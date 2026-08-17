@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at": "2026-08-12",
+  "sources": [
+    {
+      "id": "kdense-scientific-agent-skills",
+      "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "commit": "5ad4aae76bc40257b914367afacc6fd686a282d5",
+      "upstream_version": "2.63.0",
+      "license": "MIT",
+      "license_source_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/5ad4aae76bc40257b914367afacc6fd686a282d5/LICENSE.md",
+      "enabled_by_default": false,
+      "installation": "scripts/install-kdense-core.sh --install",
+      "selected_skills": [
+        "citation-management",
+        "experimental-design",
+        "exploratory-data-analysis",
+        "literature-review",
+        "peer-review",
+        "scientific-critical-thinking",
+        "scientific-visualization",
+        "scientific-writing",
+        "scikit-learn",
+        "statistical-analysis",
+        "statistical-power",
+        "statsmodels",
+        "uncertainty-and-units",
+        "venue-templates"
+      ],
+      "selection_note": "Generic, cross-domain skills only. Domain packages are selected after G1 so a mechanical or robotics program does not inherit a biology-heavy toolchain."
+    },
+    {
+      "id": "academic-research-skills",
+      "repository": "https://github.com/Imbad0202/academic-research-skills",
+      "commit": "bc1478d8747b8fa2665aef5c8260f19999ce59cb",
+      "upstream_version": "current commit snapshot",
+      "license": "CC-BY-NC-4.0",
+      "license_source_url": "https://github.com/Imbad0202/academic-research-skills/blob/bc1478d8747b8fa2665aef5c8260f19999ce59cb/LICENSE",
+      "enabled_by_default": false,
+      "installation": "human-confirmed Claude Code plugin installation only",
+      "selected_skills": [],
+      "selection_note": "Useful optional implementation for deep research, writing, revision and peer review. Not vendored because the non-commercial license requires a human use-case decision."
+    },
+    {
+      "id": "experiment-agent",
+      "repository": "https://github.com/Imbad0202/experiment-agent",
+      "commit": "e291e7dc7ca268b2de7e1a9cf23bc2eef5dc0651",
+      "upstream_version": "1.1.0",
+      "license": "CC-BY-NC-4.0",
+      "license_source_url": "https://github.com/Imbad0202/experiment-agent/blob/e291e7dc7ca268b2de7e1a9cf23bc2eef5dc0651/LICENSE",
+      "enabled_by_default": false,
+      "installation": "not installed in v1",
+      "selected_skills": [],
+      "selection_note": "Capable optional executor, but it overlaps the local experiment state machine and carries a non-commercial license. Reassess after the topic and intended use are fixed."
+    }
+  ]
+}

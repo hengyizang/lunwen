@@ -1,0 +1,10 @@
+{
+  "name": "doctoral-research-os",
+  "description": "Human-gated, reproducible doctoral research workflow spanning topic intelligence, public data, experiments, journal formatting, writing, revision and adversarial review.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Hengyi Zang"
+  },
+  "homepage": "https://github.com/hengyizang/lunwen",
+  "repository": "https://github.com/hengyizang/lunwen"
+}

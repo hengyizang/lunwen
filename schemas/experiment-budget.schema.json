@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/experiment-budget.schema.json",
+  "title": "Experiment budget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "hard_ceiling_usd"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "status": {"const": "ready_for_review"},
+    "hard_ceiling_usd": {"type": "number", "minimum": 0},
+    "currency": {"const": "USD"},
+    "assumptions": {"type": "array", "items": {"type": "string"}}
+  }
+}

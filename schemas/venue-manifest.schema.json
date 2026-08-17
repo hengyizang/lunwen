@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/venue-manifest.schema.json",
+  "title": "Venue manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "venue_id",
+    "name",
+    "publisher",
+    "issn",
+    "scope",
+    "jcr",
+    "templates",
+    "requirements",
+    "sources",
+    "verified_at",
+    "reverification"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "venue_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "trial_only": {
+      "type": "boolean"
+    },
+    "publisher": {
+      "type": "object",
+      "required": [
+        "name",
+        "headquarters_country",
+        "headquarters_source_url"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "headquarters_country": {
+          "type": "string"
+        },
+        "headquarters_source_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "issn": {
+      "type": "object",
+      "required": [
+        "print",
+        "online"
+      ],
+      "properties": {
+        "print": {
+          "type": "string"
+        },
+        "online": {
+          "type": "string"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "summary",
+        "fit_notes",
+        "official_url"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "fit_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "official_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "jcr": {
+      "type": "object",
+      "required": [
+        "metric_year",
+        "impact_factor",
+        "quartile",
+        "category",
+        "evidence_status",
+        "source_url",
+        "direct_clarivate_recheck_required"
+      ],
+      "properties": {
+        "metric_year": {
+          "type": "integer"
+        },
+        "release_year": {
+          "type": "integer"
+        },
+        "impact_factor": {
+          "type": "number"
+        },
+        "quartile": {
+          "enum": [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4",
+            "unverified"
+          ]
+        },
+        "category": {
+          "type": "string"
+        },
+        "evidence_status": {
+          "enum": [
+            "direct-clarivate",
+            "publisher-reported",
+            "institutional-jcr-export",
+            "unverified"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "direct_clarivate_recheck_required": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "required": [
+        "official_guidelines_url",
+        "latex",
+        "word"
+      ],
+      "properties": {
+        "official_guidelines_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "latex": {
+          "$ref": "#/$defs/template"
+        },
+        "word": {
+          "$ref": "#/$defs/template"
+        }
+      }
+    },
+    "requirements": {
+      "type": "object"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "claim",
+          "url",
+          "source_type",
+          "accessed_at"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "source_type": {
+            "type": "string"
+          },
+          "accessed_at": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "reverification": {
+      "type": "object",
+      "required": [
+        "required_at_gate",
+        "fields"
+      ],
+      "properties": {
+        "required_at_gate": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "template": {
+      "type": "object",
+      "required": [
+        "readme_url",
+        "expected_archive_name",
+        "download_via_guidelines"
+      ],
+      "properties": {
+        "readme_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "expected_archive_name": {
+          "type": "string"
+        },
+        "download_via_guidelines": {
+          "type": "boolean"
+        },
+        "sample_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}
+

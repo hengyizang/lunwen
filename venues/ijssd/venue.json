@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "venue_id": "ijssd",
+  "name": "International Journal of Structural Stability and Dynamics",
+  "trial_only": true,
+  "publisher": {
+    "name": "World Scientific Publishing Co Pte Ltd",
+    "headquarters_country": "Singapore",
+    "headquarters_source_url": "https://www.worldscientific.com/page/about/corporate-profile"
+  },
+  "issn": {
+    "print": "0219-4554",
+    "online": "1793-6764"
+  },
+  "scope": {
+    "summary": "Structural stability and dynamics, including structural engineering, vibration, conventional and emerging structures, and engineering applications.",
+    "fit_notes": [
+      "Suitable trial venue for AI-assisted structural dynamics, structural health monitoring, vibration analysis, digital twins and physics-informed machine learning.",
+      "Not a default target for papers whose primary contribution is generic AI, robotics control or manufacturing rather than structural dynamics.",
+      "Every paper requires a fresh scope-fit decision."
+    ],
+    "official_url": "https://www.worldscientific.com/worldscinet/ijssd"
+  },
+  "jcr": {
+    "metric_year": 2025,
+    "release_year": 2026,
+    "impact_factor": 3.8,
+    "quartile": "Q1",
+    "category": "Engineering, Mechanical",
+    "evidence_status": "publisher-reported",
+    "source_url": "https://www.worldscientific.com/worldscinet/ijssd",
+    "direct_clarivate_recheck_required": true,
+    "notes": "The official publisher page reports 2025 Impact Factor 3.8 and identifies IJSSD as a Q1 journal in Engineering, Mechanical. Re-check the exact current JCR record through Clarivate at G5; do not substitute CiteScore or SJR evidence."
+  },
+  "templates": {
+    "official_guidelines_url": "https://www.worldscientific.com/page/ijssd/submission-guidelines",
+    "latex": {
+      "readme_url": "https://www.worldscientific.com/page/ijssd/stylefiles-readme-2e",
+      "expected_archive_name": "ijssd-2e.zip",
+      "download_via_guidelines": true,
+      "sample_url": "https://www.worldscientific.com/sda/1037/ws-ijssd.pdf"
+    },
+    "word": {
+      "readme_url": "https://www.worldscientific.com/page/ijssd/stylefiles-readme-doc",
+      "expected_archive_name": "ijssd-doc.zip",
+      "download_via_guidelines": true
+    }
+  },
+  "requirements": {
+    "original_article_max_word_equivalents": 10000,
+    "technical_note_max_word_equivalents": 4000,
+    "template_formats": [
+      "LaTeX2e",
+      "MS Word"
+    ],
+    "policy_notes": [
+      "Verify article type, reference style, figures, declarations, AI-use policy, data policy, fees and submission files from the current official guidelines at G5.",
+      "Do not infer current requirements from the sample PDF alone."
+    ]
+  },
+  "sources": [
+    {
+      "claim": "Current publisher-reported journal metrics and Q1 positioning",
+      "url": "https://www.worldscientific.com/worldscinet/ijssd",
+      "source_type": "official publisher journal page",
+      "accessed_at": "2026-08-12"
+    },
+    {
+      "claim": "Official submission guidelines, word limits and template download entry points",
+      "url": "https://www.worldscientific.com/page/ijssd/submission-guidelines",
+      "source_type": "official journal instructions",
+      "accessed_at": "2026-08-12"
+    },
+    {
+      "claim": "Official LaTeX2e template archive name and contents",
+      "url": "https://www.worldscientific.com/page/ijssd/stylefiles-readme-2e",
+      "source_type": "official template readme",
+      "accessed_at": "2026-08-12"
+    },
+    {
+      "claim": "World Scientific is headquartered in Singapore",
+      "url": "https://www.worldscientific.com/page/about/corporate-profile",
+      "source_type": "official publisher corporate profile",
+      "accessed_at": "2026-08-12"
+    }
+  ],
+  "verified_at": "2026-08-12",
+  "reverification": {
+    "required_at_gate": "G5",
+    "fields": [
+      "JCR metric year, category, quartile and impact factor",
+      "scope and article type",
+      "template version",
+      "length and reference rules",
+      "AI, ethics, data and code policies",
+      "fees and access model",
+      "submission file requirements"
+    ]
+  }
+}

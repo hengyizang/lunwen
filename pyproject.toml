@@ -1,0 +1,8 @@
+[project]
+name = "doctoral-research-os"
+version = "0.2.0"
+description = "Human-gated research workflow for Claude Code and Codex"
+requires-python = ">=3.10"
+
+[tool.unittest]
+start-directory = "tests"
