@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/codex-audit.schema.json",
+  "title": "Independent Codex stage audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verdict",
+    "fatal_findings",
+    "major_findings",
+    "minor_findings",
+    "missing_evidence",
+    "remediation_steps",
+    "uncertainty"
+  ],
+  "properties": {
+    "verdict": {"enum": ["block", "revise", "pass-with-conditions"]},
+    "fatal_findings": {"type": "array", "items": {"type": "string"}},
+    "major_findings": {"type": "array", "items": {"type": "string"}},
+    "minor_findings": {"type": "array", "items": {"type": "string"}},
+    "missing_evidence": {"type": "array", "items": {"type": "string"}},
+    "remediation_steps": {"type": "array", "items": {"type": "string"}},
+    "uncertainty": {"type": "array", "items": {"type": "string"}}
+  }
+}

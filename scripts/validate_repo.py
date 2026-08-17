@@ -13,6 +13,14 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+EXPECTED_STAGES = {
+    "intake": "G0",
+    "topic-intelligence": "G1",
+    "paper-architecture": "G2",
+    "experiment-design": "G3",
+    "experiment-execution": "G4",
+    "writing-and-review": "G5",
+}
 
 
 def load_json(path: Path, errors: list[str]) -> Any | None:
@@ -142,6 +150,42 @@ def validate_upstreams(path: Path, errors: list[str]) -> None:
                 errors.append(f"{path.relative_to(ROOT)}: invalid selected skill {skill!r}")
 
 
+def validate_stage_config(path: Path, errors: list[str]) -> None:
+    value = load_json(path, errors)
+    stages = value.get("stages") if isinstance(value, dict) else None
+    if not isinstance(stages, dict):
+        errors.append(f"{path.relative_to(ROOT)}: stages must be an object")
+        return
+    if set(stages) != set(EXPECTED_STAGES):
+        errors.append(f"{path.relative_to(ROOT)}: stage names do not match G0-G5")
+    for name, gate in EXPECTED_STAGES.items():
+        stage = stages.get(name)
+        if not isinstance(stage, dict):
+            continue
+        if stage.get("gate") != gate:
+            errors.append(f"{path.relative_to(ROOT)}: {name} must map to {gate}")
+        if not str(stage.get("author_task", "")).strip():
+            errors.append(f"{path.relative_to(ROOT)}: {name} needs author_task")
+
+
+def project_version(path: Path, errors: list[str]) -> str | None:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"{path.relative_to(ROOT)}: {exc}")
+        return None
+    project_match = re.search(r"(?ms)^\[project\]\s*(.*?)(?=^\[|\Z)", text)
+    version_match = (
+        re.search(r'(?m)^version\s*=\s*"([^"]+)"\s*$', project_match.group(1))
+        if project_match
+        else None
+    )
+    if not version_match:
+        errors.append(f"{path.relative_to(ROOT)}: project.version is required")
+        return None
+    return version_match.group(1)
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -150,10 +194,14 @@ def main() -> int:
     for path in sorted((ROOT / "venues").glob("*/venue.json")):
         validate_venue(path, errors)
     validate_upstreams(ROOT / "integrations" / "upstreams.lock.json", errors)
+    validate_stage_config(ROOT / "config" / "stages.json", errors)
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)
     if isinstance(plugin, dict) and plugin.get("name") != "doctoral-research-os":
         errors.append(".claude-plugin/plugin.json: unexpected plugin name")
+    version = project_version(ROOT / "pyproject.toml", errors)
+    if isinstance(plugin, dict) and version and plugin.get("version") != version:
+        errors.append("Plugin version must match pyproject.toml")
     mcp = load_json(ROOT / ".mcp.json", errors)
     codex = (
         mcp.get("mcpServers", {}).get("codex-review", {})
@@ -162,6 +210,13 @@ def main() -> int:
     )
     if codex.get("command") != "codex" or codex.get("args") != ["mcp-server"]:
         errors.append(".mcp.json: codex-review must run codex mcp-server")
+    try:
+        start_script = (ROOT / "scripts" / "start.sh").read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"scripts/start.sh: {exc}")
+    else:
+        if "scripts/autopilot.py start" not in start_script:
+            errors.append("scripts/start.sh must invoke the bounded autopilot")
 
     skill_names: dict[str, Path] = {}
     skill_paths = list((ROOT / "skills").glob("*/SKILL.md"))

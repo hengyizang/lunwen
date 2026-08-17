@@ -17,5 +17,6 @@ Use blinded actor-critic passes:
 6. Revise scientific claims only when evidence supports the change; never polish away a substantive limitation.
 7. Run a second clean review that cannot see the desired answer.
 
-Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.
+For G5, also run `scripts/citation_audit.py` and `scripts/venue_compliance.py`; preserve both reports under the active paper's `reviews/` directory.
 
+Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.

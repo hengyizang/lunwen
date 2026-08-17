@@ -1,28 +1,30 @@
 # Doctoral Research OS
 
-这是一个面向个人研究者的、可审计的博士级研究流水线。它把 Claude Code、Claude Science 的证据工作流和 Codex 的独立代码/统计审计组合起来，但不把“生成文字”误当成“完成科研”。
+面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude Code 负责产物构建，Codex 负责独立复核，本地脚本负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
-一键启动的含义是：创建研究项目、执行当前阶段并停在下一道人类审批闸门。系统不会自动批准选题、伪造数据、替你确认作者资格，也不会自动向期刊投稿。
+“一键”指：创建或恢复项目，运行当前阶段的 author → critic → remediation → final critic 流程，通过确定性检查后停在下一道人类审批闸门。它不代表自动批准选题、自动确认数据许可、自动产出真实实验结果或自动投稿。
 
-## 第一版包含什么
+## 已实现的闭环
 
-- 选题情报：核心博士命题 A、可独立成立的扩展命题 B、竞争/岗位/可行性分析。
-- 论文架构：默认 6 篇论文，每篇有独立贡献、数据、实验和反证条件，同时共同支撑博士主线。
-- 数据获取：只获取公开或已获授权的数据，记录版本、许可、来源、校验和与拆分策略；原始数据不进入 Git。
-- 实验：预注册式实验合同、计算预算、基线、消融、统计检验、失败实验和复现记录。
-- 写作与修改：claim-evidence matrix、引用核验、模拟审稿、逐条回复和版本差异。
-- 期刊适配：安全导入官方 Word/LaTeX 模板，将语义稿件映射到模板并进行编译/版式检查。
-- 人工闸门：G0–G5。只有你能批准，代理不能替你越过。
+- G0–G5 状态机和显式人类审批；审批包含产物哈希。
+- 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
+- Claude Code 非交互执行、每次调用预算上限、超时、输出上限、断点日志和敏感环境值脱敏。
+- Codex 只读、临时、JSON Schema 约束的初审和终审；终审未通过时闸门保持关闭。
+- DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
+- 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
+- G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
+- BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
+- 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
 
-## Windows 11 推荐安装
+系统不会把模型一致意见当作科学验证。最终 PDF/DOCX、作者资格、伦理、数据权利、当年 JCR 信息和投稿门户仍由人确认。
 
-使用 WSL2 Ubuntu，并把仓库放在 Linux 文件系统（例如 `~/code`）而不是 `/mnt/c`。
+## 安装
+
+Windows 11 推荐 WSL2 Ubuntu，并把仓库放在 Linux 文件系统（如 `~/code`），不要放在 `/mnt/c`。
 
 ```powershell
 wsl --install -d Ubuntu
 ```
-
-进入 Ubuntu：
 
 ```bash
 mkdir -p ~/code
@@ -32,135 +34,176 @@ cd lunwen
 bash scripts/bootstrap-wsl.sh
 ```
 
-如果希望同时安装经筛选的 K-Dense 通用科研技能子集，可在首次检查时显式启用：
+先分别安装并登录 `claude` 与 `codex` CLI。仓库不保存 API key；如使用环境变量，只在对应单次进程中注入。
+
+可选的 K-Dense 通用科研技能子集：
 
 ```bash
 bash scripts/bootstrap-wsl.sh --with-kdense
 ```
 
-该选项只安装 `integrations/upstreams.lock.json` 固定提交中的 14 个通用技能，不安装全部 161 个技能。安装内容放在 Git 忽略的本地目录，同时供 Claude Code 与 Codex 发现；脚本不执行这些技能自带的代码。
+该选项只安装锁定提交中的筛选子集，默认不开启。许可、固定版本和边界见 `references/upstream-components.md`。
 
-Claude Code 启动：
+## 一键启动与恢复
+
+```bash
+bash scripts/start.sh my-phd "目标、已有背景、每周时间、预算和设备条件"
+```
+
+等价命令：
+
+```bash
+python3 scripts/autopilot.py start \
+  --project my-phd \
+  --context "目标、已有背景、每周时间、预算和设备条件"
+```
+
+预览下一次动作，不调用模型：
+
+```bash
+python3 scripts/autopilot.py plan --project my-phd
+```
+
+人类批准并继续：
+
+```bash
+python3 scripts/researchctl.py approve \
+  --project my-phd --gate G0 --actor "Hengyi" --note "constraints reviewed"
+python3 scripts/autopilot.py resume --project my-phd
+```
+
+`resume` 只会跨越已经记录批准的闸门。若当前阶段仍缺证据或许可，它会保留检查错误并停下。运行日志在本地 `projects/<slug>/state/runs/`；最新断点摘要在 `state/autopilot.json`。
+
+默认每次 Claude 调用上限为 5 美元，可显式下调：
+
+```bash
+python3 scripts/autopilot.py resume \
+  --project my-phd --claude-max-budget-usd 2.00 --timeout 1800
+```
+
+`--claude-mode minimal` 使用 Claude Code 的 bare/minimal 模式；默认 `standard` 会加载仓库配置。Codex 审核固定使用 `codex exec --ephemeral --sandbox read-only --json`。
+
+也可在 Claude Code 交互模式使用插件：
 
 ```bash
 claude --plugin-dir .
 ```
 
-然后运行：
-
 ```text
 /doctoral-research-os:start my-phd
 ```
 
-也可以直接使用启动器：
-
-```bash
-bash scripts/start.sh my-phd
-```
-
-Codex 在仓库根目录启动后会自动发现 `.agents/skills/doctoral-research`：
-
-```text
-$doctoral-research start my-phd
-```
-
-Claude Code 会从根目录的 `.mcp.json` 启动 `codex mcp-server`。首次使用项目 MCP 配置时，Claude Code 会要求你确认信任。不要在仓库中保存 API key；使用各工具自己的登录或环境变量。
-
-## 组件组合与许可
-
-核心流水线自身即可运行。外部组件是受控增强，不是把多个“自动写论文”代理同时放开：
-
-| 组件 | 在本系统中的角色 | 第一版策略 |
-|---|---|---|
-| 本仓库 skills + agents | 选题架构、数据许可、实验合同、闸门与审计 | 默认启用 |
-| K-Dense Scientific Agent Skills | 文献、实验设计、统计、可视化、写作和期刊模板的专业方法 | MIT；固定提交；只安装 14 个通用技能 |
-| Academic Research Skills | 深度研究、写作、修改和多视角审稿的可选第二套实现 | CC BY-NC；需你确认用途后在 Claude Code 插件管理器中安装 |
-| Experiment Agent | 可选实验执行器 | CC BY-NC；第一版不自动安装，避免与本仓库实验状态机重复 |
-| Claude Science | 文献与证据包生产者 | 通过稳定的导出合同接入，不猜测未公开 CLI/API |
-| Codex | 独立代码、统计、泄漏和复现审计 | 通过本仓库技能与 MCP 接入 |
-
-固定版本、选择理由、许可边界和 Academic Research Skills 的人工安装命令见 `references/upstream-components.md`。第三方技能仍需在首次触发前检查其脚本、网络域名、API 权限和费用。
-
-## Claude Science 的边界
-
-第一版不假设一个尚未公开文档化的 Claude Science CLI/API。Claude Science 可用于文献阅读和证据整理，再把导出的证据包放入：
-
-```text
-projects/<project>/evidence/claude-science/
-```
-
-`schemas/science-evidence.schema.json` 定义了导入格式。若未来有官方自动化接口，只需替换这一适配层，不需要重写研究流水线。
+Codex 会发现 `.agents/skills/doctoral-research`。
 
 ## 人工闸门
 
-| 闸门 | 你批准的内容 | 系统随后允许 |
+| 闸门 | 人类批准的内容 | 通过后允许 |
 |---|---|---|
-| G0 | 目标、资源、预算、申请地区和伦理边界 | 开始选题情报 |
-| G1 | 核心命题 A、扩展命题 B、淘汰理由 | 拆分论文组合 |
-| G2 | 论文地图与每篇 paper contract | 设计数据和实验 |
-| G3 | 数据许可、实验方案、统计方案和算力预算 | 执行实验 |
-| G4 | 结果、失败实验、claim-evidence matrix | 写作与修改 |
-| G5 | 最新期刊资格、最终模板、作者声明和投稿包 | 标记 submission-ready |
+| G0 | 目标、时间、预算、设备、地区、伦理边界 | 选题情报 |
+| G1 | 三个以上候选、核心命题 A、扩展命题 B、淘汰理由 | 论文组合架构 |
+| G2 | 完整 paper map 与每篇可证伪 contract | 数据与实验设计 |
+| G3 | 数据许可、SHA、可执行实验计划、统计方案、预算 | 执行锁定计划 |
+| G4 | 全部尝试、负结果、claim-evidence matrix、复现报告 | 结果约束写作 |
+| G5 | 当前论文的引用、两轮审稿、模板、披露、当年期刊复核 | 标记该篇就绪；转下一篇 |
 
-查看状态：
+查看状态和精确缺口：
 
 ```bash
-python3 scripts/researchctl.py status --project my-phd
+python3 scripts/researchctl.py status --project my-phd --json
 python3 scripts/researchctl.py gate-check --project my-phd
 ```
 
-批准并推进（只能由你执行或明确授权）：
+代理只能调用 `ready`，不能替人调用 `approve`。系统永不自动投稿。
+
+## 数据发现与获取
+
+公开元数据发现：
 
 ```bash
-python3 scripts/researchctl.py approve --project my-phd --gate G0 --actor "Hengyi" --note "constraints reviewed"
-python3 scripts/researchctl.py advance --project my-phd
+python3 scripts/data_discovery.py "structural vibration anomaly detection" \
+  --limit 10 \
+  --project my-phd \
+  --output projects/my-phd/data/discovery-vibration.json
 ```
 
-## 试验期刊
-
-首个模板适配目标是 **International Journal of Structural Stability and Dynamics (IJSSD)**。选择它是因为：
-
-- 出版社 World Scientific [总部位于新加坡](https://www.worldscientific.com/page/about/corporate-profile)；
-- 期刊官方页面报告 2025 Impact Factor 3.8，并标注为 Engineering, Mechanical Q1；
-- 方向覆盖结构稳定性、结构动力学、振动与工程应用，能容纳 AI + 机械/结构健康监测、数字孪生、PINN 等研究；
-- [官方投稿指南](https://www.worldscientific.com/page/ijssd/submission-guidelines)提供 LaTeX2e 与 MS Word 模板入口。
-
-这是模板适配测试目标，不代表六篇论文都应投同一期刊。G5 必须重新在 Clarivate JCR 核验当年分区、范围、政策和费用；出版社页面的说明不能替代你所在机构对 JCR 的正式查验。
-
-期刊机器可读清单位于 `venues/ijssd/venue.json`。模板文件不复制到仓库；从官方投稿指南下载后，用：
-
-```bash
-python3 scripts/venue_adapter.py inspect ~/Downloads/ijssd-2e.zip
-python3 scripts/venue_adapter.py ingest ~/Downloads/ijssd-2e.zip projects/my-phd/papers/P01/venue-template
-```
-
-## 数据获取
-
-数据清单必须包含来源 URL、版本、许可证、研究用途许可、再分发许可和 SHA-256。下载器只接受 HTTPS，不携带登录凭据，不绕过付费墙、验证码或访问控制。
+发现报告不是许可结论。选中数据后，人工核验官方记录、研究用途、隐私、版本、来源与泄漏风险，再创建符合 `schemas/dataset-manifest.schema.json` 的清单。
 
 ```bash
 python3 scripts/dataset_fetch.py validate path/to/dataset.json
-python3 scripts/dataset_fetch.py download path/to/dataset.json projects/my-phd/data/raw --accept-license
+python3 scripts/dataset_fetch.py download \
+  path/to/dataset.json projects/my-phd/data/raw --accept-license
 ```
+
+下载只接受公网 HTTPS，不携带登录凭据，不绕过付费墙、验证码或访问控制；原始数据不进入 Git。
+
+## 实验执行
+
+`experiments/plan.json` 必须符合 `schemas/experiment-plan.schema.json`，并和 `experiments/budget.json` 一起通过 G3 人工批准。示例单次运行：
+
+```json
+{
+  "run_id": "p01-baseline-seed-7",
+  "paper_id": "P01",
+  "argv": ["python3", "experiments/code/train.py", "--seed", "7"],
+  "cwd": ".",
+  "seed": 7,
+  "timeout_seconds": 7200,
+  "estimated_cost_usd": 0,
+  "inputs": [{"path": "data/processed/split.parquet", "sha256": "<64 hex>"}],
+  "expected_outputs": ["experiments/results/p01-baseline-seed-7.json"]
+}
+```
+
+执行全部或指定运行：
+
+```bash
+python3 scripts/experiment_runner.py --project my-phd
+python3 scripts/experiment_runner.py --project my-phd --run p01-baseline-seed-7
+```
+
+计划或预算在 G3 后被修改会被拒绝。运行器不是恶意代码沙箱：它只执行你已经批准的本地研究代码，并通过无 shell 调用、可执行文件白名单、项目内路径、精简环境、超时和预算减少误操作。
+
+## 引用与期刊合规
+
+```bash
+python3 scripts/citation_audit.py \
+  projects/my-phd/papers/P01/manuscript/references.bib \
+  --output projects/my-phd/papers/P01/reviews/citation-audit.json
+```
+
+无 DOI 的书籍、标准等可使用人工核验 JSON；每条必须包含 `verified_by`、`verified_at`、`source_url` 和 `title`，通过 `--manual-verifications` 传入。
+
+从期刊官方页面下载模板 ZIP 后：
+
+```bash
+python3 scripts/venue_adapter.py inspect ~/Downloads/ijssd-2e.zip
+python3 scripts/venue_adapter.py ingest \
+  ~/Downloads/ijssd-2e.zip projects/my-phd/papers/P01/venue-template
+python3 scripts/venue_compliance.py projects/my-phd/papers/P01
+```
+
+首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。
 
 ## 验证
 
 ```bash
+python3 -m compileall -q scripts
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
 ```
 
+CI 同时执行编译、单元测试和仓库结构验证。
+
 ## 目录
 
 ```text
-.agents/skills/        Codex 仓库级技能
-.claude-plugin/        Claude Code 插件清单
-agents/                Claude Code 专职子代理
-skills/                Claude Code 分阶段技能
-references/            流程、阶段合同和科研诚信规则
-schemas/               数据、期刊和证据包格式
-scripts/               状态机、数据下载、模板导入与验证
-venues/                期刊清单
-integrations/           第三方组件固定版本与许可记录
-projects/               本地研究项目（原始数据和大输出被忽略）
+.agents/skills/       Codex 仓库技能
+.claude-plugin/       Claude Code 插件清单
+agents/               有边界的专职代理
+config/               默认值与机器可读阶段任务
+references/           流程、阶段合同与科研诚信规则
+schemas/              数据、实验、审核、期刊与证据格式
+scripts/              编排器、状态机、发现、执行与审计工具
+venues/               期刊清单（需在 G5 复核）
+projects/             本地研究项目；原始数据和大产物被忽略
 ```

@@ -21,7 +21,7 @@ For `design`:
 For `run`:
 
 - require recorded G3 approval;
-- execute only versioned configs and code;
+- execute only the hash-locked plan through `scripts/experiment_runner.py`;
 - log every run, including failures and negative results;
 - capture environment, code revision, data hashes, seed, command, runtime, cost and output hashes;
 - ask `statistical-auditor` and Codex to independently inspect leakage, inference, robustness and reproducibility;
@@ -29,4 +29,3 @@ For `run`:
 - stop at G4.
 
 Never fill missing outputs with plausible numbers.
-

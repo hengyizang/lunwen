@@ -14,11 +14,14 @@ This repository is a research workflow, not a publication generator.
 10. Use an independent model family for adversarial checks when available: Claude synthesizes; Codex audits code, statistics, reproducibility, and unsupported claims.
 11. Never auto-submit a manuscript. G5 produces a submission-ready package for human review.
 12. Read `references/workflow.md` and the relevant section of `references/stage-contracts.md` before changing a research project.
+13. Run model orchestration through `scripts/autopilot.py`; preserve both initial and final Codex audits and the itemized decision log.
+14. Execute experiments only through `scripts/experiment_runner.py` after the approved G3 plan and budget hashes match.
+15. Treat dataset discovery metadata and DOI lookup results as leads to verify, never as license, fitness, or claim-support decisions.
 
 Run repository checks after code or schema changes:
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 -m compileall -q scripts
 python3 scripts/validate_repo.py
 ```
-

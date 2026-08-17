@@ -12,10 +12,4 @@ shift
 context="$*"
 cd "$repo_root"
 
-if ! command -v claude >/dev/null 2>&1; then
-  echo "Claude Code is not on PATH." >&2
-  exit 2
-fi
-
-exec claude --plugin-dir "$repo_root" "/doctoral-research-os:start $project_slug $context"
-
+exec python3 scripts/autopilot.py start --project "$project_slug" --context "$context"

@@ -10,9 +10,8 @@ disable-model-invocation: true
 1. Read `references/workflow.md` and `references/research-integrity.md`.
 2. Run `python3 scripts/researchctl.py status --project $ARGUMENTS --json`.
 3. Read only the current section of `references/stage-contracts.md`.
-4. Delegate bounded analysis to the matching specialist agents. Preserve their evidence, disagreements and uncertainty.
-5. Ask the Codex MCP server for an independent audit at G1–G5. Save the raw audit and an itemized resolution.
+4. Prefer `python3 scripts/autopilot.py resume --project $ARGUMENTS` to run the bounded author/critic loop. Delegate additional bounded analysis only when the stage needs it. Preserve evidence, disagreements and uncertainty.
+5. Require initial and final schema-bound Codex audits at G1–G5. Save both plus an itemized resolution.
 6. Create the required artifacts without inventing missing evidence or results.
 7. Run `gate-check` and `ready`. Present a concise dossier and stop.
-8. Never approve or advance a gate unless the human explicitly instructs that exact action after seeing the dossier.
-
+8. Never approve a gate. Advance only when an explicit approval is already recorded and the human asked to resume.

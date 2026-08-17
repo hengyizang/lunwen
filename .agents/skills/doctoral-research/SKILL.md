@@ -9,15 +9,15 @@ Locate the repository root, then read `references/workflow.md`, `references/rese
 
 Interpret the request as one of:
 
-- `start <slug>`: initialize through `scripts/researchctl.py` and prepare G0;
-- `continue <slug>`: complete only the current stage and stop at its gate;
+- `start <slug>`: initialize through `scripts/autopilot.py start` and prepare G0;
+- `continue <slug>`: use `scripts/autopilot.py resume`, complete only the current stage and stop at its gate;
 - `topic <slug>`: attack topic novelty, feasibility and doctoral architecture;
 - `experiment <slug> <design|run>`: design or audit reproducible experiments;
 - `review <slug> [paper]`: audit code, statistics, claims and reproducibility;
 - `retarget <slug> <paper> <venue>`: verify official requirements and template adaptation;
 - `audit <slug>`: run a cross-stage integrity check.
 
-Use deterministic scripts for state, manifests, downloads and archives. Never edit gate approvals by hand. Never approve a gate for the user.
+Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Require initial and final Codex audits at G1–G5. Never edit gate approvals by hand. Never approve a gate for the user.
 
 When acting as the independent critic:
 
@@ -29,4 +29,3 @@ When acting as the independent critic:
 6. Preserve findings under `projects/<slug>/reviews/codex/`.
 
 Never invent missing data, citations or results, and never auto-submit.
-

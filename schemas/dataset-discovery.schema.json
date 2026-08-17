@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/dataset-discovery.schema.json",
+  "title": "Dataset discovery report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "created_at",
+    "query",
+    "providers",
+    "candidate_count",
+    "candidates",
+    "warning"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "query": {"type": "string", "minLength": 1},
+    "providers": {"type": "array", "items": {"type": "object"}},
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "provider",
+          "provider_id",
+          "title",
+          "landing_url",
+          "license_status",
+          "fitness_status"
+        ],
+        "properties": {
+          "provider": {"type": "string"},
+          "provider_id": {"type": "string"},
+          "title": {"type": "string"},
+          "landing_url": {"type": "string", "pattern": "^https://"},
+          "license_status": {"const": "unverified_requires_human_review"},
+          "fitness_status": {"const": "candidate_only"}
+        }
+      }
+    },
+    "warning": {"type": "string"}
+  }
+}

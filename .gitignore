@@ -25,7 +25,9 @@ projects/**/papers/**/venue-template/
 # Large experiment artifacts and generated build files
 projects/**/experiments/runs/**/artifacts/
 projects/**/experiments/runs/**/checkpoints/
+projects/**/experiments/runs/
 projects/**/papers/**/build/
+projects/**/state/runs/
 *.aux
 *.bbl
 *.blg

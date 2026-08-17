@@ -32,5 +32,5 @@ if ! command -v codex >/dev/null 2>&1; then
 fi
 
 echo "Bootstrap checks complete."
-echo "Start with: claude --plugin-dir ."
-echo "Then run: /doctoral-research-os:start my-phd"
+echo "One-click start: bash scripts/start.sh my-phd 'goal and constraints'"
+echo "Interactive alternative: claude --plugin-dir ."

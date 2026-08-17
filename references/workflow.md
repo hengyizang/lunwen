@@ -16,14 +16,16 @@ Do not ask multiple agents to produce one blended answer without preserving thei
 
 For the current stage:
 
-1. Run `python3 scripts/researchctl.py status --project <slug> --json`.
+1. Run `python3 scripts/researchctl.py status --project <slug> --json`, or use `python3 scripts/autopilot.py plan --project <slug>`.
 2. Read the matching stage contract in `references/stage-contracts.md`.
 3. Gather evidence and write only the required artifacts.
-4. Ask Codex to audit the artifact without revealing the preferred verdict. Save the raw findings.
-5. Resolve findings explicitly; do not silently discard adverse feedback.
+4. Ask Codex to audit the artifact without revealing the preferred verdict. Save the schema-bound initial findings.
+5. Resolve findings explicitly; do not silently discard adverse feedback, then request a fresh final Codex audit.
 6. Run `gate-check`, then `ready`.
 7. Present a concise gate dossier to the human and stop.
-8. After explicit approval, record it with `approve` and use `advance`.
+8. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage.
+
+`scripts/autopilot.py` implements this loop with bounded non-interactive CLI calls, local checkpoints, output limits and per-Claude-call budget limits. It never invokes `approve`. At G5 it works only on `state.active_paper`; an approved `advance` marks that paper ready and selects the next paper until all configured papers are complete.
 
 ## Evidence rules
 
@@ -48,5 +50,4 @@ The authoring agent must respond item by item. A different model agreeing is sup
 
 ## Completion boundary
 
-`submission-ready` means the package passed local checks and G5. It does not mean accepted, publishable, ethically cleared, or guaranteed to meet a degree requirement.
-
+`submission-ready` means every configured paper passed its own G5 checks and human approval. It does not mean submitted, accepted, publishable, ethically cleared, or guaranteed to meet a degree requirement.

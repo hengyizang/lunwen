@@ -40,8 +40,8 @@ Avoid salami slicing. Each paper must answer a distinct research question and re
 Required:
 
 - `data/datasets.jsonl` with licenses and provenance;
-- `experiments/plan.json`;
-- `experiments/budget.json`;
+- `experiments/plan.json` conforming to `schemas/experiment-plan.schema.json`;
+- `experiments/budget.json` with `status: ready_for_review` and `hard_ceiling_usd`;
 - hypotheses, baselines, ablations, splits, metrics, uncertainty, power/precision rationale, seeds and stopping rules;
 - leakage, privacy, bias and external-validity assessment.
 
@@ -67,9 +67,8 @@ Required:
 - citation audit with zero unresolved fabricated/unverified references;
 - two simulated review rounds and itemized response matrices;
 - official venue manifest and imported template inventory;
-- successful compile/render when tooling permits;
+- passing venue compliance report and successful compile/render when tooling permits;
 - author contributions, conflicts, funding, ethics and AI-use disclosures;
 - current JCR/venue-policy re-verification.
 
-The human must inspect the final PDF/DOCX and submission portal fields. Agents do not submit.
-
+Repeat G5 for `state.active_paper`. A paper-level approval moves to the next configured paper; only the last paper can move the project to `submission-ready`. The human must inspect every final PDF/DOCX and submission portal field. Agents do not submit.

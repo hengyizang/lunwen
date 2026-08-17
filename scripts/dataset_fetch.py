@@ -9,10 +9,24 @@ import json
 import os
 import sys
 import tempfile
-import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+
+try:
+    from scripts.network_safety import (
+        NetworkSafetyError,
+        PublicHTTPSRedirectHandler,
+        require_public_https_url,
+        validate_https_url,
+    )
+except ModuleNotFoundError:  # Direct execution from scripts/.
+    from network_safety import (  # type: ignore[no-redef]
+        NetworkSafetyError,
+        PublicHTTPSRedirectHandler,
+        require_public_https_url,
+        validate_https_url,
+    )
 
 
 DEFAULT_MAX_BYTES = 5 * 1024 * 1024 * 1024
@@ -33,14 +47,10 @@ def load_manifest(path: Path) -> dict[str, Any]:
 
 
 def https_url(value: Any, field: str) -> str:
-    if not isinstance(value, str):
-        raise DatasetError(f"{field} must be a string")
-    parsed = urllib.parse.urlparse(value)
-    if parsed.scheme != "https" or not parsed.netloc:
-        raise DatasetError(f"{field} must use HTTPS")
-    if parsed.username or parsed.password:
-        raise DatasetError(f"{field} must not contain credentials")
-    return value
+    try:
+        return validate_https_url(value, field)
+    except NetworkSafetyError as exc:
+        raise DatasetError(str(exc)) from exc
 
 
 def validate_manifest(value: dict[str, Any]) -> list[str]:
@@ -117,7 +127,9 @@ def safe_filename(manifest: dict[str, Any]) -> str:
     download = manifest["download"]
     candidate = download.get("filename")
     if not candidate:
-        candidate = Path(urllib.parse.urlparse(download["url"]).path).name
+        from urllib.parse import urlparse
+
+        candidate = Path(urlparse(download["url"]).path).name
     if not candidate or Path(candidate).name != candidate or candidate in {".", ".."}:
         raise DatasetError("download filename is missing or unsafe")
     return candidate
@@ -137,6 +149,9 @@ def download_dataset(
     accept_license: bool,
     max_bytes: int,
     overwrite: bool,
+    *,
+    opener: Callable[..., Any] | None = None,
+    resolver: Callable[..., list[tuple[Any, ...]]] | None = None,
 ) -> Path:
     manifest = load_manifest(manifest_path)
     errors = validate_manifest(manifest)
@@ -149,6 +164,14 @@ def download_dataset(
         )
 
     url = manifest["download"]["url"]
+    try:
+        public_url = require_public_https_url(
+            url,
+            "download.url",
+            **({"resolver": resolver} if resolver is not None else {}),
+        )
+    except NetworkSafetyError as exc:
+        raise DatasetError(str(exc)) from exc
     filename = safe_filename(manifest)
     destination.mkdir(parents=True, exist_ok=True)
     target = destination / filename
@@ -160,17 +183,32 @@ def download_dataset(
         raise DatasetError(f"Target exists: {target}; use --overwrite only after review")
 
     request = urllib.request.Request(
-        url,
-        headers={"User-Agent": "DoctoralResearchOS/0.1 (+research data acquisition)"},
+        public_url,
+        headers={"User-Agent": "DoctoralResearchOS/0.2 (+research data acquisition)"},
     )
     temp_name: str | None = None
     try:
-        with urllib.request.urlopen(request, timeout=60) as response:
+        open_url = opener or urllib.request.build_opener(
+            PublicHTTPSRedirectHandler(resolver) if resolver is not None else PublicHTTPSRedirectHandler()
+        ).open
+        with open_url(request, timeout=60) as response:
             final_url = response.geturl()
-            https_url(final_url, "redirected download URL")
+            try:
+                require_public_https_url(
+                    final_url,
+                    "redirected download URL",
+                    **({"resolver": resolver} if resolver is not None else {}),
+                )
+            except NetworkSafetyError as exc:
+                raise DatasetError(str(exc)) from exc
             content_length = response.headers.get("Content-Length")
-            if content_length and int(content_length) > max_bytes:
-                raise DatasetError("Server Content-Length exceeds the configured limit")
+            if content_length:
+                try:
+                    declared_size = int(content_length)
+                except ValueError as exc:
+                    raise DatasetError("Server returned an invalid Content-Length") from exc
+                if declared_size > max_bytes:
+                    raise DatasetError("Server Content-Length exceeds the configured limit")
 
             digest = hashlib.sha256()
             total = 0
@@ -206,7 +244,7 @@ def download_dataset(
                     "path": str(target),
                     "bytes": total,
                     "sha256": actual_hash,
-                    "source_url": url,
+                    "source_url": public_url,
                 },
                 indent=2,
             )
@@ -260,4 +298,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
