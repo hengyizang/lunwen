@@ -1,0 +1,66 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# Secrets and local credentials
+*.pem
+*.key
+secrets/
+
+# Raw/licensed data and caches
+projects/**/data/raw/
+projects/**/data/cache/
+projects/**/data/private/
+
+# Publisher-owned template packages
+projects/**/papers/**/venue-template/
+*.zip
+
+# Large experiment artifacts and generated build files
+projects/**/experiments/runs/**/artifacts/
+projects/**/experiments/runs/**/checkpoints/
+projects/**/papers/**/build/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+
+# Optional pinned third-party skills installed locally by the user
+.vendor/
+/skills/citation-management/
+/skills/experimental-design/
+/skills/exploratory-data-analysis/
+/skills/literature-review/
+/skills/peer-review/
+/skills/scientific-critical-thinking/
+/skills/scientific-visualization/
+/skills/scientific-writing/
+/skills/scikit-learn/
+/skills/statistical-analysis/
+/skills/statistical-power/
+/skills/statsmodels/
+/skills/uncertainty-and-units/
+/skills/venue-templates/
+/.agents/skills/citation-management/
+/.agents/skills/experimental-design/
+/.agents/skills/exploratory-data-analysis/
+/.agents/skills/literature-review/
+/.agents/skills/peer-review/
+/.agents/skills/scientific-critical-thinking/
+/.agents/skills/scientific-visualization/
+/.agents/skills/scientific-writing/
+/.agents/skills/scikit-learn/
+/.agents/skills/statistical-analysis/
+/.agents/skills/statistical-power/
+/.agents/skills/statsmodels/
+/.agents/skills/uncertainty-and-units/
+/.agents/skills/venue-templates/

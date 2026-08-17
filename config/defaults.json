@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "paper_count": 6,
+  "trial_venue": "ijssd",
+  "compute": {
+    "local_gpu_required": false,
+    "default_cloud_budget_usd": 100,
+    "hard_budget_gate": "G3"
+  },
+  "data": {
+    "prefer_public_benchmarks": true,
+    "require_license_record": true,
+    "require_sha256": true,
+    "allow_credentialed_downloads": false,
+    "max_single_download_bytes": 5368709120
+  },
+  "integrity": {
+    "require_claim_evidence_matrix": true,
+    "record_failed_experiments": true,
+    "independent_model_audit": true,
+    "automatic_submission": false
+  }
+}
+

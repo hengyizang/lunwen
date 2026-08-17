@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/science-evidence.schema.json",
+  "title": "Claude Science evidence bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "created_at",
+    "producer",
+    "research_question",
+    "searches",
+    "sources",
+    "claims",
+    "contradictions",
+    "unresolved_questions"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "bundle_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "research_question": {
+      "type": "string"
+    },
+    "searches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "database",
+          "query",
+          "searched_at",
+          "result_count"
+        ],
+        "properties": {
+          "database": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "searched_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "result_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "title",
+          "stable_url",
+          "publication_status",
+          "included",
+          "reason"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "doi": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stable_url": {
+            "type": "string"
+          },
+          "publication_status": {
+            "type": "string"
+          },
+          "included": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "local_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim_id",
+          "claim",
+          "source_ids",
+          "anchors",
+          "support",
+          "uncertainty"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "claim": {
+            "type": "string"
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "support": {
+            "enum": [
+              "supports",
+              "contradicts",
+              "mixed",
+              "unclear"
+            ]
+          },
+          "uncertainty": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
+

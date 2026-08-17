@@ -1,0 +1,6 @@
+interface:
+  display_name: "Doctoral Research OS"
+  short_description: "Orchestrate auditable doctoral research with human gates"
+  default_prompt: "Use $doctoral-research to continue the current research stage and stop at the next human gate."
+policy:
+  allow_implicit_invocation: true
