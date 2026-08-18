@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from scripts import api_orchestrator
-from scripts.jcr_verify import JcrVerificationError
+from scripts.researchctl import ResearchCtlError
 from scripts.submission_guard import verify_jcr
 
 
@@ -21,7 +21,7 @@ class V1GuardTests(unittest.TestCase):
             "verified_by": "tester",
             "verified_at": "2026-08-18T00:00:00+00:00",
         }
-        with self.assertRaises(JcrVerificationError):
+        with self.assertRaises(ResearchCtlError):
             verify_payload(payload)
 
     def test_jcr_accepts_if_above_one(self):
