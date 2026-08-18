@@ -1,35 +1,22 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
+  "quality_policy": {
+    "score_scale": "0-10",
+    "minimum_dimension_score": 8.0,
+    "minimum_overall_score": 8.5,
+    "novelty_evidence_minimum": 3,
+    "target_publication_level": "JCR Q1 SCI/SCIE",
+    "impact_factor_floor": ">1.0",
+    "human_review_required": true,
+    "acceptance_guarantee": false,
+    "note": "The gates enforce a Q1-targeting evidence floor; no software can guarantee novelty, peer-review acceptance or doctoral admission."
+  },
   "stages": {
-    "intake": {
-      "gate": "G0",
-      "contract": "Intake — G0",
-      "author_task": "Capture only user-confirmed goals, constraints, budget, compute, schedule, application routes, exclusions and ethical boundaries. Leave unknown material facts explicit. Do not approve or advance the gate."
-    },
-    "topic-intelligence": {
-      "gate": "G1",
-      "contract": "Topic intelligence — G1",
-      "author_task": "Research at least three serious topic candidates using current primary sources. Preserve search queries, inclusion and rejection reasons, uncertainty, negative evidence, the core thesis A and independent extension B. Do not claim novelty from absence alone."
-    },
-    "paper-architecture": {
-      "gate": "G2",
-      "contract": "Paper architecture — G2",
-      "author_task": "Build the complete paper map and one testable contract per configured paper. Give every paper a distinct question, falsification condition, dependencies, shared assets and fallback venues; reject salami slicing."
-    },
-    "experiment-design": {
-      "gate": "G3",
-      "contract": "Experiment design — G3",
-      "author_task": "Produce licensed dataset manifests, a machine-executable experiment plan and hard budget. Pre-register hypotheses, splits, leakage controls, baselines, ablations, metrics, seeds, uncertainty, stopping rules and negative-result handling. Never confirm a license for the human."
-    },
-    "experiment-execution": {
-      "gate": "G4",
-      "contract": "Experiment execution — G4",
-      "author_task": "Execute only the exact G3-approved plan through scripts/experiment_runner.py. Preserve failed attempts, immutable configuration, output hashes and negative results. Build the claim-evidence matrix and reproducibility report without selecting favorable runs."
-    },
-    "writing-and-review": {
-      "gate": "G5",
-      "contract": "Writing and review — G5",
-      "author_task": "Work only on state.active_paper. Write from the claim-evidence matrix, run citation and venue compliance audits, preserve two review rounds and itemized responses, and complete disclosure records. Never invent citations, results, authorship or venue status, and never submit."
-    }
+    "intake": {"gate": "G0", "contract": "Intake — G0", "author_task": "Capture only user-confirmed goals, constraints, budget, compute, schedule, application routes, exclusions and ethical boundaries. Leave unknown material facts explicit. Do not approve or advance the gate."},
+    "topic-intelligence": {"gate": "G1", "contract": "Topic intelligence — G1", "quality_report": "program/quality-G1.json", "hard_floor": "Every scored dimension >= 8.0; overall >= 8.5; at least 3 dated primary evidence items; comparative novelty; at least 2 current Q1 SCI/SCIE target venues per direction.", "author_task": "Research at least three serious topic candidates using current primary sources, literature, patents and market/position evidence where relevant. Preserve search queries, inclusion and rejection reasons, uncertainty, the core thesis A and independent extension B. Do not claim novelty from absence alone."},
+    "paper-architecture": {"gate": "G2", "contract": "Paper architecture — G2", "quality_report": "papers/Pxx/quality-G2.json", "hard_floor": "Every paper must score >= 8.0 on novelty, distinct contribution, significance, feasibility, methodological rigor and Q1 fit; overall >= 8.5; >=2 Q1 SCI/SCIE targets and a falsifiable contribution.", "author_task": "Build the complete paper map and one testable contract per configured paper. Give every paper a distinct question, falsification condition, non-overlapping contribution, dependencies, shared assets and fallback logic. Reject salami slicing."},
+    "experiment-design": {"gate": "G3", "contract": "Experiment design — G3", "quality_report": "experiments/quality-G3.json", "hard_floor": "Every scored dimension >= 8.0; overall >= 8.5; the design must support a Q1-level claim with baselines, ablations, uncertainty/statistics, leakage controls, reproducibility and feasible compute/data.", "author_task": "Produce licensed dataset manifests, a machine-executable experiment plan and hard budget. Pre-register hypotheses, splits, leakage controls, baselines, ablations, metrics, seeds, uncertainty, stopping rules and negative-result handling. Never confirm a license for the human."},
+    "experiment-execution": {"gate": "G4", "contract": "Experiment execution — G4", "quality_report": "reports/quality-G4.json", "hard_floor": "Every scored dimension >= 8.0; overall >= 8.5; observed evidence must support the scientific contribution, robustness, statistics and reproducibility expected by a Q1 reviewer. Failed and negative runs remain visible.", "author_task": "Execute only the exact G3-approved plan through scripts/experiment_runner.py. Preserve failed attempts, immutable configuration, output hashes and negative results. Build the claim-evidence matrix and reproducibility report without selecting favorable runs."},
+    "writing-and-review": {"gate": "G5", "contract": "Writing and review — G5", "quality_report": "papers/Pxx/reviews/quality-G5.json", "hard_floor": "Every scored dimension >= 8.0; overall >= 8.5; selected venue must be current JCR Q1 SCI/SCIE with IF >1.0; two adversarial review rounds have no unresolved fatal findings.", "author_task": "Work only on state.active_paper. Write from the claim-evidence matrix, run citation and venue compliance audits, preserve two review rounds and itemized responses, and complete disclosure records. Never invent citations, results, authorship or venue status, and never submit."}
   }
 }
