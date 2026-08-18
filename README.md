@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.0
+# Doctoral Research OS v1.1
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -11,6 +11,7 @@
 - Claude Code 非交互执行、每次调用预算上限、超时、输出上限、断点日志和敏感环境值脱敏。
 - Codex 只读、临时、JSON Schema 约束的初审和终审；终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可调用 Claude/OpenAI API 生成结构化阶段产物；模型生成的文件受路径、大小、状态文件和凭据保护约束。
+- UUAPI 原生适配：Anthropic Messages 作者与 OpenAI Responses 独立审稿角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
 - DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
@@ -87,13 +88,17 @@ python3 scripts/api_orchestrator.py health
 执行阶段：
 
 ```bash
+python3 scripts/researchctl.py init --project my-phd --paper-count 6
 python3 scripts/api_orchestrator.py stage my-phd intake --provider anthropic \
   --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU.'
 ```
 
-API 模式会把原始响应、结构化 bundle 和写入清单放在 `projects/<project>/api_runs/<run-id>/`。模型只能生成项目内普通科研文件，不能修改 `state/run.json`、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
+API 模式会把原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。模型只能生成项目内普通科研文件，不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
 
 完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
+
+使用 UUAPI + CC Switch 时，先阅读
+[`docs/UUAPI-CC-SWITCH.md`](docs/UUAPI-CC-SWITCH.md)，完成非计费配置检查、余额查询和两次最小实时探针后，再运行真实研究项目。
 
 ## CLI 一键启动与恢复
 
