@@ -223,6 +223,19 @@ def main() -> int:
     package_skill = ROOT / "skills" / "package" / "SKILL.md"
     if not package_skill.is_file():
         errors.append("skills/package/SKILL.md is required")
+    uuapi_doc = ROOT / "docs" / "UUAPI-CC-SWITCH.md"
+    if not uuapi_doc.is_file():
+        errors.append("docs/UUAPI-CC-SWITCH.md is required")
+    try:
+        provider_source = (ROOT / "scripts" / "ai_providers.py").read_text(
+            encoding="utf-8"
+        )
+    except OSError as exc:
+        errors.append(f"scripts/ai_providers.py: {exc}")
+    else:
+        for provider in ("uuapi-anthropic", "uuapi-openai"):
+            if provider not in provider_source:
+                errors.append(f"scripts/ai_providers.py must support {provider}")
 
     skill_names: dict[str, Path] = {}
     skill_paths = list((ROOT / "skills").glob("*/SKILL.md"))

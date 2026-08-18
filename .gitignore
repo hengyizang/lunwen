@@ -28,6 +28,7 @@ projects/**/experiments/runs/**/checkpoints/
 projects/**/experiments/runs/
 projects/**/papers/**/build/
 projects/**/state/runs/
+projects/**/api_runs/
 *.aux
 *.bbl
 *.blg
