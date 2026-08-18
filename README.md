@@ -1,6 +1,6 @@
-# Doctoral Research OS
+# Doctoral Research OS v1.0
 
-面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude Code 负责产物构建，Codex 负责独立复核，本地脚本负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
+面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
 “一键”指：创建或恢复项目，运行当前阶段的 author → critic → remediation → final critic 流程，通过确定性检查后停在下一道人类审批闸门。它不代表自动批准选题、自动确认数据许可、自动产出真实实验结果或自动投稿。
 
@@ -10,6 +10,7 @@
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
 - Claude Code 非交互执行、每次调用预算上限、超时、输出上限、断点日志和敏感环境值脱敏。
 - Codex 只读、临时、JSON Schema 约束的初审和终审；终审未通过时闸门保持关闭。
+- API-first 模式：无需 Claude Code/Codex CLI 即可调用 Claude/OpenAI API 生成结构化阶段产物；模型生成的文件受路径、大小、状态文件和凭据保护约束。
 - DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
@@ -18,6 +19,27 @@
 - 已通过单篇 G5 后生成确定性的人工投稿 ZIP、逐文件 SHA-256 清单和人工检查表；不访问期刊门户。
 
 系统不会把模型一致意见当作科学验证。最终 PDF/DOCX、作者资格、伦理、数据权利、当年 JCR 信息和投稿门户仍由人确认。
+
+## 推荐架构
+
+```text
+                    Doctoral Research OS
+                             |
+                 Python deterministic control plane
+                             |
+       +---------------------+---------------------+
+       |                     |                     |
+   Claude API            OpenAI API          Local experiments
+   research/writing      critique/audit       after G3 approval
+       |                     |                     |
+       +---------------------+---------------------+
+                             |
+             state / evidence / hashes / gates
+                             |
+                venue compliance / submission ZIP
+```
+
+Claude Code 和 Codex CLI 保留为可选高级接口；系统的科研状态和安全边界不依赖某一个 CLI。
 
 ## 安装
 
@@ -35,7 +57,7 @@ cd lunwen
 bash scripts/bootstrap-wsl.sh
 ```
 
-先分别安装并登录 `claude` 与 `codex` CLI。仓库不保存 API key；如使用环境变量，只在对应单次进程中注入。
+CLI 模式需要分别安装并登录 `claude` 与 `codex`。API-first 模式不需要它们；只需要相应 API key。仓库不保存 API key。
 
 可选的 K-Dense 通用科研技能子集：
 
@@ -45,7 +67,35 @@ bash scripts/bootstrap-wsl.sh --with-kdense
 
 该选项只安装锁定提交中的筛选子集，默认不开启。许可、固定版本和边界见 `references/upstream-components.md`。
 
-## 一键启动与恢复
+## API-first 模式（推荐长期使用）
+
+配置环境变量：
+
+```bash
+export ANTHROPIC_API_KEY='...'
+export ANTHROPIC_MODEL='你的当前Anthropic模型ID'
+export OPENAI_API_KEY='...'
+export OPENAI_MODEL='gpt-5.6'
+```
+
+检查：
+
+```bash
+python3 scripts/api_orchestrator.py health
+```
+
+执行阶段：
+
+```bash
+python3 scripts/api_orchestrator.py stage my-phd intake --provider anthropic \
+  --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU.'
+```
+
+API 模式会把原始响应、结构化 bundle 和写入清单放在 `projects/<project>/api_runs/<run-id>/`。模型只能生成项目内普通科研文件，不能修改 `state/run.json`、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
+
+完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
+
+## CLI 一键启动与恢复
 
 ```bash
 bash scripts/start.sh my-phd "目标、已有背景、每周时间、预算和设备条件"
@@ -193,9 +243,9 @@ python3 scripts/venue_compliance.py projects/my-phd/papers/P01
 python3 scripts/submission_package.py --project my-phd --paper P01
 ```
 
-默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`（投稿信、Highlights、Graphical Abstract、Title Page 等）。同时生成逐文件 SHA-256 的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。
+默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`。同时生成逐文件 SHA-256 的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。
 
-打包器拒绝符号链接、隐藏文件和密钥类文件，不包含原始数据、期刊模板归档、运行日志或实验原始产物。ZIP 只是整理工具；不同期刊常要求分槽上传，作者仍需逐项核对、手动上传、预览门户生成稿并最终确认提交。
+打包器拒绝符号链接、隐藏文件和密钥类文件，不包含原始数据、期刊模板归档、运行日志或实验原始产物。ZIP 只是整理工具；作者仍需逐项核对、手动上传、预览门户生成稿并最终确认提交。
 
 ## 验证
 
@@ -214,9 +264,9 @@ CI 同时执行编译、单元测试和仓库结构验证。
 .claude-plugin/       Claude Code 插件清单
 agents/               有边界的专职代理
 config/               默认值与机器可读阶段任务
+docs/                 API-first 架构和操作说明
 references/           流程、阶段合同与科研诚信规则
 schemas/              数据、实验、审核、期刊与证据格式
-scripts/              编排器、状态机、发现、执行与审计工具
+scripts/              API/CLI 编排器、状态机、发现、执行与审计工具
 venues/               期刊清单（需在 G5 复核）
-projects/             本地研究项目；原始数据和大产物被忽略
 ```
