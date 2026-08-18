@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "quality-gate.schema.json",
+  "title": "Doctoral Research OS Quality Gate Report",
+  "type": "object",
+  "required": ["schema_version", "gate", "status", "scores", "evidence", "novelty_claim", "feasibility_claim", "scientific_contribution", "novelty_basis", "novelty_is_absence_only", "q1_target", "blockers", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "gate": {"enum": ["G1", "G2", "G3", "G4", "G5"]},
+    "status": {"enum": ["ready_for_review", "approved"]},
+    "scores": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 10}},
+    "evidence": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["id", "source", "claim_supported", "source_date"]}},
+    "novelty_claim": {"type": "string", "minLength": 1},
+    "feasibility_claim": {"type": "string", "minLength": 1},
+    "scientific_contribution": {"type": "string", "minLength": 1},
+    "novelty_basis": {"enum": ["comparative_primary_literature", "comparative_literature_and_patents"]},
+    "novelty_is_absence_only": {"const": false},
+    "q1_target": {
+      "type": "object",
+      "required": ["candidate_venues", "current_verification_required"],
+      "properties": {
+        "candidate_venues": {"type": "array", "minItems": 2},
+        "current_verification_required": {"const": true}
+      }
+    },
+    "blockers": {"type": "array", "maxItems": 0},
+    "human_review_required": {"const": true}
+  },
+  "additionalProperties": true
+}
