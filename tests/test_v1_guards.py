@@ -4,7 +4,8 @@ import unittest
 from pathlib import Path
 
 from scripts import api_orchestrator
-from scripts.submission_guard import verify_jcr, JcrVerificationError
+from scripts.jcr_verify import JcrVerificationError
+from scripts.submission_guard import verify_jcr
 
 
 class V1GuardTests(unittest.TestCase):
@@ -21,7 +22,7 @@ class V1GuardTests(unittest.TestCase):
             "verified_at": "2026-08-18T00:00:00+00:00",
         }
         with self.assertRaises(JcrVerificationError):
-            verify_jcr_payload(payload)
+            verify_payload(payload)
 
     def test_jcr_accepts_if_above_one(self):
         payload = {
@@ -35,7 +36,7 @@ class V1GuardTests(unittest.TestCase):
             "verified_by": "tester",
             "verified_at": "2026-08-18T00:00:00+00:00",
         }
-        verify_jcr_payload(payload)
+        verify_payload(payload)
 
     def test_api_path_protection(self):
         with self.assertRaises(ValueError):
@@ -44,7 +45,7 @@ class V1GuardTests(unittest.TestCase):
             api_orchestrator.safe_target("demo", ".env")
 
 
-def verify_jcr_payload(payload):
+def verify_payload(payload):
     with tempfile.TemporaryDirectory() as temp:
         path = Path(temp) / "jcr.json"
         path.write_text(json.dumps(payload), encoding="utf-8")
