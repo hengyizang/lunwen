@@ -542,7 +542,14 @@ def initialize(args: argparse.Namespace) -> None:
     for number in range(1, paper_count + 1):
         paper_id = f"P{number:02d}"
         paper = destination / "papers" / paper_id
-        for rel in ["manuscript", "figures", "tables", "supplement", "reviews"]:
+        for rel in [
+            "manuscript",
+            "figures",
+            "tables",
+            "supplement",
+            "submission-materials",
+            "reviews",
+        ]:
             (paper / rel).mkdir(parents=True, exist_ok=True)
         write_json(
             paper / "paper-contract.json",

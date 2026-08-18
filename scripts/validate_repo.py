@@ -217,6 +217,12 @@ def main() -> int:
     else:
         if "scripts/autopilot.py start" not in start_script:
             errors.append("scripts/start.sh must invoke the bounded autopilot")
+    package_script = ROOT / "scripts" / "submission_package.py"
+    if not package_script.is_file():
+        errors.append("scripts/submission_package.py is required")
+    package_skill = ROOT / "skills" / "package" / "SKILL.md"
+    if not package_skill.is_file():
+        errors.append("skills/package/SKILL.md is required")
 
     skill_names: dict[str, Path] = {}
     skill_paths = list((ROOT / "skills").glob("*/SKILL.md"))

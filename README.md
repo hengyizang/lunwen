@@ -15,6 +15,7 @@
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
 - 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
+- 已通过单篇 G5 后生成确定性的人工投稿 ZIP、逐文件 SHA-256 清单和人工检查表；不访问期刊门户。
 
 系统不会把模型一致意见当作科学验证。最终 PDF/DOCX、作者资格、伦理、数据权利、当年 JCR 信息和投稿门户仍由人确认。
 
@@ -183,6 +184,18 @@ python3 scripts/venue_compliance.py projects/my-phd/papers/P01
 ```
 
 首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。
+
+## 人工投稿包
+
+当某篇论文已经通过其 G5 人类审批并在状态中标记为 `submission_ready` 后，可生成本地投稿材料包：
+
+```bash
+python3 scripts/submission_package.py --project my-phd --paper P01
+```
+
+默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`（投稿信、Highlights、Graphical Abstract、Title Page 等）。同时生成逐文件 SHA-256 的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。
+
+打包器拒绝符号链接、隐藏文件和密钥类文件，不包含原始数据、期刊模板归档、运行日志或实验原始产物。ZIP 只是整理工具；不同期刊常要求分槽上传，作者仍需逐项核对、手动上传、预览门户生成稿并最终确认提交。
 
 ## 验证
 
