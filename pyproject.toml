@@ -1,7 +1,7 @@
 [project]
 name = "doctoral-research-os"
-version = "0.3.0"
-description = "Human-gated research workflow for Claude Code and Codex"
+version = "1.0.0"
+description = "API-first, human-gated Doctoral Research OS for topic selection, experiments, writing, review, venues and manual submission"
 requires-python = ">=3.10"
 
 [tool.unittest]
