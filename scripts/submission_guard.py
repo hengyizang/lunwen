@@ -27,6 +27,8 @@ def verify_jcr(path: Path) -> dict:
         raise ResearchCtlError("JCR verification must identify Clarivate Journal Citation Reports")
     if not isinstance(data["impact_factor"], (int, float)) or data["impact_factor"] <= 1.0:
         raise ResearchCtlError("Manual submission requires a human-verified JCR impact factor > 1.0")
+    if data["quartile"] != "Q1":
+        raise ResearchCtlError("Manual submission requires a current JCR Q1 venue")
     if data["indexing"] not in {"SCI", "SCIE"}:
         raise ResearchCtlError("Manual submission requires SCI/SCIE indexing")
     if not str(data["source_url"]).startswith("https://"):
@@ -56,7 +58,7 @@ def main() -> int:
         print(f"error: {exc}")
         return 2
     print(destination)
-    print("JCR/SCI threshold passed. Package is for manual upload only; nothing was submitted.")
+    print("JCR Q1/SCI threshold passed. Package is for manual upload only; nothing was submitted.")
     return 0
 
 
