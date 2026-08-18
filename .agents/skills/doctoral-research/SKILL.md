@@ -15,6 +15,7 @@ Interpret the request as one of:
 - `experiment <slug> <design|run>`: design or audit reproducible experiments;
 - `review <slug> [paper]`: audit code, statistics, claims and reproducibility;
 - `retarget <slug> <paper> <venue>`: verify official requirements and template adaptation;
+- `package <slug> <paper>`: build a deterministic ZIP for human inspection and manual upload;
 - `audit <slug>`: run a cross-stage integrity check.
 
 Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Require initial and final Codex audits at G1–G5. Never edit gate approvals by hand. Never approve a gate for the user.
@@ -28,4 +29,4 @@ When acting as the independent critic:
 5. Report blockers, major and minor findings, residual uncertainty and a verdict.
 6. Preserve findings under `projects/<slug>/reviews/codex/`.
 
-Never invent missing data, citations or results, and never auto-submit.
+Never invent missing data, citations or results. Packaging is local-only: never request portal credentials, upload files or auto-submit.
