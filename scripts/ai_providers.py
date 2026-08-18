@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Small dependency-free API adapters for the Doctoral Research OS.
 
-The adapters deliberately return model text plus usage metadata. They never
-execute model-produced commands. Tool use and local execution remain under the
-existing human-gated Python control plane.
+The adapters return model text plus usage metadata. They never execute
+model-produced commands; local execution remains under the human-gated
+Python control plane.
 """
 from __future__ import annotations
 
@@ -36,8 +36,7 @@ def _request(url: str, headers: dict[str, str], payload: dict[str, Any], timeout
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
-                raw = response.read().decode("utf-8")
-                return json.loads(raw)
+                return json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
             if exc.code in {429, 500, 502, 503, 504} and attempt < 2:
@@ -59,10 +58,15 @@ def call_openai(prompt: str, *, model: str | None = None, system: str | None = N
     if not key:
         raise ProviderError("OPENAI_API_KEY is not configured")
     model = model or os.environ.get("OPENAI_MODEL", "gpt-5.6")
-    content = prompt if not system else [{"role": "developer", "content": system}, {"role": "user", "content": prompt}]
-    payload = {"model": model, "input": content, "max_output_tokens": max_output_tokens}
-    data = _request(os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1/responses"),
-                    {"Authorization": f"Bearer {key}"}, payload, timeout)
+    content: Any = prompt
+    if system:
+        content = [{"role": "developer", "content": system}, {"role": "user", "content": prompt}]
+    data = _request(
+        os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1/responses"),
+        {"Authorization": f"Bearer {key}"},
+        {"model": model, "input": content, "max_output_tokens": max_output_tokens},
+        timeout,
+    )
     text = data.get("output_text")
     if not isinstance(text, str):
         chunks: list[str] = []
@@ -81,7 +85,9 @@ def call_anthropic(prompt: str, *, model: str | None = None, system: str | None 
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         raise ProviderError("ANTHROPIC_API_KEY is not configured")
-    model = model or os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
+    model = model or os.environ.get("ANTHROPIC_MODEL")
+    if not model:
+        raise ProviderError("ANTHROPIC_MODEL is not configured; set it to a current model ID")
     payload: dict[str, Any] = {
         "model": model,
         "max_tokens": max_tokens,
@@ -89,8 +95,12 @@ def call_anthropic(prompt: str, *, model: str | None = None, system: str | None 
     }
     if system:
         payload["system"] = system
-    data = _request(os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1/messages"),
-                    {"x-api-key": key, "anthropic-version": os.environ.get("ANTHROPIC_VERSION", "2023-06-01")}, payload, timeout)
+    data = _request(
+        os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1/messages"),
+        {"x-api-key": key, "anthropic-version": os.environ.get("ANTHROPIC_VERSION", "2023-06-01")},
+        payload,
+        timeout,
+    )
     parts = [p.get("text", "") for p in data.get("content", []) if isinstance(p, dict) and p.get("type") == "text"]
     text = "\n".join(p for p in parts if p)
     if not text:
