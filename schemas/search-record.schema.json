@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/search-record.schema.json",
+  "title": "Traceable originality-search record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "search_id", "database", "query_family", "query", "searched_at", "date_range", "filters", "result_count", "included_work_ids", "exclusion_reasons", "source_url"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "search_id": {"type": "string", "minLength": 1},
+    "database": {"type": "string", "minLength": 1},
+    "query_family": {"type": "string", "minLength": 1},
+    "query": {"type": "string", "minLength": 1},
+    "searched_at": {"type": "string", "format": "date-time"},
+    "date_range": {"type": "string", "minLength": 1},
+    "filters": {"type": "string", "minLength": 1},
+    "result_count": {"type": "integer", "minimum": 0},
+    "included_work_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "exclusion_reasons": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "source_url": {"type": "string", "pattern": "^https://"}
+  }
+}

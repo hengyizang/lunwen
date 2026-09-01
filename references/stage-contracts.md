@@ -16,10 +16,11 @@ Do not begin broad topic scoring while critical constraints are unknown.
 
 Required:
 
-- `evidence/search-log.jsonl`;
+- `evidence/search-log.jsonl` with each line conforming to `schemas/search-record.schema.json`; every claimed database, query family and closest-work inclusion must be traceable to a logged search;
 - `program/topic-shortlist.json` with at least three serious candidates and explicit rejection reasons;
 - `program/core-thesis.json` for doctoral proposition A;
 - `program/extension-thesis.json` for separately doctoral-level extension B;
+- `program/originality-audit.json` conforming to `schemas/originality-audit.schema.json`, including at least five closest primary works, three adjacent fields, three query families, counterevidence, residual novelty risk, a doctoral case and a reliability strategy;
 - `program/topic-decision.md` with novelty, contribution, feasibility, competition, PhD-position supply and job-market evidence.
 
 Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.”
@@ -28,7 +29,7 @@ Stress-test novelty against adjacent literatures, not only exact keywords. Disti
 
 Required:
 
-- `program/paper-map.json`;
+- `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, including every pairwise paper comparison, independently sufficient primary evidence, standalone value and a justification for any shared outcome;
 - six default paper contracts under `papers/P01`–`papers/P06`;
 - dependency graph, shared assets, independent contribution, falsification condition and fallback venue for each paper;
 - thesis synthesis showing why the collection is more than six unrelated papers.
@@ -41,8 +42,9 @@ Required:
 
 - `data/datasets.jsonl` with licenses and provenance;
 - `experiments/plan.json` conforming to `schemas/experiment-plan.schema.json`;
+- one or more JSON design files under `papers/Pxx/experiments/` for every configured paper, each conforming to `schemas/paper-experiment-design.schema.json`, with every global plan run assigned to exactly one design;
 - `experiments/budget.json` with `status: ready_for_review` and `hard_ceiling_usd`;
-- hypotheses, baselines, ablations, splits, metrics, uncertainty, power/precision rationale, seeds and stopping rules;
+- hypotheses; traceable simple, domain-standard and strong-recent baselines with source, version, license and comparable tuning budgets; ablations; splits; primary/secondary metrics; estimands; practical-significance thresholds; effect sizes; confidence intervals; multiplicity handling; power/precision rationale; at least three seeds for stochastic designs; robustness, negative controls and stopping rules;
 - leakage, privacy, bias and external-validity assessment.
 
 Freeze the confirmatory plan before final runs. Label later exploration as exploratory.
@@ -72,5 +74,6 @@ Required:
 - current JCR/venue-policy re-verification;
 - current output-provenance hashes showing no packaged manuscript, table, figure, supplement, disclosure, response or cover-letter file was persistently written by Claude/Anthropic;
 - figures rendered by deterministic local code from recorded data, with plotting code/configuration retained.
+- all manuscript-bound text—including title, abstract, body, captions, tables, supplement, responses and cover material—written in English, with `scripts/manuscript_language.py` passing on the final manuscript source.
 
 Repeat G5 for `state.active_paper`. A paper-level approval moves to the next configured paper; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP, manifest and manual checklist for that paper. The human must inspect every final PDF/DOCX, choose the portal upload slots and submit. Agents do not log into portals, upload or submit.

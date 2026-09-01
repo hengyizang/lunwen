@@ -20,6 +20,8 @@ This repository is a research workflow, not a publication generator.
 16. Treat third-party gateways as untrusted transport: use HTTPS, keep keys out of files and URLs, record requested and reported model IDs, and stop on missing or mismatched model identity.
 17. The author and independent critic must use different model families. A different endpoint or account does not make the same family independent.
 18. Never package a file whose current provenance hash identifies Anthropic/Claude as its persistent writer. Human or deterministic local edits must create a new file hash; do not use paraphrasing merely to conceal AI use.
+19. Require current JCR Q1 SCI/SCIE candidate and selected venues. A quartile does not establish methodological rigor; apply the separate doctoral/originality/experiment contracts and re-check category/year evidence.
+20. Write every manuscript-bound artifact in English. G5 must pass the deterministic manuscript-language check; a model's assertion that prose is English is not sufficient.
 
 Run repository checks after code or schema changes:
 

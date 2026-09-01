@@ -99,12 +99,12 @@ def validate_venue(path: Path, errors: list[str]) -> None:
         if key not in value:
             errors.append(f"{path.relative_to(ROOT)}: missing {key}")
     jcr = value.get("jcr", {})
-    if jcr.get("quartile") == "Q1" and jcr.get("evidence_status") not in {
+    if jcr.get("quartile") in {"Q1", "Q2"} and jcr.get("evidence_status") not in {
         "direct-clarivate",
         "publisher-reported",
         "institutional-jcr-export",
     }:
-        errors.append(f"{path.relative_to(ROOT)}: Q1 needs identified JCR evidence")
+        errors.append(f"{path.relative_to(ROOT)}: Q1/Q2 needs identified JCR evidence")
     if jcr.get("direct_clarivate_recheck_required") is not True:
         errors.append(f"{path.relative_to(ROOT)}: G5 Clarivate recheck must be required")
     for source in value.get("sources", []):

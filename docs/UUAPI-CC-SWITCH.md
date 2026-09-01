@@ -106,6 +106,12 @@ request ID and token usage in the run manifest. It does not approve or advance
 G0. At G1–G5 it additionally creates the matching initial/final JSON audits and
 decision log required by the deterministic gate.
 
+From G1 onward, allocate enough output tokens for the expanded doctoral/Q1
+contracts: closest-work originality evidence, all pairwise paper comparisons,
+and one or more complete experiment designs per paper with exact run coverage. At G5, Codex/OpenAI writes the
+English manuscript and the local language validator must pass; Claude remains
+read-only planning/audit material.
+
 `api_runs/` contains the Claude plan, raw model responses and usage diagnostics
 and is ignored by Git. Claude cannot write scientific or submission artifacts;
 its schema-checked audits are stored only as internal control records. The

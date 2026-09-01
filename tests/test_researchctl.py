@@ -39,6 +39,10 @@ class ResearchCtlTests(unittest.TestCase):
         venue = json.loads((project / "papers" / "P01" / "venue.json").read_text())
         self.assertEqual(venue["venue_id"], "ijssd")
         self.assertEqual(venue["selection_status"], "trial")
+        contract = json.loads((project / "papers" / "P01" / "paper-contract.json").read_text())
+        self.assertEqual(contract["schema_version"], "2.0")
+        self.assertEqual(contract["writing_language"], "en")
+        self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
 
     def test_duplicate_project_is_rejected(self) -> None:
         self.init_project()
@@ -146,6 +150,43 @@ class ResearchCtlTests(unittest.TestCase):
         self.assertTrue(
             all(value == "submission_ready" for value in state["paper_statuses"].values())
         )
+
+    def test_g3_malformed_nested_plan_reports_errors_instead_of_crashing(self) -> None:
+        project = self.init_project(paper_count=1)
+        state = researchctl.load_state("test-phd")
+        state.update(
+            {"stage_index": 3, "stage": "experiment-design", "gate": "G3"}
+        )
+        researchctl.save_state("test-phd", state)
+        researchctl.write_json(
+            project / "experiments" / "plan.json",
+            {"schema_version": "1.0", "status": "ready_for_review", "runs": None},
+        )
+        errors = researchctl.gate_errors("test-phd", "G3")
+        self.assertTrue(any("runs must be a non-empty array" in error for error in errors))
+        self.assertTrue(any("experiments" in error and "*.json" in error for error in errors))
+
+    def test_g3_detects_planned_runs_missing_from_paper_designs(self) -> None:
+        project = self.init_project(paper_count=1)
+        state = researchctl.load_state("test-phd")
+        state.update(
+            {"stage_index": 3, "stage": "experiment-design", "gate": "G3"}
+        )
+        researchctl.save_state("test-phd", state)
+        runs = [
+            {"run_id": f"run-{seed}", "paper_id": "P01", "argv": ["python3", "study.py"], "cwd": ".", "seed": seed, "timeout_seconds": 60, "estimated_cost_usd": 0, "inputs": [], "expected_outputs": []}
+            for seed in (1, 2, 3)
+        ]
+        researchctl.write_json(
+            project / "experiments" / "plan.json",
+            {"schema_version": "1.0", "status": "ready_for_review", "runs": runs},
+        )
+        researchctl.write_json(
+            project / "papers" / "P01" / "experiments" / "primary.json",
+            {"schema_version": "1.0", "status": "ready_for_review", "paper_id": "P01", "design_id": "D1", "run_ids": ["run-1"]},
+        )
+        errors = researchctl.gate_errors("test-phd", "G3")
+        self.assertTrue(any("omit planned runs: run-2, run-3" in error for error in errors))
 
 
 if __name__ == "__main__":

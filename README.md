@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.2
+# Doctoral Research OS v1.3
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -8,6 +8,10 @@
 
 - G0–G5 状态机和显式人类审批；审批包含产物哈希。
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
+- G1 强制最接近的 5 项既有研究、3 个相邻领域、反证与剩余原创性风险；G2 对全部论文两两检查，六篇时必须覆盖 15 组比较，阻止“切香肠”。
+- G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
+- 候选与最终期刊均要求当前 JCR Q1 SCI/SCIE；JCR 分区必须按年份和类别人工核验。
+- 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对 `main.tex`/`main.docx` 执行确定性语言检查。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
@@ -160,9 +164,9 @@ Codex 会发现 `.agents/skills/doctoral-research`。
 | 闸门 | 人类批准的内容 | 通过后允许 |
 |---|---|---|
 | G0 | 目标、时间、预算、设备、地区、伦理边界 | 选题情报 |
-| G1 | 三个以上候选、核心命题 A、扩展命题 B、淘汰理由 | 论文组合架构 |
-| G2 | 完整 paper map 与每篇可证伪 contract | 数据与实验设计 |
-| G3 | 数据许可、SHA、可执行实验计划、统计方案、预算 | 执行锁定计划 |
+| G1 | 三个以上候选、最近工作对照、原创性风险、核心命题 A、扩展命题 B、博士论证 | 论文组合架构 |
+| G2 | 完整 paper map、全部论文两两独立性比较、每篇可证伪 contract 与两个当前 JCR Q1 候选 | 数据与实验设计 |
+| G3 | 数据许可、SHA、每篇独立实验设计、可执行计划、统计功效/精度与预算 | 执行锁定计划 |
 | G4 | 全部尝试、负结果、claim-evidence matrix、复现报告 | 结果约束写作 |
 | G5 | 当前论文的引用、两轮审稿、模板、披露、当年期刊复核 | 标记该篇就绪；转下一篇 |
 
@@ -198,7 +202,7 @@ python3 scripts/dataset_fetch.py download \
 
 ## 实验执行
 
-`experiments/plan.json` 必须符合 `schemas/experiment-plan.schema.json`，并和 `experiments/budget.json` 一起通过 G3 人工批准。示例单次运行：
+每篇论文在 `papers/Pxx/experiments/` 下建立一份或多份 JSON 设计文件，均符合 `schemas/paper-experiment-design.schema.json`；其中的假设、数据集、设计 ID、种子和运行 ID 必须分别与论文 contract、数据清单及全局 `experiments/plan.json` 完整对上，不允许遗漏或重复分配运行。每个基线还要记录原始来源、年份、实现版本、许可和调参预算，并说明公平比较协议。全局计划与 `experiments/budget.json` 一起通过 G3 人工批准。示例单次运行：
 
 ```json
 {
@@ -240,9 +244,10 @@ python3 scripts/venue_adapter.py inspect ~/Downloads/ijssd-2e.zip
 python3 scripts/venue_adapter.py ingest \
   ~/Downloads/ijssd-2e.zip projects/my-phd/papers/P01/venue-template
 python3 scripts/venue_compliance.py projects/my-phd/papers/P01
+python3 scripts/manuscript_language.py projects/my-phd/papers/P01/manuscript/main.tex
 ```
 
-首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。
+首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、Q1 分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。最终正文及所有投稿相关文本必须为英文。
 
 ## 人工投稿包
 
