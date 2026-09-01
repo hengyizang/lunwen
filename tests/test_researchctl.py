@@ -29,6 +29,12 @@ class ResearchCtlTests(unittest.TestCase):
         )
         return researchctl.PROJECTS_ROOT / slug
 
+    def complete_constraints(self, project: Path) -> None:
+        path=project/"intake"/"constraints.json"
+        value=json.loads(path.read_text())
+        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"novelty_and_doctoral_depth":0.3,"feasibility_without_lab":0.2,"funded_position_supply":0.1,"competition":0.1,"job_market_and_salary":0.1,"background_fit":0.2}})
+        researchctl.write_json(path,value)
+
     def test_initialize_creates_state_papers_and_trial_venue(self) -> None:
         project = self.init_project()
         state = json.loads((project / "state" / "run.json").read_text())
@@ -54,10 +60,7 @@ class ResearchCtlTests(unittest.TestCase):
         with self.assertRaises(researchctl.ResearchCtlError):
             researchctl.advance(types.SimpleNamespace(project="test-phd"))
 
-        constraints_path = project / "intake" / "constraints.json"
-        constraints = json.loads(constraints_path.read_text())
-        constraints["status"] = "ready_for_review"
-        researchctl.write_json(constraints_path, constraints)
+        self.complete_constraints(project)
 
         researchctl.mark_ready(
             types.SimpleNamespace(project="test-phd", note="prepared")
@@ -90,9 +93,8 @@ class ResearchCtlTests(unittest.TestCase):
     def test_artifact_change_invalidates_approval(self) -> None:
         project = self.init_project()
         constraints_path = project / "intake" / "constraints.json"
+        self.complete_constraints(project)
         constraints = json.loads(constraints_path.read_text())
-        constraints["status"] = "ready_for_review"
-        researchctl.write_json(constraints_path, constraints)
         researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note="ready"))
         researchctl.approve(
             types.SimpleNamespace(
@@ -103,6 +105,33 @@ class ResearchCtlTests(unittest.TestCase):
         researchctl.write_json(constraints_path, constraints)
         with self.assertRaises(researchctl.ResearchCtlError):
             researchctl.advance(types.SimpleNamespace(project="test-phd"))
+
+    def test_g0_rejects_status_only_with_unknown_constraints(self) -> None:
+        project=self.init_project()
+        path=project/"intake"/"constraints.json";value=json.loads(path.read_text());value["status"]="ready_for_review";researchctl.write_json(path,value)
+        errors=researchctl.gate_errors("test-phd","G0")
+        self.assertTrue(any("weekly_hours" in error for error in errors))
+
+    def test_change_after_ready_requires_fresh_human_review(self) -> None:
+        project=self.init_project();self.complete_constraints(project)
+        researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
+        path=project/"intake"/"constraints.json";value=json.loads(path.read_text());value["notes"].append("changed");researchctl.write_json(path,value)
+        with self.assertRaisesRegex(researchctl.ResearchCtlError,"changed after ready"):
+            researchctl.approve(types.SimpleNamespace(project="test-phd",gate="G0",actor="Human",note="old review"))
+
+    def test_reopen_returns_gate_to_model_editable_work(self) -> None:
+        project=self.init_project();self.complete_constraints(project);researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
+        researchctl.reopen(types.SimpleNamespace(project="test-phd",note="Needs another model revision"))
+        state=researchctl.load_state("test-phd");self.assertEqual(state["status"],"awaiting_work");self.assertNotIn("ready_artifact_sha256",state)
+
+    def test_final_audit_blocks_major_findings_and_unresolved_dispositions(self) -> None:
+        project=self.init_project();review_dir=project/"reviews"/"independent";review_dir.mkdir(parents=True,exist_ok=True)
+        base={"verdict":"revise","fatal_findings":[],"major_findings":[],"minor_findings":[],"missing_evidence":[],"remediation_steps":[],"uncertainty":[]}
+        initial=review_dir/"G1-run-initial.json";final=review_dir/"G1-run-final.json";researchctl.write_json(initial,base)
+        bad={**base,"verdict":"pass-with-conditions","major_findings":["weak baseline"]};researchctl.write_json(final,bad)
+        (project/"reviews"/"decision-log.md").write_text("# Review decision log\n\n## latest\n- Initial independent audit: `reviews/independent/G1-run-initial.json`\n- Final independent audit: `reviews/independent/G1-run-final.json`\n  - unresolved: baseline remains\n",encoding="utf-8")
+        errors=[];researchctl.independent_audit_errors(project,"G1",errors)
+        self.assertTrue(any("no fatal/major" in error for error in errors));self.assertTrue(any("unresolved" in error for error in errors))
 
     def test_g5_advances_each_paper_before_finishing(self) -> None:
         self.init_project(paper_count=3)

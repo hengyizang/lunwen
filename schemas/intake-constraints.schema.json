@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/intake-constraints.schema.json",
+  "title": "Human-confirmed G0 research constraints",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "research_goal", "researcher_background", "available_skills", "preferred_domains", "candidate_application_routes", "time_horizon_years", "weekly_hours", "cash_budget_usd", "cloud_compute_budget_usd", "local_compute", "equipment", "data_constraint", "ranking_weights", "excluded_domains", "ethics_or_legal_constraints", "notes", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.1"},
+    "status": {"enum": ["needs_user_input", "ready_for_review"]},
+    "research_goal": {"type": ["string", "null"]},
+    "researcher_background": {"type": ["string", "null"]},
+    "available_skills": {"type": "array", "items": {"type": "string"}},
+    "preferred_domains": {"type": "array", "items": {"type": "string"}},
+    "candidate_application_routes": {"type": "array", "items": {"type": "string"}},
+    "time_horizon_years": {"type": ["number", "null"]},
+    "weekly_hours": {"type": ["number", "null"]},
+    "cash_budget_usd": {"type": ["number", "null"]},
+    "cloud_compute_budget_usd": {"type": ["number", "null"]},
+    "local_compute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gpu", "ram_gb", "storage_gb"],
+      "properties": {
+        "gpu": {"type": ["string", "null"]},
+        "ram_gb": {"type": ["number", "null"]},
+        "storage_gb": {"type": ["number", "null"]}
+      }
+    },
+    "equipment": {"type": "string"},
+    "data_constraint": {"type": "string"},
+    "ranking_weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["novelty_and_doctoral_depth", "feasibility_without_lab", "funded_position_supply", "competition", "job_market_and_salary", "background_fit"],
+      "properties": {
+        "novelty_and_doctoral_depth": {"type": ["number", "null"]},
+        "feasibility_without_lab": {"type": ["number", "null"]},
+        "funded_position_supply": {"type": ["number", "null"]},
+        "competition": {"type": ["number", "null"]},
+        "job_market_and_salary": {"type": ["number", "null"]},
+        "background_fit": {"type": ["number", "null"]}
+      }
+    },
+    "excluded_domains": {"type": "array", "items": {"type": "string"}},
+    "ethics_or_legal_constraints": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "array", "items": {"type": "string"}},
+    "human_review_required": {"const": true}
+  }
+}

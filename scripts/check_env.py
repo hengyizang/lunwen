@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import platform
 import shutil
 import sys
@@ -18,6 +19,7 @@ def version_output(command: str) -> str | None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--soft", action="store_true", help="Always return success")
+    parser.add_argument("--mode", choices=("api", "cli", "all"), default="api")
     args = parser.parse_args()
 
     in_wsl = (
@@ -25,7 +27,8 @@ def main() -> int:
         or "microsoft" in platform.version().lower()
         or Path("/proc/sys/fs/binfmt_misc/WSLInterop").exists()
     )
-    required = {name: version_output(name) for name in ["git", "claude", "codex"]}
+    required_names=["git"]+(["claude","codex"] if args.mode in {"cli","all"} else [])
+    required = {name: version_output(name) for name in required_names}
     optional = {
         name: version_output(name)
         for name in ["latexmk", "pandoc", "docker", "quarto", "Rscript"]
@@ -37,6 +40,7 @@ def main() -> int:
         },
         "platform": platform.platform(),
         "wsl": in_wsl,
+        "mode": args.mode,
         "required_commands": required,
         "optional_commands": optional,
         "recommendations": [],
@@ -52,6 +56,10 @@ def main() -> int:
     for name, path in required.items():
         if path is None:
             report["recommendations"].append(f"Install or expose {name} on PATH.")
+    if args.mode in {"api","all"}:
+        configured={name:bool(os.environ.get(name)) for name in ("UUAPI_API_KEY","UUAPI_BASE_URL","UUAPI_ANTHROPIC_MODEL","UUAPI_OPENAI_MODEL")}
+        report["uuapi_api_configuration"]=configured
+        if not all(configured.values()):report["recommendations"].append("Set the four UUAPI_* environment variables before live API use.")
     if optional["latexmk"] is None:
         report["recommendations"].append(
             "Install TeX Live/latexmk before validating LaTeX journal templates."
@@ -67,4 +75,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 from scripts.manuscript_language import analyze
@@ -23,13 +24,13 @@ def originality_audit():
             "databases": ["WoS", "Scopus", "IEEE Xplore"],
             "adjacent_fields": ["reliability", "robotics", "operations"],
             "query_families": ["mechanism", "application", "failure mode"],
-            "cutoff_date": "2026-09-01",
+            "cutoff_date": date.today().isoformat(),
         },
         "closest_prior_work": [
             {
                 "id": f"W{index}",
                 "title": f"Prior work {index}",
-                "publication_year": 2020 + index,
+                "publication_year": date.today().year - 6 + index,
                 "primary_source_url": f"https://example.org/work-{index}",
                 "overlap": "Shared application domain.",
                 "difference": "Different falsifiable mechanism.",
@@ -77,7 +78,7 @@ def venue(name, quartile):
         "quartile": quartile,
         "indexing": "SCIE",
         "category": "Engineering",
-        "jcr_year": 2026,
+        "jcr_year": date.today().year,
         "source_url": f"https://example.org/{name.lower()}",
         "scope_fit": "Industrial AI.",
         "article_type": "Original article",
@@ -199,6 +200,10 @@ class ResearchDesignTests(unittest.TestCase):
         value["closest_prior_work"] = value["closest_prior_work"][:4]
         self.assertTrue(any("at least 5" in error for error in validate_originality_audit(value)))
 
+    def test_originality_search_must_be_current(self):
+        value=originality_audit();value["search_scope"]["cutoff_date"]="2020-01-01"
+        self.assertTrue(any("within 120 days" in error for error in validate_originality_audit(value)))
+
     def test_search_log_traces_claimed_scope_and_closest_works(self):
         audit = originality_audit()
         records = [
@@ -208,7 +213,7 @@ class ResearchDesignTests(unittest.TestCase):
                 "database": database,
                 "query_family": family,
                 "query": f"query {index}",
-                "searched_at": "2026-09-01T00:00:00Z",
+                "searched_at": date.today().isoformat()+"T00:00:00Z",
                 "date_range": "2020-2026",
                 "filters": "primary studies",
                 "result_count": 10,

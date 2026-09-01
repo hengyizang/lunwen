@@ -4,7 +4,7 @@
 
 Required:
 
-- `intake/constraints.json` with status `ready_for_review`;
+- `intake/constraints.json` conforming to `schemas/intake-constraints.schema.json`, with every material feasibility value explicit and status `ready_for_review`;
 - target application routes and time horizon;
 - available skills, time, budget, compute, data and equipment;
 - excluded domains and ethical/legal boundaries;
@@ -53,9 +53,9 @@ Freeze the confirmatory plan before final runs. Label later exploration as explo
 
 Required:
 
-- `experiments/registry.jsonl` including failed runs;
+- `experiments/registry.jsonl` including failed runs and current hashes for every successful expected output, each tied to the exact G3-approved plan;
 - immutable configs, code commit identifiers, environment lock or image digest and random seeds;
-- `claims/claim-evidence.csv`;
+- `claims/claim-evidence.csv` exactly covering every contracted unique claim; supported claims reference successful registered analyses;
 - `reports/reproducibility.md`;
 - statistical audit and sensitivity analysis.
 
@@ -73,7 +73,7 @@ Required:
 - author contributions, conflicts, funding, ethics and AI-use disclosures;
 - current JCR/venue-policy re-verification;
 - current output-provenance hashes showing no packaged manuscript, table, figure, supplement, disclosure, response or cover-letter file was persistently written by Claude/Anthropic;
-- figures rendered by deterministic local code from recorded data, with plotting code/configuration retained.
+- figures registered in `figures/figure-provenance.json` and rendered by deterministic local code from recorded data, with current input, run, output and non-Claude renderer hashes retained, plus named human confirmation that raster/PDF figure labels are English;
 - all manuscript-bound text—including title, abstract, body, captions, tables, supplement, responses and cover material—written in English, with `scripts/manuscript_language.py` passing on the final manuscript source.
 
 Repeat G5 for `state.active_paper`. A paper-level approval moves to the next configured paper; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP, manifest and manual checklist for that paper. The human must inspect every final PDF/DOCX, choose the portal upload slots and submit. Agents do not log into portals, upload or submit.

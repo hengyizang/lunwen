@@ -14,7 +14,7 @@ if [[ "$#" -ne 0 ]]; then
   exit 2
 fi
 
-python3 scripts/check_env.py --soft
+python3 scripts/check_env.py --mode api --soft
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
 
@@ -23,14 +23,6 @@ if [[ "$install_kdense" == true ]]; then
   python3 scripts/validate_repo.py
 fi
 
-if ! command -v claude >/dev/null 2>&1; then
-  echo "Claude Code is not on PATH. Install/authenticate it before using the plugin."
-fi
-
-if ! command -v codex >/dev/null 2>&1; then
-  echo "Codex is not on PATH. Install/authenticate it before using codex-review MCP."
-fi
-
 echo "Bootstrap checks complete."
-echo "One-click start: bash scripts/start.sh my-phd 'goal and constraints'"
-echo "Interactive alternative: claude --plugin-dir ."
+echo "API-first start: follow docs/UUAPI-CC-SWITCH.md"
+echo "Optional CLI-mode check: python3 scripts/check_env.py --mode cli"

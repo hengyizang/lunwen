@@ -9,8 +9,11 @@ mislabelled as model output.
 from __future__ import annotations
 
 import hashlib
+import argparse
 import json
 import os
+import re
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -156,6 +159,25 @@ def reject_current_anthropic_outputs(project: Path, paths: Iterable[Path]) -> No
         )
 
 
+def require_final_origins(project: Path, paths: Iterable[Path]) -> None:
+    """Require a current, explicitly non-Anthropic origin for final files."""
+
+    blocked: list[str] = []
+    for path in paths:
+        if not path.is_file():
+            continue
+        origin = current_origin(project, path)
+        if origin.get("status") != "tracked":
+            blocked.append(f"{origin['path']} ({origin['status']})")
+        elif origin.get("family") == "anthropic":
+            blocked.append(f"{origin['path']} (anthropic)")
+    if blocked:
+        raise ProvenanceError(
+            "Final files need current Codex/local/human provenance: "
+            + ", ".join(sorted(blocked))
+        )
+
+
 def provenance_report(project: Path, paths: Iterable[Path]) -> list[dict[str, Any]]:
     return [current_origin(project, path) for path in sorted(paths)]
 
@@ -187,3 +209,56 @@ def changed_files(project: Path, before: dict[str, str]) -> list[Path]:
         for relative, digest in after.items()
         if before.get(relative) != digest
     ]
+
+
+def attest_human_files(
+    project: Path, paths: Iterable[Path], *, actor: str, note: str
+) -> list[str]:
+    """Record a human's explicit non-Claude authorship/review attestation."""
+
+    if not actor.strip() or not note.strip():
+        raise ProvenanceError("Human attestation requires a named actor and an explanatory note")
+    resolved: list[Path] = []
+    for path in paths:
+        candidate = path if path.is_absolute() else project / path
+        _relative(project, candidate)
+        if not candidate.is_file() or candidate.is_symlink():
+            raise ProvenanceError(f"Attestation target must be a real file: {candidate}")
+        resolved.append(candidate)
+    return record_model_writes(
+        project,
+        resolved,
+        family="other",
+        provider="human-attestation",
+        model=actor.strip(),
+        role=f"human-reviewed: {note.strip()}",
+        run_id="human-" + re.sub(r"[^0-9A-Za-z._-]", "-", utc_now()),
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    subcommands = parser.add_subparsers(dest="command", required=True)
+    attest = subcommands.add_parser("attest")
+    attest.add_argument("--project", required=True)
+    attest.add_argument("--actor", required=True)
+    attest.add_argument("--note", required=True)
+    attest.add_argument("--path", action="append", required=True, dest="paths")
+    args = parser.parse_args()
+    try:
+        repo = Path(__file__).resolve().parents[1]
+        project = repo / "projects" / args.project
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,62}", args.project) or not project.is_dir():
+            raise ProvenanceError("Unknown or invalid project")
+        written = attest_human_files(
+            project, (Path(value) for value in args.paths), actor=args.actor, note=args.note
+        )
+        print(json.dumps({"attested": written}, ensure_ascii=False, indent=2))
+        return 0
+    except ProvenanceError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

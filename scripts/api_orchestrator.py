@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -125,8 +126,10 @@ def require_current_stage(project: str, stage: str) -> dict[str, Any]:
         raise ValueError(
             "Requested API stage does not match the project's current state"
         )
-    if state.get("status") == "approved":
-        raise ValueError("Current gate is already approved; advance before editing")
+    if state.get("status") != "awaiting_work":
+        raise ValueError(
+            "API authoring is allowed only while the current gate is awaiting_work"
+        )
     return state
 
 
@@ -544,6 +547,8 @@ def apply_bundle(
     written: list[str] = []
     root = project_root(project)
     root.mkdir(parents=True, exist_ok=True)
+    prepared: list[tuple[Path,bytes]] = []
+    seen: set[Path] = set()
     for item in bundle["artifacts"]:
         if not isinstance(item, dict) or not isinstance(item.get("path"), str) or not isinstance(item.get("content"), str):
             raise ValueError("Malformed artifact")
@@ -552,11 +557,29 @@ def apply_bundle(
         if contains_environment_secret(item["content"]):
             raise ValueError(f"Artifact contains a configured secret: {item['path']}")
         target = safe_target(project, item["path"])
-        target.parent.mkdir(parents=True, exist_ok=True)
-        temporary = target.with_name(target.name + ".tmp")
-        temporary.write_text(item["content"], encoding="utf-8")
-        os.replace(temporary, target)
-        written.append(str(target.relative_to(ROOT)))
+        if target in seen:
+            raise ValueError(f"Duplicate artifact path: {item['path']}")
+        seen.add(target)
+        prepared.append((target,item["content"].encode("utf-8")))
+    originals={target:(target.read_bytes() if target.is_file() else None) for target,_ in prepared}
+    temporaries: list[Path] = []
+    try:
+        for target,payload in prepared:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with tempfile.NamedTemporaryFile("wb",dir=target.parent,delete=False) as handle:
+                handle.write(payload);temporary=Path(handle.name)
+            temporaries.append(temporary);os.replace(temporary,target)
+            written.append(str(target.relative_to(ROOT)))
+    except OSError:
+        for target,original in originals.items():
+            if original is None:target.unlink(missing_ok=True)
+            else:
+                with tempfile.NamedTemporaryFile("wb",dir=target.parent,delete=False) as handle:
+                    handle.write(original);restore=Path(handle.name)
+                os.replace(restore,target)
+        raise
+    finally:
+        for temporary in temporaries:temporary.unlink(missing_ok=True)
     return written
 
 
@@ -637,7 +660,7 @@ def append_decision_log(
         f"- Final verdict: `{final_audit['verdict']}`",
         "- Non-Claude writer dispositions:",
     ]
-    lines.extend(f"  - {note}" for note in (notes or ["unresolved: no actionable findings were reported"]))
+    lines.extend(f"  - {note}" for note in (notes or ["fixed: no actionable findings were reported"]))
     path.write_text(existing + "\n".join(lines) + "\n", encoding="utf-8")
     return path
 

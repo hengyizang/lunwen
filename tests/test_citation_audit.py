@@ -74,6 +74,22 @@ class CitationAuditTests(unittest.TestCase):
                 report["citation_usage"]["missing_bibliography_keys"], ["missing"]
             )
 
+    def test_included_tex_is_hashed_and_scanned(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);bibliography=root/"references.bib";bibliography.write_text("@misc{known,\n title={Known}\n}\n",encoding="utf-8");(root/"main.tex").write_text("\\input{section}",encoding="utf-8");section=root/"section.tex";section.write_text("Evidence \\cite{missing}.",encoding="utf-8")
+            report=audit(bibliography,offline=True);before=report["manuscript_sha256"]
+            self.assertIn("missing",report["citation_usage"]["missing_bibliography_keys"])
+            section.write_text("Changed evidence \\cite{missing}.",encoding="utf-8")
+            self.assertNotEqual(before,audit(bibliography,offline=True)["manuscript_sha256"])
+
+    def test_docx_citation_mapping_requires_named_human(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            import zipfile
+            root=Path(temp);bibliography=root/"references.bib";bibliography.write_text("@misc{known,\n title={Known}\n}\n",encoding="utf-8")
+            with zipfile.ZipFile(root/"main.docx","w") as archive:archive.writestr("word/document.xml",'<w:document xmlns:w="urn:w"><w:t>Known 2026</w:t></w:document>')
+            self.assertEqual(audit(bibliography,offline=True)["citation_usage"]["status"],"human_check_required")
+            self.assertEqual(audit(bibliography,offline=True,docx_verified_by="Researcher")["citation_usage"]["status"],"human_verified")
+
 
 if __name__ == "__main__":
     unittest.main()

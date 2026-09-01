@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 import zipfile
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -25,11 +26,12 @@ class SubmissionPackageTests(unittest.TestCase):
             "paper_count": 1,
             "active_paper": "P01",
             "paper_statuses": {"P01": "submission_ready" if ready else "active"},
+            "approvals": [],
         }
         (project / "state").mkdir()
         (project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         fixtures = {
-            "manuscript/main.tex": "\\documentclass{article}\\begin{document}Ready\\end{document}",
+            "manuscript/main.tex": "\\documentclass{article}\\begin{document}\\section{Introduction} " + ("This study presents the method and analysis of the data with reproducible results. " * 35) + "\\end{document}",
             "manuscript/references.bib": "@article{x, title={Verified}}",
             "paper-contract.json": "{}",
             "venue.json": "{}",
@@ -39,14 +41,22 @@ class SubmissionPackageTests(unittest.TestCase):
             "reviews/response-matrix.csv": "item,response,status\n1,done,closed\n",
             "reviews/round-1.md": "review one",
             "reviews/round-2.md": "review two",
-            "figures/figure-1.png": "fixture",
             "submission-materials/cover-letter.md": "Dear editor",
+            "jcr-verification.json": json.dumps({"schema_version":"1.0","database":"Clarivate Journal Citation Reports","verification_year":datetime.now(timezone.utc).year,"impact_factor":2.5,"quartile":"Q1","category":"Engineering, Mechanical","indexing":"SCIE","source_url":"https://example.org/jcr","verified_by":"Human","verified_at":datetime.now(timezone.utc).isoformat()}),
         }
         for relative, content in fixtures.items():
             path = paper / relative
             path.write_text(content, encoding="utf-8")
         (project / "data" / "raw").mkdir(parents=True)
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
+        final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]
+        output_provenance.record_model_writes(project,final_files,family="openai",provider="codex",model="test",role="persistent-writer",run_id="test")
+        old=researchctl.PROJECTS_ROOT
+        try:
+            researchctl.PROJECTS_ROOT=root
+            state["approvals"].append({"gate":"G5","paper_id":"P01","paper_artifact_sha256":researchctl.paper_artifact_hash("demo-study","P01")})
+        finally:researchctl.PROJECTS_ROOT=old
+        (project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         return project
 
     def test_builds_deterministic_manual_package(self) -> None:
@@ -65,6 +75,8 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertIn("MANUAL-CHECKLIST.md", names)
                 self.assertIn("submission-materials/cover-letter.md", names)
                 self.assertNotIn("data/raw/private.csv", names)
+                self.assertNotIn("paper-contract.json",names)
+                self.assertNotIn("reviews/citation-audit.json",names)
                 manifest = json.loads(archive.read("SUBMISSION-MANIFEST.json"))
                 self.assertEqual(manifest["submission_mode"], "manual_only")
                 self.assertFalse(

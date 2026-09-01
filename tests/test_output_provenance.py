@@ -50,6 +50,13 @@ class OutputProvenanceTests(unittest.TestCase):
                 "modified_after_record",
             )
 
+    def test_final_origin_rejects_untracked_and_accepts_human_attestation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            project=Path(temp)/"project";artifact=project/"papers"/"P01"/"manuscript"/"main.tex";artifact.parent.mkdir(parents=True);artifact.write_text("Human text",encoding="utf-8")
+            with self.assertRaises(output_provenance.ProvenanceError):output_provenance.require_final_origins(project,[artifact])
+            output_provenance.attest_human_files(project,[artifact],actor="Researcher",note="Independently reviewed and not Claude-derived")
+            output_provenance.require_final_origins(project,[artifact])
+
 
 if __name__ == "__main__":
     unittest.main()

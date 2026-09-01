@@ -59,6 +59,18 @@ class ApiFirstTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             api_orchestrator.apply_bundle("demo", bundle)
 
+    def test_apply_bundle_prevalidates_without_partial_write(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            bundle={"stage":"intake","artifacts":[{"path":"intake/ok.txt","content":"written"},{"path":"state/run.json","content":"{}"}]}
+            with patch.object(api_orchestrator,"ROOT",root),self.assertRaises(ValueError):api_orchestrator.apply_bundle("demo",bundle)
+            self.assertFalse((root/"projects"/"demo"/"intake"/"ok.txt").exists())
+
+    def test_apply_bundle_rejects_duplicate_paths(self):
+        bundle={"stage":"intake","artifacts":[{"path":"intake/a.txt","content":"one"},{"path":"intake/a.txt","content":"two"}]}
+        with self.assertRaisesRegex(ValueError,"Duplicate"):
+            api_orchestrator.apply_bundle("demo",bundle)
+
     def test_safe_target_protects_independent_review_files(self):
         for relative in (
             "reviews/codex/G1-fake-final.json",
@@ -283,6 +295,14 @@ class ApiFirstTests(unittest.TestCase):
                 "",
                 "",
             )
+
+    def test_cycle_cannot_edit_while_awaiting_human_approval(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/"config").mkdir();(root/"projects"/"demo"/"state").mkdir(parents=True)
+            (root/"config"/"stages.json").write_text(json.dumps({"stages":{"intake":{"gate":"G0"}}}),encoding="utf-8")
+            (root/"projects"/"demo"/"state"/"run.json").write_text(json.dumps({"stage":"intake","gate":"G0","status":"awaiting_approval"}),encoding="utf-8")
+            with patch.object(api_orchestrator,"ROOT",root),self.assertRaisesRegex(ValueError,"awaiting_work"):
+                api_orchestrator.require_current_stage("demo","intake")
 
 
 if __name__ == "__main__":

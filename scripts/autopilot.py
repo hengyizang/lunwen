@@ -167,8 +167,25 @@ desired answer. This internal review must not be copied into publishable text.
 
 
 def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
-    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified, and append an itemized disposition (accepted/fixed, rejected with evidence, or unresolved blocker) to projects/{project}/reviews/decision-log.md. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata or independent-review files. Do not approve or advance. Keep every manuscript-bound artifact in English. Run the relevant validators when finished.
+    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. Run the relevant validators when finished.
+
+End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """
+
+
+def remediation_dispositions(path: Path, audit: dict[str, Any]) -> list[str]:
+    try:
+        raw=path.read_text(encoding="utf-8").strip()
+        if raw.startswith("```"):raw=re.sub(r"^```(?:json)?\s*|\s*```$","",raw,flags=re.S).strip()
+        value=json.loads(raw)
+    except (OSError,json.JSONDecodeError) as exc:raise AutopilotError(f"Codex remediation did not return disposition JSON: {exc}") from exc
+    if not isinstance(value,dict) or set(value)!={"dispositions"} or not isinstance(value["dispositions"],list):raise AutopilotError("Codex remediation response must contain only a dispositions array")
+    notes=value["dispositions"]
+    actionable=any(audit.get(field) for field in api_orchestrator.AUDIT_FIELDS-{"verdict","uncertainty"})
+    if actionable and not notes:raise AutopilotError("Codex remediation omitted actionable finding dispositions")
+    allowed=re.compile(r"^(?:fixed|rejected|unresolved):\s*\S",re.IGNORECASE)
+    if any(not isinstance(note,str) or not allowed.match(note.strip()) for note in notes):raise AutopilotError("Each remediation disposition must begin with fixed:, rejected:, or unresolved:")
+    return notes
 
 
 def claude_command(
@@ -418,6 +435,7 @@ def protected_control_snapshot(
     paths = [
         root / "state" / "run.json",
         root / "state" / "output-provenance.json",
+        root / "reviews" / "decision-log.md",
     ]
     paths.extend(extra_paths or [])
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
@@ -447,7 +465,7 @@ def ensure_protected_control_unchanged(
     }
     current_paths.update(
         relative
-        for relative in ("state/run.json", "state/output-provenance.json")
+        for relative in ("state/run.json", "state/output-provenance.json", "reviews/decision-log.md")
         if (root / relative).is_file()
     )
     changed = {
@@ -647,7 +665,7 @@ def run_stage(
                 / "independent"
                 / f"{review_prefix}-{token}-initial.json"
             )
-            copy_claude_audit(run_dir / "critic.stdout.txt", review)
+            initial_audit = copy_claude_audit(run_dir / "critic.stdout.txt", review)
             before_remediation = output_provenance.artifact_snapshot(
                 researchctl.project_dir(project)
             )
@@ -672,6 +690,7 @@ def run_stage(
             ensure_run_state_unchanged(project, state)
             if remediation["status"] != "succeeded":
                 raise AutopilotError("Codex remediation step did not complete successfully")
+            dispositions=remediation_dispositions(remediation_last_message,initial_audit)
             journal["written"] = sorted(
                 set(journal.get("written", []))
                 | set(
@@ -709,7 +728,8 @@ def run_stage(
                 / "independent"
                 / f"{review_prefix}-{token}-final.json"
             )
-            copy_claude_audit(run_dir / "final-critic.stdout.txt", final_review)
+            final_audit=copy_claude_audit(run_dir / "final-critic.stdout.txt", final_review)
+            api_orchestrator.append_decision_log(project,state["stage"],token,review,final_review,dispositions,final_audit)
         errors = researchctl.gate_errors(project, state["gate"])
         if errors:
             journal["status"] = "needs_work"

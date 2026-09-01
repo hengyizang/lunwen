@@ -8,6 +8,7 @@ a Q1-targeting floor before a human can approve a gate.
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -97,7 +98,7 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
             for field in ("name", "category", "scope_fit", "article_type"):
                 if not str(candidate.get(field, "")).strip(): errors.append(f"candidate venue {index} needs {field}")
             year = candidate.get("jcr_year")
-            if not isinstance(year, int) or isinstance(year, bool) or year < 2000: errors.append(f"candidate venue {index} needs jcr_year")
+            if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}: errors.append(f"candidate venue {index} needs the current or immediately previous JCR year")
         if candidates and not q1_seen: errors.append("at least one aspirational JCR Q1 candidate venue is required")
     blockers = report.get("blockers")
     if not isinstance(blockers, list): errors.append("blockers must be a list")

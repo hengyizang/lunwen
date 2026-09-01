@@ -60,14 +60,33 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def tex_source_paths(path: Path, root: Path | None=None, seen: set[Path] | None=None)->set[Path]:
+    root=(root or path.parent).resolve();seen=seen if seen is not None else set();resolved=path.resolve()
+    if resolved!=root and root not in resolved.parents:raise CitationAuditError("TeX include escapes the manuscript directory")
+    if resolved in seen:return seen
+    if not resolved.is_file():raise CitationAuditError(f"Missing TeX include: {resolved}")
+    seen.add(resolved)
+    if len(seen)>200:raise CitationAuditError("TeX manuscript includes more than 200 source files")
+    text=re.sub(r"(?m)(?<!\\)%.*$","",resolved.read_text(encoding="utf-8"))
+    for match in re.finditer(r"\\(?:input|include)\{([^}]+)\}",text):
+        relative=Path(match.group(1));relative=relative if relative.suffix else relative.with_suffix(".tex")
+        tex_source_paths(root/relative,root,seen)
+    return seen
+
+
+def manuscript_digest(path: Path) -> str:
+    if path.suffix.lower()!=".tex":return sha256_file(path)
+    digest=hashlib.sha256();root=path.parent.resolve()
+    for source in sorted(tex_source_paths(path),key=lambda item:item.relative_to(root).as_posix()):
+        digest.update(source.relative_to(root).as_posix().encode());digest.update(b"\0");digest.update(source.read_bytes());digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def tex_citation_keys(path: Path) -> set[str]:
-    text = re.sub(r"(?m)(?<!\\)%.*$", "", path.read_text(encoding="utf-8"))
     keys: set[str] = set()
-    for match in re.finditer(
-        r"\\(?:cite|citep|citet|parencite|textcite|autocite)\*?(?:\[[^]]*\])*\{([^}]*)\}",
-        text,
-    ):
-        keys.update(key.strip() for key in match.group(1).split(",") if key.strip())
+    for source in tex_source_paths(path):
+        text = re.sub(r"(?m)(?<!\\)%.*$", "", source.read_text(encoding="utf-8"))
+        for match in re.finditer(r"\\(?:cite|citep|citet|parencite|textcite|autocite)\*?(?:\[[^]]*\])*\{([^}]*)\}",text):keys.update(key.strip() for key in match.group(1).split(",") if key.strip())
     return keys
 
 
@@ -148,6 +167,7 @@ def audit(
     *,
     manual_path: Path | None = None,
     offline: bool = False,
+    docx_verified_by: str | None = None,
     fetcher: Callable[..., Any] = fetch_json,
 ) -> dict[str, Any]:
     try:
@@ -236,7 +256,7 @@ def audit(
         "bibliography": str(bib_path),
         "bibliography_sha256": sha256_file(bib_path),
         "manuscript": str(manuscript_path) if manuscript_path else None,
-        "manuscript_sha256": sha256_file(manuscript_path) if manuscript_path else None,
+        "manuscript_sha256": manuscript_digest(manuscript_path) if manuscript_path else None,
         "offline": offline,
         "entry_count": len(entries),
         "verified_count": len(entries) - len(unresolved),
@@ -244,6 +264,14 @@ def audit(
         "unresolved_keys": unresolved,
         "status": "pass" if entries and not unresolved else "fail",
         "citation_usage": {
+            "status": (
+                "checked_automatically" if tex_path.is_file()
+                else "human_verified" if docx_path.is_file() and isinstance(docx_verified_by,str) and docx_verified_by.strip()
+                else "human_check_required" if docx_path.is_file()
+                else "no_manuscript_found"
+            ),
+            "verified_by": docx_verified_by.strip() if isinstance(docx_verified_by,str) and docx_verified_by.strip() else None,
+            "verified_at": now() if docx_path.is_file() and isinstance(docx_verified_by,str) and docx_verified_by.strip() else None,
             "cited_keys": sorted(cited_keys),
             "missing_bibliography_keys": missing_citations,
             "unused_bibliography_keys": sorted(bibliography_keys - cited_keys)
@@ -263,6 +291,7 @@ def main() -> int:
     parser.add_argument("bibliography", type=Path)
     parser.add_argument("--manual-verifications", type=Path)
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--docx-citations-verified-by",help="Named human who checked every DOCX in-text citation against the bibliography")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
@@ -270,6 +299,7 @@ def main() -> int:
             args.bibliography,
             manual_path=args.manual_verifications,
             offline=args.offline,
+            docx_verified_by=args.docx_citations_verified_by,
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(

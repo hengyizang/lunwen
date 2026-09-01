@@ -53,5 +53,8 @@ than an invented universal “Q1 checklist”:
   ablations, leakage controls, primary metrics, effect sizes, intervals,
   multiplicity handling, power or precision, repeated seeds for stochastic
   work, robustness, negative controls, external validity and reproducibility.
+- G4 requires every attempt and current output hash to match the G3-approved
+  plan and every contracted claim to trace to registered analyses.
 - G5 requires current human-verified JCR Q1 SCI/SCIE status, venue-specific
-  checks and deterministic English-manuscript validation.
+  checks, deterministic English validation for all submission text, and local
+  figure provenance tied to real experiment outputs.

@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.3 — Quality Policy
+# Doctoral Research OS v1.4 — Quality Policy
 
 The OS is deliberately stricter than a generic paper-writing agent. A project cannot advance from G1 through G5 unless the current gate has a machine-validated quality report.
 
@@ -10,8 +10,8 @@ The OS is deliberately stricter than a generic paper-writing agent. A project ca
 - G1: every serious direction needs a schema-bound originality audit, doctoral case and reliability strategy.
 - G2: every paper needs its own falsifiable contribution, independently sufficient evidence, standalone scientific value and structured experiment strategy; the complete pairwise matrix must show distinct questions and primary claims and explain shared outcomes. Salami slicing is a hard failure.
 - G3: every paper requires one or more linked executable designs with traceable simple/domain-standard/strong-recent baselines, fair comparison budgets, ablations, leakage controls, estimands, practical thresholds, effect sizes, intervals, multiplicity, power/precision, repeated stochastic seeds, robustness, negative controls, external validity and reproducibility. Every planned run must be assigned to exactly one design.
-- G4: observed evidence must support calibrated claims at strong JCR Q1 reviewer strength; failed and negative runs cannot be hidden.
-- G5: the selected venue must be **current JCR Q1, SCI/SCIE, IF > 1.0**; the manuscript must pass deterministic English-language validation; two adversarial review rounds must have no unresolved fatal findings.
+- G4: observed evidence must support calibrated claims at strong JCR Q1 reviewer strength; every contracted claim is linked to current registered outputs and failed/negative runs cannot be hidden.
+- G5: the selected venue must be **current JCR Q1, SCI/SCIE, IF > 1.0**; all submission-bound text must pass deterministic English-language validation; figures have deterministic input/renderer provenance; final independent audit and dispositions have no unresolved fatal/major/evidence/remediation blockers.
 
 ## What this does and does not guarantee
 
