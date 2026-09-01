@@ -81,10 +81,19 @@ def extract_text(path: Path) -> str:
         return tex_text(path)
     if suffix == ".docx":
         return docx_text(path)
-    raise ValueError("manuscript must be main.tex or main.docx")
+    if suffix == ".svg":
+        try:return " ".join(node.text or "" for node in ElementTree.parse(path).getroot().iter())
+        except (OSError,ElementTree.ParseError) as exc:raise ValueError(f"cannot read SVG text: {exc}") from exc
+    if suffix in {".md", ".txt", ".csv", ".tsv", ".json"}:
+        if path.stat().st_size > MAX_MANUSCRIPT_BYTES:
+            raise ValueError(f"text file exceeds the 10 MiB language-audit limit: {path}")
+        return path.read_text(encoding="utf-8")
+    raise ValueError("unsupported text format for English-language validation")
 
 
-def analyze(path: Path) -> dict[str, object]:
+def analyze(
+    path: Path, *, min_english_words: int = MIN_ENGLISH_WORDS, require_markers: bool = True
+) -> dict[str, object]:
     text = extract_text(path)
     words = [word.lower() for word in WORD_RE.findall(text)]
     english_words = len(words)
@@ -100,17 +109,17 @@ def analyze(path: Path) -> dict[str, object]:
     )
     latin_ratio = latin_letters / len(letters) if letters else 0.0
     errors: list[str] = []
-    if english_words < MIN_ENGLISH_WORDS:
+    if english_words < min_english_words:
         errors.append(
-            f"manuscript has {english_words} English words; at least {MIN_ENGLISH_WORDS} are required for language validation"
+            f"file has {english_words} English words; at least {min_english_words} are required for language validation"
         )
     if cjk_characters:
         errors.append(f"manuscript body contains {cjk_characters} CJK character(s)")
-    if latin_ratio < MIN_LATIN_LETTER_RATIO:
+    if letters and latin_ratio < MIN_LATIN_LETTER_RATIO:
         errors.append(
             f"Latin-letter ratio {latin_ratio:.3f} is below {MIN_LATIN_LETTER_RATIO:.2f}"
         )
-    if english_marker_ratio < MIN_ENGLISH_MARKER_RATIO:
+    if require_markers and english_marker_ratio < MIN_ENGLISH_MARKER_RATIO:
         errors.append(
             f"English marker-word ratio {english_marker_ratio:.3f} is below {MIN_ENGLISH_MARKER_RATIO:.2f}"
         )
@@ -126,6 +135,24 @@ def analyze(path: Path) -> dict[str, object]:
         "errors": errors,
         "note": "This deterministic script checks script/language composition, not academic writing quality.",
     }
+
+
+def analyze_submission(paper: Path) -> dict[str, object]:
+    """Check the canonical manuscript plus all submission-bound textual files."""
+
+    main_candidates=[path for path in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx") if path.is_file()]
+    if len(main_candidates)!=1:
+        return {"status":"fail","errors":["exactly one canonical main.tex or main.docx is required"],"files":[]}
+    reports=[analyze(main_candidates[0])]
+    roots=(paper/"figures",paper/"tables",paper/"supplement",paper/"submission-materials")
+    extra=[path for root in roots if root.is_dir() for path in root.rglob("*") if path.is_file() and path.suffix.lower() in {".md",".txt",".csv",".tsv",".json",".tex",".docx",".svg"} and path.name!="figure-provenance.json"]
+    disclosures=paper/"disclosures.json"
+    if disclosures.is_file():extra.append(disclosures)
+    for path in sorted(set(extra)):
+        text=extract_text(path);word_count=len(WORD_RE.findall(text))
+        reports.append(analyze(path,min_english_words=0,require_markers=word_count>=50))
+    errors=[f"{Path(str(report['file'])).name}: {error}" for report in reports for error in report.get("errors",[])]
+    return {"schema_version":"1.0","status":"pass" if not errors else "fail","files":reports,"errors":errors}
 
 
 def main() -> int:

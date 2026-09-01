@@ -1,6 +1,6 @@
 [project]
 name = "doctoral-research-os"
-version = "1.3.0"
+version = "1.4.0"
 description = "API-first, human-gated Doctoral Research OS for topic selection, experiments, writing, review, venues and manual submission"
 requires-python = ">=3.10"
 

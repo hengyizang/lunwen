@@ -95,8 +95,8 @@ def validate_venue_candidates(value: Any, field: str = "target_venues") -> list[
         if venue.get("indexing") not in {"SCI", "SCIE"}:
             errors.append(f"{prefix}.indexing must be SCI or SCIE")
         year = venue.get("jcr_year")
-        if not isinstance(year, int) or isinstance(year, bool) or year < 2000:
-            errors.append(f"{prefix}.jcr_year must identify the verified JCR edition")
+        if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}:
+            errors.append(f"{prefix}.jcr_year must identify the current or immediately previous JCR edition")
         _https(venue.get("source_url"), f"{prefix}.source_url", errors)
     if candidates and not q1_seen:
         errors.append(f"{field} must contain current JCR Q1 candidates")
@@ -117,6 +117,11 @@ def validate_originality_audit(audit: dict[str, Any]) -> list[str]:
     cutoff = scope.get("cutoff_date")
     if not isinstance(cutoff, str) or not DATE_RE.fullmatch(cutoff):
         errors.append("search_scope.cutoff_date must use YYYY-MM-DD")
+    else:
+        try:cutoff_date=date.fromisoformat(cutoff)
+        except ValueError:errors.append("search_scope.cutoff_date is not a real calendar date")
+        else:
+            if cutoff_date>date.today() or (date.today()-cutoff_date).days>120:errors.append("search_scope.cutoff_date must be current (within 120 days and not in the future)")
 
     works = _list(audit.get("closest_prior_work"), "closest_prior_work", errors, minimum=5)
     work_ids: set[str] = set()
@@ -131,16 +136,24 @@ def validate_originality_audit(audit: dict[str, Any]) -> list[str]:
         for key in ("title", "overlap", "difference", "evidence_location"):
             _text(work.get(key), f"{prefix}.{key}", errors)
         year = work.get("publication_year")
-        if not isinstance(year, int) or isinstance(year, bool) or not 1900 <= year <= 2100:
+        if not isinstance(year, int) or isinstance(year, bool) or not 1900 <= year <= date.today().year:
             errors.append(f"{prefix}.publication_year is invalid")
         _https(work.get("primary_source_url"), f"{prefix}.primary_source_url", errors)
 
+    recent_works=[item for item in works if isinstance(item,dict) and isinstance(item.get("publication_year"),int) and item["publication_year"]>=date.today().year-5]
+    if len(recent_works)<2:errors.append("closest_prior_work must include at least two works from the current five-year window")
+
     claims = _list(audit.get("novelty_claims"), "novelty_claims", errors, minimum=1)
+    claim_ids:set[str]=set()
     for index, item in enumerate(claims):
         prefix = f"novelty_claims[{index}]"
         claim = _object(item, prefix, errors)
         for key in ("claim_id", "claim", "counterevidence", "residual_risk"):
             _text(claim.get(key), f"{prefix}.{key}", errors)
+        claim_id=claim.get("claim_id")
+        if isinstance(claim_id,str) and claim_id:
+            if claim_id in claim_ids:errors.append(f"{prefix}.claim_id is duplicated")
+            claim_ids.add(claim_id)
         if claim.get("novelty_type") not in NOVELTY_TYPES:
             errors.append(f"{prefix}.novelty_type is not recognized")
         evidence_ids = _string_list(
@@ -217,6 +230,11 @@ def validate_search_log(
         searched_at = record.get("searched_at")
         if not isinstance(searched_at, str) or not DATE_RE.fullmatch(searched_at[:10]):
             errors.append(f"{prefix}.searched_at must begin with YYYY-MM-DD")
+        else:
+            try:searched_date=date.fromisoformat(searched_at[:10])
+            except ValueError:errors.append(f"{prefix}.searched_at is not a real calendar date")
+            else:
+                if searched_date>date.today() or (date.today()-searched_date).days>180:errors.append(f"{prefix}.searched_at must be current (within 180 days and not in the future)")
         result_count = record.get("result_count")
         if not isinstance(result_count, int) or isinstance(result_count, bool) or result_count < 0:
             errors.append(f"{prefix}.result_count must be a non-negative integer")

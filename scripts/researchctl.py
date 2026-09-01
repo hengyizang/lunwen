@@ -2,7 +2,7 @@
 """Human-gated Doctoral Research OS state manager with publication-quality floors."""
 from __future__ import annotations
 import argparse,csv,hashlib,json,os,re,sys,tempfile
-from datetime import datetime,timezone
+from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from typing import Any,Iterable
 ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULTS_PATH=ROOT/"config/defaults.json"
@@ -49,6 +49,13 @@ def load_nonempty_json(path,errors):
     except json.JSONDecodeError as exc:errors.append(f"invalid JSON: {path} ({exc})");return None
     if not isinstance(value,dict):errors.append(f"expected JSON object: {path}");return None
     return value
+def require_recent_timestamp(value,field,label,errors,max_days):
+    raw=value.get(field) if isinstance(value,dict) else None
+    try:stamp=datetime.fromisoformat(str(raw).replace("Z","+00:00"))
+    except ValueError:errors.append(f"{label} {field} must be ISO-8601 with timezone");return
+    if stamp.tzinfo is None:errors.append(f"{label} {field} must include timezone");return
+    age=datetime.now(timezone.utc)-stamp.astimezone(timezone.utc)
+    if age < -timedelta(days=1) or age > timedelta(days=max_days):errors.append(f"{label} {field} must be within {max_days} days")
 def jsonl_objects(path,errors):
     if not nonempty(path):errors.append(f"missing or empty: {path}");return []
     out=[]
@@ -59,15 +66,34 @@ def jsonl_objects(path,errors):
         if not isinstance(v,dict):errors.append(f"expected JSON object at {path}:{n}");continue
         out.append(v)
     return out
+def audit_document_valid(path,audit,errors,final=False):
+    expected={"verdict","fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps","uncertainty"};valid=True
+    if set(audit)!=expected:errors.append(f"{path.name}: audit must contain exactly {', '.join(sorted(expected))}");valid=False
+    if audit.get("verdict") not in {"block","revise","pass-with-conditions"}:errors.append(f"{path.name}: invalid verdict");valid=False
+    for field in expected-{"verdict"}:
+        value=audit.get(field)
+        if not isinstance(value,list) or any(not isinstance(item,str) or not item.strip() for item in value):errors.append(f"{path.name}: {field} must be an array of non-empty strings");valid=False
+    if final:
+        blockers=any(audit.get(field) for field in ("fatal_findings","major_findings","missing_evidence","remediation_steps"))
+        if audit.get("verdict")!="pass-with-conditions" or blockers:errors.append(f"{path.name}: final audit must pass with no fatal/major findings, missing evidence or remediation steps");valid=False
+    return valid
 def independent_audit_errors(project,gate,errors,paper_id=None):
     prefix=f"{gate}-{paper_id}" if paper_id else gate; finals=sorted([*list((project/"reviews"/"independent").glob(f"{prefix}-*-final.json")),*list((project/"reviews"/"codex").glob(f"{prefix}-*-final.json"))]); valid=False
     if not finals:errors.append(f"{gate} requires a final independent model-family audit")
     for path in finals[-1:]:
         initial=path.with_name(path.name.replace("-final.json","-initial.json"))
         if not nonempty(initial):errors.append(f"{path.name}: matching initial independent audit is missing");continue
+        initial_audit=load_nonempty_json(initial,errors)
+        if initial_audit:audit_document_valid(initial,initial_audit,errors)
         audit=load_nonempty_json(path,errors)
-        if audit and audit.get("verdict")=="pass-with-conditions" and not audit.get("fatal_findings"):valid=True
-        elif audit:errors.append(f"{path.name}: final independent verdict must be pass-with-conditions and have no fatal findings")
+        if audit:
+            if audit_document_valid(path,audit,errors,final=True):valid=True
+        log=project/"reviews"/"decision-log.md"
+        if nonempty(log):
+            latest="## "+log.read_text(encoding="utf-8").rsplit("## ",1)[-1]
+            initial_rel=initial.relative_to(project).as_posix();final_rel=path.relative_to(project).as_posix()
+            if f"`{initial_rel}`" not in latest or f"`{final_rel}`" not in latest:errors.append("latest decision-log section must reference the exact latest initial and final audits")
+            if re.search(r"(?im)^\s*-\s+unresolved:",latest):errors.append("latest decision-log section contains an unresolved blocker")
     if not valid:errors.append(f"{gate} requires a passing final independent model-family audit")
     if not nonempty(project/"reviews"/"decision-log.md"):errors.append("reviews/decision-log.md must disposition independent findings")
 def quality_path(project,gate,paper_id=None):
@@ -81,7 +107,11 @@ def gate_errors(slug,gate):
     if gate is None:return errors
     if gate=="G0":
         c=load_nonempty_json(project/"intake"/"constraints.json",errors)
-        if c and c.get("status")!="ready_for_review":errors.append("intake/constraints.json status must be ready_for_review")
+        if c:
+            try:
+                from scripts.intake_validation import validate_constraints
+                errors.extend(f"intake/constraints.json: {x}" for x in validate_constraints(c))
+            except ImportError as exc:errors.append(f"intake validator unavailable: {exc}")
         return errors
     if gate=="G1":
         searches=jsonl_objects(project/"evidence"/"search-log.jsonl",errors)
@@ -137,8 +167,10 @@ def gate_errors(slug,gate):
             from scripts.dataset_fetch import validate_manifest
             for i,d in enumerate(datasets,1):
                 for issue in validate_manifest(d):errors.append(f"datasets.jsonl entry {i}: {issue}")
-                if d.get("license",{}).get("confirmed_by_human") is not True:errors.append(f"datasets.jsonl entry {i}: license needs human confirmation")
-                if d.get("download",{}).get("sha256")=="pending":errors.append(f"datasets.jsonl entry {i}: SHA-256 remains pending")
+                license_value=d.get("license") if isinstance(d.get("license"),dict) else {}
+                download_value=d.get("download") if isinstance(d.get("download"),dict) else {}
+                if license_value.get("confirmed_by_human") is not True:errors.append(f"datasets.jsonl entry {i}: license needs human confirmation")
+                if download_value.get("sha256")=="pending":errors.append(f"datasets.jsonl entry {i}: SHA-256 remains pending")
         except ImportError as exc:errors.append(f"dataset validator unavailable: {exc}")
         plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
         if plan:
@@ -210,33 +242,35 @@ def gate_errors(slug,gate):
         registry=jsonl_objects(project/"experiments"/"registry.jsonl",errors)
         if not registry:errors.append("at least one experiment registry entry is required")
         plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
-        if plan:
-            run_values=plan.get("runs",[]);run_values=run_values if isinstance(run_values,list) else []
-            planned={x.get("run_id") for x in run_values if isinstance(x,dict)};attempted={x.get("run_id") for x in registry};missing=sorted(str(x) for x in planned-attempted)
-            if missing:errors.append(f"planned runs without registry attempts: {', '.join(missing)}")
         claim=project/"claims"/"claim-evidence.csv"
-        if not nonempty(claim):errors.append("claims/claim-evidence.csv is required")
-        elif sum(1 for _ in csv.reader(claim.open(newline="",encoding="utf-8")))<2:errors.append("claim-evidence.csv needs at least one claim row")
+        try:
+            from scripts.results_validation import validate_claim_evidence,validate_registry
+            if plan:errors.extend(f"experiments/registry.jsonl: {x}" for x in validate_registry(project,plan,registry))
+            errors.extend(f"claims/claim-evidence.csv: {x}" for x in validate_claim_evidence(project,claim,registry))
+        except ImportError as exc:errors.append(f"results validator unavailable: {exc}")
         if not nonempty(project/"reports"/"reproducibility.md"):errors.append("reports/reproducibility.md is required")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
         try:
-            from scripts.output_provenance import ProvenanceError,reject_current_anthropic_outputs
-            final_files=[path for path in paper.rglob("*") if path.is_file() and not path.is_symlink() and not any(part in {"build","submission","venue-template"} for part in path.relative_to(paper).parts)]
-            reject_current_anthropic_outputs(project,final_files)
+            from scripts.output_provenance import ProvenanceError,require_final_origins
+            final_roots=(paper/"manuscript",paper/"figures",paper/"tables",paper/"supplement",paper/"submission-materials")
+            final_files=[path for root in final_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and not path.is_symlink()]
+            if nonempty(paper/"disclosures.json"):final_files.append(paper/"disclosures.json")
+            require_final_origins(project,final_files)
         except ImportError as exc:errors.append(f"output provenance validator unavailable: {exc}")
         except ProvenanceError as exc:errors.append(str(exc))
         manuscripts=[p for p in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx") if nonempty(p)]
         if not manuscripts:errors.append(f"{pid} requires manuscript/main.tex or manuscript/main.docx")
         else:
             try:
-                from scripts.manuscript_language import analyze
-                language=analyze(manuscripts[0])
-                errors.extend(f"{pid} English manuscript check: {x}" for x in language.get("errors",[]))
+                from scripts.manuscript_language import analyze_submission
+                language=analyze_submission(paper)
+                errors.extend(f"{pid} English submission check: {x}" for x in language.get("errors",[]))
             except (ImportError,ValueError) as exc:errors.append(f"{pid} English manuscript validator failed: {exc}")
         venue=load_nonempty_json(paper/"venue.json",errors)
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
+        if venue and venue.get("g5_reverified_at"):require_recent_timestamp(venue,"g5_reverified_at",f"{pid}/venue.json",errors,120)
         jcr=load_nonempty_json(paper/"jcr-verification.json",errors)
         if jcr:
             try:
@@ -250,8 +284,37 @@ def gate_errors(slug,gate):
             if not nonempty(paper/"reviews"/f"round-{n}.md"):errors.append(f"{pid} requires reviews/round-{n}.md")
         citation=load_nonempty_json(paper/"reviews"/"citation-audit.json",errors)
         if citation and citation.get("status")!="pass":errors.append(f"{pid} citation audit must pass")
+        if citation:
+            require_recent_timestamp(citation,"created_at",f"{pid} citation audit",errors,180)
+            bibliography=paper/"manuscript"/"references.bib"
+            manuscript=manuscripts[0] if manuscripts else None
+            if not nonempty(bibliography) or citation.get("bibliography_sha256")!=file_sha256(bibliography):errors.append(f"{pid} citation audit is stale for references.bib")
+            if manuscript:
+                try:
+                    from scripts.citation_audit import manuscript_digest
+                    current_manuscript_digest=manuscript_digest(manuscript)
+                except (ImportError,ValueError) as exc:errors.append(f"{pid} citation manuscript digest failed: {exc}");current_manuscript_digest=None
+                if citation.get("manuscript_sha256")!=current_manuscript_digest:errors.append(f"{pid} citation audit is stale for the manuscript source tree")
+                usage=citation.get("citation_usage") if isinstance(citation.get("citation_usage"),dict) else {}
+                if manuscript.suffix.lower()==".docx":
+                    if usage.get("status")!="human_verified" or not isinstance(usage.get("verified_by"),str) or not usage["verified_by"].strip():errors.append(f"{pid} DOCX in-text citations need named human verification")
+                    else:require_recent_timestamp(usage,"verified_at",f"{pid} DOCX citation mapping",errors,180)
         compliance=load_nonempty_json(paper/"reviews"/"venue-compliance.json",errors)
         if compliance and compliance.get("status")!="pass":errors.append(f"{pid} venue compliance report must pass")
+        if compliance:
+            require_recent_timestamp(compliance,"created_at",f"{pid} venue compliance",errors,120)
+            if compliance.get("venue_sha256")!=file_sha256(paper/"venue.json"):errors.append(f"{pid} venue compliance report is stale for venue.json")
+            report_manuscript=compliance.get("manuscript") if isinstance(compliance.get("manuscript"),dict) else {}
+            if manuscripts:
+                try:
+                    from scripts.venue_compliance import manuscript_tree_sha256
+                    current_tree_hash=manuscript_tree_sha256(manuscripts[0])
+                except ImportError as exc:errors.append(f"{pid} venue manuscript digest failed: {exc}");current_tree_hash=None
+                if report_manuscript.get("source_tree_sha256")!=current_tree_hash:errors.append(f"{pid} venue compliance report is stale for the manuscript source tree")
+        try:
+            from scripts.figure_provenance import validate_figure_provenance
+            errors.extend(f"{pid} figure provenance: {x}" for x in validate_figure_provenance(project,paper))
+        except ImportError as exc:errors.append(f"figure provenance validator unavailable: {exc}")
         disclosures=load_nonempty_json(paper/"disclosures.json",errors)
         if disclosures and disclosures.get("status")!="ready_for_review":errors.append(f"{pid}/disclosures.json status must be ready_for_review")
         if disclosures:
@@ -267,13 +330,21 @@ def artifact_hash(slug,gate):
         if not path.is_file() or rel.parts[0]=="state" or "raw" in rel.parts or "venue-template" in rel.parts or "build" in rel.parts or rel.parts[:2]==("experiments","runs"):continue
         d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
     d.update(gate.encode("ascii"));return d.hexdigest()
+def paper_artifact_hash(slug,paper_id):
+    paper=project_dir(slug)/"papers"/validate_paper_id(paper_id);d=hashlib.sha256()
+    for path in sorted(paper.rglob("*")):
+        if not path.is_file() or path.is_symlink():continue
+        rel=path.relative_to(paper)
+        if any(part in {"build","submission","venue-template"} for part in rel.parts):continue
+        d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
+    return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
     defaults=read_json(DEFAULTS_PATH);count=args.paper_count or int(defaults["paper_count"])
     if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
     for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
-    write_json(dest/"intake"/"constraints.json",{"schema_version":"1.0","status":"needs_user_input","research_goal":None,"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[]})
+    write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"Windows 11 with WSL2 recommended","orchestrator":"API-first Python orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
     for rel in ["evidence/search-log.jsonl","data/datasets.jsonl","experiments/registry.jsonl"]:write_text(dest/rel,"")
@@ -299,18 +370,26 @@ def mark_ready(args):
     if gate is None:raise ResearchCtlError("Project is already submission-ready.")
     errors=gate_errors(args.project,gate)
     if errors:raise ResearchCtlError(f"{gate} cannot be marked ready: {len(errors)} requirement(s) remain")
-    state["status"]="awaiting_approval";state["history"].append({"at":now(),"event":"gate_marked_ready","gate":gate,"note":args.note});save_state(args.project,state);print(f"{gate} is awaiting explicit human approval.")
+    state["status"]="awaiting_approval";state["ready_gate"]=gate;state["ready_artifact_sha256"]=artifact_hash(args.project,gate);state["history"].append({"at":now(),"event":"gate_marked_ready","gate":gate,"note":args.note,"artifact_sha256":state["ready_artifact_sha256"]});save_state(args.project,state);print(f"{gate} is awaiting explicit human approval.")
+def reopen(args):
+    state=load_state(args.project);gate=state["gate"]
+    if gate is None:raise ResearchCtlError("Submission-ready projects have no gate to reopen.")
+    if state["status"]!="awaiting_approval":raise ResearchCtlError("Only a gate awaiting approval can be reopened.")
+    if not args.note.strip():raise ResearchCtlError("reopen requires a reason in --note")
+    state["status"]="awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None);state["history"].append({"at":now(),"event":"gate_reopened","gate":gate,"note":args.note.strip()});save_state(args.project,state);print(f"{gate} reopened for revision; the prior ready snapshot is no longer approvable.")
 def approve(args):
     state=load_state(args.project);gate=state["gate"]
     if gate!=args.gate:raise ResearchCtlError(f"Current gate is {gate}, not {args.gate}.")
     if state["status"]!="awaiting_approval":raise ResearchCtlError("Run gate-check and ready before approval.")
     if gate_errors(args.project,gate):raise ResearchCtlError("Gate artifacts or quality report changed and no longer pass checks.")
+    current_hash=artifact_hash(args.project,gate)
+    if state.get("ready_gate")!=gate or state.get("ready_artifact_sha256")!=current_hash:raise ResearchCtlError("Artifacts changed after ready; review them and run ready again before approval.")
     if not args.actor.strip():raise ResearchCtlError("actor must identify the human approver")
-    approval={"gate":gate,"actor":args.actor.strip(),"at":now(),"note":args.note,"artifact_sha256":artifact_hash(args.project,gate)}
+    approval={"gate":gate,"actor":args.actor.strip(),"at":now(),"note":args.note,"artifact_sha256":current_hash}
     if gate=="G3":
         p=project_dir(args.project);approval["experiment_plan_sha256"]=file_sha256(p/"experiments/plan.json");approval["experiment_budget_sha256"]=file_sha256(p/"experiments/budget.json")
     key=gate
-    if gate=="G5":approval["paper_id"]=state["active_paper"];key=f"G5:{state['active_paper']}"
+    if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(args.project,state["active_paper"]);key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)
     if key not in state["approved_gates"]:state["approved_gates"].append(key)
     state["status"]="approved";state["history"].append({"at":now(),"event":"gate_approved","gate":gate});save_state(args.project,state);print(f"Recorded human approval for {gate}. Run advance to continue.")
@@ -324,8 +403,8 @@ def advance(args):
     if gate=="G5":
         done=state["active_paper"];state.setdefault("paper_statuses",{})[done]="submission_ready";remaining=[f"P{n:02d}" for n in range(1,int(state["paper_count"])+1) if state["paper_statuses"].get(f"P{n:02d}")!="submission_ready"]
         if remaining:
-            nxt=remaining[0];state["active_paper"]=nxt;state["paper_statuses"][nxt]="active";state["status"]="awaiting_work";state["history"].append({"at":now(),"event":"paper_advanced","from":done,"to":nxt});save_state(args.project,state);print(f"Marked {done} submission-ready; continuing G5 with {nxt}.");return
-    i=state["stage_index"]+1;next_stage=STAGES[i];prev=state["stage"];state["stage_index"]=i;state["stage"]=next_stage["name"];state["gate"]=next_stage["gate"];state["status"]="submission_ready" if next_stage["gate"] is None else "awaiting_work";state["history"].append({"at":now(),"event":"stage_advanced","from":prev,"to":next_stage["name"]});save_state(args.project,state);print(f"Advanced to {next_stage['name']}.")
+            nxt=remaining[0];state["active_paper"]=nxt;state["paper_statuses"][nxt]="active";state["status"]="awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None);state["history"].append({"at":now(),"event":"paper_advanced","from":done,"to":nxt});save_state(args.project,state);print(f"Marked {done} submission-ready; continuing G5 with {nxt}.");return
+    i=state["stage_index"]+1;next_stage=STAGES[i];prev=state["stage"];state["stage_index"]=i;state["stage"]=next_stage["name"];state["gate"]=next_stage["gate"];state["status"]="submission_ready" if next_stage["gate"] is None else "awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None);state["history"].append({"at":now(),"event":"stage_advanced","from":prev,"to":next_stage["name"]});save_state(args.project,state);print(f"Advanced to {next_stage['name']}.")
 def set_venue_values(slug,paper_id,venue_id):
     validate_paper_id(paper_id);source=ROOT/"venues"/venue_id/"venue.json"
     if not source.is_file():raise ResearchCtlError(f"Unknown venue manifest: {venue_id}")
@@ -340,6 +419,7 @@ def parser():
     p=cmd.add_parser("status");p.add_argument("--project",required=True);p.add_argument("--json",action="store_true");p.set_defaults(func=print_status)
     p=cmd.add_parser("gate-check");p.add_argument("--project",required=True);p.add_argument("--gate");p.set_defaults(func=check_gate)
     p=cmd.add_parser("ready");p.add_argument("--project",required=True);p.add_argument("--note",default="");p.set_defaults(func=mark_ready)
+    p=cmd.add_parser("reopen");p.add_argument("--project",required=True);p.add_argument("--note",required=True);p.set_defaults(func=reopen)
     p=cmd.add_parser("approve");p.add_argument("--project",required=True);p.add_argument("--gate",required=True);p.add_argument("--actor",required=True);p.add_argument("--note",default="");p.set_defaults(func=approve)
     p=cmd.add_parser("advance");p.add_argument("--project",required=True);p.set_defaults(func=advance)
     p=cmd.add_parser("set-venue");p.add_argument("--project",required=True);p.add_argument("--paper",required=True);p.add_argument("--venue",required=True);p.set_defaults(func=set_venue)

@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.3
+# Doctoral Research OS v1.4
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -6,20 +6,20 @@
 
 ## 已实现的闭环
 
-- G0–G5 状态机和显式人类审批；审批包含产物哈希。
+- G0–G5 状态机和显式人类审批；G0 不允许把未知时间、预算和设备仅改成 `ready` 后通过；`ready` 与 `approve` 之间以及批准后的任何产物变化都会由哈希锁检测。
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
 - G1 强制最接近的 5 项既有研究、3 个相邻领域、反证与剩余原创性风险；G2 对全部论文两两检查，六篇时必须覆盖 15 组比较，阻止“切香肠”。
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - 候选与最终期刊均要求当前 JCR Q1 SCI/SCIE；JCR 分区必须按年份和类别人工核验。
-- 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对 `main.tex`/`main.docx` 执行确定性语言检查。
+- 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
-- 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段，投稿包发现当前版本由Claude/Anthropic写入时立即拒绝。
+- 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
 - UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
 - DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
-- G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
+- G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
 - 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
 - 已通过单篇 G5 后生成确定性的人工投稿 ZIP、逐文件 SHA-256 清单和人工检查表；不访问期刊门户。
@@ -104,22 +104,25 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
 API 模式会把 Claude 语义计划、原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。Claude计划不会写进普通科研文件；只有非Anthropic writer可以写项目产物。模型不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
 
 完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
+本次全链路要求追踪与剩余人工边界见 [`docs/AUDIT-V1.4.md`](docs/AUDIT-V1.4.md)。
 
 使用 UUAPI + CC Switch 时，先阅读
 [`docs/UUAPI-CC-SWITCH.md`](docs/UUAPI-CC-SWITCH.md)，完成非计费配置检查、余额查询和两次最小实时探针后，再运行真实研究项目。
 
-## CLI 一键启动与恢复
+## API 一键首次试跑
 
 ```bash
 bash scripts/start.sh my-phd "目标、已有背景、每周时间、预算和设备条件"
 ```
 
-等价命令：
+该命令默认初始化 6 篇论文并用 `uuapi-anthropic` 只读规划/审查、`uuapi-openai` 持久写入。项目已存在时不会覆盖；按 `status` 显示的当前阶段手动运行 `api_orchestrator.py cycle`。
+
+## 可选 CLI 启动与恢复
+
+只有已经安装并配置 Claude Code 与 Codex CLI 时才使用：
 
 ```bash
-python3 scripts/autopilot.py start \
-  --project my-phd \
-  --context "目标、已有背景、每周时间、预算和设备条件"
+bash scripts/start.sh --cli my-phd "目标、已有背景、每周时间、预算和设备条件"
 ```
 
 预览下一次动作，不调用模型：
@@ -134,6 +137,14 @@ python3 scripts/autopilot.py plan --project my-phd
 python3 scripts/researchctl.py approve \
   --project my-phd --gate G0 --actor "Hengyi" --note "constraints reviewed"
 python3 scripts/autopilot.py resume --project my-phd
+```
+
+批准前必须先运行 `gate-check` 和 `ready`；`ready` 后若修改任何工件，必须重新检查和 `ready`。
+若 `ready` 后决定让模型继续修改，先显式退回并记录原因：
+
+```bash
+python3 scripts/researchctl.py reopen --project my-phd \
+  --note 'Human review found issues requiring another model revision'
 ```
 
 `resume` 只会跨越已经记录批准的闸门。若当前阶段仍缺证据或许可，它会保留检查错误并停下。运行日志在本地 `projects/<slug>/state/runs/`；最新断点摘要在 `state/autopilot.json`。
@@ -227,6 +238,36 @@ python3 scripts/experiment_runner.py --project my-phd --run p01-baseline-seed-7
 
 计划或预算在 G3 后被修改会被拒绝。运行器不是恶意代码沙箱：它只执行你已经批准的本地研究代码，并通过无 shell 调用、可执行文件白名单、项目内路径、精简环境、超时和预算减少误操作。
 
+G4 的 `claims/claim-evidence.csv` 必须逐项覆盖每篇 `paper-contract.json` 中的唯一 claim ID；标记为 `supported` 或 `partially_supported` 的主张必须引用至少一个成功的 `analysis_ids`，且对应输出文件的当前哈希必须与实验登记一致。
+
+## 确定性图表与来源
+
+Codex 可以编写绘图脚本，但 Claude 不得写最终图、图中文字或图注。用本地脚本从已登记结果生成图后，登记其输入、运行和渲染器：
+
+```bash
+python3 scripts/figure_provenance.py record \
+  --project my-phd --paper P01 \
+  --figure papers/P01/figures/result.png \
+  --type data_chart \
+  --renderer experiments/code/render_p01.py \
+  --input experiments/results/p01-metrics.csv \
+  --run p01-primary-seed-7 \
+  --language-checked-by 'your-name'
+
+python3 scripts/figure_provenance.py validate --project my-phd --paper P01
+```
+
+`--language-checked-by` 是对 PNG/PDF 等无法可靠自动读取的图内标签所作的具名英文确认；SVG 与文本型投稿材料仍会自动检查。它不能替代你对最终 PDF 的目视复核。
+
+渲染脚本也必须有当前非 Claude 来源。若是你独立编写或彻底独立改写的文件，可作具名人工证明（这不是密码学证明，责任由证明者承担）：
+
+```bash
+python3 scripts/output_provenance.py attest \
+  --project my-phd --actor 'your-name' \
+  --note 'Independently authored/reviewed; not derived from Claude text' \
+  --path experiments/code/render_p01.py
+```
+
 ## 引用与期刊合规
 
 ```bash
@@ -236,6 +277,7 @@ python3 scripts/citation_audit.py \
 ```
 
 无 DOI 的书籍、标准等可使用人工核验 JSON；每条必须包含 `verified_by`、`verified_at`、`source_url` 和 `title`，通过 `--manual-verifications` 传入。
+DOCX 无法像 TeX 一样自动解析引用键，审阅者逐条核对正文引用与文末记录后还必须传入 `--docx-citations-verified-by 'your-name'`；否则 G5 保持关闭。
 
 从期刊官方页面下载模板 ZIP 后：
 
@@ -257,7 +299,7 @@ python3 scripts/manuscript_language.py projects/my-phd/papers/P01/manuscript/mai
 python3 scripts/submission_package.py --project my-phd --paper P01
 ```
 
-默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`。同时生成逐文件 SHA-256、写入来源摘要的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。任何当前哈希被登记为Claude/Anthropic写入的文件都会阻止打包；人工或本地工具改写后必须产生新的哈希。
+默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中只包含稿件、参考文献、最终图表、补充材料和你放入 `submission-materials/` 的真实门户文件；内部 paper contract、JCR 证明、披露工作表、模拟审稿、回复矩阵、引用审计与合规报告不会混入期刊上传包。同时生成逐文件 SHA-256、写入来源摘要的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。每个文件必须有当前非 Claude 来源；该篇在 G5 批准后发生任何变化也会阻止打包并要求重新审批。
 
 打包器拒绝符号链接、隐藏文件和密钥类文件，不包含原始数据、期刊模板归档、运行日志或实验原始产物。ZIP 只是整理工具；作者仍需逐项核对、手动上传、预览门户生成稿并最终确认提交。
 

@@ -15,11 +15,13 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 
 try:
-    from researchctl import ResearchCtlError, load_state, project_dir, validate_paper_id
+    from researchctl import ResearchCtlError, file_sha256, load_state, paper_artifact_hash, project_dir, validate_paper_id
 except ModuleNotFoundError:  # Support `python -m unittest` package imports.
     from scripts.researchctl import (
         ResearchCtlError,
+        file_sha256,
         load_state,
+        paper_artifact_hash,
         project_dir,
         validate_paper_id,
     )
@@ -28,26 +30,19 @@ try:
     from output_provenance import (
         ProvenanceError,
         provenance_report,
-        reject_current_anthropic_outputs,
+        require_final_origins,
     )
 except ModuleNotFoundError:
     from scripts.output_provenance import (
         ProvenanceError,
         provenance_report,
-        reject_current_anthropic_outputs,
+        require_final_origins,
     )
 
 
 SECRET_NAMES = {".env", "credentials.json", "secrets.json", "id_rsa", "id_ed25519"}
 SECRET_SUFFIXES = {".key", ".pem", ".p12", ".pfx"}
 OPTIONAL_DIRS = ("figures", "tables", "supplement", "submission-materials")
-REVIEW_FILES = (
-    "citation-audit.json",
-    "venue-compliance.json",
-    "response-matrix.csv",
-    "round-1.md",
-    "round-2.md",
-)
 FIXED_ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -96,6 +91,8 @@ def directory_files(directory: Path, paper: Path) -> Iterable[Path]:
         for name in names:
             candidate = root_path / name
             safe_file(candidate, paper)
+            if candidate.name == "figure-provenance.json":
+                continue
             if candidate.is_file():
                 files.append(candidate)
     return sorted(files, key=lambda item: item.relative_to(paper).as_posix())
@@ -112,16 +109,6 @@ def select_files(paper: Path) -> list[Path]:
         path = manuscript / name
         if path.is_file():
             selected.append(path)
-    for name in ("paper-contract.json", "venue.json", "disclosures.json"):
-        path = paper / name
-        if not path.is_file():
-            raise ResearchCtlError(f"Missing required file: {path}")
-        selected.append(path)
-    for name in REVIEW_FILES:
-        path = paper / "reviews" / name
-        if not path.is_file():
-            raise ResearchCtlError(f"Missing required file: {path}")
-        selected.append(path)
     for dirname in OPTIONAL_DIRS:
         selected.extend(directory_files(paper / dirname, paper))
 
@@ -135,6 +122,9 @@ def select_files(paper: Path) -> list[Path]:
                 pdf = paper / pdf
             safe_file(pdf, paper)
             if pdf.is_file():
+                recorded=compile_info.get("pdf_sha256")
+                if not isinstance(recorded,str) or recorded!=file_sha256(pdf):
+                    raise ResearchCtlError("Compiled PDF changed after venue compliance audit")
                 selected.append(pdf)
 
     unique = {path.resolve(): path for path in selected}
@@ -175,10 +165,30 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     if not paper.is_dir():
         raise ResearchCtlError(f"Missing paper directory: {paper}")
 
-    files = select_files(paper)
     project = paper.parent.parent
+    approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==paper_id),None)
+    if not approval or approval.get("paper_artifact_sha256")!=paper_artifact_hash(slug,paper_id):
+        raise ResearchCtlError("Paper changed after G5 approval or approval predates the per-paper hash; re-run G5 review and approval")
     try:
-        reject_current_anthropic_outputs(project, files)
+        try:from scripts.jcr_verify import verify as verify_jcr_payload
+        except ModuleNotFoundError:from jcr_verify import verify as verify_jcr_payload
+        verify_jcr_payload(load_object(paper/"jcr-verification.json"))
+    except Exception as exc:
+        raise ResearchCtlError(f"Current JCR Q1 verification failed: {exc}") from exc
+    try:
+        try:from scripts.manuscript_language import analyze_submission
+        except ModuleNotFoundError:from manuscript_language import analyze_submission
+        language=analyze_submission(paper)
+        if language.get("status")!="pass":raise ResearchCtlError("English submission validation failed: "+"; ".join(language.get("errors",[])))
+        try:from scripts.figure_provenance import validate_figure_provenance
+        except ModuleNotFoundError:from figure_provenance import validate_figure_provenance
+        figure_errors=validate_figure_provenance(project,paper)
+        if figure_errors:raise ResearchCtlError("Figure provenance failed: "+"; ".join(figure_errors))
+    except ImportError as exc:
+        raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc
+    files = select_files(paper)
+    try:
+        require_final_origins(project, files)
     except ProvenanceError as exc:
         raise ResearchCtlError(str(exc)) from exc
     origins = provenance_report(project, files)

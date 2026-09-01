@@ -114,8 +114,10 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         if not isinstance(seed, int):
             errors.append(f"{prefix}.seed must be an integer")
         outputs = run.get("expected_outputs")
-        if not isinstance(outputs, list) or any(not isinstance(item, str) for item in outputs):
-            errors.append(f"{prefix}.expected_outputs must be a string array")
+        if not isinstance(outputs, list) or not outputs or any(not isinstance(item, str) or not item.strip() for item in outputs):
+            errors.append(f"{prefix}.expected_outputs must be a non-empty string array")
+        elif len(outputs)!=len(set(outputs)) or any(Path(item).is_absolute() or ".." in Path(item).parts for item in outputs):
+            errors.append(f"{prefix}.expected_outputs must be unique project-relative paths")
         inputs = run.get("inputs")
         if not isinstance(inputs, list):
             errors.append(f"{prefix}.inputs must be an array")
@@ -133,8 +135,10 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
                     errors.append(
                         f"{prefix}.inputs[{input_index}] needs relative path and SHA-256"
                     )
+                elif Path(item["path"]).is_absolute() or ".." in Path(item["path"]).parts:
+                    errors.append(f"{prefix}.inputs[{input_index}].path must be project-relative")
         cwd = run.get("cwd", ".")
-        if not isinstance(cwd, str):
+        if not isinstance(cwd, str) or Path(cwd).is_absolute() or ".." in Path(cwd).parts:
             errors.append(f"{prefix}.cwd must be a relative string")
     return errors
 

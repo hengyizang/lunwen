@@ -115,11 +115,14 @@ read-only planning/audit material.
 `api_runs/` contains the Claude plan, raw model responses and usage diagnostics
 and is ignored by Git. Claude cannot write scientific or submission artifacts;
 its schema-checked audits are stored only as internal control records. The
-Codex/OpenAI structured scientific artifacts and decision log remain normal
-project files so you can review and version them.
+Codex/OpenAI structured scientific artifacts remain normal project files. The
+control plane writes the decision log deterministically only after the final
+audit, so you can review and version both.
 
-`state/output-provenance.json` records the current writer family and file hash;
-submission packaging rejects a current Anthropic-authored output.
+`state/output-provenance.json` records the current writer family and file hash.
+G5 and submission packaging reject Anthropic, untracked, or modified-after-record
+final files. Human-created files can be explicitly attested with
+`scripts/output_provenance.py attest` after independent review.
 
 After the command finishes:
 

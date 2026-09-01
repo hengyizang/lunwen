@@ -17,6 +17,11 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
 
+try:
+    from scripts import output_provenance
+except ImportError:
+    import output_provenance  # type: ignore
+
 
 MAX_LOG_CHARS = 200_000
 PLACEHOLDER_RE = re.compile(
@@ -47,6 +52,14 @@ def sha256_file(path: Path) -> str:
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
+    return digest.hexdigest()
+
+
+def manuscript_tree_sha256(manuscript: Path) -> str:
+    digest=hashlib.sha256();root=manuscript.parent
+    files=sorted(path for path in root.rglob("*") if path.is_file() and not path.is_symlink())
+    for path in files:
+        relative=path.relative_to(root).as_posix();digest.update(relative.encode());digest.update(b"\0");digest.update(path.read_bytes());digest.update(b"\0")
     return digest.hexdigest()
 
 
@@ -133,6 +146,7 @@ def inspect_manuscript(paper_dir: Path, venue: dict[str, Any]) -> tuple[dict[str
             "status": "pass" if not missing_sections and not placeholders and not over_limit else "fail",
             "path": str(manuscript),
             "sha256": sha256_file(manuscript),
+            "source_tree_sha256": manuscript_tree_sha256(manuscript),
             "format": format_name,
             "word_equivalent_estimate": len(words),
             "configured_maximum": maximum,
@@ -256,6 +270,13 @@ def main() -> int:
         output = args.output or args.paper_dir / "reviews" / "venue-compliance.json"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        compile_info=report.get("compile") if isinstance(report.get("compile"),dict) else {}
+        pdf_value=compile_info.get("pdf")
+        if compile_info.get("status")=="pass" and isinstance(pdf_value,str):
+            pdf=Path(pdf_value)
+            if not pdf.is_absolute():pdf=args.paper_dir/pdf
+            project=args.paper_dir.parent.parent
+            output_provenance.record_model_writes(project,[pdf],family="other",provider="latexmk-local",model="latexmk",role="compiled-manuscript",run_id="venue-"+now().replace(":","-"))
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["status"] == "pass" else 1
     except (ComplianceError, OSError) as exc:

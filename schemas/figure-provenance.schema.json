@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/figure-provenance.schema.json",
+  "title": "Deterministic final figure provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "figures"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "figures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["figure_path", "figure_type", "renderer", "config", "inputs", "source_run_ids", "output_sha256", "deterministic", "generated_by", "language_checked_by", "language_checked_at", "recorded_at"],
+        "properties": {
+          "figure_path": {"type": "string", "minLength": 1},
+          "figure_type": {"enum": ["data_chart", "conceptual_diagram"]},
+          "renderer": {"$ref": "#/$defs/file"},
+          "config": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+          "inputs": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+          "source_run_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+          "output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "deterministic": {"const": true},
+          "generated_by": {"const": "local-tool"},
+          "language_checked_by": {"type": "string", "minLength": 1},
+          "language_checked_at": {"type": "string", "format": "date-time"},
+          "recorded_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    }
+  },
+  "$defs": {"file": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+}

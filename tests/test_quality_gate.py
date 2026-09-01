@@ -1,5 +1,6 @@
 import copy
 import unittest
+from datetime import date
 
 from scripts.quality_gate import DIMENSIONS, validate_report
 
@@ -48,7 +49,7 @@ BASE = {
                 "quartile": "Q1",
                 "indexing": "SCIE",
                 "category": "Engineering",
-                "jcr_year": 2026,
+                "jcr_year": date.today().year,
                 "source_url": "https://example.org/jcr-a",
                 "scope_fit": "Industrial AI",
                 "article_type": "Original article",
@@ -58,7 +59,7 @@ BASE = {
                 "quartile": "Q1",
                 "indexing": "SCIE",
                 "category": "Engineering",
-                "jcr_year": 2026,
+                "jcr_year": date.today().year,
                 "source_url": "https://example.org/jcr-b",
                 "scope_fit": "Predictive maintenance",
                 "article_type": "Original article",
@@ -106,6 +107,10 @@ class QualityGateTests(unittest.TestCase):
         value = report("G5")
         value["venue_readiness"]["candidate_venues"][1]["quartile"] = "Q2"
         self.assertTrue(any("current JCR Q1" in error for error in validate_report(value, "G5")))
+
+    def test_stale_jcr_candidate_year_blocks(self):
+        value=report("G1");value["venue_readiness"]["candidate_venues"][0]["jcr_year"]=2020
+        self.assertTrue(any("current or immediately previous" in error for error in validate_report(value,"G1")))
 
     def test_doctoral_case_is_required(self):
         value = report("G1")
