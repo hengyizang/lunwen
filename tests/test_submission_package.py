@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import researchctl
+from scripts import output_provenance, researchctl
 from scripts.submission_package import build_package
 
 
@@ -67,6 +67,9 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertNotIn("data/raw/private.csv", names)
                 manifest = json.loads(archive.read("SUBMISSION-MANIFEST.json"))
                 self.assertEqual(manifest["submission_mode"], "manual_only")
+                self.assertFalse(
+                    manifest["output_policy"]["anthropic_final_outputs_allowed"]
+                )
 
     def test_rejects_paper_before_g5_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -83,6 +86,26 @@ class SubmissionPackageTests(unittest.TestCase):
             root = Path(temp)
             project = self.make_project(root)
             (project / "papers" / "P01" / "submission-materials" / "portal.key").write_text("x", encoding="utf-8")
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
+                "scripts.submission_package.project_dir", lambda slug: root / slug
+            ):
+                with self.assertRaises(researchctl.ResearchCtlError):
+                    build_package("demo-study", "P01", root / "blocked.zip")
+
+    def test_rejects_current_anthropic_authored_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project = self.make_project(root)
+            manuscript = project / "papers" / "P01" / "manuscript" / "main.tex"
+            output_provenance.record_model_writes(
+                project,
+                [manuscript],
+                family="anthropic",
+                provider="uuapi-anthropic",
+                model="claude-test",
+                role="persistent-writer",
+                run_id="test-run",
+            )
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
             ):

@@ -167,23 +167,37 @@ class UuapiProviderTests(unittest.TestCase):
         )
         self.assertNotIn("secret", json.dumps(value))
 
-    def test_cycle_rejects_same_author_and_critic_provider(self) -> None:
+    def test_cycle_rejects_anthropic_persistent_writer(self) -> None:
         with self.assertRaises(ValueError):
             api_orchestrator.run_cycle(
                 "demo",
                 "intake",
-                "uuapi-openai",
+                "uuapi-anthropic",
+                "uuapi-anthropic",
                 "uuapi-openai",
                 "",
                 "",
             )
 
-    def test_cycle_rejects_same_model_family_across_gateways(self) -> None:
+    def test_cycle_rejects_writer_and_critic_from_same_family(self) -> None:
         with self.assertRaises(ValueError):
             api_orchestrator.run_cycle(
                 "demo",
                 "intake",
                 "anthropic",
+                "openai",
+                "uuapi-openai",
+                "",
+                "",
+            )
+
+    def test_cycle_requires_claude_semantic_planner(self) -> None:
+        with self.assertRaises(ValueError):
+            api_orchestrator.run_cycle(
+                "demo",
+                "intake",
+                "openai",
+                "uuapi-openai",
                 "uuapi-anthropic",
                 "",
                 "",

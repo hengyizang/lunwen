@@ -18,7 +18,7 @@ Interpret the request as one of:
 - `package <slug> <paper>`: build a deterministic ZIP for human inspection and manual upload;
 - `audit <slug>`: run a cross-stage integrity check.
 
-Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Require initial and final Codex audits at G1–G5. Never edit gate approvals by hand. Never approve a gate for the user.
+Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Claude is restricted to read-only semantic planning and internal independent audits. Codex/OpenAI independently writes and remediates every persistent text artifact and plotting program; local deterministic tools render final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Never edit gate approvals by hand. Never approve a gate for the user.
 
 When acting as the independent critic:
 
@@ -27,6 +27,8 @@ When acting as the independent critic:
 3. Recompute critical values and test leakage, seed sensitivity and alternative explanations.
 4. Check each material claim against the claim-evidence matrix.
 5. Report blockers, major and minor findings, residual uncertainty and a verdict.
-6. Preserve findings under `projects/<slug>/reviews/codex/`.
+6. Preserve findings under `projects/<slug>/reviews/independent/`.
+
+Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude.
 
 Never invent missing data, citations or results. Packaging is local-only: never request portal credentials, upload files or auto-submit.

@@ -24,7 +24,7 @@ For `run`:
 - execute only the hash-locked plan through `scripts/experiment_runner.py`;
 - log every run, including failures and negative results;
 - capture environment, code revision, data hashes, seed, command, runtime, cost and output hashes;
-- ask `statistical-auditor` and Codex to independently inspect leakage, inference, robustness and reproducibility;
+- ask `statistical-auditor` and a model family different from the Codex/OpenAI writer to independently inspect leakage, inference, robustness and reproducibility;
 - populate the claim-evidence matrix before conclusions;
 - stop at G4.
 

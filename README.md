@@ -1,17 +1,18 @@
-# Doctoral Research OS v1.1
+# Doctoral Research OS v1.2
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
-“一键”指：创建或恢复项目，运行当前阶段的 author → critic → remediation → final critic 流程，通过确定性检查后停在下一道人类审批闸门。它不代表自动批准选题、自动确认数据许可、自动产出真实实验结果或自动投稿。
+“一键”指：创建或恢复项目，运行当前阶段的 Claude只读规划 → Codex写入 → Claude独立审查 → Codex修订 → Claude终审流程，通过确定性检查后停在下一道人类审批闸门。它不代表自动批准选题、自动确认数据许可、自动产出真实实验结果或自动投稿。
 
 ## 已实现的闭环
 
 - G0–G5 状态机和显式人类审批；审批包含产物哈希。
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
-- Claude Code 非交互执行、每次调用预算上限、超时、输出上限、断点日志和敏感环境值脱敏。
-- Codex 只读、临时、JSON Schema 约束的初审和终审；终审未通过时闸门保持关闭。
-- API-first 模式：无需 Claude Code/Codex CLI 即可调用 Claude/OpenAI API 生成结构化阶段产物；模型生成的文件受路径、大小、状态文件和凭据保护约束。
-- UUAPI 原生适配：Anthropic Messages 作者与 OpenAI Responses 独立审稿角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
+- Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
+- 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
+- API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
+- 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段，投稿包发现当前版本由Claude/Anthropic写入时立即拒绝。
+- UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
 - DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。
@@ -30,8 +31,8 @@
                              |
        +---------------------+---------------------+
        |                     |                     |
-   Claude API            OpenAI API          Local experiments
-   research/writing      critique/audit       after G3 approval
+   Claude API            OpenAI API          Local deterministic tools
+   plan/audit only       persistent writing   experiments + chart rendering
        |                     |                     |
        +---------------------+---------------------+
                              |
@@ -89,11 +90,14 @@ python3 scripts/api_orchestrator.py health
 
 ```bash
 python3 scripts/researchctl.py init --project my-phd --paper-count 6
-python3 scripts/api_orchestrator.py stage my-phd intake --provider anthropic \
+python3 scripts/api_orchestrator.py cycle my-phd intake \
+  --planner-provider anthropic \
+  --writer-provider openai \
+  --critic-provider anthropic \
   --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU.'
 ```
 
-API 模式会把原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。模型只能生成项目内普通科研文件，不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
+API 模式会把 Claude 语义计划、原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。Claude计划不会写进普通科研文件；只有非Anthropic writer可以写项目产物。模型不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
 
 完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
 
@@ -137,7 +141,7 @@ python3 scripts/autopilot.py resume \
   --project my-phd --claude-max-budget-usd 2.00 --timeout 1800
 ```
 
-`--claude-mode minimal` 使用 Claude Code 的 bare/minimal 模式；默认 `standard` 会加载仓库配置。Codex 审核固定使用 `codex exec --ephemeral --sandbox read-only --json`。
+`--claude-mode minimal` 使用 Claude Code 的 bare/minimal 模式；默认 `standard` 会加载仓库配置。Claude命令不开放 Write/Edit；Codex写入使用临时会话和 workspace-write，并由控制层检查受保护状态、审稿文件和输出来源哈希。
 
 也可在 Claude Code 交互模式使用插件：
 
@@ -248,7 +252,7 @@ python3 scripts/venue_compliance.py projects/my-phd/papers/P01
 python3 scripts/submission_package.py --project my-phd --paper P01
 ```
 
-默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`。同时生成逐文件 SHA-256 的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。
+默认输出为 `projects/my-phd/papers/P01/submission/manual-upload.zip`。其中包含稿件、参考文献、图表、补充材料、披露、两轮审稿与回复、期刊合规报告，以及可选的 `submission-materials/`。同时生成逐文件 SHA-256、写入来源摘要的 `SUBMISSION-MANIFEST.json` 和 `MANUAL-CHECKLIST.md`。任何当前哈希被登记为Claude/Anthropic写入的文件都会阻止打包；人工或本地工具改写后必须产生新的哈希。
 
 打包器拒绝符号链接、隐藏文件和密钥类文件，不包含原始数据、期刊模板归档、运行日志或实验原始产物。ZIP 只是整理工具；作者仍需逐项核对、手动上传、预览门户生成稿并最终确认提交。
 

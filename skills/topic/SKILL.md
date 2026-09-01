@@ -25,5 +25,4 @@ Define:
 - proposition B: a valuable extension that could independently support a second doctoral-level program, not merely an extra experiment;
 - a six-paper draft map, used only as a feasibility test before G2.
 
-Ask `topic-architect` and `literature-scout` for separate judgments, then ask Codex to attack the preferred choice. Resolve objections explicitly and stop at G1.
-
+Use Claude judgments only as internal semantic plans. Ask Codex/OpenAI to write the persistent topic artifacts in independent wording, then use a different model family to attack the preferred choice. Resolve objections explicitly and stop at G1.

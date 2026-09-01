@@ -24,6 +24,19 @@ except ModuleNotFoundError:  # Support `python -m unittest` package imports.
         validate_paper_id,
     )
 
+try:
+    from output_provenance import (
+        ProvenanceError,
+        provenance_report,
+        reject_current_anthropic_outputs,
+    )
+except ModuleNotFoundError:
+    from scripts.output_provenance import (
+        ProvenanceError,
+        provenance_report,
+        reject_current_anthropic_outputs,
+    )
+
 
 SECRET_NAMES = {".env", "credentials.json", "secrets.json", "id_rsa", "id_ed25519"}
 SECRET_SUFFIXES = {".key", ".pem", ".p12", ".pfx"}
@@ -163,6 +176,12 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         raise ResearchCtlError(f"Missing paper directory: {paper}")
 
     files = select_files(paper)
+    project = paper.parent.parent
+    try:
+        reject_current_anthropic_outputs(project, files)
+    except ProvenanceError as exc:
+        raise ResearchCtlError(str(exc)) from exc
+    origins = provenance_report(project, files)
     entries: dict[str, bytes] = {
         path.relative_to(paper).as_posix(): path.read_bytes() for path in files
     }
@@ -172,6 +191,10 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         "project": slug,
         "paper_id": paper_id,
         "submission_mode": "manual_only",
+        "output_policy": {
+            "anthropic_final_outputs_allowed": False,
+            "provenance": origins,
+        },
         "files": [
             {"path": name, "size": len(payload), "sha256": sha256_bytes(payload)}
             for name, payload in sorted(entries.items())

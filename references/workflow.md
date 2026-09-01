@@ -2,12 +2,12 @@
 
 ## Operating model
 
-Use one orchestrator and several bounded workers:
+Use one deterministic control plane and bounded model roles:
 
-1. Claude Code owns stage state, integrates artifacts, presents decisions, and stops at gates.
-2. Claude Science or a literature worker produces traceable evidence bundles. It does not decide the topic alone.
-3. Focused Claude subagents handle topic intelligence, data stewardship, experiment design, statistics, review, and venue adaptation.
-4. Codex acts as the independent model-family critic for code, statistics, leakage, reproducibility, and claim support.
+1. Local Python owns stage state, output provenance, gates, hashes and execution authority.
+2. Claude supplies a read-only semantic plan and may perform internal independent criticism. Its text is stored only in run/audit records, never as a persistent scientific or submission artifact.
+3. Codex/OpenAI independently expresses and remediates every persistent text artifact. It uses Claude's ideas as requirements, not wording to copy.
+4. Codex writes plotting code/specifications; deterministic local tools render final figures from recorded data and experiment outputs.
 5. The human approves G0–G5 and owns authorship, scientific judgment, ethics, venue choice, and submission.
 
 Do not ask multiple agents to produce one blended answer without preserving their separate evidence and disagreements. Store unresolved disagreements in `reviews/decision-log.md`.
@@ -18,14 +18,15 @@ For the current stage:
 
 1. Run `python3 scripts/researchctl.py status --project <slug> --json`, or use `python3 scripts/autopilot.py plan --project <slug>`.
 2. Read the matching stage contract in `references/stage-contracts.md`.
-3. Gather evidence and write only the required artifacts.
-4. Ask Codex to audit the artifact without revealing the preferred verdict. Save the schema-bound initial findings.
-5. Resolve findings explicitly; do not silently discard adverse feedback, then request a fresh final Codex audit.
-6. Run `gate-check`, then `ready`.
-7. Present a concise gate dossier to the human and stop.
-8. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage.
+3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
+4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
+5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
+6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
+7. Run `gate-check`, then `ready`.
+8. Present a concise gate dossier to the human and stop.
+9. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage.
 
-`scripts/autopilot.py` implements this loop with bounded non-interactive CLI calls, local checkpoints, output limits and per-Claude-call budget limits. It never invokes `approve`. At G5 it works only on `state.active_paper`; an approved `advance` marks that paper ready and selects the next paper until all configured papers are complete.
+`scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never invokes `approve`. At G5 it works only on `state.active_paper`; an approved `advance` marks that paper ready and selects the next paper until all configured papers are complete.
 
 ## Evidence rules
 
@@ -46,7 +47,7 @@ Give the critic the artifact, evidence bundle, rubric, and constraints. Do not g
 - leakage/statistical/reproducibility risks;
 - a verdict: block, revise, or pass with conditions.
 
-The authoring agent must respond item by item. A different model agreeing is supporting evidence, not validation by itself.
+The non-Claude writer must respond item by item. A different model agreeing is supporting evidence, not validation by itself. The writer and critic must be different model families.
 
 ## Completion boundary
 

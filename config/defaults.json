@@ -18,7 +18,10 @@
     "require_claim_evidence_matrix": true,
     "record_failed_experiments": true,
     "independent_model_audit": true,
+    "claude_persistent_outputs_allowed": false,
+    "semantic_planner_family": "anthropic",
+    "persistent_writer_family": "openai",
+    "final_charts": "deterministic-local-rendering",
     "automatic_submission": false
   }
 }
-

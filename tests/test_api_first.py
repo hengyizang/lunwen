@@ -62,6 +62,7 @@ class ApiFirstTests(unittest.TestCase):
     def test_safe_target_protects_independent_review_files(self):
         for relative in (
             "reviews/codex/G1-fake-final.json",
+            "reviews/independent/G1-fake-final.json",
             "reviews/decision-log.md",
         ):
             with self.subTest(relative=relative), self.assertRaises(ValueError):
@@ -115,6 +116,39 @@ class ApiFirstTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             api_orchestrator.extract_audit_json(json.dumps(audit))
 
+    def test_extract_semantic_plan_requires_non_prose_structure(self):
+        plan = {
+            "schema_version": "1.0",
+            "stage": "intake",
+            "objectives": ["capture constraints"],
+            "artifact_specs": [],
+            "evidence_requirements": [],
+            "figure_specs": [],
+            "risks": [],
+            "open_questions": [],
+        }
+        self.assertEqual(api_orchestrator.extract_plan_json(json.dumps(plan)), plan)
+
+    def test_long_claude_phrase_copy_is_rejected(self):
+        source = {
+            "idea": "one two three four five six seven eight nine ten eleven twelve thirteen"
+        }
+        target = {
+            "artifacts": [
+                {
+                    "content": "one two three four five six seven eight nine ten eleven twelve",
+                }
+            ]
+        }
+        with self.assertRaises(ValueError):
+            api_orchestrator.reject_long_source_copy(source, target, "plan")
+
+    def test_long_cjk_claude_phrase_copy_is_rejected(self):
+        source = {"idea": "这是一个用于验证长中文原文复制检测功能是否能够正常工作的测试句子"}
+        target = {"content": "用于验证长中文原文复制检测功能是否能够正常工作的测试句子"}
+        with self.assertRaises(ValueError):
+            api_orchestrator.reject_long_source_copy(source, target, "plan")
+
     def test_cycle_persists_gate_audits_and_decision_log(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -145,7 +179,19 @@ class ApiFirstTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            author_bundle = json.dumps(
+            semantic_plan = json.dumps(
+                {
+                    "schema_version": "1.0",
+                    "stage": "topic-intelligence",
+                    "objectives": ["compare candidates"],
+                    "artifact_specs": [],
+                    "evidence_requirements": [],
+                    "figure_specs": [],
+                    "risks": [],
+                    "open_questions": [],
+                }
+            )
+            writer_bundle = json.dumps(
                 {
                     "schema_version": "1.0",
                     "stage": "topic-intelligence",
@@ -188,10 +234,11 @@ class ApiFirstTests(unittest.TestCase):
                 }
             )
             responses = [
-                ModelResult("uuapi-anthropic", "claude-test", author_bundle, {}),
-                ModelResult("uuapi-openai", "gpt-test", initial_audit, {}),
-                ModelResult("uuapi-anthropic", "claude-test", remediation, {}),
-                ModelResult("uuapi-openai", "gpt-test", final_audit, {}),
+                ModelResult("uuapi-anthropic", "claude-test", semantic_plan, {}),
+                ModelResult("uuapi-openai", "gpt-test", writer_bundle, {}),
+                ModelResult("uuapi-anthropic", "claude-test", initial_audit, {}),
+                ModelResult("uuapi-openai", "gpt-test", remediation, {}),
+                ModelResult("uuapi-anthropic", "claude-test", final_audit, {}),
             ]
             with patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
@@ -202,10 +249,11 @@ class ApiFirstTests(unittest.TestCase):
                     "topic-intelligence",
                     "uuapi-anthropic",
                     "uuapi-openai",
+                    "uuapi-anthropic",
                     "",
                     "",
                 )
-            reviews = list((root / "projects" / "demo" / "reviews" / "codex").glob("*.json"))
+            reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
             self.assertEqual(len(reviews), 2)
             self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))
             self.assertTrue(any(path.name.endswith("-final.json") for path in reviews))
@@ -217,6 +265,12 @@ class ApiFirstTests(unittest.TestCase):
                 manifest["independent_audit"]["final_verdict"],
                 "pass-with-conditions",
             )
+            provenance = json.loads(
+                (root / "projects" / "demo" / "state" / "output-provenance.json").read_text()
+            )
+            self.assertEqual(
+                provenance["files"]["program/topic.md"]["family"], "openai"
+            )
 
     def test_cycle_requires_current_initialized_stage(self):
         with self.assertRaises(ValueError):
@@ -225,6 +279,7 @@ class ApiFirstTests(unittest.TestCase):
                 "intake",
                 "uuapi-anthropic",
                 "uuapi-openai",
+                "uuapi-anthropic",
                 "",
                 "",
             )

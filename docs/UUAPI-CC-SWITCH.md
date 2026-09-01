@@ -27,11 +27,10 @@ Create two provider cards using the exact root shown by the UUAPI dashboard:
 
 | Card | Application | Protocol | Base URL |
 |---|---|---|---|
-| Author | Claude Code | Anthropic Messages | `<UUAPI_ROOT>` |
-| Critic | Codex | OpenAI Responses | `<UUAPI_ROOT>/v1` |
+| Planner / internal critic | Claude Code | Anthropic Messages | `<UUAPI_ROOT>` |
+| Persistent writer | Codex | OpenAI Responses | `<UUAPI_ROOT>/v1` |
 
-Use a Claude-family model for the author and a GPT/Codex-family model for the
-critic. Do not configure automatic failover between the two roles. Restart the
+Use a Claude-family model only for read-only planning/auditing and a GPT/Codex-family model for all persistent writing. Do not configure automatic failover between the two roles. Restart the
 corresponding CLI after switching a card. Avoid cloud-syncing provider secrets.
 
 ## 2. Configure API-first mode in WSL2
@@ -94,21 +93,27 @@ reported by the gateway.
 python3 scripts/researchctl.py init --project my-phd --paper-count 6
 
 python3 scripts/api_orchestrator.py cycle my-phd intake \
-  --author-provider uuapi-anthropic \
-  --critic-provider uuapi-openai \
+  --planner-provider uuapi-anthropic \
+  --writer-provider uuapi-openai \
+  --critic-provider uuapi-anthropic \
   --max-output-tokens 4000 \
   --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU; target JCR Q1 SCI/SCIE; build a doctoral Theme A with a separately doctoral-level extension Theme B and six non-salami-sliced papers.'
 ```
 
-The cycle performs four calls: author, independent critic, remediation and final
-critic. It records the requested and gateway-reported model, protocol, endpoint,
+The cycle performs five calls: Claude semantic plan, Codex/OpenAI writer, Claude
+independent critic, Codex/OpenAI remediation and Claude final critic. It records the requested and gateway-reported model, protocol, endpoint,
 request ID and token usage in the run manifest. It does not approve or advance
 G0. At G1–G5 it additionally creates the matching initial/final JSON audits and
 decision log required by the deterministic gate.
 
-`api_runs/` contains raw model responses and usage diagnostics and is ignored by
-Git. The structured scientific artifacts, gate audits and decision log remain
-normal project files so you can review and version them intentionally.
+`api_runs/` contains the Claude plan, raw model responses and usage diagnostics
+and is ignored by Git. Claude cannot write scientific or submission artifacts;
+its schema-checked audits are stored only as internal control records. The
+Codex/OpenAI structured scientific artifacts and decision log remain normal
+project files so you can review and version them.
+
+`state/output-provenance.json` records the current writer family and file hash;
+submission packaging rejects a current Anthropic-authored output.
 
 After the command finishes:
 
@@ -146,5 +151,5 @@ time, budget, equipment, ethics or scope values, edit and review
   internally. Set only `UUAPI_BASE_URL`, not `.../responses` or `.../messages`.
 - Model mismatch: replace the requested model with the exact dashboard/reported
   ID. `UUAPI_STRICT_MODEL_ID=false` is an explicit, logged-risk escape hatch.
-- One provider fails: stop the cycle. Do not silently use the author model as its
-  own critic.
+- One provider fails: stop the cycle. Do not silently let Claude become the
+  persistent writer or let the writer family audit itself.

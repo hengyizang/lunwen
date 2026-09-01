@@ -25,11 +25,11 @@ This is a strong optional second implementation for deep research, drafting, rev
 /plugin install academic-research-skills
 ```
 
-Use it as a worker behind the local contracts, not as a competing state machine. Export its literature and manuscript artifacts into the current project; the local G1–G5 rules and Codex audit remain authoritative.
+Use it only as an evidence/semantic-planning worker behind the local contracts, not as a competing state machine. Do not export Claude-authored manuscript or chart artifacts into final project paths. The local G1–G5 rules, non-Claude writer, output provenance and independent model-family audit remain authoritative.
 
 ## Experiment Agent
 
-The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical/Codex audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Reconsider it only after G2 if it adds a capability the local executor lacks and the use satisfies the license.
+The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Reconsider it only after G2 if it adds a capability the local executor lacks and the use satisfies the license.
 
 ## Update protocol
 
