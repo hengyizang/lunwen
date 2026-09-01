@@ -69,6 +69,8 @@ Required:
 - official venue manifest and imported template inventory;
 - passing venue compliance report and successful compile/render when tooling permits;
 - author contributions, conflicts, funding, ethics and AI-use disclosures;
-- current JCR/venue-policy re-verification.
+- current JCR/venue-policy re-verification;
+- current output-provenance hashes showing no packaged manuscript, table, figure, supplement, disclosure, response or cover-letter file was persistently written by Claude/Anthropic;
+- figures rendered by deterministic local code from recorded data, with plotting code/configuration retained.
 
 Repeat G5 for `state.active_paper`. A paper-level approval moves to the next configured paper; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP, manifest and manual checklist for that paper. The human must inspect every final PDF/DOCX, choose the portal upload slots and submit. Agents do not log into portals, upload or submit.

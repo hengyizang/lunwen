@@ -60,15 +60,15 @@ def jsonl_objects(path,errors):
         out.append(v)
     return out
 def independent_audit_errors(project,gate,errors,paper_id=None):
-    prefix=f"{gate}-{paper_id}" if paper_id else gate; finals=sorted((project/"reviews"/"codex").glob(f"{prefix}-*-final.json")); valid=False
-    if not finals:errors.append(f"{gate} requires a final independent Codex audit")
+    prefix=f"{gate}-{paper_id}" if paper_id else gate; finals=sorted([*list((project/"reviews"/"independent").glob(f"{prefix}-*-final.json")),*list((project/"reviews"/"codex").glob(f"{prefix}-*-final.json"))]); valid=False
+    if not finals:errors.append(f"{gate} requires a final independent model-family audit")
     for path in finals[-1:]:
         initial=path.with_name(path.name.replace("-final.json","-initial.json"))
-        if not nonempty(initial):errors.append(f"{path.name}: matching initial Codex audit is missing");continue
+        if not nonempty(initial):errors.append(f"{path.name}: matching initial independent audit is missing");continue
         audit=load_nonempty_json(path,errors)
         if audit and audit.get("verdict")=="pass-with-conditions" and not audit.get("fatal_findings"):valid=True
-        elif audit:errors.append(f"{path.name}: final Codex verdict must be pass-with-conditions and have no fatal findings")
-    if not valid:errors.append(f"{gate} requires a passing final independent Codex audit")
+        elif audit:errors.append(f"{path.name}: final independent verdict must be pass-with-conditions and have no fatal findings")
+    if not valid:errors.append(f"{gate} requires a passing final independent model-family audit")
     if not nonempty(project/"reviews"/"decision-log.md"):errors.append("reviews/decision-log.md must disposition independent findings")
 def quality_path(project,gate,paper_id=None):
     return {"G1":project/"program"/"quality-G1.json","G2":project/"papers"/str(paper_id)/"quality-G2.json","G3":project/"experiments"/"quality-G3.json","G4":project/"reports"/"quality-G4.json","G5":project/"papers"/str(paper_id)/"reviews"/"quality-G5.json"}[gate]
@@ -143,6 +143,12 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
+        try:
+            from scripts.output_provenance import ProvenanceError,reject_current_anthropic_outputs
+            final_files=[path for path in paper.rglob("*") if path.is_file() and not path.is_symlink() and not any(part in {"build","submission","venue-template"} for part in path.relative_to(paper).parts)]
+            reject_current_anthropic_outputs(project,final_files)
+        except ImportError as exc:errors.append(f"output provenance validator unavailable: {exc}")
+        except ProvenanceError as exc:errors.append(str(exc))
         if not any(nonempty(p) for p in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx")):errors.append(f"{pid} requires manuscript/main.tex or manuscript/main.docx")
         venue=load_nonempty_json(paper/"venue.json",errors)
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
@@ -179,9 +185,10 @@ def initialize(args):
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
     defaults=read_json(DEFAULTS_PATH);count=args.paper_count or int(defaults["paper_count"])
     if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
-    for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","experiments/runs","claims","reports","reviews/codex"]:(dest/rel).mkdir(parents=True,exist_ok=True)
+    for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.0","status":"needs_user_input","research_goal":None,"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[]})
-    write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"Windows 11 with WSL2 recommended","orchestrator":"API-first Python orchestrator","evidence_workbench":"Claude Science export contract","independent_auditor":"OpenAI/Codex API or CLI","checked_at":None,"environment_report":None})
+    write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"Windows 11 with WSL2 recommended","orchestrator":"API-first Python orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
+    write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
     for rel in ["evidence/search-log.jsonl","data/datasets.jsonl","experiments/registry.jsonl"]:write_text(dest/rel,"")
     write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,support,uncertainty,status\n")
     for n in range(1,count+1):

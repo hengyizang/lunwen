@@ -17,6 +17,8 @@ Use blinded actor-critic passes:
 6. Revise scientific claims only when evidence supports the change; never polish away a substantive limitation.
 7. Run a second clean review that cannot see the desired answer.
 
+Claude review text is an internal control record only. Codex/OpenAI must independently write all persistent revision text and response materials; never copy sentences from the Claude audit.
+
 For G5, also run `scripts/citation_audit.py` and `scripts/venue_compliance.py`; preserve both reports under the active paper's `reviews/` directory.
 
 Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.

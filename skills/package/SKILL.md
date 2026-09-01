@@ -13,6 +13,6 @@ Run:
 python3 scripts/submission_package.py --project <slug> --paper <Pxx>
 ```
 
-Inspect `SUBMISSION-MANIFEST.json`, `MANUAL-CHECKLIST.md` and every included file. Report missing portal-only metadata or separate-upload requirements to the human. The ZIP is a convenience bundle, not evidence that a journal accepts a single archive.
+Inspect `SUBMISSION-MANIFEST.json`, its output-provenance section, `MANUAL-CHECKLIST.md` and every included file. The packager must reject any current hash recorded as Anthropic/Claude-authored. Report missing portal-only metadata or separate-upload requirements to the human. The ZIP is a convenience bundle, not evidence that a journal accepts a single archive.
 
 Never request portal credentials, bypass access controls, upload files, click a submission confirmation or claim that submission occurred.

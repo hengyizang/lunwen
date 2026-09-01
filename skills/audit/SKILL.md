@@ -21,4 +21,4 @@ Check:
 - authorship, funding, conflict, ethics, data/code and AI-use disclosures;
 - secrets, raw/private data and publisher files accidentally tracked by Git.
 
-Ask Codex for an independent initial pass, disposition it, and require a fresh final schema-bound pass. Emit blocking, major and minor findings with exact paths and remediation evidence. Do not mark a gate ready while blockers remain.
+Use a model family different from the Codex/OpenAI persistent writer for the independent initial and final schema-bound passes. Require Codex/OpenAI to disposition and remediate every finding. Also verify `state/output-provenance.json` and block current Anthropic-authored final files. Emit blocking, major and minor findings with exact paths and remediation evidence. Do not mark a gate ready while blockers remain.
