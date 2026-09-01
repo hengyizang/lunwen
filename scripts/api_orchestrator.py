@@ -290,6 +290,17 @@ code/specifications tied to recorded data; do not fabricate numeric values or
 model-generated bitmap artwork. Local deterministic execution must render final
 charts from real experiment outputs.
 
+Write all manuscript-bound scientific content in English, including titles,
+abstracts, body text, captions, table text, supplements, response letters and
+cover materials. At G1 require a closest-work originality audit and a doctoral
+case. At G2 compare every paper pair and reject overlapping primary claims. At
+G3 create one or more complete experiment designs for every configured paper;
+assign every planned run exactly once; trace baseline sources, versions and
+licenses; require fair tuning/evaluation, strong/domain-standard/simple
+comparators, ablations, leakage controls, estimands, practical thresholds,
+effect sizes, uncertainty, power or precision, robustness, external validity,
+negative controls, stopping rules and falsification criteria.
+
 Return ONLY one JSON object with keys schema_version, stage, artifacts, notes.
 Use schema_version 1.0 and make notes an array of strings. Each artifact path
 must be relative to projects/{project}. Produce the smallest useful set of
@@ -318,6 +329,8 @@ Audit independently for fabricated or unverified citations, weak novelty claims,
 missing primary evidence, unsupported job/market/JCR claims, data-license gaps,
 leakage, circular validation, inadequate baselines/ablations/statistics,
 confounding, compute infeasibility, salami slicing, missing falsification,
+weak closest-work differentiation, unsupported doctoral synthesis, inadequate
+power or precision, weak external validity, non-English manuscript content,
 reproducibility gaps, and any gate-contract violation. Do not edit files. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
@@ -350,6 +363,7 @@ anything, write reviews/codex, write reviews/decision-log.md, or write
 reviews/independent, provenance files, or state/run.json. Express all revised
 text independently; do not reuse wording from a Claude plan or review. For every
 rejected item, record the evidence-based reason.
+Keep every manuscript-bound artifact in English.
 """
 
 

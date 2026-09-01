@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/paper-experiment-design.schema.json",
+  "title": "Paper-level confirmatory experiment design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "paper_id", "design_id", "hypothesis_ids", "run_ids", "stochastic", "seeds", "baselines", "baseline_fairness", "ablations", "data_protocol", "metrics", "statistics", "robustness_checks", "negative_controls", "falsification_criteria", "stopping_rules", "failure_analysis", "reproducibility", "claim_limits"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "status": {"const": "ready_for_review"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "design_id": {"type": "string", "minLength": 1},
+    "hypothesis_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "run_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "stochastic": {"type": "boolean"},
+    "seeds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer"}},
+    "baselines": {
+      "type": "array", "minItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "class", "rationale", "publication_year", "primary_source_url", "implementation_source", "version_or_commit", "license_or_terms", "tuning_budget"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "class": {"enum": ["simple", "domain_standard", "strong_recent"]},
+          "rationale": {"type": "string", "minLength": 1},
+          "publication_year": {"type": "integer", "minimum": 1900},
+          "primary_source_url": {"type": "string", "pattern": "^https://"},
+          "implementation_source": {"type": "string", "minLength": 1},
+          "version_or_commit": {"type": "string", "minLength": 1},
+          "license_or_terms": {"type": "string", "minLength": 1},
+          "tuning_budget": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "baseline_fairness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["common_evaluation_protocol", "comparable_tuning_budget", "leakage_isolation", "implementation_verification"],
+      "properties": {
+        "common_evaluation_protocol": {"type": "string", "minLength": 1},
+        "comparable_tuning_budget": {"type": "string", "minLength": 1},
+        "leakage_isolation": {"type": "string", "minLength": 1},
+        "implementation_verification": {"type": "string", "minLength": 1}
+      }
+    },
+    "ablations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "data_protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["datasets", "split_unit", "split_strategy", "leakage_controls", "preprocessing_fit_scope", "external_validation"],
+      "properties": {
+        "datasets": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "split_unit": {"type": "string", "minLength": 1},
+        "split_strategy": {"type": "string", "minLength": 1},
+        "leakage_controls": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+        "preprocessing_fit_scope": {"type": "string", "minLength": 1},
+        "external_validation": {"type": "string", "minLength": 1}
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primary", "secondary"],
+      "properties": {
+        "primary": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["name", "direction", "aggregation", "uncertainty", "rationale"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "direction": {"type": "string", "minLength": 1},
+              "aggregation": {"type": "string", "minLength": 1},
+              "uncertainty": {"type": "string", "minLength": 1},
+              "rationale": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "secondary": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "statistics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["estimand", "unit_of_analysis", "effect_size", "confidence_interval", "test_or_model", "practical_significance_threshold", "assumption_checks", "multiplicity_control", "power_or_precision", "missing_data", "seed_aggregation"],
+      "properties": {
+        "estimand": {"type": "string", "minLength": 1},
+        "unit_of_analysis": {"type": "string", "minLength": 1},
+        "effect_size": {"type": "string", "minLength": 1},
+        "confidence_interval": {"type": "string", "minLength": 1},
+        "test_or_model": {"type": "string", "minLength": 1},
+        "practical_significance_threshold": {"type": "string", "minLength": 1},
+        "assumption_checks": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "multiplicity_control": {"type": "string", "minLength": 1},
+        "power_or_precision": {"type": "string", "minLength": 1},
+        "missing_data": {"type": "string", "minLength": 1},
+        "seed_aggregation": {"type": "string", "minLength": 1}
+      }
+    },
+    "robustness_checks": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+    "negative_controls": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "falsification_criteria": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "stopping_rules": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "failure_analysis": {"type": "string", "minLength": 1},
+    "reproducibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["environment_lock", "code_commit", "config_capture", "output_hashes"],
+      "properties": {
+        "environment_lock": {"type": "string", "minLength": 1},
+        "code_commit": {"type": "string", "minLength": 1},
+        "config_capture": {"type": "string", "minLength": 1},
+        "output_hashes": {"type": "string", "minLength": 1}
+      }
+    },
+    "claim_limits": {"type": "string", "minLength": 1}
+  }
+}

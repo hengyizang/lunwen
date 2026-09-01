@@ -84,7 +84,7 @@ def gate_errors(slug,gate):
         if c and c.get("status")!="ready_for_review":errors.append("intake/constraints.json status must be ready_for_review")
         return errors
     if gate=="G1":
-        if not nonempty(project/"evidence"/"search-log.jsonl"):errors.append("evidence/search-log.jsonl is required")
+        searches=jsonl_objects(project/"evidence"/"search-log.jsonl",errors)
         s=load_nonempty_json(project/"program"/"topic-shortlist.json",errors)
         if s:
             cs=s.get("candidates") or s.get("topics")
@@ -92,19 +92,42 @@ def gate_errors(slug,gate):
         for rel in ("program/core-thesis.json","program/extension-thesis.json"):
             v=load_nonempty_json(project/rel,errors)
             if v and v.get("status") not in {"ready_for_review","approved"}:errors.append(f"{rel} status must be ready_for_review or approved")
+        originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
+        if originality:
+            try:
+                from scripts.research_design import validate_originality_audit,validate_search_log
+                errors.extend(f"program/originality-audit.json: {x}" for x in validate_originality_audit(originality))
+                errors.extend(f"evidence/search-log.jsonl: {x}" for x in validate_search_log(searches,originality))
+            except ImportError as exc:errors.append(f"originality validator unavailable: {exc}")
         if not nonempty(project/"program"/"topic-decision.md"):errors.append("program/topic-decision.md is required")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G2":
-        load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
+        paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
         if len(dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(dirs)}")
+        originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
+        prior_work_values=(originality or {}).get("closest_prior_work",[]);prior_work_values=prior_work_values if isinstance(prior_work_values,list) else []
+        prior_work_ids={str(item.get("id")) for item in prior_work_values if isinstance(item,dict) and item.get("id")}
+        mapped_values=(paper_map or {}).get("papers",[]);mapped_values=mapped_values if isinstance(mapped_values,list) else []
+        mapped_claims={}
+        for item in mapped_values:
+            if not isinstance(item,dict) or not item.get("paper_id"):continue
+            claim_values=item.get("unique_claim_ids",[]);claim_values=claim_values if isinstance(claim_values,list) else []
+            mapped_claims[str(item.get("paper_id"))]=set(str(claim) for claim in claim_values)
+        try:
+            from scripts.research_design import validate_paper_contract,validate_paper_map
+            if paper_map:errors.extend(f"program/paper-map.json: {x}" for x in validate_paper_map(paper_map,(pd.name for pd in dirs)))
+        except ImportError as exc:errors.append(f"paper architecture validator unavailable: {exc}");validate_paper_contract=None
         for pd in dirs:
             c=load_nonempty_json(pd/"paper-contract.json",errors)
-            if c and c.get("status") not in {"ready_for_review","approved"}:errors.append(f"{pd.name}/paper-contract.json must be ready_for_review or approved")
+            if c and validate_paper_contract:errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name))
             if c:
-                for f in ("working_title","research_question","distinct_contribution"):
-                    if not str(c.get(f,"")).strip():errors.append(f"{pd.name}/paper-contract.json needs {f}")
-                if not c.get("falsification_conditions"):errors.append(f"{pd.name}/paper-contract.json needs falsification conditions")
-                if not isinstance(c.get("target_venues"),list) or len(c.get("target_venues"))<2:errors.append(f"{pd.name} needs at least two Q1 target venues")
+                boundary=c.get("originality_boundary") if isinstance(c.get("originality_boundary"),dict) else {};independence=c.get("independence") if isinstance(c.get("independence"),dict) else {}
+                referenced_values=boundary.get("closest_prior_work_ids",[]);referenced_values=referenced_values if isinstance(referenced_values,list) else []
+                referenced=set(str(item) for item in referenced_values);missing=sorted(referenced-prior_work_ids)
+                if missing:errors.append(f"{pd.name}/paper-contract.json references prior work absent from G1 originality audit: {', '.join(missing)}")
+                contract_claim_values=independence.get("unique_claim_ids",[]);contract_claim_values=contract_claim_values if isinstance(contract_claim_values,list) else []
+                contract_claims=set(str(item) for item in contract_claim_values)
+                if mapped_claims.get(pd.name,set())!=contract_claims:errors.append(f"{pd.name} unique claim IDs must match program/paper-map.json")
                 quality_errors(project,gate,errors,pd.name)
         independent_audit_errors(project,gate,errors);return errors
     if gate=="G3":
@@ -123,6 +146,60 @@ def gate_errors(slug,gate):
                 from scripts.experiment_runner import validate_plan
                 errors.extend(f"experiments/plan.json: {x}" for x in validate_plan(plan))
             except ImportError as exc:errors.append(f"experiment plan validator unavailable: {exc}")
+            try:
+                from scripts.research_design import validate_experiment_design
+                run_values=plan.get("runs",[]);run_values=run_values if isinstance(run_values,list) else []
+                plan_runs={str(run.get("run_id")):run for run in run_values if isinstance(run,dict) and run.get("run_id")}
+                manifest_ids={str(item.get("dataset_id")) for item in datasets if item.get("dataset_id")}
+                paper_dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
+                state=read_json(state_path(slug))
+                if len(paper_dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(paper_dirs)}")
+                for paper_dir in paper_dirs:
+                    contract=load_nonempty_json(paper_dir/"paper-contract.json",errors)
+                    experiment_dir=paper_dir/"experiments";design_paths=sorted(experiment_dir.glob("*.json"))
+                    if not design_paths:errors.append(f"missing or empty: {experiment_dir}/*.json");continue
+                    found_design_ids=set();assigned_run_ids=set();duplicate_run_ids=set()
+                    for design_path in design_paths:
+                        design=load_nonempty_json(design_path,errors)
+                        if not design:continue
+                        rel=design_path.relative_to(project)
+                        errors.extend(f"{rel}: {x}" for x in validate_experiment_design(design,paper_dir.name,plan_runs))
+                        design_id=design.get("design_id")
+                        if isinstance(design_id,str) and design_id:
+                            if design_id in found_design_ids:errors.append(f"{paper_dir.name} repeats experiment design_id {design_id}")
+                            found_design_ids.add(design_id)
+                        design_run_values=design.get("run_ids",[]);design_run_values=design_run_values if isinstance(design_run_values,list) else []
+                        design_run_ids={str(item) for item in design_run_values}
+                        duplicate_run_ids.update(assigned_run_ids&design_run_ids);assigned_run_ids.update(design_run_ids)
+                        if contract:
+                            hypothesis_values=contract.get("hypotheses",[]);hypothesis_values=hypothesis_values if isinstance(hypothesis_values,list) else []
+                            contract_hypotheses={str(item.get("id")) for item in hypothesis_values if isinstance(item,dict) and item.get("id")}
+                            design_hypotheses=design.get("hypothesis_ids",[]);design_hypotheses=design_hypotheses if isinstance(design_hypotheses,list) else []
+                            missing=sorted(set(str(item) for item in design_hypotheses)-contract_hypotheses)
+                            if missing:errors.append(f"{rel} references unknown hypotheses: {', '.join(missing)}")
+                            data_protocol=design.get("data_protocol") if isinstance(design.get("data_protocol"),dict) else {}
+                            contract_dataset_values=contract.get("datasets",[]);contract_dataset_values=contract_dataset_values if isinstance(contract_dataset_values,list) else []
+                            design_dataset_values=data_protocol.get("datasets",[]);design_dataset_values=design_dataset_values if isinstance(design_dataset_values,list) else []
+                            contract_datasets=set(str(item) for item in contract_dataset_values);design_datasets=set(str(item) for item in design_dataset_values)
+                            missing_contract=sorted(design_datasets-contract_datasets)
+                            if missing_contract:errors.append(f"{rel} datasets absent from paper-contract.json: {', '.join(missing_contract)}")
+                            missing_manifest=sorted(design_datasets-manifest_ids)
+                            if missing_manifest:errors.append(f"{rel} datasets absent from data/datasets.jsonl: {', '.join(missing_manifest)}")
+                    if duplicate_run_ids:errors.append(f"{paper_dir.name} assigns runs to multiple designs: {', '.join(sorted(duplicate_run_ids))}")
+                    paper_run_ids={run_id for run_id,run in plan_runs.items() if run.get("paper_id")==paper_dir.name}
+                    if assigned_run_ids!=paper_run_ids:
+                        missing=sorted(paper_run_ids-assigned_run_ids);extra=sorted(assigned_run_ids-paper_run_ids)
+                        if missing:errors.append(f"{paper_dir.name} experiment designs omit planned runs: {', '.join(missing)}")
+                        if extra:errors.append(f"{paper_dir.name} experiment designs include non-paper runs: {', '.join(extra)}")
+                    if contract:
+                        planned=contract.get("planned_experiments") if isinstance(contract.get("planned_experiments"),dict) else {}
+                        planned_values=planned.get("design_ids",[]);planned_values=planned_values if isinstance(planned_values,list) else []
+                        planned_designs=set(str(item) for item in planned_values)
+                        if found_design_ids!=planned_designs:
+                            missing=sorted(planned_designs-found_design_ids);extra=sorted(found_design_ids-planned_designs)
+                            if missing:errors.append(f"{paper_dir.name} is missing contracted experiment designs: {', '.join(missing)}")
+                            if extra:errors.append(f"{paper_dir.name} has uncontracted experiment designs: {', '.join(extra)}")
+            except ImportError as exc:errors.append(f"paper experiment-design validator unavailable: {exc}")
         budget=load_nonempty_json(project/"experiments"/"budget.json",errors)
         if budget:
             if budget.get("status")!="ready_for_review":errors.append("experiments/budget.json status must be ready_for_review")
@@ -134,7 +211,8 @@ def gate_errors(slug,gate):
         if not registry:errors.append("at least one experiment registry entry is required")
         plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
         if plan:
-            planned={x.get("run_id") for x in plan.get("runs",[]) if isinstance(x,dict)};attempted={x.get("run_id") for x in registry};missing=sorted(str(x) for x in planned-attempted)
+            run_values=plan.get("runs",[]);run_values=run_values if isinstance(run_values,list) else []
+            planned={x.get("run_id") for x in run_values if isinstance(x,dict)};attempted={x.get("run_id") for x in registry};missing=sorted(str(x) for x in planned-attempted)
             if missing:errors.append(f"planned runs without registry attempts: {', '.join(missing)}")
         claim=project/"claims"/"claim-evidence.csv"
         if not nonempty(claim):errors.append("claims/claim-evidence.csv is required")
@@ -149,14 +227,23 @@ def gate_errors(slug,gate):
             reject_current_anthropic_outputs(project,final_files)
         except ImportError as exc:errors.append(f"output provenance validator unavailable: {exc}")
         except ProvenanceError as exc:errors.append(str(exc))
-        if not any(nonempty(p) for p in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx")):errors.append(f"{pid} requires manuscript/main.tex or manuscript/main.docx")
+        manuscripts=[p for p in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx") if nonempty(p)]
+        if not manuscripts:errors.append(f"{pid} requires manuscript/main.tex or manuscript/main.docx")
+        else:
+            try:
+                from scripts.manuscript_language import analyze
+                language=analyze(manuscripts[0])
+                errors.extend(f"{pid} English manuscript check: {x}" for x in language.get("errors",[]))
+            except (ImportError,ValueError) as exc:errors.append(f"{pid} English manuscript validator failed: {exc}")
         venue=load_nonempty_json(paper/"venue.json",errors)
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
         jcr=load_nonempty_json(paper/"jcr-verification.json",errors)
         if jcr:
-            if jcr.get("quartile")!="Q1":errors.append(f"{pid} selected venue must be current JCR Q1")
-            if jcr.get("indexing") not in {"SCI","SCIE"}:errors.append(f"{pid} selected venue must be SCI/SCIE")
-            if not isinstance(jcr.get("impact_factor"),(int,float)) or jcr.get("impact_factor",0)<=1.0:errors.append(f"{pid} selected venue impact factor must be > 1.0")
+            try:
+                from scripts.jcr_verify import JcrVerificationError,verify
+                verify(jcr)
+            except ImportError as exc:errors.append(f"JCR Q1 validator unavailable: {exc}")
+            except JcrVerificationError as exc:errors.append(f"{pid} current JCR Q1 verification: {exc}")
         response=paper/"reviews"/"response-matrix.csv"
         if not nonempty(response) or sum(1 for _ in csv.reader(response.open(newline="",encoding="utf-8")))<2:errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
         for n in (1,2):
@@ -193,8 +280,8 @@ def initialize(args):
     write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,support,uncertainty,status\n")
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid
-        for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews"]:(paper/rel).mkdir(parents=True,exist_ok=True)
-        write_json(paper/"paper-contract.json",{"schema_version":"1.0","paper_id":pid,"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","hypotheses":[],"datasets":[],"experiments":[],"falsification_conditions":[],"dependencies":[],"target_venues":[],"status":"draft"})
+        for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments"]:(paper/rel).mkdir(parents=True,exist_ok=True)
+        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)
     venue_id=args.venue or defaults.get("trial_venue")
     if venue_id:set_venue_values(slug,"P01",venue_id)

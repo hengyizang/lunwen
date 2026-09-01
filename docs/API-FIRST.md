@@ -1,4 +1,4 @@
-# API-first mode (v1.2)
+# API-first mode (v1.3)
 
 Doctoral Research OS can run without Claude Code or Codex CLI. The Python control plane calls Claude only for a non-publishable semantic plan and independent audits. OpenAI/Codex independently writes and remediates every persistent artifact. The control plane validates bundles, rejects long verbatim spans copied from Claude control text, records writer-family hashes, and blocks current Anthropic-authored files from final packaging.
 
@@ -47,6 +47,14 @@ For G1–G5, `cycle` validates Claude critic JSON against the independent-audit 
 writes matching initial/final audits under `reviews/independent/`, and appends the
 non-Claude writer's itemized dispositions to `reviews/decision-log.md`. A non-passing final
 verdict remains recorded and keeps the deterministic gate closed.
+
+G1 additionally requires `program/originality-audit.json`; G2 requires a
+complete pairwise paper-distinctness matrix and paper-contract schema 2.0; G3
+requires one or more linked experiment designs per paper, with every planned run
+assigned exactly once. Candidate and selected venues
+must be current JCR Q1 SCI/SCIE. At G5 the control plane reads the final TeX or
+DOCX source and blocks non-English manuscript content. These are readiness
+checks, not an acceptance guarantee.
 
 ## Architecture
 
