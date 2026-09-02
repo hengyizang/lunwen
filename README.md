@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.4
+# Doctoral Research OS v1.5
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -17,7 +17,8 @@
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
 - 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
 - UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
-- DataCite、Zenodo、Hugging Face、OpenML 的公开数据元数据发现；候选许可始终标记为未核验。
+- DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方数据接口的并行检索、跨查询去重和元数据相关度初筛；候选许可和科学适用性始终标记为需要人工核验。
+- 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
@@ -73,6 +74,31 @@ bash scripts/bootstrap-wsl.sh --with-kdense
 
 该选项只安装锁定提交中的筛选子集，默认不开启。许可、固定版本和边界见 `references/upstream-components.md`。
 
+## 本地可视化客户端（新手推荐）
+
+无需安装 Node、数据库或桌面框架。在 WSL2 项目目录运行：
+
+```bash
+bash scripts/start-dashboard.sh
+```
+
+客户端默认只监听本机 `127.0.0.1:8765`，并尝试自动打开 Windows 浏览器。若浏览器没有自动打开，请访问：
+
+```text
+http://127.0.0.1:8765
+```
+
+在“API 设置”中输入 UUAPI 地址、Key、Claude 模型 ID 和 GPT/Codex 模型 ID。Key 只保存在当前 Python 进程内存中，页面不会读回密钥，关闭终端即清除。客户端覆盖：
+
+- API 配置检查、计费探针与余额查询；
+- 项目创建、阶段运行、闸门检查、`ready/reopen/approve/advance`；
+- 八类数据源的多查询并行检索与候选排序；
+- 数据清单验证、许可证确认后的安全下载；
+- 已批准实验执行、实时日志、Token 与完成度监控；
+- 六篇论文的顺序状态和本地投稿 ZIP。
+
+完整说明、安全边界和故障处理见 [`docs/DASHBOARD.md`](docs/DASHBOARD.md)。CLI 仍然保留，并与客户端共享完全相同的项目状态。
+
 ## API-first 模式（推荐长期使用）
 
 配置环境变量：
@@ -104,7 +130,7 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
 API 模式会把 Claude 语义计划、原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。Claude计划不会写进普通科研文件；只有非Anthropic writer可以写项目产物。模型不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
 
 完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
-本次全链路要求追踪与剩余人工边界见 [`docs/AUDIT-V1.4.md`](docs/AUDIT-V1.4.md)。
+v1.4 全链路要求追踪与剩余人工边界见 [`docs/AUDIT-V1.4.md`](docs/AUDIT-V1.4.md)。
 
 使用 UUAPI + CC Switch 时，先阅读
 [`docs/UUAPI-CC-SWITCH.md`](docs/UUAPI-CC-SWITCH.md)，完成非计费配置检查、余额查询和两次最小实时探针后，再运行真实研究项目。

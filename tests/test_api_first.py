@@ -10,6 +10,48 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
+    def test_experiment_design_receives_latest_broad_dataset_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = root / "projects" / "demo" / "data"
+            data.mkdir(parents=True)
+            (data / "discovery-broad-20260901T000000Z.json").write_text(
+                json.dumps(
+                    {
+                        "created_at": "2026-09-01T00:00:00+00:00",
+                        "queries": ["bearing vibration dataset"],
+                        "candidate_count": 1,
+                        "ranking_note": "metadata overlap only",
+                        "warning": "human review required",
+                        "candidates": [
+                            {
+                                "provider": "Zenodo",
+                                "title": "Bearing benchmark",
+                                "landing_url": "https://zenodo.org/records/1",
+                                "doi": "10.1/example",
+                                "license_claim": "CC-BY-4.0",
+                                "metadata_relevance_score": 82,
+                                "screening_reasons": ["title-term match"],
+                                "fitness_status": "candidate_only_requires_scientific_and_human_review",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(api_orchestrator, "ROOT", root):
+                evidence = json.loads(
+                    api_orchestrator.discover_context(
+                        "demo", "experiment-design", ""
+                    )
+                )
+            saved = evidence["saved_broad_dataset_discovery"]
+            self.assertEqual(saved["included_candidate_count"], 1)
+            self.assertEqual(saved["candidates"][0]["title"], "Bearing benchmark")
+            self.assertEqual(
+                saved["candidates"][0]["license_claim_unverified"], "CC-BY-4.0"
+            )
+
     def test_safe_target_rejects_traversal(self):
         for relative in ("../escape.txt", "C:\\escape.txt", "."):
             with self.subTest(relative=relative), self.assertRaises(ValueError):

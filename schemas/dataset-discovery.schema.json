@@ -36,7 +36,16 @@
           "title": {"type": "string"},
           "landing_url": {"type": "string", "pattern": "^https://"},
           "license_status": {"const": "unverified_requires_human_review"},
-          "fitness_status": {"const": "candidate_only"}
+          "fitness_status": {
+            "enum": [
+              "candidate_only",
+              "candidate_only_requires_scientific_and_human_review"
+            ]
+          },
+          "metadata_relevance_score": {"type": "integer", "minimum": 0, "maximum": 100},
+          "matched_queries": {"type": "array", "items": {"type": "string"}},
+          "also_found_by": {"type": "array", "items": {"type": "string"}},
+          "screening_reasons": {"type": "array", "items": {"type": "string"}}
         }
       }
     },

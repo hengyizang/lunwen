@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Doctoral Research OS</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <p class="eyebrow">LOCAL RESEARCH CONTROL</p>
+          <h1>Doctoral Research OS</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span id="connectionBadge" class="badge neutral">正在连接</span>
+        <button id="openConfig" class="button secondary">API 设置</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero panel">
+        <div>
+          <p class="eyebrow accent">RESEARCH, WITH BRAKES</p>
+          <h2>把复杂研究流程，变成每一步都看得见的驾驶舱。</h2>
+          <p class="hero-copy">Claude 只负责内部规划与批判，Codex/OpenAI 写正式产物，本地工具验证数据、实验、英文与投稿材料。所有关键决定仍由你确认。</p>
+        </div>
+        <div class="hero-status">
+          <div class="mini-stat"><span>当前版本</span><strong id="versionValue">—</strong></div>
+          <div class="mini-stat"><span>活跃任务</span><strong id="activeJobs">0</strong></div>
+          <div class="mini-stat"><span>研究项目</span><strong id="projectCount">0</strong></div>
+        </div>
+      </section>
+
+      <section class="toolbar panel">
+        <label class="field compact">
+          <span>当前项目</span>
+          <select id="projectSelect"><option value="">尚未创建项目</option></select>
+        </label>
+        <button id="refreshButton" class="button ghost">刷新状态</button>
+        <div class="toolbar-spacer"></div>
+        <span class="privacy-note"><i></i>密钥只在当前本地进程内存中</span>
+      </section>
+
+      <section id="emptyState" class="empty-state panel">
+        <div class="empty-illustration" aria-hidden="true">
+          <div class="orbit one"></div><div class="orbit two"></div><div class="core">G0</div>
+        </div>
+        <div>
+          <p class="eyebrow accent">FIRST PROJECT</p>
+          <h2>从真实约束开始，而不是从一个漂亮题目开始。</h2>
+          <p>填写项目名和研究背景，客户端会创建六篇论文的工作区，并运行第一次 G0 约束整理与双模型审查。</p>
+          <form id="startForm" class="stack-form">
+            <label class="field">
+              <span>项目名</span>
+              <input id="startProject" value="my-phd" pattern="[a-z0-9][a-z0-9-]{1,62}" required>
+              <small>只用小写字母、数字和连字符</small>
+            </label>
+            <label class="field grow">
+              <span>你的背景、目标与约束</span>
+              <textarea id="startContext" rows="9" required>Background: mechanical engineering and Big Data/AI.
+Goal: build a doctoral research programme in AI, robotics, industrial manufacturing or predictive maintenance.
+Portfolio: one coherent doctoral Theme A, one independently doctoral-level Theme B, and six non-salami-sliced papers.
+Publication target: current JCR Q1 SCI/SCIE journals, without guaranteeing acceptance.
+Laboratory access: none.
+Local hardware: [GPU], [RAM] GB RAM, [storage] GB.
+Available time: [hours] hours per week for [years] years.
+Research budget: [amount]. API/cloud budget: [amount].
+Use only public or explicitly licensed data. Leave every unknown explicit.
+All research and submission-bound artifacts must be written in English.</textarea>
+            </label>
+            <button class="button primary" type="submit">创建项目并运行 G0</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="projectWorkspace" class="workspace hidden">
+        <div class="progress-panel panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">WORKFLOW</p><h2>研究进度</h2></div>
+            <span id="projectStatusBadge" class="badge neutral">—</span>
+          </div>
+          <div id="stageProgress" class="stage-progress"></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel action-panel">
+            <div class="section-heading">
+              <div><p class="eyebrow accent">NEXT BEST ACTION</p><h2 id="nextActionTitle">读取状态</h2></div>
+              <span id="gateBadge" class="gate-badge">—</span>
+            </div>
+            <p id="nextActionCopy" class="muted">客户端会根据当前状态给出下一步。</p>
+
+            <div id="gateAlert" class="alert warning hidden"></div>
+
+            <form id="cycleForm" class="stack-form">
+              <label class="field">
+                <span>本阶段补充要求</span>
+                <textarea id="cycleContext" rows="6" placeholder="例如：优先无实验室、公开数据、有限 GPU；不能夸大原创性；所有正式产物用英文。"></textarea>
+              </label>
+              <div class="two-columns">
+                <label class="field">
+                  <span>文献/网页检索词</span>
+                  <input id="discoveryQuery" placeholder="仅 G1 使用；建议使用英文">
+                </label>
+                <label class="field">
+                  <span>单次最大输出 Token</span>
+                  <input id="maxTokens" type="number" min="1000" max="100000" value="12000">
+                </label>
+              </div>
+              <button id="runCycle" class="button primary" type="submit">运行当前阶段</button>
+            </form>
+
+            <div class="human-gate">
+              <div>
+                <p class="eyebrow">HUMAN GATE</p>
+                <h3>模型不能替你批准</h3>
+              </div>
+              <label class="field">
+                <span>审批人</span>
+                <input id="approvalActor" value="Hengyi Zang">
+              </label>
+              <label class="field">
+                <span>检查说明 / 修改原因</span>
+                <input id="gateNote" placeholder="说明你检查了什么">
+              </label>
+              <div class="button-row wrap">
+                <button id="gateCheck" class="button secondary">检查闸门</button>
+                <button id="markReady" class="button secondary">锁定并等待审批</button>
+                <button id="approveGate" class="button success">人工批准</button>
+                <button id="advanceGate" class="button primary">进入下一阶段</button>
+                <button id="reopenGate" class="button danger-ghost">重新打开</button>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel telemetry-panel">
+            <div class="section-heading"><div><p class="eyebrow">TELEMETRY</p><h2>项目监控</h2></div></div>
+            <div id="metricGrid" class="metric-grid"></div>
+            <div class="divider"></div>
+            <h3>闸门缺项</h3>
+            <ol id="gateErrors" class="issue-list"><li class="muted">暂无数据</li></ol>
+          </aside>
+        </div>
+
+        <section class="panel data-panel">
+          <div class="section-heading wide">
+            <div>
+              <p class="eyebrow green">BROAD DATA SCOUT</p>
+              <h2>全网多源数据侦察</h2>
+              <p class="muted">并行搜索、跨源去重、元数据相关度排序；保存后，下一次 G1/G3 运行会把报告交给 Codex 进行论文级评估。许可证和科学适用性仍需人工确认。</p>
+            </div>
+            <span id="sourceCountBadge" class="badge green">8 个官方来源</span>
+          </div>
+          <form id="dataSearchForm" class="data-search-layout">
+            <div>
+              <label class="field">
+                <span>查询组合：每行一种表述，建议 3–6 行</span>
+                <textarea id="dataQueries" rows="7" required>industrial predictive maintenance vibration time series dataset
+rotating machinery bearing fault diagnosis benchmark
+remaining useful life machine degradation dataset
+industrial robot anomaly detection multivariate sensor data</textarea>
+              </label>
+              <div class="two-columns narrow">
+                <label class="field"><span>每个来源/查询最多返回</span><input id="dataLimit" type="number" min="1" max="50" value="20"></label>
+                <div class="field"><span>理论最大检索量</span><strong id="searchScale" class="calculated">640 条元数据</strong></div>
+              </div>
+              <button class="button green-button" type="submit">开始广域搜索</button>
+            </div>
+            <fieldset class="source-picker">
+              <legend>数据源</legend>
+              <div id="providerOptions" class="provider-options"></div>
+              <div class="optional-source"><span>Kaggle</span><small>需要单独账号和凭据；当前不自动连接</small></div>
+            </fieldset>
+          </form>
+
+          <div class="results-heading">
+            <div><h3>候选数据集</h3><p id="dataSummary" class="muted">尚未执行搜索</p></div>
+            <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="20"><output id="scoreValue">20</output></label>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>相关度</th><th>数据集</th><th>来源</th><th>元数据</th><th>状态</th></tr></thead>
+              <tbody id="candidateRows"><tr><td colspan="5" class="empty-cell">搜索完成后在这里比较候选数据</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="bottom-grid">
+          <div class="panel jobs-panel">
+            <div class="section-heading"><div><p class="eyebrow orange">LIVE JOBS</p><h2>任务与日志</h2></div><div class="button-row"><button id="cancelJob" class="button danger-ghost small" disabled>停止任务</button><button id="clearJobSelection" class="button ghost small">查看全部</button></div></div>
+            <div id="jobList" class="job-list"></div>
+            <pre id="jobLog" class="job-log">选择一个任务查看实时输出。</pre>
+          </div>
+
+          <div class="panel advanced-panel">
+            <div class="section-heading"><div><p class="eyebrow">CONTROL TOOLS</p><h2>数据、实验与投稿</h2></div></div>
+            <div class="tool-card">
+              <h3>已批准实验</h3>
+              <p>只执行 G3 已批准、哈希一致的实验计划。</p>
+              <input id="experimentRun" placeholder="可选：指定 run_id">
+              <button id="runExperiment" class="button secondary">执行实验</button>
+            </div>
+            <div class="tool-card">
+              <h3>数据清单</h3>
+              <p>路径相对于项目目录，例如 <code>data/bearing-manifest.json</code>。</p>
+              <input id="datasetManifest" placeholder="data/dataset-manifest.json">
+              <label class="check-line"><input id="acceptLicense" type="checkbox">我已在官方页面核验许可证与研究用途</label>
+              <div class="button-row"><button id="validateDataset" class="button secondary">验证清单</button><button id="downloadDataset" class="button secondary">安全下载</button></div>
+            </div>
+            <div class="tool-card">
+              <h3>投稿包</h3>
+              <p>仅生成本地 ZIP，不登录、不上传、不投稿。</p>
+              <select id="packagePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+              <button id="buildPackage" class="button secondary">生成手工投稿包</button>
+            </div>
+            <div class="tool-card">
+              <h3>期刊配置</h3>
+              <p>设置模板配置不等于确认 JCR Q1；当年分类与分区仍需你核验。</p>
+              <div class="two-columns">
+                <select id="venuePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                <select id="venueId"><option value="">选择已安装期刊配置</option></select>
+              </div>
+              <button id="setVenue" class="button secondary">设置期刊配置</button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="configDialog">
+    <form id="configForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow accent">SESSION SETTINGS</p><h2>API 与模型设置</h2></div><button id="closeConfig" class="icon-button" type="button" aria-label="关闭">×</button></div>
+      <div class="security-banner"><strong>不会写入磁盘</strong><span>关闭客户端后，内存中的密钥随进程清除。</span></div>
+      <label class="field"><span>UUAPI API Key</span><input id="apiKey" type="password" autocomplete="off" placeholder="已配置时可留空"></label>
+      <label class="field"><span>UUAPI Base URL</span><input id="baseUrl" type="url" placeholder="https://gateway.example" required></label>
+      <div class="two-columns">
+        <label class="field"><span>Claude 模型 ID（规划/审查）</span><input id="anthropicModel" required></label>
+        <label class="field"><span>GPT/Codex 模型 ID（正式写作）</span><input id="openaiModel" required></label>
+      </div>
+      <label class="field"><span>Tavily Key（可选，仅扩展网页检索）</span><input id="tavilyKey" type="password" autocomplete="off" placeholder="不使用可留空"></label>
+      <label class="check-line"><input id="strictModel" type="checkbox" checked>严格核对请求模型与网关报告模型</label>
+      <div class="dialog-actions">
+        <button id="saveConfig" class="button primary" type="submit">保存到当前会话</button>
+        <button id="checkHealth" class="button secondary" type="button">配置检查</button>
+        <button id="liveProbe" class="button secondary" type="button">小额计费探针</button>
+        <button id="checkBalance" class="button ghost" type="button">查询余额</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

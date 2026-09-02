@@ -121,6 +121,8 @@ def fetch_json(
     timeout: int = 30,
     max_bytes: int = DEFAULT_JSON_LIMIT,
     headers: dict[str, str] | None = None,
+    method: str = "GET",
+    json_body: Any | None = None,
     opener: Callable[..., Any] | None = None,
     resolver: Callable[..., list[tuple[Any, ...]]] = socket.getaddrinfo,
 ) -> Any:
@@ -132,7 +134,21 @@ def fetch_json(
         "User-Agent": "DoctoralResearchOS/0.2 (+research metadata discovery)",
     }
     request_headers.update(headers or {})
-    request = urllib.request.Request(public_url, headers=request_headers)
+    normalized_method = method.upper()
+    if normalized_method not in {"GET", "POST"}:
+        raise NetworkSafetyError("JSON requests support only GET or POST")
+    data = None
+    if json_body is not None:
+        if normalized_method != "POST":
+            raise NetworkSafetyError("json_body requires POST")
+        data = json.dumps(json_body, ensure_ascii=False).encode("utf-8")
+        request_headers["Content-Type"] = "application/json"
+    request = urllib.request.Request(
+        public_url,
+        data=data,
+        headers=request_headers,
+        method=normalized_method,
+    )
     open_url = opener or urllib.request.build_opener(
         PublicHTTPSRedirectHandler(resolver)
     ).open
