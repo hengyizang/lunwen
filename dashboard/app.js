@@ -126,6 +126,7 @@ function renderProject() {
   alert.classList.toggle("hidden", state.gate_error_count === 0);
   alert.textContent = state.gate_error_count ? `当前还有 ${state.gate_error_count} 项硬性要求未满足。运行模型不代表可以批准，请查看右侧缺项。` : "";
   renderStages(state);
+  renderPhaseCards(state);
   renderMetrics(detail.metrics);
   $("gateErrors").innerHTML = state.gate_errors.length
     ? state.gate_errors.map((error) => `<li>${esc(error)}</li>`).join("")
@@ -157,8 +158,30 @@ function renderStages(state) {
   const labels = {"intake":"约束", "topic-intelligence":"选题", "paper-architecture":"论文架构", "experiment-design":"实验设计", "experiment-execution":"实验执行", "writing-and-review":"写作审查", "submission-ready":"投稿准备"};
   $("stageProgress").innerHTML = app.overview.stages.map((stage, index) => {
     const css = index < state.stage_index ? "done" : index === state.stage_index ? "current" : "future";
-    return `<div class="stage ${css}"><strong>${esc(stage.gate || "完成")}</strong><span>${esc(labels[stage.name] || stage.name)}</span></div>`;
+    const target = index < 6 ? `phase-g${index}` : "phase-submission";
+    const status = css === "done" ? "已完成" : css === "current" ? "当前阶段" : "未开始";
+    return `<a class="stage ${css}" href="#${target}" ${css === "current" ? 'aria-current="step"' : ""}>
+      <strong class="stage-gate">${esc(stage.gate || "✓")}</strong>
+      <span class="stage-name"><b>${esc(labels[stage.name] || stage.name)}</b><small>${esc(stage.name)}</small></span>
+      <span class="stage-state">${status}</span>
+    </a>`;
   }).join("");
+}
+
+function renderPhaseCards(state) {
+  document.querySelectorAll("[data-phase-index]").forEach((card) => {
+    const index = Number(card.dataset.phaseIndex);
+    const css = index < state.stage_index ? "done" : index === state.stage_index ? "current" : "future";
+    const badge = card.querySelector("[data-phase-status]");
+    card.classList.remove("done", "current", "future");
+    card.classList.add(css);
+    if (css === "current") card.setAttribute("aria-current", "step");
+    else card.removeAttribute("aria-current");
+    if (badge) {
+      badge.className = `badge phase-status ${css === "done" ? "good" : css === "current" ? "warn" : "neutral"}`;
+      badge.textContent = css === "done" ? "已完成" : css === "current" ? "当前阶段" : "未开始";
+    }
+  });
 }
 
 function renderMetrics(metrics) {

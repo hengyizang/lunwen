@@ -1,4 +1,4 @@
-# Local visual dashboard (v1.5)
+# Local visual dashboard (v1.5.1)
 
 The dashboard is a beginner-facing local client over the existing Doctoral
 Research OS. It does not replace the G0–G5 control plane. Every mutation is
@@ -42,6 +42,22 @@ small billable probe. Stop on a model-ID mismatch. Do not disable strict model
 checking simply to hide a gateway substitution.
 
 ## Project workflow
+
+The client lays out the complete workflow vertically in execution order. G0 is
+always at the top, followed by G1 through G5, with submission preparation last.
+The current stage is highlighted, completed stages are green, and future stages
+remain visible so a new user can understand what comes next without being able
+to skip a gate.
+
+| Position | Stage | Embedded workspace |
+|---:|---|---|
+| 1 | G0 intake | Constraints and research boundaries |
+| 2 | G1 topic intelligence | Novelty investigation and broad dataset discovery |
+| 3 | G2 paper architecture | Six-paper contribution and overlap checks |
+| 4 | G3 experiment design | Dataset manifest, license and design controls |
+| 5 | G4 experiment execution | Approved, hash-locked experiment runner |
+| 6 | G5 writing and review | English writing, figures, review and venue setup |
+| 7 | Submission ready | Local manual-submission package generation |
 
 1. Create a project and provide complete, truthful G0 constraints.
 2. Wait for the live job to finish and inspect the log.
