@@ -82,10 +82,10 @@ All research and submission-bound artifacts must be written in English.</textare
       <section id="projectWorkspace" class="workspace hidden">
         <div class="progress-panel panel">
           <div class="section-heading">
-            <div><p class="eyebrow">WORKFLOW</p><h2>研究进度</h2></div>
+            <div><p class="eyebrow">WORKFLOW</p><h2>纵向阶段导航</h2><p class="muted">严格按照 G0 → G5 从上到下推进；点击阶段可跳到对应工作区。</p></div>
             <span id="projectStatusBadge" class="badge neutral">—</span>
           </div>
-          <div id="stageProgress" class="stage-progress"></div>
+          <nav id="stageProgress" class="stage-progress" aria-label="研究阶段"></nav>
         </div>
 
         <div class="dashboard-grid">
@@ -148,87 +148,179 @@ All research and submission-bound artifacts must be written in English.</textare
           </aside>
         </div>
 
-        <section class="panel data-panel">
-          <div class="section-heading wide">
-            <div>
-              <p class="eyebrow green">BROAD DATA SCOUT</p>
-              <h2>全网多源数据侦察</h2>
-              <p class="muted">并行搜索、跨源去重、元数据相关度排序；保存后，下一次 G1/G3 运行会把报告交给 Codex 进行论文级评估。许可证和科学适用性仍需人工确认。</p>
+        <div class="phase-stack" aria-label="按顺序排列的研究工作区">
+          <section id="phase-g0" class="panel phase-card" data-phase-index="0">
+            <div class="phase-header">
+              <span class="phase-marker">G0</span>
+              <div>
+                <p class="eyebrow">INTAKE</p>
+                <h2>约束与研究边界</h2>
+                <p class="muted">先锁定你的真实目标、时间、预算、设备、伦理和数据边界，未知信息不得由模型代填。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
             </div>
-            <span id="sourceCountBadge" class="badge green">8 个官方来源</span>
-          </div>
-          <form id="dataSearchForm" class="data-search-layout">
-            <div>
-              <label class="field">
-                <span>查询组合：每行一种表述，建议 3–6 行</span>
-                <textarea id="dataQueries" rows="7" required>industrial predictive maintenance vibration time series dataset
+            <div class="phase-body phase-intro-grid">
+              <div class="phase-note"><strong>本阶段要形成</strong><span>可审计的约束清单、研究目标与不可突破的伦理边界。</span></div>
+              <div class="phase-note"><strong>如何操作</strong><span>在上方“当前阶段操作”运行 G0，阅读生成文件后再完成闸门审批。</span></div>
+              <div class="phase-note"><strong>人工判断</strong><span>确认所有个人条件真实，且没有把 JCR Q1 目标写成录用保证。</span></div>
+            </div>
+          </section>
+
+          <section id="phase-g1" class="panel phase-card data-panel" data-phase-index="1">
+            <div class="phase-header wide">
+              <span class="phase-marker">G1</span>
+              <div>
+                <p class="eyebrow green">TOPIC INTELLIGENCE · BROAD DATA SCOUT</p>
+                <h2>选题、新颖性与全网多源数据侦察</h2>
+                <p class="muted">先广泛检索候选方向、反证和可用数据，再让 Codex 评估博士级原创性与可行性。元数据相关度不等于科学质量。</p>
+              </div>
+              <div class="phase-badges"><span id="sourceCountBadge" class="badge green">8 个官方来源</span><span class="badge neutral phase-status" data-phase-status>未开始</span></div>
+            </div>
+            <div class="phase-body">
+              <form id="dataSearchForm" class="data-search-layout">
+                <div>
+                  <label class="field">
+                    <span>查询组合：每行一种表述，建议 3–6 行</span>
+                    <textarea id="dataQueries" rows="7" required>industrial predictive maintenance vibration time series dataset
 rotating machinery bearing fault diagnosis benchmark
 remaining useful life machine degradation dataset
 industrial robot anomaly detection multivariate sensor data</textarea>
-              </label>
-              <div class="two-columns narrow">
-                <label class="field"><span>每个来源/查询最多返回</span><input id="dataLimit" type="number" min="1" max="50" value="20"></label>
-                <div class="field"><span>理论最大检索量</span><strong id="searchScale" class="calculated">640 条元数据</strong></div>
+                  </label>
+                  <div class="two-columns narrow">
+                    <label class="field"><span>每个来源/查询最多返回</span><input id="dataLimit" type="number" min="1" max="50" value="20"></label>
+                    <div class="field"><span>理论最大检索量</span><strong id="searchScale" class="calculated">640 条元数据</strong></div>
+                  </div>
+                  <button class="button green-button" type="submit">开始广域搜索</button>
+                </div>
+                <fieldset class="source-picker">
+                  <legend>数据源</legend>
+                  <div id="providerOptions" class="provider-options"></div>
+                  <div class="optional-source"><span>Kaggle</span><small>需要单独账号和凭据；当前不自动连接</small></div>
+                </fieldset>
+              </form>
+
+              <div class="results-heading">
+                <div><h3>候选数据集</h3><p id="dataSummary" class="muted">尚未执行搜索</p></div>
+                <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="20"><output id="scoreValue">20</output></label>
               </div>
-              <button class="button green-button" type="submit">开始广域搜索</button>
-            </div>
-            <fieldset class="source-picker">
-              <legend>数据源</legend>
-              <div id="providerOptions" class="provider-options"></div>
-              <div class="optional-source"><span>Kaggle</span><small>需要单独账号和凭据；当前不自动连接</small></div>
-            </fieldset>
-          </form>
-
-          <div class="results-heading">
-            <div><h3>候选数据集</h3><p id="dataSummary" class="muted">尚未执行搜索</p></div>
-            <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="20"><output id="scoreValue">20</output></label>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>相关度</th><th>数据集</th><th>来源</th><th>元数据</th><th>状态</th></tr></thead>
-              <tbody id="candidateRows"><tr><td colspan="5" class="empty-cell">搜索完成后在这里比较候选数据</td></tr></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="bottom-grid">
-          <div class="panel jobs-panel">
-            <div class="section-heading"><div><p class="eyebrow orange">LIVE JOBS</p><h2>任务与日志</h2></div><div class="button-row"><button id="cancelJob" class="button danger-ghost small" disabled>停止任务</button><button id="clearJobSelection" class="button ghost small">查看全部</button></div></div>
-            <div id="jobList" class="job-list"></div>
-            <pre id="jobLog" class="job-log">选择一个任务查看实时输出。</pre>
-          </div>
-
-          <div class="panel advanced-panel">
-            <div class="section-heading"><div><p class="eyebrow">CONTROL TOOLS</p><h2>数据、实验与投稿</h2></div></div>
-            <div class="tool-card">
-              <h3>已批准实验</h3>
-              <p>只执行 G3 已批准、哈希一致的实验计划。</p>
-              <input id="experimentRun" placeholder="可选：指定 run_id">
-              <button id="runExperiment" class="button secondary">执行实验</button>
-            </div>
-            <div class="tool-card">
-              <h3>数据清单</h3>
-              <p>路径相对于项目目录，例如 <code>data/bearing-manifest.json</code>。</p>
-              <input id="datasetManifest" placeholder="data/dataset-manifest.json">
-              <label class="check-line"><input id="acceptLicense" type="checkbox">我已在官方页面核验许可证与研究用途</label>
-              <div class="button-row"><button id="validateDataset" class="button secondary">验证清单</button><button id="downloadDataset" class="button secondary">安全下载</button></div>
-            </div>
-            <div class="tool-card">
-              <h3>投稿包</h3>
-              <p>仅生成本地 ZIP，不登录、不上传、不投稿。</p>
-              <select id="packagePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
-              <button id="buildPackage" class="button secondary">生成手工投稿包</button>
-            </div>
-            <div class="tool-card">
-              <h3>期刊配置</h3>
-              <p>设置模板配置不等于确认 JCR Q1；当年分类与分区仍需你核验。</p>
-              <div class="two-columns">
-                <select id="venuePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
-                <select id="venueId"><option value="">选择已安装期刊配置</option></select>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>相关度</th><th>数据集</th><th>来源</th><th>元数据</th><th>状态</th></tr></thead>
+                  <tbody id="candidateRows"><tr><td colspan="5" class="empty-cell">搜索完成后在这里比较候选数据</td></tr></tbody>
+                </table>
               </div>
-              <button id="setVenue" class="button secondary">设置期刊配置</button>
             </div>
-          </div>
+          </section>
+
+          <section id="phase-g2" class="panel phase-card" data-phase-index="2">
+            <div class="phase-header">
+              <span class="phase-marker">G2</span>
+              <div>
+                <p class="eyebrow">PAPER ARCHITECTURE</p>
+                <h2>六篇论文架构与贡献边界</h2>
+                <p class="muted">为每篇论文定义不同的研究问题、方法贡献和证据，并逐对检查差异，防止切香肠式发表。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
+            </div>
+            <div class="phase-body phase-intro-grid">
+              <div class="phase-note"><strong>博士主线</strong><span>Theme A 必须连贯，Theme B 必须具备可独立成立的博士级深度。</span></div>
+              <div class="phase-note"><strong>论文独立性</strong><span>六篇论文分别拥有清晰问题、数据、方法、实验和不可互换的贡献。</span></div>
+              <div class="phase-note"><strong>期刊门槛</strong><span>以当前 JCR Q1 为设计目标，但分区证据和适配度必须逐篇、逐年核验。</span></div>
+            </div>
+          </section>
+
+          <section id="phase-g3" class="panel phase-card" data-phase-index="3">
+            <div class="phase-header">
+              <span class="phase-marker">G3</span>
+              <div>
+                <p class="eyebrow">EXPERIMENT DESIGN</p>
+                <h2>数据确认与实验设计</h2>
+                <p class="muted">锁定数据版本、许可证、基线、消融、统计检验、随机种子、预算和证伪规则，然后才允许实验执行。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
+            </div>
+            <div class="phase-body phase-tools">
+              <div class="tool-card">
+                <h3>数据清单</h3>
+                <p>路径相对于项目目录，例如 <code>data/bearing-manifest.json</code>。先验证，再在官方页面人工核验许可证。</p>
+                <input id="datasetManifest" placeholder="data/dataset-manifest.json">
+                <label class="check-line"><input id="acceptLicense" type="checkbox">我已在官方页面核验许可证与研究用途</label>
+                <div class="button-row"><button id="validateDataset" class="button secondary">验证清单</button><button id="downloadDataset" class="button secondary">安全下载</button></div>
+              </div>
+              <div class="phase-note"><strong>审批前必须检查</strong><span>数据泄漏、样本量与功效、外部验证、强基线、公平调参、消融、鲁棒性、失败判据和计算预算。</span></div>
+            </div>
+          </section>
+
+          <section id="phase-g4" class="panel phase-card" data-phase-index="4">
+            <div class="phase-header">
+              <span class="phase-marker">G4</span>
+              <div>
+                <p class="eyebrow orange">EXPERIMENT EXECUTION</p>
+                <h2>已批准实验与真实证据</h2>
+                <p class="muted">只执行 G3 已批准且哈希一致的实验计划；失败、超时和负结果同样保留，不能让模型编造实验结果。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
+            </div>
+            <div class="phase-body phase-tools">
+              <div class="tool-card">
+                <h3>执行已批准实验</h3>
+                <p>留空时执行当前可运行计划；也可以指定已注册的 <code>run_id</code>。</p>
+                <input id="experimentRun" placeholder="可选：指定 run_id">
+                <button id="runExperiment" class="button secondary">执行实验</button>
+              </div>
+              <div class="phase-note"><strong>G4 输出要求</strong><span>从真实运行记录构建 claim–evidence matrix，并检查复现性、统计结论与预注册偏差。</span></div>
+            </div>
+          </section>
+
+          <section id="phase-g5" class="panel phase-card" data-phase-index="5">
+            <div class="phase-header">
+              <span class="phase-marker">G5</span>
+              <div>
+                <p class="eyebrow accent">WRITING AND REVIEW</p>
+                <h2>英文写作、图表与独立审查</h2>
+                <p class="muted">Codex/OpenAI 按 Claude 的只读规划完成英文正文、图表标签和投稿材料，再进行独立审查与逐项处置。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
+            </div>
+            <div class="phase-body phase-tools">
+              <div class="tool-card">
+                <h3>期刊配置</h3>
+                <p>系统会辅助筛选适配期刊；设置模板不等于确认 JCR Q1，当年分类、分区和官网要求仍需你核验。</p>
+                <div class="two-columns">
+                  <select id="venuePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                  <select id="venueId"><option value="">选择已安装期刊配置</option></select>
+                </div>
+                <button id="setVenue" class="button secondary">设置期刊配置</button>
+              </div>
+              <div class="phase-note"><strong>逐篇检查</strong><span>论点必须由 G4 证据支持，引用可核验，图表可复现，英语达到国际期刊标准，且作者职责可追溯。</span></div>
+            </div>
+          </section>
+
+          <section id="phase-submission" class="panel phase-card completion-card" data-phase-index="6">
+            <div class="phase-header">
+              <span class="phase-marker completion-marker">✓</span>
+              <div>
+                <p class="eyebrow green">SUBMISSION READY</p>
+                <h2>手工投稿准备</h2>
+                <p class="muted">G5 完成后生成本地投稿包。客户端不会登录期刊网站、上传文件或替你投稿。</p>
+              </div>
+              <span class="badge neutral phase-status" data-phase-status>未开始</span>
+            </div>
+            <div class="phase-body phase-tools">
+              <div class="tool-card">
+                <h3>投稿包</h3>
+                <p>选择论文并生成本地 ZIP；提交前再次核对 PDF/DOCX、附信、声明、图表和期刊门户要求。</p>
+                <select id="packagePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                <button id="buildPackage" class="button secondary">生成手工投稿包</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel jobs-panel">
+          <div class="section-heading"><div><p class="eyebrow orange">LIVE JOBS</p><h2>全流程任务与日志</h2><p class="muted">这里集中监控模型运行、数据搜索、下载、实验和投稿包生成。</p></div><div class="button-row"><button id="cancelJob" class="button danger-ghost small" disabled>停止任务</button><button id="clearJobSelection" class="button ghost small">查看全部</button></div></div>
+          <div id="jobList" class="job-list"></div>
+          <pre id="jobLog" class="job-log">选择一个任务查看实时输出。</pre>
         </section>
       </section>
     </main>

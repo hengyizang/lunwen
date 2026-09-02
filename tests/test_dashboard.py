@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import time
 import unittest
+from pathlib import Path
 
 from scripts.dashboard import (
     JobManager,
@@ -13,6 +14,15 @@ from scripts.dashboard import (
 
 
 class DashboardTests(unittest.TestCase):
+    def test_stage_workspaces_are_ordered_top_to_bottom(self) -> None:
+        html = (Path(__file__).resolve().parents[1] / "dashboard" / "index.html").read_text(encoding="utf-8")
+        phase_positions = [html.index(f'data-phase-index="{index}"') for index in range(7)]
+        self.assertEqual(phase_positions, sorted(phase_positions))
+        self.assertLess(html.index('id="dataSearchForm"'), html.index('id="datasetManifest"'))
+        self.assertLess(html.index('id="datasetManifest"'), html.index('id="experimentRun"'))
+        self.assertLess(html.index('id="experimentRun"'), html.index('id="venuePaper"'))
+        self.assertLess(html.index('id="venuePaper"'), html.index('id="packagePaper"'))
+
     def test_public_configuration_never_contains_api_key(self) -> None:
         config = SessionConfig(api_key="super-secret", base_url="https://gateway.example", anthropic_model="claude", openai_model="gpt")
         public = config.public()
