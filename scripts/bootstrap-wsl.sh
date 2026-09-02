@@ -24,5 +24,6 @@ if [[ "$install_kdense" == true ]]; then
 fi
 
 echo "Bootstrap checks complete."
-echo "API-first start: follow docs/UUAPI-CC-SWITCH.md"
+echo "Visual dashboard: bash scripts/start-dashboard.sh"
+echo "API-first CLI: follow docs/UUAPI-CC-SWITCH.md"
 echo "Optional CLI-mode check: python3 scripts/check_env.py --mode cli"

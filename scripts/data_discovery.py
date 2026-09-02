@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
+import html
 import json
+import re
 import sys
 import urllib.parse
 from datetime import datetime, timezone
@@ -19,7 +22,16 @@ except ModuleNotFoundError:  # Direct execution from scripts/.
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
-PROVIDERS = ("datacite", "zenodo", "huggingface", "openml")
+PROVIDERS = (
+    "datacite",
+    "zenodo",
+    "huggingface",
+    "openml",
+    "figshare",
+    "dryad",
+    "dataverse",
+    "datagov",
+)
 
 
 class DiscoveryError(RuntimeError):
@@ -45,6 +57,13 @@ def _first_text(value: Any) -> str | None:
     return _text(value)
 
 
+def _plain_text(value: Any) -> str | None:
+    text = _text(value)
+    if not text:
+        return None
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", text))).strip()
+
+
 def _candidate(
     *,
     provider: str,
@@ -67,7 +86,7 @@ def _candidate(
         "provider_id": identifier,
         "title": normalized_title,
         "landing_url": url,
-        "description": _text(description),
+        "description": _plain_text(description),
         "version": _text(str(version)) if version is not None else None,
         "doi": _text(doi),
         "license_claim": _text(license_name),
@@ -193,12 +212,286 @@ def openml(query: str, limit: int, fetcher: Callable[..., Any]) -> list[dict[str
     return results
 
 
+def figshare(query: str, limit: int, fetcher: Callable[..., Any]) -> list[dict[str, Any]]:
+    payload = fetcher(
+        "https://api.figshare.com/v2/articles/search",
+        method="POST",
+        json_body={
+            "search_for": query,
+            "item_type": 3,
+            "page_size": limit,
+            "order": "published_date",
+            "order_direction": "desc",
+        },
+    )
+    results: list[dict[str, Any]] = []
+    for item in payload if isinstance(payload, list) else []:
+        if not isinstance(item, dict):
+            continue
+        identifier = item.get("id")
+        candidate = _candidate(
+            provider="Figshare",
+            provider_id=identifier,
+            title=item.get("title"),
+            landing_url=(
+                item.get("url_public_html")
+                or item.get("url")
+                or (f"https://figshare.com/articles/dataset/_/{identifier}" if identifier else None)
+            ),
+            description=item.get("description"),
+            doi=item.get("doi"),
+            updated_at=item.get("modified_date") or item.get("published_date"),
+        )
+        if candidate:
+            results.append(candidate)
+    return results
+
+
+def dryad(query: str, limit: int, fetcher: Callable[..., Any]) -> list[dict[str, Any]]:
+    params = urllib.parse.urlencode({"q": query, "per_page": limit})
+    payload = fetcher(f"https://datadryad.org/api/v2/search?{params}")
+    embedded = payload.get("_embedded", {}) if isinstance(payload, dict) else {}
+    datasets = []
+    if isinstance(embedded, dict):
+        datasets = embedded.get("stash:datasets") or embedded.get("datasets") or []
+    results: list[dict[str, Any]] = []
+    for item in datasets if isinstance(datasets, list) else []:
+        if not isinstance(item, dict):
+            continue
+        identifier = item.get("identifier") or item.get("doi") or item.get("id")
+        doi = str(identifier).removeprefix("doi:") if identifier is not None else None
+        links = item.get("_links", {}) if isinstance(item.get("_links"), dict) else {}
+        version_link = links.get("stash:version") or links.get("self") or {}
+        api_url = version_link.get("href") if isinstance(version_link, dict) else None
+        candidate = _candidate(
+            provider="Dryad",
+            provider_id=identifier,
+            title=item.get("title"),
+            landing_url=(f"https://doi.org/{doi}" if doi else api_url),
+            description=item.get("abstract"),
+            version=item.get("versionNumber") or item.get("version"),
+            license_name=item.get("license"),
+            doi=doi,
+            updated_at=item.get("publicationDate") or item.get("lastModificationDate"),
+        )
+        if candidate:
+            results.append(candidate)
+    return results
+
+
+def dataverse(query: str, limit: int, fetcher: Callable[..., Any]) -> list[dict[str, Any]]:
+    params = urllib.parse.urlencode(
+        {"q": query, "type": "dataset", "per_page": limit, "sort": "score", "order": "desc"}
+    )
+    payload = fetcher(f"https://dataverse.harvard.edu/api/search?{params}")
+    data = payload.get("data", {}) if isinstance(payload, dict) else {}
+    items = data.get("items", []) if isinstance(data, dict) else []
+    results: list[dict[str, Any]] = []
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        identifier = item.get("global_id") or item.get("identifier") or item.get("entity_id")
+        candidate = _candidate(
+            provider="Harvard Dataverse",
+            provider_id=identifier,
+            title=item.get("name") or item.get("title"),
+            landing_url=item.get("url"),
+            description=item.get("description"),
+            version=item.get("version"),
+            doi=identifier if isinstance(identifier, str) and "10." in identifier else None,
+            updated_at=item.get("published_at") or item.get("updated_at"),
+        )
+        if candidate:
+            results.append(candidate)
+    return results
+
+
+def datagov(query: str, limit: int, fetcher: Callable[..., Any]) -> list[dict[str, Any]]:
+    params = urllib.parse.urlencode({"q": query, "rows": limit})
+    payload = fetcher(f"https://catalog.data.gov/api/3/action/package_search?{params}")
+    result = payload.get("result", {}) if isinstance(payload, dict) else {}
+    datasets = result.get("results", []) if isinstance(result, dict) else []
+    results: list[dict[str, Any]] = []
+    for item in datasets if isinstance(datasets, list) else []:
+        if not isinstance(item, dict):
+            continue
+        identifier = item.get("id") or item.get("name")
+        name = item.get("name")
+        landing = item.get("url")
+        if not isinstance(landing, str) or not landing.startswith("https://"):
+            landing = f"https://catalog.data.gov/dataset/{name}" if name else None
+        candidate = _candidate(
+            provider="Data.gov",
+            provider_id=identifier,
+            title=item.get("title") or name,
+            landing_url=landing,
+            description=item.get("notes"),
+            version=item.get("version"),
+            license_name=item.get("license_title") or item.get("license_id"),
+            updated_at=item.get("metadata_modified") or item.get("metadata_created"),
+        )
+        if candidate:
+            results.append(candidate)
+    return results
+
+
 SEARCHERS: dict[str, Callable[[str, int, Callable[..., Any]], list[dict[str, Any]]]] = {
     "datacite": datacite,
     "zenodo": zenodo,
     "huggingface": huggingface,
     "openml": openml,
+    "figshare": figshare,
+    "dryad": dryad,
+    "dataverse": dataverse,
+    "datagov": datagov,
 }
+
+
+def _query_terms(query: str) -> set[str]:
+    return {part for part in re.findall(r"[a-z0-9]+", query.lower()) if len(part) >= 3}
+
+
+def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int, list[str], list[str]]:
+    title = str(candidate.get("title") or "").lower()
+    description = str(candidate.get("description") or "").lower()
+    matched_queries: list[str] = []
+    matched_terms: set[str] = set()
+    all_terms: set[str] = set()
+    phrase_bonus = 0
+    title_matches = 0
+    for query in queries:
+        terms = _query_terms(query)
+        all_terms.update(terms)
+        current = {term for term in terms if term in title or term in description}
+        if current:
+            matched_queries.append(query)
+            matched_terms.update(current)
+        normalized_query = " ".join(re.findall(r"[a-z0-9]+", query.lower()))
+        if normalized_query and normalized_query in f"{title} {description}":
+            phrase_bonus = max(phrase_bonus, 18)
+        title_matches += len({term for term in terms if term in title})
+    coverage = len(matched_terms) / max(1, len(all_terms))
+    score = min(
+        100,
+        round(coverage * 62 + min(title_matches, 5) * 4 + phrase_bonus
+              + (5 if candidate.get("doi") else 0)
+              + (4 if candidate.get("license_claim") else 0)),
+    )
+    reasons = [f"matched {len(matched_terms)}/{max(1, len(all_terms))} query terms"]
+    if title_matches:
+        reasons.append(f"{title_matches} title-term matches")
+    if candidate.get("doi"):
+        reasons.append("persistent identifier present")
+    if candidate.get("license_claim"):
+        reasons.append("license metadata present but unverified")
+    return score, reasons, matched_queries
+
+
+def _dedupe_key(candidate: dict[str, Any]) -> str:
+    doi = str(candidate.get("doi") or "").lower().strip()
+    doi = doi.removeprefix("https://doi.org/").removeprefix("doi:")
+    if doi:
+        return f"doi:{doi}"
+    return f"url:{str(candidate.get('landing_url') or '').lower().rstrip('/')}"
+
+
+def discover_many(
+    queries: Iterable[str],
+    providers: Iterable[str],
+    limit: int,
+    *,
+    max_candidates: int = 250,
+    fetcher: Callable[..., Any] = fetch_json,
+) -> dict[str, Any]:
+    cleaned_queries = list(dict.fromkeys(item.strip() for item in queries if item.strip()))
+    if not cleaned_queries:
+        raise DiscoveryError("at least one query is required")
+    if len(cleaned_queries) > 12:
+        raise DiscoveryError("at most 12 query variants are allowed")
+    selected = list(dict.fromkeys(providers))
+    if not selected:
+        raise DiscoveryError("at least one provider is required")
+    unknown = sorted(set(selected) - set(PROVIDERS))
+    if unknown:
+        raise DiscoveryError(f"unknown providers: {', '.join(unknown)}")
+    if not 1 <= limit <= 100:
+        raise DiscoveryError("limit must be between 1 and 100 per provider")
+    if not 1 <= max_candidates <= 2000:
+        raise DiscoveryError("max_candidates must be between 1 and 2000")
+
+    tasks = [(query, provider) for query in cleaned_queries for provider in selected]
+
+    def search(task: tuple[str, str]) -> tuple[str, str, list[dict[str, Any]], str | None]:
+        query, provider = task
+        try:
+            return query, provider, SEARCHERS[provider](query, limit, fetcher), None
+        except (NetworkSafetyError, OSError, KeyError, TypeError, ValueError) as exc:
+            return query, provider, [], str(exc)
+
+    collected: list[dict[str, Any]] = []
+    sources: list[dict[str, Any]] = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(12, len(tasks))) as pool:
+        for query, provider, found, error in pool.map(search, tasks):
+            sources.append(
+                {"query": query, "provider": provider, "status": "error" if error else "ok",
+                 "candidate_count": len(found), **({"error": error} if error else {})}
+            )
+            for candidate in found:
+                candidate["matched_queries"] = [query]
+                collected.append(candidate)
+
+    merged: dict[str, dict[str, Any]] = {}
+    for candidate in collected:
+        key = _dedupe_key(candidate)
+        if key not in merged:
+            merged[key] = candidate
+            candidate["also_found_by"] = [candidate["provider"]]
+        else:
+            current = merged[key]
+            current["matched_queries"] = sorted(
+                set(current.get("matched_queries", [])) | set(candidate.get("matched_queries", []))
+            )
+            current["also_found_by"] = sorted(
+                set(current.get("also_found_by", [])) | {candidate["provider"]}
+            )
+            if not current.get("license_claim") and candidate.get("license_claim"):
+                current["license_claim"] = candidate["license_claim"]
+
+    ranked = list(merged.values())
+    for candidate in ranked:
+        score, reasons, matched = _rank_candidate(candidate, cleaned_queries)
+        candidate["metadata_relevance_score"] = score
+        candidate["screening_reasons"] = reasons
+        candidate["matched_queries"] = sorted(set(candidate.get("matched_queries", [])) | set(matched))
+        candidate["fitness_status"] = "candidate_only_requires_scientific_and_human_review"
+    ranked.sort(
+        key=lambda item: (
+            -int(item["metadata_relevance_score"]),
+            -len(item.get("also_found_by", [])),
+            str(item.get("title", "")).lower(),
+        )
+    )
+    ranked = ranked[:max_candidates]
+    return {
+        "schema_version": "1.1",
+        "created_at": now(),
+        "query": cleaned_queries[0],
+        "queries": cleaned_queries,
+        "providers": sources,
+        "provider_count": len(selected),
+        "query_count": len(cleaned_queries),
+        "raw_candidate_count": len(collected),
+        "candidate_count": len(ranked),
+        "candidates": ranked,
+        "ranking_note": (
+            "The score measures metadata/query overlap only. It is not evidence of scientific "
+            "fitness, data quality, license validity, novelty, or publication suitability."
+        ),
+        "warning": (
+            "Discovery metadata is not a license decision. A human must verify the official "
+            "record, terms, privacy, provenance, version, download URL and research fitness."
+        ),
+    }
 
 
 def discover(
@@ -213,6 +506,8 @@ def discover(
     if not 1 <= limit <= 100:
         raise DiscoveryError("limit must be between 1 and 100 per provider")
     selected = list(dict.fromkeys(providers))
+    if not selected:
+        raise DiscoveryError("at least one provider is required")
     unknown = sorted(set(selected) - set(PROVIDERS))
     if unknown:
         raise DiscoveryError(f"unknown providers: {', '.join(unknown)}")
@@ -264,13 +559,20 @@ def append_search_log(project: str, report: dict[str, Any]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("query")
+    parser.add_argument("--query", action="append", dest="extra_queries", default=[])
     parser.add_argument("--provider", action="append", choices=PROVIDERS, dest="providers")
-    parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument("--limit", type=int, default=15)
+    parser.add_argument("--max-candidates", type=int, default=250)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--project", help="Append a compact query record to this project")
     args = parser.parse_args()
     try:
-        report = discover(args.query, args.providers or PROVIDERS, args.limit)
+        report = discover_many(
+            [args.query, *args.extra_queries],
+            args.providers or PROVIDERS,
+            args.limit,
+            max_candidates=args.max_candidates,
+        )
         if args.output:
             save_report(report, args.output)
         if args.project:
