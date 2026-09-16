@@ -1,4 +1,4 @@
-# API-first mode (v1.4)
+# API-first mode (v1.7.1)
 
 Doctoral Research OS can run without Claude Code or Codex CLI. The Python control plane calls Claude only for a non-publishable semantic plan and independent audits. OpenAI/Codex independently writes and remediates every persistent artifact. The control plane validates bundles atomically, rejects long verbatim spans copied from Claude control text, records writer-family hashes, and requires a current non-Anthropic origin for every final packaged file.
 
@@ -41,6 +41,15 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
 The requested stage must match an `awaiting_work` `state/run.json`; API writing is blocked while a gate is awaiting human approval or already approved. Initialize first, and use the
 human `ready` → `approve` → `advance` sequence between stages.
 
+For G1 and G3, `cycle` and the one-pass `stage` command automatically derive up
+to eight dataset-query variants, search the eight reviewed public metadata
+providers, deduplicate results and
+build a deterministic metadata shortlist before the first paid model call. An
+optional `--discovery-query` gives the automatic builder a preferred focus but
+is no longer required. G3 prioritizes every paper contract. If all providers
+fail, the command stops before model charges. `--no-auto-data-discovery` exists for
+deliberate CLI-only diagnostics; the visual dashboard keeps automation enabled.
+
 The API mode writes Claude's semantic plan and all raw responses under `projects/my-phd/api_runs/<run-id>/`; this local audit/debug directory is ignored by Git and excluded from submission packages. It sends a bounded text snapshot of the current project, excluding raw/private data, prior API responses, build/cache directories, hidden files, obvious credential files and—during independent review—prior reviews. Only the non-Anthropic writer bundle can become a persistent artifact. Traversal, hidden files, credentials, `.env`, state/provenance files, independent audits and the decision log are protected. No model can call `approve`, `advance`, execute shell commands, or submit a manuscript.
 
 For G1–G5, `cycle` validates Claude critic JSON against the independent-audit contract,
@@ -79,7 +88,16 @@ Claude Code and Codex CLI remain optional acceleration interfaces. The repositor
 
 ## What is and is not automatic
 
-Automatic: semantic planning, non-Claude structured artifact generation, evidence bookkeeping, public metadata discovery, data-download validation, approved experiment execution, citation checks, venue checks, manuscript/review artifacts, deterministic chart rendering workflows and manual submission packages.
+Automatic: semantic planning, non-Claude structured artifact generation, evidence bookkeeping, public metadata discovery, data-download validation, approved experiment execution, citation checks, venue checks, manuscript/review artifacts, hash-bound G5 academic-style auditing, deterministic chart rendering workflows and manual submission packages.
+
+The G5 style audit runs after both Codex writing passes and is available manually
+through `python3 scripts/academic_style.py audit --project <slug> --paper P01`.
+It evaluates writing quality without estimating an AI probability or attempting
+detector evasion. Codex must preserve scientific meaning, numbers, equations,
+citations, uncertainty and the applicable AI-use disclosure while resolving its
+findings. If local `proselint==0.16.0` is installed, the report also contains
+advisory offline prose diagnostics; absence or failure of that optional tool does
+not bypass or weaken the built-in deterministic gate.
 
 Human required: final topic choice, doctoral architecture, data-license confirmation, experiment approval, interpretation of scientific evidence, authorship/ethics, current JCR verification, final PDF/DOCX inspection and every journal portal action.
 

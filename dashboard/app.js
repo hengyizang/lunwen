@@ -122,6 +122,9 @@ function renderProject() {
   $("gateBadge").textContent = state.gate || "✓";
   $("nextActionTitle").textContent = state.next_action;
   $("nextActionCopy").textContent = stageAdvice(state);
+  $("runCycle").textContent = ["topic-intelligence", "experiment-design"].includes(state.stage)
+    ? `自动搜索并运行 ${state.gate}`
+    : "运行当前阶段";
   const alert = $("gateAlert");
   alert.classList.toggle("hidden", state.gate_error_count === 0);
   alert.textContent = state.gate_error_count ? `当前还有 ${state.gate_error_count} 项硬性要求未满足。运行模型不代表可以批准，请查看右侧缺项。` : "";
@@ -138,6 +141,26 @@ function renderProject() {
   $("reopenGate").disabled = state.status !== "awaiting_approval";
   $("advanceGate").disabled = state.status !== "approved";
   $("venueId").innerHTML = '<option value="">选择已安装期刊配置</option>' + detail.venues.map((venue) => `<option value="${esc(venue)}">${esc(venue)}</option>`).join("");
+  if (state.active_paper) $("stylePaper").value = state.active_paper;
+  const styleAudit = detail.style_audits?.[state.active_paper];
+  if (styleAudit) {
+    const unresolved = (styleAudit.errors || []).length;
+    const warnings = (styleAudit.warnings || []).length;
+    const proselint = styleAudit.proselint_status === "unavailable"
+      ? "proselint 未安装（可选）"
+      : styleAudit.proselint_status === "advisory"
+        ? `proselint ${Number(styleAudit.proselint_diagnostic_count || 0)} 项建议`
+        : styleAudit.proselint_status === "pass"
+          ? "proselint 通过"
+          : styleAudit.proselint_status === "error"
+            ? "proselint 运行异常（不阻断核心检查）"
+            : "仅核心检查";
+    $("styleAuditStatus").textContent = styleAudit.status === "pass"
+      ? `通过 · ${Number(styleAudit.word_count || 0).toLocaleString()} 词 · ${warnings} 项人工提示 · ${proselint}；仍需本人阅读全文`
+      : `需要修改 · ${unresolved} 项硬问题 · ${warnings} 项人工提示 · ${proselint}`;
+  } else {
+    $("styleAuditStatus").textContent = "尚未生成检查报告；运行 G5 时会自动执行";
+  }
   renderDataReports(detail.data_reports);
 }
 
@@ -205,7 +228,9 @@ function renderDataReports(reports) {
   const report = reports[0];
   const threshold = Number($("scoreFilter").value);
   const candidates = report.candidates.filter((item) => Number(item.metadata_relevance_score || 0) >= threshold);
-  $("dataSummary").textContent = `${report.candidate_count} 个去重候选 · ${report.queries.filter(Boolean).length} 组查询 · 当前显示 ${candidates.length} 个`;
+  const shortlist = report.automatic_screening_summary?.shortlist_count;
+  const shortlistText = Number.isInteger(shortlist) ? ` · 自动初筛 ${shortlist} 个` : "";
+  $("dataSummary").textContent = `${report.candidate_count} 个去重候选${shortlistText} · ${report.queries.filter(Boolean).length} 组查询 · 当前显示 ${candidates.length} 个`;
   $("candidateRows").innerHTML = candidates.length ? candidates.map(candidateRow).join("") : '<tr><td colspan="5" class="empty-cell">没有达到当前相关度阈值的候选</td></tr>';
 }
 
@@ -214,12 +239,16 @@ function candidateRow(item) {
   const description = String(item.description || "暂无描述").slice(0, 260);
   const doi = item.doi ? `<span class="meta-line">DOI: ${esc(item.doi)}</span>` : "";
   const license = item.license_claim ? `<span class="meta-line">许可声明: ${esc(item.license_claim)}</span>` : '<span class="meta-line">许可证元数据缺失</span>';
+  const screening = item.automatic_screening;
+  const status = screening?.status === "metadata_shortlist"
+    ? `自动初筛候选 #${esc(screening.rank)}`
+    : screening ? "元数据低优先级" : "候选";
   return `<tr>
     <td><span class="score-pill">${esc(item.metadata_relevance_score ?? 0)}</span></td>
     <td><a class="dataset-title" href="${esc(safeUrl(item.landing_url))}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a><div class="dataset-desc">${esc(description)}</div></td>
     <td><div class="source-tags">${providers.map((name) => `<span class="source-tag">${esc(name)}</span>`).join("")}</div></td>
     <td>${doi}${license}<span class="meta-line">匹配查询: ${esc((item.matched_queries || []).length)}</span></td>
-    <td class="status-candidate">候选<br>需科学与人工审查</td>
+    <td class="status-candidate">${status}<br>需科学、许可与人工审查</td>
   </tr>`;
 }
 
@@ -330,6 +359,7 @@ function bindEvents() {
   $("downloadDataset").addEventListener("click", () => startJob("dataset_download", {project:currentProject(), manifest:$("datasetManifest").value, accept_license:$("acceptLicense").checked}).catch((e) => toast(e.message, "error")));
   $("buildPackage").addEventListener("click", () => startJob("package", {project:currentProject(), paper:$("packagePaper").value}).catch((e) => toast(e.message, "error")));
   $("setVenue").addEventListener("click", () => startJob("set_venue", {project:currentProject(), paper:$("venuePaper").value, venue:$("venueId").value}).catch((e) => toast(e.message, "error")));
+  $("runStyleAudit").addEventListener("click", () => startJob("style_audit", {project:currentProject(), paper:$("stylePaper").value}).catch((e) => toast(e.message, "error")));
 }
 
 bindEvents();

@@ -414,7 +414,18 @@ def project_detail(slug: str) -> dict[str, Any]:
         raise ValueError("项目不存在")
     state = project_state(slug)
     reports: list[dict[str, Any]] = []
-    for path in sorted((project / "data").glob("discovery-*.json"), reverse=True)[:12]:
+    def report_modified(path: Path) -> int:
+        try:
+            return path.stat().st_mtime_ns
+        except OSError:
+            return 0
+
+    report_paths = sorted(
+        (project / "data").glob("discovery-*.json"),
+        key=report_modified,
+        reverse=True,
+    )
+    for path in report_paths[:12]:
         try:
             if path.stat().st_size > 8 * 1024 * 1024:
                 continue
@@ -430,6 +441,9 @@ def project_detail(slug: str) -> dict[str, Any]:
                 "candidate_count": report.get("candidate_count", 0),
                 "candidates": report.get("candidates", [])[:100],
                 "ranking_note": report.get("ranking_note"),
+                "automatic_screening_summary": report.get(
+                    "automatic_screening_summary"
+                ),
             }
         )
     registry = project / "experiments" / "registry.jsonl"
@@ -441,6 +455,41 @@ def project_detail(slug: str) -> dict[str, Any]:
     if datasets.is_file():
         dataset_count = sum(1 for line in datasets.read_text(encoding="utf-8").splitlines() if line.strip())
     venues = sorted(path.parent.name for path in (ROOT / "venues").glob("*/venue.json"))
+    style_audits: dict[str, dict[str, Any]] = {}
+    for paper_dir in sorted((project / "papers").glob("P[0-9][0-9]")):
+        path = paper_dir / "style" / "academic-style-audit.json"
+        try:
+            if not path.is_file() or path.stat().st_size > 1_000_000:
+                continue
+            report = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(report, dict):
+            continue
+        analysis = report.get("analysis") if isinstance(report.get("analysis"), dict) else {}
+        external_linters = (
+            report.get("external_linters")
+            if isinstance(report.get("external_linters"), list)
+            else []
+        )
+        proselint = next(
+            (
+                item
+                for item in external_linters
+                if isinstance(item, dict) and item.get("name") == "proselint"
+            ),
+            {},
+        )
+        style_audits[paper_dir.name] = {
+            "status": report.get("status"),
+            "created_at": report.get("created_at"),
+            "word_count": analysis.get("word_count"),
+            "errors": report.get("errors", [])[:12],
+            "warnings": report.get("warnings", [])[:12],
+            "detector_score_used": report.get("detector_score_used"),
+            "proselint_status": proselint.get("status"),
+            "proselint_diagnostic_count": proselint.get("diagnostic_count", 0),
+        }
     return {
         "state": state,
         "history": list(reversed(state.get("history", [])))[:30],
@@ -455,6 +504,7 @@ def project_detail(slug: str) -> dict[str, Any]:
             "paper_count": state.get("paper_count", 0),
         },
         "venues": venues,
+        "style_audits": style_audits,
     }
 
 
@@ -591,6 +641,24 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
         if not PAPER_RE.fullmatch(paper) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", venue):
             raise ValueError("论文编号或期刊配置无效")
         return [python, "scripts/researchctl.py", "set-venue", "--project", slug, "--paper", paper, "--venue", venue], f"设置 {paper} 期刊", slug
+    if action == "style_audit":
+        paper = bounded_text(
+            payload.get("paper") or state.get("active_paper"),
+            "论文编号",
+            3,
+            required=True,
+        )
+        if not PAPER_RE.fullmatch(paper) or not (project / "papers" / paper).is_dir():
+            raise ValueError("论文编号必须是项目中现有的编号，例如 P01")
+        return [
+            python,
+            "scripts/academic_style.py",
+            "audit",
+            "--project",
+            slug,
+            "--paper",
+            paper,
+        ], f"检查 {paper} 自然学术表达", slug
     if action == "package":
         paper = bounded_text(payload.get("paper"), "论文编号", 3, required=True)
         if not PAPER_RE.fullmatch(paper):

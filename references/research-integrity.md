@@ -26,6 +26,12 @@ AI tools are assistants, not accountable authors. The human must verify citation
 
 Claude is restricted to non-publishable semantic planning and internal independent audits. Codex/OpenAI must independently write all persistent project text, and deterministic local tools must render charts from recorded data. The control plane records model-family and file-hash provenance and blocks a current Anthropic-authored file from submission packaging. This technical boundary does not remove any journal, university or funder disclosure obligation.
 
+Natural academic-style revision may remove stock phrasing, repetition and weak
+argument transitions, but it must preserve supported meaning, numbers, equations,
+citations and uncertainty. Do not optimize against an AI-detector score, claim
+human-only authorship, or use paraphrasing to conceal assistance. The applicable
+journal, university and funder disclosure rules remain controlling.
+
 ## Corrections
 
 Never erase an adverse result or audit finding. Supersede it with a dated correction and retain the original in history.

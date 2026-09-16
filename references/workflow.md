@@ -20,6 +20,9 @@ For the current stage:
 2. Read the matching stage contract in `references/stage-contracts.md`.
 3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
 4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
+   At G5, run the deterministic academic-style audit after writing and again
+   after remediation; use it to improve authentic academic expression without
+   detector scoring or concealment.
 5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
 6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
 7. Run `gate-check`, then `ready`.

@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.5.1
+# Doctoral Research OS v1.7.1
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -12,12 +12,13 @@
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - 候选与最终期刊均要求当前 JCR Q1 SCI/SCIE；JCR 分区必须按年份和类别人工核验。
 - 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
+- G5 在 Codex 首稿和修订后自动执行自然学术表达审计，检查模板化套话、机械连接词、重复句子/句首、超长句和异常均匀的行文节奏；若本机安装开源 `proselint`，自动追加完全本地的英文用法建议。报告与当前稿件树哈希绑定并受保护。该模块不计算“AI率”、不规避检测器，也不取消 AI 使用披露。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
 - 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
 - UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
-- DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方数据接口的并行检索、跨查询去重和元数据相关度初筛；候选许可和科学适用性始终标记为需要人工核验。
+- G1/G3 默认自动生成多组数据查询，调用 DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方接口并行检索、跨查询去重和元数据初筛；G3 优先按六篇论文分别构造查询。候选许可和科学适用性始终标记为需要人工核验。
 - 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
@@ -64,6 +65,15 @@ cd lunwen
 bash scripts/bootstrap-wsl.sh
 ```
 
+可选安装本地英文 prose linter（BSD-3-Clause，精确锁定 v0.16.0）：
+
+```bash
+cd ~/code/lunwen
+bash scripts/bootstrap-wsl.sh --with-writing-tools
+```
+
+它会把固定版本放入仓库自己的 `.venv`，控制层会自动发现，无需每次手工激活。未安装 `proselint` 不影响核心审计或 G5；系统会在界面明确显示“可选工具未安装”。
+
 CLI 模式需要分别安装并登录 `claude` 与 `codex`。API-first 模式不需要它们；只需要相应 API key。仓库不保存 API key。
 
 可选的 K-Dense 通用科研技能子集：
@@ -92,7 +102,7 @@ http://127.0.0.1:8765
 
 - API 配置检查、计费探针与余额查询；
 - 项目创建、阶段运行、闸门检查、`ready/reopen/approve/advance`；
-- 八类数据源的多查询并行检索与候选排序；
+- G1/G3 自动执行八类数据源的多查询并行检索与候选排序，页面仍可手动补充搜索；
 - 数据清单验证、许可证确认后的安全下载；
 - 已批准实验执行、实时日志、Token 与完成度监控；
 - 六篇论文的顺序状态和本地投稿 ZIP。
@@ -313,7 +323,17 @@ python3 scripts/venue_adapter.py ingest \
   ~/Downloads/ijssd-2e.zip projects/my-phd/papers/P01/venue-template
 python3 scripts/venue_compliance.py projects/my-phd/papers/P01
 python3 scripts/manuscript_language.py projects/my-phd/papers/P01/manuscript/main.tex
+python3 scripts/academic_style.py audit --project my-phd --paper P01
 ```
+
+最后一条命令也可以在本地客户端 G5 区域点击“重新运行表达检查”。
+它生成 `papers/P01/style/academic-style-audit.json`。状态为 `revise` 时，查看
+`errors` 和 `warnings` 后让 Codex 依据真实论证重新修改；不要机械替换同义词。
+若安装了 `proselint`，其行列级建议位于 `external_linters[].diagnostics`，只作
+人工复核，不作为通用规则机械改写；本项目关闭了可能压掉科学不确定性的
+`hedging` 检查。
+任何稿件源文件变化都会使旧报告失效。报告不预测 Turnitin、GPTZero 或其他
+检测器，也不能证明文本由人独立撰写。
 
 首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、Q1 分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。最终正文及所有投稿相关文本必须为英文。
 

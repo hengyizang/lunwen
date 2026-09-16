@@ -1,4 +1,4 @@
-# Local visual dashboard (v1.5.1)
+# Local visual dashboard (v1.7.1)
 
 The dashboard is a beginner-facing local client over the existing Doctoral
 Research OS. It does not replace the G0–G5 control plane. Every mutation is
@@ -56,7 +56,7 @@ to skip a gate.
 | 3 | G2 paper architecture | Six-paper contribution and overlap checks |
 | 4 | G3 experiment design | Dataset manifest, license and design controls |
 | 5 | G4 experiment execution | Approved, hash-locked experiment runner |
-| 6 | G5 writing and review | English writing, figures, review and venue setup |
+| 6 | G5 writing and review | English writing, natural-style audit, figures, review and venue setup |
 | 7 | Submission ready | Local manual-submission package generation |
 
 1. Create a project and provide complete, truthful G0 constraints.
@@ -75,8 +75,17 @@ gate.
 
 ## Broad dataset discovery
 
-Enter several English query formulations, one per line. The client searches
-the selected sources concurrently:
+G1 and G3 now run dataset discovery automatically before any paid model call.
+At G1, queries are derived from the human-confirmed G0 goal, preferred domains,
+data constraints and optional focus query. At G3, the query builder prioritizes
+the title, research question, hypotheses and data needs of every paper contract.
+The current job log shows when automatic search starts and how many candidates
+were metadata-shortlisted.
+
+The form in G1 is therefore an optional manual supplement, not a prerequisite.
+Enter several English query formulations, one per line only when you want an
+additional search. Automatic and manual searches use the selected approved
+sources concurrently:
 
 | Source | Coverage |
 |---|---|
@@ -91,9 +100,16 @@ the selected sources concurrently:
 
 Results are deduplicated by DOI or canonical landing URL. The displayed score
 uses only query overlap, title matches, persistent identifiers and the presence
-of license metadata. It is not a quality, license, novelty or JCR-readiness
-score. A high-scoring dataset can still be biased, too small, leaked,
-incompatible with the hypothesis, or legally unusable.
+of license/version metadata and cross-source recurrence. The automatic shortlist
+is not a quality, license, novelty or JCR-readiness decision. A high-scoring
+dataset can still be biased, too small, leaked, incompatible with the hypothesis,
+or legally unusable.
+
+If every approved source fails, the G1/G3 cycle stops before paid model calls.
+Successful search metadata is saved under `data/discovery-broad-auto-*.json`,
+and its separate audit trail is written to `evidence/dataset-search-log.jsonl`.
+It does not pollute the originality-literature records in
+`evidence/search-log.jsonl`.
 
 The reviewed API registry is maintained in
 [`references/dataset-discovery-sources.md`](../references/dataset-discovery-sources.md).
@@ -119,11 +135,34 @@ The dashboard reports:
 - dataset-manifest and experiment-attempt counts;
 - paper-by-paper completion;
 - ranked discovery candidates.
+- the active paper's hash-bound academic-style audit status and actionable findings.
 
 It cannot truthfully decide data rights, doctoral originality, causal validity,
 authorship, ethics, current JCR category evidence, or final submission fitness.
 Those decisions remain named human actions. Model consensus is not scientific
 validation.
+
+At G5 the control plane automatically runs `scripts/academic_style.py` after the
+initial Codex draft and again after remediation. The dashboard also provides a
+manual rerun button. The audit detects stock framing, repeated sentences and
+openings, transition overuse, very long sentences and unusually uniform cadence.
+When the optional BSD-licensed `proselint` v0.16.0 executable is available, the
+same local audit adds line/column prose suggestions. Its results are advisory
+because general prose rules can conflict with domain terminology; the repository
+configuration disables hedging checks so warranted scientific uncertainty is
+not removed. No manuscript content is sent to an external service.
+It records no AI-detector probability and must not be used to conceal assistance.
+Any manuscript-source change makes the report stale, and the final AI-use
+disclosure remains mandatory where the venue requires it.
+
+Install the reviewed optional version in the repository-local environment with:
+
+```bash
+bash scripts/bootstrap-wsl.sh --with-writing-tools
+```
+
+The controller finds `.venv/bin/proselint` automatically; activating the virtual
+environment is not required for dashboard use.
 
 ## Experiment and submission controls
 

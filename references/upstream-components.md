@@ -31,6 +31,21 @@ Use it only as an evidence/semantic-planning worker behind the local contracts, 
 
 The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Reconsider it only after G2 if it adds a capability the local executor lacks and the use satisfies the license.
 
+## proselint
+
+[`amperser/proselint`](https://github.com/amperser/proselint) is an optional
+BSD-3-Clause command-line linter for English prose. Version `0.16.0` is the
+reviewed integration target, corresponding to Git commit
+`a83a6164999803909f69eb3274d783c7070e73c1`. The G5 controller runs it only
+when the executable is already installed, only over a temporary plain-text extraction of the active
+manuscript, and with `config/proselint-academic.json`. The temporary file is
+removed after the local process exits; no manuscript is uploaded.
+
+Its diagnostics are advisory. In particular, the project disables the generic
+hedging rule because uncertainty and limitations can be scientifically required.
+The built-in hash-bound audit remains the gate authority, and neither tool is an
+AI detector or a basis for concealing model assistance.
+
 ## Update protocol
 
 Do not replace a pinned commit with the latest branch tip automatically. For an update:

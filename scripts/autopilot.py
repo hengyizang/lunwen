@@ -150,6 +150,12 @@ including exact run-to-design assignment, traceable baseline versions and
 licenses, fair tuning, ablations, leakage, estimands, practical thresholds,
 statistics, power or precision, external validity, negative controls and
 falsification. Run only the stage validators allowed by the repository rules.
+At G5 write direct, evidence-led academic prose; remove stock framing,
+mechanical transitions, repeated sentence openings and vague importance claims.
+Preserve all supported meaning, numbers, equations, citations and uncertainty.
+The control plane will run scripts/academic_style.py after each writing pass.
+Never optimize against an AI detector, conceal assistance or weaken AI-use
+disclosure.
 """
 
 
@@ -157,6 +163,9 @@ def critic_prompt(project: str, state: dict[str, Any]) -> str:
     return f"""Act as a read-only independent adversarial critic of Codex-written artifacts. Do not edit files.
 
 Read AGENTS.md, references/research-integrity.md, the {state['gate']} section of references/stage-contracts.md, and the current scientific artifacts under projects/{project}. Do not read prior model verdicts or the author's desired outcome before forming your own verdict. Audit stage {state['stage']} for fatal flaws, unsupported claims, fabricated or unverified citations, missing primary evidence, alternative explanations, leakage, statistical problems, budget violations, security risks and reproducibility gaps. Also challenge closest-work differentiation, doctoral synthesis, pairwise paper independence, baseline fairness, statistical power or precision, external validity, claim calibration and English-only manuscript compliance. Do not infer success from file existence.
+At G5 also inspect the deterministic academic-style audit, template-driven or
+repetitive prose, and any scientific drift caused by stylistic revision. Do not
+estimate AI authorship or request detector-evasion tactics.
 
 Return ONLY one JSON object with exactly these keys: verdict, fatal_findings,
 major_findings, minor_findings, missing_evidence, remediation_steps,
@@ -167,7 +176,7 @@ desired answer. This internal review must not be copied into publishable text.
 
 
 def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
-    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. Run the relevant validators when finished.
+    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete problems without changing supported meaning, numbers, equations or citations. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished.
 
 End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """
@@ -438,6 +447,9 @@ def protected_control_snapshot(
         root / "reviews" / "decision-log.md",
     ]
     paths.extend(extra_paths or [])
+    paths.extend(
+        root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
+    )
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
         if dirname.is_dir():
             paths.extend(path for path in dirname.rglob("*") if path.is_file())
@@ -467,6 +479,11 @@ def ensure_protected_control_unchanged(
         relative
         for relative in ("state/run.json", "state/output-provenance.json", "reviews/decision-log.md")
         if (root / relative).is_file()
+    )
+    current_paths.update(
+        path.relative_to(root).as_posix()
+        for path in root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
+        if path.is_file()
     )
     changed = {
         relative
@@ -637,6 +654,10 @@ def run_stage(
             run_id=token,
             claude_sources=[run_dir / "planner.stdout.txt"],
         )
+        initial_style_audit = api_orchestrator.refresh_academic_style_audit(
+            project, state["stage"]
+        )
+        journal["academic_style_audit"] = {"initial": initial_style_audit}
         if state["gate"] != "G0":
             critic = invoke(
                 "critic",
@@ -706,6 +727,10 @@ def run_stage(
                     )
                 )
             )
+            final_style_audit = api_orchestrator.refresh_academic_style_audit(
+                project, state["stage"]
+            )
+            journal["academic_style_audit"]["final"] = final_style_audit
             final_critic = invoke(
                 "final-critic",
                 claude_command(

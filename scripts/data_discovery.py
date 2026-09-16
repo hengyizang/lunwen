@@ -371,11 +371,16 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
             phrase_bonus = max(phrase_bonus, 18)
         title_matches += len({term for term in terms if term in title})
     coverage = len(matched_terms) / max(1, len(all_terms))
+    cross_source_count = len(candidate.get("also_found_by", []))
+    cross_source_bonus = min(6, max(0, cross_source_count - 1) * 3)
+    version_bonus = 3 if candidate.get("version") else 0
     score = min(
         100,
         round(coverage * 62 + min(title_matches, 5) * 4 + phrase_bonus
               + (5 if candidate.get("doi") else 0)
-              + (4 if candidate.get("license_claim") else 0)),
+              + (4 if candidate.get("license_claim") else 0)
+              + cross_source_bonus
+              + version_bonus),
     )
     reasons = [f"matched {len(matched_terms)}/{max(1, len(all_terms))} query terms"]
     if title_matches:
@@ -384,6 +389,10 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
         reasons.append("persistent identifier present")
     if candidate.get("license_claim"):
         reasons.append("license metadata present but unverified")
+    if cross_source_count > 1:
+        reasons.append(f"found through {cross_source_count} provider families")
+    if candidate.get("version"):
+        reasons.append("version metadata present")
     return score, reasons, matched_queries
 
 
@@ -542,7 +551,7 @@ def save_report(report: dict[str, Any], output: Path) -> None:
 def append_search_log(project: str, report: dict[str, Any]) -> None:
     if not project or any(part in project for part in ("/", "\\", "..")):
         raise DiscoveryError("project must be a simple project slug")
-    path = PROJECTS_ROOT / project / "evidence" / "search-log.jsonl"
+    path = PROJECTS_ROOT / project / "evidence" / "dataset-search-log.jsonl"
     if not path.parent.is_dir():
         raise DiscoveryError(f"project does not exist: {project}")
     entry = {
