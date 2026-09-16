@@ -1,19 +1,53 @@
 from __future__ import annotations
 
+import json
+import os
 import sys
+import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.dashboard import (
     JobManager,
     SessionConfig,
     build_command,
+    project_detail,
     update_config,
 )
 
 
 class DashboardTests(unittest.TestCase):
+    def test_project_detail_uses_newest_report_by_modification_time(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            projects = Path(directory)
+            project = projects / "demo"
+            data = project / "data"
+            data.mkdir(parents=True)
+            older = data / "discovery-z-old.json"
+            newer = data / "discovery-a-new.json"
+            for path, created_at in ((older, "old"), (newer, "new")):
+                path.write_text(
+                    json.dumps(
+                        {
+                            "created_at": created_at,
+                            "query": "bearing",
+                            "providers": [],
+                            "candidate_count": 0,
+                            "candidates": [],
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+            os.utime(older, ns=(1_000_000_000, 1_000_000_000))
+            os.utime(newer, ns=(2_000_000_000, 2_000_000_000))
+            with patch("scripts.dashboard.PROJECTS_ROOT", projects), patch(
+                "scripts.dashboard.project_state", return_value={"paper_count": 6}
+            ):
+                detail = project_detail("demo")
+        self.assertEqual(detail["data_reports"][0]["created_at"], "new")
+
     def test_stage_workspaces_are_ordered_top_to_bottom(self) -> None:
         html = (Path(__file__).resolve().parents[1] / "dashboard" / "index.html").read_text(encoding="utf-8")
         phase_positions = [html.index(f'data-phase-index="{index}"') for index in range(7)]
@@ -83,6 +117,62 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(command[-1], "No lab; public data only.")
         self.assertEqual(project, "dashboard-new-test")
         self.assertIn("G0", label)
+
+    def test_cycle_uses_default_automatic_data_discovery(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dashboard-test").mkdir()
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.researchctl.load_state"
+            ) as load_state:
+                load_state.return_value = {
+                    "stage": "topic-intelligence",
+                    "gate": "G1",
+                    "status": "awaiting_work",
+                }
+                command, label, project = build_command(
+                    "cycle",
+                    {
+                        "project": "dashboard-test",
+                        "context": "Public licensed data only.",
+                        "discovery_query": "",
+                        "max_output_tokens": 12000,
+                    },
+                )
+        self.assertEqual(project, "dashboard-test")
+        self.assertIn("topic-intelligence", label)
+        self.assertNotIn("--no-auto-data-discovery", command)
+
+    def test_style_audit_command_is_local_and_paper_scoped(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dashboard-test" / "papers" / "P01").mkdir(parents=True)
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.researchctl.load_state"
+            ) as load_state:
+                load_state.return_value = {
+                    "stage": "writing-and-review",
+                    "gate": "G5",
+                    "status": "awaiting_work",
+                    "active_paper": "P01",
+                }
+                command, label, project = build_command(
+                    "style_audit",
+                    {"project": "dashboard-test", "paper": "P01"},
+                )
+        self.assertEqual(project, "dashboard-test")
+        self.assertEqual(
+            command[1:],
+            [
+                "scripts/academic_style.py",
+                "audit",
+                "--project",
+                "dashboard-test",
+                "--paper",
+                "P01",
+            ],
+        )
+        self.assertIn("P01", label)
 
     def test_project_slug_rejects_shell_metacharacters(self) -> None:
         with self.assertRaises(ValueError):

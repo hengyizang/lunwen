@@ -268,6 +268,10 @@ def gate_errors(slug,gate):
                 language=analyze_submission(paper)
                 errors.extend(f"{pid} English submission check: {x}" for x in language.get("errors",[]))
             except (ImportError,ValueError) as exc:errors.append(f"{pid} English manuscript validator failed: {exc}")
+        try:
+            from scripts.academic_style import validate_saved_audit
+            errors.extend(f"{pid} academic style: {x}" for x in validate_saved_audit(paper))
+        except ImportError as exc:errors.append(f"{pid} academic style validator unavailable: {exc}")
         venue=load_nonempty_json(paper/"venue.json",errors)
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
         if venue and venue.get("g5_reverified_at"):require_recent_timestamp(venue,"g5_reverified_at",f"{pid}/venue.json",errors,120)
@@ -351,7 +355,7 @@ def initialize(args):
     write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,support,uncertainty,status\n")
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid
-        for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments"]:(paper/rel).mkdir(parents=True,exist_ok=True)
+        for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
         write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)
     venue_id=args.venue or defaults.get("trial_venue")

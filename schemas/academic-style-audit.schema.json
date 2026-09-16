@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/academic-style-audit.schema.json",
+  "title": "Authentic academic style audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "status",
+    "purpose",
+    "detector_score_used",
+    "detector_evasion_prohibited",
+    "disclosure_must_be_preserved",
+    "human_review_required",
+    "manuscript",
+    "analysis",
+    "external_linters",
+    "errors",
+    "warnings",
+    "note"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.1"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["pass", "revise"]},
+    "purpose": {"const": "authentic_academic_style_and_readability"},
+    "detector_score_used": {"const": false},
+    "detector_evasion_prohibited": {"const": true},
+    "disclosure_must_be_preserved": {"const": true},
+    "human_review_required": {"const": true},
+    "manuscript": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "source_tree_sha256"],
+      "properties": {
+        "path": {"type": ["string", "null"]},
+        "source_tree_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "required": ["word_count", "sentence_count", "paragraph_count", "errors", "warnings"]
+    },
+    "external_linters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "source",
+          "license",
+          "required",
+          "local_only",
+          "detector",
+          "available",
+          "status",
+          "diagnostic_count",
+          "diagnostics",
+          "note"
+        ],
+        "properties": {
+          "name": {"const": "proselint"},
+          "source": {"const": "https://github.com/amperser/proselint"},
+          "license": {"const": "BSD-3-Clause"},
+          "required": {"const": false},
+          "local_only": {"const": true},
+          "detector": {"const": false},
+          "available": {"type": "boolean"},
+          "status": {"enum": ["pass", "advisory", "unavailable", "error"]},
+          "diagnostic_count": {"type": "integer", "minimum": 0},
+          "diagnostics": {"type": "array"},
+          "note": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "note": {"type": "string", "minLength": 1}
+  }
+}

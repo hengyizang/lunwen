@@ -112,6 +112,22 @@ class ResearchCtlTests(unittest.TestCase):
         errors=researchctl.gate_errors("test-phd","G0")
         self.assertTrue(any("weekly_hours" in error for error in errors))
 
+    def test_g5_requires_current_academic_style_audit(self) -> None:
+        self.init_project()
+        state = researchctl.load_state("test-phd")
+        state.update(
+            {
+                "stage_index": 5,
+                "stage": "writing-and-review",
+                "gate": "G5",
+                "status": "awaiting_work",
+                "active_paper": "P01",
+            }
+        )
+        researchctl.save_state("test-phd", state)
+        errors = researchctl.gate_errors("test-phd", "G5")
+        self.assertTrue(any("academic style audit" in error for error in errors))
+
     def test_change_after_ready_requires_fresh_human_review(self) -> None:
         project=self.init_project();self.complete_constraints(project)
         researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))

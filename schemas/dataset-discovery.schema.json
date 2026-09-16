@@ -45,8 +45,48 @@
           "metadata_relevance_score": {"type": "integer", "minimum": 0, "maximum": 100},
           "matched_queries": {"type": "array", "items": {"type": "string"}},
           "also_found_by": {"type": "array", "items": {"type": "string"}},
-          "screening_reasons": {"type": "array", "items": {"type": "string"}}
+          "screening_reasons": {"type": "array", "items": {"type": "string"}},
+          "automatic_screening": {
+            "type": "object",
+            "required": [
+              "rank",
+              "status",
+              "metadata_score",
+              "scientific_fitness_assessed"
+            ],
+            "properties": {
+              "rank": {"type": "integer", "minimum": 1},
+              "status": {"enum": ["metadata_shortlist", "metadata_deprioritized"]},
+              "metadata_score": {"type": "integer", "minimum": 0, "maximum": 100},
+              "cross_source_count": {"type": "integer", "minimum": 0},
+              "persistent_identifier_present": {"type": "boolean"},
+              "license_metadata_present_unverified": {"type": "boolean"},
+              "version_metadata_present": {"type": "boolean"},
+              "scientific_fitness_assessed": {"const": false}
+            }
+          }
         }
+      }
+    },
+    "automatic_screening_summary": {
+      "type": "object",
+      "required": [
+        "method",
+        "minimum_metadata_score",
+        "shortlist_count",
+        "not_automatically_decided",
+        "human_review_required"
+      ],
+      "properties": {
+        "method": {"const": "deterministic_metadata_screening"},
+        "minimum_metadata_score": {"type": "integer", "minimum": 0, "maximum": 100},
+        "maximum_shortlist": {"type": "integer", "minimum": 1},
+        "shortlist_count": {"type": "integer", "minimum": 0},
+        "deprioritized_count": {"type": "integer", "minimum": 0},
+        "shortlisted_candidate_ids": {"type": "array", "items": {"type": "string"}},
+        "criteria": {"type": "array", "items": {"type": "string"}},
+        "not_automatically_decided": {"type": "array", "items": {"type": "string"}},
+        "human_review_required": {"const": true}
       }
     },
     "warning": {"type": "string"}

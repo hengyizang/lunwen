@@ -105,8 +105,8 @@ All research and submission-bound artifacts must be written in English.</textare
               </label>
               <div class="two-columns">
                 <label class="field">
-                  <span>文献/网页检索词</span>
-                  <input id="discoveryQuery" placeholder="仅 G1 使用；建议使用英文">
+                  <span>可选的重点检索词</span>
+                  <input id="discoveryQuery" placeholder="可留空；G1/G3 会自动生成多组英文数据检索词">
                 </label>
                 <label class="field">
                   <span>单次最大输出 Token</span>
@@ -172,7 +172,7 @@ All research and submission-bound artifacts must be written in English.</textare
               <div>
                 <p class="eyebrow green">TOPIC INTELLIGENCE · BROAD DATA SCOUT</p>
                 <h2>选题、新颖性与全网多源数据侦察</h2>
-                <p class="muted">先广泛检索候选方向、反证和可用数据，再让 Codex 评估博士级原创性与可行性。元数据相关度不等于科学质量。</p>
+                <p class="muted">运行 G1 时会自动生成多组查询并搜索全部已批准来源，再让 Codex 评估博士级原创性与可行性。元数据相关度不等于科学质量。</p>
               </div>
               <div class="phase-badges"><span id="sourceCountBadge" class="badge green">8 个官方来源</span><span class="badge neutral phase-status" data-phase-status>未开始</span></div>
             </div>
@@ -190,7 +190,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                     <label class="field"><span>每个来源/查询最多返回</span><input id="dataLimit" type="number" min="1" max="50" value="20"></label>
                     <div class="field"><span>理论最大检索量</span><strong id="searchScale" class="calculated">640 条元数据</strong></div>
                   </div>
-                  <button class="button green-button" type="submit">开始广域搜索</button>
+                  <button class="button green-button" type="submit">手动补充一次广域搜索</button>
                 </div>
                 <fieldset class="source-picker">
                   <legend>数据源</legend>
@@ -201,7 +201,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
 
               <div class="results-heading">
                 <div><h3>候选数据集</h3><p id="dataSummary" class="muted">尚未执行搜索</p></div>
-                <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="20"><output id="scoreValue">20</output></label>
+                <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="25"><output id="scoreValue">25</output></label>
               </div>
               <div class="table-wrap">
                 <table>
@@ -235,7 +235,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
               <div>
                 <p class="eyebrow">EXPERIMENT DESIGN</p>
                 <h2>数据确认与实验设计</h2>
-                <p class="muted">锁定数据版本、许可证、基线、消融、统计检验、随机种子、预算和证伪规则，然后才允许实验执行。</p>
+                <p class="muted">运行 G3 时会按六篇论文逐篇自动搜索并初筛数据，再锁定版本、许可证、基线、统计、预算和证伪规则。</p>
               </div>
               <span class="badge neutral phase-status" data-phase-status>未开始</span>
             </div>
@@ -291,6 +291,13 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                   <select id="venueId"><option value="">选择已安装期刊配置</option></select>
                 </div>
                 <button id="setVenue" class="button secondary">设置期刊配置</button>
+              </div>
+              <div class="tool-card">
+                <h3>自然学术表达检查</h3>
+                <p>检查模板化套话、机械连接词、重复句子与句首、超长句和段落节奏；若本机安装 proselint，还会追加本地英文用法建议。它不计算“AI率”，也不能替代期刊要求的 AI 使用声明。</p>
+                <select id="stylePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                <button id="runStyleAudit" class="button secondary">重新运行表达检查</button>
+                <p id="styleAuditStatus" class="muted">尚未生成检查报告</p>
               </div>
               <div class="phase-note"><strong>逐篇检查</strong><span>论点必须由 G4 证据支持，引用可核验，图表可复现，英语达到国际期刊标准，且作者职责可追溯。</span></div>
             </div>

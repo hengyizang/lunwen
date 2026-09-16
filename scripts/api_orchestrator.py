@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -299,13 +300,26 @@ charts from real experiment outputs.
 Write all manuscript-bound scientific content in English, including titles,
 abstracts, body text, captions, table text, supplements, response letters and
 cover materials. At G1 require a closest-work originality audit and a doctoral
-case. At G2 compare every paper pair and reject overlapping primary claims. At
-G3 create one or more complete experiment designs for every configured paper;
+case, and score every topic against the human-confirmed G0 weights for novelty
+and doctoral depth, no-laboratory feasibility, funded-position supply,
+competition, job market and salary, and researcher-background fit. At G2 compare
+every paper pair and reject overlapping primary claims. At G1 and G3 treat the
+automatic dataset shortlist only as leads: assess topical/task fit, provenance,
+license uncertainty, sample/unit adequacy, labels, missingness, bias, leakage,
+external validity, compute and no-laboratory feasibility, and preserve rejection
+reasons and alternatives. At G3 create one or more complete experiment designs for every configured paper;
 assign every planned run exactly once; trace baseline sources, versions and
 licenses; require fair tuning/evaluation, strong/domain-standard/simple
 comparators, ablations, leakage controls, estimands, practical thresholds,
 effect sizes, uncertainty, power or precision, robustness, external validity,
 negative controls, stopping rules and falsification criteria.
+At G5 write direct, evidence-led academic prose with varied but appropriate
+sentence and paragraph structure. Remove stock framing, mechanical transitions,
+repeated sentence openings and vague importance claims. Preserve every number,
+equation, citation, uncertainty boundary and claim-evidence link. Use
+scripts/academic_style.py as a writing-quality audit only. Never optimize against
+an AI detector, claim human-only authorship, conceal assistance or weaken the
+required AI-use disclosure.
 
 Return ONLY one JSON object with keys schema_version, stage, artifacts, notes.
 Use schema_version 1.0 and make notes an array of strings. Each artifact path
@@ -337,7 +351,8 @@ leakage, circular validation, inadequate baselines/ablations/statistics,
 confounding, compute infeasibility, salami slicing, missing falsification,
 weak closest-work differentiation, unsupported doctoral synthesis, inadequate
 power or precision, weak external validity, non-English manuscript content,
-reproducibility gaps, and any gate-contract violation. Do not edit files. Do not
+repetitive or template-driven academic prose, scientific drift during style
+revision, reproducibility gaps, and any gate-contract violation. Do not edit files. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
 
@@ -370,6 +385,10 @@ reviews/independent, provenance files, or state/run.json. Express all revised
 text independently; do not reuse wording from a Claude plan or review. For every
 rejected item, record the evidence-based reason.
 Keep every manuscript-bound artifact in English.
+At G5 read the deterministic academic-style audit, resolve its concrete writing
+problems without changing supported meaning, numbers, equations or citations,
+and preserve the AI-use disclosure. Do not target a detector score or disguise
+AI assistance.
 """
 
 
@@ -532,6 +551,22 @@ def safe_target(project: str, relative: str) -> Path:
         ("reviews", "independent"),
     } or lower_parts == ("reviews", "decision-log.md"):
         raise ValueError(f"Independent review path is protected: {relative}")
+    if (
+        lower_parts == ("evidence", "dataset-search-log.jsonl")
+        or (
+            lower_parts
+            and lower_parts[0] == "data"
+            and candidate.name.startswith("discovery-broad-auto-")
+        )
+    ):
+        raise ValueError(f"Automatic discovery evidence is protected: {relative}")
+    if (
+        len(lower_parts) == 4
+        and lower_parts[0] == "papers"
+        and re.fullmatch(r"p[0-9]{2}", lower_parts[1])
+        and lower_parts[2:] == ("style", "academic-style-audit.json")
+    ):
+        raise ValueError(f"Deterministic academic style audit is protected: {relative}")
     target = (project_root(project) / candidate).resolve()
     if not target.is_relative_to(project_root(project)):
         raise ValueError(f"Artifact escapes project: {relative}")
@@ -701,6 +736,34 @@ def record_writer_provenance(
     )
 
 
+def refresh_academic_style_audit(
+    project: str, stage: str
+) -> dict[str, Any] | None:
+    """Refresh the deterministic G5 style audit after a writer changes the paper."""
+
+    if stage != "writing-and-review":
+        return None
+    try:
+        from scripts import academic_style
+    except ImportError:
+        import academic_style  # type: ignore[no-redef]
+    state = load_json(project_root(project) / "state" / "run.json")
+    paper_id = str(state.get("active_paper") or "")
+    if not re.fullmatch(r"P[0-9]{2}", paper_id):
+        raise ValueError("G5 requires a valid active paper before style auditing")
+    path, report = academic_style.write_audit(project_root(project), paper_id)
+    return {
+        "path": path.relative_to(project_root(project)).as_posix(),
+        "status": report.get("status"),
+        "errors": report.get("errors", []),
+        "warnings": report.get("warnings", []),
+        "manuscript_source_tree_sha256": report.get("manuscript", {}).get(
+            "source_tree_sha256"
+        ),
+        "detector_score_used": False,
+    }
+
+
 def validate_roles(
     planner_provider: str, writer_provider: str, critic_provider: str
 ) -> None:
@@ -731,7 +794,13 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
     data_root = project_root(project) / "data"
     if not data_root.is_dir():
         return None
-    for path in sorted(data_root.glob("discovery-*.json"), reverse=True):
+    def modified(path: Path) -> int:
+        try:
+            return path.stat().st_mtime_ns
+        except OSError:
+            return 0
+
+    for path in sorted(data_root.glob("discovery-*.json"), key=modified, reverse=True):
         try:
             if path.is_symlink() or path.stat().st_size > 8 * 1024 * 1024:
                 continue
@@ -750,6 +819,23 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
             raw_reasons = item.get("screening_reasons", [])
             if not isinstance(raw_reasons, list):
                 raw_reasons = []
+            raw_screening = item.get("automatic_screening", {})
+            screening: dict[str, Any] | None = None
+            if isinstance(raw_screening, dict):
+                screening = {
+                    key: raw_screening.get(key)
+                    for key in (
+                        "rank",
+                        "status",
+                        "metadata_score",
+                        "cross_source_count",
+                        "persistent_identifier_present",
+                        "license_metadata_present_unverified",
+                        "version_metadata_present",
+                        "scientific_fitness_assessed",
+                    )
+                    if key in raw_screening
+                } or None
             candidates.append(
                 {
                     "provider": _short_external_text(item.get("provider"), 100),
@@ -766,11 +852,33 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
                         if (shortened := _short_external_text(reason, 300))
                     ],
                     "fitness_status": _short_external_text(item.get("fitness_status"), 200),
+                    "automatic_screening": screening,
                 }
             )
         raw_queries = report.get("queries") or [report.get("query")]
         if not isinstance(raw_queries, list):
             raw_queries = []
+        raw_summary = report.get("automatic_screening_summary", {})
+        summary: dict[str, Any] | None = None
+        if isinstance(raw_summary, dict):
+            summary = {
+                "method": _short_external_text(raw_summary.get("method"), 100),
+                "minimum_metadata_score": raw_summary.get("minimum_metadata_score"),
+                "maximum_shortlist": raw_summary.get("maximum_shortlist"),
+                "shortlist_count": raw_summary.get("shortlist_count"),
+                "deprioritized_count": raw_summary.get("deprioritized_count"),
+                "criteria": [
+                    shortened
+                    for item in raw_summary.get("criteria", [])[:10]
+                    if (shortened := _short_external_text(item, 300))
+                ] if isinstance(raw_summary.get("criteria"), list) else [],
+                "not_automatically_decided": [
+                    shortened
+                    for item in raw_summary.get("not_automatically_decided", [])[:10]
+                    if (shortened := _short_external_text(item, 300))
+                ] if isinstance(raw_summary.get("not_automatically_decided"), list) else [],
+                "human_review_required": bool(raw_summary.get("human_review_required", True)),
+            }
         return {
             "source_file": path.relative_to(project_root(project)).as_posix(),
             "created_at": report.get("created_at"),
@@ -783,9 +891,60 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
             "included_candidate_count": len(candidates),
             "ranking_note": _short_external_text(report.get("ranking_note"), 1000),
             "warning": _short_external_text(report.get("warning"), 1000),
+            "automatic_screening_summary": summary,
             "candidates": candidates,
         }
     return None
+
+
+def run_automatic_dataset_discovery(
+    project: str, stage: str, context: str, discovery_query: str
+) -> dict[str, Any]:
+    try:
+        from scripts import automatic_data_discovery
+    except ImportError:
+        import automatic_data_discovery  # type: ignore[no-redef]
+
+    return automatic_data_discovery.run_automatic_discovery(
+        project_root(project),
+        stage,
+        context,
+        discovery_query,
+    )
+
+
+def prepare_discovery_evidence(
+    project: str,
+    stage: str,
+    context: str,
+    discovery_query: str,
+    automatic_data: bool,
+) -> tuple[str, dict[str, Any] | None]:
+    summary: dict[str, Any] | None = None
+    effective_query = discovery_query
+    if automatic_data and stage in DATA_DISCOVERY_STAGES:
+        print(
+            f"[automatic-data] deriving queries and searching approved sources for {stage}",
+            file=sys.stderr,
+            flush=True,
+        )
+        try:
+            summary = run_automatic_dataset_discovery(
+                project, stage, context, discovery_query
+            )
+        except Exception as exc:
+            raise ValueError(f"Automatic dataset discovery failed: {exc}") from exc
+        if not effective_query and summary.get("queries"):
+            effective_query = str(summary["queries"][0])
+        print(
+            "[automatic-data] "
+            f"{summary.get('candidate_count', 0)} candidates, "
+            f"{summary.get('shortlist_count', 0)} metadata-shortlisted; "
+            "human scientific/license review remains required",
+            file=sys.stderr,
+            flush=True,
+        )
+    return discover_context(project, stage, effective_query), summary
 
 
 def discover_context(project: str, stage: str, query: str) -> str:
@@ -823,11 +982,22 @@ def run_cycle(
     context: str,
     discovery_query: str,
     max_output_tokens: int = 8000,
+    automatic_data: bool = True,
 ) -> dict[str, Any]:
     validate_roles(planner_provider, writer_provider, critic_provider)
     require_current_stage(project, stage)
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    evidence = discover_context(project, stage, discovery_query)
+    try:
+        evidence, automatic_discovery = prepare_discovery_evidence(
+            project,
+            stage,
+            context,
+            discovery_query,
+            automatic_data,
+        )
+    except ValueError as exc:
+        save_run(project, run_id, "automatic-data-discovery-error.txt", str(exc))
+        raise
     planner = ai_providers.call(
         planner_provider,
         planning_prompt(project, stage, context, evidence),
@@ -855,6 +1025,7 @@ def run_cycle(
     )
     written = list(initial_written)
     save_run(project, run_id, "writer-bundle.json", bundle)
+    initial_style_audit = refresh_academic_style_audit(project, stage)
 
     review = ai_providers.call(
         critic_provider,
@@ -895,6 +1066,7 @@ def run_cycle(
     )
     written += revised_written
     save_run(project, run_id, "remediation-bundle.json", revised_bundle)
+    final_style_audit = refresh_academic_style_audit(project, stage)
 
     final = ai_providers.call(
         critic_provider,
@@ -959,6 +1131,17 @@ def run_cycle(
             "remediation": revised.usage,
             "critic_final": final.usage,
         },
+        "automatic_data_discovery": {
+            "enabled": automatic_data and stage in DATA_DISCOVERY_STAGES,
+            "stage_applicable": stage in DATA_DISCOVERY_STAGES,
+            "result": automatic_discovery,
+        },
+        "academic_style_audit": {
+            "stage_applicable": stage == "writing-and-review",
+            "initial": initial_style_audit,
+            "final": final_style_audit,
+            "policy": "quality-and-author-voice; no detector score or evasion",
+        },
         "generated_at": utc_now(),
         "next_action": "Human gate review; no approve/advance action was performed.",
     }
@@ -987,6 +1170,11 @@ def main() -> int:
         command.add_argument("stage")
         command.add_argument("--context", default="")
         command.add_argument("--discovery-query", default="")
+        command.add_argument(
+            "--no-auto-data-discovery",
+            action="store_true",
+            help="Skip the default automatic dataset search for G1/G3",
+        )
         command.add_argument(
             "--max-output-tokens",
             type=int,
@@ -1071,21 +1259,39 @@ def main() -> int:
             parser.error(
                 "stage cannot persist Claude/Anthropic output; use an OpenAI/Codex provider"
             )
-        evidence = discover_context(args.project, args.stage, args.discovery_query)
+        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        try:
+            evidence, automatic_discovery = prepare_discovery_evidence(
+                args.project,
+                args.stage,
+                args.context,
+                args.discovery_query,
+                not args.no_auto_data_discovery,
+            )
+        except ValueError as exc:
+            save_run(
+                args.project,
+                run_id,
+                "automatic-data-discovery-error.txt",
+                str(exc),
+            )
+            raise
         result = ai_providers.call(
             args.provider,
             writer_prompt(args.project, args.stage, args.context, None, evidence),
             max_output_tokens=args.max_output_tokens,
         )
         bundle = extract_json(result.text)
-        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         save_run(args.project, run_id, "response.txt", result.text)
         written = apply_bundle(args.project, bundle, args.stage)
         record_writer_provenance(
             args.project, written, result, "persistent-writer", run_id
         )
+        style_audit = refresh_academic_style_audit(args.project, args.stage)
         print(json.dumps({"run_id": run_id, "written": written, "provider": result.provider, "model": result.model,
                           "provider_audit": result_audit(result), "usage": result.usage,
+                          "automatic_data_discovery": automatic_discovery,
+                          "academic_style_audit": style_audit,
                           "next_action": "Human gate review; no approve/advance action was performed."}, ensure_ascii=False, indent=2))
         return 0
     print(json.dumps(run_cycle(
@@ -1097,6 +1303,7 @@ def main() -> int:
         args.context,
         args.discovery_query,
         args.max_output_tokens,
+        automatic_data=not args.no_auto_data_discovery,
     ), ensure_ascii=False, indent=2))
     return 0
 

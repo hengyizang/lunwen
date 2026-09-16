@@ -1,0 +1,10 @@
+{
+  "max_errors": 250,
+  "checks": {
+    "hedging": false,
+    "restricted": false,
+    "misc.narcissism": false,
+    "typography.symbols.curly_quotes": false
+  },
+  "per_file_checks": {}
+}

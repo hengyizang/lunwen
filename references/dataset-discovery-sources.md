@@ -26,6 +26,14 @@ Kaggle is not enabled by default. Its official client requires separate Kaggle
 account credentials and its dataset terms vary. Do not scrape it, store its key
 in a project, or treat the UUAPI key as a Kaggle credential.
 
+G1 and G3 call `scripts/automatic_data_discovery.py` by default. Its automatic
+screening is deliberately limited to metadata relevance, cross-source
+recurrence, persistent identifiers and the presence of license/version fields.
+It records whether those fields exist but never interprets a license as legal
+permission or a high score as scientific fitness. Dataset searches use
+`evidence/dataset-search-log.jsonl`; `evidence/search-log.jsonl` is reserved for
+schema-bound originality and closest-literature searches.
+
 Review these documents and the provider changelogs before changing an endpoint
 or response parser. Provider availability and response fields can change
 without making an existing local research approval valid for new data.

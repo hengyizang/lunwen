@@ -75,6 +75,7 @@ class DataDiscoveryTests(unittest.TestCase):
         candidate = report["candidates"][0]
         self.assertGreater(candidate["metadata_relevance_score"], 50)
         self.assertEqual(set(candidate["also_found_by"]), {"DataCite", "Zenodo"})
+        self.assertIn("found through 2 provider families", candidate["screening_reasons"])
         self.assertEqual(
             candidate["fitness_status"],
             "candidate_only_requires_scientific_and_human_review",

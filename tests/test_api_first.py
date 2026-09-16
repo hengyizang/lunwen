@@ -10,6 +10,100 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
+    def test_g5_refreshes_a_local_style_audit_without_detector_scoring(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "projects" / "demo"
+            state = project / "state"
+            manuscript = project / "papers" / "P01" / "manuscript" / "main.tex"
+            state.mkdir(parents=True)
+            manuscript.parent.mkdir(parents=True)
+            (state / "run.json").write_text(
+                json.dumps({"active_paper": "P01"}), encoding="utf-8"
+            )
+            manuscript.write_text(
+                " ".join(
+                    f"Analysis group {index} compares documented observations with the registered baseline and reports uncertainty."
+                    for index in range(80)
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(api_orchestrator, "ROOT", root):
+                summary = api_orchestrator.refresh_academic_style_audit(
+                    "demo", "writing-and-review"
+                )
+            self.assertIsNotNone(summary)
+            self.assertFalse(summary["detector_score_used"])
+            self.assertTrue(
+                (project / "papers" / "P01" / "style" / "academic-style-audit.json").is_file()
+            )
+
+    def test_writer_prompt_preserves_user_topic_and_dataset_selection_criteria(self):
+        prompt = api_orchestrator.writer_prompt(
+            "missing-project", "topic-intelligence", ""
+        )
+        for required in (
+            "human-confirmed G0 weights",
+            "novelty and doctoral depth",
+            "no-laboratory feasibility",
+            "job market and salary",
+            "sample/unit adequacy",
+            "leakage",
+            "external validity",
+        ):
+            self.assertIn(required, prompt)
+
+    def test_automatic_data_failure_stops_before_paid_model_calls(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "config").mkdir()
+            (root / "config" / "stages.json").write_text(
+                json.dumps(
+                    {
+                        "stages": {
+                            "topic-intelligence": {
+                                "gate": "G1",
+                                "contract": "Topic intelligence — G1",
+                                "author_task": "Research candidates",
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            state = root / "projects" / "demo" / "state"
+            state.mkdir(parents=True)
+            (state / "run.json").write_text(
+                json.dumps(
+                    {
+                        "stage": "topic-intelligence",
+                        "gate": "G1",
+                        "status": "awaiting_work",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(api_orchestrator, "ROOT", root), patch.object(
+                api_orchestrator,
+                "run_automatic_dataset_discovery",
+                side_effect=ValueError("all sources offline"),
+            ), patch("scripts.api_orchestrator.ai_providers.call") as model_call:
+                with self.assertRaisesRegex(ValueError, "Automatic dataset discovery failed"):
+                    api_orchestrator.run_cycle(
+                        "demo",
+                        "topic-intelligence",
+                        "uuapi-anthropic",
+                        "uuapi-openai",
+                        "uuapi-anthropic",
+                        "",
+                        "",
+                    )
+            model_call.assert_not_called()
+            errors = list((root / "projects" / "demo" / "api_runs").glob(
+                "*/automatic-data-discovery-error.txt"
+            ))
+            self.assertEqual(len(errors), 1)
+
     def test_experiment_design_receives_latest_broad_dataset_report(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -33,8 +127,24 @@ class ApiFirstTests(unittest.TestCase):
                                 "metadata_relevance_score": 82,
                                 "screening_reasons": ["title-term match"],
                                 "fitness_status": "candidate_only_requires_scientific_and_human_review",
+                                "automatic_screening": {
+                                    "rank": 1,
+                                    "status": "metadata_shortlist",
+                                    "metadata_score": 82,
+                                    "scientific_fitness_assessed": False,
+                                },
                             }
                         ],
+                        "automatic_screening_summary": {
+                            "method": "deterministic_metadata_screening",
+                            "minimum_metadata_score": 25,
+                            "maximum_shortlist": 80,
+                            "shortlist_count": 1,
+                            "deprioritized_count": 0,
+                            "criteria": ["metadata overlap"],
+                            "not_automatically_decided": ["scientific fitness"],
+                            "human_review_required": True,
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -47,6 +157,13 @@ class ApiFirstTests(unittest.TestCase):
                 )
             saved = evidence["saved_broad_dataset_discovery"]
             self.assertEqual(saved["included_candidate_count"], 1)
+            self.assertEqual(
+                saved["candidates"][0]["automatic_screening"]["status"],
+                "metadata_shortlist",
+            )
+            self.assertTrue(
+                saved["automatic_screening_summary"]["human_review_required"]
+            )
             self.assertEqual(saved["candidates"][0]["title"], "Bearing benchmark")
             self.assertEqual(
                 saved["candidates"][0]["license_claim_unverified"], "CC-BY-4.0"
@@ -121,6 +238,22 @@ class ApiFirstTests(unittest.TestCase):
         ):
             with self.subTest(relative=relative), self.assertRaises(ValueError):
                 api_orchestrator.safe_target("demo", relative)
+
+    def test_safe_target_protects_automatic_discovery_evidence(self):
+        for relative in (
+            "data/discovery-broad-auto-20260902T000000Z.json",
+            "evidence/dataset-search-log.jsonl",
+        ):
+            with self.subTest(relative=relative), self.assertRaisesRegex(
+                ValueError, "Automatic discovery evidence"
+            ):
+                api_orchestrator.safe_target("demo", relative)
+
+    def test_safe_target_protects_deterministic_style_audit(self):
+        with self.assertRaisesRegex(ValueError, "style audit"):
+            api_orchestrator.safe_target(
+                "demo", "papers/P01/style/academic-style-audit.json"
+            )
 
     def test_snapshot_includes_content_and_excludes_sensitive_areas(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -306,6 +439,7 @@ class ApiFirstTests(unittest.TestCase):
                     "uuapi-anthropic",
                     "",
                     "",
+                    automatic_data=False,
                 )
             reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
             self.assertEqual(len(reviews), 2)
