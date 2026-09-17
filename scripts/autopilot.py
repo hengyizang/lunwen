@@ -151,9 +151,13 @@ licenses, fair tuning, ablations, leakage, estimands, practical thresholds,
 statistics, power or precision, external validity, negative controls and
 falsification. Run only the stage validators allowed by the repository rules.
 At G5 write direct, evidence-led academic prose; remove stock framing,
-mechanical transitions, repeated sentence openings and vague importance claims.
+mechanical transitions, repeated sentence openings, conversational artifacts,
+vague attribution and unsupported importance or novelty claims. Prefer concrete
+results, comparisons, mechanisms and limitations over decorative synonyms.
 Preserve all supported meaning, numbers, equations, citations and uncertainty.
-The control plane will run scripts/academic_style.py after each writing pass.
+The control plane will run scripts/academic_style.py after each writing pass and
+return line-level findings; revise them only when the scientific context supports
+the change, never through blind synonym replacement.
 Never optimize against an AI detector, conceal assistance or weaken AI-use
 disclosure.
 """
@@ -176,7 +180,7 @@ desired answer. This internal review must not be copied into publishable text.
 
 
 def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
-    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete problems without changing supported meaning, numbers, equations or citations. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished.
+    return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete rule-and-line findings without changing supported meaning, numbers, equations, citations, registered uncertainty or limitations. Do not vary established terminology merely to avoid repetition. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished.
 
 End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """

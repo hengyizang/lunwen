@@ -22,6 +22,7 @@ This repository is a research workflow, not a publication generator.
 18. Never package a file whose current provenance hash identifies Anthropic/Claude as its persistent writer. Human or deterministic local edits must create a new file hash; do not use paraphrasing merely to conceal AI use.
 19. Require current JCR Q1 SCI/SCIE candidate and selected venues. A quartile does not establish methodological rigor; apply the separate doctoral/originality/experiment contracts and re-check category/year evidence.
 20. Write every manuscript-bound artifact in English. G5 must pass the deterministic manuscript-language check; a model's assertion that prose is English is not sufficient.
+21. At G5, use line-level academic-style findings for targeted evidence-preserving revision. Never perform synonym spinning, optimize for an AI-detector score, remove warranted uncertainty, or weaken a required AI-use disclosure.
 
 Run repository checks after code or schema changes:
 

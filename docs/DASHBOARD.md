@@ -1,4 +1,4 @@
-# Local visual dashboard (v1.7.1)
+# Local visual dashboard (v1.8.0)
 
 The dashboard is a beginner-facing local client over the existing Doctoral
 Research OS. It does not replace the G0–G5 control plane. Every mutation is
@@ -146,11 +146,14 @@ At G5 the control plane automatically runs `scripts/academic_style.py` after the
 initial Codex draft and again after remediation. The dashboard also provides a
 manual rerun button. The audit detects stock framing, repeated sentences and
 openings, transition overuse, very long sentences and unusually uniform cadence.
-When the optional BSD-licensed `proselint` v0.16.0 executable is available, the
-same local audit adds line/column prose suggestions. Its results are advisory
-because general prose rules can conflict with domain terminology; the repository
-configuration disables hedging checks so warranted scientific uncertainty is
-not removed. No manuscript content is sent to an external service.
+It also shows line-level findings from an academic allowlist derived from
+reviewed, pinned GitHub sources (`avoid-ai-writing`, `vale-ai-tells` and
+`No AI Slop`). When optional BSD-licensed `proselint` v0.16.0 or Apache-2.0
+`harper-cli` is available, the same local audit adds separate grammar
+suggestions. External-linter results are advisory because general prose rules
+can conflict with domain terminology; the repository configuration disables
+proselint hedging checks so warranted scientific uncertainty is not removed. No
+manuscript content is sent to an external service.
 It records no AI-detector probability and must not be used to conceal assistance.
 Any manuscript-source change makes the report stale, and the final AI-use
 disclosure remains mandatory where the venue requires it.
@@ -161,8 +164,9 @@ Install the reviewed optional version in the repository-local environment with:
 bash scripts/bootstrap-wsl.sh --with-writing-tools
 ```
 
-The controller finds `.venv/bin/proselint` automatically; activating the virtual
-environment is not required for dashboard use.
+The controller finds `.venv/bin/proselint` and an installed `harper-cli`
+automatically; activating the virtual environment is not required for dashboard
+use. Harper remains optional and is not downloaded silently.
 
 ## Experiment and submission controls
 

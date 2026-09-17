@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "purpose": "academic_clarity_and_formulaic_prose_review",
+  "high_confidence_density_per_1000_words": 2,
+  "high_confidence_minimum_before_block": 3,
+  "sources": [
+    {
+      "id": "avoid-ai-writing",
+      "repository": "https://github.com/conorbronsdon/avoid-ai-writing",
+      "commit": "0f2371ea9096654223410bd3e9d67ea7b4c7ba3a",
+      "license": "MIT",
+      "use": "Pattern taxonomy and preservation-first review concepts; no upstream executable or automatic rewriter is run."
+    },
+    {
+      "id": "vale-ai-tells",
+      "repository": "https://github.com/tbhb/vale-ai-tells",
+      "commit": "dd60c5dc0d5432f71b0113fe2003fb06d069a71f",
+      "upstream_version": "1.37.0",
+      "license": "MIT",
+      "use": "Lexical and structural warning concepts selected for technical and academic prose; the full Vale package is not applied mechanically."
+    },
+    {
+      "id": "no-ai-slop",
+      "repository": "https://github.com/petergyang/no-ai-slop",
+      "commit": "000650b156983f5159695b441477f4e63b25dc85",
+      "license": "MIT",
+      "use": "High-confidence conversational, puffery and generic-conclusion pattern concepts; social-media-specific rules are excluded."
+    }
+  ],
+  "rules": [
+    {
+      "id": "chatbot-artifact",
+      "category": "register",
+      "confidence": "high",
+      "block_on_any": true,
+      "pattern": "\\b(?:certainly|absolutely)[!,]|\\b(?:great|excellent) question[!,]|\\blet(?:'|’)s (?:delve|explore|break (?:this|it) down)\\b|\\bi hope this helps\\b|\\bfeel free to ask\\b",
+      "message": "Conversational assistant wording is inappropriate in a journal manuscript.",
+      "guidance": "Delete the interactional phrase and begin with the scientific claim or evidence.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells", "no-ai-slop"]
+    },
+    {
+      "id": "formulaic-landscape-opener",
+      "category": "framing",
+      "confidence": "high",
+      "block_on_any": false,
+      "pattern": "\\bin (?:today(?:'|’)s|the) (?:rapidly|ever)[ -]evolving (?:world|landscape|field|era)\\b|\\bin the (?:modern|digital) era\\b",
+      "message": "Generic landscape framing delays the research problem.",
+      "guidance": "Open with the specific empirical, technical or theoretical problem and cite its evidence.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
+    },
+    {
+      "id": "significance-puffery",
+      "category": "claim_calibration",
+      "confidence": "high",
+      "block_on_any": false,
+      "pattern": "\\b(?:marks?|represents?|constitutes?) (?:a )?(?:pivotal|transformative|groundbreaking|revolutionary|remarkable|watershed) (?:moment|shift|advance|milestone|breakthrough)\\b|\\bgame[ -]chang(?:er|ing)\\b",
+      "message": "The sentence announces importance instead of demonstrating it.",
+      "guidance": "Replace the valuation with the measured contribution, comparison and uncertainty.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells", "no-ai-slop"]
+    },
+    {
+      "id": "generic-future-conclusion",
+      "category": "conclusion",
+      "confidence": "high",
+      "block_on_any": false,
+      "pattern": "\\bthe future (?:looks|is) (?:bright|promising)\\b|\\bonly time will tell\\b|\\bthe possibilities are endless\\b|\\b(?:paves?|opens?) the way for (?:future|further) (?:research|innovation|advances?)\\b",
+      "message": "The conclusion is generic and not tied to the reported evidence.",
+      "guidance": "End with the bounded result, limitation and next falsifiable research step.",
+      "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    },
+    {
+      "id": "vague-attribution",
+      "category": "evidence",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:experts|researchers|scholars) (?:agree|believe|recognize|suggest)\\b|\\b(?:many|numerous|several) studies (?:show|have shown|suggest|demonstrate)\\b|\\bit is widely (?:believed|recognized|accepted) that\\b",
+      "message": "The attribution is too vague to audit.",
+      "guidance": "Name and cite the relevant evidence, or state the proposition as an explicitly bounded inference.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells", "no-ai-slop"]
+    },
+    {
+      "id": "filler-metadiscourse",
+      "category": "clarity",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:it is (?:important|crucial|essential|worthwhile) to (?:note|mention|emphasize) that|it should be noted that|in order to|due to the fact that|for the purpose of)\\b",
+      "message": "Filler or metadiscourse obscures the substantive statement.",
+      "guidance": "State the fact, method or limitation directly without changing its evidential force.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
+    },
+    {
+      "id": "stacked-hedges",
+      "category": "claim_calibration",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:may|might|could|potentially|possibly|perhaps)(?:\\s+[A-Za-z'-]+){0,2}\\s+(?:may|might|could|potentially|possibly|perhaps)\\b",
+      "message": "Multiple nearby hedges make the uncertainty boundary unclear.",
+      "guidance": "Retain the single scientifically justified qualifier and state the source of uncertainty.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
+    },
+    {
+      "id": "uncalibrated-certainty",
+      "category": "claim_calibration",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:undeniably|unquestionably|indisputably|without (?:a )?doubt|there is no denying that)\\b",
+      "message": "Absolute certainty is rarely justified by empirical evidence.",
+      "guidance": "Calibrate the claim to the design, estimand, uncertainty interval and external-validity limits.",
+      "source_ids": ["vale-ai-tells", "no-ai-slop"]
+    },
+    {
+      "id": "unquantified-performance",
+      "category": "evidence",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:significantly|substantially|dramatically|considerably) (?:improves?|outperforms?|reduces?|increases?|decreases?|enhances?)\\b",
+      "message": "A performance claim is not quantified in the matched wording.",
+      "guidance": "Report the comparison, effect size or absolute difference, uncertainty and multiplicity treatment where applicable.",
+      "source_ids": ["vale-ai-tells"]
+    },
+    {
+      "id": "novelty-inflation",
+      "category": "originality",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:first[- ]of[- ]its[- ]kind|unprecedented|groundbreaking|revolutionary) (?:approach|framework|method|study|solution|system)\\b",
+      "message": "The novelty language is stronger than a manuscript should assert without a current closest-work audit.",
+      "guidance": "State the exact residual contribution relative to named closest work and preserve the remaining novelty risk.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
+    },
+    {
+      "id": "superficial-participle",
+      "category": "analysis",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": ",\\s+(?:highlighting|showcasing|underscoring|emphasizing)\\b",
+      "message": "A trailing participle may be substituting interpretation for a supported analytical link.",
+      "guidance": "Specify what result supports the interpretation, or remove the trailing evaluative clause.",
+      "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    },
+    {
+      "id": "false-binary-contrast",
+      "category": "structure",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\bit is not (?:just|simply|merely) [^.!?]{1,100}[,;:] (?:it is|rather|but)\\b|\\bnot (?:just|simply|merely) [^.!?]{1,100}, but\\b",
+      "message": "A stock binary contrast may overstate the distinction.",
+      "guidance": "State the precise distinction, comparison or mechanism directly.",
+      "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    },
+    {
+      "id": "rhetorical-question-opener",
+      "category": "structure",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "(?:^|\\n\\s*)(?:what if|why does|how can|can we|could we)[^?\\n]{3,160}\\?",
+      "message": "A rhetorical question opens a section or paragraph instead of stating the research problem.",
+      "guidance": "State the research question or problem formally and connect it to evidence or a registered hypothesis.",
+      "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    }
+  ]
+}

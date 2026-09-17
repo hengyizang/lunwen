@@ -1,4 +1,4 @@
-# API-first mode (v1.7.1)
+# API-first mode (v1.8.0)
 
 Doctoral Research OS can run without Claude Code or Codex CLI. The Python control plane calls Claude only for a non-publishable semantic plan and independent audits. OpenAI/Codex independently writes and remediates every persistent artifact. The control plane validates bundles atomically, rejects long verbatim spans copied from Claude control text, records writer-family hashes, and requires a current non-Anthropic origin for every final packaged file.
 
@@ -95,9 +95,11 @@ through `python3 scripts/academic_style.py audit --project <slug> --paper P01`.
 It evaluates writing quality without estimating an AI probability or attempting
 detector evasion. Codex must preserve scientific meaning, numbers, equations,
 citations, uncertainty and the applicable AI-use disclosure while resolving its
-findings. If local `proselint==0.16.0` is installed, the report also contains
-advisory offline prose diagnostics; absence or failure of that optional tool does
-not bypass or weaken the built-in deterministic gate.
+findings. The report includes line-level findings from the reviewed academic
+subset of `avoid-ai-writing`, `vale-ai-tells` and `No AI Slop`. If local
+`proselint==0.16.0` or `harper-cli` is installed, it also contains advisory
+offline grammar diagnostics; absence or failure of either optional tool does not
+bypass or weaken the built-in deterministic gate.
 
 Human required: final topic choice, doctoral architecture, data-license confirmation, experiment approval, interpretation of scientific evidence, authorship/ethics, current JCR verification, final PDF/DOCX inspection and every journal portal action.
 

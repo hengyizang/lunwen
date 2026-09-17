@@ -150,6 +150,67 @@ def validate_upstreams(path: Path, errors: list[str]) -> None:
                 errors.append(f"{path.relative_to(ROOT)}: invalid selected skill {skill!r}")
 
 
+def validate_academic_style_rules(
+    path: Path, upstream_path: Path, errors: list[str]
+) -> None:
+    value = load_json(path, errors)
+    upstreams = load_json(upstream_path, errors)
+    if not isinstance(value, dict) or not isinstance(upstreams, dict):
+        return
+    if value.get("schema_version") != "1.0":
+        errors.append(f"{path.relative_to(ROOT)}: schema_version must be 1.0")
+    upstream_map = {
+        item.get("id"): item
+        for item in upstreams.get("sources", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    configured_sources = value.get("sources")
+    if not isinstance(configured_sources, list) or len(configured_sources) < 3:
+        errors.append(f"{path.relative_to(ROOT)}: at least three reviewed sources are required")
+        return
+    configured_ids: set[str] = set()
+    for source in configured_sources:
+        if not isinstance(source, dict):
+            errors.append(f"{path.relative_to(ROOT)}: every source must be an object")
+            continue
+        source_id = source.get("id")
+        configured_ids.add(str(source_id))
+        upstream = upstream_map.get(source_id)
+        if not upstream:
+            errors.append(f"{path.relative_to(ROOT)}: unknown upstream source {source_id!r}")
+        elif source.get("commit") != upstream.get("commit"):
+            errors.append(f"{path.relative_to(ROOT)}: {source_id} commit differs from upstream lock")
+    rules = value.get("rules")
+    if not isinstance(rules, list) or not rules:
+        errors.append(f"{path.relative_to(ROOT)}: rules must be a non-empty array")
+        return
+    rule_ids: set[str] = set()
+    for rule in rules:
+        if not isinstance(rule, dict):
+            errors.append(f"{path.relative_to(ROOT)}: every rule must be an object")
+            continue
+        rule_id = rule.get("id")
+        if not isinstance(rule_id, str) or not NAME_RE.fullmatch(rule_id):
+            errors.append(f"{path.relative_to(ROOT)}: invalid rule id {rule_id!r}")
+        elif rule_id in rule_ids:
+            errors.append(f"{path.relative_to(ROOT)}: duplicate rule id {rule_id}")
+        else:
+            rule_ids.add(rule_id)
+        if rule.get("confidence") not in {"high", "moderate"}:
+            errors.append(f"{path.relative_to(ROOT)}: invalid confidence for {rule_id}")
+        if not isinstance(rule.get("block_on_any"), bool):
+            errors.append(f"{path.relative_to(ROOT)}: block_on_any must be boolean for {rule_id}")
+        source_ids = rule.get("source_ids")
+        if not isinstance(source_ids, list) or not source_ids or any(
+            source_id not in configured_ids for source_id in source_ids
+        ):
+            errors.append(f"{path.relative_to(ROOT)}: invalid source_ids for {rule_id}")
+        try:
+            re.compile(str(rule.get("pattern", "")), re.I | re.M)
+        except re.error as exc:
+            errors.append(f"{path.relative_to(ROOT)}: invalid regex for {rule_id}: {exc}")
+
+
 def validate_stage_config(path: Path, errors: list[str]) -> None:
     value = load_json(path, errors)
     stages = value.get("stages") if isinstance(value, dict) else None
@@ -193,7 +254,11 @@ def main() -> int:
         load_json(path, errors)
     for path in sorted((ROOT / "venues").glob("*/venue.json")):
         validate_venue(path, errors)
-    validate_upstreams(ROOT / "integrations" / "upstreams.lock.json", errors)
+    upstream_path = ROOT / "integrations" / "upstreams.lock.json"
+    validate_upstreams(upstream_path, errors)
+    validate_academic_style_rules(
+        ROOT / "config" / "academic-style-rules.json", upstream_path, errors
+    )
     validate_stage_config(ROOT / "config" / "stages.json", errors)
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)

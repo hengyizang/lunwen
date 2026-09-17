@@ -46,6 +46,42 @@ hedging rule because uncertainty and limitations can be scientifically required.
 The built-in hash-bound audit remains the gate authority, and neither tool is an
 AI detector or a basis for concealing model assistance.
 
+## Academic writing-pattern sources
+
+The built-in line-level G5 rules in `config/academic-style-rules.json` use a
+reviewed academic subset of ideas from three MIT-licensed projects:
+
+- [`conorbronsdon/avoid-ai-writing`](https://github.com/conorbronsdon/avoid-ai-writing)
+  contributes the preservation-first review model and a broad taxonomy of
+  formulaic prose patterns.
+- [`tbhb/vale-ai-tells`](https://github.com/tbhb/vale-ai-tells) contributes
+  technical-writing warnings for filler, unsupported certainty, vague
+  attribution and repeated structural formulas.
+- [`petergyang/no-ai-slop`](https://github.com/petergyang/no-ai-slop) contributes
+  high-confidence conversational artifacts, importance puffery and generic
+  conclusion patterns.
+
+The repository does not execute their automatic rewriters and does not copy a
+general social-media rule set into manuscripts. It records the reviewed commits
+in `integrations/upstreams.lock.json`, implements a small academic allowlist
+locally, reports the exact line and rule, and lets Codex make evidence-preserving
+edits. Numerical results, equations, citations, limitations and required AI-use
+disclosures are not targets for stylistic substitution. The audit estimates
+neither authorship nor the output of Turnitin, GPTZero or another detector.
+
+## Harper
+
+[`Automattic/harper`](https://github.com/Automattic/harper) is an optional
+Apache-2.0 offline English grammar checker. When `harper-cli` is already
+available on `PATH` or in the repository `.venv`, `scripts/academic_style.py`
+runs it over the same temporary plain-text extraction used for proselint and
+normalizes its JSON findings. The temporary text is removed after execution.
+
+Harper is advisory and intentionally not auto-installed: its release and
+platform-specific binary must be reviewed before installation. A missing Harper
+binary never disables the built-in audit or G5; the dashboard reports its status
+separately.
+
 ## Update protocol
 
 Do not replace a pinned commit with the latest branch tip automatically. For an update:

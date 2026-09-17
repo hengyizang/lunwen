@@ -174,6 +174,65 @@ class DashboardTests(unittest.TestCase):
         )
         self.assertIn("P01", label)
 
+    def test_project_detail_exposes_line_level_style_and_local_tool_status(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report_path = (
+                root
+                / "dashboard-test"
+                / "papers"
+                / "P01"
+                / "style"
+                / "academic-style-audit.json"
+            )
+            report_path.parent.mkdir(parents=True)
+            report_path.write_text(
+                json.dumps(
+                    {
+                        "status": "revise",
+                        "created_at": "2026-09-17T00:00:00+00:00",
+                        "errors": ["formulaic wording"],
+                        "warnings": [],
+                        "detector_score_used": False,
+                        "analysis": {
+                            "word_count": 1200,
+                            "formulaic_pattern_findings": [
+                                {
+                                    "rule_id": "vague-attribution",
+                                    "line": 12,
+                                    "message": "The attribution is too vague to audit.",
+                                }
+                            ],
+                        },
+                        "external_linters": [
+                            {"name": "proselint", "status": "pass", "diagnostic_count": 0},
+                            {"name": "harper", "status": "advisory", "diagnostic_count": 2},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.project_state",
+                return_value={"paper_count": 1, "paper_statuses": {"P01": "active"}},
+            ):
+                detail = project_detail("dashboard-test")
+        style = detail["style_audits"]["P01"]
+        self.assertEqual(style["formulaic_finding_count"], 1)
+        self.assertEqual(style["formulaic_findings"][0]["line"], 12)
+        self.assertEqual(style["harper_status"], "advisory")
+
+    def test_dashboard_has_style_finding_monitor(self) -> None:
+        html = (Path(__file__).resolve().parents[1] / "dashboard" / "index.html").read_text(
+            encoding="utf-8"
+        )
+        javascript = (Path(__file__).resolve().parents[1] / "dashboard" / "app.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('id="styleAuditFindings"', html)
+        self.assertIn("formulaic_findings", javascript)
+        self.assertIn("harper_status", javascript)
+
     def test_project_slug_rejects_shell_metacharacters(self) -> None:
         with self.assertRaises(ValueError):
             build_command("start", {"project": "bad;touch-x", "context": "test"})
