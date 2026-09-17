@@ -507,6 +507,11 @@ def project_detail(slug: str) -> dict[str, Any]:
             "formulaic_finding_count": len(formulaic_findings),
             "formulaic_findings": formulaic_findings[:12],
         }
+    try:
+        from scripts.research_quality import quality_summary
+        research_quality = quality_summary(project)
+    except (ImportError, OSError, ValueError, RuntimeError):
+        research_quality = {}
     return {
         "state": state,
         "history": list(reversed(state.get("history", [])))[:30],
@@ -522,6 +527,7 @@ def project_detail(slug: str) -> dict[str, Any]:
         },
         "venues": venues,
         "style_audits": style_audits,
+        "research_quality": research_quality,
     }
 
 
@@ -642,6 +648,80 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
                 raise ValueError("运行 ID 含有不安全字符")
             command.extend(["--run", run_id])
         return command, "执行已批准实验" + (f"：{run_id}" if run_id else ""), slug
+    if action == "research_quality_check":
+        return [python, "scripts/research_quality.py", "validate", "--project", slug], "检查科研质量硬闸门", slug
+    if action == "data_quality":
+        dataset_id = bounded_text(payload.get("dataset_id"), "数据集 ID", 128, required=True)
+        if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", dataset_id):
+            raise ValueError("数据集 ID 含有不安全字符")
+        source = safe_project_path(slug, payload.get("path"))
+        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
+        command = [python, "scripts/research_quality.py", "data-audit", "--project", slug, "--dataset-id", dataset_id, "--path", source.relative_to(project).as_posix(), "--actor", actor]
+        for payload_key, option, label in (
+            ("label_column", "--label-column", "标签列"),
+            ("split_column", "--split-column", "划分列"),
+            ("group_column", "--group-column", "分组列"),
+        ):
+            value = bounded_text(payload.get(payload_key), label, 200)
+            if value:
+                command.extend([option, value])
+        if payload.get("derived") is True:
+            command.append("--derived")
+        return command, f"审计数据质量：{dataset_id}", slug
+    if action == "confirm_data_quality":
+        dataset_id = bounded_text(payload.get("dataset_id"), "数据集 ID", 128, required=True)
+        if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", dataset_id):
+            raise ValueError("数据集 ID 含有不安全字符")
+        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
+        return [
+            python,
+            "scripts/research_quality.py",
+            "confirm-data-quality",
+            "--project",
+            slug,
+            "--dataset-id",
+            dataset_id,
+            "--actor",
+            actor,
+        ], f"确认数据质量报告：{dataset_id}", slug
+    if action == "power_analysis":
+        paper = bounded_text(payload.get("paper"), "论文编号", 3, required=True)
+        method = bounded_text(payload.get("method"), "功效方法", 40, required=True)
+        if not PAPER_RE.fullmatch(paper) or not (project / "papers" / paper).is_dir():
+            raise ValueError("论文编号必须是项目中现有编号，例如 P01")
+        if method not in {"ttest_ind", "ttest_paired", "ttest_one_sample", "anova", "proportion_ind", "simulation"}:
+            raise ValueError("不支持的功效分析方法")
+        try:
+            effect = float(payload.get("effect_size"))
+            alpha = float(payload.get("alpha", 0.05))
+            power_value = float(payload.get("power", 0.8))
+            ratio = float(payload.get("ratio", 1.0))
+            groups = int(payload.get("groups", 2))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("效应量、alpha、功效、分配比和组数必须是数字") from exc
+        effect_size_basis = bounded_text(payload.get("effect_size_basis"), "效应量依据", 2000, required=True)
+        if method == "simulation":
+            script = safe_project_path(slug, payload.get("simulation_script"))
+            evidence = safe_project_path(slug, payload.get("simulation_evidence"))
+            method_note = bounded_text(payload.get("simulation_method_note"), "仿真方法说明", 2000, required=True)
+            try:
+                simulation_count = int(payload.get("simulation_count"))
+                achieved_power = float(payload.get("achieved_power"))
+            except (TypeError, ValueError) as exc:
+                raise ValueError("仿真次数和达到的功效必须是数字") from exc
+            command = [python, "scripts/research_quality.py", "simulation-power", "--project", slug, "--paper", paper, "--effect-size", str(effect), "--effect-size-basis", effect_size_basis, "--alpha", str(alpha), "--power", str(power_value), "--simulation-count", str(simulation_count), "--achieved-power", str(achieved_power), "--script", script.relative_to(project).as_posix(), "--evidence", evidence.relative_to(project).as_posix(), "--method-note", method_note]
+        else:
+            command = [python, "scripts/research_quality.py", "power", "--project", slug, "--paper", paper, "--method", method, "--effect-size", str(effect), "--effect-size-basis", effect_size_basis, "--alpha", str(alpha), "--power", str(power_value), "--ratio", str(ratio), "--groups", str(groups)]
+        return command, f"计算 {paper} 统计功效", slug
+    if action == "freeze_preregistration":
+        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
+        return [python, "scripts/research_quality.py", "freeze", "--project", slug, "--all", "--actor", actor], "冻结全部论文预注册", slug
+    if action == "confirm_reproduction":
+        paper = bounded_text(payload.get("paper"), "论文编号", 3, required=True)
+        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
+        if not PAPER_RE.fullmatch(paper) or not (project / "papers" / paper).is_dir():
+            raise ValueError("论文编号必须是项目中现有编号，例如 P01")
+        return [python, "scripts/research_quality.py", "confirm-reproduction", "--project", slug, "--paper", paper, "--actor", actor], f"确认 {paper} 复现证据", slug
     if action in {"dataset_validate", "dataset_download"}:
         manifest = safe_project_path(slug, payload.get("manifest"), ".json")
         command = [python, "scripts/dataset_fetch.py", "validate", str(manifest)]

@@ -204,11 +204,11 @@ def safe_environment(run_id: str, seed: int) -> dict[str, str]:
     return environment
 
 
-def git_commit() -> str | None:
+def git_commit(cwd: Path) -> str | None:
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
-            cwd=ROOT,
+            cwd=cwd,
             check=True,
             capture_output=True,
             text=True,
@@ -364,11 +364,12 @@ def run_one(
         "exit_code": exit_code,
         "estimated_cost_usd": float(run["estimated_cost_usd"]),
         "reported_cost_usd": None,
-        "git_commit": git_commit(),
+        "git_commit": git_commit(cwd),
         "approved_plan_sha256": plan_sha256,
         "inputs": input_records,
         "runtime": {
             "python": platform.python_version(),
+            "python_executable": sys.executable,
             "platform": platform.platform(),
         },
         "outputs": output_records,

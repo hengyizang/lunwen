@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/power-simulation-evidence.schema.json",
+  "title": "Monte Carlo power simulation evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "simulation_count", "rejection_count", "achieved_power", "effect_size", "alpha", "random_seeds", "decision_rule", "data_generating_process", "generated_by_script_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "simulation_count": {"type": "integer", "minimum": 1000},
+    "rejection_count": {"type": "integer", "minimum": 0},
+    "achieved_power": {"type": "number", "minimum": 0, "maximum": 1},
+    "effect_size": {"type": "number", "exclusiveMinimum": 0},
+    "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "random_seeds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer"}},
+    "decision_rule": {"type": "string", "minLength": 1},
+    "data_generating_process": {"type": "string", "minLength": 1},
+    "generated_by_script_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

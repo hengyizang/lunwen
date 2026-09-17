@@ -46,15 +46,22 @@ than an invented universal “Q1 checklist”:
 
 - G1 requires comparative closest-work evidence, adjacent-field searches,
   counterevidence, non-novel components, residual novelty risk, a coherent
-  doctoral case and a reliability strategy.
+  doctoral case and a reliability strategy. Each novelty claim is separately
+  mapped to at least three closest works and a falsification test, and the search
+  must reach recorded forward/backward-chaining saturation.
 - G2 requires structured contracts, two current JCR Q1 targets per paper and a
   complete pairwise anti-salami matrix.
 - G3 requires one or more designs per paper, traceable strong/domain-standard/simple baselines,
   ablations, leakage controls, primary metrics, effect sizes, intervals,
   multiplicity handling, power or precision, repeated seeds for stochastic
   work, robustness, negative controls, external validity and reproducibility.
+  Local data-quality reports with separate named hash-bound confirmations,
+  executable power calculations, hash-frozen
+  preregistrations and preplanned clean-room/baseline runs are mandatory.
 - G4 requires every attempt and current output hash to match the G3-approved
-  plan and every contracted claim to trace to registered analyses.
+  plan and every contracted claim to trace to registered analyses. Every paper
+  must reproduce domain-standard and strong-recent baselines and pass a
+  registry-bound independent-environment reproduction within locked tolerances.
 - G5 requires current human-verified JCR Q1 SCI/SCIE status, venue-specific
   checks, deterministic English validation for all submission text, and local
   figure provenance tied to real experiment outputs.

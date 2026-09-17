@@ -20,6 +20,20 @@ For each result, preserve code revision, environment, command/config, seed, inpu
 
 For each material claim, preserve evidence IDs, source locations, analysis IDs, uncertainty and scope limits.
 
+For each novelty claim, preserve what was already known, at least three closest
+works, the exact proposed difference, counterevidence, a falsification test,
+boundary conditions, residual risk and the search-saturation record. “No paper
+was found” is not evidence of originality.
+
+For each selected dataset, run a local hash-bound quality audit before G3. A
+clean checksum does not establish representativeness, unbiased labels, valid
+sampling or lawful use; those remain separate scientific and human judgments.
+
+Freeze the confirmatory plan before G4. Any later change must be logged and
+labeled as a protocol deviation or exploratory analysis. Reproduction evidence
+must use successful registered runs and current output hashes; do not type a
+passing status into a report when numeric tolerances are exceeded.
+
 ## AI authorship boundary
 
 AI tools are assistants, not accountable authors. The human must verify citations, methods, results, wording, permissions, disclosures and authorship criteria. Follow the target journal’s current AI-use policy at G5.

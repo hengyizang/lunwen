@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/reproduction-confirmation.schema.json",
+  "title": "Named human confirmation of reproduction evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "paper_id", "generated_by", "confirmed_by", "confirmed_at", "baseline_report_sha256", "clean_room_report_sha256", "statement"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "generated_by": {"const": "deterministic_local_control_plane"},
+    "confirmed_by": {"type": "string", "minLength": 1},
+    "confirmed_at": {"type": "string", "format": "date-time"},
+    "baseline_report_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "clean_room_report_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "statement": {"type": "string", "minLength": 1}
+  }
+}

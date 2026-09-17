@@ -82,6 +82,36 @@ platform-specific binary must be reviewed before installation. A missing Harper
 binary never disables the built-in audit or G5; the dashboard reports its status
 separately.
 
+## Research-quality toolchain
+
+The v1.9 hard gates use a small dependency-free core for file hashes, complete
+CSV/TSV/JSONL scans, missingness, exact duplicates, label imbalance and
+split/group overlap. This keeps the gate auditable when an optional package is
+unavailable. The following mature upstreams were reviewed and pinned rather
+than reimplementing their specialist functionality:
+
+- [`statsmodels`](https://github.com/statsmodels/statsmodels), BSD-3-Clause:
+  used directly for supported analytical power/sample-size calculations. Install
+  the reviewed `0.15.0` target with
+  `bash scripts/bootstrap-wsl.sh --with-research-quality-tools`.
+- [`fg-data-profiling`](https://github.com/Data-Centric-AI-Community/fg-data-profiling),
+  MIT: optional richer local exploratory profiles for missingness,
+  distributions, correlations and duplicate structure.
+- [`Pandera`](https://github.com/unionai-oss/pandera), MIT: optional
+  project-specific dataframe schema validation after the actual columns and
+  scientific constraints are known.
+- [`Evidently`](https://github.com/evidentlyai/evidently), Apache-2.0: optional
+  reference/current cohort quality and drift analysis. A named reference cohort
+  is required; the tool must not infer one silently.
+- [`DVC`](https://github.com/treeverse/dvc), Apache-2.0: optional data and
+  pipeline versioning. DVC metadata never replaces this repository's G0–G5
+  state, approved-plan hash or experiment registry.
+
+All five remain opt-in and local. Their availability and version are shown in
+the generated data-quality report. Heavy optional profilers are not silently
+installed or allowed to upload research data. The exact reviewed commits and
+licenses are recorded in `integrations/upstreams.lock.json`.
+
 ## Update protocol
 
 Do not replace a pinned commit with the latest branch tip automatically. For an update:

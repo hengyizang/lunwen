@@ -100,6 +100,66 @@
       "installation": "Optional preinstalled harper-cli executable discovered locally",
       "selected_skills": [],
       "selection_note": "Runs only as an advisory local grammar checker over a temporary plain-text extraction; it is not installed automatically and is not an authorship detector."
+    },
+    {
+      "id": "statsmodels",
+      "repository": "https://github.com/statsmodels/statsmodels",
+      "commit": "b6b382183676557763bd12ce561b61e1f08c9258",
+      "upstream_version": "0.15.0",
+      "license": "BSD-3-Clause",
+      "license_source_url": "https://github.com/statsmodels/statsmodels/blob/b6b382183676557763bd12ce561b61e1f08c9258/LICENSE.txt",
+      "enabled_by_default": false,
+      "installation": "scripts/bootstrap-wsl.sh --with-research-quality-tools",
+      "selected_skills": [],
+      "selection_note": "Used directly for executable sample-size and power calculations. The generated report records the installed version and hashes the paper contract and experiment designs."
+    },
+    {
+      "id": "fg-data-profiling",
+      "repository": "https://github.com/Data-Centric-AI-Community/fg-data-profiling",
+      "commit": "98b1abaf5b629d31fcfe6b0cb85c4ca9782e21a0",
+      "upstream_version": "4.20.0",
+      "license": "MIT",
+      "license_source_url": "https://github.com/Data-Centric-AI-Community/fg-data-profiling/blob/98b1abaf5b629d31fcfe6b0cb85c4ca9782e21a0/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional preinstalled Python package discovered locally",
+      "selected_skills": [],
+      "selection_note": "Reviewed optional enrichment for local exploratory profiles. The dependency-free hash, missingness, duplicate and leakage checks remain the gate authority."
+    },
+    {
+      "id": "pandera",
+      "repository": "https://github.com/unionai-oss/pandera",
+      "commit": "1c9a139436ae2657dd2cb100655b84138d7da443",
+      "upstream_version": "0.33.1",
+      "license": "MIT",
+      "license_source_url": "https://github.com/unionai-oss/pandera/blob/1c9a139436ae2657dd2cb100655b84138d7da443/LICENSE.txt",
+      "enabled_by_default": false,
+      "installation": "Optional preinstalled pandera[pandas] package discovered locally",
+      "selected_skills": [],
+      "selection_note": "Reviewed optional adapter target for project-specific dataframe schemas; it does not replace provenance, split or license checks."
+    },
+    {
+      "id": "evidently",
+      "repository": "https://github.com/evidentlyai/evidently",
+      "commit": "74f4243e4e20265e2ae61beb5a613f436607a6a3",
+      "upstream_version": "0.7.23",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/evidentlyai/evidently/blob/74f4243e4e20265e2ae61beb5a613f436607a6a3/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional preinstalled Python package discovered locally",
+      "selected_skills": [],
+      "selection_note": "Reviewed optional adapter target for local data-quality and drift comparisons. Explicit reference/current cohorts are required before it can support a claim."
+    },
+    {
+      "id": "dvc",
+      "repository": "https://github.com/treeverse/dvc",
+      "commit": "356dfa03278058b02df42124f243c2c345329dae",
+      "upstream_version": "3.67.1",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/treeverse/dvc/blob/356dfa03278058b02df42124f243c2c345329dae/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional preinstalled dvc executable/package discovered locally",
+      "selected_skills": [],
+      "selection_note": "Optional data and pipeline versioning layer only. The local project hash ledger and G0-G5 state machine remain authoritative."
     }
   ]
 }

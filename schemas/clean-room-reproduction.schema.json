@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/clean-room-reproduction.schema.json",
+  "title": "Independent-environment clean-room reproduction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "paper_id", "status", "independent_operator", "original_run_ids", "reproduction_run_ids", "original_attempt_ids", "reproduction_attempt_ids", "isolation", "metric_comparisons", "evidence_files", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "status": {"const": "pass"},
+    "independent_operator": {"type": "string", "minLength": 1},
+    "original_run_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "reproduction_run_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "original_attempt_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "reproduction_attempt_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "isolation": {"type": "object", "additionalProperties": false, "required": ["separate_checkout", "original_environment_digest", "reproduction_environment_digest", "source_commit"], "properties": {"separate_checkout": {"const": true}, "original_environment_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "reproduction_environment_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "source_commit": {"type": "string", "minLength": 1}}},
+    "metric_comparisons": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["metric", "original_value", "reproduction_value", "absolute_tolerance", "within_tolerance"], "properties": {"metric": {"type": "string", "minLength": 1}, "original_value": {"type": "number"}, "reproduction_value": {"type": "number"}, "absolute_tolerance": {"type": "number", "minimum": 0}, "within_tolerance": {"const": true}}}},
+    "evidence_files": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}},
+    "human_review_required": {"const": true}
+  }
+}

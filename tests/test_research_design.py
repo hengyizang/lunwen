@@ -187,6 +187,15 @@ def experiment_design():
         "stopping_rules": ["Execute all preregistered runs."],
         "failure_analysis": "Inspect errors by machine and failure type.",
         "reproducibility": {"environment_lock": "lock file", "code_commit": "Git SHA", "config_capture": "JSON config", "output_hashes": "SHA-256 manifest"},
+        "reproduction_plan": {
+            "baseline_runs": {"domain_standard": ["run-1"], "strong_recent": ["run-2"]},
+            "original_run_ids": ["run-1"],
+            "clean_room_run_ids": ["run-3"],
+            "independent_operator_plan": "A second researcher executes the locked reproduction.",
+            "separate_checkout_plan": "Use the approved env-b checkout for the clean-room run.",
+            "environment_capture_plan": "Record Python, platform, commit and cwd in the registry.",
+            "metric_tolerances": [{"metric": "Macro F1", "absolute_tolerance": 0.02, "rationale": "Predeclared practical equivalence bound."}],
+        },
         "claim_limits": "Associational benchmark evidence only.",
     }
 
@@ -268,14 +277,14 @@ class ResearchDesignTests(unittest.TestCase):
         self.assertTrue(any("current JCR Q1" in error for error in errors))
 
     def test_experiment_design_links_three_stochastic_seeds(self):
-        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed} for seed in (1, 2, 3)}
+        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed, "cwd": "env-b" if seed == 3 else "env-a"} for seed in (1, 2, 3)}
         self.assertEqual(validate_experiment_design(experiment_design(), "P01", runs), [])
         value = experiment_design()
         value["run_ids"] = value["run_ids"][:2]
         self.assertTrue(any("three distinct" in error for error in validate_experiment_design(value, "P01", runs)))
 
     def test_experiment_design_requires_recent_traceable_strong_baseline(self):
-        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed} for seed in (1, 2, 3)}
+        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed, "cwd": "env-b" if seed == 3 else "env-a"} for seed in (1, 2, 3)}
         value = experiment_design()
         value["baselines"][2]["publication_year"] = 2010
         value["baselines"][2]["primary_source_url"] = "unverified"

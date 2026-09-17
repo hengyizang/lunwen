@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/preregistration.schema.json",
+  "title": "Hash-frozen confirmatory preregistration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "paper_id", "status", "frozen_at", "frozen_by", "generated_by", "confirmatory_lock", "files", "deviation_policy", "human_confirmation"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "status": {"const": "frozen"},
+    "frozen_at": {"type": "string", "format": "date-time"},
+    "frozen_by": {"type": "string", "minLength": 1},
+    "generated_by": {"const": "deterministic_local_control_plane"},
+    "confirmatory_lock": {"const": true},
+    "files": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}},
+    "deviation_policy": {"type": "string", "minLength": 1},
+    "human_confirmation": {"const": true}
+  }
+}

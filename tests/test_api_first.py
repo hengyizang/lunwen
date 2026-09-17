@@ -50,6 +50,21 @@ class ApiFirstTests(unittest.TestCase):
             "sample/unit adequacy",
             "leakage",
             "external validity",
+            "novelty-claim-matrix.json",
+            "closest_work_ids(minimum 3)",
+        ):
+            self.assertIn(required, prompt)
+
+    def test_g4_api_writer_receives_exact_reproduction_contract(self):
+        prompt = api_orchestrator.writer_prompt(
+            "missing-project", "experiment-execution", ""
+        )
+        for required in (
+            "baseline-reproduction.json",
+            "clean-room-reproduction.json",
+            "attempt_ids",
+            "original_environment_digest",
+            "runtime-evidence-catalog.json",
         ):
             self.assertIn(required, prompt)
 
@@ -254,6 +269,18 @@ class ApiFirstTests(unittest.TestCase):
             api_orchestrator.safe_target(
                 "demo", "papers/P01/style/academic-style-audit.json"
             )
+
+    def test_safe_target_protects_deterministic_research_quality_records(self):
+        for relative in (
+            "data/quality/d1.json",
+            "data/quality/d1-confirmation.json",
+            "papers/P01/power-analysis.json",
+            "papers/P01/preregistration.json",
+            "papers/P01/reproduction-confirmation.json",
+            "reports/runtime-evidence-catalog.json",
+        ):
+            with self.subTest(relative=relative), self.assertRaises(ValueError):
+                api_orchestrator.safe_target("demo", relative)
 
     def test_snapshot_includes_content_and_excludes_sensitive_areas(self):
         with tempfile.TemporaryDirectory() as directory:

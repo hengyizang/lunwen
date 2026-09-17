@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/data-quality-confirmation.schema.json",
+  "title": "Named human confirmation of a local data-quality report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "generated_by", "confirmed_by", "confirmed_at", "data_quality_report_sha256", "reviewed_warning_count", "statement"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "dataset_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "generated_by": {"const": "deterministic_local_control_plane"},
+    "confirmed_by": {"type": "string", "minLength": 1},
+    "confirmed_at": {"type": "string", "format": "date-time"},
+    "data_quality_report_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewed_warning_count": {"type": "integer", "minimum": 0},
+    "statement": {"type": "string", "minLength": 1}
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/power-analysis.schema.json",
+  "title": "Executable power analysis",
+  "type": "object",
+  "required": ["schema_version", "paper_id", "created_at", "generated_by", "effect_size", "effect_size_basis", "alpha", "target_power", "bound_files", "status", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "generated_by": {"enum": ["statsmodels", "simulation"]},
+    "engine_version": {"type": "string"},
+    "method": {"type": "string"},
+    "effect_size": {"type": "number", "exclusiveMinimum": 0},
+    "effect_size_basis": {"type": "string", "minLength": 1},
+    "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "target_power": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "allocation_ratio": {"type": "number", "exclusiveMinimum": 0},
+    "group_count": {"type": ["integer", "null"], "minimum": 2},
+    "required_sample_size": {"type": "object"},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "simulation_count": {"type": "integer", "minimum": 1000},
+    "rejection_count": {"type": "integer", "minimum": 0},
+    "achieved_power": {"type": "number", "minimum": 0, "maximum": 1},
+    "random_seeds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer"}},
+    "simulation_method": {"type": "string", "minLength": 1},
+    "bound_files": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}},
+    "status": {"const": "ready_for_review"},
+    "human_review_required": {"const": true}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"generated_by": {"const": "simulation"}}},
+      "then": {"required": ["simulation_count", "rejection_count", "achieved_power", "random_seeds", "simulation_method"]}
+    }
+  ]
+}
