@@ -211,6 +211,16 @@ class ResearchCtlTests(unittest.TestCase):
         self.assertTrue(any("runs must be a non-empty array" in error for error in errors))
         self.assertTrue(any("experiments" in error and "*.json" in error for error in errors))
 
+    def test_g3_malformed_dataset_manifest_does_not_crash_quality_validator(self) -> None:
+        project = self.init_project(paper_count=1)
+        state = researchctl.load_state("test-phd")
+        state.update({"stage_index": 3, "stage": "experiment-design", "gate": "G3"})
+        researchctl.save_state("test-phd", state)
+        (project / "data" / "datasets.jsonl").write_text("{not-json}\n", encoding="utf-8")
+        errors = researchctl.gate_errors("test-phd", "G3")
+        self.assertTrue(any("invalid JSONL" in error for error in errors))
+        self.assertTrue(any("research-quality evidence is invalid" in error for error in errors))
+
     def test_g3_detects_planned_runs_missing_from_paper_designs(self) -> None:
         project = self.init_project(paper_count=1)
         state = researchctl.load_state("test-phd")

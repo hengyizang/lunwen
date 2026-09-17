@@ -129,6 +129,12 @@ def gate_errors(slug,gate):
                 errors.extend(f"program/originality-audit.json: {x}" for x in validate_originality_audit(originality))
                 errors.extend(f"evidence/search-log.jsonl: {x}" for x in validate_search_log(searches,originality))
             except ImportError as exc:errors.append(f"originality validator unavailable: {exc}")
+            novelty_matrix=load_nonempty_json(project/"program"/"novelty-claim-matrix.json",errors)
+            if novelty_matrix:
+                try:
+                    from scripts.research_quality import validate_novelty_claim_matrix
+                    errors.extend(f"program/novelty-claim-matrix.json: {x}" for x in validate_novelty_claim_matrix(novelty_matrix,originality,searches))
+                except ImportError as exc:errors.append(f"novelty claim-matrix validator unavailable: {exc}")
         if not nonempty(project/"program"/"topic-decision.md"):errors.append("program/topic-decision.md is required")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G2":
@@ -237,6 +243,11 @@ def gate_errors(slug,gate):
             if budget.get("status")!="ready_for_review":errors.append("experiments/budget.json status must be ready_for_review")
             ceiling=budget.get("hard_ceiling_usd")
             if not isinstance(ceiling,(int,float)) or isinstance(ceiling,bool) or ceiling<0:errors.append("experiments/budget.json needs non-negative hard_ceiling_usd")
+        try:
+            from scripts.research_quality import ResearchQualityError,validate_g3_quality
+            errors.extend(f"research quality: {x}" for x in validate_g3_quality(project))
+        except ImportError as exc:errors.append(f"research-quality validator unavailable: {exc}")
+        except ResearchQualityError as exc:errors.append(f"research-quality evidence is invalid: {exc}")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G4":
         registry=jsonl_objects(project/"experiments"/"registry.jsonl",errors)
@@ -249,6 +260,11 @@ def gate_errors(slug,gate):
             errors.extend(f"claims/claim-evidence.csv: {x}" for x in validate_claim_evidence(project,claim,registry))
         except ImportError as exc:errors.append(f"results validator unavailable: {exc}")
         if not nonempty(project/"reports"/"reproducibility.md"):errors.append("reports/reproducibility.md is required")
+        try:
+            from scripts.research_quality import ResearchQualityError,validate_g4_quality
+            errors.extend(f"research quality: {x}" for x in validate_g4_quality(project))
+        except ImportError as exc:errors.append(f"research-quality validator unavailable: {exc}")
+        except ResearchQualityError as exc:errors.append(f"research-quality evidence is invalid: {exc}")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
@@ -347,7 +363,7 @@ def initialize(args):
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
     defaults=read_json(DEFAULTS_PATH);count=args.paper_count or int(defaults["paper_count"])
     if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
-    for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
+    for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","data/quality","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"Windows 11 with WSL2 recommended","orchestrator":"API-first Python orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})

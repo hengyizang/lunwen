@@ -578,4 +578,65 @@ def validate_experiment_design(
     reproducibility = _object(design.get("reproducibility"), "reproducibility", errors)
     for key in ("environment_lock", "code_commit", "config_capture", "output_hashes"):
         _text(reproducibility.get(key), f"reproducibility.{key}", errors)
+    reproduction = _object(design.get("reproduction_plan"), "reproduction_plan", errors)
+    baseline_runs = _object(reproduction.get("baseline_runs"), "reproduction_plan.baseline_runs", errors)
+    domain_runs = _string_list(
+        baseline_runs.get("domain_standard"),
+        "reproduction_plan.baseline_runs.domain_standard",
+        errors,
+    )
+    recent_runs = _string_list(
+        baseline_runs.get("strong_recent"),
+        "reproduction_plan.baseline_runs.strong_recent",
+        errors,
+    )
+    original_runs = _string_list(
+        reproduction.get("original_run_ids"),
+        "reproduction_plan.original_run_ids",
+        errors,
+    )
+    clean_runs = _string_list(
+        reproduction.get("clean_room_run_ids"),
+        "reproduction_plan.clean_room_run_ids",
+        errors,
+    )
+    declared = set(run_ids)
+    referenced = set(domain_runs + recent_runs + original_runs + clean_runs)
+    unknown_reproduction_runs = sorted(referenced - declared)
+    if unknown_reproduction_runs:
+        errors.append(
+            "reproduction_plan references runs outside this design: "
+            + ", ".join(unknown_reproduction_runs)
+        )
+    if set(original_runs) & set(clean_runs):
+        errors.append("reproduction_plan original and clean-room run IDs must be disjoint")
+    original_cwds = {
+        str(plan_runs[run_id].get("cwd", "."))
+        for run_id in original_runs if run_id in plan_runs
+    }
+    clean_cwds = {
+        str(plan_runs[run_id].get("cwd", "."))
+        for run_id in clean_runs if run_id in plan_runs
+    }
+    if original_cwds and clean_cwds and original_cwds & clean_cwds:
+        errors.append("clean-room runs must use a different approved cwd/checkout")
+    for key in (
+        "independent_operator_plan",
+        "separate_checkout_plan",
+        "environment_capture_plan",
+    ):
+        _text(reproduction.get(key), f"reproduction_plan.{key}", errors)
+    tolerances = _list(
+        reproduction.get("metric_tolerances"),
+        "reproduction_plan.metric_tolerances",
+        errors,
+    )
+    for index, item in enumerate(tolerances):
+        prefix = f"reproduction_plan.metric_tolerances[{index}]"
+        tolerance = _object(item, prefix, errors)
+        _text(tolerance.get("metric"), f"{prefix}.metric", errors)
+        _text(tolerance.get("rationale"), f"{prefix}.rationale", errors)
+        value = tolerance.get("absolute_tolerance")
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0:
+            errors.append(f"{prefix}.absolute_tolerance must be non-negative")
     return errors

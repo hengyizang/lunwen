@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/novelty-claim-matrix.schema.json",
+  "title": "Claim-level novelty and search-saturation matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "claims", "search_saturation", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "status": {"const": "ready_for_review"},
+    "claims": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["claim_id", "paper_ids", "claim", "closest_work_ids", "already_known", "precise_difference", "mechanism_or_rationale", "falsification_test", "expected_if_false", "boundary_conditions", "residual_risk"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "paper_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^P[0-9]{2}$"}},
+          "claim": {"type": "string", "minLength": 1},
+          "closest_work_ids": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "already_known": {"type": "string", "minLength": 1},
+          "precise_difference": {"type": "string", "minLength": 1},
+          "mechanism_or_rationale": {"type": "string", "minLength": 1},
+          "falsification_test": {"type": "string", "minLength": 1},
+          "expected_if_false": {"type": "string", "minLength": 1},
+          "boundary_conditions": {"type": "string", "minLength": 1},
+          "residual_risk": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "search_saturation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exact_query_rounds", "adjacent_field_rounds", "backward_chaining_complete", "forward_chaining_complete", "supporting_search_ids", "backward_chaining_search_ids", "forward_chaining_search_ids", "consecutive_no_material_new_work_rounds", "no_material_new_work_rounds", "unresolved_search_gaps", "saturation_rationale"],
+      "properties": {
+        "exact_query_rounds": {"type": "integer", "minimum": 2},
+        "adjacent_field_rounds": {"type": "integer", "minimum": 2},
+        "backward_chaining_complete": {"const": true},
+        "forward_chaining_complete": {"const": true},
+        "supporting_search_ids": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "backward_chaining_search_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "forward_chaining_search_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "consecutive_no_material_new_work_rounds": {"type": "integer", "minimum": 2},
+        "no_material_new_work_rounds": {"type": "array", "minItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["round_id", "search_ids", "material_new_closest_work_count", "stopping_reason"], "properties": {"round_id": {"type": "string", "minLength": 1}, "search_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "material_new_closest_work_count": {"const": 0}, "stopping_reason": {"type": "string", "minLength": 1}}}},
+        "unresolved_search_gaps": {"type": "array", "maxItems": 0},
+        "saturation_rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "human_review_required": {"const": true}
+  }
+}

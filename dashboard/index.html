@@ -143,6 +143,10 @@ All research and submission-bound artifacts must be written in English.</textare
             <div class="section-heading"><div><p class="eyebrow">TELEMETRY</p><h2>项目监控</h2></div></div>
             <div id="metricGrid" class="metric-grid"></div>
             <div class="divider"></div>
+            <h3>科研质量证据</h3>
+            <ul id="researchQualitySummary" class="issue-list"><li class="muted">暂无数据</li></ul>
+            <button id="checkResearchQuality" class="button secondary">检查科研质量硬闸门</button>
+            <div class="divider"></div>
             <h3>闸门缺项</h3>
             <ol id="gateErrors" class="issue-list"><li class="muted">暂无数据</li></ol>
           </aside>
@@ -247,7 +251,51 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                 <label class="check-line"><input id="acceptLicense" type="checkbox">我已在官方页面核验许可证与研究用途</label>
                 <div class="button-row"><button id="validateDataset" class="button secondary">验证清单</button><button id="downloadDataset" class="button secondary">安全下载</button></div>
               </div>
-              <div class="phase-note"><strong>审批前必须检查</strong><span>数据泄漏、样本量与功效、外部验证、强基线、公平调参、消融、鲁棒性、失败判据和计算预算。</span></div>
+              <div class="tool-card">
+                <h3>本地数据质量审计</h3>
+                <p>读取本地 CSV/TSV/JSONL，核对哈希、缺失、重复、类别失衡及跨划分泄漏；数据不会上传。</p>
+                <div class="two-columns">
+                  <input id="qualityDatasetId" placeholder="datasets.jsonl 中的 dataset_id">
+                  <input id="qualityDataPath" placeholder="例如 data/raw/bearing.csv">
+                </div>
+                <div class="three-columns">
+                  <input id="qualityLabelColumn" placeholder="可选：标签列">
+                  <input id="qualitySplitColumn" placeholder="可选：train/test 划分列">
+                  <input id="qualityGroupColumn" placeholder="可选：机器/患者分组列">
+                </div>
+                <label class="check-line"><input id="qualityDerived" type="checkbox">这是经转换的数据；转换步骤已写入 manifest</label>
+                <div class="button-row wrap"><button id="runDataQuality" class="button secondary">1. 生成数据质量报告</button><button id="confirmDataQuality" class="button primary">2. 阅读报告后确认</button></div>
+              </div>
+              <div class="tool-card">
+                <h3>可执行统计功效</h3>
+                <p>使用本地 <code>statsmodels</code> 计算，不接受只写一句“功效足够”。效应量必须来自先验研究、试点或最小实际意义。</p>
+                <div class="two-columns">
+                  <select id="powerPaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                  <select id="powerMethod"><option value="ttest_ind">独立样本 t 检验</option><option value="ttest_paired">配对 t 检验</option><option value="ttest_one_sample">单样本 t 检验</option><option value="anova">ANOVA</option><option value="proportion_ind">两比例比较</option><option value="simulation">Monte Carlo 仿真（ML/复杂指标）</option></select>
+                </div>
+                <div class="four-columns">
+                  <label class="field"><span>效应量</span><input id="powerEffect" type="number" min="0.0001" step="0.01" value="0.5"></label>
+                  <label class="field"><span>α</span><input id="powerAlpha" type="number" min="0.0001" max="0.999" step="0.01" value="0.05"></label>
+                  <label class="field"><span>目标功效</span><input id="powerTarget" type="number" min="0.01" max="0.999" step="0.01" value="0.80"></label>
+                  <label class="field"><span>分配比</span><input id="powerRatio" type="number" min="0.01" step="0.1" value="1"></label>
+                  <label class="field"><span>ANOVA 组数</span><input id="powerGroups" type="number" min="2" step="1" value="2"></label>
+                </div>
+                <input id="powerEffectBasis" placeholder="必填：效应量来源（最近先验研究 DOI、独立 pilot，或最小实际重要差异的理由）">
+                <details>
+                  <summary>仿真功效所需证据（选择 Monte Carlo 时填写）</summary>
+                  <div class="two-columns">
+                    <input id="powerSimulationScript" placeholder="项目内仿真脚本路径">
+                    <input id="powerSimulationEvidence" placeholder="项目内仿真结果路径">
+                  </div>
+                  <div class="two-columns">
+                    <input id="powerSimulationCount" type="number" min="1000" value="1000" placeholder="模拟次数">
+                    <input id="powerAchieved" type="number" min="0" max="1" step="0.01" value="0.80" placeholder="达到的功效">
+                  </div>
+                  <input id="powerSimulationNote" placeholder="数据生成过程、随机机制、判定规则和效应量定义">
+                </details>
+                <div class="button-row wrap"><button id="runPower" class="button secondary">计算当前论文</button><button id="freezePreregistration" class="button primary">全部检查后冻结预注册</button></div>
+              </div>
+              <div class="phase-note"><strong>审批前必须检查</strong><span>六篇论文都要有数据质量报告、可执行功效报告和哈希冻结的预注册；另需检查外部验证、强基线、公平调参、消融、鲁棒性、失败判据和预算。</span></div>
             </div>
           </section>
 
@@ -268,7 +316,13 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                 <input id="experimentRun" placeholder="可选：指定 run_id">
                 <button id="runExperiment" class="button secondary">执行实验</button>
               </div>
-              <div class="phase-note"><strong>G4 输出要求</strong><span>从真实运行记录构建 claim–evidence matrix，并检查复现性、统计结论与预注册偏差。</span></div>
+              <div class="tool-card">
+                <h3>人工确认复现证据</h3>
+                <p>模型完成两份复现报告后，选择论文。程序会先重算容差、运行状态、环境和文件哈希，再把你的姓名与两份报告哈希锁定。</p>
+                <select id="reproductionPaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
+                <button id="confirmReproduction" class="button primary">核验并确认该论文</button>
+              </div>
+              <div class="phase-note"><strong>G4 输出要求</strong><span>从真实运行记录构建 claim–evidence matrix；每篇论文必须复现领域标准与强近期基线，并用不同环境、不同运行 ID 完成隔离复现，全部绑定真实输出哈希。</span></div>
             </div>
           </section>
 

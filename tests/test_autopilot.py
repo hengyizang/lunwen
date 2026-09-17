@@ -87,15 +87,19 @@ class AutopilotTests(unittest.TestCase):
                 style = project / "papers" / "P01" / "style" / "academic-style-audit.json"
                 style.parent.mkdir(parents=True)
                 style.write_text('{"status":"pass"}', encoding="utf-8")
+                power = project / "papers" / "P01" / "power-analysis.json"
+                power.write_text('{"generated_by":"statsmodels"}', encoding="utf-8")
                 before = autopilot.protected_control_snapshot("test-phd", [plan])
                 plan.write_text("tampered", encoding="utf-8")
                 style.write_text('{"status":"forged"}', encoding="utf-8")
+                power.write_text('{"generated_by":"model"}', encoding="utf-8")
                 with self.assertRaises(autopilot.AutopilotError):
                     autopilot.ensure_protected_control_unchanged(
                         "test-phd", before
                     )
                 self.assertEqual(plan.read_text(), "original Claude plan")
                 self.assertEqual(style.read_text(), '{"status":"pass"}')
+                self.assertEqual(power.read_text(), '{"generated_by":"statsmodels"}')
             finally:
                 autopilot.researchctl.PROJECTS_ROOT = old_root
 

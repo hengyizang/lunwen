@@ -233,6 +233,65 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("formulaic_findings", javascript)
         self.assertIn("harper_status", javascript)
 
+    def test_dashboard_exposes_research_quality_controls(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        html = (root / "dashboard" / "index.html").read_text(encoding="utf-8")
+        javascript = (root / "dashboard" / "app.js").read_text(encoding="utf-8")
+        for element in (
+            'id="researchQualitySummary"',
+            'id="runDataQuality"',
+            'id="confirmDataQuality"',
+            'id="runPower"',
+            'id="freezePreregistration"',
+            'id="confirmReproduction"',
+        ):
+            self.assertIn(element, html)
+        self.assertIn("renderResearchQuality", javascript)
+
+    def test_power_command_is_argument_safe_and_paper_scoped(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dashboard-test" / "papers" / "P01").mkdir(parents=True)
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.researchctl.load_state", return_value={"gate": "G3"}
+            ):
+                command, label, project = build_command(
+                    "power_analysis",
+                    {
+                        "project": "dashboard-test",
+                        "paper": "P01",
+                        "method": "ttest_ind",
+                        "effect_size": 0.5,
+                        "effect_size_basis": "Prior registered study DOI 10.1000/example.",
+                        "alpha": 0.05,
+                        "power": 0.8,
+                        "ratio": 1,
+                    },
+                )
+        self.assertEqual(project, "dashboard-test")
+        self.assertIn("scripts/research_quality.py", command)
+        self.assertIn("P01", command)
+        self.assertIn("统计功效", label)
+
+    def test_data_quality_confirmation_is_named_and_argument_safe(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dashboard-test").mkdir()
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.researchctl.load_state", return_value={"gate": "G3"}
+            ):
+                command, _label, project = build_command(
+                    "confirm_data_quality",
+                    {
+                        "project": "dashboard-test",
+                        "dataset_id": "bearing-v1",
+                        "actor": "Researcher Name",
+                    },
+                )
+        self.assertEqual(project, "dashboard-test")
+        self.assertIn("confirm-data-quality", command)
+        self.assertIn("Researcher Name", command)
+
     def test_project_slug_rejects_shell_metacharacters(self) -> None:
         with self.assertRaises(ValueError):
             build_command("start", {"project": "bad;touch-x", "context": "test"})

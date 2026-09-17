@@ -149,7 +149,17 @@ at G2 compare every paper pair; at G3 fully design every paper's experiments,
 including exact run-to-design assignment, traceable baseline versions and
 licenses, fair tuning, ablations, leakage, estimands, practical thresholds,
 statistics, power or precision, external validity, negative controls and
-falsification. Run only the stage validators allowed by the repository rules.
+falsification. Plan domain-standard and strong-recent reproduction runs plus
+disjoint original/clean-room runs in different approved checkouts before G3 is
+frozen. Run only the stage validators allowed by the repository rules.
+At G1 create program/novelty-claim-matrix.json with claim-level closest-work
+differences, falsification logic and documented search saturation. At G3 never
+invent deterministic data-quality, power-analysis or preregistration files;
+scripts/research_quality.py creates and protects them after the required inputs
+exist. At G4 create baseline-reproduction.json and clean-room-reproduction.json
+for each paper only from exact successful attempt IDs and their complete current
+output sets; match the G3-frozen run roles, baseline IDs/source URLs, checkout
+paths and tolerances. Use reports/runtime-evidence-catalog.json for exact facts.
 At G5 write direct, evidence-led academic prose; remove stock framing,
 mechanical transitions, repeated sentence openings, conversational artifacts,
 vague attribution and unsupported importance or novelty claims. Prefer concrete
@@ -167,6 +177,9 @@ def critic_prompt(project: str, state: dict[str, Any]) -> str:
     return f"""Act as a read-only independent adversarial critic of Codex-written artifacts. Do not edit files.
 
 Read AGENTS.md, references/research-integrity.md, the {state['gate']} section of references/stage-contracts.md, and the current scientific artifacts under projects/{project}. Do not read prior model verdicts or the author's desired outcome before forming your own verdict. Audit stage {state['stage']} for fatal flaws, unsupported claims, fabricated or unverified citations, missing primary evidence, alternative explanations, leakage, statistical problems, budget violations, security risks and reproducibility gaps. Also challenge closest-work differentiation, doctoral synthesis, pairwise paper independence, baseline fairness, statistical power or precision, external validity, claim calibration and English-only manuscript compliance. Do not infer success from file existence.
+Require claim-level closest-work and search-saturation evidence at G1, current
+local data-quality, executable power and frozen preregistration evidence at G3,
+and successful registry-bound baseline plus clean-room reproduction at G4.
 At G5 also inspect the deterministic academic-style audit, template-driven or
 repetitive prose, and any scientific drift caused by stylistic revision. Do not
 estimate AI authorship or request detector-evasion tactics.
@@ -454,6 +467,11 @@ def protected_control_snapshot(
     paths.extend(
         root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
     )
+    paths.extend((root / "data" / "quality").glob("*.json"))
+    paths.extend(root.glob("papers/P[0-9][0-9]/power-analysis.json"))
+    paths.extend(root.glob("papers/P[0-9][0-9]/preregistration.json"))
+    paths.extend(root.glob("papers/P[0-9][0-9]/reproduction-confirmation.json"))
+    paths.append(root / "reports" / "runtime-evidence-catalog.json")
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
         if dirname.is_dir():
             paths.extend(path for path in dirname.rglob("*") if path.is_file())
@@ -487,6 +505,23 @@ def ensure_protected_control_unchanged(
     current_paths.update(
         path.relative_to(root).as_posix()
         for path in root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
+        if path.is_file()
+    )
+    if (root / "reports" / "runtime-evidence-catalog.json").is_file():
+        current_paths.add("reports/runtime-evidence-catalog.json")
+    current_paths.update(
+        path.relative_to(root).as_posix()
+        for path in (root / "data" / "quality").glob("*.json")
+        if path.is_file()
+    )
+    current_paths.update(
+        path.relative_to(root).as_posix()
+        for pattern in (
+            "papers/P[0-9][0-9]/power-analysis.json",
+            "papers/P[0-9][0-9]/preregistration.json",
+            "papers/P[0-9][0-9]/reproduction-confirmation.json",
+        )
+        for path in root.glob(pattern)
         if path.is_file()
     )
     changed = {
@@ -590,6 +625,9 @@ def run_stage(
     config = load_stage_config().get(state["stage"])
     if not isinstance(config, dict):
         raise AutopilotError(f"No stage configuration for {state['stage']}")
+    if state["stage"] == "experiment-execution":
+        from scripts.research_quality import refresh_runtime_evidence_catalog
+        refresh_runtime_evidence_catalog(researchctl.project_dir(project))
     token = run_token()
     run_dir = researchctl.project_dir(project) / "state" / "runs" / f"{token}-{state['stage']}"
     run_dir.mkdir(parents=True, exist_ok=False)

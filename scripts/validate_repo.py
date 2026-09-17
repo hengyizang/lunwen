@@ -291,6 +291,21 @@ def main() -> int:
     uuapi_doc = ROOT / "docs" / "UUAPI-CC-SWITCH.md"
     if not uuapi_doc.is_file():
         errors.append("docs/UUAPI-CC-SWITCH.md is required")
+    for relative in (
+        "docs/RESEARCH-QUALITY.md",
+        "scripts/research_quality.py",
+        "schemas/novelty-claim-matrix.schema.json",
+        "schemas/data-quality-report.schema.json",
+        "schemas/data-quality-confirmation.schema.json",
+        "schemas/power-analysis.schema.json",
+        "schemas/power-simulation-evidence.schema.json",
+        "schemas/preregistration.schema.json",
+        "schemas/baseline-reproduction.schema.json",
+        "schemas/clean-room-reproduction.schema.json",
+        "schemas/reproduction-confirmation.schema.json",
+    ):
+        if not (ROOT / relative).is_file():
+            errors.append(f"{relative} is required")
     try:
         provider_source = (ROOT / "scripts" / "ai_providers.py").read_text(
             encoding="utf-8"

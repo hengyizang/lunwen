@@ -1,4 +1,4 @@
-# Local visual dashboard (v1.8.0)
+# Local visual dashboard (v1.9.0)
 
 The dashboard is a beginner-facing local client over the existing Doctoral
 Research OS. It does not replace the G0–G5 control plane. Every mutation is
@@ -136,11 +136,44 @@ The dashboard reports:
 - paper-by-paper completion;
 - ranked discovery candidates.
 - the active paper's hash-bound academic-style audit status and actionable findings.
+- novelty-matrix, local data-quality, executable-power, frozen-preregistration,
+  baseline-reproduction and clean-room-reproduction completion counts.
 
 It cannot truthfully decide data rights, doctoral originality, causal validity,
 authorship, ethics, current JCR category evidence, or final submission fitness.
 Those decisions remain named human actions. Model consensus is not scientific
 validation.
+
+## Research-quality controls
+
+Before G3, install the pinned analytical power dependency:
+
+```bash
+bash scripts/bootstrap-wsl.sh --with-research-quality-tools
+```
+
+The G3 workspace then provides three local actions:
+
+1. **本地数据质量审计** reads a project-local dataset, verifies current hashes
+   and scans CSV/TSV/JSONL missingness, duplicates, labels and split/group
+   overlap. It does not claim human review. After reading the report and all
+   warnings, **阅读报告后确认** records a named, hash-bound confirmation; changing
+   the report or data makes it stale.
+2. **可执行统计功效** runs pinned `statsmodels` for supported classical designs,
+   or binds a >=1,000-run Monte Carlo script and structured result for complex
+   ML metrics, cross-checking rejection counts, power, seeds and the script hash.
+3. **全部检查后冻结预注册** refuses to proceed until every paper's data,
+   designs, plan, budget and power evidence are complete, then stores their
+   hashes. It also refuses to freeze after experiment attempts exist.
+
+The project monitor shows counts, while **检查科研质量硬闸门** runs the same
+deterministic validator used by G3/G4. During G4 the control plane derives a
+protected runtime-evidence catalog from successful experiment records. Baseline
+and clean-room reports must cite that catalog, pass recalculated tolerances and
+use current evidence hashes. The G4 **人工确认复现证据** button creates a protected
+named-human confirmation bound to both current report hashes; models cannot
+write it. See `docs/RESEARCH-QUALITY.md` for field meanings,
+simulation-power and environment-digest commands.
 
 At G5 the control plane automatically runs `scripts/academic_style.py` after the
 initial Codex draft and again after remediation. The dashboard also provides a

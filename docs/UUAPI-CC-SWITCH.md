@@ -112,6 +112,19 @@ and one or more complete experiment designs per paper with exact run coverage. A
 English manuscript and the local language validator must pass; Claude remains
 read-only planning/audit material.
 
+Before G3, install the local analytical power tool and use the dashboard's data
+quality, power and preregistration controls:
+
+```bash
+bash scripts/bootstrap-wsl.sh --with-research-quality-tools
+```
+
+G1 now requires a claim-level novelty/saturation matrix. G3 requires a current
+local quality report for every selected dataset and a frozen, hash-bound
+preregistration for every paper. G4 requires successful registry-bound
+domain/strong-baseline and clean-room reproduction. Full operation and the
+Monte Carlo alternative for ML metrics are in `docs/RESEARCH-QUALITY.md`.
+
 `api_runs/` contains the Claude plan, raw model responses and usage diagnostics
 and is ignored by Git. Claude cannot write scientific or submission artifacts;
 its schema-checked audits are stored only as internal control records. The
