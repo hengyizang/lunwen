@@ -155,11 +155,25 @@ function renderProject() {
           : styleAudit.proselint_status === "error"
             ? "proselint 运行异常（不阻断核心检查）"
             : "仅核心检查";
+    const harper = styleAudit.harper_status === "unavailable"
+      ? "Harper 未安装（可选）"
+      : styleAudit.harper_status === "advisory"
+        ? `Harper ${Number(styleAudit.harper_diagnostic_count || 0)} 项建议`
+        : styleAudit.harper_status === "pass"
+          ? "Harper 通过"
+          : styleAudit.harper_status === "error"
+            ? "Harper 运行异常（不阻断核心检查）"
+            : "Harper 未记录";
     $("styleAuditStatus").textContent = styleAudit.status === "pass"
-      ? `通过 · ${Number(styleAudit.word_count || 0).toLocaleString()} 词 · ${warnings} 项人工提示 · ${proselint}；仍需本人阅读全文`
-      : `需要修改 · ${unresolved} 项硬问题 · ${warnings} 项人工提示 · ${proselint}`;
+      ? `通过 · ${Number(styleAudit.word_count || 0).toLocaleString()} 词 · ${warnings} 项人工提示 · ${proselint} · ${harper}；仍需本人阅读全文`
+      : `需要修改 · ${unresolved} 项硬问题 · ${warnings} 项人工提示 · ${proselint} · ${harper}`;
+    const findings = styleAudit.formulaic_findings || [];
+    $("styleAuditFindings").innerHTML = findings.length
+      ? findings.map((item) => `<li><strong>${esc(item.rule_id || "style")}</strong> · 第 ${Number(item.line || 0)} 行：${esc(item.message || "请结合上下文复核")}</li>`).join("")
+      : '<li class="muted">内置规则没有发现可定位的模板化表达；仍需本人阅读全文。</li>';
   } else {
     $("styleAuditStatus").textContent = "尚未生成检查报告；运行 G5 时会自动执行";
+    $("styleAuditFindings").innerHTML = '<li class="muted">运行后显示可定位的修改建议。</li>';
   }
   renderDataReports(detail.data_reports);
 }

@@ -8,7 +8,9 @@ from unittest.mock import patch
 
 from scripts.academic_style import (
     analyze_text,
+    find_harper,
     find_proselint,
+    run_harper,
     run_proselint,
     validate_saved_audit,
     write_audit,
@@ -50,6 +52,17 @@ class AcademicStyleTests(unittest.TestCase):
             ):
                 self.assertEqual(find_proselint(), str(executable))
 
+    def test_repository_virtualenv_harper_is_discovered_without_activation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            executable = root / ".venv" / "bin" / "harper-cli"
+            executable.parent.mkdir(parents=True)
+            executable.write_text("#!/bin/sh\n", encoding="utf-8")
+            with patch("scripts.academic_style.ROOT", root), patch(
+                "scripts.academic_style.shutil.which", return_value=None
+            ):
+                self.assertEqual(find_harper(), str(executable))
+
     def test_varied_evidence_led_manuscript_passes(self) -> None:
         result = analyze_text(varied_manuscript())
         self.assertGreaterEqual(result["word_count"], 500)
@@ -64,6 +77,21 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertTrue(result["errors"])
         self.assertTrue(result["duplicate_sentences"])
         self.assertGreater(len(result["stock_phrase_hits"]), 1)
+
+    def test_github_informed_rules_produce_line_level_findings(self) -> None:
+        filler = " ".join(
+            f"Measurement {index} compared the registered baseline with held-out observations."
+            for index in range(90)
+        )
+        result = analyze_text(
+            "Certainly!\nIn today's rapidly evolving field, this is a game-changing "
+            "framework. Experts agree that it could potentially improve performance.\n"
+            + filler
+        )
+        findings = result["formulaic_pattern_findings"]
+        self.assertTrue(any(item["rule_id"] == "chatbot-artifact" for item in findings))
+        self.assertTrue(any(item["line"] == 1 for item in findings))
+        self.assertTrue(result["errors"])
 
     def test_proselint_json_is_normalized_as_local_advice(self) -> None:
         payload = {
@@ -98,6 +126,40 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertFalse(result["detector"])
         self.assertEqual(result["diagnostics"][0]["line"], 4)
 
+    def test_harper_json_is_normalized_as_local_advice(self) -> None:
+        payload = [
+            {
+                "file": "/tmp/manuscript.txt",
+                "lint_count": 1,
+                "lints": [
+                    {
+                        "rule": "AnA",
+                        "kind": "Grammar",
+                        "span": {"char_start": 8, "char_end": 10},
+                        "line": 1,
+                        "column": 9,
+                        "message": "Use 'a' instead.",
+                        "suggestions": ["a"],
+                        "matched_text": "an",
+                    }
+                ],
+            }
+        ]
+
+        def fake_runner(command: list[str], **kwargs: object) -> SimpleNamespace:
+            self.assertEqual(command[1:5], ["--no-color", "lint", "--format", "json"])
+            self.assertFalse(kwargs.get("shell", False))
+            return SimpleNamespace(stdout=__import__("json").dumps(payload), returncode=1)
+
+        result = run_harper(
+            "This is an test.", executable="harper-cli", runner=fake_runner
+        )
+        self.assertEqual(result["status"], "advisory")
+        self.assertEqual(result["diagnostic_count"], 1)
+        self.assertTrue(result["local_only"])
+        self.assertFalse(result["detector"])
+        self.assertEqual(result["diagnostics"][0]["check"], "AnA")
+
     def test_saved_audit_is_bound_to_current_manuscript_tree(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "demo"
@@ -106,8 +168,12 @@ class AcademicStyleTests(unittest.TestCase):
             manuscript.write_text(varied_manuscript(), encoding="utf-8")
             _, report = write_audit(project, "P01")
             self.assertEqual(report["status"], "pass")
-            self.assertEqual(report["schema_version"], "1.1")
-            self.assertEqual(report["external_linters"][0]["name"], "proselint")
+            self.assertEqual(report["schema_version"], "1.2")
+            self.assertEqual(
+                [item["name"] for item in report["external_linters"]],
+                ["proselint", "harper"],
+            )
+            self.assertEqual(len(report["reviewed_rule_sources"]), 3)
             self.assertEqual(validate_saved_audit(project / "papers" / "P01"), [])
             manuscript.write_text(varied_manuscript() + "\nA documented limitation remains.", encoding="utf-8")
             errors = validate_saved_audit(project / "papers" / "P01")

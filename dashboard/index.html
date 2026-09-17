@@ -294,10 +294,11 @@ industrial robot anomaly detection multivariate sensor data</textarea>
               </div>
               <div class="tool-card">
                 <h3>自然学术表达检查</h3>
-                <p>检查模板化套话、机械连接词、重复句子与句首、超长句和段落节奏；若本机安装 proselint，还会追加本地英文用法建议。它不计算“AI率”，也不能替代期刊要求的 AI 使用声明。</p>
+                <p>结合经过审查的 GitHub 规则检查模板化套话、空洞拔高、含糊归因、机械结构、重复和行文节奏；proselint 与 Harper 可追加完全本地的英文建议。它不计算“AI率”，也不能替代期刊要求的 AI 使用声明。</p>
                 <select id="stylePaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
                 <button id="runStyleAudit" class="button secondary">重新运行表达检查</button>
                 <p id="styleAuditStatus" class="muted">尚未生成检查报告</p>
+                <ul id="styleAuditFindings" class="compact-list"><li class="muted">运行后显示可定位的修改建议。</li></ul>
               </div>
               <div class="phase-note"><strong>逐篇检查</strong><span>论点必须由 G4 证据支持，引用可核验，图表可复现，英语达到国际期刊标准，且作者职责可追溯。</span></div>
             </div>

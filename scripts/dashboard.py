@@ -480,6 +480,19 @@ def project_detail(slug: str) -> dict[str, Any]:
             ),
             {},
         )
+        harper = next(
+            (
+                item
+                for item in external_linters
+                if isinstance(item, dict) and item.get("name") == "harper"
+            ),
+            {},
+        )
+        formulaic_findings = (
+            analysis.get("formulaic_pattern_findings")
+            if isinstance(analysis.get("formulaic_pattern_findings"), list)
+            else []
+        )
         style_audits[paper_dir.name] = {
             "status": report.get("status"),
             "created_at": report.get("created_at"),
@@ -489,6 +502,10 @@ def project_detail(slug: str) -> dict[str, Any]:
             "detector_score_used": report.get("detector_score_used"),
             "proselint_status": proselint.get("status"),
             "proselint_diagnostic_count": proselint.get("diagnostic_count", 0),
+            "harper_status": harper.get("status"),
+            "harper_diagnostic_count": harper.get("diagnostic_count", 0),
+            "formulaic_finding_count": len(formulaic_findings),
+            "formulaic_findings": formulaic_findings[:12],
         }
     return {
         "state": state,

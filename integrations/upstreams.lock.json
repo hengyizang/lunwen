@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-08-12",
+  "reviewed_at": "2026-09-17",
   "sources": [
     {
       "id": "kdense-scientific-agent-skills",
@@ -52,6 +52,54 @@
       "installation": "not installed in v1",
       "selected_skills": [],
       "selection_note": "Capable optional executor, but it overlaps the local experiment state machine and carries a non-commercial license. Reassess after the topic and intended use are fixed."
+    },
+    {
+      "id": "avoid-ai-writing",
+      "repository": "https://github.com/conorbronsdon/avoid-ai-writing",
+      "commit": "0f2371ea9096654223410bd3e9d67ea7b4c7ba3a",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/conorbronsdon/avoid-ai-writing/blob/0f2371ea9096654223410bd3e9d67ea7b4c7ba3a/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No upstream code execution; selected concepts are implemented in config/academic-style-rules.json",
+      "selected_skills": [],
+      "selection_note": "Uses the preservation-first and formulaic-pattern taxonomy as reviewed design input. The repository's general-purpose automatic rewriter is not run on scientific manuscripts."
+    },
+    {
+      "id": "vale-ai-tells",
+      "repository": "https://github.com/tbhb/vale-ai-tells",
+      "commit": "dd60c5dc0d5432f71b0113fe2003fb06d069a71f",
+      "upstream_version": "1.37.0",
+      "license": "MIT",
+      "license_source_url": "https://github.com/tbhb/vale-ai-tells/blob/dd60c5dc0d5432f71b0113fe2003fb06d069a71f/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No Vale runtime required; an academic allowlist is implemented in config/academic-style-rules.json",
+      "selected_skills": [],
+      "selection_note": "Only rules suitable for technical and academic prose are represented. Social, marketing and detector-optimization rules are excluded."
+    },
+    {
+      "id": "no-ai-slop",
+      "repository": "https://github.com/petergyang/no-ai-slop",
+      "commit": "000650b156983f5159695b441477f4e63b25dc85",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/petergyang/no-ai-slop/blob/000650b156983f5159695b441477f4e63b25dc85/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No upstream code execution; selected concepts are implemented in config/academic-style-rules.json",
+      "selected_skills": [],
+      "selection_note": "Uses high-confidence conversational and unsupported-puffery concepts only; creator/social-post style rules are excluded."
+    },
+    {
+      "id": "harper",
+      "repository": "https://github.com/Automattic/harper",
+      "commit": "c821f511f83c24401993e207f7e5cdb51ae872e6",
+      "upstream_version": "harper-cli 2.11.0 at reviewed commit",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/Automattic/harper/blob/c821f511f83c24401993e207f7e5cdb51ae872e6/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional preinstalled harper-cli executable discovered locally",
+      "selected_skills": [],
+      "selection_note": "Runs only as an advisory local grammar checker over a temporary plain-text extraction; it is not installed automatically and is not an authorship detector."
     }
   ]
 }

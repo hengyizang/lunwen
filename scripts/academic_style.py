@@ -66,8 +66,11 @@ TRANSITION_OPENERS = {
     "therefore",
 }
 PROSELINT_CONFIG = ROOT / "config" / "proselint-academic.json"
+STYLE_RULES_CONFIG = ROOT / "config" / "academic-style-rules.json"
 PROSELINT_MAX_DIAGNOSTICS = 100
 PROSELINT_TIMEOUT_SECONDS = 30
+HARPER_MAX_DIAGNOSTICS = 100
+HARPER_TIMEOUT_SECONDS = 30
 
 
 class AcademicStyleError(RuntimeError):
@@ -82,6 +85,16 @@ def find_proselint() -> str | None:
         if candidate.is_file():
             return str(candidate)
     return shutil.which("proselint")
+
+
+def find_harper() -> str | None:
+    for candidate in (
+        ROOT / ".venv" / "bin" / "harper-cli",
+        ROOT / ".venv" / "Scripts" / "harper-cli.exe",
+    ):
+        if candidate.is_file():
+            return str(candidate)
+    return shutil.which("harper-cli")
 
 
 def now() -> str:
@@ -127,7 +140,114 @@ def _coefficient_of_variation(values: list[int]) -> float | None:
     return statistics.pstdev(values) / statistics.mean(values)
 
 
-def analyze_text(text: str) -> dict[str, Any]:
+def load_style_rules(path: Path | None = None) -> dict[str, Any]:
+    source = path or STYLE_RULES_CONFIG
+    try:
+        payload = json.loads(source.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AcademicStyleError(f"cannot load academic style rules: {exc}") from exc
+    if not isinstance(payload, dict) or payload.get("schema_version") != "1.0":
+        raise AcademicStyleError("academic style rules must use schema_version 1.0")
+    if not isinstance(payload.get("sources"), list) or not isinstance(payload.get("rules"), list):
+        raise AcademicStyleError("academic style rules must contain source and rule arrays")
+    source_ids = {
+        item.get("id") for item in payload["sources"] if isinstance(item, dict)
+    }
+    for item in payload["rules"]:
+        if not isinstance(item, dict):
+            raise AcademicStyleError("each academic style rule must be an object")
+        required = {
+            "id", "category", "confidence", "block_on_any", "pattern",
+            "message", "guidance", "source_ids",
+        }
+        if not required.issubset(item):
+            raise AcademicStyleError(f"academic style rule is incomplete: {item.get('id')}")
+        if item["confidence"] not in {"high", "moderate"}:
+            raise AcademicStyleError(f"invalid rule confidence: {item['id']}")
+        if not isinstance(item["source_ids"], list) or any(
+            source_id not in source_ids for source_id in item["source_ids"]
+        ):
+            raise AcademicStyleError(f"academic style rule has an unknown source: {item['id']}")
+        try:
+            re.compile(str(item["pattern"]), re.I | re.M)
+        except re.error as exc:
+            raise AcademicStyleError(f"invalid academic style regex {item['id']}: {exc}") from exc
+    return payload
+
+
+def _line_and_column(text: str, offset: int) -> tuple[int, int]:
+    line = text.count("\n", 0, offset) + 1
+    line_start = text.rfind("\n", 0, offset)
+    return line, offset - line_start
+
+
+def _excerpt(text: str, start: int, end: int, limit: int = 220) -> str:
+    left = max(0, text.rfind("\n", 0, start) + 1)
+    right_index = text.find("\n", end)
+    right = len(text) if right_index < 0 else right_index
+    raw = text[left:right]
+    compact = re.sub(r"\s+", " ", raw).strip()
+    if len(compact) <= limit:
+        return compact
+    match_start = max(0, start - left)
+    window_start = max(0, match_start - limit // 3)
+    return re.sub(r"\s+", " ", raw[window_start:window_start + limit]).strip()
+
+
+def _review_formulaic_patterns(
+    text: str, word_count: int, ruleset: dict[str, Any]
+) -> tuple[list[dict[str, Any]], list[str], list[str]]:
+    findings: list[dict[str, Any]] = []
+    errors: list[str] = []
+    warnings: list[str] = []
+    high_confidence_count = 0
+    for rule in ruleset["rules"]:
+        pattern = re.compile(str(rule["pattern"]), re.I | re.M)
+        matches = list(pattern.finditer(text))
+        if not matches:
+            continue
+        if rule["confidence"] == "high":
+            high_confidence_count += len(matches)
+        for match in matches[:20]:
+            line, column = _line_and_column(text, match.start())
+            findings.append(
+                {
+                    "rule_id": rule["id"],
+                    "category": rule["category"],
+                    "confidence": rule["confidence"],
+                    "severity": "error" if rule["block_on_any"] else "review",
+                    "line": line,
+                    "column": column,
+                    "matched_text": match.group(0)[:160],
+                    "excerpt": _excerpt(text, match.start(), match.end()),
+                    "message": rule["message"],
+                    "guidance": rule["guidance"],
+                    "source_ids": rule["source_ids"],
+                }
+            )
+        if rule["block_on_any"]:
+            errors.append(
+                f"rule {rule['id']} found {len(matches)} journal-inappropriate occurrence(s)"
+            )
+
+    density = max(
+        int(ruleset.get("high_confidence_minimum_before_block", 3)),
+        math.ceil(word_count / 1000)
+        * int(ruleset.get("high_confidence_density_per_1000_words", 2)),
+    )
+    if high_confidence_count >= density:
+        errors.append(
+            f"high-confidence formulaic pattern count {high_confidence_count} "
+            f"meets or exceeds the manuscript-size limit {density}"
+        )
+    elif findings:
+        warnings.append(
+            f"review {len(findings)} line-level formulaic or claim-calibration finding(s)"
+        )
+    return findings[:200], errors, warnings
+
+
+def analyze_text(text: str, *, ruleset: dict[str, Any] | None = None) -> dict[str, Any]:
     words = WORD_RE.findall(text)
     sentences = _sentences(text)
     sentence_lengths = [len(WORD_RE.findall(item)) for item in sentences]
@@ -135,6 +255,13 @@ def analyze_text(text: str) -> dict[str, Any]:
     paragraph_lengths = [len(WORD_RE.findall(item)) for item in paragraphs]
     errors: list[str] = []
     warnings: list[str] = []
+
+    configured_rules = ruleset or load_style_rules()
+    pattern_findings, pattern_errors, pattern_warnings = _review_formulaic_patterns(
+        text, len(words), configured_rules
+    )
+    errors.extend(pattern_errors)
+    warnings.extend(pattern_warnings)
 
     stock_hits: list[dict[str, Any]] = []
     for label, pattern in STOCK_PATTERNS.items():
@@ -225,6 +352,8 @@ def analyze_text(text: str) -> dict[str, Any]:
         ),
         "stock_phrase_hits": stock_hits,
         "stock_phrase_limit": stock_limit,
+        "formulaic_pattern_findings": pattern_findings,
+        "formulaic_pattern_finding_count": len(pattern_findings),
         "duplicate_sentences": duplicate_sentences[:20],
         "repeated_sentence_openings": repeated_openings[:20],
         "transition_openers": dict(sorted(transition_counts.items())),
@@ -373,6 +502,135 @@ def run_proselint(
         }
 
 
+def run_harper(
+    text: str,
+    *,
+    executable: str | None = None,
+    runner: Any = subprocess.run,
+) -> dict[str, Any]:
+    """Run the optional privacy-first Harper grammar CLI over temporary text."""
+
+    command = executable or find_harper()
+    base: dict[str, Any] = {
+        "name": "harper",
+        "source": "https://github.com/Automattic/harper",
+        "license": "Apache-2.0",
+        "required": False,
+        "local_only": True,
+        "detector": False,
+        "diagnostic_count": 0,
+        "diagnostics": [],
+    }
+    if not command:
+        return {
+            **base,
+            "available": False,
+            "status": "unavailable",
+            "note": (
+                "Optional local Harper grammar CLI not installed; the deterministic "
+                "academic-style gate still ran."
+            ),
+        }
+    try:
+        with tempfile.TemporaryDirectory(prefix="research-os-harper-") as directory:
+            source = Path(directory) / "manuscript.txt"
+            source.write_text(text, encoding="utf-8")
+            completed = runner(
+                [
+                    command,
+                    "--no-color",
+                    "lint",
+                    "--format",
+                    "json",
+                    str(source),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=HARPER_TIMEOUT_SECONDS,
+                check=False,
+            )
+        payload = json.loads(completed.stdout or "[]")
+        if not isinstance(payload, list):
+            raise ValueError("Harper JSON must be an array")
+        diagnostics: list[dict[str, Any]] = []
+        tool_errors: list[str] = []
+        for file_result in payload:
+            if not isinstance(file_result, dict):
+                continue
+            if file_result.get("error"):
+                tool_errors.append(str(file_result["error"])[:300])
+            raw_lints = file_result.get("lints")
+            if not isinstance(raw_lints, list):
+                continue
+            for item in raw_lints:
+                if not isinstance(item, dict):
+                    continue
+                span = item.get("span")
+                diagnostics.append(
+                    {
+                        "check": str(item.get("rule", "unknown"))[:160],
+                        "kind": str(item.get("kind", "unknown"))[:80],
+                        "message": str(item.get("message", ""))[:500],
+                        "line": item.get("line") if isinstance(item.get("line"), int) else None,
+                        "column": (
+                            item.get("column")
+                            if isinstance(item.get("column"), int)
+                            else None
+                        ),
+                        "span": (
+                            [span.get("char_start"), span.get("char_end")]
+                            if isinstance(span, dict)
+                            and isinstance(span.get("char_start"), int)
+                            and isinstance(span.get("char_end"), int)
+                            else None
+                        ),
+                        "matched_text": str(item.get("matched_text", ""))[:200],
+                        "replacements": (
+                            [str(value)[:200] for value in item.get("suggestions", [])[:10]]
+                            if isinstance(item.get("suggestions"), list)
+                            else None
+                        ),
+                    }
+                )
+        diagnostics = diagnostics[:HARPER_MAX_DIAGNOSTICS]
+        if tool_errors:
+            return {
+                **base,
+                "available": True,
+                "status": "error",
+                "diagnostic_count": len(diagnostics),
+                "diagnostics": diagnostics,
+                "note": f"Harper reported an input error: {tool_errors[0]}",
+            }
+        return {
+            **base,
+            "available": True,
+            "status": "advisory" if diagnostics else "pass",
+            "diagnostic_count": len(diagnostics),
+            "diagnostics": diagnostics,
+            "note": (
+                "Advisory local grammar findings; discipline-specific terms and "
+                "scientifically necessary wording require human review."
+            ),
+        }
+    except subprocess.TimeoutExpired:
+        return {
+            **base,
+            "available": True,
+            "status": "error",
+            "note": f"Harper exceeded the {HARPER_TIMEOUT_SECONDS}-second timeout.",
+        }
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        return {
+            **base,
+            "available": True,
+            "status": "error",
+            "note": f"Harper could not be evaluated: {str(exc)[:300]}",
+        }
+
+
 def build_audit(paper: Path) -> dict[str, Any]:
     errors: list[str] = []
     manuscript: Path | None = None
@@ -384,23 +642,29 @@ def build_audit(paper: Path) -> dict[str, Any]:
         "warnings": [],
     }
     external_linters: list[dict[str, Any]] = []
+    reviewed_rule_sources: list[dict[str, Any]] = []
     try:
         manuscript = canonical_manuscript(paper)
         text = extract_text(manuscript)
-        analysis = analyze_text(text)
+        ruleset = load_style_rules()
+        reviewed_rule_sources = ruleset["sources"]
+        analysis = analyze_text(text, ruleset=ruleset)
         errors.extend(str(item) for item in analysis.get("errors", []))
-        external = run_proselint(text)
-        external_linters.append(external)
-        if external.get("status") == "advisory":
-            analysis["warnings"].append(
-                f"proselint reported {external['diagnostic_count']} advisory finding(s)"
-            )
-        elif external.get("status") == "error":
-            analysis["warnings"].append(str(external.get("note", "proselint failed")))
+        for external in (run_proselint(text), run_harper(text)):
+            external_linters.append(external)
+            if external.get("status") == "advisory":
+                analysis["warnings"].append(
+                    f"{external['name']} reported {external['diagnostic_count']} "
+                    "advisory finding(s)"
+                )
+            elif external.get("status") == "error":
+                analysis["warnings"].append(
+                    str(external.get("note", f"{external['name']} failed"))
+                )
     except (AcademicStyleError, OSError, ValueError) as exc:
         errors.append(str(exc))
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "created_at": now(),
         "status": "pass" if not errors else "revise",
         "purpose": "authentic_academic_style_and_readability",
@@ -413,6 +677,7 @@ def build_audit(paper: Path) -> dict[str, Any]:
             "source_tree_sha256": manuscript_tree_sha256(manuscript) if manuscript else None,
         },
         "analysis": analysis,
+        "reviewed_rule_sources": reviewed_rule_sources,
         "external_linters": external_linters,
         "errors": errors,
         "warnings": [str(item) for item in analysis.get("warnings", [])],
@@ -457,8 +722,8 @@ def validate_saved_audit(paper: Path) -> list[str]:
     if not isinstance(report, dict):
         return ["academic style audit must be a JSON object"]
     errors: list[str] = []
-    if report.get("schema_version") != "1.1":
-        errors.append("academic style audit schema_version must be 1.1")
+    if report.get("schema_version") != "1.2":
+        errors.append("academic style audit schema_version must be 1.2")
     if report.get("purpose") != "authentic_academic_style_and_readability":
         errors.append("academic style audit has an invalid purpose")
     if report.get("detector_score_used") is not False:
@@ -469,16 +734,59 @@ def validate_saved_audit(paper: Path) -> list[str]:
         errors.append("academic style audit must preserve AI-use disclosure")
     if report.get("human_review_required") is not True:
         errors.append("academic style audit must require human review")
+    analysis = report.get("analysis")
+    if not isinstance(analysis, dict):
+        errors.append("academic style audit analysis is missing")
+    else:
+        findings = analysis.get("formulaic_pattern_findings")
+        finding_count = analysis.get("formulaic_pattern_finding_count")
+        if not isinstance(findings, list) or not isinstance(finding_count, int):
+            errors.append("academic style audit line-level findings are missing")
+        elif finding_count != len(findings):
+            errors.append("academic style audit line-level finding count is inconsistent")
+    reviewed_sources = report.get("reviewed_rule_sources")
+    if not isinstance(reviewed_sources, list) or len(reviewed_sources) < 3:
+        errors.append("academic style audit reviewed rule sources are missing")
+    else:
+        try:
+            expected_sources = {
+                item["id"]: item["commit"] for item in load_style_rules()["sources"]
+            }
+        except (AcademicStyleError, KeyError, TypeError) as exc:
+            errors.append(f"academic style rule source validation failed: {exc}")
+        else:
+            actual_sources = {
+                item.get("id"): item.get("commit")
+                for item in reviewed_sources
+                if isinstance(item, dict)
+            }
+            if actual_sources != expected_sources:
+                errors.append("academic style audit reviewed rule sources do not match the lock")
     external_linters = report.get("external_linters")
     if not isinstance(external_linters, list):
         errors.append("academic style audit external_linters must be an array")
     else:
+        expected_linters = {
+            "proselint": ("https://github.com/amperser/proselint", "BSD-3-Clause"),
+            "harper": ("https://github.com/Automattic/harper", "Apache-2.0"),
+        }
+        seen_linters: set[str] = set()
         for linter in external_linters:
             if not isinstance(linter, dict):
                 errors.append("academic style audit has an invalid external linter record")
                 continue
             if linter.get("detector") is not False or linter.get("local_only") is not True:
                 errors.append("external writing checks must be local and must not be AI detectors")
+            name = linter.get("name")
+            if name in seen_linters or name not in expected_linters:
+                errors.append("academic style audit has an unknown or duplicate external linter")
+                continue
+            seen_linters.add(str(name))
+            source, license_name = expected_linters[str(name)]
+            if linter.get("source") != source or linter.get("license") != license_name:
+                errors.append(f"academic style audit {name} source or license is invalid")
+        if seen_linters != set(expected_linters):
+            errors.append("academic style audit must record proselint and Harper status")
     if report.get("status") != "pass":
         errors.append("academic style audit must pass")
     stored_errors = report.get("errors")

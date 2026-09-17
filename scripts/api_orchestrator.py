@@ -315,11 +315,15 @@ effect sizes, uncertainty, power or precision, robustness, external validity,
 negative controls, stopping rules and falsification criteria.
 At G5 write direct, evidence-led academic prose with varied but appropriate
 sentence and paragraph structure. Remove stock framing, mechanical transitions,
-repeated sentence openings and vague importance claims. Preserve every number,
-equation, citation, uncertainty boundary and claim-evidence link. Use
-scripts/academic_style.py as a writing-quality audit only. Never optimize against
-an AI detector, claim human-only authorship, conceal assistance or weaken the
-required AI-use disclosure.
+repeated sentence openings, conversational artifacts, vague attribution and
+unsupported importance or novelty claims. Prefer a concrete result, comparison,
+mechanism or limitation over decorative synonyms. Preserve every number,
+equation, citation, uncertainty boundary and claim-evidence link. Read the
+line-level guidance in scripts/academic_style.py output and revise only where the
+scientific context supports the change; never perform blind synonym replacement.
+Use the audit as a writing-quality control only. Never optimize against an AI
+detector, claim human-only authorship, conceal assistance or weaken the required
+AI-use disclosure.
 
 Return ONLY one JSON object with keys schema_version, stage, artifacts, notes.
 Use schema_version 1.0 and make notes an array of strings. Each artifact path
@@ -386,9 +390,10 @@ text independently; do not reuse wording from a Claude plan or review. For every
 rejected item, record the evidence-based reason.
 Keep every manuscript-bound artifact in English.
 At G5 read the deterministic academic-style audit, resolve its concrete writing
-problems without changing supported meaning, numbers, equations or citations,
-and preserve the AI-use disclosure. Do not target a detector score or disguise
-AI assistance.
+problems by rule and line without changing supported meaning, numbers, equations,
+citations, registered uncertainty or limitations. Do not replace terminology
+merely to vary vocabulary. Preserve the AI-use disclosure. Do not target a
+detector score or disguise AI assistance.
 """
 
 

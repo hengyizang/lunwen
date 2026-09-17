@@ -1,4 +1,4 @@
-# Doctoral Research OS v1.7.1
+# Doctoral Research OS v1.8.0
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -12,7 +12,7 @@
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - 候选与最终期刊均要求当前 JCR Q1 SCI/SCIE；JCR 分区必须按年份和类别人工核验。
 - 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
-- G5 在 Codex 首稿和修订后自动执行自然学术表达审计，检查模板化套话、机械连接词、重复句子/句首、超长句和异常均匀的行文节奏；若本机安装开源 `proselint`，自动追加完全本地的英文用法建议。报告与当前稿件树哈希绑定并受保护。该模块不计算“AI率”、不规避检测器，也不取消 AI 使用披露。
+- G5 在 Codex 首稿和修订后自动执行自然学术表达审计。内置规则选取 `avoid-ai-writing`、`vale-ai-tells` 与 `No AI Slop` 中适合学术英文的部分，逐行检查模板化套话、空洞拔高、含糊归因、失准断言、机械结构、重复和异常均匀的节奏；可选 `proselint` 与 Harper 只在本地追加语法建议。报告与当前稿件树哈希绑定并受保护。该模块不计算“AI率”、不规避检测器，也不取消 AI 使用披露。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
@@ -72,7 +72,7 @@ cd ~/code/lunwen
 bash scripts/bootstrap-wsl.sh --with-writing-tools
 ```
 
-它会把固定版本放入仓库自己的 `.venv`，控制层会自动发现，无需每次手工激活。未安装 `proselint` 不影响核心审计或 G5；系统会在界面明确显示“可选工具未安装”。
+它会把固定版本的 `proselint` 放入仓库自己的 `.venv`，控制层会自动发现，无需每次手工激活。若系统中另有 `harper-cli`，控制层也会自动调用。未安装任一可选工具都不影响内置审计或 G5；系统会在界面分别显示状态。
 
 CLI 模式需要分别安装并登录 `claude` 与 `codex`。API-first 模式不需要它们；只需要相应 API key。仓库不保存 API key。
 
@@ -329,9 +329,11 @@ python3 scripts/academic_style.py audit --project my-phd --paper P01
 最后一条命令也可以在本地客户端 G5 区域点击“重新运行表达检查”。
 它生成 `papers/P01/style/academic-style-audit.json`。状态为 `revise` 时，查看
 `errors` 和 `warnings` 后让 Codex 依据真实论证重新修改；不要机械替换同义词。
-若安装了 `proselint`，其行列级建议位于 `external_linters[].diagnostics`，只作
-人工复核，不作为通用规则机械改写；本项目关闭了可能压掉科学不确定性的
-`hedging` 检查。
+内置 GitHub 来源规则的行级结果位于
+`analysis.formulaic_pattern_findings`；若安装了 `proselint` 或 Harper，其建议位于
+`external_linters[].diagnostics`。所有结果只作证据约束下的定向修改，不作为
+通用同义词替换；本项目关闭了 proselint 中可能压掉科学不确定性的 `hedging`
+检查。
 任何稿件源文件变化都会使旧报告失效。报告不预测 Turnitin、GPTZero 或其他
 检测器，也不能证明文本由人独立撰写。
 
