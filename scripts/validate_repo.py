@@ -293,6 +293,8 @@ def main() -> int:
         errors.append("docs/UUAPI-CC-SWITCH.md is required")
     for relative in (
         "docs/RESEARCH-QUALITY.md",
+        "docs/CI-VALIDATION.md",
+        "docs/LIVE-ACCEPTANCE.md",
         "scripts/research_quality.py",
         "schemas/novelty-claim-matrix.schema.json",
         "schemas/data-quality-report.schema.json",
@@ -305,15 +307,31 @@ def main() -> int:
         "schemas/reproduction-confirmation.schema.json",
         "schemas/literature-evidence-receipt.schema.json",
         "schemas/ai4science-evidence-receipt.schema.json",
+        "schemas/live-acceptance-report.schema.json",
         "schemas/core-thesis.schema.json",
         "schemas/extension-thesis.schema.json",
         "schemas/venue-candidates.schema.json",
         "scripts/literature_evidence.py",
         "scripts/ai4science_evidence.py",
+        "scripts/tooluniverse_worker.py",
+        "scripts/live_acceptance.py",
         "scripts/venue_candidates.py",
+        ".github/workflows/validate.yml",
     ):
         if not (ROOT / relative).is_file():
             errors.append(f"{relative} is required")
+    workflow_path = ROOT / ".github" / "workflows" / "validate.yml"
+    if workflow_path.is_file():
+        workflow = workflow_path.read_text(encoding="utf-8")
+        for marker in (
+            "python -m unittest discover -s tests -v",
+            "python -m compileall -q scripts tests",
+            "python scripts/validate_repo.py",
+            "scripts/live_acceptance.py literature",
+            "scripts/live_acceptance.py container",
+        ):
+            if marker not in workflow:
+                errors.append(f"validate.yml is missing required check: {marker}")
     try:
         provider_source = (ROOT / "scripts" / "ai_providers.py").read_text(
             encoding="utf-8"

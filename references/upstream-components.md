@@ -108,15 +108,21 @@ than reimplementing their specialist functionality:
   state, approved-plan hash or experiment registry.
 - [`ToolUniverse`](https://github.com/mims-harvard/ToolUniverse), Apache-2.0:
   optional topic-selected AI4Science tool ecosystem. It is strongest for
-  biomedical/life-science routes and is not enabled indiscriminately.
+  biomedical/life-science routes and is not enabled indiscriminately. The local
+  adapter loads only the named tool, calls the official dictionary API in a
+  subprocess, and records request/result/log hashes.
 - [`PaperQA2`](https://github.com/Future-House/paper-qa), Apache-2.0: optional
   local scientific-document RAG and contradiction-checking layer. Its answers
   remain advisory and every citation still needs primary-source verification.
+  The local adapter invokes the official `pqa` CLI over a hash-inventoried,
+  human-owned corpus and rechecks every input after execution.
 
 All optional tools remain opt-in and local. Their availability and version are shown in
 the generated data-quality report. Heavy optional profilers are not silently
 installed or allowed to upload research data. The exact reviewed commits and
 licenses are recorded in `integrations/upstreams.lock.json`.
+Installation, live WSL2/Docker acceptance and executable adapter usage are
+documented in `docs/LIVE-ACCEPTANCE.md`.
 
 ## Update protocol
 

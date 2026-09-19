@@ -7,6 +7,7 @@ cd "$repo_root"
 install_kdense=false
 install_writing_tools=false
 install_research_quality_tools=false
+install_ai4science=false
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --with-kdense)
@@ -18,8 +19,11 @@ while [[ "$#" -gt 0 ]]; do
     --with-research-quality-tools)
       install_research_quality_tools=true
       ;;
+    --with-ai4science)
+      install_ai4science=true
+      ;;
     *)
-      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools]" >&2
+      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools] [--with-ai4science]" >&2
       exit 2
       ;;
   esac
@@ -34,6 +38,21 @@ if [[ "$install_writing_tools" == true ]]; then
     .venv/bin/python -m pip install 'proselint==0.16.0'
   fi
   .venv/bin/proselint version
+fi
+
+if [[ "$install_ai4science" == true ]]; then
+  if ! python3 -c 'import sys; raise SystemExit(sys.version_info < (3, 11))'; then
+    echo "PaperQA2 requires Python 3.11 or newer." >&2
+    exit 2
+  fi
+  if [[ ! -x ".venv/bin/python" ]]; then
+    python3 -m venv .venv
+  fi
+  if ! .venv/bin/python -c "import importlib.metadata as m; raise SystemExit(m.version('paper-qa') != '2026.08.12' or m.version('tooluniverse') != '1.5.1')" >/dev/null 2>&1; then
+    .venv/bin/python -m pip install 'paper-qa==2026.08.12' 'tooluniverse==1.5.1'
+  fi
+  .venv/bin/python -c "import importlib.metadata as m; print('paper-qa', m.version('paper-qa')); print('tooluniverse', m.version('tooluniverse'))"
+  .venv/bin/pqa --help >/dev/null
 fi
 
 if [[ "$install_research_quality_tools" == true ]]; then
@@ -65,4 +84,5 @@ echo "Visual dashboard: bash scripts/start-dashboard.sh"
 echo "API-first CLI: follow docs/UUAPI-CC-SWITCH.md"
 echo "Optional local prose checks: bash scripts/bootstrap-wsl.sh --with-writing-tools"
 echo "Executable power analysis: bash scripts/bootstrap-wsl.sh --with-research-quality-tools"
+echo "PaperQA2 and ToolUniverse adapters: bash scripts/bootstrap-wsl.sh --with-ai4science"
 echo "Optional CLI-mode check: python3 scripts/check_env.py --mode cli"

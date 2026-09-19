@@ -1,4 +1,4 @@
-# Doctoral Research OS v2.0.0
+# Doctoral Research OS v2.1.0
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -27,7 +27,8 @@
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
 - G4 每篇论文必须复现领域标准和强近期基线；clean-room 运行只接受锁定摘要、禁网且只读根文件系统的 Docker/Podman 容器。linked Git worktree 仅算独立检出目录，不再被视为隔离执行器。容差、执行器隔离收据、环境与证据哈希均由控制层复核，不能由模型自报。
-- PaperQA2 与 ToolUniverse 作为按课题启用的成熟 AI4Science 上游；默认关闭，实际使用时必须记录已安装版本、输入/输出哈希，并保持“仅建议、需人工核验”。
+- PaperQA2 与 ToolUniverse 作为按课题启用的成熟 AI4Science 上游；默认关闭。可执行适配器会真实调用官方 CLI/dictionary API，登记成功、失败、超时、包版本、输入完整性、stdout/stderr 和结果哈希，并始终保持“仅建议、需人工核验”。
+- GitHub Actions 在 Python 3.10/3.12/3.13 上运行确定性回归；每周和手动工作流真实调用全部公开文献接口，并用 digest 固定镜像验证 Docker 隔离。WSL2 本机验收另存环境与原始调用证据，Linux CI 不冒充 WSL2。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
 - 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
 - 已通过单篇 G5 后生成确定性的人工投稿 ZIP、逐文件 SHA-256 清单和人工检查表；不访问期刊门户。
@@ -87,6 +88,14 @@ bash scripts/bootstrap-wsl.sh --with-research-quality-tools
 ```
 
 该选项把固定版本 `statsmodels==0.15.0` 安装到仓库 `.venv`。数据哈希、缺失、重复、类别失衡和跨划分泄漏检查由无依赖本地核心完成；`fg-data-profiling`、Pandera、Evidently 和 DVC 是经过固定提交审查的可选增强层，不替代核心闸门。
+
+按课题启用 PaperQA2 与 ToolUniverse 实际执行适配器：
+
+```bash
+bash scripts/bootstrap-wsl.sh --with-ai4science
+```
+
+该选项安装锁定的 `paper-qa==2026.08.12` 与 `tooluniverse==1.5.1`，要求 Python 3.11+。公开文献 API、WSL2、Docker 真实验收和两个适配器的命令、证据位置与失败语义见 [`docs/LIVE-ACCEPTANCE.md`](docs/LIVE-ACCEPTANCE.md)。GitHub Actions 的确定性与 live job 边界见 [`docs/CI-VALIDATION.md`](docs/CI-VALIDATION.md)。
 
 CLI 模式需要分别安装并登录 `claude` 与 `codex`。API-first 模式不需要它们；只需要相应 API key。仓库不保存 API key。
 

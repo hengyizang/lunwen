@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/live-acceptance-report.schema.json",
+  "title": "Live API and container acceptance report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "acceptance_id",
+    "command",
+    "environment",
+    "started_at",
+    "completed_at",
+    "literature",
+    "container",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "acceptance_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "command": {"enum": ["literature", "container", "wsl"]},
+    "environment": {"$ref": "#/$defs/environment"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "literature": {"type": ["object", "null"]},
+    "container": {"type": ["object", "null"]},
+    "status": {"enum": ["passed", "failed", "blocked"]}
+  },
+  "$defs": {
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "python",
+        "kernel",
+        "is_wsl",
+        "is_wsl2",
+        "container_engines"
+      ],
+      "properties": {
+        "platform": {"type": "string"},
+        "python": {"type": "string"},
+        "kernel": {"type": "string"},
+        "is_wsl": {"type": "boolean"},
+        "is_wsl2": {"type": "boolean"},
+        "container_engines": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["docker", "podman"]}
+        }
+      }
+    }
+  }
+}

@@ -9,11 +9,19 @@ import os
 import platform
 import shutil
 import sys
+from importlib import metadata
 from pathlib import Path
 
 
 def version_output(command: str) -> str | None:
     return shutil.which(command)
+
+
+def package_version(name: str) -> str | None:
+    try:
+        return metadata.version(name)
+    except metadata.PackageNotFoundError:
+        return None
 
 
 def main() -> int:
@@ -31,7 +39,7 @@ def main() -> int:
     required = {name: version_output(name) for name in required_names}
     optional = {
         name: version_output(name)
-        for name in ["latexmk", "pandoc", "docker", "quarto", "Rscript"]
+        for name in ["latexmk", "pandoc", "docker", "podman", "quarto", "Rscript", "pqa", "tu"]
     }
     report = {
         "python": {
@@ -43,6 +51,10 @@ def main() -> int:
         "mode": args.mode,
         "required_commands": required,
         "optional_commands": optional,
+        "optional_ai4science_packages": {
+            "paper-qa": package_version("paper-qa"),
+            "tooluniverse": package_version("tooluniverse"),
+        },
         "recommendations": [],
     }
     if not in_wsl and platform.system() == "Linux":

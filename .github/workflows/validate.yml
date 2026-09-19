@@ -5,21 +5,87 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
 
 permissions:
   contents: read
 
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  deterministic:
+    name: Deterministic checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Compile Python entry points
+        run: python -m compileall -q scripts tests
+      - name: Validate manifests and extensions
+        run: python scripts/validate_repo.py
+      - name: Reject whitespace errors
+        run: git diff --check
+
+  live-literature:
+    name: Live public literature APIs
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: deterministic
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Unit tests
-        run: python3 -m unittest discover -s tests -v
-      - name: Compile Python entry points
-        run: python3 -m compileall -q scripts
-      - name: Validate manifests and extensions
-        run: python3 scripts/validate_repo.py
+      - name: Exercise all public literature providers
+        run: >-
+          python scripts/live_acceptance.py literature
+          --limit 1
+          --output artifacts/acceptance/literature.json
+      - name: Preserve API receipts and raw responses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-literature-acceptance
+          path: artifacts/acceptance/
+          if-no-files-found: warn
+          retention-days: 14
+
+  container-isolation:
+    name: Docker isolation probe
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: deterministic
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run digest-pinned no-network read-only container
+        run: >-
+          python scripts/live_acceptance.py container
+          --engine docker
+          --output artifacts/acceptance/container.json
+      - name: Preserve container acceptance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-isolation-acceptance
+          path: artifacts/acceptance/
+          if-no-files-found: warn
+          retention-days: 14

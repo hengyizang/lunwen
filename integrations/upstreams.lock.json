@@ -157,7 +157,7 @@
       "license": "Apache-2.0",
       "license_source_url": "https://github.com/mims-harvard/ToolUniverse/blob/8016f8f87dcb21517ac75c1c64807642ca1dd968/LICENSE",
       "enabled_by_default": false,
-      "installation": "Optional isolated environment; record outputs with scripts/ai4science_evidence.py",
+      "installation": "Optional pinned package in the repository virtual environment; execute with scripts/ai4science_evidence.py tooluniverse",
       "selected_skills": [],
       "selection_note": "Mature AI-for-science tool ecosystem, especially strong for biomedical and life-science routes. It is topic-selected after G1, never a source of gate authority, and every used output must be locally hash-bound."
     },
@@ -169,7 +169,7 @@
       "license": "Apache-2.0",
       "license_source_url": "https://github.com/Future-House/paper-qa/blob/57e89f7223b0960d5ee5ea048c69e3c47e088572/LICENSE",
       "enabled_by_default": false,
-      "installation": "Optional isolated environment; record indexes/answers with scripts/ai4science_evidence.py",
+      "installation": "Optional pinned package in the repository virtual environment; execute with scripts/ai4science_evidence.py paperqa",
       "selected_skills": [],
       "selection_note": "Reviewed scientific-document RAG option for a human-owned local corpus. It may support discovery and contradiction checks, but citations still require primary-source verification and exact provider-search receipts."
     },

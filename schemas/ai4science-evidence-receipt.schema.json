@@ -1,12 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/hengyizang/lunwen/schemas/ai4science-evidence-receipt.schema.json",
-  "title": "Local AI4Science tool output receipt",
+  "title": "Local AI4Science tool execution receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "receipt_id", "tool", "package", "package_version", "recorded_at", "recorded_by", "purpose", "output", "inputs", "advisory_only", "human_verification_required"],
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "tool",
+    "package",
+    "package_version",
+    "recorded_at",
+    "recorded_by",
+    "purpose",
+    "output",
+    "inputs",
+    "advisory_only",
+    "human_verification_required"
+  ],
   "properties": {
-    "schema_version": {"const": "1.0"},
+    "schema_version": {"enum": ["1.0", "1.1"]},
     "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "tool": {"enum": ["tooluniverse", "paperqa2", "kdense-scientific-agent-skills"]},
     "package": {"type": "string", "minLength": 1},
@@ -14,10 +27,137 @@
     "recorded_at": {"type": "string", "format": "date-time"},
     "recorded_by": {"type": "string", "minLength": 1},
     "purpose": {"type": "string", "minLength": 1},
-    "output": {"$ref": "#/$defs/file"},
+    "status": {"enum": ["succeeded", "failed", "timed_out"]},
+    "output": {
+      "oneOf": [
+        {"$ref": "#/$defs/file"},
+        {"type": "null"}
+      ]
+    },
     "inputs": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+    "execution": {"$ref": "#/$defs/execution"},
     "advisory_only": {"const": true},
     "human_verification_required": {"const": true}
   },
-  "$defs": {"file": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "bytes"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "bytes": {"type": "integer", "minimum": 0}}}}
+  "oneOf": [
+    {
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "output": {"$ref": "#/$defs/file"}
+      },
+      "not": {"required": ["execution"]}
+    },
+    {
+      "required": ["status", "execution"],
+      "properties": {"schema_version": {"const": "1.1"}},
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "succeeded"}}},
+          "then": {"properties": {"output": {"$ref": "#/$defs/file"}}},
+          "else": {"properties": {"output": {"type": "null"}}}
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_version",
+        "started_at",
+        "completed_at",
+        "runtime_seconds",
+        "subprocess_status",
+        "argv",
+        "cwd",
+        "timeout_seconds",
+        "timed_out",
+        "exit_code",
+        "error",
+        "environment_names",
+        "secret_environment_names",
+        "stdout",
+        "stderr",
+        "stdout_truncated",
+        "stderr_truncated",
+        "stdout_full_sha256",
+        "stderr_full_sha256",
+        "input_integrity"
+      ],
+      "properties": {
+        "adapter_version": {"const": "1.0"},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "runtime_seconds": {"type": "number", "minimum": 0},
+        "subprocess_status": {"enum": ["succeeded", "failed", "timed_out"]},
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "cwd": {"type": "string", "minLength": 1},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 86400},
+        "timed_out": {"type": "boolean"},
+        "exit_code": {"type": ["integer", "null"]},
+        "error": {"type": ["string", "null"]},
+        "environment_names": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "secret_environment_names": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "OPENAI_API_KEY",
+              "ANTHROPIC_API_KEY",
+              "GEMINI_API_KEY",
+              "GOOGLE_API_KEY",
+              "MISTRAL_API_KEY",
+              "COHERE_API_KEY",
+              "AZURE_API_KEY",
+              "NVIDIA_API_KEY",
+              "HF_TOKEN",
+              "HUGGINGFACE_API_KEY",
+              "NCBI_API_KEY",
+              "SEMANTIC_SCHOLAR_API_KEY",
+              "CROSSREF_API_KEY",
+              "FDA_API_KEY"
+            ]
+          }
+        },
+        "stdout": {"$ref": "#/$defs/file"},
+        "stderr": {"$ref": "#/$defs/file"},
+        "stdout_truncated": {"type": "boolean"},
+        "stderr_truncated": {"type": "boolean"},
+        "stdout_full_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "stderr_full_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "input_integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["verified_after_run", "passed", "changed_or_missing"],
+          "properties": {
+            "verified_after_run": {"const": true},
+            "passed": {"type": "boolean"},
+            "changed_or_missing": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
 }
