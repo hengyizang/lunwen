@@ -185,6 +185,9 @@ function renderResearchQuality(quality) {
   const paperCount = Number(quality.paper_count || 0);
   const datasetCount = Number(quality.dataset_count || 0);
   const items = [
+    [Number(quality.executed_literature_searches || 0) > 0 && Number(quality.screened_literature_searches || 0) === Number(quality.executed_literature_searches || 0), "真实文献检索与具名筛选", `${Number(quality.screened_literature_searches || 0)}/${Number(quality.executed_literature_searches || 0)}`],
+    [quality.theme_b_independent === true, "Theme B 独立硬闸门", quality.theme_b_independent ? "通过" : "未通过"],
+    [quality.venue_candidates_valid === true, "期刊候选库", quality.venue_candidates_valid ? "当前且哈希一致" : "缺失或失效"],
     [quality.novelty_claim_matrix === true, "新颖性主张矩阵", quality.novelty_claim_matrix ? "已生成" : "缺失"],
     [Number(quality.data_quality_confirmations || 0) === datasetCount && datasetCount > 0, "数据质量报告及人工确认", `${Number(quality.data_quality_confirmations || 0)}/${datasetCount}`],
     [Number(quality.power_reports || 0) === paperCount && paperCount > 0, "可执行功效分析", `${Number(quality.power_reports || 0)}/${paperCount}`],
@@ -377,6 +380,9 @@ function bindEvents() {
   $("dataQueries").addEventListener("input", updateSearchScale);
   $("dataLimit").addEventListener("input", updateSearchScale);
   $("scoreFilter").addEventListener("input", () => { $("scoreValue").textContent = $("scoreFilter").value; if (app.detail) renderDataReports(app.detail.data_reports); });
+  $("runLiteratureSearch").addEventListener("click", () => startJob("literature_search", {project:currentProject(), provider:$("literatureProvider").value, query:$("literatureQuery").value, query_family:$("literatureFamily").value, date_range:$("literatureDateRange").value, filters:$("literatureFilters").value, limit:Number($("literatureLimit").value)}).catch((e) => toast(e.message, "error")));
+  $("screenLiterature").addEventListener("click", () => startJob("literature_screen", {project:currentProject(), receipt:$("literatureReceipt").value, included:$("literatureIncluded").value, exclusion_reasons:$("literatureExclusions").value, actor:$("approvalActor").value}).catch((e) => toast(e.message, "error")));
+  $("buildVenueCandidates").addEventListener("click", () => startJob("venue_candidates", {project:currentProject(), spec:$("venueCandidateSpec").value, jcr_export:$("venueJcrExport").value, source_url:$("venueJcrSource").value, actor:$("approvalActor").value}).catch((e) => toast(e.message, "error")));
   $("clearJobSelection").addEventListener("click", () => { app.selectedJob = ""; $("jobLog").textContent = "选择一个任务查看实时输出。"; renderJobs(); });
   $("cancelJob").addEventListener("click", async () => {
     if (!app.selectedJob || !confirm("停止任务可能留下未完成的模型调用或实验记录。确定停止吗？")) return;

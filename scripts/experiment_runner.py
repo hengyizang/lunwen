@@ -25,6 +25,11 @@ RUN_ID_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$")
 PAPER_RE = re.compile(r"^P[0-9]{2}$")
 DEFAULT_EXECUTABLES = {"python", "python3", "Rscript", "julia"}
 MAX_LOG_BYTES = 2 * 1024 * 1024
+FILE_ARGUMENT_SUFFIXES = {
+    ".py", ".r", ".jl", ".json", ".jsonl", ".yaml", ".yml", ".toml",
+    ".ini", ".cfg", ".csv", ".tsv", ".parquet", ".npy", ".npz",
+    ".h5", ".hdf5", ".wav", ".txt",
+}
 
 
 class ExperimentError(RuntimeError):
@@ -110,6 +115,14 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         estimate = run.get("estimated_cost_usd")
         if not isinstance(estimate, (int, float)) or isinstance(estimate, bool) or estimate < 0:
             errors.append(f"{prefix}.estimated_cost_usd must be non-negative")
+        isolation = run.get("isolation")
+        if not isinstance(isolation, dict) or isolation.get("kind") not in {"host", "git_worktree", "container"}:
+            errors.append(f"{prefix}.isolation must select host, git_worktree or container")
+        elif isolation.get("kind") == "container":
+            if isolation.get("engine") not in {"docker", "podman"}:
+                errors.append(f"{prefix}.isolation.engine must be docker or podman")
+            if not re.fullmatch(r"[^\s]+@sha256:[0-9a-f]{64}", str(isolation.get("image", ""))):
+                errors.append(f"{prefix}.isolation.image must be pinned by sha256 digest")
         seed = run.get("seed")
         if not isinstance(seed, int):
             errors.append(f"{prefix}.seed must be an integer")
@@ -137,6 +150,34 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
                     )
                 elif Path(item["path"]).is_absolute() or ".." in Path(item["path"]).parts:
                     errors.append(f"{prefix}.inputs[{input_index}].path must be project-relative")
+            input_paths = {
+                item.get("path")
+                for item in inputs
+                if isinstance(item, dict) and isinstance(item.get("path"), str)
+            }
+            output_paths = {
+                item for item in outputs if isinstance(item, str)
+            } if isinstance(outputs, list) else set()
+            if input_paths.intersection(output_paths):
+                errors.append(f"{prefix}.inputs and expected_outputs must be disjoint")
+            if isinstance(argv, list):
+                for argument_index, argument in enumerate(argv[1:], 1):
+                    if not isinstance(argument, str) or argument.startswith("-"):
+                        continue
+                    argument_path = Path(argument)
+                    if argument_path.is_absolute():
+                        if isinstance(isolation, dict) and isolation.get("kind") != "container":
+                            errors.append(
+                                f"{prefix}.argv[{argument_index}] absolute file paths require a pinned container"
+                            )
+                    elif (
+                        argument_path.suffix.lower() in FILE_ARGUMENT_SUFFIXES
+                        and argument not in input_paths
+                        and argument not in output_paths
+                    ):
+                        errors.append(
+                            f"{prefix}.argv[{argument_index}] file argument must be hash-declared in inputs"
+                        )
         cwd = run.get("cwd", ".")
         if not isinstance(cwd, str) or Path(cwd).is_absolute() or ".." in Path(cwd).parts:
             errors.append(f"{prefix}.cwd must be a relative string")
@@ -220,6 +261,102 @@ def git_commit(cwd: Path) -> str | None:
     return value if re.fullmatch(r"[0-9a-f]{40}", value) else None
 
 
+def git_path(cwd: Path, argument: str) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", argument], cwd=cwd, check=True,
+            capture_output=True, text=True, timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    value = result.stdout.strip()
+    if not value:
+        return None
+    path = Path(value)
+    return str((cwd / path).resolve() if not path.is_absolute() else path.resolve())
+
+
+def isolation_record(
+    project: Path, cwd: Path, specification: dict[str, Any], attempt_id: str
+) -> dict[str, Any]:
+    kind = specification["kind"]
+    record: dict[str, Any] = {
+        "kind": kind,
+        "instance_id": attempt_id,
+        "checkout_root": git_path(cwd, "--show-toplevel"),
+        "git_dir": git_path(cwd, "--git-dir"),
+        "git_common_dir": git_path(cwd, "--git-common-dir"),
+    }
+    if kind == "git_worktree":
+        if not record["checkout_root"] or not record["git_dir"] or not record["git_common_dir"]:
+            raise ExperimentError("git_worktree isolation requires an actual Git worktree")
+        if record["git_dir"] == record["git_common_dir"]:
+            raise ExperimentError("git_worktree isolation requires a linked worktree, not the primary checkout")
+        record.update(
+            {
+                "isolated_executor": False,
+                "separate_checkout": True,
+                "network_disabled": False,
+                "read_only_root": False,
+            }
+        )
+    elif kind == "container":
+        record.update(
+            {
+                "isolated_executor": True,
+                "separate_checkout": False,
+                "network_disabled": True,
+                "read_only_root": True,
+                "engine": specification["engine"],
+                "image": specification["image"],
+                "image_digest": specification["image"].rsplit("@sha256:", 1)[1],
+            }
+        )
+    else:
+        record.update(
+            {
+                "isolated_executor": False,
+                "separate_checkout": False,
+                "network_disabled": False,
+                "read_only_root": False,
+            }
+        )
+    fingerprint_value = {
+        key: record.get(key)
+        for key in ("kind", "checkout_root", "git_dir", "git_common_dir", "engine", "image_digest")
+    }
+    record["fingerprint"] = hashlib.sha256(
+        json.dumps(fingerprint_value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return record
+
+
+def execution_command(
+    project: Path,
+    cwd: Path,
+    run: dict[str, Any],
+    environment: dict[str, str],
+) -> tuple[list[str], Path, dict[str, str]]:
+    isolation = run["isolation"]
+    if isolation["kind"] != "container":
+        return list(run["argv"]), cwd, environment
+    relative_cwd = cwd.relative_to(project).as_posix()
+    workdir = "/workspace" if relative_cwd == "." else f"/workspace/{relative_cwd}"
+    command = [
+        isolation["engine"], "run", "--rm", "--network=none", "--read-only",
+        "--tmpfs", "/tmp:rw,nosuid,nodev,noexec", "--security-opt", "no-new-privileges",
+        "-v", f"{project.resolve()}:/workspace:rw", "-w", workdir,
+    ]
+    for item in run["inputs"]:
+        source = resolve_inside(project, item["path"], f"{run['run_id']}.inputs")
+        target = f"/workspace/{Path(item['path']).as_posix()}"
+        command.extend(["--mount", f"type=bind,src={source},dst={target},readonly"])
+    for key in ("RESEARCH_OS_RUN_ID", "RESEARCH_OS_SEED", "PYTHONHASHSEED"):
+        command.extend(["-e", f"{key}={environment[key]}"])
+    command.extend([isolation["image"], *run["argv"]])
+    return command, project, environment
+
+
 def read_capped(path: Path, limit: int = MAX_LOG_BYTES) -> tuple[str, bool]:
     with path.open("rb") as handle:
         payload = handle.read(limit + 1)
@@ -294,12 +431,17 @@ def run_one(
     exit_code: int | None = None
     error: str | None = None
     timed_out = False
+    environment = safe_environment(run_id, run["seed"])
+    isolation = isolation_record(project, cwd, run["isolation"], attempt_id)
+    command, execution_cwd, execution_environment = execution_command(
+        project, cwd, run, environment
+    )
     with tempfile.NamedTemporaryFile("w+b") as stdout, tempfile.NamedTemporaryFile("w+b") as stderr:
         try:
             process = subprocess.Popen(
-                run["argv"],
-                cwd=cwd,
-                env=safe_environment(run_id, run["seed"]),
+                command,
+                cwd=execution_cwd,
+                env=execution_environment,
                 stdin=subprocess.DEVNULL,
                 stdout=stdout,
                 stderr=stderr,
@@ -331,6 +473,26 @@ def run_one(
         stderr_text, stderr_truncated = read_capped(Path(stderr.name))
     (log_dir / "stdout.txt").write_text(stdout_text, encoding="utf-8")
     (log_dir / "stderr.txt").write_text(stderr_text, encoding="utf-8")
+    changed_inputs: list[dict[str, Any]] = []
+    for original in input_records:
+        input_path = resolve_inside(project, original["path"], f"{run_id}.inputs")
+        if not input_path.is_file():
+            changed_inputs.append({"path": original["path"], "reason": "missing"})
+            continue
+        current_hash = sha256_file(input_path)
+        if current_hash != original["sha256"]:
+            changed_inputs.append(
+                {
+                    "path": original["path"],
+                    "reason": "hash_changed",
+                    "expected_sha256": original["sha256"],
+                    "actual_sha256": current_hash,
+                }
+            )
+    if changed_inputs:
+        status = "failed"
+        integrity_error = "Approved inputs changed during execution"
+        error = f"{error}; {integrity_error}" if error else integrity_error
     output_records = []
     missing_outputs = []
     for output in outputs:
@@ -367,11 +529,17 @@ def run_one(
         "git_commit": git_commit(cwd),
         "approved_plan_sha256": plan_sha256,
         "inputs": input_records,
+        "input_integrity": {
+            "verified_after_run": True,
+            "passed": not changed_inputs,
+            "mutated_or_missing": changed_inputs,
+        },
         "runtime": {
             "python": platform.python_version(),
             "python_executable": sys.executable,
             "platform": platform.platform(),
         },
+        "executor_isolation": isolation,
         "outputs": output_records,
         "missing_outputs": missing_outputs,
         "logs": {

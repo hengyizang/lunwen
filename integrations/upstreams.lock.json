@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-09-17",
+  "reviewed_at": "2026-09-19",
   "sources": [
     {
       "id": "kdense-scientific-agent-skills",
@@ -148,6 +148,30 @@
       "installation": "Optional preinstalled Python package discovered locally",
       "selected_skills": [],
       "selection_note": "Reviewed optional adapter target for local data-quality and drift comparisons. Explicit reference/current cohorts are required before it can support a claim."
+    },
+    {
+      "id": "tooluniverse",
+      "repository": "https://github.com/mims-harvard/ToolUniverse",
+      "commit": "8016f8f87dcb21517ac75c1c64807642ca1dd968",
+      "upstream_version": "1.5.1",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/mims-harvard/ToolUniverse/blob/8016f8f87dcb21517ac75c1c64807642ca1dd968/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional isolated environment; record outputs with scripts/ai4science_evidence.py",
+      "selected_skills": [],
+      "selection_note": "Mature AI-for-science tool ecosystem, especially strong for biomedical and life-science routes. It is topic-selected after G1, never a source of gate authority, and every used output must be locally hash-bound."
+    },
+    {
+      "id": "paperqa2",
+      "repository": "https://github.com/Future-House/paper-qa",
+      "commit": "57e89f7223b0960d5ee5ea048c69e3c47e088572",
+      "upstream_version": "2026.08.12",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/Future-House/paper-qa/blob/57e89f7223b0960d5ee5ea048c69e3c47e088572/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Optional isolated environment; record indexes/answers with scripts/ai4science_evidence.py",
+      "selected_skills": [],
+      "selection_note": "Reviewed scientific-document RAG option for a human-owned local corpus. It may support discovery and contradiction checks, but citations still require primary-source verification and exact provider-search receipts."
     },
     {
       "id": "dvc",

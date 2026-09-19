@@ -1,4 +1,4 @@
-# API-first mode (v1.9.0)
+# API-first mode (v2.0.0)
 
 Doctoral Research OS can run without Claude Code or Codex CLI. The Python control plane calls Claude only for a non-publishable semantic plan and independent audits. OpenAI/Codex independently writes and remediates every persistent artifact. The control plane validates bundles atomically, rejects long verbatim spans copied from Claude control text, records writer-family hashes, and requires a current non-Anthropic origin for every final packaged file.
 
@@ -59,8 +59,14 @@ non-Claude writer's itemized dispositions to `reviews/decision-log.md` after the
 G1 additionally requires `program/originality-audit.json`; G2 requires a
 complete pairwise paper-distinctness matrix and paper-contract schema 2.0; G3
 requires one or more linked experiment designs per paper, with every planned run
-assigned exactly once. Candidate and selected venues
-must be current JCR Q1 SCI/SCIE. At G4 the registry and claim matrix are hash-linked to the approved plan and outputs. At G5 the control plane checks the final source and all submission-bound text, deterministic figure provenance, current citation/venue report hashes and per-paper approval hash. These are readiness
+assigned exactly once. Theme B must own disjoint claims, papers and primary
+evidence and survive failure of Theme A. Candidate and selected venues are
+bound to a human-imported local JCR export and must be current JCR Q1 SCI/SCIE.
+At G4 the registry and claim matrix are hash-linked to the approved plan and
+outputs; clean-room claims require an executor-issued, digest-pinned container
+isolation receipt. A linked worktree alone does not qualify. At G5 the control plane checks the final source and
+all submission-bound text, deterministic figure provenance, current
+citation/venue report hashes and per-paper approval hash. These are readiness
 checks, not an acceptance guarantee.
 
 ## Architecture

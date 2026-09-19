@@ -258,10 +258,13 @@ class ApiFirstTests(unittest.TestCase):
         for relative in (
             "data/discovery-broad-auto-20260902T000000Z.json",
             "evidence/dataset-search-log.jsonl",
+            "evidence/search-log.jsonl",
+            "evidence/literature-api-ledger.jsonl",
+            "evidence/literature/raw/receipt.json",
+            "evidence/ai4science-ledger.jsonl",
+            "program/venue-candidates.json",
         ):
-            with self.subTest(relative=relative), self.assertRaisesRegex(
-                ValueError, "Automatic discovery evidence"
-            ):
+            with self.subTest(relative=relative), self.assertRaises(ValueError):
                 api_orchestrator.safe_target("demo", relative)
 
     def test_safe_target_protects_deterministic_style_audit(self):

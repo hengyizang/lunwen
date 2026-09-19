@@ -103,6 +103,118 @@ def validate_venue_candidates(value: Any, field: str = "target_venues") -> list[
     return errors
 
 
+def validate_thesis_theme(value: dict[str, Any], expected_theme_id: str) -> list[str]:
+    """Validate the minimum falsifiable contract for thesis theme A or B."""
+
+    errors: list[str] = []
+    if value.get("schema_version") != "1.0":
+        errors.append("schema_version must be 1.0")
+    if value.get("theme_id") != expected_theme_id:
+        errors.append(f"theme_id must be {expected_theme_id}")
+    if value.get("status") not in {"ready_for_review", "approved"}:
+        errors.append("status must be ready_for_review or approved")
+    for key in ("title", "doctoral_question", "distinct_contribution"):
+        _text(value.get(key), key, errors)
+    _string_list(value.get("novelty_claim_ids"), "novelty_claim_ids", errors, minimum=2)
+    paper_ids = _string_list(value.get("planned_paper_ids"), "planned_paper_ids", errors)
+    for paper_id in paper_ids:
+        if not PAPER_RE.fullmatch(paper_id):
+            errors.append(f"planned_paper_ids contains an invalid paper ID: {paper_id}")
+    _string_list(value.get("falsification_conditions"), "falsification_conditions", errors, minimum=2)
+    if value.get("human_review_required") is not True:
+        errors.append("human_review_required must be true")
+    if expected_theme_id == "B":
+        _text(value.get("mechanism_or_rationale"), "mechanism_or_rationale", errors)
+        _string_list(
+            value.get("independent_evidence_plan"),
+            "independent_evidence_plan",
+            errors,
+            minimum=2,
+        )
+        _string_list(value.get("boundary_conditions"), "boundary_conditions", errors)
+        _text(value.get("fallback_if_unsupported"), "fallback_if_unsupported", errors)
+        relationship = _object(value.get("relationship_to_core"), "relationship_to_core", errors)
+        _string_list(
+            relationship.get("shared_foundation"),
+            "relationship_to_core.shared_foundation",
+            errors,
+            minimum=0,
+        )
+        for key in (
+            "independent_question",
+            "independent_claims",
+            "independent_primary_evidence",
+            "survives_core_failure",
+        ):
+            if relationship.get(key) is not True:
+                errors.append(f"relationship_to_core.{key} must be true")
+        _text(
+            relationship.get("non_dependency_rationale"),
+            "relationship_to_core.non_dependency_rationale",
+            errors,
+        )
+    return errors
+
+
+def validate_theme_independence(
+    core: dict[str, Any], extension: dict[str, Any]
+) -> list[str]:
+    """Make theme B independence a deterministic G1/G2 blocking condition."""
+
+    errors = [f"core: {item}" for item in validate_thesis_theme(core, "A")]
+    errors.extend(f"extension: {item}" for item in validate_thesis_theme(extension, "B"))
+    core_claims = set(str(item) for item in core.get("novelty_claim_ids", [])) if isinstance(core.get("novelty_claim_ids"), list) else set()
+    extension_claims = set(str(item) for item in extension.get("novelty_claim_ids", [])) if isinstance(extension.get("novelty_claim_ids"), list) else set()
+    overlap = sorted(core_claims & extension_claims)
+    if overlap:
+        errors.append("theme A and B novelty claim IDs must be disjoint: " + ", ".join(overlap))
+    core_papers = set(str(item) for item in core.get("planned_paper_ids", [])) if isinstance(core.get("planned_paper_ids"), list) else set()
+    extension_papers = set(str(item) for item in extension.get("planned_paper_ids", [])) if isinstance(extension.get("planned_paper_ids"), list) else set()
+    paper_overlap = sorted(core_papers & extension_papers)
+    if paper_overlap:
+        errors.append("theme A and B planned papers must be disjoint: " + ", ".join(paper_overlap))
+    core_question = str(core.get("doctoral_question", "")).strip().casefold()
+    extension_question = str(extension.get("doctoral_question", "")).strip().casefold()
+    if core_question and core_question == extension_question:
+        errors.append("theme B must have a doctoral question distinct from theme A")
+    return errors
+
+
+def validate_theme_mapping(
+    paper_map: dict[str, Any], core: dict[str, Any], extension: dict[str, Any]
+) -> list[str]:
+    errors: list[str] = []
+    papers = paper_map.get("papers") if isinstance(paper_map.get("papers"), list) else []
+    by_theme: dict[str, dict[str, set[str]]] = {
+        "A": {"papers": set(), "claims": set()},
+        "B": {"papers": set(), "claims": set()},
+    }
+    for index, item in enumerate(papers):
+        if not isinstance(item, dict):
+            continue
+        theme_id = item.get("theme_id")
+        if theme_id not in by_theme:
+            errors.append(f"papers[{index}].theme_id must be A or B")
+            continue
+        paper_id = item.get("paper_id")
+        if isinstance(paper_id, str):
+            by_theme[theme_id]["papers"].add(paper_id)
+        claims = item.get("unique_claim_ids")
+        if isinstance(claims, list):
+            by_theme[theme_id]["claims"].update(str(claim) for claim in claims)
+    for theme_id, contract in (("A", core), ("B", extension)):
+        planned_values = contract.get("planned_paper_ids")
+        planned = set(str(item) for item in planned_values) if isinstance(planned_values, list) else set()
+        if by_theme[theme_id]["papers"] != planned:
+            errors.append(f"theme {theme_id} paper-map assignments must exactly match planned_paper_ids")
+        claim_values = contract.get("novelty_claim_ids")
+        required_claims = set(str(item) for item in claim_values) if isinstance(claim_values, list) else set()
+        missing = sorted(required_claims - by_theme[theme_id]["claims"])
+        if missing:
+            errors.append(f"theme {theme_id} paper-map claims omit: {', '.join(missing)}")
+    return errors
+
+
 def validate_originality_audit(audit: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if audit.get("schema_version") != "1.0":
@@ -212,8 +324,8 @@ def validate_search_log(
     search_ids: set[str] = set()
     for index, record in enumerate(records):
         prefix = f"search-log[{index}]"
-        if record.get("schema_version") != "1.0":
-            errors.append(f"{prefix}.schema_version must be 1.0")
+        if record.get("schema_version") != "1.1":
+            errors.append(f"{prefix}.schema_version must be 1.1")
         search_id = _text(record.get("search_id"), f"{prefix}.search_id", errors)
         if search_id:
             if search_id in search_ids:
@@ -239,6 +351,12 @@ def validate_search_log(
         if not isinstance(result_count, int) or isinstance(result_count, bool) or result_count < 0:
             errors.append(f"{prefix}.result_count must be a non-negative integer")
         _https(record.get("source_url"), f"{prefix}.source_url", errors)
+        _text(record.get("evidence_receipt_id"), f"{prefix}.evidence_receipt_id", errors)
+        for hash_field in ("response_sha256", "normalized_results_sha256"):
+            value = record.get(hash_field)
+            if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+                errors.append(f"{prefix}.{hash_field} must be a SHA-256 digest")
+        _text(record.get("screened_by"), f"{prefix}.screened_by", errors)
         included = _string_list(
             record.get("included_work_ids"),
             f"{prefix}.included_work_ids",
@@ -299,6 +417,8 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
             errors.append(f"{prefix}.paper_id must look like P01")
         else:
             seen.append(paper_id)
+        if paper.get("theme_id") not in {"A", "B"}:
+            errors.append(f"{prefix}.theme_id must be A or B")
         for key in ("portfolio_role", "distinct_contribution"):
             _text(paper.get(key), f"{prefix}.{key}", errors)
         claim_ids = _string_list(paper.get("unique_claim_ids"), f"{prefix}.unique_claim_ids", errors)
@@ -610,19 +730,16 @@ def validate_experiment_design(
         )
     if set(original_runs) & set(clean_runs):
         errors.append("reproduction_plan original and clean-room run IDs must be disjoint")
-    original_cwds = {
-        str(plan_runs[run_id].get("cwd", "."))
-        for run_id in original_runs if run_id in plan_runs
-    }
-    clean_cwds = {
-        str(plan_runs[run_id].get("cwd", "."))
-        for run_id in clean_runs if run_id in plan_runs
-    }
-    if original_cwds and clean_cwds and original_cwds & clean_cwds:
-        errors.append("clean-room runs must use a different approved cwd/checkout")
+    for run_id in clean_runs:
+        run = plan_runs.get(run_id)
+        isolation = run.get("isolation") if isinstance(run, dict) else None
+        if not isinstance(isolation, dict) or isolation.get("kind") != "container":
+            errors.append(
+                f"clean-room run {run_id} must use digest-pinned container isolation"
+            )
     for key in (
         "independent_operator_plan",
-        "separate_checkout_plan",
+        "isolated_environment_plan",
         "environment_capture_plan",
     ):
         _text(reproduction.get(key), f"reproduction_plan.{key}", errors)

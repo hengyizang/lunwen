@@ -203,6 +203,34 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                 </fieldset>
               </form>
 
+              <div class="phase-tools">
+                <div class="tool-card">
+                  <h3>可验证文献检索</h3>
+                  <p>直接调用公开学术 API，保存原始响应、规范化结果和 SHA-256。结果必须再由具名人员筛选。</p>
+                  <div class="two-columns">
+                    <select id="literatureProvider"><option value="openalex">OpenAlex</option><option value="crossref">Crossref</option><option value="semantic-scholar">Semantic Scholar</option><option value="arxiv">arXiv</option><option value="europe-pmc">Europe PMC</option><option value="dblp">DBLP</option><option value="hal">HAL</option></select>
+                    <input id="literatureLimit" type="number" min="1" max="100" value="25" placeholder="返回数量">
+                  </div>
+                  <input id="literatureQuery" placeholder="检索式">
+                  <div class="three-columns">
+                    <input id="literatureFamily" placeholder="查询族，例如 core-method">
+                    <input id="literatureDateRange" value="2021-2026" placeholder="日期范围">
+                    <input id="literatureFilters" value="journal and conference papers" placeholder="过滤条件">
+                  </div>
+                  <button id="runLiteratureSearch" class="button secondary">执行并保存检索证据</button>
+                </div>
+                <div class="tool-card">
+                  <h3>人工筛选检索结果</h3>
+                  <p>从任务日志复制 receipt ID；纳入 ID 必须来自对应的规范化结果。每行一个 ID 或排除理由。</p>
+                  <input id="literatureReceipt" placeholder="receipt ID">
+                  <div class="two-columns">
+                    <textarea id="literatureIncluded" rows="4" placeholder="doi:10.xxxx/...&#10;openalex:..."></textarea>
+                    <textarea id="literatureExclusions" rows="4" placeholder="必填：每行一个排除理由"></textarea>
+                  </div>
+                  <button id="screenLiterature" class="button primary">记录具名筛选决定</button>
+                </div>
+              </div>
+
               <div class="results-heading">
                 <div><h3>候选数据集</h3><p id="dataSummary" class="muted">尚未执行搜索</p></div>
                 <label class="field compact"><span>最低相关度</span><input id="scoreFilter" type="range" min="0" max="100" value="25"><output id="scoreValue">25</output></label>
@@ -230,6 +258,14 @@ industrial robot anomaly detection multivariate sensor data</textarea>
               <div class="phase-note"><strong>博士主线</strong><span>Theme A 必须连贯，Theme B 必须具备可独立成立的博士级深度。</span></div>
               <div class="phase-note"><strong>论文独立性</strong><span>六篇论文分别拥有清晰问题、数据、方法、实验和不可互换的贡献。</span></div>
               <div class="phase-note"><strong>期刊门槛</strong><span>以当前 JCR Q1 为设计目标，但分区证据和适配度必须逐篇、逐年核验。</span></div>
+              <div class="tool-card">
+                <h3>期刊候选库</h3>
+                <p>从项目内的授权 JCR CSV/JSON 导出生成候选库；每篇至少两个当前 Q1 SCI/SCIE 候选，并绑定官网指南与政策链接。</p>
+                <input id="venueCandidateSpec" placeholder="例如 private/venue-candidate-spec.json">
+                <input id="venueJcrExport" placeholder="例如 private/jcr-export.csv">
+                <input id="venueJcrSource" value="https://jcr.clarivate.com/" placeholder="JCR 官方来源网址">
+                <button id="buildVenueCandidates" class="button secondary">导入并生成候选库</button>
+              </div>
             </div>
           </section>
 
@@ -253,7 +289,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
               </div>
               <div class="tool-card">
                 <h3>本地数据质量审计</h3>
-                <p>读取本地 CSV/TSV/JSONL，核对哈希、缺失、重复、类别失衡及跨划分泄漏；数据不会上传。</p>
+                <p>读取本地表格、图像、WAV、NumPy、HDF5 或 Parquet，核对哈希、内容可读性、重复及跨划分泄漏；数据不会上传。</p>
                 <div class="two-columns">
                   <input id="qualityDatasetId" placeholder="datasets.jsonl 中的 dataset_id">
                   <input id="qualityDataPath" placeholder="例如 data/raw/bearing.csv">
@@ -268,7 +304,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
               </div>
               <div class="tool-card">
                 <h3>可执行统计功效</h3>
-                <p>使用本地 <code>statsmodels</code> 计算，不接受只写一句“功效足够”。效应量必须来自先验研究、试点或最小实际意义。</p>
+                <p>使用本地 <code>statsmodels</code> 计算；Monte Carlo 脚本会在两个干净临时目录中由控制层重复执行并精确比对，不接受只绑定一个结果文件。</p>
                 <div class="two-columns">
                   <select id="powerPaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
                   <select id="powerMethod"><option value="ttest_ind">独立样本 t 检验</option><option value="ttest_paired">配对 t 检验</option><option value="ttest_one_sample">单样本 t 检验</option><option value="anova">ANOVA</option><option value="proportion_ind">两比例比较</option><option value="simulation">Monte Carlo 仿真（ML/复杂指标）</option></select>
@@ -322,7 +358,7 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                 <select id="reproductionPaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
                 <button id="confirmReproduction" class="button primary">核验并确认该论文</button>
               </div>
-              <div class="phase-note"><strong>G4 输出要求</strong><span>从真实运行记录构建 claim–evidence matrix；每篇论文必须复现领域标准与强近期基线，并用不同环境、不同运行 ID 完成隔离复现，全部绑定真实输出哈希。</span></div>
+              <div class="phase-note"><strong>G4 输出要求</strong><span>从真实运行记录构建 claim–evidence matrix；每篇论文必须复现领域标准与强近期基线。clean-room 运行必须来自锁定镜像且禁网/只读根文件系统的容器，并绑定执行器收据与输出哈希；linked Git worktree 仅算独立检出目录。</span></div>
             </div>
           </section>
 

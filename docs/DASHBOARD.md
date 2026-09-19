@@ -1,4 +1,4 @@
-# Local visual dashboard (v1.9.0)
+# Local visual dashboard (v2.0.0)
 
 The dashboard is a beginner-facing local client over the existing Doctoral
 Research OS. It does not replace the G0–G5 control plane. Every mutation is
@@ -136,13 +136,21 @@ The dashboard reports:
 - paper-by-paper completion;
 - ranked discovery candidates.
 - the active paper's hash-bound academic-style audit status and actionable findings.
-- novelty-matrix, local data-quality, executable-power, frozen-preregistration,
+- executed/screened literature receipts, Theme B independence, venue candidates,
+  novelty-matrix, local data-quality, executable-power, frozen-preregistration,
   baseline-reproduction and clean-room-reproduction completion counts.
 
 It cannot truthfully decide data rights, doctoral originality, causal validity,
 authorship, ethics, current JCR category evidence, or final submission fitness.
 Those decisions remain named human actions. Model consensus is not scientific
 validation.
+
+The G1 workspace also exposes evidence-producing literature retrieval for
+OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP and HAL. The first
+action saves exact provider bytes and hashes; the second action records a named
+screening decision over returned IDs. G2 can build the per-paper venue registry
+from a project-local authorized JCR CSV/JSON export and a human-authored
+candidate specification. Neither control automates licensed database access.
 
 ## Research-quality controls
 
@@ -155,13 +163,14 @@ bash scripts/bootstrap-wsl.sh --with-research-quality-tools
 The G3 workspace then provides three local actions:
 
 1. **本地数据质量审计** reads a project-local dataset, verifies current hashes
-   and scans CSV/TSV/JSONL missingness, duplicates, labels and split/group
+   and scans tables, images, WAV, NumPy, HDF5 and Parquet for content validity,
+   duplicates, labels and split/group
    overlap. It does not claim human review. After reading the report and all
    warnings, **阅读报告后确认** records a named, hash-bound confirmation; changing
    the report or data makes it stale.
 2. **可执行统计功效** runs pinned `statsmodels` for supported classical designs,
-   or binds a >=1,000-run Monte Carlo script and structured result for complex
-   ML metrics, cross-checking rejection counts, power, seeds and the script hash.
+   or reruns a >=1,000-run Monte Carlo script twice in clean directories for
+   complex ML metrics, cross-checking exact output, power, seeds and script hash.
 3. **全部检查后冻结预注册** refuses to proceed until every paper's data,
    designs, plan, budget and power evidence are complete, then stores their
    hashes. It also refuses to freeze after experiment attempts exist.

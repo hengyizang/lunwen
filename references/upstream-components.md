@@ -84,8 +84,8 @@ separately.
 
 ## Research-quality toolchain
 
-The v1.9 hard gates use a small dependency-free core for file hashes, complete
-CSV/TSV/JSONL scans, missingness, exact duplicates, label imbalance and
+The v2.0 hard gates use a small dependency-free core for file hashes, complete
+tabular scans, non-tabular handler dispatch, exact duplicates, label imbalance and
 split/group overlap. This keeps the gate auditable when an optional package is
 unavailable. The following mature upstreams were reviewed and pinned rather
 than reimplementing their specialist functionality:
@@ -106,8 +106,14 @@ than reimplementing their specialist functionality:
 - [`DVC`](https://github.com/treeverse/dvc), Apache-2.0: optional data and
   pipeline versioning. DVC metadata never replaces this repository's G0–G5
   state, approved-plan hash or experiment registry.
+- [`ToolUniverse`](https://github.com/mims-harvard/ToolUniverse), Apache-2.0:
+  optional topic-selected AI4Science tool ecosystem. It is strongest for
+  biomedical/life-science routes and is not enabled indiscriminately.
+- [`PaperQA2`](https://github.com/Future-House/paper-qa), Apache-2.0: optional
+  local scientific-document RAG and contradiction-checking layer. Its answers
+  remain advisory and every citation still needs primary-source verification.
 
-All five remain opt-in and local. Their availability and version are shown in
+All optional tools remain opt-in and local. Their availability and version are shown in
 the generated data-quality report. Heavy optional profilers are not silently
 installed or allowed to upload research data. The exact reviewed commits and
 licenses are recorded in `integrations/upstreams.lock.json`.

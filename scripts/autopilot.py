@@ -150,7 +150,7 @@ including exact run-to-design assignment, traceable baseline versions and
 licenses, fair tuning, ablations, leakage, estimands, practical thresholds,
 statistics, power or precision, external validity, negative controls and
 falsification. Plan domain-standard and strong-recent reproduction runs plus
-disjoint original/clean-room runs in different approved checkouts before G3 is
+disjoint original/clean-room runs in digest-pinned, network-disabled containers before G3 is
 frozen. Run only the stage validators allowed by the repository rules.
 At G1 create program/novelty-claim-matrix.json with claim-level closest-work
 differences, falsification logic and documented search saturation. At G3 never
@@ -158,8 +158,8 @@ invent deterministic data-quality, power-analysis or preregistration files;
 scripts/research_quality.py creates and protects them after the required inputs
 exist. At G4 create baseline-reproduction.json and clean-room-reproduction.json
 for each paper only from exact successful attempt IDs and their complete current
-output sets; match the G3-frozen run roles, baseline IDs/source URLs, checkout
-paths and tolerances. Use reports/runtime-evidence-catalog.json for exact facts.
+output sets; match the G3-frozen run roles, baseline IDs/source URLs, executor
+isolation IDs and tolerances. Use reports/runtime-evidence-catalog.json for exact facts.
 At G5 write direct, evidence-led academic prose; remove stock framing,
 mechanical transitions, repeated sentence openings, conversational artifacts,
 vague attribution and unsupported importance or novelty claims. Prefer concrete
@@ -472,6 +472,15 @@ def protected_control_snapshot(
     paths.extend(root.glob("papers/P[0-9][0-9]/preregistration.json"))
     paths.extend(root.glob("papers/P[0-9][0-9]/reproduction-confirmation.json"))
     paths.append(root / "reports" / "runtime-evidence-catalog.json")
+    paths.append(root / "evidence" / "literature-api-ledger.jsonl")
+    paths.append(root / "evidence" / "search-log.jsonl")
+    paths.append(root / "evidence" / "ai4science-ledger.jsonl")
+    paths.append(root / "program" / "venue-candidates.json")
+    if (root / "evidence" / "literature").is_dir():
+        paths.extend(
+            path for path in (root / "evidence" / "literature").rglob("*")
+            if path.is_file()
+        )
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
         if dirname.is_dir():
             paths.extend(path for path in dirname.rglob("*") if path.is_file())
@@ -509,6 +518,20 @@ def ensure_protected_control_unchanged(
     )
     if (root / "reports" / "runtime-evidence-catalog.json").is_file():
         current_paths.add("reports/runtime-evidence-catalog.json")
+    if (root / "evidence" / "literature-api-ledger.jsonl").is_file():
+        current_paths.add("evidence/literature-api-ledger.jsonl")
+    if (root / "evidence" / "search-log.jsonl").is_file():
+        current_paths.add("evidence/search-log.jsonl")
+    if (root / "evidence" / "ai4science-ledger.jsonl").is_file():
+        current_paths.add("evidence/ai4science-ledger.jsonl")
+    if (root / "program" / "venue-candidates.json").is_file():
+        current_paths.add("program/venue-candidates.json")
+    if (root / "evidence" / "literature").is_dir():
+        current_paths.update(
+            path.relative_to(root).as_posix()
+            for path in (root / "evidence" / "literature").rglob("*")
+            if path.is_file()
+        )
     current_paths.update(
         path.relative_to(root).as_posix()
         for path in (root / "data" / "quality").glob("*.json")

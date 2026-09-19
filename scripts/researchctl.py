@@ -115,13 +115,23 @@ def gate_errors(slug,gate):
         return errors
     if gate=="G1":
         searches=jsonl_objects(project/"evidence"/"search-log.jsonl",errors)
+        ai4science_path=project/"evidence"/"ai4science-ledger.jsonl"
+        if ai4science_path.is_file() and ai4science_path.read_text(encoding="utf-8").strip():
+            try:
+                from scripts.ai4science_evidence import read_ledger,validate
+                errors.extend(f"evidence/ai4science-ledger.jsonl: {x}" for x in validate(project,read_ledger(ai4science_path)))
+            except (ImportError,RuntimeError) as exc:errors.append(f"AI4Science evidence validator unavailable: {exc}")
         s=load_nonempty_json(project/"program"/"topic-shortlist.json",errors)
         if s:
             cs=s.get("candidates") or s.get("topics")
             if not isinstance(cs,list) or len(cs)<3:errors.append("topic-shortlist.json requires at least three candidates")
-        for rel in ("program/core-thesis.json","program/extension-thesis.json"):
-            v=load_nonempty_json(project/rel,errors)
-            if v and v.get("status") not in {"ready_for_review","approved"}:errors.append(f"{rel} status must be ready_for_review or approved")
+        core_thesis=load_nonempty_json(project/"program/core-thesis.json",errors)
+        extension_thesis=load_nonempty_json(project/"program/extension-thesis.json",errors)
+        if core_thesis and extension_thesis:
+            try:
+                from scripts.research_design import validate_theme_independence
+                errors.extend(f"program/theme-independence: {x}" for x in validate_theme_independence(core_thesis,extension_thesis))
+            except ImportError as exc:errors.append(f"theme independence validator unavailable: {exc}")
         originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
         if originality:
             try:
@@ -129,6 +139,10 @@ def gate_errors(slug,gate):
                 errors.extend(f"program/originality-audit.json: {x}" for x in validate_originality_audit(originality))
                 errors.extend(f"evidence/search-log.jsonl: {x}" for x in validate_search_log(searches,originality))
             except ImportError as exc:errors.append(f"originality validator unavailable: {exc}")
+            try:
+                from scripts.literature_evidence import validate_search_evidence
+                errors.extend(f"evidence/search-log.jsonl: {x}" for x in validate_search_evidence(project,searches))
+            except ImportError as exc:errors.append(f"literature evidence validator unavailable: {exc}")
             novelty_matrix=load_nonempty_json(project/"program"/"novelty-claim-matrix.json",errors)
             if novelty_matrix:
                 try:
@@ -139,6 +153,16 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G2":
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
+        venue_registry=load_nonempty_json(project/"program"/"venue-candidates.json",errors);venue_names_by_paper={}
+        if venue_registry:
+            try:
+                from scripts.venue_candidates import validate_registry
+                errors.extend(f"program/venue-candidates.json: {x}" for x in validate_registry(project,venue_registry))
+                for item in venue_registry.get("papers",[]) if isinstance(venue_registry.get("papers"),list) else []:
+                    if isinstance(item,dict) and item.get("paper_id"):
+                        values=item.get("candidates",[]);values=values if isinstance(values,list) else []
+                        venue_names_by_paper[str(item["paper_id"])]=set(str(candidate.get("name")) for candidate in values if isinstance(candidate,dict) and candidate.get("name"))
+            except ImportError as exc:errors.append(f"venue candidate validator unavailable: {exc}")
         if len(dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(dirs)}")
         originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
         prior_work_values=(originality or {}).get("closest_prior_work",[]);prior_work_values=prior_work_values if isinstance(prior_work_values,list) else []
@@ -150,13 +174,20 @@ def gate_errors(slug,gate):
             claim_values=item.get("unique_claim_ids",[]);claim_values=claim_values if isinstance(claim_values,list) else []
             mapped_claims[str(item.get("paper_id"))]=set(str(claim) for claim in claim_values)
         try:
-            from scripts.research_design import validate_paper_contract,validate_paper_map
+            from scripts.research_design import validate_paper_contract,validate_paper_map,validate_theme_independence,validate_theme_mapping
             if paper_map:errors.extend(f"program/paper-map.json: {x}" for x in validate_paper_map(paper_map,(pd.name for pd in dirs)))
+            core_thesis=load_nonempty_json(project/"program/core-thesis.json",errors);extension_thesis=load_nonempty_json(project/"program/extension-thesis.json",errors)
+            if core_thesis and extension_thesis:
+                errors.extend(f"program/theme-independence: {x}" for x in validate_theme_independence(core_thesis,extension_thesis))
+                if paper_map:errors.extend(f"program/paper-map.json: {x}" for x in validate_theme_mapping(paper_map,core_thesis,extension_thesis))
         except ImportError as exc:errors.append(f"paper architecture validator unavailable: {exc}");validate_paper_contract=None
         for pd in dirs:
             c=load_nonempty_json(pd/"paper-contract.json",errors)
             if c and validate_paper_contract:errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name))
             if c:
+                contract_venue_values=c.get("target_venues",[]);contract_venue_values=contract_venue_values if isinstance(contract_venue_values,list) else []
+                contract_venue_names=set(str(item.get("name")) for item in contract_venue_values if isinstance(item,dict) and item.get("name"))
+                if venue_names_by_paper.get(pd.name,set())!=contract_venue_names:errors.append(f"{pd.name} target venues must match program/venue-candidates.json")
                 boundary=c.get("originality_boundary") if isinstance(c.get("originality_boundary"),dict) else {};independence=c.get("independence") if isinstance(c.get("independence"),dict) else {}
                 referenced_values=boundary.get("closest_prior_work_ids",[]);referenced_values=referenced_values if isinstance(referenced_values,list) else []
                 referenced=set(str(item) for item in referenced_values);missing=sorted(referenced-prior_work_ids)
@@ -367,7 +398,16 @@ def initialize(args):
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"Windows 11 with WSL2 recommended","orchestrator":"API-first Python orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
-    for rel in ["evidence/search-log.jsonl","data/datasets.jsonl","experiments/registry.jsonl"]:write_text(dest/rel,"")
+    write_json(dest/"program"/"core-thesis.json",{"schema_version":"1.0","theme_id":"A","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","novelty_claim_ids":[],"planned_paper_ids":[],"falsification_conditions":[],"human_review_required":True})
+    write_json(dest/"program"/"extension-thesis.json",{"schema_version":"1.0","theme_id":"B","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","mechanism_or_rationale":"","novelty_claim_ids":[],"planned_paper_ids":[],"independent_evidence_plan":[],"falsification_conditions":[],"boundary_conditions":[],"relationship_to_core":{"shared_foundation":[],"independent_question":False,"independent_claims":False,"independent_primary_evidence":False,"survives_core_failure":False,"non_dependency_rationale":""},"fallback_if_unsupported":"","human_review_required":True})
+    for rel in [
+        "evidence/search-log.jsonl",
+        "evidence/literature-api-ledger.jsonl",
+        "evidence/ai4science-ledger.jsonl",
+        "data/datasets.jsonl",
+        "experiments/registry.jsonl",
+    ]:
+        write_text(dest / rel, "")
     write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,support,uncertainty,status\n")
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid

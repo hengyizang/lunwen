@@ -14,9 +14,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["paper_id", "portfolio_role", "distinct_contribution", "unique_claim_ids", "shared_assets", "dependencies"],
+        "required": ["paper_id", "theme_id", "portfolio_role", "distinct_contribution", "unique_claim_ids", "shared_assets", "dependencies"],
         "properties": {
           "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+          "theme_id": {"enum": ["A", "B"]},
           "portfolio_role": {"type": "string", "minLength": 1},
           "distinct_contribution": {"type": "string", "minLength": 1},
           "unique_claim_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},

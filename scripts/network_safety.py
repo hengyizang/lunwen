@@ -165,3 +165,52 @@ def fetch_json(
         return json.loads(payload.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise NetworkSafetyError(f"Endpoint did not return valid UTF-8 JSON: {exc}") from exc
+
+
+def fetch_bytes(
+    url: str,
+    *,
+    timeout: int = 30,
+    max_bytes: int = DEFAULT_JSON_LIMIT,
+    headers: dict[str, str] | None = None,
+    opener: Callable[..., Any] | None = None,
+    resolver: Callable[..., list[tuple[Any, ...]]] = socket.getaddrinfo,
+) -> tuple[bytes, str, int | None, str | None]:
+    """Fetch bounded public HTTPS bytes plus auditable response metadata.
+
+    This is used where the exact provider response must be hashed before it is
+    parsed.  It intentionally supports GET only and never accepts credentials
+    in the URL.  Callers may add public API headers, but are responsible for
+    excluding secret values from any persisted request record.
+    """
+
+    public_url = require_public_https_url(url, resolver=resolver)
+    request_headers = {
+        "Accept": "application/json, application/atom+xml, application/xml;q=0.9",
+        "User-Agent": "DoctoralResearchOS/2.0 (+auditable research discovery)",
+    }
+    request_headers.update(headers or {})
+    request = urllib.request.Request(
+        public_url,
+        headers=request_headers,
+        method="GET",
+    )
+    open_url = opener or urllib.request.build_opener(
+        PublicHTTPSRedirectHandler(resolver)
+    ).open
+    try:
+        with open_url(request, timeout=timeout) as response:
+            final_url = response.geturl() if hasattr(response, "geturl") else public_url
+            final_url = require_public_https_url(
+                final_url, "redirected URL", resolver=resolver
+            )
+            payload = read_bounded_response(response, max_bytes)
+            status = getattr(response, "status", None)
+            content_type = (
+                response.headers.get("Content-Type") if response.headers else None
+            )
+    except NetworkSafetyError:
+        raise
+    except OSError as exc:
+        raise NetworkSafetyError(f"Request failed for {public_url}: {exc}") from exc
+    return payload, final_url, status, content_type

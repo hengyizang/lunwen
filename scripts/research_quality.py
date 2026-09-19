@@ -14,8 +14,10 @@ import json
 import math
 import os
 import re
+import subprocess
 import sys
 import tempfile
+import wave
 from collections import Counter
 from datetime import datetime, timezone
 from importlib import metadata
@@ -29,7 +31,14 @@ PAPER_RE = re.compile(r"^P[0-9]{2}$")
 DATASET_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,127}$")
 HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 TABULAR_SUFFIXES = {".csv", ".tsv", ".jsonl"}
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
+NUMPY_SUFFIXES = {".npy", ".npz"}
+HDF_SUFFIXES = {".h5", ".hdf5"}
+PARQUET_SUFFIXES = {".parquet"}
+AUDIO_SUFFIXES = {".wav"}
 REVIEWED_STATSMODELS_VERSION = "0.15.0"
+POWER_RERUN_TIMEOUT_SECONDS = 300
+POWER_RERUN_MAX_BYTES = 16 * 1024 * 1024
 
 
 class ResearchQualityError(RuntimeError):
@@ -348,6 +357,285 @@ def _row_key(row: dict[str, str], fields: Iterable[str]) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def _split_from_path(relative: Path) -> str | None:
+    aliases = {
+        "train": "train", "training": "train", "test": "test",
+        "testing": "test", "val": "validation", "valid": "validation",
+        "validation": "validation", "dev": "validation",
+    }
+    for part in relative.parts[:-1]:
+        if part.lower() in aliases:
+            return aliases[part.lower()]
+    return None
+
+
+def _profile_non_tabular(
+    source: Path, files: list[Path], maximum_rows: int
+) -> tuple[dict[str, Any], list[str], list[str]]:
+    """Inspect common AI/AI4Science formats with reviewed local libraries.
+
+    Unknown or unreadable formats are blockers.  The function never uploads
+    data and records the exact handler/version used so a later environment
+    change cannot masquerade as the same audit.
+    """
+
+    blockers: list[str] = []
+    warnings: list[str] = []
+    formats = Counter(path.suffix.lower() for path in files)
+    handlers: dict[str, Any] = {}
+    details: list[dict[str, Any]] = []
+    hashes: dict[str, list[Path]] = {}
+    for path in files:
+        hashes.setdefault(sha256_file(path), []).append(path)
+    duplicate_groups = [values for values in hashes.values() if len(values) > 1]
+    if duplicate_groups:
+        warnings.append(f"{sum(len(group) - 1 for group in duplicate_groups)} duplicate file(s) share exact content hashes")
+
+    root = source if source.is_dir() else source.parent
+    split_hashes: dict[str, set[str]] = {}
+    for digest, paths in hashes.items():
+        for path in paths:
+            try:
+                relative = path.relative_to(root)
+            except ValueError:
+                relative = Path(path.name)
+            split = _split_from_path(relative)
+            if split:
+                split_hashes.setdefault(split, set()).add(digest)
+    cross_split: set[str] = set()
+    names = sorted(split_hashes)
+    for left_index, left in enumerate(names):
+        for right in names[left_index + 1:]:
+            cross_split.update(split_hashes[left] & split_hashes[right])
+    if cross_split:
+        blockers.append("identical files occur in multiple path-inferred data splits")
+
+    tabular_files = [path for path in files if path.suffix.lower() in TABULAR_SUFFIXES]
+    cross_split_rows: set[str] = set()
+    if tabular_files:
+        handlers["tabular"] = {
+            "available": True,
+            "package": "python-standard-library",
+            "version": sys.version.split()[0],
+        }
+        tables: list[dict[str, Any]] = []
+        remaining_rows = maximum_rows
+        split_rows: dict[str, set[str]] = {}
+        for path in tabular_files:
+            relative = path.relative_to(root)
+            try:
+                fields, rows, complete = _iter_rows(path, max(0, remaining_rows))
+            except (OSError, UnicodeError, json.JSONDecodeError, csv.Error, ResearchQualityError) as exc:
+                blockers.append(f"cannot read tabular file {relative.as_posix()}: {exc}")
+                continue
+            remaining_rows -= len(rows)
+            if not fields:
+                blockers.append(f"tabular file has no header fields: {relative.as_posix()}")
+            if not rows:
+                blockers.append(f"tabular file has no rows: {relative.as_posix()}")
+            if not complete:
+                blockers.append("row limit reached across the multi-file dataset; a complete scan is required")
+            row_keys = [_row_key(row, fields) for row in rows]
+            duplicates = len(row_keys) - len(set(row_keys))
+            missing = {
+                field: sum(1 for row in rows if not row.get(field, "").strip())
+                for field in fields
+            }
+            constant = [
+                field for field in fields
+                if rows and len({row.get(field, "") for row in rows}) <= 1
+            ]
+            if rows and duplicates / len(rows) > 0.20:
+                warnings.append(
+                    f"more than 20% of rows are exact duplicates in {relative.as_posix()}"
+                )
+            split = _split_from_path(relative)
+            if split:
+                split_rows.setdefault(split, set()).update(row_keys)
+            tables.append(
+                {
+                    "path": relative.as_posix(),
+                    "format": path.suffix.lower().lstrip("."),
+                    "complete_scan": complete,
+                    "row_count": len(rows),
+                    "column_count": len(fields),
+                    "columns": fields,
+                    "missing_count_by_column": missing,
+                    "exact_duplicate_rows": duplicates,
+                    "constant_columns": constant,
+                }
+            )
+        split_names = sorted(split_rows)
+        for left_index, left in enumerate(split_names):
+            for right in split_names[left_index + 1:]:
+                cross_split_rows.update(split_rows[left] & split_rows[right])
+        if cross_split_rows:
+            blockers.append("identical tabular observations occur in multiple path-inferred data splits")
+        details.append(
+            {
+                "kind": "tabular_files",
+                "file_count": len(tabular_files),
+                "tables": tables,
+                "cross_split_exact_row_overlap_count": len(cross_split_rows),
+            }
+        )
+
+    image_files = [path for path in files if path.suffix.lower() in IMAGE_SUFFIXES]
+    if image_files:
+        try:
+            from PIL import Image, UnidentifiedImageError  # type: ignore
+            pillow_version = metadata.version("Pillow")
+        except (ImportError, metadata.PackageNotFoundError):
+            blockers.append("Pillow is required to verify image datasets")
+            handlers["images"] = {"available": False, "version": None}
+        else:
+            handlers["images"] = {"available": True, "package": "Pillow", "version": pillow_version}
+            corrupt: list[str] = []
+            dimensions: Counter[str] = Counter()
+            modes: Counter[str] = Counter()
+            labels: Counter[str] = Counter()
+            for path in image_files:
+                try:
+                    with Image.open(path) as image:
+                        image.verify()
+                    with Image.open(path) as image:
+                        dimensions[f"{image.width}x{image.height}"] += 1
+                        modes[str(image.mode)] += 1
+                except (OSError, UnidentifiedImageError) as exc:
+                    corrupt.append(f"{path.relative_to(root).as_posix()}: {exc}")
+                labels[path.parent.name] += 1
+            if corrupt:
+                blockers.append(f"{len(corrupt)} image file(s) are corrupt or unreadable")
+            details.append({
+                "kind": "images", "file_count": len(image_files),
+                "dimensions": dict(dimensions), "color_modes": dict(modes),
+                "parent_directory_distribution": dict(labels),
+                "corrupt_examples": corrupt[:20],
+            })
+
+    audio_files = [path for path in files if path.suffix.lower() in AUDIO_SUFFIXES]
+    if audio_files:
+        handlers["wav"] = {"available": True, "package": "python-wave", "version": sys.version.split()[0]}
+        corrupt: list[str] = []
+        sample_rates: Counter[str] = Counter()
+        channels: Counter[str] = Counter()
+        total_seconds = 0.0
+        for path in audio_files:
+            try:
+                with wave.open(str(path), "rb") as handle:
+                    rate = handle.getframerate()
+                    frames = handle.getnframes()
+                    sample_rates[str(rate)] += 1
+                    channels[str(handle.getnchannels())] += 1
+                    total_seconds += frames / rate if rate else 0.0
+            except (OSError, wave.Error, EOFError) as exc:
+                corrupt.append(f"{path.relative_to(root).as_posix()}: {exc}")
+        if corrupt:
+            blockers.append(f"{len(corrupt)} WAV file(s) are corrupt or unreadable")
+        details.append({
+            "kind": "wav_audio", "file_count": len(audio_files),
+            "sample_rates": dict(sample_rates), "channels": dict(channels),
+            "total_duration_seconds": round(total_seconds, 6),
+            "corrupt_examples": corrupt[:20],
+        })
+
+    numpy_files = [path for path in files if path.suffix.lower() in NUMPY_SUFFIXES]
+    if numpy_files:
+        try:
+            import numpy as np  # type: ignore
+            numpy_version = metadata.version("numpy")
+        except (ImportError, metadata.PackageNotFoundError):
+            blockers.append("NumPy is required to verify NPY/NPZ datasets")
+            handlers["numpy"] = {"available": False, "version": None}
+        else:
+            handlers["numpy"] = {"available": True, "package": "numpy", "version": numpy_version}
+            arrays: list[dict[str, Any]] = []
+            for path in numpy_files:
+                try:
+                    loaded = np.load(path, allow_pickle=False, mmap_mode="r" if path.suffix.lower() == ".npy" else None)
+                    values = {"array": loaded} if path.suffix.lower() == ".npy" else {name: loaded[name] for name in loaded.files}
+                    for name, array in values.items():
+                        nonfinite = int(np.size(array) - np.count_nonzero(np.isfinite(array))) if np.issubdtype(array.dtype, np.number) else None
+                        arrays.append({
+                            "path": path.relative_to(root).as_posix(), "name": name,
+                            "shape": list(array.shape), "dtype": str(array.dtype),
+                            "element_count": int(array.size), "nonfinite_count": nonfinite,
+                        })
+                    if hasattr(loaded, "close"):
+                        loaded.close()
+                except (OSError, ValueError, EOFError) as exc:
+                    blockers.append(f"cannot read NumPy file {path.relative_to(root).as_posix()}: {exc}")
+            details.append({"kind": "numpy_arrays", "file_count": len(numpy_files), "arrays": arrays})
+
+    hdf_files = [path for path in files if path.suffix.lower() in HDF_SUFFIXES]
+    if hdf_files:
+        try:
+            import h5py  # type: ignore
+            h5py_version = metadata.version("h5py")
+        except (ImportError, metadata.PackageNotFoundError):
+            blockers.append("h5py is required to verify HDF5 datasets")
+            handlers["hdf5"] = {"available": False, "version": None}
+        else:
+            handlers["hdf5"] = {"available": True, "package": "h5py", "version": h5py_version}
+            datasets: list[dict[str, Any]] = []
+            for path in hdf_files:
+                try:
+                    with h5py.File(path, "r") as handle:
+                        def visit(name: str, value: Any) -> None:
+                            if isinstance(value, h5py.Dataset):
+                                datasets.append({"file": path.relative_to(root).as_posix(), "name": name, "shape": list(value.shape), "dtype": str(value.dtype)})
+                        handle.visititems(visit)
+                except (OSError, ValueError) as exc:
+                    blockers.append(f"cannot read HDF5 file {path.relative_to(root).as_posix()}: {exc}")
+            details.append({"kind": "hdf5", "file_count": len(hdf_files), "datasets": datasets})
+
+    parquet_files = [path for path in files if path.suffix.lower() in PARQUET_SUFFIXES]
+    if parquet_files:
+        try:
+            import pyarrow.parquet as parquet  # type: ignore
+            pyarrow_version = metadata.version("pyarrow")
+        except (ImportError, metadata.PackageNotFoundError):
+            blockers.append("pyarrow is required to verify Parquet datasets")
+            handlers["parquet"] = {"available": False, "version": None}
+        else:
+            handlers["parquet"] = {"available": True, "package": "pyarrow", "version": pyarrow_version}
+            tables: list[dict[str, Any]] = []
+            for path in parquet_files:
+                try:
+                    value = parquet.ParquetFile(path)
+                    tables.append({
+                        "path": path.relative_to(root).as_posix(),
+                        "row_count": value.metadata.num_rows,
+                        "row_group_count": value.metadata.num_row_groups,
+                        "schema": str(value.schema_arrow),
+                    })
+                except (OSError, ValueError) as exc:
+                    blockers.append(f"cannot read Parquet file {path.relative_to(root).as_posix()}: {exc}")
+            details.append({"kind": "parquet", "file_count": len(parquet_files), "tables": tables})
+
+    recognized = (
+        TABULAR_SUFFIXES | IMAGE_SUFFIXES | AUDIO_SUFFIXES | NUMPY_SUFFIXES
+        | HDF_SUFFIXES | PARQUET_SUFFIXES
+    )
+    unknown = [path.relative_to(root).as_posix() for path in files if path.suffix.lower() not in recognized]
+    if unknown:
+        blockers.append(f"{len(unknown)} file(s) have no reviewed content handler")
+    return {
+        "complete_scan": True,
+        "file_count": len(files),
+        "formats": dict(formats),
+        "handlers": handlers,
+        "profiles": details,
+        "exact_duplicate_groups": [
+            [path.relative_to(root).as_posix() for path in group]
+            for group in duplicate_groups[:50]
+        ],
+        "path_inferred_splits": {name: len(values) for name, values in split_hashes.items()},
+        "cross_split_duplicate_hash_count": len(cross_split),
+        "unhandled_examples": unknown[:20],
+    }, blockers, warnings
+
+
 def create_data_quality_report(
     project: Path,
     dataset_id: str,
@@ -368,6 +656,9 @@ def create_data_quality_report(
     source = _safe_path(project, relative_path)
     if source.is_symlink():
         raise ResearchQualityError("dataset audit does not accept symlinks")
+    symlinks = [path for path in source.rglob("*") if path.is_symlink()] if source.is_dir() else []
+    if symlinks:
+        raise ResearchQualityError("dataset tree contains symlinks and cannot be completely audited")
     files = [source] if source.is_file() else sorted(
         path for path in source.rglob("*") if path.is_file() and not path.is_symlink()
     )
@@ -385,6 +676,7 @@ def create_data_quality_report(
     warnings: list[str] = []
     tabular = [path for path in files if path.suffix.lower() in TABULAR_SUFFIXES]
     table: dict[str, Any] | None = None
+    non_tabular: dict[str, Any] | None = None
     if len(files) == 1 and len(tabular) == 1:
         try:
             fields, rows, complete = _iter_rows(source, maximum_rows)
@@ -472,9 +764,11 @@ def create_data_quality_report(
             "group_overlap": group_overlap,
         }
     else:
-        warnings.append(
-            "automatic cell-level checks were unavailable for a multi-file or non-tabular dataset"
+        non_tabular, format_blockers, format_warnings = _profile_non_tabular(
+            source, files, maximum_rows
         )
+        blockers.extend(format_blockers)
+        warnings.extend(format_warnings)
 
     manifest = manifests[dataset_id]
     download = manifest.get("download") if isinstance(manifest.get("download"), dict) else {}
@@ -501,6 +795,7 @@ def create_data_quality_report(
         "canonical_hash_match": canonical_match,
         "inventory": inventory,
         "tabular_profile": table,
+        "non_tabular_profile": non_tabular,
         "optional_upstreams": optional_tool_status(),
         "blockers": blockers,
         "warnings": warnings,
@@ -557,6 +852,8 @@ def validate_data_quality_report(
             errors.append(f"inventory[{index}] hash changed")
         elif item.get("bytes") != path.stat().st_size:
             errors.append(f"inventory[{index}] size changed")
+    if report.get("tabular_profile") is None and not isinstance(report.get("non_tabular_profile"), dict):
+        errors.append("report must contain a tabular or non-tabular content profile")
     return errors
 
 
@@ -624,6 +921,8 @@ def optional_tool_status() -> dict[str, dict[str, Any]]:
         "pandera": "pandera",
         "evidently": "evidently",
         "dvc": "dvc",
+        "ToolUniverse": "tooluniverse",
+        "PaperQA2": "paper-qa",
     }
     result: dict[str, dict[str, Any]] = {}
     for label, package in packages.items():
@@ -759,7 +1058,87 @@ def create_simulation_power_report(
     evidence = _safe_path(project, evidence_path)
     if not script.is_file() or not evidence.is_file():
         raise ResearchQualityError("simulation script and evidence must be regular files")
+    if script.suffix.lower() != ".py":
+        raise ResearchQualityError("simulation script must be a Python .py file")
     evidence_value = _load_json(evidence)
+    reruns: list[dict[str, Any]] = []
+    rerun_values: list[dict[str, Any]] = []
+    for rerun_index in range(2):
+        with tempfile.TemporaryDirectory(prefix="research-os-power-") as directory:
+            clean_dir = Path(directory)
+            output = clean_dir / "power-evidence.json"
+            environment = {
+                key: value
+                for key, value in os.environ.items()
+                if key in {"PATH", "LANG", "LC_ALL", "TZ", "VIRTUAL_ENV", "CONDA_PREFIX"}
+            }
+            environment.update(
+                {
+                    "RESEARCH_OS_POWER_OUTPUT": str(output),
+                    "RESEARCH_OS_SIMULATION_COUNT": str(simulation_count),
+                    "RESEARCH_OS_EFFECT_SIZE": repr(effect_size),
+                    "RESEARCH_OS_ALPHA": repr(alpha),
+                    "RESEARCH_OS_RANDOM_SEEDS": json.dumps(
+                        evidence_value.get("random_seeds"), separators=(",", ":")
+                    ),
+                    "PYTHONHASHSEED": "0",
+                }
+            )
+            try:
+                completed = subprocess.run(
+                    [sys.executable, "-I", str(script.resolve())],
+                    cwd=clean_dir,
+                    env=environment,
+                    stdin=subprocess.DEVNULL,
+                    capture_output=True,
+                    timeout=POWER_RERUN_TIMEOUT_SECONDS,
+                    check=False,
+                )
+            except (OSError, subprocess.SubprocessError) as exc:
+                raise ResearchQualityError(f"power simulation rerun {rerun_index + 1} failed: {exc}") from exc
+            if completed.returncode != 0:
+                stderr = completed.stderr[:2000].decode("utf-8", errors="replace")
+                raise ResearchQualityError(
+                    f"power simulation rerun {rerun_index + 1} exited {completed.returncode}: {stderr}"
+                )
+            if not output.is_file() or output.is_symlink():
+                raise ResearchQualityError(
+                    "power simulation must write a regular JSON file to RESEARCH_OS_POWER_OUTPUT"
+                )
+            if output.stat().st_size > POWER_RERUN_MAX_BYTES:
+                raise ResearchQualityError("power simulation evidence exceeds 16 MiB")
+            try:
+                rerun_value = json.loads(output.read_text(encoding="utf-8"))
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                raise ResearchQualityError(f"power simulation rerun output is invalid JSON: {exc}") from exc
+            if not isinstance(rerun_value, dict):
+                raise ResearchQualityError("power simulation rerun output must be a JSON object")
+            output_bytes = json.dumps(
+                rerun_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")
+            rerun_values.append(rerun_value)
+            reruns.append(
+                {
+                    "rerun": rerun_index + 1,
+                    "exit_code": completed.returncode,
+                    "output_sha256": hashlib.sha256(output_bytes).hexdigest(),
+                    "stdout_sha256": hashlib.sha256(completed.stdout).hexdigest(),
+                    "stderr_sha256": hashlib.sha256(completed.stderr).hexdigest(),
+                    "clean_working_directory": True,
+                    "sanitized_environment": True,
+                }
+            )
+    canonical_evidence = json.dumps(
+        evidence_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    canonical_reruns = [
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        for value in rerun_values
+    ]
+    if any(value != canonical_evidence for value in canonical_reruns):
+        raise ResearchQualityError(
+            "power simulation reruns do not exactly reproduce the bound evidence"
+        )
     evidence_errors: list[str] = []
     if evidence_value.get("schema_version") != "1.0":
         evidence_errors.append("schema_version must be 1.0")
@@ -822,7 +1201,7 @@ def create_simulation_power_report(
         "schema_version": "1.0",
         "paper_id": paper_id,
         "created_at": utc_now(),
-        "generated_by": "simulation",
+        "generated_by": "simulation_rerun",
         "method": "monte_carlo_simulation",
         "effect_size": effect_size,
         "effect_size_basis": effect_size_basis.strip(),
@@ -833,6 +1212,23 @@ def create_simulation_power_report(
         "achieved_power": achieved_power,
         "simulation_method": method_note.strip(),
         "random_seeds": seeds,
+        "simulation_script_path": script.relative_to(project).as_posix(),
+        "simulation_evidence_path": evidence.relative_to(project).as_posix(),
+        "simulation_evidence_canonical_sha256": hashlib.sha256(
+            canonical_evidence.encode("utf-8")
+        ).hexdigest(),
+        "rerun_receipts": reruns,
+        "rerun_protocol": {
+            "interpreter": "python-isolated-mode",
+            "output_environment_variable": "RESEARCH_OS_POWER_OUTPUT",
+            "parameter_environment_variables": [
+                "RESEARCH_OS_SIMULATION_COUNT",
+                "RESEARCH_OS_EFFECT_SIZE",
+                "RESEARCH_OS_ALPHA",
+                "RESEARCH_OS_RANDOM_SEEDS",
+            ],
+            "exact_reproduction_count": 2,
+        },
         "bound_files": [
             {"path": path.relative_to(project).as_posix(), "sha256": sha256_file(path)}
             for path in bindings
@@ -865,7 +1261,7 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
             errors.append("method is not a supported statsmodels calculation")
         if not isinstance(report.get("required_sample_size"), dict) or not report["required_sample_size"]:
             errors.append("required_sample_size must be a non-empty object")
-    elif engine == "simulation":
+    elif engine == "simulation_rerun":
         simulations = report.get("simulation_count")
         if not isinstance(simulations, int) or isinstance(simulations, bool) or simulations < 1000:
             errors.append("simulation_count must be at least 1000")
@@ -893,8 +1289,62 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
         ):
             errors.append("random_seeds must be a non-empty integer array")
         _text(report.get("simulation_method"), "simulation_method", errors)
+        receipts = report.get("rerun_receipts")
+        canonical_digest: str | None = None
+        evidence_path_value = report.get("simulation_evidence_path")
+        if not isinstance(evidence_path_value, str):
+            errors.append("simulation_evidence_path is required")
+        else:
+            try:
+                evidence_path = _safe_path(project, evidence_path_value)
+                evidence_value = _load_json(evidence_path)
+                canonical_payload = json.dumps(
+                    evidence_value,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+                canonical_digest = hashlib.sha256(canonical_payload).hexdigest()
+                if report.get("simulation_evidence_canonical_sha256") != canonical_digest:
+                    errors.append("simulation_evidence_canonical_sha256 is stale")
+            except ResearchQualityError as exc:
+                errors.append(f"simulation_evidence_path: {exc}")
+        script_path_value = report.get("simulation_script_path")
+        if not isinstance(script_path_value, str):
+            errors.append("simulation_script_path is required")
+        else:
+            try:
+                script_path = _safe_path(project, script_path_value)
+                if not script_path.is_file() or script_path.suffix.lower() != ".py":
+                    errors.append("simulation_script_path must identify a Python file")
+            except ResearchQualityError as exc:
+                errors.append(f"simulation_script_path: {exc}")
+        if not isinstance(receipts, list) or len(receipts) != 2:
+            errors.append("rerun_receipts must contain exactly two controlled reruns")
+        else:
+            output_hashes: set[str] = set()
+            for index, receipt in enumerate(receipts):
+                if not isinstance(receipt, dict):
+                    errors.append(f"rerun_receipts[{index}] must be an object")
+                    continue
+                digest = receipt.get("output_sha256")
+                if not isinstance(digest, str) or not HEX64_RE.fullmatch(digest):
+                    errors.append(f"rerun_receipts[{index}].output_sha256 is invalid")
+                else:
+                    output_hashes.add(digest)
+                    if canonical_digest is not None and digest != canonical_digest:
+                        errors.append(f"rerun_receipts[{index}] output does not match bound evidence")
+                if receipt.get("exit_code") != 0:
+                    errors.append(f"rerun_receipts[{index}] did not exit successfully")
+                if receipt.get("clean_working_directory") is not True or receipt.get("sanitized_environment") is not True:
+                    errors.append(f"rerun_receipts[{index}] lacks controlled execution evidence")
+            if len(output_hashes) != 1:
+                errors.append("controlled power reruns produced different outputs")
+        protocol = report.get("rerun_protocol")
+        if not isinstance(protocol, dict) or protocol.get("exact_reproduction_count") != 2:
+            errors.append("rerun_protocol must record two exact reproductions")
     else:
-        errors.append("generated_by must be statsmodels or simulation")
+        errors.append("generated_by must be statsmodels or simulation_rerun")
     effect = report.get("effect_size")
     alpha = report.get("alpha")
     target_power = report.get("target_power")
@@ -1370,16 +1820,48 @@ def validate_clean_room_reproduction(
         "reproduction_attempt_ids",
         errors,
     )
-    original_cwds = {str(item.get("cwd")) for item in original_entries}
-    reproduction_cwds = {str(item.get("cwd")) for item in reproduction_entries}
-    if original_cwds & reproduction_cwds:
-        errors.append("original and reproduction attempts must use different recorded cwd/checkouts")
+    original_isolation = [item.get("executor_isolation") for item in original_entries]
+    reproduction_isolation = [item.get("executor_isolation") for item in reproduction_entries]
+    original_ids = {
+        str(item.get("instance_id")) for item in original_isolation
+        if isinstance(item, dict) and item.get("instance_id")
+    }
+    reproduction_ids = {
+        str(item.get("instance_id")) for item in reproduction_isolation
+        if isinstance(item, dict) and item.get("instance_id")
+    }
+    if len(original_ids) != len(original_entries):
+        errors.append("original attempts lack executor-recorded isolation receipts")
+    if len(reproduction_ids) != len(reproduction_entries):
+        errors.append("reproduction attempts lack executor-recorded isolation receipts")
+    if original_ids & reproduction_ids:
+        errors.append("original and reproduction isolation instances must be disjoint")
+    for index, item in enumerate(reproduction_isolation):
+        if not isinstance(item, dict) or item.get("kind") != "container" or item.get("isolated_executor") is not True:
+            errors.append(f"reproduction attempt {index} was not executed in an isolated container")
+            continue
+        if item.get("network_disabled") is not True or item.get("read_only_root") is not True:
+            errors.append(f"reproduction container {index} lacks network/root-filesystem isolation")
+        if not HEX64_RE.fullmatch(str(item.get("image_digest", ""))):
+            errors.append(f"reproduction container {index} lacks a pinned image digest")
     isolation = report.get("isolation")
     if not isinstance(isolation, dict):
         errors.append("isolation must be an object")
     else:
-        if isolation.get("separate_checkout") is not True:
-            errors.append("isolation.separate_checkout must be true")
+        if isolation.get("isolated_executor") is not True:
+            errors.append("isolation.isolated_executor must be true")
+        if isolation.get("reproduction_kind") != "container":
+            errors.append("isolation.reproduction_kind must be container")
+        reported_original_ids = set(
+            _string_list(isolation.get("original_isolation_ids"), "isolation.original_isolation_ids", errors)
+        )
+        reported_reproduction_ids = set(
+            _string_list(isolation.get("reproduction_isolation_ids"), "isolation.reproduction_isolation_ids", errors)
+        )
+        if reported_original_ids != original_ids:
+            errors.append("isolation.original_isolation_ids do not match the registry")
+        if reported_reproduction_ids != reproduction_ids:
+            errors.append("isolation.reproduction_isolation_ids do not match the registry")
         original_digest = _text(isolation.get("original_environment_digest"), "isolation.original_environment_digest", errors)
         reproduction_digest = _text(isolation.get("reproduction_environment_digest"), "isolation.reproduction_environment_digest", errors)
         if original_digest and original_digest == reproduction_digest:
@@ -1516,10 +1998,19 @@ def registry_environment_digest(
     for item in registry:
         if item.get("status") != "succeeded" or str(item.get("attempt_id")) not in selected:
             continue
+        isolation = item.get("executor_isolation") if isinstance(item.get("executor_isolation"), dict) else {}
+        isolation_environment = {
+            key: isolation.get(key)
+            for key in (
+                "kind", "checkout_root", "git_dir", "git_common_dir", "engine",
+                "image_digest", "isolated_executor", "network_disabled", "read_only_root",
+            )
+        }
         record = {
             "git_commit": item.get("git_commit"),
             "cwd": item.get("cwd"),
             "runtime": item.get("runtime"),
+            "executor_isolation_environment": isolation_environment,
         }
         key = json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
         unique[key] = record
@@ -1559,6 +2050,7 @@ def refresh_runtime_evidence_catalog(project: Path) -> Path:
             "git_commit": item.get("git_commit"),
             "cwd": item.get("cwd"),
             "runtime": item.get("runtime"),
+            "executor_isolation": item.get("executor_isolation"),
             "single_attempt_environment_digest": registry_environment_digest(
                 registry, [str(item.get("attempt_id"))]
             ),
@@ -1698,8 +2190,39 @@ def quality_summary(project: Path) -> dict[str, Any]:
     papers = _paper_ids(project)
     count = lambda paths: sum(1 for path in paths if path.is_file())
     novelty = project / "program" / "novelty-claim-matrix.json"
+    search_log = project / "evidence" / "search-log.jsonl"
+    search_values: list[dict[str, Any]] = []
+    if search_log.is_file():
+        for line in search_log.read_text(encoding="utf-8").splitlines():
+            try:
+                value = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(value, dict):
+                search_values.append(value)
+    theme_b_independent = False
+    try:
+        from scripts.research_design import validate_theme_independence
+        core = _load_json(project / "program" / "core-thesis.json")
+        extension = _load_json(project / "program" / "extension-thesis.json")
+        theme_b_independent = not validate_theme_independence(core, extension)
+    except (ImportError, ResearchQualityError):
+        pass
+    venue_candidates_valid = False
+    try:
+        from scripts.venue_candidates import validate_registry
+        venue_registry = _load_json(project / "program" / "venue-candidates.json")
+        venue_candidates_valid = not validate_registry(project, venue_registry)
+    except (ImportError, ResearchQualityError):
+        pass
     return {
         "novelty_claim_matrix": novelty.is_file(),
+        "executed_literature_searches": len(search_values),
+        "screened_literature_searches": sum(
+            1 for item in search_values if isinstance(item.get("screened_by"), str) and item["screened_by"].strip()
+        ),
+        "theme_b_independent": theme_b_independent,
+        "venue_candidates_valid": venue_candidates_valid,
         "data_quality_reports": count(project / "data" / "quality" / f"{item}.json" for item in manifests),
         "data_quality_confirmations": count(
             project / "data" / "quality" / f"{item}-confirmation.json" for item in manifests

@@ -4,9 +4,9 @@
   "title": "Traceable originality-search record",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "search_id", "database", "query_family", "query", "searched_at", "date_range", "filters", "result_count", "included_work_ids", "exclusion_reasons", "source_url"],
+  "required": ["schema_version", "search_id", "database", "query_family", "query", "searched_at", "date_range", "filters", "result_count", "included_work_ids", "exclusion_reasons", "source_url", "evidence_receipt_id", "response_sha256", "normalized_results_sha256", "screened_by"],
   "properties": {
-    "schema_version": {"const": "1.0"},
+    "schema_version": {"const": "1.1"},
     "search_id": {"type": "string", "minLength": 1},
     "database": {"type": "string", "minLength": 1},
     "query_family": {"type": "string", "minLength": 1},
@@ -17,6 +17,10 @@
     "result_count": {"type": "integer", "minimum": 0},
     "included_work_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "exclusion_reasons": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-    "source_url": {"type": "string", "pattern": "^https://"}
+    "source_url": {"type": "string", "pattern": "^https://"},
+    "evidence_receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,127}$"},
+    "response_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "normalized_results_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "screened_by": {"type": "string", "minLength": 1}
   }
 }

@@ -5,6 +5,7 @@ import json
 import tempfile
 import types
 import unittest
+import wave
 from pathlib import Path
 from unittest.mock import patch
 
@@ -24,6 +25,7 @@ from scripts.research_quality import (
     validate_data_quality_report,
     validate_data_quality_confirmation,
     validate_novelty_claim_matrix,
+    validate_power_report,
     validate_preregistration,
     validate_reproduction_confirmation,
 )
@@ -184,6 +186,75 @@ class ResearchQualityTests(unittest.TestCase):
                 any("changed" in error for error in validate_data_quality_report(report, "d1", project))
             )
 
+    def test_non_tabular_wav_is_content_scanned(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.make_project(Path(directory))
+            audio = project / "data" / "raw" / "signal.wav"
+            with wave.open(str(audio), "wb") as handle:
+                handle.setnchannels(1)
+                handle.setsampwidth(2)
+                handle.setframerate(8000)
+                handle.writeframes(b"\x00\x00" * 800)
+            manifest = {
+                "dataset_id": "audio",
+                "download": {"sha256": sha256_file(audio)},
+                "provenance": {"transformations": []},
+            }
+            with (project / "data" / "datasets.jsonl").open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(manifest) + "\n")
+            report = create_data_quality_report(
+                project, "audio", "data/raw/signal.wav", actor="Researcher"
+            )
+            self.assertEqual(report["status"], "pass")
+            profile = report["non_tabular_profile"]
+            self.assertEqual(profile["profiles"][0]["kind"], "wav_audio")
+            self.assertEqual(profile["profiles"][0]["sample_rates"], {"8000": 1})
+
+    def test_unknown_non_tabular_format_blocks_instead_of_warning_only(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.make_project(Path(directory))
+            blob = project / "data" / "raw" / "opaque.bin"
+            blob.write_bytes(b"opaque")
+            manifest = {
+                "dataset_id": "opaque",
+                "download": {"sha256": sha256_file(blob)},
+                "provenance": {"transformations": []},
+            }
+            with (project / "data" / "datasets.jsonl").open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(manifest) + "\n")
+            report = create_data_quality_report(
+                project, "opaque", "data/raw/opaque.bin", actor="Researcher"
+            )
+            self.assertEqual(report["status"], "block")
+            self.assertTrue(any("no reviewed content handler" in item for item in report["blockers"]))
+
+    def test_mixed_audio_and_tabular_directory_scans_both_formats(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.make_project(Path(directory))
+            mixed = project / "data" / "raw" / "mixed"
+            mixed.mkdir()
+            audio = mixed / "signal.wav"
+            with wave.open(str(audio), "wb") as handle:
+                handle.setnchannels(1)
+                handle.setsampwidth(2)
+                handle.setframerate(8000)
+                handle.writeframes(b"\x00\x00" * 80)
+            (mixed / "labels.csv").write_text("file,label\nsignal.wav,normal\n", encoding="utf-8")
+            manifest = {
+                "dataset_id": "mixed",
+                "download": {"sha256": "not-applicable-to-derived-directory"},
+                "provenance": {"transformations": ["Extracted authorized source archive."]},
+            }
+            with (project / "data" / "datasets.jsonl").open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(manifest) + "\n")
+            report = create_data_quality_report(
+                project, "mixed", "data/raw/mixed", actor="Researcher", derived=True
+            )
+
+            self.assertEqual(report["status"], "pass")
+            kinds = {item["kind"] for item in report["non_tabular_profile"]["profiles"]}
+            self.assertEqual(kinds, {"tabular_files", "wav_audio"})
+
     def test_preregistration_detects_post_freeze_change(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = self.make_project(Path(directory))
@@ -264,7 +335,25 @@ class ResearchQualityTests(unittest.TestCase):
             project = self.make_project(Path(directory))
             script = project / "papers" / "P01" / "experiments" / "power.py"
             evidence = project / "papers" / "P01" / "experiments" / "power.json"
-            script.write_text("# deterministic Monte Carlo driver\n", encoding="utf-8")
+            script.write_text(
+                "import hashlib, json, os\n"
+                "from pathlib import Path\n"
+                "script = Path(__file__)\n"
+                "payload = {\n"
+                "  'schema_version': '1.0',\n"
+                "  'simulation_count': int(os.environ['RESEARCH_OS_SIMULATION_COUNT']),\n"
+                "  'rejection_count': 800,\n"
+                "  'achieved_power': 0.8,\n"
+                "  'effect_size': float(os.environ['RESEARCH_OS_EFFECT_SIZE']),\n"
+                "  'alpha': float(os.environ['RESEARCH_OS_ALPHA']),\n"
+                "  'random_seeds': json.loads(os.environ['RESEARCH_OS_RANDOM_SEEDS']),\n"
+                "  'decision_rule': 'Reject when the corrected lower interval exceeds zero.',\n"
+                "  'data_generating_process': 'Cluster bootstrap over machines.',\n"
+                "  'generated_by_script_sha256': hashlib.sha256(script.read_bytes()).hexdigest(),\n"
+                "}\n"
+                "Path(os.environ['RESEARCH_OS_POWER_OUTPUT']).write_text(json.dumps(payload))\n",
+                encoding="utf-8",
+            )
             payload = {
                 "schema_version": "1.0",
                 "simulation_count": 1000,
@@ -292,9 +381,17 @@ class ResearchQualityTests(unittest.TestCase):
                 "Minimum practically important difference.",
             )
             self.assertEqual(report["rejection_count"], 800)
+            self.assertEqual(report["generated_by"], "simulation_rerun")
+            self.assertEqual(len(report["rerun_receipts"]), 2)
+            self.assertEqual(validate_power_report(report, "P01", project), [])
+            tampered_report = copy.deepcopy(report)
+            tampered_report["rerun_receipts"][0]["output_sha256"] = "f" * 64
+            self.assertTrue(
+                any("bound evidence" in item for item in validate_power_report(tampered_report, "P01", project))
+            )
             payload["rejection_count"] = 700
             evidence.write_text(json.dumps(payload), encoding="utf-8")
-            with self.assertRaisesRegex(ResearchQualityError, "rejection_count"):
+            with self.assertRaisesRegex(ResearchQualityError, "reproduce"):
                 create_simulation_power_report(
                     project,
                     "P01",
@@ -359,6 +456,24 @@ class ResearchQualityTests(unittest.TestCase):
                 {"run_id": "original", "attempt_id": "a3", "paper_id": "P01", "status": "succeeded", "cwd": "env-a", "git_commit": "a" * 40, "runtime": {"python": "3.12", "platform": "linux-a"}},
                 {"run_id": "reproduction", "attempt_id": "b1", "paper_id": "P01", "status": "succeeded", "cwd": "env-b", "git_commit": "a" * 40, "runtime": {"python": "3.12", "platform": "linux-b"}},
             ]
+            for record in registry:
+                record["executor_isolation"] = {
+                    "kind": "host",
+                    "instance_id": record["attempt_id"],
+                    "isolated_executor": False,
+                    "network_disabled": False,
+                    "read_only_root": False,
+                    "fingerprint": "c" * 64,
+                }
+            registry[-1]["executor_isolation"] = {
+                "kind": "container",
+                "instance_id": "b1",
+                "isolated_executor": True,
+                "network_disabled": True,
+                "read_only_root": True,
+                "image_digest": "d" * 64,
+                "fingerprint": "e" * 64,
+            }
             evidence_files = [{"path": "experiments/metrics.json", "sha256": sha256_file(evidence)}]
             for record in registry:
                 record["outputs"] = evidence_files
@@ -384,7 +499,10 @@ class ResearchQualityTests(unittest.TestCase):
                 "original_run_ids": ["original"], "reproduction_run_ids": ["reproduction"],
                 "original_attempt_ids": ["a3"], "reproduction_attempt_ids": ["b1"],
                 "isolation": {
-                    "separate_checkout": True,
+                    "isolated_executor": True,
+                    "reproduction_kind": "container",
+                    "original_isolation_ids": ["a3"],
+                    "reproduction_isolation_ids": ["b1"],
                     "original_environment_digest": registry_environment_digest(registry, ["a3"]),
                     "reproduction_environment_digest": registry_environment_digest(registry, ["b1"]),
                     "source_commit": "a" * 40,
@@ -396,6 +514,14 @@ class ResearchQualityTests(unittest.TestCase):
             same_environment = copy.deepcopy(registry)
             same_environment[-1]["cwd"] = "env-a"
             same_environment[-1]["runtime"] = {"python": "3.12", "platform": "linux-a"}
+            self.assertNotEqual(
+                registry_environment_digest(same_environment, ["a3"]),
+                registry_environment_digest(same_environment, ["b1"]),
+            )
+            same_environment[-1]["executor_isolation"] = {
+                **same_environment[2]["executor_isolation"],
+                "instance_id": "b1",
+            }
             self.assertEqual(
                 registry_environment_digest(same_environment, ["a3"]),
                 registry_environment_digest(same_environment, ["b1"]),

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/ai4science-evidence-receipt.schema.json",
+  "title": "Local AI4Science tool output receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "tool", "package", "package_version", "recorded_at", "recorded_by", "purpose", "output", "inputs", "advisory_only", "human_verification_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "tool": {"enum": ["tooluniverse", "paperqa2", "kdense-scientific-agent-skills"]},
+    "package": {"type": "string", "minLength": 1},
+    "package_version": {"type": "string", "minLength": 1},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "recorded_by": {"type": "string", "minLength": 1},
+    "purpose": {"type": "string", "minLength": 1},
+    "output": {"$ref": "#/$defs/file"},
+    "inputs": {"type": "array", "items": {"$ref": "#/$defs/file"}},
+    "advisory_only": {"const": true},
+    "human_verification_required": {"const": true}
+  },
+  "$defs": {"file": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "bytes"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "bytes": {"type": "integer", "minimum": 0}}}}
+}

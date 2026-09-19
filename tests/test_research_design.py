@@ -13,6 +13,8 @@ from scripts.research_design import (
     validate_paper_contract,
     validate_paper_map,
     validate_search_log,
+    validate_theme_independence,
+    validate_theme_mapping,
 )
 
 
@@ -192,7 +194,7 @@ def experiment_design():
             "original_run_ids": ["run-1"],
             "clean_room_run_ids": ["run-3"],
             "independent_operator_plan": "A second researcher executes the locked reproduction.",
-            "separate_checkout_plan": "Use the approved env-b checkout for the clean-room run.",
+            "isolated_environment_plan": "Use the approved digest-pinned container for the clean-room run.",
             "environment_capture_plan": "Record Python, platform, commit and cwd in the registry.",
             "metric_tolerances": [{"metric": "Macro F1", "absolute_tolerance": 0.02, "rationale": "Predeclared practical equivalence bound."}],
         },
@@ -217,7 +219,7 @@ class ResearchDesignTests(unittest.TestCase):
         audit = originality_audit()
         records = [
             {
-                "schema_version": "1.0",
+                "schema_version": "1.1",
                 "search_id": f"S{index}",
                 "database": database,
                 "query_family": family,
@@ -229,6 +231,10 @@ class ResearchDesignTests(unittest.TestCase):
                 "included_work_ids": included,
                 "exclusion_reasons": ["Out of scope."],
                 "source_url": f"https://example.org/search-{index}",
+                "evidence_receipt_id": f"receipt-{index}",
+                "response_sha256": "a" * 64,
+                "normalized_results_sha256": "b" * 64,
+                "screened_by": "Human reviewer",
             }
             for index, (database, family, included) in enumerate(
                 zip(
@@ -248,7 +254,7 @@ class ResearchDesignTests(unittest.TestCase):
             "schema_version": "2.0",
             "status": "ready_for_review",
             "papers": [
-                {"paper_id": paper, "portfolio_role": f"Role {paper}", "distinct_contribution": f"Contribution {paper}", "unique_claim_ids": [f"C-{paper}"], "shared_assets": [], "dependencies": []}
+                {"paper_id": paper, "theme_id": "A" if paper in {"P01", "P02"} else "B", "portfolio_role": f"Role {paper}", "distinct_contribution": f"Contribution {paper}", "unique_claim_ids": [f"C-{paper}"], "shared_assets": [], "dependencies": []}
                 for paper in ("P01", "P02", "P03")
             ],
             "pairwise_distinctness": [
@@ -267,6 +273,37 @@ class ResearchDesignTests(unittest.TestCase):
         value["pairwise_distinctness"].pop()
         self.assertTrue(any("missing" in error for error in validate_paper_map(value, ("P01", "P02", "P03"))))
 
+    def test_theme_b_is_independent_and_mapped_to_its_own_paper(self):
+        core = {
+            "schema_version": "1.0", "theme_id": "A", "status": "ready_for_review",
+            "title": "Core", "doctoral_question": "How does mechanism A work?",
+            "distinct_contribution": "Mechanism A.", "novelty_claim_ids": ["A1", "A2"],
+            "planned_paper_ids": ["P01", "P02"],
+            "falsification_conditions": ["A1 fails.", "A2 fails."], "human_review_required": True,
+        }
+        extension = {
+            "schema_version": "1.0", "theme_id": "B", "status": "ready_for_review",
+            "title": "Extension", "doctoral_question": "Can mechanism B transfer?",
+            "distinct_contribution": "Mechanism B.", "mechanism_or_rationale": "Independent causal route.",
+            "novelty_claim_ids": ["B1", "B2"], "planned_paper_ids": ["P03"],
+            "independent_evidence_plan": ["Independent dataset.", "Independent outcome."],
+            "falsification_conditions": ["B1 fails.", "B2 fails."],
+            "boundary_conditions": ["Comparable sensors."],
+            "relationship_to_core": {"shared_foundation": ["Tooling"], "independent_question": True, "independent_claims": True, "independent_primary_evidence": True, "survives_core_failure": True, "non_dependency_rationale": "B does not use A's primary result."},
+            "fallback_if_unsupported": "Report a bounded negative result.", "human_review_required": True,
+        }
+        paper_map = {
+            "papers": [
+                {"paper_id": "P01", "theme_id": "A", "unique_claim_ids": ["A1"]},
+                {"paper_id": "P02", "theme_id": "A", "unique_claim_ids": ["A2"]},
+                {"paper_id": "P03", "theme_id": "B", "unique_claim_ids": ["B1", "B2"]},
+            ]
+        }
+        self.assertEqual(validate_theme_independence(core, extension), [])
+        self.assertEqual(validate_theme_mapping(paper_map, core, extension), [])
+        extension["novelty_claim_ids"][0] = "A1"
+        self.assertTrue(any("disjoint" in item for item in validate_theme_independence(core, extension)))
+
     def test_paper_contract_requires_english_and_q1(self):
         value = paper_contract()
         self.assertEqual(validate_paper_contract(value, "P01"), [])
@@ -277,14 +314,32 @@ class ResearchDesignTests(unittest.TestCase):
         self.assertTrue(any("current JCR Q1" in error for error in errors))
 
     def test_experiment_design_links_three_stochastic_seeds(self):
-        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed, "cwd": "env-b" if seed == 3 else "env-a"} for seed in (1, 2, 3)}
+        runs = {
+            f"run-{seed}": {
+                "run_id": f"run-{seed}", "paper_id": "P01", "seed": seed,
+                "cwd": "env-b" if seed == 3 else "env-a",
+                "isolation": {"kind": "container"} if seed == 3 else {"kind": "host"},
+            }
+            for seed in (1, 2, 3)
+        }
         self.assertEqual(validate_experiment_design(experiment_design(), "P01", runs), [])
         value = experiment_design()
         value["run_ids"] = value["run_ids"][:2]
         self.assertTrue(any("three distinct" in error for error in validate_experiment_design(value, "P01", runs)))
+        runs["run-3"]["isolation"] = {"kind": "git_worktree"}
+        self.assertTrue(
+            any("container isolation" in error for error in validate_experiment_design(experiment_design(), "P01", runs))
+        )
 
     def test_experiment_design_requires_recent_traceable_strong_baseline(self):
-        runs = {f"run-{seed}": {"run_id": f"run-{seed}", "paper_id": "P01", "seed": seed, "cwd": "env-b" if seed == 3 else "env-a"} for seed in (1, 2, 3)}
+        runs = {
+            f"run-{seed}": {
+                "run_id": f"run-{seed}", "paper_id": "P01", "seed": seed,
+                "cwd": "env-b" if seed == 3 else "env-a",
+                "isolation": {"kind": "container"} if seed == 3 else {"kind": "host"},
+            }
+            for seed in (1, 2, 3)
+        }
         value = experiment_design()
         value["baselines"][2]["publication_year"] = 2010
         value["baselines"][2]["primary_source_url"] = "unverified"

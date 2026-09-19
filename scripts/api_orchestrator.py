@@ -160,6 +160,17 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "no_material_new_work_rounds[{round_id,search_ids,material_new_closest_work_count=0,stopping_reason}]",
                 "unresolved_search_gaps=[]", "saturation_rationale",
             ],
+            "theme_b_independence": [
+                "core and extension follow their dedicated schemas",
+                "A/B claim IDs and planned paper IDs are disjoint",
+                "B has independent question/evidence/falsification and survives core failure",
+            ],
+            "protected_local_outputs_do_not_write": [
+                "evidence/search-log.jsonl",
+                "evidence/literature-api-ledger.jsonl",
+                "evidence/literature/**",
+                "evidence/ai4science-ledger.jsonl",
+            ],
         },
         "experiment-design": {
             "each_paper_experiment_design_requires": {
@@ -169,9 +180,9 @@ def research_quality_artifact_contract(stage: str) -> str:
                         "strong_recent": ["approved run IDs"],
                     },
                     "original_run_ids": ["approved run IDs"],
-                    "clean_room_run_ids": ["disjoint approved run IDs with different cwd"],
+                    "clean_room_run_ids": ["disjoint run IDs with digest-pinned container isolation"],
                     "independent_operator_plan": "text",
-                    "separate_checkout_plan": "text",
+                    "isolated_environment_plan": "text",
                     "environment_capture_plan": "text",
                     "metric_tolerances": [
                         {"metric": "name", "absolute_tolerance": 0.0, "rationale": "text"}
@@ -207,8 +218,10 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "human_review_required=true",
             ],
             "isolation_fields": [
-                "separate_checkout=true", "original_environment_digest",
-                "reproduction_environment_digest", "source_commit",
+                "reproduction_kind=container", "isolated_executor=true",
+                "original_isolation_ids", "reproduction_isolation_ids",
+                "original_environment_digest", "reproduction_environment_digest",
+                "source_commit",
             ],
             "each_metric_comparison_fields": [
                 "metric", "original_value", "reproduction_value",
@@ -407,8 +420,8 @@ comparators, ablations, leakage controls, estimands, practical thresholds,
 effect sizes, uncertainty, power or precision, robustness, external validity,
 negative controls, stopping rules and falsification criteria. The approved G3
 plan must already contain domain-standard and strong-recent reproduction runs,
-plus disjoint original and clean-room reproduction run IDs using different
-approved working directories/checkouts and predeclared metric tolerances.
+plus disjoint original and clean-room reproduction run IDs using a digest-pinned,
+network-disabled container and predeclared metric tolerances.
 At G1 also create program/novelty-claim-matrix.json: map every novelty claim to
 at least three closest works, state what is already known, the precise remaining
 difference, mechanism, falsification test, expected result if false, boundary
@@ -420,7 +433,7 @@ Design the inputs they need and preserve blockers. At G4 create a baseline-
 reproduction.json and clean-room-reproduction.json for every paper only from
 the exact successful attempt IDs and complete current output sets in the
 registry; match the G3-frozen run roles, baseline IDs/source URLs and numeric
-tolerances, and use distinct recorded checkout paths. Use the protected facts
+tolerances, and use exact executor-issued isolation instance IDs. Use the protected facts
 in reports/runtime-evidence-catalog.json rather than inventing run hashes,
 attempt IDs or environment digests. Never mark a comparison as passing merely
 to satisfy the gate.
@@ -674,6 +687,11 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Independent review path is protected: {relative}")
     if (
         lower_parts == ("evidence", "dataset-search-log.jsonl")
+        or lower_parts == ("evidence", "search-log.jsonl")
+        or lower_parts == ("evidence", "literature-api-ledger.jsonl")
+        or lower_parts == ("evidence", "ai4science-ledger.jsonl")
+        or lower_parts == ("program", "venue-candidates.json")
+        or lower_parts[:2] == ("evidence", "literature")
         or (
             lower_parts
             and lower_parts[0] == "data"

@@ -106,6 +106,21 @@ def validate_registry(
         expected_inputs={str(item.get("path")):str(item.get("sha256")).lower() for item in run.get("inputs",[]) if isinstance(item,dict)}
         actual_inputs={str(item.get("path")):str(item.get("sha256")).lower() for item in inputs if isinstance(item,dict)}
         if actual_inputs!=expected_inputs:errors.append(f"{label}: inputs differ from the approved run")
+        integrity = entry.get("input_integrity")
+        if not isinstance(integrity, dict):
+            errors.append(f"{label}: post-run input integrity receipt is missing")
+        else:
+            if integrity.get("verified_after_run") is not True:
+                errors.append(f"{label}: inputs were not verified after execution")
+            changed_inputs = integrity.get("mutated_or_missing")
+            if not isinstance(changed_inputs, list):
+                errors.append(f"{label}: mutated_or_missing must be an array")
+            if not isinstance(integrity.get("passed"), bool):
+                errors.append(f"{label}: input integrity passed must be boolean")
+            elif isinstance(changed_inputs, list) and bool(changed_inputs) == integrity["passed"]:
+                errors.append(f"{label}: input integrity pass flag is inconsistent")
+            if entry.get("status") == "succeeded" and integrity.get("passed") is not True:
+                errors.append(f"{label}: successful run has changed approved inputs")
         for input_path,input_hash in actual_inputs.items():
             path=_resolve(project,input_path,f"{label}.inputs",errors)
             if path is None or not path.is_file():errors.append(f"{label}: recorded input is missing: {input_path}")

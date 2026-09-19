@@ -303,6 +303,14 @@ def main() -> int:
         "schemas/baseline-reproduction.schema.json",
         "schemas/clean-room-reproduction.schema.json",
         "schemas/reproduction-confirmation.schema.json",
+        "schemas/literature-evidence-receipt.schema.json",
+        "schemas/ai4science-evidence-receipt.schema.json",
+        "schemas/core-thesis.schema.json",
+        "schemas/extension-thesis.schema.json",
+        "schemas/venue-candidates.schema.json",
+        "scripts/literature_evidence.py",
+        "scripts/ai4science_evidence.py",
+        "scripts/venue_candidates.py",
     ):
         if not (ROOT / relative).is_file():
             errors.append(f"{relative} is required")

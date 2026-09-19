@@ -40,6 +40,7 @@ class ExperimentRunnerTests(unittest.TestCase):
                     "seed": 7,
                     "timeout_seconds": 30,
                     "estimated_cost_usd": 0,
+                    "isolation": {"kind": "host"},
                     "inputs": [],
                     "expected_outputs": ["result.txt"],
                 }
@@ -75,6 +76,9 @@ class ExperimentRunnerTests(unittest.TestCase):
         project = self.project()
         results = experiment_runner.execute("test-phd")
         self.assertEqual(results[0]["status"], "succeeded")
+        self.assertEqual(results[0]["executor_isolation"]["kind"], "host")
+        self.assertFalse(results[0]["executor_isolation"]["isolated_executor"])
+        self.assertTrue(results[0]["input_integrity"]["passed"])
         self.assertTrue((project / "result.txt").is_file())
         registry = (project / "experiments" / "registry.jsonl").read_text()
         self.assertIn('"run_id": "baseline"', registry)
@@ -85,6 +89,56 @@ class ExperimentRunnerTests(unittest.TestCase):
         plan_path.write_text(plan_path.read_text() + "\n", encoding="utf-8")
         with self.assertRaises(experiment_runner.ExperimentError):
             experiment_runner.execute("test-phd")
+
+    def test_plan_requires_command_file_arguments_to_be_hash_declared(self) -> None:
+        plan = {
+            "status": "ready_for_review",
+            "runs": [
+                {
+                    "run_id": "audit", "paper_id": "P01",
+                    "argv": ["python3", "analysis.py"], "cwd": ".", "seed": 1,
+                    "timeout_seconds": 30, "estimated_cost_usd": 0,
+                    "isolation": {"kind": "host"}, "inputs": [],
+                    "expected_outputs": ["result.json"],
+                }
+            ],
+        }
+        self.assertTrue(
+            any("hash-declared" in item for item in experiment_runner.validate_plan(plan))
+        )
+        plan["runs"][0]["inputs"] = [{"path": "analysis.py", "sha256": "a" * 64}]
+        self.assertEqual(experiment_runner.validate_plan(plan), [])
+
+    def test_run_that_mutates_an_approved_input_fails(self) -> None:
+        project = self.project()
+        input_path = project / "input.txt"
+        input_path.write_text("approved", encoding="utf-8")
+        plan_path = project / "experiments" / "plan.json"
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        plan["runs"][0]["inputs"] = [
+            {"path": "input.txt", "sha256": hashlib.sha256(input_path.read_bytes()).hexdigest()}
+        ]
+        plan["runs"][0]["argv"] = [
+            sys.executable,
+            "-c",
+            "from pathlib import Path; Path('input.txt').write_text('changed'); Path('result.txt').write_text('ok')",
+        ]
+        plan_path.write_text(json.dumps(plan), encoding="utf-8")
+        state_path = project / "state" / "run.json"
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        state["approvals"][0]["experiment_plan_sha256"] = hashlib.sha256(
+            plan_path.read_bytes()
+        ).hexdigest()
+        state_path.write_text(json.dumps(state), encoding="utf-8")
+
+        result = experiment_runner.execute("test-phd")[0]
+
+        self.assertEqual(result["status"], "failed")
+        self.assertFalse(result["input_integrity"]["passed"])
+        self.assertEqual(
+            result["input_integrity"]["mutated_or_missing"][0]["reason"],
+            "hash_changed",
+        )
 
 
 if __name__ == "__main__":

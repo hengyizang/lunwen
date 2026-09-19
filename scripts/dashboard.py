@@ -650,6 +650,48 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
         return command, "执行已批准实验" + (f"：{run_id}" if run_id else ""), slug
     if action == "research_quality_check":
         return [python, "scripts/research_quality.py", "validate", "--project", slug], "检查科研质量硬闸门", slug
+    if action == "literature_search":
+        provider = bounded_text(payload.get("provider"), "文献数据库", 40, required=True)
+        if provider not in {"openalex", "crossref", "semantic-scholar", "arxiv", "europe-pmc", "dblp", "hal"}:
+            raise ValueError("不支持的文献数据库")
+        query = bounded_text(payload.get("query"), "检索式", 2000, required=True)
+        family = bounded_text(payload.get("query_family"), "查询族", 200, required=True)
+        date_range = bounded_text(payload.get("date_range"), "日期范围", 200, required=True)
+        filters = bounded_text(payload.get("filters"), "过滤条件", 1000, required=True)
+        try:
+            limit = int(payload.get("limit", 25))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("返回数量必须是整数") from exc
+        if not 1 <= limit <= 100:
+            raise ValueError("返回数量必须在 1–100 之间")
+        return [python, "scripts/literature_evidence.py", "search", "--project", slug, "--provider", provider, "--query", query, "--query-family", family, "--date-range", date_range, "--filters", filters, "--limit", str(limit)], f"执行并留存 {provider} 检索", slug
+    if action == "literature_screen":
+        receipt = bounded_text(payload.get("receipt"), "检索收据 ID", 128, required=True)
+        if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,127}", receipt):
+            raise ValueError("检索收据 ID 无效")
+        actor = bounded_text(payload.get("actor"), "筛选人", 200, required=True)
+        included = [item.strip() for item in bounded_text(payload.get("included"), "纳入 ID", 10_000).splitlines() if item.strip()]
+        reasons = [item.strip() for item in bounded_text(payload.get("exclusion_reasons"), "排除理由", 10_000, required=True).splitlines() if item.strip()]
+        command = [python, "scripts/literature_evidence.py", "screen", "--project", slug, "--receipt", receipt, "--actor", actor]
+        for item in included:
+            command.extend(["--include", item])
+        for reason in reasons:
+            command.extend(["--exclusion-reason", reason])
+        return command, "记录具名文献筛选决定", slug
+    if action == "venue_candidates":
+        spec = safe_project_path(slug, payload.get("spec"), ".json")
+        export = safe_project_path(slug, payload.get("jcr_export"))
+        if export.suffix.lower() not in {".csv", ".json"}:
+            raise ValueError("JCR 导出必须是 CSV 或 JSON")
+        actor = bounded_text(payload.get("actor"), "导入人", 200, required=True)
+        try:
+            source_url = validate_https_url(
+                bounded_text(payload.get("source_url"), "JCR 来源网址", 1000, required=True),
+                "JCR 来源网址",
+            )
+        except NetworkSafetyError as exc:
+            raise ValueError(str(exc)) from exc
+        return [python, "scripts/venue_candidates.py", "build", "--project", slug, "--spec", spec.relative_to(project).as_posix(), "--jcr-export", export.relative_to(project).as_posix(), "--actor", actor, "--source-url", source_url], "生成哈希绑定的期刊候选库", slug
     if action == "data_quality":
         dataset_id = bounded_text(payload.get("dataset_id"), "数据集 ID", 128, required=True)
         if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", dataset_id):

@@ -244,6 +244,9 @@ class DashboardTests(unittest.TestCase):
             'id="runPower"',
             'id="freezePreregistration"',
             'id="confirmReproduction"',
+            'id="runLiteratureSearch"',
+            'id="screenLiterature"',
+            'id="buildVenueCandidates"',
         ):
             self.assertIn(element, html)
         self.assertIn("renderResearchQuality", javascript)
@@ -272,6 +275,29 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("scripts/research_quality.py", command)
         self.assertIn("P01", command)
         self.assertIn("统计功效", label)
+
+    def test_literature_search_command_uses_fixed_provider_and_argument_array(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "dashboard-test").mkdir()
+            with patch("scripts.dashboard.PROJECTS_ROOT", root), patch(
+                "scripts.dashboard.researchctl.load_state", return_value={"gate": "G1"}
+            ):
+                command, _label, project = build_command(
+                    "literature_search",
+                    {
+                        "project": "dashboard-test",
+                        "provider": "openalex",
+                        "query": "auditable predictive maintenance",
+                        "query_family": "core-method",
+                        "date_range": "2021-2026",
+                        "filters": "journal papers",
+                        "limit": 25,
+                    },
+                )
+        self.assertEqual(project, "dashboard-test")
+        self.assertIn("scripts/literature_evidence.py", command)
+        self.assertEqual(command[command.index("--provider") + 1], "openalex")
 
     def test_data_quality_confirmation_is_named_and_argument_safe(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
