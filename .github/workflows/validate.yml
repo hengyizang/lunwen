@@ -26,11 +26,10 @@ jobs:
       matrix:
         python-version: ["3.10", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Compile Python entry points
@@ -47,8 +46,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Exercise all public literature providers
@@ -58,7 +57,7 @@ jobs:
           --output artifacts/acceptance/literature.json
       - name: Preserve API receipts and raw responses
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: public-literature-acceptance
           path: artifacts/acceptance/
@@ -72,8 +71,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Run digest-pinned no-network read-only container
@@ -83,7 +82,7 @@ jobs:
           --output artifacts/acceptance/container.json
       - name: Preserve container acceptance report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: container-isolation-acceptance
           path: artifacts/acceptance/
