@@ -38,7 +38,9 @@ For the current stage:
 - A DOI or URL is not proof that a source supports a claim. Capture the supporting location and a short paraphrase.
 - Separate observed fact, source claim, model inference, forecast, and recommendation.
 - Re-check temporally unstable facts at the gate where they matter.
-- Treat current JCR Q1 SCI/SCIE as the required venue target.
+- Treat at least three of six papers as current JCR Q1 SCI/SCIE targets and
+  every remaining paper as at least current JCR Q2 SCI/SCIE. Apply identical
+  scientific-quality gates to both groups.
   A quartile is a category/year journal rank, not proof that an experiment meets
   a scientific standard; apply `references/doctoral-q1-readiness.md` separately.
 

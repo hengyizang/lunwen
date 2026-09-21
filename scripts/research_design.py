@@ -15,7 +15,7 @@ from typing import Any, Iterable
 
 PAPER_RE = re.compile(r"^P[0-9]{2}$")
 DATE_RE = re.compile(r"^20[0-9]{2}-[01][0-9]-[0-3][0-9]$")
-VENUE_QUARTILES = {"Q1"}
+VENUE_QUARTILES = {"Q1", "Q2"}
 BASELINE_CLASSES = {"simple", "domain_standard", "strong_recent"}
 NOVELTY_TYPES = {
     "theoretical",
@@ -77,10 +77,21 @@ def _https(value: Any, field: str, errors: list[str]) -> None:
         errors.append(f"{field} must be an HTTPS primary-source URL")
 
 
-def validate_venue_candidates(value: Any, field: str = "target_venues") -> list[str]:
+def validate_venue_candidates(
+    value: Any,
+    field: str = "target_venues",
+    target_quartile: str = "Q1",
+) -> list[str]:
     errors: list[str] = []
     candidates = _list(value, field, errors, minimum=2)
-    q1_seen = False
+    try:
+        from scripts.venue_policy import meets_target, normalize_quartile
+    except ImportError:
+        from venue_policy import meets_target, normalize_quartile
+    target = normalize_quartile(target_quartile)
+    if target is None:
+        errors.append(f"{field} target quartile must be Q1 or Q2")
+        target = "Q1"
     for index, item in enumerate(candidates):
         prefix = f"{field}[{index}]"
         venue = _object(item, prefix, errors)
@@ -89,17 +100,14 @@ def validate_venue_candidates(value: Any, field: str = "target_venues") -> list[
         for key in ("name", "category", "scope_fit", "article_type"):
             _text(venue.get(key), f"{prefix}.{key}", errors)
         quartile = venue.get("quartile")
-        if quartile not in VENUE_QUARTILES:
-            errors.append(f"{prefix}.quartile must be current JCR Q1")
-        q1_seen = q1_seen or quartile == "Q1"
+        if quartile not in VENUE_QUARTILES or not meets_target(quartile, target):
+            errors.append(f"{prefix}.quartile must meet the current JCR {target} target")
         if venue.get("indexing") not in {"SCI", "SCIE"}:
             errors.append(f"{prefix}.indexing must be SCI or SCIE")
         year = venue.get("jcr_year")
         if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}:
             errors.append(f"{prefix}.jcr_year must identify the current or immediately previous JCR edition")
         _https(venue.get("source_url"), f"{prefix}.source_url", errors)
-    if candidates and not q1_seen:
-        errors.append(f"{field} must contain current JCR Q1 candidates")
     return errors
 
 
@@ -419,6 +427,8 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
             seen.append(paper_id)
         if paper.get("theme_id") not in {"A", "B"}:
             errors.append(f"{prefix}.theme_id must be A or B")
+        if paper.get("target_jcr_quartile") not in VENUE_QUARTILES:
+            errors.append(f"{prefix}.target_jcr_quartile must be Q1 or Q2")
         for key in ("portfolio_role", "distinct_contribution"):
             _text(paper.get(key), f"{prefix}.{key}", errors)
         claim_ids = _string_list(paper.get("unique_claim_ids"), f"{prefix}.unique_claim_ids", errors)
@@ -430,6 +440,11 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
         _string_list(paper.get("dependencies"), f"{prefix}.dependencies", errors, minimum=0)
     if sorted(seen) != expected:
         errors.append(f"papers must contain exactly: {', '.join(expected)}")
+    try:
+        from scripts.venue_policy import validate_portfolio
+    except ImportError:
+        from venue_policy import validate_portfolio
+    errors.extend(validate_portfolio(papers, expected_count=len(expected)))
 
     required_pairs = {tuple(pair) for pair in itertools.combinations(expected, 2)}
     found_pairs: set[tuple[str, str]] = set()
@@ -490,6 +505,9 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
         errors.append(f"paper_id must be {expected_paper_id}")
     if contract.get("writing_language") != "en":
         errors.append("writing_language must be en")
+    target_quartile = contract.get("target_jcr_quartile")
+    if target_quartile not in VENUE_QUARTILES:
+        errors.append("target_jcr_quartile must be Q1 or Q2")
     if contract.get("status") not in {"ready_for_review", "approved"}:
         errors.append("status must be ready_for_review or approved")
     for key in (
@@ -561,7 +579,12 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
         minimum=0,
     )
     _text(independence.get("why_not_merge"), "independence.why_not_merge", errors)
-    errors.extend(validate_venue_candidates(contract.get("target_venues")))
+    errors.extend(
+        validate_venue_candidates(
+            contract.get("target_venues"),
+            target_quartile=str(target_quartile or "Q1"),
+        )
+    )
     return errors
 
 

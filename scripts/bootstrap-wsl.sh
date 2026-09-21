@@ -8,6 +8,7 @@ install_kdense=false
 install_writing_tools=false
 install_research_quality_tools=false
 install_ai4science=false
+install_figures=false
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --with-kdense)
@@ -22,13 +23,24 @@ while [[ "$#" -gt 0 ]]; do
     --with-ai4science)
       install_ai4science=true
       ;;
+    --with-figures)
+      install_figures=true
+      ;;
     *)
-      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools] [--with-ai4science]" >&2
+      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools] [--with-ai4science] [--with-figures]" >&2
       exit 2
       ;;
   esac
   shift
 done
+
+if [[ "$install_figures" == true ]]; then
+  if [[ ! -x ".venv/bin/python" ]]; then
+    python3 -m venv .venv
+  fi
+  .venv/bin/python -m pip install 'matplotlib>=3.8,<4' 'numpy>=1.26,<3' 'pandas>=2.1,<3'
+  .venv/bin/python -c "import matplotlib,numpy,pandas; print('figure stack', matplotlib.__version__, numpy.__version__, pandas.__version__)"
+fi
 
 if [[ "$install_writing_tools" == true ]]; then
   if [[ ! -x ".venv/bin/python" ]]; then
@@ -85,4 +97,5 @@ echo "API-first CLI: follow docs/UUAPI-CC-SWITCH.md"
 echo "Optional local prose checks: bash scripts/bootstrap-wsl.sh --with-writing-tools"
 echo "Executable power analysis: bash scripts/bootstrap-wsl.sh --with-research-quality-tools"
 echo "PaperQA2 and ToolUniverse adapters: bash scripts/bootstrap-wsl.sh --with-ai4science"
+echo "Publication figure renderer: bash scripts/bootstrap-wsl.sh --with-figures"
 echo "Optional CLI-mode check: python3 scripts/check_env.py --mode cli"

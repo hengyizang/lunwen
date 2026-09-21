@@ -49,7 +49,10 @@ export UUAPI_STRICT_MODEL_ID='true'
 
 `UUAPI_BASE_URL` may be the root or end in `/v1`; the adapter normalizes it.
 The Python adapter itself calls `/v1/messages`, `/v1/responses`, and
-`/v1/usage`. Never put the API key in the URL.
+`/v1/usage`. If the gateway documents only OpenAI-compatible Chat Completions,
+set `UUAPI_OPENAI_PROTOCOL=chat_completions`; the GPT route then uses
+`/v1/chat/completions`. Never put the API key in the URL and never enable a
+silent model fallback.
 
 The runner sends the current project's bounded safe-text snapshot through
 UUAPI. It excludes raw/private data, old API responses, build/cache directories,
@@ -97,7 +100,7 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
   --writer-provider uuapi-openai \
   --critic-provider uuapi-anthropic \
   --max-output-tokens 4000 \
-  --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU; target JCR Q1 SCI/SCIE; build a doctoral Theme A with a separately doctoral-level extension Theme B and six non-salami-sliced papers.'
+  --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU; six papers with at least three JCR Q1 and every remainder at least JCR Q2; keep identical doctoral scientific gates; build a doctoral Theme A with a separately doctoral-level extension Theme B and six non-salami-sliced papers.'
 ```
 
 The cycle performs five calls: Claude semantic plan, Codex/OpenAI writer, Claude
@@ -106,7 +109,8 @@ request ID and token usage in the run manifest. It does not approve or advance
 G0. At G1–G5 it additionally creates the matching initial/final JSON audits and
 decision log required by the deterministic gate.
 
-From G1 onward, allocate enough output tokens for the expanded doctoral/Q1
+From G1 onward, allocate enough output tokens for the expanded doctoral and
+paper-specific Q1/Q2 portfolio
 contracts: closest-work originality evidence, all pairwise paper comparisons,
 and one or more complete experiment designs per paper with exact run coverage. At G5, Codex/OpenAI writes the
 English manuscript and the local language validator must pass; Claude remains

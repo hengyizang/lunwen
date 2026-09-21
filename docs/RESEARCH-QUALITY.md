@@ -1,7 +1,8 @@
-# Research-quality hard gates (v2.0.0)
+# Research-quality hard gates (v2.2.0)
 
 These controls raise the evidence floor for a doctoral programme targeting
-current JCR Q1 journals. They do not prove novelty, guarantee acceptance or
+the declared six-paper portfolio of at least three current JCR Q1 targets and
+every remainder at least Q2. They do not prove novelty, guarantee acceptance or
 replace an advisor, statistician, domain expert, data steward or named human
 approver.
 
@@ -73,7 +74,8 @@ python3 scripts/venue_candidates.py build \
 ```
 
 Every paper needs at least two candidates. Each candidate is bound to its exact
-export row and must use a current or immediately prior JCR year, Q1, IF > 1 and
+export row and must use a current or immediately prior JCR year, meet the
+paper-specific Q1/Q2 target, have IF > 1 and
 SCI/SCIE indexing. Scope fit, article type, official author guidelines, policy
 source, ranking and selection status remain explicit. The licensed export is
 not redistributed.

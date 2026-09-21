@@ -17,15 +17,18 @@ class V1GuardTests(unittest.TestCase):
     def test_jcr_accepts_q1_with_if_above_one(self):
         p=valid_jcr();p["impact_factor"]=1.01
         verify_payload(p)
+    def test_jcr_accepts_q2_for_declared_q2_paper(self):
+        p=valid_jcr();p["quartile"]="Q2"
+        verify_payload(p,"Q2")
     def test_jcr_rejects_stale_edition_and_empty_category(self):
         p=valid_jcr();p.update({"verification_year":2020,"category":""})
         with self.assertRaises(ResearchCtlError):verify_payload(p)
     def test_api_path_protection(self):
         with self.assertRaises(ValueError):api_orchestrator.safe_target("demo","../outside.txt")
         with self.assertRaises(ValueError):api_orchestrator.safe_target("demo",".env")
-def verify_payload(payload):
+def verify_payload(payload,required="Q1"):
     with tempfile.TemporaryDirectory() as temp:
-        path=Path(temp)/"jcr.json";path.write_text(json.dumps(payload),encoding="utf-8");verify_jcr(path)
+        path=Path(temp)/"jcr.json";path.write_text(json.dumps(payload),encoding="utf-8");verify_jcr(path,required)
 def valid_jcr():
     now=datetime.now(timezone.utc).replace(microsecond=0)
     return {"schema_version":"1.0","database":"Clarivate Journal Citation Reports","verification_year":now.year,"impact_factor":5.0,"quartile":"Q1","category":"Engineering, Mechanical","indexing":"SCIE","source_url":"https://example.org/jcr","verified_by":"tester","verified_at":now.isoformat()}

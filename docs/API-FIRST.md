@@ -61,7 +61,9 @@ complete pairwise paper-distinctness matrix and paper-contract schema 2.0; G3
 requires one or more linked experiment designs per paper, with every planned run
 assigned exactly once. Theme B must own disjoint claims, papers and primary
 evidence and survive failure of Theme A. Candidate and selected venues are
-bound to a human-imported local JCR export and must be current JCR Q1 SCI/SCIE.
+bound to a human-imported local JCR export. The six-paper portfolio must retain
+at least three current JCR Q1 SCI/SCIE targets and every remainder at least Q2;
+Q2 does not relax any scientific-quality gate.
 At G4 the registry and claim matrix are hash-linked to the approved plan and
 outputs; clean-room claims require an executor-issued, digest-pinned container
 isolation receipt. A linked worktree alone does not qualify. At G5 the control plane checks the final source and
@@ -110,3 +112,8 @@ bypass or weaken the built-in deterministic gate.
 Human required: final topic choice, doctoral architecture, data-license confirmation, experiment approval, interpretation of scientific evidence, authorship/ethics, current JCR verification, final PDF/DOCX inspection and every journal portal action.
 
 The system intentionally cannot guarantee novelty, acceptance, publication, doctoral admission or employment outcomes. It is an auditable research workflow, not a substitute for scientific judgment.
+
+Every paid call also passes through the local CNY budget ledger and
+byte-identical request cache described in `RESEARCH-CAPABILITIES.md`. Cache hits
+do not remove planner/critic roles; they only avoid paying twice for the exact
+same audited request.

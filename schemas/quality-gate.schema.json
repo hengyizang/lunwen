@@ -43,7 +43,7 @@
       "type": "object",
       "required": ["minimum_jcr_quartile", "preferred_jcr_quartile", "candidate_venues", "current_verification_required", "venue_specific_guidelines_required"],
       "properties": {
-        "minimum_jcr_quartile": {"const": "Q1"},
+        "minimum_jcr_quartile": {"enum": ["Q1", "Q2"]},
         "preferred_jcr_quartile": {"const": "Q1"},
         "candidate_venues": {
           "type": "array", "minItems": 2,
@@ -52,7 +52,7 @@
             "required": ["name", "quartile", "indexing", "category", "jcr_year", "source_url", "scope_fit", "article_type"],
             "properties": {
               "name": {"type": "string", "minLength": 1},
-              "quartile": {"const": "Q1"},
+              "quartile": {"enum": ["Q1", "Q2"]},
               "indexing": {"enum": ["SCI", "SCIE"]},
               "category": {"type": "string", "minLength": 1},
               "jcr_year": {"type": "integer", "minimum": 2000},

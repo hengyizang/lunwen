@@ -46,6 +46,15 @@ class VenueCandidateTests(unittest.TestCase):
             self.assertEqual(validate_registry(project, registry), [])
             self.assertEqual(registry["papers"][0]["candidates"][0]["rank"], 1)
             self.assertEqual(registry["papers"][0]["selected_venue_id"], "journal-a")
+            (project / "papers" / "P01" / "paper-contract.json").write_text(
+                json.dumps({"target_jcr_quartile": "Q2"}), encoding="utf-8"
+            )
+            self.assertTrue(
+                any(
+                    "differs from paper-contract.json" in item
+                    for item in validate_registry(project, registry)
+                )
+            )
             registry["papers"][0]["candidates"][0]["fit_score"] = -1
             self.assertTrue(any("fit_score" in item for item in validate_registry(project, registry)))
             registry["papers"][0]["candidates"][0]["fit_score"] = 92.0

@@ -19,6 +19,7 @@ class FigureProvenanceTests(unittest.TestCase):
             (project/"experiments"/"registry.jsonl").write_text(json.dumps({"run_id":"r1","paper_id":"P01","status":"succeeded"})+"\n",encoding="utf-8")
             record_figure(project,"P01","papers/P01/figures/result.png","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
             self.assertEqual(validate_figure_provenance(project,paper),[])
+            self.assertEqual(output_provenance.current_origin(project,paper/"figures"/"figure-provenance.json")["status"],"tracked")
             data.write_text("x,y\n1,3\n",encoding="utf-8")
             self.assertTrue(any("input hash is stale" in error for error in validate_figure_provenance(project,paper)))
 

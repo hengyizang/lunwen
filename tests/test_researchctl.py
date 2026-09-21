@@ -48,7 +48,16 @@ class ResearchCtlTests(unittest.TestCase):
         contract = json.loads((project / "papers" / "P01" / "paper-contract.json").read_text())
         self.assertEqual(contract["schema_version"], "2.0")
         self.assertEqual(contract["writing_language"], "en")
+        self.assertEqual(contract["target_jcr_quartile"], "Q1")
         self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
+
+    def test_six_paper_initialization_assigns_three_q1_and_three_q2_targets(self) -> None:
+        project = self.init_project(paper_count=6)
+        targets = [
+            json.loads((project / "papers" / f"P{index:02d}" / "paper-contract.json").read_text())["target_jcr_quartile"]
+            for index in range(1, 7)
+        ]
+        self.assertEqual(targets, ["Q1", "Q1", "Q1", "Q2", "Q2", "Q2"])
 
     def test_duplicate_project_is_rejected(self) -> None:
         self.init_project()
@@ -127,6 +136,36 @@ class ResearchCtlTests(unittest.TestCase):
         researchctl.save_state("test-phd", state)
         errors = researchctl.gate_errors("test-phd", "G5")
         self.assertTrue(any("academic style audit" in error for error in errors))
+
+    def test_g5_rechecks_six_paper_venue_portfolio(self) -> None:
+        project = self.init_project(paper_count=6)
+        paper_map = {
+            "papers": [
+                {
+                    "paper_id": f"P{index:02d}",
+                    "target_jcr_quartile": "Q1" if index <= 3 else "Q2",
+                }
+                for index in range(1, 7)
+            ]
+        }
+        researchctl.write_json(project / "program" / "paper-map.json", paper_map)
+        contract_path = project / "papers" / "P03" / "paper-contract.json"
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        contract["target_jcr_quartile"] = "Q2"
+        researchctl.write_json(contract_path, contract)
+        state = researchctl.load_state("test-phd")
+        state.update(
+            {
+                "stage_index": 5,
+                "stage": "writing-and-review",
+                "gate": "G5",
+                "active_paper": "P01",
+            }
+        )
+        researchctl.save_state("test-phd", state)
+        errors = researchctl.gate_errors("test-phd", "G5")
+        self.assertTrue(any("P03 target JCR quartile" in item for item in errors))
+        self.assertTrue(any("at least 3 Q1" in item for item in errors))
 
     def test_change_after_ready_requires_fresh_human_review(self) -> None:
         project=self.init_project();self.complete_constraints(project)

@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Require G4 approval for result-bearing prose. Read the paper contract, claim-evidence matrix, experiment registry and `references/research-integrity.md`.
 
-Claude may provide only a semantic outline and internal critique. Codex/OpenAI must independently write and revise every manuscript, table, caption, supplement, disclosure and submission-material text. Codex may write plotting code, but deterministic local tools must render final charts from recorded experiment data. Never copy wording from a Claude plan or audit.
+Claude may provide only a semantic outline and internal critique. GPT/OpenAI must independently write and revise every manuscript, table, caption, supplement, disclosure and submission-material text. Prefer a schema-bound specification rendered through `scripts/publication_figures.py`; specialized GPT-written plotting code remains available when scientifically necessary. Every final chart must be rendered locally from recorded experiment data, include uncertainty and accessible redundant encodings, and pass figure provenance. Never copy wording from a Claude plan or audit.
 
 Write a venue-neutral semantic manuscript first:
 

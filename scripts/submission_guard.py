@@ -11,19 +11,26 @@ except ImportError:
     from jcr_verify import JcrVerificationError,verify
     from submission_package import build_package
     from researchctl import ResearchCtlError,project_dir,load_state,validate_paper_id
-def verify_jcr(path:Path)->dict:
+def verify_jcr(path:Path,required_quartile="Q1")->dict:
     try:data=json.loads(path.read_text(encoding="utf-8"))
     except (OSError,json.JSONDecodeError) as exc:raise ResearchCtlError(f"Invalid JCR verification file: {path}: {exc}") from exc
-    try:verify(data)
-    except JcrVerificationError as exc:raise ResearchCtlError(f"Invalid current JCR Q1 verification: {exc}") from exc
+    try:verify(data,required_quartile)
+    except JcrVerificationError as exc:raise ResearchCtlError(f"Invalid current JCR {required_quartile} verification: {exc}") from exc
     return data
 def build_guarded_package(project,paper,output=None):
     paper=validate_paper_id(paper);state=load_state(project)
     if state.get("paper_statuses",{}).get(paper)!="submission_ready":raise ResearchCtlError(f"{paper} has not passed its G5 human gate")
-    verify_jcr(project_dir(project)/"papers"/paper/"jcr-verification.json");return build_package(project,paper,output)
+    paper_dir=project_dir(project)/"papers"/paper
+    try:
+        from scripts.venue_policy import target_from_contract
+    except ImportError:
+        from venue_policy import target_from_contract
+    try:contract=json.loads((paper_dir/"paper-contract.json").read_text(encoding="utf-8"))
+    except (OSError,json.JSONDecodeError):contract={}
+    verify_jcr(paper_dir/"jcr-verification.json",target_from_contract(contract));return build_package(project,paper,output)
 def main():
     p=argparse.ArgumentParser();p.add_argument("--project",required=True);p.add_argument("--paper",required=True);p.add_argument("--output",type=Path);a=p.parse_args()
     try:destination=build_guarded_package(a.project,a.paper,a.output)
     except ResearchCtlError as exc:print(f"error: {exc}");return 2
-    print(destination);print("JCR Q1 SCI/SCIE threshold passed. Package is for manual upload only; nothing was submitted.");return 0
+    print(destination);print("Paper-specific JCR Q1/Q2 SCI/SCIE threshold passed. Package is for manual upload only; nothing was submitted.");return 0
 if __name__=="__main__":raise SystemExit(main())

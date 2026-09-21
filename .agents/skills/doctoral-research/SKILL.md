@@ -9,8 +9,8 @@ Locate the repository root, then read `references/workflow.md`, `references/rese
 
 Interpret the request as one of:
 
-- `start <slug>`: initialize through `scripts/autopilot.py start` and prepare G0;
-- `continue <slug>`: use `scripts/autopilot.py resume`, complete only the current stage and stop at its gate;
+- `start <slug>`: initialize through the API-first `scripts/start.sh` path and prepare G0;
+- `continue <slug>`: inspect `researchctl.py status`, run the current stage through `scripts/api_orchestrator.py cycle`, and stop at its gate;
 - `topic <slug>`: attack topic novelty, feasibility and doctoral architecture;
 - `experiment <slug> <design|run>`: design or audit reproducible experiments;
 - `review <slug> [paper]`: audit code, statistics, claims and reproducibility;
@@ -18,7 +18,9 @@ Interpret the request as one of:
 - `package <slug> <paper>`: build a deterministic ZIP for human inspection and manual upload;
 - `audit <slug>`: run a cross-stage integrity check.
 
-Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Claude is restricted to read-only semantic planning and internal independent audits. Codex/OpenAI independently writes and remediates every persistent text artifact and plotting program; local deterministic tools render final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Never edit gate approvals by hand. Never approve a gate for the user.
+Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Default to the external API worker so this Codex conversation remains a thin manager; do not invoke `autopilot.py`, Claude Code or Codex CLI unless the user explicitly requests CLI mode. Claude is restricted to read-only semantic planning and internal independent audits. GPT/OpenAI independently writes and remediates every persistent text artifact and plotting specification; `scripts/publication_figures.py` renders final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Preserve the configured CNY hard budgets and exact-request cache. Never edit gate approvals by hand. Never approve a gate for the user.
+
+For six papers, require at least three declared current JCR Q1 SCI/SCIE targets and every remainder at least current JCR Q2, all with JIF above 1.0. Apply the same doctoral originality, experiment, reliability, review and writing gates to every paper. Use `scripts/open_fulltext.py` for lawful OA candidates. When the user supplies a SciencePro export, ingest it through `scripts/sciencepro_import.py` and treat it as advisory until independently verified.
 
 When acting as the independent critic:
 

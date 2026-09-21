@@ -18,6 +18,7 @@ secrets/
 projects/**/data/raw/
 projects/**/data/cache/
 projects/**/data/private/
+projects/**/state/model-usage.jsonl
 projects/**/.cache/
 
 # Publisher-owned template packages

@@ -62,6 +62,33 @@ class UuapiProviderTests(unittest.TestCase):
         self.assertEqual(audit["gateway"], "uuapi")
         self.assertNotIn("sk-test-not-real", json.dumps(audit))
 
+    def test_openai_chat_completions_compatibility_mode(self) -> None:
+        captured: list[object] = []
+
+        def fake_urlopen(request: object, timeout: int = 0) -> FakeResponse:
+            captured.append(request)
+            return FakeResponse(
+                {
+                    "id": "chat_1",
+                    "model": "gpt-test",
+                    "choices": [{"message": {"role": "assistant", "content": "OK"}}],
+                    "usage": {"prompt_tokens": 2, "completion_tokens": 1},
+                }
+            )
+
+        environment = {**self.environment(), "UUAPI_OPENAI_PROTOCOL": "chat_completions"}
+        with patch.dict(os.environ, environment, clear=True), patch(
+            "scripts.ai_providers.urllib.request.urlopen", side_effect=fake_urlopen
+        ):
+            result = ai_providers.call("uuapi-openai", "hello", system="system")
+
+        request = captured[0]
+        payload = json.loads(request.data)
+        self.assertEqual(request.full_url, "https://gateway.example/v1/chat/completions")
+        self.assertEqual(payload["messages"][0]["role"], "system")
+        self.assertEqual(result.text, "OK")
+        self.assertEqual(result.protocol, "openai_chat_completions")
+
     def test_anthropic_messages_endpoint_and_headers(self) -> None:
         captured: list[object] = []
 

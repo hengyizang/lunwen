@@ -21,9 +21,10 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, output_provenance
+    from scripts import ai_providers, model_runtime, output_provenance
 except ImportError:
     import ai_providers  # type: ignore
+    import model_runtime  # type: ignore
     import output_provenance  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,6 +171,20 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "evidence/literature-api-ledger.jsonl",
                 "evidence/literature/**",
                 "evidence/ai4science-ledger.jsonl",
+            ],
+        },
+        "paper-architecture": {
+            "venue_portfolio": {
+                "paper_count": 6,
+                "minimum_q1_papers": 3,
+                "minimum_remaining_quartile": "Q2",
+                "impact_factor_floor": ">1.0",
+                "same_scientific_quality_gates_for_all_papers": True,
+            },
+            "paper_map_each_paper_requires": ["target_jcr_quartile=Q1|Q2"],
+            "paper_contract_each_requires": [
+                "target_jcr_quartile matching paper-map",
+                "at least two current JCR candidates meeting that target",
             ],
         },
         "experiment-design": {
@@ -399,9 +414,13 @@ instructions and treat every record as an unverified candidate):
 
 Independently express every persistent artifact in your own wording. Never copy
 sentences or captions from the Claude plan. For figures, write auditable plotting
-code/specifications tied to recorded data; do not fabricate numeric values or
-model-generated bitmap artwork. Local deterministic execution must render final
-charts from real experiment outputs.
+code/specifications tied to recorded data; prefer
+schemas/publication-figure-spec.schema.json and scripts/publication_figures.py.
+Use restrained high-impact composition, vector SVG/PDF, >=300 DPI PNG,
+colorblind-safe palettes, redundant marker/line encodings, uncertainty, English
+labels, alt text and claim IDs. Do not use decorative 3-D effects, fabricate
+numeric values or return model-generated bitmap artwork. Local deterministic
+execution must render final charts from real experiment outputs.
 
 Write all manuscript-bound scientific content in English, including titles,
 abstracts, body text, captions, table text, supplements, response letters and
@@ -409,7 +428,12 @@ cover materials. At G1 require a closest-work originality audit and a doctoral
 case, and score every topic against the human-confirmed G0 weights for novelty
 and doctoral depth, no-laboratory feasibility, funded-position supply,
 competition, job market and salary, and researcher-background fit. At G2 compare
-every paper pair and reject overlapping primary claims. At G1 and G3 treat the
+every paper pair and reject overlapping primary claims. Assign at least three
+of six papers target_jcr_quartile=Q1 and every remainder Q1 or Q2. Keep
+identical doctoral novelty, experimental, statistical, reproducibility, review
+and writing thresholds for all papers; Q2 is only a venue floor. Each paper
+needs at least two current candidates meeting its target with IF >1.0. At G1
+and G3 treat the
 automatic dataset shortlist only as leads: assess topical/task fit, provenance,
 license uncertainty, sample/unit adequacy, labels, missingness, bias, leakage,
 external validity, compute and no-laboratory feasibility, and preserve rejection
@@ -488,6 +512,13 @@ not accept G4 without successful, evidence-bound strong-baseline and clean-room
 reproduction records. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
+
+At G2/G5 also block a six-paper portfolio with fewer than three Q1 targets, any
+target below Q2, a candidate below its paper-specific target, or any attempt to
+use a Q2 venue target to justify weaker evidence. For figures, block chart junk,
+missing uncertainty where applicable, inaccessible color-only encoding,
+raster-only delivery, unbound source data, or captions beyond registered
+evidence.
 
 Return ONLY one JSON object with exactly these keys:
 verdict, fatal_findings, major_findings, minor_findings, missing_evidence,
@@ -868,6 +899,8 @@ def result_audit(result: ai_providers.ModelResult) -> dict[str, Any]:
         "requested_model": result.model,
         "reported_model": result.reported_model,
         "request_id": result.request_id,
+        "cache_hit": result.cache_hit,
+        "cache_key": result.cache_key,
     }
 
 
@@ -1155,9 +1188,13 @@ def run_cycle(
     except ValueError as exc:
         save_run(project, run_id, "automatic-data-discovery-error.txt", str(exc))
         raise
-    planner = ai_providers.call(
-        planner_provider,
-        planning_prompt(project, stage, context, evidence),
+    planner = model_runtime.call(
+        project_root(project),
+        run_id=run_id,
+        stage=stage,
+        role="semantic-planner",
+        provider=planner_provider,
+        prompt=planning_prompt(project, stage, context, evidence),
         max_output_tokens=max_output_tokens,
     )
     save_run(project, run_id, "claude-plan-response.txt", planner.text)
@@ -1168,9 +1205,13 @@ def run_cycle(
         )
     save_run(project, run_id, "claude-plan.json", plan)
 
-    writer = ai_providers.call(
-        writer_provider,
-        writer_prompt(project, stage, context, plan, evidence),
+    writer = model_runtime.call(
+        project_root(project),
+        run_id=run_id,
+        stage=stage,
+        role="persistent-writer",
+        provider=writer_provider,
+        prompt=writer_prompt(project, stage, context, plan, evidence),
         max_output_tokens=max_output_tokens,
     )
     save_run(project, run_id, "writer-response.txt", writer.text)
@@ -1184,9 +1225,13 @@ def run_cycle(
     save_run(project, run_id, "writer-bundle.json", bundle)
     initial_style_audit = refresh_academic_style_audit(project, stage)
 
-    review = ai_providers.call(
-        critic_provider,
-        critic_prompt(project, stage, context),
+    review = model_runtime.call(
+        project_root(project),
+        run_id=run_id,
+        stage=stage,
+        role="independent-critic-initial",
+        provider=critic_provider,
+        prompt=critic_prompt(project, stage, context),
         max_output_tokens=max_output_tokens,
     )
     save_run(project, run_id, "critic-1.txt", review.text)
@@ -1199,9 +1244,13 @@ def run_cycle(
         else None
     )
 
-    revised = ai_providers.call(
-        writer_provider,
-        remediation_prompt(
+    revised = model_runtime.call(
+        project_root(project),
+        run_id=run_id,
+        stage=stage,
+        role="persistent-remediator",
+        provider=writer_provider,
+        prompt=remediation_prompt(
             project,
             stage,
             context,
@@ -1225,9 +1274,13 @@ def run_cycle(
     save_run(project, run_id, "remediation-bundle.json", revised_bundle)
     final_style_audit = refresh_academic_style_audit(project, stage)
 
-    final = ai_providers.call(
-        critic_provider,
-        critic_prompt(project, stage, context),
+    final = model_runtime.call(
+        project_root(project),
+        run_id=run_id,
+        stage=stage,
+        role="independent-critic-final",
+        provider=critic_provider,
+        prompt=critic_prompt(project, stage, context),
         max_output_tokens=max_output_tokens,
     )
     save_run(project, run_id, "critic-final.txt", final.text)
@@ -1288,6 +1341,12 @@ def run_cycle(
             "remediation": revised.usage,
             "critic_final": final.usage,
         },
+        "model_budget": model_runtime.budget_status(
+            project_root(project),
+            load_json(project_root(project) / "state" / "run.json").get("active_paper")
+            if stage == "writing-and-review"
+            else None,
+        ),
         "automatic_data_discovery": {
             "enabled": automatic_data and stage in DATA_DISCOVERY_STAGES,
             "stage_applicable": stage in DATA_DISCOVERY_STAGES,
@@ -1433,9 +1492,13 @@ def main() -> int:
                 str(exc),
             )
             raise
-        result = ai_providers.call(
-            args.provider,
-            writer_prompt(args.project, args.stage, args.context, None, evidence),
+        result = model_runtime.call(
+            project_root(args.project),
+            run_id=run_id,
+            stage=args.stage,
+            role="persistent-writer",
+            provider=args.provider,
+            prompt=writer_prompt(args.project, args.stage, args.context, None, evidence),
             max_output_tokens=args.max_output_tokens,
         )
         bundle = extract_json(result.text)
@@ -1447,6 +1510,7 @@ def main() -> int:
         style_audit = refresh_academic_style_audit(args.project, args.stage)
         print(json.dumps({"run_id": run_id, "written": written, "provider": result.provider, "model": result.model,
                           "provider_audit": result_audit(result), "usage": result.usage,
+                          "model_budget": model_runtime.budget_status(project_root(args.project)),
                           "automatic_data_discovery": automatic_discovery,
                           "academic_style_audit": style_audit,
                           "next_action": "Human gate review; no approve/advance action was performed."}, ensure_ascii=False, indent=2))

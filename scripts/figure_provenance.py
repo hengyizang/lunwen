@@ -72,7 +72,7 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
     timestamp=output_provenance.utc_now();record={"figure_path":figure_rel,"figure_type":figure_type,"renderer":{"path":renderer_rel,"sha256":output_provenance.sha256_file(renderer_path)},"config":config_record,"inputs":input_records,"source_run_ids":sorted(set(runs)),"output_sha256":output_provenance.sha256_file(figure_path),"deterministic":True,"generated_by":"local-tool","language_checked_by":language_checked_by.strip(),"language_checked_at":timestamp,"recorded_at":timestamp}
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=figure_rel]+[record]
     _write(registry_path,registry)
-    output_provenance.record_model_writes(project,[figure_path],family="other",provider="deterministic-local-renderer",model=renderer_rel,role="final-figure",run_id="figure-"+output_provenance.utc_now().replace(":","-"))
+    output_provenance.record_model_writes(project,[figure_path,registry_path],family="other",provider="deterministic-local-renderer",model=renderer_rel,role="final-figure",run_id="figure-"+output_provenance.utc_now().replace(":","-"))
     return figure_rel
 
 

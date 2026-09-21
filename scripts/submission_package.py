@@ -172,9 +172,11 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     try:
         try:from scripts.jcr_verify import verify as verify_jcr_payload
         except ModuleNotFoundError:from jcr_verify import verify as verify_jcr_payload
-        verify_jcr_payload(load_object(paper/"jcr-verification.json"))
+        try:from scripts.venue_policy import target_from_contract
+        except ModuleNotFoundError:from venue_policy import target_from_contract
+        verify_jcr_payload(load_object(paper/"jcr-verification.json"),target_from_contract(load_object(paper/"paper-contract.json")))
     except Exception as exc:
-        raise ResearchCtlError(f"Current JCR Q1 verification failed: {exc}") from exc
+        raise ResearchCtlError(f"Current paper-specific JCR verification failed: {exc}") from exc
     try:
         try:from scripts.manuscript_language import analyze_submission
         except ModuleNotFoundError:from manuscript_language import analyze_submission

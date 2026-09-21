@@ -106,7 +106,13 @@ class QualityGateTests(unittest.TestCase):
     def test_q2_candidate_blocks(self):
         value = report("G5")
         value["venue_readiness"]["candidate_venues"][1]["quartile"] = "Q2"
-        self.assertTrue(any("current JCR Q1" in error for error in validate_report(value, "G5")))
+        self.assertTrue(any("JCR Q1 target" in error for error in validate_report(value, "G5")))
+
+    def test_declared_q2_floor_accepts_q1_and_q2_candidates(self):
+        value = report("G5")
+        value["venue_readiness"]["minimum_jcr_quartile"] = "Q2"
+        value["venue_readiness"]["candidate_venues"][1]["quartile"] = "Q2"
+        self.assertEqual(validate_report(value, "G5"), [])
 
     def test_stale_jcr_candidate_year_blocks(self):
         value=report("G1");value["venue_readiness"]["candidate_venues"][0]["jcr_year"]=2020

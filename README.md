@@ -1,4 +1,4 @@
-# Doctoral Research OS v2.1.0
+# Doctoral Research OS v2.2.0
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -14,7 +14,7 @@
 - Theme B 是独立硬闸门：独立问题、claim、论文、主证据、证伪条件和失败后退路都必须明确，且 Theme A 失败时仍能成立。
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - G3 对表格、图像、WAV、NumPy、HDF5 与 Parquet 生成本地哈希绑定质量报告；未知格式或缺失内容处理器会阻断。每篇论文必须有 `statsmodels` 或至少 1,000 次 Monte Carlo 的可执行功效证据，Monte Carlo 由控制层在两个干净目录中重跑并精确比对。
-- 候选与最终期刊均要求当前 JCR Q1 SCI/SCIE；完整候选库从本地授权 JCR 导出生成，每篇至少两个候选并绑定官网指南、政策、排序和选择状态。
+- 六篇期刊组合固定为至少三篇当前 JCR Q1 SCI/SCIE、其余最低 Q2，且 JIF 均须大于 1.0；Q2 只改变期刊目标，不降低博士级新颖性、实验、统计、复现、审稿或写作阈值。完整候选库从本地授权 JCR 导出生成，每篇至少两个满足其声明目标的候选并绑定官网指南、政策、排序和选择状态。
 - 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
 - G5 在 Codex 首稿和修订后自动执行自然学术表达审计。内置规则选取 `avoid-ai-writing`、`vale-ai-tells` 与 `No AI Slop` 中适合学术英文的部分，逐行检查模板化套话、空洞拔高、含糊归因、失准断言、机械结构、重复和异常均匀的节奏；可选 `proselint` 与 Harper 只在本地追加语法建议。报告与当前稿件树哈希绑定并受保护。该模块不计算“AI率”、不规避检测器，也不取消 AI 使用披露。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
@@ -22,12 +22,17 @@
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
 - 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
 - UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
+- UUAPI 的 GPT 路线可在 `Responses` 与 OpenAI-compatible `chat/completions` 间显式切换；不做静默协议或模型回退。
+- Claude 与 GPT 继续各司其职；本地模型运行层按配置的人民币单价记录每次调用，实行项目 300 元、单篇 60 元默认硬上限，并只对同模型、同端点、同参数、同 Prompt 哈希的完全相同请求使用零成本缓存。
 - G1/G3 默认自动生成多组数据查询，调用 DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方接口并行检索、跨查询去重和元数据初筛；G3 优先按六篇论文分别构造查询。候选许可和科学适用性始终标记为需要人工核验。
-- 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。
+- 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/人民币模型费用/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。
 - 数据清单验证、人工许可确认、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝。
 - G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
 - G4 每篇论文必须复现领域标准和强近期基线；clean-room 运行只接受锁定摘要、禁网且只读根文件系统的 Docker/Podman 容器。linked Git worktree 仅算独立检出目录，不再被视为隔离执行器。容差、执行器隔离收据、环境与证据哈希均由控制层复核，不能由模型自报。
 - PaperQA2 与 ToolUniverse 作为按课题启用的成熟 AI4Science 上游；默认关闭。可执行适配器会真实调用官方 CLI/dictionary API，登记成功、失败、超时、包版本、输入完整性、stdout/stderr 和结果哈希，并始终保持“仅建议、需人工核验”。
+- 开放全文解析器联合 OpenAlex、Unpaywall 与 Crossref 生成合法全文候选，不绕过访问控制，也不把元数据中的许可声明自动当作下载授权。
+- SciencePro 无 API 时可把人工下载的 PDF/DOCX/CSV/BibTeX 导入 Git 忽略的私有区；系统提取 DOI/HTTPS 线索并生成哈希收据，结论始终标记为需要独立核验。
+- 高级科研绘图器用 Python 从登记数据确定性生成 SVG/PDF 与至少 300 DPI PNG，内置多面板折线、散点、柱状、热图和森林图，采用色盲安全配色、颜色+标记+线型冗余编码、英文标签、替代文本、claim 绑定和输出哈希；禁止用装饰性 3D 图替代证据。
 - GitHub Actions 在 Python 3.10/3.12/3.13 上运行确定性回归；每周和手动工作流真实调用全部公开文献接口，并用 digest 固定镜像验证 Docker 隔离。WSL2 本机验收另存环境与原始调用证据，Linux CI 不冒充 WSL2。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
 - 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
@@ -96,6 +101,14 @@ bash scripts/bootstrap-wsl.sh --with-ai4science
 ```
 
 该选项安装锁定的 `paper-qa==2026.08.12` 与 `tooluniverse==1.5.1`，要求 Python 3.11+。公开文献 API、WSL2、Docker 真实验收和两个适配器的命令、证据位置与失败语义见 [`docs/LIVE-ACCEPTANCE.md`](docs/LIVE-ACCEPTANCE.md)。GitHub Actions 的确定性与 live job 边界见 [`docs/CI-VALIDATION.md`](docs/CI-VALIDATION.md)。
+
+安装确定性高级科研绘图栈：
+
+```bash
+bash scripts/bootstrap-wsl.sh --with-figures
+```
+
+图表由 `scripts/publication_figures.py` 从 CSV/TSV/JSON 实验表渲染，默认同时输出 SVG、PDF 和高分辨率 PNG。完整命令、SciencePro 导入、开放全文解析和模型成本控制见 [`docs/RESEARCH-CAPABILITIES.md`](docs/RESEARCH-CAPABILITIES.md)。
 
 CLI 模式需要分别安装并登录 `claude` 与 `codex`。API-first 模式不需要它们；只需要相应 API key。仓库不保存 API key。
 
@@ -238,7 +251,7 @@ Codex 会发现 `.agents/skills/doctoral-research`。
 |---|---|---|
 | G0 | 目标、时间、预算、设备、地区、伦理边界 | 选题情报 |
 | G1 | 三个以上候选、逐条最近工作差异、检索饱和、原创性风险、核心命题 A、扩展命题 B、博士论证 | 论文组合架构 |
-| G2 | 完整 paper map、全部论文两两独立性比较、每篇可证伪 contract 与两个当前 JCR Q1 候选 | 数据与实验设计 |
+| G2 | 完整 paper map、全部论文两两独立性比较、每篇可证伪 contract 与两个满足其声明 Q1/Q2 目标的当前候选；六篇至少三篇Q1 | 数据与实验设计 |
 | G3 | 数据许可/SHA/质量报告、每篇独立实验设计、可执行功效分析、冻结预注册与预算 | 执行锁定计划 |
 | G4 | 全部尝试、负结果、claim-evidence matrix、强基线复现、隔离复现 | 结果约束写作 |
 | G5 | 当前论文的引用、两轮审稿、模板、披露、当年期刊复核 | 标记该篇就绪；转下一篇 |
@@ -363,7 +376,7 @@ python3 scripts/academic_style.py audit --project my-phd --paper P01
 任何稿件源文件变化都会使旧报告失效。报告不预测 Turnitin、GPTZero 或其他
 检测器，也不能证明文本由人独立撰写。
 
-首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、Q1 分区和指标，且重新检查范围、费用、AI/数据政策与模板版本。最终正文及所有投稿相关文本必须为英文。
+首个适配样例是 IJSSD，但只是模板试验目标，不代表所有论文都应投稿该刊。仓库中的指标明确标记为出版社报告；G5 必须通过 Clarivate 或机构 JCR 权限重新核验当年分类、该论文声明的 Q1/Q2 分区目标和指标，且重新检查范围、费用、AI/数据政策与模板版本。最终正文及所有投稿相关文本必须为英文。
 
 ## 人工投稿包
 

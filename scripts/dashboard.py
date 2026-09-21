@@ -379,8 +379,8 @@ def project_summaries() -> list[dict[str, Any]]:
     return summaries
 
 
-def _token_totals(project: Path) -> dict[str, int]:
-    totals = {"input_tokens": 0, "output_tokens": 0, "api_runs": 0}
+def _token_totals(project: Path) -> dict[str, Any]:
+    totals: dict[str, Any] = {"input_tokens": 0, "output_tokens": 0, "api_runs": 0}
     manifests = list((project / "api_runs").glob("*/manifest.json"))
     totals["api_runs"] = len(manifests)
 
@@ -404,6 +404,25 @@ def _token_totals(project: Path) -> dict[str, int]:
         except (OSError, json.JSONDecodeError):
             continue
         visit(payload.get("usage", {}))
+    try:
+        from scripts.model_runtime import budget_status
+
+        budget = budget_status(project)
+        totals.update(
+            {
+                "model_cost_cny": budget["spent"],
+                "model_budget_cny": budget["project_hard_limit"],
+                "model_budget_remaining_cny": budget["project_remaining"],
+            }
+        )
+    except (ImportError, OSError, ValueError, RuntimeError):
+        totals.update(
+            {
+                "model_cost_cny": None,
+                "model_budget_cny": None,
+                "model_budget_remaining_cny": None,
+            }
+        )
     return totals
 
 

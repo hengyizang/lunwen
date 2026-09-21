@@ -34,7 +34,7 @@ Required:
 - `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, including every pairwise paper comparison, independently sufficient primary evidence, standalone value and a justification for any shared outcome;
 - six default paper contracts under `papers/P01`–`papers/P06`;
 - dependency graph, shared assets, independent contribution, falsification condition and fallback venue for each paper;
-- `program/venue-candidates.json`, generated from a local authorized JCR export, with at least two current Q1 SCI/SCIE candidates per paper and current official policy links;
+- `program/venue-candidates.json`, generated from a local authorized JCR export, with at least two current SCI/SCIE candidates meeting each paper's declared Q1/Q2 target and current official policy links; the six-paper portfolio needs at least three Q1 targets;
 - thesis synthesis showing why the collection is more than six unrelated papers.
 
 Avoid salami slicing. Each paper must answer a distinct research question and remain scientifically coherent.

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/sciencepro-import.schema.json",
+  "title": "SciencePro advisory export receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "platform", "imported_at", "imported_by", "source", "extraction", "evidence_status", "required_follow_up", "human_review_required"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_id": {"type": "string", "pattern": "^sciencepro-[0-9a-f]{16}$"},
+    "platform": {"const": "SciencePro"},
+    "imported_at": {"type": "string", "format": "date-time"},
+    "imported_by": {"type": "string", "minLength": 1},
+    "source": {"type": "object", "required": ["private_path", "original_filename", "size", "sha256", "suffix"]},
+    "extraction": {"type": "object", "required": ["method", "text_extracted", "doi_candidates", "https_url_candidates"]},
+    "evidence_status": {"const": "advisory_requires_independent_verification"},
+    "required_follow_up": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}},
+    "human_review_required": {"const": true}
+  }
+}

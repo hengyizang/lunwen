@@ -92,6 +92,7 @@ def paper_contract():
         "schema_version": "2.0",
         "paper_id": "P01",
         "writing_language": "en",
+        "target_jcr_quartile": "Q1",
         "working_title": "Reliable Industrial AI",
         "research_question": "Does the proposed method generalize?",
         "distinct_contribution": "A distinct falsifiable method.",
@@ -254,7 +255,7 @@ class ResearchDesignTests(unittest.TestCase):
             "schema_version": "2.0",
             "status": "ready_for_review",
             "papers": [
-                {"paper_id": paper, "theme_id": "A" if paper in {"P01", "P02"} else "B", "portfolio_role": f"Role {paper}", "distinct_contribution": f"Contribution {paper}", "unique_claim_ids": [f"C-{paper}"], "shared_assets": [], "dependencies": []}
+                {"paper_id": paper, "theme_id": "A" if paper in {"P01", "P02"} else "B", "target_jcr_quartile": "Q1", "portfolio_role": f"Role {paper}", "distinct_contribution": f"Contribution {paper}", "unique_claim_ids": [f"C-{paper}"], "shared_assets": [], "dependencies": []}
                 for paper in ("P01", "P02", "P03")
             ],
             "pairwise_distinctness": [
@@ -304,14 +305,39 @@ class ResearchDesignTests(unittest.TestCase):
         extension["novelty_claim_ids"][0] = "A1"
         self.assertTrue(any("disjoint" in item for item in validate_theme_independence(core, extension)))
 
-    def test_paper_contract_requires_english_and_q1(self):
+    def test_paper_contract_requires_english_and_declared_quartile(self):
         value = paper_contract()
         self.assertEqual(validate_paper_contract(value, "P01"), [])
         value["writing_language"] = "zh"
         value["target_venues"][1]["quartile"] = "Q3"
         errors = validate_paper_contract(value, "P01")
         self.assertTrue(any("writing_language" in error for error in errors))
-        self.assertTrue(any("current JCR Q1" in error for error in errors))
+        self.assertTrue(any("JCR Q1 target" in error for error in errors))
+
+    def test_q2_contract_accepts_q1_or_q2_candidates(self):
+        value = paper_contract()
+        value["target_jcr_quartile"] = "Q2"
+        value["target_venues"][1]["quartile"] = "Q2"
+        self.assertEqual(validate_paper_contract(value, "P01"), [])
+
+    def test_six_paper_portfolio_requires_at_least_three_q1_targets(self):
+        value = {
+            "schema_version": "2.0",
+            "status": "ready_for_review",
+            "papers": [
+                {"paper_id": f"P{i:02d}", "theme_id": "A" if i <= 3 else "B", "target_jcr_quartile": "Q1" if i <= 3 else "Q2", "portfolio_role": f"Role {i}", "distinct_contribution": f"Contribution {i}", "unique_claim_ids": [f"C{i}"], "shared_assets": [], "dependencies": []}
+                for i in range(1, 7)
+            ],
+            "pairwise_distinctness": [
+                {"paper_a": f"P{left:02d}", "paper_b": f"P{right:02d}", "distinct_research_questions": True, "distinct_primary_claims": True, "independent_primary_evidence": True, "standalone_scientific_value": True, "shared_primary_outcome": False, "shared_outcome_justification": "Separate outcomes.", "overlap_risk": "low", "why_separate": "Different claims.", "merge_trigger": "Merge if claims converge."}
+                for left in range(1, 7) for right in range(left + 1, 7)
+            ],
+            "thesis_synthesis": {"core_thesis": "Core.", "extension_thesis": "Extension.", "cumulative_progression": "Progression.", "integrated_contribution": "Synthesis.", "dependency_logic": "Dependencies."},
+        }
+        expected = tuple(f"P{i:02d}" for i in range(1, 7))
+        self.assertEqual(validate_paper_map(value, expected), [])
+        value["papers"][2]["target_jcr_quartile"] = "Q2"
+        self.assertTrue(any("at least 3 Q1" in item for item in validate_paper_map(value, expected)))
 
     def test_experiment_design_links_three_stochastic_seeds(self):
         runs = {

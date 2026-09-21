@@ -168,11 +168,12 @@ def gate_errors(slug,gate):
         prior_work_values=(originality or {}).get("closest_prior_work",[]);prior_work_values=prior_work_values if isinstance(prior_work_values,list) else []
         prior_work_ids={str(item.get("id")) for item in prior_work_values if isinstance(item,dict) and item.get("id")}
         mapped_values=(paper_map or {}).get("papers",[]);mapped_values=mapped_values if isinstance(mapped_values,list) else []
-        mapped_claims={}
+        mapped_claims={};mapped_targets={}
         for item in mapped_values:
             if not isinstance(item,dict) or not item.get("paper_id"):continue
             claim_values=item.get("unique_claim_ids",[]);claim_values=claim_values if isinstance(claim_values,list) else []
             mapped_claims[str(item.get("paper_id"))]=set(str(claim) for claim in claim_values)
+            mapped_targets[str(item.get("paper_id"))]=str(item.get("target_jcr_quartile") or "").upper()
         try:
             from scripts.research_design import validate_paper_contract,validate_paper_map,validate_theme_independence,validate_theme_mapping
             if paper_map:errors.extend(f"program/paper-map.json: {x}" for x in validate_paper_map(paper_map,(pd.name for pd in dirs)))
@@ -185,6 +186,8 @@ def gate_errors(slug,gate):
             c=load_nonempty_json(pd/"paper-contract.json",errors)
             if c and validate_paper_contract:errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name))
             if c:
+                contract_target=str(c.get("target_jcr_quartile") or "").upper()
+                if mapped_targets.get(pd.name)!=contract_target:errors.append(f"{pd.name} target JCR quartile must match program/paper-map.json")
                 contract_venue_values=c.get("target_venues",[]);contract_venue_values=contract_venue_values if isinstance(contract_venue_values,list) else []
                 contract_venue_names=set(str(item.get("name")) for item in contract_venue_values if isinstance(item,dict) and item.get("name"))
                 if venue_names_by_paper.get(pd.name,set())!=contract_venue_names:errors.append(f"{pd.name} target venues must match program/venue-candidates.json")
@@ -299,6 +302,22 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
+        paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors) or {}
+        map_portfolio=paper_map.get("papers",[]) if isinstance(paper_map.get("papers"),list) else []
+        map_targets={str(item.get("paper_id")):str(item.get("target_jcr_quartile") or "").upper() for item in map_portfolio if isinstance(item,dict) and item.get("paper_id")}
+        portfolio=[]
+        for portfolio_paper in sorted((project/"papers").glob("P[0-9][0-9]")):
+            contract=load_nonempty_json(portfolio_paper/"paper-contract.json",errors)
+            if contract:
+                target=str(contract.get("target_jcr_quartile") or "").upper()
+                portfolio.append({"paper_id":portfolio_paper.name,"target_jcr_quartile":target})
+                if map_targets.get(portfolio_paper.name)!=target:errors.append(f"{portfolio_paper.name} target JCR quartile must match program/paper-map.json")
+        try:
+            from scripts.venue_policy import validate_portfolio
+            state=read_json(state_path(slug))
+            errors.extend(f"venue portfolio: {x}" for x in validate_portfolio(portfolio,expected_count=state.get("paper_count")))
+            errors.extend(f"paper-map venue portfolio: {x}" for x in validate_portfolio(map_portfolio,expected_count=state.get("paper_count")))
+        except ImportError as exc:errors.append(f"venue portfolio validator unavailable: {exc}")
         try:
             from scripts.output_provenance import ProvenanceError,require_final_origins
             final_roots=(paper/"manuscript",paper/"figures",paper/"tables",paper/"supplement",paper/"submission-materials")
@@ -326,9 +345,11 @@ def gate_errors(slug,gate):
         if jcr:
             try:
                 from scripts.jcr_verify import JcrVerificationError,verify
-                verify(jcr)
-            except ImportError as exc:errors.append(f"JCR Q1 validator unavailable: {exc}")
-            except JcrVerificationError as exc:errors.append(f"{pid} current JCR Q1 verification: {exc}")
+                from scripts.venue_policy import target_from_contract
+                contract=load_nonempty_json(paper/"paper-contract.json",errors) or {}
+                verify(jcr,target_from_contract(contract))
+            except ImportError as exc:errors.append(f"JCR Q1/Q2 validator unavailable: {exc}")
+            except JcrVerificationError as exc:errors.append(f"{pid} current JCR verification: {exc}")
         response=paper/"reviews"/"response-matrix.csv"
         if not nonempty(response) or sum(1 for _ in csv.reader(response.open(newline="",encoding="utf-8")))<2:errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
         for n in (1,2):
@@ -393,6 +414,8 @@ def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
     defaults=read_json(DEFAULTS_PATH);count=args.paper_count or int(defaults["paper_count"])
+    portfolio=defaults.get("venue_portfolio",{}) if isinstance(defaults.get("venue_portfolio"),dict) else {}
+    minimum_q1=int(portfolio.get("minimum_q1_papers",3))
     if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
     for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","data/quality","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"weekly_hours":None,"cash_budget_usd":None,"cloud_compute_budget_usd":defaults["compute"]["default_cloud_budget_usd"],"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","ranking_weights":{"novelty_and_doctoral_depth":None,"feasibility_without_lab":None,"funded_position_supply":None,"competition":None,"job_market_and_salary":None,"background_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
@@ -412,7 +435,11 @@ def initialize(args):
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid
         for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
-        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
+        try:
+            from scripts.venue_policy import default_target
+        except ImportError:
+            from venue_policy import default_target
+        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)
     venue_id=args.venue or defaults.get("trial_venue")
     if venue_id:set_venue_values(slug,"P01",venue_id)
@@ -471,7 +498,7 @@ def set_venue_values(slug,paper_id,venue_id):
     target=project_dir(slug)/"papers"/paper_id
     if not target.is_dir():raise ResearchCtlError(f"Unknown paper: {paper_id}")
     m=read_json(source);m["selected_at"]=now();m["selection_status"]="trial" if m.get("trial_only") else "candidate";write_json(target/"venue.json",m)
-def set_venue(args):load_state(args.project);set_venue_values(args.project,args.paper,args.venue);print(f"Set {args.paper} venue to {args.venue}; current JCR Q1 verification remains required.")
+def set_venue(args):load_state(args.project);set_venue_values(args.project,args.paper,args.venue);print(f"Set {args.paper} venue to {args.venue}; current paper-specific JCR Q1/Q2 verification remains required.")
 def list_stages(_):print(json.dumps(STAGES,indent=2))
 def parser():
     root=argparse.ArgumentParser(description=__doc__);cmd=root.add_subparsers(dest="command",required=True)

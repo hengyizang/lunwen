@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Deterministic gates for doctoral rigor and JCR Q1 readiness.
+"""Deterministic gates for doctoral rigor and paper-specific JCR readiness.
 
 AI may propose scores and evidence, but this module only accepts structured evidence
 that satisfies hard thresholds. It cannot prove publication or acceptance; it enforces
-a Q1-targeting floor before a human can approve a gate.
+a declared Q1/Q2 venue floor before a human can approve a gate.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from typing import Any
 MIN_SCORE = 8.0
 MIN_OVERALL = 8.5
 MIN_EVIDENCE = {"G1": 5, "G2": 5, "G3": 3, "G4": 3, "G5": 3}
-ACCEPTABLE_QUARTILES = {"Q1"}
+ACCEPTABLE_QUARTILES = {"Q1", "Q2"}
 DIMENSIONS = {
     "G1": ("novelty", "originality_evidence", "doctoral_depth", "significance", "feasibility", "reliability_plan", "evidence_strength", "publication_potential"),
     "G2": ("novelty", "distinct_contribution", "portfolio_coherence", "doctoral_progression", "significance", "feasibility", "methodological_rigor", "venue_fit"),
@@ -81,25 +81,27 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
     venue = report.get("venue_readiness")
     if not isinstance(venue, dict): errors.append("venue_readiness object is required")
     else:
-        if venue.get("minimum_jcr_quartile") != "Q1": errors.append("venue_readiness.minimum_jcr_quartile must be Q1")
+        minimum_quartile = venue.get("minimum_jcr_quartile")
+        if minimum_quartile not in ACCEPTABLE_QUARTILES: errors.append("venue_readiness.minimum_jcr_quartile must be Q1 or Q2")
         if venue.get("preferred_jcr_quartile") != "Q1": errors.append("venue_readiness.preferred_jcr_quartile must be Q1")
         candidates = venue.get("candidate_venues")
-        if not isinstance(candidates, list) or len(candidates) < 2: errors.append("at least two current JCR Q1 candidate venues are required")
+        if not isinstance(candidates, list) or len(candidates) < 2: errors.append("at least two current JCR candidate venues are required")
         if venue.get("current_verification_required") is not True: errors.append("venue_readiness.current_verification_required must be true")
         if venue.get("venue_specific_guidelines_required") is not True: errors.append("venue_readiness.venue_specific_guidelines_required must be true")
-        q1_seen = False
+        try:
+            from scripts.venue_policy import meets_target
+        except ImportError:
+            from venue_policy import meets_target
         for index, candidate in enumerate(candidates or [], 1):
             if not isinstance(candidate, dict): errors.append(f"venue_readiness.candidate_venues[{index}] must be an object"); continue
             quartile = candidate.get("quartile")
-            if quartile not in ACCEPTABLE_QUARTILES: errors.append(f"candidate venue {index} must be current JCR Q1")
-            q1_seen = q1_seen or quartile == "Q1"
+            if quartile not in ACCEPTABLE_QUARTILES or not meets_target(quartile, minimum_quartile): errors.append(f"candidate venue {index} must meet current JCR {minimum_quartile or 'Q1/Q2'} target")
             if candidate.get("indexing") not in {"SCIE", "SCI"}: errors.append(f"candidate venue {index} must be SCI/SCIE")
             if not str(candidate.get("source_url", "")).startswith("https://"): errors.append(f"candidate venue {index} needs an HTTPS primary source")
             for field in ("name", "category", "scope_fit", "article_type"):
                 if not str(candidate.get(field, "")).strip(): errors.append(f"candidate venue {index} needs {field}")
             year = candidate.get("jcr_year")
             if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}: errors.append(f"candidate venue {index} needs the current or immediately previous JCR year")
-        if candidates and not q1_seen: errors.append("at least one aspirational JCR Q1 candidate venue is required")
     blockers = report.get("blockers")
     if not isinstance(blockers, list): errors.append("blockers must be a list")
     elif blockers: errors.append("quality report has unresolved blockers")

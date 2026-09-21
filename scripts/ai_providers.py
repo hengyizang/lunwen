@@ -42,6 +42,8 @@ class ModelResult:
     protocol: str | None = None
     endpoint: str | None = None
     gateway: str | None = None
+    cache_hit: bool = False
+    cache_key: str | None = None
 
 
 def _request(
@@ -114,6 +116,26 @@ def _openai_text(data: dict[str, Any]) -> str:
     if not text:
         raise ProviderError("OpenAI Responses payload contained no text")
     return text
+
+
+def _chat_completions_text(data: dict[str, Any]) -> str:
+    choices = data.get("choices")
+    if not isinstance(choices, list) or not choices:
+        raise ProviderError("OpenAI Chat Completions payload contained no choices")
+    first = choices[0]
+    message = first.get("message") if isinstance(first, dict) else None
+    content = message.get("content") if isinstance(message, dict) else None
+    if isinstance(content, str) and content:
+        return content
+    if isinstance(content, list):
+        chunks = [
+            str(item.get("text"))
+            for item in content
+            if isinstance(item, dict) and isinstance(item.get("text"), str)
+        ]
+        if chunks:
+            return "\n".join(chunks)
+    raise ProviderError("OpenAI Chat Completions payload contained no text")
 
 
 def _anthropic_text(data: dict[str, Any]) -> str:
@@ -330,22 +352,42 @@ def call_uuapi_openai(
     model = model or os.environ.get("UUAPI_OPENAI_MODEL")
     if not model:
         raise ProviderError("UUAPI_OPENAI_MODEL is not configured")
-    content: Any = prompt
-    if system:
-        content = [
-            {"role": "developer", "content": system},
-            {"role": "user", "content": prompt},
-        ]
-    endpoint = _uuapi_endpoint("responses")
-    data = _request(
-        endpoint,
-        _uuapi_headers("openai_responses"),
-        {
+    protocol = os.environ.get("UUAPI_OPENAI_PROTOCOL", "responses").strip().lower()
+    if protocol not in {"responses", "chat_completions"}:
+        raise ProviderError(
+            "UUAPI_OPENAI_PROTOCOL must be responses or chat_completions"
+        )
+    if protocol == "chat_completions":
+        messages: list[dict[str, str]] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        payload: dict[str, Any] = {
+            "model": model,
+            "messages": messages,
+            "max_tokens": max_output_tokens,
+        }
+        endpoint = _uuapi_endpoint("chat/completions")
+        audit_protocol = "openai_chat_completions"
+    else:
+        content: Any = prompt
+        if system:
+            content = [
+                {"role": "developer", "content": system},
+                {"role": "user", "content": prompt},
+            ]
+        payload = {
             "model": model,
             "input": content,
             "max_output_tokens": max_output_tokens,
             "store": False,
-        },
+        }
+        endpoint = _uuapi_endpoint("responses")
+        audit_protocol = "openai_responses"
+    data = _request(
+        endpoint,
+        _uuapi_headers(audit_protocol),
+        payload,
         timeout,
     )
     reported = _reported_model(data)
@@ -353,11 +395,11 @@ def call_uuapi_openai(
     return ModelResult(
         "uuapi-openai",
         model,
-        _openai_text(data),
+        _chat_completions_text(data) if protocol == "chat_completions" else _openai_text(data),
         data.get("usage", {}) or {},
         data.get("id"),
         reported,
-        "openai_responses",
+        audit_protocol,
         endpoint,
         "uuapi",
     )
@@ -452,13 +494,31 @@ def configuration(provider: str) -> dict[str, Any]:
             if provider == "uuapi-openai"
             else "UUAPI_ANTHROPIC_MODEL"
         )
-        path = "responses" if provider == "uuapi-openai" else "messages"
+        openai_protocol = os.environ.get("UUAPI_OPENAI_PROTOCOL", "responses").strip().lower()
+        if provider == "uuapi-openai":
+            if openai_protocol not in {"responses", "chat_completions"}:
+                path = "responses"
+                protocol_error = "UUAPI_OPENAI_PROTOCOL must be responses or chat_completions"
+            else:
+                path = "chat/completions" if openai_protocol == "chat_completions" else "responses"
+                protocol_error = None
+        else:
+            path = "messages"
+            protocol_error = None
         endpoint: str | None = None
         endpoint_error: str | None = None
         try:
             endpoint = _uuapi_endpoint(path)
         except ProviderError as exc:
             endpoint_error = str(exc)
+        endpoint_error = protocol_error or endpoint_error
+        audit_protocol = (
+            "openai_chat_completions"
+            if provider == "uuapi-openai" and openai_protocol == "chat_completions"
+            else "openai_responses"
+            if provider == "uuapi-openai"
+            else "anthropic_messages"
+        )
         return {
             "provider": provider,
             "configured": bool(
@@ -468,11 +528,7 @@ def configuration(provider: str) -> dict[str, Any]:
                 and not endpoint_error
             ),
             "model": os.environ.get(model_key),
-            "protocol": (
-                "openai_responses"
-                if provider == "uuapi-openai"
-                else "anthropic_messages"
-            ),
+            "protocol": audit_protocol,
             "endpoint": endpoint,
             "configuration_error": endpoint_error,
             "strict_model_id": os.environ.get(

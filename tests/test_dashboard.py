@@ -47,6 +47,11 @@ class DashboardTests(unittest.TestCase):
             ):
                 detail = project_detail("demo")
         self.assertEqual(detail["data_reports"][0]["created_at"], "new")
+        self.assertEqual(detail["metrics"]["model_cost_cny"], 0.0)
+        self.assertEqual(
+            detail["metrics"]["model_budget_remaining_cny"],
+            detail["metrics"]["model_budget_cny"],
+        )
 
     def test_stage_workspaces_are_ordered_top_to_bottom(self) -> None:
         html = (Path(__file__).resolve().parents[1] / "dashboard" / "index.html").read_text(encoding="utf-8")

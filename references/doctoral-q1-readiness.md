@@ -1,4 +1,4 @@
-# Doctoral and JCR Q1 readiness basis
+# Doctoral and JCR Q1/Q2 portfolio readiness basis
 
 Accessed: 2026-09-01.
 
@@ -6,8 +6,9 @@ Accessed: 2026-09-01.
 
 JCR quartiles rank journals within a JIF category; they are not a universal
 experimental-design standard and may differ by category and annual edition.
-The workflow therefore requires **current JCR Q1 SCI/SCIE** for candidate and
-selected venues and separately enforces scientific-design checks. It never
+The workflow therefore requires **at least three of six current JCR Q1
+SCI/SCIE targets and every remainder at least current JCR Q2**, all with JIF
+above 1.0, and separately enforces identical scientific-design checks. It never
 treats a gate score as proof of novelty, doctoral merit, acceptance or
 publication.
 
@@ -49,7 +50,8 @@ than an invented universal “Q1 checklist”:
   doctoral case and a reliability strategy. Each novelty claim is separately
   mapped to at least three closest works and a falsification test, and the search
   must reach recorded forward/backward-chaining saturation.
-- G2 requires structured contracts, two current JCR Q1 targets per paper and a
+- G2 requires structured contracts, two current venues meeting each paper's
+  declared Q1/Q2 target, at least three Q1 papers across the portfolio, and a
   complete pairwise anti-salami matrix.
 - G3 requires one or more designs per paper, traceable strong/domain-standard/simple baselines,
   ablations, leakage controls, primary metrics, effect sizes, intervals,
@@ -62,6 +64,6 @@ than an invented universal “Q1 checklist”:
   plan and every contracted claim to trace to registered analyses. Every paper
   must reproduce domain-standard and strong-recent baselines and pass a
   registry-bound independent-environment reproduction within locked tolerances.
-- G5 requires current human-verified JCR Q1 SCI/SCIE status, venue-specific
+- G5 requires current human-verified paper-specific JCR Q1/Q2 SCI/SCIE status, venue-specific
   checks, deterministic English validation for all submission text, and local
   figure provenance tied to real experiment outputs.
