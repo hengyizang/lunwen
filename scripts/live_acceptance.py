@@ -40,7 +40,9 @@ DEFAULT_IMAGE = (
 )
 IMAGE_RE = re.compile(r"^[^\s@]+@sha256:[0-9a-f]{64}$")
 DEFAULT_QUERY = "machine learning scientific research"
-DEFAULT_DOI = "10.1038/s41586-021-03819-2"
+# The OpenCitations v2 documentation uses this moderate-size citation example;
+# avoid a highly cited Nature paper whose complete edge list is a poor smoke test.
+DEFAULT_DOI = "10.1108/jd-12-2013-0166"
 
 
 class AcceptanceError(RuntimeError):

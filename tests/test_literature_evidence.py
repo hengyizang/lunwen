@@ -3,15 +3,18 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+import urllib.parse
 from pathlib import Path
 from unittest.mock import patch
 
 from scripts.literature_evidence import (
     LiteratureEvidenceError,
+    build_search_url,
     execute_citation_graph,
     execute_import,
     execute_search,
     fetch_provider_bytes,
+    normalize_search,
     screen_receipt,
     validate_search_evidence,
 )
@@ -201,6 +204,43 @@ class LiteratureEvidenceTests(unittest.TestCase):
             raw = project / ledger["raw_response_path"]
             self.assertEqual(raw.read_bytes(), b"<html>upstream block</html>")
             self.assertEqual(ledger["http_status"], 200)
+
+    def test_arxiv_uses_explicit_boolean_terms(self) -> None:
+        url = build_search_url("arxiv", "machine learning research", 3)
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        self.assertEqual(
+            query["search_query"],
+            ["all:machine AND all:learning AND all:research"],
+        )
+
+    def test_dblp_uses_official_sparql_endpoint_and_normalizes_bindings(self) -> None:
+        url = build_search_url("dblp", "machine learning research", 2)
+        parsed = urllib.parse.urlsplit(url)
+        query = urllib.parse.parse_qs(parsed.query)["query"][0]
+        self.assertEqual(parsed.hostname, "sparql.dblp.org")
+        self.assertIn('CONTAINS(LCASE(STR(?title)), "machine learning")', query)
+        self.assertIn("LIMIT 2", query)
+        payload = json.dumps(
+            {
+                "results": {
+                    "bindings": [
+                        {
+                            "publ": {"type": "uri", "value": "https://dblp.org/rec/x"},
+                            "title": {"type": "literal", "value": "Machine learning"},
+                            "year": {"type": "literal", "value": "2026"},
+                            "doi": {
+                                "type": "uri",
+                                "value": "https://doi.org/10.1000/example",
+                            },
+                        }
+                    ]
+                }
+            }
+        ).encode()
+        works = normalize_search("dblp", payload)
+        self.assertEqual(len(works), 1)
+        self.assertEqual(works[0]["doi"], "10.1000/example")
+        self.assertEqual(works[0]["publication_year"], 2026)
 
 
 if __name__ == "__main__":

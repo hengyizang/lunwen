@@ -175,6 +175,8 @@ def provider_headers(provider: str) -> dict[str, str]:
     }
     if provider == "arxiv":
         headers["Accept"] = "application/atom+xml"
+    elif provider == "dblp":
+        headers["Accept"] = "application/sparql-results+json"
     else:
         headers["Accept"] = "application/json"
     if provider == "semantic-scholar":
@@ -297,17 +299,31 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
             }
         )
     if provider == "arxiv":
+        terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query)[:8]
+        search_query = " AND ".join(f"all:{term}" for term in terms) or "all:science"
         return "https://export.arxiv.org/api/query?" + encoded(
-            {"search_query": f"all:{query}", "start": 0, "max_results": limit}
+            {"search_query": search_query, "start": 0, "max_results": limit}
         )
     if provider == "europe-pmc":
         return "https://www.ebi.ac.uk/europepmc/webservices/rest/search?" + encoded(
             {"query": query, "pageSize": limit, "format": "json"}
         )
     if provider == "dblp":
-        return "https://dblp.org/search/publ/api?" + encoded(
-            {"q": query, "h": limit, "format": "json"}
+        terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query.lower())[:2]
+        phrase = " ".join(terms) or "science"
+        sparql = "\n".join(
+            (
+                "PREFIX dblp: <https://dblp.org/rdf/schema#>",
+                "SELECT ?publ ?title ?year ?doi WHERE {",
+                "  ?publ a dblp:Publication ; dblp:title ?title .",
+                "  OPTIONAL { ?publ dblp:yearOfPublication ?year . }",
+                "  OPTIONAL { ?publ dblp:doi ?doi . }",
+                f'  FILTER(CONTAINS(LCASE(STR(?title)), "{phrase}"))',
+                "}",
+                f"LIMIT {limit}",
+            )
         )
+        return "https://sparql.dblp.org/sparql?" + encoded({"query": sparql})
     if provider == "hal":
         return "https://api.archives-ouvertes.fr/search/?" + encoded(
             {
@@ -404,19 +420,27 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     venue=item.get("journalTitle"),
                 ))
         elif provider == "dblp":
-            result = data.get("result", {}) if isinstance(data, dict) else {}
-            hits = result.get("hits", {}).get("hit", []) if isinstance(result.get("hits"), dict) else []
-            if isinstance(hits, dict):
-                hits = [hits]
-            for hit in hits:
-                info = hit.get("info", {}) if isinstance(hit, dict) else {}
-                author_value = info.get("authors", {}).get("author", []) if isinstance(info.get("authors"), dict) else []
-                if isinstance(author_value, (str, dict)):
-                    author_value = [author_value]
-                works.append(normalized_work(
-                    provider, info.get("key"), info.get("title"), info.get("year"), info.get("doi"),
-                    info.get("ee") or info.get("url"), author_value, venue=info.get("venue"),
-                ))
+            results = data.get("results", {}) if isinstance(data, dict) else {}
+            bindings = results.get("bindings", []) if isinstance(results, dict) else []
+            for binding in bindings:
+                if not isinstance(binding, dict):
+                    continue
+                values = {
+                    key: item.get("value")
+                    for key, item in binding.items()
+                    if isinstance(item, dict)
+                }
+                works.append(
+                    normalized_work(
+                        provider,
+                        values.get("publ"),
+                        values.get("title"),
+                        values.get("year"),
+                        values.get("doi"),
+                        values.get("publ"),
+                        [],
+                    )
+                )
         elif provider == "hal":
             response = data.get("response", {}) if isinstance(data, dict) else {}
             for item in response.get("docs", []) if isinstance(response, dict) else []:

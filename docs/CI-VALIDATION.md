@@ -25,7 +25,8 @@ Matplotlib、NumPy 和 pandas。CI 不再依赖 runner 恰好预装这些包。
 提交信息中加入 `[live-acceptance]`，让该次提交同时运行它们：
 
 - `live-literature`：真实调用全部公开文献接口及 OpenCitations，上传原始响应、
-  规范化结果和验收报告；
+  规范化结果和验收报告；DBLP 使用官方 SPARQL endpoint，避免把网页端的
+  JavaScript 反机器人挑战当成 API；
 - `container-isolation`：在 GitHub Linux runner 上用 digest 固定镜像实际验证
   无网络、只读根目录和受限 tmpfs。
 
