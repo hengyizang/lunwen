@@ -55,6 +55,55 @@ class ModelRuntimeTests(unittest.TestCase):
             self.assertEqual(status["paper_hard_limit"], 20.0)
             self.assertEqual(status["paper_warning_limit"], 20.0)
 
+    def test_usage_summary_groups_paid_calls_and_cache_hits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory) / "demo"
+            ledger = project / "state" / "model-usage.jsonl"
+            ledger.parent.mkdir(parents=True)
+            entries = [
+                {
+                    "paper_id": "P01",
+                    "provider": "uuapi-openai",
+                    "model": "gpt-test",
+                    "role": "persistent-writer",
+                    "input_tokens": 100,
+                    "output_tokens": 50,
+                    "cost_cny": 0.1,
+                    "cache_hit": False,
+                },
+                {
+                    "paper_id": "P01",
+                    "provider": "uuapi-openai",
+                    "model": "gpt-test",
+                    "role": "persistent-writer",
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "cost_cny": 0,
+                    "cache_hit": True,
+                },
+                {
+                    "paper_id": "P02",
+                    "provider": "uuapi-anthropic",
+                    "model": "claude-test",
+                    "role": "independent-critic-final",
+                    "input_tokens": 80,
+                    "output_tokens": 20,
+                    "cost_cny": 0.05,
+                    "cache_hit": False,
+                },
+            ]
+            ledger.write_text(
+                "".join(json.dumps(item) + "\n" for item in entries),
+                encoding="utf-8",
+            )
+            summary = model_runtime.usage_summary(project, "P01")
+            self.assertEqual(summary["paid_calls"], 1)
+            self.assertEqual(summary["cache_hits"], 1)
+            self.assertEqual(summary["input_tokens"], 100)
+            self.assertEqual(summary["output_tokens"], 50)
+            self.assertEqual(summary["cost_cny"], 0.1)
+            self.assertEqual(len(summary["by_provider_model_role"]), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

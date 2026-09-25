@@ -63,7 +63,7 @@ Claude Code 和 Codex CLI 保留为可选高级接口；系统的科研状态和
 
 ## 安装
 
-Windows 11 推荐 WSL2 Ubuntu，并把仓库放在 Linux 文件系统（如 `~/code`），不要放在 `/mnt/c`。
+Windows 11 推荐 WSL2 Ubuntu，并把仓库放在 Linux 文件系统（如 `~/code`），不要放在 `/mnt/c`。C 盘空间紧张时，按 [`docs/WSL2-D-DRIVE.md`](docs/WSL2-D-DRIVE.md) 把 WSL2 与 Docker 数据放到 D 盘。
 
 ```powershell
 wsl --install -d Ubuntu
@@ -179,6 +179,7 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
 API 模式会把 Claude 语义计划、原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。Claude计划不会写进普通科研文件；只有非Anthropic writer可以写项目产物。模型不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
 
 完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
+如果希望只在 Codex 聊天框里下达自然语言指令，由 Codex 管理闸门、脚本和外部 API，见 [`docs/CHAT-USAGE.md`](docs/CHAT-USAGE.md)。
 v1.4 全链路要求追踪与剩余人工边界见 [`docs/AUDIT-V1.4.md`](docs/AUDIT-V1.4.md)。
 
 使用 UUAPI + CC Switch 时，先阅读

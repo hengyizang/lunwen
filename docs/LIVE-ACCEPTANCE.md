@@ -17,6 +17,10 @@ docker version
 `uname -r` 必须包含 `microsoft-standard-WSL2` 或 `WSL2`。只安装 Docker CLI、
 但 daemon 不可访问，不算通过。
 
+若 Windows C 盘空间紧张，先按 [`WSL2-D-DRIVE.md`](WSL2-D-DRIVE.md) 把新发行版、
+交换文件和 Docker 数据放到 D 盘；仓库仍应克隆到该发行版内部的 `~/code`，而
+不是 `/mnt/c` 或 `/mnt/d`。
+
 安装可选 AI4Science 运行时：
 
 ```bash
@@ -27,6 +31,23 @@ bash scripts/bootstrap-wsl.sh --with-ai4science
 `tooluniverse==1.5.1`。PaperQA2 要求 Python 3.11+。
 
 ## 2. 一次完成 WSL2 真实验收
+
+推荐的一键命令会依次验证 WSL2、锁定包版本、API 配置和 Docker daemon，然后
+真实运行公开文献接口、隔离容器、PaperQA2、ToolUniverse，并校验收据：
+
+```bash
+bash scripts/run-wsl-acceptance.sh \
+  --project my-phd \
+  --corpus literature/papers \
+  --tool-request evidence/requests/uniprot-p12345.json \
+  --actor 'Hengyi Zang'
+```
+
+PaperQA2 可能触发一次真实的计费模型调用；脚本会在调用前明确提示。必须由研究者
+提供有权使用的本地语料和一个经过检查的 ToolUniverse 请求。任一环节失败都会
+以非零状态退出，不会把部分通过写成“完整通过”。
+
+只验收公开文献接口与容器时，可直接运行底层命令：
 
 ```bash
 mkdir -p artifacts/acceptance

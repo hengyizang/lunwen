@@ -316,6 +316,39 @@ class ApiFirstTests(unittest.TestCase):
             self.assertNotIn("KEY=secret", snapshot)
             self.assertNotIn("prior verdict", snapshot)
 
+    def test_writing_snapshot_keeps_active_paper_and_other_contracts_only(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "projects" / "demo"
+            (project / "state").mkdir(parents=True)
+            (project / "state" / "run.json").write_text(
+                json.dumps({"active_paper": "P01"}), encoding="utf-8"
+            )
+            for paper in ("P01", "P02"):
+                (project / "papers" / paper / "manuscript").mkdir(parents=True)
+                (project / "papers" / paper / "reviews").mkdir(parents=True)
+                (project / "papers" / paper / "paper-contract.json").write_text(
+                    json.dumps({"paper_id": paper, "marker": f"{paper} contract"}),
+                    encoding="utf-8",
+                )
+            (project / "papers" / "P01" / "manuscript" / "main.tex").write_text(
+                "active manuscript", encoding="utf-8"
+            )
+            (project / "papers" / "P02" / "manuscript" / "main.tex").write_text(
+                "inactive manuscript", encoding="utf-8"
+            )
+            (project / "papers" / "P01" / "reviews" / "round.md").write_text(
+                "duplicated review", encoding="utf-8"
+            )
+            with patch.object(api_orchestrator, "ROOT", root):
+                snapshot = api_orchestrator.project_snapshot(
+                    "demo", stage="writing-and-review", exclude_reviews=True
+                )
+            self.assertIn("active manuscript", snapshot)
+            self.assertIn("P02 contract", snapshot)
+            self.assertNotIn("inactive manuscript", snapshot)
+            self.assertNotIn("duplicated review", snapshot)
+
     def test_extract_audit_requires_exact_schema(self):
         audit = {
             "verdict": "revise",
@@ -460,7 +493,7 @@ class ApiFirstTests(unittest.TestCase):
             with patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
                 side_effect=responses,
-            ):
+            ) as model_call:
                 manifest = api_orchestrator.run_cycle(
                     "demo",
                     "topic-intelligence",
@@ -471,6 +504,11 @@ class ApiFirstTests(unittest.TestCase):
                     "",
                     automatic_data=False,
                 )
+            self.assertEqual(
+                [item.kwargs["max_output_tokens"] for item in model_call.call_args_list],
+                [4000, 8000, 4000, 8000, 4000],
+            )
+            self.assertEqual(manifest["cost_controls"]["control_max_output_tokens"], 4000)
             reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
             self.assertEqual(len(reviews), 2)
             self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))

@@ -160,6 +160,55 @@ def budget_status(project_root: Path, paper_id: str | None = None) -> dict[str, 
     }
 
 
+def usage_summary(project_root: Path, paper_id: str | None = None) -> dict[str, Any]:
+    values = ledger_entries(project_root)
+    if paper_id:
+        values = [item for item in values if item.get("paper_id") == paper_id]
+    groups: dict[tuple[str, str, str], dict[str, Any]] = {}
+    for item in values:
+        key = (
+            str(item.get("provider") or "unknown"),
+            str(item.get("model") or "unknown"),
+            str(item.get("role") or "unknown"),
+        )
+        group = groups.setdefault(
+            key,
+            {
+                "provider": key[0],
+                "model": key[1],
+                "role": key[2],
+                "paid_calls": 0,
+                "cache_hits": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "cost_cny": 0.0,
+            },
+        )
+        if item.get("cache_hit") is True:
+            group["cache_hits"] += 1
+        else:
+            group["paid_calls"] += 1
+        group["input_tokens"] += int(item.get("input_tokens") or 0)
+        group["output_tokens"] += int(item.get("output_tokens") or 0)
+        group["cost_cny"] += float(item.get("cost_cny") or 0.0)
+    rows = []
+    for group in groups.values():
+        group["cost_cny"] = round(group["cost_cny"], 8)
+        rows.append(group)
+    rows.sort(key=lambda item: (-item["cost_cny"], item["provider"], item["role"]))
+    return {
+        "schema_version": "1.0",
+        "paper_id": paper_id,
+        "paid_calls": sum(item["paid_calls"] for item in rows),
+        "cache_hits": sum(item["cache_hits"] for item in rows),
+        "input_tokens": sum(item["input_tokens"] for item in rows),
+        "output_tokens": sum(item["output_tokens"] for item in rows),
+        "cost_cny": round(sum(item["cost_cny"] for item in rows), 8),
+        "budget": budget_status(project_root, paper_id),
+        "by_provider_model_role": rows,
+    }
+
+
 def _append(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:

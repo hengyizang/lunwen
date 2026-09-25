@@ -38,6 +38,22 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
   --context 'PhD application goal; AI + robotics/mechanical engineering; no laboratory; limited GPU.'
 ```
 
+The writer/remediator output ceiling defaults to 12,000 tokens. Read-only
+planning and both independent audits use a separate 4,000-token ceiling, which
+can be changed for one session with `DR_OS_CONTROL_MAX_OUTPUT_TOKENS`. Writing
+snapshots contain the complete active paper but only the contracts of inactive
+papers; prior reviews remain excluded and are supplied to the appropriate
+review/remediation call explicitly. This lowers repeated input without weakening
+cross-paper constraints or review independence.
+
+Inspect actual token use, cache hits and estimated CNY cost without making a
+model call:
+
+```bash
+python3 scripts/api_orchestrator.py cost my-phd
+python3 scripts/api_orchestrator.py cost my-phd --paper P01
+```
+
 The requested stage must match an `awaiting_work` `state/run.json`; API writing is blocked while a gate is awaiting human approval or already approved. Initialize first, and use the
 human `ready` → `approve` → `advance` sequence between stages.
 
@@ -117,3 +133,6 @@ Every paid call also passes through the local CNY budget ledger and
 byte-identical request cache described in `RESEARCH-CAPABILITIES.md`. Cache hits
 do not remove planner/critic roles; they only avoid paying twice for the exact
 same audited request.
+
+For the natural Codex-chat workflow and short commands to start, continue,
+inspect and package work, see [`CHAT-USAGE.md`](CHAT-USAGE.md).
