@@ -1194,7 +1194,7 @@ def run_cycle(
     critic_provider: str,
     context: str,
     discovery_query: str,
-    max_output_tokens: int = 8000,
+    max_output_tokens: int = 12000,
     control_max_output_tokens: int = 4000,
     automatic_data: bool = True,
 ) -> dict[str, Any]:
@@ -1435,7 +1435,7 @@ def main() -> int:
         command.add_argument(
             "--max-output-tokens",
             type=int,
-            default=int(os.environ.get("DR_OS_MAX_OUTPUT_TOKENS", "8000")),
+            default=int(os.environ.get("DR_OS_MAX_OUTPUT_TOKENS", "12000")),
         )
     stage.add_argument(
         "--provider", choices=ai_providers.PROVIDERS, default="openai",

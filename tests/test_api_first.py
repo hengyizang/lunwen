@@ -506,7 +506,7 @@ class ApiFirstTests(unittest.TestCase):
                 )
             self.assertEqual(
                 [item.kwargs["max_output_tokens"] for item in model_call.call_args_list],
-                [4000, 8000, 4000, 8000, 4000],
+                [4000, 12000, 4000, 12000, 4000],
             )
             self.assertEqual(manifest["cost_controls"]["control_max_output_tokens"], 4000)
             reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
