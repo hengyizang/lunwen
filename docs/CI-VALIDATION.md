@@ -35,6 +35,12 @@ Matplotlib、NumPy 和 pandas。CI 不再依赖 runner 恰好预装这些包。
 `[live-acceptance]` 只用于有意进行的验收提交，不应加入每次日常提交，以免
 反复消耗第三方接口配额和 runner 时间。
 
+Semantic Scholar 和 OpenCitations 都可匿名调用，但共享 runner IP 容易触发限流。
+为提高定时验收的稳定性，可分别添加仓库 Actions secrets
+`SEMANTIC_SCHOLAR_API_KEY` 和 `OPENCITATIONS_ACCESS_TOKEN`。它们只作为请求头传给
+官方 API，不写入 URL、日志、收据或 artifact；未配置时仍会真实尝试匿名接口并
+如实保存限流失败。
+
 GitHub runner 的容器 job 证明 Linux/Docker 路径；它不能冒充 WSL2。Windows
 本机的 WSL2 验收必须按 [`LIVE-ACCEPTANCE.md`](LIVE-ACCEPTANCE.md) 执行，报告
 中的 `environment.is_wsl2` 必须为 `true`。

@@ -17,6 +17,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 import urllib.parse
 import uuid
 import xml.etree.ElementTree as ET
@@ -61,6 +62,7 @@ MAX_RESULTS = 100
 MAX_RESPONSE_BYTES = 32 * 1024 * 1024
 HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 SAFE_RECEIPT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{1,127}$")
+TRANSIENT_HTTP_RE = re.compile(r"HTTP Error (?:429|500|502|503|504)\b")
 
 
 class LiteratureEvidenceError(RuntimeError):
@@ -158,7 +160,54 @@ def _doi(value: Any) -> str | None:
         return None
     text = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", text, flags=re.I)
     text = re.sub(r"^doi:\s*", "", text, flags=re.I).strip().lower()
+    embedded = re.search(r"(?:^|\s)doi:(10\.[^\s;]+/[^\s;]+)", text, flags=re.I)
+    if embedded:
+        text = embedded.group(1).lower()
     return text if text.startswith("10.") and "/" in text else None
+
+
+def provider_headers(provider: str) -> dict[str, str]:
+    headers = {
+        "User-Agent": (
+            "DoctoralResearchOS/2.2 "
+            "(https://github.com/hengyizang/lunwen; auditable metadata discovery)"
+        )
+    }
+    if provider == "arxiv":
+        headers["Accept"] = "application/atom+xml"
+    else:
+        headers["Accept"] = "application/json"
+    if provider == "semantic-scholar":
+        api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "").strip()
+        if api_key:
+            headers["x-api-key"] = api_key
+    if provider == "opencitations":
+        access_token = os.environ.get("OPENCITATIONS_ACCESS_TOKEN", "").strip()
+        if access_token:
+            headers["authorization"] = access_token
+    return headers
+
+
+def fetch_provider_bytes(
+    fetcher: Callable[..., tuple[bytes, str, int | None, str | None]],
+    request_url: str,
+    provider: str,
+) -> tuple[bytes, str, int | None, str | None]:
+    """Retry only explicit transient HTTP failures, preserving all final errors."""
+
+    for attempt, delay in enumerate((0, 2, 5), 1):
+        if delay:
+            time.sleep(delay)
+        try:
+            return fetcher(
+                request_url,
+                max_bytes=MAX_RESPONSE_BYTES,
+                headers=provider_headers(provider),
+            )
+        except Exception as exc:
+            if attempt == 3 or not TRANSIENT_HTTP_RE.search(str(exc)):
+                raise
+    raise AssertionError("unreachable provider retry state")
 
 
 def _year(value: Any) -> int | None:
@@ -273,7 +322,7 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
 
 def _json_payload(payload: bytes) -> Any:
     try:
-        return json.loads(payload.decode("utf-8"))
+        return json.loads(payload.decode("utf-8-sig"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise LiteratureEvidenceError(f"provider returned invalid UTF-8 JSON: {exc}") from exc
 
@@ -407,15 +456,20 @@ def execute_citation_graph(
         raise LiteratureEvidenceError("direction must be citations or references")
     if not date_range.strip() or not filters.strip():
         raise LiteratureEvidenceError("date-range and filters are required")
-    encoded_doi = urllib.parse.quote(normalized_doi, safe="")
-    request_url = f"https://api.opencitations.net/index/v2/{direction}/{encoded_doi}"
+    identifier = urllib.parse.quote(f"doi:{normalized_doi}", safe=":/")
+    request_url = f"https://api.opencitations.net/index/v2/{direction}/{identifier}"
     receipt_id = _receipt_id("opencitations")
     requested_at = utc_now()
     raw_path, normalized_path = _artifact_paths(project, receipt_id, "json")
+    payload: bytes | None = None
+    final_url: str | None = None
+    status: int | None = None
+    content_type: str | None = None
     try:
-        payload, final_url, status, content_type = fetcher(
-            request_url, max_bytes=MAX_RESPONSE_BYTES
+        payload, final_url, status, content_type = fetch_provider_bytes(
+            fetcher, request_url, "opencitations"
         )
+        raw_path.write_bytes(payload)
         data = _json_payload(payload)
         if not isinstance(data, list):
             raise LiteratureEvidenceError("OpenCitations response must be an array")
@@ -451,9 +505,19 @@ def execute_citation_graph(
             "request_url": request_url, "requested_at": requested_at,
             "completed_at": utc_now(), "status": "failed", "error": str(exc),
         }
+        if payload is not None:
+            failed.update(
+                {
+                    "final_url": final_url,
+                    "http_status": status,
+                    "content_type": content_type,
+                    "response_sha256": sha256_bytes(payload),
+                    "raw_response_path": raw_path.relative_to(project).as_posix(),
+                }
+            )
         append_jsonl(project / "evidence" / "literature-api-ledger.jsonl", failed)
         raise LiteratureEvidenceError(f"OpenCitations expansion failed: {exc}") from exc
-    raw_path.write_bytes(payload)
+    assert payload is not None and final_url is not None
     normalized_payload = canonical_json_bytes({"schema_version": "1.0", "works": works}) + b"\n"
     normalized_path.write_bytes(normalized_payload)
     receipt = {
@@ -541,10 +605,15 @@ def execute_search(
     raw_path, normalized_path = _artifact_paths(
         project, receipt_id, "xml" if provider == "arxiv" else "json"
     )
+    payload: bytes | None = None
+    final_url: str | None = None
+    status: int | None = None
+    content_type: str | None = None
     try:
-        payload, final_url, status, content_type = fetcher(
-            request_url, max_bytes=MAX_RESPONSE_BYTES
+        payload, final_url, status, content_type = fetch_provider_bytes(
+            fetcher, request_url, provider
         )
+        raw_path.write_bytes(payload)
         normalized = normalize_search(provider, payload)
     except Exception as exc:
         failed = {
@@ -560,9 +629,19 @@ def execute_search(
             "status": "failed",
             "error": str(exc),
         }
+        if payload is not None:
+            failed.update(
+                {
+                    "final_url": final_url,
+                    "http_status": status,
+                    "content_type": content_type,
+                    "response_sha256": sha256_bytes(payload),
+                    "raw_response_path": raw_path.relative_to(project).as_posix(),
+                }
+            )
         append_jsonl(project / "evidence" / "literature-api-ledger.jsonl", failed)
         raise LiteratureEvidenceError(f"{DISPLAY_NAMES[provider]} search failed: {exc}") from exc
-    raw_path.write_bytes(payload)
+    assert payload is not None and final_url is not None
     normalized_payload = canonical_json_bytes({"schema_version": "1.0", "works": normalized})
     normalized_path.write_bytes(normalized_payload + b"\n")
     receipt = {

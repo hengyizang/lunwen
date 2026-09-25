@@ -51,6 +51,9 @@ jobs:
     needs: deterministic
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+      OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7

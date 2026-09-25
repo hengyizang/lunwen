@@ -77,6 +77,9 @@ ARM64 主机必须用 Docker Hub 对应平台的完整 manifest digest，通过 
 状态语义：`passed` 表示所有真实调用通过；`failed` 表示调用已经发生但响应、
 解析或隔离探针失败；`blocked` 表示不是 WSL2、容器引擎缺失或镜像没有 digest。
 脚本分别返回 0、1、2。报告及原始响应位于 `artifacts/acceptance/`，不提交 Git。
+公开接口只对明确的 429/5xx 临时错误进行有限重试。Semantic Scholar 可选读取
+`SEMANTIC_SCHOLAR_API_KEY`，OpenCitations 可选读取
+`OPENCITATIONS_ACCESS_TOKEN`；请求头中的值从不进入收据。
 
 若只排查单一层，可以分别运行：
 
