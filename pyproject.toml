@@ -10,6 +10,9 @@ figures = [
   "numpy>=1.26,<3",
   "pandas>=2.1,<3"
 ]
+reference-tools = [
+  "ref-verify==1.2.0"
+]
 
 # This repository is an application/control-plane tree, not an importable
 # Python distribution.  Declaring an empty package set lets pip resolve the

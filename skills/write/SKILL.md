@@ -20,6 +20,10 @@ Write a venue-neutral semantic manuscript first:
 - do not alter methods after seeing results without disclosure;
 - generate data/code availability, ethics, funding, conflict, author contribution and AI-use drafts for human confirmation.
 
-Run `scripts/citation_audit.py` and require zero unresolved references. Run `scripts/venue_compliance.py` after the official template is safely ingested. Complete two review rounds and the response matrix for the current `state.active_paper`; do not skip directly to another paper.
+Select the applicable reporting checklist from `references/reporting-guidelines.md` before methods drafting. Record item identifiers, exact manuscript locations and evidence artifacts in `reviews/reporting-guideline-input.json`; explain genuine non-applicability. Run `scripts/reporting_checklist.py` after the final revision so G5 can verify completeness and bind the checklist to the manuscript snapshot.
+
+The checklist input needs `schema_version`, `study_design`, `guideline`, `guideline_version`, official HTTPS URL, named reviewer and timezone-aware review time. Each item has `item_id`, `status` (`present`, `not_applicable`, or `open`), `location`, `evidence_ids`, and `rationale`; any `open` item blocks G5.
+
+Run `scripts/citation_audit.py` and require zero unresolved references. Then use the `citations` skill and `scripts/ref_verify_adapter.py` for DOI-bound abstract-level topline/numeric claims; use full text for deeper claims. Run `scripts/venue_compliance.py` after the official template is safely ingested. Complete two review rounds and the response matrix for the current `state.active_paper`; do not skip directly to another paper.
 
 Keep title, abstract and conclusions within the evidence scope. Formatting belongs to the retarget skill.

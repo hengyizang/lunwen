@@ -19,6 +19,8 @@ Require official/current sources for regulations, positions and market facts, an
 
 Produce at least three serious candidate programs. For each, test novelty, doctoral depth, paperability, public-data feasibility, compute/equipment ceiling, competition, supervisor/position supply, job-market breadth and failure modes.
 
+At G2, use the `journal` skill after the authorized JCR registry is built. Keep separate challenge, target and safety choices and score fit dimensions individually so a high impact factor cannot mask a scope or practicality failure.
+
 Define:
 
 - proposition A: one coherent doctoral-level core;

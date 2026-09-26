@@ -39,7 +39,7 @@ def main() -> int:
     required = {name: version_output(name) for name in required_names}
     optional = {
         name: version_output(name)
-        for name in ["latexmk", "pandoc", "docker", "podman", "quarto", "Rscript", "pqa", "tu"]
+        for name in ["latexmk", "pandoc", "docker", "podman", "quarto", "Rscript", "pqa", "tu", "ref-verify"]
     }
     report = {
         "python": {
@@ -54,6 +54,9 @@ def main() -> int:
         "optional_ai4science_packages": {
             "paper-qa": package_version("paper-qa"),
             "tooluniverse": package_version("tooluniverse"),
+        },
+        "optional_reference_packages": {
+            "ref-verify": package_version("ref-verify"),
         },
         "recommendations": [],
     }

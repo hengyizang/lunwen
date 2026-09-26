@@ -9,6 +9,7 @@ install_writing_tools=false
 install_research_quality_tools=false
 install_ai4science=false
 install_figures=false
+install_reference_tools=false
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --with-kdense)
@@ -26,13 +27,27 @@ while [[ "$#" -gt 0 ]]; do
     --with-figures)
       install_figures=true
       ;;
+    --with-reference-tools)
+      install_reference_tools=true
+      ;;
     *)
-      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools] [--with-ai4science] [--with-figures]" >&2
+      echo "Usage: bash scripts/bootstrap-wsl.sh [--with-kdense] [--with-writing-tools] [--with-research-quality-tools] [--with-ai4science] [--with-figures] [--with-reference-tools]" >&2
       exit 2
       ;;
   esac
   shift
 done
+
+if [[ "$install_reference_tools" == true ]]; then
+  if [[ ! -x ".venv/bin/python" ]]; then
+    python3 -m venv .venv
+  fi
+  if ! .venv/bin/python -c "import importlib.metadata as m; raise SystemExit(m.version('ref-verify') != '1.2.0')" >/dev/null 2>&1; then
+    .venv/bin/python -m pip install 'ref-verify==1.2.0'
+  fi
+  .venv/bin/ref-verify --help >/dev/null
+  .venv/bin/python -c "import importlib.metadata as m; print('ref-verify', m.version('ref-verify'))"
+fi
 
 if [[ "$install_figures" == true ]]; then
   if [[ ! -x ".venv/bin/python" ]]; then
@@ -98,4 +113,5 @@ echo "Optional local prose checks: bash scripts/bootstrap-wsl.sh --with-writing-
 echo "Executable power analysis: bash scripts/bootstrap-wsl.sh --with-research-quality-tools"
 echo "PaperQA2 and ToolUniverse adapters: bash scripts/bootstrap-wsl.sh --with-ai4science"
 echo "Publication figure renderer: bash scripts/bootstrap-wsl.sh --with-figures"
+echo "DOI-bound abstract claim checks: bash scripts/bootstrap-wsl.sh --with-reference-tools"
 echo "Optional CLI-mode check: python3 scripts/check_env.py --mode cli"

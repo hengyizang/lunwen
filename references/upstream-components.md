@@ -27,6 +27,20 @@ This is a strong optional second implementation for deep research, drafting, rev
 
 Use it only as an evidence/semantic-planning worker behind the local contracts, not as a competing state machine. Do not export Claude-authored manuscript or chart artifacts into final project paths. The local G1–G5 rules, non-Claude writer, output provenance and independent model-family audit remain authoritative.
 
+The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e9370309c24b99977ad44091f`. Most orchestration overlaps the local state machine. The retained improvement is independently implemented revision-drift control: `scripts/revision_integrity.py` compares exact numeric, citation-key and claim-strength token multisets and requires named human authorization for every change.
+
+## ref-verify, paper-skill and journal recommender review
+
+[`Moonweave-Research/ref-verify`](https://github.com/Moonweave-Research/ref-verify) version 1.2.0 (commit `8d56a6c5ed42c5332efa516f6ee5f56cbba8557d`, MIT) is invoked directly by `scripts/ref_verify_adapter.py`. The adapter accepts only DOI-bound topline or numeric claims, requires `ACCEPT`/`SUPPORTED` plus evidence, and labels the result as abstract-only. It cannot validate a mechanism, procedure, table or figure claim.
+
+[`cLin-c/paper-skill`](https://github.com/cLin-c/paper-skill) commit `e86b450c0b68a199db0539e18e8fe3a74e2e660d` (MIT) was reviewed selectively. Drafting, figures and general review already existed locally; the missing reporting-guideline router and executable commitment tracing were independently implemented in `references/reporting-guidelines.md` and `scripts/revision_trace.py`.
+
+[`zero565656/journal-recommender`](https://github.com/zero565656/journal-recommender) commit `407aff106677aac090bf2d177155db15e3593126` had no repository license file at review time. No code, text or assets are copied. `scripts/journal_screening.py` independently implements the general workflow ideas that were genuinely missing: decomposed evidence-backed scoring, explicit risk flags and challenge/target/safety portfolio roles. Official venue pages and the authorized JCR export remain the evidence authorities.
+
+## Anti-Defensive Writing
+
+[`Kiterlin/anti-defensive-writing`](https://github.com/Kiterlin/anti-defensive-writing) commit `5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975` (MIT) contributed three advisory concepts absent from the local audit: pre-emptive disclaimers, self-minimizing contribution language and caveat-led paragraphs. They are review prompts, never automatic rewrites or detector-evasion rules. Necessary limitations, uncertainty, negative findings and disclosures must remain.
+
 ## Experiment Agent
 
 The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Reconsider it only after G2 if it adds a capability the local executor lacks and the use satisfies the license.

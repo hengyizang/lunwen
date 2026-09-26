@@ -173,11 +173,27 @@ class AcademicStyleTests(unittest.TestCase):
                 [item["name"] for item in report["external_linters"]],
                 ["proselint", "harper"],
             )
-            self.assertEqual(len(report["reviewed_rule_sources"]), 3)
+            self.assertEqual(len(report["reviewed_rule_sources"]), 4)
             self.assertEqual(validate_saved_audit(project / "papers" / "P01"), [])
             manuscript.write_text(varied_manuscript() + "\nA documented limitation remains.", encoding="utf-8")
             errors = validate_saved_audit(project / "papers" / "P01")
             self.assertTrue(any("stale" in error for error in errors))
+
+    def test_defensive_framing_is_advisory_and_preserves_limitations(self) -> None:
+        filler = " ".join(
+            f"Measurement {index} compared the registered baseline with held-out observations."
+            for index in range(90)
+        )
+        result = analyze_text(
+            "We do not claim that this modest contribution resolves every limitation.\n\n"
+            "Although the sample is restricted, the measured comparison is reproducible. "
+            + filler
+        )
+        ids = {item["rule_id"] for item in result["formulaic_pattern_findings"]}
+        self.assertIn("preemptive-disclaimer", ids)
+        self.assertIn("self-minimizing-contribution", ids)
+        self.assertIn("caveat-led-paragraph", ids)
+        self.assertFalse(any("defensive" in error for error in result["errors"]))
 
 
 if __name__ == "__main__":

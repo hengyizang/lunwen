@@ -22,7 +22,8 @@ For the current stage:
 4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
    At G5, run the deterministic academic-style audit after writing and again
    after remediation; use it to improve authentic academic expression without
-   detector scoring or concealment.
+   detector scoring or concealment. Run citation identity, DOI-bound abstract
+   claim, commitment-trace and revision-integrity checks against the final snapshot.
 5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
 6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
 7. Run `gate-check`, then `ready`.

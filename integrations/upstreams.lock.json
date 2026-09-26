@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-09-19",
+  "reviewed_at": "2026-09-26",
   "sources": [
     {
       "id": "kdense-scientific-agent-skills",
@@ -40,6 +40,54 @@
       "installation": "human-confirmed Claude Code plugin installation only",
       "selected_skills": [],
       "selection_note": "Useful optional implementation for deep research, writing, revision and peer review. Not vendored because the non-commercial license requires a human use-case decision."
+    },
+    {
+      "id": "ars-codex",
+      "repository": "https://github.com/Imbad0202/academic-research-skills-codex",
+      "commit": "3c37ef8ab480ba1e9370309c24b99977ad44091f",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "CC-BY-NC-4.0",
+      "license_source_url": "https://github.com/Imbad0202/academic-research-skills-codex/blob/3c37ef8ab480ba1e9370309c24b99977ad44091f/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No upstream code copied; selected revision-integrity concepts are independently implemented locally",
+      "selected_skills": [],
+      "selection_note": "The local G0-G5 state machine is retained. Only stronger revision-drift checks for numbers, citations and claim-strength language were independently implemented."
+    },
+    {
+      "id": "ref-verify",
+      "repository": "https://github.com/Moonweave-Research/ref-verify",
+      "commit": "8d56a6c5ed42c5332efa516f6ee5f56cbba8557d",
+      "upstream_version": "1.2.0",
+      "license": "MIT",
+      "license_source_url": "https://github.com/Moonweave-Research/ref-verify/blob/8d56a6c5ed42c5332efa516f6ee5f56cbba8557d/LICENSE",
+      "enabled_by_default": false,
+      "installation": "scripts/bootstrap-wsl.sh --with-reference-tools",
+      "selected_skills": [],
+      "selection_note": "Pinned executable used only for DOI-bound abstract support checks; full-text mechanism, procedure, table and figure claims remain outside its scope."
+    },
+    {
+      "id": "paper-skill",
+      "repository": "https://github.com/cLin-c/paper-skill",
+      "commit": "e86b450c0b68a199db0539e18e8fe3a74e2e660d",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/cLin-c/paper-skill/blob/e86b450c0b68a199db0539e18e8fe3a74e2e660d/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No upstream execution; missing revision-trace and reporting-guideline mechanisms are independently implemented locally",
+      "selected_skills": [],
+      "selection_note": "The existing workflow already covers drafting, figures and review. Only reporting-guideline routing and executable commitment traceability were retained."
+    },
+    {
+      "id": "anti-defensive-writing",
+      "repository": "https://github.com/Kiterlin/anti-defensive-writing",
+      "commit": "5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975/LICENSE",
+      "enabled_by_default": false,
+      "installation": "No upstream execution; a preservation-first academic subset is implemented in config/academic-style-rules.json",
+      "selected_skills": [],
+      "selection_note": "Only advisory defensive-framing checks absent from the existing audit are used. True limitations, calibrated uncertainty, disclosures and negative results are protected."
     },
     {
       "id": "experiment-agent",

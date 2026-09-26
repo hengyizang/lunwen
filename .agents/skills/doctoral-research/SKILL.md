@@ -14,11 +14,15 @@ Interpret the request as one of:
 - `topic <slug>`: attack topic novelty, feasibility and doctoral architecture;
 - `experiment <slug> <design|run>`: design or audit reproducible experiments;
 - `review <slug> [paper]`: audit code, statistics, claims and reproducibility;
+- `citations <slug> <paper>`: run reference identity checks, DOI-bound abstract claim verification and route deeper claims to full-text evidence;
+- `journal <slug>`: produce an official-evidence-backed challenge/target/safety shortlist from the authorized JCR registry;
 - `retarget <slug> <paper> <venue>`: verify official requirements and template adaptation;
 - `package <slug> <paper>`: build a deterministic ZIP for human inspection and manual upload;
 - `audit <slug>`: run a cross-stage integrity check.
 
 Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Default to the external API worker so this Codex conversation remains a thin manager; do not invoke `autopilot.py`, Claude Code or Codex CLI unless the user explicitly requests CLI mode. Claude is restricted to read-only semantic planning and internal independent audits. GPT/OpenAI independently writes and remediates every persistent text artifact and plotting specification; `scripts/publication_figures.py` renders final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Preserve the configured CNY hard budgets and exact-request cache. Never edit gate approvals by hand. Never approve a gate for the user.
+
+At G2, run `scripts/journal_screening.py` and retain decomposed scores, official evidence, risks and challenge/target/safety roles. At G5, follow `skills/citations/SKILL.md`, route the applicable reporting guideline, snapshot the pre-revision manuscript, then run `scripts/ref_verify_adapter.py`, `scripts/reporting_checklist.py`, `scripts/revision_trace.py` and `scripts/revision_integrity.py`. Abstract support is never full-text support. Numeric, citation or claim-strength drift needs exact named human authorization.
 
 For six papers, require at least three declared current JCR Q1 SCI/SCIE targets and every remainder at least current JCR Q2, all with JIF above 1.0. Apply the same doctoral originality, experiment, reliability, review and writing gates to every paper. Use `scripts/open_fulltext.py` for lawful OA candidates. When the user supplies a SciencePro export, ingest it through `scripts/sciencepro_import.py` and treat it as advisory until independently verified.
 

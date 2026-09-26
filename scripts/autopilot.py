@@ -467,6 +467,18 @@ def protected_control_snapshot(
     paths.extend(
         root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
     )
+    for name in (
+        "ref-verify.json", "revision-trace.json", "revision-integrity.json", "reporting-guideline.json",
+        "revision-authorizations.json", "revision-base.tex", "revision-base.docx",
+    ):
+        paths.extend(root.glob(f"papers/P[0-9][0-9]/reviews/{name}"))
+    paths.extend(
+        path
+        for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base")
+        if directory.is_dir()
+        for path in directory.rglob("*")
+        if path.is_file()
+    )
     paths.extend((root / "data" / "quality").glob("*.json"))
     paths.extend(root.glob("papers/P[0-9][0-9]/power-analysis.json"))
     paths.extend(root.glob("papers/P[0-9][0-9]/preregistration.json"))
@@ -476,6 +488,7 @@ def protected_control_snapshot(
     paths.append(root / "evidence" / "search-log.jsonl")
     paths.append(root / "evidence" / "ai4science-ledger.jsonl")
     paths.append(root / "program" / "venue-candidates.json")
+    paths.append(root / "program" / "journal-screening.json")
     if (root / "evidence" / "literature").is_dir():
         paths.extend(
             path for path in (root / "evidence" / "literature").rglob("*")
@@ -516,6 +529,22 @@ def ensure_protected_control_unchanged(
         for path in root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
         if path.is_file()
     )
+    current_paths.update(
+        path.relative_to(root).as_posix()
+        for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base")
+        if directory.is_dir()
+        for path in directory.rglob("*")
+        if path.is_file()
+    )
+    current_paths.update(
+        path.relative_to(root).as_posix()
+        for name in (
+            "ref-verify.json", "revision-trace.json", "revision-integrity.json", "reporting-guideline.json",
+            "revision-authorizations.json", "revision-base.tex", "revision-base.docx",
+        )
+        for path in root.glob(f"papers/P[0-9][0-9]/reviews/{name}")
+        if path.is_file()
+    )
     if (root / "reports" / "runtime-evidence-catalog.json").is_file():
         current_paths.add("reports/runtime-evidence-catalog.json")
     if (root / "evidence" / "literature-api-ledger.jsonl").is_file():
@@ -526,6 +555,8 @@ def ensure_protected_control_unchanged(
         current_paths.add("evidence/ai4science-ledger.jsonl")
     if (root / "program" / "venue-candidates.json").is_file():
         current_paths.add("program/venue-candidates.json")
+    if (root / "program" / "journal-screening.json").is_file():
+        current_paths.add("program/journal-screening.json")
     if (root / "evidence" / "literature").is_dir():
         current_paths.update(
             path.relative_to(root).as_posix()

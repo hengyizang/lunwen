@@ -25,6 +25,13 @@
       "commit": "000650b156983f5159695b441477f4e63b25dc85",
       "license": "MIT",
       "use": "High-confidence conversational, puffery and generic-conclusion pattern concepts; social-media-specific rules are excluded."
+    },
+    {
+      "id": "anti-defensive-writing",
+      "repository": "https://github.com/Kiterlin/anti-defensive-writing",
+      "commit": "5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975",
+      "license": "MIT",
+      "use": "Advisory patterns for pre-emptive disclaimers, self-minimizing contribution language and caveat-led paragraph openings; legitimate limitations and uncertainty are protected."
     }
   ],
   "rules": [
@@ -157,6 +164,36 @@
       "message": "A rhetorical question opens a section or paragraph instead of stating the research problem.",
       "guidance": "State the research question or problem formally and connect it to evidence or a registered hypothesis.",
       "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    },
+    {
+      "id": "preemptive-disclaimer",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:this (?:paper|study|work) (?:does not|is not intended to)|we (?:do not|don't) (?:claim|attempt|intend)|this should not be taken to mean|this is not to say that)\\b",
+      "message": "A pre-emptive disclaimer may foreground an imagined objection rather than the evidence boundary.",
+      "guidance": "If the boundary is scientifically necessary, state it once as a concrete scope condition or limitation; otherwise remove the defensive framing.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "self-minimizing-contribution",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:merely|only|simply) (?:attempts?|aims?|seeks?|provides?|offers?)\\b|\\b(?:modest|limited) (?:contribution|improvement|insight)\\b",
+      "message": "Self-minimizing language may obscure the exact contribution without improving calibration.",
+      "guidance": "State the measurable contribution and its evidence-bounded scope directly; retain genuine magnitude limits in the limitations or results context.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "caveat-led-paragraph",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "(?:^|\\n\\s*\\n)\\s*(?:Although|While|Despite|Notwithstanding)\\b",
+      "message": "A paragraph begins with a caveat before its main scientific point.",
+      "guidance": "When clarity improves, lead with the result or scope statement and place the necessary caveat next to the claim it qualifies. Never delete a real limitation.",
+      "source_ids": ["anti-defensive-writing"]
     }
   ]
 }

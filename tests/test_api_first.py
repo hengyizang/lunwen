@@ -10,6 +10,39 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
+    def test_g5_revision_baseline_preserves_included_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "projects" / "demo"
+            state = project / "state"
+            manuscript_dir = project / "papers" / "P01" / "manuscript"
+            state.mkdir(parents=True)
+            manuscript_dir.mkdir(parents=True)
+            (state / "run.json").write_text(
+                json.dumps({"active_paper": "P01"}), encoding="utf-8"
+            )
+            (manuscript_dir / "main.tex").write_text(
+                "\\documentclass{article}\\begin{document}\\input{results}\\end{document}",
+                encoding="utf-8",
+            )
+            (manuscript_dir / "results.tex").write_text(
+                "The model may improve accuracy by 10 percent.", encoding="utf-8"
+            )
+            with patch.object(api_orchestrator, "ROOT", root):
+                first = api_orchestrator.prepare_revision_baseline(
+                    "demo", "writing-and-review"
+                )
+                (manuscript_dir / "results.tex").write_text(
+                    "The model proves accuracy improved by 12 percent.", encoding="utf-8"
+                )
+                second = api_orchestrator.prepare_revision_baseline(
+                    "demo", "writing-and-review"
+                )
+            baseline = project / "papers" / "P01" / "reviews" / "revision-base"
+            self.assertTrue((baseline / "main.tex").is_file())
+            self.assertIn("10 percent", (baseline / "results.tex").read_text(encoding="utf-8"))
+            self.assertEqual(first, second)
+
     def test_g5_refreshes_a_local_style_audit_without_detector_scoring(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -272,6 +305,20 @@ class ApiFirstTests(unittest.TestCase):
             api_orchestrator.safe_target(
                 "demo", "papers/P01/style/academic-style-audit.json"
             )
+
+    def test_safe_target_protects_citation_and_revision_controls(self):
+        for relative in (
+            "program/journal-screening.json",
+            "papers/P01/reviews/ref-verify.json",
+            "papers/P01/reviews/revision-trace.json",
+            "papers/P01/reviews/revision-integrity.json",
+            "papers/P01/reviews/reporting-guideline.json",
+            "papers/P01/reviews/revision-authorizations.json",
+            "papers/P01/reviews/revision-base.tex",
+            "papers/P01/reviews/revision-base/main.tex",
+        ):
+            with self.assertRaises(ValueError):
+                api_orchestrator.safe_target("demo", relative)
 
     def test_safe_target_protects_deterministic_research_quality_records(self):
         for relative in (

@@ -163,6 +163,10 @@ def gate_errors(slug,gate):
                         values=item.get("candidates",[]);values=values if isinstance(values,list) else []
                         venue_names_by_paper[str(item["paper_id"])]=set(str(candidate.get("name")) for candidate in values if isinstance(candidate,dict) and candidate.get("name"))
             except ImportError as exc:errors.append(f"venue candidate validator unavailable: {exc}")
+        try:
+            from scripts.journal_screening import validate_saved_report
+            errors.extend(f"program/journal-screening.json: {x}" for x in validate_saved_report(project))
+        except ImportError as exc:errors.append(f"journal screening validator unavailable: {exc}")
         if len(dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(dirs)}")
         originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
         prior_work_values=(originality or {}).get("closest_prior_work",[]);prior_work_values=prior_work_values if isinstance(prior_work_values,list) else []
@@ -338,6 +342,22 @@ def gate_errors(slug,gate):
             from scripts.academic_style import validate_saved_audit
             errors.extend(f"{pid} academic style: {x}" for x in validate_saved_audit(paper))
         except ImportError as exc:errors.append(f"{pid} academic style validator unavailable: {exc}")
+        try:
+            from scripts.ref_verify_adapter import validate_saved_report as validate_ref_verify
+            errors.extend(f"{pid} citation claim verification: {x}" for x in validate_ref_verify(paper))
+        except ImportError as exc:errors.append(f"{pid} ref-verify validator unavailable: {exc}")
+        try:
+            from scripts.revision_trace import validate_saved_report as validate_revision_trace
+            errors.extend(f"{pid} revision trace: {x}" for x in validate_revision_trace(paper))
+        except ImportError as exc:errors.append(f"{pid} revision trace validator unavailable: {exc}")
+        try:
+            from scripts.revision_integrity import validate_saved_report as validate_revision_integrity
+            errors.extend(f"{pid} revision integrity: {x}" for x in validate_revision_integrity(paper))
+        except ImportError as exc:errors.append(f"{pid} revision integrity validator unavailable: {exc}")
+        try:
+            from scripts.reporting_checklist import validate_saved_report as validate_reporting_checklist
+            errors.extend(f"{pid} reporting guideline: {x}" for x in validate_reporting_checklist(paper))
+        except ImportError as exc:errors.append(f"{pid} reporting checklist validator unavailable: {exc}")
         venue=load_nonempty_json(paper/"venue.json",errors)
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
         if venue and venue.get("g5_reverified_at"):require_recent_timestamp(venue,"g5_reverified_at",f"{pid}/venue.json",errors,120)
@@ -351,7 +371,10 @@ def gate_errors(slug,gate):
             except ImportError as exc:errors.append(f"JCR Q1/Q2 validator unavailable: {exc}")
             except JcrVerificationError as exc:errors.append(f"{pid} current JCR verification: {exc}")
         response=paper/"reviews"/"response-matrix.csv"
-        if not nonempty(response) or sum(1 for _ in csv.reader(response.open(newline="",encoding="utf-8")))<2:errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
+        if not nonempty(response):errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
+        else:
+            with response.open(newline="",encoding="utf-8") as response_handle:
+                if sum(1 for _ in csv.reader(response_handle))<2:errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
         for n in (1,2):
             if not nonempty(paper/"reviews"/f"round-{n}.md"):errors.append(f"{pid} requires reviews/round-{n}.md")
         citation=load_nonempty_json(paper/"reviews"/"citation-audit.json",errors)
@@ -440,6 +463,8 @@ def initialize(args):
         except ImportError:
             from venue_policy import default_target
         write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
+        write_text(paper/"reviews"/"citation-claims.jsonl","")
+        write_text(paper/"reviews"/"response-matrix.csv","comment_id,commitment_id,fulfillment_status,location,revised_text,unfulfilled_rationale\n")
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)
     venue_id=args.venue or defaults.get("trial_venue")
     if venue_id:set_venue_values(slug,"P01",venue_id)

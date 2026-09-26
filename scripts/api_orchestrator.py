@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 from datetime import datetime, timezone
@@ -748,6 +749,7 @@ def safe_target(project: str, relative: str) -> Path:
         or lower_parts == ("evidence", "literature-api-ledger.jsonl")
         or lower_parts == ("evidence", "ai4science-ledger.jsonl")
         or lower_parts == ("program", "venue-candidates.json")
+        or lower_parts == ("program", "journal-screening.json")
         or lower_parts[:2] == ("evidence", "literature")
         or (
             lower_parts
@@ -763,6 +765,22 @@ def safe_target(project: str, relative: str) -> Path:
         and lower_parts[2:] == ("style", "academic-style-audit.json")
     ):
         raise ValueError(f"Deterministic academic style audit is protected: {relative}")
+    if (
+        len(lower_parts) >= 4
+        and lower_parts[0] == "papers"
+        and re.fullmatch(r"p[0-9]{2}", lower_parts[1])
+        and lower_parts[2] == "reviews"
+        and (lower_parts[3] == "revision-base" or lower_parts[3] in {
+            "ref-verify.json",
+            "revision-trace.json",
+            "revision-integrity.json",
+            "reporting-guideline.json",
+            "revision-authorizations.json",
+            "revision-base.tex",
+            "revision-base.docx",
+        })
+    ):
+        raise ValueError(f"Deterministic or human revision control is protected: {relative}")
     if len(lower_parts) == 3 and lower_parts[:2] == ("data", "quality"):
         raise ValueError(f"Deterministic data-quality report is protected: {relative}")
     if (
@@ -974,6 +992,57 @@ def refresh_academic_style_audit(
             "source_tree_sha256"
         ),
         "detector_score_used": False,
+    }
+
+
+def prepare_revision_baseline(project: str, stage: str) -> dict[str, Any] | None:
+    """Snapshot the current G5 manuscript sources before a model revision pass."""
+
+    if stage != "writing-and-review":
+        return None
+    try:
+        from scripts.citation_audit import manuscript_digest, tex_source_paths
+        from scripts.ref_verify_adapter import RefVerifyAdapterError, canonical_manuscript
+    except ImportError:
+        from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
+        from ref_verify_adapter import RefVerifyAdapterError, canonical_manuscript  # type: ignore
+    root = project_root(project)
+    state = load_json(root / "state" / "run.json")
+    paper_id = str(state.get("active_paper") or "")
+    paper = root / "papers" / paper_id
+    try:
+        manuscript = canonical_manuscript(paper)
+    except RefVerifyAdapterError:
+        return None
+    baseline = paper / "reviews" / "revision-base"
+    if baseline.exists():
+        base_main = baseline / manuscript.name
+        if not base_main.is_file() or base_main.is_symlink():
+            raise ValueError("existing revision baseline is incomplete or mismatched")
+        return {
+            "path": base_main.relative_to(root).as_posix(),
+            "source_tree_sha256": manuscript_digest(base_main),
+        }
+    baseline.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(
+        prefix="doctoral-os-revision-base-", dir=baseline.parent
+    ) as directory:
+        staged = Path(directory) / "revision-base"
+        staged.mkdir()
+        if manuscript.suffix.lower() == ".tex":
+            source_root = manuscript.parent.resolve()
+            for source in tex_source_paths(manuscript):
+                relative = source.relative_to(source_root)
+                target = staged / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+        else:
+            shutil.copy2(manuscript, staged / manuscript.name)
+        os.replace(staged, baseline)
+    base_main = baseline / manuscript.name
+    return {
+        "path": base_main.relative_to(root).as_posix(),
+        "source_tree_sha256": manuscript_digest(base_main),
     }
 
 
@@ -1236,6 +1305,8 @@ def run_cycle(
         )
     save_run(project, run_id, "claude-plan.json", plan)
 
+    revision_baseline = prepare_revision_baseline(project, stage)
+
     writer = model_runtime.call(
         project_root(project),
         run_id=run_id,
@@ -1254,6 +1325,8 @@ def run_cycle(
     )
     written = list(initial_written)
     save_run(project, run_id, "writer-bundle.json", bundle)
+    if revision_baseline is None:
+        revision_baseline = prepare_revision_baseline(project, stage)
     initial_style_audit = refresh_academic_style_audit(project, stage)
 
     review = model_runtime.call(
@@ -1395,6 +1468,11 @@ def run_cycle(
             "initial": initial_style_audit,
             "final": final_style_audit,
             "policy": "quality-and-author-voice; no detector score or evasion",
+        },
+        "revision_baseline": {
+            "stage_applicable": stage == "writing-and-review",
+            "snapshot": revision_baseline,
+            "policy": "protected local snapshot taken before remediation",
         },
         "generated_at": utc_now(),
         "next_action": "Human gate review; no approve/advance action was performed.",
