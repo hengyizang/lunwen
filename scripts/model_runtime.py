@@ -56,11 +56,32 @@ def _float_env(name: str, default: float) -> float:
     return value
 
 
-def pricing(provider: str) -> dict[str, float]:
+def pricing(provider: str, model: str | None = None) -> dict[str, float]:
     family = ai_providers.provider_family(provider)
     defaults = _defaults()
     configured = defaults.get(family)
     configured = configured if isinstance(configured, dict) else {}
+    # Explicit model-specific rates avoid charging a premium route at a cheap
+    # model's assumed price (or vice versa). No inferred gateway pricing.
+    if model:
+        raw_rates = os.environ.get("DR_OS_MODEL_PRICING_JSON", "{}")
+        try:
+            overrides = json.loads(raw_rates)
+        except json.JSONDecodeError as exc:
+            raise ModelBudgetError("DR_OS_MODEL_PRICING_JSON is invalid JSON") from exc
+        if not isinstance(overrides, dict):
+            raise ModelBudgetError("model pricing must be an object")
+        selected = overrides.get(model)
+        if selected is not None:
+            if not isinstance(selected, dict):
+                raise ModelBudgetError(f"model price entry is malformed: {model}")
+            try:
+                values = {key: float(selected[key]) for key in ("input_per_million", "output_per_million")}
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ModelBudgetError(f"model price entry needs numeric input/output CNY per million: {model}") from exc
+            if any(not math.isfinite(value) or value <= 0 for value in values.values()):
+                raise ModelBudgetError("model prices must be positive finite numbers")
+            return values
     prefix = "DR_OS_ANTHROPIC" if family == "anthropic" else "DR_OS_OPENAI"
     return {
         "input_per_million": _float_env(
@@ -92,8 +113,8 @@ def estimate_tokens(text: str) -> int:
     return max(1, math.ceil(len(text.encode("utf-8")) / 3.2))
 
 
-def cost_cny(provider: str, input_tokens: int, output_tokens: int) -> float:
-    rates = pricing(provider)
+def cost_cny(provider: str, input_tokens: int, output_tokens: int, model: str | None = None) -> float:
+    rates = pricing(provider, model)
     return round(
         input_tokens * rates["input_per_million"] / 1_000_000
         + output_tokens * rates["output_per_million"] / 1_000_000,
@@ -221,11 +242,12 @@ def _cache_key(
     prompt: str,
     system: str | None,
     max_output_tokens: int,
+    model: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     configuration = ai_providers.configuration(provider)
     identity = {
         "provider": provider,
-        "model": configuration.get("model"),
+        "model": model or configuration.get("model"),
         "protocol": configuration.get("protocol"),
         "endpoint": configuration.get("endpoint"),
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
@@ -273,11 +295,12 @@ def call(
     max_output_tokens: int = 8000,
     timeout: int = 180,
     use_cache: bool = True,
+    model: str | None = None,
 ) -> ai_providers.ModelResult:
     """Call a provider with exact-request caching and hard CNY ceilings."""
 
     paper_id = _paper_for_stage(project_root, stage)
-    key, identity = _cache_key(provider, prompt, system, max_output_tokens)
+    key, identity = _cache_key(provider, prompt, system, max_output_tokens, model)
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
         try:
@@ -319,7 +342,7 @@ def call(
             return result
 
     predicted_input = estimate_tokens((system or "") + "\n" + prompt)
-    predicted_cost = cost_cny(provider, predicted_input, max_output_tokens)
+    predicted_cost = cost_cny(provider, predicted_input, max_output_tokens, model)
     status = budget_status(project_root, paper_id)
     if predicted_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
@@ -338,12 +361,13 @@ def call(
         system=system,
         max_output_tokens=max_output_tokens,
         timeout=timeout,
+        model=model,
     )
     input_tokens, output_tokens = usage_counts(result.usage)
     estimated = input_tokens is None or output_tokens is None
     input_tokens = input_tokens if input_tokens is not None else predicted_input
     output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-    actual_cost = cost_cny(provider, input_tokens, output_tokens)
+    actual_cost = cost_cny(provider, input_tokens, output_tokens, model)
     result.cache_key = key
     _append(
         _ledger(project_root),

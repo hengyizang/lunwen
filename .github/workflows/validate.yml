@@ -31,8 +31,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-      - name: Install declared figure dependencies
-        run: python -m pip install --disable-pip-version-check ".[figures]"
+      - name: Install declared figure and reader dependencies and PDF test fixture helper
+        run: python -m pip install --disable-pip-version-check ".[figures,reader]" "reportlab>=4,<5"
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Compile Python entry points

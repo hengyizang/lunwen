@@ -18,6 +18,7 @@
     "columns": {"type": "integer", "minimum": 1, "maximum": 3},
     "width": {"type": "number", "minimum": 3, "maximum": 18},
     "height": {"type": "number", "minimum": 2.5, "maximum": 24},
+    "source_data_export": {"type": "boolean", "description": "Explicit opt-in; only export data cleared for redistribution."},
     "panels": {
       "type": "array",
       "minItems": 1,
@@ -25,9 +26,9 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["kind", "y", "xlabel", "ylabel"],
+        "required": ["kind", "xlabel", "ylabel"],
         "properties": {
-          "kind": {"enum": ["line", "scatter", "bar", "heatmap", "forest"]},
+          "kind": {"enum": ["line", "scatter", "bar", "heatmap", "forest", "box", "violin", "strip", "histogram", "density", "ecdf", "area", "stacked_bar", "dumbbell", "errorbar", "roc", "pr", "calibration", "confusion", "correlation", "volcano", "pca", "survival", "sankey", "raincloud", "hexbin", "qq", "funnel", "waterfall"]},
           "data": {"type": "string"},
           "title": {"type": "string"},
           "x": {"type": "string", "minLength": 1},
@@ -40,6 +41,10 @@
           "label": {"type": "string"},
           "ci_low": {"type": "string"},
           "ci_high": {"type": "string"},
+          "end": {"type": "string"},
+          "bins": {"type": "integer", "minimum": 5, "maximum": 100},
+          "threshold": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+          "effect_threshold": {"type": "number", "minimum": 0},
           "reference": {"type": "number"},
           "annotate": {"type": "boolean"},
           "colorbar_label": {"type": "string"},
@@ -52,8 +57,11 @@
           }
         },
         "allOf": [
-          {"if": {"properties": {"kind": {"const": "forest"}}}, "then": {"required": ["label", "ci_low", "ci_high"]}, "else": {"required": ["x"]}},
-          {"if": {"properties": {"kind": {"const": "heatmap"}}}, "then": {"required": ["value"]}}
+          {"if": {"properties": {"kind": {"const": "forest"}}}, "then": {"required": ["y", "label", "ci_low", "ci_high"]}},
+          {"if": {"properties": {"kind": {"const": "correlation"}}}, "else": {"if": {"properties": {"kind": {"const": "forest"}}}, "else": {"required": ["x", "y"]}}},
+          {"if": {"properties": {"kind": {"enum": ["heatmap", "confusion", "sankey"]}}}, "then": {"required": ["value"]}},
+          {"if": {"properties": {"kind": {"const": "dumbbell"}}}, "then": {"required": ["end"]}},
+          {"if": {"properties": {"kind": {"const": "errorbar"}}}, "then": {"required": ["uncertainty"]}}
         ]
       }
     }

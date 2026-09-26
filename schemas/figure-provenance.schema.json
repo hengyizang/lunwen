@@ -15,18 +15,23 @@
         "required": ["figure_path", "figure_type", "renderer", "config", "inputs", "source_run_ids", "output_sha256", "deterministic", "generated_by", "language_checked_by", "language_checked_at", "recorded_at"],
         "properties": {
           "figure_path": {"type": "string", "minLength": 1},
-          "figure_type": {"enum": ["data_chart", "conceptual_diagram"]},
+          "figure_type": {"enum": ["data_chart", "conceptual_diagram", "conceptual_illustration"]},
           "renderer": {"$ref": "#/$defs/file"},
           "config": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
           "inputs": {"type": "array", "items": {"$ref": "#/$defs/file"}},
           "source_run_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
           "output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-          "deterministic": {"const": true},
-          "generated_by": {"const": "local-tool"},
+          "deterministic": {"type": "boolean"},
+          "generated_by": {"enum": ["local-tool", "gpt-image-api", "chatgpt-web"]},
+          "prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "model_id": {"type": "string"},
+          "disclosure_location": {"type": "string"},
+          "human_content_checked_by": {"type": "string"},
           "language_checked_by": {"type": "string", "minLength": 1},
           "language_checked_at": {"type": "string", "format": "date-time"},
           "recorded_at": {"type": "string", "format": "date-time"}
-        }
+        },
+        "allOf": [{"if": {"properties": {"figure_type": {"const": "conceptual_illustration"}}}, "then": {"required": ["prompt_sha256", "model_id", "disclosure_location", "human_content_checked_by"], "properties": {"deterministic": {"const": false}}}, "else": {"properties": {"deterministic": {"const": true}, "generated_by": {"const": "local-tool"}}}}]
       }
     }
   },

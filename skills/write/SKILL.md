@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Require G4 approval for result-bearing prose. Read the paper contract, claim-evidence matrix, experiment registry and `references/research-integrity.md`.
 
-Claude may provide only a semantic outline and internal critique. GPT/OpenAI must independently write and revise every manuscript, table, caption, supplement, disclosure and submission-material text. Prefer a schema-bound specification rendered through `scripts/publication_figures.py`; specialized GPT-written plotting code remains available when scientifically necessary. Every final chart must be rendered locally from recorded experiment data, include uncertainty and accessible redundant encodings, and pass figure provenance. Never copy wording from a Claude plan or audit.
+Claude may provide only a semantic outline and internal critique. GPT/OpenAI must independently write and revise every manuscript, table, caption, supplement, disclosure and submission-material text. Use `skills/figures/SKILL.md` for data charts, research diagrams and separately disclosed conceptual illustrations. Every result-bearing chart must be rendered locally from recorded experiment data, include uncertainty and accessible redundant encodings, and pass figure provenance. Never copy wording from a Claude plan or audit.
 
 Write a venue-neutral semantic manuscript first:
 
@@ -38,3 +38,5 @@ The checklist input needs `schema_version`, `study_design`, `guideline`, `guidel
 Run `scripts/citation_audit.py` and require zero unresolved references. Then use the `citations` skill and `scripts/ref_verify_adapter.py` for DOI-bound abstract-level topline/numeric claims; use full text for deeper claims. Run `scripts/venue_compliance.py` after the official template is safely ingested. Complete two review rounds and the response matrix for the current `state.active_paper`; do not skip directly to another paper.
 
 Keep title, abstract and conclusions within the evidence scope. Formatting belongs to the retarget skill.
+
+Before the introduction, record the precise gap, supporting closest-work evidence and a 3–4-layer background map. Draft each paragraph with a clear role, bounded claim, allowed evidence and reason for the next paragraph; do not pad background with irrelevant history. Build `reviews/paper-facts.json` and run `scripts/manuscript_audit.py` to check claim alignment, construct→item→coding→analysis→evidence validity, argument roles and terminology/acronym consistency. For user-supplied AI-detector feedback, allow a bounded editorial pass as described in `skills/paper-audit/SKILL.md`; preserve the integrity and AI disclosure controls. Do not equate a detector score with authorship.

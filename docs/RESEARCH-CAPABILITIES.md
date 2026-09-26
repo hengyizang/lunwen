@@ -144,10 +144,9 @@ python3 scripts/publication_figures.py render \
   --record --run P01-main-seed-1 --language-checked-by 'Hengyi Zang'
 ```
 
-The renderer supports line, scatter, grouped bar, heatmap and forest panels.
+The renderer also supports common distribution, comparison, diagnostic, embedding, survival and flow panels; see [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md) for the exact list and input semantics.
 Its journal style uses restrained high-contrast color, marker and line-style
 redundancy, vector text, clean grids and a minimum 300 DPI raster. Decorative
-3-D perspective, fabricated values and bitmap figures produced directly by a
-language/image model are excluded. Custom Python plot programs remain allowed
+3-D perspective and fabricated values are excluded. GPT Image bitmap output is allowed only as a separately registered, visually verified and disclosed conceptual illustration—not a result-bearing chart. Custom Python plot programs remain allowed
 when a paper needs a specialized scientific visualization; the same data,
 claim and provenance checks still apply.

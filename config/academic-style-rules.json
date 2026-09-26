@@ -234,6 +234,36 @@
       "message": "The text explicitly describes suppressing evidence because of its direction or anticipated controversy.",
       "guidance": "Restore the result and its uncertainty. Decide main-text versus supplement placement only from predeclared role, relevance and statistical adequacy, and cross-reference any supplement placement.",
       "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "forced-tricolon",
+      "category": "structure",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:robust|scalable|efficient),\\s+(?:reliable|flexible|transparent),\\s+and\\s+(?:effective|interpretable|powerful)\\b",
+      "message": "A stock three-part adjective list adds little scientific information.",
+      "guidance": "Replace generic adjectives with the exact tested properties and supporting results.",
+      "source_ids": ["avoid-ai-writing", "no-ai-slop"]
+    },
+    {
+      "id": "abstract-noun-overclaim",
+      "category": "clarity",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:this|these) (?:findings|results) (?:underscore|highlight|showcase) the (?:importance|potential|significance)\\b",
+      "message": "Abstract evaluation stands in for a precise inference.",
+      "guidance": "State what changed, for which population, and with what uncertainty.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
+    },
+    {
+      "id": "generic-credibility-claim",
+      "category": "evidence",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:a wealth of evidence|it is well known|it is established that|strongly supports the notion)\\b",
+      "message": "An unspecified authority claim needs concrete sourcing.",
+      "guidance": "Name the primary evidence and its scope, or remove the unsupported clause.",
+      "source_ids": ["avoid-ai-writing", "vale-ai-tells"]
     }
   ]
 }

@@ -7,7 +7,7 @@ Use one deterministic control plane and bounded model roles:
 1. Local Python owns stage state, output provenance, gates, hashes and execution authority.
 2. Claude supplies a read-only semantic plan and may perform internal independent criticism. Its text is stored only in run/audit records, never as a persistent scientific or submission artifact.
 3. Codex/OpenAI independently expresses and remediates every persistent text artifact. It uses Claude's ideas as requirements, not wording to copy.
-4. Codex writes plotting code/specifications; deterministic local tools render final figures from recorded data and experiment outputs.
+4. Codex writes plotting code/specifications; deterministic local tools render result-bearing figures from recorded data and experiment outputs. A separately disclosed GPT Image conceptual illustration can supplement but never replace a data figure.
 5. The human approves G0–G5 and owns authorship, scientific judgment, ethics, venue choice, and submission.
 
 Do not ask multiple agents to produce one blended answer without preserving their separate evidence and disagreements. Store unresolved disagreements in `reviews/decision-log.md`.
@@ -21,8 +21,9 @@ For the current stage:
 3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
 4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
    At G5, run the deterministic academic-style audit after writing and again
-   after remediation; use it to improve authentic academic expression without
-   detector scoring or concealment. Run citation identity, DOI-bound abstract
+   after remediation; use it to improve authentic academic expression. Optional
+   user-supplied detector feedback stays outside the scientific gate and never
+   removes disclosure. Run citation identity, DOI-bound abstract
    claim, commitment-trace and revision-integrity checks against the final snapshot.
 5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
 6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.

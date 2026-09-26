@@ -17,7 +17,7 @@ except ImportError:
 
 
 FIGURE_SUFFIXES={".png",".svg",".pdf",".eps",".tif",".tiff"}
-FIGURE_TYPES={"data_chart","conceptual_diagram"}
+FIGURE_TYPES={"data_chart","conceptual_diagram","conceptual_illustration"}
 
 
 def _relative(project:Path,value:str,field:str)->tuple[Path,str]:
@@ -44,7 +44,7 @@ def _write(path:Path,value:dict[str,Any])->None:
 
 def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:str,inputs:list[str],runs:list[str],config:str|None=None,language_checked_by:str="")->str:
     if not re.fullmatch(r"P[0-9]{2}",paper_id):raise ValueError("paper must look like P01")
-    if figure_type not in FIGURE_TYPES:raise ValueError("type must be data_chart or conceptual_diagram")
+    if figure_type not in FIGURE_TYPES-{"conceptual_illustration"}:raise ValueError("use record_generated_illustration for conceptual_illustration")
     if not language_checked_by.strip():raise ValueError("language_checked_by must identify the human who confirmed English figure text")
     figure_path,figure_rel=_relative(project,figure,"figure")
     renderer_path,renderer_rel=_relative(project,renderer,"renderer")
@@ -76,6 +76,44 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
     return figure_rel
 
 
+def record_generated_illustration(project:Path,paper_id:str,figure:str,source_record:str,
+                                  checked_by:str,disclosure_location:str)->str:
+    """Approve an explicitly illustrative image only after human visual inspection."""
+    if not re.fullmatch(r"P[0-9]{2}",paper_id):raise ValueError("invalid paper ID")
+    if not checked_by.strip() or not disclosure_location.strip():
+        raise ValueError("named human review and AI-use disclosure location are required")
+    path,relative=_relative(project,figure,"figure")
+    source,source_rel=_relative(project,source_record,"source_record")
+    if not path.is_file() or path.suffix.lower() not in {".png",".tif",".tiff"} or not source.is_file():
+        raise ValueError("generated illustration and source receipt must exist")
+    if (project/"papers"/paper_id/"figures").resolve() not in path.parents:
+        raise ValueError("generated illustration must be in the paper's figures directory")
+    receipt=json.loads(source.read_text(encoding="utf-8"))
+    if receipt.get("kind")!="conceptual_illustration" or receipt.get("source") not in {"gpt-image-api","chatgpt-web"}:
+        raise ValueError("invalid illustration source")
+    if receipt.get("output_sha256")!=output_provenance.sha256_file(path) or not re.fullmatch(r"[0-9a-f]{64}",str(receipt.get("prompt_sha256",""))):
+        raise ValueError("stale illustration receipt or missing prompt hash")
+    if not str(receipt.get("model_id","")).strip():raise ValueError("model_id is required (unverified if unknown)")
+    origin=output_provenance.current_origin(project,path)
+    if origin.get("status")!="tracked" or origin.get("family")=="anthropic":
+        raise ValueError("illustration requires current non-Claude output provenance")
+    registry_path=project/"papers"/paper_id/"figures"/"figure-provenance.json"
+    registry=_load_registry(registry_path);timestamp=output_provenance.utc_now()
+    record={"figure_path":relative,"figure_type":"conceptual_illustration",
+            "renderer":{"path":source_rel,"sha256":output_provenance.sha256_file(source)},
+            "config":None,"inputs":[],"source_run_ids":[],
+            "output_sha256":output_provenance.sha256_file(path),"deterministic":False,
+            "generated_by":receipt["source"],"prompt_sha256":receipt["prompt_sha256"],
+            "model_id":receipt["model_id"],"disclosure_location":disclosure_location.strip(),
+            "human_content_checked_by":checked_by.strip(),
+            "language_checked_by":checked_by.strip(),"language_checked_at":timestamp,"recorded_at":timestamp}
+    registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=relative]+[record]
+    _write(registry_path,registry)
+    output_provenance.record_model_writes(project,[registry_path],family="other",provider="local-provenance-check",
+        model="scripts/figure_provenance.py",role="illustration-approval",run_id="illustration-"+timestamp.replace(":","-"))
+    return relative
+
+
 def validate_figure_provenance(project:Path,paper:Path)->list[str]:
     errors=[];figures_dir=paper/"figures"
     actual={path.relative_to(project).as_posix() for path in figures_dir.rglob("*") if path.is_file() and path.suffix.lower() in FIGURE_SUFFIXES}
@@ -104,12 +142,20 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
         try:
             path,_=_relative(project,relative,"figure_path")
             if not path.is_file() or item.get("output_sha256")!=output_provenance.sha256_file(path):errors.append(f"{relative}: output hash is stale")
-            if item.get("figure_type") not in FIGURE_TYPES or item.get("deterministic") is not True or item.get("generated_by")!="local-tool":errors.append(f"{relative}: invalid deterministic rendering declaration")
+            illustration=item.get("figure_type")=="conceptual_illustration"
+            if item.get("figure_type") not in FIGURE_TYPES:errors.append(f"{relative}: invalid figure type")
+            if illustration:
+                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or not str(item.get("human_content_checked_by","")).strip() or not str(item.get("disclosure_location","")).strip() or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
+                    errors.append(f"{relative}: conceptual illustration needs explicit source, approval and disclosure")
+                origin=output_provenance.current_origin(project,path)
+                if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: illustration needs current non-Claude provenance")
+            elif item.get("deterministic") is not True or item.get("generated_by")!="local-tool":
+                errors.append(f"{relative}: invalid deterministic rendering declaration")
             if not isinstance(item.get("language_checked_by"),str) or not item["language_checked_by"].strip() or not isinstance(item.get("language_checked_at"),str) or not item["language_checked_at"].strip():errors.append(f"{relative}: named human English-label confirmation is required")
             renderer=item.get("renderer") if isinstance(item.get("renderer"),dict) else {};renderer_path,_=_relative(project,str(renderer.get("path","")),"renderer")
             if not renderer_path.is_file() or renderer.get("sha256")!=output_provenance.sha256_file(renderer_path):errors.append(f"{relative}: renderer hash is stale")
             origin=output_provenance.current_origin(project,renderer_path)
-            if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: renderer lacks current non-Claude provenance")
+            if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: renderer/source lacks current non-Claude provenance")
             inputs=item.get("inputs") if isinstance(item.get("inputs"),list) else []
             for input_item in inputs:
                 if not isinstance(input_item,dict):errors.append(f"{relative}: malformed input record");continue
@@ -123,17 +169,31 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
                 if config_origin.get("status")!="tracked" or config_origin.get("family")=="anthropic":errors.append(f"{relative}: config lacks current non-Claude provenance")
             runs=set(str(value) for value in item.get("source_run_ids",[]) if value)
             if item.get("figure_type")=="data_chart" and (not inputs or not runs or not runs.issubset(successful) or any(successful.get(run)!=paper.name for run in runs)):errors.append(f"{relative}: data chart needs current inputs and successful source runs for {paper.name}")
+            if illustration and (inputs or runs):errors.append(f"{relative}: conceptual illustration may not assert experimental inputs or runs")
         except (OSError,ValueError) as exc:errors.append(f"{relative}: {exc}")
+    if any(item.get("figure_type")=="conceptual_illustration" for item in records.values() if isinstance(item,dict)):
+        disclosure_file=paper/"disclosures.json"
+        if disclosure_file.is_file():
+            try:
+                disclosures=json.loads(disclosure_file.read_text(encoding="utf-8"))
+                ai_use=disclosures.get("ai_use","") if isinstance(disclosures,dict) else ""
+                statement=ai_use if isinstance(ai_use,str) else json.dumps(ai_use,ensure_ascii=False)
+                if not statement.strip() or re.fullmatch(r"\s*(none|no|not used|n/a)\s*\.?",statement,re.I):
+                    errors.append("conceptual illustration requires an actual AI-use disclosure; source receipt alone is insufficient")
+            except (OSError,json.JSONDecodeError):
+                errors.append("cannot verify conceptual illustration AI-use disclosure")
     return errors
 
 
 def main()->int:
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest="command",required=True)
-    record=sub.add_parser("record");record.add_argument("--project",required=True);record.add_argument("--paper",required=True);record.add_argument("--figure",required=True);record.add_argument("--type",required=True,choices=sorted(FIGURE_TYPES));record.add_argument("--renderer",required=True);record.add_argument("--input",action="append",default=[],dest="inputs");record.add_argument("--run",action="append",default=[],dest="runs");record.add_argument("--config");record.add_argument("--language-checked-by",required=True)
+    record=sub.add_parser("record");record.add_argument("--project",required=True);record.add_argument("--paper",required=True);record.add_argument("--figure",required=True);record.add_argument("--type",required=True,choices=sorted(FIGURE_TYPES-{"conceptual_illustration"}));record.add_argument("--renderer",required=True);record.add_argument("--input",action="append",default=[],dest="inputs");record.add_argument("--run",action="append",default=[],dest="runs");record.add_argument("--config");record.add_argument("--language-checked-by",required=True)
+    illustration=sub.add_parser("approve-illustration");illustration.add_argument("--project",required=True);illustration.add_argument("--paper",required=True);illustration.add_argument("--figure",required=True);illustration.add_argument("--receipt",required=True);illustration.add_argument("--checked-by",required=True);illustration.add_argument("--disclosure-location",required=True)
     validate=sub.add_parser("validate");validate.add_argument("--project",required=True);validate.add_argument("--paper",required=True)
     args=parser.parse_args();root=Path(__file__).resolve().parents[1];project=root/"projects"/args.project;paper=project/"papers"/args.paper
     try:
         if args.command=="record":print(record_figure(project,args.paper,args.figure,args.type,args.renderer,args.inputs,args.runs,args.config,args.language_checked_by))
+        elif args.command=="approve-illustration":print(record_generated_illustration(project,args.paper,args.figure,args.receipt,args.checked_by,args.disclosure_location))
         else:
             errors=validate_figure_provenance(project,paper)
             if errors:raise ValueError("; ".join(errors))

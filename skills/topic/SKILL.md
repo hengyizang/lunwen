@@ -17,6 +17,8 @@ Coordinate three independent workstreams:
 
 Require official/current sources for regulations, positions and market facts, and primary literature for scientific claims. Record queries, dates, result counts and exclusions.
 
+If the request is a systematic/scoping review, invoke `skills/systematic-review/SKILL.md` for study-level screening and evidence comparison. When the user has authorized local Zotero/Obsidian/PDF material, use `skills/library-import/SKILL.md` before external expansion. Do not equate a topical search with a completed systematic review.
+
 Produce at least three serious candidate programs. For each, test novelty, doctoral depth, paperability, public-data feasibility, compute/equipment ceiling, competition, supervisor/position supply, job-market breadth and failure modes.
 
 At G2, use the `journal` skill after the authorized JCR registry is built. Keep separate challenge, target and safety choices and score fit dimensions individually so a high impact factor cannot mask a scope or practicality failure.

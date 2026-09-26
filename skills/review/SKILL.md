@@ -34,4 +34,6 @@ The authorization file uses `schema_version`, `approved_by`, timezone-aware `app
 
 For G5, also run `scripts/citation_audit.py`, `scripts/ref_verify_adapter.py` and `scripts/venue_compliance.py`; preserve the reports under the active paper's `reviews/` directory.
 
+For external peer-review letters, parse every original comment into one concern card with stable `comment_id`, underlying concern, decision impact, evidence need, response stance (accept/clarify/partial/disagree), action, effort and manuscript location. Keep unfulfilled actions visible. Validate coverage and journal word limit with `scripts/rebuttal_triage.py`; preserve the internal full response, concise submit-ready draft and editor/Area Chair summary. Do not automatically truncate a response or invent an experiment; the existing response matrix and revision trace remain authoritative.
+
 Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.

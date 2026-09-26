@@ -343,6 +343,10 @@ def gate_errors(slug,gate):
             errors.extend(f"{pid} academic style: {x}" for x in validate_saved_audit(paper))
         except ImportError as exc:errors.append(f"{pid} academic style validator unavailable: {exc}")
         try:
+            from scripts.manuscript_audit import validate_saved_report as validate_paper_facts
+            errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
+        except ImportError as exc:errors.append(f"{pid} paper-facts validator unavailable: {exc}")
+        try:
             from scripts.ref_verify_adapter import validate_saved_report as validate_ref_verify
             errors.extend(f"{pid} citation claim verification: {x}" for x in validate_ref_verify(paper))
         except ImportError as exc:errors.append(f"{pid} ref-verify validator unavailable: {exc}")

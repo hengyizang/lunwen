@@ -14,6 +14,7 @@ import json
 import math
 import numbers
 import re
+import shutil
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -21,7 +22,12 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
-KINDS = {"line", "scatter", "bar", "heatmap", "forest"}
+try:
+    from scripts import figure_recipes
+except ImportError:
+    import figure_recipes  # type: ignore
+
+KINDS = {"line", "scatter", "bar", "heatmap", "forest"} | figure_recipes.KINDS
 FORMATS = {"png", "pdf", "svg"}
 PALETTE = (
     "#005F73",
@@ -100,9 +106,13 @@ def validate_spec(spec: dict[str, Any]) -> None:
             if panel.get(optional_label) is not None:
                 _english_text(panel.get(optional_label), f"{prefix}.{optional_label}")
         for field in ("x", "y", "xlabel", "ylabel"):
-            if panel.get("kind") == "forest" and field == "x":
+            if (panel.get("kind") == "forest" and field == "x") or (panel.get("kind") == "correlation" and field in {"x", "y"}):
                 continue
             _english_text(panel.get(field), f"{prefix}.{field}")
+        if panel.get("kind") in {"sankey", "confusion"}:
+            _english_text(panel.get("value"), f"{prefix}.value")
+        if panel.get("kind") == "dumbbell":
+            _english_text(panel.get("end"), f"{prefix}.end")
         if panel.get("kind") == "forest":
             for field in ("label", "ci_low", "ci_high"):
                 _english_text(panel.get(field), f"{prefix}.{field}")
@@ -118,6 +128,10 @@ def validate_spec(spec: dict[str, Any]) -> None:
                 raise FigureSpecError(f"{prefix}.uncertainty must be an object")
             _english_text(uncertainty.get("lower"), f"{prefix}.uncertainty.lower")
             _english_text(uncertainty.get("upper"), f"{prefix}.uncertainty.upper")
+        if panel.get("kind") == "errorbar" and uncertainty is None:
+            raise FigureSpecError(f"{prefix}.uncertainty is required for errorbar")
+    if not isinstance(spec.get("source_data_export", False), bool):
+        raise FigureSpecError("source_data_export must be boolean")
 
 
 def _imports() -> tuple[Any, Any, Any]:
@@ -344,6 +358,25 @@ def _draw_forest(ax: Any, panel: dict[str, Any], frame: Any, np: Any) -> None:
     ax.set_yticks(positions, ordered[label].astype(str))
 
 
+def inspect_layout(fig: Any) -> list[str]:
+    """Mechanical preflight; a human must still inspect all rendered formats."""
+    from matplotlib.text import Text
+
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    bounds = fig.bbox
+    warnings: list[str] = []
+    for ax_index, ax in enumerate(fig.axes, 1):
+        for artist in ax.get_children():
+            if not isinstance(artist, Text) or not artist.get_visible() or not artist.get_text().strip():
+                continue
+            box = artist.get_window_extent(renderer)
+            if (box.x0 < bounds.x0-3 or box.y0 < bounds.y0-3 or
+                    box.x1 > bounds.x1+3 or box.y1 > bounds.y1+3):
+                warnings.append(f"axes {ax_index}: text extends outside canvas: {artist.get_text()[:50]}")
+    return warnings
+
+
 def render(project: Path, spec_path: Path) -> dict[str, Any]:
     project = project.resolve()
     spec_path = spec_path.resolve()
@@ -386,6 +419,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         raise FigureSpecError("figure width/height is outside publication-safe bounds")
     fig, axes = plt.subplots(rows, columns, figsize=(width, height), squeeze=False, constrained_layout=True)
     data_records: dict[str, dict[str, Any]] = {}
+    layout_warnings: list[str] = []
     try:
         for index, panel in enumerate(panels):
             ax = axes[index // columns][index % columns]
@@ -398,16 +432,30 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 _draw_heatmap(ax, panel, frame, np)
             elif panel["kind"] == "forest":
                 _draw_forest(ax, panel, frame, np)
+            elif panel["kind"] in figure_recipes.KINDS:
+                try:
+                    figure_recipes.draw(ax, panel, frame, np, pd, PALETTE)
+                except (ValueError, KeyError, TypeError, OverflowError) as exc:
+                    raise FigureSpecError(f"panels[{index}]: {exc}") from exc
             else:
                 _draw_standard(ax, panel, frame, np)
             _decorate(ax, panel, chr(ord("a") + index))
         for index in range(len(panels), rows * columns):
             axes[index // columns][index % columns].axis("off")
+        layout_warnings = inspect_layout(fig)
         output_stem = safe_file(project, spec.get("output_stem"), "output_stem")
         expected_root = project / "papers"
         if expected_root.resolve() not in output_stem.parents or "figures" not in output_stem.parts:
             raise FigureSpecError("output_stem must be inside papers/Pxx/figures")
         output_stem.parent.mkdir(parents=True, exist_ok=True)
+        source_records: list[dict[str, Any]] = []
+        if spec.get("source_data_export", False):
+            # Explicit opt-in: copying a raw table can disclose restricted data.
+            for index, panel in enumerate(panels):
+                source = safe_file(project, panel.get("data", spec["data"]), "source data")
+                target = output_stem.with_name(f"{output_stem.name}-panel-{index+1}-source{source.suffix}")
+                shutil.copyfile(source, target)
+                source_records.append({"path": target.relative_to(project).as_posix(), "sha256": sha256_file(target)})
         outputs: list[dict[str, Any]] = []
         for suffix in spec["formats"]:
             path = output_stem.with_suffix(f".{suffix}")
@@ -451,6 +499,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         "renderer_wrapper": {"path": renderer.relative_to(project).as_posix(), "sha256": sha256_file(renderer)},
         "spec": {"path": spec_path.relative_to(project).as_posix(), "sha256": sha256_file(spec_path)},
         "data": sorted(data_records.values(), key=lambda item: item["path"]),
+        "source_data_exports": source_records,
         "outputs": outputs,
         "quality": {
             "vector_outputs": sorted(set(spec["formats"]) & {"svg", "pdf"}),
@@ -461,6 +510,9 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "caption": spec["caption"],
             "alt_text": spec["alt_text"],
             "claim_ids": spec["claim_ids"],
+            "layout_review_required": True,
+            "layout_warnings": layout_warnings,
+            "distribution_estimates_not_inferred": True,
         },
     }
     report_path = output_stem.with_suffix(".figure-build.json")

@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.2.0
 
+新增的 29 类科研绘图、研究架构图、系统综述筛选/PRISMA、Zotero/Obsidian 本地索引、按页 PDF 阅读/翻译和组会 PPT、paper-facts 与测量审查、审稿 concern cards、分层 API 任务、可选 GPT Image 概念图和独立 Skill 清单，见 [`docs/NEW-CAPABILITIES.md`](docs/NEW-CAPABILITIES.md)。均为现有 G0–G5 控制层的增量能力；未运行的真实 API、用户账号和论文图件不会被宣称为已验收。
+
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
 “一键”指：创建或恢复项目，运行当前阶段的 Claude只读规划 → Codex写入 → Claude独立审查 → Codex修订 → Claude终审流程，通过确定性检查后停在下一道人类审批闸门。它不代表自动批准选题、自动确认数据许可、自动产出真实实验结果或自动投稿。

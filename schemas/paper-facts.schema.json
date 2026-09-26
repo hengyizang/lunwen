@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Located paper facts and argument audit input",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "facts", "claim_alignment", "measurement", "argument_ledger", "glossary"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "facts": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "statement", "source_path", "source_sha256", "location", "verbatim_evidence"], "properties": {"id": {"type": "string"}, "statement": {"type": "string"}, "source_path": {"type": "string"}, "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "location": {"type": "string"}, "verbatim_evidence": {"type": "string"}}}},
+    "claim_alignment": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["claim_id", "research_question", "allowed_inference", "evidence_ids", "sections"], "properties": {"claim_id": {"type": "string"}, "research_question": {"type": "string"}, "allowed_inference": {"type": "string"}, "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "sections": {"type": "object", "required": ["title", "abstract", "question", "results", "conclusion"]}}}},
+    "measurement_not_applicable_reason": {"type": "string"},
+    "measurement": {"type": "array", "items": {"type": "object", "required": ["construct_id", "definition", "operationalization", "measurement_item", "coding_rule", "analysis_id", "claim_id", "validity_risk", "evidence_ids"]}},
+    "argument_ledger": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["paragraph_id", "section", "function", "claim_id", "inference_boundary", "transition", "evidence_ids"]}},
+    "glossary": {"type": "array", "items": {"type": "object", "required": ["term", "definition", "first_use", "forbidden_variants"]}}
+  }
+}

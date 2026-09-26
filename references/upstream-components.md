@@ -29,6 +29,8 @@ Use it only as an evidence/semantic-planning worker behind the local contracts, 
 
 The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e9370309c24b99977ad44091f`. Most orchestration overlaps the local state machine. The retained improvement is independently implemented revision-drift control: `scripts/revision_integrity.py` compares exact numeric, citation-key and claim-strength token multisets and requires named human authorization for every change.
 
+The next review also identified a shared `paper-facts` ledger, construct-to-item/coding/analysis validity chain, paragraph argument map, contradiction/method comparability grid and reviewer-concern triage as useful missing concepts across Supervisor Skills, Academic Research Skills and related projects. They are independently implemented in `scripts/manuscript_audit.py`, `scripts/systematic_review.py` and `scripts/rebuttal_triage.py`. No third-party restricted Skill text, source code or figures are vendored; direct use or redistribution of an upstream remains subject to its own license.
+
 ## ref-verify, paper-skill and journal recommender review
 
 [`Moonweave-Research/ref-verify`](https://github.com/Moonweave-Research/ref-verify) version 1.2.0 (commit `8d56a6c5ed42c5332efa516f6ee5f56cbba8557d`, MIT) is invoked directly by `scripts/ref_verify_adapter.py`. The adapter accepts only DOI-bound topline or numeric claims, requires `ACCEPT`/`SUPPORTED` plus evidence, and labels the result as abstract-only. It cannot validate a mechanism, procedure, table or figure claim.

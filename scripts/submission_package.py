@@ -91,7 +91,7 @@ def directory_files(directory: Path, paper: Path) -> Iterable[Path]:
         for name in names:
             candidate = root_path / name
             safe_file(candidate, paper)
-            if candidate.name == "figure-provenance.json":
+            if candidate.name == "figure-provenance.json" or candidate.name.endswith(".image-source.json"):
                 continue
             if candidate.is_file():
                 files.append(candidate)

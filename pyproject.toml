@@ -13,6 +13,10 @@ figures = [
 reference-tools = [
   "ref-verify==1.2.0"
 ]
+reader = [
+  "pypdf>=5,<7",
+  "python-pptx>=1.0,<2"
+]
 
 # This repository is an application/control-plane tree, not an importable
 # Python distribution.  Declaring an empty package set lets pip resolve the

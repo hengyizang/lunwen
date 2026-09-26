@@ -50,6 +50,10 @@ python3 scripts/api_orchestrator.py cost my-phd
 python3 scripts/api_orchestrator.py cost my-phd --paper P01
 ```
 
+直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts 和理论测量链”“把审稿意见拆成 concern cards”“先估算一次低成本抽取任务”等，Codex 会路由至仓库内对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
+
+当你明确要求、且当前 ChatGPT Work/桌面浏览器可用时，可以人工登录网页工具、导出合法文件，再由脚本导入并记录哈希。ChatGPT 网页版不是后台 API，不复用 Cookie 或绕过验证码；Codex CLI 不自动共享网页会话。GPT Image 的概念插图需额外人工检查和 AI 使用披露。
+
 如果正文被截断，应提高写作上限或拆分任务，不应为了省 token 接受残缺论文。费用
 优化的顺序是减少重复上下文、复用确定性计算、使用精确缓存，最后才是缩短必要输出。
 
