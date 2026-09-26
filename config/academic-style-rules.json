@@ -31,7 +31,7 @@
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
       "commit": "5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975",
       "license": "MIT",
-      "use": "Advisory patterns for pre-emptive disclaimers, self-minimizing contribution language and caveat-led paragraph openings; legitimate limitations and uncertainty are protected."
+      "use": "Advisory patterns for pre-emptive disclaimers, self-minimizing contribution language, caveat-led paragraphs, negative scope framing, apology-like framing and redundant clarifiers; legitimate limitations and uncertainty are protected, and explicit direction-dependent omission language is blocked."
     }
   ],
   "rules": [
@@ -193,6 +193,46 @@
       "pattern": "(?:^|\\n\\s*\\n)\\s*(?:Although|While|Despite|Notwithstanding)\\b",
       "message": "A paragraph begins with a caveat before its main scientific point.",
       "guidance": "When clarity improves, lead with the result or scope statement and place the necessary caveat next to the claim it qualifies. Never delete a real limitation.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "negative-scope-framing",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:does not|do not|cannot|can't) (?:fully |completely )?(?:capture|cover|account for|represent|address) (?:all|every|the full|the entire)\\b",
+      "message": "Negative scope framing may spend the sentence on what the study does not do.",
+      "guidance": "When scientifically equivalent, state the exact population, setting, mechanism or task that the analysis covers. Keep the negative limitation if positive scope would hide a validity boundary.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "apology-like-framing",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:unfortunately|regrettably|admittedly)[,;:]?\\s+(?:this|the|our|we)\\b",
+      "message": "Apology-like framing weakens a factual result or limitation.",
+      "guidance": "State the result, evidence boundary or limitation directly and neutrally; preserve every fact that affects interpretation.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "redundant-clarifier",
+      "category": "defensive_framing",
+      "confidence": "moderate",
+      "block_on_any": false,
+      "pattern": "\\b(?:to be clear|for (?:the )?avoidance of doubt|of course)[,;:]?",
+      "message": "A defensive clarifier may answer a hypothetical objection instead of advancing the argument.",
+      "guidance": "Delete it when the following statement adds no necessary evidence, scope or logic; otherwise state the qualification directly.",
+      "source_ids": ["anti-defensive-writing"]
+    },
+    {
+      "id": "direction-dependent-omission",
+      "category": "research_integrity",
+      "confidence": "high",
+      "block_on_any": true,
+      "pattern": "\\b(?:(?:unfavorable|negative|null|non[- ]?significant|controversial) (?:results?|findings?|experiments?|analyses?) (?:were|are|have been) (?:omitted|excluded|removed|not reported)|(?:results?|findings?|experiments?|analyses?) (?:were|are|have been) (?:omitted|excluded|removed|not reported) (?:because|since) (?:they |the (?:results?|findings?) )?(?:were|are)?\\s*(?:unfavorable|negative|null|non[- ]?significant|controversial))\\b",
+      "message": "The text explicitly describes suppressing evidence because of its direction or anticipated controversy.",
+      "guidance": "Restore the result and its uncertainty. Decide main-text versus supplement placement only from predeclared role, relevance and statistical adequacy, and cross-reference any supplement placement.",
       "source_ids": ["anti-defensive-writing"]
     }
   ]

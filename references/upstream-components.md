@@ -39,7 +39,7 @@ The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e93703
 
 ## Anti-Defensive Writing
 
-[`Kiterlin/anti-defensive-writing`](https://github.com/Kiterlin/anti-defensive-writing) commit `5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975` (MIT) contributed three advisory concepts absent from the local audit: pre-emptive disclaimers, self-minimizing contribution language and caveat-led paragraphs. They are review prompts, never automatic rewrites or detector-evasion rules. Necessary limitations, uncertainty, negative findings and disclosures must remain.
+[`Kiterlin/anti-defensive-writing`](https://github.com/Kiterlin/anti-defensive-writing) commit `5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975` (MIT) contributed advisory concepts absent from the local audit: pre-emptive disclaimers, self-minimizing contribution language, caveat-led paragraphs, negative scope framing, apology-like framing and redundant clarifiers. They are review prompts, never automatic rewrites or detector-evasion rules. The local implementation also blocks explicit direction-dependent omission language so “write confidently” cannot be interpreted as selective reporting. Necessary limitations, uncertainty, negative findings and disclosures must remain. The abstract and conclusion may emphasize the preregistered primary finding, but every registered result remains locatable and experiment placement cannot depend on whether the result is favorable.
 
 ## Experiment Agent
 

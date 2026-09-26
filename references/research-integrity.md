@@ -46,6 +46,29 @@ citations and uncertainty. Do not optimize against an AI-detector score, claim
 human-only authorship, or use paraphrasing to conceal assistance. The applicable
 journal, university and funder disclosure rules remain controlling.
 
+## Claim-forward reporting without selective reporting
+
+Lead the abstract, discussion and conclusion with the preregistered primary
+question and the strongest claim that the complete evidence supports. A
+secondary, exploratory, null or unfavorable result need not become a headline
+conclusion unless it materially changes the primary claim, validity, safety or
+scope. It must still remain locatable in the results, supplement and registered
+evidence trail with its uncertainty and interpretation intact.
+
+Do not delete, soften or demote an experiment because its result is unfavorable
+or likely to attract criticism. Main-text versus supplement placement may depend
+only on predeclared role, relevance, statistical adequacy, redundancy and venue
+space. Record the placement rationale and cross-reference the supplement from
+the main manuscript. A primary outcome, falsification test, required baseline,
+material robustness failure or result that changes interpretation stays visible
+in the main text regardless of direction.
+
+State material limitations once, specifically and without apology, next to the
+claim they qualify or in the designated methods/discussion/limitations section.
+Remove generic caveats and repeated defenses against hypothetical objections;
+never remove a limitation that affects validity, interpretation, scope, research
+design, safety, ethics or correct use of the result.
+
 ## Corrections
 
 Never erase an adverse result or audit finding. Supersede it with a dated correction and retain the original in history.

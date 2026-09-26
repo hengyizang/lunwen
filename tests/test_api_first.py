@@ -101,6 +101,28 @@ class ApiFirstTests(unittest.TestCase):
         ):
             self.assertIn(required, prompt)
 
+    def test_g5_prompts_are_claim_forward_without_selective_reporting(self):
+        writer = api_orchestrator.writer_prompt(
+            "missing-project", "writing-and-review", ""
+        )
+        critic = api_orchestrator.critic_prompt(
+            "missing-project", "writing-and-review", ""
+        )
+        for required in (
+            "preregistered primary finding",
+            "every registered result locatable",
+            "unfavorable or contentious",
+            "material limitations once",
+        ):
+            self.assertIn(required, writer)
+        for required in (
+            "direction-dependent omission or demotion",
+            "missing primary outcome",
+            "main-text cross-reference",
+            "material limitation once",
+        ):
+            self.assertIn(required, critic)
+
     def test_automatic_data_failure_stops_before_paid_model_calls(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

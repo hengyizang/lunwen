@@ -195,6 +195,33 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertIn("caveat-led-paragraph", ids)
         self.assertFalse(any("defensive" in error for error in result["errors"]))
 
+    def test_remaining_anti_defensive_patterns_are_advisory(self) -> None:
+        filler = " ".join(
+            f"Measurement {index} compared the registered baseline with held-out observations."
+            for index in range(90)
+        )
+        result = analyze_text(
+            "To be clear, unfortunately, this analysis cannot capture every "
+            "operational regime. " + filler
+        )
+        ids = {item["rule_id"] for item in result["formulaic_pattern_findings"]}
+        self.assertIn("negative-scope-framing", ids)
+        self.assertIn("apology-like-framing", ids)
+        self.assertIn("redundant-clarifier", ids)
+        self.assertFalse(any("direction-dependent" in error for error in result["errors"]))
+
+    def test_direction_dependent_result_omission_is_blocked(self) -> None:
+        result = analyze_text(
+            "Negative results were omitted because they were unfavorable."
+        )
+        findings = result["formulaic_pattern_findings"]
+        self.assertTrue(
+            any(item["rule_id"] == "direction-dependent-omission" for item in findings)
+        )
+        self.assertTrue(
+            any("direction-dependent-omission" in error for error in result["errors"])
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

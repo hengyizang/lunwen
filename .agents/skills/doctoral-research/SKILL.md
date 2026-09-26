@@ -24,6 +24,14 @@ Use deterministic scripts for state, discovery, manifests, downloads, approved e
 
 At G2, run `scripts/journal_screening.py` and retain decomposed scores, official evidence, risks and challenge/target/safety roles. At G5, follow `skills/citations/SKILL.md`, route the applicable reporting guideline, snapshot the pre-revision manuscript, then run `scripts/ref_verify_adapter.py`, `scripts/reporting_checklist.py`, `scripts/revision_trace.py` and `scripts/revision_integrity.py`. Abstract support is never full-text support. Numeric, citation or claim-strength drift needs exact named human authorization.
 
+At G5 use claim-forward, non-defensive writing without selective reporting.
+Headline the preregistered primary finding and strongest supported contribution;
+do not promote every secondary or null result into the conclusion. Keep every
+registered result locatable in the manuscript or supplement, and never move,
+weaken or omit an experiment because of its direction. Use predeclared role,
+relevance and statistical adequacy to decide placement. State every material
+limitation once and calmly; remove only generic or repeated defensive caveats.
+
 For six papers, require at least three declared current JCR Q1 SCI/SCIE targets and every remainder at least current JCR Q2, all with JIF above 1.0. Apply the same doctoral originality, experiment, reliability, review and writing gates to every paper. Use `scripts/open_fulltext.py` for lawful OA candidates. When the user supplies a SciencePro export, ingest it through `scripts/sciencepro_import.py` and treat it as advisory until independently verified.
 
 When acting as the independent critic:

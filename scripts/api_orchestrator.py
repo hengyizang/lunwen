@@ -495,6 +495,14 @@ mechanism or limitation over decorative synonyms. Preserve every number,
 equation, citation, uncertainty boundary and claim-evidence link. Read the
 line-level guidance in scripts/academic_style.py output and revise only where the
 scientific context supports the change; never perform blind synonym replacement.
+Lead the abstract and conclusion with the preregistered primary finding and
+strongest supported contribution; a secondary or null result needs headline
+treatment only when it changes the main claim, validity, safety or scope. Keep
+every registered result locatable in the results or supplement. Never omit,
+soften or demote an experiment because its result is unfavorable or contentious;
+use only predeclared role, relevance and statistical adequacy for placement and
+cross-reference supplement material. State material limitations once, calmly and
+where they qualify interpretation; remove only generic or repeated defenses.
 Use the audit as a writing-quality control only. Never optimize against an AI
 detector, claim human-only authorship, conceal assistance or weaken the required
 AI-use disclosure.
@@ -539,6 +547,14 @@ reproduction records. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
 
+At G5 compare the experiment registry and claim-evidence matrix with the
+manuscript and supplement. Block direction-dependent omission or demotion and
+any missing primary outcome, falsification test, required baseline, material
+robustness failure or result that changes interpretation. Supplement placement
+requires a role-, relevance- or adequacy-based rationale plus a main-text cross-reference.
+Require every material limitation once, but do not demand
+repeated apologetic caveats.
+
 At G2/G5 also block a six-paper portfolio with fewer than three Q1 targets, any
 target below Q2, a candidate below its paper-specific target, or any attempt to
 use a Q2 venue target to justify weaker evidence. For figures, block chart junk,
@@ -581,6 +597,10 @@ problems by rule and line without changing supported meaning, numbers, equations
 citations, registered uncertainty or limitations. Do not replace terminology
 merely to vary vocabulary. Preserve the AI-use disclosure. Do not target a
 detector score or disguise AI assistance.
+Do not resolve a review or style finding by hiding an unfavorable result,
+demoting an experiment based on direction, or deleting a material limitation.
+Keep registered results locatable and express each necessary limitation once in
+the location where it changes interpretation.
 """
 
 

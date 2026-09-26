@@ -17,6 +17,15 @@ Use blinded actor-critic passes:
 6. Revise scientific claims only when evidence supports the change; never polish away a substantive limitation.
 7. Run a second clean review that cannot see the desired answer.
 
+Audit result placement as well as wording. Compare the experiment registry,
+claim-evidence matrix, manuscript and supplement for direction-dependent
+omission or demotion. Block any missing primary outcome, falsification test,
+required baseline, material robustness failure, or result that changes
+interpretation. Accept supplement placement only when predeclared role,
+relevance or statistical adequacy justifies it and the main text cross-references
+it. Do not demand repeated apologetic caveats; require each material limitation
+once in the location where it changes interpretation.
+
 Claude review text is an internal control record only. Codex/OpenAI must independently write all persistent revision text and response materials; never copy sentences from the Claude audit.
 
 Before revision, snapshot the canonical manuscript tree under `reviews/revision-base/`; API cycles do this automatically before the writer changes an existing manuscript. After revision, run `scripts/revision_trace.py` to prove that promised changes exist, and `scripts/revision_integrity.py` to detect numeric, citation and claim-strength drift. Any protected change must exactly match a named human authorization in `reviews/revision-authorizations.json`; the checker never silently approves a strengthened claim.
