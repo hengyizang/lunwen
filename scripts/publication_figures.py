@@ -109,10 +109,15 @@ def validate_spec(spec: dict[str, Any]) -> None:
             if (panel.get("kind") == "forest" and field == "x") or (panel.get("kind") == "correlation" and field in {"x", "y"}):
                 continue
             _english_text(panel.get(field), f"{prefix}.{field}")
-        if panel.get("kind") in {"sankey", "confusion"}:
+        if panel.get("kind") in {"sankey", "confusion", "network", "chord", "shap_summary", "geospatial"}:
             _english_text(panel.get("value"), f"{prefix}.value")
-        if panel.get("kind") == "dumbbell":
+        if panel.get("kind") in {"dumbbell","nomogram"}:
             _english_text(panel.get("end"), f"{prefix}.end")
+        if panel.get("kind") == "kaplan_meier":
+            _english_text(panel.get("risk"), f"{prefix}.risk")
+        if panel.get("kind") == "bland_altman":
+            for field in ("mean_difference","loa_lower","loa_upper"):
+                if not isinstance(panel.get(field),(int,float)) or isinstance(panel.get(field),bool):raise FigureSpecError(f"{prefix}.{field} must be numeric")
         if panel.get("kind") == "forest":
             for field in ("label", "ci_low", "ci_high"):
                 _english_text(panel.get(field), f"{prefix}.{field}")

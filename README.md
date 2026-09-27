@@ -1,6 +1,8 @@
-# Doctoral Research OS v2.2.0
+# Doctoral Research OS v2.3.0
 
-新增的 29 类科研绘图、研究架构图、系统综述筛选/PRISMA、Zotero/Obsidian 本地索引、按页 PDF 阅读/翻译和组会 PPT、paper-facts 与测量审查、审稿 concern cards、分层 API 任务、可选 GPT Image 概念图和独立 Skill 清单，见 [`docs/NEW-CAPABILITIES.md`](docs/NEW-CAPABILITIES.md)。均为现有 G0–G5 控制层的增量能力；未运行的真实 API、用户账号和论文图件不会被宣称为已验收。
+新增的 37 类科研绘图、类型化研究架构图、协议/双人筛选/偏倚风险/PRISMA 导出、Zotero Local API 与 Obsidian 图、本地 PDF/PPT、paper-facts/测量/段落/符号审查、审稿 concern cards 与编辑摘要、健康感知分层模型路由、真实 DOCX 和独立 Skill/MCP 管理，见 [`docs/NEW-CAPABILITIES.md`](docs/NEW-CAPABILITIES.md)。均为现有 G0–G5 控制层的增量能力；未运行的真实 API、用户账号、人工筛选和六篇实际论文不会被宣称为已完成。
+
+P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [`docs/P0-P1-COMPLETION.md`](docs/P0-P1-COMPLETION.md)，机器可读追踪表见 `config/requirements-traceability.json`。
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
@@ -12,14 +14,14 @@
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
 - G1 强制最接近的 5 项既有研究、3 个相邻领域、反证与剩余原创性风险；G2 对全部论文两两检查，六篇时必须覆盖 15 组比较，阻止“切香肠”。
 - G1 还强制逐条 `novelty-claim-matrix`：每项原创性主张至少对照 3 项最近工作，明确已知部分、精确差异、机制、证伪试验、若为假时的预期、边界和剩余风险；前向/后向引文追踪及连续两轮无实质新增才算检索饱和。
-- G1 真实调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、DBLP、HAL 和 OpenCitations，保存原始响应与规范化结果哈希；Web of Science/Scopus 仅导入本地授权导出。每条检索必须由具名人员筛选，模型不能自填检索证据。
+- G1 默认真实调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、DBLP、HAL 和 OpenCitations；另提供有密钥、配额受控的 SerpApi Google Scholar 补充检索。全部路径保存原始响应与规范化结果哈希；Web of Science/Scopus 仅导入本地授权导出。每条检索必须由具名人员筛选，模型不能自填检索证据。
 - Theme B 是独立硬闸门：独立问题、claim、论文、主证据、证伪条件和失败后退路都必须明确，且 Theme A 失败时仍能成立。
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - G3 对表格、图像、WAV、NumPy、HDF5 与 Parquet 生成本地哈希绑定质量报告；未知格式或缺失内容处理器会阻断。每篇论文必须有 `statsmodels` 或至少 1,000 次 Monte Carlo 的可执行功效证据，Monte Carlo 由控制层在两个干净目录中重跑并精确比对。
 - 六篇期刊组合固定为至少三篇当前 JCR Q1 SCI/SCIE、其余最低 Q2，且 JIF 均须大于 1.0；Q2 只改变期刊目标，不降低博士级新颖性、实验、统计、复现、审稿或写作阈值。完整候选库从本地授权 JCR 导出生成；二次筛选按范围、文章类型、受众、分区、实务、费用和声誉分项计分，保留风险证据，并为每篇形成仍满足其分区底线的 challenge/target/safety 组合。
 - 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
 - G5 在 Codex 首稿和修订后自动执行自然学术表达审计。内置规则选取 `avoid-ai-writing`、`vale-ai-tells`、`No AI Slop` 与 `Anti-Defensive Writing` 中适合学术英文且不损害科研诚信的部分，逐行检查模板化套话、空洞拔高、含糊归因、失准断言、机械结构、重复、防御性开场和异常均匀的节奏；真实限制、不确定性、负结果和披露不会被自动删除。可选 `proselint` 与 Harper 只在本地追加语法建议。该模块不计算“AI率”或规避检测器。
-- G5 叠加摘要级 claim verification、审稿承诺落稿检查和修订漂移检查：`ref-verify` 只核对 DOI 绑定的主结论/数值与摘要，机制/方法/表图仍须全文证据；数字、引用或主张强度变化必须与具名人工授权精确一致。
+- G5 叠加摘要级 claim verification、paper-facts/理论测量/五区段/术语符号一致性、concern cards/编辑摘要、审稿承诺落稿检查和修订漂移检查：`ref-verify` 只核对 DOI 绑定的主结论/数值与摘要，机制/方法/表图仍须全文证据；数字、引用或主张强度变化必须与具名人工授权精确一致。Word 主稿必须有非 Claude 源文件收据和具名目视验收。
 - Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
@@ -35,7 +37,7 @@
 - PaperQA2 与 ToolUniverse 作为按课题启用的成熟 AI4Science 上游；默认关闭。可执行适配器会真实调用官方 CLI/dictionary API，登记成功、失败、超时、包版本、输入完整性、stdout/stderr 和结果哈希，并始终保持“仅建议、需人工核验”。
 - 开放全文解析器联合 OpenAlex、Unpaywall 与 Crossref 生成合法全文候选，不绕过访问控制，也不把元数据中的许可声明自动当作下载授权。
 - SciencePro 无 API 时可把人工下载的 PDF/DOCX/CSV/BibTeX 导入 Git 忽略的私有区；系统提取 DOI/HTTPS 线索并生成哈希收据，结论始终标记为需要独立核验。
-- 高级科研绘图器用 Python 从登记数据确定性生成 SVG/PDF 与至少 300 DPI PNG，内置多面板折线、散点、柱状、热图和森林图，采用色盲安全配色、颜色+标记+线型冗余编码、英文标签、替代文本、claim 绑定和输出哈希；禁止用装饰性 3D 图替代证据。
+- 高级科研绘图器用 Python 从登记数据确定性生成 SVG/PDF 与至少 300 DPI PNG，覆盖 37 类常见 SCI 图，包括分布/不确定性/诊断/生存/校准/Bland–Altman/SHAP/nomogram/decision curve/network/chord/geospatial，采用英文标签、替代文本、claim 绑定和输出哈希；禁止用装饰性 3D 图替代证据。
 - GitHub Actions 在 Python 3.10/3.12/3.13 上运行确定性回归；每周和手动工作流真实调用全部公开文献接口，并用 digest 固定镜像验证 Docker 隔离。WSL2 本机验收另存环境与原始调用证据，Linux CI 不冒充 WSL2。
 - BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有人类核验记录。
 - 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
@@ -66,24 +68,24 @@ Claude Code 和 Codex CLI 保留为可选高级接口；系统的科研状态和
 
 ## 安装
 
-Windows 11 推荐 WSL2 Ubuntu，并把仓库放在 Linux 文件系统（如 `~/code`），不要放在 `/mnt/c`。C 盘空间紧张时，按 [`docs/WSL2-D-DRIVE.md`](docs/WSL2-D-DRIVE.md) 把 WSL2 与 Docker 数据放到 D 盘。
+Windows 11 推荐 WSL2 Ubuntu。本项目按用户要求采用严格 D 盘策略：仓库、虚拟环境、缓存、WSL2、交换文件与 Docker 数据都位于 `D:\ad\lunwen`。先按 [`docs/WSL2-D-DRIVE.md`](docs/WSL2-D-DRIVE.md) 设置 WSL/Docker，再运行安装脚本。
 
 ```powershell
-wsl --install -d Ubuntu
+New-Item -ItemType Directory -Force D:\ad\lunwen
+Set-Location D:\ad\lunwen
+git clone https://github.com/hengyizang/lunwen.git .
+powershell -ExecutionPolicy Bypass -File .\scripts\install-d-drive.ps1
 ```
 
 ```bash
-mkdir -p ~/code
-cd ~/code
-git clone https://github.com/hengyizang/lunwen.git
-cd lunwen
-bash scripts/bootstrap-wsl.sh
+cd /mnt/d/ad/lunwen
+bash scripts/bootstrap-d-drive.sh
 ```
 
 可选安装本地英文 prose linter（BSD-3-Clause，精确锁定 v0.16.0）：
 
 ```bash
-cd ~/code/lunwen
+cd /mnt/d/ad/lunwen
 bash scripts/bootstrap-wsl.sh --with-writing-tools
 ```
 

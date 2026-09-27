@@ -1,89 +1,80 @@
-# 把 WSL2、Docker 与项目放在 D 盘
+# 将整个运行环境固定到 `D:\ad\lunwen`
 
-目标是让发行版虚拟磁盘、WSL 交换文件和 Docker 镜像数据都不占用 C 盘，同时
-保持 Linux 工具链的性能和权限语义。以下命令在 Windows PowerShell 中运行；
-Linux 命令只在 WSL2 Ubuntu 中运行。
+本项目的严格 D 盘策略是：仓库、Python 虚拟环境、pip/模型/工具缓存、WSL2 发行版、交换文件、Docker Desktop 磁盘和验收输出都必须位于 `D:\ad\lunwen` 下。安装脚本发现关键路径仍在 C 盘时会停止，不会悄悄继续。
 
-## 新安装：直接指定 D 盘
+## 仓库与最终安装命令
 
-先创建目录，再安装到指定位置：
+在管理员或普通 Windows PowerShell（按本机 WSL 安装权限）中运行：
+
+```powershell
+New-Item -ItemType Directory -Force D:\ad\lunwen
+Set-Location D:\ad\lunwen
+git clone https://github.com/hengyizang/lunwen.git .
+```
+
+完成下方 WSL2 与 Docker Desktop 设置后，再从该目录运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-d-drive.ps1
+```
+
+脚本只接受仓库根目录正好为 `D:\ad\lunwen`。它会创建 `.runtime`，检查 WSL 发行版注册位置和 Docker Desktop 磁盘位置，写入本机 Docker 位置收据，然后在 WSL 中调用 `scripts/bootstrap-d-drive.sh`。Python 环境和缓存位于仓库内，不写入 C 盘用户缓存。
+
+## WSL2 位于 D 盘
+
+新安装可用当前 WSL 的 `--location`：
 
 ```powershell
 wsl --update
-New-Item -ItemType Directory -Force D:\WSL\Ubuntu
-wsl --install -d Ubuntu --location D:\WSL\Ubuntu
+New-Item -ItemType Directory -Force D:\ad\lunwen\.runtime\wsl\Ubuntu
+wsl --install -d Ubuntu --location D:\ad\lunwen\.runtime\wsl\Ubuntu
 ```
 
-`--location` 是 WSL 的正式安装位置参数。若本机的 `wsl --help` 尚未显示它，先
-更新 WSL；不要继续一个无法确认目标位置的安装。
+若 `wsl --help` 尚未显示 `--location`，先更新 WSL。已有发行版使用保守的导出/导入路径；验证新实例完整前不要注销旧实例：
 
-在 `%UserProfile%\.wslconfig` 中把 WSL2 交换文件也放到 D 盘，并为以后新安装
-的发行版指定默认根目录：
+```powershell
+wsl --shutdown
+New-Item -ItemType Directory -Force D:\ad\lunwen\.runtime\wsl\backup
+wsl --export Ubuntu D:\ad\lunwen\.runtime\wsl\backup\ubuntu.tar
+wsl --import Ubuntu-D D:\ad\lunwen\.runtime\wsl\Ubuntu-D D:\ad\lunwen\.runtime\wsl\backup\ubuntu.tar --version 2
+wsl -d Ubuntu-D
+```
+
+将 `%UserProfile%\.wslconfig` 中的交换文件设置为：
 
 ```ini
 [wsl2]
 swap=4GB
-swapFile=D:\\WSL\\swap.vhdx
+swapFile=D:\\ad\\lunwen\\.runtime\\wsl\\swap.vhdx
 
 [general]
-distributionInstallPath=D:\\WSL
+distributionInstallPath=D:\\ad\\lunwen\\.runtime\\wsl
 ```
 
-保存后执行：
+保存后运行 `wsl --shutdown`。此 Windows 配置文件本身很小且由 WSL 固定读取；大体积交换文件仍在 D 盘。
 
-```powershell
-wsl --shutdown
+## Docker Desktop 位于 D 盘
+
+在 Docker Desktop 的 **Settings → Resources → Advanced → Disk image location** 中选择：
+
+```text
+D:\ad\lunwen\.runtime\docker-desktop
 ```
 
-`distributionInstallPath` 影响之后安装的发行版，不会自动搬迁已经存在的发行版。
+等待 Docker Desktop 自己完成迁移，不要手工移动正在使用的 VHDX。重新启动后运行安装脚本；只有设置路径和磁盘文件都指向 D 盘，脚本才写入 `.runtime/docker-location.json`。之后 `run-wsl-acceptance.sh` 会复核该收据。
 
-## 已有发行版：先导出，再导入 D 盘
+## WSL 内路径
 
-这是保守迁移方式；在新实例验证成功前保留旧实例：
-
-```powershell
-wsl --shutdown
-New-Item -ItemType Directory -Force D:\WSL\backup
-wsl --export Ubuntu D:\WSL\backup\ubuntu.tar
-wsl --import Ubuntu-D D:\WSL\Ubuntu-D D:\WSL\backup\ubuntu.tar --version 2
-wsl -d Ubuntu-D
-```
-
-进入 `Ubuntu-D` 后检查用户文件、Git、Python 和网络。只有确认新实例完整、备份
-可读且默认用户设置正确后，才考虑自行注销旧实例。注销会删除旧实例，本文不将
-它放入自动步骤。
-
-## Docker Desktop 数据
-
-Docker Desktop 默认可能把虚拟磁盘留在 C 盘。在 Docker Desktop 打开
-**Settings → Resources → Advanced → Disk image location**，选择例如
-`D:\DockerData`，等待迁移完成，再运行：
-
-```powershell
-wsl --shutdown
-```
-
-重新启动 Docker Desktop，在 WSL2 中验证 `docker info`。不要手工移动 Docker
-正在使用的 VHDX。
-
-## 仓库与项目数据
-
-即使发行版物理上位于 D 盘，仓库仍应放在发行版自己的 Linux 文件系统：
+从 WSL 进入 Windows 仓库：
 
 ```bash
-mkdir -p ~/code
-cd ~/code
-git clone https://github.com/hengyizang/lunwen.git
-cd lunwen
-bash scripts/bootstrap-wsl.sh --with-ai4science --with-figures
+cd /mnt/d/ad/lunwen
+bash scripts/bootstrap-d-drive.sh
 ```
 
-`~/code/lunwen` 此时已经实际占用 D 盘发行版虚拟磁盘。不要为了“放到 D 盘”改成
-`/mnt/d/lunwen`；Windows 挂载目录通常在大量小文件、权限和文件监控方面更差。
-大体积、只读的人工导入数据可以先放在 `D:\Research`，再通过 `/mnt/d/Research`
-显式导入到项目受控目录。
+这是有意采用的严格物理位置策略。`/mnt/d` 对大量小文件可能慢于 ext4 VHDX，但能最直接保证仓库、环境和缓存都落在指定的 D 盘目录；若性能不足，可把整个 WSL 发行版 VHDX 仍放在 `D:\ad\lunwen\.runtime\wsl`，同时保持脚本要求的项目根目录不变。
 
-完成后按 [`LIVE-ACCEPTANCE.md`](LIVE-ACCEPTANCE.md) 执行真实环境验收。
+安装完成后按 [`LIVE-ACCEPTANCE.md`](LIVE-ACCEPTANCE.md) 在真实 WSL2/Docker 环境验收。
 
 官方参考：
 

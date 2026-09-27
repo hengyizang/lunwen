@@ -26,9 +26,11 @@ Interpret the request as one of:
 - `api-tasks <slug>`: preflight a bounded auxiliary API task before any paid execution;
 - `skill-catalog`: inventory project/global Skills without changing them.
 
+For a natural chat request, use the project MCP server in `.mcp.json` to call `research_route` or `research_status` first. These tools are deliberately zero-cost and cannot approve gates, start paid calls or submit. Then read the routed Skill and continue through the existing state machine.
+
 Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Default to the external API worker so this Codex conversation remains a thin manager; do not invoke `autopilot.py`, Claude Code or Codex CLI unless the user explicitly requests CLI mode. Claude is restricted to read-only semantic planning and internal independent audits. GPT/OpenAI independently writes and remediates every persistent text artifact and plotting specification; `scripts/publication_figures.py` renders final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Preserve the configured CNY hard budgets and exact-request cache. Never edit gate approvals by hand. Never approve a gate for the user.
 
-At G2, run `scripts/journal_screening.py` and retain decomposed scores, official evidence, risks and challenge/target/safety roles. At G5, follow `skills/citations/SKILL.md`, route the applicable reporting guideline, snapshot the pre-revision manuscript, then run `scripts/ref_verify_adapter.py`, `scripts/reporting_checklist.py`, `scripts/revision_trace.py` and `scripts/revision_integrity.py`. Abstract support is never full-text support. Numeric, citation or claim-strength drift needs exact named human authorization.
+At G2, run `scripts/journal_screening.py` and retain decomposed scores, official evidence, risks and challenge/target/safety roles. At G5, follow `skills/citations/SKILL.md`, route the applicable reporting guideline, snapshot the pre-revision manuscript, then run `scripts/ref_verify_adapter.py`, `scripts/reporting_checklist.py`, `scripts/manuscript_audit.py`, `scripts/rebuttal_triage.py`, `scripts/revision_trace.py` and `scripts/revision_integrity.py`. Abstract support is never full-text support. Numeric, citation or claim-strength drift needs exact named human authorization. A Word path additionally requires a current `reviews/docx-build.json` and named final visual approval.
 
 For new bounded capabilities, read the matching Skill under `skills/figures`, `skills/systematic-review`, `skills/paper-audit`, `skills/library-import`, `skills/api-tasks` or `skills/skill-catalog`. Their outputs are complements to the existing state machine, never alternative approvals. A user-triggered ChatGPT-web task may yield a manually imported, hash-bound artifact; do not treat a consumer browser session as an unattended API or a source of experimental truth.
 
@@ -54,3 +56,5 @@ When acting as the independent critic:
 Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude. Measured figures remain deterministic; GPT Image may supply only explicitly labeled conceptual illustrations after human inspection and disclosure.
 
 Never invent missing data, citations or results. Packaging is local-only: never request portal credentials, upload files or auto-submit.
+
+On Windows/WSL, keep the repository, virtual environment, caches, adapter corpora and Docker data under `D:\ad\lunwen` (`/mnt/d/ad/lunwen`). Use `scripts/install-d-drive.ps1`; stop if WSL or Docker data still resolve to C: instead of silently consuming it.

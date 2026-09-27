@@ -5,6 +5,8 @@
 承担。Claude 只做不可发表的规划与独立审查，不能写正文、图表文字或任何最终
 投稿产物。
 
+首次使用时先在 Windows PowerShell 从仓库根目录 `D:\ad\lunwen` 运行 `scripts\install-d-drive.ps1`。它把项目环境和缓存放在 D 盘，并检查 WSL2 与 Docker Desktop 的大体积数据没有留在 C 盘。项目 `.mcp.json` 注册的 `doctoral-research-os` 只提供零成本的 `research_route` 和 `research_status`：它根据自然语言选择 Skill、读取阶段，但不能启动付费调用、批准闸门或投稿。
+
 ## 推荐说法
 
 首次开始：
@@ -42,6 +44,7 @@
 - 只有端点、模型、协议、参数、system prompt 和用户 prompt 全部完全相同时才使用
   零成本缓存，不用相似缓存冒充新审查。
 - 项目与单篇硬预算默认分别为 300 元和 60 元；达到上限会在调用前阻断。
+- 辅助任务按最低质量层、科研风险、24 小时端点健康和精确人民币单价路由；高风险科学判断不会仅按最低价格选择。
 
 查看实际费用不产生模型调用：
 
@@ -50,7 +53,7 @@ python3 scripts/api_orchestrator.py cost my-phd
 python3 scripts/api_orchestrator.py cost my-phd --paper P01
 ```
 
-直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts 和理论测量链”“把审稿意见拆成 concern cards”“先估算一次低成本抽取任务”等，Codex 会路由至仓库内对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
+直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts、理论测量链和数学符号”“把审稿意见拆成 concern cards 和编辑摘要”“把 Markdown 转成需要人工目视验收的 Word 主稿”“先估算一次低成本抽取任务”等，Codex 会先经 MCP 零成本路由，再使用对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
 
 当你明确要求、且当前 ChatGPT Work/桌面浏览器可用时，可以人工登录网页工具、导出合法文件，再由脚本导入并记录哈希。ChatGPT 网页版不是后台 API，不复用 Cookie 或绕过验证码；Codex CLI 不自动共享网页会话。GPT Image 的概念插图需额外人工检查和 AI 使用披露。
 

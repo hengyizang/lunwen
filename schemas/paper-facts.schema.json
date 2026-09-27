@@ -2,14 +2,16 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Located paper facts and argument audit input",
   "type": "object", "additionalProperties": false,
-  "required": ["schema_version", "facts", "claim_alignment", "measurement", "argument_ledger", "glossary"],
+  "required": ["schema_version", "facts", "claim_alignment", "measurement", "argument_ledger", "glossary", "symbols", "ignored_symbols"],
   "properties": {
     "schema_version": {"const": "1.0"},
     "facts": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "statement", "source_path", "source_sha256", "location", "verbatim_evidence"], "properties": {"id": {"type": "string"}, "statement": {"type": "string"}, "source_path": {"type": "string"}, "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "location": {"type": "string"}, "verbatim_evidence": {"type": "string"}}}},
-    "claim_alignment": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["claim_id", "research_question", "allowed_inference", "evidence_ids", "sections"], "properties": {"claim_id": {"type": "string"}, "research_question": {"type": "string"}, "allowed_inference": {"type": "string"}, "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "sections": {"type": "object", "required": ["title", "abstract", "question", "results", "conclusion"]}}}},
+    "claim_alignment": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["claim_id", "research_question", "canonical_claim", "allowed_inference", "claim_strength", "result_status", "evidence_ids", "sections"], "properties": {"claim_id": {"type": "string"}, "research_question": {"type": "string"}, "canonical_claim": {"type":"string","minLength":1}, "allowed_inference": {"enum":["descriptive","association","prediction","causal","mechanism"]}, "claim_strength": {"enum":["descriptive","association","prediction","causal","mechanism"]}, "result_status":{"enum":["supported","partially_supported","not_supported","contradicted","inconclusive"]}, "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "sections": {"type": "object", "required": ["title", "abstract", "question", "results", "conclusion"], "properties":{"title":{"type":"string","minLength":1},"abstract":{"type":"string","minLength":1},"question":{"type":"string","minLength":1},"results":{"type":"string","minLength":1},"conclusion":{"type":"string","minLength":1}}}}}},
     "measurement_not_applicable_reason": {"type": "string"},
     "measurement": {"type": "array", "items": {"type": "object", "required": ["construct_id", "definition", "operationalization", "measurement_item", "coding_rule", "analysis_id", "claim_id", "validity_risk", "evidence_ids"]}},
     "argument_ledger": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["paragraph_id", "section", "function", "claim_id", "inference_boundary", "transition", "evidence_ids"]}},
-    "glossary": {"type": "array", "items": {"type": "object", "required": ["term", "definition", "first_use", "forbidden_variants"]}}
+    "glossary": {"type": "array", "items": {"type": "object", "required": ["term", "definition", "first_use", "forbidden_variants"]}},
+    "symbols": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["symbol","definition","first_use","unit","forbidden_variants"],"properties":{"symbol":{"type":"string","pattern":"^(\\\\[A-Za-z]+|[A-Za-z])$"},"definition":{"type":"string","minLength":1},"first_use":{"type":"string","minLength":1},"unit":{"type":"string","minLength":1},"forbidden_variants":{"type":"array","items":{"type":"string","minLength":1}}}}},
+    "ignored_symbols":{"type":"array","items":{"type":"string","pattern":"^(\\\\[A-Za-z]+|[A-Za-z])$"}}
   }
 }

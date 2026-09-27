@@ -27,19 +27,59 @@ except ImportError:
 
 ACRONYM = re.compile(r"\b[A-Z][A-Z0-9]{1,7}s?\b")
 SECTION = {"title","abstract","question","results","conclusion"}
+MATH_BLOCK=re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$|\\\(.*?\\\)|\\\[.*?\\\]",re.S)
+MATH_TOKEN=re.compile(r"\\(?:alpha|beta|gamma|delta|epsilon|theta|lambda|mu|sigma|tau|phi|psi|omega)|(?<!\\)[A-Za-z]")
+RESULT_STATUSES={"supported","partially_supported","not_supported","contradicted","inconclusive"}
+INFERENCE_LEVELS={"descriptive":0,"association":1,"prediction":2,"causal":3,"mechanism":4}
 
 
 def _nonempty(item: dict[str, Any], fields: tuple[str, ...], errors: list[str], prefix: str)->None:
     for field in fields:
         if not str(item.get(field,"")).strip():errors.append(f"{prefix}.{field} is required")
 
+def _section_key(heading:str)->str|None:
+    value=re.sub(r"[^a-z ]+"," ",heading.lower())
+    if "abstract" in value:return "abstract"
+    if any(x in value for x in ("research question","objective","aim","introduction")):return "question"
+    if any(x in value for x in ("result","finding","analysis")):return "results"
+    if any(x in value for x in ("conclusion","discussion")):return "conclusion"
+    return None
+def _section_buckets(manuscript:Path)->dict[str,str]:
+    buckets={key:"" for key in SECTION};suffix=manuscript.suffix.lower()
+    if suffix==".tex":
+        raw=manuscript.read_text(encoding="utf-8");title=re.search(r"\\title\s*\{([^{}]+)\}",raw,re.S);abstract=re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}",raw,re.S)
+        if title:buckets["title"]=title.group(1)
+        if abstract:buckets["abstract"]=abstract.group(1)
+        markers=list(re.finditer(r"\\(?:section|subsection)\*?\{([^{}]+)\}",raw,re.S))
+        for i,marker in enumerate(markers):
+            key=_section_key(marker.group(1));end=markers[i+1].start() if i+1<len(markers) else len(raw)
+            if key:buckets[key]+="\n"+raw[marker.end():end]
+    elif suffix in {".md",".markdown"}:
+        raw=manuscript.read_text(encoding="utf-8");markers=list(re.finditer(r"(?m)^#{1,6}\s+(.+?)\s*$",raw))
+        for i,marker in enumerate(markers):
+            key="title" if i==0 and marker.group(0).startswith("# ") else _section_key(marker.group(1));end=markers[i+1].start() if i+1<len(markers) else len(raw)
+            if key:buckets[key]+="\n"+marker.group(1)+"\n"+raw[marker.end():end]
+    elif suffix==".docx":
+        try:
+            from docx import Document
+            current=None
+            for paragraph in Document(manuscript).paragraphs:
+                content=paragraph.text.strip();style=str(paragraph.style.name or "").lower()
+                if not content:continue
+                if "title" in style and not buckets["title"]:buckets["title"]=content;current=None;continue
+                if "heading" in style:current=_section_key(content);continue
+                if current:buckets[current]+="\n"+content
+        except (ImportError,OSError,ValueError):pass
+    return buckets
+
 
 def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
     config=json.loads(spec.read_text(encoding="utf-8"))
     text=extract_text(manuscript)
+    section_buckets=_section_buckets(manuscript);symbol_text=manuscript.read_text(encoding="utf-8") if manuscript.suffix.lower()==".tex" else text
     errors=[]; warnings=[]; fact_ids=set();claim_ids=set()
     if config.get("schema_version")!="1.0":errors.append("schema_version must be 1.0")
-    for name in ("facts", "claim_alignment", "measurement", "argument_ledger", "glossary"):
+    for name in ("facts", "claim_alignment", "measurement", "argument_ledger", "glossary", "symbols"):
         if not isinstance(config.get(name), list):
             errors.append(f"{name} must be an array")
             config[name]=[]
@@ -69,7 +109,12 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
         identifier=str(link.get("claim_id",""))
         if identifier in claim_ids:errors.append(f"duplicate claim alignment: {identifier}")
         claim_ids.add(identifier)
-        _nonempty(link,("claim_id","research_question","allowed_inference","evidence_ids"),errors,"alignment")
+        _nonempty(link,("claim_id","research_question","canonical_claim","allowed_inference","claim_strength","result_status","evidence_ids"),errors,"alignment")
+        allowed=str(link.get("allowed_inference","")).lower();strength=str(link.get("claim_strength","")).lower()
+        if allowed not in INFERENCE_LEVELS:errors.append(f"{identifier}: invalid allowed_inference")
+        if strength not in INFERENCE_LEVELS:errors.append(f"{identifier}: invalid claim_strength")
+        elif allowed in INFERENCE_LEVELS and INFERENCE_LEVELS[strength]>INFERENCE_LEVELS[allowed]:errors.append(f"{identifier}: claim_strength exceeds allowed_inference")
+        if link.get("result_status") not in RESULT_STATUSES:errors.append(f"{identifier}: invalid result_status")
         evidence_ids=link.get("evidence_ids")
         if not isinstance(evidence_ids,list) or not evidence_ids or any(not isinstance(id_,str) for id_ in evidence_ids):
             errors.append(f"{identifier}: evidence_ids must be a nonempty array of fact IDs")
@@ -80,9 +125,9 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
         else:
             for section, phrase in locations.items():
                 if section not in SECTION:continue
-                if phrase and phrase not in text:
-                    errors.append(f"{identifier}: {section} anchor absent from manuscript")
-                if not phrase:warnings.append(f"{identifier}: {section} does not explicitly state the claim")
+                if not str(phrase).strip():errors.append(f"{identifier}: {section} needs a non-empty anchor")
+                elif not section_buckets.get(section):errors.append(f"{identifier}: cannot locate the manuscript {section} region")
+                elif phrase not in section_buckets[section]:errors.append(f"{identifier}: {section} anchor is outside the declared manuscript region")
     for chain in config.get("measurement",[]):
         _nonempty(chain,("construct_id","definition","operationalization","measurement_item",
                          "coding_rule","analysis_id","claim_id","validity_risk"),errors,"measurement")
@@ -116,18 +161,34 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
     for acronym in sorted(acronyms):
         if len(re.findall(r"\b"+re.escape(acronym)+r"\b",text))>=2:
             warnings.append(f"unlisted acronym: {acronym}")
+    declared=set()
+    for entry in config.get("symbols",[]):
+        _nonempty(entry,("symbol","definition","first_use","unit"),errors,"symbol");symbol=str(entry.get("symbol","")).strip();first=str(entry.get("first_use","")).strip()
+        if not re.fullmatch(r"(?:\\[A-Za-z]+|[A-Za-z])",symbol):errors.append(f"symbol {symbol!r}: use one canonical Latin or LaTeX Greek token");continue
+        if symbol in declared:errors.append(f"duplicate symbol definition: {symbol}")
+        declared.add(symbol)
+        if first and first not in symbol_text:errors.append(f"symbol {symbol}: first-use definition not found")
+        for variant in entry.get("forbidden_variants",[]):
+            if str(variant) and str(variant) in symbol_text:errors.append(f"symbol {symbol}: inconsistent variant {variant!r}")
+    ignored_symbols=config.get("ignored_symbols",[])
+    if not isinstance(ignored_symbols,list) or any(not isinstance(x,str) for x in ignored_symbols):errors.append("ignored_symbols must be an array of canonical symbol tokens");ignored_symbols=[]
+    used=set()
+    for block in MATH_BLOCK.findall(symbol_text):used.update(MATH_TOKEN.findall(block))
+    undeclared=sorted(used-declared-set(ignored_symbols)-{"e","i"})
+    if undeclared:errors.append("undeclared mathematical symbols: "+", ".join(undeclared))
+    unused=sorted(declared-used)
+    if unused:warnings.append("declared symbols not found in a math expression: "+", ".join(unused))
     return {"schema_version":"1.0","manuscript_sha256":manuscript_digest(manuscript),
             "spec_sha256":sha256_file(spec),"fact_count":len(fact_ids),"claim_count":len(claim_ids),
             "measurement_chains":len(config.get("measurement",[])),"paragraphs":len(config.get("argument_ledger",[])),
-            "errors":errors,"warnings":warnings,"pass":not errors,
+            "symbol_count":len(declared),"used_math_symbols":sorted(used),"section_regions_found":sorted(k for k,v in section_buckets.items() if v.strip()),"errors":errors,"warnings":warnings,"pass":not errors,
             "human_review_required":True}
 
 
 def validate_saved_report(paper: Path) -> list[str]:
-    """Check a present ledger at G5 without breaking older projects without it."""
+    """Require and recompute the full fact/alignment/measurement/symbol audit at G5."""
     spec=paper/"reviews"/"paper-facts.json"
     output=paper/"reviews"/"manuscript-audit.json"
-    if not spec.is_file() and not output.is_file():return []
     if not spec.is_file() or not output.is_file():return ["paper-facts input and manuscript audit must both exist"]
     try:
         current=audit(paper.parent.parent,canonical_manuscript(paper),spec)
@@ -136,7 +197,7 @@ def validate_saved_report(paper: Path) -> list[str]:
         return [f"cannot validate paper-facts audit: {exc}"]
     errors=[]
     if not current["pass"]:errors.extend(current["errors"])
-    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs"):
+    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs","symbol_count","used_math_symbols","section_regions_found"):
         if saved.get(key)!=current.get(key):errors.append(f"stale paper-facts audit field: {key}")
     return errors
 

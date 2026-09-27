@@ -176,8 +176,15 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertEqual(payload, b"{}")
         self.assertEqual(status, 200)
         self.assertEqual(len(calls), 3)
-        self.assertTrue(all(item["Accept"] == "application/atom+xml" for item in calls))
-        self.assertEqual([item.args[0] for item in sleep.call_args_list], [2, 5])
+        self.assertTrue(all("application/atom+xml" in item["Accept"] for item in calls))
+        self.assertEqual([item.args[0] for item in sleep.call_args_list], [5, 20])
+
+    def test_arxiv_identifier_uses_official_id_list_probe(self) -> None:
+        url = build_search_url("arxiv", "arxiv-id:1706.03762", 1)
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        self.assertEqual(query["id_list"], ["1706.03762"])
+        self.assertEqual(query["max_results"], ["1"])
+        self.assertNotIn("search_query", query)
 
     def test_failed_normalization_preserves_returned_raw_response(self) -> None:
         def fetcher(url: str, **_kwargs):
@@ -241,6 +248,99 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertEqual(len(works), 1)
         self.assertEqual(works[0]["doi"], "10.1000/example")
         self.assertEqual(works[0]["publication_year"], 2026)
+
+    def test_serpapi_google_scholar_is_normalized_without_persisting_key(self) -> None:
+        captured: dict[str, object] = {}
+
+        def fetcher(url: str, **kwargs):
+            captured["url"] = url
+            captured["headers"] = kwargs["headers"]
+            payload = json.dumps(
+                {
+                    "search_metadata": {"status": "Success"},
+                    "organic_results": [
+                        {
+                            "result_id": "scholar-result-1",
+                            "title": "Auditable machine learning for science",
+                            "link": "https://doi.org/10.1000/scholar-example",
+                            "snippet": "A result snippet returned by Google Scholar.",
+                            "publication_info": {
+                                "summary": "A Researcher, B Scientist - Example Journal, 2025",
+                                "authors": [
+                                    {"name": "A Researcher"},
+                                    {"name": "B Scientist"},
+                                ],
+                            },
+                        }
+                    ],
+                }
+            ).encode()
+            return payload, url, 200, "application/json"
+
+        secret = "serpapi-test-secret"
+        with tempfile.TemporaryDirectory() as directory, patch.dict(
+            "os.environ", {"SERPAPI_API_KEY": secret}, clear=True
+        ):
+            project = self.project(Path(directory))
+            receipt = execute_search(
+                project,
+                "serpapi-google-scholar",
+                "auditable machine learning",
+                query_family="supplemental-discovery",
+                date_range="all years",
+                filters="Google Scholar supplemental discovery",
+                limit=50,
+                fetcher=fetcher,
+            )
+            ledger = (project / "evidence" / "literature-api-ledger.jsonl").read_text()
+            normalized = json.loads(
+                (project / receipt["normalized_results_path"]).read_text()
+            )["works"]
+
+        transport_query = urllib.parse.parse_qs(
+            urllib.parse.urlsplit(str(captured["url"])).query
+        )
+        audit_query = urllib.parse.parse_qs(
+            urllib.parse.urlsplit(receipt["request_url"]).query
+        )
+        final_query = urllib.parse.parse_qs(
+            urllib.parse.urlsplit(receipt["final_url"]).query
+        )
+        self.assertEqual(transport_query["api_key"], [secret])
+        self.assertEqual(transport_query["num"], ["20"])
+        self.assertNotIn("api_key", audit_query)
+        self.assertNotIn("api_key", final_query)
+        self.assertNotIn(secret, ledger)
+        self.assertNotIn("api_key", captured["headers"])
+        self.assertEqual(receipt["result_count"], 1)
+        self.assertEqual(normalized[0]["doi"], "10.1000/scholar-example")
+        self.assertEqual(normalized[0]["publication_year"], 2025)
+        self.assertEqual(normalized[0]["authors"], ["A Researcher", "B Scientist"])
+
+    def test_serpapi_transport_errors_are_redacted_before_receipt(self) -> None:
+        secret = "serpapi-secret-that-must-not-leak"
+
+        def fetcher(url: str, **_kwargs):
+            raise OSError(f"HTTP Error 400 for {url}")
+
+        with tempfile.TemporaryDirectory() as directory, patch.dict(
+            "os.environ", {"SERPAPI_API_KEY": secret}, clear=True
+        ):
+            project = self.project(Path(directory))
+            with self.assertRaises(LiteratureEvidenceError) as raised:
+                execute_search(
+                    project,
+                    "serpapi-google-scholar",
+                    "machine learning",
+                    query_family="supplemental-discovery",
+                    date_range="all years",
+                    filters="Google Scholar supplemental discovery",
+                    limit=1,
+                    fetcher=fetcher,
+                )
+            ledger = (project / "evidence" / "literature-api-ledger.jsonl").read_text()
+        self.assertNotIn(secret, str(raised.exception))
+        self.assertNotIn(secret, ledger)
 
 
 if __name__ == "__main__":

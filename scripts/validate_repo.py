@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import sys
@@ -275,6 +276,8 @@ def main() -> int:
     )
     if codex.get("command") != "codex" or codex.get("args") != ["mcp-server"]:
         errors.append(".mcp.json: codex-review must run codex mcp-server")
+    research_mcp=mcp.get("mcpServers",{}).get("doctoral-research-os",{}) if isinstance(mcp,dict) else {}
+    if research_mcp.get("command")!="python3" or research_mcp.get("args")!=["scripts/research_mcp.py"]:errors.append(".mcp.json: doctoral-research-os server is required")
     try:
         start_script = (ROOT / "scripts" / "start.sh").read_text(encoding="utf-8")
     except OSError as exc:
@@ -295,6 +298,7 @@ def main() -> int:
         "docs/RESEARCH-QUALITY.md",
         "docs/CI-VALIDATION.md",
         "docs/LIVE-ACCEPTANCE.md",
+        "docs/P0-P1-COMPLETION.md",
         "scripts/research_quality.py",
         "schemas/novelty-claim-matrix.schema.json",
         "schemas/data-quality-report.schema.json",
@@ -317,6 +321,12 @@ def main() -> int:
         "scripts/live_acceptance.py",
         "scripts/venue_candidates.py",
         ".github/workflows/validate.yml",
+        "config/requirements-traceability.json",
+        "scripts/requirements_trace.py",
+        "scripts/install-d-drive.ps1",
+        "scripts/bootstrap-d-drive.sh",
+        "scripts/research_mcp.py",
+        "scripts/manuscript_docx.py",
     ):
         if not (ROOT / relative).is_file():
             errors.append(f"{relative} is required")
@@ -342,6 +352,11 @@ def main() -> int:
         for provider in ("uuapi-anthropic", "uuapi-openai"):
             if provider not in provider_source:
                 errors.append(f"scripts/ai_providers.py must support {provider}")
+    try:
+        trace_path=ROOT/"scripts"/"requirements_trace.py";spec=importlib.util.spec_from_file_location("doctoral_os_requirements_trace",trace_path)
+        if spec is None or spec.loader is None:raise ImportError("cannot load requirements trace")
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);errors.extend(f"requirements trace: {x}" for x in module.validate())
+    except (ImportError,OSError) as exc:errors.append(f"requirements trace validator unavailable: {exc}")
 
     skill_names: dict[str, Path] = {}
     skill_paths = list((ROOT / "skills").glob("*/SKILL.md"))

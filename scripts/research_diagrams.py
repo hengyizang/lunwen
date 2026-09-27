@@ -23,6 +23,8 @@ except ImportError:
 
 
 TYPES = {"architecture", "workflow", "sequence", "dataflow", "lifecycle", "mechanism"}
+NODE_KINDS={"input","data","process","model","decision","output","actor","system","construct"}
+EDGE_KINDS={"data","control","causal","association","feedback","temporal"}
 PALETTE = ("#D9EDF1", "#E8E5F1", "#FAEAD8", "#DCEDE5", "#E7EAF0")
 
 
@@ -54,6 +56,7 @@ def validate(ir: dict[str, Any]) -> None:
             raise FigureSpecError("node labels must be at most 80 characters; use a note")
         if node.get("note"):
             _english_text(node["note"], "note")
+        if node.get("kind","process") not in NODE_KINDS:raise FigureSpecError("invalid node kind")
         if "layer" in node:
             layer, rank = node["layer"], node.get("rank", 0)
             if (not isinstance(layer,int) or isinstance(layer,bool) or not 0<=layer<=7 or
@@ -72,6 +75,7 @@ def validate(ir: dict[str, Any]) -> None:
         seen.add(pair)
         if edge.get("label"):
             _english_text(edge["label"], "edge label")
+        if edge.get("kind","control") not in EDGE_KINDS:raise FigureSpecError("invalid edge kind")
     if not re.fullmatch(r"papers/P[0-9]{2}/figures/[A-Za-z0-9_-]+", str(ir.get("output_stem", ""))):
         raise FigureSpecError("output_stem must be papers/Pxx/figures/<name>")
 
@@ -80,10 +84,22 @@ def layout(ir: dict[str, Any]) -> dict[str, tuple[float, float]]:
     nodes = ir["nodes"]
     if all("layer" in node for node in nodes):
         return {node["id"]: (float(node["layer"]),-float(node.get("rank",0))) for node in nodes}
-    # Explicit order remains deterministic and editable; no more than 4 nodes per row.
-    columns = min(4, max(2, int(math.ceil(math.sqrt(len(nodes))))))
-    return {node["id"]: (index % columns, -(index // columns))
-            for index, node in enumerate(nodes)}
+    ids=[node["id"] for node in nodes];incoming={node:set() for node in ids};outgoing={node:set() for node in ids}
+    for edge in ir["edges"]:outgoing[edge["from"]].add(edge["to"]);incoming[edge["to"]].add(edge["from"])
+    queue=sorted(node for node in ids if not incoming[node]);order=[];levels={node:0 for node in queue};remaining={node:set(values) for node,values in incoming.items()}
+    while queue:
+        node=queue.pop(0);order.append(node)
+        for target in sorted(outgoing[node]):
+            levels[target]=max(levels.get(target,0),levels[node]+1);remaining[target].discard(node)
+            if not remaining[target] and target not in order and target not in queue:queue.append(target);queue.sort()
+    if len(order)==len(ids):
+        ranks={}
+        for node in order:ranks[node]=sum(1 for prior in order if levels[prior]==levels[node] and order.index(prior)<order.index(node))
+        return {node:(float(levels[node]),-float(ranks[node])) for node in ids}
+    if ir["type"]=="mechanism":
+        angles=[2*math.pi*i/len(ids) for i in range(len(ids))]
+        return {node:(math.cos(angle)*1.8,math.sin(angle)*1.4) for node,angle in zip(ids,angles)}
+    columns=min(4,max(2,int(math.ceil(math.sqrt(len(nodes))))));return {node["id"]:(index%columns,-(index//columns)) for index,node in enumerate(nodes)}
 
 
 def render(project: Path, ir_path: Path) -> dict[str, Any]:
@@ -99,10 +115,10 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
     positions = layout(ir)
-    columns = max(int(point[0]) for point in positions.values()) + 1
-    rows = -min(int(point[1]) for point in positions.values()) + 1
-    fig, ax = plt.subplots(figsize=(max(6, columns*2.2), max(3, rows*1.75+1)), constrained_layout=True)
-    ax.set(xlim=(-.85, columns-.15), ylim=(-rows+.35, .9)); ax.axis("off")
+    xs=[point[0] for point in positions.values()];ys=[point[1] for point in positions.values()]
+    width=max(xs)-min(xs)+1;height=max(ys)-min(ys)+1
+    fig, ax = plt.subplots(figsize=(max(6,width*2.1),max(3,height*1.7)),constrained_layout=True)
+    ax.set(xlim=(min(xs)-.85,max(xs)+.85),ylim=(min(ys)-.65,max(ys)+.9));ax.axis("off")
     for index, node in enumerate(ir["nodes"]):
         x, y = positions[node["id"]]
         ax.add_patch(FancyBboxPatch((x-.36, y-.22), .72, .44, boxstyle="round,pad=0.06",
@@ -122,8 +138,9 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
         ax.text(x, y, label, ha="center", va="center", fontsize=8, color="#142C38", zorder=3)
     for edge in ir["edges"]:
         x0, y0 = positions[edge["from"]]; x1, y1 = positions[edge["to"]]
-        ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>",
-                                     mutation_scale=11, linewidth=1.2, color="#416779",
+        kind=edge.get("kind","control");style={"association":"--","feedback":":"}.get(kind,"-");arrow="-" if kind=="association" else "-|>"
+        ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle=arrow,
+                                     mutation_scale=11, linewidth=1.2, linestyle=style, color="#416779",
                                      shrinkA=31, shrinkB=31, connectionstyle="arc3,rad=.13", zorder=1))
         if edge.get("label"):
             ax.text((x0+x1)/2, (y0+y1)/2+.08, edge["label"], ha="center", fontsize=6.5,

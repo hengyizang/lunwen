@@ -69,7 +69,7 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
         config_record={"path":config_rel,"sha256":output_provenance.sha256_file(config_path)}
     registry_path=project/"papers"/paper_id/"figures"/"figure-provenance.json"
     registry=_load_registry(registry_path)
-    timestamp=output_provenance.utc_now();record={"figure_path":figure_rel,"figure_type":figure_type,"renderer":{"path":renderer_rel,"sha256":output_provenance.sha256_file(renderer_path)},"config":config_record,"inputs":input_records,"source_run_ids":sorted(set(runs)),"output_sha256":output_provenance.sha256_file(figure_path),"deterministic":True,"generated_by":"local-tool","language_checked_by":language_checked_by.strip(),"language_checked_at":timestamp,"recorded_at":timestamp}
+    timestamp=output_provenance.utc_now();record={"figure_path":figure_rel,"figure_type":figure_type,"renderer":{"path":renderer_rel,"sha256":output_provenance.sha256_file(renderer_path)},"config":config_record,"inputs":input_records,"source_run_ids":sorted(set(runs)),"output_sha256":output_provenance.sha256_file(figure_path),"deterministic":True,"generated_by":"local-tool","language_checked_by":language_checked_by.strip(),"language_checked_at":timestamp,"visual_checked_by":language_checked_by.strip(),"visual_checked_at":timestamp,"recorded_at":timestamp}
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=figure_rel]+[record]
     _write(registry_path,registry)
     output_provenance.record_model_writes(project,[figure_path,registry_path],family="other",provider="deterministic-local-renderer",model=renderer_rel,role="final-figure",run_id="figure-"+output_provenance.utc_now().replace(":","-"))
@@ -106,7 +106,7 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
             "generated_by":receipt["source"],"prompt_sha256":receipt["prompt_sha256"],
             "model_id":receipt["model_id"],"disclosure_location":disclosure_location.strip(),
             "human_content_checked_by":checked_by.strip(),
-            "language_checked_by":checked_by.strip(),"language_checked_at":timestamp,"recorded_at":timestamp}
+            "language_checked_by":checked_by.strip(),"language_checked_at":timestamp,"visual_checked_by":checked_by.strip(),"visual_checked_at":timestamp,"recorded_at":timestamp}
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=relative]+[record]
     _write(registry_path,registry)
     output_provenance.record_model_writes(project,[registry_path],family="other",provider="local-provenance-check",
@@ -152,6 +152,7 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
             elif item.get("deterministic") is not True or item.get("generated_by")!="local-tool":
                 errors.append(f"{relative}: invalid deterministic rendering declaration")
             if not isinstance(item.get("language_checked_by"),str) or not item["language_checked_by"].strip() or not isinstance(item.get("language_checked_at"),str) or not item["language_checked_at"].strip():errors.append(f"{relative}: named human English-label confirmation is required")
+            if not isinstance(item.get("visual_checked_by"),str) or not item["visual_checked_by"].strip() or not isinstance(item.get("visual_checked_at"),str) or not item["visual_checked_at"].strip():errors.append(f"{relative}: named human visual inspection is required")
             renderer=item.get("renderer") if isinstance(item.get("renderer"),dict) else {};renderer_path,_=_relative(project,str(renderer.get("path","")),"renderer")
             if not renderer_path.is_file() or renderer.get("sha256")!=output_provenance.sha256_file(renderer_path):errors.append(f"{relative}: renderer hash is stale")
             origin=output_provenance.current_origin(project,renderer_path)
