@@ -75,7 +75,7 @@ if [[ "$install_ai4science" == true ]]; then
   if [[ ! -x ".venv/bin/python" ]]; then
     python3 -m venv .venv
   fi
-  if ! .venv/bin/python -c "import importlib.metadata as m; raise SystemExit(m.version('paper-qa') != '2026.08.12' or m.version('tooluniverse') != '1.5.1')" >/dev/null 2>&1; then
+  if ! .venv/bin/python -c "import importlib.metadata as m; from packaging.version import Version; raise SystemExit(Version(m.version('paper-qa')) != Version('2026.08.12') or Version(m.version('tooluniverse')) != Version('1.5.1'))" >/dev/null 2>&1; then
     .venv/bin/python -m pip install 'paper-qa==2026.08.12' 'tooluniverse==1.5.1'
   fi
   .venv/bin/python -c "import importlib.metadata as m; print('paper-qa', m.version('paper-qa')); print('tooluniverse', m.version('tooluniverse'))"

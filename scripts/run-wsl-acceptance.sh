@@ -58,7 +58,7 @@ fi
 "$python_bin" -c \
   'from scripts.live_acceptance import environment_report; import sys; report=environment_report(); print(report); raise SystemExit(0 if report["is_wsl2"] else 2)'
 "$python_bin" -c \
-  'import importlib.metadata as m; assert m.version("paper-qa") == "2026.08.12"; assert m.version("tooluniverse") == "1.5.1"; assert m.version("ref-verify") == "1.2.0"'
+  'import importlib.metadata as m; from packaging.version import Version; assert Version(m.version("paper-qa")) == Version("2026.08.12"); assert Version(m.version("tooluniverse")) == Version("1.5.1"); assert Version(m.version("ref-verify")) == Version("1.2.0")'
 "$python_bin" scripts/check_env.py --mode api --install-root /mnt/d/ad/lunwen
 docker info >/dev/null
 "$python_bin" - <<'PY'
