@@ -76,6 +76,12 @@ class P0P1CompletionTests(unittest.TestCase):
                 self.assertTrue(value["selection_required"])
                 self.assertEqual(value["candidates"], ["study-one", "study-two"])
 
+    def test_windows_installer_normalizes_wsl_names_from_powershell_51(self):
+        installer = (Path(__file__).parents[1] / "scripts" / "install-d-drive.ps1").read_text(encoding="utf-8")
+        self.assertIn('([string]$_ -replace "`0", \'\').Trim()', installer)
+        self.assertIn("$wslNames -notcontains $Distribution", installer)
+        self.assertNotIn("$wslList -notmatch", installer)
+
     def test_genuine_docx_requires_non_claude_sources_and_named_visual_review(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp) / "study"

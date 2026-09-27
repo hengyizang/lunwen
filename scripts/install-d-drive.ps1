@@ -7,8 +7,12 @@ if ($actual -ne $expected) { throw "All project components must be installed at 
 if (-not (Test-Path -LiteralPath (Join-Path $actual 'scripts\bootstrap-d-drive.sh'))) { throw "Repository not found at $actual." }
 $runtime = Join-Path $actual '.runtime'
 @('pip-cache','huggingface','xdg-cache','xdg-data','tmp','matplotlib','paperqa','tooluniverse','docker-desktop','wsl') | ForEach-Object { New-Item -ItemType Directory -Force -Path (Join-Path $runtime $_) | Out-Null }
-$wslList = (& wsl.exe --list --quiet) -join "`n"
-if ($wslList -notmatch [regex]::Escape($Distribution)) { throw "Install/import '$Distribution' under D:\ad\lunwen\.runtime\wsl first." }
+$wslNames = @(& wsl.exe --list --quiet) | ForEach-Object {
+  # Windows PowerShell 5.1 can expose NUL-delimited WSL output. Normalize it
+  # before exact-name matching so an installed distribution is not missed.
+  ([string]$_ -replace "`0", '').Trim()
+} | Where-Object { $_ }
+if ($wslNames -notcontains $Distribution) { throw "Install/import '$Distribution' under D:\ad\lunwen\.runtime\wsl first. Detected: $($wslNames -join ', ')" }
 $wslExpected = [IO.Path]::GetFullPath((Join-Path $runtime 'wsl')).TrimEnd('\')
 $record = Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss' -ErrorAction SilentlyContinue | ForEach-Object { Get-ItemProperty $_.PSPath } | Where-Object { $_.DistributionName -eq $Distribution } | Select-Object -First 1
 if ($null -eq $record -or -not $record.BasePath) { throw "Cannot verify WSL distribution location." }
