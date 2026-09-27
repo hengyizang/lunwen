@@ -14,7 +14,8 @@ from scripts.manuscript_docx import approve_visual_review, build, validate_saved
 from scripts.publication_figures import render, sha256_file
 from scripts.requirements_trace import validate as validate_requirements
 from scripts.research_diagrams import render as render_diagram
-from scripts.research_mcp import handle, route_request
+from scripts import research_mcp
+from scripts.research_mcp import context, handle, route_request
 from scripts.skill_catalog import apply_operation, lint_skill, mcp_inventory, plan_operation
 from scripts.systematic_review import validate_completed_checklist
 from scripts.task_router import plan as route_plan
@@ -41,7 +42,39 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertFalse(routed["paid_call_started"])
         response = handle({"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
         self.assertEqual({row["name"] for row in response["result"]["tools"]},
-                         {"research_route", "research_status"})
+                         {"research_context", "research_projects", "research_route", "research_status"})
+
+    def test_chat_context_discovers_project_and_stops_at_human_gate(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            state = root / "projects" / "doctoral-study" / "state"
+            state.mkdir(parents=True)
+            (state / "run.json").write_text(json.dumps({
+                "stage": "topic-intelligence", "gate": "G1", "status": "awaiting_approval",
+                "active_paper": "P01"
+            }), encoding="utf-8")
+            with patch.object(research_mcp, "ROOT", root):
+                value = context("继续当前工作")
+                self.assertEqual(value["project"], "doctoral-study")
+                self.assertEqual(value["project_resolution"], "automatic-single-project")
+                self.assertEqual(value["skill"], "continue")
+                self.assertTrue(value["must_stop"])
+                self.assertEqual(value["human_action"], "approve-or-reopen-gate")
+                self.assertFalse(value["paid_call_started"])
+                self.assertFalse(value["paid_call_authorized"])
+
+    def test_chat_context_requires_selection_or_initialization_without_guessing(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            with patch.object(research_mcp, "ROOT", root):
+                self.assertTrue(context("开始研究")["initialization_required"])
+                for slug in ("study-one", "study-two"):
+                    state = root / "projects" / slug / "state"
+                    state.mkdir(parents=True)
+                    (state / "run.json").write_text(json.dumps({"stage": "intake", "gate": "G0", "status": "awaiting_work", "active_paper": "P01"}), encoding="utf-8")
+                value = context("继续")
+                self.assertTrue(value["selection_required"])
+                self.assertEqual(value["candidates"], ["study-one", "study-two"])
 
     def test_genuine_docx_requires_non_claude_sources_and_named_visual_review(self):
         with tempfile.TemporaryDirectory() as temp:

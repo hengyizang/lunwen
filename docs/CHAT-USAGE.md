@@ -5,7 +5,7 @@
 承担。Claude 只做不可发表的规划与独立审查，不能写正文、图表文字或任何最终
 投稿产物。
 
-首次使用时先在 Windows PowerShell 从仓库根目录 `D:\ad\lunwen` 运行 `scripts\install-d-drive.ps1`。它把项目环境和缓存放在 D 盘，并检查 WSL2 与 Docker Desktop 的大体积数据没有留在 C 盘。项目 `.mcp.json` 注册的 `doctoral-research-os` 只提供零成本的 `research_route` 和 `research_status`：它根据自然语言选择 Skill、读取阶段，但不能启动付费调用、批准闸门或投稿。
+首次使用时先在 Windows PowerShell 从仓库根目录 `D:\ad\lunwen` 运行 `scripts\install-d-drive.ps1`。它把项目环境和缓存放在 D 盘，并检查 WSL2 与 Docker Desktop 的大体积数据没有留在 C 盘。项目 `.mcp.json` 注册的 `doctoral-research-os` 提供四个零成本只读工具：`research_context` 一次完成项目发现、自然语言路由、状态与下一步聚合，`research_projects` 列出项目，`research_route` 单独路由，`research_status` 单独读取阶段。它们都不能启动付费调用、批准闸门或投稿。
 
 ## 推荐说法
 
@@ -37,6 +37,7 @@
 ## Codex 会怎样节约额度
 
 - 优先读取 `state/run.json`、结构化清单和失败报告，不反复重读整个仓库。
+- 聊天入口优先调用一次 `research_context`；只有需要展开细节时才读取具体 Skill 和产物，避免重复消耗上下文。
 - 用本地脚本完成哈希、数据质量、统计验证、绘图、引文检查和打包。
 - 只把当前论文的完整内容发给写作模型；其他论文只发送研究合同，以保留六篇之间
   的约束和区分度。

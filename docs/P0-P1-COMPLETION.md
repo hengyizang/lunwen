@@ -11,7 +11,7 @@ Version 2.3 closes the requested implementation gaps without claiming that user-
 | Public literature APIs | Contact-aware headers, provider-specific bounded retries, paced live acceptance and raw/hash receipts | Real network execution; provider outages and rate limits remain possible |
 | Docker isolation | Digest-pinned, no-network, read-only, dropped-capability probe | Real Docker daemon in WSL2; Linux CI does not prove WSL2 |
 | PaperQA2 / ToolUniverse / ref-verify | Pinned package install checks, executable adapters, input/output/hash/error receipts and contract tests | Authorized corpus/request, any needed credentials and explicit paid-call approval |
-| Chat-first Codex control | Project Skills plus zero-cost MCP `research_route` and `research_status` | Enable/reload project MCP in the Codex client |
+| Chat-first Codex control | Project Skills plus zero-cost MCP `research_context`, `research_projects`, `research_route` and `research_status` | Enable/reload project MCP in the Codex client |
 
 ## P1 — research quality and output layers
 
