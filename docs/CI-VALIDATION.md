@@ -25,9 +25,10 @@ git diff --check
 `schedule` 和 `workflow_dispatch` 额外启动两个 job。维护者也可在一次 push 的
 提交信息中加入 `[live-acceptance]`，让该次提交同时运行它们：
 
-- `live-literature`：真实调用全部公开文献接口及 OpenCitations，上传原始响应、
+- `live-literature`：真实调用全部无凭据接口、已配置凭据的接口及 OpenCitations，上传原始响应、
   规范化结果和验收报告；DBLP 使用官方 SPARQL endpoint，避免把网页端的
-  JavaScript 反机器人挑战当成 API；
+  JavaScript 反机器人挑战当成 API；arXiv 使用官方 `id_list` 单记录端点验证
+  API 连通性，避免把宽泛检索的公共出口限流误判为适配器故障；
 - `container-isolation`：在 GitHub Linux runner 上用 digest 固定镜像实际验证
   无网络、只读根目录和受限 tmpfs。
 
@@ -42,8 +43,11 @@ git diff --check
 Semantic Scholar 和 OpenCitations 都可匿名调用，但共享 runner IP 容易触发限流。
 为提高定时验收的稳定性，可分别添加仓库 Actions secrets
 `SEMANTIC_SCHOLAR_API_KEY` 和 `OPENCITATIONS_ACCESS_TOKEN`。它们只作为请求头传给
-官方 API，不写入 URL、日志、收据或 artifact；未配置时仍会真实尝试匿名接口并
-如实保存限流失败。
+官方 API，不写入 URL、日志、收据或 artifact。GitHub Actions 未配置 Semantic
+Scholar key 时会在报告中明确记录该提供商为 `skipped_providers`，其余无凭据核心
+来源仍须全部真实通过；一旦配置 key，Semantic Scholar 自动加入严格验收。WSL2
+底层命令默认仍是全源严格模式，除非操作者显式传入
+`--allow-missing-semantic-scholar-key`。
 
 GitHub runner 的容器 job 证明 Linux/Docker 路径；它不能冒充 WSL2。Windows
 本机的 WSL2 验收必须按 [`LIVE-ACCEPTANCE.md`](LIVE-ACCEPTANCE.md) 执行，报告

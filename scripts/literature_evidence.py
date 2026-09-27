@@ -62,6 +62,10 @@ MAX_RESULTS = 100
 MAX_RESPONSE_BYTES = 32 * 1024 * 1024
 HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 SAFE_RECEIPT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{1,127}$")
+ARXIV_IDENTIFIER_RE = re.compile(
+    r"^(?:arxiv-id:)?([0-9]{4}\.[0-9]{4,5}(?:v[0-9]+)?|[a-z-]+(?:\.[A-Z]{2})?/[0-9]{7}(?:v[0-9]+)?)$",
+    re.I,
+)
 TRANSIENT_HTTP_RE = re.compile(r"HTTP Error (?:429|500|502|503|504)\b")
 RETRY_SCHEDULES = {
     "openalex": (0, 5, 20, 60),
@@ -304,6 +308,11 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
             }
         )
     if provider == "arxiv":
+        identifier = ARXIV_IDENTIFIER_RE.fullmatch(query.strip())
+        if identifier:
+            return "https://export.arxiv.org/api/query?" + encoded(
+                {"id_list": identifier.group(1), "start": 0, "max_results": limit}
+            )
         terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query)[:8]
         search_query = " AND ".join(f"all:{term}" for term in terms) or "all:science"
         return "https://export.arxiv.org/api/query?" + encoded(

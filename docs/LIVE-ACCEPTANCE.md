@@ -79,6 +79,13 @@ ARM64 主机必须用 Docker Hub 对应平台的完整 manifest digest，通过 
 `SEMANTIC_SCHOLAR_API_KEY`，OpenCitations 可选读取
 `OPENCITATIONS_ACCESS_TOKEN`；请求头中的值从不进入收据。
 
+严格模式要求 Semantic Scholar 也真实返回成功，因此共享出口持续收到 429 时应
+申请并配置官方 API key。GitHub 定时 CI 可使用
+`--allow-missing-semantic-scholar-key`：无 key 时报告会明确列出
+`skipped_providers`，不会伪造 Semantic Scholar 收据；其余来源仍须全部通过。
+arXiv 的连通性验收使用官方 `id_list` 查询已知记录，实际主题检索仍使用
+`search_query`，两条路径不会混淆。
+
 若只排查单一层，可以分别运行：
 
 ```bash

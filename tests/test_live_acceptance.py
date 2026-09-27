@@ -39,6 +39,62 @@ class LiveAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["status"], "passed")
         self.assertEqual(len(report["checks"]), 2)
 
+    def test_arxiv_acceptance_uses_known_identifier_probe(self) -> None:
+        observed: dict[str, str] = {}
+
+        def receipt(_project, provider, query, **_kwargs):
+            observed[provider] = query
+            return {
+                "status": "success",
+                "http_status": 200,
+                "content_type": "application/atom+xml",
+                "result_count": 1,
+                "receipt_id": f"receipt-{provider}",
+                "response_sha256": "a" * 64,
+                "normalized_results_sha256": "b" * 64,
+                "raw_response_path": f"evidence/raw/{provider}.xml",
+                "normalized_results_path": f"evidence/normalized/{provider}.json",
+            }
+
+        with tempfile.TemporaryDirectory() as directory, patch(
+            "scripts.live_acceptance.execute_search", side_effect=receipt
+        ):
+            report = live_acceptance.literature_acceptance(
+                Path(directory) / "evidence",
+                ["arxiv"],
+                query="machine learning",
+                limit=1,
+                include_opencitations=False,
+                citation_doi=live_acceptance.DEFAULT_DOI,
+                pace_seconds=0,
+            )
+        self.assertEqual(report["status"], "passed")
+        self.assertEqual(observed["arxiv"], live_acceptance.ARXIV_ACCEPTANCE_ID)
+        self.assertEqual(
+            report["provider_queries"]["arxiv"], live_acceptance.ARXIV_ACCEPTANCE_ID
+        )
+
+    def test_ci_can_explicitly_skip_unconfigured_semantic_scholar(self) -> None:
+        with patch.dict("os.environ", {}, clear=True):
+            selected, skipped = live_acceptance.configured_literature_providers(
+                ["openalex", "semantic-scholar", "arxiv"],
+                allow_missing_semantic_scholar_key=True,
+            )
+        self.assertEqual(selected, ["openalex", "arxiv"])
+        self.assertEqual(skipped[0]["provider"], "semantic-scholar")
+        self.assertIn("not configured", skipped[0]["reason"])
+
+    def test_configured_semantic_scholar_remains_strictly_required(self) -> None:
+        with patch.dict(
+            "os.environ", {"SEMANTIC_SCHOLAR_API_KEY": "configured"}, clear=True
+        ):
+            selected, skipped = live_acceptance.configured_literature_providers(
+                ["openalex", "semantic-scholar"],
+                allow_missing_semantic_scholar_key=True,
+            )
+        self.assertEqual(selected, ["openalex", "semantic-scholar"])
+        self.assertEqual(skipped, [])
+
     def test_literature_acceptance_preserves_provider_failure(self) -> None:
         with tempfile.TemporaryDirectory() as directory, patch(
             "scripts.live_acceptance.execute_search",

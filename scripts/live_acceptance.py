@@ -40,6 +40,7 @@ DEFAULT_IMAGE = (
 )
 IMAGE_RE = re.compile(r"^[^\s@]+@sha256:[0-9a-f]{64}$")
 DEFAULT_QUERY = "machine learning scientific research"
+ARXIV_ACCEPTANCE_ID = "arxiv-id:1706.03762"
 # The OpenCitations v2 documentation uses this moderate-size citation example;
 # avoid a highly cited Nature paper whose complete edge list is a poor smoke test.
 DEFAULT_DOI = "10.1108/jd-12-2013-0166"
@@ -94,15 +95,18 @@ def literature_acceptance(
     evidence_project.mkdir(parents=True, exist_ok=False)
     started_at = now()
     checks: list[dict[str, Any]] = []
+    provider_queries: dict[str, str] = {}
     for provider in providers:
         if checks and pace_seconds:
             time.sleep(pace_seconds)
         started = time.monotonic()
+        provider_query = ARXIV_ACCEPTANCE_ID if provider == "arxiv" else query
+        provider_queries[provider] = provider_query
         try:
             receipt = execute_search(
                 evidence_project,
                 provider,
-                query,
+                provider_query,
                 query_family="acceptance-smoke",
                 date_range="all years",
                 filters="public API acceptance; no human screening decision",
@@ -197,6 +201,7 @@ def literature_acceptance(
         "started_at": started_at,
         "completed_at": now(),
         "query": query,
+        "provider_queries": provider_queries,
         "limit_per_provider": limit,
         "evidence_directory": str(evidence_project),
         "checks": checks,
@@ -352,6 +357,26 @@ def write_report(path: Path, report: dict[str, Any]) -> None:
     os.replace(temporary, path)
 
 
+def configured_literature_providers(
+    requested: list[str], *, allow_missing_semantic_scholar_key: bool
+) -> tuple[list[str], list[dict[str, str]]]:
+    providers = list(requested)
+    skipped: list[dict[str, str]] = []
+    if (
+        allow_missing_semantic_scholar_key
+        and "semantic-scholar" in providers
+        and not os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "").strip()
+    ):
+        providers.remove("semantic-scholar")
+        skipped.append(
+            {
+                "provider": "semantic-scholar",
+                "reason": "SEMANTIC_SCHOLAR_API_KEY is not configured; anonymous shared-IP acceptance is rate-limited.",
+            }
+        )
+    return providers, skipped
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     sub = root.add_subparsers(dest="command", required=True)
@@ -361,6 +386,11 @@ def parser() -> argparse.ArgumentParser:
     literature.add_argument("--query", default=DEFAULT_QUERY)
     literature.add_argument("--limit", type=int, default=1)
     literature.add_argument("--skip-opencitations", action="store_true")
+    literature.add_argument(
+        "--allow-missing-semantic-scholar-key",
+        action="store_true",
+        help="Record Semantic Scholar as skipped when its API key is not configured.",
+    )
     literature.add_argument("--citation-doi", default=DEFAULT_DOI)
     literature.add_argument("--pace-seconds", type=float, default=3.0)
     literature.add_argument("--output", type=Path, required=True)
@@ -377,6 +407,11 @@ def parser() -> argparse.ArgumentParser:
     wsl.add_argument("--query", default=DEFAULT_QUERY)
     wsl.add_argument("--limit", type=int, default=1)
     wsl.add_argument("--skip-opencitations", action="store_true")
+    wsl.add_argument(
+        "--allow-missing-semantic-scholar-key",
+        action="store_true",
+        help="Record Semantic Scholar as skipped when its API key is not configured.",
+    )
     wsl.add_argument("--citation-doi", default=DEFAULT_DOI)
     wsl.add_argument("--pace-seconds", type=float, default=3.0)
     wsl.add_argument("--image", default=DEFAULT_IMAGE)
@@ -401,16 +436,23 @@ def main(argv: Iterable[str] | None = None) -> int:
         "environment": environment_report(),
         "started_at": now(),
     }
+    providers, skipped_providers = configured_literature_providers(
+        list(args.provider or list(PROVIDERS)),
+        allow_missing_semantic_scholar_key=getattr(
+            args, "allow_missing_semantic_scholar_key", False
+        ),
+    )
     if args.command == "literature":
         literature = literature_acceptance(
             run_root / "literature-project",
-            args.provider or list(PROVIDERS),
+            providers,
             query=args.query,
             limit=args.limit,
             include_opencitations=not args.skip_opencitations,
             citation_doi=args.citation_doi,
             pace_seconds=args.pace_seconds,
         )
+        literature["skipped_providers"] = skipped_providers
         report = {**common, "literature": literature, "container": None}
         status = literature["status"]
     elif args.command == "container":
@@ -425,13 +467,14 @@ def main(argv: Iterable[str] | None = None) -> int:
     else:
         literature = literature_acceptance(
             run_root / "literature-project",
-            args.provider or list(PROVIDERS),
+            providers,
             query=args.query,
             limit=args.limit,
             include_opencitations=not args.skip_opencitations,
             citation_doi=args.citation_doi,
             pace_seconds=args.pace_seconds,
         )
+        literature["skipped_providers"] = skipped_providers
         container = container_acceptance(
             args.image,
             engine=args.engine,

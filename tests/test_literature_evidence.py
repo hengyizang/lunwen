@@ -179,6 +179,13 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertTrue(all("application/atom+xml" in item["Accept"] for item in calls))
         self.assertEqual([item.args[0] for item in sleep.call_args_list], [5, 20])
 
+    def test_arxiv_identifier_uses_official_id_list_probe(self) -> None:
+        url = build_search_url("arxiv", "arxiv-id:1706.03762", 1)
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        self.assertEqual(query["id_list"], ["1706.03762"])
+        self.assertEqual(query["max_results"], ["1"])
+        self.assertNotIn("search_query", query)
+
     def test_failed_normalization_preserves_returned_raw_response(self) -> None:
         def fetcher(url: str, **_kwargs):
             return b"<html>upstream block</html>", url, 200, "text/html"
