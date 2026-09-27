@@ -6,6 +6,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      install_ai4science:
+        description: "Install and smoke-test PaperQA2, ToolUniverse and ref-verify"
+        required: false
+        type: boolean
+        default: false
   schedule:
     - cron: "17 3 * * 1"
 
@@ -42,18 +48,34 @@ jobs:
       - name: Reject whitespace errors
         run: git diff --check
 
+  windows-script-syntax:
+    name: Windows D-drive installer syntax
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Parse PowerShell without running installer
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path '.\scripts\install-d-drive.ps1'), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+
   live-literature:
     name: Live public literature APIs
     if: >-
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'schedule' ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]'))
-    needs: deterministic
+    needs: [deterministic, windows-script-syntax]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
       SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
       OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
+      LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
+      OPENALEX_MAILTO: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -73,13 +95,36 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+  adapter-packages:
+    name: Install executable research adapters
+    if: github.event_name == 'workflow_dispatch' && inputs.install_ai4science
+    needs: [deterministic, windows-script-syntax]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pinned executable adapters
+        run: python -m pip install --disable-pip-version-check ".[ai4science,reference-tools]"
+      - name: Verify package identity and executable entry points
+        run: |
+          python -c "import importlib.metadata as m; assert m.version('paper-qa') == '2026.08.12'; assert m.version('tooluniverse') == '1.5.1'; assert m.version('ref-verify') == '1.2.0'"
+          pqa --help >/dev/null
+          ref-verify --help >/dev/null
+          python -c "from tooluniverse import ToolUniverse; assert ToolUniverse"
+      - name: Run adapter contract tests against installed packages
+        run: python -m unittest tests.test_ai4science_evidence tests.test_tooluniverse_worker tests.test_ref_verify_adapter -v
+
   container-isolation:
     name: Docker isolation probe
     if: >-
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'schedule' ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]'))
-    needs: deterministic
+    needs: [deterministic, windows-script-syntax]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

@@ -14,7 +14,9 @@ KINDS = {
     "box", "violin", "strip", "histogram", "density", "ecdf", "area",
     "stacked_bar", "dumbbell", "errorbar", "roc", "pr", "calibration",
     "confusion", "correlation", "volcano", "pca", "survival", "sankey",
-    "raincloud", "hexbin", "qq", "funnel", "waterfall",
+    "raincloud", "hexbin", "qq", "funnel", "waterfall", "bland_altman",
+    "kaplan_meier", "shap_summary", "nomogram", "decision_curve", "network",
+    "chord", "geospatial",
 }
 RAW_DISTRIBUTIONS = {"box", "violin", "strip", "histogram", "density", "ecdf", "raincloud", "hexbin"}
 
@@ -31,6 +33,9 @@ def required_fields(panel: dict[str, Any]) -> list[str]:
         return ["x", "y"]  # log2 fold change, adjusted p value
     if kind == "dumbbell":
         return ["x", "y", "end"]  # category, before, after
+    if kind in {"network","chord"}:return ["x","y","value"]
+    if kind in {"shap_summary","geospatial"}:return ["x","y","value"]
+    if kind=="nomogram":return ["x","y","end"]
     return ["x", "y"]
 
 
@@ -47,7 +52,51 @@ def draw(ax: Any, panel: dict[str, Any], frame: Any, np: Any, pd: Any,
     if len(groups) > len(palette):
         raise ValueError("a panel may contain at most eight visual groups")
 
-    if kind in {"box", "violin", "strip", "raincloud"}:
+    if kind == "bland_altman":
+        xx=pd.to_numeric(frame[x],errors="raise").to_numpy(float);yy=pd.to_numeric(frame[y],errors="raise").to_numpy(float)
+        if not (np.isfinite(xx).all() and np.isfinite(yy).all()):raise ValueError("Bland-Altman coordinates must be finite")
+        for field in ("mean_difference","loa_lower","loa_upper"):
+            if field not in panel or not np.isfinite(float(panel[field])):raise ValueError(f"bland_altman requires finite {field}")
+        ax.scatter(xx,yy,s=22,color=palette[0],alpha=.75)
+        for value,style in ((panel["mean_difference"],"-"),(panel["loa_lower"],"--"),(panel["loa_upper"],"--")):ax.axhline(float(value),color="#7A4E2D",linestyle=style,linewidth=1)
+    elif kind == "kaplan_meier":
+        risk=panel.get("risk")
+        if not risk or risk not in frame.columns:raise ValueError("kaplan_meier requires a precomputed risk-count column")
+        for index,(name,group) in enumerate(groups):
+            xx=pd.to_numeric(group[x],errors="raise").to_numpy(float);yy=pd.to_numeric(group[y],errors="raise").to_numpy(float);rr=pd.to_numeric(group[risk],errors="raise").to_numpy(float);order=np.argsort(xx,kind="stable");xx,yy,rr=xx[order],yy[order],rr[order]
+            if np.any(np.diff(yy)>1e-8) or np.any(yy<0) or np.any(yy>1) or np.any(rr<0):raise ValueError("invalid Kaplan-Meier survival/risk input")
+            ax.step(xx,yy,where="post",color=palette[index],label=str(name) or None)
+            ax.text(.01,-.14-index*.07,(str(name)+": " if name else "At risk: ")+"  ".join(f"{t:g}:{r:g}" for t,r in zip(xx,rr)),transform=ax.transAxes,fontsize=6,color=palette[index])
+        ax.set_ylim(0,1)
+    elif kind == "decision_curve":
+        for index,(name,group) in enumerate(groups):
+            xx=pd.to_numeric(group[x],errors="raise").to_numpy(float);yy=pd.to_numeric(group[y],errors="raise").to_numpy(float);order=np.argsort(xx,kind="stable")
+            if np.any(xx<0) or np.any(xx>1) or not np.isfinite(yy).all():raise ValueError("decision curve needs threshold probabilities in [0,1]")
+            ax.plot(xx[order],yy[order],color=palette[index],label=str(name) or None)
+        ax.axhline(float(panel.get("reference",0)),color="#777",linestyle="--",linewidth=.8);ax.set_xlim(0,1)
+    elif kind == "shap_summary":
+        shap=pd.to_numeric(frame[x],errors="raise").to_numpy(float);features=frame[y].astype(str);values=pd.to_numeric(frame[panel["value"]],errors="raise").to_numpy(float)
+        if not (np.isfinite(shap).all() and np.isfinite(values).all()):raise ValueError("SHAP inputs must be precomputed finite values")
+        labels=sorted(features.unique());pos=np.array([labels.index(v) for v in features]);artist=ax.scatter(shap,pos,c=values,cmap="coolwarm",s=18,alpha=.75);ax.set_yticks(range(len(labels)),labels);ax.figure.colorbar(artist,ax=ax,fraction=.046,pad=.04,label="Feature value")
+    elif kind == "nomogram":
+        if frame[x].astype(str).duplicated().any():raise ValueError("nomogram variables must be unique")
+        low=pd.to_numeric(frame[y],errors="raise").to_numpy(float);high=pd.to_numeric(frame[panel["end"]],errors="raise").to_numpy(float);pos=np.arange(len(frame))
+        if not (np.isfinite(low).all() and np.isfinite(high).all()) or np.any(low>high):raise ValueError("invalid nomogram ranges")
+        ax.hlines(pos,low,high,color="#607D8B",linewidth=2);ax.scatter(low,pos,color=palette[0]);ax.scatter(high,pos,color=palette[1]);ax.set_yticks(pos,frame[x].astype(str));ax.invert_yaxis()
+    elif kind in {"network","chord"}:
+        from matplotlib.patches import FancyArrowPatch
+        weights=pd.to_numeric(frame[panel["value"]],errors="raise").to_numpy(float)
+        if np.any(weights<=0) or not np.isfinite(weights).all():raise ValueError("network/chord weights must be positive and finite")
+        nodes=sorted(set(frame[x].astype(str))|set(frame[y].astype(str)));angles=np.linspace(0,2*np.pi,len(nodes),endpoint=False);positions={node:(math.cos(a),math.sin(a)) for node,a in zip(nodes,angles)}
+        for index,node in enumerate(nodes):px,py=positions[node];ax.scatter([px],[py],s=180,color=palette[index%len(palette)],zorder=3);ax.text(px*1.15,py*1.15,node,ha="center",va="center",fontsize=7)
+        maximum=max(weights)
+        for (_,row),weight in zip(frame.iterrows(),weights):a=positions[str(row[x])];b=positions[str(row[y])];ax.add_patch(FancyArrowPatch(a,b,arrowstyle="-|>" if kind=="network" else "-",connectionstyle="arc3,rad=.18",linewidth=.6+2*weight/maximum,color="#456A7A",alpha=.45,shrinkA=12,shrinkB=12))
+        ax.set_aspect("equal");ax.axis("off")
+    elif kind == "geospatial":
+        lon=pd.to_numeric(frame[x],errors="raise").to_numpy(float);lat=pd.to_numeric(frame[y],errors="raise").to_numpy(float);value=pd.to_numeric(frame[panel["value"]],errors="raise").to_numpy(float)
+        if np.any(lon<-180) or np.any(lon>180) or np.any(lat<-90) or np.any(lat>90) or not np.isfinite(value).all():raise ValueError("invalid precomputed geospatial coordinates")
+        size=25+75*(value-value.min())/(np.ptp(value) or 1);ax.scatter(lon,lat,s=size,c=value,cmap="viridis",alpha=.75,edgecolor="white",linewidth=.4);ax.set(xlim=(-180,180),ylim=(-90,90));ax.grid(alpha=.2)
+    elif kind in {"box", "violin", "strip", "raincloud"}:
         values = pd.to_numeric(frame[y], errors="raise")
         if not np.isfinite(values).all():
             raise ValueError("distribution values must be finite")

@@ -105,7 +105,9 @@ class NewCapabilitiesTests(unittest.TestCase):
                     "normalized_results_sha256":sha256_file(path)})
             (project/"evidence"/"literature-api-ledger.jsonl").write_text("\n".join(map(json.dumps,receipts))+"\n")
             ledger=project/"evidence"/"systematic"/"screening.json"
-            seed(project,[r["receipt_id"] for r in receipts],"deep","Predeclared population","Author",ledger)
+            protocol=project/"evidence"/"systematic"/"protocol.json";protocol.parent.mkdir(parents=True,exist_ok=True)
+            protocol.write_text(json.dumps({"status":"author-approved","approved_by":"Author"}))
+            seed(project,[r["receipt_id"] for r in receipts],"deep","Predeclared population","Author",ledger,protocol)
             data=json.loads(ledger.read_text());item=data["studies"][0]
             item["title_abstract"].update(decision="include",reviewer="A")
             ledger.write_text(json.dumps(data))
@@ -120,6 +122,9 @@ class NewCapabilitiesTests(unittest.TestCase):
             item["full_text"].update(decision="include",reviewer="A",evidence_location="PDF p. 3",
                 independent_reviews=[{"reviewer":"A","decision":"include"},{"reviewer":"B","decision":"include"}])
             item["comparison"].update(method="RCT",population="Adults",outcome="Score",limitations="Short follow-up")
+            item.update(report_id="R1",study_group_id="S1")
+            item["risk_of_bias"].update(tool="RoB 2",assessors=["A","B"],domains=[
+                {"domain":"randomization","judgment":"low","support":"PDF p. 3"}])
             ledger.write_text(json.dumps(data))
             self.assertEqual(assess(project,ledger)["included"],1)
             item["full_text"].update(decision="not_retrieved",reason="Library access unsuccessful",
@@ -149,17 +154,22 @@ class NewCapabilitiesTests(unittest.TestCase):
     def test_facts_rebuttal_library_and_catalog(self):
         with tempfile.TemporaryDirectory() as temp:
             project=Path(temp)/"study";paper=project/"papers"/"P01";paper.mkdir(parents=True)
-            manuscript=paper/"draft.tex";manuscript.write_text("A system improves reliability. Reliability (REL) rose by 2 units.",encoding="utf-8")
+            manuscript=paper/"draft.tex";manuscript.write_text(
+                "\\title{Reliability Study}\\begin{abstract}Reliability is evaluated.\\end{abstract}"
+                "\\section{Research Question}A system improves Reliability."
+                "\\section{Results}Reliability (REL) rose by 2 units."
+                "\\section{Conclusion}Reliability improved within the measured scope.",encoding="utf-8")
             source=paper/"results.csv";source.write_text("reliability,2\n",encoding="utf-8")
             fact={"schema_version":"1.0","facts":[{"id":"F1","statement":"Reliability rose by 2", "source_path":"papers/P01/results.csv","source_sha256":sha256_file(source),"location":"row 1","verbatim_evidence":"reliability,2"}],
-                  "claim_alignment":[{"claim_id":"C1","research_question":"Reliability?","allowed_inference":"association","evidence_ids":["F1"],"sections":{key:"Reliability" for key in ("title","abstract","question","results","conclusion")}}],
+                  "claim_alignment":[{"claim_id":"C1","research_question":"Reliability?","canonical_claim":"Reliability improved within the measured scope.","allowed_inference":"association","claim_strength":"association","result_status":"supported","evidence_ids":["F1"],"sections":{key:"Reliability" for key in ("title","abstract","question","results","conclusion")}}],
                   "measurement":[{"construct_id":"K1","definition":"Reliability","operationalization":"Score","measurement_item":"Reliability score","coding_rule":"Numeric","analysis_id":"A1","claim_id":"C1","validity_risk":"Limited scope","evidence_ids":["F1"]}],
                   "argument_ledger":[{"paragraph_id":"P1","section":"intro","function":"Motivation","claim_id":"C1","inference_boundary":"Association","transition":"Methods","evidence_ids":["F1"],"text_anchor":"system improves"}],
-                  "glossary":[{"term":"REL","definition":"Reliability","first_use":"Reliability (REL)","forbidden_variants":[]}]}
+                  "glossary":[{"term":"REL","definition":"Reliability","first_use":"Reliability (REL)","forbidden_variants":[]}],
+                  "symbols":[],"ignored_symbols":[]}
             spec=paper/"facts.json";spec.write_text(json.dumps(fact),encoding="utf-8")
             self.assertTrue(audit(project,manuscript,spec)["pass"])
             spec.write_text(json.dumps({"schema_version":"1.0","facts":[],"claim_alignment":[],
-                "measurement":[],"argument_ledger":[],"glossary":[]}))
+                "measurement":[],"argument_ledger":[],"glossary":[],"symbols":[],"ignored_symbols":[]}))
             self.assertFalse(audit(project,manuscript,spec)["pass"])
             original={"comments":[{"comment_id":"R1","reviewer_id":"Reviewer 1","comment":"Show interval"}]}
             plan={"venue_word_limit":100,"editor_summary":"We addressed the concern.","cards":[{"comment_id":"R1","impact":"major","stance":"accept","underlying_concern":"Missing uncertainty","action":"Add interval","evidence_status":"pending","full_response":"Full response.","short_response":"We added an interval.","manuscript_location":"Results","effort":"low"}]}

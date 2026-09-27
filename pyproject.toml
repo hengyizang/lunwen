@@ -1,6 +1,6 @@
 [project]
 name = "doctoral-research-os"
-version = "2.2.0"
+version = "2.3.0"
 description = "API-first, human-gated Doctoral Research OS for topic selection, experiments, writing, review, venues and manual submission"
 requires-python = ">=3.10"
 
@@ -15,7 +15,14 @@ reference-tools = [
 ]
 reader = [
   "pypdf>=5,<7",
-  "python-pptx>=1.0,<2"
+  "python-pptx>=1.0,<2",
+  "python-docx>=1.1,<2"
+]
+writing-tools = ["proselint==0.16.0"]
+research-quality = ["statsmodels==0.15.0"]
+ai4science = [
+  "paper-qa==2026.08.12",
+  "tooluniverse==1.5.1"
 ]
 
 # This repository is an application/control-plane tree, not an importable

@@ -28,7 +28,7 @@
         "additionalProperties": false,
         "required": ["kind", "xlabel", "ylabel"],
         "properties": {
-          "kind": {"enum": ["line", "scatter", "bar", "heatmap", "forest", "box", "violin", "strip", "histogram", "density", "ecdf", "area", "stacked_bar", "dumbbell", "errorbar", "roc", "pr", "calibration", "confusion", "correlation", "volcano", "pca", "survival", "sankey", "raincloud", "hexbin", "qq", "funnel", "waterfall"]},
+          "kind": {"enum": ["line", "scatter", "bar", "heatmap", "forest", "box", "violin", "strip", "histogram", "density", "ecdf", "area", "stacked_bar", "dumbbell", "errorbar", "roc", "pr", "calibration", "confusion", "correlation", "volcano", "pca", "survival", "sankey", "raincloud", "hexbin", "qq", "funnel", "waterfall", "bland_altman", "kaplan_meier", "shap_summary", "nomogram", "decision_curve", "network", "chord", "geospatial"]},
           "data": {"type": "string"},
           "title": {"type": "string"},
           "x": {"type": "string", "minLength": 1},
@@ -42,6 +42,10 @@
           "ci_low": {"type": "string"},
           "ci_high": {"type": "string"},
           "end": {"type": "string"},
+          "risk": {"type": "string"},
+          "mean_difference": {"type": "number"},
+          "loa_lower": {"type": "number"},
+          "loa_upper": {"type": "number"},
           "bins": {"type": "integer", "minimum": 5, "maximum": 100},
           "threshold": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
           "effect_threshold": {"type": "number", "minimum": 0},
@@ -59,8 +63,10 @@
         "allOf": [
           {"if": {"properties": {"kind": {"const": "forest"}}}, "then": {"required": ["y", "label", "ci_low", "ci_high"]}},
           {"if": {"properties": {"kind": {"const": "correlation"}}}, "else": {"if": {"properties": {"kind": {"const": "forest"}}}, "else": {"required": ["x", "y"]}}},
-          {"if": {"properties": {"kind": {"enum": ["heatmap", "confusion", "sankey"]}}}, "then": {"required": ["value"]}},
-          {"if": {"properties": {"kind": {"const": "dumbbell"}}}, "then": {"required": ["end"]}},
+          {"if": {"properties": {"kind": {"enum": ["heatmap", "confusion", "sankey", "network", "chord", "shap_summary", "geospatial"]}}}, "then": {"required": ["value"]}},
+          {"if": {"properties": {"kind": {"enum": ["dumbbell", "nomogram"]}}}, "then": {"required": ["end"]}},
+          {"if": {"properties": {"kind": {"const": "kaplan_meier"}}}, "then": {"required": ["risk"]}},
+          {"if": {"properties": {"kind": {"const": "bland_altman"}}}, "then": {"required": ["mean_difference", "loa_lower", "loa_upper"]}},
           {"if": {"properties": {"kind": {"const": "errorbar"}}}, "then": {"required": ["uncertainty"]}}
         ]
       }

@@ -1,5 +1,10 @@
 {
   "mcpServers": {
+    "doctoral-research-os": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["scripts/research_mcp.py"]
+    },
     "codex-review": {
       "type": "stdio",
       "command": "codex",
@@ -9,4 +14,3 @@
     }
   }
 }
-

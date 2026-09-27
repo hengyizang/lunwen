@@ -1,4 +1,4 @@
-# Research capabilities v2.2
+# Research capabilities v2.3
 
 ## Venue portfolio
 

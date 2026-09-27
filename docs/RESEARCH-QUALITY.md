@@ -1,4 +1,4 @@
-# Research-quality hard gates (v2.2.0)
+# Research-quality hard gates (v2.3.0)
 
 These controls raise the evidence floor for a doctoral programme targeting
 the declared six-paper portfolio of at least three current JCR Q1 targets and

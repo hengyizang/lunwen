@@ -87,11 +87,16 @@ def literature_acceptance(
     limit: int,
     include_opencitations: bool,
     citation_doi: str,
+    pace_seconds: float = 3.0,
 ) -> dict[str, Any]:
+    if not 0 <= pace_seconds <= 60:
+        raise ValueError("pace_seconds must be between 0 and 60")
     evidence_project.mkdir(parents=True, exist_ok=False)
     started_at = now()
     checks: list[dict[str, Any]] = []
     for provider in providers:
+        if checks and pace_seconds:
+            time.sleep(pace_seconds)
         started = time.monotonic()
         try:
             receipt = execute_search(
@@ -357,6 +362,7 @@ def parser() -> argparse.ArgumentParser:
     literature.add_argument("--limit", type=int, default=1)
     literature.add_argument("--skip-opencitations", action="store_true")
     literature.add_argument("--citation-doi", default=DEFAULT_DOI)
+    literature.add_argument("--pace-seconds", type=float, default=3.0)
     literature.add_argument("--output", type=Path, required=True)
 
     container = sub.add_parser("container")
@@ -372,6 +378,7 @@ def parser() -> argparse.ArgumentParser:
     wsl.add_argument("--limit", type=int, default=1)
     wsl.add_argument("--skip-opencitations", action="store_true")
     wsl.add_argument("--citation-doi", default=DEFAULT_DOI)
+    wsl.add_argument("--pace-seconds", type=float, default=3.0)
     wsl.add_argument("--image", default=DEFAULT_IMAGE)
     wsl.add_argument("--engine", choices=("docker", "podman"))
     wsl.add_argument("--timeout", type=int, default=180)
@@ -402,6 +409,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             limit=args.limit,
             include_opencitations=not args.skip_opencitations,
             citation_doi=args.citation_doi,
+            pace_seconds=args.pace_seconds,
         )
         report = {**common, "literature": literature, "container": None}
         status = literature["status"]
@@ -422,6 +430,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             limit=args.limit,
             include_opencitations=not args.skip_opencitations,
             citation_doi=args.citation_doi,
+            pace_seconds=args.pace_seconds,
         )
         container = container_acceptance(
             args.image,

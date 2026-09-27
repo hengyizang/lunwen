@@ -1,13 +1,12 @@
 # WSL2、公开文献 API 与 Docker 真实验收
 
-本页定义 v2.1 的可重复真实验收。验收脚本不会把网络可达性、模型回答或
+本页定义 v2.3 的可重复真实验收。验收脚本不会把网络可达性、模型回答或
 数据库返回结果当成科学结论；它只证明接口和隔离执行路径在指定环境中确实
 运行，并保存原始响应、哈希和失败原因。
 
 ## 1. WSL2 前置条件
 
-在 Windows 11 的 WSL2 Ubuntu 中把仓库放在 Linux 文件系统（例如
-`~/code/lunwen`），启用 Docker Desktop 的 WSL integration，并确认：
+在 Windows 11 的 WSL2 Ubuntu 中从 `/mnt/d/ad/lunwen` 运行项目，启用 Docker Desktop 的 WSL integration，并确认：
 
 ```bash
 uname -r
@@ -17,29 +16,28 @@ docker version
 `uname -r` 必须包含 `microsoft-standard-WSL2` 或 `WSL2`。只安装 Docker CLI、
 但 daemon 不可访问，不算通过。
 
-若 Windows C 盘空间紧张，先按 [`WSL2-D-DRIVE.md`](WSL2-D-DRIVE.md) 把新发行版、
-交换文件和 Docker 数据放到 D 盘；仓库仍应克隆到该发行版内部的 `~/code`，而
-不是 `/mnt/c` 或 `/mnt/d`。
+先按 [`WSL2-D-DRIVE.md`](WSL2-D-DRIVE.md) 把发行版、交换文件、Docker 数据、仓库、环境和缓存全部固定到 `D:\ad\lunwen`。验收脚本会拒绝其他项目根目录，并复核 `.runtime/docker-location.json`。
 
-安装可选 AI4Science 运行时：
+安装完整运行时：
 
 ```bash
-bash scripts/bootstrap-wsl.sh --with-ai4science
+bash scripts/bootstrap-d-drive.sh
 ```
 
-该选项在仓库 `.venv` 中安装锁定的 `paper-qa==2026.08.12` 与
-`tooluniverse==1.5.1`。PaperQA2 要求 Python 3.11+。
+该脚本在仓库 `.venv` 中安装全部声明的写作、科研质量、绘图、阅读、参考核验和 AI4Science 依赖，包括锁定的 `paper-qa==2026.08.12`、`tooluniverse==1.5.1` 和 `ref-verify==1.2.0`。PaperQA2 要求 Python 3.11+。
 
 ## 2. 一次完成 WSL2 真实验收
 
 推荐的一键命令会依次验证 WSL2、锁定包版本、API 配置和 Docker daemon，然后
-真实运行公开文献接口、隔离容器、PaperQA2、ToolUniverse，并校验收据：
+真实运行公开文献接口、隔离容器、PaperQA2、ToolUniverse 和 ref-verify，并校验收据：
 
 ```bash
 bash scripts/run-wsl-acceptance.sh \
   --project my-phd \
   --corpus literature/papers \
   --tool-request evidence/requests/uniprot-p12345.json \
+  --paper P01 \
+  --ref-claims papers/P01/reviews/ref-verify-input.json \
   --actor 'Hengyi Zang'
 ```
 
@@ -85,7 +83,7 @@ ARM64 主机必须用 Docker Hub 对应平台的完整 manifest digest，通过 
 
 ```bash
 python3 scripts/live_acceptance.py literature \
-  --output artifacts/acceptance/literature.json
+  --pace-seconds 3 --output artifacts/acceptance/literature.json
 python3 scripts/live_acceptance.py container --require-wsl2 \
   --output artifacts/acceptance/container.json
 ```

@@ -51,8 +51,26 @@ def triage(original: dict[str,Any], plan: dict[str,Any]) -> dict[str,Any]:
     short_text="\n".join(short);count=len(re.findall(r"\b[\w'-]+\b",short_text))
     return {"schema_version":"1.0","comment_count":len(cards),"venue_word_limit":budget,
             "submitted_words":count,"within_limit":count<=budget,"full_text":"\n".join(extended),
-            "short_text":short_text,"priority_order":[c["comment_id"] for c in ordered],
+            "short_text":short_text,"editor_summary":"# Editor / Area Chair summary\n\n"+header+"\n","priority_order":[c["comment_id"] for c in ordered],
             "human_review_required":True,"note":"Evidence status is author supplied; revision-trace verifies commitments separately."}
+
+def validate_saved_report(paper:Path)->list[str]:
+    review=paper/"reviews";original=review/"original-comments.json";cards=review/"concern-cards.json";output=review/"concern-response";coverage=output/"coverage.json"
+    required=(original,cards,coverage,output/"internal-full.md",output/"submitted-short.md",output/"editor-summary.md");missing=[p.relative_to(paper).as_posix() for p in required if not p.is_file() or p.is_symlink()]
+    if missing:return ["missing mandatory concern-card artifacts: "+", ".join(missing)]
+    try:
+        expected=triage(json.loads(original.read_text()),json.loads(cards.read_text()));full=expected.pop("full_text");short=expected.pop("short_text");summary=expected.pop("editor_summary");saved=json.loads(coverage.read_text())
+    except (OSError,ValueError,json.JSONDecodeError) as exc:return [f"cannot validate concern cards: {exc}"]
+    errors=[]
+    if (output/"internal-full.md").read_text()!=full:errors.append("stale concern-response/internal-full.md")
+    if (output/"submitted-short.md").read_text()!=short:errors.append("stale concern-response/submitted-short.md")
+    if (output/"editor-summary.md").read_text()!=summary:errors.append("stale concern-response/editor-summary.md")
+    for key,value in expected.items():
+        if saved.get(key)!=value:errors.append(f"stale concern response field: {key}")
+    if saved.get("original_sha256")!=sha256_file(original):errors.append("stale original reviewer comments hash")
+    if saved.get("cards_sha256")!=sha256_file(cards):errors.append("stale concern cards hash")
+    if not expected["within_limit"]:errors.append("submitted reviewer response exceeds venue word limit")
+    return errors
 
 
 def main()->int:
@@ -68,6 +86,7 @@ def main()->int:
     output=safe_file(project,args.output_dir,"output-dir");output.mkdir(parents=True,exist_ok=True)
     (output/"internal-full.md").write_text(report.pop("full_text"),encoding="utf-8")
     (output/"submitted-short.md").write_text(report.pop("short_text"),encoding="utf-8")
+    (output/"editor-summary.md").write_text(report.pop("editor_summary"),encoding="utf-8")
     report["original_sha256"]=sha256_file(original);report["cards_sha256"]=sha256_file(cards)
     (output/"coverage.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2));return 0 if report["within_limit"] else 2

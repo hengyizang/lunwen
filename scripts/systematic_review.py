@@ -67,20 +67,27 @@ def verified_works(project: Path, receipt_ids: list[str]) -> tuple[list[dict[str
 
 
 def seed(project: Path, receipt_ids: list[str], mode: str, criteria: str, actor: str,
-         output: Path) -> dict[str, Any]:
+         output: Path, protocol: Path|None=None) -> dict[str, Any]:
     if mode not in MODES or not actor.strip() or not criteria.strip():
         raise ValueError("mode, named actor and predeclared inclusion criteria required")
     if len(receipt_ids) < MODES[mode]:
         raise ValueError(f"{mode} requires at least {MODES[mode]} executed source receipts")
     if output.exists():
         raise ValueError("refusing to overwrite existing screening decisions")
+    protocol_record=None
+    if mode in {"deep","audit"}:
+        if protocol is None:raise ValueError("deep/audit requires a preregistered or named-human-approved protocol")
+        value=json.loads(protocol.read_text(encoding="utf-8"))
+        if value.get("status") not in {"registered","author-approved"} or not str(value.get("approved_by") or value.get("registration_id") or "").strip():raise ValueError("protocol needs registered/author-approved status and named authority")
+        protocol_record={"path":protocol.relative_to(project).as_posix(),"sha256":sha256_file(protocol),"status":value["status"]}
     works, found = verified_works(project, receipt_ids)
-    value = {"schema_version":"1.0","mode":mode,"criteria":criteria,
+    value = {"schema_version":"1.0","mode":mode,"criteria":criteria,"protocol":protocol_record,
              "seeded_by":actor,"receipt_ids":receipt_ids,"identified_count":found,
-             "studies":[{**item,"title_abstract":{"decision":"pending","reason":"","reviewer":"","independent_reviews":[],"adjudication":{}},
+             "studies":[{**item,"report_id":item["study_id"],"study_group_id":"","title_abstract":{"decision":"pending","reason":"","reviewer":"","independent_reviews":[],"adjudication":{}},
                          "full_text":{"decision":"pending","reason":"","reviewer":"","evidence_location":"","independent_reviews":[],"adjudication":{}},
                          "comparison":{"method":"","population":"","outcome":"","estimate":"",
-                                       "contradiction_group":"","limitations":""}} for item in works]}
+                                       "contradiction_group":"","limitations":""},
+                         "risk_of_bias":{"tool":"","assessors":[],"domains":[]}} for item in works]}
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(value,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     return {"identified":found,"deduplicated":len(works),"duplicates":found-len(works),
@@ -158,17 +165,24 @@ def assess(project: Path, ledger_path: Path) -> dict[str, Any]:
                 comparison = item.get("comparison") or {}
                 if any(not str(comparison.get(key, "")).strip() for key in ("method", "population", "outcome", "limitations")):
                     raise ValueError(f"{item['study_id']}: deep/audit inclusion needs a method, population, outcome and limitations comparison")
+                if not str(item.get("report_id","")).strip() or not str(item.get("study_group_id","")).strip():raise ValueError(f"{item['study_id']}: deep/audit inclusion needs report_id and study_group_id")
+                rob=item.get("risk_of_bias") or {};assessors=rob.get("assessors");domains=rob.get("domains")
+                if not str(rob.get("tool","")).strip() or not isinstance(assessors,list) or len(set(map(str,assessors)))<2 or not isinstance(domains,list) or not domains:raise ValueError(f"{item['study_id']}: deep/audit inclusion needs a named risk-of-bias tool, two assessors and domains")
+                for domain in domains:
+                    if not isinstance(domain,dict) or not all(str(domain.get(key,"")).strip() for key in ("domain","judgment","support")):raise ValueError(f"{item['study_id']}: each risk-of-bias domain needs judgment and support")
             included+=1
+    included_items=[item for item in studies if item.get("full_text",{}).get("decision")=="include"]
+    unique_groups={str(item.get("study_group_id") or item.get("study_id")) for item in included_items}
     return {"schema_version":"1.0","mode":ledger["mode"],"ledger_sha256":sha256_file(ledger_path),
             "identified":found,"duplicates_removed":found-len(studies),"unique":len(studies),
             "title_abstract_screened":screened,"title_abstract_excluded":excluded_title,
             "full_text_sought":fulltext,"reports_not_retrieved":not_retrieved,
             "reports_assessed":excluded_full+included,
-            "full_text_excluded":excluded_full,"included":included,
+            "full_text_excluded":excluded_full,"included":included,"included_reports":included,"included_studies":len(unique_groups),
             "pending_decisions":pending,"complete":pending==0,"exclusion_reasons":dict(sorted(reasons.items())),
             "search_receipt_ids":ledger["receipt_ids"],
             "screening_method":"dual independent + third adjudicator on conflict" if ledger["mode"] in {"deep","audit"} else "named single screening",
-            "warning":"PRISMA-style accounting; one normalized work is treated as one record/report. Multi-report studies, registration/protocol, complete search strategy and risk-of-bias require author reconciliation."}
+            "warning":"PRISMA-style accounting remains subject to completed human screening and checklist verification."}
 
 
 def _svg(counts: dict[str, Any]) -> str:
@@ -177,7 +191,7 @@ def _svg(counts: dict[str, Any]) -> str:
              ("Title/abstract excluded",counts["title_abstract_excluded"]),
              ("Full text sought",counts["full_text_sought"]),("Reports not retrieved",counts["reports_not_retrieved"]),
              ("Reports assessed",counts["reports_assessed"]),("Full text excluded",counts["full_text_excluded"]),
-             ("Studies included",counts["included"]),("Unresolved decisions",counts["pending_decisions"])]
+             ("Reports included",counts["included_reports"]),("Unique studies included",counts["included_studies"]),("Unresolved decisions",counts["pending_decisions"])]
     canvas_height=80+len(cells)*85
     lines=[f'<svg xmlns="http://www.w3.org/2000/svg" width="620" height="{canvas_height}" viewBox="0 0 620 {canvas_height}">',
            f'<rect width="620" height="{canvas_height}" fill="white"/>',
@@ -211,6 +225,7 @@ def export(project: Path, ledger_path: Path, output_dir: Path) -> dict[str, Any]
                   for receipt_id in data["receipt_ids"]]
     (output_dir/"search-strategy.json").write_text(json.dumps({"criteria":data["criteria"],"source_receipts":search_log,
         "manual_PRISMA_S_check_required":True},indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    (output_dir/"protocol.json").write_text(json.dumps(data.get("protocol"),indent=2)+"\n",encoding="utf-8")
     checklist={"schema_version":"1.0","not_a_completed_reporting_checklist":True,
                "PRISMA_2020_reference":"https://www.prisma-statement.org/prisma-2020-checklist",
                "PRISMA_S_reference":"https://www.prisma-statement.org/prisma-search",
@@ -225,6 +240,11 @@ def export(project: Path, ledger_path: Path, output_dir: Path) -> dict[str, Any]
             writer.writerow({"study_id":item["study_id"],"title":work.get("title"),"year":work.get("year"),
                 "doi":work.get("doi"),"source":work.get("source"),"evidence_location":item["full_text"]["evidence_location"],
                 **{field:comparison.get(field,"") for field in headers[6:]}})
+    with (output_dir/"risk-of-bias.csv").open("w",encoding="utf-8",newline="") as handle:
+        writer=csv.DictWriter(handle,fieldnames=["report_id","study_group_id","tool","assessors","domain","judgment","support"]);writer.writeheader()
+        for item in selected:
+            rob=item.get("risk_of_bias") or {}
+            for domain in rob.get("domains",[]):writer.writerow({"report_id":item.get("report_id"),"study_group_id":item.get("study_group_id"),"tool":rob.get("tool"),"assessors":"; ".join(map(str,rob.get("assessors",[]))),**domain})
     bib=[];ris=[];rows=[]
     for index,item in enumerate(selected,1):
         work=item["work"];key=f"review{index}"
@@ -236,20 +256,55 @@ def export(project: Path, ledger_path: Path, output_dir: Path) -> dict[str, Any]
     (output_dir/"report.html").write_text("<!doctype html><meta charset=\"utf-8\"><h1>Screening report</h1>"+
         f"<p>Complete: {report['complete']}; included: {report['included']}; pending: {report['pending_decisions']}</p>"+
         "<table><tr><th>Title</th><th>Year</th><th>DOI</th></tr>"+"".join(rows)+"</table>",encoding="utf-8")
+    files=[p for p in sorted(output_dir.iterdir()) if p.is_file() and p.name!="export-manifest.json"]
+    manifest={"schema_version":"1.0","ledger_sha256":sha256_file(ledger_path),"files":{p.name:sha256_file(p) for p in files}}
+    (output_dir/"export-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8")
     return {**report,"files":[p.relative_to(project).as_posix() for p in sorted(output_dir.iterdir()) if p.is_file()]}
+
+
+def validate_completed_checklist(path:Path)->list[str]:
+    try:value=json.loads(path.read_text(encoding="utf-8"))
+    except (OSError,json.JSONDecodeError) as exc:return [f"cannot read completed checklist: {exc}"]
+    errors=[]
+    if not str(value.get("signed_by","")).strip() or not str(value.get("signed_at","")).strip():errors.append("completed checklist needs named signature and date")
+    for name,count in (("PRISMA_2020",27),("PRISMA_S",16)):
+        rows=value.get(name)
+        if not isinstance(rows,list) or len(rows)!=count:errors.append(f"{name} needs exactly {count} items");continue
+        numbers=[str(row.get("item_number","")) for row in rows if isinstance(row,dict)]
+        if numbers!=[str(number) for number in range(1,count+1)]:errors.append(f"{name} item numbers must be unique and ordered 1..{count}")
+        for row in rows:
+            if not isinstance(row,dict) or row.get("status") not in {"complete","not_applicable"} or not str(row.get("manuscript_location","")).strip():errors.append(f"{name} item {row.get('item_number') if isinstance(row,dict) else '?'} is incomplete")
+    return errors
+
+
+def validate_export(project:Path,output_dir:Path,checklist:Path|None=None)->list[str]:
+    required={"prisma.json","prisma.svg","included.json","search-strategy.json","protocol.json","reporting-checklist-template.json","comparison-matrix.csv","risk-of-bias.csv","included.bib","included.ris","report.html","export-manifest.json"};missing=sorted(name for name in required if not (output_dir/name).is_file());errors=["missing systematic-review exports: "+", ".join(missing)] if missing else []
+    if not missing:
+        try:
+            manifest=json.loads((output_dir/"export-manifest.json").read_text());hashes=manifest["files"]
+            for name in required-{"export-manifest.json"}:
+                if hashes.get(name)!=sha256_file(output_dir/name):errors.append(f"stale systematic-review export: {name}")
+        except (OSError,KeyError,json.JSONDecodeError) as exc:errors.append(f"invalid export manifest: {exc}")
+    if checklist:errors.extend(validate_completed_checklist(checklist))
+    return errors
 
 
 def main()->int:
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="command",required=True)
     s=sub.add_parser("seed");s.add_argument("--project",required=True);s.add_argument("--receipt",action="append",required=True)
     s.add_argument("--mode",choices=sorted(MODES),required=True);s.add_argument("--criteria",required=True);s.add_argument("--actor",required=True)
+    s.add_argument("--protocol",help="project-relative protocol JSON; mandatory for deep/audit")
     s.add_argument("--output",default="evidence/systematic/screening.json")
     r=sub.add_parser("report");r.add_argument("--project",required=True)
     r.add_argument("--ledger",default="evidence/systematic/screening.json");r.add_argument("--output-dir",default="evidence/systematic/report")
+    v=sub.add_parser("validate");v.add_argument("--project",required=True);v.add_argument("--output-dir",default="evidence/systematic/report");v.add_argument("--completed-checklist")
     args=p.parse_args();project=PROJECTS_ROOT/args.project
-    if args.command=="seed":result=seed(project,args.receipt,args.mode,args.criteria,args.actor,safe_file(project,args.output,"output"))
-    else:result=export(project,safe_file(project,args.ledger,"ledger"),safe_file(project,args.output_dir,"output-dir"))
-    print(json.dumps(result,indent=2,ensure_ascii=False));return 0
+    if args.command=="seed":result=seed(project,args.receipt,args.mode,args.criteria,args.actor,safe_file(project,args.output,"output"),safe_file(project,args.protocol,"protocol") if args.protocol else None)
+    elif args.command=="report":result=export(project,safe_file(project,args.ledger,"ledger"),safe_file(project,args.output_dir,"output-dir"))
+    else:
+        errors=validate_export(project,safe_file(project,args.output_dir,"output-dir"),safe_file(project,args.completed_checklist,"completed-checklist") if args.completed_checklist else None)
+        result={"pass":not errors,"errors":errors}
+    print(json.dumps(result,indent=2,ensure_ascii=False));return 0 if args.command!="validate" or result["pass"] else 2
 
 
 if __name__=="__main__":raise SystemExit(main())

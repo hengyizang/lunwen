@@ -9,7 +9,7 @@ executed by the same reviewed Python scripts used by the CLI.
 From WSL2 Ubuntu:
 
 ```bash
-cd ~/code/lunwen
+cd /mnt/d/ad/lunwen
 git switch main
 git pull --ff-only
 bash scripts/bootstrap-wsl.sh

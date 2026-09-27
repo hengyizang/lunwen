@@ -176,8 +176,8 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertEqual(payload, b"{}")
         self.assertEqual(status, 200)
         self.assertEqual(len(calls), 3)
-        self.assertTrue(all(item["Accept"] == "application/atom+xml" for item in calls))
-        self.assertEqual([item.args[0] for item in sleep.call_args_list], [2, 5])
+        self.assertTrue(all("application/atom+xml" in item["Accept"] for item in calls))
+        self.assertEqual([item.args[0] for item in sleep.call_args_list], [5, 20])
 
     def test_failed_normalization_preserves_returned_raw_response(self) -> None:
         def fetcher(url: str, **_kwargs):

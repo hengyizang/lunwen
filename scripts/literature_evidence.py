@@ -63,6 +63,11 @@ MAX_RESPONSE_BYTES = 32 * 1024 * 1024
 HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 SAFE_RECEIPT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{1,127}$")
 TRANSIENT_HTTP_RE = re.compile(r"HTTP Error (?:429|500|502|503|504)\b")
+RETRY_SCHEDULES = {
+    "openalex": (0, 5, 20, 60),
+    "semantic-scholar": (0, 10, 30, 90),
+    "arxiv": (0, 5, 20, 60),
+}
 
 
 class LiteratureEvidenceError(RuntimeError):
@@ -168,13 +173,11 @@ def _doi(value: Any) -> str | None:
 
 def provider_headers(provider: str) -> dict[str, str]:
     headers = {
-        "User-Agent": (
-            "DoctoralResearchOS/2.2 "
-            "(https://github.com/hengyizang/lunwen; auditable metadata discovery)"
-        )
+        "User-Agent": "DoctoralResearchOS/2.3 (https://github.com/hengyizang/lunwen; "
+        f"auditable metadata discovery; contact={os.environ.get('LITERATURE_CONTACT_EMAIL','not-configured')})"
     }
     if provider == "arxiv":
-        headers["Accept"] = "application/atom+xml"
+        headers["Accept"] = "application/atom+xml, application/xml, text/xml, */*;q=0.1"
     elif provider == "dblp":
         headers["Accept"] = "application/sparql-results+json"
     else:
@@ -197,7 +200,8 @@ def fetch_provider_bytes(
 ) -> tuple[bytes, str, int | None, str | None]:
     """Retry only explicit transient HTTP failures, preserving all final errors."""
 
-    for attempt, delay in enumerate((0, 2, 5), 1):
+    schedule = RETRY_SCHEDULES.get(provider, (0, 2, 5, 15))
+    for attempt, delay in enumerate(schedule, 1):
         if delay:
             time.sleep(delay)
         try:
@@ -207,7 +211,7 @@ def fetch_provider_bytes(
                 headers=provider_headers(provider),
             )
         except Exception as exc:
-            if attempt == 3 or not TRANSIENT_HTTP_RE.search(str(exc)):
+            if attempt == len(schedule) or not TRANSIENT_HTTP_RE.search(str(exc)):
                 raise
     raise AssertionError("unreachable provider retry state")
 
@@ -283,9 +287,10 @@ def normalized_work(
 def build_search_url(provider: str, query: str, limit: int) -> str:
     encoded = urllib.parse.urlencode
     if provider == "openalex":
-        return "https://api.openalex.org/works?" + encoded(
-            {"search": query, "per-page": limit}
-        )
+        values = {"search": query, "per-page": limit}
+        contact = os.environ.get("OPENALEX_MAILTO") or os.environ.get("LITERATURE_CONTACT_EMAIL")
+        if contact: values["mailto"] = contact
+        return "https://api.openalex.org/works?" + encoded(values)
     if provider == "crossref":
         return "https://api.crossref.org/works?" + encoded(
             {"query.bibliographic": query, "rows": limit}

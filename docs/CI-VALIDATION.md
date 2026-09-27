@@ -7,17 +7,18 @@
 `deterministic` job 在 Python 3.10、3.12、3.13 上分别执行：
 
 ```bash
-python -m pip install ".[figures]"
+python -m pip install ".[figures,reader]" "reportlab>=4,<5"
 python -m unittest discover -s tests -v
 python -m compileall -q scripts tests
 python scripts/validate_repo.py
 git diff --check
 ```
 
-`.[figures]` 是项目已经声明的可选依赖组，包含科研绘图测试实际使用的
-Matplotlib、NumPy 和 pandas。CI 不再依赖 runner 恰好预装这些包。
+`.[figures,reader]` 是项目已经声明的绘图与文档读取依赖，覆盖 Matplotlib、NumPy、pandas、PDF/DOCX/PPTX 路径；ReportLab 只用于测试中生成真实 PDF 固件。CI 不再依赖 runner 恰好预装这些包。
 矩阵覆盖项目声明的最低 Python 3.10，以及当前主要运行版本。单个 job 最长
 15 分钟；同一分支有新提交时，旧运行会取消。
+
+独立的 `windows-script-syntax` job 在 `windows-latest` 上用 PowerShell AST 解析 `scripts/install-d-drive.ps1`，但不会在 GitHub runner 上修改磁盘、安装 WSL 或迁移 Docker。
 
 ## 每周及手动触发
 
@@ -29,6 +30,8 @@ Matplotlib、NumPy 和 pandas。CI 不再依赖 runner 恰好预装这些包。
   JavaScript 反机器人挑战当成 API；
 - `container-isolation`：在 GitHub Linux runner 上用 digest 固定镜像实际验证
   无网络、只读根目录和受限 tmpfs。
+
+手动触发时可勾选 `install_ai4science`。`adapter-packages` 会真实安装项目声明的 PaperQA2、ToolUniverse 与 ref-verify 固定版本，核对入口和包身份，再运行适配器契约测试；它不执行付费 PaperQA 问答，也不伪造用户语料。
 
 外部服务限流或停机将使 live job 明确失败，但不会让普通 PR 的确定性回归结果
 失真。两个 live job 的证据保留 14 天。

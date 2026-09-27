@@ -65,7 +65,39 @@ def _metadata(path: Path) -> dict[str,Any]:
             "capability_terms":sorted(terms),"headings":re.findall(r"(?m)^#{1,3}\s+(.+)$",source)[:20]}
 
 
-def scan(roots: list[Path], destination: Path) -> dict[str,Any]:
+def lint_skill(target: Path) -> dict[str,Any]:
+    target=target.resolve();findings=[];file_count=0;total=0
+    high={r"curl\s+[^\n|]+\|\s*(?:ba)?sh":"remote download piped to shell",r"wget\s+[^\n|]+\|\s*(?:ba)?sh":"remote download piped to shell",r"\brm\s+-rf\s+(?:/|~|\$HOME)":"broad destructive deletion",r"Invoke-Expression|\biex\s*\(":"dynamic PowerShell execution",r"(?:print|echo).{0,80}(?:API_KEY|TOKEN|PASSWORD)":"possible secret disclosure"}
+    medium={r"\b(?:sudo|chmod\s+777)\b":"privileged or overly broad permission change",r"\b(?:eval|exec)\s*\(":"dynamic code execution",r"subprocess\.(?:run|Popen)|os\.system":"local process execution"}
+    for item in sorted(target.rglob("*")):
+        if item.is_symlink():findings.append({"severity":"high","path":item.relative_to(target).as_posix(),"issue":"symlink not allowed"});continue
+        if not item.is_file():continue
+        file_count+=1;size=item.stat().st_size;total+=size
+        if size>1_000_000:findings.append({"severity":"high","path":item.relative_to(target).as_posix(),"issue":"file exceeds 1 MiB"});continue
+        text=item.read_text(encoding="utf-8",errors="replace")
+        for pattern,issue in high.items():
+            if re.search(pattern,text,re.I):findings.append({"severity":"high","path":item.relative_to(target).as_posix(),"issue":issue})
+        for pattern,issue in medium.items():
+            if re.search(pattern,text,re.I):findings.append({"severity":"medium","path":item.relative_to(target).as_posix(),"issue":issue})
+    if file_count>200:findings.append({"severity":"high","path":".","issue":"skill contains more than 200 files"})
+    return {"file_count":file_count,"total_bytes":total,"findings":findings,"blocked":any(x["severity"]=="high" for x in findings)}
+
+
+def mcp_inventory(configs:list[Path])->list[dict[str,Any]]:
+    rows=[]
+    for config in configs:
+        if not config.is_file() or config.is_symlink():raise ValueError(f"invalid MCP config: {config}")
+        value=json.loads(config.read_text(encoding="utf-8"));servers=value.get("mcpServers",{})
+        if not isinstance(servers,dict):raise ValueError(f"mcpServers must be an object: {config}")
+        for name,spec in sorted(servers.items()):
+            if not isinstance(spec,dict):raise ValueError(f"malformed MCP server {name}")
+            environment=spec.get("env",{});secret_literals=[]
+            if isinstance(environment,dict):secret_literals=[key for key,val in environment.items() if re.search(r"KEY|TOKEN|SECRET|PASSWORD",key,re.I) and str(val).strip()]
+            rows.append({"config":str(config.resolve()),"name":name,"type":spec.get("type"),"command":spec.get("command"),"args":spec.get("args",[]),"literal_secret_fields":secret_literals,"safe":not secret_literals})
+    return rows
+
+
+def scan(roots: list[Path], destination: Path, mcp_configs:list[Path]|None=None) -> dict[str,Any]:
     if not roots or any(not root.is_dir() for root in roots):raise ValueError("explicit existing roots required")
     destination.mkdir(parents=True,exist_ok=True)
     latest=destination/"latest.json"
@@ -76,9 +108,9 @@ def scan(roots: list[Path], destination: Path) -> dict[str,Any]:
             if path.is_symlink() or not path.is_dir() or not (path/"SKILL.md").is_file():continue
             target=path/"SKILL.md";key=str(path.resolve());hash_=digest(target)
             if key in previous and previous[key].get("sha256")==hash_:
-                row=previous[key];reused+=1
+                row=previous[key];row.setdefault("security",lint_skill(path));reused+=1
             else:
-                row={"path":key,"sha256":hash_,**_metadata(target)}
+                row={"path":key,"sha256":hash_,**_metadata(target),"security":lint_skill(path)}
             rows.append(row)
             if len(rows)>2000:raise ValueError("skill inventory limit exceeded")
     for row in rows:
@@ -92,7 +124,7 @@ def scan(roots: list[Path], destination: Path) -> dict[str,Any]:
     now=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     report={"schema_version":"1.0","scanned_at":now,"roots":[str(p.resolve()) for p in roots],
             "skill_count":len(rows),"reused_hash_cache":reused,"new_or_changed":len(rows)-reused,
-            "missing_since_previous":[p for p in previous if p not in {r["path"] for r in rows}],"skills":rows}
+            "missing_since_previous":[p for p in previous if p not in {r["path"] for r in rows}],"skills":rows,"mcp_servers":mcp_inventory(mcp_configs or [])}
     body=json.dumps(report,indent=2,ensure_ascii=False)+"\n"
     latest.write_text(body,encoding="utf-8")
     history=destination/"history";history.mkdir(exist_ok=True)
@@ -111,10 +143,16 @@ def scan(roots: list[Path], destination: Path) -> dict[str,Any]:
     return {k:report[k] for k in ("skill_count","reused_hash_cache","new_or_changed","missing_since_previous")}
 
 
-def plan_operation(target: Path, roots: list[Path], destination: Path, action: str) -> dict[str,Any]:
+def plan_operation(target: Path, roots: list[Path], destination: Path, action: str, install_root:Path|None=None) -> dict[str,Any]:
     target=_safe_target(target,roots)
     destination=_safe_destination(target,destination)
-    if action not in {"backup","update","disable"}:raise ValueError("unknown action")
+    if action not in {"backup","update","disable","install"}:raise ValueError("unknown action")
+    security=lint_skill(target)
+    if action=="install":
+        if security["blocked"]:raise ValueError("skill install blocked by high-severity security findings")
+        if install_root is None:raise ValueError("install requires an explicit install_root")
+        install_root=install_root.resolve();install_root.mkdir(parents=True,exist_ok=True)
+        if target==install_root or install_root in target.parents:raise ValueError("install root cannot contain source Skill")
     if action=="update":
         gitroot=subprocess.run(["git","-C",str(target),"rev-parse","--show-toplevel"],capture_output=True,text=True,check=True).stdout.strip()
         if Path(gitroot).resolve()!=target:raise ValueError("update requires a standalone clean skill Git repository")
@@ -126,7 +164,7 @@ def plan_operation(target: Path, roots: list[Path], destination: Path, action: s
     destination.mkdir(parents=True,exist_ok=True)
     token=uuid.uuid4().hex
     plan={"action":action,"target":str(target),"roots":[str(root.resolve()) for root in roots],
-          "skill_sha256":digest(target/"SKILL.md"),"tree_sha256":_tree_digest(target),"token":token}
+          "skill_sha256":digest(target/"SKILL.md"),"tree_sha256":_tree_digest(target),"token":token,"security":security,"install_root":str(install_root) if install_root else None}
     plans=destination/"plans";plans.mkdir(exist_ok=True)
     (plans/(token+".json")).write_text(json.dumps(plan,indent=2),encoding="utf-8")
     return plan
@@ -162,21 +200,31 @@ def apply_operation(destination: Path, token: str) -> dict[str,Any]:
             raise ValueError("target update conditions changed after plan")
         subprocess.run(["git","-C",str(target),"pull","--ff-only"],check=True)
         result={"updated":str(target)}
+    elif action=="install":
+        if lint_skill(target)["blocked"]:raise ValueError("skill changed to a blocked security state")
+        install_root=Path(plan["install_root"]).resolve();install_root.mkdir(parents=True,exist_ok=True);installed=install_root/target.name
+        if installed.exists():raise ValueError("installed Skill already exists; disable it or use a reviewed update")
+        shutil.copytree(target,installed,symlinks=False);result={"installed":str(installed),"activated":True,"tree_sha256":_tree_digest(installed)}
     else:raise ValueError("unknown plan action")
     path.unlink()
     return result
 
 
 def main()->int:
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument("command",choices=("scan","plan","apply"))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument("command",choices=("scan","plan","apply","lint"))
     p.add_argument("--root",action="append",type=Path,default=[])
-    p.add_argument("--output-dir",type=Path,required=True);p.add_argument("--target",type=Path)
-    p.add_argument("--action",choices=("backup","update","disable"));p.add_argument("--confirm-token")
+    p.add_argument("--output-dir",type=Path);p.add_argument("--target",type=Path)
+    p.add_argument("--action",choices=("backup","update","disable","install"));p.add_argument("--confirm-token")
+    p.add_argument("--install-root",type=Path);p.add_argument("--mcp-config",action="append",type=Path,default=[])
     args=p.parse_args()
-    if args.command=="scan":result=scan(args.root,args.output_dir)
+    if args.command in {"scan","plan","apply"} and not args.output_dir:p.error(f"{args.command} requires --output-dir")
+    if args.command=="scan":result=scan(args.root,args.output_dir,args.mcp_config)
     elif args.command=="plan":
         if not args.target or not args.action:p.error("plan requires --target and --action")
-        result=plan_operation(args.target,args.root,args.output_dir,args.action)
+        result=plan_operation(args.target,args.root,args.output_dir,args.action,args.install_root)
+    elif args.command=="lint":
+        if not args.target:p.error("lint requires --target")
+        result=lint_skill(args.target)
     else:
         if not args.confirm_token:p.error("apply requires --confirm-token")
         result=apply_operation(args.output_dir,args.confirm_token)

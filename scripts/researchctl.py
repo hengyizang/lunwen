@@ -347,6 +347,14 @@ def gate_errors(slug,gate):
             errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
         except ImportError as exc:errors.append(f"{pid} paper-facts validator unavailable: {exc}")
         try:
+            from scripts.rebuttal_triage import validate_saved_report as validate_concern_cards
+            errors.extend(f"{pid} concern cards: {x}" for x in validate_concern_cards(paper))
+        except ImportError as exc:errors.append(f"{pid} concern-card validator unavailable: {exc}")
+        try:
+            from scripts.manuscript_docx import validate_saved_report as validate_docx_build
+            errors.extend(f"{pid} DOCX build: {x}" for x in validate_docx_build(paper))
+        except ImportError as exc:errors.append(f"{pid} DOCX validator unavailable: {exc}")
+        try:
             from scripts.ref_verify_adapter import validate_saved_report as validate_ref_verify
             errors.extend(f"{pid} citation claim verification: {x}" for x in validate_ref_verify(paper))
         except ImportError as exc:errors.append(f"{pid} ref-verify validator unavailable: {exc}")
