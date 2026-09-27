@@ -24,7 +24,8 @@ exact missing or stale artifact.
 
 G1 literature evidence must come from executed retrievals, not model-authored
 search summaries. Use the dashboard or `scripts/literature_evidence.py` to query
-OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP or HAL. The
+OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP or HAL, with
+SerpApi Google Scholar available as an explicit quota-limited supplemental source. The
 control plane stores the exact response bytes, a normalized work list and both
 SHA-256 values. OpenCitations expands DOI citation graphs; authorized Web of
 Science and Scopus CSV/JSON exports can be imported locally without automating

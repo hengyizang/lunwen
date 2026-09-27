@@ -33,7 +33,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
-PROVIDERS = (
+DEFAULT_SEARCH_PROVIDERS = (
     "openalex",
     "crossref",
     "semantic-scholar",
@@ -42,6 +42,8 @@ PROVIDERS = (
     "dblp",
     "hal",
 )
+OPTIONAL_SEARCH_PROVIDERS = ("serpapi-google-scholar",)
+PROVIDERS = DEFAULT_SEARCH_PROVIDERS + OPTIONAL_SEARCH_PROVIDERS
 DISPLAY_NAMES = {
     "openalex": "OpenAlex",
     "crossref": "Crossref",
@@ -50,6 +52,7 @@ DISPLAY_NAMES = {
     "europe-pmc": "Europe PMC",
     "dblp": "DBLP",
     "hal": "HAL",
+    "serpapi-google-scholar": "Google Scholar via SerpApi",
     "opencitations": "OpenCitations",
     "wos": "Web of Science",
     "scopus": "Scopus",
@@ -71,6 +74,7 @@ RETRY_SCHEDULES = {
     "openalex": (0, 5, 20, 60),
     "semantic-scholar": (0, 10, 30, 90),
     "arxiv": (0, 5, 20, 60),
+    "serpapi-google-scholar": (0, 2, 5),
 }
 
 
@@ -197,6 +201,55 @@ def provider_headers(provider: str) -> dict[str, str]:
     return headers
 
 
+def _serpapi_transport_url(request_url: str) -> str:
+    """Inject the required query credential only at the network boundary.
+
+    SerpApi requires ``api_key`` as a query parameter and rejects header-based
+    authentication.  The returned URL must therefore never be persisted or
+    included in an exception or report.
+    """
+
+    api_key = os.environ.get("SERPAPI_API_KEY", "").strip()
+    if not api_key:
+        raise LiteratureEvidenceError(
+            "SERPAPI_API_KEY is required for the SerpApi Google Scholar provider"
+        )
+    parsed = urllib.parse.urlsplit(request_url)
+    if parsed.scheme != "https" or parsed.hostname != "serpapi.com":
+        raise LiteratureEvidenceError("refusing to send a SerpApi key to an unexpected host")
+    values = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+    values = [(key, value) for key, value in values if key != "api_key"]
+    values.append(("api_key", api_key))
+    return urllib.parse.urlunsplit(
+        (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(values), "")
+    )
+
+
+def _redact_provider_text(provider: str, value: Any) -> str:
+    text = str(value)
+    if provider != "serpapi-google-scholar":
+        return text
+    api_key = os.environ.get("SERPAPI_API_KEY", "").strip()
+    if api_key:
+        text = text.replace(api_key, "<redacted>")
+    return re.sub(r"([?&]api_key=)[^&\s]+", r"\1<redacted>", text, flags=re.I)
+
+
+def _safe_provider_url(provider: str, value: Any) -> str:
+    text = _redact_provider_text(provider, value)
+    if provider != "serpapi-google-scholar":
+        return text
+    parsed = urllib.parse.urlsplit(text)
+    values = [
+        (key, item)
+        for key, item in urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+        if key.lower() != "api_key"
+    ]
+    return urllib.parse.urlunsplit(
+        (parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(values), "")
+    )
+
+
 def fetch_provider_bytes(
     fetcher: Callable[..., tuple[bytes, str, int | None, str | None]],
     request_url: str,
@@ -205,18 +258,37 @@ def fetch_provider_bytes(
     """Retry only explicit transient HTTP failures, preserving all final errors."""
 
     schedule = RETRY_SCHEDULES.get(provider, (0, 2, 5, 15))
+    transport_url = (
+        _serpapi_transport_url(request_url)
+        if provider == "serpapi-google-scholar"
+        else request_url
+    )
     for attempt, delay in enumerate(schedule, 1):
         if delay:
             time.sleep(delay)
         try:
-            return fetcher(
-                request_url,
+            payload, final_url, status, content_type = fetcher(
+                transport_url,
                 max_bytes=MAX_RESPONSE_BYTES,
                 headers=provider_headers(provider),
             )
+            if provider == "serpapi-google-scholar":
+                api_key = os.environ.get("SERPAPI_API_KEY", "").strip()
+                if api_key and api_key.encode() in payload:
+                    raise LiteratureEvidenceError(
+                        "refusing to persist a provider response that echoes SERPAPI_API_KEY"
+                    )
+            return (
+                payload,
+                _safe_provider_url(provider, final_url),
+                status,
+                content_type,
+            )
         except Exception as exc:
             if attempt == len(schedule) or not TRANSIENT_HTTP_RE.search(str(exc)):
-                raise
+                raise LiteratureEvidenceError(
+                    _redact_provider_text(provider, exc)
+                ) from exc
     raise AssertionError("unreachable provider retry state")
 
 
@@ -347,6 +419,16 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
                 "wt": "json",
             }
         )
+    if provider == "serpapi-google-scholar":
+        return "https://serpapi.com/search.json?" + encoded(
+            {
+                "engine": "google_scholar",
+                "q": query,
+                "num": min(limit, 20),
+                "hl": "en",
+                "output": "json",
+            }
+        )
     raise LiteratureEvidenceError(f"unsupported provider: {provider}")
 
 
@@ -466,6 +548,46 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     item.get("producedDateY_i"), item.get("doiId_s"), item.get("uri_s"),
                     item.get("authFullName_s", []), abstract=item.get("abstract_s"), venue=item.get("journalTitle_s"),
                 ))
+        elif provider == "serpapi-google-scholar":
+            if isinstance(data, dict) and data.get("error"):
+                raise LiteratureEvidenceError(
+                    "SerpApi Google Scholar returned an error: "
+                    + (_text(data.get("error")) or "unknown error")
+                )
+            metadata = data.get("search_metadata", {}) if isinstance(data, dict) else {}
+            if isinstance(metadata, dict) and metadata.get("status") == "Error":
+                raise LiteratureEvidenceError("SerpApi Google Scholar search status is Error")
+            for item in data.get("organic_results", []) if isinstance(data, dict) else []:
+                if not isinstance(item, dict):
+                    continue
+                publication = (
+                    item.get("publication_info")
+                    if isinstance(item.get("publication_info"), dict)
+                    else {}
+                )
+                link = item.get("link")
+                resources = item.get("resources")
+                if not link and isinstance(resources, list):
+                    link = next(
+                        (
+                            resource.get("link")
+                            for resource in resources
+                            if isinstance(resource, dict) and resource.get("link")
+                        ),
+                        None,
+                    )
+                works.append(
+                    normalized_work(
+                        provider,
+                        item.get("result_id"),
+                        item.get("title"),
+                        publication.get("summary"),
+                        _doi(link),
+                        link,
+                        publication.get("authors", []),
+                        abstract=item.get("snippet"),
+                    )
+                )
         else:
             raise LiteratureEvidenceError(f"unsupported provider: {provider}")
     result: list[dict[str, Any]] = []
@@ -947,7 +1069,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     try:
         project = project_path(args.project)
         if args.command == "search":
-            providers = args.provider or list(PROVIDERS)
+            providers = args.provider or list(DEFAULT_SEARCH_PROVIDERS)
             receipts = [
                 execute_search(
                     project,

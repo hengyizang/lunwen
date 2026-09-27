@@ -54,7 +54,8 @@ mkdir -p artifacts/acceptance
 ```
 
 该命令实际调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、
-DBLP、HAL 和 OpenCitations，每个检索接口至少规范化一条记录；随后实际启动
+DBLP、HAL、已配置的 SerpApi Google Scholar 和 OpenCitations，每个被选择的
+检索接口至少规范化一条记录；随后实际启动
 Docker/Podman 容器，验证：
 
 - 镜像由完整 SHA-256 digest 固定；
@@ -77,12 +78,19 @@ ARM64 主机必须用 Docker Hub 对应平台的完整 manifest digest，通过 
 脚本分别返回 0、1、2。报告及原始响应位于 `artifacts/acceptance/`，不提交 Git。
 公开接口只对明确的 429/5xx 临时错误进行有限重试。Semantic Scholar 可选读取
 `SEMANTIC_SCHOLAR_API_KEY`，OpenCitations 可选读取
-`OPENCITATIONS_ACCESS_TOKEN`；请求头中的值从不进入收据。
+`OPENCITATIONS_ACCESS_TOKEN`，SerpApi Google Scholar 读取
+`SERPAPI_API_KEY`。Semantic Scholar 与 OpenCitations 的凭据只在请求头使用；
+SerpApi 官方接口强制把 `api_key` 放入查询参数，因此适配器只在实际网络调用前
+注入，随后从 final URL、异常、收据和 artifact 中删除，并拒绝持久化任何回显
+密钥的响应。官方参数与返回结构核对日期：2026-09-27，见
+[Google Scholar API](https://serpapi.com/google-scholar-api)。
 
 严格模式要求 Semantic Scholar 也真实返回成功，因此共享出口持续收到 429 时应
 申请并配置官方 API key。GitHub 定时 CI 可使用
-`--allow-missing-semantic-scholar-key`：无 key 时报告会明确列出
-`skipped_providers`，不会伪造 Semantic Scholar 收据；其余来源仍须全部通过。
+`--allow-missing-semantic-scholar-key` 和 `--allow-missing-serpapi-key`：无相应 key 时
+报告会明确列出 `skipped_providers`，不会伪造收据；其余来源仍须全部通过。
+SerpApi 是补充发现源，不替代 DOI、出版商或其他权威元数据核验；单次最多请求
+20 条，真实验收只请求 1 条以控制配额。
 arXiv 的连通性验收使用官方 `id_list` 查询已知记录，实际主题检索仍使用
 `search_query`，两条路径不会混淆。
 
@@ -90,13 +98,31 @@ arXiv 的连通性验收使用官方 `id_list` 查询已知记录，实际主题
 
 ```bash
 python3 scripts/live_acceptance.py literature \
-  --pace-seconds 3 --output artifacts/acceptance/literature.json
+  --pace-seconds 3 --allow-missing-serpapi-key \
+  --output artifacts/acceptance/literature.json
 python3 scripts/live_acceptance.py container --require-wsl2 \
   --output artifacts/acceptance/container.json
 ```
 
 验收检索不等于 G1 文献筛选。它生成的 `search-log.jsonl` 故意保持“待具名人工
 筛选”，不能直接用于关闭科研质量闸门。
+
+在 G1 中显式使用补充来源：
+
+```bash
+read -rsp 'SerpApi key: ' SERPAPI_API_KEY && export SERPAPI_API_KEY && echo
+.venv/bin/python scripts/literature_evidence.py search \
+  --project my-phd \
+  --provider serpapi-google-scholar \
+  --query 'registered topic and mechanism terms' \
+  --query-family supplemental-google-scholar \
+  --date-range '2021-2026' \
+  --filters 'article and review leads for human screening' \
+  --limit 20
+unset SERPAPI_API_KEY
+```
+
+不传 `--provider` 时仍只运行原有七个核心检索来源，不会静默消耗 SerpApi 配额。
 
 ## 3. PaperQA2 实际执行适配器
 

@@ -95,6 +95,29 @@ class LiveAcceptanceTests(unittest.TestCase):
         self.assertEqual(selected, ["openalex", "semantic-scholar"])
         self.assertEqual(skipped, [])
 
+    def test_ci_can_explicitly_skip_unconfigured_serpapi(self) -> None:
+        with patch.dict("os.environ", {}, clear=True):
+            selected, skipped = live_acceptance.configured_literature_providers(
+                ["openalex", "serpapi-google-scholar"],
+                allow_missing_semantic_scholar_key=True,
+                allow_missing_serpapi_key=True,
+            )
+        self.assertEqual(selected, ["openalex"])
+        self.assertEqual(skipped[0]["provider"], "serpapi-google-scholar")
+        self.assertIn("SERPAPI_API_KEY", skipped[0]["reason"])
+
+    def test_configured_serpapi_is_included_in_live_acceptance(self) -> None:
+        with patch.dict(
+            "os.environ", {"SERPAPI_API_KEY": "configured"}, clear=True
+        ):
+            selected, skipped = live_acceptance.configured_literature_providers(
+                ["openalex", "serpapi-google-scholar"],
+                allow_missing_semantic_scholar_key=True,
+                allow_missing_serpapi_key=True,
+            )
+        self.assertEqual(selected, ["openalex", "serpapi-google-scholar"])
+        self.assertEqual(skipped, [])
+
     def test_container_cli_does_not_require_literature_arguments(self) -> None:
         with tempfile.TemporaryDirectory() as directory, patch(
             "scripts.live_acceptance.container_acceptance",

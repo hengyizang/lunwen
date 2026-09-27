@@ -14,7 +14,7 @@ P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [
 - 默认 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。
 - G1 强制最接近的 5 项既有研究、3 个相邻领域、反证与剩余原创性风险；G2 对全部论文两两检查，六篇时必须覆盖 15 组比较，阻止“切香肠”。
 - G1 还强制逐条 `novelty-claim-matrix`：每项原创性主张至少对照 3 项最近工作，明确已知部分、精确差异、机制、证伪试验、若为假时的预期、边界和剩余风险；前向/后向引文追踪及连续两轮无实质新增才算检索饱和。
-- G1 真实调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、DBLP、HAL 和 OpenCitations，保存原始响应与规范化结果哈希；Web of Science/Scopus 仅导入本地授权导出。每条检索必须由具名人员筛选，模型不能自填检索证据。
+- G1 默认真实调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、DBLP、HAL 和 OpenCitations；另提供有密钥、配额受控的 SerpApi Google Scholar 补充检索。全部路径保存原始响应与规范化结果哈希；Web of Science/Scopus 仅导入本地授权导出。每条检索必须由具名人员筛选，模型不能自填检索证据。
 - Theme B 是独立硬闸门：独立问题、claim、论文、主证据、证伪条件和失败后退路都必须明确，且 Theme A 失败时仍能成立。
 - G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
 - G3 对表格、图像、WAV、NumPy、HDF5 与 Parquet 生成本地哈希绑定质量报告；未知格式或缺失内容处理器会阻断。每篇论文必须有 `statsmodels` 或至少 1,000 次 Monte Carlo 的可执行功效证据，Monte Carlo 由控制层在两个干净目录中重跑并精确比对。

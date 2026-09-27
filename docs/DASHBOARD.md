@@ -146,7 +146,8 @@ Those decisions remain named human actions. Model consensus is not scientific
 validation.
 
 The G1 workspace also exposes evidence-producing literature retrieval for
-OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP and HAL. The first
+OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP and HAL. An
+explicit keyed option can additionally query Google Scholar through SerpApi. The first
 action saves exact provider bytes and hashes; the second action records a named
 screening decision over returned IDs. G2 can build the per-paper venue registry
 from a project-local authorized JCR CSV/JSON export and a human-authored
