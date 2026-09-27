@@ -95,6 +95,20 @@ class LiveAcceptanceTests(unittest.TestCase):
         self.assertEqual(selected, ["openalex", "semantic-scholar"])
         self.assertEqual(skipped, [])
 
+    def test_container_cli_does_not_require_literature_arguments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory, patch(
+            "scripts.live_acceptance.container_acceptance",
+            return_value={"status": "passed"},
+        ):
+            code = live_acceptance.main(
+                [
+                    "container",
+                    "--output",
+                    str(Path(directory) / "container.json"),
+                ]
+            )
+        self.assertEqual(code, 0)
+
     def test_literature_acceptance_preserves_provider_failure(self) -> None:
         with tempfile.TemporaryDirectory() as directory, patch(
             "scripts.live_acceptance.execute_search",

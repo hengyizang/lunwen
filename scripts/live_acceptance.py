@@ -437,7 +437,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         "started_at": now(),
     }
     providers, skipped_providers = configured_literature_providers(
-        list(args.provider or list(PROVIDERS)),
+        list(getattr(args, "provider", None) or list(PROVIDERS)),
         allow_missing_semantic_scholar_key=getattr(
             args, "allow_missing_semantic_scholar_key", False
         ),
