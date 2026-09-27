@@ -73,6 +73,7 @@ jobs:
     timeout-minutes: 20
     env:
       SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+      SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
       OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
       LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
       OPENALEX_MAILTO: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
@@ -86,6 +87,7 @@ jobs:
           python scripts/live_acceptance.py literature
           --limit 1
           --allow-missing-semantic-scholar-key
+          --allow-missing-serpapi-key
           --output artifacts/acceptance/literature.json
       - name: Preserve API receipts and raw responses
         if: always()

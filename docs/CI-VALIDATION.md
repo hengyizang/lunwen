@@ -25,7 +25,7 @@ git diff --check
 `schedule` 和 `workflow_dispatch` 额外启动两个 job。维护者也可在一次 push 的
 提交信息中加入 `[live-acceptance]`，让该次提交同时运行它们：
 
-- `live-literature`：真实调用全部无凭据接口、已配置凭据的接口及 OpenCitations，上传原始响应、
+- `live-literature`：真实调用全部无凭据接口、已配置凭据的接口、SerpApi Google Scholar 补充源及 OpenCitations，上传原始响应、
   规范化结果和验收报告；DBLP 使用官方 SPARQL endpoint，避免把网页端的
   JavaScript 反机器人挑战当成 API；arXiv 使用官方 `id_list` 单记录端点验证
   API 连通性，避免把宽泛检索的公共出口限流误判为适配器故障；
@@ -41,13 +41,17 @@ git diff --check
 反复消耗第三方接口配额和 runner 时间。
 
 Semantic Scholar 和 OpenCitations 都可匿名调用，但共享 runner IP 容易触发限流。
-为提高定时验收的稳定性，可分别添加仓库 Actions secrets
-`SEMANTIC_SCHOLAR_API_KEY` 和 `OPENCITATIONS_ACCESS_TOKEN`。它们只作为请求头传给
-官方 API，不写入 URL、日志、收据或 artifact。GitHub Actions 未配置 Semantic
+为提高定时验收的稳定性，可添加仓库 Actions secrets
+`SEMANTIC_SCHOLAR_API_KEY`、`OPENCITATIONS_ACCESS_TOKEN` 和
+`SERPAPI_API_KEY`。前两者只作为请求头传给官方 API；SerpApi 按官方要求只在实际
+传输 URL 中临时注入查询凭据，审计 URL、final URL、异常、日志、收据和 artifact
+均不保存它。GitHub Actions 未配置 Semantic
 Scholar key 时会在报告中明确记录该提供商为 `skipped_providers`，其余无凭据核心
 来源仍须全部真实通过；一旦配置 key，Semantic Scholar 自动加入严格验收。WSL2
 底层命令默认仍是全源严格模式，除非操作者显式传入
-`--allow-missing-semantic-scholar-key`。
+`--allow-missing-semantic-scholar-key`。SerpApi 未配置时同理由
+`--allow-missing-serpapi-key` 明确记录为跳过；配置后自动进入严格验收。每周验收
+只请求 1 条结果，普通 push/PR 不调用它，避免消耗配额。
 
 GitHub runner 的容器 job 证明 Linux/Docker 路径；它不能冒充 WSL2。Windows
 本机的 WSL2 验收必须按 [`LIVE-ACCEPTANCE.md`](LIVE-ACCEPTANCE.md) 执行，报告

@@ -358,7 +358,10 @@ def write_report(path: Path, report: dict[str, Any]) -> None:
 
 
 def configured_literature_providers(
-    requested: list[str], *, allow_missing_semantic_scholar_key: bool
+    requested: list[str],
+    *,
+    allow_missing_semantic_scholar_key: bool,
+    allow_missing_serpapi_key: bool = False,
 ) -> tuple[list[str], list[dict[str, str]]]:
     providers = list(requested)
     skipped: list[dict[str, str]] = []
@@ -372,6 +375,18 @@ def configured_literature_providers(
             {
                 "provider": "semantic-scholar",
                 "reason": "SEMANTIC_SCHOLAR_API_KEY is not configured; anonymous shared-IP acceptance is rate-limited.",
+            }
+        )
+    if (
+        allow_missing_serpapi_key
+        and "serpapi-google-scholar" in providers
+        and not os.environ.get("SERPAPI_API_KEY", "").strip()
+    ):
+        providers.remove("serpapi-google-scholar")
+        skipped.append(
+            {
+                "provider": "serpapi-google-scholar",
+                "reason": "SERPAPI_API_KEY is not configured; the quota-limited supplemental provider requires a key.",
             }
         )
     return providers, skipped
@@ -390,6 +405,11 @@ def parser() -> argparse.ArgumentParser:
         "--allow-missing-semantic-scholar-key",
         action="store_true",
         help="Record Semantic Scholar as skipped when its API key is not configured.",
+    )
+    literature.add_argument(
+        "--allow-missing-serpapi-key",
+        action="store_true",
+        help="Record SerpApi Google Scholar as skipped when its API key is not configured.",
     )
     literature.add_argument("--citation-doi", default=DEFAULT_DOI)
     literature.add_argument("--pace-seconds", type=float, default=3.0)
@@ -411,6 +431,11 @@ def parser() -> argparse.ArgumentParser:
         "--allow-missing-semantic-scholar-key",
         action="store_true",
         help="Record Semantic Scholar as skipped when its API key is not configured.",
+    )
+    wsl.add_argument(
+        "--allow-missing-serpapi-key",
+        action="store_true",
+        help="Record SerpApi Google Scholar as skipped when its API key is not configured.",
     )
     wsl.add_argument("--citation-doi", default=DEFAULT_DOI)
     wsl.add_argument("--pace-seconds", type=float, default=3.0)
@@ -441,6 +466,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         allow_missing_semantic_scholar_key=getattr(
             args, "allow_missing_semantic_scholar_key", False
         ),
+        allow_missing_serpapi_key=getattr(args, "allow_missing_serpapi_key", False),
     )
     if args.command == "literature":
         literature = literature_acceptance(
