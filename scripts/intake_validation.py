@@ -2,11 +2,11 @@
 """Validate that G0 contains explicit, usable human constraints."""
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 
 WEIGHT_FIELDS = (
-    "novelty_and_doctoral_depth",
     "feasibility_without_lab",
     "funded_position_supply",
     "competition",
@@ -64,15 +64,37 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
         errors,
         1,
     )
-    _number(value.get("time_horizon_years"), "time_horizon_years", errors, minimum=0.25, maximum=10)
+    deadline = value.get("target_submission_ready_date")
+    if deadline is None:
+        _number(value.get("time_horizon_years"), "time_horizon_years", errors, minimum=0.01, maximum=10)
+    else:
+        if not isinstance(deadline, str):
+            errors.append("target_submission_ready_date must be an ISO date")
+        else:
+            try:
+                if date.fromisoformat(deadline).isoformat() != deadline:
+                    raise ValueError("non-canonical date")
+            except ValueError:
+                errors.append("target_submission_ready_date must be an ISO date")
+        if value.get("time_horizon_years") is not None:
+            _number(value["time_horizon_years"], "time_horizon_years", errors, minimum=0.01, maximum=10)
     _number(value.get("weekly_hours"), "weekly_hours", errors, minimum=1, maximum=100)
-    _number(value.get("cash_budget_usd"), "cash_budget_usd", errors, minimum=0)
+    cash_budget = value.get("cash_budget_usd")
+    model_budget = value.get("model_api_budget_cny")
+    if cash_budget is not None:
+        _number(cash_budget, "cash_budget_usd", errors, minimum=0)
+    if model_budget is not None:
+        _number(model_budget, "model_api_budget_cny", errors, minimum=0)
+    if cash_budget is None and model_budget is None:
+        errors.append("cash_budget_usd or model_api_budget_cny must be explicit")
     _number(
         value.get("cloud_compute_budget_usd"),
         "cloud_compute_budget_usd",
         errors,
         minimum=0,
     )
+    if cash_budget is None and value.get("cloud_compute_budget_usd") != 0:
+        errors.append("cloud_compute_budget_usd must be 0 when no USD cash ceiling is set")
 
     compute = value.get("local_compute")
     if not isinstance(compute, dict):
@@ -83,6 +105,14 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
         _number(compute.get("storage_gb"), "local_compute.storage_gb", errors, minimum=1)
     _nonempty_text(value.get("equipment"), "equipment", errors)
     _nonempty_text(value.get("data_constraint"), "data_constraint", errors)
+
+    quality = value.get("topic_quality_requirements")
+    if not isinstance(quality, dict):
+        errors.append("topic_quality_requirements must be an object")
+    else:
+        for field in ("novelty_evidence_required", "doctoral_depth_required", "original_contribution_required"):
+            if quality.get(field) is not True:
+                errors.append(f"topic_quality_requirements.{field} must be true")
 
     weights = value.get("ranking_weights")
     if not isinstance(weights, dict):

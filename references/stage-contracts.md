@@ -9,7 +9,8 @@ Required:
 - available skills, time, budget, compute, data and equipment;
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
-- ranking weights for novelty, doctoral depth, feasibility, jobs, positions and background fit.
+- direction ranking weights for feasibility, jobs, positions, competition and background fit;
+- novelty evidence, doctoral depth and original contribution as mandatory topic and research-plan requirements that cannot be traded against direction scores.
 
 Do not begin broad topic scoring while critical constraints are unknown.
 
@@ -26,7 +27,7 @@ Required:
 - `program/topic-decision.md` with novelty, contribution, feasibility, competition, PhD-position supply and job-market evidence.
 - automatic broad-data evidence followed by Codex scientific-fit screening against the human-confirmed G0 ranking weights; preserve rejected datasets and unresolved license, sample, bias, leakage, compute and external-validity concerns.
 
-Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.”
+Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.” Reject a proposed topic that lacks a defensible original contribution or doctoral depth, regardless of its direction ranking score.
 
 ## Paper architecture — G2
 
