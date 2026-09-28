@@ -88,6 +88,15 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertIn("--cd $requiredWslRoot -- pwd -P", installer)
         self.assertIn('($wslOutput -join "`n") -replace "`0", \'\'', installer)
 
+    def test_windows_installer_repairs_existing_crlf_bootstrap(self):
+        root = Path(__file__).parents[1]
+        installer = (root / "scripts" / "install-d-drive.ps1").read_text(encoding="utf-8")
+        attributes = (root / ".gitattributes").read_text(encoding="utf-8")
+        self.assertIn('Replace("`r`n", "`n").Replace("`r", "`n")', installer)
+        self.assertIn("[Text.UTF8Encoding]::new($false)", installer)
+        self.assertLess(installer.index("[IO.File]::WriteAllText"), installer.index("-- bash scripts/bootstrap-d-drive.sh"))
+        self.assertIn("*.sh text eol=lf", attributes)
+
     def test_genuine_docx_requires_non_claude_sources_and_named_visual_review(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp) / "study"

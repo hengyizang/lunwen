@@ -43,6 +43,14 @@ $wslOutput = @(& wsl.exe -d $Distribution --cd $requiredWslRoot -- pwd -P)
 if ($LASTEXITCODE -ne 0) { throw "Cannot access repository at $requiredWslRoot in '$Distribution'." }
 $wslRoot = (($wslOutput -join "`n") -replace "`0", '').Trim()
 if ($wslRoot -ne $requiredWslRoot) { throw "WSL resolved repository as '$wslRoot'." }
+$bootstrapPath = Join-Path $actual 'scripts\bootstrap-d-drive.sh'
+$bootstrapText = [IO.File]::ReadAllText($bootstrapPath)
+if ($bootstrapText.Contains("`r")) {
+  # Existing Windows checkouts may predate .gitattributes. Repair only line
+  # endings and keep UTF-8 free of a BOM so Bash can read the shebang.
+  $bootstrapText = $bootstrapText.Replace("`r`n", "`n").Replace("`r", "`n")
+  [IO.File]::WriteAllText($bootstrapPath, $bootstrapText, [Text.UTF8Encoding]::new($false))
+}
 & wsl.exe -d $Distribution --cd $requiredWslRoot -- bash scripts/bootstrap-d-drive.sh
 if ($LASTEXITCODE -ne 0) { throw "WSL bootstrap failed with exit code $LASTEXITCODE" }
 Write-Host 'D-drive installation completed.'
