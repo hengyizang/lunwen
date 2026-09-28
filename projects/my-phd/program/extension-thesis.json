@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "theme_id": "B",
+  "status": "draft",
+  "title": "",
+  "doctoral_question": "",
+  "distinct_contribution": "",
+  "mechanism_or_rationale": "",
+  "novelty_claim_ids": [],
+  "planned_paper_ids": [],
+  "independent_evidence_plan": [],
+  "falsification_conditions": [],
+  "boundary_conditions": [],
+  "relationship_to_core": {
+    "shared_foundation": [],
+    "independent_question": false,
+    "independent_claims": false,
+    "independent_primary_evidence": false,
+    "survives_core_failure": false,
+    "non_dependency_rationale": ""
+  },
+  "fallback_if_unsupported": "",
+  "human_review_required": true
+}

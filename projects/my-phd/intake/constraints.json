@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1",
+  "status": "needs_user_input",
+  "research_goal": null,
+  "researcher_background": null,
+  "available_skills": [],
+  "preferred_domains": [
+    "AI",
+    "robotics",
+    "mechanical engineering"
+  ],
+  "candidate_application_routes": [
+    "France PhD or industrial doctorate",
+    "Spain PhD or industrial doctorate",
+    "Netherlands EngD",
+    "United Kingdom PhD",
+    "Japan PhD",
+    "Hong Kong PhD",
+    "PhD by publication where legally and institutionally available"
+  ],
+  "time_horizon_years": null,
+  "weekly_hours": null,
+  "cash_budget_usd": null,
+  "cloud_compute_budget_usd": 100,
+  "local_compute": {
+    "gpu": null,
+    "ram_gb": null,
+    "storage_gb": null
+  },
+  "equipment": "No institutional laboratory assumed",
+  "data_constraint": "Prefer public or authorized datasets",
+  "ranking_weights": {
+    "novelty_and_doctoral_depth": null,
+    "feasibility_without_lab": null,
+    "funded_position_supply": null,
+    "competition": null,
+    "job_market_and_salary": null,
+    "background_fit": null
+  },
+  "excluded_domains": [],
+  "ethics_or_legal_constraints": [],
+  "notes": [],
+  "human_review_required": true
+}

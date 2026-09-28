@@ -1,0 +1,29 @@
+{
+  "schema_version": "2.0",
+  "project": "my-phd",
+  "created_at": "2026-09-28T10:06:20+00:00",
+  "updated_at": "2026-09-28T10:06:20+00:00",
+  "stage_index": 0,
+  "stage": "intake",
+  "gate": "G0",
+  "status": "awaiting_work",
+  "active_paper": "P01",
+  "paper_count": 6,
+  "paper_statuses": {
+    "P01": "active",
+    "P02": "planned",
+    "P03": "planned",
+    "P04": "planned",
+    "P05": "planned",
+    "P06": "planned"
+  },
+  "approved_gates": [],
+  "approvals": [],
+  "history": [
+    {
+      "at": "2026-09-28T10:06:20+00:00",
+      "event": "project_initialized",
+      "stage": "intake"
+    }
+  ]
+}

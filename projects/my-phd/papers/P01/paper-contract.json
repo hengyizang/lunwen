@@ -1,0 +1,39 @@
+{
+  "schema_version": "2.0",
+  "paper_id": "P01",
+  "writing_language": "en",
+  "target_jcr_quartile": "Q1",
+  "working_title": "",
+  "research_question": "",
+  "distinct_contribution": "",
+  "relationship_to_core": "",
+  "relationship_to_extension": "",
+  "originality_boundary": {
+    "novel_elements": [],
+    "reused_elements": [],
+    "closest_prior_work_ids": [],
+    "differentiation": "",
+    "claim_limitations": ""
+  },
+  "hypotheses": [],
+  "datasets": [],
+  "planned_experiments": {
+    "design_ids": [],
+    "baseline_classes": [],
+    "ablations": [],
+    "primary_evaluation": "",
+    "statistical_plan": "",
+    "external_validity_plan": "",
+    "reproducibility_plan": ""
+  },
+  "falsification_conditions": [],
+  "dependencies": [],
+  "independence": {
+    "unique_claim_ids": [],
+    "shared_assets": [],
+    "overlap_with_other_papers": [],
+    "why_not_merge": ""
+  },
+  "target_venues": [],
+  "status": "draft"
+}

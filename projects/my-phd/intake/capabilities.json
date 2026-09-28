@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "status": "unverified",
+  "os": "Windows 11 with WSL2 recommended",
+  "orchestrator": "API-first Python orchestrator",
+  "semantic_planner": "Claude/Anthropic read-only",
+  "persistent_writer": "OpenAI/Codex",
+  "independent_auditor": "model family different from persistent writer",
+  "evidence_workbench": "Claude Science export contract",
+  "checked_at": null,
+  "environment_report": null
+}
