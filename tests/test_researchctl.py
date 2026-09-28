@@ -59,6 +59,26 @@ class ResearchCtlTests(unittest.TestCase):
         ]
         self.assertEqual(targets, ["Q1", "Q1", "Q1", "Q2", "Q2", "Q2"])
 
+    def test_cloud_only_g0_requires_no_local_machine_resources(self) -> None:
+        project = self.init_project()
+        path = project / "intake" / "constraints.json"
+        value = json.loads(path.read_text())
+        self.assertEqual(value["execution_mode"], "cloud_only")
+        self.assertIsNone(value["cloud_compute_budget_usd"])
+        capabilities = json.loads((project / "intake" / "capabilities.json").read_text())
+        self.assertEqual(capabilities["os"], "GitHub Actions Linux runner")
+
+        self.complete_constraints(project)
+        value = json.loads(path.read_text())
+        value["local_compute"] = {"gpu": None, "ram_gb": None, "storage_gb": None}
+        researchctl.write_json(path, value)
+        self.assertEqual(researchctl.gate_errors("test-phd", "G0"), [])
+
+        value["execution_mode"] = "hybrid"
+        researchctl.write_json(path, value)
+        errors = researchctl.gate_errors("test-phd", "G0")
+        self.assertTrue(any("local_compute.ram_gb" in error for error in errors))
+
     def test_duplicate_project_is_rejected(self) -> None:
         self.init_project()
         with self.assertRaises(researchctl.ResearchCtlError):

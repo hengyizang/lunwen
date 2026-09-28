@@ -49,6 +49,9 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if value.get("schema_version") != "1.1":
         errors.append("schema_version must be 1.1")
+    execution_mode = value.get("execution_mode", "hybrid")
+    if execution_mode not in {"cloud_only", "hybrid", "local"}:
+        errors.append("execution_mode must be cloud_only, hybrid, or local")
     if value.get("status") != "ready_for_review":
         errors.append("status must be ready_for_review")
     _nonempty_text(value.get("research_goal"), "research_goal", errors)
@@ -74,7 +77,7 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
     compute = value.get("local_compute")
     if not isinstance(compute, dict):
         errors.append("local_compute must be an object")
-    else:
+    elif execution_mode != "cloud_only":
         _nonempty_text(compute.get("gpu"), "local_compute.gpu", errors)
         _number(compute.get("ram_gb"), "local_compute.ram_gb", errors, minimum=1)
         _number(compute.get("storage_gb"), "local_compute.storage_gb", errors, minimum=1)
