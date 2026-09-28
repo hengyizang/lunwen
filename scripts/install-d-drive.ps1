@@ -45,15 +45,15 @@ $wslRoot = (($wslOutput -join "`n") -replace "`0", '').Trim()
 if ($wslRoot -ne $requiredWslRoot) { throw "WSL resolved repository as '$wslRoot'." }
 $bootstrapPath = Join-Path $actual 'scripts\bootstrap-d-drive.sh'
 $bootstrapText = [IO.File]::ReadAllText($bootstrapPath)
-if ($bootstrapText.Contains("`r")) {
-  # Existing Windows checkouts may predate .gitattributes. Repair only line
-  # endings and keep UTF-8 free of a BOM so Bash can read the shebang.
-  $bootstrapText = $bootstrapText.Replace("`r`n", "`n").Replace("`r", "`n")
-  [IO.File]::WriteAllText($bootstrapPath, $bootstrapText, [Text.UTF8Encoding]::new($false))
-}
+# Never rewrite a Git-tracked file during installation. Normalize a runtime
+# copy so existing Windows checkouts work without creating local changes.
+$bootstrapText = $bootstrapText.Replace("`r`n", "`n").Replace("`r", "`n")
+$runtimeBootstrapPath = Join-Path $runtime 'tmp\bootstrap-d-drive.sh'
+[IO.File]::WriteAllText($runtimeBootstrapPath, $bootstrapText, [Text.UTF8Encoding]::new($false))
+$runtimeBootstrapWslPath = "$requiredWslRoot/.runtime/tmp/bootstrap-d-drive.sh"
 $prerequisiteCommand = 'if ! command -v python3 >/dev/null 2>&1 || ! dpkg-query -W python3-venv >/dev/null 2>&1; then apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-venv; fi'
 & wsl.exe -d $Distribution -u root -- sh -lc $prerequisiteCommand
 if ($LASTEXITCODE -ne 0) { throw "WSL Python prerequisite installation failed with exit code $LASTEXITCODE" }
-& wsl.exe -d $Distribution --cd $requiredWslRoot -- bash scripts/bootstrap-d-drive.sh
+& wsl.exe -d $Distribution --cd $requiredWslRoot -- env "DR_OS_REPO_ROOT=$requiredWslRoot" bash $runtimeBootstrapWslPath
 if ($LASTEXITCODE -ne 0) { throw "WSL bootstrap failed with exit code $LASTEXITCODE" }
 Write-Host 'D-drive installation completed.'

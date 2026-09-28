@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+repo_root="${DR_OS_REPO_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)}"
+repo_root="$(cd "$repo_root" && pwd -P)"
 required_root="/mnt/d/ad/lunwen"
 if [[ "${repo_root,,}" != "${required_root,,}" ]]; then
   printf '%s\n' "Refusing to install outside ${required_root}." "Move or clone the repository to D:\\ad\\lunwen first." >&2

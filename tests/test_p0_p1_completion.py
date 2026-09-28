@@ -88,13 +88,17 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertIn("--cd $requiredWslRoot -- pwd -P", installer)
         self.assertIn('($wslOutput -join "`n") -replace "`0", \'\'', installer)
 
-    def test_windows_installer_repairs_existing_crlf_bootstrap(self):
+    def test_windows_installer_uses_nonmutating_lf_bootstrap_copy(self):
         root = Path(__file__).parents[1]
         installer = (root / "scripts" / "install-d-drive.ps1").read_text(encoding="utf-8")
+        bootstrap = (root / "scripts" / "bootstrap-d-drive.sh").read_text(encoding="utf-8")
         attributes = (root / ".gitattributes").read_text(encoding="utf-8")
         self.assertIn('Replace("`r`n", "`n").Replace("`r", "`n")', installer)
         self.assertIn("[Text.UTF8Encoding]::new($false)", installer)
-        self.assertLess(installer.index("[IO.File]::WriteAllText"), installer.index("-- bash scripts/bootstrap-d-drive.sh"))
+        self.assertIn("WriteAllText($runtimeBootstrapPath", installer)
+        self.assertNotIn("WriteAllText($bootstrapPath", installer)
+        self.assertIn('env "DR_OS_REPO_ROOT=$requiredWslRoot" bash $runtimeBootstrapWslPath', installer)
+        self.assertIn('repo_root="${DR_OS_REPO_ROOT:-', bootstrap)
         self.assertIn("*.sh text eol=lf", attributes)
 
     def test_windows_installer_provisions_venv_and_repairs_missing_pip(self):
@@ -103,7 +107,7 @@ class P0P1CompletionTests(unittest.TestCase):
         bootstrap = (root / "scripts" / "bootstrap-d-drive.sh").read_text(encoding="utf-8")
         self.assertIn("dpkg-query -W python3-venv", installer)
         self.assertIn("-u root -- sh -lc $prerequisiteCommand", installer)
-        self.assertLess(installer.index("dpkg-query -W python3-venv"), installer.index("-- bash scripts/bootstrap-d-drive.sh"))
+        self.assertLess(installer.index("dpkg-query -W python3-venv"), installer.index("bash $runtimeBootstrapWslPath"))
         self.assertIn(".venv/bin/python -m pip --version", bootstrap)
         self.assertIn("python3 -m venv --clear .venv", bootstrap)
 
