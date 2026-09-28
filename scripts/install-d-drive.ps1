@@ -38,8 +38,11 @@ $match = $null; $settingsFile = $null
 }
 if ($null -eq $match) { throw "Set Docker Desktop Disk image location to $dockerExpected, apply/restart, then rerun." }
 [ordered]@{schema_version='1.0';verified=$true;expected_root=$dockerExpected;configured_path=$match;settings_file=$settingsFile;confirmed_by=$env:USERNAME;confirmed_at=[DateTimeOffset]::UtcNow.ToString('o')} | ConvertTo-Json | Set-Content (Join-Path $runtime 'docker-location.json') -Encoding UTF8
-$wslRoot = (& wsl.exe -d $Distribution -- wslpath -a $actual).Trim()
-if ($wslRoot -ne '/mnt/d/ad/lunwen') { throw "WSL resolved repository as '$wslRoot'." }
-& wsl.exe -d $Distribution --cd /mnt/d/ad/lunwen -- bash scripts/bootstrap-d-drive.sh
+$requiredWslRoot = '/mnt/d/ad/lunwen'
+$wslOutput = @(& wsl.exe -d $Distribution --cd $requiredWslRoot -- pwd -P)
+if ($LASTEXITCODE -ne 0) { throw "Cannot access repository at $requiredWslRoot in '$Distribution'." }
+$wslRoot = (($wslOutput -join "`n") -replace "`0", '').Trim()
+if ($wslRoot -ne $requiredWslRoot) { throw "WSL resolved repository as '$wslRoot'." }
+& wsl.exe -d $Distribution --cd $requiredWslRoot -- bash scripts/bootstrap-d-drive.sh
 if ($LASTEXITCODE -ne 0) { throw "WSL bootstrap failed with exit code $LASTEXITCODE" }
 Write-Host 'D-drive installation completed.'
