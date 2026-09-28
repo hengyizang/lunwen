@@ -78,8 +78,13 @@ ARM64 主机必须用 Docker Hub 对应平台的完整 manifest digest，通过 
 脚本分别返回 0、1、2。报告及原始响应位于 `artifacts/acceptance/`，不提交 Git。
 公开接口只对明确的 429/5xx 临时错误进行有限重试。Semantic Scholar 可选读取
 `SEMANTIC_SCHOLAR_API_KEY`，OpenCitations 可选读取
-`OPENCITATIONS_ACCESS_TOKEN`，SerpApi Google Scholar 读取
+`OPENCITATIONS_ACCESS_TOKEN`，OpenAlex 可选读取免费 API key
+`OPENALEX_API_KEY`（推荐在 GitHub Secrets 配置；`mailto` 参数已失效），
+SerpApi Google Scholar 读取
 `SERPAPI_API_KEY`。Semantic Scholar 与 OpenCitations 的凭据只在请求头使用；
+OpenAlex 的 key 也只作为 Bearer 请求头发送；带凭据的请求拒绝跨主机重定向。
+OpenAlex 的[认证](https://help.openalex.org/api/authentication/)与
+[弃用说明](https://help.openalex.org/api/deprecations/)核对日期：2026-09-28。
 SerpApi 官方接口强制把 `api_key` 放入查询参数，因此适配器只在实际网络调用前
 注入，随后从 final URL、异常、收据和 artifact 中删除，并拒绝持久化任何回显
 密钥的响应。官方参数与返回结构核对日期：2026-09-27，见

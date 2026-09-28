@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+import urllib.request
 
 from scripts.network_safety import (
     NetworkSafetyError,
@@ -40,6 +41,28 @@ class NetworkSafetyTests(unittest.TestCase):
                 "Found",
                 {},
                 "https://private.example/internal",
+            )
+
+    def test_credentialed_redirect_must_remain_on_original_host(self) -> None:
+        handler = PublicHTTPSRedirectHandler(self.resolver)
+        request = urllib.request.Request(
+            "https://public.example/data", headers={"Authorization": "Bearer secret"}
+        )
+        with self.assertRaisesRegex(NetworkSafetyError, "cross-origin redirect"):
+            handler.redirect_request(
+                request, None, 302, "Found", {}, "https://other.example/data"
+            )
+        redirected = handler.redirect_request(
+            request, None, 302, "Found", {}, "https://public.example/new-data"
+        )
+        self.assertEqual(redirected.get_header("Authorization"), "Bearer secret")
+
+    def test_query_key_is_not_forwarded_to_another_host(self) -> None:
+        handler = PublicHTTPSRedirectHandler(self.resolver)
+        request = urllib.request.Request("https://public.example/data?api_key=secret")
+        with self.assertRaisesRegex(NetworkSafetyError, "cross-origin redirect"):
+            handler.redirect_request(
+                request, None, 302, "Found", {}, "https://other.example/data"
             )
 
     def test_json_post_body_is_encoded_without_credentials(self) -> None:
