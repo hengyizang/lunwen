@@ -218,3 +218,15 @@ class P0P1CompletionTests(unittest.TestCase):
             checklist = {"signed_by": "Researcher", "signed_at": "2026-09-27",
                 "PRISMA_2020": [{"item_number": str(n), "status": "complete", "manuscript_location": f"p. {n}"} for n in range(1, 28)],
                 "PRISMA_S": [{"item_number": str(n), "status": "not_applicable", "manuscript_location": "Protocol rationale"} for n in range(1, 17)]}
+            path = project / "checklist.json"; path.write_text(json.dumps(checklist))
+            self.assertEqual(validate_completed_checklist(path), [])
+
+    def test_requirement_trace_is_closed_without_claiming_research_completion(self):
+        self.assertEqual(validate_requirements(), [])
+        matrix = json.loads((Path(__file__).parents[1] / "config" / "requirements-traceability.json").read_text())
+        final = next(row for row in matrix["requirements"] if row["id"] == "R24")
+        self.assertEqual((final["implementation"], final["acceptance"]), ("workflow-ready", "research-not-yet-executed"))
+
+
+if __name__ == "__main__":
+    unittest.main()
