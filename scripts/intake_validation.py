@@ -7,11 +7,12 @@ from typing import Any
 
 
 WEIGHT_FIELDS = (
-    "feasibility_without_lab",
     "funded_position_supply",
-    "competition",
     "job_market_and_salary",
+    "future_growth_potential",
+    "competition",
     "background_fit",
+    "application_route_fit",
 )
 
 
@@ -110,7 +111,12 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
     if not isinstance(quality, dict):
         errors.append("topic_quality_requirements must be an object")
     else:
-        for field in ("novelty_evidence_required", "doctoral_depth_required", "original_contribution_required"):
+        for field in (
+            "novelty_evidence_required",
+            "doctoral_depth_required",
+            "original_contribution_required",
+            "current_papers_cloud_feasible_required",
+        ):
             if quality.get(field) is not True:
                 errors.append(f"topic_quality_requirements.{field} must be true")
 

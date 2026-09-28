@@ -32,7 +32,7 @@ class ResearchCtlTests(unittest.TestCase):
     def complete_constraints(self, project: Path) -> None:
         path=project/"intake"/"constraints.json"
         value=json.loads(path.read_text())
-        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"feasibility_without_lab":0.3,"funded_position_supply":0.2,"competition":0.1,"job_market_and_salary":0.2,"background_fit":0.2}})
+        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.30,"job_market_and_salary":0.20,"future_growth_potential":0.15,"competition":0.15,"background_fit":0.10,"application_route_fit":0.10}})
         researchctl.write_json(path,value)
 
     def test_initialize_creates_state_papers_and_trial_venue(self) -> None:
@@ -49,6 +49,7 @@ class ResearchCtlTests(unittest.TestCase):
         self.assertEqual(contract["schema_version"], "2.0")
         self.assertEqual(contract["writing_language"], "en")
         self.assertEqual(contract["target_jcr_quartile"], "Q1")
+        self.assertFalse(contract["cloud_feasibility"]["current_paper_cloud_executable"])
         self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
 
     def test_six_paper_initialization_assigns_three_q1_and_three_q2_targets(self) -> None:
@@ -92,6 +93,11 @@ class ResearchCtlTests(unittest.TestCase):
         value["local_compute"] = {"gpu": None, "ram_gb": None, "storage_gb": None}
         researchctl.write_json(path, value)
         self.assertEqual(researchctl.gate_errors("test-phd", "G0"), [])
+
+        value["topic_quality_requirements"]["current_papers_cloud_feasible_required"] = False
+        researchctl.write_json(path, value)
+        self.assertTrue(any("current_papers_cloud_feasible_required" in error for error in researchctl.gate_errors("test-phd", "G0")))
+        value["topic_quality_requirements"]["current_papers_cloud_feasible_required"] = True
 
         value["topic_quality_requirements"]["original_contribution_required"] = False
         researchctl.write_json(path, value)

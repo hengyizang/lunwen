@@ -9,9 +9,13 @@ for this path.
 For G0, set `execution_mode` to `cloud_only`. Local GPU, RAM and storage may
 remain `null`; the GitHub runner supplies the execution environment. Record
 an exact `target_submission_ready_date` when the goal is a short sprint, with
-`time_horizon_years: null`. Direction weights cover feasibility and career
-factors; novelty evidence, doctoral depth and original contribution remain
-mandatory topic requirements. When only the model API has a proposed CNY
+`time_horizon_years: null`. Cloud feasibility is mandatory for every current
+paper, including any paper assigned to doctoral extension B. Future laboratory
+work after admission may be planned separately, but no current result may depend
+on it. Rank only feasible directions by funded positions, employment and salary,
+future growth, competition, background fit and application-route fit. Novelty
+evidence, doctoral depth and original contribution remain mandatory topic
+requirements. When only the model API has a proposed CNY
 ceiling, `cash_budget_usd` may stay null and external cloud compute must be
 zero. A later non-model expense needs an explicit budget decision. Any draft
 budget number remains subject to human review.

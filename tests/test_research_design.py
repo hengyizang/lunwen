@@ -13,6 +13,7 @@ from scripts.research_design import (
     validate_paper_contract,
     validate_paper_map,
     validate_search_log,
+    validate_selected_direction_cloud_feasibility,
     validate_theme_independence,
     validate_theme_mapping,
 )
@@ -98,6 +99,13 @@ def paper_contract():
         "distinct_contribution": "A distinct falsifiable method.",
         "relationship_to_core": "Tests the core mechanism.",
         "relationship_to_extension": "Supplies a transfer test.",
+        "cloud_feasibility": {
+            "current_paper_cloud_executable": True,
+            "no_future_lab_dependency": True,
+            "data_access_plan": "Use a licensed public dataset.",
+            "cloud_execution_plan": "Run reproducible experiments on the GitHub Actions runner.",
+            "evidence_and_claim_scope": "Claims are limited to the cloud experiments.",
+        },
         "originality_boundary": {
             "novel_elements": ["new mechanism"],
             "reused_elements": ["standard encoder"],
@@ -313,6 +321,24 @@ class ResearchDesignTests(unittest.TestCase):
         errors = validate_paper_contract(value, "P01")
         self.assertTrue(any("writing_language" in error for error in errors))
         self.assertTrue(any("JCR Q1 target" in error for error in errors))
+
+    def test_current_paper_cloud_feasibility_blocks_future_lab_dependency(self):
+        value = paper_contract()
+        value["cloud_feasibility"]["no_future_lab_dependency"] = False
+        errors = validate_paper_contract(value, "P01")
+        self.assertTrue(any("no_future_lab_dependency" in error for error in errors))
+
+    def test_selected_direction_needs_six_paper_cloud_path(self):
+        shortlist = {"selected_direction_cloud_feasibility": {
+            "current_papers_feasible": True,
+            "no_future_lab_dependency": True,
+            "authorized_data_plan": "Use authorized public datasets for all six papers.",
+            "cloud_experiment_plan": "Run on GitHub Actions within recorded budgets.",
+            "current_paper_scope": "P01-P06 have independent cloud-only primary evidence.",
+        }}
+        self.assertEqual(validate_selected_direction_cloud_feasibility(shortlist), [])
+        shortlist["selected_direction_cloud_feasibility"]["current_papers_feasible"] = False
+        self.assertTrue(any("current_papers_feasible" in e for e in validate_selected_direction_cloud_feasibility(shortlist)))
 
     def test_q2_contract_accepts_q1_or_q2_candidates(self):
         value = paper_contract()

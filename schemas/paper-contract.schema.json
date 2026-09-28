@@ -4,7 +4,7 @@
   "title": "Doctoral paper contract",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "paper_id", "writing_language", "target_jcr_quartile", "working_title", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension", "originality_boundary", "hypotheses", "datasets", "planned_experiments", "falsification_conditions", "dependencies", "independence", "target_venues", "status"],
+  "required": ["schema_version", "paper_id", "writing_language", "target_jcr_quartile", "working_title", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension", "cloud_feasibility", "originality_boundary", "hypotheses", "datasets", "planned_experiments", "falsification_conditions", "dependencies", "independence", "target_venues", "status"],
   "properties": {
     "schema_version": {"const": "2.0"},
     "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
@@ -15,6 +15,17 @@
     "distinct_contribution": {"type": "string", "minLength": 1},
     "relationship_to_core": {"type": "string", "minLength": 1},
     "relationship_to_extension": {"type": "string", "minLength": 1},
+    "cloud_feasibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["current_paper_cloud_executable", "no_future_lab_dependency", "data_access_plan", "cloud_execution_plan", "evidence_and_claim_scope"],
+      "properties": {
+        "current_paper_cloud_executable": {"type": "boolean"},
+        "no_future_lab_dependency": {"type": "boolean"},
+        "data_access_plan": {"type": "string"},
+        "cloud_execution_plan": {"type": "string"},
+        "evidence_and_claim_scope": {"type": "string"}
+      }
+    },
     "originality_boundary": {
       "type": "object", "additionalProperties": false,
       "required": ["novel_elements", "reused_elements", "closest_prior_work_ids", "differentiation", "claim_limitations"],
