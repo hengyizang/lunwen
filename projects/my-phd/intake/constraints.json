@@ -1,13 +1,18 @@
 {
   "schema_version": "1.1",
   "status": "needs_user_input",
-  "research_goal": null,
-  "researcher_background": null,
-  "available_skills": [],
+  "research_goal": "Develop a coherent AI and robotics/industrial systems doctoral programme with a core thesis and an independently doctoral-scale extension. Produce six distinct English SCI/SCIE manuscripts targeting at least three current JCR Q1 journals and at least Q2 for the rest, using public or authorized data and cloud computation. Prepare a credible doctoral application dossier by August 2027; editorial acceptance is outside the project’s control.",
+  "researcher_background": "Mechanical engineering and Big Data/BI training, with Python, machine learning, data analysis and industrial application experience. Researcher to review this summary.",
+  "available_skills": [
+    "Python and data analysis",
+    "machine learning and model evaluation",
+    "mechanical and industrial engineering",
+    "academic literature review and writing"
+  ],
   "preferred_domains": [
-    "AI",
-    "robotics",
-    "mechanical engineering"
+    "AI for robotics and industrial systems",
+    "robotics and autonomy",
+    "data-centric AI for engineering"
   ],
   "candidate_application_routes": [
     "France PhD or industrial doctorate",
@@ -18,27 +23,38 @@
     "Hong Kong PhD",
     "PhD by publication where legally and institutionally available"
   ],
-  "time_horizon_years": null,
-  "weekly_hours": null,
-  "cash_budget_usd": null,
+  "time_horizon_years": 1.5,
+  "weekly_hours": 18,
+  "cash_budget_usd": 300,
   "cloud_compute_budget_usd": 100,
   "local_compute": {
     "gpu": null,
     "ram_gb": null,
     "storage_gb": null
   },
-  "equipment": "No institutional laboratory assumed",
-  "data_constraint": "Prefer public or authorized datasets",
+  "equipment": "No institutional laboratory, physical prototype, or local GPU is assumed. GitHub Actions standard Linux runners execute the cloud workflow.",
+  "data_constraint": "Use public or explicitly authorized, versioned datasets with verified licenses and provenance; do not upload restricted or identifying data to a public runner.",
   "ranking_weights": {
-    "novelty_and_doctoral_depth": null,
-    "feasibility_without_lab": null,
-    "funded_position_supply": null,
-    "competition": null,
-    "job_market_and_salary": null,
-    "background_fit": null
+    "novelty_and_doctoral_depth": 0.3,
+    "feasibility_without_lab": 0.25,
+    "funded_position_supply": 0.15,
+    "competition": 0.1,
+    "job_market_and_salary": 0.15,
+    "background_fit": 0.05
   },
-  "excluded_domains": [],
-  "ethics_or_legal_constraints": [],
-  "notes": [],
-  "human_review_required": true
+  "excluded_domains": [
+    "Projects requiring a physical laboratory, costly equipment, or dedicated local GPU"
+  ],
+  "ethics_or_legal_constraints": [
+    "Respect dataset and full-text licenses, privacy, provider terms, and research-use rights."
+  ],
+  "notes": [
+    "PROPOSED G0 DRAFT: all time, effort, and budget figures and ranking weights require researcher review. This file is not a paid-run authorization or human gate approval.",
+    "Application milestone: August 2027. Stretch goal: up to three scientifically independent manuscripts submitted or submission-ready by month six, subject to evidence and quality gates. Complete the six-manuscript programme within 18 months; journal acceptance cannot be scheduled or guaranteed.",
+    "Initial cash ceiling proposal: USD 300 total, including up to USD 100 of external cloud compute; standard public-repository GitHub Actions runners are the default. Publication fees, travel and paid data are excluded and require a separate decision.",
+    "The existing model ceiling in config/defaults.json is CNY 300 for the project; keep it as a separate, provisional limit within the total cash ceiling. Actual UUAPI model IDs and charges must be verified before each paid cycle.",
+    "Codex controls GitHub cloud jobs. Claude API supplies read-only planning and independent criticism; OpenAI API writes persistent research artifacts. No local WSL2, Docker, Python, GPU, RAM or storage is required for this workflow."
+  ],
+  "human_review_required": true,
+  "execution_mode": "cloud_only"
 }
