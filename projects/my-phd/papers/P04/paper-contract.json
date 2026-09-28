@@ -35,5 +35,12 @@
     "why_not_merge": ""
   },
   "target_venues": [],
-  "status": "draft"
+  "status": "draft",
+  "cloud_feasibility": {
+    "current_paper_cloud_executable": false,
+    "no_future_lab_dependency": false,
+    "data_access_plan": "",
+    "cloud_execution_plan": "",
+    "evidence_and_claim_scope": ""
+  }
 }

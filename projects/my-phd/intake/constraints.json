@@ -1,13 +1,18 @@
 {
   "schema_version": "1.1",
   "status": "needs_user_input",
-  "research_goal": null,
-  "researcher_background": null,
-  "available_skills": [],
+  "research_goal": "Prepare six distinct English SCI/SCIE manuscripts for the researcher’s scientific and submission review by 2026-10-07, targeting at least three current JCR Q1 journals and at least Q2 for the rest. Each paper must have a defensible original contribution, doctoral depth, evidence-bound claims, reproducible analysis, and an independent research question; the coherent programme must include a doctoral core thesis and a separately viable extension. Submission readiness depends on the G0–G5 checks and named human review, not the target date alone.",
+  "researcher_background": "Mechanical engineering and Big Data/BI training, with Python, machine learning, data analysis and industrial application experience. Researcher to review this summary.",
+  "available_skills": [
+    "Python and data analysis",
+    "machine learning and model evaluation",
+    "mechanical and industrial engineering",
+    "academic literature review and writing"
+  ],
   "preferred_domains": [
-    "AI",
-    "robotics",
-    "mechanical engineering"
+    "AI for robotics and industrial systems",
+    "robotics and autonomy",
+    "data-centric AI for engineering"
   ],
   "candidate_application_routes": [
     "France PhD or industrial doctorate",
@@ -19,26 +24,48 @@
     "PhD by publication where legally and institutionally available"
   ],
   "time_horizon_years": null,
-  "weekly_hours": null,
+  "weekly_hours": 30,
   "cash_budget_usd": null,
-  "cloud_compute_budget_usd": 100,
+  "cloud_compute_budget_usd": 0,
   "local_compute": {
     "gpu": null,
     "ram_gb": null,
     "storage_gb": null
   },
-  "equipment": "No institutional laboratory assumed",
-  "data_constraint": "Prefer public or authorized datasets",
+  "equipment": "No institutional laboratory, physical prototype, or local GPU is assumed. GitHub Actions standard Linux runners execute the cloud workflow.",
+  "data_constraint": "Use public or explicitly authorized, versioned datasets with verified licenses and provenance; do not upload restricted or identifying data to a public runner.",
   "ranking_weights": {
-    "novelty_and_doctoral_depth": null,
-    "feasibility_without_lab": null,
-    "funded_position_supply": null,
-    "competition": null,
-    "job_market_and_salary": null,
-    "background_fit": null
+    "funded_position_supply": 0.25,
+    "job_market_and_salary": 0.25,
+    "future_growth_potential": 0.15,
+    "background_fit": 0.1,
+    "application_route_fit": 0.1,
+    "phd_position_competition": 0.075,
+    "job_market_competition": 0.075
   },
-  "excluded_domains": [],
-  "ethics_or_legal_constraints": [],
-  "notes": [],
-  "human_review_required": true
+  "excluded_domains": [
+    "Current-paper directions requiring a physical laboratory, proprietary data without research rights, costly equipment, or the researcher’s local GPU"
+  ],
+  "ethics_or_legal_constraints": [
+    "Respect dataset and full-text licenses, privacy, provider terms, and research-use rights."
+  ],
+  "notes": [
+    "PROPOSED G0 DRAFT: 2026-10-07 is the researcher’s target for six manuscripts ready for named review and possible manual submission. A target date does not certify results, override G0–G5, or authorize a paid API call.",
+    "Intensive nine-day sprint proposal: 30 hours per week of human availability for decisions and manuscript review. This availability is unconfirmed. The current project is only a scaffold; topic selection, evidence, data, experiments, model gateway configuration and six review cycles remain to be completed.",
+    "The previously suggested USD 300 cash ceiling and USD 100 external compute allowance are withdrawn. cash_budget_usd is unset, the initial external cloud compute allowance is USD 0, and the model API has a separate provisional CNY 300 project safety ceiling. Standard public-repository GitHub Actions CPU runners are the initial executor. Any additional paid compute, services or publication fees need a separate decision; no local hardware is required.",
+    "Model API spending approval is cumulative rather than per call: first approve CNY 300, then CNY 600 after the first tranche, then CNY 900 and so on in CNY 300 steps. The initial approved ceiling is CNY 0; model_api_budget_cny=300 describes a proposed first tranche and does not grant spending permission. Estimate and reconcile actual gateway model rates and bills; unused approved capacity carries across cloud jobs. PaperQA2 and ToolUniverse paid cloud actions remain paused until their third-party charges can be included in this ledger.",
+    "Before weighted ranking, reject any direction without a credible cloud-only, no-laboratory path to authorized data, experiments and independent primary evidence for all six current papers. Rank eligible directions by funded PhD position supply (25%) and jobs and salary (25%) with equal weight; future growth (15%), competition (15%: funded PhD entry 7.5% and relevant job access 7.5%), background fit (10%) and application-route fit (10%). Higher competition scores mean easier access. Verify route eligibility, funding terms, location and recency from primary sources. After direction selection, each topic and research plan must meet novelty, doctoral depth and original-contribution gates; a weighted score cannot compensate for failure.",
+    "Codex controls GitHub cloud jobs. Claude API supplies read-only planning and independent criticism; OpenAI API writes persistent artifacts. No local WSL2, Docker, Python, GPU, RAM or storage is required for this workflow.",
+    "Doctoral extension B may include separately labeled laboratory work only after admission. Any B paper among the six current manuscripts must still be feasible with authorized cloud data and runner compute; no result or claim in P01–P06 may rely on the future laboratory work."
+  ],
+  "human_review_required": true,
+  "execution_mode": "cloud_only",
+  "target_submission_ready_date": "2026-10-07",
+  "topic_quality_requirements": {
+    "novelty_evidence_required": true,
+    "doctoral_depth_required": true,
+    "original_contribution_required": true,
+    "current_papers_cloud_feasible_required": true
+  },
+  "model_api_budget_cny": 300
 }

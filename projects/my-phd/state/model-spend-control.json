@@ -1,0 +1,11 @@
+{
+  "authorization_events": [],
+  "authorized_ceiling_cny": 0,
+  "currency": "CNY",
+  "paper_spent_cny": {},
+  "reconciliation_events": [],
+  "reservations": {},
+  "schema_version": "1.0",
+  "spent_cny": 0.0,
+  "tranche_cny": 300
+}
