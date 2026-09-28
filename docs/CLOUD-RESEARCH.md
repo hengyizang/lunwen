@@ -6,6 +6,11 @@ and returns a GitHub Actions artifact. Local WSL2/Docker remains an optional,
 separate machine-specific check. No local API key or Python environment is needed
 for this path.
 
+For G0, set `execution_mode` to `cloud_only`. Local GPU, RAM and storage may
+remain `null`; the GitHub runner supplies the execution environment. Record
+separate proposed cash, cloud compute and model ceilings for human review.
+Filling a draft constraint does not authorize a paid run or approve a gate.
+
 Only a new issue created by the `hengyizang` repository owner, with a title
 starting exactly `[research-cloud]`, starts `.github/workflows/cloud-research.yml`.
 Use the marker and one fenced JSON object; no prose or credentials:

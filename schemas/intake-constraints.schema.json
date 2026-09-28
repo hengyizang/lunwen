@@ -8,6 +8,7 @@
   "properties": {
     "schema_version": {"const": "1.1"},
     "status": {"enum": ["needs_user_input", "ready_for_review"]},
+    "execution_mode": {"enum": ["cloud_only", "hybrid", "local"]},
     "research_goal": {"type": ["string", "null"]},
     "researcher_background": {"type": ["string", "null"]},
     "available_skills": {"type": "array", "items": {"type": "string"}},

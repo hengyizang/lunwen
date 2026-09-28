@@ -4,10 +4,10 @@
 
 Use one deterministic control plane and bounded model roles:
 
-1. Local Python owns stage state, output provenance, gates, hashes and execution authority.
+1. Python on the selected runner owns stage state, output provenance, gates, hashes and execution authority. In cloud-only mode the runner is GitHub Actions, not the researcher's computer.
 2. Claude supplies a read-only semantic plan and may perform internal independent criticism. Its text is stored only in run/audit records, never as a persistent scientific or submission artifact.
 3. Codex/OpenAI independently expresses and remediates every persistent text artifact. It uses Claude's ideas as requirements, not wording to copy.
-4. Codex writes plotting code/specifications; deterministic local tools render result-bearing figures from recorded data and experiment outputs. A separately disclosed GPT Image conceptual illustration can supplement but never replace a data figure.
+4. Codex writes plotting code/specifications; deterministic tools on the runner render result-bearing figures from recorded data and experiment outputs. A separately disclosed GPT Image conceptual illustration can supplement but never replace a data figure.
 5. The human approves G0–G5 and owns authorship, scientific judgment, ethics, venue choice, and submission.
 
 Do not ask multiple agents to produce one blended answer without preserving their separate evidence and disagreements. Store unresolved disagreements in `reviews/decision-log.md`.

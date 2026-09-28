@@ -7,6 +7,7 @@ Required:
 - `intake/constraints.json` conforming to `schemas/intake-constraints.schema.json`, with every material feasibility value explicit and status `ready_for_review`;
 - target application routes and time horizon;
 - available skills, time, budget, compute, data and equipment;
+- an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - ranking weights for novelty, doctoral depth, feasibility, jobs, positions and background fit.
 
