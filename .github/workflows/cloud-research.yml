@@ -1,0 +1,69 @@
+name: Owner research cloud job
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  run:
+    if: >-
+      github.repository == 'hengyizang/lunwen' &&
+      github.event.issue.user.id == github.event.repository.owner.id &&
+      startsWith(github.event.issue.title, '[research-cloud]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Validate the owner issue as a single structured job
+        id: job
+        run: >-
+          python scripts/cloud_job.py validate-event
+          --event "$GITHUB_EVENT_PATH"
+          --output .runtime/cloud-job.json
+          --github-output "$GITHUB_OUTPUT"
+      - name: Install pinned research adapters for public acceptance or PaperQA2
+        if: steps.job.outputs.action == 'acceptance' || steps.job.outputs.action == 'paperqa' || steps.job.outputs.action == 'tooluniverse'
+        run: python -m pip install --disable-pip-version-check '.[ai4science,reference-tools]'
+      - name: Run requested cloud job
+        id: execute
+        env:
+          UUAPI_API_KEY: ${{ secrets.UUAPI_API_KEY }}
+          UUAPI_BASE_URL: ${{ vars.UUAPI_BASE_URL }}
+          UUAPI_ANTHROPIC_MODEL: ${{ vars.UUAPI_ANTHROPIC_MODEL }}
+          UUAPI_OPENAI_MODEL: ${{ vars.UUAPI_OPENAI_MODEL }}
+          UUAPI_STRICT_MODEL_ID: 'true'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+          OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
+        run: >-
+          python scripts/cloud_job.py execute
+          --config .runtime/cloud-job.json
+          --run-id "$GITHUB_RUN_ID"
+      - name: Return the outcome to the requesting issue
+        if: always() && steps.job.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: >-
+          python scripts/cloud_job.py comment
+          --issue "$ISSUE_NUMBER"
+          --summary .runtime/cloud-summary.md
+      - name: Preserve redacted receipts and tracked-result snapshot
+        if: always() && steps.job.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-research-${{ github.run_id }}
+          path: .runtime/cloud-artifact/
+          if-no-files-found: warn
+          retention-days: 14

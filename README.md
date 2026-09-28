@@ -1,5 +1,9 @@
 # Doctoral Research OS v2.3.0
 
+## 云端运行（本地只启动 Codex）
+
+现在可以通过仓库所有者创建的 GitHub issue 驱动 GitHub Actions。云端完成依赖安装、公开文献与 Docker 验收、项目状态保存和结果回传；可能计费的模型步骤逐次单独授权。入口格式、配置变量、状态分支及费用边界见 [`docs/CLOUD-RESEARCH.md`](docs/CLOUD-RESEARCH.md)。下面的 D 盘/WSL2 安装只供需要本机运行或本机私有数据验收时使用。
+
 新增的 37 类科研绘图、类型化研究架构图、协议/双人筛选/偏倚风险/PRISMA 导出、Zotero Local API 与 Obsidian 图、本地 PDF/PPT、paper-facts/测量/段落/符号审查、审稿 concern cards 与编辑摘要、健康感知分层模型路由、真实 DOCX 和独立 Skill/MCP 管理，见 [`docs/NEW-CAPABILITIES.md`](docs/NEW-CAPABILITIES.md)。均为现有 G0–G5 控制层的增量能力；未运行的真实 API、用户账号、人工筛选和六篇实际论文不会被宣称为已完成。
 
 P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [`docs/P0-P1-COMPLETION.md`](docs/P0-P1-COMPLETION.md)，机器可读追踪表见 `config/requirements-traceability.json`。
