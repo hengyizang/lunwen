@@ -211,7 +211,7 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
         result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
                                 text=True, errors="replace", timeout=timeout)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
-        for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
+        for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
             if len(os.environ.get(key, "")) >= 8:
                 raw = raw.replace(os.environ[key], "[REDACTED]")
         return result.returncode, raw
@@ -235,7 +235,7 @@ def run_job(job: dict, run_id: str) -> int:
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         if action == "preflight":
             output = {"repository": REPOSITORY, "project": slug, "configured": {
-                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "OPENAI_API_KEY", "OPENALEX_API_KEY")},
+                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "OPENAI_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
                 "python": sys.version.split()[0], "cloud_runtime": True}
             logs.append(json.dumps(output, ensure_ascii=False, indent=2))
         elif action == "acceptance":
