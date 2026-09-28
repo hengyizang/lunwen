@@ -69,6 +69,8 @@ For reliable OpenAlex calls, put a free OpenAlex key in the repository secret
 `OPENALEX_API_KEY`. It is sent only in the Authorization header. The preflight
 reports whether it is configured without revealing it. A public provider's
 503 or 406 remains a failed acceptance receipt; retry when its service recovers.
+The cloud literature job also passes the optional `LITERATURE_CONTACT_EMAIL`
+secret used by the scheduled acceptance run as provider contact metadata.
 OpenAlex's [authentication](https://help.openalex.org/api/authentication/) and
 [deprecation](https://help.openalex.org/api/deprecations/) guidance was checked
 on 2026-09-28.
