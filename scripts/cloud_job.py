@@ -204,8 +204,11 @@ def persist_state(slug: str, worktree: Path, branch: str, run_id: str) -> list[s
 
 
 def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
+    if not argv or not argv[0].startswith("scripts/") or not argv[0].endswith(".py"):
+        raise CloudJobError("only repository Python entry points may run")
+    module = argv[0][:-3].replace("/", ".")
     try:
-        result = subprocess.run([sys.executable, *argv], cwd=ROOT, capture_output=True,
+        result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
                                 text=True, errors="replace", timeout=timeout)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
         for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
@@ -225,6 +228,7 @@ def run_job(job: dict, run_id: str) -> int:
     logs = []
     status = "completed"
     changed = []
+    detail = ""
     try:
         if action in {"init", "status", *PAID}:
             worktree, branch = restore_state(slug)
@@ -287,6 +291,10 @@ def run_job(job: dict, run_id: str) -> int:
             logs.append(output)
             if code:
                 status = "failed"
+            elif action == "status":
+                state = researchctl.load_state(slug)
+                detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
+                          f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
     except (CloudJobError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
         status = "failed"
         logs.append(str(exc))
@@ -309,6 +317,7 @@ def run_job(job: dict, run_id: str) -> int:
             logs.append("Result packaging failed: " + str(exc))
         (ARTIFACT / "redacted-log.txt").write_text("\n".join(logs)[-100000:], encoding="utf-8")
         summary = (f"Cloud job `{action}` for `{slug}`: **{status}**.\n\n"
+                   f"{detail}"
                    f"[GitHub Actions run](https://github.com/{REPOSITORY}/actions/runs/{run_id}) · "
                    f"State branch (when used): `cloud-state/{slug}` · Changed files: {len(changed)}.\n\n"
                    "The run artifact contains redacted logs and tracked results. Human scientific gates remain pending.\n")
