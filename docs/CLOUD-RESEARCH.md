@@ -30,6 +30,9 @@ tracked project results. The state branch contains only bounded project results;
 raw/private data, credentials, model usage logs, caches, and experiment run
 directories are excluded. The branch is updated without force push. Inspect
 the branch diff and artifact before importing its work into `main`.
+Open a new state-changing issue after the previous run finishes. Concurrent
+updates to the same project fail safely on a non-fast-forward push and need a
+new request; the runner never overwrites an earlier branch update.
 
 | Action | Extra JSON properties | Effect |
 |---|---|---|
