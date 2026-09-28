@@ -140,7 +140,7 @@ def selected_files(project: Path) -> list[Path]:
     files = [p for p in project.rglob("*") if p.is_file() and safe_file(p, project)]
     if sum(p.stat().st_size for p in files) > 15_000_000:
         raise CloudJobError("tracked cloud result exceeds 15 MB")
-    secrets = [v.encode() for k, v in os.environ.items() if k in {"UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"} and len(v) >= 8]
+    secrets = [v.encode() for k, v in os.environ.items() if k in {"UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"} and len(v) >= 8]
     for path in files:
         data = path.read_bytes()
         if any(secret in data for secret in secrets):
