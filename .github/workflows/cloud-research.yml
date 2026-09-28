@@ -8,6 +8,10 @@ permissions:
   contents: write
   issues: write
 
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   run:
     if: >-
@@ -41,6 +45,7 @@ jobs:
           UUAPI_BASE_URL: ${{ vars.UUAPI_BASE_URL }}
           UUAPI_ANTHROPIC_MODEL: ${{ vars.UUAPI_ANTHROPIC_MODEL }}
           UUAPI_OPENAI_MODEL: ${{ vars.UUAPI_OPENAI_MODEL }}
+          DR_OS_MODEL_PRICING_JSON: ${{ vars.DR_OS_MODEL_PRICING_JSON }}
           UUAPI_STRICT_MODEL_ID: 'true'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

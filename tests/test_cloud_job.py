@@ -23,7 +23,7 @@ def issue(value, *, owner=cloud_job.OWNER_ID):
 
 
 class CloudJobTests(unittest.TestCase):
-    def test_owner_single_object_and_paid_authorization(self):
+    def test_owner_single_object_and_billable_action_flag(self):
         self.assertEqual(cloud_job.issue_request(issue(request()))["action"], "status")
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request(), owner=42))
@@ -31,6 +31,12 @@ class CloudJobTests(unittest.TestCase):
             cloud_job.issue_request(issue(request("cycle", allow_paid=False)))
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request("status", allow_paid=True)))
+        self.assertEqual(cloud_job.issue_request(issue(request("authorize_budget", allow_paid=False, new_ceiling_cny=300)))["new_ceiling_cny"], 300)
+        for ceiling in (0, 350, 900.0):
+            with self.subTest(ceiling=ceiling), self.assertRaises(cloud_job.CloudJobError):
+                cloud_job.validate_request(request("authorize_budget", allow_paid=False, new_ceiling_cny=ceiling))
+        self.assertEqual(cloud_job.validate_request(request("reconcile_budget", allow_paid=False,
+                        reservation_id="a" * 32, actual_cost_cny=0.0, evidence_note="Gateway shows no charge."))["action"], "reconcile_budget")
 
     def test_reject_duplicate_properties_extra_fences_and_prs(self):
         event = issue(request())
@@ -65,7 +71,7 @@ class CloudJobTests(unittest.TestCase):
     def test_result_selection_excludes_sensitive_paths_and_symlinks(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            for rel in ("state/run.json", "data/raw/input.json", "papers/P01/build/out.pdf", "reviews/a.md"):
+            for rel in ("state/run.json", "state/model-spend-control.json", "state/model-usage.jsonl", "data/raw/input.json", "papers/P01/build/out.pdf", "reviews/a.md"):
                 target = root / rel
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text("safe", encoding="utf-8")
@@ -74,7 +80,7 @@ class CloudJobTests(unittest.TestCase):
                 cloud_job.selected_files(root)
             (root / "reviews" / "linked.md").unlink()
             self.assertEqual([p.relative_to(root).as_posix() for p in cloud_job.selected_files(root)],
-                             ["reviews/a.md", "state/run.json"])
+                             ["reviews/a.md", "state/model-spend-control.json", "state/run.json"])
 
     def test_state_branch_round_trip_without_remote_force_push(self):
         with tempfile.TemporaryDirectory() as d:

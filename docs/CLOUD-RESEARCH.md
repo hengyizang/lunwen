@@ -18,8 +18,8 @@ evidence, doctoral depth and original contribution remain mandatory topic
 requirements. When only the model API has a proposed CNY
 ceiling, `cash_budget_usd` may stay null and external cloud compute must be
 zero. A later non-model expense needs an explicit budget decision. Any draft
-budget number remains subject to human review.
-Filling a draft constraint does not authorize a paid run or approve a gate.
+budget number remains subject to human review. A draft ceiling does not grant
+spending authority or approve a scientific gate.
 
 Only a new issue created by the `hengyizang` repository owner, with a title
 starting exactly `[research-cloud]`, starts `.github/workflows/cloud-research.yml`.
@@ -43,11 +43,13 @@ The issue comment reports the result and links its run. The artifact contains
 redacted logs, public acceptance receipts when applicable, and a ZIP of selected
 tracked project results. The state branch contains only bounded project results;
 raw/private data, credentials, model usage logs, caches, and experiment run
-directories are excluded. The branch is updated without force push. Inspect
+directories are excluded. The state branch does retain the aggregate approved
+ceiling, estimated cumulative spend and unresolved reservations, without prompt
+or response text. The branch is updated without force push. Inspect
 the branch diff and artifact before importing its work into `main`.
-Open a new state-changing issue after the previous run finishes. Concurrent
-updates to the same project fail safely on a non-fast-forward push and need a
-new request; the runner never overwrites an earlier branch update.
+Each job still has its own owner issue as a command and audit record. The cloud
+workflow serializes issues to protect the shared budget and project state; it
+does not treat a new issue as a new spending approval.
 
 | Action | Extra JSON properties | Effect |
 |---|---|---|
@@ -55,22 +57,39 @@ new request; the runner never overwrites an earlier branch update.
 | `acceptance` | none | Call public literature APIs, run Docker isolation, and check installed adapter versions. No model call. |
 | `init` | `paper_count` (default 6) | Create a six-paper project in its state branch. |
 | `status` | none | Read the persisted stage, gate and blockers. |
+| `authorize_budget` | `new_ceiling_cny` | Record the owner's next CNY 300 cumulative model API tranche. No model call. |
+| `reconcile_budget` | `reservation_id`, `actual_cost_cny`, `evidence_note` | Record the checked gateway bill for an ambiguous or interrupted call and release its reservation. No model call. |
 | `cycle` | `context`, optional `stage` | One current-stage Claude plan/critic and GPT writer/remediation cycle through UUAPI. |
-| `paperqa` | `corpus`, `question`, optional `settings` | Query a project-relative, authorized corpus with PaperQA2. |
-| `tooluniverse` | `request_file` | Run a validated, project-relative ToolUniverse request. |
+| `paperqa` | `corpus`, `question`, optional `settings` | Paused as a paid cloud action until its external model charges are meterable against the tranche. |
+| `tooluniverse` | `request_file` | Paused as a paid cloud action until any external API charges are meterable against the tranche. |
 
 Only `cycle`, `paperqa`, and `tooluniverse` accept `allow_paid: true`; every
-other action requires `false`. A new explicit owner issue is required for each
-potentially billable run. Before creating one, estimate and disclose its model
-and gateway charges. The default model budget in `config/defaults.json` is a
-CNY 300 project ceiling, not an estimate or an authorization. The `cycle` uses
+other action requires `false`. `allow_paid: true` identifies a potentially
+billable job, not a fresh spending approval. The owner first approves a
+**cumulative** ceiling of CNY 300 with a separate `authorize_budget` issue,
+then CNY 600, CNY 900 and so on by one CNY 300 increment each time. Subsequent
+cycles inside the approved unused ceiling need no new spending approval. The
+owner issue for each cycle remains the job trigger. The initial ceiling is zero;
+the CNY 300 default in `config/defaults.json` is only a legacy local safety
+limit. An approval example uses `action: "authorize_budget"`,
+`new_ceiling_cny: 300` and `allow_paid: false`; the next approval must request
+600. Before a cycle, estimate and disclose its possible gateway charges. The
+runner persists aggregate CNY estimates and reserves a conservative per-call
+amount before transport. Interrupted or ambiguous calls keep their reservation
+until the actual provider bill is reconciled through an owner issue. A provider
+usage report above the reservation is recorded and blocks further calls if the
+approved ceiling is exceeded. These are estimates, so compare
+them with the gateway bill before a threshold decision. The `cycle` uses
 the current stage stored in `state/run.json`; it refuses a mismatched `stage`
 and stops at a pending human gate. The workflow never invokes `ready`,
 `approve`, `advance`, a publisher login, or submission.
 
 For `cycle`, configure GitHub repository secret `UUAPI_API_KEY` and repository
-variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, and `UUAPI_OPENAI_MODEL`
-with the exact model IDs. The runner fixes the roles to `uuapi-anthropic` for
+variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, `UUAPI_OPENAI_MODEL` and
+`DR_OS_MODEL_PRICING_JSON` with the exact model IDs and each model's verified
+CNY input/output rates per million tokens, e.g. an object keyed by exact model
+ID with `input_per_million` and `output_per_million` numbers. Missing rates
+block the paid call. The runner fixes the roles to `uuapi-anthropic` for
 planning and independent criticism and `uuapi-openai` for persistent writing.
 Strict reported-model checking is enabled. PaperQA2 may require its own
 `OPENAI_API_KEY` secret according to the approved local settings; no key is
