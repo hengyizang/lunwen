@@ -18,7 +18,13 @@ export TMPDIR="$runtime_root/tmp"
 export MPLCONFIGDIR="$runtime_root/matplotlib"
 export PAPERQA_HOME="$runtime_root/paperqa"
 export TOOLUNIVERSE_HOME="$runtime_root/tooluniverse"
-[[ -x .venv/bin/python ]] || python3 -m venv .venv
+if [[ ! -x .venv/bin/python ]]; then
+  python3 -m venv .venv
+elif ! .venv/bin/python -m pip --version >/dev/null 2>&1; then
+  printf '%s\n' "Repairing incomplete virtual environment at $repo_root/.venv."
+  python3 -m venv --clear .venv
+fi
+.venv/bin/python -m pip --version >/dev/null
 .venv/bin/python -m pip install --disable-pip-version-check --upgrade pip
 .venv/bin/python -m pip install --disable-pip-version-check -e ".[figures,reader,reference-tools,writing-tools,research-quality,ai4science]"
 env_file="$runtime_root/env.sh"

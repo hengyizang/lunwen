@@ -51,6 +51,9 @@ if ($bootstrapText.Contains("`r")) {
   $bootstrapText = $bootstrapText.Replace("`r`n", "`n").Replace("`r", "`n")
   [IO.File]::WriteAllText($bootstrapPath, $bootstrapText, [Text.UTF8Encoding]::new($false))
 }
+$prerequisiteCommand = 'if ! command -v python3 >/dev/null 2>&1 || ! dpkg-query -W python3-venv >/dev/null 2>&1; then apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-venv; fi'
+& wsl.exe -d $Distribution -u root -- sh -lc $prerequisiteCommand
+if ($LASTEXITCODE -ne 0) { throw "WSL Python prerequisite installation failed with exit code $LASTEXITCODE" }
 & wsl.exe -d $Distribution --cd $requiredWslRoot -- bash scripts/bootstrap-d-drive.sh
 if ($LASTEXITCODE -ne 0) { throw "WSL bootstrap failed with exit code $LASTEXITCODE" }
 Write-Host 'D-drive installation completed.'
