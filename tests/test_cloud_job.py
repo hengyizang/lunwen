@@ -55,6 +55,13 @@ class CloudJobTests(unittest.TestCase):
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.validate_request(request("cycle", stage="submission-ready"))
 
+    def test_repository_entry_points_run_as_modules(self):
+        code, output = cloud_job.run_command(["scripts/researchctl.py", "stages"])
+        self.assertEqual(code, 0, output)
+        self.assertIn('"intake"', output)
+        with self.assertRaises(cloud_job.CloudJobError):
+            cloud_job.run_command(["/bin/sh", "-c", "true"])
+
     def test_result_selection_excludes_sensitive_paths_and_symlinks(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)

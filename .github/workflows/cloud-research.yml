@@ -27,7 +27,7 @@ jobs:
       - name: Validate the owner issue as a single structured job
         id: job
         run: >-
-          python scripts/cloud_job.py validate-event
+          python -m scripts.cloud_job validate-event
           --event "$GITHUB_EVENT_PATH"
           --output .runtime/cloud-job.json
           --github-output "$GITHUB_OUTPUT"
@@ -47,7 +47,7 @@ jobs:
           SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
           OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
         run: >-
-          python scripts/cloud_job.py execute
+          python -m scripts.cloud_job execute
           --config .runtime/cloud-job.json
           --run-id "$GITHUB_RUN_ID"
       - name: Return the outcome to the requesting issue
@@ -56,7 +56,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: >-
-          python scripts/cloud_job.py comment
+          python -m scripts.cloud_job comment
           --issue "$ISSUE_NUMBER"
           --summary .runtime/cloud-summary.md
       - name: Preserve redacted receipts and tracked-result snapshot
