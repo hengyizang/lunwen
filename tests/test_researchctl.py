@@ -32,7 +32,7 @@ class ResearchCtlTests(unittest.TestCase):
     def complete_constraints(self, project: Path) -> None:
         path=project/"intake"/"constraints.json"
         value=json.loads(path.read_text())
-        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"novelty_and_doctoral_depth":0.3,"feasibility_without_lab":0.2,"funded_position_supply":0.1,"competition":0.1,"job_market_and_salary":0.1,"background_fit":0.2}})
+        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"feasibility_without_lab":0.3,"funded_position_supply":0.2,"competition":0.1,"job_market_and_salary":0.2,"background_fit":0.2}})
         researchctl.write_json(path,value)
 
     def test_initialize_creates_state_papers_and_trial_venue(self) -> None:
@@ -78,6 +78,28 @@ class ResearchCtlTests(unittest.TestCase):
         researchctl.write_json(path, value)
         errors = researchctl.gate_errors("test-phd", "G0")
         self.assertTrue(any("local_compute.ram_gb" in error for error in errors))
+
+    def test_short_submission_deadline_and_topic_quality_gates(self) -> None:
+        project = self.init_project()
+        self.complete_constraints(project)
+        path = project / "intake" / "constraints.json"
+        value = json.loads(path.read_text())
+        value["time_horizon_years"] = None
+        value["target_submission_ready_date"] = "2026-10-07"
+        value["cash_budget_usd"] = None
+        value["model_api_budget_cny"] = 300
+        value["cloud_compute_budget_usd"] = 0
+        value["local_compute"] = {"gpu": None, "ram_gb": None, "storage_gb": None}
+        researchctl.write_json(path, value)
+        self.assertEqual(researchctl.gate_errors("test-phd", "G0"), [])
+
+        value["topic_quality_requirements"]["original_contribution_required"] = False
+        researchctl.write_json(path, value)
+        self.assertTrue(any("original_contribution_required" in error for error in researchctl.gate_errors("test-phd", "G0")))
+        value["topic_quality_requirements"]["original_contribution_required"] = True
+        value["target_submission_ready_date"] = "2026-13-07"
+        researchctl.write_json(path, value)
+        self.assertTrue(any("target_submission_ready_date" in error for error in researchctl.gate_errors("test-phd", "G0")))
 
     def test_duplicate_project_is_rejected(self) -> None:
         self.init_project()

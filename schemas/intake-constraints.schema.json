@@ -4,7 +4,7 @@
   "title": "Human-confirmed G0 research constraints",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "status", "research_goal", "researcher_background", "available_skills", "preferred_domains", "candidate_application_routes", "time_horizon_years", "weekly_hours", "cash_budget_usd", "cloud_compute_budget_usd", "local_compute", "equipment", "data_constraint", "ranking_weights", "excluded_domains", "ethics_or_legal_constraints", "notes", "human_review_required"],
+  "required": ["schema_version", "status", "research_goal", "researcher_background", "available_skills", "preferred_domains", "candidate_application_routes", "time_horizon_years", "weekly_hours", "cash_budget_usd", "cloud_compute_budget_usd", "local_compute", "equipment", "data_constraint", "topic_quality_requirements", "ranking_weights", "excluded_domains", "ethics_or_legal_constraints", "notes", "human_review_required"],
   "properties": {
     "schema_version": {"const": "1.1"},
     "status": {"enum": ["needs_user_input", "ready_for_review"]},
@@ -15,8 +15,10 @@
     "preferred_domains": {"type": "array", "items": {"type": "string"}},
     "candidate_application_routes": {"type": "array", "items": {"type": "string"}},
     "time_horizon_years": {"type": ["number", "null"]},
+    "target_submission_ready_date": {"type": ["string", "null"], "format": "date"},
     "weekly_hours": {"type": ["number", "null"]},
     "cash_budget_usd": {"type": ["number", "null"]},
+    "model_api_budget_cny": {"type": ["number", "null"]},
     "cloud_compute_budget_usd": {"type": ["number", "null"]},
     "local_compute": {
       "type": "object",
@@ -30,12 +32,21 @@
     },
     "equipment": {"type": "string"},
     "data_constraint": {"type": "string"},
+    "topic_quality_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["novelty_evidence_required", "doctoral_depth_required", "original_contribution_required"],
+      "properties": {
+        "novelty_evidence_required": {"const": true},
+        "doctoral_depth_required": {"const": true},
+        "original_contribution_required": {"const": true}
+      }
+    },
     "ranking_weights": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["novelty_and_doctoral_depth", "feasibility_without_lab", "funded_position_supply", "competition", "job_market_and_salary", "background_fit"],
+      "required": ["feasibility_without_lab", "funded_position_supply", "competition", "job_market_and_salary", "background_fit"],
       "properties": {
-        "novelty_and_doctoral_depth": {"type": ["number", "null"]},
         "feasibility_without_lab": {"type": ["number", "null"]},
         "funded_position_supply": {"type": ["number", "null"]},
         "competition": {"type": ["number", "null"]},

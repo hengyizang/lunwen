@@ -8,7 +8,13 @@ for this path.
 
 For G0, set `execution_mode` to `cloud_only`. Local GPU, RAM and storage may
 remain `null`; the GitHub runner supplies the execution environment. Record
-separate proposed cash, cloud compute and model ceilings for human review.
+an exact `target_submission_ready_date` when the goal is a short sprint, with
+`time_horizon_years: null`. Direction weights cover feasibility and career
+factors; novelty evidence, doctoral depth and original contribution remain
+mandatory topic requirements. When only the model API has a proposed CNY
+ceiling, `cash_budget_usd` may stay null and external cloud compute must be
+zero. A later non-model expense needs an explicit budget decision. Any draft
+budget number remains subject to human review.
 Filling a draft constraint does not authorize a paid run or approve a gate.
 
 Only a new issue created by the `hengyizang` repository owner, with a title
