@@ -97,6 +97,16 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertLess(installer.index("[IO.File]::WriteAllText"), installer.index("-- bash scripts/bootstrap-d-drive.sh"))
         self.assertIn("*.sh text eol=lf", attributes)
 
+    def test_windows_installer_provisions_venv_and_repairs_missing_pip(self):
+        root = Path(__file__).parents[1]
+        installer = (root / "scripts" / "install-d-drive.ps1").read_text(encoding="utf-8")
+        bootstrap = (root / "scripts" / "bootstrap-d-drive.sh").read_text(encoding="utf-8")
+        self.assertIn("dpkg-query -W python3-venv", installer)
+        self.assertIn("-u root -- sh -lc $prerequisiteCommand", installer)
+        self.assertLess(installer.index("dpkg-query -W python3-venv"), installer.index("-- bash scripts/bootstrap-d-drive.sh"))
+        self.assertIn(".venv/bin/python -m pip --version", bootstrap)
+        self.assertIn("python3 -m venv --clear .venv", bootstrap)
+
     def test_genuine_docx_requires_non_claude_sources_and_named_visual_review(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp) / "study"
