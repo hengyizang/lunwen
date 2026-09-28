@@ -32,7 +32,7 @@ class ResearchCtlTests(unittest.TestCase):
     def complete_constraints(self, project: Path) -> None:
         path=project/"intake"/"constraints.json"
         value=json.loads(path.read_text())
-        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.30,"job_market_and_salary":0.20,"future_growth_potential":0.15,"competition":0.15,"background_fit":0.10,"application_route_fit":0.10}})
+        value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.25,"job_market_and_salary":0.25,"future_growth_potential":0.15,"phd_position_competition":0.075,"job_market_competition":0.075,"background_fit":0.10,"application_route_fit":0.10}})
         researchctl.write_json(path,value)
 
     def test_initialize_creates_state_papers_and_trial_venue(self) -> None:
@@ -50,6 +50,8 @@ class ResearchCtlTests(unittest.TestCase):
         self.assertEqual(contract["writing_language"], "en")
         self.assertEqual(contract["target_jcr_quartile"], "Q1")
         self.assertFalse(contract["cloud_feasibility"]["current_paper_cloud_executable"])
+        spending = json.loads((project / "state" / "model-spend-control.json").read_text())
+        self.assertEqual(spending["authorized_ceiling_cny"], 0)
         self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
 
     def test_six_paper_initialization_assigns_three_q1_and_three_q2_targets(self) -> None:

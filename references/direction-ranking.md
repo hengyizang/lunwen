@@ -20,10 +20,11 @@ clearly marked untested; its hoped-for results cannot support the six papers.
 
 | Direction factor | Weight | Evidence to collect before assigning a score |
 |---|---:|---|
-| Funded PhD position supply | 30% | Count distinct, genuinely funded positions in the relevant countries and eligibility routes over a stated recent window; record institution, date, funding, topic fit and source. Deduplicate reposts and separate observed openings from forecasts. |
-| Employment and salary | 20% | Compare role availability and location-adjusted salary ranges for relevant research and industry roles from dated official statistics or verifiable employer listings; state whether amounts are gross and which career stage they cover. |
+| Funded PhD position supply | 25% | Count distinct, genuinely funded positions in the relevant countries and eligibility routes over a stated recent window; record institution, date, funding, topic fit and source. Deduplicate reposts and separate observed openings from forecasts. |
+| Employment and salary | 25% | Compare role availability and location-adjusted salary ranges for relevant research and industry roles from dated official statistics or verifiable employer listings; state whether amounts are gross and which career stage they cover. |
 | Future growth potential | 15% | Assess credible medium-term research, industrial and policy demand from dated primary sources, including uncertainty and adjacent skills that transfer across fields. |
-| Competition | 15% | Use observed applicant-to-funded-place ratios when published; otherwise mark a cautious proxy and its limitations. A larger number of listings alone does not establish easier admission. |
+| Funded PhD competition | 7.5% | Use published applicant-to-funded-place ratios when available; otherwise label cautious proxies and their limits. Higher scores mean a better chance of admission, not more competition. |
+| Job market competition | 7.5% | Use dated applicant-to-opening or qualified-supply evidence for relevant roles when available; label proxies and their limits. Higher scores mean a better chance of obtaining a job. |
 | Background fit | 10% | Compare prerequisites and evidence of the researcher's mechanical-engineering and Big Data/AI skills to realistic entry requirements, including gaps that can be closed before applying. |
 | Application-route fit | 10% | Check country, PhD/industrial doctorate/EngD route, supervision, residence, language and work-status requirements for France, Spain, the Netherlands, the UK, Japan and Hong Kong; only compare routes open to this researcher. |
 

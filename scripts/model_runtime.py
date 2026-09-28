@@ -17,9 +17,10 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers
+    from scripts import ai_providers, model_spend
 except ImportError:
     import ai_providers  # type: ignore
+    import model_spend  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,7 +28,7 @@ DEFAULTS_PATH = ROOT / "config" / "defaults.json"
 
 
 class ModelBudgetError(RuntimeError):
-    """A model call would exceed an explicit local cost ceiling."""
+    """A model call would exceed its recorded cost ceiling."""
 
 
 def utc_now() -> str:
@@ -82,6 +83,8 @@ def pricing(provider: str, model: str | None = None) -> dict[str, float]:
             if any(not math.isfinite(value) or value <= 0 for value in values.values()):
                 raise ModelBudgetError("model prices must be positive finite numbers")
             return values
+        if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
+            raise ModelBudgetError(f"exact CNY input/output rates are required for cloud model {model}")
     prefix = "DR_OS_ANTHROPIC" if family == "anthropic" else "DR_OS_OPENAI"
     return {
         "input_per_million": _float_env(
@@ -144,20 +147,17 @@ def ledger_entries(project_root: Path) -> list[dict[str, Any]]:
 
 
 def budget_status(project_root: Path, paper_id: str | None = None) -> dict[str, Any]:
-    values = ledger_entries(project_root)
-    spent = round(sum(float(item.get("cost_cny", 0.0)) for item in values), 8)
-    paper_spent = round(
-        sum(
-            float(item.get("cost_cny", 0.0))
-            for item in values
-            if paper_id and item.get("paper_id") == paper_id
-        ),
-        8,
-    )
+    control = model_spend.read(project_root, required=os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1")
+    values = ledger_entries(project_root) if control is None else []
+    spent = round(sum(float(item.get("cost_cny", 0.0)) for item in values), 8) if control is None else control["spent_cny"]
+    paper_spent = round(sum(float(item.get("cost_cny", 0.0)) for item in values if paper_id and item.get("paper_id") == paper_id), 8) if control is None else control["paper_spent_cny"].get(paper_id, 0.0)
+    reserved = model_spend.reserved(control) if control is not None else 0.0
+    paper_reserved = model_spend.reserved(control, paper_id) if control is not None and paper_id else 0.0
     defaults = _defaults()
-    project_limit = _float_env(
+    configured_project_limit = _float_env(
         "DR_OS_PROJECT_BUDGET_CNY", float(defaults.get("project_hard_limit", 300.0))
     )
+    project_limit = float(control["authorized_ceiling_cny"]) if control is not None else configured_project_limit
     paper_limit = _float_env(
         "DR_OS_PAPER_BUDGET_CNY", float(defaults.get("paper_hard_limit", 60.0))
     )
@@ -170,14 +170,15 @@ def budget_status(project_root: Path, paper_id: str | None = None) -> dict[str, 
     return {
         "currency": "CNY",
         "spent": spent,
+        "reserved": reserved,
         "project_hard_limit": project_limit,
-        "project_remaining": round(project_limit - spent, 8),
+        "project_remaining": round(project_limit - spent - reserved, 8),
         "paper_id": paper_id,
         "paper_spent": paper_spent if paper_id else None,
         "paper_warning_limit": paper_warning if paper_id else None,
         "paper_warning_reached": paper_spent >= paper_warning if paper_id else None,
         "paper_hard_limit": paper_limit if paper_id else None,
-        "paper_remaining": round(paper_limit - paper_spent, 8) if paper_id else None,
+        "paper_remaining": round(paper_limit - paper_spent - paper_reserved, 8) if paper_id else None,
     }
 
 
@@ -301,6 +302,9 @@ def call(
 
     paper_id = _paper_for_stage(project_root, stage)
     key, identity = _cache_key(provider, prompt, system, max_output_tokens, model)
+    effective_model = str(identity["model"] or "")
+    if not effective_model and os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
+        raise ModelBudgetError("a configured exact model ID is required")
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
         try:
@@ -341,19 +345,24 @@ def call(
             )
             return result
 
-    predicted_input = estimate_tokens((system or "") + "\n" + prompt)
-    predicted_cost = cost_cny(provider, predicted_input, max_output_tokens, model)
+    request_text = (system or "") + "\n" + prompt
+    predicted_input = estimate_tokens(request_text)
+    predicted_cost = cost_cny(provider, predicted_input, max_output_tokens, effective_model or None)
     status = budget_status(project_root, paper_id)
-    if predicted_cost > float(status["project_remaining"]):
+    controlled = model_spend.read(project_root) is not None
+    reserved_cost = cost_cny(provider, max(predicted_input, len(request_text.encode("utf-8")) + 1000), max_output_tokens, effective_model or None) if controlled else predicted_cost
+    if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
-            f"request could exceed project model budget: need up to CNY {predicted_cost:.4f}, "
+            f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
             f"remaining CNY {status['project_remaining']:.4f}"
         )
-    if paper_id and predicted_cost > float(status["paper_remaining"]):
+    if paper_id and reserved_cost > float(status["paper_remaining"]):
         raise ModelBudgetError(
-            f"request could exceed {paper_id} model budget: need up to CNY {predicted_cost:.4f}, "
+            f"request could exceed {paper_id} model budget: reserve up to CNY {reserved_cost:.4f}, "
             f"remaining CNY {status['paper_remaining']:.4f}"
         )
+    reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
+                                         paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
 
     result = ai_providers.call(
         provider,
@@ -367,8 +376,10 @@ def call(
     estimated = input_tokens is None or output_tokens is None
     input_tokens = input_tokens if input_tokens is not None else predicted_input
     output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-    actual_cost = cost_cny(provider, input_tokens, output_tokens, model)
+    actual_cost = cost_cny(provider, input_tokens, output_tokens, effective_model or None)
     result.cache_key = key
+    if reservation_id and not estimated:
+        model_spend.settle(project_root, reservation_id, actual_cost_cny=actual_cost)
     _append(
         _ledger(project_root),
         {

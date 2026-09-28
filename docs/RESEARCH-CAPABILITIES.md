@@ -33,7 +33,8 @@ The default prices and hard ceilings are in `config/defaults.json`:
 
 - Claude: CNY 2/M input and CNY 10/M output;
 - GPT: CNY 2.2/M input and CNY 11/M output;
-- project hard limit: CNY 300;
+- local legacy project hard limit: CNY 300; cloud jobs start with zero
+  authorization and use owner-approved CNY 300 cumulative tranches;
 - active-paper hard limit at G5: CNY 60.
 
 Override a ceiling for one WSL session only when the user authorizes it:
@@ -53,6 +54,18 @@ cache status. It is local and ignored by Git. The exact-request cache is keyed
 by provider, exact model, endpoint, protocol, output limit, system hash and
 prompt hash. It never reuses a merely similar request and never removes a
 required planner or critic role.
+
+For GitHub cloud jobs, `state/model-spend-control.json` carries only aggregate
+cost estimates, outstanding reservations and owner approval events across jobs.
+The cloud runner uses its approved ceiling even when a local budget environment
+variable is larger. The first paid call requires a recorded CNY 300 approval;
+another owner approval raises the cumulative ceiling to CNY 600, then 900, and
+so on. Each subsequent call within unused authorized capacity can proceed
+without a new approval. Set `DR_OS_MODEL_PRICING_JSON` with verified rates
+keyed by the exact gateway model IDs; cloud calls fail closed if a rate is
+missing. Provider invoices still need reconciliation with the
+estimated ledger; an interrupted call leaves a reservation until the owner
+records the checked bill with `reconcile_budget`.
 
 ## Lawful open-full-text resolution
 

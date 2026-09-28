@@ -10,7 +10,8 @@ WEIGHT_FIELDS = (
     "funded_position_supply",
     "job_market_and_salary",
     "future_growth_potential",
-    "competition",
+    "phd_position_competition",
+    "job_market_competition",
     "background_fit",
     "application_route_fit",
 )

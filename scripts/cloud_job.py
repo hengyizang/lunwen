@@ -15,9 +15,10 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 try:
-    from scripts import researchctl
+    from scripts import model_spend, researchctl
 except ImportError:
     import researchctl  # type: ignore
+    import model_spend  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = ROOT / ".runtime"
@@ -30,7 +31,9 @@ PAID = {"cycle", "paperqa", "tooluniverse"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
     "preflight": set(), "acceptance": set(), "init": {"paper_count"},
-    "status": set(), "cycle": {"context", "stage"},
+    "status": set(), "authorize_budget": {"new_ceiling_cny"},
+    "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
+    "cycle": {"context", "stage"},
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
 }
 SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".txt", ".tex", ".bib", ".svg", ".png", ".pdf", ".docx"}
@@ -75,7 +78,14 @@ def validate_request(value: object) -> dict:
             or any(ord(ch) < 32 for ch in value["actor"])):
         raise CloudJobError("actor must name the human requester")
     if type(value["allow_paid"]) is not bool or value["allow_paid"] != (action in PAID):
-        raise CloudJobError("paid actions require allow_paid=true in this issue; free actions require false")
+        raise CloudJobError("billable actions require allow_paid=true; non-billable actions require false")
+    if action == "authorize_budget" and (type(value.get("new_ceiling_cny")) is not int or value["new_ceiling_cny"] <= 0 or value["new_ceiling_cny"] % model_spend.STEP_CNY):
+        raise CloudJobError("new_ceiling_cny must be a positive CNY 300 tranche boundary")
+    if action == "reconcile_budget":
+        if (not isinstance(value.get("reservation_id"), str) or not re.fullmatch(r"[a-f0-9]{32}", value["reservation_id"])
+                or not isinstance(value.get("evidence_note"), str) or not 0 < len(value["evidence_note"].strip()) <= 300):
+            raise CloudJobError("reconciliation requires a reservation ID and a short billing evidence note")
+        model_spend._amount(value.get("actual_cost_cny"), "actual_cost_cny")
     if action == "init" and (type(value.get("paper_count", 6)) is not int or not 1 <= value.get("paper_count", 6) <= 20):
         raise CloudJobError("paper_count must be 1–20")
     if action == "cycle":
@@ -230,12 +240,12 @@ def run_job(job: dict, run_id: str) -> int:
     changed = []
     detail = ""
     try:
-        if action in {"init", "status", *PAID}:
+        if action in {"init", "status", "authorize_budget", "reconcile_budget", *PAID}:
             worktree, branch = restore_state(slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         if action == "preflight":
             output = {"repository": REPOSITORY, "project": slug, "configured": {
-                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "OPENAI_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
+                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON", "OPENAI_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
                 "python": sys.version.split()[0], "cloud_runtime": True}
             logs.append(json.dumps(output, ensure_ascii=False, indent=2))
         elif action == "acceptance":
@@ -266,10 +276,26 @@ def run_job(job: dict, run_id: str) -> int:
                 raise CloudJobError("project does not exist; create it with init first")
             if action == "status":
                 cmd = ["scripts/researchctl.py", "status", "--project", slug, "--json"]
+            elif action == "authorize_budget":
+                state = model_spend.grant(ROOT / "projects" / slug, new_ceiling_cny=job["new_ceiling_cny"],
+                                          actor=job["actor"], run_id=run_id)
+                logs.append(f"Owner approved project model spending ceiling CNY {state['authorized_ceiling_cny']}; no model call was made.")
+                detail = f"Approved cumulative model API ceiling: CNY {state['authorized_ceiling_cny']}.\n\n"
+                cmd = None
+            elif action == "reconcile_budget":
+                state = model_spend.reconcile(ROOT / "projects" / slug, job["reservation_id"],
+                                              actual_cost_cny=job["actual_cost_cny"], actor=job["actor"],
+                                              run_id=run_id, evidence_note=job["evidence_note"])
+                logs.append(f"Owner reconciled reservation {job['reservation_id']}; aggregate estimated spending is CNY {state['spent_cny']}.")
+                detail = f"Reconciled cumulative estimated model API spend: CNY {state['spent_cny']}.\n\n"
+                cmd = None
             elif action == "cycle":
-                required = ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL")
+                control = model_spend.read(ROOT / "projects" / slug, required=True)
+                if not control or control["authorized_ceiling_cny"] <= 0:
+                    raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
+                required = ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON")
                 if any(not os.environ.get(name) for name in required):
-                    raise CloudJobError("UUAPI gateway key, base URL and exact model IDs must be configured")
+                    raise CloudJobError("UUAPI gateway key, base URL, exact model IDs and CNY pricing must be configured")
                 state = researchctl.load_state(slug)
                 if state["status"] in {"awaiting_approval", "approved"} or state["gate"] is None:
                     raise CloudJobError("current gate requires human review or is already approved")
@@ -278,24 +304,21 @@ def run_job(job: dict, run_id: str) -> int:
                 cmd = ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
                        "--planner-provider", "uuapi-anthropic", "--writer-provider", "uuapi-openai",
                        "--critic-provider", "uuapi-anthropic", "--context", job.get("context", "")]
+                os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
             elif action == "paperqa":
-                cmd = ["scripts/ai4science_evidence.py", "paperqa", "--project", slug,
-                       "--corpus", job["corpus"], "--question", job["question"],
-                       "--settings", job.get("settings", "fast"), "--actor", job["actor"],
-                       "--purpose", "Owner-authorized advisory evidence scan"]
+                raise CloudJobError("PaperQA2 can use unmetered external model calls; its paid cloud action is paused until its charges can count against the approved tranche")
             else:
-                cmd = ["scripts/ai4science_evidence.py", "tooluniverse", "--project", slug,
-                       "--request", job["request_file"], "--actor", job["actor"],
-                       "--purpose", "Owner-authorized advisory public database lookup"]
-            code, output = run_command(cmd)
-            logs.append(output)
-            if code:
-                status = "failed"
-            elif action == "status":
-                state = researchctl.load_state(slug)
-                detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
-                          f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
-    except (CloudJobError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
+                raise CloudJobError("ToolUniverse can use unmetered paid APIs; its paid cloud action is paused until its charges can count against the approved tranche")
+            if cmd is not None:
+                code, output = run_command(cmd)
+                logs.append(output)
+                if code:
+                    status = "failed"
+                elif action == "status":
+                    state = researchctl.load_state(slug)
+                    detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
+                              f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
+    except (CloudJobError, model_spend.SpendControlError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
         status = "failed"
         logs.append(str(exc))
     finally:

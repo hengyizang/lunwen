@@ -46,12 +46,13 @@
     "ranking_weights": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["funded_position_supply", "job_market_and_salary", "future_growth_potential", "competition", "background_fit", "application_route_fit"],
+      "required": ["funded_position_supply", "job_market_and_salary", "future_growth_potential", "phd_position_competition", "job_market_competition", "background_fit", "application_route_fit"],
       "properties": {
         "funded_position_supply": {"type": ["number", "null"]},
         "job_market_and_salary": {"type": ["number", "null"]},
         "future_growth_potential": {"type": ["number", "null"]},
-        "competition": {"type": ["number", "null"]},
+        "phd_position_competition": {"type": ["number", "null"]},
+        "job_market_competition": {"type": ["number", "null"]},
         "background_fit": {"type": ["number", "null"]},
         "application_route_fit": {"type": ["number", "null"]}
       }
