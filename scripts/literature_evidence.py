@@ -194,6 +194,10 @@ def provider_headers(provider: str) -> dict[str, str]:
         api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "").strip()
         if api_key:
             headers["x-api-key"] = api_key
+    if provider == "openalex":
+        api_key = os.environ.get("OPENALEX_API_KEY", "").strip()
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
     if provider == "opencitations":
         access_token = os.environ.get("OPENCITATIONS_ACCESS_TOKEN", "").strip()
         if access_token:
@@ -227,6 +231,9 @@ def _serpapi_transport_url(request_url: str) -> str:
 
 def _redact_provider_text(provider: str, value: Any) -> str:
     text = str(value)
+    if provider == "openalex":
+        api_key = os.environ.get("OPENALEX_API_KEY", "").strip()
+        return text.replace(api_key, "<redacted>") if api_key else text
     if provider != "serpapi-google-scholar":
         return text
     api_key = os.environ.get("SERPAPI_API_KEY", "").strip()
@@ -277,6 +284,12 @@ def fetch_provider_bytes(
                 if api_key and api_key.encode() in payload:
                     raise LiteratureEvidenceError(
                         "refusing to persist a provider response that echoes SERPAPI_API_KEY"
+                    )
+            if provider == "openalex":
+                api_key = os.environ.get("OPENALEX_API_KEY", "").strip()
+                if api_key and api_key.encode() in payload:
+                    raise LiteratureEvidenceError(
+                        "refusing to persist a provider response that echoes OPENALEX_API_KEY"
                     )
             return (
                 payload,
@@ -364,8 +377,6 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
     encoded = urllib.parse.urlencode
     if provider == "openalex":
         values = {"search": query, "per-page": limit}
-        contact = os.environ.get("OPENALEX_MAILTO") or os.environ.get("LITERATURE_CONTACT_EMAIL")
-        if contact: values["mailto"] = contact
         return "https://api.openalex.org/works?" + encoded(values)
     if provider == "crossref":
         return "https://api.crossref.org/works?" + encoded(

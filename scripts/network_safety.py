@@ -38,6 +38,19 @@ class PublicHTTPSRedirectHandler(urllib.request.HTTPRedirectHandler):
         newurl: str,
     ) -> Any:
         require_public_https_url(newurl, "redirected URL", resolver=self.resolver)
+        if req is not None:
+            old = urllib.parse.urlsplit(req.full_url)
+            new = urllib.parse.urlsplit(newurl)
+            credential_headers = {"authorization", "proxy-authorization", "x-api-key", "api-key"}
+            has_credential = any(key.lower() in credential_headers for key, _ in req.header_items())
+            has_credential |= any(
+                key.lower() in {"api_key", "access_token", "token"}
+                for key, _ in urllib.parse.parse_qsl(old.query)
+            )
+            if has_credential and (old.scheme.lower(), old.hostname, old.port) != (
+                new.scheme.lower(), new.hostname, new.port
+            ):
+                raise NetworkSafetyError("refusing cross-origin redirect with a credential")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 

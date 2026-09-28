@@ -179,6 +179,35 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertTrue(all("application/atom+xml" in item["Accept"] for item in calls))
         self.assertEqual([item.args[0] for item in sleep.call_args_list], [5, 20])
 
+    def test_openalex_key_stays_in_header_and_is_redacted_on_error(self) -> None:
+        url = build_search_url("openalex", "robot learning", 1)
+        self.assertNotIn("api_key", url)
+        captured = {}
+
+        def fetcher(request_url: str, **kwargs):
+            captured["url"] = request_url
+            captured["headers"] = kwargs["headers"]
+            raise OSError("upstream included test-openalex-secret in an error")
+
+        with patch.dict("os.environ", {"OPENALEX_API_KEY": "test-openalex-secret"}):
+            with self.assertRaises(LiteratureEvidenceError) as raised:
+                fetch_provider_bytes(fetcher, url, "openalex")
+        self.assertEqual(captured["url"], url)
+        self.assertEqual(captured["headers"]["Authorization"], "Bearer test-openalex-secret")
+        self.assertNotIn("test-openalex-secret", str(raised.exception))
+
+    def test_openalex_does_not_persist_response_echoing_key(self) -> None:
+        def fetcher(url: str, **_kwargs):
+            return b'{"echo":"test-openalex-secret"}', url, 200, "application/json"
+
+        with patch.dict("os.environ", {"OPENALEX_API_KEY": "test-openalex-secret"}):
+            with self.assertRaisesRegex(LiteratureEvidenceError, "refusing to persist"):
+                fetch_provider_bytes(fetcher, build_search_url("openalex", "x", 1), "openalex")
+
+    def test_openalex_does_not_send_obsolete_mailto_parameter(self) -> None:
+        with patch.dict("os.environ", {"OPENALEX_MAILTO": "person@example.org"}):
+            self.assertNotIn("mailto=", build_search_url("openalex", "robot learning", 1))
+
     def test_arxiv_identifier_uses_official_id_list_probe(self) -> None:
         url = build_search_url("arxiv", "arxiv-id:1706.03762", 1)
         query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)

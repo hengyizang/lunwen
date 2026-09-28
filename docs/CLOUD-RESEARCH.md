@@ -65,6 +65,13 @@ placed in an issue, commit, ZIP, or comment.
 Desktop or the D-drive path works on a Windows computer. It excludes
 quota-consuming SerpApi and unauthenticated Semantic Scholar; failures in the
 remaining public providers are recorded as failures, not silently skipped.
+For reliable OpenAlex calls, put a free OpenAlex key in the repository secret
+`OPENALEX_API_KEY`. It is sent only in the Authorization header. The preflight
+reports whether it is configured without revealing it. A public provider's
+503 or 406 remains a failed acceptance receipt; retry when its service recovers.
+OpenAlex's [authentication](https://help.openalex.org/api/authentication/) and
+[deprecation](https://help.openalex.org/api/deprecations/) guidance was checked
+on 2026-09-28.
 
 The exact input contract is in `schemas/cloud-job.schema.json`. The script
 also enforces action-specific properties, owner ID, a single JSON object,
