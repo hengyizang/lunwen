@@ -35,23 +35,25 @@
     "topic_quality_requirements": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["novelty_evidence_required", "doctoral_depth_required", "original_contribution_required"],
+      "required": ["novelty_evidence_required", "doctoral_depth_required", "original_contribution_required", "current_papers_cloud_feasible_required"],
       "properties": {
         "novelty_evidence_required": {"const": true},
         "doctoral_depth_required": {"const": true},
-        "original_contribution_required": {"const": true}
+        "original_contribution_required": {"const": true},
+        "current_papers_cloud_feasible_required": {"const": true}
       }
     },
     "ranking_weights": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["feasibility_without_lab", "funded_position_supply", "competition", "job_market_and_salary", "background_fit"],
+      "required": ["funded_position_supply", "job_market_and_salary", "future_growth_potential", "competition", "background_fit", "application_route_fit"],
       "properties": {
-        "feasibility_without_lab": {"type": ["number", "null"]},
         "funded_position_supply": {"type": ["number", "null"]},
-        "competition": {"type": ["number", "null"]},
         "job_market_and_salary": {"type": ["number", "null"]},
-        "background_fit": {"type": ["number", "null"]}
+        "future_growth_potential": {"type": ["number", "null"]},
+        "competition": {"type": ["number", "null"]},
+        "background_fit": {"type": ["number", "null"]},
+        "application_route_fit": {"type": ["number", "null"]}
       }
     },
     "excluded_domains": {"type": "array", "items": {"type": "string"}},

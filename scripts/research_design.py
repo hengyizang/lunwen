@@ -223,6 +223,19 @@ def validate_theme_mapping(
     return errors
 
 
+def validate_selected_direction_cloud_feasibility(shortlist: dict[str, Any]) -> list[str]:
+    """Block G1 until the selected direction has a cloud-only current-paper path."""
+
+    errors: list[str] = []
+    feasibility = _object(shortlist.get("selected_direction_cloud_feasibility"), "selected_direction_cloud_feasibility", errors)
+    for key in ("current_papers_feasible", "no_future_lab_dependency"):
+        if feasibility.get(key) is not True:
+            errors.append(f"selected_direction_cloud_feasibility.{key} must be true")
+    for key in ("authorized_data_plan", "cloud_experiment_plan", "current_paper_scope"):
+        _text(feasibility.get(key), f"selected_direction_cloud_feasibility.{key}", errors)
+    return errors
+
+
 def validate_originality_audit(audit: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if audit.get("schema_version") != "1.0":
@@ -518,6 +531,13 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
         "relationship_to_extension",
     ):
         _text(contract.get(key), key, errors)
+
+    feasibility = _object(contract.get("cloud_feasibility"), "cloud_feasibility", errors)
+    for key in ("current_paper_cloud_executable", "no_future_lab_dependency"):
+        if feasibility.get(key) is not True:
+            errors.append(f"cloud_feasibility.{key} must be true")
+    for key in ("data_access_plan", "cloud_execution_plan", "evidence_and_claim_scope"):
+        _text(feasibility.get(key), f"cloud_feasibility.{key}", errors)
 
     boundary = _object(contract.get("originality_boundary"), "originality_boundary", errors)
     _string_list(boundary.get("novel_elements"), "originality_boundary.novel_elements", errors)

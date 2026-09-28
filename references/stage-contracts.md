@@ -9,7 +9,9 @@ Required:
 - available skills, time, budget, compute, data and equipment;
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
-- direction ranking weights for feasibility, jobs, positions, competition and background fit;
+- cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
+- direction ranking weights for funded PhD position supply, employment and salary, future growth, competition, background fit and application-route fit, applied only after feasibility and data-rights screening;
+- use `references/direction-ranking.md` to collect dated, route-specific primary evidence and score the six factors without double-counting positions;
 - novelty evidence, doctoral depth and original contribution as mandatory topic and research-plan requirements that cannot be traded against direction scores.
 
 Do not begin broad topic scoring while critical constraints are unknown.
@@ -26,6 +28,7 @@ Required:
 - `program/novelty-claim-matrix.json` conforming to `schemas/novelty-claim-matrix.schema.json`; every originality claim must distinguish already-known elements from the precise proposed difference, cite at least three closest works, specify mechanism, falsification, expected evidence if false, boundary conditions and residual risk, and document forward/backward citation chaining plus two consecutive saturation rounds;
 - `program/topic-decision.md` with novelty, contribution, feasibility, competition, PhD-position supply and job-market evidence.
 - automatic broad-data evidence followed by Codex scientific-fit screening against the human-confirmed G0 ranking weights; preserve rejected datasets and unresolved license, sample, bias, leakage, compute and external-validity concerns.
+- `program/topic-shortlist.json` records `selected_direction_cloud_feasibility` with `current_papers_feasible: true`, `no_future_lab_dependency: true`, and concrete authorized-data, cloud-experiment and current-paper-scope plans. If a proposed direction requires post-admission laboratory work to establish a current paper's result, reject it before weighted ranking. Future laboratory extensions can be retained as separate, unproven plans.
 
 Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.” Reject a proposed topic that lacks a defensible original contribution or doctoral depth, regardless of its direction ranking score.
 
@@ -35,6 +38,7 @@ Required:
 
 - `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, including every pairwise paper comparison, independently sufficient primary evidence, standalone value and a justification for any shared outcome;
 - six default paper contracts under `papers/P01`–`papers/P06`;
+- for each current paper, a cloud-feasibility declaration with a specific authorized data-access plan, GitHub Actions compute plan and rationale that no laboratory or local hardware is required. The current claim and primary evidence may not depend on post-admission laboratory work, including for papers assigned to extension B;
 - dependency graph, shared assets, independent contribution, falsification condition and fallback venue for each paper;
 - `program/venue-candidates.json`, generated from a local authorized JCR export, with at least two current SCI/SCIE candidates meeting each paper's declared Q1/Q2 target and current official policy links; the six-paper portfolio needs at least three Q1 targets;
 - `program/journal-screening.json`, deterministically bound to the JCR registry and dated official evidence, with decomposed scope/article/audience/tier/practicality/access/reputation scores, explicit risk flags and challenge/target/safety choices for every paper;
