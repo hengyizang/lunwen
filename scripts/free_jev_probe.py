@@ -74,9 +74,10 @@ def _key_status(transport: Transport, key: str) -> dict:
     data = transport("GET", "/key", None, key).get("data")
     if not isinstance(data, dict):
         raise ProbeError("API key status was unavailable")
-    # A dedicated free-tier key must have a hard zero-credit cap, including BYOK.
-    if data.get("is_free_tier") is not True or data.get("include_byok_in_limit") is not True:
-        raise ProbeError("a dedicated free-tier key with BYOK included in its limit is required")
+    # Account free-tier status is not a spending control. The key's own zero
+    # credit cap must apply to OpenRouter and any configured BYOK spending.
+    if data.get("include_byok_in_limit") is not True:
+        raise ProbeError("a dedicated key with BYOK included in its limit is required")
     _zero(data.get("limit"), "API key spending limit")
     _zero(data.get("limit_remaining"), "API key remaining spending limit")
     return data

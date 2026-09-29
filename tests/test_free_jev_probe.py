@@ -17,7 +17,7 @@ class FakeTransport:
         assert key == KEY
         if path == "/key":
             return {"data": {"limit": self.limit, "limit_remaining": self.limit,
-                             "is_free_tier": True, "include_byok_in_limit": True, "usage": 0}}
+                             "is_free_tier": False, "include_byok_in_limit": True, "usage": 0}}
         if path == "/chat/completions":
             return {"id": "gen-123", "model": free_jev_probe.ROUTER,
                     "choices": [{"message": {"content": "uncertain"}}]}
