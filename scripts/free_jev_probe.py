@@ -21,6 +21,7 @@ from typing import Callable
 BASE = "https://openrouter.ai/api/v1"
 ROUTER = "typesafe/jev-router"
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$")
+PROVIDER_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ._/-]{0,127}$")
 LABELS = {"prioritize", "ordinary_review", "uncertain"}
 Transport = Callable[[str, str, dict | None, str], dict]
 
@@ -109,7 +110,9 @@ def probe(key: str, transport: Transport = http_json) -> dict:
         raise ProbeError("generation billing record is unavailable")
     _zero(record.get("total_cost"), "generation total cost")
     actual_model = _identifier(record.get("model"), "actual serving model")
-    provider = _identifier(record.get("provider_name"), "actual provider")
+    provider = record.get("provider_name")
+    if not isinstance(provider, str) or not PROVIDER_NAME.fullmatch(provider):
+        raise ProbeError("actual provider was missing or invalid")
     if actual_model == ROUTER or record.get("is_byok") is not False:
         raise ProbeError("actual model or non-BYOK provider identity is unverified")
     response_model = response.get("model")
