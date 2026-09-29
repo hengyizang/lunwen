@@ -30,7 +30,8 @@ BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```
 PAID = {"cycle", "paperqa", "tooluniverse"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
-    "preflight": set(), "acceptance": set(), "free_jev_probe": set(), "init": {"paper_count"},
+    "preflight": set(), "acceptance": set(), "free_jev_probe": set(),
+    "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count"},
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
     "cycle": {"context", "stage"},
@@ -88,6 +89,14 @@ def validate_request(value: object) -> dict:
         model_spend._amount(value.get("actual_cost_cny"), "actual_cost_cny")
     if action == "init" and (type(value.get("paper_count", 6)) is not int or not 1 <= value.get("paper_count", 6) <= 20):
         raise CloudJobError("paper_count must be 1–20")
+    if action == "bocha_jev_probe":
+        if type(value.get("live", False)) is not bool:
+            raise CloudJobError("live must be a boolean")
+        if value.get("live", False):
+            if not isinstance(value.get("free_policy_checked_on"), str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value["free_policy_checked_on"]):
+                raise CloudJobError("live Bocha trial requires the date the no-charge policy was checked")
+        elif "free_policy_checked_on" in value:
+            raise CloudJobError("a policy-check date is only used for a live Bocha trial")
     if action == "cycle":
         if not isinstance(value.get("context", ""), str) or len(value.get("context", "")) > 4000:
             raise CloudJobError("context exceeds 4000 characters")
@@ -150,7 +159,7 @@ def selected_files(project: Path) -> list[Path]:
     files = [p for p in project.rglob("*") if p.is_file() and safe_file(p, project)]
     if sum(p.stat().st_size for p in files) > 15_000_000:
         raise CloudJobError("tracked cloud result exceeds 15 MB")
-    secrets = [v.encode() for k, v in os.environ.items() if k in {"UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"} and len(v) >= 8]
+    secrets = [v.encode() for k, v in os.environ.items() if k in {"UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"} and len(v) >= 8]
     for path in files:
         data = path.read_bytes()
         if any(secret in data for secret in secrets):
@@ -221,7 +230,7 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
         result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
                                 text=True, errors="replace", timeout=timeout)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
-        for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
+        for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
             if len(os.environ.get(key, "")) >= 8:
                 raw = raw.replace(os.environ[key], "[REDACTED]")
         return result.returncode, raw
@@ -245,7 +254,7 @@ def run_job(job: dict, run_id: str) -> int:
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         if action == "preflight":
             output = {"repository": REPOSITORY, "project": slug, "configured": {
-                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON", "OPENAI_API_KEY", "OPENROUTER_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
+                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON", "OPENAI_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
                 "python": sys.version.split()[0], "cloud_runtime": True}
             logs.append(json.dumps(output, ensure_ascii=False, indent=2))
         elif action == "acceptance":
@@ -268,6 +277,14 @@ def run_job(job: dict, run_id: str) -> int:
             if not os.environ.get("OPENROUTER_API_KEY"):
                 raise CloudJobError("a dedicated zero-credit OpenRouter key is required in the OPENROUTER_API_KEY repository secret")
             code, output = run_command(["scripts/free_jev_probe.py", "--output", str(ARTIFACT / "free-jev-probe.json")], timeout=120)
+            logs.append(output)
+            if code:
+                status = "failed"
+        elif action == "bocha_jev_probe":
+            cmd = ["scripts/bocha_jev_probe.py", "--output", str(ARTIFACT / "bocha-jev-probe.json")]
+            if job.get("live", False):
+                cmd += ["--live", "--free-policy-checked-on", job["free_policy_checked_on"]]
+            code, output = run_command(cmd, timeout=120)
             logs.append(output)
             if code:
                 status = "failed"
