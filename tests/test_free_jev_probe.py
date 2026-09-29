@@ -23,7 +23,7 @@ class FakeTransport:
                     "choices": [{"message": {"content": "uncertain"}}]}
         if path == "/generation?id=gen-123":
             return {"data": {"total_cost": self.cost, "model": self.actual,
-                             "provider_name": "OpenAI", "is_byok": self.byok}}
+                             "provider_name": "Moonshot AI", "is_byok": self.byok}}
         raise AssertionError(path)
 
 
@@ -39,6 +39,7 @@ class FreeJevProbeTests(unittest.TestCase):
         receipt = free_jev_probe.probe(KEY, transport)
         self.assertEqual(receipt["total_cost_usd"], 0)
         self.assertEqual(receipt["actual_model"], "openai/gpt-6-sol")
+        self.assertEqual(receipt["provider"], "Moonshot AI")
         self.assertEqual(receipt["triage_label"], "uncertain")
         self.assertNotIn(KEY, str(receipt))
         post = transport.calls[1][2]
