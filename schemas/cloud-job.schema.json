@@ -6,7 +6,7 @@
   "required": ["schema_version", "action", "project", "actor", "allow_paid"],
   "properties": {
     "schema_version": {"const": "1.0"},
-    "action": {"enum": ["preflight", "acceptance", "init", "status", "authorize_budget", "reconcile_budget", "cycle", "paperqa", "tooluniverse"]},
+    "action": {"enum": ["preflight", "acceptance", "free_jev_probe", "init", "status", "authorize_budget", "reconcile_budget", "cycle", "paperqa", "tooluniverse"]},
     "project": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"},
     "actor": {"type": "string", "minLength": 1, "maxLength": 100},
     "allow_paid": {"type": "boolean"},
