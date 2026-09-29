@@ -73,7 +73,7 @@ def connectivity(transport: Transport = http_json) -> dict:
     if code not in {200, 401, 403}:
         raise ProbeError(f"Bocha models endpoint returned unexpected HTTP {code}")
     return {"schema_version": "1.0", "provider": "bocha-official", "endpoint": BASE + "/v1/models",
-            "http_status": code, "status": "auth_required" if code in {401, 403} else "public_models",
+            "http_status": code, "status": {200: "public_models", 401: "auth_required", 403: "access_forbidden"}[code],
             "model_call_made": False, "cost_cny": 0}
 
 

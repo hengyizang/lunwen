@@ -29,7 +29,7 @@ The latest inspected cloud acceptance run (`36436741307`, 2026-09-28) passed Cro
 
 ## Official Bocha cloud check
 
-The owner-only `bocha_jev_probe` cloud action first makes an unauthenticated `GET /v1/models` and records only its HTTP status. It does not send a model request or require a key. A 401 or 403 is an **auth-required** result, not a working authenticated API.
+The owner-only `bocha_jev_probe` cloud action first makes an unauthenticated `GET /v1/models` and records only its HTTP status. It does not send a model request or require a key. A 401 is **auth-required**; a 403 is **access-forbidden** and needs investigation. Neither is a working authenticated API.
 
 The separate `live: true` mode requires `BOCHA_JEV_API_KEY` as a GitHub Actions secret and `free_policy_checked_on` equal to the current UTC date. It checks the exact model list before one synthetic `choice` request, verifies the returned model ID and response shape, and logs neither the key nor raw response. One successful synthetic request would validate transport and decision format; it would still not establish measured classification accuracy, a provider-side hard spending cap, or a monetary billing receipt. Do not run repeated requests automatically when the temporary free policy changes.
 
