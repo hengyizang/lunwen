@@ -25,12 +25,15 @@ def issue(value, *, owner=cloud_job.OWNER_ID):
 class CloudJobTests(unittest.TestCase):
     def test_owner_single_object_and_billable_action_flag(self):
         self.assertEqual(cloud_job.issue_request(issue(request()))["action"], "status")
+        self.assertEqual(cloud_job.issue_request(issue(request("free_jev_probe")))["action"], "free_jev_probe")
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request(), owner=42))
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request("cycle", allow_paid=False)))
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request("status", allow_paid=True)))
+        with self.assertRaises(cloud_job.CloudJobError):
+            cloud_job.issue_request(issue(request("free_jev_probe", allow_paid=True)))
         self.assertEqual(cloud_job.issue_request(issue(request("authorize_budget", allow_paid=False, new_ceiling_cny=300)))["new_ceiling_cny"], 300)
         for ceiling in (0, 350, 900.0):
             with self.subTest(ceiling=ceiling), self.assertRaises(cloud_job.CloudJobError):

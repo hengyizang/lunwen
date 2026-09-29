@@ -48,6 +48,7 @@ jobs:
           DR_OS_MODEL_PRICING_JSON: ${{ vars.DR_OS_MODEL_PRICING_JSON }}
           UUAPI_STRICT_MODEL_ID: 'true'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
