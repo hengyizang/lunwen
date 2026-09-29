@@ -55,7 +55,7 @@ does not treat a new issue as a new spending approval.
 |---|---|---|
 | `preflight` | none | Check Python and redacted provider configuration. |
 | `acceptance` | none | Call public literature APIs, run Docker isolation, and check installed adapter versions. No model call. |
-| `free_jev_probe` | none | One fixed, synthetic public-metadata request to OpenRouter `typesafe/jev-router`, only with a dedicated free-tier API key capped at USD 0 (BYOK counted). Require zero provider prices, an exact serving model and a zero-cost generation receipt. No research data or scientific gate change. |
+| `free_jev_probe` | none | One fixed, synthetic public-metadata request to OpenRouter `typesafe/jev-router`, only with a dedicated API key capped at USD 0 (BYOK counted). Require zero provider prices, an exact serving model and a zero-cost generation receipt. No research data or scientific gate change. |
 | `init` | `paper_count` (default 6) | Create a six-paper project in its state branch. |
 | `status` | none | Read the persisted stage, gate and blockers. |
 | `authorize_budget` | `new_ceiling_cny` | Record the owner's next CNY 300 cumulative model API tranche. No model call. |
@@ -115,7 +115,7 @@ also enforces action-specific properties, owner ID, a single JSON object,
 strict paths and the paid-action flag before any project is restored.
 
 For an optional `free_jev_probe`, configure the repository secret
-`OPENROUTER_API_KEY` with a **dedicated free-tier key whose per-key limit and
+`OPENROUTER_API_KEY` with a **dedicated key whose per-key limit and
 remaining limit are both USD 0, with BYOK usage included in the limit**.
 The probe checks those fields through OpenRouter's `GET /api/v1/key` before its
 single model request. It also sets `provider.max_price` to zero for token,
