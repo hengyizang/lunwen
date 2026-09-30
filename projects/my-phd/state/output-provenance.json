@@ -1,4 +1,69 @@
 {
+  "files": {
+    "intake/capabilities.json": {
+      "family": "openai",
+      "model": "Codex session (GPT-6 family; exact API model ID not supplied)",
+      "provider": "codex-work-session",
+      "recorded_at": "2026-09-30T17:12:30+00:00",
+      "role": "proposed-intake-author; no scientific gate or independent audit granted",
+      "run_id": "codex-g0-continuation-20261001",
+      "sha256": "5ede70eed05ad3a62f096fc7a716485d4a90ca5f45773cf5f2684a3d17ec0859"
+    },
+    "intake/constraint-sources.json": {
+      "family": "openai",
+      "model": "Codex session (GPT-6 family; exact API model ID not supplied)",
+      "provider": "codex-work-session",
+      "recorded_at": "2026-09-30T18:20:51+00:00",
+      "role": "confirmed-intake consolidation; records actual user instructions, no independent audit",
+      "run_id": "codex-confirmed-g0-20261001",
+      "sha256": "e5ec27b52b02656346d4fbe4bbe314c3a01d1d7da184303c819b49801636579b"
+    },
+    "intake/constraints.json": {
+      "family": "openai",
+      "model": "Codex session (GPT-6 family; exact API model ID not supplied)",
+      "provider": "codex-work-session",
+      "recorded_at": "2026-09-30T18:20:51+00:00",
+      "role": "confirmed-intake consolidation; records actual user instructions, no independent audit",
+      "run_id": "codex-confirmed-g0-20261001",
+      "sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b"
+    },
+    "intake/continuation-dossier.md": {
+      "family": "openai",
+      "model": "Codex session (GPT-6 family; exact API model ID not supplied)",
+      "provider": "codex-work-session",
+      "recorded_at": "2026-09-30T18:20:51+00:00",
+      "role": "confirmed-intake consolidation; records actual user instructions, no independent audit",
+      "run_id": "codex-confirmed-g0-20261001",
+      "sha256": "43b9e59ae75df9b3013d2ed66444e18bc14e84b63a966d09fc4a878be819abec"
+    },
+    "intake/g0-draft-validation.json": {
+      "family": "other",
+      "model": "Python 3; no model API call",
+      "provider": "deterministic-python-control-plane",
+      "recorded_at": "2026-09-30T18:20:51+00:00",
+      "role": "scoped schema and exact G0 pre-approval validation",
+      "run_id": "codex-confirmed-g0-20261001",
+      "sha256": "ae58f2a2c816957d510d5e3d1eb6c04f6869cf8ebf67339bc6958bd951caf3e8"
+    },
+    "reports/cloud-preflight-20261001.json": {
+      "family": "other",
+      "model": "Python 3; no model API call",
+      "provider": "deterministic-python-control-plane",
+      "recorded_at": "2026-09-30T17:12:30+00:00",
+      "role": "hash-verified receipt extraction and deterministic constraint validation",
+      "run_id": "codex-g0-continuation-20261001",
+      "sha256": "e1ce48c6573a7db0454d2f20ed7c4d15d60c89e17c35c2dec05b59c1b63a36ac"
+    },
+    "reports/cloud-status-20261001.json": {
+      "family": "other",
+      "model": "Python 3; no model API call",
+      "provider": "deterministic-python-control-plane",
+      "recorded_at": "2026-09-30T17:12:30+00:00",
+      "role": "hash-verified receipt extraction and deterministic constraint validation",
+      "run_id": "codex-g0-continuation-20261001",
+      "sha256": "d59916f86aea3d370d9778ed1e0289b2ac289a82530e78303c6032c2cd90c620"
+    }
+  },
   "schema_version": "1.0",
-  "files": {}
+  "updated_at": "2026-09-30T18:20:51+00:00"
 }

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "actor": "Hengyi Zang",
+  "confirmed_at": "2026-09-30T17:24:37+00:00",
+  "original_message": "我确认，改成每天24小时不停，直到满足论文要求",
+  "approved_scope": [
+    "presented G0 constraints",
+    "initial cumulative CNY 300 envelope",
+    "24-hour cloud continuation"
+  ],
+  "not_approved": [
+    "unseen G1-G5 dossiers",
+    "future budget tranches",
+    "automatic submission"
+  ],
+  "constraints_sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
+  "g0_approval_artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad",
+  "source": "Current user reply to the previously presented G0 draft and initial CNY 300 confirmation request",
+  "scientific_code_commit": "111c0416a0565d7dc8bbb0bd2e3a3b9a21023774",
+  "paid_model_call_made": false
+}

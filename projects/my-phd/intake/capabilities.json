@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
   "status": "unverified",
-  "os": "Windows 11 with WSL2 recommended",
-  "orchestrator": "API-first Python orchestrator",
+  "os": "GitHub Actions Ubuntu cloud runner; Python 3.12.14 observed in preflight 36747990456",
+  "orchestrator": "Codex control and API-first cloud orchestrator; provider credentials, endpoint/model IDs and verified pricing are not yet configured",
   "semantic_planner": "Claude/Anthropic read-only",
   "persistent_writer": "OpenAI/Codex",
   "independent_auditor": "model family different from persistent writer",
   "evidence_workbench": "Claude Science export contract",
-  "checked_at": null,
-  "environment_report": null
+  "checked_at": "2026-09-30T16:57:48+00:00",
+  "environment_report": "reports/cloud-preflight-20261001.json"
 }

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "record_type": "deterministic G0 pre-approval receipt",
+  "checked_at": "2026-09-30T18:20:51+00:00",
+  "validation_code_commit": "111c0416a0565d7dc8bbb0bd2e3a3b9a21023774",
+  "schema_path": "schemas/intake-constraints.schema.json",
+  "schema_sha256": "c1b0146b8667b30bbb862b9d1b89c92237e73c19c4495f581b5b83e6067370dd",
+  "validator_sha256": "b52c213ced52e0bbdbc3bbda928f304f157c6c0ed24a5d1a97571e4a4984b416",
+  "constraints_path": "intake/constraints.json",
+  "constraints_sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
+  "schema_property_check_scope": [
+    "additionalProperties",
+    "const",
+    "enum",
+    "format",
+    "items",
+    "maximum",
+    "minimum",
+    "properties",
+    "required",
+    "type"
+  ],
+  "schema_property_errors": [],
+  "baseline_g0_error_count": 19,
+  "draft_g0_error_count": 0,
+  "draft_g0_errors": [],
+  "gate_ready": true,
+  "human_approval_recorded_at_receipt_creation": false,
+  "project_state_sha256_before_human_control_plane": "9c324edaa3a26f646fe652ac3a221754e5af7d35e0cd7b1a305954a3a9e53fd0",
+  "direction_weight_sum": 1.0,
+  "authorized_model_spend_ceiling_cny_at_receipt_creation": 0,
+  "operational_requirements": [
+    "Record the separately confirmed first CNY 300 tranche through the owner cloud job",
+    "Configure secure gateway credentials, exact model IDs and verified CNY prices",
+    "Run only the current stage and present each future scientific dossier for human approval"
+  ]
+}

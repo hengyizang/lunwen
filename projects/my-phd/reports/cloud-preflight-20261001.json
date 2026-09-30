@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "record_type": "read-only cloud receipt copy; no scientific gate or paid approval",
+  "source_run_id": 36747990456,
+  "source_run_url": "https://github.com/hengyizang/lunwen/actions/runs/36747990456",
+  "source_issue_url": "https://github.com/hengyizang/lunwen/issues/50",
+  "source_commit": "1d3c1a478f0b8a7ac43fab8fda3cc4bf8fe3d30d",
+  "artifact_id": 11113456539,
+  "artifact_sha256": "07b82efedb367cf36f1abbeb45a5d0a529a5fd3778f3469334c3545183c4c455",
+  "redacted_log_sha256": "7c7d319dda1beb7abe70a4244126a2afbf12332c2e62dacc5b1e59afcb18d097",
+  "collected_at": "2026-09-30T17:12:30+00:00",
+  "allow_paid": false,
+  "observed": {
+    "repository": "hengyizang/lunwen",
+    "project": "my-phd",
+    "configured": {
+      "UUAPI_API_KEY": false,
+      "UUAPI_BASE_URL": false,
+      "UUAPI_ANTHROPIC_MODEL": false,
+      "UUAPI_OPENAI_MODEL": false,
+      "DR_OS_MODEL_PRICING_JSON": false,
+      "OPENAI_API_KEY": false,
+      "OPENROUTER_API_KEY": false,
+      "BOCHA_JEV_API_KEY": false,
+      "OPENALEX_API_KEY": false,
+      "LITERATURE_CONTACT_EMAIL": false
+    },
+    "python": "3.12.14",
+    "cloud_runtime": true
+  }
+}

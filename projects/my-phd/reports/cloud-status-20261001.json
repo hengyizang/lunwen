@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "record_type": "read-only cloud receipt copy; no scientific gate or paid approval",
+  "source_run_id": 36748024163,
+  "source_run_url": "https://github.com/hengyizang/lunwen/actions/runs/36748024163",
+  "source_issue_url": "https://github.com/hengyizang/lunwen/issues/51",
+  "source_commit": "1d3c1a478f0b8a7ac43fab8fda3cc4bf8fe3d30d",
+  "artifact_id": 11112664201,
+  "artifact_sha256": "e9c35fef0284b6c1cf9d37c6ca645275dc8c50538687cd68909d9e9c041f9edd",
+  "redacted_log_sha256": "f146cddf3ee6be227759a7c3b90fed1b8788f45046f77f2b99ec2eee71d90772",
+  "collected_at": "2026-09-30T17:12:30+00:00",
+  "allow_paid": false,
+  "observed": {
+    "schema_version": "2.0",
+    "project": "my-phd",
+    "created_at": "2026-09-28T10:06:20+00:00",
+    "updated_at": "2026-09-28T10:06:20+00:00",
+    "stage_index": 0,
+    "stage": "intake",
+    "gate": "G0",
+    "status": "awaiting_work",
+    "active_paper": "P01",
+    "paper_count": 6,
+    "paper_statuses": {
+      "P01": "active",
+      "P02": "planned",
+      "P03": "planned",
+      "P04": "planned",
+      "P05": "planned",
+      "P06": "planned"
+    },
+    "approved_gates": [],
+    "approvals": [],
+    "history": [
+      {
+        "at": "2026-09-28T10:06:20+00:00",
+        "event": "project_initialized",
+        "stage": "intake"
+      }
+    ],
+    "gate_ready": false,
+    "gate_errors": [
+      "intake/constraints.json: status must be ready_for_review",
+      "intake/constraints.json: research_goal must be an explicit non-empty string",
+      "intake/constraints.json: researcher_background must be an explicit non-empty string",
+      "intake/constraints.json: available_skills must contain at least 1 item(s)",
+      "intake/constraints.json: time_horizon_years must be a number",
+      "intake/constraints.json: weekly_hours must be a number",
+      "intake/constraints.json: cash_budget_usd or model_api_budget_cny must be explicit",
+      "intake/constraints.json: cloud_compute_budget_usd must be 0 when no USD cash ceiling is set",
+      "intake/constraints.json: local_compute.gpu must be an explicit non-empty string",
+      "intake/constraints.json: local_compute.ram_gb must be a number",
+      "intake/constraints.json: local_compute.storage_gb must be a number",
+      "intake/constraints.json: topic_quality_requirements must be an object",
+      "intake/constraints.json: ranking_weights.funded_position_supply must be a number",
+      "intake/constraints.json: ranking_weights.job_market_and_salary must be a number",
+      "intake/constraints.json: ranking_weights.future_growth_potential must be a number",
+      "intake/constraints.json: ranking_weights.phd_position_competition must be a number",
+      "intake/constraints.json: ranking_weights.job_market_competition must be a number",
+      "intake/constraints.json: ranking_weights.background_fit must be a number",
+      "intake/constraints.json: ranking_weights.application_route_fit must be a number"
+    ]
+  }
+}
