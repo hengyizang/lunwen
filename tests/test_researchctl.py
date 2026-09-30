@@ -114,6 +114,27 @@ class ResearchCtlTests(unittest.TestCase):
         with self.assertRaises(researchctl.ResearchCtlError):
             self.init_project()
 
+    def test_cloud_system_hours_do_not_fabricate_human_weekly_availability(self) -> None:
+        project = self.init_project()
+        self.complete_constraints(project)
+        path = project / "intake/constraints.json"
+        value = json.loads(path.read_text())
+        value.update({"human_review_mode": "on_request", "weekly_hours": None,
+                      "system_execution_hours_per_day": 24})
+        researchctl.write_json(path, value)
+        self.assertEqual(researchctl.gate_errors("test-phd", "G0"), [])
+        value["weekly_hours"] = 168
+        researchctl.write_json(path, value)
+        self.assertTrue(any("weekly_hours" in x for x in researchctl.gate_errors("test-phd", "G0")))
+        value["weekly_hours"] = None
+        value["execution_mode"] = "local"
+        researchctl.write_json(path, value)
+        self.assertTrue(any("on_request" in x for x in researchctl.gate_errors("test-phd", "G0")))
+        value["execution_mode"] = "cloud_only"
+        value["system_execution_hours_per_day"] = 25
+        researchctl.write_json(path, value)
+        self.assertTrue(any("system_execution_hours" in x for x in researchctl.gate_errors("test-phd", "G0")))
+
     def test_gate_requires_readiness_and_human_approval(self) -> None:
         project = self.init_project()
         with self.assertRaises(researchctl.ResearchCtlError):

@@ -15,10 +15,12 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 try:
-    from scripts import model_spend, researchctl
+    from scripts import cloud_continuation, model_runtime, model_spend, researchctl
 except ImportError:
     import researchctl  # type: ignore
     import model_spend  # type: ignore
+    import cloud_continuation  # type: ignore
+    import model_runtime  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = ROOT / ".runtime"
@@ -27,7 +29,7 @@ OWNER_ID = 163310614
 REPOSITORY = "hengyizang/lunwen"
 MARKER = "<!-- doctoral-research-os-cloud-job -->"
 BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```\s*", re.S)
-PAID = {"cycle", "paperqa", "tooluniverse"}
+PAID = {"cycle", "continuation", "paperqa", "tooluniverse"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
     "preflight": set(), "acceptance": set(), "free_jev_probe": set(),
@@ -35,6 +37,7 @@ EXTRA = {
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
     "cycle": {"context", "stage"},
+    "continuation": set(),
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
 }
 SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".txt", ".tex", ".bib", ".svg", ".png", ".pdf", ".docx"}
@@ -248,6 +251,7 @@ def run_job(job: dict, run_id: str) -> int:
     status = "completed"
     changed = []
     detail = ""
+    continuation_decision = None
     try:
         if action in {"init", "status", "authorize_budget", "reconcile_budget", *PAID}:
             worktree, branch = restore_state(slug)
@@ -313,22 +317,18 @@ def run_job(job: dict, run_id: str) -> int:
                 logs.append(f"Owner reconciled reservation {job['reservation_id']}; aggregate estimated spending is CNY {state['spent_cny']}.")
                 detail = f"Reconciled cumulative estimated model API spend: CNY {state['spent_cny']}.\n\n"
                 cmd = None
-            elif action == "cycle":
-                control = model_spend.read(ROOT / "projects" / slug, required=True)
-                if not control or control["authorized_ceiling_cny"] <= 0:
-                    raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
-                required = ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON")
-                if any(not os.environ.get(name) for name in required):
-                    raise CloudJobError("UUAPI gateway key, base URL, exact model IDs and CNY pricing must be configured")
-                state = researchctl.load_state(slug)
-                if state["status"] in {"awaiting_approval", "approved"} or state["gate"] is None:
-                    raise CloudJobError("current gate requires human review or is already approved")
-                if job.get("stage", state["stage"]) != state["stage"]:
-                    raise CloudJobError("requested stage does not match persisted current stage")
-                cmd = ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
-                       "--planner-provider", "uuapi-anthropic", "--writer-provider", "uuapi-openai",
-                       "--critic-provider", "uuapi-anthropic", "--context", job.get("context", "")]
-                os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+            elif action in {"cycle", "continuation"}:
+                if action == "continuation":
+                    continuation_decision = cloud_continuation.evaluate(slug)
+                    cloud_continuation.checkpoint(slug, continuation_decision, run_id)
+                    detail = f"Continuation: `{continuation_decision['reason']}`.\n\n"
+                    logs.append(json.dumps(continuation_decision, ensure_ascii=False, indent=2))
+                if action == "continuation" and not continuation_decision["should_run"]:
+                    cmd = None
+                else:
+                    if action == "continuation" and job["actor"] != continuation_decision["actor"]:
+                        raise CloudJobError("continuation actor must match the recorded owner confirmation")
+                    cmd = cycle_command(job, slug)
             elif action == "paperqa":
                 raise CloudJobError("PaperQA2 can use unmetered external model calls; its paid cloud action is paused until its charges can count against the approved tranche")
             else:
@@ -336,13 +336,18 @@ def run_job(job: dict, run_id: str) -> int:
             if cmd is not None:
                 code, output = run_command(cmd)
                 logs.append(output)
+                if action == "continuation":
+                    cloud_continuation.checkpoint(slug, continuation_decision, run_id, cycle_exit_code=code)
+                    continuation_decision = cloud_continuation.evaluate(slug)
+                    cloud_continuation.checkpoint(slug, continuation_decision, run_id, cycle_exit_code=code)
+                    detail = f"Continuation after cycle: `{continuation_decision['reason']}`.\n\n"
                 if code:
                     status = "failed"
                 elif action == "status":
                     state = researchctl.load_state(slug)
                     detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
                               f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
-    except (CloudJobError, model_spend.SpendControlError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
+    except (CloudJobError, cloud_continuation.ContinuationError, model_spend.SpendControlError, model_runtime.ModelBudgetError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
         status = "failed"
         logs.append(str(exc))
     finally:
@@ -369,7 +374,34 @@ def run_job(job: dict, run_id: str) -> int:
                    f"State branch (when used): `cloud-state/{slug}` · Changed files: {len(changed)}.\n\n"
                    "The run artifact contains redacted logs and tracked results. Human scientific gates remain pending.\n")
         (RUNTIME / "cloud-summary.md").write_text(summary, encoding="utf-8")
+        if action == "continuation" and status == "completed" and continuation_decision is not None:
+            (RUNTIME / "continuation-followup.json").write_text(json.dumps(continuation_decision), encoding="utf-8")
     return 0 if status == "completed" else 1
+
+
+def cycle_command(job: dict, slug: str) -> list[str]:
+    control = model_spend.read(ROOT / "projects" / slug, required=True)
+    if not control or control["authorized_ceiling_cny"] <= 0:
+        raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
+    if any(not os.environ.get(name) for name in cloud_continuation.CONFIG):
+        raise CloudJobError("UUAPI gateway key, base URL, exact model IDs and CNY pricing must be configured")
+    state = researchctl.load_state(slug)
+    if state["status"] in {"awaiting_approval", "approved"} or state["gate"] is None:
+        raise CloudJobError("current gate requires human review or is already approved")
+    if job.get("stage", state["stage"]) != state["stage"]:
+        raise CloudJobError("requested stage does not match persisted current stage")
+    context = job.get("context", "")
+    if job["action"] == "continuation":
+        context = ("Continue the owner-confirmed current stage toward the six-paper requirements. "
+                   "Read the frozen intake constraints and existing evidence, initial/final audits and decision log; "
+                   "repair remaining evidence and quality gaps without repeating completed work. "
+                   "Preserve negative results. Use only cloud-authorized data and the cumulative approved budget. "
+                   "Do not approve or advance a human gate, change spending authority, or auto-submit. "
+                   "Keep Claude read-only and OpenAI as the persistent author. The October 7 target does not lower any requirement.")
+    os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+    return ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
+            "--planner-provider", "uuapi-anthropic", "--writer-provider", "uuapi-openai",
+            "--critic-provider", "uuapi-anthropic", "--context", context]
 
 
 def main() -> int:

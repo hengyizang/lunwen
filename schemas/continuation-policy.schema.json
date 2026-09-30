@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Protected owner-confirmed continuous cloud work",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "enabled", "actor", "confirmed_at", "confirmation_note", "system_execution_hours_per_day", "resume_interval_minutes", "constraints_sha256", "g0_approval_artifact_sha256", "stop_when"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "enabled": {"type": "boolean"},
+    "actor": {"type": "string", "minLength": 1},
+    "confirmed_at": {"type": "string", "format": "date-time"},
+    "confirmation_note": {"type": "string", "minLength": 1},
+    "system_execution_hours_per_day": {"const": 24},
+    "resume_interval_minutes": {"const": 15},
+    "constraints_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "g0_approval_artifact_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "stop_when": {"const": "all_papers_submission_ready"}
+  }
+}

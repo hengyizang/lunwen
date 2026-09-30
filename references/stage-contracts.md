@@ -7,12 +7,13 @@ Required:
 - `intake/constraints.json` conforming to `schemas/intake-constraints.schema.json`, with every material feasibility value explicit and status `ready_for_review`;
 - target application routes and time horizon;
 - available skills, time, budget, compute, data and equipment;
+- keep system availability separate from human time: cloud-only projects may explicitly use `human_review_mode: on_request` with `weekly_hours: null`; `system_execution_hours_per_day: 24` describes cloud automation, never 168 hours of weekly human work. Human gate approval remains mandatory;
 - a proposed model API first tranche of CNY 300 with initial cumulative authorization at CNY 0; a named owner approval raises the ceiling by CNY 300 at a time and applies across cloud cycles, while every paper and scientific gate still requires its own evidence and human review;
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
 - direction ranking weights for funded PhD position supply, employment and salary, future growth, separately scored funded-PhD and job-market competition, background fit and application-route fit, applied only after feasibility and data-rights screening;
-- use `references/direction-ranking.md` to collect dated, route-specific primary evidence and score the six factors without double-counting positions;
+- use `references/direction-ranking.md` to collect dated, route-specific primary evidence and score the seven factors without double-counting positions;
 - novelty evidence, doctoral depth and original contribution as mandatory topic and research-plan requirements that cannot be traded against direction scores.
 
 Do not begin broad topic scoring while critical constraints are unknown.
