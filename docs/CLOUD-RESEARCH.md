@@ -1,5 +1,8 @@
 # Cloud research from a GitHub issue
 
+For owner-confirmed round-the-clock continuation, see
+[Continuous cloud research](CONTINUOUS-CLOUD-RESEARCH.md).
+
 The researcher can start Codex locally and use GitHub Actions for the runtime. The
 cloud runner installs its own dependencies, reads and writes `cloud-state/<project>`,
 and returns a GitHub Actions artifact. Local WSL2/Docker remains an optional,
@@ -47,9 +50,10 @@ directories are excluded. The state branch does retain the aggregate approved
 ceiling, estimated cumulative spend and unresolved reservations, without prompt
 or response text. The branch is updated without force push. Inspect
 the branch diff and artifact before importing its work into `main`.
-Each job still has its own owner issue as a command and audit record. The cloud
-workflow serializes issues to protect the shared budget and project state; it
-does not treat a new issue as a new spending approval.
+Manual jobs retain an owner issue as their command and audit record. Approved
+continuation uses the standing confirmation with serialized schedule/dispatch
+receipts. Both workflows share a lock to protect the budget and project state;
+a new job is not a new spending approval.
 
 | Action | Extra JSON properties | Effect |
 |---|---|---|
@@ -61,16 +65,18 @@ does not treat a new issue as a new spending approval.
 | `authorize_budget` | `new_ceiling_cny` | Record the owner's next CNY 300 cumulative model API tranche. No model call. |
 | `reconcile_budget` | `reservation_id`, `actual_cost_cny`, `evidence_note` | Record the checked gateway bill for an ambiguous or interrupted call and release its reservation. No model call. |
 | `cycle` | `context`, optional `stage` | One current-stage Claude plan/critic and GPT writer/remediation cycle through UUAPI. |
+| `continuation` | none | Recheck the bound owner policy, gates, configuration and ledger; run one permitted current-stage cycle and continue only while healthy. |
 | `paperqa` | `corpus`, `question`, optional `settings` | Paused as a paid cloud action until its external model charges are meterable against the tranche. |
 | `tooluniverse` | `request_file` | Paused as a paid cloud action until any external API charges are meterable against the tranche. |
 
-Only `cycle`, `paperqa`, and `tooluniverse` accept `allow_paid: true`; every
+Only `cycle`, `continuation`, `paperqa`, and `tooluniverse` accept `allow_paid: true`; every
 other action requires `false`. `allow_paid: true` identifies a potentially
 billable job, not a fresh spending approval. The owner first approves a
 **cumulative** ceiling of CNY 300 with a separate `authorize_budget` issue,
 then CNY 600, CNY 900 and so on by one CNY 300 increment each time. Subsequent
 cycles inside the approved unused ceiling need no new spending approval. The
-owner issue for each cycle remains the job trigger. The initial ceiling is zero;
+owner issue remains the manual-cycle trigger; approved continuation uses native
+workflow wakeups. The initial ceiling is zero;
 the CNY 300 default in `config/defaults.json` is only a legacy local safety
 limit. An approval example uses `action: "authorize_budget"`,
 `new_ceiling_cny: 300` and `allow_paid: false`; the next approval must request

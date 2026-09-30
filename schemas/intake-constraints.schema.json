@@ -17,6 +17,8 @@
     "time_horizon_years": {"type": ["number", "null"]},
     "target_submission_ready_date": {"type": ["string", "null"], "format": "date"},
     "weekly_hours": {"type": ["number", "null"]},
+    "human_review_mode": {"enum": ["weekly_hours", "on_request"]},
+    "system_execution_hours_per_day": {"type": ["integer", "null"], "minimum": 1, "maximum": 24},
     "cash_budget_usd": {"type": ["number", "null"]},
     "model_api_budget_cny": {"type": ["number", "null"]},
     "cloud_compute_budget_usd": {"type": ["number", "null"]},

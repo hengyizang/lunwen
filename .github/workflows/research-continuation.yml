@@ -1,0 +1,68 @@
+name: Continuous owner-approved research
+
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+# Share the owner-job lock: no two jobs may read/spend/push the same ledger.
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  continue:
+    if: github.repository == 'hengyizang/lunwen'
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Validate the default-branch wakeup
+        run: >-
+          python -m scripts.cloud_continuation scheduled-request
+          --event "$GITHUB_EVENT_PATH" --output .runtime/cloud-job.json
+      - name: Re-check confirmation, configuration, human gates and remaining budget
+        id: execute
+        env:
+          UUAPI_API_KEY: ${{ secrets.UUAPI_API_KEY }}
+          UUAPI_BASE_URL: ${{ vars.UUAPI_BASE_URL }}
+          UUAPI_ANTHROPIC_MODEL: ${{ vars.UUAPI_ANTHROPIC_MODEL }}
+          UUAPI_OPENAI_MODEL: ${{ vars.UUAPI_OPENAI_MODEL }}
+          DR_OS_MODEL_PRICING_JSON: ${{ vars.DR_OS_MODEL_PRICING_JSON }}
+          UUAPI_STRICT_MODEL_ID: 'true'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BOCHA_JEV_API_KEY: ${{ secrets.BOCHA_JEV_API_KEY }}
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
+          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+          OPENCITATIONS_ACCESS_TOKEN: ${{ secrets.OPENCITATIONS_ACCESS_TOKEN }}
+        run: >-
+          python -m scripts.cloud_job execute
+          --config .runtime/cloud-job.json --run-id "$GITHUB_RUN_ID"
+      - name: Preserve the checkpoint and redacted outcome
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: continuous-research-${{ github.run_id }}
+          path: .runtime/cloud-artifact/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Request the next healthy cycle or stop the completed schedule
+        if: steps.execute.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m scripts.cloud_continuation enqueue-followup
+          --decision .runtime/continuation-followup.json

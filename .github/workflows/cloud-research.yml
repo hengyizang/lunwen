@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 concurrency:
   group: owner-research-cloud-${{ github.repository }}
@@ -76,3 +77,10 @@ jobs:
           path: .runtime/cloud-artifact/
           if-no-files-found: warn
           retention-days: 14
+      - name: Continue healthy owner-authorized work after its checkpoint
+        if: steps.execute.outcome == 'success' && steps.job.outputs.action == 'continuation'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m scripts.cloud_continuation enqueue-followup
+          --decision .runtime/continuation-followup.json

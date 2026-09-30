@@ -80,7 +80,16 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
                 errors.append("target_submission_ready_date must be an ISO date")
         if value.get("time_horizon_years") is not None:
             _number(value["time_horizon_years"], "time_horizon_years", errors, minimum=0.01, maximum=10)
-    _number(value.get("weekly_hours"), "weekly_hours", errors, minimum=1, maximum=100)
+    review_mode = value.get("human_review_mode", "weekly_hours")
+    if review_mode not in {"weekly_hours", "on_request"}:
+        errors.append("human_review_mode must be weekly_hours or on_request")
+    if review_mode == "on_request" and execution_mode != "cloud_only":
+        errors.append("on_request human review requires cloud_only execution")
+    if review_mode != "on_request" or value.get("weekly_hours") is not None:
+        _number(value.get("weekly_hours"), "weekly_hours", errors, minimum=1, maximum=100)
+    system_hours = value.get("system_execution_hours_per_day")
+    if system_hours is not None and (type(system_hours) is not int or not 1 <= system_hours <= 24):
+        errors.append("system_execution_hours_per_day must be an integer from 1 to 24")
     cash_budget = value.get("cash_budget_usd")
     model_budget = value.get("model_api_budget_cny")
     if cash_budget is not None:
