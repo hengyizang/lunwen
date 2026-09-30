@@ -1,28 +1,143 @@
 {
   "schema_version": "1.0",
-  "record_type": "G0 constraint consolidation source notes; not a literature or human-reading receipt",
+  "record_type": "Human-confirmed G0 source notes; no literature or human-reading receipt",
   "as_of_local_date": "2026-10-01",
   "source_classes": {
     "visible_user_messages": "User instructions in the present conversation; no scientific findings inferred",
     "recovered_user_context": "Personal Context retrieval of prior user statements and user-provided file summaries; original personal documents were not acquired or fully read in this step",
     "repository_contract": "Current main AGENTS.md, references/workflow.md, references/stage-contracts.md and references/direction-ranking.md",
     "cloud_receipt": "Downloaded and read redacted GitHub Actions preflight/status artifacts on main commit 1d3c1a478f0b8a7ac43fab8fda3cc4bf8fe3d30d",
-    "assistant_proposal": "Codex draft requiring human review; not a user approval"
+    "assistant_proposal": "Codex draft requiring human review; not a user approval",
+    "current_user_confirmation": "Current user explicitly confirms the presented G0/budget proposal and replaces the time arrangement with 24-hour cloud-system continuation; does not approve unseen G1-G5 dossiers"
   },
   "entries": [
-    {"fields": ["execution_mode", "equipment", "topic_quality_requirements.current_papers_cloud_feasible_required"], "source_class": "visible_user_messages", "status": "explicit_user_constraint", "basis": "User requires Codex/OpenAI and Claude APIs in the cloud; cannot use an offline laboratory before doctoral admission; cloud feasibility is mandatory for current papers."},
-    {"fields": ["target_submission_ready_date"], "source_class": "visible_user_messages", "status": "explicit_user_constraint", "basis": "User requests papers ready for human inspection before October 7; year resolved as 2026 for this continuing project. No 18-month horizon retained."},
-    {"fields": ["topic_quality_requirements"], "source_class": "visible_user_messages", "status": "explicit_user_constraint", "basis": "Novelty, doctoral depth and original contribution are mandatory for specific topics and plans after choosing a direction, rather than direction-ranking weights."},
-    {"fields": ["ranking_weights"], "source_class": "assistant_proposal", "status": "needs_human_review", "basis": "The exact seven-number vector is proposed in the repository direction-ranking reference. Equal funded-position and employment/salary weights and separate PhD/job competition implement explicit user priorities. No direction selection is claimed."},
-    {"fields": ["research_goal"], "source_class": "recovered_user_context", "status": "recovered_project_constraint", "basis": "Six standalone English doctoral-level papers, core A and independently doctoral extension B; at least three current JCR Q1 targets, remainder at least Q2, IF > 1, same quality requirements; human final inspection and manual submission."},
-    {"fields": ["researcher_background"], "source_class": "recovered_user_context", "status": "self_reported_background_only", "basis": "Prior user messages dated 2026-07-29 and 2026-08-06 and summaries of user-provided materials report mechanical engineering, Big Data/BI and AI4Health study experience. Exact degree title, grades, credential recognition and eligibility are not certified."},
-    {"fields": ["available_skills"], "source_class": "recovered_user_context", "status": "self_reported_skills_only", "basis": "Retrieved summary of the user's interview preparation material explicitly lists Python, case-based reasoning, databases, error validation, software-interface work, machine learning, data analysis and a new-energy vehicle life-cycle-cost estimation software project. No competence score or original-document reading certificate is claimed."},
-    {"fields": ["weekly_hours"], "source_class": "recovered_user_context", "status": "unknown", "basis": "No explicit weekly human working/review hours found. Field remains null; 7 hours/week appears only as an assistant proposal in the review dossier."},
-    {"fields": ["model_api_budget_cny", "notes"], "source_class": "recovered_user_context", "status": "proposed_envelope_not_spending_authority", "basis": "Recovered prior CNY 300 total limit, CNY 45 per-paper warning and CNY 60 per-paper hard limit; user's later authorization preference is cumulative CNY 300/600/900 tranches rather than approval for each API call. No initial paid authorization recovered."},
-    {"fields": ["cloud_compute_budget_usd", "cash_budget_usd"], "source_class": "assistant_proposal", "status": "needs_human_review", "basis": "No confirmed external-compute budget found; replace the old unapproved USD 100 template default with a USD 0 proposal while the model budget is in CNY. No exchange rate or GPU capacity invented."},
-    {"fields": ["preferred_domains", "candidate_application_routes", "excluded_domains"], "source_class": "recovered_user_context", "status": "exploratory_or_unknown", "basis": "Retain AI/robotics/mechanical-engineering and previously discussed application routes for exploration, not verified eligibility. Recovered UK publication-route requirement accepts ordinary external applicants and excludes six-or-more-years-since-degree routes. No additional excluded domain recovered."},
-    {"fields": ["ethics_or_legal_constraints", "human_review_required"], "source_class": "repository_contract", "status": "binding_repository_rules", "basis": "Evidence integrity, lawful data access, preregistration, negative results, model-family separation, human G0-G5 gates and no automatic submission."},
-    {"fields": ["intake/capabilities.json", "reports/cloud-preflight-20261001.json"], "source_class": "cloud_receipt", "status": "observed_configuration_presence_only", "basis": "Run 36747990456 succeeded on Python 3.12.14 and reported false for every checked provider/configuration name. This does not validate a live model API, provider identity, free quota, data rights or scientific quality."},
-    {"fields": ["reports/cloud-status-20261001.json"], "source_class": "cloud_receipt", "status": "observed_state", "basis": "Run 36748024163 used current main to read project G0 awaiting_work with 19 blockers and no approved gates; it changed no state files."}
-  ]
+    {
+      "fields": [
+        "execution_mode",
+        "equipment",
+        "topic_quality_requirements.current_papers_cloud_feasible_required"
+      ],
+      "source_class": "visible_user_messages",
+      "status": "explicit_user_constraint",
+      "basis": "User requires Codex/OpenAI and Claude APIs in the cloud; cannot use an offline laboratory before doctoral admission; cloud feasibility is mandatory for current papers."
+    },
+    {
+      "fields": [
+        "target_submission_ready_date"
+      ],
+      "source_class": "visible_user_messages",
+      "status": "explicit_user_constraint",
+      "basis": "User requests papers ready for human inspection before October 7; year resolved as 2026 for this continuing project. No 18-month horizon retained."
+    },
+    {
+      "fields": [
+        "topic_quality_requirements"
+      ],
+      "source_class": "visible_user_messages",
+      "status": "explicit_user_constraint",
+      "basis": "Novelty, doctoral depth and original contribution are mandatory for specific topics and plans after choosing a direction, rather than direction-ranking weights."
+    },
+    {
+      "fields": [
+        "ranking_weights"
+      ],
+      "source_class": "current_user_confirmation",
+      "status": "confirmed_proposal",
+      "basis": "The prior presented seven-number vector is now confirmed; equal funded-position and employment/salary weights and separate PhD/job competition remain. No direction selection is claimed."
+    },
+    {
+      "fields": [
+        "research_goal"
+      ],
+      "source_class": "recovered_user_context",
+      "status": "recovered_project_constraint",
+      "basis": "Six standalone English doctoral-level papers, core A and independently doctoral extension B; at least three current JCR Q1 targets, remainder at least Q2, IF > 1, same quality requirements; human final inspection and manual submission."
+    },
+    {
+      "fields": [
+        "researcher_background"
+      ],
+      "source_class": "recovered_user_context",
+      "status": "self_reported_background_only",
+      "basis": "Prior user messages dated 2026-07-29 and 2026-08-06 and summaries of user-provided materials report mechanical engineering, Big Data/BI and AI4Health study experience. Exact degree title, grades, credential recognition and eligibility are not certified."
+    },
+    {
+      "fields": [
+        "available_skills"
+      ],
+      "source_class": "recovered_user_context",
+      "status": "self_reported_skills_only",
+      "basis": "Retrieved summary of the user's interview preparation material explicitly lists Python, case-based reasoning, databases, error validation, software-interface work, machine learning, data analysis and a new-energy vehicle life-cycle-cost estimation software project. No competence score or original-document reading certificate is claimed."
+    },
+    {
+      "fields": [
+        "weekly_hours",
+        "human_review_mode",
+        "system_execution_hours_per_day"
+      ],
+      "source_class": "current_user_confirmation",
+      "status": "explicit_system_schedule_human_hours_unknown",
+      "basis": "The user requests continuous 24-hour cloud execution. This replaces the proposed seven-hour arrangement. Human weekly availability remains null, with human review on request at scientific gates."
+    },
+    {
+      "fields": [
+        "model_api_budget_cny",
+        "notes"
+      ],
+      "source_class": "current_user_confirmation",
+      "status": "confirmed_initial_envelope_separate_ledger_grant",
+      "basis": "The user confirms the presented initial CNY 300 cumulative ceiling, CNY 45 warning and CNY 60 per-paper hard limit. The next cumulative 600/900 tranches still need explicit approval; no per-call permission inside the unused approved amount."
+    },
+    {
+      "fields": [
+        "cloud_compute_budget_usd",
+        "cash_budget_usd"
+      ],
+      "source_class": "current_user_confirmation",
+      "status": "confirmed_presented_expense_envelope",
+      "basis": "The presented external paid-compute ceiling is USD 0; other cash budget stays null. No exchange rate, local GPU or future laboratory capacity is inferred."
+    },
+    {
+      "fields": [
+        "preferred_domains",
+        "candidate_application_routes",
+        "excluded_domains"
+      ],
+      "source_class": "recovered_user_context",
+      "status": "exploratory_or_unknown",
+      "basis": "Retain AI/robotics/mechanical-engineering and previously discussed application routes for exploration, not verified eligibility. Recovered UK publication-route requirement accepts ordinary external applicants and excludes six-or-more-years-since-degree routes. No additional excluded domain recovered."
+    },
+    {
+      "fields": [
+        "ethics_or_legal_constraints",
+        "human_review_required"
+      ],
+      "source_class": "repository_contract",
+      "status": "binding_repository_rules",
+      "basis": "Evidence integrity, lawful data access, preregistration, negative results, model-family separation, human G0-G5 gates and no automatic submission."
+    },
+    {
+      "fields": [
+        "intake/capabilities.json",
+        "reports/cloud-preflight-20261001.json"
+      ],
+      "source_class": "cloud_receipt",
+      "status": "observed_configuration_presence_only",
+      "basis": "Run 36747990456 succeeded on Python 3.12.14 and reported false for every checked provider/configuration name. This does not validate a live model API, provider identity, free quota, data rights or scientific quality."
+    },
+    {
+      "fields": [
+        "reports/cloud-status-20261001.json"
+      ],
+      "source_class": "cloud_receipt",
+      "status": "observed_state",
+      "basis": "Run 36748024163 used current main to read project G0 awaiting_work with 19 blockers and no approved gates; it changed no state files."
+    }
+  ],
+  "confirmation": {
+    "actor": "Hengyi Zang",
+    "confirmed_at": "2026-09-30T17:24:37+00:00",
+    "original_message": "我确认，改成每天24小时不停，直到满足论文要求",
+    "interpretation": "Confirm presented G0 and initial cumulative CNY 300; change cloud system availability to 24 hours daily; preserve named human scientific gates and manual submission."
+  }
 }

@@ -1,41 +1,37 @@
 {
   "schema_version": "1.0",
-  "record_type": "deterministic proposed-intake validation; not human approval",
-  "checked_at": "2026-09-30T17:12:30+00:00",
-  "validation_code_commit": "1d3c1a478f0b8a7ac43fab8fda3cc4bf8fe3d30d",
+  "record_type": "deterministic G0 pre-approval receipt",
+  "checked_at": "2026-09-30T18:20:51+00:00",
+  "validation_code_commit": "111c0416a0565d7dc8bbb0bd2e3a3b9a21023774",
   "schema_path": "schemas/intake-constraints.schema.json",
-  "schema_sha256": "3fd6aad87a46ba8ff4e09c87a811698cd785575286a482454e083e70282f7ec9",
-  "validator_path": "scripts/intake_validation.py",
-  "validator_sha256": "e15f47b7aa53bd60dfda0e684299cc5412351e693c46dcd3257da72ae1053ae5",
+  "schema_sha256": "c1b0146b8667b30bbb862b9d1b89c92237e73c19c4495f581b5b83e6067370dd",
+  "validator_sha256": "b52c213ced52e0bbdbc3bbda928f304f157c6c0ed24a5d1a97571e4a4984b416",
   "constraints_path": "intake/constraints.json",
-  "constraints_sha256": "de5f4e21663ec09879f2ed92c725b35488da23252e12f55730d98294ab9d6dd7",
+  "constraints_sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
   "schema_property_check_scope": [
     "additionalProperties",
     "const",
     "enum",
     "format",
     "items",
+    "maximum",
+    "minimum",
     "properties",
     "required",
     "type"
   ],
   "schema_property_errors": [],
   "baseline_g0_error_count": 19,
-  "draft_g0_error_count": 2,
-  "draft_g0_errors": [
-    "intake/constraints.json: status must be ready_for_review",
-    "intake/constraints.json: weekly_hours must be a number"
-  ],
-  "gate_ready": false,
-  "human_approval_recorded": false,
-  "project_state_bytes_unchanged": true,
-  "project_state_sha256": "9c324edaa3a26f646fe652ac3a221754e5af7d35e0cd7b1a305954a3a9e53fd0",
+  "draft_g0_error_count": 0,
+  "draft_g0_errors": [],
+  "gate_ready": true,
+  "human_approval_recorded_at_receipt_creation": false,
+  "project_state_sha256_before_human_control_plane": "9c324edaa3a26f646fe652ac3a221754e5af7d35e0cd7b1a305954a3a9e53fd0",
   "direction_weight_sum": 1.0,
-  "authorized_model_spend_ceiling_cny": 0,
-  "pending_operational_requirements": [
-    "Confirm weekly human review/working hours and review the proposed G0 constraints",
-    "Configure API credentials, exact model identities, HTTPS endpoint and verified prices through GitHub secure settings",
-    "Obtain initial named cumulative CNY 300 approval before any paid model call",
-    "Assess the six-paper deadline against evidence, experiment resources and all individual scientific gates"
+  "authorized_model_spend_ceiling_cny_at_receipt_creation": 0,
+  "operational_requirements": [
+    "Record the separately confirmed first CNY 300 tranche through the owner cloud job",
+    "Configure secure gateway credentials, exact model IDs and verified CNY prices",
+    "Run only the current stage and present each future scientific dossier for human approval"
   ]
 }

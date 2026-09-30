@@ -2,10 +2,10 @@
   "schema_version": "2.0",
   "project": "my-phd",
   "created_at": "2026-09-28T10:06:20+00:00",
-  "updated_at": "2026-09-28T10:06:20+00:00",
-  "stage_index": 0,
-  "stage": "intake",
-  "gate": "G0",
+  "updated_at": "2026-09-30T18:20:51+00:00",
+  "stage_index": 1,
+  "stage": "topic-intelligence",
+  "gate": "G1",
   "status": "awaiting_work",
   "active_paper": "P01",
   "paper_count": 6,
@@ -17,13 +17,41 @@
     "P05": "planned",
     "P06": "planned"
   },
-  "approved_gates": [],
-  "approvals": [],
+  "approved_gates": [
+    "G0"
+  ],
+  "approvals": [
+    {
+      "gate": "G0",
+      "actor": "Hengyi Zang",
+      "at": "2026-09-30T18:20:51+00:00",
+      "note": "Explicit current-user confirmation at 2026-09-30T17:24:37+00:00: 我确认，改成每天24小时不停，直到满足论文要求. Confirms presented G0 and first cumulative CNY 300; cloud system 24h daily, human reviews on request. Does not approve future G1-G5 or submission.",
+      "artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad"
+    }
+  ],
   "history": [
     {
       "at": "2026-09-28T10:06:20+00:00",
       "event": "project_initialized",
       "stage": "intake"
+    },
+    {
+      "at": "2026-09-30T18:20:51+00:00",
+      "event": "gate_marked_ready",
+      "gate": "G0",
+      "note": "Zero G0 errors; exact dossier already presented and owner confirmed.",
+      "artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad"
+    },
+    {
+      "at": "2026-09-30T18:20:51+00:00",
+      "event": "gate_approved",
+      "gate": "G0"
+    },
+    {
+      "at": "2026-09-30T18:20:51+00:00",
+      "event": "stage_advanced",
+      "from": "intake",
+      "to": "topic-intelligence"
     }
   ]
 }
