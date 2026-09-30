@@ -1,6 +1,13 @@
 {
-  "authorization_events": [],
-  "authorized_ceiling_cny": 0,
+  "authorization_events": [
+    {
+      "actor": "Hengyi Zang",
+      "at": "2026-09-30T18:25:52+00:00",
+      "ceiling_cny": 300,
+      "run_id": "36758494072"
+    }
+  ],
+  "authorized_ceiling_cny": 300,
   "currency": "CNY",
   "paper_spent_cny": {},
   "reconciliation_events": [],
