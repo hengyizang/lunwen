@@ -211,6 +211,13 @@ def _decorate(ax: Any, panel: dict[str, Any], label: str) -> None:
     ax.spines["right"].set_visible(False)
     ax.grid(axis="y", color="#D8DEE9", linewidth=0.6, alpha=0.65, zorder=0)
     ax.set_axisbelow(True)
+    legend = ax.get_legend()
+    if legend is not None:
+        # Keep text outside the data/grid area instead of hiding collisions.
+        title = legend.get_title().get_text()
+        legend.remove()
+        ax.legend(loc="upper left", bbox_to_anchor=(1.015, 1.0),
+                  borderaxespad=0, frameon=False, title=title or None)
 
 
 def _draw_standard(ax: Any, panel: dict[str, Any], frame: Any, np: Any) -> None:
@@ -382,6 +389,28 @@ def inspect_layout(fig: Any) -> list[str]:
     return warnings
 
 
+def align_grid_rows(fig: Any, axes: Any) -> None:
+    """Use equal row gutters after measuring all labels and risk tables."""
+    fig.canvas.draw()
+    fig.set_layout_engine("none")
+    if len(axes) < 3:
+        return
+    boxes = [row[0].get_position(original=True).frozen() for row in axes]
+    top, bottom = boxes[0].y1, boxes[-1].y0
+    height = min(box.height for box in boxes)
+    step = (top - bottom - height) / (len(axes) - 1)
+    for index, row in enumerate(axes):
+        new_y = top - height - index * step
+        for ax in row:
+            box = ax.get_position(original=True).frozen()
+            delta = new_y - box.y0
+            ax.set_position([box.x0, new_y, box.width, height])
+            for colorbar in fig.axes:
+                if ax in getattr(colorbar, "_colorbar_info", {}).get("parents", []):
+                    cb = colorbar.get_position(original=True).frozen()
+                    colorbar.set_position([cb.x0, cb.y0 + delta, cb.width, cb.height])
+
+
 def render(project: Path, spec_path: Path) -> dict[str, Any]:
     project = project.resolve()
     spec_path = spec_path.resolve()
@@ -423,8 +452,12 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
     if not (3 <= width <= 18 and 2.5 <= height <= 24):
         raise FigureSpecError("figure width/height is outside publication-safe bounds")
     fig, axes = plt.subplots(rows, columns, figsize=(width, height), squeeze=False, constrained_layout=True)
+    if rows >= 3:
+        # A common minimum gutter dominates row-specific tick/risk-table padding.
+        fig.get_layout_engine().set(hspace=0.25)
     data_records: dict[str, dict[str, Any]] = {}
     layout_warnings: list[str] = []
+    layout_audit: dict[str, Any] = {}
     try:
         for index, panel in enumerate(panels):
             ax = axes[index // columns][index % columns]
@@ -446,12 +479,22 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 _draw_standard(ax, panel, frame, np)
             _decorate(ax, panel, chr(ord("a") + index))
         for index in range(len(panels), rows * columns):
-            axes[index // columns][index % columns].axis("off")
+            axes[index // columns][index % columns].set_visible(False)
+        align_grid_rows(fig, axes)
         layout_warnings = inspect_layout(fig)
+        try:
+            from scripts import figure_layout
+        except ImportError:
+            import figure_layout  # type: ignore
+        alignment = figure_layout.inspect_panels(fig)
+        # Preserve the measured geometry when PDF/SVG renderers draw the figure.
+        fig.set_layout_engine("none")
         output_stem = safe_file(project, spec.get("output_stem"), "output_stem")
         expected_root = project / "papers"
         if expected_root.resolve() not in output_stem.parents or "figures" not in output_stem.parts:
             raise FigureSpecError("output_stem must be inside papers/Pxx/figures")
+        if not re.fullmatch(r"papers/P[0-9]{2}/figures/.+", output_stem.relative_to(project).as_posix()):
+            raise FigureSpecError("output_stem must belong to a valid paper's figures directory")
         output_stem.parent.mkdir(parents=True, exist_ok=True)
         source_records: list[dict[str, Any]] = []
         if spec.get("source_data_export", False):
@@ -478,6 +521,16 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 metadata=metadata,
             )
             outputs.append({"path": path.relative_to(project).as_posix(), "format": suffix, "sha256": sha256_file(path), "size": path.stat().st_size})
+        pdf = output_stem.with_suffix(".pdf")
+        paper = next(parent for parent in output_stem.parents if re.fullmatch(r"P[0-9]{2}", parent.name)
+                     and parent.parent == project / "papers")
+        audit_relative = output_stem.relative_to(paper / "figures")
+        if "pdf" not in spec["formats"]:
+            pdf = (paper / "reviews" / "figure-layout" / audit_relative).with_suffix(".pdf")
+            pdf.parent.mkdir(parents=True, exist_ok=True)
+            fig.savefig(pdf, bbox_inches="tight", metadata={"Creator": "Doctoral Research OS QA", "CreationDate": None, "ModDate": None})
+        audit_path = (paper / "reviews" / "figure-layout" / audit_relative).with_suffix(".json")
+        layout_audit = figure_layout.save_audit(project, pdf, audit_path, alignment)
     finally:
         plt.close(fig)
     renderer = output_stem.with_suffix(".renderer.py")
@@ -517,6 +570,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "claim_ids": spec["claim_ids"],
             "layout_review_required": True,
             "layout_warnings": layout_warnings,
+            "layout_audit": layout_audit,
             "distribution_estimates_not_inferred": True,
         },
     }
@@ -535,6 +589,8 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         role="figure-renderer-control",
         run_id=f"figure-{hashlib.sha256(spec_path.read_bytes()).hexdigest()[:16]}",
     )
+    if not layout_audit.get("pass") or layout_warnings:
+        raise FigureSpecError("rendered figure layout failed; inspect the saved figure layout/build reports")
     return report
 
 

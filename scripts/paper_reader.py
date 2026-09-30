@@ -7,6 +7,7 @@ Only run on a local copy the user is authorized to process; do not redistribute.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -41,11 +42,15 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
     lines=["# Page-anchored PDF reader", "", f"Local source SHA-256: `{sha256_file(pdf)}`", "",
            "Personal reading aid; verify all quotes, figures and claims against the original PDF.", ""]
     output.parent.mkdir(parents=True,exist_ok=True)
-    images=[];run_id="reader-"+uuid.uuid4().hex
+    images=[];source_blocks=[];run_id="reader-"+uuid.uuid4().hex
     for index,page in enumerate(reader.pages,1):
         text=(page.extract_text() or "").strip()
         if not text:raise ValueError(f"page {index} has no extractable text; OCR/visual review is required")
         if len(text)>40000:raise ValueError(f"page {index} is too long for safe bounded processing")
+        source_blocks.append({"block_id": f"PDF_PAGE_{index:03d}", "pdf_page": index,
+                              "locator": f"PDF page {index}",
+                              "extracted_text_sha256": hashlib.sha256(text.encode()).hexdigest(),
+                              "verification_state": "extracted_not_semantically_verified"})
         lines += [f"## PDF page {index}","", "### Original extracted text", "",text,"",
                   "### Chinese reading translation", ""]
         if translate:
@@ -62,15 +67,24 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
             images.append({"path":image.relative_to(project).as_posix(),"sha256":sha256_file(image),"pdf_page":index})
             lines += [f"![Original PDF page {index}]({image.name})", ""]
     output.write_text("\n".join(lines)+"\n",encoding="utf-8")
+    source_map_path=output.with_suffix(".source-map.json")
+    source_map={"schema_version":"1.0","source_sha256":sha256_file(pdf),
+                "source_filename":pdf.name,"reader_sha256":sha256_file(output),
+                "source_blocks":source_blocks,"human_read_scope":"not_declared",
+                "extraction_is_not_full_text_reading":True}
+    source_map_path.write_text(json.dumps(source_map,indent=2)+"\n",encoding="utf-8")
     receipt={"schema_version":"1.0","pdf_sha256":sha256_file(pdf),"page_count":len(reader.pages),
+             "source_map":{"path":source_map_path.relative_to(project).as_posix(),
+                           "sha256":sha256_file(source_map_path)},
              "translation_provider":"openai" if translate else None,"page_images":images,
              "reader_sha256":sha256_file(output),"personal_use_only":True,"not_citation_evidence":True}
     receipt_path=output.with_suffix(".reader.json")
     receipt_path.write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
-    output_provenance.record_model_writes(project,[output,receipt_path,*[project/i["path"] for i in images]],
+    output_provenance.record_model_writes(project,[output,receipt_path,source_map_path,*[project/i["path"] for i in images]],
         family="openai" if translate else "other",provider="page-reader",model="GPT translator" if translate else "local extractor",
         role="reader-not-manuscript",run_id=run_id)
     return {"reader":output.relative_to(project).as_posix(),"receipt":receipt_path.relative_to(project).as_posix(),
+            "source_map":source_map_path.relative_to(project).as_posix(),
             "pages":len(reader.pages),"translated":translate}
 
 

@@ -363,6 +363,8 @@ python3 scripts/output_provenance.py attest \
 
 ## 引用与期刊合规
 
+2026-09-30 新增的云端研究方法包括：先精读论文再生成候选假设、比较竞争解释与证伪检验、明确允许/禁止的论证边界，以及按研究类型逐项追问的投稿前清单。它们已接入 API/CLI 规划、写作、审查与 G1/G5 验收；原生图表同时检查面板对齐和 PDF 文字碰撞。安装范围、调用方式、来源与许可证见 [研究方法整合说明](docs/RESEARCH-METHODS-INTEGRATION.md)。
+
 ```bash
 python3 scripts/citation_audit.py \
   projects/my-phd/papers/P01/manuscript/references.bib \

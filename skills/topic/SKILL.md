@@ -21,6 +21,8 @@ If the request is a systematic/scoping review, invoke `skills/systematic-review/
 
 Produce at least three serious candidate programs. For each, test novelty, doctoral depth, paperability, public-data feasibility, compute/equipment ceiling, competition, supervisor/position supply, job-market breadth and failure modes.
 
+Read `references/research-methods/topic-hypotheses.md` and `skills/scientific-brainstorming/SKILL.md`. Apply G0 weights only to feasible direction ranking; novelty, doctoral depth and original contribution remain mandatory specific-topic requirements after screening. Write the competing-hypothesis register and proposal-first argument plan, then run `scripts/research_candidates.py hypotheses` against located evidence. Use `skills/hypothesis-generation/SKILL.md` to attack the favored mechanism with alternatives and discriminating tests. The audit checks traceability and structure; the existing originality matrix and human G1 decision remain authoritative.
+
 At G2, use the `journal` skill after the authorized JCR registry is built. Keep separate challenge, target and safety choices and score fit dimensions individually so a high impact factor cannot mask a scope or practicality failure.
 
 Define:

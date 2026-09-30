@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at": "2026-09-30",
+  "source_ids": [
+    "kdense-topic-methods",
+    "ars-codex",
+    "academic-research-skills",
+    "nature-skills",
+    "paperspine"
+  ],
+  "modules": [
+    {
+      "id": "topic-hypotheses",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design"
+      ],
+      "path": "references/research-methods/topic-hypotheses.md",
+      "sha256": "7c5efdf0defdeaca6a829ce0bf3531e71489e2ca13f9d17b39ba3789b23a6589",
+      "source_ids": [
+        "kdense-topic-methods",
+        "nature-skills"
+      ]
+    },
+    {
+      "id": "paper-cards",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "path": "references/research-methods/paper-cards.md",
+      "sha256": "05d749d37e81e77c9826c9fa7f2a3ebcf71127addfb190417c460f171ac95d88",
+      "source_ids": [
+        "nature-skills",
+        "kdense-topic-methods"
+      ]
+    },
+    {
+      "id": "evidence-arguments",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "path": "references/research-methods/evidence-arguments.md",
+      "sha256": "6b5f8db1686ca9c7bae075d369fbd1b141246dabc5252b7c3bbe7e19256e3dd9",
+      "source_ids": [
+        "paperspine",
+        "ars-codex",
+        "academic-research-skills",
+        "nature-skills"
+      ]
+    },
+    {
+      "id": "submission-review",
+      "stages": [
+        "writing-and-review"
+      ],
+      "path": "references/research-methods/submission-review.md",
+      "sha256": "2101f556a431af2c9d930931efefc8dec78bc27dfdb7d9317e7bf2e1946fb291",
+      "source_ids": [
+        "academic-research-skills",
+        "ars-codex",
+        "nature-skills",
+        "paperspine"
+      ]
+    }
+  ],
+  "local_adaptations_enabled": true,
+  "paid_services_enabled": false,
+  "full_upstream_orchestrators_enabled": false
+}

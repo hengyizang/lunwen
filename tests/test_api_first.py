@@ -77,9 +77,11 @@ class ApiFirstTests(unittest.TestCase):
         )
         for required in (
             "human-confirmed G0 weights",
-            "novelty and doctoral depth",
+            "novelty, doctoral depth and original contribution",
             "no-laboratory feasibility",
-            "job market and salary",
+            "employment/salary",
+            "PhD competition",
+            "job competition",
             "sample/unit adequacy",
             "leakage",
             "external validity",
@@ -87,6 +89,8 @@ class ApiFirstTests(unittest.TestCase):
             "closest_work_ids(minimum 3)",
         ):
             self.assertIn(required, prompt)
+        self.assertIn("mandatory specific-topic requirements after direction screening", prompt)
+        self.assertNotIn("G0 weights for novelty", prompt)
 
     def test_g4_api_writer_receives_exact_reproduction_contract(self):
         prompt = api_orchestrator.writer_prompt(

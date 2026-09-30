@@ -154,6 +154,10 @@ def gate_errors(slug,gate):
                     errors.extend(f"program/novelty-claim-matrix.json: {x}" for x in validate_novelty_claim_matrix(novelty_matrix,originality,searches))
                 except ImportError as exc:errors.append(f"novelty claim-matrix validator unavailable: {exc}")
         if not nonempty(project/"program"/"topic-decision.md"):errors.append("program/topic-decision.md is required")
+        try:
+            from scripts.research_candidates import validate_saved_register
+            errors.extend("specific-topic hypotheses: " + issue for issue in validate_saved_register(project))
+        except ImportError as exc:errors.append(f"hypothesis validator unavailable: {exc}")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G2":
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
@@ -350,6 +354,12 @@ def gate_errors(slug,gate):
             from scripts.manuscript_audit import validate_saved_report as validate_paper_facts
             errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
         except ImportError as exc:errors.append(f"{pid} paper-facts validator unavailable: {exc}")
+        try:
+            from scripts.pre_submission_review import validate_saved_report as validate_submission_review
+            errors.extend(f"{pid} pre-submission criteria: {x}" for x in validate_submission_review(paper))
+            from scripts.figure_layout import validate_saved_figures
+            errors.extend(f"{pid} rendered figure layout: {x}" for x in validate_saved_figures(paper))
+        except ImportError as exc:errors.append(f"{pid} installed research-method validator unavailable: {exc}")
         try:
             from scripts.rebuttal_triage import validate_saved_report as validate_concern_cards
             errors.extend(f"{pid} concern cards: {x}" for x in validate_concern_cards(paper))

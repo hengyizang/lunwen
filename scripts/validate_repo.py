@@ -261,6 +261,11 @@ def main() -> int:
         ROOT / "config" / "academic-style-rules.json", upstream_path, errors
     )
     validate_stage_config(ROOT / "config" / "stages.json", errors)
+    try:
+        from scripts.research_methods import installation_errors
+    except ImportError:
+        from research_methods import installation_errors
+    errors.extend(installation_errors(ROOT))
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)
     if isinstance(plugin, dict) and plugin.get("name") != "doctoral-research-os":

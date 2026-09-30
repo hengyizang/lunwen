@@ -7,6 +7,7 @@ from pathlib import Path
 
 from scripts.output_provenance import current_origin
 from scripts.publication_figures import FigureSpecError, render
+from scripts import figure_layout
 
 
 class PublicationFigureTests(unittest.TestCase):
@@ -66,6 +67,16 @@ class PublicationFigureTests(unittest.TestCase):
             self.assertIn("subprocess.run", wrapper.read_text(encoding="utf-8"))
             self.assertEqual(current_origin(project, wrapper)["status"], "tracked")
             self.assertEqual(current_origin(project, build_report)["status"], "tracked")
+            self.assertTrue(report["quality"]["layout_audit"]["pass"])
+            paper = project / "papers" / "P01"
+            self.assertEqual(figure_layout.validate_saved_figures(paper), [])
+            audit_record = report["quality"]["layout_audit"]
+            audit_path = project / audit_record["path"]
+            audit = json.loads(audit_path.read_text())
+            audit["human_visual_review_required"] = False
+            audit_path.write_text(json.dumps(audit))
+            self.assertTrue(any("stale" in error or "control provenance" in error
+                                for error in figure_layout.validate_saved_figures(paper)))
 
     def test_rejects_non_english_labels(self):
         spec = {
