@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "project": "my-phd",
+  "should_run": false,
+  "reason": "configuration_pending",
+  "stage": "topic-intelligence",
+  "gate": "G1",
+  "actor": "Hengyi Zang",
+  "authorized_ceiling_cny": 300,
+  "spent_cny": 0.0,
+  "remaining_cny": 300.0,
+  "configuration_errors": [
+    "missing UUAPI_API_KEY",
+    "missing UUAPI_BASE_URL",
+    "missing UUAPI_ANTHROPIC_MODEL",
+    "missing UUAPI_OPENAI_MODEL",
+    "missing DR_OS_MODEL_PRICING_JSON"
+  ],
+  "changed_at": "2026-09-30T18:27:02+00:00",
+  "source_run_id": "36758633209"
+}
