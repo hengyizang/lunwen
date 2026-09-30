@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "license": "CC-BY-NC-4.0",
+  "attribution": "Based on Academic Research Skills by Cheng-I Wu; original criteria retained and computational checks added independently.",
+  "source_id": "academic-research-skills",
+  "calibration_status": "NOT_CALIBRATED",
+  "universal": [
+    {
+      "id": "originality",
+      "question": "What defensible contribution does the paper make relative to the relevant literature and target venue?"
+    },
+    {
+      "id": "methodological_rigor",
+      "question": "Can the design, execution, analysis, and reporting support the inferences made?"
+    },
+    {
+      "id": "evidence_sufficiency",
+      "question": "Does each material claim have evidence of the appropriate type, quality, relevance, and coverage?"
+    },
+    {
+      "id": "argument_coherence",
+      "question": "Do the problem, gap, question, method, findings, and implications form a traceable argument?"
+    },
+    {
+      "id": "writing_quality",
+      "question": "Is the reasoning communicated precisely enough to interpret and verify without conflating language polish with research quality?"
+    },
+    {
+      "id": "literature_integration",
+      "question": "Does the paper critically integrate the literature needed for its question, alternatives, and contribution?"
+    },
+    {
+      "id": "significance_impact",
+      "question": "Do the claimed implications follow from the evidence and matter for the stated audience?"
+    }
+  ],
+  "article_types": {
+    "empirical": [
+      {
+        "id": "research_hypothesis_clarity",
+        "question": "Are hypotheses testable and consistent with the stated theory?"
+      },
+      {
+        "id": "variable_operational_definitions",
+        "question": "Are variables or constructs defined and measured precisely?"
+      },
+      {
+        "id": "internal_validity",
+        "question": "Are plausible confounds and alternative explanations addressed?"
+      },
+      {
+        "id": "external_validity",
+        "question": "Is the claimed scope of generalization supported?"
+      },
+      {
+        "id": "statistical_reporting_completeness",
+        "question": "Are effect sizes, uncertainty, assumptions, and exclusions reported as required?"
+      },
+      {
+        "id": "conclusion_conservatism",
+        "question": "Do conclusions stay within what the design and data support?"
+      }
+    ],
+    "theoretical": [
+      {
+        "id": "conceptual_definition_precision",
+        "question": "Are core concepts clearly delineated?"
+      },
+      {
+        "id": "argument_logic_structure",
+        "question": "Is the premise-to-inference-to-conclusion chain complete?"
+      },
+      {
+        "id": "counterargument_handling",
+        "question": "Are material alternatives considered and answered?"
+      },
+      {
+        "id": "theoretical_novelty",
+        "question": "Does the paper advance theoretical understanding rather than merely rename it?"
+      },
+      {
+        "id": "testability",
+        "question": "Can the theory generate discriminating propositions or implications?"
+      }
+    ],
+    "review": [
+      {
+        "id": "search_strategy",
+        "question": "Is it sufficiently comprehensive and reproducible for the stated review type?"
+      },
+      {
+        "id": "inclusion_exclusion_criteria",
+        "question": "Are criteria clear, justified, and consistently applied?"
+      },
+      {
+        "id": "risk_of_bias_assessment",
+        "question": "Is the quality or bias risk of included studies assessed appropriately?"
+      },
+      {
+        "id": "heterogeneity_handling",
+        "question": "Is statistical and conceptual heterogeneity handled appropriately?"
+      },
+      {
+        "id": "synthesis_method",
+        "question": "Does the method support the synthesis and conclusions?"
+      },
+      {
+        "id": "publication_bias",
+        "question": "Is publication bias assessed and discussed where applicable?"
+      }
+    ],
+    "case-study": [
+      {
+        "id": "case_selection_justification",
+        "question": "Why was this case chosen, and what can it illuminate?"
+      },
+      {
+        "id": "sampling_logic",
+        "question": "Is case selection theoretically or analytically grounded?"
+      },
+      {
+        "id": "triangulation",
+        "question": "Are evidence sources sufficient for the claims made?"
+      },
+      {
+        "id": "contextual_detail",
+        "question": "Is the context described well enough to interpret the case?"
+      },
+      {
+        "id": "transferability",
+        "question": "Are claims beyond the case bounded and justified?"
+      },
+      {
+        "id": "researcher_reflexivity",
+        "question": "Is the researcher's relationship with the case addressed where relevant?"
+      }
+    ],
+    "policy": [
+      {
+        "id": "policy_problem_definition",
+        "question": "Is the problem clearly defined and evidence-supported?"
+      },
+      {
+        "id": "stakeholder_analysis",
+        "question": "Are relevant stakeholders and interests represented?"
+      },
+      {
+        "id": "policy_option_analysis",
+        "question": "Are viable alternatives compared on explicit criteria?"
+      },
+      {
+        "id": "feasibility_assessment",
+        "question": "Are implementation constraints and trade-offs addressed?"
+      },
+      {
+        "id": "evidence_quality",
+        "question": "Are recommendations supported by fit-for-purpose evidence?"
+      },
+      {
+        "id": "unintended_consequences",
+        "question": "Are material adverse or distributional effects considered?"
+      }
+    ],
+    "computational": [
+      {
+        "id": "research_hypothesis_clarity",
+        "question": "Are hypotheses testable and consistent with the stated theory?"
+      },
+      {
+        "id": "variable_operational_definitions",
+        "question": "Are variables or constructs defined and measured precisely?"
+      },
+      {
+        "id": "internal_validity",
+        "question": "Are plausible confounds and alternative explanations addressed?"
+      },
+      {
+        "id": "external_validity",
+        "question": "Is the claimed scope of generalization supported?"
+      },
+      {
+        "id": "statistical_reporting_completeness",
+        "question": "Are effect sizes, uncertainty, assumptions, and exclusions reported as required?"
+      },
+      {
+        "id": "conclusion_conservatism",
+        "question": "Do conclusions stay within what the design and data support?"
+      },
+      {
+        "id": "fair_compute_and_leakage",
+        "question": "Are tuning budgets, splits, leakage controls, seeds and deployment limits comparable and reproducible?"
+      }
+    ]
+  },
+  "aggregation_allowed": false
+}

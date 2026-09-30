@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-09-26",
+  "reviewed_at": "2026-09-30",
   "sources": [
     {
       "id": "kdense-scientific-agent-skills",
@@ -32,26 +32,36 @@
     {
       "id": "academic-research-skills",
       "repository": "https://github.com/Imbad0202/academic-research-skills",
-      "commit": "bc1478d8747b8fa2665aef5c8260f19999ce59cb",
-      "upstream_version": "current commit snapshot",
+      "commit": "8120a34368f9f7493ef1ff3fb784b0dc93608be8",
+      "upstream_version": "reviewed 2026-09-30 snapshot",
       "license": "CC-BY-NC-4.0",
-      "license_source_url": "https://github.com/Imbad0202/academic-research-skills/blob/bc1478d8747b8fa2665aef5c8260f19999ce59cb/LICENSE",
+      "license_source_url": "https://github.com/Imbad0202/academic-research-skills/blob/8120a34368f9f7493ef1ff3fb784b0dc93608be8/LICENSE",
       "enabled_by_default": false,
-      "installation": "human-confirmed Claude Code plugin installation only",
+      "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
       "selected_skills": [],
-      "selection_note": "Useful optional implementation for deep research, writing, revision and peer review. Not vendored because the non-commercial license requires a human use-case decision."
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation.",
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "review-criteria-framework",
+        "criterion-bound-judgement-rubric"
+      ]
     },
     {
       "id": "ars-codex",
       "repository": "https://github.com/Imbad0202/academic-research-skills-codex",
-      "commit": "3c37ef8ab480ba1e9370309c24b99977ad44091f",
-      "upstream_version": "reviewed commit snapshot",
+      "commit": "70b412fe69d3b5bf6b16adf64a96160bdd3c2d28",
+      "upstream_version": "reviewed 2026-09-30 snapshot",
       "license": "CC-BY-NC-4.0",
-      "license_source_url": "https://github.com/Imbad0202/academic-research-skills-codex/blob/3c37ef8ab480ba1e9370309c24b99977ad44091f/LICENSE",
+      "license_source_url": "https://github.com/Imbad0202/academic-research-skills-codex/blob/70b412fe69d3b5bf6b16adf64a96160bdd3c2d28/LICENSE",
       "enabled_by_default": false,
-      "installation": "No upstream code copied; selected revision-integrity concepts are independently implemented locally",
+      "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
       "selected_skills": [],
-      "selection_note": "The local G0-G5 state machine is retained. Only stronger revision-drift checks for numbers, citations and claim-strength language were independently implemented."
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation.",
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "evidence-row-protocol",
+        "stage-scoped-verification"
+      ]
     },
     {
       "id": "ref-verify",
@@ -232,6 +242,63 @@
       "installation": "Optional preinstalled dvc executable/package discovered locally",
       "selected_skills": [],
       "selection_note": "Optional data and pipeline versioning layer only. The local project hash ledger and G0-G5 state machine remain authoritative."
+    },
+    {
+      "id": "kdense-topic-methods",
+      "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "upstream_version": "reviewed 2026-09-30 snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/65d6e786832e2c52832713117bbbf5096b56f77f/LICENSE.md",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "scientific-brainstorming",
+        "hypothesis-generation"
+      ],
+      "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
+      "selected_skills": [
+        "scientific-brainstorming",
+        "hypothesis-generation"
+      ],
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."
+    },
+    {
+      "id": "nature-skills",
+      "repository": "https://github.com/Yuan1z0825/nature-skills",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "upstream_version": "reviewed 2026-09-30 snapshot",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/Yuan1z0825/nature-skills/blob/84880815fb37317b3766bff2c2abba395b8993c3/LICENSE",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "paper-card-idea-gates",
+        "proposal-foundation",
+        "panel-alignment",
+        "pdf-collisions"
+      ],
+      "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
+      "selected_skills": [],
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."
+    },
+    {
+      "id": "paperspine",
+      "repository": "https://github.com/WUBING2023/PaperSpine",
+      "commit": "f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3",
+      "upstream_version": "reviewed 2026-09-30 snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/WUBING2023/PaperSpine/blob/f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3/LICENSE",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "scientific-evidence-ledger",
+        "citation-support-bank",
+        "writing-rationale-matrix"
+      ],
+      "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
+      "selected_skills": [],
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."
     }
   ]
 }

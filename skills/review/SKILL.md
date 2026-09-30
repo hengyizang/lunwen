@@ -34,6 +34,8 @@ The authorization file uses `schema_version`, `approved_by`, timezone-aware `app
 
 For G5, also run `scripts/citation_audit.py`, `scripts/ref_verify_adapter.py` and `scripts/venue_compliance.py`; preserve the reports under the active paper's `reviews/` directory.
 
+Read `references/research-methods/submission-review.md` and the pinned ARS reviewer criteria in `third_party/ars-review/`. Use all seven universal dimensions plus the applicable article-type dimensions as adversarial questions. Independently write `reviews/pre-submission-checklist.json` with concrete manuscript and evidence locations, categorical judgements, uncertainties and resolution tests, then let `scripts/pre_submission_review.py` generate the protected audit. Do not calculate a total score or acceptance probability. Review failed native figure alignment/collision audits as well as the exported PDF; a mechanical pass does not complete visual inspection.
+
 For every final G5 review set—including simulated comments before first submission—parse every original comment into one concern card with stable `comment_id`, underlying concern, decision impact, evidence need, response stance (accept/clarify/partial/disagree), action, effort and manuscript location. Keep unfulfilled actions visible. Run `scripts/rebuttal_triage.py`; preserve and hash-check the original comments, cards, coverage JSON, internal full response, concise venue-budgeted response and editor/Area Chair summary. G5 recomputes this package and blocks missing/stale artifacts. Do not automatically truncate a response or invent an experiment; the existing response matrix and revision trace remain authoritative.
 
 Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.

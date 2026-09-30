@@ -217,7 +217,15 @@ class NewCapabilitiesTests(unittest.TestCase):
             project=Path(temp)/"study";project.mkdir();source=project/"original.pdf"
             pdf=canvas.Canvas(str(source));pdf.drawString(72,700,"Measured improvement was 2 units.");pdf.showPage();pdf.save()
             reader=project/"evidence"/"readers"/"paper.md"
-            self.assertEqual(build_reader(project,source,reader)["pages"],1)
+            result = build_reader(project,source,reader)
+            self.assertEqual(result["pages"],1)
+            source_map = json.loads((project / result["source_map"]).read_text())
+            self.assertEqual(source_map["source_sha256"], sha256_file(source))
+            self.assertEqual(source_map["reader_sha256"], sha256_file(reader))
+            self.assertEqual(source_map["source_blocks"][0]["block_id"], "PDF_PAGE_001")
+            self.assertTrue(source_map["extraction_is_not_full_text_reading"])
+            receipt = json.loads((project / result["receipt"]).read_text())
+            self.assertEqual(receipt["source_map"]["sha256"], sha256_file(project / result["source_map"]))
             self.assertIn("## PDF page 1",reader.read_text())
             spec=reader.with_name("plan.json")
             spec.write_text(json.dumps({"schema_version":"1.0","source_pdf":"original.pdf",

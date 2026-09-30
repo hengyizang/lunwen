@@ -91,7 +91,7 @@ def draw(ax: Any, panel: dict[str, Any], frame: Any, np: Any, pd: Any,
         for index,node in enumerate(nodes):px,py=positions[node];ax.scatter([px],[py],s=180,color=palette[index%len(palette)],zorder=3);ax.text(px*1.15,py*1.15,node,ha="center",va="center",fontsize=7)
         maximum=max(weights)
         for (_,row),weight in zip(frame.iterrows(),weights):a=positions[str(row[x])];b=positions[str(row[y])];ax.add_patch(FancyArrowPatch(a,b,arrowstyle="-|>" if kind=="network" else "-",connectionstyle="arc3,rad=.18",linewidth=.6+2*weight/maximum,color="#456A7A",alpha=.45,shrinkA=12,shrinkB=12))
-        ax.set_aspect("equal");ax.axis("off")
+        ax.set_aspect("equal",adjustable="datalim");ax.axis("off")
     elif kind == "geospatial":
         lon=pd.to_numeric(frame[x],errors="raise").to_numpy(float);lat=pd.to_numeric(frame[y],errors="raise").to_numpy(float);value=pd.to_numeric(frame[panel["value"]],errors="raise").to_numpy(float)
         if np.any(lon<-180) or np.any(lon>180) or np.any(lat<-90) or np.any(lat>90) or not np.isfinite(value).all():raise ValueError("invalid precomputed geospatial coordinates")

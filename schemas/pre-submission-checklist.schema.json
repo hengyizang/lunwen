@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "article_type",
+    "calibration_status",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "article_type": {
+      "enum": [
+        "empirical",
+        "theoretical",
+        "review",
+        "case-study",
+        "policy",
+        "computational"
+      ]
+    },
+    "calibration_status": {
+      "const": "NOT_CALIBRATED"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "required": [
+          "criterion_id",
+          "criterion_source",
+          "judgement",
+          "rationale",
+          "uncertainty",
+          "decision_bearing",
+          "resolution_test"
+        ],
+        "properties": {
+          "criterion_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "criterion_source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resolution_test": {
+            "type": "string",
+            "minLength": 1
+          },
+          "non_applicability_reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "judgement": {
+            "enum": [
+              "EXCEEDS",
+              "MEETS",
+              "PARTLY_MEETS",
+              "DOES_NOT_MEET",
+              "NOT_ASSESSED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "decision_bearing": {
+            "type": "boolean"
+          },
+          "manuscript_anchors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/anchor"
+            }
+          },
+          "evidence_anchors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/anchor"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "anchor": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "locator",
+        "excerpt"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "excerpt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pdf_page": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

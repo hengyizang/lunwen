@@ -1,0 +1,377 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at": "2026-09-30",
+  "files": [
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/SKILL.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/SKILL.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "8153fdc33e0a4cd012109931c6a822c0e0afe206769e1af3e7a3d07ea37e1137"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/evidence_ledger_template.csv",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/evidence_ledger_template.csv",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "1ec5cc4ada96e05041c67865bcdfd3bb0a4f7cc92f24ca1ce7a826028a41d3de"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/falsification_controls_template.json",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/falsification_controls_template.json",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "beea4e2be3b5abdad1014934a7c2fe1f9f00f07b3270119cfeb8134a94603e26"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/hypothesis_record_template.json",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/hypothesis_record_template.json",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "73f080a6696c415f228b38100bb7b0f6bc89ad2c7997bf50d62b585b0bc8fe0c"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/operationalization_template.json",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/operationalization_template.json",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "36ecdbd91c022554e60db646b548f5694d8409277a5b15fdf309d86f8c1e3070"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/prediction_rival_matrix_template.csv",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/prediction_rival_matrix_template.csv",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "ccf6cb53c048a9f4d60788a8ec73c5d683ec549dab7df95b30282f6c0963653a"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/preregistration_scaffold_template.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/preregistration_scaffold_template.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "570314aa6669b935a5c1fd91a0e55ef7035d219a23cc6703ddece0f6fbdd6f5d"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/search_boundary_template.json",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/search_boundary_template.json",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "b885d4e252c0df7010d8fca3dab7e3fef49e9f386b7a1b15240531ce374bf6ec"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/assets/source_ledger.csv",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/assets/source_ledger.csv",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "185f563d213a2254d3f9280bb12f7d1ff332c5e7e77f15b4839ca5f9a9d7740c"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/causal_inference_and_claims.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/causal_inference_and_claims.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "37fba9d9d72414fcb342faa231944b4dbc5ce3255f552482ea8298cf0909b0a4"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/concepts_and_workflow.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/concepts_and_workflow.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "a86a8f464fb555212e79bf13e307f3c129e9c853069856eb3c93c3c8a60bb7fc"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/ethics_safety_and_ai.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/ethics_safety_and_ai.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "f89c8c85cab8a84b0ac0c0e402942e596bbd66f293ebb7597217e1514cdffbe9"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/experimental_design_patterns.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/experimental_design_patterns.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "83c0c75c7b1edadc92e4ae23607624277c19955fc6a71ee0313b6efc51e4e939"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/hypothesis_quality_criteria.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/hypothesis_quality_criteria.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "12698b549f77a6ee64807b959093f39628fe3d47aa9a00a9b235681bf0b09269"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/literature_search_strategies.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/literature_search_strategies.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "2a34fa0645f854093aea2d867059bae563c795f1935ba4b9c6d494bdc389fdcb"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/preregistration_and_open_science.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/preregistration_and_open_science.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "fd4f7ffe03d419bfd8b1b104637f508b9dad5ae868afc5c9307bb868f3920b16"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/security_validation.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/security_validation.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "39dffd9c0878e8da5fe2511678b4f69fab95143c17a4915f56033cb111c35572"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/source_ledger.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/source_ledger.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "ff41a6f5e1d365eafdf6be130cf40733653587b6ec51be19ce0294df44d93919"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/references/tool_reference.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/references/tool_reference.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "db305bec51a46a67c5d21baa47e2854110f0a3901f525ec7c9a7fe120b9d9c8b"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/_common.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/_common.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "a1e1390b9bac9440d5038ebe22705420c8831d669c90c9dcbc6647c2cd494e90"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/audit_evidence_ledger.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/audit_evidence_ledger.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "18fc0a947fec34ea573eb824f540ce6ccb351aed5e08fc80ae476c2150aef2bb"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/check_falsification_controls.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/check_falsification_controls.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "e56f67b92d15c93cbe9eb1b9fb89253239b6ac81328fb56fc96d9e2c3ec3ba32"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/check_operationalization.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/check_operationalization.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "efc093f4b58b23e095238e60badef04d34dfb012b7958e1326a1f7d58ed5edd6"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/generate_preregistration_scaffold.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/generate_preregistration_scaffold.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "f953e3af468cb69ebbba3ff9f3dbba3846a52e557698c03f78972e0b41fb5ba8"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/lint_causal_claims.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/lint_causal_claims.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "561186e71f7c0b573f7ba45ef0009460c1398048929ed55fad53a65cda56dafe"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/validate_hypothesis_schema.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/validate_hypothesis_schema.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "63bc1b7752d20042c2845ecb2457448ec8e2d9bc8fe1337003b222f8f4620608"
+    },
+    {
+      "path": "third_party/kdense/skills/hypothesis-generation/scripts/validate_prediction_matrix.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/hypothesis-generation/scripts/validate_prediction_matrix.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "3888802496f4e6ece5955b4fe28d6b2e6d810c5107ce6ca45ebbd70acceed317"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/SKILL.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/SKILL.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "49ae9b430f3495a36de5fbfe4f053c0acc67440ad8b2bcb31749283e2286c48f"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/references/brainstorming_methods.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/references/brainstorming_methods.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "a2dc4e248b43b257af8b3359c26ec973527e212064f5f4a0c1f5161fa7f27013"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/references/facilitation_workflows.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/references/facilitation_workflows.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "bfb2acc43472f4649b10f2c3db02180fa9c86636f375f82d8bc36b28075a5ccc"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/references/idea_evaluation.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/references/idea_evaluation.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "415089ce7fb4234c2836c0a1652ca7407d5822c3b645564530ffb76bd594d110"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/references/responsible_ai.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/references/responsible_ai.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "7465647aaf261ce84124683bbebaafa2f57db0491c34b7ef1a650b05431b9cb1"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/references/sources.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/references/sources.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "ab93a7b744c0fb2a026f6485eac5f54fbd3479e7349a6a1502287f1704a48d88"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/scripts/_common.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/scripts/_common.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "a78ef369fe2613871e8026420b9c78a368f61aeab670947482517fd49711060d"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/scripts/evaluate_matrix.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/scripts/evaluate_matrix.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "9056a5356c72d638277cc24f8e02f043c6bdb35d2b50e13fca3ac6ef860a1014"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/scripts/session_scaffold.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/scripts/session_scaffold.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "0af7b297a8f92f1c7456b7e14c717a017315b4a71b603ca5402434dee98db5ba"
+    },
+    {
+      "path": "third_party/kdense/skills/scientific-brainstorming/scripts/validate_register.py",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/scientific-brainstorming/scripts/validate_register.py",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "9a28c5abc16c48babdf6e5f3ded1672eb272d2569283c53a3e1f09beed43197a"
+    },
+    {
+      "path": "third_party/kdense/LICENSE.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "LICENSE.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1"
+    },
+    {
+      "path": "third_party/nature-figure/scripts/audit_panel_alignment.py",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "skills/nature-figure/scripts/audit_panel_alignment.py",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "43958e6b49d897f326ff64e73cbed0bf057e17c06533b5b57d3dededf8111e76"
+    },
+    {
+      "path": "third_party/nature-figure/scripts/audit_figure_collisions.py",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "skills/nature-figure/scripts/audit_figure_collisions.py",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "841ede7dcaefa3ab11576b5ba52375d1678a71f77d39f553d5464e81b0699283"
+    },
+    {
+      "path": "third_party/nature-figure/requirements.txt",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "skills/nature-figure/requirements.txt",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "e2596dd9f3381fb6280bd18added6c3d0025d954c99a132e3d0bc8d3e8a24d00"
+    },
+    {
+      "path": "third_party/nature-figure/LICENSE",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "LICENSE",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "integrations/licenses/ars-cc-by-nc-4.0.txt",
+      "source_repository": "Imbad0202/academic-research-skills",
+      "source_path": "LICENSE",
+      "commit": "8120a34368f9f7493ef1ff3fb784b0dc93608be8",
+      "sha256": "b3848009d12a173f549ef98d9ee486e64459e8eb5d9f895bff53782b4aa86d7c"
+    },
+    {
+      "path": "integrations/licenses/paperspine-mit.txt",
+      "source_repository": "WUBING2023/PaperSpine",
+      "source_path": "LICENSE",
+      "commit": "f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3",
+      "sha256": "e89308aa6fe435bd6c8967ed865c613732888329176cc4c6fb020825812bec2d"
+    },
+    {
+      "path": "third_party/ars-review/review-criteria-framework.md",
+      "source_repository": "Imbad0202/academic-research-skills",
+      "source_path": "academic-paper-reviewer/references/review_criteria_framework.md",
+      "commit": "8120a34368f9f7493ef1ff3fb784b0dc93608be8",
+      "sha256": "6af77dc4a0b86c84dd3b1b7c9849294deb869899c9d82ff100816aca7c1eead9"
+    },
+    {
+      "path": "third_party/ars-review/quality-rubrics.md",
+      "source_repository": "Imbad0202/academic-research-skills",
+      "source_path": "academic-paper-reviewer/references/quality_rubrics.md",
+      "commit": "8120a34368f9f7493ef1ff3fb784b0dc93608be8",
+      "sha256": "7335aa653d3573a323d9de522b0bc98f3230b7c639b673fc812fa46d607e01e1"
+    },
+    {
+      "path": "third_party/ars-codex/evidence-row-protocol.md",
+      "source_repository": "Imbad0202/academic-research-skills-codex",
+      "source_path": "skills/academic-research-suite/ars/shared/references/evidence_row_protocol.md",
+      "commit": "70b412fe69d3b5bf6b16adf64a96160bdd3c2d28",
+      "sha256": "d206df0eca8eef18b41a26b7f2401ca15c36ac9b0696300f09d2852511de6211"
+    },
+    {
+      "path": "third_party/nature-methods/research-idea-gates.md",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "skills/nature-paper-card/references/research-idea-gates.md",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "7eed78f2e65d1408d6e2902448cd05928f7d10e3a78799be2ebc1d81ac3849fd"
+    },
+    {
+      "path": "third_party/nature-methods/foundation-files.md",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "skills/nature-proposal-writer/references/foundation-files.md",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "7062a9799966a1364d0d92d6d26623f3a931ab38111b9acf83f90afedd16306e"
+    },
+    {
+      "path": "third_party/nature-methods/LICENSE",
+      "source_repository": "Yuan1z0825/nature-skills",
+      "source_path": "LICENSE",
+      "commit": "84880815fb37317b3766bff2c2abba395b8993c3",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "third_party/paperspine/scientific-evidence-ledger.md",
+      "source_repository": "WUBING2023/PaperSpine",
+      "source_path": "src/skill/references/scientific-evidence-ledger.md",
+      "commit": "f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3",
+      "sha256": "3184d20c4e822e9fce7bd62bfcdf3bd2778a9770d3460d44993d91822e6e168f"
+    },
+    {
+      "path": "third_party/paperspine/citation-support-bank.md",
+      "source_repository": "WUBING2023/PaperSpine",
+      "source_path": "src/skill/references/citation-support-bank.md",
+      "commit": "f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3",
+      "sha256": "08f43376d9d0b65518da2b97d51ed48afe8f29568952c3e75e6ae1e7f1baabd6"
+    },
+    {
+      "path": "third_party/paperspine/writing-rationale-matrix.md",
+      "source_repository": "WUBING2023/PaperSpine",
+      "source_path": "src/skill/references/writing-rationale-matrix.md",
+      "commit": "f7e3dabaf499b2aef1eabdd1cd5d64f173d7dcc3",
+      "sha256": "51a991ade7910944e536c02389dfe73954523e94b84a65de37a213814c56d27b"
+    }
+  ]
+}
