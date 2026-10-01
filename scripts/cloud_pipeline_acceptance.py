@@ -119,24 +119,37 @@ def consume(directory: Path) -> None:
     metadata = manuscript/'metadata.json';steps.write(metadata,{'schema_version':'1.0','title':'Synthetic acceptance',
                'abstract':'This document verifies export only.','authors':[{'name':'Fixture'}],
                'keywords':['synthetic','acceptance','export']})
-    tex = manuscript/'main.tex';tex.write_text(r'\documentclass{article}\begin{document}Synthetic acceptance only.\end{document}')
+    # Each fixture paper keeps exactly one canonical manuscript format.
+    tex_manuscript = project/'papers/P02/manuscript'
+    tex_manuscript.mkdir(parents=True, exist_ok=True)
+    tex = tex_manuscript/'main.tex';tex.write_text(r'\documentclass{article}\begin{document}Synthetic acceptance only.\end{document}')
     output_provenance.record_model_writes(project,[source,metadata,tex],family='other',provider='synthetic-fixture',
         model='none',role='acceptance-only',run_id='fixture')
     build(project,source,metadata,manuscript/'main.docx',prefer_pandoc=False)
+    from docx import Document
+    if 'Synthetic acceptance' not in '\\n'.join(p.text for p in Document(manuscript/'main.docx').paragraphs):
+        raise RuntimeError('native DOCX did not preserve fixture content')
     from scripts.cloud_runtime import compile_tex
     try:
-        tex_report = compile_tex(project,'P01')
+        tex_report = compile_tex(project,'P02')
     finally:
-        print(json.dumps({'tex_build': steps.read(project/'papers/P01/reviews/cloud-tex-build.json')}), flush=True)
+        print(json.dumps({'tex_build': steps.read(project/'papers/P02/reviews/cloud-tex-build.json')}), flush=True)
     import fitz
-    with fitz.open(manuscript/'main.pdf') as document:
+    with fitz.open(tex_manuscript/'main.pdf') as document:
         if document.page_count != 1 or 'Synthetic acceptance only' not in document[0].get_text():
             raise RuntimeError('compiled PDF did not preserve fixture content')
-    steps.write(directory/'acceptance.json', {'status':'passed','synthetic_acceptance_only':True,
+    exported = [manuscript/'main.docx', tex_manuscript/'main.pdf']
+    exported.extend(project/f'papers/P01/figures/negative.{ext}' for ext in ('png', 'svg', 'pdf'))
+    report = {'status':'passed','synthetic_acceptance_only':True,
         'requirement_ids':['R25','R26','R31'],'fresh_runner_restoration':True,'failed_attempt_not_retried':True,
         'native_docx':True,'vector_and_raster_figure':True,'isolated_tex_pdf':True,
+        'restored_file_count':len(steps.read(transfer/'hashes.json')),
+        'checkpoint_sha256':cp.sha(transfer/'checkpoint.zip'),
+        'export_sha256':{p.relative_to(project).as_posix():cp.sha(p) for p in exported},
         'source_commit':os.environ.get('GITHUB_SHA'),
-        'workflow_run_url':f"https://github.com/hengyizang/lunwen/actions/runs/{os.environ['GITHUB_RUN_ID']}"})
+        'workflow_run_url':f"https://github.com/hengyizang/lunwen/actions/runs/{os.environ['GITHUB_RUN_ID']}"}
+    steps.write(directory/'acceptance.json', report)
+    print(json.dumps({'cloud_pipeline_acceptance': report}), flush=True)
 
 
 def main():
