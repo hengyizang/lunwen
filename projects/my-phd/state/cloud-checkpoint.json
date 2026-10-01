@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "run_id": "36917764939",
+  "created_at": "2026-10-01T19:54:58.436889+00:00",
+  "artifact_name": "research-checkpoint-36917764939",
+  "archive_sha256": null,
+  "retention_days": 90,
+  "files": [],
+  "raw_data_policy": "rehydrate_from_authorized_acquisition_receipts"
+}
