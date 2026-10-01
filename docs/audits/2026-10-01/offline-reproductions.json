@@ -1,0 +1,90 @@
+{
+  "scope": "formal main 111c0416a0565d7dc8bbb0bd2e3a3b9a21023774; offline fixtures only",
+  "real_network_requests": 0,
+  "real_paid_calls": 0,
+  "real_research_state_modified": false,
+  "cloud_persistence": {
+    "retained": [
+      "experiments/registry.jsonl",
+      "papers/P01/manuscript/main.tex",
+      "reports/metrics.csv"
+    ],
+    "silently_omitted": [
+      "experiments/code/run.py",
+      "experiments/config.yaml",
+      "evidence/literature/source.xml",
+      "data/processed/measurements.parquet",
+      "papers/P01/figures/plot.renderer.py"
+    ]
+  },
+  "author_boundary": {
+    "author_write_accepted_for_executor_records": [
+      "experiments/registry.jsonl",
+      "experiments/runs/fixture-attempt/metrics.csv",
+      "experiments/runs/fixture-attempt/stdout.txt"
+    ],
+    "state_and_literature_control_paths_correctly_blocked": [
+      "state/run.json",
+      "evidence/search-log.jsonl",
+      "experiments/runs/fixture-attempt/run.json"
+    ],
+    "scientific_gate_bypass_proven": false
+  },
+  "literature_wiring": {
+    "metadata_returned": true,
+    "protected_required_search_log_created": false
+  },
+  "ambiguous_transport_retry": {
+    "transport_attempts": 2,
+    "idempotency_header_present": false,
+    "ledger_settled_against_last_reported_usage": true,
+    "unresolved_reservations_after_final_success": 0,
+    "first_attempt_charge_confirmed": false,
+    "interpretation": "A successful retry settles the sole reservation while the first timed-out attempt remains potentially billable; this fixture does not assert an actual provider charge."
+  },
+  "cycle_dispatch": {
+    "direct_experiment_executor_call_present": false,
+    "direct_dataset_acquisition_call_present": false,
+    "cloud_job_actions": [
+      "acceptance",
+      "authorize_budget",
+      "bocha_jev_probe",
+      "continuation",
+      "cycle",
+      "free_jev_probe",
+      "init",
+      "paperqa",
+      "preflight",
+      "reconcile_budget",
+      "status",
+      "tooluniverse"
+    ],
+    "writer_has_shell_tool": false,
+    "limitation": "Static call-path observation, not a proof of an entire scientific run."
+  },
+  "unprovisioned_runtime": {
+    "clean_python_figure_backend_exit_code": 1,
+    "expected_dependency_error_observed": true
+  },
+  "audit_metadata": {
+    "audit_date_utc": "2026-10-01",
+    "baseline_main_sha": "111c0416a0565d7dc8bbb0bd2e3a3b9a21023774",
+    "baseline_tree_sha": "6a2743d01a047e842064e68b8839d3fbaa5acf82",
+    "observed_project_state_sha": "d65bc1aa4c470abb683a2c889611cf5ff212a4d9",
+    "latest_verified_scheduled_run_id": 36832022376,
+    "scheduled_run_created_at_utc": "2026-10-01T07:43:52Z",
+    "scheduled_run_result": "success; Continuation paused: configuration_pending",
+    "unit_tests_passed": 294,
+    "unit_test_elapsed_seconds": 11.442,
+    "compileall_passed": true,
+    "repository_validation_passed": true,
+    "production_code_modified_by_audit": false,
+    "limitations": [
+      "No live paid provider execution or actual vendor charge was observed.",
+      "An author-write boundary defect was reproduced; a complete scientific-gate bypass was not proven.",
+      "Static dispatch observations do not constitute a completed research run.",
+      "The dependency-isolation fixture does not establish the exact installed packages of a current hosted runner.",
+      "Existing unit tests do not establish cross-runner or six-paper scientific acceptance."
+    ]
+  }
+}
