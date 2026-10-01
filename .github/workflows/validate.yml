@@ -42,6 +42,15 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Preserve failed executor diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-pipeline-producer-failure
+          path: artifacts/cloud-pipeline/
+          if-no-files-found: warn
+          retention-days: 14
+
   cloud-restore:
     name: Fresh runner restore and scientific exports
     needs: cloud-produce

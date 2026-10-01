@@ -600,6 +600,8 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
     project = project_root or PROJECTS_ROOT / project_slug
     if project.name != project_slug or project.is_symlink():
         raise ExperimentError("project root does not match the requested slug")
+    # Boundary helpers return resolved paths; keep their project base absolute too.
+    project = project.resolve()
     plan_path = project / "experiments" / "plan.json"
     budget_path = project / "experiments" / "budget.json"
     plan, ceiling = approved_plan(project, plan_path, budget_path)

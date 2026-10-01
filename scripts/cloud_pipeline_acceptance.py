@@ -52,6 +52,7 @@ else:
 
 
 def produce(directory: Path) -> None:
+    directory = directory.resolve()
     project = directory/'runner-one'/'acceptance-fixture'
     fixture(project)
     control_hash = cp.sha(project/'state/run.json')
@@ -79,6 +80,7 @@ def produce(directory: Path) -> None:
 
 
 def consume(directory: Path) -> None:
+    directory = directory.resolve()
     transfer = directory/'transfer'
     project = directory/'runner-two'/'acceptance-fixture'
     shutil.copytree(transfer/'git'/'acceptance-fixture',project)

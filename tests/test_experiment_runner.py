@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -82,6 +83,34 @@ class ExperimentRunnerTests(unittest.TestCase):
         self.assertTrue((project / "result.txt").is_file())
         registry = (project / "experiments" / "registry.jsonl").read_text()
         self.assertIn('"run_id": "baseline"', registry)
+
+    def test_relative_project_root_keeps_executor_receipts_relative(self) -> None:
+        project = self.project()
+        input_path = project / "input.txt"
+        input_path.write_text("approved", encoding="utf-8")
+        plan_path = project / "experiments" / "plan.json"
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        plan["runs"][0]["inputs"] = [
+            {"path": "input.txt", "sha256": hashlib.sha256(input_path.read_bytes()).hexdigest()}
+        ]
+        plan_path.write_text(json.dumps(plan), encoding="utf-8")
+        state_path = project / "state" / "run.json"
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        state["approvals"][0]["experiment_plan_sha256"] = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+        state_path.write_text(json.dumps(state), encoding="utf-8")
+        previous = Path.cwd()
+        try:
+            os.chdir(project.parent)
+            result = experiment_runner.execute("test-phd", project_root=Path("test-phd"))[0]
+        finally:
+            os.chdir(previous)
+        self.assertEqual(result["status"], "succeeded")
+        self.assertEqual(result["inputs"][0]["path"], "input.txt")
+        self.assertEqual(result["outputs"][0]["path"], "result.txt")
+        self.assertEqual(result["cwd"], ".")
+        self.assertTrue(result["input_integrity"]["passed"])
+        receipt = project / result["logs"]["stdout"]
+        self.assertTrue(receipt.is_file())
 
     def test_changed_plan_is_rejected(self) -> None:
         project = self.project()
