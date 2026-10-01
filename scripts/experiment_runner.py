@@ -346,6 +346,13 @@ def isolation_record(
     return record
 
 
+def container_user() -> str:
+    """Use the cloud runner's file owner without restoring DAC override powers."""
+    if not hasattr(os, "getuid") or not hasattr(os, "getgid"):
+        raise ExperimentError("container execution requires a POSIX cloud runner")
+    return f"{os.getuid()}:{os.getgid()}"
+
+
 def execution_command(
     project: Path,
     cwd: Path,
@@ -358,7 +365,7 @@ def execution_command(
     relative_cwd = cwd.relative_to(project).as_posix()
     workdir = "/workspace" if relative_cwd == "." else f"/workspace/{relative_cwd}"
     command = [
-        isolation["engine"], "run", "--rm", "--network=none", "--read-only",
+        isolation["engine"], "run", "--rm", "--user", container_user(), "--network=none", "--read-only",
         "--tmpfs", "/tmp:rw,nosuid,nodev,noexec,size=512m", "--security-opt", "no-new-privileges",
         "--cap-drop=ALL", "--pids-limit=256", "--cpus=2", "--memory=4g",
         "-v", f"{project.resolve()}:/workspace:ro", "-w", workdir,

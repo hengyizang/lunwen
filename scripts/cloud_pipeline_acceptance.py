@@ -124,7 +124,10 @@ def consume(directory: Path) -> None:
         model='none',role='acceptance-only',run_id='fixture')
     build(project,source,metadata,manuscript/'main.docx',prefer_pandoc=False)
     from scripts.cloud_runtime import compile_tex
-    compile_tex(project,'P01')
+    try:
+        tex_report = compile_tex(project,'P01')
+    finally:
+        print(json.dumps({'tex_build': steps.read(project/'papers/P01/reviews/cloud-tex-build.json')}), flush=True)
     import fitz
     with fitz.open(manuscript/'main.pdf') as document:
         if document.page_count != 1 or 'Synthetic acceptance only' not in document[0].get_text():

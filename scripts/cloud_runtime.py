@@ -14,6 +14,7 @@ from pathlib import Path
 from scripts.cloud_research_steps import path_in, write
 from scripts import output_provenance
 from scripts.cloud_checkpoint import sha
+from scripts.experiment_runner import container_user
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGES = ("matplotlib", "numpy", "pandas", "PyMuPDF", "pypdf", "python-docx", "python-pptx", "statsmodels", "ref-verify")
@@ -51,7 +52,7 @@ def compile_tex(project: Path, paper_id: str) -> dict:
         raise RuntimeError("configure DR_OS_TEX_IMAGE with a verified xu-cheng TeX Live image digest, or use the native DOCX path")
     build = paper / "build"
     build.mkdir(exist_ok=True)
-    command = ["docker", "run", "--rm", "--network=none", "--read-only", "--cap-drop=ALL", "--pids-limit=256",
+    command = ["docker", "run", "--rm", "--user", container_user(), "--network=none", "--read-only", "--cap-drop=ALL", "--pids-limit=256",
                "--cpus=2", "--memory=4g", "--security-opt", "no-new-privileges", "--tmpfs", "/tmp:rw,nosuid,nodev,size=512m",
                "--mount", f"type=bind,src={paper.resolve()},dst=/paper,readonly",
                "--mount", f"type=bind,src={build.resolve()},dst=/out", "-w", "/paper/manuscript",
