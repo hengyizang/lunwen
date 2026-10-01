@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "synthetic_acceptance_only": true,
+  "requirement_ids": [
+    "R25",
+    "R26",
+    "R31"
+  ],
+  "fresh_runner_restoration": true,
+  "failed_attempt_not_retried": true,
+  "native_docx": true,
+  "vector_and_raster_figure": true,
+  "isolated_tex_pdf": true,
+  "restored_file_count": 19,
+  "checkpoint_sha256": "2a6196942b3e7ec84fdf536201e9f711ffcf808d463b13814fceb0fc7c6ca8a7",
+  "export_sha256": {
+    "papers/P01/manuscript/main.docx": "3b55b94cbb20d595e315302f10f2788186e2ca8375288ad27e7e2764ff7f59f8",
+    "papers/P02/manuscript/main.pdf": "69a4d6272bb077a73229d8f72735a5fa5d62fcd149b51cd5ee21d3e3fe3977b6",
+    "papers/P01/figures/negative.png": "955d8a1a4e5ee665ea4214203a34fb74b08478013cd704309e0d49732c664904",
+    "papers/P01/figures/negative.svg": "f55dce53cadb9ba46545df1dc4634c8481e81c2fe4820938668287ea0aebc035",
+    "papers/P01/figures/negative.pdf": "1f68718f9048939296f14fb080c9f9ae75b9c752ff6f3c0ae92f9ee49069afeb"
+  },
+  "source_commit": "55b79ac1ca827a8bc1e58afb9289dba4e68bc39c",
+  "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/36904033630"
+}

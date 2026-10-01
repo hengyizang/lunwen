@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-02",
   "requirements": [
     {
       "id": "R01",
@@ -340,27 +340,35 @@
       "id": "R25",
       "requirement": "Restore executable code, metadata, binary results and negative/failed-run evidence across cloud runners",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/cloud_checkpoint.py"
       ],
       "tests": [
         "tests/test_cloud_checkpoint.py"
       ],
-      "remaining": "Fresh-runner acceptance must verify every saved hash; raw data requires reviewed rehydration and checkpoints expire after 90 days."
+      "remaining": "Synthetic software acceptance passed on two independent cloud runners with 19 exact restored hashes. Real raw data still needs reviewed rehydration and durable storage beyond the 90-day checkpoint retention.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
     },
     {
       "id": "R26",
       "requirement": "Only the controlled executor can write empirical outputs and experiment records",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/artifact_ownership.py"
       ],
       "tests": [
         "tests/test_cloud_readiness_boundaries.py"
       ],
-      "remaining": "Require Docker execution and mutation denial in the cloud fixture, then actual G3-approved studies."
+      "remaining": "Synthetic Docker mutation denial and author-boundary regressions passed. This does not validate any scientific finding; real G3-approved experiments and human review remain required.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
     },
     {
       "id": "R27",
@@ -418,14 +426,18 @@
       "id": "R31",
       "requirement": "Declared cloud dependencies and native DOCX, figures and isolated TeX export",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/cloud_runtime.py"
       ],
       "tests": [
         "tests/test_cloud_pipeline_acceptance.py"
       ],
-      "remaining": "Complete cloud export acceptance; each final paper still requires named visual review."
+      "remaining": "Synthetic native DOCX, PNG/SVG/PDF figures and isolated TeX PDF acceptance passed. Each real final paper still requires provenance checks and named human visual review.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
     }
   ],
   "execution_mode": "cloud_only"

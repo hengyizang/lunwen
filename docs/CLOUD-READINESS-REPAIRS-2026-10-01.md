@@ -42,3 +42,5 @@ The cloud has no dependency on the user's local hardware, WSL or physical labora
 ## Acceptance evidence
 
 `validate.yml` now has a real Docker producer and a separate fresh-runner restore/export job on pull requests. Fixtures are labeled synthetic, live outside `projects/my-phd`, make no model API calls, and cannot create a research approval. A green fixture tests the software path only. Review the exact commit's workflow and its `cloud-pipeline-acceptance` artifact before calling the cross-runner repair verified.
+
+The cross-runner fixture was subsequently repaired and passed in GitHub Actions. See [the October 2 follow-up](CLOUD-READINESS-ACCEPTANCE-2026-10-02.md) for the exact code/workflow binding, regression results, artifact hashes and remaining scientific limits.
