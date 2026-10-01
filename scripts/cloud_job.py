@@ -15,9 +15,10 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 try:
-    from scripts import cloud_continuation, model_runtime, model_spend, researchctl
+    from scripts import cloud_checkpoint, cloud_continuation, model_runtime, model_spend, researchctl
 except ImportError:
     import researchctl  # type: ignore
+    import cloud_checkpoint  # type: ignore
     import model_spend  # type: ignore
     import cloud_continuation  # type: ignore
     import model_runtime  # type: ignore
@@ -36,13 +37,12 @@ EXTRA = {
     "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count"},
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
+    "authorize_data": {"manifest", "expected_sha256"},
+    "resume": {"expected_sha256", "repair_note"},
     "cycle": {"context", "stage"},
     "continuation": set(),
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
 }
-SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".txt", ".tex", ".bib", ".svg", ".png", ".pdf", ".docx"}
-DIRECTORIES = {"state", "intake", "program", "evidence", "data", "experiments", "claims", "reports", "reviews", "papers", "literature"}
-EXCLUDED = {"raw", "private", "cache", "runs", "checkpoints", "build", "api_runs", "venue-template", "secrets", ".cache", "model-usage.jsonl"}
 
 
 class CloudJobError(RuntimeError):
@@ -90,6 +90,15 @@ def validate_request(value: object) -> dict:
                 or not isinstance(value.get("evidence_note"), str) or not 0 < len(value["evidence_note"].strip()) <= 300):
             raise CloudJobError("reconciliation requires a reservation ID and a short billing evidence note")
         model_spend._amount(value.get("actual_cost_cny"), "actual_cost_cny")
+    if action in {"authorize_data", "resume"}:
+        if not isinstance(value.get("expected_sha256"), str) or not re.fullmatch(r"[a-f0-9]{64}", value["expected_sha256"]):
+            raise CloudJobError("the exact reviewed artifact SHA-256 is required")
+        if action == "authorize_data":
+            relative = project_relative(value.get("manifest"))
+            if not relative.startswith("data/manifests/") or not relative.endswith(".json"):
+                raise CloudJobError("authorize an exact data/manifests/*.json file")
+        elif not isinstance(value.get("repair_note"), str) or not 10 <= len(value["repair_note"].strip()) <= 500:
+            raise CloudJobError("resume needs a 10–500 character explanation of the inspected repair")
     if action == "init" and (type(value.get("paper_count", 6)) is not int or not 1 <= value.get("paper_count", 6) <= 20):
         raise CloudJobError("paper_count must be 1–20")
     if action == "bocha_jev_probe":
@@ -142,32 +151,14 @@ def issue_request(event: dict) -> dict:
 
 
 def safe_file(path: Path, project: Path) -> bool:
-    rel = path.relative_to(project)
-    if not rel.parts or rel.parts[0] not in DIRECTORIES or path.suffix.lower() not in SUFFIXES:
-        return False
-    if any(part.startswith(".") or part.lower() in EXCLUDED or "secret" in part.lower() or "credential" in part.lower() for part in rel.parts):
-        return False
-    if any(parent.is_symlink() for parent in (path, *path.parents) if parent == project or project in parent.parents):
-        raise CloudJobError("project contains a symlink in a persistable path")
-    if not path.is_file() or path.stat().st_size > 2_000_000:
-        return False
-    return True
+    return path in selected_files(project)
 
 
 def selected_files(project: Path) -> list[Path]:
-    if not project.exists():
-        return []
-    if project.is_symlink() or not project.is_dir():
-        raise CloudJobError("project root must be a regular directory")
-    files = [p for p in project.rglob("*") if p.is_file() and safe_file(p, project)]
-    if sum(p.stat().st_size for p in files) > 15_000_000:
-        raise CloudJobError("tracked cloud result exceeds 15 MB")
-    secrets = [v.encode() for k, v in os.environ.items() if k in {"UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"} and len(v) >= 8]
-    for path in files:
-        data = path.read_bytes()
-        if any(secret in data for secret in secrets):
-            raise CloudJobError("a persistable file contains a configured credential")
-    return sorted(files)
+    try:
+        return cloud_checkpoint.git_files(project)
+    except cloud_checkpoint.CheckpointError as exc:
+        raise CloudJobError(str(exc)) from exc
 
 
 def git(*argv: str, cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess:
@@ -198,6 +189,7 @@ def restore_state(slug: str) -> tuple[Path, str]:
             dest = target / path.relative_to(source)
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, dest)
+        cloud_checkpoint.restore(target)
     return tmp, branch
 
 
@@ -233,7 +225,7 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
         result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
                                 text=True, errors="replace", timeout=timeout)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
-        for key in ("UUAPI_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL", "SEMANTIC_SCHOLAR_API_KEY", "OPENCITATIONS_ACCESS_TOKEN"):
+        for key in cloud_checkpoint.SECRET_NAMES | {"LITERATURE_CONTACT_EMAIL"}:
             if len(os.environ.get(key, "")) >= 8:
                 raw = raw.replace(os.environ[key], "[REDACTED]")
         return result.returncode, raw
@@ -252,9 +244,15 @@ def run_job(job: dict, run_id: str) -> int:
     changed = []
     detail = ""
     continuation_decision = None
+    progress_before = None
     try:
-        if action in {"init", "status", "authorize_budget", "reconcile_budget", *PAID}:
+        if action in {"init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", *PAID}:
             worktree, branch = restore_state(slug)
+            os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
+            os.environ["DR_OS_STATE_BRANCH"] = branch
+            if action in {"status", "cycle", "continuation"}:
+                from scripts.cloud_research_steps import acquire_data
+                acquire_data(ROOT / "projects" / slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         if action == "preflight":
             output = {"repository": REPOSITORY, "project": slug, "configured": {
@@ -317,6 +315,16 @@ def run_job(job: dict, run_id: str) -> int:
                 logs.append(f"Owner reconciled reservation {job['reservation_id']}; aggregate estimated spending is CNY {state['spent_cny']}.")
                 detail = f"Reconciled cumulative estimated model API spend: CNY {state['spent_cny']}.\n\n"
                 cmd = None
+            elif action == "authorize_data":
+                from scripts.cloud_research_steps import authorize_data
+                authorize_data(ROOT / "projects" / slug, job["manifest"], job["expected_sha256"], job["actor"], run_id)
+                detail = "Recorded owner review of the exact data manifest; scientific gates are unchanged.\n\n"
+                cmd = None
+            elif action == "resume":
+                from scripts.cloud_progress import resume
+                resume(slug, job["expected_sha256"], job["actor"], job["repair_note"], run_id)
+                detail = "Recorded the inspected repair; the next job rechecks budget, configuration and all gates.\n\n"
+                cmd = None
             elif action in {"cycle", "continuation"}:
                 if action == "continuation":
                     continuation_decision = cloud_continuation.evaluate(slug)
@@ -329,6 +337,10 @@ def run_job(job: dict, run_id: str) -> int:
                     if action == "continuation" and job["actor"] != continuation_decision["actor"]:
                         raise CloudJobError("continuation actor must match the recorded owner confirmation")
                     cmd = cycle_command(job, slug)
+                    from scripts.cloud_runtime import prepare as prepare_runtime
+                    prepare_runtime(ROOT / "projects" / slug)
+                    from scripts.cloud_progress import snapshot
+                    progress_before = snapshot(slug)
             elif action == "paperqa":
                 raise CloudJobError("PaperQA2 can use unmetered external model calls; its paid cloud action is paused until its charges can count against the approved tranche")
             else:
@@ -336,6 +348,13 @@ def run_job(job: dict, run_id: str) -> int:
             if cmd is not None:
                 code, output = run_command(cmd)
                 logs.append(output)
+                if action in {"cycle", "continuation"} and progress_before is not None:
+                    from scripts.cloud_progress import record
+                    record(slug, progress_before, run_id, code)
+                    if action == "cycle":
+                        cloud_continuation.checkpoint(slug, {"project": slug, "should_run": False,
+                            "reason": "manual_cycle_completed" if not code else "previous_cycle_failed_requires_inspection"},
+                            run_id, cycle_exit_code=code)
                 if action == "continuation":
                     cloud_continuation.checkpoint(slug, continuation_decision, run_id, cycle_exit_code=code)
                     continuation_decision = cloud_continuation.evaluate(slug)
@@ -347,16 +366,40 @@ def run_job(job: dict, run_id: str) -> int:
                     state = researchctl.load_state(slug)
                     detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
                               f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
-    except (CloudJobError, cloud_continuation.ContinuationError, model_spend.SpendControlError, model_runtime.ModelBudgetError, researchctl.ResearchCtlError, OSError, ImportError) as exc:
+    except (RuntimeError, OSError, ImportError, ValueError) as exc:
         status = "failed"
         logs.append(str(exc))
+        if worktree is not None and action in {"cycle", "continuation"}:
+            cloud_continuation.checkpoint(slug, {"project": slug, "should_run": False,
+                "reason": "previous_cycle_failed_requires_inspection"}, run_id, cycle_exit_code=2)
     finally:
         if worktree is not None:
             try:
+                cloud_checkpoint.prepare(ROOT / "projects" / slug, RUNTIME / "checkpoint", run_id)
                 changed = persist_state(slug, worktree, branch, run_id)
-            except (CloudJobError, OSError) as exc:
+            except (CloudJobError, cloud_checkpoint.CheckpointError, OSError, ValueError) as exc:
                 status = "failed"
                 logs.append("State persistence failed: " + str(exc))
+                # Preserve the failure and conservative billing state even when
+                # an unsupported/oversized research file prevents packaging.
+                project = ROOT / "projects" / slug
+                cloud_continuation.checkpoint(slug, {"project": slug, "should_run": False,
+                    "reason": "checkpoint_repair_required"}, run_id, cycle_exit_code=2)
+                try:
+                    for relative in ("state/model-spend-control.json", "state/continuation-status.json"):
+                        source = project / relative
+                        if source.is_file():
+                            cloud_checkpoint.check_file(source, project)
+                            target = worktree / "projects" / slug / relative
+                            target.parent.mkdir(parents=True, exist_ok=True)
+                            shutil.copyfile(source, target)
+                            git("add", "--", str(target.relative_to(worktree)), cwd=worktree)
+                    if git("diff", "--cached", "--name-only", cwd=worktree).stdout.strip():
+                        git("-c", "user.name=research-cloud", "-c", "user.email=research-cloud@users.noreply.github.com",
+                            "commit", "-m", "Pause research after checkpoint failure; preserve billing", cwd=worktree)
+                        git("push", "origin", f"HEAD:refs/heads/{branch}", cwd=worktree)
+                except (RuntimeError, OSError):
+                    logs.append("Control-only recovery push failed; inspect the last remote reservation before any retry.")
             git("worktree", "remove", "--force", str(worktree), check=False)
             shutil.rmtree(worktree, ignore_errors=True)
         try:
@@ -364,7 +407,7 @@ def run_job(job: dict, run_id: str) -> int:
             with zipfile.ZipFile(ARTIFACT / "tracked-results.zip", "w", zipfile.ZIP_DEFLATED) as archive:
                 for path in safe_results:
                     archive.write(path, path.relative_to(ROOT))
-        except (CloudJobError, OSError) as exc:
+        except (RuntimeError, OSError, ValueError) as exc:
             status = "failed"
             logs.append("Result packaging failed: " + str(exc))
         (ARTIFACT / "redacted-log.txt").write_text("\n".join(logs)[-100000:], encoding="utf-8")
@@ -374,12 +417,19 @@ def run_job(job: dict, run_id: str) -> int:
                    f"State branch (when used): `cloud-state/{slug}` · Changed files: {len(changed)}.\n\n"
                    "The run artifact contains redacted logs and tracked results. Human scientific gates remain pending.\n")
         (RUNTIME / "cloud-summary.md").write_text(summary, encoding="utf-8")
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as output:
+                output.write(summary)
         if action == "continuation" and status == "completed" and continuation_decision is not None:
             (RUNTIME / "continuation-followup.json").write_text(json.dumps(continuation_decision), encoding="utf-8")
     return 0 if status == "completed" else 1
 
 
 def cycle_command(job: dict, slug: str) -> list[str]:
+    from scripts.cloud_progress import pause_reason
+    pause = pause_reason(slug)
+    if pause:
+        raise CloudJobError("Continuation needs external input or an inspected repair: " + pause["reason"])
     control = model_spend.read(ROOT / "projects" / slug, required=True)
     if not control or control["authorized_ceiling_cny"] <= 0:
         raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
@@ -399,6 +449,7 @@ def cycle_command(job: dict, slug: str) -> list[str]:
                    "Do not approve or advance a human gate, change spending authority, or auto-submit. "
                    "Keep Claude read-only and OpenAI as the persistent author. The October 7 target does not lower any requirement.")
     os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+    os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
     return ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
             "--planner-provider", "uuapi-anthropic", "--writer-provider", "uuapi-openai",
             "--critic-provider", "uuapi-anthropic", "--context", context]

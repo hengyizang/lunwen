@@ -1,26 +1,444 @@
-{"schema_version":"1.0","updated_at":"2026-09-27","requirements":[
-{"id":"R01","requirement":"GitHub Actions matrix and declared figure/reader dependencies","implementation":"complete","acceptance":"ci-required","evidence":[".github/workflows/validate.yml"]},
-{"id":"R02","requirement":"All user-machine packages and caches under D:\\ad\\lunwen","implementation":"complete","acceptance":"user-machine-required","evidence":["scripts/install-d-drive.ps1","scripts/bootstrap-d-drive.sh","scripts/check_env.py"]},
-{"id":"R03","requirement":"Real WSL2 Docker isolation and public literature API acceptance","implementation":"complete","acceptance":"user-machine-required","evidence":["scripts/live_acceptance.py","scripts/run-wsl-acceptance.sh"]},
-{"id":"R04","requirement":"Executable PaperQA2 ToolUniverse and ref-verify adapters","implementation":"complete","acceptance":"credentials-or-corpus-required","evidence":["scripts/ai4science_evidence.py","scripts/tooluniverse_worker.py","scripts/ref_verify_adapter.py"]},
-{"id":"R05","requirement":"Natural Codex chat routing through Skills and MCP","implementation":"complete","acceptance":"codex-client-required","evidence":[".mcp.json","scripts/research_mcp.py"]},
-{"id":"R06","requirement":"Claude planning/audit only and non-Claude persistent final outputs","implementation":"complete","acceptance":"gate-enforced","evidence":["AGENTS.md","scripts/output_provenance.py"]},
-{"id":"R07","requirement":"Layered quality/risk/cost routing health filtering and CNY budgets","implementation":"complete","acceptance":"credentials-required","evidence":["scripts/task_router.py","scripts/model_health.py","scripts/model_runtime.py"]},
-{"id":"R08","requirement":"Broad public literature and dataset discovery except Chinese databases","implementation":"complete","acceptance":"live-network-required","evidence":["scripts/literature_evidence.py","scripts/data_discovery.py"]},
-{"id":"R09","requirement":"Lawful full-text and manual SciencePro or ChatGPT-web import","implementation":"complete","acceptance":"account-or-export-required","evidence":["scripts/open_fulltext.py","scripts/sciencepro_import.py","scripts/concept_illustrations.py"]},
-{"id":"R10","requirement":"37-family deterministic scientific figure engine","implementation":"complete","acceptance":"real-paper-visual-review-required","evidence":["scripts/publication_figures.py","scripts/figure_recipes.py"]},
-{"id":"R11","requirement":"Typed editable research diagrams","implementation":"complete","acceptance":"real-paper-visual-review-required","evidence":["scripts/research_diagrams.py","schemas/research-diagram.schema.json"]},
-{"id":"R12","requirement":"GPT Image only as disclosed conceptual supplement","implementation":"complete","acceptance":"image-account-required","evidence":["scripts/concept_illustrations.py","scripts/figure_provenance.py"]},
-{"id":"R13","requirement":"Protocol dual review multi-report risk-of-bias PRISMA and exports","implementation":"complete","acceptance":"human-screening-required","evidence":["scripts/systematic_review.py"]},
-{"id":"R14","requirement":"Mandatory paper facts theory-measurement argument and full-section audit","implementation":"complete","acceptance":"per-paper-required","evidence":["scripts/manuscript_audit.py","schemas/paper-facts.schema.json"]},
-{"id":"R15","requirement":"Terminology acronym and mathematical-symbol consistency","implementation":"complete","acceptance":"per-paper-required","evidence":["scripts/manuscript_audit.py"]},
-{"id":"R16","requirement":"Mandatory reviewer concern cards and editor summary","implementation":"complete","acceptance":"per-paper-required","evidence":["scripts/rebuttal_triage.py","scripts/researchctl.py"]},
-{"id":"R17","requirement":"Read-only Zotero Local API and Obsidian graph","implementation":"complete","acceptance":"local-app-required","evidence":["scripts/local_library.py"]},
-{"id":"R18","requirement":"Skill inventory security lint MCP inventory and token-gated operations","implementation":"complete","acceptance":"codex-client-required","evidence":["scripts/skill_catalog.py"]},
-{"id":"R19","requirement":"Evidence-preserving language and optional detector feedback","implementation":"complete","acceptance":"human-review-required","evidence":["scripts/academic_style.py","scripts/detector_feedback.py"]},
-{"id":"R20","requirement":"Independent implementation without copying restricted Skills","implementation":"complete","acceptance":"repository-audit-required","evidence":["references/upstream-components.md"]},
-{"id":"R21","requirement":"LaTeX and genuine provenance-bound DOCX paths","implementation":"complete","acceptance":"venue-template-review-required","evidence":["scripts/manuscript_docx.py","schemas/docx-manuscript-metadata.schema.json"]},
-{"id":"R22","requirement":"Six-paper portfolio at least three current JCR Q1 and rest Q2","implementation":"complete","acceptance":"current-jcr-human-verification-required","evidence":["scripts/venue_policy.py","scripts/jcr_verify.py"]},
-{"id":"R23","requirement":"Negative and unfavorable registered results remain locatable","implementation":"complete","acceptance":"per-paper-human-review-required","evidence":["AGENTS.md","scripts/revision_integrity.py"]},
-{"id":"R24","requirement":"Six actual submission-ready doctoral-quality papers","implementation":"workflow-ready","acceptance":"research-not-yet-executed","evidence":["projects/.gitkeep","references/doctoral-q1-readiness.md"]}
-]}
+{
+  "schema_version": "2.0",
+  "updated_at": "2026-10-02",
+  "requirements": [
+    {
+      "id": "R01",
+      "requirement": "GitHub Actions matrix and declared figure/reader dependencies",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        ".github/workflows/validate.yml"
+      ],
+      "tests": [
+        "tests/test_cloud_job.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R02",
+      "requirement": "All user-machine packages and caches under D:\\ad\\lunwen",
+      "implementation": "optional",
+      "acceptance": "optional-not-enabled",
+      "evidence": [
+        "scripts/install-d-drive.ps1",
+        "scripts/bootstrap-d-drive.sh",
+        "scripts/check_env.py"
+      ],
+      "tests": [
+        "tests/test_p0_p1_completion.py"
+      ],
+      "remaining": "Legacy local functionality is outside the cloud-only project and is not a prerequisite."
+    },
+    {
+      "id": "R03",
+      "requirement": "GitHub-hosted Docker isolation and public literature API acceptance",
+      "implementation": "implemented",
+      "acceptance": "live-network-required",
+      "evidence": [
+        "scripts/live_acceptance.py",
+        ".github/workflows/validate.yml"
+      ],
+      "tests": [
+        "tests/test_live_acceptance.py"
+      ],
+      "remaining": "Require passing GitHub Actions Docker and live source receipts; no user machine or WSL is required."
+    },
+    {
+      "id": "R04",
+      "requirement": "Executable PaperQA2 ToolUniverse and ref-verify adapters",
+      "implementation": "partial",
+      "acceptance": "blocked-unmetered",
+      "evidence": [
+        "scripts/ai4science_evidence.py",
+        "scripts/tooluniverse_worker.py",
+        "scripts/ref_verify_adapter.py"
+      ],
+      "tests": [
+        "tests/test_ai4science_evidence.py"
+      ],
+      "remaining": "ref-verify is available; optional PaperQA2 and arbitrary ToolUniverse paid SDK calls remain disabled until every charge is metered. Core evidence uses controlled public APIs."
+    },
+    {
+      "id": "R05",
+      "requirement": "Natural Codex chat routing through Skills and MCP",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        ".mcp.json",
+        "scripts/research_mcp.py"
+      ],
+      "tests": [
+        "tests/test_api_first.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R06",
+      "requirement": "Claude planning/audit only and non-Claude persistent final outputs",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "AGENTS.md",
+        "scripts/output_provenance.py"
+      ],
+      "tests": [
+        "tests/test_output_provenance.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R07",
+      "requirement": "Layered quality/risk/cost routing health filtering and CNY budgets",
+      "implementation": "implemented",
+      "acceptance": "credentials-required",
+      "evidence": [
+        "scripts/task_router.py",
+        "scripts/model_health.py",
+        "scripts/model_runtime.py"
+      ],
+      "tests": [
+        "tests/test_model_runtime.py"
+      ],
+      "remaining": "Configure exact gateway credentials, model IDs and CNY rates, then validate actual usage settlement inside the authorized cumulative tranche."
+    },
+    {
+      "id": "R08",
+      "requirement": "Broad public literature and dataset discovery except Chinese databases",
+      "implementation": "implemented",
+      "acceptance": "live-network-required",
+      "evidence": [
+        "scripts/literature_evidence.py",
+        "scripts/data_discovery.py"
+      ],
+      "tests": [
+        "tests/test_literature_evidence.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R09",
+      "requirement": "Lawful full-text and manual SciencePro or ChatGPT-web import",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/open_fulltext.py",
+        "scripts/sciencepro_import.py",
+        "scripts/concept_illustrations.py"
+      ],
+      "tests": [
+        "tests/test_open_fulltext.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R10",
+      "requirement": "37-family deterministic scientific figure engine",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/publication_figures.py",
+        "scripts/figure_recipes.py"
+      ],
+      "tests": [
+        "tests/test_publication_figures.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R11",
+      "requirement": "Typed editable research diagrams",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/research_diagrams.py",
+        "schemas/research-diagram.schema.json"
+      ],
+      "tests": [
+        "tests/test_new_capabilities.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R12",
+      "requirement": "GPT Image only as disclosed conceptual supplement",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/concept_illustrations.py",
+        "scripts/figure_provenance.py"
+      ],
+      "tests": [
+        "tests/test_figure_provenance.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R13",
+      "requirement": "Protocol dual review multi-report risk-of-bias PRISMA and exports",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/systematic_review.py"
+      ],
+      "tests": [
+        "tests/test_new_capabilities.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R14",
+      "requirement": "Mandatory paper facts theory-measurement argument and full-section audit",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/manuscript_audit.py",
+        "schemas/paper-facts.schema.json"
+      ],
+      "tests": [
+        "tests/test_p0_p1_completion.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R15",
+      "requirement": "Terminology acronym and mathematical-symbol consistency",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/manuscript_audit.py"
+      ],
+      "tests": [
+        "tests/test_p0_p1_completion.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R16",
+      "requirement": "Mandatory reviewer concern cards and editor summary",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/rebuttal_triage.py",
+        "scripts/researchctl.py"
+      ],
+      "tests": [
+        "tests/test_p0_p1_completion.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R17",
+      "requirement": "Read-only Zotero Local API and Obsidian graph",
+      "implementation": "optional",
+      "acceptance": "optional-not-enabled",
+      "evidence": [
+        "scripts/local_library.py"
+      ],
+      "tests": [
+        "tests/test_new_capabilities.py"
+      ],
+      "remaining": "Legacy local functionality is outside the cloud-only project and is not a prerequisite."
+    },
+    {
+      "id": "R18",
+      "requirement": "Skill inventory security lint MCP inventory and token-gated operations",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/skill_catalog.py"
+      ],
+      "tests": [
+        "tests/test_new_capabilities.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R19",
+      "requirement": "Evidence-preserving language and optional detector feedback",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/academic_style.py",
+        "scripts/detector_feedback.py"
+      ],
+      "tests": [
+        "tests/test_academic_style.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R20",
+      "requirement": "Independent implementation without copying restricted Skills",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "references/upstream-components.md"
+      ],
+      "tests": [
+        "tests/test_research_methods.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R21",
+      "requirement": "LaTeX and genuine provenance-bound DOCX paths",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/manuscript_docx.py",
+        "schemas/docx-manuscript-metadata.schema.json"
+      ],
+      "tests": [
+        "tests/test_p0_p1_completion.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R22",
+      "requirement": "Six-paper portfolio at least three current JCR Q1 and rest Q2",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/venue_policy.py",
+        "scripts/jcr_verify.py"
+      ],
+      "tests": [
+        "tests/test_journal_screening.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R23",
+      "requirement": "Negative and unfavorable registered results remain locatable",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "AGENTS.md",
+        "scripts/revision_integrity.py"
+      ],
+      "tests": [
+        "tests/test_revision_controls.py"
+      ],
+      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+    },
+    {
+      "id": "R24",
+      "requirement": "Six actual submission-ready doctoral-quality papers",
+      "implementation": "not-started",
+      "acceptance": "research-not-yet-executed",
+      "evidence": [
+        "projects/.gitkeep",
+        "references/doctoral-q1-readiness.md"
+      ],
+      "tests": [
+        "tests/test_researchctl.py"
+      ],
+      "remaining": "Six real papers need original contributions, registered experiments, valid current JCR evidence, independent review and explicit final human approval before October 7; software tests cannot satisfy this requirement."
+    },
+    {
+      "id": "R25",
+      "requirement": "Restore executable code, metadata, binary results and negative/failed-run evidence across cloud runners",
+      "implementation": "implemented",
+      "acceptance": "verified",
+      "evidence": [
+        "scripts/cloud_checkpoint.py"
+      ],
+      "tests": [
+        "tests/test_cloud_checkpoint.py"
+      ],
+      "remaining": "Synthetic software acceptance passed on two independent cloud runners with 19 exact restored hashes. Real raw data still needs reviewed rehydration and durable storage beyond the 90-day checkpoint retention.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
+    },
+    {
+      "id": "R26",
+      "requirement": "Only the controlled executor can write empirical outputs and experiment records",
+      "implementation": "implemented",
+      "acceptance": "verified",
+      "evidence": [
+        "scripts/artifact_ownership.py"
+      ],
+      "tests": [
+        "tests/test_cloud_readiness_boundaries.py"
+      ],
+      "remaining": "Synthetic Docker mutation denial and author-boundary regressions passed. This does not validate any scientific finding; real G3-approved experiments and human review remain required.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
+    },
+    {
+      "id": "R27",
+      "requirement": "CNY 300 cumulative boundaries, one POST per reservation and durable pre-call budget checkpoint",
+      "implementation": "implemented",
+      "acceptance": "credentials-required",
+      "evidence": [
+        "scripts/model_runtime.py"
+      ],
+      "tests": [
+        "tests/test_cloud_readiness_boundaries.py"
+      ],
+      "remaining": "Actual gateway acceptance is blocked on configured credentials/rates; ambiguous charges require reconciliation rather than retry."
+    },
+    {
+      "id": "R28",
+      "requirement": "Continuous cloud work with bounded repairs and typed human/external blockers",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/cloud_progress.py"
+      ],
+      "tests": [
+        "tests/test_cloud_continuation.py"
+      ],
+      "remaining": "Exercise stalled runs, external input and inspected resume without granting a scientific gate."
+    },
+    {
+      "id": "R29",
+      "requirement": "Equal funded PhD and employment weights with dated primary evidence and separate competition measures",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/direction_evidence.py"
+      ],
+      "tests": [
+        "tests/test_cloud_research_steps.py"
+      ],
+      "remaining": "Populate at least three comparable directions, inspect missingness, eligibility, salary basis, proxies and sensitivity; no fabricated neutral scores."
+    },
+    {
+      "id": "R30",
+      "requirement": "Owner-reviewed data manifests and approved Docker experiments dispatched from the cloud cycle",
+      "implementation": "implemented",
+      "acceptance": "human-review-required",
+      "evidence": [
+        "scripts/cloud_research_steps.py"
+      ],
+      "tests": [
+        "tests/test_cloud_research_steps.py"
+      ],
+      "remaining": "Exact data rights and G3 plan/budget approval are required before actual study execution."
+    },
+    {
+      "id": "R31",
+      "requirement": "Declared cloud dependencies and native DOCX, figures and isolated TeX export",
+      "implementation": "implemented",
+      "acceptance": "verified",
+      "evidence": [
+        "scripts/cloud_runtime.py"
+      ],
+      "tests": [
+        "tests/test_cloud_pipeline_acceptance.py"
+      ],
+      "remaining": "Synthetic native DOCX, PNG/SVG/PDF figures and isolated TeX PDF acceptance passed. Each real final paper still requires provenance checks and named human visual review.",
+      "verification": {
+        "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
+        "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
+      }
+    }
+  ],
+  "execution_mode": "cloud_only"
+}

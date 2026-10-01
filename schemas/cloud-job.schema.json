@@ -3,25 +3,123 @@
   "title": "Owner-requested cloud research job",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "action", "project", "actor", "allow_paid"],
+  "required": [
+    "schema_version",
+    "action",
+    "project",
+    "actor",
+    "allow_paid"
+  ],
   "properties": {
-    "schema_version": {"const": "1.0"},
-    "action": {"enum": ["preflight", "acceptance", "free_jev_probe", "bocha_jev_probe", "init", "status", "authorize_budget", "reconcile_budget", "cycle", "continuation", "paperqa", "tooluniverse"]},
-    "project": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"},
-    "actor": {"type": "string", "minLength": 1, "maxLength": 100},
-    "allow_paid": {"type": "boolean"},
-    "live": {"type": "boolean"},
-    "free_policy_checked_on": {"type": "string", "format": "date"},
-    "new_ceiling_cny": {"type": "integer", "minimum": 300, "multipleOf": 300},
-    "reservation_id": {"type": "string", "pattern": "^[a-f0-9]{32}$"},
-    "actual_cost_cny": {"type": "number", "minimum": 0},
-    "evidence_note": {"type": "string", "minLength": 1, "maxLength": 300},
-    "paper_count": {"type": "integer", "minimum": 1, "maximum": 20},
-    "context": {"type": "string", "maxLength": 4000},
-    "stage": {"enum": ["intake", "topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"]},
-    "corpus": {"type": "string", "maxLength": 250},
-    "question": {"type": "string", "minLength": 1, "maxLength": 2000},
-    "settings": {"enum": ["fast", "medium", "high"]},
-    "request_file": {"type": "string", "maxLength": 250}
+    "schema_version": {
+      "const": "1.0"
+    },
+    "action": {
+      "enum": [
+        "preflight",
+        "acceptance",
+        "free_jev_probe",
+        "bocha_jev_probe",
+        "init",
+        "status",
+        "authorize_budget",
+        "reconcile_budget",
+        "cycle",
+        "continuation",
+        "paperqa",
+        "tooluniverse",
+        "authorize_data",
+        "resume"
+      ]
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$"
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "allow_paid": {
+      "type": "boolean"
+    },
+    "live": {
+      "type": "boolean"
+    },
+    "free_policy_checked_on": {
+      "type": "string",
+      "format": "date"
+    },
+    "new_ceiling_cny": {
+      "type": "integer",
+      "minimum": 300,
+      "multipleOf": 300
+    },
+    "reservation_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{32}$"
+    },
+    "actual_cost_cny": {
+      "type": "number",
+      "minimum": 0
+    },
+    "evidence_note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "paper_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "context": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "stage": {
+      "enum": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ]
+    },
+    "corpus": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "settings": {
+      "enum": [
+        "fast",
+        "medium",
+        "high"
+      ]
+    },
+    "request_file": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "manifest": {
+      "type": "string",
+      "pattern": "^data/manifests/.+\\.json$"
+    },
+    "expected_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "repair_note": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500
+    }
   }
 }

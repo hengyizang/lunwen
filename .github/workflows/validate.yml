@@ -23,6 +23,60 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  cloud-produce:
+    name: Cloud executor and checkpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Execute synthetic negative and failed runs with the real Docker executor
+        run: python -m scripts.cloud_pipeline_acceptance produce --directory artifacts/cloud-pipeline
+      - name: Transfer exact checkpoint to an independent runner
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-pipeline-transfer
+          path: artifacts/cloud-pipeline/transfer/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Preserve failed executor diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-pipeline-producer-failure
+          path: artifacts/cloud-pipeline/
+          if-no-files-found: warn
+          retention-days: 14
+
+  cloud-restore:
+    name: Fresh runner restore and scientific exports
+    needs: cloud-produce
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/download-artifact@v8
+        with:
+          name: cloud-pipeline-transfer
+          path: artifacts/cloud-pipeline/transfer/
+      - name: Restore hashes and test the actual figure, DOCX and isolated TeX toolchain
+        run: python -m scripts.cloud_pipeline_acceptance consume --directory artifacts/cloud-pipeline
+      - name: Preserve acceptance evidence and export fixtures
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-pipeline-acceptance
+          path: artifacts/cloud-pipeline/
+          if-no-files-found: error
+          retention-days: 14
+
   deterministic:
     name: Deterministic checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest

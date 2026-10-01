@@ -78,12 +78,15 @@ def connectivity(transport: Transport = http_json) -> dict:
 
 
 def trial(key: str, policy_checked_on: str, transport: Transport = http_json,
-          today: dt.date | None = None) -> dict:
+          today: dt.date | None = None, *, public_metadata: dict | None = None) -> dict:
     today = today or dt.datetime.now(dt.timezone.utc).date()
     if policy_checked_on != today.isoformat():
         raise ProbeError("the official no-charge Jev policy must be checked again today")
     if not key or len(key) < 8:
         raise ProbeError("BOCHA_JEV_API_KEY is not configured")
+    if public_metadata is not None and (set(public_metadata) != {"title", "description"}
+            or any(not isinstance(v, str) or len(v) > 2000 for v in public_metadata.values())):
+        raise ProbeError("public metadata must contain bounded title and description strings")
     code, models = transport("GET", "/v1/models", None, key)
     if code != 200:
         raise ProbeError(f"authenticated Bocha model query returned HTTP {code}")
@@ -91,7 +94,7 @@ def trial(key: str, policy_checked_on: str, transport: Transport = http_json,
     if not isinstance(entries, list) or MODEL not in [item.get("name") for item in entries if isinstance(item, dict)]:
         raise ProbeError("the exact Bocha Jev model was absent from the authenticated model list")
     request = {"model": MODEL,
-               "state": {"title": "Cloud simulation benchmark catalogue",
+               "state": public_metadata or {"title": "Cloud simulation benchmark catalogue",
                          "description": "A public index of reproducible simulation datasets."},
                "questions": {"triage": {"type": "choice",
                                        "instructions": "Choose a provisional metadata review queue label; do not assert scientific merit.",
@@ -120,7 +123,7 @@ def trial(key: str, policy_checked_on: str, transport: Transport = http_json,
         raise ProbeError("Bocha candidate probabilities are invalid")
     return {"schema_version": "1.0", "provider": "bocha-official", "status": "passed",
             "requested_model": MODEL, "actual_model": result["model"],
-            "public_synthetic_input": True, "model_call_made": True,
+            "public_synthetic_input": public_metadata is None, "model_call_made": True,
             "triage_label": answer["choice"], "input_tokens": usage["input_tokens"],
             "output_tokens": 0, "free_policy_checked_on": policy_checked_on,
             "billing_receipt_available": False,

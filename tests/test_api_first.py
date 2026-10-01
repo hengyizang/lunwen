@@ -566,7 +566,8 @@ class ApiFirstTests(unittest.TestCase):
             with patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
                 side_effect=responses,
-            ) as model_call:
+            ) as model_call, patch.object(api_orchestrator, "discover_context", return_value=json.dumps({
+                "literature": {"receipts": [{"fixture_only": True}], "pending_searches": 0}})):
                 manifest = api_orchestrator.run_cycle(
                     "demo",
                     "topic-intelligence",

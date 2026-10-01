@@ -42,15 +42,20 @@ jobs:
       - name: Run requested cloud job
         id: execute
         env:
+          GH_TOKEN: ${{ github.token }}
           UUAPI_API_KEY: ${{ secrets.UUAPI_API_KEY }}
           UUAPI_BASE_URL: ${{ vars.UUAPI_BASE_URL }}
           UUAPI_ANTHROPIC_MODEL: ${{ vars.UUAPI_ANTHROPIC_MODEL }}
           UUAPI_OPENAI_MODEL: ${{ vars.UUAPI_OPENAI_MODEL }}
           DR_OS_MODEL_PRICING_JSON: ${{ vars.DR_OS_MODEL_PRICING_JSON }}
+          DR_OS_TEX_IMAGE: ${{ vars.DR_OS_TEX_IMAGE }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          DR_OS_TAVILY_CREDIT_CNY: ${{ vars.DR_OS_TAVILY_CREDIT_CNY }}
           UUAPI_STRICT_MODEL_ID: 'true'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BOCHA_JEV_API_KEY: ${{ secrets.BOCHA_JEV_API_KEY }}
+          BOCHA_JEV_FREE_POLICY_CHECKED_ON: ${{ vars.BOCHA_JEV_FREE_POLICY_CHECKED_ON }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
@@ -60,6 +65,14 @@ jobs:
           python -m scripts.cloud_job execute
           --config .runtime/cloud-job.json
           --run-id "$GITHUB_RUN_ID"
+      - name: Preserve hash-bound research checkpoint
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: research-checkpoint-${{ github.run_id }}
+          path: .runtime/checkpoint/checkpoint.zip
+          if-no-files-found: ignore
+          retention-days: 90
       - name: Return the outcome to the requesting issue
         if: always() && steps.job.outcome == 'success'
         env:

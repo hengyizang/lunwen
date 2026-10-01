@@ -349,7 +349,10 @@ def call(
     predicted_input = estimate_tokens(request_text)
     predicted_cost = cost_cny(provider, predicted_input, max_output_tokens, effective_model or None)
     status = budget_status(project_root, paper_id)
-    controlled = model_spend.read(project_root) is not None
+    control = model_spend.read(project_root)
+    controlled = control is not None
+    if control and control["reservations"]:
+        raise ModelBudgetError("billing reconciliation is required before another paid request")
     reserved_cost = cost_cny(provider, max(predicted_input, len(request_text.encode("utf-8")) + 1000), max_output_tokens, effective_model or None) if controlled else predicted_cost
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
@@ -363,6 +366,9 @@ def call(
         )
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
+    if reservation_id:
+        from scripts.cloud_checkpoint import sync_billing
+        sync_billing(project_root)
 
     result = ai_providers.call(
         provider,
