@@ -51,15 +51,26 @@ else:
                  'experiment_budget_sha256':cp.sha(project/'experiments/budget.json')}]})
 
 
+def print_executor_diagnostics(project: Path) -> None:
+    """Keep synthetic executor failures visible even before checkpoint creation."""
+    for receipt in sorted((project / 'experiments/runs').glob('*/run.json')):
+        record = steps.read(receipt)
+        logs = {name: (project / record['logs'][name]).read_text(encoding='utf-8')[-12000:]
+                for name in ('stdout', 'stderr')}
+        print(json.dumps({'executor_receipt': record, 'log_tails': logs}), flush=True)
+
+
 def produce(directory: Path) -> None:
     directory = directory.resolve()
     project = directory/'runner-one'/'acceptance-fixture'
     fixture(project)
     control_hash = cp.sha(project/'state/run.json')
     first = steps.resume_experiments(project)
+    print_executor_diagnostics(project)
     if first.get('blockers') or first.get('pending_runs') != 1:
         raise RuntimeError('first controlled experiment did not succeed: '+json.dumps(first))
     second = steps.resume_experiments(project)
+    print_executor_diagnostics(project)
     if not second.get('blockers') or cp.sha(project/'state/run.json') != control_hash:
         raise RuntimeError('failed attempt or immutable control state was not preserved')
     if '-0.5' not in (project/'results/negative.csv').read_text():
