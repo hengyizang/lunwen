@@ -965,12 +965,12 @@ def create_power_report(
         from statsmodels.stats.power import FTestAnovaPower, NormalIndPower, TTestIndPower, TTestPower  # type: ignore
     except ImportError as exc:
         raise ResearchQualityError(
-            "statsmodels is required; run bash scripts/bootstrap-wsl.sh --with-research-quality-tools"
+            "statsmodels is required; install the declared cloud group with pip install '.[research-quality]'"
         ) from exc
     if statsmodels.__version__ != REVIEWED_STATSMODELS_VERSION:
         raise ResearchQualityError(
             "statsmodels version is not the reviewed target; run "
-            "bash scripts/bootstrap-wsl.sh --with-research-quality-tools"
+            "pip install '.[research-quality]'"
         )
     if method == "ttest_ind":
         per_group = float(TTestIndPower().solve_power(

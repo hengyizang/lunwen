@@ -84,7 +84,7 @@ class ContinuationTests(unittest.TestCase):
                 patch.object(cloud_job, "restore_state", return_value=(self.root / "dummy-worktree", "cloud-state/my-phd")), \
                 patch.object(cloud_job, "persist_state", return_value=[]), patch.object(cloud_job, "git"), \
                 patch.object(cloud_job, "run_command") as transport:
-            self.assertEqual(cloud_job.run_job(request, "test-idle-run"), 0)
+            self.assertEqual(cloud_job.run_job(request, "123456"), 0)
             transport.assert_not_called()
         followup = json.loads((runtime / "continuation-followup.json").read_text())
         self.assertFalse(followup["should_run"])
@@ -169,3 +169,30 @@ class ContinuationTests(unittest.TestCase):
             continuation.enqueue_followup(path)
             self.assertEqual(command.call_args.args[0], ["gh", "api", "--method", "PUT",
                                                         f"repos/{cloud_job.REPOSITORY}/actions/workflows/research-continuation.yml/disable"])
+
+    def test_prose_churn_stops_and_reviewed_resume_does_not_grant_a_gate(self):
+        from scripts import cloud_progress
+        researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[]})
+        with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
+            for index in range(2):
+                before=cloud_progress.snapshot('my-phd')
+                (self.project/'program/topic.md').write_text('Rephrased draft '+str(index))
+                cloud_progress.record('my-phd',before,str(index),0)
+            self.assertEqual(self.decision()['reason'],'no_semantic_progress')
+            continuation.checkpoint('my-phd',self.decision(),'123')
+            status=self.project/continuation.STATUS
+            with self.assertRaises(ValueError):
+                cloud_progress.resume('my-phd','0'*64,'Owner','Inspected the evidence problem','124')
+            cloud_progress.resume('my-phd',continuation._sha(status),'Owner','Inspected the evidence problem','124')
+            self.assertTrue(self.decision()['should_run'])
+        self.assertEqual(researchctl.load_state('my-phd')['approved_gates'],['G0'])
+        self.assertEqual(model_spend.read(self.project)['authorized_ceiling_cny'],300)
+
+    def test_external_blocker_pauses_after_draft_and_new_owner_input_allows_recheck(self):
+        from scripts import cloud_progress
+        before=cloud_progress.snapshot('my-phd')
+        researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[{'kind':'data_rights_review'}]})
+        cloud_progress.record('my-phd',before,'123',0)
+        self.assertEqual(self.decision()['reason'],'external_input_required')
+        researchctl.write_json(self.project/'state/data-authorizations.json',{'manifests':{'fixture':{'actor':'Owner'}}})
+        self.assertTrue(self.decision()['should_run'])

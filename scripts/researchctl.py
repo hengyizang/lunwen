@@ -114,6 +114,8 @@ def gate_errors(slug,gate):
             except ImportError as exc:errors.append(f"intake validator unavailable: {exc}")
         return errors
     if gate=="G1":
+        from scripts.direction_evidence import validate_saved as validate_direction_ranking
+        errors.extend(validate_direction_ranking(project))
         searches=jsonl_objects(project/"evidence"/"search-log.jsonl",errors)
         ai4science_path=project/"evidence"/"ai4science-ledger.jsonl"
         if ai4science_path.is_file() and ai4science_path.read_text(encoding="utf-8").strip():

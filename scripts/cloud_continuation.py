@@ -173,6 +173,10 @@ def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[st
     previous = _object(project / STATUS) if (project / STATUS).is_file() else {}
     if previous.get("last_cycle_exit_code", 0) != 0:
         return {**result, "reason": "previous_cycle_failed_requires_inspection"}
+    from scripts.cloud_progress import pause_reason
+    pause = pause_reason(slug)
+    if pause:
+        return {**result, **pause}
     return {**result, "should_run": True, "reason": "current_stage_work_allowed"}
 
 

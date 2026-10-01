@@ -181,6 +181,21 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         cwd = run.get("cwd", ".")
         if not isinstance(cwd, str) or Path(cwd).is_absolute() or ".." in Path(cwd).parts:
             errors.append(f"{prefix}.cwd must be a relative string")
+    output_owners = {}
+    for run in runs:
+        if not isinstance(run, dict):
+            continue
+        for output in run.get("expected_outputs", []) if isinstance(run.get("expected_outputs"), list) else []:
+            if not isinstance(output, str):
+                continue
+            if any(c in output for c in (",", ":", "\\")):
+                errors.append("output paths cannot contain container mount delimiters")
+            if output in output_owners and output_owners[output] != run.get("run_id"):
+                errors.append("different runs must use distinct output paths to preserve earlier results")
+            output_owners[output] = run.get("run_id")
+        for item in run.get("inputs", []) if isinstance(run.get("inputs"), list) else []:
+            if isinstance(item, dict) and any(c in str(item.get("path", "")) for c in (",", ":", "\\")):
+                errors.append("input paths cannot contain container mount delimiters")
     return errors
 
 
@@ -344,13 +359,23 @@ def execution_command(
     workdir = "/workspace" if relative_cwd == "." else f"/workspace/{relative_cwd}"
     command = [
         isolation["engine"], "run", "--rm", "--network=none", "--read-only",
-        "--tmpfs", "/tmp:rw,nosuid,nodev,noexec", "--security-opt", "no-new-privileges",
-        "-v", f"{project.resolve()}:/workspace:rw", "-w", workdir,
+        "--tmpfs", "/tmp:rw,nosuid,nodev,noexec,size=512m", "--security-opt", "no-new-privileges",
+        "--cap-drop=ALL", "--pids-limit=256", "--cpus=2", "--memory=4g",
+        "-v", f"{project.resolve()}:/workspace:ro", "-w", workdir,
     ]
     for item in run["inputs"]:
         source = resolve_inside(project, item["path"], f"{run['run_id']}.inputs")
         target = f"/workspace/{Path(item['path']).as_posix()}"
         command.extend(["--mount", f"type=bind,src={source},dst={target},readonly"])
+    for value in run["expected_outputs"]:
+        source = resolve_inside(project, value, f"{run['run_id']}.expected_outputs")
+        if "," in str(source) or ":" in value or "\\" in value:
+            raise ExperimentError("container output path contains mount delimiters")
+        source.parent.mkdir(parents=True, exist_ok=True)
+        # Only named output files are writable; the model-authored script cannot
+        # alter approvals, budgets, the registry, code or another result file.
+        source.touch(exist_ok=True)
+        command.extend(["--mount", f"type=bind,src={source},dst=/workspace/{Path(value).as_posix()}"])
     for key in ("RESEARCH_OS_RUN_ID", "RESEARCH_OS_SEED", "PYTHONHASHSEED"):
         command.extend(["-e", f"{key}={environment[key]}"])
     command.extend([isolation["image"], *run["argv"]])
@@ -425,6 +450,16 @@ def run_one(
     attempt_id = f"{run_id}-attempt-{attempt:03d}"
     log_dir = project / "experiments" / "runs" / attempt_id
     log_dir.mkdir(parents=True, exist_ok=False)
+    previous_outputs = []
+    for output in outputs:
+        if output.is_file():
+            old_hash = sha256_file(output)
+            snapshot = log_dir / "previous-outputs" / (old_hash + output.suffix)
+            snapshot.parent.mkdir(parents=True, exist_ok=True)
+            snapshot.write_bytes(output.read_bytes())
+            previous_outputs.append({"path": output.relative_to(project).as_posix(),
+                                     "snapshot_path": snapshot.relative_to(project).as_posix(), "sha256": old_hash})
+            output.unlink()
     started = now()
     monotonic_start = time.monotonic()
     status = "failed"
@@ -496,7 +531,7 @@ def run_one(
     output_records = []
     missing_outputs = []
     for output in outputs:
-        if output.is_file():
+        if output.is_file() and output.stat().st_size > 0:
             output_records.append(
                 {
                     "path": output.relative_to(project).as_posix(),
@@ -542,6 +577,7 @@ def run_one(
         "executor_isolation": isolation,
         "outputs": output_records,
         "missing_outputs": missing_outputs,
+        "preexisting_output_snapshots": previous_outputs,
         "logs": {
             "stdout": (log_dir / "stdout.txt").relative_to(project).as_posix(),
             "stderr": (log_dir / "stderr.txt").relative_to(project).as_posix(),
@@ -557,10 +593,13 @@ def run_one(
     return entry
 
 
-def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None) -> list[dict[str, Any]]:
+def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
+            *, project_root: Path | None = None) -> list[dict[str, Any]]:
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,62}", project_slug):
         raise ExperimentError("Invalid project slug")
-    project = PROJECTS_ROOT / project_slug
+    project = project_root or PROJECTS_ROOT / project_slug
+    if project.name != project_slug or project.is_symlink():
+        raise ExperimentError("project root does not match the requested slug")
     plan_path = project / "experiments" / "plan.json"
     budget_path = project / "experiments" / "budget.json"
     plan, ceiling = approved_plan(project, plan_path, budget_path)

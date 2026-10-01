@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import json
 import os
-import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -59,29 +58,20 @@ def _request(
         headers={**headers, "Content-Type": "application/json"},
         method="POST",
     )
-    last: Exception | None = None
-    for attempt in range(3):
-        try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
-                value = json.loads(response.read().decode("utf-8"))
-                if not isinstance(value, dict):
-                    raise ProviderError("API response was not a JSON object")
-                return value
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode("utf-8", errors="replace")
-            if exc.code in {429, 500, 502, 503, 504} and attempt < 2:
-                time.sleep(2**attempt)
-                continue
-            raise ProviderError(f"API HTTP {exc.code}: {detail[:1000]}") from exc
-        except ProviderError:
-            raise
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-            last = exc
-            if attempt < 2:
-                time.sleep(2**attempt)
-                continue
-            raise ProviderError(f"API request failed: {exc}") from exc
-    raise ProviderError(f"API request failed: {last}")
+    # A generation POST may already be billable when its response is lost.
+    # Neither official/custom gateways nor both protocols share a verified
+    # idempotency contract. One reservation therefore permits ONE transport
+    # attempt. The caller retains it on all ambiguous failures for reconciliation.
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            value = json.loads(response.read().decode("utf-8"))
+            if not isinstance(value, dict):
+                raise ProviderError("API response was not a JSON object; reconcile billing before retry")
+            return value
+    except urllib.error.HTTPError as exc:
+        raise ProviderError(f"API HTTP {exc.code}; no automatic generation retry; reconcile billing") from exc
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise ProviderError("API response unavailable; no automatic generation retry; reconcile billing") from exc
 
 
 def _get_json(

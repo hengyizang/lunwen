@@ -480,12 +480,17 @@ def protected_control_snapshot(
     project: str, extra_paths: list[Path] | None = None
 ) -> dict[str, bytes]:
     root = researchctl.project_dir(project)
+    from scripts.artifact_ownership import executor_snapshot
+    executor_records = executor_snapshot(root)
     paths = [
         root / "state" / "run.json",
         root / "state" / "output-provenance.json",
         root / "reviews" / "decision-log.md",
     ]
     paths.extend(extra_paths or [])
+    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search"):
+        paths.extend(p for p in directory.rglob("*") if p.is_file())
+    paths.append(root / "program/direction-ranking.json")
     paths.extend((root / "evidence" / "source-scopes").glob("*.json"))
     paths.extend(
         root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
@@ -522,18 +527,24 @@ def protected_control_snapshot(
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
         if dirname.is_dir():
             paths.extend(path for path in dirname.rglob("*") if path.is_file())
-    return {
+    return {**executor_records, **{
         path.relative_to(root).as_posix(): path.read_bytes()
         for path in paths
         if path.is_file()
-    }
+    }}
 
 
 def ensure_protected_control_unchanged(
     project: str, before: dict[str, bytes]
 ) -> None:
     root = researchctl.project_dir(project)
+    from scripts.artifact_ownership import executor_snapshot
     protected_roots = (
+        root / "state",
+        root / "evidence/direction-sources",
+        root / "evidence/lead-triage",
+        root / "evidence/web-search",
+        root / "literature/readers",
         root / "reviews" / "independent",
         root / "reviews" / "codex",
     )
@@ -544,6 +555,9 @@ def ensure_protected_control_unchanged(
         for path in directory.rglob("*")
         if path.is_file()
     }
+    current_paths.update(executor_snapshot(root))
+    if (root / "program/direction-ranking.json").is_file():
+        current_paths.add("program/direction-ranking.json")
     current_paths.update(
         relative
         for relative in ("state/run.json", "state/output-provenance.json", "reviews/decision-log.md")

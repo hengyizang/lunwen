@@ -248,7 +248,7 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertEqual(validate_requirements(), [])
         matrix = json.loads((Path(__file__).parents[1] / "config" / "requirements-traceability.json").read_text())
         final = next(row for row in matrix["requirements"] if row["id"] == "R24")
-        self.assertEqual((final["implementation"], final["acceptance"]), ("workflow-ready", "research-not-yet-executed"))
+        self.assertEqual((final["implementation"], final["acceptance"]), ("not-started", "research-not-yet-executed"))
 
 
 if __name__ == "__main__":

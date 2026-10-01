@@ -149,7 +149,7 @@ def _imports() -> tuple[Any, Any, Any]:
     except ImportError as exc:
         raise FigureSpecError(
             "publication figures require matplotlib, numpy and pandas; "
-            "run bootstrap-wsl.sh --with-figures"
+            "install the declared cloud dependency group with pip install '.[figures]'"
         ) from exc
     return plt, np, pd
 
