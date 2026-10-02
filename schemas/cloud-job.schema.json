@@ -29,7 +29,17 @@
         "paperqa",
         "tooluniverse",
         "authorize_data",
-        "resume"
+        "resume",
+        "review_dossier",
+        "ready",
+        "approve",
+        "advance",
+        "reopen",
+        "freeze_preregistration",
+        "confirm_data_quality",
+        "confirm_reproduction",
+        "screen_literature",
+        "confirm_source_scope"
       ]
     },
     "project": {
@@ -120,6 +130,465 @@
       "type": "string",
       "minLength": 10,
       "maxLength": 500
+    },
+    "operation": {
+      "enum": [
+        "ready",
+        "approve",
+        "advance",
+        "reopen",
+        "freeze_preregistration",
+        "confirm_data_quality",
+        "confirm_reproduction",
+        "screen_literature",
+        "confirm_source_scope"
+      ]
+    },
+    "gate": {
+      "enum": [
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5"
+      ]
+    },
+    "paper_id": {
+      "type": "string",
+      "pattern": "^(P[0-9]{2}|all)$"
+    },
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,100}$"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,127}$"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 250
+    },
+    "scope": {
+      "enum": [
+        "full_text",
+        "abstract",
+        "excerpt",
+        "metadata"
+      ]
+    },
+    "note": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "included_work_ids": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "exclusion_reasons": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "ready"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gate",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "approve"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gate",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "advance"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gate",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "reopen"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gate",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "freeze_preregistration"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "paper_id",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "confirm_data_quality"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "dataset_id",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "confirm_reproduction"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "paper_id",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "screen_literature"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "receipt_id",
+          "expected_sha256",
+          "note",
+          "included_work_ids",
+          "exclusion_reasons"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "confirm_source_scope"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "source",
+          "scope",
+          "expected_sha256",
+          "note"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "not": {
+          "required": [
+            "operation"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "review_dossier"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "operation"
+        ],
+        "properties": {
+          "allow_paid": {
+            "const": false
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "ready"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "gate"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "approve"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "gate"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "advance"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "gate"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "reopen"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "gate"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "freeze_preregistration"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "paper_id"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "confirm_data_quality"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "dataset_id"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "confirm_reproduction"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "paper_id"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "screen_literature"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "receipt_id"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "operation": {
+                  "const": "confirm_source_scope"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "source",
+                "scope"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

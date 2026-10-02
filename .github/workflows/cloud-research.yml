@@ -39,6 +39,9 @@ jobs:
       - name: Install pinned research adapters for public acceptance or PaperQA2
         if: steps.job.outputs.action == 'acceptance' || steps.job.outputs.action == 'paperqa' || steps.job.outputs.action == 'tooluniverse'
         run: python -m pip install --disable-pip-version-check '.[ai4science,reference-tools]'
+      - name: Install declared validation tools for human review controls
+        if: contains(fromJSON('["review_dossier","ready","approve","advance","reopen","freeze_preregistration","confirm_data_quality","confirm_reproduction","screen_literature","confirm_source_scope"]'), steps.job.outputs.action)
+        run: python -m pip install --disable-pip-version-check '.[figures,reader,research-quality,reference-tools]'
       - name: Run requested cloud job
         id: execute
         env:
