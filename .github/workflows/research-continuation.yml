@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "check: no model calls; start: continue within the existing owner budget"
+        required: true
+        type: choice
+        default: check
+        options:
+          - check
+          - start
 
 permissions:
   contents: write
@@ -37,6 +46,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           UUAPI_API_KEY: ${{ secrets.UUAPI_API_KEY }}
           UUAPI_BASE_URL: ${{ vars.UUAPI_BASE_URL }}
+          UUAPI_OPENAI_API_KEY: ${{ secrets.UUAPI_OPENAI_API_KEY }}
+          UUAPI_OPENAI_BASE_URL: ${{ vars.UUAPI_OPENAI_BASE_URL }}
+          UUAPI_ANTHROPIC_API_KEY: ${{ secrets.UUAPI_ANTHROPIC_API_KEY }}
+          UUAPI_ANTHROPIC_BASE_URL: ${{ vars.UUAPI_ANTHROPIC_BASE_URL }}
+          UUAPI_OPENAI_PROTOCOL: ${{ vars.UUAPI_OPENAI_PROTOCOL }}
+          UUAPI_OPENAI_CHAT_TOKEN_FIELD: ${{ vars.UUAPI_OPENAI_CHAT_TOKEN_FIELD }}
           UUAPI_ANTHROPIC_MODEL: ${{ vars.UUAPI_ANTHROPIC_MODEL }}
           UUAPI_OPENAI_MODEL: ${{ vars.UUAPI_OPENAI_MODEL }}
           DR_OS_MODEL_PRICING_JSON: ${{ vars.DR_OS_MODEL_PRICING_JSON }}
@@ -73,7 +88,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
       - name: Request the next healthy cycle or stop the completed schedule
-        if: steps.execute.outcome == 'success'
+        if: steps.execute.outcome == 'success' && (github.event_name == 'schedule' || inputs.mode == 'start')
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-

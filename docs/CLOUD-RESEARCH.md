@@ -2,6 +2,7 @@
 
 For owner-confirmed round-the-clock continuation, see
 [Continuous cloud research](CONTINUOUS-CLOUD-RESEARCH.md).
+For shared or separate OpenAI/Claude gateways, see [the cloud startup checklist](GATEWAY-STARTUP.md).
 
 The researcher can start Codex locally and use GitHub Actions for the runtime. The
 cloud runner installs its own dependencies, reads and writes `cloud-state/<project>`,
@@ -57,7 +58,7 @@ a new job is not a new spending approval.
 
 | Action | Extra JSON properties | Effect |
 |---|---|---|
-| `preflight` | none | Check Python and redacted provider configuration. |
+| `preflight` | none | Restore project state and report gateway configuration, budget and continuation readiness; no model call. |
 | `acceptance` | none | Call public literature APIs, run Docker isolation, and check installed adapter versions. No model call. |
 | `free_jev_probe` | none | One fixed, synthetic public-metadata request to OpenRouter `typesafe/jev-router`, only with a dedicated API key capped at USD 0 (BYOK counted). Require zero provider prices, an exact serving model and a zero-cost generation receipt. No research data or scientific gate change. |
 | `init` | `paper_count` (default 6) | Create a six-paper project in its state branch. |
@@ -88,15 +89,21 @@ usage report above the reservation is recorded and blocks further calls if the
 approved ceiling is exceeded. These are estimates, so compare
 them with the gateway bill before a threshold decision. The `cycle` uses
 the current stage stored in `state/run.json`; it refuses a mismatched `stage`
-and stops at a pending human gate. The workflow never invokes `ready`,
-`approve`, `advance`, a publisher login, or submission.
+and stops at a pending human gate. Automatic cycles never invoke `ready`, `approve` or `advance`. Explicit owner
+operations use the separate [hash-bound human controls](CLOUD-HUMAN-CONTROLS.md).
+No workflow performs a publisher login or submission.
 
-For `cycle`, configure GitHub repository secret `UUAPI_API_KEY` and repository
+For a shared gateway, configure GitHub repository secret `UUAPI_API_KEY` and repository
 variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, `UUAPI_OPENAI_MODEL` and
 `DR_OS_MODEL_PRICING_JSON` with the exact model IDs and each model's verified
 CNY input/output rates per million tokens, e.g. an object keyed by exact model
 ID with `input_per_million` and `output_per_million` numbers. Missing rates
-block the paid call. The runner fixes the roles to `uuapi-anthropic` for
+block the paid call. Alternatively configure complete `UUAPI_OPENAI_API_KEY` /
+`UUAPI_OPENAI_BASE_URL` and `UUAPI_ANTHROPIC_API_KEY` /
+`UUAPI_ANTHROPIC_BASE_URL` pairs. Both cloud entry points pass
+`UUAPI_OPENAI_PROTOCOL` and `UUAPI_OPENAI_CHAT_TOKEN_FIELD` to the same validated
+adapter. See [startup](GATEWAY-STARTUP.md) for the non-billable check and immediate
+manual start modes. The runner fixes the roles to `uuapi-anthropic` for
 planning and independent criticism and `uuapi-openai` for persistent writing.
 Strict reported-model checking is enabled. PaperQA2 may require its own
 `OPENAI_API_KEY` secret according to the approved local settings; no key is
@@ -107,8 +114,8 @@ Desktop or the D-drive path works on a Windows computer. It excludes
 quota-consuming SerpApi and unauthenticated Semantic Scholar; failures in the
 remaining public providers are recorded as failures, not silently skipped.
 For reliable OpenAlex calls, put a free OpenAlex key in the repository secret
-`OPENALEX_API_KEY`. It is sent only in the Authorization header. The preflight
-reports whether it is configured without revealing it. A public provider's
+`OPENALEX_API_KEY`. It is sent only in the Authorization header. The key is optional for startup configuration; the literature transport checks
+its own provider configuration before use. A public provider's
 503 or 406 remains a failed acceptance receipt; retry when its service recovers.
 The cloud literature job also passes the optional `LITERATURE_CONTACT_EMAIL`
 secret used by the scheduled acceptance run as provider contact metadata.

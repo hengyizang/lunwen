@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "status": "passed",
+  "scope": "cloud software readiness only; HTTP model responses and discovery are simulated",
+  "scientific_completion_verified": false,
+  "provider_authentication_verified": false,
+  "real_paid_calls": 0,
+  "requirement_ids": [
+    "R34"
+  ],
+  "checked_at": "2026-10-02",
+  "source_commit": "7cbb476a4d339d90894aa59932e310ed6794328a",
+  "tested_merge_commit": "511c2f69d1e9c016cfe7487ead963a7d19176ec2",
+  "source_tree": "64f2ca17b63b45fe576292cdd04952bd95aca3b1",
+  "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/36982917546",
+  "deterministic_validation": {
+    "python_versions": [
+      "3.10",
+      "3.12",
+      "3.13"
+    ],
+    "tests_per_version": 342,
+    "compile": "passed",
+    "repository_validator": "passed",
+    "whitespace": "passed",
+    "windows_syntax": "passed"
+  },
+  "gateway_acceptance": {
+    "schema_version": "1.0",
+    "status": "passed",
+    "real_paid_calls": 0,
+    "source_commit": "511c2f69d1e9c016cfe7487ead963a7d19176ec2",
+    "workflow_run": "36982917546",
+    "scope": "software wiring and budget persistence only; provider transport and discovery are simulated",
+    "scientific_completion_verified": false,
+    "cases": [
+      {
+        "case": "shared-responses",
+        "receipt": "shared-responses/receipt.json",
+        "sha256": "bf525594c3467163a9a43b4eb84efdf0f555d59793ccfd31f36c472f6c5ab7c0",
+        "simulated_calls": 5
+      },
+      {
+        "case": "separate-responses",
+        "receipt": "separate-responses/receipt.json",
+        "sha256": "a765acb2e1d9d1bda41d177b0b6067eadd17aec8a85625bd07f460aae1d10273",
+        "simulated_calls": 5
+      },
+      {
+        "case": "shared-chat-legacy",
+        "receipt": "shared-chat-legacy/receipt.json",
+        "sha256": "1c6faaab10f050ab13e35799e82590513b698b48bb8f4bf2ef9e145e6d124d2a",
+        "simulated_calls": 5
+      },
+      {
+        "case": "separate-chat",
+        "receipt": "separate-chat/receipt.json",
+        "sha256": "06de03c7a8517445fddd11a1f716f44a7f824a2e67d6a12c4f86563b687c32f9",
+        "simulated_calls": 5
+      }
+    ],
+    "artifact_url": "https://github.com/hengyizang/lunwen/actions/runs/36982917546/artifacts/11216606148",
+    "artifact_zip_sha256": "b3f8d45f285abd138ad4599968b777c9aeaccdca6d8afafd3152db10ab1b0c94",
+    "artifact_expires_at": "2026-10-16T08:14:34Z"
+  },
+  "existing_pipeline_regression": {
+    "status": "passed",
+    "artifact_url": "https://github.com/hengyizang/lunwen/actions/runs/36982917546/artifacts/11216576378",
+    "artifact_zip_sha256": "fb392bfeb19b366b45c337e3195da0fb3349aa5d52ed91e64353cae1c719742a"
+  },
+  "remaining": "Supply secrets through the repository secret store, exact model IDs, supported protocols and verified CNY prices. Real authentication, availability and billing remain unverified. No actual my-phd scientific gate or spending authority was changed. CI artifacts expire after 14 days; this receipt preserves hashes and run identity, not all fixture bytes."
+}

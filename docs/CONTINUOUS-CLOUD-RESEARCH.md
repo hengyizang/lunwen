@@ -15,8 +15,8 @@ confirmation time and words, the exact intake SHA-256 and the actual G0 approval
 artifact SHA-256. It cannot grant a spending tranche or approve G1–G5. A changed
 intake, a missing prior approval, a complete current-stage dossier or a stage
 awaiting human approval stops model work. Present that dossier to the owner and
-use the separate human control plane to record their decision. Neither workflow
-invokes `ready`, `approve`, `advance` or submission.
+use the separate human control plane to record their decision. Automatic continuation never invokes `ready`, `approve`, `advance` or submission.
+Explicit owner decisions are recorded through [cloud human controls](CLOUD-HUMAN-CONTROLS.md).
 
 One allowed cycle uses Claude for read-only planning and independent criticism,
 and the configured OpenAI model for persistent authorship. All existing evidence,
@@ -41,11 +41,16 @@ another CNY 300 tranche. See GitHub's primary documentation on
 [concurrency](https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency)
 and [workflow token triggers](https://docs.github.com/en/actions/concepts/security/github_token).
 
-Each wakeup rechecks the five gateway configuration fields, HTTPS endpoint,
-distinct exact writer/critic model IDs and verified positive CNY prices. It does
+Each wakeup resolves the shared or separate gateway key/address pairs, validates
+HTTPS roots, protocol and token-limit field, distinct exact writer/critic model
+IDs and verified positive CNY prices. It does
 not test credentials by making paid requests. Invalid or missing configuration
 produces a successful waiting receipt. An unchanged idle decision does not create
 another state commit. Each run retains redacted logs and tracked results.
+
+The manual workflow offers `check` (default; no model call) and `start` (immediate
+current-stage continuation within existing authority). Scheduled and healthy
+followup jobs explicitly select continuation. See [gateway startup](GATEWAY-STARTUP.md).
 
 ## Spending and pauses
 

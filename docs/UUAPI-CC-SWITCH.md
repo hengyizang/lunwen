@@ -1,5 +1,8 @@
 # UUAPI + CC Switch first run
 
+For cloud-only research, use [Gateway startup](GATEWAY-STARTUP.md). The local
+CC Switch/WSL2 instructions below are a separate optional route.
+
 This integration keeps the Doctoral Research OS control plane and research files
 local. CC Switch manages optional Claude Code/Codex CLI configurations; the
 Python API-first mode calls UUAPI directly. CC Switch does not automatically
@@ -51,7 +54,11 @@ export UUAPI_STRICT_MODEL_ID='true'
 The Python adapter itself calls `/v1/messages`, `/v1/responses`, and
 `/v1/usage`. If the gateway documents only OpenAI-compatible Chat Completions,
 set `UUAPI_OPENAI_PROTOCOL=chat_completions`; the GPT route then uses
-`/v1/chat/completions`. Never put the API key in the URL and never enable a
+`/v1/chat/completions`, with `max_completion_tokens` by default. Set
+`UUAPI_OPENAI_CHAT_TOKEN_FIELD=max_tokens` only for a gateway requiring the old
+field. Complete `UUAPI_OPENAI_API_KEY` / `UUAPI_OPENAI_BASE_URL` and
+`UUAPI_ANTHROPIC_API_KEY` / `UUAPI_ANTHROPIC_BASE_URL` pairs support separate
+providers; partial overrides fail closed. Never put the API key in the URL and never enable a
 silent model fallback.
 
 The runner sends the current project's bounded safe-text snapshot through

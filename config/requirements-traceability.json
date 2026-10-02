@@ -477,6 +477,29 @@
         "path": "docs/acceptance/cloud-human-controls-2026-10-02.json",
         "sha256": "1b7b7307464e8a75f7313d133490565d4f4372bc34d866cd2815f80c96acd5f7"
       }
+    },
+    {
+      "id": "R34",
+      "requirement": "Configure shared or separate OpenAI/Claude gateways and inspect cloud startup readiness without code edits or unapproved calls",
+      "implementation": "implemented",
+      "acceptance": "verified",
+      "evidence": [
+        "scripts/ai_providers.py",
+        "scripts/cloud_continuation.py",
+        "scripts/gateway_acceptance.py",
+        "docs/GATEWAY-STARTUP.md",
+        ".github/workflows/research-continuation.yml"
+      ],
+      "tests": [
+        "tests/test_uuapi_provider.py",
+        "tests/test_cloud_continuation.py",
+        "tests/test_cloud_readiness_boundaries.py"
+      ],
+      "remaining": "Cloud software acceptance passed for shared/separate gateways and both OpenAI protocols, including durable reservations and unchanged human gates. Actual provider authentication and billing require owner credentials, exact model IDs and verified CNY prices; no scientific completion is established.",
+      "verification": {
+        "path": "docs/acceptance/gateway-startup-2026-10-02.json",
+        "sha256": "9032859166b9c7178c426c54ebb23aaf6673c980a5ba2b737ec797281a8afcfe"
+      }
     }
   ],
   "execution_mode": "cloud_only"
