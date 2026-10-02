@@ -177,14 +177,17 @@ def dossier(value: dict) -> dict:
         and not item["path"].startswith(("api_runs/", ".cache/"))
     ]
     # Bind the exact implementation too; an upgrade requires a new human review.
-    controller = Path(__file__).resolve().parent
-    implementation = {name: cp.sha(controller / name) for name in
-                      ("cloud_human_controls.py", "cloud_job.py", "researchctl.py", "research_quality.py",
-                       "literature_evidence.py", "source_scope.py")}
+    repository = Path(__file__).resolve().parents[1]
+    implementation_paths = sorted(
+        [*repository.joinpath("scripts").rglob("*.py"), *repository.joinpath("schemas").glob("*.json"),
+         *repository.joinpath("config").glob("*.json"), *repository.joinpath(".github/workflows").glob("*.yml")]
+    )
+    implementation = {p.relative_to(repository).as_posix(): cp.sha(p) for p in implementation_paths}
     snapshot = {"schema_version": "1.0", "project": value["project"], "operation": operation,
                 "actor": value["actor"], "selectors": {k: value[k] for k in sorted(SELECTORS[operation])},
                 "state": {"stage": state["stage"], "gate": state["gate"], "status": state["status"],
                           "active_paper": state["active_paper"]},
+                "gate_artifact_sha256": researchctl.artifact_hash(value["project"], state["gate"]) if state["gate"] else None,
                 "implementation": implementation, "files": sorted(files, key=lambda item: item["path"])}
     digest = hashlib.sha256(json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     try:

@@ -45,6 +45,18 @@ class CloudHumanControlTests(unittest.TestCase):
         self.assertEqual(first["review_sha256"], second["review_sha256"])
         self.assertEqual(researchctl.load_state(self.project.name)["approved_gates"], [])
 
+    def test_internal_audit_change_invalidates_review_even_if_not_listed(self):
+        audit = self.project / "api_runs/internal-audit.json"
+        audit.parent.mkdir()
+        audit.write_text('{"synthetic_audit": "first"}', encoding="utf-8")
+        before = acceptance.review("ready", gate="G0")
+        audit.write_text('{"synthetic_audit": "changed"}', encoding="utf-8")
+        after = acceptance.review("ready", gate="G0")
+        self.assertNotEqual(before["review_sha256"], after["review_sha256"])
+        with self.assertRaisesRegex(controls.HumanControlError, "changed"):
+            controls.execute(self.request("ready", gate="G0", expected_sha256=before["review_sha256"],
+                             note="Review the synthetic gate including its internal audit."), "20")
+
     def test_real_gate_sequence_and_stale_decision_rejection(self):
         old = acceptance.review("ready", gate="G0")
         job = self.request("ready", gate="G0", expected_sha256=old["review_sha256"],

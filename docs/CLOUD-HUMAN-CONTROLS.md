@@ -20,7 +20,7 @@ Create an issue in this repository from the owner's GitHub account. Its title mu
 }
 ```
 
-The issue's Actions result returns `human-control-receipt.json`, an exact `review_sha256`, the current stage/gate/paper, blockers, file hashes and the implementation hashes. Inspect the actual evidence in the tracked-results snapshot and checkpoint, not just the digest. The dossier itself records no decision. Public artifacts must contain only checkpoint-safe evidence with appropriate distribution rights.
+The issue's Actions result returns `human-control-receipt.json`, an exact `review_sha256`, the current stage/gate/paper, blockers, file hashes and the script/schema/configuration/workflow hashes. The original gate artifact digest also binds internal audit files omitted from the displayed inventory. Inspect the actual evidence in the tracked-results snapshot and checkpoint, not just the digest. The dossier itself records no decision. Public artifacts must contain only checkpoint-safe evidence with appropriate distribution rights.
 
 ## Record the decision
 
