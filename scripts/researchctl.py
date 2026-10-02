@@ -531,6 +531,7 @@ def approve(args):
     approval={"gate":gate,"actor":args.actor.strip(),"at":now(),"note":args.note,"artifact_sha256":current_hash}
     if gate=="G3":
         p=project_dir(args.project);approval["experiment_plan_sha256"]=file_sha256(p/"experiments/plan.json");approval["experiment_budget_sha256"]=file_sha256(p/"experiments/budget.json")
+        approval["frozen_protocol_sha256"]={path.relative_to(p).as_posix():file_sha256(path) for path in sorted((p/"papers").glob("P[0-9][0-9]/preregistration.json"))}
     key=gate
     if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(args.project,state["active_paper"]);key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)

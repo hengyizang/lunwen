@@ -44,9 +44,13 @@ else:
                      'expected_outputs':['results/'+output]})
     steps.write(project/'experiments/plan.json', {'schema_version':'1.0','status':'ready_for_review','runs':runs})
     steps.write(project/'experiments/budget.json', {'schema_version':'1.0','status':'ready_for_review','hard_ceiling_usd':0})
+    steps.write(project/'papers/P01/experiment-evidence-plan.json', {'synthetic_control_fixture_only':True})
+    steps.write(project/'papers/P01/preregistration.json', {'status':'frozen','files':[
+        {'path':'papers/P01/experiment-evidence-plan.json','sha256':cp.sha(project/'papers/P01/experiment-evidence-plan.json')}]})
     steps.write(project/'state/run.json', {'stage':'experiment-execution','gate':'G4','status':'awaiting_work',
                  'active_paper':'P01','synthetic_acceptance_only':True,'approvals':[{'gate':'G3',
                  'actor':'synthetic fixture, not a project approval',
+                 'frozen_protocol_sha256':{'papers/P01/preregistration.json':cp.sha(project/'papers/P01/preregistration.json')},
                  'experiment_plan_sha256':cp.sha(project/'experiments/plan.json'),
                  'experiment_budget_sha256':cp.sha(project/'experiments/budget.json')}]})
 

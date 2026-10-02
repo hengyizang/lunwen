@@ -220,6 +220,14 @@ def before_cycle(project: Path, stage: str) -> dict:
             # One real attempt/checkpoint per job; only analyze once all planned
             # runs have completed. A failed attempt is retained and never retried.
             report["control_only"] = bool(report["experiments"].get("executed_attempt") or report["blockers"])
+            if not report["control_only"] and report["experiments"].get("pending_runs") == 0:
+                from scripts.experiment_evidence import refresh
+                report["statistical_evidence"] = refresh(project)
+                for paper, evidence in report["statistical_evidence"].items():
+                    if evidence["status"] != "complete":
+                        report["blockers"].append({"kind": "experiment_inspection", "paper_id": paper,
+                                                   "detail": evidence["errors"]})
+                report["control_only"] = bool(report["blockers"])
         from scripts.research_quality import refresh_runtime_evidence_catalog
         refresh_runtime_evidence_catalog(project)
     write(project / REPORT, report)

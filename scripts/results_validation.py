@@ -187,6 +187,7 @@ def validate_claim_evidence(
     successful_runs = {
         str(item.get("run_id")) for item in registry if item.get("status") == "succeeded"
     }
+    evidence_cache: dict[str, tuple] = {}
     for index, row in enumerate(rows, 2):
         claim_id = (row.get("claim_id") or "").strip()
         if not claim_id:
@@ -209,6 +210,32 @@ def validate_claim_evidence(
         unknown = sorted(analysis_ids - known_runs)
         if unknown:
             errors.append(f"row {index}: unknown analysis_ids: {', '.join(unknown)}")
+        wrong_paper = {r["run_id"] for r in registry if r.get("run_id") in analysis_ids
+                       and r.get("paper_id") != row.get("paper_id")}
+        if wrong_paper:
+            errors.append(f"row {index}: analysis_ids belong to a different paper")
+        paper_id = expected.get(claim_id)
+        if paper_id and (project / "papers" / paper_id / "experiment-evidence-plan.json").is_file():
+            from scripts import experiment_evidence as evidence
+            if paper_id not in evidence_cache:
+                validation = evidence.validate_report(project, paper_id)
+                report = evidence.build_report(project, paper_id)
+                evidence_cache[paper_id] = (validation, report)
+            validation, report = evidence_cache[paper_id]
+            errors.extend(f"row {index}: {issue}" for issue in validation)
+            linked = [c for c in report["comparisons"] if claim_id in c["claim_ids"]]
+            required_comparisons = {c["comparison_id"] for c in linked}
+            if not required_comparisons or _ids(row.get("comparison_ids")) != required_comparisons:
+                errors.append(f"row {index}: comparison_ids must include every preregistered comparison for this claim")
+            source_runs = {source["run_id"] for comp in linked for source in comp.get("sources", [])}
+            if not source_runs <= analysis_ids:
+                errors.append(f"row {index}: analysis_ids omit registered comparison sources")
+            confirmatory = [c for c in linked if c["analysis_phase"] == "confirmatory"]
+            supported = [c for c in confirmatory if c.get("decision") == "meets_preregistered_threshold"]
+            if support == "supported" and (not confirmatory or len(supported) != len(confirmatory)):
+                errors.append(f"row {index}: supported claim does not meet every confirmatory threshold")
+            if support == "partially_supported" and not any(c["role"] == "primary" for c in supported):
+                errors.append(f"row {index}: partial support needs a passing confirmatory primary comparison")
         if support in {"supported", "partially_supported"} and not (analysis_ids & successful_runs):
             errors.append(f"row {index}: supported claim needs a successful referenced run")
     missing = sorted(set(expected) - seen)

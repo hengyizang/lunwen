@@ -500,6 +500,22 @@
         "path": "docs/acceptance/gateway-startup-2026-10-02.json",
         "sha256": "9032859166b9c7178c426c54ebb23aaf6673c980a5ba2b737ec797281a8afcfe"
       }
+    },
+    {
+      "id": "R35",
+      "requirement": "Executable preregistered claim comparisons, pilot dependencies, independent-unit statistics and calibrated evidence claims",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/experiment_evidence.py",
+        "scripts/experiment_runner.py",
+        "scripts/results_validation.py",
+        "docs/EXPERIMENT-EVIDENCE.md"
+      ],
+      "tests": [
+        "tests/test_experiment_evidence.py"
+      ],
+      "remaining": "Cloud software acceptance is pending. Real study validity, method suitability, novelty, human G3/G4 approval and doctoral/Q1 merit remain unverified."
     }
   ],
   "execution_mode": "cloud_only"

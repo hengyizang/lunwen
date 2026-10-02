@@ -1387,6 +1387,7 @@ def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
         project / "experiments" / "budget.json",
         contract,
         power,
+        project / "papers" / paper_id / "experiment-evidence-plan.json",
     ]
     try:
         contract_value = _load_json(contract)
@@ -2069,6 +2070,7 @@ def refresh_runtime_evidence_catalog(project: Path) -> Path:
 
 
 def validate_g3_quality(project: Path) -> list[str]:
+    from scripts.experiment_evidence import validate_plan as validate_evidence_plan
     errors: list[str] = []
     manifests = _manifest_map(project)
     for dataset_id in sorted(manifests):
@@ -2101,6 +2103,7 @@ def validate_g3_quality(project: Path) -> list[str]:
                     )
                 )
     for paper_id in _paper_ids(project):
+        errors.extend(f"{paper_id}/experiment-evidence-plan.json: {e}" for e in validate_evidence_plan(project, paper_id))
         power_path = project / "papers" / paper_id / "power-analysis.json"
         prereg_path = project / "papers" / paper_id / "preregistration.json"
         if not power_path.is_file():
@@ -2129,9 +2132,11 @@ def validate_g3_quality(project: Path) -> list[str]:
 
 
 def validate_g4_quality(project: Path) -> list[str]:
+    from scripts.experiment_evidence import validate_report
     errors: list[str] = []
     registry = _registry(project)
     for paper_id in _paper_ids(project):
+        errors.extend(f"{paper_id}/experiment-evidence.json: {e}" for e in validate_report(project, paper_id))
         prereg_path = project / "papers" / paper_id / "preregistration.json"
         if prereg_path.is_file():
             try:

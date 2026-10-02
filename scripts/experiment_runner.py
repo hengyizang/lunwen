@@ -181,6 +181,20 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         cwd = run.get("cwd", ".")
         if not isinstance(cwd, str) or Path(cwd).is_absolute() or ".." in Path(cwd).parts:
             errors.append(f"{prefix}.cwd must be a relative string")
+    earlier: dict[str, str] = {}
+    for run in runs:
+        if not isinstance(run, dict):
+            continue
+        parents = run.get("depends_on", [])
+        if (not isinstance(parents, list) or any(not isinstance(p, str) for p in parents)
+                or len(set(parents)) != len(parents)):
+            errors.append("depends_on must be a unique string array")
+        else:
+            for parent in parents:
+                if parent not in earlier or earlier[parent] != run.get("paper_id"):
+                    errors.append("dependencies must name earlier runs of the same paper")
+        if isinstance(run.get("run_id"), str):
+            earlier[run["run_id"]] = run.get("paper_id")
     output_owners = {}
     for run in runs:
         if not isinstance(run, dict):
@@ -234,6 +248,22 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
     errors = validate_plan(plan)
     if errors:
         raise ExperimentError("; ".join(errors))
+    frozen = approval.get("frozen_protocol_sha256")
+    required = {f"papers/{run['paper_id']}/preregistration.json" for run in plan["runs"]}
+    if not isinstance(frozen, dict) or not required <= set(frozen):
+        raise ExperimentError("G3 approval has no frozen protocol hashes; review and approve G3 again")
+    for relative in sorted(required):
+        path = resolve_inside(project, relative, "frozen protocol")
+        if not path.is_file() or sha256_file(path) != frozen[relative]:
+            raise ExperimentError("Frozen protocol changed after G3 approval")
+        protocol = read_json(path)
+        files = protocol.get("files")
+        if protocol.get("status") != "frozen" or not isinstance(files, list) or not files:
+            raise ExperimentError("Frozen protocol has no locked inputs")
+        for item in files:
+            locked = resolve_inside(project, item["path"], "preregistered input")
+            if not locked.is_file() or sha256_file(locked) != item.get("sha256"):
+                raise ExperimentError("Preregistered input changed after G3 approval")
     return plan, budget_ceiling(read_json(budget_path))
 
 
@@ -420,9 +450,35 @@ def prior_estimated_cost(registry: Path) -> float:
     return total
 
 
+def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: str) -> None:
+    """Check immutable successful receipts before any dependent process starts."""
+    parents = run.get("depends_on", [])
+    if not parents:
+        return
+    records = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines()
+               if line.strip()] if registry.is_file() else []
+    for parent in parents:
+        attempts = [r for r in records if r.get("run_id") == parent]
+        if len(attempts) != 1:
+            raise ExperimentError(f"Dependency {parent} needs exactly one inspected successful attempt")
+        receipt = attempts[0]
+        if (receipt.get("status") != "succeeded" or receipt.get("paper_id") != run["paper_id"]
+                or receipt.get("approved_plan_sha256") != plan_sha256
+                or not receipt.get("input_integrity", {}).get("passed")):
+            raise ExperimentError(f"Dependency {parent} did not succeed under the approved plan")
+        path = resolve_inside(project, f"experiments/runs/{receipt['attempt_id']}/run.json", "dependency receipt")
+        if not path.is_file() or read_json(path) != receipt or not receipt.get("outputs"):
+            raise ExperimentError(f"Dependency {parent} has no matching executor receipt")
+        for item in receipt["outputs"]:
+            path = resolve_inside(project, item["path"], "dependency output")
+            if not path.is_file() or sha256_file(path) != item["sha256"]:
+                raise ExperimentError(f"Dependency {parent} output changed")
+
+
 def run_one(
     project: Path, run: dict[str, Any], registry: Path, plan_sha256: str
 ) -> dict[str, Any]:
+    verify_dependencies(project, run, registry, plan_sha256)
     run_id = run["run_id"]
     cwd = resolve_inside(project, run.get("cwd", "."), f"{run_id}.cwd")
     if not cwd.is_dir():

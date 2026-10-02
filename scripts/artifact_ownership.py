@@ -21,6 +21,11 @@ def declared_outputs(root: Path) -> set[str]:
             state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
             if state.get("stage") in {"experiment-execution", "writing-and-review", "submission-ready"}:
                 values.update({"experiments/plan.json", "experiments/budget.json"})
+                for prereg in (root / "papers").glob("P[0-9][0-9]/preregistration.json"):
+                    values.add(prereg.relative_to(root).as_posix())
+                    frozen = json.loads(prereg.read_text(encoding="utf-8"))
+                    values.update(item["path"] for item in frozen.get("files", [])
+                                  if isinstance(item, dict) and isinstance(item.get("path"), str))
                 values.update(item["path"] for run in value.get("runs", []) for item in run.get("inputs", [])
                               if isinstance(item, dict) and isinstance(item.get("path"), str))
         except (ValueError, TypeError, AttributeError):
@@ -41,6 +46,8 @@ def declared_outputs(root: Path) -> set[str]:
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     return (value in EXECUTOR_FILES
+            or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
+                and value.endswith("/experiment-evidence.json"))
             or any(value == prefix or value.startswith(prefix + "/") for prefix in EXECUTOR_ROOTS)
             or value in (declared_outputs(root) if outputs is None else outputs))
 

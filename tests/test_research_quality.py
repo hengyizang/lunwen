@@ -145,6 +145,7 @@ class ResearchQualityTests(unittest.TestCase):
             json.dumps({"status": "ready_for_review", "hard_ceiling_usd": 10}),
             encoding="utf-8",
         )
+        (project / "papers/P01/experiment-evidence-plan.json").write_text('{"synthetic_freeze_fixture_only": true}', encoding="utf-8")
         return project
 
     def test_data_quality_report_is_local_and_hash_bound(self) -> None:
