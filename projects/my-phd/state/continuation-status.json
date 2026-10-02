@@ -10,12 +10,10 @@
   "spent_cny": 0.0,
   "remaining_cny": 300.0,
   "configuration_errors": [
-    "missing UUAPI_API_KEY",
-    "missing UUAPI_BASE_URL",
-    "missing UUAPI_ANTHROPIC_MODEL",
-    "missing UUAPI_OPENAI_MODEL",
+    "UUAPI_BASE_URL is not configured; supply the exact HTTPS root or /v1 base; UUAPI_API_KEY is not configured; UUAPI_OPENAI_MODEL is not configured",
+    "UUAPI_BASE_URL is not configured; supply the exact HTTPS root or /v1 base; UUAPI_API_KEY is not configured; UUAPI_ANTHROPIC_MODEL is not configured",
     "missing DR_OS_MODEL_PRICING_JSON"
   ],
-  "changed_at": "2026-09-30T18:27:02+00:00",
-  "source_run_id": "36758633209"
+  "changed_at": "2026-10-02T15:58:47+00:00",
+  "source_run_id": "37030738912"
 }
