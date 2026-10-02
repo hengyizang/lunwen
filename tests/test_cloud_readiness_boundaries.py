@@ -84,6 +84,7 @@ class CloudReadinessBoundaries(unittest.TestCase):
         from tests.test_uuapi_provider import FakeResponse
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
+            model_spend.write(project, model_spend.initial())
             model_spend.grant(project, new_ceiling_cny=300, actor="Fixture", run_id="grant")
             env = {"UUAPI_OPENAI_API_KEY": "fixture-writer-key",
                    "UUAPI_OPENAI_BASE_URL": "https://writer.example.invalid",
@@ -106,6 +107,7 @@ class CloudReadinessBoundaries(unittest.TestCase):
         from tests.test_uuapi_provider import FakeResponse
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
+            model_spend.write(project, model_spend.initial())
             model_spend.grant(project, new_ceiling_cny=300, actor="Fixture", run_id="grant")
             env = {"UUAPI_OPENAI_API_KEY": "fixture-writer-key",
                    "UUAPI_OPENAI_BASE_URL": "https://writer.example.invalid",

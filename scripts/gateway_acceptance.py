@@ -118,6 +118,7 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
         write(project / "state/run.json", state)
         (root / "config").mkdir()
         shutil.copyfile(ROOT / "config/stages.json", root / "config/stages.json")
+        model_spend.write(project, model_spend.initial())
         model_spend.grant(project, new_ceiling_cny=300, actor="Synthetic fixture owner", run_id="fixture-grant")
         authority_before = model_spend.read(project)["authorization_events"]
         state_before = (project / "state/run.json").read_bytes()
@@ -247,6 +248,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory", type=Path, required=True)
     args = parser.parse_args()
+    write(args.directory / "acceptance.json", {
+        "status": "incomplete", "scope": "synthetic software acceptance",
+        "real_paid_calls": 0, "scientific_completion_verified": False})
     cases = []
     for name, separate, protocol, field in (
         ("shared-responses", False, "responses", "max_completion_tokens"),
