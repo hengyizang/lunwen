@@ -116,7 +116,7 @@ def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False)
         "baselines": [{"id": c} for c, role in CONDITIONS if role == "primary"],
         "ablations": ["remove-component"], "negative_controls": ["null-control"],
         "robustness_checks": ["shift", "noise"],
-        "metrics": {"primary": [{"name": "synthetic_score"}], "secondary": []},
+        "metrics": {"primary": [{"name": "synthetic_score", "direction": "higher"}], "secondary": []},
         "data_protocol": {"datasets": ["synthetic-only"]},
     })
     # A synthetic design-side lower bound tests matching, not real study power.

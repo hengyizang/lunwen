@@ -148,13 +148,18 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         if role == "primary":
             coverage[design_id]["hypotheses"].add(comp["hypothesis_id"])
             for claim in assigned_claims:
-                claim_baselines[(design_id, claim)].add(comparator)
+                claim_baselines[(design_id, comp["hypothesis_id"], claim)].add(comparator)
         for key in ("metric", "analysis_unit", "independence_rationale", "assumptions", "rationale", "sample_size_rationale", "population_scope"):
             text(comp.get(key), key)
         metrics = design.get("metrics", {})
         names = {m.get("name") for m in metrics.get("primary", []) if isinstance(m, dict)}
         names |= set(metrics.get("secondary", []))
         need(comp["metric"] in names, "comparison metric is absent from the design")
+        primary_metric = next((m for m in metrics.get("primary", []) if m.get("name") == comp["metric"]), None)
+        if primary_metric is not None:
+            need(primary_metric.get("direction") in {"higher", "lower"}
+                 and primary_metric["direction"] == comp.get("direction"),
+                 "comparison direction must match the primary metric in the design")
         need(comp.get("dataset_id") in design.get("data_protocol", {}).get("datasets", []),
              "comparison dataset is absent from the design")
         need(comp.get("direction") in {"higher", "lower"}, "metric direction must be higher or lower")
@@ -226,9 +231,9 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         group = coverage[design_id]
         baseline_ids = {item["id"] for item in design.get("baselines", [])}
         need(group["primary"] == baseline_ids, f"{design_id}: primary comparisons must cover exactly all declared baselines")
-        for (covered_design, claim), baselines in claim_baselines.items():
+        for (covered_design, hypothesis, claim), baselines in claim_baselines.items():
             if covered_design == design_id:
-                need(baselines == baseline_ids, f"{claim}: primary evidence must include every declared baseline")
+                need(baselines == baseline_ids, f"{claim}/{hypothesis}: primary evidence must include every declared baseline")
         need(group["hypotheses"] == set(design.get("hypothesis_ids", [])),
              f"{design_id}: primary comparisons must cover all hypotheses")
         for role, field in (("ablation", "ablations"), ("negative_control", "negative_controls"), ("robustness", "robustness_checks")):

@@ -82,6 +82,10 @@ class ExperimentEvidenceTests(unittest.TestCase):
         self.assertAlmostEqual(row["ci_low"], -.963243161, places=7)
         self.assertAlmostEqual(row["ci_high"], 2.963243161, places=7)
 
+    def test_metric_direction_cannot_reverse_the_design(self):
+        self.protocol["comparisons"][0]["direction"] = "lower"
+        self.assert_plan_error("direction must match")
+
     def test_missing_baseline_is_blocked(self):
         self.protocol["comparisons"].pop(0)
         self.assert_plan_error("all declared baselines")
