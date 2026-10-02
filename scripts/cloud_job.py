@@ -15,13 +15,14 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 try:
-    from scripts import cloud_checkpoint, cloud_continuation, model_runtime, model_spend, researchctl
+    from scripts import cloud_checkpoint, cloud_continuation, cloud_human_controls, model_runtime, model_spend, researchctl
 except ImportError:
     import researchctl  # type: ignore
     import cloud_checkpoint  # type: ignore
     import model_spend  # type: ignore
     import cloud_continuation  # type: ignore
     import model_runtime  # type: ignore
+    import cloud_human_controls  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = ROOT / ".runtime"
@@ -33,6 +34,9 @@ BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```
 PAID = {"cycle", "continuation", "paperqa", "tooluniverse"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
+    "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope"},
+    **{action: fields | cloud_human_controls.DECISIONS.get(action, set()) | {"expected_sha256", "note"}
+       for action, fields in cloud_human_controls.SELECTORS.items()},
     "preflight": set(), "acceptance": set(), "free_jev_probe": set(),
     "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count"},
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
@@ -83,6 +87,16 @@ def validate_request(value: object) -> dict:
         raise CloudJobError("actor must name the human requester")
     if type(value["allow_paid"]) is not bool or value["allow_paid"] != (action in PAID):
         raise CloudJobError("billable actions require allow_paid=true; non-billable actions require false")
+    if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
+        try:
+            operation = cloud_human_controls.validate_fields(value)
+            allowed = cloud_human_controls.SELECTORS[operation]
+            if action != "review_dossier":
+                allowed = allowed | {"expected_sha256", "note"} | cloud_human_controls.DECISIONS.get(operation, set())
+            elif set(value) - COMMON - allowed - {"operation"}:
+                raise CloudJobError("dossier selectors must match the requested human operation")
+        except (cloud_human_controls.HumanControlError, cloud_checkpoint.CheckpointError) as exc:
+            raise CloudJobError(str(exc)) from exc
     if action == "authorize_budget" and (type(value.get("new_ceiling_cny")) is not int or value["new_ceiling_cny"] <= 0 or value["new_ceiling_cny"] % model_spend.STEP_CNY):
         raise CloudJobError("new_ceiling_cny must be a positive CNY 300 tranche boundary")
     if action == "reconcile_budget":
@@ -246,11 +260,11 @@ def run_job(job: dict, run_id: str) -> int:
     continuation_decision = None
     progress_before = None
     try:
-        if action in {"init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", *PAID}:
+        if action in {"init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
             os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
             os.environ["DR_OS_STATE_BRANCH"] = branch
-            if action in {"status", "cycle", "continuation"}:
+            if action in {"status", "cycle", "continuation", "review_dossier", *cloud_human_controls.ACTIONS}:
                 from scripts.cloud_research_steps import acquire_data
                 acquire_data(ROOT / "projects" / slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
@@ -300,7 +314,18 @@ def run_job(job: dict, run_id: str) -> int:
         else:
             if not project_exists:
                 raise CloudJobError("project does not exist; create it with init first")
-            if action == "status":
+            if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
+                result = cloud_human_controls.execute(job, run_id)
+                (ARTIFACT / "human-control-receipt.json").write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                logs.append(json.dumps(result, ensure_ascii=False, indent=2))
+                if action == "review_dossier":
+                    detail = (f"Review SHA-256: `{result['review_sha256']}`. "
+                              f"Blockers: {len(result['blockers'])}. No human decision was recorded.\n\n")
+                else:
+                    detail = f"Recorded explicit owner operation `{action}`; no paid model call was made.\n\n"
+                cmd = None
+            elif action == "status":
                 cmd = ["scripts/researchctl.py", "status", "--project", slug, "--json"]
             elif action == "authorize_budget":
                 state = model_spend.grant(ROOT / "projects" / slug, new_ceiling_cny=job["new_ceiling_cny"],
@@ -415,7 +440,7 @@ def run_job(job: dict, run_id: str) -> int:
                    f"{detail}"
                    f"[GitHub Actions run](https://github.com/{REPOSITORY}/actions/runs/{run_id}) · "
                    f"State branch (when used): `cloud-state/{slug}` · Changed files: {len(changed)}.\n\n"
-                   "The run artifact contains redacted logs and tracked results. Human scientific gates remain pending.\n")
+                   "The run artifact contains redacted logs and tracked results. Only explicit human decisions grant gates; software receipts do not establish scientific completion.\n")
         (RUNTIME / "cloud-summary.md").write_text(summary, encoding="utf-8")
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as output:

@@ -29,7 +29,7 @@ For the current stage:
 6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
 7. Run `gate-check`, then `ready`.
 8. Present a concise gate dossier to the human and stop.
-9. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage.
+9. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage. Cloud-only projects use separate hash-bound owner issues for `ready`, `approve` and `advance`, as described in [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md); a scheduled continuation never supplies the human decision.
 
 `scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never invokes `approve`. At G5 it works only on `state.active_paper`; an approved `advance` marks that paper ready and selects the next paper until all configured papers are complete.
 

@@ -438,6 +438,37 @@
         "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
         "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
       }
+    },
+    {
+      "id": "R32",
+      "requirement": "Cloud-only owner gate review, ready, approval, advance and reopening with exact reviewed hashes",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/cloud_human_controls.py",
+        "scripts/cloud_job.py",
+        "docs/CLOUD-HUMAN-CONTROLS.md",
+        ".github/workflows/validate.yml"
+      ],
+      "tests": [
+        "tests/test_cloud_human_controls.py"
+      ],
+      "remaining": "Verify synthetic cloud acceptance on the exact merge. Actual G0-G5 decisions remain human and evidence dependent; no provider credentials or scientific completion are inferred."
+    },
+    {
+      "id": "R33",
+      "requirement": "Protected cloud human confirmations and all-paper preregistration freeze before any experiment attempt",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/cloud_human_controls.py",
+        "scripts/research_quality.py",
+        "scripts/cloud_human_acceptance.py"
+      ],
+      "tests": [
+        "tests/test_cloud_human_controls.py"
+      ],
+      "remaining": "Verify scoped synthetic confirmation/freeze acceptance. Real data quality, reproduction, primary-source screening and supplied-source scope require exact human review; real experiments and final packages remain unverified."
     }
   ],
   "execution_mode": "cloud_only"
