@@ -99,6 +99,26 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  gateway-startup:
+    name: Gateway startup and five-role cycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Exercise production routing and durable budgets with synthetic HTTP
+        run: python -m scripts.gateway_acceptance --directory artifacts/gateway-startup
+      - name: Preserve gateway software acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: gateway-startup-acceptance
+          path: artifacts/gateway-startup/
+          if-no-files-found: error
+          retention-days: 14
+
   deterministic:
     name: Deterministic checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest

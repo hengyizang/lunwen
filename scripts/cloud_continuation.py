@@ -16,11 +16,11 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
-from urllib.parse import urlsplit
 
 try:
-    from scripts import intake_validation, model_runtime, model_spend, researchctl
+    from scripts import ai_providers, intake_validation, model_runtime, model_spend, researchctl
 except ImportError:
+    import ai_providers  # type: ignore
     import intake_validation  # type: ignore
     import model_runtime  # type: ignore
     import model_spend  # type: ignore
@@ -28,8 +28,7 @@ except ImportError:
 
 POLICY = Path("state/continuation.json")
 STATUS = Path("state/continuation-status.json")
-CONFIG = ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL",
-          "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON")
+CONFIG = ("UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON")
 POLICY_FIELDS = {"schema_version", "enabled", "actor", "confirmed_at", "confirmation_note",
                  "system_execution_hours_per_day", "resume_interval_minutes", "constraints_sha256",
                  "g0_approval_artifact_sha256", "stop_when"}
@@ -54,33 +53,83 @@ def _sha(path: Path) -> str:
 
 
 def configuration_errors(environment: Mapping[str, str]) -> list[str]:
-    """Return bounded labels only, never key values or an endpoint URL."""
-    missing = [name for name in CONFIG if not environment.get(name, "").strip()]
-    if missing:
-        return ["missing " + name for name in missing]
+    """Use the same resolver as transport; return labels without secret values."""
+    errors: list[str] = []
+    providers = [ai_providers.configuration(provider, environment)
+                 for provider in ("uuapi-openai", "uuapi-anthropic")]
+    for provider in providers:
+        if provider["configuration_error"]:
+            errors.append(provider["configuration_error"])
+        if not provider["strict_model_id"]:
+            errors.append("cloud execution requires UUAPI_STRICT_MODEL_ID=true")
+    models = [provider["model"] for provider in providers]
+    if all(models) and models[0] == models[1]:
+        errors.append("author and critic must use distinct exact model IDs")
+    if not environment.get("DR_OS_MODEL_PRICING_JSON", "").strip():
+        errors.append("missing DR_OS_MODEL_PRICING_JSON")
+    else:
+        try:
+            rates = json.loads(environment["DR_OS_MODEL_PRICING_JSON"])
+            if not isinstance(rates, dict):
+                raise ValueError("not an object")
+            for model in models:
+                price = rates.get(model)
+                if not isinstance(price, dict):
+                    raise ValueError("missing exact model price")
+                for key in ("input_per_million", "output_per_million"):
+                    number = price.get(key)
+                    if (not isinstance(number, (int, float)) or isinstance(number, bool)
+                            or not math.isfinite(number) or number <= 0):
+                        raise ValueError("invalid price")
+        except (ValueError, TypeError, KeyError):
+            errors.append("DR_OS_MODEL_PRICING_JSON needs positive finite CNY input/output prices for both exact model IDs")
+    return list(dict.fromkeys(errors))
+
+
+def startup_report(slug: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
+    """Non-billable inspection of configuration and the restored project.
+
+    No provider request, model probe, gate mutation, or new spending grant occurs.
+    Authentication, balance and real response quality require a later authorized run.
+    """
+    env = os.environ if environment is None else environment
+    errors = configuration_errors(env)
+    report: dict[str, Any] = {
+        "schema_version": "1.0", "project": slug, "paid_calls": 0,
+        "configuration_ready": not errors, "configuration_errors": errors,
+        "providers": [ai_providers.configuration(provider, env)
+                      for provider in ("uuapi-openai", "uuapi-anthropic")],
+        "ready_to_continue": False, "provider_authentication_verified": False,
+        "scientific_completion_verified": False,
+        "next_action": "Configure missing fields, then rerun the non-billable check.",
+    }
+    project = researchctl.project_dir(slug)
+    if not (project / "state/run.json").is_file():
+        report["continuation"] = {"should_run": False, "reason": "project_not_initialized"}
+        return report
     try:
-        url = urlsplit(environment["UUAPI_BASE_URL"])
-        if (url.scheme != "https" or not url.hostname or url.username or url.password
-                or url.query or url.fragment):
-            return ["gateway must be HTTPS without URL credentials, query or fragment"]
-        models = [environment[name].strip() for name in ("UUAPI_OPENAI_MODEL", "UUAPI_ANTHROPIC_MODEL")]
-        if models[0] == models[1]:
-            return ["author and critic must use distinct exact model IDs"]
-        rates = json.loads(environment["DR_OS_MODEL_PRICING_JSON"])
-        if not isinstance(rates, dict):
-            raise ValueError("not an object")
-        for model in models:
-            price = rates.get(model)
-            if not isinstance(price, dict):
-                raise ValueError("missing exact model price")
-            for key in ("input_per_million", "output_per_million"):
-                number = price.get(key)
-                if (not isinstance(number, (int, float)) or isinstance(number, bool)
-                        or not math.isfinite(number) or number <= 0):
-                    raise ValueError("invalid price")
-    except (ValueError, TypeError, KeyError):
-        return ["exact model CNY prices and a valid HTTPS gateway configuration are required"]
-    return []
+        state = researchctl.load_state(slug)
+        report["current_state"] = {key: state.get(key) for key in ("stage", "gate", "status", "active_paper")}
+        control = model_spend.read(project, required=True)
+        assert control is not None
+        report["budget"] = {
+            "authorized_ceiling_cny": control["authorized_ceiling_cny"],
+            "spent_cny": control["spent_cny"],
+            "reserved_cny": model_spend.reserved(control),
+            "remaining_cny": round(control["authorized_ceiling_cny"] - control["spent_cny"]
+                                   - model_spend.reserved(control), 8),
+        }
+        decision = evaluate(slug, env)
+    except (RuntimeError, ValueError, OSError, KeyError, TypeError):
+        decision = {"should_run": False, "reason": "project_control_validation_failed"}
+    report["continuation"] = decision
+    report["ready_to_continue"] = not errors and decision["should_run"]
+    if report["ready_to_continue"]:
+        report["next_action"] = ("Run the start mode to begin an authorized cloud cycle. "
+                                 "Each request reserves budget before transport; real authentication is not yet verified.")
+    elif not errors:
+        report["next_action"] = "Resolve the reported project, human-review or budget blocker; configuration alone does not grant authority."
+    return report
 
 
 def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
@@ -211,8 +260,12 @@ def scheduled_request(event: dict[str, Any], environment: Mapping[str, str]) -> 
     if (environment["GITHUB_EVENT_NAME"] == "workflow_dispatch"
             and (event.get("sender") or {}).get("id") not in {cloud_job.OWNER_ID, 41898282}):
         raise ContinuationError("manual wakeup must come from the owner or the workflow bot")
-    return cloud_job.validate_request({"schema_version": "1.0", "action": "continuation",
-                                      "project": "my-phd", "actor": "Hengyi Zang", "allow_paid": True})
+    mode = "start" if environment["GITHUB_EVENT_NAME"] == "schedule" else (event.get("inputs") or {}).get("mode", "check")
+    if mode not in {"check", "start"}:
+        raise ContinuationError("manual mode must be check or start")
+    action = "preflight" if mode == "check" else "continuation"
+    return cloud_job.validate_request({"schema_version": "1.0", "action": action,
+                                      "project": "my-phd", "actor": "Hengyi Zang", "allow_paid": mode == "start"})
 
 
 def enqueue_followup(path: Path) -> int:
@@ -232,7 +285,7 @@ def enqueue_followup(path: Path) -> int:
         print("Continuation paused: " + str(value.get("reason", "unknown")))
         return 0
     return subprocess.run(["gh", "workflow", "run", "research-continuation.yml", "--ref", "main",
-                           "--repo", cloud_job.REPOSITORY], check=False).returncode
+                           "--repo", cloud_job.REPOSITORY, "-f", "mode=start"], check=False).returncode
 
 
 def main() -> int:

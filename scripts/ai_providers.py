@@ -12,7 +12,7 @@ import os
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Mapping
 from urllib.parse import urlsplit, urlunsplit
 
 
@@ -183,57 +183,86 @@ def provider_family(provider: str) -> str:
     raise ProviderError(f"Unknown provider: {provider}")
 
 
-def _validated_https_root(raw: str) -> str:
-    parsed = urlsplit(raw.strip())
-    if parsed.scheme != "https" or not parsed.hostname:
-        raise ProviderError("UUAPI_BASE_URL must be a valid HTTPS URL")
+def _validated_https_root(raw: str, name: str = "UUAPI_BASE_URL") -> str:
+    # Validate before normalization: urlsplit silently strips some whitespace.
+    if any(ch.isspace() or ord(ch) < 32 for ch in raw.strip()):
+        raise ProviderError(f"{name} must be a valid HTTPS root")
+    try:
+        parsed = urlsplit(raw.strip())
+        port = parsed.port
+    except ValueError as exc:
+        raise ProviderError(f"{name} must be a valid HTTPS root") from exc
+    if parsed.scheme != "https" or not parsed.hostname or port == 0:
+        raise ProviderError(f"{name} must be a valid HTTPS URL")
     if parsed.username or parsed.password or parsed.query or parsed.fragment:
-        raise ProviderError(
-            "UUAPI_BASE_URL must not contain credentials, query or fragment"
-        )
+        raise ProviderError(f"{name} must not contain credentials, query or fragment")
     path = parsed.path.rstrip("/")
+    if path.endswith(("/responses", "/chat/completions", "/messages", "/usage")):
+        raise ProviderError(f"{name} needs the HTTPS root or /v1 base, not a full API endpoint")
     if path.endswith("/v1"):
         path = path[:-3]
     return urlunsplit((parsed.scheme, parsed.netloc, path.rstrip("/"), "", ""))
 
 
-def _uuapi_root() -> str:
-    value = os.environ.get("UUAPI_BASE_URL")
+def _uuapi_setting_names(provider: str | None, environment: Mapping[str, str]) -> tuple[str, str]:
+    if provider in {"uuapi-openai", "uuapi-anthropic"}:
+        prefix = "UUAPI_OPENAI" if provider == "uuapi-openai" else "UUAPI_ANTHROPIC"
+        names = (f"{prefix}_API_KEY", f"{prefix}_BASE_URL")
+        # An override is an atomic pair. Never send a shared key to a new host
+        # (or a new key to the old host) because one half was left empty.
+        if any(environment.get(name, "").strip() for name in names):
+            return names
+    return "UUAPI_API_KEY", "UUAPI_BASE_URL"
+
+
+def _uuapi_root(provider: str | None = None, environment: Mapping[str, str] | None = None) -> str:
+    env = os.environ if environment is None else environment
+    _, name = _uuapi_setting_names(provider, env)
+    value = env.get(name, "").strip()
     if not value:
-        raise ProviderError(
-            "UUAPI_BASE_URL is not configured; copy the exact HTTPS root from "
-            "your UUAPI dashboard"
-        )
-    return _validated_https_root(value)
+        raise ProviderError(f"{name} is not configured; supply the exact HTTPS root or /v1 base")
+    return _validated_https_root(value, name)
 
 
-def _uuapi_endpoint(path: str) -> str:
-    return f"{_uuapi_root()}/v1/{path.lstrip('/')}"
+def _uuapi_endpoint(path: str, provider: str | None = None,
+                    environment: Mapping[str, str] | None = None) -> str:
+    return f"{_uuapi_root(provider, environment)}/v1/{path.lstrip('/')}"
 
 
-def _uuapi_key() -> str:
-    key = os.environ.get("UUAPI_API_KEY")
+def _uuapi_key(provider: str | None = None, environment: Mapping[str, str] | None = None) -> str:
+    env = os.environ if environment is None else environment
+    name, _ = _uuapi_setting_names(provider, env)
+    key = env.get(name, "").strip()
     if not key:
-        raise ProviderError("UUAPI_API_KEY is not configured")
+        raise ProviderError(f"{name} is not configured")
+    if any(ch.isspace() or ord(ch) < 32 for ch in key):
+        raise ProviderError(f"{name} must not contain whitespace")
     return key
 
 
+def _openai_protocol(environment: Mapping[str, str]) -> tuple[str, str]:
+    protocol = (environment.get("UUAPI_OPENAI_PROTOCOL") or "responses").strip().lower()
+    field = (environment.get("UUAPI_OPENAI_CHAT_TOKEN_FIELD") or "max_completion_tokens").strip()
+    if protocol not in {"responses", "chat_completions"}:
+        raise ProviderError("UUAPI_OPENAI_PROTOCOL must be responses or chat_completions")
+    if field not in {"max_completion_tokens", "max_tokens"}:
+        raise ProviderError("UUAPI_OPENAI_CHAT_TOKEN_FIELD must be max_completion_tokens or max_tokens")
+    return protocol, field
+
+
 def _uuapi_headers(protocol: str) -> dict[str, str]:
-    key = _uuapi_key()
+    provider = "uuapi-anthropic" if protocol == "anthropic_messages" else "uuapi-openai"
+    key = _uuapi_key(provider)
     if protocol == "anthropic_messages":
         return {
             "Authorization": f"Bearer {key}",
             "x-api-key": key,
-            "anthropic-version": os.environ.get(
-                "UUAPI_ANTHROPIC_VERSION", "2023-06-01"
-            ),
-            "User-Agent": os.environ.get(
-                "UUAPI_ANTHROPIC_USER_AGENT", UUAPI_ANTHROPIC_UA
-            ),
+            "anthropic-version": os.environ.get("UUAPI_ANTHROPIC_VERSION") or "2023-06-01",
+            "User-Agent": os.environ.get("UUAPI_ANTHROPIC_USER_AGENT") or UUAPI_ANTHROPIC_UA,
         }
     return {
         "Authorization": f"Bearer {key}",
-        "User-Agent": os.environ.get("UUAPI_OPENAI_USER_AGENT", UUAPI_OPENAI_UA),
+        "User-Agent": os.environ.get("UUAPI_OPENAI_USER_AGENT") or UUAPI_OPENAI_UA,
     }
 
 
@@ -339,14 +368,10 @@ def call_uuapi_openai(
     max_output_tokens: int = 8000,
     timeout: int = 180,
 ) -> ModelResult:
-    model = model or os.environ.get("UUAPI_OPENAI_MODEL")
+    model = model or os.environ.get("UUAPI_OPENAI_MODEL", "").strip()
     if not model:
         raise ProviderError("UUAPI_OPENAI_MODEL is not configured")
-    protocol = os.environ.get("UUAPI_OPENAI_PROTOCOL", "responses").strip().lower()
-    if protocol not in {"responses", "chat_completions"}:
-        raise ProviderError(
-            "UUAPI_OPENAI_PROTOCOL must be responses or chat_completions"
-        )
+    protocol, token_field = _openai_protocol(os.environ)
     if protocol == "chat_completions":
         messages: list[dict[str, str]] = []
         if system:
@@ -355,9 +380,9 @@ def call_uuapi_openai(
         payload: dict[str, Any] = {
             "model": model,
             "messages": messages,
-            "max_tokens": max_output_tokens,
+            token_field: max_output_tokens,
         }
-        endpoint = _uuapi_endpoint("chat/completions")
+        endpoint = _uuapi_endpoint("chat/completions", "uuapi-openai")
         audit_protocol = "openai_chat_completions"
     else:
         content: Any = prompt
@@ -372,7 +397,7 @@ def call_uuapi_openai(
             "max_output_tokens": max_output_tokens,
             "store": False,
         }
-        endpoint = _uuapi_endpoint("responses")
+        endpoint = _uuapi_endpoint("responses", "uuapi-openai")
         audit_protocol = "openai_responses"
     data = _request(
         endpoint,
@@ -403,7 +428,7 @@ def call_uuapi_anthropic(
     max_output_tokens: int = 8000,
     timeout: int = 180,
 ) -> ModelResult:
-    model = model or os.environ.get("UUAPI_ANTHROPIC_MODEL")
+    model = model or os.environ.get("UUAPI_ANTHROPIC_MODEL", "").strip()
     if not model:
         raise ProviderError("UUAPI_ANTHROPIC_MODEL is not configured")
     payload: dict[str, Any] = {
@@ -413,7 +438,7 @@ def call_uuapi_anthropic(
     }
     if system:
         payload["system"] = system
-    endpoint = _uuapi_endpoint("messages")
+    endpoint = _uuapi_endpoint("messages", "uuapi-anthropic")
     data = _request(
         endpoint,
         _uuapi_headers("anthropic_messages"),
@@ -448,17 +473,18 @@ def uuapi_usage(timeout: int = 30) -> dict[str, Any]:
     )
 
 
-def configuration(provider: str) -> dict[str, Any]:
+def configuration(provider: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
     """Describe configuration without exposing credentials."""
 
+    env = os.environ if environment is None else environment
     if provider == "openai":
         return {
             "provider": provider,
-            "configured": bool(os.environ.get("OPENAI_API_KEY")),
-            "model": os.environ.get("OPENAI_MODEL", "gpt-5.6"),
+            "configured": bool(env.get("OPENAI_API_KEY")),
+            "model": env.get("OPENAI_MODEL", "gpt-5.6"),
             "protocol": "openai_responses",
             "endpoint": _safe_endpoint_for_audit(
-                os.environ.get(
+                env.get(
                     "OPENAI_BASE_URL", "https://api.openai.com/v1/responses"
                 )
             ),
@@ -467,63 +493,58 @@ def configuration(provider: str) -> dict[str, Any]:
         return {
             "provider": provider,
             "configured": bool(
-                os.environ.get("ANTHROPIC_API_KEY")
-                and os.environ.get("ANTHROPIC_MODEL")
+                env.get("ANTHROPIC_API_KEY")
+                and env.get("ANTHROPIC_MODEL")
             ),
-            "model": os.environ.get("ANTHROPIC_MODEL"),
+            "model": env.get("ANTHROPIC_MODEL"),
             "protocol": "anthropic_messages",
             "endpoint": _safe_endpoint_for_audit(
-                os.environ.get(
+                env.get(
                     "ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1/messages"
                 )
             ),
         }
     if provider in {"uuapi-openai", "uuapi-anthropic"}:
-        model_key = (
-            "UUAPI_OPENAI_MODEL"
-            if provider == "uuapi-openai"
-            else "UUAPI_ANTHROPIC_MODEL"
-        )
-        openai_protocol = os.environ.get("UUAPI_OPENAI_PROTOCOL", "responses").strip().lower()
-        if provider == "uuapi-openai":
-            if openai_protocol not in {"responses", "chat_completions"}:
-                path = "responses"
-                protocol_error = "UUAPI_OPENAI_PROTOCOL must be responses or chat_completions"
-            else:
-                path = "chat/completions" if openai_protocol == "chat_completions" else "responses"
-                protocol_error = None
-        else:
-            path = "messages"
-            protocol_error = None
+        model_key = "UUAPI_OPENAI_MODEL" if provider == "uuapi-openai" else "UUAPI_ANTHROPIC_MODEL"
+        key_name, base_name = _uuapi_setting_names(provider, env)
+        errors: list[str] = []
         endpoint: str | None = None
-        endpoint_error: str | None = None
+        token_field: str | None = None
+        protocol = "anthropic_messages"
+        path = "messages"
+        if provider == "uuapi-openai":
+            try:
+                selected, token_field = _openai_protocol(env)
+                path = "chat/completions" if selected == "chat_completions" else "responses"
+                protocol = "openai_chat_completions" if selected == "chat_completions" else "openai_responses"
+                if selected == "responses":
+                    token_field = "max_output_tokens"
+            except ProviderError as exc:
+                errors.append(str(exc))
         try:
-            endpoint = _uuapi_endpoint(path)
+            endpoint = _uuapi_endpoint(path, provider, env)
         except ProviderError as exc:
-            endpoint_error = str(exc)
-        endpoint_error = protocol_error or endpoint_error
-        audit_protocol = (
-            "openai_chat_completions"
-            if provider == "uuapi-openai" and openai_protocol == "chat_completions"
-            else "openai_responses"
-            if provider == "uuapi-openai"
-            else "anthropic_messages"
-        )
+            errors.append(str(exc))
+        try:
+            _uuapi_key(provider, env)
+        except ProviderError as exc:
+            errors.append(str(exc))
+        model = env.get(model_key, "").strip()
+        if not model:
+            errors.append(f"{model_key} is not configured")
+        elif any(ch.isspace() or ord(ch) < 32 for ch in model):
+            errors.append(f"{model_key} must be an exact model ID without whitespace")
         return {
             "provider": provider,
-            "configured": bool(
-                os.environ.get("UUAPI_API_KEY")
-                and os.environ.get("UUAPI_BASE_URL")
-                and os.environ.get(model_key)
-                and not endpoint_error
-            ),
-            "model": os.environ.get(model_key),
-            "protocol": audit_protocol,
+            "configured": not errors,
+            "model": model,
+            "protocol": protocol,
             "endpoint": endpoint,
-            "configuration_error": endpoint_error,
-            "strict_model_id": os.environ.get(
-                "UUAPI_STRICT_MODEL_ID", "true"
-            ).lower()
+            "max_tokens_field": token_field if provider == "uuapi-openai" else "max_tokens",
+            "key_setting": key_name,
+            "base_setting": base_name,
+            "configuration_error": "; ".join(errors) or None,
+            "strict_model_id": (env.get("UUAPI_STRICT_MODEL_ID") or "true").strip().lower()
             not in {"0", "false", "no"},
         }
     raise ProviderError(f"Unknown provider: {provider}")

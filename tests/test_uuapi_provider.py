@@ -89,6 +89,68 @@ class UuapiProviderTests(unittest.TestCase):
         self.assertEqual(result.text, "OK")
         self.assertEqual(result.protocol, "openai_chat_completions")
 
+    def test_separate_gateway_pairs_never_cross_send_credentials(self) -> None:
+        environment = {**self.environment(),
+                       "UUAPI_OPENAI_API_KEY": "fixture-writer-secret",
+                       "UUAPI_OPENAI_BASE_URL": "https://writer.example/api/v1/",
+                       "UUAPI_ANTHROPIC_API_KEY": "fixture-critic-secret",
+                       "UUAPI_ANTHROPIC_BASE_URL": "https://critic.example"}
+        captured = []
+        def transport(request, timeout=0):
+            captured.append(request)
+            model = json.loads(request.data)["model"]
+            return FakeResponse({"model": model, "output_text": "OK",
+                                 "content": [{"type": "text", "text": "OK"}]})
+        with patch.dict(os.environ, environment, clear=True), patch(
+                "scripts.ai_providers.urllib.request.urlopen", side_effect=transport):
+            ai_providers.call("uuapi-openai", "writer")
+            ai_providers.call("uuapi-anthropic", "critic")
+            descriptions = [ai_providers.configuration(p) for p in ("uuapi-openai", "uuapi-anthropic")]
+        self.assertEqual([r.full_url for r in captured],
+                         ["https://writer.example/api/v1/responses", "https://critic.example/v1/messages"])
+        for request, key in zip(captured, ("fixture-writer-secret", "fixture-critic-secret")):
+            headers = {k.lower(): v for k, v in request.header_items()}
+            self.assertEqual(headers["authorization"], "Bearer " + key)
+            if "x-api-key" in headers:
+                self.assertEqual(headers["x-api-key"], key)
+        for key in ("fixture-writer-secret", "fixture-critic-secret", "sk-test-not-real"):
+            self.assertNotIn(key, json.dumps(descriptions))
+
+    def test_partial_override_never_falls_back_to_a_shared_secret_or_host(self) -> None:
+        for setting, value in (("UUAPI_OPENAI_BASE_URL", "https://different.example"),
+                               ("UUAPI_OPENAI_API_KEY", "different-fixture-secret")):
+            with patch.dict(os.environ, {**self.environment(), setting: value}, clear=True), patch(
+                    "scripts.ai_providers.urllib.request.urlopen") as transport:
+                self.assertFalse(ai_providers.configuration("uuapi-openai")["configured"])
+                with self.assertRaises(ai_providers.ProviderError):
+                    ai_providers.call("uuapi-openai", "must not be sent")
+                transport.assert_not_called()
+
+    def test_chat_token_limit_supports_explicit_legacy_field_without_retry(self) -> None:
+        for field in ("max_completion_tokens", "max_tokens"):
+            with patch.dict(os.environ, {**self.environment(), "UUAPI_OPENAI_PROTOCOL": "chat_completions",
+                                         "UUAPI_OPENAI_CHAT_TOKEN_FIELD": field}, clear=True), patch(
+                    "scripts.ai_providers.urllib.request.urlopen",
+                    return_value=FakeResponse({"model": "gpt-test", "choices": [{"message": {"content": "OK"}}]})) as transport:
+                ai_providers.call("uuapi-openai", "fixture", max_output_tokens=123)
+                payload = json.loads(transport.call_args.args[0].data)
+                self.assertEqual(payload[field], 123)
+                self.assertNotIn("max_tokens" if field == "max_completion_tokens" else "max_completion_tokens", payload)
+                transport.assert_called_once()
+
+    def test_full_endpoint_invalid_port_and_empty_workflow_defaults(self) -> None:
+        for base in ("https://gateway.example/v1/responses", "https://gateway.example/v1/messages",
+                     "https://gateway.example/v1/chat/completions", "https://gateway.example:bad",
+                     "https://gate way.example", "https://gateway.example:0"):
+            with patch.dict(os.environ, {**self.environment(), "UUAPI_BASE_URL": base}, clear=True):
+                self.assertFalse(ai_providers.configuration("uuapi-openai")["configured"])
+        with patch.dict(os.environ, {**self.environment(), "UUAPI_OPENAI_PROTOCOL": "",
+                                     "UUAPI_OPENAI_CHAT_TOKEN_FIELD": ""}, clear=True):
+            config = ai_providers.configuration("uuapi-openai")
+            self.assertTrue(config["configured"])
+            self.assertEqual(config["protocol"], "openai_responses")
+            self.assertEqual(config["max_tokens_field"], "max_output_tokens")
+
     def test_anthropic_messages_endpoint_and_headers(self) -> None:
         captured: list[object] = []
 

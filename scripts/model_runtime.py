@@ -250,6 +250,7 @@ def _cache_key(
         "provider": provider,
         "model": model or configuration.get("model"),
         "protocol": configuration.get("protocol"),
+        "max_tokens_field": configuration.get("max_tokens_field"),
         "endpoint": configuration.get("endpoint"),
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "system_sha256": hashlib.sha256((system or "").encode("utf-8")).hexdigest(),

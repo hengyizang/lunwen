@@ -260,7 +260,7 @@ def run_job(job: dict, run_id: str) -> int:
     continuation_decision = None
     progress_before = None
     try:
-        if action in {"init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
+        if action in {"preflight", "init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
             os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
             os.environ["DR_OS_STATE_BRANCH"] = branch
@@ -269,10 +269,16 @@ def run_job(job: dict, run_id: str) -> int:
                 acquire_data(ROOT / "projects" / slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         if action == "preflight":
-            output = {"repository": REPOSITORY, "project": slug, "configured": {
-                name: bool(os.environ.get(name)) for name in ("UUAPI_API_KEY", "UUAPI_BASE_URL", "UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON", "OPENAI_API_KEY", "OPENROUTER_API_KEY", "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "LITERATURE_CONTACT_EMAIL")},
-                "python": sys.version.split()[0], "cloud_runtime": True}
+            output = cloud_continuation.startup_report(slug)
+            output.update(repository=REPOSITORY, python=sys.version.split()[0], cloud_runtime=True)
+            (ARTIFACT / "gateway-startup.json").write_text(
+                json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             logs.append(json.dumps(output, ensure_ascii=False, indent=2))
+            detail = (f"Configuration ready: **{output['configuration_ready']}** · "
+                      f"Ready to continue: **{output['ready_to_continue']}** · Model calls: **0**.\n\n"
+                      + output["next_action"] + "\n\n")
+            if output["configuration_errors"]:
+                detail += "\n".join("- " + error for error in output["configuration_errors"]) + "\n\n"
         elif action == "acceptance":
             from packaging.version import Version
             versions = {name: importlib.metadata.version(name) for name in ("paper-qa", "tooluniverse", "ref-verify")}
@@ -458,8 +464,9 @@ def cycle_command(job: dict, slug: str) -> list[str]:
     control = model_spend.read(ROOT / "projects" / slug, required=True)
     if not control or control["authorized_ceiling_cny"] <= 0:
         raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
-    if any(not os.environ.get(name) for name in cloud_continuation.CONFIG):
-        raise CloudJobError("UUAPI gateway key, base URL, exact model IDs and CNY pricing must be configured")
+    errors = cloud_continuation.configuration_errors(os.environ)
+    if errors:
+        raise CloudJobError("Gateway configuration pending: " + "; ".join(errors))
     state = researchctl.load_state(slug)
     if state["status"] in {"awaiting_approval", "approved"} or state["gate"] is None:
         raise CloudJobError("current gate requires human review or is already approved")

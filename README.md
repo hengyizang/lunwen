@@ -4,6 +4,8 @@
 
 通过 Codex 管理仓库所有者授权的 GitHub 云端作业。GitHub Actions 完成依赖安装、受控文献检索、许可确认后的数据获取、G3 批准后的 Docker 实验、检查点恢复和论文导出。API 费用复用已批准的累计 300 元额度，在 600/900 元等下一额度边界才请求追加授权。持续运行会在人工科研审核、外部资料或费用对账阻塞处暂停；不会反复付费空转。
 
+中转站密钥到位后的配置清单、免费启动检查和立即启动入口见 [`docs/GATEWAY-STARTUP.md`](docs/GATEWAY-STARTUP.md)，支持 OpenAI 与 Claude 使用独立地址和密钥。
+
 入口与配置见 [`docs/CLOUD-RESEARCH.md`](docs/CLOUD-RESEARCH.md)，本轮修复、验收与仍需真实配置的项目见 [`docs/CLOUD-READINESS-REPAIRS-2026-10-01.md`](docs/CLOUD-READINESS-REPAIRS-2026-10-01.md)，模型可请求的云端操作见 [`references/cloud-operations.md`](references/cloud-operations.md)。下面的 D 盘/WSL2 安装是可选旧入口，不是本项目的前置条件。
 
 新增的 37 类科研绘图、类型化研究架构图、协议/双人筛选/偏倚风险/PRISMA 导出、Zotero Local API 与 Obsidian 图、本地 PDF/PPT、paper-facts/测量/段落/符号审查、审稿 concern cards 与编辑摘要、健康感知分层模型路由、真实 DOCX 和独立 Skill/MCP 管理，见 [`docs/NEW-CAPABILITIES.md`](docs/NEW-CAPABILITIES.md)。均为现有 G0–G5 控制层的增量能力；未运行的真实 API、用户账号、人工筛选和六篇实际论文不会被宣称为已完成。
