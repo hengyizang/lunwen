@@ -356,6 +356,10 @@ def build_report(project: Path, paper_id: str) -> dict:
     prereg_path = project / "papers" / paper_id / "preregistration.json"
     from scripts.research_quality import validate_preregistration
     try:
+        state = read(project / "state/run.json")
+        approval = next((a for a in reversed(state.get("approvals", [])) if a.get("gate") == "G3"), {})
+        need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg_path),
+             "preregistration differs from the G3-approved frozen protocol")
         errors.extend(validate_preregistration(read(prereg_path), paper_id, project))
         registry = [json.loads(line) for line in registry_path.read_text(encoding="utf-8").splitlines() if line.strip()]
         from scripts.results_validation import validate_registry
@@ -380,7 +384,8 @@ def build_report(project: Path, paper_id: str) -> dict:
         family_size = sum(c["family"] == comp["family"] and c["analysis_phase"] == comp["analysis_phase"]
                           for c in protocol["comparisons"])
         row = {key: comp[key] for key in ("comparison_id", "design_id", "hypothesis_id", "claim_ids",
-               "role", "analysis_phase", "family", "alpha", "decision_rule", "minimum_effect", "analysis_unit")}
+               "role", "analysis_phase", "family", "alpha", "decision_rule", "minimum_effect", "analysis_unit",
+               "metric", "dataset_id", "direction", "population_scope", "assumptions", "sample_size_rationale")}
         try:
             row.update(_measure(project, comp, registry, sha(plan_path), family_size))
             row["status"] = "computed"

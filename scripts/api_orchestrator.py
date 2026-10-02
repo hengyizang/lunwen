@@ -209,6 +209,7 @@ def research_quality_artifact_contract(stage: str) -> str:
                 ],
                 "coverage": "Every claim needs primary comparisons to all design baselines. Bind every ablation, negative control and robustness item to actual comparator runs for every design seed. One run cannot stand for different conditions.",
                 "pilot": "All evidence arms depend_on earlier same-paper pilot runs. Put prespecified technical success assertions in the frozen pilot code; a failed pilot blocks downstream processes.",
+                "registered_result_output_fields": ["schema_version=1.0", "comparison_id", "method_id", "decision_rule", "direction", "minimum_effect", "aggregation", "analysis_unit", "independent_units", "source_hashes{every arm CSV path:sha256}", "estimate", "ci_low", "ci_high", "p_value", "ci_confidence>=1-alpha/family_size"],
                 "statistics": "Choose a suitable method and independent unit, justify practical thresholds and assumptions. Paired t uses unit means conditional on the registered seeds. Other models require a frozen executor analysis run depending on every source arm, with exact source_hashes and registered metadata; see docs/EXPERIMENT-EVIDENCE.md. Power alpha must account for the comparison family and minimum_units cannot undercut calculated sample size.",
             },
             "each_paper_experiment_design_requires": {

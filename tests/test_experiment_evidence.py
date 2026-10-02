@@ -150,6 +150,22 @@ class ExperimentEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(runner.ExperimentError, "output changed"):
             runner.execute(self.project.name, ["proposed-11"], project_root=self.project)
 
+    def test_changed_pilot_blocks_transitive_dependency(self):
+        project = Path(self.temp.name) / "transitive"
+        acceptance.fixture(project)
+        plan = evidence.read(project / "experiments/plan.json")
+        middle = next(r for r in plan["runs"] if r["run_id"] == "weak-11")
+        plan["runs"].remove(middle)
+        plan["runs"].insert(1, middle)
+        next(r for r in plan["runs"] if r["run_id"] == "proposed-11")["depends_on"] = ["weak-11"]
+        acceptance.write(project / "experiments/plan.json", plan)
+        acceptance.freeze_fixture(project)
+        runner.execute(project.name, ["pilot-0", "weak-11"], project_root=project)
+        (project / "results/pilot-0.csv").write_text("changed", encoding="utf-8")
+        with self.assertRaisesRegex(runner.ExperimentError, "output changed"):
+            runner.execute(project.name, ["proposed-11"], project_root=project)
+        self.assertFalse((project / "results/proposed-11.csv").exists())
+
     def test_frozen_protocol_and_locked_design_cannot_change_before_execution(self):
         for relative in ("papers/P01/preregistration.json", "papers/P01/experiments/primary.json"):
             path = self.project / relative
@@ -238,6 +254,26 @@ class ExperimentEvidenceTests(unittest.TestCase):
         for relative in ("papers/P01/experiment-evidence.json", "papers/P01/experiment-evidence-plan.json",
                          "papers/P01/experiments/primary.json", "papers/P01/preregistration.json"):
             self.assertTrue(artifact_ownership.executor_owned(self.project, relative), relative)
+
+    def test_refrozen_changed_threshold_cannot_bypass_g3_approval(self):
+        original_state = (self.project / "state/run.json").read_bytes()
+        self.protocol["comparisons"][0]["minimum_effect"] = 0
+        self.save_protocol()
+        acceptance.freeze_fixture(self.project)
+        (self.project / "state/run.json").write_bytes(original_state)
+        self.assertIn("G3-approved", "; ".join(evidence.build_report(self.project, "P01")["errors"]))
+
+    def test_unmatched_independent_units_are_rejected(self):
+        comp = self.protocol["comparisons"][0]
+        records = copy.deepcopy(self.registry)
+        binding = comp["pairs"][0]["comparator"]
+        path = self.project / binding["output"]
+        path.write_text(path.read_text().replace("u00", "different"), encoding="utf-8")
+        record = next(r for r in records if r["run_id"] == binding["run_id"])
+        record["outputs"][0]["sha256"] = evidence.sha(path)
+        acceptance.write(self.project / f"experiments/runs/{record['attempt_id']}/run.json", record)
+        with self.assertRaisesRegex(evidence.EvidenceError, "unit IDs differ"):
+            evidence._measure(self.project, comp, records, evidence.sha(self.project / "experiments/plan.json"), 7)
 
     def test_hand_edited_statistical_summary_is_rejected(self):
         report = copy.deepcopy(self.report)

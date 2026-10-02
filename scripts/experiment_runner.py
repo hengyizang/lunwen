@@ -457,7 +457,17 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
         return
     records = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines()
                if line.strip()] if registry.is_file() else []
-    for parent in parents:
+    plan = read_json(project / "experiments/plan.json")
+    planned = {r["run_id"]: r for r in plan["runs"]}
+    pending, visited = list(parents), set()
+    while pending:
+        parent = pending.pop()
+        if parent in visited:
+            continue
+        visited.add(parent)
+        if parent not in planned or planned[parent].get("paper_id") != run["paper_id"]:
+            raise ExperimentError("Dependency is absent from the approved same-paper plan")
+        pending.extend(planned[parent].get("depends_on", []))
         attempts = [r for r in records if r.get("run_id") == parent]
         if len(attempts) != 1:
             raise ExperimentError(f"Dependency {parent} needs exactly one inspected successful attempt")
