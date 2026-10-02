@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "status": "passed",
+  "scope": "synthetic cloud software controls only",
+  "scientific_completion_verified": false,
+  "requirement_ids": [
+    "R32",
+    "R33"
+  ],
+  "source_commit": "66282f21b45457deffc0bb1a95b01a58664629b7",
+  "tested_merge_commit": "e8d6d3f1898c0e619afc4a9473855bc2ddbe6825",
+  "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/36970826132",
+  "checked_at": "2026-10-02",
+  "deterministic_validation": {
+    "python_versions": [
+      "3.10",
+      "3.12",
+      "3.13"
+    ],
+    "tests_per_version": 331,
+    "compile": "passed",
+    "repository_validator": "passed",
+    "whitespace": "passed",
+    "windows_syntax": "passed"
+  },
+  "human_controls": {
+    "status": "pass",
+    "scope": "synthetic software controls only",
+    "scientific_completion_verified": false,
+    "paid_provider_calls": 0,
+    "real_statsmodels_power": true,
+    "checks": [
+      "real G0 ready/approve/advance",
+      "incomplete G1 still blocked",
+      "named data quality confirmation",
+      "all-paper preregistration freeze",
+      "named reproduction confirmation",
+      "spending and intake unchanged",
+      "no G3/G4 scientific approval"
+    ],
+    "decision_log_sha256": "4854e00b75db39db5249ec98c73416184dbf5a111e001c0a1c1c68c5de211394",
+    "spend_control_sha256": "edde369c5a2229686c44f0ce71c6a6b658fe7d947e68bda5be4e293eb5e702d2",
+    "artifact_url": "https://github.com/hengyizang/lunwen/actions/runs/36970826132/artifacts/11212020739",
+    "artifact_zip_sha256": "dde3b21e56bc480f5f96375c7d56aca4eeff5931878c90c96c62e16f94e205e2",
+    "artifact_expires_at": "2026-10-16T05:52:02Z"
+  },
+  "existing_pipeline_regression": {
+    "status": "passed",
+    "artifact_url": "https://github.com/hengyizang/lunwen/actions/runs/36970826132/artifacts/11211143717",
+    "artifact_zip_sha256": "a05f92f8bb0123011afaa694621afa43df76cb257ebb367b7e747725761dc138"
+  },
+  "remaining": "Actual project credentials, original primary evidence, dataset rights, registered experiments, independent audits and separate named G0-G5 decisions remain required. No actual my-phd gate or spending authority was changed. Artifacts expire after 14 days; this summary preserves hashes and run identity, not all fixture bytes."
+}

@@ -74,3 +74,5 @@ Decisions are traceable through `state/cloud-human-decisions.jsonl`, original ga
 Regression tests cover stale/replayed decisions, reviewer mismatch, active G5 paper changes, checkpoint digest stability, invalid or changed data/outputs, all-paper preparation failures, freezing after any attempt, owner-only requests, supplied-source limits and no paid-command dispatch. CI artifacts retain the scoped acceptance receipt and decision-log hash for 14 days.
 
 Real project work remains dependent on configured gateway credentials/exact model prices, verified primary evidence, appropriate data rights and fresh human decisions. The October 7 target does not weaken these checks.
+
+The scoped [2026-10-02 acceptance receipt](acceptance/cloud-human-controls-2026-10-02.json) binds passing source commit, PR merge snapshot, 331 tests per Python version, cloud control/pipeline run URLs and artifact digests. Its verified R32/R33 statuses refer only to software controls; actual research remains unverified.

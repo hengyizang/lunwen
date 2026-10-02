@@ -443,7 +443,7 @@
       "id": "R32",
       "requirement": "Cloud-only owner gate review, ready, approval, advance and reopening with exact reviewed hashes",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/cloud_human_controls.py",
         "scripts/cloud_job.py",
@@ -453,13 +453,17 @@
       "tests": [
         "tests/test_cloud_human_controls.py"
       ],
-      "remaining": "Verify synthetic cloud acceptance on the exact merge. Actual G0-G5 decisions remain human and evidence dependent; no provider credentials or scientific completion are inferred."
+      "remaining": "Synthetic owner-boundary and state-transition acceptance passed in cloud CI. Actual G0-G5 scientific decisions remain evidence dependent and human; repeat CI on the final merge.",
+      "verification": {
+        "path": "docs/acceptance/cloud-human-controls-2026-10-02.json",
+        "sha256": "1b7b7307464e8a75f7313d133490565d4f4372bc34d866cd2815f80c96acd5f7"
+      }
     },
     {
       "id": "R33",
       "requirement": "Protected cloud human confirmations and all-paper preregistration freeze before any experiment attempt",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/cloud_human_controls.py",
         "scripts/research_quality.py",
@@ -468,7 +472,11 @@
       "tests": [
         "tests/test_cloud_human_controls.py"
       ],
-      "remaining": "Verify scoped synthetic confirmation/freeze acceptance. Real data quality, reproduction, primary-source screening and supplied-source scope require exact human review; real experiments and final packages remain unverified."
+      "remaining": "Synthetic named data/reproduction confirmations, source/screening boundaries and preregistration freeze checks passed. Real dataset/reproduction validity, scientific reading and human gate approvals remain unverified.",
+      "verification": {
+        "path": "docs/acceptance/cloud-human-controls-2026-10-02.json",
+        "sha256": "1b7b7307464e8a75f7313d133490565d4f4372bc34d866cd2815f80c96acd5f7"
+      }
     }
   ],
   "execution_mode": "cloud_only"
