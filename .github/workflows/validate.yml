@@ -99,6 +99,28 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  experiment-evidence:
+    name: Experiment design and statistical evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install pinned statistical runtime without model credentials
+        run: python -m pip install --disable-pip-version-check '.[research-quality]'
+      - name: Execute synthetic paired studies and failed pilot with the real Docker executor
+        run: python -m scripts.experiment_evidence_acceptance --directory artifacts/experiment-evidence
+      - name: Preserve scoped statistical software evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: experiment-evidence-acceptance
+          path: artifacts/experiment-evidence/
+          if-no-files-found: error
+          retention-days: 14
+
   gateway-startup:
     name: Gateway startup and five-role cycle
     runs-on: ubuntu-latest
@@ -134,7 +156,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install declared figure and reader dependencies and PDF test fixture helper
-        run: python -m pip install --disable-pip-version-check ".[figures,reader]" "reportlab>=4,<5"
+        run: python -m pip install --disable-pip-version-check ".[figures,reader,research-quality]" "reportlab>=4,<5"
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Compile Python entry points

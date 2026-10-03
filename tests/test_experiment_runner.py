@@ -56,6 +56,14 @@ class ExperimentRunnerTests(unittest.TestCase):
         budget_path = project / "experiments" / "budget.json"
         plan_path.write_text(json.dumps(plan), encoding="utf-8")
         budget_path.write_text(json.dumps(budget), encoding="utf-8")
+        paper = project / "papers/P01"
+        paper.mkdir(parents=True)
+        evidence_plan = paper / "experiment-evidence-plan.json"
+        evidence_plan.write_text('{"synthetic_unit_fixture": true}', encoding="utf-8")
+        prereg = paper / "preregistration.json"
+        prereg.write_text(json.dumps({"status": "frozen", "files": [
+            {"path": "papers/P01/experiment-evidence-plan.json", "sha256": hashlib.sha256(evidence_plan.read_bytes()).hexdigest()}
+        ]}), encoding="utf-8")
         state = {
             "stage": "experiment-execution",
             "gate": "G4",
@@ -63,6 +71,7 @@ class ExperimentRunnerTests(unittest.TestCase):
             "approvals": [
                 {
                     "gate": "G3",
+                    "frozen_protocol_sha256": {"papers/P01/preregistration.json": hashlib.sha256(prereg.read_bytes()).hexdigest()},
                     "experiment_plan_sha256": hashlib.sha256(plan_path.read_bytes()).hexdigest(),
                     "experiment_budget_sha256": hashlib.sha256(
                         budget_path.read_bytes()

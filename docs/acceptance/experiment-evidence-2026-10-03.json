@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "status": "passed",
+  "scope": "Cloud software controls and synthetic statistical evidence only",
+  "scientific_completion_verified": false,
+  "real_paid_model_calls": 0,
+  "requirement_ids": [
+    "R35"
+  ],
+  "checked_at": "2026-10-03",
+  "source_commit": "d6a7ff9b1746b8d3da6fc832587e99f716566155",
+  "tested_merge_commit": "56ef2efac5b91755cbb10205cf8e7f40ee9630df",
+  "source_tree": "1727bc23c2a92a90ee19f01ce3f179610852c64d",
+  "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/37001431770",
+  "deterministic_validation": {
+    "python_versions": [
+      "3.10",
+      "3.12",
+      "3.13"
+    ],
+    "tests_per_version": 369,
+    "compile": "passed",
+    "repository_validator": "passed",
+    "whitespace": "passed",
+    "windows_syntax": "passed"
+  },
+  "required_jobs": [
+    {
+      "name": "Experiment design and statistical evidence",
+      "job_id": 110819774279,
+      "status": "success"
+    },
+    {
+      "name": "Deterministic checks (Python 3.10)",
+      "job_id": 110819774467,
+      "status": "success"
+    },
+    {
+      "name": "Gateway startup and five-role cycle",
+      "job_id": 110819774516,
+      "status": "success"
+    },
+    {
+      "name": "Deterministic checks (Python 3.13)",
+      "job_id": 110819774523,
+      "status": "success"
+    },
+    {
+      "name": "Cloud human review controls",
+      "job_id": 110819774576,
+      "status": "success"
+    },
+    {
+      "name": "Deterministic checks (Python 3.12)",
+      "job_id": 110819774602,
+      "status": "success"
+    },
+    {
+      "name": "Windows D-drive installer syntax",
+      "job_id": 110819774606,
+      "status": "success"
+    },
+    {
+      "name": "Cloud executor and checkpoint",
+      "job_id": 110819774625,
+      "status": "success"
+    },
+    {
+      "name": "Fresh runner restore and scientific exports",
+      "job_id": 110819851407,
+      "status": "success"
+    }
+  ],
+  "experiment_acceptance": {
+    "schema_version": "1.0",
+    "status": "passed",
+    "synthetic_acceptance_only": true,
+    "scientific_completion_verified": false,
+    "paid_model_calls": 0,
+    "source_commit": "56ef2efac5b91755cbb10205cf8e7f40ee9630df",
+    "workflow_run_id": "37001431770",
+    "successful_container_attempts": 25,
+    "failed_pilot_attempts": 1,
+    "dependent_execution_blocked": true,
+    "comparisons": 7,
+    "independent_units": 12,
+    "seeds": 3,
+    "negative_and_inconclusive_results_preserved": true,
+    "unsupported_positive_claim_rejected": true,
+    "report_sha256": "b195861ffb53e75c5982bfef2dacaa727cd0bee036c46f80840a60dbad9a97f7",
+    "registry_sha256": "a7c5cffad6c12be0f31949aa4e504ddc381ccf2a72aa8141a844c15a6360fac8",
+    "scope": "Execution, aggregation, inferential calculations and traceability only; upstream approvals are synthetic.",
+    "artifact_url": "https://github.com/hengyizang/lunwen/actions/runs/37001431770/artifacts/11223579184",
+    "artifact_zip_sha256": "555b347fa35a4e8266ea779beebcca4e4cdbeddb3293e496c741d93368a31bfd",
+    "artifact_expires_at": "2026-10-16T11:31:37Z"
+  },
+  "validated_boundaries": [
+    "All named baselines, ablations, negative controls and robustness comparisons cover preregistered seeds.",
+    "A failed, changed or indirect pilot dependency prevents downstream execution.",
+    "Repeated rows and random seeds do not inflate independent-unit sample counts.",
+    "Frozen G3 approvals bind statistical protocols; refreezing changed thresholds cannot reuse old approval.",
+    "Registry/output hashes and matching executor receipts bind measured effects and claim mappings.",
+    "Negative and inconclusive comparisons remain visible; unsupported positive claims and selective comparison omission are rejected."
+  ],
+  "remaining": "Real study validity, data rights, sample independence, method suitability, baseline fairness, causal identification, novelty and doctoral/Q1 merit still require scientific evidence and human G3/G4 review. Custom statistical models are source-bound but not recomputed by this component. Actual my-phd state and budget authority were not changed. CI artifacts expire after 14 days; this receipt preserves hashes and run identity, not all fixture bytes."
+}

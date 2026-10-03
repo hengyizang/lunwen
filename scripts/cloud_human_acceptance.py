@@ -81,6 +81,7 @@ def quality_fixture(project: Path, *, real_power: bool = False) -> None:
             "metric_tolerances": [{"metric": "F1", "absolute_tolerance": .02, "rationale": "Synthetic locked margin."}],
         },
     }
+    researchctl.write_json(project / "papers/P01/experiment-evidence-plan.json", {"synthetic_freeze_fixture_only": True})
     design_path = project / "papers/P01/experiments/primary.json"
     researchctl.write_json(design_path, design)
     researchctl.write_json(project / "experiments/plan.json", {"status": "ready_for_review", "runs": []})

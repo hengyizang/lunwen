@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Preregistered executable claim comparisons",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "paper_id",
+    "status",
+    "pilot_run_ids",
+    "pilot_success_criteria",
+    "comparisons",
+    "external_validity"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "paper_id": {
+      "type": "string",
+      "pattern": "^P[0-9]{2}$"
+    },
+    "status": {
+      "const": "ready_for_review"
+    },
+    "pilot_run_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "pilot_success_criteria": {
+      "type": "string",
+      "minLength": 1
+    },
+    "comparisons": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "comparison_id",
+          "design_id",
+          "hypothesis_id",
+          "claim_ids",
+          "role",
+          "analysis_phase",
+          "comparator_id",
+          "metric",
+          "dataset_id",
+          "direction",
+          "analysis_unit",
+          "population_scope",
+          "independence_rationale",
+          "assumptions",
+          "rationale",
+          "sample_size_rationale",
+          "decision_rule",
+          "minimum_effect",
+          "alpha",
+          "family",
+          "minimum_units",
+          "analysis_mode",
+          "unit_column",
+          "value_column",
+          "aggregation",
+          "pairs"
+        ],
+        "properties": {
+          "comparison_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "design_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hypothesis_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "role": {
+            "enum": [
+              "primary",
+              "ablation",
+              "negative_control",
+              "robustness",
+              "external_validation"
+            ]
+          },
+          "analysis_phase": {
+            "enum": [
+              "confirmatory",
+              "exploratory"
+            ]
+          },
+          "comparator_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "metric": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dataset_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "direction": {
+            "enum": [
+              "higher",
+              "lower"
+            ]
+          },
+          "analysis_unit": {
+            "type": "string",
+            "minLength": 1
+          },
+          "population_scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "independence_rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assumptions": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sample_size_rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision_rule": {
+            "enum": [
+              "superiority",
+              "equivalence"
+            ]
+          },
+          "minimum_effect": {
+            "type": "number",
+            "minimum": 0
+          },
+          "alpha": {
+            "type": "number",
+            "minimum": 0.000001,
+            "maximum": 0.1
+          },
+          "family": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minimum_units": {
+            "type": "integer",
+            "minimum": 3
+          },
+          "analysis_mode": {
+            "enum": [
+              "paired_t",
+              "registered_result"
+            ]
+          },
+          "unit_column": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value_column": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aggregation": {
+            "const": "mean_within_unit_then_mean_across_seeds"
+          },
+          "pairs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "seed",
+                "treatment",
+                "comparator"
+              ],
+              "properties": {
+                "seed": {
+                  "type": "integer"
+                },
+                "treatment": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "run_id",
+                    "output"
+                  ],
+                  "properties": {
+                    "run_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "output": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "comparator": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "run_id",
+                    "output"
+                  ],
+                  "properties": {
+                    "run_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "output": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "registered_result": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "run_id",
+              "output",
+              "method_id"
+            ],
+            "properties": {
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "output": {
+                "type": "string",
+                "minLength": 1
+              },
+              "method_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "analysis_mode": {
+                  "const": "registered_result"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "registered_result"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "decision_rule": {
+                  "const": "equivalence"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "minimum_effect": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "external_validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "rationale"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "tested",
+            "scope_limited"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_limit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "scope_limited"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "claim_limit"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
