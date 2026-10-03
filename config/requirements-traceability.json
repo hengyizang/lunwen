@@ -505,7 +505,7 @@
       "id": "R35",
       "requirement": "Executable preregistered claim comparisons, pilot dependencies, independent-unit statistics and calibrated evidence claims",
       "implementation": "implemented",
-      "acceptance": "ci-required",
+      "acceptance": "verified",
       "evidence": [
         "scripts/experiment_evidence.py",
         "scripts/experiment_runner.py",
@@ -515,7 +515,11 @@
       "tests": [
         "tests/test_experiment_evidence.py"
       ],
-      "remaining": "Cloud software acceptance is pending. Real study validity, method suitability, novelty, human G3/G4 approval and doctoral/Q1 merit remain unverified."
+      "remaining": "Cloud software acceptance passed on synthetic container experiments with preserved adverse evidence and blocked failed-pilot dependencies. Real study validity, method suitability, novelty, human G3/G4 approval and doctoral/Q1 merit remain unverified.",
+      "verification": {
+        "path": "docs/acceptance/experiment-evidence-2026-10-03.json",
+        "sha256": "2c71a13f3be9c0dff7961a83a2a6bf0de48256e0ede4e5ed7a76cee64f52c761"
+      }
     }
   ],
   "execution_mode": "cloud_only"
