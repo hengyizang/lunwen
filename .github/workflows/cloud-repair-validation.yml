@@ -1,0 +1,47 @@
+name: Validate automatic cloud repair
+run-name: Cloud repair ${{ inputs.repair_ref }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      repair_ref:
+        description: 'Exact revision recorded by the main-branch recovery controller'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+jobs:
+  identity:
+    if: >-
+      github.repository == 'hengyizang/lunwen' &&
+      (github.event.sender.id == 163310614 || github.event.sender.id == 41898282)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      repair_ref: ${{ steps.identity.outputs.repair_ref }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify pending owner repair and protected scope
+        id: identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          python -m scripts.cloud_recovery --event "$GITHUB_EVENT_PATH"
+          --validation-output "$GITHUB_OUTPUT"
+  checks:
+    needs: identity
+    uses: ./.github/workflows/validate.yml
+    with:
+      repair_ref: ${{ needs.identity.outputs.repair_ref }}
+      offline_only: true
+    # No model, paid search, or repository secrets are passed to candidate code.

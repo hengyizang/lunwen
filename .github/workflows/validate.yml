@@ -1,6 +1,14 @@
 name: Validate research workflow
 
 on:
+  workflow_call:
+    inputs:
+      repair_ref:
+        type: string
+        default: ''
+      offline_only:
+        type: boolean
+        default: true
   pull_request:
   push:
     branches:
@@ -29,6 +37,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -58,6 +69,9 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -83,6 +97,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -105,6 +122,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -127,6 +147,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -141,6 +164,29 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  cloud-recovery:
+    name: Automatic recovery safety and fault injection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Inject engineering faults without paid calls or production state
+        run: python -m scripts.cloud_recovery_acceptance --output artifacts/cloud-recovery/acceptance.json
+      - name: Preserve scoped recovery acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-recovery-acceptance
+          path: artifacts/cloud-recovery/
+          if-no-files-found: error
+          retention-days: 30
+
   deterministic:
     name: Deterministic checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
@@ -151,6 +197,9 @@ jobs:
         python-version: ["3.10", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -172,6 +221,9 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - name: Parse PowerShell without running installer
         shell: pwsh
         run: |
@@ -183,9 +235,10 @@ jobs:
   live-literature:
     name: Live public literature APIs
     if: >-
+      !inputs.offline_only && (
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'schedule' ||
-      (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]'))
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]')))
     needs: [deterministic, windows-script-syntax]
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -197,6 +250,9 @@ jobs:
       LITERATURE_CONTACT_EMAIL: ${{ secrets.LITERATURE_CONTACT_EMAIL }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -218,12 +274,15 @@ jobs:
 
   adapter-packages:
     name: Install executable research adapters
-    if: github.event_name == 'workflow_dispatch' && inputs.install_ai4science
+    if: ${{ !inputs.offline_only && github.event_name == 'workflow_dispatch' && inputs.install_ai4science }}
     needs: [deterministic, windows-script-syntax]
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -242,14 +301,18 @@ jobs:
   container-isolation:
     name: Docker isolation probe
     if: >-
+      !inputs.offline_only && (
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'schedule' ||
-      (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]'))
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[live-acceptance]')))
     needs: [deterministic, windows-script-syntax]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.repair_ref || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"

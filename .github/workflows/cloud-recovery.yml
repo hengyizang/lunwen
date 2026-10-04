@@ -1,0 +1,60 @@
+name: Automatic cloud recovery
+
+on:
+  workflow_run:
+    workflows: [Owner research cloud job, Continuous owner-approved research, Validate automatic cloud repair]
+    types: [completed]
+  schedule:
+    - cron: '4,19,34,49 * * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Inspect without mutation, or recover within the existing owner policy'
+        type: choice
+        default: inspect
+        options: [inspect, recover]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+
+# Use the same lock as owner jobs: never race state, reservations or checkpoints.
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    if: >-
+      github.repository == 'hengyizang/lunwen' &&
+      (github.event_name != 'workflow_dispatch' || github.event.sender.id == 163310614) &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure' ||
+       github.event.workflow_run.name == 'Validate automatic cloud repair')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Diagnose and recover using trusted main code, without model credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INSPECT_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'inspect' }}
+        run: |
+          args=()
+          if [ "$INSPECT_ONLY" = true ]; then args+=(--inspect); fi
+          python -m scripts.cloud_recovery --event "$GITHUB_EVENT_PATH" "${args[@]}"
+      - name: Preserve engineering recovery diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-recovery-${{ github.run_id }}
+          path: .runtime/cloud-artifact/
+          if-no-files-found: ignore
+          retention-days: 30

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "enabled": true,
+  "project": "my-phd",
+  "owner_id": 163310614,
+  "authorization": "请你完善一下，项目运行中如果出现错误，需要能够及时自动修复，不要耽误我们项目的运行。",
+  "max_incident_recoveries": 2,
+  "max_daily_recoveries": 4,
+  "model_calls_allowed": false,
+  "external_paid_compute_usd": 0
+}
