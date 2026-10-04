@@ -168,10 +168,10 @@ class RecoveryTests(unittest.TestCase):
 
     def test_alerts_are_deduplicated(self):
         state = {}
-        with patch.object(recovery, "api", return_value={"number": 99}) as github:
+        with patch.object(recovery, "api", side_effect=[[], {"number": 99}]) as github:
             recovery.alert(state, "same", "billing_reconciliation_pending", 123456)
             recovery.alert(state, "same", "billing_reconciliation_pending", 123456)
-        self.assertEqual(github.call_count, 1)
+        self.assertEqual(github.call_count, 2)
         self.assertEqual(state["alerts"]["same"], 99)
 
     def test_only_skipped_research_after_checkout_failure_can_replay_old_job(self):
@@ -191,7 +191,7 @@ class RecoveryTests(unittest.TestCase):
             state = {"events": []}
             with patch.object(recovery, "failure_report", return_value=report()), \
                     patch.object(recovery, "authority", return_value="billing_reconciliation_pending"), \
-                    patch.object(recovery, "api", return_value={"number": 100}):
+                    patch.object(recovery, "api", side_effect=[[], {"number": 100}]):
                 self.assertFalse(recovery.handle_failure(source_run(), project, state, policy(), MAIN))
             self.assertEqual((project / cloud_continuation.STATUS).read_bytes(), before)
             self.assertEqual(state["events"], [])
@@ -238,6 +238,65 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 recovery.verify_pending(pending, MAIN)
 
+    def test_changed_base_is_rejected_before_creating_merge_commit(self):
+        pending = {"base": MAIN, "head": HEAD, "pr": 99, "path": PATH}
+        with patch.object(recovery, "api", return_value={"object": {"sha": "d" * 40}}) as github:
+            with self.assertRaises(ValueError):
+                recovery.merge_pending(pending)
+        self.assertEqual(github.call_count, 1)
 
+    def test_atomic_merge_has_exact_tree_parents_and_never_force_pushes(self):
+        pending = {"base": MAIN, "head": HEAD, "pr": 99, "path": PATH}
+        answers = [{"object": {"sha": MAIN}}, {"parents": [{"sha": MAIN}], "tree": {"sha": "f" * 40}},
+                   {"sha": "e" * 40}, {"object": {"sha": "e" * 40}}]
+        with patch.object(recovery, "verify_pending"), patch.object(recovery, "api", side_effect=answers) as github:
+            self.assertEqual(recovery.merge_pending(pending), "e" * 40)
+        create, move = github.call_args_list[-2:]
+        self.assertEqual(create.kwargs["body"]["parents"], [MAIN, HEAD])
+        self.assertEqual(create.kwargs["body"]["tree"], "f" * 40)
+        self.assertEqual(move.kwargs["body"], {"sha": "e" * 40, "force": False})
+
+    def test_issue_marker_survives_lost_checkpoint_to_prevent_duplicate_alerts(self):
+        with patch.object(recovery, "api", return_value=[{"number": 99, "body": "<!-- cloud-recovery:incident -->"}]) as github:
+            state = {}
+            recovery.alert(state, "incident", "checkpoint_failed", 123456)
+        self.assertEqual(state["alerts"]["incident"], 99)
+        self.assertEqual(github.call_count, 1)
+
+    def test_cloud_controller_persists_resume_before_dispatch_and_deduplicates_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = self.project(root / "projects")
+            (root / "config").mkdir()
+            self.write(root / "config/cloud-recovery.json", {"enabled": True, "project": "my-phd", "owner_id": 163310614,
+                "model_calls_allowed": False, "external_paid_compute_usd": 0, **policy()})
+            event = {"repository": {"full_name": recovery.REPO, "owner": {"id": 163310614}},
+                     "workflow_run": {"id": 123456}}
+            timeline = []
+            def github(path, **kwargs):
+                if path == "git/ref/heads/main":
+                    return {"object": {"sha": MAIN}}
+                if path == "actions/runs/123456":
+                    return source_run()
+                if path.endswith("/dispatches"):
+                    timeline.append("dispatch")
+                    self.assertEqual(kwargs["body"]["inputs"], {"mode": "start"})
+                    return None
+                raise AssertionError("Unexpected GitHub operation: " + path)
+            with patch.object(recovery, "ROOT", root), patch.object(recovery.cloud_job, "ROOT", root), \
+                    patch.object(recovery.cloud_job, "RUNTIME", root / ".runtime"), \
+                    patch.object(recovery.cloud_job, "restore_state", return_value=(root / "state-worktree", "cloud-state/my-phd")), \
+                    patch.object(recovery.cloud_job, "git", return_value=type("GitResult", (), {"stdout": MAIN})()), \
+                    patch.object(recovery.cloud_job, "persist_state", side_effect=lambda *args: timeline.append("persist")), \
+                    patch.object(recovery, "failure_report", return_value=report()), \
+                    patch.object(recovery, "setup_retry", return_value=False), \
+                    patch.object(recovery, "authority", return_value=None), \
+                    patch.object(recovery, "api", side_effect=github), \
+                    patch.dict(os.environ, {"GITHUB_REF": "refs/heads/main", "GITHUB_RUN_ID": "999999"}):
+                recovery.run(event)
+                self.assertEqual(timeline, ["persist", "dispatch"])
+                self.assertEqual(recovery.read(project / recovery.STATE)["seen"], ["123456:1"])
+                recovery.run(event)
+                self.assertEqual(timeline, ["persist", "dispatch", "persist"])
 if __name__ == "__main__":
     unittest.main()

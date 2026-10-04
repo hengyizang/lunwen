@@ -188,8 +188,15 @@ def incident_fingerprint(report: dict) -> str:
 def alert(state: dict, fingerprint: str, reason: str, run_id: int) -> None:
     if fingerprint in state.setdefault("alerts", {}):
         return
+    marker = "<!-- cloud-recovery:" + fingerprint + " -->"
+    # The issue also deduplicates if a later state push fails.
+    issues = api("issues?state=open&per_page=100")
+    existing = next((x for x in issues if marker in (x.get("body") or "")), None)
+    if existing:
+        state["alerts"][fingerprint] = existing["number"]
+        return
     issue = api("issues", method="POST", body={"title": "[cloud-recovery] 需要检查：" + reason[:80],
-        "body": "自动恢复已停止：`" + reason + "`。失败证据与检查点保留。"
+        "body": marker + "\n\n自动恢复已停止：`" + redact(reason)[:1200] + "`。失败证据与检查点保留。"
                 "没有增加预算、重发模型请求、重跑正式实验或批准科学关卡。\n\n"
                 f"[失败运行](https://github.com/{REPO}/actions/runs/{run_id})\n\n"
                 "请修复或完成对账后，通过原有 owner resume 控制恢复。"})
@@ -267,6 +274,21 @@ def verify_pending(pending: dict, main: str) -> dict:
     if candidate != actual or hashlib.sha256(actual.encode()).hexdigest() != pending["content_sha256"]:
         raise ValueError("repair content does not match the exact verified rollback")
     return pr
+
+
+def merge_pending(pending: dict) -> str:
+    """Use a normal fast-forward push so a changed base is rejected atomically."""
+    main = api("git/ref/heads/main")["object"]["sha"]
+    verify_pending(pending, main)
+    head = api(f"git/commits/{pending['head']}")
+    if [p["sha"] for p in head["parents"]] != [main]:
+        raise ValueError("repair head does not descend directly from the tested base")
+    merged = api("git/commits", method="POST", body={"message": f"Merge verified cloud recovery #{pending['pr']}",
+        "tree": head["tree"]["sha"], "parents": [main, pending["head"]]})
+    # No force: if another writer moved main, this commit is no longer a
+    # descendant and GitHub rejects the update. The PR head remains unchanged.
+    api("git/refs/heads/main", method="PATCH", body={"sha": merged["sha"], "force": False})
+    return merged["sha"]
 
 
 def failure_report(run: dict) -> dict:
@@ -386,14 +408,14 @@ def run(event: dict, *, inspect=False) -> None:
                 if reason or not checks_pass(completed):
                     alert(state, pending["fingerprint"], reason or "repair_cloud_checks_failed", completed["id"])
                 else:
-                    verify_pending(pending, main)
-                    result = api(f"pulls/{pending['pr']}/merge", method="PUT",
-                                 body={"sha": pending["head"], "merge_method": "squash"})
-                    if not result.get("merged"):
-                        raise ValueError("GitHub did not merge the verified repair")
+                    # Verify failed status before changing repository code.
+                    status = read(project / cloud_continuation.STATUS, {})
+                    if status.get("source_run_id") != pending["report"]["run_id"] or not status.get("last_cycle_exit_code"):
+                        raise ValueError("failed research status changed while validating repair")
+                    merged_sha = merge_pending(pending)
                     resume(project, state, pending["report"], pending["fingerprint"],
                            {"kind": "verified_rollback", "pr": pending["pr"], "validation_run": completed["id"],
-                            "validated_head": pending["head"], "merged_sha": result["sha"]})
+                            "validated_head": pending["head"], "merged_sha": merged_sha})
                     state.pop("pending")
                     dispatch = True
             elif not matches:
@@ -404,6 +426,8 @@ def run(event: dict, *, inspect=False) -> None:
                 if key in state["seen"] or source.get("path") not in WORKFLOWS or source.get("conclusion") != "failure":
                     continue
                 state["seen"].append(key)
+                if source.get("head_sha") != main:
+                    continue  # Do not create alerts for historical, superseded runs.
                 try:
                     trusted_run(source)
                     if source["head_sha"] == main and not authority(project) and setup_retry(source, state, policy):
