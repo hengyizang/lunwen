@@ -298,5 +298,93 @@ class RecoveryTests(unittest.TestCase):
                 self.assertEqual(recovery.read(project / recovery.STATE)["seen"], ["123456:1"])
                 recovery.run(event)
                 self.assertEqual(timeline, ["persist", "dispatch", "persist"])
+    def test_capability_probe_is_isolated_closed_and_never_merged(self):
+        for denied in (False, True):
+            with self.subTest(denied=denied), tempfile.TemporaryDirectory() as directory:
+                mutations = []
+                def github(path, **kwargs):
+                    if kwargs.get("method", "GET") != "GET":
+                        mutations.append((path, kwargs))
+                    if path == "pulls" and kwargs.get("method") == "POST":
+                        if denied:
+                            raise RuntimeError("GitHub Actions is not permitted to create pull requests (HTTP 403)")
+                        return {"number": 101, "html_url": "https://github.com/hengyizang/lunwen/pull/101"}
+                    if path.startswith("git/commits/"):
+                        return {"tree": {"sha": "f" * 40}}
+                    return {"sha": HEAD}
+                with patch.object(recovery, "api", side_effect=github), \
+                        patch.object(recovery.cloud_job, "ARTIFACT", Path(directory)), \
+                        patch.dict(os.environ, {"GITHUB_RUN_ID": "999999"}):
+                    recovery.capability_probe(MAIN)
+                saved = recovery.read(Path(directory) / "recovery-capabilities.json")
+                self.assertEqual(saved["pull_request_creation_verified"], not denied)
+                self.assertFalse(saved["main_changed"])
+                self.assertFalse(saved["research_state_mutated"])
+                self.assertEqual(saved["model_calls"], 0)
+                self.assertFalse(any(path.endswith("/main") or path.endswith("/merge") for path, _ in mutations))
+                self.assertEqual(mutations[-1], ("git/refs/heads/cloud-repair-probe/999999", {"method": "DELETE"}))
+                if not denied:
+                    self.assertIn(("pulls/101", {"method": "PATCH", "body": {"state": "closed"}}), mutations)
+
+    def test_pending_repair_requires_complete_ci_and_records_blockers(self):
+        for outcome in ("success", "failure", "base_changed"):
+            with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                project = self.project(root / "projects")
+                (root / "config").mkdir()
+                self.write(root / "config/cloud-recovery.json", {"enabled": True, "project": "my-phd", "owner_id": 163310614,
+                    "model_calls_allowed": False, "external_paid_compute_usd": 0, **policy()})
+                pending = {"pr": 99, "head": HEAD, "base": MAIN, "fingerprint": "incident", "report": report(),
+                           "at": "2026-10-03T00:00:00+00:00"}
+                self.write(project / recovery.STATE, {"events": [], "alerts": {}, "seen": [], "pending": pending})
+                validation = source_run(id=123457, path=recovery.VALIDATION, event="workflow_dispatch",
+                    conclusion="failure" if outcome == "failure" else "success",
+                    display_title="Cloud repair " + HEAD, created_at="2026-10-04T00:00:00Z")
+                event = {"repository": {"full_name": recovery.REPO, "owner": {"id": 163310614}},
+                         "workflow_run": {"id": 123457}}
+                mutations = []
+                def github(path, **kwargs):
+                    if path == "git/ref/heads/main":
+                        return {"object": {"sha": MAIN}}
+                    if path == "actions/runs/123457":
+                        return validation
+                    if path.startswith("actions/workflows/cloud-repair-validation.yml/runs?"):
+                        return {"workflow_runs": [validation]}
+                    if path.endswith("/jobs?per_page=100"):
+                        return {"jobs": [{"name": "checks / " + name, "conclusion": "success"} for name in recovery.REQUIRED]}
+                    if path == "issues?state=open&per_page=100":
+                        return []
+                    if path == "issues":
+                        mutations.append("alert")
+                        return {"number": 101}
+                    if path.endswith("/dispatches"):
+                        mutations.append("dispatch")
+                        return None
+                    raise AssertionError("Unexpected GitHub operation: " + path)
+                before = (project / cloud_continuation.STATUS).read_bytes()
+                with patch.object(recovery, "ROOT", root), patch.object(recovery.cloud_job, "ROOT", root), \
+                        patch.object(recovery.cloud_job, "RUNTIME", root / ".runtime"), \
+                        patch.object(recovery.cloud_job, "restore_state", return_value=(root / "state-worktree", "cloud-state/my-phd")), \
+                        patch.object(recovery.cloud_job, "git", return_value=type("GitResult", (), {"stdout": MAIN})()), \
+                        patch.object(recovery.cloud_job, "persist_state", side_effect=lambda *args: mutations.append("persist")), \
+                        patch.object(recovery, "authority", return_value=None), \
+                        patch.object(recovery, "merge_pending", side_effect=ValueError("base changed") if outcome == "base_changed" else None,
+                                     return_value="e" * 40) as merge, \
+                        patch.object(recovery, "api", side_effect=github), \
+                        patch.dict(os.environ, {"GITHUB_REF": "refs/heads/main", "GITHUB_RUN_ID": "999999"}):
+                    recovery.run(event)
+                saved = recovery.read(project / recovery.STATE)
+                if outcome == "success":
+                    merge.assert_called_once()
+                    self.assertNotIn("pending", saved)
+                    self.assertEqual(mutations, ["persist", "dispatch"])
+                    self.assertEqual(saved["events"][0]["proof"]["validated_head"], HEAD)
+                else:
+                    self.assertIn("pending", saved)
+                    self.assertEqual((project / cloud_continuation.STATUS).read_bytes(), before)
+                    self.assertEqual(mutations, ["alert", "persist"])
+                    if outcome == "failure":
+                        merge.assert_not_called()
+
 if __name__ == "__main__":
     unittest.main()

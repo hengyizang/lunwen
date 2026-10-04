@@ -106,3 +106,9 @@ jobs:
         run: >-
           python -m scripts.cloud_continuation enqueue-followup
           --decision .runtime/continuation-followup.json
+      - name: Verify automatic repair permissions without model calls
+        if: steps.execute.outcome == 'success' && steps.job.outputs.action == 'preflight'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run cloud-recovery.yml --repo hengyizang/lunwen --ref main -f mode=probe
+

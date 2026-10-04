@@ -233,7 +233,8 @@ def propose(state: dict, report: dict, fingerprint: str, path: str, main: str) -
         except (ValueError, SyntaxError):
             continue
         runs = api(f"actions/runs?head_sha={cursor}&event=push&per_page=20")["workflow_runs"]
-        if not any(r.get("path") == ".github/workflows/validate.yml" and checks_pass(r) for r in runs):
+        if not any(r.get("path") == ".github/workflows/validate.yml" and r.get("head_sha") == cursor
+                   and r.get("event") == "push" and checks_pass(r) for r in runs):
             continue
         branch = "cloud-repair/" + fingerprint[:16]
         api("git/refs", method="POST", body={"ref": "refs/heads/" + branch, "sha": main})
@@ -365,6 +366,46 @@ def validation_request(event: dict, output: Path) -> None:
         stream.write("repair_ref=" + ref + "\n")
 
 
+def capability_probe(main: str) -> None:
+    """Exercise real Actions PR permissions using an isolated, never-merged draft."""
+    run_id = os.environ["GITHUB_RUN_ID"]
+    if not run_id.isdecimal():
+        raise ValueError("capability probe requires a numeric cloud run ID")
+    branch = "cloud-repair-probe/" + run_id
+    report = {"schema_version": "1.0", "model_calls": 0, "research_state_mutated": False,
+              "main_changed": False, "pull_request_creation_verified": False, "probe_run": run_id}
+    created = False
+    pr = None
+    try:
+        api("git/refs", method="POST", body={"ref": "refs/heads/" + branch, "sha": main})
+        created = True
+        tree = api(f"git/commits/{main}")["tree"]["sha"]
+        tree = api("git/trees", method="POST", body={"base_tree": tree, "tree": [{"path": "docs/recovery-capability-probe.json",
+            "mode": "100644", "type": "blob", "content": json.dumps(report) + "\n"}]})
+        commit = api("git/commits", method="POST", body={"message": "Verify automatic repair PR permissions without research execution",
+            "parents": [main], "tree": tree["sha"]})
+        api("git/refs/heads/" + branch, method="PATCH", body={"sha": commit["sha"], "force": False})
+        pr = api("pulls", method="POST", body={"head": branch, "base": "main", "draft": True,
+            "title": "[recovery-verification] Test Actions repair permissions; do not merge",
+            "body": "Temporary cloud permission probe. No models, experiments, spending or scientific changes. "
+                    "The controller closes this draft immediately and removes only its probe branch."})
+        report.update(pull_request_creation_verified=True, probe_pr=pr["number"], probe_url=pr["html_url"])
+    except RuntimeError as exc:
+        report["blocker"] = redact(str(exc))
+    finally:
+        try:
+            if pr:
+                api(f"pulls/{pr['number']}", method="PATCH", body={"state": "closed"})
+            if created:
+                api("git/refs/heads/" + branch, method="DELETE")
+        except RuntimeError as exc:
+            report["cleanup_blocker"] = redact(str(exc))
+        destination = cloud_job.ARTIFACT / "recovery-capabilities.json"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        researchctl.write_json(destination, report)
+        print(json.dumps(report, ensure_ascii=False))
+
+
 def run(event: dict, *, inspect=False) -> None:
     if ((event.get("repository") or {}).get("full_name") != REPO
             or ((event.get("repository") or {}).get("owner") or {}).get("id") != cloud_job.OWNER_ID
@@ -380,6 +421,11 @@ def run(event: dict, *, inspect=False) -> None:
     main = api("git/ref/heads/main")["object"]["sha"]
     if cloud_job.git("rev-parse", "HEAD").stdout.strip() != main:
         raise ValueError("checked-out recovery code is stale")
+    if (event.get("inputs") or {}).get("mode") == "probe":
+        if (event.get("sender") or {}).get("id") not in {cloud_job.OWNER_ID, 41898282}:
+            raise ValueError("permission probes are owner/bot only")
+        capability_probe(main)
+        return
     trigger = event.get("workflow_run")
     runs = [api(f"actions/runs/{trigger['id']}")] if trigger else []
     if not runs:
@@ -398,28 +444,33 @@ def run(event: dict, *, inspect=False) -> None:
     try:
         pending = state.get("pending")
         if pending:
-            validate_runs = api("actions/workflows/cloud-repair-validation.yml/runs?event=workflow_dispatch&per_page=30")["workflow_runs"]
-            matches = [r for r in validate_runs if r.get("display_title") == "Cloud repair " + pending["head"]
-                       and r.get("created_at", "") >= pending["at"][:19] + "Z"]
-            completed = next((r for r in matches if r.get("status") == "completed"), None)
-            if completed:
-                trusted_run(completed, {VALIDATION})
-                reason = authority(project)
-                if reason or not checks_pass(completed):
-                    alert(state, pending["fingerprint"], reason or "repair_cloud_checks_failed", completed["id"])
-                else:
-                    # Verify failed status before changing repository code.
-                    status = read(project / cloud_continuation.STATUS, {})
-                    if status.get("source_run_id") != pending["report"]["run_id"] or not status.get("last_cycle_exit_code"):
-                        raise ValueError("failed research status changed while validating repair")
-                    merged_sha = merge_pending(pending)
-                    resume(project, state, pending["report"], pending["fingerprint"],
-                           {"kind": "verified_rollback", "pr": pending["pr"], "validation_run": completed["id"],
-                            "validated_head": pending["head"], "merged_sha": merged_sha})
-                    state.pop("pending")
-                    dispatch = True
-            elif not matches:
-                dispatch_validation = pending["head"]
+            try:
+                validate_runs = api("actions/workflows/cloud-repair-validation.yml/runs?event=workflow_dispatch&per_page=30")["workflow_runs"]
+                matches = [r for r in validate_runs if r.get("display_title") == "Cloud repair " + pending["head"]
+                           and r.get("created_at", "") >= pending["at"][:19] + "Z"]
+                completed = next((r for r in matches if r.get("status") == "completed"), None)
+                if completed:
+                    trusted_run(completed, {VALIDATION})
+                    reason = authority(project)
+                    if not bounded(state, pending["fingerprint"], policy):
+                        reason = reason or "automatic_repair_attempt_limit"
+                    if reason or not checks_pass(completed):
+                        alert(state, pending["fingerprint"], reason or "repair_cloud_checks_failed", completed["id"])
+                    else:
+                        # Verify failed status before changing repository code.
+                        status = read(project / cloud_continuation.STATUS, {})
+                        if status.get("source_run_id") != pending["report"]["run_id"] or not status.get("last_cycle_exit_code"):
+                            raise ValueError("failed research status changed while validating repair")
+                        merged_sha = merge_pending(pending)
+                        resume(project, state, pending["report"], pending["fingerprint"],
+                               {"kind": "verified_rollback", "pr": pending["pr"], "validation_run": completed["id"],
+                                "validated_head": pending["head"], "merged_sha": merged_sha})
+                        state.pop("pending")
+                        dispatch = True
+                elif not matches:
+                    dispatch_validation = pending["head"]
+            except (ValueError, RuntimeError, KeyError, OSError) as exc:
+                alert(state, pending["fingerprint"], str(exc), int(pending["report"]["run_id"]))
         else:
             for source in sorted(runs, key=lambda r: r["id"], reverse=True):
                 key = f"{source['id']}:{source.get('run_attempt', 1)}"

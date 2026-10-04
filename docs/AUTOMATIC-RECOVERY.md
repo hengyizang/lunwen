@@ -53,5 +53,11 @@ all new code defects can be fixed automatically. Missing API keys, depleted
 credits, upstream outages and Codex desktop/cloud service failures cannot be
 repaired by changing this repository.
 
+An owner `preflight` also dispatches a nonbillable permissions probe. It creates
+and immediately closes an isolated draft PR, removes only its temporary branch,
+and saves `recovery-capabilities.json`. It never merges the probe or touches
+research state. If creation is denied, the receipt records the exact GitHub
+error; ordinary safe infrastructure recovery still works.
+
 To disable recovery, set `config/cloud-recovery.json` `enabled` to `false`.
 The existing owner resume operation remains the escape hatch after review.

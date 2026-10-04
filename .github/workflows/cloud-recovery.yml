@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Inspect without mutation, or recover within the existing owner policy'
+        description: 'Inspect, recover, or verify repair-PR permissions with an isolated draft'
         type: choice
         default: inspect
-        options: [inspect, recover]
+        options: [inspect, recover, probe]
 
 permissions:
   contents: write
@@ -29,7 +29,8 @@ jobs:
   recover:
     if: >-
       github.repository == 'hengyizang/lunwen' &&
-      (github.event_name != 'workflow_dispatch' || github.event.sender.id == 163310614) &&
+      (github.event_name != 'workflow_dispatch' || github.event.sender.id == 163310614 ||
+       (github.event.sender.id == 41898282 && (inputs.mode == 'inspect' || inputs.mode == 'probe'))) &&
       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure' ||
        github.event.workflow_run.name == 'Validate automatic cloud repair')
     runs-on: ubuntu-latest
