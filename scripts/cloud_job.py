@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import traceback
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -410,9 +411,9 @@ def run_job(job: dict, run_id: str) -> int:
                     state = researchctl.load_state(slug)
                     detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
                               f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
-    except (RuntimeError, OSError, ImportError, ValueError) as exc:
+    except Exception:
         status = "failed"
-        logs.append(str(exc))
+        logs.append(traceback.format_exc())
         if worktree is not None and action in {"cycle", "continuation"}:
             cloud_continuation.checkpoint(slug, {"project": slug, "should_run": False,
                 "reason": "previous_cycle_failed_requires_inspection"}, run_id, cycle_exit_code=2)

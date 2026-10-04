@@ -9,7 +9,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import cloud_recovery as recovery
-from scripts import cloud_checkpoint, cloud_continuation, cloud_progress
+from scripts import cloud_checkpoint, cloud_continuation, cloud_progress, cloud_job, cloud_runtime, cloud_research_steps, researchctl
+import subprocess
 
 MAIN = "a" * 40
 HEAD = "b" * 40
@@ -325,6 +326,39 @@ class RecoveryTests(unittest.TestCase):
                 self.assertEqual(mutations[-1], ("git/refs/heads/cloud-repair-probe/999999", {"method": "DELETE"}))
                 if not denied:
                     self.assertIn(("pulls/101", {"method": "PATCH", "body": {"state": "closed"}}), mutations)
+
+    def test_unexpected_runtime_bug_is_checkpointed_as_failure_before_any_model_call(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = self.project(root / "projects")
+            runtime = root / ".runtime"
+            def broken_prepare(project):
+                raise TypeError("test-token-long-secret")
+            job = {"schema_version": "1.0", "action": "continuation", "project": "my-phd", "actor": "Owner", "allow_paid": True}
+            decision = {"project": "my-phd", "should_run": True, "reason": "current_stage_work_allowed", "actor": "Owner"}
+            with patch.object(cloud_job, "ROOT", root), patch.object(cloud_job, "RUNTIME", runtime), \
+                    patch.object(cloud_job, "ARTIFACT", runtime / "cloud-artifact"), \
+                    patch.object(researchctl, "PROJECTS_ROOT", root / "projects"), \
+                    patch.object(cloud_job, "restore_state", return_value=(root / "dummy-worktree", "cloud-state/my-phd")), \
+                    patch.object(cloud_job, "persist_state", return_value=[]), \
+                    patch.object(cloud_job, "git", return_value=subprocess.CompletedProcess([], 0, MAIN, "")), \
+                    patch.object(cloud_checkpoint, "prepare"), \
+                    patch.object(cloud_research_steps, "acquire_data"), \
+                    patch.object(cloud_job, "cycle_command", return_value=["scripts/api_orchestrator.py"]), \
+                    patch.object(cloud_continuation, "evaluate", return_value=decision), \
+                    patch.object(cloud_runtime, "prepare", side_effect=broken_prepare), \
+                    patch.object(cloud_job, "run_command") as transport, \
+                    patch.dict(os.environ, {"GH_TOKEN": "test-token-long-secret", "GITHUB_RUN_ATTEMPT": "1"}):
+                self.assertEqual(cloud_job.run_job(job, "123456"), 1)
+                transport.assert_not_called()
+            saved = recovery.read(runtime / "cloud-artifact/failure.json")
+            self.assertEqual(saved["status"], "failed")
+            self.assertEqual(saved["phase"], "environment")
+            self.assertFalse(saved["execution_started"])
+            self.assertTrue(saved["checkpoint_persisted"])
+            self.assertIn("TypeError", saved["diagnostic"])
+            self.assertNotIn("test-token-long-secret", saved["diagnostic"])
+            self.assertEqual(recovery.read(project / cloud_continuation.STATUS)["last_cycle_exit_code"], 2)
 
     def test_pending_repair_requires_complete_ci_and_records_blockers(self):
         for outcome in ("success", "failure", "base_changed"):
