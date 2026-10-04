@@ -460,9 +460,16 @@ def run_job(job: dict, run_id: str) -> int:
         from scripts.cloud_retry import redact
         diagnostic = redact("\n".join(logs))[-100000:]
         (ARTIFACT / "redacted-log.txt").write_text(diagnostic, encoding="utf-8")
+        try:
+            source_output = git("rev-parse", "HEAD", check=False).stdout
+        except (RuntimeError, OSError):
+            source_output = ""
+        source_sha = source_output.strip() if isinstance(source_output, str) else ""
+        if not re.fullmatch(r"[a-f0-9]{40}", source_sha):
+            source_sha = ""  # Preserve the outcome; unknown code cannot auto-recover.
         (ARTIFACT / "failure.json").write_text(json.dumps({"schema_version": "1.0",
             "run_id": str(run_id), "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", "1"),
-            "source_sha": git("rev-parse", "HEAD").stdout.strip(), "project": slug, "action": action,
+            "source_sha": source_sha, "project": slug, "action": action,
             "status": status, "phase": phase, "execution_started": execution_started,
             "checkpoint_persisted": persisted, "diagnostic": diagnostic[-12000:]}, ensure_ascii=False,
             indent=2) + "\n", encoding="utf-8")
