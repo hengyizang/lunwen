@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import traceback
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -176,7 +177,12 @@ def selected_files(project: Path) -> list[Path]:
 
 
 def git(*argv: str, cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess:
-    result = subprocess.run(["git", *argv], cwd=cwd or ROOT, text=True, capture_output=True)
+    if argv and argv[0] in {"ls-remote", "fetch", "push"}:
+        from scripts.cloud_retry import run
+        result = run(["git", *argv], cwd=cwd or ROOT, operation="git-" + argv[0],
+                     receipt=ARTIFACT / "infrastructure-retries.jsonl")
+    else:
+        result = subprocess.run(["git", *argv], cwd=cwd or ROOT, text=True, capture_output=True)
     if check and result.returncode:
         raise CloudJobError(f"git {argv[0]} failed (exit {result.returncode})")
     return result
@@ -259,6 +265,9 @@ def run_job(job: dict, run_id: str) -> int:
     detail = ""
     continuation_decision = None
     progress_before = None
+    phase = "restore"
+    execution_started = False
+    persisted = False
     try:
         if action in {"preflight", "init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
@@ -268,6 +277,7 @@ def run_job(job: dict, run_id: str) -> int:
                 from scripts.cloud_research_steps import acquire_data
                 acquire_data(ROOT / "projects" / slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
+        phase = "control"
         if action == "preflight":
             output = cloud_continuation.startup_report(slug)
             output.update(repository=REPOSITORY, python=sys.version.split()[0], cloud_runtime=True)
@@ -369,7 +379,9 @@ def run_job(job: dict, run_id: str) -> int:
                         raise CloudJobError("continuation actor must match the recorded owner confirmation")
                     cmd = cycle_command(job, slug)
                     from scripts.cloud_runtime import prepare as prepare_runtime
+                    phase = "environment"
                     prepare_runtime(ROOT / "projects" / slug)
+                    phase = "control"
                     from scripts.cloud_progress import snapshot
                     progress_before = snapshot(slug)
             elif action == "paperqa":
@@ -377,6 +389,8 @@ def run_job(job: dict, run_id: str) -> int:
             else:
                 raise CloudJobError("ToolUniverse can use unmetered paid APIs; its paid cloud action is paused until its charges can count against the approved tranche")
             if cmd is not None:
+                phase = "execution"
+                execution_started = True
                 code, output = run_command(cmd)
                 logs.append(output)
                 if action in {"cycle", "continuation"} and progress_before is not None:
@@ -397,9 +411,9 @@ def run_job(job: dict, run_id: str) -> int:
                     state = researchctl.load_state(slug)
                     detail = (f"Stage: `{state['stage']}` · Gate: `{state['gate']}` · "
                               f"State: `{state['status']}` · Blockers: {len(researchctl.gate_errors(slug, state['gate']))}.\n\n")
-    except (RuntimeError, OSError, ImportError, ValueError) as exc:
+    except Exception:
         status = "failed"
-        logs.append(str(exc))
+        logs.append(traceback.format_exc())
         if worktree is not None and action in {"cycle", "continuation"}:
             cloud_continuation.checkpoint(slug, {"project": slug, "should_run": False,
                 "reason": "previous_cycle_failed_requires_inspection"}, run_id, cycle_exit_code=2)
@@ -408,8 +422,10 @@ def run_job(job: dict, run_id: str) -> int:
             try:
                 cloud_checkpoint.prepare(ROOT / "projects" / slug, RUNTIME / "checkpoint", run_id)
                 changed = persist_state(slug, worktree, branch, run_id)
+                persisted = True
             except (CloudJobError, cloud_checkpoint.CheckpointError, OSError, ValueError) as exc:
                 status = "failed"
+                phase = "checkpoint"
                 logs.append("State persistence failed: " + str(exc))
                 # Preserve the failure and conservative billing state even when
                 # an unsupported/oversized research file prevents packaging.
@@ -440,8 +456,24 @@ def run_job(job: dict, run_id: str) -> int:
                     archive.write(path, path.relative_to(ROOT))
         except (RuntimeError, OSError, ValueError) as exc:
             status = "failed"
+            phase = "packaging"
             logs.append("Result packaging failed: " + str(exc))
-        (ARTIFACT / "redacted-log.txt").write_text("\n".join(logs)[-100000:], encoding="utf-8")
+        from scripts.cloud_retry import redact
+        diagnostic = redact("\n".join(logs))[-100000:]
+        (ARTIFACT / "redacted-log.txt").write_text(diagnostic, encoding="utf-8")
+        try:
+            source_output = git("rev-parse", "HEAD", check=False).stdout
+        except (RuntimeError, OSError):
+            source_output = ""
+        source_sha = source_output.strip() if isinstance(source_output, str) else ""
+        if not re.fullmatch(r"[a-f0-9]{40}", source_sha):
+            source_sha = ""  # Preserve the outcome; unknown code cannot auto-recover.
+        (ARTIFACT / "failure.json").write_text(json.dumps({"schema_version": "1.0",
+            "run_id": str(run_id), "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", "1"),
+            "source_sha": source_sha, "project": slug, "action": action,
+            "status": status, "phase": phase, "execution_started": execution_started,
+            "checkpoint_persisted": persisted, "diagnostic": diagnostic[-12000:]}, ensure_ascii=False,
+            indent=2) + "\n", encoding="utf-8")
         summary = (f"Cloud job `{action}` for `{slug}`: **{status}**.\n\n"
                    f"{detail}"
                    f"[GitHub Actions run](https://github.com/{REPOSITORY}/actions/runs/{run_id}) · "

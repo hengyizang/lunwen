@@ -24,11 +24,14 @@ DEFAULT_TEX_IMAGE = "ghcr.io/xu-cheng/texlive-small@sha256:f6a08603f17dcc9493528
 
 
 def prepare(project: Path) -> dict:
-    result = subprocess.run([sys.executable, "-m", "pip", "install", "--disable-pip-version-check",
-                             ".[figures,reader,research-quality,reference-tools]"], cwd=ROOT,
-                            capture_output=True, text=True, timeout=900, check=False)
+    from scripts.cloud_retry import run
+    result = run([sys.executable, "-m", "pip", "install", "--disable-pip-version-check",
+                  ".[figures,reader,research-quality,reference-tools]"], cwd=ROOT,
+                 operation="pinned-runtime-install", receipt=project / "state/cloud-retry.jsonl", timeout=300)
     if result.returncode:
-        raise RuntimeError("declared cloud dependencies could not be installed; inspect the pinned package environment")
+        from scripts.cloud_retry import redact
+        raise RuntimeError("declared cloud dependencies could not be installed; inspect the pinned package environment\n"
+                           + redact((result.stdout + result.stderr)[-3000:]))
     report = {"schema_version": "1.0", "python": platform.python_version(), "platform": platform.platform(),
               "versions": {package: importlib.metadata.version(package) for package in PACKAGES},
               "docker_available": bool(shutil.which("docker")), "disk_free_bytes": shutil.disk_usage(project).free,
