@@ -168,6 +168,7 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "A/B claim IDs and planned paper IDs are disjoint",
                 "B has independent question/evidence/falsification and survives core failure",
             ],
+            "question_notebook": "program/research-notebook.json groups questions, supporting and contrary evidence by ID, source path/hash/locator and read_scope. Decisions need evidence_ids, rationale, failure_condition and stop_rule. A notebook phase never grants G3 approval. Request the research_notebook cloud operation; generated reports/history are protected.",
             "protected_local_outputs_do_not_write": [
                 "evidence/search-log.jsonl",
                 "evidence/literature-api-ledger.jsonl",
@@ -270,6 +271,18 @@ def research_quality_artifact_contract(stage: str) -> str:
             ],
             "deterministic_source": "reports/runtime-evidence-catalog.json; use exact attempt_id, current output hashes and single_attempt_environment_digest; never infer values",
             "protected_human_confirmation": "papers/Pxx/reproduction-confirmation.json is created only by scripts/research_quality.py after review; do not write it",
+        },
+        "writing-and-review": {
+            "statistical_reporting": "Write papers/Pxx/statistical-reporting-map.json using docs/RESEARCH-IMPROVEMENTS.md. Cover every experiment-evidence comparison including adverse/exploratory results; bind method, independent unit/n, effect, CI, adjusted p, decision and phase to unique actual Methods/Results text passages. Figure statistics also need caption bindings. Use statistical_reporting cloud operation; never write its deterministic report.",
+            "statistical_map_fields": {
+                "comparisons": "[{comparison_id,reporting_notes,has_figure,locations:[{field,path,quote,section,value,decimals,uncertainty}]}]",
+                "required_fields": ["method", "analysis_unit", "independent_units", "estimate", "ci_low", "ci_high", "ci_confidence", "p_value", "p_adjusted", "seeds", "aggregation", "family", "family_size", "direction", "assumptions", "sample_size_rationale", "decision", "analysis_phase"],
+                "location_rules": "project-relative text source in this paper's manuscript/figures/tables/supplement; unique actual quote; Methods and Results required, Caption when has_figure; value equals actual evidence field; decimals 0-12; ci_confidence requires uncertainty=CI and optionally display_scale=100 for percent; no other conversions",
+                "operation": {"stage": "writing-and-review", "action": "statistical_reporting", "paper_id": "Pxx"},
+            },
+            "word_revision": "Optional docx_revision operation produces real OOXML revisions after revision-integrity and response trace checks. It refuses unsupported structural changes. Do not fabricate author approvals or visual inspection.",
+            "journal_dossiers": "Use evidence-bound publisher costs/OA/timing/policy fields; unknown is not zero. Request journal_dossiers cloud operation when the dossier input is available.",
+            "protected_local_outputs_do_not_write": ["papers/Pxx/reviews/statistical-reporting.json", "papers/Pxx/reviews/docx-revision.json", "reports/research-notebook*", "reports/method-tools.json", "program/journal-dossier-report.json"],
         },
     }
     value = contracts.get(stage)
@@ -870,6 +883,12 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Deterministic research-quality record is protected: {relative}")
     if lower_parts == ("reports", "runtime-evidence-catalog.json"):
         raise ValueError(f"Deterministic runtime evidence is protected: {relative}")
+    if (lower_parts[:1] == ("reports",) and candidate.name.startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
+        raise ValueError(f"Deterministic research improvement report is protected: {relative}")
+    if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2] == "reviews" and lower_parts[3] in {"statistical-reporting.json", "docx-revision.json"}:
+        raise ValueError(f"Deterministic statistical/Word receipt is protected: {relative}")
+    if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2:4] == ("submission-materials", "revision"):
+        raise ValueError(f"Deterministic Word revision package is protected: {relative}")
     if lower_parts == ("program", "hypothesis-audit.json"):
         raise ValueError(f"Deterministic hypothesis audit is protected: {relative}")
     if lower_parts[:2] == ("evidence", "source-scopes"):
@@ -1031,6 +1050,7 @@ def result_audit(result: ai_providers.ModelResult) -> dict[str, Any]:
         "request_id": result.request_id,
         "cache_hit": result.cache_hit,
         "cache_key": result.cache_key,
+        "completion_status": result.completion_status,
     }
 
 
@@ -1495,6 +1515,7 @@ def run_cycle(
         run_id=run_id,
         stage=stage,
         role="independent-critic-initial",
+        use_cache=False,
         provider=critic_provider,
         prompt=critic_prompt(project, stage, context),
         max_output_tokens=control_max_output_tokens,
@@ -1546,6 +1567,7 @@ def run_cycle(
         run_id=run_id,
         stage=stage,
         role="independent-critic-final",
+        use_cache=False,
         provider=critic_provider,
         prompt=critic_prompt(project, stage, context),
         max_output_tokens=control_max_output_tokens,

@@ -19,7 +19,7 @@ class ModelRuntimeTests(unittest.TestCase):
             (project / "state" / "run.json").write_text(json.dumps({"active_paper": "P01"}), encoding="utf-8")
             result = ModelResult(
                 "uuapi-openai", "gpt-test", "answer", {"input_tokens": 100, "output_tokens": 20},
-                "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi",
+                "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi", completion_status="completed",
             )
             configuration = {"model": "gpt-test", "protocol": "openai_responses", "endpoint": "https://gateway.example/v1/responses"}
             with patch("scripts.model_runtime.ai_providers.configuration", return_value=configuration), patch("scripts.model_runtime.ai_providers.call", return_value=result) as provider_call:
@@ -47,7 +47,7 @@ class ModelRuntimeTests(unittest.TestCase):
             project = Path(directory) / "demo"
             model_spend.write(project, model_spend.initial())
             result = ModelResult("uuapi-openai", "gpt-test", "answer", {"input_tokens": 100, "output_tokens": 20},
-                                 "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi")
+                                 "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi", completion_status="completed")
             configuration = {"model": "gpt-test", "protocol": "openai_responses", "endpoint": "https://gateway.example/v1/responses"}
             with patch.dict(os.environ, {"DR_OS_REQUIRE_MODEL_AUTH": "1", "DR_OS_PROJECT_BUDGET_CNY": "10000", "DR_OS_MODEL_PRICING_JSON": '{"gpt-test":{"input_per_million":2.2,"output_per_million":11}}'}, clear=False), \
                  patch("scripts.model_runtime.ai_providers.configuration", return_value=configuration), \
@@ -92,7 +92,7 @@ class ModelRuntimeTests(unittest.TestCase):
             model_spend.write(project, model_spend.initial())
             model_spend.grant(project, new_ceiling_cny=300, actor="Hengyi", run_id="approval-1")
             result = ModelResult("uuapi-openai", "gpt-test", "answer", {},
-                                 "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi")
+                                 "r1", "gpt-test", "openai_responses", "https://gateway.example/v1/responses", "uuapi", completion_status="completed")
             configuration = {"model": "gpt-test", "protocol": "openai_responses", "endpoint": "https://gateway.example/v1/responses"}
             with patch.dict(os.environ, {"DR_OS_REQUIRE_MODEL_AUTH": "1", "DR_OS_MODEL_PRICING_JSON": '{"gpt-test":{"input_per_million":2.2,"output_per_million":11}}'}, clear=False), \
                  patch("scripts.model_runtime.ai_providers.configuration", return_value=configuration), \

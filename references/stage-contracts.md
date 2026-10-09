@@ -85,6 +85,9 @@ Do not write a favorable conclusion before the claim matrix and negative results
 
 Required:
 
+- fresh passing `reviews/statistical-reporting.json` from the cloud control plane, with `statistical-reporting-map.json` covering every registered comparison, independent sample counts, seed/repetition layers, uncertainty, raw/adjusted p, multiplicity, assumptions and actual Methods/Results/caption locations; no omission of adverse results;
+- if a tracked DOCX revision package exists, a fresh passing `reviews/docx-revision.json` and verified clean/tracked/baseline/response hashes and accept/reject round trips; real Word visual inspection remains mandatory.
+
 - manuscript source, figures, tables, supplement and data/code availability statements;
 - citation audit with zero unresolved fabricated/unverified references;
 - passing `reviews/ref-verify.json` for DOI-bound abstract-level topline and numeric claims, while mechanism, procedure, table and figure claims retain exact full-text evidence locations;

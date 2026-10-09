@@ -18,10 +18,12 @@ try:
     from scripts.citation_audit import manuscript_digest, tex_source_paths
     from scripts.manuscript_language import extract_text
     from scripts.ref_verify_adapter import canonical_manuscript
+    from scripts.scientific_editing import docx_citations, context_changes, character_audit
 except ImportError:  # Direct execution from scripts/.
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from manuscript_language import extract_text  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
+    from scientific_editing import docx_citations, context_changes, character_audit  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,6 +57,8 @@ def multiset_delta(before: list[str], after: list[str]) -> dict[str, list[str]]:
 
 
 def citation_tokens(path: Path) -> list[str]:
+    if path.suffix.lower() == ".docx":
+        return docx_citations(path)
     if path.suffix.lower() != ".tex":
         return []
     values: list[str] = []
@@ -105,6 +109,7 @@ def audit(paper: Path) -> dict[str, Any]:
         key + "_changes": multiset_delta(before[key], after[key])
         for key in ("numeric", "citation", "claim_language")
     }
+    changes["scientific_context_changes"] = context_changes(extract_text(base), extract_text(current))
     has_changes = any(value[side] for value in changes.values() for side in ("removed", "added"))
     errors: list[str] = []
     if has_changes and authorization is None:
@@ -121,6 +126,10 @@ def audit(paper: Path) -> dict[str, Any]:
             authorization.get("claim_language_rationale", "")
         ).strip():
             errors.append("claim-language changes require an authorization rationale")
+        if changes["scientific_context_changes"] != {"removed": [], "added": []} and not str(
+            authorization.get("scientific_context_rationale") or authorization.get("claim_language_rationale") or ""
+        ).strip():
+            errors.append("scientific-context changes require an authorization rationale")
     return {
         "schema_version": "1.0",
         "created_at": now(),
@@ -134,6 +143,9 @@ def audit(paper: Path) -> dict[str, Any]:
         ),
         "changes": changes,
         "errors": errors,
+        "semantic_equivalence_proven": False,
+        "human_scientific_review_required": True,
+        "character_findings": character_audit(extract_text(current)),
     }
 
 

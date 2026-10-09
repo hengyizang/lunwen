@@ -17,8 +17,15 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 | writing-and-review | `render_figure`, `spec` | Executes the deterministic figure renderer on actual registered data. |
 | writing-and-review | `docx`, `source`, `metadata`, `output` | Creates genuine DOCX from provenance-bound English source and metadata using python-docx. |
 | writing-and-review | `compile_tex`, `paper_id` | Compiles provenance-bound `manuscript/main.tex` in a pinned, network-disabled, read-only TeX container; preserves the build receipt and PDF. |
+| topic-intelligence through writing-and-review | `research_notebook` | Builds incremental question/evidence/decision views from `program/research-notebook.json`; keeps opposing evidence and honest reading scope. No interpretation or gate is certified. |
+| experiment-design or experiment-execution | `method_tools` | Inspects pinned `program/method-tools.json` contracts and registered validation outputs; never directly executes methods. |
+| paper-architecture or writing-and-review | `journal_dossiers` | Rechecks dated official cost/OA/timing/policy sources from `program/journal-dossiers.json`; unknown values remain unknown. |
+| writing-and-review | `statistical_reporting`, `paper_id` | Reruns actual numerical evidence and binds all comparisons to current Methods/Results/caption passages. Fresh passing report required at G5. |
+| writing-and-review | `docx_revision`, `paper_id` | Builds genuine Word clean/tracked/response package after revision controls pass; unsupported complex changes are refused. |
 
 An example request is `{"stage":"writing-and-review","action":"render_figure","spec":"papers/P01/figures/main.spec.json"}`. Final exports still require scientific and visual review.
+
+Input contracts and limits for the added quality operations are in [Research improvements](../docs/RESEARCH-IMPROVEMENTS.md). Models may author proposed inputs, but generated receipts, histories and revision packages are protected.
 
 ## Literature and data
 

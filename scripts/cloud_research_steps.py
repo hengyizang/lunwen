@@ -315,6 +315,21 @@ def after_write(project: Path, stage: str) -> dict:
                 from scripts.manuscript_docx import build
                 source, metadata = path_in(project, operation["source"]), path_in(project, operation["metadata"])
                 build(project, source, metadata, path_in(project, operation["output"]), prefer_pandoc=False)
+            elif action == "statistical_reporting" and stage == "writing-and-review":
+                from scripts.statistical_reporting import refresh
+                refresh(project, operation["paper_id"])
+            elif action == "docx_revision" and stage == "writing-and-review":
+                from scripts.docx_revision import build
+                build(project, operation["paper_id"])
+            elif action == "research_notebook" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.research_notebook import refresh
+                refresh(project)
+            elif action == "method_tools" and stage in {"experiment-design", "experiment-execution"}:
+                from scripts.method_tools import refresh
+                refresh(project)
+            elif action == "journal_dossiers" and stage in {"paper-architecture", "writing-and-review"}:
+                from scripts.journal_dossier import refresh
+                refresh(project)
             elif action == "compile_tex" and stage == "writing-and-review":
                 from scripts.cloud_runtime import compile_tex
                 compile_tex(project, operation["paper_id"])
