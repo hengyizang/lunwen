@@ -5,6 +5,8 @@
     {"id":"negation","category":"claim","before":"Treatment did not improve survival.","after":"Treatment did improve survival.","must_flag":true},
     {"id":"group-swap","category":"numbers","before":"Group A had 12 events; group B had 20 events.","after":"Group A had 20 events; group B had 12 events.","must_flag":true},
     {"id":"unit-swap","category":"units","before":"The dose was 5 mg.","after":"The dose was 5 g.","must_flag":true},
+    {"id":"case-sensitive-unit","category":"units","before":"The scale was 5 mM.","after":"The scale was 5 mm.","must_flag":true},
+    {"id":"micro-prefix","category":"units","before":"The dose was 5 μg.","after":"The dose was 5 g.","must_flag":true},
     {"id":"ci-se","category":"uncertainty","before":"The error bars show CI.","after":"The error bars show SE.","must_flag":true},
     {"id":"association-causation","category":"claim","before":"Exposure was associated with mortality.","after":"Exposure caused mortality.","must_flag":true},
     {"id":"necessary-hedge","category":"claim","before":"The treatment may improve survival.","after":"The treatment improves survival.","must_flag":true},

@@ -330,6 +330,9 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "journal_dossiers" and stage in {"paper-architecture", "writing-and-review"}:
                 from scripts.journal_dossier import refresh
                 refresh(project)
+            elif action == "journal_sources" and stage in {"paper-architecture", "writing-and-review"}:
+                from scripts.journal_dossier import fetch_sources
+                fetch_sources(project)
             elif action == "compile_tex" and stage == "writing-and-review":
                 from scripts.cloud_runtime import compile_tex
                 compile_tex(project, operation["paper_id"])

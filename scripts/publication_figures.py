@@ -522,8 +522,11 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 metadata=metadata,
             )
             outputs.append({"path": path.relative_to(project).as_posix(), "format": suffix, "sha256": sha256_file(path), "size": path.stat().st_size})
-        from scripts.figure_output_qa import audit_outputs
-        output_qa = audit_outputs(project, outputs, expected_text=[p["xlabel"] for p in panels if p.get("xlabel") and "$" not in p["xlabel"]])
+        try:
+            from scripts.figure_output_qa import audit_outputs
+        except ImportError:
+            from figure_output_qa import audit_outputs
+        output_qa = audit_outputs(project, outputs, expected_text=[ax.get_xlabel() for ax in fig.axes if ax.axison and ax.get_xlabel() and "$" not in ax.get_xlabel()])
         pdf = output_stem.with_suffix(".pdf")
         paper = next(parent for parent in output_stem.parents if re.fullmatch(r"P[0-9]{2}", parent.name)
                      and parent.parent == project / "papers")

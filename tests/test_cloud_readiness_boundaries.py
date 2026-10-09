@@ -115,7 +115,7 @@ class CloudReadinessBoundaries(unittest.TestCase):
                    "DR_OS_MODEL_PRICING_JSON": '{"gpt-test":{"input_per_million":2,"output_per_million":10}}'}
             with patch.dict(os.environ, env, clear=True), patch(
                     "scripts.ai_providers.urllib.request.urlopen",
-                    return_value=FakeResponse({"model": "gpt-test", "output_text": "fixture", "usage": {}})) as transport:
+                    return_value=FakeResponse({"model": "gpt-test", "status": "completed", "output_text": "fixture", "usage": {}})) as transport:
                 args = dict(run_id="fixture", stage="topic-intelligence", role="writer",
                             provider="uuapi-openai", max_output_tokens=100)
                 model_runtime.call(project, prompt="first", **args)

@@ -62,6 +62,16 @@ class PublicationFigureTests(unittest.TestCase):
             self.assertTrue(all((project / item["path"]).stat().st_size > 100 for item in report["outputs"]))
             self.assertTrue(report["quality"]["colorblind_safe_palette"])
             self.assertFalse(report["quality"]["three_dimensional_chart"])
+            qa = report["quality"]["output_qa"]
+            self.assertEqual(qa["status"], "pass")
+            svg = next(row for row in qa["outputs"] if row["path"].endswith(".svg"))
+            pdf = next(row for row in qa["outputs"] if row["path"].endswith(".pdf"))
+            self.assertGreater(svg["editable_text_nodes"], 0)
+            self.assertGreater(pdf["minimum_text_points"], 0)
+            self.assertTrue(pdf["physical_pages_mm"])
+            for preview in pdf["grayscale_previews"]:
+                self.assertTrue(preview["path"].startswith("reports/figure-output-qa/"))
+                self.assertTrue((project / preview["path"]).is_file())
             wrapper = project / "papers" / "P01" / "figures" / "learning-curve.renderer.py"
             build_report = project / "papers" / "P01" / "figures" / "learning-curve.figure-build.json"
             self.assertIn("subprocess.run", wrapper.read_text(encoding="utf-8"))

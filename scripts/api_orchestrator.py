@@ -281,7 +281,7 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "operation": {"stage": "writing-and-review", "action": "statistical_reporting", "paper_id": "Pxx"},
             },
             "word_revision": "Optional docx_revision operation produces real OOXML revisions after revision-integrity and response trace checks. It refuses unsupported structural changes. Do not fabricate author approvals or visual inspection.",
-            "journal_dossiers": "Use evidence-bound publisher costs/OA/timing/policy fields; unknown is not zero. Request journal_dossiers cloud operation when the dossier input is available.",
+            "journal_dossiers": "Use evidence-bound publisher costs/OA/timing/policy fields; unknown is not zero. Request journal_sources first for controlled public retrieval, then bind source path/hash and accessed_at to evidence/journal-sources/index.json. Request journal_dossiers to audit; never write either receipt yourself.",
             "protected_local_outputs_do_not_write": ["papers/Pxx/reviews/statistical-reporting.json", "papers/Pxx/reviews/docx-revision.json", "reports/research-notebook*", "reports/method-tools.json", "program/journal-dossier-report.json"],
         },
     }
@@ -835,6 +835,7 @@ def safe_target(project: str, relative: str) -> Path:
         or lower_parts[:2] == ("evidence", "direction-sources")
         or lower_parts[:2] == ("evidence", "lead-triage")
         or lower_parts[:2] == ("evidence", "web-search")
+        or lower_parts[:2] == ("evidence", "journal-sources")
         or lower_parts == ("program", "direction-ranking.json")
         or lower_parts[:2] == ("literature", "readers")
         or (

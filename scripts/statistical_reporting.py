@@ -7,6 +7,7 @@ from pathlib import Path
 
 from scripts.research_artifacts import path_in, read, write, sha, record
 from scripts.manuscript_language import extract_text
+from scripts.scientific_editing import scientific_text
 
 REQUIRED = ("method", "analysis_unit", "independent_units", "estimate", "ci_low", "ci_high",
             "ci_confidence", "p_value", "p_adjusted", "seeds", "aggregation", "family", "family_size",
@@ -20,7 +21,7 @@ def display_value(value, decimals: int = 6) -> str:
     return str(value)
 
 
-def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict) -> dict:
+def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *, manuscript_sources: set[str] | None = None, figure_claims: set[str] | None = None) -> dict:
     errors, bindings = [], []
     comparisons = {row["comparison_id"]: row for row in evidence.get("comparisons", [])}
     if not comparisons:
@@ -52,7 +53,8 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict) -
                         relative.startswith(paper_prefix + part + "/") for part in ("manuscript", "figures", "tables", "supplement")):
                     raise ValueError("statistics must point to this paper's final materials")
                 target = path_in(project, relative)
-                text = extract_text(target)
+                text = (scientific_text(target).replace(r"\%", "%").replace(r"\_", "_").replace(r"\&", "&")
+                        if target.suffix.lower() == ".tex" else extract_text(target))
                 quote = location["quote"]
                 if not isinstance(quote, str) or not quote or text.count(quote) != 1:
                     raise ValueError("location quote must identify exactly one actual text passage")
@@ -63,7 +65,7 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict) -
                     scale = location.get("display_scale", 1)
                     if scale != 1 and not (field == "ci_confidence" and scale == 100):
                         raise ValueError("only confidence probability to percentage conversion is supported")
-                    if not re.search(r"(?<![\w.])" + re.escape(display_value(actual[field] * scale, decimals)) + r"(?![\w.])", quote):
+                    if not re.search(r"(?<![\w.])" + re.escape(display_value(actual[field] * scale, decimals)) + r"(?!\w|\.\d)", quote):
                         raise ValueError("displayed number differs from the actual evidence at the declared precision")
                 elif location.get("value") != actual[field]:
                     raise ValueError("method, unit, phase or decision differs from the evidence record")
@@ -72,6 +74,8 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict) -
                 section = location["section"]
                 if section not in {"Methods", "Results", "Caption", "Table", "Supplement"}:
                     raise ValueError("unknown reporting section")
+                if section in {"Methods", "Results"} and manuscript_sources is not None and relative not in manuscript_sources:
+                    raise ValueError("Methods/Results must occur in the actual canonical manuscript source tree")
                 fields.add(field)
                 sections.add(section)
                 bindings.append({**location, "comparison_id": identifier, "sha256": sha(target),
@@ -82,7 +86,8 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict) -
             errors.append(f"{identifier}: missing fields {sorted(set(REQUIRED) - fields)}")
         if not {"Methods", "Results"}.issubset(sections):
             errors.append(f"{identifier}: Methods and Results locations are required")
-        if item.get("has_figure") is True and "Caption" not in sections:
+        needs_caption = item.get("has_figure") is True or bool(set(actual.get("claim_ids", [])) & (figure_claims or set()))
+        if needs_caption and "Caption" not in sections:
             errors.append(f"{identifier}: statistical figure needs a caption mapping")
         if not str(item.get("reporting_notes", "")).strip():
             errors.append(f"{identifier}: document exclusions, missingness, assumptions and repetition levels")
@@ -96,11 +101,22 @@ def audit(project: Path, paper_id: str) -> dict:
     errors = validate_report(project, paper_id)
     evidence = build_report(project, paper_id)
     paper = path_in(project, f"papers/{paper_id}/statistical-reporting-map.json")
-    result = check_mapping(project, paper_id, evidence, read(paper))
+    from scripts.ref_verify_adapter import canonical_manuscript
+    from scripts.citation_audit import tex_source_paths
+    canonical = canonical_manuscript(project / "papers" / paper_id)
+    sources = tex_source_paths(canonical) if canonical.suffix == ".tex" else [canonical]
+    manuscript_sources = {p.relative_to(project).as_posix() for p in sources}
+    figure_claims = set()
+    figure_inputs = {}
+    for build in sorted((project / "papers" / paper_id / "figures").rglob("*.figure-build.json")):
+        figure_claims.update(read(build).get("quality", {}).get("claim_ids", []))
+        figure_inputs[build.relative_to(project).as_posix()] = sha(build)
+    result = check_mapping(project, paper_id, evidence, read(paper), manuscript_sources=manuscript_sources, figure_claims=figure_claims)
     result["errors"] = errors + result["errors"]
     result["status"] = "pass" if not result["errors"] else "fail"
     result["mapping_sha256"] = sha(paper)
     result["evidence_sha256"] = sha(path_in(project, f"papers/{paper_id}/experiment-evidence.json"))
+    result["figure_inputs"] = figure_inputs
     return result
 
 

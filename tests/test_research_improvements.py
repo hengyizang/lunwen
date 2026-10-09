@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import tempfile
+import zipfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -70,12 +71,36 @@ class ScientificEditTests(unittest.TestCase):
         self.assertEqual([r["codepoint"] for r in findings], ["U+200D", "U+202E"])
         self.assertEqual(text, "Data\u200dvalue\u202e")
 
+    def test_formula_and_math_numbers_survive_language_cleanup(self):
+        from scripts.revision_integrity import audit
+        with tempfile.TemporaryDirectory() as directory:
+            paper = Path(directory)
+            (paper / "manuscript").mkdir()
+            (paper / "reviews/revision-base").mkdir(parents=True)
+            base = paper / "reviews/revision-base/main.tex"
+            current = paper / "manuscript/main.tex"
+            base.write_text("An effect is defined by $x = a + 10$.")
+            current.write_text("An effect is defined by $x = a - 12$.")
+            result = audit(paper)
+            self.assertEqual(result["status"], "fail")
+            self.assertEqual(result["changes"]["numeric_changes"], {"removed": ["10"], "added": ["12"]})
+            self.assertTrue(result["changes"]["formula_changes"]["added"])
+
+    def test_split_word_citation_instructions_remain_protected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "main.docx"
+            w = scientific_editing.W[1:-1]
+            xml = f'<w:document xmlns:w="{w}"><w:body><w:p><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText>CIT</w:instrText></w:r><w:r><w:instrText>ATION alpha2025</w:instrText></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:body></w:document>'
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("word/document.xml", xml)
+            self.assertIn("CITATION alpha2025", scientific_editing.docx_citations(path))
+
 
 class StatisticalMappingTests(unittest.TestCase):
     def fixture(self, project: Path):
         paragraph = project / "papers/P01/manuscript/results.md"
         paragraph.parent.mkdir(parents=True)
-        row = {"comparison_id": "negative", "status": "computed", "method": "paired unit means", "analysis_unit": "patient",
+        row = {"comparison_id": "negative", "claim_ids": ["C1"], "status": "computed", "method": "paired unit means", "analysis_unit": "patient",
                "independent_units": 20, "estimate": 0.125, "ci_low": -0.1, "ci_high": 0.35,
                "ci_confidence": 0.95, "p_value": 0.31, "p_adjusted": 0.31, "seeds": 3,
                "aggregation": "mean_within_unit_then_mean_across_seeds", "family": "primary", "family_size": 1,
@@ -120,6 +145,48 @@ class StatisticalMappingTests(unittest.TestCase):
             mapping["comparisons"] = []
             result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
             self.assertTrue(any("every registered" in e for e in result["errors"]))
+
+    def test_orphan_text_and_hidden_figure_mapping_cannot_pass(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping,
+                        manuscript_sources={"papers/P01/manuscript/main.tex"}, figure_claims={"C1"})
+            self.assertTrue(any("canonical" in e for e in result["errors"]))
+            self.assertTrue(any("caption" in e for e in result["errors"]))
+
+    def test_larger_number_cannot_match_a_shorter_registered_value(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            target = project / "papers/P01/manuscript/results.md"
+            target.write_text(target.read_text().replace("independent_units: 20.", "independent_units: 120."))
+            mapping["comparisons"][0]["locations"][2]["quote"] = "independent_units: 120."
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
+            self.assertEqual(result["status"], "fail")
+
+    def test_confidence_percentage_conversion_is_explicit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            target = project / "papers/P01/manuscript/results.md"
+            target.write_text(target.read_text().replace("ci_confidence: 0.95.", "ci_confidence: 95%."))
+            location = mapping["comparisons"][0]["locations"][6]
+            location.update(quote="ci_confidence: 95%.", display_scale=100, decimals=0)
+            self.assertEqual(statistical_reporting.check_mapping(project, "P01", evidence, mapping)["status"], "pass")
+
+    def test_inline_tex_statistics_are_not_erased_as_language_markup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            original = project / "papers/P01/manuscript/results.md"
+            target = original.with_suffix(".tex")
+            target.write_text(original.read_text().replace("p_adjusted: 0.31.", r"The adjusted probability was $p=0.31$."))
+            for location in mapping["comparisons"][0]["locations"]:
+                location["path"] = "papers/P01/manuscript/results.tex"
+                if location["field"] == "p_adjusted":
+                    location["quote"] = r"The adjusted probability was $p=0.31$."
+            self.assertEqual(statistical_reporting.check_mapping(project, "P01", evidence, mapping)["status"], "pass")
 
 
 class NotebookTests(unittest.TestCase):
@@ -172,6 +239,27 @@ class WordRevisionTests(unittest.TestCase):
 
 
 class JournalAndMethodTests(unittest.TestCase):
+    def test_fee_quotes_require_actual_retrieval_and_refuse_wrong_amounts(self):
+        from datetime import datetime, timedelta
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            write(project / "program/venue-candidates.json", {"papers": [{"candidates": [{"venue_id": "journal"}]}]})
+            fields = {name: {"status": "unknown", "reason": "No publisher evidence"} for name in journal_dossier.FIELDS}
+            fields["apc"] = {"status": "unknown", "reason": "Pending receipt", "url": "https://publisher.example/fees"}
+            dossier = {"journals": [{"venue_id": "journal", "official_domains": ["publisher.example"], "fields": fields}]}
+            write(project / "program/journal-dossiers.json", dossier)
+            fetcher = lambda url, **kw: (b"<p>APC 100 USD.</p>", url, 200, "text/html")
+            ledger = journal_dossier.fetch_sources(project, fetcher=fetcher)
+            receipt = ledger["sources"][fields["apc"]["url"]]
+            fields["apc"].update(status="verified", value=100, currency="USD", tax="unknown", quote="APC 100 USD.",
+                source={"path": receipt["path"], "sha256": receipt["sha256"], "locator": "fees paragraph"},
+                accessed_at=receipt["retrieved_at"], expires_at=(datetime.fromisoformat(receipt["retrieved_at"]) + timedelta(days=90)).isoformat())
+            write(project / "program/journal-dossiers.json", dossier)
+            self.assertEqual(journal_dossier.audit(project)["status"], "pass")
+            fields["apc"]["value"] = 900
+            write(project / "program/journal-dossiers.json", dossier)
+            self.assertEqual(journal_dossier.audit(project)["status"], "fail")
+
     def test_unknown_journal_fee_is_not_free_and_expired_quote_is_refused(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)

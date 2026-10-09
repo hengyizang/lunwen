@@ -6,7 +6,7 @@ This increment applies the worthwhile gaps identified in the 19-article assessme
 
 | Improvement | Implementation | Remaining scientific work |
 | --- | --- | --- |
-| Scientific meaning during editing | Numeric/unit/negation/uncertainty/citation context signatures, DOCX citation fields and links, inspect-only Unicode findings, exact human authorization | Conservative checks can flag legitimate edits or miss semantic changes; independent human scientific review remains necessary |
+| Scientific meaning during editing | Numeric/unit/negation/uncertainty/citation context signatures, TeX/Word formula protection, DOCX citation fields and links, inspect-only Unicode findings, exact human authorization | Conservative checks can flag legitimate edits or miss semantic changes; independent human scientific review remains necessary |
 | Complete model replies | Responses status, Chat finish reason and Claude stop reason; refuse truncated/refused/tool-only replies before persistent writes; billable failures remain recorded; cache schema changed | Actual gateway acceptance requires the user's credentials; absent termination metadata blocks authorized cloud calls |
 | Billing identity | Provider/endpoint/model scoped quotes, quote version, cache read/write and total output billing; unknown cache pricing keeps the reservation for reconciliation | Supply verified CNY quotes; official dollar prices and channel multipliers are not invoices |
 | Evidence and decisions | Question-centred notebook with opposing evidence, reading scope, hashes, locators, failure conditions and stop rules; append-only incremental snapshots | Interpretations and decisions require review and cannot grant G0–G5 approval |
@@ -28,6 +28,7 @@ Use the existing authorized GitHub cloud cycle. `program/cloud-operations.json` 
   "operations": [
     {"action": "research_notebook", "stage": "topic-intelligence"},
     {"action": "method_tools", "stage": "experiment-design"},
+    {"action": "journal_sources", "stage": "paper-architecture"},
     {"action": "journal_dossiers", "stage": "paper-architecture"},
     {"action": "statistical_reporting", "stage": "writing-and-review", "paper_id": "P01"},
     {"action": "docx_revision", "stage": "writing-and-review", "paper_id": "P01"}
@@ -85,6 +86,8 @@ Example location (replace quote and values with actual manuscript/evidence):
 
 The author can use readable prose while the mapping's `value` preserves the machine decision. The report explicitly does not verify that a paraphrase entails its mapped scientific meaning. G5 requires a fresh passing `reviews/statistical-reporting.json`, produced by the control plane against rerun numerical evidence. Seed effects and within-unit repetitions remain separate from independent units. Existing registered custom analyses are hash-bound; their statistical appropriateness still requires review.
 
+Methods/Results locations must belong to the canonical manuscript and its actual TeX includes; unrelated draft files cannot satisfy these anchors. Figure build records sharing a comparison's claim IDs require a caption anchor even if the proposed map sets `has_figure` to false. Numeric matching distinguishes registered `20` from `120`, supports sentence punctuation, and preserves declared precision.
+
 ## Pinned method-tool contracts
 
 `program/method-tools.json` has `tools`. Each tool needs:
@@ -111,6 +114,8 @@ Specification references: [Microsoft inserted runs](https://learn.microsoft.com/
 `program/journal-dossiers.json` has `journals`, each with a unique existing `venue_id`, `official_domains`, and all seven `fields`: `apc`, `page_charges`, `oa_policy`, `waivers`, `review_time`, `submission_url`, `ai_policy`.
 
 Every field is either `{status: "unknown", reason: "..."}` or `verified` with a concrete `value`, official HTTPS `url`, preserved UTF-8 source `path`/hash/locator, matching `quote`, `accessed_at` and `expires_at`. Evidence expires within at most 120 days; dates require timezones. Fees include `currency` and `tax: included|excluded|unknown`. OA is `optional|required|subscription|diamond`. Review time includes `definition`, `statistic`, `historical_period`; it is historical information, not an individual promise. Hash matching and an official-domain claim still require human assessment that the source/value is authentic and interpreted correctly. Existing candidate/JCR requirements remain authoritative.
+
+Request `journal_sources` first to retrieve the declared publisher URLs through the existing public-HTTPS network safeguards. It performs at most twenty bounded, non-billable GETs per operation, uses a seven-day hash-checked cache and records pending URLs for a later operation (at most 140 URLs per project plan). Failed sources have a six-hour cooldown so they cannot starve remaining journals. Protected `evidence/journal-sources/index.json` records actual retrieval time, final URL, normalized and raw hashes. Copy the resulting exact source path/hash/retrieval time into each field before `journal_dossiers`. A model-written text file or invented receipt cannot satisfy this check. Fee numbers must occur in the actual quoted publisher passage. Expired, changed or missing sources block stale dossiers at G5.
 
 ## Pricing and quality evaluation
 

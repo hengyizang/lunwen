@@ -20,6 +20,7 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 | topic-intelligence through writing-and-review | `research_notebook` | Builds incremental question/evidence/decision views from `program/research-notebook.json`; keeps opposing evidence and honest reading scope. No interpretation or gate is certified. |
 | experiment-design or experiment-execution | `method_tools` | Inspects pinned `program/method-tools.json` contracts and registered validation outputs; never directly executes methods. |
 | paper-architecture or writing-and-review | `journal_dossiers` | Rechecks dated official cost/OA/timing/policy sources from `program/journal-dossiers.json`; unknown values remain unknown. |
+| paper-architecture or writing-and-review | `journal_sources` | Fetches declared public publisher URLs with network safeguards, at most twenty GETs per operation; records protected raw/normalized hashes and pending URLs. |
 | writing-and-review | `statistical_reporting`, `paper_id` | Reruns actual numerical evidence and binds all comparisons to current Methods/Results/caption passages. Fresh passing report required at G5. |
 | writing-and-review | `docx_revision`, `paper_id` | Builds genuine Word clean/tracked/response package after revision controls pass; unsupported complex changes are refused. |
 
