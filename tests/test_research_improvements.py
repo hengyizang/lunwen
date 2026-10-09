@@ -58,6 +58,15 @@ class CompletionTests(unittest.TestCase):
             cost, unknown, _ = model_runtime.billed_cost("anthropic", {"cache_read_input_tokens": 50, "cache_creation_input_tokens": 10}, "test", 100, 30)
             self.assertAlmostEqual(cost, 0.00055)
 
+    def test_nonfinite_budget_settings_and_wrong_route_quotes_are_refused(self):
+        with patch.dict(os.environ, {"DR_OS_PROJECT_BUDGET_CNY": "nan"}):
+            with self.assertRaises(model_runtime.ModelBudgetError):
+                model_runtime._float_env("DR_OS_PROJECT_BUDGET_CNY", 300)
+        rates = {"test": {"input_per_million": 2, "output_per_million": 10, "endpoint": "https://other.example/v1/responses"}}
+        with patch("scripts.ai_providers.configuration", return_value={"endpoint": "https://expected.example/v1/responses"}), patch.dict(os.environ, {"DR_OS_MODEL_PRICING_JSON": json.dumps(rates)}):
+            with self.assertRaises(model_runtime.ModelBudgetError):
+                model_runtime.pricing("openai", "test")
+
 
 class ScientificEditTests(unittest.TestCase):
     def test_counterexamples_and_legal_edits(self):
@@ -212,6 +221,48 @@ class NotebookTests(unittest.TestCase):
 
 
 class WordRevisionTests(unittest.TestCase):
+    def test_actual_docx_packages_keep_namespaces_fields_tables_and_equations(self):
+        from docx import Document
+        from docx.oxml import OxmlElement
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            baseline, clean = root / "baseline.docx", root / "clean.docx"
+            document = Document()
+            document.add_paragraph("The effect may improve.")
+            citation = document.add_paragraph()
+            for tag, text in (("fldChar", "begin"), ("instrText", " CITATION alpha2025 "), ("fldChar", "end")):
+                node = OxmlElement("w:" + tag)
+                if tag == "fldChar":
+                    node.set(docx_revision.W + "fldCharType", text)
+                else:
+                    node.text = text
+                citation.add_run()._r.append(node)
+            equation = OxmlElement("m:oMath")
+            run, text = OxmlElement("m:r"), OxmlElement("m:t")
+            text.text = "x = 1"
+            run.append(text)
+            equation.append(run)
+            document.add_paragraph()._p.append(equation)
+            document.add_table(rows=1, cols=1).cell(0, 0).text = "Unchanged data"
+            document.save(baseline)
+            updated = Document(baseline)
+            updated.paragraphs[0].runs[0].text = "The effect might improve."
+            updated.save(clean)
+            old_parts, new_parts = docx_revision.package(baseline), docx_revision.package(clean)
+            payload = docx_revision.track(old_parts, new_parts, "Doctoral Research OS", "2026-10-09T00:00:00Z")
+            tracked = docx_revision.ET.fromstring(payload)
+            self.assertTrue(set(docx_revision.ET.fromstring(new_parts[docx_revision.DOCUMENT]).nsmap).issubset(tracked.nsmap))
+            for accept, expected in ((True, "The effect might improve."), (False, "The effect may improve.")):
+                target = root / ("accepted.docx" if accept else "rejected.docx")
+                with zipfile.ZipFile(target, "w") as archive:
+                    for name, data in new_parts.items():
+                        archive.writestr(name, docx_revision.ET.tostring(docx_revision.resolve(tracked, accept)) if name == docx_revision.DOCUMENT else data)
+                reread = Document(target)
+                self.assertEqual(reread.paragraphs[0].text, expected)
+                self.assertEqual(reread.tables[0].cell(0, 0).text, "Unchanged data")
+                self.assertIn("CITATION alpha2025", scientific_editing.docx_citations(target))
+                self.assertTrue(scientific_editing.formula_tokens(target))
+
     def parts(self, text, *, extra=""):
         w = docx_revision.W[1:-1]
         return {"word/document.xml": f'<w:document xmlns:w="{w}"><w:body><w:p><w:r><w:t>{text}</w:t></w:r></w:p>{extra}</w:body></w:document>'.encode(),

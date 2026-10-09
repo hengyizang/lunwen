@@ -52,7 +52,7 @@ def _float_env(name: str, default: float) -> float:
         value = float(raw)
     except ValueError as exc:
         raise ModelBudgetError(f"{name} must be numeric") from exc
-    if value <= 0:
+    if not math.isfinite(value) or value <= 0:
         raise ModelBudgetError(f"{name} must be positive")
     return value
 
@@ -392,7 +392,10 @@ def call(
     controlled = control is not None
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
-    reserved_cost = cost_cny(provider, max(predicted_input, len(request_text.encode("utf-8")) + 1000), max_output_tokens, effective_model or None) if controlled else predicted_cost
+    reserve_rates = pricing(provider, effective_model or None)
+    maximum_input_rate = max(reserve_rates["input_per_million"], reserve_rates.get("cache_read_per_million", 0), reserve_rates.get("cache_write_per_million", 0))
+    reserved_cost = round((max(predicted_input, len(request_text.encode("utf-8")) + 1000) * maximum_input_rate
+                          + max_output_tokens * reserve_rates["output_per_million"]) / 1_000_000, 8) if controlled else predicted_cost
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
