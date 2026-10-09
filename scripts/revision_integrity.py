@@ -18,15 +18,17 @@ try:
     from scripts.citation_audit import manuscript_digest, tex_source_paths
     from scripts.manuscript_language import extract_text
     from scripts.ref_verify_adapter import canonical_manuscript
+    from scripts.scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens
 except ImportError:  # Direct execution from scripts/.
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from manuscript_language import extract_text  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
+    from scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
-NUMBER_RE = re.compile(r"(?<![A-Za-z])[-+]?\d+(?:[.,]\d+)*(?:[eE][-+]?\d+)?%?")
+NUMBER_RE = re.compile(r"(?<![A-Za-z0-9])[-+]?\d+(?:[.,]\d+)*(?:[eE][-+]?\d+)?%?")
 SIGNAL_RE = re.compile(
     r"\b(?:may|might|could|suggests?|indicates?|associated|correlat(?:e|es|ed|ion)|"
     r"causes?|caused|drives?|demonstrates?|proves?|establishes?|confirms?)\b",
@@ -55,6 +57,8 @@ def multiset_delta(before: list[str], after: list[str]) -> dict[str, list[str]]:
 
 
 def citation_tokens(path: Path) -> list[str]:
+    if path.suffix.lower() == ".docx":
+        return docx_citations(path)
     if path.suffix.lower() != ".tex":
         return []
     values: list[str] = []
@@ -69,11 +73,12 @@ def citation_tokens(path: Path) -> list[str]:
 
 
 def tokens(path: Path) -> dict[str, list[str]]:
-    text = extract_text(path)
+    text = scientific_text(path)
     return {
         "numeric": NUMBER_RE.findall(text),
         "citation": citation_tokens(path),
         "claim_language": [match.group(0).casefold() for match in SIGNAL_RE.finditer(text)],
+        "formula": formula_tokens(path),
     }
 
 
@@ -103,8 +108,9 @@ def audit(paper: Path) -> dict[str, Any]:
     before, after = tokens(base), tokens(current)
     changes = {
         key + "_changes": multiset_delta(before[key], after[key])
-        for key in ("numeric", "citation", "claim_language")
+        for key in ("numeric", "citation", "claim_language", "formula")
     }
+    changes["scientific_context_changes"] = context_changes(scientific_text(base), scientific_text(current))
     has_changes = any(value[side] for value in changes.values() for side in ("removed", "added"))
     errors: list[str] = []
     if has_changes and authorization is None:
@@ -121,6 +127,14 @@ def audit(paper: Path) -> dict[str, Any]:
             authorization.get("claim_language_rationale", "")
         ).strip():
             errors.append("claim-language changes require an authorization rationale")
+        if changes["scientific_context_changes"] != {"removed": [], "added": []} and not str(
+            authorization.get("scientific_context_rationale") or authorization.get("claim_language_rationale") or ""
+        ).strip():
+            errors.append("scientific-context changes require an authorization rationale")
+        if changes["formula_changes"] != {"removed": [], "added": []} and not str(
+            authorization.get("formula_rationale") or authorization.get("scientific_context_rationale") or authorization.get("claim_language_rationale") or ""
+        ).strip():
+            errors.append("formula changes require an authorization rationale")
     return {
         "schema_version": "1.0",
         "created_at": now(),
@@ -134,6 +148,9 @@ def audit(paper: Path) -> dict[str, Any]:
         ),
         "changes": changes,
         "errors": errors,
+        "semantic_equivalence_proven": False,
+        "human_scientific_review_required": True,
+        "character_findings": character_audit(extract_text(current)),
     }
 
 

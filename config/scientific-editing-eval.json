@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Engineering counterexamples; no real-world scientific or authorship calibration claim",
+  "cases": [
+    {"id":"negation","category":"claim","before":"Treatment did not improve survival.","after":"Treatment did improve survival.","must_flag":true},
+    {"id":"group-swap","category":"numbers","before":"Group A had 12 events; group B had 20 events.","after":"Group A had 20 events; group B had 12 events.","must_flag":true},
+    {"id":"unit-swap","category":"units","before":"The dose was 5 mg.","after":"The dose was 5 g.","must_flag":true},
+    {"id":"case-sensitive-unit","category":"units","before":"The scale was 5 mM.","after":"The scale was 5 mm.","must_flag":true},
+    {"id":"micro-prefix","category":"units","before":"The dose was 5 μg.","after":"The dose was 5 g.","must_flag":true},
+    {"id":"ci-se","category":"uncertainty","before":"The error bars show CI.","after":"The error bars show SE.","must_flag":true},
+    {"id":"association-causation","category":"claim","before":"Exposure was associated with mortality.","after":"Exposure caused mortality.","must_flag":true},
+    {"id":"necessary-hedge","category":"claim","before":"The treatment may improve survival.","after":"The treatment improves survival.","must_flag":true},
+    {"id":"non-significant","category":"claim","before":"The difference was not significant.","after":"The difference was significant.","must_flag":true},
+    {"id":"plain-style","category":"legal-style","before":"We conducted an analysis of the results.","after":"We analysed the results.","must_flag":false},
+    {"id":"same-claim","category":"legal-domain-language","before":"The effect may depend on dose.","after":"The effect may depend on dose.","must_flag":false},
+    {"id":"citation-drift","category":"citation","before":"A result was found \\cite{alpha2025}.","after":"A result was found \\cite{beta2025}.","must_flag":true},
+    {"id":"moved-number","category":"numbers","before":"Accuracy was 91 percent; recall was 80 percent.","after":"Recall was 91 percent; accuracy was 80 percent.","must_flag":true},
+    {"id":"unchanged-number","category":"legal-domain-language","before":"The dose was 5 mg.","after":"The dose was 5 mg.","must_flag":false}
+  ]
+}

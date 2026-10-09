@@ -181,12 +181,14 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
             value = {"id": f"synthetic-{index}", "model": expected_model}
             if anthropic:
                 value.update(content=[{"type": "text", "text": texts[index]}],
+                             stop_reason="end_turn",
                              usage={"input_tokens": 120, "output_tokens": 20})
             elif protocol == "chat_completions":
-                value.update(choices=[{"message": {"content": texts[index]}}],
+                value.update(choices=[{"message": {"content": texts[index]}, "finish_reason": "stop"}],
                              usage={"prompt_tokens": 120, "completion_tokens": 20})
             else:
                 value.update(output=[{"type": "message", "content": [{"type": "output_text", "text": texts[index]}]}],
+                             status="completed",
                              usage={"input_tokens": 120, "output_tokens": 20})
             return Response(value)
 

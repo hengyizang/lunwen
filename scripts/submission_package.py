@@ -186,6 +186,9 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         except ModuleNotFoundError:from figure_provenance import validate_figure_provenance
         figure_errors=validate_figure_provenance(project,paper)
         if figure_errors:raise ResearchCtlError("Figure provenance failed: "+"; ".join(figure_errors))
+        from scripts.docx_revision import validate_saved_report as validate_word_revision
+        revision_errors=validate_word_revision(project,paper_id)
+        if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc
     files = select_files(paper)

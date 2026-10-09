@@ -43,6 +43,38 @@ class ModelResult:
     gateway: str | None = None
     cache_hit: bool = False
     cache_key: str | None = None
+    completion_status: str | None = None
+
+
+def completion_status(data: dict[str, Any], protocol: str) -> str:
+    """Preserve termination failures even when the provider returned partial text."""
+    if protocol == "openai_responses":
+        for item in data.get("output", []):
+            if isinstance(item, dict):
+                if item.get("status") in {"incomplete", "failed", "in_progress"}:
+                    return str(item["status"])
+                if any(p.get("type") == "refusal" for p in item.get("content", []) if isinstance(p, dict)):
+                    return "refusal"
+                if item.get("type") in {"function_call", "tool_call"}:
+                    return "tool_use"
+        return str(data.get("status") or "unknown")
+    if protocol == "openai_chat_completions":
+        choice = (data.get("choices") or [{}])[0]
+        if not isinstance(choice, dict):
+            return "unknown"
+        if (choice.get("message") or {}).get("refusal"):
+            return "refusal"
+        reason = choice.get("finish_reason")
+        return "completed" if reason == "stop" else str(reason or "unknown")
+    reason = data.get("stop_reason")
+    return "completed" if reason in {"end_turn", "stop_sequence"} else str(reason or "unknown")
+
+
+def require_complete(result: ModelResult) -> None:
+    strict = os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1"
+    status = result.completion_status or "unknown"
+    if status != "completed" and (strict or status != "unknown"):
+        raise ProviderError(f"model response did not complete ({status}); no artifact writes or automatic paid retry")
 
 
 def _request(
@@ -307,6 +339,7 @@ def call_openai(
         "openai_responses",
         _safe_endpoint_for_audit(endpoint),
         "official-or-custom",
+        completion_status=completion_status(data, "openai_responses"),
     )
 
 
@@ -357,6 +390,7 @@ def call_anthropic(
         "anthropic_messages",
         _safe_endpoint_for_audit(endpoint),
         "official-or-custom",
+        completion_status=completion_status(data, "anthropic_messages"),
     )
 
 
@@ -417,6 +451,7 @@ def call_uuapi_openai(
         audit_protocol,
         endpoint,
         "uuapi",
+        completion_status=completion_status(data, audit_protocol),
     )
 
 
@@ -457,6 +492,7 @@ def call_uuapi_anthropic(
         "anthropic_messages",
         endpoint,
         "uuapi",
+        completion_status=completion_status(data, "anthropic_messages"),
     )
 
 

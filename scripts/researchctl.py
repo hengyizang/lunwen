@@ -386,7 +386,17 @@ def gate_errors(slug,gate):
             from scripts.reporting_checklist import validate_saved_report as validate_reporting_checklist
             errors.extend(f"{pid} reporting guideline: {x}" for x in validate_reporting_checklist(paper))
         except ImportError as exc:errors.append(f"{pid} reporting checklist validator unavailable: {exc}")
+        try:
+            from scripts.statistical_reporting import validate_saved_report as validate_statistical_reporting
+            errors.extend(f"{pid} statistical reporting: {x}" for x in validate_statistical_reporting(project,pid))
+            from scripts.docx_revision import validate_saved_report as validate_word_revision
+            errors.extend(f"{pid} Word revisions: {x}" for x in validate_word_revision(project,pid))
+        except ImportError as exc:errors.append(f"{pid} statistical/Word validator unavailable: {exc}")
         venue=load_nonempty_json(paper/"venue.json",errors)
+        try:
+            from scripts.journal_dossier import validate_saved_report as validate_dossier
+            errors.extend(f"{pid} journal dossier: {x}" for x in validate_dossier(project,venue.get("venue_id") if venue else None))
+        except ImportError as exc:errors.append(f"{pid} journal dossier validator unavailable: {exc}")
         if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
         if venue and venue.get("g5_reverified_at"):require_recent_timestamp(venue,"g5_reverified_at",f"{pid}/venue.json",errors,120)
         jcr=load_nonempty_json(paper/"jcr-verification.json",errors)

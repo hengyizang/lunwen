@@ -52,12 +52,12 @@ def _float_env(name: str, default: float) -> float:
         value = float(raw)
     except ValueError as exc:
         raise ModelBudgetError(f"{name} must be numeric") from exc
-    if value <= 0:
+    if not math.isfinite(value) or value <= 0:
         raise ModelBudgetError(f"{name} must be positive")
     return value
 
 
-def pricing(provider: str, model: str | None = None) -> dict[str, float]:
+def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
     family = ai_providers.provider_family(provider)
     defaults = _defaults()
     configured = defaults.get(family)
@@ -72,7 +72,9 @@ def pricing(provider: str, model: str | None = None) -> dict[str, float]:
             raise ModelBudgetError("DR_OS_MODEL_PRICING_JSON is invalid JSON") from exc
         if not isinstance(overrides, dict):
             raise ModelBudgetError("model pricing must be an object")
-        selected = overrides.get(model)
+        configuration = ai_providers.configuration(provider)
+        scope_key = "|".join((provider, str(configuration.get("endpoint") or ""), model))
+        selected = overrides.get(scope_key, overrides.get(model))
         if selected is not None:
             if not isinstance(selected, dict):
                 raise ModelBudgetError(f"model price entry is malformed: {model}")
@@ -82,6 +84,22 @@ def pricing(provider: str, model: str | None = None) -> dict[str, float]:
                 raise ModelBudgetError(f"model price entry needs numeric input/output CNY per million: {model}") from exc
             if any(not math.isfinite(value) or value <= 0 for value in values.values()):
                 raise ModelBudgetError("model prices must be positive finite numbers")
+            if selected.get("currency", "CNY") != "CNY":
+                raise ModelBudgetError("budget rates must be expressed in CNY")
+            for field, actual in (("provider", provider), ("endpoint", configuration.get("endpoint"))):
+                if selected.get(field) is not None and selected[field] != actual:
+                    raise ModelBudgetError(f"price quote {field} differs from the requested route")
+            for key in ("cache_read_per_million", "cache_write_per_million"):
+                if key in selected:
+                    try:
+                        value = float(selected[key])
+                    except (TypeError, ValueError) as exc:
+                        raise ModelBudgetError("cache rate must be numeric") from exc
+                    if not math.isfinite(value) or value < 0:
+                        raise ModelBudgetError("cache rate must be non-negative and finite")
+                    values[key] = value
+            values["price_version"] = str(selected.get("price_version") or "legacy-model-only")
+            values["scope_key"] = scope_key
             return values
         if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
             raise ModelBudgetError(f"exact CNY input/output rates are required for cloud model {model}")
@@ -123,6 +141,24 @@ def cost_cny(provider: str, input_tokens: int, output_tokens: int, model: str | 
         + output_tokens * rates["output_per_million"] / 1_000_000,
         8,
     )
+
+
+def billed_cost(provider: str, usage: dict, model: str, input_tokens: int, output_tokens: int) -> tuple[float, bool, dict]:
+    """Output includes reasoning; never add reasoning tokens a second time."""
+    rates = pricing(provider, model)
+    cached = usage.get("cache_read_input_tokens", (usage.get("input_tokens_details") or usage.get("prompt_tokens_details") or {}).get("cached_tokens", 0))
+    created = usage.get("cache_creation_input_tokens", 0)
+    if any(not isinstance(n, int) or isinstance(n, bool) or n < 0 for n in (cached, created)):
+        raise ModelBudgetError("cache usage is malformed; reconcile the outstanding reservation")
+    anthropic = ai_providers.provider_family(provider) == "anthropic"
+    ordinary = input_tokens if anthropic else max(0, input_tokens - cached)
+    unknown = bool((cached and "cache_read_per_million" not in rates) or (created and "cache_write_per_million" not in rates))
+    total = (ordinary * rates["input_per_million"] + cached * rates.get("cache_read_per_million", rates["input_per_million"])
+             + created * rates.get("cache_write_per_million", 2 * rates["input_per_million"])
+             + output_tokens * rates["output_per_million"]) / 1_000_000
+    details = {"ordinary_input_tokens": ordinary, "cache_read_tokens": cached, "cache_write_tokens": created,
+               "output_tokens_including_reasoning": output_tokens, "rates": rates, "unknown_cache_price": unknown}
+    return round(total, 8), unknown, details
 
 
 def _ledger(project_root: Path) -> Path:
@@ -255,7 +291,7 @@ def _cache_key(
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "system_sha256": hashlib.sha256((system or "").encode("utf-8")).hexdigest(),
         "max_output_tokens": max_output_tokens,
-        "cache_schema": "1.0",
+        "cache_schema": "2.0",
     }
     digest = hashlib.sha256(
         json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -322,10 +358,12 @@ def call(
                 gateway=cached.get("gateway"),
                 cache_hit=True,
                 cache_key=key,
+                completion_status=cached.get("completion_status"),
             )
         except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
             result = None  # type: ignore[assignment]
         if result is not None:
+            ai_providers.require_complete(result)
             _append(
                 _ledger(project_root),
                 {
@@ -354,7 +392,10 @@ def call(
     controlled = control is not None
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
-    reserved_cost = cost_cny(provider, max(predicted_input, len(request_text.encode("utf-8")) + 1000), max_output_tokens, effective_model or None) if controlled else predicted_cost
+    reserve_rates = pricing(provider, effective_model or None)
+    maximum_input_rate = max(reserve_rates["input_per_million"], reserve_rates.get("cache_read_per_million", 0), reserve_rates.get("cache_write_per_million", 0))
+    reserved_cost = round((max(predicted_input, len(request_text.encode("utf-8")) + 1000) * maximum_input_rate
+                          + max_output_tokens * reserve_rates["output_per_million"]) / 1_000_000, 8) if controlled else predicted_cost
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
@@ -383,7 +424,8 @@ def call(
     estimated = input_tokens is None or output_tokens is None
     input_tokens = input_tokens if input_tokens is not None else predicted_input
     output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-    actual_cost = cost_cny(provider, input_tokens, output_tokens, effective_model or None)
+    actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens)
+    estimated = estimated or cache_price_unknown
     result.cache_key = key
     if reservation_id and not estimated:
         model_spend.settle(project_root, reservation_id, actual_cost_cny=actual_cost)
@@ -404,8 +446,16 @@ def call(
             "cost_cny": actual_cost,
             "cache_hit": False,
             "cache_key": key,
+            "completion_status": result.completion_status,
+            "billing": billing_details,
+            "endpoint": result.endpoint,
+            "gateway": result.gateway,
+            "protocol": result.protocol,
         },
     )
+    # Account for the billable response first. Truncated/refused answers must
+    # never become cached scientific artifacts, even if their text parses.
+    ai_providers.require_complete(result)
     if use_cache:
         _write_cache(
             cache_path,
@@ -420,6 +470,7 @@ def call(
                 "protocol": result.protocol,
                 "endpoint": result.endpoint,
                 "gateway": result.gateway,
+                "completion_status": result.completion_status,
                 "created_at": utc_now(),
             },
         )

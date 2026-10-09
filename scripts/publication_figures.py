@@ -440,6 +440,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "axes.facecolor": axes_face,
             "savefig.facecolor": "white",
             "svg.hashsalt": "doctoral-research-os-v2",
+            "svg.fonttype": "none",
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
         }
@@ -521,6 +522,11 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 metadata=metadata,
             )
             outputs.append({"path": path.relative_to(project).as_posix(), "format": suffix, "sha256": sha256_file(path), "size": path.stat().st_size})
+        try:
+            from scripts.figure_output_qa import audit_outputs
+        except ImportError:
+            from figure_output_qa import audit_outputs
+        output_qa = audit_outputs(project, outputs, expected_text=[ax.get_xlabel() for ax in fig.axes if ax.axison and ax.get_xlabel() and "$" not in ax.get_xlabel()])
         pdf = output_stem.with_suffix(".pdf")
         paper = next(parent for parent in output_stem.parents if re.fullmatch(r"P[0-9]{2}", parent.name)
                      and parent.parent == project / "papers")
@@ -572,6 +578,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "layout_warnings": layout_warnings,
             "layout_audit": layout_audit,
             "distribution_estimates_not_inferred": True,
+            "output_qa": output_qa,
         },
     }
     report_path = output_stem.with_suffix(".figure-build.json")
@@ -589,7 +596,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         role="figure-renderer-control",
         run_id=f"figure-{hashlib.sha256(spec_path.read_bytes()).hexdigest()[:16]}",
     )
-    if not layout_audit.get("pass") or layout_warnings:
+    if not layout_audit.get("pass") or layout_warnings or output_qa["errors"]:
         raise FigureSpecError("rendered figure layout failed; inspect the saved figure layout/build reports")
     return report
 
