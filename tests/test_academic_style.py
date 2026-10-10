@@ -173,7 +173,7 @@ class AcademicStyleTests(unittest.TestCase):
                 [item["name"] for item in report["external_linters"]],
                 ["proselint", "harper"],
             )
-            self.assertEqual(len(report["reviewed_rule_sources"]), 4)
+            self.assertEqual(len(report["reviewed_rule_sources"]), 5)
             self.assertEqual(validate_saved_audit(project / "papers" / "P01"), [])
             manuscript.write_text(varied_manuscript() + "\nA documented limitation remains.", encoding="utf-8")
             errors = validate_saved_audit(project / "papers" / "P01")

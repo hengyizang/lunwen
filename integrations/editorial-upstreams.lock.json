@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "normalization": "UTF-8 decoded content; CRLF replaced by LF; no other normalization",
+  "sources": [
+    {
+      "id": "humanizer",
+      "repository": "https://github.com/blader/humanizer",
+      "commit": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
+      "scope": "All 26 numbered patterns and two-pass editorial workflow",
+      "license": "MIT",
+      "accessed_at": "2026-10-10",
+      "files": [
+        {
+          "path": "third_party/humanizer/SKILL.md",
+          "canonical_lf_sha256": "0612f1dfb1672b0ea9b97e139bf1f06cabe98d8b27424fe8ff01e1fb4cc99cad"
+        },
+        {
+          "path": "third_party/humanizer/LICENSE",
+          "canonical_lf_sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96"
+        }
+      ]
+    },
+    {
+      "id": "anti-defensive-writing",
+      "repository": "https://github.com/Kiterlin/anti-defensive-writing",
+      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
+      "scope": "All checklist/procedure/function and expanded academic rules",
+      "license": "MIT",
+      "accessed_at": "2026-10-10",
+      "files": [
+        {
+          "path": "third_party/anti-defensive-writing/SKILL.md",
+          "canonical_lf_sha256": "ef055917cc1407064cd0deaffd78264c251e8a27c30c112c54c64fb5ca46ef7a"
+        },
+        {
+          "path": "third_party/anti-defensive-writing/LICENSE",
+          "canonical_lf_sha256": "cc3d842a912f0ed1fc80ae8d2ca7ab6cff37756422069424bf2edec554219fc9"
+        }
+      ]
+    },
+    {
+      "id": "watermarks-remover",
+      "repository": "https://github.com/guillaumemeyer/watermarks-remover",
+      "commit": "c5297e9e69fec0779c29127c7892427e673fafd9",
+      "scope": "Actual pinned Unicode cleaner and authorized editorial workflow; no statistical-watermark verification or media regeneration",
+      "license": "MIT",
+      "accessed_at": "2026-10-10",
+      "files": [
+        {
+          "path": "third_party/watermarks-remover/SKILL.md",
+          "canonical_lf_sha256": "07ce27ad6e3c25b738285e7087c42364c1738f446b7dd7d2feedb174f6a5c1c3"
+        },
+        {
+          "path": "third_party/watermarks-remover/LICENSE",
+          "canonical_lf_sha256": "7b238ac3774945dae85fad6e83819b43f7d5f48c181ecb4d005e5e91fe7e0ec1"
+        },
+        {
+          "path": "third_party/watermarks-remover/scripts/text_unicode.py",
+          "canonical_lf_sha256": "ed86ed9715f40e306371731f97bf6f2a63f6a7719674630afac89eb3741bc6fd"
+        },
+        {
+          "path": "third_party/watermarks-remover/references/detectors.md",
+          "canonical_lf_sha256": "43d4a3b9015d948af22912e99e3014cac8f0e45f4e53a2d1664371f9cd8bd582"
+        },
+        {
+          "path": "third_party/watermarks-remover/references/responsible-use.md",
+          "canonical_lf_sha256": "4704b413da87f988d1e0d19905aea30c67297632fdbcf3fdd68cd80edae473fc"
+        },
+        {
+          "path": "third_party/watermarks-remover/references/writing-in-your-voice.md",
+          "canonical_lf_sha256": "745089d780c6ed0800165ef76162aba0bff5291fddbc6d048cba2cfa2e3ac954"
+        }
+      ]
+    }
+  ]
+}

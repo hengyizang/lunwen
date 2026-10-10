@@ -456,6 +456,47 @@ uncertainty rather than inventing facts.
 """
 
 
+def editorial_prompt_contract(stage: str) -> str:
+    if stage != "writing-and-review":
+        return "(full editorial pass applies at G5)"
+    from scripts import humanizer_review, defensive_review
+    return "\n\n".join((
+        humanizer_review.prompt_contract(), defensive_review.prompt_contract(),
+        "Watermark cleanup: request the non-billable watermark_cleanup cloud operation with "
+        "paper_id, exact manuscript source and expected_sha256 to obtain a protected derived "
+        "candidate. Read its changes/receipt. Preserve original source ancestry, scientific "
+        "facts and AI disclosure. A later canonical prose edit still needs revision integrity "
+        "and the complete ledger. Statistical watermark absence is not verified. Do not "
+        "add detector calls, repeated paid paraphrase loops or change model settings.",
+        "Use the existing initial writer and remediation as the two editorial passes. "
+        "In remediation notes, explicitly dispose of H01 through H26 and each defensive "
+        "review group: changed, retained with scientific/contextual reason, or unresolved. "
+        "Use fixed:, rejected: or unresolved: prefixes, followed by exactly one pattern "
+        "ID H01-H26 or AD01-AD08 and a substantive contextual reason for each. Read the current protected audit; "
+        "semantic_review_required means a real contextual judgement is still needed.",
+    ))
+
+
+def editorial_feedback(project: str, stage: str) -> str:
+    if stage != "writing-and-review":
+        return "(not applicable)"
+    try:
+        paper_id = load_json(project_root(project) / "state/run.json").get("active_paper")
+        if not re.fullmatch(r"P[0-9]{2}", str(paper_id)):
+            return "Current editorial audit is unavailable; do not claim it passed."
+        report = load_json(project_root(project) / "papers" / paper_id / "style/academic-style-audit.json")
+        analysis = report.get("analysis", {})
+        compact = {"manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {}}
+        for name in ("humanizer_review", "anti_defensive_review"):
+            value = analysis.get(name, {})
+            compact["reviews"][name] = {"coverage": value.get("coverage"),
+                "findings": value.get("findings", [])[:60],
+                "remaining_findings": max(0, len(value.get("findings", [])) - 60)}
+        return json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
+    except (OSError, ValueError):
+        return "Current editorial audit is unavailable; do not claim it passed."
+
+
 def writer_prompt(
     project: str,
     stage: str,
@@ -483,6 +524,9 @@ Claude semantic plan (internal ideas only; do not copy its wording):
 
 Installed stage-scoped research methods:
 {research_methods.stage_context(stage, "writer")}
+
+Complete editorial skill contract:
+{editorial_prompt_contract(stage)}
 
 Current stage-scoped project snapshot (bounded safe text only; review records
 are excluded because audits are passed separately):
@@ -565,8 +609,9 @@ soften or demote an experiment because its result is unfavorable or contentious;
 use only predeclared role, relevance and statistical adequacy for placement and
 cross-reference supplement material. State material limitations once, calmly and
 where they qualify interpretation; remove only generic or repeated defenses.
-Use the audit as a writing-quality control only. Never optimize against an AI
-detector, claim human-only authorship, conceal assistance or weaken the required
+Use the audit as a writing-quality control. User-requested reduction of
+formulaic AI-style prose is authorized; do not promise detector outcomes,
+claim human-only authorship, conceal assistance or weaken the required
 AI-use disclosure.
 
 Return ONLY one JSON object with keys schema_version, stage, artifacts, notes.
@@ -642,6 +687,12 @@ def remediation_prompt(project: str, stage: str, context: str, review: str) -> s
 Independent review:
 {review}
 
+Complete editorial skill contract:
+{editorial_prompt_contract(stage)}
+
+Fresh protected editorial findings (contextual review remains mandatory):
+{editorial_feedback(project, stage)}
+
 Installed stage-scoped research methods:
 {research_methods.stage_context(stage, "writer")}
 
@@ -664,8 +715,8 @@ Keep every manuscript-bound artifact in English.
 At G5 read the deterministic academic-style audit, resolve its concrete writing
 problems by rule and line without changing supported meaning, numbers, equations,
 citations, registered uncertainty or limitations. Do not replace terminology
-merely to vary vocabulary. Preserve the AI-use disclosure. Do not target a
-detector score or disguise AI assistance.
+merely to vary vocabulary. Preserve the AI-use disclosure. User-requested
+reduction of formulaic prose does not verify a detector outcome or AI authorship.
 Do not resolve a review or style finding by hiding an unfavorable result,
 demoting an experiment based on direction, or deleting a material limitation.
 Keep registered results locatable and express each necessary limitation once in
@@ -789,6 +840,23 @@ def reject_long_source_copy(source: Any, target: Any, label: str) -> None:
             )
 
 
+def validate_editorial_dispositions(notes: list[str], stage: str | None) -> None:
+    if stage != "writing-and-review":
+        return
+    required = {f"H{i:02d}" for i in range(1, 27)} | {f"AD{i:02d}" for i in range(1, 9)}
+    seen = set()
+    for note in notes:
+        match = re.match(r"^(?:fixed|rejected|unresolved):\s*(H\d{2}|AD\d{2})\b[\s:;-]*(.+)$", note.strip(), re.I)
+        if not match:
+            continue
+        code, rationale = match.group(1).upper(), match.group(2).strip()
+        if code not in required or code in seen or len(rationale) < 20:
+            raise ValueError("Editorial dispositions require unique current pattern IDs and substantive reasons")
+        seen.add(code)
+    if missing := sorted(required - seen):
+        raise ValueError("Missing per-pattern editorial dispositions: " + ", ".join(missing))
+
+
 def validate_remediation_notes(
     bundle: dict[str, Any], audit: dict[str, Any]
 ) -> list[str]:
@@ -801,6 +869,7 @@ def validate_remediation_notes(
         raise ValueError(
             "Each remediation note must begin with fixed:, rejected:, or unresolved:"
         )
+    validate_editorial_dispositions(notes, bundle.get("stage"))
     return notes
 
 
@@ -899,6 +968,8 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Deterministic research-quality record is protected: {relative}")
     if lower_parts == ("reports", "runtime-evidence-catalog.json"):
         raise ValueError(f"Deterministic runtime evidence is protected: {relative}")
+    if lower_parts[:2] == ("reports", "watermark-cleanup"):
+        raise ValueError(f"Deterministic watermark cleanup candidate and receipt are protected: {relative}")
     if lower_parts == ("reports", "research-support.json") or lower_parts[:2] == ("reports", "review-packets"):
         raise ValueError(f"Deterministic research support/review packet is protected: {relative}")
     if lower_parts[:2] == ("reports", "figure-output-qa") or candidate.name.endswith((".render-receipt.json", ".output-qa.json")):
@@ -1119,6 +1190,17 @@ def refresh_academic_style_audit(
         ),
         "detector_score_used": False,
     }
+
+
+def snapshot_editorial_pass(project: str, run_id: str, phase: str, summary: dict | None) -> dict | None:
+    if summary is None:
+        return None
+    if phase not in {"initial", "final"}:
+        raise ValueError("editorial snapshot phase must be initial or final")
+    source = project_root(project) / summary["path"]
+    path = save_run(project, run_id, f"academic-style-{phase}.json", load_json(source))
+    return {**summary, "snapshot_path": path.relative_to(project_root(project)).as_posix(),
+            "snapshot_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
 def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] | None:
@@ -1526,6 +1608,7 @@ def run_cycle(
     if revision_baseline is None:
         revision_baseline = prepare_revision_baseline(project, stage)
     initial_style_audit = refresh_academic_style_audit(project, stage)
+    initial_style_audit = snapshot_editorial_pass(project, run_id, "initial", initial_style_audit)
     from scripts.cloud_research_steps import after_write
     after_write(project_root(project), stage)
     initial_method_audit = refresh_research_method_audits(project, stage)
@@ -1579,6 +1662,7 @@ def run_cycle(
     written += revised_written
     save_run(project, run_id, "remediation-bundle.json", revised_bundle)
     final_style_audit = refresh_academic_style_audit(project, stage)
+    final_style_audit = snapshot_editorial_pass(project, run_id, "final", final_style_audit)
     controlled_steps = after_write(project_root(project), stage)
     final_method_audit = refresh_research_method_audits(project, stage)
 

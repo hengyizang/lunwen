@@ -90,14 +90,38 @@
     {
       "id": "anti-defensive-writing",
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
-      "commit": "5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975",
+      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
       "upstream_version": "reviewed commit snapshot",
       "license": "MIT",
-      "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975/LICENSE",
+      "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46/LICENSE",
       "enabled_by_default": false,
-      "installation": "No upstream execution; a preservation-first academic subset is implemented in config/academic-style-rules.json",
+      "installation": "Pinned SKILL and MIT license in third_party/anti-defensive-writing; full source-mapped review via scripts/defensive_review.py",
       "selected_skills": [],
-      "selection_note": "Only advisory defensive-framing checks absent from the existing audit are used. True limitations, calibrated uncertainty, disclosures and negative results are protected."
+      "selection_note": "User-authorized full academic integration: checklist, rewriting procedure, sentence functions and expanded paper rules. Necessary precision, disclosures and all registered results remain protected."
+    },
+    {
+      "id": "humanizer",
+      "repository": "https://github.com/blader/humanizer",
+      "commit": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
+      "upstream_version": "3.1.0",
+      "license": "MIT",
+      "license_source_url": "https://github.com/blader/humanizer/blob/225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8/LICENSE",
+      "enabled_by_default": false,
+      "installation": "User-authorized vendored skill and 26-pattern academic review; existing writer/remediator calls only",
+      "selected_skills": ["humanizer"],
+      "selection_note": "All numbered patterns have explicit coverage; weak and semantic findings require contextual decisions. No detector-result guarantee."
+    },
+    {
+      "id": "watermarks-remover",
+      "repository": "https://github.com/guillaumemeyer/watermarks-remover",
+      "commit": "c5297e9e69fec0779c29127c7892427e673fafd9",
+      "upstream_version": "reviewed commit snapshot",
+      "license": "MIT",
+      "license_source_url": "https://github.com/guillaumemeyer/watermarks-remover/blob/c5297e9e69fec0779c29127c7892427e673fafd9/LICENSE",
+      "enabled_by_default": false,
+      "installation": "User-authorized cloud cleanup via pinned text_unicode.clean_text; bounded prose-only derived copies and protected receipts",
+      "selected_skills": ["clean-user-facing-text"],
+      "selection_note": "Real character-carrier removal, preserving scientific originals, quotations and disclosure. Statistical rewriting uses existing editorial roles, without claiming vendor-key watermark absence. No media pixel regeneration or source-metadata stripping."
     },
     {
       "id": "experiment-agent",

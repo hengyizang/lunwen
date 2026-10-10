@@ -50,6 +50,8 @@
         "paragraph_count",
         "formulaic_pattern_findings",
         "formulaic_pattern_finding_count",
+        "humanizer_review",
+        "anti_defensive_review",
         "errors",
         "warnings"
       ],
@@ -59,6 +61,8 @@
         "paragraph_count": {"type": "integer", "minimum": 0},
         "formulaic_pattern_findings": {"type": "array"},
         "formulaic_pattern_finding_count": {"type": "integer", "minimum": 0},
+        "humanizer_review": {"type": "object"},
+        "anti_defensive_review": {"type": "object"},
         "errors": {"type": "array", "items": {"type": "string"}},
         "warnings": {"type": "array", "items": {"type": "string"}}
       }

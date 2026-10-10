@@ -23,6 +23,7 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 | paper-architecture or writing-and-review | `journal_sources` | Fetches declared public publisher URLs with network safeguards, at most twenty GETs per operation; records protected raw/normalized hashes and pending URLs. |
 | writing-and-review | `statistical_reporting`, `paper_id` | Reruns actual numerical evidence and binds all comparisons to current Methods/Results/caption passages. Fresh passing report required at G5. |
 | writing-and-review | `docx_revision`, `paper_id` | Builds genuine Word clean/tracked/response package after revision controls pass; unsupported complex changes are refused. |
+| writing-and-review | `watermark_cleanup`, `paper_id`, `source`, `expected_sha256` | Runs the pinned upstream Unicode cleaner on supported prose; creates a protected derived candidate/diff/receipt and reuses a still-valid receipt. Does not overwrite canonical text or verify statistical watermark absence. |
 
 An example request is `{"stage":"writing-and-review","action":"render_figure","spec":"papers/P01/figures/main.spec.json"}`. Final exports still require scientific and visual review.
 

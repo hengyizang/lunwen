@@ -17,9 +17,12 @@ if str(ROOT) not in sys.path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval"))
+    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval", "editorial-audit", "watermark-cleanup", "watermark-validate"))
     parser.add_argument("--project")
     parser.add_argument("--paper")
+    parser.add_argument("--source", help="Exact project-relative manuscript source for Unicode cleanup")
+    parser.add_argument("--expected-sha256", help="Reviewed current source SHA256")
+    parser.add_argument("--receipt", help="Protected cleanup receipt to revalidate")
     args = parser.parse_args()
     if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
         parser.error("builders must run in an authorized cloud executor; local research execution is disabled")
@@ -32,9 +35,23 @@ def main() -> int:
         project = ROOT / "projects" / args.project
         if not project.is_dir() or project.is_symlink():
             parser.error("project is absent or unsafe")
-        if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
+        if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "editorial-audit", "watermark-cleanup"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
             parser.error("paper must be P01, P02, etc.")
-        if args.action == "notebook":
+        if args.action == "editorial-audit":
+            from scripts.academic_style import write_audit
+            _, result = write_audit(project, args.paper)
+        elif args.action == "watermark-cleanup":
+            if not args.source or not args.expected_sha256:
+                parser.error("watermark-cleanup requires --source and --expected-sha256")
+            from scripts.watermark_cleanup import build
+            result = build(project, args.paper, args.source, args.expected_sha256)
+        elif args.action == "watermark-validate":
+            if not args.receipt:
+                parser.error("watermark-validate requires --receipt")
+            from scripts.watermark_cleanup import validate_saved_report
+            errors = validate_saved_report(project, args.receipt)
+            result = {"status": "fail" if errors else "pass", "errors": errors}
+        elif args.action == "notebook":
             from scripts.research_notebook import refresh
             result = refresh(project)
         elif args.action == "daily-brief":

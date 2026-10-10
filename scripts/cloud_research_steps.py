@@ -321,6 +321,16 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "docx_revision" and stage == "writing-and-review":
                 from scripts.docx_revision import build
                 build(project, operation["paper_id"])
+            elif action == "watermark_cleanup" and stage == "writing-and-review":
+                from scripts.watermark_cleanup import build, validate_saved_report
+                cache_key = "watermark_cleanup:" + operation_sha
+                receipt_relative = cache.get(cache_key)
+                if not isinstance(receipt_relative, str) or validate_saved_report(project, receipt_relative):
+                    receipt = build(project, operation["paper_id"], operation["source"], operation["expected_sha256"])
+                    receipt_relative = f"reports/watermark-cleanup/{receipt['id']}/receipt.json"
+                    cache[cache_key] = receipt_relative
+                report.setdefault("watermark_cleanup", []).append({"receipt": receipt_relative,
+                    "canonical_changed": False, "statistical_watermark_absence_verified": False})
             elif action == "research_notebook" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_notebook import refresh
                 refresh(project)

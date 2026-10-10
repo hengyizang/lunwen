@@ -144,6 +144,9 @@ Claude semantic plan: {plan_path.relative_to(ROOT)}
 Installed stage-scoped research methods:
 {research_methods.stage_context(state['stage'], "writer")}
 
+Complete editorial skill contract:
+{api_orchestrator.editorial_prompt_contract(state['stage'])}
+
 Read the semantic plan for ideas and requirements, but do not copy its wording.
 Independently write every persistent text artifact. For figures, write auditable
 plotting code/specifications bound to recorded experiment outputs; deterministic
@@ -182,8 +185,8 @@ and where they qualify interpretation; remove only generic or repeated defenses.
 The control plane will run scripts/academic_style.py after each writing pass and
 return line-level findings; revise them only when the scientific context supports
 the change, never through blind synonym replacement.
-Never optimize against an AI detector, conceal assistance or weaken AI-use
-disclosure.
+User-requested reduction of formulaic AI-style prose is authorized. Do not
+promise a detector outcome, conceal assistance or weaken AI-use disclosure.
 """
 
 
@@ -217,11 +220,14 @@ desired answer. This internal review must not be copied into publishable text.
 def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
     return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete rule-and-line findings without changing supported meaning, numbers, equations, citations, registered uncertainty or limitations. Do not vary established terminology merely to avoid repetition. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished. Do not resolve a finding by hiding an unfavorable result, demoting an experiment based on direction, or deleting a material limitation. Keep registered results locatable and state each necessary limitation once where it changes interpretation.
 
+Complete editorial skill contract:
+{api_orchestrator.editorial_prompt_contract(state['stage'])}
+
 End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """
 
 
-def remediation_dispositions(path: Path, audit: dict[str, Any]) -> list[str]:
+def remediation_dispositions(path: Path, audit: dict[str, Any], stage: str | None = None) -> list[str]:
     try:
         raw=path.read_text(encoding="utf-8").strip()
         if raw.startswith("```"):raw=re.sub(r"^```(?:json)?\s*|\s*```$","",raw,flags=re.S).strip()
@@ -233,6 +239,7 @@ def remediation_dispositions(path: Path, audit: dict[str, Any]) -> list[str]:
     if actionable and not notes:raise AutopilotError("Codex remediation omitted actionable finding dispositions")
     allowed=re.compile(r"^(?:fixed|rejected|unresolved):\s*\S",re.IGNORECASE)
     if any(not isinstance(note,str) or not allowed.match(note.strip()) for note in notes):raise AutopilotError("Each remediation disposition must begin with fixed:, rejected:, or unresolved:")
+    api_orchestrator.validate_editorial_dispositions(notes, stage)
     return notes
 
 
@@ -488,7 +495,7 @@ def protected_control_snapshot(
         root / "reviews" / "decision-log.md",
     ]
     paths.extend(extra_paths or [])
-    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search"):
+    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search", root / "reports/watermark-cleanup"):
         paths.extend(p for p in directory.rglob("*") if p.is_file())
     paths.append(root / "program/direction-ranking.json")
     paths.extend((root / "evidence" / "source-scopes").glob("*.json"))
@@ -540,6 +547,7 @@ def ensure_protected_control_unchanged(
     root = researchctl.project_dir(project)
     from scripts.artifact_ownership import executor_snapshot
     protected_roots = (
+        root / "reports/watermark-cleanup",
         root / "state",
         root / "evidence/direction-sources",
         root / "evidence/lead-triage",
@@ -800,6 +808,7 @@ def run_stage(
         initial_style_audit = api_orchestrator.refresh_academic_style_audit(
             project, state["stage"]
         )
+        initial_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "initial", initial_style_audit)
         journal["academic_style_audit"] = {"initial": initial_style_audit}
         journal["research_method_audits"] = {
             "initial": api_orchestrator.refresh_research_method_audits(project, state["stage"])
@@ -857,7 +866,7 @@ def run_stage(
             ensure_run_state_unchanged(project, state)
             if remediation["status"] != "succeeded":
                 raise AutopilotError("Codex remediation step did not complete successfully")
-            dispositions=remediation_dispositions(remediation_last_message,initial_audit)
+            dispositions=remediation_dispositions(remediation_last_message,initial_audit,state["stage"])
             journal["written"] = sorted(
                 set(journal.get("written", []))
                 | set(
@@ -876,6 +885,7 @@ def run_stage(
             final_style_audit = api_orchestrator.refresh_academic_style_audit(
                 project, state["stage"]
             )
+            final_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "final", final_style_audit)
             journal["academic_style_audit"]["final"] = final_style_audit
             journal["research_method_audits"]["final"] = api_orchestrator.refresh_research_method_audits(
                 project, state["stage"]

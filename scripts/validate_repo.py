@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import re
 import sys
@@ -248,6 +249,43 @@ def project_version(path: Path, errors: list[str]) -> str | None:
     return version_match.group(1)
 
 
+def validate_editorial_integration(errors: list[str]) -> None:
+    lock = load_json(ROOT / "integrations/editorial-upstreams.lock.json", errors)
+    if not isinstance(lock, dict):
+        return
+    expected = {"humanizer", "anti-defensive-writing", "watermarks-remover"}
+    sources = lock.get("sources", [])
+    if len(sources) != 3 or {row.get("id") for row in sources} != expected:
+        errors.append("editorial sources must cover all three pinned integrations")
+        return
+    for source in sources:
+        if source.get("license") != "MIT" or not SHA_RE.fullmatch(source.get("commit", "")):
+            errors.append("editorial source license or commit is missing")
+        for item in source.get("files", []):
+            relative = Path(item.get("path", ""))
+            if relative.is_absolute() or ".." in relative.parts or not relative.as_posix().startswith(f"third_party/{source['id']}/"):
+                errors.append("editorial vendored path escapes its source directory")
+                continue
+            try:
+                value = (ROOT / relative).read_bytes().replace(b"\r\n", b"\n")
+                if hashlib.sha256(value).hexdigest() != item.get("canonical_lf_sha256"):
+                    errors.append(f"editorial vendored source hash mismatch: {relative}")
+            except OSError as exc:
+                errors.append(f"editorial vendored source unavailable: {exc}")
+    humanizer = load_json(ROOT / "config/humanizer-rules.json", errors)
+    defensive = load_json(ROOT / "config/anti-defensive-rules.json", errors)
+    if isinstance(humanizer, dict):
+        rows = humanizer.get("rules", [])
+        if [row.get("number") for row in rows] != list(range(1, 27)) or len({row.get("id") for row in rows}) != 26:
+            errors.append("Humanizer coverage must retain all 26 current patterns exactly once")
+    if isinstance(defensive, dict):
+        groups = defensive.get("groups", [])
+        if [row.get("review_id") for row in groups] != [f"AD{i:02d}" for i in range(1, 9)]:
+            errors.append("Anti-defensive review must retain AD01 through AD08")
+        if len(defensive.get("checklist", [])) != 10 or len(defensive.get("rewrite_procedure", [])) != 5 or len(defensive.get("function_classes", [])) != 6:
+            errors.append("Anti-defensive source checklist, procedure or function coverage is incomplete")
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -261,6 +299,7 @@ def main() -> int:
         ROOT / "config" / "academic-style-rules.json", upstream_path, errors
     )
     validate_stage_config(ROOT / "config" / "stages.json", errors)
+    validate_editorial_integration(errors)
     try:
         from scripts.research_methods import installation_errors
     except ImportError:
