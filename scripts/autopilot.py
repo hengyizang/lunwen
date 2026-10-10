@@ -227,11 +227,10 @@ End with ONLY one JSON object containing exactly one key, dispositions. Its valu
 """
 
 
-def refresh_editorial_operations(project: str, stage: str) -> dict | None:
-    if stage != "writing-and-review":
-        return None
-    from scripts.cloud_research_steps import after_write
-    return after_write(researchctl.project_dir(project), stage)
+def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: str) -> dict:
+    return api_orchestrator.refresh_post_write_evidence(
+        project, stage, run_id, phase, run_operations=stage == "writing-and-review"
+    )
 
 
 def remediation_dispositions(path: Path, audit: dict[str, Any], stage: str | None = None) -> list[str]:
@@ -812,12 +811,9 @@ def run_stage(
             run_id=token,
             claude_sources=[run_dir / "planner.stdout.txt"],
         )
-        initial_style_audit = api_orchestrator.refresh_academic_style_audit(
-            project, state["stage"]
-        )
-        initial_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "initial", initial_style_audit)
-        journal["academic_style_audit"] = {"initial": initial_style_audit}
-        journal["controlled_editorial_operations"] = {"initial": refresh_editorial_operations(project, state["stage"])}
+        initial_evidence = refresh_post_write_evidence(project, state["stage"], token, "initial")
+        journal["academic_style_audit"] = {"initial": initial_evidence["academic_style_audit"]}
+        journal["controlled_editorial_operations"] = {"initial": initial_evidence["controlled_steps"]}
         journal["research_method_audits"] = {
             "initial": api_orchestrator.refresh_research_method_audits(project, state["stage"])
         }
@@ -890,12 +886,9 @@ def run_stage(
                     )
                 )
             )
-            final_style_audit = api_orchestrator.refresh_academic_style_audit(
-                project, state["stage"]
-            )
-            final_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "final", final_style_audit)
-            journal["academic_style_audit"]["final"] = final_style_audit
-            journal["controlled_editorial_operations"]["final"] = refresh_editorial_operations(project, state["stage"])
+            final_evidence = refresh_post_write_evidence(project, state["stage"], token, "final")
+            journal["academic_style_audit"]["final"] = final_evidence["academic_style_audit"]
+            journal["controlled_editorial_operations"]["final"] = final_evidence["controlled_steps"]
             journal["research_method_audits"]["final"] = api_orchestrator.refresh_research_method_audits(
                 project, state["stage"]
             )

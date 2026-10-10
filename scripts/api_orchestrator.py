@@ -893,6 +893,11 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Forbidden artifact path: {relative}")
     if candidate.name in FORBIDDEN_NAMES or candidate.name.startswith("."):
         raise ValueError(f"Protected artifact path: {relative}")
+    root = project_root(project)
+    unresolved = root / candidate
+    if any(path.is_symlink() for path in (unresolved, *unresolved.parents)
+           if path == root or root in path.parents):
+        raise ValueError(f"Artifact paths cannot use symlinks: {relative}")
     from scripts.artifact_ownership import executor_owned
     if executor_owned(project_root(project), relative):
         raise ValueError(f"Executor-owned result or record is protected: {relative}")
@@ -984,8 +989,8 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Deterministic hypothesis audit is protected: {relative}")
     if lower_parts[:2] == ("evidence", "source-scopes"):
         raise ValueError(f"Human-confirmed source scope is protected: {relative}")
-    target = (project_root(project) / candidate).resolve()
-    if not target.is_relative_to(project_root(project)):
+    target = unresolved.resolve()
+    if not target.is_relative_to(root):
         raise ValueError(f"Artifact escapes project: {relative}")
     return target
 
@@ -1201,6 +1206,18 @@ def snapshot_editorial_pass(project: str, run_id: str, phase: str, summary: dict
     path = save_run(project, run_id, f"academic-style-{phase}.json", load_json(source))
     return {**summary, "snapshot_path": path.relative_to(project_root(project)).as_posix(),
             "snapshot_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+
+
+def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: str,
+                                *, run_operations: bool = True) -> dict[str, Any]:
+    """Build canonical outputs before binding an editorial audit to their bytes."""
+    controlled_steps = None
+    if run_operations:
+        from scripts.cloud_research_steps import after_write
+        controlled_steps = after_write(project_root(project), stage)
+    summary = refresh_academic_style_audit(project, stage)
+    return {"controlled_steps": controlled_steps,
+            "academic_style_audit": snapshot_editorial_pass(project, run_id, phase, summary)}
 
 
 def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] | None:
@@ -1605,12 +1622,10 @@ def run_cycle(
     )
     written = list(initial_written)
     save_run(project, run_id, "writer-bundle.json", bundle)
+    initial_evidence = refresh_post_write_evidence(project, stage, run_id, "initial")
     if revision_baseline is None:
         revision_baseline = prepare_revision_baseline(project, stage)
-    initial_style_audit = refresh_academic_style_audit(project, stage)
-    initial_style_audit = snapshot_editorial_pass(project, run_id, "initial", initial_style_audit)
-    from scripts.cloud_research_steps import after_write
-    after_write(project_root(project), stage)
+    initial_style_audit = initial_evidence["academic_style_audit"]
     initial_method_audit = refresh_research_method_audits(project, stage)
 
     review = model_runtime.call(
@@ -1661,9 +1676,9 @@ def run_cycle(
     )
     written += revised_written
     save_run(project, run_id, "remediation-bundle.json", revised_bundle)
-    final_style_audit = refresh_academic_style_audit(project, stage)
-    final_style_audit = snapshot_editorial_pass(project, run_id, "final", final_style_audit)
-    controlled_steps = after_write(project_root(project), stage)
+    final_evidence = refresh_post_write_evidence(project, stage, run_id, "final")
+    final_style_audit = final_evidence["academic_style_audit"]
+    controlled_steps = final_evidence["controlled_steps"]
     final_method_audit = refresh_research_method_audits(project, stage)
 
     final = model_runtime.call(
@@ -1697,6 +1712,7 @@ def run_cycle(
         )
     manifest = {
         "controlled_steps": controlled_steps,
+        "controlled_steps_initial": initial_evidence["controlled_steps"],
         "run_id": run_id,
         "research_method_audits": {"initial": initial_method_audit, "final": final_method_audit},
         "stage": stage,
