@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import re
+import sys
 import tempfile
 from collections import Counter
 from datetime import datetime, timezone
@@ -27,6 +28,8 @@ except ImportError:  # Direct execution from scripts/.
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 PROJECTS_ROOT = ROOT / "projects"
 NUMBER_RE = re.compile(r"(?<![A-Za-z0-9])[-+]?\d+(?:[.,]\d+)*(?:[eE][-+]?\d+)?%?")
 SIGNAL_RE = re.compile(
@@ -96,7 +99,7 @@ def load_authorization(path: Path | None) -> dict[str, Any] | None:
     return value
 
 
-def audit(paper: Path) -> dict[str, Any]:
+def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
     current = canonical_manuscript(paper)
     preferred = paper / "reviews" / "revision-base" / current.name
     legacy = paper / "reviews" / f"revision-base{current.suffix.lower()}"
@@ -135,6 +138,15 @@ def audit(paper: Path) -> dict[str, Any]:
             authorization.get("formula_rationale") or authorization.get("scientific_context_rationale") or authorization.get("claim_language_rationale") or ""
         ).strip():
             errors.append("formula changes require an authorization rationale")
+    ledger_binding = None
+    if include_ledger and any((paper / "reviews" / name).exists() for name in ("revision-ledger.json", "revision-ledger-report.json")):
+        try:
+            from scripts.revision_ledger import validate_saved_report as ledger_errors
+            errors.extend("revision ledger: " + error for error in ledger_errors(paper.parent.parent, paper.name))
+            ledger_path = paper / "reviews/revision-ledger-report.json"
+            ledger_binding = {"path": ledger_path.relative_to(paper).as_posix(), "sha256": sha256_file(ledger_path)} if ledger_path.is_file() else None
+        except (OSError, ValueError, RuntimeError) as exc:
+            errors.append(f"revision ledger: {exc}")
     return {
         "schema_version": "1.0",
         "created_at": now(),
@@ -151,6 +163,7 @@ def audit(paper: Path) -> dict[str, Any]:
         "semantic_equivalence_proven": False,
         "human_scientific_review_required": True,
         "character_findings": character_audit(extract_text(current)),
+        **({"revision_ledger": ledger_binding} if ledger_binding is not None else {}),
     }
 
 
@@ -166,11 +179,12 @@ def validate_saved_report(paper: Path) -> list[str]:
     errors: list[str] = []
     if saved.get("schema_version") != "1.0" or saved.get("status") != "pass":
         errors.append("revision integrity must be a passing schema_version 1.0 report")
-    for key in ("base", "current", "authorization"):
+    for key in ("base", "current", "authorization", "revision_ledger"):
         if saved.get(key) != current.get(key):
             errors.append(f"revision integrity is stale for {key}")
     if saved.get("changes") != current.get("changes"):
         errors.append("revision integrity changes differ from a clean rerun")
+    errors.extend(current["errors"])
     return errors
 
 

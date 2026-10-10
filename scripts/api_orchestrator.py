@@ -286,6 +286,17 @@ def research_quality_artifact_contract(stage: str) -> str:
         },
     }
     value = contracts.get(stage)
+    if value:
+        value["quality_followup"] = {
+            "guide": "docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md",
+            "support": "Optional program/research-support.json contains explicit question/estimand/inference boundaries, unresolved owner questions, primary-source method dissection, worked examples and FAIR/data availability declarations. Request research_support; support_sources fetches only public metadata. Unknown data deposits or method readings remain pending; never author protected retrieval receipts.",
+            "daily_changes": "research_notebook refresh also creates an Asia/Shanghai daily brief from dated append-only change events. Removing a gap or contradiction does not prove resolution.",
+            "revision_ledger": "When a frozen canonical manuscript changes, write reviews/revision-ledger.json from the exact revision-ledger-manifest; cover every sentence/paragraph/package change with reason, kind, protected facts and real claim/source anchors. Request revision_ledger. Existing independent human authorization still applies to protected scientific changes. G5 and submission check the ledger.",
+            "response_locations": "Use JSON source_lines, docx_paragraph, docx_table_cell or pdf_lines locators with current file SHA. PDF pages/lines must come from the actual protected revision-render.json after compile_tex; never invent page numbers.",
+            "statistical_semantics": "Every statistical-map comparison needs structured reporting_semantics with estimand, inclusion_rule, exclusion_rule, missingness_rule, uncertainty_interpretation, inference_boundary, reconciled disjoint sample_flow counts, exact repetition units/n/seeds/aggregation, seeds_are_independent_units=false and unique source quotes/hashes from actual protocol/flow evidence. Declarations still require scientific review.",
+            "review_packets": "Optional program/review-packets.json requests blinded calibration or visual inspection materials. review_packets builds protected artifacts; only the authenticated owner confirm_review_packet action records hash-bound independent human ratings. No gate, model routing or NOT_CALIBRATED status changes automatically.",
+            "protected_outputs": ["reviews/revision-ledger-report.json", "reviews/revision-render.json", "reviews/cloud-tex-build.json", "reports/research-support.json", "reports/review-packets/**", "evidence/support-sources/**", "state/review-packet-confirmations/**"],
+        }
     return json.dumps(value, ensure_ascii=False, indent=2) if value else "(none for this stage)"
 
 
@@ -836,6 +847,7 @@ def safe_target(project: str, relative: str) -> Path:
         or lower_parts[:2] == ("evidence", "lead-triage")
         or lower_parts[:2] == ("evidence", "web-search")
         or lower_parts[:2] == ("evidence", "journal-sources")
+        or lower_parts[:2] == ("evidence", "support-sources")
         or lower_parts == ("program", "direction-ranking.json")
         or lower_parts[:2] == ("literature", "readers")
         or (
@@ -861,6 +873,9 @@ def safe_target(project: str, relative: str) -> Path:
             "ref-verify.json",
             "revision-trace.json",
             "revision-integrity.json",
+            "revision-ledger-report.json",
+            "revision-render.json",
+            "cloud-tex-build.json",
             "reporting-guideline.json",
             "revision-authorizations.json",
             "revision-base.tex",
@@ -884,7 +899,11 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Deterministic research-quality record is protected: {relative}")
     if lower_parts == ("reports", "runtime-evidence-catalog.json"):
         raise ValueError(f"Deterministic runtime evidence is protected: {relative}")
-    if (lower_parts[:1] == ("reports",) and candidate.name.startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
+    if lower_parts == ("reports", "research-support.json") or lower_parts[:2] == ("reports", "review-packets"):
+        raise ValueError(f"Deterministic research support/review packet is protected: {relative}")
+    if lower_parts[:2] == ("reports", "figure-output-qa") or candidate.name.endswith((".render-receipt.json", ".output-qa.json")):
+        raise ValueError(f"Actual figure rendering/QA receipt is protected: {relative}")
+    if (len(lower_parts) >= 2 and lower_parts[0] == "reports" and lower_parts[1].startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
         raise ValueError(f"Deterministic research improvement report is protected: {relative}")
     if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2] == "reviews" and lower_parts[3] in {"statistical-reporting.json", "docx-revision.json"}:
         raise ValueError(f"Deterministic statistical/Word receipt is protected: {relative}")

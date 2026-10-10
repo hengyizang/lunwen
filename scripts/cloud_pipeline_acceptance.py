@@ -142,11 +142,16 @@ def consume(directory: Path) -> None:
     with fitz.open(tex_manuscript/'main.pdf') as document:
         if document.page_count != 1 or 'Synthetic acceptance only' not in document[0].get_text():
             raise RuntimeError('compiled PDF did not preserve fixture content')
+    from scripts.revision_render import validate_render_manifest
+    render_manifest, pages = validate_render_manifest(project/'papers/P02')
+    if render_manifest['page_count'] != 1 or not pages[0]['lines']:
+        raise RuntimeError('actual compiled PDF location index is missing')
     exported = [manuscript/'main.docx', tex_manuscript/'main.pdf']
     exported.extend(project/f'papers/P01/figures/negative.{ext}' for ext in ('png', 'svg', 'pdf'))
     report = {'status':'passed','synthetic_acceptance_only':True,
         'requirement_ids':['R25','R26','R31'],'fresh_runner_restoration':True,'failed_attempt_not_retried':True,
         'native_docx':True,'vector_and_raster_figure':True,'isolated_tex_pdf':True,
+        'source_bound_pdf_locations': True,
         'restored_file_count':len(steps.read(transfer/'hashes.json')),
         'checkpoint_sha256':cp.sha(transfer/'checkpoint.zip'),
         'export_sha256':{p.relative_to(project).as_posix():cp.sha(p) for p in exported},

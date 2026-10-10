@@ -188,6 +188,14 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         if figure_errors:raise ResearchCtlError("Figure provenance failed: "+"; ".join(figure_errors))
         from scripts.docx_revision import validate_saved_report as validate_word_revision
         revision_errors=validate_word_revision(project,paper_id)
+        from scripts.revision_ledger import validate_saved_report as validate_revision_ledger
+        revision_errors.extend(validate_revision_ledger(project,paper_id,require_when_changed=True))
+        if (project/"program/research-support.json").exists():
+            from scripts.research_support import validate_saved_report as validate_support
+            revision_errors.extend(validate_support(project))
+        if (project/"program/review-packets.json").exists():
+            from scripts.review_packets import validate_gate_reviews
+            revision_errors.extend(validate_gate_reviews(project))
         if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc

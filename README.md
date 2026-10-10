@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.3.0
 
+补充审计的工程缺口及真实研究验收边界见 [`docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md`](docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md)：逐项修订账本、条件计费、统计样本流程、每日变化、真实返修定位、盲审与视觉检查材料、方法拆解及 FAIR 凭据。模型配置保持原样；软件检查通过不代表正式实验或论文质量已达标。
+
 文章工具评估后的质量改进见 [`docs/RESEARCH-IMPROVEMENTS.md`](docs/RESEARCH-IMPROVEMENTS.md)：科学语义修订保护、完整回复与缓存计费、问题证据日志、固定版本方法工具、实际统计到正文/图注的映射、可编辑 SVG 与灰度预览、真实 Word 修订和期刊费用/政策档案。模型分工与推理档位按用户要求保持原样；真实课题、方法试点和渠道实测仍须在获批的云端研究流程中完成。
 
 ## 云端运行（无需本地科研运行环境）

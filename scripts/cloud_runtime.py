@@ -42,6 +42,8 @@ def prepare(project: Path) -> dict:
 
 
 def compile_tex(project: Path, paper_id: str) -> dict:
+    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
+        raise RuntimeError("TeX rendering requires an authorized cloud executor")
     if not re.fullmatch(r"P[0-9]{2}", paper_id):
         raise ValueError("invalid paper ID")
     paper = path_in(project, f"papers/{paper_id}")
@@ -49,6 +51,13 @@ def compile_tex(project: Path, paper_id: str) -> dict:
     if not source.is_file() or not shutil.which("docker"):
         raise RuntimeError("TeX source and the cloud Docker runtime are required")
     output_provenance.require_final_origins(project, [source])
+    # Bind actual mounted research inputs, including includes and figures.
+    inputs = [{"path": item.relative_to(project).as_posix(), "sha256": sha(item)}
+              for directory in ("manuscript", "figures", "tables", "supplement")
+              for item in sorted((paper / directory).rglob("*"))
+              if item.is_file() and item != paper / "manuscript/main.pdf"]
+    if any(path_in(project, item["path"]).is_symlink() for item in inputs):
+        raise RuntimeError("render inputs cannot be symlinks")
     # This variable is a reviewed digest, never a model-proposed shell command.
     image = os.environ.get("DR_OS_TEX_IMAGE") or DEFAULT_TEX_IMAGE
     if not re.fullmatch(r"ghcr\.io/xu-cheng/texlive-(?:small|full)@sha256:[a-f0-9]{64}", image):
@@ -65,16 +74,28 @@ def compile_tex(project: Path, paper_id: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k in {"PATH", "LANG", "LC_ALL", "TZ"}}
     result = subprocess.run(command, capture_output=True, text=True, timeout=300, check=False, env=env)
     pdf = build / "main.pdf"
-    report = {"schema_version": "1.0", "status": "pass" if result.returncode == 0 and pdf.is_file() else "fail",
+    inputs_unchanged = all(path_in(project, item["path"]).is_file()
+                           and sha(path_in(project, item["path"])) == item["sha256"] for item in inputs)
+    report = {"schema_version": "1.0", "status": "pass" if result.returncode == 0 and pdf.is_file() and inputs_unchanged else "fail",
               "source_sha256": sha(source), "image": image, "network_disabled": True,
+              "inputs": inputs, "inputs_unchanged": inputs_unchanged,
+              "renderer": {"name": "cloud_runtime", "implementation_sha256": sha(Path(__file__))},
+              "execution": {"mode": "cloud", "receipt_id": "tex-" + str(os.environ.get("GITHUB_RUN_ID") or os.environ.get("DR_OS_CLOUD_RUN_ID") or "authorized-cloud") + "-" + sha(source)[:16]},
               "log_tail": (result.stdout + result.stderr)[-20000:], "human_visual_review_required": True}
     if report["status"] == "pass":
         final = paper / "manuscript/main.pdf"
         shutil.copyfile(pdf, final)
         report.update(pdf=final.relative_to(project).as_posix(), pdf_sha256=sha(final))
+        report["outputs"] = [{"path": report["pdf"], "sha256": report["pdf_sha256"]}]
         output_provenance.record_model_writes(project, [final], family="other", provider="cloud-tex-renderer",
             model=image, role="compiled-manuscript", run_id="tex-" + report["source_sha256"][:16])
     write(paper / "reviews/cloud-tex-build.json", report)
     if report["status"] != "pass":
         raise RuntimeError("TeX compilation failed; inspect the preserved cloud-tex-build.json")
+    output_provenance.record_model_writes(project, [paper / "reviews/cloud-tex-build.json"],
+        family="other", provider="cloud-tex-renderer", model=image, role="render-receipt",
+        run_id=report["execution"]["receipt_id"])
+    from scripts.revision_render import build_render_manifest
+    build_render_manifest(paper, final, "cloud_runtime", image,
+                          rendering_receipt=paper / "reviews/cloud-tex-build.json")
     return report

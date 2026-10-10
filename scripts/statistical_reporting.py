@@ -5,7 +5,7 @@ import json
 import re
 from pathlib import Path
 
-from scripts.research_artifacts import path_in, read, write, sha, record
+from scripts.research_artifacts import path_in, read, write, sha, record, bound_source
 from scripts.manuscript_language import extract_text
 from scripts.scientific_editing import scientific_text
 
@@ -15,6 +15,45 @@ REQUIRED = ("method", "analysis_unit", "independent_units", "estimate", "ci_low"
 NUMERIC = {"independent_units", "estimate", "ci_low", "ci_high", "ci_confidence", "p_value", "p_adjusted", "seeds", "family_size"}
 
 
+def reporting_semantics(project: Path, paper_id: str, item: dict, actual: dict) -> dict:
+    """Audit explicit reporting declarations, without claiming their truth."""
+    value = item.get("reporting_semantics")
+    if not isinstance(value, dict):
+        raise ValueError("structured reporting_semantics is required")
+    for key in ("estimand", "inclusion_rule", "exclusion_rule", "missingness_rule",
+                "uncertainty_interpretation", "inference_boundary"):
+        if not isinstance(value.get(key), str) or not value[key].strip():
+            raise ValueError(f"reporting_semantics needs {key}")
+    repetition = value.get("repetition")
+    if not isinstance(repetition, dict) or any(repetition.get(key) != actual.get(key)
+            for key in ("analysis_unit", "independent_units", "seeds", "aggregation")):
+        raise ValueError("repetition levels must match actual independent units, seeds and aggregation")
+    if repetition.get("seeds_are_independent_units") is not False:
+        raise ValueError("seeds must not be counted as independent units")
+    counts = value.get("sample_flow")
+    if not isinstance(counts, dict) or any(type(counts.get(key)) is not int or counts[key] < 0
+            for key in ("eligible_units", "excluded_units", "missing_units", "analyzed_units")):
+        raise ValueError("sample_flow requires nonnegative integer counts")
+    if (counts["analyzed_units"] != actual["independent_units"] or
+            counts["eligible_units"] != counts["excluded_units"] + counts["missing_units"] + counts["analyzed_units"]):
+        raise ValueError("sample_flow must reconcile disjoint eligible/excluded/missing/analyzed units to actual n")
+    anchors = value.get("evidence", [])
+    if not isinstance(anchors, list) or not 1 <= len(anchors) <= 20:
+        raise ValueError("reporting semantics requires actual protocol/sample-flow evidence")
+    bindings = []
+    for anchor in anchors:
+        source = bound_source(project, anchor)
+        relative = source["path"]
+        if relative.startswith((f"papers/{paper_id}/manuscript/", f"papers/{paper_id}/reviews/", "reports/")):
+            raise ValueError("reporting semantics cannot cite its own manuscript or generated audit")
+        text = path_in(project, relative).read_text(encoding="utf-8")
+        quote = anchor.get("quote")
+        if not isinstance(quote, str) or not quote.strip() or text.count(quote) != 1:
+            raise ValueError("reporting semantics evidence requires a unique actual source quote")
+        bindings.append({**source, "quote": quote})
+    return {**value, "evidence": bindings, "declaration_truth_verified": False}
+
+
 def display_value(value, decimals: int = 6) -> str:
     if isinstance(value, (float, int)) and not isinstance(value, bool):
         return f"{value:.{decimals}f}".rstrip("0").rstrip(".") if decimals else str(round(value))
@@ -22,7 +61,7 @@ def display_value(value, decimals: int = 6) -> str:
 
 
 def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *, manuscript_sources: set[str] | None = None, figure_claims: set[str] | None = None) -> dict:
-    errors, bindings = [], []
+    errors, bindings, semantics = [], [], []
     comparisons = {row["comparison_id"]: row for row in evidence.get("comparisons", [])}
     if not comparisons:
         errors.append("no registered comparisons are available for statistical reporting")
@@ -91,8 +130,12 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
             errors.append(f"{identifier}: statistical figure needs a caption mapping")
         if not str(item.get("reporting_notes", "")).strip():
             errors.append(f"{identifier}: document exclusions, missingness, assumptions and repetition levels")
+        try:
+            semantics.append({"comparison_id": identifier, **reporting_semantics(project, paper_id, item, actual)})
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            errors.append(f"{identifier}: {exc}")
     return {"schema_version": "1.0", "status": "pass" if not errors else "fail", "paper_id": paper_id,
-            "bindings": bindings, "errors": errors, "semantic_support_verified": False,
+            "bindings": bindings, "reporting_semantics": semantics, "errors": errors, "semantic_support_verified": False,
             "human_scientific_review_required": True, "scientific_completion_verified": False}
 
 

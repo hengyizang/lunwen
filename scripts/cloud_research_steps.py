@@ -324,6 +324,21 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "research_notebook" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_notebook import refresh
                 refresh(project)
+            elif action == "research_notebook_daily" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.research_notebook import daily_brief
+                daily_brief(project)
+            elif action == "revision_ledger" and stage == "writing-and-review":
+                from scripts.revision_ledger import refresh
+                refresh(project, operation["paper_id"])
+            elif action == "research_support" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.research_support import refresh
+                refresh(project)
+            elif action == "support_sources" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "writing-and-review"}:
+                from scripts.research_support import fetch_sources
+                fetch_sources(project)
+            elif action == "review_packets" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.review_packets import refresh
+                refresh(project)
             elif action == "method_tools" and stage in {"experiment-design", "experiment-execution"}:
                 from scripts.method_tools import refresh
                 refresh(project)

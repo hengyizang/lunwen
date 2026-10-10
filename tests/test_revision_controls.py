@@ -15,7 +15,7 @@ class RevisionControlTests(unittest.TestCase):
         paper = root / "papers" / "P01"
         (paper / "manuscript").mkdir(parents=True)
         (paper / "reviews").mkdir()
-        base = "\\documentclass{article}\\begin{document}The model may improve accuracy by 10 percent \\cite{old}.\\end{document}"
+        base = "\\documentclass{article}\\begin{document}\\section{Results}The model may improve accuracy by 10 percent \\cite{old}.\\end{document}"
         (paper / "reviews" / "revision-base.tex").write_text(base, encoding="utf-8")
         (paper / "manuscript" / "main.tex").write_text(base, encoding="utf-8")
         return paper
