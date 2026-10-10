@@ -18,9 +18,9 @@ A weak signal such as passive voice, a dash or quotation typography never establ
 
 ## Existing two-pass workflow
 
-API and Codex orchestration receive compact full-skill contracts at G5, reusing the existing initial author and remediation calls. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
+API and Codex orchestration receive compact full-skill contracts at G5, reusing the existing initial author and remediation calls. Both existing independent critics also receive the complete criteria in read-only review mode, without author dispositions or new output fields. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
 
-The controller saves separate initial/final academic-audit snapshots and hashes. Final remediation requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.
+Both controllers finish deterministic operations, including canonical Word construction, before auditing the resulting manuscript. The controller saves separate initial/final academic-audit snapshots and hashes. Final remediation requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.
 
 The protected academic audit contains both complete reviews. G5 recomputes them against current manuscript and rule hashes. A partial/stale coverage report cannot pass merely by setting a boolean. Existing scientific editing, human revision authorization, exact revision ledger, citation/claim checks, English-language requirements and human approval remain mandatory.
 
@@ -56,4 +56,3 @@ Meaning-preserving prose revision may reduce statistical watermark signals, but 
 Image pixel regeneration, experimental-image alteration, C2PA/source stripping and media watermark removal are outside this manuscript-text integration. Required AI disclosure and internal traceability remain intact.
 
 Cloud regressions cover all 26 Humanizer items, legal scientific exceptions, anti-defensive source coverage, real character removal, scientific/code protection, genuine DOCX preservation, forged receipts, source changes, path limits, writer protections and operation reuse. These are engineering checks, not an “AI percentage”, scientific calibration or doctoral/Q1 acceptance guarantee.
-

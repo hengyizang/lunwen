@@ -58,10 +58,16 @@ class EditorialIntegrationTests(unittest.TestCase):
         state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
         cli_prompt = autopilot.writer_prompt("demo", state, {"contract": "Writing and review"}, "", autopilot.ROOT / "plan.json")
         cli_remediation = autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json")
-        for value in (api_prompt, api_remediation, cli_prompt, cli_remediation):
+        api_critic = api_orchestrator.critic_prompt("missing-project", "writing-and-review", "")
+        cli_critic = autopilot.critic_prompt("demo", state)
+        for value in (api_prompt, api_remediation, cli_prompt, cli_remediation, api_critic, cli_critic):
             for code in ("H01", "H26", "AD01", "AD08"):
                 self.assertIn(code, value)
+        for value in (api_prompt, api_remediation, cli_prompt, cli_remediation):
             self.assertIn("watermark_cleanup", value)
+        for value in (api_critic, cli_critic):
+            self.assertIn("read-only independent review", value)
+            self.assertNotIn("In remediation notes", value)
         self.assertNotIn("H26", api_orchestrator.editorial_prompt_contract("topic-intelligence"))
 
     def test_every_pattern_needs_its_own_substantive_disposition(self):

@@ -456,10 +456,21 @@ uncertainty rather than inventing facts.
 """
 
 
-def editorial_prompt_contract(stage: str) -> str:
+def editorial_prompt_contract(stage: str, *, role: str = "writer") -> str:
     if stage != "writing-and-review":
         return "(full editorial pass applies at G5)"
     from scripts import humanizer_review, defensive_review
+    if role == "critic":
+        return "\n\n".join((humanizer_review.prompt_contract(), defensive_review.prompt_contract(),
+            "Apply every H01-H26 and AD01-AD08 criterion as a read-only independent review. "
+            "The drafting and rewriting guidance above defines quality criteria; do not draft "
+            "replacement prose, edit artifacts, or adopt the writer's dispositions as evidence. "
+            "Check the manuscript against scientific sources and legitimate-use exceptions. "
+            "Report concrete actionable findings in the existing review JSON fields; no new "
+            "output fields or paid calls. Do not estimate AI authorship or claim statistical "
+            "watermark absence. Preserve necessary scientific uncertainty and AI disclosure."))
+    if role != "writer":
+        raise ValueError("editorial role must be writer or critic")
     return "\n\n".join((
         humanizer_review.prompt_contract(), defensive_review.prompt_contract(),
         "Watermark cleanup: request the non-billable watermark_cleanup cloud operation with "
@@ -634,6 +645,9 @@ Project: {project}
 Stage: {stage} / {contract['gate']}
 Installed stage-scoped research methods:
 {research_methods.stage_context(stage, "critic")}
+
+Complete editorial review criteria:
+{editorial_prompt_contract(stage, role="critic")}
 
 Current stage-scoped project snapshot (prior reviews excluded):
 {project_snapshot(project, stage=stage, exclude_reviews=True)}
