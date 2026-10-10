@@ -17,7 +17,7 @@ This increment applies the worthwhile gaps identified in the 19-article assessme
 | Journal economics and policies | Dated official-source APC, tax, OA choice, waivers, page charges, review-time definitions, portal and AI policies | Official evidence and authorized JCR information must be supplied/rechecked; no acceptance probability or guaranteed decision date |
 | Editing/review evaluation | Engineering counterexamples including legitimate scientific qualifiers; offline evaluator | NOT_CALIBRATED; add field-specific blinded human evaluations before any model/effort downgrade |
 
-Original files and scientific provenance are preserved. No AI detector score, watermark removal, image regeneration or style preference can authorize changes to science. Optional Jev sorting, multimedia interpretation, screenshot-to-PPT and Chinese style tooling are deferred until an actual task and measured net benefit justify them; they are not missing prerequisites for English scientific manuscripts.
+Original files and scientific provenance are preserved. The later user-authorized [editorial integration](EDITORIAL-SKILLS.md) adds all Humanizer patterns, the full anti-defensive academic review and actual Unicode watermark-carrier cleanup in derived text copies. No detector score, cleanup, image regeneration or style preference can authorize changes to science. Optional Jev sorting, multimedia interpretation, screenshot-to-PPT and Chinese style tooling are deferred until an actual task and measured net benefit justify them; they are not missing prerequisites for English scientific manuscripts.
 
 ## Cloud entry points
 

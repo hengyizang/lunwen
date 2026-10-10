@@ -85,6 +85,8 @@ Do not write a favorable conclusion before the claim matrix and negative results
 
 ## Writing and review — G5
 
+The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Optional cloud watermark_cleanup creates traceable text candidates only. Scientific meaning, disclosure and human gates remain protected.
+
 Required:
 
 - fresh passing `reviews/statistical-reporting.json` from the cloud control plane, with `statistical-reporting-map.json` covering every registered comparison, independent sample counts, seed/repetition layers, uncertainty, raw/adjusted p, multiplicity, assumptions and actual Methods/Results/caption locations; no omission of adverse results;

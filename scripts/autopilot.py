@@ -10,13 +10,15 @@ import os
 import re
 import signal
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 try:
     from scripts import api_orchestrator, output_provenance, researchctl, research_methods
@@ -144,6 +146,9 @@ Claude semantic plan: {plan_path.relative_to(ROOT)}
 Installed stage-scoped research methods:
 {research_methods.stage_context(state['stage'], "writer")}
 
+Complete editorial skill contract:
+{api_orchestrator.editorial_prompt_contract(state['stage'])}
+
 Read the semantic plan for ideas and requirements, but do not copy its wording.
 Independently write every persistent text artifact. For figures, write auditable
 plotting code/specifications bound to recorded experiment outputs; deterministic
@@ -182,8 +187,8 @@ and where they qualify interpretation; remove only generic or repeated defenses.
 The control plane will run scripts/academic_style.py after each writing pass and
 return line-level findings; revise them only when the scientific context supports
 the change, never through blind synonym replacement.
-Never optimize against an AI detector, conceal assistance or weaken AI-use
-disclosure.
+User-requested reduction of formulaic AI-style prose is authorized. Do not
+promise a detector outcome, conceal assistance or weaken AI-use disclosure.
 """
 
 
@@ -192,6 +197,9 @@ def critic_prompt(project: str, state: dict[str, Any]) -> str:
 
 Installed stage-scoped research methods:
 {research_methods.stage_context(state['stage'], "critic")}
+
+Complete editorial review criteria:
+{api_orchestrator.editorial_prompt_contract(state['stage'], role="critic")}
 
 Read AGENTS.md, references/research-integrity.md, the {state['gate']} section of references/stage-contracts.md, and the current scientific artifacts under projects/{project}. Do not read prior model verdicts or the author's desired outcome before forming your own verdict. Audit stage {state['stage']} for fatal flaws, unsupported claims, fabricated or unverified citations, missing primary evidence, alternative explanations, leakage, statistical problems, budget violations, security risks and reproducibility gaps. Also challenge closest-work differentiation, doctoral synthesis, pairwise paper independence, baseline fairness, statistical power or precision, external validity, claim calibration and English-only manuscript compliance. Do not infer success from file existence.
 Require claim-level closest-work and search-saturation evidence at G1, current
@@ -217,11 +225,20 @@ desired answer. This internal review must not be copied into publishable text.
 def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
     return f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete rule-and-line findings without changing supported meaning, numbers, equations, citations, registered uncertainty or limitations. Do not vary established terminology merely to avoid repetition. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished. Do not resolve a finding by hiding an unfavorable result, demoting an experiment based on direction, or deleting a material limitation. Keep registered results locatable and state each necessary limitation once where it changes interpretation.
 
+Complete editorial skill contract:
+{api_orchestrator.editorial_prompt_contract(state['stage'])}
+
 End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """
 
 
-def remediation_dispositions(path: Path, audit: dict[str, Any]) -> list[str]:
+def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: str) -> dict:
+    return api_orchestrator.refresh_post_write_evidence(
+        project, stage, run_id, phase, run_operations=stage == "writing-and-review"
+    )
+
+
+def remediation_dispositions(path: Path, audit: dict[str, Any], stage: str | None = None) -> list[str]:
     try:
         raw=path.read_text(encoding="utf-8").strip()
         if raw.startswith("```"):raw=re.sub(r"^```(?:json)?\s*|\s*```$","",raw,flags=re.S).strip()
@@ -233,6 +250,7 @@ def remediation_dispositions(path: Path, audit: dict[str, Any]) -> list[str]:
     if actionable and not notes:raise AutopilotError("Codex remediation omitted actionable finding dispositions")
     allowed=re.compile(r"^(?:fixed|rejected|unresolved):\s*\S",re.IGNORECASE)
     if any(not isinstance(note,str) or not allowed.match(note.strip()) for note in notes):raise AutopilotError("Each remediation disposition must begin with fixed:, rejected:, or unresolved:")
+    api_orchestrator.validate_editorial_dispositions(notes, stage)
     return notes
 
 
@@ -326,14 +344,77 @@ def public_command(command: list[str]) -> list[str]:
     ]
 
 
+@contextmanager
+def invocation_directory(run_dir: Path):
+    """Open the actual directory without following any ancestor link."""
+    run_dir = run_dir.absolute()
+    if any(path.is_symlink() for path in (run_dir, *run_dir.parents)):
+        raise AutopilotError("Invocation output directories cannot use symlinks")
+    if not run_dir.is_dir():
+        raise AutopilotError("Invocation output directory must already exist")
+    if os.open not in os.supports_dir_fd or not all(hasattr(os, flag) for flag in ("O_DIRECTORY", "O_NOFOLLOW")):
+        raise AutopilotError("This executor cannot safely open invocation directories without following links")
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    descriptor = os.open(run_dir.anchor, flags)
+    try:
+        for part in run_dir.parts[1:]:
+            child = os.open(part, flags, dir_fd=descriptor)
+            os.close(descriptor)
+            descriptor = child
+        yield descriptor
+    finally:
+        os.close(descriptor)
+
+
+def write_new_invocation_output(run_dir: Path, path: Path, payload: bytes) -> None:
+    if path.parent != run_dir:
+        raise AutopilotError("Invocation logs must be direct children of this run")
+    with invocation_directory(run_dir) as directory:
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
+        kwargs = {"dir_fd": directory} if directory is not None else {}
+        descriptor = os.open(path.name if directory is not None else path, flags, 0o600, **kwargs)
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+
+
+def read_invocation_message(run_dir: Path, path: Path, max_bytes: int) -> bytes | None:
+    if path.parent != run_dir:
+        raise AutopilotError("Codex response must belong to the current run")
+    with invocation_directory(run_dir) as directory:
+        flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+        kwargs = {"dir_fd": directory} if directory is not None else {}
+        if path.is_symlink():
+            raise AutopilotError("Codex response cannot be a symlink")
+        try:
+            descriptor = os.open(path.name if directory is not None else path, flags, **kwargs)
+        except FileNotFoundError:
+            return None
+        with os.fdopen(descriptor, "rb") as handle:
+            if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                raise AutopilotError("Codex response must be a regular file")
+            content = handle.read(max_bytes + 1)
+    if len(content) > max_bytes:
+        raise AutopilotError("Codex response exceeds the invocation output limit")
+    return content
+
+
 def invoke(
     name: str,
     command: list[str],
     run_dir: Path,
     timeout: int,
     max_output: int,
+    *,
+    before_log_write: Callable[[], str | None] | None = None,
+    captured_outputs: dict[Path, bytes] | None = None,
 ) -> dict[str, Any]:
+    if any(path.is_symlink() for path in (run_dir, *run_dir.parents)):
+        raise AutopilotError("Invocation output directories cannot use symlinks")
     run_dir.mkdir(parents=True, exist_ok=True)
+    with invocation_directory(run_dir):
+        if any((run_dir / filename).exists() or (run_dir / filename).is_symlink()
+               for filename in (f"{name}.stdout.txt", f"{name}.stderr.txt", f"{name}.json")):
+            raise AutopilotError("Invocation controller logs must be new files")
     started = now()
     with tempfile.NamedTemporaryFile("w+b") as stdout, tempfile.NamedTemporaryFile("w+b") as stderr:
         try:
@@ -371,10 +452,13 @@ def invoke(
         stderr.flush()
         stdout_text, stdout_truncated, stdout_sha = read_capped(Path(stdout.name), max_output)
         stderr_text, stderr_truncated, stderr_sha = read_capped(Path(stderr.name), max_output)
+    if before_log_write is not None:
+        integrity_error = before_log_write()
+        if integrity_error:
+            status, error = "failed", integrity_error
     stdout_path = run_dir / f"{name}.stdout.txt"
     stderr_path = run_dir / f"{name}.stderr.txt"
-    stdout_path.write_text(stdout_text, encoding="utf-8")
-    stderr_path.write_text(stderr_text, encoding="utf-8")
+    payloads = {stdout_path: stdout_text.encode("utf-8"), stderr_path: stderr_text.encode("utf-8")}
     result_record = {
         "name": name,
         "started_at": started,
@@ -390,7 +474,11 @@ def invoke(
         "stdout_full_sha256": stdout_sha,
         "stderr_full_sha256": stderr_sha,
     }
-    write_json(run_dir / f"{name}.json", result_record)
+    payloads[run_dir / f"{name}.json"] = (json.dumps(result_record, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    for path, payload in payloads.items():
+        write_new_invocation_output(run_dir, path, payload)
+        if captured_outputs is not None:
+            captured_outputs[path] = payload
     return result_record
 
 
@@ -479,16 +567,34 @@ def record_codex_changes(
 def protected_control_snapshot(
     project: str, extra_paths: list[Path] | None = None
 ) -> dict[str, bytes]:
+    """Snapshot regular records and their directory shape (keys ending in /)."""
     root = researchctl.project_dir(project)
-    from scripts.artifact_ownership import executor_snapshot
-    executor_records = executor_snapshot(root)
+    from scripts.artifact_ownership import declared_outputs, executor_owned
+
+    def require_regular_ancestry(target: Path) -> None:
+        if target != root and root not in target.parents:
+            raise AutopilotError("Control snapshot escaped the project")
+        if any(path.is_symlink() for path in (target, *target.parents)
+               if path == root or root in path.parents):
+            raise AutopilotError("Protected control records cannot use symlinks")
+
+    for control_input in (root, root / "state/run.json", root / "experiments/plan.json",
+                          root / "experiments/registry.jsonl"):
+        require_regular_ancestry(control_input)
+    outputs = declared_outputs(root)
+    executor_records = {}
+    for path in root.rglob("*"):
+        if executor_owned(root, path.relative_to(root).as_posix(), outputs):
+            require_regular_ancestry(path)
+            if path.is_file():
+                executor_records[path.relative_to(root).as_posix()] = path.read_bytes()
     paths = [
         root / "state" / "run.json",
         root / "state" / "output-provenance.json",
         root / "reviews" / "decision-log.md",
     ]
     paths.extend(extra_paths or [])
-    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search"):
+    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search", root / "reports/watermark-cleanup"):
         paths.extend(p for p in directory.rglob("*") if p.is_file())
     paths.append(root / "program/direction-ranking.json")
     paths.extend((root / "evidence" / "source-scopes").glob("*.json"))
@@ -527,19 +633,82 @@ def protected_control_snapshot(
     for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
         if dirname.is_dir():
             paths.extend(path for path in dirname.rglob("*") if path.is_file())
-    return {**executor_records, **{
-        path.relative_to(root).as_posix(): path.read_bytes()
-        for path in paths
-        if path.is_file()
-    }}
+    records = dict(executor_records)
+    for path in paths:
+        require_regular_ancestry(path)
+        if path.is_file():
+            records[path.relative_to(root).as_posix()] = path.read_bytes()
+    directories: set[Path] = set()
+    for relative in records:
+        target = root / relative
+        for path in (target, *target.parents):
+            if path != root and root not in path.parents:
+                continue
+            if path.is_symlink():
+                raise AutopilotError("Protected control records cannot use symlinks: " + relative)
+            if path != target and path != root:
+                directories.add(path)
+    recursive_roots = (
+        root / "state", root / "evidence/direction-sources", root / "literature/readers",
+        root / "evidence/lead-triage", root / "evidence/web-search", root / "evidence/literature",
+        root / "reports/watermark-cleanup", root / "reviews/independent", root / "reviews/codex",
+        root / "experiments/runs", root / "results", root / "data/acquisition",
+        *root.glob("papers/P[0-9][0-9]/reviews/revision-base"),
+    )
+    for directory in recursive_roots:
+        for path in (directory, *directory.parents):
+            if path != root and root not in path.parents:
+                continue
+            if path.is_symlink():
+                raise AutopilotError("Protected control directories cannot use symlinks")
+        if not directory.is_dir():
+            continue
+        directories.add(directory)
+        for path in directory.rglob("*"):
+            if path.is_symlink():
+                raise AutopilotError("Protected control trees cannot contain symlinks")
+            if path.is_dir():
+                directories.add(path)
+        directories.update(path for path in directory.parents if path != root and root in path.parents)
+    records.update({path.relative_to(root).as_posix() + "/": b"" for path in directories})
+    return records
 
 
 def ensure_protected_control_unchanged(
-    project: str, before: dict[str, bytes]
+    project: str, before: dict[str, bytes],
+    *, allowed_new_outputs: dict[str, bytes] | None = None,
 ) -> None:
     root = researchctl.project_dir(project)
-    from scripts.artifact_ownership import executor_snapshot
+    from scripts.artifact_ownership import declared_outputs, executor_owned
+    allowed = allowed_new_outputs or {}
+    output_pattern = re.compile(
+        r"state/runs/[0-9A-Za-z][0-9A-Za-z._-]*/(?:writer\.(?:stdout\.txt|stderr\.txt|json)|"
+        r"remediation\.(?:stdout\.txt|stderr\.txt|json)|codex-(?:writer|remediation)-last-message\.txt)"
+    )
+    if any(not isinstance(relative, str) or not output_pattern.fullmatch(relative)
+           or not isinstance(content, bytes) for relative, content in allowed.items()):
+        raise AutopilotError("Only exact invocation output bytes may be allowed")
+
+    def has_link(path: Path) -> bool:
+        return any(item.is_symlink() for item in (path, *path.parents)
+                   if item == root or root in item.parents)
+
+    def tree_paths(directory: Path) -> set[str]:
+        """Inventory links themselves, never their targets or linked descendants."""
+        if has_link(directory) or (directory.exists() and not directory.is_dir()):
+            return {directory.relative_to(root).as_posix()}
+        if not directory.is_dir():
+            return set()
+        values = {directory.relative_to(root).as_posix() + "/"}
+        for parent, dirs, files in os.walk(directory, followlinks=False):
+            for name in dirs + files:
+                path = Path(parent) / name
+                relative = path.relative_to(root).as_posix()
+                values.add(relative + "/" if path.is_dir() and not path.is_symlink() else relative)
+        return values
+
     protected_roots = (
+        root / "reports/watermark-cleanup",
         root / "state",
         root / "evidence/direction-sources",
         root / "evidence/lead-triage",
@@ -547,15 +716,22 @@ def ensure_protected_control_unchanged(
         root / "literature/readers",
         root / "reviews" / "independent",
         root / "reviews" / "codex",
+        root / "experiments/runs",
+        root / "results",
+        root / "data/acquisition",
     )
-    current_paths = {
-        path.relative_to(root).as_posix()
-        for directory in protected_roots
-        if directory.is_dir()
-        for path in directory.rglob("*")
-        if path.is_file()
-    }
-    current_paths.update(executor_snapshot(root))
+    current_paths = set().union(*(tree_paths(directory) for directory in protected_roots))
+    current_paths.update(allowed)
+    # A corrupted protected registry must be restored, not abort restoration while
+    # trying to use the writer's new contents as an ownership authority.
+    try:
+        outputs = declared_outputs(root) if not has_link(root / "experiments/registry.jsonl") else set()
+    except (ValueError, OSError, TypeError, AttributeError):
+        outputs = {relative for relative in before if not relative.endswith("/")}
+    if not has_link(root):
+        current_paths.update(path.relative_to(root).as_posix() for path in root.rglob("*")
+                             if (path.is_file() or path.is_symlink())
+                             and executor_owned(root, path.relative_to(root).as_posix(), outputs))
     if (root / "program/direction-ranking.json").is_file():
         current_paths.add("program/direction-ranking.json")
     current_paths.update(
@@ -573,13 +749,8 @@ def ensure_protected_control_unchanged(
         for path in root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
         if path.is_file()
     )
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base")
-        if directory.is_dir()
-        for path in directory.rglob("*")
-        if path.is_file()
-    )
+    for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base"):
+        current_paths.update(tree_paths(directory))
     current_paths.update(
         path.relative_to(root).as_posix()
         for name in (
@@ -604,12 +775,7 @@ def ensure_protected_control_unchanged(
         current_paths.add("program/journal-screening.json")
     if (root / "program" / "hypothesis-audit.json").is_file():
         current_paths.add("program/hypothesis-audit.json")
-    if (root / "evidence" / "literature").is_dir():
-        current_paths.update(
-            path.relative_to(root).as_posix()
-            for path in (root / "evidence" / "literature").rglob("*")
-            if path.is_file()
-        )
+    current_paths.update(tree_paths(root / "evidence/literature"))
     current_paths.update(
         path.relative_to(root).as_posix()
         for path in (root / "data" / "quality").glob("*.json")
@@ -625,25 +791,129 @@ def ensure_protected_control_unchanged(
         for path in root.glob(pattern)
         if path.is_file()
     )
-    changed = {
-        relative
-        for relative in set(before) | current_paths
-        if not (root / relative).is_file()
-        or (root / relative).read_bytes() != before.get(relative)
-    }
+    def unchanged(relative: str) -> bool:
+        path = root / relative.rstrip("/")
+        if has_link(path):
+            return False
+        if relative.endswith("/"):
+            return relative in before and path.is_dir()
+        try:
+            if relative in before:
+                return path.is_file() and path.read_bytes() == before[relative]
+            if relative not in allowed or relative + "/" in before:
+                return False
+            parents = [parent for parent in path.parents if parent != root and root in parent.parents]
+            if any(parent.relative_to(root).as_posix() + "/" not in before
+                   or not parent.is_dir() or has_link(parent) for parent in parents):
+                return False
+            return path.is_file() and path.read_bytes() == allowed[relative]
+        except OSError:
+            return False
+
+    changed = {relative for relative in set(before) | current_paths if not unchanged(relative)}
     if not changed:
         return
-    for relative in changed:
-        path = root / relative
-        if relative in before:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(before[relative])
-        elif path.is_file():
+
+    def remove_node(path: Path) -> None:
+        # All callers first repair the parent chain. rmtree removes inner links
+        # themselves; it never recurses into a symlink passed as this node.
+        if path.is_symlink():
             path.unlink()
+        elif path.is_dir():
+            shutil.rmtree(path)
+        elif path.exists():
+            path.unlink()
+
+    def regular_directory(path: Path) -> None:
+        if path != root and root not in path.parents:
+            raise AutopilotError("Control restoration escaped the project")
+        chain = [root, *reversed([item for item in path.parents if root in item.parents])]
+        if path != root:
+            chain.append(path)
+        for directory in chain:
+            if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
+                remove_node(directory)
+            directory.mkdir(exist_ok=True)
+
+    regular_directory(root)
+    # Delete new forgery/type-alias nodes deepest first, without following any
+    # ancestor link. Original directory markers are then restored shallow first.
+    for relative in sorted(changed - set(before), key=lambda value: len(Path(value).parts), reverse=True):
+        path = root / relative.rstrip("/")
+        regular_directory(path.parent)
+        remove_node(path)
+    for relative in sorted((value for value in before if value.endswith("/")),
+                           key=lambda value: len(Path(value).parts)):
+        regular_directory(root / relative.rstrip("/"))
+    for relative in sorted(changed & set(before)):
+        if relative.endswith("/"):
+            continue
+        path = root / relative
+        regular_directory(path.parent)
+        if path.is_symlink() or path.is_dir():
+            remove_node(path)
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile("wb", dir=path.parent, delete=False) as handle:
+                handle.write(before[relative])
+                temporary = Path(handle.name)
+            os.replace(temporary, path)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
     raise AutopilotError(
         "Codex writer changed protected control/audit files; changes were restored: "
         + ", ".join(sorted(changed))
     )
+
+
+def invoke_writer(
+    project: str, before: dict[str, bytes], name: str, command: list[str],
+    run_dir: Path, last_message: Path, timeout: int, max_output: int,
+) -> dict[str, Any]:
+    """Permit only this invocation's new, byte-bound logs; restore other changes."""
+    if name not in {"writer", "remediation"} or last_message != run_dir / f"codex-{name}-last-message.txt":
+        raise AutopilotError("Unknown persistent-writer invocation outputs")
+    root = researchctl.project_dir(project)
+    expected = [run_dir / filename for filename in (
+        f"{name}.stdout.txt", f"{name}.stderr.txt", f"{name}.json", last_message.name
+    )]
+    captured: dict[Path, bytes] = {}
+
+    def allowed() -> dict[str, bytes]:
+        return {path.relative_to(root).as_posix(): content for path, content in captured.items()}
+
+    def inspect_child() -> str | None:
+        try:
+            message = read_invocation_message(run_dir, last_message, max_output)
+            if message is not None:
+                captured[last_message] = message
+            ensure_protected_control_unchanged(project, before, allowed_new_outputs=allowed())
+            return None
+        except (OSError, AutopilotError) as exc:
+            # A rejected response/link must also be removed before controller writes.
+            try:
+                ensure_protected_control_unchanged(project, before, allowed_new_outputs=allowed())
+            except AutopilotError as restoration:
+                return str(restoration)
+            return str(exc)
+
+    try:
+        with invocation_directory(run_dir):
+            for path in expected:
+                relative = path.relative_to(root).as_posix()
+                if relative in before or relative + "/" in before or path.exists() or path.is_symlink():
+                    raise AutopilotError("Writer invocation outputs must not replace existing records")
+        result = invoke(name, command, run_dir, timeout, max_output,
+                        before_log_write=inspect_child, captured_outputs=captured)
+        ensure_protected_control_unchanged(project, before, allowed_new_outputs=allowed())
+        return result
+    except BaseException:
+        try:
+            ensure_protected_control_unchanged(project, before, allowed_new_outputs=allowed())
+        except AutopilotError:
+            pass  # The invocation still fails; restoration errors never grant a gate.
+        raise
 
 
 def ensure_run_state_unchanged(project: str, original: dict[str, Any]) -> None:
@@ -769,7 +1039,9 @@ def run_stage(
         protected_before_writer = protected_control_snapshot(
             project, [run_dir / "planner.stdout.txt"]
         )
-        writer = invoke(
+        writer = invoke_writer(
+            project,
+            protected_before_writer,
             "writer",
             codex_writer_command(
                 writer_prompt(
@@ -782,11 +1054,11 @@ def run_stage(
                 writer_last_message,
             ),
             run_dir,
+            writer_last_message,
             timeout,
             max_output,
         )
         journal["runs"].append(writer)
-        ensure_protected_control_unchanged(project, protected_before_writer)
         ensure_run_state_unchanged(project, state)
         if writer["status"] != "succeeded":
             raise AutopilotError("Codex writer step did not complete successfully")
@@ -797,10 +1069,9 @@ def run_stage(
             run_id=token,
             claude_sources=[run_dir / "planner.stdout.txt"],
         )
-        initial_style_audit = api_orchestrator.refresh_academic_style_audit(
-            project, state["stage"]
-        )
-        journal["academic_style_audit"] = {"initial": initial_style_audit}
+        initial_evidence = refresh_post_write_evidence(project, state["stage"], token, "initial")
+        journal["academic_style_audit"] = {"initial": initial_evidence["academic_style_audit"]}
+        journal["controlled_editorial_operations"] = {"initial": initial_evidence["controlled_steps"]}
         journal["research_method_audits"] = {
             "initial": api_orchestrator.refresh_research_method_audits(project, state["stage"])
         }
@@ -840,24 +1111,24 @@ def run_stage(
                 project, [run_dir / "planner.stdout.txt"]
             )
             remediation_last_message = run_dir / "codex-remediation-last-message.txt"
-            remediation = invoke(
+            remediation = invoke_writer(
+                project,
+                protected_before_remediation,
                 "remediation",
                 codex_writer_command(
                     remediation_prompt(project, state, review),
                     remediation_last_message,
                 ),
                 run_dir,
+                remediation_last_message,
                 timeout,
                 max_output,
             )
             journal["runs"].append(remediation)
-            ensure_protected_control_unchanged(
-                project, protected_before_remediation
-            )
             ensure_run_state_unchanged(project, state)
             if remediation["status"] != "succeeded":
                 raise AutopilotError("Codex remediation step did not complete successfully")
-            dispositions=remediation_dispositions(remediation_last_message,initial_audit)
+            dispositions=remediation_dispositions(remediation_last_message,initial_audit,state["stage"])
             journal["written"] = sorted(
                 set(journal.get("written", []))
                 | set(
@@ -873,10 +1144,9 @@ def run_stage(
                     )
                 )
             )
-            final_style_audit = api_orchestrator.refresh_academic_style_audit(
-                project, state["stage"]
-            )
-            journal["academic_style_audit"]["final"] = final_style_audit
+            final_evidence = refresh_post_write_evidence(project, state["stage"], token, "final")
+            journal["academic_style_audit"]["final"] = final_evidence["academic_style_audit"]
+            journal["controlled_editorial_operations"]["final"] = final_evidence["controlled_steps"]
             journal["research_method_audits"]["final"] = api_orchestrator.refresh_research_method_audits(
                 project, state["stage"]
             )

@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "purpose": "complete_26_item_humanizer_review_for_scientific_prose",
+  "upstream": {
+    "repository": "https://github.com/blader/humanizer",
+    "commit": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
+    "version": "3.1.0",
+    "skill_path": "third_party/humanizer/SKILL.md",
+    "license_path": "third_party/humanizer/LICENSE",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2025 Siqi Chen"
+  },
+  "policy": {
+    "automatic_rewriting": false,
+    "detector_score": false,
+    "scientific_validation": false,
+    "default_voice": "neutral_scientific",
+    "weak_single_patterns_are_advisory": true,
+    "preserve": ["facts", "names", "numbers", "units", "dates", "formulas", "citations", "rankings", "simultaneity", "negation", "uncertainty", "limitations", "negative_results", "disclosures", "code", "data", "link_targets", "quoted_words"]
+  },
+  "rules": [
+    {
+      "number": 1, "id": "not-x-but-y", "title": "Not X but Y", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\bnot (?:just|only|merely|simply)\\b[^.!?\\n]{1,160}\\bbut\\b|\\b(?:it|this) (?:is|isn't|is not|does not mean)[^.!?\\n]{1,120}(?:,|;)\\s*(?:it is|it's|but|rather)\\b|\\brather than\\b|\\bThis does not mean[^.!?]{1,160}[.!?]\\s*It means\\b|[,;]\\s*no guessing\\b",
+      "guidance": "State the actual positive claim directly when the negative half adds no information; review split-sentence contrasts and clipped negative tails too.",
+      "exceptions": "Retain a supported correction of an actual reader belief, necessary statistical contrast, negation, or two informative alternatives. Do not remove an exclusion or change the comparator."
+    },
+    {
+      "number": 2, "id": "one-line-closers", "title": "One-line closers and dramatic fragments", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:That is the real win|That distinction matters|Read that again|Let that sink in|The message was clear|It was a lesson in|This shows the importance of)\\b|\\bevery\\.\\s*single\\.\\s*day\\b|\\bNo [A-Za-z][^.!?\\n]{0,45}\\.\\s*No [A-Za-z]",
+      "guidance": "Review short restating paragraphs, repeated closers, fragment sequences and dramatic emphasis. Merge or remove only a redundant statement; retain every new fact or consequence.",
+      "exceptions": "A short sentence with a new empirical result, clinical warning, mathematical definition, or real consequence is useful; uppercase scientific acronyms are not dramatic emphasis."
+    },
+    {
+      "number": 3, "id": "deep-sounding-sayings", "title": "Sayings that sound deep", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:the real question is|at its core|what really matters|the deeper issue|the heart of the matter|fundamentally|in reality)\\b|\\b(?:the language of|the currency of|the architecture of)\\b|\\bbecomes? a trap\\b|\\bnot a tool but a mirror\\b",
+      "guidance": "Replace unsupported aphorisms or revelations with the specific mechanism, relationship or claim. Inspect metaphors beyond the watch list semantically.",
+      "exceptions": "Keep literal scientific terms, a precise theoretical definition, an attributed quotation, or a necessary contrast. The architecture of a network is not automatically an aphorism."
+    },
+    {
+      "number": 4, "id": "staged-run-up", "title": "Staged run-up before the point", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:let['’]s (?:dive in|dive into|explore|break this down|look at|be honest)|here['’]s what you need to know|without further ado|here['’]s the thing|the thing is|real talk|heads up|quick note)\\b|(?:^|[.!?]\\s+)(?:Honestly\\?|Look,)",
+      "guidance": "Begin with the scientific point instead of announcing an explanation or staging candor.",
+      "exceptions": "Do not rewrite code, quoted interview speech, source titles or genuine first-person statements that are part of the data."
+    },
+    {
+      "number": 5, "id": "arguing-with-no-one", "title": "Arguing with no one", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:this isn['’]t (?:mainly )?about|I['’]m not saying|to be clear|don['’]t get me wrong|this is not to say|some might say|a tempting approach would be|one might be tempted to|an obvious approach would be|you might think|it would be easy to just)\\b",
+      "guidance": "Check whether the objection or rejected option actually belongs to the argument or reader context; express any remaining substantive claim directly.",
+      "exceptions": "Retain an attributed reviewer objection, a scientifically important alternative explanation, a documented limitation, or a real decision alternative."
+    },
+    {
+      "number": 6, "id": "forced-triads", "title": "Forced triads", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b[A-Za-z][A-Za-z -]{1,45},\\s+[A-Za-z][A-Za-z -]{1,45},?\\s+and\\s+[A-Za-z][A-Za-z -]{1,45}",
+      "guidance": "Review three-part lists and three parallel examples at sentence and paragraph scales. Each item must add a distinct supported idea; do not compress away a condition or outcome.",
+      "exceptions": "Keep three actual datasets, measurements, assumptions, treatment groups or other distinct real items. Counting three items cannot establish a forced rhetorical triad."
+    },
+    {
+      "number": 7, "id": "repeated-openings", "title": "Repeated sentence openings", "detection": "contextual", "weak_alone": false,
+      "guidance": "Inspect adjacent repeated subjects/openings and rewrite paragraph structure when repetition is mechanical, without changing actor or agency.",
+      "exceptions": "Intentional parallel definitions, enumerated results, quotations and deliberate rhetoric can legitimately repeat an opening."
+    },
+    {
+      "number": 8, "id": "universal-dashes", "title": "Dashes as the universal connector", "detection": "mixed", "weak_alone": true,
+      "guidance": "For ordinary prose without a writing sample, replace dash connectors only after choosing the real clause relation. A supplied sample overrides the general punctuation preference.",
+      "exceptions": "Preserve numerical ranges, minus signs, names such as Mann–Whitney, scientific terminology, code, commands, paths, URLs and quoted words. Scientific notation takes priority over blanket dash removal."
+    },
+    {
+      "number": 9, "id": "stacked-qualifiers", "title": "Stacked qualifiers", "detection": "mixed", "weak_alone": true,
+      "pattern": "\\b(?:to be fair|it['’]s also possible|could potentially|might arguably|in some cases it may|this is an inference)\\b|\\b(?:may|might|could|potentially|possibly|perhaps)(?:\\s+[A-Za-z'-]+){0,2}\\s+(?:may|might|could|potentially|possibly|perhaps)\\b",
+      "guidance": "Review stacked uncertainty language and retain the qualifier, scope and source of uncertainty actually supported by the evidence.",
+      "exceptions": "A real uncertainty statement, a necessary inference label, legal/safety notice or correction is not clutter. Never make an empirical claim more certain to satisfy this rule."
+    },
+    {
+      "number": 10, "id": "hyphenated-pairs", "title": "Hyphenated pairs everywhere", "detection": "mixed", "weak_alone": true,
+      "pattern": "\\b(?:is|are|was|were|remains?|became)\\s+(?:high-quality|well-known|well-documented|long-term|real-time|client-facing)\\b",
+      "guidance": "Review unnecessary hyphens in predicate compounds; retain pre-noun compound modifiers and dictionary/venue-required spellings.",
+      "exceptions": "Keep established technical compounds, third-party, cross-functional, lexical spellings, minus signs, paths, commands and citations."
+    },
+    {
+      "number": 11, "id": "passive-missing-subjects", "title": "Passive voice and missing subjects", "detection": "mixed", "weak_alone": true,
+      "pattern": "\\b(?:is|are|was|were|been)\\s+(?:automatically\\s+)?(?:preserved|performed|conducted|analyzed|analysed|measured|recorded|collected|selected|excluded|reported|determined)\\b|(?:^|[.!?]\\s+|\\n)No [^.!?\\n]{1,70} (?:needed|required)\\.",
+      "guidance": "Review missing agency when active wording would clarify who performed an action. Recover an actor only from an actual source.",
+      "exceptions": "Scientific methods often use legitimate passive voice, especially when the actor is irrelevant or explicitly identified. Do not invent an experimenter or turn an unknown actor into 'we'."
+    },
+    {
+      "number": 12, "id": "overused-words", "title": "Overused AI words", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:actually|additionally|align with|bolstered|crucial|deep dive|delv(?:e|es|ed|ing)|enduring|enhance|garner|gates?|gated|gating|highlight(?:s|ed|ing)?|interplay|intricate|intricacies|key|landscape|meticulous|meticulously|pivotal|quietly|robust|showcase|tapestry|testament|underscore(?:s|d|ing)?|valuable|vibrant)\\b",
+      "guidance": "Inspect word clusters and rhetorical function, not just vocabulary. Prefer a precise domain term or measured claim over ornamental repetition.",
+      "exceptions": "Technical robust regression, key variables/keys, physical or logic gates, energy/fitness landscapes and literal uses are legitimate. A word's presence is neither authorship evidence nor sufficient reason to change terminology."
+    },
+    {
+      "number": 13, "id": "inflated-significance", "title": "Inflated significance", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:stands? as a testament|a (?:pivotal|crucial) moment|plays? a key role|underscores? its importance|reflects? a broader|(?:enduring|lasting) legacy|setting the stage for|evolving landscape|indelible mark|continues? to thrive|challenges and legacy|future outlook|awards and recognition|the future looks bright|exciting times (?:lie )?ahead|a step in the right direction)\\b",
+      "guidance": "Inspect inflated phrases, stock challenges/outlook sections and send-off paragraphs. Keep concrete findings and documented future plans rather than invented significance.",
+      "exceptions": "Preserve a source-supported historical consequence, justified clinical relevance, preregistered practical significance, or specific future experiment."
+    },
+    {
+      "number": 14, "id": "vague-association", "title": "Vague connection or association", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:associated with|in association with|connected to|in connection with|linked to|tied to)\\b",
+      "guidance": "Name the relationship only when the source establishes it. Otherwise preserve the actual uncertainty rather than inventing a role, mechanism or causal link.",
+      "exceptions": "Statistical association is a necessary scientific term; retain observational association, confidence intervals, adjusted effects and noncausal interpretation. Never change 'associated with' into 'causes'."
+    },
+    {
+      "number": 15, "id": "shallow-ing-riders", "title": "Shallow -ing riders", "detection": "mixed", "weak_alone": false,
+      "pattern": ",\\s+(?:highlighting|underscoring|emphasizing|ensuring|reflecting|symbolizing|contributing to|cultivating|fostering|encompassing|showcasing)\\b",
+      "guidance": "Check whether the trailing participial interpretation follows from the cited observation; retain supported mechanism or consequence and remove only unsupported evaluation.",
+      "exceptions": "A measured or source-supported mechanism, mathematically established implication or necessary causal condition is substantive."
+    },
+    {
+      "number": 16, "id": "sales-language", "title": "Sales language", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:rich (?:heritage|tradition|history|tapestry)|profound|exemplifies|commitment to|natural beauty|nestled|in the heart of|groundbreaking|renowned|featuring|diverse array|breathtaking|must-visit|stunning)\\b",
+      "guidance": "Replace promotional valuation with what was measured, compared, implemented or documented.",
+      "exceptions": "Preserve proper names, quoted data and literal scientific terms such as nutrient-rich medium; do not invent a quantitative replacement for an unsupported adjective."
+    },
+    {
+      "number": 17, "id": "borrowed-authority", "title": "Borrowed authority", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:experts (?:argue|believe|agree)|observers have cited|industry reports|some critics|several publications|trade publications|independent coverage|active social media presence)\\b|\\b(?:cited|featured|profiled) in\\b|\\bover [0-9,]+ followers\\b",
+      "guidance": "Distinguish an exact source and its claim from unnamed experts, prestige-outlet lists or popularity. Keep actual attributable evidence; never invent an expert or citation.",
+      "exceptions": "A properly attributed systematic review, bibliometric measurement, actual named quotation or study of media coverage can legitimately discuss authority and attention."
+    },
+    {
+      "number": 18, "id": "avoiding-simple-copulas", "title": "Avoiding is, are, and has", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:serves? as|stands? as|functions? as|operates? as|boasts?|features?|offers?|maintains?)\\b|\\b(?:marks?|represents?) (?:a|an)\\b|\\brefers? to\\b",
+      "guidance": "Use simple copulas when the longer verb adds no meaning. Verify the original relationship before replacing a functional, temporal or technical verb.",
+      "exceptions": "A functional role, dynamic process, named mathematical representation, defined reference or maintained invariant may require the longer verb."
+    },
+    {
+      "number": 19, "id": "decorative-bold", "title": "Bold as decoration", "detection": "contextual", "weak_alone": false,
+      "guidance": "Review repeated bold labels/colons and indiscriminate emphasis in raw formatting. Convert a list only when no label, condition, ranking or item-specific fact is lost.",
+      "exceptions": "Venue-required headings, defined terms, tensor/vector math, accessibility emphasis, quoted formatting and structured reporting checklists may require bold."
+    },
+    {
+      "number": 20, "id": "decorative-headings", "title": "Decorative headings", "detection": "mixed", "weak_alone": false,
+      "guidance": "Review title case, decorative heading/list emojis or arrows, repeated horizontal rules and a heading duplicating the document title. Use the real section subject and the required venue format.",
+      "exceptions": "Preserve scientific acronyms, proper names, mathematical arrows, required title case, template separators and labels with real meaning."
+    },
+    {
+      "number": 21, "id": "curly-quotation-marks", "title": "Curly quotation marks", "detection": "mixed", "weak_alone": true,
+      "guidance": "Check the actual target-format convention or writing sample before recommending straight versus curly quotation marks; automatic editor typography alone is weak evidence.",
+      "exceptions": "Keep exact quoted words, apostrophes, primes in scientific notation, source/code text and the venue's typography. This rule never licenses altering a quoted claim."
+    },
+    {
+      "number": 22, "id": "chatbot-residue", "title": "Chatbot residue", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:I hope this helps|of course!|certainly!|great question!|you['’]re absolutely right|would you like|want me to|should I continue|let me know|here is an? |here['’]s an? )",
+      "guidance": "Remove interactional wrappers from the manuscript while retaining the actual scientific content.",
+      "exceptions": "Keep interview quotations, chatbot-output study data, titles, legitimate correspondence salutations/sign-offs and passages discussing these phrases."
+    },
+    {
+      "number": 23, "id": "knowledge-limit-guesses", "title": "Knowledge-limit disclaimers and guesses", "detection": "mixed", "weak_alone": false,
+      "pattern": "\\b(?:up to my last training update|my (?:knowledge|training) cutoff|as (?:an? )?(?:AI|language model)|while specific details are limited|based on available information|in the (?:provided|available) sources|maintains? a low profile|keeps? personal details private|likely (?:grew up|studied|began)|it is believed that)\\b|\\bas of\\s+(?:[A-Z][a-z]+\\s+)?(?:19|20)[0-9]{2}\\b|\\bnot (?:publicly available|widely documented|extensively documented)\\b",
+      "guidance": "Remove model-knowledge boilerplate and unsupported guesses. State a real source gap without filling it with a plausible invented biography or fact.",
+      "exceptions": "A dated search cutoff, data freeze, explicit source-coverage limit, genuine unavailability statement or bounded scientific uncertainty is necessary evidence metadata."
+    },
+    {
+      "number": 24, "id": "heading-repeated-first-sentence", "title": "A heading repeated in the first sentence", "detection": "contextual", "weak_alone": false,
+      "guidance": "Check the first paragraph after a heading for a redundant restatement, including semantic paraphrases with different words.",
+      "exceptions": "Keep a first sentence that adds a definition, result, scope restriction, study population or other new information. Lexical overlap alone cannot establish redundancy."
+    },
+    {
+      "number": 25, "id": "document-self-narration", "title": "Writing about the document instead of its subject", "detection": "mixed", "weak_alone": true,
+      "pattern": "\\b(?:was added to replace|generated from|compiled from|the table below compares|the figures below|this section is organized by|anything unconfirmed is flagged rather than guessed)\\b",
+      "guidance": "Remove obvious layout narration or editing history when it adds nothing to the scientific subject; state a necessary convention once.",
+      "exceptions": "Retain actual Methods/provenance, source credits, data-generation procedures, cross-references required to locate results, change logs and response-to-reviewer commitments."
+    },
+    {
+      "number": 26, "id": "wrong-reader-background", "title": "Re-explaining what the reader knows", "detection": "contextual", "weak_alone": false,
+      "guidance": "Apply only to a reply with surrounding conversation or an explicitly known reader. Lead with the decision and retain reasoning that affects it; compare background with what the reader already supplied.",
+      "exceptions": "A scientific introduction, standalone paper, new collaborator or unknown readership may need background. Without surrounding context, request review instead of deleting information."
+    }
+  ]
+}

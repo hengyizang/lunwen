@@ -29,9 +29,17 @@
     {
       "id": "anti-defensive-writing",
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
-      "commit": "5d69bd55b1c5f1780d87cb0e4fe26dd916d8c975",
+      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
       "license": "MIT",
-      "use": "Advisory patterns for pre-emptive disclaimers, self-minimizing contribution language, caveat-led paragraphs, negative scope framing, apology-like framing and redundant clarifiers; legitimate limitations and uncertainty are protected, and explicit direction-dependent omission language is blocked."
+      "use": "Full source-mapped academic defensive review in scripts/defensive_review.py plus the existing advisory patterns; necessary precision and all registered results are preserved."
+    },
+    {
+      "id": "humanizer",
+      "repository": "https://github.com/blader/humanizer",
+      "commit": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
+      "upstream_version": "3.1.0",
+      "license": "MIT",
+      "use": "All 26 numbered patterns are mapped in config/humanizer-rules.json and scripts/humanizer_review.py; context-sensitive and weak-alone patterns remain explicit review items, not authorship probabilities."
     }
   ],
   "rules": [
