@@ -903,7 +903,7 @@ def safe_target(project: str, relative: str) -> Path:
         raise ValueError(f"Deterministic research support/review packet is protected: {relative}")
     if lower_parts[:2] == ("reports", "figure-output-qa") or candidate.name.endswith((".render-receipt.json", ".output-qa.json")):
         raise ValueError(f"Actual figure rendering/QA receipt is protected: {relative}")
-    if (lower_parts[:1] == ("reports",) and candidate.name.startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
+    if (len(lower_parts) >= 2 and lower_parts[0] == "reports" and lower_parts[1].startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
         raise ValueError(f"Deterministic research improvement report is protected: {relative}")
     if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2] == "reviews" and lower_parts[3] in {"statistical-reporting.json", "docx-revision.json"}:
         raise ValueError(f"Deterministic statistical/Word receipt is protected: {relative}")

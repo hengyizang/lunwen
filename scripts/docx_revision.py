@@ -174,6 +174,8 @@ class Tracker:
     def paragraph(self, before: ET.Element, after: ET.Element) -> ET.Element:
         if canonical(before) == canonical(after):
             return copy.deepcopy(after)
+        if Counter(canonical(node) for node in before.iter(W + "drawing")) != Counter(canonical(node) for node in after.iter(W + "drawing")):
+            raise ValueError("image moves duplicate drawing IDs in tracked copies; picture edits need an explicit structural Word workflow")
         if before.attrib != after.attrib:
             raise ValueError("paragraph attributes changed; explicit structural review required")
         bprop, aprop = before.find(W + "pPr"), after.find(W + "pPr")
