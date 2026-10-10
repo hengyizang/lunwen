@@ -17,9 +17,10 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, model_spend
+    from scripts import ai_providers, billing_quotes, model_spend
 except ImportError:
     import ai_providers  # type: ignore
+    import billing_quotes  # type: ignore
     import model_spend  # type: ignore
 
 
@@ -57,7 +58,23 @@ def _float_env(name: str, default: float) -> float:
     return value
 
 
-def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
+def _billing_configuration(name: str, provider: str, explicit: dict | None) -> dict | None:
+    """Optional billing metadata never reaches provider inference arguments."""
+    if explicit is not None:
+        return explicit
+    raw = os.environ.get(name)
+    if raw is None:
+        return None
+    try:
+        values = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ModelBudgetError(f"{name} is invalid JSON") from exc
+    if not isinstance(values, dict) or provider not in values or not isinstance(values[provider], dict):
+        raise ModelBudgetError(f"{name} needs an exact provider entry")
+    return values[provider]
+
+
+def pricing(provider: str, model: str | None = None, *, billing_identity: dict | None = None) -> dict[str, Any]:
     family = ai_providers.provider_family(provider)
     defaults = _defaults()
     configured = defaults.get(family)
@@ -74,7 +91,20 @@ def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
             raise ModelBudgetError("model pricing must be an object")
         configuration = ai_providers.configuration(provider)
         scope_key = "|".join((provider, str(configuration.get("endpoint") or ""), model))
-        selected = overrides.get(scope_key, overrides.get(model))
+        try:
+            request_identity = billing_quotes.identity(_billing_configuration("DR_OS_MODEL_BILLING_IDENTITY_JSON", provider, billing_identity))
+            if "schema_version" in overrides or "quotes" in overrides:
+                return billing_quotes.select(overrides, provider, str(configuration.get("endpoint") or ""), model, request_identity)
+            if any(request_identity.values()):
+                raise billing_quotes.BillingQuoteError("plan/group/mode identity needs an exact version 2 quote")
+        except billing_quotes.BillingQuoteError as exc:
+            raise ModelBudgetError(str(exc)) from exc
+        # Once any scoped quote exists for this model, never silently select a
+        # model-only price when an endpoint or provider changes.
+        scoped = any(isinstance(key, str) and "|" in key and key.rsplit("|", 1)[-1] == model for key in overrides)
+        if scoped and scope_key not in overrides:
+            raise ModelBudgetError("scoped model quotes require an exact transport route; no price fallback")
+        selected = overrides.get(scope_key) if scoped else overrides.get(model)
         if selected is not None:
             if not isinstance(selected, dict):
                 raise ModelBudgetError(f"model price entry is malformed: {model}")
@@ -86,9 +116,11 @@ def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
                 raise ModelBudgetError("model prices must be positive finite numbers")
             if selected.get("currency", "CNY") != "CNY":
                 raise ModelBudgetError("budget rates must be expressed in CNY")
-            for field, actual in (("provider", provider), ("endpoint", configuration.get("endpoint"))):
+            for field, actual in (("provider", provider), ("endpoint", configuration.get("endpoint")), ("model", model)):
                 if selected.get(field) is not None and selected[field] != actual:
                     raise ModelBudgetError(f"price quote {field} differs from the requested route")
+            if any(key in selected for key in ("context_brackets", "context_basis", "tool_fees", "plan", "group", "mode")):
+                raise ModelBudgetError("conditional billing fields require the version 2 pricing schema")
             for key in ("cache_read_per_million", "cache_write_per_million"):
                 if key in selected:
                     try:
@@ -100,6 +132,8 @@ def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
                     values[key] = value
             values["price_version"] = str(selected.get("price_version") or "legacy-model-only")
             values["scope_key"] = scope_key
+            values["billing_identity"] = request_identity
+            values["quote_sha256"] = billing_quotes.quote_digest(values)
             return values
         if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
             raise ModelBudgetError(f"exact CNY input/output rates are required for cloud model {model}")
@@ -117,12 +151,21 @@ def pricing(provider: str, model: str | None = None) -> dict[str, Any]:
 
 
 def usage_counts(usage: dict[str, Any]) -> tuple[int | None, int | None]:
+    if not isinstance(usage, dict):
+        raise ModelBudgetError("usage must be an object; billing reconciliation is required")
+
     def integer(*names: str) -> int | None:
+        values = []
         for name in names:
-            value = usage.get(name)
-            if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
-                return value
-        return None
+            if name not in usage:
+                continue
+            value = usage[name]
+            if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                raise ModelBudgetError(f"{name} is malformed; billing reconciliation is required")
+            values.append(value)
+        if len(set(values)) > 1:
+            raise ModelBudgetError("conflicting token usage counters; billing reconciliation is required")
+        return values[0] if values else None
 
     return integer("input_tokens", "prompt_tokens"), integer(
         "output_tokens", "completion_tokens"
@@ -134,31 +177,29 @@ def estimate_tokens(text: str) -> int:
     return max(1, math.ceil(len(text.encode("utf-8")) / 3.2))
 
 
-def cost_cny(provider: str, input_tokens: int, output_tokens: int, model: str | None = None) -> float:
-    rates = pricing(provider, model)
-    return round(
-        input_tokens * rates["input_per_million"] / 1_000_000
-        + output_tokens * rates["output_per_million"] / 1_000_000,
-        8,
-    )
+def cost_cny(provider: str, input_tokens: int, output_tokens: int, model: str | None = None, *,
+             billing_identity: dict | None = None, declared_tool_limits: dict | None = None) -> float:
+    """Conservative ceiling; conditional rates require actual usage to settle."""
+    rates = pricing(provider, model, billing_identity=billing_identity)
+    try:
+        if rates.get("quote_schema") == "2.0":
+            return billing_quotes.reserve_cost(rates, input_tokens, output_tokens, declared_tool_limits)
+        return round((input_tokens * rates["input_per_million"] + output_tokens * rates["output_per_million"]) / 1_000_000, 8)
+    except billing_quotes.BillingQuoteError as exc:
+        raise ModelBudgetError(str(exc)) from exc
 
 
-def billed_cost(provider: str, usage: dict, model: str, input_tokens: int, output_tokens: int) -> tuple[float, bool, dict]:
+def billed_cost(provider: str, usage: dict, model: str, input_tokens: int, output_tokens: int, *,
+                quote: dict | None = None, billing_identity: dict | None = None,
+                declared_tool_limits: dict | None = None, request_id: str | None = None) -> tuple[float, bool, dict]:
     """Output includes reasoning; never add reasoning tokens a second time."""
-    rates = pricing(provider, model)
-    cached = usage.get("cache_read_input_tokens", (usage.get("input_tokens_details") or usage.get("prompt_tokens_details") or {}).get("cached_tokens", 0))
-    created = usage.get("cache_creation_input_tokens", 0)
-    if any(not isinstance(n, int) or isinstance(n, bool) or n < 0 for n in (cached, created)):
-        raise ModelBudgetError("cache usage is malformed; reconcile the outstanding reservation")
-    anthropic = ai_providers.provider_family(provider) == "anthropic"
-    ordinary = input_tokens if anthropic else max(0, input_tokens - cached)
-    unknown = bool((cached and "cache_read_per_million" not in rates) or (created and "cache_write_per_million" not in rates))
-    total = (ordinary * rates["input_per_million"] + cached * rates.get("cache_read_per_million", rates["input_per_million"])
-             + created * rates.get("cache_write_per_million", 2 * rates["input_per_million"])
-             + output_tokens * rates["output_per_million"]) / 1_000_000
-    details = {"ordinary_input_tokens": ordinary, "cache_read_tokens": cached, "cache_write_tokens": created,
-               "output_tokens_including_reasoning": output_tokens, "rates": rates, "unknown_cache_price": unknown}
-    return round(total, 8), unknown, details
+    rates = quote if quote is not None else pricing(provider, model, billing_identity=billing_identity)
+    try:
+        return billing_quotes.bill(rates, usage, input_tokens, output_tokens,
+                                   anthropic=ai_providers.provider_family(provider) == "anthropic",
+                                   tools=declared_tool_limits, request_id=request_id)
+    except billing_quotes.BillingQuoteError as exc:
+        raise ModelBudgetError(str(exc)) from exc
 
 
 def _ledger(project_root: Path) -> Path:
@@ -222,12 +263,13 @@ def usage_summary(project_root: Path, paper_id: str | None = None) -> dict[str, 
     values = ledger_entries(project_root)
     if paper_id:
         values = [item for item in values if item.get("paper_id") == paper_id]
-    groups: dict[tuple[str, str, str], dict[str, Any]] = {}
+    groups: dict[tuple[str, str, str, str], dict[str, Any]] = {}
     for item in values:
         key = (
             str(item.get("provider") or "unknown"),
             str(item.get("model") or "unknown"),
             str(item.get("role") or "unknown"),
+            json.dumps(item.get("billing_identity") or {}, sort_keys=True),
         )
         group = groups.setdefault(
             key,
@@ -235,6 +277,7 @@ def usage_summary(project_root: Path, paper_id: str | None = None) -> dict[str, 
                 "provider": key[0],
                 "model": key[1],
                 "role": key[2],
+                "billing_identity": json.loads(key[3]),
                 "paid_calls": 0,
                 "cache_hits": 0,
                 "input_tokens": 0,
@@ -280,6 +323,8 @@ def _cache_key(
     system: str | None,
     max_output_tokens: int,
     model: str | None = None,
+    billing_quote: dict | None = None,
+    declared_tool_limits: dict | None = None,
 ) -> tuple[str, dict[str, Any]]:
     configuration = ai_providers.configuration(provider)
     identity = {
@@ -291,7 +336,10 @@ def _cache_key(
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "system_sha256": hashlib.sha256((system or "").encode("utf-8")).hexdigest(),
         "max_output_tokens": max_output_tokens,
-        "cache_schema": "2.0",
+        "cache_schema": "3.0",
+        "billing_identity": (billing_quote or {}).get("billing_identity", {}),
+        "billing_quote_sha256": (billing_quote.get("quote_sha256") or billing_quotes.quote_digest(billing_quote)) if billing_quote is not None else None,
+        "declared_tool_limits": declared_tool_limits or {},
     }
     digest = hashlib.sha256(
         json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -334,18 +382,28 @@ def call(
     timeout: int = 180,
     use_cache: bool = True,
     model: str | None = None,
+    billing_identity: dict | None = None,
+    declared_tool_limits: dict | None = None,
 ) -> ai_providers.ModelResult:
     """Call a provider with exact-request caching and hard CNY ceilings."""
 
     paper_id = _paper_for_stage(project_root, stage)
-    key, identity = _cache_key(provider, prompt, system, max_output_tokens, model)
-    effective_model = str(identity["model"] or "")
+    configuration = ai_providers.configuration(provider)
+    effective_model = str(model or configuration.get("model") or "")
     if not effective_model and os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
         raise ModelBudgetError("a configured exact model ID is required")
+    quote = pricing(provider, effective_model or None, billing_identity=billing_identity)
+    try:
+        limits = billing_quotes.tool_limits(quote, _billing_configuration("DR_OS_MODEL_TOOL_LIMITS_JSON", provider, declared_tool_limits))
+    except billing_quotes.BillingQuoteError as exc:
+        raise ModelBudgetError(str(exc)) from exc
+    key, identity = _cache_key(provider, prompt, system, max_output_tokens, effective_model or None, quote, limits)
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
         try:
             cached = json.loads(cache_path.read_text(encoding="utf-8"))
+            if any(cached.get(field) != identity[field] for field in ("cache_schema", "billing_identity", "billing_quote_sha256", "declared_tool_limits")):
+                raise ValueError("cached billing identity differs from the exact request")
             result = ai_providers.ModelResult(
                 provider=str(cached["provider"]),
                 model=str(cached["model"]),
@@ -380,22 +438,25 @@ def call(
                     "cost_cny": 0.0,
                     "cache_hit": True,
                     "cache_key": key,
+                    "billing_identity": identity["billing_identity"],
+                    "billing_quote_sha256": identity["billing_quote_sha256"],
+                    "declared_tool_limits": limits,
                 },
             )
             return result
 
     request_text = (system or "") + "\n" + prompt
     predicted_input = estimate_tokens(request_text)
-    predicted_cost = cost_cny(provider, predicted_input, max_output_tokens, effective_model or None)
     status = budget_status(project_root, paper_id)
     control = model_spend.read(project_root)
     controlled = control is not None
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
-    reserve_rates = pricing(provider, effective_model or None)
-    maximum_input_rate = max(reserve_rates["input_per_million"], reserve_rates.get("cache_read_per_million", 0), reserve_rates.get("cache_write_per_million", 0))
-    reserved_cost = round((max(predicted_input, len(request_text.encode("utf-8")) + 1000) * maximum_input_rate
-                          + max_output_tokens * reserve_rates["output_per_million"]) / 1_000_000, 8) if controlled else predicted_cost
+    # The byte ceiling includes prompt/system framing. Conditional quotes also
+    # reserve worst-tier/cache premiums/tools without relying on a tokenizer guess.
+    conservative = controlled or quote.get("quote_schema") == "2.0"
+    input_ceiling = max(predicted_input, len(request_text.encode("utf-8")) + 1000) if conservative else predicted_input
+    reserved_cost = billing_quotes.reserve_cost(quote, input_ceiling, max_output_tokens, limits)
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
@@ -420,11 +481,27 @@ def call(
         timeout=timeout,
         model=model,
     )
-    input_tokens, output_tokens = usage_counts(result.usage)
-    estimated = input_tokens is None or output_tokens is None
-    input_tokens = input_tokens if input_tokens is not None else predicted_input
-    output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-    actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens)
+    try:
+        input_tokens, output_tokens = usage_counts(result.usage)
+        estimated = input_tokens is None or output_tokens is None
+        if estimated and quote.get("quote_schema") == "2.0":
+            raise ModelBudgetError("conditional billing needs actual token usage; reconcile the outstanding reservation")
+        input_tokens = input_tokens if input_tokens is not None else predicted_input
+        output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
+        actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens,
+                                                                      quote=quote, declared_tool_limits=limits, request_id=result.request_id)
+    except ModelBudgetError as exc:
+        _append(_ledger(project_root), {"schema_version": "2.0", "at": utc_now(), "run_id": run_id, "stage": stage,
+                                      "paper_id": paper_id, "role": role, "provider": provider,
+                                      "model": result.reported_model or result.model, "cache_hit": False,
+                                      "cache_key": key, "cost_cny": 0.0, "cost_status": "unknown_reconcile_required",
+                                      "reservation_id": reservation_id, "reserved_cost_cny": reserved_cost,
+                                      "billing_identity": identity["billing_identity"], "billing_quote_sha256": identity["billing_quote_sha256"],
+                                      "declared_tool_limits": limits, "request_id": result.request_id,
+                                      "billing_error": str(exc), "usage_receipt": result.usage,
+                                      "completion_status": result.completion_status,
+                                      "endpoint": result.endpoint, "gateway": result.gateway, "protocol": result.protocol})
+        raise
     estimated = estimated or cache_price_unknown
     result.cache_key = key
     if reservation_id and not estimated:
@@ -451,12 +528,17 @@ def call(
             "endpoint": result.endpoint,
             "gateway": result.gateway,
             "protocol": result.protocol,
+            "billing_identity": identity["billing_identity"],
+            "billing_quote_sha256": identity["billing_quote_sha256"],
+            "declared_tool_limits": limits,
+            "reservation_id": reservation_id,
+            "cost_status": "estimated_reconcile_required" if estimated else "settled_usage_receipt",
         },
     )
     # Account for the billable response first. Truncated/refused answers must
     # never become cached scientific artifacts, even if their text parses.
     ai_providers.require_complete(result)
-    if use_cache:
+    if use_cache and not estimated:
         _write_cache(
             cache_path,
             {

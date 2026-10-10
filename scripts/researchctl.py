@@ -391,7 +391,15 @@ def gate_errors(slug,gate):
             errors.extend(f"{pid} statistical reporting: {x}" for x in validate_statistical_reporting(project,pid))
             from scripts.docx_revision import validate_saved_report as validate_word_revision
             errors.extend(f"{pid} Word revisions: {x}" for x in validate_word_revision(project,pid))
+            from scripts.revision_ledger import validate_saved_report as validate_revision_ledger
+            errors.extend(f"{pid} edit ledger: {x}" for x in validate_revision_ledger(project,pid,require_when_changed=True))
         except ImportError as exc:errors.append(f"{pid} statistical/Word validator unavailable: {exc}")
+        if (project/"program/research-support.json").exists():
+            from scripts.research_support import validate_saved_report as validate_support
+            errors.extend(f"research support: {x}" for x in validate_support(project))
+        if (project/"program/review-packets.json").exists():
+            from scripts.review_packets import validate_gate_reviews
+            errors.extend(f"review packets: {x}" for x in validate_gate_reviews(project))
         venue=load_nonempty_json(paper/"venue.json",errors)
         try:
             from scripts.journal_dossier import validate_saved_report as validate_dossier

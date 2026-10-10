@@ -49,4 +49,6 @@ The controller retrieves allowed primary URLs, saves their content/hash/date, de
 
 ## Separate owner review operations
 
+Follow-up deterministic builders are documented in [Quality controls follow-up](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Add `research_support`, `support_sources`, `research_notebook_daily` or `review_packets` at their documented stages, or `revision_ledger` plus `paper_id` at writing-and-review. Only `support_sources` performs bounded public metadata GETs; none enables paid calls or experiments. Owner-only `confirm_review_packet` uses `packet_id`, exact dossier SHA and structured human `judgments`; it never grants a scientific gate.
+
 The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.

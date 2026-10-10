@@ -13,6 +13,7 @@ import hashlib
 import json
 import math
 import numbers
+import os
 import re
 import shutil
 import tempfile
@@ -76,7 +77,48 @@ def _english_text(value: Any, field: str, *, required: bool = True) -> str:
     return result
 
 
+def actual_figure_labels(fig):
+    fig.canvas.draw()
+    values, seen = [], set()
+    def add(artist, role, source):
+        if artist is None or id(artist) in seen or not artist.get_visible() or not artist.get_text().strip():
+            return
+        seen.add(id(artist))
+        values.append({"text": artist.get_text(), "role": role, "source": source})
+    for index, ax in enumerate(fig.axes, 1):
+        if not ax.get_visible():
+            continue
+        source = f"axes[{index}]"
+        for artist, role in ((ax.title, "title.center"), (getattr(ax, "_left_title", None), "title.left"), (getattr(ax, "_right_title", None), "title.right")):
+            add(artist, role, source)
+        if ax.axison:
+            add(ax.xaxis.label, "xlabel", source)
+            add(ax.yaxis.label, "ylabel", source)
+            for direction, axis in (("x", ax.xaxis), ("y", ax.yaxis)):
+                low, high = sorted(axis.get_view_interval())
+                tolerance = max(1.0, abs(high-low))*1e-9
+                for kind, ticks in (("major", axis.get_major_ticks()), ("minor", axis.get_minor_ticks())):
+                    for tick in ticks:
+                        if low-tolerance <= tick.get_loc() <= high+tolerance:
+                            add(tick.label1, f"{direction}tick.{kind}", source)
+                            add(tick.label2, f"{direction}tick.{kind}", source)
+                add(axis.get_offset_text(), f"{direction}axis.offset", source)
+        for artist in ax.texts:
+            add(artist, "annotation", source)
+        legend = ax.get_legend()
+        if legend is not None and legend.get_visible():
+            add(legend.get_title(), "legend.title", source)
+            for artist in legend.get_texts():
+                add(artist, "legend.label", source)
+    for artist in fig.texts:
+        add(artist, "figure.text", "figure")
+    return values
+
+
 def validate_spec(spec: dict[str, Any]) -> None:
+    width = spec.get("final_width_mm")
+    if width is not None and (type(width) not in (int, float) or not math.isfinite(width) or width <= 0):
+        raise FigureSpecError("final_width_mm must be a positive finite number")
     if spec.get("schema_version") != "1.0":
         raise FigureSpecError("schema_version must be 1.0")
     if spec.get("style") not in {"technical", "minimal", "high-impact"}:
@@ -417,7 +459,9 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
     if project not in spec_path.parents or not spec_path.is_file():
         raise FigureSpecError("spec must be an existing project file")
     try:
-        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        spec_source = spec_path.read_bytes()
+        spec = json.loads(spec_source.decode("utf-8"))
+        spec_sha256 = hashlib.sha256(spec_source).hexdigest()
     except (OSError, json.JSONDecodeError) as exc:
         raise FigureSpecError(f"cannot read figure spec: {exc}") from exc
     if not isinstance(spec, dict):
@@ -464,9 +508,12 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             ax = axes[index // columns][index % columns]
             data_relative = panel.get("data", spec.get("data"))
             data_path = safe_file(project, data_relative, f"panels[{index}].data")
+            data_sha256 = sha256_file(data_path)
             frame = _read_table(data_path, pd)
+            if sha256_file(data_path) != data_sha256:
+                raise FigureSpecError("figure data changed while being read")
             relative = data_path.relative_to(project).as_posix()
-            data_records[relative] = {"path": relative, "sha256": sha256_file(data_path), "rows": int(len(frame)), "columns": [str(item) for item in frame.columns]}
+            data_records[relative] = {"path": relative, "sha256": data_sha256, "rows": int(len(frame)), "columns": [str(item) for item in frame.columns]}
             if panel["kind"] == "heatmap":
                 _draw_heatmap(ax, panel, frame, np)
             elif panel["kind"] == "forest":
@@ -526,7 +573,8 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             from scripts.figure_output_qa import audit_outputs
         except ImportError:
             from figure_output_qa import audit_outputs
-        output_qa = audit_outputs(project, outputs, expected_text=[ax.get_xlabel() for ax in fig.axes if ax.axison and ax.get_xlabel() and "$" not in ax.get_xlabel()])
+        expected_labels = actual_figure_labels(fig)
+        output_qa = audit_outputs(project, outputs, expected_text=expected_labels, final_width_mm=spec.get("final_width_mm"))
         pdf = output_stem.with_suffix(".pdf")
         paper = next(parent for parent in output_stem.parents if re.fullmatch(r"P[0-9]{2}", parent.name)
                      and parent.parent == project / "papers")
@@ -561,7 +609,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         "renderer": "scripts/publication_figures.py",
         "renderer_sha256": sha256_file(Path(__file__)),
         "renderer_wrapper": {"path": renderer.relative_to(project).as_posix(), "sha256": sha256_file(renderer)},
-        "spec": {"path": spec_path.relative_to(project).as_posix(), "sha256": sha256_file(spec_path)},
+        "spec": {"path": spec_path.relative_to(project).as_posix(), "sha256": spec_sha256},
         "data": sorted(data_records.values(), key=lambda item: item["path"]),
         "source_data_exports": source_records,
         "outputs": outputs,
@@ -579,9 +627,26 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "layout_audit": layout_audit,
             "distribution_estimates_not_inferred": True,
             "output_qa": output_qa,
+            "expected_labels": expected_labels,
         },
     }
     report_path = output_stem.with_suffix(".figure-build.json")
+    qa_report_path = output_stem.with_suffix(".output-qa.json")
+    qa_report_path.write_text(json.dumps(output_qa, indent=2) + "\n", encoding="utf-8")
+    report["qa_report"] = {"path": qa_report_path.relative_to(project).as_posix(), "sha256": sha256_file(qa_report_path)}
+    render_receipt_path = output_stem.with_suffix(".render-receipt.json")
+    if any(sha256_file(project / item["path"]) != item["sha256"] for item in [report["spec"], *report["data"]]):
+        raise FigureSpecError("figure specification or data changed during rendering")
+    receipt_id = os.environ.get("GITHUB_RUN_ID", "").strip() or os.environ.get("DR_OS_CLOUD_EXECUTION_RECEIPT_ID", "").strip()
+    cloud_mode = os.environ.get("GITHUB_ACTIONS", "").lower() == "true" or os.environ.get("DR_OS_CLOUD_EXECUTOR") == "1"
+    qa_previews = [preview for row in output_qa["outputs"] for key in ("grayscale_previews", "color_vision_previews") for preview in row.get(key, [])]
+    render_receipt = {"schema_version": "1.0", "status": "pass" if cloud_mode and receipt_id else "unverified_execution",
+        "inputs": [report["spec"], *report["data"]], "outputs": [*outputs, *qa_previews],
+        "renderer": {"name": "publication_figures", "implementation_sha256": sha256_file(Path(__file__))},
+        "execution": {"mode": "cloud" if cloud_mode else "local", "receipt_id": receipt_id},
+        "visual_review_required": True, "output_qa_status": output_qa["status"]}
+    render_receipt_path.write_text(json.dumps(render_receipt, indent=2) + "\n", encoding="utf-8")
+    report["render_receipt"] = {"path": render_receipt_path.relative_to(project).as_posix(), "sha256": sha256_file(render_receipt_path)}
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=report_path.parent, delete=False) as handle:
         json.dump(report, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
@@ -596,6 +661,12 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         role="figure-renderer-control",
         run_id=f"figure-{hashlib.sha256(spec_path.read_bytes()).hexdigest()[:16]}",
     )
+    output_provenance.record_model_writes(project, [render_receipt_path], family="other",
+        provider="publication-figure-renderer", model="scripts/publication_figures.py", role="render-receipt",
+        run_id="figure-" + receipt_id)
+    output_provenance.record_model_writes(project, [qa_report_path], family="other",
+        provider="publication-figure-renderer", model="scripts/publication_figures.py", role="figure-output-qa",
+        run_id="figure-" + receipt_id)
     if not layout_audit.get("pass") or layout_warnings or output_qa["errors"]:
         raise FigureSpecError("rendered figure layout failed; inspect the saved figure layout/build reports")
     return report

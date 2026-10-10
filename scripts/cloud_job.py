@@ -35,7 +35,7 @@ BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```
 PAID = {"cycle", "continuation", "paperqa", "tooluniverse"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
-    "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope"},
+    "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope", "packet_id"},
     **{action: fields | cloud_human_controls.DECISIONS.get(action, set()) | {"expected_sha256", "note"}
        for action, fields in cloud_human_controls.SELECTORS.items()},
     "preflight": set(), "acceptance": set(), "free_jev_probe": set(),

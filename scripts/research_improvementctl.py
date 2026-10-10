@@ -17,7 +17,7 @@ if str(ROOT) not in sys.path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("notebook", "statistics", "word-revision", "journals", "method-contracts", "style-eval"))
+    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval"))
     parser.add_argument("--project")
     parser.add_argument("--paper")
     args = parser.parse_args()
@@ -32,10 +32,28 @@ def main() -> int:
         project = ROOT / "projects" / args.project
         if not project.is_dir() or project.is_symlink():
             parser.error("project is absent or unsafe")
-        if args.action in {"statistics", "word-revision"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
+        if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
             parser.error("paper must be P01, P02, etc.")
         if args.action == "notebook":
             from scripts.research_notebook import refresh
+            result = refresh(project)
+        elif args.action == "daily-brief":
+            from scripts.research_notebook import daily_brief
+            result = daily_brief(project)
+        elif args.action == "revision-ledger":
+            from scripts.revision_ledger import refresh
+            result = refresh(project, args.paper)
+        elif args.action == "revision-ledger-manifest":
+            from scripts.revision_ledger import change_manifest
+            result = change_manifest(project, args.paper)
+        elif args.action == "research-support":
+            from scripts.research_support import refresh
+            result = refresh(project)
+        elif args.action == "support-sources":
+            from scripts.research_support import fetch_sources
+            result = fetch_sources(project)
+        elif args.action == "review-packets":
+            from scripts.review_packets import refresh
             result = refresh(project)
         elif args.action == "statistics":
             from scripts.statistical_reporting import refresh

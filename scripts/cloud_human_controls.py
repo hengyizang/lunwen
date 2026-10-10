@@ -15,7 +15,7 @@ from scripts import cloud_checkpoint as cp, output_provenance, researchctl, rese
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
 QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
@@ -23,8 +23,9 @@ SELECTORS = {
     "confirm_reproduction": {"paper_id"},
     "screen_literature": {"receipt_id"},
     "confirm_source_scope": {"source", "scope"},
+    "confirm_review_packet": {"packet_id"},
 }
-DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}}
+DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
 VOLATILE = {cp.MANIFEST, AUDIT, "state/continuation-status.json"}
 
@@ -66,6 +67,9 @@ def validate_fields(value: dict) -> str:
             raise HumanControlError("source must be a checkpoint-safe supplied document")
         if not isinstance(value["scope"], str) or value["scope"] not in {"full_text", "abstract", "excerpt", "metadata"}:
             raise HumanControlError("invalid supplied source scope")
+    if "packet_id" in selectors and (not isinstance(value["packet_id"], str)
+            or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", value["packet_id"])):
+        raise HumanControlError("select an exact safe packet_id")
     if value["action"] != "review_dossier":
         if not isinstance(value.get("expected_sha256"), str) or not re.fullmatch(r"[a-f0-9]{64}", value["expected_sha256"]):
             raise HumanControlError("exact reviewed dossier SHA-256 required")
@@ -79,6 +83,9 @@ def validate_fields(value: dict) -> str:
                         or any(not isinstance(item, str) or not 0 < len(item.strip()) <= 500
                                or any(ord(ch) < 32 for ch in item) for item in items)):
                     raise HumanControlError("screening needs bounded work IDs and explicit exclusion reasons")
+        if operation == "confirm_review_packet" and (not isinstance(value.get("judgments"), dict)
+                or len(json.dumps(value["judgments"]).encode()) > 100_000):
+            raise HumanControlError("review packet needs bounded structured human judgments")
     return operation
 
 
@@ -147,6 +154,12 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
     if state["status"] != "awaiting_work" or (required_gate and state["gate"] != required_gate) or state["gate"] is None:
         raise HumanControlError("human evidence decisions require the matching gate open for work")
     actor = value["actor"]
+    if operation == "confirm_review_packet":
+        from scripts import review_packets
+        if value["action"] == "review_dossier":
+            review_packets.review_snapshot(project, value["packet_id"])
+            return []
+        return [review_packets.create_confirmation(project, value["packet_id"], actor, value["judgments"])]
     if operation == "confirm_data_quality":
         dataset = value["dataset_id"]
         return [(project / "data/quality" / f"{dataset}-confirmation.json",

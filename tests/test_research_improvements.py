@@ -126,7 +126,42 @@ class StatisticalMappingTests(unittest.TestCase):
         paragraph.write_text("\n".join(text), encoding="utf-8")
         mapping = {"comparisons": [{"comparison_id": "negative", "locations": locations,
                     "reporting_notes": "No exclusions or missing data; seeds averaged within independent patients."}]}
+        protocol = project / "papers/P01/experiment-evidence-plan.json"
+        protocol.write_text("Synthetic protocol: all 20 patients included; none excluded or missing; 3 seeds averaged.", encoding="utf-8")
+        mapping["comparisons"][0]["reporting_semantics"] = {
+            "estimand": "Mean paired metric difference in eligible patients",
+            "inclusion_rule": "All registered patients", "exclusion_rule": "No exclusions",
+            "missingness_rule": "No missing units", "uncertainty_interpretation": "95 percent CI for the mean difference",
+            "inference_boundary": "These registered patients only",
+            "sample_flow": {"eligible_units": 20, "excluded_units": 0, "missing_units": 0, "analyzed_units": 20},
+            "repetition": {key: row[key] for key in ("analysis_unit", "independent_units", "seeds", "aggregation")},
+            "evidence": [{"path": protocol.relative_to(project).as_posix(), "sha256": sha(protocol),
+                          "locator": "synthetic protocol", "quote": protocol.read_text()}]}
+        mapping["comparisons"][0]["reporting_semantics"]["repetition"]["seeds_are_independent_units"] = False
         return {"comparisons": [row]}, mapping
+
+    def test_structured_semantics_rejects_pseudoreplication_and_unreconciled_sample_flow(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            semantics = mapping["comparisons"][0]["reporting_semantics"]
+            semantics["repetition"]["seeds_are_independent_units"] = True
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
+            self.assertTrue(any("seeds must not" in error for error in result["errors"]))
+            semantics["repetition"]["seeds_are_independent_units"] = False
+            semantics["sample_flow"]["missing_units"] = 1
+            self.assertTrue(any("sample_flow" in error for error in statistical_reporting.check_mapping(project, "P01", evidence, mapping)["errors"]))
+
+    def test_reporting_semantics_rejects_stale_or_self_referential_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            source = mapping["comparisons"][0]["reporting_semantics"]["evidence"][0]
+            (project / source["path"]).write_text("Changed protocol")
+            self.assertEqual(statistical_reporting.check_mapping(project, "P01", evidence, mapping)["status"], "fail")
+            target = project / "papers/P01/manuscript/results.md"
+            source.update(path=target.relative_to(project).as_posix(), sha256=sha(target), quote=target.read_text())
+            self.assertTrue(any("own manuscript" in error for error in statistical_reporting.check_mapping(project, "P01", evidence, mapping)["errors"]))
 
     def test_negative_result_and_precision_are_preserved(self):
         with tempfile.TemporaryDirectory() as directory:
