@@ -227,6 +227,13 @@ End with ONLY one JSON object containing exactly one key, dispositions. Its valu
 """
 
 
+def refresh_editorial_operations(project: str, stage: str) -> dict | None:
+    if stage != "writing-and-review":
+        return None
+    from scripts.cloud_research_steps import after_write
+    return after_write(researchctl.project_dir(project), stage)
+
+
 def remediation_dispositions(path: Path, audit: dict[str, Any], stage: str | None = None) -> list[str]:
     try:
         raw=path.read_text(encoding="utf-8").strip()
@@ -810,6 +817,7 @@ def run_stage(
         )
         initial_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "initial", initial_style_audit)
         journal["academic_style_audit"] = {"initial": initial_style_audit}
+        journal["controlled_editorial_operations"] = {"initial": refresh_editorial_operations(project, state["stage"])}
         journal["research_method_audits"] = {
             "initial": api_orchestrator.refresh_research_method_audits(project, state["stage"])
         }
@@ -887,6 +895,7 @@ def run_stage(
             )
             final_style_audit = api_orchestrator.snapshot_editorial_pass(project, token, "final", final_style_audit)
             journal["academic_style_audit"]["final"] = final_style_audit
+            journal["controlled_editorial_operations"]["final"] = refresh_editorial_operations(project, state["stage"])
             journal["research_method_audits"]["final"] = api_orchestrator.refresh_research_method_audits(
                 project, state["stage"]
             )

@@ -85,7 +85,7 @@ def main() -> int:
             from scripts.method_tools import refresh
             result = refresh(project)
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 1 if result.get("status") in {"fail", "blocked"} else 0
+    return 1 if result.get("status") in {"fail", "blocked", "revise"} else 0
 
 
 if __name__ == "__main__":

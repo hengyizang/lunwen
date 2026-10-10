@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps
+from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps, research_improvementctl
 
 
 def manuscript_text() -> str:
@@ -133,3 +133,30 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertIn("prose", candidates[0].read_text(encoding="utf-8"))
             self.assertIn("\u200b", source.read_text(encoding="utf-8"))
 
+    def test_cli_editorial_audit_revise_is_an_unsuccessful_exit(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}, clear=False):
+            root = Path(directory)
+            (root / "projects/demo").mkdir(parents=True)
+            with patch.object(research_improvementctl, "ROOT", root), patch("sys.argv", ["ctl", "editorial-audit", "--project", "demo", "--paper", "P01"]), patch(
+                "scripts.academic_style.write_audit", return_value=(root / "audit.json", {"status": "revise"})
+            ):
+                self.assertEqual(research_improvementctl.main(), 1)
+
+    def test_cli_controller_executes_declared_editorial_operation(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}, clear=False), patch.object(
+            autopilot.researchctl, "PROJECTS_ROOT", Path(directory)
+        ):
+            project = Path(directory) / "demo"
+            source = project / "papers/P01/manuscript/main.txt"
+            source.parent.mkdir(parents=True)
+            source.write_text("The pro\u200bse is evidence-bound.", encoding="utf-8")
+            (project / "program").mkdir()
+            (project / "program/cloud-operations.json").write_text(json.dumps({"operations": [{
+                "stage": "writing-and-review", "action": "watermark_cleanup", "paper_id": "P01",
+                "source": source.relative_to(project).as_posix(),
+                "expected_sha256": hashlib.sha256(source.read_bytes()).hexdigest()
+            }]}), encoding="utf-8")
+            result = autopilot.refresh_editorial_operations("demo", "writing-and-review")
+            self.assertEqual(result["operation_errors"], [])
+            self.assertEqual(len(list((project / "reports/watermark-cleanup").glob("*/candidate.txt"))), 1)
+            self.assertIsNone(autopilot.refresh_editorial_operations("demo", "topic-intelligence"))
