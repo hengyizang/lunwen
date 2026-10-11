@@ -91,6 +91,8 @@ def method(project, row):
     baseline = next((b for b in design.get("baselines", []) if b.get("id") == row.get("baseline_id")), None)
     if baseline is None:
         raise ValueError("method adoption must bind an actual baseline in the design")
+    if baseline.get("class") != row["baseline_class"].replace("-", "_"):
+        raise ValueError("method baseline class differs from the actual design")
     if not set(selected["run_ids"]).issubset(set(design.get("run_ids", []))):
         raise ValueError("method validation runs must belong to the declared design")
     return {**row, "evidence": sources(project, row.get("evidence")),
@@ -178,6 +180,9 @@ def audit(project: Path) -> dict:
             raise ValueError("research extension section must have at most 200 rows")
         seen, checked = set(), []
         for row in rows:
+            if not isinstance(row, dict):
+                output["errors"].append(f"{section}: row must be an object")
+                continue
             try:
                 identifier = row.get("id")
                 if not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", identifier) or identifier in seen:

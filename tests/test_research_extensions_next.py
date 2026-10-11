@@ -75,7 +75,7 @@ class ExtensionTests(ExtensionFixture):
 
     def test_method_adoption_binds_actual_baseline_and_run_membership(self):
         write(self.project / "papers/P01/paper-contract.json", {"research_question": "Synthetic question only"})
-        write(self.project / "papers/P01/experiments/design.json", {"baselines": [{"id": "strong"}], "run_ids": ["pilot"]})
+        write(self.project / "papers/P01/experiments/design.json", {"baselines": [{"id": "strong", "class": "strong_recent"}], "run_ids": ["pilot"]})
         row = {"id": "adoption", "paper_id": "P01", "baseline_class": "strong-recent", "baseline_id": "strong",
                "fair_comparison": "Same held-out data", "resource_rationale": "Bounded CPU fixture",
                "transfer_limitations": "No scientific applicability claimed", "method_tool_id": "method",
@@ -85,6 +85,10 @@ class ExtensionTests(ExtensionFixture):
         with patch("scripts.method_tools.inspect", return_value=contract):
             result = extensions.method(self.project, row)
             self.assertFalse(result["scientific_applicability_verified"])
+            row["baseline_class"] = "simple"
+            with self.assertRaisesRegex(ValueError, "class differs"):
+                extensions.method(self.project, row)
+            row["baseline_class"] = "strong-recent"
             row["baseline_id"] = "nonexistent"
             with self.assertRaisesRegex(ValueError, "baseline"):
                 extensions.method(self.project, row)
@@ -230,6 +234,19 @@ class CalibrationTests(ExtensionFixture):
         report = calibration_analysis.summarize(self.project, "blind")
         self.assertEqual(report["qualified_candidates"], 0)
         self.assertEqual(report["exact_pairwise_rating_agreement"], 0)
+
+    def test_duplicate_rater_with_whitespace_cannot_count_twice(self):
+        self.fixture()
+        self.rate("reviewer-one")
+        self.rate("  REVIEWER-ONE  ")
+        with self.assertRaisesRegex(ValueError, "multiple owner"):
+            calibration_analysis.summarize(self.project, "blind")
+
+    def test_default_snapshot_excludes_blind_answer_key(self):
+        self.fixture()
+        with patch.object(api_orchestrator, "project_root", return_value=self.project):
+            content = api_orchestrator.project_snapshot("synthetic", stage="topic-intelligence", exclude_reviews=True)
+        self.assertNotIn("answer-key.json", content)
 
     def test_source_leakage_and_post_rating_rubric_change_are_rejected(self):
         packet = self.fixture()

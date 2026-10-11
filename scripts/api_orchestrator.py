@@ -67,6 +67,7 @@ SNAPSHOT_SKIPPED_PARTS = {
     "raw",
     "secrets",
     "venue-template",
+    "review-packets",
 }
 MAX_SNAPSHOT_FILES = 300
 MAX_SNAPSHOT_FILE_BYTES = 100_000

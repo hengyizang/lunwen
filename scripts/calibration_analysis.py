@@ -12,7 +12,7 @@ from scripts import review_packets
 
 def protocol(packet):
     spec = packet.get("analysis")
-    if spec is None:
+    if not isinstance(spec, dict):
         raise ValueError("freeze an analysis protocol in the packet before collecting ratings")
     minimum = spec.get("minimum_raters")
     if type(minimum) is not int or not 2 <= minimum <= 20:
@@ -40,6 +40,13 @@ def protocol(packet):
     run_ids = spec.get("cost_run_ids", [])
     if not isinstance(run_ids, list) or any(not isinstance(x, str) or not x for x in run_ids) or len(set(run_ids)) != len(run_ids):
         raise ValueError("cost run IDs must be unique explicit IDs")
+    for case in packet["cases"]:
+        for candidate in case["candidates"]:
+            values = candidate.get("run_ids", [])
+            if not isinstance(values, list) or any(not isinstance(x, str) or not x for x in values) or len(set(values)) != len(values):
+                raise ValueError("candidate run IDs must be a unique list")
+    if not isinstance(spec.get("additional_cost_receipts", []), list) or len(spec.get("additional_cost_receipts", [])) > 200:
+        raise ValueError("at most 200 additional cost receipts are permitted")
     return spec
 
 
@@ -110,7 +117,7 @@ def summarize(project: Path, packet_id: str) -> dict:
         current = [a for a in confirmation["attempts"] if a["current"]]
         if current:
             last = current[-1]
-            identifier = last["judgments"]["rater_id"].casefold()
+            identifier = last["judgments"]["rater_id"].strip().casefold()
             if identifier in raters:
                 raise ValueError("one rater cannot be counted through multiple owner records")
             raters[identifier] = last["judgments"]

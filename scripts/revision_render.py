@@ -65,7 +65,7 @@ def validate_render_receipt(paper: Path, pdf: Path, receipt_path: Path) -> dict:
         raise ValueError("rendering receipt lacks cloud execution identity")
     renderers = {"cloud_runtime": ("cloud_runtime.py", "cloud-tex-renderer"),
                  "word_render": ("word_render.py", "cloud-word-renderer")}
-    implementation = renderers.get(renderer.get("name")) if isinstance(renderer, dict) else None
+    implementation = renderers.get(renderer.get("name")) if isinstance(renderer, dict) and isinstance(renderer.get("name"), str) else None
     if implementation is None or renderer.get("implementation_sha256") != sha(Path(__file__).resolve().parent / implementation[0]):
         raise ValueError("rendering receipt is stale or unsupported for the real renderer implementation")
     def artifacts(key):
