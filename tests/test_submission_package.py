@@ -51,6 +51,32 @@ class SubmissionPackageTests(unittest.TestCase):
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
         final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]
         output_provenance.record_model_writes(project,final_files,family="openai",provider="codex",model="test",role="persistent-writer",run_id="test")
+        # Supply the new mechanical controls with explicit synthetic provenance.
+        # This fixture demonstrates packaging, not a scientifically valid paper.
+        from scripts import incremental_writing, research_increments
+        from scripts.research_artifacts import write, sha
+        evidence = project / "evidence/fixture.txt"
+        evidence.parent.mkdir(parents=True)
+        evidence.write_text("Synthetic bounded packaging fixture.", encoding="utf-8")
+        anchor = {"path": "evidence/fixture.txt", "sha256": sha(evidence), "kind": "source_lines",
+                  "start_line": 1, "end_line": 1, "quote": evidence.read_text(encoding="utf-8")}
+        write(paper / "reviews/paper-facts.json", {"facts": [{"id": "FIXTURE", "statement": "Synthetic fixture"}]})
+        increments = research_increments.initialize(project)
+        units = incremental_writing.inventory(project, "P01")["units"]
+        argument = {"id": "PACKAGING", "paper_id": "P01", "precedence": [], "paragraphs": [
+            {"paragraph_id": "PAR" + str(index), "section": "Introduction", "function": "context",
+             "purpose": "Exercise packaging fixture coverage", "claim_ids": ["FIXTURE"],
+             "inference_boundary": "Synthetic engineering fixture only", "transition": "Fixture continuation",
+             "units": [{"unit_id": unit["unit_id"], "sha256": unit["sha256"]}]}
+            for index, unit in enumerate(units, 1)]}
+        increments["arguments"] = [argument]
+        increments["lineage"] = [{"id": "PACKAGING", "paper_id": "P01", "nodes": [
+            {"id": "SOURCE", "kind": "primary_finding", "research_state": "unknown", "read_scope": "excerpt",
+             "statement": "Synthetic packaging source", "boundary": "Not scientific evidence",
+             "parents": [], "evidence": [anchor]}], "fact_links": [{"fact_id": "FIXTURE", "node_id": "SOURCE"}]}]
+        write(project / research_increments.PLAN, increments)
+        incremental_writing.freeze_plan(project, argument, phase="before_writer")
+        research_increments.refresh(project)
         old=researchctl.PROJECTS_ROOT
         try:
             researchctl.PROJECTS_ROOT=root

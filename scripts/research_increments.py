@@ -195,14 +195,21 @@ def build(project):
     # Same identity/version with different bytes is a conflict, never silent replacement.
     seen, content_seen = {}, {}
     for item in results["ingestion"]:
-        identity = item["identity_key"]
+        identities = [digest({"kind": kind, "value": value.casefold(), "version": item["version"]})
+                      for kind, value in item["identifiers"].items()]
         content = item.get("attachment", {}).get("sha256")
-        previous = seen.get(identity)
-        if previous and previous.get("attachment", {}).get("sha256") != content:
+        matches = [seen[key] for key in identities if key in seen]
+        previous = matches[0] if matches else None
+        if len({value["id"] for value in matches}) > 1:
+            errors.append({"group": "ingestion", "id": item["id"], "error": "identifier aliases join conflicting prior records"})
+        if previous and content and previous.get("attachment", {}).get("sha256") and previous["attachment"]["sha256"] != content:
             errors.append({"group": "ingestion", "id": item["id"], "error": "same identity/version has conflicting attachments"})
         item["duplicate_of"] = previous["id"] if previous else None
         item["content_reuse_of"] = content_seen.get(content) if content else None
-        seen.setdefault(identity, item)
+        for identity in identities:
+            seen.setdefault(identity, item)
+            if content and not seen[identity].get("attachment"):
+                seen[identity] = item  # Metadata-to-attachment receipt, preserving both records.
         if content:
             content_seen.setdefault(content, item["id"])
     try:
@@ -221,7 +228,8 @@ def build(project):
 def handoff(project, audit):
     """Only state-backed status/costs; no invented completion percentage or ETA."""
     from scripts.model_spend import read as spend_read
-    state = read(path_in(project, "state/run.json"))
+    state_path = path_in(project, "state/run.json", exists=False)
+    state = read(state_path) if state_path.is_file() else {}
     spend = spend_read(project)
     cost = {"currency": "CNY", "status": "authorization_state_missing"}
     if spend is not None:
@@ -235,6 +243,8 @@ def handoff(project, audit):
     counts = {status: sum(item.get("status") == status for item in attempts)
               for status in ("succeeded", "failed", "timed_out", "stopped")}
     blockers = list(audit.get("errors", []))
+    if not state:
+        blockers.append({"group": "state", "error": "project state is unavailable; restore the cloud checkpoint"})
     blockers.extend({"group": "inputs", "error": item} for item in audit.get("missing", []))
     checks = {}
     for name in ("state/research-steps.json", "reports/research-extensions/audit.json"):
@@ -249,7 +259,8 @@ def handoff(project, audit):
             "registered_attempt_counts": counts, "increment_blockers": blockers[:50],
             "blockers_truncated": len(blockers) > 50, "other_checks": checks,
             "next_action": "resolve recorded blockers then request the existing human gate decision",
-            "source_bindings": [{"path": "state/run.json", "sha256": sha(project / "state/run.json")},
+            "state_verified": bool(state),
+            "source_bindings": [*([{"path": "state/run.json", "sha256": sha(state_path)}] if state else []),
                                 *([{"path": "state/model-spend-control.json",
                                     "sha256": sha(project / "state/model-spend-control.json")}] if spend else [])],
             "scientific_completion_verified": False}

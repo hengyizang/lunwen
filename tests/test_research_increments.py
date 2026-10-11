@@ -193,7 +193,8 @@ class IncrementTests(unittest.TestCase):
     def test_metadata_receipts_duplicate_without_claiming_fulltext(self):
         row = {"id": "I1", "work_id": "W1", "identifiers": {"doi": "10.1234/test"},
                "title": "A declared fixture", "version": "publisher-v1", "source_url": "https://example.org/paper"}
-        self.spec["ingestion"] = [row, {**row, "id": "I2", "work_id": "W2"}]
+        self.spec["ingestion"] = [row, {**row, "id": "I2", "work_id": "W2",
+                                      "identifiers": {"doi": "10.1234/test", "arxiv": "2601.12345"}}]
         self.save()
         results = increments.build(self.project)["groups"]["ingestion"]
         self.assertEqual(results[1]["duplicate_of"], "I1")
@@ -361,6 +362,54 @@ class IncrementTests(unittest.TestCase):
         self.assertTrue(increments.gate_errors(self.project, "G5", "P02"))
         write(self.project / increments.REPORT, {"status": "mechanically_checked"})
         self.assertIn("stale", " ".join(increments.gate_errors(self.project, "G5", "P01")))
+
+    def test_actual_cloud_owner_dossier_authorizes_voice_and_rejects_stale_review(self):
+        from scripts import cloud_human_controls as controls, cloud_job, researchctl
+        sample = self.put("evidence/author.txt", "A grounded sample with an explicit observation. " * 5)
+        row = {"id": "V1", "sample": sample, "language": "en", "genre": "academic",
+               "owner": "fixture-owner", "authorized_use": "style_reference_only"}
+        self.spec["voices"] = [row]
+        self.save()
+        common = {"schema_version": "1.0", "project": "fixture-project", "actor": "fixture-owner", "allow_paid": False}
+        selectors = {"kind": "voice", "record_id": "V1", "decision": "authorize_sample"}
+        preview = {**common, **selectors, "action": "review_dossier", "operation": "confirm_research_increment"}
+        cloud_job.validate_request(preview)
+        with patch.object(researchctl, "project_dir", return_value=self.project), patch.object(
+            researchctl, "load_state", side_effect=lambda *args: read(self.project / "state/run.json")
+        ), patch.object(researchctl, "artifact_hash", return_value="a" * 64):
+            reviewed = controls.execute(preview, "123")
+            self.assertFalse((self.project / increments.CONFIRMATIONS).exists())
+            self.assertEqual(reviewed["blockers"], [])
+            decision = {**common, **selectors, "action": "confirm_research_increment",
+                        "expected_sha256": reviewed["review_sha256"], "note": "Reviewed this exact scoped author sample."}
+            cloud_job.validate_request(decision)
+            self.put("evidence/unrelated.txt", "Changed checkpoint after review")
+            with self.assertRaisesRegex(controls.HumanControlError, "changed"):
+                controls.execute(decision, "124")
+            decision["expected_sha256"] = controls.execute(preview, "125")["review_sha256"]
+            receipt = controls.execute(decision, "126")
+            self.assertEqual(receipt["paid_calls"], 0)
+            self.assertTrue(increments.confirmation(self.project, "voice", "V1", row, "authorize_sample"))
+            self.assertEqual(read(self.project / "state/run.json")["approved_gates"], ["G0"])
+
+    def test_failed_observation_remains_failed_with_actual_executor_receipt(self):
+        row = self.lineage()
+        attempt = {"attempt_id": "ATTEMPT1", "run_id": "RUN1", "paper_id": "P01", "status": "failed",
+                   "input_integrity": {"passed": False}, "outputs": [], "error": "Synthetic invalid input"}
+        write(self.project / "experiments/runs/ATTEMPT1/run.json", attempt)
+        self.put("experiments/registry.jsonl", json.dumps(attempt) + "\n")
+        write(self.project / "experiments/plan.json", {"runs": [{"run_id": "RUN1", "paper_id": "P01"}]})
+        receipt = self.project / "experiments/runs/ATTEMPT1/run.json"
+        lines = receipt.read_text(encoding="utf-8").splitlines()
+        line = next(i for i, value in enumerate(lines, 1) if '"error"' in value)
+        row["nodes"][0].update(kind="project_observation", research_state="failed", attempt_id="ATTEMPT1",
+                               evidence=[{"path": receipt.relative_to(self.project).as_posix(), "sha256": sha(receipt),
+                                          "kind": "source_lines", "start_line": line, "end_line": line,
+                                          "quote": "Synthetic invalid input"}])
+        self.assertEqual(evidence.lineage(self.project, row)["nodes"][0]["research_state"], "failed")
+        row["nodes"][0]["research_state"] = "confirmatory"
+        with self.assertRaises(ValueError):
+            evidence.lineage(self.project, row)
 
 
 if __name__ == "__main__":

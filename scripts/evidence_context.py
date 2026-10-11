@@ -34,15 +34,15 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     spec = plan.get("stages", {}).get(stage)
     if isinstance(spec, dict):
         task = task if task is not None else spec.get("active_task")
-    target = None
+    chapter_target = None
     if task is not None:
         if not isinstance(task, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", task):
             raise ValueError("context task needs an exact safe ID")
         selected = spec.get("tasks", {}).get(task) if isinstance(spec, dict) else None
         if not isinstance(selected, dict):
             raise ValueError("context task is absent from this stage")
-        target = selected.get("target")
-        if not isinstance(target, str) or not target.strip() or len(target) > 1000:
+        chapter_target = selected.get("target")
+        if not isinstance(chapter_target, str) or not chapter_target.strip() or len(chapter_target) > 1000:
             raise ValueError("task context needs an explicit paper/chapter target")
         spec = {**selected,
                 "items": spec.get("items", []) + selected.get("items", []),
@@ -100,7 +100,7 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     for dependency in spec.get("dependencies", []):
         target = path_in(project, dependency["path"])
         dependencies.append({"path": dependency["path"], "sha256": sha(target)})
-    payload = {"stage": stage, "task": task, "target": target, "question": spec["question"], "bindings": bindings,
+    payload = {"stage": stage, "task": task, "target": chapter_target, "question": spec["question"], "bindings": bindings,
                "dependencies": dependencies, "plan_sha256": sha(project / PLAN),
                "implementation_sha256": sha(Path(__file__))}
     fingerprint = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()

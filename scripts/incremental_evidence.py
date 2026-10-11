@@ -174,19 +174,23 @@ def lineage(project: Path, row: dict) -> dict:
         if node["kind"] == "project_observation":
             attempts = [item for item in jsonl(project, "experiments/registry.jsonl")
                         if item.get("attempt_id") == node.get("attempt_id")]
-            if len(attempts) != 1 or attempts[0].get("status") != "succeeded" or attempts[0].get("paper_id") != paper:
-                raise ValueError("project observation requires one successful matching executor attempt")
+            failure = node["research_state"] in {"failed", "stopped"}
+            statuses = {"failed", "timed_out", "stopped"} if failure else {"succeeded"}
+            if len(attempts) != 1 or attempts[0].get("status") not in statuses or attempts[0].get("paper_id") != paper:
+                raise ValueError("project observation requires one matching executor attempt and research state")
             attempt = attempts[0]
-            receipt = path_in(project, f"experiments/runs/{attempt['attempt_id']}/run.json")
-            if read(receipt) != attempt or attempt.get("input_integrity", {}).get("passed") is not True:
+            receipt = path_in(project, f"experiments/runs/{identifier(attempt['attempt_id'])}/run.json")
+            if read(receipt) != attempt or (not failure and attempt.get("input_integrity", {}).get("passed") is not True):
                 raise ValueError("project observation executor receipt is absent or inconsistent")
             outputs = {(item["path"], item["sha256"]) for item in attempt.get("outputs", [])}
+            if failure:
+                outputs.add((receipt.relative_to(project).as_posix(), sha(receipt)))
             if not outputs or any((item["path"], item["sha256"]) not in outputs for item in node["evidence"]):
                 raise ValueError("observation must anchor the exact registered attempt outputs")
             for relative, checksum in outputs:
                 if sha(path_in(project, relative)) != checksum:
                     raise ValueError("executor output changed")
-            if node["research_state"] not in {"exploratory", "confirmatory"}:
+            if not failure and node["research_state"] not in {"exploratory", "confirmatory"}:
                 raise ValueError("completed observations require their registered analysis state")
             plan = read(path_in(project, "experiments/plan.json"))
             run = next((item for item in plan.get("runs", []) if item.get("run_id") == attempt.get("run_id")), None)
