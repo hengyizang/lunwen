@@ -173,6 +173,27 @@ class ManuscriptHygieneTests(unittest.TestCase):
         added.unlink()
         self.assertTrue(hygiene.validate_saved_report(self.project, "P01"))
 
+    def test_image_only_figure_pdf_is_preserved_with_explicit_media_scope(self):
+        import fitz
+        import io
+        from PIL import Image
+        self.source(text="Clean ordinary prose.")
+        image = io.BytesIO()
+        Image.new("RGB", (12, 12), "white").save(image, format="PNG")
+        pdf = self.paper / "figures/raster.pdf"
+        pdf.parent.mkdir()
+        document = fitz.open()
+        document.new_page().insert_image(fitz.Rect(20, 20, 120, 120), stream=image.getvalue())
+        document.save(pdf)
+        document.close()
+        original = pdf.read_bytes()
+        report = self.refresh()
+        self.assertEqual(report["status"], "pass")
+        self.assertEqual(pdf.read_bytes(), original)
+        self.assertTrue(any("image-only figure PDF" in row["scope"] for row in report["files"]))
+        self.assertTrue(any("image watermarks not assessed" in row for row in report["warnings"]))
+        self.assertEqual(hygiene.validate_saved_report(self.project, "P01"), [])
+
     def test_preserved_original_diff_and_history_cannot_be_forged_even_with_resigning(self):
         self.source()
         report = self.refresh()

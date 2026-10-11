@@ -98,7 +98,7 @@ def _findings(details: dict) -> tuple[list[dict], list[dict]]:
     return changed, retained
 
 
-def _scan(payload: bytes, suffix: str) -> tuple[bytes, dict, str, str]:
+def _scan(payload: bytes, suffix: str, *, allow_image_only: bool = False) -> tuple[bytes, dict, str, str]:
     if suffix in EDITABLE:
         derived, details, before, after = cleaner._process(payload, suffix)
         changes, retained = _findings(details)
@@ -133,6 +133,9 @@ def _scan(payload: bytes, suffix: str) -> tuple[bytes, dict, str, str]:
                 raise ValueError("PDF is encrypted or exceeds the 300-page audit bound")
             text = "\n".join(page.get_text(sort=True) for page in document)
         if not text.strip():
+            if allow_image_only:
+                return payload, {"remaining_count": 0, "changes": [], "retained_findings": [], "auxiliary": [],
+                    "scope": "image-only figure PDF; no text to inspect; image watermarks not assessed"}, "", ""
             raise ValueError("PDF has no extractable text; source/render review is required")
         scope = "PDF extracted text only; image pixels and invisible PDF objects not assessed"
     else:
@@ -227,7 +230,10 @@ def audit(project: Path, paper_id: str) -> dict:
         relative = path.relative_to(project).as_posix()
         payload = path.read_bytes()
         try:
-            _, detail, _, _ = _scan(payload, path.suffix.lower())
+            if path.suffix.lower() == ".pdf":
+                _, detail, _, _ = _scan(payload, ".pdf", allow_image_only=path.is_relative_to(_paper(project, paper_id) / "figures"))
+            else:
+                _, detail, _, _ = _scan(payload, path.suffix.lower())
             auxiliary_count = sum(row["removed_count"] for row in detail["auxiliary"])
             findings += detail["remaining_count"] + len(detail["retained_findings"]) + auxiliary_count
             if findings > cleaner.MAX_FINDINGS:
@@ -236,6 +242,8 @@ def audit(project: Path, paper_id: str) -> dict:
                 errors.append(relative + ": removable character artifacts remain; clean editable sources and rebuild generated outputs")
             if detail["retained_findings"] or any(row["retained_findings"] for row in detail["auxiliary"]):
                 warnings.append(relative + ": protected/legitimate Unicode retained for contextual human review")
+            if detail["scope"].startswith("image-only figure PDF"):
+                warnings.append(relative + ": image watermarks not assessed; existing figure provenance and human visual review still apply")
             files.append({"path": relative, "sha256": cleaner.digest(payload),
                           "origin": output_provenance.current_origin(project, path), **detail})
         except (ValueError, OSError, ImportError, RuntimeError, RecursionError, csv.Error, zipfile.BadZipFile) as exc:
