@@ -16,7 +16,7 @@ def safe_text(project, relative, redact):
     parts = Path(relative).parts
     lowered = tuple(p.lower() for p in parts)
     if (any(p.startswith(".") or p in SNAPSHOT_SKIPPED_PARTS for p in lowered)
-            or "reviews" in lowered or "review-packets" in lowered
+            or "reviews" in lowered or "review-packets" in lowered or "manuscript-hygiene" in lowered
             or any(x in Path(relative).name.lower() for x in ("api_key", "apikey", "credential", "password", "secret", "token"))
             or Path(relative).suffix.lower() not in SNAPSHOT_SUFFIXES):
         raise ValueError("context input is private, a prior review, or unsupported: " + relative)

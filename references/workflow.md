@@ -21,7 +21,11 @@ For the current stage:
 3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
 4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
    At G5, run the deterministic academic-style audit after writing and again
-   after remediation; use it to improve authentic academic expression. Optional
+   after remediation; use it to improve authentic academic expression. Mandatory
+   automatic Unicode hygiene runs before builders and scans the resulting text
+   after each pass; preserved originals, protected spans, source ancestry and
+   remaining findings are covered by [the hygiene contract](../docs/MANUSCRIPT-HYGIENE.md).
+   A clean character scan cannot establish statistical-watermark absence. Optional
    user-supplied detector feedback stays outside the scientific gate and never
    removes disclosure. Run citation identity, DOI-bound abstract
    claim, commitment-trace and revision-integrity checks against the final snapshot.

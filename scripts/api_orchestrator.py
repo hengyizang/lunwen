@@ -70,6 +70,7 @@ SNAPSHOT_SKIPPED_PARTS = {
     "review-packets",
     "review-packet-confirmations",
     "output-provenance.json",
+    "manuscript-hygiene",
 }
 MAX_SNAPSHOT_FILES = 300
 MAX_SNAPSHOT_FILE_BYTES = 100_000
@@ -480,17 +481,27 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer") -> str:
             "Check the manuscript against scientific sources and legitimate-use exceptions. "
             "Report concrete actionable findings in the existing review JSON fields; no new "
             "output fields or paid calls. Do not estimate AI authorship or claim statistical "
-            "watermark absence. Preserve necessary scientific uncertainty and AI disclosure."))
+            "watermark absence. Inspect the fresh protected manuscript-hygiene audit and "
+            "the preserved change receipts, without treating a character scan as authorship evidence. "
+            "Preserve necessary scientific uncertainty and AI disclosure."))
     if role != "writer":
         raise ValueError("editorial role must be writer or critic")
     return "\n\n".join((
         humanizer_review.prompt_contract(), defensive_review.prompt_contract(),
-        "Watermark cleanup: request the non-billable watermark_cleanup cloud operation with "
-        "paper_id, exact manuscript source and expected_sha256 to obtain a protected derived "
-        "candidate. Read its changes/receipt. Preserve original source ancestry, scientific "
-        "facts and AI disclosure. A later canonical prose edit still needs revision integrity "
-        "and the complete ledger. Statistical watermark absence is not verified. Do not "
-        "add detector calls, repeated paid paraphrase loops or change model settings.",
+        "Automatic manuscript hygiene runs before deterministic builders and scans again after "
+        "each existing writing/remediation pass. It invokes pinned watermarks-remover, preserves "
+        "original bytes/change receipts, and removes supported character artifacts only from "
+        "eligible prose. Write without inserted invisible characters. Read reports/manuscript-hygiene/"
+        "<paper_id>/latest.json; resolve remaining artifacts in source files and regenerate outputs. "
+        "Protected quotations, math, citations, terms, uncertainty, disclosure and source ancestry "
+        "must survive. The explicit watermark_cleanup operation remains candidate-only. "
+        "A canonical edit still needs revision integrity and the complete ledger. Statistical "
+        "watermark absence is not verified. Do not add detector calls, paid rewrite loops or model changes.",
+        "Improve sentence rhythm and paragraph order only for a stated argument purpose. "
+        "Choose context-appropriate wording while keeping each technical term consistent. "
+        "Do not randomly shuffle sentences or rotate synonyms: neither establishes quality or "
+        "a detector outcome. Preserve hypothesis-to-method-to-result links, numbers, citations, "
+        "causal direction and warranted uncertainty; record substantive edits in the ledger.",
         "Use the existing initial writer and remediation as the two editorial passes. "
         "In remediation notes, explicitly dispose of H01 through H26 and each defensive "
         "review group: changed, retained with scientific/contextual reason, or unresolved. "
@@ -509,7 +520,8 @@ def editorial_feedback(project: str, stage: str) -> str:
             return "Current editorial audit is unavailable; do not claim it passed."
         report = load_json(project_root(project) / "papers" / paper_id / "style/academic-style-audit.json")
         analysis = report.get("analysis", {})
-        compact = {"manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {}}
+        compact = {"manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {},
+                   "manuscript_hygiene": hygiene_feedback(project, stage)}
         for name in ("humanizer_review", "anti_defensive_review"):
             value = analysis.get(name, {})
             compact["reviews"][name] = {"coverage": value.get("coverage"),
@@ -518,6 +530,21 @@ def editorial_feedback(project: str, stage: str) -> str:
         return json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
     except (OSError, ValueError):
         return "Current editorial audit is unavailable; do not claim it passed."
+
+
+def hygiene_feedback(project: str, stage: str) -> str:
+    if stage != "writing-and-review":
+        return "(not applicable)"
+    try:
+        paper_id = active_paper(project)
+        path = project_root(project) / "reports/manuscript-hygiene" / str(paper_id) / "latest.json"
+        report = load_json(path)
+        return json.dumps({"path": path.relative_to(project_root(project)).as_posix(),
+            "status": report.get("status"), "errors": report.get("errors", []), "warnings": report.get("warnings", []),
+            "protected_findings_require_contextual_review": True, "statistical_watermarks": "not_assessed",
+            "watermark_absence_verified": False}, ensure_ascii=False, separators=(",", ":"))
+    except (OSError, ValueError, TypeError):
+        return "Automatic manuscript hygiene audit is unavailable; do not claim it passed."
 
 
 def writer_prompt(
@@ -550,6 +577,9 @@ Installed stage-scoped research methods:
 
 Complete editorial skill contract:
 {editorial_prompt_contract(stage)}
+
+Current deterministic Unicode hygiene findings:
+{hygiene_feedback(project, stage)}
 
 Current incremental checks and authorized style data:
 {incremental_feedback(project)}
@@ -664,6 +694,9 @@ Installed stage-scoped research methods:
 Complete editorial review criteria:
 {editorial_prompt_contract(stage, role="critic")}
 
+Current deterministic Unicode hygiene findings (not an author disposition):
+{hygiene_feedback(project, stage)}
+
 Current stage-scoped project snapshot (prior reviews excluded):
 {project_snapshot(project, stage=stage, exclude_reviews=True)}
 
@@ -734,6 +767,9 @@ Complete editorial skill contract:
 
 Fresh protected editorial findings (contextual review remains mandatory):
 {editorial_feedback(project, stage)}
+
+Current deterministic Unicode hygiene findings:
+{hygiene_feedback(project, stage)}
 
 Current incremental checks and authorized style data:
 {incremental_feedback(project)}
@@ -1257,13 +1293,28 @@ def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: st
                                 *, run_operations: bool = True) -> dict[str, Any]:
     """Build canonical outputs before binding an editorial audit to their bytes."""
     controlled_steps = None
+    hygiene = None
+    if stage == "writing-and-review":
+        from scripts.manuscript_hygiene import refresh as refresh_hygiene
+        paper_id = active_paper(project)
+        before = refresh_hygiene(project_root(project), paper_id, apply=True)
+        save_run(project, run_id, f"manuscript-hygiene-{phase}-before-build.json", before)
     if run_operations:
         from scripts.cloud_research_steps import after_write
         controlled_steps = after_write(project_root(project), stage)
+    if stage == "writing-and-review":
+        after = refresh_hygiene(project_root(project), paper_id)
+        snapshot = save_run(project, run_id, f"manuscript-hygiene-{phase}-after-build.json", after)
+        hygiene = {"status": after["status"], "errors": after["errors"], "warnings": after["warnings"],
+                   "changes": after["changes"], "snapshot_path": snapshot.relative_to(project_root(project)).as_posix(),
+                   "snapshot_sha256": hashlib.sha256(snapshot.read_bytes()).hexdigest(), "paid_calls": 0}
+        if controlled_steps is not None:
+            controlled_steps["automatic_manuscript_hygiene"] = hygiene
     from scripts.research_increments import refresh as refresh_increments
     increment_audit = refresh_increments(project_root(project))
     summary = refresh_academic_style_audit(project, stage)
     return {"controlled_steps": controlled_steps,
+            "manuscript_hygiene": hygiene,
             "research_increments": increment_audit,
             "academic_style_audit": snapshot_editorial_pass(project, run_id, phase, summary)}
 
