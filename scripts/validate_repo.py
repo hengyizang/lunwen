@@ -371,6 +371,12 @@ def main() -> int:
         "scripts/bootstrap-d-drive.sh",
         "scripts/research_mcp.py",
         "scripts/manuscript_docx.py",
+        "scripts/research_increments.py",
+        "scripts/incremental_evidence.py",
+        "scripts/incremental_writing.py",
+        "scripts/incremental_rules.py",
+        "schemas/research-increments.schema.json",
+        "docs/RESEARCH-INCREMENTS.md",
     ):
         if not (ROOT / relative).is_file():
             errors.append(f"{relative} is required")

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from scripts.research_artifacts import path_in, read, record, sha, write
 
@@ -26,11 +27,26 @@ def safe_text(project, relative, redact):
     return redact(content), sha(target)
 
 
-def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_000) -> dict:
+def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_000, task=None) -> dict:
     plan = read(path_in(project, PLAN))
     if plan.get("schema_version") != "1.0":
         raise ValueError("unsupported context plan schema")
     spec = plan.get("stages", {}).get(stage)
+    if isinstance(spec, dict):
+        task = task if task is not None else spec.get("active_task")
+    chapter_target = None
+    if task is not None:
+        if not isinstance(task, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", task):
+            raise ValueError("context task needs an exact safe ID")
+        selected = spec.get("tasks", {}).get(task) if isinstance(spec, dict) else None
+        if not isinstance(selected, dict):
+            raise ValueError("context task is absent from this stage")
+        chapter_target = selected.get("target")
+        if not isinstance(chapter_target, str) or not chapter_target.strip() or len(chapter_target) > 1000:
+            raise ValueError("task context needs an explicit paper/chapter target")
+        spec = {**selected,
+                "items": spec.get("items", []) + selected.get("items", []),
+                "dependencies": spec.get("dependencies", []) + selected.get("dependencies", [])}
     if not isinstance(spec, dict) or not isinstance(spec.get("question"), str) or not 1 <= len(spec["question"].strip()) <= 4000:
         raise ValueError("context plan needs the current stage and its question")
     items = spec.get("items")
@@ -38,7 +54,8 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
         raise ValueError("context plan needs 1-200 explicit source selections")
     # Contracts remain complete even when a task selects a narrow evidence slice.
     mandatory = [name for name in ("state/run.json", "intake/constraints.json", "program/core-thesis.json",
-                 "program/extension-thesis.json", "program/hypothesis-register.json") if (project / name).is_file()]
+                 "program/extension-thesis.json", "program/hypothesis-register.json",
+                 "reports/research-increments/context-summary.json") if (project / name).is_file()]
     mandatory.extend(p.relative_to(project).as_posix() for p in sorted(project.glob("papers/P[0-9][0-9]/paper-contract.json")))
     selections = [{"path": name, "reason": "mandatory research constraints", "stance": "constraint"}
                   for name in mandatory] + items
@@ -83,7 +100,9 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     for dependency in spec.get("dependencies", []):
         target = path_in(project, dependency["path"])
         dependencies.append({"path": dependency["path"], "sha256": sha(target)})
-    payload = {"stage": stage, "question": spec["question"], "bindings": bindings,
+    from scripts.research_increments import context_dependencies
+    payload = {"stage": stage, "task": task, "target": chapter_target, "question": spec["question"], "bindings": bindings,
+               "increment_dependencies": context_dependencies(project),
                "dependencies": dependencies, "plan_sha256": sha(project / PLAN),
                "implementation_sha256": sha(Path(__file__))}
     fingerprint = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
@@ -96,16 +115,19 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
             "omissions_are_not_irrelevant": True, "scientific_completeness_verified": False}
 
 
-def refresh(project: Path, stage: str) -> dict:
+def refresh(project: Path, stage: str, *, task=None) -> dict:
     from scripts.api_orchestrator import redact
-    value = build(project, stage, redact=redact)
-    target = path_in(project, OUTPUT, exists=False)
+    value = build(project, stage, redact=redact, task=task)
+    output = OUTPUT if value["task"] is None else "reports/research-extensions/context-" + value["task"] + ".json"
+    target = path_in(project, output, exists=False)
     previous = read(target) if target.is_file() else {}
-    value["dependency_changes"] = sorted({item["path"] for item in value["bindings"] + value["dependencies"]
-        if (item["path"], item["sha256"]) not in {(b["path"], b["sha256"]) for b in previous.get("bindings", []) + previous.get("dependencies", [])}})
+    current_dependencies = value["bindings"] + value["dependencies"] + value.get("increment_dependencies", [])
+    prior_dependencies = previous.get("bindings", []) + previous.get("dependencies", []) + previous.get("increment_dependencies", [])
+    value["dependency_changes"] = sorted({item["path"] for item in current_dependencies
+        if (item["path"], item["sha256"]) not in {(b["path"], b["sha256"]) for b in prior_dependencies}})
     value["reusable"] = previous.get("fingerprint") == value["fingerprint"]
-    value["removed_dependencies"] = sorted({b["path"] for b in previous.get("bindings", []) + previous.get("dependencies", [])}
-        - {b["path"] for b in value["bindings"] + value["dependencies"]})
+    value["removed_dependencies"] = sorted({b["path"] for b in prior_dependencies}
+        - {b["path"] for b in current_dependencies})
     # Save bindings, not another duplicated manuscript/context copy.
     value.pop("context")
     write(target, value)

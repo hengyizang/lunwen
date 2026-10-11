@@ -15,7 +15,7 @@ from scripts import cloud_checkpoint as cp, output_provenance, researchctl, rese
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
 QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
@@ -24,6 +24,7 @@ SELECTORS = {
     "screen_literature": {"receipt_id"},
     "confirm_source_scope": {"source", "scope"},
     "confirm_review_packet": {"packet_id"},
+    "confirm_research_increment": {"kind", "record_id", "decision"},
 }
 DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
@@ -86,6 +87,13 @@ def validate_fields(value: dict) -> str:
         if operation == "confirm_review_packet" and (not isinstance(value.get("judgments"), dict)
                 or len(json.dumps(value["judgments"]).encode()) > 100_000):
             raise HumanControlError("review packet needs bounded structured human judgments")
+    if operation == "confirm_research_increment":
+        if (value.get("kind") not in {"voice", "lesson"}
+                or not isinstance(value.get("record_id"), str)
+                or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", value["record_id"])
+                or value.get("decision") not in ({"authorize_sample"} if value["kind"] == "voice"
+                                                else {"adopt_rule", "rollback_rule"})):
+            raise HumanControlError("select a scoped author sample or exact rule adoption/rollback")
     return operation
 
 
@@ -154,6 +162,10 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
     if state["status"] != "awaiting_work" or (required_gate and state["gate"] != required_gate) or state["gate"] is None:
         raise HumanControlError("human evidence decisions require the matching gate open for work")
     actor = value["actor"]
+    if operation == "confirm_research_increment":
+        from scripts.research_increments import prepare_confirmation
+        return prepare_confirmation(project, value["kind"], value["record_id"], value["decision"],
+                                    actor, preview=value["action"] == "review_dossier")
     if operation == "confirm_review_packet":
         from scripts import review_packets
         if value["action"] == "review_dossier":

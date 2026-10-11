@@ -324,6 +324,21 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "word_render" and stage == "writing-and-review":
                 from scripts.word_render import render
                 render(project, operation["paper_id"], operation.get("source"))
+            elif action == "research_increments" and stage != "intake":
+                from scripts.research_increments import initialize, refresh
+                initialize(project)
+                result = refresh(project)
+                if result.get("errors"):
+                    raise ResearchStepError("research increments blocked: " + json.dumps(result["errors"])[:2000])
+            elif action == "increments_inventory" and stage == "writing-and-review":
+                from scripts.incremental_writing import inventory
+                from scripts.research_artifacts import record
+                output = project / "reports/research-increments" / ("inventory-" + operation["paper_id"] + ".json")
+                write(output, inventory(project, operation["paper_id"]))
+                record(project, [output], "incremental-source-inventory")
+            elif action == "increments_freeze" and stage != "intake":
+                from scripts.research_increments import freeze
+                freeze(project, operation["kind"], operation["record_id"])
             elif action == "research_extensions" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_extensions import refresh
                 result = refresh(project)
@@ -331,7 +346,7 @@ def after_write(project: Path, stage: str) -> dict:
                     raise ResearchStepError("research extensions blocked: " + "; ".join(result["errors"]))
             elif action == "evidence_context" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.evidence_context import refresh
-                refresh(project, stage)
+                refresh(project, stage, task=operation.get("task_id"))
             elif action == "calibration_analysis" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.calibration_analysis import refresh
                 refresh(project, operation["packet_id"])

@@ -149,6 +149,9 @@ Installed stage-scoped research methods:
 Complete editorial skill contract:
 {api_orchestrator.editorial_prompt_contract(state['stage'])}
 
+Current incremental checks and authorized style data:
+{api_orchestrator.incremental_feedback(project)}
+
 Read the semantic plan for ideas and requirements, but do not copy its wording.
 Independently write every persistent text artifact. For figures, write auditable
 plotting code/specifications bound to recorded experiment outputs; deterministic
@@ -233,6 +236,9 @@ def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -
 
 Complete editorial skill contract:
 {api_orchestrator.editorial_prompt_contract(state['stage'])}
+
+Current incremental checks and authorized style data:
+{api_orchestrator.incremental_feedback(project)}
 
 End with ONLY one JSON object containing exactly one key, dispositions. Its value must be an array with one itemized disposition for every actionable finding; each item begins with fixed:, rejected:, or unresolved:. The control plane will write the decision log after the final independent audit.
 """
@@ -1039,6 +1045,8 @@ def run_stage(
             raise AutopilotError("Claude planning step did not complete successfully")
 
         writer_last_message = run_dir / "codex-writer-last-message.txt"
+        from scripts.research_increments import freeze_plans, record_editing_attempt
+        freeze_plans(researchctl.project_dir(project))
         before_writer = output_provenance.artifact_snapshot(
             researchctl.project_dir(project)
         )
@@ -1075,6 +1083,7 @@ def run_stage(
             run_id=token,
             claude_sources=[run_dir / "planner.stdout.txt"],
         )
+        record_editing_attempt(researchctl.project_dir(project))
         initial_evidence = refresh_post_write_evidence(project, state["stage"], token, "initial")
         journal["academic_style_audit"] = {"initial": initial_evidence["academic_style_audit"]}
         journal["controlled_editorial_operations"] = {"initial": initial_evidence["controlled_steps"]}
