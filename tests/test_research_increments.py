@@ -388,6 +388,24 @@ class IncrementTests(unittest.TestCase):
         self.assertEqual([row["text"] for row in inventory["units"]], ["Body argument.", "Table argument."])
         self.assertFalse(inventory["rendered_pagination_verified"])
 
+    def test_paper_approval_binds_its_shared_inputs_without_invalidating_unrelated_paper(self):
+        from scripts import researchctl
+        self.spec["arguments"] = [self.argument()]
+        self.spec["lineage"] = [self.lineage()]
+        self.save()
+        with patch.object(researchctl, "project_dir", return_value=self.project):
+            initial = researchctl.paper_artifact_hash("fixture-project", "P01")
+            self.spec["editing"] = [{"id": "OTHER", "paper_id": "P02", "purpose": "clarity",
+                                     "language": "en", "genre": "academic", "issue_ids": [], "evidence": []}]
+            self.save()
+            self.assertEqual(researchctl.paper_artifact_hash("fixture-project", "P01"), initial)
+            self.spec["lineage"][0]["nodes"][0]["boundary"] = "Changed interpretation scope"
+            self.save()
+            self.assertNotEqual(researchctl.paper_artifact_hash("fixture-project", "P01"), initial)
+            current = researchctl.paper_artifact_hash("fixture-project", "P01")
+            self.put("evidence/source.md", "Changed upstream scientific source.")
+            self.assertNotEqual(researchctl.paper_artifact_hash("fixture-project", "P01"), current)
+
     def test_actual_cloud_owner_dossier_authorizes_voice_and_rejects_stale_review(self):
         from scripts import cloud_human_controls as controls, cloud_job, researchctl
         sample = self.put("evidence/author.txt", "A grounded sample with an explicit observation. " * 5)

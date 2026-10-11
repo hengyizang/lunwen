@@ -37,6 +37,10 @@ A manual argument freeze is labelled review_checkpoint, never retroactively
 pre-write. G5 and submission packaging require full current paragraph coverage
 and typed lineage for the active paper, with a current protected audit.
 Other configured groups are validated; stale dependencies block readiness.
+The existing per-paper approval hash also binds that paper's increment
+specifications and referenced current source bytes. Changes to its interpretation,
+shared dependencies or evidence require renewed approval; unrelated edits to
+another paper do not invalidate its approval.
 Empty material never constitutes scientific completion.
 
 ## A. Paragraph plans and reverse outlines

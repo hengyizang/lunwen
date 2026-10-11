@@ -483,6 +483,9 @@ def paper_artifact_hash(slug,paper_id):
         rel=path.relative_to(paper)
         if any(part in {"build","submission","venue-template"} for part in rel.parts):continue
         d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
+    from scripts.research_increments import paper_review_binding
+    binding=paper_review_binding(project_dir(slug),paper_id)
+    d.update(json.dumps(binding,sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)

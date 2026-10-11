@@ -80,6 +80,60 @@ def context_dependencies(project):
     return result
 
 
+def paper_review_binding(project, paper_id):
+    """Bind shared increment inputs to the existing per-paper human approval."""
+    if not (project / PLAN).is_file():
+        return {"status": "not_initialized"}
+    spec = load(project)
+    selected = {key: [row for row in spec[key] if row.get("paper_id") == paper_id]
+                for key in ("arguments", "lineage", "editing")}
+    selected["dependencies"] = []
+    for graph in spec["dependencies"]:
+        nodes = {row["id"]: row for row in graph["nodes"]}
+        keep = {key for key, row in nodes.items() if paper_id in row["paper_ids"]}
+        pending = list(keep)
+        while pending:
+            key = pending.pop()
+            if key not in nodes:
+                raise ValueError("unknown dependency parent in paper approval")
+            for parent in nodes[key].get("depends_on", []):
+                if parent not in keep:
+                    keep.add(parent)
+                    pending.append(parent)
+        if keep:
+            selected["dependencies"].append({"id": graph["id"], "nodes": [nodes[key] for key in sorted(keep)]})
+    voices = {row.get("voice_id") for row in selected["editing"]}
+    selected["voices"] = [row for row in spec["voices"] if row["id"] in voices]
+    matrix_path = project / "program/novelty-claim-matrix.json"
+    claims = read(matrix_path).get("claims", []) if matrix_path.is_file() else []
+    claim_ids = {row.get("claim_id") for row in claims if paper_id in row.get("paper_ids", [])}
+    selected["gaps"] = [row for row in spec["gaps"] if row.get("paper_id") == paper_id
+                        or row.get("novelty_claim_id") in claim_ids
+                        or (not claims and not row.get("paper_id"))]
+    work_ids = {key for row in selected["gaps"] for key in row.get("closest_work_ids", [])}
+    paths = set()
+
+    def collect(value):
+        if isinstance(value, dict):
+            if isinstance(value.get("path"), str) and "sha256" in value:
+                paths.add(value["path"])
+            for item in value.values():
+                collect(item)
+        elif isinstance(value, list):
+            for item in value:
+                collect(item)
+    collect(selected)
+    selected["ingestion"] = [row for row in spec["ingestion"] if row["work_id"] in work_ids
+                            or row.get("attachment", {}).get("path") in paths]
+    collect(selected["ingestion"])
+    sources = []
+    for relative in sorted(paths):
+        source = path_in(project, relative, exists=False)
+        sources.append({"path": relative, "sha256": sha(source) if source.is_file() else None})
+    return {"specification": selected, "sources": sources, "implementation": implementations(),
+            "required_at_submission": spec["required_at_submission"]}
+
+
 def confirmation(project, kind, key, spec, decision):
     from scripts import output_provenance
     target = project / CONFIRMATIONS / (kind + "-" + identifier(key) + ".json")
