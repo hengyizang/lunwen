@@ -108,6 +108,8 @@ def gate_errors(slug,gate):
     if gate != "G0":
         from scripts.research_extensions import gate_errors as extension_errors
         errors.extend(f"research extensions: {x}" for x in extension_errors(project))
+        from scripts.research_increments import gate_errors as increment_errors
+        errors.extend(increment_errors(project, gate, read_json(project/"state/run.json").get("active_paper")))
     if gate=="G0":
         c=load_nonempty_json(project/"intake"/"constraints.json",errors)
         if c:
@@ -493,6 +495,8 @@ def initialize(args):
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","execution_mode":"cloud_only","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"target_submission_ready_date":None,"weekly_hours":None,"cash_budget_usd":None,"model_api_budget_cny":None,"cloud_compute_budget_usd":None,"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","topic_quality_requirements":{"novelty_evidence_required":True,"doctoral_depth_required":True,"original_contribution_required":True,"current_papers_cloud_feasible_required":True},"ranking_weights":{"funded_position_supply":None,"job_market_and_salary":None,"future_growth_potential":None,"phd_position_competition":None,"job_market_competition":None,"background_fit":None,"application_route_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"GitHub Actions Linux runner","orchestrator":"Codex control and API-first cloud orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
+    from scripts.research_increments import initialize as initialize_increments
+    initialize_increments(dest)
     try:from scripts.model_spend import initial as initial_model_spend
     except ImportError:from model_spend import initial as initial_model_spend
     write_json(dest/"state"/"model-spend-control.json",initial_model_spend())

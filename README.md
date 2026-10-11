@@ -424,6 +424,12 @@ python3 scripts/submission_package.py --project my-phd --paper P01
 
 ## 验证
 
+新增的八组增量覆盖段落论证计划、证据来源链、研究 Gap、文献接收凭证、
+失败规则验证与人工采用、跨论文依赖、最小必要编辑与授权写作样本、章节上下文和成本交接。
+使用方式与边界见 [八组科研增量](docs/RESEARCH-INCREMENTS.md)。
+所有运行和验证继续在授权云端执行；模型分工与推理档位保持不变，
+不新增付费轮次，也不将工程检查通过等同于科研完成。
+
 ```bash
 python3 -m compileall -q scripts
 python3 -m unittest discover -s tests -v

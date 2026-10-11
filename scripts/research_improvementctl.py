@@ -17,13 +17,16 @@ if str(ROOT) not in sys.path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval", "editorial-audit", "watermark-cleanup", "watermark-validate", "research-extensions", "evidence-context", "calibration-analysis", "word-render"))
+    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval", "editorial-audit", "watermark-cleanup", "watermark-validate", "research-extensions", "evidence-context", "calibration-analysis", "word-render", "research-increments", "increments-inventory", "increments-freeze"))
     parser.add_argument("--project")
     parser.add_argument("--paper")
     parser.add_argument("--packet", help="Frozen blinded review packet ID")
     parser.add_argument("--source", help="Exact project-relative manuscript source for Unicode cleanup")
     parser.add_argument("--expected-sha256", help="Reviewed current source SHA256")
     parser.add_argument("--receipt", help="Protected cleanup receipt to revalidate")
+    parser.add_argument("--kind", choices=("argument", "lesson"))
+    parser.add_argument("--record-id")
+    parser.add_argument("--task-id", help="Exact stage/chapter context task")
     args = parser.parse_args()
     if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
         parser.error("builders must run in an authorized cloud executor; local research execution is disabled")
@@ -38,13 +41,25 @@ def main() -> int:
             parser.error("project is absent or unsafe")
         if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "editorial-audit", "watermark-cleanup", "word-render"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
             parser.error("paper must be P01, P02, etc.")
-        if args.action == "research-extensions":
+        if args.action == "research-increments":
+            from scripts.research_increments import initialize, refresh
+            initialize(project)
+            result = refresh(project)
+        elif args.action == "increments-inventory":
+            from scripts.incremental_writing import inventory
+            result = inventory(project, args.paper)
+        elif args.action == "increments-freeze":
+            if not args.kind or not args.record_id:
+                parser.error("increments-freeze needs --kind and --record-id")
+            from scripts.research_increments import freeze
+            result = freeze(project, args.kind, args.record_id)
+        elif args.action == "research-extensions":
             from scripts.research_extensions import refresh
             result = refresh(project)
         elif args.action == "evidence-context":
             from scripts.research_artifacts import read
             from scripts.evidence_context import refresh
-            result = refresh(project, read(project / "state/run.json")["stage"])
+            result = refresh(project, read(project / "state/run.json")["stage"], task=args.task_id)
         elif args.action == "calibration-analysis":
             if not args.packet:
                 parser.error("calibration-analysis requires --packet")

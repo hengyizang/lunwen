@@ -1,0 +1,497 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cloud research increments; mechanical checks do not certify science",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "required_at_submission",
+    "arguments",
+    "lineage",
+    "gaps",
+    "ingestion",
+    "lessons",
+    "dependencies",
+    "voices",
+    "editing"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "required_at_submission": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "arguments",
+          "lineage",
+          "gaps",
+          "ingestion",
+          "lessons",
+          "dependencies",
+          "voices",
+          "editing"
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": "arguments"
+          }
+        },
+        {
+          "contains": {
+            "const": "lineage"
+          }
+        }
+      ]
+    },
+    "arguments": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/arguments"
+      }
+    },
+    "lineage": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/lineage"
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/gaps"
+      }
+    },
+    "ingestion": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/ingestion"
+      }
+    },
+    "lessons": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/lessons"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/dependencies"
+      }
+    },
+    "voices": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/voices"
+      }
+    },
+    "editing": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/editing"
+      }
+    }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "quote",
+        "kind"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 12000
+        },
+        "kind": {
+          "enum": [
+            "source_lines",
+            "pdf_page"
+          ]
+        },
+        "start_line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "end_line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "arguments": {
+      "type": "object",
+      "required": [
+        "id",
+        "paper_id",
+        "paragraphs",
+        "precedence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "required": [
+              "paragraph_id",
+              "section",
+              "function",
+              "purpose",
+              "claim_ids",
+              "inference_boundary",
+              "transition",
+              "units"
+            ],
+            "properties": {
+              "function": {
+                "enum": [
+                  "context",
+                  "gap",
+                  "question",
+                  "method",
+                  "result",
+                  "interpretation",
+                  "limitation",
+                  "transition",
+                  "non_argument"
+                ]
+              },
+              "units": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "unit_id",
+                    "sha256"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "required": [
+        "id",
+        "paper_id",
+        "nodes",
+        "fact_links"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 500,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "kind",
+              "research_state",
+              "read_scope",
+              "statement",
+              "boundary",
+              "evidence"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_finding",
+                  "review_report",
+                  "review_interpretation",
+                  "project_inference",
+                  "project_observation"
+                ]
+              },
+              "research_state": {
+                "enum": [
+                  "hypothesis",
+                  "planned",
+                  "exploratory",
+                  "confirmatory",
+                  "failed",
+                  "stopped",
+                  "unknown"
+                ]
+              },
+              "read_scope": {
+                "enum": [
+                  "full_text",
+                  "abstract",
+                  "excerpt",
+                  "metadata"
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 30,
+                "items": {
+                  "$ref": "#/$defs/anchor"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "gaps": {
+      "type": "object",
+      "required": [
+        "id",
+        "hypothesis_id",
+        "novelty_claim_id",
+        "types",
+        "status",
+        "scope",
+        "evidence",
+        "counterevidence",
+        "closest_work_ids",
+        "counter_search_ids",
+        "question",
+        "importance",
+        "precise_difference",
+        "falsification_test",
+        "feasibility",
+        "failure_condition",
+        "missing_evidence",
+        "attribution"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "unknown",
+            "refuted"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "supplied_materials",
+            "executed_queries"
+          ]
+        },
+        "attribution": {
+          "enum": [
+            "author_acknowledged",
+            "reader_inferred"
+          ]
+        },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "knowledge",
+              "conceptual",
+              "theoretical",
+              "empirical",
+              "methodological",
+              "population",
+              "practical",
+              "application",
+              "interdisciplinary",
+              "temporal"
+            ]
+          }
+        }
+      }
+    },
+    "ingestion": {
+      "type": "object",
+      "required": [
+        "id",
+        "work_id",
+        "identifiers",
+        "title",
+        "version",
+        "source_url"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        }
+      }
+    },
+    "lessons": {
+      "type": "object",
+      "required": [
+        "id",
+        "lesson",
+        "failure",
+        "root_cause",
+        "proposed_check",
+        "limitations",
+        "rollback_reason",
+        "benchmark",
+        "baseline",
+        "rule"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "required": [
+        "id",
+        "nodes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        }
+      }
+    },
+    "voices": {
+      "type": "object",
+      "required": [
+        "id",
+        "language",
+        "genre",
+        "authorized_use",
+        "owner",
+        "sample"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        },
+        "authorized_use": {
+          "const": "style_reference_only"
+        },
+        "sample": {
+          "$ref": "#/$defs/binding"
+        }
+      }
+    },
+    "editing": {
+      "type": "object",
+      "required": [
+        "id",
+        "paper_id",
+        "purpose",
+        "language",
+        "genre",
+        "issue_ids",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "paper_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}$"
+        },
+        "purpose": {
+          "enum": [
+            "clarity",
+            "language",
+            "structure",
+            "scientific_correction"
+          ]
+        }
+      }
+    }
+  }
+}
