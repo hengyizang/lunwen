@@ -92,6 +92,8 @@ Optional `program/context-plan.json` contains schema_version `1.0` and a `stages
 
 Actual intake/state, core/extension/hypothesis contracts and every paper contract remain complete. Sensitive paths, prior reviews, unsupported formats and escaped paths are rejected. Full-file hashes and exact snippet hashes/lines are recorded separately. Current contrary/mixed notebook sources must be included completely. Reviewers receive no prior verdicts; this source-selection contract does not make external source text trustworthy instructions.
 
+The complete output-provenance registry, review packets and rating confirmations remain protected control-plane records and are excluded from model snapshots and selected contexts. The registry itself is preserved for deterministic audit: its anonymous material paths and original author metadata must not become a side channel for revealing blind identities.
+
 The API path uses the packet when declared. If evidence does not fit, it stops with an explicit error instead of cutting off required text. Omitted eligible paths remain listed for further reading. Refresh reports fingerprints, changed/removed dependencies and whether an identical packet is reusable. This reuses source preparation; it does not skip new independent scientific audits or final gates. Existing exact-request caching remains tied to the complete prompt/model/configuration. No model identity, role or effort changes.
 
 ## 6. Cloud Word rendering and final review

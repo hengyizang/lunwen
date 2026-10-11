@@ -68,6 +68,8 @@ SNAPSHOT_SKIPPED_PARTS = {
     "secrets",
     "venue-template",
     "review-packets",
+    "review-packet-confirmations",
+    "output-provenance.json",
 }
 MAX_SNAPSHOT_FILES = 300
 MAX_SNAPSHOT_FILE_BYTES = 100_000

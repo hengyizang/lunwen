@@ -244,15 +244,22 @@ class CalibrationTests(ExtensionFixture):
 
     def test_default_snapshot_excludes_blind_answer_key(self):
         self.fixture()
+        self.rate("reviewer-one")
         answer_path = self.project / "reports/review-packets/blind/answer-key.json"
         answer = json.loads(answer_path.read_text(encoding="utf-8"))
+        registry = self.project / "state/output-provenance.json"
+        original_registry_hash = sha(registry)
         with patch.object(api_orchestrator, "project_root", return_value=self.project):
             content = api_orchestrator.project_snapshot("synthetic", stage="topic-intelligence", exclude_reviews=True)
-        # Provenance may name protected outputs, but their contents must stay private.
+        # Keep the complete audit registry on disk, outside model-facing contexts.
         self.assertNotIn("--- FILE reports/review-packets/", content)
+        self.assertNotIn("--- FILE state/output-provenance.json", content)
         self.assertNotIn(answer["seed"], content)
         for row in answer["answer_key"]:
             self.assertNotIn(row["candidate_label"], content)
+        self.assertEqual(sha(registry), original_registry_hash)
+        with self.assertRaisesRegex(ValueError, "private"):
+            evidence_context.safe_text(self.project, "state/output-provenance.json", lambda text: text)
 
     def test_source_leakage_and_post_rating_rubric_change_are_rejected(self):
         packet = self.fixture()
