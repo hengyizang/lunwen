@@ -149,6 +149,9 @@ Installed stage-scoped research methods:
 Complete editorial skill contract:
 {api_orchestrator.editorial_prompt_contract(state['stage'])}
 
+Current deterministic Unicode hygiene findings:
+{api_orchestrator.hygiene_feedback(project, state['stage'])}
+
 Current incremental checks and authorized style data:
 {api_orchestrator.incremental_feedback(project)}
 
@@ -204,6 +207,9 @@ Installed stage-scoped research methods:
 Complete editorial review criteria:
 {api_orchestrator.editorial_prompt_contract(state['stage'], role="critic")}
 
+Current deterministic Unicode hygiene findings (not an author disposition):
+{api_orchestrator.hygiene_feedback(project, state['stage'])}
+
 Form METHOD, STATISTICS and CONTRIBUTION perspectives separately before the verdict.
 Prefix each finding with its perspective, actual evidence and required test or repair.
 Check baseline fairness and reproducibility; independent units and uncertainty;
@@ -236,6 +242,9 @@ def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -
 
 Complete editorial skill contract:
 {api_orchestrator.editorial_prompt_contract(state['stage'])}
+
+Current deterministic Unicode hygiene findings:
+{api_orchestrator.hygiene_feedback(project, state['stage'])}
 
 Current incremental checks and authorized style data:
 {api_orchestrator.incremental_feedback(project)}

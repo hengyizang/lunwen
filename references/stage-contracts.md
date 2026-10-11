@@ -88,7 +88,7 @@ Do not write a favorable conclusion before the claim matrix and negative results
 
 ## Writing and review — G5
 
-The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Optional cloud watermark_cleanup creates traceable text candidates only. Scientific meaning, disclosure and human gates remain protected.
+The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and human gates remain protected.
 
 Required:
 

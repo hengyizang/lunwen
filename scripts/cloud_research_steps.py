@@ -352,6 +352,12 @@ def after_write(project: Path, stage: str) -> dict:
                 refresh(project, operation["packet_id"])
             elif action == "watermark_cleanup" and stage == "writing-and-review":
                 from scripts.watermark_cleanup import build, validate_saved_report
+                from scripts.manuscript_hygiene import applied_cleanup
+                auto_receipt = applied_cleanup(project, operation["paper_id"], operation["source"], operation["expected_sha256"])
+                if auto_receipt is not None:
+                    report.setdefault("watermark_cleanup", []).append({"receipt": auto_receipt,
+                        "canonical_changed": True, "statistical_watermark_absence_verified": False})
+                    continue
                 cache_key = "watermark_cleanup:" + operation_sha
                 receipt_relative = cache.get(cache_key)
                 if not isinstance(receipt_relative, str) or validate_saved_report(project, receipt_relative):

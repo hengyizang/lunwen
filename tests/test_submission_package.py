@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 import zipfile
@@ -77,6 +78,9 @@ class SubmissionPackageTests(unittest.TestCase):
         write(project / research_increments.PLAN, increments)
         incremental_writing.freeze_plan(project, argument, phase="before_writer")
         research_increments.refresh(project)
+        from scripts.manuscript_hygiene import refresh as refresh_hygiene
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            refresh_hygiene(project, "P01")
         old=researchctl.PROJECTS_ROOT
         try:
             researchctl.PROJECTS_ROOT=root
@@ -103,11 +107,31 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertNotIn("data/raw/private.csv", names)
                 self.assertNotIn("paper-contract.json",names)
                 self.assertNotIn("reviews/citation-audit.json",names)
+                self.assertFalse(any("manuscript-hygiene" in name or "original.tex" in name for name in names))
                 manifest = json.loads(archive.read("SUBMISSION-MANIFEST.json"))
                 self.assertEqual(manifest["submission_mode"], "manual_only")
                 self.assertFalse(
                     manifest["output_policy"]["anthropic_final_outputs_allowed"]
                 )
+
+    def test_package_recomputes_hygiene_even_if_an_approval_hash_is_incorrectly_resigned(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project = self.make_project(root)
+            latest = project / "reports/manuscript-hygiene/P01/latest.json"
+            report = json.loads(latest.read_text(encoding="utf-8"))
+            report["watermark_absence_verified"] = True
+            latest.write_text(json.dumps(report), encoding="utf-8")
+            from scripts.manuscript_hygiene import _record
+            _record(project, [latest], "synthetic-forgery")
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
+                "scripts.submission_package.project_dir", lambda slug: root / slug
+            ):
+                state = json.loads((project / "state/run.json").read_text(encoding="utf-8"))
+                state["approvals"][-1]["paper_artifact_sha256"] = researchctl.paper_artifact_hash("demo-study", "P01")
+                (project / "state/run.json").write_text(json.dumps(state), encoding="utf-8")
+                with self.assertRaisesRegex(researchctl.ResearchCtlError, "hygiene audit"):
+                    build_package("demo-study", "P01", root / "blocked.zip")
 
     def test_rejects_paper_before_g5_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

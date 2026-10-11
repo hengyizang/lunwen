@@ -10,7 +10,7 @@ Exact commits, MIT licenses and LF-normalized file hashes are in `integrations/e
 |---|---|---|
 | Humanizer 3.1.0 | All 26 numbered items; located pattern/structural findings, weak-alone exceptions and explicit contextual review | Complete rule coverage does not certify semantic correctness or an external detector result |
 | Anti-defensive-writing | All 10 checklist items, 5 rewriting steps, 6 sentence functions and expanded paper rules, mapped to AD01–AD08 | Necessary scope, uncertainty, ethics, controls, negative results and evidence-based rebuttals stay protected |
-| watermarks-remover | Actual pinned `text_unicode.clean_text` through `scripts/watermark_cleanup.py`, on bounded TXT/MD/TeX/DOCX prose candidates | Removes supported invisible character carriers; KGW/SynthID/vendor-key statistical watermark absence is not verified |
+| watermarks-remover | Actual pinned `text_unicode.clean_text` through `scripts/watermark_cleanup.py`; automatic source hygiene and post-build/G5/package checks through `scripts/manuscript_hygiene.py` | Removes supported invisible character carriers; KGW/SynthID/vendor-key statistical watermark absence is not verified |
 
 Humanizer covers binary contrasts; redundant closers/fragments; empty sayings; staged openings; imaginary objections; forced triads; repeated openings; universal dashes; stacked qualifiers; excessive hyphens; passive/missing subjects; stock vocabulary; inflated significance; vague associations; shallow participles; sales language; borrowed authority; copula avoidance; decorative bold; decorative headings; curly quotes; chatbot residue; source-limit guesses; repeated headings; document metadiscourse; reader-mismatched over-explanation.
 
@@ -47,7 +47,9 @@ Output: `reports/watermark-cleanup/<id>/candidate.<ext>`, `changes.json`, `diff.
 
 Only supported prose is cleaned. Mathematics, citations, URLs/link targets, code, commands, quoted text, AI disclosure and source metadata are protected. DOCX fields, relations, equations, images and other package parts remain unchanged. NFKC, homoglyph rewriting and space normalization are disabled; legitimate multilingual/emoji/directional characters and scientific invisible operators are retained.
 
-Candidates never overwrite canonical sources or gain automatic promotion. They can inform a subsequent evidence-preserving edit by the existing OpenAI writer, subject to normal revision checks. Claude source ancestry cannot be converted to OpenAI/human authorship by cleanup.
+Explicit-operation candidates never overwrite canonical sources or gain automatic promotion. They can inform a subsequent evidence-preserving edit by the existing OpenAI writer, subject to normal revision checks. Claude source ancestry cannot be converted to OpenAI/human authorship by cleanup.
+
+The separate [automatic hygiene contract](MANUSCRIPT-HYGIENE.md) applies to every G5 author/remediation pass. Eligible current OpenAI or human-authored prose has supported character artifacts removed before builders; original bytes and differences are retained outside the manuscript. Generated outputs and structured metadata are scanned without blind edits. A final scan, protected report recomputation and ordinary scientific integrity/human gates remain mandatory.
 
 ## Limits
 

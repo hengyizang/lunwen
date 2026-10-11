@@ -371,6 +371,8 @@ def main() -> int:
         "scripts/bootstrap-d-drive.sh",
         "scripts/research_mcp.py",
         "scripts/manuscript_docx.py",
+        "scripts/manuscript_hygiene.py",
+        "docs/MANUSCRIPT-HYGIENE.md",
         "scripts/research_increments.py",
         "scripts/incremental_evidence.py",
         "scripts/incremental_writing.py",

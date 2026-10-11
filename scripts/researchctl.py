@@ -358,6 +358,10 @@ def gate_errors(slug,gate):
             errors.extend(f"{pid} academic style: {x}" for x in validate_saved_audit(paper))
         except ImportError as exc:errors.append(f"{pid} academic style validator unavailable: {exc}")
         try:
+            from scripts.manuscript_hygiene import validate_saved_report as validate_hygiene
+            errors.extend(f"{pid} automatic manuscript hygiene: {x}" for x in validate_hygiene(project,pid))
+        except ImportError as exc:errors.append(f"{pid} manuscript hygiene validator unavailable: {exc}")
+        try:
             from scripts.manuscript_audit import validate_saved_report as validate_paper_facts
             errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
         except ImportError as exc:errors.append(f"{pid} paper-facts validator unavailable: {exc}")
@@ -486,6 +490,8 @@ def paper_artifact_hash(slug,paper_id):
     from scripts.research_increments import paper_review_binding
     binding=paper_review_binding(project_dir(slug),paper_id)
     d.update(json.dumps(binding,sort_keys=True,separators=(",",":")).encode())
+    from scripts.manuscript_hygiene import review_binding as hygiene_review_binding
+    d.update(json.dumps(hygiene_review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)

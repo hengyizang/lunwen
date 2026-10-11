@@ -172,6 +172,8 @@ class EditorialIntegrationTests(unittest.TestCase):
             source = project / "papers/P01/manuscript/main.txt"
             source.parent.mkdir(parents=True)
             source.write_text("The pro\u200bse is evidence-bound.", encoding="utf-8")
+            (project / "state").mkdir()
+            (project / "state/run.json").write_text(json.dumps({"active_paper": "P01"}), encoding="utf-8")
             (project / "program").mkdir()
             (project / "program/cloud-operations.json").write_text(json.dumps({"operations": [{
                 "stage": "writing-and-review", "action": "watermark_cleanup", "paper_id": "P01",
