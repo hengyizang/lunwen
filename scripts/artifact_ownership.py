@@ -4,7 +4,8 @@ from __future__ import annotations
 import json
 from pathlib import Path, PurePosixPath
 
-EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition")
+EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
+                  "reports/word-render", "reports/review-packets")
 EXECUTOR_FILES = {"experiments/registry.jsonl"}
 
 
@@ -46,6 +47,8 @@ def declared_outputs(root: Path) -> set[str]:
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     return (value in EXECUTOR_FILES
+            or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
+                and value.endswith("/reviews/cloud-word-build.json"))
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
                 and value.endswith("/experiment-evidence.json"))
             or any(value == prefix or value.startswith(prefix + "/") for prefix in EXECUTOR_ROOTS)

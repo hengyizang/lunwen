@@ -133,6 +133,30 @@ def consume(directory: Path) -> None:
     from docx import Document
     if 'Synthetic acceptance' not in '\\n'.join(p.text for p in Document(manuscript/'main.docx').paragraphs):
         raise RuntimeError('native DOCX did not preserve fixture content')
+    # Exercise actual Word conversion, multi-page tables, symbols and figures.
+    document = Document(manuscript/'main.docx')
+    document.add_paragraph('Synthetic symbols: α β Δ = 1.25 × 10−3')
+    table = document.add_table(rows=2, cols=2)
+    table.cell(0,0).text = 'Synthetic unit'; table.cell(0,1).text = 'Recorded effect'
+    table.cell(1,0).text = 'A'; table.cell(1,1).text = '-0.5'
+    document.add_picture(str(project/'papers/P01/figures/negative.png'))
+    document.add_page_break()
+    document.add_paragraph('Second page: synthetic layout acceptance only.')
+    document.save(manuscript/'main.docx')
+    output_provenance.record_model_writes(project,[manuscript/'main.docx'],family='other',provider='synthetic-fixture',
+        model='none',role='acceptance-only',run_id='fixture')
+    from scripts.word_render import render as render_word
+    word_report = render_word(project,'P01')
+    import fitz
+    with fitz.open(manuscript/'main.pdf') as document:
+        word_text = '\n'.join(page.get_text() for page in document)
+        if len(document) < 2 or 'Second page' not in word_text or 'Recorded effect' not in word_text or 'α' not in word_text:
+            raise RuntimeError('actual Word render lost table, symbols or pagination')
+    from scripts.revision_render import validate_render_manifest
+    word_manifest, word_pages = validate_render_manifest(project/'papers/P01')
+    if word_manifest['page_count'] < 2 or not word_pages[0]['lines']:
+        raise RuntimeError('actual Word PDF page locations are absent')
+    print(json.dumps({'word_build': word_report, 'word_page_count': word_manifest['page_count']}), flush=True)
     from scripts.cloud_runtime import compile_tex
     try:
         tex_report = compile_tex(project,'P02')

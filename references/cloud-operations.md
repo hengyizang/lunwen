@@ -1,5 +1,7 @@
 # Controlled cloud research operations
 
+The controlled operations `research_extensions`, `evidence_context`, `calibration_analysis` and `word_render` are documented in [Experiment and evidence extensions](../docs/RESEARCH-EXTENSIONS.md). `read_paper` accepts optional `pages` (unique original 1-based page numbers) for bounded reading without paid translation. No operation changes model roles, approves a scientific gate or starts unapproved paid computation.
+
 The model authors plans and code. The GitHub controller retrieves evidence, executes approved experiments and builds final files. A model-authored JSON boolean is never human approval. Unknown facts remain missing. No action below grants a scientific gate, submits a paper or changes the cumulative CNY spending ceiling.
 
 ## Request format

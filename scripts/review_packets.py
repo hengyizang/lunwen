@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 IDENTIFIER = re.compile(r"[a-z0-9][a-z0-9_-]{0,63}\Z")
 CHECKS = {"math_symbols", "final_size_readability", "color_vision", "statistical_labels", "Word_complex_content"}
 RENDERERS = {"cloud_runtime": ("cloud_runtime.py", "cloud-tex-renderer"),
+             "word_render": ("word_render.py", "cloud-word-renderer"),
              "publication_figures": ("publication_figures.py", "publication-figure-renderer")}
 
 
@@ -119,6 +120,9 @@ def plain(project, bound, hidden=()):
 
 
 def calibration(project, packet, seed):
+    if "analysis" in packet:
+        from scripts.calibration_analysis import protocol
+        protocol(packet)
     cases = packet.get("cases")
     if not isinstance(cases, list) or not 1 <= len(cases) <= 200:
         raise ValueError("calibration needs 1-200 cases")
@@ -222,7 +226,8 @@ def render_dependencies(project, value, sources, artifact, previews):
     right = {(row["path"], row["sha256"]) for row in outputs}
     if any((row["path"], row["sha256"]) not in left for row in sources):
         raise ValueError("review source is absent from actual render inputs")
-    if any((row["path"], row["sha256"]) not in right for row in [artifact, *previews]):
+    artifact_set = left if renderer["name"] == "word_render" and Path(artifact["path"]).suffix.lower() == ".docx" else right
+    if (artifact["path"], artifact["sha256"]) not in artifact_set or any((row["path"], row["sha256"]) not in right for row in previews):
         raise ValueError("review artifact/preview is absent from actual render outputs")
     return [bound, *inputs, *outputs]
 
@@ -254,7 +259,7 @@ def visual(project, packet):
         if qa_value.get("status") not in {"pass", "review_required"} or qa_value.get("errors"):
             raise ValueError("actual output QA must pass mechanical checks or await explicit visual inspection")
         qa_origin = output_provenance.current_origin(project, project / qa["path"])
-        if qa_origin.get("status") != "tracked" or qa_origin.get("family") != "other" or qa_origin.get("provider") not in {"publication-figure-renderer", "cloud-tex-renderer", "deterministic-control-plane"}:
+        if qa_origin.get("status") != "tracked" or qa_origin.get("family") != "other" or qa_origin.get("provider") not in {"publication-figure-renderer", "cloud-tex-renderer", "cloud-word-renderer", "deterministic-control-plane"}:
             raise ValueError("visual QA report lacks current protected control-plane provenance")
         checks = row.get("checklist")
         required = {"math_symbols", "final_size_readability", "statistical_labels", "Word_complex_content" if extension == ".docx" else "color_vision"}

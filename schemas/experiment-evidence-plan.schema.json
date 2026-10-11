@@ -176,8 +176,12 @@
           "analysis_mode": {
             "enum": [
               "paired_t",
+              "welch_t",
               "registered_result"
             ]
+          },
+          "unit_design": {
+            "enum": ["paired", "independent"]
           },
           "unit_column": {
             "type": "string",

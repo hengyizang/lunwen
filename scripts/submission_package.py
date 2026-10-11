@@ -196,6 +196,8 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         if (project/"program/review-packets.json").exists():
             from scripts.review_packets import validate_gate_reviews
             revision_errors.extend(validate_gate_reviews(project))
+        from scripts.research_extensions import gate_errors as extension_errors
+        revision_errors.extend(extension_errors(project))
         if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc

@@ -23,7 +23,7 @@ except ImportError:
 
 
 def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
-          translate: bool = False, include_page_images: bool = False) -> dict:
+          translate: bool = False, include_page_images: bool = False, pages: list[int] | None = None) -> dict:
     try:
         from pypdf import PdfReader
     except ImportError as exc:
@@ -36,14 +36,20 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
     if output.exists():raise ValueError("refusing to overwrite an existing reader")
     reader=PdfReader(str(pdf),strict=False)
     if reader.is_encrypted:raise ValueError("encrypted PDF requires separate authorized access")
-    if len(reader.pages)>max_pages:raise ValueError("PDF exceeds selected page limit; select a bounded section")
+    selected = list(range(1, len(reader.pages) + 1)) if pages is None else pages
+    if (not isinstance(selected, list) or not 1 <= len(selected) <= max_pages or
+            any(type(page) is not int or not 1 <= page <= len(reader.pages) for page in selected) or
+            len(set(selected)) != len(selected)):
+        raise ValueError("PDF exceeds selected page limit or selection has invalid/duplicate page numbers")
+    selected = sorted(selected)
     if include_page_images and not shutil.which("pdftoppm"):
         raise RuntimeError("pdftoppm is required for page images")
     lines=["# Page-anchored PDF reader", "", f"Local source SHA-256: `{sha256_file(pdf)}`", "",
            "Personal reading aid; verify all quotes, figures and claims against the original PDF.", ""]
     output.parent.mkdir(parents=True,exist_ok=True)
     images=[];source_blocks=[];run_id="reader-"+uuid.uuid4().hex
-    for index,page in enumerate(reader.pages,1):
+    for index in selected:
+        page = reader.pages[index - 1]
         text=(page.extract_text() or "").strip()
         if not text:raise ValueError(f"page {index} has no extractable text; OCR/visual review is required")
         if len(text)>40000:raise ValueError(f"page {index} is too long for safe bounded processing")
@@ -73,7 +79,7 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
                 "source_blocks":source_blocks,"human_read_scope":"not_declared",
                 "extraction_is_not_full_text_reading":True}
     source_map_path.write_text(json.dumps(source_map,indent=2)+"\n",encoding="utf-8")
-    receipt={"schema_version":"1.0","pdf_sha256":sha256_file(pdf),"page_count":len(reader.pages),
+    receipt={"schema_version":"1.0","pdf_sha256":sha256_file(pdf),"page_count":len(reader.pages),"selected_pages":selected,
              "source_map":{"path":source_map_path.relative_to(project).as_posix(),
                            "sha256":sha256_file(source_map_path)},
              "translation_provider":"openai" if translate else None,"page_images":images,
@@ -94,10 +100,11 @@ def main()->int:
     p.add_argument("--output",required=True);p.add_argument("--max-pages",type=int,default=30)
     p.add_argument("--translate",action="store_true",help="explicit paid GPT translation")
     p.add_argument("--include-page-images",action="store_true")
+    p.add_argument("--pages",type=int,nargs="+",help="Explicit original PDF page numbers; only these pages are read/translated")
     args=p.parse_args();project=PROJECTS_ROOT/args.project
     if not args.output.startswith("evidence/readers/"):p.error("reader output must be in evidence/readers")
     print(json.dumps(build(project,args.pdf,safe_file(project,args.output,"output"),max_pages=args.max_pages,
-                           translate=args.translate,include_page_images=args.include_page_images),indent=2))
+                           translate=args.translate,include_page_images=args.include_page_images,pages=args.pages),indent=2))
     return 0
 
 
