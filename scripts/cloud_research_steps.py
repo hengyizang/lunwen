@@ -310,7 +310,7 @@ def after_write(project: Path, stage: str) -> dict:
                         or manifest.get("download", {}).get("sha256") != cloud_checkpoint.sha(source)):
                     raise ResearchStepError("persisted cloud readers require an owner-reviewed redistributable full-text manifest")
                 if not output.exists():
-                    build(project, source, output, max_pages=operation.get("max_pages", 30), translate=False)
+                    build(project, source, output, max_pages=operation.get("max_pages", 30), translate=False, pages=operation.get("pages"))
             elif action == "docx" and stage == "writing-and-review":
                 from scripts.manuscript_docx import build
                 source, metadata = path_in(project, operation["source"]), path_in(project, operation["metadata"])
@@ -321,6 +321,20 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "docx_revision" and stage == "writing-and-review":
                 from scripts.docx_revision import build
                 build(project, operation["paper_id"])
+            elif action == "word_render" and stage == "writing-and-review":
+                from scripts.word_render import render
+                render(project, operation["paper_id"], operation.get("source"))
+            elif action == "research_extensions" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.research_extensions import refresh
+                result = refresh(project)
+                if result.get("errors"):
+                    raise ResearchStepError("research extensions blocked: " + "; ".join(result["errors"]))
+            elif action == "evidence_context" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.evidence_context import refresh
+                refresh(project, stage)
+            elif action == "calibration_analysis" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.calibration_analysis import refresh
+                refresh(project, operation["packet_id"])
             elif action == "watermark_cleanup" and stage == "writing-and-review":
                 from scripts.watermark_cleanup import build, validate_saved_report
                 cache_key = "watermark_cleanup:" + operation_sha

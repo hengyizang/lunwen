@@ -295,6 +295,10 @@ def research_quality_artifact_contract(stage: str) -> str:
             "response_locations": "Use JSON source_lines, docx_paragraph, docx_table_cell or pdf_lines locators with current file SHA. PDF pages/lines must come from the actual protected revision-render.json after compile_tex; never invent page numbers.",
             "statistical_semantics": "Every statistical-map comparison needs structured reporting_semantics with estimand, inclusion_rule, exclusion_rule, missingness_rule, uncertainty_interpretation, inference_boundary, reconciled disjoint sample_flow counts, exact repetition units/n/seeds/aggregation, seeds_are_independent_units=false and unique source quotes/hashes from actual protocol/flow evidence. Declarations still require scientific review.",
             "review_packets": "Optional program/review-packets.json requests blinded calibration or visual inspection materials. review_packets builds protected artifacts; only the authenticated owner confirm_review_packet action records hash-bound independent human ratings. No gate, model routing or NOT_CALIBRATED status changes automatically.",
+            "research_extensions": "Read docs/RESEARCH-EXTENSIONS.md. program/research-extensions.json links actual pinned methods to paper baselines, source-bound comparability and competing experimental predictions, PDF figure/table/equation anchors and method/statistics/contribution finding worklists. Request research_extensions. Missing real topic/data/raters remain explicit; never create fictitious research to fill a template.",
+            "context_selection": "Optional program/context-plan.json selects exact task evidence lines, full constraints and contrary evidence for each stage. Request evidence_context. Include every relevant source and actual hashes; critical omissions or stale frozen inputs block. No automatic model routing changes.",
+            "calibration_analysis": "Freeze analysis thresholds, source-separated calibration/holdout partitions and cost run IDs in the review packet before collecting human ratings. Request calibration_analysis with packet_id. Partial ratings reveal no results; descriptive summaries and recorded costs do not establish scientific equivalence.",
+            "word_render": "At writing-and-review request word_render with paper_id and optional exact source DOCX. It renders canonical, clean or tracked Word in an isolated cloud runtime, records previews and actual package versions. Use protected receipts for visual packets and actual canonical PDF page locations. Final visual review remains human.",
             "protected_outputs": ["reviews/revision-ledger-report.json", "reviews/revision-render.json", "reviews/cloud-tex-build.json", "reports/research-support.json", "reports/review-packets/**", "evidence/support-sources/**", "state/review-packet-confirmations/**"],
         }
     return json.dumps(value, ensure_ascii=False, indent=2) if value else "(none for this stage)"
@@ -345,6 +349,11 @@ def project_snapshot(
     root = project_root(project)
     if not root.exists():
         return "(new project)"
+    if stage and (root / "program/context-plan.json").is_file():
+        from scripts.evidence_context import build
+        packet = build(root, stage, redact=redact, max_bytes=MAX_SNAPSHOT_TOTAL_BYTES)
+        return (packet["context"] + "\n--- OMITTED FILES (not judged irrelevant; request explicit evidence before concluding) ---\n"
+                + "\n".join(packet["omitted_paths"]))
     current_paper = active_paper(project) if stage == "writing-and-review" else None
     blocks: list[str] = []
     total = 0
@@ -656,6 +665,11 @@ Human scientific constraints are in the recorded intake, paper contracts and
 venue manifest in the source packet. Free-form author instructions, preferred
 verdicts and previous reviews are withheld from this independent assessment.
 
+First form three separate evidence-grounded perspectives: METHOD (fair baselines,
+reproducibility and discriminating experiments), STATISTICS (units, design,
+assumptions and uncertainty), CONTRIBUTION (closest work, novelty and claim limits).
+Prefix findings with the perspective and cite the exact source or missing test.
+Only then synthesize the verdict. These are views of one critic, not three independent raters.
 Audit independently for fabricated or unverified citations, weak novelty claims,
 missing primary evidence, unsupported job/market/JCR claims, data-license gaps,
 leakage, circular validation, inadequate baselines/ablations/statistics,

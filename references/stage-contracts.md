@@ -1,5 +1,8 @@
 # Stage contracts
 
+Experiment/evidence extensions: [RESEARCH-EXTENSIONS.md](../docs/RESEARCH-EXTENSIONS.md).
+Declared comparability, pinned baseline adoption, fine-grained reading anchors and review worklists are revalidated at research gates. Actual topics, data, method trials and independent human ratings remain required; no template or regression fixture fills those gaps. Model routing and effort remain unchanged.
+
 Follow-up quality input and receipt contracts: [RESEARCH-IMPROVEMENTS-FOLLOWUP.md](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Changed frozen canonical manuscripts require a complete revision ledger at G5; statistics require explicit sample-flow/missingness/repetition declarations bound to actual sources. Optional research-support and review-packet inputs require fresh protected audits when present. Their reports and human ratings never establish scientific completion automatically.
 
 ## Intake — G0

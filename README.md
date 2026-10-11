@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.3.0
 
+实验与证据的下一轮工程改进见 [`docs/RESEARCH-EXTENSIONS.md`](docs/RESEARCH-EXTENSIONS.md)：强基线方法接入、文献可比性与辨别实验、非配对统计、盲评与成本汇总、按问题取证、云端 Word 渲染、图表公式精读定位和三视角审查。模型分工不变；真实课题、正式实验和独立盲评仍须实际执行。
+
 Humanizer 全部 26 项规则、anti-defensive-writing 完整学术审查及实际文本字符水印清理已接入，见 [`docs/EDITORIAL-SKILLS.md`](docs/EDITORIAL-SKILLS.md)。沿用既有模型和预算；保留原稿、科学证据与 AI 披露；不保证外部检测分数或统计水印已被去除。
 
 补充审计的工程缺口及真实研究验收边界见 [`docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md`](docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md)：逐项修订账本、条件计费、统计样本流程、每日变化、真实返修定位、盲审与视觉检查材料、方法拆解及 FAIR 凭据。模型配置保持原样；软件检查通过不代表正式实验或论文质量已达标。

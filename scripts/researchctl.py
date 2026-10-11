@@ -105,6 +105,9 @@ def quality_errors(project,gate,errors,paper_id=None):
 def gate_errors(slug,gate):
     project=project_dir(slug);errors=[]
     if gate is None:return errors
+    if gate != "G0":
+        from scripts.research_extensions import gate_errors as extension_errors
+        errors.extend(f"research extensions: {x}" for x in extension_errors(project))
     if gate=="G0":
         c=load_nonempty_json(project/"intake"/"constraints.json",errors)
         if c:

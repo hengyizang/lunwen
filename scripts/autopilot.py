@@ -201,6 +201,12 @@ Installed stage-scoped research methods:
 Complete editorial review criteria:
 {api_orchestrator.editorial_prompt_contract(state['stage'], role="critic")}
 
+Form METHOD, STATISTICS and CONTRIBUTION perspectives separately before the verdict.
+Prefix each finding with its perspective, actual evidence and required test or repair.
+Check baseline fairness and reproducibility; independent units and uncertainty;
+closest-work differentiation and claim limits. These are perspectives of one critic,
+not independently calibrated reviewers. Keep existing model roles and human gates.
+
 Read AGENTS.md, references/research-integrity.md, the {state['gate']} section of references/stage-contracts.md, and the current scientific artifacts under projects/{project}. Do not read prior model verdicts or the author's desired outcome before forming your own verdict. Audit stage {state['stage']} for fatal flaws, unsupported claims, fabricated or unverified citations, missing primary evidence, alternative explanations, leakage, statistical problems, budget violations, security risks and reproducibility gaps. Also challenge closest-work differentiation, doctoral synthesis, pairwise paper independence, baseline fairness, statistical power or precision, external validity, claim calibration and English-only manuscript compliance. Do not infer success from file existence.
 Require claim-level closest-work and search-saturation evidence at G1, current
 local data-quality, executable power and frozen preregistration evidence at G3,

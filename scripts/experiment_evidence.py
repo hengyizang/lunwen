@@ -182,7 +182,14 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         need(number(power.get("alpha"), "power alpha", 0.000000001, 0.1) <= alpha / family_size + 1e-12,
              "power analysis must account for the prespecified family multiplicity")
         mode = comp.get("analysis_mode")
-        need(mode in {"paired_t", "registered_result"}, "unsupported analysis mode")
+        need(mode in {"paired_t", "welch_t", "registered_result"}, "unsupported analysis mode")
+        unit_design = comp.get("unit_design", "independent" if mode == "welch_t" else "paired")
+        need(unit_design in {"paired", "independent"}, "unsupported unit design")
+        need(mode != "paired_t" or unit_design == "paired", "paired_t requires paired units")
+        if mode == "welch_t":
+            need(unit_design == "independent", "Welch analysis requires independent arms")
+            need(power.get("method") == "monte_carlo_simulation",
+                 "Welch inference requires simulation power for the prespecified unequal-variance design")
         if mode == "paired_t":
             need(power.get("method") in {"ttest_paired", "ttest_one_sample", "monte_carlo_simulation"},
                  "paired inference requires compatible paired or simulation power analysis")
@@ -289,6 +296,8 @@ def _unit_values(path: Path, comp: dict) -> dict[str, float]:
 
 
 def _measure(project: Path, comp: dict, registry: list[dict], plan_hash: str, family_size: int) -> dict:
+    if comp.get("unit_design", "independent" if comp["analysis_mode"] == "welch_t" else "paired") == "independent":
+        return _measure_independent(project, comp, registry, plan_hash, family_size)
     sources, per_seed, expected = [], [], None
     for pair in comp["pairs"]:
         paths = []
@@ -346,6 +355,70 @@ def _measure(project: Path, comp: dict, registry: list[dict], plan_hash: str, fa
     seed_effects = [statistics.fmean(seed.values()) for seed in per_seed]
     return {**measured, "independent_units": len(units), "seeds": len(per_seed),
             "seed_effects": seed_effects,
+            "seed_effect_sd": statistics.stdev(seed_effects) if len(seed_effects) > 1 else None,
+            "aggregation": comp["aggregation"], "sources": sources}
+
+
+def _measure_independent(project: Path, comp: dict, registry: list[dict], plan_hash: str, family_size: int) -> dict:
+    """Independent arms, averaging repeats/seeds within units, never pooling seeds as n."""
+    from scipy import stats
+    sources, arms, expected = [], {"treatment": [], "comparator": []}, {}
+    for pair in comp["pairs"]:
+        for arm in arms:
+            path, source = _bound_output(project, pair[arm], registry, plan_hash)
+            sources.append(source)
+            values = _unit_values(path, comp)
+            if arm in expected:
+                need(set(values) == expected[arm], "independent arm unit coverage changes across seeds")
+            else:
+                expected[arm] = set(values)
+            arms[arm].append(values)
+        need(not expected["treatment"] & expected["comparator"],
+             "independent arms overlap; use globally unique IDs and a scientifically appropriate design")
+    counts = {arm: len(ids) for arm, ids in expected.items()}
+    need(all(n >= comp["minimum_units"] for n in counts.values()), "fewer independent units per arm than preregistered")
+    aggregate = {arm: [statistics.fmean(seed[unit] for seed in seeds) for unit in sorted(expected[arm])]
+                 for arm, seeds in arms.items()}
+    sign = 1 if comp["direction"] == "higher" else -1
+    a, b = aggregate["treatment"], aggregate["comparator"]
+    n = sum(counts.values())
+    confidence = 1 - comp["alpha"] / family_size
+    if comp["analysis_mode"] == "welch_t":
+        va, vb = statistics.variance(a) / len(a), statistics.variance(b) / len(b)
+        need(va + vb > 0, "zero variation cannot establish population uncertainty")
+        se = math.sqrt(va + vb)
+        df = (va + vb) ** 2 / (va ** 2 / (len(a) - 1) + vb ** 2 / (len(b) - 1))
+        estimate = sign * (statistics.fmean(a) - statistics.fmean(b))
+        width = float(stats.t.ppf((1 + confidence) / 2, df)) * se
+        margin = comp["minimum_effect"]
+        p = (max(float(stats.t.sf((estimate + margin) / se, df)), float(stats.t.cdf((estimate - margin) / se, df)))
+             if comp["decision_rule"] == "equivalence" else float(stats.t.sf((estimate - margin) / se, df)))
+        measured = {"estimate": estimate, "ci_low": estimate - width, "ci_high": estimate + width,
+                    "ci_confidence": confidence, "p_value": p, "degrees_of_freedom": df,
+                    "method": "independent unit means, Welch t; TOST for equivalence", "recomputed_from_units": True}
+    else:
+        need(comp["analysis_mode"] == "registered_result", "unsupported independent analysis")
+        path, source = _bound_output(project, comp["registered_result"], registry, plan_hash)
+        need(path.stat().st_size <= 100_000, "registered result exceeds the byte ceiling")
+        custom = read(path)
+        need(custom.get("schema_version") == "1.0" and custom.get("comparison_id") == comp["comparison_id"], "custom comparison identity differs")
+        need(custom.get("method_id") == comp["registered_result"]["method_id"] and custom.get("unit_design") == "independent", "custom method/unit design differs")
+        need(all(custom.get(key) == comp[key] for key in ("direction", "minimum_effect", "aggregation", "analysis_unit", "decision_rule")), "custom analysis contract differs")
+        need(custom.get("independent_units") == n and custom.get("independent_units_by_arm") == counts, "custom arm unit counts differ")
+        need(custom.get("source_hashes") == {s["path"]: s["sha256"] for s in sources}, "custom analysis source hashes differ")
+        measured = {key: number(custom.get(key), key) for key in ("estimate", "ci_low", "ci_high", "p_value", "ci_confidence")}
+        need(confidence - 1e-12 <= measured["ci_confidence"] < 1, "custom interval lacks family coverage")
+        need(measured["ci_low"] <= measured["estimate"] <= measured["ci_high"], "custom confidence interval is incoherent")
+        measured.update(method=custom["method_id"], recomputed_from_units=False)
+        sources.append(source)
+    for key in ("estimate", "ci_low", "ci_high", "p_value"):
+        number(measured[key], key)
+    number(measured["p_value"], "p_value", 0, 1)
+    seed_effects = [sign * (statistics.fmean(a.values()) - statistics.fmean(b.values()))
+                    for a, b in zip(arms["treatment"], arms["comparator"])]
+    return {**measured, "unit_design": "independent", "independent_units": n,
+            "treatment_units": counts["treatment"], "comparator_units": counts["comparator"],
+            "independent_units_by_arm": counts, "seeds": len(comp["pairs"]), "seed_effects": seed_effects,
             "seed_effect_sd": statistics.stdev(seed_effects) if len(seed_effects) > 1 else None,
             "aggregation": comp["aggregation"], "sources": sources}
 
@@ -415,7 +488,7 @@ def build_report(project: Path, paper_id: str) -> dict:
             if comp["analysis_phase"] == "exploratory":
                 row["decision"] = "exploratory_only"
     report["status"] = "complete" if not errors else "blocked"
-    report["interpretation"] = ("Numeric evidence only. Paired t inference assumes independent units and suitable "
+    report["interpretation"] = ("Numeric evidence only. Paired/Welch t inference assumes independent units and suitable "
         "difference distributions; repeated rows and seeds are averaged within units. Registered custom analyses "
         "are hash-checked but not statistically recomputed here. Human scientific review remains required.")
     return report

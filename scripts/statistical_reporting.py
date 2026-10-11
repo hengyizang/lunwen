@@ -30,6 +30,8 @@ def reporting_semantics(project: Path, paper_id: str, item: dict, actual: dict) 
         raise ValueError("repetition levels must match actual independent units, seeds and aggregation")
     if repetition.get("seeds_are_independent_units") is not False:
         raise ValueError("seeds must not be counted as independent units")
+    if actual.get("unit_design") == "independent" and repetition.get("independent_units_by_arm") != actual.get("independent_units_by_arm"):
+        raise ValueError("independent-arm sample counts must match actual statistical evidence")
     counts = value.get("sample_flow")
     if not isinstance(counts, dict) or any(type(counts.get(key)) is not int or counts[key] < 0
             for key in ("eligible_units", "excluded_units", "missing_units", "analyzed_units")):
@@ -78,6 +80,7 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
             continue
         identifier = item["comparison_id"]
         actual = comparisons[identifier]
+        required = set(REQUIRED) | ({"treatment_units", "comparator_units"} if actual.get("unit_design") == "independent" else set())
         if actual.get("status") != "computed":
             errors.append(f"{identifier}: blocked evidence cannot support manuscript statistics")
             continue
@@ -85,7 +88,7 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
         for location in item.get("locations", []):
             try:
                 field = location["field"]
-                if field not in REQUIRED:
+                if field not in required:
                     raise ValueError("unsupported statistical field")
                 relative = location["path"]
                 if not relative.startswith(paper_prefix) or not any(
@@ -100,7 +103,7 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
                 decimals = location.get("decimals", 6)
                 if not isinstance(decimals, int) or isinstance(decimals, bool) or not 0 <= decimals <= 12:
                     raise ValueError("decimals must be an integer between 0 and 12")
-                if field in NUMERIC:
+                if field in NUMERIC or field in {"treatment_units", "comparator_units"}:
                     scale = location.get("display_scale", 1)
                     if scale != 1 and not (field == "ci_confidence" and scale == 100):
                         raise ValueError("only confidence probability to percentage conversion is supported")
@@ -121,8 +124,8 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
                                  "evidence_value": actual[field]})
             except (KeyError, TypeError, ValueError, OSError) as exc:
                 errors.append(f"{identifier}: {exc}")
-        if not set(REQUIRED).issubset(fields):
-            errors.append(f"{identifier}: missing fields {sorted(set(REQUIRED) - fields)}")
+        if not required.issubset(fields):
+            errors.append(f"{identifier}: missing fields {sorted(required - fields)}")
         if not {"Methods", "Results"}.issubset(sections):
             errors.append(f"{identifier}: Methods and Results locations are required")
         needs_caption = item.get("has_figure") is True or bool(set(actual.get("claim_ids", [])) & (figure_claims or set()))
