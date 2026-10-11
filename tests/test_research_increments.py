@@ -320,6 +320,17 @@ class IncrementTests(unittest.TestCase):
         first = evidence_context.refresh(self.project, "writing-and-review")
         self.assertFalse(first["reusable"])
         self.assertTrue(evidence_context.refresh(self.project, "writing-and-review")["reusable"])
+        asset = self.put("evidence/unselected.txt", "Declared source outside the selected chapter slice")
+        self.spec["dependencies"] = [{"id": "DEPENDENCY", "nodes": [
+            {"id": "ASSET", "kind": "shared_asset", "meaning": "Declared dependency", "paper_ids": ["P01"],
+             "source": asset, "depends_on": []}]}]
+        self.save()
+        evidence_context.refresh(self.project, "writing-and-review")
+        self.assertTrue(evidence_context.refresh(self.project, "writing-and-review")["reusable"])
+        self.put("evidence/unselected.txt", "Upstream source changed outside the selected chapter")
+        changed = evidence_context.refresh(self.project, "writing-and-review")
+        self.assertFalse(changed["reusable"])
+        self.assertIn("evidence/unselected.txt", changed["dependency_changes"])
         self.put("papers/P01/manuscript/main.tex", "Changed chapter.")
         self.assertFalse(evidence_context.refresh(self.project, "writing-and-review")["reusable"])
         self.assertEqual(first["target"], "P01/results")
@@ -362,6 +373,20 @@ class IncrementTests(unittest.TestCase):
         self.assertTrue(increments.gate_errors(self.project, "G5", "P02"))
         write(self.project / increments.REPORT, {"status": "mechanically_checked"})
         self.assertIn("stale", " ".join(increments.gate_errors(self.project, "G5", "P01")))
+
+    def test_word_inventory_covers_nonempty_table_paragraphs_without_pdf_page_claims(self):
+        import zipfile
+        (self.paper / "manuscript/main.tex").unlink()
+        target = self.paper / "manuscript/main.docx"
+        xml = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+               '<w:body><w:p><w:r><w:t>Body argument.</w:t></w:r></w:p>'
+               '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>Table argument.</w:t></w:r></w:p>'
+               '</w:tc></w:tr></w:tbl></w:body></w:document>')
+        with zipfile.ZipFile(target, "w") as archive:
+            archive.writestr("word/document.xml", xml)
+        inventory = writing.inventory(self.project, "P01")
+        self.assertEqual([row["text"] for row in inventory["units"]], ["Body argument.", "Table argument."])
+        self.assertFalse(inventory["rendered_pagination_verified"])
 
     def test_actual_cloud_owner_dossier_authorizes_voice_and_rejects_stale_review(self):
         from scripts import cloud_human_controls as controls, cloud_job, researchctl

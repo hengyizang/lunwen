@@ -199,7 +199,9 @@ Context stages may define tasks keyed by safe ID and active_task. A task has
 question, target (paper/chapter), items and optional dependencies. Selections
 augment stage constraints, never remove mandatory contracts or current contrary/
 mixed notebook evidence. Hashes bind task, chapter, plan, implementation, slices
-and dependencies. Per-task reuse reports identify changed/removed inputs;
+and dependencies. Declared increment sources are also hashed even outside the
+selected chapter slice. A compact protected context-summary avoids duplicating
+the full manuscript in the packet. Per-task reports identify changed/removed inputs;
 no model-cache hit is claimed. Independent initial/final reviews remain fresh.
 
 reports/research-increments/handoff.json contains stage/gate/status, actual

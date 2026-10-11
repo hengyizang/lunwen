@@ -47,6 +47,39 @@ def implementations():
         "incremental_rules.py", "evidence_context.py", "source_scope.py", "research_artifacts.py")]}
 
 
+def context_dependencies(project):
+    """Invalidate narrow packets when any declared increment source changes."""
+    if not (project / PLAN).is_file():
+        return []
+    spec = load(project)
+    paths = {PLAN}
+
+    def collect(value):
+        if isinstance(value, dict):
+            if isinstance(value.get("path"), str) and "sha256" in value:
+                paths.add(value["path"])
+            for item in value.values():
+                collect(item)
+        elif isinstance(value, list):
+            for item in value:
+                collect(item)
+    collect(spec)
+    for group in ("arguments", "lineage"):
+        for item in spec[group]:
+            from scripts.incremental_writing import paper_path
+            paper_path(project, item.get("paper_id"))
+            paths.add("papers/" + item["paper_id"] + "/reviews/paper-facts.json")
+    if len(paths) > 2000:
+        raise ValueError("increment context dependency inventory exceeds 2000 sources")
+    result = []
+    for relative in sorted(paths):
+        source = path_in(project, relative, exists=False)
+        if source.is_file() and source.stat().st_size > 50_000_000:
+            raise ValueError("increment context source exceeds 50 MB")
+        result.append({"path": relative, "sha256": sha(source) if source.is_file() else None})
+    return result
+
+
 def confirmation(project, kind, key, spec, decision):
     from scripts import output_provenance
     target = project / CONFIRMATIONS / (kind + "-" + identifier(key) + ".json")
@@ -276,7 +309,19 @@ def refresh(project):
     write(project / REPORT, audit)
     brief = handoff(project, audit)
     write(project / ROOT / "handoff.json", brief)
-    record(project, [project / REPORT, project / ROOT / "handoff.json"], "research-increments")
+    # Narrow chapter packets need current blockers and bindings, not two copies
+    # of every manuscript paragraph from inventory and reverse outline.
+    summary = {"schema_version": "1.0", "status": audit["status"], "errors": audit.get("errors", []),
+               "missing": audit.get("missing", []),
+               "groups": {key: [{"id": row["id"], "paper_id": row.get("paper_id"),
+                                 "status": row.get("status"), "stale": row.get("stale", {})}
+                                for row in values] for key, values in audit.get("groups", {}).items()},
+               "bindings": [{"path": REPORT, "sha256": sha(project / REPORT)},
+                            *([{"path": PLAN, "sha256": sha(project / PLAN)}] if (project / PLAN).is_file() else [])],
+               "scientific_completion_verified": False}
+    write(project / ROOT / "context-summary.json", summary)
+    record(project, [project / REPORT, project / ROOT / "handoff.json",
+                     project / ROOT / "context-summary.json"], "research-increments")
     return audit
 
 
