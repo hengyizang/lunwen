@@ -246,6 +246,17 @@ class ReviewerRoundTests(unittest.TestCase):
             model="fixture", role="writer", run_id="fixture")
         self.assertIn("anthropic", " ".join(rounds.refresh(self.project, "P01")["errors"]))
 
+    def test_refresh_builds_real_coverage_trace_and_integrity_without_model_calls(self):
+        self.start()
+        self.response()
+        (self.paper / "reviews/concern-response/coverage.json").unlink()
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("no model calls")):
+            report = rounds.refresh(self.project, "P01")
+        self.assertEqual(report["status"], "pass", report["errors"])
+        self.assertEqual(read(self.paper / "reviews/revision-trace.json")["status"], "pass")
+        self.assertEqual(read(self.paper / "reviews/revision-integrity.json")["status"], "pass")
+        self.assertEqual(rounds.validate_saved_report(self.project, "P01"), [])
+
     def test_intake_must_identify_the_selected_paper(self):
         value = read(self.project / self.source)
         value["paper_id"] = "P02"

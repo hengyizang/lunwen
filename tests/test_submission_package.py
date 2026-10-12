@@ -70,7 +70,7 @@ class SubmissionPackageTests(unittest.TestCase):
         from scripts import incremental_writing, research_increments
         from scripts.research_artifacts import write, sha
         evidence = project / "evidence/fixture.txt"
-        evidence.parent.mkdir(parents=True)
+        evidence.parent.mkdir(parents=True, exist_ok=True)
         evidence.write_text("Synthetic bounded packaging fixture.", encoding="utf-8")
         anchor = {"path": "evidence/fixture.txt", "sha256": sha(evidence), "kind": "source_lines",
                   "start_line": 1, "end_line": 1, "quote": evidence.read_text(encoding="utf-8")}

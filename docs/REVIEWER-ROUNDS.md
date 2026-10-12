@@ -121,6 +121,9 @@ The response itself, response letter and editable original-comments copy cannot
 serve as their own evidence. The deterministic audit verifies comment coverage,
 hashes, real manuscript locations, unchanged frozen history, response consistency
 and current non-Claude provenance. It does not establish semantic correctness.
+After each existing writer/remediator pass, the cloud control plane generates
+concern-response coverage, revision trace and numeric/citation integrity reports
+from the current writer inputs. Writers cannot forge those protected reports.
 Existing numerical, citation, claim-strength, revision-ledger, independent-audit
 and human G5 controls remain required. A passing report is a reviewable package,
 not scientific approval or journal acceptance.

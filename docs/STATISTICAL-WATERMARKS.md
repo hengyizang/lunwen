@@ -22,7 +22,7 @@ The owner supplies `papers/P01/watermark-assessment.json` with these exact field
 - `assets_dir`: a dedicated project-local directory with only supported tokenizer
   and config JSON files; `asset_sha256` maps every filename to its actual hash;
 - `key_env`: a dedicated secret `DR_OS_WATERMARK_KEY_*` variable, with a
-  non-secret `key_version` label. Never place the key in source or reports;
+  non-secret `key_version` label and an 8–20 digit applicable key. Never place the key in source or reports;
 - `watermark`: explicit `greenlist_ratio`, `bias`, `seeding_scheme: "lefthash"`
   and `context_width` matching generation;
 - `z_threshold` (2–10), `min_scored_tokens` (100–8192), and `sources` covering

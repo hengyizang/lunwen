@@ -187,7 +187,7 @@ def _prepare(project: Path, paper_id: str) -> tuple[dict, dict, str]:
 
 def _secret(profile: dict) -> int:
     value = os.environ.get(profile["key_env"], "")
-    if not re.fullmatch(r"[0-9]{1,20}", value) or not 1 <= int(value) < 2**64:
+    if not re.fullmatch(r"[0-9]{8,20}", value) or not 1 <= int(value) < 2**64:
         raise ValueError("applicable watermark secret is missing or invalid; no key values are reported")
     return int(value)
 

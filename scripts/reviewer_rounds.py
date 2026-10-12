@@ -357,7 +357,42 @@ def audit(project: Path, paper_id: str):
 
 def refresh(project: Path, paper_id: str):
     _cloud()
+    # Generate mechanical coverage and integrity evidence from current writer
+    # inputs. API writers cannot execute programs or forge protected receipts.
+    build_errors = []
+    index = _index(project, paper_id)
+    if index["rounds"]:
+        paper = _paper(project, paper_id)
+        try:
+            from scripts.rebuttal_triage import triage
+            cards = path_in(project, f"papers/{paper_id}/reviews/concern-cards.json")
+            output_provenance.require_final_origins(project, [cards])
+            original = path_in(project, f"papers/{paper_id}/reviews/original-comments.json")
+            coverage = triage(read(original), read(cards))
+            outputs = []
+            for key, name in (("full_text", "internal-full.md"), ("short_text", "submitted-short.md"),
+                              ("editor_summary", "editor-summary.md")):
+                target = path_in(project, f"papers/{paper_id}/reviews/concern-response/{name}", exists=False)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(coverage.pop(key), encoding="utf-8")
+                outputs.append(target)
+            coverage.update(original_sha256=sha(original), cards_sha256=sha(cards))
+            target = path_in(project, f"papers/{paper_id}/reviews/concern-response/coverage.json", exists=False)
+            write(target, coverage)
+            outputs.append(target)
+            from scripts.revision_trace import audit as trace_audit
+            from scripts.revision_integrity import audit as integrity_audit
+            for name, builder in (("revision-trace.json", trace_audit), ("revision-integrity.json", integrity_audit)):
+                target = path_in(project, f"papers/{paper_id}/reviews/{name}", exists=False)
+                write(target, builder(paper))
+                outputs.append(target)
+            record(project, outputs, MODULE)
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            build_errors.append("external revision builders: " + str(exc))
     result = audit(project, paper_id)
+    if build_errors:
+        result["errors"].extend(build_errors)
+        result["status"] = "revise"
     if result["status"] != "not_applicable":
         target = path_in(project, f"{PREFIX}/{paper_id}/latest.json", exists=False)
         write(target, result)
