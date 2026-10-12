@@ -361,6 +361,9 @@ def gate_errors(slug,gate):
             from scripts.manuscript_hygiene import validate_saved_report as validate_hygiene
             errors.extend(f"{pid} automatic manuscript hygiene: {x}" for x in validate_hygiene(project,pid))
         except ImportError as exc:errors.append(f"{pid} manuscript hygiene validator unavailable: {exc}")
+        from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
+        for label,module in (("real reviewer rounds",reviewer_rounds),("journal AI disclosure",publication_disclosure),("configured statistical watermarks",statistical_watermarks)):
+            errors.extend(f"{pid} {label}: {x}" for x in module.validate_saved_report(project,pid))
         try:
             from scripts.manuscript_audit import validate_saved_report as validate_paper_facts
             errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
@@ -492,6 +495,9 @@ def paper_artifact_hash(slug,paper_id):
     d.update(json.dumps(binding,sort_keys=True,separators=(",",":")).encode())
     from scripts.manuscript_hygiene import review_binding as hygiene_review_binding
     d.update(json.dumps(hygiene_review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
+    from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
+    for module in (reviewer_rounds,publication_disclosure,statistical_watermarks):
+        d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)

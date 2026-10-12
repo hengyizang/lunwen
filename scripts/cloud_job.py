@@ -245,7 +245,7 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
         result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
                                 text=True, errors="replace", timeout=timeout)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
-        for key in cloud_checkpoint.SECRET_NAMES | {"LITERATURE_CONTACT_EMAIL"}:
+        for key in cloud_checkpoint.SECRET_NAMES | {"LITERATURE_CONTACT_EMAIL"} | {name for name in os.environ if name.startswith("DR_OS_WATERMARK_KEY_")}:
             if len(os.environ.get(key, "")) >= 8:
                 raw = raw.replace(os.environ[key], "[REDACTED]")
         return result.returncode, raw

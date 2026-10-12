@@ -48,6 +48,19 @@ class SubmissionPackageTests(unittest.TestCase):
         for relative, content in fixtures.items():
             path = paper / relative
             path.write_text(content, encoding="utf-8")
+        # Source-bound synthetic policy; this does not assert a real exemption.
+        from scripts.research_artifacts import write, sha
+        policy = project / "evidence/packaging-policy.txt"
+        policy.parent.mkdir(parents=True)
+        policy.write_text("Synthetic packaging fixture: no manuscript declaration is required by this test policy.\n", encoding="utf-8")
+        write(paper / "venue.json", {"venue_id": "fixture", "scope": {"official_url": "https://publisher.example/scope"}})
+        write(paper / "disclosures.json", {"status": "ready_for_review",
+            "ai_use": "The synthetic authoring fixture records OpenAI prose drafting and checks all scientific content manually.",
+            "ai_policy": {"venue_id": "fixture", "official_url": "https://publisher.example/policy",
+                "checked_at": datetime.now(timezone.utc).isoformat(), "requirement": "not_required",
+                "rationale": "This synthetic policy exercises packaging only and asserts no real journal exemption.",
+                "evidence": {"path": "evidence/packaging-policy.txt", "sha256": sha(policy), "start_line": 1, "end_line": 1,
+                    "quote": "no manuscript declaration is required by this test policy"}}})
         (project / "data" / "raw").mkdir(parents=True)
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
         final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]
@@ -81,6 +94,9 @@ class SubmissionPackageTests(unittest.TestCase):
         from scripts.manuscript_hygiene import refresh as refresh_hygiene
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             refresh_hygiene(project, "P01")
+            from scripts import publication_disclosure, statistical_watermarks
+            publication_disclosure.refresh(project, "P01")
+            statistical_watermarks.refresh(project, "P01")
         old=researchctl.PROJECTS_ROOT
         try:
             researchctl.PROJECTS_ROOT=root

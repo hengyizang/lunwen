@@ -72,7 +72,8 @@ def excluded(value: str) -> bool:
 def check_file(path: Path, project: Path) -> None:
     if any(p.is_symlink() for p in (path, *path.parents) if p == project or project in p.parents):
         raise CheckpointError("checkpoint paths must not be symlinks")
-    secrets = [os.environ[k].encode() for k in SECRET_NAMES if len(os.environ.get(k, "")) >= 8]
+    names = SECRET_NAMES | {key for key in os.environ if key.startswith("DR_OS_WATERMARK_KEY_")}
+    secrets = [os.environ[k].encode() for k in names if len(os.environ.get(k, "")) >= 8]
     overlap = max((len(s) for s in secrets), default=1) - 1
     tail = b""
     with path.open("rb") as stream:

@@ -66,3 +66,18 @@ The non-Claude writer must respond item by item. A different model agreeing is s
 ## Completion boundary
 
 `submission-ready` means every configured paper passed its own G5 checks and human approval. It does not mean submitted, accepted, publishable, ethically cleared, or guaranteed to meet a degree requirement.
+
+After a real submission, use [Reviewer rounds](../docs/REVIEWER-ROUNDS.md) to import
+the original decision and comments through a hash-bound owner decision. Each real
+round retains its original submitted manuscript and receipt; an old G5 approval
+cannot approve the changed paper. The same writer, independent critics, source
+checks, cloud budgets and human G5 controls apply again. A request for additional
+experiments is a scientific planning requirement, not execution permission; the
+original confirmatory plan must never be retrospectively re-frozen.
+
+The final paper receives no automatic AI-generated branding. Its truthful internal
+use record and actual upload locations are checked against the current official
+[journal disclosure policy](../docs/PUBLICATION-DISCLOSURE.md). Required statements
+remain. [Configured statistical watermark detection](../docs/STATISTICAL-WATERMARKS.md)
+is separate from character cleaning: an unknown scheme remains unknown, and a
+negative result for one configured detector never certifies universal absence.
