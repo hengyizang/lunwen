@@ -99,6 +99,14 @@ Required:
 - citation audit with zero unresolved fabricated/unverified references;
 - passing `reviews/ref-verify.json` for DOI-bound abstract-level topline and numeric claims, while mechanism, procedure, table and figure claims retain exact full-text evidence locations;
 - two simulated review rounds and itemized response matrices;
+- when real reviewer rounds have been opened, complete coverage of the exact
+  frozen external comments, source-bound responses and a fresh protected
+  reviewer-round audit; simulated reviews cannot fulfill this requirement;
+- a current, venue-bound official AI disclosure policy assessment and verified
+  statement location where required; no automatic AI-generated branding;
+- a fresh configured-statistical-watermark assessment, with unknown schemes
+  explicitly unassessed; missing configured prerequisites and positive results
+  require resolution, while a negative result never proves universal absence;
 - `reviews/pre-submission-checklist.json` conforming to `schemas/pre-submission-checklist.schema.json`, covering all seven universal criteria and the applicable article-type criteria in `config/pre-submission-criteria.json`; every assessed criterion needs current manuscript/evidence anchors, rationale, uncertainty and a resolution test. Run `scripts/pre_submission_review.py` to generate the protected `reviews/pre-submission-review.json`. Unresolved criteria block G5; judgements are categorical and never aggregated into acceptance odds;
 - passing, current `reviews/revision-trace.json` proving promised response-matrix changes are present, and `reviews/revision-integrity.json` proving numeric, citation and claim-strength changes match named human authorization;
 - official venue manifest and imported template inventory;

@@ -17,7 +17,7 @@ if str(ROOT) not in sys.path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval", "editorial-audit", "watermark-cleanup", "watermark-validate", "manuscript-hygiene", "manuscript-hygiene-scan", "research-extensions", "evidence-context", "calibration-analysis", "word-render", "research-increments", "increments-inventory", "increments-freeze"))
+    parser.add_argument("action", choices=("notebook", "daily-brief", "statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "research-support", "support-sources", "review-packets", "journals", "method-contracts", "style-eval", "editorial-audit", "watermark-cleanup", "watermark-validate", "manuscript-hygiene", "manuscript-hygiene-scan", "research-extensions", "evidence-context", "calibration-analysis", "word-render", "research-increments", "increments-inventory", "increments-freeze", "reviewer-rounds", "publication-disclosure", "statistical-watermarks"))
     parser.add_argument("--project")
     parser.add_argument("--paper")
     parser.add_argument("--packet", help="Frozen blinded review packet ID")
@@ -39,9 +39,14 @@ def main() -> int:
         project = ROOT / "projects" / args.project
         if not project.is_dir() or project.is_symlink():
             parser.error("project is absent or unsafe")
-        if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "editorial-audit", "watermark-cleanup", "word-render", "manuscript-hygiene", "manuscript-hygiene-scan"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
+        if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "editorial-audit", "watermark-cleanup", "word-render", "manuscript-hygiene", "manuscript-hygiene-scan", "reviewer-rounds", "publication-disclosure", "statistical-watermarks"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
             parser.error("paper must be P01, P02, etc.")
-        if args.action == "research-increments":
+        if args.action in {"reviewer-rounds", "publication-disclosure", "statistical-watermarks"}:
+            from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
+            module = {"reviewer-rounds": reviewer_rounds, "publication-disclosure": publication_disclosure,
+                      "statistical-watermarks": statistical_watermarks}[args.action]
+            result = module.refresh(project, args.paper)
+        elif args.action == "research-increments":
             from scripts.research_increments import initialize, refresh
             initialize(project)
             result = refresh(project)

@@ -6,7 +6,8 @@ from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
-                  "reports/manuscript-hygiene")
+                  "reports/manuscript-hygiene", "reports/reviewer-rounds",
+                  "reports/publication-disclosure", "reports/statistical-watermarks")
 EXECUTOR_FILES = {"experiments/registry.jsonl"}
 
 

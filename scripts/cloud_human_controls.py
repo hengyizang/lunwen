@@ -15,7 +15,7 @@ from scripts import cloud_checkpoint as cp, output_provenance, researchctl, rese
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
 QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
@@ -25,6 +25,7 @@ SELECTORS = {
     "confirm_source_scope": {"source", "scope"},
     "confirm_review_packet": {"packet_id"},
     "confirm_research_increment": {"kind", "record_id", "decision"},
+    "start_revision": {"paper_id", "source"},
 }
 DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
@@ -66,7 +67,7 @@ def validate_fields(value: dict) -> str:
         cp.relative(value["source"])
         if cp.excluded(value["source"]):
             raise HumanControlError("source must be a checkpoint-safe supplied document")
-        if not isinstance(value["scope"], str) or value["scope"] not in {"full_text", "abstract", "excerpt", "metadata"}:
+        if "scope" in selectors and (not isinstance(value["scope"], str) or value["scope"] not in {"full_text", "abstract", "excerpt", "metadata"}):
             raise HumanControlError("invalid supplied source scope")
     if "packet_id" in selectors and (not isinstance(value["packet_id"], str)
             or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", value["packet_id"])):
@@ -132,6 +133,10 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
     slug = value["project"]
     project = researchctl.project_dir(slug)
     state = researchctl.load_state(slug)
+    if operation == "start_revision":
+        from scripts.reviewer_rounds import prepare_start
+        prepare_start(project, value["paper_id"], value["source"], value["actor"], preview=True)
+        return []
     if operation in GATE_ACTIONS:
         if state["gate"] != value["gate"]:
             raise HumanControlError("reviewed gate is not the current gate")
@@ -250,6 +255,10 @@ def execute(value: dict, run_id: str) -> dict:
             state["approvals"][-1].update({"cloud_review_sha256": reviewed["review_sha256"],
                                          "source_run_id": str(run_id)})
             researchctl.save_state(value["project"], state)
+    elif operation == "start_revision":
+        from scripts.reviewer_rounds import start_revision
+        start_revision(project, value["paper_id"], value["source"], value["actor"],
+                       reviewed["review_sha256"], str(run_id))
     elif operation == "screen_literature":
         from scripts import literature_evidence as literature
         literature.screen_receipt(project, value["receipt_id"], value["included_work_ids"],

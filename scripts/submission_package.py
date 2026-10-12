@@ -202,6 +202,9 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         revision_errors.extend(increment_errors(project, "G5", paper_id))
         from scripts.manuscript_hygiene import validate_saved_report as validate_hygiene
         revision_errors.extend(validate_hygiene(project, paper_id))
+        from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
+        for module in (reviewer_rounds, publication_disclosure, statistical_watermarks):
+            revision_errors.extend(module.validate_saved_report(project, paper_id))
         if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc
