@@ -10,8 +10,13 @@ Without an applicable configuration the result is `unknown`. Unknown is visible
 coverage, never an absence certificate. The supported optional detector is the
 Hugging Face CPU `WatermarkDetector` greenlist implementation, pinned to
 transformers 4.57.1, torch 2.8.0 (CPU build allowed), and tokenizers 0.22.1.
-Installation requires a reviewed cloud runtime change; the adapter never installs
-packages or downloads a model/tokenizer. It loads no model weights.
+The owner issue and continuation workflows support this pinned CPU runtime when
+the repository variable `DR_OS_ENABLE_WATERMARK_DETECTOR` is explicitly set to
+`true`. Their dependency setup downloads the reviewed runtime packages from the
+CPU package index/PyPI before execution; the detector itself stays offline and
+never installs packages or downloads a model/tokenizer. It loads no model weights.
+The manual continuation `check` mode skips this optional installation. The variable
+does not grant model spending, approve a scientific gate, or certify applicability.
 
 The owner supplies `papers/P01/watermark-assessment.json` with these exact fields:
 
@@ -27,6 +32,15 @@ The owner supplies `papers/P01/watermark-assessment.json` with these exact field
   and `context_width` matching generation;
 - `z_threshold` (2–10), `min_scored_tokens` (100–8192), and `sources` covering
   every canonical main.tex/include source or the canonical main.docx.
+
+For these GitHub workflows, set `key_env` to `DR_OS_WATERMARK_KEY_ACTIVE` and
+store the applicable key in a GitHub Actions secret of that exact name. This is
+not an OpenAI/Claude API key. The owner must supply the matching tokenizer/config
+cache, its hashes and applicability evidence before enabling a profile. No secret,
+repository variable or scientific configuration is auto-created by this change.
+Local/other reviewed cloud runtimes may use a different `DR_OS_WATERMARK_KEY_*`
+name if explicitly forwarded there. Enabling the runtime without a profile still
+returns `unknown`; a configured profile with missing runtime/key blocks release.
 
 The author cannot change the profile. The complete text is assessed without
 truncation, within 8192 tokens and 45 CPU seconds. Cached files must match their
