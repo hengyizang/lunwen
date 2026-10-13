@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "record_type": "current user amendment; historical G0 approval unchanged",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "source": "Codex chat 01a134fd-daef-7f03-9d7d-b3db20aa41d9",
+  "preferred_domains": [
+    "AI",
+    "mechanical engineering",
+    "robotics",
+    "intelligent manufacturing"
+  ],
+  "requested_completion_date": "2026-10-20",
+  "execution_mode": "cloud_only",
+  "local_project_execution_allowed": false,
+  "compute_test_and_persistent_result_runtime": "GitHub cloud services; no local Python, WSL, Docker or local dashboard",
+  "temporary_model_collaboration": "GPT-6.1 Sol coordinator with bounded GPT-6 Luna tasks using current account's native Codex access",
+  "external_model_api_calls_in_native_session": 0,
+  "same_family_review_is_cross_family_independent": false,
+  "new_gate_approval": false,
+  "historical_state_commit": "027f447da3a3d8fc3a920ad7277d1bfd7a630f14",
+  "user_correction": "我需要提醒一下，我之前说过，这个项目完全在云端运行，不要用我本地的环境",
+  "incident": "The assistant mistakenly ran local validation and a dashboard before this correction. Its own local dashboard and validation processes were stopped. Those runs are not cloud research evidence.",
+  "unattended_native_quota_backend_verified": false
+}

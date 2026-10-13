@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "status": "advisory proposals, not a formal registered hypothesis set",
+  "novelty_established": false,
+  "experiment_execution_authorized": false,
+  "candidates": [
+    {
+      "id": "NQ01",
+      "question": "Under physical-bearing and acquisition-session grouped splits, can a condition-aware representation improve diagnosis and calibration on unseen assets under equal CPU/tuning budgets?",
+      "rival_explanations": [
+        "Split leakage or shared preprocessing explains the gain.",
+        "A transparent feature baseline already captures the effect."
+      ],
+      "falsification": "Require multiple held-out assets and matched baselines; gains disappearing after grouped controls or calibration deterioration would refute the intended claim."
+    },
+    {
+      "id": "NQ02",
+      "question": "In an authorized small state-based simulation with explicit actuator/sensor degradation, can bounded offline-policy adaptation reduce violations while preserving task success under an equal interaction budget?",
+      "rival_explanations": [
+        "Extra interactions or easier disturbances explain the gain.",
+        "The policy appears safe only because it stops or fails tasks."
+      ],
+      "falsification": "Jointly assess held-out degradation, task success and constraints against fixed-policy and simple-controller baselines; no physical safety claim from simulation."
+    },
+    {
+      "id": "NQ03",
+      "question": "Can a fixed-compute industrial inspection system recognize unreliable decisions under held-out acquisition conditions while preserving prespecified coverage and small-defect sensitivity?",
+      "rival_explanations": [
+        "Test-condition tuning or pretrained exposure explains apparent robustness.",
+        "Abstaining on nearly every difficult case hides failure."
+      ],
+      "falsification": "Hold out acquisition groups before calibration; compare risk with coverage and defect sensitivity under matched budgets, without unsupported distribution-free guarantees."
+    }
+  ],
+  "limits": [
+    "No numerical outcome, success threshold or effect size invented.",
+    "No paper or thesis allocation decided.",
+    "Every real experiment still requires the approved G3 plan, budget hashes and existing experiment runner."
+  ]
+}
