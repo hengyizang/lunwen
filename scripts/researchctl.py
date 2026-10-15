@@ -105,6 +105,11 @@ def quality_errors(project,gate,errors,paper_id=None):
 def gate_errors(slug,gate):
     project=project_dir(slug);errors=[]
     if gate is None:return errors
+    if gate in {"G2","G3","G4","G5"}:
+        from scripts.research_identity import validate as validate_research_identity
+        state=read_json(state_path(slug))
+        selected=[state.get("active_paper")] if gate=="G5" else [f"P{i:02d}" for i in range(1,int(state["paper_count"])+1)]
+        for paper_id in selected:errors.extend(validate_research_identity(project,paper_id,gate))
     if gate != "G0":
         from scripts.research_extensions import gate_errors as extension_errors
         errors.extend(f"research extensions: {x}" for x in extension_errors(project))
@@ -498,6 +503,8 @@ def paper_artifact_hash(slug,paper_id):
     from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
     for module in (reviewer_rounds,publication_disclosure,statistical_watermarks):
         d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
+    from scripts.research_identity import review_binding as research_identity_binding
+    d.update(json.dumps(research_identity_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
@@ -529,6 +536,8 @@ def initialize(args):
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid
         for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
+        from scripts.research_identity import template as research_identity_template
+        write_json(paper/"research-identity.json",research_identity_template(pid))
         try:
             from scripts.venue_policy import default_target
         except ImportError:

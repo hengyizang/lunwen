@@ -39,6 +39,17 @@ For the current stage:
 
 ## Evidence rules
 
+Apply the [original-research-first portfolio policy](../docs/ORIGINAL-RESEARCH-POLICY.md).
+Prefer primary original research for every paper. Narrative reviews and
+literature-summary-only papers do not fulfill the portfolio. A substantive
+secondary quantitative study needs a new question, complete analysis protocol,
+actual executed analyses and current official evidence that the target venue
+accepts that design in its research-article category. Meta analysis is a method,
+not permission to rename a Review, hide secondary methods or waive scientific
+checks. Keep each paper's type unassigned until topic/material assessment, then
+create research-identity.json before G2 approval. Journal classification never
+establishes degree eligibility; human scientific and institutional review remain.
+
 - Prefer primary literature, official datasets, official degree regulations, official employer/job data, official journal pages, and official software documentation.
 - Record query, database, date range, filters, result count, inclusion/exclusion reason, and access date.
 - A DOI or URL is not proof that a source supports a claim. Capture the supporting location and a short paraphrase.

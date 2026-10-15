@@ -46,6 +46,13 @@ Required:
 
 - `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, including every pairwise paper comparison, independently sufficient primary evidence, standalone value and a justification for any shared outcome;
 - six default paper contracts under `papers/P01`–`papers/P06`;
+- `papers/Pxx/research-identity.json` for each paper, following
+  `schemas/research-identity.schema.json` and
+  [the original-research policy](../docs/ORIGINAL-RESEARCH-POLICY.md): primary
+  research preferred; summary-only reviews excluded; secondary quantitative
+  work needs a substantive protocol and truthful, source-bound research-article
+  eligibility for its actual design at every candidate venue. Assign types only
+  after assessing real research questions and materials;
 - for each current paper, a cloud-feasibility declaration with a specific authorized data-access plan, GitHub Actions compute plan and rationale that no laboratory or local hardware is required. The current claim and primary evidence may not depend on post-admission laboratory work, including for papers assigned to extension B;
 - dependency graph, shared assets, independent contribution, falsification condition and fallback venue for each paper;
 - `program/venue-candidates.json`, generated from a local authorized JCR export, with at least two current SCI/SCIE candidates meeting each paper's declared Q1/Q2 target and current official policy links; the six-paper portfolio needs at least three Q1 targets;
@@ -87,6 +94,13 @@ Required:
 Do not write a favorable conclusion before the claim matrix and negative results are visible.
 
 ## Writing and review — G5
+
+Revalidate the actual study identity and selected venue's research-article policy.
+Secondary quantitative studies need successful approved executor evidence; the
+manuscript must state the actual secondary/Meta method at a verified canonical
+location. Keep the review/synthesis scientific checklist when applicable even if
+the publisher calls the paper Research. This policy does not add a Meta executor
+or waive existing G3/G4 checks; unsupported study routes remain blocked.
 
 The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and human gates remain protected.
 

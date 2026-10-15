@@ -437,6 +437,9 @@ Gate: {contract['gate']}
 Contract: {contract['contract']}
 Task: {contract['author_task']}
 
+Original-research portfolio policy:
+{research_identity_prompt_contract()}
+
 Installed stage-scoped research methods:
 {research_methods.stage_context(stage, "planner")}
 
@@ -581,6 +584,9 @@ Installed stage-scoped research methods:
 Complete editorial skill contract:
 {editorial_prompt_contract(stage)}
 
+Original-research portfolio policy:
+{research_identity_prompt_contract()}
+
 Current deterministic Unicode hygiene findings:
 {hygiene_feedback(project, stage)}
 
@@ -700,6 +706,9 @@ Installed stage-scoped research methods:
 Complete editorial review criteria:
 {editorial_prompt_contract(stage, role="critic")}
 
+Original-research portfolio policy:
+{research_identity_prompt_contract()}
+
 Current deterministic Unicode hygiene findings (not an author disposition):
 {hygiene_feedback(project, stage)}
 
@@ -773,6 +782,9 @@ Independent review:
 
 Complete editorial skill contract:
 {editorial_prompt_contract(stage)}
+
+Original-research portfolio policy:
+{research_identity_prompt_contract()}
 
 Fresh protected editorial findings (contextual review remains mandatory):
 {editorial_feedback(project, stage)}
@@ -1345,6 +1357,11 @@ def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: st
             "publication_controls": publication,
             "research_increments": increment_audit,
             "academic_style_audit": snapshot_editorial_pass(project, run_id, phase, summary)}
+
+
+def research_identity_prompt_contract() -> str:
+    from scripts.research_identity import prompt_contract
+    return prompt_contract()
 
 
 def publication_feedback(project: str, stage: str) -> str:
