@@ -224,7 +224,7 @@ class ResearchIdentityTests(unittest.TestCase):
 
     def test_new_six_paper_portfolio_stays_unassigned_without_approval_or_budget_grant(self):
         with patch.object(researchctl, "PROJECTS_ROOT", self.project.parent), patch("builtins.print"):
-            researchctl.initialize(SimpleNamespace(project="new-portfolio", paper_count=6))
+            researchctl.initialize(SimpleNamespace(project="new-portfolio", paper_count=6, venue=None))
         project = self.project.parent / "new-portfolio"
         for number in range(1, 7):
             identity = read(project / f"papers/P{number:02d}/research-identity.json")
