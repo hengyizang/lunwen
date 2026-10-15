@@ -229,10 +229,24 @@ def review_binding(project: Path, paper_id: str) -> dict:
         except (ValueError, OSError, KeyError, TypeError, AttributeError):
             sources = [{"status": "unverifiable"}]
     return {"policy": POLICY, "implementation_sha256": sha(Path(__file__)),
+            "schema_sha256": sha(Path(__file__).resolve().parents[1] / "schemas/research-identity.schema.json"),
             "identity_sha256": sha(target) if target.is_file() else None, "sources": sources}
 
 
 def prompt_contract() -> str:
+    # API writers cannot open repository files. Include the concrete input shape
+    # here instead of relying only on a schema/document path in their prompt.
+    shape = {"identity_fields": sorted(FIELDS), "schema_version": "1.0",
+        "design_families": {"primary": sorted(PRIMARY), "secondary_quantitative": sorted(SECONDARY)},
+        "secondary_protocol": {"fields": sorted(PROTOCOL_FIELDS), "each_explanation_min_chars": 40},
+        "venue_classifications": {"fields": ["venue_name", "article_type", "official_url", "checked_at",
+            "research_article_eligible", "design_eligible", "rationale", "evidence"],
+            "evidence_fields": ["path under evidence/", "sha256", "start_line", "end_line", "quote"],
+            "policy_max_age_days": 30, "rationale_min_chars": 60},
+        "analysis_evidence": {"fields": ["attempt_id", "path", "sha256"], "source": "actual approved executor receipts only"},
+        "reporting_statement": {"fields": ["excerpt", "location"], "location": "existing canonical source_lines/docx location contract"},
+        "explanation_min_chars": {"new_analysis_rationale": 60, "validation_plan": 60, "reporting_description": 15},
+        "g2_assesses_proposal_only": True, "scientific_completion_verified": False}
     return ("Original-research-first policy: plan every portfolio paper around a distinct new question, "
         "analysis and defensible contribution. Exclude narrative reviews and literature-summary-only papers. "
         "Prefer primary research; secondary quantitative research needs a genuine new analysis protocol, "
@@ -243,4 +257,5 @@ def prompt_contract() -> str:
         "degree eligibility. At G2 create papers/Pxx/research-identity.json for every paper using "
         "schemas/research-identity.schema.json and docs/ORIGINAL-RESEARCH-POLICY.md. Keep types unassigned "
         "until actual topic/material assessment. Existing G3/G4 experiments and all human approvals remain "
-        "required; this policy introduces no alternative executor, paid call, budget grant, or model switch.")
+        "required; this policy introduces no alternative executor, paid call, budget grant, or model switch.\n"
+        "Input contract (field names and constraints, never evidence): " + json.dumps(shape, separators=(",", ":")))
