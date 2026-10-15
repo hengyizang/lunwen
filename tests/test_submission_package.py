@@ -32,7 +32,7 @@ class SubmissionPackageTests(unittest.TestCase):
         (project / "state").mkdir()
         (project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         fixtures = {
-            "manuscript/main.tex": "\\documentclass{article}\\begin{document}\\section{Introduction} " + ("This study presents the method and analysis of the data with reproducible results. " * 35) + "\\end{document}",
+            "manuscript/main.tex": "\\documentclass{article}\\begin{document}\\section{Introduction} " + ("This study presents the method and analysis of the data with reproducible results. " * 35) + "This is a computational experimental study. \\end{document}",
             "manuscript/references.bib": "@article{x, title={Verified}}",
             "paper-contract.json": "{}",
             "venue.json": "{}",
@@ -52,8 +52,8 @@ class SubmissionPackageTests(unittest.TestCase):
         from scripts.research_artifacts import write, sha
         policy = project / "evidence/packaging-policy.txt"
         policy.parent.mkdir(parents=True)
-        policy.write_text("Synthetic packaging fixture: no manuscript declaration is required by this test policy.\n", encoding="utf-8")
-        write(paper / "venue.json", {"venue_id": "fixture", "scope": {"official_url": "https://publisher.example/scope"}})
+        policy.write_text("Synthetic packaging fixture: no manuscript declaration is required by this test policy. Research Article accepts computational research in this synthetic packaging fixture.\n", encoding="utf-8")
+        write(paper / "venue.json", {"venue_id": "fixture", "name": "Synthetic Packaging Journal", "scope": {"official_url": "https://publisher.example/scope"}})
         write(paper / "disclosures.json", {"status": "ready_for_review",
             "ai_use": "The synthetic authoring fixture records OpenAI prose drafting and checks all scientific content manually.",
             "ai_policy": {"venue_id": "fixture", "official_url": "https://publisher.example/policy",
@@ -61,6 +61,29 @@ class SubmissionPackageTests(unittest.TestCase):
                 "rationale": "This synthetic policy exercises packaging only and asserts no real journal exemption.",
                 "evidence": {"path": "evidence/packaging-policy.txt", "sha256": sha(policy), "start_line": 1, "end_line": 1,
                     "quote": "no manuscript declaration is required by this test policy"}}})
+        # The research identity is a structural packaging fixture, not real
+        # publisher policy, originality evidence or completed scientific review.
+        from scripts.research_identity import template as identity_template
+        write(paper / "paper-contract.json", {"target_venues": [{"name": "Synthetic Packaging Journal", "article_type": "Research Article"}],
+            "independence": {"unique_claim_ids": ["FIXTURE"]}})
+        write(project / "program/venue-candidates.json", {"papers": [{"paper_id": "P01", "candidates": [{
+            "name": "Synthetic Packaging Journal", "article_type": "Research Article",
+            "official_guidelines_url": "https://publisher.example/guidelines", "policy_source_url": "https://publisher.example/policy"}]}]})
+        identity = identity_template("P01")
+        identity.update(research_kind="primary", design_family="computational", methods=["synthetic_packaging_fixture"],
+            reporting_description="computational experimental study", claim_ids=["FIXTURE"],
+            new_analysis_rationale="This synthetic record exercises the packaging identity boundary and establishes no scientific contribution.",
+            validation_plan="This is an isolated deterministic packaging fixture, not a scientifically validated computational study.",
+            venue_classifications=[{"venue_name": "Synthetic Packaging Journal", "article_type": "Research Article",
+                "official_url": "https://publisher.example/policy", "checked_at": datetime.now(timezone.utc).isoformat(),
+                "research_article_eligible": True, "design_eligible": True,
+                "rationale": "This synthetic source exercises category binding only and does not assert a real journal policy or eligibility.",
+                "evidence": {"path": "evidence/packaging-policy.txt", "sha256": sha(policy), "start_line": 1, "end_line": 1,
+                    "quote": "Research Article accepts computational research in this synthetic packaging fixture."}}],
+            reporting_statement={"excerpt": "This is a computational experimental study.", "location": {
+                "kind": "source_lines", "path": "manuscript/main.tex", "sha256": sha(paper / "manuscript/main.tex"), "start_line": 1, "end_line": 1}})
+        write(paper / "research-identity.json", identity)
+        write(paper / "reviews/pre-submission-checklist.json", {"article_type": "computational"})
         (project / "data" / "raw").mkdir(parents=True)
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
         final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]

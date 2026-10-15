@@ -205,6 +205,8 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
         for module in (reviewer_rounds, publication_disclosure, statistical_watermarks):
             revision_errors.extend(module.validate_saved_report(project, paper_id))
+        from scripts.research_identity import validate as validate_research_identity
+        revision_errors.extend(validate_research_identity(project, paper_id, "G5"))
         if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc
