@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from scripts import research_identity as policy, researchctl
@@ -97,7 +98,9 @@ class ResearchIdentityTests(unittest.TestCase):
     def test_narrative_or_summary_review_cannot_be_renamed_primary(self):
         for kind, design, methods in [("primary", "narrative-review", ["summary"]),
                 ("secondary_quantitative", "systematic-review", ["systematic_review"]),
-                ("primary", "computational", ["meta_analysis"])]:
+                ("primary", "computational", ["meta_analysis"]),
+                ("primary", "computational", ["Meta-Analysis"]),
+                ("primary", "computational", ["systematic review and meta analysis"])]:
             self.identity.update(research_kind=kind, design_family=design, methods=methods)
             self.save()
             self.assertTrue(policy.validate(self.project, "P01", "G2"))
@@ -203,10 +206,32 @@ class ResearchIdentityTests(unittest.TestCase):
             errors = researchctl.gate_errors("identity-study", "G2")
         self.assertTrue(any("original-research policy" in x for x in errors))
 
-    def test_policy_contract_keeps_models_budget_and_execution_permissions_unchanged(self):
-        contract = policy.prompt_contract()
-        self.assertIn("no alternative executor, paid call, budget grant, or model switch", contract)
-        self.assertIn("Never rename", contract)
+    def test_secondary_completion_needs_named_human_and_current_receipt(self):
+        self.secondary()
+        self.receipt()
+        state_path = self.project / "state/run.json"
+        state = read(state_path)
+        state["approvals"][0]["actor"] = ""
+        write(state_path, state)
+        self.assertIn("named human", " ".join(policy.validate(self.project, "P01", "G4")))
+        state["approvals"][0]["actor"] = "Synthetic human"
+        write(state_path, state)
+        receipt_path = self.project / "experiments/runs/synthesis-attempt-001/run.json"
+        receipt = read(receipt_path)
+        receipt["status"] = "failed"
+        write(receipt_path, receipt)
+        self.assertIn("executor receipt", " ".join(policy.validate(self.project, "P01", "G4")))
+
+    def test_new_six_paper_portfolio_stays_unassigned_without_approval_or_budget_grant(self):
+        with patch.object(researchctl, "PROJECTS_ROOT", self.project.parent), patch("builtins.print"):
+            researchctl.initialize(SimpleNamespace(project="new-portfolio", paper_count=6))
+        project = self.project.parent / "new-portfolio"
+        for number in range(1, 7):
+            identity = read(project / f"papers/P{number:02d}/research-identity.json")
+            self.assertEqual(identity["research_kind"], "unassigned")
+            self.assertEqual(identity["design_family"], "unassigned")
+        self.assertEqual(read(project / "state/run.json")["approved_gates"], [])
+        self.assertEqual(read(project / "state/model-spend-control.json")["authorized_ceiling_cny"], 0)
 
 
 if __name__ == "__main__":

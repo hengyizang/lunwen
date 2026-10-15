@@ -174,12 +174,15 @@ def validate(project: Path, paper_id: str, gate: str) -> list[str]:
         if not ((kind == "primary" and design in PRIMARY) or (kind == "secondary_quantitative" and design in SECONDARY)):
             raise ValueError("assign original primary research or substantive secondary quantitative research; narrative/systematic-summary reviews are excluded")
         methods = _strings(identity["methods"], "actual research methods")
-        if kind == "primary" and any(m in {"meta_analysis", "literature_summary", "systematic_review"} for m in methods):
+        normalized_methods = {re.sub(r"[\s-]+", "_", m.casefold()) for m in methods}
+        secondary_names = r"(?:^|_)(?:meta_analysis|literature_summary|systematic_review|narrative_review|literature_review|bibliometric_analysis)(?:_|$)"
+        if kind == "primary" and any(re.search(secondary_names, m) for m in normalized_methods
+                                     if m != "meta_analysis_of_own_studies"):
             raise ValueError("a literature-based synthesis cannot be relabeled primary research; use secondary_quantitative or explicitly meta_analysis_of_own_studies")
         _text(identity["new_analysis_rationale"], "new knowledge beyond the closest work", 60)
         _text(identity["validation_plan"], "study-specific validation plan", 60)
         description = _text(identity["reporting_description"], "honest manuscript study description", 15, 250)
-        if design == "meta-analysis" and ("meta_analysis" not in methods or not re.search(r"(?i)meta[ -]analysis", description)):
+        if design == "meta-analysis" and ("meta_analysis" not in normalized_methods or not re.search(r"(?i)meta[ -]analysis", description)):
             raise ValueError("Meta analysis must be declared as an actual method and in the manuscript study description")
         claims = _strings(identity["claim_ids"], "research contribution claim IDs")
         if set(claims) != set(contract.get("independence", {}).get("unique_claim_ids", [])):
