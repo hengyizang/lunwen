@@ -242,7 +242,8 @@ def review_binding(project, paper_id, round_ids):
     scopes = []
     for round_id in round_ids:
         for control_path, control in controls(project, paper_id, round_id):
-            child = path_in(project, control["scope_root"])
+            child = path_in(project, control["scope_root"], exists=False)
+            need(child.is_dir(), "approved supplemental study is missing")
             relative_paths = {"state/run.json", "experiments/plan.json", "experiments/budget.json",
                               "experiments/registry.jsonl", f"papers/{paper_id}/preregistration.json",
                               f"papers/{paper_id}/experiment-evidence.json",

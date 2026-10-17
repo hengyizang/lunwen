@@ -234,11 +234,22 @@ def supplemental_acceptance(parent, *, execute=True):
         errors = supplemental.revision_errors(parent, paper)
         if errors:
             raise AssertionError(errors)
+        binding = supplemental.review_binding(parent, paper, ["R001"])
+        if len(binding["scopes"]) != 1 or not binding["scopes"][0]["parent_exports"]:
+            raise AssertionError("actual supplemental results are missing from the final review binding")
+        parent_state = parent / "state/run.json"
+        original_state = parent_state.read_bytes()
+        for status in ("awaiting_approval", "approved"):
+            state = read(parent_state); state["status"] = status; write(parent_state, state)
+            if supplemental.revision_errors(parent, paper) or supplemental.review_binding(parent, paper, ["R001"]) != binding:
+                raise AssertionError("final G5 status changed the supplemental scientific review")
+        parent_state.write_bytes(original_state)
         for relative, content in original.items():
             if (parent / relative).read_bytes() != content:
                 raise AssertionError("original G3 input was rewritten: " + relative)
     return {"actual_separate_scope_execution": True, "unapproved_execution_blocked": True,
             "original_g3_bytes_unchanged": True, "owner_approval_and_confirmation_functions_exercised": True,
+            "supplemental_evidence_binding_verified": True,
             "executions": executions, "paid_model_calls": 0, "scientific_completion_verified": False}
 
 
