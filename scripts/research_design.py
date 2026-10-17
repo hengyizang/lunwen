@@ -510,8 +510,10 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
     return errors
 
 
-def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) -> list[str]:
+def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *, study_route: str = "empirical") -> list[str]:
     errors: list[str] = []
+    if study_route not in {"empirical", "meta_analysis", "theory"}:
+        return ["unknown study route"]
     if contract.get("schema_version") != "2.0":
         errors.append("schema_version must be 2.0")
     if contract.get("paper_id") != expected_paper_id:
@@ -551,7 +553,7 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
     for key in ("differentiation", "claim_limitations"):
         _text(boundary.get(key), f"originality_boundary.{key}", errors)
 
-    hypotheses = _list(contract.get("hypotheses"), "hypotheses", errors)
+    hypotheses = _list(contract.get("hypotheses"), "hypotheses", errors, minimum=1 if study_route == "empirical" else 0)
     hypothesis_ids: set[str] = set()
     for index, item in enumerate(hypotheses):
         prefix = f"hypotheses[{index}]"
@@ -566,7 +568,7 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
         if not isinstance(hypothesis.get("confirmatory"), bool):
             errors.append(f"{prefix}.confirmatory must be boolean")
 
-    _string_list(contract.get("datasets"), "datasets", errors)
+    _string_list(contract.get("datasets"), "datasets", errors, minimum=1 if study_route == "empirical" else 0)
     planned = _object(contract.get("planned_experiments"), "planned_experiments", errors)
     _string_list(planned.get("design_ids"), "planned_experiments.design_ids", errors)
     classes = set(
@@ -574,12 +576,12 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str) ->
             planned.get("baseline_classes"),
             "planned_experiments.baseline_classes",
             errors,
-            minimum=3,
+            minimum=3 if study_route == "empirical" else 0,
         )
     )
-    if classes and not BASELINE_CLASSES.issubset(classes):
+    if study_route == "empirical" and classes and not BASELINE_CLASSES.issubset(classes):
         errors.append("planned_experiments.baseline_classes must include simple, domain_standard and strong_recent")
-    _string_list(planned.get("ablations"), "planned_experiments.ablations", errors)
+    _string_list(planned.get("ablations"), "planned_experiments.ablations", errors, minimum=1 if study_route == "empirical" else 0)
     for key in (
         "primary_evaluation",
         "statistical_plan",

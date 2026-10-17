@@ -284,7 +284,8 @@ def audit(project: Path, paper_id: str):
     required = {item["comment_id"] for item in intake["comments"]}
     errors, bindings, checks = [], [], []
     if intake["needs_new_experiments"]:
-        errors.append("reviewer requests new experiments: a separately approved supplemental protocol and budget are required; old G3 preregistration cannot be re-frozen after execution. Prepare reviews/reviewer-required-experiment-plan.json; no experiment authorization is granted")
+        from scripts.supplemental_experiments import revision_errors
+        errors.extend(revision_errors(project, paper_id))
     originals_path = f"papers/{paper_id}/reviews/original-comments.json"
     expected = {"schema_version": "1.0", "review_type": "external", "round_id": manifest["round_id"],
                 "journal": intake["journal"], "manuscript_id": intake["manuscript_id"], "comments": intake["comments"]}

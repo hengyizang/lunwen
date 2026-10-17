@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Preregistered Meta analysis or formal theory protocol",
+  "type": "object",
+  "required": ["schema_version", "paper_id", "route", "status", "question", "claim_ids", "methodological_review", "closest_work_comparison", "limitations", "replication_plan", "replication_tolerance", "deviation_policy", "runtime_path", "execution_runs", "outputs"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "route": {"enum": ["meta_analysis", "theory"]},
+    "status": {"const": "ready_for_review"},
+    "question": {"type": "string", "minLength": 10},
+    "claim_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "methodological_review": {"type": "string", "minLength": 10},
+    "closest_work_comparison": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["path", "sha256", "start_line", "end_line", "quote"]}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "replication_plan": {"type": "string", "minLength": 10},
+    "replication_tolerance": {"type": "number", "minimum": 0, "maximum": 0.000001},
+    "deviation_policy": {"type": "string", "minLength": 10},
+    "runtime_path": {"type": "string", "pattern": "^analysis/runtime/P[0-9]{2}/runtime\\.py$"},
+    "execution_runs": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+    "outputs": {"type": "object", "minProperties": 2, "maxProperties": 2, "additionalProperties": {"type": "string", "pattern": "^results/"}},
+    "selection_file": {"type": "string"},
+    "extraction_file": {"type": "string"},
+    "outcomes": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"type": "object", "required": ["id", "claim_ids", "estimand", "population", "comparability", "precision_rationale", "effect_measure", "direction", "minimum_effect", "analysis_phase", "family", "alpha"]}},
+    "proof_timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 900},
+    "theorems": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"type": "object", "required": ["id", "claim_ids", "declaration", "formal_type", "statement", "assumptions", "scope", "proof_strategy", "comparison_to_closest_result", "source", "sha256", "role", "depends_on"]}}
+  },
+  "allOf": [
+    {"if": {"properties": {"route": {"const": "meta_analysis"}}}, "then": {"required": ["selection_file", "extraction_file", "outcomes"]}},
+    {"if": {"properties": {"route": {"const": "theory"}}}, "then": {"required": ["theorems", "proof_timeout_seconds"]}}
+  ],
+  "additionalProperties": false
+}

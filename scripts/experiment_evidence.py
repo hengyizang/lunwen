@@ -424,6 +424,9 @@ def _measure_independent(project: Path, comp: dict, registry: list[dict], plan_h
 
 
 def build_report(project: Path, paper_id: str) -> dict:
+    from scripts import study_routes
+    if study_routes.route(project, paper_id) != "empirical":
+        return study_routes.build_report(project, paper_id)
     errors = validate_plan(project, paper_id)
     report = {"schema_version": "1.0", "paper_id": paper_id, "status": "blocked",
               "scientific_completion_verified": False, "errors": errors, "comparisons": []}

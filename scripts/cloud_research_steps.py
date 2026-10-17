@@ -211,6 +211,18 @@ def before_cycle(project: Path, stage: str) -> dict:
     if stage in {"topic-intelligence", "experiment-design", "experiment-execution", "writing-and-review"}:
         report["data"] = acquire_data(project)
         report["blockers"].extend(report["data"]["blockers"])
+    if stage == "writing-and-review" and not report["blockers"]:
+        from scripts import supplemental_experiments as supplemental
+        paper = read(project / "state/run.json").get("active_paper")
+        if (project / "papers" / str(paper) / supplemental.PROPOSAL).is_file():
+            try:
+                report["supplemental"] = supplemental.resume(project, paper)
+                report["control_only"] = bool(report["supplemental"].get("executed") or report["supplemental"]["status"] == "inspection_required")
+                if report["supplemental"]["status"] == "inspection_required":
+                    report["blockers"].append({"kind": "supplemental_inspection", "detail": report["supplemental"]})
+            except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+                report["blockers"].append({"kind": "supplemental_inspection", "detail": str(exc)})
+                report["control_only"] = True
     if stage == "experiment-execution":
         if report["blockers"]:
             report["control_only"] = True
@@ -259,7 +271,13 @@ def after_write(project: Path, stage: str) -> dict:
         action = operation.get("action")
         operation_sha = hashlib.sha256(json.dumps(operation, sort_keys=True).encode()).hexdigest()
         try:
-            if action == "data_quality" and stage == "experiment-design":
+            if action == "supplemental_prepare" and stage == "writing-and-review":
+                from scripts.supplemental_experiments import prepare
+                prepare(project, operation["paper_id"])
+            elif action == "study_prepare" and stage == "experiment-design":
+                from scripts.study_routes import prepare_runtime
+                prepare_runtime(project, operation["paper_id"])
+            elif action == "data_quality" and stage == "experiment-design":
                 identifier = operation["dataset_id"]
                 if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,100}", identifier):
                     raise ResearchStepError("invalid dataset identifier")

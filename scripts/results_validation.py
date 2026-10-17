@@ -215,7 +215,25 @@ def validate_claim_evidence(
         if wrong_paper:
             errors.append(f"row {index}: analysis_ids belong to a different paper")
         paper_id = expected.get(claim_id)
-        if paper_id and (project / "papers" / paper_id / "experiment-evidence-plan.json").is_file():
+        from scripts import study_routes
+        if paper_id and study_routes.route(project, paper_id) != "empirical":
+            from scripts import experiment_evidence as evidence
+            if paper_id not in evidence_cache:
+                evidence_cache[paper_id] = (evidence.validate_report(project, paper_id), evidence.build_report(project, paper_id))
+            validation, report = evidence_cache[paper_id]
+            errors.extend(f"row {index}: {issue}" for issue in validation)
+            linked = [c for c in report["comparisons"] if claim_id in c["claim_ids"]]
+            if not linked or _ids(row.get("comparison_ids")) != {c["comparison_id"] for c in linked}:
+                errors.append(f"row {index}: comparison_ids must retain every study outcome/proof obligation")
+            if not {s["run_id"] for c in linked for s in c["sources"]} <= analysis_ids:
+                errors.append(f"row {index}: analysis_ids omit the original or isolated replay")
+            main = [c for c in linked if c["role"] in {"main", "primary"}]
+            passed = [c for c in main if c["decision"] in {"kernel_checked", "meets_preregistered_threshold"}]
+            if support == "supported" and (not main or len(passed) != len(main)):
+                errors.append(f"row {index}: supported study claim lacks its preregistered evidence")
+            if support == "partially_supported" and not passed:
+                errors.append(f"row {index}: partial study support needs a passing primary result")
+        elif paper_id and (project / "papers" / paper_id / "experiment-evidence-plan.json").is_file():
             from scripts import experiment_evidence as evidence
             if paper_id not in evidence_cache:
                 validation = evidence.validate_report(project, paper_id)

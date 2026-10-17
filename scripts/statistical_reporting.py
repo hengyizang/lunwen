@@ -143,6 +143,9 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
 
 
 def audit(project: Path, paper_id: str) -> dict:
+    from scripts import study_routes
+    if study_routes.route(project, paper_id) != "empirical":
+        return study_routes.reporting_audit(project, paper_id)
     from scripts.experiment_evidence import build_report, validate_report
     errors = validate_report(project, paper_id)
     evidence = build_report(project, paper_id)

@@ -42,6 +42,7 @@ FORBIDDEN_PARTS = {
 }
 FORBIDDEN_NAMES = {"run.json", "state.json"}
 SNAPSHOT_SUFFIXES = {
+    ".lean",
     ".bib",
     ".csv",
     ".html",
@@ -1361,7 +1362,9 @@ def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: st
 
 def research_identity_prompt_contract() -> str:
     from scripts.research_identity import prompt_contract
-    return prompt_contract()
+    from scripts.study_routes import prompt_contract as study_prompt
+    from scripts.supplemental_experiments import prompt_contract as supplemental_prompt
+    return prompt_contract() + "\n" + study_prompt() + "\n" + supplemental_prompt()
 
 
 def publication_feedback(project: str, stage: str) -> str:

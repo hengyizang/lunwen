@@ -14,18 +14,21 @@ from pathlib import Path
 from scripts import cloud_checkpoint as cp, output_provenance, researchctl, research_quality as quality
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
-QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision"}
+QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction", "confirm_study_validation"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision", "approve_supplemental", "confirm_supplemental"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
     "confirm_data_quality": {"dataset_id"},
     "confirm_reproduction": {"paper_id"},
+    "confirm_study_validation": {"paper_id"},
     "screen_literature": {"receipt_id"},
     "confirm_source_scope": {"source", "scope"},
     "confirm_review_packet": {"packet_id"},
     "confirm_research_increment": {"kind", "record_id", "decision"},
     "start_revision": {"paper_id", "source"},
+    "approve_supplemental": {"paper_id"},
+    "confirm_supplemental": {"paper_id"},
 }
 DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
@@ -137,6 +140,13 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
         from scripts.reviewer_rounds import prepare_start
         prepare_start(project, value["paper_id"], value["source"], value["actor"], preview=True)
         return []
+    if operation in {"approve_supplemental", "confirm_supplemental"}:
+        from scripts import supplemental_experiments as supplemental
+        if operation == "approve_supplemental":
+            supplemental.prepare_approval(project, value["paper_id"], value["actor"])
+        else:
+            supplemental.prepare_confirmation(project, value["paper_id"], value["actor"])
+        return []
     if operation in GATE_ACTIONS:
         if state["gate"] != value["gate"]:
             raise HumanControlError("reviewed gate is not the current gate")
@@ -163,7 +173,7 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
                 raise HumanControlError("approval is absent or stale")
         return []
     required_gate = {"freeze_preregistration": "G3", "confirm_data_quality": "G3",
-                     "confirm_reproduction": "G4", "screen_literature": "G1"}.get(operation)
+                     "confirm_reproduction": "G4", "confirm_study_validation": "G4", "screen_literature": "G1"}.get(operation)
     if state["status"] != "awaiting_work" or (required_gate and state["gate"] != required_gate) or state["gate"] is None:
         raise HumanControlError("human evidence decisions require the matching gate open for work")
     actor = value["actor"]
@@ -188,6 +198,11 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
         paper = _papers(project, value)[0]
         return [(project / "papers" / paper / "reproduction-confirmation.json",
                  quality.create_reproduction_confirmation(project, paper, actor))]
+    if operation == "confirm_study_validation":
+        from scripts import study_routes
+        paper = _papers(project, value)[0]
+        return [(project / "papers" / paper / study_routes.CONFIRMATION,
+                 study_routes.create_confirmation(project, paper, actor))]
     if operation == "screen_literature":
         _screen_inputs(project, value["receipt_id"])
     if operation == "confirm_source_scope":
@@ -259,6 +274,10 @@ def execute(value: dict, run_id: str) -> dict:
         from scripts.reviewer_rounds import start_revision
         start_revision(project, value["paper_id"], value["source"], value["actor"],
                        reviewed["review_sha256"], str(run_id))
+    elif operation in {"approve_supplemental", "confirm_supplemental"}:
+        from scripts import supplemental_experiments as supplemental
+        function = supplemental.approve if operation == "approve_supplemental" else supplemental.confirm
+        function(project, value["paper_id"], value["actor"], reviewed["review_sha256"], str(run_id))
     elif operation == "screen_literature":
         from scripts import literature_evidence as literature
         literature.screen_receipt(project, value["receipt_id"], value["included_work_ids"],
