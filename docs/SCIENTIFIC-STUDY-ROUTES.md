@@ -170,6 +170,24 @@ failed scope with a reason, retaining logs/costs and requiring an explicit failu
 statement in the manuscript. It grants no scientific result; requested experiments
 remain incomplete until a separate approved scope supplies the required evidence.
 
+## Topic-specific candidates
+
+Timestral is an owner-selected **deferred candidate**, recorded on 2026-10-17,
+for a future time-series, equipment-sensor or industrial forecasting study.
+The [official announcement](https://mistral.ai/news/timestral/), accessed
+2026-10-17, describes probabilistic multivariate forecasting and CPU inference.
+These are upstream claims, not validation on this project's data or runners.
+
+Reassess only when the actual topic needs forecasting. Before scientific use,
+review and pin the exact model revision, license, dependencies and weight hashes;
+verify dataset rights and leakage-safe temporal splits; measure feasibility on
+the existing cloud CPU runner; and preregister fair baselines, metrics, uncertainty,
+compute limits and isolated replay under the existing G3/G4 controls.
+
+Candidate status does not install or enable a model, select a topic, change
+language-model roles, grant spending, rent a GPU or substantiate a paper claim.
+Do not add it to the reviewed runtime lock until those checks are complete.
+
 ## Reviewed sources and software acceptance
 
 The project's existing scientific-skills integration and statsmodels acceptance
