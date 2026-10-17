@@ -54,6 +54,13 @@ def candidate(project, paper_id):
     need(value.get("schema_version") == "1.0" and value.get("paper_id") == paper_id and value.get("round_id") == manifest["round_id"], "supplemental proposal belongs to another paper/round")
     comments = study_routes.ids(value.get("comment_ids"), "reviewer experiment comment IDs")
     need(comments <= {c["comment_id"] for c in intake["comments"]}, "supplemental protocol references unknown reviewer comments")
+    dispositions = value.get("comment_dispositions")
+    need(isinstance(dispositions, list) and len(dispositions) == len(intake["comments"])
+         and {d.get("comment_id") for d in dispositions} == {c["comment_id"] for c in intake["comments"]}, "classify every immutable reviewer comment for experiment requirements")
+    for disposition in dispositions:
+        need(type(disposition.get("requires_experiment")) is bool, "explicit experiment disposition required")
+        study_routes.text(disposition.get("rationale"), "comment experiment rationale")
+    need(comments == {d["comment_id"] for d in dispositions if d["requires_experiment"]}, "scope must cover every comment classified as requiring an experiment")
     need(value.get("analysis_phase") in {"exploratory", "prospective_followup"} and value.get("prior_outcomes_seen") is True,
          "declare prior outcome access; supplemental work is not the original confirmatory study")
     for field in ("rationale", "outcome_access_statement", "scope_and_claim_limits"):
@@ -129,6 +136,9 @@ def prepare_approval(project, paper_id, actor):
     need(state.get("stage") == "experiment-design" and not state.get("approvals"), "an initialized, unapproved supplemental candidate is required")
     need(not (child / "experiments/registry.jsonl").exists() or not (child / "experiments/registry.jsonl").read_text().strip(), "cannot approve a protocol after experiment attempts exist")
     plan, budget, errors = _design_errors(child, paper_id)
+    parent_claims = set(read(project / "papers" / paper_id / "paper-contract.json").get("independence", {}).get("unique_claim_ids", []))
+    child_claims = set(read(child / "papers" / paper_id / "paper-contract.json").get("independence", {}).get("unique_claim_ids", []))
+    need(bool(child_claims) and child_claims <= parent_claims, "supplemental claims must belong to the unchanged parent paper contract")
     constraints = read(project / "intake/constraints.json")
     cap = constraints.get("cloud_compute_budget_usd")
     need(type(cap) in (float, int) and math.isfinite(cap) and cap >= 0, "explicit parent compute authorization required")
@@ -183,7 +193,15 @@ def approve(project, paper_id, actor, review_sha256, run_id):
 
 def controls(project, paper_id, round_id):
     directory = project / INDEX / paper_id / round_id
-    return [(p, read(p)) for p in sorted(directory.glob("s[0-9][0-9][0-9].json"))]
+    values = [(p, read(p)) for p in sorted(directory.glob("s[0-9][0-9][0-9].json"))]
+    need(len(values) <= 100, "supplemental history exceeds its bounded review scope")
+    registered = {v["scope_root"] for _, v in values}
+    for child in (project / PREFIX / paper_id / round_id).glob("s[0-9][0-9][0-9]"):
+        state = child / "state/run.json"
+        registry = child / "experiments/registry.jsonl"
+        if (state.is_file() and read(state).get("approvals")) or (registry.is_file() and registry.read_text().strip()):
+            need(child.relative_to(project).as_posix() in registered, "orphaned supplemental approval or attempts cannot be omitted")
+    return values
 
 
 def checked_child(project, control):
@@ -230,6 +248,10 @@ def resume(project, paper_id):
         return {"status": "awaiting_separate_protocol_approval", "executed": False}
     for _, control in candidates:
         child = checked_child(project, control)
+        if control.get("retirement"):
+            for relative, digest in control["retirement"]["files"].items():
+                need(sha(path_in(child, relative)) == digest, "retired failed scope changed")
+            continue
         plan = read(child / "experiments/plan.json")
         registry = quality._registry(child)
         for entry in registry:
@@ -281,24 +303,72 @@ def confirm(project, paper_id, actor, review_sha256, run_id):
              and (p.relative_to(child).parts[0] in {"claims", "results", "experiments"} or p.name in {"experiment-evidence.json", "baseline-reproduction.json", "clean-room-reproduction.json", "reproduction-confirmation.json", study_routes.CONFIRMATION})}
     control["confirmation"] = {"actor": actor, "source_run_id": run_id, "cloud_review_sha256": review_sha256, "files": bound,
                                "scientific_completion_verified": False}
+    sources = [child / "papers" / paper_id / "experiment-evidence.json"]
+    if study_routes.route(child, paper_id) != "empirical":
+        sources.extend((child / "papers" / paper_id / "supplement/study-results").glob("*.json"))
+    exports = []
+    for source in sources:
+        target = project / "papers" / paper_id / "supplement/reviewer-experiments" / control["round_id"] / control["scope_id"] / source.name
+        target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
+        exports.append({"source": source.relative_to(child).as_posix(), "target": target.relative_to(project).as_posix(), "sha256": sha(target)})
+    control["parent_exports"] = exports
     write(control_path, control)
-    record(project, [control_path, target], "scripts/supplemental_experiments.py")
+    record(project, [control_path, *[project / e["target"] for e in exports]], "scripts/supplemental_experiments.py")
+    record(child, [child / "papers" / paper_id / ("reproduction-confirmation.json" if study_routes.route(child, paper_id) == "empirical" else study_routes.CONFIRMATION)], "scripts/supplemental_experiments.py")
     return control["confirmation"]
+
+
+def prepare_retirement(project, paper_id):
+    cloud()
+    value, _, control_path = candidate(project, paper_id)
+    control = read(control_path)
+    need(control.get("proposal") == value and not control.get("confirmation") and not control.get("retirement"), "select an unconfirmed, unretired approved scope")
+    child = checked_child(project, control)
+    registry = quality._registry(child)
+    need(any(r.get("status") in {"failed", "timed_out"} for r in registry), "retirement requires an actual failed executor attempt")
+    for row in registry:
+        need(read(child / "experiments/runs" / row["attempt_id"] / "run.json") == row, "failed registry needs its exact executor receipt")
+    files = {p.relative_to(child).as_posix(): sha(p) for p in (child / "experiments").rglob("*") if p.is_file()}
+    return child, control_path, control, files
+
+
+def retire(project, paper_id, actor, review_sha256, run_id, note):
+    child, control_path, control, files = prepare_retirement(project, paper_id)
+    control["retirement"] = {"actor": actor, "cloud_review_sha256": review_sha256, "source_run_id": run_id, "note": note,
+                             "files": files, "failure_statement": "The supplementary experiment did not complete successfully; no result is inferred from it."}
+    write(control_path, control); record(project, [control_path], "scripts/supplemental_experiments.py")
+    return control["retirement"]
 
 
 def revision_errors(project, paper_id, *, require_reporting=True):
     try:
         manifest, intake = current(project, paper_id)
         values = controls(project, paper_id, manifest["round_id"])
-        need(bool(values), "reviewer requests new experiments: separately approve a supplemental protocol and budget")
+        need(bool(values), "reviewer requests new experiments: a separately approved supplemental protocol and budget are required")
         errors, covered = [], set()
         for _, control in values:
             child = checked_child(project, control)
+            if control.get("retirement"):
+                retirement = control["retirement"]
+                for relative, digest in retirement["files"].items():
+                    need(sha(path_in(child, relative)) == digest, "retired failed scope changed")
+                if require_reporting:
+                    from scripts.ref_verify_adapter import canonical_manuscript
+                    from scripts.revision_trace import verify_location
+                    mapping = read(child / "papers" / paper_id / "failed-study-reporting.json")
+                    need(retirement["failure_statement"] in mapping["excerpt"], "failed supplemental run must be explicitly reported")
+                    paper = project / "papers" / paper_id
+                    verify_location(paper, canonical_manuscript(paper), json.dumps(mapping["location"]), mapping["excerpt"])
+                continue
             covered.update(control["proposal"]["comment_ids"])
             confirmation = control.get("confirmation")
             need(isinstance(confirmation, dict) and confirmation.get("actor"), "supplemental results need fresh named human scientific confirmation")
             for relative, digest in confirmation["files"].items():
                 need(sha(path_in(child, relative)) == digest, "confirmed supplemental evidence changed")
+            need(bool(control.get("parent_exports")), "supplemental aggregate evidence must be included in the parent submission supplement")
+            for exported in control["parent_exports"]:
+                need(sha(path_in(child, exported["source"])) == exported["sha256"]
+                     and sha(path_in(project, exported["target"])) == exported["sha256"], "supplemental submission evidence changed")
             errors.extend(quality.validate_g4_quality(child))
             if require_reporting:
                 if study_routes.route(child, paper_id) != "empirical":
@@ -317,7 +387,7 @@ def revision_errors(project, paper_id, *, require_reporting=True):
                         shutil.copyfile(child / "papers" / paper_id / "experiment-evidence-plan.json", view / "papers" / paper_id / "experiment-evidence-plan.json")
                         mapping = read(child / "papers" / paper_id / "statistical-reporting-map.json")
                         errors.extend(check_mapping(view, paper_id, evidence, mapping)["errors"])
-        requested = {c["comment_id"] for c in intake["comments"] if c.get("requires_experiment") is True}
+        requested = {c["comment_id"] for _, control in values for c in control["proposal"]["comment_dispositions"] if c["requires_experiment"]}
         need(not requested or requested <= covered, "supplemental scopes omit reviewer experiment requests")
         return errors
     except (OSError, ValueError, KeyError, TypeError, AttributeError, RuntimeError) as exc:

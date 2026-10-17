@@ -155,13 +155,19 @@ def _theory_inputs(project, value):
     for item in theorems:
         need(re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*(?:\.[A-Za-z_][A-Za-z_0-9]*)*", item["declaration"]), "unsafe theorem name")
         need(item.get("role") in {"main", "assumption_witness", "scope_check"}, "declare theorem, non-vacuity and scope obligations")
-        for field in ("statement", "formal_type", "assumptions", "scope", "proof_strategy", "comparison_to_closest_result"):
+        for field in ("statement", "assumptions", "scope", "proof_strategy", "comparison_to_closest_result"):
             text(item.get(field), field)
+        need(isinstance(item.get("formal_type"), str) and item["formal_type"].strip(), "exact formal proposition required")
         claim_ids = ids(item.get("claim_ids"), "theorem claims")
         for claim in claim_ids:
             covered.setdefault(claim, set()).add(item["role"])
         source = path_in(project, item["source"])
         need(source.suffix == ".lean" and sha(source) == item["sha256"], "exact Lean proof source required")
+        from scripts.theory_verification_runtime import FORBIDDEN
+        code = source.read_text(encoding="utf-8")
+        need(not FORBIDDEN.search(code), "proof source contains an unfinished proof or executable metaprogram")
+        imports = re.findall(r"(?m)^\s*import\s+([^\n]+)", code)
+        need(all(module in {"Init", "Std"} for line in imports for module in line.split()), "the reviewed proof runtime supports Init/Std; other libraries need a separately frozen runtime profile")
         sources.append(source)
         parents = ids(item.get("depends_on", []), "proof dependencies", 0)
         need(parents <= declarations and item["declaration"] not in parents, "invalid proof dependency")
@@ -198,6 +204,7 @@ def validate_protocol(project, paper_id):
     need(set().union(*(set(u["claim_ids"]) for u in units)) == claims, "study outcomes must cover all and only contracted claims")
     references = value.get("closest_work_comparison")
     need(isinstance(references, list) and len(references) >= 3, "compare at least three closest primary results")
+    need(len({item.get("path") for item in references}) >= 3, "closest-work evidence cannot repeat the same source")
     sources.extend(anchor(project, item) for item in references)
     run_ids = ids(value.get("execution_runs"), "original and isolated reproduction runs", 2)
     need(len(run_ids) == 2, "declare exactly one original and one independent replay")
@@ -238,25 +245,45 @@ def prepare_runtime(project, paper_id):
     kind = route(project, paper_id)
     value = read(protocol_path(project, paper_id))
     need(kind in {"meta_analysis", "theory"}, "unsupported study route")
+    prereg = project / "papers" / paper_id / "preregistration.json"
+    if kind == "theory":
+        changed = False
+        for item in value.get("theorems", []):
+            actual = sha(path_in(project, item["source"]))
+            if item.get("sha256") != actual:
+                need(not prereg.is_file(), "frozen proof source changed; inspect before explicitly re-freezing")
+                item["sha256"] = actual; changed = True
+        if changed:
+            write(protocol_path(project, paper_id), value)
     target = path_in(project, value["runtime_path"])
     need(value["runtime_path"] == f"analysis/runtime/{paper_id}/runtime.py", "use the reserved runtime path")
     source = ROOT / "scripts" / ("meta_analysis_runtime.py" if kind == "meta_analysis" else "theory_verification_runtime.py")
+    if prereg.is_file():
+        need(target.is_file() and sha(target) == sha(source), "reviewed runtime changed after protocol freeze")
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
     identity_lock = project / "papers" / paper_id / IDENTITY_LOCK
+    if identity_lock.is_file() and read(identity_lock) != identity_projection(project, paper_id):
+        need(not prereg.is_file(), "frozen study identity changed")
     write(identity_lock, identity_projection(project, paper_id))
     plan_path = project / "experiments/plan.json"
     if plan_path.is_file():
         from scripts.study_environment import prepare
-        environment, _ = prepare(kind)
         plan = read(plan_path)
+        prior_binding = next((r.get("runtime") for r in plan.get("runs", []) if r.get("paper_id") == paper_id), None)
+        environment, _ = prepare(kind, prior_binding if prereg.is_file() else None)
+        sources = _meta_inputs(project, value) if kind == "meta_analysis" else _theory_inputs(project, value)
+        sources.extend(anchor(project, item) for item in value["closest_work_comparison"])
+        sources.extend([target, identity_lock, protocol_path(project, paper_id), project / "papers" / paper_id / "paper-contract.json"])
         for run in plan.get("runs", []):
             if run.get("paper_id") == paper_id:
                 run["runtime"] = environment
                 run["isolation"] = {"kind": "container", "engine": "docker", "image": environment["base_image"]}
                 items = {i["path"]: i for i in run.get("inputs", [])}
-                for file in (target, identity_lock):
+                for file in sources:
                     relative = file.relative_to(project).as_posix()
+                    if prereg.is_file() and items.get(relative, {}).get("sha256") != sha(file):
+                        raise ValueError("frozen study inputs changed")
                     items[relative] = {"path": relative, "sha256": sha(file)}
                 run["inputs"] = list(items.values())
         write(plan_path, plan)
@@ -415,6 +442,34 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
             "errors": errors, "bindings": bindings, "mapping_sha256": sha(mapping_path) if mapping_path.is_file() else None,
             "evidence_digest": hashlib.sha256(json.dumps(evidence, sort_keys=True).encode()).hexdigest(),
             "scientific_completion_verified": False, "human_scientific_review_required": True}
+
+
+def export_results(project, paper_id):
+    """Keep the full registered sensitivity/proof results in the submission tree."""
+    report = build_report(project, paper_id)
+    need(report["status"] == "complete", "; ".join(report["errors"]))
+    folder = project / "papers" / paper_id / "supplement/study-results"
+    folder.mkdir(parents=True, exist_ok=True)
+    outputs = []
+    for source in report["sources"]:
+        path = path_in(project, source["path"])
+        target = folder / (source["run_id"] + ".json")
+        shutil.copyfile(path, target); outputs.append(target)
+    from scripts.research_artifacts import record
+    record(project, outputs, "scripts/study_routes.py")
+    return outputs
+
+
+def export_errors(project, paper_id):
+    try:
+        report = build_report(project, paper_id)
+        need(report["status"] == "complete", "; ".join(report["errors"]))
+        for source in report["sources"]:
+            target = project / "papers" / paper_id / "supplement/study-results" / (source["run_id"] + ".json")
+            need(target.is_file() and sha(target) == source["sha256"], "full study/sensitivity results are missing or changed in the supplement")
+        return []
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return [str(exc)]
 
 
 def prompt_contract():

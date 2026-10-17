@@ -654,7 +654,7 @@ conditions and residual risk, and document backward/forward citation chaining
 plus two consecutive saturation rounds. At G3 do not fabricate local quality,
 power or preregistration records: data/quality/*.json, power-analysis.json and
 preregistration.json are created and hash-bound by scripts/research_quality.py.
-Design the inputs they need and preserve blockers. At G4 create a baseline-
+Design the inputs they need and preserve blockers. For empirical papers at G4 create a baseline-
 reproduction.json and clean-room-reproduction.json for every paper only from
 the exact successful attempt IDs and complete current output sets in the
 registry; match the G3-frozen run roles, baseline IDs/source URLs and numeric
@@ -738,9 +738,11 @@ repetitive or template-driven academic prose, scientific drift during style
 revision, reproducibility gaps, and any gate-contract violation. Do not
 accept narrative novelty without the claim matrix and search saturation; do not
 accept a selected dataset without a current local quality report; do not accept
-G3 without executable power evidence and a hash-frozen preregistration; and do
-not accept G4 without successful, evidence-bound strong-baseline and clean-room
-reproduction records. Do not
+empirical G3 without executable power evidence and a hash-frozen preregistration; and do
+not accept empirical G4 without successful, evidence-bound strong-baseline and clean-room
+reproduction records. Meta/theory use the dedicated study protocol, exact isolated
+execution evidence and named study-validation confirmation instead of empirical
+power/baseline records. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
 

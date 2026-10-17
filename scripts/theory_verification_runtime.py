@@ -54,8 +54,8 @@ def verify(protocol, root):
         if FORBIDDEN.search(code):
             raise ValueError("proof source contains an unfinished proof, custom axiom or executable metaprogram")
         imports = re.findall(r"(?m)^\s*import\s+([^\n]+)", code)
-        if any(module not in {"Init", "Std", "Mathlib"} for line in imports for module in line.split()):
-            raise ValueError("only pinned Init/Std/Mathlib imports are supported")
+        if any(module not in {"Init", "Std"} for line in imports for module in line.split()):
+            raise ValueError("the reviewed CPU profile supports pinned Init/Std imports")
         # Let Lean's kernel compare the actual proposition. Pretty-printer
         # binder layout is not a sound type-equivalence test.
         audit_code = code + '\nexample : Prop := (' + formal_type + ')\nexample : (' + formal_type + ') := @' + name

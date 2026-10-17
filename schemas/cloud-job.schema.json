@@ -42,7 +42,8 @@
         "confirm_source_scope",
         "confirm_study_validation",
         "approve_supplemental",
-        "confirm_supplemental"
+        "confirm_supplemental",
+        "retire_supplemental"
       ]
     },
     "project": {
@@ -147,7 +148,8 @@
         "confirm_source_scope",
         "confirm_study_validation",
         "approve_supplemental",
-        "confirm_supplemental"
+        "confirm_supplemental",
+        "retire_supplemental"
       ]
     },
     "gate": {

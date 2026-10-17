@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from scripts import artifact_ownership, cloud_checkpoint, cloud_job, experiment_runner as runner
 from scripts import meta_analysis_runtime as meta, research_quality as quality, study_route_acceptance as fixtures, study_routes
+from scripts import supplemental_experiments as supplemental, researchctl, cloud_human_controls
 from scripts.research_artifacts import read, sha, write
 
 
@@ -126,6 +127,14 @@ class StudyRouteTests(unittest.TestCase):
 
 
 class MetaNumericalTests(unittest.TestCase):
+    def test_pm_matches_independently_recorded_r_metafor_golden_result(self):
+        # Numeric facts from statsmodels' BSD-3 test fixture results_meta.py at
+        # b6b382183676557763bd12ce561b61e1f08c9258, exk1_metafor (R method PM).
+        result = meta.pool([61, 61.4, 62.21, 62.3, 62.34, 62.6, 62.7, 62.84, 65.9],
+                           [.2025, 1.21, .09, .2025, .3844, .5625, .0676, .0225, 1.8225])
+        self.assertAlmostEqual(result["estimate"], 62.4076199113286, places=8)
+        self.assertAlmostEqual(result["tau_squared"], .705395309224248, places=8)
+        self.assertAlmostEqual(result["q"], 24.801897741835, places=8)
     def test_equal_effects_match_closed_form_with_conservative_t_interval(self):
         result = meta.pool([.2, .2, .2], [.04, .04, .04])
         self.assertAlmostEqual(result["estimate"], .2, places=12)
@@ -148,6 +157,61 @@ class MetaNumericalTests(unittest.TestCase):
             self.assertEqual(len(outcome["sensitivity"]["leave_one_out"]), 4)
             self.assertIsNotNone(outcome["sensitivity"]["exclude_high_risk"])
             self.assertFalse(outcome["small_study_diagnostic"]["absence_of_bias_verified"])
+
+
+class SupplementalGuardTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(); self.addCleanup(temporary.cleanup)
+        self.parent = Path(temporary.name) / "demo"
+        self.env = patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}); self.env.start(); self.addCleanup(self.env.stop)
+        fixtures.make_study(self.parent, "meta_analysis"); fixtures.freeze(self.parent)
+        self.case = fixtures.supplemental_acceptance(self.parent, execute=False)
+        self.child = self.case["child"]
+
+    def test_review_request_and_candidate_never_authorize_execution(self):
+        with patch("scripts.experiment_runner.execute", side_effect=AssertionError("unapproved execution")):
+            result = supplemental.resume(self.parent, "P01")
+        self.assertEqual(result["status"], "awaiting_separate_protocol_approval")
+        self.assertFalse(result["executed"])
+
+    def test_zero_parent_compute_budget_cannot_be_raised_by_child(self):
+        write(self.child / "experiments/budget.json", {"status": "ready_for_review", "hard_ceiling_usd": 1})
+        with self.assertRaisesRegex(ValueError, "compute authorization"):
+            supplemental.prepare_approval(self.parent, "P01", "Synthetic reviewer")
+
+    def test_changed_original_plan_cannot_be_reused(self):
+        path = self.parent / "experiments/plan.json"; value = read(path); value["runs"][0]["seed"] = 42; write(path, value)
+        with self.assertRaisesRegex(ValueError, "original approved"):
+            supplemental.candidate(self.parent, "P01")
+
+    def test_stale_owner_dossier_cannot_approve_changed_child(self):
+        with patch.object(researchctl, "PROJECTS_ROOT", self.parent.parent):
+            value = {"schema_version": "1.0", "action": "review_dossier", "operation": "approve_supplemental", "project": "demo",
+                     "actor": "Synthetic reviewer", "allow_paid": False, "paper_id": "P01"}
+            dossier = cloud_human_controls.dossier(value)
+            self.assertEqual(dossier["blockers"], [])
+            path = self.child / "papers/P01/study-protocol.json"; protocol = read(path); protocol["question"] += " Changed."; write(path, protocol)
+            value.update(action="approve_supplemental", expected_sha256=dossier["review_sha256"], note="Synthetic approval attempt after inputs changed."); value.pop("operation")
+            with self.assertRaisesRegex(cloud_human_controls.HumanControlError, "dossier changed"):
+                cloud_human_controls.execute(value, "123")
+
+    def test_deleted_scope_control_cannot_hide_approved_history(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        controls = supplemental.controls(self.parent, "P01", "R001")
+        controls[0][0].unlink()
+        with self.assertRaisesRegex(ValueError, "orphaned"):
+            supplemental.controls(self.parent, "P01", "R001")
+
+    def test_failed_attempt_cost_is_not_released(self):
+        registry = self.child / "experiments/registry.jsonl"
+        registry.parent.mkdir(exist_ok=True)
+        registry.write_text(json.dumps({"estimated_cost_usd": .5, "status": "failed"}) + "\n", encoding="utf-8")
+        self.assertEqual(supplemental.all_compute_cost(self.parent), .5)
+
+    def test_results_require_execution_and_a_separate_scientific_confirmation(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        errors = supplemental.revision_errors(self.parent, "P01", require_reporting=False)
+        self.assertTrue(any("confirmation" in e for e in errors))
 
 
 if __name__ == "__main__":

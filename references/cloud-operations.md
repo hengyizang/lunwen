@@ -6,6 +6,13 @@ The model authors plans and code. The GitHub controller retrieves evidence, exec
 
 ## Request format
 
+Study-specific builders: study_prepare plus paper_id at experiment-design
+prepares the reviewed Meta/Lean CPU runtime, input hashes and identity projection.
+supplemental_prepare plus paper_id at writing-and-review initializes a separate
+unapproved reviewer child study and its deterministic builders. Dependency setup
+is cloud-only; neither operation executes scientific runs or grants approval.
+See [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md).
+
 Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[...]}`. Maximum 16 operations, each with `stage` and `action`. Paths are relative to this project. The controller saves results and failures in `state/research-steps.json`. Read this report before making another plan. Do not write controlled receipts yourself.
 
 | Stage | Action and fields | Controller behavior |

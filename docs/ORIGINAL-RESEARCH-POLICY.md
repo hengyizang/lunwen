@@ -55,12 +55,13 @@ stored run receipt and current output hash must match. Existing G4 all-attempt,
 statistics, independence, preregistration and clean-room checks still apply.
 This additional binding is not a substitute for substantive statistical review.
 
-This policy **does not add a Meta-analysis executor, a supplemental-experiment
-route, or a complete non-empirical G3/G4 branch**. Existing engine requirements
-are retained. Do not claim end-to-end Meta/theory readiness until an appropriate
-protocol and scientifically suitable execution/validation route are separately
-implemented and verified. Unsupported routes remain blocked rather than filling
-irrelevant experiment fields with invented evidence.
+The [dedicated study routes](SCIENTIFIC-STUDY-ROUTES.md) add executable
+independent-effect Meta analysis, Lean formal-theory G3/G4 validation and separately
+approved reviewer experiments. Their positive evidence requirements replace
+irrelevant empirical fields for those actual study identities. They do not cover
+every possible Meta/theory method: dependent/network Meta models and unprovisioned
+proof libraries remain blocked. Never fill irrelevant experiment fields with
+invented evidence or promote software acceptance to scientific completion.
 
 ## Honest publication categories
 

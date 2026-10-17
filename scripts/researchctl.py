@@ -334,7 +334,8 @@ def gate_errors(slug,gate):
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
         from scripts import study_routes
-        if study_routes.route(project,pid)!="empirical":errors.extend(study_routes.validation_errors(project,pid))
+        if study_routes.route(project,pid)!="empirical":
+            errors.extend(study_routes.validation_errors(project,pid));errors.extend(study_routes.export_errors(project,pid))
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors) or {}
         map_portfolio=paper_map.get("papers",[]) if isinstance(paper_map.get("papers"),list) else []
         map_targets={str(item.get("paper_id")):str(item.get("target_jcr_quartile") or "").upper() for item in map_portfolio if isinstance(item,dict) and item.get("paper_id")}

@@ -58,6 +58,9 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
             return True
         return executor_owned(child, child_relative)
     return (value in EXECUTOR_FILES
+            or (len(PurePosixPath(value).parts) >= 5 and value.startswith("papers/")
+                and PurePosixPath(value).parts[2] == "supplement"
+                and PurePosixPath(value).parts[3] in {"study-results", "reviewer-experiments"})
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
                 and value.endswith("/study-validation-confirmation.json"))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")

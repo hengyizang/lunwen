@@ -505,6 +505,9 @@ def refresh(project: Path) -> dict:
         report = build_report(project, paper.name)
         path = paper / REPORT
         write_json(path, report)
+        from scripts import study_routes
+        if study_routes.route(project, paper.name) != "empirical" and report["status"] == "complete":
+            study_routes.export_results(project, paper.name)
         record_model_writes(project, [path], family="other", provider="deterministic-experiment-evidence",
                             model="scripts/experiment_evidence.py", role="statistical-auditor", run_id="evidence-refresh")
         summaries[paper.name] = {"status": report["status"], "errors": report["errors"]}

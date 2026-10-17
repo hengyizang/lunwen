@@ -32,12 +32,15 @@ def pool(effects, variances, *, method="pm", alpha=0.05):
     v = np.asarray([finite(x, "variance", positive=True) for x in variances])
     # statsmodels' untruncated DL estimator can be negative: recompute weights
     # with the scientifically meaningful nonnegative variance component.
-    result = combine_effects(y, v, method_re=method, use_t=True, alpha=alpha)
+    options = {"atol": 1e-10, "maxiter": 1000} if method == "pm" else {}
+    result = combine_effects(y, v, method_re=method, use_t=True, alpha=alpha, **options)
     tau = max(0.0, float(result.tau2))
     w = 1 / (v + tau)
     mean = float(np.sum(w * y) / np.sum(w))
     k = len(y)
     residual_scale = float(np.sum(w * (y - mean) ** 2) / (k - 1))
+    if method == "pm" and tau > 0 and abs(residual_scale - 1) > 1e-5:
+        raise ValueError("Paule-Mandel heterogeneity estimation did not converge")
     se = math.sqrt(max(1.0, residual_scale) / float(np.sum(w)))
     critical = float(stats.t.ppf(1 - alpha / 2, k - 1))
     fixed_w = 1 / v

@@ -183,7 +183,7 @@ At G1 create program/novelty-claim-matrix.json with claim-level closest-work
 differences, falsification logic and documented search saturation. At G3 never
 invent deterministic data-quality, power-analysis or preregistration files;
 scripts/research_quality.py creates and protects them after the required inputs
-exist. At G4 create baseline-reproduction.json and clean-room-reproduction.json
+exist. For empirical papers at G4 create baseline-reproduction.json and clean-room-reproduction.json
 for each paper only from exact successful attempt IDs and their complete current
 output sets; match the G3-frozen run roles, baseline IDs/source URLs, executor
 isolation IDs and tolerances. Use reports/runtime-evidence-catalog.json for exact facts.
@@ -233,8 +233,10 @@ not independently calibrated reviewers. Keep existing model roles and human gate
 
 Read AGENTS.md, references/research-integrity.md, the {state['gate']} section of references/stage-contracts.md, and the current scientific artifacts under projects/{project}. Do not read prior model verdicts or the author's desired outcome before forming your own verdict. Audit stage {state['stage']} for fatal flaws, unsupported claims, fabricated or unverified citations, missing primary evidence, alternative explanations, leakage, statistical problems, budget violations, security risks and reproducibility gaps. Also challenge closest-work differentiation, doctoral synthesis, pairwise paper independence, baseline fairness, statistical power or precision, external validity, claim calibration and English-only manuscript compliance. Do not infer success from file existence.
 Require claim-level closest-work and search-saturation evidence at G1, current
-local data-quality, executable power and frozen preregistration evidence at G3,
-and successful registry-bound baseline plus clean-room reproduction at G4.
+local data-quality, executable power and frozen preregistration evidence at empirical G3,
+and successful registry-bound baseline plus clean-room reproduction at empirical G4.
+For Meta/theory require their dedicated protocol, exact isolated execution,
+study-specific numerical/proof evidence and named study-validation confirmation.
 At G5 also inspect the deterministic academic-style audit, template-driven or
 repetitive prose, and any scientific drift caused by stylistic revision. Do not
 estimate AI authorship or request detector-evasion tactics.

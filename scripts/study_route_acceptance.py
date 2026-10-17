@@ -140,6 +140,127 @@ def claim_matrix(project, report):
             "uncertainty": "No real study, originality or publication claim.", "status": "synthetic_software_acceptance"})
 
 
+def reporting_fixture(project, report, *, manuscript_project=None, label="Original"):
+    manuscript_project = manuscript_project or project
+    manuscript = manuscript_project / "papers/P01/manuscript/main.tex"
+    manuscript.parent.mkdir(parents=True, exist_ok=True)
+    lines = ["\\documentclass{article}", "\\begin{document}", "\\section{Results}"]
+    if manuscript.is_file():
+        lines = manuscript.read_text(encoding="utf-8").splitlines()
+        if lines and lines[-1] == "\\end{document}":
+            lines.pop()
+    items = []
+    for result in report["comparisons"]:
+        row = {"result_id": result["comparison_id"], "interpretation": "Synthetic fixture only; no scientific contribution is asserted.",
+               "uncertainty": "Interpretation is limited to synthetic studies or the exact formal assumptions."}
+        if report["route"] == "meta_analysis":
+            actual = result["statistics"]
+            numbers = {**{k: actual["summary"][k] for k in ("k", "estimate", "ci_low", "ci_high", "tau_squared", "i_squared")}, "p_adjusted": actual["p_adjusted"]}
+            row["values"] = {k: f"{v:.6f}" for k, v in numbers.items()}
+            excerpt = label + " synthetic Meta result " + result["comparison_id"] + ": " + ", ".join(k + "=" + v for k, v in row["values"].items()) + "."
+        else:
+            excerpt = label + ": " + result["proof"]["natural_language_statement"]
+            row["formal_type"] = result["proof"]["checked_type"]
+        lines.append(excerpt); row["excerpt"] = excerpt; row["line"] = len(lines); items.append(row)
+    lines.append("\\end{document}"); manuscript.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    for row in items:
+        row["location"] = {"kind": "source_lines", "path": "manuscript/main.tex", "sha256": sha(manuscript), "start_line": row.pop("line"), "end_line": len(lines)-1}
+    write(project / "papers/P01/statistical-reporting-map.json", {"schema_version": "1.0", "items": items})
+    return manuscript
+
+
+def supplemental_acceptance(parent, *, execute=True):
+    from scripts import reviewer_rounds, supplemental_experiments as supplemental
+    paper = "P01"
+    manuscript = parent / "papers/P01/manuscript/main.tex"
+    if not manuscript.is_file():
+        manuscript.parent.mkdir(parents=True, exist_ok=True)
+        manuscript.write_text("\\documentclass{article}\n\\begin{document}\nSynthetic software fixture only.\n\\end{document}\n", encoding="utf-8")
+    write(parent / "intake/constraints.json", {"execution_mode": "cloud_only", "cloud_compute_budget_usd": 0})
+    source = parent / "evidence/reviewer-intake/P01/reviewer.txt"; source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_text("Reviewer 1\nPlease conduct a separately planned sensitivity experiment.\n", encoding="utf-8")
+    receipt = source.with_name("submission.txt"); receipt.write_text("Synthetic submission FIXTURE-1 received.\n", encoding="utf-8")
+    intake = {"schema_version": "1.0", "paper_id": paper, "review_type": "external", "journal": "Synthetic Fixture Journal",
+        "manuscript_id": "FIXTURE-1", "submitted_at": "2026-10-01T00:00:00Z", "needs_new_experiments": True,
+        "submission_receipt": {"path": receipt.relative_to(parent).as_posix(), "sha256": sha(receipt), "locator": "line 1", "quote": "Synthetic submission FIXTURE-1 received."},
+        "reviewer_source": {"path": source.relative_to(parent).as_posix(), "sha256": sha(source)}, "comments": [
+            {"comment_id": "R1-C1", "reviewer_id": "Reviewer 1", "comment": "Please conduct a separately planned sensitivity experiment.", "source_location": {"start_line": 2, "end_line": 2}}]}
+    intake_path = source.with_name("intake.json"); write(intake_path, intake)
+    state = read(parent / "state/run.json")
+    state.update(stage_index=6, stage="submission-ready", gate=None, status="submission_ready", approved_gates=["G3", "G4", "G5:P01"], paper_statuses={paper: "submission_ready"})
+    write(parent / "state/run.json", state)
+    original = {path.relative_to(parent).as_posix(): path.read_bytes() for path in research_quality._preregistration_inputs(parent, paper)}
+    original["papers/P01/preregistration.json"] = (parent / "papers/P01/preregistration.json").read_bytes()
+    with patch.object(researchctl, "PROJECTS_ROOT", parent.parent):
+        state["approvals"].append({"gate": "G5", "paper_id": paper, "actor": "Synthetic CI reviewer", "paper_artifact_sha256": researchctl.paper_artifact_hash(parent.name, paper)})
+        write(parent / "state/run.json", state)
+        reviewer_rounds.start_revision(parent, paper, intake_path.relative_to(parent).as_posix(), "Synthetic CI reviewer", "a" * 64, "123")
+        proposal = {"schema_version": "1.0", "paper_id": paper, "round_id": "R001", "scope_id": "s001", "comment_ids": ["R1-C1"],
+            "comment_dispositions": [{"comment_id": "R1-C1", "requires_experiment": True, "rationale": "The synthetic reviewer explicitly requests an additional experiment."}],
+            "analysis_phase": "exploratory", "prior_outcomes_seen": True, "rationale": "Synthetic reviewer follow-up exercises the separate approval/execution path.",
+            "outcome_access_statement": "The synthetic original outcome was already inspected; no retrospective confirmation is claimed.",
+            "scope_and_claim_limits": "Supplemental software fixture only, not an actual requested scientific study.", "imports": [],
+            "original_plan_sha256": sha(parent / "experiments/plan.json"), "original_preregistration_sha256": sha(parent / "papers/P01/preregistration.json")}
+        write(parent / "papers/P01" / supplemental.PROPOSAL, proposal)
+        child = parent / "experiments/supplemental/P01/R001/s001"
+        make_study(child, "meta_analysis", provision=execute)
+        supplemental.prepare(parent, paper)
+        if not execute:
+            return {"child": child, "proposal": proposal}
+        before = supplemental.resume(parent, paper)
+        if before["executed"]:
+            raise AssertionError("unapproved reviewer request executed")
+        value = {"schema_version": "1.0", "action": "review_dossier", "operation": "approve_supplemental", "project": parent.name,
+                 "actor": "Synthetic CI reviewer", "allow_paid": False, "paper_id": paper}
+        dossier = cloud_human_controls.dossier(value)
+        if dossier["blockers"]:
+            raise AssertionError(dossier["blockers"])
+        value.update(action="approve_supplemental", expected_sha256=dossier["review_sha256"], note="Synthetic supplemental protocol and zero-cost budget reviewed."); value.pop("operation")
+        cloud_human_controls.execute(value, "124")
+        executions = [supplemental.resume(parent, paper) for _ in range(3)]
+        report = study_routes.build_report(child, paper)
+        if report["status"] != "complete":
+            raise AssertionError(report)
+        claim_matrix(child, report)
+        value = {"schema_version": "1.0", "action": "review_dossier", "operation": "confirm_supplemental", "project": parent.name,
+                 "actor": "Synthetic CI reviewer", "allow_paid": False, "paper_id": paper}
+        dossier = cloud_human_controls.dossier(value)
+        if dossier["blockers"]:
+            raise AssertionError(dossier["blockers"])
+        value.update(action="confirm_supplemental", expected_sha256=dossier["review_sha256"], note="Synthetic actual results and isolated replay reviewed."); value.pop("operation")
+        cloud_human_controls.execute(value, "125")
+        reporting_fixture(child, report, manuscript_project=parent, label="Supplemental")
+        errors = supplemental.revision_errors(parent, paper)
+        if errors:
+            raise AssertionError(errors)
+        for relative, content in original.items():
+            if (parent / relative).read_bytes() != content:
+                raise AssertionError("original G3 input was rewritten: " + relative)
+    return {"actual_separate_scope_execution": True, "unapproved_execution_blocked": True,
+            "original_g3_bytes_unchanged": True, "owner_approval_and_confirmation_functions_exercised": True,
+            "executions": executions, "paid_model_calls": 0, "scientific_completion_verified": False}
+
+
+def reject_false_proof(directory):
+    project = directory / "projects/false-proof"
+    make_study(project, "theory", provision=True)
+    source = project / "analysis/proof.lean"
+    source.write_text(source.read_text(encoding="utf-8").replace("n + 0 = n := by simp", "n + 1 = n := by rfl"), encoding="utf-8")
+    path = project / "papers/P01/study-protocol.json"; value = read(path)
+    value["theorems"][0]["formal_type"] = "∀ n : Nat, n + 1 = n"
+    write(path, value); study_routes.prepare_runtime(project, "P01"); freeze(project)
+    attempts = experiment_runner.execute(project.name, ["study-original"], project_root=project)
+    if attempts[0]["status"] != "failed":
+        raise AssertionError("false theorem passed Lean kernel checking")
+    from scripts.cloud_research_steps import resume_experiments
+    before = (project / "experiments/registry.jsonl").read_bytes()
+    resumed = resume_experiments(project)
+    if not resumed["blockers"] or before != (project / "experiments/registry.jsonl").read_bytes():
+        raise AssertionError("failed proof was retried or omitted")
+    return {"false_theorem_rejected_by_real_kernel": True, "failed_attempt_preserved_without_retry": True,
+            "attempt_id": attempts[0]["attempt_id"], "scientific_completion_verified": False}
+
+
 def accept(directory):
     os.environ["DR_OS_CLOUD_EXECUTOR"] = "1"
     directory.mkdir(parents=True, exist_ok=True)
@@ -169,6 +290,9 @@ def accept(directory):
             cloud_human_controls.execute(value, "123")
         if research_quality.validate_g4_quality(project):
             raise AssertionError(research_quality.validate_g4_quality(project))
+        reporting_fixture(project, report)
+        if study_routes.reporting_audit(project, "P01")["errors"]:
+            raise AssertionError(study_routes.reporting_audit(project, "P01"))
         # Exact checkpoint/restore must retain proof sources and trusted runtime.
         inventory = cloud_checkpoint.inventory(project)
         if kind == "theory" and not any(r["path"] == "analysis/proof.lean" for r in inventory):
@@ -176,7 +300,9 @@ def accept(directory):
         cases.append({"route": kind, "attempt_ids": [a["attempt_id"] for a in attempts], "evidence_sha256": sha(project / "papers/P01/experiment-evidence.json"),
                       "actual_isolated_execution": True, "human_control_function_exercised_with_synthetic_identity": True,
                       "scientific_completion_verified": False})
-    result = {"schema_version": "1.0", "status": "passed", "cases": cases, "paid_model_calls": 0,
+    supplemental = supplemental_acceptance(directory / "projects/meta-demo")
+    failed_proof = reject_false_proof(directory)
+    result = {"schema_version": "1.0", "status": "passed", "cases": cases, "supplemental": supplemental, "failed_proof": failed_proof, "paid_model_calls": 0,
               "scientific_completion_verified": False, "scope": "Synthetic software acceptance only; no selected real topic or paper is validated."}
     write(directory / "acceptance.json", result)
     return result

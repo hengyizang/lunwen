@@ -27,6 +27,7 @@ WORKFLOWS = {".github/workflows/cloud-research.yml", ".github/workflows/research
 VALIDATION = ".github/workflows/cloud-repair-validation.yml"
 ALLOWED = {"scripts/cloud_runtime.py": "prepare", "scripts/manuscript_docx.py": "_python_docx"}
 REQUIRED = {"Cloud executor and checkpoint", "Fresh runner restore and scientific exports",
+    "Meta analysis and formal theory on cloud CPU",
     "Cloud human review controls", "Experiment design and statistical evidence",
     "Gateway startup and five-role cycle", "Automatic recovery safety and fault injection",
     "Deterministic checks (Python 3.10)", "Deterministic checks (Python 3.12)",

@@ -135,16 +135,21 @@ completion of the new human G5 cycle and a newly supplied submission receipt.
 
 ## Supplemental experiment boundary
 
-`needs_new_experiments: true` deliberately blocks completion. The writer can
+`needs_new_experiments: true` blocks completion until the new
+[supplemental execution route](SCIENTIFIC-STUDY-ROUTES.md) passes. The writer can
 prepare `reviews/reviewer-required-experiment-plan.json` describing requested
 analyses, datasets, code changes, cost, scientific purpose, exploratory versus
 confirmatory status, and required approvals. This proposal grants no execution or
 spending permission.
 
 The existing experiment engine forbids re-freezing an already executed G3
-preregistration. This adapter therefore does not move a completed study back to
-G3 or reuse an old approval for new runs. A separately designed and human-approved
-supplemental protocol, budget and executor route are still required before new
-experiments can be run. Requests for fresh empirical results cannot be satisfied
-by writing plausible results or by marking a template complete. Textual revisions
-can proceed while this explicit blocker remains visible.
+preregistration. Create a separate experiments/supplemental/Pxx/Rxxx/s001 child
+study, keeping the original plan and approval unchanged. The authenticated owner
+reviews and uses approve_supplemental for a distinct G3 protocol/budget; bounded
+continuation then executes actual child runs through the same experiment runner.
+confirm_supplemental binds human review to the actual G4 evidence. Current parent
+manuscript locations must cover every requested experiment and result before G5.
+Failed attempts pause, remain registered and can only be retired through a separate
+owner decision with failure disclosure; a new scope needs fresh approval. Textual
+revisions can proceed while an unapproved proposal remains visible. No generated
+result or template can fulfill a real experiment request.
