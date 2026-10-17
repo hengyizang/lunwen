@@ -14,6 +14,12 @@ Do not ask multiple agents to produce one blended answer without preserving thei
 
 ## Stage loop
 
+The native [scientific reasoning contract](../docs/SCIENTIFIC-REASONING.md)
+is included in the existing stage/role method prompts. Source-bound question
+value and discriminating decisions are checked at G1; empirical G3/G4 connects
+critical tests to every actual comparison. Existing G5 reviews challenge the
+supported contribution and conclusion scope. No extra paid role is introduced.
+
 Use the [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md) for actual
 Meta/formal-theory identities and separate reviewer-requested experiments.
 These routes keep the shared evidence, budget, writer/critic and human gates.

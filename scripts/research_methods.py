@@ -10,6 +10,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts import scientific_reasoning
+except ImportError:
+    import scientific_reasoning
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -66,6 +71,7 @@ def installation_errors(root: Path = ROOT) -> list[str]:
                 errors.append(f"unknown adapted-method source: {module['id']}")
         if not catalog.get("modules") or catalog.get("schema_version") != "1.0":
             errors.append("research-method catalog is empty or unsupported")
+        scientific_reasoning.load_policy(root)
     except (OSError, ValueError, KeyError, TypeError) as exc:
         errors.append(f"invalid research-method installation: {exc}")
     return errors
@@ -81,6 +87,9 @@ def stage_context(stage: str, role: str, root: Path = ROOT) -> str:
         if stage in module["stages"]:
             text = safe_path(root, module["path"]).read_text(encoding="utf-8")
             blocks.append(f"Reviewed method {module['id']} (SHA-256 {module['sha256']}):\n{text}")
+    scientific_contract = scientific_reasoning.stage_prompt(stage, role, root)
+    if scientific_contract:
+        blocks.append(scientific_contract)
     if not blocks:
         return "(no additional methods for this stage)"
     if stage == "writing-and-review":

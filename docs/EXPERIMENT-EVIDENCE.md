@@ -4,6 +4,11 @@ These tools aim to make demanding doctoral and Q1 research auditable. They do no
 
 ## Design before execution
 
+The [scientific reasoning contract](SCIENTIFIC-REASONING.md) adds mandatory
+critical_tests to empirical evidence plans and binds the current G1 register
+when present. Every claim/comparison stays covered; G4 exposes all numeric
+decisions with unresolved alternatives and no automatic mechanism claim.
+
 Keep the existing paper contract and experiment designs. Add one `papers/Pxx/experiment-evidence-plan.json` using [its schema](../schemas/experiment-evidence-plan.schema.json). This plan sits outside `experiments/*.json`, which contains scientific design documents.
 
 For each core claim, explain the proposed mechanism, alternative explanations, an outcome that would refute it and its population boundary. Register all domain-standard, strong recent and simple baselines with fair data access, tuning and compute budgets. Bind every baseline, ablation, negative control and robustness item to real run IDs and declared output files for every design seed. Each claim must include all baselines for the design supporting it. Runs cannot be relabeled as different comparator conditions or datasets.

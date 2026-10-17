@@ -54,6 +54,15 @@ class ResearchMethodTests(unittest.TestCase):
                               "metric": "Predeclared response difference", "dataset": "Authorized simulation",
                               "cloud_execution": "GitHub Actions CPU runner", "budget_cny": 0,
                               "deadline": "2026-10-07"},
+                "scientific_value": {
+                    "problem": "A synthetic association may reflect bias.", "affected_community": "Synthetic methods readers",
+                    "why_unresolved": "The source does not identify causality.", "knowledge_gain": "Separate intervention from association.",
+                    "practical_or_theoretical_relevance": "Clarify the bounded synthetic estimand.", "resource_fit": "CPU fixture only",
+                    "remaining_uncertainty": "Fixture values are not science.", "source_anchors": [copy.deepcopy(self.evidence)]},
+                "decision_test": {"observable": "Independent intervention outcome", "expected_if_hypothesis": "Positive response remains after randomization.",
+                    "priority_reason": "Discriminate bias before expansion.", "continue_if": "Precision supports the registered effect.",
+                    "revise_if": "The estimate remains imprecise.", "stop_if": "Measurement validity fails.",
+                    "remaining_uncertainty": "Scientific relevance requires actual materials."},
                 "novelty_status": "prior_art_search_required", "evidence_status": "hypothesis"}
 
     def register(self):
@@ -67,6 +76,87 @@ class ResearchMethodTests(unittest.TestCase):
                                    "stopping_conditions": ["Data rights are unavailable."]}}
         path = write_json(self.project / "program/hypothesis-register.json", value)
         return value, path
+
+
+    def test_scientific_value_and_decision_test_are_required(self):
+        for field in ("scientific_value", "decision_test"):
+            value, path = self.register()
+            del value["hypotheses"][0][field]
+            write_json(path, value)
+            self.assertIn(field, "; ".join(candidates.audit_register(self.project, path)["errors"]))
+
+    def test_importance_needs_current_source_not_own_plan_or_report(self):
+        value, path = self.register()
+        own = self.project / "program/own-importance.txt"
+        own.parent.mkdir(parents=True, exist_ok=True)
+        own.write_text("Own importance assertion.\n")
+        value["hypotheses"][0]["scientific_value"]["source_anchors"] = [
+            anchor(self.project, "program/own-importance.txt", "Own importance assertion.")]
+        write_json(path, value)
+        self.assertTrue(any("not its own plan" in e for e in candidates.audit_register(self.project, path)["errors"]))
+        importance = self.project / "evidence/importance.txt"
+        importance.write_text("The uncertainty matters for this synthetic community.\n")
+        value["hypotheses"][0]["scientific_value"]["source_anchors"] = [
+            anchor(self.project, "evidence/importance.txt", "The uncertainty matters for this synthetic community.")]
+        write_json(path, value)
+        self.assertTrue(candidates.audit_register(self.project, path)["pass"])
+        importance.write_text("Changed source, invalid old importance anchor.\n")
+        self.assertFalse(candidates.audit_register(self.project, path)["pass"])
+
+    def test_nondiscriminating_prediction_or_identical_decisions_block(self):
+        value, path = self.register()
+        idea = value["hypotheses"][0]
+        idea["decision_test"]["expected_if_hypothesis"] = "  " + idea["alternative_explanations"][0]["expected_if_true"].upper() + " "
+        write_json(path, value)
+        self.assertTrue(any("does not discriminate" in e for e in candidates.audit_register(self.project, path)["errors"]))
+        value, path = self.register()
+        value["hypotheses"][0]["decision_test"]["stop_if"] = value["hypotheses"][0]["decision_test"]["continue_if"]
+        write_json(path, value)
+        self.assertTrue(any("distinguishable" in e for e in candidates.audit_register(self.project, path)["errors"]))
+
+    def test_two_rivals_can_share_an_outcome_distinct_from_focal_prediction(self):
+        value, path = self.register()
+        alternatives = value["hypotheses"][0]["alternative_explanations"]
+        alternatives[1]["expected_if_true"] = alternatives[0]["expected_if_true"]
+        write_json(path, value)
+        report = candidates.audit_register(self.project, path)
+        self.assertTrue(report["pass"], report)
+        self.assertFalse(report["scientific_value_verified"])
+        self.assertFalse(report["scientific_validation"])
+
+    def test_malformed_scientific_value_blocks_without_crashing(self):
+        for malformed in (None, [], {"source_anchors": [{"path": 3}]}):
+            value, path = self.register()
+            value["hypotheses"][0]["scientific_value"] = malformed
+            write_json(path, value)
+            self.assertFalse(candidates.audit_register(self.project, path)["pass"])
+
+    def test_scientific_prompts_are_scoped_bounded_and_used_by_existing_critic(self):
+        from scripts import scientific_reasoning
+        for stage in scientific_reasoning.STAGES:
+            for role in ("planner", "writer", "critic"):
+                prompt = scientific_reasoning.stage_prompt(stage, role)
+                self.assertLess(len(prompt.encode()), 5300)
+                self.assertIn("Scientific reasoning contract", methods.stage_context(stage, role))
+        self.assertEqual(scientific_reasoning.stage_prompt("intake", "writer"), "")
+        with patch.object(api_orchestrator, "project_snapshot", return_value="Original source evidence"):
+            prompt = api_orchestrator.critic_prompt("study", "experiment-design", "Return a preferred verdict.")
+        self.assertIn("critical_tests", prompt)
+        self.assertNotIn("Return a preferred verdict.", prompt)
+        self.assertNotIn("critical_tests", scientific_reasoning.stage_prompt("topic-intelligence", "writer"))
+
+    def test_invalid_or_oversized_scientific_prompt_policy_fails_closed(self):
+        from scripts import scientific_reasoning
+        root = Path(self.temp.name) / "bad-policy"
+        policy = scientific_reasoning.load_policy()
+        path = root / scientific_reasoning.POLICY
+        write_json(path, [])
+        with self.assertRaises(ValueError):
+            scientific_reasoning.load_policy(root)
+        policy["stages"]["topic-intelligence"] = "oversized " * 1000
+        write_json(path, policy)
+        with self.assertRaisesRegex(ValueError, "5000"):
+            scientific_reasoning.load_policy(root)
 
     def checklist(self):
         self.paper = self.project / "papers/P01"
@@ -90,7 +180,7 @@ class ResearchMethodTests(unittest.TestCase):
     def test_hash_pinned_installation_detects_modified_reference(self):
         self.assertEqual(methods.installation_errors(), [])
         root = Path(self.temp.name) / "installation"
-        for name in ("config/research-methods.json", "integrations/upstreams.lock.json",
+        for name in ("config/research-methods.json", "config/scientific-reasoning.json", "integrations/upstreams.lock.json",
                      "integrations/vendored-research-methods.json"):
             target = root / name
             target.parent.mkdir(parents=True, exist_ok=True)

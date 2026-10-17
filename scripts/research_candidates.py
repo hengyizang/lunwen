@@ -134,6 +134,11 @@ def validate_idea(project: Path, idea: Any, prefix: str) -> list[str]:
         errors.append(prefix + ".novelty_status must remain prior_art_search_required")
     if idea.get("evidence_status") != "hypothesis":
         errors.append(prefix + ".evidence_status must be hypothesis, never an observed result")
+    try:
+        from scripts.scientific_reasoning import validate_hypothesis_value
+    except ImportError:
+        from scientific_reasoning import validate_hypothesis_value
+    errors.extend(prefix + ": " + error for error in validate_hypothesis_value(project, idea))
     return errors
 
 
@@ -172,6 +177,9 @@ def audit_register(project: Path, spec: Path) -> dict[str, Any]:
                 {item.strip() for item in forbidden if isinstance(item, str)}):
             errors.append("an argument claim is simultaneously allowed and forbidden")
     return {"schema_version": "1.0", "spec_sha256": sha256(spec), "hypothesis_count": len(hypotheses),
+            "implementation_sha256": sha256(Path(__file__)),
+            "reasoning_implementation_sha256": sha256(Path(__file__).with_name("scientific_reasoning.py")),
+            "scientific_value_verified": False,
             "errors": errors, "pass": not errors, "scientific_validation": False,
             "novelty_granted": False, "human_review_required": True}
 
