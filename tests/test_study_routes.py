@@ -255,6 +255,21 @@ class SupplementalGuardTests(unittest.TestCase):
         (self.child / "experiments/registry.jsonl").write_text(json.dumps({"status": "failed"}) + "\n", encoding="utf-8")
         self.assertNotEqual(after_mapping, reviewer_rounds.review_binding(self.parent, "P01"))
 
+    def test_g5_binding_does_not_require_reacquiring_raw_inputs(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        raw = self.child / "data/raw/synthetic.txt"; raw.parent.mkdir(parents=True, exist_ok=True)
+        raw.write_text("Synthetic rehydratable input, never real participant data.", encoding="utf-8")
+        frozen_path = self.child / "papers/P01/preregistration.json"; frozen = read(frozen_path)
+        # Exercise the inventory contract with a registered raw-input entry.
+        # G3 authority itself is separately verified by checked_child/G4.
+        frozen["files"].append({"path": "data/raw/synthetic.txt", "sha256": sha(raw)})
+        write(frozen_path, frozen)
+        before = reviewer_rounds.review_binding(self.parent, "P01")
+        raw.unlink()
+        self.assertEqual(before, reviewer_rounds.review_binding(self.parent, "P01"))
+        frozen["files"][-1]["sha256"] = "0" * 64; write(frozen_path, frozen)
+        self.assertNotEqual(before, reviewer_rounds.review_binding(self.parent, "P01"))
+
 
 if __name__ == "__main__":
     unittest.main()

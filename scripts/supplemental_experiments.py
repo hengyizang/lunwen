@@ -238,6 +238,7 @@ def review_binding(project, paper_id, round_ids):
     or packaging. Changes to child approvals, attempts, results or manuscript
     mappings invalidate the old reviewer audit and final human approval.
     """
+    from scripts.cloud_checkpoint import excluded
     scopes = []
     for round_id in round_ids:
         for control_path, control in controls(project, paper_id, round_id):
@@ -251,8 +252,17 @@ def review_binding(project, paper_id, round_ids):
                 if sealed:
                     relative_paths.update(sealed.get("files", {}))
             frozen = child / "papers" / paper_id / "preregistration.json"
+            rehydratable = {}
             if frozen.is_file():
-                relative_paths.update(item["path"] for item in read(frozen).get("files", []))
+                for item in read(frozen).get("files", []):
+                    if excluded(f"{control['scope_root']}/{item['path']}"):
+                        # Raw/private inputs are deliberately absent from cloud
+                        # checkpoints. Bind their approved digests, not transient
+                        # download presence; checked_child/G4 verifies bytes before
+                        # scientific use. Never re-download data just to hash G5.
+                        rehydratable[item["path"]] = item["sha256"]
+                    else:
+                        relative_paths.add(item["path"])
             files = {}
             for relative in sorted(relative_paths):
                 target = path_in(child, relative, exists=False)
@@ -262,7 +272,8 @@ def review_binding(project, paper_id, round_ids):
                 target = path_in(project, item["target"], exists=False)
                 exports[item["target"]] = sha(target) if target.is_file() else None
             scopes.append({"path": control_path.relative_to(project).as_posix(), "sha256": sha(control_path),
-                           "scope_root": control["scope_root"], "files": files, "parent_exports": exports})
+                           "scope_root": control["scope_root"], "files": files, "rehydratable_inputs": rehydratable,
+                           "parent_exports": exports})
     return {"scopes": scopes, "implementation_sha256": sha(Path(__file__))} if scopes else None
 
 

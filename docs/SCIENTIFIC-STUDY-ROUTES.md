@@ -159,6 +159,9 @@ Use separate authenticated owner dossiers/decisions:
    are hashed into the reviewer audit and parent G5 approval; any change requires
    a fresh review. Read-only validation remains available during final approval
    and submission packaging, without authorizing another experiment.
+   Raw/private inputs retain their approved hashes across checkpoint restores;
+   final package hashing does not download them or require their continued presence.
+   Their actual bytes are checked before scientific use under the existing controls.
 
 Do not re-freeze the original study after execution. A changed proposal needs a
 new supplemental scope and new approval. Failed attempts are never retried or
