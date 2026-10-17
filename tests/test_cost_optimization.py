@@ -293,6 +293,62 @@ class MetadataCacheTests(unittest.TestCase):
             self.assertEqual(rows[0]["storage"], "artifact")
 
 
+class HealthBudgetBoundaryTests(unittest.TestCase):
+    def test_live_probe_without_project_or_authority_cannot_reach_transport(self):
+        from scripts import model_health
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True), \
+                patch.object(model_runtime.ai_providers, "configuration", side_effect=configuration), \
+                patch.object(model_runtime.ai_providers, "call") as transport:
+            with self.assertRaises(ValueError):
+                api.health_report(["uuapi-openai"], live=True)
+            with self.assertRaises(RuntimeError):
+                api.health_report(["uuapi-openai"], live=True, root=Path(directory))
+            report = model_health.probe(Path(directory), "uuapi-openai", "gpt-test", execute=True)
+            self.assertFalse(report["paid_call"])
+            self.assertEqual(report["status"], "failed")
+            self.assertNotIn("DR_OS_REQUIRE_MODEL_AUTH", os.environ)
+            transport.assert_not_called()
+
+    def test_zero_budget_probe_and_free_configuration_check_remain_unbilled(self):
+        from scripts import model_spend
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {
+                "DR_OS_MODEL_PRICING_JSON": json.dumps({"gpt-test": {"input_per_million": 2, "output_per_million": 10}})}, clear=True), \
+                patch.object(model_runtime.ai_providers, "configuration", side_effect=configuration), \
+                patch.object(model_runtime.ai_providers, "call") as transport:
+            root = Path(directory)
+            model_spend.write(root, model_spend.initial())
+            report, failed = api.health_report(["uuapi-openai"], live=True, root=root)
+            self.assertTrue(failed)
+            self.assertEqual(report["providers"][0]["live_probe"]["status"], "fail")
+            dry, failed = api.health_report(["uuapi-openai"], live=False)
+            self.assertFalse(failed)
+            self.assertFalse(dry["live_probe_is_billable"])
+            self.assertFalse(model_runtime.ledger_entries(root))
+            transport.assert_not_called()
+
+    def test_authorized_live_probe_is_fresh_and_settles_the_shared_ledger(self):
+        from scripts import model_spend
+        def ok_response(*args, **kwargs):
+            result = response(*args, **kwargs)
+            result.text = "OK"
+            return result
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {
+                "DR_OS_MODEL_PRICING_JSON": json.dumps({"gpt-test": {"input_per_million": 2, "output_per_million": 10}})}, clear=True), \
+                patch.object(model_runtime.ai_providers, "configuration", side_effect=configuration), \
+                patch.object(model_runtime.ai_providers, "call", side_effect=ok_response) as transport:
+            root = Path(directory)
+            model_spend.write(root, model_spend.initial())
+            model_spend.grant(root, new_ceiling_cny=300, actor="Fixture owner", run_id="fixture")
+            report, failed = api.health_report(["uuapi-openai"], live=True, root=root)
+            self.assertFalse(failed)
+            self.assertEqual(report["providers"][0]["live_probe"]["status"], "pass")
+            self.assertEqual(transport.call_count, 1)
+            control = model_spend.read(root)
+            self.assertGreater(control["spent_cny"], 0)
+            self.assertFalse(control["reservations"])
+            self.assertEqual(model_runtime.ledger_entries(root)[0]["role"], "endpoint-health")
+
+
 class RetrievalAndSearchReuseTests(unittest.TestCase):
     def test_lexical_retrieval_keeps_source_hashes_and_never_excludes_evidence(self):
         from scripts import evidence_retrieval

@@ -19,6 +19,7 @@ are not evidence of doctoral quality, scientific equivalence or journal acceptan
 | Citation checks | Repeated checks could fetch the same public metadata again. | The controlled `citation_audit` operation can reuse 24h hash-bound metadata; every bibliography/manuscript decision is recomputed. Changed titles, expired/corrupt/future cache records and explicit refresh cannot reuse a PASS. |
 | Native PDF readers | Existence of an output alone could suppress a newly required extraction. | Reuse only an exact native-reader source, implementation, selected page scope, reader and source-map hash. Preserve stale readers and request a new output path. Never silently overwrite old source-bound evidence. |
 | Model routes | A missing later route/quote could be discovered after paying the planner. | Preflight every distinct configured route and quote before the first paid role. This does not guarantee all future prompts will fit the remaining budget; per-request reservations remain mandatory. |
+| Live health probes | The legacy API health `--live` path bypassed project accounting. | Require an existing project, spending authority and exact rates. Both health entry points now use the shared runtime, fresh responses and ledger; default configuration checks remain free. A blocked request is not labeled as paid. |
 | Response caching | A request key did not explicitly separate stage/role; auxiliary review or health calls could replay an old response. | Cache version 4 binds stage, role, model, transport, strict identity, API version and billing identity. Validate response text hashes. Reviews and health always require fresh calls. |
 | Cost observability | Ambiguous transport failures had reservations but little request-level diagnostic detail. | Record request hashes/bytes, output ceilings, cache policy and uncertain failures. Duplicate paid requests are inspection candidates, not proof of waste. Unknown charges are never certified free. |
 
@@ -107,6 +108,11 @@ chapters need not be regenerated: the remediator can return reasoned disposition
 without a gratuitous edit. The final critic and all G0-G5 human gates still run.
 Model family separation, approval, frozen experiments and manual submission are
 unchanged. No independent review is fulfilled by a response-cache hit.
+
+The zero-call `health` command is unchanged. For a deliberately billable check,
+use `health --live --project PROJECT --provider PROVIDER` only within an existing
+approved ceiling and explicit model quote. `model_health --execute` has the same
+authority requirements. Neither starts an automatic health polling loop.
 
 ## Inspect costs without starting another model job
 

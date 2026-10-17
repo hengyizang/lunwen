@@ -2025,10 +2025,40 @@ def run_cycle(
     return manifest
 
 
+def health_report(selected: list[str], *, live: bool = False, root: Path | None = None) -> tuple[dict, bool]:
+    statuses = [ai_providers.configuration(provider) for provider in selected]
+    failed = False
+    if live:
+        if root is None:
+            raise ValueError("live health probes require --project and its approved spending authority")
+        with model_runtime.authorized_calls(root):
+            for provider, status in zip(selected, statuses):
+                if status["configured"]:
+                    model_runtime.preflight_route(provider)
+            for provider, status in zip(selected, statuses):
+                if not status["configured"]:
+                    status["live_probe"] = {"status": "not_run", "error": "provider is not fully configured"}
+                    failed = True
+                    continue
+                try:
+                    probe = model_runtime.call(root, run_id="health-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"),
+                        stage="health", role="endpoint-health", provider=provider,
+                        prompt="Reply with exactly: OK", max_output_tokens=32, timeout=60)
+                    if probe.text.strip() != "OK":
+                        raise ai_providers.ProviderError("health reply was not exactly OK")
+                    status["live_probe"] = {"status": "pass", **result_audit(probe)}
+                except (RuntimeError, ValueError, OSError) as exc:
+                    status["live_probe"] = {"status": "fail", "error": redact(str(exc))}
+                    failed = True
+    return {"providers": statuses, "tavily_configured": bool(os.environ.get("TAVILY_API_KEY")),
+            "live_probe_is_billable": live, "scientific_quality_test": False}, failed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="API-first Doctoral Research OS")
     sub = parser.add_subparsers(dest="command", required=True)
     health = sub.add_parser("health")
+    health.add_argument("--project", help="Required for live probes: use the existing project budget and exact rates")
     health.add_argument(
         "--provider", choices=ai_providers.PROVIDERS, action="append"
     )
@@ -2092,46 +2122,15 @@ def main() -> int:
             "--critic-provider <Claude>"
         )
     if args.command == "health":
-        selected = args.provider or list(ai_providers.PROVIDERS)
-        providers: list[dict[str, Any]] = []
-        failed = False
-        for provider in selected:
-            status = ai_providers.configuration(provider)
-            if args.live and status["configured"]:
-                try:
-                    probe = ai_providers.call(
-                        provider,
-                        "Reply with exactly: OK",
-                        max_output_tokens=32,
-                        timeout=60,
-                    )
-                    status["live_probe"] = {
-                        "status": "pass",
-                        **result_audit(probe),
-                    }
-                except ai_providers.ProviderError as exc:
-                    status["live_probe"] = {
-                        "status": "fail",
-                        "error": str(exc),
-                    }
-                    failed = True
-            elif args.live:
-                status["live_probe"] = {
-                    "status": "not_run",
-                    "error": "provider is not fully configured",
-                }
-                failed = True
-            providers.append(status)
-        print(
-            json.dumps(
-                {
-                    "providers": providers,
-                    "tavily_configured": bool(os.environ.get("TAVILY_API_KEY")),
-                    "live_probe_is_billable": args.live,
-                },
-                indent=2,
-            )
-        )
+        if args.live and not args.project:
+            parser.error("--live requires --project and its existing spending authority")
+        try:
+            report, failed = health_report(args.provider or list(ai_providers.PROVIDERS), live=args.live,
+                                           root=project_root(args.project) if args.project else None)
+        except (RuntimeError, ValueError, OSError) as exc:
+            print(json.dumps({"error": redact(str(exc)), "paid_call_started": False}, indent=2))
+            return 2
+        print(json.dumps(report, indent=2))
         return 2 if failed else 0
     if args.command == "balance":
         print(json.dumps(ai_providers.uuapi_usage(), ensure_ascii=False, indent=2))

@@ -12,6 +12,7 @@ import json
 import math
 import os
 import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -360,17 +361,33 @@ def fresh_call_required(role: str) -> bool:
     return role.startswith("independent-critic") or role in {"independent-critique", "endpoint-health"}
 
 
-def preflight_route(provider: str) -> dict[str, Any]:
+def preflight_route(provider: str, model: str | None = None) -> dict[str, Any]:
     """Check the whole cycle's known routes before spending on its first role."""
     configuration = ai_providers.configuration(provider)
     if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1" and not configuration.get("configured"):
         raise ModelBudgetError(f"model route is not configured: {provider}")
-    quote = pricing(provider, str(configuration.get("model") or "") or None)
+    effective_model = model or str(configuration.get("model") or "") or None
+    quote = pricing(provider, effective_model)
     try:
         billing_quotes.tool_limits(quote, _billing_configuration("DR_OS_MODEL_TOOL_LIMITS_JSON", provider, None))
     except billing_quotes.BillingQuoteError as exc:
         raise ModelBudgetError(str(exc)) from exc
-    return {"provider": provider, "model": configuration.get("model"), "quote_sha256": quote.get("quote_sha256")}
+    return {"provider": provider, "model": effective_model, "quote_sha256": quote.get("quote_sha256")}
+
+
+@contextmanager
+def authorized_calls(project_root: Path):
+    """A paid CLI probe must use project authority even outside a cloud job."""
+    previous = os.environ.get("DR_OS_REQUIRE_MODEL_AUTH")
+    os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+    try:
+        model_spend.read(project_root, required=True)
+        yield
+    finally:
+        if previous is None:
+            os.environ.pop("DR_OS_REQUIRE_MODEL_AUTH", None)
+        else:
+            os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = previous
 
 
 def _write_cache(path: Path, value: dict[str, Any]) -> None:
