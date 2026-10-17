@@ -283,9 +283,14 @@ def audit(project: Path, paper_id: str):
     paper = project / "papers" / paper_id
     required = {item["comment_id"] for item in intake["comments"]}
     errors, bindings, checks = [], [], []
+    supplemental_binding = None
     if intake["needs_new_experiments"]:
-        from scripts.supplemental_experiments import revision_errors
+        from scripts.supplemental_experiments import revision_errors, review_binding as supplemental_review_binding
         errors.extend(revision_errors(project, paper_id))
+        try:
+            supplemental_binding = supplemental_review_binding(project, paper_id, [manifest["round_id"]])
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            errors.append("supplemental approval/evidence binding: " + str(exc))
     originals_path = f"papers/{paper_id}/reviews/original-comments.json"
     expected = {"schema_version": "1.0", "review_type": "external", "round_id": manifest["round_id"],
                 "journal": intake["journal"], "manuscript_id": intake["manuscript_id"], "comments": intake["comments"]}
@@ -352,6 +357,7 @@ def audit(project: Path, paper_id: str):
     return {"schema_version": "1.0", "paper_id": paper_id, "round_id": manifest["round_id"],
             "status": "pass" if not errors else "revise", "errors": errors, "rounds": index["rounds"],
             "needs_new_experiments": intake["needs_new_experiments"], "checks": checks, "manuscript": manuscript,
+            "supplemental_binding": supplemental_binding,
             "bindings": sorted(bindings, key=lambda row: (row["path"], row["sha256"])),
             "implementation_sha256": sha(Path(__file__)), **LIMITS}
 
@@ -422,8 +428,11 @@ def validate_saved_report(project: Path, paper_id: str):
 def review_binding(project: Path, paper_id: str):
     target = path_in(project, f"{PREFIX}/{paper_id}/latest.json", exists=False)
     index = path_in(project, f"state/reviewer-rounds/{paper_id}.json", exists=False)
+    from scripts.supplemental_experiments import review_binding as supplemental_review_binding
+    supplemental = supplemental_review_binding(project, paper_id, [r["round_id"] for r in _index(project, paper_id)["rounds"]]) if index.is_file() else None
     return {"report_sha256": sha(target) if target.is_file() else None,
             "index_sha256": sha(index) if index.is_file() else None,
+            "supplemental": supplemental,
             "implementation_sha256": sha(Path(__file__))} if target.is_file() or index.is_file() else None
 
 

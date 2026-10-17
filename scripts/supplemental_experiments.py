@@ -231,6 +231,41 @@ def controls(project, paper_id, round_id):
     return values
 
 
+def review_binding(project, paper_id, round_ids):
+    """Bind current supplemental authority and evidence into the parent G5 hash.
+
+    This read-only inventory remains stable when the parent moves to approval
+    or packaging. Changes to child approvals, attempts, results or manuscript
+    mappings invalidate the old reviewer audit and final human approval.
+    """
+    scopes = []
+    for round_id in round_ids:
+        for control_path, control in controls(project, paper_id, round_id):
+            child = path_in(project, control["scope_root"])
+            relative_paths = {"state/run.json", "experiments/plan.json", "experiments/budget.json",
+                              "experiments/registry.jsonl", f"papers/{paper_id}/preregistration.json",
+                              f"papers/{paper_id}/experiment-evidence.json",
+                              f"papers/{paper_id}/statistical-reporting-map.json",
+                              f"papers/{paper_id}/failed-study-reporting.json"}
+            for sealed in (control.get("confirmation"), control.get("retirement")):
+                if sealed:
+                    relative_paths.update(sealed.get("files", {}))
+            frozen = child / "papers" / paper_id / "preregistration.json"
+            if frozen.is_file():
+                relative_paths.update(item["path"] for item in read(frozen).get("files", []))
+            files = {}
+            for relative in sorted(relative_paths):
+                target = path_in(child, relative, exists=False)
+                files[relative] = sha(target) if target.is_file() else None
+            exports = {}
+            for item in control.get("parent_exports", []):
+                target = path_in(project, item["target"], exists=False)
+                exports[item["target"]] = sha(target) if target.is_file() else None
+            scopes.append({"path": control_path.relative_to(project).as_posix(), "sha256": sha(control_path),
+                           "scope_root": control["scope_root"], "files": files, "parent_exports": exports})
+    return {"scopes": scopes, "implementation_sha256": sha(Path(__file__))} if scopes else None
+
+
 def checked_child(project, control):
     child = path_in(project, control["scope_root"], exists=False)
     need(child.is_dir(), "approved supplemental study is missing")
@@ -353,7 +388,10 @@ def prepare_retirement(project, paper_id):
     child = checked_child(project, control)
     registry = quality._registry(child)
     need(any(r.get("status") in {"failed", "timed_out"} for r in registry), "retirement requires an actual failed executor attempt")
+    runs = {run["run_id"]: run for run in read(child / "experiments/plan.json")["runs"]}
     for row in registry:
+        need(row.get("run_id") in runs and row.get("paper_id") == paper_id
+             and row.get("approved_plan_sha256") == sha(child / "experiments/plan.json"), "failed attempt must belong to this approved scope and paper")
         need(read(child / "experiments/runs" / row["attempt_id"] / "run.json") == row, "failed registry needs its exact executor receipt")
     files = {p.relative_to(child).as_posix(): sha(p) for p in (child / "experiments").rglob("*") if p.is_file()}
     return child, control_path, control, files

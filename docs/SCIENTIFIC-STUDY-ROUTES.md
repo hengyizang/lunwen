@@ -116,6 +116,8 @@ Full result JSONs, including sensitivities, are copied deterministically into
 supplement/study-results and verified again at G5. Statistical-reporting-map.json
 maps every outcome/proof to actual canonical manuscript locations; Meta values
 must match estimates, counts, intervals, heterogeneity and adjusted tests.
+Meta map items also carry the actual analysis_phase and decision; exploratory
+follow-ups must be explicitly identified in the manuscript.
 
 All source excerpts must have checkpoint/distribution rights. Keep copyrighted
 full texts, private/raw datasets and credentials outside tracked project outputs.
@@ -140,7 +142,7 @@ deterministic G3 builders. It grants no execution authority.
 Use separate authenticated owner dossiers/decisions:
 
 1. `approve_supplemental`, paper_id: review the entire current child design,
-   actual data quality, budget and parent linkage. This atomically creates the
+   actual data quality, budget and parent linkage. This creates the
    child confirmations/preregistration and its separate G3 approval.
 2. Healthy G5 continuation executes at most one approved child run per job.
    Aggregate parent and supplemental costs share the G0 compute ceiling.
@@ -153,6 +155,10 @@ Use separate authenticated owner dossiers/decisions:
    audit blocks missing requests, missing approval/confirmation, changed results
    and missing or incorrect reporting. Existing response coverage, independent
    audits and fresh human G5 approval still apply.
+   Supplemental approvals, inputs, attempts, results, exports and reporting maps
+   are hashed into the reviewer audit and parent G5 approval; any change requires
+   a fresh review. Read-only validation remains available during final approval
+   and submission packaging, without authorizing another experiment.
 
 Do not re-freeze the original study after execution. A changed proposal needs a
 new supplemental scope and new approval. Failed attempts are never retried or
@@ -163,9 +169,9 @@ remain incomplete until a separate approved scope supplies the required evidence
 
 ## Reviewed sources and software acceptance
 
-The pre-existing reviewed scientific-skills/statistical-analysis workflow and
-statsmodels integration supplied the evidence-first, assumption-checking and
-uncertainty approach. We reuse the installed statistics library rather than
+The project's existing scientific-skills integration and statsmodels acceptance
+informed the evidence-first, assumption-checking and uncertainty approach.
+We reuse the installed statistics library rather than
 install another agent framework or change model roles. SymPy was considered
 for algebraic checks; Lean kernel checking is the accepted proof route here.
 

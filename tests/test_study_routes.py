@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from scripts import artifact_ownership, cloud_checkpoint, cloud_job, experiment_runner as runner
 from scripts import meta_analysis_runtime as meta, research_quality as quality, study_route_acceptance as fixtures, study_routes
-from scripts import supplemental_experiments as supplemental, researchctl, cloud_human_controls
+from scripts import supplemental_experiments as supplemental, researchctl, cloud_human_controls, reviewer_rounds
 from scripts.research_artifacts import read, sha, write
 
 
@@ -216,6 +216,44 @@ class SupplementalGuardTests(unittest.TestCase):
         supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
         errors = supplemental.revision_errors(self.parent, "P01", require_reporting=False)
         self.assertTrue(any("confirmation" in e for e in errors))
+
+    def test_exploratory_followup_cannot_be_relabelled_confirmatory(self):
+        path = self.child / "papers/P01/study-protocol.json"; value = read(path)
+        value["outcomes"][0]["analysis_phase"] = "confirmatory"; write(path, value)
+        with self.assertRaisesRegex(ValueError, "exploratory/prospective phase"):
+            supplemental.prepare_approval(self.parent, "P01", "Synthetic reviewer")
+
+    def test_readonly_review_survives_final_approval_and_packaging(self):
+        path = self.parent / "state/run.json"; state = read(path)
+        for status in ("awaiting_approval", "approved"):
+            with self.subTest(status=status):
+                state["status"] = status; write(path, state)
+                self.assertEqual(supplemental.current(self.parent, "P01", execution=False)[0]["round_id"], "R001")
+                with self.assertRaisesRegex(ValueError, "open reviewer"):
+                    supplemental.current(self.parent, "P01")
+        state.update(gate="G5", active_paper="P02", status="awaiting_work")
+        state["paper_statuses"]["P01"] = "submission_ready"; state["approved_gates"].append("G5:P01"); write(path, state)
+        self.assertEqual(supplemental.current(self.parent, "P01", execution=False)[0]["round_id"], "R001")
+        with self.assertRaisesRegex(ValueError, "open reviewer"):
+            supplemental.current(self.parent, "P01")
+
+    def test_g5_binding_changes_when_supplemental_authority_changes(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        before = reviewer_rounds.review_binding(self.parent, "P01")
+        control_path, control = supplemental.controls(self.parent, "P01", "R001")[0]
+        control["cloud_review_sha256"] = "b" * 64; write(control_path, control)
+        after = reviewer_rounds.review_binding(self.parent, "P01")
+        self.assertEqual(before["report_sha256"], after["report_sha256"])
+        self.assertNotEqual(before, after)
+
+    def test_g5_binding_changes_when_child_reporting_or_attempts_change(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        before = reviewer_rounds.review_binding(self.parent, "P01")
+        write(self.child / "papers/P01/statistical-reporting-map.json", {"schema_version": "1.0", "items": []})
+        after_mapping = reviewer_rounds.review_binding(self.parent, "P01")
+        self.assertNotEqual(before, after_mapping)
+        (self.child / "experiments/registry.jsonl").write_text(json.dumps({"status": "failed"}) + "\n", encoding="utf-8")
+        self.assertNotEqual(after_mapping, reviewer_rounds.review_binding(self.parent, "P01"))
 
 
 if __name__ == "__main__":
