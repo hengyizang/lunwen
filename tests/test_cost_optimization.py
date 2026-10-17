@@ -344,6 +344,22 @@ class RetrievalAndSearchReuseTests(unittest.TestCase):
                 self.assertEqual(second["new_search_calls"], 1)
             self.assertEqual(fetcher.call_count, 2)
 
+    def test_requested_search_scope_is_counted_before_the_bounded_preview(self):
+        from scripts import literature_evidence
+        original = literature_evidence.execute_search
+        payload = json.dumps({"message": {"items": [{"DOI": f"10.1234/fixture{i}", "title": [f"Robustness fixture {i}"]} for i in range(50)]}}).encode()
+        def execute(*args, **kwargs):
+            return original(*args, **kwargs, fetcher=lambda url, **kw: (payload, url, 200, "application/json"))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write(root / "program/literature-search-plan.json", {"searches": [{
+                "provider": "crossref", "query": "robustness", "query_family": "direct", "limit": 50}]})
+            with patch.object(literature_evidence, "execute_search", side_effect=execute):
+                result = cloud_research_steps.literature_context(root, "unused")
+            self.assertEqual(result["work_count"], 50)
+            self.assertEqual(len(result["works"]), 50)
+            self.assertEqual(result["works_omitted"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

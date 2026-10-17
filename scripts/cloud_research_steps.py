@@ -116,7 +116,9 @@ def literature_context(project: Path, query: str) -> dict:
         seen_receipts.add(cached["receipt_id"])
         results.append(cached)
         normalized = read(path_in(project, cached["normalized_results_path"]), {"works": []})
-        for work in normalized.get("works", [])[:15]:
+        # Count/deduplicate every retrieved record before bounding the preview;
+        # a larger explicit search must not silently become a 15-record search.
+        for work in normalized.get("works", []):
             key = hashlib.sha256(json.dumps(work, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
             row = unique_works.setdefault(key, {**work, "source_receipt_ids": []})
             if cached["receipt_id"] not in row["source_receipt_ids"]:
