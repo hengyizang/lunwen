@@ -79,6 +79,7 @@ SNAPSHOT_SKIPPED_PARTS = {
 MAX_SNAPSHOT_FILES = 300
 MAX_SNAPSHOT_FILE_BYTES = 100_000
 MAX_SNAPSHOT_TOTAL_BYTES = 600_000
+MAX_SNAPSHOT_SOURCE_BYTES = 4_000_000
 DATA_DISCOVERY_STAGES = {"topic-intelligence", "experiment-design"}
 AUDIT_FIELDS = {
     "verdict",
@@ -281,6 +282,7 @@ def research_quality_artifact_contract(stage: str) -> str:
             "protected_human_confirmation": "papers/Pxx/reproduction-confirmation.json is created only by scripts/research_quality.py after review; do not write it",
         },
         "writing-and-review": {
+            "citation_audit": "Request the deterministic citation_audit cloud operation for the active paper. It rechecks the current bibliography/manuscript using 24h hash-bound public metadata, never a cached PASS. Do not author reviews/citation-audit.json. Manual verifications must come from protected owner state, not invented names.",
             "statistical_reporting": "Write papers/Pxx/statistical-reporting-map.json using docs/RESEARCH-IMPROVEMENTS.md. Cover every experiment-evidence comparison including adverse/exploratory results; bind method, independent unit/n, effect, CI, adjusted p, decision and phase to unique actual Methods/Results text passages. Figure statistics also need caption bindings. Use statistical_reporting cloud operation; never write its deterministic report.",
             "statistical_map_fields": {
                 "comparisons": "[{comparison_id,reporting_notes,has_figure,locations:[{field,path,quote,section,value,decimals,uncertainty}]}]",
@@ -361,6 +363,7 @@ def project_snapshot(
 ) -> str:
     """Return a bounded, text-only project snapshot suitable for model input."""
 
+    from scripts.context_efficiency import lossless_text, operational_path
     root = project_root(project)
     if not root.exists():
         return "(new project)"
@@ -374,11 +377,11 @@ def project_snapshot(
     total = 0
     included = 0
     for path in sorted(root.rglob("*")):
-        if included >= MAX_SNAPSHOT_FILES or total >= MAX_SNAPSHOT_TOTAL_BYTES:
-            break
         if path.is_symlink() or not path.is_file():
             continue
         relative = path.relative_to(root)
+        if operational_path(relative.as_posix()):
+            continue
         lower_parts = tuple(part.lower() for part in relative.parts)
         if any(part.startswith(".") for part in relative.parts):
             continue
@@ -402,36 +405,37 @@ def project_snapshot(
             continue
         if path.suffix.lower() not in SNAPSHOT_SUFFIXES:
             continue
+        if included >= MAX_SNAPSHOT_FILES:
+            raise ValueError("Required project context exceeds the file limit; prepare an explicit program/context-plan.json, never silently omit evidence")
         try:
             with path.open("rb") as handle:
-                payload = handle.read(MAX_SNAPSHOT_FILE_BYTES + 1)
-        except OSError:
-            continue
-        truncated = len(payload) > MAX_SNAPSHOT_FILE_BYTES
-        payload = payload[:MAX_SNAPSHOT_FILE_BYTES]
+                payload = handle.read(MAX_SNAPSHOT_SOURCE_BYTES + 1)
+        except OSError as exc:
+            raise ValueError(f"Required context source is unreadable: {relative}") from exc
+        if len(payload) > MAX_SNAPSHOT_SOURCE_BYTES:
+            raise ValueError(f"Required context source exceeds 4 MB: {relative}; prepare a source-bound context plan")
         try:
             content = payload.decode("utf-8")
-        except UnicodeDecodeError:
-            continue
+        except UnicodeDecodeError as exc:
+            raise ValueError(f"Required context source is not UTF-8: {relative}; prepare a verified text extract") from exc
         content = redact(content)
-        remaining = MAX_SNAPSHOT_TOTAL_BYTES - total
-        encoded = content.encode("utf-8")
-        if len(encoded) > remaining:
-            content = encoded[:remaining].decode("utf-8", errors="ignore")
-            truncated = True
+        content, representation = lossless_text(relative.as_posix(), content)
+        if len(content.encode("utf-8")) > MAX_SNAPSHOT_FILE_BYTES:
+            raise ValueError(f"Required context source exceeds the rendered file limit: {relative}; select explicit source ranges in program/context-plan.json")
         digest = hashlib.sha256(payload).hexdigest()
-        marker = " truncated" if truncated else ""
+        marker = f" representation={representation}" if representation else ""
         block = (
             f"--- FILE {relative.as_posix()} sha256={digest}{marker} ---\n"
             f"{content}\n--- END FILE ---"
         )
+        block_bytes = len(block.encode("utf-8")) + (2 if blocks else 0)
+        if total + block_bytes > MAX_SNAPSHOT_TOTAL_BYTES:
+            raise ValueError("Required project context exceeds the byte limit; prepare an explicit program/context-plan.json, never silently omit evidence")
         blocks.append(block)
-        total += len(content.encode("utf-8"))
+        total += block_bytes
         included += 1
     if not blocks:
         return "(no safe text files)"
-    if included >= MAX_SNAPSHOT_FILES or total >= MAX_SNAPSHOT_TOTAL_BYTES:
-        blocks.append("--- SNAPSHOT LIMIT REACHED; additional files omitted ---")
     return "\n\n".join(blocks)
 
 
@@ -561,6 +565,91 @@ def hygiene_feedback(project: str, stage: str) -> str:
         return "Automatic manuscript hygiene audit is unavailable; do not claim it passed."
 
 
+def stage_writing_instructions(stage: str) -> str:
+    """Keep every applicable instruction, without resending other stages' prose."""
+    common = """Write all manuscript-bound scientific content in English, including titles,
+abstracts, body text, captions, table text, supplements, response letters and
+cover materials."""
+    sections = {
+        "intake": """""",
+        "topic-intelligence": """At G1 require a closest-work originality audit and a doctoral
+case. Rank cloud-feasible directions against the human-confirmed G0 weights
+for funded PhD supply, employment/salary, growth, PhD competition, job
+competition, background and application-route fit. Assess novelty, doctoral
+depth and original contribution as mandatory specific-topic requirements after
+direction screening; never trade them against weighted direction scores.
+
+At G1
+and G3 treat the
+automatic dataset shortlist only as leads: assess topical/task fit, provenance,
+license uncertainty, sample/unit adequacy, labels, missingness, bias, leakage,
+external validity, compute and no-laboratory feasibility, and preserve rejection
+reasons and alternatives.
+
+At G1 also create program/novelty-claim-matrix.json: map every novelty claim to
+at least three closest works, state what is already known, the precise remaining
+difference, mechanism, falsification test, expected result if false, boundary
+conditions and residual risk, and document backward/forward citation chaining
+plus two consecutive saturation rounds.""",
+        "paper-architecture": """At G2 compare
+every paper pair and reject overlapping primary claims. Assign at least three
+of six papers target_jcr_quartile=Q1 and every remainder Q1 or Q2. Keep
+identical doctoral novelty, experimental, statistical, reproducibility, review
+and writing thresholds for all papers; Q2 is only a venue floor. Each paper
+needs at least two current candidates meeting its target with IF >1.0.""",
+        "experiment-design": """At G1
+and G3 treat the
+automatic dataset shortlist only as leads: assess topical/task fit, provenance,
+license uncertainty, sample/unit adequacy, labels, missingness, bias, leakage,
+external validity, compute and no-laboratory feasibility, and preserve rejection
+reasons and alternatives.
+
+At G3 create one or more complete experiment designs for every configured paper;
+assign every planned run exactly once; trace baseline sources, versions and
+licenses; require fair tuning/evaluation, strong/domain-standard/simple
+comparators, ablations, leakage controls, estimands, practical thresholds,
+effect sizes, uncertainty, power or precision, robustness, external validity,
+negative controls, stopping rules and falsification criteria. The approved G3
+plan must already contain domain-standard and strong-recent reproduction runs,
+plus disjoint original and clean-room reproduction run IDs using a digest-pinned,
+network-disabled container and predeclared metric tolerances.
+
+At G3 do not fabricate local quality,
+power or preregistration records: data/quality/*.json, power-analysis.json and
+preregistration.json are created and hash-bound by scripts/research_quality.py.
+Design the inputs they need and preserve blockers.""",
+        "experiment-execution": """For empirical papers at G4 create a baseline-
+reproduction.json and clean-room-reproduction.json for every paper only from
+the exact successful attempt IDs and complete current output sets in the
+registry; match the G3-frozen run roles, baseline IDs/source URLs and numeric
+tolerances, and use exact executor-issued isolation instance IDs. Use the protected facts
+in reports/runtime-evidence-catalog.json rather than inventing run hashes,
+attempt IDs or environment digests. Never mark a comparison as passing merely
+to satisfy the gate.""",
+        "writing-and-review": """At G5 write direct, evidence-led academic prose with varied but appropriate
+sentence and paragraph structure. Remove stock framing, mechanical transitions,
+repeated sentence openings, conversational artifacts, vague attribution and
+unsupported importance or novelty claims. Prefer a concrete result, comparison,
+mechanism or limitation over decorative synonyms. Preserve every number,
+equation, citation, uncertainty boundary and claim-evidence link. Read the
+line-level guidance in scripts/academic_style.py output and revise only where the
+scientific context supports the change; never perform blind synonym replacement.
+Lead the abstract and conclusion with the preregistered primary finding and
+strongest supported contribution; a secondary or null result needs headline
+treatment only when it changes the main claim, validity, safety or scope. Keep
+every registered result locatable in the results or supplement. Never omit,
+soften or demote an experiment because its result is unfavorable or contentious;
+use only predeclared role, relevance and statistical adequacy for placement and
+cross-reference supplement material. State material limitations once, calmly and
+where they qualify interpretation; remove only generic or repeated defenses.
+Use the audit as a writing-quality control. User-requested reduction of
+formulaic AI-style prose is authorized; do not promise detector outcomes,
+claim human-only authorship, conceal assistance or weaken the required
+AI-use disclosure.""",
+    }
+    return common + "\n\n" + sections.get(stage, "")
+
+
 def writer_prompt(
     project: str,
     stage: str,
@@ -628,67 +717,7 @@ labels, alt text and claim IDs. Do not use decorative 3-D effects, fabricate
 numeric values or return model-generated bitmap artwork. Local deterministic
 execution must render final charts from real experiment outputs.
 
-Write all manuscript-bound scientific content in English, including titles,
-abstracts, body text, captions, table text, supplements, response letters and
-cover materials. At G1 require a closest-work originality audit and a doctoral
-case. Rank cloud-feasible directions against the human-confirmed G0 weights
-for funded PhD supply, employment/salary, growth, PhD competition, job
-competition, background and application-route fit. Assess novelty, doctoral
-depth and original contribution as mandatory specific-topic requirements after
-direction screening; never trade them against weighted direction scores. At G2 compare
-every paper pair and reject overlapping primary claims. Assign at least three
-of six papers target_jcr_quartile=Q1 and every remainder Q1 or Q2. Keep
-identical doctoral novelty, experimental, statistical, reproducibility, review
-and writing thresholds for all papers; Q2 is only a venue floor. Each paper
-needs at least two current candidates meeting its target with IF >1.0. At G1
-and G3 treat the
-automatic dataset shortlist only as leads: assess topical/task fit, provenance,
-license uncertainty, sample/unit adequacy, labels, missingness, bias, leakage,
-external validity, compute and no-laboratory feasibility, and preserve rejection
-reasons and alternatives. At G3 create one or more complete experiment designs for every configured paper;
-assign every planned run exactly once; trace baseline sources, versions and
-licenses; require fair tuning/evaluation, strong/domain-standard/simple
-comparators, ablations, leakage controls, estimands, practical thresholds,
-effect sizes, uncertainty, power or precision, robustness, external validity,
-negative controls, stopping rules and falsification criteria. The approved G3
-plan must already contain domain-standard and strong-recent reproduction runs,
-plus disjoint original and clean-room reproduction run IDs using a digest-pinned,
-network-disabled container and predeclared metric tolerances.
-At G1 also create program/novelty-claim-matrix.json: map every novelty claim to
-at least three closest works, state what is already known, the precise remaining
-difference, mechanism, falsification test, expected result if false, boundary
-conditions and residual risk, and document backward/forward citation chaining
-plus two consecutive saturation rounds. At G3 do not fabricate local quality,
-power or preregistration records: data/quality/*.json, power-analysis.json and
-preregistration.json are created and hash-bound by scripts/research_quality.py.
-Design the inputs they need and preserve blockers. For empirical papers at G4 create a baseline-
-reproduction.json and clean-room-reproduction.json for every paper only from
-the exact successful attempt IDs and complete current output sets in the
-registry; match the G3-frozen run roles, baseline IDs/source URLs and numeric
-tolerances, and use exact executor-issued isolation instance IDs. Use the protected facts
-in reports/runtime-evidence-catalog.json rather than inventing run hashes,
-attempt IDs or environment digests. Never mark a comparison as passing merely
-to satisfy the gate.
-At G5 write direct, evidence-led academic prose with varied but appropriate
-sentence and paragraph structure. Remove stock framing, mechanical transitions,
-repeated sentence openings, conversational artifacts, vague attribution and
-unsupported importance or novelty claims. Prefer a concrete result, comparison,
-mechanism or limitation over decorative synonyms. Preserve every number,
-equation, citation, uncertainty boundary and claim-evidence link. Read the
-line-level guidance in scripts/academic_style.py output and revise only where the
-scientific context supports the change; never perform blind synonym replacement.
-Lead the abstract and conclusion with the preregistered primary finding and
-strongest supported contribution; a secondary or null result needs headline
-treatment only when it changes the main claim, validity, safety or scope. Keep
-every registered result locatable in the results or supplement. Never omit,
-soften or demote an experiment because its result is unfavorable or contentious;
-use only predeclared role, relevance and statistical adequacy for placement and
-cross-reference supplement material. State material limitations once, calmly and
-where they qualify interpretation; remove only generic or repeated defenses.
-Use the audit as a writing-quality control. User-requested reduction of
-formulaic AI-style prose is authorized; do not promise detector outcomes,
-claim human-only authorship, conceal assistance or weaken the required
-AI-use disclosure.
+{stage_writing_instructions(stage)}
 
 Return ONLY one JSON object with keys schema_version, stage, artifacts, notes.
 Use schema_version 1.0 and make notes an array of strings. Each artifact path
@@ -826,6 +855,11 @@ anything, write reviews/codex, write reviews/decision-log.md, or write
 reviews/independent, provenance files, or state/run.json. Express all revised
 text independently; do not reuse wording from a Claude plan or review. For every
 rejected item, record the evidence-based reason.
+Return only artifacts whose bytes actually need changing. Do not regenerate
+unaffected chapters, full manuscripts, reference lists or unchanged files.
+If no evidence-grounded edit is justified, return artifacts=[] with reasoned
+dispositions; the independent final review and every gate still run. Required
+G5 H01-H26 and AD01-AD08 contextual dispositions remain mandatory.
 Keep every manuscript-bound artifact in English.
 At G5 read the deterministic academic-style audit, resolve its concrete writing
 problems by rule and line without changing supported meaning, numbers, equations,
@@ -1146,6 +1180,8 @@ def apply_bundle(
         seen.add(target)
         prepared.append((target,item["content"].encode("utf-8")))
     originals={target:(target.read_bytes() if target.is_file() else None) for target,_ in prepared}
+    # Exact no-ops must not churn files or overwrite their authorship ancestry.
+    prepared = [(target, payload) for target, payload in prepared if originals[target] != payload]
     temporaries: list[Path] = []
     try:
         for target,payload in prepared:
@@ -1273,6 +1309,8 @@ def record_writer_provenance(
     role: str,
     run_id: str,
 ) -> list[str]:
+    if not written:
+        return []
     paths = [ROOT / relative for relative in written]
     return output_provenance.record_model_writes(
         project_root(project),
@@ -1767,6 +1805,10 @@ def run_cycle(
             controlled_steps["blockers"].append({"kind": "literature_service_unavailable", "detail": "No controlled search receipts; inspect the source/plan before spending."})
         write_step_report(project_root(project) / REPORT, controlled_steps)
         return {"stage": stage, "controlled_steps": controlled_steps, "paid_model_cycle": False}
+    # Discover a missing writer/critic configuration or quote before paying the
+    # planner. This is readiness checking, not a whole-cycle cost guarantee.
+    route_preflight = [model_runtime.preflight_route(provider)
+                       for provider in dict.fromkeys((planner_provider, writer_provider, critic_provider))]
     controlled_steps["paid_model_cycle"] = True
     write_step_report(project_root(project) / REPORT, controlled_steps)
     planner = model_runtime.call(
@@ -1920,6 +1962,12 @@ def run_cycle(
             "review_records_excluded_from_model_snapshots": True,
             "writing_stage_snapshot_scope": "active paper plus every paper contract",
             "exact_request_cache_enabled": True,
+            "route_preflight": route_preflight,
+            "scientific_reviews_always_fresh": True,
+            "lossless_json_whitespace_compaction": True,
+            "operational_transcripts_excluded": True,
+            "silent_context_truncation_allowed": False,
+            "unchanged_artifacts_not_rewritten": True,
         },
         "provider_audit": {
             "planner": result_audit(planner),
@@ -1971,6 +2019,8 @@ def run_cycle(
         "generated_at": utc_now(),
         "next_action": "Human gate review; no approve/advance action was performed.",
     }
+    from scripts.cost_audit import refresh as refresh_cost_audit
+    manifest["cost_diagnostics"] = refresh_cost_audit(project_root(project))
     save_run(project, run_id, "manifest.json", manifest)
     return manifest
 

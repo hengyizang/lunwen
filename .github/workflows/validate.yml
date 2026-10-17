@@ -208,6 +208,8 @@ jobs:
           python-version: "3.12"
       - name: Exercise production routing and durable budgets with synthetic HTTP
         run: python -m scripts.gateway_acceptance --directory artifacts/gateway-startup
+      - name: Verify lossless context, request reuse and fresh reviews without model credentials
+        run: python -m scripts.cost_quality_acceptance --directory artifacts/gateway-startup/cost-quality
       - name: Preserve gateway software acceptance evidence
         if: always()
         uses: actions/upload-artifact@v7

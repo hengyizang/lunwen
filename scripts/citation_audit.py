@@ -9,7 +9,7 @@ import json
 import re
 import sys
 import urllib.parse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Callable
@@ -124,6 +124,51 @@ def crossref_record(doi: str, fetcher: Callable[..., Any]) -> dict[str, Any]:
     return payload["message"]
 
 
+def _metadata_cache_directory(bib_path: Path) -> Path | None:
+    projects = (Path(__file__).resolve().parents[1] / "projects").resolve()
+    resolved = bib_path.resolve()
+    if resolved.is_relative_to(projects):
+        parts = resolved.relative_to(projects).parts
+        if len(parts) >= 2:
+            return projects / parts[0] / "state/citation-metadata"
+    return None
+
+
+def cached_crossref_record(doi: str, fetcher: Callable[..., Any], cache_directory: Path | None,
+                          *, refresh: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Cache public metadata for 24h; never cache a bibliography PASS decision."""
+    url = "https://api.crossref.org/works/" + urllib.parse.quote(doi, safe="")
+    target = cache_directory / (hashlib.sha256(url.encode()).hexdigest() + ".json") if cache_directory else None
+    if target is not None:
+        if any(p.is_symlink() for p in (target, *target.parents)):
+            raise CitationAuditError("citation metadata cache cannot use symlinks")
+        if target.is_file() and not refresh:
+            try:
+                value = json.loads(target.read_text(encoding="utf-8"))
+                age = datetime.now(timezone.utc) - datetime.fromisoformat(value["retrieved_at"])
+                encoded = json.dumps(value["record"], sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+                if (value.get("schema_version") == "1.0" and value.get("url") == url
+                        and value.get("doi") == doi and isinstance(value["record"], dict)
+                        and timedelta(0) <= age < timedelta(hours=24)
+                        and hashlib.sha256(encoded).hexdigest() == value["record_sha256"]):
+                    return value["record"], {"source_url": url, "retrieved_at": value["retrieved_at"],
+                                              "record_sha256": value["record_sha256"], "cache_hit": True}
+            except (OSError, ValueError, TypeError, KeyError):
+                pass
+    record = crossref_record(doi, fetcher)
+    digest = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+    receipt = {"schema_version": "1.0", "doi": doi, "url": url, "retrieved_at": now(),
+               "record_sha256": digest, "record": record}
+    if target is not None:
+        try:
+            from scripts.research_artifacts import write
+        except ModuleNotFoundError:
+            from research_artifacts import write  # type: ignore
+        write(target, receipt)
+    return record, {"source_url": url, "retrieved_at": receipt["retrieved_at"],
+                    "record_sha256": digest, "cache_hit": False}
+
+
 def record_year(record: dict[str, Any]) -> int | None:
     for key in ("published-print", "published-online", "published", "issued"):
         parts = record.get(key, {}).get("date-parts", []) if isinstance(record.get(key), dict) else []
@@ -169,6 +214,8 @@ def audit(
     offline: bool = False,
     docx_verified_by: str | None = None,
     fetcher: Callable[..., Any] = fetch_json,
+    cache_directory: Path | None = None,
+    refresh_metadata: bool = False,
 ) -> dict[str, Any]:
     try:
         text = bib_path.read_text(encoding="utf-8")
@@ -208,7 +255,9 @@ def audit(
                 result["issues"].append("DOI not queried in offline mode")
             elif not result["issues"]:
                 try:
-                    record = crossref_record(doi, fetcher)
+                    record, metadata_receipt = cached_crossref_record(doi, fetcher, cache_directory,
+                                                                       refresh=refresh_metadata)
+                    result["metadata_receipt"] = metadata_receipt
                     crossref_title = " ".join(record.get("title", []))
                     similarity = title_similarity(title, crossref_title)
                     result["crossref"] = {
@@ -291,6 +340,8 @@ def main() -> int:
     parser.add_argument("bibliography", type=Path)
     parser.add_argument("--manual-verifications", type=Path)
     parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--refresh-metadata", action="store_true", help="Bypass the 24h metadata cache when checking changed publisher metadata")
+    parser.add_argument("--cache-metadata", action="store_true", help="Control-plane use only: save hash-bound public metadata under project state")
     parser.add_argument("--docx-citations-verified-by",help="Named human who checked every DOCX in-text citation against the bibliography")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -300,6 +351,8 @@ def main() -> int:
             manual_path=args.manual_verifications,
             offline=args.offline,
             docx_verified_by=args.docx_citations_verified_by,
+            refresh_metadata=args.refresh_metadata,
+            cache_directory=_metadata_cache_directory(args.bibliography) if args.cache_metadata else None,
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(

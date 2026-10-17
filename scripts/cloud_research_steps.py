@@ -74,6 +74,8 @@ def literature_context(project: Path, query: str) -> dict:
     searches_done = literature_evidence.read_jsonl(project / "evidence/search-log.jsonl")
     families = {r.get("evidence_receipt_id"): r.get("query_family") for r in searches_done}
     results, errors, works = [], [], []
+    seen_receipts: set[str] = set()
+    unique_works: dict[str, dict] = {}
     calls = 0
     pending = 0
     attempts_path = project / "state/literature-attempts.json"
@@ -85,7 +87,9 @@ def literature_context(project: Path, query: str) -> dict:
                 or not 1 <= len(text.strip()) <= 1000 or not isinstance(family, str) or not family.strip()
                 or type(limit) is not int or not 1 <= limit <= 50):
             raise ResearchStepError("search plan uses an invalid or unmetered provider/query/limit")
+        request_url = literature_evidence.build_search_url(provider, text.strip(), limit)
         cached = next((r for r in reversed(ledger) if r.get("provider") == provider and r.get("query") == text.strip()
+                       and r.get("request_url") == request_url
                        and families.get(r.get("receipt_id")) == family and fresh(r, project)), None)
         if cached is None:
             key = hashlib.sha256(json.dumps(item, sort_keys=True).encode()).hexdigest()
@@ -101,16 +105,28 @@ def literature_context(project: Path, query: str) -> dict:
                 cached = literature_evidence.execute_search(project, provider, text,
                     query_family=family, date_range="all indexed years; inspect dates before claiming novelty",
                     filters="unfiltered relevance discovery; pending human screening", limit=limit)
+                ledger.append(cached)
+                families[cached.get("receipt_id")] = family
             except (literature_evidence.LiteratureEvidenceError, OSError, ValueError) as exc:
                 errors.append({"provider": provider, "query_family": family, "error": str(exc)[:500]})
                 attempts[key] = {"at": datetime.now(timezone.utc).isoformat(), "error": str(exc)[:500]}
                 continue  # One failed database must not suppress other providers.
+        if cached["receipt_id"] in seen_receipts:
+            continue
+        seen_receipts.add(cached["receipt_id"])
         results.append(cached)
         normalized = read(path_in(project, cached["normalized_results_path"]), {"works": []})
-        works.extend(normalized.get("works", [])[:15])
+        for work in normalized.get("works", [])[:15]:
+            key = hashlib.sha256(json.dumps(work, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+            row = unique_works.setdefault(key, {**work, "source_receipt_ids": []})
+            if cached["receipt_id"] not in row["source_receipt_ids"]:
+                row["source_receipt_ids"].append(cached["receipt_id"])
+    works = list(unique_works.values())
     write(attempts_path, attempts)
     return {"receipts": results, "works": works[:90], "provider_errors": errors,
             "pending_searches": pending, "new_search_calls": calls,
+            "work_count": len(works), "works_omitted": max(0, len(works) - 90),
+            "bounded_metadata_only": True,
             "human_screening_required": True, "novelty_proven": False}
 
 
@@ -311,7 +327,7 @@ def after_write(project: Path, stage: str) -> dict:
                 from scripts.publication_figures import render
                 render(project, path_in(project, operation["spec"]))
             elif action == "read_paper" and stage == "topic-intelligence":
-                from scripts.paper_reader import build
+                from scripts.paper_reader import build, reusable_reader
                 source = path_in(project, operation["pdf"])
                 output = path_in(project, operation["output"])
                 if not operation["output"].startswith("literature/readers/"):
@@ -329,6 +345,8 @@ def after_write(project: Path, stage: str) -> dict:
                     raise ResearchStepError("persisted cloud readers require an owner-reviewed redistributable full-text manifest")
                 if not output.exists():
                     build(project, source, output, max_pages=operation.get("max_pages", 30), translate=False, pages=operation.get("pages"))
+                elif not reusable_reader(project, source, output, max_pages=operation.get("max_pages", 30), pages=operation.get("pages")):
+                    raise ResearchStepError("cached reader is stale or its page scope changed; preserve it and request a new source-bound output path")
             elif action == "docx" and stage == "writing-and-review":
                 from scripts.manuscript_docx import build
                 source, metadata = path_in(project, operation["source"]), path_in(project, operation["metadata"])
@@ -336,6 +354,24 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "statistical_reporting" and stage == "writing-and-review":
                 from scripts.statistical_reporting import refresh
                 refresh(project, operation["paper_id"])
+            elif action == "citation_audit" and stage == "writing-and-review":
+                from scripts.citation_audit import audit
+                from scripts.research_artifacts import record
+                paper = operation["paper_id"]
+                if not re.fullmatch(r"P[0-9]{2}", paper):
+                    raise ResearchStepError("invalid paper ID")
+                bibliography = path_in(project, f"papers/{paper}/manuscript/references.bib")
+                manual = operation.get("manual_verifications")
+                if manual is not None and not str(manual).startswith("state/"):
+                    raise ResearchStepError("manual citation verification must be an owner-controlled state record")
+                result = audit(bibliography, manual_path=path_in(project, manual) if manual else None,
+                               cache_directory=path_in(project, "state/citation-metadata"),
+                               refresh_metadata=operation.get("refresh_metadata") is True)
+                output = project / f"papers/{paper}/reviews/citation-audit.json"
+                write(output, result)
+                record(project, [output], "scripts/citation_audit.py")
+                if result["status"] != "pass":
+                    raise ResearchStepError("citation audit has unresolved references")
             elif action == "docx_revision" and stage == "writing-and-review":
                 from scripts.docx_revision import build
                 build(project, operation["paper_id"])
@@ -365,6 +401,13 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "evidence_context" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.evidence_context import refresh
                 refresh(project, stage, task=operation.get("task_id"))
+            elif action == "retrieve_evidence" and stage != "intake":
+                from scripts.evidence_retrieval import refresh, REPORT as retrieval_report
+                result = refresh(project)
+                report["retrieval"] = {"path": retrieval_report,
+                    "candidates": [{k: row[k] for k in ("path", "sha256", "start_line", "end_line")}
+                                   for row in result["results"]],
+                    "automatic_source_exclusion": False, "paid_calls": 0}
             elif action == "calibration_analysis" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.calibration_analysis import refresh
                 refresh(project, operation["packet_id"])

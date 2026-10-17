@@ -13,9 +13,10 @@ OUTPUT = "reports/research-extensions/context.json"
 
 def safe_text(project, relative, redact):
     from scripts.api_orchestrator import SNAPSHOT_SUFFIXES, SNAPSHOT_SKIPPED_PARTS
+    from scripts.context_efficiency import operational_path
     parts = Path(relative).parts
     lowered = tuple(p.lower() for p in parts)
-    if (any(p.startswith(".") or p in SNAPSHOT_SKIPPED_PARTS for p in lowered)
+    if (operational_path(relative) or any(p.startswith(".") or p in SNAPSHOT_SKIPPED_PARTS for p in lowered)
             or "reviews" in lowered or "review-packets" in lowered or "manuscript-hygiene" in lowered
             or any(x in Path(relative).name.lower() for x in ("api_key", "apikey", "credential", "password", "secret", "token"))
             or Path(relative).suffix.lower() not in SNAPSHOT_SUFFIXES):
@@ -60,6 +61,7 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     selections = [{"path": name, "reason": "mandatory research constraints", "stance": "constraint"}
                   for name in mandatory] + items
     blocks, bindings, covered, total = [], [], set(), 0
+    snippets: dict[tuple, dict] = {}
     for item in selections:
         relative = item["path"]
         content, digest = safe_text(project, relative, redact)
@@ -74,15 +76,24 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
         if type(first) is not int or type(last) is not int or not 1 <= first <= last <= max(1, len(lines)):
             raise ValueError("context line range is invalid")
         snippet = "".join(lines[first - 1:last])
-        block = f"--- FILE {relative} sha256={digest} lines={first}-{last} stance={item['stance']} ---\n{snippet}\n--- END FILE ---"
-        total += len(block.encode("utf-8"))
-        if total > max_bytes:
-            raise ValueError("required context exceeds the budget; select smaller explicit ranges, never silently omit evidence")
-        blocks.append(block)
+        # Keep every evidence binding/stance/reason, send identical source bytes
+        # once. A constraint that is also counterevidence keeps both labels.
+        key = (relative, digest, first, last)
+        group = snippets.setdefault(key, {"text": snippet, "selections": []})
+        selection = {"stance": item["stance"], "reason": item["reason"]}
+        if selection not in group["selections"]:
+            group["selections"].append(selection)
         bindings.append({"path": relative, "sha256": digest, "start_line": first, "end_line": last,
                          "snippet_sha256": hashlib.sha256(snippet.encode()).hexdigest(), "reason": item["reason"], "stance": item["stance"]})
         bindings[-1]["complete_source"] = first == 1 and last == max(1, len(lines))
         covered.add(relative)
+    for (relative, digest, first, last), group in snippets.items():
+        labels = json.dumps(group["selections"], ensure_ascii=False, separators=(",", ":"))
+        block = f"--- FILE {relative} sha256={digest} lines={first}-{last} selections={labels} ---\n{group['text']}\n--- END FILE ---"
+        total += len(block.encode("utf-8"))
+        if total > max_bytes:
+            raise ValueError("required context exceeds the budget; select smaller explicit ranges, never silently omit evidence")
+        blocks.append(block)
     # An active conflict cannot be left out of a task packet by changing its stance.
     notebook_path = project / "program/research-notebook.json"
     if notebook_path.is_file():
@@ -109,7 +120,9 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     eligible = {p.relative_to(project).as_posix() for p in project.rglob("*") if p.is_file() and not p.is_symlink()}
     omitted = sorted(p for p in eligible - covered if p.startswith(("papers/", "program/", "literature/", "evidence/"))
                      and not any(x in p.lower() for x in ("secret", "credential", "private", "review", "token", "password")))
-    return {**payload, "fingerprint": fingerprint, "bytes": total, "omitted_paths": omitted[:200],
+    return {**payload, "fingerprint": fingerprint, "bytes": total,
+            "source_selection_count": len(bindings), "unique_snippet_count": len(snippets),
+            "duplicate_snippets_avoided": len(bindings) - len(snippets), "omitted_paths": omitted[:200],
             "omitted_count": len(omitted), "omission_inventory_truncated": len(omitted) > 200,
             "context": "Question: " + spec["question"] + "\n\n" + "\n\n".join(blocks),
             "omissions_are_not_irrelevant": True, "scientific_completeness_verified": False}
