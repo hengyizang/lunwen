@@ -429,7 +429,8 @@ def review_binding(project: Path, paper_id: str):
     target = path_in(project, f"{PREFIX}/{paper_id}/latest.json", exists=False)
     index = path_in(project, f"state/reviewer-rounds/{paper_id}.json", exists=False)
     from scripts.supplemental_experiments import review_binding as supplemental_review_binding
-    supplemental = supplemental_review_binding(project, paper_id, [r["round_id"] for r in _index(project, paper_id)["rounds"]]) if index.is_file() else None
+    rounds = [Path(row["path"]).parent.name for row in _index(project, paper_id)["rounds"]] if index.is_file() else []
+    supplemental = supplemental_review_binding(project, paper_id, rounds)
     return {"report_sha256": sha(target) if target.is_file() else None,
             "index_sha256": sha(index) if index.is_file() else None,
             "supplemental": supplemental,
