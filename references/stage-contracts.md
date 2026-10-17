@@ -63,6 +63,13 @@ Avoid salami slicing. Each paper must answer a distinct research question and re
 
 ## Experiment design — G3
 
+The empirical requirements below apply to empirical papers. Actual Meta/theory
+identities instead use the positive protocol, source, uncertainty/proof,
+isolated-replay and frozen-input requirements in
+[SCIENTIFIC-STUDY-ROUTES.md](../docs/SCIENTIFIC-STUDY-ROUTES.md). They still need
+the same human G3 approval, execution plan and budget. Never fabricate empirical
+datasets, baseline classes or power calculations for another research design.
+
 Required:
 
 - `data/datasets.jsonl` with licenses and provenance;
@@ -79,6 +86,11 @@ Required:
 Freeze the confirmatory plan before final runs. Label later exploration as exploratory.
 
 ## Experiment execution — G4
+
+Meta/theory use their dedicated computed study evidence and named
+confirm_study_validation decision in place of empirical baseline/power reports.
+Every route requires exact approved executor receipts, complete claim coverage,
+isolated replay, unchanged inputs and human scientific review.
 
 Required:
 
@@ -99,8 +111,8 @@ Revalidate the actual study identity and selected venue's research-article polic
 Secondary quantitative studies need successful approved executor evidence; the
 manuscript must state the actual secondary/Meta method at a verified canonical
 location. Keep the review/synthesis scientific checklist when applicable even if
-the publisher calls the paper Research. This policy does not add a Meta executor
-or waive existing G3/G4 checks; unsupported study routes remain blocked.
+the publisher calls the paper Research. The dedicated study routes supply the
+applicable Meta/formal-theory G3/G4 checks; unsupported methods remain blocked.
 
 The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and human gates remain protected.
 

@@ -157,6 +157,36 @@
             },
             "uniqueItems": true,
             "description": "Earlier runs of this paper whose immutable successful receipts are required before launch."
+          },
+          "runtime": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "definition_sha256",
+              "environment_sha256",
+              "base_image"
+            ],
+            "properties": {
+              "profile": {
+                "enum": [
+                  "meta_analysis",
+                  "theory"
+                ]
+              },
+              "definition_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "environment_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "base_image": {
+                "type": "string",
+                "pattern": "^[^\\s]+@sha256:[0-9a-f]{64}$"
+              }
+            }
           }
         }
       }

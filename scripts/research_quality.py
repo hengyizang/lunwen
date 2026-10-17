@@ -1379,6 +1379,9 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
 
 
 def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
+    from scripts import study_routes
+    if study_routes.route(project, paper_id) != "empirical":
+        return study_routes.preregistration_inputs(project, paper_id)
     contract = project / "papers" / paper_id / "paper-contract.json"
     power = project / "papers" / paper_id / "power-analysis.json"
     common = [
@@ -1412,7 +1415,9 @@ def create_preregistration(project: Path, paper_id: str, actor: str) -> dict[str
     missing = [path.relative_to(project).as_posix() for path in inputs if not path.is_file()]
     if missing:
         raise ResearchQualityError("cannot freeze; missing inputs: " + ", ".join(missing))
-    power_errors = validate_power_report(_load_json(project / "papers" / paper_id / "power-analysis.json"), paper_id, project)
+    from scripts import study_routes
+    power_errors = (validate_power_report(_load_json(project / "papers" / paper_id / "power-analysis.json"), paper_id, project)
+                    if study_routes.route(project, paper_id) == "empirical" else study_routes.plan_errors(project, paper_id))
     if power_errors:
         raise ResearchQualityError("power analysis is invalid: " + "; ".join(power_errors))
     manifests = _manifest_map(project)
@@ -2069,7 +2074,7 @@ def refresh_runtime_evidence_catalog(project: Path) -> Path:
     return path
 
 
-def validate_g3_quality(project: Path) -> list[str]:
+def validate_g3_quality(project: Path, *, require_preregistration: bool = True) -> list[str]:
     from scripts.experiment_evidence import validate_plan as validate_evidence_plan
     errors: list[str] = []
     manifests = _manifest_map(project)
@@ -2103,6 +2108,15 @@ def validate_g3_quality(project: Path) -> list[str]:
                     )
                 )
     for paper_id in _paper_ids(project):
+        from scripts import study_routes
+        if study_routes.route(project, paper_id) != "empirical":
+            errors.extend(f"{paper_id} study route: {e}" for e in study_routes.plan_errors(project, paper_id))
+            if require_preregistration:
+                try:
+                    errors.extend(validate_preregistration(_load_json(project / "papers" / paper_id / "preregistration.json"), paper_id, project))
+                except ResearchQualityError as exc:
+                    errors.append(str(exc))
+            continue
         errors.extend(f"{paper_id}/experiment-evidence-plan.json: {e}" for e in validate_evidence_plan(project, paper_id))
         power_path = project / "papers" / paper_id / "power-analysis.json"
         prereg_path = project / "papers" / paper_id / "preregistration.json"
@@ -2117,6 +2131,8 @@ def validate_g3_quality(project: Path) -> list[str]:
                 )
             except ResearchQualityError as exc:
                 errors.append(str(exc))
+        if not require_preregistration:
+            continue
         if not prereg_path.is_file():
             errors.append(f"{paper_id} is missing preregistration.json")
         else:
@@ -2131,11 +2147,15 @@ def validate_g3_quality(project: Path) -> list[str]:
     return errors
 
 
-def validate_g4_quality(project: Path) -> list[str]:
+def validate_g4_quality(project: Path, *, require_confirmation: bool = True) -> list[str]:
     from scripts.experiment_evidence import validate_report
     errors: list[str] = []
     registry = _registry(project)
     for paper_id in _paper_ids(project):
+        from scripts import study_routes
+        if study_routes.route(project, paper_id) != "empirical":
+            errors.extend(study_routes.validation_errors(project, paper_id, confirmation=require_confirmation))
+            continue
         errors.extend(f"{paper_id}/experiment-evidence.json: {e}" for e in validate_report(project, paper_id))
         prereg_path = project / "papers" / paper_id / "preregistration.json"
         if prereg_path.is_file():
@@ -2175,6 +2195,8 @@ def validate_g4_quality(project: Path) -> list[str]:
             except ResearchQualityError as exc:
                 errors.append(str(exc))
         confirmation_path = project / "papers" / paper_id / "reproduction-confirmation.json"
+        if not require_confirmation:
+            continue
         if not confirmation_path.is_file():
             errors.append(f"{paper_id} is missing reproduction-confirmation.json")
         else:

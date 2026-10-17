@@ -40,10 +40,10 @@ jobs:
         if: steps.job.outputs.action == 'acceptance' || steps.job.outputs.action == 'paperqa' || steps.job.outputs.action == 'tooluniverse'
         run: python -m pip install --disable-pip-version-check '.[ai4science,reference-tools]'
       - name: Install declared validation tools for human review controls
-        if: contains(fromJSON('["review_dossier","ready","approve","advance","reopen","freeze_preregistration","confirm_data_quality","confirm_reproduction","screen_literature","confirm_source_scope","confirm_review_packet","confirm_research_increment","start_revision"]'), steps.job.outputs.action)
+        if: contains(fromJSON('["review_dossier","ready","approve","advance","reopen","freeze_preregistration","confirm_data_quality","confirm_reproduction","screen_literature","confirm_source_scope","confirm_review_packet","confirm_research_increment","start_revision","confirm_study_validation","approve_supplemental","confirm_supplemental","retire_supplemental"]'), steps.job.outputs.action)
         run: python -m pip install --disable-pip-version-check '.[figures,reader,research-quality,reference-tools]'
       - name: Install owner-enabled offline statistical watermark runtime on CPU
-        if: vars.DR_OS_ENABLE_WATERMARK_DETECTOR == 'true' && contains(fromJSON('["cycle","continuation","review_dossier","ready","approve","advance","start_revision"]'), steps.job.outputs.action)
+        if: vars.DR_OS_ENABLE_WATERMARK_DETECTOR == 'true' && contains(fromJSON('["cycle","continuation","review_dossier","ready","approve","advance","start_revision","confirm_study_validation","approve_supplemental","confirm_supplemental","retire_supplemental"]'), steps.job.outputs.action)
         run: |
           python -m pip install --disable-pip-version-check torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install --disable-pip-version-check transformers==4.57.1 tokenizers==0.22.1

@@ -39,7 +39,11 @@
         "confirm_data_quality",
         "confirm_reproduction",
         "screen_literature",
-        "confirm_source_scope"
+        "confirm_source_scope",
+        "confirm_study_validation",
+        "approve_supplemental",
+        "confirm_supplemental",
+        "retire_supplemental"
       ]
     },
     "project": {
@@ -141,7 +145,11 @@
         "confirm_data_quality",
         "confirm_reproduction",
         "screen_literature",
-        "confirm_source_scope"
+        "confirm_source_scope",
+        "confirm_study_validation",
+        "approve_supplemental",
+        "confirm_supplemental",
+        "retire_supplemental"
       ]
     },
     "gate": {

@@ -48,7 +48,21 @@ def declared_outputs(root: Path) -> set[str]:
 
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
+    parts = PurePosixPath(relative).parts
+    if len(parts) >= 6 and value.startswith("experiments/supplemental/"):
+        child = root.joinpath(*parts[:5])
+        child_relative = PurePosixPath(*parts[5:]).as_posix()
+        child_lower = child_relative.casefold()
+        if child_lower.startswith(("state/", "reviews/independent/", "reviews/codex/", "data/quality/", "data/acquisition/")) or child_lower in {
+                "evidence/literature-api-ledger.jsonl", "evidence/search-log.jsonl", "reviews/decision-log.md"}:
+            return True
+        return executor_owned(child, child_relative)
     return (value in EXECUTOR_FILES
+            or (len(PurePosixPath(value).parts) >= 5 and value.startswith("papers/")
+                and PurePosixPath(value).parts[2] == "supplement"
+                and PurePosixPath(value).parts[3] in {"study-results", "reviewer-experiments"})
+            or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
+                and value.endswith("/study-validation-confirmation.json"))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/cloud-word-build.json"))
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")

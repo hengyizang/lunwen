@@ -14,6 +14,10 @@ Do not ask multiple agents to produce one blended answer without preserving thei
 
 ## Stage loop
 
+Use the [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md) for actual
+Meta/formal-theory identities and separate reviewer-requested experiments.
+These routes keep the shared evidence, budget, writer/critic and human gates.
+
 For the current stage:
 
 1. Run `python3 scripts/researchctl.py status --project <slug> --json`, or use `python3 scripts/autopilot.py plan --project <slug>`.

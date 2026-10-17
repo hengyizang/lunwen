@@ -208,7 +208,9 @@ def gate_errors(slug,gate):
         except ImportError as exc:errors.append(f"paper architecture validator unavailable: {exc}");validate_paper_contract=None
         for pd in dirs:
             c=load_nonempty_json(pd/"paper-contract.json",errors)
-            if c and validate_paper_contract:errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name))
+            if c and validate_paper_contract:
+                from scripts.study_routes import route
+                errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name,study_route=route(project,pd.name)))
             if c:
                 contract_target=str(c.get("target_jcr_quartile") or "").upper()
                 if mapped_targets.get(pd.name)!=contract_target:errors.append(f"{pd.name} target JCR quartile must match program/paper-map.json")
@@ -226,7 +228,9 @@ def gate_errors(slug,gate):
         independent_audit_errors(project,gate,errors);return errors
     if gate=="G3":
         datasets=jsonl_objects(project/"data"/"datasets.jsonl",errors)
-        if not datasets:errors.append("at least one licensed dataset manifest is required")
+        from scripts import study_routes
+        if not datasets and any(study_routes.route(project,p.name)=="empirical" for p in (project/"papers").glob("P[0-9][0-9]")):
+            errors.append("at least one licensed dataset manifest is required")
         try:
             from scripts.dataset_fetch import validate_manifest
             for i,d in enumerate(datasets,1):
@@ -252,6 +256,9 @@ def gate_errors(slug,gate):
                 if len(paper_dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(paper_dirs)}")
                 for paper_dir in paper_dirs:
                     contract=load_nonempty_json(paper_dir/"paper-contract.json",errors)
+                    if study_routes.route(project,paper_dir.name)!="empirical":
+                        errors.extend(f"{paper_dir.name} study route: {x}" for x in study_routes.plan_errors(project,paper_dir.name))
+                        continue
                     experiment_dir=paper_dir/"experiments";design_paths=sorted(experiment_dir.glob("*.json"))
                     if not design_paths:errors.append(f"missing or empty: {experiment_dir}/*.json");continue
                     found_design_ids=set();assigned_run_ids=set();duplicate_run_ids=set()
@@ -326,6 +333,9 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
+        from scripts import study_routes
+        if study_routes.route(project,pid)!="empirical":
+            errors.extend(study_routes.validation_errors(project,pid));errors.extend(study_routes.export_errors(project,pid))
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors) or {}
         map_portfolio=paper_map.get("papers",[]) if isinstance(paper_map.get("papers"),list) else []
         map_targets={str(item.get("paper_id")):str(item.get("target_jcr_quartile") or "").upper() for item in map_portfolio if isinstance(item,dict) and item.get("paper_id")}

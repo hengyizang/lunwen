@@ -42,6 +42,7 @@ FORBIDDEN_PARTS = {
 }
 FORBIDDEN_NAMES = {"run.json", "state.json"}
 SNAPSHOT_SUFFIXES = {
+    ".lean",
     ".bib",
     ".csv",
     ".html",
@@ -307,6 +308,13 @@ def research_quality_artifact_contract(stage: str) -> str:
             "calibration_analysis": "Freeze analysis thresholds, source-separated calibration/holdout partitions and cost run IDs in the review packet before collecting human ratings. Request calibration_analysis with packet_id. Partial ratings reveal no results; descriptive summaries and recorded costs do not establish scientific equivalence.",
             "word_render": "At writing-and-review request word_render with paper_id and optional exact source DOCX. It renders canonical, clean or tracked Word in an isolated cloud runtime, records previews and actual package versions. Use protected receipts for visual packets and actual canonical PDF page locations. Final visual review remains human.",
             "protected_outputs": ["reviews/revision-ledger-report.json", "reviews/revision-render.json", "reviews/cloud-tex-build.json", "reports/research-support.json", "reports/review-packets/**", "evidence/support-sources/**", "state/review-packet-confirmations/**"],
+        }
+    if value and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+        value["study_route_overrides"] = {
+            "applicability": "Empirical power/baseline/comparison schemas above apply to empirical papers. Actual Meta/theory identities use the positive dedicated route in docs/SCIENTIFIC-STUDY-ROUTES.md; retain every human, evidence and independent-audit gate.",
+            "protocol": "Set paper-contract.study_route=meta_analysis|theory consistently with research-identity. Write study-protocol.json following schemas/study-protocol.schema.json. Use study_prepare at G3 for reviewed runtime provisioning and deterministic input hashes; never author computed reports or confirmations.",
+            "reporting": "For Meta/theory use statistical-reporting-map.json items[{result_id,excerpt,location:{kind,path,sha256,...},interpretation,uncertainty,analysis_phase,decision,values:{k,estimate,ci_low,ci_high,tau_squared,i_squared,p_adjusted} for Meta OR formal_type for theory}]. Preserve actual decisions and phases; explicitly identify exploratory Meta follow-ups in manuscript text. Cover every actual outcome/proof in the canonical manuscript. Full registered results are exported into supplement/study-results by the controller.",
+            "supplemental": "At real reviewer G5 prepare reviewer-required-experiment-plan.json following its schema and experiments/supplemental/Pxx/Rxxx/s001 child study. Request supplemental_prepare, then wait for separate owner approve_supplemental and confirm_supplemental. Keep original G3 untouched and map every child result into the revised parent manuscript."
         }
     return json.dumps(value, ensure_ascii=False, indent=2) if value else "(none for this stage)"
 
@@ -653,7 +661,7 @@ conditions and residual risk, and document backward/forward citation chaining
 plus two consecutive saturation rounds. At G3 do not fabricate local quality,
 power or preregistration records: data/quality/*.json, power-analysis.json and
 preregistration.json are created and hash-bound by scripts/research_quality.py.
-Design the inputs they need and preserve blockers. At G4 create a baseline-
+Design the inputs they need and preserve blockers. For empirical papers at G4 create a baseline-
 reproduction.json and clean-room-reproduction.json for every paper only from
 the exact successful attempt IDs and complete current output sets in the
 registry; match the G3-frozen run roles, baseline IDs/source URLs and numeric
@@ -737,9 +745,11 @@ repetitive or template-driven academic prose, scientific drift during style
 revision, reproducibility gaps, and any gate-contract violation. Do not
 accept narrative novelty without the claim matrix and search saturation; do not
 accept a selected dataset without a current local quality report; do not accept
-G3 without executable power evidence and a hash-frozen preregistration; and do
-not accept G4 without successful, evidence-bound strong-baseline and clean-room
-reproduction records. Do not
+empirical G3 without executable power evidence and a hash-frozen preregistration; and do
+not accept empirical G4 without successful, evidence-bound strong-baseline and clean-room
+reproduction records. Meta/theory use the dedicated study protocol, exact isolated
+execution evidence and named study-validation confirmation instead of empirical
+power/baseline records. Do not
 accept a claim merely because another model wrote it. Your review is internal
 control-plane material and must not be copied into publishable outputs.
 
@@ -1361,7 +1371,9 @@ def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: st
 
 def research_identity_prompt_contract() -> str:
     from scripts.research_identity import prompt_contract
-    return prompt_contract()
+    from scripts.study_routes import prompt_contract as study_prompt
+    from scripts.supplemental_experiments import prompt_contract as supplemental_prompt
+    return prompt_contract() + "\n" + study_prompt() + "\n" + supplemental_prompt()
 
 
 def publication_feedback(project: str, stage: str) -> str:

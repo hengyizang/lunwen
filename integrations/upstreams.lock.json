@@ -108,7 +108,9 @@
       "license_source_url": "https://github.com/blader/humanizer/blob/225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8/LICENSE",
       "enabled_by_default": false,
       "installation": "User-authorized vendored skill and 26-pattern academic review; existing writer/remediator calls only",
-      "selected_skills": ["humanizer"],
+      "selected_skills": [
+        "humanizer"
+      ],
       "selection_note": "All numbered patterns have explicit coverage; weak and semantic findings require contextual decisions. No detector-result guarantee."
     },
     {
@@ -120,7 +122,9 @@
       "license_source_url": "https://github.com/guillaumemeyer/watermarks-remover/blob/c5297e9e69fec0779c29127c7892427e673fafd9/LICENSE",
       "enabled_by_default": false,
       "installation": "User-authorized cloud cleanup via pinned text_unicode.clean_text; bounded prose-only derived copies and protected receipts",
-      "selected_skills": ["clean-user-facing-text"],
+      "selected_skills": [
+        "clean-user-facing-text"
+      ],
       "selection_note": "Real character-carrier removal, preserving scientific originals, quotations and disclosure. Statistical rewriting uses existing editorial roles, without claiming vendor-key watermark absence. No media pixel regeneration or source-metadata stripping."
     },
     {
@@ -323,6 +327,18 @@
       "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
       "selected_skills": [],
       "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."
+    },
+    {
+      "id": "lean4-proof-kernel",
+      "repository": "https://github.com/leanprover/lean4",
+      "commit": "eb6cafb7290e8bd5f2937522d8d804f58f02bafc",
+      "upstream_version": "4.35.0",
+      "license": "Apache-2.0",
+      "license_source_url": "https://github.com/leanprover/lean4/blob/eb6cafb7290e8bd5f2937522d8d804f58f02bafc/LICENSE",
+      "enabled_by_default": false,
+      "installation": "Cloud-only reviewed CPU profile with official release checksum and exact toolchain file inventory",
+      "selected_skills": [],
+      "selection_note": "Reviewed 2026-10-17. Kernel-check exact registered propositions and transitive axioms; no sorry/native trust or generated scientific-completion claim. No model routing change or paid inference."
     }
   ]
 }

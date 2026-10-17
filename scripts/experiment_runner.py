@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -28,7 +29,7 @@ MAX_LOG_BYTES = 2 * 1024 * 1024
 FILE_ARGUMENT_SUFFIXES = {
     ".py", ".r", ".jl", ".json", ".jsonl", ".yaml", ".yml", ".toml",
     ".ini", ".cfg", ".csv", ".tsv", ".parquet", ".npy", ".npz",
-    ".h5", ".hdf5", ".wav", ".txt",
+    ".h5", ".hdf5", ".wav", ".txt", ".lean",
 }
 
 
@@ -113,7 +114,7 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         if not isinstance(timeout, int) or not 1 <= timeout <= 7 * 24 * 60 * 60:
             errors.append(f"{prefix}.timeout_seconds must be between 1 and 604800")
         estimate = run.get("estimated_cost_usd")
-        if not isinstance(estimate, (int, float)) or isinstance(estimate, bool) or estimate < 0:
+        if not isinstance(estimate, (int, float)) or isinstance(estimate, bool) or not math.isfinite(estimate) or estimate < 0:
             errors.append(f"{prefix}.estimated_cost_usd must be non-negative")
         isolation = run.get("isolation")
         if not isinstance(isolation, dict) or isolation.get("kind") not in {"host", "git_worktree", "container"}:
@@ -123,6 +124,15 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
                 errors.append(f"{prefix}.isolation.engine must be docker or podman")
             if not re.fullmatch(r"[^\s]+@sha256:[0-9a-f]{64}", str(isolation.get("image", ""))):
                 errors.append(f"{prefix}.isolation.image must be pinned by sha256 digest")
+        if "runtime" in run:
+            from scripts.study_environment import definition
+            runtime = run["runtime"]
+            if (not isinstance(runtime, dict) or runtime.get("profile") not in {"meta_analysis", "theory"}
+                    or set(runtime) != {"profile", "definition_sha256", "base_image", "environment_sha256"}
+                    or runtime.get("definition_sha256") != definition(runtime["profile"])
+                    or not re.fullmatch(r"[0-9a-f]{64}", str(runtime.get("environment_sha256", "")))
+                    or not isinstance(isolation, dict) or runtime.get("base_image") != isolation.get("image")):
+                errors.append(f"{prefix}.runtime must match the exact reviewed environment")
         seed = run.get("seed")
         if not isinstance(seed, int):
             errors.append(f"{prefix}.seed must be an integer")
@@ -217,7 +227,7 @@ def budget_ceiling(budget: dict[str, Any]) -> float:
     if budget.get("status") != "ready_for_review":
         raise ExperimentError("experiments/budget.json status must be ready_for_review")
     value = budget.get("hard_ceiling_usd")
-    if not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0:
+    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value) or value < 0:
         raise ExperimentError("budget hard_ceiling_usd must be non-negative")
     return float(value)
 
@@ -415,6 +425,16 @@ def execution_command(
         command.extend(["--mount", f"type=bind,src={source},dst=/workspace/{Path(value).as_posix()}"])
     for key in ("RESEARCH_OS_RUN_ID", "RESEARCH_OS_SEED", "PYTHONHASHSEED"):
         command.extend(["-e", f"{key}={environment[key]}"])
+    if run.get("runtime"):
+        from scripts.study_environment import prepare
+        binding, vendor = prepare(run["runtime"]["profile"], run["runtime"])
+        if binding["base_image"] != isolation["image"]:
+            raise ExperimentError("approved runtime base image differs from the executor image")
+        command.extend(["--mount", f"type=bind,src={vendor.resolve()},dst=/opt/research-runtime,readonly"])
+        if binding["profile"] == "meta_analysis":
+            command.extend(["-e", "PYTHONPATH=/opt/research-runtime", "-e", "PYTHONDONTWRITEBYTECODE=1"])
+        else:
+            command.extend(["-e", "PATH=/opt/research-runtime/bin:/usr/local/bin:/usr/bin:/bin"])
     command.extend([isolation["image"], *run["argv"]])
     return command, project, environment
 
@@ -541,11 +561,13 @@ def run_one(
     timed_out = False
     environment = safe_environment(run_id, run["seed"])
     isolation = isolation_record(project, cwd, run["isolation"], attempt_id)
-    command, execution_cwd, execution_environment = execution_command(
-        project, cwd, run, environment
-    )
+    if run.get("runtime"):
+        isolation["reviewed_runtime"] = run["runtime"]
     with tempfile.NamedTemporaryFile("w+b") as stdout, tempfile.NamedTemporaryFile("w+b") as stderr:
         try:
+            command, execution_cwd, execution_environment = execution_command(
+                project, cwd, run, environment
+            )
             process = subprocess.Popen(
                 command,
                 cwd=execution_cwd,
@@ -572,7 +594,7 @@ def run_one(
                 error = str(exc)
             else:
                 status = "succeeded" if exit_code == 0 else "failed"
-        except OSError as exc:
+        except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
             status = "failed"
             error = str(exc)
         stdout.flush()

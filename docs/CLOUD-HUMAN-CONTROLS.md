@@ -59,6 +59,13 @@ For every operation, first request `review_dossier` with `operation` and only th
 
 ## Gate sequence and cloud continuation
 
+Dedicated [study/supplemental controls](SCIENTIFIC-STUDY-ROUTES.md) use the same
+exact dossier/owner-decision flow and paper_id selector: confirm_study_validation
+at G4; approve_supplemental, confirm_supplemental and retire_supplemental during
+the selected paper's real reviewer G5 round. They call no paid provider and
+cannot raise API or compute authority. Supplemental approval/confirmation applies
+only to its separate scope, never to the original G3 or final parent G5.
+
 Request fresh dossiers between `ready`, `approve` and `advance`: each step changes state and consumes a different review scope. To revise an awaiting-approval gate, review and use `reopen` first. Confirmations/freeze never grant G3 or G4; the full scientific gate still needs separate `ready` and `approve`. G5 remains paper-specific and cannot approve the whole portfolio in one action.
 
 Owner jobs share the existing serialization group with scheduled research, restore the state branch and hash-verified checkpoint, and rehydrate only owner-authorized raw data before checking quality. Raw data stays out of Git and artifacts. Missing rights, files or checkpoints fail closed. Protected receipts stay unavailable to the model writer and the model-authored cloud-operations queue.

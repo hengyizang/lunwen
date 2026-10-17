@@ -141,7 +141,13 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         need(role in ROLES, "invalid comparison role")
         need(comp.get("analysis_phase") in {"confirmatory", "exploratory"}, "declare confirmatory or exploratory")
         if role == "primary":
-            need(comp["analysis_phase"] == "confirmatory", "primary evidence cannot be exploratory")
+            context = (read(project / "state/run.json").get("supplemental_context", {})
+                       if comp["analysis_phase"] == "exploratory" and (project / "state/run.json").is_file() else {})
+            scoped_exploration = (project.parts[-5:-3] == ("experiments", "supplemental")
+                and context.get("analysis_phase") == "exploratory" and context.get("scope_id") == project.name
+                and context.get("paper_id") == paper_id)
+            need(comp["analysis_phase"] == "confirmatory" or scoped_exploration,
+                 "primary evidence cannot be exploratory outside a separately approved supplemental scope")
             covered_claims |= assigned_claims
         comparator = text(comp.get("comparator_id"), "comparator_id")
         coverage[design_id][role].add(comparator)
@@ -424,6 +430,9 @@ def _measure_independent(project: Path, comp: dict, registry: list[dict], plan_h
 
 
 def build_report(project: Path, paper_id: str) -> dict:
+    from scripts import study_routes
+    if study_routes.route(project, paper_id) != "empirical":
+        return study_routes.build_report(project, paper_id)
     errors = validate_plan(project, paper_id)
     report = {"schema_version": "1.0", "paper_id": paper_id, "status": "blocked",
               "scientific_completion_verified": False, "errors": errors, "comparisons": []}
@@ -502,6 +511,9 @@ def refresh(project: Path) -> dict:
         report = build_report(project, paper.name)
         path = paper / REPORT
         write_json(path, report)
+        from scripts import study_routes
+        if study_routes.route(project, paper.name) != "empirical" and report["status"] == "complete":
+            study_routes.export_results(project, paper.name)
         record_model_writes(project, [path], family="other", provider="deterministic-experiment-evidence",
                             model="scripts/experiment_evidence.py", role="statistical-auditor", run_id="evidence-refresh")
         summaries[paper.name] = {"status": report["status"], "errors": report["errors"]}

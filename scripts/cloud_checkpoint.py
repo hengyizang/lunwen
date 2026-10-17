@@ -18,9 +18,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
 
 MANIFEST = "state/cloud-checkpoint.json"
-DIRECTORIES = {"state", "intake", "program", "evidence", "data", "experiments", "claims",
+DIRECTORIES = {"state", "intake", "program", "evidence", "data", "experiments", "claims", "analysis",
                "reports", "reviews", "papers", "literature", "results", "api_runs", ".cache"}
-GIT_SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".tsv", ".txt", ".tex", ".bib", ".svg",
+GIT_SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".tsv", ".txt", ".tex", ".bib", ".svg", ".lean",
                 ".png", ".pdf", ".docx", ".py", ".r", ".jl", ".yaml", ".yml", ".toml",
                 ".xml", ".html", ".css", ".sty", ".cls", ".bst", ".lock"}
 DATA_SUFFIXES = {".parquet", ".feather", ".npy", ".npz", ".h5", ".hdf5", ".pkl", ".pickle",
