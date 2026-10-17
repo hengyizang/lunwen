@@ -55,6 +55,10 @@ class StudyRouteTests(unittest.TestCase):
         self.fixture(); self.change("evidence/extraction.json", lambda v: v["records"][0].update(independent_extractions=[v["records"][0]["independent_extractions"][0]]))
         self.assertIn("two separately attributed", " ".join(study_routes.plan_errors(self.project, "P01")))
 
+    def test_contract_flag_cannot_override_actual_identity(self):
+        self.fixture(); self.change("papers/P01/paper-contract.json", lambda v: v.update(study_route="empirical"))
+        self.assertIn("study_route", " ".join(study_routes.plan_errors(self.project, "P01")))
+
     def test_dependent_cohorts_are_not_independent_studies(self):
         self.fixture(); self.change("evidence/extraction.json", lambda v: v["records"][1].update(cohort_id=v["records"][0]["cohort_id"]))
         self.assertIn("dependent", " ".join(study_routes.plan_errors(self.project, "P01")))

@@ -514,6 +514,8 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *,
     errors: list[str] = []
     if study_route not in {"empirical", "meta_analysis", "theory"}:
         return ["unknown study route"]
+    if contract.get("study_route", "empirical") != study_route:
+        errors.append("paper contract study_route must match its actual research identity")
     if contract.get("schema_version") != "2.0":
         errors.append("schema_version must be 2.0")
     if contract.get("paper_id") != expected_paper_id:

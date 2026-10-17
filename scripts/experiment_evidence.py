@@ -141,7 +141,13 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         need(role in ROLES, "invalid comparison role")
         need(comp.get("analysis_phase") in {"confirmatory", "exploratory"}, "declare confirmatory or exploratory")
         if role == "primary":
-            need(comp["analysis_phase"] == "confirmatory", "primary evidence cannot be exploratory")
+            context = (read(project / "state/run.json").get("supplemental_context", {})
+                       if comp["analysis_phase"] == "exploratory" and (project / "state/run.json").is_file() else {})
+            scoped_exploration = (project.parts[-5:-3] == ("experiments", "supplemental")
+                and context.get("analysis_phase") == "exploratory" and context.get("scope_id") == project.name
+                and context.get("paper_id") == paper_id)
+            need(comp["analysis_phase"] == "confirmatory" or scoped_exploration,
+                 "primary evidence cannot be exploratory outside a separately approved supplemental scope")
             covered_claims |= assigned_claims
         comparator = text(comp.get("comparator_id"), "comparator_id")
         coverage[design_id][role].add(comparator)

@@ -31,10 +31,14 @@ def cloud():
     need(os.environ.get("DR_OS_CLOUD_EXECUTOR") == "1", "supplemental controls require the cloud executor")
 
 
-def current(project, paper_id):
+def current(project, paper_id, *, execution=True):
     from scripts import reviewer_rounds
     state = read(project / "state/run.json")
-    need(state.get("gate") == "G5" and state.get("status") == "awaiting_work" and state.get("active_paper") == paper_id,
+    open_review = (state.get("gate") == "G5" and state.get("active_paper") == paper_id
+                   and state.get("status") in ({"awaiting_work"} if execution else {"awaiting_work", "awaiting_approval", "approved"}))
+    completed = (not execution and state.get("paper_statuses", {}).get(paper_id) == "submission_ready"
+                 and f"G5:{paper_id}" in state.get("approved_gates", []))
+    need(open_review or completed,
          "supplemental work requires this paper's open reviewer G5 round")
     index = reviewer_rounds._index(project, paper_id)
     need(bool(index["rounds"]), "a real external reviewer round is required")
@@ -91,6 +95,10 @@ def prepare(project, paper_id):
             "stage": "experiment-design", "gate": "G3", "status": "awaiting_work", "active_paper": paper_id,
             "paper_count": 1, "paper_statuses": {paper_id: "active"}, "approved_gates": [], "approvals": [], "history": []})
     need(read(state_path).get("gate") == "G3" and not read(state_path).get("approvals"), "candidate state is not an unapproved design")
+    state = read(state_path)
+    state["supplemental_context"] = {"parent_project": project.name, "paper_id": paper_id, "round_id": value["round_id"],
+                                     "scope_id": value["scope_id"], "analysis_phase": value["analysis_phase"], "prior_outcomes_seen": True}
+    write(state_path, state)
     imports = value.get("imports", [])
     need(isinstance(imports, list) and len(imports) <= 1000, "bounded declared imports required")
     for item in imports:
@@ -112,6 +120,8 @@ def _design_errors(child, paper_id):
     from scripts.research_design import validate_experiment_design
     plan = read(child / "experiments/plan.json")
     errors = runner.validate_plan(plan)
+    context = read(child / "state/run.json").get("supplemental_context", {})
+    expected_phase = "exploratory" if context.get("analysis_phase") == "exploratory" else "confirmatory"
     budget = runner.budget_ceiling(read(child / "experiments/budget.json"))
     need(all(r["paper_id"] == paper_id for r in plan["runs"]), "supplemental scope must contain only the selected paper")
     if study_routes.route(child, paper_id) == "empirical":
@@ -121,7 +131,19 @@ def _design_errors(child, paper_id):
         assigned = []
         for path in designs:
             value = read(path); errors.extend(validate_experiment_design(value, paper_id, runs)); assigned.extend(value["run_ids"])
+            contract = read(child / "papers" / paper_id / "paper-contract.json")
+            hypotheses = {h["id"] for h in contract.get("hypotheses", [])}
+            need(set(value["hypothesis_ids"]) <= hypotheses, "supplemental design references uncontracted hypotheses")
+            need(set(value["data_protocol"]["datasets"]) <= set(contract.get("datasets", [])) <= set(quality._manifest_map(child)), "supplemental data/design/manifest assignments differ")
         need(len(assigned) == len(set(assigned)) and set(assigned) == set(runs), "every supplemental run needs exactly one full experiment design")
+        contract = read(child / "papers" / paper_id / "paper-contract.json")
+        need({read(p)["design_id"] for p in designs} == set(contract.get("planned_experiments", {}).get("design_ids", [])), "supplemental design IDs differ from the scoped contract")
+        protocol = read(child / "papers" / paper_id / "experiment-evidence-plan.json")
+        phases = {c["analysis_phase"] for c in protocol["comparisons"]}
+        need(phases == {expected_phase}, "supplemental analyses must retain the approved exploratory/prospective phase")
+    elif study_routes.route(child, paper_id) == "meta_analysis":
+        protocol = read(study_routes.protocol_path(child, paper_id))
+        need({o["analysis_phase"] for o in protocol["outcomes"]} == {expected_phase}, "supplemental Meta outcomes must retain their approved exploratory/prospective phase")
     for run in plan["runs"]:
         need(run["isolation"]["kind"] == "container" and run["isolation"].get("engine") == "docker" and run["timeout_seconds"] <= 1200
              and all(p.startswith("results/") for p in run["expected_outputs"]), "supplemental cloud runs need pinned Docker, <=1200 seconds and results/ outputs")
@@ -134,6 +156,7 @@ def prepare_approval(project, paper_id, actor):
     need(not control.exists(), "scope already approved; never replace an old supplemental approval")
     state = read(child / "state/run.json")
     need(state.get("stage") == "experiment-design" and not state.get("approvals"), "an initialized, unapproved supplemental candidate is required")
+    need(state.get("supplemental_context", {}).get("analysis_phase") == value["analysis_phase"], "supplemental phase changed after preparation")
     need(not (child / "experiments/registry.jsonl").exists() or not (child / "experiments/registry.jsonl").read_text().strip(), "cannot approve a protocol after experiment attempts exist")
     plan, budget, errors = _design_errors(child, paper_id)
     parent_claims = set(read(project / "papers" / paper_id / "paper-contract.json").get("independence", {}).get("unique_claim_ids", []))
@@ -147,6 +170,10 @@ def prepare_approval(project, paper_id, actor):
     # this dossier; no model-supplied confirmation is copied or trusted.
     confirmations = []
     for dataset in quality._manifest_map(child):
+        from scripts.dataset_fetch import validate_manifest
+        manifest = quality._manifest_map(child)[dataset]
+        errors.extend(validate_manifest(manifest))
+        need(manifest.get("license", {}).get("confirmed_by_human") is True and manifest.get("download", {}).get("sha256") != "pending", "supplemental data rights and exact acquisition hashes need human confirmation")
         path = child / "data/quality" / f"{dataset}.json"
         need(path.is_file(), "supplemental data needs a complete quality report")
         errors.extend(quality.validate_data_quality_report(read(path), dataset, child))
@@ -342,7 +369,7 @@ def retire(project, paper_id, actor, review_sha256, run_id, note):
 
 def revision_errors(project, paper_id, *, require_reporting=True):
     try:
-        manifest, intake = current(project, paper_id)
+        manifest, intake = current(project, paper_id, execution=False)
         values = controls(project, paper_id, manifest["round_id"])
         need(bool(values), "reviewer requests new experiments: a separately approved supplemental protocol and budget are required")
         errors, covered = [], set()

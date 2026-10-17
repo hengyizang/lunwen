@@ -195,6 +195,7 @@ def validate_protocol(project, paper_id):
         text(value.get(key), key)
     ids(value.get("limitations"), "scope limitations")
     contract = read(project / "papers" / paper_id / "paper-contract.json")
+    need(contract.get("study_route") == kind, "paper contract study_route must match the actual study identity")
     if kind == "theory":
         need(contract.get("datasets") == [], "pure theory declares no empirical datasets; evidence consists of formal obligations")
     claims = ids(contract.get("independence", {}).get("unique_claim_ids"), "contracted claims")
@@ -365,7 +366,7 @@ def build_report(project, paper_id):
                      and theorem.get("source_sha256") == original["sha256"]
                      and theorem.get("checked_type") == " ".join((original["declaration"] + " : " + original["formal_type"]).split()), "proof report does not verify the declared theorem")
                 report["comparisons"].append({"comparison_id": theorem["id"], "claim_ids": original["claim_ids"],
-                    "analysis_phase": "confirmatory", "role": original["role"], "decision": "kernel_checked",
+                    "analysis_phase": "formal_verification", "role": original["role"], "decision": "kernel_checked",
                     "sources": sources, "proof": theorem})
         report.update(status="complete", protocol_sha256=sha(protocol_path(project, paper_id)),
                       preregistration_sha256=sha(prereg), registry_sha256=sha(registry_path),
@@ -427,6 +428,9 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
             text(row.get("uncertainty"), "uncertainty/scope")
             if evidence["route"] == "meta_analysis":
                 actual = result["statistics"]
+                need(row.get("analysis_phase") == actual["analysis_phase"] and row.get("decision") == actual["decision"], "reported Meta phase/decision differs from the registered evidence")
+                if actual["analysis_phase"] == "exploratory":
+                    need("exploratory" in row["excerpt"].casefold(), "exploratory Meta follow-up must be identified in the manuscript")
                 fields = {**{k: actual["summary"][k] for k in ("k", "estimate", "ci_low", "ci_high", "tau_squared", "i_squared")}, "p_adjusted": actual["p_adjusted"]}
                 need(set(row["values"]) == set(fields), "Meta reporting must include count, estimate, uncertainty, heterogeneity and adjusted test")
                 for key, value in fields.items():
@@ -473,7 +477,7 @@ def export_errors(project, paper_id):
 
 
 def prompt_contract():
-    return ("For actual Meta-analysis or theoretical identities, use papers/Pxx/study-protocol.json and the dedicated study route. "
+    return ("For actual Meta-analysis or theoretical identities, set paper-contract.study_route to meta_analysis or theory and use papers/Pxx/study-protocol.json. "
             "Meta needs complete search/selection receipts, source-bound independently attributed extraction, cohort independence, bias assessment, "
             "preregistered PM/modified-HKSJ outcomes, DL/leave-one-out/bias sensitivities and isolated replay. Theory needs exact Lean types, "
             "proof, assumption-witness and scope-check obligations for every claim; numerical examples are not proofs. "

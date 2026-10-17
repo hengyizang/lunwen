@@ -357,6 +357,69 @@
         "approved",
         "retired"
       ]
+    },
+    "study_route": {
+      "enum": [
+        "empirical",
+        "meta_analysis",
+        "theory"
+      ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "study_route"
+        ],
+        "properties": {
+          "study_route": {
+            "enum": [
+              "meta_analysis",
+              "theory"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "hypotheses": {
+            "minItems": 1
+          },
+          "datasets": {
+            "minItems": 1
+          },
+          "planned_experiments": {
+            "properties": {
+              "baseline_classes": {
+                "minItems": 3
+              },
+              "ablations": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "study_route"
+        ],
+        "properties": {
+          "study_route": {
+            "const": "theory"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "datasets": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
 }

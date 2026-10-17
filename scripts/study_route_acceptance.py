@@ -14,7 +14,7 @@ from scripts import research_identity, research_quality, researchctl, study_envi
 from scripts.research_artifacts import read, sha, write
 
 
-def make_study(project, kind, *, provision=False):
+def make_study(project, kind, *, provision=False, analysis_phase="confirmatory"):
     project.mkdir(parents=True, exist_ok=True)
     paper_id = "P01"
     paper = project / "papers" / paper_id
@@ -24,7 +24,7 @@ def make_study(project, kind, *, provision=False):
         "paper_count": 1, "paper_statuses": {paper_id: "active"}, "approved_gates": [], "approvals": [], "history": []})
     (project / "data").mkdir(exist_ok=True)
     (project / "data/datasets.jsonl").write_text("", encoding="utf-8")
-    write(paper / "paper-contract.json", {"paper_id": paper_id, "datasets": [],
+    write(paper / "paper-contract.json", {"paper_id": paper_id, "study_route": kind, "datasets": [],
         "independence": {"unique_claim_ids": ["C1"]}, "planned_experiments": {"design_ids": ["study-protocol"]}})
     identity = research_identity.template(paper_id)
     identity.update(research_kind="secondary_quantitative" if kind == "meta_analysis" else "primary",
@@ -74,7 +74,7 @@ def make_study(project, kind, *, provision=False):
             "population": "Synthetic studies without a real scientific population.", "comparability": "All effects use the same synthetic linear scale.",
             "precision_rationale": "Four studies exercise uncertainty; no claim of adequate scientific precision.",
             "effect_measure": "mean_difference", "direction": "greater", "minimum_effect": .05,
-            "analysis_phase": "confirmatory", "family": "primary-family", "alpha": .05}])
+            "analysis_phase": analysis_phase, "family": "primary-family", "alpha": .05}])
     else:
         source = project / "analysis/proof.lean"
         source.parent.mkdir(exist_ok=True)
@@ -155,9 +155,10 @@ def reporting_fixture(project, report, *, manuscript_project=None, label="Origin
                "uncertainty": "Interpretation is limited to synthetic studies or the exact formal assumptions."}
         if report["route"] == "meta_analysis":
             actual = result["statistics"]
+            row.update(analysis_phase=actual["analysis_phase"], decision=actual["decision"])
             numbers = {**{k: actual["summary"][k] for k in ("k", "estimate", "ci_low", "ci_high", "tau_squared", "i_squared")}, "p_adjusted": actual["p_adjusted"]}
             row["values"] = {k: f"{v:.6f}" for k, v in numbers.items()}
-            excerpt = label + " synthetic Meta result " + result["comparison_id"] + ": " + ", ".join(k + "=" + v for k, v in row["values"].items()) + "."
+            excerpt = label + " " + actual["analysis_phase"] + " synthetic Meta result " + result["comparison_id"] + ": " + ", ".join(k + "=" + v for k, v in row["values"].items()) + "."
         else:
             excerpt = label + ": " + result["proof"]["natural_language_statement"]
             row["formal_type"] = result["proof"]["checked_type"]
@@ -203,7 +204,7 @@ def supplemental_acceptance(parent, *, execute=True):
             "original_plan_sha256": sha(parent / "experiments/plan.json"), "original_preregistration_sha256": sha(parent / "papers/P01/preregistration.json")}
         write(parent / "papers/P01" / supplemental.PROPOSAL, proposal)
         child = parent / "experiments/supplemental/P01/R001/s001"
-        make_study(child, "meta_analysis", provision=execute)
+        make_study(child, "meta_analysis", provision=execute, analysis_phase="exploratory")
         supplemental.prepare(parent, paper)
         if not execute:
             return {"child": child, "proposal": proposal}

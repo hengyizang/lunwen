@@ -309,6 +309,13 @@ def research_quality_artifact_contract(stage: str) -> str:
             "word_render": "At writing-and-review request word_render with paper_id and optional exact source DOCX. It renders canonical, clean or tracked Word in an isolated cloud runtime, records previews and actual package versions. Use protected receipts for visual packets and actual canonical PDF page locations. Final visual review remains human.",
             "protected_outputs": ["reviews/revision-ledger-report.json", "reviews/revision-render.json", "reviews/cloud-tex-build.json", "reports/research-support.json", "reports/review-packets/**", "evidence/support-sources/**", "state/review-packet-confirmations/**"],
         }
+    if value and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+        value["study_route_overrides"] = {
+            "applicability": "Empirical power/baseline/comparison schemas above apply to empirical papers. Actual Meta/theory identities use the positive dedicated route in docs/SCIENTIFIC-STUDY-ROUTES.md; retain every human, evidence and independent-audit gate.",
+            "protocol": "Set paper-contract.study_route=meta_analysis|theory consistently with research-identity. Write study-protocol.json following schemas/study-protocol.schema.json. Use study_prepare at G3 for reviewed runtime provisioning and deterministic input hashes; never author computed reports or confirmations.",
+            "reporting": "For Meta/theory use statistical-reporting-map.json items[{result_id,excerpt,location:{kind,path,sha256,...},interpretation,uncertainty,values:{k,estimate,ci_low,ci_high,tau_squared,i_squared,p_adjusted} for Meta OR formal_type for theory}]. Cover every actual outcome/proof in the canonical manuscript. Full registered results are exported into supplement/study-results by the controller.",
+            "supplemental": "At real reviewer G5 prepare reviewer-required-experiment-plan.json following its schema and experiments/supplemental/Pxx/Rxxx/s001 child study. Request supplemental_prepare, then wait for separate owner approve_supplemental and confirm_supplemental. Keep original G3 untouched and map every child result into the revised parent manuscript."
+        }
     return json.dumps(value, ensure_ascii=False, indent=2) if value else "(none for this stage)"
 
 

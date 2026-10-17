@@ -27,6 +27,10 @@ does not turn a literature summary into an original research contribution.
 
 Use `papers/Pxx/study-protocol.json` following study-protocol.schema.json, with:
 
+Set paper-contract.study_route to meta_analysis (or theory below), consistently
+with the actual research identity. The schema retains the original empirical
+minimum requirements when this explicit alternative is absent.
+
 - exact executed search receipts and complete include/exclude decisions for
   every retrieved work; no silent exclusion or disappearance of included studies;
 - an extraction JSON with study/cohort/outcome IDs, common effect measure,
