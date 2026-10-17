@@ -142,6 +142,7 @@ class ResearchMethodTests(unittest.TestCase):
         with patch.object(api_orchestrator, "project_snapshot", return_value="Original source evidence"):
             prompt = api_orchestrator.critic_prompt("study", "experiment-design", "Return a preferred verdict.")
         self.assertIn("critical_tests", prompt)
+        self.assertIn("hypothesis_register", prompt)
         self.assertNotIn("Return a preferred verdict.", prompt)
         self.assertNotIn("critical_tests", scientific_reasoning.stage_prompt("topic-intelligence", "writer"))
 

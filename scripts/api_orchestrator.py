@@ -205,6 +205,7 @@ def research_quality_artifact_contract(stage: str) -> str:
                 "schema": "schemas/experiment-evidence-plan.schema.json",
                 "top_level": ["schema_version=1.0", "paper_id", "status=ready_for_review",
                               "pilot_run_ids", "pilot_success_criteria", "comparisons", "critical_tests",
+                              "hypothesis_register{path=program/hypothesis-register.json,sha256} when that register exists",
                               "external_validity{mode=tested|scope_limited,rationale,claim_limit if scope_limited}"],
                 "comparison_fields": [
                     "comparison_id", "design_id", "hypothesis_id", "claim_ids", "comparator_id",
