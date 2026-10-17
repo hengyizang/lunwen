@@ -10,9 +10,15 @@ ROOT=Path(__file__).resolve().parents[1]
 def probe(project:Path,provider:str,model:str,execute:bool=False)->dict:
     row={"provider":provider,"model":model,"checked_at":datetime.now(timezone.utc).replace(microsecond=0).isoformat(),"status":"dry-run","paid_call":False,"scientific_quality_test":False}
     if execute:
+        before=len(model_runtime.ledger_entries(project))
         try:
-            result=model_runtime.call(project,run_id="health-"+datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),stage="health",role="endpoint-health",provider=provider,model=model,prompt="Reply with exactly OK.",max_output_tokens=8);row.update(status="passed" if result.text.strip() else "failed",paid_call=True,reported_model=result.reported_model)
-        except (ai_providers.ProviderError,ValueError,OSError) as exc:row.update(status="failed",paid_call=True,error=str(exc))
+            with model_runtime.authorized_calls(project):
+                model_runtime.preflight_route(provider,model)
+                result=model_runtime.call(project,run_id="health-"+datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),stage="health",role="endpoint-health",provider=provider,model=model,prompt="Reply with exactly OK.",max_output_tokens=8)
+            row.update(status="passed" if result.text.strip()=="OK" else "failed",reported_model=result.reported_model)
+        except (RuntimeError,ValueError,OSError) as exc:row.update(status="failed",error=str(exc))
+        attempts=model_runtime.ledger_entries(project)[before:]
+        row.update(paid_call=bool(attempts),billing_unknown=any(str(item.get("cost_status","")).startswith(("unknown","estimated")) for item in attempts))
         path=project/"state"/"model-health.jsonl";path.parent.mkdir(parents=True,exist_ok=True)
         with path.open("a",encoding="utf-8") as handle:handle.write(json.dumps(row,ensure_ascii=False)+"\n")
     return row

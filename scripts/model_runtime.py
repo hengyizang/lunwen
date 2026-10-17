@@ -12,6 +12,7 @@ import json
 import math
 import os
 import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -260,6 +261,7 @@ def budget_status(project_root: Path, paper_id: str | None = None) -> dict[str, 
 
 
 def usage_summary(project_root: Path, paper_id: str | None = None) -> dict[str, Any]:
+    from scripts.cost_audit import summarize
     values = ledger_entries(project_root)
     if paper_id:
         values = [item for item in values if item.get("paper_id") == paper_id]
@@ -307,6 +309,7 @@ def usage_summary(project_root: Path, paper_id: str | None = None) -> dict[str, 
         "cost_cny": round(sum(item["cost_cny"] for item in rows), 8),
         "budget": budget_status(project_root, paper_id),
         "by_provider_model_role": rows,
+        "cost_diagnostics": summarize(values),
     }
 
 
@@ -325,6 +328,9 @@ def _cache_key(
     model: str | None = None,
     billing_quote: dict | None = None,
     declared_tool_limits: dict | None = None,
+    *,
+    stage: str | None = None,
+    role: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     configuration = ai_providers.configuration(provider)
     identity = {
@@ -332,11 +338,15 @@ def _cache_key(
         "model": model or configuration.get("model"),
         "protocol": configuration.get("protocol"),
         "max_tokens_field": configuration.get("max_tokens_field"),
+        "strict_model_id": configuration.get("strict_model_id"),
+        "anthropic_version": os.environ.get("ANTHROPIC_VERSION", "2023-06-01") if ai_providers.provider_family(provider) == "anthropic" else None,
         "endpoint": configuration.get("endpoint"),
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "system_sha256": hashlib.sha256((system or "").encode("utf-8")).hexdigest(),
         "max_output_tokens": max_output_tokens,
-        "cache_schema": "3.0",
+        "cache_schema": "4.0",
+        "stage": stage,
+        "role": role,
         "billing_identity": (billing_quote or {}).get("billing_identity", {}),
         "billing_quote_sha256": (billing_quote.get("quote_sha256") or billing_quotes.quote_digest(billing_quote)) if billing_quote is not None else None,
         "declared_tool_limits": declared_tool_limits or {},
@@ -345,6 +355,39 @@ def _cache_key(
         json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
     return digest, identity
+
+
+def fresh_call_required(role: str) -> bool:
+    return role.startswith("independent-critic") or role in {"independent-critique", "endpoint-health"}
+
+
+def preflight_route(provider: str, model: str | None = None) -> dict[str, Any]:
+    """Check the whole cycle's known routes before spending on its first role."""
+    configuration = ai_providers.configuration(provider)
+    if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1" and not configuration.get("configured"):
+        raise ModelBudgetError(f"model route is not configured: {provider}")
+    effective_model = model or str(configuration.get("model") or "") or None
+    quote = pricing(provider, effective_model)
+    try:
+        billing_quotes.tool_limits(quote, _billing_configuration("DR_OS_MODEL_TOOL_LIMITS_JSON", provider, None))
+    except billing_quotes.BillingQuoteError as exc:
+        raise ModelBudgetError(str(exc)) from exc
+    return {"provider": provider, "model": effective_model, "quote_sha256": quote.get("quote_sha256")}
+
+
+@contextmanager
+def authorized_calls(project_root: Path):
+    """A paid CLI probe must use project authority even outside a cloud job."""
+    previous = os.environ.get("DR_OS_REQUIRE_MODEL_AUTH")
+    os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+    try:
+        model_spend.read(project_root, required=True)
+        yield
+    finally:
+        if previous is None:
+            os.environ.pop("DR_OS_REQUIRE_MODEL_AUTH", None)
+        else:
+            os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = previous
 
 
 def _write_cache(path: Path, value: dict[str, Any]) -> None:
@@ -397,13 +440,28 @@ def call(
         limits = billing_quotes.tool_limits(quote, _billing_configuration("DR_OS_MODEL_TOOL_LIMITS_JSON", provider, declared_tool_limits))
     except billing_quotes.BillingQuoteError as exc:
         raise ModelBudgetError(str(exc)) from exc
-    key, identity = _cache_key(provider, prompt, system, max_output_tokens, effective_model or None, quote, limits)
+    # Fresh reviews are deliberately billable: response replay is not another
+    # independent scientific review or a current endpoint-health observation.
+    use_cache = use_cache and not fresh_call_required(role)
+    key, identity = _cache_key(provider, prompt, system, max_output_tokens, effective_model or None, quote, limits,
+                               stage=stage, role=role)
+    request_metrics = {
+        "prompt_sha256": identity["prompt_sha256"],
+        "system_sha256": identity["system_sha256"],
+        "prompt_input_bytes": len(prompt.encode("utf-8")) + len((system or "").encode("utf-8")),
+        "max_output_tokens": max_output_tokens,
+        "cache_policy": "exact_request" if use_cache else "fresh_required_or_explicit",
+    }
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
         try:
             cached = json.loads(cache_path.read_text(encoding="utf-8"))
-            if any(cached.get(field) != identity[field] for field in ("cache_schema", "billing_identity", "billing_quote_sha256", "declared_tool_limits")):
-                raise ValueError("cached billing identity differs from the exact request")
+            if any(cached.get(field) != value for field, value in identity.items()):
+                raise ValueError("cached scope or billing identity differs from the exact request")
+            if configuration.get("strict_model_id") is True and cached.get("reported_model") != effective_model:
+                raise ValueError("cached reported model differs from the strict requested identity")
+            if cached.get("response_text_sha256") != hashlib.sha256(str(cached.get("text", "")).encode("utf-8")).hexdigest():
+                raise ValueError("cached response content changed")
             result = ai_providers.ModelResult(
                 provider=str(cached["provider"]),
                 model=str(cached["model"]),
@@ -425,6 +483,7 @@ def call(
             _append(
                 _ledger(project_root),
                 {
+                    **request_metrics,
                     "schema_version": "1.0",
                     "at": utc_now(),
                     "run_id": run_id,
@@ -473,14 +532,26 @@ def call(
         from scripts.cloud_checkpoint import sync_billing
         sync_billing(project_root)
 
-    result = ai_providers.call(
-        provider,
-        prompt,
-        system=system,
-        max_output_tokens=max_output_tokens,
-        timeout=timeout,
-        model=model,
-    )
+    try:
+        result = ai_providers.call(
+            provider, prompt, system=system, max_output_tokens=max_output_tokens,
+            timeout=timeout, model=model,
+        )
+    except Exception as exc:
+        _append(_ledger(project_root), {
+            **request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id,
+            "stage": stage, "paper_id": paper_id, "role": role, "provider": provider,
+            "model": effective_model, "cache_hit": False, "cache_key": key,
+            "cost_cny": 0.0, "cost_status": "unknown_reconcile_required",
+            "reservation_id": reservation_id, "reserved_cost_cny": reserved_cost,
+            "billing_identity": identity["billing_identity"],
+            "billing_quote_sha256": identity["billing_quote_sha256"],
+            "endpoint": configuration.get("endpoint"), "protocol": configuration.get("protocol"),
+            "declared_tool_limits": limits,
+            "transport_error_type": type(exc).__name__,
+            "zero_cost_not_confirmed": True,
+        })
+        raise
     try:
         input_tokens, output_tokens = usage_counts(result.usage)
         estimated = input_tokens is None or output_tokens is None
@@ -491,7 +562,7 @@ def call(
         actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens,
                                                                       quote=quote, declared_tool_limits=limits, request_id=result.request_id)
     except ModelBudgetError as exc:
-        _append(_ledger(project_root), {"schema_version": "2.0", "at": utc_now(), "run_id": run_id, "stage": stage,
+        _append(_ledger(project_root), {**request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id, "stage": stage,
                                       "paper_id": paper_id, "role": role, "provider": provider,
                                       "model": result.reported_model or result.model, "cache_hit": False,
                                       "cache_key": key, "cost_cny": 0.0, "cost_status": "unknown_reconcile_required",
@@ -509,6 +580,7 @@ def call(
     _append(
         _ledger(project_root),
         {
+            **request_metrics,
             "schema_version": "1.0",
             "at": utc_now(),
             "run_id": run_id,
@@ -546,6 +618,7 @@ def call(
                 "provider": result.provider,
                 "model": result.model,
                 "text": result.text,
+                "response_text_sha256": hashlib.sha256(result.text.encode("utf-8")).hexdigest(),
                 "usage": result.usage,
                 "request_id": result.request_id,
                 "reported_model": result.reported_model,

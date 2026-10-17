@@ -22,6 +22,35 @@ except ImportError:
     from publication_figures import PROJECTS_ROOT, safe_file, sha256_file  # type: ignore
 
 
+def reusable_reader(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
+                    pages: list[int] | None = None) -> bool:
+    """Reuse native extraction only when source, scope, implementation and outputs match."""
+    try:
+        if not output.is_file() or output.is_symlink() or pdf.is_symlink():
+            return False
+        receipt = json.loads(output.with_suffix(".reader.json").read_text(encoding="utf-8"))
+        if (type(receipt.get("page_count")) is not int or not 1 <= max_pages <= 100
+                or receipt.get("translation_provider") is not None
+                or receipt.get("reader_implementation_sha256") != sha256_file(Path(__file__))
+                or receipt.get("pdf_sha256") != sha256_file(pdf)
+                or receipt.get("reader_sha256") != sha256_file(output)):
+            return False
+        expected = list(range(1, receipt["page_count"] + 1)) if pages is None else pages
+        if (not isinstance(expected, list) or not 1 <= len(expected) <= max_pages
+                or any(type(p) is not int or not 1 <= p <= receipt["page_count"] for p in expected)
+                or len(set(expected)) != len(expected) or sorted(expected) != receipt.get("selected_pages")):
+            return False
+        mapping = safe_file(project, receipt["source_map"]["path"], "source-map")
+        if mapping.is_symlink() or sha256_file(mapping) != receipt["source_map"]["sha256"]:
+            return False
+        source_map = json.loads(mapping.read_text(encoding="utf-8"))
+        return (source_map.get("source_sha256") == receipt["pdf_sha256"]
+                and source_map.get("reader_sha256") == receipt["reader_sha256"]
+                and [item["pdf_page"] for item in source_map.get("source_blocks", [])] == sorted(expected))
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+
+
 def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
           translate: bool = False, include_page_images: bool = False, pages: list[int] | None = None) -> dict:
     try:
@@ -80,6 +109,7 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
                 "extraction_is_not_full_text_reading":True}
     source_map_path.write_text(json.dumps(source_map,indent=2)+"\n",encoding="utf-8")
     receipt={"schema_version":"1.0","pdf_sha256":sha256_file(pdf),"page_count":len(reader.pages),"selected_pages":selected,
+             "reader_implementation_sha256":sha256_file(Path(__file__)),
              "source_map":{"path":source_map_path.relative_to(project).as_posix(),
                            "sha256":sha256_file(source_map_path)},
              "translation_provider":"openai" if translate else None,"page_images":images,

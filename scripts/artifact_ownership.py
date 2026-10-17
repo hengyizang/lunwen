@@ -8,7 +8,7 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
                   "reports/manuscript-hygiene", "reports/reviewer-rounds",
                   "reports/publication-disclosure", "reports/statistical-watermarks")
-EXECUTOR_FILES = {"experiments/registry.jsonl"}
+EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json"}
 
 
 def declared_outputs(root: Path) -> set[str]:
@@ -65,6 +65,8 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
                 and value.endswith("/study-validation-confirmation.json"))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/cloud-word-build.json"))
+            or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
+                and value.endswith("/reviews/citation-audit.json"))
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
                 and value.endswith("/experiment-evidence.json"))
             or any(value == prefix or value.startswith(prefix + "/") for prefix in EXECUTOR_ROOTS)

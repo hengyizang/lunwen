@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.3.0
 
+质量约束下的成本审计和优化见 [`docs/COST-EFFICIENCY.md`](docs/COST-EFFICIENCY.md)：隔离旧调用记录、无损压缩结构化上下文、合并重复取证、免费关键词/BM25检索、引用元数据缓存与PDF缓存失效检查、提前核对整轮通道报价，并记录重复请求和未知费用。模型选择与档位不变；两轮独立审查、统计/实验要求和人工批准保留，不以工程测试宣称论文等质或实际省费比例。
+
 实验与证据的下一轮工程改进见 [`docs/RESEARCH-EXTENSIONS.md`](docs/RESEARCH-EXTENSIONS.md)：强基线方法接入、文献可比性与辨别实验、非配对统计、盲评与成本汇总、按问题取证、云端 Word 渲染、图表公式精读定位和三视角审查。模型分工不变；真实课题、正式实验和独立盲评仍须实际执行。
 
 Humanizer 全部 26 项规则、anti-defensive-writing 完整学术审查及实际文本字符水印清理已接入，见 [`docs/EDITORIAL-SKILLS.md`](docs/EDITORIAL-SKILLS.md)。沿用既有模型和预算；保留原稿、科学证据与 AI 披露；不保证外部检测分数或统计水印已被去除。

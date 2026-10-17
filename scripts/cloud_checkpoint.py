@@ -100,10 +100,10 @@ def inventory(project: Path) -> list[dict]:
         if path.suffix.lower() not in GIT_SUFFIXES | DATA_SUFFIXES:
             raise CheckpointError(f"unsupported checkpoint file requires an explicit storage plan: {rel}")
         size = path.stat().st_size
-        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/")) or rel == "state/model-usage.jsonl"
+        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/", "state/citation-metadata/")) or rel == "state/model-usage.jsonl"
         in_git = (not internal and path.suffix.lower() in GIT_SUFFIXES and size <= GIT_FILE_LIMIT
                   and (rel == MANIFEST or used_git + size <= GIT_TOTAL_LIMIT))
-        if rel.startswith("state/") and rel != "state/model-usage.jsonl" and not in_git:
+        if rel.startswith("state/") and rel != "state/model-usage.jsonl" and not rel.startswith("state/citation-metadata/") and not in_git:
             raise CheckpointError("control state exceeds the Git checkpoint limit; archive cannot replace authority")
         if in_git:
             used_git += size
