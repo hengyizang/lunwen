@@ -78,6 +78,27 @@ class TrialControlsTests(unittest.TestCase):
             transport.assert_not_called()
         self.assertEqual(entry['gateway_debit_cny'],.001)
 
+    def test_rate_limit_backoff_is_read_only_and_never_replays_paid_post(self):
+        with patch.object(trial,'meter',side_effect=[trial.TrialError('http_429'),{'requests':0}]) as meter, \
+             patch.object(trial.time,'sleep') as pause,patch.object(trial,'http_json') as transport:
+            self.assertEqual(trial.read_meter({},'fake'),{'requests':0})
+            self.assertEqual(meter.call_count,2)
+            pause.assert_called_once_with(60)
+            transport.assert_not_called()
+
+    def test_resume_only_metadata_skips_with_all_prior_debits_verified(self):
+        ledger=self.ledger()
+        ledger.update(results=[{'call_id':'r|m|engineering','status':'billing_metadata_unavailable_no_call'}],
+                      quarantined_routes={'r|m':'http_429'},stop_reason='planned_available_comparisons_finished_with_quarantines')
+        entry={'call_id':'r|m|evidence','reserved_ceiling_cny':1,'status':'ambiguous_failure_reservation_retained'}
+        ledger['entries']=[entry]
+        with self.assertRaises(trial.TrialError):
+            trial.resume_metadata_skips(ledger)
+        trial.settle_debit(entry,.01,{'source':'independent fake debit'})
+        self.assertEqual(trial.resume_metadata_skips(ledger),['r|m'])
+        self.assertEqual(len(ledger['entries']),1)
+        self.assertNotIn('stop_reason',ledger)
+
     def test_public_billing_diagnostics_omit_credentials_and_identifiers(self):
         self.assertEqual(trial.numeric_tree({'user_id':13,'token_id':9,'balance':30,
             'key':'never store','data':{'cache_tokens':14,'cost':.02,'remaining':8}}),

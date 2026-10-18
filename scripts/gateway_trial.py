@@ -48,6 +48,8 @@ SOURCES = {
     'google': 'https://ai.google.dev/gemini-api/docs/pricing',
     'deepseek': 'https://api-docs.deepseek.com/quick_start/pricing',
 }
+_CHEAP_DENOMINATION = None
+_KEY_USAGE_SNAPSHOTS = {}
 
 
 class TrialError(Exception):
@@ -381,6 +383,7 @@ def inspect_billing(state,plan,keys):
 
 
 def meter(group,key):
+    global _CHEAP_DENOMINATION
     headers={'Authorization':'Bearer '+key}
     if group['root']=='https://codekey.ai':
         raw,_=http_json(group['root']+'/v1/usage',headers)
@@ -391,14 +394,18 @@ def meter(group,key):
             raise TrialError('unusable_gateway_meter')
         return {'kind':'codekey_total_actual_cost','requests':requests,'cost_cny':float(cost),
                 'currency_rule':'owner numeric USD wallet unit equals CNY1'}
-    status,_=http_json(group['root']+'/api/status')
-    unit=status.get('data',{}).get('quota_per_unit')
-    display=status.get('data',{}).get('quota_display_type')
+    if _CHEAP_DENOMINATION is None:
+        status,_=http_json(group['root']+'/api/status')
+        _CHEAP_DENOMINATION=status.get('data',{})
+    unit=_CHEAP_DENOMINATION.get('quota_per_unit')
+    display=_CHEAP_DENOMINATION.get('quota_display_type')
     if unit!=500000 or display!='USD':
         raise TrialError('gateway_denomination_changed')
-    usage,_=http_json(group['root']+'/api/usage/token/',headers)
+    if group['id'] not in _KEY_USAGE_SNAPSHOTS:
+        usage,_=http_json(group['root']+'/api/usage/token/',headers)
+        _KEY_USAGE_SNAPSHOTS[group['id']]=usage.get('data',{}).get('total_used')
     logs,_=http_json(group['root']+'/api/log/token',headers)
-    total=usage.get('data',{}).get('total_used')
+    total=_KEY_USAGE_SNAPSHOTS[group['id']]
     rows=logs.get('data',[])
     if not isinstance(rows,list) or type(total) is not int or total<0:
         raise TrialError('unusable_gateway_meter')
@@ -419,6 +426,38 @@ def meter(group,key):
             'rows':rows,'currency_rule':'owner numeric USD wallet unit equals CNY1'}
 
 
+def read_meter(group,key):
+    for attempt in range(3):
+        try:
+            return meter(group,key)
+        except TrialError as error:
+            if str(error)!='http_429' or attempt==2:
+                raise
+            # Only free, read-only usage queries wait and retry. No generation
+            # request is sent or repeated by this function.
+            time.sleep(60)
+
+
+def resume_metadata_skips(ledger):
+    allowed=[]
+    blocked=ledger.get('quarantined_routes',{})
+    for route,reason in list(blocked.items()):
+        if reason!='http_429':
+            continue
+        attempts=[e for e in ledger['entries'] if e['call_id'].startswith(route+'|')]
+        skipped=[r for r in ledger['results'] if r['call_id'].startswith(route+'|')
+                 and r.get('status')=='billing_metadata_unavailable_no_call']
+        if skipped and all(e.get('status')=='gateway_debit_verified' for e in attempts):
+            allowed.append(route)
+            del blocked[route]
+    if not allowed:
+        raise TrialError('no_safe_unattempted_metadata_skips_to_resume')
+    ledger.setdefault('operator_reviews',[]).append({'reason':'Resume only tasks whose read-only meter was rate-limited before inference; all prior paid IDs remain skipped.',
+        'routes':allowed,'commit':os.environ.get('GITHUB_SHA','unit-test')})
+    ledger.pop('stop_reason',None)
+    return allowed
+
+
 def settle_debit(entry,amount,evidence):
     if type(amount) not in (int,float) or not math.isfinite(amount) or amount<0 or amount>entry['reserved_ceiling_cny']:
         raise TrialError('gateway_debit_exceeds_reservation')
@@ -436,7 +475,7 @@ def reconcile_existing_cheapai(state,plan,keys,ledger):
         entries=[e for e in ledger['entries'] if e['call_id'].split('|')[0]==group['id']]
         if not entries:
             continue
-        current=meter(group,keys[group['id']])
+        current=read_meter(group,keys[group['id']])
         rows=current['rows']
         if len(rows)!=len(entries):
             raise TrialError('paused_debits_not_uniquely_matchable')
@@ -470,7 +509,7 @@ def reconcile_existing_cheapai(state,plan,keys,ledger):
 def settle_after_call(group,key,ledger,entry,before):
     for retry in range(4):
         try:
-            after=meter(group,key)
+            after=read_meter(group,key)
         except TrialError as error:
             if str(error)!='incomplete_gateway_debit_history' or retry==3:
                 raise
@@ -549,7 +588,7 @@ def run_trial(state, plan, keys, ledger):
                 ceiling = round(max(.10,7*billing_quotes.reserve_cost(quote,input_ceiling,output_ceiling)),8)
                 persist = lambda value: state.write('ledger.json',value)
                 try:
-                    before=meter(group,keys[group['id']])
+                    before=read_meter(group,keys[group['id']])
                 except TrialError as error:
                     blocked[route_id]=str(error)
                     records.append({'call_id':call_id,'status':'billing_metadata_unavailable_no_call','diagnostic':str(error)})
@@ -672,6 +711,9 @@ def main():
         finally:
             keys.clear()
         return
+    if os.environ.get('TRIAL_RESUME_METADATA_SKIPS')=='1' and ledger.get('stop_reason')=='planned_available_comparisons_finished_with_quarantines':
+        resume_metadata_skips(ledger)
+        state.write('ledger.json',ledger)
     if os.environ.get('TRIAL_RECONCILE_AND_CONTINUE')=='1' and ledger.get('stop_reason')=='generation_or_billing_requires_review':
         keys=receive_credentials(plan)
         reconcile_existing_cheapai(state,plan,keys,ledger)
