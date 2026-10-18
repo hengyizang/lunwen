@@ -849,6 +849,7 @@
   "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held.",
   "reservations_never_released_without_independent_gateway_debit": true,
   "quarantined_routes": {
-    "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified"
+    "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
+    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified"
   }
 }
