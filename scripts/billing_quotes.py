@@ -21,6 +21,7 @@ class BillingQuoteError(ValueError):
 
 IDENTITY_FIELDS = ("plan", "group", "mode")
 RATE_FIELDS = ("input_per_million", "output_per_million", "cache_read_per_million", "cache_write_per_million")
+CACHE_WRITE_TTL_RATES = ("cache_write_5m_per_million", "cache_write_1h_per_million")
 CONTEXT_BASES = {"full_request_input_tokens", "uncached_input_tokens"}
 
 
@@ -62,6 +63,10 @@ def _rates(value: dict, *, cache_required: bool) -> dict:
     result = {field: number(value[field], field) for field in RATE_FIELDS if field in value}
     if cache_required and any(field not in result for field in RATE_FIELDS[2:]):
         raise BillingQuoteError("conditional quotes need explicit cache read/write rates, including zero")
+    if any(field in value for field in CACHE_WRITE_TTL_RATES):
+        if not all(field in value for field in CACHE_WRITE_TTL_RATES):
+            raise BillingQuoteError("TTL-aware cache pricing needs both 5m and 1h write rates")
+        result.update({field: number(value[field], field) for field in CACHE_WRITE_TTL_RATES})
     return result
 
 
@@ -77,7 +82,7 @@ def _route(value: dict) -> tuple[str, str, str]:
 def _normalize(value: Any) -> dict:
     if not isinstance(value, dict):
         raise BillingQuoteError("each quote must be an object")
-    allowed = {"provider", "endpoint", "model", *IDENTITY_FIELDS, "currency", "price_version", "context_basis", "context_brackets", "tool_fees", *RATE_FIELDS}
+    allowed = {"provider", "endpoint", "model", *IDENTITY_FIELDS, "currency", "price_version", "context_basis", "context_brackets", "tool_fees", *RATE_FIELDS, *CACHE_WRITE_TTL_RATES}
     if set(value) - allowed:
         raise BillingQuoteError("unknown conditional quote fields")
     if any(field not in value for field in IDENTITY_FIELDS):
@@ -97,7 +102,7 @@ def _normalize(value: Any) -> dict:
             raise BillingQuoteError("context_basis without context_brackets is ambiguous")
         result.update(_rates(value, cache_required=True))
     else:
-        if any(field in value for field in RATE_FIELDS):
+        if any(field in value for field in (*RATE_FIELDS, *CACHE_WRITE_TTL_RATES)):
             raise BillingQuoteError("bracket rates cannot be mixed with top-level token rates")
         basis = value.get("context_basis")
         if not isinstance(basis, str) or basis not in CONTEXT_BASES:
@@ -107,7 +112,7 @@ def _normalize(value: Any) -> dict:
         normalized = []
         next_minimum = 0
         for index, bracket in enumerate(brackets):
-            if not isinstance(bracket, dict) or set(bracket) - {"min_input_tokens", "max_input_tokens", *RATE_FIELDS}:
+            if not isinstance(bracket, dict) or set(bracket) - {"min_input_tokens", "max_input_tokens", *RATE_FIELDS, *CACHE_WRITE_TTL_RATES}:
                 raise BillingQuoteError("unknown or malformed context bracket")
             minimum = count(bracket.get("min_input_tokens"), "min_input_tokens")
             maximum = bracket.get("max_input_tokens")
@@ -180,7 +185,8 @@ def reserve_cost(quote: dict, input_ceiling: int, output_ceiling: int, tools: di
     tiers = quote.get("context_brackets", [quote])
     # Reserving every declared tier is intentionally conservative when tokenization
     # and gateway context accounting cannot be known exactly before transport.
-    input_rate = max(tier.get(field, 0) for tier in tiers for field in ("input_per_million", "cache_read_per_million", "cache_write_per_million"))
+    input_rate = max(tier.get(field, 0) for tier in tiers
+                     for field in ("input_per_million", "cache_read_per_million", "cache_write_per_million", *CACHE_WRITE_TTL_RATES))
     output_rate = max(tier["output_per_million"] for tier in tiers)
     fee = sum(value["price_cny"] * (int(limits.get(name, 0) > 0) if value["billing"] == "flat_per_call" else limits.get(name, 0))
               for name, value in quote.get("tool_fees", {}).items())
@@ -192,13 +198,30 @@ def token_parts(usage: dict, input_tokens: int, output_tokens: int, *, anthropic
         raise BillingQuoteError("usage must be an object; reconcile the outstanding reservation")
     count(input_tokens, "input_tokens")
     count(output_tokens, "output_tokens")
-    detail = usage.get("input_tokens_details", usage.get("prompt_tokens_details", {}))
-    if not isinstance(detail, dict):
+    details = [usage[key] for key in ("input_tokens_details", "prompt_tokens_details") if key in usage]
+    if any(not isinstance(detail, dict) for detail in details):
         raise BillingQuoteError("input token details are malformed; reconcile the outstanding reservation")
-    cached = count(usage.get("cache_read_input_tokens", detail.get("cached_tokens", 0)), "cache read input tokens")
-    created = count(usage.get("cache_creation_input_tokens", 0), "cache creation input tokens")
-    if "cache_read_input_tokens" in usage and "cached_tokens" in detail and cached != detail["cached_tokens"]:
-        raise BillingQuoteError("conflicting cached-token receipts")
+
+    def receipt_count(primary: str, nested: str, label: str) -> int:
+        values = ([usage[primary]] if primary in usage else []) + [detail[nested] for detail in details if nested in detail]
+        values = [count(value, label) for value in values]
+        if len(set(values)) > 1:
+            raise BillingQuoteError(f"conflicting {label} receipts")
+        return values[0] if values else 0
+
+    cached = receipt_count("cache_read_input_tokens", "cached_tokens", "cache read input tokens")
+    created = receipt_count("cache_creation_input_tokens", "cache_write_tokens", "cache creation input tokens")
+    write_5m = write_1h = 0
+    creation = usage.get("cache_creation")
+    if creation is not None:
+        if not isinstance(creation, dict) or set(creation) != {"ephemeral_5m_input_tokens", "ephemeral_1h_input_tokens"}:
+            raise BillingQuoteError("cache creation needs a complete 5m/1h token breakdown")
+        write_5m = count(creation["ephemeral_5m_input_tokens"], "5m cache write tokens")
+        write_1h = count(creation["ephemeral_1h_input_tokens"], "1h cache write tokens")
+        if write_5m + write_1h != created:
+            raise BillingQuoteError("cache creation TTL tokens differ from total cache writes")
+    elif "cache_creation" in usage and created:
+        raise BillingQuoteError("cache creation needs a complete 5m/1h token breakdown")
     if not anthropic and (cached > input_tokens or created > input_tokens - cached):
         raise BillingQuoteError("cache counters exceed total input tokens")
     output_detail = usage.get("output_tokens_details", usage.get("completion_tokens_details", {}))
@@ -209,6 +232,8 @@ def token_parts(usage: dict, input_tokens: int, output_tokens: int, *, anthropic
     ordinary = input_tokens if anthropic else input_tokens - cached - created
     full_input = ordinary + cached + created
     return {"ordinary_input_tokens": ordinary, "cache_read_tokens": cached, "cache_write_tokens": created,
+            "cache_write_5m_tokens": write_5m, "cache_write_1h_tokens": write_1h,
+            "cache_write_unclassified_tokens": created - write_5m - write_1h,
             "full_request_input_tokens": full_input, "uncached_input_tokens": ordinary + created,
             "output_tokens_including_reasoning": output_tokens}
 
@@ -270,11 +295,21 @@ def bill(quote: dict, usage: dict, input_tokens: int, output_tokens: int, *, ant
                 "min_input_tokens": rates["min_input_tokens"], "max_input_tokens": rates["max_input_tokens"]}
     limits = tool_limits(quote, tools)
     tool_cost, tool_receipts = _tool_charge(quote, usage, limits, request_id)
+    ttl_parts = (("cache_write_5m_tokens", "cache_write_5m_per_million"),
+                 ("cache_write_1h_tokens", "cache_write_1h_per_million"))
+    for token_field, rate_field in ttl_parts:
+        if parts[token_field] and rate_field not in rates:
+            raise BillingQuoteError("cache write TTL has no exact price; reconcile the outstanding reservation")
+    unclassified = parts["cache_write_unclassified_tokens"]
+    if unclassified and any(field in rates for field in CACHE_WRITE_TTL_RATES):
+        if any(rates.get(field) != rates.get("cache_write_per_million") for field in CACHE_WRITE_TTL_RATES):
+            raise BillingQuoteError("different cache write prices require a complete TTL usage breakdown")
     unknown = bool((parts["cache_read_tokens"] and "cache_read_per_million" not in rates)
-                   or (parts["cache_write_tokens"] and "cache_write_per_million" not in rates))
+                   or (unclassified and "cache_write_per_million" not in rates))
     token_cost = (parts["ordinary_input_tokens"] * rates["input_per_million"]
                   + parts["cache_read_tokens"] * rates.get("cache_read_per_million", rates["input_per_million"])
-                  + parts["cache_write_tokens"] * rates.get("cache_write_per_million", 2 * rates["input_per_million"])
+                  + unclassified * rates.get("cache_write_per_million", 2 * rates["input_per_million"])
+                  + sum(parts[token_field] * rates.get(rate_field, 0) for token_field, rate_field in ttl_parts)
                   + output_tokens * rates["output_per_million"]) / 1_000_000
     details = {**parts, "rates": rates, "quote_sha256": quote.get("quote_sha256"),
                "billing_identity": quote.get("billing_identity", identity()), "context_tier": tier,
