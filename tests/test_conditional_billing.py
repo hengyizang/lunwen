@@ -206,6 +206,15 @@ class CacheWriteBillingTests(unittest.TestCase):
     def ttl_quote(**changes):
         return quote(cache_write_5m_per_million=3, cache_write_1h_per_million=6, **changes)
 
+    def test_legacy_candidate_cost_estimate_covers_cache_rates_without_a_paid_probe(self):
+        for write_rate, read_rate, expected in ((3, 0.2, 0.004), (2, 5, 0.006)):
+            prices = {MODEL: {"input_per_million": 2, "output_per_million": 10,
+                              "cache_write_per_million": write_rate, "cache_read_per_million": read_rate}}
+            with self.subTest(prices=prices), runtime(prices) as transport:
+                value = model_runtime.cost_cny(PROVIDER, 1000, 100, MODEL)
+                self.assertAlmostEqual(value, expected)
+                transport.assert_not_called()
+
     def test_openai_cache_writes_replace_ordinary_input_and_reasoning_is_counted_once(self):
         usage = {"input_tokens": 1000, "output_tokens": 20,
                  "input_tokens_details": {"cached_tokens": 400, "cache_write_tokens": 500},
