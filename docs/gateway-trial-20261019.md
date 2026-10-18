@@ -19,7 +19,9 @@ The separate cloud-state branch retains a durable CNY30 authorization and a
 write-before-transport reservation for each route/model/fixture. Reruns share
 this allowance and skip attempted IDs. No inference retries, paid warmups,
 cross-site fallback, built-in tools, recharge or production activation occur.
-Unknown billing holds its reservation and stops the trial. Conservative ceilings
+Unknown billing holds its reservation and stops the affected route. Other
+already planned independent comparisons may proceed under the same shared cap;
+they are never automatic fallbacks for the failed request. Conservative ceilings
 include the most expensive context/cache-write rates, a larger input allowance
 for Claude's observed additional gateway context, and a sevenfold safety margin.
 A model receipt alone never releases money. A separately queried gateway debit
@@ -28,7 +30,9 @@ quota units are checked against its public quota-per-unit setting and complete
 per-key debit logs. CodeKey requires exactly one new request in its independent
 total actual-cost meter. Other concurrent requests, changed denomination,
 missing debit evidence, negative/nonfinite amounts or over-ceiling charges stop
-the trial. All initial attempts remain recorded. The margin is not actual spend
+that route and keep its reservation. Model-identity mismatches also quarantine
+the route instead of accepting its outputs or issuing another test on it. All
+initial attempts remain recorded. The margin is not actual spend
 and does not change the owner's price formula.
 
 Quotes record official price items and the screenshot group coefficient, plus

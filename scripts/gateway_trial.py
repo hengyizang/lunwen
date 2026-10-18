@@ -3,8 +3,8 @@
 All material is an original synthetic software fixture, not research evidence.
 Credentials arrive only through GitHub Actions Secrets, never PR metadata.
 Generation has no retry/fallback. Durable conservative reservations are not
-released on a model receipt alone. Unknown billing stops
-the trial; restarting does not create another CNY30 allowance. A reservation can
+released on a model receipt alone. Unknown billing stops the affected route;
+restarting does not create another CNY30 allowance. A reservation can
 be settled only against an independently read, exactly matched gateway debit.
 """
 from __future__ import annotations
@@ -409,9 +409,13 @@ def meter(group,key):
         raise TrialError('unexpected_model_in_dedicated_key_history')
     if any(type(r['quota']) is not int or r['quota']<0 or type(r['created_at']) is not int for r in rows):
         raise TrialError('unusable_gateway_debits')
-    if sum(r['quota'] for r in rows)!=total:
+    logged_total=sum(r['quota'] for r in rows)
+    if logged_total<total:
         raise TrialError('incomplete_gateway_debit_history')
-    return {'kind':'cheapai_quota_history','quota_per_unit':unit,'total_quota':total,
+    # The token-usage endpoint may cache an older aggregate. A newer complete
+    # debit log is authoritative for its own recorded amounts; never infer zero.
+    return {'kind':'cheapai_quota_history','quota_per_unit':unit,'total_quota':logged_total,
+            'token_usage_counter_quota':total,'token_usage_counter_lagged':total<logged_total,
             'rows':rows,'currency_rule':'owner numeric USD wallet unit equals CNY1'}
 
 
@@ -451,6 +455,9 @@ def reconcile_existing_cheapai(state,plan,keys,ledger):
                         record['post_reconciliation_grade']=grade(record['text'],entry['call_id'].split('|')[2])
                         record['gateway_debit_cny']=entry['gateway_debit_cny']
                         record['reconciled_without_generation_retry']=True
+                    elif record['call_id']==entry['call_id'] and record.get('identity_exact') is False:
+                        blocked=ledger.setdefault('quarantined_routes',{})
+                        blocked['|'.join(entry['call_id'].split('|')[:2])]='reported_model_identity_unverified'
     if any(e.get('status')!='gateway_debit_verified' for e in ledger['entries']):
         raise TrialError('unreconciled_prior_attempts_still_blocked')
     ledger.setdefault('operator_reviews',[]).append({'run_id':os.environ['GITHUB_RUN_ID'],
@@ -507,6 +514,7 @@ def run_trial(state, plan, keys, ledger):
     state.write('inventory.json', {'trial_id':TRIAL,'inventory':inventory})
     print('Cloud account model inventory recorded without generation calls',flush=True)
     records = ledger.setdefault('results',[])
+    blocked=ledger.setdefault('quarantined_routes',{})
     # Finish the common evidence comparison before spending on the second fixture.
     for case in ('evidence','engineering'):
         for group in plan['groups']:
@@ -519,6 +527,10 @@ def run_trial(state, plan, keys, ledger):
                     model='deepseek-v4.1-flash'
                 call_id = group['id']+'|'+model+'|'+case
                 if any(e['call_id']==call_id for e in ledger['entries']):
+                    continue
+                route_id=group['id']+'|'+model
+                if route_id in blocked:
+                    records.append({'call_id':call_id,'status':'quarantined_route_no_call','reason':blocked[route_id]})
                     continue
                 if model not in inventory[group['id']]['models']:
                     records.append({'call_id':call_id,'status':'exact_model_not_advertised_no_call'})
@@ -536,7 +548,13 @@ def run_trial(state, plan, keys, ledger):
                 # Release only after an independent, exactly matched gateway debit.
                 ceiling = round(max(.10,7*billing_quotes.reserve_cost(quote,input_ceiling,output_ceiling)),8)
                 persist = lambda value: state.write('ledger.json',value)
-                before=meter(group,keys[group['id']])
+                try:
+                    before=meter(group,keys[group['id']])
+                except TrialError as error:
+                    blocked[route_id]=str(error)
+                    records.append({'call_id':call_id,'status':'billing_metadata_unavailable_no_call','diagnostic':str(error)})
+                    persist(ledger)
+                    continue
                 if not reserve(ledger,call_id,ceiling,persist,meter_before=before):
                     records.append({'call_id':call_id,'status':'budget_ceiling_prevented_call'})
                     continue
@@ -611,9 +629,9 @@ def run_trial(state, plan, keys, ledger):
                     persist(ledger)
                     print(call_id+': '+record['status'],flush=True)
                     if not identity_ok:
-                        ledger['stop_reason']='model_identity_requires_review'
+                        blocked[route_id]='reported_model_identity_unverified'
                         persist(ledger)
-                        return
+                        continue
                 except (TrialError,billing_quotes.BillingQuoteError,ValueError,TypeError,KeyError) as error:
                     # Keep this reservation and STOP, even for a seemingly harmless 400/401.
                     entry['status']='ambiguous_failure_reservation_retained'
@@ -622,11 +640,11 @@ def run_trial(state, plan, keys, ledger):
                         elapsed_seconds=round(time.monotonic()-started,3))
                     if not receipt_saved:
                         records.append(record)
-                    ledger['stop_reason']='generation_or_billing_requires_review'
+                    blocked[route_id]=record['diagnostic']
                     persist(ledger)
-                    print(call_id+': stopped; reservation held; no retry',flush=True)
-                    return
-    ledger['stop_reason']='planned_available_comparisons_finished_or_budget_limited'
+                    print(call_id+': route stopped; reservation held; no retry',flush=True)
+                    continue
+    ledger['stop_reason']='planned_available_comparisons_finished_with_quarantines' if blocked else 'planned_available_comparisons_finished_or_budget_limited'
     state.write('ledger.json',ledger)
 
 

@@ -6,6 +6,7 @@ import hashlib
 import io
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 from scripts import gateway_trial as trial
 
@@ -81,6 +82,29 @@ class TrialControlsTests(unittest.TestCase):
         self.assertEqual(trial.numeric_tree({'user_id':13,'token_id':9,'balance':30,
             'key':'never store','data':{'cache_tokens':14,'cost':.02,'remaining':8}}),
             {'data':{'cache_tokens':14,'cost':.02}})
+
+    def test_identity_failure_quarantines_route_without_retrying_or_blocking_other_planned_model(self):
+        group={'id':'test','root':'https://codekey.ai','family':'openai','multiplier':.2,
+               'models':['gpt-6.1-sol','gpt-6-astra']}
+        state=SimpleNamespace(token='fake',write=lambda name,value:None)
+        ledger=self.ledger();ledger['results']=[]
+        generated=[]
+        def fake_http(url,headers=None,body=None,**kwargs):
+            if body is None:
+                return {'data':[{'id':m} for m in group['models']]},{}
+            model=body['model'];generated.append(model)
+            return {'model':'unverified-model' if model=='gpt-6.1-sol' else model,
+                'status':'completed','output':[{'type':'message','content':[{'type':'output_text','text':'{}'}]}],
+                'usage':{'input_tokens':10,'output_tokens':10}},{}
+        def fake_settle(group,key,ledger,entry,before):
+            trial.settle_debit(entry,.001,{'source':'independent fake meter'})
+        with patch.object(trial,'http_json',side_effect=fake_http),patch.object(trial,'meter',return_value={}), \
+             patch.object(trial,'settle_after_call',side_effect=fake_settle),patch('sys.stdout',io.StringIO()):
+            trial.run_trial(state,{'groups':[group]},{'test':'fake'},ledger)
+        self.assertEqual(generated,['gpt-6.1-sol','gpt-6-astra','gpt-6-astra'])
+        self.assertIn('test|gpt-6.1-sol',ledger['quarantined_routes'])
+        self.assertEqual(len(ledger['entries']),3)
+        self.assertAlmostEqual(trial.committed_cost(ledger),.003)
 
     def test_no_local_or_pr_event_execution(self):
         with patch.dict(os.environ,{},clear=True),self.assertRaises(trial.TrialError):
