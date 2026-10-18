@@ -188,7 +188,8 @@ def grade(text, case):
                 'no_false_primary_significance':data.get('primary_significant') is False,
                 'posthoc_not_confirmatory':data.get('subgroup_confirmatory') is False,
                 'no_fabricated_doi':data.get('doi', 'MISSING') is None,
-                'source_trace':data.get('source_ids')==['S1','S2','S3'],
+                'source_trace':isinstance(data.get('source_ids'),list) and
+                    {'S1','S2'}.issubset(set(data['source_ids'])) and set(data['source_ids']).issubset({'S1','S2','S3'}),
                 'conclusion_present':isinstance(data.get('conclusion'),str) and bool(data['conclusion'].strip()),
             }
         else:
@@ -298,6 +299,71 @@ def receipt_numbers(usage):
             if k in allowed and (isinstance(v,dict) or type(v) is int)}
 
 
+def numeric_tree(value):
+    """Billing diagnostics contain only numeric fields, never account names/keys/IPs."""
+    if not isinstance(value,dict):
+        return {}
+    result={}
+    for key,item in value.items():
+        if not re.fullmatch(r'[a-zA-Z_][a-zA-Z0-9_]{0,80}',key) or key in {
+            'id','user_id','token_id','channel_id','balance','remaining','limit',
+            'total_granted','total_available','expires_at','expired_time'}:
+            continue
+        if type(item) in (int,float) and math.isfinite(item):
+            result[key]=item
+        elif isinstance(item,dict):
+            result[key]=numeric_tree(item)
+    return result
+
+
+def inspect_billing(state,plan,keys):
+    audit={'trial_id':TRIAL,'model_generation_calls':0,'groups':{},
+           'cost_units':'gateway reported numbers; CNY conversion requires denomination evidence'}
+    source_run=state.api('actions/runs/39146426861')
+    from datetime import datetime
+    cutoff=int(datetime.fromisoformat(source_run['created_at'].replace('Z','+00:00')).timestamp())
+    for group in plan['groups']:
+        headers={'Authorization':'Bearer '+keys[group['id']]}
+        data={}
+        endpoints=('/api/usage/token/','/api/log/token') if group['root']=='https://cheapai.info' else ('/v1/usage',)
+        for path in endpoints:
+            try:
+                raw,_=http_json(group['root']+path,headers)
+                if path=='/api/log/token':
+                    logs=raw.get('data',[])
+                    if isinstance(logs,dict):
+                        logs=logs.get('items',logs.get('logs',[]))
+                    rows=[]
+                    for item in logs if isinstance(logs,list) else []:
+                        if not isinstance(item,dict) or item.get('created_at',0)<cutoff:
+                            continue
+                        row=numeric_tree(item)
+                        if item.get('model_name') in group['models']:
+                            row['model_name']=item['model_name']
+                        other=item.get('other',{})
+                        if isinstance(other,str):
+                            try:
+                                other=json.loads(other)
+                            except ValueError:
+                                other={}
+                        row['other']=numeric_tree(other)
+                        rows.append(row)
+                    data[path]={'records':rows}
+                else:
+                    data[path]={'numbers':numeric_tree(raw)}
+                    if group['family'] in ('google','deepseek','openai','anthropic') and group['root']=='https://codekey.ai':
+                        data[path]['is_valid']=raw.get('isValid')
+                        data[path]['subscription_present']=bool(raw.get('subscription'))
+                        balance=raw.get('balance')
+                        data[path]['wallet_positive']=balance>0 if type(balance) in (int,float) else None
+                        data[path]['mode']=raw.get('mode') if raw.get('mode') in ('quota_limited','balance','subscription','unlimited') else 'unverified'
+            except (TrialError,TypeError,ValueError) as error:
+                data[path]={'status':str(error) if type(error) is TrialError else type(error).__name__}
+        audit['groups'][group['id']]=data
+    state.write('billing-audit.json',audit)
+    print('Read-only billing audit recorded; no model generation requested',flush=True)
+
+
 def run_trial(state, plan, keys, ledger):
     secret_values = [*keys.values(),state.token]
     inventory = {}
@@ -350,10 +416,17 @@ def run_trial(state, plan, keys, ledger):
                     'payload_sha256':digest(payload),'quote_sha256':quote['quote_sha256'],
                     'source_url':SOURCES[family],'reserved_ceiling_cny':ceiling}
                 started = time.monotonic()
+                receipt_saved=False
                 try:
                     response, response_headers = http_json(route['root']+path,headers,payload)
                     text, raw_usage, reported, complete = decode(route,response)
                     usage = receipt_numbers(raw_usage)
+                    record.update(text=safe_text(text,secret_values),usage=usage,
+                        reported_model=safe_text(reported,secret_values),complete=complete,
+                        identity_exact=reported==model,status='receipt_received_before_billing_validation')
+                    records.append(record)
+                    receipt_saved=True
+                    persist(ledger)
                     input_tokens = usage.get('input_tokens',usage.get('prompt_tokens'))
                     output_tokens = usage.get('output_tokens',usage.get('completion_tokens'))
                     modeled,unknown,parts = billing_quotes.bill(quote,usage,input_tokens,output_tokens,
@@ -367,7 +440,6 @@ def run_trial(state, plan, keys, ledger):
                         reported_model=safe_text(reported,secret_values),identity_exact=identity_ok,
                         complete=complete,text=safe_text(text,secret_values),usage=usage,
                         modeled_cost_cny=modeled,billing_parts=parts,grade=grade(text,case) if complete and identity_ok else None)
-                    records.append(record)
                     record['elapsed_seconds']=round(time.monotonic()-started,3)
                     persist(ledger)
                     print(call_id+': '+record['status'],flush=True)
@@ -379,9 +451,10 @@ def run_trial(state, plan, keys, ledger):
                     # Keep this reservation and STOP, even for a seemingly harmless 400/401.
                     entry['status']='ambiguous_failure_reservation_retained'
                     record.update(status='ambiguous_failure_no_retry',
-                        diagnostic=str(error) if type(error) is TrialError else type(error).__name__,
+                        diagnostic=str(error) if type(error) in (TrialError,billing_quotes.BillingQuoteError) else type(error).__name__,
                         elapsed_seconds=round(time.monotonic()-started,3))
-                    records.append(record)
+                    if not receipt_saved:
+                        records.append(record)
                     ledger['stop_reason']='generation_or_billing_requires_review'
                     persist(ledger)
                     print(call_id+': stopped; reservation held; no retry',flush=True)
@@ -407,6 +480,13 @@ def main():
                   'budget_safety_multiplier':7,'reservations_never_automatically_released':True}
         state.write('ledger.json',ledger)
     validate_ledger(ledger,plan_hash)
+    if os.environ.get('TRIAL_METADATA_ONLY')=='1':
+        keys=receive_credentials(plan)
+        try:
+            inspect_billing(state,plan,keys)
+        finally:
+            keys.clear()
+        return
     if ledger.get('stop_reason') or any(e['status']=='reserved_before_transport' for e in ledger['entries']):
         raise TrialError('existing_trial_stopped_do_not_replay_authorization')
     keys = receive_credentials(plan)
