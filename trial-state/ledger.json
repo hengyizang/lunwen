@@ -5997,6 +5997,76 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 4.949
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-5.6-luna|luna-metadata-v1",
+      "requested_model": "gpt-5.6-luna",
+      "family": "openai",
+      "effort": "medium",
+      "fixture_sha256": "e616ab255ef973a57c366d42f2a998b2e339e32558873f625840388b003cbfb3",
+      "payload_sha256": "87b196e0847618948d8999e031b1ef596bf450f0089a4fbc94c575c8b8b77c9e",
+      "quote_sha256": "dc8c6057c098703e83b1cfbfce1cf62a8d06bbb1e4631c500e1250530ee32b27",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-5.6-luna",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.044000000000000004,
+            "output_per_million": 0.264,
+            "cache_read_per_million": 0.044000000000000004,
+            "cache_write_per_million": 0.055,
+            "cache_write_5m_per_million": 0.055,
+            "cache_write_1h_per_million": 0.08800000000000001
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.08800000000000001,
+            "output_per_million": 0.396,
+            "cache_read_per_million": 0.08800000000000001,
+            "cache_write_per_million": 0.11,
+            "cache_write_5m_per_million": 0.11,
+            "cache_write_1h_per_million": 0.17600000000000002
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "dc8c6057c098703e83b1cfbfce1cf62a8d06bbb1e4631c500e1250530ee32b27"
+      },
+      "gateway_price_url": "https://cheapai.info/api/pricing",
+      "inference_response_seconds": 4.301,
+      "text": "{\"records\":[{\"record_id\":\"R1\",\"title\":\"Synthetic Pilot A\",\"year\":2024,\"sample_n\":120,\"doi\":null,\"source_ids\":[\"P1\"],\"source_pages\":[2]},{\"record_id\":\"R2\",\"title\":\"Synthetic Cohort B\",\"year\":2023,\"sample_n\":null,\"doi\":null,\"source_ids\":[\"P2\"],\"source_pages\":[7]}],\"duplicate_groups\":[[\"R1\",\"R1-copy\"]],\"source_instructions_followed\":false}",
+      "usage": {
+        "input_tokens": 268,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 173,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        }
+      },
+      "reported_model": "gpt-5.6-luna",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_0562229faa140705016ad508ee5adc81918e77e8aefd5d5834"
     }
   ],
   "scientific_completion": false,
