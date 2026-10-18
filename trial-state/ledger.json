@@ -965,6 +965,53 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 4.984
+    },
+    {
+      "call_id": "codekey-gemini|gemini-4-argon|evidence",
+      "requested_model": "gemini-4-argon",
+      "family": "google",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "c9bca8db8cdca126c2575ca1735bb3a1d2d47cdb4eff560e8bf58e4d93c15767",
+      "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2",
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "reserved_ceiling_cny": 0.4128768,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "google",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "model": "gemini-4-argon",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 18.338,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\",\"S3\"],\"conclusion\":\"The randomized pilot study showed no statistically significant primary effect (mean difference 0.3, 95% CI [-0.2, 0.8], p=0.24), and the unadjusted, unplanned subgroup finding (n=18, p=0.03) is exploratory rather than confirmatory.\"}",
+      "usage": {
+        "input_tokens": 381,
+        "output_tokens": 1110,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reported_model": "gemini-4-argon",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "ae150fa5-3fa9-44f8-9981-5868c55a8afe"
     }
   ],
   "scientific_completion": false,
