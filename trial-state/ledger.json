@@ -5806,6 +5806,50 @@
       "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-engineering-v1",
       "status": "quarantined_route_no_call",
       "reason": "http_502"
+    },
+    {
+      "call_id": "codekey-deepseek|deepseek-v4.1-flash|luna-engineering-v1",
+      "requested_model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "effort": "high",
+      "fixture_sha256": "fa84534f8697fe57a7b700e4e2802022f34e9e31cb0ace6290025dca3b8617ba",
+      "payload_sha256": "5094f4d40273a094fd6025dbe9a594f39a4831017e432ffa39f3a382d86d772e",
+      "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352",
+      "source_url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "deepseek",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "deepseek-v4.1-flash",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.2,
+        "output_per_million": 0.8,
+        "cache_read_per_million": 0.004,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 2.965,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Re-run the experiment with patient-grouped train/test splits, fit the scaler only on the training set, transform the held-out set, and compare against baselines with confidence intervals and a complete run log.\"}",
+      "usage": {
+        "prompt_tokens": 236,
+        "completion_tokens": 331
+      },
+      "reported_model": "deepseek-v4.1-flash",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "cmb-993bddd3cb1d11f18e6faed48874872d"
     }
   ],
   "scientific_completion": false,
