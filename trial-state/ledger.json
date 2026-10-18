@@ -1100,6 +1100,72 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 20.596
+    },
+    {
+      "call_id": "codekey-codex-pure|gpt-6.1-sol|evidence",
+      "requested_model": "gpt-6.1-sol",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "b1a697c82169e3c8a196f4746e927f2f1b876fab5f839dfbef11ab4717724164",
+      "quote_sha256": "1570e631eaf88093328f3b34b7280da384ed71536684a093a61fa312abc32096",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 0.401408,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 16384,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-6.1-sol",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-pure",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.4,
+            "output_per_million": 2.0,
+            "cache_read_per_million": 0.020000000000000004,
+            "cache_write_per_million": 0.5
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.8,
+            "output_per_million": 3.0,
+            "cache_read_per_million": 0.04000000000000001,
+            "cache_write_per_million": 1.0
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "1570e631eaf88093328f3b34b7280da384ed71536684a093a61fa312abc32096"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 31.866,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\",\"S3\"],\"conclusion\":\"The preregistered pilot estimate was 0.3 (95% CI [-0.2, 0.8], p=0.24) and did not establish a statistically significant effect; the unplanned subgroup finding is exploratory.\"}",
+      "usage": {
+        "input_tokens": 198,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 250,
+        "output_tokens_details": {
+          "reasoning_tokens": 119
+        }
+      },
+      "reported_model": "gpt-6.1-sol",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_0adb08032c93999c016ad4fedf949881998efcc4cc6eca41dd"
     }
   ],
   "scientific_completion": false,
