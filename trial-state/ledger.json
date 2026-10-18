@@ -3307,6 +3307,72 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 5.461
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6.1-sol|engineering",
+      "requested_model": "gpt-6.1-sol",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "56b289efb868b350e5b418e3edaa3ecb510f7e39015c7714a45d91375337de79",
+      "quote_sha256": "0533ec5b5329e4b06ea81acb577fa556477d8c27506ee76c3b4e30d6b8f6b519",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 0.2408448,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 16384,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-6.1-sol",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-discount",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.24,
+            "output_per_million": 1.2,
+            "cache_read_per_million": 0.012,
+            "cache_write_per_million": 0.3
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.48,
+            "output_per_million": 1.7999999999999998,
+            "cache_read_per_million": 0.024,
+            "cache_write_per_million": 0.6
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "0533ec5b5329e4b06ea81acb577fa556477d8c27506ee76c3b4e30d6b8f6b519"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 41.03,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Repeat evaluation with patient-grouped train/test splits, fitting StandardScaler only on the training patients, and report accuracy with a confidence interval across repeated splits alongside all baselines.\"}",
+      "usage": {
+        "input_tokens": 176,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 166,
+        "output_tokens_details": {
+          "reasoning_tokens": 63
+        }
+      },
+      "reported_model": "gpt-6.1-sol",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_08dd3e163e9ed6e1016ad500a5e8cc8194822460e0552e68cf"
     }
   ],
   "scientific_completion": false,
