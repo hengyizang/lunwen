@@ -5472,6 +5472,72 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 6.479
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6.1-sol|luna-engineering-v1",
+      "requested_model": "gpt-6.1-sol",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "fa84534f8697fe57a7b700e4e2802022f34e9e31cb0ace6290025dca3b8617ba",
+      "payload_sha256": "1b9015cd09723e6d3b1345bd389cc2c3b2c66868aaaa0c419b57845f629c9c12",
+      "quote_sha256": "4caf9b744434d9aa3058c0a95e47d6e01a74d05d15cbc531bf76bd18514b4fc7",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 0.157696,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6.1-sol",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.44,
+            "output_per_million": 2.2,
+            "cache_read_per_million": 0.022000000000000002,
+            "cache_write_per_million": 0.55
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.88,
+            "output_per_million": 3.3000000000000003,
+            "cache_read_per_million": 0.044000000000000004,
+            "cache_write_per_million": 1.1
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "4caf9b744434d9aa3058c0a95e47d6e01a74d05d15cbc531bf76bd18514b4fc7"
+      },
+      "gateway_price_url": "https://cheapai.info/api/pricing",
+      "inference_response_seconds": 3.127,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Run a patient-grouped train/test evaluation, fit the scaler only on training data, and compare the method with baselines using confidence intervals.\"}",
+      "usage": {
+        "input_tokens": 209,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 161,
+        "output_tokens_details": {
+          "reasoning_tokens": 81
+        }
+      },
+      "reported_model": "gpt-6.1-sol",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_0c3878f284cad0c6016ad508d2cefc8195a44dc57ad97fb87b"
     }
   ],
   "scientific_completion": false,
