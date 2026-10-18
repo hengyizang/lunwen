@@ -23,6 +23,7 @@ This repository is a research workflow, not a publication generator.
 19. Enforce the declared six-paper venue portfolio: at least three current JCR Q1 SCI/SCIE targets and every remainder at least current JCR Q2, all with IF >1.0. Q2 changes only the venue target and never weakens doctoral/originality/experiment/writing gates. Re-check category/year evidence.
 20. Write every manuscript-bound artifact in English. G5 must pass the deterministic manuscript-language check; a model's assertion that prose is English is not sufficient.
 21. At G5, use line-level academic-style findings for targeted evidence-preserving revision. A user-supplied detector score may guide a separate optional editing pass, but it cannot override scientific quality, claim/citation/numeric integrity, human review or required AI-use disclosure. Never spin synonyms, remove warranted uncertainty or conceal model assistance.
+22. Keep all six papers within one overarching doctoral question and cumulative knowledge contribution. Core theme A and independently evidenced extension B must serve that same doctoral topic. Each paper needs standalone value and an explicit contribution to the approved thesis synthesis. Evidence-led reframing stays within that scope; a substantive change to the doctoral question or paper-to-thesis mapping needs human review of the affected G1/G2 records before dependent work continues. Never silently turn the portfolio into unrelated topics or waive paper independence.
 
 Run repository checks after code or schema changes:
 

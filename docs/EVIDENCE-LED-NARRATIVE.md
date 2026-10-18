@@ -4,6 +4,25 @@ Native user-requested policy, 2026-10-18. This extends the reviewed
 anti-defensive-writing adaptation and the existing G2-G5 contracts within the
 current model calls, evidence records, budgets and human decisions.
 
+## Preserve one doctoral topic across all six papers
+
+The six papers must cumulatively answer one overarching doctoral question. Each
+paper has a distinct subquestion, independently sufficient evidence and standalone
+value, with an explicit role in the integrated thesis. Core A and independently
+evidenced extension B remain within that same doctoral topic; scientific
+independence does not create permission to pursue unrelated topics.
+
+Establish the common question and A/B relationship at G1. At G2, use the existing
+paper contracts, paper-map roles/dependencies and `thesis_synthesis` to explain
+each paper's contribution and the cumulative knowledge gained by the collection.
+Shared datasets, code or vocabulary alone do not establish this connection.
+
+Evidence-led reframing at G4/G5 or in reviewer revisions must preserve the approved
+doctoral scope and paper-to-thesis relationship. If stronger evidence calls for a
+substantive change, present the affected G1/G2 records for human review before
+dependent work continues, keeping all six papers in one coherent doctoral topic.
+Do not silently substitute a different topic or duplicate another paper's claim.
+
 ## Build one clear scientific argument
 
 Organize the paper around the strongest supported contribution:
