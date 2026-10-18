@@ -1447,6 +1447,17 @@
         "completion_tokens": 167,
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-deepseek|deepseek-v4.1-flash|luna-engineering-v1",
+      "reserved_ceiling_cny": 0.1,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 3,
+        "cost_cny": 0.000818,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
@@ -5790,6 +5801,11 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 6.137
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-engineering-v1",
+      "status": "quarantined_route_no_call",
+      "reason": "http_502"
     }
   ],
   "scientific_completion": false,
