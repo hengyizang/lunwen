@@ -48,8 +48,10 @@ journal, university and funder disclosure rules remain controlling.
 
 ## Claim-forward reporting without selective reporting
 
-Lead the abstract, discussion and conclusion with the preregistered primary
-question and the strongest claim that the complete evidence supports. A
+Lead the abstract, discussion and conclusion with the strongest supported
+contribution, its decisive evidence and bounded value. Reframe around a better
+supported contribution when warranted; preserve original hypotheses, outcomes
+and actual analysis phases using the existing claim/argument and revision records. A
 secondary, exploratory, null or unfavorable result need not become a headline
 conclusion unless it materially changes the primary claim, validity, safety or
 scope. It must still remain locatable in the results, supplement and registered

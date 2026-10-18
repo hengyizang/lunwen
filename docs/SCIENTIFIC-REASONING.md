@@ -81,6 +81,13 @@ saved reports are recomputed by the existing gates.
 
 ## Scientific claims and pre-review (G5)
 
+Use the [evidence-led narrative guide](EVIDENCE-LED-NARRATIVE.md) to make the
+strongest supported contribution the organizing point. Fair comparison scope
+and experiment roles are justified before results; later narrative changes
+preserve original tests and actual analysis phases. The abstract and conclusion
+can follow a better-supported bounded contribution rather than defend the
+original story. Existing claim/argument records retain that evolution.
+
 The existing writer/remediation and fresh independent reviews examine importance,
 contribution, discriminating power, statistical suitability and conclusion strength.
 Use the existing categorical checklist and METHOD/STATISTICS/CONTRIBUTION views;

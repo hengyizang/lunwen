@@ -663,9 +663,12 @@ mechanism or limitation over decorative synonyms. Preserve every number,
 equation, citation, uncertainty boundary and claim-evidence link. Read the
 line-level guidance in scripts/academic_style.py output and revise only where the
 scientific context supports the change; never perform blind synonym replacement.
-Lead the abstract and conclusion with the preregistered primary finding and
-strongest supported contribution; a secondary or null result needs headline
-treatment only when it changes the main claim, validity, safety or scope. Keep
+Build an evidence-led narrative around the strongest supported contribution:
+the important problem, exact demonstrated advantage, decisive evidence and value.
+Give core claims and figures priority instead of equal coverage or an experiment
+diary. Reframe the story when the evidence supports a stronger bounded claim;
+retain original hypotheses and outcomes, and label post-hoc findings by their
+actual analysis phase. State relevant measured tradeoffs calmly. Keep
 every registered result locatable in the results or supplement. Never omit,
 soften or demote an experiment because its result is unfavorable or contentious;
 use only predeclared role, relevance and statistical adequacy for placement and
@@ -818,6 +821,11 @@ robustness failure or result that changes interpretation. Supplement placement
 requires a role-, relevance- or adequacy-based rationale plus a main-text cross-reference.
 Require every material limitation once, but do not demand
 repeated apologetic caveats.
+Review the actual narrative claim and its declared comparison scope. A missing
+experiment must map to a specific unsupported inference, not an imagined broader
+competition. Distinguish demonstrated problems, verification questions and
+optional extensions. Retain rigorous internal findings; manuscript changes
+address the evidence and interpretation rather than copying speculative attacks.
 Check current argument source coverage and reverse-outline dependencies, typed
 primary/review/inference/observation attribution, scoped Gap cards and real query
 receipts. A parseable PDF is not a verified scientific source. Rule benchmarks

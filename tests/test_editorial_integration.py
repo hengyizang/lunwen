@@ -79,6 +79,31 @@ class EditorialIntegrationTests(unittest.TestCase):
                     api_orchestrator.validate_editorial_dispositions(bad, "writing-and-review")
         api_orchestrator.validate_editorial_dispositions([], "topic-intelligence")
 
+    def test_evidence_led_narrative_reaches_all_existing_g5_roles(self):
+        state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
+        prompts = [
+            api_orchestrator.writer_prompt("missing-project", "writing-and-review", ""),
+            api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}"),
+            api_orchestrator.critic_prompt("missing-project", "writing-and-review", "secret-preferred-verdict"),
+            autopilot.writer_prompt("demo", state, {"contract": "Writing and review"}, "", autopilot.ROOT / "plan.json"),
+            autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json"),
+            autopilot.critic_prompt("demo", state),
+        ]
+        for prompt in prompts:
+            with self.subTest(role=prompt[:80]):
+                for instruction in (
+                    "evidence-led narrative", "strongest supported contribution",
+                    "before results", "normal approval", "post-hoc",
+                    "fixed evaluation criteria", "negative/null/adverse results",
+                ):
+                    self.assertIn(instruction, prompt.lower())
+                self.assertNotIn("Lead the abstract and conclusion with the preregistered primary finding", prompt)
+                self.assertNotIn("secret-preferred-verdict", prompt)
+        # Choosing a focal story does not waive per-group dispositions or independent review.
+        api_orchestrator.validate_editorial_dispositions(complete_notes(), "writing-and-review")
+        with self.assertRaises(ValueError):
+            api_orchestrator.validate_editorial_dispositions(complete_notes()[:-1], "writing-and-review")
+
     def test_protected_signals_reach_api_and_cli_remediation_with_honest_bounds(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
             project = Path(directory) / "projects/demo"
