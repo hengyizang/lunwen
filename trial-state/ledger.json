@@ -886,7 +886,7 @@
     {
       "call_id": "cheapai-gpt-discount|gpt-6-astra|engineering",
       "reserved_ceiling_cny": 0.802816,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "cheapai_quota_history",
         "quota_per_unit": 500000,
@@ -917,6 +917,19 @@
           }
         ],
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.0010456,
+      "gateway_debit_cny": 0.001046,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6-astra",
+        "quota": 523,
+        "created_at": 1792344475,
+        "prompt_tokens": 147,
+        "completion_tokens": 232,
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -4065,8 +4078,59 @@
       "reported_model": "gpt-6-astra",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "resp_0831d6b4d24cc9a6016ad50197a324819eabd6da43e2651f2c"
+      "status": "complete",
+      "gateway_request_id": "resp_0831d6b4d24cc9a6016ad50197a324819eabd6da43e2651f2c",
+      "modeled_cost_cny": 0.0010456,
+      "billing_parts": {
+        "ordinary_input_tokens": 147,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 147,
+        "uncached_input_tokens": 147,
+        "output_tokens_including_reasoning": 232,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 0.8,
+          "output_per_million": 4.0,
+          "cache_read_per_million": 0.08,
+          "cache_write_per_million": 1.0
+        },
+        "quote_sha256": "3bf49b1324fb20c2fee557779410ff1aa6c138894e83539213e94c3b06188053",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-discount",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 147,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.0010456
+      },
+      "gateway_debit_cny": 0.001046,
+      "grade": {
+        "checks": {
+          "both_leaks": true,
+          "safe_order": true,
+          "no_unsupported_superiority": true,
+          "no_fabricated_accuracy": true,
+          "experiment_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 7.458
     }
   ],
   "scientific_completion": false,
