@@ -1022,6 +1022,49 @@
         "completion_tokens": 153,
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-5.6-luna|luna-evidence-v1",
+      "reserved_ceiling_cny": 0.1,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 2939,
+        "token_usage_counter_quota": 2939,
+        "token_usage_counter_lagged": false,
+        "rows": [
+          {
+            "model": "gpt-6-astra",
+            "quota": 1223,
+            "created_at": 1792344034,
+            "prompt_tokens": 147,
+            "completion_tokens": 193
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 284,
+            "created_at": 1792344019,
+            "prompt_tokens": 147,
+            "completion_tokens": 229
+          },
+          {
+            "model": "gpt-6-astra",
+            "quota": 1238,
+            "created_at": 1792341999,
+            "prompt_tokens": 165,
+            "completion_tokens": 192
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 194,
+            "created_at": 1792341993,
+            "prompt_tokens": 165,
+            "completion_tokens": 143
+          }
+        ],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
