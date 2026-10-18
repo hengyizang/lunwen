@@ -118,7 +118,7 @@
     {
       "call_id": "cheapai-ccmax|claude-sonnet-5-5|evidence",
       "reserved_ceiling_cny": 2.408448,
-      "status": "ambiguous_failure_reservation_retained",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "cheapai_quota_history",
         "quota_per_unit": 500000,
@@ -126,7 +126,20 @@
         "rows": [],
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
       },
-      "modeled_cost_cny": 0.015364
+      "modeled_cost_cny": 0.015364,
+      "gateway_debit_cny": 0.015364,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "claude-sonnet-5-5",
+        "quota": 7682,
+        "created_at": 1792343333,
+        "prompt_tokens": 6967,
+        "completion_tokens": 143,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     }
   ],
   "results": [
@@ -696,9 +709,16 @@
       "run_id": "39148069593",
       "commit": "c560f98c5eb6a1cb3442d33995daeb45df73a720",
       "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
+    },
+    {
+      "run_id": "39148553988",
+      "commit": "20208c3c0eb8fed849e78242197252c06b0dfe00",
+      "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
     }
   ],
   "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held.",
   "reservations_never_released_without_independent_gateway_debit": true,
-  "stop_reason": "generation_or_billing_requires_review"
+  "quarantined_routes": {
+    "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified"
+  }
 }
