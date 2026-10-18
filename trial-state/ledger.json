@@ -504,6 +504,42 @@
         "completion_tokens": 229,
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6-astra|engineering",
+      "reserved_ceiling_cny": 2.207744,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 1716,
+        "token_usage_counter_quota": 1432,
+        "token_usage_counter_lagged": true,
+        "rows": [
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 284,
+            "created_at": 1792344019,
+            "prompt_tokens": 147,
+            "completion_tokens": 229
+          },
+          {
+            "model": "gpt-6-astra",
+            "quota": 1238,
+            "created_at": 1792341999,
+            "prompt_tokens": 165,
+            "completion_tokens": 192
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 194,
+            "created_at": 1792341993,
+            "prompt_tokens": 165,
+            "completion_tokens": 143
+          }
+        ],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
