@@ -204,6 +204,17 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-gemini|gemini-4-argon|evidence",
+      "reserved_ceiling_cny": 0.4128768,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
