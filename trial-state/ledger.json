@@ -840,6 +840,35 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "cheapai-gpt-discount|gpt-6.1-sol|engineering",
+      "reserved_ceiling_cny": 0.1605632,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 558,
+        "token_usage_counter_quota": 558,
+        "token_usage_counter_lagged": false,
+        "rows": [
+          {
+            "model": "gpt-6-astra",
+            "quota": 472,
+            "created_at": 1792342012,
+            "prompt_tokens": 165,
+            "completion_tokens": 203
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 86,
+            "created_at": 1792342006,
+            "prompt_tokens": 165,
+            "completion_tokens": 183
+          }
+        ],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
@@ -3798,6 +3827,14 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 13.877
+    },
+    {
+      "call_id": "codekey-codex-pure|gpt-6-luna|evidence",
+      "status": "exact_model_not_advertised_no_call"
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6-luna|evidence",
+      "status": "exact_model_not_advertised_no_call"
     }
   ],
   "scientific_completion": false,
