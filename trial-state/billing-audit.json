@@ -7,12 +7,70 @@
         "numbers": {
           "data": {
             "model_limits": {},
-            "total_used": 1432
+            "total_used": 2939
           }
         }
       },
       "/api/log/token": {
         "records": [
+          {
+            "created_at": 1792344034,
+            "type": 2,
+            "quota": 1223,
+            "prompt_tokens": 147,
+            "completion_tokens": 193,
+            "use_time": 8,
+            "channel": 0,
+            "model_name": "gpt-6-astra",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.22,
+              "group_ratio": 0.22,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 7727,
+                "output_tokens": 193,
+                "total_handler_ms": 7734
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792344019,
+            "type": 2,
+            "quota": 284,
+            "prompt_tokens": 147,
+            "completion_tokens": 229,
+            "use_time": 5,
+            "channel": 0,
+            "model_name": "gpt-6.1-sol",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.22,
+              "group_ratio": 0.22,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 4856,
+                "output_tokens": 229,
+                "total_handler_ms": 4863
+              },
+              "user_group_ratio": -1
+            }
+          },
           {
             "created_at": 1792341999,
             "type": 2,
@@ -79,12 +137,70 @@
         "numbers": {
           "data": {
             "model_limits": {},
-            "total_used": 558
+            "total_used": 1179
           }
         }
       },
       "/api/log/token": {
         "records": [
+          {
+            "created_at": 1792344475,
+            "type": 2,
+            "quota": 523,
+            "prompt_tokens": 147,
+            "completion_tokens": 232,
+            "use_time": 4,
+            "channel": 0,
+            "model_name": "gpt-6-astra",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.08,
+              "group_ratio": 0.08,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 4408,
+                "output_tokens": 232,
+                "total_handler_ms": 4414
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792344463,
+            "type": 2,
+            "quota": 98,
+            "prompt_tokens": 147,
+            "completion_tokens": 216,
+            "use_time": 7,
+            "channel": 0,
+            "model_name": "gpt-6.1-sol",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.08,
+              "group_ratio": 0.08,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 7389,
+                "output_tokens": 216,
+                "total_handler_ms": 7394
+              },
+              "user_group_ratio": -1
+            }
+          },
           {
             "created_at": 1792342012,
             "type": 2,
@@ -151,12 +267,97 @@
         "numbers": {
           "data": {
             "model_limits": {},
-            "total_used": 1147
+            "total_used": 3137
           }
         }
       },
       "/api/log/token": {
         "records": [
+          {
+            "created_at": 1792344496,
+            "type": 2,
+            "quota": 238,
+            "prompt_tokens": 271,
+            "completion_tokens": 153,
+            "use_time": 4,
+            "channel": 0,
+            "model_name": "claude-opus-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 0,
+              "cache_ratio": 0.1,
+              "cache_tokens": 0,
+              "completion_ratio": 5,
+              "default_group_ratio": 0.115,
+              "group_ratio": 0.115,
+              "model_input_price": 4,
+              "model_price": -1,
+              "model_ratio": 2,
+              "timing": {
+                "inference_total_ms": 3444,
+                "output_tokens": 153,
+                "total_handler_ms": 3450
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792344486,
+            "type": 2,
+            "quota": 133,
+            "prompt_tokens": 271,
+            "completion_tokens": 177,
+            "use_time": 4,
+            "channel": 0,
+            "model_name": "claude-sonnet-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 0,
+              "cache_ratio": 0.1,
+              "cache_tokens": 0,
+              "completion_ratio": 5,
+              "default_group_ratio": 0.115,
+              "group_ratio": 0.115,
+              "model_input_price": 2,
+              "model_price": -1,
+              "model_ratio": 1,
+              "timing": {
+                "inference_total_ms": 3634,
+                "output_tokens": 177,
+                "total_handler_ms": 3639
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792342987,
+            "type": 2,
+            "quota": 1619,
+            "prompt_tokens": 0,
+            "completion_tokens": 236,
+            "use_time": 3,
+            "channel": 0,
+            "model_name": "claude-opus-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 3604,
+              "cache_ratio": 0.1,
+              "cache_tokens": 13552,
+              "cache_write_tokens": 3604,
+              "completion_ratio": 5,
+              "default_group_ratio": 0.115,
+              "group_ratio": 0.115,
+              "model_input_price": 4,
+              "model_price": -1,
+              "model_ratio": 2,
+              "timing": {
+                "inference_total_ms": 2283,
+                "output_tokens": 236,
+                "total_handler_ms": 2287
+              },
+              "user_group_ratio": -1
+            }
+          },
           {
             "created_at": 1792342022,
             "type": 2,
@@ -194,39 +395,96 @@
         "numbers": {
           "data": {
             "model_limits": {},
-            "total_used": 0
+            "total_used": 24590
           }
         }
       },
       "/api/log/token": {
-        "records": []
+        "records": [
+          {
+            "created_at": 1792343732,
+            "type": 2,
+            "quota": 16908,
+            "prompt_tokens": 7344,
+            "completion_tokens": 222,
+            "use_time": 48,
+            "channel": 0,
+            "model_name": "claude-opus-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 0,
+              "cache_ratio": 0.1,
+              "cache_tokens": 0,
+              "completion_ratio": 5,
+              "default_group_ratio": 1,
+              "group_ratio": 1,
+              "model_input_price": 4,
+              "model_price": -1,
+              "model_ratio": 2,
+              "timing": {
+                "inference_total_ms": 47092,
+                "output_tokens": 222,
+                "total_handler_ms": 47098
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792343333,
+            "type": 2,
+            "quota": 7682,
+            "prompt_tokens": 6967,
+            "completion_tokens": 143,
+            "use_time": 6,
+            "channel": 0,
+            "model_name": "claude-sonnet-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 0,
+              "cache_ratio": 0.1,
+              "cache_tokens": 0,
+              "completion_ratio": 5,
+              "default_group_ratio": 1,
+              "group_ratio": 1,
+              "model_input_price": 2,
+              "model_price": -1,
+              "model_ratio": 1,
+              "timing": {
+                "inference_total_ms": 5927,
+                "output_tokens": 143,
+                "total_handler_ms": 5934
+              },
+              "user_group_ratio": -1
+            }
+          }
+        ]
       }
     },
     "codekey-deepseek": {
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 2377.5,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
+              "actual_cost": 0.0004678,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.004678,
+              "input_tokens": 355,
+              "output_tokens": 496,
+              "requests": 2,
+              "total_tokens": 851
             },
             "total": {
-              "actual_cost": 0,
+              "actual_cost": 0.0004678,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.004678,
+              "input_tokens": 355,
+              "output_tokens": 496,
+              "requests": 2,
+              "total_tokens": 851
             },
             "tpm": 0
           }
@@ -241,27 +499,27 @@
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 19262.5,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
+              "actual_cost": 0.006756,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.02252,
+              "input_tokens": 750,
+              "output_tokens": 2102,
+              "requests": 2,
+              "total_tokens": 2852
             },
             "total": {
-              "actual_cost": 0,
+              "actual_cost": 0.006756,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.02252,
+              "input_tokens": 750,
+              "output_tokens": 2102,
+              "requests": 2,
+              "total_tokens": 2852
             },
             "tpm": 0
           }
@@ -276,27 +534,27 @@
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 38754.75,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
+              "actual_cost": 0.0040796,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.020398,
+              "input_tokens": 748,
+              "output_tokens": 707,
+              "requests": 4,
+              "total_tokens": 1455
             },
             "total": {
-              "actual_cost": 0,
+              "actual_cost": 0.0040796,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.020398,
+              "input_tokens": 748,
+              "output_tokens": 707,
+              "requests": 4,
+              "total_tokens": 1455
             },
             "tpm": 0
           }
@@ -311,27 +569,27 @@
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 3454.25,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
-              "cache_creation_tokens": 0,
-              "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "actual_cost": 0.030249485,
+              "cache_creation_tokens": 181,
+              "cache_read_tokens": 623,
+              "cost": 0.0864271,
+              "input_tokens": 18177,
+              "output_tokens": 848,
+              "requests": 4,
+              "total_tokens": 19829
             },
             "total": {
-              "actual_cost": 0,
-              "cache_creation_tokens": 0,
-              "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "actual_cost": 0.030249485,
+              "cache_creation_tokens": 181,
+              "cache_read_tokens": 623,
+              "cost": 0.0864271,
+              "input_tokens": 18177,
+              "output_tokens": 848,
+              "requests": 4,
+              "total_tokens": 19829
             },
             "tpm": 0
           }
@@ -346,27 +604,27 @@
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 37440.25,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
+              "actual_cost": 0.00214896,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.017908,
+              "input_tokens": 748,
+              "output_tokens": 486,
+              "requests": 4,
+              "total_tokens": 1234
             },
             "total": {
-              "actual_cost": 0,
+              "actual_cost": 0.00214896,
               "cache_creation_tokens": 0,
               "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "cost": 0.017908,
+              "input_tokens": 748,
+              "output_tokens": 486,
+              "requests": 4,
+              "total_tokens": 1234
             },
             "tpm": 0
           }
@@ -381,27 +639,27 @@
       "/v1/usage": {
         "numbers": {
           "usage": {
-            "average_duration_ms": 0,
+            "average_duration_ms": 10218.75,
             "rpm": 0,
             "today": {
-              "actual_cost": 0,
-              "cache_creation_tokens": 0,
-              "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "actual_cost": 0.005068632,
+              "cache_creation_tokens": 12,
+              "cache_read_tokens": 288,
+              "cost": 0.0422386,
+              "input_tokens": 832,
+              "output_tokens": 2644,
+              "requests": 4,
+              "total_tokens": 3776
             },
             "total": {
-              "actual_cost": 0,
-              "cache_creation_tokens": 0,
-              "cache_read_tokens": 0,
-              "cost": 0,
-              "input_tokens": 0,
-              "output_tokens": 0,
-              "requests": 0,
-              "total_tokens": 0
+              "actual_cost": 0.005068632,
+              "cache_creation_tokens": 12,
+              "cache_read_tokens": 288,
+              "cost": 0.0422386,
+              "input_tokens": 832,
+              "output_tokens": 2644,
+              "requests": 4,
+              "total_tokens": 3776
             },
             "tpm": 0
           }
