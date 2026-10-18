@@ -26,6 +26,11 @@
       "reserved_ceiling_cny": 0.802816,
       "status": "response_received_reservation_retained",
       "modeled_cost_cny": 0.000944
+    },
+    {
+      "call_id": "cheapai-kiro|claude-sonnet-5-5|evidence",
+      "reserved_ceiling_cny": 0.1,
+      "status": "reserved_before_transport"
     }
   ],
   "results": [
