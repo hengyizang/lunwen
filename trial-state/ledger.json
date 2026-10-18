@@ -406,6 +406,17 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-kiro-standard|claude-sonnet-5-5|evidence",
+      "reserved_ceiling_cny": 0.28901376,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
@@ -1929,6 +1940,10 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 20.646
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6-luna|evidence",
+      "status": "exact_model_not_advertised_no_call"
     }
   ],
   "scientific_completion": false,
