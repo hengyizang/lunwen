@@ -100,7 +100,20 @@
     {
       "call_id": "cheapai-kiro|claude-opus-5-5|evidence",
       "reserved_ceiling_cny": 0.55394304,
-      "status": "ambiguous_failure_reservation_retained"
+      "status": "gateway_debit_verified",
+      "gateway_debit_cny": 0.003238,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "claude-opus-5-5",
+        "quota": 1619,
+        "created_at": 1792342987,
+        "prompt_tokens": 0,
+        "completion_tokens": 236,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     }
   ],
   "results": [
@@ -179,7 +192,22 @@
         "passed": true,
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
-      "elapsed_seconds": 5.59
+      "elapsed_seconds": 5.59,
+      "post_reconciliation_grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": true,
+          "conclusion_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "gateway_debit_cny": 0.000388,
+      "reconciled_without_generation_retry": true
     },
     {
       "call_id": "cheapai-gpt-pro|gpt-6-astra|evidence",
@@ -256,7 +284,22 @@
         "passed": true,
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
-      "elapsed_seconds": 3.568
+      "elapsed_seconds": 3.568,
+      "post_reconciliation_grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": true,
+          "conclusion_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "gateway_debit_cny": 0.002476,
+      "reconciled_without_generation_retry": true
     },
     {
       "call_id": "cheapai-gpt-discount|gpt-6.1-sol|evidence",
@@ -333,7 +376,22 @@
         "passed": false,
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
-      "elapsed_seconds": 3.759
+      "elapsed_seconds": 3.759,
+      "post_reconciliation_grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": false,
+          "conclusion_present": true
+        },
+        "passed": false,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "gateway_debit_cny": 0.000172,
+      "reconciled_without_generation_retry": true
     },
     {
       "call_id": "cheapai-gpt-discount|gpt-6-astra|evidence",
@@ -410,7 +468,22 @@
         "passed": false,
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
-      "elapsed_seconds": 2.876
+      "elapsed_seconds": 2.876,
+      "post_reconciliation_grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": false,
+          "conclusion_present": true
+        },
+        "passed": false,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "gateway_debit_cny": 0.000944,
+      "reconciled_without_generation_retry": true
     },
     {
       "call_id": "cheapai-kiro|claude-sonnet-5-5|evidence",
@@ -485,7 +558,22 @@
         "output_tokens_including_reasoning": 236
       },
       "diagnostic": "incomplete_gateway_debit_history",
-      "elapsed_seconds": 4.7
+      "elapsed_seconds": 4.7,
+      "post_reconciliation_grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": false,
+          "conclusion_present": true
+        },
+        "passed": false,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "gateway_debit_cny": 0.003238,
+      "reconciled_without_generation_retry": true
     }
   ],
   "scientific_completion": false,
@@ -498,9 +586,13 @@
       "run_id": "39147666165",
       "commit": "bc1d941c7f864c5458bd2615d9f56b5a76e6c001",
       "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
+    },
+    {
+      "run_id": "39148069593",
+      "commit": "c560f98c5eb6a1cb3442d33995daeb45df73a720",
+      "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
     }
   ],
   "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held.",
-  "reservations_never_released_without_independent_gateway_debit": true,
-  "stop_reason": "generation_or_billing_requires_review"
+  "reservations_never_released_without_independent_gateway_debit": true
 }
