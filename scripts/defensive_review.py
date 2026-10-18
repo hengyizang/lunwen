@@ -21,8 +21,9 @@ PROTECTED_PATTERNS = {
     "application_and_population_boundary": r"\b(?:external validity|generaliz(?:e|ation|ability)|out[- ]of[- ]distribution|unseen populations?|tested populations?|tested settings?|validated settings?|clinical use|deployment safety)\b|外部效度|泛化|分布外|未验证人群|已测试(?:人群|场景)|临床使用|部署安全",
     "ethics_law_and_safety": r"\b(?:ethic(?:s|al)|informed consent|IRB|privacy|identifiable|licen[cs]e|copyright|legal|safety|harm|AI[- ]use disclosure|conflict of interest)\b|伦理|知情同意|隐私|可识别|许可证|版权|法律|安全|利益冲突|AI使用披露",
     "registered_controls_and_adverse_evidence": r"\b(?:preregistered|preregistration|pre[- ]registered|negative control|positive control|control group|placebo|failed runs?|failed experiments?|adverse events?|null results?|negative results?|falsification|ablation|baseline|replication|counterevidence)\b|预注册|阴性对照|阳性对照|对照组|安慰剂|失败实验|失败运行|阴性结果|负面结果|消融|基线|反证|复现",
-    "quantified_scope_or_tradeoff": r"\b(?:sample|cohort|dataset|sites?|participants?|patients?|subjects?|cases?|seeds?)\b[^.!?。！？\n]{0,55}\b\d|\b\d+[ -](?:site|dataset|participant|patient|case|seed)\b|\b(?:accuracy|latency|effect|improvement|difference|reduction|increase|decrease)\b[^.!?。！？\n]{0,35}\d|(?:样本|数据集|患者|参与者|准确率|延迟|差异|效应|提高|下降|降低)[^。！？\n]{0,25}[0-9一二三四五六七八九十两]",
-    "evidence_based_rebuttal_or_distinction": r"\b(?:reviewer|response|rebuttal|contrary to)\b[^.!?。！？\n]{0,90}\b(?:Table|Figure|Eq(?:uation)?|Appendix|Supplement|evidence)\b|\b(?:conceptual distinction|distinguish(?:es)? between|alternative explanations?|counterfactual|identification assumption)\b|(?:审稿|反驳|回复)[^。！？\n]{0,45}(?:图|表|公式|证据)|概念区分|竞争解释|替代解释|识别假设"
+    "quantified_scope_or_tradeoff": r"\b(?:sample|cohort|dataset|sites?|participants?|patients?|subjects?|cases?|seeds?)\b[^.!?。！？\n]{0,55}\b\d|\b\d+[ -](?:site|dataset|participant|patient|case|seed)\b|\b(?:accuracy|latency|effect|improvement|difference|reduction|increase|decrease)\b[^.!?。！？\n]{0,35}\d|(?:[0-9]+|[一二三四五六七八九十百两]+)(?:个)?(?:数据集|独立单元|样本|患者|参与者|中心|站点|种子)|(?:样本|数据集|患者|参与者|准确率|延迟|差异|效应|提高|下降|降低)[^。！？\n]{0,25}[0-9一二三四五六七八九十两]",
+    "evidence_based_rebuttal_or_distinction": r"\b(?:reviewer|response|rebuttal|contrary to)\b[^.!?。！？\n]{0,90}\b(?:Table|Figure|Eq(?:uation)?|Appendix|Supplement|evidence)\b|\b(?:conceptual distinction|distinguish(?:es)? between|alternative explanations?|counterfactual|identification assumption)\b|(?:审稿|反驳|回复)[^。！？\n]{0,45}(?:图|表|公式|证据)|概念区分|竞争解释|替代解释|识别假设",
+    "technical_prerequisites_and_prohibitions": r"\b(?:prerequisites?|not interchangeable|must not|only when|only if)\b|仅在[^。！？\n]{1,70}时|只有[^。！？\n]{1,70}才|若欲[^。！？\n]{1,70}需要|不可互相替代|禁止|不得"
 }
 
 
@@ -58,7 +59,12 @@ def _hash_file(path: Path) -> str:
 
 def _mask(text: str) -> str:
     """Keep offsets while excluding code/math and explicitly quoted examples."""
-    pattern = re.compile(r"```.*?```|~~~.*?~~~|\\\[.*?\\\]|\$\$.*?\$\$|(?<!\\)\$(?!\$).*?(?<!\\)\$|^\s*>[^\n]*", re.S | re.M)
+    pattern = re.compile(
+        r"\x60{3}.*?\x60{3}|~~~.*?~~~|\x60[^\x60\n]*\x60|"
+        r"\\begin\{(?P<env>verbatim|lstlisting|minted)\}.*?\\end\{(?P=env)\}|"
+        r"\\\[.*?\\\]|\\\(.*?\\\)|\$\$.*?\$\$|(?<!\\)\$(?!\$).*?(?<!\\)\$|^\s*>[^\n]*",
+        re.S | re.M,
+    )
     def blank(match):
         return "".join("\n" if char == "\n" else " " for char in match.group())
     return pattern.sub(blank, text)
@@ -142,8 +148,10 @@ def audit_text(text: str, raw_text: str | None = None) -> dict:
                **location, "raw_location": raw_location, "match": text[start:end], "context": sentence[:600],
                "paragraph": paragraph, "section": section, "message": rule["message"], "guidance": rule["guidance"],
                "confidence": "advisory", "automatic_edit_allowed": False,
-               "protected_context": reasons, "scientific_judgment_required": True}
-        if rule.get("protect_context") and reasons:
+               "protected_context": reasons, "scientific_judgment_required": True,
+               "protected_content_must_be_preserved": bool(reasons),
+               "framing_review_required": bool(reasons and rule.get("review_with_protected_context"))}
+        if rule.get("protect_context") and reasons and not rule.get("review_with_protected_context"):
             row["disposition"] = "retain_evidence_boundary_and_review_context"
             protected.append(row)
         else:
@@ -195,6 +203,9 @@ def audit_text(text: str, raw_text: str | None = None) -> dict:
             "checklist_coverage": [{**item, "automatic_verification": "signals_only", "context_review_required": True} for item in rules["checklist"]],
             "function_classes": rules["function_classes"], "rewrite_procedure": rules["rewrite_procedure"],
             "context_guidance": rules["semantic_only_checks"], "rules_sha256": _hash_file(CONFIG),
+            "implementation_sha256": _hash_file(Path(__file__)),
+            "semantic_review_required": bool(masked.strip()),
+            "protected_context_is_semantic_approval": False,
             "source": {**source, "skill_sha256": _hash_file(ROOT / source["skill_path"]), "license_sha256": _hash_file(ROOT / source["license_path"])},
             "automatic_rewrite": False, "scientific_equivalence_verified": False, "full_semantic_review_verified": False,
             "manuscript_language_requirement": "English", "inspection_languages": rules["policy"]["inspection_languages"]}
@@ -213,7 +224,9 @@ def prompt_contract() -> str:
         "For every experiment state whether it tests effectiveness, mechanism, alternative explanations or applicability. A missing experiment identifies a specific unsupported claim, not a blanket verdict that experiments are insufficient.",
         "For an unfavorable finding: assess its effect on the central conclusion; state conditions/metric/comparison/uncertainty; leave the cause unknown if unknown; narrow unsupported claims; avoid turning one local weaker metric into a global defect. Preserve both improving and worsening metrics and fixed evaluation criteria. Combine only redundant presentation; supplement placement follows predeclared role/relevance/adequacy, never outcome direction.",
         "Triage reviewer comments as demonstrated problems, unresolved verification questions or optional additional experiments. Preserve necessary rebuttals. Do not insert every imagined objection into manuscript limitations. Chinese modesty such as 仅仅做了初步尝试/只能提供有限参考/仍有很大提升空间 needs exact facts instead; keep 初步/可能/提示 when justified.",
-        "Classify each candidate sentence using these six functions: " + ", ".join(rules["function_classes"]) + "."
+        "Classify each candidate sentence using these six functions: " + ", ".join(rules["function_classes"]) + ".",
+        "Protected facts do not justify redundant hedges or vague modesty around them. Review framing separately, preserving the exact uncertainty, effect, scope and causal force. A protected signal is not semantic approval.",
+        "For technical plans/SOPs preserve operations, purpose, prerequisites, prohibitions and parameters. Replace vague conditions only from supplied facts; keep missing prerequisites unresolved. Remove admonitory wrappers, not restrictions; never swap a precise technical verb for a different operation."
     ]
     sections.extend(f"Rewrite step {row['step']}: {row['task']}" for row in rules["rewrite_procedure"])
     sections.append("Full upstream checklist: " + "; ".join(row["text"] for row in rules["checklist"]) + ".")

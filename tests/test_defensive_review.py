@@ -16,7 +16,7 @@ class DefensiveReviewTests(unittest.TestCase):
         self.assertEqual(len(report["checklist_coverage"]), 10)
         self.assertEqual(len(report["rewrite_procedure"]), 5)
         self.assertEqual(len(report["function_classes"]), 6)
-        self.assertEqual(report["source"]["commit"], "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46")
+        self.assertEqual(report["source"]["commit"], "f516147d017a3fe43ae99192cb89d8261b0c8679")
         self.assertEqual(len(report["source"]["skill_sha256"]), 64)
         self.assertEqual(len(report["source"]["license_sha256"]), 64)
         self.assertFalse(report["automatic_rewrite"])
@@ -135,6 +135,88 @@ class DefensiveReviewTests(unittest.TestCase):
         for number in range(1, 9):
             self.assertIn(f"AD{number:02d}", contract)
         self.assertEqual(contract, review.prompt_contract())
+
+    def test_scientific_context_does_not_hide_stacked_hedges(self):
+        for text in (
+            "These results may potentially suggest that X could possibly be associated with Y in this observational analysis.",
+            "The confidence interval may tentatively suggest an effect in this cohort.",
+            "这或许说明，观察性分析中的相关关系可能在一定程度上具有潜在影响。",
+        ):
+            with self.subTest(text=text):
+                report = review.audit_text(text)
+                rows = [row for row in report["findings"] if row["rule_id"] == "stacked-uncertainty"]
+                self.assertTrue(rows)
+                for row in rows:
+                    self.assertTrue(row["protected_context"])
+                    self.assertTrue(row["framing_review_required"])
+                    self.assertTrue(row["protected_content_must_be_preserved"])
+                    self.assertFalse(row["automatic_edit_allowed"])
+                    self.assertEqual(text[row["start"]:row["end"]], row["match"])
+
+    def test_quantified_scope_does_not_hide_empty_modesty(self):
+        text = "本文在两个数据集上评估该方法，只能提供有限参考，仍有很大提升空间。"
+        report = review.audit_text(text)
+        rows = [row for row in report["findings"] if row["rule_id"] == "self-minimizing-posture"]
+        self.assertEqual(len(rows), 2)
+        self.assertTrue(all(row["protected_content_must_be_preserved"] for row in rows))
+        self.assertIn("两个数据集", rows[0]["context"])
+        self.assertFalse(report["automatic_rewrite"])
+
+    def test_additional_upstream_nonclaim_forms_are_located(self):
+        for text in (
+            "We are not arguing that the model is superior in every situation.",
+            "This does not mean that the explanation is complete.",
+            "This paper does not prove a comprehensive theory.",
+            "本文无意提供完整的平台治理理论。",
+            "本文并非论证一个完整理论。",
+        ):
+            with self.subTest(text=text):
+                rows = review.audit_text(text)["findings"]
+                self.assertIn("preemptive-nonclaim", {row["rule_id"] for row in rows})
+        necessary = review.audit_text("This does not imply causality in this observational analysis.")
+        self.assertFalse(necessary["findings"])
+        self.assertTrue(necessary["protected_signals"])
+
+    def test_technical_plans_keep_conditions_and_operation_meaning(self):
+        text = "在条件允许时进行标定；切记，只有完成标定后才可测量，两种测量不可互相替代。"
+        report = review.audit_text(text)
+        self.assertEqual(
+            {row["rule_id"] for row in report["findings"]},
+            {"vague-technical-prerequisite", "technical-admonition-wrapper"},
+        )
+        self.assertTrue(all(row["protected_content_must_be_preserved"] for row in report["findings"]))
+        self.assertIn("不可互相替代", report["findings"][0]["context"])
+        for term in ("prerequisites", "unresolved", "unconditional"):
+            self.assertIn(term, report["findings"][0]["guidance"])
+        self.assertFalse(report["automatic_rewrite"])
+        self.assertFalse(review.audit_text("仅在完成标定时测量；两种测量不可互相替代。")["findings"])
+        contract = review.prompt_contract()
+        for term in ("technical plans/SOPs", "prerequisites", "prohibitions", "different operation"):
+            self.assertIn(term, contract)
+
+    def test_inline_code_and_tex_math_examples_keep_offsets_and_stay_outside_prose(self):
+        text = (
+            "A code token " + chr(96) + "may potentially" + chr(96) + " is quoted.\n\n"
+            r"\(may potentially\)" + "\n\n"
+            r"\begin{verbatim}We do not claim completeness.\end{verbatim}" + "\n\n"
+            r"\begin{lstlisting}To be clear, merely provides\end{lstlisting}" + "\n\n"
+            r"\begin{minted}{text}may potentially\end{minted}" + "\n\n"
+            "To be clear, the passage describes the task."
+        )
+        report = review.audit_text(text)
+        self.assertEqual([row["rule_id"] for row in report["findings"]], ["hypothetical-clarifier"])
+        self.assertEqual(report["findings"][0]["start"], text.rfind("To be clear"))
+        self.assertEqual(text[report["findings"][0]["start"]:report["findings"][0]["end"]], "To be clear")
+
+    def test_protected_signal_is_not_a_semantic_pass_and_checker_is_bound(self):
+        report = review.audit_text("We do not claim causal identification from this observational analysis.")
+        self.assertFalse(report["findings"])
+        self.assertTrue(report["protected_signals"])
+        self.assertTrue(report["semantic_review_required"])
+        self.assertFalse(report["protected_context_is_semantic_approval"])
+        self.assertEqual(len(report["implementation_sha256"]), 64)
+        self.assertFalse(review.audit_text("")["semantic_review_required"])
+        self.assertFalse(review.audit_text(chr(96) + "may potentially" + chr(96))["semantic_review_required"])
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps, output_provenance, research_improvementctl
+from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps, defensive_review, output_provenance, research_improvementctl
 
 
 def manuscript_text() -> str:
@@ -78,6 +78,72 @@ class EditorialIntegrationTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     api_orchestrator.validate_editorial_dispositions(bad, "writing-and-review")
         api_orchestrator.validate_editorial_dispositions([], "topic-intelligence")
+
+    def test_protected_signals_reach_api_and_cli_remediation_with_honest_bounds(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
+            project = Path(directory) / "projects/demo"
+            state_path = project / "state/run.json"
+            state_path.parent.mkdir(parents=True)
+            state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            protected = defensive_review.audit_text("\n\n".join(
+                "We do not claim causal identification from this observational analysis." for _ in range(16)
+            ))
+            # Feedback excerpts remain bounded even for an unusually long recorded span.
+            protected["protected_signals"][0]["match"] = "m" * 5000
+            protected["protected_signals"][0]["context"] = "c" * 5000
+            audit_path = project / "papers/P01/style/academic-style-audit.json"
+            audit_path.parent.mkdir(parents=True)
+            audit_path.write_text(json.dumps({
+                "manuscript": {"path": "manuscript/main.tex", "source_tree_sha256": "a" * 64},
+                "analysis": {"humanizer_review": {}, "anti_defensive_review": protected},
+            }), encoding="utf-8")
+            feedback = json.loads(api_orchestrator.editorial_feedback("demo", "writing-and-review"))
+            actual = feedback["reviews"]["anti_defensive_review"]
+            self.assertEqual(feedback["audit_path"], "papers/P01/style/academic-style-audit.json")
+            self.assertFalse(actual["findings"])
+            self.assertTrue(actual["semantic_review_required"])
+            self.assertFalse(actual["protected_context_is_semantic_approval"])
+            self.assertEqual(len(actual["protected_signals"]), 12)
+            self.assertEqual(actual["remaining_protected_signals"], len(protected["protected_signals"]) - 12)
+            self.assertTrue(all(len(row["context"]) <= 320 for row in actual["protected_signals"]))
+            self.assertTrue(all(len(row["match"]) <= 160 for row in actual["protected_signals"]))
+            self.assertTrue(actual["protected_signals"][0]["match_truncated"])
+            self.assertTrue(actual["protected_signals"][0]["context_truncated"])
+            self.assertIn("start", actual["protected_signals"][0])
+            self.assertEqual(actual["implementation_sha256"], protected["implementation_sha256"])
+            api_prompt = api_orchestrator.remediation_prompt("demo", "writing-and-review", "", "{}")
+            cli_prompt = autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json")
+            for prompt in (api_prompt, cli_prompt):
+                self.assertIn("protected_signals", prompt)
+                self.assertIn("causal identification", prompt)
+                self.assertIn("Truncated examples are not resolved", prompt)
+
+    def test_saved_anti_defensive_review_cannot_forge_checker_binding(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            manuscript = project / "papers/P01/manuscript/main.tex"
+            manuscript.parent.mkdir(parents=True)
+            manuscript.write_text(manuscript_text(), encoding="utf-8")
+            with patch.object(academic_style, "run_proselint", return_value={"status": "unavailable", "name": "proselint"}), patch.object(
+                academic_style, "run_harper", return_value={"status": "unavailable", "name": "harper"}
+            ):
+                _, report = academic_style.write_audit(project, "P01")
+            report["analysis"]["anti_defensive_review"]["implementation_sha256"] = "0" * 64
+            academic_style.report_path(manuscript.parent.parent).write_text(json.dumps(report), encoding="utf-8")
+            self.assertTrue(any("anti_defensive_review" in row for row in academic_style.validate_saved_audit(manuscript.parent.parent)))
+
+    def test_malformed_protected_signals_do_not_claim_editorial_success(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
+            project = Path(directory) / "projects/demo"
+            (project / "state").mkdir(parents=True)
+            (project / "state/run.json").write_text('{"active_paper":"P01"}', encoding="utf-8")
+            audit_path = project / "papers/P01/style/academic-style-audit.json"
+            audit_path.parent.mkdir(parents=True)
+            audit_path.write_text(json.dumps({"analysis": {
+                "anti_defensive_review": {"protected_signals": ["invalid signal"]}
+            }}), encoding="utf-8")
+            self.assertIn("unavailable", api_orchestrator.editorial_feedback("demo", "writing-and-review"))
 
     def test_api_writer_cannot_forge_cleanup_candidates_or_receipts(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):

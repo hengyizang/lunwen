@@ -263,6 +263,9 @@ Complete editorial skill contract:
 Original-research portfolio policy:
 {api_orchestrator.research_identity_prompt_contract()}
 
+Fresh protected editorial findings (contextual review remains mandatory):
+{api_orchestrator.editorial_feedback(project, state['stage'])}
+
 Current deterministic Unicode hygiene findings:
 {api_orchestrator.hygiene_feedback(project, state['stage'])}
 

@@ -23,14 +23,14 @@
     {
       "id": "anti-defensive-writing",
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
-      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
-      "scope": "All checklist/procedure/function and expanded academic rules",
+      "commit": "f516147d017a3fe43ae99192cb89d8261b0c8679",
+      "scope": "All checklist/procedure/function, expanded academic and technical-plan/SOP rules",
       "license": "MIT",
-      "accessed_at": "2026-10-10",
+      "accessed_at": "2026-10-18",
       "files": [
         {
           "path": "third_party/anti-defensive-writing/SKILL.md",
-          "canonical_lf_sha256": "ef055917cc1407064cd0deaffd78264c251e8a27c30c112c54c64fb5ca46ef7a"
+          "canonical_lf_sha256": "287e3d05aeabf6409fa53b74a124ee0d897338009be2c04d3e38c352ca74a3c1"
         },
         {
           "path": "third_party/anti-defensive-writing/LICENSE",

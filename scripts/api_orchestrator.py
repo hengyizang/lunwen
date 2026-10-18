@@ -526,7 +526,10 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer") -> str:
         "review group: changed, retained with scientific/contextual reason, or unresolved. "
         "Use fixed:, rejected: or unresolved: prefixes, followed by exactly one pattern "
         "ID H01-H26 or AD01-AD08 and a substantive contextual reason for each. Read the current protected audit; "
-        "semantic_review_required means a real contextual judgement is still needed.",
+        "semantic_review_required means a real contextual judgement is still needed. "
+        "Inspect protected_signals as well as findings: protected facts stay, while surrounding "
+        "redundant framing still needs review. Truncated examples are not resolved findings; "
+        "use the complete current audit and manuscript for each group disposition.",
     ))
 
 
@@ -539,13 +542,38 @@ def editorial_feedback(project: str, stage: str) -> str:
             return "Current editorial audit is unavailable; do not claim it passed."
         report = load_json(project_root(project) / "papers" / paper_id / "style/academic-style-audit.json")
         analysis = report.get("analysis", {})
-        compact = {"manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {},
+        compact = {"audit_path": f"papers/{paper_id}/style/academic-style-audit.json",
+                   "manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {},
                    "manuscript_hygiene": hygiene_feedback(project, stage)}
         for name in ("humanizer_review", "anti_defensive_review"):
             value = analysis.get(name, {})
+            if not isinstance(value, dict):
+                raise ValueError("editorial review must be an object")
             compact["reviews"][name] = {"coverage": value.get("coverage"),
                 "findings": value.get("findings", [])[:60],
                 "remaining_findings": max(0, len(value.get("findings", [])) - 60)}
+            if name == "anti_defensive_review":
+                signals = value.get("protected_signals", [])
+                if not isinstance(signals, list) or any(not isinstance(row, dict) for row in signals):
+                    raise ValueError("protected editorial signals must be objects")
+                fields = ("id", "rule_id", "group", "start", "end", "line", "column", "raw_location",
+                          "section", "protected_context", "disposition", "automatic_edit_allowed",
+                          "protected_content_must_be_preserved")
+                compact["reviews"][name].update({
+                    "semantic_review_required": value.get("semantic_review_required", True),
+                    "protected_context_is_semantic_approval": False,
+                    "protected_signals": [
+                        {**{key: row.get(key) for key in fields},
+                         "match": str(row.get("match", ""))[:160],
+                         "match_truncated": len(str(row.get("match", ""))) > 160,
+                         "context": str(row.get("context", ""))[:320],
+                         "context_truncated": len(str(row.get("context", ""))) > 320}
+                        for row in signals[:12]
+                    ],
+                    "remaining_protected_signals": max(0, len(signals) - 12),
+                    "rules_sha256": value.get("rules_sha256"),
+                    "implementation_sha256": value.get("implementation_sha256"),
+                })
         return json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
     except (OSError, ValueError):
         return "Current editorial audit is unavailable; do not claim it passed."
