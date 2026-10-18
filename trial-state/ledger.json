@@ -12,7 +12,8 @@
     {
       "call_id": "cheapai-gpt-pro|gpt-6-astra|evidence",
       "reserved_ceiling_cny": 2.207744,
-      "status": "reserved_before_transport"
+      "status": "response_received_reservation_retained",
+      "modeled_cost_cny": 0.002475
     }
   ],
   "results": [
@@ -92,6 +93,83 @@
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
       "elapsed_seconds": 5.59
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6-astra|evidence",
+      "requested_model": "gpt-6-astra",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "b273fb7cfbb3254978230f2086c31bb7ac5cd782c2fbed8cdc920f489aec324c",
+      "quote_sha256": "3348b19098528d009a186ba11f27e4c710942b37548f68fb8a022bd4be16c539",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 2.207744,
+      "status": "complete",
+      "reported_model": "gpt-6-astra",
+      "identity_exact": true,
+      "complete": true,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\",\"S3\"],\"conclusion\":\"The preregistered primary estimate was imprecise and not statistically significant, while the unplanned subgroup finding is exploratory rather than confirmatory.\"}",
+      "usage": {
+        "input_tokens": 165,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 192,
+        "output_tokens_details": {
+          "reasoning_tokens": 103
+        }
+      },
+      "modeled_cost_cny": 0.002475,
+      "billing_parts": {
+        "ordinary_input_tokens": 165,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 165,
+        "uncached_input_tokens": 165,
+        "output_tokens_including_reasoning": 192,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 2.2,
+          "output_per_million": 11.0,
+          "cache_read_per_million": 0.22,
+          "cache_write_per_million": 2.75
+        },
+        "quote_sha256": "3348b19098528d009a186ba11f27e4c710942b37548f68fb8a022bd4be16c539",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 165,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.002475
+      },
+      "grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": true,
+          "conclusion_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "elapsed_seconds": 3.568
     }
   ],
   "scientific_completion": false,
