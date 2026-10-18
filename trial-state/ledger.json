@@ -1307,6 +1307,70 @@
         "completion_tokens": 144,
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6.1-sol|luna-engineering-v1",
+      "reserved_ceiling_cny": 0.157696,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 3317,
+        "token_usage_counter_quota": 2939,
+        "token_usage_counter_lagged": true,
+        "rows": [
+          {
+            "model": "gpt-5.6-luna",
+            "quota": 24,
+            "created_at": 1792346315,
+            "prompt_tokens": 209,
+            "completion_tokens": 144
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 325,
+            "created_at": 1792346282,
+            "prompt_tokens": 254,
+            "completion_tokens": 245
+          },
+          {
+            "model": "gpt-5.6-luna",
+            "quota": 29,
+            "created_at": 1792346274,
+            "prompt_tokens": 254,
+            "completion_tokens": 179
+          },
+          {
+            "model": "gpt-6-astra",
+            "quota": 1223,
+            "created_at": 1792344034,
+            "prompt_tokens": 147,
+            "completion_tokens": 193
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 284,
+            "created_at": 1792344019,
+            "prompt_tokens": 147,
+            "completion_tokens": 229
+          },
+          {
+            "model": "gpt-6-astra",
+            "quota": 1238,
+            "created_at": 1792341999,
+            "prompt_tokens": 165,
+            "completion_tokens": 192
+          },
+          {
+            "model": "gpt-6.1-sol",
+            "quota": 194,
+            "created_at": 1792341993,
+            "prompt_tokens": 165,
+            "completion_tokens": 143
+          }
+        ],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
