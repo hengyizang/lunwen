@@ -140,6 +140,28 @@
         "all_key_debits_match_attempt_count": true,
         "no_generation_retry": true
       }
+    },
+    {
+      "call_id": "cheapai-ccmax|claude-opus-5-5|evidence",
+      "reserved_ceiling_cny": 4.816896,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 7682,
+        "token_usage_counter_quota": 7682,
+        "token_usage_counter_lagged": false,
+        "rows": [
+          {
+            "model": "claude-sonnet-5-5",
+            "quota": 7682,
+            "created_at": 1792343333,
+            "prompt_tokens": 6967,
+            "completion_tokens": 143
+          }
+        ],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
