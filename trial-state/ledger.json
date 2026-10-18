@@ -8,6 +8,11 @@
       "reserved_ceiling_cny": 0.4415488,
       "status": "response_received_reservation_retained",
       "modeled_cost_cny": 0.0003872
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6-astra|evidence",
+      "reserved_ceiling_cny": 2.207744,
+      "status": "reserved_before_transport"
     }
   ],
   "results": [
