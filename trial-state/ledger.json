@@ -755,6 +755,17 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6-astra|engineering",
+      "reserved_ceiling_cny": 1.204224,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 3,
+        "cost_cny": 0.00131976,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
