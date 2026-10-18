@@ -1944,6 +1944,54 @@
     {
       "call_id": "codekey-codex-discount|gpt-6-luna|evidence",
       "status": "exact_model_not_advertised_no_call"
+    },
+    {
+      "call_id": "codekey-kiro-standard|claude-sonnet-5-5|evidence",
+      "requested_model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "29e5811737ee2acf42baff867d01534204e2ebc0580a9e749e3fdc444b895bc4",
+      "quote_sha256": "b9938675e4dd359bb095a625e8b0440e18d490700ad575e040955f742f05c591",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "reserved_ceiling_cny": 0.28901376,
+      "input_token_ceiling": 65536,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "anthropic",
+        "endpoint": "https://codekey.ai/v1/messages",
+        "model": "claude-sonnet-5-5",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-kiro-standard",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.24,
+        "output_per_million": 1.2,
+        "cache_read_per_million": 0.012,
+        "cache_write_per_million": 0.3,
+        "cache_write_5m_per_million": 0.3,
+        "cache_write_1h_per_million": 0.48,
+        "tool_fees": {},
+        "quote_sha256": "b9938675e4dd359bb095a625e8b0440e18d490700ad575e040955f742f05c591"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 10.207,
+      "text": "```json\n{\n  \"primary_effect\": 0.3,\n  \"primary_ci\": [-0.2, 0.8],\n  \"primary_significant\": false,\n  \"subgroup_confirmatory\": false,\n  \"doi\": null,\n  \"source_ids\": [],\n  \"conclusion\": \"The preregistered primary outcome was not statistically significant (p=0.24), and the subgroup finding was unplanned without multiplicity correction.\"\n}\n```",
+      "usage": {
+        "cache_creation_input_tokens": 3,
+        "cache_read_input_tokens": 72,
+        "input_tokens": 216,
+        "output_tokens": 638
+      },
+      "reported_model": "claude-sonnet-5-5",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "msg_67xp0JGWrF9eTum5SHP5WQM4"
     }
   ],
   "scientific_completion": false,
