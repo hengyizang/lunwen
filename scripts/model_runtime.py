@@ -183,9 +183,7 @@ def cost_cny(provider: str, input_tokens: int, output_tokens: int, model: str | 
     """Conservative ceiling; conditional rates require actual usage to settle."""
     rates = pricing(provider, model, billing_identity=billing_identity)
     try:
-        if rates.get("quote_schema") == "2.0":
-            return billing_quotes.reserve_cost(rates, input_tokens, output_tokens, declared_tool_limits)
-        return round((input_tokens * rates["input_per_million"] + output_tokens * rates["output_per_million"]) / 1_000_000, 8)
+        return billing_quotes.reserve_cost(rates, input_tokens, output_tokens, declared_tool_limits)
     except billing_quotes.BillingQuoteError as exc:
         raise ModelBudgetError(str(exc)) from exc
 
