@@ -16,6 +16,20 @@ Humanizer covers binary contrasts; redundant closers/fragments; empty sayings; s
 
 A weak signal such as passive voice, a dash or quotation typography never establishes AI authorship. Scientific uncertainty or a valid negative statement cannot be strengthened or removed to satisfy a style preference. Unavailable Word-format checks explicitly remain review-required.
 
+Anti-defensive coverage was refreshed on 2026-10-18 against the reviewed upstream
+commit f516147d017a3fe43ae99192cb89d8261b0c8679. Its technical-plan/SOP guidance
+also preserves real operations, research purpose, parameters, prerequisites and
+prohibitions. Vague conditions stay unresolved until the source supplies the
+actual prerequisite; concise wording cannot make a conditional step unconditional.
+Technical verbs cannot be replaced with different operations for rhetorical effect.
+
+Scientific content and its surrounding framing are reviewed separately.
+Association, confidence intervals, sample counts or baselines do not exempt
+stacked hedges or empty modesty from advisory review. Necessary scope, uncertainty
+and genuinely small effects remain protected. Inline code, supported TeX math
+and code environments are excluded while retaining honest source offsets.
+The protected review binds the checker hash as well as rules and upstream sources.
+
 ## Existing two-pass workflow
 
 API and Codex orchestration receive compact full-skill contracts at G5, reusing the existing initial author and remediation calls. Both existing independent critics also receive the complete criteria in read-only review mode, without author dispositions or new output fields. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
@@ -23,6 +37,14 @@ API and Codex orchestration receive compact full-skill contracts at G5, reusing 
 Both controllers finish deterministic operations, including canonical Word construction, before auditing the resulting manuscript. The controller saves separate initial/final academic-audit snapshots and hashes. Final remediation requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.
 
 The protected academic audit contains both complete reviews. G5 recomputes them against current manuscript and rule hashes. A partial/stale coverage report cannot pass merely by setting a boolean. Existing scientific editing, human revision authorization, exact revision ledger, citation/claim checks, English-language requirements and human approval remain mandatory.
+
+API and CLI remediation also receive up to 12 compact protected-context signals,
+alongside the existing findings and full group coverage. Counts explicitly identify
+unshown signals; a bounded excerpt is not a completed review. Writers use the
+current full audit and manuscript for each AD01-AD08 disposition. A protected
+signal preserves its scientific boundary but does not establish that all wording
+around it is necessary. This reuses the current calls and budget, with bounded
+additional prompt input and no extra review round or automatic text rewrite.
 
 ## Cloud cleanup request
 

@@ -29,7 +29,7 @@
     {
       "id": "anti-defensive-writing",
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
-      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
+      "commit": "f516147d017a3fe43ae99192cb89d8261b0c8679",
       "license": "MIT",
       "use": "Full source-mapped academic defensive review in scripts/defensive_review.py plus the existing advisory patterns; necessary precision and all registered results are preserved."
     },

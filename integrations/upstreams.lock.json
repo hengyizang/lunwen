@@ -90,14 +90,14 @@
     {
       "id": "anti-defensive-writing",
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
-      "commit": "c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46",
+      "commit": "f516147d017a3fe43ae99192cb89d8261b0c8679",
       "upstream_version": "reviewed commit snapshot",
       "license": "MIT",
-      "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/c7edf8fc91ae9c4f7e58345bd12934bb4cf41c46/LICENSE",
+      "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/f516147d017a3fe43ae99192cb89d8261b0c8679/LICENSE",
       "enabled_by_default": false,
       "installation": "Pinned SKILL and MIT license in third_party/anti-defensive-writing; full source-mapped review via scripts/defensive_review.py",
       "selected_skills": [],
-      "selection_note": "User-authorized full academic integration: checklist, rewriting procedure, sentence functions and expanded paper rules. Necessary precision, disclosures and all registered results remain protected."
+      "selection_note": "User-authorized full integration: checklist, rewriting procedure, sentence functions, expanded paper rules and technical-plan/SOP precision. Necessary precision, disclosures and all registered results remain protected."
     },
     {
       "id": "humanizer",
