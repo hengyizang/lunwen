@@ -1,9 +1,8 @@
 {
-  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAzwrEcBZv2t/3tBDzmKNx\ndrO8aTS+3Xbn5WclOa0JLjtxdT9XKuW8auMk6g3hmvPCjl01GVISWI6scbMGZwoE\n6cMn0CbSUOyKDeZ6pvevg694ZZMGxkI2iaBGd49Mv+dI3lWlbjiB9DK3G6qwmbUH\nI4hZj23luftBgMXhZb0178hxEkMoJ0plhPkGAsbycRkjSEIrIu0efSnPicnr7KHn\nEWcdE0k8iqCcIJgSOPzdIqbgKTttLZjLc1wOTRTn4NYoz2TR6D7otfqFffUunhjy\nrac6DG2YSVQD3+nZH923HghX7Fybv/jXMZpvqVOIcrh2OWFIlA62UZPlfbJ62UUk\nTn46/vYdbYuDlGo8DdkwtSKUivefcSNCJ6N6iO8iOW8/lvYbyyYGCnThUDjBdTdL\nmxmzcTfbAKuQVEAbhX3Xjm1OtQvmjHeXpaqVlif7UnshgfZqWzIQC5DzLzxeSZ3u\n8to7aMCHM5i2XAv/SaAjsMVsp6jMMSg/hvsoG4TKi/PzAgMBAAE=\n-----END PUBLIC KEY-----\n",
-  "aad": "relay-acceptance-20261019|39145466355|1|cd9e7981a07be198d7f76e53810a78dae743e613|f435e49e01ad1f55c62105433b73a300d9ab075ef8a19b86",
   "trial_id": "relay-acceptance-20261019",
-  "run_id": "39145466355",
-  "attempt": "1",
-  "head_sha": "cd9e7981a07be198d7f76e53810a78dae743e613",
-  "status": "waiting_for_encrypted_envelope"
+  "status": "superseded_by_owner_approved_actions_secrets",
+  "old_run": "39145466355",
+  "old_worker": "cancelled",
+  "credential_envelope_uploaded": false,
+  "model_calls_from_handoff": 0
 }
