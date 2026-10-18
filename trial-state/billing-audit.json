@@ -1,0 +1,417 @@
+{
+  "trial_id": "relay-acceptance-20261019",
+  "model_generation_calls": 0,
+  "groups": {
+    "cheapai-gpt-pro": {
+      "/api/usage/token/": {
+        "numbers": {
+          "data": {
+            "model_limits": {},
+            "total_used": 1432
+          }
+        }
+      },
+      "/api/log/token": {
+        "records": [
+          {
+            "created_at": 1792341999,
+            "type": 2,
+            "quota": 1238,
+            "prompt_tokens": 165,
+            "completion_tokens": 192,
+            "use_time": 3,
+            "channel": 0,
+            "model_name": "gpt-6-astra",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.22,
+              "group_ratio": 0.22,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 3333,
+                "output_tokens": 192,
+                "total_handler_ms": 3339
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792341993,
+            "type": 2,
+            "quota": 194,
+            "prompt_tokens": 165,
+            "completion_tokens": 143,
+            "use_time": 5,
+            "channel": 0,
+            "model_name": "gpt-6.1-sol",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.22,
+              "group_ratio": 0.22,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 5296,
+                "output_tokens": 143,
+                "total_handler_ms": 5303
+              },
+              "user_group_ratio": -1
+            }
+          }
+        ]
+      }
+    },
+    "cheapai-gpt-discount": {
+      "/api/usage/token/": {
+        "numbers": {
+          "data": {
+            "model_limits": {},
+            "total_used": 558
+          }
+        }
+      },
+      "/api/log/token": {
+        "records": [
+          {
+            "created_at": 1792342012,
+            "type": 2,
+            "quota": 472,
+            "prompt_tokens": 165,
+            "completion_tokens": 203,
+            "use_time": 2,
+            "channel": 0,
+            "model_name": "gpt-6-astra",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.08,
+              "group_ratio": 0.08,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 2383,
+                "output_tokens": 203,
+                "total_handler_ms": 2391
+              },
+              "user_group_ratio": -1
+            }
+          },
+          {
+            "created_at": 1792342006,
+            "type": 2,
+            "quota": 86,
+            "prompt_tokens": 165,
+            "completion_tokens": 183,
+            "use_time": 3,
+            "channel": 0,
+            "model_name": "gpt-6.1-sol",
+            "other": {
+              "cache_ratio": 0,
+              "cache_tokens": 0,
+              "completion_ratio": 0,
+              "default_group_ratio": 0.08,
+              "group_ratio": 0.08,
+              "model_input_price": 0,
+              "model_price": 0,
+              "model_ratio": 0,
+              "pricing_rules": {
+                "version": 1
+              },
+              "timing": {
+                "inference_total_ms": 3533,
+                "output_tokens": 183,
+                "total_handler_ms": 3541
+              },
+              "user_group_ratio": -1
+            }
+          }
+        ]
+      }
+    },
+    "cheapai-kiro": {
+      "/api/usage/token/": {
+        "numbers": {
+          "data": {
+            "model_limits": {},
+            "total_used": 1147
+          }
+        }
+      },
+      "/api/log/token": {
+        "records": [
+          {
+            "created_at": 1792342022,
+            "type": 2,
+            "quota": 1147,
+            "prompt_tokens": 0,
+            "completion_tokens": 258,
+            "use_time": 5,
+            "channel": 0,
+            "model_name": "claude-sonnet-5-5",
+            "other": {
+              "cache_creation_ratio": 1.25,
+              "cache_creation_tokens": 5970,
+              "cache_ratio": 0.1,
+              "cache_tokens": 12172,
+              "cache_write_tokens": 5970,
+              "completion_ratio": 5,
+              "default_group_ratio": 0.115,
+              "group_ratio": 0.115,
+              "model_input_price": 2,
+              "model_price": -1,
+              "model_ratio": 1,
+              "timing": {
+                "inference_total_ms": 5523,
+                "output_tokens": 258,
+                "total_handler_ms": 5530
+              },
+              "user_group_ratio": -1
+            }
+          }
+        ]
+      }
+    },
+    "cheapai-ccmax": {
+      "/api/usage/token/": {
+        "numbers": {
+          "data": {
+            "model_limits": {},
+            "total_used": 0
+          }
+        }
+      },
+      "/api/log/token": {
+        "records": []
+      }
+    },
+    "codekey-deepseek": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    },
+    "codekey-gemini": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    },
+    "codekey-codex-pure": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    },
+    "codekey-kiro-enterprise": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    },
+    "codekey-codex-discount": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    },
+    "codekey-kiro-standard": {
+      "/v1/usage": {
+        "numbers": {
+          "usage": {
+            "average_duration_ms": 0,
+            "rpm": 0,
+            "today": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "total": {
+              "actual_cost": 0,
+              "cache_creation_tokens": 0,
+              "cache_read_tokens": 0,
+              "cost": 0,
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "requests": 0,
+              "total_tokens": 0
+            },
+            "tpm": 0
+          }
+        },
+        "is_valid": true,
+        "subscription_present": false,
+        "wallet_positive": true,
+        "mode": "unverified"
+      }
+    }
+  },
+  "cost_units": "gateway reported numbers; CNY conversion requires denomination evidence"
+}
