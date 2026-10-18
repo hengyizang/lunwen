@@ -30,7 +30,7 @@
     {
       "call_id": "cheapai-kiro|claude-sonnet-5-5|evidence",
       "reserved_ceiling_cny": 0.1,
-      "status": "reserved_before_transport"
+      "status": "ambiguous_failure_reservation_retained"
     }
   ],
   "results": [
@@ -341,6 +341,20 @@
         "automatic_scope": "fixture facts only; prose quality needs review"
       },
       "elapsed_seconds": 2.876
+    },
+    {
+      "call_id": "cheapai-kiro|claude-sonnet-5-5|evidence",
+      "requested_model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "29e5811737ee2acf42baff867d01534204e2ebc0580a9e749e3fdc444b895bc4",
+      "quote_sha256": "c111924cfe58b21ed46a3970bcfb2cceaae76d9808a3646c0c1d4ae875f304aa",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "status": "ambiguous_failure_no_retry",
+      "diagnostic": "BillingQuoteError",
+      "elapsed_seconds": 7.189
     }
   ],
   "scientific_completion": false,
@@ -348,5 +362,6 @@
   "actual_invoice_reconciled": false,
   "currency_rule": "user foreign USD numeric as CNY; domestic CNY",
   "budget_safety_multiplier": 7,
-  "reservations_never_automatically_released": true
+  "reservations_never_automatically_released": true,
+  "stop_reason": "generation_or_billing_requires_review"
 }
