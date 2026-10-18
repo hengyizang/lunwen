@@ -113,12 +113,15 @@ class ApiFirstTests(unittest.TestCase):
             "missing-project", "writing-and-review", ""
         )
         for required in (
-            "preregistered primary finding",
+            "strongest supported contribution",
+            "original hypotheses and outcomes",
+            "post-hoc",
             "every registered result locatable",
             "unfavorable or contentious",
             "material limitations once",
         ):
             self.assertIn(required, writer)
+        self.assertNotIn("Lead the abstract and conclusion with the preregistered primary finding", writer)
         for required in (
             "direction-dependent omission or demotion",
             "missing primary outcome",

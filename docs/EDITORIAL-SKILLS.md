@@ -32,6 +32,14 @@ The protected review binds the checker hash as well as rules and upstream source
 
 ## Existing two-pass workflow
 
+The [evidence-led narrative guide](EVIDENCE-LED-NARRATIVE.md) gives central
+claims, decisive figures and exact advantages priority over equal coverage.
+AD06/AD07 and existing stage prompts apply it within the same calls. Internal
+scientific review distinguishes demonstrated issues from verification questions
+and optional extensions; the manuscript states the supported contribution and
+necessary boundaries. Reframing follows the evidence while preserving original
+hypotheses, outcomes, fair comparisons and actual analysis phases.
+
 API and Codex orchestration receive compact full-skill contracts at G5, reusing the existing initial author and remediation calls. Both existing independent critics also receive the complete criteria in read-only review mode, without author dispositions or new output fields. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
 
 Both controllers finish deterministic operations, including canonical Word construction, before auditing the resulting manuscript. The controller saves separate initial/final academic-audit snapshots and hashes. Final remediation requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.

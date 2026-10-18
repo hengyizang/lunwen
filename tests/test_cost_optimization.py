@@ -123,7 +123,7 @@ class LosslessContextTests(unittest.TestCase):
             self.assertIn(required, topic)
         for required in ("strong", "negative controls", "stopping rules", "power", "preregistration", "clean-room"):
             self.assertIn(required, design)
-        for required in ("every registered result locatable", "unfavorable", "AI-use disclosure", "preregistered primary finding"):
+        for required in ("every registered result locatable", "unfavorable", "AI-use disclosure", "strongest supported contribution", "post-hoc"):
             self.assertIn(required, writing)
         self.assertNotIn("At G5 write", topic)
         self.assertNotIn("At G1 also create", writing)

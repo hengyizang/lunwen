@@ -20,6 +20,12 @@ value and discriminating decisions are checked at G1; empirical G3/G4 connects
 critical tests to every actual comparison. Existing G5 reviews challenge the
 supported contribution and conclusion scope. No extra paid role is introduced.
 
+The [evidence-led narrative guide](../docs/EVIDENCE-LED-NARRATIVE.md) prioritizes
+the strongest supported contribution, relevant comparisons and decisive evidence.
+Existing paper contracts, claim records and argument plans hold the evolving
+story. Scientific reviews remain internal; manuscript emphasis follows evidence
+and actual analysis phase while preserving registered outcomes and frozen plans.
+
 Use the [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md) for actual
 Meta/formal-theory identities and separate reviewer-requested experiments.
 These routes keep the shared evidence, budget, writer/critic and human gates.

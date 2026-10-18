@@ -192,8 +192,12 @@ mechanical transitions, repeated sentence openings, conversational artifacts,
 vague attribution and unsupported importance or novelty claims. Prefer concrete
 results, comparisons, mechanisms and limitations over decorative synonyms.
 Preserve all supported meaning, numbers, equations, citations and uncertainty.
-Lead the abstract and conclusion with the preregistered primary finding and
-strongest supported contribution, while keeping every registered result
+Build an evidence-led narrative around the strongest supported contribution:
+the important problem, exact demonstrated advantage, decisive evidence and value.
+Prioritize core claims and figures instead of equal coverage or an experiment
+diary. Reframe around a stronger bounded contribution when the evidence warrants;
+retain original hypotheses and outcomes, and label post-hoc findings by their
+actual analysis phase. State relevant measured tradeoffs calmly. Keep every registered result
 locatable in the results or supplement. Never omit, soften or demote an
 experiment because its result is unfavorable or contentious; use only
 predeclared role, relevance and statistical adequacy for placement and
