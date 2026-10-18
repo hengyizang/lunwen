@@ -2639,6 +2639,53 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 4.924
+    },
+    {
+      "call_id": "codekey-gemini|gemini-4-argon|engineering",
+      "requested_model": "gemini-4-argon",
+      "family": "google",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "d38cb52ac855d8dc957b993ceae7ef4f4feea5d6d0f7fc1715f40f7dfb145226",
+      "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2",
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "reserved_ceiling_cny": 0.4128768,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "google",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "model": "gemini-4-argon",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 20.639,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Perform a patient-grouped split, fit the StandardScaler exclusively on the training partition, and benchmark the model against established baselines with confidence intervals on the held-out test set.\"}",
+      "usage": {
+        "input_tokens": 369,
+        "output_tokens": 992,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reported_model": "gemini-4-argon",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "b0dbb14e-4ba7-4cee-97a3-99024ba9f5f3"
     }
   ],
   "scientific_completion": false,
