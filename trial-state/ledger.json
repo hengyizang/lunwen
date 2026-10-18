@@ -2509,6 +2509,50 @@
       "call_id": "cheapai-ccmax|claude-opus-5-5|engineering",
       "status": "quarantined_route_no_call",
       "reason": "reported_model_identity_unverified"
+    },
+    {
+      "call_id": "codekey-deepseek|deepseek-v4.1-flash|engineering",
+      "requested_model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "01873f1dab5bbbf80620858a95c67e8977ce430564aa96a82de06b7058a9c920",
+      "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352",
+      "source_url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "deepseek",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "deepseek-v4.1-flash",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.2,
+        "output_per_million": 0.8,
+        "cache_read_per_million": 0.004,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 2.635,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Re-run with a patient-level group split, fit the scaler only on training data, transform the held-out test data, and compare against all baselines with confidence intervals.\"}",
+      "usage": {
+        "prompt_tokens": 173,
+        "completion_tokens": 284
+      },
+      "reported_model": "deepseek-v4.1-flash",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "cmb-45ba9889cb1811f1b1a5f22739cd92f2"
     }
   ],
   "scientific_completion": false,
