@@ -2338,6 +2338,72 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 7.817
+    },
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6-astra|engineering",
+      "requested_model": "gpt-6-astra",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "d5c2ddfaedf3cc240bc6e8b46dcb271f1a5dc90851bc9adea5377a56b9c5f0bd",
+      "quote_sha256": "3348b19098528d009a186ba11f27e4c710942b37548f68fb8a022bd4be16c539",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 2.207744,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 16384,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6-astra",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 2.2,
+            "output_per_million": 11.0,
+            "cache_read_per_million": 0.22,
+            "cache_write_per_million": 2.75
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 4.4,
+            "output_per_million": 16.5,
+            "cache_read_per_million": 0.44,
+            "cache_write_per_million": 5.5
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "3348b19098528d009a186ba11f27e4c710942b37548f68fb8a022bd4be16c539"
+      },
+      "gateway_price_url": "https://cheapai.info/api/pricing",
+      "inference_response_seconds": 8.342,
+      "text": "{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Split by patient, fit the scaler on training patients only, evaluate on held-out patients, and report matched baseline results with confidence intervals across repeated runs.\"}",
+      "usage": {
+        "input_tokens": 147,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 193,
+        "output_tokens_details": {
+          "reasoning_tokens": 111
+        }
+      },
+      "reported_model": "gpt-6-astra",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_0ad340340fbb2711016ad4ffdb8f8c8192a888c6e49efef8f6"
     }
   ],
   "scientific_completion": false,
