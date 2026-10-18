@@ -611,6 +611,17 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-codex-pure|gpt-6.1-sol|engineering",
+      "reserved_ceiling_cny": 0.401408,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.0020252,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
