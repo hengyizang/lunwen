@@ -935,7 +935,7 @@
     {
       "call_id": "cheapai-kiro|claude-sonnet-5-5|engineering",
       "reserved_ceiling_cny": 0.27697152,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "cheapai_quota_history",
         "quota_per_unit": 500000,
@@ -959,6 +959,19 @@
           }
         ],
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.00026588,
+      "gateway_debit_cny": 0.000266,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "claude-sonnet-5-5",
+        "quota": 133,
+        "created_at": 1792344486,
+        "prompt_tokens": 271,
+        "completion_tokens": 177,
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -4211,8 +4224,67 @@
       "reported_model": "claude-sonnet-5-5",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "msg_011CgA6Z49sCnxx4Q2PGZNpM"
+      "status": "complete",
+      "gateway_request_id": "msg_011CgA6Z49sCnxx4Q2PGZNpM",
+      "modeled_cost_cny": 0.00026588,
+      "billing_parts": {
+        "ordinary_input_tokens": 271,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 271,
+        "uncached_input_tokens": 271,
+        "output_tokens_including_reasoning": 177,
+        "rates": {
+          "quote_schema": "2.0",
+          "provider": "anthropic",
+          "endpoint": "https://cheapai.info/v1/messages",
+          "model": "claude-sonnet-5-5",
+          "billing_identity": {
+            "plan": "relay-acceptance-20261019",
+            "group": "cheapai-kiro",
+            "mode": "standard"
+          },
+          "currency": "CNY",
+          "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+          "input_per_million": 0.23,
+          "output_per_million": 1.1500000000000001,
+          "cache_read_per_million": 0.023000000000000003,
+          "cache_write_per_million": 0.28750000000000003,
+          "cache_write_5m_per_million": 0.28750000000000003,
+          "cache_write_1h_per_million": 0.46,
+          "tool_fees": {},
+          "quote_sha256": "49a8f25bf418d0a36f4d0d659d18c17ffc782f6bed8fcd5e9e2af612c0949d7a"
+        },
+        "quote_sha256": "49a8f25bf418d0a36f4d0d659d18c17ffc782f6bed8fcd5e9e2af612c0949d7a",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-kiro",
+          "mode": "standard"
+        },
+        "context_tier": null,
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.00026588
+      },
+      "gateway_debit_cny": 0.000266,
+      "grade": {
+        "checks": {
+          "both_leaks": true,
+          "safe_order": true,
+          "no_unsupported_superiority": true,
+          "no_fabricated_accuracy": true,
+          "experiment_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 5.942
     }
   ],
   "scientific_completion": false,
