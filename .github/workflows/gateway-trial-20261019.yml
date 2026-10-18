@@ -49,7 +49,7 @@ jobs:
       - name: Execute bounded trial using isolated Actions Secrets
         env:
           TRIAL_GITHUB_TOKEN: ${{ github.token }}
-          TRIAL_METADATA_ONLY: '1'
+          TRIAL_RECONCILE_AND_CONTINUE: '1'
           MODEL_TEST_CHEAPAI_GPT_PRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_PRO_KEY }}
           MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY }}
           MODEL_TEST_CHEAPAI_KIRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_KIRO_KEY }}

@@ -39,6 +39,37 @@ class TrialControlsTests(unittest.TestCase):
         with self.assertRaises(trial.TrialError):
             trial.validate_ledger(ledger,'test')
 
+    def test_only_independent_debit_releases_reservation(self):
+        ledger=self.ledger()
+        trial.reserve(ledger,'first',29,lambda x:None)
+        entry=ledger['entries'][0]
+        entry['gateway_debit_cny']=.001
+        self.assertFalse(trial.reserve(ledger,'next',2,lambda x:None))
+        trial.settle_debit(entry,.001,{'source':'independent test meter','exactly_one_new_gateway_request':True})
+        self.assertTrue(trial.reserve(ledger,'next',2,lambda x:None))
+        self.assertAlmostEqual(trial.committed_cost(ledger),2.001)
+        trial.validate_ledger(ledger,'test')
+
+    def test_invalid_debit_cannot_release_or_exceed_reservation(self):
+        for amount in (-1,float('nan'),float('inf'),True,2):
+            entry={'reserved_ceiling_cny':1}
+            with self.assertRaises(trial.TrialError):
+                trial.settle_debit(entry,amount,{'source':'test'})
+
+    def test_concurrent_gateway_request_prevents_settlement(self):
+        entry={'call_id':'codekey-gemini|gemini-4-argon|evidence','reserved_ceiling_cny':1}
+        before={'kind':'codekey_total_actual_cost','requests':0,'cost_cny':0}
+        after={'kind':'codekey_total_actual_cost','requests':2,'cost_cny':.01}
+        group={'root':'https://codekey.ai'}
+        with patch.object(trial,'meter',return_value=after),patch.object(trial.time,'sleep'),self.assertRaises(trial.TrialError):
+            trial.settle_after_call(group,'fake',{'entries':[entry]},entry,before)
+        self.assertNotIn('gateway_debit_cny',entry)
+
+    def test_public_billing_diagnostics_omit_credentials_and_identifiers(self):
+        self.assertEqual(trial.numeric_tree({'user_id':13,'token_id':9,'balance':30,
+            'key':'never store','data':{'cache_tokens':14,'cost':.02,'remaining':8}}),
+            {'data':{'cache_tokens':14,'cost':.02}})
+
     def test_no_local_or_pr_event_execution(self):
         with patch.dict(os.environ,{},clear=True),self.assertRaises(trial.TrialError):
             trial.main()

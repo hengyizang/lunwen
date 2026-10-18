@@ -20,17 +20,26 @@ write-before-transport reservation for each route/model/fixture. Reruns share
 this allowance and skip attempted IDs. No inference retries, paid warmups,
 cross-site fallback, built-in tools, recharge or production activation occur.
 Unknown billing holds its reservation and stops the trial. Conservative ceilings
-include the most expensive context/cache-write rates and a sevenfold safety
-margin for unresolved gateway denomination. Reservations are never automatically
-released during this authorization, even when usage is complete. The margin
-is not actual spend and does not change the owner's price formula.
+include the most expensive context/cache-write rates, a larger input allowance
+for Claude's observed additional gateway context, and a sevenfold safety margin.
+A model receipt alone never releases money. A separately queried gateway debit
+must match exactly one new request before the reservation can be settled. CheapAI
+quota units are checked against its public quota-per-unit setting and complete
+per-key debit logs. CodeKey requires exactly one new request in its independent
+total actual-cost meter. Other concurrent requests, changed denomination,
+missing debit evidence, negative/nonfinite amounts or over-ceiling charges stop
+the trial. All initial attempts remain recorded. The margin is not actual spend
+and does not change the owner's price formula.
 
-Quotes use each official input/output/cache item times the screenshot group
-coefficient. Foreign USD numeric prices are interpreted as CNY per the owner's
+Quotes record official price items and the screenshot group coefficient, plus
+the observed CheapAI cache-read surcharge (10% rather than official 5% on Claude
+5.5). Foreign USD numeric prices are interpreted as CNY per the owner's
 instruction; domestic prices are CNY. Google reserves non-promotional prices;
 DeepSeek reserves peak rates. Complete usage is required and cache tokens are
 disjoint. Reasoning output is charged once. Official references are recorded in
-the receipt; relay billing and actual invoices still require reconciliation.
+the receipt. A missing Claude cache-write TTL is recorded as unknown; an exact
+modeled fee is not invented. The separately matched gateway debit can establish
+the wallet charge without inventing that TTL. Fiat invoices remain distinct.
 A malicious or misconfigured relay cannot be made trustworthy by a client-side
 ledger; no claim of audited real CNY charges is made without billing evidence.
 

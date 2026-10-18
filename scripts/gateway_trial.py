@@ -2,9 +2,10 @@
 
 All material is an original synthetic software fixture, not research evidence.
 Credentials arrive only through GitHub Actions Secrets, never PR metadata.
-Generation has no retry/fallback. Durable conservative reservations are never
-released automatically, even after a complete receipt. Unknown billing stops
-the trial; restarting does not create another CNY30 allowance.
+Generation has no retry/fallback. Durable conservative reservations are not
+released on a model receipt alone. Unknown billing stops
+the trial; restarting does not create another CNY30 allowance. A reservation can
+be settled only against an independently read, exactly matched gateway debit.
 """
 from __future__ import annotations
 
@@ -136,9 +137,18 @@ def validate_ledger(ledger, plan_hash):
         amount = entry.get('reserved_ceiling_cny')
         if isinstance(amount, bool) or not isinstance(amount, (float, int)) or not math.isfinite(amount) or amount < 0:
             raise TrialError('invalid_ledger_amount')
-    if sum(e['reserved_ceiling_cny'] for e in entries) > LIMIT + 1e-8:
+        if entry.get('status')=='gateway_debit_verified':
+            settled=entry.get('gateway_debit_cny')
+            if type(settled) not in (int,float) or not math.isfinite(settled) or not 0<=settled<=amount or not entry.get('debit_evidence'):
+                raise TrialError('invalid_gateway_settlement')
+    if committed_cost(ledger) > LIMIT + 1e-8:
         raise TrialError('over_budget_ledger')
     return ledger
+
+
+def committed_cost(ledger):
+    return round(sum(e['gateway_debit_cny'] if e.get('status')=='gateway_debit_verified'
+                     else e['reserved_ceiling_cny'] for e in ledger['entries']),8)
 
 
 def reserve(ledger, call_id, ceiling, persist):
@@ -146,7 +156,7 @@ def reserve(ledger, call_id, ceiling, persist):
         return False
     if not math.isfinite(ceiling) or ceiling <= 0:
         raise TrialError('invalid_reservation')
-    used = sum(e['reserved_ceiling_cny'] for e in ledger['entries'])
+    used = committed_cost(ledger)
     if used + ceiling > LIMIT:
         return False
     ledger['entries'].append({'call_id':call_id, 'reserved_ceiling_cny':ceiling,
@@ -211,11 +221,15 @@ def quote_for(route):
         'gpt-6.1-sol':(2,.1,2.5,10), 'gpt-6-astra':(10,1,12.5,50),
         'gpt-6-luna':(.1,.01,.125,.5), 'claude-sonnet-5-5':(2,.1,2.5,10),
         'claude-opus-5-5':(4,.2,5,20), 'gemini-4-argon':(4,.2,0,20),
-        'deepseek-flash':(2,.04,0,8),
+        'deepseek-flash':(2,.04,0,8),'deepseek-v4.1-flash':(2,.04,0,8),
     }
     rates = prices[route['model']]
     fields = ('input_per_million','cache_read_per_million','cache_write_per_million','output_per_million')
     base = {k:v*route['multiplier'] for k,v in zip(fields,rates)}
+    if route['root']=='https://cheapai.info' and route['family']=='anthropic':
+        # Current relay price table/logs charge 10% of input for reads, while
+        # official Sonnet/Opus 5.5 charge 5%; do not silently undercount the relay.
+        base['cache_read_per_million']=rates[0]*.1*route['multiplier']
     raw = {'provider':route['family'],'endpoint':route['root']+route['path'],'model':route['model'],
            'plan':TRIAL,'group':route['id'],'mode':'standard','currency':'CNY',
            'price_version':'official-2026-10-19-user-numeric-CNY-times-group', **base}
@@ -364,6 +378,104 @@ def inspect_billing(state,plan,keys):
     print('Read-only billing audit recorded; no model generation requested',flush=True)
 
 
+def meter(group,key):
+    headers={'Authorization':'Bearer '+key}
+    if group['root']=='https://codekey.ai':
+        raw,_=http_json(group['root']+'/v1/usage',headers)
+        total=raw.get('usage',{}).get('total',{})
+        requests=total.get('requests')
+        cost=total.get('actual_cost')
+        if type(requests) is not int or requests<0 or type(cost) not in (int,float) or not math.isfinite(cost) or cost<0:
+            raise TrialError('unusable_gateway_meter')
+        return {'kind':'codekey_total_actual_cost','requests':requests,'cost_cny':float(cost),
+                'currency_rule':'owner numeric USD wallet unit equals CNY1'}
+    status,_=http_json(group['root']+'/api/status')
+    unit=status.get('data',{}).get('quota_per_unit')
+    display=status.get('data',{}).get('quota_display_type')
+    if unit!=500000 or display!='USD':
+        raise TrialError('gateway_denomination_changed')
+    usage,_=http_json(group['root']+'/api/usage/token/',headers)
+    logs,_=http_json(group['root']+'/api/log/token',headers)
+    total=usage.get('data',{}).get('total_used')
+    rows=logs.get('data',[])
+    if not isinstance(rows,list) or type(total) is not int or total<0:
+        raise TrialError('unusable_gateway_meter')
+    rows=[{'model':r.get('model_name'),'quota':r.get('quota'),'created_at':r.get('created_at'),
+           'prompt_tokens':r.get('prompt_tokens'),'completion_tokens':r.get('completion_tokens')}
+          for r in rows if isinstance(r,dict) and r.get('type')==2]
+    if any(type(r['quota']) is not int or r['quota']<0 or type(r['created_at']) is not int for r in rows):
+        raise TrialError('unusable_gateway_debits')
+    if sum(r['quota'] for r in rows)!=total:
+        raise TrialError('incomplete_gateway_debit_history')
+    return {'kind':'cheapai_quota_history','quota_per_unit':unit,'total_quota':total,
+            'rows':rows,'currency_rule':'owner numeric USD wallet unit equals CNY1'}
+
+
+def settle_debit(entry,amount,evidence):
+    if type(amount) not in (int,float) or not math.isfinite(amount) or amount<0 or amount>entry['reserved_ceiling_cny']:
+        raise TrialError('gateway_debit_exceeds_reservation')
+    if not isinstance(evidence,dict) or not evidence.get('source'):
+        raise TrialError('independent_debit_evidence_required')
+    entry.update(status='gateway_debit_verified',gateway_debit_cny=round(amount,8),debit_evidence=evidence)
+
+
+def reconcile_existing_cheapai(state,plan,keys,ledger):
+    # Explicit operator-reviewed repair: match the paused original attempts to
+    # independent debit logs. Preserve lost/failed responses and never replay IDs.
+    for group in plan['groups']:
+        if group['root']!='https://cheapai.info':
+            continue
+        entries=[e for e in ledger['entries'] if e['call_id'].split('|')[0]==group['id']]
+        if not entries:
+            continue
+        current=meter(group,keys[group['id']])
+        rows=current['rows']
+        if len(rows)!=len(entries):
+            raise TrialError('paused_debits_not_uniquely_matchable')
+        for model in {e['call_id'].split('|')[1] for e in entries}:
+            matches=[r for r in rows if r['model']==model]
+            attempts=[e for e in entries if e['call_id'].split('|')[1]==model]
+            if len(matches)!=len(attempts):
+                raise TrialError('paused_debits_not_uniquely_matchable')
+            for entry,row in zip(attempts,sorted(matches,key=lambda r:r['created_at'])):
+                settle_debit(entry,row['quota']/current['quota_per_unit'],{
+                    'source':group['root']+'/api/log/token','unit_source':group['root']+'/api/status',
+                    'quota_per_unit':current['quota_per_unit'],**row,
+                    'all_key_debits_match_attempt_count':True,'no_generation_retry':True})
+    if any(e.get('status')!='gateway_debit_verified' for e in ledger['entries']):
+        raise TrialError('unreconciled_prior_attempts_still_blocked')
+    ledger.setdefault('operator_reviews',[]).append({'run_id':os.environ['GITHUB_RUN_ID'],
+        'commit':os.environ['GITHUB_SHA'],'reason':'Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30.'})
+    ledger.pop('stop_reason',None)
+    ledger['settlement_rule']='Only independently matched gateway debit releases unused reservation; unknown debit remains held.'
+    state.write('ledger.json',ledger)
+
+
+def settle_after_call(group,key,ledger,entry,before):
+    for retry in range(4):
+        after=meter(group,key)
+        if after['kind']=='codekey_total_actual_cost':
+            if after['requests']==before['requests']+1 and after['cost_cny']>=before['cost_cny']:
+                settle_debit(entry,round(after['cost_cny']-before['cost_cny'],8),{
+                    'source':group['root']+'/v1/usage','before':before,'after':after,
+                    'exactly_one_new_gateway_request':True})
+                return
+        else:
+            prior=before['rows']
+            current=after['rows']
+            delta=[r for r in current if r not in prior]
+            if len(delta)==1 and len(current)==len(prior)+1 and after['total_quota']-before['total_quota']==delta[0]['quota'] \
+               and delta[0]['model']==entry['call_id'].split('|')[1]:
+                row=delta[0]
+                settle_debit(entry,row['quota']/after['quota_per_unit'],{
+                    'source':group['root']+'/api/log/token','unit_source':group['root']+'/api/status',
+                    'quota_per_unit':after['quota_per_unit'],**row,'exactly_one_new_gateway_request':True})
+                return
+        if retry<3:
+            time.sleep(2)
+    raise TrialError('gateway_debit_not_uniquely_reconciled')
+
+
 def run_trial(state, plan, keys, ledger):
     secret_values = [*keys.values(),state.token]
     inventory = {}
@@ -384,6 +496,10 @@ def run_trial(state, plan, keys, ledger):
             if inventory[group['id']]['status'] != 'received':
                 continue
             for model in group['models']:
+                if model=='deepseek-flash' and model not in inventory[group['id']]['models'] \
+                   and 'deepseek-v4.1-flash' in inventory[group['id']]['models']:
+                    # Advertised relay ID; dated 1017 backend remains unverified.
+                    model='deepseek-v4.1-flash'
                 call_id = group['id']+'|'+model+'|'+case
                 if any(e['call_id']==call_id for e in ledger['entries']):
                     continue
@@ -396,12 +512,14 @@ def run_trial(state, plan, keys, ledger):
                 route = {**group,'model':model,'path':path,'effort':'medium' if model=='gpt-6-luna' else 'high'}
                 payload = payload_for(route,case)
                 quote = quote_for(route)
-                input_ceiling = max(8192,len(json.dumps(payload,ensure_ascii=False).encode())+4096)
+                input_ceiling = max(65536 if family=='anthropic' else 8192,
+                                    len(json.dumps(payload,ensure_ascii=False).encode())+4096)
                 output_ceiling = 16384 if family=='openai' else 8192
                 # Sevenfold currency/billing safety margin; do not report it as actual spend.
-                # Reservations are cumulative and never reclaimed during this authorization.
+                # Release only after an independent, exactly matched gateway debit.
                 ceiling = round(max(.10,7*billing_quotes.reserve_cost(quote,input_ceiling,output_ceiling)),8)
                 persist = lambda value: state.write('ledger.json',value)
+                before=meter(group,keys[group['id']])
                 if not reserve(ledger,call_id,ceiling,persist):
                     records.append({'call_id':call_id,'status':'budget_ceiling_prevented_call'})
                     continue
@@ -414,7 +532,10 @@ def run_trial(state, plan, keys, ledger):
                 record = {'call_id':call_id,'requested_model':model,'family':family,'effort':route['effort'],
                     'fixture_sha256':hashlib.sha256(fixture(case).encode()).hexdigest(),
                     'payload_sha256':digest(payload),'quote_sha256':quote['quote_sha256'],
-                    'source_url':SOURCES[family],'reserved_ceiling_cny':ceiling}
+                    'source_url':SOURCES[family],'reserved_ceiling_cny':ceiling,
+                    'input_token_ceiling':input_ceiling,'output_token_ceiling':output_ceiling,
+                    'quote_snapshot':quote,
+                    'gateway_price_url':group['root']+('/api/pricing' if group['root']=='https://cheapai.info' else '/models')}
                 started = time.monotonic()
                 receipt_saved=False
                 try:
@@ -424,22 +545,41 @@ def run_trial(state, plan, keys, ledger):
                     record.update(text=safe_text(text,secret_values),usage=usage,
                         reported_model=safe_text(reported,secret_values),complete=complete,
                         identity_exact=reported==model,status='receipt_received_before_billing_validation')
+                    opaque_id=safe_text(response.get('id',response_headers.get('x-request-id','')),secret_values)
+                    if re.fullmatch(r'[A-Za-z0-9_.:-]{1,180}',opaque_id):
+                        record['gateway_request_id']=opaque_id
                     records.append(record)
                     receipt_saved=True
                     persist(ledger)
                     input_tokens = usage.get('input_tokens',usage.get('prompt_tokens'))
                     output_tokens = usage.get('output_tokens',usage.get('completion_tokens'))
-                    modeled,unknown,parts = billing_quotes.bill(quote,usage,input_tokens,output_tokens,
-                        anthropic=family=='anthropic')
+                    try:
+                        modeled,unknown,parts = billing_quotes.bill(quote,usage,input_tokens,output_tokens,
+                            anthropic=family=='anthropic')
+                        record.update(modeled_cost_cny=modeled,billing_parts=parts)
+                    except billing_quotes.BillingQuoteError as error:
+                        if family!='anthropic' or 'TTL usage breakdown' not in str(error):
+                            raise
+                        # Total cache-write tokens can be valid while TTL is absent.
+                        # Do not fabricate a TTL or an exact modeled charge; settle
+                        # only against the separately queried gateway wallet debit.
+                        parts=billing_quotes.token_parts(usage,input_tokens,output_tokens,anthropic=True)
+                        modeled=None;unknown=False
+                        record.update(cache_write_ttl_unreported=True,billing_parts=parts)
                     # Date-pinned model versions are recorded but require manual identity review.
                     identity_ok = reported==model
-                    if modeled>ceiling or parts['full_request_input_tokens']>input_ceiling or output_tokens>output_ceiling or unknown:
+                    if (modeled is not None and modeled>ceiling) or parts['full_request_input_tokens']>input_ceiling or output_tokens>output_ceiling or unknown:
                         raise TrialError('billing_ceiling_or_receipt_violation')
-                    entry.update(status='response_received_reservation_retained', modeled_cost_cny=modeled)
+                    entry.update(status='response_received_reservation_retained')
+                    if modeled is not None:
+                        entry['modeled_cost_cny']=modeled
+                    settle_after_call(group,keys[group['id']],ledger,entry,before)
                     record.update(status='complete' if complete and identity_ok else 'incomplete_or_identity_unverified',
                         reported_model=safe_text(reported,secret_values),identity_exact=identity_ok,
                         complete=complete,text=safe_text(text,secret_values),usage=usage,
-                        modeled_cost_cny=modeled,billing_parts=parts,grade=grade(text,case) if complete and identity_ok else None)
+                        gateway_debit_cny=entry['gateway_debit_cny'],grade=grade(text,case) if complete and identity_ok else None,
+                        dated_backend_version_verified=False,
+                        reasoning_effort_attestation='requested; not independently attested')
                     record['elapsed_seconds']=round(time.monotonic()-started,3)
                     persist(ledger)
                     print(call_id+': '+record['status'],flush=True)
@@ -477,7 +617,7 @@ def main():
         ledger = {'trial_id':TRIAL,'limit_cny':LIMIT,'plan_sha256':plan_hash,'entries':[], 'results':[],
                   'scientific_completion':False,'production_routing_changed':False,
                   'actual_invoice_reconciled':False,'currency_rule':'user foreign USD numeric as CNY; domestic CNY',
-                  'budget_safety_multiplier':7,'reservations_never_automatically_released':True}
+                  'budget_safety_multiplier':7,'reservations_never_released_without_independent_gateway_debit':True}
         state.write('ledger.json',ledger)
     validate_ledger(ledger,plan_hash)
     if os.environ.get('TRIAL_METADATA_ONLY')=='1':
@@ -487,6 +627,12 @@ def main():
         finally:
             keys.clear()
         return
+    if os.environ.get('TRIAL_RECONCILE_AND_CONTINUE')=='1' and ledger.get('stop_reason')=='generation_or_billing_requires_review':
+        keys=receive_credentials(plan)
+        reconcile_existing_cheapai(state,plan,keys,ledger)
+        keys.clear()
+        ledger.pop('reservations_never_automatically_released',None)
+        ledger['reservations_never_released_without_independent_gateway_debit']=True
     if ledger.get('stop_reason') or any(e['status']=='reserved_before_transport' for e in ledger['entries']):
         raise TrialError('existing_trial_stopped_do_not_replay_authorization')
     keys = receive_credentials(plan)
@@ -494,8 +640,8 @@ def main():
         run_trial(state,plan,keys,ledger)
     finally:
         keys.clear()
-    print(json.dumps({'trial_id':TRIAL,'reserved_upper_cny':sum(e['reserved_ceiling_cny'] for e in ledger['entries']),
-        'modeled_cny':round(sum(e.get('modeled_cost_cny',0) for e in ledger['entries']),8),
+    print(json.dumps({'trial_id':TRIAL,'committed_upper_cny':committed_cost(ledger),
+        'gateway_debit_cny':round(sum(e.get('gateway_debit_cny',0) for e in ledger['entries']),8),
         'stop_reason':ledger.get('stop_reason'),'actual_invoice_reconciled':False}),flush=True)
 
 
