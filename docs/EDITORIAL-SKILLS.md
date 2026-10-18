@@ -38,7 +38,8 @@ Both controllers finish deterministic operations, including canonical Word const
 
 The protected academic audit contains both complete reviews. G5 recomputes them against current manuscript and rule hashes. A partial/stale coverage report cannot pass merely by setting a boolean. Existing scientific editing, human revision authorization, exact revision ledger, citation/claim checks, English-language requirements and human approval remain mandatory.
 
-API and CLI remediation also receive up to 12 compact protected-context signals,
+API and CLI remediation also receive up to 12 compact protected-context signals
+(160-character matches, 320-character context excerpts and explicit truncation flags),
 alongside the existing findings and full group coverage. Counts explicitly identify
 unshown signals; a bounded excerpt is not a completed review. Writers use the
 current full audit and manuscript for each AD01-AD08 disposition. A protected

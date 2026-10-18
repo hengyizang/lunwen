@@ -556,13 +556,18 @@ def editorial_feedback(project: str, stage: str) -> str:
                 signals = value.get("protected_signals", [])
                 if not isinstance(signals, list) or any(not isinstance(row, dict) for row in signals):
                     raise ValueError("protected editorial signals must be objects")
-                fields = ("id", "rule_id", "group", "line", "column", "raw_location", "section",
-                          "match", "protected_context", "disposition", "automatic_edit_allowed")
+                fields = ("id", "rule_id", "group", "start", "end", "line", "column", "raw_location",
+                          "section", "protected_context", "disposition", "automatic_edit_allowed",
+                          "protected_content_must_be_preserved")
                 compact["reviews"][name].update({
                     "semantic_review_required": value.get("semantic_review_required", True),
                     "protected_context_is_semantic_approval": False,
                     "protected_signals": [
-                        {**{key: row.get(key) for key in fields}, "context": str(row.get("context", ""))[:320]}
+                        {**{key: row.get(key) for key in fields},
+                         "match": str(row.get("match", ""))[:160],
+                         "match_truncated": len(str(row.get("match", ""))) > 160,
+                         "context": str(row.get("context", ""))[:320],
+                         "context_truncated": len(str(row.get("context", ""))) > 320}
                         for row in signals[:12]
                     ],
                     "remaining_protected_signals": max(0, len(signals) - 12),

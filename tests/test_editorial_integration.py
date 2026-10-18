@@ -89,6 +89,9 @@ class EditorialIntegrationTests(unittest.TestCase):
             protected = defensive_review.audit_text("\n\n".join(
                 "We do not claim causal identification from this observational analysis." for _ in range(16)
             ))
+            # Feedback excerpts remain bounded even for an unusually long recorded span.
+            protected["protected_signals"][0]["match"] = "m" * 5000
+            protected["protected_signals"][0]["context"] = "c" * 5000
             audit_path = project / "papers/P01/style/academic-style-audit.json"
             audit_path.parent.mkdir(parents=True)
             audit_path.write_text(json.dumps({
@@ -104,9 +107,13 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertEqual(len(actual["protected_signals"]), 12)
             self.assertEqual(actual["remaining_protected_signals"], len(protected["protected_signals"]) - 12)
             self.assertTrue(all(len(row["context"]) <= 320 for row in actual["protected_signals"]))
+            self.assertTrue(all(len(row["match"]) <= 160 for row in actual["protected_signals"]))
+            self.assertTrue(actual["protected_signals"][0]["match_truncated"])
+            self.assertTrue(actual["protected_signals"][0]["context_truncated"])
+            self.assertIn("start", actual["protected_signals"][0])
             self.assertEqual(actual["implementation_sha256"], protected["implementation_sha256"])
             api_prompt = api_orchestrator.remediation_prompt("demo", "writing-and-review", "", "{}")
-            cli_prompt = autopilot.remediation_prompt("demo", state, Path(directory) / "review.json")
+            cli_prompt = autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json")
             for prompt in (api_prompt, cli_prompt):
                 self.assertIn("protected_signals", prompt)
                 self.assertIn("causal identification", prompt)

@@ -186,7 +186,8 @@ class DefensiveReviewTests(unittest.TestCase):
         )
         self.assertTrue(all(row["protected_content_must_be_preserved"] for row in report["findings"]))
         self.assertIn("不可互相替代", report["findings"][0]["context"])
-        self.assertIn("supplied", report["findings"][0]["guidance"])
+        for term in ("prerequisites", "unresolved", "unconditional"):
+            self.assertIn(term, report["findings"][0]["guidance"])
         self.assertFalse(report["automatic_rewrite"])
         self.assertFalse(review.audit_text("仅在完成标定时测量；两种测量不可互相替代。")["findings"])
         contract = review.prompt_contract()
