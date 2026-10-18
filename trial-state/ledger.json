@@ -644,12 +644,30 @@
     {
       "call_id": "codekey-codex-pure|gpt-6-astra|engineering",
       "reserved_ceiling_cny": 2.00704,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 3,
         "cost_cny": 0.0025676,
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.001512,
+      "gateway_debit_cny": 0.001512,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 3,
+          "cost_cny": 0.0025676,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "after": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 4,
+          "cost_cny": 0.0040796,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -2982,8 +3000,59 @@
       "reported_model": "gpt-6-astra",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "resp_0bec77f2a1b22d7f016ad5004defc88191945b7df537f0a5a8"
+      "status": "complete",
+      "gateway_request_id": "resp_0bec77f2a1b22d7f016ad5004defc88191945b7df537f0a5a8",
+      "modeled_cost_cny": 0.001512,
+      "billing_parts": {
+        "ordinary_input_tokens": 176,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 176,
+        "uncached_input_tokens": 176,
+        "output_tokens_including_reasoning": 116,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 2.0,
+          "output_per_million": 10.0,
+          "cache_read_per_million": 0.2,
+          "cache_write_per_million": 2.5
+        },
+        "quote_sha256": "45c06f5d7a3b40881c404e9b034cb87277fe94f9dbf6c88d07f91b3e8065aec2",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-pure",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 176,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.001512
+      },
+      "gateway_debit_cny": 0.001512,
+      "grade": {
+        "checks": {
+          "both_leaks": true,
+          "safe_order": true,
+          "no_unsupported_superiority": true,
+          "no_fabricated_accuracy": true,
+          "experiment_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 51.243
     }
   ],
   "scientific_completion": false,
