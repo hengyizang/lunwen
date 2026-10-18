@@ -6,31 +6,96 @@
     {
       "call_id": "cheapai-gpt-pro|gpt-6.1-sol|evidence",
       "reserved_ceiling_cny": 0.4415488,
-      "status": "response_received_reservation_retained",
-      "modeled_cost_cny": 0.0003872
+      "status": "gateway_debit_verified",
+      "modeled_cost_cny": 0.0003872,
+      "gateway_debit_cny": 0.000388,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6.1-sol",
+        "quota": 194,
+        "created_at": 1792341993,
+        "prompt_tokens": 165,
+        "completion_tokens": 143,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     },
     {
       "call_id": "cheapai-gpt-pro|gpt-6-astra|evidence",
       "reserved_ceiling_cny": 2.207744,
-      "status": "response_received_reservation_retained",
-      "modeled_cost_cny": 0.002475
+      "status": "gateway_debit_verified",
+      "modeled_cost_cny": 0.002475,
+      "gateway_debit_cny": 0.002476,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6-astra",
+        "quota": 1238,
+        "created_at": 1792341999,
+        "prompt_tokens": 165,
+        "completion_tokens": 192,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     },
     {
       "call_id": "cheapai-gpt-discount|gpt-6.1-sol|evidence",
       "reserved_ceiling_cny": 0.1605632,
-      "status": "response_received_reservation_retained",
-      "modeled_cost_cny": 0.0001728
+      "status": "gateway_debit_verified",
+      "modeled_cost_cny": 0.0001728,
+      "gateway_debit_cny": 0.000172,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6.1-sol",
+        "quota": 86,
+        "created_at": 1792342006,
+        "prompt_tokens": 165,
+        "completion_tokens": 183,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     },
     {
       "call_id": "cheapai-gpt-discount|gpt-6-astra|evidence",
       "reserved_ceiling_cny": 0.802816,
-      "status": "response_received_reservation_retained",
-      "modeled_cost_cny": 0.000944
+      "status": "gateway_debit_verified",
+      "modeled_cost_cny": 0.000944,
+      "gateway_debit_cny": 0.000944,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6-astra",
+        "quota": 472,
+        "created_at": 1792342012,
+        "prompt_tokens": 165,
+        "completion_tokens": 203,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     },
     {
       "call_id": "cheapai-kiro|claude-sonnet-5-5|evidence",
       "reserved_ceiling_cny": 0.1,
-      "status": "ambiguous_failure_reservation_retained"
+      "status": "gateway_debit_verified",
+      "gateway_debit_cny": 0.002294,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "claude-sonnet-5-5",
+        "quota": 1147,
+        "created_at": 1792342022,
+        "prompt_tokens": 0,
+        "completion_tokens": 258,
+        "all_key_debits_match_attempt_count": true,
+        "no_generation_retry": true
+      }
     }
   ],
   "results": [
@@ -363,5 +428,12 @@
   "currency_rule": "user foreign USD numeric as CNY; domestic CNY",
   "budget_safety_multiplier": 7,
   "reservations_never_automatically_released": true,
-  "stop_reason": "generation_or_billing_requires_review"
+  "operator_reviews": [
+    {
+      "run_id": "39147666165",
+      "commit": "bc1d941c7f864c5458bd2615d9f56b5a76e6c001",
+      "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
+    }
+  ],
+  "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held."
 }
