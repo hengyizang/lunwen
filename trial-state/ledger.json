@@ -697,6 +697,17 @@
         },
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-kiro-enterprise|claude-opus-5-5|engineering",
+      "reserved_ceiling_cny": 1.6859136,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 3,
+        "cost_cny": 0.016410485,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
