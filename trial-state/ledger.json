@@ -466,7 +466,7 @@
     {
       "call_id": "cheapai-gpt-pro|gpt-6.1-sol|engineering",
       "reserved_ceiling_cny": 0.4415488,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "cheapai_quota_history",
         "quota_per_unit": 500000,
@@ -490,6 +490,19 @@
           }
         ],
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.00056848,
+      "gateway_debit_cny": 0.000568,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-6.1-sol",
+        "quota": 284,
+        "created_at": 1792344019,
+        "prompt_tokens": 147,
+        "completion_tokens": 229,
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -2236,8 +2249,59 @@
       "reported_model": "gpt-6.1-sol",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "resp_04002fd3e7116231016ad4ffcf6fd0819787c9c37f62133cfd"
+      "status": "complete",
+      "gateway_request_id": "resp_04002fd3e7116231016ad4ffcf6fd0819787c9c37f62133cfd",
+      "modeled_cost_cny": 0.00056848,
+      "billing_parts": {
+        "ordinary_input_tokens": 147,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 147,
+        "uncached_input_tokens": 147,
+        "output_tokens_including_reasoning": 229,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 0.44,
+          "output_per_million": 2.2,
+          "cache_read_per_million": 0.022000000000000002,
+          "cache_write_per_million": 0.55
+        },
+        "quote_sha256": "4caf9b744434d9aa3058c0a95e47d6e01a74d05d15cbc531bf76bd18514b4fc7",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 147,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.00056848
+      },
+      "gateway_debit_cny": 0.000568,
+      "grade": {
+        "checks": {
+          "both_leaks": true,
+          "safe_order": true,
+          "no_unsupported_superiority": true,
+          "no_fabricated_accuracy": true,
+          "experiment_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 7.817
     }
   ],
   "scientific_completion": false,
