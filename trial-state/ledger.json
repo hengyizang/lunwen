@@ -1792,6 +1792,72 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 17.833
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6-astra|evidence",
+      "requested_model": "gpt-6-astra",
+      "family": "openai",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "b273fb7cfbb3254978230f2086c31bb7ac5cd782c2fbed8cdc920f489aec324c",
+      "quote_sha256": "454720bd5a3e2555227710d4b54d3c85a5111f8dedf0a9b44931394d0ae2dfcd",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 1.204224,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 16384,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-6-astra",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-discount",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 1.2,
+            "output_per_million": 6.0,
+            "cache_read_per_million": 0.12,
+            "cache_write_per_million": 1.5
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 2.4,
+            "output_per_million": 9.0,
+            "cache_read_per_million": 0.24,
+            "cache_write_per_million": 3.0
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "454720bd5a3e2555227710d4b54d3c85a5111f8dedf0a9b44931394d0ae2dfcd"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 18.357,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\",\"S3\"],\"conclusion\":\"In this synthetic randomized pilot, the preregistered primary effect was not statistically significant, and the unplanned subgroup finding without multiplicity correction is exploratory rather than confirmatory.\"}",
+      "usage": {
+        "input_tokens": 198,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 111,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reported_model": "gpt-6-astra",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "resp_03242877da53ff42016ad4ffa4c8548191ae402efa71368b8a"
     }
   ],
   "scientific_completion": false,
