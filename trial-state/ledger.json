@@ -3068,6 +3068,54 @@
     {
       "call_id": "codekey-codex-pure|gpt-6-luna|engineering",
       "status": "exact_model_not_advertised_no_call"
+    },
+    {
+      "call_id": "codekey-kiro-enterprise|claude-sonnet-5-5|engineering",
+      "requested_model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "50de9671909559f77be0541e2bab70b37b5b55b4d9d7f69919914734406fe517",
+      "quote_sha256": "011f3b5ed04dd3d9b9feb051c286e0f8628b21366819a72abd73840d37f55b38",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "reserved_ceiling_cny": 0.8429568,
+      "input_token_ceiling": 65536,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "anthropic",
+        "endpoint": "https://codekey.ai/v1/messages",
+        "model": "claude-sonnet-5-5",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-kiro-enterprise",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.7,
+        "output_per_million": 3.5,
+        "cache_read_per_million": 0.034999999999999996,
+        "cache_write_per_million": 0.875,
+        "cache_write_5m_per_million": 0.875,
+        "cache_write_1h_per_million": 1.4,
+        "tool_fees": {},
+        "quote_sha256": "011f3b5ed04dd3d9b9feb051c286e0f8628b21366819a72abd73840d37f55b38"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 24.271,
+      "text": "```json\n{\"leaks\":[\"pre_split_fit\",\"patient_overlap\"],\"correct_order\":[\"group_split\",\"fit_train\",\"transform_heldout\",\"evaluate\"],\"superiority_supported\":false,\"verified_new_accuracy\":null,\"next_experiment\":\"Re-run all methods including baselines with a patient-grouped split (e.g., GroupKFold on patient ID) where StandardScaler is fit only on each training fold, then report mean accuracy with confidence intervals across folds plus a run log, and confirm on an independent cohort.\"}\n```",
+      "usage": {
+        "cache_creation_input_tokens": 119,
+        "cache_read_input_tokens": 333,
+        "input_tokens": 60,
+        "output_tokens": 189
+      },
+      "reported_model": "claude-sonnet-5-5",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "msg_fa2c5cb6b9c44b829e94b269aedf9f7e"
     }
   ],
   "scientific_completion": false,
