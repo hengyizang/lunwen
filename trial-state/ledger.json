@@ -2,7 +2,13 @@
   "trial_id": "relay-acceptance-20261019",
   "limit_cny": 30.0,
   "plan_sha256": "1a0bd20fdcf73910fbe1bd6f207575a000110ab7bfb79abfa4bcd654ecbdf3c7",
-  "entries": [],
+  "entries": [
+    {
+      "call_id": "cheapai-gpt-pro|gpt-6.1-sol|evidence",
+      "reserved_ceiling_cny": 0.4415488,
+      "status": "reserved_before_transport"
+    }
+  ],
   "results": [],
   "scientific_completion": false,
   "production_routing_changed": false,
