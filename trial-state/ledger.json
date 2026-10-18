@@ -6868,8 +6868,12 @@
         "scientific_completion": false
       },
       "authorization_sha256": "9821a2f83b54ffa79f0834a1ffdb48436d59061456a7f3b94417773b607ff59f",
-      "status": "running",
-      "starting_commit": "815eaad27b82ddaa21ca6ea7627a05f9f8d88b35"
+      "status": "closed_with_reservations",
+      "starting_commit": "815eaad27b82ddaa21ca6ea7627a05f9f8d88b35",
+      "fresh_calls": 14,
+      "incremental_committed_upper_cny": 0.1035504,
+      "production_routing_changed": false,
+      "scientific_completion": false
     }
   }
 }
