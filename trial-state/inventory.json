@@ -1,0 +1,201 @@
+{
+  "trial_id": "relay-acceptance-20261019",
+  "inventory": {
+    "cheapai-gpt-pro": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "gpt-5.4",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "cheapai-gpt-discount": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "gpt-5.4",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "cheapai-kiro": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "gpt-5.4",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "cheapai-ccmax": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "gpt-5.4",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "codekey-deepseek": {
+      "status": "received",
+      "models": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro",
+        "deepseek-v4.1-flash"
+      ]
+    },
+    "codekey-gemini": {
+      "status": "received",
+      "models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-pro",
+        "gemini-3.5-flash",
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
+        "gemini-3.8-flash",
+        "gemini-4-argon",
+        "gemini-4-argon-high",
+        "gemini-4-argon-low",
+        "gemini-4-argon-medium"
+      ]
+    },
+    "codekey-codex-pure": {
+      "status": "received",
+      "models": [
+        "codex-auto-review",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "codekey-kiro-enterprise": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-5-20251101",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5"
+      ]
+    },
+    "codekey-codex-discount": {
+      "status": "received",
+      "models": [
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol"
+      ]
+    },
+    "codekey-kiro-standard": {
+      "status": "received",
+      "models": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5-20251001",
+        "claude-haiku-5-5",
+        "claude-opus-4-5-20251101",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5"
+      ]
+    }
+  }
+}
