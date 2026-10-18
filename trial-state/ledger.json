@@ -208,12 +208,30 @@
     {
       "call_id": "codekey-gemini|gemini-4-argon|evidence",
       "reserved_ceiling_cny": 0.4128768,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 0,
         "cost_cny": 0.0,
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.0071172,
+      "gateway_debit_cny": 0.0035586,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 0,
+          "cost_cny": 0.0,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "after": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 1,
+          "cost_cny": 0.0035586,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -1010,8 +1028,67 @@
       "reported_model": "gemini-4-argon",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "ae150fa5-3fa9-44f8-9981-5868c55a8afe"
+      "status": "complete",
+      "gateway_request_id": "ae150fa5-3fa9-44f8-9981-5868c55a8afe",
+      "modeled_cost_cny": 0.0071172,
+      "billing_parts": {
+        "ordinary_input_tokens": 381,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 381,
+        "uncached_input_tokens": 381,
+        "output_tokens_including_reasoning": 1110,
+        "rates": {
+          "quote_schema": "2.0",
+          "provider": "google",
+          "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+          "model": "gemini-4-argon",
+          "billing_identity": {
+            "plan": "relay-acceptance-20261019",
+            "group": "codekey-gemini",
+            "mode": "standard"
+          },
+          "currency": "CNY",
+          "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+          "input_per_million": 1.2,
+          "output_per_million": 6.0,
+          "cache_read_per_million": 0.06,
+          "cache_write_per_million": 0.0,
+          "tool_fees": {},
+          "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2"
+        },
+        "quote_sha256": "470a8315388d314e3663ce7f452bd2de7c4d10a5debcfe7ebcee2ef8b2b4beb2",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "context_tier": null,
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.0071172
+      },
+      "gateway_debit_cny": 0.0035586,
+      "grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": true,
+          "conclusion_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 20.596
     }
   ],
   "scientific_completion": false,
