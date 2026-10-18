@@ -4446,6 +4446,24 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 6.116
+    },
+    {
+      "call_id": "cheapai-ccmax|claude-sonnet-5-5|engineering",
+      "status": "quarantined_route_no_call",
+      "reason": "reported_model_identity_unverified"
+    },
+    {
+      "call_id": "cheapai-ccmax|claude-opus-5-5|engineering",
+      "status": "quarantined_route_no_call",
+      "reason": "reported_model_identity_unverified"
+    },
+    {
+      "call_id": "codekey-codex-pure|gpt-6-luna|engineering",
+      "status": "exact_model_not_advertised_no_call"
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-6-luna|engineering",
+      "status": "exact_model_not_advertised_no_call"
     }
   ],
   "scientific_completion": false,
@@ -4485,5 +4503,6 @@
   "quarantined_routes": {
     "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
     "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified"
-  }
+  },
+  "stop_reason": "planned_available_comparisons_finished_with_quarantines"
 }
