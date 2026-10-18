@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "trial_id": "relay-acceptance-20261019",
+  "budget_cny": 30.0,
+  "authorization": "User explicitly authorized real cloud API testing at no more than CNY30 on 2026-10-19",
+  "key_binding_salt": "f5ab98c462b64f00f2ddf81a3a6a6bb925598afd995bdf23",
+  "groups": [
+    {
+      "id": "cheapai-gpt-pro",
+      "root": "https://cheapai.info",
+      "family": "openai",
+      "multiplier": 0.22,
+      "models": [
+        "gpt-6.1-sol",
+        "gpt-6-astra"
+      ],
+      "key_sha256": "67f048e106bb0bbb74be0367330de95482a3b524c598d15d63c159b2f91fd0cb"
+    },
+    {
+      "id": "cheapai-gpt-discount",
+      "root": "https://cheapai.info",
+      "family": "openai",
+      "multiplier": 0.08,
+      "models": [
+        "gpt-6.1-sol",
+        "gpt-6-astra"
+      ],
+      "key_sha256": "18500f5ef1acdc9662f79a83421c98cf5e5ae843c199b4dcc4b4c8eefaeb8930"
+    },
+    {
+      "id": "cheapai-kiro",
+      "root": "https://cheapai.info",
+      "family": "anthropic",
+      "multiplier": 0.115,
+      "models": [
+        "claude-sonnet-5-5",
+        "claude-opus-5-5"
+      ],
+      "key_sha256": "5ad1206cd87feab66cd2d596ef0897cdbdc2a42c0d7402864db45a9b736f5923"
+    },
+    {
+      "id": "cheapai-ccmax",
+      "root": "https://cheapai.info",
+      "family": "anthropic",
+      "multiplier": 1.0,
+      "models": [
+        "claude-sonnet-5-5",
+        "claude-opus-5-5"
+      ],
+      "key_sha256": "bfc983cd11aa974b14b23244587b8137ecacb95a2c6746182b4fb3318c86ce3c"
+    },
+    {
+      "id": "codekey-deepseek",
+      "root": "https://codekey.ai",
+      "family": "deepseek",
+      "multiplier": 0.1,
+      "models": [
+        "deepseek-flash"
+      ],
+      "key_sha256": "fa52c5e39175928fde2140818d97a27283db5b0064f962b55a478c3dd20eca07"
+    },
+    {
+      "id": "codekey-gemini",
+      "root": "https://codekey.ai",
+      "family": "google",
+      "multiplier": 0.3,
+      "models": [
+        "gemini-4-argon"
+      ],
+      "key_sha256": "fe14ec4354c32b9685bdff9aaf4410276c14731f72d7338626c2e15b65def78b"
+    },
+    {
+      "id": "codekey-codex-pure",
+      "root": "https://codekey.ai",
+      "family": "openai",
+      "multiplier": 0.2,
+      "models": [
+        "gpt-6.1-sol",
+        "gpt-6-astra",
+        "gpt-6-luna"
+      ],
+      "key_sha256": "2f653dfc8c15e1b8ff9b1ce71fe567e0fd6cf16d24ba0375a9396195bb63b299"
+    },
+    {
+      "id": "codekey-kiro-enterprise",
+      "root": "https://codekey.ai",
+      "family": "anthropic",
+      "multiplier": 0.35,
+      "models": [
+        "claude-sonnet-5-5",
+        "claude-opus-5-5"
+      ],
+      "key_sha256": "2d923c478c8b801a68432ed03890d72742e2606d34ba7c0a6ff3494e688a0fd5"
+    },
+    {
+      "id": "codekey-codex-discount",
+      "root": "https://codekey.ai",
+      "family": "openai",
+      "multiplier": 0.12,
+      "models": [
+        "gpt-6.1-sol",
+        "gpt-6-astra",
+        "gpt-6-luna"
+      ],
+      "key_sha256": "d601c8bf0c9da1b0fab218d84c2836d23b308caf995b9a90a5f72b24a16afd79"
+    },
+    {
+      "id": "codekey-kiro-standard",
+      "root": "https://codekey.ai",
+      "family": "anthropic",
+      "multiplier": 0.12,
+      "models": [
+        "claude-sonnet-5-5",
+        "claude-opus-5-5"
+      ],
+      "key_sha256": "e221d7d864ad752740ce2488681e431bd44bda0da34a6b9b985a246d940668a1"
+    }
+  ]
+}
