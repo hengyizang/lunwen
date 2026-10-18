@@ -2468,6 +2468,11 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 11.514
+    },
+    {
+      "call_id": "cheapai-gpt-discount|gpt-6.1-sol|engineering",
+      "status": "billing_metadata_unavailable_no_call",
+      "diagnostic": "http_429"
     }
   ],
   "scientific_completion": false,
@@ -2496,6 +2501,7 @@
   "reservations_never_released_without_independent_gateway_debit": true,
   "quarantined_routes": {
     "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
-    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified"
+    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified",
+    "cheapai-gpt-discount|gpt-6.1-sol": "http_429"
   }
 }
