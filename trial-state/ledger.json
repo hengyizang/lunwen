@@ -237,12 +237,30 @@
     {
       "call_id": "codekey-codex-pure|gpt-6.1-sol|evidence",
       "reserved_ceiling_cny": 0.401408,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 0,
         "cost_cny": 0.0,
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 0.0005792,
+      "gateway_debit_cny": 0.0005792,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 0,
+          "cost_cny": 0.0,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "after": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 1,
+          "cost_cny": 0.0005792,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -1164,8 +1182,61 @@
       "reported_model": "gpt-6.1-sol",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "resp_0adb08032c93999c016ad4fedf949881998efcc4cc6eca41dd"
+      "status": "complete",
+      "gateway_request_id": "resp_0adb08032c93999c016ad4fedf949881998efcc4cc6eca41dd",
+      "modeled_cost_cny": 0.0005792,
+      "billing_parts": {
+        "ordinary_input_tokens": 198,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 198,
+        "uncached_input_tokens": 198,
+        "output_tokens_including_reasoning": 250,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 0.4,
+          "output_per_million": 2.0,
+          "cache_read_per_million": 0.020000000000000004,
+          "cache_write_per_million": 0.5
+        },
+        "quote_sha256": "1570e631eaf88093328f3b34b7280da384ed71536684a093a61fa312abc32096",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-pure",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 198,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 0.0005792
+      },
+      "gateway_debit_cny": 0.0005792,
+      "grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": true,
+          "conclusion_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 34.318
     }
   ],
   "scientific_completion": false,
