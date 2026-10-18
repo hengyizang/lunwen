@@ -163,6 +163,36 @@ class TrialControlsTests(unittest.TestCase):
         self.assertEqual(usage['output_tokens'],50)
         self.assertTrue(complete)
 
+    def test_luna_replacement_quotes_include_relay_cache_difference(self):
+        route={'id':'cheapai-gpt-discount','root':'https://cheapai.info',
+               'family':'openai','model':'gpt-5.6-luna','path':'/v1/responses','multiplier':.08}
+        cheap=trial.quote_for(route)['context_brackets']
+        self.assertAlmostEqual(cheap[0]['input_per_million'],.016)
+        self.assertAlmostEqual(cheap[0]['cache_read_per_million'],.016)
+        self.assertAlmostEqual(cheap[0]['cache_write_per_million'],.02)
+        self.assertAlmostEqual(cheap[0]['cache_write_1h_per_million'],.032)
+        self.assertAlmostEqual(cheap[1]['output_per_million'],.144)
+        route.update(id='codekey-codex-discount',root='https://codekey.ai',multiplier=.12)
+        codekey=trial.quote_for(route)['context_brackets'][0]
+        self.assertAlmostEqual(codekey['cache_read_per_million'],.0024)
+        self.assertAlmostEqual(codekey['output_per_million'],.144)
+
+    def test_supplement_cap_prevents_post_and_reservation(self):
+        group={'id':'test','root':'https://codekey.ai','family':'openai',
+               'models':['gpt-5.6-luna'],'multiplier':.12,'max_output_tokens':4096}
+        state=SimpleNamespace(token='fake',write=lambda *a:None)
+        ledger=self.ledger()
+        def fake_http(url,*args,**kwargs):
+            self.assertTrue(url.endswith('/v1/models'))
+            return {'data':[{'id':'gpt-5.6-luna'}]},{}
+        with patch.object(trial,'http_json',side_effect=fake_http) as transport, \
+             patch.object(trial,'read_meter',return_value={}),patch('sys.stdout',io.StringIO()):
+            trial.run_trial(state,{'groups':[group]},{'test':'fake'},ledger,cases=('evidence',),
+                baseline_committed_cny=0,incremental_ceiling_cny=.01)
+        self.assertEqual(transport.call_count,1)
+        self.assertEqual(ledger['entries'],[])
+        self.assertEqual(ledger['results'][0]['status'],'supplement_ceiling_prevented_call')
+
     def test_only_actions_secrets_with_exact_key_binding_accepted(self):
         plan={'key_binding_salt':'salt','groups':[
             {'id':g,'key_sha256':hashlib.sha256(('salt:fake-'+g).encode()).hexdigest()}

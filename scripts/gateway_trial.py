@@ -223,7 +223,8 @@ def quote_for(route):
     # Conservative non-promotional Google and peak domestic DeepSeek rates.
     prices = {
         'gpt-6.1-sol':(2,.1,2.5,10), 'gpt-6-astra':(10,1,12.5,50),
-        'gpt-6-luna':(.1,.01,.125,.5), 'claude-sonnet-5-5':(2,.1,2.5,10),
+        'gpt-6-luna':(.1,.01,.125,.5), 'gpt-5.6-luna':(.2,.02,.25,1.2),
+        'claude-sonnet-5-5':(2,.1,2.5,10),
         'claude-opus-5-5':(4,.2,5,20), 'gemini-4-argon':(4,.2,0,20),
         'deepseek-flash':(2,.04,0,8),'deepseek-v4.1-flash':(2,.04,0,8),
     }
@@ -234,6 +235,10 @@ def quote_for(route):
         # Current relay price table/logs charge 10% of input for reads, while
         # official Sonnet/Opus 5.5 charge 5%; do not silently undercount the relay.
         base['cache_read_per_million']=rates[0]*.1*route['multiplier']
+    if route['root']=='https://cheapai.info' and route['model']=='gpt-5.6-luna':
+        # Relay's public tier table charges full input price for cache reads.
+        # Do not promise the official 90% cache-read discount on this route.
+        base['cache_read_per_million']=rates[0]*route['multiplier']
     raw = {'provider':route['family'],'endpoint':route['root']+route['path'],'model':route['model'],
            'plan':TRIAL,'group':route['id'],'mode':'standard','currency':'CNY',
            'price_version':'official-2026-10-19-user-numeric-CNY-times-group', **base}
@@ -243,6 +248,9 @@ def quote_for(route):
     if route['family']=='openai':
         # The full request, including cached input, selects the context tier.
         raw = {k:v for k,v in raw.items() if k not in fields}
+        if route['root']=='https://cheapai.info' and route['model']=='gpt-5.6-luna':
+            base.update(cache_write_5m_per_million=.25*route['multiplier'],
+                        cache_write_1h_per_million=.4*route['multiplier'])
         raw.update(context_basis='full_request_input_tokens', context_brackets=[
             {'min_input_tokens':0,'max_input_tokens':272000,**base},
             {'min_input_tokens':272001,'max_input_tokens':None,
@@ -251,8 +259,8 @@ def quote_for(route):
         route['root']+route['path'],route['model'], {'plan':TRIAL,'group':route['id'],'mode':'standard'})
 
 
-def payload_for(route, case):
-    model, text = route['model'], fixture(case)
+def payload_for(route, case, *, prompt=None):
+    model, text = route['model'], fixture(case) if prompt is None else prompt
     if route['family']=='openai':
         return {'model':model,'input':text,'reasoning':{'effort':route['effort']},
                 'max_output_tokens':16384,'store':False,'tools':[], 'service_tier':'default'}
@@ -412,7 +420,7 @@ def meter(group,key):
     rows=[{'model':r.get('model_name'),'quota':r.get('quota'),'created_at':r.get('created_at'),
            'prompt_tokens':r.get('prompt_tokens'),'completion_tokens':r.get('completion_tokens')}
           for r in rows if isinstance(r,dict) and r.get('type')==2]
-    if any(r['model'] not in group['models'] for r in rows):
+    if any(r['model'] not in group.get('billing_history_models',group['models']) for r in rows):
         raise TrialError('unexpected_model_in_dedicated_key_history')
     if any(type(r['quota']) is not int or r['quota']<0 or type(r['created_at']) is not int for r in rows):
         raise TrialError('unusable_gateway_debits')
@@ -539,7 +547,9 @@ def settle_after_call(group,key,ledger,entry,before):
     raise TrialError('gateway_debit_not_uniquely_reconciled')
 
 
-def run_trial(state, plan, keys, ledger):
+def run_trial(state, plan, keys, ledger, *, cases=('evidence','engineering'),
+              fixture_factory=fixture, grader=grade, inventory_name='inventory.json',
+              baseline_committed_cny=None, incremental_ceiling_cny=None):
     secret_values = [*keys.values(),state.token]
     inventory = {}
     for group in plan['groups']:
@@ -550,12 +560,12 @@ def run_trial(state, plan, keys, ledger):
             inventory[group['id']] = {'status':'received','models':models}
         except TrialError as e:
             inventory[group['id']] = {'status':str(e),'models':[]}
-    state.write('inventory.json', {'trial_id':TRIAL,'inventory':inventory})
+    state.write(inventory_name, {'trial_id':TRIAL,'inventory':inventory})
     print('Cloud account model inventory recorded without generation calls',flush=True)
     records = ledger.setdefault('results',[])
     blocked=ledger.setdefault('quarantined_routes',{})
     # Finish the common evidence comparison before spending on the second fixture.
-    for case in ('evidence','engineering'):
+    for case in cases:
         for group in plan['groups']:
             if inventory[group['id']]['status'] != 'received':
                 continue
@@ -577,12 +587,21 @@ def run_trial(state, plan, keys, ledger):
                 family = group['family']
                 path = {'openai':'/v1/responses','anthropic':'/v1/messages',
                     'deepseek':'/v1/chat/completions','google':'/v1beta/models/'+model+':generateContent'}[family]
-                route = {**group,'model':model,'path':path,'effort':'medium' if model=='gpt-6-luna' else 'high'}
-                payload = payload_for(route,case)
+                route = {**group,'model':model,'path':path,
+                         'effort':group.get('effort_by_model',{}).get(model,
+                             group.get('effort','medium' if model in ('gpt-6-luna','gpt-5.6-luna') else 'high'))}
+                prompt = fixture_factory(case)
+                payload = payload_for(route,case,prompt=prompt)
                 quote = quote_for(route)
                 input_ceiling = max(65536 if family=='anthropic' else 8192,
                                     len(json.dumps(payload,ensure_ascii=False).encode())+4096)
-                output_ceiling = 16384 if family=='openai' else 8192
+                output_ceiling = group.get('max_output_tokens',16384 if family=='openai' else 8192)
+                if type(output_ceiling) is not int or not 1<=output_ceiling<=(16384 if family=='openai' else 8192):
+                    raise TrialError('invalid_output_ceiling')
+                if family=='google':
+                    payload['generationConfig']['maxOutputTokens']=output_ceiling
+                else:
+                    payload['max_output_tokens' if family=='openai' else 'max_tokens']=output_ceiling
                 # Sevenfold currency/billing safety margin; do not report it as actual spend.
                 # Release only after an independent, exactly matched gateway debit.
                 ceiling = round(max(.10,7*billing_quotes.reserve_cost(quote,input_ceiling,output_ceiling)),8)
@@ -592,6 +611,14 @@ def run_trial(state, plan, keys, ledger):
                 except TrialError as error:
                     blocked[route_id]=str(error)
                     records.append({'call_id':call_id,'status':'billing_metadata_unavailable_no_call','diagnostic':str(error)})
+                    persist(ledger)
+                    continue
+                if incremental_ceiling_cny is not None and (
+                    baseline_committed_cny is None or type(incremental_ceiling_cny) not in (float,int)
+                    or not math.isfinite(incremental_ceiling_cny) or incremental_ceiling_cny<=0
+                    or type(baseline_committed_cny) not in (float,int) or not math.isfinite(baseline_committed_cny)
+                    or committed_cost(ledger)+ceiling>baseline_committed_cny+incremental_ceiling_cny+1e-8):
+                    records.append({'call_id':call_id,'status':'supplement_ceiling_prevented_call'})
                     persist(ledger)
                     continue
                 if not reserve(ledger,call_id,ceiling,persist,meter_before=before):
@@ -604,7 +631,7 @@ def run_trial(state, plan, keys, ledger):
                 elif family=='google':
                     headers = {'x-goog-api-key':keys[group['id']]}
                 record = {'call_id':call_id,'requested_model':model,'family':family,'effort':route['effort'],
-                    'fixture_sha256':hashlib.sha256(fixture(case).encode()).hexdigest(),
+                    'fixture_sha256':hashlib.sha256(prompt.encode()).hexdigest(),
                     'payload_sha256':digest(payload),'quote_sha256':quote['quote_sha256'],
                     'source_url':SOURCES[family],'reserved_ceiling_cny':ceiling,
                     'input_token_ceiling':input_ceiling,'output_token_ceiling':output_ceiling,
@@ -642,12 +669,12 @@ def run_trial(state, plan, keys, ledger):
                             anthropic=family=='anthropic')
                         record.update(modeled_cost_cny=modeled,billing_parts=parts)
                     except billing_quotes.BillingQuoteError as error:
-                        if family!='anthropic' or 'TTL usage breakdown' not in str(error):
+                        if family not in ('anthropic','openai') or 'TTL usage breakdown' not in str(error):
                             raise
                         # Total cache-write tokens can be valid while TTL is absent.
                         # Do not fabricate a TTL or an exact modeled charge; settle
                         # only against the separately queried gateway wallet debit.
-                        parts=billing_quotes.token_parts(usage,input_tokens,output_tokens,anthropic=True)
+                        parts=billing_quotes.token_parts(usage,input_tokens,output_tokens,anthropic=family=='anthropic')
                         modeled=None;unknown=False
                         record.update(cache_write_ttl_unreported=True,billing_parts=parts)
                     # Date-pinned model versions are recorded but require manual identity review.
@@ -661,7 +688,7 @@ def run_trial(state, plan, keys, ledger):
                     record.update(status='complete' if complete and identity_ok else 'incomplete_or_identity_unverified',
                         reported_model=safe_text(reported,secret_values),identity_exact=identity_ok,
                         complete=complete,text=safe_text(text,secret_values),usage=usage,
-                        gateway_debit_cny=entry['gateway_debit_cny'],grade=grade(text,case) if complete and identity_ok else None,
+                        gateway_debit_cny=entry['gateway_debit_cny'],grade=grader(text,case) if complete and identity_ok else None,
                         dated_backend_version_verified=False,
                         reasoning_effort_attestation='requested; not independently attested')
                     record['elapsed_seconds']=round(time.monotonic()-started,3)

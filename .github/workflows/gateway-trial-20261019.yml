@@ -46,10 +46,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Read final usage using isolated Actions Secrets
+      - name: Test bounded Luna replacement using isolated Actions Secrets
         env:
           TRIAL_GITHUB_TOKEN: ${{ github.token }}
           TRIAL_METADATA_ONLY: '1'
+          LUNA_SUPPLEMENT_EXECUTE: '1'
           MODEL_TEST_CHEAPAI_GPT_PRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_PRO_KEY }}
           MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY }}
           MODEL_TEST_CHEAPAI_KIRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_KIRO_KEY }}
@@ -60,4 +61,4 @@ jobs:
           MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY }}
           MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY }}
           MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY }}
-        run: python -m scripts.gateway_trial
+        run: python -m scripts.luna_supplement
