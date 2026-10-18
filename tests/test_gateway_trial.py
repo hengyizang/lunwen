@@ -65,6 +65,18 @@ class TrialControlsTests(unittest.TestCase):
             trial.settle_after_call(group,'fake',{'entries':[entry]},entry,before)
         self.assertNotIn('gateway_debit_cny',entry)
 
+    def test_delayed_log_visibility_retries_only_the_read_meter(self):
+        entry={'call_id':'cheapai-gpt-pro|gpt-6.1-sol|engineering','reserved_ceiling_cny':1}
+        before={'kind':'cheapai_quota_history','rows':[],'total_quota':0,'quota_per_unit':500000}
+        after={**before,'rows':[{'model':'gpt-6.1-sol','quota':500,'created_at':1}], 'total_quota':500}
+        group={'root':'https://cheapai.info'}
+        with patch.object(trial,'meter',side_effect=[trial.TrialError('incomplete_gateway_debit_history'),after]) as read_meter, \
+             patch.object(trial.time,'sleep'),patch.object(trial,'http_json') as transport:
+            trial.settle_after_call(group,'fake',{'entries':[entry]},entry,before)
+            self.assertEqual(read_meter.call_count,2)
+            transport.assert_not_called()
+        self.assertEqual(entry['gateway_debit_cny'],.001)
+
     def test_public_billing_diagnostics_omit_credentials_and_identifiers(self):
         self.assertEqual(trial.numeric_tree({'user_id':13,'token_id':9,'balance':30,
             'key':'never store','data':{'cache_tokens':14,'cost':.02,'remaining':8}}),

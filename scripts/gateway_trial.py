@@ -151,7 +151,7 @@ def committed_cost(ledger):
                      else e['reserved_ceiling_cny'] for e in ledger['entries']),8)
 
 
-def reserve(ledger, call_id, ceiling, persist):
+def reserve(ledger, call_id, ceiling, persist, *, meter_before=None):
     if any(e['call_id']==call_id for e in ledger['entries']):
         return False
     if not math.isfinite(ceiling) or ceiling <= 0:
@@ -159,8 +159,10 @@ def reserve(ledger, call_id, ceiling, persist):
     used = committed_cost(ledger)
     if used + ceiling > LIMIT:
         return False
-    ledger['entries'].append({'call_id':call_id, 'reserved_ceiling_cny':ceiling,
-                              'status':'reserved_before_transport'})
+    entry={'call_id':call_id,'reserved_ceiling_cny':ceiling,'status':'reserved_before_transport'}
+    if meter_before is not None:
+        entry['gateway_meter_before']=meter_before
+    ledger['entries'].append(entry)
     # A write failure stops execution BEFORE any billable transport.
     persist(ledger)
     return True
@@ -403,6 +405,8 @@ def meter(group,key):
     rows=[{'model':r.get('model_name'),'quota':r.get('quota'),'created_at':r.get('created_at'),
            'prompt_tokens':r.get('prompt_tokens'),'completion_tokens':r.get('completion_tokens')}
           for r in rows if isinstance(r,dict) and r.get('type')==2]
+    if any(r['model'] not in group['models'] for r in rows):
+        raise TrialError('unexpected_model_in_dedicated_key_history')
     if any(type(r['quota']) is not int or r['quota']<0 or type(r['created_at']) is not int for r in rows):
         raise TrialError('unusable_gateway_debits')
     if sum(r['quota'] for r in rows)!=total:
@@ -442,6 +446,11 @@ def reconcile_existing_cheapai(state,plan,keys,ledger):
                     'source':group['root']+'/api/log/token','unit_source':group['root']+'/api/status',
                     'quota_per_unit':current['quota_per_unit'],**row,
                     'all_key_debits_match_attempt_count':True,'no_generation_retry':True})
+                for record in ledger['results']:
+                    if record['call_id']==entry['call_id'] and record.get('complete') and record.get('identity_exact') and isinstance(record.get('text'),str):
+                        record['post_reconciliation_grade']=grade(record['text'],entry['call_id'].split('|')[2])
+                        record['gateway_debit_cny']=entry['gateway_debit_cny']
+                        record['reconciled_without_generation_retry']=True
     if any(e.get('status')!='gateway_debit_verified' for e in ledger['entries']):
         raise TrialError('unreconciled_prior_attempts_still_blocked')
     ledger.setdefault('operator_reviews',[]).append({'run_id':os.environ['GITHUB_RUN_ID'],
@@ -453,7 +462,15 @@ def reconcile_existing_cheapai(state,plan,keys,ledger):
 
 def settle_after_call(group,key,ledger,entry,before):
     for retry in range(4):
-        after=meter(group,key)
+        try:
+            after=meter(group,key)
+        except TrialError as error:
+            if str(error)!='incomplete_gateway_debit_history' or retry==3:
+                raise
+            # Wallet counters and log insertion can become visible separately.
+            # Retry only a free GET, never the inference POST.
+            time.sleep(2)
+            continue
         if after['kind']=='codekey_total_actual_cost':
             if after['requests']==before['requests']+1 and after['cost_cny']>=before['cost_cny']:
                 settle_debit(entry,round(after['cost_cny']-before['cost_cny'],8),{
@@ -520,7 +537,7 @@ def run_trial(state, plan, keys, ledger):
                 ceiling = round(max(.10,7*billing_quotes.reserve_cost(quote,input_ceiling,output_ceiling)),8)
                 persist = lambda value: state.write('ledger.json',value)
                 before=meter(group,keys[group['id']])
-                if not reserve(ledger,call_id,ceiling,persist):
+                if not reserve(ledger,call_id,ceiling,persist,meter_before=before):
                     records.append({'call_id':call_id,'status':'budget_ceiling_prevented_call'})
                     continue
                 entry = ledger['entries'][-1]
@@ -540,7 +557,17 @@ def run_trial(state, plan, keys, ledger):
                 receipt_saved=False
                 try:
                     response, response_headers = http_json(route['root']+path,headers,payload)
+                    record['inference_response_seconds']=round(time.monotonic()-started,3)
                     text, raw_usage, reported, complete = decode(route,response)
+                    if family=='deepseek' and 'prompt_cache_hit_tokens' in raw_usage:
+                        hit=raw_usage['prompt_cache_hit_tokens']
+                        miss=raw_usage.get('prompt_cache_miss_tokens')
+                        total=raw_usage.get('prompt_tokens')
+                        if type(hit) is not int or hit<0 or (miss is not None and (type(miss) is not int or hit+miss!=total)):
+                            raise TrialError('deepseek_cache_receipt_contradiction')
+                        if 'prompt_tokens_details' not in raw_usage:
+                            raw_usage={**raw_usage,'prompt_tokens_details':{'cached_tokens':hit}}
+                        record['deepseek_native_cache_counts']={'hit':hit,'miss':miss}
                     usage = receipt_numbers(raw_usage)
                     record.update(text=safe_text(text,secret_values),usage=usage,
                         reported_model=safe_text(reported,secret_values),complete=complete,
