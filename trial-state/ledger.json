@@ -5090,6 +5090,50 @@
       "status": "ambiguous_failure_no_retry",
       "diagnostic": "http_502",
       "elapsed_seconds": 0.155
+    },
+    {
+      "call_id": "codekey-deepseek|deepseek-v4.1-flash|luna-evidence-v1",
+      "requested_model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "effort": "high",
+      "fixture_sha256": "12de4ac945e9409ce7a75bca82d3b076b2f92ba947b06a35c71fef369abe680e",
+      "payload_sha256": "f9d8cfefd3d17c5e6b8be588b770ebafdeab83c10073d4229ad3066d98cb4486",
+      "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352",
+      "source_url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "deepseek",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "deepseek-v4.1-flash",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.2,
+        "output_per_million": 0.8,
+        "cache_read_per_million": 0.004,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 3.465,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\"],\"conclusion\":\"The corrected primary analysis found a mean difference of 0.3 (95% CI -0.2 to 0.8, p=0.24), which is not statistically significant, and the unplanned subgroup finding (p=0.03) is not confirmatory.\"}",
+      "usage": {
+        "prompt_tokens": 275,
+        "completion_tokens": 369
+      },
+      "reported_model": "deepseek-v4.1-flash",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "cmb-828bbf28cb1d11f1b3b16e168a7320d4"
     }
   ],
   "scientific_completion": false,
