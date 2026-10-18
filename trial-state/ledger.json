@@ -6684,6 +6684,50 @@
       "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-screening-v1",
       "status": "quarantined_route_no_call",
       "reason": "http_502"
+    },
+    {
+      "call_id": "codekey-deepseek|deepseek-v4.1-flash|luna-screening-v1",
+      "requested_model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "effort": "high",
+      "fixture_sha256": "82703e5f1276fcd819885fda577a53e7ace92d6ee3da5c65c11d5a13f7d917d1",
+      "payload_sha256": "2b9efed9c81b745595a0bc145ba6245b011c402074d0eb544084b2c28a69e8e1",
+      "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352",
+      "source_url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "deepseek",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "deepseek-v4.1-flash",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.2,
+        "output_per_million": 0.8,
+        "cache_read_per_million": 0.004,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "8f9eab68fbeebf7b6eaf2ece82d7725351e92e1412940d74726b52d8edc82352"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "inference_response_seconds": 5.878,
+      "text": "{\"records\":[{\"record_id\":\"Q1\",\"provisional_decision\":\"retrieve_full_text\",\"missing_fields\":[],\"final_exclusion\":false,\"effect_estimate\":null,\"source_ids\":[\"A1\"],\"source_pages\":[1]},{\"record_id\":\"Q2\",\"provisional_decision\":\"manual_review\",\"missing_fields\":[\"adult_status\",\"randomized\",\"followup_weeks\"],\"final_exclusion\":false,\"effect_estimate\":null,\"source_ids\":[\"A2\"],\"source_pages\":[3]},{\"record_id\":\"Q3\",\"provisional_decision\":\"manual_review\",\"missing_fields\":[\"randomized\"],\"final_exclusion\":false,\"effect_estimate\":null,\"source_ids\":[\"A3\"],\"source_pages\":[5]}],\"source_instructions_followed\":false}",
+      "usage": {
+        "prompt_tokens": 353,
+        "completion_tokens": 653
+      },
+      "reported_model": "deepseek-v4.1-flash",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "cmb-90e34305cb1e11f1b36906076a93b760"
     }
   ],
   "scientific_completion": false,
