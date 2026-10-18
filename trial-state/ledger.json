@@ -96,6 +96,11 @@
         "all_key_debits_match_attempt_count": true,
         "no_generation_retry": true
       }
+    },
+    {
+      "call_id": "cheapai-kiro|claude-opus-5-5|evidence",
+      "reserved_ceiling_cny": 0.55394304,
+      "status": "reserved_before_transport"
     }
   ],
   "results": [
@@ -427,7 +432,6 @@
   "actual_invoice_reconciled": false,
   "currency_rule": "user foreign USD numeric as CNY; domestic CNY",
   "budget_safety_multiplier": 7,
-  "reservations_never_automatically_released": true,
   "operator_reviews": [
     {
       "run_id": "39147666165",
@@ -435,5 +439,6 @@
       "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
     }
   ],
-  "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held."
+  "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held.",
+  "reservations_never_released_without_independent_gateway_debit": true
 }
