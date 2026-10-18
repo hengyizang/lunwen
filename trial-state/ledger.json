@@ -1197,6 +1197,17 @@
         "completion_tokens": 183,
         "exactly_one_new_gateway_request": true
       }
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-evidence-v1",
+      "reserved_ceiling_cny": 0.1,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "codekey_total_actual_cost",
+        "requests": 4,
+        "cost_cny": 0.00214896,
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
