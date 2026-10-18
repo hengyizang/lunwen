@@ -149,6 +149,19 @@ def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False)
         "schema_version": "1.0", "paper_id": "P01", "status": "ready_for_review",
         "pilot_run_ids": ["pilot-0"], "pilot_success_criteria": "Synthetic pilot must exit zero and retain its diagnostic.",
         "comparisons": comparisons,
+        "critical_tests": [{
+            "test_id": "synthetic-discrimination", "hypothesis_id": "H1", "claim_ids": ["C1"],
+            "scientific_question": "Does the software preserve mixed comparisons?",
+            "mechanism_or_rationale": "Synthetic fixture tests bookkeeping, not a scientific mechanism.",
+            "expected_if_hypothesis": "All seven declared comparisons are replayed without omission.",
+            "alternative_explanations": [
+                {"explanation": "Selective reporting", "expected_if_true": "The adverse recent baseline disappears."},
+                {"explanation": "Incomplete execution", "expected_if_true": "A source result remains missing."}],
+            "comparison_ids": [c["comparison_id"] for c in comparisons],
+            "priority_reason": "Expose adverse evidence in the same scientific decision packet.",
+            "practical_or_theoretical_relevance": "Software acceptance only, no paper claim.",
+            "continue_if": "All fixture outputs remain traceable.", "revise_if": "Bindings are inconsistent.",
+            "stop_if": "The fixture pilot fails.", "remaining_uncertainty": "No research topic is evaluated."}],
         "external_validity": {"mode": "scope_limited", "rationale": "Synthetic software fixture.",
                               "claim_limit": "No real population or doctoral/publication claim."},
     }
@@ -192,6 +205,9 @@ def accept(directory: Path) -> dict:
     assert rows["recent"]["decision"] == rows["noise"]["decision"] == "does_not_establish_claim"
     assert rows["recent"]["ci_high"] < 0
     assert rows["null-control"]["decision"] == "meets_preregistered_threshold"
+    critical = report["critical_test_results"][0]
+    assert {"recent", "noise"} <= set(critical["threshold_not_established_ids"])
+    assert not critical["mechanism_established"] and not critical["automatic_stop_or_execution_authorized"]
     assert all(c["independent_units"] == 12 and c["seeds"] == 3 and c["family_size"] == 7 for c in rows.values())
     assert not results_validation.validate_claim_evidence(project, claim_matrix(project, report), registry)
     assert results_validation.validate_claim_evidence(project, claim_matrix(project, report, "supported"), registry)
@@ -214,6 +230,7 @@ def accept(directory: Path) -> dict:
         "successful_container_attempts": len(registry), "failed_pilot_attempts": 1,
         "dependent_execution_blocked": True, "comparisons": len(rows), "independent_units": 12, "seeds": 3,
         "negative_and_inconclusive_results_preserved": True, "unsupported_positive_claim_rejected": True,
+        "critical_test_adverse_comparisons_preserved": True, "mechanism_not_inferred_from_thresholds": True,
         "report_sha256": evidence.sha(project / "papers/P01" / evidence.REPORT),
         "registry_sha256": evidence.sha(project / "experiments/registry.jsonl"),
         "scope": "Execution, aggregation, inferential calculations and traceability only; upstream approvals are synthetic.",

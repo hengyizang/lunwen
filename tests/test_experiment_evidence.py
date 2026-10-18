@@ -43,6 +43,69 @@ class ExperimentEvidenceTests(unittest.TestCase):
         self.save_protocol()
         self.assertIn(text, "; ".join(evidence.validate_plan(self.project, "P01")))
 
+
+    def test_critical_tests_cannot_omit_the_adverse_comparator(self):
+        self.protocol["critical_tests"][0]["comparison_ids"].remove("recent")
+        self.assert_plan_error("every claim/comparison")
+
+    def test_critical_tests_require_actual_comparison_hypothesis_claim_links(self):
+        for key, value in (("comparison_ids", ["invented"]), ("hypothesis_id", "OTHER"), ("claim_ids", ["OTHER"])):
+            saved = copy.deepcopy(self.protocol)
+            self.protocol["critical_tests"][0][key] = value
+            self.assert_plan_error("binding differs")
+            self.protocol = saved
+
+    def test_missing_or_duplicate_critical_tests_block(self):
+        saved = copy.deepcopy(self.protocol)
+        del self.protocol["critical_tests"]
+        self.assert_plan_error("critical_tests")
+        self.protocol = saved
+        self.protocol["critical_tests"].append(copy.deepcopy(self.protocol["critical_tests"][0]))
+        self.assert_plan_error("duplicate critical test_id")
+
+    def test_critical_predictions_and_decision_conditions_must_discriminate(self):
+        saved = copy.deepcopy(self.protocol)
+        test = self.protocol["critical_tests"][0]
+        test["alternative_explanations"][0]["expected_if_true"] = "  " + test["expected_if_hypothesis"].upper() + " "
+        self.assert_plan_error("distinguishable")
+        self.protocol = saved
+        test = self.protocol["critical_tests"][0]
+        test["stop_if"] = test["continue_if"]
+        self.assert_plan_error("conditions must differ")
+
+    def test_critical_rivals_can_have_same_outcome_without_being_same_explanation(self):
+        test = self.protocol["critical_tests"][0]
+        test["alternative_explanations"][1]["expected_if_true"] = test["alternative_explanations"][0]["expected_if_true"]
+        self.save_protocol()
+        self.assertEqual(evidence.validate_plan(self.project, "P01"), [])
+
+    def test_current_g1_register_is_bound_and_changes_invalidate_g3_test_links(self):
+        register = self.project / "program/hypothesis-register.json"
+        acceptance.write(register, {"hypotheses": [{"hypothesis_id": "H1"}]})
+        self.assert_plan_error("hypothesis_register binding")
+        self.protocol["hypothesis_register"] = {"path": "program/hypothesis-register.json", "sha256": evidence.sha(register)}
+        self.save_protocol()
+        self.assertEqual(evidence.validate_plan(self.project, "P01"), [])
+        acceptance.write(register, {"hypotheses": [{"hypothesis_id": "H1", "hypothesis": "Changed scientific meaning"}]})
+        self.assert_plan_error("hypothesis_register binding")
+        self.protocol["hypothesis_register"]["sha256"] = evidence.sha(register)
+        acceptance.write(register, {"hypotheses": [{"hypothesis_id": "OTHER"}]})
+        self.protocol["hypothesis_register"]["sha256"] = evidence.sha(register)
+        self.assert_plan_error("absent from the bound register")
+
+    def test_critical_result_summary_never_promotes_thresholds_to_science(self):
+        critical = self.report["critical_test_results"][0]
+        self.assertEqual(set(critical["comparison_ids"]), {row["comparison_id"] for row in self.report["comparisons"]})
+        self.assertTrue({"recent", "noise"} <= set(critical["threshold_not_established_ids"]))
+        self.assertFalse(critical["mechanism_established"])
+        self.assertFalse(critical["scientific_significance_verified"])
+        self.assertFalse(critical["automatic_stop_or_execution_authorized"])
+        self.assertEqual(critical["evidence_status"], "numeric_results_require_scientific_review")
+
+    def test_declared_register_binding_cannot_silently_refer_to_a_missing_register(self):
+        self.protocol["hypothesis_register"] = {"path": "program/hypothesis-register.json", "sha256": "a" * 64}
+        self.assert_plan_error("hypothesis_register is missing")
+
     def test_known_effects_negative_null_and_equivalence_are_preserved(self):
         report = evidence.build_report(self.project, "P01")
         rows = {r["comparison_id"]: r for r in report["comparisons"]}

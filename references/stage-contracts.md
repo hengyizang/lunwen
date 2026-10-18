@@ -1,5 +1,10 @@
 # Stage contracts
 
+Scientific reasoning: [SCIENTIFIC-REASONING.md](../docs/SCIENTIFIC-REASONING.md)
+strengthens source-bound problem value, discriminating tests and conclusions in
+the existing G1-G5 contracts. Missing inputs block; completeness never proves
+scientific validity, doctoral merit or Q1 acceptance.
+
 Experiment/evidence extensions: [RESEARCH-EXTENSIONS.md](../docs/RESEARCH-EXTENSIONS.md).
 Declared comparability, pinned baseline adoption, fine-grained reading anchors and review worklists are revalidated at research gates. Actual topics, data, method trials and independent human ratings remain required; no template or regression fixture fills those gaps. Model routing and effort remain unchanged.
 
@@ -39,6 +44,11 @@ Required:
 - `program/topic-shortlist.json` records `selected_direction_cloud_feasibility` with `current_papers_feasible: true`, `no_future_lab_dependency: true`, and concrete authorized-data, cloud-experiment and current-paper-scope plans. If a proposed direction requires post-admission laboratory work to establish a current paper's result, reject it before weighted ranking. Future laboratory extensions can be retained as separate, unproven plans.
 
 Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.” Reject a proposed topic that lacks a defensible original contribution or doctoral depth, regardless of its direction ranking score.
+
+Every hypothesis also requires scientific_value with located importance evidence
+and decision_test with a focal observable prediction and distinguishable continue,
+revise and stop conditions. The actual problem value and identifiability remain
+scientific judgments. See the strengthened research-hypotheses schema.
 
 ## Paper architecture — G2
 
@@ -155,6 +165,13 @@ Result-bearing charts still require deterministic data/run provenance. An option
 Repeat G5 for `state.active_paper`. A paper-level approval moves to the next configured paper; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP, manifest and manual checklist for that paper. The human must inspect every final PDF/DOCX, choose the portal upload slots and submit. Agents do not log into portals, upload or submit.
 
 ## Executable experiment evidence supplement (G3 and G4)
+
+Empirical protocols require critical_tests linking questions, rival predictions,
+claim/hypothesis IDs, every comparator and explicit decision conditions. Bind the
+current G1 hypothesis register when it exists. These fields are frozen with the
+existing protocol; they alter no execution authority. Protected G4 summaries
+expose every linked numeric decision while retaining unresolved alternatives.
+Meta/theory retain their dedicated route contracts.
 
 G3 also requires each paper's `experiment-evidence-plan.json`, following `schemas/experiment-evidence-plan.schema.json` and [the experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md). It binds claims to hypotheses, datasets, outcomes, exact comparator runs, all seeds, independent units, inference scope, practical thresholds and multiplicity families. Every design baseline, ablation, negative control and robustness condition must have executable coverage. Preregistration includes this plan; G3 approval binds every paper's frozen preregistration hash. Pilot assertions and technical success criteria are locked before full runs.
 

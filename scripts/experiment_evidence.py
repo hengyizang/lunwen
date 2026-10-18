@@ -261,6 +261,8 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
              "external validity claim needs an actual comparison")
     else:
         text(external.get("claim_limit"), "scope-limited claim boundary")
+    from scripts.scientific_reasoning import validate_critical_tests
+    validate_critical_tests(protocol, project)
     return protocol
 
 
@@ -461,6 +463,7 @@ def build_report(project: Path, paper_id: str) -> dict:
     report["registry_sha256"] = sha(registry_path)
     report["approved_plan_sha256"] = sha(plan_path)
     report["implementation_sha256"] = sha(Path(__file__))
+    report["reasoning_implementation_sha256"] = sha(Path(__file__).with_name("scientific_reasoning.py"))
     try:
         report["software"] = {name: importlib.metadata.version(name) for name in ("scipy", "statsmodels")}
     except importlib.metadata.PackageNotFoundError:
@@ -496,6 +499,8 @@ def build_report(project: Path, paper_id: str) -> dict:
                                if threshold_met and p_adjusted <= comp["alpha"] else "does_not_establish_claim")
             if comp["analysis_phase"] == "exploratory":
                 row["decision"] = "exploratory_only"
+    from scripts.scientific_reasoning import critical_test_results
+    report["critical_test_results"] = critical_test_results(protocol, report["comparisons"])
     report["status"] = "complete" if not errors else "blocked"
     report["interpretation"] = ("Numeric evidence only. Paired/Welch t inference assumes independent units and suitable "
         "difference distributions; repeated rows and seeds are averaged within units. Registered custom analyses "
