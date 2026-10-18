@@ -3820,17 +3820,22 @@
       "run_id": "39148553988",
       "commit": "20208c3c0eb8fed849e78242197252c06b0dfe00",
       "reason": "Paused cache receipt reviewed against independent gateway debit; retain every original attempt, continue only unattempted fixtures under same CNY30."
+    },
+    {
+      "reason": "Resume only tasks whose read-only meter was rate-limited before inference; all prior paid IDs remain skipped.",
+      "routes": [
+        "cheapai-gpt-discount|gpt-6.1-sol",
+        "cheapai-gpt-discount|gpt-6-astra",
+        "cheapai-kiro|claude-sonnet-5-5",
+        "cheapai-kiro|claude-opus-5-5"
+      ],
+      "commit": "fae4345d7746b9ce13eda81beb535db0d2a05e8d"
     }
   ],
   "settlement_rule": "Only independently matched gateway debit releases unused reservation; unknown debit remains held.",
   "reservations_never_released_without_independent_gateway_debit": true,
   "quarantined_routes": {
     "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
-    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified",
-    "cheapai-gpt-discount|gpt-6.1-sol": "http_429",
-    "cheapai-gpt-discount|gpt-6-astra": "http_429",
-    "cheapai-kiro|claude-sonnet-5-5": "http_429",
-    "cheapai-kiro|claude-opus-5-5": "http_429"
-  },
-  "stop_reason": "planned_available_comparisons_finished_with_quarantines"
+    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified"
+  }
 }
