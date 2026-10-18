@@ -20,9 +20,11 @@ Write a venue-neutral semantic manuscript first:
 - do not alter methods after seeing results without disclosure;
 - generate data/code availability, ethics, funding, conflict, author contribution and AI-use drafts for human confirmation.
 
-Use claim-forward reporting rather than defensive prose. The abstract and
-conclusion should prioritize the preregistered primary result and the strongest
-supported contribution. Secondary, exploratory, null or unfavorable results do
+Follow [the evidence-led narrative guide](../../docs/EVIDENCE-LED-NARRATIVE.md).
+Prioritize the strongest supported contribution, exact advantage, decisive
+evidence and bounded value in the abstract and conclusion. Reframe the story
+when a different contribution is better supported, retaining original hypotheses,
+outcomes and actual exploratory/confirmatory phases. Secondary, null or unfavorable results do
 not need headline treatment unless they change the main claim, validity, safety
 or scope, but every registered result must remain locatable in the results,
 supplement and evidence trail. Never delete, soften or demote an experiment
