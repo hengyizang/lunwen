@@ -586,6 +586,52 @@
       },
       "gateway_debit_cny": 0.003238,
       "reconciled_without_generation_retry": true
+    },
+    {
+      "call_id": "cheapai-ccmax|claude-sonnet-5-5|evidence",
+      "requested_model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "effort": "high",
+      "fixture_sha256": "d2777007577f7955b8e4bb62ebc662f5e68dedda6762547d9989047bc3b3c3d2",
+      "payload_sha256": "29e5811737ee2acf42baff867d01534204e2ebc0580a9e749e3fdc444b895bc4",
+      "quote_sha256": "97fe1ba4583994a55df24fed6385dc0ba2621d0e63e98021def294d5ecd29724",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "reserved_ceiling_cny": 2.408448,
+      "input_token_ceiling": 65536,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "anthropic",
+        "endpoint": "https://cheapai.info/v1/messages",
+        "model": "claude-sonnet-5-5",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-ccmax",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 2.0,
+        "output_per_million": 10.0,
+        "cache_read_per_million": 0.2,
+        "cache_write_per_million": 2.5,
+        "cache_write_5m_per_million": 2.5,
+        "cache_write_1h_per_million": 4.0,
+        "tool_fees": {},
+        "quote_sha256": "97fe1ba4583994a55df24fed6385dc0ba2621d0e63e98021def294d5ecd29724"
+      },
+      "gateway_price_url": "https://cheapai.info/api/pricing",
+      "inference_response_seconds": 6.222,
+      "text": "{\"primary_effect\":0.3,\"primary_ci\":[-0.2,0.8],\"primary_significant\":false,\"subgroup_confirmatory\":false,\"doi\":null,\"source_ids\":[\"S1\",\"S2\",\"S3\"],\"conclusion\":\"The preregistered primary analysis (n=120) showed a mean difference of 0.3 with a 95% CI of -0.2 to 0.8 (p=0.24), which does not establish an effect, and the unplanned n=18 subgroup result (p=0.03, no multiplicity correction) is exploratory and cannot support a confirmatory or superiority claim.\"}",
+      "usage": {
+        "input_tokens": 6967,
+        "output_tokens": 143
+      },
+      "reported_model": "claude-sonnet-5.5",
+      "complete": true,
+      "identity_exact": false,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "msg_267a953f-5180-4ce8-afd3-56bbbfae2b1f"
     }
   ],
   "scientific_completion": false,
