@@ -1655,7 +1655,7 @@
     {
       "call_id": "cheapai-gpt-discount|gpt-5.6-luna|luna-metadata-v1",
       "reserved_ceiling_cny": 0.1,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "cheapai_quota_history",
         "quota_per_unit": 500000,
@@ -1707,6 +1707,19 @@
           }
         ],
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "modeled_cost_cny": 1.898e-05,
+      "gateway_debit_cny": 1.8e-05,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "model": "gpt-5.6-luna",
+        "quota": 9,
+        "created_at": 1792346369,
+        "prompt_tokens": 268,
+        "completion_tokens": 153,
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -6458,8 +6471,57 @@
       "reported_model": "gpt-5.6-luna",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "resp_0256cf3b4134e399016ad508ff71e08191af889b6fb398ba95"
+      "status": "complete",
+      "gateway_request_id": "resp_0256cf3b4134e399016ad508ff71e08191af889b6fb398ba95",
+      "modeled_cost_cny": 1.898e-05,
+      "billing_parts": {
+        "ordinary_input_tokens": 268,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 0,
+        "full_request_input_tokens": 268,
+        "uncached_input_tokens": 268,
+        "output_tokens_including_reasoning": 153,
+        "rates": {
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000,
+          "input_per_million": 0.016,
+          "output_per_million": 0.096,
+          "cache_read_per_million": 0.016,
+          "cache_write_per_million": 0.02,
+          "cache_write_5m_per_million": 0.02,
+          "cache_write_1h_per_million": 0.032
+        },
+        "quote_sha256": "b46acc98fa94831178ffa375fdc50fee3575cee812440edc902e160753812a08",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-gpt-discount",
+          "mode": "standard"
+        },
+        "context_tier": {
+          "basis": "full_request_input_tokens",
+          "input_tokens": 268,
+          "min_input_tokens": 0,
+          "max_input_tokens": 272000
+        },
+        "unknown_cache_price": false,
+        "tool_receipts": [],
+        "tool_cost_cny": 0.0,
+        "token_cost_cny": 1.898e-05
+      },
+      "gateway_debit_cny": 1.8e-05,
+      "grade": {
+        "checks": {
+          "exact_schema_source_facts_and_abstention": true
+        },
+        "passed": true,
+        "automatic_scope": "Four synthetic auxiliary fixtures only; no scientific or broad role qualification."
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 4.618
     }
   ],
   "scientific_completion": false,
