@@ -1201,7 +1201,7 @@
     {
       "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-evidence-v1",
       "reserved_ceiling_cny": 0.1,
-      "status": "reserved_before_transport",
+      "status": "ambiguous_failure_reservation_retained",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 4,
@@ -5028,6 +5028,57 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 7.038
+    },
+    {
+      "call_id": "codekey-codex-discount|gpt-5.6-luna|luna-evidence-v1",
+      "requested_model": "gpt-5.6-luna",
+      "family": "openai",
+      "effort": "medium",
+      "fixture_sha256": "12de4ac945e9409ce7a75bca82d3b076b2f92ba947b06a35c71fef369abe680e",
+      "payload_sha256": "729fccff22985f83fa668cb91582a0f6ccaafe3e252670c74f2fb86a87fa41ee",
+      "quote_sha256": "5079d17147fdbd7cb7289d12dc742133bba93f6e954171ca734a0383a18805fd",
+      "source_url": "https://developers.openai.com/api/docs/pricing",
+      "reserved_ceiling_cny": 0.1,
+      "input_token_ceiling": 8192,
+      "output_token_ceiling": 4096,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "openai",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-5.6-luna",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "codekey-codex-discount",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.024,
+            "output_per_million": 0.144,
+            "cache_read_per_million": 0.0024,
+            "cache_write_per_million": 0.03
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.048,
+            "output_per_million": 0.21599999999999997,
+            "cache_read_per_million": 0.0048,
+            "cache_write_per_million": 0.06
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "5079d17147fdbd7cb7289d12dc742133bba93f6e954171ca734a0383a18805fd"
+      },
+      "gateway_price_url": "https://codekey.ai/models",
+      "status": "ambiguous_failure_no_retry",
+      "diagnostic": "http_502",
+      "elapsed_seconds": 0.155
     }
   ],
   "scientific_completion": false,
@@ -5066,7 +5117,8 @@
   "reservations_never_released_without_independent_gateway_debit": true,
   "quarantined_routes": {
     "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
-    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified"
+    "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified",
+    "codekey-codex-discount|gpt-5.6-luna": "http_502"
   },
   "stop_reason": "planned_available_comparisons_finished_with_quarantines",
   "supplements": {
