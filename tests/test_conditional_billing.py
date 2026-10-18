@@ -201,6 +201,141 @@ class ConditionalQuoteTests(unittest.TestCase):
                 transport.assert_called_once()
 
 
+class CacheWriteBillingTests(unittest.TestCase):
+    @staticmethod
+    def ttl_quote(**changes):
+        return quote(cache_write_5m_per_million=3, cache_write_1h_per_million=6, **changes)
+
+    def test_openai_cache_writes_replace_ordinary_input_and_reasoning_is_counted_once(self):
+        usage = {"input_tokens": 1000, "output_tokens": 20,
+                 "input_tokens_details": {"cached_tokens": 400, "cache_write_tokens": 500},
+                 "output_tokens_details": {"reasoning_tokens": 10}}
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            authorized(project)
+            with runtime(document(quote()), response(usage)):
+                call(project)
+            state = model_spend.read(project)
+            self.assertAlmostEqual(state["spent_cny"], 0.00198)
+            self.assertFalse(state["reservations"])
+            billing = model_runtime.ledger_entries(project)[0]["billing"]
+            self.assertEqual(billing["ordinary_input_tokens"], 100)
+            self.assertEqual(billing["cache_write_tokens"], 500)
+            self.assertEqual(billing["cache_write_unclassified_tokens"], 500)
+            self.assertEqual(billing["full_request_input_tokens"], 1000)
+
+    def test_chat_completions_and_gateway_write_aliases_are_not_added_twice(self):
+        usage = {"cache_creation_input_tokens": 500,
+                 "prompt_tokens_details": {"cached_tokens": 400, "cache_write_tokens": 500}}
+        selected = billing_quotes.select(document(quote()), PROVIDER, ENDPOINT, MODEL, IDENTITY)
+        value, unknown, detail = billing_quotes.bill(selected, usage, 1000, 20, anthropic=False)
+        self.assertAlmostEqual(value, 0.00198)
+        self.assertFalse(unknown)
+        self.assertEqual(detail["cache_write_tokens"], 500)
+
+    def test_mixed_claude_ttls_charge_disjoint_write_tokens(self):
+        usage = {"cache_read_input_tokens": 400, "cache_creation_input_tokens": 500,
+                 "cache_creation": {"ephemeral_5m_input_tokens": 300, "ephemeral_1h_input_tokens": 200}}
+        selected = billing_quotes.select(document(self.ttl_quote()), PROVIDER, ENDPOINT, MODEL, IDENTITY)
+        value, unknown, detail = billing_quotes.bill(selected, usage, 100, 20, anthropic=True)
+        self.assertAlmostEqual(value, 0.00258)
+        self.assertFalse(unknown)
+        self.assertEqual(detail["full_request_input_tokens"], 1000)
+        self.assertEqual(detail["uncached_input_tokens"], 600)
+        self.assertEqual(detail["cache_write_unclassified_tokens"], 0)
+        self.assertEqual(detail["cache_write_5m_tokens"], 300)
+        self.assertEqual(detail["cache_write_1h_tokens"], 200)
+
+    def test_context_brackets_select_and_reserve_the_expensive_ttl_rate(self):
+        prices = bracket_quote()
+        for tier in prices["context_brackets"]:
+            tier.update(cache_write_5m_per_million=5, cache_write_1h_per_million=8)
+        selected = billing_quotes.select(document(prices), PROVIDER, ENDPOINT, MODEL, IDENTITY)
+        usage = {"input_tokens_details": {"cached_tokens": 100, "cache_write_tokens": 1},
+                 "cache_creation": {"ephemeral_5m_input_tokens": 0, "ephemeral_1h_input_tokens": 1}}
+        value, _, detail = billing_quotes.bill(selected, usage, 101, 20, anthropic=False)
+        self.assertAlmostEqual(value, (100 * 0.4 + 8 + 20 * 20) / 1_000_000)
+        self.assertEqual(detail["context_tier"]["input_tokens"], 101)
+        self.assertAlmostEqual(billing_quotes.reserve_cost(selected, 101, 20), (101 * 8 + 20 * 20) / 1_000_000)
+
+    def test_ttl_quote_errors_and_legacy_ttl_fields_fail_before_transport(self):
+        partial = quote(cache_write_5m_per_million=3)
+        cases = [document(partial), document(self.ttl_quote(cache_write_per_million=True)),
+                 document(quote(cache_write_5m_per_million=-1, cache_write_1h_per_million=6)),
+                 document(quote(cache_write_5m_per_million=3, cache_write_1h_per_million="6")),
+                 {MODEL: {"input_per_million": 2, "output_per_million": 10, "cache_write_1h_per_million": 6}}]
+        for prices in cases:
+            with self.subTest(prices=prices), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory)
+                authorized(project)
+                with runtime(prices) as transport, self.assertRaises(model_runtime.ModelBudgetError):
+                    call(project, billing_identity={} if MODEL in prices else IDENTITY)
+                transport.assert_not_called()
+
+    def test_ambiguous_cache_receipts_hold_reservations_and_cannot_be_retried(self):
+        base = {"input_tokens": 1000, "output_tokens": 20}
+        receipts = [
+            (quote(), {"input_tokens_details": {"cached_tokens": 400, "cache_write_tokens": 601}}),
+            (quote(), {"input_tokens_details": {"cache_write_tokens": True}}),
+            (quote(), {"input_tokens_details": {"cache_write_tokens": -1}}),
+            (quote(), {"input_tokens_details": {"cache_write_tokens": 1.5}}),
+            (quote(), {"input_tokens_details": {"cache_write_tokens": "500"}}),
+            (quote(), {"cache_creation_input_tokens": 500, "input_tokens_details": {"cache_write_tokens": 499}}),
+            (quote(), {"input_tokens_details": {"cache_write_tokens": 500}, "prompt_tokens_details": {"cache_write_tokens": 499}}),
+            (self.ttl_quote(), {"cache_creation_input_tokens": 500, "cache_creation": None}),
+            (self.ttl_quote(), {"cache_creation_input_tokens": 500, "cache_creation": {"ephemeral_5m_input_tokens": 500}}),
+            (self.ttl_quote(), {"cache_creation_input_tokens": 500,
+                                "cache_creation": {"ephemeral_5m_input_tokens": 300, "ephemeral_1h_input_tokens": 201}}),
+            (self.ttl_quote(), {"cache_creation_input_tokens": 500,
+                                "cache_creation": {"ephemeral_5m_input_tokens": 500, "ephemeral_1h_input_tokens": True}}),
+            (self.ttl_quote(), {"cache_creation_input_tokens": 500}),
+            (quote(), {"cache_creation_input_tokens": 500,
+                       "cache_creation": {"ephemeral_5m_input_tokens": 300, "ephemeral_1h_input_tokens": 200}}),
+        ]
+        for prices, extra in receipts:
+            usage = {**base, **extra}
+            with self.subTest(usage=usage), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory)
+                authorized(project)
+                with runtime(document(prices), response(usage)) as transport:
+                    for _ in range(2):
+                        with self.assertRaises(model_runtime.ModelBudgetError):
+                            call(project)
+                    transport.assert_called_once()
+                self.assertGreater(model_spend.reserved(model_spend.read(project)), 0)
+                self.assertEqual(model_spend.read(project)["spent_cny"], 0)
+                entry = model_runtime.ledger_entries(project)[0]
+                self.assertEqual(entry["cost_status"], "unknown_reconcile_required")
+                self.assertEqual(entry["usage_receipt"], usage)
+                self.assertFalse(list((project / ".cache" / "model-responses").glob("*.json")))
+
+    def test_one_hour_write_price_can_block_an_otherwise_affordable_request(self):
+        prices = quote(cache_write_5m_per_million=3, cache_write_1h_per_million=1_000_000)
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            authorized(project)
+            with runtime(document(prices)) as transport, self.assertRaises(model_runtime.ModelBudgetError):
+                call(project)
+            transport.assert_not_called()
+            self.assertFalse(model_spend.read(project)["reservations"])
+
+    def test_cache_reads_refresh_without_a_second_creation_charge(self):
+        selected = billing_quotes.select(document(self.ttl_quote()), PROVIDER, ENDPOINT, MODEL, IDENTITY)
+        usage = {"cache_read_input_tokens": 500, "cache_creation_input_tokens": 0,
+                 "cache_creation": {"ephemeral_5m_input_tokens": 0, "ephemeral_1h_input_tokens": 0}}
+        value, unknown, detail = billing_quotes.bill(selected, usage, 100, 20, anthropic=True)
+        self.assertAlmostEqual(value, 0.0005)
+        self.assertFalse(unknown)
+        self.assertEqual(detail["cache_write_tokens"], 0)
+
+    def test_nullable_creation_metadata_is_harmless_only_without_writes(self):
+        selected = billing_quotes.select(document(self.ttl_quote()), PROVIDER, ENDPOINT, MODEL, IDENTITY)
+        value, unknown, detail = billing_quotes.bill(selected, {"cache_creation": None}, 100, 20, anthropic=True)
+        self.assertAlmostEqual(value, 0.0004)
+        self.assertFalse(unknown)
+        self.assertEqual(detail["cache_write_tokens"], 0)
+
+
 class ToolBillingTests(unittest.TestCase):
     FEES = {"web_search": {"billing": "per_unit", "unit": "query", "price_cny": 0.2},
             "retrieval": {"billing": "flat_per_call", "unit": "lookup", "price_cny": 0.3}}

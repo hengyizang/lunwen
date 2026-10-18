@@ -120,7 +120,7 @@ def pricing(provider: str, model: str | None = None, *, billing_identity: dict |
             for field, actual in (("provider", provider), ("endpoint", configuration.get("endpoint")), ("model", model)):
                 if selected.get(field) is not None and selected[field] != actual:
                     raise ModelBudgetError(f"price quote {field} differs from the requested route")
-            if any(key in selected for key in ("context_brackets", "context_basis", "tool_fees", "plan", "group", "mode")):
+            if any(key in selected for key in ("context_brackets", "context_basis", "tool_fees", "plan", "group", "mode", *billing_quotes.CACHE_WRITE_TTL_RATES)):
                 raise ModelBudgetError("conditional billing fields require the version 2 pricing schema")
             for key in ("cache_read_per_million", "cache_write_per_million"):
                 if key in selected:
