@@ -1,0 +1,13 @@
+{
+  "trial_id": "relay-acceptance-20261019",
+  "limit_cny": 30.0,
+  "plan_sha256": "1a0bd20fdcf73910fbe1bd6f207575a000110ab7bfb79abfa4bcd654ecbdf3c7",
+  "entries": [],
+  "results": [],
+  "scientific_completion": false,
+  "production_routing_changed": false,
+  "actual_invoice_reconciled": false,
+  "currency_rule": "user foreign USD numeric as CNY; domestic CNY",
+  "budget_safety_multiplier": 7,
+  "reservations_never_automatically_released": true
+}
