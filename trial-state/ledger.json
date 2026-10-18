@@ -816,12 +816,29 @@
     {
       "call_id": "codekey-kiro-standard|claude-opus-5-5|engineering",
       "reserved_ceiling_cny": 0.57802752,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 3,
         "cost_cny": 0.003389904,
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "gateway_debit_cny": 0.00167873,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 3,
+          "cost_cny": 0.003389904,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "after": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 4,
+          "cost_cny": 0.005068632,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -3752,8 +3769,35 @@
       "reported_model": "claude-opus-5-5",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "msg_4uyDed6afZnUQqBMj8AZdULs"
+      "status": "complete",
+      "gateway_request_id": "msg_4uyDed6afZnUQqBMj8AZdULs",
+      "cache_write_ttl_unreported": true,
+      "billing_parts": {
+        "ordinary_input_tokens": 200,
+        "cache_read_tokens": 72,
+        "cache_write_tokens": 3,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 3,
+        "full_request_input_tokens": 275,
+        "uncached_input_tokens": 203,
+        "output_tokens_including_reasoning": 658
+      },
+      "gateway_debit_cny": 0.00167873,
+      "grade": {
+        "checks": {
+          "both_leaks": true,
+          "safe_order": true,
+          "no_unsupported_superiority": true,
+          "no_fabricated_accuracy": true,
+          "experiment_present": true
+        },
+        "passed": true,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 13.877
     }
   ],
   "scientific_completion": false,
