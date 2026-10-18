@@ -4321,6 +4321,59 @@
       "dated_backend_version_verified": false,
       "reasoning_effort_attestation": "requested; not independently attested",
       "elapsed_seconds": 5.942
+    },
+    {
+      "call_id": "cheapai-kiro|claude-opus-5-5|engineering",
+      "requested_model": "claude-opus-5-5",
+      "family": "anthropic",
+      "effort": "high",
+      "fixture_sha256": "5da4f8bdeaccf233250caf0b5da4b733fea32608130ce3d8fcf8178ec80a93c2",
+      "payload_sha256": "575b08fc1c3b0e9131f07450ce9c14118e9143e13c4e2e975b4dbf0c2d73edb8",
+      "quote_sha256": "a1ff849dae6e0db0fd4a16386cc30592e2da3b7b13c8f30116c8155a36145ac2",
+      "source_url": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "reserved_ceiling_cny": 0.55394304,
+      "input_token_ceiling": 65536,
+      "output_token_ceiling": 8192,
+      "quote_snapshot": {
+        "quote_schema": "2.0",
+        "provider": "anthropic",
+        "endpoint": "https://cheapai.info/v1/messages",
+        "model": "claude-opus-5-5",
+        "billing_identity": {
+          "plan": "relay-acceptance-20261019",
+          "group": "cheapai-kiro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-2026-10-19-user-numeric-CNY-times-group",
+        "input_per_million": 0.46,
+        "output_per_million": 2.3000000000000003,
+        "cache_read_per_million": 0.046000000000000006,
+        "cache_write_per_million": 0.5750000000000001,
+        "cache_write_5m_per_million": 0.5750000000000001,
+        "cache_write_1h_per_million": 0.92,
+        "tool_fees": {},
+        "quote_sha256": "a1ff849dae6e0db0fd4a16386cc30592e2da3b7b13c8f30116c8155a36145ac2"
+      },
+      "gateway_price_url": "https://cheapai.info/api/pricing",
+      "inference_response_seconds": 3.58,
+      "text": "```json\n{\n  \"leaks\": [\"pre_split_fit\", \"patient_overlap\"],\n  \"correct_order\": [\"group_split\", \"fit_train\", \"transform_heldout\", \"evaluate\"],\n  \"superiority_supported\": false,\n  \"verified_new_accuracy\": null,\n  \"next_experiment\": \"Split patients into train/test groups, refit the scaler only on training data, and report accuracy with 95% confidence intervals across five independent random seeds.\"\n}\n```",
+      "usage": {
+        "input_tokens": 271,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 153,
+        "output_tokens_details": {}
+      },
+      "reported_model": "claude-opus-5-5",
+      "complete": true,
+      "identity_exact": true,
+      "status": "receipt_received_before_billing_validation",
+      "gateway_request_id": "msg_011CgA6ZozbWXgBdmqWsSE98"
     }
   ],
   "scientific_completion": false,
