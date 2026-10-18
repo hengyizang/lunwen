@@ -410,12 +410,29 @@
     {
       "call_id": "codekey-kiro-standard|claude-sonnet-5-5|evidence",
       "reserved_ceiling_cny": 0.28901376,
-      "status": "reserved_before_transport",
+      "status": "gateway_debit_verified",
       "gateway_meter_before": {
         "kind": "codekey_total_actual_cost",
         "requests": 0,
         "cost_cny": 0.0,
         "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      },
+      "gateway_debit_cny": 0.00082007,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 0,
+          "cost_cny": 0.0,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "after": {
+          "kind": "codekey_total_actual_cost",
+          "requests": 1,
+          "cost_cny": 0.000820068,
+          "currency_rule": "owner numeric USD wallet unit equals CNY1"
+        },
+        "exactly_one_new_gateway_request": true
       }
     }
   ],
@@ -1990,8 +2007,37 @@
       "reported_model": "claude-sonnet-5-5",
       "complete": true,
       "identity_exact": true,
-      "status": "receipt_received_before_billing_validation",
-      "gateway_request_id": "msg_67xp0JGWrF9eTum5SHP5WQM4"
+      "status": "complete",
+      "gateway_request_id": "msg_67xp0JGWrF9eTum5SHP5WQM4",
+      "cache_write_ttl_unreported": true,
+      "billing_parts": {
+        "ordinary_input_tokens": 216,
+        "cache_read_tokens": 72,
+        "cache_write_tokens": 3,
+        "cache_write_5m_tokens": 0,
+        "cache_write_1h_tokens": 0,
+        "cache_write_unclassified_tokens": 3,
+        "full_request_input_tokens": 291,
+        "uncached_input_tokens": 219,
+        "output_tokens_including_reasoning": 638
+      },
+      "gateway_debit_cny": 0.00082007,
+      "grade": {
+        "checks": {
+          "effect_preserved": true,
+          "ci_preserved": true,
+          "no_false_primary_significance": true,
+          "posthoc_not_confirmatory": true,
+          "no_fabricated_doi": true,
+          "source_trace": false,
+          "conclusion_present": true
+        },
+        "passed": false,
+        "automatic_scope": "fixture facts only; prose quality needs review"
+      },
+      "dated_backend_version_verified": false,
+      "reasoning_effort_attestation": "requested; not independently attested",
+      "elapsed_seconds": 12.434
     }
   ],
   "scientific_completion": false,
