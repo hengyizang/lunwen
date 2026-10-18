@@ -114,6 +114,18 @@
         "all_key_debits_match_attempt_count": true,
         "no_generation_retry": true
       }
+    },
+    {
+      "call_id": "cheapai-ccmax|claude-sonnet-5-5|evidence",
+      "reserved_ceiling_cny": 2.408448,
+      "status": "reserved_before_transport",
+      "gateway_meter_before": {
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "total_quota": 0,
+        "rows": [],
+        "currency_rule": "owner numeric USD wallet unit equals CNY1"
+      }
     }
   ],
   "results": [
