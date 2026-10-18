@@ -2478,6 +2478,11 @@
       "call_id": "cheapai-gpt-discount|gpt-6-astra|engineering",
       "status": "billing_metadata_unavailable_no_call",
       "diagnostic": "http_429"
+    },
+    {
+      "call_id": "cheapai-kiro|claude-sonnet-5-5|engineering",
+      "status": "billing_metadata_unavailable_no_call",
+      "diagnostic": "http_429"
     }
   ],
   "scientific_completion": false,
@@ -2508,6 +2513,7 @@
     "cheapai-ccmax|claude-sonnet-5-5": "reported_model_identity_unverified",
     "cheapai-ccmax|claude-opus-5-5": "reported_model_identity_unverified",
     "cheapai-gpt-discount|gpt-6.1-sol": "http_429",
-    "cheapai-gpt-discount|gpt-6-astra": "http_429"
+    "cheapai-gpt-discount|gpt-6-astra": "http_429",
+    "cheapai-kiro|claude-sonnet-5-5": "http_429"
   }
 }
