@@ -1,7 +1,7 @@
 """Cloud-only, bounded relay acceptance; never changes scientific runtime roles.
 
 All material is an original synthetic software fixture, not research evidence.
-Credentials arrive once through an RSA-OAEP/AES-GCM envelope bound to this run.
+Credentials arrive only through GitHub Actions Secrets, never PR metadata.
 Generation has no retry/fallback. Durable conservative reservations are never
 released automatically, even after a complete receipt. Unknown billing stops
 the trial; restarting does not create another CNY30 allowance.
@@ -15,7 +15,6 @@ import math
 import os
 from pathlib import Path
 import re
-import subprocess
 import sys
 import time
 import urllib.error
@@ -30,8 +29,18 @@ STATE = 'cloud-state/relay-acceptance-20261019'
 REPO = 'hengyizang/lunwen'
 LIMIT = 30.0
 HOSTS = {'cheapai.info', 'codekey.ai'}
-START = '<!-- relay-envelope-start -->'
-END = '<!-- relay-envelope-end -->'
+SECRET_ENVS = {
+    'cheapai-gpt-pro':'MODEL_TEST_CHEAPAI_GPT_PRO_KEY',
+    'cheapai-gpt-discount':'MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY',
+    'cheapai-kiro':'MODEL_TEST_CHEAPAI_KIRO_KEY',
+    'cheapai-ccmax':'MODEL_TEST_CHEAPAI_CCMAX_KEY',
+    'codekey-deepseek':'MODEL_TEST_CODEKEY_DEEPSEEK_KEY',
+    'codekey-gemini':'MODEL_TEST_CODEKEY_GEMINI_KEY',
+    'codekey-codex-pure':'MODEL_TEST_CODEKEY_CODEX_PURE_KEY',
+    'codekey-kiro-enterprise':'MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY',
+    'codekey-codex-discount':'MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY',
+    'codekey-kiro-standard':'MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY',
+}
 SOURCES = {
     'openai': 'https://developers.openai.com/api/docs/pricing',
     'anthropic': 'https://platform.claude.com/docs/en/about-claude/pricing',
@@ -263,50 +272,20 @@ def decode(route, response):
     return item.get('message',{}).get('content',''),response.get('usage',{}),response.get('model'),item.get('finish_reason')=='stop'
 
 
-def receive_credentials(state, plan, sha):
-    run = os.environ['GITHUB_RUN_ID']
-    attempt = os.environ['GITHUB_RUN_ATTEMPT']
-    worker = subprocess.Popen(['node', 'scripts/gateway_trial_crypto.cjs'], stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
-    try:
-        public = json.loads(worker.stdout.readline())
-        aad = TRIAL+'|'+run+'|'+attempt+'|'+sha+'|'+os.urandom(24).hex()
-        state.write('handoff.json', {**public, 'aad':aad,'trial_id':TRIAL,'run_id':run,
-                    'attempt':attempt,'head_sha':sha,'status':'waiting_for_encrypted_envelope'})
-        print('Cloud acceptance ready for one-time encrypted handoff', flush=True)
-        deadline = time.monotonic()+1500
-        while time.monotonic()<deadline:
-            # This branch is owned by this repository and has exactly one trial PR.
-            pulls = state.api('pulls')
-            matches = [p for p in pulls if p['head']['ref']==BRANCH and p['head']['sha']==sha
-                       and p['head']['repo']['full_name']==REPO]
-            if len(matches)==1:
-                body = matches[0].get('body') or ''
-                if START in body and END in body:
-                    envelope = json.loads(body.split(START,1)[1].split(END,1)[0].strip())
-                    if envelope.get('aad') != aad:
-                        raise TrialError('handoff_run_mismatch')
-                    worker.stdin.write(json.dumps(envelope)+'\n'); worker.stdin.flush()
-                    line = worker.stdout.readline()
-                    if not line:
-                        raise TrialError('handoff_decryption_failed')
-                    keys = json.loads(line)
-                    if set(keys) != {g['id'] for g in plan['groups']}:
-                        raise TrialError('handoff_key_set_mismatch')
-                    for group in plan['groups']:
-                        key = keys[group['id']]
-                        actual = hashlib.sha256((plan['key_binding_salt']+':'+key).encode()).hexdigest()
-                        if actual != group['key_sha256']:
-                            raise TrialError('handoff_key_binding_mismatch')
-                    # Register masks before any provider IO; never register them as command arguments.
-                    for key in keys.values():
-                        print('::add-mask::'+key, flush=True)
-                    state.write('handoff.json', {'trial_id':TRIAL,'run_id':run,'head_sha':sha,'status':'consumed'})
-                    return keys
-            time.sleep(10)
-        raise TrialError('handoff_expired_no_paid_requests')
-    finally:
-        worker.kill(); worker.wait()
+def receive_credentials(plan):
+    if {g['id'] for g in plan['groups']} != set(SECRET_ENVS):
+        raise TrialError('secret_group_set_mismatch')
+    keys = {}
+    for group in plan['groups']:
+        key = os.environ.get(SECRET_ENVS[group['id']], '').strip()
+        actual = hashlib.sha256((plan['key_binding_salt']+':'+key).encode()).hexdigest()
+        if not key or actual != group['key_sha256']:
+            raise TrialError('secret_missing_or_binding_mismatch')
+        keys[group['id']] = key
+    # GitHub masks secrets already; explicitly register before any provider IO too.
+    for key in keys.values():
+        print('::add-mask::'+key, flush=True)
+    return keys
 
 
 def receipt_numbers(usage):
@@ -428,9 +407,9 @@ def main():
                   'budget_safety_multiplier':7,'reservations_never_automatically_released':True}
         state.write('ledger.json',ledger)
     validate_ledger(ledger,plan_hash)
-    if ledger.get('stop_reason'):
+    if ledger.get('stop_reason') or any(e['status']=='reserved_before_transport' for e in ledger['entries']):
         raise TrialError('existing_trial_stopped_do_not_replay_authorization')
-    keys = receive_credentials(state,plan,os.environ['GITHUB_SHA'])
+    keys = receive_credentials(plan)
     try:
         run_trial(state,plan,keys,ledger)
     finally:

@@ -6,15 +6,14 @@ fixtures, not a scientific experiment, paper result or G0-G5 approval.
 Production model selection, research budgets and family-separated audits remain
 unchanged. All execution and checks occur on GitHub cloud runners.
 
-The named trial branch has a push-only workflow. Offline repository checks must
-pass before an isolated runner generates a one-time RSA3072 public key. The
-private key remains in the runner process. A local administrative encryption
-step seals credentials with AES256-GCM, wrapping the AES key with RSA-OAEP-SHA256.
-The authenticated context includes trial, run, attempt, commit and random nonce.
-Only ciphertext is handed over in the trial PR description; no credentials are
-committed. Salted key bindings prevent accepting unrelated keys. The encrypted
-description block is removed after consumption. Credentials are never put in
-URLs or handed to an additional service. HTTP redirects are refused.
+The owner explicitly selected GitHub Actions Secrets for credential storage.
+Ten separate secret references preserve the screenshot group assignment. The
+official GitHub CLI imports values through standard input after the owner logs
+in, encrypting them for GitHub Secrets. Credentials are never put in Git, PR
+metadata, command-line arguments, URLs or additional services. The named trial
+branch has a push-only workflow; offline repository checks must pass before
+an isolated runner receives the secrets. Salted key bindings reject missing or
+misassigned keys. HTTP redirects are refused. No fork-PR execution receives keys.
 
 The separate cloud-state branch retains a durable CNY30 authorization and a
 write-before-transport reservation for each route/model/fixture. Reruns share

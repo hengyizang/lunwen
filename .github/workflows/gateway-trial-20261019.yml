@@ -39,7 +39,6 @@ jobs:
     timeout-minutes: 85
     permissions:
       contents: write
-      pull-requests: read
     steps:
       - uses: actions/checkout@v7
         with:
@@ -47,7 +46,17 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Accept one encrypted handoff and execute bounded trial
+      - name: Execute bounded trial using isolated Actions Secrets
         env:
           TRIAL_GITHUB_TOKEN: ${{ github.token }}
+          MODEL_TEST_CHEAPAI_GPT_PRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_PRO_KEY }}
+          MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY }}
+          MODEL_TEST_CHEAPAI_KIRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_KIRO_KEY }}
+          MODEL_TEST_CHEAPAI_CCMAX_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_CCMAX_KEY }}
+          MODEL_TEST_CODEKEY_DEEPSEEK_KEY: ${{ secrets.MODEL_TEST_CODEKEY_DEEPSEEK_KEY }}
+          MODEL_TEST_CODEKEY_GEMINI_KEY: ${{ secrets.MODEL_TEST_CODEKEY_GEMINI_KEY }}
+          MODEL_TEST_CODEKEY_CODEX_PURE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_CODEX_PURE_KEY }}
+          MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY }}
+          MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY }}
+          MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY }}
         run: python -m scripts.gateway_trial

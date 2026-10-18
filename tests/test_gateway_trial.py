@@ -2,7 +2,8 @@
 import json
 import os
 from pathlib import Path
-import subprocess
+import hashlib
+import io
 import unittest
 from unittest.mock import patch
 
@@ -74,28 +75,22 @@ class TrialControlsTests(unittest.TestCase):
         self.assertEqual(usage['output_tokens'],50)
         self.assertTrue(complete)
 
-    def test_aes_gcm_rsa_handoff_and_tamper_rejection(self):
-        encrypt='''const c=require('node:crypto'); const pub=process.env.TEST_PUBLIC_KEY;
-const key=c.randomBytes(32),iv=c.randomBytes(12),aad='only-this-run';
-const cipher=c.createCipheriv('aes-256-gcm',key,iv);cipher.setAAD(Buffer.from(aad));
-const encrypted=Buffer.concat([cipher.update('{"fake":"credential"}'),cipher.final()]);
-console.log(JSON.stringify({version:1,aad,iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64'),
-ciphertext:encrypted.toString('base64'),wrapped_key:c.publicEncrypt({key:pub,oaepHash:'sha256'},key).toString('base64')}));'''
-        for tamper in (False,True):
-            worker=subprocess.Popen(['node','scripts/gateway_trial_crypto.cjs'],stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
-            public=json.loads(worker.stdout.readline())['public_key_pem']
-            envelope=json.loads(subprocess.check_output(['node','-e',encrypt],
-                env={**os.environ,'TEST_PUBLIC_KEY':public},text=True))
-            if tamper:
-                envelope['aad']='another-run'
-            out,err=worker.communicate(json.dumps(envelope)+'\n',timeout=20)
-            if tamper:
-                self.assertNotEqual(worker.returncode,0)
-                self.assertNotIn('credential',out)
+    def test_only_actions_secrets_with_exact_key_binding_accepted(self):
+        plan={'key_binding_salt':'salt','groups':[
+            {'id':g,'key_sha256':hashlib.sha256(('salt:fake-'+g).encode()).hexdigest()}
+            for g in trial.SECRET_ENVS]}
+        env={v:'fake-'+k for k,v in trial.SECRET_ENVS.items()}
+        with patch.dict(os.environ,env,clear=True),patch('sys.stdout',io.StringIO()):
+            self.assertEqual(len(trial.receive_credentials(plan)),10)
+        for changed in ('missing','different-key'):
+            bad={**env}
+            first=next(iter(env))
+            if changed=='missing':
+                del bad[first]
             else:
-                self.assertEqual(worker.returncode,0,err)
-                self.assertEqual(json.loads(out),{'fake':'credential'})
+                bad[first]='wrong'
+            with patch.dict(os.environ,bad,clear=True),self.assertRaises(trial.TrialError):
+                trial.receive_credentials(plan)
 
 
 if __name__=='__main__':
