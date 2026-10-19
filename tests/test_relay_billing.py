@@ -12,6 +12,14 @@ from scripts import ai_providers, relay_billing as billing
 
 
 class RelayBillingTests(unittest.TestCase):
+    def test_explicit_environment_meter_does_not_read_global_credentials(self):
+        env=self.environment()
+        with patch.dict(os.environ,{},clear=True), patch.object(billing,"_get_json",return_value={
+                "usage":{"total":{"requests":0,"actual_cost":0.0}}}) as get:
+            value=billing.read_meter("codekey-deepseek",environment=env)
+        self.assertEqual(value["cost_cny"],0)
+        self.assertEqual(get.call_args.args[1]["Authorization"],"Bearer fixture-only-secret")
+
     def setUp(self):
         self.old_denomination = billing._CHEAP_DENOMINATION
         billing._CHEAP_DENOMINATION = None

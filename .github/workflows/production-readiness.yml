@@ -34,7 +34,7 @@ jobs:
           DR_OS_CODEKEY_DEEPSEEK_KEY: ${{ secrets.DR_OS_CODEKEY_DEEPSEEK_KEY }}
           DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
         run: >-
-          python -m scripts.production_readiness --check-models
+          python -m scripts.production_readiness --check-models --check-billing
           --output .runtime/production-readiness.json
       - name: Preserve sanitized readiness receipt
         if: always()

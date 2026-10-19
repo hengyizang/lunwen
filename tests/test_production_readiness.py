@@ -28,6 +28,33 @@ class FakeResponse:
 
 
 class ProductionReadinessTests(unittest.TestCase):
+    def test_billing_readiness_uses_explicit_keys_without_recording_wallet_values(self):
+        env = self.environment()
+        def meter(provider, environment):
+            self.assertIs(environment, env)
+            return {"provider":provider,"kind":"fixture-read-only-meter","cost_cny":123.456,
+                    "private":"never-persist-wallet-detail"}
+        with patch.object(readiness.relay_billing,"read_meter",side_effect=meter) as get, \
+             patch.object(ai_providers,"call") as generate, patch.object(model_spend,"grant") as grant:
+            value = readiness.report(env,check_billing=True)
+        self.assertTrue(value["configuration_ready"])
+        self.assertEqual(get.call_count,5)
+        self.assertEqual(len(value["billing_meters"]),5)
+        self.assertNotIn("123.456",json.dumps(value))
+        self.assertNotIn("never-persist-wallet-detail",json.dumps(value))
+        generate.assert_not_called()
+        grant.assert_not_called()
+
+    def test_billing_metadata_failure_is_not_zero_cost_or_ready_and_has_no_retry(self):
+        with patch.object(readiness.relay_billing,"read_meter",side_effect=
+                readiness.relay_billing.BillingReconciliationError("fixture key must not echo")) as get:
+            value = readiness.report(self.environment(),check_billing=True)
+        self.assertFalse(value["configuration_ready"])
+        self.assertEqual(get.call_count,5)
+        self.assertEqual(len(value["configuration_errors"]),5)
+        self.assertTrue(all(not row["metadata_access_verified"] for row in value["billing_meters"].values()))
+        self.assertNotIn("fixture key must not echo",json.dumps(value))
+
     def environment(self):
         return {spec["key_setting"]: "fixture-secret-" + provider
                 for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items()}

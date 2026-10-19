@@ -111,11 +111,12 @@ def _rows(value: Any) -> list[dict[str, Any]]:
     return rows
 
 
-def read_meter(provider: str) -> dict[str, Any]:
+def read_meter(provider: str, environment=None) -> dict[str, Any]:
     """Read a sanitized pre/post meter once; never retry metadata failures."""
     global _CHEAP_DENOMINATION
     spec = _spec(provider)
-    key = os.environ.get(spec["key_setting"], "").strip()
+    env = os.environ if environment is None else environment
+    key = env.get(spec["key_setting"], "").strip()
     if not key or any(ch.isspace() or ord(ch) < 32 for ch in key):
         raise BillingReconciliationError(f"{spec['key_setting']} is not configured")
     headers = {"Authorization": f"Bearer {key}"}

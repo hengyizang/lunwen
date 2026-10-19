@@ -12,7 +12,7 @@ from pathlib import Path
 import urllib.error
 import urllib.request
 
-from scripts import ai_providers, billing_quotes, model_routing
+from scripts import ai_providers, billing_quotes, model_routing, relay_billing
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -53,7 +53,7 @@ def catalog(provider: str, environment: dict) -> set[str]:
         raise ValueError("catalog unavailable or malformed") from None
 
 
-def report(environment=None, *, check_models=False) -> dict:
+def report(environment=None, *, check_models=False, check_billing=False) -> dict:
     env = os.environ if environment is None else environment
     errors, rows = [], []
     try:
@@ -75,6 +75,15 @@ def report(environment=None, *, check_models=False) -> dict:
         policy_hash = None
         errors.append("invalid production policy or exact billing contract: " + type(exc).__name__)
     inventory = {}
+    meters = {}
+    if check_billing and not errors:
+        for provider in sorted({row["provider"] for row in rows}):
+            try:
+                snapshot = relay_billing.read_meter(provider, environment=env)
+                meters[provider] = {"metadata_access_verified":True,"kind":snapshot["kind"]}
+            except relay_billing.BillingReconciliationError:
+                meters[provider] = {"metadata_access_verified":False}
+                errors.append("billing meter inspection failed: " + provider)
     if check_models and not errors:
         for provider in sorted({row["provider"] for row in rows}):
             expected = {row["model"] for row in rows if row["provider"] == provider}
@@ -88,7 +97,7 @@ def report(environment=None, *, check_models=False) -> dict:
                 inventory[provider] = {"metadata_access_verified":False,"diagnostic":str(exc)}
                 errors.append("catalog inspection failed: " + provider)
     return {"profile":"production","configuration_ready":not errors,"configuration_errors":errors,
-            "model_routes":rows,"policy_sha256":policy_hash,"model_inventory":inventory,
+            "model_routes":rows,"policy_sha256":policy_hash,"model_inventory":inventory,"billing_meters":meters,
             "model_generation_calls":0,"new_spending_authority":False,"scientific_completion":False,
             "inference_access_and_effort_passthrough_verified":False,
             "optional_image_generation":"disabled_no_selected_image_model",
@@ -99,9 +108,10 @@ def report(environment=None, *, check_models=False) -> dict:
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-models", action="store_true", help="read-only authenticated catalogs; never inference")
+    parser.add_argument("--check-billing", action="store_true", help="read-only debit counters; never inference or settlement")
     parser.add_argument("--output",type=Path)
     args=parser.parse_args()
-    value=report(check_models=args.check_models)
+    value=report(check_models=args.check_models,check_billing=args.check_billing)
     text=json.dumps(value,ensure_ascii=False,indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True,exist_ok=True)

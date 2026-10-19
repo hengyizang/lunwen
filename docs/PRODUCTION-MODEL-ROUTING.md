@@ -124,9 +124,10 @@ remain authoritative.
 
 ## Validation boundaries
 
-`production-readiness.yml` uses authenticated catalog GET requests only. It
-checks five credentials, seven advertised model IDs, exact quotes and the
-routing policy, then preserves a sanitized receipt. It sends zero generation
+`production-readiness.yml` uses authenticated catalog and billing-counter GET
+requests only. It checks five credentials, seven advertised model IDs, readable
+debit meters, exact quotes and the routing policy, then preserves a sanitized
+receipt without wallet balances or billing history. It sends zero generation
 requests and cannot grant spending authority. Cloud unit tests use fake
 transports to verify protocols, per-role effort, reservations, meter failures,
 cache isolation and source contracts. Neither check establishes real research
