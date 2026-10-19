@@ -288,6 +288,48 @@ class ProductionRuntimeTests(unittest.TestCase):
             post.assert_not_called()
             meter.assert_not_called()
 
+    def test_engineering_contract_is_required_before_meter_reservation_or_post(self):
+        with patch.object(model_runtime.ai_providers,"call") as post, patch.object(relay_billing,"read_meter") as meter:
+            for contract in (None,{"sources":[]}):
+                with self.assertRaises((ValueError,model_runtime.ModelBudgetError)):
+                    self.call(stage="auxiliary",role="engineering-test-design",source_contract=contract)
+            post.assert_not_called();meter.assert_not_called()
+            self.assertEqual(model_spend.read(self.project)["reservations"],{})
+
+    def test_engineering_unsupported_quote_is_billed_once_and_not_cached(self):
+        contract={"sources":[{"source_id":"S1","text":"return x[0]","locator":"snapshot:line1"}]}
+        def invalid(provider,prompt,**kwargs):
+            result=self.result(provider,prompt,**kwargs)
+            result.text=json.dumps({"abstain":False,"findings":[{"source_id":"S1","locator":"snapshot:line1",
+                "quote":"invented source","observation":"suspected defect","suggestion":"candidate fix","verification":"test it"}]})
+            return result
+        with patch.object(model_runtime.ai_providers,"call",side_effect=invalid) as post, \
+             patch.object(relay_billing,"read_meter",return_value={"fixture":"before"}), \
+             patch.object(relay_billing,"settle",return_value=self.debit()):
+            with self.assertRaisesRegex(ValueError,"unsupported source"):
+                self.call(stage="auxiliary",role="engineering-code-review",source_contract=contract)
+        post.assert_called_once()
+        self.assertEqual(model_spend.read(self.project)["spent_cny"],0.001)
+        self.assertFalse(list((self.project/".cache/model-responses").glob("*.json")))
+        self.assertEqual(model_runtime.ledger_entries(self.project)[-1]["validation_status"],"source_contract_failed_no_retry")
+
+    def test_engineering_cache_reuses_same_request_but_not_changed_sources_or_roles(self):
+        contract={"sources":[{"source_id":"S1","text":"return x[0]","locator":"snapshot:line1"}]}
+        def abstain(provider,prompt,**kwargs):
+            result=self.result(provider,prompt,**kwargs);result.text='{"findings":[],"abstain":true}'
+            return result
+        with patch.object(model_runtime.ai_providers,"call",side_effect=abstain) as post, \
+             patch.object(relay_billing,"read_meter",return_value={"fixture":"before"}), \
+             patch.object(relay_billing,"settle",return_value=self.debit()):
+            self.call(stage="auxiliary",role="engineering-code-review",source_contract=contract)
+            replay=self.call(stage="auxiliary",role="engineering-code-review",source_contract=contract)
+            self.assertTrue(replay.cache_hit);post.assert_called_once()
+            self.call(stage="auxiliary",role="engineering-test-design",source_contract=contract)
+            contract["sources"][0]["text"]="return x[-1]"
+            self.call(stage="auxiliary",role="engineering-code-review",source_contract=contract)
+            self.assertEqual(post.call_count,3)
+        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"],0.003)
+
     def test_invalid_metadata_output_is_billed_once_and_never_cached(self):
         def invalid(provider, prompt, **kwargs):
             result = self.result(provider, prompt, **kwargs)

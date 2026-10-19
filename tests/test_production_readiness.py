@@ -59,6 +59,15 @@ class ProductionReadinessTests(unittest.TestCase):
         return {spec["key_setting"]: "fixture-secret-" + provider
                 for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items()}
 
+    def test_billing_failure_does_not_hide_independent_catalog_diagnostics(self):
+        with patch.object(readiness.relay_billing,"read_meter",side_effect=readiness.relay_billing.BillingReconciliationError("private")), \
+             patch.object(readiness,"catalog",side_effect=self.advertised) as catalog:
+            value=readiness.report(self.environment(),check_billing=True,check_models=True)
+        self.assertFalse(value["configuration_ready"])
+        self.assertEqual(catalog.call_count,5)
+        self.assertEqual(len(value["model_inventory"]),5)
+        self.assertTrue(all(row["metadata_access_verified"] for row in value["model_inventory"].values()))
+
     def advertised(self, provider, environment):
         return {
             "cheapai-gpt-pro": {"gpt-6.1-sol", "gpt-6-astra"},

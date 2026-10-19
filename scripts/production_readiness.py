@@ -76,7 +76,8 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
         errors.append("invalid production policy or exact billing contract: " + type(exc).__name__)
     inventory = {}
     meters = {}
-    if check_billing and not errors:
+    valid_configuration = not errors
+    if check_billing and valid_configuration:
         for provider in sorted({row["provider"] for row in rows}):
             try:
                 snapshot = relay_billing.read_meter(provider, environment=env)
@@ -84,7 +85,7 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
             except relay_billing.BillingReconciliationError:
                 meters[provider] = {"metadata_access_verified":False}
                 errors.append("billing meter inspection failed: " + provider)
-    if check_models and not errors:
+    if check_models and valid_configuration:
         for provider in sorted({row["provider"] for row in rows}):
             expected = {row["model"] for row in rows if row["provider"] == provider}
             try:

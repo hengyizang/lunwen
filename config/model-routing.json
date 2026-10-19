@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "profile": "production",
-  "policy_version": "2026-10-19.1",
+  "policy_version": "2026-10-20.1",
   "quality_policy": {
     "scientific_equivalence_verified": false,
     "human_gate_approval_required": true,
@@ -39,6 +39,9 @@
     "reader-translation": {"model_key": "sol", "quality_boundary": "Faithful personal-reading translation preserving source pages, numbers, citations and uncertainty; not verified citation evidence.", "max_output_tokens": 6000},
     "reader-qa": {"model_key": "sol", "quality_boundary": "Personal source-bound reading answers with exact supplied page locators. Abstain for missing material; never convert an internal answer into verified citation evidence.", "max_output_tokens": 5000},
     "engineering-diagnosis": {"model_key": "deepseek", "quality_boundary": "Internal read-only engineering diagnostics from supplied logs/code. OpenAI performs any persistent remediation; never determine scientific validity.", "max_output_tokens": 4000},
+    "engineering-code-review": {"model_key": "deepseek", "quality_boundary": "Source-bound internal review of routine implementation. Findings require exact source quotes and verification steps; OpenAI owns remediation and cloud checks. Never replace scientific audits or assess the core algorithm's novelty.", "max_output_tokens": 4000},
+    "engineering-test-design": {"model_key": "deepseek", "quality_boundary": "Source-bound candidate software regression and boundary tests. OpenAI implements; deterministic cloud execution verifies. Never choose scientific hypotheses, endpoints, metrics or analysis thresholds.", "max_output_tokens": 4000},
+    "engineering-reproducibility": {"model_key": "deepseek", "quality_boundary": "Source-bound environment, dependency and run-log diagnostics only. Preserve frozen scientific inputs and failed runs; OpenAI owns fixes and cloud replay. Never certify scientific reproducibility from model text.", "max_output_tokens": 4000},
     "multimodal-inspection": {"model_key": "argon", "quality_boundary": "Internal source-bound image/PDF inspection; never generate result figures, replace human visual review or certify scientific claims.", "max_output_tokens": 4000}
   },
   "auxiliary_stages": ["auxiliary", "intake", "topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],

@@ -18,13 +18,14 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, billing_quotes, model_spend, model_routing, relay_billing
+    from scripts import ai_providers, billing_quotes, model_spend, model_routing, relay_billing, engineering_contract
 except ImportError:
     import ai_providers  # type: ignore
     import billing_quotes  # type: ignore
     import model_spend  # type: ignore
     import model_routing  # type: ignore
     import relay_billing  # type: ignore
+    import engineering_contract  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -458,14 +459,21 @@ def call(
         raise ModelBudgetError("attachments require a supported native production route")
     if role == "multimodal-inspection" and not media:
         raise ModelBudgetError("multimodal inspection requires source-hashed attachments")
-    if production and model == "gpt-5.6-luna" and role not in {"endpoint-health", "model-signature", "model-instrumentation"}:
+    contract_validator = None
+    if role in engineering_contract.TASKS:
+        if not production or model != "deepseek-v4.1-flash" or source_contract is None:
+            raise ModelBudgetError("engineering support requires its production route and source contract")
+        contract_validator = engineering_contract
+    elif production and model == "gpt-5.6-luna" and role not in {"endpoint-health", "model-signature", "model-instrumentation"}:
         if role != "metadata-extraction" or source_contract is None:
             raise ModelBudgetError("Luna requires a bounded metadata source contract")
         from scripts import metadata_contract
-        source_contract = metadata_contract.validate_contract(source_contract)
-        prompt = metadata_contract.build_prompt(prompt, source_contract)
+        contract_validator = metadata_contract
     elif source_contract is not None:
-        raise ModelBudgetError("metadata source contracts are scoped to the Luna extraction route")
+        raise ModelBudgetError("source contracts require their scoped metadata or engineering route")
+    if contract_validator is not None:
+        source_contract = contract_validator.validate_contract(source_contract)
+        prompt = contract_validator.build_prompt(prompt, source_contract)
     media_identity = [{"sha256":item["sha256"], "mime_type":item["mime_type"],
                        "size_bytes":len(item["decoded"])} for item in media]
     paper_id = _paper_for_stage(project_root, stage)
@@ -528,7 +536,7 @@ def call(
         if result is not None:
             ai_providers.require_complete(result)
             if source_contract is not None:
-                metadata_contract.validate_response(result.text, source_contract)
+                contract_validator.validate_response(result.text, source_contract)
             _append(
                 _ledger(project_root),
                 {
@@ -715,7 +723,7 @@ def call(
     ai_providers.require_complete(result)
     if source_contract is not None:
         try:
-            metadata_contract.validate_response(result.text, source_contract)
+            contract_validator.validate_response(result.text, source_contract)
         except ValueError:
             _append(_ledger(project_root), {**request_metrics,"at":utc_now(),"run_id":run_id,
                 "stage":stage,"role":role,"provider":provider,"model":effective_model,

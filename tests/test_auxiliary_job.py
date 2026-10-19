@@ -61,7 +61,7 @@ class AuxiliaryJobTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     auxiliary_job.load(self.project,self.manifest(**{field:"override"}))
         for kind in ("scientific-judgment","evidence-synthesis","independent-critique"):
-            with self.assertRaisesRegex(ValueError,"five bounded"):
+            with self.assertRaisesRegex(ValueError,"bounded auxiliary"):
                 auxiliary_job.load(self.project,self.manifest(kind=kind))
         manifest=self.manifest()
         (self.project/manifest).write_text('{"schema_version":"1.0","kind":"format-conversion","kind":"engineering-diagnosis","prompt_file":"evidence/requests/prompt.txt"}')

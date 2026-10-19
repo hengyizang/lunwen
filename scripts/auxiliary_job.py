@@ -15,15 +15,15 @@ from pathlib import Path, PureWindowsPath
 import re
 
 try:
-    from scripts import ai_providers, metadata_contract, model_routing, task_router
+    from scripts import ai_providers, metadata_contract, model_routing, task_router, engineering_contract
     from scripts.publication_figures import PROJECTS_ROOT
 except ImportError:
-    import ai_providers, metadata_contract, model_routing, task_router  # type: ignore
+    import ai_providers, metadata_contract, model_routing, task_router, engineering_contract  # type: ignore
     from publication_figures import PROJECTS_ROOT  # type: ignore
 
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
-         "format-conversion", "screening-assist"}
+         "format-conversion", "screening-assist", *engineering_contract.TASKS}
 FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens"}
 REQUIRED = {"schema_version", "kind", "prompt_file"}
 PRIVATE_PARTS = {"state", "api_runs", "private", "raw", "secrets", "credentials", "keys", "auth", "tokens"}
@@ -109,7 +109,7 @@ def load(project: Path, manifest_relative: str) -> dict:
         raise ValueError("unsupported auxiliary manifest fields or schema_version")
     kind = manifest["kind"]
     if not isinstance(kind, str) or kind not in KINDS:
-        raise ValueError("manifest kind is outside the five bounded auxiliary roles")
+        raise ValueError("manifest kind is outside the bounded auxiliary roles")
     prompt_path = _path(project, manifest["prompt_file"], "prompt_file", limit=MAX_PROMPT_BYTES)
     try:
         prompt_bytes = _read(prompt_path, MAX_PROMPT_BYTES, "prompt_file")
@@ -124,16 +124,17 @@ def load(project: Path, manifest_relative: str) -> dict:
     inputs = [{"role":"manifest","path":manifest_relative,"sha256":_sha(manifest_bytes)},
               {"role":"prompt","path":manifest["prompt_file"],"sha256":_sha(prompt_bytes)}]
     contract = None
-    if kind == "metadata-extraction":
+    if kind == "metadata-extraction" or kind in engineering_contract.TASKS:
         if "source_contract_file" not in manifest:
-            raise ValueError("metadata-extraction requires source_contract_file")
+            raise ValueError(kind + " requires source_contract_file")
         contract_path = _path(project, manifest["source_contract_file"], "source_contract_file")
         contract_bytes = _read(contract_path, MAX_JSON_BYTES, "source_contract_file")
-        contract = metadata_contract.validate_contract(_strict_json(contract_bytes))
+        handler = engineering_contract if kind in engineering_contract.TASKS else metadata_contract
+        contract = handler.validate_contract(_strict_json(contract_bytes))
         inputs.append({"role":"source_contract","path":manifest["source_contract_file"],
                        "sha256":_sha(contract_bytes)})
     elif "source_contract_file" in manifest:
-        raise ValueError("source_contract_file is allowed only for metadata-extraction")
+        raise ValueError("source_contract_file is allowed only for metadata-extraction or bounded engineering support")
     attachments = []; attachment_receipts = []
     if kind == "multimodal-inspection":
         records = manifest.get("attachments")

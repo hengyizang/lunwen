@@ -38,6 +38,8 @@ APPROVED_AUXILIARY_MODELS = {
     "metadata-extraction": "luna", "format-conversion": "sol", "screening-assist": "sol",
     "evidence-synthesis": "sol", "scientific-judgment": "astra", "independent-critique": "opus",
     "reader-translation": "sol", "reader-qa": "sol", "engineering-diagnosis": "deepseek",
+    "engineering-code-review": "deepseek", "engineering-test-design": "deepseek",
+    "engineering-reproducibility": "deepseek",
     "multimodal-inspection": "argon",
 }
 APPROVED_STAGES = {

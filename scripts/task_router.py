@@ -5,13 +5,20 @@ import argparse,json,os,uuid
 from datetime import datetime,timezone,timedelta
 from pathlib import Path
 try:
-    from scripts import ai_providers,model_runtime,model_routing,metadata_contract
+    from scripts import ai_providers,model_runtime,model_routing,metadata_contract,engineering_contract
     from scripts.publication_figures import PROJECTS_ROOT,safe_file
 except ImportError:
-    import ai_providers,model_runtime,model_routing,metadata_contract  # type: ignore
+    import ai_providers,model_runtime,model_routing,metadata_contract,engineering_contract  # type: ignore
     from publication_figures import PROJECTS_ROOT,safe_file  # type: ignore
 PROFILES={"metadata-extraction":("openai","DR_OS_FAST_OPENAI_MODEL",1500,"basic","low"),"format-conversion":("openai","DR_OS_FAST_OPENAI_MODEL",1200,"basic","low"),"screening-assist":("openai","DR_OS_FAST_OPENAI_MODEL",2500,"standard","low"),"evidence-synthesis":("openai","DR_OS_PREMIUM_OPENAI_MODEL",5000,"standard","medium"),"scientific-judgment":("openai","DR_OS_PREMIUM_OPENAI_MODEL",5000,"premium","high"),"independent-critique":("anthropic","DR_OS_CRITIC_ANTHROPIC_MODEL",4500,"premium","high"),"engineering-diagnosis":("deepseek","DR_OS_DIAGNOSTIC_MODEL",4000,"standard","medium"),"multimodal-inspection":("google","DR_OS_MULTIMODAL_MODEL",4000,"standard","medium")}
 TIERS={"basic":0,"standard":1,"premium":2}
+PROFILES.update({kind:("deepseek","DR_OS_DIAGNOSTIC_MODEL",4000,"standard","medium")
+                 for kind in engineering_contract.TASKS})
+
+def _contract_handler(kind:str):
+    if kind=="metadata-extraction":return metadata_contract
+    if kind in engineering_contract.TASKS:return engineering_contract
+    raise ValueError("source contracts require metadata extraction or bounded engineering support")
 def _json_env(name:str)->dict:
     try:value=json.loads(os.environ.get(name,"{}"))
     except json.JSONDecodeError as exc:raise ValueError(f"{name} must be valid JSON") from exc
@@ -38,7 +45,8 @@ def _candidates(project:Path,kind:str,provider:str,configured:str,legacy:str|Non
         valid.append({"provider":candidate_provider,"model":model,"tier":tier,"priority":int(row.get("priority",50)),"health":health.get((candidate_provider,model),"unknown")})
     return valid
 def _task_prompt(route:dict,prompt:str)->str:
-    return "Task boundary: "+route["quality_boundary"]+"\nReturn a candidate for review; do not invent missing source fields or perform a scientific approval.\n\n"+prompt
+    specialization=engineering_contract.TASKS.get(route.get("role"),"")
+    return "Task boundary: "+route["quality_boundary"]+"\n"+specialization+"\nReturn a candidate for review; do not invent missing source fields or perform a scientific approval.\n\n"+prompt
 
 
 def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None)->dict:
@@ -49,10 +57,10 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
     if type(tokens) is not int or not 1<=tokens<=ceiling:
         raise ValueError(f"{kind} output cap must be 1..{ceiling}")
     request_prompt=_task_prompt(route,prompt)
-    complete=route["model_key"]!="luna" or source_contract is not None
+    contract_required=route["model_key"]=="luna" or kind in engineering_contract.TASKS
+    complete=not contract_required or source_contract is not None
     if source_contract is not None:
-        if kind!="metadata-extraction":raise ValueError("source-field contracts require the metadata-extraction task")
-        request_prompt=metadata_contract.build_prompt(request_prompt,source_contract)
+        request_prompt=_contract_handler(kind).build_prompt(request_prompt,source_contract)
     estimated=model_runtime.estimate_tokens(request_prompt)
     maximum=model_runtime.cost_cny(route["provider"],estimated,tokens,route["model"])
     state=project/"state"/"run.json"
@@ -64,13 +72,14 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
             "maximum_estimated_cost_cny":maximum,"budget":budget,
             "within_estimated_budget":complete and maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),
             "persistent_output":False,"automatic_acceptance":False,"scientific_equivalence_verified":False,
-            "source_contract_required":route["model_key"]=="luna","estimated_cost_complete":complete,
+            "source_contract_required":contract_required,"estimated_cost_complete":complete,
             "estimated_input_excludes_missing_sources":not complete,"ready_for_execution":complete}
 
 
 def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None)->dict:
     if kind not in PROFILES:raise ValueError(f"unknown auxiliary task kind: {kind}")
     if model_routing.production_enabled():return _production_plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract)
+    if kind in engineering_contract.TASKS:raise ValueError("bounded engineering support requires production routing")
     if source_contract is not None:raise ValueError("source-field contracts require production routing")
     family,env_name,ceiling,minimum,risk=PROFILES[kind]
     if ai_providers.provider_family(provider)!=family:raise ValueError(f"{kind} requires {family} family")
@@ -86,10 +95,10 @@ def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,
     state=project/"state"/"run.json";active=json.loads(state.read_text(encoding="utf-8")).get("active_paper") if state.is_file() else None;budget=model_runtime.budget_status(project,active);maximum=chosen["maximum_estimated_cost_cny"]
     return {"profile":kind,"provider":chosen["provider"],"model":chosen["model"],"family":family,"quality_tier":chosen["tier"],"risk":risk,"health":chosen["health"],"candidate_count":len(candidates),"input_tokens_estimated":estimated,"output_tokens_ceiling":tokens,"maximum_estimated_cost_cny":maximum,"budget":budget,"within_estimated_budget":maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),"persistent_output":False}
 def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,attachments:list[dict]|None=None,source_contract:dict|None=None)->dict:
-    if model_routing.production_enabled() and kind=="metadata-extraction":
-        source_contract=metadata_contract.validate_contract(source_contract)
+    if model_routing.production_enabled() and (kind=="metadata-extraction" or kind in engineering_contract.TASKS):
+        source_contract=_contract_handler(kind).validate_contract(source_contract)
     elif source_contract is not None:
-        raise ValueError("source-field contracts are supported only by production metadata extraction")
+        raise ValueError("source contracts require production metadata extraction or bounded engineering support")
     info=plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract)
     if kind=="multimodal-inspection" and not attachments:
         raise ValueError("multimodal inspection requires explicit source attachments")
@@ -108,7 +117,10 @@ def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*
     directory=project/"api_runs"/run_id;directory.mkdir(parents=True,exist_ok=False)
     receipt={**info,"run_id":run_id,"reported_model":result.reported_model,"cache_hit":result.cache_hit,
              "text":result.text,"not_manuscript_or_evidence":True,"automatic_acceptance":False}
-    if source_contract is not None:receipt["source_contract_sha256"]=metadata_contract.contract_sha256(source_contract)
+    if source_contract is not None:receipt["source_contract_sha256"]=_contract_handler(kind).contract_sha256(source_contract)
+    if kind in engineering_contract.TASKS:
+        receipt["required_followup"]="OpenAI review/implementation and deterministic cloud checks; no automatic application"
+        receipt["scientific_equivalence_verified"]=False
     (directory/"result.json").write_text(json.dumps(receipt,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     return {"run_id":run_id,"result":(directory/"result.json").relative_to(project).as_posix(),"model":result.reported_model or result.model,
             "cache_hit":result.cache_hit,"not_manuscript_or_evidence":True}
@@ -118,12 +130,12 @@ def main()->int:
     p.add_argument("--provider",choices=ai_providers.PROVIDERS,default="openai")
     p.add_argument("--prompt-file",required=True);p.add_argument("--max-output-tokens",type=int)
     p.add_argument("--attachments-file",help="Project-relative JSON source attachment list for multimodal inspection")
-    p.add_argument("--source-contract",help="Project-relative JSON literal extraction contract required before a Luna metadata call")
+    p.add_argument("--source-contract",help="Project-relative JSON source contract for metadata or engineering support")
     p.add_argument("--execute",action="store_true");a=p.parse_args();project=PROJECTS_ROOT/a.project
     prompt=safe_file(project,a.prompt_file,"prompt-file").read_text(encoding="utf-8")
     attachments=json.loads(safe_file(project,a.attachments_file,"attachments-file").read_text(encoding="utf-8")) if a.attachments_file else None
     source_contract=json.loads(safe_file(project,a.source_contract,"source-contract").read_text(encoding="utf-8")) if a.source_contract else None
-    if source_contract is not None:source_contract=metadata_contract.validate_contract(source_contract)
+    if source_contract is not None:source_contract=_contract_handler(a.kind).validate_contract(source_contract)
     if attachments is not None and not isinstance(attachments,list):raise ValueError("attachments must be a JSON list")
     if a.kind=="multimodal-inspection" and not attachments:raise ValueError("multimodal inspection requires source attachments")
     value=run(project,a.kind,a.provider,prompt,a.max_output_tokens,attachments=attachments,source_contract=source_contract) if a.execute else plan(project,a.kind,a.provider,prompt,a.max_output_tokens,source_contract=source_contract)

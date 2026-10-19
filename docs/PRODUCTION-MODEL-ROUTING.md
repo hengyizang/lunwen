@@ -13,7 +13,7 @@ reasoning effort and exact endpoint pricing are versioned in
 | Routine read-only planning and initial independent audit | CodeKey Kiro enterprise / Claude Sonnet 5.5 | high |
 | Core scientific planning/audits and every final independent audit | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
 | Source-bound metadata fields with exact quotes and locators | CheapAI GPT discount / GPT-5.6 Luna | medium |
-| Internal engineering diagnosis from supplied logs/code | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
+| Internal engineering diagnosis, routine code review, software test proposals and environment/replay troubleshooting | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
 | Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / Gemini 4 Argon | high |
 
 The five-role scientific cycle is unchanged: read-only plan, OpenAI writer,
@@ -108,7 +108,8 @@ An owner `auxiliary` cloud job uses `allow_paid=true` and a project-relative
 prompt file, optional output cap, a source contract for metadata extraction, or
 hashed file attachments for multimodal inspection. It cannot override provider,
 model, budget or command. Supported kinds are `metadata-extraction`,
-`engineering-diagnosis`, `multimodal-inspection`, `format-conversion` and
+`engineering-diagnosis`, `engineering-code-review`, `engineering-test-design`,
+`engineering-reproducibility`, `multimodal-inspection`, `format-conversion` and
 `screening-assist`. Outputs are internal candidates for review.
 
 The cloud entry point supports free preview before execution:
@@ -124,6 +125,56 @@ requires real attachments, validates file signatures/MIME and SHA-256, and
 refuses missing/changed/private/symlinked sources. No base64 media or credentials
 are written into audit reports. Scientific review and original source files
 remain authoritative.
+
+## DeepSeek engineering support
+
+DeepSeek has four explicit uses. General `engineering-diagnosis` remains available;
+the three specialized tasks below additionally require a bounded source contract.
+They are optional work items, not extra calls attached to every scientific cycle.
+Use deterministic checks first. When a model is useful for routine engineering
+triage, use one of these routes instead of commissioning the same initial triage
+from several models. Existing OpenAI implementation and validation consume only
+reviewed, relevant findings; do not automatically request a second paraphrase.
+
+| Kind | Inputs and useful output | Acceptance boundary |
+| --- | --- | --- |
+| `engineering-code-review` | Routine code, requirements and existing failure logs; suspected defects with exact quotes and verification steps | OpenAI reviews and implements; actual regression checks establish software behavior |
+| `engineering-test-design` | Code and stated software requirements; boundary cases, regression cases and failure-injection suggestions | No experimental hypotheses, metric selection, statistical thresholds or fabricated test results |
+| `engineering-reproducibility` | Environment snapshots, dependency versions, commands and run logs; candidate explanations and replay checks | Preserve frozen plans, raw data, seeds, splits and failed runs; execution remains with the approved cloud runner |
+
+For these three tasks, the manifest's `source_contract_file` is mandatory.
+Its strict JSON shape is `{"sources":[{"source_id":"S1","locator":"supplied code snapshot, line 3","text":"return values[0]"}]}`.
+Supply actual authorized excerpts, not this illustrative fixture. At most eight
+sources and 48,000 total UTF-8 source bytes are accepted. Locators describe the
+supplied snapshots; the model does not fetch the files or verify their origin.
+
+For example, a cloud job manifest can select:
+
+```json
+{
+  "schema_version": "1.0",
+  "kind": "engineering-code-review",
+  "prompt_file": "evidence/auxiliary-jobs/code-review.txt",
+  "source_contract_file": "evidence/auxiliary-jobs/code-sources.json",
+  "max_output_tokens": 2500
+}
+```
+
+Each finding must contain a supplied source ID, exact locator, verbatim quote,
+tentative observation, candidate suggestion and a verification step. Unknown
+sources, invented quotes, malformed JSON, extra execution fields and missing
+verification steps fail validation. An empty finding list requires abstention
+and never means that code or science passed review. Source hashes enter the
+request/cache identity; changed sources or task roles cannot reuse an old answer.
+Invalid responses are accounted for once and never cached, retried or applied.
+
+This makes DeepSeek useful for engineering support while preserving scientific
+authority. It does not establish equivalence to Sol/Astra on scientific tasks.
+Broader transfer of literature synthesis, statistical interpretation, research
+design or scientific writing requires a separately authorized, task-specific
+comparison on real project material, including missed defects, unsupported
+claims, correction effort and actual total cost. No new paid evaluation is
+started by adding these routes.
 
 ## Validation boundaries
 
