@@ -162,6 +162,47 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.assertGreater(model_spend.reserved(model_spend.read(self.project)), 0)
         self.assertTrue(model_runtime.ledger_entries(self.project)[0]["zero_cost_not_confirmed"])
 
+    def test_confirmed_debit_above_ceiling_expands_pending_hold_without_grant_or_double_spend(self):
+        observed = {}
+        authority = model_spend.read(self.project)["authorization_events"]
+        def gateway_settlement(provider, model, before):
+            pending = model_spend.read(self.project)["reservations"]
+            self.assertEqual(len(pending), 1)
+            observed["original_ceiling"] = next(iter(pending.values()))["max_cost_cny"]
+            observed["actual_debit"] = observed["original_ceiling"] + 0.125
+            return self.debit(observed["actual_debit"])
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}) as meter,
+                patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
+                patch.object(relay_billing, "settle", side_effect=gateway_settlement) as wallet,
+                patch.object(model_spend, "settle", wraps=model_spend.settle) as spend_settle,
+                patch.object(model_spend, "grant", wraps=model_spend.grant) as grant):
+            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "exceeded the reserved ceiling"):
+                self.call()
+            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation is required"):
+                self.call(run_id="blocked-after-confirmed-overage", prompt="different work must wait")
+            post.assert_called_once()
+            meter.assert_called_once()
+            wallet.assert_called_once()
+            spend_settle.assert_not_called()
+            grant.assert_not_called()
+        state = model_spend.read(self.project)
+        self.assertEqual(state["authorized_ceiling_cny"], 300)
+        self.assertEqual(state["authorization_events"], authority)
+        self.assertEqual(state["spent_cny"], 0)
+        self.assertEqual(len(state["reservations"]), 1)
+        hold = next(iter(state["reservations"].values()))
+        self.assertGreater(hold["max_cost_cny"], observed["original_ceiling"])
+        self.assertEqual(hold["max_cost_cny"], observed["actual_debit"])
+        self.assertEqual(hold["confirmed_gateway_debit_cny"], observed["actual_debit"])
+        self.assertEqual(hold["review_reason"], "gateway_debit_exceeded_reserved_ceiling")
+        self.assertEqual(self.sync.call_count, 2)
+        self.assertAlmostEqual(model_runtime.budget_status(self.project)["project_remaining"],
+                               300 - observed["actual_debit"])
+        entries = model_runtime.ledger_entries(self.project)
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["cost_cny"], 0)
+        self.assertEqual(entries[0]["independent_gateway_debit"]["actual_cost_cny"], observed["actual_debit"])
+
     def test_independent_wallet_debit_settles_missing_cache_ttl_and_promotion(self):
         def cached_response(provider, prompt, **kwargs):
             result = self.result(provider, prompt, **kwargs)

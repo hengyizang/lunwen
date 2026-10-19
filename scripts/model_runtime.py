@@ -620,6 +620,7 @@ def call(
             "gateway_meter_before": meter_before,
         })
         raise
+    settled = None
     try:
         input_tokens, output_tokens = usage_counts(result.usage)
         estimated = input_tokens is None or output_tokens is None
@@ -643,7 +644,15 @@ def call(
             settled = relay_billing.settle(provider, effective_model, meter_before)
             if settled["actual_cost_cny"] > reserved_cost:
                 if reservation_id:
-                    model_spend.settle(project_root, reservation_id, actual_cost_cny=settled["actual_cost_cny"])
+                    # Keep a pending hold for the known debit, rather than
+                    # releasing it and permitting another underquoted call.
+                    # This records an existing liability, not new authority.
+                    control = model_spend.read(project_root, required=True)
+                    pending = control["reservations"][reservation_id]
+                    pending["max_cost_cny"] = settled["actual_cost_cny"]
+                    pending["confirmed_gateway_debit_cny"] = settled["actual_cost_cny"]
+                    pending["review_reason"] = "gateway_debit_exceeded_reserved_ceiling"
+                    model_spend.write(project_root, control)
                     from scripts.cloud_checkpoint import sync_billing
                     sync_billing(project_root)
                 raise ModelBudgetError("gateway debit exceeded the reserved ceiling; hold for reconciliation")
@@ -659,6 +668,7 @@ def call(
                                       "billing_identity": identity["billing_identity"], "billing_quote_sha256": identity["billing_quote_sha256"],
                                       "declared_tool_limits": limits, "request_id": result.request_id,
                                       "billing_error": str(exc), "usage_receipt": result.usage,
+                                      "independent_gateway_debit": settled,
                                       "completion_status": result.completion_status,
                                       "endpoint": result.endpoint, "gateway": result.gateway, "protocol": result.protocol})
         raise

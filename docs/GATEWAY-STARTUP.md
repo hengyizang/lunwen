@@ -1,5 +1,9 @@
 # 中转站 API 云端启动
 
+当前正式方案是 **CheapAI＋CodeKey**，无需 UUAPI，见 [正式模型与启动配置](PRODUCTION-MODEL-ROUTING.md)。五组密钥使用专用 Actions Secrets，七个型号及推理档位由版本化路由控制。先运行 **Production relay readiness without generation** 核对目录和报价，再运行持续研究的 `check` 查看项目关口与原有预算。自动研究变量 `DR_OS_AUTOMATIC_RESEARCH_ENABLED` 默认 `false`；明确启动时设为 `true` 后使用 `start`，仍受原有预算与人工关口限制。
+
+以下共享／独立 `UUAPI_` 配置仅介绍历史通用适配器；正式工作流不再读取这些变量、密钥或双模型配置。配置完整、模型目录可访问、真实任务表现合格和科研完成是不同检查，不可互相替代。
+
 本入口用于 OpenAI 负责写入、Claude 负责只读规划和独立审查的科研流程。运行环境由 GitHub Actions 安装，无需本地 Python、Docker、WSL2 或 CC Switch。已有项目继续读取 `cloud-state/my-phd`，不会重新初始化或重置预算。
 
 ## 提供哪些配置

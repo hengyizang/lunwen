@@ -150,6 +150,10 @@ class ProductionReadinessTests(unittest.TestCase):
         self.assertNotIn("fixture-secret", request.full_url)
         headers = {key.lower(): value for key, value in request.header_items()}
         self.assertEqual(headers["authorization"], "Bearer fixture-secret-cheapai-gpt-pro")
+        self.assertEqual(headers["user-agent"], "lunwen-production-research/1.0")
+        self.assertEqual(headers["accept"], "application/json")
+        self.assertNotIn("Python", headers["user-agent"])
+        self.assertNotIn("fixture-secret", headers["user-agent"])
         opener.open.assert_called_once()
         with self.assertRaises(ValueError):
             readiness.NoRedirect().redirect_request(None, None, 307, "redirect", {}, "https://other.example")

@@ -42,7 +42,8 @@ def _get_json(url: str, headers: dict[str, str] | None = None) -> dict[str, Any]
     if (parts.scheme != "https" or (parts.netloc, parts.path) not in allowed
             or parts.query or parts.fragment or parts.username or parts.password):
         raise BillingReconciliationError("billing metadata requires an exact configured HTTPS endpoint")
-    request = urllib.request.Request(url, headers=headers or {}, method="GET")
+    request = urllib.request.Request(url, headers={**(headers or {}),
+        "User-Agent": "lunwen-production-research/1.0", "Accept": "application/json"}, method="GET")
     try:
         with urllib.request.build_opener(_NoRedirect()).open(request, timeout=15) as response:
             raw = response.read(2 * 1024 * 1024 + 1)

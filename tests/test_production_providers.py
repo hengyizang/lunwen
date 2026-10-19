@@ -248,6 +248,13 @@ class ProductionProviderTests(unittest.TestCase):
             self.assertIn("502", str(error.exception))
             self.assertNotIn("secret body", str(error.exception))
             opener.open.assert_called_once()
+            request = opener.open.call_args.args[0]
+            headers = {key.lower(): value for key, value in request.header_items()}
+            self.assertEqual(headers["user-agent"], "lunwen-production-research/1.0")
+            self.assertEqual(headers["accept"], "application/json")
+            self.assertNotIn("Python", headers["user-agent"])
+            self.assertNotIn("fixture-only", headers["user-agent"])
+            self.assertNotIn("fixture-only", request.full_url)
 
     def test_redirect_handler_refuses_credential_forwarding_and_post_replay(self):
         handler = providers._NoGenerationRedirect()

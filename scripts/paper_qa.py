@@ -17,10 +17,10 @@ import uuid
 
 try:
     from scripts import model_runtime, output_provenance
-    from scripts.publication_figures import PROJECTS_ROOT, safe_file, sha256_file
+    from scripts.publication_figures import PROJECTS_ROOT, FigureSpecError, safe_file, sha256_file
 except ImportError:
     import model_runtime, output_provenance  # type: ignore
-    from publication_figures import PROJECTS_ROOT, safe_file, sha256_file  # type: ignore
+    from publication_figures import PROJECTS_ROOT, FigureSpecError, safe_file, sha256_file  # type: ignore
 
 
 MAX_FILE_BYTES = 2_000_000
@@ -30,18 +30,27 @@ BLOCKED_PARTS = {".git", ".cache", "api_runs", "state", "secrets", "credentials"
 STOPWORDS = {"the", "and", "this", "that", "what", "which", "does", "with", "from", "were", "study", "paper"}
 
 
+class PaperQAError(ValueError):
+    """A source-Q&A request failed its reading-aid input boundary."""
+
+
 def _file(project: Path, relative: str, field: str, *, existing=True) -> Path:
     path = Path(relative)
     if any(part.lower() in BLOCKED_PARTS or part.lower().startswith(".env") for part in path.parts):
-        raise ValueError(f"{field} may not read private/control/raw material")
-    result = safe_file(project, relative, field)
+        raise PaperQAError(f"{field} may not read private/control/raw material")
+    try:
+        result = safe_file(project, relative, field)
+    except FigureSpecError as exc:
+        # Expose the Q&A boundary consistently instead of leaking a renderer's
+        # unrelated exception type. The shared path rejection remains intact.
+        raise PaperQAError(str(exc)) from exc
     cursor = project
     for part in path.parts:
         cursor = cursor / part
         if cursor.is_symlink():
-            raise ValueError(f"{field} may not use symlinks")
+            raise PaperQAError(f"{field} may not use symlinks")
     if existing and (not result.is_file() or result.stat().st_size > MAX_FILE_BYTES):
-        raise ValueError(f"{field} must be a regular file no larger than 2 MB")
+        raise PaperQAError(f"{field} must be a regular file no larger than 2 MB")
     return result
 
 

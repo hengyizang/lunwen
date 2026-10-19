@@ -51,8 +51,24 @@ class ProductionOptionalTests(unittest.TestCase):
             self.assertEqual(report["status"],"no_lexical_match_abstained_without_model_call")
             with self.assertRaisesRegex(ValueError,"private/control/raw"):
                 paper_qa.retrieve(project,["state/model-spend.json"],"budget")
-            with self.assertRaises(ValueError):
+            with self.assertRaises(paper_qa.PaperQAError):
                 paper_qa.retrieve(project,["../outside.txt"],"outside")
+
+    def test_qa_path_errors_are_normalized_at_source_output_and_cli_question_boundaries(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)
+            for relative in ("../outside.txt","/outside.txt","evidence/../../outside.txt"):
+                with self.subTest(relative=relative), self.assertRaises(paper_qa.PaperQAError):
+                    paper_qa._file(project,relative,"source",existing=False)
+            with self.assertRaises(paper_qa.PaperQAError):
+                paper_qa.answer(project,["evidence/source.txt"],"sample?", "evidence/qa/../../../outside.json")
+            with patch.object(paper_qa,"PROJECTS_ROOT",project), \
+                 patch("sys.argv",["paper_qa","--project","study","--question-file","../outside.txt",
+                    "--source","evidence/source.txt","--output","evidence/qa/one.json"]), \
+                 patch.object(paper_qa.model_runtime,"call") as call:
+                with self.assertRaises(paper_qa.PaperQAError):
+                    paper_qa.main()
+                call.assert_not_called()
 
     def test_qa_rejects_fabricated_quotes_unknown_anchors_and_duplicate_json(self):
         blocks=[{"source_id":"SRC001","locator":"PDF page 2","text":"The sample included 120 adults."}]

@@ -30,7 +30,8 @@ def catalog(provider: str, environment: dict) -> set[str]:
     if not isinstance(key, str) or not key.strip() or any(ch.isspace() or ord(ch) < 32 for ch in key.strip()):
         raise ValueError("catalog production credential is missing or invalid")
     request = urllib.request.Request(spec["root"] + "/v1/models", method="GET",
-        headers={"Authorization": "Bearer " + key.strip()})
+        headers={"Authorization": "Bearer " + key.strip(),
+                 "User-Agent": "lunwen-production-research/1.0", "Accept": "application/json"})
     try:
         with urllib.request.build_opener(NoRedirect()).open(request, timeout=30) as response:
             raw = response.read(2_000_001)

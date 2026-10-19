@@ -174,7 +174,14 @@ class RelayBillingTests(unittest.TestCase):
         self.assertIn("429", str(error.exception))
         self.assertNotIn("private", str(error.exception))
         opener.open.assert_called_once()
-        self.assertEqual(opener.open.call_args.args[0].get_method(), "GET")
+        request = opener.open.call_args.args[0]
+        self.assertEqual(request.get_method(), "GET")
+        headers = {key.lower(): value for key, value in request.header_items()}
+        self.assertEqual(headers["user-agent"], "lunwen-production-research/1.0")
+        self.assertEqual(headers["accept"], "application/json")
+        self.assertNotIn("Python", headers["user-agent"])
+        self.assertNotIn("fixture-secret", headers["user-agent"])
+        self.assertNotIn("fixture-secret", request.full_url)
         with self.assertRaises(billing.BillingReconciliationError):
             billing._NoRedirect().redirect_request(None, None, 302, "redirect", {}, "https://other.example")
         for url in ("http://codekey.ai/v1/usage", "https://codekey.ai/v1/usage?key=secret", "https://other.example/v1/usage"):

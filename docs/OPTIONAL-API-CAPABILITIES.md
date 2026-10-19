@@ -42,6 +42,12 @@ budget already authorizes the request. With `DR_OS_ROUTING_PROFILE=production`,
 the model role is routed to Sol 6.1 high through the central runtime. The legacy
 provider configuration remains available outside the production profile.
 
+The cloud request's historical `settings` values (`fast`, `medium`, `high`) are
+accepted only for compatibility with the earlier SDK request shape. They do not
+select a different model, reasoning effort, context limit, output limit or extra
+paid pass. The native production route stays Sol 6.1 high with the same bounded
+defaults. Adjusting explicit source/context bounds is a separate reviewed request.
+
 Every source has its original SHA-256. Blocks retain exact extracted text,
 text hashes, source IDs and original PDF page/line locators. Sources are rehashed
 before saving the result. A source with no lexical match causes abstention

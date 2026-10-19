@@ -566,7 +566,9 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
             or parsed.username or parsed.password or parsed.query or parsed.fragment):
         raise ProviderError("production generation requires an exact configured HTTPS endpoint")
     request = urllib.request.Request(url, data=json.dumps(payload, allow_nan=False).encode("utf-8"),
-                                     headers={**headers, "Content-Type": "application/json"}, method="POST")
+                                     headers={**headers, "Content-Type": "application/json",
+                                              "User-Agent": "lunwen-production-research/1.0",
+                                              "Accept": "application/json"}, method="POST")
     # One reservation permits one POST. No retries, protocol fallbacks or paid
     # warm-ups. A lost response remains an outstanding spend reservation.
     try:
