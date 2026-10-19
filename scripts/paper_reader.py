@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import uuid
@@ -76,7 +77,7 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
     lines=["# Page-anchored PDF reader", "", f"Local source SHA-256: `{sha256_file(pdf)}`", "",
            "Personal reading aid; verify all quotes, figures and claims against the original PDF.", ""]
     output.parent.mkdir(parents=True,exist_ok=True)
-    images=[];source_blocks=[];run_id="reader-"+uuid.uuid4().hex
+    images=[];source_blocks=[];translation_calls=[];run_id="reader-"+uuid.uuid4().hex
     for index in selected:
         page = reader.pages[index - 1]
         text=(page.extract_text() or "").strip()
@@ -89,10 +90,16 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
         lines += [f"## PDF page {index}","", "### Original extracted text", "",text,"",
                   "### Chinese reading translation", ""]
         if translate:
+            routed = os.environ.get("DR_OS_ROUTING_PROFILE") == "production"
             result=model_runtime.call(project,run_id=run_id,stage="auxiliary",role="reader-translation",
                 provider="openai",prompt=f"Translate this PDF page into faithful Chinese for personal reading. Preserve all numbers, abbreviations, hedges, citations and page order. Do not add claims.\n\n{text}",
-                max_output_tokens=min(6000,max(1200,model_runtime.estimate_tokens(text)*2)))
+                max_output_tokens=min(6000,max(1200,model_runtime.estimate_tokens(text)*2)),
+                **({"reasoning_effort":"high"} if routed else {}))
             lines.extend([result.text,""])
+            translation_calls.append({"pdf_page":index,"provider":result.provider,
+                "requested_model":result.model,"reported_model":result.reported_model,
+                "request_id":result.request_id,"reasoning_effort":"high" if routed else None,
+                "cache_hit":result.cache_hit})
         else:lines.extend(["[Translation pending; no model call made.]",""])
         if include_page_images:
             stem=output.with_name(f"{output.stem}-page-{index:03d}")
@@ -112,7 +119,7 @@ def build(project: Path, pdf: Path, output: Path, *, max_pages: int = 30,
              "reader_implementation_sha256":sha256_file(Path(__file__)),
              "source_map":{"path":source_map_path.relative_to(project).as_posix(),
                            "sha256":sha256_file(source_map_path)},
-             "translation_provider":"openai" if translate else None,"page_images":images,
+             "translation_provider":"openai" if translate else None,"translation_calls":translation_calls,"page_images":images,
              "reader_sha256":sha256_file(output),"personal_use_only":True,"not_citation_evidence":True}
     receipt_path=output.with_suffix(".reader.json")
     receipt_path.write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")

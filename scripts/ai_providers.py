@@ -7,6 +7,9 @@ Python control plane.
 """
 from __future__ import annotations
 
+import base64
+import binascii
+import hashlib
 import json
 import os
 import urllib.error
@@ -21,7 +24,41 @@ PROVIDERS = (
     "openai",
     "uuapi-anthropic",
     "uuapi-openai",
+    "cheapai-gpt-pro",
+    "cheapai-gpt-discount",
+    "codekey-kiro-enterprise",
+    "codekey-deepseek",
+    "codekey-gemini",
 )
+# Exact transport routes, not assertions about gateway authenticity or quality.
+# UUAPI remains a deprecated compatibility adapter for historical run receipts.
+PRODUCTION_PROVIDERS = {
+    "cheapai-gpt-pro": {
+        "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
+        "key_setting": "DR_OS_CHEAPAI_GPT_PRO_KEY", "model": "gpt-6.1-sol",
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra"),
+    },
+    "cheapai-gpt-discount": {
+        "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
+        "key_setting": "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY", "model": "gpt-5.6-luna",
+        "protocol": "openai_responses", "models": ("gpt-5.6-luna",),
+    },
+    "codekey-kiro-enterprise": {
+        "family": "anthropic", "root": "https://codekey.ai", "path": "/v1/messages",
+        "key_setting": "DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY", "model": "claude-sonnet-5-5",
+        "protocol": "anthropic_messages", "models": ("claude-sonnet-5-5", "claude-opus-5-5"),
+    },
+    "codekey-deepseek": {
+        "family": "deepseek", "root": "https://codekey.ai", "path": "/v1/chat/completions",
+        "key_setting": "DR_OS_CODEKEY_DEEPSEEK_KEY", "model": "deepseek-v4.1-flash",
+        "protocol": "deepseek_chat_completions", "models": ("deepseek-v4.1-flash",),
+    },
+    "codekey-gemini": {
+        "family": "google", "root": "https://codekey.ai", "path": "/v1beta/models/{model}:generateContent",
+        "key_setting": "DR_OS_CODEKEY_GEMINI_KEY", "model": "gemini-4-argon",
+        "protocol": "gemini_generate_content", "models": ("gemini-4-argon",),
+    },
+}
 UUAPI_ANTHROPIC_UA = "claude-cli/2.0.76 (external, cli)"
 UUAPI_OPENAI_UA = "codex_cli_rs/0.77.0 (external, cli)"
 
@@ -44,6 +81,9 @@ class ModelResult:
     cache_hit: bool = False
     cache_key: str | None = None
     completion_status: str | None = None
+    requested_effort: str | None = None
+    # Requested effort is auditable intent, never an attestation of actual effort.
+    attachment_sha256: tuple[str, ...] = ()
 
 
 def completion_status(data: dict[str, Any], protocol: str) -> str:
@@ -208,6 +248,8 @@ def _safe_endpoint_for_audit(raw: str) -> str:
 def provider_family(provider: str) -> str:
     """Return the model/protocol family used for independence checks."""
 
+    if provider in PRODUCTION_PROVIDERS:
+        return PRODUCTION_PROVIDERS[provider]["family"]
     if provider in {"anthropic", "uuapi-anthropic"}:
         return "anthropic"
     if provider in {"openai", "uuapi-openai"}:
@@ -509,10 +551,278 @@ def uuapi_usage(timeout: int = 30) -> dict[str, Any]:
     )
 
 
+class _NoGenerationRedirect(urllib.request.HTTPRedirectHandler):
+    """Do not replay a billable POST or forward credentials to another URL."""
+
+    def redirect_request(self, req: Any, fp: Any, code: int, msg: str,
+                         headers: Any, newurl: str) -> None:
+        raise ProviderError("generation redirect refused; reconcile billing before retry")
+
+
+def _production_request(url: str, headers: dict[str, str], payload: dict[str, Any],
+                        timeout: int) -> dict[str, Any]:
+    parsed = urlsplit(url)
+    if (parsed.scheme != "https" or parsed.netloc not in {"cheapai.info", "codekey.ai"}
+            or parsed.username or parsed.password or parsed.query or parsed.fragment):
+        raise ProviderError("production generation requires an exact configured HTTPS endpoint")
+    request = urllib.request.Request(url, data=json.dumps(payload, allow_nan=False).encode("utf-8"),
+                                     headers={**headers, "Content-Type": "application/json"}, method="POST")
+    # One reservation permits one POST. No retries, protocol fallbacks or paid
+    # warm-ups. A lost response remains an outstanding spend reservation.
+    try:
+        with urllib.request.build_opener(_NoGenerationRedirect()).open(request, timeout=timeout) as response:
+            body = response.read(4 * 1024 * 1024 + 1)
+            if len(body) > 4 * 1024 * 1024:
+                raise ProviderError("generation response exceeded size limit; reconcile billing")
+            value = json.loads(body.decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        # Do not expose gateway bodies, credential-bearing request objects or headers.
+        raise ProviderError(f"API HTTP {exc.code}; no automatic generation retry; reconcile billing") from None
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError):
+        raise ProviderError("API response unavailable; no automatic generation retry; reconcile billing") from None
+    if not isinstance(value, dict) or value.get("error"):
+        raise ProviderError("generation response was not a successful JSON object; reconcile billing")
+    return value
+
+
+def _production_identity(requested: str, reported: Any) -> str:
+    # An exact echo is a traceability condition, not proof of genuine weights.
+    if not isinstance(reported, str) or reported != requested:
+        raise ProviderError("production response model ID missing or mismatched; quarantine route and reconcile billing")
+    return reported
+
+
+def _token_count(value: Any, name: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise ProviderError(f"invalid {name} usage receipt; reconcile billing")
+    return value
+
+
+def _production_usage(data: dict[str, Any], family: str) -> dict[str, Any]:
+    raw = data.get("usageMetadata" if family == "google" else "usage")
+    if not isinstance(raw, dict):
+        raise ProviderError("missing production token usage; reconcile billing")
+    usage = dict(raw)
+    if family == "deepseek":
+        inputs = _token_count(raw.get("prompt_tokens"), "prompt_tokens")
+        outputs = _token_count(raw.get("completion_tokens"), "completion_tokens")
+        cached = _token_count(raw.get("prompt_cache_hit_tokens", 0), "prompt_cache_hit_tokens")
+        if cached > inputs:
+            raise ProviderError("cache hit tokens exceed total input; reconcile billing")
+        if "prompt_cache_miss_tokens" in raw:
+            missed = _token_count(raw["prompt_cache_miss_tokens"], "prompt_cache_miss_tokens")
+            if missed + cached != inputs:
+                raise ProviderError("cache hit/miss tokens differ from input total; reconcile billing")
+        usage.update(input_tokens=inputs, output_tokens=outputs,
+                     input_tokens_details={"cached_tokens": cached})
+        # completion_tokens already includes reasoning. Never add it again.
+        details = raw.get("completion_tokens_details", {})
+        if not isinstance(details, dict):
+            raise ProviderError("malformed completion token details; reconcile billing")
+        reasoning = _token_count(details.get("reasoning_tokens", 0), "reasoning_tokens")
+        if reasoning > outputs:
+            raise ProviderError("reasoning tokens exceed output total; reconcile billing")
+        usage["output_tokens_details"] = {"reasoning_tokens": reasoning}
+    elif family == "google":
+        inputs = _token_count(raw.get("promptTokenCount"), "promptTokenCount")
+        candidates = _token_count(raw.get("candidatesTokenCount"), "candidatesTokenCount")
+        thoughts = _token_count(raw.get("thoughtsTokenCount", 0), "thoughtsTokenCount")
+        cached = _token_count(raw.get("cachedContentTokenCount", 0), "cachedContentTokenCount")
+        if cached > inputs:
+            raise ProviderError("cached content exceeds prompt tokens; reconcile billing")
+        if "totalTokenCount" in raw and _token_count(raw["totalTokenCount"], "totalTokenCount") != inputs + candidates + thoughts:
+            raise ProviderError("Google token components differ from total; reconcile billing")
+        usage.update(input_tokens=inputs, output_tokens=candidates + thoughts,
+                     input_tokens_details={"cached_tokens": cached},
+                     output_tokens_details={"reasoning_tokens": thoughts})
+    else:
+        _token_count(raw.get("input_tokens"), "input_tokens")
+        _token_count(raw.get("output_tokens"), "output_tokens")
+    return usage
+
+
+def _validated_attachments(attachments: Any) -> list[dict[str, Any]]:
+    if attachments is None:
+        return []
+    if not isinstance(attachments, list) or len(attachments) > 5:
+        raise ProviderError("attachments must be a list of at most five inline files")
+    result = []
+    size = 0
+    allowed = {"application/pdf", "text/plain", "image/png", "image/jpeg", "image/webp"}
+    for item in attachments:
+        if (not isinstance(item, dict) or set(item) - {"mime_type", "data_base64", "sha256", "filename"}
+                or not isinstance(item.get("mime_type"), str)
+                or item.get("mime_type") not in allowed):
+            raise ProviderError("unsupported attachment fields or MIME type")
+        encoded = item.get("data_base64")
+        if not isinstance(encoded, str) or len(encoded) > 14 * 1024 * 1024:
+            raise ProviderError("attachment requires bounded base64 data")
+        try:
+            decoded = base64.b64decode(encoded, validate=True)
+        except (binascii.Error, ValueError):
+            raise ProviderError("attachment base64 data is invalid") from None
+        size += len(decoded)
+        if not decoded or size > 10 * 1024 * 1024:
+            raise ProviderError("attachments must be nonempty and at most 10 MiB total")
+        digest = hashlib.sha256(decoded).hexdigest()
+        if item.get("sha256") != digest:
+            raise ProviderError("attachment content differs from its declared SHA-256")
+        mime = item["mime_type"]
+        signatures = {"application/pdf": decoded.startswith(b"%PDF-"),
+                      "image/png": decoded.startswith(b"\x89PNG\r\n\x1a\n"),
+                      "image/jpeg": decoded.startswith(b"\xff\xd8\xff"),
+                      "image/webp": decoded.startswith(b"RIFF") and decoded[8:12] == b"WEBP"}
+        if mime in signatures and not signatures[mime]:
+            raise ProviderError("attachment MIME type differs from its file signature")
+        if mime == "text/plain":
+            try:
+                decoded.decode("utf-8")
+            except UnicodeDecodeError:
+                raise ProviderError("text attachment must contain UTF-8 text") from None
+        filename = item.get("filename", "attachment.pdf" if mime == "application/pdf" else "attachment")
+        if (not isinstance(filename, str) or not filename or len(filename) > 120
+                or any(ch in filename for ch in "/\\") or any(ord(ch) < 32 for ch in filename)):
+            raise ProviderError("attachment filename must be a simple bounded name")
+        result.append({**item, "filename": filename, "decoded": decoded})
+    return result
+
+
+def _google_text(data: dict[str, Any]) -> tuple[str, str]:
+    candidates = data.get("candidates")
+    if not isinstance(candidates, list) or len(candidates) != 1 or not isinstance(candidates[0], dict):
+        raise ProviderError("Google response must contain one candidate; reconcile billing")
+    candidate = candidates[0]
+    content = candidate.get("content")
+    if not isinstance(content, dict):
+        raise ProviderError("malformed Google response content; reconcile billing")
+    parts = content.get("parts", [])
+    if not isinstance(parts, list):
+        raise ProviderError("malformed Google response parts; reconcile billing")
+    # Internal thought parts never become persistent scientific prose.
+    text = "\n".join(part["text"] for part in parts
+                     if isinstance(part, dict) and isinstance(part.get("text"), str) and not part.get("thought"))
+    if not text:
+        raise ProviderError("Google response contained no final text; reconcile billing")
+    stop = candidate.get("finishReason")
+    status = "completed" if stop == "STOP" else str(stop or "unknown")
+    if any(isinstance(part, dict) and "functionCall" in part for part in parts):
+        status = "tool_use"
+    return text, status
+
+
+def validate_attachments(attachments: Any) -> list[dict[str, Any]]:
+    """Validate inline files before budget reservation; never perform network IO.
+
+    Returned records include decoded bytes for bounded input-cost estimation.
+    Persist only their hashes and sizes, never their encoded/raw content.
+    """
+    return _validated_attachments(attachments)
+
+
+def call_production(provider: str, prompt: str, *, model: str | None = None,
+                    system: str | None = None, max_output_tokens: int = 8000,
+                    timeout: int = 180, reasoning_effort: str | None = None,
+                    attachments: Any = None) -> ModelResult:
+    spec = PRODUCTION_PROVIDERS[provider]
+    model = spec["model"] if model is None else model
+    if model not in spec["models"]:
+        raise ProviderError("model is not explicitly allowed on the selected production route")
+    if not isinstance(prompt, str) or not prompt or (system is not None and not isinstance(system, str)):
+        raise ProviderError("generation prompt and optional system must be text")
+    if isinstance(max_output_tokens, bool) or not isinstance(max_output_tokens, int) or not 1 <= max_output_tokens <= 32768:
+        raise ProviderError("max_output_tokens must be an integer from 1 to 32768")
+    if isinstance(timeout, bool) or not isinstance(timeout, int) or not 1 <= timeout <= 600:
+        raise ProviderError("timeout must be an integer from 1 to 600 seconds")
+    effort = ("medium" if model == "gpt-5.6-luna" else "high") if reasoning_effort is None else reasoning_effort
+    family = spec["family"]
+    supported_efforts = {"low", "medium", "high"} if family in {"openai", "google"} else {"high"}
+    if not isinstance(effort, str) or effort not in supported_efforts:
+        raise ProviderError("reasoning effort is not supported by this production route")
+    media = _validated_attachments(attachments)
+    if media and family not in {"openai", "google"}:
+        raise ProviderError("attachments are not supported on this production route")
+    key = os.environ.get(spec["key_setting"], "").strip()
+    if not key or any(ch.isspace() or ord(ch) < 32 for ch in key):
+        raise ProviderError(f"{spec['key_setting']} is not configured as a valid key")
+    endpoint = spec["root"] + spec["path"].format(model=model)
+    headers = {"Authorization": f"Bearer {key}"}
+    if family == "openai":
+        user_parts: list[dict[str, Any]] = [{"type": "input_text", "text": prompt}]
+        for item in media:
+            data_url = f"data:{item['mime_type']};base64,{item['data_base64']}"
+            if item["mime_type"].startswith("image/"):
+                user_parts.append({"type": "input_image", "image_url": data_url})
+            elif item["mime_type"] == "application/pdf":
+                user_parts.append({"type": "input_file", "filename": item["filename"], "file_data": data_url})
+            else:
+                user_parts.append({"type": "input_text", "text": item["decoded"].decode("utf-8")})
+        messages = ([{"role": "developer", "content": system}] if system else [])
+        messages.append({"role": "user", "content": user_parts})
+        payload = {"model": model, "input": messages, "max_output_tokens": max_output_tokens,
+                   "reasoning": {"effort": effort}, "store": False, "tools": [], "service_tier": "default"}
+    elif family == "anthropic":
+        headers = {"x-api-key": key, "anthropic-version": "2023-06-01"}
+        payload = {"model": model, "messages": [{"role": "user", "content": prompt}],
+                   "max_tokens": max_output_tokens, "thinking": {"type": "adaptive"},
+                   "output_config": {"effort": effort}, "tools": []}
+        if system:
+            payload["system"] = system
+    elif family == "deepseek":
+        messages = ([{"role": "system", "content": system}] if system else [])
+        messages.append({"role": "user", "content": prompt})
+        payload = {"model": model, "messages": messages, "max_tokens": max_output_tokens,
+                   "thinking": {"type": "enabled"}, "reasoning_effort": effort}
+    else:
+        headers = {"x-goog-api-key": key}
+        parts = [{"text": prompt}] + [{"inlineData": {"mimeType": item["mime_type"], "data": item["data_base64"]}} for item in media]
+        payload = {"contents": [{"role": "user", "parts": parts}],
+                   "generationConfig": {"maxOutputTokens": max_output_tokens,
+                                        "thinkingConfig": {"thinkingLevel": effort.upper()}}, "tools": []}
+        if system:
+            payload["systemInstruction"] = {"parts": [{"text": system}]}
+    data = _production_request(endpoint, headers, payload, timeout)
+    reported = _production_identity(model, data.get("modelVersion") if family == "google" else data.get("model"))
+    if family == "google":
+        text, status = _google_text(data)
+    else:
+        protocol = "openai_chat_completions" if family == "deepseek" else spec["protocol"]
+        if family == "deepseek":
+            choices = data.get("choices")
+            if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
+                raise ProviderError("DeepSeek response requires one choice; reconcile billing")
+            message = choices[0].get("message")
+            if not isinstance(message, dict) or message.get("tool_calls") or message.get("function_call"):
+                raise ProviderError("unexpected DeepSeek tool response; reconcile billing")
+        text = (_anthropic_text(data) if family == "anthropic" else
+                _chat_completions_text(data) if family == "deepseek" else _openai_text(data))
+        status = completion_status(data, protocol)
+    # Production never accepts unknown or partial termination, even when the
+    # deprecated compatibility strictness switch was disabled historically.
+    if status != "completed":
+        raise ProviderError(f"production model response did not complete ({status}); reconcile billing")
+    return ModelResult(provider, model, text, _production_usage(data, family),
+                       data.get("responseId") if family == "google" else data.get("id"),
+                       reported, spec["protocol"], endpoint,
+                       "cheapai" if provider.startswith("cheapai-") else "codekey",
+                       completion_status=status, requested_effort=effort,
+                       attachment_sha256=tuple(item["sha256"] for item in media))
+
+
 def configuration(provider: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
     """Describe configuration without exposing credentials."""
 
     env = os.environ if environment is None else environment
+    if provider in PRODUCTION_PROVIDERS:
+        spec = PRODUCTION_PROVIDERS[provider]
+        key = env.get(spec["key_setting"], "").strip()
+        valid = bool(key) and not any(ch.isspace() or ord(ch) < 32 for ch in key)
+        return {"provider": provider, "family": spec["family"], "root": spec["root"],
+                "configured": valid, "model": spec["model"], "protocol": spec["protocol"],
+                "endpoint": spec["root"] + spec["path"].format(model=spec["model"]),
+                "key_setting": spec["key_setting"], "strict_model_id": True,
+                "billing_identity": {"plan": "production", "group": provider, "mode": "standard"},
+                "allowed_models": list(spec["models"]),
+                "configuration_error": None if valid else f"{spec['key_setting']} is not configured as a valid key"}
     if provider == "openai":
         return {
             "provider": provider,
@@ -587,6 +897,13 @@ def configuration(provider: str, environment: Mapping[str, str] | None = None) -
 
 
 def call(provider: str, prompt: str, **kwargs: Any) -> ModelResult:
+    if provider in PRODUCTION_PROVIDERS:
+        return call_production(provider, prompt, **kwargs)
+    for name in ("reasoning_effort", "attachments"):
+        if kwargs.get(name) is None:
+            kwargs.pop(name, None)
+        elif name in kwargs:
+            raise ProviderError(f"{name} requires a configured production route")
     if provider == "openai":
         return call_openai(prompt, **kwargs)
     if provider == "anthropic":

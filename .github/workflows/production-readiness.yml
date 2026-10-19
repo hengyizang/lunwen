@@ -1,0 +1,46 @@
+name: Production relay readiness without generation
+
+on:
+  push:
+    branches: [main, codex/relay-acceptance-20261019]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-relay-readiness
+  cancel-in-progress: false
+
+jobs:
+  readiness:
+    if: github.repository == 'hengyizang/lunwen'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify seven routes, scoped prices and authenticated model catalogs
+        env:
+          DR_OS_ROUTING_PROFILE: production
+          DR_OS_AUTOMATIC_RESEARCH_ENABLED: ${{ vars.DR_OS_AUTOMATIC_RESEARCH_ENABLED }}
+          DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
+          DR_OS_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_DISCOUNT_KEY }}
+          DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY }}
+          DR_OS_CODEKEY_DEEPSEEK_KEY: ${{ secrets.DR_OS_CODEKEY_DEEPSEEK_KEY }}
+          DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
+        run: >-
+          python -m scripts.production_readiness --check-models
+          --output .runtime/production-readiness.json
+      - name: Preserve sanitized readiness receipt
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: production-readiness-${{ github.run_id }}
+          path: .runtime/production-readiness.json
+          if-no-files-found: error
+          retention-days: 30
