@@ -1,0 +1,60 @@
+{
+  "record_type": "auxiliary_candidate_selection_not_runtime_configuration",
+  "decision_date": "2026-10-19",
+  "unavailable_dependency": "gpt-6-luna",
+  "selected_candidate": {
+    "model": "gpt-5.6-luna",
+    "family": "openai",
+    "requested_effort": "medium",
+    "primary_group": "cheapai-gpt-discount",
+    "secondary_group": "cheapai-gpt-pro",
+    "automatic_cross_group_fallback": false,
+    "executed_cases_passed_per_group": 3,
+    "executed_cases_per_group": 3,
+    "candidate_scope": [
+      "source-bound metadata extraction with exact source IDs and pages",
+      "source-bound numerical evidence fields without scientific authority",
+      "bounded read-only engineering diagnostics"
+    ],
+    "source_validation_required_for_each_result": true,
+    "deterministic_scripts_first": true
+  },
+  "unqualified_scope": [
+    "Luna abstract screening fixture was not sent because pre-call billing queries were rate-limited",
+    "low effort has not been tested",
+    "full-text synthesis, complete reviewer-comment coverage and long-document tasks were not tested",
+    "final inclusion or exclusion, novelty, experiments, statistics, conclusions and independent final review retain existing models"
+  ],
+  "deepseek_comparator": {
+    "model": "deepseek-v4.1-flash",
+    "family": "deepseek",
+    "requested_effort": "high",
+    "group": "codekey-deepseek",
+    "executed_cases_passed": 4,
+    "executed_cases": 4,
+    "dated_backend_1017_verified": false,
+    "production_family_integration_activated": false
+  },
+  "codekey_luna_route": {
+    "group": "codekey-codex-discount",
+    "status": "quarantined_after_http_502_no_retry",
+    "retained_reservation_cny": 0.1,
+    "actual_debit_known": false
+  },
+  "evidence": {
+    "source_commit": "815eaad27b82ddaa21ca6ea7627a05f9f8d88b35",
+    "cloud_run_id": 39151851790,
+    "ledger_commit": "9c6abac52424ac4645a8ffe8697a65e523b39178",
+    "report": "docs/luna-replacement-results-20261019.md",
+    "test_scope": "original synthetic software fixtures only"
+  },
+  "original_authorization_cny": 30.0,
+  "supplement_ceiling_within_original_authorization_cny": 1.0,
+  "new_generation_requests": 14,
+  "new_gateway_verified_debit_cny": 0.0035504,
+  "all_trials_gateway_verified_debit_cny": 0.11601088,
+  "all_trials_committed_upper_cny_including_unknown_reservation": 0.21601088,
+  "production_routing_activated": false,
+  "core_scientific_roles_changed": false,
+  "scientific_completion": false
+}

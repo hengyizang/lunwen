@@ -46,19 +46,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Test bounded Luna replacement using isolated Actions Secrets
+      - name: Inspect closed Luna supplement without generation
         env:
           TRIAL_GITHUB_TOKEN: ${{ github.token }}
           TRIAL_METADATA_ONLY: '1'
-          LUNA_SUPPLEMENT_EXECUTE: '1'
-          MODEL_TEST_CHEAPAI_GPT_PRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_PRO_KEY }}
-          MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_DISCOUNT_KEY }}
-          MODEL_TEST_CHEAPAI_KIRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_KIRO_KEY }}
-          MODEL_TEST_CHEAPAI_CCMAX_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_CCMAX_KEY }}
-          MODEL_TEST_CODEKEY_DEEPSEEK_KEY: ${{ secrets.MODEL_TEST_CODEKEY_DEEPSEEK_KEY }}
-          MODEL_TEST_CODEKEY_GEMINI_KEY: ${{ secrets.MODEL_TEST_CODEKEY_GEMINI_KEY }}
-          MODEL_TEST_CODEKEY_CODEX_PURE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_CODEX_PURE_KEY }}
-          MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY }}
-          MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY: ${{ secrets.MODEL_TEST_CODEKEY_CODEX_DISCOUNT_KEY }}
-          MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_STANDARD_KEY }}
+          LUNA_SUPPLEMENT_EXECUTE: '0'
         run: python -m scripts.luna_supplement

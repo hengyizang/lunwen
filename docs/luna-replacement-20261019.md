@@ -1,5 +1,11 @@
 # GPT-5.6 Luna auxiliary replacement
 
+The comparison is closed. See the [scoped results and selection](luna-replacement-results-20261019.md):
+Luna passed all three executed cases on each CheapAI route; the Luna screening
+case was not sent because billing metadata was rate-limited. CodeKey Luna was
+quarantined after one HTTP502. The current workflow only inspects the closed
+ledger and receives no model keys.
+
 The owner requested an available replacement for GPT-6 Luna on 2026-10-19.
 GPT-5.6 Luna is the first candidate; DeepSeek 4.1 Flash is a read-only auxiliary
 comparator and GPT-6.1 Sol high is the reference route. Core scientific writing,
