@@ -53,6 +53,9 @@ translation and safe alternatives are described in
 [OPTIONAL-API-CAPABILITIES.md](OPTIONAL-API-CAPABILITIES.md).
 
 All project execution, model calls, tests and experiments run in GitHub cloud.
+The production runtime rejects paid calls outside that runner or without the
+mandatory remote-reservation mode; the low-level generation transport also
+rejects non-cloud execution. A reservation push failure blocks the POST.
 Importing configuration does not start research. The repository variable
 `DR_OS_AUTOMATIC_RESEARCH_ENABLED=false` prevents the older 24-hour continuation
 confirmation from unexpectedly starting paid work during this configuration

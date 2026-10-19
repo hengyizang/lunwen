@@ -28,7 +28,8 @@ class ProductionCycleTests(unittest.TestCase):
             "experiment-execution": {"gate": "G4", "contract": "Fixture G4", "author_task": "Fixture only"},
             "topic-intelligence": {"gate": "G1", "contract": "Fixture G1", "author_task": "Fixture only"}}}),
             encoding="utf-8")
-        self.env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_REQUIRE_MODEL_AUTH": "1"}
+        self.env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_REQUIRE_MODEL_AUTH": "1",
+                    "GITHUB_ACTIONS":"true", "DR_OS_REQUIRE_REMOTE_RESERVATION":"1"}
         self.env.update({spec["key_setting"]: "fixture-provider-key-" + provider
                          for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items()})
         self.stack.enter_context(patch.dict("os.environ", self.env, clear=True))

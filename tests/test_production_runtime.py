@@ -25,7 +25,8 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.project = Path(directory) / "fixture-project"
         (self.project / "state").mkdir(parents=True)
         (self.project / "state" / "run.json").write_text(json.dumps({"active_paper": "P01"}), encoding="utf-8")
-        env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_REQUIRE_MODEL_AUTH": "1"}
+        env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_REQUIRE_MODEL_AUTH": "1",
+               "GITHUB_ACTIONS":"true", "DR_OS_REQUIRE_REMOTE_RESERVATION":"1"}
         env.update({spec["key_setting"]: "fixture-no-real-key"
                     for spec in ai_providers.PRODUCTION_PROVIDERS.values()})
         self.stack.enter_context(patch.dict("os.environ", env, clear=True))
@@ -136,6 +137,17 @@ class ProductionRuntimeTests(unittest.TestCase):
             post.assert_not_called()
             reserve.assert_not_called()
         self.assertEqual(model_spend.read(self.project)["reservations"], {})
+
+    def test_noncloud_or_optional_remote_checkpoint_mode_blocks_before_meter_and_post(self):
+        for field in ("GITHUB_ACTIONS","DR_OS_REQUIRE_REMOTE_RESERVATION"):
+            with self.subTest(field=field), patch.dict("os.environ",{field:""}), \
+                 patch.object(relay_billing,"read_meter") as meter, \
+                 patch.object(ai_providers,"call") as post:
+                with self.assertRaisesRegex(model_runtime.ModelBudgetError,"cloud runner"):
+                    self.call()
+                meter.assert_not_called()
+                post.assert_not_called()
+                self.assertEqual(model_spend.read(self.project)["reservations"],{})
 
     def test_ambiguous_post_meter_keeps_hold_and_blocks_any_second_generation(self):
         with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),

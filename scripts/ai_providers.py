@@ -561,6 +561,8 @@ class _NoGenerationRedirect(urllib.request.HTTPRedirectHandler):
 
 def _production_request(url: str, headers: dict[str, str], payload: dict[str, Any],
                         timeout: int) -> dict[str, Any]:
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        raise ProviderError("production generation is restricted to the authorized cloud runner")
     parsed = urlsplit(url)
     if (parsed.scheme != "https" or parsed.netloc not in {"cheapai.info", "codekey.ai"}
             or parsed.username or parsed.password or parsed.query or parsed.fragment):

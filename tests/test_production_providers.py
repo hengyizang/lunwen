@@ -13,9 +13,15 @@ from scripts import ai_providers as providers
 
 
 class ProductionProviderTests(unittest.TestCase):
+    def test_direct_production_transport_rejects_noncloud_generation_before_network(self):
+        with patch.dict(os.environ,{},clear=True), patch.object(providers.urllib.request,"build_opener") as network:
+            with self.assertRaisesRegex(providers.ProviderError,"cloud runner"):
+                providers._production_request("https://codekey.ai/v1/chat/completions",{}, {},30)
+            network.assert_not_called()
+
     def env(self):
-        return {spec["key_setting"]: f"fixture-only-{name}"
-                for name, spec in providers.PRODUCTION_PROVIDERS.items()}
+        return {"GITHUB_ACTIONS":"true", **{spec["key_setting"]: f"fixture-only-{name}"
+                for name, spec in providers.PRODUCTION_PROVIDERS.items()}}
 
     def response(self, family="openai", model="gpt-6.1-sol"):
         if family == "google":

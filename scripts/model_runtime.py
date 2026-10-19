@@ -560,6 +560,9 @@ def call(
     controlled = control is not None
     if production and not controlled:
         raise ModelBudgetError("production calls require the persisted owner-approved spending ledger")
+    if production and (os.environ.get("GITHUB_ACTIONS") != "true"
+                       or os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") != "1"):
+        raise ModelBudgetError("production generation requires the cloud runner and durable remote reservation mode")
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
     # The byte ceiling includes prompt/system framing. Conditional quotes also
