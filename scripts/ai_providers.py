@@ -394,6 +394,24 @@ def call_anthropic(
     )
 
 
+def generation_options(provider: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
+    """Explicit, auditable reasoning settings; never infer a different model."""
+    env = os.environ if environment is None else environment
+    names = {"uuapi-openai": "UUAPI_OPENAI_REASONING_EFFORT",
+             "uuapi-anthropic": "UUAPI_ANTHROPIC_EFFORT"}
+    if provider not in names:
+        return {}
+    effort = env.get(names[provider], "").strip()
+    if not effort:
+        return {}
+    if effort not in {"low", "medium", "high"}:
+        raise ProviderError(f"{names[provider]} must be low, medium or high")
+    if provider == "uuapi-anthropic":
+        return {"thinking": {"type": "adaptive"}, "output_config": {"effort": effort}}
+    protocol, _ = _openai_protocol(env)
+    return {"reasoning_effort": effort} if protocol == "chat_completions" else {"reasoning": {"effort": effort}}
+
+
 def call_uuapi_openai(
     prompt: str,
     *,
@@ -433,6 +451,7 @@ def call_uuapi_openai(
         }
         endpoint = _uuapi_endpoint("responses", "uuapi-openai")
         audit_protocol = "openai_responses"
+    payload.update(generation_options("uuapi-openai"))
     data = _request(
         endpoint,
         _uuapi_headers(audit_protocol),
@@ -474,6 +493,7 @@ def call_uuapi_anthropic(
     if system:
         payload["system"] = system
     endpoint = _uuapi_endpoint("messages", "uuapi-anthropic")
+    payload.update(generation_options("uuapi-anthropic"))
     data = _request(
         endpoint,
         _uuapi_headers("anthropic_messages"),
@@ -544,6 +564,11 @@ def configuration(provider: str, environment: Mapping[str, str] | None = None) -
         model_key = "UUAPI_OPENAI_MODEL" if provider == "uuapi-openai" else "UUAPI_ANTHROPIC_MODEL"
         key_name, base_name = _uuapi_setting_names(provider, env)
         errors: list[str] = []
+        options: dict[str, Any] = {}
+        try:
+            options = generation_options(provider, env)
+        except ProviderError as exc:
+            errors.append(str(exc))
         endpoint: str | None = None
         token_field: str | None = None
         protocol = "anthropic_messages"
@@ -580,6 +605,7 @@ def configuration(provider: str, environment: Mapping[str, str] | None = None) -
             "key_setting": key_name,
             "base_setting": base_name,
             "configuration_error": "; ".join(errors) or None,
+            "generation_options": options,
             "strict_model_id": (env.get("UUAPI_STRICT_MODEL_ID") or "true").strip().lower()
             not in {"0", "false", "no"},
         }
