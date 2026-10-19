@@ -18,9 +18,10 @@ from pathlib import Path
 from typing import Any, Mapping
 
 try:
-    from scripts import ai_providers, intake_validation, model_runtime, model_spend, researchctl
+    from scripts import ai_providers, billing_quotes, intake_validation, model_runtime, model_spend, researchctl
 except ImportError:
     import ai_providers  # type: ignore
+    import billing_quotes  # type: ignore
     import intake_validation  # type: ignore
     import model_runtime  # type: ignore
     import model_spend  # type: ignore
@@ -72,17 +73,32 @@ def configuration_errors(environment: Mapping[str, str]) -> list[str]:
             rates = json.loads(environment["DR_OS_MODEL_PRICING_JSON"])
             if not isinstance(rates, dict):
                 raise ValueError("not an object")
-            for model in models:
-                price = rates.get(model)
-                if not isinstance(price, dict):
-                    raise ValueError("missing exact model price")
-                for key in ("input_per_million", "output_per_million"):
-                    number = price.get(key)
-                    if (not isinstance(number, (int, float)) or isinstance(number, bool)
-                            or not math.isfinite(number) or number <= 0):
-                        raise ValueError("invalid price")
-        except (ValueError, TypeError, KeyError):
-            errors.append("DR_OS_MODEL_PRICING_JSON needs positive finite CNY input/output prices for both exact model IDs")
+            if "schema_version" in rates or "quotes" in rates:
+                identities = json.loads(environment.get("DR_OS_MODEL_BILLING_IDENTITY_JSON", "{}"))
+                if not isinstance(identities, dict):
+                    raise ValueError("invalid billing identities")
+                for config in providers:
+                    provider = config["provider"]
+                    if provider not in identities or not isinstance(identities[provider], dict):
+                        raise ValueError("missing exact billing identity")
+                    quote = billing_quotes.select(rates, provider, str(config.get("endpoint") or ""),
+                                                  config["model"], identities[provider])
+                    billing_quotes.reserve_cost(quote, 1, 1)
+            else:
+                for config in providers:
+                    model = config["model"]
+                    scope = "|".join((config["provider"], str(config.get("endpoint") or ""), model))
+                    scoped = any("|" in key and key.rsplit("|", 1)[-1] == model for key in rates)
+                    price = rates.get(scope if scoped else model)
+                    if not isinstance(price, dict):
+                        raise ValueError("missing exact model price")
+                    for key in ("input_per_million", "output_per_million"):
+                        number = price.get(key)
+                        if (not isinstance(number, (int, float)) or isinstance(number, bool)
+                                or not math.isfinite(number) or number <= 0):
+                            raise ValueError("invalid price")
+        except (ValueError, TypeError, KeyError, billing_quotes.BillingQuoteError):
+            errors.append("DR_OS_MODEL_PRICING_JSON needs valid exact-route CNY quotes or positive finite CNY input/output prices for both exact model IDs")
     return list(dict.fromkeys(errors))
 
 

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "description": "Bounded my-phd startup using two previously tested relay groups; no scientific gate or new spending authority.",
+  "routes": [
+    {
+      "provider": "uuapi-openai",
+      "family": "openai",
+      "root": "https://cheapai.info",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "secret_name": "MODEL_TEST_CHEAPAI_GPT_PRO_KEY",
+      "group": "cheapai-gpt-pro"
+    },
+    {
+      "provider": "uuapi-anthropic",
+      "family": "anthropic",
+      "root": "https://codekey.ai",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "secret_name": "MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY",
+      "group": "codekey-kiro-enterprise"
+    }
+  ],
+  "pricing": {
+    "schema_version": "2.0",
+    "quotes": [
+      {
+        "provider": "uuapi-openai",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6-astra",
+        "plan": "relay-production-20261019",
+        "group": "cheapai-gpt-pro",
+        "mode": "standard",
+        "currency": "CNY",
+        "price_version": "relay-trial-20261019-numeric-CNY-times-group",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 2.2,
+            "output_per_million": 11,
+            "cache_read_per_million": 0.22,
+            "cache_write_per_million": 2.75
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 4.4,
+            "output_per_million": 16.5,
+            "cache_read_per_million": 0.44,
+            "cache_write_per_million": 5.5
+          }
+        ]
+      },
+      {
+        "provider": "uuapi-anthropic",
+        "endpoint": "https://codekey.ai/v1/messages",
+        "model": "claude-opus-5-5",
+        "plan": "relay-production-20261019",
+        "group": "codekey-kiro-enterprise",
+        "mode": "standard",
+        "currency": "CNY",
+        "price_version": "relay-trial-20261019-numeric-CNY-times-group",
+        "input_per_million": 1.4,
+        "output_per_million": 7,
+        "cache_read_per_million": 0.07,
+        "cache_write_per_million": 1.75,
+        "cache_write_5m_per_million": 1.75,
+        "cache_write_1h_per_million": 2.8
+      }
+    ]
+  },
+  "evidence": "https://github.com/hengyizang/lunwen/blob/815eaad27b82ddaa21ca6ea7627a05f9f8d88b35/docs/gateway-trial-results-20261019.md"
+}

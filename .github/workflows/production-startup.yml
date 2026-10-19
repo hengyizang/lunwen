@@ -1,0 +1,63 @@
+name: Reviewed production gateway startup
+
+on:
+  push:
+    branches: [codex/production-startup-20261019]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check: no model calls; trial: one current G1 cycle within existing authority"
+        type: choice
+        options: [check, trial]
+        default: check
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  validation:
+    uses: ./.github/workflows/validate.yml
+    with:
+      offline_only: true
+  startup:
+    needs: validation
+    if: github.repository == 'hengyizang/lunwen'
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Inspect reviewed routes and restored project without creating new authority
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODEL_TEST_CHEAPAI_GPT_PRO_KEY: ${{ secrets.MODEL_TEST_CHEAPAI_GPT_PRO_KEY }}
+          MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.MODEL_TEST_CODEKEY_KIRO_ENTERPRISE_KEY }}
+          STARTUP_MODE: ${{ inputs.mode || 'check' }}
+        run: python -m scripts.production_gateway --mode "$STARTUP_MODE" --run-id "$GITHUB_RUN_ID"
+      - name: Preserve redacted startup or trial results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reviewed-gateway-startup-${{ github.run_id }}
+          path: .runtime/cloud-artifact/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Preserve research checkpoint if a cycle produced one
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: research-checkpoint-${{ github.run_id }}
+          path: .runtime/checkpoint/checkpoint.zip
+          retention-days: 90
+          if-no-files-found: ignore
