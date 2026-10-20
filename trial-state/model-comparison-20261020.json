@@ -10015,7 +10015,7 @@
       "catalog_omission_probe": false,
       "run_id": "39460628361",
       "code_sha": "96be6d61af2e3003b9ff27a5600a5cad136bd73d",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T16:52:42.412231+00:00",
       "reported_model": "gpt-6.1-sol",
       "request_id": "resp_0aea15c51e87160f016ad79c5ca2fc819f870392b1d312a071",
@@ -10080,7 +10080,27 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 1.9766
+      "duration_seconds": 1.9766,
+      "actual_cost_cny": 0.00026,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-6.1-sol",
+          "quota": 130,
+          "created_at": 1792515165,
+          "prompt_tokens": 254,
+          "completion_tokens": 67,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "cb245c18b4c98677650315c81e2bd99bb61f30a555f7d664003ed6a3c90986a0",
+        "after_snapshot_sha256": "0df4c59b29f392a4c2f5cea5f62b2695a5009a53b4db31ebd51999ca5e9d50b5",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T16:52:47.508721+00:00"
     }
   ],
   "status": "running",
