@@ -7677,6 +7677,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T14:11:20.751039+00:00"
+    },
+    {
+      "call_id": "codekey-enterprise-sonnet-high|long_context",
+      "candidate_id": "codekey-enterprise-sonnet-high",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "case_id": "long_context",
+      "phase": "focused",
+      "case_sha256": "6633a658e4747c289a92c07f2b27fd2de8a0b5f0ae7cf98d20ed6431b209595a",
+      "quote_sha256": "c8a6ab552f22b022bf25d68002c02e8050d4725e08216a549ded4b094eafe01e",
+      "reserved_ceiling_cny": 1.0802834,
+      "meter_before": {
+        "provider": "codekey-kiro-enterprise",
+        "kind": "codekey_total_actual_cost",
+        "requests": 14,
+        "cost_cny": 0.08381254,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T14:11:22.781473+00:00"
     }
   ],
   "status": "running",
