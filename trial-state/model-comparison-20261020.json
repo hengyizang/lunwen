@@ -10977,6 +10977,11 @@
       "call_id": "cheapai-ccmax-sonnet-high|code_statistics",
       "at": "2026-10-20T16:59:39.006361+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-discount-sol-high|code_statistics",
+      "at": "2026-10-20T17:00:21.404086+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
