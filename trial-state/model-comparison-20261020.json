@@ -4407,6 +4407,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T13:54:39.525531+00:00"
+    },
+    {
+      "call_id": "codekey-pro-astra-high|experiment_design",
+      "candidate_id": "codekey-pro-astra-high",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "case_id": "experiment_design",
+      "phase": "screening",
+      "case_sha256": "d99d694664482b7a260d3b31a26eba8a03bd22bac267f3d94c65736a3f83c80e",
+      "quote_sha256": "5e994b1568828c0a77a6e5f9a90e5c83e012d3491abe0f0a78f46b918a99479b",
+      "reserved_ceiling_cny": 1.44088,
+      "meter_before": {
+        "provider": "codekey-codex-pro",
+        "kind": "codekey_total_actual_cost",
+        "requests": 8,
+        "cost_cny": 0.0081968,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:54:41.487217+00:00"
     }
   ],
   "status": "running",
