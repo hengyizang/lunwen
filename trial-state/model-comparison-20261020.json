@@ -5916,6 +5916,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T14:09:04.042782+00:00"
+    },
+    {
+      "call_id": "codekey-enterprise-opus-high|code_statistics",
+      "candidate_id": "codekey-enterprise-opus-high",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "case_id": "code_statistics",
+      "phase": "focused",
+      "case_sha256": "30d4b70109c8fad09560017699a9b988cd4b02f2ef7a88da8dcbe81a1b6775ca",
+      "quote_sha256": "704506e417d6f8328a986b97ea3480ca86ad7072d810e699b0be62a7b4c2718a",
+      "reserved_ceiling_cny": 1.6859136,
+      "meter_before": {
+        "provider": "codekey-kiro-enterprise",
+        "kind": "codekey_total_actual_cost",
+        "requests": 11,
+        "cost_cny": 0.07999005,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T14:09:05.891515+00:00"
     }
   ],
   "status": "running",
