@@ -1182,6 +1182,64 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T13:47:15.855333+00:00"
+    },
+    {
+      "call_id": "cheapai-kiro-sonnet-high|evidence_conflict",
+      "candidate_id": "cheapai-kiro-sonnet-high",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "case_id": "evidence_conflict",
+      "phase": "screening",
+      "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+      "quote_sha256": "31c0d12a39addd06007333b7c238315a91b2fd25f507d68affd2d2c3e96d5347",
+      "reserved_ceiling_cny": 0.27697152,
+      "meter_before": {
+        "provider": "cheapai-kiro-discount",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 238,
+            "created_at": 1792344496,
+            "prompt_tokens": 271,
+            "completion_tokens": 153,
+            "id": 1
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 133,
+            "created_at": 1792344486,
+            "prompt_tokens": 271,
+            "completion_tokens": 177,
+            "id": 2
+          },
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 1619,
+            "created_at": 1792342987,
+            "prompt_tokens": 0,
+            "completion_tokens": 236,
+            "id": 3
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 1147,
+            "created_at": 1792342022,
+            "prompt_tokens": 0,
+            "completion_tokens": 258,
+            "id": 4
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:47:18.898660+00:00"
     }
   ],
   "status": "running",
