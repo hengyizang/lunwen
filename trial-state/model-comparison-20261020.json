@@ -13220,7 +13220,7 @@
       "reconciled_at": "2026-10-20T17:12:24.429417+00:00"
     }
   ],
-  "status": "closed_with_holds",
+  "status": "running",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
@@ -13675,5 +13675,37 @@
     }
   ],
   "closed_at": "2026-10-20T17:12:25.939547+00:00",
-  "committed_upper_cny": 0.71500273
+  "committed_upper_cny": 0.71500273,
+  "metadata_continuations": [
+    {
+      "reviewed_blob_sha": "af4c997684a69bdb0b93f81c4d44dfe82ca4db6b",
+      "at": "2026-10-20T17:16:07.906143+00:00",
+      "prior_status": "closed_with_holds",
+      "eligible_never_sent_ids": [
+        "cheapai-discount-luna-low|experiment_design",
+        "cheapai-pro-sol-high|scientific_plan",
+        "cheapai-pro-astra-high|scientific_plan",
+        "cheapai-discount-luna-medium|scientific_plan",
+        "cheapai-pro-astra-high|visual_chart",
+        "cheapai-discount-luna-medium|visual_chart",
+        "cheapai-kiro-sonnet-high|code_statistics",
+        "cheapai-ccmax-sonnet-high|code_statistics",
+        "cheapai-discount-sol-high|code_statistics",
+        "cheapai-kiro-opus-high|code_statistics",
+        "cheapai-ccmax-opus-high|code_statistics",
+        "cheapai-discount-astra-high|code_statistics",
+        "cheapai-pro-luna-medium|code_statistics",
+        "cheapai-pro-sol-medium|code_statistics",
+        "cheapai-discount-luna-low|code_statistics",
+        "cheapai-kiro-sonnet-high|claim_precision",
+        "cheapai-ccmax-sonnet-high|claim_precision",
+        "cheapai-discount-sol-high|claim_precision",
+        "cheapai-kiro-opus-high|claim_precision",
+        "cheapai-ccmax-opus-high|claim_precision"
+      ],
+      "attempts_preserved": 85,
+      "original_scope_unchanged": true,
+      "paid_retries_authorized": false
+    }
+  ]
 }
