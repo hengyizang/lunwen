@@ -12123,6 +12123,11 @@
       "call_id": "cheapai-discount-sol-high|claim_precision",
       "at": "2026-10-20T17:08:36.535127+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-kiro-opus-high|claim_precision",
+      "at": "2026-10-20T17:09:41.907180+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
