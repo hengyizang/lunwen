@@ -14024,12 +14024,50 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39464243857",
       "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:17:17.849228+00:00"
+      "reserved_at": "2026-10-20T17:17:17.849228+00:00",
+      "reported_model": "gpt-6-astra",
+      "request_id": "resp_0dfe39d2e49916f7016ad7a220c298819686abc5fddc63eac9",
+      "text": "{\n  \"hypothesis\": \"On previously unseen devices, a model using per-session spectral shape will be more accurate under multiplicative gain shifts than C, which uses gain-jitter augmentation. Prespecify a practically interesting target of at least a 5-percentage-point improvement; this is a target, not an observed effect.\",\n  \"mechanism_and_distinction_from_C\": \"Use D: take the same log-power features as B/C, subtract each session’s mean log power across frequency bins, then apply a robust scaler fitted on development devices and a two-layer MLP. This removes the session-wide log-power offset while retaining relative spectral shape. Unlike C, D changes the representation rather than augmenting training with gain jitter.\",\n  \"split_and_confound_control\": \"The independent sampling unit is the device. Before fitting, assign 4 devices per site to a locked final test and 8 per site to development, sampling within site and label where possible and requiring both labels in each partition per site if the available counts permit. Use all 20 sessions for each assigned device; never split a device’s sessions across partitions. Do not use final-test labels or features to select settings or adapt models. This estimates generalization to new devices at represented sites, not to unseen sites.\",\n  \"baseline_fairness\": \"Compare A, B, C, D, and D plus a global log-power offset feature. Use identical device partitions, sessions, log-power extraction, training labels, fixed training schedule, and prespecified optimizer and stopping rule. A uses a robust scaler and logistic regression; B/C use the same two-layer MLP; C alone uses multiplicative gain-jitter augmentation. Fix all settings before the final test; do no tuning.\",\n  \"mechanism_ablation_and_falsification\": \"The offset-feature ablation tests whether restoring absolute magnitude weakens D’s gain robustness. Evaluate every model on the unmodified final inputs and on prespecified waveform gain multipliers 0.5 and 2, without adaptation. Evidence against the proposed mechanism includes no D advantage over C under shifted inputs, or no loss of robustness when the offset is restored. Synthetic gain perturbations do not establish performance under every real sensor shift.\",\n  \"primary_metric_and_paired_statistics\": \"Primary comparison: D minus C in device-level balanced accuracy, averaged equally across the three gain conditions. Average session logits within device before classifying; average predictions across the three seeds. Report the paired difference and a 95% percentile bootstrap interval from resampling test devices within site. The small test set makes uncertainty substantial; seed runs are not independent samples.\",\n  \"compute_plan\": \"Exactly 15 fits: 3 seeds each for A, B, C, D, and D-plus-offset (5 × 3). No tuning, hidden fitting, or replacement runs; retain every run, including failures. Train only on development devices and evaluate the locked test once. Use at most four CPU cores and 8 GiB RAM. Stop launching runs at 120 CPU-minutes or 40 wall-clock minutes, whichever comes first; stop earlier on resource-limit warnings. A stopped or incomplete pilot is reported as inconclusive.\",\n  \"go_no_go\": \"Proceed to a larger, separately planned study only if D exceeds C by at least 5 percentage points on the primary metric and the paired interval’s lower bound is above zero. Otherwise do not claim success. A positive result supports this method on this partition and these perturbations only; it does not establish the mechanism as real, novelty, broad site generalization, or performance under unmeasured gain shifts.\",\n  \"remaining_unknowns\": \"The capsule does not specify feature extraction details, label counts within each site, gain-shift magnitudes in deployment, or whether the proposed spectral mechanism is valid. If site-label counts prevent the planned partition constraint, report the resulting test composition and limitation before fitting.\"\n}",
+      "usage": {
+        "input_tokens": 559,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 2894,
+        "output_tokens_details": {
+          "reasoning_tokens": 2096
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "a91e08ae3c41fa159724f3a04ca8095277713c4c647dfdc8be6019cec55cb306",
+      "grade": {
+        "case_id": "scientific_plan",
+        "score": null,
+        "max_score": null,
+        "passed": null,
+        "criteria": [],
+        "requires_manual_review": true,
+        "scope": "synthetic open proposal; qualitative review required",
+        "review_dimensions": [
+          "provisional_novelty_and_mechanism",
+          "falsifiable_predictions",
+          "leakage_and_site_confound_control",
+          "fair_strong_baselines",
+          "mechanism_specific_ablation",
+          "independent_unit_statistics",
+          "explicit_compute_arithmetic",
+          "evidence_bound_go_no_go"
+        ],
+        "format_valid": true
+      },
+      "duration_seconds": 28.3153
     }
   ],
   "status": "running",
