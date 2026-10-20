@@ -2837,6 +2837,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T13:50:24.330453+00:00"
+    },
+    {
+      "call_id": "codekey-discount-luna-medium|evidence_conflict",
+      "candidate_id": "codekey-discount-luna-medium",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "case_id": "evidence_conflict",
+      "phase": "screening",
+      "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+      "quote_sha256": "2d148875db28a950af8cfbe2331ce40f629149f22faf15b1942edd9f3354fbe2",
+      "reserved_ceiling_cny": 0.01938181,
+      "meter_before": {
+        "provider": "codekey-codex-discount",
+        "kind": "codekey_total_actual_cost",
+        "requests": 6,
+        "cost_cny": 0.00369736,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:50:26.271251+00:00"
     }
   ],
   "status": "running",
