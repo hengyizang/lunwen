@@ -13220,7 +13220,7 @@
       "reconciled_at": "2026-10-20T17:12:24.429417+00:00"
     }
   ],
-  "status": "running",
+  "status": "closed_with_holds",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
@@ -13673,5 +13673,7 @@
       "at": "2026-10-20T17:10:36.962781+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
     }
-  ]
+  ],
+  "closed_at": "2026-10-20T17:12:25.939547+00:00",
+  "committed_upper_cny": 0.71500273
 }
