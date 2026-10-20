@@ -2,18 +2,13 @@
   "schema_version": "1.0",
   "project": "my-phd",
   "should_run": false,
-  "reason": "configuration_pending",
+  "reason": "production_configured_automatic_research_not_started",
   "stage": "topic-intelligence",
   "gate": "G1",
   "actor": "Hengyi Zang",
   "authorized_ceiling_cny": 300,
   "spent_cny": 0.0,
   "remaining_cny": 300.0,
-  "configuration_errors": [
-    "UUAPI_BASE_URL is not configured; supply the exact HTTPS root or /v1 base; UUAPI_API_KEY is not configured; UUAPI_OPENAI_MODEL is not configured",
-    "UUAPI_BASE_URL is not configured; supply the exact HTTPS root or /v1 base; UUAPI_API_KEY is not configured; UUAPI_ANTHROPIC_MODEL is not configured",
-    "missing DR_OS_MODEL_PRICING_JSON"
-  ],
-  "changed_at": "2026-10-02T15:58:47+00:00",
-  "source_run_id": "37030738912"
+  "changed_at": "2026-10-20T10:22:46+00:00",
+  "source_run_id": "39407496718"
 }
