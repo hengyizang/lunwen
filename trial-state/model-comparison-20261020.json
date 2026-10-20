@@ -10713,12 +10713,87 @@
         "cost_cny": 0.013182,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39460628361",
       "code_sha": "96be6d61af2e3003b9ff27a5600a5cad136bd73d",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:00:35.336346+00:00"
+      "reserved_at": "2026-10-20T17:00:35.336346+00:00",
+      "reported_model": "gpt-6-astra",
+      "request_id": "resp_0e800fc37604e93c016ad79e4c3ec887d184da188cb14ff602",
+      "text": "{\n  \"paired_differences\": [0.1, 0.0, 0.2, -0.1],\n  \"mean_difference\": 0.05,\n  \"independent_units\": 4,\n  \"sample_sd_difference\": 0.1290994449,\n  \"standard_error_difference\": 0.0645497224,\n  \"pseudoreplication\": true,\n  \"appropriate_test\": \"paired_t\",\n  \"can_infer_significance_from_mean_alone\": false\n}",
+      "usage": {
+        "input_tokens": 309,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 259,
+        "output_tokens_details": {
+          "reasoning_tokens": 121
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "8e3d187adbc2f56cd9ab7a3ce3b990c52f71849373ce6d8014dc9d3f0452be80",
+      "grade": {
+        "case_id": "code_statistics",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "paired_differences",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "mean_difference",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "independent_units",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "sample_sd",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "standard_error",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "pseudoreplication",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "paired_test",
+            "passed": true,
+            "weight": 10,
+            "critical": true
+          },
+          {
+            "id": "no_mean_only_significance",
+            "passed": true,
+            "weight": 10,
+            "critical": true
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 28.0787
     }
   ],
   "status": "running",
