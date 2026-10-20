@@ -121,7 +121,7 @@ def _ledger(project: Path) -> list[dict]:
 def _check_holds(project: Path, rows: list[dict]) -> None:
     state = model_spend.read(project)
     if state and state["reservations"]:
-        raise RoutingError("outstanding reservations block route changes and new paid requests")
+        raise RoutingError("billing reconciliation is required; outstanding reservations block route changes and new paid requests")
     reconciled = {event.get("receipt_id") for event in (state or {}).get("reconciliation_events", [])}
     for row in rows:
         if ((row.get("cost_status") in {"unknown_reconcile_required", "estimated_reconcile_required"}
