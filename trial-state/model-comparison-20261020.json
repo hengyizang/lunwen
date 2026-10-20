@@ -306,9 +306,20 @@
       "reconciled_at": "2026-10-20T13:04:44.880843+00:00"
     }
   ],
-  "status": "stopped",
+  "status": "running",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
-  "stop_reason": "unknown_charge_reconciliation_required"
+  "operator_reviews": [
+    {
+      "at": "2026-10-20T13:09:57.664298+00:00",
+      "reviewed_ledger_blob_sha": "1887a26624459f621beb56971921979d1c2b5951",
+      "reviewed_code_sha": "97fb97ee1a9d5ad4349144ab32eed8668e6a8090",
+      "reason": "Independent debit reconciled; continue only unattempted fixed-plan calls within the same allowance.",
+      "attempts_preserved": 1,
+      "limit_unchanged_cny": 30.0,
+      "committed_cny_before_resume": 0.000496,
+      "generation_retry_authorized": false
+    }
+  ]
 }
