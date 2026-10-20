@@ -12048,12 +12048,71 @@
         "cost_cny": 0.014484864,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39460628361",
       "code_sha": "96be6d61af2e3003b9ff27a5600a5cad136bd73d",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:11:29.926744+00:00"
+      "reserved_at": "2026-10-20T17:11:29.926744+00:00",
+      "reported_model": "claude-opus-5-5",
+      "request_id": "msg_edfcd77c07ff4e008b0e392891ef77b5",
+      "text": "```json\n{\n  \"selected_claim\": \"B\",\n  \"effect_percentage_points\": 3,\n  \"ci_contains_zero\": true,\n  \"claim_scope\": \"held_out_benchmark\",\n  \"preserve_failed_runs\": true,\n  \"sentence\": \"On the held-out benchmark, mean F1 increased by 3 percentage points; the paired 95% CI [-0.01, 0.07] does not establish a positive effect.\"\n}\n```",
+      "usage": {
+        "cache_creation_input_tokens": 369,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 0,
+        "output_tokens": 366
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "5c0f9ccf333d21529dc94cf0814b89388efd8c3b31b144a395e2b14ac0113aef",
+      "grade": {
+        "case_id": "claim_precision",
+        "score": 85,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "supported_main_claim",
+            "passed": true,
+            "weight": 25,
+            "critical": true
+          },
+          {
+            "id": "numerical_effect",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "uncertainty",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "evidence_scope",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "failed_run_integrity",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "bounded_english_sentence",
+            "passed": false,
+            "weight": 15,
+            "critical": false
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 4.8449
     }
   ],
   "status": "running",
