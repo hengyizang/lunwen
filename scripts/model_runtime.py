@@ -18,11 +18,14 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, billing_quotes, model_spend
+    from scripts import ai_providers, billing_quotes, model_spend, model_routing, relay_billing, engineering_contract
 except ImportError:
     import ai_providers  # type: ignore
     import billing_quotes  # type: ignore
     import model_spend  # type: ignore
+    import model_routing  # type: ignore
+    import relay_billing  # type: ignore
+    import engineering_contract  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,7 +86,10 @@ def pricing(provider: str, model: str | None = None, *, billing_identity: dict |
     # Explicit model-specific rates avoid charging a premium route at a cheap
     # model's assumed price (or vice versa). No inferred gateway pricing.
     if model:
-        raw_rates = os.environ.get("DR_OS_MODEL_PRICING_JSON", "{}")
+        raw_rates = os.environ.get("DR_OS_MODEL_PRICING_JSON", "").strip()
+        if not raw_rates and provider in ai_providers.PRODUCTION_PROVIDERS:
+            raw_rates = (ROOT / "config" / "model-pricing.json").read_text(encoding="utf-8")
+        raw_rates = raw_rates or "{}"
         try:
             overrides = json.loads(raw_rates)
         except json.JSONDecodeError as exc:
@@ -93,7 +99,10 @@ def pricing(provider: str, model: str | None = None, *, billing_identity: dict |
         configuration = ai_providers.configuration(provider)
         scope_key = "|".join((provider, str(configuration.get("endpoint") or ""), model))
         try:
-            request_identity = billing_quotes.identity(_billing_configuration("DR_OS_MODEL_BILLING_IDENTITY_JSON", provider, billing_identity))
+            scoped_identity = _billing_configuration("DR_OS_MODEL_BILLING_IDENTITY_JSON", provider, billing_identity)
+            if scoped_identity is None and provider in ai_providers.PRODUCTION_PROVIDERS:
+                scoped_identity = configuration["billing_identity"]
+            request_identity = billing_quotes.identity(scoped_identity)
             if "schema_version" in overrides or "quotes" in overrides:
                 return billing_quotes.select(overrides, provider, str(configuration.get("endpoint") or ""), model, request_identity)
             if any(request_identity.values()):
@@ -329,6 +338,9 @@ def _cache_key(
     *,
     stage: str | None = None,
     role: str | None = None,
+    reasoning_effort: str | None = None,
+    attachment_identity: list | None = None,
+    routing_policy_sha256: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     configuration = ai_providers.configuration(provider)
     identity = {
@@ -342,9 +354,12 @@ def _cache_key(
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         "system_sha256": hashlib.sha256((system or "").encode("utf-8")).hexdigest(),
         "max_output_tokens": max_output_tokens,
-        "cache_schema": "4.0",
+        "cache_schema": "5.0",
         "stage": stage,
         "role": role,
+        "reasoning_effort": reasoning_effort,
+        "attachment_identity": attachment_identity or [],
+        "routing_policy_sha256": routing_policy_sha256,
         "billing_identity": (billing_quote or {}).get("billing_identity", {}),
         "billing_quote_sha256": (billing_quote.get("quote_sha256") or billing_quotes.quote_digest(billing_quote)) if billing_quote is not None else None,
         "declared_tool_limits": declared_tool_limits or {},
@@ -425,9 +440,42 @@ def call(
     model: str | None = None,
     billing_identity: dict | None = None,
     declared_tool_limits: dict | None = None,
+    reasoning_effort: str | None = None,
+    attachments: list | None = None,
+    task_kind: str | None = None,
+    source_contract: dict | None = None,
 ) -> ai_providers.ModelResult:
     """Call a provider with exact-request caching and hard CNY ceilings."""
 
+    route = model_routing.resolve_call(stage, role, provider, model, reasoning_effort, task_kind)
+    provider, model, reasoning_effort = route["provider"], route["model"], route["reasoning_effort"]
+    production = provider in ai_providers.PRODUCTION_PROVIDERS
+    if route.get("max_output_tokens") is not None:
+        max_output_tokens = min(max_output_tokens, route["max_output_tokens"])
+    if type(max_output_tokens) is not int or not 1 <= max_output_tokens <= 100000:
+        raise ModelBudgetError("output token ceiling must be a bounded positive integer")
+    media = ai_providers.validate_attachments(attachments) if attachments else []
+    if media and (not production or ai_providers.provider_family(provider) not in {"openai", "google"}):
+        raise ModelBudgetError("attachments require a supported native production route")
+    if role == "multimodal-inspection" and not media:
+        raise ModelBudgetError("multimodal inspection requires source-hashed attachments")
+    contract_validator = None
+    if role in engineering_contract.TASKS:
+        if not production or model != "deepseek-v4.1-flash" or source_contract is None:
+            raise ModelBudgetError("engineering support requires its production route and source contract")
+        contract_validator = engineering_contract
+    elif production and model == "gpt-5.6-luna" and role not in {"endpoint-health", "model-signature", "model-instrumentation"}:
+        if role != "metadata-extraction" or source_contract is None:
+            raise ModelBudgetError("Luna requires a bounded metadata source contract")
+        from scripts import metadata_contract
+        contract_validator = metadata_contract
+    elif source_contract is not None:
+        raise ModelBudgetError("source contracts require their scoped metadata or engineering route")
+    if contract_validator is not None:
+        source_contract = contract_validator.validate_contract(source_contract)
+        prompt = contract_validator.build_prompt(prompt, source_contract)
+    media_identity = [{"sha256":item["sha256"], "mime_type":item["mime_type"],
+                       "size_bytes":len(item["decoded"])} for item in media]
     paper_id = _paper_for_stage(project_root, stage)
     configuration = ai_providers.configuration(provider)
     effective_model = str(model or configuration.get("model") or "")
@@ -440,15 +488,22 @@ def call(
         raise ModelBudgetError(str(exc)) from exc
     # Fresh reviews are deliberately billable: response replay is not another
     # independent scientific review or a current endpoint-health observation.
-    use_cache = use_cache and not fresh_call_required(role)
+    use_cache = use_cache and not fresh_call_required(role) and not route.get("fresh_required", False)
     key, identity = _cache_key(provider, prompt, system, max_output_tokens, effective_model or None, quote, limits,
-                               stage=stage, role=role)
+                               stage=stage, role=role, reasoning_effort=reasoning_effort,
+                               attachment_identity=media_identity,
+                               routing_policy_sha256=route.get("policy_sha256"))
     request_metrics = {
         "prompt_sha256": identity["prompt_sha256"],
         "system_sha256": identity["system_sha256"],
         "prompt_input_bytes": len(prompt.encode("utf-8")) + len((system or "").encode("utf-8")),
         "max_output_tokens": max_output_tokens,
         "cache_policy": "exact_request" if use_cache else "fresh_required_or_explicit",
+        "requested_reasoning_effort": reasoning_effort,
+        "reasoning_effort_attestation": "requested_not_independently_attested" if reasoning_effort else None,
+        "routing_policy_sha256": route.get("policy_sha256"),
+        "route_id": route.get("route_id"),
+        "attachments": media_identity,
     }
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
@@ -473,11 +528,15 @@ def call(
                 cache_hit=True,
                 cache_key=key,
                 completion_status=cached.get("completion_status"),
+                requested_effort=reasoning_effort,
+                attachment_sha256=tuple(item["sha256"] for item in media_identity),
             )
         except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
             result = None  # type: ignore[assignment]
         if result is not None:
             ai_providers.require_complete(result)
+            if source_contract is not None:
+                contract_validator.validate_response(result.text, source_contract)
             _append(
                 _ledger(project_root),
                 {
@@ -507,13 +566,26 @@ def call(
     status = budget_status(project_root, paper_id)
     control = model_spend.read(project_root)
     controlled = control is not None
+    if production and not controlled:
+        raise ModelBudgetError("production calls require the persisted owner-approved spending ledger")
+    if production and (os.environ.get("GITHUB_ACTIONS") != "true"
+                       or os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") != "1"):
+        raise ModelBudgetError("production generation requires the cloud runner and durable remote reservation mode")
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
     # The byte ceiling includes prompt/system framing. Conditional quotes also
     # reserve worst-tier/cache premiums/tools without relying on a tokenizer guess.
     conservative = controlled or quote.get("quote_schema") == "2.0"
     input_ceiling = max(predicted_input, len(request_text.encode("utf-8")) + 1000) if conservative else predicted_input
+    if production:
+        input_ceiling = max(input_ceiling + 8192, 65536 if ai_providers.provider_family(provider)=="anthropic" else 8192)
+        if media:
+            # Vision/PDF tokens cannot be inferred from compressed byte length.
+            # Reserve the whole supported context rather than a text-only guess.
+            input_ceiling = max(input_ceiling, 1048576)
     reserved_cost = billing_quotes.reserve_cost(quote, input_ceiling, max_output_tokens, limits)
+    if production:
+        reserved_cost = round(7 * reserved_cost, 8)
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
@@ -524,6 +596,11 @@ def call(
             f"request could exceed {paper_id} model budget: reserve up to CNY {reserved_cost:.4f}, "
             f"remaining CNY {status['paper_remaining']:.4f}"
         )
+    meter_before = None
+    if production:
+        if not configuration.get("configured"):
+            raise ModelBudgetError("production route credentials are missing")
+        meter_before = relay_billing.read_meter(provider)
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
     if reservation_id:
@@ -531,9 +608,12 @@ def call(
         sync_billing(project_root)
 
     try:
+        inference_options = {"reasoning_effort": reasoning_effort} if reasoning_effort is not None else {}
+        if attachments:
+            inference_options["attachments"] = attachments
         result = ai_providers.call(
             provider, prompt, system=system, max_output_tokens=max_output_tokens,
-            timeout=timeout, model=model,
+            timeout=timeout, model=model, **inference_options,
         )
     except Exception as exc:
         _append(_ledger(project_root), {
@@ -548,8 +628,10 @@ def call(
             "declared_tool_limits": limits,
             "transport_error_type": type(exc).__name__,
             "zero_cost_not_confirmed": True,
+            "gateway_meter_before": meter_before,
         })
         raise
+    settled = None
     try:
         input_tokens, output_tokens = usage_counts(result.usage)
         estimated = input_tokens is None or output_tokens is None
@@ -557,9 +639,38 @@ def call(
             raise ModelBudgetError("conditional billing needs actual token usage; reconcile the outstanding reservation")
         input_tokens = input_tokens if input_tokens is not None else predicted_input
         output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-        actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens,
-                                                                      quote=quote, declared_tool_limits=limits, request_id=result.request_id)
-    except ModelBudgetError as exc:
+        try:
+            actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens,
+                                                                          quote=quote, declared_tool_limits=limits, request_id=result.request_id)
+        except ModelBudgetError:
+            if not production:
+                raise
+            # Independent gateway settlement can resolve missing cache TTL or
+            # a promotional price without fabricating a precise token quote.
+            actual_cost, cache_price_unknown = reserved_cost, True
+            billing_details = {"modeled_cost_unknown":True,"usage_receipt":result.usage}
+        if production:
+            if output_tokens > max_output_tokens:
+                raise ModelBudgetError("provider output exceeded the reserved ceiling")
+            settled = relay_billing.settle(provider, effective_model, meter_before)
+            if settled["actual_cost_cny"] > reserved_cost:
+                if reservation_id:
+                    # Keep a pending hold for the known debit, rather than
+                    # releasing it and permitting another underquoted call.
+                    # This records an existing liability, not new authority.
+                    control = model_spend.read(project_root, required=True)
+                    pending = control["reservations"][reservation_id]
+                    pending["max_cost_cny"] = settled["actual_cost_cny"]
+                    pending["confirmed_gateway_debit_cny"] = settled["actual_cost_cny"]
+                    pending["review_reason"] = "gateway_debit_exceeded_reserved_ceiling"
+                    model_spend.write(project_root, control)
+                    from scripts.cloud_checkpoint import sync_billing
+                    sync_billing(project_root)
+                raise ModelBudgetError("gateway debit exceeded the reserved ceiling; hold for reconciliation")
+            billing_details = {**billing_details,"modeled_cost_cny":None if cache_price_unknown else actual_cost,
+                               "independent_gateway_debit":settled}
+            actual_cost, cache_price_unknown, estimated = settled["actual_cost_cny"], False, False
+    except (ModelBudgetError, relay_billing.BillingReconciliationError) as exc:
         _append(_ledger(project_root), {**request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id, "stage": stage,
                                       "paper_id": paper_id, "role": role, "provider": provider,
                                       "model": result.reported_model or result.model, "cache_hit": False,
@@ -568,6 +679,7 @@ def call(
                                       "billing_identity": identity["billing_identity"], "billing_quote_sha256": identity["billing_quote_sha256"],
                                       "declared_tool_limits": limits, "request_id": result.request_id,
                                       "billing_error": str(exc), "usage_receipt": result.usage,
+                                      "independent_gateway_debit": settled,
                                       "completion_status": result.completion_status,
                                       "endpoint": result.endpoint, "gateway": result.gateway, "protocol": result.protocol})
         raise
@@ -602,12 +714,22 @@ def call(
             "billing_quote_sha256": identity["billing_quote_sha256"],
             "declared_tool_limits": limits,
             "reservation_id": reservation_id,
-            "cost_status": "estimated_reconcile_required" if estimated else "settled_usage_receipt",
+            "cost_status": ("estimated_reconcile_required" if estimated else
+                            "settled_gateway_debit" if production else "settled_usage_receipt"),
         },
     )
     # Account for the billable response first. Truncated/refused answers must
     # never become cached scientific artifacts, even if their text parses.
     ai_providers.require_complete(result)
+    if source_contract is not None:
+        try:
+            contract_validator.validate_response(result.text, source_contract)
+        except ValueError:
+            _append(_ledger(project_root), {**request_metrics,"at":utc_now(),"run_id":run_id,
+                "stage":stage,"role":role,"provider":provider,"model":effective_model,
+                "cost_cny":0.0,"validation_status":"source_contract_failed_no_retry",
+                "request_id":result.request_id,"not_scientific_evidence":True})
+            raise
     if use_cache and not estimated:
         _write_cache(
             cache_path,

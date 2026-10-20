@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "profile": "production",
+  "policy_version": "2026-10-20.1",
+  "quality_policy": {
+    "scientific_equivalence_verified": false,
+    "human_gate_approval_required": true,
+    "automatic_paid_fallback": false,
+    "unknown_cost_stops_execution": true,
+    "deterministic_tools_first": true,
+    "claude_persistent_artifacts_allowed": false,
+    "scientific_critics_always_fresh": true
+  },
+  "models": {
+    "sol": {"provider": "cheapai-gpt-pro", "model": "gpt-6.1-sol", "family": "openai", "reasoning_effort": "high", "max_output_tokens": 12000},
+    "astra": {"provider": "cheapai-gpt-pro", "model": "gpt-6-astra", "family": "openai", "reasoning_effort": "high", "max_output_tokens": 12000},
+    "luna": {"provider": "cheapai-gpt-discount", "model": "gpt-5.6-luna", "family": "openai", "reasoning_effort": "medium", "max_output_tokens": 1500},
+    "sonnet": {"provider": "codekey-kiro-enterprise", "model": "claude-sonnet-5-5", "family": "anthropic", "reasoning_effort": "high", "max_output_tokens": 4000},
+    "opus": {"provider": "codekey-kiro-enterprise", "model": "claude-opus-5-5", "family": "anthropic", "reasoning_effort": "high", "max_output_tokens": 4000},
+    "deepseek": {"provider": "codekey-deepseek", "model": "deepseek-v4.1-flash", "family": "deepseek", "reasoning_effort": "high", "max_output_tokens": 4000},
+    "argon": {"provider": "codekey-gemini", "model": "gemini-4-argon", "family": "google", "reasoning_effort": "high", "max_output_tokens": 4000}
+  },
+  "stage_routes": {
+    "intake": {"semantic-planner": "sonnet", "persistent-writer": "sol", "independent-critic-initial": "sonnet", "persistent-remediator": "sol", "independent-critic-final": "opus"},
+    "topic-intelligence": {"semantic-planner": "opus", "persistent-writer": "astra", "independent-critic-initial": "opus", "persistent-remediator": "astra", "independent-critic-final": "opus"},
+    "paper-architecture": {"semantic-planner": "opus", "persistent-writer": "astra", "independent-critic-initial": "opus", "persistent-remediator": "astra", "independent-critic-final": "opus"},
+    "experiment-design": {"semantic-planner": "opus", "persistent-writer": "astra", "independent-critic-initial": "opus", "persistent-remediator": "astra", "independent-critic-final": "opus"},
+    "experiment-execution": {"semantic-planner": "sonnet", "persistent-writer": "sol", "independent-critic-initial": "sonnet", "persistent-remediator": "sol", "independent-critic-final": "opus"},
+    "writing-and-review": {"semantic-planner": "sonnet", "persistent-writer": "sol", "independent-critic-initial": "sonnet", "persistent-remediator": "sol", "independent-critic-final": "opus"}
+  },
+  "critical_tasks": ["scientific-judgment", "core-story", "novelty", "critical-experiment-design", "complex-revision", "key-algorithm", "thesis-synthesis", "scientific-interpretation"],
+  "auxiliary_routes": {
+    "metadata-extraction": {"model_key": "luna", "quality_boundary": "Source-bound field extraction only; preserve explicit source IDs, unknowns and exact values. Never exclude literature, infer support or write scientific conclusions.", "max_output_tokens": 1500},
+    "format-conversion": {"model_key": "sol", "quality_boundary": "Formatting assistance only after deterministic tools. Luna format conversion has not been accepted. Preserve all facts, citations, numbers and uncertainty; validate candidate output.", "max_output_tokens": 1200},
+    "screening-assist": {"model_key": "sol", "quality_boundary": "Luna screening has not been accepted. Source-bound advisory screening retains all exclusions and requires scientific review.", "max_output_tokens": 2500},
+    "evidence-synthesis": {"model_key": "sol", "quality_boundary": "Source-bound internal synthesis; retain conflicts, exact evidence locators and unknowns. No automatic claim acceptance.", "max_output_tokens": 5000},
+    "scientific-judgment": {"model_key": "astra", "quality_boundary": "Evidence-bound scientific analysis subject to independent audits and human gates.", "max_output_tokens": 5000},
+    "independent-critique": {"model_key": "opus", "quality_boundary": "Fresh read-only independent audit; never persist scientific artifacts or approve a gate.", "max_output_tokens": 4000},
+    "reader-translation": {"model_key": "sol", "quality_boundary": "Faithful personal-reading translation preserving source pages, numbers, citations and uncertainty; not verified citation evidence.", "max_output_tokens": 6000},
+    "reader-qa": {"model_key": "sol", "quality_boundary": "Personal source-bound reading answers with exact supplied page locators. Abstain for missing material; never convert an internal answer into verified citation evidence.", "max_output_tokens": 5000},
+    "engineering-diagnosis": {"model_key": "deepseek", "quality_boundary": "Internal read-only engineering diagnostics from supplied logs/code. OpenAI performs any persistent remediation; never determine scientific validity.", "max_output_tokens": 4000},
+    "engineering-code-review": {"model_key": "deepseek", "quality_boundary": "Source-bound internal review of routine implementation. Findings require exact source quotes and verification steps; OpenAI owns remediation and cloud checks. Never replace scientific audits or assess the core algorithm's novelty.", "max_output_tokens": 4000},
+    "engineering-test-design": {"model_key": "deepseek", "quality_boundary": "Source-bound candidate software regression and boundary tests. OpenAI implements; deterministic cloud execution verifies. Never choose scientific hypotheses, endpoints, metrics or analysis thresholds.", "max_output_tokens": 4000},
+    "engineering-reproducibility": {"model_key": "deepseek", "quality_boundary": "Source-bound environment, dependency and run-log diagnostics only. Preserve frozen scientific inputs and failed runs; OpenAI owns fixes and cloud replay. Never certify scientific reproducibility from model text.", "max_output_tokens": 4000},
+    "multimodal-inspection": {"model_key": "argon", "quality_boundary": "Internal source-bound image/PDF inspection; never generate result figures, replace human visual review or certify scientific claims.", "max_output_tokens": 4000}
+  },
+  "auxiliary_stages": ["auxiliary", "intake", "topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
+  "health_roles": ["endpoint-health", "model-signature", "model-instrumentation"],
+  "health_stages": ["health", "acceptance", "instrumentation"]
+}

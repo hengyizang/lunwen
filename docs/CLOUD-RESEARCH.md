@@ -1,5 +1,10 @@
 # Cloud research from a GitHub issue
 
+Production uses [CheapAI and CodeKey task routes](PRODUCTION-MODEL-ROUTING.md)
+and five dedicated Actions Secrets, with no UUAPI requirement. Configuration
+checks do not enable paid automatic continuation. Existing budgets and human
+gate decisions remain authoritative.
+
 For owner-confirmed round-the-clock continuation, see
 [Continuous cloud research](CONTINUOUS-CLOUD-RESEARCH.md).
 For shared or separate OpenAI/Claude gateways, see [the cloud startup checklist](GATEWAY-STARTUP.md).
@@ -65,12 +70,13 @@ a new job is not a new spending approval.
 | `status` | none | Read the persisted stage, gate and blockers. |
 | `authorize_budget` | `new_ceiling_cny` | Record the owner's next CNY 300 cumulative model API tranche. No model call. |
 | `reconcile_budget` | `reservation_id`, `actual_cost_cny`, `evidence_note` | Record the checked gateway bill for an ambiguous or interrupted call and release its reservation. No model call. |
-| `cycle` | `context`, optional `stage` | One current-stage Claude plan/critic and GPT writer/remediation cycle through UUAPI. |
+| `cycle` | `context`, optional `stage` and critical `task_kind` | One current-stage Claude plan/critic and GPT writer/remediation cycle through the production task routes. |
 | `continuation` | none | Recheck the bound owner policy, gates, configuration and ledger; run one permitted current-stage cycle and continue only while healthy. |
-| `paperqa` | `corpus`, `question`, optional `settings` | Paused as a paid cloud action until its external model charges are meterable against the tranche. |
+| `paperqa` | `corpus`, `question`, optional compatibility `settings` | Bounded native source Q&A with deterministic retrieval and Sol high through the central budget; not the upstream paid PaperQA2 SDK. |
+| `auxiliary` | `manifest` | One bounded metadata/engineering/multimodal/format/screening helper from evidence/auxiliary-jobs/*.json; no model override or budget grant. |
 | `tooluniverse` | `request_file` | Paused as a paid cloud action until any external API charges are meterable against the tranche. |
 
-Only `cycle`, `continuation`, `paperqa`, and `tooluniverse` accept `allow_paid: true`; every
+Only `cycle`, `continuation`, `paperqa`, `auxiliary`, and `tooluniverse` accept `allow_paid: true`; every
 other action requires `false`. `allow_paid: true` identifies a potentially
 billable job, not a fresh spending approval. The owner first approves a
 **cumulative** ceiling of CNY 300 with a separate `authorize_budget` issue,

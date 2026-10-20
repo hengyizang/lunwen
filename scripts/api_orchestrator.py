@@ -22,10 +22,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, model_runtime, output_provenance, research_methods
+    from scripts import ai_providers, model_runtime, model_routing, output_provenance, research_methods
 except ImportError:
     import ai_providers  # type: ignore
     import model_runtime  # type: ignore
+    import model_routing  # type: ignore
     import output_provenance  # type: ignore
     import research_methods  # type: ignore
 
@@ -1336,6 +1337,8 @@ def result_audit(result: ai_providers.ModelResult) -> dict[str, Any]:
         "cache_hit": result.cache_hit,
         "cache_key": result.cache_key,
         "completion_status": result.completion_status,
+        "requested_reasoning_effort": getattr(result, "requested_effort", None),
+        "attachment_sha256": list(getattr(result, "attachment_sha256", ())),
     }
 
 
@@ -1810,11 +1813,19 @@ def run_cycle(
     max_output_tokens: int = 12000,
     control_max_output_tokens: int = 4000,
     automatic_data: bool = True,
+    task_kind: str | None = None,
 ) -> dict[str, Any]:
     if not 1 <= control_max_output_tokens <= max_output_tokens:
         raise ValueError(
             "control_max_output_tokens must be between 1 and max_output_tokens"
         )
+    production_routes = model_routing.cycle_routes(stage, task_kind) if model_routing.production_enabled() else {}
+    if production_routes:
+        planner_provider = production_routes["semantic-planner"]["provider"]
+        writer_provider = production_routes["persistent-writer"]["provider"]
+        critic_provider = production_routes["independent-critic-final"]["provider"]
+    elif task_kind is not None:
+        raise ValueError("explicit scientific task routing requires the production profile")
     validate_roles(planner_provider, writer_provider, critic_provider)
     require_current_stage(project, stage)
     from scripts.cloud_research_steps import before_cycle
@@ -1844,8 +1855,20 @@ def run_cycle(
         return {"stage": stage, "controlled_steps": controlled_steps, "paid_model_cycle": False}
     # Discover a missing writer/critic configuration or quote before paying the
     # planner. This is readiness checking, not a whole-cycle cost guarantee.
-    route_preflight = [model_runtime.preflight_route(provider)
-                       for provider in dict.fromkeys((planner_provider, writer_provider, critic_provider))]
+    if production_routes:
+        unique_routes = {(route["provider"], route["model"]) for route in production_routes.values()}
+        route_preflight = [model_runtime.preflight_route(provider, model=model)
+                           for provider, model in sorted(unique_routes)]
+    else:
+        route_preflight = [model_runtime.preflight_route(provider)
+                           for provider in dict.fromkeys((planner_provider, writer_provider, critic_provider))]
+
+    def route_arguments(role: str) -> dict[str, Any]:
+        route = production_routes.get(role)
+        if route is None:
+            return {}
+        return {"model": route["model"], "reasoning_effort": route["reasoning_effort"],
+                **({"task_kind": task_kind} if task_kind is not None else {})}
     controlled_steps["paid_model_cycle"] = True
     write_step_report(project_root(project) / REPORT, controlled_steps)
     planner = model_runtime.call(
@@ -1854,6 +1877,7 @@ def run_cycle(
         stage=stage,
         role="semantic-planner",
         provider=planner_provider,
+        **route_arguments("semantic-planner"),
         prompt=planning_prompt(project, stage, context, evidence),
         max_output_tokens=control_max_output_tokens,
     )
@@ -1875,6 +1899,7 @@ def run_cycle(
         stage=stage,
         role="persistent-writer",
         provider=writer_provider,
+        **route_arguments("persistent-writer"),
         prompt=writer_prompt(project, stage, context, plan, evidence),
         max_output_tokens=max_output_tokens,
     )
@@ -1900,7 +1925,8 @@ def run_cycle(
         stage=stage,
         role="independent-critic-initial",
         use_cache=False,
-        provider=critic_provider,
+        provider=production_routes["independent-critic-initial"]["provider"] if production_routes else critic_provider,
+        **route_arguments("independent-critic-initial"),
         prompt=critic_prompt(project, stage, context),
         max_output_tokens=control_max_output_tokens,
     )
@@ -1920,6 +1946,7 @@ def run_cycle(
         stage=stage,
         role="persistent-remediator",
         provider=writer_provider,
+        **route_arguments("persistent-remediator"),
         prompt=remediation_prompt(
             project,
             stage,
@@ -1954,6 +1981,7 @@ def run_cycle(
         role="independent-critic-final",
         use_cache=False,
         provider=critic_provider,
+        **route_arguments("independent-critic-final"),
         prompt=critic_prompt(project, stage, context),
         max_output_tokens=control_max_output_tokens,
     )
@@ -1982,6 +2010,8 @@ def run_cycle(
         "run_id": run_id,
         "research_method_audits": {"initial": initial_method_audit, "final": final_method_audit},
         "stage": stage,
+        "task_kind": task_kind,
+        "production_routes": production_routes,
         "planner_provider": planner.provider,
         "writer_provider": writer.provider,
         "critic_provider": critic_provider,
@@ -2116,6 +2146,7 @@ def main() -> int:
         command.add_argument("stage")
         command.add_argument("--context", default="")
         command.add_argument("--discovery-query", default="")
+        command.add_argument("--task-kind", help="Explicit core scientific task; production policy selects Astra/Opus without adding calls")
         command.add_argument(
             "--no-auto-data-discovery",
             action="store_true",
@@ -2162,7 +2193,8 @@ def main() -> int:
         if args.live and not args.project:
             parser.error("--live requires --project and its existing spending authority")
         try:
-            report, failed = health_report(args.provider or list(ai_providers.PROVIDERS), live=args.live,
+            default_providers = list(ai_providers.PRODUCTION_PROVIDERS) if model_routing.production_enabled() else list(ai_providers.PROVIDERS)
+            report, failed = health_report(args.provider or default_providers, live=args.live,
                                            root=project_root(args.project) if args.project else None)
         except (RuntimeError, ValueError, OSError) as exc:
             print(json.dumps({"error": redact(str(exc)), "paid_call_started": False}, indent=2))
@@ -2170,6 +2202,8 @@ def main() -> int:
         print(json.dumps(report, indent=2))
         return 2 if failed else 0
     if args.command == "balance":
+        if model_routing.production_enabled():
+            parser.error("UUAPI is retired in production; use cost <project> for the recorded model budget")
         print(json.dumps(ai_providers.uuapi_usage(), ensure_ascii=False, indent=2))
         return 0
     if args.command == "cost":
@@ -2194,6 +2228,11 @@ def main() -> int:
         )
     if args.command == "stage":
         require_current_stage(args.project, args.stage)
+        stage_route = model_routing.select(args.stage, "persistent-writer", args.task_kind) if model_routing.production_enabled() else None
+        if stage_route:
+            args.provider = stage_route["provider"]
+        elif args.task_kind:
+            parser.error("--task-kind requires the production routing profile")
         if ai_providers.provider_family(args.provider) == "anthropic":
             parser.error(
                 "stage cannot persist Claude/Anthropic output; use an OpenAI/Codex provider"
@@ -2221,6 +2260,8 @@ def main() -> int:
             stage=args.stage,
             role="persistent-writer",
             provider=args.provider,
+            **({"model": stage_route["model"], "reasoning_effort": stage_route["reasoning_effort"],
+                **({"task_kind": args.task_kind} if args.task_kind else {})} if stage_route else {}),
             prompt=writer_prompt(args.project, args.stage, args.context, None, evidence),
             max_output_tokens=args.max_output_tokens,
         )
@@ -2249,6 +2290,7 @@ def main() -> int:
         args.max_output_tokens,
         args.control_max_output_tokens,
         automatic_data=not args.no_auto_data_discovery,
+        task_kind=args.task_kind,
     ), ensure_ascii=False, indent=2))
     return 0
 

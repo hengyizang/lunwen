@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "supplement_id": "luna-replacement-20261019",
+  "original_trial_id": "relay-acceptance-20261019",
+  "original_plan_sha256": "1a0bd20fdcf73910fbe1bd6f207575a000110ab7bfb79abfa4bcd654ecbdf3c7",
+  "original_ledger_blob_sha": "318ac04cec15dbdfd093dbc14e76fc20544935af",
+  "original_entries": 34,
+  "original_committed_cny": 0.11246048,
+  "incremental_ceiling_cny": 1.0,
+  "cumulative_ceiling_cny": 30.0,
+  "authorization": "User requests a replacement for unavailable GPT-6 Luna; bounded cloud comparison uses the existing CNY30 authorization, not a new allowance.",
+  "production_routing_changed": false,
+  "scientific_completion": false,
+  "max_fresh_calls": 20,
+  "cases": [
+    "luna-evidence-v1",
+    "luna-engineering-v1",
+    "luna-metadata-v1",
+    "luna-screening-v1"
+  ],
+  "groups": [
+    {
+      "id": "cheapai-gpt-pro",
+      "root": "https://cheapai.info",
+      "family": "openai",
+      "multiplier": 0.22,
+      "models": ["gpt-5.6-luna", "gpt-6.1-sol"],
+      "effort_by_model": {"gpt-5.6-luna": "medium", "gpt-6.1-sol": "high"},
+      "max_output_tokens": 4096,
+      "billing_history_models": ["gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"]
+    },
+    {
+      "id": "cheapai-gpt-discount",
+      "root": "https://cheapai.info",
+      "family": "openai",
+      "multiplier": 0.08,
+      "models": ["gpt-5.6-luna"],
+      "effort": "medium",
+      "max_output_tokens": 4096,
+      "billing_history_models": ["gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"]
+    },
+    {
+      "id": "codekey-codex-discount",
+      "root": "https://codekey.ai",
+      "family": "openai",
+      "multiplier": 0.12,
+      "models": ["gpt-5.6-luna"],
+      "effort": "medium",
+      "max_output_tokens": 4096,
+      "billing_history_models": ["gpt-6.1-sol", "gpt-6-astra", "gpt-6-luna", "gpt-5.6-luna"]
+    },
+    {
+      "id": "codekey-deepseek",
+      "root": "https://codekey.ai",
+      "family": "deepseek",
+      "multiplier": 0.1,
+      "models": ["deepseek-v4.1-flash"],
+      "effort": "high",
+      "max_output_tokens": 4096,
+      "billing_history_models": ["deepseek-flash", "deepseek-v4.1-flash"]
+    }
+  ]
+}

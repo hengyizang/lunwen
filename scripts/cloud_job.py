@@ -32,7 +32,7 @@ OWNER_ID = 163310614
 REPOSITORY = "hengyizang/lunwen"
 MARKER = "<!-- doctoral-research-os-cloud-job -->"
 BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```\s*", re.S)
-PAID = {"cycle", "continuation", "paperqa", "tooluniverse"}
+PAID = {"cycle", "continuation", "paperqa", "tooluniverse", "auxiliary"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
     "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope", "packet_id", "kind", "record_id", "decision"},
@@ -44,9 +44,10 @@ EXTRA = {
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
     "authorize_data": {"manifest", "expected_sha256"},
     "resume": {"expected_sha256", "repair_note"},
-    "cycle": {"context", "stage"},
+    "cycle": {"context", "stage", "task_kind"},
     "continuation": set(),
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
+    "auxiliary": {"manifest"},
 }
 
 
@@ -129,6 +130,11 @@ def validate_request(value: object) -> dict:
             raise CloudJobError("context exceeds 4000 characters")
         if "stage" in value and value["stage"] not in {s["name"] for s in researchctl.STAGES if s["gate"]}:
             raise CloudJobError("invalid stage")
+        if "task_kind" in value:
+            from scripts import model_routing
+            policy, _ = model_routing.load_policy()
+            if value["task_kind"] not in policy["critical_tasks"]:
+                raise CloudJobError("task_kind must name an approved critical scientific task")
     if action == "paperqa":
         if not isinstance(value.get("question"), str) or not 0 < len(value["question"].strip()) <= 2000:
             raise CloudJobError("a question of at most 2000 characters is required")
@@ -141,6 +147,10 @@ def validate_request(value: object) -> dict:
         if not isinstance(value.get("request_file"), str) or len(value["request_file"]) > 250:
             raise CloudJobError("request_file path is too long")
         project_relative(value["request_file"])
+    if action == "auxiliary":
+        manifest = project_relative(value.get("manifest"))
+        if len(manifest) > 250 or not manifest.startswith("evidence/auxiliary-jobs/") or not manifest.endswith(".json"):
+            raise CloudJobError("auxiliary requires an evidence/auxiliary-jobs/*.json manifest")
     return value
 
 
@@ -384,8 +394,43 @@ def run_job(job: dict, run_id: str) -> int:
                     phase = "control"
                     from scripts.cloud_progress import snapshot
                     progress_before = snapshot(slug)
+            elif action == "auxiliary":
+                if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
+                    raise CloudJobError("bounded auxiliary jobs require the production routing profile")
+                project = ROOT / "projects" / slug
+                control = model_spend.read(project, required=True)
+                if control["authorized_ceiling_cny"] <= 0 or control["reservations"]:
+                    raise CloudJobError("auxiliary work needs existing owner budget and no outstanding reservations")
+                os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+                os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
+                cmd = ["scripts/auxiliary_job.py", "--project", slug, "--manifest", job["manifest"],
+                       "--output", "evidence/auxiliary/" + run_id + ".json", "--execute"]
             elif action == "paperqa":
-                raise CloudJobError("PaperQA2 can use unmetered external model calls; its paid cloud action is paused until its charges can count against the approved tranche")
+                if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
+                    raise CloudJobError("PaperQA2 SDK is unmetered; select production for the native budgeted source-QA alternative")
+                from scripts.paper_qa import _file
+                project = ROOT / "projects" / slug
+                corpus = project / project_relative(job["corpus"])
+                if corpus.is_symlink() or not corpus.exists():
+                    raise CloudJobError("source corpus must exist and cannot be a symlink")
+                sources = [corpus] if corpus.is_file() else sorted(p for p in corpus.rglob("*")
+                    if p.is_file() and p.suffix.lower() in {".txt", ".md", ".pdf"})
+                if not 1 <= len(sources) <= 20:
+                    raise CloudJobError("native source QA requires 1-20 explicit supported source files")
+                for source in sources:
+                    _file(project, source.relative_to(project).as_posix(), "corpus source")
+                question = project / "evidence" / "qa" / (run_id + "-question.txt")
+                question.parent.mkdir(parents=True, exist_ok=True)
+                question.write_text(job["question"], encoding="utf-8")
+                control = model_spend.read(project, required=True)
+                if control["authorized_ceiling_cny"] <= 0 or control["reservations"]:
+                    raise CloudJobError("source QA needs existing owner budget and no outstanding reservations")
+                os.environ["DR_OS_REQUIRE_MODEL_AUTH"]="1"
+                os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"]="1"
+                cmd = ["scripts/paper_qa.py", "--project", slug, "--question-file", question.relative_to(project).as_posix(),
+                       "--output", "evidence/qa/" + run_id + ".json", "--execute"]
+                for source in sources:
+                    cmd += ["--source", source.relative_to(project).as_posix()]
             else:
                 raise CloudJobError("ToolUniverse can use unmetered paid APIs; its paid cloud action is paused until its charges can count against the approved tranche")
             if cmd is not None:
@@ -514,9 +559,14 @@ def cycle_command(job: dict, slug: str) -> list[str]:
                    "Keep Claude read-only and OpenAI as the persistent author. The October 7 target does not lower any requirement.")
     os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
     os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
-    return ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
-            "--planner-provider", "uuapi-anthropic", "--writer-provider", "uuapi-openai",
-            "--critic-provider", "uuapi-anthropic", "--context", context]
+    production = os.environ.get("DR_OS_ROUTING_PROFILE")=="production"
+    command = ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
+            "--planner-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic",
+            "--writer-provider", "cheapai-gpt-pro" if production else "uuapi-openai",
+            "--critic-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic", "--context", context]
+    if job.get("task_kind"):
+        command += ["--task-kind", job["task_kind"]]
+    return command
 
 
 def main() -> int:

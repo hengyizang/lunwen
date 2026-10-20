@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.3.0
 
+正式云端模型现已改用 **CheapAI＋CodeKey**，不再需要 UUAPI。逐任务模型、推理档位、五组 Actions Secrets、缓存与实际扣费核对及免费就绪检查见 [`docs/PRODUCTION-MODEL-ROUTING.md`](docs/PRODUCTION-MODEL-ROUTING.md)。配置完成不自动启动付费研究；既有累计预算、单一博士主题与六篇论文要求、人工关口继续保留。
+
 核心科学质量路线已接入既有流程，见 [`docs/SCIENTIFIC-REASONING.md`](docs/SCIENTIFIC-REASONING.md)：选题价值需有来源，竞争解释绑定关键实验及实际比较，结果报告保留不利证据，并在原有模型调用中审查贡献与结论边界。模型分工、档位及人工关口不变；结构通过不等于科学有效或达到Q1录用标准。
 
 质量约束下的成本审计和优化见 [`docs/COST-EFFICIENCY.md`](docs/COST-EFFICIENCY.md)：隔离旧调用记录、无损压缩结构化上下文、合并重复取证、免费关键词/BM25检索、引用元数据缓存与PDF缓存失效检查、提前核对整轮通道报价，并记录重复请求和未知费用。模型选择与档位不变；两轮独立审查、统计/实验要求和人工批准保留，不以工程测试宣称论文等质或实际省费比例。
@@ -46,8 +48,7 @@ P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [
 - 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
 - API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
 - 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
-- UUAPI 原生适配：Anthropic Messages 只读规划/审查与 OpenAI Responses 持久写作角色、HTTPS/路径保护、外部调用 User-Agent、余额查询、模型 ID 严格核对和可审计运行清单；CC Switch 可作为可选可视化管理面板。
-- UUAPI 的 GPT 路线可在 `Responses` 与 OpenAI-compatible `chat/completions` 间显式切换；不做静默协议或模型回退。
+- 正式流程使用 CheapAI OpenAI Responses、CodeKey Anthropic Messages、DeepSeek Chat 和 Gemini 原生多模态协议；逐任务显式模型与档位、严格身份核对、预算预留和独立实际扣费核对，不做自动付费重试或模型回退。历史 UUAPI 适配器仅为旧运行复现保留。
 - Claude 与 GPT 继续各司其职；本地模型运行层按配置的人民币单价记录每次调用，实行项目 300 元、单篇 60 元默认硬上限，并只对同模型、同端点、同参数、同 Prompt 哈希的完全相同请求使用零成本缓存。
 - G1/G3 默认自动生成多组数据查询，调用 DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方接口并行检索、跨查询去重和元数据初筛；G3 优先按六篇论文分别构造查询。候选许可和科学适用性始终标记为需要人工核验。
 - 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/人民币模型费用/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。

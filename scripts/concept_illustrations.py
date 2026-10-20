@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 """Optional GPT Image conceptual illustrations; never use for measured results.
 
-An explicit --execute pays for an API call. Importing a ChatGPT-web download is
-manual; this script never automates a consumer account or borrows its session.
+Paid image generation is disabled until a separately verified image route has
+central budget reservation, reconciliation and identity support. Importing a
+ChatGPT-web download is manual; this script never borrows its session.
 All images remain UNREGISTERED until visual inspection and separate approval.
 """
 from __future__ import annotations
 
 import argparse
-import base64
 import hashlib
 import json
-import os
 import re
-import shutil
-import urllib.request
 from pathlib import Path
 
 try:
@@ -23,9 +20,6 @@ try:
 except ImportError:
     import output_provenance  # type: ignore
     from publication_figures import PROJECTS_ROOT, safe_file, sha256_file  # type: ignore
-
-
-ENDPOINT = "https://api.openai.com/v1/images/generations"
 
 
 def _png(data: bytes) -> None:
@@ -41,10 +35,12 @@ def prepare(project: Path, paper: str, stem: str, prompt: str, source: str,
         raise ValueError("prompt and model ID are required")
     if source not in {"chatgpt-web", "gpt-image-api"}:
         raise ValueError("unsupported illustration source")
-    if source == "gpt-image-api" and not execute:
-        return {"dry_run": True, "source": source, "model_id": model,
+    if source == "gpt-image-api":
+        if execute:
+            raise ValueError("paid image generation is disabled: no verified, centrally metered image route is configured; import an authorized PNG or use deterministic research_diagrams")
+        return {"dry_run": True, "available": False, "source": source, "model_id": model,
                 "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-                "notice": "No paid request sent; pass --execute after reviewing the prompt and price."}
+                "notice": "No paid request sent. Image generation remains disabled pending verified route, permission and central billing support."}
     destination = safe_file(project, f"papers/{paper}/figures/{stem}.png", "figure")
     receipt_path = destination.with_suffix(".image-source.json")
     if destination.exists() or receipt_path.exists():
@@ -53,19 +49,6 @@ def prepare(project: Path, paper: str, stem: str, prompt: str, source: str,
         if source_file is None or not source_file.is_file():
             raise ValueError("ChatGPT-web import requires a local downloaded PNG")
         data = source_file.read_bytes()
-    else:
-        key = os.environ.get("OPENAI_API_KEY")
-        if not key:
-            raise ValueError("OPENAI_API_KEY is required for an explicit paid generation")
-        payload = json.dumps({"model": model, "prompt": prompt, "size": "1536x1024", "n": 1}).encode()
-        request = urllib.request.Request(ENDPOINT, data=payload,
-            headers={"Authorization":f"Bearer {key}", "Content-Type":"application/json"}, method="POST")
-        with urllib.request.urlopen(request, timeout=180) as response:
-            answer = json.loads(response.read(30_000_000).decode())
-        encoded = answer.get("data", [{}])[0].get("b64_json")
-        if not isinstance(encoded, str):
-            raise ValueError("image API returned no base64 image; no file created")
-        data = base64.b64decode(encoded, validate=True)
     _png(data)
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(data)
@@ -88,7 +71,7 @@ def main() -> int:
     p.add_argument("--stem",required=True);p.add_argument("--prompt-file",type=Path,required=True)
     p.add_argument("--source",choices=("gpt-image-api","chatgpt-web"),required=True)
     p.add_argument("--model",required=True);p.add_argument("--source-file",type=Path)
-    p.add_argument("--execute",action="store_true",help="explicitly authorize a paid Image API request")
+    p.add_argument("--execute",action="store_true",help="legacy option; paid image generation currently fails closed")
     args=p.parse_args()
     print(json.dumps(prepare(PROJECTS_ROOT/args.project,args.paper,args.stem,
           args.prompt_file.read_text(encoding="utf-8"),args.source,args.model,

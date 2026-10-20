@@ -50,6 +50,34 @@ def protocol(packet):
     return spec
 
 
+def settled_cost(row):
+    """Accept actual scoped charges, never estimates or unreconciled holds."""
+    value = row.get("cost_cny")
+    if (type(value) not in {int, float} or not math.isfinite(value) or value < 0
+            or row.get("usage_estimated") is True):
+        return None
+    status = row.get("cost_status")
+    if status == "settled_usage_receipt" or (status is None and row.get("cache_hit") is True and value == 0):
+        return float(value)
+    if row.get("cost_status") != "settled_gateway_debit":
+        return None
+    billing = row.get("billing")
+    debit = billing.get("independent_gateway_debit") if isinstance(billing, dict) else None
+    if not isinstance(debit, dict):
+        return None
+    actual, evidence = debit.get("actual_cost_cny"), debit.get("debit_evidence")
+    provider = row.get("provider", "")
+    source = ("https://cheapai.info/api/log/token" if provider in {"cheapai-gpt-pro", "cheapai-gpt-discount"}
+              else "https://codekey.ai/v1/usage" if provider in {
+                  "codekey-kiro-enterprise", "codekey-deepseek", "codekey-gemini"} else None)
+    if (source is None or type(actual) not in {int, float} or not math.isfinite(actual) or actual < 0
+            or not math.isclose(actual, value, rel_tol=0, abs_tol=1e-9)
+            or not isinstance(evidence, dict) or evidence.get("source") != source
+            or evidence.get("exactly_one_new_gateway_request") is not True):
+        return None
+    return float(value)
+
+
 def cost_summary(project, spec, answer, qualified, judgments=()):
     expected = set(spec.get("cost_run_ids", []))
     candidate_runs = {run for row in answer["answer_key"] for run in row["candidate"].get("run_ids", [])}
@@ -59,11 +87,24 @@ def cost_summary(project, spec, answer, qualified, judgments=()):
     seen = {r["run_id"] for r in selected}
     complete = bool(expected) and expected == seen and candidate_runs <= expected
     total = 0.0
+    identity_fields = ("run_id", "request_id", "provider", "model", "stage", "role")
+    settled_ids = {tuple(row.get(k) for k in identity_fields) for row in selected
+                   if settled_cost(row) is not None
+                   and all(isinstance(row.get(k), str) and row[k] for k in identity_fields)}
+    diagnostics = 0
     for row in selected:
-        value = row.get("cost_cny")
-        if (type(value) not in {int, float} or not math.isfinite(value) or value < 0
-                or row.get("usage_estimated") is True
-                or (row.get("cost_status") != "settled_usage_receipt" and not (row.get("cache_hit") is True and value == 0))):
+        # The runtime appends a zero-cost validation diagnostic AFTER settling
+        # a rejected answer. It is not another call; keep its original paid cost.
+        if (row.get("validation_status") == "source_contract_failed_no_retry"
+                and type(row.get("cost_cny")) in {int, float} and row["cost_cny"] == 0
+                and row.get("cost_status") is None and row.get("usage_estimated") is not True
+                and row.get("not_scientific_evidence") is True
+                and all(isinstance(row.get(k), str) and row[k] for k in identity_fields)
+                and tuple(row[k] for k in identity_fields) in settled_ids):
+            diagnostics += 1
+            continue
+        value = settled_cost(row)
+        if value is None:
             complete = False
         else:
             total += value
@@ -89,7 +130,8 @@ def cost_summary(project, spec, answer, qualified, judgments=()):
         "ledger_sha256": sha(ledger_path) if ledger_path.is_file() else None,
         "no_double_counting": True} for j in judgments)
     total_complete = complete and scope_confirmed
-    return {"scope_run_ids": sorted(expected), "recorded_calls": len(selected),
+    return {"scope_run_ids": sorted(expected), "recorded_calls": len(selected) - diagnostics,
+            "linked_validation_diagnostics": diagnostics,
             "ledger_sha256": sha(ledger_path) if ledger_path.is_file() else None,
             "known_model_cost_cny": round(total, 8), "model_cost_coverage_complete": complete,
             "model_cost_per_qualified_candidate_cny": round(total / qualified, 8) if complete and qualified else None,

@@ -54,6 +54,9 @@ def _sha(path: Path) -> str:
 
 def configuration_errors(environment: Mapping[str, str]) -> list[str]:
     """Use the same resolver as transport; return labels without secret values."""
+    if environment.get("DR_OS_ROUTING_PROFILE") == "production":
+        from scripts.production_readiness import report
+        return report(environment)["configuration_errors"]
     errors: list[str] = []
     providers = [ai_providers.configuration(provider, environment)
                  for provider in ("uuapi-openai", "uuapi-anthropic")]
@@ -98,7 +101,9 @@ def startup_report(slug: str, environment: Mapping[str, str] | None = None) -> d
         "schema_version": "1.0", "project": slug, "paid_calls": 0,
         "configuration_ready": not errors, "configuration_errors": errors,
         "providers": [ai_providers.configuration(provider, env)
-                      for provider in ("uuapi-openai", "uuapi-anthropic")],
+                      for provider in (tuple(ai_providers.PRODUCTION_PROVIDERS)
+                                       if env.get("DR_OS_ROUTING_PROFILE")=="production"
+                                       else ("uuapi-openai", "uuapi-anthropic"))],
         "ready_to_continue": False, "provider_authentication_verified": False,
         "scientific_completion_verified": False,
         "next_action": "Configure missing fields, then rerun the non-billable check.",
@@ -219,6 +224,8 @@ def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[st
     errors = configuration_errors(env)
     if errors:
         return {**result, "reason": "configuration_pending", "configuration_errors": errors}
+    if env.get("DR_OS_ROUTING_PROFILE")=="production" and env.get("DR_OS_AUTOMATIC_RESEARCH_ENABLED")!="true":
+        return {**result,"reason":"production_configured_automatic_research_not_started"}
     previous = _object(project / STATUS) if (project / STATUS).is_file() else {}
     if previous.get("last_cycle_exit_code", 0) != 0:
         return {**result, "reason": "previous_cycle_failed_requires_inspection"}
