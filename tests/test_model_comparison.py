@@ -568,6 +568,19 @@ class ModelComparisonTests(unittest.TestCase):
             comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "a" * 40, self.persist)
         self.post.assert_not_called()
 
+    def test_exhausted_free_meter_cooldown_defers_same_credential_for_one_pass(self):
+        ledger = self.authorize_full()
+        calls = []
+        def limited(current, route, case_id, phase, persist):
+            calls.append(route["provider"])
+            return "metadata_unavailable_no_generation"
+        with patch.object(comparison, "run_one", side_effect=limited):
+            comparison.execute(self.plan, ledger, self.persist)
+        self.assertEqual(len(calls), len(set(calls)))
+        self.assertEqual(ledger["entries"], [])
+        self.assertGreater(len(ledger["metadata_skips"]), 0)
+        self.post.assert_not_called()
+
     def test_full_scope_skips_unsupported_media_in_derived_task_count(self):
         item = self.definitions["visual_chart"]
         item["attachments"] = [{"mime_type": "image/png", "sha256": "fake", "data_base64": "fake"}]

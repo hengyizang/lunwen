@@ -274,9 +274,16 @@ def execute(ledger, contract, persist):
                     changed = True
     if changed:
         persist(ledger)  # Crash recovery cannot put a second call on an uncertain meter.
+    metadata_deferred = set()
     for case_id in CASE_IDS:
         for route in contract["configurations"]:
-            run_one(ledger, route, case_id, persist)
+            if route["provider"] in metadata_deferred:
+                ledger.setdefault("metadata_skips", []).append({"call_id": route["id"] + "|" + case_id,
+                    "reason": "pre_call_meter_unavailable_no_generation",
+                    "diagnostic": "same_credential_deferred_for_this_pass_after_exhausted_free_cooldown"})
+                continue
+            if run_one(ledger, route, case_id, persist) == "metadata_unavailable_no_generation":
+                metadata_deferred.add(route["provider"])
     ledger.update(status="closed_with_holds" if any(entry.get("billing_status") != "settled"
         for entry in ledger["entries"]) else "closed", closed_at=parent_trial.now())
     persist(ledger)

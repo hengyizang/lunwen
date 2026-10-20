@@ -468,23 +468,37 @@ def execute(plan, ledger, persist):
             persist(ledger)
     if not full_scope(ledger) and any(e.get("billing_status") != "settled" for e in ledger["entries"]):
         raise ComparisonError("unknown_charge_blocks_new_generation")
+    metadata_deferred = set()
+
+    def attempt(route, case_id, phase):
+        if route["provider"] in metadata_deferred:
+            call_id = route["id"] + "|" + case_id
+            if not any(entry["call_id"] == call_id for entry in ledger["entries"]):
+                ledger.setdefault("metadata_skips", []).append({"call_id": call_id, "at": now(),
+                    "reason": "pre_call_meter_unavailable_no_generation",
+                    "diagnostic": "same_credential_deferred_for_this_pass_after_exhausted_free_cooldown"})
+            return
+        result = run_one(ledger, route, case_id, phase, persist)
+        if result == "metadata_unavailable_no_generation":
+            metadata_deferred.add(route["provider"])
+
     # Cover every model/channel once before the second shared screening task.
     for case_id in plan["screening_cases"]:
         for route in plan["candidates"]:
             if route["id"] not in ledger.get("quarantined_candidates", []):
-                run_one(ledger, route, case_id, "screening", persist)
+                attempt(route, case_id, "screening")
     # Focused settings first get the same screens. They cannot inherit another
     # effort's success or become production accepted through this trial.
     for route in plan.get("focused_settings", []):
         for case_id in route["screening_cases"]:
-            run_one(ledger, route, case_id, "focused-setting-screen", persist)
+            attempt(route, case_id, "focused-setting-screen")
     primary = [route for route in plan["candidates"] if route.get("baseline")]
     alternatives = [route for route in plan["candidates"] if not route.get("baseline")] + plan.get("focused_settings", [])
     for pool in (primary, alternatives):
         for case_id in plan["focused_cases"]:
             for route in pool:
                 if case_id in route["focused_cases"] and (full_scope(ledger) or qualified(ledger, route)):
-                    run_one(ledger, route, case_id, "focused", persist)
+                    attempt(route, case_id, "focused")
     unsettled = any(entry.get("billing_status") != "settled" for entry in ledger["entries"])
     ledger.update(status="closed_with_holds" if unsettled else "closed",
                   closed_at=now(), committed_upper_cny=cost(ledger))
