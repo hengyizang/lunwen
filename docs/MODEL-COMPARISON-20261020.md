@@ -102,3 +102,40 @@ unsupported claims, constraint violations, latency and settled cost per accepted
 test. A perfect short fixture does not prove broad equivalence, high-context
 reliability or suitability for core scientific judgment. No trial score alone
 updates production assignments or dynamic acceptance records.
+
+## Later owner directive and clarification cohort
+
+The owner subsequently instructed: complete the fixed model tests, prioritize
+effectiveness and speed, and do not constrain this round to the initial CNY30.
+`complete` requires `model-comparison-20261020-full-fixed-matrix` and the exact
+reviewed ledger blob. It appends that directive without replacing the initial
+authorization, original responses or frozen prefix. Its 114 possible tasks use
+the existing seven logical models, ten groups and two focused settings. The
+derived CNY241.09388247 total reservation ceiling is a finite worst-case bound,
+not observed spending, a new research-project budget or an authorization for
+unbounded retries. Unknown debits keep full holds and isolate their credential;
+this explicit trial exception permits only independent remaining routes.
+
+Ordinary execution never reopens a closed ledger. A separately reviewed
+`complete` dispatch may continue only never-sent preflight skips within the
+same frozen scope, at most twice, using the exact current closed ledger. It
+cannot replay an attempted ID, reset spending, remove isolation or resume a
+parent once a follow-up has started. Free HTTP429 queries wait a full cooldown;
+exhausting it defers that credential for the remainder of the pass.
+
+The original scores have instrument ambiguities. Read
+`MODEL-COMPARISON-VALIDITY-ERRATA.md` before interpreting them; aggregate v1
+scores must not rank model capability or promote routes. `clarify`, authorized
+by `model-comparison-20261020-clarified-baselines`, creates a separate immutable
+cohort for two explicitly repaired v2 case IDs across eight existing settings
+(at most 16 calls), preserving parent holds and route isolation. `argonprobe`,
+authorized by `model-comparison-20261020-argon-base-probe`, then permits one
+native base-ID diagnostic; it is distinct from the failed high alias. The
+clarified scope reserves that one slot, the probe requires a closed sibling,
+and all three ledgers share a 128-attempt cap. Both follow-ups verify the
+reviewed parent is still current. Closed or attempted probes never replay.
+
+The base probe cannot attribute aggregate counter movement while an earlier
+same-key hold remains unresolved. It preserves both holds and the observed
+counter separately. No test result waives production catalog, billing,
+independent human review, scientific evidence or six-paper thesis gates.
