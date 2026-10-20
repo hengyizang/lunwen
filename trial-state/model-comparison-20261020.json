@@ -939,7 +939,7 @@
         "claude-opus-5-5",
         "claude-sonnet-5-5"
       ],
-      "at": "2026-10-20T13:10:00.091203+00:00"
+      "at": "2026-10-20T13:25:19.570129+00:00"
     },
     "cheapai-gpt-discount": {
       "metadata_access_verified": true,
@@ -948,7 +948,7 @@
         "gpt-6-astra",
         "gpt-6.1-sol"
       ],
-      "at": "2026-10-20T13:10:00.236629+00:00"
+      "at": "2026-10-20T13:25:19.885161+00:00"
     },
     "cheapai-gpt-pro": {
       "metadata_access_verified": true,
@@ -957,7 +957,7 @@
         "gpt-6-astra",
         "gpt-6.1-sol"
       ],
-      "at": "2026-10-20T13:10:00.480134+00:00"
+      "at": "2026-10-20T13:25:20.144360+00:00"
     },
     "cheapai-kiro-discount": {
       "metadata_access_verified": true,
@@ -965,7 +965,7 @@
         "claude-opus-5-5",
         "claude-sonnet-5-5"
       ],
-      "at": "2026-10-20T13:10:00.766776+00:00"
+      "at": "2026-10-20T13:25:20.334152+00:00"
     },
     "codekey-codex-discount": {
       "metadata_access_verified": true,
@@ -974,7 +974,7 @@
         "gpt-6-astra",
         "gpt-6.1-sol"
       ],
-      "at": "2026-10-20T13:10:01.119433+00:00"
+      "at": "2026-10-20T13:25:20.800245+00:00"
     },
     "codekey-codex-pro": {
       "metadata_access_verified": true,
@@ -983,19 +983,19 @@
         "gpt-6-astra",
         "gpt-6.1-sol"
       ],
-      "at": "2026-10-20T13:10:01.496862+00:00"
+      "at": "2026-10-20T13:25:21.201467+00:00"
     },
     "codekey-deepseek": {
       "metadata_access_verified": true,
       "model_ids": [
         "deepseek-v4.1-flash"
       ],
-      "at": "2026-10-20T13:10:01.733502+00:00"
+      "at": "2026-10-20T13:25:21.440150+00:00"
     },
     "codekey-gemini": {
       "metadata_access_verified": true,
       "model_ids": [],
-      "at": "2026-10-20T13:10:02.049601+00:00"
+      "at": "2026-10-20T13:25:21.703192+00:00"
     },
     "codekey-kiro-enterprise": {
       "metadata_access_verified": true,
@@ -1003,7 +1003,7 @@
         "claude-opus-5-5",
         "claude-sonnet-5-5"
       ],
-      "at": "2026-10-20T13:10:02.438741+00:00"
+      "at": "2026-10-20T13:25:22.368391+00:00"
     },
     "codekey-kiro-standard": {
       "metadata_access_verified": true,
@@ -1011,7 +1011,7 @@
         "claude-opus-5-5",
         "claude-sonnet-5-5"
       ],
-      "at": "2026-10-20T13:10:02.982770+00:00"
+      "at": "2026-10-20T13:25:23.195337+00:00"
     }
   }
 }
