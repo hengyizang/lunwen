@@ -4796,6 +4796,11 @@
       "call_id": "cheapai-discount-sol-high|experiment_design",
       "at": "2026-10-20T13:54:27.322850+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-kiro-opus-high|experiment_design",
+      "at": "2026-10-20T13:55:43.597390+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
