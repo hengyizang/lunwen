@@ -4941,12 +4941,45 @@
         "cost_cny": 0.037182285,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T14:03:43.633346+00:00"
+      "reserved_at": "2026-10-20T14:03:43.633346+00:00",
+      "reported_model": "claude-sonnet-5-5",
+      "request_id": "msg_e8baa2916f934b57ac06b82b60f36abb",
+      "text": "{\n\"hypothesis\": \"UNVERIFIED: if fault information lies in spectral shape rather than absolute magnitude, a magnitude-free model (P) will discriminate unseen-device faults better than gain-jitter augmentation (C) when test gain falls outside the training jitter range. Prespecified target, not a result: P minus C device-level AUROC of at least +0.05 under stress.\",\n\"mechanism_and_distinction_from_C\": {\n\"P\": \"Same log-power features and MLP as B/C, but each session's mean log-power is subtracted. This gives exact invariance to a scalar multiplicative gain, with no augmentation.\",\n\"distinction\": \"C learns invariance from a sampled jitter range, so it can fail beyond that range. P is invariant by construction, so the testable prediction is that P-minus-C grows as the gain shift exceeds the C training range.\",\n\"caveat\": \"No novelty is claimed. Centering may be a known normalization, and it fails if gain varies by frequency.\"\n},\n\"split_and_confound_control\": {\n\"independent_unit\": \"device (sessions are nested within it).\",\n\"locked_test\": \"Before any analysis, randomly lock 8 devices (2 per site, label-balanced where site prevalence allows) using a fixed seed. Do not touch them until the go decision.\",\n\"development\": \"The remaining 40 devices go into 4 device-grouped folds of 10, stratified by site and label. All 20 sessions of a device stay in one fold.\",\n\"shortcuts\": \"Exclude site and device IDs from the features. Fit all scalers and jitter ranges on training folds only. Include a zero-fit site-prevalence prior as a shortcut reference. Report site-stratified (within-site) AUROC as a secondary metric.\",\n\"stress_evaluation\": \"Apply fixed log-gain offsets of 2x the training-fold gain range to validation sessions. This is an evaluation transform only, with no fitted statistics.\"\n},\n\"baseline_fairness\": \"A (logistic regression) and C use the same features, folds, and prespecified hyperparameters (hidden 32, weight decay 1e-3, 30 epochs, fixed C=1 for A). No arm gets tuning. B is omitted to save fits, and C is the nearer comparator. C's jitter range is estimated from training-fold sessions only.\",\n\"mechanism_ablation_and_falsification\": {\n\"ablation\": \"P+mag restores the scalar mean log-power as an extra feature, so any P advantage tied to magnitude removal should shrink.\",\n\"falsify_distinction\": \"The paired 95% CI for P minus C includes 0 or lies below it. This means augmentation is sufficient or the distinction is unsupported.\",\n\"falsify_mechanism\": \"The CI for P minus P+mag includes 0, so the magnitude-shortcut mechanism is unsupported.\",\n\"confound_flag\": \"If gains appear only in pooled AUROC and not within-site AUROC, attribute them to a site confound.\"\n},\n\"primary_metric_and_paired_statistics\": {\n\"metric\": \"Device-level AUROC under stress, computed pooled across the 4 held-out folds. Session scores are averaged within device, and seeds are averaged within device first.\",\n\"primary_comparison\": \"P versus C only.\",\n\"uncertainty\": \"Paired stratified (site x label) bootstrap over devices, 2000 resamples, 95% percentile CI on the AUROC difference. Report per-seed spread descriptively. Two seeds do not characterize seed variance well.\",\n\"secondary\": \"Unstressed AUROC, within-site AUROC, and A as a reference, all reported without confirmatory claims.\"\n},\n\"compute_plan\": {\n\"cv_fits\": \"4 folds x (A 1 + C 2 seeds + P 2 + P+mag 2) = 4 x 7 = 28.\",\n\"final_refits_if_go\": \"A, C, P on all 40 development devices, 1 seed each = 3. This gives 28 + 3 = 31 planned fits.\",\n\"reserve\": \"5 fits are for crashed or killed runs only, never tuning. The maximum is 31 + 5 = 36.\",\n\"per_fit_cap\": \"1 core and 3 CPU-min per fit, with up to 4 fits in parallel. Expected total is well under 180 CPU-min and 45 min wall.\",\n\"resource_stop\": \"Stop launching new fits at 135 CPU-min, 34 min wall, or 33 fits used. A killed fit still counts. Report any incomplete folds as partial and never extend the budget.\",\n\"records\": \"Retain all runs, including failed ones.\"\n},\n\"go_no_go\": {\n\"go\": \"Only if the P-minus-C CI lower bound is above 0 with a point estimate of at least +0.05, P-minus-P+mag is positive with a CI excluding 0, and the within-site result is not contradicting. Then run the 3 locked-test refits once.\",\n\"no_go\": \"Stop, leave the locked test untouched, and report the falsification outcome. Never use locked-test labels or statistics for selection, and never adapt on unlabeled test data.\"\n},\n\"remaining_unknowns\": \"Whether gain is scalar or frequency-dependent, the true site prevalences, how realistic the synthetic stress offsets are, and seed variance. Success would show only that magnitude removal beats jitter augmentation on this synthetic capsule under stress, with 40 development devices. It would not establish the mechanism causally, generalization to new sites, real-world performance, or any claim from the 8-device locked test, which is too small for strong inference.\"\n}",
+      "usage": {
+        "cache_creation_input_tokens": 132,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 850,
+        "output_tokens": 3238
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "8f8613cd7c6ede7498b24f438b0412bbd06afc8f9bd04171cf889970e3ad9254",
+      "grade": {
+        "case_id": "scientific_plan",
+        "score": null,
+        "max_score": null,
+        "passed": null,
+        "criteria": [],
+        "requires_manual_review": true,
+        "scope": "synthetic open proposal; qualitative review required",
+        "review_dimensions": [
+          "provisional_novelty_and_mechanism",
+          "falsifiable_predictions",
+          "leakage_and_site_confound_control",
+          "fair_strong_baselines",
+          "mechanism_specific_ablation",
+          "independent_unit_statistics",
+          "explicit_compute_arithmetic",
+          "evidence_bound_go_no_go"
+        ],
+        "format_valid": true
+      },
+      "duration_seconds": 54.8435
     }
   ],
   "status": "running",
