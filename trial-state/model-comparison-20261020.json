@@ -7696,12 +7696,71 @@
         "cost_cny": 0.08381254,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T14:11:22.781473+00:00"
+      "reserved_at": "2026-10-20T14:11:22.781473+00:00",
+      "reported_model": "claude-sonnet-5-5",
+      "request_id": "msg_b22b55b782204cb0b9bb54195bd86fc2",
+      "text": "{\"record_id\":\"R137\",\"version\":2,\"independent_devices\":48,\"paired_delta\":0.006,\"ci95\":[-0.004,0.016],\"positive_effect_established\":false}",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 111,
+        "input_tokens": 26091,
+        "output_tokens": 40
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "0b70da96bd6233d6dfa510a434c301fa4da0734c2e63af3dff7e54a072ec59f1",
+      "grade": {
+        "case_id": "long_context",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "record_binding",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "active_version",
+            "passed": true,
+            "weight": 20,
+            "critical": true
+          },
+          {
+            "id": "independent_units",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "corrected_delta",
+            "passed": true,
+            "weight": 20,
+            "critical": true
+          },
+          {
+            "id": "paired_interval",
+            "passed": true,
+            "weight": 20,
+            "critical": true
+          },
+          {
+            "id": "no_unproven_effect",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 7.8004
     }
   ],
   "status": "running",
