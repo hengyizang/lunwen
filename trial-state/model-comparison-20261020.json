@@ -4733,12 +4733,76 @@
         "cost_cny": 0.0123048,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T13:57:40.334611+00:00"
+      "reserved_at": "2026-10-20T13:57:40.334611+00:00",
+      "reported_model": "gpt-5.6-luna",
+      "request_id": "resp_02fb3275ebe153e1016ad77357d124819b944dd9641aeffba8",
+      "text": "{\"flaws\":[\"participant_leakage\",\"global_preprocessing\",\"test_set_tuning\",\"seed_cherry_picking\",\"unequal_tuning_budget\"],\"split_unit\":\"session\",\"preprocessing_fit\":\"all_data\",\"tuning_set\":\"test\",\"report_seeds\":\"best_only\",\"budget_control\":\"unconstrained\"}",
+      "usage": {
+        "input_tokens": 304,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 80,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "2b3835885e0dbaad283f53124c31322d54ad75f81885a5e2cd75c8a111f98023",
+      "grade": {
+        "case_id": "experiment_design",
+        "score": 40,
+        "max_score": 100,
+        "passed": false,
+        "criteria": [
+          {
+            "id": "all_observed_flaws",
+            "passed": true,
+            "weight": 40,
+            "critical": true
+          },
+          {
+            "id": "independent_split",
+            "passed": false,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "preprocessing_scope",
+            "passed": false,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "locked_test",
+            "passed": false,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "negative_seed_retention",
+            "passed": false,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "fair_baseline_budget",
+            "passed": false,
+            "weight": 10,
+            "critical": false
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 2.8592
     }
   ],
   "status": "running",
