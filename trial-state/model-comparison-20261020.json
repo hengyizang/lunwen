@@ -16262,6 +16262,11 @@
       "call_id": "cheapai-discount-astra-high|code_statistics",
       "at": "2026-10-20T17:25:44.291412+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-luna-medium|code_statistics",
+      "at": "2026-10-20T17:27:50.960160+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ],
   "closed_at": "2026-10-20T17:12:25.939547+00:00",
