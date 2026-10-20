@@ -5068,6 +5068,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T14:05:59.487051+00:00"
+    },
+    {
+      "call_id": "codekey-deepseek-high|scientific_plan",
+      "candidate_id": "codekey-deepseek-high",
+      "provider": "codekey-deepseek",
+      "model": "deepseek-v4.1-flash",
+      "effort": "high",
+      "case_id": "scientific_plan",
+      "phase": "focused",
+      "case_sha256": "cd6392059ca7560ce79290a609d9223f1422b76bf6fb58afc4c8710e5495add2",
+      "quote_sha256": "945b698dc980c1d1de5c97f82c1e954175dbb032df6cae8e1d4d56dc072387be",
+      "reserved_ceiling_cny": 0.0625758,
+      "meter_before": {
+        "provider": "codekey-deepseek",
+        "kind": "codekey_total_actual_cost",
+        "requests": 8,
+        "cost_cny": 0.0029326,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T14:06:02.138686+00:00"
     }
   ],
   "status": "running",
