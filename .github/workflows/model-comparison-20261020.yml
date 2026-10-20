@@ -1,0 +1,78 @@
+name: Bounded model comparison CNY30 20261020
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Read-only metadata, authorized execute, or read-only reconcile
+        type: choice
+        options: [metadata, execute, reconcile]
+        default: metadata
+      authorization:
+        description: Exact new allowance ID required for execute
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install declared validation dependencies without model credentials
+        run: python -m pip install --disable-pip-version-check '.[figures,reader,research-quality]' 'reportlab>=4,<5'
+      - name: Validate deterministic controls without model credentials
+        run: |
+          python -m unittest discover -s tests -v
+          python -m compileall -q scripts tests
+          python scripts/validate_repo.py
+          git diff --check
+  comparison:
+    needs: offline
+    if: github.repository == 'hengyizang/lunwen' && github.actor == 'hengyizang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    permissions:
+      contents: write
+    env:
+      COMPARISON_GITHUB_TOKEN: ${{ github.token }}
+      COMPARISON_MODE: ${{ inputs.mode }}
+      COMPARISON_AUTHORIZATION: ${{ inputs.authorization }}
+      DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
+      DR_OS_CHEAPAI_GPT_DISCOUNT_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_DISCOUNT_KEY }}
+      DR_OS_CHEAPAI_KIRO_DISCOUNT_KEY: ${{ secrets.DR_OS_CHEAPAI_KIRO_DISCOUNT_KEY }}
+      DR_OS_CHEAPAI_CCMAX_KEY: ${{ secrets.DR_OS_CHEAPAI_CCMAX_KEY }}
+      DR_OS_CODEKEY_CODEX_PRO_KEY: ${{ secrets.DR_OS_CODEKEY_CODEX_PRO_KEY }}
+      DR_OS_CODEKEY_CODEX_DISCOUNT_KEY: ${{ secrets.DR_OS_CODEKEY_CODEX_DISCOUNT_KEY }}
+      DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY }}
+      DR_OS_CODEKEY_KIRO_STANDARD_KEY: ${{ secrets.DR_OS_CODEKEY_KIRO_STANDARD_KEY }}
+      DR_OS_CODEKEY_DEEPSEEK_KEY: ${{ secrets.DR_OS_CODEKEY_DEEPSEEK_KEY }}
+      DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Read exact Gemini catalog endpoints without generation
+        run: python -m scripts.catalog_diagnostic --output .runtime/catalog-diagnostic.json
+      - name: Execute only the separately authorized bounded comparison or read-only reconciliation
+        if: inputs.mode != 'metadata'
+        run: python -m scripts.model_comparison --mode "$COMPARISON_MODE"
+      - name: Preserve sanitized scoped receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: model-comparison-20261020-${{ github.run_id }}
+          path: .runtime/
+          if-no-files-found: error
+          retention-days: 30
