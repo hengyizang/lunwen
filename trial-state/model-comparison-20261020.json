@@ -4227,7 +4227,7 @@
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T13:52:51.817407+00:00",
       "reported_model": "gpt-6.1-sol",
       "request_id": "resp_06bbedce96b7cedf016ad77238a4cc8191871a3ae29f2d2657",
@@ -4292,7 +4292,22 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 7.0499
+      "duration_seconds": 7.0499,
+      "actual_cost_cny": 0.0002158,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 7,
+          "cost_cny": 0.00382096
+        },
+        "after": {
+          "requests": 8,
+          "cost_cny": 0.00403676
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T13:53:02.506399+00:00"
     }
   ],
   "status": "running",
