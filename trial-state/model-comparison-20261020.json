@@ -14964,6 +14964,96 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T17:20:49.059202+00:00"
+    },
+    {
+      "call_id": "cheapai-kiro-sonnet-high|code_statistics",
+      "candidate_id": "cheapai-kiro-sonnet-high",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "case_id": "code_statistics",
+      "phase": "focused",
+      "case_sha256": "30d4b70109c8fad09560017699a9b988cd4b02f2ef7a88da8dcbe81a1b6775ca",
+      "quote_sha256": "31c0d12a39addd06007333b7c238315a91b2fd25f507d68affd2d2c3e96d5347",
+      "reserved_ceiling_cny": 0.27697152,
+      "meter_before": {
+        "provider": "cheapai-kiro-discount",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 1859,
+            "created_at": 1792515112,
+            "prompt_tokens": 6298,
+            "completion_tokens": 238,
+            "id": 1
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 930,
+            "created_at": 1792515077,
+            "prompt_tokens": 6298,
+            "completion_tokens": 238,
+            "id": 2
+          },
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 236,
+            "created_at": 1792504118,
+            "prompt_tokens": 463,
+            "completion_tokens": 113,
+            "id": 3
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 118,
+            "created_at": 1792504043,
+            "prompt_tokens": 463,
+            "completion_tokens": 113,
+            "id": 4
+          },
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 238,
+            "created_at": 1792344496,
+            "prompt_tokens": 271,
+            "completion_tokens": 153,
+            "id": 5
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 133,
+            "created_at": 1792344486,
+            "prompt_tokens": 271,
+            "completion_tokens": 177,
+            "id": 6
+          },
+          {
+            "model_name": "claude-opus-5-5",
+            "quota": 1619,
+            "created_at": 1792342987,
+            "prompt_tokens": 0,
+            "completion_tokens": 236,
+            "id": 7
+          },
+          {
+            "model_name": "claude-sonnet-5-5",
+            "quota": 1147,
+            "created_at": 1792342022,
+            "prompt_tokens": 0,
+            "completion_tokens": 258,
+            "id": 8
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39464243857",
+      "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T17:20:51.252744+00:00"
     }
   ],
   "status": "running",
