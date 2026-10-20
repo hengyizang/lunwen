@@ -1240,7 +1240,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1253,7 +1255,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1266,7 +1270,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1279,7 +1285,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1292,7 +1300,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1305,7 +1315,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1318,7 +1330,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1331,7 +1345,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1344,7 +1360,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1357,7 +1375,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1370,7 +1390,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1383,7 +1405,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1396,7 +1420,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1409,7 +1435,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1422,7 +1450,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1435,7 +1465,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1448,7 +1480,9 @@
       "max_input_bytes": 64000,
       "max_output_tokens": 4000,
       "timeout_seconds": 180,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {
@@ -1461,7 +1495,9 @@
       "max_input_bytes": 2000000,
       "max_output_tokens": 32768,
       "timeout_seconds": 600,
-      "modalities": "text",
+      "modalities": [
+        "text"
+      ],
       "status": "candidate"
     },
     {

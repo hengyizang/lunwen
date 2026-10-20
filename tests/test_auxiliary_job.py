@@ -52,7 +52,8 @@ class AuxiliaryJobTests(unittest.TestCase):
             result=auxiliary_job.run(self.project,manifest,"evidence/auxiliary/result.json",execute=True)
         self.assertEqual(run.call_args.args[:3],(self.project,"engineering-diagnosis","deepseek"))
         self.assertEqual(run.call_args.args[4],900)
-        self.assertEqual(run.call_args.kwargs,{"attachments":None,"source_contract":None})
+        self.assertEqual(run.call_args.kwargs,{"attachments":None,"source_contract":None,
+            "task_profile":{"task_class":"unspecified","science_risk":"auxiliary","priority":"quality"}})
         self.assertEqual(result["status"],"internal_candidate_requires_review")
 
     def test_manifest_rejects_unknown_fields_roles_duplicate_json_and_legacy(self):
