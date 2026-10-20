@@ -1057,7 +1057,15 @@
       "billing_status": "reserved",
       "reserved_at": "2026-10-20T13:25:36.003845+00:00",
       "diagnostic": "API HTTP 503; no automatic generation retry; reconcile billing",
-      "duration_seconds": 0.2426
+      "duration_seconds": 0.2426,
+      "billing_diagnostic": "gateway debit has not uniquely appeared; retain reservation",
+      "billing_review_after": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.006756,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "status": "running",
