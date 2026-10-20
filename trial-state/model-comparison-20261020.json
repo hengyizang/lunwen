@@ -12052,7 +12052,7 @@
       "catalog_omission_probe": false,
       "run_id": "39460628361",
       "code_sha": "96be6d61af2e3003b9ff27a5600a5cad136bd73d",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T17:11:29.926744+00:00",
       "reported_model": "claude-opus-5-5",
       "request_id": "msg_edfcd77c07ff4e008b0e392891ef77b5",
@@ -12112,7 +12112,22 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 4.8449
+      "duration_seconds": 4.8449,
+      "actual_cost_cny": 0.0010998,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 11,
+          "cost_cny": 0.014484864
+        },
+        "after": {
+          "requests": 12,
+          "cost_cny": 0.015584664
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T17:11:38.124888+00:00"
     }
   ],
   "status": "running",
