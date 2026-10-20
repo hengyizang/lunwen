@@ -60,7 +60,7 @@ class ProductionPolicyTests(unittest.TestCase):
     def test_deepseek_and_argon_are_internal_auxiliary_routes(self):
         self.assertEqual(model_routing.select("auxiliary", "engineering-diagnosis")["family"], "deepseek")
         route = model_routing.select("auxiliary", "multimodal-inspection")
-        self.assertEqual((route["family"], route["model"]), ("google", "gemini-4-argon"))
+        self.assertEqual((route["family"], route["model"]), ("google", "gemini-4-argon-high"))
         self.assertFalse(route["persistent_output"])
 
     def test_unknown_stage_role_or_critical_task_fails_closed(self):

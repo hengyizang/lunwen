@@ -76,5 +76,6 @@ jobs:
         with:
           name: model-comparison-20261020-${{ github.run_id }}
           path: .runtime/
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 30

@@ -106,7 +106,11 @@ effort and context envelope. A same-named model on another gateway or promotiona
 group does not inherit acceptance. A successful HTTP response, provider model
 label, short smoke test or registry `status` field does not establish equal
 quality. Current Anthropic and DeepSeek transport support remains high-only.
-OpenAI/Google low and medium protocol support does not mean those settings have
+The configured Gemini key currently advertises `gemini-4-argon-high` only;
+that exact high ID requires high effort. Its base, low and medium aliases are
+excluded until separately configured and verified, rather than synthesized
+from the website or by changing the thinking level on the high endpoint.
+OpenAI low and medium protocol support does not mean those settings have
 passed project acceptance. No additional low effort, cheap group or long-context
 candidate is declared accepted by this change.
 

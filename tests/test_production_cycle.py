@@ -152,7 +152,7 @@ class ProductionCycleTests(unittest.TestCase):
 
     def test_unneeded_optional_argon_quote_does_not_block_this_scientific_cycle(self):
         prices = json.loads((model_runtime.ROOT / "config/model-pricing.json").read_text())
-        prices["quotes"] = [quote for quote in prices["quotes"] if quote["model"] != "gemini-4-argon"]
+        prices["quotes"] = [quote for quote in prices["quotes"] if quote["model"] != "gemini-4-argon-high"]
         with (patch.dict("os.environ", {"DR_OS_MODEL_PRICING_JSON": json.dumps(prices)}),
                 patch.object(ai_providers, "call", side_effect=self.transport) as post):
             self.run_cycle()

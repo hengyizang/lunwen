@@ -165,7 +165,7 @@ class RelayBillingTests(unittest.TestCase):
 
     def test_route_binding_rejects_another_keys_meter(self):
         with patch.object(billing, "read_meter") as read:
-            for provider, model, before in (("codekey-gemini", "gemini-4-argon", self.counter()),
+            for provider, model, before in (("codekey-gemini", "gemini-4-argon-high", self.counter()),
                     ("cheapai-gpt-pro", "gpt-6.1-sol", self.counter(provider="cheapai-gpt-pro")),
                     ("codekey-deepseek", "gpt-6.1-sol", self.counter())):
                 with self.assertRaises(billing.BillingReconciliationError):

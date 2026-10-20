@@ -21,7 +21,15 @@ reasoning effort and exact endpoint pricing are versioned in
 | Core scientific planning/audits and every final independent audit | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
 | Source-bound metadata fields with exact quotes and locators | CheapAI GPT discount / GPT-5.6 Luna | medium |
 | Internal engineering diagnosis, routine code review, software test proposals and environment/replay troubleshooting | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
-| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / Gemini 4 Argon | high |
+| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / `gemini-4-argon-high` | high |
+
+The configured Gemini key's authenticated catalogs advertise the exact
+`gemini-4-argon-high` identifier. The base, low and medium aliases are not
+inferred from that entry or from the public website. Google catalog inspection
+uses `/v1beta/models` with the same header authentication as its native
+generation adapter and normalizes only the `models/` prefix. Catalog metadata
+does not establish successful inference, effort passthrough or scientific
+quality; those require separate, budgeted call receipts and task evaluations.
 
 The five-role scientific cycle is unchanged: read-only plan, OpenAI writer,
 fresh initial independent audit, OpenAI remediation, fresh final Opus audit.

@@ -87,7 +87,7 @@ class ProductionRuntimeTests(unittest.TestCase):
             ({"stage": "auxiliary", "role": "engineering-diagnosis"},
                 "codekey-deepseek", "deepseek-v4.1-flash", "high"),
             ({"stage": "auxiliary", "role": "multimodal-inspection", "attachments": [self.attachment()]},
-                "codekey-gemini", "gemini-4-argon", "high"),
+                "codekey-gemini", "gemini-4-argon-high", "high"),
         ]
         with (patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
                 patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
@@ -129,6 +129,18 @@ class ProductionRuntimeTests(unittest.TestCase):
                 post.assert_not_called()
                 meter.assert_not_called()
                 grant.assert_not_called()
+
+    def test_google_base_catalog_entry_does_not_authorize_the_exact_high_route(self):
+        self.catalog.side_effect = None
+        self.catalog.return_value = {"gemini-4-argon"}
+        with (patch.object(relay_billing, "read_meter") as meter,
+                patch.object(ai_providers, "call") as post,
+                patch.object(model_spend, "reserve") as reserve):
+            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "model_not_advertised"):
+                self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
+        meter.assert_not_called()
+        post.assert_not_called()
+        reserve.assert_not_called()
 
     def test_missing_model_or_catalog_blocks_before_meter_reservation_and_generation(self):
         for failure in ("model_not_advertised", "catalog_unavailable"):
@@ -280,7 +292,7 @@ class ProductionRuntimeTests(unittest.TestCase):
                 patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
             self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
         self.assertEqual(ceilings[0][0], 1048576)
-        production_quote = model_runtime.pricing("codekey-gemini", "gemini-4-argon")
+        production_quote = model_runtime.pricing("codekey-gemini", "gemini-4-argon-high")
         expected = round(7 * original(production_quote, 1048576, 100, {}), 8)
         self.assertEqual(reserve.call_args.kwargs["max_cost_cny"], expected)
 

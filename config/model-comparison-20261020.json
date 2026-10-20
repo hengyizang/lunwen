@@ -1,0 +1,492 @@
+{
+  "schema_version": "1.0",
+  "trial_id": "model-comparison-20261020",
+  "budget_cny": 30.0,
+  "authorization": "The owner explicitly authorized an additional maximum of CNY30 on 2026-10-20 for screening all configured models and then focused comparisons.",
+  "closed_prior_trial_id": "relay-acceptance-20261019",
+  "execution": "github-actions-cloud-only",
+  "pricing_file": "config/model-pricing.json",
+  "case_module": "scripts.model_comparison_cases",
+  "policy": {
+    "budget_is_new_and_separate": true,
+    "automatic_research_budget_unchanged": true,
+    "screen_all_existing_models_before_focus": true,
+    "sequential_generation": true,
+    "automatic_paid_retries": 0,
+    "stop_on_unknown_charge": true,
+    "stop_on_missing_or_mismatched_reported_model": true,
+    "independent_meter_before_and_after_each_call": true,
+    "reserve_conservative_cache_write_and_output_ceiling": true,
+    "paid_model_judges": false,
+    "auto_promote_routes": false,
+    "model_identity_is_reported_not_authenticated": true,
+    "synthetic_scores_do_not_prove_scientific_equivalence": true,
+    "closed_prior_allowance_must_not_be_reopened": true
+  },
+  "screening_cases": [
+    "evidence_conflict",
+    "experiment_design"
+  ],
+  "focused_cases": [
+    "scientific_plan",
+    "code_statistics",
+    "claim_precision",
+    "long_context",
+    "visual_chart"
+  ],
+  "phases": [
+    {
+      "id": "screening",
+      "budget_ceiling_cny": 18.0,
+      "candidate_order": "listed-baselines-first-then-round-robin",
+      "case_order": "case-first-round-robin"
+    },
+    {
+      "id": "focused",
+      "budget_ceiling_cny": 30.0,
+      "selection": "screening-qualified-routes-with-remaining-budget",
+      "minimum_screen_score": 85
+    }
+  ],
+  "candidates": [
+    {
+      "id": "cheapai-pro-sol-high",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-pro-astra-high",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-discount-luna-medium",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-enterprise-sonnet-high",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-enterprise-opus-high",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-deepseek-high",
+      "provider": "codekey-deepseek",
+      "model": "deepseek-v4.1-flash",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-argon-high",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon-high",
+      "effort": "high",
+      "baseline": true,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "scientific_plan",
+        "code_statistics",
+        "claim_precision",
+        "long_context",
+        "visual_chart"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-pro-sol-high",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-kiro-sonnet-high",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-discount-sol-high",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-ccmax-sonnet-high",
+      "provider": "cheapai-ccmax",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-discount-sol-high",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-standard-sonnet-high",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-pro-astra-high",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-kiro-opus-high",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-discount-astra-high",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-ccmax-opus-high",
+      "provider": "cheapai-ccmax",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-discount-astra-high",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-standard-opus-high",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-pro-luna-medium",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "codekey-discount-luna-medium",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-pro-luna-medium",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    }
+  ],
+  "focused_settings": [
+    {
+      "id": "cheapai-pro-sol-medium",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    },
+    {
+      "id": "cheapai-discount-luna-low",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "low",
+      "baseline": false,
+      "screening_cases": [
+        "evidence_conflict",
+        "experiment_design"
+      ],
+      "focused_cases": [
+        "code_statistics",
+        "claim_precision"
+      ],
+      "max_output_tokens": 8192,
+      "timeout": 180
+    }
+  ],
+  "interpretation_limits": [
+    "The full authorization is CNY30 total, not CNY30 per phase, model, group, or workflow rerun.",
+    "Exact settled gateway debits, including cache creation and reasoning output, govern the cumulative ceiling.",
+    "The model and group list is the configured seven-model roster across ten groups, not every market model.",
+    "Two short screening cases expose transport failures and obvious reasoning errors but cannot establish doctoral research quality.",
+    "Scores reflect narrow synthetic fixtures and must be accompanied by latency, completion, model-label, and billing evidence.",
+    "A relay's requested and reported identifiers are transport labels, not cryptographic proof of the upstream model.",
+    "No trial score automatically changes production assignments, safety gates, candidate acceptance, or the six-paper doctoral scope."
+  ]
+}

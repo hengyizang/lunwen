@@ -148,8 +148,8 @@
     },
     {
       "provider": "codekey-gemini",
-      "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
-      "model": "gemini-4-argon",
+      "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon-high:generateContent",
+      "model": "gemini-4-argon-high",
       "plan": "production",
       "group": "codekey-gemini",
       "mode": "standard",

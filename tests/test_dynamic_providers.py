@@ -107,11 +107,12 @@ class DynamicProviderTests(unittest.TestCase):
                             providers.call(name, "fixture", model=model, reasoning_effort=effort)
                         transport.assert_not_called()
 
-    def test_google_efforts_are_native_thinking_levels(self):
+    def test_google_high_id_requires_matching_high_native_thinking_level(self):
         name = "codekey-gemini"
         spec = providers.PRODUCTION_PROVIDERS[name]
-        self.assertEqual(providers.production_supported_efforts(name, spec["model"]), ("low", "medium", "high"))
-        for effort in ("low", "medium", "high"):
+        self.assertEqual(spec["model"], "gemini-4-argon-high")
+        self.assertEqual(providers.production_supported_efforts(name, spec["model"]), ("high",))
+        for effort in ("high",):
             with self.subTest(effort=effort), patch.dict(os.environ,
                     {spec["key_setting"]: "fixture-only-secret"}, clear=True), patch.object(
                     providers, "_production_request", return_value=response("google", spec["model"])) as transport:
@@ -119,6 +120,11 @@ class DynamicProviderTests(unittest.TestCase):
                 self.assertEqual(transport.call_args.args[2]["generationConfig"]["thinkingConfig"],
                                  {"thinkingLevel": effort.upper()})
                 self.assertEqual(result.requested_effort, effort)
+        for effort in ("low", "medium"):
+            with self.subTest(effort=effort), patch.object(providers, "_production_request") as transport:
+                with self.assertRaises(providers.ProviderError):
+                    providers.call(name, "fixture", reasoning_effort=effort)
+                transport.assert_not_called()
 
     def test_unknown_effort_or_model_is_not_a_fallback_permission(self):
         for name, spec in providers.PRODUCTION_PROVIDERS.items():

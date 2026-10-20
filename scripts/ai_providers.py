@@ -85,8 +85,8 @@ PRODUCTION_PROVIDERS = {
     },
     "codekey-gemini": {
         "family": "google", "root": "https://codekey.ai", "path": "/v1beta/models/{model}:generateContent",
-        "key_setting": "DR_OS_CODEKEY_GEMINI_KEY", "model": "gemini-4-argon",
-        "protocol": "gemini_generate_content", "models": ("gemini-4-argon",),
+        "key_setting": "DR_OS_CODEKEY_GEMINI_KEY", "model": "gemini-4-argon-high",
+        "protocol": "gemini_generate_content", "models": ("gemini-4-argon-high",),
     },
 }
 UUAPI_ANTHROPIC_UA = "claude-cli/2.0.76 (external, cli)"
@@ -766,8 +766,11 @@ def production_supported_efforts(provider: str, model: str) -> tuple[str, ...]:
     spec = PRODUCTION_PROVIDERS.get(provider)
     if spec is None or model not in spec["models"]:
         raise ProviderError("model is not explicitly allowed on the selected production route")
-    if spec["family"] in {"openai", "google"}:
+    if spec["family"] == "openai":
         return ("low", "medium", "high")
+    # The current Gemini key advertises the exact high-suffixed ID only. Do not
+    # combine that ID with a conflicting low/medium thinking level or infer that
+    # the unlisted base/other-suffixed aliases work on this configured group.
     # Retain tested native high payloads for Claude and DeepSeek. Lower efforts
     # require a separate native protocol and relay acceptance before enablement.
     return ("high",)

@@ -18,7 +18,7 @@
     "sonnet": {"provider": "codekey-kiro-enterprise", "model": "claude-sonnet-5-5", "family": "anthropic", "reasoning_effort": "high", "max_output_tokens": 4000},
     "opus": {"provider": "codekey-kiro-enterprise", "model": "claude-opus-5-5", "family": "anthropic", "reasoning_effort": "high", "max_output_tokens": 4000},
     "deepseek": {"provider": "codekey-deepseek", "model": "deepseek-v4.1-flash", "family": "deepseek", "reasoning_effort": "high", "max_output_tokens": 4000},
-    "argon": {"provider": "codekey-gemini", "model": "gemini-4-argon", "family": "google", "reasoning_effort": "high", "max_output_tokens": 4000}
+    "argon": {"provider": "codekey-gemini", "model": "gemini-4-argon-high", "family": "google", "reasoning_effort": "high", "max_output_tokens": 4000}
   },
   "stage_routes": {
     "intake": {"semantic-planner": "sonnet", "persistent-writer": "sol", "independent-critic-initial": "sonnet", "persistent-remediator": "sol", "independent-critic-final": "opus"},
