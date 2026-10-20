@@ -1031,6 +1031,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T13:25:33.903881+00:00"
+    },
+    {
+      "call_id": "codekey-argon-high|evidence_conflict",
+      "candidate_id": "codekey-argon-high",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon-high",
+      "effort": "high",
+      "case_id": "evidence_conflict",
+      "phase": "screening",
+      "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+      "quote_sha256": "3ed5425994b4b4b1ae3d020fb2d977e36774ace8970307ad6321a93465c0fe4e",
+      "reserved_ceiling_cny": 0.431508,
+      "meter_before": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.006756,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": true,
+      "run_id": "39429999330",
+      "code_sha": "2568a1d5ee9e7b4e185998b8f1a4a742ca468655",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:25:36.003845+00:00"
     }
   ],
   "status": "running",
