@@ -5222,6 +5222,11 @@
       "call_id": "cheapai-discount-astra-high|experiment_design",
       "at": "2026-10-20T13:57:21.207199+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-luna-medium|experiment_design",
+      "at": "2026-10-20T13:58:44.806259+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
