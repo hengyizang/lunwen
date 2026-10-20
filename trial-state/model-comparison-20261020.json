@@ -5368,10 +5368,12 @@
     "scientific_equivalence_verified": false
   },
   "quarantined_candidates": [
-    "codekey-argon-high"
+    "codekey-argon-high",
+    "codekey-deepseek-high"
   ],
   "isolated_providers": [
-    "codekey-gemini"
+    "codekey-gemini",
+    "codekey-deepseek"
   ],
   "metadata_skips": [
     {
