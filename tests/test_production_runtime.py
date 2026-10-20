@@ -130,9 +130,9 @@ class ProductionRuntimeTests(unittest.TestCase):
                 meter.assert_not_called()
                 grant.assert_not_called()
 
-    def test_google_base_catalog_entry_does_not_authorize_the_exact_high_route(self):
+    def test_google_high_catalog_entry_does_not_authorize_the_exact_base_route(self):
         self.catalog.side_effect = None
-        self.catalog.return_value = {"gemini-4-argon"}
+        self.catalog.return_value = {"gemini-4-argon-high"}
         with (patch.object(relay_billing, "read_meter") as meter,
                 patch.object(ai_providers, "call") as post,
                 patch.object(model_spend, "reserve") as reserve):

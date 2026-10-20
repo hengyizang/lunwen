@@ -178,7 +178,9 @@ class ComparisonMatrixTests(unittest.TestCase):
         quotes = json.loads((ROOT / "config/model-pricing.json").read_text())["quotes"]
         pairs = {(x["provider"], x["model"]) for x in candidates}
         self.assertEqual(len(candidates), 22)
-        self.assertEqual(pairs, {(x["provider"], x["model"]) for x in quotes})
+        quoted_pairs = {(x["provider"], x["model"]) for x in quotes}
+        self.assertTrue(pairs <= quoted_pairs)
+        self.assertEqual(quoted_pairs - pairs, {("codekey-gemini", "gemini-4-argon")})
         self.assertEqual(len({x["provider"] for x in candidates}), 10)
         self.assertEqual(len({x["model"] for x in candidates}), 7)
         self.assertTrue(all(x["baseline"] for x in candidates[:7]))
