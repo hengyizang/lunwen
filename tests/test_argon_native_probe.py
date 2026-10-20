@@ -12,7 +12,8 @@ class NativeProbeTests(unittest.TestCase):
     def setUp(self):
         stack = ExitStack()
         self.addCleanup(stack.close)
-        self.item = {"id": probe.CASE, "prompt": "Synthetic source test", "system": "Return JSON"}
+        self.item = {"id": probe.CASE, "prompt": "Synthetic source test", "system": "Return JSON",
+                     "attachments": [{"mime_type": "image/png", "data_base64": "Zml4dHVyZQ=="}]}
         stack.enter_context(patch.object(probe.fixtures, "case", return_value=self.item))
         stack.enter_context(patch.object(probe.fixtures, "score", return_value={"passed": True, "score": 100}))
         stack.enter_context(patch.object(probe, "quote", return_value={"quote_sha256": "q" * 64}))
@@ -44,6 +45,8 @@ class NativeProbeTests(unittest.TestCase):
             self.assertEqual(endpoint, probe.ENDPOINT)
             self.assertEqual(headers, {"x-goog-api-key": "fake-probe-key"})
             self.assertEqual(payload["generationConfig"]["thinkingConfig"]["thinkingLevel"], "HIGH")
+            self.assertEqual(payload["contents"][0]["parts"][1]["inlineData"],
+                             {"mimeType": "image/png", "data": "Zml4dHVyZQ=="})
             self.assertEqual(timeout, 180)
             return response
         self.post.side_effect = receive

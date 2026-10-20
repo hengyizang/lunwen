@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 import time
 from scripts import ai_providers, billing_quotes, gateway_trial, model_comparison as parent_trial
-from scripts import model_comparison_clarified as clarified, model_comparison_cases_v2 as fixtures
+from scripts import model_comparison_clarified as clarified, model_comparison_cases as fixtures
 from scripts import model_runtime, relay_billing
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +20,7 @@ AUTHORIZATION = "model-comparison-20261020-argon-base-probe"
 FILE = AUTHORIZATION + ".json"
 MODEL = "gemini-4-argon"
 ENDPOINT = "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent"
-CASE = "evidence_conflict_v2"
+CASE = "visual_chart"
 
 
 class ProbeError(RuntimeError):
@@ -69,7 +69,7 @@ def contract(parent, parent_sha, sibling_attempts):
     item = fixtures.case(CASE)
     price = quote()
     ceiling = model_runtime.reservation_bound("codekey-gemini", item["prompt"], item["system"],
-        8192, price, {}, controlled=True)
+        8192, price, {}, controlled=True, has_media=bool(item.get("attachments")))
     return {"authorization_id": AUTHORIZATION, "parent_blob_sha": parent_sha,
         "parent_ledger_sha256": parent_trial.digest(parent), "parent_attempts": len(parent["entries"]),
         "sibling_attempts": sibling_attempts, "max_combined_attempts": 128,
@@ -98,7 +98,10 @@ def execute(ledger, scope, persist):
     start = time.monotonic()
     try:
         key = os.environ[ai_providers.PRODUCTION_PROVIDERS["codekey-gemini"]["key_setting"]].strip()
-        payload = {"contents": [{"role": "user", "parts": [{"text": item["prompt"]}]}],
+        parts = [{"text": item["prompt"]}] + [{"inlineData": {
+            "mimeType": media["mime_type"], "data": media["data_base64"]}}
+            for media in item.get("attachments", [])]
+        payload = {"contents": [{"role": "user", "parts": parts}],
             "systemInstruction": {"parts": [{"text": item["system"]}]},
             "generationConfig": {"maxOutputTokens": 8192, "thinkingConfig": {"thinkingLevel": "HIGH"}},
             "tools": []}

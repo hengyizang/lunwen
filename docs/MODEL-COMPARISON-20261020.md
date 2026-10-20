@@ -130,7 +130,8 @@ by `model-comparison-20261020-clarified-baselines`, creates a separate immutable
 cohort for two explicitly repaired v2 case IDs across eight existing settings
 (at most 16 calls), preserving parent holds and route isolation. `argonprobe`,
 authorized by `model-comparison-20261020-argon-base-probe`, then permits one
-native base-ID diagnostic; it is distinct from the failed high alias. The
+native base-ID chart diagnostic, checking the intended image-inspection route;
+it is distinct from the failed high alias. The
 clarified scope reserves that one slot, the probe requires a closed sibling,
 and all three ledgers share a 128-attempt cap. Both follow-ups verify the
 reviewed parent is still current. Closed or attempted probes never replay.
