@@ -1066,6 +1066,31 @@
         "cost_cny": 0.006756,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "codekey-pro-sol-high|evidence_conflict",
+      "candidate_id": "codekey-pro-sol-high",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "case_id": "evidence_conflict",
+      "phase": "screening",
+      "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+      "quote_sha256": "227e0e3f28f5bbf8707b6d2e84ac321701db9e519428776757bb0276fce80307",
+      "reserved_ceiling_cny": 0.754992,
+      "meter_before": {
+        "provider": "codekey-codex-pro",
+        "kind": "codekey_total_actual_cost",
+        "requests": 4,
+        "cost_cny": 0.0040796,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:47:08.122626+00:00"
     }
   ],
   "status": "running",
