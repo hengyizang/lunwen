@@ -14680,6 +14680,200 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T17:20:38.521596+00:00"
+    },
+    {
+      "call_id": "cheapai-discount-luna-medium|visual_chart",
+      "candidate_id": "cheapai-discount-luna-medium",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "case_id": "visual_chart",
+      "phase": "focused",
+      "case_sha256": "f1ad860914ddc2e2e2aec299e8e5aa4d3971b2b94067ac919a6e858aea643fdc",
+      "quote_sha256": "faa642da7aef61d60c845c926f92528082989d99b037c9874abde45b7da4af33",
+      "reserved_ceiling_cny": 0.47801957,
+      "meter_before": {
+        "provider": "cheapai-gpt-discount",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 166,
+            "created_at": 1792516823,
+            "prompt_tokens": 559,
+            "completion_tokens": 3373,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 5,
+            "created_at": 1792516595,
+            "prompt_tokens": 254,
+            "completion_tokens": 67,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 6,
+            "created_at": 1792516342,
+            "prompt_tokens": 279,
+            "completion_tokens": 81,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 524,
+            "created_at": 1792516286,
+            "prompt_tokens": 279,
+            "completion_tokens": 206,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 9,
+            "created_at": 1792515188,
+            "prompt_tokens": 282,
+            "completion_tokens": 146,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 736,
+            "created_at": 1792515141,
+            "prompt_tokens": 254,
+            "completion_tokens": 317,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 92,
+            "created_at": 1792515102,
+            "prompt_tokens": 254,
+            "completion_tokens": 180,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 361,
+            "created_at": 1792505478,
+            "prompt_tokens": 44572,
+            "completion_tokens": 94,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 11,
+            "created_at": 1792505394,
+            "prompt_tokens": 279,
+            "completion_tokens": 176,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 10,
+            "created_at": 1792505323,
+            "prompt_tokens": 258,
+            "completion_tokens": 174,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 5,
+            "created_at": 1792504269,
+            "prompt_tokens": 254,
+            "completion_tokens": 67,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 503,
+            "created_at": 1792504153,
+            "prompt_tokens": 282,
+            "completion_tokens": 195,
+            "id": 12
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 107,
+            "created_at": 1792504075,
+            "prompt_tokens": 282,
+            "completion_tokens": 212,
+            "id": 13
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 13,
+            "created_at": 1792501826,
+            "prompt_tokens": 282,
+            "completion_tokens": 221,
+            "id": 14
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 9,
+            "created_at": 1792346369,
+            "prompt_tokens": 268,
+            "completion_tokens": 153,
+            "id": 15
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 10,
+            "created_at": 1792346335,
+            "prompt_tokens": 209,
+            "completion_tokens": 167,
+            "id": 16
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 11,
+            "created_at": 1792346293,
+            "prompt_tokens": 254,
+            "completion_tokens": 183,
+            "id": 17
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 523,
+            "created_at": 1792344475,
+            "prompt_tokens": 147,
+            "completion_tokens": 232,
+            "id": 18
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 98,
+            "created_at": 1792344463,
+            "prompt_tokens": 147,
+            "completion_tokens": 216,
+            "id": 19
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 472,
+            "created_at": 1792342012,
+            "prompt_tokens": 165,
+            "completion_tokens": 203,
+            "id": 20
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 86,
+            "created_at": 1792342006,
+            "prompt_tokens": 165,
+            "completion_tokens": 183,
+            "id": 21
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39464243857",
+      "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T17:20:40.712885+00:00"
     }
   ],
   "status": "running",
