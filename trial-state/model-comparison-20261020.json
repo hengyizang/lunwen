@@ -8506,6 +8506,11 @@
       "call_id": "cheapai-pro-astra-high|visual_chart",
       "at": "2026-10-20T14:12:56.067454+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-discount-luna-medium|visual_chart",
+      "at": "2026-10-20T14:13:38.678196+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
