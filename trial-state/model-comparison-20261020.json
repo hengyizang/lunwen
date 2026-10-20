@@ -5087,12 +5087,14 @@
         "cost_cny": 0.0029326,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "response_failed",
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T14:06:02.138686+00:00"
+      "reserved_at": "2026-10-20T14:06:02.138686+00:00",
+      "diagnostic": "API HTTP 524; no automatic generation retry; reconcile billing",
+      "duration_seconds": 125.5667
     }
   ],
   "status": "running",
