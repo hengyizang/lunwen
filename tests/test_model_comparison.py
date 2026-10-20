@@ -231,6 +231,70 @@ class ModelComparisonTests(unittest.TestCase):
         self.assertEqual(self.saved, [])
         self.post.assert_not_called()
 
+    def stopped_settled_ledger(self, amount=0.12):
+        ledger = self.ledger()
+        entry = self.entry(amount=max(2.0, amount))
+        comparison.reserve(ledger, entry, self.persist)
+        comparison.settle_entry(ledger, entry,
+            {"actual_cost_cny": amount, "debit_evidence": {"source": "fake independent meter"}},
+            self.persist)
+        ledger.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+        return ledger
+
+    def test_reviewed_resume_requires_the_exact_settled_ledger_blob(self):
+        for expected in (None, "", "different-blob"):
+            with self.subTest(expected=expected):
+                ledger = self.stopped_settled_ledger()
+                prior = copy.deepcopy(ledger)
+                with self.assertRaisesRegex(comparison.ComparisonError, "exact_settled_stopped"):
+                    comparison.reviewed_resume(ledger, expected, "reviewed-blob", self.persist)
+                self.assertEqual(ledger, prior)
+        self.post.assert_not_called()
+
+    def test_reviewed_resume_cannot_release_unknown_charges_or_resume_empty_ledger(self):
+        unsettled = self.ledger()
+        comparison.reserve(unsettled, self.entry(), self.persist)
+        unsettled.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+        empty = self.ledger()
+        empty.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+        for ledger in (unsettled, empty):
+            with self.assertRaisesRegex(comparison.ComparisonError, "exact_settled_stopped"):
+                comparison.reviewed_resume(ledger, "reviewed-blob", "reviewed-blob", self.persist)
+        self.post.assert_not_called()
+
+    def test_reviewed_resume_preserves_attempt_ids_cost_and_the_original_cap(self):
+        ledger = self.stopped_settled_ledger(amount=29.9)
+        entries = copy.deepcopy(ledger["entries"])
+        authorization = ledger["authorization_id"]
+        comparison.reviewed_resume(ledger, "reviewed-blob", "reviewed-blob", self.persist)
+        self.assertEqual(ledger["status"], "running")
+        self.assertEqual(ledger["entries"], entries)
+        self.assertEqual(ledger["authorization_id"], authorization)
+        self.assertEqual(ledger["limit_cny"], 30.0)
+        self.assertEqual(comparison.cost(ledger), 29.9)
+        self.assertNotIn("stop_reason", ledger)
+        review = ledger["operator_reviews"][-1]
+        self.assertEqual(review["reviewed_ledger_blob_sha"], "reviewed-blob")
+        self.assertIs(review["generation_retry_authorized"], False)
+        self.assertEqual(comparison.run_one(ledger, self.route, self.case_id,
+            "screening", self.persist), "already_attempted")
+        self.assertFalse(comparison.reserve(ledger, self.entry(amount=0.2,
+            case_id=self.route["screening_cases"][1]), self.persist))
+        self.post.assert_not_called()
+
+    def test_reviewed_resume_does_not_reopen_closed_trials_or_other_stop_reasons(self):
+        for status, reason in (("closed", "unknown_charge_reconciliation_required"),
+                               ("stopped", "actual_debit_exceeded_reserved_bound"),
+                               ("running", "unknown_charge_reconciliation_required")):
+            with self.subTest(status=status, reason=reason):
+                ledger = self.stopped_settled_ledger()
+                ledger.update(status=status, stop_reason=reason)
+                prior = copy.deepcopy(ledger)
+                with self.assertRaisesRegex(comparison.ComparisonError, "exact_settled_stopped"):
+                    comparison.reviewed_resume(ledger, "reviewed-blob", "reviewed-blob", self.persist)
+                self.assertEqual(ledger, prior)
+        self.post.assert_not_called()
+
     def test_outstanding_reservation_blocks_resumed_execute(self):
         ledger = self.ledger()
         comparison.reserve(ledger, self.entry(), self.persist)

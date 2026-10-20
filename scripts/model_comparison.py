@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 import time
 
-from scripts import ai_providers, gateway_trial, model_runtime, relay_billing
+from scripts import ai_providers, gateway_trial, model_runtime, production_readiness, relay_billing
 from scripts import model_comparison_cases as fixtures
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -214,6 +214,17 @@ def reconcile_attempt(ledger, entry, persist):
 def run_one(ledger, route, case_id, phase, persist):
     if route["id"] in ledger.get("quarantined_candidates", []):
         return "quarantined_no_generation"
+    if "inventory" in ledger:
+        inventory = ledger["inventory"].get(route["provider"], {})
+        if not inventory.get("metadata_access_verified"):
+            return "catalog_unverified_no_generation"
+        if route["model"] not in inventory.get("model_ids", []):
+            # The owner explicitly requested diagnosing this portal/catalog
+            # discrepancy. Its exact high ID was advertised by both catalogs
+            # earlier in this trial; a bounded trial probe is not production
+            # acceptance or a waiver of the production availability guard.
+            if (route["provider"], route["model"]) != ("codekey-gemini", "gemini-4-argon-high"):
+                return "not_advertised_by_this_key_no_generation"
     item = fixtures.case(case_id)
     call_id = route["id"] + "|" + case_id
     if any(e["call_id"] == call_id for e in ledger["entries"]):
@@ -239,6 +250,7 @@ def run_one(ledger, route, case_id, phase, persist):
              "case_id": case_id, "phase": phase, "case_sha256": digest(item),
              "quote_sha256": quote["quote_sha256"], "reserved_ceiling_cny": ceiling,
              "meter_before": before, "generation_status": "not_sent",
+             "catalog_omission_probe": "inventory" in ledger and route["model"] not in ledger["inventory"].get(route["provider"], {}).get("model_ids", []),
              "run_id": os.environ.get("GITHUB_RUN_ID"), "code_sha": os.environ.get("GITHUB_SHA")}
     if not reserve(ledger, entry, persist, phase_limit=phase_limit):
         return "budget_or_call_limit"
@@ -286,6 +298,25 @@ def qualified(ledger, route):
         and e.get("grade", {}).get("passed") is True for e in rows))
 
 
+def reviewed_resume(ledger, expected_sha, actual_sha, persist):
+    """Separate owner operation after verified settlement; never a paid retry."""
+    if (not expected_sha or expected_sha != actual_sha or ledger.get("status") != "stopped"
+            or ledger.get("stop_reason") != "unknown_charge_reconciliation_required"
+            or not ledger["entries"]
+            or any(e.get("billing_status") != "settled" for e in ledger["entries"])):
+        raise ComparisonError("reviewed_resume_requires_exact_settled_stopped_ledger")
+    ledger.setdefault("operator_reviews", []).append({
+        "at": now(), "reviewed_ledger_blob_sha": actual_sha,
+        "reviewed_code_sha": os.environ.get("GITHUB_SHA"),
+        "reason": "Independent debit reconciled; continue only unattempted fixed-plan calls within the same allowance.",
+        "attempts_preserved": len(ledger["entries"]), "limit_unchanged_cny": LIMIT,
+        "committed_cny_before_resume": cost(ledger), "generation_retry_authorized": False,
+    })
+    ledger.update(status="running")
+    ledger.pop("stop_reason", None)
+    persist(ledger)
+
+
 def execute(plan, ledger, persist):
     validate_ledger(ledger, plan)
     if ledger.get("status") in {"closed", "stopped"}:
@@ -323,6 +354,8 @@ def summary(ledger, plan):
                      "settled_cost_cny": round(sum(e.get("actual_cost_cny", 0) for e in entries
                                                    if e.get("billing_status") == "settled"), 8),
                      "screening_passed": qualified(ledger, route),
+                     "catalog_verified": ledger.get("inventory", {}).get(route["provider"], {}).get("metadata_access_verified"),
+                     "exact_model_advertised": route["model"] in ledger.get("inventory", {}).get(route["provider"], {}).get("model_ids", []),
                      "cases": [{"case_id": e["case_id"], "score": e.get("grade", {}).get("score"),
                                 "passed": e.get("grade", {}).get("passed"),
                                 "duration_seconds": e.get("duration_seconds"),
@@ -336,16 +369,28 @@ def summary(ledger, plan):
             "limitation": "Small synthetic screening; no human blind review or broad model quality certification."}
 
 
+def inspect_inventory(plan):
+    inventory = {}
+    for provider in sorted({r["provider"] for r in plan["candidates"]}):
+        try:
+            models = production_readiness.catalog(provider, dict(os.environ))
+            allowed = set(ai_providers.PRODUCTION_PROVIDERS[provider]["models"])
+            inventory[provider] = {"metadata_access_verified": True, "model_ids": sorted(models & allowed), "at": now()}
+        except ValueError:
+            inventory[provider] = {"metadata_access_verified": False, "model_ids": [], "at": now()}
+    return inventory
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("execute", "reconcile"), required=True)
+    parser.add_argument("--mode", choices=("execute", "reconcile", "resume"), required=True)
     args = parser.parse_args()
     env = os.environ
     if (env.get("GITHUB_ACTIONS") != "true" or env.get("GITHUB_REPOSITORY") != "hengyizang/lunwen"
             or env.get("GITHUB_ACTOR") != "hengyizang" or env.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
             or env.get("GITHUB_REF") not in {"refs/heads/main", "refs/heads/" + CODE_BRANCH}):
         raise ComparisonError("explicit_owner_cloud_dispatch_required")
-    if args.mode == "execute" and env.get("COMPARISON_AUTHORIZATION") != AUTHORIZATION:
+    if args.mode in {"execute", "resume"} and env.get("COMPARISON_AUTHORIZATION") != AUTHORIZATION:
         raise ComparisonError("new_cny30_allowance_confirmation_required")
     plan = validate_plan(json.loads((ROOT / "config/model-comparison-20261020.json").read_text()))
     state = CloudState(env["COMPARISON_GITHUB_TOKEN"])
@@ -363,6 +408,11 @@ def main():
                     reconcile_attempt(ledger, entry, state.save)
             # Reconciliation never reopens or generates. A stopped trial stays stopped.
         else:
+            if args.mode == "resume":
+                reviewed_resume(ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"), state.expected_sha, state.save)
+            if ledger.get("status") == "running":
+                ledger["inventory"] = inspect_inventory(plan)
+                state.save(ledger)
             execute(plan, ledger, state.save)
     finally:
         receipt = summary(ledger, plan)

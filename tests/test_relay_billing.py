@@ -133,6 +133,77 @@ class RelayBillingTests(unittest.TestCase):
         sanitized = billing._rows([{**fresh, "id": "not-an-integer", "type": 2}])
         self.assertNotIn("id", sanitized[0])
 
+    def test_actual_display_ordinal_shift_matches_only_the_new_sol_debit(self):
+        # Sanitized shape observed in the cloud trial: ten prior rows become
+        # positions 2..11 when the single new debit is displayed at position 1.
+        prior = [self.row(i, created_at=1792500000 - i * 10) for i in range(1, 11)]
+        fresh = {**self.row(1, quota=248, created_at=1792500557),
+                 "prompt_tokens": 282, "completion_tokens": 169}
+        shifted = [dict(row, id=row["id"] + 1) for row in prior]
+        with patch.object(billing, "read_meter", return_value=self.history([fresh] + shifted)) as read:
+            value = billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+        self.assertEqual(value["actual_cost_cny"], 0.000496)
+        self.assertEqual(value["debit_evidence"]["row"], fresh)
+        self.assertEqual(value["debit_evidence"]["row_identity_rule"],
+                         "billing_fields_excluding_display_id")
+        read.assert_called_once()
+
+    def test_display_renumbering_alone_never_invents_a_debit_or_releases_a_hold(self):
+        prior = [self.row(i, created_at=100 + i) for i in range(1, 11)]
+        renumbered = [dict(row, id=index) for index, row in enumerate(reversed(prior), 1)]
+        with (patch.object(billing, "read_meter", return_value=self.history(renumbered)) as read,
+              patch.object(billing.time, "sleep") as sleep):
+            with self.assertRaises(billing.BillingReconciliationError):
+                billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+        self.assertEqual(read.call_count, 3)
+        self.assertEqual(sleep.call_count, 2)
+
+    def test_changed_historical_billing_fields_remain_ambiguous_despite_new_ids(self):
+        prior = [self.row(i, created_at=100 + i) for i in range(1, 11)]
+        for field, value in (("quota", 999), ("prompt_tokens", 999),
+                             ("completion_tokens", 999), ("created_at", 999),
+                             ("model_name", "another-model")):
+            with self.subTest(field=field):
+                shifted = [dict(row, id=row["id"] + 1) for row in prior]
+                shifted[4][field] = value
+                fresh = self.row(1, quota=248, created_at=1000)
+                with patch.object(billing, "read_meter", return_value=self.history([fresh] + shifted)):
+                    with self.assertRaises(billing.BillingReconciliationError):
+                        billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+
+    def test_display_ids_can_roll_over_with_the_last_hundred_without_losing_continuity(self):
+        prior = [self.row(index, created_at=101 - index) for index in range(1, 101)]
+        fresh = self.row(1, quota=333, created_at=101)
+        shifted = [dict(row, id=row["id"] + 1) for row in prior[:-1]]
+        with patch.object(billing, "read_meter", return_value=self.history([fresh] + shifted)):
+            value = billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+        self.assertEqual(value["actual_cost_cny"], 333 / 500000)
+        self.assertEqual(value["debit_evidence"]["row"]["created_at"], 101)
+
+    def test_oldest_row_mutation_in_full_window_is_not_mistaken_for_rollover(self):
+        prior = [self.row(index, created_at=101 - index) for index in range(1, 101)]
+        after = [dict(row) for row in prior]
+        after[-1]["quota"] = 999
+        with patch.object(billing, "read_meter", return_value=self.history(after)):
+            with self.assertRaisesRegex(billing.BillingReconciliationError, "predates"):
+                billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+
+    def test_two_fresh_display_rows_are_still_concurrent_and_cannot_settle(self):
+        prior = [self.row(i, created_at=100 + i) for i in range(1, 11)]
+        after = [self.row(1, created_at=201), self.row(2, created_at=200)]
+        after += [dict(row, id=row["id"] + 2) for row in prior]
+        with patch.object(billing, "read_meter", return_value=self.history(after)) as read:
+            with self.assertRaisesRegex(billing.BillingReconciliationError, "multiple new"):
+                billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+        read.assert_called_once()
+
+    def test_equal_core_rows_use_multiplicity_instead_of_unique_fingerprint_set(self):
+        prior = [self.row(1, created_at=100), self.row(2, created_at=100)]
+        after = [self.row(i, created_at=100) for i in range(1, 4)]
+        with patch.object(billing, "read_meter", return_value=self.history(after)):
+            value = billing.settle("cheapai-gpt-pro", "gpt-6.1-sol", self.history(prior))
+        self.assertEqual(value["actual_cost_cny"], 100 / 500000)
+
     def test_last_hundred_rollover_preserves_unique_new_debit(self):
         before = self.history([self.row(i) for i in range(1, 101)])
         after = self.history([self.row(i) for i in range(2, 102)])

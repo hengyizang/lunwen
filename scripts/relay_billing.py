@@ -84,6 +84,14 @@ def _fingerprint(row: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(row, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
 
+def _debit_fingerprint(row: dict[str, Any]) -> str:
+    # CheapAI's authenticated log assigns 1..N display positions afresh on
+    # every response. A new first row shifts every historical ID. Preserve
+    # that number for audit, but identify debits by their sanitized billing
+    # fields and multiplicity, never by the display position.
+    return _fingerprint({key: value for key, value in row.items() if key != "id"})
+
+
 def _rows(value: Any) -> list[dict[str, Any]]:
     if not isinstance(value, list) or len(value) > 1000:
         raise BillingReconciliationError("billing debit history is malformed; retain reservation")
@@ -145,27 +153,26 @@ def read_meter(provider: str, environment=None) -> dict[str, Any]:
 
 
 def _new_cheapai_rows(before: list[dict], after: list[dict]) -> list[dict]:
-    # IDs identify a row when present; changes under an existing ID are ambiguous.
-    old_ids = {row["id"]: row for row in before if "id" in row}
-    for row in after:
-        if "id" in row and row["id"] in old_ids and row != old_ids[row["id"]]:
-            raise BillingReconciliationError("existing debit row changed; retain reservation")
-    prior = Counter(_fingerprint(row) for row in before)
-    current = Counter(_fingerprint(row) for row in after)
+    # Display IDs are not stable database identifiers. Core-field multisets
+    # still reject altered/deleted historical debits and concurrent new rows.
+    prior = Counter(_debit_fingerprint(row) for row in before)
+    current = Counter(_debit_fingerprint(row) for row in after)
     fresh_counts, missing_counts = current - prior, prior - current
     fresh = []
     for row in after:
-        fingerprint = _fingerprint(row)
+        fingerprint = _debit_fingerprint(row)
         if fresh_counts[fingerprint]:
             fresh.append(row)
             fresh_counts[fingerprint] -= 1
+    if len(fresh) == 1 and before and fresh[0]["created_at"] < max(row["created_at"] for row in before):
+        raise BillingReconciliationError("new debit predates prior history; retain reservation")
     missing = sum(missing_counts.values())
     if missing:
         # The relay returns a recent window, normally 100 rows. Permit a single
         # oldest-row rollover; never require a sum of the account's full history.
         if len(before) < 100 or len(after) != len(before) or missing != 1 or len(fresh) != 1:
             raise BillingReconciliationError("debit history continuity is ambiguous; retain reservation")
-        omitted = [row for row in before if missing_counts[_fingerprint(row)]]
+        omitted = [row for row in before if missing_counts[_debit_fingerprint(row)]]
         if not omitted or omitted[0]["created_at"] > min(row["created_at"] for row in after):
             raise BillingReconciliationError("debit history lost a recent row; retain reservation")
     return fresh
@@ -221,6 +228,7 @@ def settle(provider: str, model: str, before: dict[str, Any]) -> dict[str, Any]:
                 return {"actual_cost_cny": row["quota"] / 500000, "debit_evidence": {
                     "source": "https://cheapai.info/api/log/token", "unit_source": "https://cheapai.info/api/status",
                     "quota_per_unit": 500000, "row": row,
+                    "row_identity_rule": "billing_fields_excluding_display_id",
                     "before_snapshot_sha256": _fingerprint({"rows": prior_rows}),
                     "after_snapshot_sha256": _fingerprint({"rows": next_rows}),
                     "exactly_one_new_gateway_request": True, "currency_rule": _CURRENCY_RULE}}

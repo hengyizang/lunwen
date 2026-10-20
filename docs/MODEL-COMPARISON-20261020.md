@@ -16,6 +16,14 @@ name correction, not proof of model weights or quality. Gemini low/medium remain
 untested because the configured key does not advertise their exact IDs.
 
 First, every route gets two shared screening tasks, one round at a time.
+Each key's exact catalog is inspected first. A missing model is recorded as
+unverified for that key and skipped before generation, rather than declared
+absent from the relay as a whole or repeatedly probed at a cost.
+The one explicit diagnostic exception is the owner's Argon high comparison:
+both authenticated catalogs advertised that exact ID early in this trial and
+later returned empty lists. A bounded attempt of that exact ID is recorded as
+a catalog-omission probe. Production catalog guards remain in force; the trial
+does not infer general availability or accept a different alias from a screenshot.
 Successful baselines then receive focused tasks before alternative channels:
 source conflict, leakage and fair design, paired statistics, English claim
 precision, long-source reconciliation and a synthetic chart. Two additional
@@ -37,7 +45,11 @@ cannot assess overall doctoral originality or replace human blind evaluation.
 The fixed cloud-state/model-comparison-20261020 branch stores an independent,
 append-only attempt ledger. The authorization ID, plan and fixture hashes, exact
 routes and call IDs are bound. A rerun does not reset the allowance or repeat an
-attempt. Closed and stopped trials stay closed/stopped. Reservations count in
+attempt. Ordinary execute and reconcile leave stopped trials stopped; closed
+trials never reopen. A separate owner-reviewed resume requires the exact stopped
+ledger blob, its original authorization, and fully independently settled attempts.
+It records review provenance and preserves all call IDs and the same limit.
+Reservations count in
 full until an independently attributable gateway debit is read.
 
 Each fresh attempt reads the group's independent meter, calculates a conservative
