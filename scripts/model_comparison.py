@@ -453,6 +453,19 @@ def execute(plan, ledger, persist):
     validate_ledger(ledger, plan)
     if ledger.get("status") in {"closed", "closed_with_holds", "stopped"}:
         return  # Re-dispatch never resets a closed trial or its allowance.
+    if full_scope(ledger):
+        # A process may have stopped after reserving/sending but before its
+        # reconciliation handler. Restore isolation before any fresh POST.
+        changed = False
+        for entry in ledger["entries"]:
+            if entry.get("billing_status") != "settled":
+                before = (len(ledger.get("isolated_providers", [])),
+                          len(ledger.get("quarantined_candidates", [])))
+                isolate(ledger, entry)
+                changed |= before != (len(ledger["isolated_providers"]),
+                                      len(ledger["quarantined_candidates"]))
+        if changed:
+            persist(ledger)
     if not full_scope(ledger) and any(e.get("billing_status") != "settled" for e in ledger["entries"]):
         raise ComparisonError("unknown_charge_blocks_new_generation")
     # Cover every model/channel once before the second shared screening task.

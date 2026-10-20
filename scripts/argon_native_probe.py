@@ -155,7 +155,10 @@ def main():
     plan = json.loads((ROOT / "config/model-comparison-20261020.json").read_text())
     parent_trial.validate_ledger(parent, plan)
     sibling, _ = gateway_trial.CloudState.read(state, clarified.FILE)
-    sibling_attempts = len(sibling.get("entries", [])) if sibling else 0
+    if (not sibling or sibling.get("status") not in {"closed", "closed_with_holds"}
+            or sibling.get("scope", {}).get("parent_blob_sha") != sha):
+        raise ProbeError("closed_clarified_sibling_with_same_parent_required")
+    sibling_attempts = len(sibling.get("entries", []))
     scope = contract(parent, sha, sibling_attempts)
     ledger = state.load()
     if ledger is None:

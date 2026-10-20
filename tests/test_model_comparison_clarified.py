@@ -80,7 +80,7 @@ class ClarifiedComparisonTests(unittest.TestCase):
 
     def test_combined_parent_and_full_followup_scope_cannot_exceed_128_calls(self):
         parent = copy.deepcopy(self.parent)
-        parent["entries"] += copy.deepcopy(parent["entries"][:5])
+        parent["entries"] += copy.deepcopy(parent["entries"][:4])
         with self.assertRaisesRegex(trial.ClarifiedError, "combined_fixed_task_limit"):
             trial.scope(self.plan, parent, "a" * 40)
         self.post.assert_not_called()
@@ -160,6 +160,21 @@ class ClarifiedComparisonTests(unittest.TestCase):
                 trial.execute(ledger, self.contract, self.persist)
                 self.assertEqual(ledger, prior)
         self.post.assert_not_called()
+
+    def test_crash_before_reconciliation_isolates_same_credential_before_new_work(self):
+        for generation in ("not_sent", "completed"):
+            with self.subTest(generation=generation):
+                ledger = trial.new_ledger(self.contract, self.parent)
+                trial.run_one(ledger, self.route, self.case_id, self.persist)
+                entry = ledger["entries"][0]
+                entry.update(billing_status="reserved", generation_status=generation)
+                entry.pop("actual_cost_cny", None)
+                entry.pop("debit_evidence", None)
+                self.post.reset_mock()
+                trial.execute(ledger, self.contract, self.persist)
+                self.assertIn(self.route["provider"], ledger["isolated_providers"])
+                self.assertFalse(any(call.args[0] == self.route["provider"] for call in self.post.call_args_list))
+                self.assertEqual(entry["billing_status"], "reserved")
 
     def test_changed_parent_blob_case_or_quote_scope_cannot_reset_existing_followup(self):
         for field, value in (("parent_blob_sha", "b" * 40), ("fixture_sha256", "changed"),

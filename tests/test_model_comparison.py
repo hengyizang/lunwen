@@ -525,6 +525,21 @@ class ModelComparisonTests(unittest.TestCase):
                 comparison.FULL_AUTHORIZATION, fail)
         self.post.assert_not_called()
 
+    def test_full_scope_resume_restores_isolation_after_interrupted_reconciliation(self):
+        for generation in ("not_sent", "completed"):
+            with self.subTest(generation=generation):
+                ledger = self.authorize_full()
+                entry = self.entry()
+                entry["quote_sha256"] = "q" * 64
+                comparison.reserve(ledger, entry, self.persist)
+                entry["generation_status"] = generation
+                prior = copy.deepcopy(entry)
+                self.post.reset_mock()
+                comparison.execute(self.plan, ledger, self.persist)
+                self.assertIn(self.route["provider"], ledger["isolated_providers"])
+                self.assertEqual(entry, prior)
+                self.assertFalse(any(call.args[0] == self.route["provider"] for call in self.post.call_args_list))
+
     def test_full_scope_skips_unsupported_media_in_derived_task_count(self):
         item = self.definitions["visual_chart"]
         item["attachments"] = [{"mime_type": "image/png", "sha256": "fake", "data_base64": "fake"}]

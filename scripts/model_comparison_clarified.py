@@ -28,6 +28,7 @@ STATE = parent_trial.STATE
 CASE_IDS = ("evidence_conflict_v2", "experiment_design_v2")
 MAX_CALLS = 16
 MAX_COMBINED_CALLS = 128
+RESERVED_NATIVE_PROBE_CALLS = 1
 
 
 class ClarifiedError(RuntimeError):
@@ -113,7 +114,7 @@ def scope(plan, parent, parent_sha):
             if type(amount) not in (int, float) or not math.isfinite(amount) or amount <= 0:
                 raise ClarifiedError("invalid_derived_clarified_bound")
             tasks[route["id"] + "|" + case_id] = amount
-    if len(tasks) != MAX_CALLS or len(parent["entries"]) + len(tasks) > MAX_COMBINED_CALLS:
+    if len(tasks) != MAX_CALLS or len(parent["entries"]) + len(tasks) + RESERVED_NATIVE_PROBE_CALLS > MAX_COMBINED_CALLS:
         raise ClarifiedError("combined_fixed_task_limit_exceeded")
     held = round(sum(entry["reserved_ceiling_cny"] for entry in parent["entries"]
                      if entry.get("billing_status") != "settled"), 8)
@@ -131,6 +132,7 @@ def scope(plan, parent, parent_sha):
             "task_ceiling_cny": tasks, "ceiling_cny": ceiling,
             "combined_ceiling_cny": round(parent_trial.cost(parent) + ceiling, 8),
             "max_calls": MAX_CALLS, "max_combined_calls": MAX_COMBINED_CALLS,
+            "reserved_native_probe_calls": RESERVED_NATIVE_PROBE_CALLS,
             "configurations": selected}
 
 
@@ -262,6 +264,16 @@ def execute(ledger, contract, persist):
     validate(ledger, contract)
     if ledger.get("status") in {"closed", "closed_with_holds", "stopped"}:
         return
+    changed = False
+    for entry in ledger["entries"]:
+        if entry.get("billing_status") != "settled":
+            for key, value in (("isolated_providers", entry["provider"]),
+                               ("quarantined_candidates", entry["candidate_id"])):
+                if value not in ledger[key]:
+                    ledger[key].append(value)
+                    changed = True
+    if changed:
+        persist(ledger)  # Crash recovery cannot put a second call on an uncertain meter.
     for case_id in CASE_IDS:
         for route in contract["configurations"]:
             run_one(ledger, route, case_id, persist)
@@ -272,8 +284,13 @@ def execute(ledger, contract, persist):
 
 def summary(ledger):
     contract = ledger["scope"]
+    attempted = {entry["call_id"] for entry in ledger["entries"]}
+    unattempted = sorted(set(contract["task_ceiling_cny"]) - attempted)
     return {"trial_id": TRIAL, "status": ledger["status"], "parent_blob_sha": contract["parent_blob_sha"],
         "attempts": len(ledger["entries"]), "combined_attempts": contract["parent_attempts"] + len(ledger["entries"]),
+        "expected_tasks": len(contract["task_ceiling_cny"]), "unattempted_tasks": unattempted,
+        "all_tasks_attempted": not unattempted,
+        "completed_responses": sum(e.get("generation_status") == "completed" for e in ledger["entries"]),
         "cohort_committed_upper_cny": cost(ledger),
         "combined_committed_upper_cny": round(contract["parent_committed_upper_cny"] + cost(ledger), 8),
         "outstanding_holds_cny": round(sum(entry["reserved_ceiling_cny"] for entry in ledger["entries"]
