@@ -5094,7 +5094,15 @@
       "billing_status": "reserved",
       "reserved_at": "2026-10-20T14:06:02.138686+00:00",
       "diagnostic": "API HTTP 524; no automatic generation retry; reconcile billing",
-      "duration_seconds": 125.5667
+      "duration_seconds": 125.5667,
+      "billing_diagnostic": "gateway debit has not uniquely appeared; retain reservation",
+      "billing_review_after": {
+        "provider": "codekey-deepseek",
+        "kind": "codekey_total_actual_cost",
+        "requests": 8,
+        "cost_cny": 0.0029326,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "status": "running",
