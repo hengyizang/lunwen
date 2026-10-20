@@ -16,6 +16,11 @@ from scripts import ai_providers
 from scripts.production_readiness import NoRedirect
 
 
+# Both roots are explicitly shown in the user's CodeKey API console. The US
+# host is a diagnostic transport only and does not become a production route.
+CATALOG_ROOTS = frozenset({"https://codekey.ai", "https://api.codekey.ai"})
+
+
 def _model_id(value, *, native=False):
     if not isinstance(value, str):
         raise ValueError("malformed model ID")
@@ -30,11 +35,20 @@ def _model_id(value, *, native=False):
 
 
 def _inspect(root, path, key, *, schema):
+    if root not in CATALOG_ROOTS:
+        raise ValueError("catalog diagnostic root is not explicitly allowed")
+    allowed_path = {
+        "openai-list": "/v1/models",
+        "google-list": "/v1beta/models",
+        "google-model": "/v1beta/models/" + _model_id(ai_providers.PRODUCTION_PROVIDERS["codekey-gemini"]["model"]),
+    }.get(schema)
+    if path != allowed_path or allowed_path is None:
+        raise ValueError("catalog diagnostic path is not explicitly allowed")
     native = schema != "openai-list"
     header = {"x-goog-api-key": key} if native else {"Authorization": "Bearer " + key}
     request = urllib.request.Request(root + path, method="GET", headers={
         **header, "User-Agent": "lunwen-production-research/1.0", "Accept": "application/json"})
-    result = {"path": path, "method": "GET", "schema": schema,
+    result = {"root": root, "path": path, "method": "GET", "schema": schema,
               "http_status": None, "metadata_access_verified": False, "model_ids": []}
     try:
         with urllib.request.build_opener(NoRedirect()).open(request, timeout=30) as response:
@@ -67,7 +81,7 @@ def _inspect(root, path, key, *, schema):
     return result
 
 
-def report(environment=None):
+def report(environment=None, *, include_us_host=False):
     env = os.environ if environment is None else environment
     if env.get("GITHUB_ACTIONS") != "true" or env.get("GITHUB_REPOSITORY") != "hengyizang/lunwen":
         raise ValueError("catalog diagnostic requires the repository cloud runner")
@@ -78,11 +92,16 @@ def report(environment=None):
     if not isinstance(key, str) or not key.strip() or any(ch.isspace() or ord(ch) < 32 for ch in key.strip()):
         raise ValueError("Gemini diagnostic credential missing or invalid")
     model = _model_id(spec["model"])
-    endpoints = [
-        _inspect(spec["root"], "/v1/models", key.strip(), schema="openai-list"),
-        _inspect(spec["root"], "/v1beta/models", key.strip(), schema="google-list"),
-        _inspect(spec["root"], "/v1beta/models/" + model, key.strip(), schema="google-model"),
-    ]
+    roots = [spec["root"]]
+    if include_us_host:
+        roots.append("https://api.codekey.ai")
+    endpoints = []
+    for root in roots:
+        endpoints.extend([
+            _inspect(root, "/v1/models", key.strip(), schema="openai-list"),
+            _inspect(root, "/v1beta/models", key.strip(), schema="google-list"),
+            _inspect(root, "/v1beta/models/" + model, key.strip(), schema="google-model"),
+        ])
     return {"schema_version": "1.0", "provider": "codekey-gemini", "requested_model": model,
             "endpoints": endpoints, "model_generation_calls": 0, "new_spending_authority": False,
             "inference_access_verified": False, "scientific_completion": False}
@@ -91,9 +110,11 @@ def report(environment=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--include-us-host", action="store_true",
+                        help="also inspect the exact US API host shown in the CodeKey console; GET metadata only")
     args = parser.parse_args()
     try:
-        value = report()
+        value = report(include_us_host=args.include_us_host)
     except ValueError:
         value = {"diagnostic": "cloud_or_credential_precondition_failed", "model_generation_calls": 0}
         print(json.dumps(value))

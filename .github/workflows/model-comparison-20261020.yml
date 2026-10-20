@@ -1,4 +1,4 @@
-name: Bounded model comparison CNY30 20261020
+name: Fixed-scope model comparison 20261020
 on:
   push:
     branches: [codex/model-comparison-20261020]
@@ -7,10 +7,10 @@ on:
       mode:
         description: Read-only metadata, authorized execute, or read-only reconcile
         type: choice
-        options: [metadata, execute, reconcile, resume]
+        options: [metadata, execute, reconcile, resume, complete]
         default: metadata
       authorization:
-        description: Exact new allowance ID required for execute
+        description: Exact authorization ID required for generating modes
         type: string
         default: ''
       expected_ledger_sha:
@@ -71,9 +71,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Read exact Gemini catalog endpoints without generation
-        run: python -m scripts.catalog_diagnostic --output .runtime/catalog-diagnostic.json
+        run: python -m scripts.catalog_diagnostic --include-us-host --output .runtime/catalog-diagnostic.json
       - name: Execute only the separately authorized bounded comparison or read-only reconciliation
-        if: inputs.mode == 'execute' || inputs.mode == 'reconcile' || inputs.mode == 'resume'
+        if: inputs.mode == 'execute' || inputs.mode == 'reconcile' || inputs.mode == 'resume' || inputs.mode == 'complete'
         run: python -m scripts.model_comparison --mode "$COMPARISON_MODE"
       - name: Preserve sanitized scoped receipts
         if: always()

@@ -417,6 +417,154 @@ class ModelComparisonTests(unittest.TestCase):
         self.assertIs(report["scientific_equivalence_verified"], False)
         self.assertIs(report["unattempted_are_unknown_not_failed"], True)
 
+    def authorize_full(self, ledger=None):
+        ledger = self.ledger() if ledger is None else ledger
+        comparison.authorize_complete(self.plan, ledger, "reviewed-blob", "reviewed-blob",
+            comparison.FULL_AUTHORIZATION, self.persist)
+        return ledger
+
+    def test_full_matrix_authorization_requires_new_id_and_exact_existing_blob(self):
+        for authorization, expected in ((comparison.AUTHORIZATION, "reviewed-blob"),
+                                        (comparison.FULL_AUTHORIZATION, "different-blob"),
+                                        (comparison.FULL_AUTHORIZATION, None)):
+            with self.subTest(authorization=authorization, expected=expected):
+                ledger = self.ledger()
+                before = copy.deepcopy(ledger)
+                with self.assertRaisesRegex(comparison.ComparisonError, "explicit_authorization_and_exact"):
+                    comparison.authorize_complete(self.plan, ledger, expected, "reviewed-blob",
+                        authorization, self.persist)
+                self.assertEqual(ledger, before)
+        self.post.assert_not_called()
+
+    def test_full_matrix_appends_finite_derived_scope_without_resetting_original_trial(self):
+        ledger = self.stopped_settled_ledger(amount=29.9)
+        original = copy.deepcopy(ledger["entries"])
+        plan = copy.deepcopy(self.plan)
+        self.authorize_full(ledger)
+        extension = ledger["full_matrix_authorization"]
+        contract = extension["scope_contract"]
+        self.assertEqual(ledger["limit_cny"], 30.0)
+        self.assertEqual(ledger["authorization_id"], comparison.AUTHORIZATION)
+        self.assertEqual(ledger["entries"], original)
+        self.assertEqual(self.plan, plan)
+        self.assertEqual(extension["original_entries_sha256"], comparison.digest(original))
+        self.assertEqual(contract["max_calls"], 128)
+        self.assertLessEqual(contract["task_count"], 128)
+        self.assertEqual(contract["ceiling_cny"], round(sum(contract["task_ceiling_cny"].values()), 8))
+        self.assertGreater(comparison.effective_limit(ledger), 30.0)
+        comparison.validate_ledger(ledger, self.plan)
+        snapshot = copy.deepcopy(ledger)
+        self.assertFalse(comparison.authorize_complete(self.plan, ledger,
+            "new-current-blob", "new-current-blob", comparison.FULL_AUTHORIZATION, self.persist))
+        self.assertEqual(ledger, snapshot)
+        self.post.assert_not_called()
+
+    def test_full_scope_cannot_accept_arbitrary_ceiling_quote_or_frozen_prefix_changes(self):
+        ledger = self.authorize_full(self.stopped_settled_ledger())
+        for change in ("ceiling", "quote", "prefix", "max_calls"):
+            with self.subTest(change=change):
+                changed = copy.deepcopy(ledger)
+                extension = changed["full_matrix_authorization"]
+                if change == "ceiling":
+                    extension["scope_contract"]["ceiling_cny"] = 999999.0
+                elif change == "quote":
+                    extension["scope_contract"]["quote_sha256_by_candidate"][self.route["id"]] = "other"
+                elif change == "max_calls":
+                    extension["scope_contract"]["max_calls"] = 100000
+                else:
+                    changed["entries"][0]["actual_cost_cny"] = 0.01
+                with self.assertRaises(comparison.ComparisonError):
+                    comparison.validate_ledger(changed, self.plan)
+
+    def test_existing_unknown_charge_is_retained_and_only_its_provider_is_isolated(self):
+        ledger = self.ledger()
+        entry = self.entry()
+        comparison.reserve(ledger, entry, self.persist)
+        ledger.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+        before = copy.deepcopy(ledger["entries"])
+        self.authorize_full(ledger)
+        self.assertEqual(ledger["entries"], before)
+        self.assertEqual(comparison.cost(ledger), 2.0)
+        self.assertIn(self.route["provider"], ledger["isolated_providers"])
+        other = next(route for route in self.plan["candidates"] if route["provider"] != self.route["provider"])
+        self.assertEqual(comparison.run_one(ledger, self.route, self.route["screening_cases"][1],
+            "screening", self.persist), "quarantined_no_generation")
+        self.assertEqual(comparison.run_one(ledger, other, self.case_id,
+            "screening", self.persist), "completed")
+        self.post.assert_called_once()
+        self.assertEqual(comparison.cost(ledger), 2.12)
+        comparison.validate_ledger(ledger, self.plan)
+
+    def test_new_unknown_bill_is_held_without_retry_and_other_providers_continue(self):
+        ledger = self.authorize_full()
+        self.settle.side_effect = [relay_billing.BillingReconciliationError("unknown debit"), self.settlement]
+        self.assertEqual(comparison.run_one(ledger, self.route, self.case_id,
+            "screening", self.persist), "unknown_charge_isolated_full_hold_retained")
+        self.assertEqual(ledger["status"], "running")
+        self.assertEqual(comparison.cost(ledger), 2.0)
+        self.assertEqual(ledger["entries"][0]["billing_status"], "reserved")
+        same_provider = next(route for route in self.plan["candidates"]
+            if route["provider"] == self.route["provider"] and route["id"] != self.route["id"])
+        self.assertEqual(comparison.run_one(ledger, same_provider, self.case_id,
+            "screening", self.persist), "isolated_provider_no_generation")
+        self.assertEqual(comparison.run_one(ledger, self.route, self.case_id,
+            "screening", self.persist), "quarantined_no_generation")
+        other = next(route for route in self.plan["candidates"] if route["provider"] != self.route["provider"])
+        self.assertEqual(comparison.run_one(ledger, other, self.case_id,
+            "screening", self.persist), "completed")
+        self.assertEqual(self.post.call_count, 2)
+        self.assertEqual(comparison.cost(ledger), 2.12)
+        comparison.validate_ledger(ledger, self.plan)
+
+    def test_authorization_persistence_failure_prevents_any_generation(self):
+        ledger = self.ledger()
+        def fail(_):
+            raise OSError("scope approval was not persisted")
+        with self.assertRaises(OSError):
+            comparison.authorize_complete(self.plan, ledger, "reviewed-blob", "reviewed-blob",
+                comparison.FULL_AUTHORIZATION, fail)
+        self.post.assert_not_called()
+
+    def test_full_scope_skips_unsupported_media_in_derived_task_count(self):
+        item = self.definitions["visual_chart"]
+        item["attachments"] = [{"mime_type": "image/png", "sha256": "fake", "data_base64": "fake"}]
+        ledger = self.authorize_full()
+        tasks = ledger["full_matrix_authorization"]["scope_contract"]["task_ceiling_cny"]
+        for route in self.plan["candidates"]:
+            if "visual_chart" not in route["focused_cases"]:
+                continue
+            present = route["id"] + "|visual_chart" in tasks
+            self.assertEqual(present, ai_providers.provider_family(route["provider"]) in {"openai", "google"})
+
+    def test_full_scope_runs_diagnostic_focus_despite_failed_screen_and_closes_with_holds(self):
+        ledger = self.ledger()
+        entry = self.entry()
+        comparison.reserve(ledger, entry, self.persist)
+        ledger.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+        self.authorize_full(ledger)
+        with (patch.object(comparison, "qualified", return_value=False),
+              patch.object(comparison, "run_one", return_value="diagnostic-fixture") as run):
+            comparison.execute(self.plan, ledger, self.persist)
+        self.assertEqual(ledger["status"], "closed_with_holds")
+        self.assertTrue(any(call.args[3] == "focused" for call in run.call_args_list))
+        self.assertEqual(comparison.cost(ledger), 2.0)
+        report = comparison.summary(ledger, self.plan)
+        self.assertEqual(report["outstanding_held_cny"], 2.0)
+        self.assertIs(report["scientific_equivalence_verified"], False)
+        self.assertIs(report["production_routing_changed"], False)
+
+    def test_full_matrix_rejects_attempts_outside_pinned_task_and_quote_scope(self):
+        ledger = self.authorize_full()
+        entry = self.entry()
+        entry["quote_sha256"] = "wrong-quote"
+        with self.assertRaisesRegex(comparison.ComparisonError, "outside_approved_full_matrix"):
+            comparison.reserve(ledger, entry, self.persist)
+        entry["quote_sha256"] = "q" * 64
+        entry["reserved_ceiling_cny"] = 1000.0
+        with self.assertRaisesRegex(comparison.ComparisonError, "outside_approved_full_matrix"):
+            comparison.reserve(ledger, entry, self.persist)
+        self.post.assert_not_called()
+
 
 class ComparisonCloudStateTests(unittest.TestCase):
     OLD_SHA = "a" * 40

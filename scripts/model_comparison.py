@@ -2,7 +2,8 @@
 
 No production role change, scientific gate, paid judge, generation retry or
 reopening of the closed 20261019 allowance. Every attempted call has a durable
-reservation and an independent meter. Unknown charges stop further generation.
+reservation and an independent meter. The separately approved finite full
+matrix can isolate unknown charges while retaining their complete holds.
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ from scripts import model_comparison_cases as fixtures
 ROOT = Path(__file__).resolve().parents[1]
 TRIAL = "model-comparison-20261020"
 AUTHORIZATION = TRIAL + "-cny30"
+FULL_AUTHORIZATION = TRIAL + "-full-fixed-matrix"
 STATE = "cloud-state/" + TRIAL
 FILE = TRIAL + ".json"
 LIMIT = 30.0
@@ -119,6 +121,111 @@ def cost(ledger):
                      for entry in ledger["entries"]), 8)
 
 
+def full_scope(ledger):
+    extension = ledger.get("full_matrix_authorization")
+    return isinstance(extension, dict) and extension.get("authorization_id") == FULL_AUTHORIZATION
+
+
+def effective_limit(ledger):
+    if full_scope(ledger):
+        return ledger["full_matrix_authorization"]["scope_contract"]["ceiling_cny"]
+    return LIMIT
+
+
+def scope_contract(plan, prior_entries=()):
+    """Finite money ceiling derived from the fixed task matrix, never a grant."""
+    prior = {entry["call_id"]: entry for entry in prior_entries}
+    task_bounds, quotes = {}, {}
+    for route in plan["candidates"] + plan.get("focused_settings", []):
+        quote = model_runtime.pricing(route["provider"], route["model"])
+        quotes[route["id"]] = quote["quote_sha256"]
+        for case_id in route["screening_cases"] + route["focused_cases"]:
+            item = fixtures.case(case_id)
+            media = item.get("attachments") or []
+            if media and ai_providers.provider_family(route["provider"]) not in {"openai", "google"}:
+                continue
+            call_id = route["id"] + "|" + case_id
+            amount = model_runtime.reservation_bound(route["provider"], item["prompt"], item.get("system"),
+                route["max_output_tokens"], quote, {}, controlled=True, has_media=bool(media))
+            if type(amount) not in (int, float) or not math.isfinite(amount) or amount <= 0:
+                raise ComparisonError("invalid_full_matrix_derived_bound")
+            if call_id in prior:
+                amount = max(amount, prior[call_id]["reserved_ceiling_cny"],
+                             prior[call_id].get("actual_cost_cny", 0))
+            task_bounds[call_id] = amount
+    if not task_bounds or len(task_bounds) > MAX_CALLS or set(prior) - set(task_bounds):
+        raise ComparisonError("full_matrix_scope_exceeds_fixed_tasks")
+    ceiling = round(sum(task_bounds.values()), 8)
+    if not math.isfinite(ceiling) or ceiling <= 0:
+        raise ComparisonError("invalid_full_matrix_derived_bound")
+    return {"plan_sha256": fingerprint(plan), "quote_sha256_by_candidate": quotes,
+            "task_ceiling_cny": task_bounds, "task_count": len(task_bounds),
+            "max_calls": MAX_CALLS, "ceiling_cny": ceiling}
+
+
+def validate_full_scope(ledger, plan):
+    extension = ledger.get("full_matrix_authorization")
+    if extension is None:
+        return
+    if (not isinstance(extension, dict) or extension.get("authorization_id") != FULL_AUTHORIZATION
+            or extension.get("original_authorization_id") != AUTHORIZATION
+            or extension.get("original_limit_cny") != LIMIT
+            or not isinstance(extension.get("reviewed_ledger_blob_sha"), str)
+            or not extension["reviewed_ledger_blob_sha"]):
+        raise ComparisonError("invalid_full_matrix_authorization")
+    count = extension.get("original_entries_count")
+    if type(count) is not int or not 0 <= count <= len(ledger["entries"]):
+        raise ComparisonError("original_trial_prefix_changed")
+    prior = ledger["entries"][:count]
+    if extension.get("original_entries_sha256") != digest(prior):
+        raise ComparisonError("original_trial_prefix_changed")
+    if extension.get("scope_contract") != scope_contract(plan, prior):
+        raise ComparisonError("full_matrix_scope_or_quotes_changed")
+    contract = extension["scope_contract"]
+    for entry in ledger["entries"][count:]:
+        if (entry["call_id"] not in contract["task_ceiling_cny"]
+                or entry["reserved_ceiling_cny"] > contract["task_ceiling_cny"][entry["call_id"]]
+                or entry.get("quote_sha256") != contract["quote_sha256_by_candidate"].get(entry["candidate_id"])):
+            raise ComparisonError("attempt_outside_approved_full_matrix")
+
+
+def authorize_complete(plan, ledger, expected_sha, actual_sha, authorization_id, persist):
+    """Append the owner's later full-matrix authorization without resetting history."""
+    if (authorization_id != FULL_AUTHORIZATION or not expected_sha or expected_sha != actual_sha):
+        raise ComparisonError("full_matrix_requires_explicit_authorization_and_exact_ledger")
+    validate_ledger(ledger, plan)
+    if full_scope(ledger):
+        return False  # A repeated dispatch cannot replace or extend the approval.
+    contract = scope_contract(plan, ledger["entries"])
+    ledger["full_matrix_authorization"] = {
+        "authorization_id": FULL_AUTHORIZATION, "at": now(),
+        "reviewed_ledger_blob_sha": actual_sha,
+        "reviewed_code_sha": os.environ.get("GITHUB_SHA"),
+        "original_authorization_id": AUTHORIZATION, "original_limit_cny": LIMIT,
+        "original_entries_count": len(ledger["entries"]),
+        "original_entries_sha256": digest(ledger["entries"]),
+        "scope_contract": contract,
+        "user_directive": "The owner subsequently requested completing the entire existing fixed comparison matrix, prioritizing effectiveness and speed over the initial CNY30 screening limit.",
+        "precedence": "This later explicit scope authorization supersedes only the initial screening ceiling; the original ledger and plan remain preserved.",
+        "unknown_debits_retain_full_holds": True, "paid_retries_authorized": False,
+        "production_routing_changed": False, "scientific_equivalence_verified": False,
+    }
+    for entry in ledger["entries"]:
+        if entry.get("billing_status") != "settled":
+            isolate(ledger, entry)
+    ledger.update(status="running")
+    ledger.pop("stop_reason", None)
+    persist(ledger)  # Durable new authorization before any generation.
+    return True
+
+
+def isolate(ledger, entry):
+    for key, value in (("quarantined_candidates", entry["candidate_id"]),
+                       ("isolated_providers", entry["provider"])):
+        if value not in ledger.setdefault(key, []):
+            ledger[key].append(value)
+
+
 def validate_ledger(ledger, plan):
     if (ledger.get("trial_id") != TRIAL or ledger.get("authorization_id") != AUTHORIZATION
             or ledger.get("limit_cny") != LIMIT or ledger.get("plan_sha256") != fingerprint(plan)
@@ -147,7 +254,8 @@ def validate_ledger(ledger, plan):
             if (type(actual) not in (int, float) or not math.isfinite(actual) or actual < 0
                     or not entry.get("debit_evidence")):
                 raise ComparisonError("invalid_settlement")
-    if len(ids) > MAX_CALLS or cost(ledger) > LIMIT + 1e-8:
+    validate_full_scope(ledger, plan)
+    if len(ids) > MAX_CALLS or cost(ledger) > effective_limit(ledger) + 1e-8:
         raise ComparisonError("trial_cap_exceeded")
     return ledger
 
@@ -163,12 +271,20 @@ def new_ledger(plan):
 def reserve(ledger, entry, persist, *, phase_limit=LIMIT):
     if any(e["call_id"] == entry["call_id"] for e in ledger["entries"]):
         return False
-    if any(e.get("billing_status") != "settled" for e in ledger["entries"]):
+    if not full_scope(ledger) and any(e.get("billing_status") != "settled" for e in ledger["entries"]):
         raise ComparisonError("unknown_charge_blocks_new_generation")
     amount = entry["reserved_ceiling_cny"]
     if type(amount) not in (int, float) or not math.isfinite(amount) or amount <= 0:
         raise ComparisonError("invalid_reservation")
-    if len(ledger["entries"]) >= MAX_CALLS or cost(ledger) + amount > min(LIMIT, phase_limit):
+    limit = effective_limit(ledger)
+    if full_scope(ledger):
+        contract = ledger["full_matrix_authorization"]["scope_contract"]
+        if (entry["call_id"] not in contract["task_ceiling_cny"]
+                or amount > contract["task_ceiling_cny"][entry["call_id"]]
+                or entry.get("quote_sha256") != contract["quote_sha256_by_candidate"].get(entry["candidate_id"])):
+            raise ComparisonError("attempt_outside_approved_full_matrix")
+        phase_limit = limit
+    if len(ledger["entries"]) >= MAX_CALLS or cost(ledger) + amount > min(limit, phase_limit) + 1e-8:
         return False
     entry.update(billing_status="reserved", reserved_at=now())
     ledger["entries"].append(entry)
@@ -184,7 +300,7 @@ def settle_entry(ledger, entry, settlement, persist):
         raise ComparisonError("independent_debit_required")
     entry.update(billing_status="settled", actual_cost_cny=amount,
                  debit_evidence=settlement["debit_evidence"], reconciled_at=now())
-    if amount > entry["reserved_ceiling_cny"] or cost(ledger) > LIMIT:
+    if amount > entry["reserved_ceiling_cny"] or cost(ledger) > effective_limit(ledger):
         ledger["status"] = "stopped"
         ledger["stop_reason"] = "actual_debit_exceeded_reserved_bound"
         persist(ledger)
@@ -223,6 +339,8 @@ def reconcile_attempt(ledger, entry, persist):
 def run_one(ledger, route, case_id, phase, persist):
     if route["id"] in ledger.get("quarantined_candidates", []):
         return "quarantined_no_generation"
+    if full_scope(ledger) and route["provider"] in ledger.get("isolated_providers", []):
+        return "isolated_provider_no_generation"
     if "inventory" in ledger:
         inventory = ledger["inventory"].get(route["provider"], {})
         if not inventory.get("metadata_access_verified"):
@@ -244,7 +362,7 @@ def run_one(ledger, route, case_id, phase, persist):
     quote = model_runtime.pricing(route["provider"], route["model"])
     ceiling = model_runtime.reservation_bound(route["provider"], item["prompt"], item.get("system"),
         route["max_output_tokens"], quote, {}, controlled=True, has_media=bool(media))
-    phase_limit = 18.0 if phase == "screening" else LIMIT
+    phase_limit = effective_limit(ledger) if full_scope(ledger) else (18.0 if phase == "screening" else LIMIT)
     if cost(ledger) + ceiling > phase_limit:
         return "budget_insufficient_for_conservative_hold"
     try:
@@ -287,14 +405,19 @@ def run_one(ledger, route, case_id, phase, persist):
     try:
         reconcile_attempt(ledger, entry, persist)
     except relay_billing.BillingReconciliationError:
-        ledger.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
-        persist(ledger)
-        raise ComparisonError("unknown_charge_reconciliation_required") from None
+        if full_scope(ledger):
+            isolate(ledger, entry)
+            persist(ledger)
+            return "unknown_charge_isolated_full_hold_retained"
+        else:
+            ledger.update(status="stopped", stop_reason="unknown_charge_reconciliation_required")
+            persist(ledger)
+            raise ComparisonError("unknown_charge_reconciliation_required") from None
     if entry["generation_status"] != "completed":
         ledger.setdefault("quarantined_candidates", []).append(route["id"])
     print(json.dumps({"call_id": call_id, "generation": entry["generation_status"],
                       "score": entry.get("grade", {}).get("score"),
-                      "actual_cost_cny": entry["actual_cost_cny"],
+                      "actual_cost_cny": entry.get("actual_cost_cny"),
                       "cumulative_cny": cost(ledger)}, ensure_ascii=False), flush=True)
     return entry["generation_status"]
 
@@ -328,9 +451,9 @@ def reviewed_resume(ledger, expected_sha, actual_sha, persist):
 
 def execute(plan, ledger, persist):
     validate_ledger(ledger, plan)
-    if ledger.get("status") in {"closed", "stopped"}:
+    if ledger.get("status") in {"closed", "closed_with_holds", "stopped"}:
         return  # Re-dispatch never resets a closed trial or its allowance.
-    if any(e.get("billing_status") != "settled" for e in ledger["entries"]):
+    if not full_scope(ledger) and any(e.get("billing_status") != "settled" for e in ledger["entries"]):
         raise ComparisonError("unknown_charge_blocks_new_generation")
     # Cover every model/channel once before the second shared screening task.
     for case_id in plan["screening_cases"]:
@@ -347,9 +470,11 @@ def execute(plan, ledger, persist):
     for pool in (primary, alternatives):
         for case_id in plan["focused_cases"]:
             for route in pool:
-                if case_id in route["focused_cases"] and qualified(ledger, route):
+                if case_id in route["focused_cases"] and (full_scope(ledger) or qualified(ledger, route)):
                     run_one(ledger, route, case_id, "focused", persist)
-    ledger.update(status="closed", closed_at=now(), committed_upper_cny=cost(ledger))
+    unsettled = any(entry.get("billing_status") != "settled" for entry in ledger["entries"])
+    ledger.update(status="closed_with_holds" if unsettled else "closed",
+                  closed_at=now(), committed_upper_cny=cost(ledger))
     persist(ledger)
 
 
@@ -371,6 +496,10 @@ def summary(ledger, plan):
                                 "billing_status": e.get("billing_status"),
                                 "generation_status": e["generation_status"]} for e in entries]})
     return {"trial_id": TRIAL, "status": ledger["status"], "limit_cny": LIMIT,
+            "effective_limit_cny": effective_limit(ledger),
+            "full_fixed_matrix_authorized": full_scope(ledger),
+            "outstanding_held_cny": round(sum(entry["reserved_ceiling_cny"] for entry in ledger["entries"]
+                if entry.get("billing_status") != "settled"), 8),
             "committed_upper_cny": cost(ledger), "attempts": len(ledger["entries"]),
             "stop_reason": ledger.get("stop_reason"), "routes": rows,
             "unattempted_are_unknown_not_failed": True,
@@ -392,7 +521,7 @@ def inspect_inventory(plan):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("execute", "reconcile", "resume"), required=True)
+    parser.add_argument("--mode", choices=("execute", "reconcile", "resume", "complete"), required=True)
     args = parser.parse_args()
     env = os.environ
     if (env.get("GITHUB_ACTIONS") != "true" or env.get("GITHUB_REPOSITORY") != "hengyizang/lunwen"
@@ -401,6 +530,8 @@ def main():
         raise ComparisonError("explicit_owner_cloud_dispatch_required")
     if args.mode in {"execute", "resume"} and env.get("COMPARISON_AUTHORIZATION") != AUTHORIZATION:
         raise ComparisonError("new_cny30_allowance_confirmation_required")
+    if args.mode == "complete" and env.get("COMPARISON_AUTHORIZATION") != FULL_AUTHORIZATION:
+        raise ComparisonError("full_fixed_matrix_authorization_required")
     plan = validate_plan(json.loads((ROOT / "config/model-comparison-20261020.json").read_text()))
     state = CloudState(env["COMPARISON_GITHUB_TOKEN"])
     ledger = state.load()
@@ -412,11 +543,17 @@ def main():
     validate_ledger(ledger, plan)
     try:
         if args.mode == "reconcile":
-            for entry in ledger["entries"]:
+            frozen = ledger.get("full_matrix_authorization", {}).get("original_entries_count", 0)
+            for index, entry in enumerate(ledger["entries"]):
+                if index < frozen:
+                    continue  # Original reviewed prefix is immutable; unknown holds remain retained.
                 if entry.get("billing_status") != "settled":
                     reconcile_attempt(ledger, entry, state.save)
             # Reconciliation never reopens or generates. A stopped trial stays stopped.
         else:
+            if args.mode == "complete":
+                authorize_complete(plan, ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"),
+                    state.expected_sha, env.get("COMPARISON_AUTHORIZATION"), state.save)
             if args.mode == "resume":
                 reviewed_resume(ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"), state.expected_sha, state.save)
             if ledger.get("status") == "running":

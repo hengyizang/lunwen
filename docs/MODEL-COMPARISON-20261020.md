@@ -1,10 +1,29 @@
-# Bounded model comparison, 2026-10-20
+# Fixed-scope model comparison, 2026-10-20
 
 This is a new owner-authorized allowance of at most CNY30, separate from the
 closed relay-acceptance-20261019 allowance and every research project budget.
 Execution is restricted to the authenticated owner dispatch in GitHub Actions.
 No local experiments, paid model judges, generation retries, automatic route
 promotion or scientific gate approvals are introduced.
+
+## Subsequent owner instruction
+
+After an Argon 503 response left a conservative charge hold, the owner explicitly
+requested completing all planned tests with quality prioritized over the initial
+screening allowance. The separate complete mode records that later authorization
+without rewriting the original CNY30 plan, ledger prefix or closed prior trial.
+Its scope is the finite existing model/task matrix, at most 128 unique attempts,
+and a derived conservative monetary ceiling covering those requests. It is not
+an unlimited budget or permission for additional models, paid judges or retries.
+
+Complete mode keeps unknown charges at their full reservation and isolates the
+affected credential provider before continuing other independent providers.
+This is an explicit exception for this evaluation only; production still stops
+new paid work on unknown charges. Missing results remain missing. All fixed
+focused tasks are diagnostic comparisons even after a failed screening answer;
+they never promote a route automatically. The old execute/resume modes retain
+their original CNY30 rules. A new scope requires its exact authorization ID and
+the exact reviewed ledger blob, with no allowance reset or call replay.
 
 ## Coverage and order
 
