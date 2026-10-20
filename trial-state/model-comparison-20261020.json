@@ -5247,6 +5247,11 @@
       "call_id": "cheapai-discount-luna-low|experiment_design",
       "at": "2026-10-20T14:01:34.239243+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-sol-high|scientific_plan",
+      "at": "2026-10-20T14:02:16.727092+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
