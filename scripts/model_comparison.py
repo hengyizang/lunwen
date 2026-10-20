@@ -505,8 +505,10 @@ def execute(plan, ledger, persist):
     persist(ledger)
 
 
-def continue_metadata_skips(plan, ledger, expected_sha, actual_sha, persist):
+def continue_metadata_skips(plan, ledger, expected_sha, actual_sha, persist, *, followups_started=False):
     """Owner-reviewed continuation of never-sent tasks; no paid ID is replayed."""
+    if followups_started:
+        raise ComparisonError("parent_frozen_after_followup_started")
     if (not full_scope(ledger) or ledger.get("status") not in {"closed", "closed_with_holds"}
             or not expected_sha or expected_sha != actual_sha):
         raise ComparisonError("metadata_continuation_requires_exact_closed_full_scope")
@@ -610,8 +612,11 @@ def main():
                 authorize_complete(plan, ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"),
                     state.expected_sha, env.get("COMPARISON_AUTHORIZATION"), state.save)
                 if ledger.get("status") in {"closed", "closed_with_holds"}:
+                    followups_started = any(state.read(name)[0] is not None for name in (
+                        "model-comparison-clarified-20261020.json",
+                        "model-comparison-20261020-argon-base-probe.json"))
                     continue_metadata_skips(plan, ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"),
-                                           state.expected_sha, state.save)
+                                           state.expected_sha, state.save, followups_started=followups_started)
             if args.mode == "resume":
                 reviewed_resume(ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"), state.expected_sha, state.save)
             if ledger.get("status") == "running":

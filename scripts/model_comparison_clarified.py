@@ -51,6 +51,13 @@ def blob_json(blob, expected_sha):
     return value
 
 
+def current_parent(state, expected_sha):
+    _, actual_sha = gateway_trial.CloudState.read(state, parent_trial.FILE)
+    if actual_sha != expected_sha:
+        raise ClarifiedError("reviewed_parent_is_not_current_do_not_use_stale_attempt_count")
+    return blob_json(state.api("git/blobs/" + expected_sha), expected_sha)
+
+
 class CloudState(gateway_trial.CloudState):
     """Only the separate clarified file is writable; every write uses file CAS."""
     def __init__(self, token):
@@ -322,7 +329,7 @@ def main():
     if not re.fullmatch(r"[0-9a-f]{40}", parent_sha):
         raise ClarifiedError("exact_parent_blob_required")
     state = CloudState(env["COMPARISON_GITHUB_TOKEN"])
-    parent = blob_json(state.api("git/blobs/" + parent_sha), parent_sha)
+    parent = current_parent(state, parent_sha)
     plan = json.loads((ROOT / "config/model-comparison-20261020.json").read_text())
     contract = scope(plan, parent, parent_sha)
     ledger = state.load()

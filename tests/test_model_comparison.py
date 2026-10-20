@@ -567,6 +567,9 @@ class ModelComparisonTests(unittest.TestCase):
         with self.assertRaisesRegex(comparison.ComparisonError, "no_remaining"):
             comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "a" * 40, self.persist)
         self.post.assert_not_called()
+        with self.assertRaisesRegex(comparison.ComparisonError, "parent_frozen_after_followup"):
+            comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "a" * 40,
+                                               self.persist, followups_started=True)
 
     def test_exhausted_free_meter_cooldown_defers_same_credential_for_one_pass(self):
         ledger = self.authorize_full()

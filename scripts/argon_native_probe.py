@@ -151,7 +151,7 @@ def main():
     if not re.fullmatch("[a-f0-9]{40}", sha):
         raise ProbeError("exact_parent_blob_required")
     state = CloudState(env["COMPARISON_GITHUB_TOKEN"])
-    parent = clarified.blob_json(state.api("git/blobs/" + sha), sha)
+    parent = clarified.current_parent(state, sha)
     plan = json.loads((ROOT / "config/model-comparison-20261020.json").read_text())
     parent_trial.validate_ledger(parent, plan)
     sibling, _ = gateway_trial.CloudState.read(state, clarified.FILE)

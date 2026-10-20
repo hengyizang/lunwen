@@ -243,6 +243,14 @@ class ClarifiedCloudStateTests(unittest.TestCase):
         self.assertEqual(api.call_args_list[1].args, ("git/blobs/" + blob["sha"],))
         self.assertEqual(state.expected_sha, blob["sha"])
 
+    def test_stale_parent_count_cannot_authorize_followup(self):
+        state = trial.CloudState("fake-nonsecret-token")
+        with (patch.object(trial.gateway_trial.CloudState, "read", return_value=({}, "b" * 40)),
+              patch.object(state, "api") as api):
+            with self.assertRaisesRegex(trial.ClarifiedError, "parent_is_not_current"):
+                trial.current_parent(state, "a" * 40)
+        api.assert_not_called()
+
     def test_conflict_or_bad_immutable_readback_cannot_confirm_persistence(self):
         ledger = {"entries": []}
         blob = self.blob(ledger)
