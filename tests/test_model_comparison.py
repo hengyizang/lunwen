@@ -407,7 +407,7 @@ class ModelComparisonTests(unittest.TestCase):
             result = self.read_meter_impl(self.route["provider"])
         self.assertEqual(result, {"ok": True})
         self.assertEqual(read.call_count, 2)
-        sleep.assert_called_once_with(20)
+        sleep.assert_called_once_with(60)
         self.post.assert_not_called()
 
     def test_summary_does_not_promote_routes_or_claim_scientific_equivalence(self):
@@ -539,6 +539,34 @@ class ModelComparisonTests(unittest.TestCase):
                 self.assertIn(self.route["provider"], ledger["isolated_providers"])
                 self.assertEqual(entry, prior)
                 self.assertFalse(any(call.args[0] == self.route["provider"] for call in self.post.call_args_list))
+
+    def test_reviewed_closed_continuation_only_covers_never_sent_metadata_skips(self):
+        ledger = self.authorize_full()
+        comparison.run_one(ledger, self.route, self.case_id, "screening", self.persist)
+        other_case = self.route["screening_cases"][1]
+        ids = [self.route["id"] + "|" + name for name in (self.case_id, other_case)]
+        ledger["metadata_skips"] = [{"call_id": call_id, "reason": "pre_call_meter_unavailable_no_generation"}
+                                    for call_id in ids]
+        ledger["status"] = "closed_with_holds"
+        entries = copy.deepcopy(ledger["entries"])
+        scope = copy.deepcopy(ledger["full_matrix_authorization"])
+        self.post.reset_mock()
+        comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "a" * 40, self.persist)
+        self.assertEqual(ledger["metadata_continuations"][0]["eligible_never_sent_ids"], [ids[1]])
+        self.assertEqual(ledger["entries"], entries)
+        self.assertEqual(ledger["full_matrix_authorization"], scope)
+        self.assertEqual(ledger["status"], "running")
+        self.post.assert_not_called()
+
+    def test_metadata_continuation_rejects_unreviewed_or_isolated_work(self):
+        ledger = self.authorize_full()
+        ledger.update(status="closed", metadata_skips=[{"call_id": self.route["id"] + "|" + self.case_id,
+            "reason": "pre_call_meter_unavailable_no_generation"}], isolated_providers=[self.route["provider"]])
+        with self.assertRaisesRegex(comparison.ComparisonError, "requires_exact_closed"):
+            comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "b" * 40, self.persist)
+        with self.assertRaisesRegex(comparison.ComparisonError, "no_remaining"):
+            comparison.continue_metadata_skips(self.plan, ledger, "a" * 40, "a" * 40, self.persist)
+        self.post.assert_not_called()
 
     def test_full_scope_skips_unsupported_media_in_derived_task_count(self):
         item = self.definitions["visual_chart"]

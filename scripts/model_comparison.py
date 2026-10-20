@@ -317,7 +317,7 @@ def read_meter(provider):
         except relay_billing.BillingReconciliationError as exc:
             if "429" not in str(exc) or index == 2:
                 raise
-            time.sleep(20)
+            time.sleep(60)  # Respect a full cooldown; repeated short polls prolonged 429s.
 
 
 def reconcile_attempt(ledger, entry, persist):
@@ -491,6 +491,34 @@ def execute(plan, ledger, persist):
     persist(ledger)
 
 
+def continue_metadata_skips(plan, ledger, expected_sha, actual_sha, persist):
+    """Owner-reviewed continuation of never-sent tasks; no paid ID is replayed."""
+    if (not full_scope(ledger) or ledger.get("status") not in {"closed", "closed_with_holds"}
+            or not expected_sha or expected_sha != actual_sha):
+        raise ComparisonError("metadata_continuation_requires_exact_closed_full_scope")
+    validate_ledger(ledger, plan)
+    attempted = {entry["call_id"] for entry in ledger["entries"]}
+    routes = {route["id"]: route for route in plan["candidates"] + plan["focused_settings"]}
+    eligible = []
+    for skip in ledger.get("metadata_skips", []):
+        call_id = skip["call_id"]
+        route = routes.get(call_id.split("|", 1)[0])
+        if (skip.get("reason") == "pre_call_meter_unavailable_no_generation"
+                and call_id not in attempted and call_id not in eligible and route
+                and route["provider"] not in ledger.get("isolated_providers", [])
+                and route["id"] not in ledger.get("quarantined_candidates", [])):
+            eligible.append(call_id)
+    previous = ledger.setdefault("metadata_continuations", [])
+    if not eligible or len(previous) >= 2:
+        raise ComparisonError("no_remaining_reviewed_metadata_continuation")
+    previous.append({"reviewed_blob_sha": actual_sha, "at": now(),
+        "prior_status": ledger["status"], "eligible_never_sent_ids": eligible,
+        "attempts_preserved": len(attempted), "original_scope_unchanged": True,
+        "paid_retries_authorized": False})
+    ledger.update(status="running")
+    persist(ledger)
+
+
 def summary(ledger, plan):
     rows = []
     for route in plan["candidates"] + plan.get("focused_settings", []):
@@ -567,6 +595,9 @@ def main():
             if args.mode == "complete":
                 authorize_complete(plan, ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"),
                     state.expected_sha, env.get("COMPARISON_AUTHORIZATION"), state.save)
+                if ledger.get("status") in {"closed", "closed_with_holds"}:
+                    continue_metadata_skips(plan, ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"),
+                                           state.expected_sha, state.save)
             if args.mode == "resume":
                 reviewed_resume(ledger, env.get("COMPARISON_EXPECTED_LEDGER_SHA"), state.expected_sha, state.save)
             if ledger.get("status") == "running":
