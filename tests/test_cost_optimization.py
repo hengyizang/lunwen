@@ -62,6 +62,8 @@ class LosslessContextTests(unittest.TestCase):
             write(project / "state/run.json", {"active_paper": "P01"})
             write(project / "state/runs/old/critic.stdout.txt", "OLD_PREFERRED_VERDICT" * 10000)
             write(project / "state/model-usage.jsonl", "BILLING_TRACE_ONLY")
+            for name in ("model-route-decisions.jsonl", "dynamic-routing-acceptances.json", "task-routing-profile.json"):
+                write(project / "state" / name, "OPERATIONAL_ROUTING_ONLY")
             write(project / "intake/constraints.json", {"cloud_only": True, "compute_ceiling": 0})
             write(project / "state/model-spend-control.json", {"authorized_ceiling_cny": 300})
             write(project / "evidence/contrary.md", "REGISTERED_NEGATIVE_RESULT")
@@ -73,6 +75,7 @@ class LosslessContextTests(unittest.TestCase):
                 self.assertIn(required, text)
             self.assertNotIn("OLD_PREFERRED_VERDICT", text)
             self.assertNotIn("BILLING_TRACE_ONLY", text)
+            self.assertNotIn("OPERATIONAL_ROUTING_ONLY", text)
 
     def test_snapshot_overflow_stops_instead_of_dropping_counterevidence(self):
         with tempfile.TemporaryDirectory() as directory:

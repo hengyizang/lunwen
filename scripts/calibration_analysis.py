@@ -67,9 +67,10 @@ def settled_cost(row):
         return None
     actual, evidence = debit.get("actual_cost_cny"), debit.get("debit_evidence")
     provider = row.get("provider", "")
-    source = ("https://cheapai.info/api/log/token" if provider in {"cheapai-gpt-pro", "cheapai-gpt-discount"}
-              else "https://codekey.ai/v1/usage" if provider in {
-                  "codekey-kiro-enterprise", "codekey-deepseek", "codekey-gemini"} else None)
+    from scripts import ai_providers
+    root = ai_providers.PRODUCTION_PROVIDERS.get(provider, {}).get("root")
+    source = ("https://cheapai.info/api/log/token" if root == "https://cheapai.info"
+              else "https://codekey.ai/v1/usage" if root == "https://codekey.ai" else None)
     if (source is None or type(actual) not in {int, float} or not math.isfinite(actual) or actual < 0
             or not math.isclose(actual, value, rel_tol=0, abs_tol=1e-9)
             or not isinstance(evidence, dict) or evidence.get("source") != source

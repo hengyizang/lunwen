@@ -28,12 +28,16 @@ DATA_SUFFIXES = {".parquet", ".feather", ".npy", ".npz", ".h5", ".hdf5", ".pkl",
 GIT_FILE_LIMIT = 2_000_000
 GIT_TOTAL_LIMIT = 14_000_000  # Leave space for the control manifest.
 ARCHIVE_LIMIT = 512_000_000
+ARCHIVE_STATE_LOGS = {"state/model-usage.jsonl", "state/model-route-decisions.jsonl"}
 SECRET_NAMES = {"UUAPI_API_KEY", "UUAPI_OPENAI_API_KEY", "UUAPI_ANTHROPIC_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "OPENROUTER_API_KEY",
                 "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY",
                 "OPENCITATIONS_ACCESS_TOKEN", "TAVILY_API_KEY", "GH_TOKEN", "GITHUB_TOKEN"}
 SECRET_NAMES |= {"DR_OS_CHEAPAI_GPT_PRO_KEY", "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY",
                  "DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY", "DR_OS_CODEKEY_DEEPSEEK_KEY",
-                 "DR_OS_CODEKEY_GEMINI_KEY", "SERPAPI_API_KEY"}
+                 "DR_OS_CODEKEY_GEMINI_KEY", "SERPAPI_API_KEY",
+                 "DR_OS_CHEAPAI_KIRO_DISCOUNT_KEY", "DR_OS_CHEAPAI_CCMAX_KEY",
+                 "DR_OS_CODEKEY_CODEX_PRO_KEY", "DR_OS_CODEKEY_CODEX_DISCOUNT_KEY",
+                 "DR_OS_CODEKEY_KIRO_STANDARD_KEY"}
 
 
 class CheckpointError(RuntimeError):
@@ -103,10 +107,10 @@ def inventory(project: Path) -> list[dict]:
         if path.suffix.lower() not in GIT_SUFFIXES | DATA_SUFFIXES:
             raise CheckpointError(f"unsupported checkpoint file requires an explicit storage plan: {rel}")
         size = path.stat().st_size
-        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/", "state/citation-metadata/")) or rel == "state/model-usage.jsonl"
+        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/", "state/citation-metadata/")) or rel in ARCHIVE_STATE_LOGS
         in_git = (not internal and path.suffix.lower() in GIT_SUFFIXES and size <= GIT_FILE_LIMIT
                   and (rel == MANIFEST or used_git + size <= GIT_TOTAL_LIMIT))
-        if rel.startswith("state/") and rel != "state/model-usage.jsonl" and not rel.startswith("state/citation-metadata/") and not in_git:
+        if rel.startswith("state/") and rel not in ARCHIVE_STATE_LOGS and not rel.startswith("state/citation-metadata/") and not in_git:
             raise CheckpointError("control state exceeds the Git checkpoint limit; archive cannot replace authority")
         if in_git:
             used_git += size
@@ -223,7 +227,7 @@ def restore(project: Path, archive: Path | None = None) -> None:
             raise CheckpointError("checkpoint archive hash changed")
         expected = {relative(item["path"]): item for item in files}
         if (len(expected) != len(files) or any(excluded(p) for p in expected)
-                or any(p.startswith("state/") and p != "state/model-usage.jsonl" for p in expected)):
+                or any(p.startswith("state/") and p not in ARCHIVE_STATE_LOGS for p in expected)):
             raise CheckpointError("duplicate or forbidden checkpoint entries")
         prepared = []
         total = 0

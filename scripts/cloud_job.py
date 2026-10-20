@@ -44,8 +44,11 @@ EXTRA = {
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
     "authorize_data": {"manifest", "expected_sha256"},
     "resume": {"expected_sha256", "repair_note"},
-    "cycle": {"context", "stage", "task_kind"},
+    "cycle": {"context", "stage", "task_kind", "task_profile"},
     "continuation": set(),
+    "routing_status": set(),
+    "set_routing_profile": {"stage", "task_profile", "expected_profile_sha256"},
+    "accept_route": {"candidate_id", "packet_id", "profile_file", "expected_profile_sha256", "stage", "role"},
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
     "auxiliary": {"manifest"},
 }
@@ -125,16 +128,48 @@ def validate_request(value: object) -> dict:
                 raise CloudJobError("live Bocha trial requires the date the no-charge policy was checked")
         elif "free_policy_checked_on" in value:
             raise CloudJobError("a policy-check date is only used for a live Bocha trial")
-    if action == "cycle":
+    if action in {"cycle", "set_routing_profile"}:
         if not isinstance(value.get("context", ""), str) or len(value.get("context", "")) > 4000:
             raise CloudJobError("context exceeds 4000 characters")
-        if "stage" in value and value["stage"] not in {s["name"] for s in researchctl.STAGES if s["gate"]}:
+        if "stage" in value and (not isinstance(value["stage"], str)
+                or value["stage"] not in {s["name"] for s in researchctl.STAGES if s["gate"]}):
             raise CloudJobError("invalid stage")
         if "task_kind" in value:
             from scripts import model_routing
             policy, _ = model_routing.load_policy()
             if value["task_kind"] not in policy["critical_tasks"]:
                 raise CloudJobError("task_kind must name an approved critical scientific task")
+        if "task_profile" in value:
+            from scripts import dynamic_routing
+            try:
+                if not isinstance(value["task_profile"], dict):
+                    raise ValueError("task profile must be a JSON object")
+                dynamic_routing.validate_profile(value["task_profile"], stage=value.get("stage"),
+                                                 role="persistent-writer")
+            except (TypeError, ValueError) as exc:
+                raise CloudJobError(f"invalid task_profile: {exc}") from exc
+        if action == "set_routing_profile":
+            if "stage" not in value or "task_profile" not in value:
+                raise CloudJobError("set_routing_profile requires stage and task_profile")
+            if "expected_profile_sha256" in value and (not isinstance(value["expected_profile_sha256"], str)
+                    or not re.fullmatch(r"[a-f0-9]{64}", value["expected_profile_sha256"])):
+                raise CloudJobError("the exact current routing profile SHA-256 is required")
+    if action == "accept_route":
+        from scripts import model_routing
+        for key in ("candidate_id", "packet_id"):
+            if not isinstance(value.get(key), str) or not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}", value[key]):
+                raise CloudJobError(f"{key} must be an existing routing or review-packet identifier")
+        relative = project_relative(value.get("profile_file"))
+        if (len(relative) > 250 or not relative.startswith("evidence/routing-profiles/")
+                or not relative.endswith(".json")):
+            raise CloudJobError("profile_file must name evidence/routing-profiles/*.json")
+        if not isinstance(value.get("expected_profile_sha256"), str) or not re.fullmatch(r"[a-f0-9]{64}", value["expected_profile_sha256"]):
+            raise CloudJobError("the exact reviewed routing profile SHA-256 is required")
+        policy, _ = model_routing.load_policy()
+        if not isinstance(value.get("stage"), str) or value["stage"] not in {*policy["stage_routes"], "auxiliary"}:
+            raise CloudJobError("unsupported routing acceptance stage")
+        if not isinstance(value.get("role"), str) or value["role"] not in {*model_routing.CYCLE_ROLES, *policy["auxiliary_routes"], *policy["critical_tasks"]}:
+            raise CloudJobError("unsupported routing acceptance role")
     if action == "paperqa":
         if not isinstance(value.get("question"), str) or not 0 < len(value["question"].strip()) <= 2000:
             raise CloudJobError("a question of at most 2000 characters is required")
@@ -279,7 +314,7 @@ def run_job(job: dict, run_id: str) -> int:
     execution_started = False
     persisted = False
     try:
-        if action in {"preflight", "init", "status", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
+        if action in {"preflight", "init", "status", "routing_status", "accept_route", "set_routing_profile", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
             os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
             os.environ["DR_OS_STATE_BRANCH"] = branch
@@ -353,6 +388,27 @@ def run_job(job: dict, run_id: str) -> int:
                 cmd = None
             elif action == "status":
                 cmd = ["scripts/researchctl.py", "status", "--project", slug, "--json"]
+            elif action == "set_routing_profile":
+                if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
+                    raise CloudJobError("routing management requires the production routing profile")
+                result = cloud_continuation.set_task_profile(ROOT / "projects" / slug, job["stage"],
+                    job["task_profile"], actor=job["actor"], run_id=str(run_id),
+                    expected_profile_sha256=job.get("expected_profile_sha256"))
+                (ARTIFACT / "routing-profile-receipt.json").write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                logs.append(json.dumps(result, ensure_ascii=False, indent=2))
+                detail = "Recorded the current-stage management profile; no model call, budget grant or scientific approval was performed.\n\n"
+                cmd = None
+            elif action in {"routing_status", "accept_route"}:
+                if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
+                    raise CloudJobError("routing management requires the production routing profile")
+                cmd = ["scripts/dynamic_routing.py", "status" if action == "routing_status" else "accept",
+                       "--project", slug]
+                if action == "accept_route":
+                    cmd += ["--candidate-id", job["candidate_id"], "--packet-id", job["packet_id"],
+                            "--profile-file", job["profile_file"], "--expected-profile-sha256", job["expected_profile_sha256"],
+                            "--stage", job["stage"], "--role", job["role"], "--actor", job["actor"]]
+                detail = "Routing management checks existing evidence; no model call, budget grant or scientific approval is performed.\n\n"
             elif action == "authorize_budget":
                 state = model_spend.grant(ROOT / "projects" / slug, new_ceiling_cny=job["new_ceiling_cny"],
                                           actor=job["actor"], run_id=run_id)
@@ -564,6 +620,17 @@ def cycle_command(job: dict, slug: str) -> list[str]:
             "--planner-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic",
             "--writer-provider", "cheapai-gpt-pro" if production else "uuapi-openai",
             "--critic-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic", "--context", context]
+    task_profile = job.get("task_profile")
+    if job["action"] == "continuation" and production:
+        task_profile = cloud_continuation.task_profile(ROOT / "projects" / slug, state["stage"])
+    if task_profile is not None:
+        from scripts import dynamic_routing
+        try:
+            task_profile = dynamic_routing.validate_profile(task_profile, stage=state["stage"],
+                                                           role="persistent-writer")
+        except (TypeError, ValueError) as exc:
+            raise CloudJobError(f"invalid task_profile: {exc}") from exc
+        command += ["--task-profile", json.dumps(task_profile, separators=(",", ":"))]
     if job.get("task_kind"):
         command += ["--task-kind", job["task_kind"]]
     return command

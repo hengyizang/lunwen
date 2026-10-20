@@ -177,7 +177,7 @@ class ProductionProviderTests(unittest.TestCase):
     def test_model_allowlists_stop_cross_family_and_unapproved_route_changes(self):
         with patch.dict(os.environ, self.env(), clear=True), patch.object(providers, "_production_request") as transport:
             for route, model in (("cheapai-gpt-pro", "deepseek-v4.1-flash"),
-                                 ("cheapai-gpt-discount", "gpt-6-astra"),
+                                 ("cheapai-gpt-discount", "gpt-6-luna"),
                                  ("codekey-deepseek", "gpt-6.1-sol"),
                                  ("codekey-gemini", "gemini-4-argon-high")):
                 with self.subTest(route=route), self.assertRaises(providers.ProviderError):

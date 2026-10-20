@@ -56,6 +56,8 @@ def catalog(provider: str, environment: dict) -> set[str]:
 def report(environment=None, *, check_models=False, check_billing=False) -> dict:
     env = os.environ if environment is None else environment
     errors, rows = [], []
+    dynamic = {"mode":env.get("DR_OS_DYNAMIC_ROUTING", "production"),
+               "candidate_count":0,"candidate_routes_accepted_by_this_check":False}
     try:
         policy, policy_hash = model_routing.load_policy(environment=env)
         prices = json.loads(env.get("DR_OS_MODEL_PRICING_JSON") or
@@ -74,6 +76,19 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
     except (OSError, ValueError, KeyError, TypeError) as exc:
         policy_hash = None
         errors.append("invalid production policy or exact billing contract: " + type(exc).__name__)
+    try:
+        if dynamic["mode"] not in {"off", "production"}:
+            raise ValueError("unsupported dynamic mode")
+        if dynamic["mode"] == "production":
+            from scripts import dynamic_routing
+            candidates, digest = dynamic_routing.load_policy()
+            dynamic.update(candidate_count=len(candidates["candidates"]), policy_sha256=digest)
+        dynamic["optional_credentials_present"] = {
+            name: bool(env.get(spec["key_setting"], "").strip())
+            for name, spec in ai_providers.PRODUCTION_PROVIDERS.items()
+            if name not in {row["provider"] for row in rows}}
+    except (OSError, ValueError, KeyError, TypeError):
+        errors.append("invalid dynamic candidate registry or mode")
     inventory = {}
     meters = {}
     valid_configuration = not errors
@@ -99,6 +114,7 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
                 errors.append("catalog inspection failed: " + provider)
     return {"profile":"production","configuration_ready":not errors,"configuration_errors":errors,
             "model_routes":rows,"policy_sha256":policy_hash,"model_inventory":inventory,"billing_meters":meters,
+            "dynamic_routing":dynamic,
             "model_generation_calls":0,"new_spending_authority":False,"scientific_completion":False,
             "inference_access_and_effort_passthrough_verified":False,
             "optional_image_generation":"disabled_no_selected_image_model",

@@ -1,5 +1,12 @@
 # Production model routing
 
+The assignments below are approved baselines. The cloud runtime now applies
+[dynamic task routing](DYNAMIC-MODEL-ROUTING.md) immediately before each request.
+Only separately accepted alternatives can replace a baseline. Unclassified
+G4/G5 work takes the critical Astra/Opus baseline; an explicit routine task
+profile preserves the routine Sol/Sonnet baseline. A candidate's presence in
+the registry does not establish quality or authorize testing it.
+
 The production cloud workflows use CheapAI and CodeKey. They do not inject or
 require UUAPI credentials. Historical UUAPI adapters and receipts remain for
 reproducibility; they are not a production fallback. Model selection, requested

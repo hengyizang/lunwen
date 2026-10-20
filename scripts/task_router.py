@@ -49,8 +49,10 @@ def _task_prompt(route:dict,prompt:str)->str:
     return "Task boundary: "+route["quality_boundary"]+"\n"+specialization+"\nReturn a candidate for review; do not invent missing source fields or perform a scientific approval.\n\n"+prompt
 
 
-def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None)->dict:
+def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
     route=model_routing.select("auxiliary",kind)
+    from scripts import dynamic_routing
+    profile=dynamic_routing.validate_profile(task_profile,stage="auxiliary",role=kind)
     if _health(project).get((route["provider"],route["model"]))=="failed":
         raise ValueError("approved task route recently failed; inspect it before requesting another paid call")
     ceiling=route["max_output_tokens"];tokens=ceiling if max_tokens is None else max_tokens
@@ -73,12 +75,15 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
             "within_estimated_budget":complete and maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),
             "persistent_output":False,"automatic_acceptance":False,"scientific_equivalence_verified":False,
             "source_contract_required":contract_required,"estimated_cost_complete":complete,
+            "task_profile":profile,"dynamic_selection_at_execution":dynamic_routing.enabled(),
+            "preview_scope":"static baseline only; execution may select an accepted candidate",
             "estimated_input_excludes_missing_sources":not complete,"ready_for_execution":complete}
 
 
-def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None)->dict:
+def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
     if kind not in PROFILES:raise ValueError(f"unknown auxiliary task kind: {kind}")
-    if model_routing.production_enabled():return _production_plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract)
+    if model_routing.production_enabled():return _production_plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract,task_profile=task_profile)
+    if task_profile is not None:raise ValueError("task profiles require production routing")
     if kind in engineering_contract.TASKS:raise ValueError("bounded engineering support requires production routing")
     if source_contract is not None:raise ValueError("source-field contracts require production routing")
     family,env_name,ceiling,minimum,risk=PROFILES[kind]
@@ -94,12 +99,12 @@ def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,
     candidates.sort(key=(lambda x:(x["maximum_estimated_cost_cny"],x["priority"])) if risk=="low" else (lambda x:(x["priority"],-TIERS[x["tier"]])));chosen=candidates[0]
     state=project/"state"/"run.json";active=json.loads(state.read_text(encoding="utf-8")).get("active_paper") if state.is_file() else None;budget=model_runtime.budget_status(project,active);maximum=chosen["maximum_estimated_cost_cny"]
     return {"profile":kind,"provider":chosen["provider"],"model":chosen["model"],"family":family,"quality_tier":chosen["tier"],"risk":risk,"health":chosen["health"],"candidate_count":len(candidates),"input_tokens_estimated":estimated,"output_tokens_ceiling":tokens,"maximum_estimated_cost_cny":maximum,"budget":budget,"within_estimated_budget":maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),"persistent_output":False}
-def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,attachments:list[dict]|None=None,source_contract:dict|None=None)->dict:
+def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,attachments:list[dict]|None=None,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
     if model_routing.production_enabled() and (kind=="metadata-extraction" or kind in engineering_contract.TASKS):
         source_contract=_contract_handler(kind).validate_contract(source_contract)
     elif source_contract is not None:
         raise ValueError("source contracts require production metadata extraction or bounded engineering support")
-    info=plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract)
+    info=plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract,task_profile=task_profile)
     if kind=="multimodal-inspection" and not attachments:
         raise ValueError("multimodal inspection requires explicit source attachments")
     if attachments and kind!="multimodal-inspection":
@@ -113,10 +118,16 @@ def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*
         request["prompt"]=_task_prompt(info,prompt)
     if attachments:request["attachments"]=attachments
     if source_contract is not None:request["source_contract"]=source_contract
+    if task_profile is not None:request["task_profile"]=task_profile
     result=model_runtime.call(project,**request)
     directory=project/"api_runs"/run_id;directory.mkdir(parents=True,exist_ok=False)
     receipt={**info,"run_id":run_id,"reported_model":result.reported_model,"cache_hit":result.cache_hit,
              "text":result.text,"not_manuscript_or_evidence":True,"automatic_acceptance":False}
+    receipt["baseline_route"]={key:info.get(key) for key in ("provider","model","reasoning_effort","route_id")}
+    receipt.update(provider=result.provider,model=result.model,reasoning_effort=result.requested_effort,
+                   requested_reasoning_effort=result.requested_effort,endpoint=result.endpoint,
+                   family=ai_providers.provider_family(result.provider),route_id=result.route_id,
+                   dynamic_candidate_id=result.dynamic_candidate_id,routing_policy_sha256=result.routing_policy_sha256)
     if source_contract is not None:receipt["source_contract_sha256"]=_contract_handler(kind).contract_sha256(source_contract)
     if kind in engineering_contract.TASKS:
         receipt["required_followup"]="OpenAI review/implementation and deterministic cloud checks; no automatic application"

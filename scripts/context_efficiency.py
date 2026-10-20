@@ -15,6 +15,8 @@ OPERATIONAL_FILES = {
     "state/continuation-status.json", "state/continuation-resumes.jsonl",
     "state/dataset-discovery-cache.json", "state/cloud-operations-cache.json",
     "state/literature-attempts.json", "state/cost-audit.json",
+    "state/model-route-decisions.jsonl", "state/dynamic-routing-acceptances.json",
+    "state/task-routing-profile.json",
 }
 
 

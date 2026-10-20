@@ -22,11 +22,12 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts import ai_providers, model_runtime, model_routing, output_provenance, research_methods
+    from scripts import ai_providers, model_runtime, model_routing, dynamic_routing, output_provenance, research_methods
 except ImportError:
     import ai_providers  # type: ignore
     import model_runtime  # type: ignore
     import model_routing  # type: ignore
+    import dynamic_routing  # type: ignore
     import output_provenance  # type: ignore
     import research_methods  # type: ignore
 
@@ -1814,11 +1815,21 @@ def run_cycle(
     control_max_output_tokens: int = 4000,
     automatic_data: bool = True,
     task_kind: str | None = None,
+    task_profile: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if not 1 <= control_max_output_tokens <= max_output_tokens:
         raise ValueError(
             "control_max_output_tokens must be between 1 and max_output_tokens"
         )
+    declared_task_kind = task_kind
+    declared_task_profile = task_profile
+    if model_routing.production_enabled():
+        task_profile = dynamic_routing.validate_profile(task_profile, stage=stage, role="persistent-writer")
+        task_kind = model_routing.effective_task_kind(stage, "persistent-writer", task_kind, task_profile)
+        if task_kind is not None:
+            task_profile = {**task_profile, "science_risk": "critical"}
+    elif task_profile is not None:
+        raise ValueError("task profiles require the production routing profile")
     production_routes = model_routing.cycle_routes(stage, task_kind) if model_routing.production_enabled() else {}
     if production_routes:
         planner_provider = production_routes["semantic-planner"]["provider"]
@@ -1868,6 +1879,7 @@ def run_cycle(
         if route is None:
             return {}
         return {"model": route["model"], "reasoning_effort": route["reasoning_effort"],
+                "task_profile": task_profile,
                 **({"task_kind": task_kind} if task_kind is not None else {})}
     controlled_steps["paid_model_cycle"] = True
     write_step_report(project_root(project) / REPORT, controlled_steps)
@@ -2011,10 +2023,20 @@ def run_cycle(
         "research_method_audits": {"initial": initial_method_audit, "final": final_method_audit},
         "stage": stage,
         "task_kind": task_kind,
-        "production_routes": production_routes,
+        "declared_task_kind": declared_task_kind,
+        "declared_task_profile": declared_task_profile,
+        "task_profile": task_profile,
+        "task_classification": "explicit_profile" if declared_task_profile is not None else "unspecified",
+        "production_route_baseline": production_routes,
+        "actual_routes": {role: {
+            "provider": result.provider, "model": result.model, "reported_model": result.reported_model,
+            "reasoning_effort": getattr(result, "requested_effort", None), "endpoint": result.endpoint,
+        } for role, result in (("semantic-planner", planner), ("persistent-writer", writer),
+                              ("independent-critic-initial", review), ("persistent-remediator", revised),
+                              ("independent-critic-final", final))},
         "planner_provider": planner.provider,
         "writer_provider": writer.provider,
-        "critic_provider": critic_provider,
+        "critic_provider": final.provider,
         "planner_model": planner.model,
         "writer_model": writer.model,
         "critic_model": final.model,
@@ -2147,6 +2169,7 @@ def main() -> int:
         command.add_argument("--context", default="")
         command.add_argument("--discovery-query", default="")
         command.add_argument("--task-kind", help="Explicit core scientific task; production policy selects Astra/Opus without adding calls")
+        command.add_argument("--task-profile", help="Strict task-profile JSON object; cannot override a provider, model or budget")
         command.add_argument(
             "--no-auto-data-discovery",
             action="store_true",
@@ -2226,9 +2249,34 @@ def main() -> int:
         parser.error(
             "--control-max-output-tokens must be between 1 and --max-output-tokens"
         )
+    task_profile = None
+    if args.task_profile is not None:
+        def unique_profile(pairs):
+            value = {}
+            for key, item in pairs:
+                if key in value:
+                    raise ValueError("duplicate task-profile property")
+                value[key] = item
+            return value
+        try:
+            if len(args.task_profile) > 16000:
+                raise ValueError("task profile exceeds 16000 characters")
+            supplied_profile = json.loads(args.task_profile, object_pairs_hook=unique_profile)
+            if not isinstance(supplied_profile, dict):
+                raise ValueError("task profile must be a JSON object")
+            task_profile = dynamic_routing.validate_profile(supplied_profile, stage=args.stage,
+                                                           role="persistent-writer")
+            if not model_routing.production_enabled():
+                raise ValueError("task profiles require the production routing profile")
+        except (TypeError, ValueError) as exc:
+            parser.error(str(exc))
     if args.command == "stage":
         require_current_stage(args.project, args.stage)
-        stage_route = model_routing.select(args.stage, "persistent-writer", args.task_kind) if model_routing.production_enabled() else None
+        effective_kind = model_routing.effective_task_kind(args.stage, "persistent-writer", args.task_kind, task_profile)
+        if effective_kind is not None:
+            task_profile = {**dynamic_routing.validate_profile(task_profile, stage=args.stage,
+                                                             role="persistent-writer"), "science_risk": "critical"}
+        stage_route = model_routing.select(args.stage, "persistent-writer", effective_kind) if model_routing.production_enabled() else None
         if stage_route:
             args.provider = stage_route["provider"]
         elif args.task_kind:
@@ -2261,7 +2309,8 @@ def main() -> int:
             role="persistent-writer",
             provider=args.provider,
             **({"model": stage_route["model"], "reasoning_effort": stage_route["reasoning_effort"],
-                **({"task_kind": args.task_kind} if args.task_kind else {})} if stage_route else {}),
+                "task_profile": task_profile,
+                **({"task_kind": effective_kind} if effective_kind else {})} if stage_route else {}),
             prompt=writer_prompt(args.project, args.stage, args.context, None, evidence),
             max_output_tokens=args.max_output_tokens,
         )
@@ -2291,6 +2340,7 @@ def main() -> int:
         args.control_max_output_tokens,
         automatic_data=not args.no_auto_data_discovery,
         task_kind=args.task_kind,
+        task_profile=task_profile,
     ), ensure_ascii=False, indent=2))
     return 0
 

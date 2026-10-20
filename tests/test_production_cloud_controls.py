@@ -32,7 +32,11 @@ class ProductionConfigurationTests(unittest.TestCase):
         with patch.dict(os.environ, env, clear=True), patch("scripts.ai_providers.urllib.request.urlopen") as network:
             self.assertEqual(cloud_continuation.configuration_errors(env), [])
             network.assert_not_called()
-        self.assertEqual({spec["key_setting"] for spec in ai_providers.PRODUCTION_PROVIDERS.values()}, PRODUCTION_KEYS)
+        policy = json.loads((ROOT / "config/model-routing.json").read_text(encoding="utf-8"))
+        required = {ai_providers.PRODUCTION_PROVIDERS[row["provider"]]["key_setting"]
+                    for row in policy["models"].values()}
+        self.assertEqual(required, PRODUCTION_KEYS)
+        self.assertTrue(PRODUCTION_KEYS <= {spec["key_setting"] for spec in ai_providers.PRODUCTION_PROVIDERS.values()})
         self.assertFalse(any(name.startswith("UUAPI") for name in env))
 
     def test_each_missing_production_credential_fails_without_disclosing_other_credentials(self):
