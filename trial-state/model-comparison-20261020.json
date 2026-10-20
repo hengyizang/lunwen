@@ -14268,12 +14268,50 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39464243857",
       "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:17:53.109697+00:00"
+      "reserved_at": "2026-10-20T17:17:53.109697+00:00",
+      "reported_model": "gpt-5.6-luna",
+      "request_id": "resp_07a8c503e3a0b132016ad7a25049b88197a54145993f3b2221",
+      "text": "{\n  \"hypothesis\": \"On previously unseen devices, explicitly removing session-wide multiplicative gain from log-power spectra will improve fault discrimination over gain-jitter augmentation alone, because fault-related spectral shape is more stable than absolute magnitude.\",\n  \"mechanism_and_distinction_from_C\": \"Proposed D uses each session's log-power vector after subtracting its across-frequency median, then applies a training-set-fitted robust scaler and the same two-layer MLP family as C. Subtracting the session median analytically removes a frequency-independent gain offset; C retains absolute magnitude and only encourages robustness through randomized training perturbations. D therefore tests invariance by representation, not by renaming augmentation.\",\n  \"split_and_confound_control\": {\n    \"independent_sampling_unit\": \"Device; all 20 sessions from a device remain in one partition and are equally weighted during training.\",\n    \"split\": \"Before modeling, lock 8 devices (2 per site) as the final test set, 8 devices (2 per site) as validation, and use the remaining 32 devices for training. Select devices without using final labels or fitted statistics, preserve session order, and stratify allocation by site and available label balance. Do not use site or device identity as features.\",\n    \"evaluation\": \"Aggregate each device's session probabilities before scoring. Report site-stratified results to expose site shortcuts.\"\n  },\n  \"baseline_fairness\": \"A, B, C, and D use identical device partitions, session weighting, preprocessing fit only on training devices, optimizer budget, stopping rule, threshold selection from validation only, and final refit procedure. A is logistic regression; B is the two-layer MLP; C is B with prespecified multiplicative gain jitter; D is the centered-spectrum MLP.\",\n  \"mechanism_ablation_and_falsification\": \"Fit a matched D ablation with session centering removed. On validation devices, also rescale complete sessions by prespecified multiplicative factors without refitting and measure score changes. The mechanism is supported only if D is substantially less sensitive to rescaling (target absolute score change at most 0.01), the raw-feature ablation loses performance, and D exceeds C by at least 0.05 validation AUROC. It is falsified if centering does not improve gain sensitivity or the ablation is not worse; these are prespecified outcomes, not observed results.\",\n  \"primary_metric_and_paired_statistics\": \"Primary metric is device-level AUROC on the locked final test, with D versus C as the sole primary comparison. Estimate the paired difference using 10,000 site-stratified cluster bootstrap resamples of devices and report a 95% interval; use a paired device-level permutation test on mean log loss as a secondary check. Report per-site AUROC descriptively.\",\n  \"compute_plan\": \"For each of A, B, C, and D, run 2 prespecified hyperparameter configurations and 2 seeds on training devices: 4×2×2=16 fits. Select by validation AUROC, refit each selected method once on the 40 non-test devices, and evaluate once on final test: 4 fits. Run the matched D raw-feature ablation with 2 seeds: 2 fits. Total planned fits: 22, all retained. Use four CPU cores, at most 8 GiB RAM, and stop further fitting at 40 minutes, 160 cumulative CPU-minutes, or 7 GiB observed RAM, whichever comes first; completed runs remain analyzable.\",\n  \"go_no_go\": \"Go only if D beats C by at least 0.05 final AUROC with a 95% paired interval excluding zero, while validation falsification checks pass. Otherwise stop and treat the mechanism as unsupported. Success could establish a promising gain-invariant representation for this capsule; it cannot establish generality, causality, novelty, or adequate statistical power.\",\n  \"remaining_unknowns\": \"The capsule does not establish that gain is frequency-independent, that spectral shape is fault-specific, or that the device sample represents deployment. The small locked test set limits precision, and site prevalence differences may remain inseparable from site-specific fault processes.\"\n}",
+      "usage": {
+        "input_tokens": 559,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 3373,
+        "output_tokens_details": {
+          "reasoning_tokens": 2511
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "afdcc136912fac8ad1d73c4ce67e2de659f327dc5fd5cc9ed43570ad30f0e3ab",
+      "grade": {
+        "case_id": "scientific_plan",
+        "score": null,
+        "max_score": null,
+        "passed": null,
+        "criteria": [],
+        "requires_manual_review": true,
+        "scope": "synthetic open proposal; qualitative review required",
+        "review_dimensions": [
+          "provisional_novelty_and_mechanism",
+          "falsifiable_predictions",
+          "leakage_and_site_confound_control",
+          "fair_strong_baselines",
+          "mechanism_specific_ablation",
+          "independent_unit_statistics",
+          "explicit_compute_arithmetic",
+          "evidence_bound_go_no_go"
+        ],
+        "format_valid": true
+      },
+      "duration_seconds": 148.87
     }
   ],
   "status": "running",
