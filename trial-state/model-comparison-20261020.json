@@ -189,8 +189,9 @@
       "duration_seconds": 2.9415
     }
   ],
-  "status": "running",
+  "status": "stopped",
   "production_routing_changed": false,
   "scientific_completion": false,
-  "paid_model_judges": 0
+  "paid_model_judges": 0,
+  "stop_reason": "unknown_charge_reconciliation_required"
 }
