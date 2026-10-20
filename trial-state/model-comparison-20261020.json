@@ -10715,6 +10715,11 @@
       "call_id": "cheapai-pro-sol-high|scientific_plan",
       "at": "2026-10-20T16:54:34.573661+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-astra-high|scientific_plan",
+      "at": "2026-10-20T16:55:16.633457+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
