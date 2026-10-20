@@ -15048,12 +15048,83 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39464243857",
       "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:20:51.252744+00:00"
+      "reserved_at": "2026-10-20T17:20:51.252744+00:00",
+      "reported_model": "claude-sonnet-5-5",
+      "request_id": "msg_7c82b8c8518c4efd8556e46a65fb3d4e",
+      "text": "```json\n{\n  \"paired_differences\": [0.10, 0.00, 0.20, -0.10],\n  \"mean_difference\": 0.05,\n  \"independent_units\": 4,\n  \"sample_sd_difference\": 0.12909944,\n  \"standard_error_difference\": 0.06454972,\n  \"pseudoreplication\": true,\n  \"appropriate_test\": \"paired_t\",\n  \"can_infer_significance_from_mean_alone\": false\n}\n```",
+      "usage": {
+        "cache_creation_input_tokens": 6534,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 6008,
+        "output_tokens": 234
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "7444792383411dade0a4553701fb1abebc16a3ad46c592d64492816a810fc0d9",
+      "grade": {
+        "case_id": "code_statistics",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "paired_differences",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "mean_difference",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "independent_units",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "sample_sd",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "standard_error",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "pseudoreplication",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "paired_test",
+            "passed": true,
+            "weight": 10,
+            "critical": true
+          },
+          {
+            "id": "no_mean_only_significance",
+            "passed": true,
+            "weight": 10,
+            "critical": true
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 4.3158
     }
   ],
   "status": "running",
