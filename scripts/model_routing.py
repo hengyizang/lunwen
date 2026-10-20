@@ -32,7 +32,7 @@ APPROVED_MODELS = {
     "sonnet": ("codekey-kiro-enterprise", "claude-sonnet-5-5", "anthropic"),
     "opus": ("codekey-kiro-enterprise", "claude-opus-5-5", "anthropic"),
     "deepseek": ("codekey-deepseek", "deepseek-v4.1-flash", "deepseek"),
-    "argon": ("codekey-gemini", "gemini-4-argon-high", "google"),
+    "argon": ("codekey-gemini", "gemini-4-argon", "google"),
 }
 APPROVED_AUXILIARY_MODELS = {
     "metadata-extraction": "luna", "format-conversion": "sol", "screening-assist": "sol",

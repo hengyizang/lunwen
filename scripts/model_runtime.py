@@ -79,6 +79,14 @@ def _billing_configuration(name: str, provider: str, explicit: dict | None) -> d
     return values[provider]
 
 
+def _route_configuration(provider: str, model: str | None = None) -> dict[str, Any]:
+    configuration = ai_providers.configuration(provider)
+    if provider in ai_providers.PRODUCTION_PROVIDERS:
+        configuration = {**configuration,
+                         "endpoint": ai_providers.production_endpoint(provider, model)}
+    return configuration
+
+
 def pricing(provider: str, model: str | None = None, *, billing_identity: dict | None = None) -> dict[str, Any]:
     family = ai_providers.provider_family(provider)
     defaults = _defaults()
@@ -97,7 +105,7 @@ def pricing(provider: str, model: str | None = None, *, billing_identity: dict |
             raise ModelBudgetError("DR_OS_MODEL_PRICING_JSON is invalid JSON") from exc
         if not isinstance(overrides, dict):
             raise ModelBudgetError("model pricing must be an object")
-        configuration = ai_providers.configuration(provider)
+        configuration = _route_configuration(provider, model)
         scope_key = "|".join((provider, str(configuration.get("endpoint") or ""), model))
         try:
             scoped_identity = _billing_configuration("DR_OS_MODEL_BILLING_IDENTITY_JSON", provider, billing_identity)
@@ -343,7 +351,7 @@ def _cache_key(
     attachment_identity: list | None = None,
     routing_policy_sha256: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
-    configuration = ai_providers.configuration(provider)
+    configuration = _route_configuration(provider, model)
     identity = {
         "provider": provider,
         "model": model or configuration.get("model"),
@@ -377,7 +385,7 @@ def fresh_call_required(role: str) -> bool:
 
 def preflight_route(provider: str, model: str | None = None) -> dict[str, Any]:
     """Check the whole cycle's known routes before spending on its first role."""
-    configuration = ai_providers.configuration(provider)
+    configuration = _route_configuration(provider, model)
     if os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1" and not configuration.get("configured"):
         raise ModelBudgetError(f"model route is not configured: {provider}")
     effective_model = model or str(configuration.get("model") or "") or None
@@ -548,7 +556,7 @@ def call(
     media_identity = [{"sha256":item["sha256"], "mime_type":item["mime_type"],
                        "size_bytes":len(item["decoded"])} for item in media]
     paper_id = _paper_for_stage(project_root, stage)
-    configuration = ai_providers.configuration(provider)
+    configuration = _route_configuration(provider, model)
     effective_model = str(model or configuration.get("model") or "")
     if not effective_model and os.environ.get("DR_OS_REQUIRE_MODEL_AUTH") == "1":
         raise ModelBudgetError("a configured exact model ID is required")

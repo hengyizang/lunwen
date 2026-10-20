@@ -1533,6 +1533,108 @@
         "pdf"
       ],
       "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--low--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--low--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--medium--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--medium--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--high--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--high--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
     }
   ]
 }

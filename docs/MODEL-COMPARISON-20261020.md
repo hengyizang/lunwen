@@ -29,8 +29,10 @@ the exact reviewed ledger blob, with no allowance reset or call replay.
 
 The frozen plan in config/model-comparison-20261020.json covers 22 exact
 provider/model combinations across the ten configured groups and seven baseline
-models. The Gemini key's authenticated catalogs advertise gemini-4-argon-high;
-the base alias gemini-4-argon is not substituted silently. This is an exact API
+models. The Gemini key's authenticated catalogs briefly advertised gemini-4-argon-high,
+then became empty. The frozen main comparison uses that exact high ID;
+the historically successful native base ID is a separate one-call diagnostic.
+Neither is substituted for the other. This is an exact API
 name correction, not proof of model weights or quality. Gemini low/medium remain
 untested because the configured key does not advertise their exact IDs.
 

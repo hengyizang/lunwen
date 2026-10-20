@@ -99,7 +99,7 @@ class DynamicRoutingTests(unittest.TestCase):
 
     def test_registry_covers_ten_groups_and_does_not_self_accept(self):
         self.assertEqual(len({row["provider"] for row in self.policy["candidates"]}), 10)
-        self.assertEqual(len(self.policy["candidates"]), 92)
+        self.assertEqual(len(self.policy["candidates"]), 98)
         self.assertEqual({row["status"] for row in self.policy["candidates"]}, {"candidate"})
         result = self.select()
         self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")

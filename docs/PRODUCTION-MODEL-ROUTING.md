@@ -21,15 +21,20 @@ reasoning effort and exact endpoint pricing are versioned in
 | Core scientific planning/audits and every final independent audit | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
 | Source-bound metadata fields with exact quotes and locators | CheapAI GPT discount / GPT-5.6 Luna | medium |
 | Internal engineering diagnosis, routine code review, software test proposals and environment/replay troubleshooting | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
-| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / `gemini-4-argon-high` | high |
+| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / `gemini-4-argon` | high |
 
-The configured Gemini key's authenticated catalogs advertise the exact
-`gemini-4-argon-high` identifier. The base, low and medium aliases are not
-inferred from that entry or from the public website. Google catalog inspection
-uses `/v1beta/models` with the same header authentication as its native
-generation adapter and normalizes only the `models/` prefix. Catalog metadata
-does not establish successful inference, effort passthrough or scientific
-quality; those require separate, budgeted call receipts and task evaluations.
+The approved native base ID remains `gemini-4-argon`, with high thinking;
+two historical 2026-10-19 receipts returned that exact ID. The separate
+`gemini-4-argon-high` diagnostic is not an equivalent alias. On 2026-10-20,
+catalogs briefly advertised high only, subsequently returned empty lists,
+and a high generation attempt returned HTTP503. Catalog omission and a
+descriptor404 do not prove that base generation is unsupported. The current
+production catalog gate remains closed when the exact requested ID is absent:
+access is unconfirmed and no production call is sent. The separately authorized
+base diagnostic does not waive that guard or resolve historical billing holds.
+Google catalog inspection uses `/v1beta/models` with native header authentication
+and normalizes only `models/`. A requested/reported identity does not attest
+upstream weights, effort passthrough or scientific quality.
 
 The five-role scientific cycle is unchanged: read-only plan, OpenAI writer,
 fresh initial independent audit, OpenAI remediation, fresh final Opus audit.

@@ -110,8 +110,9 @@ class DynamicProviderTests(unittest.TestCase):
     def test_google_high_id_requires_matching_high_native_thinking_level(self):
         name = "codekey-gemini"
         spec = providers.PRODUCTION_PROVIDERS[name]
-        self.assertEqual(spec["model"], "gemini-4-argon-high")
-        self.assertEqual(providers.production_supported_efforts(name, spec["model"]), ("high",))
+        self.assertEqual(spec["model"], "gemini-4-argon")
+        self.assertEqual(providers.production_supported_efforts(name, spec["model"]), ("low", "medium", "high"))
+        self.assertEqual(providers.production_supported_efforts(name, "gemini-4-argon-high"), ("high",))
         for effort in ("high",):
             with self.subTest(effort=effort), patch.dict(os.environ,
                     {spec["key_setting"]: "fixture-only-secret"}, clear=True), patch.object(
@@ -123,7 +124,7 @@ class DynamicProviderTests(unittest.TestCase):
         for effort in ("low", "medium"):
             with self.subTest(effort=effort), patch.object(providers, "_production_request") as transport:
                 with self.assertRaises(providers.ProviderError):
-                    providers.call(name, "fixture", reasoning_effort=effort)
+                    providers.call(name, "fixture", model="gemini-4-argon-high", reasoning_effort=effort)
                 transport.assert_not_called()
 
     def test_unknown_effort_or_model_is_not_a_fallback_permission(self):

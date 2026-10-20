@@ -130,7 +130,7 @@ class ProductionProviderTests(unittest.TestCase):
     def test_google_native_auth_and_candidate_plus_thoughts_accounting(self):
         result, transport = self.invoke("codekey-gemini")
         endpoint, headers, payload, timeout = transport.call_args.args
-        self.assertEqual(endpoint, "https://codekey.ai/v1beta/models/gemini-4-argon-high:generateContent")
+        self.assertEqual(endpoint, "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent")
         self.assertEqual(headers, {"x-goog-api-key": "fixture-only-codekey-gemini"})
         self.assertNotIn("key=", endpoint)
         self.assertEqual(payload["generationConfig"]["thinkingConfig"], {"thinkingLevel": "HIGH"})
@@ -151,7 +151,7 @@ class ProductionProviderTests(unittest.TestCase):
 
     def test_google_bad_total_or_cache_receipt_fails(self):
         for field, value in (("cachedContentTokenCount", 101), ("totalTokenCount", 100)):
-            response = self.response("google", "gemini-4-argon-high")
+            response = self.response("google", "gemini-4-argon")
             response["usageMetadata"][field] = value
             with patch.dict(os.environ, self.env(), clear=True), patch.object(
                     providers, "_production_request", return_value=response):
@@ -179,7 +179,6 @@ class ProductionProviderTests(unittest.TestCase):
             for route, model in (("cheapai-gpt-pro", "deepseek-v4.1-flash"),
                                  ("cheapai-gpt-discount", "gpt-6-luna"),
                                  ("codekey-deepseek", "gpt-6.1-sol"),
-                                 ("codekey-gemini", "gemini-4-argon"),
                                  ("codekey-gemini", "gemini-4-argon-low"),
                                  ("codekey-gemini", "gemini-4-argon-medium")):
                 with self.subTest(route=route), self.assertRaises(providers.ProviderError):

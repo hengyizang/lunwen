@@ -167,7 +167,7 @@ class ProductionReadinessTests(unittest.TestCase):
             "cheapai-gpt-discount": {"gpt-5.6-luna"},
             "codekey-kiro-enterprise": {"claude-sonnet-5-5", "claude-opus-5-5"},
             "codekey-deepseek": {"deepseek-v4.1-flash"},
-            "codekey-gemini": {"gemini-4-argon-high"},
+            "codekey-gemini": {"gemini-4-argon"},
         }[provider]
 
     def test_offline_report_describes_five_credentials_and_seven_quoted_routes(self):

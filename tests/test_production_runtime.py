@@ -87,7 +87,7 @@ class ProductionRuntimeTests(unittest.TestCase):
             ({"stage": "auxiliary", "role": "engineering-diagnosis"},
                 "codekey-deepseek", "deepseek-v4.1-flash", "high"),
             ({"stage": "auxiliary", "role": "multimodal-inspection", "attachments": [self.attachment()]},
-                "codekey-gemini", "gemini-4-argon-high", "high"),
+                "codekey-gemini", "gemini-4-argon", "high"),
         ]
         with (patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
                 patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
@@ -292,7 +292,7 @@ class ProductionRuntimeTests(unittest.TestCase):
                 patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
             self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
         self.assertEqual(ceilings[0][0], 1048576)
-        production_quote = model_runtime.pricing("codekey-gemini", "gemini-4-argon-high")
+        production_quote = model_runtime.pricing("codekey-gemini", "gemini-4-argon")
         expected = round(7 * original(production_quote, 1048576, 100, {}), 8)
         self.assertEqual(reserve.call_args.kwargs["max_cost_cny"], expected)
 
