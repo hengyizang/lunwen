@@ -1068,7 +1068,7 @@
       }
     }
   ],
-  "status": "running",
+  "status": "stopped",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
@@ -1165,5 +1165,6 @@
       ],
       "at": "2026-10-20T13:25:23.195337+00:00"
     }
-  }
+  },
+  "stop_reason": "unknown_charge_reconciliation_required"
 }
