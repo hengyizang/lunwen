@@ -1050,12 +1050,14 @@
         "cost_cny": 0.006756,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "response_failed",
       "catalog_omission_probe": true,
       "run_id": "39429999330",
       "code_sha": "2568a1d5ee9e7b4e185998b8f1a4a742ca468655",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T13:25:36.003845+00:00"
+      "reserved_at": "2026-10-20T13:25:36.003845+00:00",
+      "diagnostic": "API HTTP 503; no automatic generation retry; reconcile billing",
+      "duration_seconds": 0.2426
     }
   ],
   "status": "running",
