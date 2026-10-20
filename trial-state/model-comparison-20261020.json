@@ -4473,5 +4473,12 @@
   ],
   "isolated_providers": [
     "codekey-gemini"
+  ],
+  "metadata_skips": [
+    {
+      "call_id": "cheapai-kiro-sonnet-high|experiment_design",
+      "at": "2026-10-20T13:52:49.600024+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
+    }
   ]
 }
