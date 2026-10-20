@@ -715,7 +715,7 @@
       "catalog_omission_probe": false,
       "run_id": "39427889051",
       "code_sha": "97fb97ee1a9d5ad4349144ab32eed8668e6a8090",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T13:10:31.094078+00:00",
       "reported_model": "claude-sonnet-5-5",
       "request_id": "msg_5d8b1ad876aa4e9b98f9acd39fbfdd4e",
@@ -787,7 +787,22 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 21.9259
+      "duration_seconds": 21.9259,
+      "actual_cost_cny": 0.000595175,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 4,
+          "cost_cny": 0.030249485
+        },
+        "after": {
+          "requests": 5,
+          "cost_cny": 0.03084466
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T13:10:57.522802+00:00"
     }
   ],
   "status": "running",
