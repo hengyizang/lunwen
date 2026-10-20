@@ -3711,7 +3711,7 @@
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T13:51:04.900913+00:00",
       "reported_model": "gpt-5.6-luna",
       "request_id": "resp_0981d76f456ac735016ad771cbf31081918dbe905dffd2a72f",
@@ -3776,7 +3776,27 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 2.4081
+      "duration_seconds": 2.4081,
+      "actual_cost_cny": 1e-05,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-5.6-luna",
+          "quota": 5,
+          "created_at": 1792504269,
+          "prompt_tokens": 254,
+          "completion_tokens": 67,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "ed63351530753321ce64551a168d859328fba88ad2f8bc8ba3e7402a2fe22256",
+        "after_snapshot_sha256": "716769e7e70b13ee8734bb6671c35dd66a163cd127609e197d0a5a1dff10cf8e",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T13:51:11.359600+00:00"
     }
   ],
   "status": "running",
