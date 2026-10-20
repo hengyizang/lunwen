@@ -530,10 +530,13 @@ def call(
                     baseline_cache_hit = True
             except (OSError, ValueError, KeyError, TypeError, ModelBudgetError):
                 baseline_cache_hit = False
-        selection = dynamic_routing.choose(project_root, route, prompt=prompt, system=system,
-                                           max_output_tokens=requested_output_limit, timeout=timeout,
-                                           attachments=attachments, task_profile=task_profile,
-                                           baseline_cache_hit=baseline_cache_hit)
+        try:
+            selection = dynamic_routing.choose(project_root, route, prompt=prompt, system=system,
+                                               max_output_tokens=requested_output_limit, timeout=timeout,
+                                               attachments=attachments, task_profile=task_profile,
+                                               baseline_cache_hit=baseline_cache_hit)
+        except dynamic_routing.RoutingError as exc:
+            raise ModelBudgetError("dynamic route blocked: " + str(exc)) from exc
         route, decision = selection["route"], selection["decision"]
         provider, model, reasoning_effort = route["provider"], route["model"], route["reasoning_effort"]
         max_output_tokens = route["max_output_tokens"]

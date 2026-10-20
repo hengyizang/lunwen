@@ -209,7 +209,9 @@ class ProductionAuxiliaryTests(unittest.TestCase):
             paid_call.assert_not_called()
 
     def test_auxiliary_run_passes_effort_and_marks_output_unaccepted(self):
-        result = SimpleNamespace(text='{"records":[{"source_id":"S1","fields":{"n":{"value":null,"quote":"","locator":""}}}]}', reported_model="gpt-5.6-luna", model="gpt-5.6-luna", cache_hit=False)
+        result = ai_providers.ModelResult(provider="cheapai-gpt-discount",model="gpt-5.6-luna",
+            text='{"records":[{"source_id":"S1","fields":{"n":{"value":null,"quote":"","locator":""}}}]}',
+            usage={},reported_model="gpt-5.6-luna",requested_effort="medium")
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}, clear=True), \
                 patch("scripts.task_router.model_runtime.cost_cny", return_value=0.01), \
                 patch("scripts.task_router.model_runtime.budget_status", return_value={"project_remaining": 1, "paper_remaining": None}), \

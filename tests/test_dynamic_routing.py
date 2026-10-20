@@ -51,7 +51,7 @@ class DynamicRoutingTests(unittest.TestCase):
                 artifact = bound(self.project, f"api_runs/{run}.md", f"The source reports a fixed quantity for case {index}.")
                 output_provenance.record_model_writes(self.project, [self.project / artifact["path"]], family="openai",
                     provider=route["provider"], model=route["model"], role=self.baseline["role"], run_id=run)
-                entries.append({"id": channel, "status": "success", "artifact": artifact,
+                entries.append({"id": "baseline" if channel == "baseline" else "candidate", "status": "success", "artifact": artifact,
                     "authorized_for_internal_review": True, "authorization_note": "Synthetic held-out test output",
                     "author_id": f"author-{channel}", "model": route["model"], "channel": channel,
                     "routing_identity": routing._id(route), "run_ids": [run]})
@@ -68,7 +68,8 @@ class DynamicRoutingTests(unittest.TestCase):
                 "cost_run_ids": [row["run_id"] for row in ledger]}
         packet = {"id": "routing-paired", "kind": "calibration", "rubric": copy.deepcopy(RUBRIC), "cases": cases, "analysis": spec}
         write(self.project / review_packets.INPUT, {"schema_version": "1.0", "packets": [packet]})
-        self.assertEqual(review_packets.refresh(self.project)["status"], "pass")
+        refreshed = review_packets.refresh(self.project)
+        self.assertEqual(refreshed["status"], "pass", refreshed)
         snapshot = review_packets.review_snapshot(self.project, "routing-paired")
         answer = read(self.project / "reports/review-packets/routing-paired/answer-key.json")
         new_labels = {(row["case_label"], row["candidate_label"]) for row in answer["answer_key"] if row["candidate"]["channel"] != "baseline"}
@@ -218,7 +219,7 @@ class DynamicRoutingTests(unittest.TestCase):
             self.assertTrue(any("floor cannot be lowered" in item["reason"] for item in result["decision"]["excluded"]))
 
     def test_input_bytes_include_unicode_system_and_actual_hashed_media(self):
-        body = b"synthetic image"
+        body = b"\x89PNG\r\n\x1a\nsynthetic image"
         media = {"mime_type": "image/png", "data_base64": base64.b64encode(body).decode(), "sha256": hashlib.sha256(body).hexdigest()}
         result = self.select(attachments=[media])
         expected = len("Read the supplied source.".encode()) + len("Preserve evidence.".encode()) + len(body)
