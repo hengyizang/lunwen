@@ -13716,12 +13716,50 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39464243857",
       "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T17:16:40.605717+00:00"
+      "reserved_at": "2026-10-20T17:16:40.605717+00:00",
+      "reported_model": "gpt-6.1-sol",
+      "request_id": "resp_086084ace578cb3a016ad7a1fb82ec8195b371a7c803a17432",
+      "text": "{\n  \"hypothesis\": \"Prespecified hypothesis: removing each session’s overall log-power level will improve fault discrimination on unseen devices in later, gain-shifted sessions versus multiplicative gain-jitter augmentation (C). This is a target to test, not an observed effect.\",\n  \"mechanism_and_distinction_from_C\": \"Proposed D uses B’s two-layer MLP but subtracts each session’s median log-power before training and inference; subsequent feature scaling is fitted on training data only. This removes a session-wide additive offset in log-power. Unlike C, D uses no gain-jitter augmentation. The proposed gain-invariance mechanism is unverified.\",\n  \"split_and_confound_control\": \"Independent sampling unit: device. Before analysis, use a fixed seeded split assigning four devices per site to locked test and the other eight per site to development; do not use test labels to choose devices or methods. Train only on sessions 1–15 of development devices; never use test-device data for fitting or adaptation. Test only on sessions 16–20 of test devices. Keep all sessions of a device together. Report site-specific results and pooled results; the four sites are fixed, not a sample of sites.\",\n  \"baseline_fairness\": \"Compare A, B, C, and D using the same training devices/sessions, log-power inputs, fixed training budget, optimizer, stopping epoch, and three prespecified seeds. Fix all settings before opening test results; no tuning or test-guided refits. A and B are provided baselines; C is the primary comparator.\",\n  \"mechanism_ablation_and_falsification\": \"Ablation: train B without per-session centering, which removes D’s proposed mechanism; retain C as the distinct augmentation comparator. Falsification: D fails to outperform C on the primary metric, or centering fails to improve over B on the locked shifted test. These outcomes would not establish that gain is irrelevant, but would fail to support the proposed method/mechanism in this pilot.\",\n  \"primary_metric_and_paired_statistics\": \"Primary comparison: D minus C in device-level AUROC, averaging session probabilities within each test device first. Report site-specific AUROC and the prespecified pooled device-level result. Give a paired 95% device-bootstrap interval, resampling test devices within site and keeping each device’s predictions paired across methods; report the small test sample and interval limitations. If a site lacks either class, its AUROC is undefined and the result is inconclusive.\",\n  \"compute_plan\": \"Exact fit count: 4 methods × 3 seeds = 12; B-without-centering ablation × 3 seeds = 3; total 15 complete fits, including all training runs. No hidden tuning, refits, or extra seeds. Use CPU only, at most four cores and 8 GiB RAM; cap each fit at 8 CPU-minutes (120 CPU-minutes total maximum). Retain configs, seeds, logs, predictions, and all runs. Stop if two fits hit the cap, projected CPU use exceeds 180 minutes, or wall time reaches 45 minutes; report incomplete and do not claim a completed comparison.\",\n  \"go_no_go\": \"Prespecified practical target: D exceeds C by at least 0.05 AUROC, with the paired interval’s lower bound above zero, without a material site-specific reversal. Meeting this permits only a larger, independently evaluated study—not deployment or a claim of established novelty. Otherwise no-go for advancing D on this evidence. The pilot cannot establish the mechanism, generalization to new sites, or clinical/operational value.\",\n  \"remaining_unknowns\": \"Actual device-level label distribution by site; magnitude and form of gain shifts; whether later sessions represent the intended deployment shift; test-set class coverage and resulting uncertainty; and whether session-wide centering removes useful fault information.\"\n}",
+      "usage": {
+        "input_tokens": 559,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 2670,
+        "output_tokens_details": {
+          "reasoning_tokens": 1872
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "3c9f577907fe56d22fd85f4d46251fc3146fe0541047e3d62ea9151dfb93d7f9",
+      "grade": {
+        "case_id": "scientific_plan",
+        "score": null,
+        "max_score": null,
+        "passed": null,
+        "criteria": [],
+        "requires_manual_review": true,
+        "scope": "synthetic open proposal; qualitative review required",
+        "review_dimensions": [
+          "provisional_novelty_and_mechanism",
+          "falsifiable_predictions",
+          "leakage_and_site_confound_control",
+          "fair_strong_baselines",
+          "mechanism_specific_ablation",
+          "independent_unit_statistics",
+          "explicit_compute_arithmetic",
+          "evidence_bound_go_no_go"
+        ],
+        "format_valid": true
+      },
+      "duration_seconds": 30.438
     }
   ],
   "status": "running",
