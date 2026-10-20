@@ -198,7 +198,16 @@ def read_meter(provider):
 def reconcile_attempt(ledger, entry, persist):
     # In this serial isolated trial, a single new independent debit is
     # attributable even when the model response was incomplete or lost.
-    settlement = relay_billing.settle(entry["provider"], entry["model"], entry["meter_before"])
+    try:
+        settlement = relay_billing.settle(entry["provider"], entry["model"], entry["meter_before"])
+    except relay_billing.BillingReconciliationError as exc:
+        entry["billing_diagnostic"] = str(exc)
+        try:
+            entry["billing_review_after"] = read_meter(entry["provider"])
+        except relay_billing.BillingReconciliationError:
+            entry["billing_review_metadata_unavailable"] = True
+        persist(ledger)
+        raise
     settle_entry(ledger, entry, settlement, persist)
 
 
