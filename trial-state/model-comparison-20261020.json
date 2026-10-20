@@ -11372,6 +11372,31 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T17:06:16.842545+00:00"
+    },
+    {
+      "call_id": "codekey-discount-sol-high|claim_precision",
+      "candidate_id": "codekey-discount-sol-high",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "case_id": "claim_precision",
+      "phase": "focused",
+      "case_sha256": "a2d79ed4aa978915cf2797986b6096fdd2e0325253c72baf7d0d3b88f7d5f03e",
+      "quote_sha256": "554fe2d2b2ce6f36b992d27e0fe0a6c874262013753749089cd4afaf184dd848",
+      "reserved_ceiling_cny": 0.4542048,
+      "meter_before": {
+        "provider": "codekey-codex-discount",
+        "kind": "codekey_total_actual_cost",
+        "requests": 13,
+        "cost_cny": 0.00700656,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39460628361",
+      "code_sha": "96be6d61af2e3003b9ff27a5600a5cad136bd73d",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T17:07:01.163750+00:00"
     }
   ],
   "status": "running",
