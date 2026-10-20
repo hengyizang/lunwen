@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "trial_id": "model-comparison-20261020",
+  "authorization_id": "model-comparison-20261020-cny30",
+  "authorization": "The owner explicitly authorized an additional maximum of CNY30 on 2026-10-20 for screening all configured models and then focused comparisons.",
+  "limit_cny": 30.0,
+  "plan_sha256": "f38f61b826d80267b4e16faee682524b2c2626d2bafa07f67066b019dd73293a",
+  "started_at": "2026-10-20T12:49:09.430942+00:00",
+  "entries": [],
+  "status": "running",
+  "production_routing_changed": false,
+  "scientific_completion": false,
+  "paid_model_judges": 0
+}
