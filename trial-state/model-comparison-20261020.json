@@ -5014,12 +5014,45 @@
         "cost_cny": 0.049225785,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39432920435",
       "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-20T14:04:46.892694+00:00"
+      "reserved_at": "2026-10-20T14:04:46.892694+00:00",
+      "reported_model": "claude-opus-5-5",
+      "request_id": "msg_8381608428c544368c3a687cd2a59a11",
+      "text": "{\"hypothesis\":\"On unseen devices from an unseen site, an MLP using per-session log-spectrum shape, with the session's mean log-power removed, will have lower device-level Brier score than C. This is a prespecified target, not a result.\",\"mechanism_and_distinction_from_C\":{\"method_D\":\"Same log-power features and MLP as B. Each session's mean log-power across frequency bins is subtracted, so a scalar sensor gain, which is an additive constant in log space, is removed exactly. No fitted statistics.\",\"distinction\":\"C learns approximate invariance and still sees absolute magnitude. D cannot see magnitude by construction. Testable consequence: D's predictions are unchanged under scalar test-time rescaling, while C's may change.\",\"caveat\":\"Frequency-dependent gain is not removed.\"},\"split_and_confound_control\":{\"sampling_unit\":\"Device (session probabilities averaged per device).\",\"locked_test\":\"One whole site, 12 devices, chosen by a prespecified random seed and sealed until all development runs end.\",\"development\":\"36 devices from 3 sites, leave-one-site-out (3 folds). Early stopping uses an inner device-grouped split.\",\"controls\":\"No device appears in both train and validation. Scalers are fit within the training fold. Per-site class reweighting applies to all methods. Per-site prevalence is reported. A magnitude-only logistic probe tests the shortcut.\"},\"baseline_fairness\":\"A, B, C, D and D+mag share features, architecture, epochs, early stopping and reweighting. No hyperparameter tuning. C's jitter range is set from the development-site gain spread. B, C and D each get 6 development fits.\",\"mechanism_ablation_and_falsification\":{\"ablation\":\"D+mag re-adds the removed mean log-power as one scalar input.\",\"prediction\":\"Held-out-site Brier: D+mag worse than D; C between them.\",\"falsification\":\"The mechanism is unsupported if D+mag matches or beats D in development and locked evaluation, or if D does not beat C.\"},\"primary_metric_and_paired_statistics\":{\"primary_comparison\":\"D minus C, locked test, natural gain, mean per-device Brier difference (C and D each averaged over 2 seeds).\",\"uncertainty\":\"Exact sign-flip permutation over 12 devices (4096 flips), plus device bootstrap 95% CI.\",\"secondary\":\"Device AUROC; late sessions 16-20; evaluation-only test rescaling by 0.5 and 2.0 (D is invariant by construction, so this is not primary).\"},\"compute_plan\":{\"fit_arithmetic\":\"Development: A 3 + B 6 + C 6 + D 6 + D+mag 3 + magnitude probe 3 = 27. Final refits on 36 devices: A 1 + B 1 + C 2 + D 2 + D+mag 1 = 7. Total 34, plus 2 crash reruns = 36 cap.\",\"resources\":\"Feature extraction ≤20 CPU-min. 4 parallel 1-core fits, each capped at 4 CPU-min: 36×4 = 144 CPU-min, 9 waves ≈ 36 wall-min. Total ≤164 of 180 CPU-min. About 2 GiB per process.\",\"resource_stop\":\"A fit exceeding 4 CPU-min is killed and logged as failed. Stop launching at 36 fits, 170 CPU-min or 42 wall-min. Priority order: C and D development, then final C and D, then the rest. All runs retained.\",\"integrity_check\":\"Unit test that D's outputs change by less than 1e-6 under scalar rescaling.\"},\"go_no_go\":{\"go\":\"D−C ≤ −0.02 with permutation p < 0.05, D+mag worse than D by ≥0.02 in development, and the invariance check passes.\",\"no_go\":\"D−C ≥ 0 or the upper CI bound exceeds +0.02.\",\"otherwise\":\"Inconclusive; a larger study is needed.\"},\"remaining_unknowns\":{\"could_establish\":\"Within this synthetic capsule, on one held-out site, removing scalar gain helped relative to augmentation, consistent with the mechanism.\",\"could_not_establish\":\"Generalization to other sites or to frequency-dependent gain, causal proof, novelty, real-world validity, or adequate power (12 devices, no power claim).\",\"open\":\"Whether gain is scalar or frequency-dependent; the test site's prevalence; whether fault information lies partly in magnitude; temporal drift; label noise.\"}}",
+      "usage": {
+        "cache_creation_input_tokens": 132,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 850,
+        "output_tokens": 3160
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "65280a2087a70f440071f1a38e1c18e21bf82ac660a724ffc17d1d18d3c41ee2",
+      "grade": {
+        "case_id": "scientific_plan",
+        "score": null,
+        "max_score": null,
+        "passed": null,
+        "criteria": [],
+        "requires_manual_review": true,
+        "scope": "synthetic open proposal; qualitative review required",
+        "review_dimensions": [
+          "provisional_novelty_and_mechanism",
+          "falsifiable_predictions",
+          "leakage_and_site_confound_control",
+          "fair_strong_baselines",
+          "mechanism_specific_ablation",
+          "independent_unit_statistics",
+          "explicit_compute_arithmetic",
+          "evidence_bound_go_no_go"
+        ],
+        "format_valid": true
+      },
+      "duration_seconds": 68.0168
     }
   ],
   "status": "running",
