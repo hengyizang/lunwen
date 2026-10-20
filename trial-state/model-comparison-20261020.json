@@ -15217,7 +15217,7 @@
       "catalog_omission_probe": false,
       "run_id": "39464243857",
       "code_sha": "ab3b7b1b89720cff5dde5b0824dfd8b0eec20ea9",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T17:21:01.960518+00:00",
       "reported_model": "claude-sonnet-5-5",
       "request_id": "msg_5240f2447a024b1e81a498897e4a1881",
@@ -15289,7 +15289,27 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 8.6247
+      "duration_seconds": 8.6247,
+      "actual_cost_cny": 0.004292,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "claude-sonnet-5-5",
+          "quota": 2146,
+          "created_at": 1792516872,
+          "prompt_tokens": 0,
+          "completion_tokens": 192,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "17b6eae10dce140a050eef92c44cda48fe455371496168a62991486e6f6554c9",
+        "after_snapshot_sha256": "93182bff62729934d213bbcfb803d0535b5960bf4c5acccfdf62e8dae4529277",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T17:21:15.244180+00:00"
     }
   ],
   "status": "running",
