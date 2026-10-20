@@ -937,7 +937,7 @@
       "catalog_omission_probe": false,
       "run_id": "39429999330",
       "code_sha": "2568a1d5ee9e7b4e185998b8f1a4a742ca468655",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-20T13:25:25.072723+00:00",
       "reported_model": "deepseek-v4.1-flash",
       "request_id": "cmb-b7ff72a9cc8911f18a792a544cf4457a",
@@ -1015,7 +1015,22 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 5.3492
+      "duration_seconds": 5.3492,
+      "actual_cost_cny": 0.000243,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 6,
+          "cost_cny": 0.0022262
+        },
+        "after": {
+          "requests": 7,
+          "cost_cny": 0.0024692
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-20T13:25:33.903881+00:00"
     }
   ],
   "status": "running",
