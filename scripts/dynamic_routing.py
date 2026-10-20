@@ -183,6 +183,7 @@ def _evaluate(project: Path, candidate: dict, baseline: dict, profile: dict, pac
     paired_scores: dict[str, dict] = {}
     case_sources: dict[str, set[str]] = {}
     evidence_runs = set()
+    artifact_origins = []
     for keyed in answer["answer_key"]:
         entry = keyed["candidate"]
         channel = entry.get("channel")
@@ -197,12 +198,25 @@ def _evaluate(project: Path, candidate: dict, baseline: dict, profile: dict, pac
         run_ids = entry.get("run_ids", [])
         if not run_ids or evidence_runs.intersection(run_ids):
             raise RoutingError("each paired candidate requires its own complete billable run IDs")
+        origin = keyed.get("original_provenance")
+        artifact = path_in(project, entry["artifact"]["path"])
+        current = output_provenance.current_origin(project, artifact)
+        if (not isinstance(origin, dict) or origin.get("status") != "tracked" or current != origin
+                or any(origin.get(key) != expected[key] for key in ("provider", "model"))
+                or origin.get("role") != baseline.get("role") or origin.get("run_id") not in run_ids):
+            raise RoutingError("scored artifact provenance does not match its actual candidate run")
+        artifact_origins.append(origin)
         evidence_runs.update(run_ids)
         actual = [row for row in rows if row.get("run_id") in run_ids and row.get("cache_hit") is not True
                   and row.get("validation_status") is None]
         if {row.get("run_id") for row in actual} != set(run_ids) or not actual:
             raise RoutingError("calibration run IDs have no complete actual request history")
         for row in actual:
+            if not isinstance(row.get("task_profile"), dict):
+                raise RoutingError("reviewed run is missing its recorded task profile")
+            actual_profile = validate_profile(row["task_profile"], stage=baseline.get("stage"), role=baseline.get("role"))
+            if any(actual_profile[key] != profile[key] for key in ("task_class", "science_risk")):
+                raise RoutingError("reviewed run task class or science risk differs from acceptance scope")
             if (row.get("provider") != expected["provider"] or row.get("model") != expected["model"]
                     or row.get("requested_reasoning_effort") != expected["reasoning_effort"]
                     or row.get("role") != baseline.get("role") or row.get("stage") != baseline.get("stage")
@@ -248,9 +262,22 @@ def _evaluate(project: Path, candidate: dict, baseline: dict, profile: dict, pac
                 snapshot["manifest"], *[{"path": item["path"], "sha256": item["sha256"]} for item in packet_review["confirmations"]]]
     reviewed_rows = [row for row in rows if row.get("run_id") in evidence_runs]
     return {"snapshot_sha256": snapshot["snapshot_sha256"], "bindings": bindings, "statistics": stats,
-            "receipt_scope_sha256": digest(reviewed_rows),
+            "receipt_scope_sha256": digest(reviewed_rows), "artifact_origins": artifact_origins,
             "scope": {"stage": baseline.get("stage"), "role": baseline.get("role"),
                       "task_class": profile["task_class"], "science_risk": profile["science_risk"]}}
+
+
+def _quote_hash(route: dict) -> str:
+    try:
+        from scripts import model_runtime
+    except ImportError:
+        import model_runtime  # type: ignore
+    configuration = ai_providers.configuration(route["provider"])
+    quote = model_runtime.pricing(route["provider"], route["model"],
+                                  billing_identity=configuration.get("billing_identity"))
+    if quote.get("quote_schema") != "2.0" or not isinstance(quote.get("quote_sha256"), str):
+        raise RoutingError("current route needs an exact price quote")
+    return quote["quote_sha256"]
 
 
 def _revalidate(project: Path, accepted: dict, rows: list[dict]) -> None:
@@ -259,6 +286,17 @@ def _revalidate(project: Path, accepted: dict, rows: list[dict]) -> None:
         from scripts import review_packets
     except ImportError:
         import review_packets  # type: ignore
+    for identity in accepted.get("price_bindings", []):
+        if _quote_hash(identity) != identity["quote_sha256"]:
+            raise RoutingError("price quote changed; review the actual cost comparison before switching")
+    if len(accepted.get("price_bindings", [])) != 2:
+        raise RoutingError("acceptance has no complete price contract binding")
+    origins = accepted.get("artifact_origins", [])
+    if len(origins) != 2 * accepted["statistics"]["baseline"]["accepted_tasks"]:
+        raise RoutingError("acceptance has no complete scored artifact origin bindings")
+    for origin in origins:
+        if output_provenance.current_origin(project, path_in(project, origin["path"])) != origin:
+            raise RoutingError("accepted scored artifact origin changed")
     packet_id = accepted["packet_id"]
     review_packets.identifier(packet_id)
     snapshot = review_packets.review_snapshot(project, packet_id)
@@ -302,7 +340,9 @@ def record_acceptance(project: Path, candidate_id: str, baseline_route: dict, *,
     evidence = _evaluate(project, candidate, baseline_route, profile, packet_id, rows, policy)
     record = {"candidate_id": candidate_id, "candidate_sha256": digest(candidate),
               "baseline_identity": _id(baseline_route), "packet_id": packet_id, "actor": actor.strip(),
-              "accepted_at": datetime.now(timezone.utc).isoformat(), **evidence}
+              "accepted_at": datetime.now(timezone.utc).isoformat(),
+              "price_bindings": [{**_id(route), "quote_sha256": _quote_hash(route)}
+                                 for route in (baseline_route, candidate)], **evidence}
     record["acceptance_sha256"] = digest(record)
     target = path_in(project, ACCEPTANCES, exists=False)
     document = read(target) if target.is_file() else {"schema_version": "1.0", "acceptances": []}

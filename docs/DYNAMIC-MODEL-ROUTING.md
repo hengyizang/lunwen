@@ -168,6 +168,12 @@ charge; it is not an instruction to send the same job to another gateway.
 Record the original outcome, reconcile its bill and inspect existing artifacts
 before any separately authorized retry. No automatic paid fallback is introduced.
 
+Acceptance also binds the runtime task class and scientific risk, the scored
+artifact's actual provider/model/role/run provenance, and both current price
+contracts. A high-quality answer from another model cannot be paired with the
+candidate's bill. Changed prices invalidate the old cost comparison; a manager
+must review fresh evidence before using that alternative again.
+
 ## Audit and rollback
 
 Each role's usage record contains its declared task profile, selection decision,

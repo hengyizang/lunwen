@@ -40,7 +40,8 @@ class DynamicRoutingTests(unittest.TestCase):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
 
-    def calibration(self, *, bad_quality=False, raters=2, holdouts=3, candidate_output=5000, repeated_source=False):
+    def calibration(self, *, bad_quality=False, raters=2, holdouts=3, candidate_output=5000, repeated_source=False,
+                    missing_task_profile=False, candidate_origin_model=None, omit_provenance=False):
         cases, ledger = [], []
         for index in range(6):
             source_index = 3 if repeated_source and index == 4 else index
@@ -49,8 +50,10 @@ class DynamicRoutingTests(unittest.TestCase):
             for channel, route, price in (("baseline", self.baseline, .02), (self.candidate["candidate_id"], self.candidate, .005)):
                 run = f"case-{index}-{channel}"
                 artifact = bound(self.project, f"api_runs/{run}.md", f"The source reports a fixed quantity for case {index}.")
-                output_provenance.record_model_writes(self.project, [self.project / artifact["path"]], family="openai",
-                    provider=route["provider"], model=route["model"], role=self.baseline["role"], run_id=run)
+                if not omit_provenance:
+                    output_provenance.record_model_writes(self.project, [self.project / artifact["path"]], family="openai",
+                        provider=route["provider"], model=candidate_origin_model if channel != "baseline" and candidate_origin_model else route["model"],
+                        role=self.baseline["role"], run_id=run)
                 entries.append({"id": "baseline" if channel == "baseline" else "candidate", "status": "success", "artifact": artifact,
                     "authorized_for_internal_review": True, "authorization_note": "Synthetic held-out test output",
                     "author_id": f"author-{channel}", "model": route["model"], "channel": channel,
@@ -58,6 +61,7 @@ class DynamicRoutingTests(unittest.TestCase):
                 ledger.append({"run_id": run, "provider": route["provider"], "model": route["model"],
                     "stage": self.baseline["stage"], "role": self.baseline["role"],
                     "requested_reasoning_effort": route["reasoning_effort"], "cost_cny": price,
+                    **({} if missing_task_profile else {"task_profile": copy.deepcopy(self.profile)}),
                     "cost_status": "settled_usage_receipt", "usage_estimated": False,
                     "completion_status": "completed", "prompt_input_bytes": 30000,
                     "max_output_tokens": 5000 if channel == "baseline" else candidate_output, "duration_seconds": 4.0})
@@ -208,6 +212,45 @@ class DynamicRoutingTests(unittest.TestCase):
         self.assertTrue(any("key is not configured" in row["reason"] for row in result["decision"]["excluded"]))
         with patch.object(routing.ai_providers, "configuration", return_value={"configured": True}), patch("scripts.model_runtime.pricing", return_value={}):
             self.assertEqual(self.select()["decision"]["selected_candidate_id"], "baseline")
+
+    def test_recorded_task_class_cannot_be_relabelled_for_acceptance(self):
+        self.calibration()
+        self.profile = {**self.profile, "task_class": "different-unverified-task"}
+        with self.assertRaisesRegex(ValueError, "task class or science risk"):
+            self.accept()
+
+    def test_recorded_science_risk_cannot_be_relabelled_for_acceptance(self):
+        self.calibration()
+        self.profile = {**self.profile, "science_risk": "auxiliary"}
+        with self.assertRaisesRegex(ValueError, "task class or science risk"):
+            self.accept()
+
+    def test_missing_runtime_task_profile_cannot_be_accepted(self):
+        self.calibration(missing_task_profile=True)
+        with self.assertRaisesRegex(ValueError, "missing its recorded task profile"):
+            self.accept()
+
+    def test_stronger_models_artifact_cannot_be_paired_with_cheap_models_bill(self):
+        self.calibration(candidate_origin_model="gpt-6-astra")
+        with self.assertRaisesRegex(ValueError, "scored artifact provenance"):
+            self.accept()
+
+    def test_untracked_artifact_cannot_be_accepted_as_a_model_result(self):
+        self.calibration(omit_provenance=True)
+        with self.assertRaisesRegex(ValueError, "scored artifact provenance"):
+            self.accept()
+
+    def test_changed_price_contract_cannot_reuse_old_cost_comparison(self):
+        self.calibration()
+        self.accept()
+        from scripts import model_runtime
+        original = model_runtime.pricing
+        def changed(*args, **kwargs):
+            return {**original(*args, **kwargs), "quote_sha256": "f" * 64}
+        with patch.object(routing, "_available"), patch.object(model_runtime, "pricing", side_effect=changed):
+            result = self.select()
+        self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
+        self.assertTrue(any("price quote changed" in item["reason"] for item in result["decision"]["excluded"]))
 
     def test_core_stage_and_explicit_critical_tasks_cannot_be_relabelled_routine(self):
         for baseline in (model_routing.select("topic-intelligence", "persistent-writer"),
