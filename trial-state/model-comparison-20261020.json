@@ -5232,6 +5232,11 @@
       "call_id": "cheapai-pro-sol-medium|evidence_conflict",
       "at": "2026-10-20T13:59:26.863390+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-sol-medium|experiment_design",
+      "at": "2026-10-20T14:00:09.595452+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
