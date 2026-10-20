@@ -80,13 +80,16 @@ class ProductionCycleTests(unittest.TestCase):
             f"fixture-request-{self.index}", model, spec["protocol"], spec["root"] + spec["path"].format(model=model),
             "fixture-only-gateway", completion_status="completed", requested_effort=kwargs["reasoning_effort"])
 
-    def run_cycle(self, stage="experiment-execution", task_kind=None):
+    def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True):
         self.stage = stage
         gate = "G1" if stage == "topic-intelligence" else "G4"
         (self.project / "state" / "run.json").write_text(json.dumps({
             "stage": stage, "gate": gate, "status": "awaiting_work"}), encoding="utf-8")
+        if task_profile is None and routine:
+            task_profile = {"task_class": "routine-implementation", "science_risk": "routine"}
         return api_orchestrator.run_cycle("demo", stage, "anthropic", "openai", "anthropic", "", "",
-            max_output_tokens=300, control_max_output_tokens=100, automatic_data=False, task_kind=task_kind)
+            max_output_tokens=300, control_max_output_tokens=100, automatic_data=False, task_kind=task_kind,
+            task_profile=task_profile)
 
     def test_real_five_role_cycle_forwards_models_effort_and_fresh_independent_reviews(self):
         with (patch.object(ai_providers, "call", side_effect=self.transport) as post,

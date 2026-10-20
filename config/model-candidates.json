@@ -1,0 +1,1570 @@
+{
+  "schema_version": "1.0",
+  "policy_version": "2026-10-20.1",
+  "minimum_paired_cases": 6,
+  "minimum_holdout_cases": 3,
+  "cooldown_seconds": 600,
+  "minimum_cost_improvement": 0.1,
+  "candidates": [
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--low--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--low--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--medium--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--medium--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--high--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--high--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--low--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--low--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--medium--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--medium--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--high--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-6-astra--high--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--low--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--low--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--medium--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--medium--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--high--standard",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--high--long",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--low--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--low--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--medium--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--medium--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--high--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--high--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--low--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--low--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--medium--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--medium--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--high--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-6-astra--high--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--low--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--low--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--medium--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--medium--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--high--standard",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--high--long",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--low--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--low--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--medium--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--medium--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--high--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-sol--high--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--low--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--low--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--medium--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--medium--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--high--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6-astra--high--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--low--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--low--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--medium--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--medium--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--high--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-5.6-luna--high--long",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--low--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--low--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--medium--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--medium--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--high--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6.1-sol--high--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6.1-sol",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--low--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--low--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--medium--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--medium--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--high--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 12000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-6-astra--high--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-6-astra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--low--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--low--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--medium--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--medium--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--high--standard",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-discount--gpt-5.6-luna--high--long",
+      "provider": "codekey-codex-discount",
+      "model": "gpt-5.6-luna",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 1500,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-kiro-discount--claude-sonnet-5-5--high--standard",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-kiro-discount--claude-sonnet-5-5--high--long",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-kiro-discount--claude-opus-5-5--high--standard",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-kiro-discount--claude-opus-5-5--high--long",
+      "provider": "cheapai-kiro-discount",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-ccmax--claude-sonnet-5-5--high--standard",
+      "provider": "cheapai-ccmax",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-ccmax--claude-sonnet-5-5--high--long",
+      "provider": "cheapai-ccmax",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-ccmax--claude-opus-5-5--high--standard",
+      "provider": "cheapai-ccmax",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "cheapai-ccmax--claude-opus-5-5--high--long",
+      "provider": "cheapai-ccmax",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-enterprise--claude-sonnet-5-5--high--standard",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-enterprise--claude-sonnet-5-5--high--long",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-enterprise--claude-opus-5-5--high--standard",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-enterprise--claude-opus-5-5--high--long",
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-standard--claude-sonnet-5-5--high--standard",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-standard--claude-sonnet-5-5--high--long",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-sonnet-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-standard--claude-opus-5-5--high--standard",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kiro-standard--claude-opus-5-5--high--long",
+      "provider": "codekey-kiro-standard",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-deepseek--deepseek-v4.1-flash--high--standard",
+      "provider": "codekey-deepseek",
+      "model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-deepseek--deepseek-v4.1-flash--high--long",
+      "provider": "codekey-deepseek",
+      "model": "deepseek-v4.1-flash",
+      "family": "deepseek",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": "text",
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--low--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "low",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--low--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "low",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--medium--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--medium--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "medium",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--high--standard",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 4000,
+      "timeout_seconds": 180,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini--gemini-4-argon--high--long",
+      "provider": "codekey-gemini",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "high",
+      "context_band": "long",
+      "max_input_bytes": 2000000,
+      "max_output_tokens": 32768,
+      "timeout_seconds": 600,
+      "modalities": [
+        "text",
+        "image",
+        "pdf"
+      ],
+      "status": "candidate"
+    }
+  ]
+}

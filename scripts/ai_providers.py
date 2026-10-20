@@ -26,7 +26,12 @@ PROVIDERS = (
     "uuapi-openai",
     "cheapai-gpt-pro",
     "cheapai-gpt-discount",
+    "cheapai-kiro-discount",
+    "cheapai-ccmax",
+    "codekey-codex-pro",
+    "codekey-codex-discount",
     "codekey-kiro-enterprise",
+    "codekey-kiro-standard",
     "codekey-deepseek",
     "codekey-gemini",
 )
@@ -36,16 +41,41 @@ PRODUCTION_PROVIDERS = {
     "cheapai-gpt-pro": {
         "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
         "key_setting": "DR_OS_CHEAPAI_GPT_PRO_KEY", "model": "gpt-6.1-sol",
-        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra"),
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
     },
     "cheapai-gpt-discount": {
         "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
         "key_setting": "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY", "model": "gpt-5.6-luna",
-        "protocol": "openai_responses", "models": ("gpt-5.6-luna",),
+        "protocol": "openai_responses", "models": ("gpt-5.6-luna", "gpt-6.1-sol", "gpt-6-astra"),
+    },
+    "cheapai-kiro-discount": {
+        "family": "anthropic", "root": "https://cheapai.info", "path": "/v1/messages",
+        "key_setting": "DR_OS_CHEAPAI_KIRO_DISCOUNT_KEY", "model": "claude-sonnet-5-5",
+        "protocol": "anthropic_messages", "models": ("claude-sonnet-5-5", "claude-opus-5-5"),
+    },
+    "cheapai-ccmax": {
+        "family": "anthropic", "root": "https://cheapai.info", "path": "/v1/messages",
+        "key_setting": "DR_OS_CHEAPAI_CCMAX_KEY", "model": "claude-sonnet-5-5",
+        "protocol": "anthropic_messages", "models": ("claude-sonnet-5-5", "claude-opus-5-5"),
+    },
+    "codekey-codex-pro": {
+        "family": "openai", "root": "https://codekey.ai", "path": "/v1/responses",
+        "key_setting": "DR_OS_CODEKEY_CODEX_PRO_KEY", "model": "gpt-6.1-sol",
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
+    },
+    "codekey-codex-discount": {
+        "family": "openai", "root": "https://codekey.ai", "path": "/v1/responses",
+        "key_setting": "DR_OS_CODEKEY_CODEX_DISCOUNT_KEY", "model": "gpt-6.1-sol",
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
     },
     "codekey-kiro-enterprise": {
         "family": "anthropic", "root": "https://codekey.ai", "path": "/v1/messages",
         "key_setting": "DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY", "model": "claude-sonnet-5-5",
+        "protocol": "anthropic_messages", "models": ("claude-sonnet-5-5", "claude-opus-5-5"),
+    },
+    "codekey-kiro-standard": {
+        "family": "anthropic", "root": "https://codekey.ai", "path": "/v1/messages",
+        "key_setting": "DR_OS_CODEKEY_KIRO_STANDARD_KEY", "model": "claude-sonnet-5-5",
         "protocol": "anthropic_messages", "models": ("claude-sonnet-5-5", "claude-opus-5-5"),
     },
     "codekey-deepseek": {
@@ -84,6 +114,9 @@ class ModelResult:
     requested_effort: str | None = None
     # Requested effort is auditable intent, never an attestation of actual effort.
     attachment_sha256: tuple[str, ...] = ()
+    route_id: str | None = None
+    dynamic_candidate_id: str | None = None
+    routing_policy_sha256: str | None = None
 
 
 def completion_status(data: dict[str, Any], protocol: str) -> str:
@@ -723,6 +756,23 @@ def validate_attachments(attachments: Any) -> list[dict[str, Any]]:
     return _validated_attachments(attachments)
 
 
+def production_supported_efforts(provider: str, model: str) -> tuple[str, ...]:
+    """Describe implemented native payloads, not relay quality or acceptance.
+
+    Optional groups are transport candidates only. Catalog access, a known
+    model ID and this effort allowlist cannot authorize spending or establish
+    that a relay actually honors the requested effort.
+    """
+    spec = PRODUCTION_PROVIDERS.get(provider)
+    if spec is None or model not in spec["models"]:
+        raise ProviderError("model is not explicitly allowed on the selected production route")
+    if spec["family"] in {"openai", "google"}:
+        return ("low", "medium", "high")
+    # Retain tested native high payloads for Claude and DeepSeek. Lower efforts
+    # require a separate native protocol and relay acceptance before enablement.
+    return ("high",)
+
+
 def call_production(provider: str, prompt: str, *, model: str | None = None,
                     system: str | None = None, max_output_tokens: int = 8000,
                     timeout: int = 180, reasoning_effort: str | None = None,
@@ -739,7 +789,7 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
         raise ProviderError("timeout must be an integer from 1 to 600 seconds")
     effort = ("medium" if model == "gpt-5.6-luna" else "high") if reasoning_effort is None else reasoning_effort
     family = spec["family"]
-    supported_efforts = {"low", "medium", "high"} if family in {"openai", "google"} else {"high"}
+    supported_efforts = production_supported_efforts(provider, model)
     if not isinstance(effort, str) or effort not in supported_efforts:
         raise ProviderError("reasoning effort is not supported by this production route")
     media = _validated_attachments(attachments)
@@ -826,6 +876,7 @@ def configuration(provider: str, environment: Mapping[str, str] | None = None) -
                 "key_setting": spec["key_setting"], "strict_model_id": True,
                 "billing_identity": {"plan": "production", "group": provider, "mode": "standard"},
                 "allowed_models": list(spec["models"]),
+                "allowed_reasoning_efforts": list(production_supported_efforts(provider, spec["model"])),
                 "configuration_error": None if valid else f"{spec['key_setting']} is not configured as a valid key"}
     if provider == "openai":
         return {

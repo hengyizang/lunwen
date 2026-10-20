@@ -213,10 +213,39 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
     }
 
 
+def effective_task_kind(stage: str, role: str, task_kind: str | None = None,
+                        task_profile: dict | None = None) -> str | None:
+    """Classify before choosing a route; unclassified late science stays critical.
+
+    A task profile is a structured management declaration, not a keyword guess
+    made from model/user prose. Existing explicit critical kinds always win.
+    """
+    if not production_enabled():
+        return task_kind
+    from scripts import dynamic_routing
+    if not dynamic_routing.enabled():
+        return task_kind
+    profile = dynamic_routing.validate_profile(task_profile, stage=stage, role=role)
+    if task_kind is not None:
+        return task_kind
+    if role == "writer":
+        role = "persistent-writer"
+    if role not in CYCLE_ROLES:
+        return None
+    declared = profile.get("task_class")
+    if declared in APPROVED_CRITICAL_TASKS:
+        return declared
+    if profile.get("science_risk") == "critical":
+        return "scientific-judgment"
+    return None
+
+
 def resolve_call(stage: str, role: str, provider: str, model: str | None = None,
-                 reasoning_effort: str | None = None, task_kind: str | None = None) -> dict[str, Any]:
+                 reasoning_effort: str | None = None, task_kind: str | None = None,
+                 task_profile: dict | None = None) -> dict[str, Any]:
     if not production_enabled():
         return {"provider": provider, "model": model, "reasoning_effort": reasoning_effort}
+    task_kind = effective_task_kind(stage, role, task_kind, task_profile)
     route = select(stage, role, task_kind, requested_provider=provider, requested_model=model)
     # Explicit overrides cannot claim one route while paying another. Legacy
     # default provider names may resolve through the approved production map.

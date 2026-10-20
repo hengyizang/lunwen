@@ -12,6 +12,7 @@ import json
 import math
 import os
 import tempfile
+import time
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -425,6 +426,23 @@ def _paper_for_stage(project_root: Path, stage: str) -> str | None:
     return value if isinstance(value, str) else None
 
 
+def reservation_bound(provider: str, prompt: str, system: str | None, max_output_tokens: int,
+                      quote: dict, limits: dict, *, controlled: bool = False,
+                      has_media: bool = False) -> float:
+    """Pure conservative bound shared by selection and the final spending gate."""
+    request_text = (system or "") + "\n" + prompt
+    predicted = estimate_tokens(request_text)
+    conservative = controlled or quote.get("quote_schema") == "2.0"
+    inputs = max(predicted, len(request_text.encode("utf-8")) + 1000) if conservative else predicted
+    production = provider in ai_providers.PRODUCTION_PROVIDERS
+    if production:
+        inputs = max(inputs + 8192, 65536 if ai_providers.provider_family(provider) == "anthropic" else 8192)
+        if has_media:
+            inputs = max(inputs, 1048576)
+    cost = billing_quotes.reserve_cost(quote, inputs, max_output_tokens, limits)
+    return round(7 * cost, 8) if production else cost
+
+
 def call(
     project_root: Path,
     *,
@@ -444,12 +462,14 @@ def call(
     attachments: list | None = None,
     task_kind: str | None = None,
     source_contract: dict | None = None,
+    task_profile: dict | None = None,
 ) -> ai_providers.ModelResult:
     """Call a provider with exact-request caching and hard CNY ceilings."""
 
-    route = model_routing.resolve_call(stage, role, provider, model, reasoning_effort, task_kind)
+    route = model_routing.resolve_call(stage, role, provider, model, reasoning_effort, task_kind, task_profile)
     provider, model, reasoning_effort = route["provider"], route["model"], route["reasoning_effort"]
     production = provider in ai_providers.PRODUCTION_PROVIDERS
+    requested_output_limit = max_output_tokens
     if route.get("max_output_tokens") is not None:
         max_output_tokens = min(max_output_tokens, route["max_output_tokens"])
     if type(max_output_tokens) is not int or not 1 <= max_output_tokens <= 100000:
@@ -474,6 +494,54 @@ def call(
     if contract_validator is not None:
         source_contract = contract_validator.validate_contract(source_contract)
         prompt = contract_validator.build_prompt(prompt, source_contract)
+    decision = None
+    if production:
+        from scripts import dynamic_routing
+        if (route.get("task_kind") or role in model_routing.APPROVED_CRITICAL_TASKS
+                or (stage in {"topic-intelligence", "paper-architecture", "experiment-design"}
+                    and role in {*model_routing.CYCLE_ROLES, "writer"})):
+            task_profile = {**dynamic_routing.validate_profile(task_profile, stage=stage, role=role),
+                            "science_risk": "critical"}
+        # A fully validated exact replay has no new inference cost. Do not
+        # switch to a paid candidate merely because its historical unit price
+        # is lower. Fresh independent reviews never enter this path.
+        baseline_cache_hit = False
+        if use_cache and not fresh_call_required(role) and not route.get("fresh_required", False):
+            try:
+                baseline_quote = pricing(provider, model, billing_identity=billing_identity)
+                baseline_limits = billing_quotes.tool_limits(baseline_quote, _billing_configuration(
+                    "DR_OS_MODEL_TOOL_LIMITS_JSON", provider, declared_tool_limits))
+                baseline_media = [{"sha256": item["sha256"], "mime_type": item["mime_type"],
+                                   "size_bytes": len(item["decoded"])} for item in media]
+                baseline_key, baseline_identity = _cache_key(
+                    provider, prompt, system, max_output_tokens, model, baseline_quote, baseline_limits,
+                    stage=stage, role=role, reasoning_effort=reasoning_effort,
+                    attachment_identity=baseline_media, routing_policy_sha256=route.get("policy_sha256"))
+                baseline_file = project_root / ".cache/model-responses" / (baseline_key + ".json")
+                cached_baseline = json.loads(baseline_file.read_text(encoding="utf-8"))
+                if (not baseline_file.is_symlink()
+                        and all(cached_baseline.get(k) == v for k, v in baseline_identity.items())
+                        and cached_baseline.get("reported_model") == model
+                        and cached_baseline.get("completion_status") == "completed"
+                        and cached_baseline.get("response_text_sha256") == hashlib.sha256(
+                            str(cached_baseline.get("text", "")).encode("utf-8")).hexdigest()):
+                    if contract_validator is not None:
+                        contract_validator.validate_response(cached_baseline["text"], source_contract)
+                    baseline_cache_hit = True
+            except (OSError, ValueError, KeyError, TypeError, ModelBudgetError):
+                baseline_cache_hit = False
+        selection = dynamic_routing.choose(project_root, route, prompt=prompt, system=system,
+                                           max_output_tokens=requested_output_limit, timeout=timeout,
+                                           attachments=attachments, task_profile=task_profile,
+                                           baseline_cache_hit=baseline_cache_hit)
+        route, decision = selection["route"], selection["decision"]
+        provider, model, reasoning_effort = route["provider"], route["model"], route["reasoning_effort"]
+        max_output_tokens = route["max_output_tokens"]
+        timeout = route.get("timeout", timeout)
+        task_profile = decision.get("task_profile", task_profile)
+        if (type(max_output_tokens) is not int or not 1 <= max_output_tokens <= min(requested_output_limit, 32768)
+                or type(timeout) is not int or not 1 <= timeout <= 600):
+            raise ModelBudgetError("selected route exceeds the explicit request or native transport ceiling")
     media_identity = [{"sha256":item["sha256"], "mime_type":item["mime_type"],
                        "size_bytes":len(item["decoded"])} for item in media]
     paper_id = _paper_for_stage(project_root, stage)
@@ -503,8 +571,20 @@ def call(
         "reasoning_effort_attestation": "requested_not_independently_attested" if reasoning_effort else None,
         "routing_policy_sha256": route.get("policy_sha256"),
         "route_id": route.get("route_id"),
+        "requested_model": effective_model,
+        "timeout_seconds": timeout,
+        "task_profile": task_profile,
+        "dynamic_candidate_id": decision.get("selected_candidate_id") if decision else None,
+        "dynamic_decision": decision,
         "attachments": media_identity,
     }
+    if decision is not None:
+        _append(project_root / "state/model-route-decisions.jsonl", {
+            "schema_version": "1.0", "at": utc_now(), "run_id": run_id,
+            "stage": stage, "role": role, **request_metrics,
+            "provider": provider, "model": effective_model,
+            "not_scientific_evidence": True,
+        })
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
     if use_cache and cache_path.is_file():
         try:
@@ -535,6 +615,9 @@ def call(
             result = None  # type: ignore[assignment]
         if result is not None:
             ai_providers.require_complete(result)
+            result.route_id = route.get("route_id")
+            result.dynamic_candidate_id = request_metrics["dynamic_candidate_id"]
+            result.routing_policy_sha256 = route.get("policy_sha256")
             if source_contract is not None:
                 contract_validator.validate_response(result.text, source_contract)
             _append(
@@ -573,19 +656,8 @@ def call(
         raise ModelBudgetError("production generation requires the cloud runner and durable remote reservation mode")
     if control and control["reservations"]:
         raise ModelBudgetError("billing reconciliation is required before another paid request")
-    # The byte ceiling includes prompt/system framing. Conditional quotes also
-    # reserve worst-tier/cache premiums/tools without relying on a tokenizer guess.
-    conservative = controlled or quote.get("quote_schema") == "2.0"
-    input_ceiling = max(predicted_input, len(request_text.encode("utf-8")) + 1000) if conservative else predicted_input
-    if production:
-        input_ceiling = max(input_ceiling + 8192, 65536 if ai_providers.provider_family(provider)=="anthropic" else 8192)
-        if media:
-            # Vision/PDF tokens cannot be inferred from compressed byte length.
-            # Reserve the whole supported context rather than a text-only guess.
-            input_ceiling = max(input_ceiling, 1048576)
-    reserved_cost = billing_quotes.reserve_cost(quote, input_ceiling, max_output_tokens, limits)
-    if production:
-        reserved_cost = round(7 * reserved_cost, 8)
+    reserved_cost = reservation_bound(provider, prompt, system, max_output_tokens, quote, limits,
+                                      controlled=controlled, has_media=bool(media))
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
@@ -607,6 +679,7 @@ def call(
         from scripts.cloud_checkpoint import sync_billing
         sync_billing(project_root)
 
+    request_started = time.monotonic()
     try:
         inference_options = {"reasoning_effort": reasoning_effort} if reasoning_effort is not None else {}
         if attachments:
@@ -629,8 +702,13 @@ def call(
             "transport_error_type": type(exc).__name__,
             "zero_cost_not_confirmed": True,
             "gateway_meter_before": meter_before,
+            "duration_seconds": round(time.monotonic() - request_started, 6),
         })
         raise
+    request_metrics["duration_seconds"] = round(time.monotonic() - request_started, 6)
+    result.route_id = route.get("route_id")
+    result.dynamic_candidate_id = request_metrics["dynamic_candidate_id"]
+    result.routing_policy_sha256 = route.get("policy_sha256")
     settled = None
     try:
         input_tokens, output_tokens = usage_counts(result.usage)
@@ -700,6 +778,7 @@ def call(
             "provider": provider,
             "model": result.reported_model or result.model,
             "input_tokens": input_tokens,
+            "request_id": result.request_id,
             "output_tokens": output_tokens,
             "usage_estimated": estimated,
             "cost_cny": actual_cost,

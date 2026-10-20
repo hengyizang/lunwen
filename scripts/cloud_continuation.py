@@ -28,6 +28,7 @@ except ImportError:
 
 POLICY = Path("state/continuation.json")
 STATUS = Path("state/continuation-status.json")
+TASK_PROFILE = Path("state/task-routing-profile.json")
 CONFIG = ("UUAPI_ANTHROPIC_MODEL", "UUAPI_OPENAI_MODEL", "DR_OS_MODEL_PRICING_JSON")
 POLICY_FIELDS = {"schema_version", "enabled", "actor", "confirmed_at", "confirmation_note",
                  "system_execution_hours_per_day", "resume_interval_minutes", "constraints_sha256",
@@ -36,6 +37,78 @@ POLICY_FIELDS = {"schema_version", "enabled", "actor", "confirmed_at", "confirma
 
 class ContinuationError(RuntimeError):
     pass
+
+
+def task_profile(project: Path, stage: str) -> dict[str, Any] | None:
+    """Read one explicit stage-bound profile; absence means unknown, never routine.
+
+    This fixed control path is optional and does not confer spending or scientific
+    authority. Stale, malformed or redirected profiles stop before model calls.
+    """
+    path = project / TASK_PROFILE
+    if project.is_symlink() or (project / "state").is_symlink() or path.is_symlink():
+        raise ContinuationError("task routing profile cannot use symlinks")
+    if not path.exists():
+        return None
+    if not path.is_file() or path.stat().st_size > 16000:
+        raise ContinuationError("task routing profile must be a bounded JSON control file")
+
+    def unique(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("duplicate task routing profile property")
+            value[key] = item
+        return value
+
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique)
+        if (not isinstance(value, dict) or set(value) != {"schema_version", "stage", "task_profile"}
+                or value["schema_version"] != "1.0" or value["stage"] != stage
+                or not isinstance(value["task_profile"], dict)):
+            raise ValueError("profile must bind schema_version 1.0 and the exact current stage")
+        from scripts import dynamic_routing
+        return dynamic_routing.validate_profile(value["task_profile"], stage=stage,
+                                                role="persistent-writer")
+    except (OSError, UnicodeError, TypeError, ValueError) as exc:
+        raise ContinuationError(f"invalid task routing profile: {exc}") from exc
+
+
+def set_task_profile(project: Path, stage: str, profile: dict, *, actor: str, run_id: str,
+                     expected_profile_sha256: str | None = None) -> dict[str, Any]:
+    """Apply an authenticated manager declaration without changing stage or budget."""
+    from scripts import dynamic_routing, output_provenance
+    from scripts.research_artifacts import path_in, write
+    state = _object(path_in(project, "state/run.json"))
+    if stage != state.get("stage"):
+        raise ContinuationError("routing profile must bind the current persisted stage")
+    if not isinstance(profile, dict):
+        raise ContinuationError("routing task profile must be a JSON object")
+    normalized = dynamic_routing.validate_profile(profile, stage=stage, role="persistent-writer")
+    if not isinstance(actor, str) or not actor.strip() or not isinstance(run_id, str) or not run_id:
+        raise ContinuationError("routing profile requires an authenticated actor and run ID")
+    path = path_in(project, TASK_PROFILE.as_posix(), exists=False)
+    if expected_profile_sha256 is not None and (not isinstance(expected_profile_sha256, str)
+            or not re.fullmatch(r"[a-f0-9]{64}", expected_profile_sha256)):
+        raise ContinuationError("routing profile expected hash must be lowercase SHA-256")
+    previous = None
+    if path.exists():
+        if not path.is_file() or path.stat().st_size > 16000:
+            raise ContinuationError("existing routing profile is not a bounded control file")
+        previous = _sha(path)
+        if expected_profile_sha256 != previous:
+            raise ContinuationError("existing routing profile changed; supply its exact current hash")
+    elif expected_profile_sha256 is not None:
+        raise ContinuationError("expected routing profile is missing")
+    path_in(project, output_provenance.REGISTRY_RELATIVE.as_posix(), exists=False)
+    write(path, {"schema_version": "1.0", "stage": stage, "task_profile": normalized})
+    output_provenance.record_model_writes(project, [path], family="other",
+        provider="deterministic-control-plane", model="scripts/cloud_continuation.py",
+        role="manager-task-declaration", run_id=run_id)
+    return {"schema_version": "1.0", "operation": "set_routing_profile", "actor": actor,
+            "run_id": run_id, "stage": stage, "task_profile": normalized,
+            "previous_sha256": previous, "profile_sha256": _sha(path), "paid_calls_executed": 0,
+            "budget_granted_cny": 0, "scientific_gate_approved": False}
 
 
 def _object(path: Path) -> dict[str, Any]:

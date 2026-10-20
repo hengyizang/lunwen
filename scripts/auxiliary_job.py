@@ -24,7 +24,7 @@ except ImportError:
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
          "format-conversion", "screening-assist", *engineering_contract.TASKS}
-FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens"}
+FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile"}
 REQUIRED = {"schema_version", "kind", "prompt_file"}
 PRIVATE_PARTS = {"state", "api_runs", "private", "raw", "secrets", "credentials", "keys", "auth", "tokens"}
 PRIVATE_STEMS = {"api", "hosts", "credentials", "secrets", "keys", "tokens", "auth"}
@@ -110,6 +110,8 @@ def load(project: Path, manifest_relative: str) -> dict:
     kind = manifest["kind"]
     if not isinstance(kind, str) or kind not in KINDS:
         raise ValueError("manifest kind is outside the bounded auxiliary roles")
+    from scripts import dynamic_routing
+    task_profile = dynamic_routing.validate_profile(manifest.get("task_profile"), stage="auxiliary", role=kind)
     prompt_path = _path(project, manifest["prompt_file"], "prompt_file", limit=MAX_PROMPT_BYTES)
     try:
         prompt_bytes = _read(prompt_path, MAX_PROMPT_BYTES, "prompt_file")
@@ -163,7 +165,7 @@ def load(project: Path, manifest_relative: str) -> dict:
         ai_providers.validate_attachments(attachments)
     elif "attachments" in manifest:
         raise ValueError("attachments are allowed only for multimodal-inspection")
-    return {"kind":kind,"prompt":prompt,"max_output_tokens":tokens,"source_contract":contract,
+    return {"kind":kind,"prompt":prompt,"max_output_tokens":tokens,"source_contract":contract,"task_profile":task_profile,
             "attachments":attachments,"attachment_receipts":attachment_receipts,"inputs":inputs,
             "manifest_sha256":_sha(manifest_bytes)}
 
@@ -193,7 +195,7 @@ def run(project: Path, manifest_relative: str, output_relative: str, *, execute=
     # the exact model/group; no manifest field can override that policy.
     provider = task_router.PROFILES[kind][0]
     preview = task_router.plan(project,kind,provider,request["prompt"],request["max_output_tokens"],
-                               source_contract=request["source_contract"])
+                               source_contract=request["source_contract"],task_profile=request["task_profile"])
     if request["attachments"]:
         preview = {**preview,"estimated_cost_complete":False,
                    "within_estimated_budget":None,"preview_attachment_cost_included":False,
@@ -205,7 +207,7 @@ def run(project: Path, manifest_relative: str, output_relative: str, *, execute=
     _check_inputs(project,request["inputs"])
     if execute:
         report["execution"] = task_router.run(project,kind,provider,request["prompt"],request["max_output_tokens"],
-            attachments=request["attachments"] or None,source_contract=request["source_contract"])
+            attachments=request["attachments"] or None,source_contract=request["source_contract"],task_profile=request["task_profile"])
         report["status"] = "internal_candidate_requires_review"
     else:
         report["status"] = "dry_run_no_model_call"

@@ -25,6 +25,7 @@ class CloudCheckpointTests(unittest.TestCase):
                 "api_runs/trial/claude-plan.json": b'{"internal_only":true}',
                 ".cache/model-responses/exact.json": b'{"cache":"fixture"}',
                 "state/model-usage.jsonl": b'{"cost_cny":0.1}\n',
+                "state/model-route-decisions.jsonl": b'{"selected_candidate_id":"baseline"}\n',
             }
             for rel, data in files.items():
                 path = first / rel
@@ -39,6 +40,7 @@ class CloudCheckpointTests(unittest.TestCase):
             self.assertEqual({p: (second / p).read_bytes() for p in files}, files)
             self.assertEqual(manifest["retention_days"], 90)
             self.assertIn("data/processed/measurements.parquet", [p["path"] for p in manifest["files"]])
+            self.assertIn("state/model-route-decisions.jsonl", [p["path"] for p in manifest["files"]])
 
     def test_tampering_or_missing_archive_blocks_without_partial_restore(self):
         with tempfile.TemporaryDirectory() as directory:

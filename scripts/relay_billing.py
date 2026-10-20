@@ -75,6 +75,8 @@ def _spec(provider: str) -> dict[str, Any]:
     spec = ai_providers.PRODUCTION_PROVIDERS.get(provider)
     if spec is None:
         raise BillingReconciliationError("provider has no production debit meter")
+    if spec.get("root") not in {"https://cheapai.info", "https://codekey.ai"}:
+        raise BillingReconciliationError("production debit meter root is not allowlisted")
     return spec
 
 
