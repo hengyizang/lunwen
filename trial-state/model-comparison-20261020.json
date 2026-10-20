@@ -16252,6 +16252,11 @@
       "call_id": "cheapai-ccmax-opus-high|claim_precision",
       "at": "2026-10-20T17:10:36.962781+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-ccmax-opus-high|code_statistics",
+      "at": "2026-10-20T17:23:40.847793+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ],
   "closed_at": "2026-10-20T17:12:25.939547+00:00",
