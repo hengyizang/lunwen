@@ -10725,6 +10725,11 @@
       "call_id": "cheapai-discount-luna-medium|scientific_plan",
       "at": "2026-10-20T16:55:58.754309+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-pro-astra-high|visual_chart",
+      "at": "2026-10-20T16:56:41.699648+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
