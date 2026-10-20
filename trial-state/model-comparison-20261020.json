@@ -2953,6 +2953,128 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "reconciled_at": "2026-10-20T13:50:35.503371+00:00"
+    },
+    {
+      "call_id": "cheapai-pro-luna-medium|evidence_conflict",
+      "candidate_id": "cheapai-pro-luna-medium",
+      "provider": "cheapai-gpt-pro",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "case_id": "evidence_conflict",
+      "phase": "screening",
+      "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+      "quote_sha256": "435adf3adc8d6c122ba7a5a1ee6ba88524bf0a75b4f31f8ee85cc3f9701006cb",
+      "reserved_ceiling_cny": 0.03553333,
+      "meter_before": {
+        "provider": "cheapai-gpt-pro",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1179,
+            "created_at": 1792501813,
+            "prompt_tokens": 282,
+            "completion_tokens": 158,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 248,
+            "created_at": 1792500557,
+            "prompt_tokens": 282,
+            "completion_tokens": 169,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 236,
+            "created_at": 1792346361,
+            "prompt_tokens": 268,
+            "completion_tokens": 161,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 29,
+            "created_at": 1792346353,
+            "prompt_tokens": 268,
+            "completion_tokens": 173,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 223,
+            "created_at": 1792346324,
+            "prompt_tokens": 209,
+            "completion_tokens": 161,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 24,
+            "created_at": 1792346315,
+            "prompt_tokens": 209,
+            "completion_tokens": 144,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 325,
+            "created_at": 1792346282,
+            "prompt_tokens": 254,
+            "completion_tokens": 245,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 29,
+            "created_at": 1792346274,
+            "prompt_tokens": 254,
+            "completion_tokens": 179,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1223,
+            "created_at": 1792344034,
+            "prompt_tokens": 147,
+            "completion_tokens": 193,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 284,
+            "created_at": 1792344019,
+            "prompt_tokens": 147,
+            "completion_tokens": 229,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1238,
+            "created_at": 1792341999,
+            "prompt_tokens": 165,
+            "completion_tokens": 192,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 194,
+            "created_at": 1792341993,
+            "prompt_tokens": 165,
+            "completion_tokens": 143,
+            "id": 12
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "generation_status": "not_sent",
+      "catalog_omission_probe": false,
+      "run_id": "39432920435",
+      "code_sha": "57a3679f6c04ce4d3129a83a502d382b8187d5ff",
+      "billing_status": "reserved",
+      "reserved_at": "2026-10-20T13:50:37.767989+00:00"
     }
   ],
   "status": "running",
