@@ -10851,6 +10851,11 @@
       "call_id": "cheapai-discount-luna-medium|visual_chart",
       "at": "2026-10-20T16:57:24.369962+00:00",
       "reason": "pre_call_meter_unavailable_no_generation"
+    },
+    {
+      "call_id": "cheapai-kiro-sonnet-high|code_statistics",
+      "at": "2026-10-20T16:58:17.575413+00:00",
+      "reason": "pre_call_meter_unavailable_no_generation"
     }
   ]
 }
