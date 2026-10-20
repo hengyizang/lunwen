@@ -203,8 +203,9 @@ def run_one(ledger, route, case_id, persist):
         raise ClarifiedError("attempt_outside_clarified_scope")
     try:
         before = parent_trial.read_meter(route["provider"])
-    except relay_billing.BillingReconciliationError:
-        ledger.setdefault("metadata_skips", []).append({"call_id": call_id, "reason": "pre_call_meter_unavailable_no_generation"})
+    except relay_billing.BillingReconciliationError as exc:
+        ledger.setdefault("metadata_skips", []).append({"call_id": call_id,
+            "reason": "pre_call_meter_unavailable_no_generation", "diagnostic": str(exc)})
         persist(ledger)
         return "metadata_unavailable_no_generation"
     item = fixtures.case(case_id)

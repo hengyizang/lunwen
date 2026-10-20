@@ -367,9 +367,9 @@ def run_one(ledger, route, case_id, phase, persist):
         return "budget_insufficient_for_conservative_hold"
     try:
         before = read_meter(route["provider"])
-    except relay_billing.BillingReconciliationError:
+    except relay_billing.BillingReconciliationError as exc:
         ledger.setdefault("metadata_skips", []).append({"call_id": call_id, "at": now(),
-                                                       "reason": "pre_call_meter_unavailable_no_generation"})
+            "reason": "pre_call_meter_unavailable_no_generation", "diagnostic": str(exc)})
         persist(ledger)
         return "metadata_unavailable_no_generation"
     entry = {"call_id": call_id, "candidate_id": route["id"],
