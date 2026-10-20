@@ -7,7 +7,7 @@ on:
       mode:
         description: Read-only metadata, authorized execute, or read-only reconcile
         type: choice
-        options: [metadata, execute, reconcile, resume, complete]
+        options: [metadata, execute, reconcile, resume, complete, clarify, argonprobe]
         default: metadata
       authorization:
         description: Exact authorization ID required for generating modes
@@ -75,6 +75,12 @@ jobs:
       - name: Execute only the separately authorized bounded comparison or read-only reconciliation
         if: inputs.mode == 'execute' || inputs.mode == 'reconcile' || inputs.mode == 'resume' || inputs.mode == 'complete'
         run: python -m scripts.model_comparison --mode "$COMPARISON_MODE"
+      - name: Run only the separately authorized clarified follow-up
+        if: inputs.mode == 'clarify'
+        run: python -m scripts.model_comparison_clarified
+      - name: Verify the historically supported native Argon base contract once
+        if: inputs.mode == 'argonprobe'
+        run: python -m scripts.argon_native_probe
       - name: Preserve sanitized scoped receipts
         if: always()
         uses: actions/upload-artifact@v7

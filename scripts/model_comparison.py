@@ -572,5 +572,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as exc:
-        print("Comparison stopped: " + (str(exc) if type(exc) is ComparisonError else type(exc).__name__))
+        print("Comparison stopped: " + (str(exc) if isinstance(exc, (ComparisonError, gateway_trial.TrialError)) else type(exc).__name__))
         raise SystemExit(1)
