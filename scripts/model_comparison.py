@@ -66,8 +66,17 @@ class CloudState(gateway_trial.CloudState):
         new_sha = response.get("content", {}).get("sha")
         if not isinstance(new_sha, str):
             raise ComparisonError("ledger_persistence_not_confirmed")
-        value, remote_sha = super().read(FILE)
-        if remote_sha != new_sha or value != ledger:
+        # Mutable branch/tree metadata can briefly lag a successful write.
+        # Verify the immutable blob returned by that committed PUT instead;
+        # the next write still requires its exact file SHA for optimistic CAS.
+        blob = self.api("git/blobs/" + new_sha)
+        if blob.get("sha") != new_sha or blob.get("encoding") != "base64":
+            raise ComparisonError("ledger_readback_mismatch_no_generation")
+        try:
+            value = json.loads(base64.b64decode(blob["content"]))
+        except (KeyError, ValueError, TypeError, UnicodeError):
+            raise ComparisonError("ledger_readback_mismatch_no_generation") from None
+        if value != ledger:
             raise ComparisonError("ledger_readback_mismatch_no_generation")
         self.expected_sha = new_sha
 

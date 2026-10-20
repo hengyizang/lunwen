@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 from contextlib import ExitStack
 import copy
+import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -418,11 +419,19 @@ class ModelComparisonTests(unittest.TestCase):
 
 
 class ComparisonCloudStateTests(unittest.TestCase):
-    def state(self, *, sha="old-blob"):
+    OLD_SHA = "a" * 40
+
+    def state(self, *, sha=OLD_SHA):
         state = comparison.CloudState("fake-nonsecret-token")
         with patch.object(gateway_trial.CloudState, "read", return_value=({"entries": []}, sha)):
             state.load()
         return state
+
+    def blob(self, ledger):
+        raw = (json.dumps(ledger, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
+        sha = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+        return {"sha": sha, "encoding": "base64", "size": len(raw),
+                "content": base64.b64encode(raw).decode()}
 
     def test_cas_conflict_is_terminal_without_generation(self):
         state = self.state()
@@ -431,7 +440,7 @@ class ComparisonCloudStateTests(unittest.TestCase):
             with self.assertRaises(gateway_trial.TrialError):
                 state.save({"entries": []})
         self.assertEqual(api.call_args.args[2], "PUT")
-        self.assertEqual(api.call_args.args[1]["sha"], "old-blob")
+        self.assertEqual(api.call_args.args[1]["sha"], self.OLD_SHA)
         post.assert_not_called()
 
     def test_write_requires_prior_read_and_durable_exact_readback(self):
@@ -440,25 +449,51 @@ class ComparisonCloudStateTests(unittest.TestCase):
             state.save({"entries": []})
         state = self.state()
         ledger = {"entries": [{"call_id": "fixture", "reserved_ceiling_cny": 1.0}]}
-        with (patch.object(state, "api", return_value={"content": {"sha": "new-blob"}}),
-              patch.object(gateway_trial.CloudState, "read", return_value=({"entries": []}, "new-blob"))):
+        wrong = self.blob({"entries": []})
+        with patch.object(state, "api", side_effect=[{"content": {"sha": wrong["sha"]}}, wrong]):
             with self.assertRaisesRegex(comparison.ComparisonError, "readback_mismatch"):
                 state.save(ledger)
-        self.assertEqual(state.expected_sha, "old-blob")
+        self.assertEqual(state.expected_sha, self.OLD_SHA)
 
     def test_successful_cas_save_targets_only_new_trial_namespace(self):
         state = self.state()
         ledger = {"entries": []}
-        with (patch.object(state, "api", return_value={"content": {"sha": "new-blob"}}) as api,
-              patch.object(gateway_trial.CloudState, "read", return_value=(ledger, "new-blob"))):
+        blob = self.blob(ledger)
+        with (patch.object(state, "api", side_effect=[{"content": {"sha": blob["sha"]}}, blob]) as api,
+              patch.object(gateway_trial.CloudState, "read", side_effect=AssertionError("mutable tree readback forbidden"))):
             state.save(ledger)
-        path, payload, method = api.call_args.args
+        path, payload, method = api.call_args_list[0].args
         self.assertEqual(path, "contents/trial-state/" + comparison.FILE)
         self.assertEqual(payload["branch"], comparison.STATE)
         self.assertNotEqual(payload["branch"], gateway_trial.STATE)
         self.assertEqual(method, "PUT")
         self.assertEqual(json.loads(base64.b64decode(payload["content"])), ledger)
-        self.assertEqual(state.expected_sha, "new-blob")
+        self.assertEqual(api.call_args_list[1].args, ("git/blobs/" + blob["sha"],))
+        self.assertEqual(state.expected_sha, blob["sha"])
+
+    def test_missing_or_unreadable_immutable_blob_keeps_the_prior_expected_sha(self):
+        ledger = {"entries": []}
+        blob = self.blob(ledger)
+        for response in (gateway_trial.TrialError("http_404"),
+                         {"sha": blob["sha"], "encoding": "base64", "content": "not-base64!"}):
+            with self.subTest(response_type=type(response).__name__):
+                state = self.state()
+                with (patch.object(state, "api", side_effect=[{"content": {"sha": blob["sha"]}}, response]),
+                      patch.object(ai_providers, "call_production") as post):
+                    with self.assertRaises((comparison.ComparisonError, gateway_trial.TrialError)):
+                        state.save(ledger)
+                self.assertEqual(state.expected_sha, self.OLD_SHA)
+                post.assert_not_called()
+
+    def test_immutable_blob_must_match_the_sha_returned_by_the_successful_put(self):
+        state = self.state()
+        ledger = {"entries": []}
+        blob = self.blob(ledger)
+        bad = dict(blob, sha="b" * 40)
+        with patch.object(state, "api", side_effect=[{"content": {"sha": blob["sha"]}}, bad]):
+            with self.assertRaisesRegex(comparison.ComparisonError, "readback_mismatch"):
+                state.save(ledger)
+        self.assertEqual(state.expected_sha, self.OLD_SHA)
 
 
 if __name__ == "__main__":
