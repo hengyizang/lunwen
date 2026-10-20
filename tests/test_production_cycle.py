@@ -33,6 +33,8 @@ class ProductionCycleTests(unittest.TestCase):
         self.env.update({spec["key_setting"]: "fixture-provider-key-" + provider
                          for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items()})
         self.stack.enter_context(patch.dict("os.environ", self.env, clear=True))
+        self.stack.enter_context(patch("scripts.production_readiness.catalog",
+            side_effect=lambda provider, environment: set(ai_providers.PRODUCTION_PROVIDERS[provider]["models"])))
         self.stack.enter_context(patch.object(api_orchestrator, "ROOT", self.root))
         self.stack.enter_context(patch("scripts.cloud_checkpoint.sync_billing", return_value=None))
         self.stack.enter_context(patch("scripts.cloud_research_steps.before_cycle", return_value={

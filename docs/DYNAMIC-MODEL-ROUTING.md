@@ -168,6 +168,13 @@ charge; it is not an instruction to send the same job to another gateway.
 Record the original outcome, reconcile its bill and inspect existing artifacts
 before any separately authorized retry. No automatic paid fallback is introduced.
 
+Before a production generation request, the runtime also reads the selected
+group's live model catalog. A missing model or unavailable catalog stops before
+billing reservation or generation, and records an availability event. This GET
+does not verify model authenticity or quality. An exact validated response-cache
+replay needs no live catalog or new generation. Catalog failure never authorizes
+an unaccepted replacement or a paid probe.
+
 Acceptance also binds the runtime task class and scientific risk, the scored
 artifact's actual provider/model/role/run provenance, and both current price
 contracts. A high-quality answer from another model cannot be paired with the

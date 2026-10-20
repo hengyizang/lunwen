@@ -675,6 +675,24 @@ def call(
     if production:
         if not configuration.get("configured"):
             raise ModelBudgetError("production route credentials are missing")
+        from scripts.production_readiness import catalog
+        availability_error = None
+        try:
+            if effective_model not in catalog(provider, dict(os.environ)):
+                availability_error = "model_not_advertised"
+        except ValueError:
+            availability_error = "catalog_unavailable"
+        if availability_error:
+            _append(project_root / "state/model-route-decisions.jsonl", {
+                "schema_version": "1.0", "at": utc_now(), "run_id": run_id,
+                "stage": stage, "role": role, **request_metrics,
+                "provider": provider, "model": effective_model,
+                "availability_error": availability_error, "generation_sent": False,
+                "not_scientific_evidence": True,
+            })
+            raise ModelBudgetError(
+                f"production route unavailable ({availability_error}); no generation sent"
+            )
         meter_before = relay_billing.read_meter(provider)
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None

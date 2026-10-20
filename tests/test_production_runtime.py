@@ -30,6 +30,8 @@ class ProductionRuntimeTests(unittest.TestCase):
         env.update({spec["key_setting"]: "fixture-no-real-key"
                     for spec in ai_providers.PRODUCTION_PROVIDERS.values()})
         self.stack.enter_context(patch.dict("os.environ", env, clear=True))
+        self.catalog = self.stack.enter_context(patch("scripts.production_readiness.catalog",
+            side_effect=lambda provider, environment: set(ai_providers.PRODUCTION_PROVIDERS[provider]["models"])))
         self.sync = self.stack.enter_context(patch("scripts.cloud_checkpoint.sync_billing", return_value=None))
         model_spend.write(self.project, model_spend.initial())
         model_spend.grant(self.project, new_ceiling_cny=300, actor="Fake Owner",
@@ -127,6 +129,40 @@ class ProductionRuntimeTests(unittest.TestCase):
                 post.assert_not_called()
                 meter.assert_not_called()
                 grant.assert_not_called()
+
+    def test_missing_model_or_catalog_blocks_before_meter_reservation_and_generation(self):
+        for failure in ("model_not_advertised", "catalog_unavailable"):
+            with self.subTest(failure=failure):
+                self.catalog.side_effect = ValueError("catalog unavailable") if failure == "catalog_unavailable" else None
+                self.catalog.return_value = set()
+                with (patch.object(relay_billing, "read_meter") as meter,
+                        patch.object(ai_providers, "call") as post,
+                        patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
+                    with self.assertRaisesRegex(model_runtime.ModelBudgetError, failure):
+                        self.call()
+                    meter.assert_not_called()
+                    reserve.assert_not_called()
+                    post.assert_not_called()
+                state = model_spend.read(self.project)
+                self.assertEqual(state["spent_cny"], 0)
+                self.assertEqual(state["reservations"], {})
+                event = json.loads((self.project / "state/model-route-decisions.jsonl").read_text().splitlines()[-1])
+                self.assertEqual(event["availability_error"], failure)
+                self.assertFalse(event["generation_sent"])
+
+    def test_exact_cache_replay_needs_no_live_catalog_or_paid_request(self):
+        with (patch.object(ai_providers, "call", side_effect=self.result) as post,
+                patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}) as meter,
+                patch.object(relay_billing, "settle", return_value=self.debit())):
+            self.call()
+            self.catalog.assert_called_once()
+            self.catalog.reset_mock(side_effect=True)
+            self.catalog.side_effect = ValueError("catalog unavailable")
+            result = self.call(run_id="cached-offline")
+            self.assertTrue(result.cache_hit)
+            self.catalog.assert_not_called()
+            post.assert_called_once()
+            meter.assert_called_once()
 
     def test_pre_generation_meter_429_blocks_post_without_creating_reservation(self):
         with (patch.object(relay_billing, "read_meter", side_effect=relay_billing.BillingReconciliationError("HTTP 429")),
