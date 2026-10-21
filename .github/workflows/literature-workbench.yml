@@ -1,0 +1,73 @@
+name: Literature skills acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/literature*'
+      - 'scripts/cloud_research_steps.py'
+      - 'scripts/cloud_job.py'
+      - 'tests/test_literature*'
+      - 'skills/start-my-day/**'
+      - 'skills/paper-analyze/**'
+      - 'skills/extract-paper-images/**'
+      - 'skills/paper-search/**'
+      - 'skills/conf-papers/**'
+      - 'third_party/evil-read-arxiv/**'
+      - 'third_party/codex-skill-installer/**'
+      - 'integrations/evil-read-arxiv.lock.json'
+      - '.github/workflows/literature-workbench.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/literature*'
+      - 'tests/test_literature*'
+      - '.github/workflows/literature-workbench.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: literature-skills-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  literature-workbench:
+    name: Literature installation, acquisition and reading
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DR_OS_CLOUD_EXECUTOR: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install declared PDF and image tools without model credentials
+        run: |
+          python -m pip install --disable-pip-version-check '.[reader]' 'Pillow>=10,<13' 'reportlab>=4,<5'
+          sudo apt-get update -qq
+          sudo apt-get install -y poppler-utils
+      - name: Install all five upstream skills with the official pinned helper in isolation
+        run: >-
+          python third_party/codex-skill-installer/install-skill-from-github.py
+          --repo juliye2025/evil-read-arxiv
+          --ref ef3a594841081703259545c828c98b52af835817
+          --path start-my-day paper-analyze extract-paper-images paper-search conf-papers
+          --dest "$RUNNER_TEMP/upstream-literature-skills"
+      - name: Verify pinned sources and run adversarial source, rights and integration tests
+        run: |
+          python -m scripts.literaturectl verify
+          python -m unittest discover -s tests -p 'test_literature*.py' -v
+      - name: Demonstrate linked reading and probe public metadata without provider keys
+        run: python -m scripts.literature_acceptance --directory artifacts/literature-workbench --live
+      - name: Preserve exact scoped software evidence and linked preview
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: literature-workbench-acceptance
+          path: artifacts/literature-workbench/
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Conference Papers"
+  short_description: "Find and rank papers from top AI conferences"
+  default_prompt: "Use $conf-papers to recommend papers from the requested conference and year."

@@ -51,6 +51,20 @@ EXTRA = {
     "accept_route": {"candidate_id", "packet_id", "profile_file", "expected_profile_sha256", "stage", "role"},
     "paperqa": {"corpus", "question", "settings"}, "tooluniverse": {"request_file"},
     "auxiliary": {"manifest"},
+    "literature": {"request_file"},
+}
+
+LITERATURE_OPERATIONS = {
+    "literature_discover": ({"plan", "output"}, set()),
+    "literature_resolve": ({"url"}, {"url"}),
+    "literature_figures": ({"pdf", "manifest", "figures", "source_receipt"}, {"pdf", "manifest"}),
+    "literature_register": ({"candidate_id", "expected_leads_sha256", "paper_id", "acquisition_receipt", "manifest", "reader", "config"},
+                            {"candidate_id", "expected_leads_sha256"}),
+    "literature_analyze": ({"paper_id", "config", "execute", "max_output_tokens"}, {"paper_id"}),
+    "literature_workbench": ({"config"}, set()),
+    "literature_search": ({"query", "paper_id", "topic_id", "limit"}, {"query"}),
+    "literature_itinerary": ({"question", "paper_id", "topic_id", "limit"}, {"question"}),
+    "literature_compare": ({"paper_ids", "question"}, {"paper_ids"}),
 }
 
 
@@ -182,11 +196,41 @@ def validate_request(value: object) -> dict:
         if not isinstance(value.get("request_file"), str) or len(value["request_file"]) > 250:
             raise CloudJobError("request_file path is too long")
         project_relative(value["request_file"])
+    if action == "literature":
+        relative = project_relative(value.get("request_file"))
+        if len(relative) > 250 or not relative.startswith("program/") or not relative.endswith(".json"):
+            raise CloudJobError("literature requires one program/*.json operation request")
     if action == "auxiliary":
         manifest = project_relative(value.get("manifest"))
         if len(manifest) > 250 or not manifest.startswith("evidence/auxiliary-jobs/") or not manifest.endswith(".json"):
             raise CloudJobError("auxiliary requires an evidence/auxiliary-jobs/*.json manifest")
     return value
+
+
+def literature_operation(project: Path, relative: str) -> tuple[dict, dict]:
+    """Read one strict nonpaid operation; never accept a batch or paid analysis."""
+    from scripts.research_artifacts import path_in, sha
+    relative = project_relative(relative)
+    if len(relative) > 250 or not relative.startswith("program/") or not relative.endswith(".json"):
+        raise CloudJobError("literature requires one program/*.json operation request")
+    try:
+        source = path_in(project, relative)
+        if source.stat().st_size > 64000:
+            raise CloudJobError("literature operation exceeds 64 KB")
+        def reject_constant(_value):
+            raise CloudJobError("nonfinite literature request value")
+        operation = json.loads(source.read_text(encoding="utf-8"), object_pairs_hook=unique_pairs, parse_constant=reject_constant)
+    except (ValueError, OSError) as exc:
+        raise CloudJobError("cannot read the bounded literature operation: " + str(exc)) from exc
+    action = operation.get("action") if isinstance(operation, dict) else None
+    if not isinstance(action, str) or action not in LITERATURE_OPERATIONS:
+        raise CloudJobError("one controlled literature action object is required; batches are forbidden")
+    allowed, required = LITERATURE_OPERATIONS[action]
+    if set(operation) - {"action"} - allowed or required - set(operation):
+        raise CloudJobError("missing or unsupported literature operation properties")
+    if "execute" in operation and (type(operation["execute"]) is not bool or operation["execute"] is not False):
+        raise CloudJobError("nonpaid literature jobs forbid execute=true; paid analysis needs the normal authorized writer cycle")
+    return operation, {"path": relative, "sha256": sha(source)}
 
 
 def issue_request(event: dict) -> dict:
@@ -314,11 +358,11 @@ def run_job(job: dict, run_id: str) -> int:
     execution_started = False
     persisted = False
     try:
-        if action in {"preflight", "init", "status", "routing_status", "accept_route", "set_routing_profile", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", *cloud_human_controls.ACTIONS, *PAID}:
+        if action in {"preflight", "init", "status", "routing_status", "accept_route", "set_routing_profile", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", "literature", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
             os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
             os.environ["DR_OS_STATE_BRANCH"] = branch
-            if action in {"status", "cycle", "continuation", "review_dossier", *cloud_human_controls.ACTIONS}:
+            if action in {"status", "cycle", "continuation", "review_dossier", "literature", *cloud_human_controls.ACTIONS}:
                 from scripts.cloud_research_steps import acquire_data
                 acquire_data(ROOT / "projects" / slug)
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
@@ -388,6 +432,22 @@ def run_job(job: dict, run_id: str) -> int:
                 cmd = None
             elif action == "status":
                 cmd = ["scripts/researchctl.py", "status", "--project", slug, "--json"]
+            elif action == "literature":
+                validate_request(job)
+                from scripts import literaturectl
+                project = ROOT / "projects" / slug
+                operation, binding = literature_operation(project, job["request_file"])
+                phase = "execution"
+                execution_started = True
+                result = literaturectl.execute_operation(project, operation)
+                (ARTIFACT / "literature-result.json").write_text(json.dumps({"request": binding,
+                    "operation": operation, "result": result, "paid_model_calls": 0,
+                    "gate_approved": False}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                logs.append(json.dumps({"action": operation["action"], "request": binding,
+                    "status": result.get("status", "completed") if isinstance(result, dict) else "completed",
+                    "paid_model_calls": 0, "gate_approved": False}, ensure_ascii=False))
+                detail = f"Executed one nonpaid literature operation `{operation['action']}` from `{binding['path']}`; no scientific gate was approved.\n\n"
+                cmd = None
             elif action == "set_routing_profile":
                 if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
                     raise CloudJobError("routing management requires the production routing profile")

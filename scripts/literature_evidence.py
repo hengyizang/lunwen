@@ -21,7 +21,7 @@ import time
 import urllib.parse
 import uuid
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -171,6 +171,7 @@ def _doi(value: Any) -> str | None:
     text = _text(value)
     if not text:
         return None
+    text = urllib.parse.unquote(text)
     text = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", text, flags=re.I)
     text = re.sub(r"^doi:\s*", "", text, flags=re.I).strip().lower()
     embedded = re.search(r"(?:^|\s)doi:(10\.[^\s;]+/[^\s;]+)", text, flags=re.I)
@@ -345,6 +346,10 @@ def normalized_work(
     *,
     abstract: Any = None,
     venue: Any = None,
+    arxiv_id: Any = None,
+    citation_count: Any = None,
+    publication_date: Any = None,
+    document_types: Any = None,
 ) -> dict[str, Any] | None:
     normalized_title = _text(title)
     if not normalized_title:
@@ -370,26 +375,160 @@ def normalized_work(
         "authors": _authors(authors),
         "venue": _text(venue),
         "abstract": _text(abstract),
+        "arxiv_id": _text(arxiv_id),
+        "citation_count": citation_count if type(citation_count) is int and citation_count >= 0 else None,
+        "publication_date": _text(publication_date),
+        "document_types": document_types if isinstance(document_types, list) else [],
     }
 
 
-def build_search_url(provider: str, query: str, limit: int) -> str:
+def _declared(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True) if isinstance(value, dict) else str(value).strip()
+
+
+def parse_conditions(date_range: Any = None, filters: Any = None) -> dict[str, Any]:
+    """Parse explicit constraints; legacy prose remains visibly unapplied.
+
+    Dates accept YYYY, YYYY-YYYY, ISO..ISO, or {from, to}. Filters accept an
+    object/JSON object, or semicolon-separated key=value pairs. Unrecognized
+    prose is retained as a declaration, never advertised as a provider filter.
+    """
+    parsed: dict[str, Any] = {}
+    unapplied = []
+    if isinstance(date_range, dict):
+        if set(date_range) - {"from", "to"} or not date_range:
+            raise LiteratureEvidenceError("structured date range needs from/to")
+        endpoints = [date_range.get("from"), date_range.get("to")]
+    elif date_range is None:
+        endpoints = None
+    elif isinstance(date_range, str):
+        value = date_range.strip()
+        match = re.fullmatch(r"(\d{4})(?:\s*-\s*(\d{4}))?", value)
+        exact = re.fullmatch(r"(\d{4}-\d{2}-\d{2})\s*\.\.\s*(\d{4}-\d{2}-\d{2})", value)
+        endpoints = [match[1], match[2] or match[1]] if match else list(exact.groups()) if exact else None
+        if endpoints is None and value:
+            unapplied.append({"field": "date_range", "declared": value})
+    else:
+        raise LiteratureEvidenceError("date_range must be text or a from/to object")
+    if endpoints is not None:
+        normalized = []
+        precision = "year"
+        for index, endpoint in enumerate(endpoints):
+            if endpoint is None:
+                normalized.append(None)
+                continue
+            if type(endpoint) is int:
+                endpoint = str(endpoint)
+            if not isinstance(endpoint, str):
+                raise LiteratureEvidenceError("invalid date endpoint")
+            if re.fullmatch(r"\d{4}", endpoint):
+                endpoint += "-01-01" if index == 0 else "-12-31"
+            else:
+                precision = "date"
+            try:
+                normalized.append(date.fromisoformat(endpoint).isoformat())
+            except ValueError as exc:
+                raise LiteratureEvidenceError("invalid structured publication date") from exc
+        if not any(normalized) or (all(normalized) and normalized[0] > normalized[1]):
+            raise LiteratureEvidenceError("publication date range is empty or reversed")
+        parsed["publication_date"] = {"from": normalized[0], "to": normalized[1], "precision": precision}
+    if isinstance(filters, str):
+        value = filters.strip()
+        if value.startswith("{"):
+            try:
+                filters = json.loads(value)
+            except json.JSONDecodeError as exc:
+                raise LiteratureEvidenceError("invalid JSON filters") from exc
+        elif "=" in value:
+            pairs = [part.strip().split("=", 1) for part in value.split(";") if part.strip()]
+            if any(len(pair) != 2 for pair in pairs) or len({pair[0] for pair in pairs}) != len(pairs):
+                raise LiteratureEvidenceError("filters need unique key=value pairs")
+            filters = dict(pairs)
+        else:
+            if value:
+                unapplied.append({"field": "filters", "declared": value})
+            filters = {}
+    if filters is None:
+        filters = {}
+    if not isinstance(filters, dict) or set(filters) - {"venue", "year", "document_types", "identity", "offset"}:
+        raise LiteratureEvidenceError("unsupported structured literature filter")
+    for key, value in filters.items():
+        if key in {"year", "offset"}:
+            if isinstance(value, str) and value.isdigit():
+                value = int(value)
+            if type(value) is not int or not (1000 <= value <= 9999 if key == "year" else 0 <= value <= 10000):
+                raise LiteratureEvidenceError("invalid " + key + " filter")
+        elif key == "document_types":
+            value = value.split(",") if isinstance(value, str) else value
+            if not isinstance(value, list) or not value or any(not isinstance(x, str) or not x.strip() for x in value):
+                raise LiteratureEvidenceError("document_types needs nonempty strings")
+            value = sorted({_document_type(x) for x in value})
+            if any(x not in {"journal-article", "conference-paper", "preprint", "book", "review"} for x in value):
+                raise LiteratureEvidenceError("unsupported document type")
+        elif not isinstance(value, str) or not 1 <= len(value.strip()) <= 300:
+            raise LiteratureEvidenceError("invalid " + key + " filter")
+        else:
+            value = value.strip()
+        parsed[key] = value
+    if "year" in parsed and "publication_date" in parsed:
+        bounds = parsed["publication_date"]
+        if (bounds["from"] and parsed["year"] < int(bounds["from"][:4])) or (bounds["to"] and parsed["year"] > int(bounds["to"][:4])):
+            raise LiteratureEvidenceError("year conflicts with publication date range")
+    return {"constraints": parsed, "unapplied_declarations": unapplied,
+            "status": "explicit_constraints" if parsed else "unfiltered_declared_only"}
+
+
+def _document_type(value: str) -> str:
+    token = re.sub(r"[^a-z]", "", value.casefold())
+    return {"journalarticle": "journal-article", "article": "journal-article",
+            "conference": "conference-paper", "conferencepaper": "conference-paper", "inproceedings": "conference-paper",
+            "proceedingsarticle": "conference-paper", "postedcontent": "preprint", "preprint": "preprint",
+            "review": "review", "book": "book"}.get(token, value.casefold().strip())
+
+
+def _dblp_stream(value: str) -> str:
+    key = value.removeprefix("https://dblp.org/streams/")
+    if not re.fullmatch(r"(?:conf|journals|series)/[a-zA-Z0-9/_-]{1,100}", key):
+        raise LiteratureEvidenceError("DBLP venue needs an official stream URL or conf/venue key")
+    return "https://dblp.org/streams/" + key
+
+
+def build_search_url(provider: str, query: str, limit: int, *, date_range: Any = None, filters: Any = None) -> str:
+    conditions = parse_conditions(date_range, filters)["constraints"]
+    if "identity" in conditions and provider != "semantic-scholar":
+        raise LiteratureEvidenceError("identity lookup is supported only for Semantic Scholar")
+    if "offset" in conditions and provider != "dblp":
+        raise LiteratureEvidenceError("explicit pagination offset is supported only for DBLP")
+    bounds = conditions.get("publication_date", {})
+    year = conditions.get("year")
     encoded = urllib.parse.urlencode
     if provider == "openalex":
         values = {"search": query, "per-page": limit}
+        dates = [f"{key}:{value}" for key, value in (("from_publication_date", bounds.get("from")), ("to_publication_date", bounds.get("to"))) if value]
+        if year:
+            dates.append(f"publication_year:{year}")
+        if dates:
+            values["filter"] = ",".join(dates)
         return "https://api.openalex.org/works?" + encoded(values)
     if provider == "crossref":
-        return "https://api.crossref.org/works?" + encoded(
-            {"query.bibliographic": query, "rows": limit}
-        )
+        values = {"query.bibliographic": query, "rows": limit}
+        dates = [f"{key}:{value}" for key, value in (("from-pub-date", bounds.get("from")), ("until-pub-date", bounds.get("to"))) if value]
+        if year:
+            dates.extend([f"from-pub-date:{year}-01-01", f"until-pub-date:{year}-12-31"])
+        if dates:
+            values["filter"] = ",".join(dates)
+        return "https://api.crossref.org/works?" + encoded(values)
     if provider == "semantic-scholar":
-        return "https://api.semanticscholar.org/graph/v1/paper/search?" + encoded(
-            {
-                "query": query,
-                "limit": limit,
-                "fields": "paperId,title,year,authors,externalIds,url,abstract,venue,publicationDate",
-            }
-        )
+        fields = "paperId,title,year,authors,externalIds,url,abstract,venue,publicationDate,citationCount,publicationTypes"
+        if conditions.get("identity"):
+            identity = conditions["identity"]
+            if not re.fullmatch(r"(?:DOI:10\.[^\s]+/[^\s]+|ARXIV:[A-Za-z0-9./-]+)", identity, re.I):
+                raise LiteratureEvidenceError("S2 identity needs a DOI or ARXIV identifier")
+            return "https://api.semanticscholar.org/graph/v1/paper/" + urllib.parse.quote(identity, safe="") + "?" + encoded({"fields": fields})
+        values = {"query": query, "limit": limit, "fields": fields}
+        if year or bounds:
+            values["year"] = str(year) if year else f"{(bounds.get('from') or '')[:4]}-{(bounds.get('to') or '')[:4]}"
+        return "https://api.semanticscholar.org/graph/v1/paper/search?" + encoded(values)
     if provider == "arxiv":
         identifier = ARXIV_IDENTIFIER_RE.fullmatch(query.strip())
         if identifier:
@@ -408,25 +547,42 @@ def build_search_url(provider: str, query: str, limit: int) -> str:
     if provider == "dblp":
         terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query.lower())[:2]
         phrase = " ".join(terms) or "science"
-        sparql = "\n".join(
-            (
+        clauses = [
                 "PREFIX dblp: <https://dblp.org/rdf/schema#>",
-                "SELECT ?publ ?title ?year ?doi WHERE {",
+                "SELECT ?publ ?title ?year ?doi ?venue ?documentType (GROUP_CONCAT(DISTINCT ?authorName; SEPARATOR=\"|\") AS ?authorNames) WHERE {",
                 "  ?publ a dblp:Publication ; dblp:title ?title .",
                 "  OPTIONAL { ?publ dblp:yearOfPublication ?year . }",
                 "  OPTIONAL { ?publ dblp:doi ?doi . }",
-                f'  FILTER(CONTAINS(LCASE(STR(?title)), "{phrase}"))',
-                "}",
-                f"LIMIT {limit}",
-            )
-        )
+                "  OPTIONAL { ?publ dblp:publishedInStream ?venue . }",
+                "  OPTIONAL { ?publ dblp:authoredBy ?person . ?person dblp:primaryCreatorName ?authorName . }",
+                "  OPTIONAL { ?publ a ?documentType . FILTER(?documentType IN (dblp:Inproceedings, dblp:Article, dblp:Book, dblp:Proceedings)) }",
+        ]
+        if query.strip() != "*":
+            clauses.append(f'  FILTER(CONTAINS(LCASE(STR(?title)), "{phrase}"))')
+        elif not conditions.get("venue"):
+            raise LiteratureEvidenceError("DBLP enumeration needs an explicit venue")
+        if conditions.get("venue"):
+            stream = _dblp_stream(conditions["venue"])
+            clauses.append(f'  ?publ dblp:publishedInStream <{stream}> . FILTER(?venue = <{stream}>)')
+            if "/conf/" in stream:
+                clauses.append("  ?publ a dblp:Inproceedings .")
+        if year:
+            clauses.append(f'  FILTER(STR(?year) = "{year}")')
+        if bounds.get("from"):
+            clauses.append(f'  FILTER(STR(?year) >= "{bounds["from"][:4]}")')
+        if bounds.get("to"):
+            clauses.append(f'  FILTER(STR(?year) <= "{bounds["to"][:4]}")')
+        clauses.extend(["}", "GROUP BY ?publ ?title ?year ?doi ?venue ?documentType", "ORDER BY STR(?publ)", f"LIMIT {limit}"])
+        if conditions.get("offset"):
+            clauses.append(f'OFFSET {conditions["offset"]}')
+        sparql = "\n".join(clauses)
         return "https://sparql.dblp.org/sparql?" + encoded({"query": sparql})
     if provider == "hal":
         return "https://api.archives-ouvertes.fr/search/?" + encoded(
             {
                 "q": query,
                 "rows": limit,
-                "fl": "halId_s,title_s,producedDateY_i,doiId_s,uri_s,authFullName_s,abstract_s,journalTitle_s",
+                "fl": "halId_s,title_s,producedDateY_i,producedDate_s,doiId_s,uri_s,authFullName_s,abstract_s,journalTitle_s,docType_s",
                 "wt": "json",
             }
         )
@@ -450,6 +606,103 @@ def _json_payload(payload: bytes) -> Any:
         raise LiteratureEvidenceError(f"provider returned invalid UTF-8 JSON: {exc}") from exc
 
 
+def _openalex_abstract(value: Any) -> str | None:
+    if not isinstance(value, dict):
+        return None
+    positioned = [(position, word) for word, positions in value.items() if isinstance(positions, list)
+                  for position in positions if type(position) is int and 0 <= position < 20000]
+    return " ".join(str(word) for _, word in sorted(positioned)) or None
+
+
+def _crossref_date(item: dict) -> str | None:
+    parts = (item.get("published") or item.get("issued") or {}).get("date-parts", [[]])
+    if not parts or not isinstance(parts[0], list) or not 1 <= len(parts[0]) <= 3:
+        return None
+    try:
+        # A year/month is not an exact day. Preserve precision rather than fill it.
+        return "-".join(f"{int(value):04d}" if index == 0 else f"{int(value):02d}" for index, value in enumerate(parts[0]))
+    except (ValueError, TypeError):
+        return None
+
+
+def filter_results(provider: str, works: list[dict], parsed: dict) -> tuple[list[dict], dict]:
+    """Validate returned metadata against explicit filters, retaining unknowns separately.
+
+    The bounded provider result window is not a complete proceedings corpus.
+    A missing field cannot establish that a returned work passes a constraint.
+    """
+    constraints = parsed["constraints"]
+    accepted, rejected, unresolved = [], [], []
+    native = {"openalex": {"publication_date", "year"}, "crossref": {"publication_date", "year"},
+              "semantic-scholar": {"publication_date", "year", "identity"},
+              "dblp": {"publication_date", "year", "venue", "offset"}}.get(provider, set())
+    for work in works:
+        failures, unknown = [], []
+        bounds = constraints.get("publication_date")
+        if bounds:
+            if bounds["precision"] == "year":
+                actual = work.get("publication_year")
+                if type(actual) is not int:
+                    unknown.append("publication_year_missing")
+                elif (bounds["from"] and actual < int(bounds["from"][:4])) or (bounds["to"] and actual > int(bounds["to"][:4])):
+                    failures.append("outside_publication_range")
+            else:
+                actual = str(work.get("publication_date") or "")[:10]
+                try:
+                    actual = date.fromisoformat(actual).isoformat()
+                except ValueError:
+                    unknown.append("exact_publication_date_missing")
+                else:
+                    if (bounds["from"] and actual < bounds["from"]) or (bounds["to"] and actual > bounds["to"]):
+                        failures.append("outside_publication_range")
+        if "year" in constraints:
+            if work.get("publication_year") is None:
+                unknown.append("publication_year_missing")
+            elif work["publication_year"] != constraints["year"]:
+                failures.append("outside_requested_year")
+        if "venue" in constraints:
+            actual = work.get("venue")
+            expected = _dblp_stream(constraints["venue"]) if provider == "dblp" else constraints["venue"]
+            if not actual:
+                unknown.append("venue_missing")
+            elif actual.casefold().strip() != expected.casefold().strip():
+                failures.append("venue_mismatch")
+        if "document_types" in constraints:
+            actual = {_document_type(value) for value in work.get("document_types", []) if isinstance(value, str)}
+            if not actual:
+                unknown.append("document_type_missing")
+            elif not actual.intersection(constraints["document_types"]):
+                failures.append("document_type_mismatch")
+        if "identity" in constraints:
+            identity = constraints["identity"]
+            kind, expected = identity.split(":", 1)
+            if kind.casefold() == "doi":
+                actual = _doi(work.get("doi"))
+                matches = actual == _doi(expected)
+            else:
+                actual = work.get("arxiv_id")
+                matches = re.sub(r"v\d+$", "", str(actual or "").casefold()) == re.sub(r"v\d+$", "", expected.casefold())
+            if not actual:
+                unknown.append("identity_missing")
+            elif not matches:
+                failures.append("identity_mismatch")
+        if failures:
+            rejected.append({"work": work, "reasons": failures, "unknown_conditions": unknown})
+        elif unknown:
+            unresolved.append({"work": work, "reasons": unknown})
+        else:
+            accepted.append(work)
+    audit = {**parsed, "server_requested": sorted(set(constraints) & native),
+             "postfilter_checked": sorted(set(constraints) - {"offset"}),
+             "postfilter_only": sorted(set(constraints) - native),
+             "returned_before_filters": len(works), "accepted_count": len(accepted),
+             "rejected": rejected, "unresolved": unresolved,
+             "coverage": "bounded_result_window_not_complete_corpus", "provider_filter_compliance_verified": False}
+    if provider in {"semantic-scholar", "dblp"} and "publication_date" in constraints:
+        audit["server_date_precision"] = "year; exact dates checked only in returned metadata"
+    return accepted, audit
+
+
 def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
     works: list[dict[str, Any] | None] = []
     if provider == "arxiv":
@@ -468,13 +721,16 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
             works.append(
                 normalized_work(
                     provider,
-                    identifier.rsplit("/", 1)[-1] if identifier else None,
+                    identifier.split("/abs/", 1)[-1] if identifier else None,
                     entry.findtext("a:title", default="", namespaces=ns),
                     entry.findtext("a:published", default="", namespaces=ns),
                     doi,
                     identifier,
                     authors,
                     abstract=entry.findtext("a:summary", default="", namespaces=ns),
+                    arxiv_id=identifier.split("/abs/", 1)[-1] if identifier else None,
+                    publication_date=entry.findtext("a:published", default="", namespaces=ns),
+                    document_types=["preprint"],
                 )
             )
     else:
@@ -490,6 +746,9 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     item.get("doi"), item.get("doi") or item.get("id"),
                     [value.get("author", {}) for value in item.get("authorships", []) if isinstance(value, dict)],
                     venue=source.get("display_name"),
+                    abstract=_openalex_abstract(item.get("abstract_inverted_index")),
+                    citation_count=item.get("cited_by_count"), publication_date=item.get("publication_date"),
+                    document_types=[item["type"]] if item.get("type") else [],
                 ))
         elif provider == "crossref":
             message = data.get("message", {}) if isinstance(data, dict) else {}
@@ -501,11 +760,14 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                 issued = item.get("issued", {}).get("date-parts", [[None]]) if isinstance(item.get("issued"), dict) else [[None]]
                 works.append(normalized_work(
                     provider, item.get("DOI"), title[0] if isinstance(title, list) and title else title,
-                    issued[0][0] if issued and issued[0] else None, item.get("DOI"), item.get("URL"),
+                    issued[0][0] if issued and issued[0] else _crossref_date(item), item.get("DOI"), item.get("URL"),
                     item.get("author", []), venue=container[0] if isinstance(container, list) and container else container,
+                    abstract=item.get("abstract"), citation_count=item.get("is-referenced-by-count"),
+                    publication_date=_crossref_date(item), document_types=[item["type"]] if item.get("type") else [],
                 ))
         elif provider == "semantic-scholar":
-            for item in data.get("data", []) if isinstance(data, dict) else []:
+            entries = ([data] if isinstance(data, dict) and data.get("paperId") else data.get("data", []) if isinstance(data, dict) else [])
+            for item in entries:
                 if not isinstance(item, dict):
                     continue
                 external = item.get("externalIds") if isinstance(item.get("externalIds"), dict) else {}
@@ -513,6 +775,8 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     provider, item.get("paperId"), item.get("title"), item.get("year") or item.get("publicationDate"),
                     external.get("DOI"), item.get("url"), item.get("authors", []),
                     abstract=item.get("abstract"), venue=item.get("venue"),
+                    arxiv_id=external.get("ArXiv"), citation_count=item.get("citationCount"),
+                    publication_date=item.get("publicationDate"), document_types=item.get("publicationTypes"),
                 ))
         elif provider == "europe-pmc":
             result_list = data.get("resultList", {}) if isinstance(data, dict) else {}
@@ -525,6 +789,8 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     item.get("doi"), f"https://europepmc.org/article/{item.get('source', 'MED')}/{item.get('id')}" if item.get("id") else None,
                     [part.strip() for part in str(author_text or "").split(",") if part.strip()],
                     venue=item.get("journalTitle"),
+                    publication_date=item.get("firstPublicationDate"),
+                    document_types=[item["pubType"]] if item.get("pubType") else [],
                 ))
         elif provider == "dblp":
             results = data.get("results", {}) if isinstance(data, dict) else {}
@@ -545,7 +811,9 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                         values.get("year"),
                         values.get("doi"),
                         values.get("publ"),
-                        [],
+                        (values.get("authorNames") or "").split("|") if values.get("authorNames") else [],
+                        venue=values.get("venue"),
+                        document_types=[_document_type(values["documentType"].rsplit("#", 1)[-1])] if values.get("documentType") else [],
                     )
                 )
         elif provider == "hal":
@@ -558,6 +826,7 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     provider, item.get("halId_s"), title[0] if isinstance(title, list) and title else title,
                     item.get("producedDateY_i"), item.get("doiId_s"), item.get("uri_s"),
                     item.get("authFullName_s", []), abstract=item.get("abstract_s"), venue=item.get("journalTitle_s"),
+                    publication_date=item.get("producedDate_s"), document_types=[item["docType_s"]] if item.get("docType_s") else [],
                 ))
         elif provider == "serpapi-google-scholar":
             if isinstance(data, dict) and data.get("error"):
@@ -741,7 +1010,8 @@ def _search_record(
         "query": receipt["query"],
         "searched_at": receipt["completed_at"],
         "date_range": date_range,
-        "filters": filters,
+        "filters": (_declared({"declared": filters, "execution": receipt["actual_conditions"]})
+                    if "actual_conditions" in receipt else filters),
         "result_count": receipt["result_count"],
         "included_work_ids": [],
         "exclusion_reasons": ["Pending named human screening of the hash-bound result set."],
@@ -759,20 +1029,29 @@ def execute_search(
     query: str,
     *,
     query_family: str,
-    date_range: str,
-    filters: str,
+    date_range: str | dict,
+    filters: str | dict,
     limit: int,
     fetcher: Callable[..., tuple[bytes, str, int | None, str | None]] = fetch_bytes,
+    request_context: dict | None = None,
 ) -> dict[str, Any]:
     if provider not in PROVIDERS:
         raise LiteratureEvidenceError(f"unsupported provider: {provider}")
-    if not query.strip() or not query_family.strip() or not date_range.strip() or not filters.strip():
+    if (not isinstance(query, str) or not query.strip() or not isinstance(query_family, str) or not query_family.strip()
+            or not isinstance(date_range, (str, dict)) or not isinstance(filters, (str, dict))
+            or not _declared(date_range) or not _declared(filters)):
         raise LiteratureEvidenceError("query, query-family, date-range and filters are required")
     if not 1 <= limit <= MAX_RESULTS:
         raise LiteratureEvidenceError(f"limit must be between 1 and {MAX_RESULTS}")
+    if request_context is not None and (not isinstance(request_context, dict)
+            or set(request_context) != {"plan_sha256", "operation"}
+            or not HEX64_RE.fullmatch(str(request_context.get("plan_sha256", "")))
+            or request_context.get("operation") != "literature_intelligence"):
+        raise LiteratureEvidenceError("invalid discovery request context")
     receipt_id = _receipt_id(provider)
     requested_at = utc_now()
-    request_url = build_search_url(provider, query.strip(), limit)
+    parsed = parse_conditions(date_range, filters)
+    request_url = build_search_url(provider, query.strip(), limit, date_range=date_range, filters=filters)
     raw_path, normalized_path = _artifact_paths(
         project, receipt_id, "xml" if provider == "arxiv" else "json"
     )
@@ -785,7 +1064,8 @@ def execute_search(
             fetcher, request_url, provider
         )
         raw_path.write_bytes(payload)
-        normalized = normalize_search(provider, payload)
+        returned = normalize_search(provider, payload)
+        normalized, conditions = filter_results(provider, returned, parsed)
     except Exception as exc:
         failed = {
             "schema_version": "1.0",
@@ -795,6 +1075,10 @@ def execute_search(
             "provider_name": DISPLAY_NAMES[provider],
             "query": query.strip(),
             "request_url": request_url,
+            "declared_date_range": date_range,
+            "declared_filters": filters,
+            "parsed_conditions": parsed,
+            "request_context": request_context,
             "requested_at": requested_at,
             "completed_at": utc_now(),
             "status": "failed",
@@ -813,7 +1097,7 @@ def execute_search(
         append_jsonl(project / "evidence" / "literature-api-ledger.jsonl", failed)
         raise LiteratureEvidenceError(f"{DISPLAY_NAMES[provider]} search failed: {exc}") from exc
     assert payload is not None and final_url is not None
-    normalized_payload = canonical_json_bytes({"schema_version": "1.0", "works": normalized})
+    normalized_payload = canonical_json_bytes({"schema_version": "1.0", "works": normalized, "filter_audit": conditions})
     normalized_path.write_bytes(normalized_payload + b"\n")
     receipt = {
         "schema_version": "1.0",
@@ -830,6 +1114,12 @@ def execute_search(
         "http_status": status,
         "content_type": content_type,
         "result_count": len(normalized),
+        "declared_date_range": date_range,
+        "declared_filters": filters,
+        "request_context": request_context,
+        "actual_conditions": {key: value for key, value in conditions.items() if key not in {"rejected", "unresolved"}},
+        "filtered_out_count": len(conditions["rejected"]),
+        "unresolved_filter_count": len(conditions["unresolved"]),
         "response_sha256": sha256_bytes(payload),
         "normalized_results_sha256": sha256_bytes(normalized_payload + b"\n"),
         "raw_response_path": raw_path.relative_to(project).as_posix(),
@@ -838,7 +1128,7 @@ def execute_search(
     append_jsonl(project / "evidence" / "literature-api-ledger.jsonl", receipt)
     append_jsonl(
         project / "evidence" / "search-log.jsonl",
-        _search_record(receipt, query_family.strip(), date_range.strip(), filters.strip()),
+        _search_record(receipt, query_family.strip(), _declared(date_range), _declared(filters)),
     )
     return receipt
 
@@ -1006,6 +1296,11 @@ def validate_search_evidence(project: Path, records: list[dict[str, Any]]) -> li
             errors.append(f"{prefix}.query differs from the executed query")
         if record.get("result_count") != receipt.get("result_count"):
             errors.append(f"{prefix}.result_count differs from the receipt")
+        if "actual_conditions" in receipt:
+            expected_filters = _declared({"declared": _declared(receipt.get("declared_filters")),
+                                         "execution": receipt["actual_conditions"]})
+            if record.get("filters") != expected_filters or record.get("date_range") != _declared(receipt.get("declared_date_range")):
+                errors.append(f"{prefix} declared/applied search conditions differ from the receipt")
         for field in ("response_sha256", "normalized_results_sha256"):
             if record.get(field) != receipt.get(field) or not HEX64_RE.fullmatch(str(record.get(field, ""))):
                 errors.append(f"{prefix}.{field} differs from the receipt")

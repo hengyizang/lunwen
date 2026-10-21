@@ -46,6 +46,7 @@ jobs:
           python -m pip install --disable-pip-version-check torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install --disable-pip-version-check transformers==4.57.1 tokenizers==0.22.1
       - name: Re-check confirmation, configuration, human gates and remaining budget
+        # Declared operations load PDF tools only when a cycle actually executes.
         id: execute
         env:
           GH_TOKEN: ${{ github.token }}

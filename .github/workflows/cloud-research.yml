@@ -40,8 +40,14 @@ jobs:
         if: steps.job.outputs.action == 'acceptance' || steps.job.outputs.action == 'tooluniverse'
         run: python -m pip install --disable-pip-version-check '.[ai4science,reference-tools]'
       - name: Install source reading for bounded native question answering
-        if: steps.job.outputs.action == 'paperqa'
-        run: python -m pip install --disable-pip-version-check '.[reader]'
+        if: contains(fromJSON('["paperqa","literature","cycle","continuation"]'), steps.job.outputs.action)
+        run: |
+          python -m pip install --disable-pip-version-check '.[reader]' 'Pillow>=10,<13'
+          if ! command -v pdftoppm >/dev/null; then sudo apt-get update -qq && sudo apt-get install -y poppler-utils; fi
+      - name: Install the reviewed project literature skills
+        env:
+          DR_OS_CLOUD_EXECUTOR: '1'
+        run: python -m scripts.literaturectl install
       - name: Install declared validation tools for human review controls
         if: contains(fromJSON('["review_dossier","ready","approve","advance","reopen","freeze_preregistration","confirm_data_quality","confirm_reproduction","screen_literature","confirm_source_scope","confirm_review_packet","confirm_research_increment","start_revision","confirm_study_validation","approve_supplemental","confirm_supplemental","retire_supplemental"]'), steps.job.outputs.action)
         run: python -m pip install --disable-pip-version-check '.[figures,reader,research-quality,reference-tools]'

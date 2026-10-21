@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper and Web Analysis"
+  short_description: "Analyze arXiv, public PDFs, blogs, and research pages"
+  default_prompt: "Use $paper-analyze to identify and deeply analyze this arXiv item, public PDF, research page, or blog in Obsidian."

@@ -305,6 +305,11 @@ def main() -> int:
     except ImportError:
         from research_methods import installation_errors
     errors.extend(installation_errors(ROOT))
+    try:
+        from scripts.literaturectl import installation_errors as literature_installation_errors
+        errors.extend(literature_installation_errors(ROOT))
+    except ImportError as exc:
+        errors.append(f"literature integration unavailable: {exc}")
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)
     if isinstance(plugin, dict) and plugin.get("name") != "doctoral-research-os":
