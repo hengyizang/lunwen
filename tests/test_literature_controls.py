@@ -16,7 +16,7 @@ from unittest.mock import patch
 
 from scripts import ai_providers, literaturectl as control, literature_workbench as workbench
 from scripts import model_runtime, output_provenance, paper_reader
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import read, record, sha, write
 
 
 class LiteratureControlTests(unittest.TestCase):
@@ -323,6 +323,27 @@ class LiteratureControlTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "explicit boolean"):
                 control.execute_operation(self.project, {"action": "literature_analyze", "paper_id": "W1", "execute": "true"})
         analyze.assert_not_called()
+
+    def test_figure_operation_preserves_verified_receipt_binding_and_selection(self):
+        self.authorized_pdf()
+        relative = "evidence/literature/assets/source.json"
+        source = self.project / relative
+        write(source, {"source_url": "https://example.org/source", "pdfs": [self.paper["source"]]})
+        record(self.project, [source], "scripts/literature_assets.py")
+        binding = {"path": relative, "sha256": sha(source)}
+        with patch("scripts.literature_assets.extract", return_value={"status": "fixture"}) as extract:
+            control.execute_operation(self.project, {"action": "literature_figures", "pdf": self.paper["source"]["path"],
+                "manifest": self.paper["manifest"], "source_receipt": binding, "question": "controlled method", "max_selected": 2})
+        self.assertEqual(extract.call_args.kwargs["source"]["manifest_path"], binding["path"])
+        self.assertEqual(extract.call_args.kwargs["source"]["manifest_sha256"], binding["sha256"])
+        self.assertEqual(extract.call_args.kwargs["question"], "controlled method")
+        self.assertEqual(extract.call_args.kwargs["max_selected"], 2)
+
+    def test_feedback_adoption_is_not_available_to_model_operation_queue(self):
+        with patch("scripts.literature_feedback.review") as review:
+            with self.assertRaisesRegex(ValueError, "authenticated repository-owner"):
+                control.execute_operation(self.project, {"action": "literature_feedback_review"})
+        review.assert_not_called()
 
     def test_invalid_workbench_identity_and_stale_input_fail_before_paid_request(self):
         with patch.object(model_runtime, "call") as call:

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Explicit source-bound reading outcome submitted to literature_feedback.record_feedback",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "candidate_id", "candidate_sha256", "sources_sha256", "recorded_by", "recorded_at", "reason", "outcomes"],
+  "properties": {
+    "event_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "candidate_sha256": {"$ref": "#/$defs/sha256"},
+    "sources_sha256": {"$ref": "#/$defs/sha256"},
+    "recorded_by": {"type": "string", "minLength": 1, "maxLength": 200},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "reason": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "outcomes": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relevance", "duplicates", "source_accessibility", "evidence_sufficiency", "experiment_utility"],
+      "properties": {
+        "relevance": {"enum": ["relevant", "partly_relevant", "irrelevant", "unknown"]},
+        "duplicates": {"enum": ["distinct", "duplicate", "version", "unknown"]},
+        "source_accessibility": {"enum": ["accessible", "blocked", "missing", "unknown"]},
+        "evidence_sufficiency": {"enum": ["sufficient", "partial", "insufficient", "unknown"]},
+        "experiment_utility": {"enum": ["used", "promising", "not_useful", "not_evaluated"]}
+      }
+    },
+    "evidence": {"type": "array", "maxItems": 30, "items": {"$ref": "#/$defs/anchor"}},
+    "suggested_keywords": {"type": "array", "maxItems": 40, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
+    "paper_ids": {"type": "array", "uniqueItems": true, "items": {"enum": ["P01", "P02", "P03", "P04", "P05", "P06"]}},
+    "related_candidate_id": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "anchor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "locator", "start_line", "end_line", "quote"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "locator": {"type": "string", "minLength": 1},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1},
+        "quote": {"type": "string", "minLength": 1, "maxLength": 20000}
+      }
+    }
+  }
+}

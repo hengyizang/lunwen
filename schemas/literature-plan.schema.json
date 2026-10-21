@@ -119,6 +119,15 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 20
+          },
+          "transport": {"enum": ["search", "sparql"]},
+          "fallback": {
+            "description": "Optional separate bounded alternate source when DBLP is unavailable. Venue is an exact container label checked against every accepted record. It never establishes complete DBLP enumeration.",
+            "oneOf": [
+              {"const": false},
+              {"type": "object", "additionalProperties": false, "required": ["provider", "venue"],
+               "properties": {"provider": {"enum": ["crossref", "openalex"]}, "venue": {"type": "string", "minLength": 1, "maxLength": 300}}}
+            ]
           }
         }
       }
@@ -132,10 +141,14 @@
     },
     "ranking_weights": {
       "type": "object",
-      "additionalProperties": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 10
+      "description": "Discovery priorities only. Reviewed feedback proposals may adjust these without deciding scientific inclusion or novelty.",
+      "additionalProperties": false,
+      "properties": {
+        "topic_relevance": {"type": "number", "exclusiveMinimum": 0, "maximum": 10},
+        "recency": {"type": "number", "minimum": 0, "maximum": 10},
+        "citation_visibility": {"type": "number", "minimum": 0, "maximum": 10},
+        "abstract_rhetoric": {"type": "number", "minimum": 0, "maximum": 10},
+        "interest_feedback": {"type": "number", "minimum": 0, "maximum": 10}
       }
     },
     "feedback": {
@@ -149,7 +162,15 @@
           "reason",
           "recorded_by",
           "recorded_at"
-        ]
+        ],
+        "description": "Legacy explicit reading-interest preferences. Multi-dimensional observed feedback belongs to immutable reports/literature-feedback events and requires a reviewed proposal for adoption.",
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1},
+          "interest": {"enum": ["interested", "not_interested", "neutral"]},
+          "reason": {"type": "string", "minLength": 1},
+          "recorded_by": {"type": "string", "minLength": 1},
+          "recorded_at": {"type": "string", "format": "date-time"}
+        }
       }
     }
   }

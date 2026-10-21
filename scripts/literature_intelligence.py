@@ -35,6 +35,34 @@ RHETORIC = {
     "reported_novelty_or_performance": ("state-of-the-art", "state of the art", "SOTA", "first", "novel",
         "outperform", "outperforms", "outperformed", "surpass", "surpasses", "accuracy", "ablation", "ablations"),
 }
+# Exact source-container labels only. ICML's generic PMLR container is not
+# sufficient to establish conference membership and is deliberately unmapped.
+CONFERENCE_FALLBACK_VENUES = {
+    "https://dblp.org/streams/conf/aaai": "Proceedings of the AAAI Conference on Artificial Intelligence",
+    "https://dblp.org/streams/conf/cvpr": "{year} IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+    "https://dblp.org/streams/conf/iccv": "{year} IEEE/CVF International Conference on Computer Vision (ICCV)",
+}
+
+
+def conference_fallback(conference: dict, venue: str, year: int) -> dict | None:
+    """A separate bounded source query, never a DBLP success or full corpus."""
+    supplied = conference.get("fallback")
+    if supplied is False:
+        return None
+    if supplied is None:
+        label = CONFERENCE_FALLBACK_VENUES.get(venue)
+        if label is None:
+            return None
+        provider, label = "crossref", label.format(year=year)
+    else:
+        if (not isinstance(supplied, dict) or set(supplied) != {"provider", "venue"}
+                or supplied.get("provider") not in {"crossref", "openalex"}
+                or not isinstance(supplied.get("venue"), str) or not 1 <= len(supplied["venue"].strip()) <= 300):
+            raise ValueError("conference fallback needs Crossref/OpenAlex and an explicit exact source venue label")
+        provider, label = supplied["provider"], supplied["venue"].strip()
+    return {"provider": provider, "query": label, "query_family": "conference-fallback-not-dblp",
+            "date_range": str(year), "filters": {"venue": label, "year": year},
+            "limit": conference.get("limit", 100)}
 
 
 def _normal(value) -> str:
@@ -293,7 +321,7 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
     prior_requests = sum(row.get("request_context", {}).get("plan_sha256") == plan_hash
                          for row in ledger if isinstance(row.get("request_context"), dict))
     now = datetime.fromisoformat(evidence.utc_now().replace("Z", "+00:00"))
-    calls, source_receipts, works, errors, enrichment = 0, {}, [], [], []
+    calls, source_receipts, works, errors, enrichment, conference_sources = 0, {}, [], [], [], []
 
     def consume(receipt):
         rows, reference = _receipt_works(project, receipt)
@@ -371,10 +399,31 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
             enrich_limit = conference.get("enrich_limit", 5)
             if type(year) is not int or not 1000 <= year <= 9999 or type(enrich_limit) is not int or not 0 <= enrich_limit <= 20:
                 raise ValueError("conference needs an explicit year and enrich_limit 0..20")
-            records = search({"provider": "dblp", "query": "*", "query_family": "conference-enumeration",
-                "date_range": str(year), "filters": {"venue": venue, "year": year, "offset": conference.get("offset", 0),
-                    "transport": conference.get("transport", "search")},
-                "limit": conference.get("limit", 100)})
+            fallback = conference_fallback(conference, venue, year)
+            try:
+                records = search({"provider": "dblp", "query": "*", "query_family": "conference-enumeration",
+                    "date_range": str(year), "filters": {"venue": venue, "year": year, "offset": conference.get("offset", 0),
+                        "transport": conference.get("transport", "search")},
+                    "limit": conference.get("limit", 100)})
+                conference_sources.append({"index": index, "venue": venue, "year": year, "provider": "dblp",
+                    "status": "bounded_primary_window", "accepted_count": len(records), "complete_enumeration": False})
+            except (ValueError, OSError, evidence.LiteratureEvidenceError) as exc:
+                errors.append({"kind": "conference_primary", "index": index, "provider": "dblp", "error": str(exc)})
+                records = []
+                detail = {"index": index, "venue": venue, "year": year, "primary_provider": "dblp",
+                          "primary_status": "unavailable", "database_not_dblp": True, "complete_enumeration": False}
+                if fallback is None:
+                    detail.update(status="pending_explicit_alternative_source", accepted_count=0)
+                else:
+                    detail.update(provider=fallback["provider"], exact_source_venue=fallback["filters"]["venue"])
+                    try:
+                        records = search(fallback)
+                        detail.update(status="bounded_alternative_window", accepted_count=len(records))
+                    except (ValueError, OSError, evidence.LiteratureEvidenceError) as fallback_error:
+                        detail.update(status="alternative_unavailable", accepted_count=0)
+                        errors.append({"kind": "conference_fallback", "index": index, "provider": fallback["provider"],
+                                       "error": str(fallback_error)})
+                conference_sources.append(detail)
             works.extend(records)
             for work in records[:enrich_limit]:
                 identity = "DOI:" + _doi(work) if _doi(work) else None
@@ -436,6 +485,7 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
         "recommendation_delta": delta,
         "reading_recommendations": [row["canonical_id"] for row in ranked if row["reading_candidate"]][:10],
         "candidates": ranked, "topic_leads": leads, "enrichment": enrichment, "errors": errors,
+        "conference_sources": conference_sources,
         "status": "partial_requires_review" if errors else "discovery_requires_G1_review",
         "coverage_complete": False, "automatic_inclusion_exclusion": False, "novelty_verified": False,
         "scope_alignment_verified": False,

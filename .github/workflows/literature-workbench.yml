@@ -35,7 +35,7 @@ jobs:
   literature-workbench:
     name: Literature installation, acquisition and reading
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       DR_OS_CLOUD_EXECUTOR: '1'
     steps:
@@ -63,6 +63,10 @@ jobs:
           python -m unittest discover -s tests -p 'test_literature*.py' -v
       - name: Demonstrate linked reading and probe public metadata without provider keys
         run: python -m scripts.literature_acceptance --directory artifacts/literature-workbench --live
+      - name: Verify the actual browser search and source links
+        run: python -m scripts.literature_browser_acceptance --directory artifacts/literature-workbench
+      - name: Verify a real openly licensed paper, original figure and source example
+        run: python -m scripts.literature_real_acceptance --directory artifacts/literature-workbench/real-paper
       - name: Preserve exact scoped software evidence and linked preview
         if: always()
         uses: actions/upload-artifact@v7

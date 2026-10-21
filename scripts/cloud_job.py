@@ -57,14 +57,19 @@ EXTRA = {
 LITERATURE_OPERATIONS = {
     "literature_discover": ({"plan", "output"}, set()),
     "literature_resolve": ({"url"}, {"url"}),
-    "literature_figures": ({"pdf", "manifest", "figures", "source_receipt"}, {"pdf", "manifest"}),
+    "literature_figures": ({"pdf", "manifest", "figures", "source_receipt", "question", "max_selected", "auto_discover"}, {"pdf", "manifest"}),
     "literature_register": ({"candidate_id", "expected_leads_sha256", "paper_id", "acquisition_receipt", "manifest", "reader", "config"},
                             {"candidate_id", "expected_leads_sha256"}),
     "literature_analyze": ({"paper_id", "config", "execute", "max_output_tokens"}, {"paper_id"}),
     "literature_workbench": ({"config"}, set()),
     "literature_search": ({"query", "paper_id", "topic_id", "limit"}, {"query"}),
-    "literature_itinerary": ({"question", "paper_id", "topic_id", "limit"}, {"question"}),
-    "literature_compare": ({"paper_ids", "question"}, {"paper_ids"}),
+    "literature_itinerary": ({"question", "paper_id", "topic_id", "limit", "reasoning", "progress"}, {"question"}),
+    "literature_compare": ({"paper_ids", "question", "reasoning"}, {"paper_ids"}),
+    "literature_progress": ({"request", "progress"}, {"request"}),
+    "literature_feedback": ({"feedback", "expected_leads_sha256", "plan"}, {"feedback", "expected_leads_sha256"}),
+    "literature_feedback_propose": ({"event_ids", "expected_plan_sha256", "proposal", "plan"}, {"event_ids", "expected_plan_sha256"}),
+    "literature_feedback_review": ({"proposal_id", "expected_proposal_sha256", "expected_plan_sha256", "decision", "reviewed_by", "reason", "plan"},
+                                  {"proposal_id", "expected_proposal_sha256", "expected_plan_sha256", "decision", "reviewed_by", "reason"}),
 }
 
 
@@ -439,7 +444,19 @@ def run_job(job: dict, run_id: str) -> int:
                 operation, binding = literature_operation(project, job["request_file"])
                 phase = "execution"
                 execution_started = True
-                result = literaturectl.execute_operation(project, operation)
+                if operation["action"] == "literature_feedback_review":
+                    # Reauthenticate the owner event at the mutation boundary.
+                    # A model-authored operation cannot supply this authority.
+                    event_path = os.environ.get("GITHUB_EVENT_PATH")
+                    event = json.loads(Path(event_path).read_text(encoding="utf-8")) if event_path else {}
+                    if issue_request(event) != job:
+                        raise CloudJobError("feedback adoption requires the matching authenticated owner issue")
+                    issue = event["issue"]
+                    proof = {"actor": issue["user"]["login"], "source_issue_id": issue["number"],
+                             "request_sha256": binding["sha256"]}
+                    result = literaturectl.execute_operation(project, operation, owner_authorization=proof)
+                else:
+                    result = literaturectl.execute_operation(project, operation)
                 (ARTIFACT / "literature-result.json").write_text(json.dumps({"request": binding,
                     "operation": operation, "result": result, "paid_model_calls": 0,
                     "gate_approved": False}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -17,8 +17,7 @@ from scripts.research_artifacts import path_in, read, record, sha, write
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ("start-my-day", "paper-analyze", "extract-paper-images", "paper-search", "conf-papers")
-FIELDS = ("research_question", "contributions", "methods", "baseline", "splits", "metrics",
-          "ablations", "findings", "limitations", "counterevidence")
+from scripts.literature_workbench import FIELDS
 
 
 def require_cloud() -> None:
@@ -333,7 +332,7 @@ def analyze(project: Path, paper_id: str, *, config_path="program/literature-wor
     return request
 
 
-def execute_operation(project: Path, operation: dict) -> dict:
+def execute_operation(project: Path, operation: dict, *, owner_authorization=None) -> dict:
     require_cloud()
     action = operation["action"]
     if action == "literature_discover":
@@ -364,11 +363,33 @@ def execute_operation(project: Path, operation: dict) -> dict:
             from scripts.output_provenance import current_origin
             if current_origin(project, receipt_path).get("status") != "tracked":
                 raise ValueError("Figure acquisition provenance is missing")
-            source = read(receipt_path)
+            source = {**read(receipt_path), "manifest_path": binding["path"], "manifest_sha256": binding["sha256"]}
             if not any(p.get("path") == operation["pdf"] and p.get("sha256") == sha(path_in(project, operation["pdf"]))
                        for p in source.get("pdfs", [])):
                 raise ValueError("Acquisition receipt does not bind the selected PDF")
-        return extract(project, operation["pdf"], figures=operation.get("figures"), source=source)
+        return extract(project, operation["pdf"], figures=operation.get("figures"), source=source,
+            question=operation.get("question", ""), max_selected=operation.get("max_selected", 12),
+            auto_discover=operation.get("auto_discover", True))
+    if action == "literature_progress":
+        from scripts.literature_reasoning import record_progress
+        return record_progress(project, operation["request"], progress_path=operation.get("progress"))
+    if action in {"literature_feedback", "literature_feedback_propose", "literature_feedback_review"}:
+        from scripts import literature_feedback as feedback
+        if action == "literature_feedback":
+            return feedback.record_feedback(project, operation["feedback"],
+                expected_leads_sha256=operation["expected_leads_sha256"],
+                plan_path=operation.get("plan", "program/literature-plan.json"))
+        if action == "literature_feedback_propose":
+            return feedback.propose(project, event_ids=operation["event_ids"],
+                expected_plan_sha256=operation["expected_plan_sha256"], proposal=operation.get("proposal"),
+                plan_path=operation.get("plan", "program/literature-plan.json"))
+        if not owner_authorization:
+            raise ValueError("Feedback adoption requires an authenticated repository-owner cloud issue")
+        return feedback.review(project, operation["proposal_id"],
+            expected_proposal_sha256=operation["expected_proposal_sha256"],
+            expected_plan_sha256=operation["expected_plan_sha256"], decision=operation["decision"],
+            reviewed_by=operation["reviewed_by"], reason=operation["reason"], authorization="human",
+            owner_authorization=owner_authorization, plan_path=operation.get("plan", "program/literature-plan.json"))
     if action == "literature_analyze":
         if type(operation.get("execute", False)) is not bool:
             raise ValueError("Analysis execute must be an explicit boolean")
@@ -383,17 +404,18 @@ def execute_operation(project: Path, operation: dict) -> dict:
                                 topic_id=operation.get("topic_id"), limit=operation.get("limit", 10))
     if action == "literature_itinerary":
         return workbench.itinerary(project, operation["question"], paper_id=operation.get("paper_id"),
-                                   topic_id=operation.get("topic_id"), limit=operation.get("limit", 8))
+                                   topic_id=operation.get("topic_id"), limit=operation.get("limit", 8),
+                                   reasoning_path=operation.get("reasoning"), progress_path=operation.get("progress"))
     if action == "literature_compare":
         return workbench.comparison_packet(project, operation["paper_ids"],
-                                          question=operation.get("question", ""))
+                                          question=operation.get("question", ""), reasoning_path=operation.get("reasoning"))
     raise ValueError("Unknown controlled literature operation")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("install", "verify", "discover", "resolve", "figures",
-        "build", "search", "itinerary", "compare", "analyze", "register"))
+        "build", "search", "itinerary", "compare", "analyze", "register", "request"))
     parser.add_argument("--project")
     parser.add_argument("--plan", default="program/literature-plan.json")
     parser.add_argument("--config")
@@ -409,6 +431,10 @@ def main() -> int:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--candidate-id")
     parser.add_argument("--expected-leads-sha256")
+    parser.add_argument("--request-file")
+    parser.add_argument("--reasoning")
+    parser.add_argument("--progress")
+    parser.add_argument("--max-selected", type=int)
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
     require_cloud()
@@ -418,12 +444,17 @@ def main() -> int:
         return 1 if result.get("errors") else 0
     if not args.project or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", args.project):
         parser.error("An explicit project slug is required")
+    if args.action == "request":
+        from scripts.cloud_job import literature_operation
+        operation, _ = literature_operation(ROOT / "projects" / args.project, args.request_file or "")
+        print(json.dumps(execute_operation(ROOT / "projects" / args.project, operation), ensure_ascii=False, indent=2))
+        return 0
     names = {"build": "workbench", "discover": "discover", "search": "search", "itinerary": "itinerary",
              "compare": "compare", "resolve": "resolve", "figures": "figures", "analyze": "analyze", "register": "register"}
     operation = {"action": "literature_" + names[args.action], "plan": args.plan, "output": args.output,
                  "execute": args.execute}
     for key in ("config", "query", "question", "url", "pdf", "manifest", "paper_id", "paper_ids",
-                "topic_id", "limit", "candidate_id", "expected_leads_sha256"):
+                "topic_id", "limit", "candidate_id", "expected_leads_sha256", "reasoning", "progress", "max_selected"):
         if getattr(args, key) is not None:
             operation[key] = getattr(args, key)
     result = execute_operation(ROOT / "projects" / args.project, operation)

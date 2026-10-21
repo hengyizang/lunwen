@@ -206,7 +206,13 @@ class WorkbenchTests(WorkbenchFixture):
         self.card(a)
         self.build()
         page = (self.project / workbench.OUTPUT / "index.html").read_text(encoding="utf-8")
-        self.assertNotIn("<script>", page)
+        # The only executable script is the pinned, CSP-hashed search viewer;
+        # source text must not create a second script or active image element.
+        import re
+        from scripts import literature_browser
+        scripts = re.findall(r"<script>(.*?)</script>", page, re.S)
+        self.assertEqual(scripts, [literature_browser.SCRIPT])
+        self.assertIn("script-src 'sha256-" + literature_browser.script_hash(), page)
         self.assertNotIn('<img src=x', page)
         self.assertIn(html.escape(dangerous, quote=True), page)
         self.assertIn("../../evidence/sources/a%20note%27s%20%26%20source.txt", page)
@@ -237,7 +243,7 @@ class WorkbenchTests(WorkbenchFixture):
         card = {"schema_version": "1.0", "paper_id": "a", "full_text_review_scope": "provided_full_text",
                 "fields": {name: [] for name in workbench.FIELDS}}
         checked = workbench.validate_card(self.project, a, card)
-        self.assertEqual(len(checked["unknown_fields"]), 10)
+        self.assertEqual(len(checked["unknown_fields"]), len(workbench.FIELDS))
         self.assertEqual(checked["full_text_review_scope"], "provided_full_text")
         self.assertEqual(checked["status"], "pending_analysis")
         self.assertFalse(checked["human_full_text_reading_verified"])

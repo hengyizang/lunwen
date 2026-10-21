@@ -184,6 +184,35 @@ just to obtain scientific approval.
 
 ## Outputs and persistence
 
+The [reasoning and reading-progress contract](LITERATURE-REASONING.md) extends
+the shared library into five linked reading phases per source, source-bound
+semantic objectives, adaptive answers, pairwise comparison conditions, nearest
+work, gap hypotheses and a 20-axis experiment dossier. The existing approved
+scientific writer supplies semantic decisions; deterministic code validates and
+organizes them. No additional paid role or automatic scientific decision is used.
+
+The generated HTML now has actual no-network search with topic, P01-P06 and
+material filters. Metadata-only discoveries have their own category. Matching
+examples, card experiment settings and captions link to actual source pages.
+Reading and comparison views survive unchanged builds; changed source, objective
+or progress inputs invalidate stale views. Downloaded folders must retain their
+relative hierarchy and authorized source files.
+
+Use `literaturectl request --project SLUG --request-file program/REQUEST.json`
+for one nonpaid operation. It accepts literature_progress, literature_feedback
+and literature_feedback_propose in addition to the existing actions. Feedback
+events conform to schemas/literature-feedback.schema.json. They cover relevance,
+duplicates, source accessibility, evidence sufficiency and actual experiment
+usefulness; exact source/claim/run evidence is checked. Proposals retain before,
+after, event IDs and affected scope. Owner-authenticated cloud requests alone
+may adopt/reject with current hashes; model operations and the CLI cannot
+self-approve an adoption. Adoption changes only additive topic keywords and
+bounded weights, never exclusions, doctoral scope, scientific gates or budgets.
+
+Conference discovery preserves DBLP failures and can use separately identified
+Crossref/OpenAlex fallback with exact venue/year checks. A fallback result is not
+DBLP coverage or complete conference enumeration. No access challenge is bypassed.
+
 - program/topic-leads.json and reports/literature-intelligence/: discovery
   receipts, ranking components, proposed questions, recommendation history.
 - evidence/literature/assets/ and figures/: acquisition/extraction manifests.
@@ -214,6 +243,11 @@ boundaries, budget control, persistence and model provenance.
 
 Validation uses adversarial source/hash/permission tests, real synthetic PDF
 raster/vector/crop extraction and a static workbench acceptance demonstration.
+It also executes search in actual headless Chromium and obtains the openly
+licensed JOSS seaborn paper to check Figure 1 on PDF page 2, the original
+sns.relplot example, source-linked search, extraction/read reuse and revoked
+rights blocking. This isolated software acceptance never supplies production
+owner approvals or demonstrates novelty or experimental correctness.
 Public metadata availability is checked separately and preserves failures.
 These checks establish engineering behavior, not novel research or model
 scientific equivalence. No paid provider credentials are used in the job.
