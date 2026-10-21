@@ -2645,7 +2645,7 @@
       "quote_sha256": "83c11119f5b1d8b95b0b31aed144e694c5ad41af44f25669976b74a4b3967c78",
       "reserved_ceiling_cny": 1.6048032,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
         "kind": "cheapai_quota_history",
@@ -2943,7 +2943,72 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "39572571264",
-      "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f"
+      "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f",
+      "reported_model": "gpt-6-astra",
+      "request_id": "resp_0593df483088cabe016ad87e1278208197857decedbfe3a24b",
+      "text": "{\"flaws_observed\":[\"participant_leakage\",\"global_preprocessing\",\"test_set_tuning\",\"seed_cherry_picking\",\"unequal_tuning_budget\"],\"repaired_split_unit\":\"participant\",\"repaired_preprocessing_fit\":\"training_only\",\"repaired_tuning_set\":\"validation\",\"repaired_seed_reporting\":\"all_predeclared\",\"repaired_tuning_budget_control\":\"matched\"}",
+      "usage": {
+        "input_tokens": 321,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 179,
+        "output_tokens_details": {
+          "reasoning_tokens": 97
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "openai_responses",
+      "response_sha256": "524646a7da2a65a8bc562692ea3c022b30ac65cf68afbf4dd58449f7add55f92",
+      "grade": {
+        "case_id": "experiment_design_v2",
+        "instrument_version": "2.0",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "all_observed_flaws",
+            "passed": true,
+            "weight": 40,
+            "critical": true
+          },
+          {
+            "id": "repaired_independent_split",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "repaired_preprocessing_scope",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "repaired_locked_test",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "repaired_seed_retention",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "repaired_fair_tuning_budget",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "clarified synthetic deterministic screening only"
+      },
+      "duration_seconds": 6.2373
     }
   ],
   "status": "running",
