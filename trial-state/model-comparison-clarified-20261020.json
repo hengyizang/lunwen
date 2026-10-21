@@ -4305,7 +4305,7 @@
       }
     }
   ],
-  "status": "running",
+  "status": "closed",
   "started_at": "2026-10-21T08:53:37.891816+00:00",
   "isolated_providers": [
     "codekey-gemini",
@@ -4318,5 +4318,6 @@
   "production_routing_changed": false,
   "scientific_equivalence_verified": false,
   "paid_model_judges": 0,
-  "generation_retries": 0
+  "generation_retries": 0,
+  "closed_at": "2026-10-21T08:56:37.122216+00:00"
 }
