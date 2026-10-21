@@ -723,6 +723,10 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
             target = _path(project, paper["output_card"], exists=False)
             write(target, paper["card"])
             targets.append(target)
+            note = _path(project, relative + "/notes/" + paper["id"] + ".md", exists=False)
+            note.parent.mkdir(parents=True, exist_ok=True)
+            note.write_text(_markdown_note(paper), encoding="utf-8")
+            targets.append(note)
     dashboard = _path(project, relative + "/index.html", exists=False)
     dashboard.write_text(_html(project, directory, library, graph), encoding="utf-8")
     targets.append(dashboard)
@@ -921,6 +925,26 @@ def _graph_svg(graph):
     return "\n".join(parts)
 
 
+def _markdown_note(paper):
+    def plain(value):
+        return html.escape(str(value), quote=True).replace("[", "\\[").replace("]", "\\]")
+    lines = ["# " + plain(paper["title"]), "",
+        "Source-bound reading note. Located evidence is not semantic verification.", "",
+        "Reading scope: " + plain(paper.get("read_scope", "pending")), "",
+        "Doctoral topic: " + plain(paper.get("topic_id") or "pending"), "",
+        "Paper mappings: " + plain(", ".join(paper.get("paper_ids", [])) or "pending"), ""]
+    for field in FIELDS:
+        lines += ["## " + field.replace("_", " "), ""]
+        rows = paper["card"]["fields"].get(field, [])
+        if not rows:
+            lines += ["Unknown / pending source review.", ""]
+        for row in rows:
+            lines += [plain(row["text"]), ""]
+            for anchor in row["evidence"]:
+                lines += ["Source: " + plain(anchor["path"]) + " · " + plain(anchor["locator"]), "",
+                          "> " + plain(anchor["quote"]).replace("\n", "\n> "), ""]
+    return "\n".join(lines) + "\n"
+
 def _html(project, directory, library, graph):
     esc = lambda value: html.escape(str(value), quote=True)
     parts = ["<!doctype html><html lang=\"en\"><meta charset=\"utf-8\">",
@@ -971,6 +995,7 @@ def _html(project, directory, library, graph):
                             parts.append('<a href="' + asset_link + '"><img loading="lazy" src="' + asset_link + '" alt="' + esc(label) + '"></a>')
                         parts.append('<p><a download href="' + asset_link + '">Original extracted asset</a> · SHA-256 ' + esc(asset["sha256"]) + '</p>')
             parts.append("<p>Reading card: " + esc(paper["card"]["status"]) + "</p>")
+            parts.append('<p><a href="notes/' + quote(paper["id"], safe="") + '.md">Reading note</a></p>')
             for field in FIELDS:
                 rows = paper["card"]["fields"][field]
                 parts.append("<h3>" + esc(field.replace("_", " ")) + "</h3>")

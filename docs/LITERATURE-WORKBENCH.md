@@ -1,5 +1,16 @@
 # Literature discovery and reading workbench
 
+All five native adaptations are committed under .agents/skills as well as
+skills/, so fresh Codex Cloud checkouts discover them without desktop setup.
+Selected actual discovery candidates enter the library through
+literature_register(candidate_id,expected_leads_sha256,paper_id?,
+acquisition_receipt?,manifest?,reader?). Metadata-only entries remain explicitly
+metadata-only. Full-text attachments require a matching acquisition receipt and
+the existing owner-approved manifest. Conference discovery defaults to the
+upstream-style DBLP Search API; explicit transport:sparql remains available.
+The CLI register command accepts --candidate-id and --expected-leads-sha256.
+Search/itinerary accept --topic-id and --limit for scoped queries.
+
 The project installs native adaptations of all five evil-read-arxiv skills:
 start-my-day, paper-analyze, extract-paper-images, paper-search and conf-papers.
 The complete pinned source directories, configuration example and README are in

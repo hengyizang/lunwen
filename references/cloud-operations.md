@@ -76,6 +76,12 @@ Follow-up deterministic builders are documented in [Quality controls follow-up](
 The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.
 # Literature workbench operations
 
+literature_register selects a real candidate from the exact current topic-leads
+hash using candidate_id and expected_leads_sha256. Optional paper_id,
+acquisition_receipt {path,sha256}, manifest and reader {path,sha256} link an
+owner-authorized full text; metadata-only registration grants no screening or
+full-text-read decision.
+
 See [LITERATURE-WORKBENCH.md](../docs/LITERATURE-WORKBENCH.md). At any research
 stage after intake, the existing queue accepts literature_discover(plan,output?),
 literature_resolve(url), literature_figures(pdf,manifest,figures?),

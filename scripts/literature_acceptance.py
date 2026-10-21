@@ -41,7 +41,7 @@ def demonstrate(directory: Path, live: bool = False) -> dict:
                 receipt = literature_evidence.execute_search(target, provider, query,
                     query_family="engineering_connectivity_probe_not_thesis_selection",
                     date_range="2017-2018" if provider != "dblp" else "2025",
-                    filters={"venue": "conf/icml", "year": 2025} if provider == "dblp" else {},
+                    filters={"venue": "conf/icml", "year": 2025, "transport": "search"} if provider == "dblp" else {},
                     limit=2)
                 normalized = json.loads((target / receipt["normalized_results_path"]).read_text(encoding="utf-8"))
                 probe["results"].append({"provider": provider, "status": receipt["status"],
@@ -49,7 +49,7 @@ def demonstrate(directory: Path, live: bool = False) -> dict:
                     "record_identity_and_semantics_verified": False})
             except (ValueError, RuntimeError, OSError) as exc:
                 probe["results"].append({"provider": provider, "status": "unavailable",
-                                         "error": str(exc)[:500]})
+                                         "error": str(exc)[-800:]})
         probe["all_providers_returned_records"] = all(r.get("works", 0) > 0 for r in probe["results"])
     result = {"schema_version": "1.0", "engineering_status": "pass",
         "fixture_only": True, "scientific_completion_verified": False, "paid_model_calls": 0,

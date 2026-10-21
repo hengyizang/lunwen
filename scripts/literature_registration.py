@@ -1,6 +1,7 @@
 """Select real discovery candidates into the shared library; no screening approval."""
 from __future__ import annotations
 import hashlib
+import json
 from pathlib import Path
 from urllib.parse import urlsplit
 from scripts.research_artifacts import path_in, read, record, sha, write
@@ -87,9 +88,8 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
             attachment = "authorized_full_text_attached_semantics_pending"
     elif manifest or reader:
         raise ValueError("Full-text attachments need their acquisition receipt")
-    write(metadata_path, metadata)
-    record(project, [metadata_path], "scripts/literature_registration.py")
-    spec.setdefault("source", {"path": metadata_path.relative_to(project).as_posix(), "sha256": sha(metadata_path)})
+    metadata_digest = hashlib.sha256((json.dumps(metadata, ensure_ascii=False, indent=2) + "\n").encode()).hexdigest()
+    spec.setdefault("source", {"path": metadata_path.relative_to(project).as_posix(), "sha256": metadata_digest})
     config_file = path_in(project, config_path, exists=False)
     config = read(config_file) if config_file.is_file() else {"schema_version": "1.0", "papers": []}
     if config.get("doctoral_question") not in {None, leads["doctoral_question"]}:
@@ -107,6 +107,8 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
         papers[papers.index(previous)] = spec
     else:
         papers.append(spec)
+    write(metadata_path, metadata)
+    record(project, [metadata_path], "scripts/literature_registration.py")
     write(config_file, config)
     record(project, [config_file], "scripts/literature_registration.py")
     built = workbench.build(project)

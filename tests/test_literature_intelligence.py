@@ -130,7 +130,7 @@ class LiteratureIntelligenceTests(unittest.TestCase):
                 return json.dumps({"results": {"bindings": [row]}}).encode(), url, 200, "application/json"
             return self.fetch(url)
         with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
-            project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/icml", "year": 2025, "enrich_limit": 1}]})
+            project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/icml", "year": 2025, "enrich_limit": 1, "transport": "sparql"}]})
             result = intelligence.discover(project, fetcher=fetch)
             self.assertEqual(result["enrichment"][0]["status"], "unresolved_no_canonical_match")
             self.assertEqual(len(result["candidates"]), 1)
@@ -159,7 +159,7 @@ class LiteratureIntelligenceTests(unittest.TestCase):
                 payload = json.loads(self.fetch(url)[0])["data"][0]
             return json.dumps(payload).encode(), url, 200, "application/json"
         with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
-            project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/icml", "year": 2025, "enrich_limit": 1}]})
+            project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/icml", "year": 2025, "enrich_limit": 1, "transport": "sparql"}]})
             report = intelligence.discover(project, fetcher=fetch)
             self.assertEqual(report["enrichment"][0]["status"], "canonical_match")
             self.assertEqual(len(report["candidates"]), 1)

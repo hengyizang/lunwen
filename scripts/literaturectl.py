@@ -349,8 +349,10 @@ def execute_operation(project: Path, operation: dict) -> dict:
                 raise ValueError("Acquisition receipt does not bind the selected PDF")
         return extract(project, operation["pdf"], figures=operation.get("figures"), source=source)
     if action == "literature_analyze":
+        if type(operation.get("execute", False)) is not bool:
+            raise ValueError("Analysis execute must be an explicit boolean")
         return analyze(project, operation["paper_id"], config_path=operation.get("config",
-            "program/literature-workbench.json"), execute=operation.get("execute") is True,
+            "program/literature-workbench.json"), execute=operation.get("execute", False),
             max_output_tokens=operation.get("max_output_tokens", 5000))
     from scripts import literature_workbench as workbench
     if action == "literature_workbench":

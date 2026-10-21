@@ -372,7 +372,8 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
             if type(year) is not int or not 1000 <= year <= 9999 or type(enrich_limit) is not int or not 0 <= enrich_limit <= 20:
                 raise ValueError("conference needs an explicit year and enrich_limit 0..20")
             records = search({"provider": "dblp", "query": "*", "query_family": "conference-enumeration",
-                "date_range": str(year), "filters": {"venue": venue, "year": year, "offset": conference.get("offset", 0)},
+                "date_range": str(year), "filters": {"venue": venue, "year": year, "offset": conference.get("offset", 0),
+                    "transport": conference.get("transport", "search")},
                 "limit": conference.get("limit", 100)})
             works.extend(records)
             for work in records[:enrich_limit]:

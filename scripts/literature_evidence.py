@@ -450,7 +450,7 @@ def parse_conditions(date_range: Any = None, filters: Any = None) -> dict[str, A
             filters = {}
     if filters is None:
         filters = {}
-    if not isinstance(filters, dict) or set(filters) - {"venue", "year", "document_types", "identity", "offset"}:
+    if not isinstance(filters, dict) or set(filters) - {"venue", "year", "document_types", "identity", "offset", "transport"}:
         raise LiteratureEvidenceError("unsupported structured literature filter")
     for key, value in filters.items():
         if key in {"year", "offset"}:
@@ -470,6 +470,8 @@ def parse_conditions(date_range: Any = None, filters: Any = None) -> dict[str, A
         else:
             value = value.strip()
         parsed[key] = value
+    if "transport" in parsed and parsed["transport"] not in {"search", "sparql"}:
+        raise LiteratureEvidenceError("DBLP transport must be search or sparql")
     if "year" in parsed and "publication_date" in parsed:
         bounds = parsed["publication_date"]
         if (bounds["from"] and parsed["year"] < int(bounds["from"][:4])) or (bounds["to"] and parsed["year"] > int(bounds["to"][:4])):
@@ -483,6 +485,7 @@ def _document_type(value: str) -> str:
     return {"journalarticle": "journal-article", "article": "journal-article",
             "conference": "conference-paper", "conferencepaper": "conference-paper", "inproceedings": "conference-paper",
             "proceedingsarticle": "conference-paper", "postedcontent": "preprint", "preprint": "preprint",
+            "conferenceandworkshoppapers": "conference-paper", "journalarticles": "journal-article",
             "review": "review", "book": "book"}.get(token, value.casefold().strip())
 
 
@@ -499,6 +502,8 @@ def build_search_url(provider: str, query: str, limit: int, *, date_range: Any =
         raise LiteratureEvidenceError("identity lookup is supported only for Semantic Scholar")
     if "offset" in conditions and provider != "dblp":
         raise LiteratureEvidenceError("explicit pagination offset is supported only for DBLP")
+    if "transport" in conditions and provider != "dblp":
+        raise LiteratureEvidenceError("transport selection belongs to DBLP only")
     bounds = conditions.get("publication_date", {})
     year = conditions.get("year")
     encoded = urllib.parse.urlencode
@@ -535,16 +540,47 @@ def build_search_url(provider: str, query: str, limit: int, *, date_range: Any =
             return "https://export.arxiv.org/api/query?" + encoded(
                 {"id_list": identifier.group(1), "start": 0, "max_results": limit}
             )
-        terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query)[:8]
-        search_query = " AND ".join(f"all:{term}" for term in terms) or "all:science"
-        return "https://export.arxiv.org/api/query?" + encoded(
-            {"search_query": search_query, "start": 0, "max_results": limit}
-        )
+        if len(query) > 1000 or query.count('"') % 2 or query.count("(") != query.count(")"):
+            raise LiteratureEvidenceError("arXiv query must be bounded with balanced quotes and parentheses")
+        fields = re.findall(r"\b([A-Za-z][A-Za-z0-9]*):", query)
+        if any(field not in {"ti", "au", "abs", "co", "jr", "cat", "rn", "id", "all", "submittedDate", "lastUpdatedDate"} for field in fields):
+            raise LiteratureEvidenceError("unsupported arXiv query field")
+        if fields:
+            search_query = query.strip()
+        else:
+            tokens = re.findall(r'"[^"\n]+"|\(|\)|[^\s()]+', query.strip())
+            if not tokens or len(tokens) > 80:
+                raise LiteratureEvidenceError("arXiv query needs explicit bounded search terms")
+            if any(token in {"AND", "OR", "ANDNOT"} for token in tokens):
+                search_query = " ".join(token if token in {"AND", "OR", "ANDNOT", "(", ")"} else "all:" + token for token in tokens)
+            else:
+                search_query = " AND ".join("all:" + token for token in tokens)
+        values = {"search_query": search_query, "start": 0, "max_results": limit}
+        if bounds or year:
+            lower = f"{year}-01-01" if year else bounds.get("from")
+            upper = f"{year}-12-31" if year else bounds.get("to")
+            lower_stamp = (lower or "1991-01-01").replace("-", "") + "0000"
+            upper_stamp = (upper or "9999-12-31").replace("-", "") + "2359"
+            values["search_query"] = f"({search_query}) AND submittedDate:[{lower_stamp} TO {upper_stamp}]"
+            values.update(sortBy="submittedDate", sortOrder="descending")
+        return "https://export.arxiv.org/api/query?" + encoded(values)
     if provider == "europe-pmc":
         return "https://www.ebi.ac.uk/europepmc/webservices/rest/search?" + encoded(
             {"query": query, "pageSize": limit, "format": "json"}
         )
     if provider == "dblp":
+        if conditions.get("transport") == "search":
+            if query.strip() != "*" or not conditions.get("venue") or not year:
+                raise LiteratureEvidenceError("DBLP Search enumeration needs explicit venue and year")
+            stream = _dblp_stream(conditions["venue"])
+            key = stream.rsplit("/", 1)[-1]
+            label = {"nips": "NeurIPS", "cvpr": "CVPR", "iccv": "ICCV", "eccv": "ECCV",
+                     "icml": "ICML", "iclr": "ICLR", "aaai": "AAAI", "acl": "ACL",
+                     "emnlp": "EMNLP", "kdd": "KDD"}.get(key)
+            if label is None:
+                raise LiteratureEvidenceError("Use SPARQL for a venue outside the reviewed DBLP Search aliases")
+            return "https://dblp.org/search/publ/api?" + encoded({"q": f"venue:{label} year:{year}",
+                "format": "json", "h": limit, "f": conditions.get("offset", 0)})
         terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9_.-]*", query.lower())[:2]
         phrase = " ".join(terms) or "science"
         clauses = [
@@ -693,8 +729,8 @@ def filter_results(provider: str, works: list[dict], parsed: dict) -> tuple[list
         else:
             accepted.append(work)
     audit = {**parsed, "server_requested": sorted(set(constraints) & native),
-             "postfilter_checked": sorted(set(constraints) - {"offset"}),
-             "postfilter_only": sorted(set(constraints) - native),
+             "postfilter_checked": sorted(set(constraints) - {"offset", "transport"}),
+             "postfilter_only": sorted(set(constraints) - native - {"transport"}),
              "returned_before_filters": len(works), "accepted_count": len(accepted),
              "rejected": rejected, "unresolved": unresolved,
              "coverage": "bounded_result_window_not_complete_corpus", "provider_filter_compliance_verified": False}
@@ -793,6 +829,32 @@ def normalize_search(provider: str, payload: bytes) -> list[dict[str, Any]]:
                     document_types=[item["pubType"]] if item.get("pubType") else [],
                 ))
         elif provider == "dblp":
+            if isinstance(data, dict) and "result" in data:
+                hits = data.get("result", {}).get("hits", {}).get("hit", [])
+                if isinstance(hits, dict):
+                    hits = [hits]
+                if not isinstance(hits, list):
+                    raise LiteratureEvidenceError("DBLP Search hits must be a list")
+                for hit in hits:
+                    if not isinstance(hit, dict) or not isinstance(hit.get("info"), dict):
+                        continue
+                    info = hit["info"]
+                    url = info.get("url")
+                    parsed_url = urllib.parse.urlsplit(str(url or ""))
+                    segments = parsed_url.path.removeprefix("/rec/").split("/")
+                    venue = ("https://dblp.org/streams/" + "/".join(segments[:2])
+                             if parsed_url.hostname == "dblp.org" and len(segments) >= 3 else None)
+                    authors = info.get("authors", {}).get("author", [])
+                    if isinstance(authors, (str, dict)):
+                        authors = [authors]
+                    names = [a.get("text", a.get("name", "")) if isinstance(a, dict) else a for a in authors]
+                    links = info.get("ee", [])
+                    if not isinstance(links, list):
+                        links = [links]
+                    doi = next((_doi(link) for link in links if isinstance(link, str) and _doi(link)), None)
+                    works.append(normalized_work("dblp", info.get("key") or hit.get("@id"), info.get("title"),
+                        info.get("year"), doi, url, names, venue=venue,
+                        document_types=[_document_type(str(info.get("type", "")))]))
             results = data.get("results", {}) if isinstance(data, dict) else {}
             bindings = results.get("bindings", []) if isinstance(results, dict) else []
             for binding in bindings:
@@ -1066,6 +1128,15 @@ def execute_search(
         raw_path.write_bytes(payload)
         returned = normalize_search(provider, payload)
         normalized, conditions = filter_results(provider, returned, parsed)
+        if provider == "arxiv":
+            server_dates = "submittedDate:" in urllib.parse.unquote(request_url)
+            conditions["server_date_prefilter"] = {"applied": server_dates,
+                "field": "submittedDate" if server_dates else None,
+                "meaning": "arXiv initial submission, not journal publication; returned metadata rechecked"}
+            if server_dates:
+                dates = set(parsed["constraints"]) & {"publication_date", "year"}
+                conditions["server_requested"] = sorted(set(conditions["server_requested"]) | dates)
+                conditions["postfilter_only"] = sorted(set(conditions["postfilter_only"]) - dates)
     except Exception as exc:
         failed = {
             "schema_version": "1.0",
