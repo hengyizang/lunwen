@@ -1911,6 +1911,245 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "cheapai-discount-luna-low|evidence_conflict_v2",
+      "candidate_id": "cheapai-discount-luna-low",
+      "provider": "cheapai-gpt-discount",
+      "model": "gpt-5.6-luna",
+      "effort": "low",
+      "case_id": "evidence_conflict_v2",
+      "case_sha256": "461262efc93f0642733f23bb1244c5f418b0ca7755c56aee31e790b385bb5e39",
+      "quote_sha256": "faa642da7aef61d60c845c926f92528082989d99b037c9874abde45b7da4af33",
+      "reserved_ceiling_cny": 0.01317302,
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "meter_before": {
+        "provider": "cheapai-gpt-discount",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 10,
+            "created_at": 1792572858,
+            "prompt_tokens": 383,
+            "completion_tokens": 138,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 106,
+            "created_at": 1792572662,
+            "prompt_tokens": 279,
+            "completion_tokens": 209,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 6,
+            "created_at": 1792572623,
+            "prompt_tokens": 258,
+            "completion_tokens": 83,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 481,
+            "created_at": 1792572588,
+            "prompt_tokens": 258,
+            "completion_tokens": 189,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 94,
+            "created_at": 1792516883,
+            "prompt_tokens": 258,
+            "completion_tokens": 184,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 11,
+            "created_at": 1792516846,
+            "prompt_tokens": 209,
+            "completion_tokens": 203,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 166,
+            "created_at": 1792516823,
+            "prompt_tokens": 559,
+            "completion_tokens": 3373,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 5,
+            "created_at": 1792516595,
+            "prompt_tokens": 254,
+            "completion_tokens": 67,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 6,
+            "created_at": 1792516342,
+            "prompt_tokens": 279,
+            "completion_tokens": 81,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 524,
+            "created_at": 1792516286,
+            "prompt_tokens": 279,
+            "completion_tokens": 206,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 9,
+            "created_at": 1792515188,
+            "prompt_tokens": 282,
+            "completion_tokens": 146,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 736,
+            "created_at": 1792515141,
+            "prompt_tokens": 254,
+            "completion_tokens": 317,
+            "id": 12
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 92,
+            "created_at": 1792515102,
+            "prompt_tokens": 254,
+            "completion_tokens": 180,
+            "id": 13
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 361,
+            "created_at": 1792505478,
+            "prompt_tokens": 44572,
+            "completion_tokens": 94,
+            "id": 14
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 11,
+            "created_at": 1792505394,
+            "prompt_tokens": 279,
+            "completion_tokens": 176,
+            "id": 15
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 10,
+            "created_at": 1792505323,
+            "prompt_tokens": 258,
+            "completion_tokens": 174,
+            "id": 16
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 5,
+            "created_at": 1792504269,
+            "prompt_tokens": 254,
+            "completion_tokens": 67,
+            "id": 17
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 503,
+            "created_at": 1792504153,
+            "prompt_tokens": 282,
+            "completion_tokens": 195,
+            "id": 18
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 107,
+            "created_at": 1792504075,
+            "prompt_tokens": 282,
+            "completion_tokens": 212,
+            "id": 19
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 13,
+            "created_at": 1792501826,
+            "prompt_tokens": 282,
+            "completion_tokens": 221,
+            "id": 20
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 9,
+            "created_at": 1792346369,
+            "prompt_tokens": 268,
+            "completion_tokens": 153,
+            "id": 21
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 10,
+            "created_at": 1792346335,
+            "prompt_tokens": 209,
+            "completion_tokens": 167,
+            "id": 22
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 11,
+            "created_at": 1792346293,
+            "prompt_tokens": 254,
+            "completion_tokens": 183,
+            "id": 23
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 523,
+            "created_at": 1792344475,
+            "prompt_tokens": 147,
+            "completion_tokens": 232,
+            "id": 24
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 98,
+            "created_at": 1792344463,
+            "prompt_tokens": 147,
+            "completion_tokens": 216,
+            "id": 25
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 472,
+            "created_at": 1792342012,
+            "prompt_tokens": 165,
+            "completion_tokens": 203,
+            "id": 26
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 86,
+            "created_at": 1792342006,
+            "prompt_tokens": 165,
+            "completion_tokens": 183,
+            "id": 27
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "run_id": "39572571264",
+      "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f"
     }
   ],
   "status": "running",
