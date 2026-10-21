@@ -293,8 +293,9 @@ class LiteratureControlTests(unittest.TestCase):
 
     def test_nonboolean_operation_execute_never_turns_on_paid_request(self):
         with patch.object(control, "analyze", return_value={"prepared": True}) as analyze:
-            control.execute_operation(self.project, {"action": "literature_analyze", "paper_id": "W1", "execute": "true"})
-        self.assertIs(analyze.call_args.kwargs["execute"], False)
+            with self.assertRaisesRegex(ValueError, "explicit boolean"):
+                control.execute_operation(self.project, {"action": "literature_analyze", "paper_id": "W1", "execute": "true"})
+        analyze.assert_not_called()
 
     def test_invalid_workbench_identity_and_stale_input_fail_before_paid_request(self):
         with patch.object(model_runtime, "call") as call:
