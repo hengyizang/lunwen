@@ -17596,12 +17596,76 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "catalog_omission_probe": false,
       "run_id": "39571949378",
       "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f",
       "billing_status": "reserved",
-      "reserved_at": "2026-10-21T08:50:40.078778+00:00"
+      "reserved_at": "2026-10-21T08:50:40.078778+00:00",
+      "reported_model": "claude-sonnet-5-5",
+      "request_id": "msg_011CddyiF5F0uBE4VBbZi4bO",
+      "text": "{\"selected_claim\":\"B\",\"effect_percentage_points\":3,\"ci_contains_zero\":true,\"claim_scope\":\"held_out_benchmark\",\"preserve_failed_runs\":true,\"sentence\":\"On the held-out benchmark, mean F1 rose from 0.79 to 0.82, a 3 percentage point gain, but the paired 95% CI of [-0.01, 0.07] includes zero, so a positive effect is not established.\"}",
+      "usage": {
+        "input_tokens": 18,
+        "output_tokens": 148,
+        "output_tokens_details": {},
+        "cache_creation_input_tokens": 87,
+        "cache_read_input_tokens": 349,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 87,
+          "ephemeral_1h_input_tokens": 0
+        }
+      },
+      "completion_status": "completed",
+      "protocol": "anthropic_messages",
+      "response_sha256": "348d249f6bfe896194b4ee387190f9630e067617c23545751bd4bf092ce8840c",
+      "grade": {
+        "case_id": "claim_precision",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "supported_main_claim",
+            "passed": true,
+            "weight": 25,
+            "critical": true
+          },
+          {
+            "id": "numerical_effect",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "uncertainty",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "evidence_scope",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "failed_run_integrity",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          },
+          {
+            "id": "bounded_english_sentence",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "duration_seconds": 4.0371
     }
   ],
   "status": "running",
