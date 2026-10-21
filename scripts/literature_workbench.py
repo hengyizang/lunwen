@@ -156,7 +156,7 @@ def source_binding(project: Path, source: dict, *, manifest=None, files=None) ->
         raise ValueError("raw PDF source requires its exact reviewed data manifest")
     # Late import avoids a control-plane/workbench import cycle.
     from scripts.literaturectl import approved_pdf
-    candidate = path_in(project, relative)
+    candidate = approved_pdf(project, relative, manifest)
     if candidate.stat().st_size > 64 * 1024 * 1024:
         raise ValueError("authorized original PDF exceeds 64 MiB")
     with candidate.open("rb") as handle:

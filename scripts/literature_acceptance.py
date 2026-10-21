@@ -50,6 +50,11 @@ def demonstrate(directory: Path, live: bool = False) -> dict:
             except (ValueError, RuntimeError, OSError) as exc:
                 probe["results"].append({"provider": provider, "status": "unavailable",
                                          "error": str(exc)[-800:]})
+                failed = literature_evidence.read_jsonl(target / "evidence/literature-api-ledger.jsonl")
+                if failed and failed[-1].get("raw_response_path"):
+                    data = (target / failed[-1]["raw_response_path"]).read_bytes()
+                    probe["results"][-1].update(content_type=failed[-1].get("content_type"),
+                        public_response_excerpt=data[:240].decode("utf-8", errors="replace"))
         probe["all_providers_returned_records"] = all(r.get("works", 0) > 0 for r in probe["results"])
     result = {"schema_version": "1.0", "engineering_status": "pass",
         "fixture_only": True, "scientific_completion_verified": False, "paid_model_calls": 0,

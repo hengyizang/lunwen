@@ -87,15 +87,36 @@ def approved_pdf(project: Path, pdf_relative: str, manifest_relative: str) -> Pa
     """Reuse the existing owner-bound full-text persistence authority."""
     if not manifest_relative.startswith("data/manifests/"):
         raise ValueError("Full-text processing needs a reviewed data/manifests record")
-    source = path_in(project, pdf_relative)
+    source = path_in(project, pdf_relative, exists=False)
     manifest_path = path_in(project, manifest_relative)
     manifest = read(manifest_path)
     auth_file = project / "state/data-authorizations.json"
     auth = read(auth_file).get("manifests", {}).get(manifest_relative, {}) if auth_file.is_file() else {}
     if (auth.get("sha256") != sha(manifest_path) or not auth.get("actor")
             or auth.get("cloud_use_confirmed") is not True
-            or manifest.get("license", {}).get("redistribution_allowed") is not True
-            or manifest.get("download", {}).get("sha256") != sha(source)):
+            or manifest.get("license", {}).get("redistribution_allowed") is not True):
+        raise ValueError("Owner-reviewed full-text/cloud/redistribution rights and exact PDF hash are required")
+    pinned = manifest.get("download", {}).get("sha256")
+    if not source.is_file():
+        require_cloud()
+        if not pdf_relative.startswith("data/raw/literature/"):
+            raise ValueError("Missing controlled PDF; only authorized raw copies can be rehydrated")
+        identifier = manifest.get("dataset_id", "")
+        if not isinstance(identifier, str) or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,100}", identifier):
+            raise ValueError("Missing PDF requires a valid reviewed acquisition identity")
+        receipt = read(path_in(project, "data/acquisition/" + identifier + ".json"))
+        original = path_in(project, receipt.get("path", ""))
+        expected_bytes = manifest.get("download", {}).get("expected_bytes")
+        if (receipt.get("manifest_path") != manifest_relative
+                or receipt.get("manifest_sha256") != sha(manifest_path)
+                or not str(receipt.get("path", "")).startswith("data/raw/")
+                or original.suffix.lower() != ".pdf" or sha(original) != pinned
+                or type(expected_bytes) is not int or not 0 < expected_bytes <= 64 * 1024 * 1024
+                or original.stat().st_size != expected_bytes):
+            raise ValueError("Rehydrated original PDF does not match the reviewed acquisition")
+        source.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(original, source)
+    if pinned != sha(source):
         raise ValueError("Owner-reviewed full-text/cloud/redistribution rights and exact PDF hash are required")
     return source
 
@@ -106,7 +127,7 @@ def source_blocks(project: Path, paper: dict) -> tuple[list[dict], list[dict]]:
     project = Path(project).resolve()
     if not isinstance(paper, dict) or not isinstance(paper.get("source"), dict):
         raise ValueError("An explicit source-bound literature paper is required")
-    original = path_in(project, paper["source"].get("path", ""))
+    original = path_in(project, paper["source"].get("path", ""), exists=False)
     is_pdf = original.suffix.lower() == ".pdf"
     if is_pdf:
         approved_pdf(project, paper["source"]["path"], paper.get("manifest", ""))

@@ -291,6 +291,33 @@ class LiteratureControlTests(unittest.TestCase):
             self.assertEqual(result["status"], "rejected_do_not_use")
             self.assertFalse((self.project / "literature/cards").exists())
 
+
+    def test_authorized_raw_pdf_rehydrates_from_exact_acquisition_after_runner_change(self):
+        pdf, _, _, _, manifest = self.authorized_pdf()
+        original = pdf.read_bytes()
+        acquired = self.project / "data/raw/authorized-paper/source.pdf"
+        acquired.parent.mkdir(parents=True)
+        acquired.write_bytes(original)
+        value = read(manifest)
+        value.update(dataset_id="authorized-paper")
+        value["download"]["expected_bytes"] = len(original)
+        write(manifest, value)
+        manifest_relative = self.paper["manifest"]
+        authority = read(self.project / "state/data-authorizations.json")
+        authority["manifests"][manifest_relative]["sha256"] = sha(manifest)
+        write(self.project / "state/data-authorizations.json", authority)
+        write(self.project / "data/acquisition/authorized-paper.json",
+            {"manifest_path":manifest_relative,"manifest_sha256":sha(manifest),
+             "path":acquired.relative_to(self.project).as_posix(),"sha256":sha(acquired)})
+        pdf.unlink()
+        self.assertEqual(control.approved_pdf(self.project, self.paper["source"]["path"], manifest_relative).read_bytes(), original)
+        pdf.unlink()
+        authority["manifests"][manifest_relative]["cloud_use_confirmed"] = False
+        write(self.project / "state/data-authorizations.json", authority)
+        with self.assertRaisesRegex(ValueError, "Owner-reviewed"):
+            control.approved_pdf(self.project, self.paper["source"]["path"], manifest_relative)
+        self.assertFalse(pdf.exists())
+
     def test_nonboolean_operation_execute_never_turns_on_paid_request(self):
         with patch.object(control, "analyze", return_value={"prepared": True}) as analyze:
             with self.assertRaisesRegex(ValueError, "explicit boolean"):

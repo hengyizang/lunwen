@@ -275,10 +275,13 @@ def fetch_provider_bytes(
         if delay:
             time.sleep(delay)
         try:
+            headers = provider_headers(provider)
+            if provider == "dblp" and urllib.parse.urlsplit(request_url).hostname == "dblp.org":
+                headers["Accept"] = "application/json"
             payload, final_url, status, content_type = fetcher(
                 transport_url,
                 max_bytes=MAX_RESPONSE_BYTES,
-                headers=provider_headers(provider),
+                headers=headers,
             )
             if provider == "serpapi-google-scholar":
                 api_key = os.environ.get("SERPAPI_API_KEY", "").strip()
