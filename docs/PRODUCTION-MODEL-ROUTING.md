@@ -7,6 +7,11 @@ G4/G5 work takes the critical Astra/Opus baseline; an explicit routine task
 profile preserves the routine Sol/Sonnet baseline. A candidate's presence in
 the registry does not establish quality or authorize testing it.
 
+The [2026-10-21 cloud comparison](MODEL-COMPARISON-RESULTS-20261021.md) records
+current task observations, gateway differences, cache/debit evidence and remaining
+isolations. It preserves these baselines and does not automatically accept any
+alternate group, effort or context setting.
+
 The production cloud workflows use CheapAI and CodeKey. They do not inject or
 require UUAPI credentials. Historical UUAPI adapters and receipts remain for
 reproducibility; they are not a production fallback. Model selection, requested

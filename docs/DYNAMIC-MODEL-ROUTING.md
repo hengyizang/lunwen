@@ -208,3 +208,22 @@ All engineering validation for this change runs on GitHub's cloud runners with
 simulated transports. Such tests verify control behavior; they do not certify
 new model/channel quality, doctoral merit, experimental completion or publication
 readiness.
+
+## Cloud comparison evidence, 2026-10-21
+
+The [model and gateway report](MODEL-COMPARISON-RESULTS-20261021.md) records
+120 requests across the fixed model/group matrix, a separate clarified cohort,
+and one native Argon base image check. Preserve its immutable ledger references
+and [instrument errata](MODEL-COMPARISON-VALIDITY-ERRATA.md). The ambiguous v1
+aggregate scores cannot rank capability or promote routes. The clarified short
+cases and masked model-assisted proposal review do not replace the paired
+real-task and independent human acceptance controls above.
+
+Before scheduling a proposed experiment, check that a mechanism-removed arm
+does not duplicate an existing baseline with the same data, configuration and
+seed. Reuse matching predictions and account for justified distinct fits.
+Separate an inconclusive interval from an equivalence claim, specify the actual
+gain-shift evaluation, and enforce resource limits across active workers,
+preprocessing, inference and statistics. Stopping new launches alone does not
+enforce a total wall-clock, CPU or memory ceiling. These checks preserve the
+existing scientific gates; model-generated proposals cannot approve themselves.
