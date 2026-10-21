@@ -18373,7 +18373,7 @@
       "reconciled_at": "2026-10-21T08:51:36.668185+00:00"
     }
   ],
-  "status": "running",
+  "status": "closed_with_holds",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
@@ -18884,8 +18884,8 @@
       "diagnostic": "same_credential_deferred_for_this_pass_after_exhausted_free_cooldown"
     }
   ],
-  "closed_at": "2026-10-20T17:29:55.470207+00:00",
-  "committed_upper_cny": 0.76943473,
+  "closed_at": "2026-10-21T08:51:38.539151+00:00",
+  "committed_upper_cny": 0.79013873,
   "metadata_continuations": [
     {
       "reviewed_blob_sha": "af4c997684a69bdb0b93f81c4d44dfe82ca4db6b",
