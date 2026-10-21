@@ -7,6 +7,11 @@ G4/G5 work takes the critical Astra/Opus baseline; an explicit routine task
 profile preserves the routine Sol/Sonnet baseline. A candidate's presence in
 the registry does not establish quality or authorize testing it.
 
+The [2026-10-21 cloud comparison](MODEL-COMPARISON-RESULTS-20261021.md) records
+current task observations, gateway differences, cache/debit evidence and remaining
+isolations. It preserves these baselines and does not automatically accept any
+alternate group, effort or context setting.
+
 The production cloud workflows use CheapAI and CodeKey. They do not inject or
 require UUAPI credentials. Historical UUAPI adapters and receipts remain for
 reproducibility; they are not a production fallback. Model selection, requested
@@ -21,7 +26,20 @@ reasoning effort and exact endpoint pricing are versioned in
 | Core scientific planning/audits and every final independent audit | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
 | Source-bound metadata fields with exact quotes and locators | CheapAI GPT discount / GPT-5.6 Luna | medium |
 | Internal engineering diagnosis, routine code review, software test proposals and environment/replay troubleshooting | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
-| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / Gemini 4 Argon | high |
+| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / `gemini-4-argon` | high |
+
+The approved native base ID remains `gemini-4-argon`, with high thinking;
+two historical 2026-10-19 receipts returned that exact ID. The separate
+`gemini-4-argon-high` diagnostic is not an equivalent alias. On 2026-10-20,
+catalogs briefly advertised high only, subsequently returned empty lists,
+and a high generation attempt returned HTTP503. Catalog omission and a
+descriptor404 do not prove that base generation is unsupported. The current
+production catalog gate remains closed when the exact requested ID is absent:
+access is unconfirmed and no production call is sent. The separately authorized
+base diagnostic does not waive that guard or resolve historical billing holds.
+Google catalog inspection uses `/v1beta/models` with native header authentication
+and normalizes only `models/`. A requested/reported identity does not attest
+upstream weights, effort passthrough or scientific quality.
 
 The five-role scientific cycle is unchanged: read-only plan, OpenAI writer,
 fresh initial independent audit, OpenAI remediation, fresh final Opus audit.

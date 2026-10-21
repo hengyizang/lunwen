@@ -106,7 +106,14 @@ effort and context envelope. A same-named model on another gateway or promotiona
 group does not inherit acceptance. A successful HTTP response, provider model
 label, short smoke test or registry `status` field does not establish equal
 quality. Current Anthropic and DeepSeek transport support remains high-only.
-OpenAI/Google low and medium protocol support does not mean those settings have
+The historically approved Gemini native base ID and the high-suffixed diagnostic
+remain distinct exact routes. Base low/medium payload support is an unaccepted
+candidate capability; the approved baseline still requests high thinking.
+The high-suffixed ID requires high thinking. No low/medium-suffixed ID is inferred
+from the portal. Empty or changing catalogs mean availability is unconfirmed;
+they do not establish unsupported generation. Production still requires current
+exact-ID advertisement before any paid request.
+OpenAI low and medium protocol support does not mean those settings have
 passed project acceptance. No additional low effort, cheap group or long-context
 candidate is declared accepted by this change.
 
@@ -201,3 +208,22 @@ All engineering validation for this change runs on GitHub's cloud runners with
 simulated transports. Such tests verify control behavior; they do not certify
 new model/channel quality, doctoral merit, experimental completion or publication
 readiness.
+
+## Cloud comparison evidence, 2026-10-21
+
+The [model and gateway report](MODEL-COMPARISON-RESULTS-20261021.md) records
+120 requests across the fixed model/group matrix, a separate clarified cohort,
+and one native Argon base image check. Preserve its immutable ledger references
+and [instrument errata](MODEL-COMPARISON-VALIDITY-ERRATA.md). The ambiguous v1
+aggregate scores cannot rank capability or promote routes. The clarified short
+cases and masked model-assisted proposal review do not replace the paired
+real-task and independent human acceptance controls above.
+
+Before scheduling a proposed experiment, check that a mechanism-removed arm
+does not duplicate an existing baseline with the same data, configuration and
+seed. Reuse matching predictions and account for justified distinct fits.
+Separate an inconclusive interval from an equivalence claim, specify the actual
+gain-shift evaluation, and enforce resource limits across active workers,
+preprocessing, inference and statistics. Stopping new launches alone does not
+enforce a total wall-clock, CPU or memory ceiling. These checks preserve the
+existing scientific gates; model-generated proposals cannot approve themselves.

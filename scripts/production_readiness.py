@@ -29,8 +29,11 @@ def catalog(provider: str, environment: dict) -> set[str]:
     key = environment.get(spec["key_setting"], "")
     if not isinstance(key, str) or not key.strip() or any(ch.isspace() or ord(ch) < 32 for ch in key.strip()):
         raise ValueError("catalog production credential is missing or invalid")
-    request = urllib.request.Request(spec["root"] + "/v1/models", method="GET",
-        headers={"Authorization": "Bearer " + key.strip(),
+    native_google = spec["family"] == "google"
+    path = "/v1beta/models" if native_google else "/v1/models"
+    credentials = {"x-goog-api-key": key.strip()} if native_google else {"Authorization": "Bearer " + key.strip()}
+    request = urllib.request.Request(spec["root"] + path, method="GET",
+        headers={**credentials,
                  "User-Agent": "lunwen-production-research/1.0", "Accept": "application/json"})
     try:
         with urllib.request.build_opener(NoRedirect()).open(request, timeout=30) as response:
@@ -38,15 +41,24 @@ def catalog(provider: str, environment: dict) -> set[str]:
         if len(raw) > 2_000_000:
             raise ValueError("catalog size limit")
         data = json.loads(raw)
+        rows_key, id_key = ("models", "name") if native_google else ("data", "id")
         if (not isinstance(data, dict) or data.get("success") is False or data.get("error")
-                or not isinstance(data.get("data"), list)):
+                or not isinstance(data.get(rows_key), list)):
             raise ValueError("malformed catalog envelope")
-        rows = data["data"]
-        if any(not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"]
-               or len(row["id"]) > 160 or any(ch.isspace() or ord(ch) < 32 for ch in row["id"])
-               for row in rows):
-            raise ValueError("malformed catalog model ID")
-        return {row["id"] for row in rows}
+        identifiers = set()
+        for row in data[rows_key]:
+            value = row.get(id_key) if isinstance(row, dict) else None
+            if native_google:
+                if not isinstance(value, str) or not value.startswith("models/"):
+                    raise ValueError("malformed native catalog model name")
+                value = value[len("models/"):]
+            if (not isinstance(value, str) or not value or len(value) > 160 or "/" in value
+                    or any(ch.isspace() or ord(ch) < 32 or ord(ch) == 127 for ch in value)):
+                raise ValueError("malformed catalog model ID")
+            identifiers.add(value)
+        # No suffix stripping or fuzzy aliasing: presence of ...-high proves
+        # only that exact metadata identifier, never the base, low, or medium.
+        return identifiers
     except urllib.error.HTTPError as exc:
         raise ValueError(f"catalog HTTP {exc.code}") from None
     except (OSError, UnicodeError, ValueError, TypeError, AttributeError):

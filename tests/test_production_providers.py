@@ -179,10 +179,19 @@ class ProductionProviderTests(unittest.TestCase):
             for route, model in (("cheapai-gpt-pro", "deepseek-v4.1-flash"),
                                  ("cheapai-gpt-discount", "gpt-6-luna"),
                                  ("codekey-deepseek", "gpt-6.1-sol"),
-                                 ("codekey-gemini", "gemini-4-argon-high")):
+                                 ("codekey-gemini", "gemini-4-argon-low"),
+                                 ("codekey-gemini", "gemini-4-argon-medium")):
                 with self.subTest(route=route), self.assertRaises(providers.ProviderError):
                     providers.call(route, "fixture", model=model)
             transport.assert_not_called()
+
+    def test_google_reported_base_identity_is_not_the_requested_high_route(self):
+        response = self.response("google", "gemini-4-argon")
+        with patch.dict(os.environ, self.env(), clear=True), patch.object(
+                providers, "_production_request", return_value=response) as transport:
+            with self.assertRaises(providers.ProviderError):
+                providers.call("codekey-gemini", "fixture", model="gemini-4-argon-high", reasoning_effort="high")
+        transport.assert_called_once()
 
     def test_missing_and_mismatched_identity_cannot_be_disabled(self):
         for route, spec in providers.PRODUCTION_PROVIDERS.items():

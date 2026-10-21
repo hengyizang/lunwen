@@ -10,12 +10,13 @@ import unittest
 import urllib.error
 from unittest.mock import Mock, patch
 
-from scripts import ai_providers, model_routing, model_spend, production_readiness as readiness
+from scripts import ai_providers, catalog_diagnostic, model_routing, model_spend, production_readiness as readiness
 
 
 class FakeResponse:
     def __init__(self, payload):
         self.body = payload if isinstance(payload, bytes) else json.dumps(payload).encode("utf-8")
+        self.status = 200
 
     def __enter__(self):
         return self
@@ -28,6 +29,98 @@ class FakeResponse:
 
 
 class ProductionReadinessTests(unittest.TestCase):
+    def test_cloud_catalog_diagnostic_reads_both_protocols_and_exact_native_descriptor(self):
+        opener = Mock()
+        opener.open.side_effect = [
+            FakeResponse({"data": [{"id": "gemini-3.8-flash"}]}),
+            FakeResponse({"models": [{"name": "models/gemini-4-argon-high"}], "nextPageToken": "private-cursor"}),
+            FakeResponse({"name": "models/gemini-4-argon-high", "private": "must-not-record"}),
+        ]
+        env = {**self.environment(), "GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "hengyizang/lunwen"}
+        with patch.object(readiness.urllib.request, "build_opener", return_value=opener), \
+             patch.object(ai_providers, "call") as generate, patch.object(model_spend, "reserve") as reserve:
+            value = catalog_diagnostic.report(env)
+        self.assertEqual(opener.open.call_count, 3)
+        self.assertEqual(value["endpoints"][0]["model_ids"], ["gemini-3.8-flash"])
+        self.assertEqual(value["endpoints"][1]["model_ids"], ["gemini-4-argon-high"])
+        self.assertTrue(value["endpoints"][1]["additional_pages_advertised"])
+        self.assertEqual(value["endpoints"][2]["model_ids"], ["gemini-4-argon-high"])
+        for index, row in enumerate(opener.open.call_args_list):
+            request = row.args[0]
+            self.assertEqual(request.get_method(), "GET")
+            headers = {key.lower(): val for key, val in request.header_items()}
+            expected_header = "authorization" if index == 0 else "x-goog-api-key"
+            self.assertIn(expected_header, headers)
+            self.assertNotIn("fixture-secret", request.full_url)
+        serialized = json.dumps(value)
+        for private in ("private-cursor", "must-not-record", "fixture-secret"):
+            self.assertNotIn(private, serialized)
+        self.assertEqual(value["model_generation_calls"], 0)
+        self.assertFalse(value["inference_access_verified"])
+        generate.assert_not_called()
+        reserve.assert_not_called()
+
+    def test_catalog_diagnostic_refuses_local_execution_before_transport(self):
+        with patch.object(readiness.urllib.request, "build_opener") as opener:
+            with self.assertRaises(ValueError):
+                catalog_diagnostic.report(self.environment())
+        opener.assert_not_called()
+
+    def test_optional_us_catalog_diagnostic_is_exact_get_only_and_not_a_production_route(self):
+        opener = Mock()
+        opener.open.side_effect = [
+            FakeResponse({"data": []}), FakeResponse({"models": []}),
+            FakeResponse({"name": "models/gemini-4-argon-high"}),
+            FakeResponse({"data": [{"id": "gemini-4-argon-high"}]}),
+            FakeResponse({"models": [{"name": "models/gemini-4-argon-high"}]}),
+            FakeResponse({"name": "models/gemini-4-argon-high"}),
+        ]
+        env = {**self.environment(), "GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "hengyizang/lunwen"}
+        with patch.object(readiness.urllib.request, "build_opener", return_value=opener), \
+             patch.object(ai_providers, "call") as generate, patch.object(model_spend, "reserve") as reserve:
+            value = catalog_diagnostic.report(env, include_us_host=True)
+        self.assertEqual(opener.open.call_count, 6)
+        self.assertEqual([row["root"] for row in value["endpoints"]],
+                         ["https://codekey.ai"] * 3 + ["https://api.codekey.ai"] * 3)
+        self.assertEqual(value["endpoints"][0]["model_ids"], [])
+        self.assertEqual(value["endpoints"][3]["model_ids"], ["gemini-4-argon-high"])
+        for row in opener.open.call_args_list:
+            request = row.args[0]
+            self.assertEqual(request.get_method(), "GET")
+            self.assertIsNone(request.data)
+            self.assertNotIn("key=", request.full_url)
+        self.assertEqual(ai_providers.PRODUCTION_PROVIDERS["codekey-gemini"]["root"], "https://codekey.ai")
+        self.assertEqual(value["model_generation_calls"], 0)
+        self.assertFalse(value["inference_access_verified"])
+        generate.assert_not_called()
+        reserve.assert_not_called()
+
+    def test_catalog_diagnostic_rejects_unlisted_hosts_and_generation_paths_before_transport(self):
+        with patch.object(readiness.urllib.request, "build_opener") as opener:
+            for root, path, schema in (
+                ("https://api.codekey.ai.attacker.example", "/v1/models", "openai-list"),
+                ("http://api.codekey.ai", "/v1/models", "openai-list"),
+                ("https://api.codekey.ai", "/v1beta/models/gemini-4-argon-high:generateContent", "google-model"),
+                ("https://api.codekey.ai", "/v1/models?key=fixture-secret", "openai-list"),
+            ):
+                with self.subTest(root=root, path=path), self.assertRaises(ValueError):
+                    catalog_diagnostic._inspect(root, path, "fixture-secret", schema=schema)
+        opener.assert_not_called()
+
+    def test_catalog_diagnostic_controls_errors_and_rejects_partial_or_malformed_model_names(self):
+        payloads = [b"private-non-json", {"models": [{"name": "publishers/gemini-4-argon-high"}]},
+                    {"models": [{"name": "models/gemini-4-argon-high/extra"}]},
+                    {"models": [{"name": "models/gemini-4-argon-high\n"}]}]
+        for payload in payloads:
+            opener = Mock()
+            opener.open.return_value = FakeResponse(payload)
+            with patch.object(readiness.urllib.request, "build_opener", return_value=opener):
+                value = catalog_diagnostic._inspect("https://codekey.ai", "/v1beta/models", "fixture-secret", schema="google-list")
+            self.assertFalse(value["metadata_access_verified"])
+            self.assertEqual(value["model_ids"], [])
+            self.assertNotIn("private-non-json", json.dumps(value))
+            opener.open.assert_called_once()
+
     def test_billing_readiness_uses_explicit_keys_without_recording_wallet_values(self):
         env = self.environment()
         def meter(provider, environment):
@@ -193,6 +286,33 @@ class ProductionReadinessTests(unittest.TestCase):
         opener.open.assert_called_once()
         with self.assertRaises(ValueError):
             readiness.NoRedirect().redirect_request(None, None, 307, "redirect", {}, "https://other.example")
+
+    def test_google_catalog_uses_native_auth_and_preserves_exact_high_identifier(self):
+        opener = Mock()
+        opener.open.return_value = FakeResponse({"models": [{"name": "models/gemini-4-argon-high"}]})
+        with patch.object(readiness.urllib.request, "build_opener", return_value=opener):
+            values = readiness.catalog("codekey-gemini", self.environment())
+        self.assertEqual(values, {"gemini-4-argon-high"})
+        self.assertNotIn("gemini-4-argon", values)
+        self.assertNotIn("gemini-4-argon-medium", values)
+        request = opener.open.call_args.args[0]
+        self.assertEqual(request.full_url, "https://codekey.ai/v1beta/models")
+        self.assertEqual(request.get_method(), "GET")
+        headers = {key.lower(): value for key, value in request.header_items()}
+        self.assertEqual(headers["x-goog-api-key"], "fixture-secret-codekey-gemini")
+        self.assertNotIn("authorization", headers)
+        opener.open.assert_called_once()
+
+    def test_google_catalog_rejects_non_native_names_and_does_not_fall_back_or_generate(self):
+        for name in ("gemini-4-argon-high", "publishers/gemini-4-argon-high", "models/gemini-4-argon-high/extra"):
+            opener = Mock()
+            opener.open.return_value = FakeResponse({"models": [{"name": name}]})
+            with patch.object(readiness.urllib.request, "build_opener", return_value=opener), \
+                    patch.object(ai_providers, "call") as generate:
+                with self.assertRaises(ValueError):
+                    readiness.catalog("codekey-gemini", self.environment())
+            opener.open.assert_called_once()
+            generate.assert_not_called()
 
     def test_http_error_body_and_secret_are_not_in_catalog_diagnostic(self):
         opener = Mock()

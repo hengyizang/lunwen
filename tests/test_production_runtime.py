@@ -130,6 +130,18 @@ class ProductionRuntimeTests(unittest.TestCase):
                 meter.assert_not_called()
                 grant.assert_not_called()
 
+    def test_google_high_catalog_entry_does_not_authorize_the_exact_base_route(self):
+        self.catalog.side_effect = None
+        self.catalog.return_value = {"gemini-4-argon-high"}
+        with (patch.object(relay_billing, "read_meter") as meter,
+                patch.object(ai_providers, "call") as post,
+                patch.object(model_spend, "reserve") as reserve):
+            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "model_not_advertised"):
+                self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
+        meter.assert_not_called()
+        post.assert_not_called()
+        reserve.assert_not_called()
+
     def test_missing_model_or_catalog_blocks_before_meter_reservation_and_generation(self):
         for failure in ("model_not_advertised", "catalog_unavailable"):
             with self.subTest(failure=failure):
