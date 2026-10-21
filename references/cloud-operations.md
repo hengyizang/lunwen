@@ -76,6 +76,34 @@ Follow-up deterministic builders are documented in [Quality controls follow-up](
 The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.
 # Literature workbench operations
 
+Use [LITERATURE-REASONING.md](../docs/LITERATURE-REASONING.md) for the existing
+authorized scientific writer's section-specific objectives, attributed reading
+answers, closest-work comparisons, gap hypotheses and 20-axis experiment
+proposals. Read original full texts before filling scientific fields. Persist
+semantic objectives and experiment candidates in program/literature-reasoning.json;
+itinerary/compare validate exact source anchors and the shared doctoral question.
+A limitation or unsuccessful search is a hypothesis to challenge, never proof of
+novelty. Route reviewed proposals into existing G1/G3 records; no new paid role,
+automatic gate approval, budget or experiment authority is introduced.
+
+literature_progress(request,progress?) records an attributed answer bound to the
+current step hash and adapts the next question. Do not directly replace protected
+reading history. The browser supports snapshot search for metadata, original
+text/notes, card experiment settings and original figure captions with P01-P06
+and topic filters. literature_figures also accepts question, max_selected and
+auto_discover; automatic crops retain actual caption/page coordinates and are
+explicitly page-context candidates rather than verified exact plot boundaries.
+
+literature_feedback(feedback,expected_leads_sha256,plan?) records relevance,
+identity duplicates, source accessibility, evidence sufficiency and experimental
+usefulness. Actual executed use requires current run/registry/output evidence.
+literature_feedback_propose(event_ids,expected_plan_sha256,proposal?,plan?) creates
+bounded before/after keyword/weight changes and operational follow-ups. Only an
+authenticated owner cloud issue can literature_feedback_review a proposal with
+exact current plan/proposal hashes; the model operation queue cannot authorize
+adoption. Repeated feedback batches cannot be learned twice. Doctoral scope,
+exclusions, contrary evidence, gates and budgets cannot be changed through feedback.
+
 literature_register selects a real candidate from the exact current topic-leads
 hash using candidate_id and expected_leads_sha256. Optional paper_id,
 acquisition_receipt {path,sha256}, manifest and reader {path,sha256} link an

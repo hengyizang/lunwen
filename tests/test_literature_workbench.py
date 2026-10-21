@@ -237,7 +237,7 @@ class WorkbenchTests(WorkbenchFixture):
         card = {"schema_version": "1.0", "paper_id": "a", "full_text_review_scope": "provided_full_text",
                 "fields": {name: [] for name in workbench.FIELDS}}
         checked = workbench.validate_card(self.project, a, card)
-        self.assertEqual(len(checked["unknown_fields"]), 10)
+        self.assertEqual(len(checked["unknown_fields"]), len(workbench.FIELDS))
         self.assertEqual(checked["full_text_review_scope"], "provided_full_text")
         self.assertEqual(checked["status"], "pending_analysis")
         self.assertFalse(checked["human_full_text_reading_verified"])

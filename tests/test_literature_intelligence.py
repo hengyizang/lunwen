@@ -239,6 +239,65 @@ class LiteratureIntelligenceTests(unittest.TestCase):
             self.assertIn("cooldown", second["errors"][0]["error"])
             self.assertEqual(second["metadata_requests_total_for_plan"], 1)
 
+    def test_conference_failure_uses_strict_alternate_source_without_calling_it_dblp(self):
+        label = "Proceedings of the AAAI Conference on Artificial Intelligence"
+        def fetch(url, **_kwargs):
+            if "dblp.org" in url:
+                raise OSError("interactive bot verification blocks DBLP")
+            self.assertIn("api.crossref.org", url)
+            payload = {"message": {"items": [
+                {"DOI": "10.1000/one", "title": ["Robust machinery prediction"], "container-title": [label],
+                 "issued": {"date-parts": [[2025]]}, "author": [{"given": "Alice", "family": "Researcher"}]},
+                {"DOI": "10.1000/wrong-venue", "title": ["Machinery at another conference"], "container-title": ["Unrelated venue"],
+                 "issued": {"date-parts": [[2025]]}},
+                {"DOI": "10.1000/wrong-year", "title": ["Machinery earlier year"], "container-title": [label],
+                 "issued": {"date-parts": [[2024]]}},
+                {"DOI": "10.1000/missing-venue", "title": ["Machinery unknown venue"], "issued": {"date-parts": [[2025]]}}
+            ]}}
+            return json.dumps(payload).encode(), url, 200, "application/json"
+        with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/aaai", "year": 2025, "enrich_limit": 0}]})
+            result = intelligence.discover(project, fetcher=fetch)
+            self.assertEqual([row["doi"] for row in result["candidates"]], ["10.1000/one"])
+            self.assertEqual(result["metadata_requests"], 2)
+            self.assertEqual(result["conference_sources"][0]["provider"], "crossref")
+            self.assertTrue(result["conference_sources"][0]["database_not_dblp"])
+            self.assertFalse(result["conference_sources"][0]["complete_enumeration"])
+            self.assertTrue(any(row["kind"] == "conference_primary" for row in result["errors"]))
+            self.assertFalse(result["coverage_complete"])
+            receipt = result["source_receipts"][0]
+            normalized = json.loads((project / receipt["normalized_results_path"]).read_text())
+            self.assertEqual(len(normalized["filter_audit"]["rejected"]), 2)
+            self.assertEqual(len(normalized["filter_audit"]["unresolved"]), 1)
+
+    def test_conference_fallback_honors_cumulative_request_ceiling(self):
+        urls = []
+        def fetch(url, **_kwargs):
+            urls.append(url)
+            raise OSError("interactive bot verification blocks DBLP")
+        with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            project = self.project(Path(directory), {"searches": [], "max_requests": 1,
+                "conferences": [{"venue": "conf/aaai", "year": 2025, "enrich_limit": 0}]})
+            first = intelligence.discover(project, fetcher=fetch)
+            self.assertEqual(len(urls), 1)
+            self.assertEqual(first["metadata_requests_total_for_plan"], 1)
+            self.assertEqual(first["conference_sources"][0]["status"], "alternative_unavailable")
+            self.assertTrue(any("ceiling" in row["error"] for row in first["errors"]))
+            with patch.object(evidence, "execute_search") as call:
+                second = intelligence.discover(project)
+                call.assert_not_called()
+            self.assertEqual(second["metadata_requests_total_for_plan"], 1)
+
+    def test_conference_fallback_requires_exact_source_venue_for_unmapped_conference(self):
+        venue = "https://dblp.org/streams/conf/icml"
+        self.assertIsNone(intelligence.conference_fallback({}, venue, 2025))
+        supplied = {"fallback": {"provider": "openalex", "venue": "A reviewed exact source container"}}
+        operation = intelligence.conference_fallback(supplied, venue, 2025)
+        self.assertEqual(operation["filters"], {"venue": "A reviewed exact source container", "year": 2025})
+        self.assertEqual(operation["query_family"], "conference-fallback-not-dblp")
+        with self.assertRaisesRegex(ValueError, "exact source venue"):
+            intelligence.conference_fallback({"fallback": {"provider": "arxiv", "venue": "ICML"}}, venue, 2025)
+
 
 if __name__ == "__main__":
     unittest.main()

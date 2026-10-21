@@ -14,7 +14,7 @@ from scripts import literature_assets as assets
 
 
 HAS_PDF_TOOLS = bool(importlib.util.find_spec("pypdf") and
-                     importlib.util.find_spec("PIL") and shutil.which("pdftoppm"))
+                     importlib.util.find_spec("PIL") and shutil.which("pdftoppm") and shutil.which("pdftotext"))
 
 
 def synthetic_pdf(*, raster: bool = True) -> bytes:
@@ -184,6 +184,33 @@ class LiteratureSourceTests(unittest.TestCase):
         self.assertIsNone(false["table_number"])
         self.assertIsNone(false["caption"])
 
+    def test_positioned_captions_rank_actual_labels_without_object_order(self):
+        xml = b'''<html><body><doc><page width="300" height="400"><flow><block>
+          <line><word xMin="20" yMin="110" xMax="68" yMax="121">Figure</word><word xMin="70" yMin="110" xMax="80" yMax="121">7:</word><word xMin="82" yMin="110" xMax="150" yMax="121">Calibration</word></line>
+          <line><word xMin="20" yMin="123" xMax="150" yMax="134">error curves.</word></line>
+          </block><block><line><word xMin="20" yMin="210" xMax="200" yMax="221">Table 3. Runtime measurements.</word></line></block>
+          <block><line><word xMin="20" yMin="310" xMax="220" yMax="321">As Figure 2 shows, calibration improves.</word></line></block>
+          </flow></page></doc></body></html>'''
+        result = assets._caption_candidates(xml, question="calibration error", max_selected=1)
+        self.assertEqual(len(result["candidates"]), 2)
+        selected = [item for item in result["candidates"] if item["selection"]["selected"]]
+        self.assertEqual(selected[0]["figure_number"], "7")
+        self.assertEqual(selected[0]["pdf_page"], 1)
+        self.assertEqual(selected[0]["caption_bbox"], [20, 110, 150, 134])
+        self.assertIn("error curves", selected[0]["caption"])
+        self.assertFalse(selected[0]["spatial_association_verified"])
+        self.assertFalse(result["semantic_relevance_verified"])
+        self.assertIsNone(result["candidates"][1]["figure_number"])
+        self.assertEqual(result["candidates"][1]["table_number"], "3")
+        self.assertEqual(assets._caption_candidates(xml, question="unrelated zirconium")["selected_candidate_ids"], [])
+
+    def test_positioned_caption_parser_rejects_entities_and_bad_coordinates(self):
+        for xml in (b'<!DOCTYPE html [<!ENTITY x "unsafe">]><html/>',
+                    b'<doc><page width="nan" height="400"/></doc>',
+                    b'<doc><page width="300" height="400"><block><line><word xMin="-1" yMin="3" xMax="200" yMax="20">Figure 2: bad</word></line></block></page></doc>'):
+            with self.subTest(xml=xml), self.assertRaises(assets.LiteratureAssetError):
+                assets._caption_candidates(xml)
+
 
 @unittest.skipUnless(HAS_PDF_TOOLS, "cloud extraction needs pypdf, Pillow and pdftoppm")
 class LiteraturePDFTests(unittest.TestCase):
@@ -232,6 +259,39 @@ class LiteraturePDFTests(unittest.TestCase):
         result = assets.extract(self.project, "data/raw/literature/source.pdf")
         self.assertFalse(any(item["kind"] == "image_object" for item in result["assets"]))
         self.assertTrue(any(item["kind"] == "page_render" for item in result["assets"]))
+
+    def test_automatic_caption_coordinates_and_question_selection_use_actual_pdf(self):
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("no model permitted")):
+            result = assets.extract(self.project, "data/raw/literature/source.pdf",
+                                    question="recorded measurements", max_selected=1)
+        candidates = result["caption_discovery"]["candidates"]
+        self.assertTrue(candidates)
+        selected = [item for item in candidates if item["selection"]["selected"]]
+        self.assertEqual(len(selected), 1)
+        self.assertEqual(selected[0]["table_number"], "2")
+        self.assertEqual(result["selected_pages"], [1])
+        self.assertTrue(all(item["pdf_page"] == 1 for asset in result["assets"] for item in asset["occurrences"]))
+        crops = [occ for asset in result["assets"] for occ in asset["occurrences"] if occ["kind"] == "caption_context_crop"]
+        self.assertEqual(crops[0]["table_number"], "2")
+        self.assertEqual(crops[0]["label_verification"]["status"], "positioned_caption_match")
+        self.assertFalse(crops[0]["spatial_association_verified"])
+        empty = assets.extract(self.project, "data/raw/literature/source.pdf", question="zirconium unrelated")
+        self.assertEqual(empty["selected_pages"], [])
+        self.assertEqual(empty["assets"], [])
+
+    def test_unchanged_figure_extraction_reuses_assets_and_tampering_forces_rebuild(self):
+        first = assets.extract(self.project, "data/raw/literature/source.pdf", question="recorded measurements", max_selected=1)
+        with patch.object(assets, "discover_captions", side_effect=AssertionError("unchanged source must not be parsed again")):
+            again = assets.extract(self.project, "data/raw/literature/source.pdf", question="recorded measurements", max_selected=1)
+        self.assertTrue(again["cache_hit"])
+        self.assertEqual(again["manifest_sha256"], first["manifest_sha256"])
+        self.assertEqual(again["assets"], first["assets"])
+        (self.project / first["assets"][0]["path"]).write_bytes(b"tampered")
+        with patch.object(assets, "discover_captions", wraps=assets.discover_captions) as discover:
+            repaired = assets.extract(self.project, "data/raw/literature/source.pdf", question="recorded measurements", max_selected=1)
+        self.assertEqual(discover.call_count, 1)
+        self.assertNotIn("cache_hit", repaired)
+        self.assertEqual(assets.digest((self.project / repaired["assets"][0]["path"]).read_bytes()), repaired["assets"][0]["sha256"])
 
     def test_hash_mismatch_page_limit_and_bad_crops_fail_closed(self):
         with self.assertRaisesRegex(assets.LiteratureAssetError, "hash"):

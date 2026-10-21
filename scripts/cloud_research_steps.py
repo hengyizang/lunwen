@@ -434,7 +434,8 @@ def after_write(project: Path, stage: str) -> dict:
                 refresh(project)
             elif action in {"literature_discover", "literature_register", "literature_resolve", "literature_figures",
                             "literature_analyze", "literature_workbench", "literature_search",
-                            "literature_itinerary", "literature_compare"} and stage != "intake":
+                            "literature_itinerary", "literature_compare", "literature_progress",
+                            "literature_feedback", "literature_feedback_propose"} and stage != "intake":
                 from scripts.literaturectl import execute_operation
                 result = execute_operation(project, operation)
                 report.setdefault("literature_workbench", []).append({"action": action, "result": result})

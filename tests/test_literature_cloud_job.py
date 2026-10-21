@@ -90,6 +90,28 @@ class LiteratureCloudJobTests(unittest.TestCase):
         with self.assertRaisesRegex(cloud_job.CloudJobError, "nonfinite"):
             cloud_job.literature_operation(self.project, "program/literature-request.json")
 
+    def test_feedback_review_authority_is_constructed_only_from_matching_owner_event(self):
+        operation = {"action": "literature_feedback_review", "proposal_id": "proposal-one",
+            "expected_proposal_sha256": "a" * 64, "expected_plan_sha256": "b" * 64,
+            "decision": "adopt", "reviewed_by": "hengyizang", "reason": "Review exact changes"}
+        self.operation.write_text(json.dumps(operation))
+        event = issue(request())
+        event["issue"].update(number=901)
+        event["issue"]["user"]["login"] = "hengyizang"
+        event_path = self.root / "event.json"
+        event_path.write_text(json.dumps(event))
+        with self.mocked_job() as mocks, patch.dict(os.environ, {"GITHUB_EVENT_PATH": str(event_path)}):
+            self.assertEqual(cloud_job.run_job(request(), "901"), 0)
+            proof = mocks.execute.call_args.kwargs["owner_authorization"]
+            self.assertEqual(proof["actor"], "hengyizang")
+            self.assertEqual(proof["source_issue_id"], 901)
+            self.assertEqual(len(proof["request_sha256"]), 64)
+        event["issue"]["user"]["id"] = 42
+        event_path.write_text(json.dumps(event))
+        with self.mocked_job() as mocks, patch.dict(os.environ, {"GITHUB_EVENT_PATH": str(event_path)}):
+            self.assertEqual(cloud_job.run_job(request(), "902"), 1)
+            mocks.execute.assert_not_called()
+
     def test_prepared_analysis_and_all_controlled_nonpaid_operations_are_available(self):
         values = [{"action": "literature_discover"}, {"action": "literature_resolve", "url": "https://arxiv.org/abs/2501.00001"},
                   {"action": "literature_figures", "pdf": "literature/paper.pdf", "manifest": "data/manifests/paper.json"},

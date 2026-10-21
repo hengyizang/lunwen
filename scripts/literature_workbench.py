@@ -25,7 +25,10 @@ from scripts.research_artifacts import path_in, read, record, sha, write
 CONFIG = "program/literature-workbench.json"
 OUTPUT = "reports/literature-workbench"
 FIELDS = ("research_question", "contributions", "methods", "baseline", "splits",
-          "metrics", "ablations", "findings", "limitations", "counterevidence")
+          "metrics", "ablations", "findings", "limitations", "counterevidence",
+          "hypotheses", "competing_explanations", "assumptions", "datasets", "protocols",
+          "negative_controls", "robustness", "statistics", "compute_budget", "resources",
+          "comparability", "contradictions", "discriminating_tests", "falsification", "thesis_contribution")
 KINDS = {"author_claim", "model_inference", "human_interpretation"}
 RELATIONS = {"cites", "extends", "supports", "contradicts", "compares_with",
              "replicates", "uses_baseline", "uses_dataset", "shares_method"}
@@ -38,6 +41,14 @@ HASH = re.compile(r"[0-9a-f]{64}\Z")
 STOPWORDS = {"the", "and", "this", "that", "with", "from", "what", "which", "paper", "study"}
 MAX_TEXT = 2_000_000
 MAX_TOTAL = 100_000_000
+
+
+def _implementation_hash():
+    # Views and reuse depend on every renderer/reasoning implementation, rather
+    # than just this entry point. A helper update must invalidate old snapshots.
+    paths = (Path(__file__), Path(__file__).with_name("literature_browser.py"),
+             Path(__file__).with_name("literature_reasoning.py"))
+    return _digest({p.name: sha(p) for p in paths if p.is_file()})
 
 
 def _json(data):
@@ -221,6 +232,11 @@ def _asset_binding(project, value, source, manifest, files):
 
 def _figures(project, binding, source, manifest, files):
     bound = files.binding(binding)
+    from scripts.output_provenance import current_origin
+    origin = current_origin(project, _path(project, bound["path"]))
+    if (origin.get("status") != "tracked" or origin.get("family") != "other"
+            or origin.get("model") != "scripts/literature_assets.py"):
+        raise ValueError("original figure manifests require tracked deterministic extraction provenance")
     value = _json(files.get(bound["path"])[0])
     if (not isinstance(value, dict) or value.get("schema_version") != 1
             or value.get("source_pdf_sha256") != source["sha256"]
@@ -239,19 +255,30 @@ def _figures(project, binding, source, manifest, files):
             page = occurrence.get("pdf_page")
             if type(page) is not int or not 1 <= page <= value["pdf_page_count"]:
                 raise ValueError("figure occurrence page lies outside the original PDF")
-            if occurrence.get("kind") not in {"image_object", "page_render", "source_crop"}:
+            if occurrence.get("kind") not in {"image_object", "page_render", "source_crop", "caption_context_crop"}:
                 raise ValueError("figure occurrence must retain its original extraction kind")
             labels = {}
+            for key in ("bbox", "caption_bbox"):
+                coordinates = occurrence.get(key)
+                if coordinates is not None and (not isinstance(coordinates, list) or len(coordinates) != 4
+                        or any(type(v) not in {int, float} or not math.isfinite(v) or not 0 <= v <= 100000 for v in coordinates)
+                        or coordinates[0] >= coordinates[2] or coordinates[1] >= coordinates[3]):
+                    raise ValueError("figure coordinates must retain bounded finite PDF rectangles")
             for key in ("figure_number", "table_number", "caption"):
                 label = occurrence.get(key)
                 if label is not None and (not isinstance(label, str) or len(label) > 6000):
                     raise ValueError("original figure labels/captions must be bounded text or unknown")
                 labels[key] = label
             locations.append({"pdf_page": page, "kind": occurrence["kind"], **labels,
-                              "bbox": occurrence.get("bbox"), "semantic_verification": False})
+                              "bbox": occurrence.get("bbox"), "caption_bbox": occurrence.get("caption_bbox"),
+                              "label_verification": occurrence.get("label_verification"),
+                              "spatial_association_verified": False,
+                              "selection": occurrence.get("selection"), "semantic_verification": False})
         assets.append({**bound_asset, "occurrences": locations, "source_pdf_sha256": source["sha256"],
                        "previewable": Path(bound_asset["path"]).suffix.lower() in {".png", ".jpg", ".jpeg"}})
     return {**bound, "assets": assets, "source_pdf_sha256": source["sha256"],
+            "selection_policy": value.get("selection_policy"), "selected_pages": value.get("selected_pages", []),
+            "caption_discovery": value.get("caption_discovery"),
             "labels_not_inferred": True, "semantic_verification": False}
 
 
@@ -535,7 +562,7 @@ def _snapshot(project, output_dir=None, *, current=True):
     if origin.get("status") != "tracked" or origin.get("family") == "anthropic":
         raise ValueError("workbench manifest provenance is stale or untracked; rebuild")
     manifest = read(manifest_path)
-    if manifest.get("schema_version") != "1.0" or manifest.get("implementation_sha256") != sha(Path(__file__)):
+    if manifest.get("schema_version") != "1.0" or manifest.get("implementation_sha256") != _implementation_hash():
         raise ValueError("workbench implementation changed; rebuild the snapshot")
     if manifest.get("output_dir") != relative:
         raise ValueError("workbench manifest output directory differs")
@@ -603,8 +630,10 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
     try:
         old, old_index, _ = _snapshot(project, relative, current=False)
         previous = {p["id"]: p for p in old["papers"]}
+        previous_views = {name: read(directory / name) for name in ("comparison.json", "itinerary.json")}
     except (ValueError, OSError, KeyError, TypeError):
         previous, old_index = {}, {"documents": []}
+        previous_views = {}
     papers, documents, errors, reused = {}, [], [], []
     for spec in entries:
         if not isinstance(spec, dict):
@@ -667,7 +696,7 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
             if paper["figure_manifest"]:
                 dependencies += [paper["figure_manifest"], *paper["figure_manifest"]["assets"]]
             fingerprint = _digest({"spec": spec, "dependencies": dependencies,
-                                   "scope": scope, "implementation": sha(Path(__file__))})
+                                   "scope": scope, "implementation": _implementation_hash()})
             paper["input_fingerprint"] = fingerprint
             prior = previous.get(identifier, {})
             if prior.get("input_fingerprint") == fingerprint and prior.get("status") == "current":
@@ -712,6 +741,28 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
     pending_itinerary = {"schema_version": "1.0", "question": None, "steps": [],
                          "status": "pending_explicit_reading_question", "model_call_made": False,
                          "scientific_completion_verified": False, "gate_approved": False}
+    views_reused = not errors and bool(previous) and set(reused) == set(previous) == set(papers)
+    if views_reused:
+        def fresh_view(value):
+            try:
+                bindings = value.get("inputs", [])
+                if not all(sha(_path(project, item["path"])) == item["sha256"] for item in bindings):
+                    return False
+                if value.get("implementation_sha256"):
+                    for key, default in (("reasoning_path", "program/literature-reasoning.json"),
+                                         ("progress_path", "program/literature-progress.json")):
+                        if key == "progress_path" and value.get("kind") != "section_aware_evidence_bound_reading_plan":
+                            continue
+                        path = value.get(key) or default
+                        if _path(project, path, exists=False).is_file() != any(i["path"] == path for i in bindings):
+                            return False
+                return True
+            except (OSError, ValueError, KeyError):
+                return False
+        if fresh_view(previous_views.get("comparison.json", {})):
+            overview = previous_views.get("comparison.json", overview)
+        if fresh_view(previous_views.get("itinerary.json", {})):
+            pending_itinerary = previous_views.get("itinerary.json", pending_itinerary)
     targets = []
     for name, value in (("library.json", library), ("search-index.json", index), ("graph.json", graph),
                         ("comparison.json", overview), ("itinerary.json", pending_itinerary)):
@@ -728,7 +779,7 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
             note.write_text(_markdown_note(paper), encoding="utf-8")
             targets.append(note)
     dashboard = _path(project, relative + "/index.html", exists=False)
-    dashboard.write_text(_html(project, directory, library, graph), encoding="utf-8")
+    dashboard.write_text(_html(project, directory, library, graph, index), encoding="utf-8")
     targets.append(dashboard)
     # Reject a concurrent source edit before presenting the newly built snapshot.
     checked_files = _Files(project)
@@ -744,7 +795,7 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
         if current_hash != digest:
             raise ValueError("workbench input changed during build; snapshot not committed")
     manifest = {"schema_version": "1.0", "output_dir": relative,
-                "implementation_sha256": sha(Path(__file__)),
+                "implementation_sha256": _implementation_hash(),
                 "inputs": [{"path": name, "sha256": value[1],
                     **({"kind": "approved_binary_pdf", "manifest": files.approved_pdfs[name]["manifest"]}
                        if name in files.approved_pdfs else
@@ -760,7 +811,7 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
     return {"output_dir": relative, "library": relative + "/library.json",
             "dashboard": relative + "/index.html", "manifest": relative + "/manifest.json",
             "status": library["status"], "paper_count": len(papers), "block_count": len(documents),
-            "reused_papers": reused, "errors": errors, "model_call_made": False,
+            "reused_papers": reused, "views_reused": views_reused, "errors": errors, "model_call_made": False,
             "scientific_completion_verified": False}
 
 
@@ -794,63 +845,18 @@ def search(project: Path, query: str, *, topic_id=None, paper_id=None, limit=10,
             "retrieval_completeness_verified": False, "scientific_completion_verified": False}
 
 
-def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, limit=8, output_dir=None) -> dict:
-    hits = search(project, question, topic_id=topic_id, paper_id=paper_id, limit=100, output_dir=output_dir)
-    if type(limit) is not int or not 1 <= limit <= 30:
-        raise ValueError("itinerary limit must be 1..30 papers")
-    library, _, _ = _snapshot(Path(project), output_dir)
-    papers = {p["id"]: p for p in library["papers"]}
-    groups = {}
-    for hit in hits["results"]:
-        groups.setdefault(hit["paper_id"], []).append(hit)
-    steps = []
-    for identifier, evidence in groups.items():
-        paper = papers[identifier]
-        fields = paper["card"].get("fields", {})
-        steps.append({"paper_id": identifier, "title": paper["title"],
-                      "reason": "Lexical relevance; read counterevidence and limitations before interpreting agreement.",
-                      "priority": "counterevidence" if fields.get("counterevidence") else "relevance",
-                      "score": max(h["score"] for h in evidence), "start_here": evidence[:3],
-                      "questions": [question, "Which baseline, split, metric and ablation actually distinguish the explanation?",
-                                    "Which limitation or contrary result could defeat this interpretation?"],
-                      "unknown_fields": paper["card"].get("unknown_fields", list(FIELDS)),
-                      "reading_status": paper["card"]["status"], "semantic_verification": False})
-    steps.sort(key=lambda s: (s["priority"] != "counterevidence", -s["score"], s["paper_id"]))
-    result = {"schema_version": "1.0", "question": question, "steps": steps[:limit],
-              "status": "reading_plan_only" if steps else "no_lexical_match_not_evidence_of_absence",
-              "retrieval_completeness_verified": False, "gate_approved": False,
-              "scientific_completion_verified": False, "model_call_made": False}
-    _save_view(Path(project), output_dir, "itinerary.json", result)
-    return result
+def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, limit=8,
+              output_dir=None, reasoning_path=None, progress_path=None) -> dict:
+    from scripts.literature_reasoning import itinerary as reasoned_itinerary
+    return reasoned_itinerary(project, question, topic_id=topic_id, paper_id=paper_id,
+        limit=limit, output_dir=output_dir, reasoning_path=reasoning_path, progress_path=progress_path)
 
 
-def comparison_packet(project: Path, paper_ids: list[str], *, question="", output_dir=None) -> dict:
-    if (not isinstance(paper_ids, list) or not 1 <= len(paper_ids) <= 30
-            or len(set(paper_ids)) != len(paper_ids)):
-        raise ValueError("comparison needs 1..30 distinct library paper IDs")
-    if question:
-        _text(question, "comparison question")
-    library, _, manifest = _snapshot(Path(project), output_dir)
-    papers = {p["id"]: p for p in library["papers"]}
-    if any(identifier not in papers for identifier in paper_ids):
-        raise ValueError("comparison references an unknown library paper")
-    rows = []
-    for identifier in paper_ids:
-        paper = papers[identifier]
-        if paper["status"] != "current":
-            raise ValueError("comparison refuses stale or invalid paper evidence")
-        fields = paper["card"]["fields"]
-        rows.append({"paper_id": identifier, "title": paper["title"], "topic_id": paper.get("topic_id"),
-                     "paper_ids": paper["paper_ids"], "fields": fields,
-                     "unknown_fields": [f for f in FIELDS if not fields[f]],
-                     "experiment_planning_gaps": [f for f in ("baseline", "splits", "metrics", "ablations") if not fields[f]],
-                     "source": paper["source"], "semantic_verification": False})
-    result = {"schema_version": "1.0", "kind": "source_bound_comparison_and_experiment_evidence_packet",
-              "question": question, "rows": rows, "snapshot_sha256": _digest(manifest),
-              "comparability_verified": False, "experiment_executed": False, "gate_approved": False,
-              "scientific_completion_verified": False, "author_claims_are_not_independent_facts": True}
-    _save_view(Path(project), output_dir, "comparison.json", result)
-    return result
+def comparison_packet(project: Path, paper_ids: list[str], *, question="", output_dir=None,
+                      reasoning_path=None) -> dict:
+    from scripts.literature_reasoning import comparison_packet as reasoned_comparison
+    return reasoned_comparison(project, paper_ids, question=question, output_dir=output_dir,
+                               reasoning_path=reasoning_path)
 
 
 def _save_view(project, output_dir, name, value):
@@ -859,10 +865,15 @@ def _save_view(project, output_dir, name, value):
     write(target, value)
     manifest_path = _path(project, relative + "/manifest.json")
     manifest = read(manifest_path)
-    manifest["outputs"] = [i for i in manifest["outputs"] if i["path"] != relative + "/" + name]
-    manifest["outputs"].append({"path": relative + "/" + name, "sha256": sha(target)})
+    directory = manifest_path.parent
+    dashboard = directory / "index.html"
+    dashboard.write_text(_html(project, directory, read(directory / "library.json"),
+        read(directory / "graph.json"), read(directory / "search-index.json")), encoding="utf-8")
+    updated = {relative + "/" + name, relative + "/index.html"}
+    manifest["outputs"] = [i for i in manifest["outputs"] if i["path"] not in updated]
+    manifest["outputs"] += [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in (target, dashboard)]
     write(manifest_path, manifest)
-    record(project, [target, manifest_path], "scripts/literature_workbench.py")
+    record(project, [target, dashboard, manifest_path], "scripts/literature_workbench.py")
 
 
 def _https(value):
@@ -945,14 +956,32 @@ def _markdown_note(paper):
                           "> " + plain(anchor["quote"]).replace("\n", "\n> "), ""]
     return "\n".join(lines) + "\n"
 
-def _html(project, directory, library, graph):
+def _html(project, directory, library, graph, index=None):
+    from scripts import literature_browser
     esc = lambda value: html.escape(str(value), quote=True)
     parts = ["<!doctype html><html lang=\"en\"><meta charset=\"utf-8\">",
-             "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'\">",
+             "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'sha256-" + literature_browser.script_hash() + "'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'\">",
              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Reading workbench</title>",
              "<style>body{font:16px system-ui;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#17324d}article{border:1px solid #ccd5df;border-radius:10px;padding:1rem;margin:1rem 0}a{color:#125ba1}pre{white-space:pre-wrap;overflow-wrap:anywhere}small{color:#475569}img{max-width:300px}table{border-collapse:collapse}td,th{padding:.5rem;border:1px solid #ccd5df;vertical-align:top}</style>",
              "<h1>Reading workbench</h1><p>Personal reading aid. Located text is not semantic verification, a human reading record, or gate approval.</p>",
              "<p>Status: " + esc(library["status"]) + "</p>"]
+    def search_link(paper, row):
+        if row.get("pdf_page") and paper["source"]["path"].lower().endswith(".pdf"):
+            return _href(project, directory, paper["source"]["path"], page=row["pdf_page"],
+                         source=paper["source"], manifest=paper.get("manifest"))
+        return _href(project, directory, row["path"])
+    parts.append(literature_browser.markup(literature_browser.payload(library, index or {"documents": []}, search_link)))
+    views = []
+    for name in ("itinerary.json", "comparison.json"):
+        path = directory / name
+        view = read(path) if path.is_file() else {}
+        try:
+            if any(sha(_path(project, item["path"])) != item["sha256"] for item in view.get("inputs", [])):
+                view = {}
+        except (ValueError, OSError, KeyError):
+            view = {}
+        views.append(view)
+    parts.append(literature_browser.planning_markup(*views))
     parts.append("<h2>Source relationship map</h2>" + _graph_svg(graph))
     for paper in library["papers"]:
         parts.append('<article id="' + esc(paper["id"]) + '"><h2>' + esc(paper["title"]) + "</h2>")
