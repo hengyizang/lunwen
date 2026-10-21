@@ -1418,7 +1418,7 @@
       "case_sha256": "461262efc93f0642733f23bb1244c5f418b0ca7755c56aee31e790b385bb5e39",
       "quote_sha256": "704506e417d6f8328a986b97ea3480ca86ad7072d810e699b0be62a7b4c2718a",
       "reserved_ceiling_cny": 1.6859136,
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "meter_before": {
         "provider": "codekey-kiro-enterprise",
@@ -1505,7 +1505,21 @@
         "requires_manual_review": false,
         "scope": "clarified synthetic deterministic screening only"
       },
-      "duration_seconds": 24.789
+      "duration_seconds": 24.789,
+      "actual_cost_cny": 0.00254534,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 17,
+          "cost_cny": 0.14025907
+        },
+        "after": {
+          "requests": 18,
+          "cost_cny": 0.14280441
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "status": "running",
