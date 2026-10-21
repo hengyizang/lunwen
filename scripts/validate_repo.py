@@ -13,6 +13,8 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 EXPECTED_STAGES = {
@@ -305,6 +307,11 @@ def main() -> int:
     except ImportError:
         from research_methods import installation_errors
     errors.extend(installation_errors(ROOT))
+    try:
+        from scripts.literaturectl import installation_errors as literature_installation_errors
+        errors.extend(literature_installation_errors(ROOT))
+    except ImportError as exc:
+        errors.append(f"literature integration unavailable: {exc}")
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)
     if isinstance(plugin, dict) and plugin.get("name") != "doctoral-research-os":

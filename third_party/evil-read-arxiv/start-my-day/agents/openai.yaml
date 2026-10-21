@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Paper Brief"
+  short_description: "Search and summarize daily papers into Obsidian"
+  default_prompt: "Use $start-my-day to create today's paper recommendations in my Obsidian vault."

@@ -7,8 +7,11 @@ from pathlib import Path, PurePosixPath
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
                   "reports/manuscript-hygiene", "reports/reviewer-rounds",
-                  "reports/publication-disclosure", "reports/statistical-watermarks")
-EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json"}
+                  "reports/publication-disclosure", "reports/statistical-watermarks",
+                  "reports/literature-workbench", "reports/literature-intelligence",
+                  "reports/literature-analysis")
+EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json",
+                  "program/topic-leads.json"}
 
 
 def declared_outputs(root: Path) -> set[str]:

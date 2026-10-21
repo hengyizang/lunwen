@@ -1,4 +1,23 @@
 # Selected research-method sources
+## Literature skills
+
+The five complete source skill trees from juliye2025/evil-read-arxiv are retained
+at ef3a594841081703259545c828c98b52af835817 in third_party/evil-read-arxiv/.
+The upstream README declares MIT License; that revision has no separate LICENSE
+file. The README declaration and author attribution are retained rather than
+inventing an upstream copyright or claiming this notice grants broader rights.
+Copies normalize line endings and a terminal newline; source Git blob identities
+and the installed canonical hashes are recorded in integrations/evil-read-arxiv.lock.json.
+Native skills/start-my-day, paper-analyze, extract-paper-images, paper-search and
+conf-papers adapt the workflow to the existing cloud/evidence/budget controls.
+The web service and its direct Anthropic/shell execution paths are not installed.
+
+The official OpenAI skill-installer helper and github_utils are retained under
+third_party/codex-skill-installer/ at the revision pinned by that same lock, with
+the component's original LICENSE.txt. Cloud validation executes the helper to
+install all five upstream skills in an isolated temporary directory, then installs
+the reviewed project adaptations for actual use. No upstream research script is
+executed automatically during installation.
 
 Selected files are retained unchanged at the commits and hashes listed in
 `integrations/vendored-research-methods.json`. Native adaptations and adapters

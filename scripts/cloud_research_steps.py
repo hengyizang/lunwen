@@ -432,6 +432,12 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "research_notebook" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_notebook import refresh
                 refresh(project)
+            elif action in {"literature_discover", "literature_register", "literature_resolve", "literature_figures",
+                            "literature_analyze", "literature_workbench", "literature_search",
+                            "literature_itinerary", "literature_compare"} and stage != "intake":
+                from scripts.literaturectl import execute_operation
+                result = execute_operation(project, operation)
+                report.setdefault("literature_workbench", []).append({"action": action, "result": result})
             elif action == "research_notebook_daily" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_notebook import daily_brief
                 daily_brief(project)

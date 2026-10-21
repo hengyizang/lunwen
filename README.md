@@ -456,3 +456,12 @@ schemas/              数据、实验、审核、期刊与证据格式
 scripts/              API/CLI 编排器、状态机、发现、执行与审计工具
 venues/               期刊清单（需在 G5 复核）
 ```
+# Literature discovery and reading
+
+The five project-native evil-read-arxiv skills provide public literature discovery,
+provisional topic leads, authorized full-text cards, original figure extraction,
+existing-note search and linked reading views. See
+[the cloud literature workbench](docs/LITERATURE-WORKBENCH.md) for installation,
+inputs and the evidence/budget boundaries. Abstract keywords remain explainable
+discovery signals; they do not assess our manuscript's scientific quality.
+

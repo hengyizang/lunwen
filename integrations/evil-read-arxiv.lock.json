@@ -1,0 +1,172 @@
+{
+  "source_repository": "juliye2025/evil-read-arxiv",
+  "normalization": "LF line endings and one terminal newline; semantic code retained",
+  "files": [
+    {
+      "path": "third_party/evil-read-arxiv/README.md",
+      "canonical_lf_sha256": "57006d6b0f8c4d338d56ad5b396108f8e94bf26b1a79a597fd29aa6c6c5a649c",
+      "upstream_git_blob_sha": "d92700798ab46d2b67d92cc778c50757f207577d",
+      "source_path": "README.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/conf-papers/SKILL.md",
+      "canonical_lf_sha256": "3d59d3c66f1b0b96fe997afa6c4fe72dea6189f86b12c4c1481fefa393400a2b",
+      "upstream_git_blob_sha": "585cf5093c2f3ab996d3ce1813539dfd6b2b1f0d",
+      "source_path": "conf-papers/SKILL.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/conf-papers/agents/openai.yaml",
+      "canonical_lf_sha256": "9bda7468abcb32e1fcedb7838163188c779c193427322e14f8f588eda2dfa92e",
+      "upstream_git_blob_sha": "41667f40bf1ea59a413274952884efa1a9e3987e",
+      "source_path": "conf-papers/agents/openai.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/conf-papers/conf-papers.yaml",
+      "canonical_lf_sha256": "9b9a148a02d80ac287106639daedb4dce4e555664586b7bea11a10126b6e8e22",
+      "upstream_git_blob_sha": "823dc15029ab28424dc26d7114eac4c815124696",
+      "source_path": "conf-papers/conf-papers.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/conf-papers/scripts/search_conf_papers.py",
+      "canonical_lf_sha256": "3bc981739173b37de39a4b0016dc86360083ec0b5d29921e20f94b08c637ef75",
+      "upstream_git_blob_sha": "c755e4773cfdec94be1687376dc5d6a6851dc247",
+      "source_path": "conf-papers/scripts/search_conf_papers.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/config.example.yaml",
+      "canonical_lf_sha256": "abf74ebc98d7d389075ca44a9482c11589ec36fb94b9d6a82f351a5192b220c2",
+      "upstream_git_blob_sha": "8fd479752f1007393b2d502dc76b65fb85bccf0e",
+      "source_path": "config.example.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/extract-paper-images/SKILL.md",
+      "canonical_lf_sha256": "eccacdff149171b35eb8551672c7446c4b94a67a5c3a9cb8894ab182c111aefb",
+      "upstream_git_blob_sha": "ee68aa8fcb7947109a9f315c3e73f7fb6f60e986",
+      "source_path": "extract-paper-images/SKILL.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/extract-paper-images/agents/openai.yaml",
+      "canonical_lf_sha256": "25217d0c12a2b7274103422fa8373936136171df1924da3f323c69d34ead1172",
+      "upstream_git_blob_sha": "6770f966d1a40a1521fe575a62613720d40283f9",
+      "source_path": "extract-paper-images/agents/openai.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/extract-paper-images/scripts/extract_images.py",
+      "canonical_lf_sha256": "6002728d52742502af8e1bafdb9b2d9dfe49531ba44f2083a28d3165068ac581",
+      "upstream_git_blob_sha": "50871ab3701e6d400a2a95ab702b7bee31e44d60",
+      "source_path": "extract-paper-images/scripts/extract_images.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-analyze/SKILL.md",
+      "canonical_lf_sha256": "57f6eab23f8eb75b964323d0d39b69971120edb5139a0e778fd4f4a06366845b",
+      "upstream_git_blob_sha": "5ac4fd1d70e4414efa4f8c94eaf9c4996d53973a",
+      "source_path": "paper-analyze/SKILL.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-analyze/agents/openai.yaml",
+      "canonical_lf_sha256": "832c02752972cfa426a2c9369eb8073d08a154e57f8dda3eecd189a43863cfc5",
+      "upstream_git_blob_sha": "924756d60a44cdee86fde61880d192252245a57f",
+      "source_path": "paper-analyze/agents/openai.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-analyze/scripts/generate_note.py",
+      "canonical_lf_sha256": "0620ba4b4651f1e988eff19eb53cc1555155e4af18ea47fcee888a334bed71c1",
+      "upstream_git_blob_sha": "53688ffce55089b6fd71cc4f29622469ce613643",
+      "source_path": "paper-analyze/scripts/generate_note.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-analyze/scripts/resolve_source.py",
+      "canonical_lf_sha256": "fd7ca8733cc76a767f66ece2aa75587e490288ef98bbb39b78e11620d6f119cc",
+      "upstream_git_blob_sha": "267ea1c7a61f582a3a150cf9fd4705e858606f99",
+      "source_path": "paper-analyze/scripts/resolve_source.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-analyze/scripts/update_graph.py",
+      "canonical_lf_sha256": "a0394b31e509833f782ba85a6629a9fd3a6f2e28a1fa8ca952afe9fc21c370fa",
+      "upstream_git_blob_sha": "b50330aee2f4f3889d7c51ddecb2806d7d72732a",
+      "source_path": "paper-analyze/scripts/update_graph.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-search/SKILL.md",
+      "canonical_lf_sha256": "cd9591ba2efe8e6e5a0426951837ea7728ed975a1e3be5c4c88e4a50e3251ad0",
+      "upstream_git_blob_sha": "0698ef2b9a40b5f88a494668b201eceee8e8d85c",
+      "source_path": "paper-search/SKILL.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-search/agents/openai.yaml",
+      "canonical_lf_sha256": "3a11a8a55ecd22d3e2e4cc6d4cbd57ca67d29b071e9365ecdeda4bcfe5a07f5d",
+      "upstream_git_blob_sha": "6e4fd7e5b98b5390e3aeaf8d9421050ace7fcac9",
+      "source_path": "paper-search/agents/openai.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/paper-search/scripts/paper_hunter.py",
+      "canonical_lf_sha256": "1b3c999bb3ad4ab3e244cb4763022c053901a89a098020d2710ae2c76869a712",
+      "upstream_git_blob_sha": "9652a3723233d878e8b041c5034352cd1ff14e57",
+      "source_path": "paper-search/scripts/paper_hunter.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/requirements.txt",
+      "canonical_lf_sha256": "76726c83217236d28011d1672e324b607bde0187824105695f5c47bffd75164a",
+      "upstream_git_blob_sha": "4627b075c2433cb9fa0e3944471d0e820ebfbdff",
+      "source_path": "requirements.txt"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/SKILL.md",
+      "canonical_lf_sha256": "6e2897665b722cc923b32f30250b5389199ff20a4336b956a0eb6c903670d893",
+      "upstream_git_blob_sha": "be9282fab7b73d5ba207816690f5b83d53b82351",
+      "source_path": "start-my-day/SKILL.md"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/agents/openai.yaml",
+      "canonical_lf_sha256": "7b85f78f7a9b10551239c24df130cc9385e454fbb2aa33e3126c64576f266ef4",
+      "upstream_git_blob_sha": "7ca2545abaa6b221677868ea5c0b7e23c445e677",
+      "source_path": "start-my-day/agents/openai.yaml"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/scripts/common_words.py",
+      "canonical_lf_sha256": "288a5153e9e8818715f157cebdab9e9bb17ca5201733fcbb1d618e98b97f38c4",
+      "upstream_git_blob_sha": "f1fcf88f85ddf0c8f42a21aa80e74d08d9cfdcab",
+      "source_path": "start-my-day/scripts/common_words.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/scripts/link_keywords.py",
+      "canonical_lf_sha256": "8e4131993276f84dd2dc20fb8218a163570456a07a6fb67c991ae7ff24cf5529",
+      "upstream_git_blob_sha": "7b4b28b8136c3c8aa82acc31e592e6502cfea91c",
+      "source_path": "start-my-day/scripts/link_keywords.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/scripts/scan_existing_notes.py",
+      "canonical_lf_sha256": "e443dcf369143da5acedd8df13c010bd7e23147000a36882dc26b9e8fae32e15",
+      "upstream_git_blob_sha": "d6262942dcf011f61042d35db815ad488456415f",
+      "source_path": "start-my-day/scripts/scan_existing_notes.py"
+    },
+    {
+      "path": "third_party/evil-read-arxiv/start-my-day/scripts/search_arxiv.py",
+      "canonical_lf_sha256": "2031e4612560fecc26815d780b43f1dada38d322cb2d339830a3b8b1dcb3a7d8",
+      "upstream_git_blob_sha": "e2da0b75835f22b0c009c7f9dd82bb5b401f69ff",
+      "source_path": "start-my-day/scripts/search_arxiv.py"
+    }
+  ],
+  "upstream_commit": "ef3a594841081703259545c828c98b52af835817",
+  "schema_version": "1.0",
+  "installer": {
+    "source_repository": "openai/skills",
+    "commit": "49f948faa9258a0c61caceaf225e179651397431",
+    "files": [
+      {
+        "canonical_lf_sha256": "0fbbd36e8ea294442c0bd48d6f610a2e8656216bfef5c322f1dcf448ef2f09f1",
+        "path": "third_party/codex-skill-installer/install-skill-from-github.py"
+      },
+      {
+        "canonical_lf_sha256": "61c1bbe2ae217433b4b6f9f09f21aca4df52c12598068343ade719f706e4859b",
+        "path": "third_party/codex-skill-installer/github_utils.py"
+      },
+      {
+        "canonical_lf_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "path": "third_party/codex-skill-installer/LICENSE.txt"
+      }
+    ],
+    "source_directory": "skills/.system/skill-installer"
+  },
+  "license_declaration": "MIT in upstream README; no standalone LICENSE in pinned tree"
+}

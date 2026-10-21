@@ -74,3 +74,32 @@ dossier flow. These operations never approve science or change paid authority.
 Follow-up deterministic builders are documented in [Quality controls follow-up](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Add `research_support`, `support_sources`, `research_notebook_daily` or `review_packets` at their documented stages, or `revision_ledger` plus `paper_id` at writing-and-review. Only `support_sources` performs bounded public metadata GETs; none enables paid calls or experiments. Owner-only `confirm_review_packet` uses `packet_id`, exact dossier SHA and structured human `judgments`; it never grants a scientific gate.
 
 The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.
+# Literature workbench operations
+
+literature_register selects a real candidate from the exact current topic-leads
+hash using candidate_id and expected_leads_sha256. Optional paper_id,
+acquisition_receipt {path,sha256}, manifest and reader {path,sha256} link an
+owner-authorized full text; metadata-only registration grants no screening or
+full-text-read decision.
+
+See [LITERATURE-WORKBENCH.md](../docs/LITERATURE-WORKBENCH.md). At any research
+stage after intake, the existing queue accepts literature_discover(plan,output?),
+literature_resolve(url), literature_figures(pdf,manifest,figures?),
+literature_analyze(paper_id,config?,execute?,max_output_tokens?),
+literature_workbench(config?), literature_search(query,topic_id?,paper_id?,limit?),
+literature_itinerary(question,topic_id?,paper_id?,limit?), and
+literature_compare(paper_ids,question?). Discovery uses the explicit proposed or
+current doctoral question in program/literature-plan.json. Source-bound topic
+leads feed the existing G1 shortlist/hypothesis/novelty/thesis contracts; ranking
+does not choose a topic or grant novelty. Rhetoric keywords are discovery aids.
+
+Do not author program/topic-leads.json or reports/literature-* executor results.
+Author source-bound workbench inputs/cards instead and request their builders.
+No paid call occurs except explicit literature_analyze execute:true through the
+existing authorized OpenAI evidence-synthesis route. Use metadata and current
+notes before requesting full-text reanalysis. Do not alter model routing.
+Acquisition quarantines raw full text; reader/figure persistence requires the
+existing exact owner-approved full-text manifest. The non-billable owner cloud
+job literature can execute one request_file operation without a paid cycle and
+forbids execute:true. No operation approves human screening or G0-G5.
+

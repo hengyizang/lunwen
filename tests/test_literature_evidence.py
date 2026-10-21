@@ -15,12 +15,89 @@ from scripts.literature_evidence import (
     execute_search,
     fetch_provider_bytes,
     normalize_search,
+    parse_conditions,
+    filter_results,
     screen_receipt,
     validate_search_evidence,
 )
 
 
 class LiteratureEvidenceTests(unittest.TestCase):
+    def test_structured_dates_are_requested_and_returned_metadata_is_postchecked(self):
+        captured = []
+        def fetch(url, **_kwargs):
+            captured.append(urllib.parse.parse_qs(urllib.parse.urlsplit(url).query))
+            rows = [{"id": "old", "display_name": "Old result", "publication_year": 2019},
+                    {"id": "current", "display_name": "Current result", "publication_year": 2025},
+                    {"id": "unknown", "display_name": "Undated result"}]
+            return json.dumps({"results": rows}).encode(), url, 200, "application/json"
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.project(Path(directory))
+            receipt = execute_search(project, "openalex", "machinery", query_family="core",
+                date_range="2024-2026", filters="none", limit=10, fetcher=fetch)
+            self.assertIn("from_publication_date:2024-01-01", captured[0]["filter"][0])
+            self.assertEqual(receipt["result_count"], 1)
+            self.assertEqual(receipt["filtered_out_count"], 1)
+            self.assertEqual(receipt["unresolved_filter_count"], 1)
+            normalized = json.loads((project / receipt["normalized_results_path"]).read_text())
+            self.assertEqual(normalized["works"][0]["title"], "Current result")
+            self.assertEqual(normalized["filter_audit"]["unresolved"][0]["work"]["title"], "Undated result")
+            record = json.loads((project / "evidence/search-log.jsonl").read_text().strip())
+            self.assertIn("postfilter_checked", record["filters"])
+            record["filters"] = "Claimed complete filtering without an execution receipt"
+            self.assertTrue(any("search conditions" in error for error in validate_search_evidence(project, [record])))
+
+    def test_legacy_descriptions_are_explicitly_unapplied_and_unknown_structured_filters_fail(self):
+        parsed = parse_conditions("all indexed years; inspect dates", "journal and conference papers")
+        self.assertEqual(parsed["status"], "unfiltered_declared_only")
+        self.assertEqual(len(parsed["unapplied_declarations"]), 2)
+        rows = [{"id": "1", "publication_year": None, "title": "Unfiltered"}]
+        result, audit = filter_results("arxiv", rows, parsed)
+        self.assertEqual(result, rows)
+        self.assertEqual(audit["postfilter_checked"], [])
+        with self.assertRaises(LiteratureEvidenceError):
+            build_search_url("openalex", "query", 10, filters={"unsupported_filter": True})
+        with self.assertRaises(LiteratureEvidenceError):
+            parse_conditions("2026-2020", {})
+
+    def test_dblp_conference_enumeration_binds_official_stream_year_and_page(self):
+        url = build_search_url("dblp", "*", 100, date_range="2025", filters={"venue": "conf/icml", "year": 2025, "offset": 100})
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)["query"][0]
+        self.assertIn("<https://dblp.org/streams/conf/icml>", query)
+        self.assertIn('FILTER(STR(?year) = "2025")', query)
+        self.assertIn("dblp:Inproceedings", query)
+        self.assertIn("OFFSET 100", query)
+        self.assertNotIn("CONTAINS", query)
+        with self.assertRaises(LiteratureEvidenceError):
+            build_search_url("dblp", "*", 10, filters={"venue": "ICML> injected"})
+        with self.assertRaises(LiteratureEvidenceError):
+            build_search_url("dblp", "*", 10)
+
+    def test_exact_dates_and_document_types_distinguish_missing_from_nonmatching(self):
+        parsed = parse_conditions({"from": "2025-03-01", "to": "2025-05-31"}, {"document_types": ["conference-paper"]})
+        rows = [{"id": "1", "publication_date": "2025-04-02", "document_types": ["Conference"]},
+                {"id": "2", "publication_date": "2025-08-01", "document_types": ["Conference"]},
+                {"id": "3", "publication_year": 2025, "document_types": ["Conference"]}]
+        result, audit = filter_results("hal", rows, parsed)
+        self.assertEqual([row["id"] for row in result], ["1"])
+        self.assertEqual(audit["postfilter_only"], ["document_types", "publication_date"])
+        self.assertEqual(audit["unresolved"][0]["reasons"], ["exact_publication_date_missing"])
+
+    def test_s2_canonical_lookup_retains_enrichment_fields_and_checks_returned_identity(self):
+        url = build_search_url("semantic-scholar", "ignored title", 5, filters={"identity": "DOI:10.1000/example"})
+        self.assertIn("/paper/DOI%3A10.1000%2Fexample?", url)
+        self.assertIn("citationCount", urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)["fields"][0])
+        row = {"paperId": "S2", "title": "A paper", "year": 2025, "externalIds": {"DOI": "10.1000/example", "ArXiv": "2501.00001v2"},
+               "citationCount": 7, "abstract": "We propose a method.", "publicationTypes": ["Conference"]}
+        works = normalize_search("semantic-scholar", json.dumps(row).encode())
+        self.assertEqual(works[0]["citation_count"], 7)
+        self.assertEqual(works[0]["arxiv_id"], "2501.00001v2")
+        matched, _ = filter_results("semantic-scholar", works, parse_conditions(None, {"identity": "DOI:10.1000/example"}))
+        self.assertEqual(len(matched), 1)
+        rejected, audit = filter_results("semantic-scholar", works, parse_conditions(None, {"identity": "DOI:10.1000/other"}))
+        self.assertEqual(rejected, [])
+        self.assertEqual(audit["rejected"][0]["reasons"], ["identity_mismatch"])
+
     def project(self, root: Path) -> Path:
         project = root / "projects" / "demo"
         (project / "evidence").mkdir(parents=True)

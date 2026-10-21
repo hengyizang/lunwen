@@ -1,0 +1,4 @@
+interface:
+  display_name: "Extract Research Images"
+  short_description: "Extract figures from arXiv, public PDF URLs, and local PDFs"
+  default_prompt: "Use $extract-paper-images to extract key figures from this arXiv item, public PDF URL, or local PDF."
