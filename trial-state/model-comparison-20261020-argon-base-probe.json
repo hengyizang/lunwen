@@ -140,10 +140,20 @@
         "scope": "synthetic deterministic screening only"
       },
       "native_completion": "completed",
-      "duration_seconds": 11.227
+      "duration_seconds": 11.227,
+      "meter_after": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 3,
+        "cost_cny": 0.0086508,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "observed_cost_delta_cny": 0.0018948,
+      "billing_diagnostic": "aggregate_delta_not_attributed_while_prior_same_key_hold_exists"
     }
   ],
-  "status": "running",
+  "status": "closed_with_holds",
   "parent_unchanged": true,
-  "production_routing_changed": false
+  "production_routing_changed": false,
+  "closed_at": "2026-10-21T09:00:19.560156+00:00"
 }
