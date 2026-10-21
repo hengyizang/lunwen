@@ -1,0 +1,62 @@
+{
+  "authorization_id": "model-comparison-20261020-argon-base-probe",
+  "scope": {
+    "authorization_id": "model-comparison-20261020-argon-base-probe",
+    "parent_blob_sha": "63ee401edc29539bfa065e820b57dc4d025adbd9",
+    "parent_ledger_sha256": "86871b0eb593d99af5c37f9aa1c487c4890716dcd11ca90ba4418942f71f018c",
+    "parent_attempts": 105,
+    "sibling_attempts": 14,
+    "max_combined_attempts": 128,
+    "parent_committed_upper_cny": 0.79013873,
+    "parent_argon_holds": [
+      {
+        "call_id": "codekey-argon-high|evidence_conflict",
+        "candidate_id": "codekey-argon-high",
+        "provider": "codekey-gemini",
+        "model": "gemini-4-argon-high",
+        "effort": "high",
+        "case_id": "evidence_conflict",
+        "phase": "screening",
+        "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+        "quote_sha256": "3ed5425994b4b4b1ae3d020fb2d977e36774ace8970307ad6321a93465c0fe4e",
+        "reserved_ceiling_cny": 0.431508,
+        "meter_before": {
+          "provider": "codekey-gemini",
+          "kind": "codekey_total_actual_cost",
+          "requests": 2,
+          "cost_cny": 0.006756,
+          "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+        },
+        "generation_status": "response_failed",
+        "catalog_omission_probe": true,
+        "run_id": "39429999330",
+        "code_sha": "2568a1d5ee9e7b4e185998b8f1a4a742ca468655",
+        "billing_status": "reserved",
+        "reserved_at": "2026-10-20T13:25:36.003845+00:00",
+        "diagnostic": "API HTTP 503; no automatic generation retry; reconcile billing",
+        "duration_seconds": 0.2426,
+        "billing_diagnostic": "gateway debit has not uniquely appeared; retain reservation",
+        "billing_review_after": {
+          "provider": "codekey-gemini",
+          "kind": "codekey_total_actual_cost",
+          "requests": 2,
+          "cost_cny": 0.006756,
+          "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+        }
+      }
+    ],
+    "model": "gemini-4-argon",
+    "provider": "codekey-gemini",
+    "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+    "effort": "high",
+    "case_id": "visual_chart",
+    "case_sha256": "f1ad860914ddc2e2e2aec299e8e5aa4d3971b2b94067ac919a6e858aea643fdc",
+    "quote_sha256": "48543e2f1a547a3f03a49edd19a0a88d8fa73c4830585ac4279e7cc427eee07f",
+    "reserved_ceiling_cny": 9.1521024,
+    "max_fresh_calls": 1
+  },
+  "entries": [],
+  "status": "running",
+  "parent_unchanged": true,
+  "production_routing_changed": false
+}
