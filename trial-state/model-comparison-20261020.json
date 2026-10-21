@@ -15877,7 +15877,7 @@
       "catalog_omission_probe": false,
       "run_id": "39571949378",
       "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f",
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "reserved_at": "2026-10-21T08:49:27.377938+00:00",
       "reported_model": "claude-opus-5-5",
       "request_id": "msg_011CddV5vtT8ivkYIL4Td1E2",
@@ -15954,7 +15954,27 @@
         "requires_manual_review": false,
         "scope": "synthetic deterministic screening only"
       },
-      "duration_seconds": 8.4403
+      "duration_seconds": 8.4403,
+      "actual_cost_cny": 0.006242,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "claude-opus-5-5",
+          "quota": 3121,
+          "created_at": 1792572578,
+          "prompt_tokens": 16,
+          "completion_tokens": 284,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "93182bff62729934d213bbcfb803d0535b5960bf4c5acccfdf62e8dae4529277",
+        "after_snapshot_sha256": "c8a6e8863cee6be064d47b2a7efefbe9c9f416d162a2ee099fb8cc377b8e7ea9",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "reconciled_at": "2026-10-21T08:49:40.518044+00:00"
     }
   ],
   "status": "running",
