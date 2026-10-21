@@ -220,7 +220,7 @@
       "case_sha256": "461262efc93f0642733f23bb1244c5f418b0ca7755c56aee31e790b385bb5e39",
       "quote_sha256": "047330c88861d9b3369cef6f320eb5e2ed8c1dabf9608365a823dd603e4d1767",
       "reserved_ceiling_cny": 0.8651104,
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -564,7 +564,26 @@
         "requires_manual_review": false,
         "scope": "clarified synthetic deterministic screening only"
       },
-      "duration_seconds": 22.3247
+      "duration_seconds": 22.3247,
+      "actual_cost_cny": 0.00066,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-6.1-sol",
+          "quota": 330,
+          "created_at": 1792572843,
+          "prompt_tokens": 383,
+          "completion_tokens": 223,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "2a0e426a3126102502c47089c46501ebe3edb97287ccbfd0a7465079cbf7696e",
+        "after_snapshot_sha256": "653be7a0629212c437b760009b3d54dc39736d4c06173b13bde26252a9717ba4",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "status": "running",
