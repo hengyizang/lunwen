@@ -64,7 +64,7 @@
       "case_sha256": "f1ad860914ddc2e2e2aec299e8e5aa4d3971b2b94067ac919a6e858aea643fdc",
       "reserved_ceiling_cny": 9.1521024,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "meter_before": {
         "provider": "codekey-gemini",
         "kind": "codekey_total_actual_cost",
@@ -73,7 +73,74 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "39573328873",
-      "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f"
+      "code_sha": "c71e2f3ad1447f112a2fdedd7aac67f40bb2716f",
+      "reported_model": "gemini-4-argon",
+      "text": "{\"bar_count\":2,\"left_value\":4,\"right_value\":7,\"difference\":3,\"larger_bar\":\"right\",\"uncertainty_shown\":false,\"statistical_significance_established\":false}",
+      "usage": {
+        "input_tokens": 1273,
+        "output_tokens": 377,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 330
+        }
+      },
+      "response_sha256": "90c8955dbf96a45a07b33484efb132f231d725baa1a3a247aff1c5620a10b9dc",
+      "grade": {
+        "case_id": "visual_chart",
+        "score": 100,
+        "max_score": 100,
+        "passed": true,
+        "criteria": [
+          {
+            "id": "bar_count",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "left_label",
+            "passed": true,
+            "weight": 20,
+            "critical": true
+          },
+          {
+            "id": "right_label",
+            "passed": true,
+            "weight": 20,
+            "critical": true
+          },
+          {
+            "id": "difference",
+            "passed": true,
+            "weight": 15,
+            "critical": false
+          },
+          {
+            "id": "direction",
+            "passed": true,
+            "weight": 10,
+            "critical": false
+          },
+          {
+            "id": "no_invented_uncertainty",
+            "passed": true,
+            "weight": 10,
+            "critical": true
+          },
+          {
+            "id": "no_visual_significance_claim",
+            "passed": true,
+            "weight": 15,
+            "critical": true
+          }
+        ],
+        "requires_manual_review": false,
+        "scope": "synthetic deterministic screening only"
+      },
+      "native_completion": "completed",
+      "duration_seconds": 11.227
     }
   ],
   "status": "running",
