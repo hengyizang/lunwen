@@ -15799,7 +15799,7 @@
       "reconciled_at": "2026-10-20T17:21:37.951087+00:00"
     }
   ],
-  "status": "closed_with_holds",
+  "status": "running",
   "production_routing_changed": false,
   "scientific_completion": false,
   "paid_model_judges": 0,
@@ -16340,6 +16340,26 @@
         "cheapai-ccmax-opus-high|claim_precision"
       ],
       "attempts_preserved": 85,
+      "original_scope_unchanged": true,
+      "paid_retries_authorized": false
+    },
+    {
+      "reviewed_blob_sha": "a5243617889d97762b523e282df5da5a5f93e284",
+      "at": "2026-10-21T08:49:17.260808+00:00",
+      "prior_status": "closed_with_holds",
+      "eligible_never_sent_ids": [
+        "cheapai-ccmax-opus-high|code_statistics",
+        "cheapai-discount-astra-high|code_statistics",
+        "cheapai-pro-luna-medium|code_statistics",
+        "cheapai-pro-sol-medium|code_statistics",
+        "cheapai-discount-luna-low|code_statistics",
+        "cheapai-kiro-sonnet-high|claim_precision",
+        "cheapai-ccmax-sonnet-high|claim_precision",
+        "cheapai-discount-sol-high|claim_precision",
+        "cheapai-kiro-opus-high|claim_precision",
+        "cheapai-ccmax-opus-high|claim_precision"
+      ],
+      "attempts_preserved": 95,
       "original_scope_unchanged": true,
       "paid_retries_authorized": false
     }
