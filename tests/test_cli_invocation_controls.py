@@ -75,14 +75,25 @@ class CliInvocationControlsTests(unittest.TestCase):
     def test_run_stage_completes_writer_and_remediation_with_real_control_checks(self):
         with fixture() as (_, project, _, state):
             names = []
+            capture_limit = 32768
+            notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
+                     for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]]
+            from scripts.ccfa_humanization import review_checklist
+            notes.extend(f"rejected: {row['id']} Fixture contextual review of {row['key']}: {row['guidance']}"
+                         for row in review_checklist())
+            remediation_message = json.dumps({"dispositions": notes})
+            message_bytes = remediation_message.encode("utf-8")
+            # Complete mandatory coverage is larger than the previous fixture
+            # ceiling; request a sufficient bounded capture, not truncation bypass.
+            self.assertGreater(len(message_bytes), 4096)
+            self.assertLessEqual(len(message_bytes), capture_limit)
+            self.assertEqual(len(notes), 72)
 
             def launch(command, **kwargs):
                 if "-o" in command:
                     message = Path(command[command.index("-o") + 1])
                     name = "remediation" if "remediation" in message.name else "writer"
-                    notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
-                             for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]]
-                    message.write_text(json.dumps({"dispositions": notes}) if name == "remediation" else "Writer complete", encoding="utf-8")
+                    message.write_text(remediation_message if name == "remediation" else "Writer complete", encoding="utf-8")
                     manuscript = project / "papers/P01/manuscript/main.tex"
                     manuscript.parent.mkdir(parents=True, exist_ok=True)
                     manuscript.write_text(f"The registered {name} comparison preserves every observed outcome.", encoding="utf-8")
@@ -107,7 +118,7 @@ class CliInvocationControlsTests(unittest.TestCase):
             ), patch.object(autopilot.researchctl, "gate_errors", return_value=[]), patch.object(
                 autopilot.researchctl, "mark_ready"
             ) as ready:
-                journal = autopilot.run_stage("demo", "", "standard", 1, 4096, 3.5)
+                journal = autopilot.run_stage("demo", "", "standard", 1, capture_limit, 3.5)
             self.assertEqual(names, ["planner", "writer", "critic", "remediation", "final-critic"])
             self.assertEqual(journal["status"], "awaiting_human_approval")
             ready.assert_called_once()
@@ -119,6 +130,9 @@ class CliInvocationControlsTests(unittest.TestCase):
                 for filename in (f"{name}.stdout.txt", f"{name}.stderr.txt", f"{name}.json", f"codex-{name}-last-message.txt"):
                     self.assertTrue((run / filename).is_file(), filename)
             self.assertIn("AD08", (project / "reviews/decision-log.md").read_text())
+            self.assertIn("CFH38", (project / "reviews/decision-log.md").read_text())
+            self.assertEqual((run / "codex-remediation-last-message.txt").read_bytes(), message_bytes)
+            self.assertEqual(json.loads((run / "codex-remediation-last-message.txt").read_text())["dispositions"], notes)
             self.assertNotIn("captured_outputs", json.dumps(journal))
 
     def test_truncated_logs_are_bound_to_saved_bytes_not_full_stream_hash(self):

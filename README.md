@@ -1,5 +1,7 @@
 # Doctoral Research OS v2.3.0
 
+CCFA-Skills 的全部 17 项技能已接入现有模型与云端工具，逐项入口、任务请求及来源固定说明见 [`docs/CCFA-INTEGRATION.md`](docs/CCFA-INTEGRATION.md)。完整 `ccf-humanization` 政策、中英文示例及原版检查器覆盖现有写作与审查；G5 要求逐项处理 CFH01–CFH38，并继续保留 H01–H26、AD01–AD08。详细参考资料按任务提供，不增加一套付费调用或实验执行器。工程验收与真实科研效果分开记录。
+
 正式云端模型现已改用 **CheapAI＋CodeKey**，不再需要 UUAPI。逐任务模型、推理档位、五组 Actions Secrets、缓存与实际扣费核对及免费就绪检查见 [`docs/PRODUCTION-MODEL-ROUTING.md`](docs/PRODUCTION-MODEL-ROUTING.md)。配置完成不自动启动付费研究；既有累计预算、单一博士主题与六篇论文要求、人工关口继续保留。
 
 核心科学质量路线已接入既有流程，见 [`docs/SCIENTIFIC-REASONING.md`](docs/SCIENTIFIC-REASONING.md)：选题价值需有来源，竞争解释绑定关键实验及实际比较，结果报告保留不利证据，并在原有模型调用中审查贡献与结论边界。模型分工、档位及人工关口不变；结构通过不等于科学有效或达到Q1录用标准。

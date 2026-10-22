@@ -33,3 +33,7 @@ It is a runtime dependency, not vendored source; its own license applies.
 Review scope and deployment licensing when changing use. No credentials,
 datasets, publisher manuscripts, paid service routes or upstream binaries are
 included by this installation.
+# Complete CCFA-Skills integration
+
+`third_party/ccfa-skills/` contains the complete functional text/code/reference inventory of all 17 skills from [mikubaka88/CCFA-Skills](https://github.com/mikubaka88/CCFA-Skills), pinned to `f157d7ed2777b655809471873b32b9632e784cfa`. MIT license, copyright (c) 2026 Chaoyue Li; the unmodified license is included alongside the source. Canonical source hashes and the complete upstream Git blob/resource inventory are in `integrations/ccfa-skills.lock.json`. Binary templates and cached exemplar papers are available by exact pinned retrieval in cloud storage, not redistributed into this repository. Their individual research-use and redistribution rights must be checked separately. Project adapters in `skills/ccf-*` and `.agents/skills/ccf-*` preserve native model roles, approvals, evidence and budgets; see `docs/CCFA-INTEGRATION.md`.
+

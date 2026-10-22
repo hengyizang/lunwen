@@ -1,0 +1,61 @@
+name: Complete CCFA skills acceptance
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ccfa-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  all-seventeen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install only offline scientific validation dependencies
+        run: python -m pip install --disable-pip-version-check '.[reader,figures,research-quality]' PyYAML seaborn
+      - name: Install every original skill using the pinned official installer
+        run: >-
+          python third_party/codex-skill-installer/install-skill-from-github.py
+          --repo mikubaka88/CCFA-Skills
+          --ref f157d7ed2777b655809471873b32b9632e784cfa
+          --method git
+          --dest "$RUNNER_TEMP/ccfa-original"
+          --path ccf-common ccf-experiment-designer ccf-humanization
+          ccf-idea-optimizer ccf-idea-reviewer ccf-integrity-auditor
+          ccf-literature-monitor ccf-literature-searcher ccf-paper-reviewer
+          ccf-paper-to-exemplar ccf-paper-writer ccf-pipeline-orchestrator
+          ccf-project-scaffolder ccf-rebuttal-writer ccf-skill-forger
+          ccf-submission-checker ccf-visual-composer
+      - name: Verify exact complete installation and actual model routing
+        run: >-
+          python -m scripts.ccfa_acceptance
+          --installed "$RUNNER_TEMP/ccfa-original"
+          --output artifacts/ccfa/acceptance.json
+      - name: Exercise source-bound native integrations and complete humanization
+        run: >-
+          python -m unittest tests.test_ccfa_runtime tests.test_ccfa_science
+          tests.test_ccfa_humanization tests.test_editorial_integration
+          tests.test_ccfa_context_isolation tests.test_ccfa_model_handoffs tests.test_cli_invocation_controls -v
+      - name: Run original reviewed deterministic helpers on isolated fixtures
+        run: |
+          python -m unittest discover -s third_party/ccfa-skills/ccf-common/scripts -p 'test_*.py' -v
+          python -m unittest discover -s third_party/ccfa-skills/ccf-pipeline-orchestrator/scripts -p 'test_*.py' -v
+          python -m unittest discover -s third_party/ccfa-skills/ccf-visual-composer/scripts -p 'test_*.py' -v
+      - name: Preserve public-safe acceptance receipt only
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ccfa-skills-acceptance
+          path: artifacts/ccfa/
+          if-no-files-found: warn
+          retention-days: 30
+

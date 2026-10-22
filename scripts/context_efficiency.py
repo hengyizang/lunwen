@@ -7,7 +7,11 @@ from pathlib import PurePosixPath
 
 # Scientific sources, constraints, approvals and spending authority are retained.
 # Invocation transcripts must not leak old plans/verdicts into independent review.
-OPERATIONAL_PREFIXES = ("state/runs/", "state/citation-metadata/")
+OPERATIONAL_PREFIXES = ("state/runs/", "state/citation-metadata/",
+                        "reports/ccfa-tasks/", "reports/ccfa-science/history/")
+# Source-bound scientific reports may be useful to a writer, but historical
+# internal judgments must never enter an independent critic's source packet.
+REVIEW_PREFIXES = ("reports/ccfa-science/internal_review/",)
 OPERATIONAL_FILES = {
     "reports/evidence-retrieval/latest.json",
     "state/autopilot.json", "state/model-usage.jsonl", "state/model-health.jsonl",
@@ -20,9 +24,10 @@ OPERATIONAL_FILES = {
 }
 
 
-def operational_path(relative: str) -> bool:
+def operational_path(relative: str, *, exclude_reviews: bool = False) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
-    return value in OPERATIONAL_FILES or value.startswith(OPERATIONAL_PREFIXES)
+    return (value in OPERATIONAL_FILES or value.startswith(OPERATIONAL_PREFIXES)
+            or exclude_reviews and value.startswith(REVIEW_PREFIXES))
 
 
 def _compact_json(text: str) -> str:

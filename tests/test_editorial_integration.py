@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps, defensive_review, output_provenance, research_improvementctl
+from scripts import ccfa_humanization
 
 
 def manuscript_text() -> str:
@@ -24,7 +25,8 @@ def complete_notes() -> list[str]:
     return [
         f"rejected: {code} Retained the scientifically necessary wording after contextual evidence review."
         for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]
-    ]
+    ] + [f"rejected: {row['id']} Fixture contextual review of {row['key']}: {row['guidance']}"
+         for row in ccfa_humanization.review_checklist()]
 
 
 class EditorialIntegrationTests(unittest.TestCase):

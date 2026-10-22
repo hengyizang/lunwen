@@ -1,0 +1,313 @@
+{
+  "schema_version": "1.0",
+  "upstream_commit": "f157d7ed2777b655809471873b32b9632e784cfa",
+  "mandatory": [
+    "ccf-humanization",
+    "ccf-common"
+  ],
+  "routes": [
+    {
+      "id": "ccf-common",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "common",
+        "handoff",
+        "交接"
+      ],
+      "native_tools": [
+        "scripts/cloud_job.py",
+        "scripts/cloud_checkpoint.py"
+      ],
+      "outcome": "scoped task/route/ownership and evidence handoff"
+    },
+    {
+      "id": "ccf-humanization",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "humanization",
+        "表达",
+        "防御性"
+      ],
+      "native_tools": [
+        "scripts/ccfa_humanization.py",
+        "scripts/academic_style.py"
+      ],
+      "outcome": "complete scientific humanization policy and advisory line findings"
+    },
+    {
+      "id": "ccf-pipeline-orchestrator",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "pipeline",
+        "流程",
+        "continuity"
+      ],
+      "native_tools": [
+        "scripts/cloud_continuation.py",
+        "scripts/ccfa_science.py"
+      ],
+      "outcome": "native gated continuation and source-bound continuity"
+    },
+    {
+      "id": "ccf-project-scaffolder",
+      "stages": [
+        "intake",
+        "paper-architecture"
+      ],
+      "triggers": [
+        "scaffold",
+        "初始化",
+        "目录"
+      ],
+      "native_tools": [
+        "scripts/researchctl.py"
+      ],
+      "outcome": "native six-paper project structure; no second state file"
+    },
+    {
+      "id": "ccf-idea-reviewer",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "triggers": [
+        "idea review",
+        "选题评估",
+        "concept"
+      ],
+      "native_tools": [
+        "scripts/research_candidates.py",
+        "scripts/pre_submission_review.py"
+      ],
+      "outcome": "concept/evidence/readiness separated; existing G1 source requirements"
+    },
+    {
+      "id": "ccf-idea-optimizer",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture"
+      ],
+      "triggers": [
+        "idea",
+        "mechanism",
+        "选题",
+        "机制"
+      ],
+      "native_tools": [
+        "scripts/ccfa_science.py",
+        "scripts/literature_reasoning.py"
+      ],
+      "outcome": "source-bound mechanism candidates with parent/operator lineage"
+    },
+    {
+      "id": "ccf-literature-searcher",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "triggers": [
+        "literature search",
+        "检索",
+        "文献"
+      ],
+      "native_tools": [
+        "scripts/literature_evidence.py",
+        "scripts/literaturectl.py"
+      ],
+      "outcome": "actual provider retrieval, original sources and experiment evidence"
+    },
+    {
+      "id": "ccf-literature-monitor",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "triggers": [
+        "monitor",
+        "novelty watch",
+        "新文献",
+        "重合"
+      ],
+      "native_tools": [
+        "scripts/literature_intelligence.py",
+        "scripts/ccfa_science.py"
+      ],
+      "outcome": "incremental discovery and located claim-overlap watch"
+    },
+    {
+      "id": "ccf-experiment-designer",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "triggers": [
+        "experiment",
+        "实验",
+        "protocol",
+        "ablation"
+      ],
+      "native_tools": [
+        "scripts/experiment_runner.py",
+        "scripts/experiment_evidence.py",
+        "scripts/literature_reasoning.py"
+      ],
+      "outcome": "claim-specific design, frozen G3 protocol and actual cloud executor"
+    },
+    {
+      "id": "ccf-integrity-auditor",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "integrity",
+        "核验",
+        "numeric",
+        "citation"
+      ],
+      "native_tools": [
+        "scripts/manuscript_audit.py",
+        "scripts/citation_audit.py",
+        "scripts/ref_verify_adapter.py"
+      ],
+      "outcome": "claim/numeric/citation-context audit with native evidence checks"
+    },
+    {
+      "id": "ccf-paper-reviewer",
+      "stages": [
+        "writing-and-review"
+      ],
+      "triggers": [
+        "review",
+        "评审",
+        "复审"
+      ],
+      "native_tools": [
+        "scripts/ccfa_science.py",
+        "scripts/pre_submission_review.py",
+        "scripts/api_orchestrator.py"
+      ],
+      "outcome": "independent scientific review and categorical cross-version findings"
+    },
+    {
+      "id": "ccf-paper-writer",
+      "stages": [
+        "paper-architecture",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "writing",
+        "write",
+        "写作",
+        "论文"
+      ],
+      "native_tools": [
+        "scripts/api_orchestrator.py",
+        "scripts/incremental_writing.py"
+      ],
+      "outcome": "authorized non-Claude authoring with source and argument contracts"
+    },
+    {
+      "id": "ccf-rebuttal-writer",
+      "stages": [
+        "writing-and-review"
+      ],
+      "triggers": [
+        "rebuttal",
+        "revision",
+        "返修",
+        "审稿回复"
+      ],
+      "native_tools": [
+        "scripts/reviewer_rounds.py",
+        "scripts/revision_trace.py",
+        "scripts/supplemental_experiments.py"
+      ],
+      "outcome": "real reviewer rounds, response commitments and independent supplemental experiments"
+    },
+    {
+      "id": "ccf-visual-composer",
+      "stages": [
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "triggers": [
+        "figure",
+        "plot",
+        "diagram",
+        "图",
+        "可视化"
+      ],
+      "native_tools": [
+        "scripts/publication_figures.py",
+        "scripts/venue_adapter.py"
+      ],
+      "outcome": "recorded-data charts and editable scientific topology QA"
+    },
+    {
+      "id": "ccf-submission-checker",
+      "stages": [
+        "writing-and-review"
+      ],
+      "triggers": [
+        "submission",
+        "投稿",
+        "package"
+      ],
+      "native_tools": [
+        "scripts/submission_package.py",
+        "scripts/journal_screening.py"
+      ],
+      "outcome": "official journal-specific package checks and manual submission"
+    },
+    {
+      "id": "ccf-paper-to-exemplar",
+      "stages": [
+        "writing-and-review"
+      ],
+      "triggers": [
+        "exemplar",
+        "范文",
+        "style reference"
+      ],
+      "native_tools": [
+        "scripts/ccfa_science.py",
+        "scripts/literature_workbench.py"
+      ],
+      "outcome": "original-page writing-move cards with do-not-copy boundaries"
+    },
+    {
+      "id": "ccf-skill-forger",
+      "stages": [],
+      "triggers": [
+        "skill-forger",
+        "skill maintenance",
+        "技能维护"
+      ],
+      "native_tools": [
+        "scripts/validate_repo.py",
+        "scripts/ccfa_runtime.py"
+      ],
+      "outcome": "authorized project-only skill maintenance and fixed-case validation"
+    }
+  ]
+}
