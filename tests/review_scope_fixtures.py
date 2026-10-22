@@ -18,7 +18,9 @@ def seal_review(project, state, *, gate="G5", run_id="fixture-review", notes=Non
     audit = {"verdict": "pass-with-conditions", **{f: [] for f in review_receipts.FIELDS - {"verdict"}}}
     if notes is None:
         codes = [f"H{n:02d}" for n in range(1, 27)] + [f"AD{n:02d}" for n in range(1, 9)] + [f"CFH{n:02d}" for n in range(1, 39)]
-        notes = [f"rejected: {code} Synthetic fixture criterion {code} is exercised at manuscript/main.tex; no actual scientific or semantic clearance is claimed." for code in codes] if gate == "G5" else []
+        from scripts.ccfa_humanization import review_checklist
+        meanings = {row["id"]: row["key"] for row in review_checklist()}
+        notes = [f"rejected: {code} Synthetic fixture checks {meanings.get(code,code)} at manuscript/main.tex; no actual scientific or semantic clearance is claimed." for code in codes] if gate == "G5" else []
     key = gate + ("-" + paper if paper else "")
     with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
         for phase in ("initial", "final"):

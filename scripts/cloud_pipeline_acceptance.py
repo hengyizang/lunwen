@@ -53,6 +53,9 @@ else:
                  'frozen_protocol_sha256':{'papers/P01/preregistration.json':cp.sha(project/'papers/P01/preregistration.json')},
                  'experiment_plan_sha256':cp.sha(project/'experiments/plan.json'),
                  'experiment_budget_sha256':cp.sha(project/'experiments/budget.json')}]})
+    from scripts.acceptance_scope import prepare_scope
+    state = steps.read(project/'state/run.json')
+    prepare_scope(project,state)
 
 
 def print_executor_diagnostics(project: Path) -> None:

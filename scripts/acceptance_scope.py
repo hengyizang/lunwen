@@ -53,7 +53,8 @@ def prepare_scope(project, state):
         for gate in ("G1", "G2"):
             approval = {"gate": gate, "actor": "Synthetic fixture human", "artifact_sha256": sha(project / "program" / ("core-thesis.json" if gate == "G1" else "paper-map.json"))}
             state["approvals"].append(approval)
-            state["approved_gates"].append(gate)
+            if gate not in state["approved_gates"]:
+                state["approved_gates"].append(gate)
             write(project / "state/run.json", state)
             scientific_scope.seal_approval(project, gate, approval["actor"], approval)
     write(project / "state/run.json", state)

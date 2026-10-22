@@ -33,6 +33,8 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.put("experiments/budget.json", {"schema_version": "1.0", "status": "ready_for_review", "hard_ceiling_usd": 1.0})
         self.put("state/run.json", {"stage_index": 4, "stage": "experiment-execution", "gate": "G4", "status": "awaiting_work",
             "active_paper": "P01", "approved_gates": ["G0", "G1", "G2", "G3"], "approvals": []})
+        from scripts.acceptance_scope import prepare_scope
+        prepare_scope(self.project,self.read("state/run.json"))
         self.freeze()
 
     def put(self, relative, value):

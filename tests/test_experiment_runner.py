@@ -80,6 +80,8 @@ class ExperimentRunnerTests(unittest.TestCase):
             ]
         }
         (project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
+        from scripts.acceptance_scope import prepare_scope
+        prepare_scope(project,state)
         return project
 
     def test_approved_run_executes_and_is_registered(self) -> None:
