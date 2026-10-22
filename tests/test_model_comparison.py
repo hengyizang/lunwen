@@ -22,6 +22,8 @@ class ModelComparisonTests(unittest.TestCase):
         self.case_id = self.route["screening_cases"][0]
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
+        from tests.relay_guard_fixtures import install_fake_guard
+        self.shared_guard=install_fake_guard(self.stack)
         definitions = [{"id": name, "prompt": "Synthetic fixture: " + name,
                         "system": "Return bounded synthetic output."}
                        for name in self.plan["screening_cases"] + self.plan["focused_cases"]]

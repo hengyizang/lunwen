@@ -16,7 +16,8 @@ class FigureProvenanceTests(unittest.TestCase):
             renderer=project/"analysis"/"chart.py";renderer.write_text("# deterministic renderer",encoding="utf-8");output_provenance.record_model_writes(project,[renderer],family="openai",provider="codex",model="test",role="analysis-code",run_id="r")
             data=project/"results"/"metrics.csv";data.write_text("x,y\n1,2\n",encoding="utf-8")
             figure=paper/"figures"/"result.png";figure.write_bytes(b"deterministic fixture")
-            (project/"experiments"/"registry.jsonl").write_text(json.dumps({"run_id":"r1","paper_id":"P01","status":"succeeded"})+"\n",encoding="utf-8")
+            from tests.figure_lineage_fixtures import sealed_run
+            sealed_run(project)
             record_figure(project,"P01","papers/P01/figures/result.png","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
             self.assertEqual(validate_figure_provenance(project,paper),[])
             self.assertEqual(output_provenance.current_origin(project,paper/"figures"/"figure-provenance.json")["status"],"tracked")

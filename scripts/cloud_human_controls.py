@@ -15,7 +15,7 @@ from scripts import cloud_checkpoint as cp, output_provenance, researchctl, rese
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
 QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction", "confirm_study_validation"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision", "approve_supplemental", "confirm_supplemental", "retire_supplemental"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision", "approve_supplemental", "confirm_supplemental", "retire_supplemental", "approve_primary_retry", "retire_primary_plan", "approve_scope_amendment", "reconcile_relay_guard"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
@@ -30,6 +30,10 @@ SELECTORS = {
     "approve_supplemental": {"paper_id"},
     "confirm_supplemental": {"paper_id"},
     "retire_supplemental": {"paper_id"},
+    "approve_primary_retry": {"source"},
+    "retire_primary_plan": {"source"},
+    "approve_scope_amendment": {"source"},
+    "reconcile_relay_guard": {"source"},
 }
 DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
@@ -137,6 +141,18 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
     slug = value["project"]
     project = researchctl.project_dir(slug)
     state = researchctl.load_state(slug)
+    if operation == "reconcile_relay_guard":
+        from scripts.relay_guard import prepare_reconciliation
+        prepare_reconciliation(project, value["source"], value["actor"])
+        return []
+    if operation in {"approve_primary_retry", "retire_primary_plan"}:
+        from scripts.primary_recovery import prepare
+        prepare(project, value["source"], value["actor"], operation)
+        return []
+    if operation == "approve_scope_amendment":
+        from scripts.scientific_scope import prepare_amendment
+        prepare_amendment(project, value["source"], value["actor"])
+        return []
     if operation == "start_revision":
         from scripts.reviewer_rounds import prepare_start
         prepare_start(project, value["paper_id"], value["source"], value["actor"], preview=True)
@@ -237,6 +253,11 @@ def dossier(value: dict) -> dict:
                           "active_paper": state["active_paper"]},
                 "gate_artifact_sha256": researchctl.artifact_hash(value["project"], state["gate"]) if state["gate"] else None,
                 "implementation": implementation, "files": sorted(files, key=lambda item: item["path"])}
+    if operation == "reconcile_relay_guard":
+        from scripts import relay_guard
+        supplied = json.loads((project / value["source"]).read_text(encoding="utf-8"))
+        _, _, shared, blob_sha = relay_guard.load(supplied["provider"])
+        snapshot["shared_relay_state"] = {"blob_sha": blob_sha, "state": shared}
     digest = hashlib.sha256(json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     try:
         _check_and_prepare(value, operation)
@@ -263,7 +284,16 @@ def execute(value: dict, run_id: str) -> dict:
     prepared = _check_and_prepare(value, operation)
     project = researchctl.project_dir(value["project"])
     outputs = []
-    if operation in GATE_ACTIONS:
+    if operation == "reconcile_relay_guard":
+        from scripts.relay_guard import reconcile
+        reconcile(project, value["source"], value["actor"], reviewed["review_sha256"], str(run_id), value["note"])
+    elif operation in {"approve_primary_retry", "retire_primary_plan"}:
+        from scripts.primary_recovery import apply
+        apply(project, value["source"], value["actor"], operation, reviewed["review_sha256"], str(run_id), value["note"])
+    elif operation == "approve_scope_amendment":
+        from scripts.scientific_scope import apply_amendment
+        apply_amendment(project, value["source"], value["actor"], reviewed["review_sha256"], str(run_id), value["note"])
+    elif operation in GATE_ACTIONS:
         args = SimpleNamespace(project=value["project"], gate=value.get("gate"),
                                actor=value["actor"], note=value["note"])
         {"ready": researchctl.mark_ready, "approve": researchctl.approve,

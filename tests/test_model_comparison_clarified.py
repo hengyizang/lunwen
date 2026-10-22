@@ -18,6 +18,8 @@ class ClarifiedComparisonTests(unittest.TestCase):
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
+        from tests.relay_guard_fixtures import install_fake_guard
+        self.shared_guard=install_fake_guard(self.stack)
         self.plan = json.loads((Path(__file__).resolve().parents[1]
             / "config/model-comparison-20261020.json").read_text())
         self.parent = {"trial_id": trial.parent_trial.TRIAL, "status": "closed_with_holds",

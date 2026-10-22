@@ -2,16 +2,18 @@
 from __future__ import annotations
 
 import json
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 
 
 # Scientific sources, constraints, approvals and spending authority are retained.
 # Invocation transcripts must not leak old plans/verdicts into independent review.
 OPERATIONAL_PREFIXES = ("state/runs/", "state/citation-metadata/",
+                        "state/review-receipts/", "state/scientific-scope/",
                         "reports/ccfa-tasks/", "reports/ccfa-science/history/")
 # Source-bound scientific reports may be useful to a writer, but historical
 # internal judgments must never enter an independent critic's source packet.
 REVIEW_PREFIXES = ("reports/ccfa-science/internal_review/",)
+INSTRUCTION_FILES = {"program/cloud-operations.json", "program/ccfa-request.json", "program/scope-amendment.json"}
 OPERATIONAL_FILES = {
     "reports/evidence-retrieval/latest.json",
     "state/autopilot.json", "state/model-usage.jsonl", "state/model-health.jsonl",
@@ -27,7 +29,38 @@ OPERATIONAL_FILES = {
 def operational_path(relative: str, *, exclude_reviews: bool = False) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     return (value in OPERATIONAL_FILES or value.startswith(OPERATIONAL_PREFIXES)
-            or exclude_reviews and value.startswith(REVIEW_PREFIXES))
+            or exclude_reviews and (value.startswith(REVIEW_PREFIXES) or value in INSTRUCTION_FILES
+                                    or value == "state/research-steps.json"))
+
+
+def instruction_paths(project: Path) -> set[str]:
+    """Recognize actual request envelopes even when an owner uses a custom filename.
+
+    Scientific plans/cards and source evidence are retained. Only the invocation
+    envelope is removed; its referenced scientific sources remain independently
+    eligible in the normal or explicitly scoped evidence packet.
+    """
+    found = set(INSTRUCTION_FILES)
+    program = Path(project) / "program"
+    if not program.is_dir():
+        return found
+    for path in program.rglob("*.json"):
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > 4_000_000:
+            continue
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(value, dict):
+            continue
+        operations = value.get("operations")
+        queue = isinstance(operations, list) and any(isinstance(row, dict) and "action" in row for row in operations)
+        if (queue or "desired_verdict" in value or "preferred_verdict" in value
+                or "action" in value and ("request" in value or str(value["action"]).startswith(("ccfa_", "literature_")))
+                or "task" in value and "skill" in value
+                or "operation" in value and "request" in value):
+            found.add(path.relative_to(project).as_posix())
+    return found
 
 
 def _compact_json(text: str) -> str:

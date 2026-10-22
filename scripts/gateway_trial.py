@@ -75,6 +75,9 @@ def safe_text(value, secrets=()):
 
 
 def http_json(url, headers=None, body=None, *, method=None, github=False):
+    if body is not None and not github:
+        from scripts.relay_guard import authorize_transport
+        authorize_transport(url, headers or {})
     parsed = urllib.parse.urlsplit(url)
     hosts = {'api.github.com'} if github else HOSTS
     if parsed.scheme != 'https' or parsed.hostname not in hosts or parsed.username or parsed.query:

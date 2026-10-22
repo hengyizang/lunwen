@@ -1,0 +1,219 @@
+"""Real shared relay control with an isolated CAS store; no external services."""
+from __future__ import annotations
+from contextvars import Context
+import base64
+import copy
+import json
+import os
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard
+from scripts.research_artifacts import write
+from tests.relay_guard_fixtures import MemoryStore
+
+PROVIDER="codekey-gemini"
+KEY_SETTING=ai_providers.PRODUCTION_PROVIDERS[PROVIDER]["key_setting"]
+
+
+class RelayGuardTests(unittest.TestCase):
+    def setUp(self):
+        self.env=patch.dict(os.environ,{"GITHUB_ACTIONS":"true","GITHUB_REPOSITORY":guard.REPOSITORY,
+            "GITHUB_RUN_ID":"123",KEY_SETTING:"synthetic-shared-key"},clear=True)
+        self.env.start();self.addCleanup(self.env.stop)
+        guard._TICKET.set(None);self.addCleanup(lambda:guard._TICKET.set(None))
+        self.store=MemoryStore()
+
+    def historical(self,provider=PROVIDER):
+        branch,name=guard.SOURCES[1]
+        self.store.put(branch,"trial-state",name,{"entries":[{"provider":provider,"call_id":provider+"|historical-unknown",
+            "billing_status":"unknown_held","reserved_ceiling_cny":0.431508}]})
+
+    def begin(self,**kwargs):
+        return guard.begin(PROVIDER,scope={"project":"original-project","reservation_id":"local-reservation"},max_cost_cny=1,store=self.store,**kwargs)
+
+    def meter(self):
+        return {"provider":PROVIDER,"kind":"codekey_total_actual_cost","requests":20,"cost_cny":2.0}
+
+    def bind(self,ticket):
+        guard.bind_meter(ticket,"gemini-4-argon",self.meter(),store=self.store)
+
+    def send(self):
+        guard.authorize_transport("https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",{"x-goog-api-key":os.environ[KEY_SETTING]})
+
+    def debit(self,cost=0.125):
+        return {"actual_cost_cny":cost,"debit_evidence":{"source":"https://codekey.ai/v1/usage",
+            "before":{"requests":20,"cost_cny":2.0},"after":{"requests":21,"cost_cny":2.0+cost},"exactly_one_new_gateway_request":True}}
+
+    def active(self):
+        return self.store.read(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json")[0]
+
+    def test_historical_unknown_remains_held_after_readonly_catalog_success(self):
+        self.historical()
+        with patch("scripts.production_readiness.catalog",return_value={"gemini-4-argon"}) as catalog:
+            self.assertIn("gemini-4-argon",catalog(PROVIDER,dict(os.environ)))
+            self.assertFalse(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
+            with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
+                self.begin()
+        self.assertEqual(len(self.active()["legacy_holds"]),1)
+        self.assertIsNone(self.active()["active"])
+
+    def test_same_credential_across_different_group_imports_original_holds(self):
+        other="codekey-codex-pro"
+        with patch.dict(os.environ,{ai_providers.PRODUCTION_PROVIDERS[other]["key_setting"]:os.environ[KEY_SETTING]}):
+            self.historical(other)
+            with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
+                self.begin()
+        self.assertEqual(next(iter(self.active()["legacy_holds"].values()))["provider"],other)
+
+    def test_cas_lease_stops_concurrent_jobs_and_a_different_project(self):
+        competing=Context()
+        self.store.before_write=lambda:competing.run(lambda:guard.begin(PROVIDER,scope={"project":"competing-project"},max_cost_cny=1,store=self.store))
+        with self.assertRaisesRegex(guard.RelayGuardError,"CAS conflict"):
+            self.begin()
+        self.assertEqual(self.active()["active"]["scope"]["project"],"competing-project")
+        with self.assertRaisesRegex(guard.RelayGuardError,"concurrent"):
+            guard.begin(PROVIDER,scope={"project":"brand-new-project"},max_cost_cny=0.5,store=self.store)
+        self.assertIsNone(guard._TICKET.get())
+
+    def test_failed_durable_lease_never_authorizes_a_post(self):
+        self.store.fail_write=True
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        with self.assertRaisesRegex(guard.RelayGuardError,"durable"):
+            self.send()
+
+    def test_cloud_store_requires_exact_blob_identity_and_put_readback(self):
+        store=guard.CloudStore()
+        with patch.object(store,"api",side_effect=[{"tree":[{"path":"relay-guard","sha":"tree"}]},
+                {"tree":[{"path":"fixture.json","sha":"a"*40}]},{"content":base64.b64encode(b"{}").decode()}]):
+            with self.assertRaisesRegex(guard.RelayGuardError,"blob identity"):
+                store.read(guard.BRANCH,"relay-guard","fixture.json")
+        with patch.object(store,"api",side_effect=[{"object":{"sha":"main"}},{"content":{"sha":"b"*40}}]), \
+                patch.object(store,"read",return_value=({"different":"bytes"},"b"*40)):
+            with self.assertRaisesRegex(guard.RelayGuardError,"readback"):
+                store.write("fixture.json",{"intended":"bytes"},None)
+
+    def test_transport_requires_durably_bound_before_meter_and_exact_key_once(self):
+        ticket=self.begin()
+        with self.assertRaisesRegex(guard.RelayGuardError,"durable"):self.send()
+        self.bind(ticket)
+        self.assertEqual(self.active()["active_meter"]["before"],self.meter())
+        with self.assertRaises(guard.RelayGuardError):
+            guard.authorize_transport("https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",{"x-goog-api-key":"different-synthetic-key"})
+        self.send()
+        with self.assertRaisesRegex(guard.RelayGuardError,"unused"):
+            self.send()
+
+    def test_exact_independent_settlement_releases_lease_and_nothing_else(self):
+        ticket=self.begin();self.bind(ticket);self.send()
+        for settlement in (None,{"actual_cost_cny":0.1,"debit_evidence":{}},self.debit(2),
+                {**self.debit(),"actual_cost_cny":True}):
+            with self.assertRaises(guard.RelayGuardError):guard.finish(ticket,settlement,store=self.store)
+            self.assertEqual(self.active()["active"],ticket)
+        wrong=self.debit();wrong["debit_evidence"]["before"]["requests"]=19
+        with self.assertRaisesRegex(guard.RelayGuardError,"different before meter"):
+            guard.finish(ticket,wrong,store=self.store)
+        guard.finish(ticket,self.debit(),store=self.store)
+        self.assertIsNone(self.active()["active"])
+        self.assertEqual(self.active()["events"][-1]["status"],"settled")
+        self.assertIsNone(guard._TICKET.get())
+        self.assertIsNotNone(self.begin())
+
+    def test_unsent_cancellation_never_releases_a_possibly_sent_call(self):
+        ticket=self.begin();guard.finish(ticket,not_sent=True,store=self.store)
+        self.assertIsNone(self.active()["active"])
+        ticket=self.begin();self.bind(ticket);self.send()
+        with self.assertRaisesRegex(guard.RelayGuardError,"possibly sent"):
+            guard.finish(ticket,not_sent=True,store=self.store)
+        self.assertEqual(self.active()["active"],ticket)
+
+    def test_an_unsent_call_cannot_be_labeled_paid_and_release_its_meter(self):
+        ticket=self.begin();self.bind(ticket)
+        with self.assertRaisesRegex(guard.RelayGuardError,"unsent"):
+            guard.finish(ticket,self.debit(),store=self.store)
+        self.assertEqual(self.active()["active"],ticket)
+
+    def test_cheapai_receipt_must_match_the_retained_before_snapshot_and_model(self):
+        provider="cheapai-gpt-pro";key=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
+        with patch.dict(os.environ,{key:"synthetic-cheapai-key"}):
+            before={"provider":provider,"kind":"cheapai_quota_history","quota_per_unit":500000,"rows":[]}
+            ticket=guard.begin(provider,scope={"project":"fixture"},max_cost_cny=1,store=self.store)
+            guard.bind_meter(ticket,"gpt-6.1-sol",before,store=self.store)
+            guard.authorize_transport("https://cheapai.info/v1/responses",{"Authorization":"Bearer synthetic-cheapai-key"})
+            settlement={"actual_cost_cny":0.1,"debit_evidence":{"source":"https://cheapai.info/api/log/token","exactly_one_new_gateway_request":True,
+                "before_snapshot_sha256":relay_billing._fingerprint({"rows":[]}),"row":{"model_name":"gpt-6-astra","quota":50000}}}
+            with self.assertRaisesRegex(guard.RelayGuardError,"before meter/model"):
+                guard.finish(ticket,settlement,store=self.store)
+            settlement["debit_evidence"]["row"]["model_name"]="gpt-6.1-sol"
+            guard.finish(ticket,settlement,store=self.store)
+            self.assertIsNone(self.store.read(guard.BRANCH,"relay-guard",guard.fingerprint(provider)+".json")[0]["active"])
+
+    def proposal(self,project,value):
+        path=project/"program/reconcile.json";write(path,value);return "program/reconcile.json"
+
+    def test_rotated_credential_requires_owner_attestation_and_preserves_the_original_hold(self):
+        self.historical()
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        old_id=guard.fingerprint(PROVIDER);old=copy.deepcopy(self.active())
+        with tempfile.TemporaryDirectory() as temporary,patch.dict(os.environ,{KEY_SETTING:"different-newly-issued-fixture-key"}):
+            project=Path(temporary)/"original-project"
+            value={"provider":PROVIDER,"kind":"new_credential","credential_sha256":guard.fingerprint(PROVIDER),"previous_credential_sha256":old_id,
+                "attestation":"Different newly issued credential; prior charges remain held on the original credential."}
+            source=self.proposal(project,value)
+            with patch.object(guard,"CloudStore",return_value=self.store):
+                guard.reconcile(project,source,"Synthetic Owner","a"*64,"123","Synthetic credential rotation test only")
+            self.assertTrue(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
+            retained,_=self.store.read(guard.BRANCH,"relay-guard",old_id+".json")
+            self.assertEqual(retained,old)
+            self.assertTrue(retained["legacy_holds"])
+
+    def test_owner_cannot_clear_legacy_holds_while_original_ledger_is_unknown(self):
+        self.historical()
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        held=list(self.active()["legacy_holds"])
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+            with self.assertRaisesRegex(guard.RelayGuardError,"still lacks independent debit"):
+                guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+            branch,name=guard.SOURCES[1]
+            self.store.put(branch,"trial-state",name,{"entries":[{"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
+                "reserved_ceiling_cny":0.431508,"debit_evidence":self.debit()["debit_evidence"]}]})
+            with patch.object(guard,"CloudStore",return_value=self.store):
+                guard.reconcile(project,source,"Synthetic Owner","a"*64,"123","Synthetic exact legacy reconciliation")
+            self.assertTrue(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
+            self.assertEqual(self.active()["reconciled_legacy_ids"],held)
+
+    def test_owner_active_reconciliation_needs_original_project_and_matching_budget_event(self):
+        ticket=self.begin();self.bind(ticket);self.send()
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_active","credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            budget={"reservations":{},"reconciliation_events":[],"settlement_events":[]}
+            with patch.object(relay_billing,"settle",return_value=self.debit()),patch.object(model_spend,"read",return_value=budget):
+                with self.assertRaisesRegex(guard.RelayGuardError,"project reconciliation"):
+                    guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                budget["settlement_events"]=[{"receipt_id":"local-reservation","actual_cost_cny":0.125}]
+                with patch.object(guard,"CloudStore",return_value=self.store):
+                    guard.reconcile(project,source,"Synthetic Owner","b"*64,"123","Synthetic original-project exact debit confirmation")
+            self.assertIsNone(self.active()["active"])
+            self.assertEqual(self.active()["events"][-2]["status"],"owner_settled_active")
+
+    def test_real_production_runtime_catalog_pass_cannot_bypass_historical_unknown_hold(self):
+        provider="cheapai-gpt-pro";key=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
+        self.historical(provider)
+        with tempfile.TemporaryDirectory() as temporary,patch.dict(os.environ,{key:"synthetic-production-key","DR_OS_ROUTING_PROFILE":"production","DR_OS_REQUIRE_MODEL_AUTH":"1","DR_OS_REQUIRE_REMOTE_RESERVATION":"1"}):
+            project=Path(temporary)/"production-fixture";write(project/"state/run.json",{"active_paper":"P01"})
+            model_spend.write(project,model_spend.initial());model_spend.grant(project,new_ceiling_cny=300,actor="Synthetic Owner",run_id="fixture-only")
+            with patch.object(guard,"CloudStore",return_value=self.store),patch("scripts.production_readiness.catalog",return_value={"gpt-6.1-sol"}) as catalog, \
+                    patch("scripts.cloud_checkpoint.sync_billing"),patch.object(relay_billing,"read_meter") as meter,patch.object(ai_providers,"call") as post:
+                with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
+                    model_runtime.call(project,run_id="fixture",stage="intake",role="persistent-writer",provider="openai",prompt="Synthetic work only",max_output_tokens=100)
+                catalog.assert_called_once();meter.assert_not_called();post.assert_not_called()
+            state=model_spend.read(project)
+            self.assertEqual(state["spent_cny"],0);self.assertEqual(state["reservations"],{})
+            self.assertEqual(len(state["unsent_events"]),1)
+
+
+if __name__=="__main__":unittest.main()

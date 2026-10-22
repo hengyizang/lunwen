@@ -78,23 +78,8 @@ def audit_document_valid(path,audit,errors,final=False):
         if audit.get("verdict")!="pass-with-conditions" or blockers:errors.append(f"{path.name}: final audit must pass with no fatal/major findings, missing evidence or remediation steps");valid=False
     return valid
 def independent_audit_errors(project,gate,errors,paper_id=None):
-    prefix=f"{gate}-{paper_id}" if paper_id else gate; finals=sorted([*list((project/"reviews"/"independent").glob(f"{prefix}-*-final.json")),*list((project/"reviews"/"codex").glob(f"{prefix}-*-final.json"))]); valid=False
-    if not finals:errors.append(f"{gate} requires a final independent model-family audit")
-    for path in finals[-1:]:
-        initial=path.with_name(path.name.replace("-final.json","-initial.json"))
-        if not nonempty(initial):errors.append(f"{path.name}: matching initial independent audit is missing");continue
-        initial_audit=load_nonempty_json(initial,errors)
-        if initial_audit:audit_document_valid(initial,initial_audit,errors)
-        audit=load_nonempty_json(path,errors)
-        if audit:
-            if audit_document_valid(path,audit,errors,final=True):valid=True
-        log=project/"reviews"/"decision-log.md"
-        if nonempty(log):
-            latest="## "+log.read_text(encoding="utf-8").rsplit("## ",1)[-1]
-            initial_rel=initial.relative_to(project).as_posix();final_rel=path.relative_to(project).as_posix()
-            if f"`{initial_rel}`" not in latest or f"`{final_rel}`" not in latest:errors.append("latest decision-log section must reference the exact latest initial and final audits")
-            if re.search(r"(?im)^\s*-\s+unresolved:",latest):errors.append("latest decision-log section contains an unresolved blocker")
-    if not valid:errors.append(f"{gate} requires a passing final independent model-family audit")
+    from scripts.review_receipts import validate_gate
+    errors.extend(validate_gate(project,gate,paper_id))
     if not nonempty(project/"reviews"/"decision-log.md"):errors.append("reviews/decision-log.md must disposition independent findings")
 def quality_path(project,gate,paper_id=None):
     return {"G1":project/"program"/"quality-G1.json","G2":project/"papers"/str(paper_id)/"quality-G2.json","G3":project/"experiments"/"quality-G3.json","G4":project/"reports"/"quality-G4.json","G5":project/"papers"/str(paper_id)/"reviews"/"quality-G5.json"}[gate]
@@ -105,6 +90,11 @@ def quality_errors(project,gate,errors,paper_id=None):
 def gate_errors(slug,gate):
     project=project_dir(slug);errors=[]
     if gate is None:return errors
+    from scripts.scientific_scope import validate as validate_scientific_scope
+    errors.extend(validate_scientific_scope(project,gate,read_json(state_path(slug)).get("active_paper")))
+    if gate in {"G3","G4","G5"}:
+        from scripts.primary_recovery import gate_errors as primary_recovery_errors
+        errors.extend(primary_recovery_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
     if gate in {"G2","G3","G4","G5"}:
         from scripts.research_identity import validate as validate_research_identity
         state=read_json(state_path(slug))
@@ -163,7 +153,7 @@ def gate_errors(slug,gate):
             if novelty_matrix:
                 try:
                     from scripts.research_quality import validate_novelty_claim_matrix
-                    errors.extend(f"program/novelty-claim-matrix.json: {x}" for x in validate_novelty_claim_matrix(novelty_matrix,originality,searches))
+                    errors.extend(f"program/novelty-claim-matrix.json: {x}" for x in validate_novelty_claim_matrix(novelty_matrix,originality,searches,project=project))
                 except ImportError as exc:errors.append(f"novelty claim-matrix validator unavailable: {exc}")
         if not nonempty(project/"program"/"topic-decision.md"):errors.append("program/topic-decision.md is required")
         try:
@@ -515,6 +505,8 @@ def paper_artifact_hash(slug,paper_id):
         d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     from scripts.research_identity import review_binding as research_identity_binding
     d.update(json.dumps(research_identity_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
+    from scripts import review_receipts,scientific_scope
+    for module in (review_receipts,scientific_scope):d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
@@ -595,6 +587,9 @@ def approve(args):
     if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(args.project,state["active_paper"]);key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)
     if key not in state["approved_gates"]:state["approved_gates"].append(key)
+    if gate in {"G1","G2"}:
+        from scripts.scientific_scope import seal_approval
+        seal_approval(project_dir(args.project),gate,args.actor.strip(),approval)
     state["status"]="approved";state["history"].append({"at":now(),"event":"gate_approved","gate":gate});save_state(args.project,state);print(f"Recorded human approval for {gate}. Run advance to continue.")
 def advance(args):
     state=load_state(args.project);gate=state["gate"]

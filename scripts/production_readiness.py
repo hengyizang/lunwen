@@ -124,9 +124,19 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
             except ValueError as exc:
                 inventory[provider] = {"metadata_access_verified":False,"diagnostic":str(exc)}
                 errors.append("catalog inspection failed: " + provider)
+    shared = {}
+    if check_billing and valid_configuration:
+        from scripts import relay_guard
+        for provider in sorted({row["provider"] for row in rows}):
+            try:
+                shared[provider] = relay_guard.inspect(provider)
+            except (OSError, ValueError, KeyError):
+                shared[provider] = {"inference_eligible": False, "diagnostic": "shared_guard_unavailable_no_generation"}
     return {"profile":"production","configuration_ready":not errors,"configuration_errors":errors,
             "model_routes":rows,"policy_sha256":policy_hash,"model_inventory":inventory,"billing_meters":meters,
             "dynamic_routing":dynamic,
+            "shared_credential_guards":shared,
+            "inference_eligible": bool(shared) and all(v.get("inference_eligible") for v in shared.values()),
             "model_generation_calls":0,"new_spending_authority":False,"scientific_completion":False,
             "inference_access_and_effort_passthrough_verified":False,
             "optional_image_generation":"disabled_no_selected_image_model",

@@ -90,6 +90,61 @@ class CCFAScienceTests(unittest.TestCase):
         self.assertFalse(result["report"]["result"]["replaces_existing_project_state"])
         self.assertEqual(science.current(self.project, "continuity", "case"), result["report"])
 
+    def test_exact_initial_queue_request_replays_without_changing_cas_or_report(self):
+        request = self.request("continuity", self.continuity())
+        first = science.execute(self.project, "continuity", request)
+        original = (self.project / first["path"]).read_bytes()
+        second = science.execute(self.project, "continuity", request)
+        self.assertTrue(second["reused"])
+        self.assertTrue(second["exact_request_replay"])
+        self.assertEqual(first["sha256"], second["sha256"])
+        self.assertEqual((self.project / first["path"]).read_bytes(), original)
+        self.assertFalse((self.project / science.PREFIX / "history").exists())
+
+    def test_replay_does_not_accept_different_source_stale_cas_or_changed_evidence(self):
+        data = self.continuity()
+        request = self.request("continuity", data)
+        first = science.execute(self.project, "continuity", request)
+        data["next_action"] = "Inspect the newly supplied alternative protocol."
+        different = self.request("continuity", data)
+        with self.assertRaisesRegex(ValueError, "previous"):
+            science.execute(self.project, "continuity", different)
+        different["expected_previous_sha256"] = first["sha256"]
+        second = science.execute(self.project, "continuity", different)
+        self.assertFalse(second["reused"])
+        with self.assertRaisesRegex(ValueError, "previous|stale"):
+            science.execute(self.project, "continuity", request)
+        self.text(self.primary["path"], "The underlying source version changed.\n")
+        with self.assertRaisesRegex(ValueError, "stale"):
+            science.execute(self.project, "continuity", different)
+
+    def test_same_queue_twice_runs_actual_after_write_without_false_operation_error(self):
+        from scripts import cloud_research_steps
+        request = self.request("continuity", self.continuity())
+        self.json("program/cloud-operations.json", {"operations": [{"stage": "paper-architecture", "action": "ccfa_science",
+            "operation": "continuity", "request": request}]})
+        first = cloud_research_steps.after_write(self.project, "paper-architecture")
+        second = cloud_research_steps.after_write(self.project, "paper-architecture")
+        self.assertEqual(first["operation_errors"], [])
+        self.assertEqual(second["operation_errors"], [])
+        self.assertTrue(second["ccfa"][-1]["result"]["exact_request_replay"])
+
+    def test_exact_replay_still_requires_current_implementation_and_executor_origin(self):
+        for change in ("implementation", "origin"):
+            with self.subTest(change=change):
+                request = self.request("continuity", self.continuity(), identifier="replay-" + change)
+                first = science.execute(self.project, "continuity", request)
+                target = self.project / first["path"]
+                if change == "implementation":
+                    report = read(target)
+                    report["implementation_sha256"] = "0" * 64
+                    write(target, report)
+                    science.record(self.project, [target], science.MODULE)
+                else:
+                    self.track(target, model="fixture-writer", provider="fixture")
+                with self.assertRaisesRegex(ValueError, "implementation|provenance"):
+                    science.execute(self.project, "continuity", request)
+
     def test_source_hash_provenance_and_scope_replayed(self):
         result = self.run_op("continuity", self.continuity())
         self.text(self.primary["path"], "Changed input.\n")

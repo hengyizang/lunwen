@@ -146,7 +146,8 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
             scoped_exploration = (project.parts[-5:-3] == ("experiments", "supplemental")
                 and context.get("analysis_phase") == "exploratory" and context.get("scope_id") == project.name
                 and context.get("paper_id") == paper_id)
-            need(comp["analysis_phase"] == "confirmatory" or scoped_exploration,
+            from scripts.primary_recovery import approved_exploration
+            need(comp["analysis_phase"] == "confirmatory" or scoped_exploration or approved_exploration(project),
                  "primary evidence cannot be exploratory outside a separately approved supplemental scope")
             covered_claims |= assigned_claims
         comparator = text(comp.get("comparator_id"), "comparator_id")
@@ -267,9 +268,8 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
 
 
 def _bound_output(project: Path, binding: dict, registry: list[dict], plan_hash: str) -> tuple[Path, dict]:
-    attempts = [r for r in registry if r.get("run_id") == binding["run_id"]]
-    need(len(attempts) == 1, "evidence needs exactly one retained attempt per run; repeated attempts require inspected protocol repair")
-    attempt = attempts[0]
+    from scripts.primary_recovery import selected_attempt
+    attempt = selected_attempt(project, binding["run_id"], registry, plan_sha256=plan_hash)
     need(attempt.get("status") == "succeeded" and attempt.get("approved_plan_sha256") == plan_hash,
          "comparison run failed, is missing, or belongs to another plan")
     receipt = path_in(project, f"experiments/runs/{attempt['attempt_id']}/run.json")

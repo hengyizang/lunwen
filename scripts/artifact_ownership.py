@@ -10,7 +10,9 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "reports/publication-disclosure", "reports/statistical-watermarks",
                   "reports/literature-workbench", "reports/literature-intelligence",
                   "reports/literature-analysis", "reports/literature-feedback",
-                  "reports/ccfa-tasks", "reports/ccfa-science", "reports/ccfa-humanization")
+                  "reports/ccfa-tasks", "reports/ccfa-science", "reports/ccfa-humanization",
+                  "reports/figure-data", "experiments/history", "experiments/recovery-artifacts",
+                  "state/primary-recovery", "state/review-receipts", "state/scientific-scope", "state/scientific-scope-amendments")
 EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json",
                   "program/topic-leads.json", "program/literature-progress.json"}
 
@@ -62,6 +64,7 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
             return True
         return executor_owned(child, child_relative)
     return (value in EXECUTOR_FILES
+            or (len(parts) >= 5 and value.startswith("papers/") and parts[2:4] == ("figures", "source-data"))
             or (len(PurePosixPath(value).parts) >= 5 and value.startswith("papers/")
                 and PurePosixPath(value).parts[2] == "supplement"
                 and PurePosixPath(value).parts[3] in {"study-results", "reviewer-experiments"})

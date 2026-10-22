@@ -334,9 +334,8 @@ def build_report(project, paper_id):
         need(not errors, "; ".join(errors))
         results, sources = [], []
         for run_id in value["execution_runs"]:
-            attempts = [r for r in registry if r.get("run_id") == run_id]
-            need(len(attempts) == 1 and attempts[0].get("status") == "succeeded", "every study run needs exactly one successful attempt; failed attempts require inspection")
-            receipt = attempts[0]
+            from scripts.primary_recovery import selected_attempt
+            receipt = selected_attempt(project, run_id, registry, plan_sha256=sha(plan_path))
             need(receipt.get("input_integrity", {}).get("passed") is True, "study inputs mutated")
             isolation = receipt.get("executor_isolation", {})
             need(isolation.get("isolated_executor") is True and isolation.get("network_disabled") is True, "study replay lacks isolated executor evidence")

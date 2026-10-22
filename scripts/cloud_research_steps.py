@@ -202,7 +202,9 @@ def resume_experiments(project: Path) -> dict:
         if read(receipt) != record:
             raise ResearchStepError("experiment registry lacks its matching executor receipt")
         if record.get("status") != "succeeded":
-            failures.append(record["attempt_id"])
+            from scripts.primary_recovery import _approval
+            if not _approval(project, record):
+                failures.append(record["attempt_id"])
         else:
             for output in record.get("outputs", []):
                 if cloud_checkpoint.sha(path_in(project, output["path"])) != output["sha256"]:
@@ -248,7 +250,7 @@ def before_cycle(project: Path, stage: str) -> dict:
             report["experiments"] = resume_experiments(project)
             report["blockers"].extend(report["experiments"].get("blockers", []))
             # One real attempt/checkpoint per job; only analyze once all planned
-            # runs have completed. A failed attempt is retained and never retried.
+            # runs have completed. Failed attempts require exact owner recovery authorization.
             report["control_only"] = bool(report["experiments"].get("executed_attempt") or report["blockers"])
             if not report["control_only"] and report["experiments"].get("pending_runs") == 0:
                 from scripts.experiment_evidence import refresh
@@ -325,6 +327,12 @@ def after_write(project: Path, stage: str) -> dict:
                 result = research_quality.create_power_report(project, paper, **args, groups=operation.get("groups", 2))
                 write(output, result)
                 cache[str(output.relative_to(project))] = operation_sha
+            elif action == "derive_figure_data" and stage == "writing-and-review":
+                from scripts.figure_lineage import derive
+                request = read(path_in(project, operation["spec"]))
+                if set(request) != {"output", "transform", "source_run_ids"}:
+                    raise ResearchStepError("figure-data spec needs output, transform and source_run_ids")
+                derive(project, operation["paper_id"], request["output"], request["transform"], request["source_run_ids"])
             elif action == "render_figure" and stage == "writing-and-review":
                 from scripts.publication_figures import render
                 render(project, path_in(project, operation["spec"]))

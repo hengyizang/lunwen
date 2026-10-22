@@ -562,9 +562,9 @@ class ApiFirstTests(unittest.TestCase):
             responses = [
                 ModelResult("uuapi-anthropic", "claude-test", semantic_plan, {}),
                 ModelResult("uuapi-openai", "gpt-test", writer_bundle, {}),
-                ModelResult("uuapi-anthropic", "claude-test", initial_audit, {}),
+                ModelResult("uuapi-anthropic", "claude-test", initial_audit, {}, reported_model="claude-test", completion_status="completed"),
                 ModelResult("uuapi-openai", "gpt-test", remediation, {}),
-                ModelResult("uuapi-anthropic", "claude-test", final_audit, {}),
+                ModelResult("uuapi-anthropic", "claude-test", final_audit, {}, reported_model="claude-test", completion_status="completed"),
             ]
             with patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",

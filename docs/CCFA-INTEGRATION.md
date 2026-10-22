@@ -73,8 +73,13 @@ The integration distinguishes three layers:
    profile. A fresh cloud checkout can discover them without global setup.
 3. **Task-selected model guidance and real execution.** `model_contract` adds
    the mandatory full Humanization/Common preflights and applicable specialist
-   workflow to existing model requests. Explicit tasks can select the full
-   applicable reference bodies, retaining original-source hashes. Preparing or
+   workflow and complete applicable reference bodies to existing model requests,
+   including ordinary API requests that have no file-reading tools. Selection is
+   deterministic: the skill's ordinary rules, additional mode-specific rules
+   (compression, version comparison, plotting, architecture, etc.), and any
+   explicitly named pinned reference path. It does not load every venue guide,
+   exemplar or maintenance document for every task. Original-source hashes are
+   retained. Preparing or
    loading a packet makes no paid call; the normal authorized model cycle owns
    actual scientific work. Native validation/execution governs the result.
 
@@ -97,8 +102,21 @@ validation are separate claims.
 ## Preparing and consuming a skill task
 
 Ordinary stage tasks select relevant skills through the fixed registry and
-include their guidance in the existing planner/writer/critic request. Explicit
-work uses one controlled operation request in `program/`, for example:
+include their guidance in the existing planner/writer/critic request.
+
+Ordinary and explicitly prepared tasks now use the same full-reference loader.
+An active task selects its actual specialists instead of adding a second set of
+all stage-default skills. Each complete entry/reference body appears only once,
+deduplicated by its pinned content hash across defaults, mode rules and explicit
+references. All three Humanization policy bodies remain mandatory in every
+research-role request. A nested venue/exemplar rule is reachable by its exact
+`ccf-.../references/...` path in the task text or `references`; no model call is
+added to choose references. `mode: full` loads the selected skill's direct rules,
+while nested venue guides/cards remain an explicit source choice. Native role,
+approval and scientific evidence contracts still take precedence over upstream
+example commands, generic numeric scores and templates.
+
+Explicit work uses one controlled operation request in `program/`, for example:
 
 ```json
 {
@@ -143,6 +161,17 @@ or additional spend authorization. The existing model runtime consumes current
 packets, original guidance and source bindings in the selected role; stale
 inputs/implementation/scope must be refreshed. A completed packet does not mean
 the associated research task is complete.
+
+The G1 novelty gate retains at least three closest works per claim and five
+distinct closest works overall. Its project-bound saturation check now replays
+actual successful retrieval receipts and raw/normalized hashes. Backward and
+forward chaining require the corresponding executed `citation_graph` direction,
+DOI request source and matching original/normalized edges; an ordinary keyword
+search cannot stand in for either. Consecutive no-material-new-work rounds need
+different actual executions: renaming a round or aliasing a prior receipt does
+not create another search. These are evidence and coverage minima, not a proof
+of exhaustive novelty or scientific completeness; named screening and human
+review remain required.
 
 ## Five source-bound extension operations
 

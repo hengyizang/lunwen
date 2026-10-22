@@ -1,0 +1,37 @@
+name: Completeness repair regression
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: completeness-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-bound-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install offline scientific and manuscript validation dependencies
+        run: |
+          python -m pip install --disable-pip-version-check '.[reader,figures,research-quality]' PyYAML seaborn
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-latex-base
+      - name: Verify source-bound reviews, thesis scope, recovery, literature and model guidance
+        run: >-
+          python -m unittest tests.test_review_receipts tests.test_scientific_scope
+          tests.test_primary_recovery tests.test_relay_guard tests.test_figure_lineage
+          tests.test_tex_sources tests.test_ccfa_reference_routing tests.test_ccfa_model_handoffs
+          tests.test_ccfa_science tests.test_research_quality -v
+      - name: Check all Python modules and repository contracts
+        run: |
+          python -m compileall -q scripts tests
+          python scripts/validate_repo.py

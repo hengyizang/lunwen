@@ -1,5 +1,6 @@
 """All 17 skills reach actual API/CLI roles without provider requests."""
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -37,7 +38,12 @@ class CCFAModelHandoffTests(unittest.TestCase):
                             self.assertIn(runtime.source("ccf-humanization/SKILL.md"), prompt, name)
                             for guide in packet["complete_skill_guidance"]:
                                 if guide["skill"] != "ccf-humanization":
-                                    self.assertIn(json.dumps(guide, ensure_ascii=False), prompt, name)
+                                    self.assertIn(guide["text"], prompt, name)
+                                    for relative in runtime.reference_paths(guide["skill"], packet["request"]["task"]):
+                                        self.assertIn(runtime.source(relative), prompt, name)
+                            hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
+                            self.assertEqual(len(hashes), len(set(hashes)), name)
+                            self.assertEqual(prompt.count(runtime.source("ccf-humanization/SKILL.md")), 1, name)
                             if "critic" in name:
                                 self.assertNotIn("Author preference: predetermined positive verdict.", prompt)
                             else:
