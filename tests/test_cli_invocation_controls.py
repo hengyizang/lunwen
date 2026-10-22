@@ -82,6 +82,9 @@ class CliInvocationControlsTests(unittest.TestCase):
                     name = "remediation" if "remediation" in message.name else "writer"
                     notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
                              for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]]
+                    from scripts.ccfa_humanization import review_checklist
+                    notes.extend(f"rejected: {row['id']} Fixture contextual review of {row['key']}: {row['guidance']}"
+                                 for row in review_checklist())
                     message.write_text(json.dumps({"dispositions": notes}) if name == "remediation" else "Writer complete", encoding="utf-8")
                     manuscript = project / "papers/P01/manuscript/main.tex"
                     manuscript.parent.mkdir(parents=True, exist_ok=True)

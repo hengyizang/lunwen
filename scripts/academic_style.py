@@ -633,7 +633,7 @@ def run_harper(
 
 def editorial_reviews(manuscript: Path, text: str) -> dict[str, Any]:
     """Cover every pinned editorial pattern; semantic judgement stays explicit."""
-    from scripts import humanizer_review, defensive_review
+    from scripts import humanizer_review, defensive_review, ccfa_humanization
 
     raw = None
     if manuscript.suffix.lower() == ".tex":
@@ -642,6 +642,7 @@ def editorial_reviews(manuscript: Path, text: str) -> dict[str, Any]:
     return {
         "humanizer_review": humanizer_review.audit_text(text, raw_text=raw),
         "anti_defensive_review": defensive_review.audit_text(text, raw_text=raw),
+        "ccfa_humanization_review": ccfa_humanization.audit_text(text, raw_text=raw),
     }
 
 

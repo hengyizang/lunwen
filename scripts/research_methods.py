@@ -77,12 +77,15 @@ def installation_errors(root: Path = ROOT) -> list[str]:
     return errors
 
 
-def stage_context(stage: str, role: str, root: Path = ROOT) -> str:
-    """Use concise local adaptations; never inject the entire third-party suite."""
+def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = "", project: Path | None = None) -> str:
+    """Load stage guidance and complete task-selected CCFA policies, without calls."""
     issues = installation_errors(root)
     if issues:
         raise ValueError("; ".join(issues))
-    blocks = []
+    from scripts import ccfa_runtime
+    blocks = [ccfa_runtime.model_contract(stage, role, context, root=root)]
+    if project is not None:
+        blocks.append(ccfa_runtime.task_context(project, stage, role, root=root))
     for module in load_catalog(root)["modules"]:
         if stage in module["stages"]:
             text = safe_path(root, module["path"]).read_text(encoding="utf-8")

@@ -55,6 +55,10 @@ EXTRA = {
 }
 
 LITERATURE_OPERATIONS = {
+    "ccfa_task": ({"request"}, {"request"}),
+    "ccfa_task_clear": ({"expected_active_sha256"}, {"expected_active_sha256"}),
+    "ccfa_science": ({"operation", "request"}, {"operation", "request"}),
+    "ccfa_humanization": ({"paper_id"}, set()),
     "literature_discover": ({"plan", "output"}, set()),
     "literature_resolve": ({"url"}, {"url"}),
     "literature_figures": ({"pdf", "manifest", "figures", "source_receipt", "question", "max_selected", "auto_discover"}, {"pdf", "manifest"}),
