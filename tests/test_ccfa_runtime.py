@@ -309,6 +309,86 @@ class CCFARuntimeTests(unittest.TestCase):
                 with self.subTest(path=candidate), self.assertRaisesRegex(ValueError, "bound manuscript files"):
                     runtime.prepare(project, {**request, "editable_inputs": [candidate]})
 
+    def test_configured_secret_in_request_input_or_core_scope_is_rejected_before_packet_persistence(self):
+        fixture_secret = "fixture-sensitive-value-987654321"
+        for location in ("request", "input", "core"):
+            with self.subTest(location=location), tempfile.TemporaryDirectory() as directory, cloud(), patch.dict(os.environ, {"DR_OS_CCFA_FIXTURE_API_KEY": fixture_secret}):
+                project, source = self.project(Path(directory))
+                request = self.request(source, project)
+                if location == "request":
+                    request["task"] = "Analyze the located mechanism and this accidental value: " + fixture_secret
+                elif location == "input":
+                    source.write_text("The copied source accidentally includes " + fixture_secret, encoding="utf-8")
+                    request["inputs"][0]["sha256"] = runtime.sha(source)
+                else:
+                    put(project / "program/core-thesis.json", {"doctoral_question": "An accidental pasted value " + fixture_secret})
+                with self.assertRaisesRegex(ValueError, "configured secret"):
+                    runtime.prepare(project, request)
+                self.assertFalse((project / "reports/ccfa-tasks/active.json").exists())
+                self.assertFalse((project / "reports/ccfa-tasks").exists())
+
+    def test_current_authorized_editable_manuscript_still_rejects_configured_secret(self):
+        fixture_secret = "fixture-sensitive-current-manuscript-123456789"
+        with tempfile.TemporaryDirectory() as directory, cloud(), patch.dict(os.environ, {"DR_OS_CCFA_FIXTURE_API_KEY": fixture_secret}):
+            project, source = self.project(Path(directory))
+            request, manuscript = self.manuscript_request(project, source)
+            result = runtime.prepare(project, request)
+            packet_before = (project / result["path"]).read_bytes()
+            manuscript.write_text("An authorized writer accidentally pasted " + fixture_secret, encoding="utf-8")
+            output_provenance.record_model_writes(project, [manuscript], family="openai", provider="fixture",
+                model="nonpaid-fixture", role="persistent-writer", run_id="fixture-secret-rejection")
+            for role in ("writer", "critic"):
+                with self.subTest(role=role), self.assertRaisesRegex(ValueError, "configured secret"):
+                    runtime.task_context(project, "topic-intelligence", role)
+            self.assertEqual((project / result["path"]).read_bytes(), packet_before)
+            self.assertNotIn(fixture_secret.encode(), packet_before)
+
+    def test_clear_requires_exact_active_hash_preserves_packet_and_native_state_without_completion_claim(self):
+        with tempfile.TemporaryDirectory() as directory, cloud(), patch("scripts.network_safety.fetch_bytes", side_effect=AssertionError("No network authorized")), patch("scripts.model_runtime.authorized_calls", side_effect=AssertionError("No paid call authorized")):
+            project, source = self.project(Path(directory))
+            self.assertIn("no active CCFA task", runtime.task_context(project, "topic-intelligence", "writer"))
+            result = runtime.prepare(project, self.request(source, project))
+            active = project / "reports/ccfa-tasks/active.json"
+            original_binding = json.loads(active.read_text(encoding="utf-8"))
+            original_active = active.read_bytes()
+            original_packet = (project / result["path"]).read_bytes()
+            original_state = (project / "state/run.json").read_bytes()
+            with self.assertRaisesRegex(ValueError, "changed before deactivation"):
+                runtime.execute(project, {"action": "ccfa_task_clear", "expected_active_sha256": "0" * 64})
+            self.assertEqual(active.read_bytes(), original_active)
+            cleared = runtime.execute(project, {"action": "ccfa_task_clear", "expected_active_sha256": runtime.sha(active)})
+            self.assertEqual(cleared["status"], "deactivated")
+            self.assertEqual(cleared["model_calls"], 0)
+            self.assertFalse(cleared["scientific_completion_verified"])
+            binding = json.loads(active.read_text(encoding="utf-8"))
+            self.assertIsNone(binding["path"])
+            self.assertEqual(binding["previous"], original_binding)
+            self.assertEqual(binding["status"], "deactivated_not_scientific_completion")
+            self.assertEqual((project / result["path"]).read_bytes(), original_packet)
+            self.assertEqual((project / "state/run.json").read_bytes(), original_state)
+            origin = output_provenance.current_origin(project, active)
+            self.assertEqual(origin["status"], "tracked")
+            self.assertEqual(origin["model"], "scripts/ccfa_runtime.py")
+            context = runtime.task_context(project, "topic-intelligence", "critic")
+            self.assertIn("no active CCFA task", context)
+            self.assertIn("without scientific completion claim", context)
+            self.assertNotIn(source.read_text(encoding="utf-8"), context)
+            with self.assertRaisesRegex(ValueError, "No active CCFA task"):
+                runtime.execute(project, {"action": "ccfa_task_clear", "expected_active_sha256": runtime.sha(active)})
+
+    def test_deactivated_marker_still_requires_deterministic_origin_before_neutral_context(self):
+        with tempfile.TemporaryDirectory() as directory, cloud():
+            project, source = self.project(Path(directory))
+            runtime.prepare(project, self.request(source, project))
+            active = project / "reports/ccfa-tasks/active.json"
+            runtime.execute(project, {"action": "ccfa_task_clear", "expected_active_sha256": runtime.sha(active)})
+            original = active.read_bytes()
+            output_provenance.record_model_writes(project, [active], family="openai", provider="fixture",
+                model="nonpaid-fixture", role="persistent-writer", run_id="fixture-forged-deactivation")
+            self.assertEqual(active.read_bytes(), original)
+            with self.assertRaisesRegex(ValueError, "executor provenance"):
+                runtime.task_context(project, "topic-intelligence", "critic")
+
     def test_pinned_source_tamper_rejected_even_if_entry_name_looks_valid(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -400,6 +480,7 @@ class CCFARuntimeTests(unittest.TestCase):
                 self.assertTrue(artifact_ownership.executor_owned(project, relative), relative)
             request_file = project / "program/ccfa-request.json"
             for operation in ({"action": "ccfa_task", "request": {"id": "prepared"}},
+                              {"action": "ccfa_task_clear", "expected_active_sha256": "a" * 64},
                               {"action": "ccfa_science", "operation": "continuity", "request": {}},
                               {"action": "ccfa_humanization", "paper_id": "P01"}):
                 put(request_file, operation)
@@ -413,7 +494,8 @@ class CCFARuntimeTests(unittest.TestCase):
     def test_cloud_guard_precedes_install_prepare_and_resource(self):
         with patch.dict(os.environ, {}, clear=True):
             for action in (lambda: runtime.install(Path(".")), lambda: runtime.prepare(Path("."), {}),
-                           lambda: runtime.resource("ccf-common/SKILL.md")):
+                           lambda: runtime.resource("ccf-common/SKILL.md"),
+                           lambda: runtime.execute(Path("."), {"action": "ccfa_task_clear", "expected_active_sha256": "a" * 64})):
                 with self.assertRaisesRegex(ValueError, "authorized cloud"):
                     action()
 

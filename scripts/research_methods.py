@@ -90,7 +90,7 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
         if stage in module["stages"]:
             text = safe_path(root, module["path"]).read_text(encoding="utf-8")
             blocks.append(f"Reviewed method {module['id']} (SHA-256 {module['sha256']}):\n{text}")
-    scientific_contract = scientific_reasoning.stage_prompt(stage, role, root)
+    scientific_contract = scientific_reasoning.stage_prompt(stage, "writer" if role == "remediator" else role, root)
     if scientific_contract:
         blocks.append(scientific_contract)
     if not blocks:

@@ -167,7 +167,9 @@ def install(root=ROOT):
         raise ValueError("; ".join(errors))
     installed = []
     for row in registry(root)["routes"]:
-        origin = path_in(root, "skills/" + row["id"])
+        origin = path_in(root, "skills/" + row["id"], exists=False)
+        if not origin.is_dir():
+            raise ValueError("CCFA native skill directory is missing")
         # Only this fixed checkout-local discovery root is writable; never HOME.
         target = root / ".agents/skills" / row["id"]
         if any(p.is_symlink() for p in [target, *target.parents] if p != root.parent):
@@ -265,6 +267,7 @@ def prepare(project: Path, request: dict, *, root=ROOT):
         data = source(relative, root)
         reference_data.append({"path": relative, "sha256": hashlib.sha256(canonical(data.encode())).hexdigest(), "text": data})
     scope = read(project / "program/core-thesis.json") if (project / "program/core-thesis.json").is_file() else {}
+    safe_text(json.dumps(scope, ensure_ascii=False))
     detailed = [guidance(identifier, root=root, detailed=True) for identifier in identifiers]
     result = {"schema_version": "1.0", "status": "prepared_requires_authorized_model_task", "request": request,
         "request_sha256": digest(request), "skills": identifiers, "stage": stage, "inputs": bound,
@@ -294,8 +297,6 @@ def task_context(project, stage, role, *, root=ROOT):
     if not active.is_file():
         return "(no active CCFA task; stage-selected skills apply)"
     binding = read(active)
-    if binding.get("status") == "deactivated_not_scientific_completion":
-        return "(no active CCFA task; previous task deactivated without scientific completion claim)"
     from scripts.output_provenance import current_origin
     def executor_origin(path):
         origin = current_origin(Path(project), path)
@@ -303,6 +304,8 @@ def task_context(project, stage, role, *, root=ROOT):
                 or origin.get("model") != "scripts/ccfa_runtime.py"):
             raise ValueError("CCFA task needs current deterministic executor provenance")
     executor_origin(active)
+    if binding.get("status") == "deactivated_not_scientific_completion":
+        return "(no active CCFA task; previous task deactivated without scientific completion claim)"
     if not isinstance(binding.get("path"), str) or not binding["path"].startswith("reports/ccfa-tasks/"):
         raise ValueError("Invalid CCFA active task path")
     target = path_in(project, binding["path"])

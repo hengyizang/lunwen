@@ -44,7 +44,7 @@ jobs:
         run: >-
           python -m unittest tests.test_ccfa_runtime tests.test_ccfa_science
           tests.test_ccfa_humanization tests.test_editorial_integration
-          tests.test_cli_invocation_controls -v
+          tests.test_ccfa_context_isolation tests.test_cli_invocation_controls -v
       - name: Run original reviewed deterministic helpers on isolated fixtures
         run: |
           python -m unittest discover -s third_party/ccfa-skills/ccf-common/scripts -p 'test_*.py' -v
