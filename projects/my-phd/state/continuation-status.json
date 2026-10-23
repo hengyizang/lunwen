@@ -6,9 +6,9 @@
   "stage": "topic-intelligence",
   "gate": "G1",
   "actor": "Hengyi Zang",
-  "authorized_ceiling_cny": 300,
+  "authorized_ceiling_cny": 500,
   "spent_cny": 0.0,
-  "remaining_cny": 300.0,
-  "changed_at": "2026-10-20T10:22:46+00:00",
-  "source_run_id": "39407496718"
+  "remaining_cny": 500.0,
+  "changed_at": "2026-10-23T20:37:27+00:00",
+  "source_run_id": "40020633474"
 }
