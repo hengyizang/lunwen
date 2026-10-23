@@ -6,6 +6,7 @@ Parent results and billing holds remain frozen at an explicitly reviewed blob.
 """
 from __future__ import annotations
 
+import argparse
 import base64
 import copy
 import hashlib
@@ -43,7 +44,11 @@ def blob_json(blob, expected_sha):
     if blob.get("sha") != expected_sha or blob.get("encoding") != "base64":
         raise ClarifiedError("immutable_blob_readback_mismatch")
     try:
-        value = json.loads(base64.b64decode(blob["content"]))
+        raw = base64.b64decode(blob["content"])
+        actual_sha = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+        if actual_sha != expected_sha:
+            raise ClarifiedError("immutable_blob_readback_mismatch")
+        value = json.loads(raw)
     except (KeyError, ValueError, TypeError, UnicodeError):
         raise ClarifiedError("immutable_blob_readback_mismatch") from None
     if not isinstance(value, dict):
@@ -123,6 +128,10 @@ def scope(plan, parent, parent_sha):
             tasks[route["id"] + "|" + case_id] = amount
     if len(tasks) != MAX_CALLS or len(parent["entries"]) + len(tasks) + RESERVED_NATIVE_PROBE_CALLS > MAX_COMBINED_CALLS:
         raise ClarifiedError("combined_fixed_task_limit_exceeded")
+    return _scope_contract(plan, parent, parent_sha, selected, tasks, quotes)
+
+
+def _scope_contract(plan, parent, parent_sha, selected, tasks, quotes):
     held = round(sum(entry["reserved_ceiling_cny"] for entry in parent["entries"]
                      if entry.get("billing_status") != "settled"), 8)
     actual = round(sum(entry["actual_cost_cny"] for entry in parent["entries"]
@@ -141,6 +150,37 @@ def scope(plan, parent, parent_sha):
             "max_calls": MAX_CALLS, "max_combined_calls": MAX_COMBINED_CALLS,
             "reserved_native_probe_calls": RESERVED_NATIVE_PROBE_CALLS,
             "configurations": selected}
+
+
+def reconciliation_contract(plan, ledger, parent, parent_sha):
+    """Verify a past fixed scope against its immutable original parent.
+
+    This accounting route never derives a fresh allowance from today's quotes
+    or from later changes to the parent's billing ledger.
+    """
+    parent_trial.validate_plan(plan)
+    contract = ledger.get("scope") if isinstance(ledger, dict) else None
+    if (not isinstance(contract, dict) or not re.fullmatch(r"[0-9a-f]{40}", parent_sha or "")
+            or contract.get("parent_blob_sha") != parent_sha
+            or contract.get("parent_ledger_sha256") != digest(parent)
+            or parent.get("status") not in {"closed", "closed_with_holds"}
+            or not parent_trial.full_scope(parent)):
+        raise ClarifiedError("exact_original_clarified_parent_required")
+    selected = routes(plan)
+    quotes, tasks = contract.get("quote_sha256_by_candidate"), contract.get("task_ceiling_cny")
+    if (tuple(item["id"] for item in fixtures.cases()) != CASE_IDS
+            or not isinstance(quotes, dict) or set(quotes) != {route["id"] for route in selected}
+            or any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value) for value in quotes.values())
+            or not isinstance(tasks, dict)
+            or set(tasks) != {route["id"] + "|" + case_id for route in selected for case_id in CASE_IDS}
+            or any(type(value) not in (int, float) or not math.isfinite(value) or value <= 0 for value in tasks.values())
+            or len(parent["entries"]) + len(tasks) + RESERVED_NATIVE_PROBE_CALLS > MAX_COMBINED_CALLS):
+        raise ClarifiedError("original_clarified_task_contract_changed")
+    expected = _scope_contract(plan, parent, parent_sha, selected, tasks, quotes)
+    if contract != expected:
+        raise ClarifiedError("original_clarified_scope_changed_do_not_reset")
+    validate(ledger, contract)
+    return contract
 
 
 def cost(ledger):
@@ -303,6 +343,43 @@ def execute(ledger, contract, persist):
     persist(ledger)
 
 
+def reconcile(ledger, contract, persist):
+    """Account only existing calls; retain closed state, responses and isolation.
+
+    The shared credential hold is released separately through the owner's
+    source-bound reconciliation control after this original ledger is settled.
+    """
+    validate(ledger, contract)
+    for index, entry in enumerate(ledger["entries"]):
+        if entry.get("billing_status") == "settled":
+            continue
+        try:
+            settlement = relay_billing.settle(entry["provider"], entry["model"], entry.get("meter_before"))
+        except relay_billing.BillingReconciliationError as exc:
+            # Diagnostics may be added, but never reset the reservation, saved
+            # response or outcome merely because accounting remains uncertain.
+            pending = copy.deepcopy(ledger)
+            pending["entries"][index]["billing_diagnostic"] = str(exc)
+            persist(pending)
+            ledger.clear()
+            ledger.update(pending)
+            raise
+        actual = settlement.get("actual_cost_cny")
+        if (type(actual) not in (int, float) or not math.isfinite(actual)
+                or not 0 <= actual <= entry["reserved_ceiling_cny"]
+                or not settlement.get("debit_evidence")):
+            raise ClarifiedError("invalid_independent_clarified_debit_full_hold_retained")
+        settled = copy.deepcopy(ledger)
+        settled["entries"][index].update(billing_status="settled", actual_cost_cny=actual,
+            debit_evidence=settlement["debit_evidence"],
+            billing_reconciliation={"at": parent_trial.now(), "run_id": os.environ.get("GITHUB_RUN_ID"),
+                                    "generation_retried": False})
+        validate(settled, contract)
+        persist(settled)  # No local or shared hold is released before durable file CAS.
+        ledger.clear()
+        ledger.update(settled)
+
+
 def summary(ledger):
     contract = ledger["scope"]
     attempted = {entry["call_id"] for entry in ledger["entries"]}
@@ -325,26 +402,41 @@ def summary(ledger):
                  for entry in ledger["entries"]]}
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=("execute", "reconcile"), default="execute")
+    args = parser.parse_args(argv)
     env = os.environ
     if (env.get("GITHUB_ACTIONS") != "true" or env.get("GITHUB_REPOSITORY") != gateway_trial.REPO
             or env.get("GITHUB_ACTOR") != "hengyizang" or env.get("GITHUB_EVENT_NAME") != "workflow_dispatch"
             or env.get("GITHUB_REF") not in {"refs/heads/main", "refs/heads/" + parent_trial.CODE_BRANCH}
-            or env.get("COMPARISON_AUTHORIZATION") != AUTHORIZATION):
+            or args.mode == "execute" and env.get("COMPARISON_AUTHORIZATION") != AUTHORIZATION):
         raise ClarifiedError("explicit_owner_cloud_clarified_authorization_required")
-    parent_sha = env.get("COMPARISON_EXPECTED_LEDGER_SHA", "")
-    if not re.fullmatch(r"[0-9a-f]{40}", parent_sha):
-        raise ClarifiedError("exact_parent_blob_required")
     state = CloudState(env["COMPARISON_GITHUB_TOKEN"])
-    parent = current_parent(state, parent_sha)
     plan = json.loads((ROOT / "config/model-comparison-20261020.json").read_text())
-    contract = scope(plan, parent, parent_sha)
     ledger = state.load()
-    if ledger is None:
-        ledger = new_ledger(contract, parent)
-        state.save(ledger)
+    if args.mode == "reconcile":
+        if ledger is None:
+            raise ClarifiedError("no_existing_clarified_trial_to_reconcile_do_not_initialize")
+        parent_sha = ledger.get("scope", {}).get("parent_blob_sha", "")
+        if not isinstance(parent_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", parent_sha):
+            raise ClarifiedError("exact_original_clarified_parent_required")
+        parent = blob_json(state.api("git/blobs/" + parent_sha), parent_sha)
+        contract = reconciliation_contract(plan, ledger, parent, parent_sha)
+    else:
+        parent_sha = env.get("COMPARISON_EXPECTED_LEDGER_SHA", "")
+        if not re.fullmatch(r"[0-9a-f]{40}", parent_sha):
+            raise ClarifiedError("exact_parent_blob_required")
+        parent = current_parent(state, parent_sha)
+        contract = scope(plan, parent, parent_sha)
+        if ledger is None:
+            ledger = new_ledger(contract, parent)
+            state.save(ledger)
     try:
-        execute(ledger, contract, state.save)
+        if args.mode == "reconcile":
+            reconcile(ledger, contract, state.save)
+        else:
+            execute(ledger, contract, state.save)
     finally:
         report = summary(ledger)
         output = ROOT / ".runtime/model-comparison-clarified-summary.json"

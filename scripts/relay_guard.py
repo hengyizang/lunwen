@@ -23,6 +23,8 @@ SOURCES = (
 ALIASES = {"cheapai-kiro": "cheapai-kiro-discount", "codekey-codex-pure": "codekey-codex-pro"}
 _TICKET = ContextVar("relay_generation_ticket", default=None)
 TRIAL_SOURCES = {name.removesuffix(".json"): (branch, name) for branch, name in SOURCES[1:3]}
+REQUEST_FIELDS = ("call_id", "provider", "model", "requested_model", "candidate_id", "effort", "case_id",
+                  "case_sha256", "quote_sha256", "meter_before", "gateway_meter_before", "run_id", "reserved_ceiling_cny")
 
 
 class RelayGuardError(ValueError):
@@ -71,12 +73,23 @@ class CloudStore:
         blob = next((x for x in subtree["tree"] if x["path"] == name), None)
         if blob is None:
             return None, None
-        data = self.api("git/blobs/" + blob["sha"])
+        return self.read_blob(blob["sha"]), blob["sha"]
+
+    def read_blob(self, blob_sha):
+        """Read the exact immutable historical ledger, never a moving ref."""
+        if not isinstance(blob_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", blob_sha):
+            raise RelayGuardError("shared relay blob identity mismatch")
+        data = self.api("git/blobs/" + blob_sha)
+        if not isinstance(data, dict) or data.get("sha") != blob_sha or data.get("encoding") != "base64":
+            raise RelayGuardError("shared relay blob identity mismatch")
         raw = base64.b64decode(data["content"])
         actual = hashlib.sha1(f"blob {len(raw)}\0".encode() + raw).hexdigest()
-        if actual != blob["sha"]:
+        if actual != blob_sha:
             raise RelayGuardError("shared relay blob identity mismatch")
-        return json.loads(raw), blob["sha"]
+        value = json.loads(raw)
+        if not isinstance(value, dict):
+            raise RelayGuardError("shared relay immutable ledger is malformed")
+        return value
 
     def write(self, name, value, expected):
         if self.api("git/ref/heads/" + BRANCH, missing=True) is None:
@@ -242,6 +255,7 @@ def source_holds(provider, store):
             identifier = hashlib.sha256((branch + "\0" + name + "\0" + entry["call_id"]).encode()).hexdigest()
             found.append({"id": identifier, "provider": provider, "branch": branch, "name": name,
                           "call_id": entry["call_id"], "source_blob_sha": blob,
+                          "request_binding": {key: entry[key] for key in REQUEST_FIELDS if key in entry},
                           "reserved_ceiling_cny": entry["reserved_ceiling_cny"]})
     return found
 
@@ -265,7 +279,7 @@ def load(provider, *, store=None, import_legacy=True):
             if same_key and group not in value.get("rotated_provider_credentials", {}):
                 for hold in source_holds(group, store):
                     if hold["id"] not in value.get("reconciled_legacy_ids", []):
-                        value["legacy_holds"][hold["id"]] = hold
+                        value["legacy_holds"].setdefault(hold["id"], hold)
     return store, name, value, expected
 
 
@@ -375,11 +389,17 @@ def _trial_settlement(store, active, meter):
     comparison.validate_plan(plan)
     if scope["trial"] == comparison.TRIAL:
         comparison.validate_ledger(ledger, plan)
+        original_parent_blob = None
     else:
-        parent, parent_blob = store.read(comparison.STATE, "trial-state", comparison.FILE)
-        if not isinstance(parent, dict) or not parent_blob:
+        original_parent_blob = ledger.get("scope", {}).get("parent_blob_sha")
+        if not isinstance(original_parent_blob, str) or not re.fullmatch(r"[a-f0-9]{40}", original_parent_blob):
+            raise RelayGuardError("original clarified parent blob identity is missing")
+        parent, current_parent_blob = store.read(comparison.STATE, "trial-state", comparison.FILE)
+        if current_parent_blob != original_parent_blob:
+            parent = store.read_blob(original_parent_blob)
+        if not isinstance(parent, dict):
             raise RelayGuardError("original parent comparison is unavailable")
-        contract = clarified.scope(plan, parent, parent_blob)
+        contract = clarified.reconciliation_contract(plan, ledger, parent, original_parent_blob)
         clarified.validate(ledger, contract)
     if (ledger.get("trial_id") != scope["trial"] or entry.get("model") != meter["model"]
             or entry.get("meter_before") != meter["before"]
@@ -393,6 +413,7 @@ def _trial_settlement(store, active, meter):
             or current["actual_cost_cny"] > active["max_cost_cny"]):
         raise RelayGuardError("independent debit differs from the original accounted trial cost")
     return {"branch": branch, "name": name, "call_id": scope["call_id"], "source_blob_sha": blob,
+            "original_parent_blob_sha": original_parent_blob,
             "hold_id": hashlib.sha256((branch + "\0" + name + "\0" + scope["call_id"]).encode()).hexdigest(),
             "entry_sha256": relay_billing._fingerprint(entry), "recorded_settlement": recorded,
             "independent_settlement": current}
@@ -448,6 +469,8 @@ def prepare_reconciliation(project, source, actor, *, store=None):
         for identifier in ids:
             hold = value["legacy_holds"][identifier]
             ledger, entry, blob = _source_entry(store, hold["branch"], hold["name"], hold["call_id"], hold["provider"])
+            if any(entry.get(key) != original for key, original in hold.get("request_binding", {}).items()):
+                raise RelayGuardError("original held request/model/before-meter binding changed")
             try:
                 settlement = _settled_receipt(entry, hold["provider"], hold["name"], ledger)
             except (RelayGuardError, KeyError, TypeError, ValueError):

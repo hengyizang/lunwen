@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard,model_comparison as comparison
+from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard,model_comparison as comparison,model_comparison_clarified as clarified
 from scripts.research_artifacts import write
 from tests.relay_guard_fixtures import MemoryStore
 
@@ -93,6 +93,20 @@ class RelayGuardTests(unittest.TestCase):
                 patch.object(store,"read",return_value=({"different":"bytes"},"b"*40)):
             with self.assertRaisesRegex(guard.RelayGuardError,"readback"):
                 store.write("fixture.json",{"intended":"bytes"},None)
+
+    def test_cloud_store_historical_blob_checks_immutable_git_identity(self):
+        import hashlib
+        raw=json.dumps({"original":"bound parent ledger"}).encode()
+        blob=hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest()
+        data={"sha":blob,"encoding":"base64","content":base64.b64encode(raw).decode()}
+        store=guard.CloudStore()
+        with patch.object(store,"api",return_value=data) as api:
+            self.assertEqual(store.read_blob(blob),{"original":"bound parent ledger"})
+            api.assert_called_once_with("git/blobs/"+blob)
+        data["content"]=base64.b64encode(b'{"changed":"parent"}').decode()
+        with patch.object(store,"api",return_value=data):
+            with self.assertRaisesRegex(guard.RelayGuardError,"blob identity"):
+                store.read_blob(blob)
 
     def test_transport_requires_durably_bound_before_meter_and_exact_key_once(self):
         ticket=self.begin()
@@ -218,6 +232,63 @@ class RelayGuardTests(unittest.TestCase):
             with self.assertRaisesRegex(guard.RelayGuardError,"still lacks independent debit"):
                 guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
 
+    def test_review_snapshot_changes_when_remote_source_proof_changes(self):
+        self.historical()
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        held=list(self.active()["legacy_holds"]);branch,name=guard.SOURCES[1]
+        entry={"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
+            "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
+            "reserved_ceiling_cny":0.431508,"debit_evidence":self.debit()["debit_evidence"]}
+        self.store.put(branch,"trial-state",name,{"entries":[entry]})
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+            first=guard.reconciliation_snapshot(project,source,"Synthetic Owner",store=self.store)
+            entry["debit_evidence"]["proof_note"]="A second independently reviewed source receipt."
+            self.store.put(branch,"trial-state",name,{"entries":[entry]})
+            second=guard.reconciliation_snapshot(project,source,"Synthetic Owner",store=self.store)
+            self.assertEqual(first["state"],second["state"])
+            a=first["resolved_proposal"]["resolved_legacy"][0];b=second["resolved_proposal"]["resolved_legacy"][0]
+            self.assertNotEqual(a["source_blob_sha"],b["source_blob_sha"])
+            self.assertNotEqual(a["entry_sha256"],b["entry_sha256"])
+
+    def test_legacy_request_binding_cannot_be_rewritten_during_unknown_charge_import(self):
+        branch,name=guard.SOURCES[1]
+        entry={"provider":PROVIDER,"call_id":PROVIDER+"|original-bound-call","billing_status":"reserved",
+            "model":"gemini-4-argon","meter_before":self.meter(),"reserved_ceiling_cny":1}
+        self.store.put(branch,"trial-state",name,{"entries":[entry]})
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        held=list(self.active()["legacy_holds"])
+        entry["model"]="gemini-4-argon-high"
+        self.store.put(branch,"trial-state",name,{"entries":[entry]})
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.assertEqual(self.active()["legacy_holds"][held[0]]["request_binding"]["model"],"gemini-4-argon")
+        entry.update(billing_status="settled",actual_cost_cny=0.125,debit_evidence=self.debit()["debit_evidence"])
+        self.store.put(branch,"trial-state",name,{"entries":[entry]})
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+            with self.assertRaisesRegex(guard.RelayGuardError,"original held request/model/before-meter"):
+                guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+
+    def test_legacy_reconciliation_checks_the_held_alias_provider_not_the_selected_group(self):
+        other="codekey-codex-pro";setting=ai_providers.PRODUCTION_PROVIDERS[other]["key_setting"]
+        with patch.dict(os.environ,{setting:os.environ[KEY_SETTING]}):
+            self.historical(other)
+            with self.assertRaises(guard.RelayGuardError):self.begin()
+            held=list(self.active()["legacy_holds"]);branch,name=guard.SOURCES[1]
+            with tempfile.TemporaryDirectory() as temporary:
+                project=Path(temporary)/"original-project"
+                source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+                with self.assertRaisesRegex(guard.RelayGuardError,"still lacks independent debit"):
+                    guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                entry={"provider":other,"call_id":other+"|historical-unknown","model":"gpt-6.1-sol",
+                    "billing_status":"settled","actual_cost_cny":0.125,"reserved_ceiling_cny":0.431508,
+                    "meter_before":{**self.meter(),"provider":other},"debit_evidence":self.debit()["debit_evidence"]}
+                self.store.put(branch,"trial-state",name,{"entries":[entry]})
+                resolved=guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)[0]
+                self.assertEqual(resolved["resolved_legacy"][0]["provider"],other)
+
     def test_original_cheapai_whole_key_proofs_and_old_codekey_counters_remain_supported(self):
         cheap="cheapai-gpt-pro";setting=ai_providers.PRODUCTION_PROVIDERS[cheap]["key_setting"]
         branch,name=guard.SOURCES[0]
@@ -289,6 +360,55 @@ class RelayGuardTests(unittest.TestCase):
                 with self.assertRaisesRegex(guard.RelayGuardError,"original accounted trial cost"):
                     guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
             self.assertEqual(self.active()["active"],ticket)
+
+    def test_clarified_settlement_uses_immutable_original_parent_after_current_parent_changes(self):
+        class ArchiveStore(MemoryStore):
+            def __init__(self):
+                self.archives={};self.blob_reads=[];super().__init__()
+            def put(self,*args):
+                blob=super().put(*args);self.archives[blob]=copy.deepcopy(args[-1]);return blob
+            def read_blob(self,blob):
+                self.blob_reads.append(blob)
+                if blob not in self.archives:raise guard.RelayGuardError("original parent blob unavailable")
+                return copy.deepcopy(self.archives[blob])
+        store=ArchiveStore()
+        plan=json.loads((comparison.ROOT/"config/model-comparison-20261020.json").read_text(encoding="utf-8"))
+        with patch.object(model_runtime,"pricing",return_value={"quote_sha256":"b"*64}), \
+                patch.object(model_runtime,"reservation_bound",return_value=1.0):
+            parent=comparison.new_ledger(plan)
+            comparison.authorize_complete(plan,parent,"a"*40,"a"*40,comparison.FULL_AUTHORIZATION,lambda _:None)
+            parent["status"]="closed"
+            parent_blob=store.put(comparison.STATE,"trial-state",comparison.FILE,parent)
+            contract=clarified.scope(plan,parent,parent_blob)
+        route=next(r for r in contract["configurations"] if r["provider"]=="codekey-codex-pro")
+        provider=route["provider"];case=clarified.CASE_IDS[0];call_id=route["id"]+"|"+case
+        setting=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
+        before={**self.meter(),"provider":provider}
+        with patch.dict(os.environ,{setting:"synthetic-clarified-history-key"}):
+            ticket=guard.begin(provider,scope={"trial":clarified.TRIAL,"call_id":call_id},max_cost_cny=1,store=store)
+            guard.bind_meter(ticket,route["model"],before,store=store)
+            guard.authorize_transport("https://codekey.ai/v1/responses",{"Authorization":"Bearer synthetic-clarified-history-key"})
+            ledger=clarified.new_ledger(contract,parent)
+            ledger["entries"].append({"provider":provider,"call_id":call_id,"candidate_id":route["id"],"model":route["model"],"effort":route["effort"],
+                "case_id":case,"case_sha256":clarified.digest(clarified.fixtures.case(case)),"run_id":"123",
+                "quote_sha256":contract["quote_sha256_by_candidate"][route["id"]],"reserved_ceiling_cny":1,
+                "meter_before":before,"billing_status":"settled","actual_cost_cny":0.125,"debit_evidence":self.debit()["debit_evidence"]})
+            store.put(comparison.STATE,"trial-state",clarified.FILE,ledger)
+            current={**parent,"operator_reviews":[{"note":"Later legitimate independent billing reconciliation."}]}
+            current_blob=store.put(comparison.STATE,"trial-state",comparison.FILE,current)
+            self.assertNotEqual(parent_blob,current_blob)
+            with tempfile.TemporaryDirectory() as temporary:
+                project=Path(temporary)/"owner-control-project"
+                source=self.proposal(project,{"provider":provider,"kind":"settled_trial","credential_sha256":guard.fingerprint(provider),"ticket_id":ticket["id"]})
+                with patch.object(relay_billing,"settle",return_value=self.debit()),patch.object(model_runtime,"pricing") as price:
+                    proposal=guard.prepare_reconciliation(project,source,"Synthetic Owner",store=store)[0]
+                    price.assert_not_called()
+                self.assertEqual(proposal["resolved_trial"]["original_parent_blob_sha"],parent_blob)
+                self.assertEqual(store.blob_reads,[parent_blob])
+                self.assertEqual(store.read(comparison.STATE,"trial-state",comparison.FILE)[1],current_blob)
+                store.archives.pop(parent_blob)
+                with self.assertRaisesRegex(guard.RelayGuardError,"original parent blob unavailable"):
+                    guard.prepare_reconciliation(project,source,"Synthetic Owner",store=store)
 
     def test_owner_active_reconciliation_needs_original_project_and_matching_budget_event(self):
         ticket=self.begin();self.bind(ticket);self.send()
