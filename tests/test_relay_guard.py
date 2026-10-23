@@ -380,14 +380,14 @@ class RelayGuardTests(unittest.TestCase):
             parent["status"]="closed"
             parent_blob=store.put(comparison.STATE,"trial-state",comparison.FILE,parent)
             contract=clarified.scope(plan,parent,parent_blob)
-        route=next(r for r in contract["configurations"] if r["provider"]=="codekey-codex-pro")
+        route=next(r for r in contract["configurations"] if r["provider"]=="codekey-deepseek")
         provider=route["provider"];case=clarified.CASE_IDS[0];call_id=route["id"]+"|"+case
         setting=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
         before={**self.meter(),"provider":provider}
         with patch.dict(os.environ,{setting:"synthetic-clarified-history-key"}):
             ticket=guard.begin(provider,scope={"trial":clarified.TRIAL,"call_id":call_id},max_cost_cny=1,store=store)
             guard.bind_meter(ticket,route["model"],before,store=store)
-            guard.authorize_transport("https://codekey.ai/v1/responses",{"Authorization":"Bearer synthetic-clarified-history-key"})
+            guard.authorize_transport("https://codekey.ai/v1/chat/completions",{"Authorization":"Bearer synthetic-clarified-history-key"})
             ledger=clarified.new_ledger(contract,parent)
             ledger["entries"].append({"provider":provider,"call_id":call_id,"candidate_id":route["id"],"model":route["model"],"effort":route["effort"],
                 "case_id":case,"case_sha256":clarified.digest(clarified.fixtures.case(case)),"run_id":"123",
