@@ -19,13 +19,13 @@
       "sha256": "e5ec27b52b02656346d4fbe4bbe314c3a01d1d7da184303c819b49801636579b"
     },
     "intake/constraints.json": {
-      "family": "openai",
-      "model": "Codex session (GPT-6 family; exact API model ID not supplied)",
-      "provider": "codex-work-session",
-      "recorded_at": "2026-09-30T18:20:51+00:00",
-      "role": "confirmed-intake consolidation; records actual user instructions, no independent audit",
-      "run_id": "codex-confirmed-g0-20261001",
-      "sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b"
+      "family": "other",
+      "model": "scripts/operating_constraints.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-10-23T18:19:38+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d"
     },
     "intake/continuation-dossier.md": {
       "family": "openai",
@@ -62,8 +62,44 @@
       "role": "hash-verified receipt extraction and deterministic constraint validation",
       "run_id": "codex-g0-continuation-20261001",
       "sha256": "d59916f86aea3d370d9778ed1e0289b2ac289a82530e78303c6032c2cd90c620"
+    },
+    "state/continuation.json": {
+      "family": "other",
+      "model": "scripts/operating_constraints.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-10-23T18:19:38+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "15fdd16801008c5de76e2450af74d8085ac0c35798d0b2e98040e813d849f6cb"
+    },
+    "state/model-spend-control.json": {
+      "family": "other",
+      "model": "scripts/operating_constraints.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-10-23T18:19:38+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "15acc24f0f3fd4bb5e808b72ecc0f13ea42eaac2212fe04f7a8738caee00e417"
+    },
+    "state/operating-constraints-amendments/40002349672.json": {
+      "family": "other",
+      "model": "scripts/operating_constraints.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-10-23T18:19:38+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "0e7cf3610e84c33b7770982de6b505954191910e5d025b1211ecc373138db8cc"
+    },
+    "state/run.json": {
+      "family": "other",
+      "model": "scripts/operating_constraints.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-10-23T18:19:38+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "77d047954c18e6cf08e547015b586b3c1eae7a5d8ae7089e78b816f2c4c62be5"
     }
   },
   "schema_version": "1.0",
-  "updated_at": "2026-09-30T18:20:51+00:00"
+  "updated_at": "2026-10-23T18:19:38+00:00"
 }

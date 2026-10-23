@@ -6,7 +6,7 @@
   "confirmation_note": "我确认，改成每天24小时不停，直到满足论文要求",
   "system_execution_hours_per_day": 24,
   "resume_interval_minutes": 15,
-  "constraints_sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
-  "g0_approval_artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad",
+  "constraints_sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+  "g0_approval_artifact_sha256": "55d9d970de11ace265afff500560af3066b6b2168f16064393aeaf3f6a34bf7a",
   "stop_when": "all_papers_submission_ready"
 }

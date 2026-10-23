@@ -5,9 +5,18 @@
       "at": "2026-09-30T18:25:52+00:00",
       "ceiling_cny": 300,
       "run_id": "36758494072"
+    },
+    {
+      "actor": "Hengyi Zang",
+      "at": "2026-10-23T18:19:38+00:00",
+      "authorization_note": "用户于2026-10-24明确要求：“调整一下，预算改到500，时间改成10月26号”。据此将累计模型API上限改为500元、目标投稿就绪日期改为2026-10-26；保留历史费用、待结算隔离、单篇限制和G1-G5人工审批，不启动付费研究。",
+      "ceiling_cny": 500,
+      "kind": "ceiling_amendment",
+      "previous_ceiling_cny": 300,
+      "run_id": "40002349672"
     }
   ],
-  "authorized_ceiling_cny": 300,
+  "authorized_ceiling_cny": 500,
   "currency": "CNY",
   "paper_spent_cny": {},
   "reconciliation_events": [],

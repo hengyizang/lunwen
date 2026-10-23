@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0",
+  "constraints_before": {
+    "schema_version": "1.1",
+    "status": "ready_for_review",
+    "execution_mode": "cloud_only",
+    "research_goal": "Develop six distinct, independently defensible doctoral-level English papers around a core thesis A and a separately doctoral-level extension B. Target at least three current JCR Q1 SCI/SCIE journals and at least current JCR Q2 SCI/SCIE for every remaining paper, all with JIF > 1.0. Apply identical novelty, original-contribution, experimental, statistical, reproducibility and writing requirements to every paper. Prepare packages for human inspection and manual submission before 2026-10-07; journal acceptance is not promised.",
+    "researcher_background": "Self-reported mechanical-engineering bachelor's background and Big Data/business-intelligence master's background, with AI4Health study experience, recovered from prior user messages and user-provided materials. Exact credentials, programme recognition, grades and admission eligibility have not been independently verified and must not be inferred from this summary.",
+    "available_skills": [
+      "Python, self-reported in prior user-provided materials; proficiency not independently assessed",
+      "Machine learning and data analysis, self-reported; no proficiency score inferred",
+      "Case-based reasoning, databases, error validation and software-interface development, self-reported",
+      "New-energy vehicle life-cycle-cost estimation software experience, self-reported"
+    ],
+    "preferred_domains": [
+      "AI",
+      "robotics",
+      "mechanical engineering"
+    ],
+    "candidate_application_routes": [
+      "France PhD or industrial doctorate",
+      "Spain PhD or industrial doctorate",
+      "Netherlands EngD",
+      "United Kingdom PhD",
+      "Japan PhD",
+      "Hong Kong PhD",
+      "PhD by publication where legally and institutionally available"
+    ],
+    "time_horizon_years": null,
+    "target_submission_ready_date": "2026-10-07",
+    "weekly_hours": null,
+    "cash_budget_usd": null,
+    "model_api_budget_cny": 300,
+    "cloud_compute_budget_usd": 0,
+    "local_compute": {
+      "gpu": null,
+      "ram_gb": null,
+      "storage_gb": null
+    },
+    "equipment": "GitHub Actions cloud runtime; no laboratory, researcher-owned GPU or local installation may be required for any of the six current papers. A future post-admission laboratory extension may be proposed separately but cannot substantiate a current paper.",
+    "data_constraint": "Use public or explicitly authorized data only after rights, licence, provenance, privacy and leakage checks. Discovery metadata is a lead, not data-access authorization. Current paper claims must be supportable with data and experiments executable on the declared cloud runner.",
+    "topic_quality_requirements": {
+      "novelty_evidence_required": true,
+      "doctoral_depth_required": true,
+      "original_contribution_required": true,
+      "current_papers_cloud_feasible_required": true
+    },
+    "ranking_weights": {
+      "funded_position_supply": 0.25,
+      "job_market_and_salary": 0.25,
+      "future_growth_potential": 0.15,
+      "phd_position_competition": 0.075,
+      "job_market_competition": 0.075,
+      "background_fit": 0.1,
+      "application_route_fit": 0.1
+    },
+    "excluded_domains": [],
+    "ethics_or_legal_constraints": [
+      "No fabricated citations, data, experiments, reviews, contributions, journal metrics or submission status",
+      "Verify data-use rights and privacy before acquisition; do not bypass access controls or upload unauthorized confidential data to model providers",
+      "Preserve failed runs, negative results, preregistered comparisons and warranted uncertainty",
+      "Human approval at every G0-G5 gate and manual submission after final inspection; no automatic submission"
+    ],
+    "notes": [
+      "The owner explicitly confirmed the presented G0 consolidation, replacing the suggested time arrangement with round-the-clock cloud system availability. Human review remains on request at each gate; actual weekly human hours are not supplied or inferred.",
+      "The owner confirmed the presented seven-number direction-weight vector: funded-position supply and employment/salary have equal weight; PhD-position and job competition are separate. No weighted direction score has been computed.",
+      "Cloud feasibility is a prerequisite before direction ranking. Novelty evidence, doctoral depth and original contribution are mandatory requirements for specific topics and plans after direction screening, not tradable direction weights.",
+      "The requested date is preserved; the planning checkpoint is a human-reviewable final manuscript snapshot by 2026-10-06. No 18-month study period is assumed. Six doctoral-quality packages by the requested date cannot be reliably promised from the current G0 state.",
+      "The owner confirmed the initial cumulative model API envelope of CNY 300, with CNY 45 per-paper warning and CNY 60 per-paper hard limits. This intake is not a ledger grant; the separate owner cloud authorize_budget job records the first tranche before any paid transport.",
+      "Spending authorization is cumulative: initial approval for CNY 300, then an explicit next-tranche approval for CNY 600, CNY 900 and so on. Calls within the approved unused ceiling need no repeated spending approval. A larger tranche must not silently override a separately agreed project or paper hard limit.",
+      "The owner confirmed the presented zero external paid-compute envelope. The old USD 100 template default is not used; every experiment still requires actual cloud resource feasibility evidence.",
+      "Codex/OpenAI authors and remediates persistent artifacts. Claude API supplies only read-only semantic planning and independent criticism; author and critic use different model families. No Claude API plan or audit has been run in this consolidation.",
+      "Preferred domains and application routes are exploratory inputs retained from the previous template, not selected directions, verified funded positions or guaranteed eligibility. UK publication routes must accept ordinary external applicants and must not impose the previously excluded six-or-more-years-since-degree requirement.",
+      "No additional excluded domain was recovered; an empty exclusion list is not a waiver of data, ethics or scientific-quality requirements.",
+      "Recovered skills are self-reported leads for background matching. Quantified programming/statistical proficiency and exact credentials are not invented. See intake/constraint-sources.json for source classes and limits.",
+      "Fresh cloud preflight 36747990456 found none of the checked provider keys, endpoint/model variables or verified pricing configured. Research API execution remains blocked until configuration and applicable authorization are present. Never place credentials in chat, an issue, a commit or this file.",
+      "Standing continuation is bound to this exact intake and recorded G0 approval. Healthy bounded cloud cycles can continue independently of ChatGPT, with recovery wakeups every 15 minutes. Stop at pending human gates, missing or invalid configuration, billing reconciliation, budget boundaries, failed-cycle inspection or all individual current-file G5 approvals. No automatic submission."
+    ],
+    "human_review_required": true,
+    "human_review_mode": "on_request",
+    "system_execution_hours_per_day": 24
+  },
+  "constraints_after": {
+    "schema_version": "1.1",
+    "status": "ready_for_review",
+    "execution_mode": "cloud_only",
+    "research_goal": "Develop six distinct, independently defensible doctoral-level English papers around a core thesis A and a separately doctoral-level extension B. Target at least three current JCR Q1 SCI/SCIE journals and at least current JCR Q2 SCI/SCIE for every remaining paper, all with JIF > 1.0. Apply identical novelty, original-contribution, experimental, statistical, reproducibility and writing requirements to every paper. Prepare packages for human inspection and manual submission before 2026-10-26; journal acceptance is not promised.",
+    "researcher_background": "Self-reported mechanical-engineering bachelor's background and Big Data/business-intelligence master's background, with AI4Health study experience, recovered from prior user messages and user-provided materials. Exact credentials, programme recognition, grades and admission eligibility have not been independently verified and must not be inferred from this summary.",
+    "available_skills": [
+      "Python, self-reported in prior user-provided materials; proficiency not independently assessed",
+      "Machine learning and data analysis, self-reported; no proficiency score inferred",
+      "Case-based reasoning, databases, error validation and software-interface development, self-reported",
+      "New-energy vehicle life-cycle-cost estimation software experience, self-reported"
+    ],
+    "preferred_domains": [
+      "AI",
+      "robotics",
+      "mechanical engineering"
+    ],
+    "candidate_application_routes": [
+      "France PhD or industrial doctorate",
+      "Spain PhD or industrial doctorate",
+      "Netherlands EngD",
+      "United Kingdom PhD",
+      "Japan PhD",
+      "Hong Kong PhD",
+      "PhD by publication where legally and institutionally available"
+    ],
+    "time_horizon_years": null,
+    "target_submission_ready_date": "2026-10-26",
+    "weekly_hours": null,
+    "cash_budget_usd": null,
+    "model_api_budget_cny": 500,
+    "cloud_compute_budget_usd": 0,
+    "local_compute": {
+      "gpu": null,
+      "ram_gb": null,
+      "storage_gb": null
+    },
+    "equipment": "GitHub Actions cloud runtime; no laboratory, researcher-owned GPU or local installation may be required for any of the six current papers. A future post-admission laboratory extension may be proposed separately but cannot substantiate a current paper.",
+    "data_constraint": "Use public or explicitly authorized data only after rights, licence, provenance, privacy and leakage checks. Discovery metadata is a lead, not data-access authorization. Current paper claims must be supportable with data and experiments executable on the declared cloud runner.",
+    "topic_quality_requirements": {
+      "novelty_evidence_required": true,
+      "doctoral_depth_required": true,
+      "original_contribution_required": true,
+      "current_papers_cloud_feasible_required": true
+    },
+    "ranking_weights": {
+      "funded_position_supply": 0.25,
+      "job_market_and_salary": 0.25,
+      "future_growth_potential": 0.15,
+      "phd_position_competition": 0.075,
+      "job_market_competition": 0.075,
+      "background_fit": 0.1,
+      "application_route_fit": 0.1
+    },
+    "excluded_domains": [],
+    "ethics_or_legal_constraints": [
+      "No fabricated citations, data, experiments, reviews, contributions, journal metrics or submission status",
+      "Verify data-use rights and privacy before acquisition; do not bypass access controls or upload unauthorized confidential data to model providers",
+      "Preserve failed runs, negative results, preregistered comparisons and warranted uncertainty",
+      "Human approval at every G0-G5 gate and manual submission after final inspection; no automatic submission"
+    ],
+    "notes": [
+      "The owner explicitly confirmed the presented G0 consolidation, replacing the suggested time arrangement with round-the-clock cloud system availability. Human review remains on request at each gate; actual weekly human hours are not supplied or inferred.",
+      "The owner confirmed the presented seven-number direction-weight vector: funded-position supply and employment/salary have equal weight; PhD-position and job competition are separate. No weighted direction score has been computed.",
+      "Cloud feasibility is a prerequisite before direction ranking. Novelty evidence, doctoral depth and original contribution are mandatory requirements for specific topics and plans after direction screening, not tradable direction weights.",
+      "The requested date is preserved; the planning checkpoint is a human-reviewable final manuscript snapshot by 2026-10-25. No 18-month study period is assumed. Six doctoral-quality packages by the requested date cannot be reliably promised from the current G0 state.",
+      "The owner confirmed the current cumulative model API envelope of CNY 500, with CNY 45 per-paper warning and CNY 60 per-paper hard limits. The hash-bound owner operating amendment records this exact cumulative ceiling; no paid transport is started by the amendment.",
+      "Spending authorization is cumulative: the current owner-approved ceiling is CNY 500. A later explicit owner tranche approval may add CNY 300, for example CNY 800; no automatic increase is authorized. Calls within the approved unused ceiling need no repeated spending approval. A larger ceiling must not silently override a separately agreed paper hard limit.",
+      "The owner confirmed the presented zero external paid-compute envelope. The old USD 100 template default is not used; every experiment still requires actual cloud resource feasibility evidence.",
+      "Codex/OpenAI authors and remediates persistent artifacts. Claude API supplies only read-only semantic planning and independent criticism; author and critic use different model families. No Claude API plan or audit has been run in this consolidation.",
+      "Preferred domains and application routes are exploratory inputs retained from the previous template, not selected directions, verified funded positions or guaranteed eligibility. UK publication routes must accept ordinary external applicants and must not impose the previously excluded six-or-more-years-since-degree requirement.",
+      "No additional excluded domain was recovered; an empty exclusion list is not a waiver of data, ethics or scientific-quality requirements.",
+      "Recovered skills are self-reported leads for background matching. Quantified programming/statistical proficiency and exact credentials are not invented. See intake/constraint-sources.json for source classes and limits.",
+      "Fresh cloud preflight 36747990456 found none of the checked provider keys, endpoint/model variables or verified pricing configured. Research API execution remains blocked until configuration and applicable authorization are present. Never place credentials in chat, an issue, a commit or this file.",
+      "Standing continuation is bound to this exact intake and recorded G0 approval. Healthy bounded cloud cycles can continue independently of ChatGPT, with recovery wakeups every 15 minutes. Stop at pending human gates, missing or invalid configuration, billing reconciliation, budget boundaries, failed-cycle inspection or all individual current-file G5 approvals. No automatic submission."
+    ],
+    "human_review_required": true,
+    "human_review_mode": "on_request",
+    "system_execution_hours_per_day": 24
+  },
+  "constraints_sha256_before": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
+  "continuation_before": {
+    "schema_version": "1.0",
+    "enabled": true,
+    "actor": "Hengyi Zang",
+    "confirmed_at": "2026-09-30T17:24:37+00:00",
+    "confirmation_note": "我确认，改成每天24小时不停，直到满足论文要求",
+    "system_execution_hours_per_day": 24,
+    "resume_interval_minutes": 15,
+    "constraints_sha256": "046135d9e2546d01cd5b7817ce63c5713c79f34568a26e9263a23be34861913b",
+    "g0_approval_artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad",
+    "stop_when": "all_papers_submission_ready"
+  },
+  "spend_before": {
+    "authorization_events": [
+      {
+        "actor": "Hengyi Zang",
+        "at": "2026-09-30T18:25:52+00:00",
+        "ceiling_cny": 300,
+        "run_id": "36758494072"
+      }
+    ],
+    "authorized_ceiling_cny": 300,
+    "currency": "CNY",
+    "paper_spent_cny": {},
+    "reconciliation_events": [],
+    "reservations": {},
+    "schema_version": "1.0",
+    "spent_cny": 0.0,
+    "tranche_cny": 300
+  },
+  "run_before": {
+    "schema_version": "2.0",
+    "project": "my-phd",
+    "created_at": "2026-09-28T10:06:20+00:00",
+    "updated_at": "2026-09-30T18:20:51+00:00",
+    "stage_index": 1,
+    "stage": "topic-intelligence",
+    "gate": "G1",
+    "status": "awaiting_work",
+    "active_paper": "P01",
+    "paper_count": 6,
+    "paper_statuses": {
+      "P01": "active",
+      "P02": "planned",
+      "P03": "planned",
+      "P04": "planned",
+      "P05": "planned",
+      "P06": "planned"
+    },
+    "approved_gates": [
+      "G0"
+    ],
+    "approvals": [
+      {
+        "gate": "G0",
+        "actor": "Hengyi Zang",
+        "at": "2026-09-30T18:20:51+00:00",
+        "note": "Explicit current-user confirmation at 2026-09-30T17:24:37+00:00: 我确认，改成每天24小时不停，直到满足论文要求. Confirms presented G0 and first cumulative CNY 300; cloud system 24h daily, human reviews on request. Does not approve future G1-G5 or submission.",
+        "artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad"
+      }
+    ],
+    "history": [
+      {
+        "at": "2026-09-28T10:06:20+00:00",
+        "event": "project_initialized",
+        "stage": "intake"
+      },
+      {
+        "at": "2026-09-30T18:20:51+00:00",
+        "event": "gate_marked_ready",
+        "gate": "G0",
+        "note": "Zero G0 errors; exact dossier already presented and owner confirmed.",
+        "artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad"
+      },
+      {
+        "at": "2026-09-30T18:20:51+00:00",
+        "event": "gate_approved",
+        "gate": "G0"
+      },
+      {
+        "at": "2026-09-30T18:20:51+00:00",
+        "event": "stage_advanced",
+        "from": "intake",
+        "to": "topic-intelligence"
+      }
+    ]
+  },
+  "effect": "exact cumulative API ceiling and planning date only; no paid calls or scientific gate advance",
+  "scientific_completion_verified": false,
+  "actor": "Hengyi Zang",
+  "cloud_review_sha256": "1d07b0b9806486363495378b5c58d89867b9fe88bca7c4c14f6058425827f237",
+  "source_run_id": "40002349672",
+  "authorization_note": "用户于2026-10-24明确要求：“调整一下，预算改到500，时间改成10月26号”。据此将累计模型API上限改为500元、目标投稿就绪日期改为2026-10-26；保留历史费用、待结算隔离、单篇限制和G1-G5人工审批，不启动付费研究。",
+  "created_at": "2026-10-23T18:19:38+00:00",
+  "constraints_sha256_after": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+  "continuation_after": {
+    "schema_version": "1.0",
+    "enabled": true,
+    "actor": "Hengyi Zang",
+    "confirmed_at": "2026-09-30T17:24:37+00:00",
+    "confirmation_note": "我确认，改成每天24小时不停，直到满足论文要求",
+    "system_execution_hours_per_day": 24,
+    "resume_interval_minutes": 15,
+    "constraints_sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+    "g0_approval_artifact_sha256": "55d9d970de11ace265afff500560af3066b6b2168f16064393aeaf3f6a34bf7a",
+    "stop_when": "all_papers_submission_ready"
+  },
+  "spend_after": {
+    "authorization_events": [
+      {
+        "actor": "Hengyi Zang",
+        "at": "2026-09-30T18:25:52+00:00",
+        "ceiling_cny": 300,
+        "run_id": "36758494072"
+      },
+      {
+        "actor": "Hengyi Zang",
+        "at": "2026-10-23T18:19:38+00:00",
+        "authorization_note": "用户于2026-10-24明确要求：“调整一下，预算改到500，时间改成10月26号”。据此将累计模型API上限改为500元、目标投稿就绪日期改为2026-10-26；保留历史费用、待结算隔离、单篇限制和G1-G5人工审批，不启动付费研究。",
+        "ceiling_cny": 500,
+        "kind": "ceiling_amendment",
+        "previous_ceiling_cny": 300,
+        "run_id": "40002349672"
+      }
+    ],
+    "authorized_ceiling_cny": 500,
+    "currency": "CNY",
+    "paper_spent_cny": {},
+    "reconciliation_events": [],
+    "reservations": {},
+    "schema_version": "1.0",
+    "spent_cny": 0.0,
+    "tranche_cny": 300
+  },
+  "g0_operating_amendment": {
+    "gate": "G0",
+    "kind": "operating_constraints_amendment",
+    "actor": "Hengyi Zang",
+    "at": "2026-10-23T18:19:38+00:00",
+    "note": "用户于2026-10-24明确要求：“调整一下，预算改到500，时间改成10月26号”。据此将累计模型API上限改为500元、目标投稿就绪日期改为2026-10-26；保留历史费用、待结算隔离、单篇限制和G1-G5人工审批，不启动付费研究。",
+    "artifact_sha256": "55d9d970de11ace265afff500560af3066b6b2168f16064393aeaf3f6a34bf7a",
+    "prior_g0_artifact_sha256": "3d560bb8b9f0d1802d965871f9c001b374fe3782b6fda5d0e34b1480403e86ad",
+    "cloud_review_sha256": "1d07b0b9806486363495378b5c58d89867b9fe88bca7c4c14f6058425827f237",
+    "source_run_id": "40002349672",
+    "amended_fields": [
+      "model_api_budget_cny",
+      "target_submission_ready_date"
+    ],
+    "scientific_approval_granted": false
+  },
+  "paid_calls": 0,
+  "planning_date_is_not_a_completion_guarantee": true
+}
