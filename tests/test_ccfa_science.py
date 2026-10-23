@@ -175,9 +175,22 @@ class CCFAScienceTests(unittest.TestCase):
             self.run_op("continuity", data, previous=before["sha256"])
         data["transition"] = {"basis": "intent_correction", "reason": "The recorded scope was broader than the supplied question.", "evidence": [self.anchor()]}
         after = self.run_op("continuity", data, previous=before["sha256"])
-        self.assertEqual(sha(self.project / after["report"]["previous"]["path"]), before["sha256"])
+        history_path = self.project / after["report"]["previous"]["path"]
+        self.assertEqual(sha(history_path), before["sha256"])
+        report_bytes = (self.project / after["path"]).read_bytes()
+        history_bytes = history_path.read_bytes()
+        replay = self.run_op("continuity", data, previous=before["sha256"])
+        self.assertTrue(replay["reused"])
+        self.assertTrue(replay["exact_request_replay"])
+        self.assertEqual(replay["sha256"], after["sha256"])
+        self.assertEqual((self.project / after["path"]).read_bytes(), report_bytes)
+        self.assertEqual(history_path.read_bytes(), history_bytes)
+        self.assertEqual(list(history_path.parent.iterdir()), [history_path])
+        data["next_action"] = "Compare the revised drift protocol with the held-out-device procedure."
         with self.assertRaisesRegex(ValueError, "previous"):
             self.run_op("continuity", data, previous=before["sha256"])
+        self.assertEqual((self.project / after["path"]).read_bytes(), report_bytes)
+        self.assertEqual(history_path.read_bytes(), history_bytes)
 
     def test_material_route_change_and_recovery_need_fresh_basis(self):
         data = self.continuity()

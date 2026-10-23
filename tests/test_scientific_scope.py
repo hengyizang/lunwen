@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import scientific_scope
-from scripts.research_artifacts import read, write, sha
+from scripts.research_artifacts import read, write, sha, record
 from tests.review_scope_fixtures import prepare_scope
 
 
@@ -100,6 +100,34 @@ class ScientificScopeTests(unittest.TestCase):
             core["doctoral_question"] = "A further unreviewed candidate change?"
             write(project / "program/core-thesis.json", core)
             self.assertTrue(any("after the named human amendment" in e for e in scientific_scope.validate(project, "G1")))
+
+    def test_exact_human_approved_supplement_inherits_parent_without_new_thesis(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parent, _ = self.fixture(Path(temp))
+            child = parent / "experiments/supplemental/P01/R001/s001"
+            write(parent / "experiments/plan.json", {"synthetic": "original frozen plan"})
+            write(parent / "papers/P01/preregistration.json", {"synthetic": "original frozen protocol"})
+            approval = {"gate": "G3", "actor": "Synthetic supplement owner", "cloud_review_sha256": "a" * 64}
+            state = {"stage": "experiment-execution", "gate": "G4", "active_paper": "P01", "approvals": [approval],
+                "supplemental_context": {"parent_project": parent.name, "paper_id": "P01", "round_id": "R001", "scope_id": "s001"}}
+            write(child / "state/run.json", state)
+            write(child / "papers/P01/paper-contract.json", {"independence": {"unique_claim_ids": ["SYNTHETIC_P01"]}})
+            control = parent / "state/supplemental-experiments/P01/R001/s001.json"
+            write(control, {"paper_id": "P01", "round_id": "R001", "scope_id": "s001",
+                "scope_root": child.relative_to(parent).as_posix(), "child_state_sha256": sha(child / "state/run.json"), "approval": approval,
+                "proposal": {"original_plan_sha256": sha(parent / "experiments/plan.json"), "original_preregistration_sha256": sha(parent / "papers/P01/preregistration.json")}})
+            record(parent, [control], "scripts/supplemental_experiments.py")
+            self.assertEqual(scientific_scope.validate(child, "G4", "P01"), [])
+            core = read(parent / "program/core-thesis.json")
+            core["doctoral_question"] = "Unapproved changed parent doctoral question"
+            write(parent / "program/core-thesis.json", core)
+            self.assertTrue(scientific_scope.validate(child, "G4", "P01"))
+
+    def test_synthetic_helper_refuses_actual_repository_project_paths(self):
+        from scripts.acceptance_scope import prepare_scope
+        production = Path(scientific_scope.__file__).resolve().parents[1] / "projects/never-created-scope-test"
+        with self.assertRaisesRegex(ValueError, "real repository project"):
+            prepare_scope(production, {"paper_count": 1})
 
 
 if __name__ == "__main__":

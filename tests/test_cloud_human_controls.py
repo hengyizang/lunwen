@@ -102,12 +102,17 @@ class CloudHumanControlTests(unittest.TestCase):
         self.assertFalse((self.project / "data/quality/d1-confirmation.json").exists())
 
     def test_quality_confirmation_and_freeze_do_not_approve_g3(self):
-        self.freeze()
+        self.prepare_quality()
+        original_approved_gates = list(researchctl.load_state(self.project.name)["approved_gates"])
+        self.decide("confirm_data_quality", dataset_id="d1")
+        self.decide("freeze_preregistration", paper_id="all")
         confirmation = researchctl.read_json(self.project / "data/quality/d1-confirmation.json")
         prereg = researchctl.read_json(self.project / "papers/P01/preregistration.json")
         self.assertEqual(quality.validate_data_quality_confirmation(confirmation, "d1", self.project), [])
         self.assertEqual(quality.validate_preregistration(prereg, "P01", self.project), [])
-        self.assertEqual(researchctl.load_state(self.project.name)["approved_gates"], [])
+        approved_gates = researchctl.load_state(self.project.name)["approved_gates"]
+        self.assertEqual(approved_gates, original_approved_gates)
+        self.assertNotIn("G3", approved_gates)
         self.assertFalse(acceptance.review("ready", gate="G3")["ready_for_operation"])
         self.assertEqual(prereg["source_run_id"], "1")
 

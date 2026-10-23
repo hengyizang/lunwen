@@ -10,7 +10,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, autopilot
+from scripts import api_orchestrator, autopilot, review_receipts
+from scripts.acceptance_scope import prepare_scope
 
 
 AUDIT = {"verdict": "pass-with-conditions", "fatal_findings": [], "major_findings": [],
@@ -74,6 +75,9 @@ def call_writer(run, before, name="writer", max_output=4096):
 class CliInvocationControlsTests(unittest.TestCase):
     def test_run_stage_completes_writer_and_remediation_with_real_control_checks(self):
         with fixture() as (_, project, _, state):
+            prepare_scope(project, state)
+            original_approvals = list(state["approvals"])
+            original_approved_gates = list(state["approved_gates"])
             names = []
             capture_limit = 32768
             notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
@@ -100,7 +104,10 @@ class CliInvocationControlsTests(unittest.TestCase):
                     payload = b"Codex event log"
                 else:
                     name = command[-1]
-                    payload = json.dumps({"result": json.dumps(AUDIT) if name != "planner" else "Internal research plan."}).encode()
+                    payload = json.dumps({
+                        "result": json.dumps(AUDIT) if name != "planner" else "Internal research plan.",
+                        "modelUsage": {"claude-synthetic-fixture": {"inputTokens": 10}},
+                    }).encode()
                 names.append(name)
                 kwargs["stdout"].write(payload)
                 return Process()
@@ -117,14 +124,17 @@ class CliInvocationControlsTests(unittest.TestCase):
                 api_orchestrator, "refresh_research_method_audits", return_value=None
             ), patch.object(autopilot.researchctl, "gate_errors", return_value=[]), patch.object(
                 autopilot.researchctl, "mark_ready"
-            ) as ready:
+            ) as ready, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1",
+                    "ANTHROPIC_MODEL": "claude-synthetic-fixture"}):
                 journal = autopilot.run_stage("demo", "", "standard", 1, capture_limit, 3.5)
             self.assertEqual(names, ["planner", "writer", "critic", "remediation", "final-critic"])
             self.assertEqual(journal["status"], "awaiting_human_approval")
             ready.assert_called_once()
             current = json.loads((project / "state/run.json").read_text())
-            self.assertEqual(current["approvals"], [])
+            self.assertEqual(current["approvals"], original_approvals)
+            self.assertEqual(current["approved_gates"], original_approved_gates)
             self.assertEqual(current["gate"], "G5")
+            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01"), [])
             run = next(path.parent for path in (project / "state/runs").glob("*/writer.json"))
             for name in ("writer", "remediation"):
                 for filename in (f"{name}.stdout.txt", f"{name}.stderr.txt", f"{name}.json", f"codex-{name}-last-message.txt"):

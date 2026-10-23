@@ -207,15 +207,20 @@ class ExperimentEvidenceTests(unittest.TestCase):
         acceptance.fixture(project, fail_pilot=True)
         result = runner.execute(project.name, ["pilot-0"], project_root=project)[0]
         self.assertEqual(result["status"], "failed")
-        with self.assertRaisesRegex(runner.ExperimentError, "did not succeed"):
+        with self.assertRaisesRegex(runner.ExperimentError, "no current successful approved attempt"):
             runner.execute(project.name, ["proposed-11"], project_root=project)
         self.assertEqual(len((project / "experiments/registry.jsonl").read_text().splitlines()), 1)
         self.assertFalse((project / "results/proposed-11.csv").exists())
 
     def test_changed_pilot_output_prevents_dependent_run(self):
-        (self.project / "results/pilot-0.csv").write_text("changed", encoding="utf-8")
+        project = Path(self.temp.name) / "changed-pilot"
+        acceptance.fixture(project)
+        runner.execute(project.name, ["pilot-0"], project_root=project)
+        (project / "results/pilot-0.csv").write_text("changed", encoding="utf-8")
         with self.assertRaisesRegex(runner.ExperimentError, "output changed"):
-            runner.execute(self.project.name, ["proposed-11"], project_root=self.project)
+            runner.execute(project.name, ["proposed-11"], project_root=project)
+        self.assertEqual(len((project / "experiments/registry.jsonl").read_text().splitlines()), 1)
+        self.assertFalse((project / "results/proposed-11.csv").exists())
 
     def test_changed_pilot_blocks_transitive_dependency(self):
         project = Path(self.temp.name) / "transitive"
@@ -258,7 +263,7 @@ class ExperimentEvidenceTests(unittest.TestCase):
         receipt = copy.deepcopy(next(r for r in self.registry if r["run_id"] == "weak-11"))
         receipt["attempt_id"] = "weak-11-attempt-002"
         runner.append_registry(self.project / "experiments/registry.jsonl", receipt)
-        self.assertIn("exactly one", "; ".join(evidence.build_report(self.project, "P01")["errors"]))
+        self.assertIn("successful runs cannot be rerun", "; ".join(evidence.build_report(self.project, "P01")["errors"]))
 
     def test_nonfinite_or_missing_values_are_never_silently_dropped(self):
         path = self.project / "bad.csv"

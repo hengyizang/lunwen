@@ -96,11 +96,19 @@ class FigureLineageTests(unittest.TestCase):
         sealed_run(self.project,output="results/plot.csv",body="group,value\nA,2\nB,4\nC,8\n")
         paper=self.project/"papers/P01";(paper/"figures").mkdir(parents=True)
         spec=paper/"figures/result.spec.json"
-        write(spec,{"schema_version":"1.0","data":"results/plot.csv","output_stem":"papers/P01/figures/result","style":"technical","formats":["svg"],"dpi":300,
+        write(spec,{"schema_version":"1.0","data":"results/plot.csv","output_stem":"papers/P01/figures/result","style":"technical","formats":["svg","pdf"],"dpi":300,
             "caption":"Synthetic executor fixture.","alt_text":"Recorded group values.","claim_ids":["FIXTURE"],"panels":[{"kind":"bar","x":"group","y":"value","xlabel":"Group","ylabel":"Value"}]})
         report=render(self.project,spec)
         output_provenance.record_model_writes(self.project,[spec],family="openai",provider="codex",model="fixture",role="writer",run_id="fixture")
-        figure_provenance.record_figure(self.project,"P01",report["outputs"][0]["path"],"data_chart",report["renderer_wrapper"]["path"],["results/plot.csv"],["r1"],spec.relative_to(self.project).as_posix(),"Synthetic inspector")
+        self.assertEqual({output["format"] for output in report["outputs"]},{"svg","pdf"})
+        for output in report["outputs"]:
+            figure_provenance.record_figure(self.project,"P01",output["path"],"data_chart",report["renderer_wrapper"]["path"],["results/plot.csv"],["r1"],spec.relative_to(self.project).as_posix(),"Synthetic inspector")
+        registry=read(paper/"figures/figure-provenance.json")
+        self.assertEqual({row["figure_path"] for row in registry["figures"]},{output["path"] for output in report["outputs"]})
+        for row in registry["figures"]:
+            self.assertEqual(row["source_lineage"]["runs"][0]["attempt_id"],"r1-attempt-001")
+            self.assertEqual(row["source_lineage"]["runs"][0]["plan_sha256"],sha(self.project/"experiments/plan.json"))
+            self.assertEqual(row["inputs"],[{"path":"results/plot.csv","sha256":sha(self.project/"results/plot.csv")}])
         self.assertEqual(figure_provenance.validate_figure_provenance(self.project,paper),[])
 
 

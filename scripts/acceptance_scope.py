@@ -40,10 +40,11 @@ def prepare_scope(project, state):
             distinct_contribution="Synthetic bounded contribution for " + pid, relationship_to_core="Synthetic common thesis",
             relationship_to_extension="Synthetic extension link", falsification_conditions=["Fixture falsification"],
             dependencies=[], target_jcr_quartile="Q1")
+        contract.setdefault("independence", {"unique_claim_ids": ["SYNTHETIC_" + pid], "shared_assets": [], "overlap_with_other_papers": [], "why_not_merge": "Synthetic independent fixture scope"})
         write(path, contract)
         rows.append({"paper_id": pid, "theme_id": "A", "target_jcr_quartile": "Q1",
                      "portfolio_role": "Synthetic role " + pid, "distinct_contribution": contract["distinct_contribution"],
-                     "unique_claim_ids": ["SYNTHETIC_" + pid], "shared_assets": [], "dependencies": []})
+                     "unique_claim_ids": contract["independence"].get("unique_claim_ids", ["SYNTHETIC_" + pid]), "shared_assets": [], "dependencies": []})
     write(project / "program/paper-map.json", {"schema_version": "2.0", "status": "ready_for_review",
         "papers": rows, "pairwise_distinctness": [], "thesis_synthesis": {"core_thesis": "Synthetic thesis", "extension_thesis": "Synthetic extension",
         "cumulative_progression": "Synthetic sequence", "integrated_contribution": "Fixture only", "dependency_logic": "Synthetic independent papers"}})
