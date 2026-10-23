@@ -1,6 +1,6 @@
 # Cloud human review controls
 
-The owner can complete G0–G5 control transitions on GitHub Actions. No local checkout or execution is required. These operations call the existing deterministic validators and never call a model, change spending authority, auto-submit, or certify scientific completion.
+The owner can complete G0–G5 control transitions on GitHub Actions. No local checkout or execution is required. These scientific operations call the existing deterministic validators and never call a model, change spending authority, auto-submit, or certify scientific completion. A separate, narrowly scoped [operating amendment](OPERATING-CONSTRAINT-AMENDMENTS.md) can record an explicit owner change to the cumulative model budget and target date before G1 approval; it does not approve a scientific gate or start research.
 
 ## Request a review
 

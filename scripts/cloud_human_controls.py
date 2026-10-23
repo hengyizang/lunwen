@@ -15,7 +15,7 @@ from scripts import cloud_checkpoint as cp, output_provenance, researchctl, rese
 
 GATE_ACTIONS = {"ready", "approve", "advance", "reopen"}
 QUALITY_ACTIONS = {"freeze_preregistration", "confirm_data_quality", "confirm_reproduction", "confirm_study_validation"}
-ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision", "approve_supplemental", "confirm_supplemental", "retire_supplemental", "approve_primary_retry", "retire_primary_plan", "approve_scope_amendment", "reconcile_relay_guard"}
+ACTIONS = GATE_ACTIONS | QUALITY_ACTIONS | {"screen_literature", "confirm_source_scope", "confirm_review_packet", "confirm_research_increment", "start_revision", "approve_supplemental", "confirm_supplemental", "retire_supplemental", "approve_primary_retry", "retire_primary_plan", "approve_scope_amendment", "reconcile_relay_guard", "amend_operating_constraints"}
 SELECTORS = {
     **{action: {"gate"} for action in GATE_ACTIONS},
     "freeze_preregistration": {"paper_id"},
@@ -34,6 +34,7 @@ SELECTORS = {
     "retire_primary_plan": {"source"},
     "approve_scope_amendment": {"source"},
     "reconcile_relay_guard": {"source"},
+    "amend_operating_constraints": {"new_ceiling_cny", "target_submission_ready_date"},
 }
 DECISIONS = {"screen_literature": {"included_work_ids", "exclusion_reasons"}, "confirm_review_packet": {"judgments"}}
 AUDIT = "state/cloud-human-decisions.jsonl"
@@ -51,6 +52,9 @@ def validate_fields(value: dict) -> str:
     selectors = SELECTORS[operation]
     if not selectors <= set(value):
         raise HumanControlError("missing human operation selectors")
+    if operation == "amend_operating_constraints":
+        from scripts.operating_constraints import validate_selectors
+        validate_selectors(value["new_ceiling_cny"], value["target_submission_ready_date"])
     if "gate" in selectors and (not isinstance(value["gate"], str) or value["gate"] not in {f"G{i}" for i in range(6)}):
         raise HumanControlError("gate must be G0-G5")
     if "paper_id" in selectors:
@@ -141,6 +145,10 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
     slug = value["project"]
     project = researchctl.project_dir(slug)
     state = researchctl.load_state(slug)
+    if operation == "amend_operating_constraints":
+        from scripts.operating_constraints import prepare
+        prepare(project, value["new_ceiling_cny"], value["target_submission_ready_date"], value["actor"])
+        return []
     if operation == "reconcile_relay_guard":
         from scripts.relay_guard import prepare_reconciliation
         prepare_reconciliation(project, value["source"], value["actor"])
@@ -256,6 +264,14 @@ def dossier(value: dict) -> dict:
     if operation == "reconcile_relay_guard":
         from scripts import relay_guard
         snapshot["shared_relay_state"] = relay_guard.reconciliation_snapshot(project, value["source"], value["actor"])
+    if operation == "amend_operating_constraints":
+        from scripts.operating_constraints import prepare
+        try:
+            snapshot["operating_amendment_preview"] = prepare(project, value["new_ceiling_cny"],
+                value["target_submission_ready_date"], value["actor"])
+        except (RuntimeError, OSError, ValueError, KeyError, TypeError):
+            # The common readiness check below reports a blocker with no writes.
+            snapshot["operating_amendment_preview"] = None
     digest = hashlib.sha256(json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     try:
         _check_and_prepare(value, operation)
@@ -282,7 +298,11 @@ def execute(value: dict, run_id: str) -> dict:
     prepared = _check_and_prepare(value, operation)
     project = researchctl.project_dir(value["project"])
     outputs = []
-    if operation == "reconcile_relay_guard":
+    if operation == "amend_operating_constraints":
+        from scripts.operating_constraints import apply
+        outputs = apply(project, value["new_ceiling_cny"], value["target_submission_ready_date"],
+                        value["actor"], reviewed["review_sha256"], str(run_id), value["note"])
+    elif operation == "reconcile_relay_guard":
         from scripts.relay_guard import reconcile
         reconcile(project, value["source"], value["actor"], reviewed["review_sha256"], str(run_id), value["note"])
     elif operation in {"approve_primary_retry", "retire_primary_plan"}:
@@ -326,7 +346,7 @@ def execute(value: dict, run_id: str) -> dict:
             payload["source_run_id"] = str(run_id)
             quality._atomic_json(path, payload)
             outputs.append(path)
-    if outputs and operation != "confirm_source_scope":
+    if outputs and operation not in {"confirm_source_scope", "amend_operating_constraints"}:
         output_provenance.record_model_writes(
             project, outputs, family="other", provider="deterministic-cloud-human-control",
             model="scripts/cloud_human_controls.py", role="human-reviewed-control",

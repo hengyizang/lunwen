@@ -55,6 +55,23 @@ def declared_outputs(root: Path) -> set[str]:
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     parts = PurePosixPath(relative).parts
+    if value == "intake/constraints.json":
+        # G0 writers may prepare intake, but an approved owner's constraints can
+        # change only through the authenticated operating-amendment controller.
+        # Both API target validation and CLI snapshot/restoration use this rule.
+        state_path = root / "state/run.json"
+        if state_path.is_file():
+            try:
+                state = json.loads(state_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError) as exc:
+                raise ValueError("Cannot establish approved intake ownership from workflow state") from exc
+            if not isinstance(state, dict):
+                raise ValueError("Cannot establish approved intake ownership from workflow state")
+            approved_gates = state.get("approved_gates", [])
+            if not isinstance(approved_gates, list) or any(not isinstance(gate, str) for gate in approved_gates):
+                raise ValueError("Cannot establish approved intake ownership from workflow state")
+            if "G0" in approved_gates:
+                return True
     if len(parts) >= 6 and value.startswith("experiments/supplemental/"):
         child = root.joinpath(*parts[:5])
         child_relative = PurePosixPath(*parts[5:]).as_posix()

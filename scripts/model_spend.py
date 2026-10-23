@@ -1,4 +1,4 @@
-"""Persist owner-approved model spending tranches across cloud research jobs.
+"""Persist owner-approved model spending ceilings across cloud research jobs.
 
 Only aggregate CNY estimates and pending reservations are committed to the
 project state branch. Prompts, responses and the detailed usage ledger stay out
@@ -13,6 +13,7 @@ import os
 import tempfile
 import uuid
 from datetime import datetime, timezone
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -58,8 +59,8 @@ def read(project_root: Path, *, required: bool = False) -> dict[str, Any] | None
     if not isinstance(state, dict) or state.get("schema_version") != "1.0" or state.get("currency") != "CNY" or state.get("tranche_cny") != STEP_CNY:
         raise SpendControlError("model spending authorization state has an invalid schema")
     ceiling = state.get("authorized_ceiling_cny")
-    if type(ceiling) is not int or ceiling < 0 or ceiling % STEP_CNY:
-        raise SpendControlError("authorized ceiling must increase in CNY 300 tranches")
+    if type(ceiling) is not int or ceiling < 0:
+        raise SpendControlError("authorized ceiling must be a non-negative integer")
     spent = _amount(state.get("spent_cny"), "spent_cny")
     papers = state.get("paper_spent_cny")
     reservations = state.get("reservations")
@@ -77,9 +78,33 @@ def read(project_root: Path, *, required: bool = False) -> dict[str, Any] | None
         _amount(reservation.get("max_cost_cny"), "reservation.max_cost_cny")
     # A provider can report usage above a pre-call reservation. Retain that
     # overage as a negative remaining balance, so the next call is blocked.
-    if any(not isinstance(item, dict) or not isinstance(item.get("run_id"), str) or not item.get("run_id")
-           or item.get("ceiling_cny") != STEP_CNY * (index + 1)
-           for index, item in enumerate(events)) or len(events) != ceiling // STEP_CNY:
+    # Old grant records remain valid and retain their exact +300 semantics.
+    # A separately authorized operating amendment may choose an exact ceiling;
+    # every later grant still adds precisely +300 to that amended ceiling.
+    recorded_ceiling = 0
+    for item in events:
+        if (not isinstance(item, dict) or not isinstance(item.get("run_id"), str)
+                or not item["run_id"].strip() or type(item.get("ceiling_cny")) is not int):
+            raise SpendControlError("authorization events do not match the current ceiling")
+        kind = item.get("kind")
+        if kind is None:
+            valid = item["ceiling_cny"] == recorded_ceiling + STEP_CNY
+        elif kind == "ceiling_amendment":
+            valid = (
+                type(item.get("previous_ceiling_cny")) is int
+                and item["previous_ceiling_cny"] == recorded_ceiling
+                and item["ceiling_cny"] > 0
+                and item["ceiling_cny"] != recorded_ceiling
+                and isinstance(item.get("actor"), str) and bool(item["actor"].strip())
+                and isinstance(item.get("authorization_note"), str)
+                and bool(item["authorization_note"].strip())
+            )
+        else:
+            valid = False
+        if not valid:
+            raise SpendControlError("authorization events do not match the current ceiling")
+        recorded_ceiling = item["ceiling_cny"]
+    if recorded_ceiling != ceiling:
         raise SpendControlError("authorization events do not match the current ceiling")
     return state
 
@@ -106,6 +131,48 @@ def grant(project_root: Path, *, new_ceiling_cny: int, actor: str, run_id: str) 
         "ceiling_cny": new_ceiling_cny,
         "actor": actor.strip(),
         "run_id": run_id,
+        "at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+    })
+    write(project_root, state)
+    return state
+
+
+def amend_ceiling(project_root: Path, *, new_ceiling_cny: int, actor: str,
+                  run_id: str, authorization_note: str) -> dict[str, Any]:
+    """Record an explicit owner amendment without resetting spending history.
+
+    This primitive does not authenticate an owner or grant a scientific gate.
+    Its caller must enforce the hash-bound owner review, serialization and
+    idempotent request contract before invoking it. Unlike ``grant``, it records
+    an exact cumulative ceiling rather than approving another standard tranche.
+    Outstanding reservations remain held and count toward the minimum ceiling.
+    """
+    state = read(project_root, required=True)
+    assert state is not None
+    if type(new_ceiling_cny) is not int or new_ceiling_cny <= 0:
+        raise SpendControlError("an amended ceiling must be a positive integer CNY amount")
+    if any(not isinstance(value, str) or not value.strip()
+           for value in (actor, run_id, authorization_note)):
+        raise SpendControlError("named owner, GitHub run and explicit authorization note are required")
+    previous = state["authorized_ceiling_cny"]
+    if new_ceiling_cny == previous:
+        raise SpendControlError("an operating amendment must change the existing ceiling")
+    # Compare the recorded amounts exactly; rounding a legacy charge down here
+    # could authorize a ceiling below commitments by a fractional currency unit.
+    committed = Decimal(str(state["spent_cny"])) + sum(
+        (Decimal(str(item["max_cost_cny"])) for item in state["reservations"].values()),
+        Decimal(0),
+    )
+    if new_ceiling_cny < committed:
+        raise SpendControlError("an amended ceiling cannot be below spent plus reserved CNY")
+    state["authorized_ceiling_cny"] = new_ceiling_cny
+    state["authorization_events"].append({
+        "kind": "ceiling_amendment",
+        "previous_ceiling_cny": previous,
+        "ceiling_cny": new_ceiling_cny,
+        "actor": actor.strip(),
+        "run_id": run_id.strip(),
+        "authorization_note": authorization_note.strip(),
         "at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     })
     write(project_root, state)
