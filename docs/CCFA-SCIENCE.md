@@ -45,7 +45,13 @@ nonfinite numbers. Named output is fixed at
 `reports/ccfa-science/<operation>/<id>.json`. Updating requires the exact current
 report hash; earlier reports are retained under content-hash history. Repeated
 unchanged requests reuse the verified-current report rather than generating a
-new review/history entry. Changed dependencies, implementation or provenance
+new review/history entry. The executor records the exact request fingerprint, so
+the same queued request can run after both authoring passes even when its
+original `expected_previous_sha256` was null. This exception requires the same
+request and source plus a current implementation, complete input provenance and
+current executor-authored output. A changed request/input still requires the
+exact current report hash; an old request cannot replace a later report. Changed
+dependencies, implementation or provenance
 invalidate reuse. `current(project, operation, id)` replays all source hashes and
 current origins; it does not certify semantic correctness.
 

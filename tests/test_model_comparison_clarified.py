@@ -6,10 +6,12 @@ from contextlib import ExitStack
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
+import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from scripts import ai_providers, gateway_trial, model_comparison_clarified as trial, relay_billing
 
@@ -18,6 +20,8 @@ class ClarifiedComparisonTests(unittest.TestCase):
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
+        from tests.relay_guard_fixtures import install_fake_guard
+        self.shared_guard=install_fake_guard(self.stack)
         self.plan = json.loads((Path(__file__).resolve().parents[1]
             / "config/model-comparison-20261020.json").read_text())
         self.parent = {"trial_id": trial.parent_trial.TRIAL, "status": "closed_with_holds",
@@ -39,7 +43,7 @@ class ClarifiedComparisonTests(unittest.TestCase):
             side_effect=lambda case_id: copy.deepcopy(self.definitions[case_id])))
         self.stack.enter_context(patch.object(trial.fixtures, "score", return_value={"score": 100, "passed": True}))
         self.pricing = self.stack.enter_context(patch.object(trial.model_runtime, "pricing",
-            return_value={"quote_sha256": "q" * 64}))
+            return_value={"quote_sha256": "b" * 64}))
         self.bound = self.stack.enter_context(patch.object(trial.model_runtime, "reservation_bound", return_value=2.0))
         self.meter = self.stack.enter_context(patch.object(trial.parent_trial, "read_meter", return_value={"before": 1}))
         self.post = self.stack.enter_context(patch.object(ai_providers, "call_production", return_value=SimpleNamespace(
@@ -218,6 +222,173 @@ class ClarifiedComparisonTests(unittest.TestCase):
         self.assertIs(report["scientific_equivalence_verified"], False)
         self.assertIs(report["production_routing_changed"], False)
 
+    def pending_closed(self, *, generation_status="completed"):
+        self.settle.side_effect = relay_billing.BillingReconciliationError("unknown debit")
+        trial.run_one(self.ledger, self.route, self.case_id, self.persist)
+        self.ledger.update(status="closed_with_holds", closed_at="original close timestamp")
+        self.ledger["entries"][0]["generation_status"] = generation_status
+        self.settle.side_effect = None
+        self.post.reset_mock()
+        self.settle.reset_mock()
+        for mocked in self.shared_guard.values():
+            mocked.reset_mock()
+        self.saved.clear()
+        return copy.deepcopy(self.ledger)
+
+    def test_reconcile_accounts_existing_call_without_touching_response_closed_state_or_isolation(self):
+        for generation_status in ("completed", "response_failed"):
+            with self.subTest(generation_status=generation_status):
+                if self.ledger["entries"]:
+                    self.ledger = trial.new_ledger(self.contract, self.parent)
+                prior = self.pending_closed(generation_status=generation_status)
+                trial.reconcile(self.ledger, self.contract, self.persist)
+                self.assertEqual(self.ledger["status"], prior["status"])
+                self.assertEqual(self.ledger["closed_at"], prior["closed_at"])
+                self.assertEqual(self.ledger["scope"], prior["scope"])
+                self.assertEqual(self.ledger["isolated_providers"], prior["isolated_providers"])
+                self.assertEqual(self.ledger["quarantined_candidates"], prior["quarantined_candidates"])
+                entry = self.ledger["entries"][0]
+                for key, value in prior["entries"][0].items():
+                    if key != "billing_status":
+                        self.assertEqual(entry[key], value)
+                self.assertEqual(entry["billing_status"], "settled")
+                self.assertEqual(entry["actual_cost_cny"], self.debit["actual_cost_cny"])
+                self.assertEqual(entry["debit_evidence"], self.debit["debit_evidence"])
+                self.assertIs(entry["billing_reconciliation"]["generation_retried"], False)
+                self.settle.assert_called_once_with(self.route["provider"], self.route["model"],
+                    prior["entries"][0]["meter_before"])
+                self.post.assert_not_called()
+                self.shared_guard["begin"].assert_not_called()
+                self.shared_guard["finish"].assert_not_called()
+                self.assertEqual(len(self.saved), 1)
+                trial.reconcile(self.ledger, self.contract, self.persist)
+                self.assertEqual(self.settle.call_count, 1)
+
+    def test_reconcile_failure_retains_full_hold_response_and_closed_state(self):
+        prior = self.pending_closed()
+        self.settle.side_effect = relay_billing.BillingReconciliationError("still ambiguous")
+        with self.assertRaisesRegex(relay_billing.BillingReconciliationError, "ambiguous"):
+            trial.reconcile(self.ledger, self.contract, self.persist)
+        expected = copy.deepcopy(prior)
+        expected["entries"][0]["billing_diagnostic"] = "still ambiguous"
+        self.assertEqual(self.ledger, expected)
+        self.assertEqual(self.saved, [expected])
+        self.assertEqual(trial.cost(self.ledger), 2.0)
+        self.post.assert_not_called()
+
+    def test_reconcile_invalid_or_over_ceiling_debit_cannot_release_any_hold(self):
+        prior = self.pending_closed()
+        for settlement in ({"actual_cost_cny": 2.001, "debit_evidence": self.debit["debit_evidence"]},
+                           {"actual_cost_cny": -1, "debit_evidence": self.debit["debit_evidence"]},
+                           {"actual_cost_cny": float("nan"), "debit_evidence": self.debit["debit_evidence"]},
+                           {"actual_cost_cny": 0.001, "debit_evidence": {}},
+                           {"actual_cost_cny": True, "debit_evidence": self.debit["debit_evidence"]}):
+            with self.subTest(settlement=settlement):
+                self.settle.return_value = settlement
+                with self.assertRaisesRegex(trial.ClarifiedError, "full_hold_retained"):
+                    trial.reconcile(self.ledger, self.contract, self.persist)
+                self.assertEqual(self.ledger, prior)
+        self.assertEqual(self.saved, [])
+        self.post.assert_not_called()
+
+    def test_reconcile_persistence_failure_leaves_original_pending_ledger_untouched(self):
+        prior = self.pending_closed()
+        with self.assertRaisesRegex(OSError, "store unavailable"):
+            trial.reconcile(self.ledger, self.contract, Mock(side_effect=OSError("store unavailable")))
+        self.assertEqual(self.ledger, prior)
+        self.assertEqual(trial.cost(self.ledger), 2.0)
+        self.post.assert_not_called()
+
+    def test_reconcile_validates_existing_contract_before_any_meter_read(self):
+        prior = self.pending_closed()
+        changed = copy.deepcopy(self.contract)
+        changed["parent_blob_sha"] = "b" * 40
+        with self.assertRaisesRegex(trial.ClarifiedError, "scope_changed_do_not_reset"):
+            trial.reconcile(self.ledger, changed, self.persist)
+        self.assertEqual(self.ledger, prior)
+        self.assertEqual(self.saved, [])
+        self.settle.assert_not_called()
+        self.post.assert_not_called()
+
+    def invoke_main(self, ledger, *, mode="reconcile", env_changes=None):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "config").mkdir()
+            (root / "config/model-comparison-20261020.json").write_text(json.dumps(self.plan), encoding="utf-8")
+            env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": gateway_trial.REPO,
+                   "GITHUB_ACTOR": "hengyizang", "GITHUB_EVENT_NAME": "workflow_dispatch",
+                   "GITHUB_REF": "refs/heads/main", "COMPARISON_AUTHORIZATION": trial.AUTHORIZATION,
+                   "COMPARISON_EXPECTED_LEDGER_SHA": "a" * 40, "COMPARISON_GITHUB_TOKEN": "fake-nonsecret"}
+            env.update(env_changes or {})
+            state = Mock()
+            state.load.return_value = ledger
+            raw_parent = json.dumps(self.parent, ensure_ascii=False).encode()
+            parent_sha = hashlib.sha1(b"blob " + str(len(raw_parent)).encode() + b"\0" + raw_parent).hexdigest()
+            state.api.return_value = {"sha": parent_sha, "encoding": "base64",
+                                      "content": base64.b64encode(raw_parent).decode()}
+            if ledger is not None:
+                ledger["scope"]["parent_blob_sha"] = parent_sha
+            with (patch.dict(os.environ, env, clear=True), patch.object(trial, "ROOT", root),
+                  patch.object(trial, "CloudState", return_value=state),
+                  patch.object(trial, "current_parent", side_effect=AssertionError("no mutable parent in reconciliation")),
+                  patch.object(trial, "new_ledger", side_effect=AssertionError("no initialization in reconciliation")),
+                  patch.object(trial, "execute", side_effect=AssertionError("no generation in reconciliation"))):
+                trial.main(["--mode", mode])
+            return state
+
+    def test_reconcile_main_requires_existing_ledger_and_never_initializes(self):
+        with self.assertRaisesRegex(trial.ClarifiedError, "no_existing_clarified_trial_to_reconcile"):
+            self.invoke_main(None)
+        self.settle.assert_not_called()
+        self.post.assert_not_called()
+
+    def test_reconcile_main_dispatch_preserves_terminal_status_without_execute(self):
+        self.pending_closed(generation_status="response_failed")
+        with (patch.object(trial, "scope", side_effect=AssertionError("no new priced scope in reconciliation")),
+              patch.object(trial.model_runtime, "pricing", side_effect=AssertionError("no current quote required"))):
+            state = self.invoke_main(self.ledger,
+                env_changes={"COMPARISON_AUTHORIZATION": "", "COMPARISON_EXPECTED_LEDGER_SHA": ""})
+        self.assertEqual(self.ledger["status"], "closed_with_holds")
+        self.assertEqual(self.ledger["entries"][0]["generation_status"], "response_failed")
+        self.assertEqual(self.ledger["entries"][0]["billing_status"], "settled")
+        state.save.assert_called_once()
+        self.post.assert_not_called()
+
+    def test_reconcile_main_retains_explicit_owner_cloud_authorization_guards(self):
+        for env_changes in ({"GITHUB_ACTIONS": "false"}, {"GITHUB_ACTOR": "not-owner"},
+                            {"GITHUB_EVENT_NAME": "push"}, {"GITHUB_REF": "refs/heads/unapproved"}):
+            with self.subTest(env_changes=env_changes):
+                with self.assertRaisesRegex(trial.ClarifiedError, "explicit_owner_cloud"):
+                    self.invoke_main(self.ledger, env_changes=env_changes)
+        self.settle.assert_not_called()
+        self.post.assert_not_called()
+
+    def test_execute_still_requires_separate_generation_authorization(self):
+        with self.assertRaisesRegex(trial.ClarifiedError, "explicit_owner_cloud"):
+            self.invoke_main(self.ledger, mode="execute", env_changes={"COMPARISON_AUTHORIZATION": ""})
+        self.settle.assert_not_called()
+        self.post.assert_not_called()
+
+    def test_reconcile_original_parent_scope_cannot_be_rebound_to_changed_parent_or_allowance(self):
+        prior = self.pending_closed()
+        original = copy.deepcopy(prior["scope"])
+        self.assertIs(trial.reconciliation_contract(self.plan, self.ledger, self.parent, "a" * 40),
+                      self.ledger["scope"])
+        changed_parent = copy.deepcopy(self.parent)
+        changed_parent["entries"][0]["actual_cost_cny"] = 0.002
+        with self.assertRaisesRegex(trial.ClarifiedError, "exact_original"):
+            trial.reconciliation_contract(self.plan, self.ledger, changed_parent, "a" * 40)
+        for field, value in (("ceiling_cny", 999), ("combined_ceiling_cny", 999),
+                             ("parent_attempts", 0), ("fixture_sha256", "f" * 64)):
+            with self.subTest(field=field):
+                changed = copy.deepcopy(self.ledger)
+                changed["scope"][field] = value
+                with self.assertRaisesRegex(trial.ClarifiedError, "scope_changed_do_not_reset"):
+                    trial.reconciliation_contract(self.plan, changed, self.parent, "a" * 40)
+        self.assertEqual(self.ledger["scope"], original)
+        self.settle.assert_not_called()
+        self.post.assert_not_called()
+
 
 class ClarifiedCloudStateTests(unittest.TestCase):
     def blob(self, value):
@@ -255,7 +426,9 @@ class ClarifiedCloudStateTests(unittest.TestCase):
         ledger = {"entries": []}
         blob = self.blob(ledger)
         for responses in ([gateway_trial.TrialError("http_409")],
-                          [{"content": {"sha": blob["sha"]}}, dict(blob, sha="b" * 40)]):
+                          [{"content": {"sha": blob["sha"]}}, dict(blob, sha="b" * 40)],
+                          [{"content": {"sha": blob["sha"]}},
+                           dict(self.blob({"entries": ["changed"]}), sha=blob["sha"])]):
             with self.subTest(responses=len(responses)):
                 state = trial.CloudState("fake-nonsecret-token")
                 with patch.object(gateway_trial.CloudState, "read", return_value=(ledger, "a" * 40)):

@@ -135,6 +135,13 @@ def validate_registry(
                 errors.append(f"{label}: outputs[{output_index}] must be an object")
                 continue
             path = _resolve(project, output.get("path"), f"{label}.outputs[{output_index}].path", errors)
+            if entry.get("status") in {"failed", "timed_out"}:
+                from scripts.primary_recovery import preserved_output
+                try:
+                    path = preserved_output(project, entry, output)
+                except (ValueError, OSError, KeyError) as exc:
+                    errors.append(f"{label}: {exc}")
+                    path = None
             if isinstance(output.get("path"), str):
                 output_paths.add(output["path"])
             if path is None or not path.is_file():
@@ -150,6 +157,13 @@ def validate_registry(
     missing = sorted(set(planned) - attempted)
     if missing:
         errors.append(f"planned runs without registry attempts: {', '.join(missing)}")
+    from scripts.primary_recovery import selected_attempt
+    for run_id in planned:
+        if len([r for r in registry if r.get("run_id") == run_id]) > 1:
+            try:
+                selected_attempt(project, run_id, registry, plan_sha256=current_plan_hash)
+            except (ValueError, OSError, KeyError) as exc:
+                errors.append(f"{run_id}: {exc}")
     return errors
 
 

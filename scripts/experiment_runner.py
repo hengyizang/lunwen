@@ -234,6 +234,10 @@ def budget_ceiling(budget: dict[str, Any]) -> float:
 
 def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[dict[str, Any], float]:
     state = read_json(project / "state" / "run.json")
+    from scripts.scientific_scope import validate as scope_errors
+    errors = scope_errors(project, "G4")
+    if errors:
+        raise ExperimentError("; ".join(errors))
     if (
         state.get("stage") != "experiment-execution"
         or state.get("gate") != "G4"
@@ -274,6 +278,10 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
             locked = resolve_inside(project, item["path"], "preregistered input")
             if not locked.is_file() or sha256_file(locked) != item.get("sha256"):
                 raise ExperimentError("Preregistered input changed after G3 approval")
+    from scripts.primary_recovery import gate_errors
+    recovery_errors = gate_errors(project, "G4")
+    if recovery_errors:
+        raise ExperimentError("; ".join(recovery_errors))
     return plan, budget_ceiling(read_json(budget_path))
 
 
@@ -488,10 +496,11 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
         if parent not in planned or planned[parent].get("paper_id") != run["paper_id"]:
             raise ExperimentError("Dependency is absent from the approved same-paper plan")
         pending.extend(planned[parent].get("depends_on", []))
-        attempts = [r for r in records if r.get("run_id") == parent]
-        if len(attempts) != 1:
-            raise ExperimentError(f"Dependency {parent} needs exactly one inspected successful attempt")
-        receipt = attempts[0]
+        from scripts.primary_recovery import selected_attempt
+        try:
+            receipt = selected_attempt(project, parent, records, plan_sha256=plan_sha256)
+        except ValueError as exc:
+            raise ExperimentError(f"Dependency {parent}: {exc}") from exc
         if (receipt.get("status") != "succeeded" or receipt.get("paper_id") != run["paper_id"]
                 or receipt.get("approved_plan_sha256") != plan_sha256
                 or not receipt.get("input_integrity", {}).get("passed")):
@@ -508,6 +517,11 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
 def run_one(
     project: Path, run: dict[str, Any], registry: Path, plan_sha256: str
 ) -> dict[str, Any]:
+    from scripts.primary_recovery import require_next_attempt, records
+    try:
+        require_next_attempt(project, run["run_id"], records(project), plan_sha256)
+    except ValueError as exc:
+        raise ExperimentError(str(exc)) from exc
     verify_dependencies(project, run, registry, plan_sha256)
     run_id = run["run_id"]
     cwd = resolve_inside(project, run.get("cwd", "."), f"{run_id}.cwd")
@@ -707,7 +721,8 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
     if missing:
         raise ExperimentError(f"Unknown run ids: {', '.join(sorted(missing))}")
     registry = project / "experiments" / "registry.jsonl"
-    committed = prior_estimated_cost(registry)
+    from scripts.primary_recovery import historical_cost
+    committed = prior_estimated_cost(registry) + historical_cost(project)
     requested = sum(float(run["estimated_cost_usd"]) for run in runs)
     if committed + requested > ceiling:
         raise ExperimentError(

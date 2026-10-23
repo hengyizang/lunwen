@@ -58,6 +58,10 @@ def write(path: Path, value: dict) -> None:
 
 def freeze_fixture(project: Path) -> None:
     """Create explicitly synthetic upstream receipts to isolate this component."""
+    from scripts.acceptance_scope import prepare_scope
+    state_path = project / "state/run.json"
+    state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
+    prepare_scope(project, state)
     paths = research_quality._preregistration_inputs(project, "P01")
     for path in paths:
         if not path.is_file():
@@ -71,15 +75,17 @@ def freeze_fixture(project: Path) -> None:
         "deviation_policy": "Block changed inputs and retain every result.",
         "files": [{"path": p.relative_to(project).as_posix(), "sha256": evidence.sha(p)} for p in paths],
     })
-    write(project / "state/run.json", {
+    state.update({
         "stage": "experiment-execution", "gate": "G4", "status": "awaiting_work",
-        "synthetic_acceptance_only": True, "approvals": [{
+        "synthetic_acceptance_only": True})
+    state["approvals"] = [row for row in state.get("approvals", []) if row.get("gate") != "G3"] + [{
             "gate": "G3", "actor": "synthetic component fixture, not project approval",
             "experiment_plan_sha256": evidence.sha(project / "experiments/plan.json"),
             "experiment_budget_sha256": evidence.sha(project / "experiments/budget.json"),
             "frozen_protocol_sha256": {"papers/P01/preregistration.json": evidence.sha(prereg)},
-        }],
-    })
+        }]
+    state["approved_gates"] = sorted(set(state.get("approved_gates", [])) | {"G3"})
+    write(state_path, state)
 
 
 def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False) -> dict:

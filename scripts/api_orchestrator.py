@@ -366,7 +366,7 @@ def project_snapshot(
 ) -> str:
     """Return a bounded, text-only project snapshot suitable for model input."""
 
-    from scripts.context_efficiency import lossless_text, operational_path
+    from scripts.context_efficiency import lossless_text, operational_path, instruction_paths
     root = project_root(project)
     if not root.exists():
         return "(new project)"
@@ -377,13 +377,14 @@ def project_snapshot(
                 + "\n".join(packet["omitted_paths"]))
     current_paper = active_paper(project) if stage == "writing-and-review" else None
     blocks: list[str] = []
+    requests = instruction_paths(root) if exclude_reviews else set()
     total = 0
     included = 0
     for path in sorted(root.rglob("*")):
         if path.is_symlink() or not path.is_file():
             continue
         relative = path.relative_to(root)
-        if operational_path(relative.as_posix(), exclude_reviews=exclude_reviews):
+        if relative.as_posix() in requests or operational_path(relative.as_posix(), exclude_reviews=exclude_reviews):
             continue
         lower_parts = tuple(part.lower() for part in relative.parts)
         if any(part.startswith(".") for part in relative.parts):
@@ -1841,6 +1842,10 @@ def run_cycle(
         raise ValueError("explicit scientific task routing requires the production profile")
     validate_roles(planner_provider, writer_provider, critic_provider)
     require_current_stage(project, stage)
+    from scripts.scientific_scope import validate as validate_scientific_scope
+    scientific_errors = validate_scientific_scope(project_root(project), stage_config(stage)["gate"], active_paper(project))
+    if scientific_errors:
+        raise ValueError("; ".join(scientific_errors))
     from scripts.cloud_research_steps import before_cycle
     controlled_steps = before_cycle(project_root(project), stage)
     if controlled_steps["control_only"]:
@@ -1933,6 +1938,10 @@ def run_cycle(
     initial_style_audit = initial_evidence["academic_style_audit"]
     initial_method_audit = refresh_research_method_audits(project, stage)
 
+    from scripts import review_receipts
+    review_paper = active_paper(project) if stage == "writing-and-review" else None
+    initial_materials = review_receipts.material_snapshot(project_root(project), stage, review_paper)
+    initial_critic_prompt = critic_prompt(project, stage, context)
     review = model_runtime.call(
         project_root(project),
         run_id=run_id,
@@ -1941,7 +1950,7 @@ def run_cycle(
         use_cache=False,
         provider=production_routes["independent-critic-initial"]["provider"] if production_routes else critic_provider,
         **route_arguments("independent-critic-initial"),
-        prompt=critic_prompt(project, stage, context),
+        prompt=initial_critic_prompt,
         max_output_tokens=control_max_output_tokens,
     )
     save_run(project, run_id, "critic-1.txt", review.text)
@@ -1953,6 +1962,10 @@ def run_cycle(
         if prefix
         else None
     )
+    if initial_path:
+        review_receipts.seal_phase(project_root(project), stage=stage, run_id=run_id, phase="initial",
+            audit_path=initial_path, prompt=initial_critic_prompt, identity=review_receipts.api_identity(review),
+            writer_family=ai_providers.provider_family(writer.provider), materials=initial_materials)
 
     revised = model_runtime.call(
         project_root(project),
@@ -1988,6 +2001,8 @@ def run_cycle(
     controlled_steps = final_evidence["controlled_steps"]
     final_method_audit = refresh_research_method_audits(project, stage)
 
+    final_materials = review_receipts.material_snapshot(project_root(project), stage, review_paper)
+    final_critic_prompt = critic_prompt(project, stage, context)
     final = model_runtime.call(
         project_root(project),
         run_id=run_id,
@@ -1996,7 +2011,7 @@ def run_cycle(
         use_cache=False,
         provider=critic_provider,
         **route_arguments("independent-critic-final"),
-        prompt=critic_prompt(project, stage, context),
+        prompt=final_critic_prompt,
         max_output_tokens=control_max_output_tokens,
     )
     save_run(project, run_id, "critic-final.txt", final.text)
@@ -2007,6 +2022,10 @@ def run_cycle(
         if prefix
         else None
     )
+    if final_path:
+        review_receipts.seal_phase(project_root(project), stage=stage, run_id=run_id, phase="final",
+            audit_path=final_path, prompt=final_critic_prompt, identity=review_receipts.api_identity(final),
+            writer_family=ai_providers.provider_family(revised.provider), materials=final_materials, notes=dispositions)
     decision_log: Path | None = None
     if initial_path and final_path:
         decision_log = append_decision_log(

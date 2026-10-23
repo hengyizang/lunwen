@@ -171,8 +171,97 @@ def _registry(project: Path) -> list[dict[str, Any]]:
     return records
 
 
+def _saturation_executions(project: Path, searches: list[dict], supporting: list[str],
+                           backward: list[str], forward: list[str], rounds: list[dict]) -> list[str]:
+    """Bind saturation to real retrievals, never labels or renamed round IDs."""
+    from urllib.parse import quote
+    from scripts import literature_evidence as literature
+    errors = []
+    try:
+        ledger = literature.read_jsonl(project / "evidence/literature-api-ledger.jsonl")
+        indexed = {row.get("receipt_id"): row for row in ledger}
+        records = {row.get("search_id"): row for row in searches if isinstance(row, dict)}
+        selected = [records[key] for key in supporting if key in records]
+        errors.extend("saturation execution: " + issue for issue in literature.validate_search_evidence(project, selected))
+    except (OSError, ValueError, TypeError, KeyError, RuntimeError) as exc:
+        return ["cannot verify saturation execution evidence: " + str(exc)]
+    executions = {}
+    for key in supporting:
+        row = records.get(key, {})
+        binding = row.get("evidence_receipt_id")
+        receipt = indexed.get(binding, {}) if isinstance(binding, str) else {}
+        if not receipt or receipt.get("status") != "success":
+            errors.append("saturation search needs an actual successful execution receipt: " + key)
+            continue
+        receipt_id = receipt.get("receipt_id")
+        if not isinstance(receipt_id, str) or not receipt_id:
+            errors.append("saturation execution needs its original receipt identity: " + key)
+            continue
+        # The executor assigns one identity per actual request. Renaming the
+        # search-log ID cannot create another execution of that request.
+        executions[key] = receipt_id
+        for field in ("requested_at", "completed_at"):
+            try:
+                instant = datetime.fromisoformat(str(receipt[field]).replace("Z", "+00:00"))
+                if instant.tzinfo is None or instant > datetime.now(timezone.utc):
+                    raise ValueError("invalid timestamp")
+            except (ValueError, KeyError):
+                errors.append("saturation execution needs an actual past timestamp: " + key + "." + field)
+        if key not in backward and key not in forward:
+            continue
+        direction = "references" if key in backward else "citations"
+        family = "backward_citation" if key in backward else "forward_citation"
+        seed = literature._doi(receipt.get("query"))
+        expected_url = ("https://api.opencitations.net/index/v2/" + direction + "/" + quote("doi:" + seed, safe=":/")) if seed else None
+        if (receipt.get("mode") != "citation_graph" or receipt.get("provider") != "opencitations"
+                or receipt.get("direction") != direction or row.get("query_family") != family
+                or not seed or receipt.get("request_url") != expected_url):
+            errors.append("citation chaining needs its executed citation_graph direction and DOI source key: " + key)
+            continue
+        try:
+            normalized = json.loads(literature.safe_project_file(project, receipt["normalized_results_path"]).read_text(encoding="utf-8"))
+            raw = json.loads(literature.safe_project_file(project, receipt["raw_response_path"]).read_text(encoding="utf-8"))
+            if not isinstance(raw, list) or not isinstance(normalized, dict) or not isinstance(normalized.get("works"), list):
+                raise ValueError("citation graph needs raw edges and normalized works")
+            source_key, target_key = ("citing", "cited") if direction == "references" else ("cited", "citing")
+            targets = set()
+            for edge in raw:
+                if not isinstance(edge, dict):
+                    raise ValueError("malformed citation edge")
+                if literature._doi(edge.get(source_key)) != seed:
+                    raise ValueError("citation edge source differs from the requested seed")
+                target = literature._doi(edge.get(target_key))
+                if target:
+                    targets.add(target)
+            for work in normalized["works"]:
+                edge = work.get("citation_edge", {}) if isinstance(work, dict) else {}
+                if (not isinstance(edge, dict) or edge.get("direction") != direction or edge.get("seed_doi") != seed
+                        or literature._doi(work.get("doi")) not in targets):
+                    raise ValueError("normalized citation direction/source differs from its raw edge")
+        except (OSError, ValueError, TypeError, KeyError, RuntimeError) as exc:
+            errors.append("citation chaining source evidence is inconsistent: " + key + ": " + str(exc))
+    if set(backward) & set(forward):
+        errors.append("one citation execution cannot be both backward and forward chaining")
+    used = set()
+    for index, item in enumerate(rounds):
+        if not isinstance(item, dict):
+            continue
+        identifiers = item.get("search_ids", [])
+        if not isinstance(identifiers, list):
+            errors.append(f"saturation round {index} requires explicit execution search IDs")
+            continue
+        actual = {executions[key] for key in identifiers if isinstance(key, str) and key in executions}
+        if not actual or len(actual) != len(identifiers):
+            errors.append(f"saturation round {index} needs distinct actual execution receipts")
+        if used & actual:
+            errors.append(f"saturation round {index} reuses an earlier execution; renamed rounds are not new searches")
+        used.update(actual)
+    return errors
+
+
 def validate_novelty_claim_matrix(
-    matrix: dict[str, Any], originality: dict[str, Any], searches: list[dict[str, Any]] | None = None
+    matrix: dict[str, Any], originality: dict[str, Any], searches: list[dict[str, Any]] | None = None,
+    *, project: Path | None = None,
 ) -> list[str]:
     """Require claim-level closest-work differences and search saturation."""
 
@@ -187,6 +276,8 @@ def validate_novelty_claim_matrix(
         str(item.get("id"))
         for item in works if isinstance(item, dict) and item.get("id")
     }
+    if len(known_works) < 5:
+        errors.append("closest_prior_work must contain at least five distinct works overall")
     source_claim_values = originality.get("novelty_claims")
     source_claims = source_claim_values if isinstance(source_claim_values, list) else []
     expected_claims = {
@@ -290,6 +381,7 @@ def validate_novelty_claim_matrix(
             errors.append("search_saturation.no_material_new_work_rounds must contain at least two rounds")
             no_new_rounds = []
         round_ids: set[str] = set()
+        used_round_searches: set[str] = set()
         for index, item in enumerate(no_new_rounds):
             prefix = f"search_saturation.no_material_new_work_rounds[{index}]"
             if not isinstance(item, dict):
@@ -301,9 +393,12 @@ def validate_novelty_claim_matrix(
                     errors.append(f"{prefix}.round_id is duplicated")
                 round_ids.add(round_id)
             round_searches = _string_list(item.get("search_ids"), f"{prefix}.search_ids", errors)
+            if used_round_searches.intersection(round_searches):
+                errors.append(f"{prefix}.search_ids reuse an earlier round; new round names do not create new executions")
+            used_round_searches.update(round_searches)
             if not set(round_searches).issubset(set(supporting)):
                 errors.append(f"{prefix}.search_ids must be included in supporting_search_ids")
-            if item.get("material_new_closest_work_count") != 0:
+            if type(item.get("material_new_closest_work_count")) is not int or item["material_new_closest_work_count"] != 0:
                 errors.append(f"{prefix}.material_new_closest_work_count must be zero")
             _text(item.get("stopping_reason"), f"{prefix}.stopping_reason", errors)
         if isinstance(rounds, int) and not isinstance(rounds, bool) and rounds != len(no_new_rounds):
@@ -311,6 +406,8 @@ def validate_novelty_claim_matrix(
         if saturation.get("unresolved_search_gaps") != []:
             errors.append("search_saturation.unresolved_search_gaps must be an empty array")
         _text(saturation.get("saturation_rationale"), "search_saturation.saturation_rationale", errors)
+        if project is not None:
+            errors.extend(_saturation_executions(Path(project), searches or [], supporting, backward, forward, no_new_rounds))
     if matrix.get("human_review_required") is not True:
         errors.append("human_review_required must be true")
     return errors

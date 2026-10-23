@@ -578,6 +578,16 @@ def execute(project: Path, operation: str, request: dict) -> dict:
     if value["schema_version"] != "1.0" or value["operation"] != operation or value["id"] != identifier:
         raise ValueError("CCFA input identity differs from the requested operation")
     previous, output = _stored(project, operation, identifier)
+    request_fingerprint = _digest(request)
+    # The native queue runs after both authoring passes. Replaying the exact
+    # already-executed request is safe only while its source, implementation,
+    # complete input provenance and current report all remain unchanged. A
+    # stale request with different content still needs the original CAS below.
+    if (previous and previous.get("request_sha256") == request_fingerprint
+            and previous.get("source") == source_binding):
+        fresh = current(project, operation, identifier)
+        return {"path": output.relative_to(project).as_posix(), "sha256": sha(output),
+                "reused": True, "exact_request_replay": True, "report": fresh}
     if request["expected_previous_sha256"] != (sha(output) if previous else None):
         raise ValueError("previous CCFA report changed; reconcile before overwriting")
     if previous and previous.get("source") == source_binding:
@@ -596,6 +606,7 @@ def execute(project: Path, operation: str, request: dict) -> dict:
     if previous and previous.get("input_fingerprint") == fingerprint:
         return {"path": output.relative_to(project).as_posix(), "sha256": sha(output), "reused": True, "report": previous}
     report = {"schema_version": "1.0", "operation": operation, "id": identifier, "scope": scope,
+        "request_sha256": request_fingerprint,
         "created_at": datetime.now(timezone.utc).isoformat(), "source": source_binding,
         "inputs": bindings, "implementation_sha256": sha(Path(__file__)), "input_fingerprint": fingerprint,
         "previous": {"path": f"{PREFIX}/history/{sha(output)}.json", "sha256": sha(output)} if previous else None,

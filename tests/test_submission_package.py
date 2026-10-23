@@ -84,6 +84,8 @@ class SubmissionPackageTests(unittest.TestCase):
                 "kind": "source_lines", "path": "manuscript/main.tex", "sha256": sha(paper / "manuscript/main.tex"), "start_line": 1, "end_line": 1}})
         write(paper / "research-identity.json", identity)
         write(paper / "reviews/pre-submission-checklist.json", {"article_type": "computational"})
+        from tests.review_scope_fixtures import prepare_scope
+        prepare_scope(project,state)
         (project / "data" / "raw").mkdir(parents=True)
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
         final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]
@@ -120,6 +122,8 @@ class SubmissionPackageTests(unittest.TestCase):
             from scripts import publication_disclosure, statistical_watermarks
             publication_disclosure.refresh(project, "P01")
             statistical_watermarks.refresh(project, "P01")
+        from tests.review_scope_fixtures import seal_review
+        seal_review(project,state)
         old=researchctl.PROJECTS_ROOT
         try:
             researchctl.PROJECTS_ROOT=root

@@ -20,6 +20,8 @@ class ProductionCycleTests(unittest.TestCase):
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
+        from tests.relay_guard_fixtures import install_fake_guard
+        self.shared_guard=install_fake_guard(self.stack)
         temporary = self.stack.enter_context(tempfile.TemporaryDirectory())
         self.root = Path(temporary)
         self.project = self.root / "projects" / "demo"
@@ -85,8 +87,11 @@ class ProductionCycleTests(unittest.TestCase):
     def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True):
         self.stage = stage
         gate = "G1" if stage == "topic-intelligence" else "G4"
-        (self.project / "state" / "run.json").write_text(json.dumps({
-            "stage": stage, "gate": gate, "status": "awaiting_work"}), encoding="utf-8")
+        state = {"stage": stage, "gate": gate, "status": "awaiting_work", "paper_count": 1, "active_paper": "P01"}
+        (self.project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
+        if gate == "G4":
+            from tests.review_scope_fixtures import prepare_scope
+            prepare_scope(self.project, state)
         if task_profile is None and routine:
             task_profile = {"task_class": "routine-implementation", "science_risk": "routine"}
         return api_orchestrator.run_cycle("demo", stage, "anthropic", "openai", "anthropic", "", "",

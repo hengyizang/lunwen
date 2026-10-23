@@ -145,9 +145,11 @@ class CCFARuntimeTests(unittest.TestCase):
             self.assertIn("not completion evidence", context)
             for guide in result["complete_skill_guidance"]:
                 if guide["skill"] != "ccf-humanization":
-                    self.assertIn(json.dumps(guide, ensure_ascii=False), context)
+                    self.assertIn(guide["text"], context)
+                    for relative in runtime.reference_paths(guide["skill"], request["task"]):
+                        self.assertIn(runtime.source(relative), context)
             for reference in result["selected_references"]:
-                self.assertIn(json.dumps(reference, ensure_ascii=False), context)
+                self.assertIn(reference["text"], context)
             active = json.loads((project / "reports/ccfa-tasks/active.json").read_text(encoding="utf-8"))
             self.assertEqual(active["sha256"], runtime.sha(project / result["path"]))
 

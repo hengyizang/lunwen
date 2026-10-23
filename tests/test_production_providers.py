@@ -13,6 +13,12 @@ from scripts import ai_providers as providers
 
 
 class ProductionProviderTests(unittest.TestCase):
+    def setUp(self):
+        # This suite isolates payload/HTTP behavior; real durable guard and
+        # unleased-POST rejection are exercised by test_relay_guard.
+        guard=patch("scripts.relay_guard.authorize_transport",return_value=None)
+        guard.start();self.addCleanup(guard.stop)
+
     def test_direct_production_transport_rejects_noncloud_generation_before_network(self):
         with patch.dict(os.environ,{},clear=True), patch.object(providers.urllib.request,"build_opener") as network:
             with self.assertRaisesRegex(providers.ProviderError,"cloud runner"):

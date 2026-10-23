@@ -34,8 +34,12 @@ def acceptance(installed: Path, output: Path):
         contract = runtime.model_contract("writing-and-review", "writer", skill=route["id"])
         if guide["text"] not in contract:
             raise ValueError("Full upstream skill is missing from actual model guidance")
+        references = runtime.reference_paths(route["id"])
+        if any(runtime.source(relative) not in contract for relative in references):
+            raise ValueError("Applicable complete reference body is missing from actual model guidance")
         rows.append({"id": route["id"], "installed": True, "full_entry_in_model_contract": True,
             "references_accessible": len(guide["references"]), "native_tools": route["native_tools"],
+            "default_reference_bodies_in_model_contract": references,
             "original_installed_files": sum(r["path"].startswith(route["id"] + "/") for r in expected),
             "scientific_outcome_verified": False})
     report = {"schema_version": "1.0", "status": "pass", "upstream_commit": runtime.COMMIT,

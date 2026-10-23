@@ -26,6 +26,10 @@ def make_study(project, kind, *, provision=False, analysis_phase="confirmatory")
     (project / "data/datasets.jsonl").write_text("", encoding="utf-8")
     write(paper / "paper-contract.json", {"paper_id": paper_id, "study_route": kind, "datasets": [],
         "independence": {"unique_claim_ids": ["C1"]}, "planned_experiments": {"design_ids": ["study-protocol"]}})
+    if "supplemental" not in project.parts:
+        from scripts.acceptance_scope import prepare_scope
+        state = read(project / "state/run.json")
+        prepare_scope(project,state)
     identity = research_identity.template(paper_id)
     identity.update(research_kind="secondary_quantitative" if kind == "meta_analysis" else "primary",
         design_family="meta-analysis" if kind == "meta_analysis" else "theoretical",
@@ -123,9 +127,11 @@ def freeze(project):
     frozen = research_quality.create_preregistration(project, paper, "Synthetic CI reviewer; not project approval")
     prereg = project / "papers/P01/preregistration.json"; write(prereg, frozen)
     state = read(project / "state/run.json")
-    state.update(stage_index=4, stage="experiment-execution", gate="G4", status="awaiting_work", approved_gates=["G3"], approvals=[{
+    state.update(stage_index=4, stage="experiment-execution", gate="G4", status="awaiting_work")
+    state["approved_gates"] = sorted(set(state.get("approved_gates", [])) | {"G3"})
+    state["approvals"] = [row for row in state.get("approvals", []) if row.get("gate") != "G3"] + [{
         "gate": "G3", "actor": "Synthetic CI reviewer; not project approval", "experiment_plan_sha256": sha(project / "experiments/plan.json"),
-        "experiment_budget_sha256": sha(project / "experiments/budget.json"), "frozen_protocol_sha256": {"papers/P01/preregistration.json": sha(prereg)}}])
+        "experiment_budget_sha256": sha(project / "experiments/budget.json"), "frozen_protocol_sha256": {"papers/P01/preregistration.json": sha(prereg)}}]
     write(project / "state/run.json", state)
 
 
@@ -188,7 +194,7 @@ def supplemental_acceptance(parent, *, execute=True):
             {"comment_id": "R1-C1", "reviewer_id": "Reviewer 1", "comment": "Please conduct a separately planned sensitivity experiment.", "source_location": {"start_line": 2, "end_line": 2}}]}
     intake_path = source.with_name("intake.json"); write(intake_path, intake)
     state = read(parent / "state/run.json")
-    state.update(stage_index=6, stage="submission-ready", gate=None, status="submission_ready", approved_gates=["G3", "G4", "G5:P01"], paper_statuses={paper: "submission_ready"})
+    state.update(stage_index=6, stage="submission-ready", gate=None, status="submission_ready", approved_gates=["G1", "G2", "G3", "G4", "G5:P01"], paper_statuses={paper: "submission_ready"})
     write(parent / "state/run.json", state)
     original = {path.relative_to(parent).as_posix(): path.read_bytes() for path in research_quality._preregistration_inputs(parent, paper)}
     original["papers/P01/preregistration.json"] = (parent / "papers/P01/preregistration.json").read_bytes()

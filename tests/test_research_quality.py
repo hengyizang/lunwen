@@ -86,6 +86,87 @@ class ResearchQualityTests(unittest.TestCase):
         self.assertTrue(any("unknown work" in error for error in errors))
         self.assertTrue(any("must be >= 2" in error for error in errors))
 
+    def executed_saturation(self, project):
+        """Use real executor builders with inert local provider fixtures."""
+        from scripts import literature_evidence as literature
+        originality, matrix = self.novelty_inputs()
+        receipts = []
+        def keyword(url, **_):
+            return b'{"results":[]}', url, 200, "application/json"
+        for family, query in (("exact", "calibration transfer"), ("adjacent", "device drift"),
+                              ("exact", "calibration adaptation"), ("adjacent", "sensor shift")):
+            receipts.append(literature.execute_search(project, "openalex", query,
+                query_family=family, date_range="all indexed years", filters="none", limit=2, fetcher=keyword))
+        for direction in ("references", "citations"):
+            edge = {"citing": "10.1000/seed", "cited": "10.1000/neighbor"} if direction == "references" else {
+                "cited": "10.1000/seed", "citing": "10.1000/neighbor"}
+            def graph(url, **_):
+                return json.dumps([edge]).encode(), url, 200, "application/json"
+            receipts.append(literature.execute_citation_graph(project, "10.1000/seed", direction,
+                date_range="all indexed years", filters="citation chaining", fetcher=graph))
+        for receipt in receipts:
+            literature.screen_receipt(project, receipt["receipt_id"], [],
+                ["Synthetic executor fixture inspected; not a scientific screening result."], "Fixture Human")
+        searches = literature.read_jsonl(project / "evidence/search-log.jsonl")
+        ids = [r["receipt_id"] for r in receipts]
+        saturation = matrix["search_saturation"]
+        saturation.update(supporting_search_ids=ids, backward_chaining_search_ids=[ids[4]], forward_chaining_search_ids=[ids[5]])
+        saturation["no_material_new_work_rounds"][0]["search_ids"] = ids[:2]
+        saturation["no_material_new_work_rounds"][1]["search_ids"] = ids[2:4]
+        return originality, matrix, searches, receipts
+
+    def test_novelty_saturation_requires_actual_graph_receipts_and_distinct_executions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            originality, matrix, searches, receipts = self.executed_saturation(project)
+            self.assertEqual(validate_novelty_claim_matrix(matrix, originality, searches, project=project), [])
+            for change in ("keyword", "wrong_direction", "renamed_round", "aliased_execution"):
+                bad = copy.deepcopy(matrix)
+                records = copy.deepcopy(searches)
+                saturation = bad["search_saturation"]
+                if change == "keyword":
+                    saturation["backward_chaining_search_ids"] = [receipts[0]["receipt_id"]]
+                elif change == "wrong_direction":
+                    saturation["backward_chaining_search_ids"], saturation["forward_chaining_search_ids"] = (
+                        saturation["forward_chaining_search_ids"], saturation["backward_chaining_search_ids"])
+                elif change == "renamed_round":
+                    saturation["no_material_new_work_rounds"][1]["search_ids"] = saturation["no_material_new_work_rounds"][0]["search_ids"]
+                else:
+                    alias = copy.deepcopy(records[0]); alias["search_id"] = "renamed-same-execution"
+                    records.append(alias)
+                    saturation["supporting_search_ids"].append(alias["search_id"])
+                    saturation["no_material_new_work_rounds"][1]["search_ids"] = [alias["search_id"]]
+                with self.subTest(change=change):
+                    errors = validate_novelty_claim_matrix(bad, originality, records, project=project)
+                    self.assertTrue(any("citation_graph" in issue or "execution" in issue or "evidence_receipt_id" in issue for issue in errors), errors)
+
+    def test_rehashing_raw_citation_edge_cannot_change_its_source_seed(self):
+        from scripts import literature_evidence as literature
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            originality, matrix, searches, receipts = self.executed_saturation(project)
+            receipt = receipts[4]
+            raw = project / receipt["raw_response_path"]
+            raw.write_text(json.dumps([{"citing": "10.1000/unrelated", "cited": "10.1000/neighbor"}]), encoding="utf-8")
+            receipt["response_sha256"] = sha256_file(raw)
+            ledger = literature.read_jsonl(project / "evidence/literature-api-ledger.jsonl")
+            ledger = [receipt if row["receipt_id"] == receipt["receipt_id"] else row for row in ledger]
+            literature.replace_jsonl(project / "evidence/literature-api-ledger.jsonl", ledger)
+            for row in searches:
+                if row["evidence_receipt_id"] == receipt["receipt_id"]:
+                    row["response_sha256"] = receipt["response_sha256"]
+            errors = validate_novelty_claim_matrix(matrix, originality, searches, project=project)
+            self.assertTrue(any("source differs" in issue for issue in errors), errors)
+
+    def test_novelty_minima_and_no_new_round_counts_do_not_accept_boolean_or_renamed_reuse(self):
+        originality, matrix = self.novelty_inputs()
+        matrix["search_saturation"]["no_material_new_work_rounds"][1]["search_ids"] = ["S3"]
+        matrix["search_saturation"]["no_material_new_work_rounds"][0]["material_new_closest_work_count"] = False
+        originality["closest_prior_work"] = originality["closest_prior_work"][:4]
+        errors = validate_novelty_claim_matrix(matrix, originality, [{"search_id": f"S{n}"} for n in range(1, 5)])
+        for expected in ("five distinct", "new round names", "must be zero"):
+            self.assertTrue(any(expected in issue for issue in errors), errors)
+
     def make_project(self, root: Path) -> Path:
         project = root / "demo"
         for relative in (

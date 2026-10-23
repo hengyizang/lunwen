@@ -257,7 +257,9 @@ class ResearchCtlTests(unittest.TestCase):
         bad={**base,"verdict":"pass-with-conditions","major_findings":["weak baseline"]};researchctl.write_json(final,bad)
         (project/"reviews"/"decision-log.md").write_text("# Review decision log\n\n## latest\n- Initial independent audit: `reviews/independent/G1-run-initial.json`\n- Final independent audit: `reviews/independent/G1-run-final.json`\n  - unresolved: baseline remains\n",encoding="utf-8")
         errors=[];researchctl.independent_audit_errors(project,"G1",errors)
-        self.assertTrue(any("no fatal/major" in error for error in errors));self.assertTrue(any("unresolved" in error for error in errors))
+        self.assertTrue(any("source-bound independent review" in error for error in errors))
+        # Bare legacy verdicts/logs cannot stand in for a current controller
+        # receipt. Detailed final-verdict/notes tests live in test_review_receipts.
 
     def test_g5_advances_each_paper_before_finishing(self) -> None:
         self.init_project(paper_count=3)

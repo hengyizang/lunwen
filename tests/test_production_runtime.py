@@ -21,6 +21,8 @@ class ProductionRuntimeTests(unittest.TestCase):
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
+        from tests.relay_guard_fixtures import install_fake_guard
+        self.shared_guard=install_fake_guard(self.stack)
         directory = self.stack.enter_context(tempfile.TemporaryDirectory())
         self.project = Path(directory) / "fixture-project"
         (self.project / "state").mkdir(parents=True)
@@ -176,15 +178,16 @@ class ProductionRuntimeTests(unittest.TestCase):
             post.assert_called_once()
             meter.assert_called_once()
 
-    def test_pre_generation_meter_429_blocks_post_without_creating_reservation(self):
+    def test_pre_generation_meter_429_cancels_unsent_reservation_without_post(self):
         with (patch.object(relay_billing, "read_meter", side_effect=relay_billing.BillingReconciliationError("HTTP 429")),
                 patch.object(model_runtime.ai_providers, "call") as post,
                 patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
             with self.assertRaises(relay_billing.BillingReconciliationError):
                 self.call()
             post.assert_not_called()
-            reserve.assert_not_called()
+            reserve.assert_called_once()
         self.assertEqual(model_spend.read(self.project)["reservations"], {})
+        self.assertEqual(len(model_spend.read(self.project)["unsent_events"]),1)
 
     def test_noncloud_or_optional_remote_checkpoint_mode_blocks_before_meter_and_post(self):
         for field in ("GITHUB_ACTIONS","DR_OS_REQUIRE_REMOTE_RESERVATION"):

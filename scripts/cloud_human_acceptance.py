@@ -71,6 +71,9 @@ def quality_fixture(project: Path, *, real_power: bool = False) -> None:
     (project / "data/datasets.jsonl").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
     researchctl.write_json(project / "papers/P01/paper-contract.json",
                            {"paper_id": "P01", "datasets": ["d1"], "hypotheses": [{"id": "H1"}]})
+    from scripts.acceptance_scope import prepare_scope
+    state = researchctl.load_state(project.name)
+    prepare_scope(project,state)
     design = {
         "paper_id": "P01", "design_id": "D1",
         "baselines": [{"id": "B1", "class": "domain_standard", "primary_source_url": "https://example.org/b1"},
@@ -183,7 +186,7 @@ def run(directory: Path, *, real_power: bool = True) -> dict:
         if spend_before != cp.sha(project / "state/model-spend-control.json") or intake != cp.sha(project / "intake/constraints.json"):
             raise RuntimeError("human controls changed spending authority or intake")
         state = researchctl.load_state(project.name)
-        if state["approved_gates"] != ["G0"]:
+        if state["approved_gates"] != ["G0", "G1", "G2"]:
             raise RuntimeError("evidence confirmations must not grant G3/G4 approval")
         result = {
             "schema_version": "1.0", "status": "pass", "scope": "synthetic software controls only",

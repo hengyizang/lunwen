@@ -365,13 +365,17 @@ def run_one(ledger, route, case_id, phase, persist):
     phase_limit = effective_limit(ledger) if full_scope(ledger) else (18.0 if phase == "screening" else LIMIT)
     if cost(ledger) + ceiling > phase_limit:
         return "budget_insufficient_for_conservative_hold"
+    from scripts import relay_guard
+    shared_ticket = relay_guard.begin(route["provider"], scope={"trial": ledger.get("trial_id"), "call_id": call_id}, max_cost_cny=ceiling)
     try:
         before = read_meter(route["provider"])
     except relay_billing.BillingReconciliationError as exc:
         ledger.setdefault("metadata_skips", []).append({"call_id": call_id, "at": now(),
             "reason": "pre_call_meter_unavailable_no_generation", "diagnostic": str(exc)})
         persist(ledger)
+        relay_guard.finish(shared_ticket, not_sent=True)
         return "metadata_unavailable_no_generation"
+    relay_guard.bind_meter(shared_ticket, route["model"], before)
     entry = {"call_id": call_id, "candidate_id": route["id"],
              "provider": route["provider"], "model": route["model"], "effort": route["effort"],
              "case_id": case_id, "phase": phase, "case_sha256": digest(item),
@@ -380,6 +384,7 @@ def run_one(ledger, route, case_id, phase, persist):
              "catalog_omission_probe": "inventory" in ledger and route["model"] not in ledger["inventory"].get(route["provider"], {}).get("model_ids", []),
              "run_id": os.environ.get("GITHUB_RUN_ID"), "code_sha": os.environ.get("GITHUB_SHA")}
     if not reserve(ledger, entry, persist, phase_limit=phase_limit):
+        relay_guard.finish(shared_ticket, not_sent=True)
         return "budget_or_call_limit"
     started = time.monotonic()
     try:
@@ -415,6 +420,7 @@ def run_one(ledger, route, case_id, phase, persist):
             raise ComparisonError("unknown_charge_reconciliation_required") from None
     if entry["generation_status"] != "completed":
         ledger.setdefault("quarantined_candidates", []).append(route["id"])
+    relay_guard.finish(shared_ticket, {"actual_cost_cny": entry["actual_cost_cny"], "debit_evidence": entry["debit_evidence"]})
     print(json.dumps({"call_id": call_id, "generation": entry["generation_status"],
                       "score": entry.get("grade", {}).get("score"),
                       "actual_cost_cny": entry.get("actual_cost_cny"),

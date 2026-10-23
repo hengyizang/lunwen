@@ -33,30 +33,16 @@ def tex_text(
     root: Path | None = None,
     seen: set[Path] | None = None,
 ) -> str:
-    root = (root or path.parent).resolve()
-    seen = seen if seen is not None else set()
-    resolved = path.resolve()
-    if resolved != root and root not in resolved.parents:
-        raise ValueError("TeX include escapes the manuscript directory")
-    if resolved in seen:
-        return ""
-    seen.add(resolved)
-    if not resolved.is_file():
-        raise ValueError(f"missing TeX include: {resolved.relative_to(root)}")
-    if sum(item.stat().st_size for item in seen) > MAX_MANUSCRIPT_BYTES:
-        raise ValueError("combined TeX manuscript exceeds the 10 MiB language-audit limit")
-    text = resolved.read_text(encoding="utf-8")
-    includes: list[str] = []
-    for match in re.finditer(r"\\(?:input|include)\{([^}]+)\}", text):
-        relative = Path(match.group(1))
-        if not relative.suffix:
-            relative = relative.with_suffix(".tex")
-        includes.append(tex_text(root / relative, root=root, seen=seen))
+    try:from scripts.tex_sources import expand
+    except ModuleNotFoundError:from tex_sources import expand
+    expanded = expand(path, root=root)
+    if seen is not None:seen.update(expanded.files)
+    text = expanded.text
     text = re.sub(r"(?m)(?<!\\)%.*$", " ", text)
     text = re.sub(r"\$\$.*?\$\$|\$.*?\$|\\\[.*?\\\]", " ", text, flags=re.S)
     text = re.sub(r"\\begin\{[^}]+\}|\\end\{[^}]+\}", " ", text)
     text = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^\]]*\])?", " ", text)
-    return text.replace("{", " ").replace("}", " ") + "\n" + "\n".join(includes)
+    return text.replace("{", " ").replace("}", " ")
 
 
 def docx_text(path: Path) -> str:

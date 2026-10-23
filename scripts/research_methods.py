@@ -83,9 +83,7 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
     if issues:
         raise ValueError("; ".join(issues))
     from scripts import ccfa_runtime
-    blocks = [ccfa_runtime.model_contract(stage, role, context, root=root)]
-    if project is not None:
-        blocks.append(ccfa_runtime.task_context(project, stage, role, root=root))
+    blocks = [ccfa_runtime.model_contract(stage, role, context, root=root, project=project)]
     for module in load_catalog(root)["modules"]:
         if stage in module["stages"]:
             text = safe_path(root, module["path"]).read_text(encoding="utf-8")

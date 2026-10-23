@@ -22,7 +22,9 @@ FIGURE_TYPES={"data_chart","conceptual_diagram","conceptual_illustration"}
 
 def _relative(project:Path,value:str,field:str)->tuple[Path,str]:
     candidate=Path(value)
-    if candidate.is_absolute():raise ValueError(f"{field} must be project-relative")
+    if candidate.is_absolute() or not value or ".." in candidate.parts or "\\" in value or ":" in value:raise ValueError(f"{field} must be project-relative")
+    unresolved=project/candidate
+    if any(p.is_symlink() for p in (unresolved,*unresolved.parents)):raise ValueError(f"{field} cannot use a symlink")
     path=(project/candidate).resolve();root=project.resolve()
     if path==root or root not in path.parents:raise ValueError(f"{field} escapes the project")
     return path,path.relative_to(root).as_posix()
@@ -60,6 +62,11 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
         if not path.is_file():raise ValueError(f"figure input is missing: {relative}")
         input_records.append({"path":relative,"sha256":output_provenance.sha256_file(path)})
     if figure_type=="data_chart" and (not input_records or not runs):raise ValueError("data_chart needs at least one input and source run")
+    source_lineage=None
+    if figure_type=="data_chart":
+        try:from scripts.figure_lineage import lineage
+        except ModuleNotFoundError:from figure_lineage import lineage
+        source_lineage=lineage(project,paper_id,[item["path"] for item in input_records],sorted(set(runs)))
     config_record=None
     if config:
         config_path,config_rel=_relative(project,config,"config")
@@ -70,6 +77,7 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
     registry_path=project/"papers"/paper_id/"figures"/"figure-provenance.json"
     registry=_load_registry(registry_path)
     timestamp=output_provenance.utc_now();record={"figure_path":figure_rel,"figure_type":figure_type,"renderer":{"path":renderer_rel,"sha256":output_provenance.sha256_file(renderer_path)},"config":config_record,"inputs":input_records,"source_run_ids":sorted(set(runs)),"output_sha256":output_provenance.sha256_file(figure_path),"deterministic":True,"generated_by":"local-tool","language_checked_by":language_checked_by.strip(),"language_checked_at":timestamp,"visual_checked_by":language_checked_by.strip(),"visual_checked_at":timestamp,"recorded_at":timestamp}
+    if source_lineage is not None:record["source_lineage"]=source_lineage
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=figure_rel]+[record]
     _write(registry_path,registry)
     output_provenance.record_model_writes(project,[figure_path,registry_path],family="other",provider="deterministic-local-renderer",model=renderer_rel,role="final-figure",run_id="figure-"+output_provenance.utc_now().replace(":","-"))
@@ -130,14 +138,6 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
         records[item["figure_path"]]=item
     if actual-set(records):errors.append("unregistered final figures: "+", ".join(sorted(actual-set(records))))
     if set(records)-actual:errors.append("stale/extra figure records: "+", ".join(sorted(set(records)-actual)))
-    successful={}
-    registry_runs=project/"experiments"/"registry.jsonl"
-    if registry_runs.is_file():
-        for line in registry_runs.read_text(encoding="utf-8").splitlines():
-            try:
-                value=json.loads(line)
-                if value.get("status")=="succeeded":successful[str(value.get("run_id"))]=value.get("paper_id")
-            except json.JSONDecodeError:pass
     for relative,item in records.items():
         try:
             path,_=_relative(project,relative,"figure_path")
@@ -169,9 +169,13 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
                 config_origin=output_provenance.current_origin(project,config_path)
                 if config_origin.get("status")!="tracked" or config_origin.get("family")=="anthropic":errors.append(f"{relative}: config lacks current non-Claude provenance")
             runs=set(str(value) for value in item.get("source_run_ids",[]) if value)
-            if item.get("figure_type")=="data_chart" and (not inputs or not runs or not runs.issubset(successful) or any(successful.get(run)!=paper.name for run in runs)):errors.append(f"{relative}: data chart needs current inputs and successful source runs for {paper.name}")
+            if item.get("figure_type")=="data_chart":
+                try:from scripts.figure_lineage import lineage
+                except ModuleNotFoundError:from figure_lineage import lineage
+                current=lineage(project,paper.name,[row["path"] for row in inputs],sorted(runs))
+                if item.get("source_lineage")!=current:errors.append(f"{relative}: sealed executor/data lineage is stale or missing")
             if illustration and (inputs or runs):errors.append(f"{relative}: conceptual illustration may not assert experimental inputs or runs")
-        except (OSError,ValueError) as exc:errors.append(f"{relative}: {exc}")
+        except (OSError,ValueError,KeyError,TypeError,AttributeError) as exc:errors.append(f"{relative}: {exc}")
     if any(item.get("figure_type")=="conceptual_illustration" for item in records.values() if isinstance(item,dict)):
         disclosure_file=paper/"disclosures.json"
         if disclosure_file.is_file():

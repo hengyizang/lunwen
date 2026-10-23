@@ -701,12 +701,29 @@ def call(
             raise ModelBudgetError(
                 f"production route unavailable ({availability_error}); no generation sent"
             )
-        meter_before = relay_billing.read_meter(provider)
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
     if reservation_id:
         from scripts.cloud_checkpoint import sync_billing
         sync_billing(project_root)
+
+    shared_ticket = None
+    if production:
+        from scripts import relay_guard
+        try:
+            shared_ticket = relay_guard.begin(provider,
+                scope={"project": project_root.name, "run_id": run_id, "reservation_id": reservation_id},
+                max_cost_cny=reserved_cost)
+            meter_before = relay_billing.read_meter(provider)
+            relay_guard.bind_meter(shared_ticket, effective_model, meter_before)
+        except Exception:
+            # No provider POST has been entered. This is not an unknown charge.
+            if shared_ticket:
+                relay_guard.finish(shared_ticket, not_sent=True)
+            if reservation_id:
+                model_spend.cancel_unsent(project_root, reservation_id, reason="shared_guard_or_pre_call_meter_blocked")
+                sync_billing(project_root)
+            raise
 
     request_started = time.monotonic()
     try:
@@ -794,6 +811,10 @@ def call(
     result.cache_key = key
     if reservation_id and not estimated:
         model_spend.settle(project_root, reservation_id, actual_cost_cny=actual_cost)
+        if production:
+            from scripts.cloud_checkpoint import sync_billing
+            sync_billing(project_root)
+            relay_guard.finish(shared_ticket, settled)
     _append(
         _ledger(project_root),
         {

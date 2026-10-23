@@ -61,17 +61,13 @@ def sha256_file(path: Path) -> str:
 
 
 def tex_source_paths(path: Path, root: Path | None=None, seen: set[Path] | None=None)->set[Path]:
-    root=(root or path.parent).resolve();seen=seen if seen is not None else set();resolved=path.resolve()
-    if resolved!=root and root not in resolved.parents:raise CitationAuditError("TeX include escapes the manuscript directory")
-    if resolved in seen:return seen
-    if not resolved.is_file():raise CitationAuditError(f"Missing TeX include: {resolved}")
-    seen.add(resolved)
-    if len(seen)>200:raise CitationAuditError("TeX manuscript includes more than 200 source files")
-    text=re.sub(r"(?m)(?<!\\)%.*$","",resolved.read_text(encoding="utf-8"))
-    for match in re.finditer(r"\\(?:input|include)\{([^}]+)\}",text):
-        relative=Path(match.group(1));relative=relative if relative.suffix else relative.with_suffix(".tex")
-        tex_source_paths(root/relative,root,seen)
-    return seen
+    try:
+        try:from scripts.tex_sources import expand
+        except ModuleNotFoundError:from tex_sources import expand
+        sources=set(expand(path,root=root).files)
+        if seen is not None:seen.update(sources);return seen
+        return sources
+    except ValueError as exc:raise CitationAuditError(str(exc)) from exc
 
 
 def manuscript_digest(path: Path) -> str:

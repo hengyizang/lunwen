@@ -63,7 +63,7 @@ def load_object(path: Path) -> dict[str, Any]:
 
 
 def safe_file(path: Path, paper: Path) -> None:
-    if path.is_symlink():
+    if any(item.is_symlink() for item in (path,*path.parents)):
         raise ResearchCtlError(f"Refusing symlink in submission package: {path}")
     try:
         path.resolve().relative_to(paper.resolve())
@@ -74,6 +74,40 @@ def safe_file(path: Path, paper: Path) -> None:
         raise ResearchCtlError(f"Refusing credential-like file: {path}")
     if any(part.startswith(".") for part in path.relative_to(paper).parts):
         raise ResearchCtlError(f"Refusing hidden file: {path}")
+    if any(part.lower() in {"private","raw","secrets","credentials","api_runs","state"} for part in path.relative_to(paper).parts):
+        raise ResearchCtlError(f"Refusing private/control material: {path}")
+
+
+def tex_dependency_files(paper: Path, manuscript: Path) -> list[Path]:
+    """Select actual safe build inputs; third-party source needs reviewable rights."""
+    try:
+        from scripts.tex_sources import dependencies
+        paths=dependencies(manuscript,paper=paper)
+    except ValueError as exc:raise ResearchCtlError(str(exc)) from exc
+    rights_path=paper/"reviews/tex-dependency-rights.json"
+    rights=load_object(rights_path).get("files",[]) if rights_path.is_file() else []
+    if not isinstance(rights,list):raise ResearchCtlError("TeX dependency rights files must be an array")
+    records={row.get("path"):row for row in rights if isinstance(row,dict)}
+    licenses=[]
+    for path in paths:
+        safe_file(path,paper)
+        relative=path.relative_to(paper).as_posix()
+        if path.relative_to(paper).parts[0] not in {"manuscript","figures","tables","supplement","submission-materials"}:
+            raise ResearchCtlError("Internal review material cannot be a submitted TeX dependency: "+relative)
+        if path.suffix.lower() in {".sty",".cls",".bst",".def",".cfg",".clo"}:
+            row=records.get(relative,{})
+            if (row.get("sha256")!=file_sha256(path) or row.get("redistribution_allowed") is not True
+                    or not isinstance(row.get("license"),str) or not row["license"].strip()
+                    or not str(row.get("confirmed_by","")).strip()):
+                raise ResearchCtlError("Local TeX class/style needs current named redistribution-rights evidence: "+relative)
+            binding=row.get("license_evidence",{})
+            evidence=paper/str(binding.get("path",""))
+            safe_file(evidence,paper)
+            if (not evidence.is_file() or binding.get("sha256")!=file_sha256(evidence)
+                    or evidence.relative_to(paper).parts[0]!="manuscript"):
+                raise ResearchCtlError("Local TeX source license evidence is missing, changed or outside manuscript sources")
+            licenses.append(evidence)
+    return [*paths,*licenses]
 
 
 def directory_files(directory: Path, paper: Path) -> Iterable[Path]:
@@ -104,7 +138,7 @@ def select_files(paper: Path) -> list[Path]:
     if len(sources) != 1:
         raise ResearchCtlError("Exactly one manuscript/main.tex or manuscript/main.docx is required.")
 
-    selected = list(sources)
+    selected = tex_dependency_files(paper,sources[0]) if sources[0].suffix.lower()==".tex" else list(sources)
     for name in ("references.bib", "main.pdf"):
         path = manuscript / name
         if path.is_file():
@@ -207,6 +241,10 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
             revision_errors.extend(module.validate_saved_report(project, paper_id))
         from scripts.research_identity import validate as validate_research_identity
         revision_errors.extend(validate_research_identity(project, paper_id, "G5"))
+        from scripts.review_receipts import validate_gate as validate_review_receipts
+        from scripts.scientific_scope import validate as validate_scientific_scope
+        revision_errors.extend(validate_review_receipts(project,"G5",paper_id))
+        revision_errors.extend(validate_scientific_scope(project,"G5",paper_id))
         if revision_errors:raise ResearchCtlError("Word revision package failed: "+"; ".join(revision_errors))
     except ImportError as exc:
         raise ResearchCtlError(f"Submission validator unavailable: {exc}") from exc

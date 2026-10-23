@@ -138,6 +138,15 @@ def reserve(project_root: Path, *, max_cost_cny: float, paper_id: str | None, pa
     return receipt_id
 
 
+def cancel_unsent(project_root: Path, receipt_id: str, *, reason: str) -> None:
+    """Only the pre-transport control path may withdraw a never-sent reservation."""
+    state = read(project_root, required=True)
+    reservation = state["reservations"].pop(receipt_id)
+    state.setdefault("unsent_events", []).append({"receipt_id": receipt_id, "reservation": reservation,
+                                                "reason": reason, "generation_sent": False})
+    write(project_root, state)
+
+
 def settle(project_root: Path, receipt_id: str, *, actual_cost_cny: float) -> None:
     state = read(project_root, required=True)
     assert state is not None
@@ -151,6 +160,7 @@ def settle(project_root: Path, receipt_id: str, *, actual_cost_cny: float) -> No
     if paper_id:
         state["paper_spent_cny"][paper_id] = round(state["paper_spent_cny"].get(paper_id, 0.0) + cost, 8)
     del state["reservations"][receipt_id]
+    state.setdefault("settlement_events", []).append({"receipt_id": receipt_id, "actual_cost_cny": cost})
     write(project_root, state)
     if over_estimate or state["spent_cny"] + reserved(state) > state["authorized_ceiling_cny"] + 1e-8:
         raise SpendControlError("provider usage exceeded the reserved estimate or approved ceiling; actual estimated spend was recorded and further calls are blocked")

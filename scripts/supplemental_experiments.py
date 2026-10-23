@@ -300,9 +300,15 @@ def checked_child(project, control):
 
 
 def all_compute_cost(project):
+    from scripts.primary_recovery import historical_cost
     total = 0.0
-    paths = [project / "experiments/registry.jsonl", *(project / PREFIX).glob("P[0-9][0-9]/R[0-9][0-9][0-9]/s[0-9][0-9][0-9]/experiments/registry.jsonl")]
-    for path in paths:
+    scopes = [project, *(project / PREFIX).glob("P[0-9][0-9]/R[0-9][0-9][0-9]/s[0-9][0-9][0-9]")]
+    for scope in scopes:
+        retired_cost = historical_cost(scope)
+        need(type(retired_cost) in (float, int) and math.isfinite(retired_cost) and retired_cost >= 0,
+             "invalid historical compute cost ledger")
+        total += retired_cost
+        path = scope / "experiments/registry.jsonl"
         if not path.is_file():
             continue
         # Invalid or non-finite ledger entries must never release budget.

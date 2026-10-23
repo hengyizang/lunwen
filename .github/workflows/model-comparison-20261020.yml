@@ -7,7 +7,7 @@ on:
       mode:
         description: Read-only metadata, authorized execute, or read-only reconcile
         type: choice
-        options: [metadata, execute, reconcile, resume, complete, clarify, argonprobe]
+        options: [metadata, execute, reconcile, resume, complete, clarify, clarify-reconcile, argonprobe]
         default: metadata
       authorization:
         description: Exact authorization ID required for generating modes
@@ -78,6 +78,9 @@ jobs:
       - name: Run only the separately authorized clarified follow-up
         if: inputs.mode == 'clarify'
         run: python -m scripts.model_comparison_clarified
+      - name: Reconcile existing clarified calls without generation or reopening
+        if: inputs.mode == 'clarify-reconcile'
+        run: python -m scripts.model_comparison_clarified --mode reconcile
       - name: Verify the historically supported native Argon base contract once
         if: inputs.mode == 'argonprobe'
         run: python -m scripts.argon_native_probe
