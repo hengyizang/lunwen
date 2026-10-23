@@ -35,7 +35,7 @@ BODY = re.compile(r"\s*" + re.escape(MARKER) + r"\s*```json\s*\n(\{.*\})\s*\n```
 PAID = {"cycle", "continuation", "paperqa", "tooluniverse", "auxiliary"}
 COMMON = {"schema_version", "action", "project", "actor", "allow_paid"}
 EXTRA = {
-    "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope", "packet_id", "kind", "record_id", "decision"},
+    "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope", "packet_id", "kind", "record_id", "decision", "new_ceiling_cny", "target_submission_ready_date"},
     **{action: fields | cloud_human_controls.DECISIONS.get(action, set()) | {"expected_sha256", "note"}
        for action, fields in cloud_human_controls.SELECTORS.items()},
     "preflight": set(), "acceptance": set(), "free_jev_probe": set(),
@@ -125,8 +125,10 @@ def validate_request(value: object) -> dict:
                 raise CloudJobError("dossier selectors must match the requested human operation")
         except (cloud_human_controls.HumanControlError, cloud_checkpoint.CheckpointError) as exc:
             raise CloudJobError(str(exc)) from exc
-    if action == "authorize_budget" and (type(value.get("new_ceiling_cny")) is not int or value["new_ceiling_cny"] <= 0 or value["new_ceiling_cny"] % model_spend.STEP_CNY):
-        raise CloudJobError("new_ceiling_cny must be a positive CNY 300 tranche boundary")
+    if action == "authorize_budget" and (type(value.get("new_ceiling_cny")) is not int or value["new_ceiling_cny"] <= 0):
+        # The stateful grant still requires exactly +300. An owner-reviewed
+        # operating amendment can establish a different base, e.g. 500 -> 800.
+        raise CloudJobError("new_ceiling_cny must be a positive integer cumulative CNY ceiling")
     if action == "reconcile_budget":
         if (not isinstance(value.get("reservation_id"), str) or not re.fullmatch(r"[a-f0-9]{32}", value["reservation_id"])
                 or not isinstance(value.get("evidence_note"), str) or not 0 < len(value["evidence_note"].strip()) <= 300):

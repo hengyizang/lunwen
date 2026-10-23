@@ -40,9 +40,11 @@ class CloudJobTests(unittest.TestCase):
         self.assertEqual(cloud_job.validate_request(request("bocha_jev_probe", live=True,
                          free_policy_checked_on="2026-09-29"))["action"], "bocha_jev_probe")
         self.assertEqual(cloud_job.issue_request(issue(request("authorize_budget", allow_paid=False, new_ceiling_cny=300)))["new_ceiling_cny"], 300)
-        for ceiling in (0, 350, 900.0):
+        for ceiling in (0, -1, 350.0, True, 900.0):
             with self.subTest(ceiling=ceiling), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request(request("authorize_budget", allow_paid=False, new_ceiling_cny=ceiling))
+        self.assertEqual(cloud_job.validate_request(request("authorize_budget", allow_paid=False,
+                         new_ceiling_cny=800))["new_ceiling_cny"], 800)
         self.assertEqual(cloud_job.validate_request(request("reconcile_budget", allow_paid=False,
                         reservation_id="a" * 32, actual_cost_cny=0.0, evidence_note="Gateway shows no charge."))["action"], "reconcile_budget")
 
@@ -55,6 +57,20 @@ class CloudJobTests(unittest.TestCase):
         event["issue"]["body"] += "\n```json\n{}\n```"
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(event)
+
+    def test_operating_amendment_has_exact_owner_only_nonbillable_scope(self):
+        selectors = {"new_ceiling_cny": 500, "target_submission_ready_date": "2026-10-26"}
+        review = request("review_dossier", operation="amend_operating_constraints", **selectors)
+        self.assertEqual(cloud_job.issue_request(issue(review))["new_ceiling_cny"], 500)
+        change = request("amend_operating_constraints", expected_sha256="a" * 64,
+                         note="Owner explicitly changed cumulative budget and target date.", **selectors)
+        self.assertEqual(cloud_job.issue_request(issue(change))["action"], "amend_operating_constraints")
+        for invalid in (dict(change, allow_paid=True), dict(change, model="unapproved-model"),
+                        dict(review, gate="G1"), dict(review, operation="approve")):
+            with self.subTest(invalid=invalid), self.assertRaises(cloud_job.CloudJobError):
+                cloud_job.validate_request(invalid)
+        with self.assertRaises(cloud_job.CloudJobError):
+            cloud_job.issue_request(issue(change, owner=42))
         event = issue(request())
         event["issue"]["pull_request"] = {}
         with self.assertRaises(cloud_job.CloudJobError):

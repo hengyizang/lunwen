@@ -34,6 +34,11 @@ jobs:
           tests.test_primary_recovery tests.test_relay_guard tests.test_figure_lineage
           tests.test_tex_sources tests.test_ccfa_reference_routing tests.test_ccfa_model_handoffs
           tests.test_ccfa_science tests.test_research_quality -v
+      - name: Verify exact owner budget/date amendments and protected intake
+        run: >-
+          python -m unittest tests.test_model_spend tests.test_operating_constraints
+          tests.test_operating_constraint_ownership tests.test_cloud_job
+          tests.test_cloud_human_controls tests.test_cloud_continuation -v
       - name: Check all Python modules and repository contracts
         run: |
           python -m compileall -q scripts tests

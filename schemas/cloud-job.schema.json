@@ -43,7 +43,8 @@
         "confirm_study_validation",
         "approve_supplemental",
         "confirm_supplemental",
-        "retire_supplemental"
+        "retire_supplemental",
+        "amend_operating_constraints"
       ]
     },
     "project": {
@@ -67,8 +68,12 @@
     },
     "new_ceiling_cny": {
       "type": "integer",
-      "minimum": 300,
-      "multipleOf": 300
+      "minimum": 1
+    },
+    "target_submission_ready_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
     },
     "reservation_id": {
       "type": "string",
@@ -149,7 +154,8 @@
         "confirm_study_validation",
         "approve_supplemental",
         "confirm_supplemental",
-        "retire_supplemental"
+        "retire_supplemental",
+        "amend_operating_constraints"
       ]
     },
     "gate": {
@@ -213,6 +219,18 @@
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {"const": "amend_operating_constraints"}
+        }
+      },
+      "then": {
+        "required": ["new_ceiling_cny", "target_submission_ready_date", "expected_sha256", "note"],
+        "properties": {"allow_paid": {"const": false}},
+        "not": {"required": ["operation"]}
+      }
+    },
     {
       "if": {
         "properties": {
@@ -468,6 +486,14 @@
           }
         },
         "allOf": [
+          {
+            "if": {
+              "properties": {"operation": {"const": "amend_operating_constraints"}}
+            },
+            "then": {
+              "required": ["new_ceiling_cny", "target_submission_ready_date"]
+            }
+          },
           {
             "if": {
               "properties": {
