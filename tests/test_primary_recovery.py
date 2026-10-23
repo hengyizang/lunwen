@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts import cloud_research_steps, experiment_evidence, experiment_runner as runner
-from scripts import primary_recovery as recovery, results_validation, study_routes
+from scripts import primary_recovery as recovery, results_validation, study_routes, supplemental_experiments as supplemental
 
 
 class PrimaryRecoveryTests(unittest.TestCase):
@@ -71,8 +71,8 @@ class PrimaryRecoveryTests(unittest.TestCase):
         source = self.proposal("approve_primary_retry", failed_attempt_id=failed["attempt_id"], failure_category="infrastructure")
         recovery.apply(self.project, source, "Synthetic Human", "approve_primary_retry", "c" * 64, "123", "Inspected unchanged infrastructure recovery.")
 
-    def retire(self, *, phase="exploratory"):
-        source = self.proposal("retire_primary_plan", version="v001", prior_outcomes_seen=True, new_analysis_phase=phase)
+    def retire(self, *, phase="exploratory", version="v001"):
+        source = self.proposal("retire_primary_plan", version=version, prior_outcomes_seen=True, new_analysis_phase=phase)
         recovery.apply(self.project, source, "Synthetic Human", "retire_primary_plan", "d" * 64, "124", "Retire the observed protocol; approve no new experiment.")
 
     def amend(self, *, phase="exploratory", cost=0.2):
@@ -204,6 +204,97 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.assertIn("archive changed", " ".join(recovery.gate_errors(self.project, "G3")))
         with self.assertRaisesRegex(recovery.RecoveryError, "archive changed"):
             recovery.historical_cost(self.project)
+
+    def test_retirement_archives_hash_declared_source_before_the_code_is_corrected(self):
+        source = self.project / "experiments/source.py"
+        original = ("from pathlib import Path\nPath('results').mkdir(exist_ok=True)\n"
+                    "Path('results/value.txt').write_text('original failure')\nraise SystemExit(2)\n")
+        source.write_text(original, encoding="utf-8")
+        raw = self.project / "data/raw/original.txt"
+        raw.parent.mkdir(parents=True)
+        raw.write_text("Synthetic private fixture input.", encoding="utf-8")
+        self.plan["runs"][0].update(argv=[sys.executable, "experiments/source.py"], inputs=[
+            {"path": "experiments/source.py", "sha256": recovery.sha(source)},
+            {"path": "data/raw/original.txt", "sha256": recovery.sha(raw)}])
+        self.put("experiments/plan.json", self.plan)
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "failed")
+        self.retire()
+        archive = self.project / "experiments/history/v001/files/experiments/source.py"
+        self.assertEqual(archive.read_text(encoding="utf-8"), original)
+        source.write_text("# Newly corrected protocol version.\n", encoding="utf-8")
+        self.amend()
+        rows = {row["path"]: row for row in recovery.histories(self.project)[0]["files"]}
+        self.assertEqual(rows["experiments/source.py"]["sha256"], recovery.sha(archive))
+        self.assertIsNone(rows["data/raw/original.txt"]["archive"])
+        self.assertFalse((self.project / "experiments/history/v001/files/data/raw/original.txt").exists())
+        self.assertEqual(archive.read_text(encoding="utf-8"), original)
+
+    def test_retirement_rejects_mutated_hash_declared_source_before_archiving(self):
+        source = self.project / "experiments/source.py"
+        source.write_text("# Original frozen source.\n", encoding="utf-8")
+        self.plan["runs"][0]["inputs"] = [{"path": "experiments/source.py", "sha256": recovery.sha(source)}]
+        self.put("experiments/plan.json", self.plan)
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "failed")
+        source.write_text("# Changed before explicit retirement.\n", encoding="utf-8")
+        with self.assertRaisesRegex(recovery.RecoveryError, "frozen input is missing or changed"):
+            self.retire()
+        self.assertFalse((self.project / "experiments/history/v001").exists())
+        self.assertEqual(self.read("state/run.json")["gate"], "G4")
+
+    def test_history_validates_failed_and_successful_outputs_after_a_retry_and_new_plan(self):
+        failed = self.execute()
+        self.authorize_retry(failed)
+        failed_output = recovery.preserved_output(self.project, failed, failed["outputs"][0])
+        (self.project / "infrastructure-ready.flag").write_text("Synthetic infrastructure restored.", encoding="utf-8")
+        success = self.execute()
+        self.retire()
+        self.amend()
+        self.assertAlmostEqual(recovery.historical_cost(self.project), 0.4)
+        success_output = self.project / success["outputs"][0]["path"]
+        for target in (failed_output, success_output):
+            original = target.read_bytes()
+            target.write_bytes(b"Corrupted retained executor output.")
+            with self.assertRaisesRegex(recovery.RecoveryError, "executor output changed"):
+                recovery.historical_cost(self.project)
+            target.write_bytes(original)
+        self.assertAlmostEqual(recovery.historical_cost(self.project), 0.4)
+
+    def test_protocol_version_order_cannot_restore_an_older_analysis_phase(self):
+        self.execute()
+        self.retire(phase="prospective_followup", version="v010")
+        plan = self.amend(phase="confirmatory")
+        plan["runs"][0]["argv"] = [sys.executable, "-c", "raise SystemExit(2)"]
+        self.put("experiments/plan.json", plan)
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "failed")
+        with self.assertRaisesRegex(recovery.RecoveryError, "increase monotonically"):
+            self.retire(phase="exploratory", version="v001")
+        self.assertFalse((self.project / "experiments/history/v001").exists())
+        self.retire(phase="exploratory", version="v011")
+        self.assertEqual(recovery.histories(self.project)[-1]["proposal"]["new_analysis_phase"], "exploratory")
+
+    def test_supplemental_cap_counts_retired_primary_and_current_attempts_once(self):
+        self.execute()
+        self.retire()
+        self.amend()
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "succeeded")
+        self.put("intake/constraints.json", {"cloud_compute_budget_usd": 1.0})
+        child = self.project / "experiments/supplemental/P01/R001/s001"
+        recovery.write(child / "experiments/plan.json", {"runs": [{"run_id": "extra", "estimated_cost_usd": 0.7}]})
+        self.assertAlmostEqual(supplemental.all_compute_cost(self.project), 0.4)
+        control = {"scope_root": child.relative_to(self.project).as_posix()}
+        with patch.object(supplemental, "current", return_value=({"round_id": "R001"}, {})), \
+             patch.object(supplemental, "controls", return_value=[(child / "control.json", control)]), \
+             patch.object(supplemental, "checked_child", return_value=child), \
+             patch.object(runner, "execute") as execute:
+            with self.assertRaisesRegex(ValueError, "aggregate parent/supplemental compute budget exhausted"):
+                supplemental.resume(self.project, "P01")
+            execute.assert_not_called()
+        (child / "experiments/registry.jsonl").write_text('{"estimated_cost_usd": 0.1}\n', encoding="utf-8")
+        self.assertAlmostEqual(supplemental.all_compute_cost(self.project), 0.5)
 
 
 if __name__ == "__main__":

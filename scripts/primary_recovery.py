@@ -85,6 +85,22 @@ def preserved_output(project, item, output):
     return path_in(project, matches[0]["preserved_path"])
 
 
+def _original_input(project, relative, expected_hash):
+    target = path_in(project, relative)
+    if not target.is_file() or sha(target) != str(expected_hash).lower():
+        raise RecoveryError("original frozen input is missing or changed: " + relative)
+    return target
+
+
+def _retained_output(project, item, output):
+    target = (preserved_output(project, item, output) if item["status"] in {"failed", "timed_out"}
+              else path_in(project, output["path"]))
+    if not target.is_file() or sha(target) != output["sha256"]:
+        raise RecoveryError("retired executor output is missing or changed")
+    return {"path": target.relative_to(project).as_posix(), "sha256": output["sha256"],
+            "original_path": output["path"], "attempt_id": item["attempt_id"]}
+
+
 def selected_attempt(project, run_id, rows, *, plan_sha256=None):
     attempts = [r for r in rows if r.get("run_id") == run_id]
     if not attempts:
@@ -161,8 +177,20 @@ def prepare(project, source, actor, operation):
     version = proposal.get("version", "")
     if not re.fullmatch(r"v[0-9]{3}", version) or (project / HISTORY / version).exists():
         raise RecoveryError("choose a new immutable vNNN protocol history version")
+    previous_versions = histories(project)
+    if previous_versions and version <= previous_versions[-1]["version"]:
+        raise RecoveryError("protocol history versions must increase monotonically")
     if proposal.get("prior_outcomes_seen") is not True or proposal.get("new_analysis_phase") not in {"exploratory", "prospective_followup"}:
         raise RecoveryError("amended protocols must disclose observed prior outcomes and the new analysis phase")
+    for run in read(project / "experiments/plan.json")["runs"]:
+        for item in run["inputs"]:
+            _original_input(project, item["path"], item["sha256"])
+    for prereg in (project / "papers").glob("P[0-9][0-9]/preregistration.json"):
+        for item in read(prereg).get("files", []):
+            _original_input(project, item["path"], item["sha256"])
+    for item in rows:
+        for output in item.get("outputs", []):
+            _retained_output(project, item, output)
     return {"proposal": proposal, "state": state, "rows": rows}
 
 
@@ -187,11 +215,35 @@ def apply(project, source, actor, operation, review_sha256, run_id, note):
         return
     version = proposal["version"]
     folder = project / HISTORY / version
+    plan = read(project / "experiments/plan.json")
     frozen = {"experiments/plan.json", "experiments/budget.json", "experiments/registry.jsonl", "state/run.json"}
+    expected_hashes = {}
+
+    def require_original(relative, expected_hash):
+        expected_hash = str(expected_hash).lower()
+        _original_input(project, relative, expected_hash)
+        if relative in expected_hashes and expected_hashes[relative] != expected_hash:
+            raise RecoveryError("original frozen input is missing or changed: " + relative)
+        expected_hashes[relative] = expected_hash
+        frozen.add(relative)
+
     preregs = list((project / "papers").glob("P[0-9][0-9]/preregistration.json"))
     for path in preregs:
         frozen.add(path.relative_to(project).as_posix())
-        frozen.update(r["path"] for r in read(path).get("files", []))
+        for item in read(path).get("files", []):
+            require_original(item["path"], item["sha256"])
+    for run in plan["runs"]:
+        for item in run["inputs"]:
+            require_original(item["path"], item["sha256"])
+    retained_outputs = []
+    for item in prepared["rows"]:
+        for output in item.get("outputs", []):
+            retained_outputs.append(_retained_output(project, item, output))
+        retry = project / CONTROL / "retries" / (item["attempt_id"] + ".json")
+        if retry.exists():
+            # Freeze the actual reviewed mapping before the current plan changes.
+            # Later history validation must not call _approval against a new plan.
+            require_original(retry.relative_to(project).as_posix(), sha(retry))
     files = []
     for relative in sorted(frozen):
         target = path_in(project, relative)
@@ -200,19 +252,20 @@ def apply(project, source, actor, operation, review_sha256, run_id, note):
         # Raw/private files remain in the sealed acquisition store, never copied into public history.
         archived = None
         from scripts.cloud_checkpoint import excluded
-        if not excluded(relative):
-            archived = f"{HISTORY}/{version}/files/{relative}"
+        archived_path = f"{HISTORY}/{version}/files/{relative}"
+        if not excluded(archived_path):
+            archived = archived_path
             copy = project / archived
             copy.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(target, copy)
         files.append({"path": relative, "sha256": sha(target), "archive": archived})
-    plan = read(project / "experiments/plan.json")
     manifest = {**authority, "version": version, "files": files,
                 "run_ids": [r["run_id"] for r in plan["runs"]],
                 "output_paths": [p for r in plan["runs"] for p in r["expected_outputs"]],
                 "compute_ceiling_usd": read(project / "experiments/budget.json")["hard_ceiling_usd"],
                 "cost_usd": sum(float(r["estimated_cost_usd"]) for r in prepared["rows"]),
-                "attempt_receipts": [{"path": f"experiments/runs/{r['attempt_id']}/run.json", "sha256": sha(receipt(project, r))} for r in prepared["rows"]]}
+                "attempt_receipts": [{"path": f"experiments/runs/{r['attempt_id']}/run.json", "sha256": sha(receipt(project, r))} for r in prepared["rows"]],
+                "retained_outputs": retained_outputs}
     write(folder / "manifest.json", manifest)
     write(project / CONTROL / "versions" / (version + ".json"), {"manifest_sha256": sha(folder / "manifest.json")})
     # This owner decision withdraws old execution authority; it grants no new execution authority.
@@ -237,12 +290,17 @@ def histories(project):
         if sha(manifest) != read(control)["manifest_sha256"]:
             raise RecoveryError("retired primary protocol seal changed")
         value = read(manifest)
+        if value.get("version") != control.stem:
+            raise RecoveryError("retired primary protocol version changed")
         for row in value["files"]:
             if row["archive"] and sha(path_in(project, row["archive"])) != row["sha256"]:
                 raise RecoveryError("retired primary protocol archive changed")
         for row in value["attempt_receipts"]:
             if sha(path_in(project, row["path"])) != row["sha256"]:
                 raise RecoveryError("retired executor evidence changed")
+        for row in value["retained_outputs"]:
+            if sha(path_in(project, row["path"])) != row["sha256"]:
+                raise RecoveryError("retired executor output changed")
         values.append(value)
     return values
 

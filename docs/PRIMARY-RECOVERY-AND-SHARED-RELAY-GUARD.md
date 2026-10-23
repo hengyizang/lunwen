@@ -34,8 +34,9 @@ The guard imports unknown fees from the original relay-acceptance, full comparis
 
 `reconcile_relay_guard` accepts a supplied JSON with the exact `provider` and `credential_sha256` and one of:
 
-- `kind: settled_legacy`, with exact `hold_ids`: the original source ledgers must now contain independently verified debit evidence. Metadata access or a guessed zero cost does not qualify.
+- `kind: settled_legacy`, with exact `hold_ids`: each original branch, file, call ID, provider and reservation must still match a unique independently settled source entry. Deleted, duplicated, relabeled or merely marked-settled entries cannot release a fee. Native historical counter receipts and complete original CheapAI whole-key debit matches are validated in their original formats. The reviewed dossier binds the current source blob, exact entry digest and debit proof.
 - `kind: settled_active`, with exact `ticket_id`: the current independent debit must match an existing settlement/reconciliation event in the original project's budget ledger; reconcile that original budget first.
+- `kind: settled_trial`, with exact `ticket_id`: first reconcile the call in its original fixed comparison ledger. Its provider, model, run ID, reservation and before meter must match the retained shared ticket. A fresh independent billing read must agree with that ledger's already-accounted debit. The source ledger and proof are bound into the dossier; releasing the shared ticket never reopens the trial, changes its budget or sends a generation request.
 - `kind: new_credential`, with `previous_credential_sha256` and the exact owner attestation `Different newly issued credential; prior charges remain held on the original credential.` The current key must have a distinct fingerprint and the old key's unresolved reservation must remain recorded. This does not release or reset the old key's fees.
 
 These decisions require the normal hash-bound owner review; they never increase project or trial spending authority. No model call or paid provider test is needed to validate the controls themselves. Engineering fixtures do not establish research validity or publication merit.

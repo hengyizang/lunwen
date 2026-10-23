@@ -79,6 +79,7 @@ class CliInvocationControlsTests(unittest.TestCase):
             original_approvals = list(state["approvals"])
             original_approved_gates = list(state["approved_gates"])
             names = []
+            source_packet_modes = []
             capture_limit = 32768
             notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
                      for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]]
@@ -112,12 +113,16 @@ class CliInvocationControlsTests(unittest.TestCase):
                 kwargs["stdout"].write(payload)
                 return Process()
 
+            def claude_command(prompt, *args, source_packet_only=False, **kwargs):
+                source_packet_modes.append((prompt, source_packet_only))
+                return ["mock-claude", prompt]
+
             with patch.object(autopilot, "load_stage_config", return_value={state["stage"]: {}}), patch.object(
                 autopilot, "planner_prompt", return_value="planner"
             ), patch.object(autopilot, "writer_prompt", return_value="writer"), patch.object(
                 autopilot, "remediation_prompt", return_value="remediation"
             ), patch.object(autopilot, "critic_prompt", side_effect=["critic", "final-critic"]), patch.object(
-                autopilot, "claude_command", side_effect=lambda prompt, *args: ["mock-claude", prompt]
+                autopilot, "claude_command", side_effect=claude_command
             ), patch.object(autopilot.shutil, "which", return_value="mock-codex"), patch.object(
                 autopilot.subprocess, "Popen", side_effect=launch
             ), patch.object(autopilot, "refresh_post_write_evidence", return_value={"controlled_steps": None, "academic_style_audit": None}), patch.object(
@@ -128,6 +133,7 @@ class CliInvocationControlsTests(unittest.TestCase):
                     "ANTHROPIC_MODEL": "claude-synthetic-fixture"}):
                 journal = autopilot.run_stage("demo", "", "standard", 1, capture_limit, 3.5)
             self.assertEqual(names, ["planner", "writer", "critic", "remediation", "final-critic"])
+            self.assertEqual(source_packet_modes, [("planner", False), ("critic", True), ("final-critic", True)])
             self.assertEqual(journal["status"], "awaiting_human_approval")
             ready.assert_called_once()
             current = json.loads((project / "state/run.json").read_text())

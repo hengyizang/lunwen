@@ -22,6 +22,7 @@ SOURCES = (
 )
 ALIASES = {"cheapai-kiro": "cheapai-kiro-discount", "codekey-codex-pure": "codekey-codex-pro"}
 _TICKET = ContextVar("relay_generation_ticket", default=None)
+TRIAL_SOURCES = {name.removesuffix(".json"): (branch, name) for branch, name in SOURCES[1:3]}
 
 
 class RelayGuardError(ValueError):
@@ -93,21 +94,150 @@ class CloudStore:
         return new_sha
 
 
+def _entry_provider(entry, name):
+    group = entry.get("provider") or str(entry.get("call_id", "")).split("|")[0]
+    if name.endswith("argon-base-probe.json") and not entry.get("provider"):
+        group = "codekey-gemini"
+    return ALIASES.get(group, group)
+
+
+def _number(value, field, *, integer=False):
+    if (type(value) not in ((int,) if integer else (int, float))
+            or not math.isfinite(value) or value < 0):
+        raise RelayGuardError("invalid independent debit " + field)
+    return value
+
+
+def _before(entry, provider):
+    before = entry.get("meter_before", entry.get("gateway_meter_before"))
+    if not isinstance(before, dict):
+        raise RelayGuardError("settled source lacks its original before meter")
+    if before.get("provider", provider) != provider:
+        raise RelayGuardError("source before meter belongs to another provider")
+    before = {**before, "provider": provider}
+    if before.get("kind") == "cheapai_quota_history":
+        rows = before.get("rows")
+        if not isinstance(rows, list):
+            raise RelayGuardError("settled source before meter lacks debit rows")
+        before["rows"] = [{("model_name" if k == "model" else k): v for k, v in row.items()}
+                          for row in rows if isinstance(row, dict)]
+        if len(before["rows"]) != len(rows):
+            raise RelayGuardError("settled source before meter has malformed debit rows")
+    return before
+
+
+def _row(evidence):
+    row = evidence.get("row", evidence)
+    model = row.get("model_name", row.get("model"))
+    if not isinstance(model, str) or not model:
+        raise RelayGuardError("independent debit row lacks an exact model")
+    result = {"model_name": model, "quota": _number(row.get("quota"), "quota", integer=True),
+              "created_at": _number(row.get("created_at"), "created_at", integer=True)}
+    for field in ("prompt_tokens", "completion_tokens"):
+        if row.get(field) is not None:
+            result[field] = _number(row[field], field, integer=True)
+    return result
+
+
+def _settled_receipt(entry, provider, name, ledger):
+    """Validate retained native formats; a status flag alone proves nothing."""
+    from scripts import ai_providers, relay_billing
+    old = entry.get("status") == "gateway_debit_verified"
+    if not old and entry.get("billing_status") != "settled":
+        raise RelayGuardError("source call still lacks independent debit evidence")
+    amount = _number(entry.get("gateway_debit_cny") if old else entry.get("actual_cost_cny"), "amount")
+    ceiling = _number(entry.get("reserved_ceiling_cny"), "reservation")
+    if amount > ceiling:
+        raise RelayGuardError("independent debit exceeds the original reservation")
+    model = entry.get("model", entry.get("requested_model"))
+    if old:
+        parts = str(entry.get("call_id", "")).split("|")
+        model = parts[1] if len(parts) >= 3 else None
+    if not isinstance(model, str) or not model:
+        raise RelayGuardError("settled source lacks an exact model")
+    evidence = entry.get("debit_evidence")
+    if not isinstance(evidence, dict):
+        raise RelayGuardError("source call lacks independent debit evidence")
+    root = ai_providers.PRODUCTION_PROVIDERS[provider]["root"]
+    before = None
+    normalized = dict(evidence)
+    if root == "https://codekey.ai":
+        before = _before(entry, provider)
+        for key in ("before", "after"):
+            meter = evidence.get(key)
+            if not isinstance(meter, dict):
+                raise RelayGuardError("independent debit lacks gateway counters")
+            normalized[key] = {"requests": _number(meter.get("requests"), "requests", integer=True),
+                               "cost_cny": _number(meter.get("cost_cny"), "cost")}
+    elif root == "https://cheapai.info":
+        row = _row(evidence)
+        if (evidence.get("source") != root + "/api/log/token"
+                or evidence.get("quota_per_unit", 500000) != 500000
+                or row["model_name"] != model or abs(row["quota"] / 500000 - amount) > 1e-8):
+            raise RelayGuardError("independent source debit does not match its model/amount")
+        if old and evidence.get("all_key_debits_match_attempt_count") is True:
+            # The original paused acceptance trial matched the entire dedicated
+            # key history rather than a per-call delta. Keep its explicit bijection.
+            related = [r for r in ledger["entries"] if _entry_provider(r, name) == provider]
+            identities = []
+            for item in related:
+                proof = item.get("debit_evidence", {})
+                parts = str(item.get("call_id", "")).split("|")
+                if (item.get("status") != "gateway_debit_verified" or len(parts) < 3
+                        or proof.get("source") != root + "/api/log/token"
+                        or proof.get("all_key_debits_match_attempt_count") is not True
+                        or proof.get("no_generation_retry") is not True or proof.get("quota_per_unit") != 500000):
+                    raise RelayGuardError("original whole-key debit match is incomplete")
+                other = _row(proof)
+                cost = _number(item.get("gateway_debit_cny"), "amount")
+                if (other["model_name"] != parts[1] or abs(other["quota"] / 500000 - cost) > 1e-8
+                        or cost > _number(item.get("reserved_ceiling_cny"), "reservation")):
+                    raise RelayGuardError("original whole-key debit binding changed")
+                identities.append(relay_billing._fingerprint(other))
+            if len(set(identities)) != len(identities):
+                raise RelayGuardError("original whole-key debit match is ambiguous")
+            return {"actual_cost_cny": amount, "debit_evidence": evidence}
+        before = _before(entry, provider)
+        if old:
+            normalized.update(row=row, before_snapshot_sha256=relay_billing._fingerprint({"rows": before["rows"]}))
+            if before.get("quota_per_unit") != 500000 or row in before["rows"]:
+                raise RelayGuardError("source debit already appeared in its before meter")
+    settlement = {"actual_cost_cny": amount, "debit_evidence": normalized}
+    validate_debit({"model": model, "before": before}, settlement)
+    return settlement
+
+
+def _source_entry(store, branch, name, call_id, provider):
+    if (branch, name) not in SOURCES:
+        raise RelayGuardError("source ledger is not an allowlisted original trial")
+    value, blob = store.read(branch, "trial-state", name)
+    if not isinstance(value, dict) or not isinstance(value.get("entries"), list) or not blob:
+        raise RelayGuardError("original source ledger unavailable")
+    rows = [r for r in value["entries"] if isinstance(r, dict) and r.get("call_id") == call_id]
+    if len(rows) != 1 or _entry_provider(rows[0], name) != provider:
+        raise RelayGuardError("original source call missing, duplicated or assigned to another provider")
+    return value, rows[0], blob
+
+
 def source_holds(provider, store):
     found = []
     for branch, name in SOURCES:
         value, blob = store.read(branch, "trial-state", name)
         if not isinstance(value, dict) or not isinstance(value.get("entries"), list):
             raise RelayGuardError("legacy relay ledger unavailable; unknown charges cannot be ignored")
+        call_ids = [r.get("call_id") for r in value["entries"] if isinstance(r, dict)]
+        duplicates = {identifier for identifier in call_ids if call_ids.count(identifier) > 1}
         for entry in value["entries"]:
-            group = entry.get("provider") or str(entry.get("call_id", "")).split("|")[0]
-            if name.endswith("argon-base-probe.json"):
-                group = "codekey-gemini"
-            group = ALIASES.get(group, group)
+            group = _entry_provider(entry, name)
             if group != provider:
                 continue
-            settled = entry.get("billing_status") == "settled" or entry.get("status") == "gateway_debit_verified"
-            if settled and entry.get("debit_evidence"):
+            try:
+                if entry.get("call_id") in duplicates:
+                    raise RelayGuardError("duplicate original source calls cannot establish a unique debit")
+                _settled_receipt(entry, provider, name, value)
+            except (RelayGuardError, KeyError, TypeError, ValueError):
+                pass
+            else:
                 continue
             identifier = hashlib.sha256((branch + "\0" + name + "\0" + entry["call_id"]).encode()).hexdigest()
             found.append({"id": identifier, "provider": provider, "branch": branch, "name": name,
@@ -233,6 +363,41 @@ def validate_debit(meter, settlement):
         raise RelayGuardError("unrecognized independent debit meter")
 
 
+def _trial_settlement(store, active, meter):
+    """Reconcile a comparison's already-accounted call without reopening it."""
+    from scripts import model_comparison as comparison, model_comparison_clarified as clarified, relay_billing
+    scope = active.get("scope")
+    if not isinstance(scope, dict) or scope.get("trial") not in TRIAL_SOURCES or not scope.get("call_id"):
+        raise RelayGuardError("shared ticket does not name an allowlisted original comparison")
+    branch, name = TRIAL_SOURCES[scope["trial"]]
+    ledger, entry, blob = _source_entry(store, branch, name, scope["call_id"], active["provider"])
+    plan = json.loads((comparison.ROOT / "config/model-comparison-20261020.json").read_text(encoding="utf-8"))
+    comparison.validate_plan(plan)
+    if scope["trial"] == comparison.TRIAL:
+        comparison.validate_ledger(ledger, plan)
+    else:
+        parent, parent_blob = store.read(comparison.STATE, "trial-state", comparison.FILE)
+        if not isinstance(parent, dict) or not parent_blob:
+            raise RelayGuardError("original parent comparison is unavailable")
+        contract = clarified.scope(plan, parent, parent_blob)
+        clarified.validate(ledger, contract)
+    if (ledger.get("trial_id") != scope["trial"] or entry.get("model") != meter["model"]
+            or entry.get("meter_before") != meter["before"]
+            or entry.get("run_id") != active["run_id"]
+            or entry.get("reserved_ceiling_cny") != active["max_cost_cny"]):
+        raise RelayGuardError("comparison call differs from the exact shared ticket and before meter")
+    recorded = _settled_receipt(entry, active["provider"], name, ledger)
+    current = relay_billing.settle(active["provider"], meter["model"], meter["before"])
+    validate_debit(meter, current)
+    if (current.get("actual_cost_cny") != recorded["actual_cost_cny"]
+            or current["actual_cost_cny"] > active["max_cost_cny"]):
+        raise RelayGuardError("independent debit differs from the original accounted trial cost")
+    return {"branch": branch, "name": name, "call_id": scope["call_id"], "source_blob_sha": blob,
+            "hold_id": hashlib.sha256((branch + "\0" + name + "\0" + scope["call_id"]).encode()).hexdigest(),
+            "entry_sha256": relay_billing._fingerprint(entry), "recorded_settlement": recorded,
+            "independent_settlement": current}
+
+
 def prepare_reconciliation(project, source, actor, *, store=None):
     from scripts.primary_recovery import path_in, read
     proposal = read(path_in(project, source))
@@ -244,10 +409,12 @@ def prepare_reconciliation(project, source, actor, *, store=None):
         old_id = proposal.get("previous_credential_sha256", "")
         if not re.fullmatch(r"[a-f0-9]{64}", old_id) or old_id == value["credential_sha256"]:
             raise RelayGuardError("new credential must be distinct from the recorded previous credential")
-        old, _ = store.read(BRANCH, "relay-guard", old_id + ".json")
+        old, old_blob = store.read(BRANCH, "relay-guard", old_id + ".json")
         if (not old or not (old["legacy_holds"] or old["active"])
                 or proposal.get("attestation") != "Different newly issued credential; prior charges remain held on the original credential."):
             raise RelayGuardError("new credential needs explicit owner attestation and the retained old hold")
+        proposal = {**proposal, "previous_shared_blob_sha": old_blob,
+                    "previous_shared_state_sha256": hashlib.sha256(json.dumps(old, sort_keys=True, allow_nan=False).encode()).hexdigest()}
     elif proposal.get("kind") == "settled_active":
         from scripts import model_spend, relay_billing
         active, meter = value.get("active"), value.get("active_meter")
@@ -265,16 +432,42 @@ def prepare_reconciliation(project, source, actor, *, store=None):
         if len(matching) != 1 or settled["actual_cost_cny"] > active["max_cost_cny"]:
             raise RelayGuardError("independent debit does not match the original project reconciliation")
         proposal = {**proposal, "independent_settlement": settled}
+    elif proposal.get("kind") == "settled_trial":
+        active, meter = value.get("active"), value.get("active_meter")
+        if not active or proposal.get("ticket_id") != active["id"] or not meter:
+            raise RelayGuardError("select the exact shared comparison ticket and retained meter")
+        proposal = {**proposal, "resolved_trial": _trial_settlement(store, active, meter)}
     elif proposal.get("kind") == "settled_legacy":
         ids = proposal.get("hold_ids")
         if not isinstance(ids, list) or not ids or not set(ids) <= set(value["legacy_holds"]):
             raise RelayGuardError("select exact retained legacy hold IDs")
-        unresolved = {r["id"] for r in source_holds(provider, store)}
-        if set(ids) & unresolved:
-            raise RelayGuardError("legacy ledger still lacks independent debit evidence; no release")
+        if len(set(ids)) != len(ids):
+            raise RelayGuardError("select unique retained legacy hold IDs")
+        resolved = []
+        from scripts import relay_billing
+        for identifier in ids:
+            hold = value["legacy_holds"][identifier]
+            ledger, entry, blob = _source_entry(store, hold["branch"], hold["name"], hold["call_id"], hold["provider"])
+            try:
+                settlement = _settled_receipt(entry, hold["provider"], hold["name"], ledger)
+            except (RelayGuardError, KeyError, TypeError, ValueError):
+                raise RelayGuardError("legacy ledger still lacks independent debit evidence; no release") from None
+            if (entry.get("reserved_ceiling_cny") != hold["reserved_ceiling_cny"]
+                    or settlement["actual_cost_cny"] > hold["reserved_ceiling_cny"]):
+                raise RelayGuardError("legacy debit differs from the retained original reservation")
+            resolved.append({"hold_id": identifier, "branch": hold["branch"], "name": hold["name"],
+                             "call_id": hold["call_id"], "provider": hold["provider"], "source_blob_sha": blob,
+                             "entry_sha256": relay_billing._fingerprint(entry), "settlement": settlement})
+        proposal = {**proposal, "resolved_legacy": resolved}
     else:
         raise RelayGuardError("select independently settled legacy holds or a genuinely different new credential")
     return proposal, store, name, value, expected
+
+
+def reconciliation_snapshot(project, source, actor, *, store=None):
+    """Bind every remote source and resolved debit into the human review digest."""
+    proposal, _, _, value, blob = prepare_reconciliation(project, source, actor, store=store)
+    return {"blob_sha": blob, "state": value, "resolved_proposal": proposal}
 
 
 def reconcile(project, source, actor, review_sha256, run_id, note):
@@ -290,6 +483,15 @@ def reconcile(project, source, actor, review_sha256, run_id, note):
                                 "settlement": proposal["independent_settlement"]})
         value["active"] = None
         value.pop("active_meter", None)
+    elif proposal["kind"] == "settled_trial":
+        value["events"].append({"status": "owner_settled_trial", "ticket": value["active"],
+                                "settlement": proposal["resolved_trial"]})
+        value["active"] = None
+        value.pop("active_meter", None)
+        identifier = proposal["resolved_trial"]["hold_id"]
+        if identifier in value["legacy_holds"]:
+            del value["legacy_holds"][identifier]
+            value.setdefault("reconciled_legacy_ids", []).append(identifier)
     else:
         for identifier in proposal["hold_ids"]:
             del value["legacy_holds"][identifier]

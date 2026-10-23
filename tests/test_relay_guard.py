@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard
+from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard,model_comparison as comparison
 from scripts.research_artifacts import write
 from tests.relay_guard_fixtures import MemoryStore
 
@@ -179,11 +179,116 @@ class RelayGuardTests(unittest.TestCase):
                 guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
             branch,name=guard.SOURCES[1]
             self.store.put(branch,"trial-state",name,{"entries":[{"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
+                "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
                 "reserved_ceiling_cny":0.431508,"debit_evidence":self.debit()["debit_evidence"]}]})
             with patch.object(guard,"CloudStore",return_value=self.store):
                 guard.reconcile(project,source,"Synthetic Owner","a"*64,"123","Synthetic exact legacy reconciliation")
             self.assertTrue(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
             self.assertEqual(self.active()["reconciled_legacy_ids"],held)
+
+    def test_legacy_source_deletion_relabel_and_duplicate_never_prove_settlement(self):
+        self.historical()
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        held=list(self.active()["legacy_holds"])
+        branch,name=guard.SOURCES[1]
+        entry={"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
+            "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
+            "reserved_ceiling_cny":0.431508,"debit_evidence":self.debit()["debit_evidence"]}
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+            for rows in ([],[{**entry,"provider":"codekey-deepseek"}],[entry,copy.deepcopy(entry)]):
+                with self.subTest(rows=len(rows)):
+                    self.store.put(branch,"trial-state",name,{"entries":rows})
+                    with self.assertRaisesRegex(guard.RelayGuardError,"missing, duplicated or assigned"):
+                        guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                    self.assertEqual(list(self.active()["legacy_holds"]),held)
+
+    def test_malformed_settled_proof_remains_held_on_first_import_and_owner_release(self):
+        branch,name=guard.SOURCES[1]
+        entry={"provider":PROVIDER,"call_id":PROVIDER+"|malformed","billing_status":"settled",
+            "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
+            "reserved_ceiling_cny":1,"debit_evidence":{"anything":True}}
+        self.store.put(branch,"trial-state",name,{"entries":[entry]})
+        with self.assertRaises(guard.RelayGuardError):self.begin()
+        held=list(self.active()["legacy_holds"])
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"original-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_legacy","credential_sha256":guard.fingerprint(PROVIDER),"hold_ids":held})
+            with self.assertRaisesRegex(guard.RelayGuardError,"still lacks independent debit"):
+                guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+
+    def test_original_cheapai_whole_key_proofs_and_old_codekey_counters_remain_supported(self):
+        cheap="cheapai-gpt-pro";setting=ai_providers.PRODUCTION_PROVIDERS[cheap]["key_setting"]
+        branch,name=guard.SOURCES[0]
+        with patch.dict(os.environ,{setting:"synthetic-old-cheapai-key"}):
+            entry={"call_id":cheap+"|gpt-6.1-sol|evidence","status":"gateway_debit_verified",
+                "gateway_debit_cny":0.000388,"reserved_ceiling_cny":1,"debit_evidence":{
+                    "source":"https://cheapai.info/api/log/token","unit_source":"https://cheapai.info/api/status",
+                    "quota_per_unit":500000,"model":"gpt-6.1-sol","quota":194,"created_at":1792341993,
+                    "prompt_tokens":165,"completion_tokens":143,"all_key_debits_match_attempt_count":True,"no_generation_retry":True}}
+            self.store.put(branch,"trial-state",name,{"entries":[entry]})
+            self.assertEqual(guard.source_holds(cheap,self.store),[])
+            broken=copy.deepcopy(entry);broken["debit_evidence"]["no_generation_retry"]=False
+            self.store.put(branch,"trial-state",name,{"entries":[broken]})
+            self.assertEqual(len(guard.source_holds(cheap,self.store)),1)
+        old={"kind":"codekey_total_actual_cost","requests":20,"cost_cny":2.0,"currency_rule":"Synthetic old format"}
+        proof=self.debit()["debit_evidence"];proof["before"]={**old};proof["after"]={**old,"requests":21,"cost_cny":2.125}
+        self.store.put(branch,"trial-state",name,{"entries":[{"call_id":PROVIDER+"|gemini-4-argon|evidence",
+            "status":"gateway_debit_verified","gateway_debit_cny":0.125,"reserved_ceiling_cny":1,
+            "gateway_meter_before":old,"debit_evidence":proof}]})
+        self.assertEqual(guard.source_holds(PROVIDER,self.store),[])
+
+    def trial(self):
+        plan=json.loads((comparison.ROOT/"config/model-comparison-20261020.json").read_text(encoding="utf-8"))
+        route=next(r for r in plan["candidates"] if r["provider"]==PROVIDER)
+        case=route["screening_cases"][0];call_id=route["id"]+"|"+case
+        ticket=guard.begin(PROVIDER,scope={"trial":comparison.TRIAL,"call_id":call_id},max_cost_cny=1,store=self.store)
+        guard.bind_meter(ticket,route["model"],self.meter(),store=self.store);self.send()
+        ledger=comparison.new_ledger(plan)
+        entry={"provider":PROVIDER,"call_id":call_id,"candidate_id":route["id"],"model":route["model"],"effort":route["effort"],
+            "case_id":case,"case_sha256":comparison.digest(comparison.fixtures.case(case)),"run_id":"123",
+            "reserved_ceiling_cny":1,"meter_before":self.meter(),"billing_status":"settled","actual_cost_cny":0.125,
+            "generation_status":"response_failed","debit_evidence":self.debit()["debit_evidence"]}
+        ledger["entries"].append(entry)
+        self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+        return ticket,ledger,entry
+
+    def test_exact_accounted_trial_settlement_releases_shared_ticket_without_budget_or_generation(self):
+        ticket,ledger,entry=self.trial();original=copy.deepcopy(ledger)
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"owner-control-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial","credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            with patch.object(guard,"CloudStore",return_value=self.store),patch.object(relay_billing,"settle",return_value=self.debit()), \
+                    patch.object(ai_providers,"call_production") as post,patch.object(model_spend,"write") as budget:
+                snapshot=guard.reconciliation_snapshot(project,source,"Synthetic Owner")
+                resolved=snapshot["resolved_proposal"]["resolved_trial"]
+                self.assertEqual(resolved["entry_sha256"],relay_billing._fingerprint(entry))
+                self.assertEqual(resolved["source_blob_sha"],self.store.read(comparison.STATE,"trial-state",comparison.FILE)[1])
+                guard.reconcile(project,source,"Synthetic Owner","c"*64,"123","Synthetic exact comparison debit review")
+                post.assert_not_called();budget.assert_not_called()
+            self.assertIsNone(self.active()["active"])
+            self.assertEqual(self.active()["events"][-2]["status"],"owner_settled_trial")
+            self.assertEqual(self.store.read(comparison.STATE,"trial-state",comparison.FILE)[0],original)
+
+    def test_trial_owner_release_rejects_wrong_ticket_before_meter_and_independent_fee(self):
+        ticket,ledger,entry=self.trial()
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"owner-control-project"
+            proposal={"provider":PROVIDER,"kind":"settled_trial","credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":"wrong"}
+            source=self.proposal(project,proposal)
+            with self.assertRaisesRegex(guard.RelayGuardError,"exact shared comparison ticket"):
+                guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+            proposal["ticket_id"]=ticket["id"];self.proposal(project,proposal)
+            entry["meter_before"]={**self.meter(),"requests":19}
+            self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+            with self.assertRaisesRegex(guard.RelayGuardError,"exact shared ticket"):
+                guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+            entry["meter_before"]=self.meter();self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+            with patch.object(relay_billing,"settle",return_value=self.debit(0.2)):
+                with self.assertRaisesRegex(guard.RelayGuardError,"original accounted trial cost"):
+                    guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+            self.assertEqual(self.active()["active"],ticket)
 
     def test_owner_active_reconciliation_needs_original_project_and_matching_budget_event(self):
         ticket=self.begin();self.bind(ticket);self.send()

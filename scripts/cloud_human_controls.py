@@ -255,9 +255,7 @@ def dossier(value: dict) -> dict:
                 "implementation": implementation, "files": sorted(files, key=lambda item: item["path"])}
     if operation == "reconcile_relay_guard":
         from scripts import relay_guard
-        supplied = json.loads((project / value["source"]).read_text(encoding="utf-8"))
-        _, _, shared, blob_sha = relay_guard.load(supplied["provider"])
-        snapshot["shared_relay_state"] = {"blob_sha": blob_sha, "state": shared}
+        snapshot["shared_relay_state"] = relay_guard.reconciliation_snapshot(project, value["source"], value["actor"])
     digest = hashlib.sha256(json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     try:
         _check_and_prepare(value, operation)
