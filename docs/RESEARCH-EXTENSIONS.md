@@ -1,5 +1,11 @@
 # Experiment and evidence extensions
 
+The source-located closest-work object/method/result axes and structured writing
+actions extend these same comparison/finding rows. Their contracts, current
+contribution reporting and persistent issue history are documented in
+[Evidence-first writing](EVIDENCE-FIRST-WRITING.md). Missing material remains
+pending and never becomes a scientific resolution merely through a status edit.
+
 These additions implement the engineering work from the October 10 assessment. They leave model IDs, routing, effort, budgets, G0–G5 approvals and manual submission unchanged. Tests use synthetic fixtures in GitHub Actions. A usable tool is not a reproduced scientific method, a calibrated editorial policy or a completed paper.
 
 The owner confirmed on October 11 that no selected research question, closest methods, dataset or independent raters are currently available. Do not invent them. The saved `my-phd` project remains at G1. Actual method reproduction requires a selected method, applicable rights, a frozen design and G3 approval. Domain calibration requires actual materials and qualified independent raters.

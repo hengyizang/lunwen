@@ -40,3 +40,21 @@ Retain the current revision baseline, numeric/citation/claim-strength
 conservation, itemized response trace and named human authorizations. Editing
 cannot upgrade association to causality, remove unfavorable evidence, or turn
 an unsupported claim into a supported one by adding cautious wording.
+
+Apply docs/EVIDENCE-FIRST-WRITING.md within these existing records. Record each
+scientific paragraph's takeaway and warrant, actual missing materials and the
+action needed to close the gap. A phrase match is a candidate style finding;
+establish its consequence before assigning severity. Do not force method,
+transition, theory and results paragraphs into one formula.
+
+Core contributions need current located findings, design-appropriate effect/
+uncertainty or proposition/assumptions/proof, and three-axis closest-work
+comparisons. Revisit original predictions against executed outcomes. Update
+abstract/introduction/conclusion to the strongest supported bounded finding,
+preserving original hypotheses and unfavorable outcomes. Unknown evidence stays
+pending. A filled form or exact quote cannot certify semantic support.
+
+Use the existing initial/final independent review and issue ledger for empty
+evaluation, missing evidence and inference gaps. Retain exact location, claim,
+needed data/literature/analysis/proof, concrete action and completion condition.
+Do not add a paid pass per paragraph or create another worklist.

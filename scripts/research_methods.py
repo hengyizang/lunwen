@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -96,6 +97,12 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
     if stage == "writing-and-review":
         criteria = (root / "config/pre-submission-criteria.json").read_text(encoding="utf-8")
         blocks.append("Required criterion IDs and questions by article type:\n" + criteria)
+        if project is not None and (project / "state/run.json").is_file():
+            active = json.loads((project / "state/run.json").read_text(encoding="utf-8")).get("active_paper")
+            if isinstance(active, str) and re.fullmatch(r"P[0-9]{2}", active):
+                from scripts.contribution_reporting import feedback
+                blocks.append("Current deterministic writing-evidence preparation (not a scientific verdict):\n"
+                              + json.dumps(feedback(project, active), ensure_ascii=False))
     boundary = {
         "planner": "Describe semantic requirements only. Do not supply final wording or write files.",
         "critic": "Assess the immutable source packet independently. Do not see another review or a preferred verdict.",

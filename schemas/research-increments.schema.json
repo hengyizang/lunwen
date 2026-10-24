@@ -199,6 +199,34 @@
               "units"
             ],
             "properties": {
+              "takeaway": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "description": "One bounded main point of this current paragraph; not a mechanical sentence-count requirement. Legacy purpose fallback remains unassessed."
+              },
+              "warrant": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 6000,
+                "description": "Why the bound evidence or premises support the main point within inference_boundary; proofs and research questions need not contain numerical effects."
+              },
+              "reasoning_status": {
+                "enum": [
+                  "not_assessed",
+                  "ready_for_scientific_review",
+                  "needs_material",
+                  "not_applicable"
+                ],
+                "description": "Preparation state only, never scientific approval. not_applicable is limited to transition/non_argument paragraphs."
+              },
+              "material_needs": {
+                "type": "array",
+                "maxItems": 30,
+                "items": {
+                  "$ref": "#/$defs/argument_material_need"
+                }
+              },
               "function": {
                 "enum": [
                   "context",
@@ -224,6 +252,54 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "argument_material_need": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "material_type",
+        "description",
+        "completion_condition",
+        "claim_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+        },
+        "material_type": {
+          "enum": [
+            "data",
+            "literature",
+            "analysis",
+            "proof",
+            "explanation",
+            "scope",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6000
+        },
+        "completion_condition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 6000
+        },
+        "claim_ids": {
+          "type": "array",
+          "maxItems": 200,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
           }
         }
       }

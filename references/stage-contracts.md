@@ -125,6 +125,14 @@ Do not write a favorable conclusion before the claim matrix and negative results
 
 ## Writing and review — G5
 
+Apply [evidence-first writing](../docs/EVIDENCE-FIRST-WRITING.md) in existing
+records: current paragraph takeaway/warrant preparation, located three-axis
+closest-work comparison, design-specific contribution facts tied to real executor
+outputs, and an explicit frozen-expectation versus observed-outcome review.
+The existing manuscript and increment audits revalidate these at G5 and packaging.
+Missing inputs block preparation; scientific meaning still requires the existing
+independent review and named human approval. No new paid review role is added.
+
 Revalidate the actual study identity and selected venue's research-article policy.
 Secondary quantitative studies need successful approved executor evidence; the
 manuscript must state the actual secondary/Meta method at a verified canonical

@@ -96,6 +96,8 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/citation-audit.json"))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
+                and value.endswith("/reviews/manuscript-audit.json"))
+            or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/ccfa-humanization.json"))
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")
                 and value.endswith("/experiment-evidence.json"))

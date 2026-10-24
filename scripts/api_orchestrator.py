@@ -677,6 +677,13 @@ line-level guidance in scripts/academic_style.py output and revise only where th
 scientific context supports the change; never perform blind synonym replacement.
 Build an evidence-led narrative around the strongest supported contribution:
 the important problem, exact demonstrated advantage, decisive evidence and value.
+Apply docs/EVIDENCE-FIRST-WRITING.md: explicit paragraph takeaway and warrant,
+source-located object/method/result closest-work axes, and contribution_detail
+inside every current paper-facts claim_alignment. Bind design-specific fact
+roles to real sealed outputs and frozen expectations; a theory needs frozen
+propositions/assumptions and proof evidence, not invented effect sizes. Reconcile
+the actual outcome with the abstract, introduction and conclusion. Put actionable
+missing materials in the existing review issue, retaining its stable ID/history.
 Give core claims and figures priority instead of equal coverage or an experiment
 diary. Reframe the story when the evidence supports a stronger bounded claim;
 retain original hypotheses and outcomes, and label post-hoc findings by their
@@ -1501,7 +1508,9 @@ def publication_feedback(project: str, stage: str) -> str:
 def incremental_feedback(project: str) -> str:
     from scripts.research_increments import prompt_feedback
     return ("Create and maintain program/research-increments.json using docs/RESEARCH-INCREMENTS.md. "
-            "Plan argument functions before drafting; bind every actual source paragraph after writing. "
+              "Plan argument functions before drafting; bind every actual source paragraph after writing. "
+              "Record one main takeaway and the warrant explaining why the cited evidence/premises support it; "
+              "classify missing data/literature/analysis/proof in the existing review issue, with exact location, action and completion condition. "
             "A plan created together with its draft is diagnostic only until a later pre-write freeze. "
             "Keep original-study attribution, explicit inference, contrary evidence and exploratory status. "
             "Use the minimum justified edit strength. If stop_repeated_editorial_rework is true, "
@@ -1537,6 +1546,11 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
             return {"status": "input_missing", "required": "active paper"}
         paper = base / "papers" / paper_id
         try:
+            from scripts.manuscript_audit import refresh as refresh_facts
+            facts = refresh_facts(base, paper_id)
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            facts = {"status": "blocked", "pass": False, "errors": [str(exc)]}
+        try:
             from scripts.figure_layout import refresh_native_figures
         except ImportError:
             from figure_layout import refresh_native_figures
@@ -1544,11 +1558,11 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
         path = paper / "reviews/pre-submission-review.json"
         if not (paper / "reviews/pre-submission-checklist.json").is_file():
             return {"status": "input_missing", "required": "reviews/pre-submission-checklist.json",
-                    "figure_layout": figures}
+                    "figure_layout": figures, "paper_facts": facts}
         try:
             report = audit(paper)
         except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
-            return {"status": "blocked", "errors": [str(exc)], "figure_layout": figures}
+            return {"status": "blocked", "errors": [str(exc)], "figure_layout": figures, "paper_facts": facts}
     else:
         return None
     write_json_atomic(path, report)
@@ -1560,6 +1574,8 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
               "pass": report["pass"], "errors": report["errors"]}
     if stage == "writing-and-review":
         result["figure_layout"] = figures
+        result["paper_facts"] = facts
+        result["pass"] = result["pass"] and facts["pass"]
         result["pass"] = result["pass"] and figures["pass"]
     return result
 

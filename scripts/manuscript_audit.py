@@ -205,11 +205,23 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
     if undeclared:errors.append("undeclared mathematical symbols: "+", ".join(undeclared))
     unused=sorted(declared-used)
     if unused:warnings.append("declared symbols not found in a math expression: "+", ".join(unused))
+    contribution_review = {"status": "not_assessed", "errors": [], "semantic_support_verified": False}
+    relative = spec.relative_to(project).parts
+    if len(relative) >= 3 and relative[0] == "papers" and re.fullmatch(r"P[0-9]{2}", relative[1]):
+        try:
+            from scripts.contribution_reporting import audit as audit_contributions
+        except ImportError:
+            from contribution_reporting import audit as audit_contributions
+        contribution_review = audit_contributions(project, relative[1], config)
+        # Legacy source-only checks stay diagnostic; the final G5 validator below
+        # requires every current claim to have explicit contribution evidence.
+        if any("contribution_detail" in row for row in config.get("claim_alignment", [])):
+            errors.extend("contribution: " + item for item in contribution_review["errors"])
     return {"schema_version":"1.0","manuscript_sha256":manuscript_digest(manuscript),
             "spec_sha256":sha256_file(spec),"fact_count":len(fact_ids),"claim_count":len(claim_ids),
             "measurement_chains":len(config.get("measurement",[])),"paragraphs":len(config.get("argument_ledger",[])),
             "symbol_count":len(declared),"used_math_symbols":sorted(used),"section_regions_found":sorted(k for k,v in section_buckets.items() if v.strip()),"source_locations":source_locations,"errors":errors,"warnings":warnings,"pass":not errors,
-            "human_review_required":True}
+            "human_review_required":True,"contribution_reporting":contribution_review}
 
 
 def validate_saved_report(paper: Path) -> list[str]:
@@ -224,9 +236,32 @@ def validate_saved_report(paper: Path) -> list[str]:
         return [f"cannot validate paper-facts audit: {exc}"]
     errors=[]
     if not current["pass"]:errors.extend(current["errors"])
-    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs","symbol_count","used_math_symbols","section_regions_found","source_locations"):
+    if current["contribution_reporting"]["status"] != "ready_for_scientific_review":
+        errors.extend("contribution reporting: " + item for item in current["contribution_reporting"].get("errors", []))
+        if not current["contribution_reporting"].get("errors"):
+            errors.append("current contribution reporting is not assessed")
+    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs","symbol_count","used_math_symbols","section_regions_found","source_locations","contribution_reporting"):
         if saved.get(key)!=current.get(key):errors.append(f"stale paper-facts audit field: {key}")
     return errors
+
+
+def refresh(project: Path, paper_id: str) -> dict[str, Any]:
+    """Use the existing protected paper audit after initial writing/remediation."""
+    if not re.fullmatch(r"P[0-9]{2}", paper_id):
+        raise ValueError("an explicit paper ID is required")
+    paper = project / "papers" / paper_id
+    spec = paper / "reviews/paper-facts.json"
+    if not spec.is_file():
+        return {"status": "input_missing", "required": str(spec.relative_to(project)), "pass": False}
+    report = audit(project, canonical_manuscript(paper), spec)
+    report["pass"] = report["pass"] and report["contribution_reporting"]["status"] == "ready_for_scientific_review"
+    from scripts.research_artifacts import write, record
+    target = paper / "reviews/manuscript-audit.json"
+    write(target, report)
+    record(project, [target], "scripts/manuscript_audit.py")
+    return {"path": target.relative_to(project).as_posix(), "sha256": sha256_file(target),
+            "pass": report["pass"], "status": report["contribution_reporting"]["status"],
+            "errors": report["errors"] + report["contribution_reporting"]["errors"]}
 
 
 def main()->int:

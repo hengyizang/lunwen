@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/closest-work-comparison.schema.json",
+  "title": "Source-located closest-work axes in an existing research-extension comparison",
+  "description": "Schema for comparisons[].closest_work. Completeness and current source locations do not verify semantic support, scientific comparability, novelty or superiority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["paper_id", "claim_id", "work_id", "library_work_id", "context", "axes"],
+  "properties": {
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "claim_id": {"$ref": "#/$defs/text"},
+    "work_id": {"$ref": "#/$defs/text"},
+    "library_work_id": {"$ref": "#/$defs/text"},
+    "context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["novelty_matrix", "originality_audit", "literature_library"],
+      "properties": {
+        "novelty_matrix": {"allOf": [{"$ref": "#/$defs/binding"}, {"properties": {"path": {"const": "program/novelty-claim-matrix.json"}}}]},
+        "originality_audit": {"allOf": [{"$ref": "#/$defs/binding"}, {"properties": {"path": {"const": "program/originality-audit.json"}}}]},
+        "literature_library": {"allOf": [{"$ref": "#/$defs/binding"}, {"properties": {"path": {"const": "program/literature-workbench.json"}}}]}
+      }
+    },
+    "axes": {
+      "type": "object", "additionalProperties": false,
+      "required": ["research_object", "method", "result"],
+      "properties": {
+        "research_object": {"$ref": "#/$defs/axis"},
+        "method": {"$ref": "#/$defs/axis"},
+        "result": {"allOf": [{"$ref": "#/$defs/axis"}, {"required": ["result_kind"]}]}
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 12000},
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "locator"],
+      "properties": {
+        "path": {"$ref": "#/$defs/text"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "locator": {"$ref": "#/$defs/text"}
+      }
+    },
+    "anchor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "locator", "start_line", "end_line", "quote"],
+      "properties": {
+        "path": {"$ref": "#/$defs/text"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "locator": {"$ref": "#/$defs/text"},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1},
+        "quote": {"$ref": "#/$defs/text"},
+        "pdf_page": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "evaluationBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "locator", "value"],
+      "properties": {
+        "path": {"$ref": "#/$defs/text"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "locator": {"$ref": "#/$defs/text"},
+        "value": {"$ref": "#/$defs/text"},
+        "pointer": {"type": "string", "pattern": "^/", "maxLength": 1000},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1},
+        "quote": {"$ref": "#/$defs/text"},
+        "pdf_page": {"type": ["integer", "null"], "minimum": 1}
+      },
+      "anyOf": [{"required": ["pointer"]}, {"required": ["start_line", "end_line", "quote"]}]
+    },
+    "evaluation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dataset_id", "dataset_version", "metric_definition", "evaluation_basis"],
+      "properties": {
+        "dataset_id": {"$ref": "#/$defs/evaluationBinding"},
+        "dataset_version": {"$ref": "#/$defs/evaluationBinding"},
+        "metric_definition": {"$ref": "#/$defs/evaluationBinding"},
+        "evaluation_basis": {"$ref": "#/$defs/evaluationBinding"}
+      }
+    },
+    "side": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "scope", "evidence"],
+      "properties": {
+        "status": {"enum": ["reported", "planned", "unknown", "not_reported"]},
+        "scope": {"$ref": "#/$defs/text"},
+        "value": {"type": ["string", "null"], "minLength": 1, "maxLength": 12000},
+        "missing_reason": {"$ref": "#/$defs/text"},
+        "evidence": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/anchor"}},
+        "evaluation": {"$ref": "#/$defs/evaluation"}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"enum": ["reported", "planned"]}}}, "then": {"required": ["value"], "properties": {"value": {"type": "string"}, "evidence": {"minItems": 1}}}},
+        {"if": {"properties": {"status": {"enum": ["unknown", "not_reported"]}}}, "then": {"required": ["missing_reason"], "properties": {"value": {"type": "null"}}}}
+      ]
+    },
+    "axis": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope", "comparison_basis", "disposition", "conclusion_kind", "ours", "prior"],
+      "properties": {
+        "scope": {"$ref": "#/$defs/text"},
+        "comparison_basis": {"$ref": "#/$defs/text"},
+        "disposition": {"enum": ["comparable", "not_comparable", "insufficient_evidence"]},
+        "conclusion_kind": {"enum": ["descriptive", "superiority", "equivalence", "none"]},
+        "result_kind": {"enum": ["quantitative", "qualitative", "theoretical"]},
+        "ours": {"$ref": "#/$defs/side"},
+        "prior": {"$ref": "#/$defs/side"}
+      }
+    }
+  }
+}

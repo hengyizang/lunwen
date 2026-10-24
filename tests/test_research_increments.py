@@ -47,6 +47,9 @@ class IncrementTests(unittest.TestCase):
         row = {"id": "A1", "paper_id": "P01", "precedence": [{"before": "P1", "after": "P2"}],
                "paragraphs": [{"paragraph_id": "P" + str(index), "section": "Introduction",
                                "function": "context", "purpose": "Provide bounded context",
+                               "takeaway": "The source provides bounded background for this argument.",
+                               "warrant": "The cited observation supplies context within its stated scope.",
+                               "reasoning_status": "ready_for_scientific_review", "material_needs": [],
                                "claim_ids": ["F1"], "inference_boundary": "source scope only",
                                "transition": "next premise", "units": [
                                    {"unit_id": unit["unit_id"], "sha256": unit["sha256"]}]}

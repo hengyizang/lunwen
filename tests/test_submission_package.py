@@ -105,6 +105,9 @@ class SubmissionPackageTests(unittest.TestCase):
         argument = {"id": "PACKAGING", "paper_id": "P01", "precedence": [], "paragraphs": [
             {"paragraph_id": "PAR" + str(index), "section": "Introduction", "function": "context",
              "purpose": "Exercise packaging fixture coverage", "claim_ids": ["FIXTURE"],
+             "takeaway": "The synthetic fixture exercises deterministic packaging coverage.",
+             "warrant": "The bounded fixture establishes packaging behavior only and no scientific conclusion.",
+             "reasoning_status": "ready_for_scientific_review", "material_needs": [],
              "inference_boundary": "Synthetic engineering fixture only", "transition": "Fixture continuation",
              "units": [{"unit_id": unit["unit_id"], "sha256": unit["sha256"]}]}
             for index, unit in enumerate(units, 1)]}
@@ -138,9 +141,12 @@ class SubmissionPackageTests(unittest.TestCase):
             project = self.make_project(root)
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
-            ):
+            ), patch("scripts.manuscript_audit.validate_saved_report", return_value=[]) as validate_manuscript:
+                # Isolate ZIP assembly; real scientific rejection is tested below.
                 first = build_package("demo-study", "P01", root / "first.zip")
                 second = build_package("demo-study", "P01", root / "second.zip")
+                self.assertEqual(validate_manuscript.call_count, 2)
+                validate_manuscript.assert_called_with(project / "papers/P01")
             self.assertEqual(hashlib.sha256(first.read_bytes()).hexdigest(), hashlib.sha256(second.read_bytes()).hexdigest())
             with zipfile.ZipFile(first) as archive:
                 names = set(archive.namelist())
@@ -156,6 +162,17 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertFalse(
                     manifest["output_policy"]["anthropic_final_outputs_allowed"]
                 )
+
+    def test_package_requires_current_manuscript_contribution_audit(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.make_project(root)
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
+                "scripts.submission_package.project_dir", lambda slug: root / slug
+            ):
+                with self.assertRaisesRegex(researchctl.ResearchCtlError, "paper-facts input and manuscript audit must both exist"):
+                    build_package("demo-study", "P01", root / "blocked.zip")
+            self.assertFalse((root / "blocked.zip").exists())
 
     def test_package_recomputes_hygiene_even_if_an_approval_hash_is_incorrectly_resigned(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
