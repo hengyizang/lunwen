@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/figure-gallery-request.schema.json",
+  "title": "Bounded cloud figure reference metadata search",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "query"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "query": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "top_k": {"type": "integer", "minimum": 1, "maximum": 20},
+    "venues": {"type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": {"enum": ["iclr", "icml", "neurips", "cvpr", "acl", "aaai"]}},
+    "years": {"type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": {"type": "integer", "minimum": 2023, "maximum": 2026}},
+    "tiers": {"type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": {"enum": ["best_paper", "oral", "spotlight", "unknown"]}},
+    "patterns": {"type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": {"enum": ["conceptual", "architecture", "teaser", "pipeline", "framework", "results", "taxonomy", "comparison"]}},
+    "topics": {"type": "array", "minItems": 1, "maxItems": 27, "uniqueItems": true, "items": {"enum": ["multimodal", "vision_language", "diffusion", "image_generation", "graph_neural_network", "knowledge_graph", "reinforcement_learning", "segmentation", "object_detection", "depth_estimation", "three_dimensional", "point_cloud", "robotics", "recommendation", "time_series", "retrieval_augmented", "language_model", "contrastive_learning", "self_supervised", "causal", "federated", "distillation", "attention", "optimization", "interpretability", "computer_vision", "natural_language"]}}
+  }
+}

@@ -124,6 +124,16 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
 
 def validate_figure_provenance(project:Path,paper:Path)->list[str]:
     errors=[];figures_dir=paper/"figures"
+    # Editable exports are auxiliary source-bearing artifacts, not an implicit
+    # figure approval. Bind them to current sources even when no SVG was
+    # selected, then retain all existing final-figure and named-review checks.
+    for receipt in sorted(figures_dir.rglob("*.editable-export.json")):
+        try:
+            try:from scripts.editable_figures import verify_export
+            except ModuleNotFoundError:from editable_figures import verify_export
+            verify_export(project,receipt)
+        except (OSError,ValueError,RuntimeError,KeyError,TypeError,AttributeError) as exc:
+            errors.append(f"{receipt.relative_to(project).as_posix()}: editable export is stale or invalid: {exc}")
     actual={path.relative_to(project).as_posix() for path in figures_dir.rglob("*") if path.is_file() and path.suffix.lower() in FIGURE_SUFFIXES}
     registry_path=figures_dir/"figure-provenance.json"
     if not actual:

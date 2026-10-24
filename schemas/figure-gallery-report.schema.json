@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/figure-gallery-report.schema.json",
+  "title": "Source-bound figure reference retrieval report",
+  "type": "object",
+  "required": ["schema_version", "query", "source", "snapshot_binding", "candidates", "retrieval", "boundary", "paid_api_calls", "images_downloaded", "implementation_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "query": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "source": {"type": "object", "required": ["repository", "commit", "url", "metadata_sha256", "upstream_git_blob_sha", "lock_sha256"], "properties": {"repository": {"const": "qwdwqfwq/topconf-paper-figure-gallery"}, "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "metadata_sha256": {"$ref": "#/$defs/hash"}}},
+    "snapshot_binding": {"$ref": "#/$defs/binding"},
+    "candidates": {"type": "array", "maxItems": 20, "items": {"type": "object", "required": ["id", "title", "authors", "venue", "year", "tier", "pattern", "topics", "topics_basis", "paper_url", "pdf_url", "figure_url", "metadata_sha256", "image_downloaded", "image_inspected", "license", "score", "reasons"], "properties": {"id": {"type": "string"}, "metadata_sha256": {"$ref": "#/$defs/hash"}, "image_downloaded": {"const": false}, "image_inspected": {"const": false}, "topics_basis": {"const": "title_bilingual_concept_inference"}, "license": {"type": "object", "required": ["code_license", "image_license", "reuse_authorized"], "properties": {"code_license": {"const": "MIT"}, "image_license": {"const": "unknown"}, "reuse_authorized": {"const": false}}}, "score": {"type": "number"}, "reasons": {"type": "array", "items": {"type": "string"}}}}},
+    "retrieval": {"type": "object", "required": ["method", "semantic_image_search"], "properties": {"method": {"enum": ["metadata_bm25_bilingual_concepts", "cpu_clip_bm25"]}, "semantic_image_search": {"type": "boolean"}, "semantic_evidence": {"type": "object"}}, "allOf": [{"if": {"properties": {"semantic_image_search": {"const": true}}}, "then": {"required": ["semantic_evidence"], "properties": {"method": {"const": "cpu_clip_bm25"}}}, "else": {"properties": {"method": {"const": "metadata_bm25_bilingual_concepts"}}}}]},
+    "boundary": {"type": "string"},
+    "paid_api_calls": {"const": 0},
+    "images_downloaded": {"const": 0},
+    "implementation_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "binding": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/hash"}}}}
+}

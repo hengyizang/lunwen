@@ -11,7 +11,9 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "reports/literature-workbench", "reports/literature-intelligence",
                   "reports/literature-analysis", "reports/literature-feedback",
                   "reports/ccfa-tasks", "reports/ccfa-science", "reports/ccfa-humanization",
-                  "reports/figure-data", "experiments/history", "experiments/recovery-artifacts",
+                  "reports/figure-data", "reports/figure-gallery", "reports/figure-gallery-semantic",
+                  "reports/figure-story", "reports/figure-visual-style", "literature/figure-gallery",
+                  "experiments/history", "experiments/recovery-artifacts",
                   "state/primary-recovery", "state/review-receipts", "state/scientific-scope", "state/scientific-scope-amendments")
 EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json",
                   "program/topic-leads.json", "program/literature-progress.json"}
@@ -81,6 +83,8 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
             return True
         return executor_owned(child, child_relative)
     return (value in EXECUTOR_FILES
+            or value.endswith((".editable.svg", ".editable.pptx", ".editable.drawio",
+                               ".editable-export.json", ".editable-layout.json", ".editable-source.json", ".editable.renderer.py"))
             or (len(parts) >= 5 and value.startswith("papers/") and parts[2:4] == ("figures", "source-data"))
             or (len(PurePosixPath(value).parts) >= 5 and value.startswith("papers/")
                 and PurePosixPath(value).parts[2] == "supplement"

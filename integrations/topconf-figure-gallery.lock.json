@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "repository": "qwdwqfwq/topconf-paper-figure-gallery",
+  "commit": "dbf360a533ee46bc7d4a8f6037717c83f21a633a",
+  "verified_access_date": "2026-10-24",
+  "metadata": {
+    "path": "data/figures.json",
+    "git_blob_sha": "8b4708a2e4685e3b7ca821fc81694f5e102ed30b",
+    "sha256": "8949316de6703bc9d20ec8a60d81bb521b2b585c7dafc348fd89b62adfa062fb",
+    "size_bytes": 2141020,
+    "record_count": 3449
+  },
+  "license": "MIT for code only; original paper figures retain their own copyright and licensing",
+  "image_redistribution": false,
+  "normalization": "upstream metadata bytes preserved exactly; no bulk image downloads",
+  "files": [
+    {
+      "path": "integrations/topconf-figure-gallery-LICENSE",
+      "source_path": "LICENSE",
+      "upstream_git_blob_sha": "5a64909ea6109748a528f08131653d62f1ece5e3",
+      "canonical_lf_sha256": "2350e38b3b77e35d200cc3424c6fded8d282bb5ba3f3b0b440730f8780020e0c"
+    },
+    {
+      "path": "integrations/topconf-figure-gallery-IMAGES_POLICY.md",
+      "source_path": "IMAGES_POLICY.md",
+      "upstream_git_blob_sha": "59616a1105ca63b970c56cfae7743fe764f1ba3a",
+      "canonical_lf_sha256": "135582a3407482b7a7b56dbe82b4dd3a4333536f570e6d5324487c93313a671d"
+    }
+  ],
+  "adapted_reference": {
+    "path": "forge/retrieval.mjs",
+    "sha256": "fed62f0dfc3abd06817bf986865a320dffe64ef9750097b8a1e12dd30b373ba1",
+    "git_blob_sha": "89c937a0de40982f6c4ebaaceb840d57739a5417"
+  }
+}

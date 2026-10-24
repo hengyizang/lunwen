@@ -76,6 +76,15 @@ Follow-up deterministic builders are documented in [Quality controls follow-up](
 The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.
 # Literature workbench operations
 
+Figure-reference operations use the existing non-billable `literature` boundary
+or current-stage queue at G1–G5: `figure_gallery_sync`, `figure_gallery_search`
+(`query`, optional `top_k`, `semantic`, `venues`, `years`, `tiers`, `patterns`,
+`topics`), `figure_story` (`operation`, `request_file`), `editable_figure_export`
+(`request_file`), `editable_figure_verify` (`receipt`). Read
+[Figure workbench](../docs/FIGURE-REFERENCE-WORKBENCH.md) for exact schemas,
+bounded model context, original briefs, shared style, native exports and rights.
+These operations never spend model budget or approve a scientific figure/gate.
+
 Use [LITERATURE-REASONING.md](../docs/LITERATURE-REASONING.md) for the existing
 authorized scientific writer's section-specific objectives, attributed reading
 answers, closest-work comparisons, gap hypotheses and 20-axis experiment

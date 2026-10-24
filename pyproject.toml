@@ -21,6 +21,7 @@ reader = [
 ]
 writing-tools = ["proselint==0.16.0"]
 research-quality = ["statsmodels==0.15.0"]
+figure-retrieval = ["onnxruntime==1.23.2", "tokenizers==0.22.1", "numpy>=1.26,<3"]
 ai4science = [
   "paper-qa==2026.08.12",
   "tooluniverse==1.5.1"

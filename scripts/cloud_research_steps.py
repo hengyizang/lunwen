@@ -443,7 +443,9 @@ def after_write(project: Path, stage: str) -> dict:
             elif action in {"ccfa_task", "ccfa_task_clear", "ccfa_science", "ccfa_humanization"}:
                 from scripts.ccfa_runtime import execute
                 report.setdefault("ccfa", []).append({"action": action, "result": execute(project, operation)})
-            elif action in {"literature_discover", "literature_register", "literature_resolve", "literature_figures",
+            elif action in {"figure_gallery_sync", "figure_gallery_search", "figure_story",
+                            "editable_figure_export", "editable_figure_verify",
+                            "literature_discover", "literature_register", "literature_resolve", "literature_figures",
                             "literature_analyze", "literature_workbench", "literature_search",
                             "literature_itinerary", "literature_compare", "literature_progress",
                             "literature_feedback", "literature_feedback_propose"} and stage != "intake":

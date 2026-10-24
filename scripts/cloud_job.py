@@ -55,6 +55,11 @@ EXTRA = {
 }
 
 LITERATURE_OPERATIONS = {
+    "figure_gallery_sync": (set(), set()),
+    "figure_gallery_search": ({"query", "top_k", "venues", "years", "tiers", "patterns", "topics", "semantic"}, {"query"}),
+    "figure_story": ({"operation", "request_file"}, {"operation", "request_file"}),
+    "editable_figure_export": ({"request_file"}, {"request_file"}),
+    "editable_figure_verify": ({"receipt"}, {"receipt"}),
     "ccfa_task": ({"request"}, {"request"}),
     "ccfa_task_clear": ({"expected_active_sha256"}, {"expected_active_sha256"}),
     "ccfa_science": ({"operation", "request"}, {"operation", "request"}),

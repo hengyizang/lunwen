@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "repository": "qwdwqfwq/topconf-paper-figure-gallery",
+  "commit": "dbf360a533ee46bc7d4a8f6037717c83f21a633a",
+  "dimension": 512,
+  "max_tokens": 77,
+  "row_count": 3449,
+  "model": "Xenova/clip-vit-base-patch32 (quantized ONNX)",
+  "model_license": "MIT",
+  "model_sources": [
+    "https://huggingface.co/Xenova/clip-vit-base-patch32",
+    "https://github.com/openai/CLIP/blob/main/LICENSE"
+  ],
+  "upstream_license": "integrations/topconf-figure-gallery-LICENSE",
+  "policy": "CPU retrieval only; no image copying, paid API or scientific validation. Git blob hashes and exact sizes bind all downloaded bytes; actual SHA256 hashes enter execution receipts.",
+  "assets": [
+    {
+      "path": "forge/data/ids.json",
+      "bytes": 94815,
+      "git_blob_sha1": "e2675c18dbc0135533cc790472a7859c64207e6f"
+    },
+    {
+      "path": "forge/data/image_emb.bin",
+      "bytes": 7063552,
+      "git_blob_sha1": "98e68a080675c0bc363d504c4e364b71ddf25802"
+    },
+    {
+      "path": "forge/data/text_emb.bin",
+      "bytes": 7063552,
+      "git_blob_sha1": "9f878378f2c09a778931b0f19f12d250e5e74b8b"
+    },
+    {
+      "path": "forge/models/clip-vit-base-patch32/onnx/text_model_quantized.onnx",
+      "bytes": 64504507,
+      "git_blob_sha1": "000058c3b14e55cff86d189938e088bcdb231eeb"
+    },
+    {
+      "path": "forge/models/clip-vit-base-patch32/tokenizer.json",
+      "bytes": 2224119,
+      "git_blob_sha1": "bc1f77d20440541dd073ebae6f6c401087c7d34e"
+    }
+  ]
+}

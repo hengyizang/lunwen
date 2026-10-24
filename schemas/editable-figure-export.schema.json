@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Native editable method-diagram receipt; human scientific review remains pending",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kind", "source", "request", "source_snapshot", "layout", "renderer", "visual_style", "story_ref", "story_alignment", "evidence", "reference_notes", "implementation", "outputs", "claim_ids", "caption", "alt_text", "human_review_required", "scientific_validation", "review_todos", "font_check", "paid_calls"],
+  "properties": {
+    "schema_version": {"const": "1.0"}, "kind": {"const": "editable_method_diagram"},
+    "source": {"$ref": "#/$defs/file"}, "request": {"$ref": "#/$defs/file"}, "source_snapshot": {"$ref": "#/$defs/file"}, "layout": {"$ref": "#/$defs/file"}, "renderer": {"$ref": "#/$defs/file"},
+    "visual_style": {"type": ["object", "null"], "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"const": "program/figure-visual-style.json"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "story_ref": {"type": ["object", "null"], "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "pattern": "^reports/figure-story/[A-Za-z0-9][A-Za-z0-9_-]{0,63}\\.json$"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "story_alignment": {"type": "object", "additionalProperties": false, "required": ["status", "manuscript_alignment", "semantic_alignment_requires_human_review"], "properties": {"status": {"enum": ["not_assessed", "current_source_bindings_checked"]}, "manuscript_alignment": {"enum": ["not_assessed", "not_available", "source_locations_checked"]}, "semantic_alignment_requires_human_review": {"const": true}}},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "locator"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "locator": {"type": "string", "minLength": 1}}}},
+    "reference_notes": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["source_url", "purpose", "rights_status", "note"], "properties": {"source_url": {"type": "string", "pattern": "^https://"}, "purpose": {"const": "layout_reference"}, "rights_status": {"enum": ["unverified", "verified"]}, "note": {"type": "string", "minLength": 1}}}},
+    "implementation": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/file"}},
+    "outputs": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "format", "editability", "raster_elements"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "format": {"enum": ["svg", "pptx", "drawio"]}, "editability": {"const": "native"}, "raster_elements": {"const": 0}}}},
+    "claim_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "caption": {"type": "string", "minLength": 1}, "alt_text": {"type": "string", "minLength": 1},
+    "human_review_required": {"const": true}, "scientific_validation": {"const": "not_established"}, "paid_calls": {"const": 0},
+    "review_todos": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "font_check": {"type": "object", "additionalProperties": false, "required": ["requested_family", "availability", "substitution_review_required"], "properties": {"requested_family": {"type": "string", "minLength": 1}, "availability": {"const": "not_established"}, "substitution_review_required": {"const": true}}}
+  },
+  "$defs": {"file": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+}
