@@ -72,7 +72,7 @@ def _time(value):
 def _bind(project, value, *, tracked=False):
     _keys(value, {"path", "sha256"}, {"path", "sha256"}, "file binding")
     relative = value["path"]
-    if (not isinstance(relative, str) or not relative.startswith(("program/", "papers/", "evidence/", "literature/", "results/", "experiments/", "reports/"))
+    if (not isinstance(relative, str) or not (relative == "claims/claim-evidence.csv" or relative.startswith(("program/", "papers/", "evidence/", "literature/", "results/", "experiments/", "reports/")))
             or relative.startswith(PREFIX + "/") or any(p.casefold() in {
                 "state", "raw", "private", "secrets", "credentials", ".git", "submission"} for p in Path(relative).parts)):
         raise ValueError("source is outside the bounded public project corpus")

@@ -234,6 +234,8 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         revision_errors.extend(extension_errors(project))
         from scripts.research_increments import gate_errors as increment_errors
         revision_errors.extend(increment_errors(project, "G5", paper_id))
+        from scripts.manuscript_audit import validate_saved_report as validate_manuscript
+        revision_errors.extend(validate_manuscript(paper))
         from scripts.manuscript_hygiene import validate_saved_report as validate_hygiene
         revision_errors.extend(validate_hygiene(project, paper_id))
         from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks

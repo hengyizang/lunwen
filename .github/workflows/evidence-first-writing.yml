@@ -11,6 +11,7 @@ on:
       - 'scripts/writing_review_actions.py'
       - 'scripts/ccfa_science.py'
       - 'scripts/api_orchestrator.py'
+      - 'scripts/submission_package.py'
       - 'schemas/*contribution*'
       - 'schemas/*writing-review*'
       - 'schemas/closest-work-comparison.schema.json'
@@ -20,6 +21,8 @@ on:
       - 'tests/test_contribution_reporting.py'
       - 'tests/test_closest_work_axes.py'
       - 'tests/test_writing*'
+      - 'tests/test_submission_package.py'
+      - 'tests/test_research_methods.py'
       - '.github/workflows/evidence-first-writing.yml'
   workflow_dispatch:
 
@@ -50,7 +53,8 @@ jobs:
         run: >-
           python -m unittest tests.test_argument_reasoning tests.test_closest_work_axes
           tests.test_writing_review_actions tests.test_writing_issue_history
-          tests.test_contribution_reporting tests.test_research_increments -v
+          tests.test_contribution_reporting tests.test_research_increments
+          tests.test_submission_package tests.test_research_methods -v
       - name: Check installed guidance and compile control-plane modules
         run: |
           python -m compileall -q scripts tests
