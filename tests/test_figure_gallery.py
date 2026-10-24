@@ -208,6 +208,16 @@ class FigureGalleryTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(data).hexdigest(), item["canonical_lf_sha256"])
         self.assertEqual(lock["metadata"]["record_count"], 3449)
 
+    def test_long_descriptive_upstream_ids_are_preserved_without_path_escape(self):
+        row = copy.deepcopy(self.rows[0])
+        row["id"] = "cvpr2026-" + "A" * 131
+        self.assertEqual(len(row["id"]), 140)
+        self.assertEqual(gallery.normalize_figures([row], self.lock)[0]["id"], row["id"])
+        for unsafe in ("x" * 201, "cvpr2026/../../secret", "cvpr2026\\secret"):
+            row["id"] = unsafe
+            with self.assertRaises(ValueError):
+                gallery.normalize_figures([row], self.lock)
+
 
 if __name__ == "__main__":
     unittest.main()

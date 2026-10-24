@@ -37,7 +37,9 @@ HOSTS = {"ojs.aaai.org", "aclanthology.org", "openaccess.thecvf.com",
          "openreview.net", "proceedings.mlr.press", "proceedings.neurips.cc",
          "arxiv.org", "raw.githubusercontent.com"}
 HASH = re.compile(r"[0-9a-f]{64}\Z")
-ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,119}\Z")
+# The pinned CVPR corpus includes descriptive IDs up to 140 characters.
+# Bound length without truncating identity or permitting path separators.
+ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,199}\Z")
 STOP = set("a an the of for to in on and or with by as at from is are be this that "
            "we our it its into using use paper figure diagram draw create generate "
            "please scientific research show showing".split())

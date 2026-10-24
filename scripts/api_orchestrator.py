@@ -762,6 +762,8 @@ For method diagrams use the free controlled gallery/story/editable operations in
 docs/FIGURE-REFERENCE-WORKBENCH.md. Search only when it improves a concrete figure;
 reuse its bound report, select 3-5 useful references, write our own claim-bound
 diagram, and check all modules/arrows against located manuscript/protocol text.
+Carry a prepared brief into its editable export as story_ref so final checks
+revalidate current manuscript/claims rather than only the diagram specification.
 Shared six-paper visual tokens are optional and never change scientific content.
 Use restrained high-impact composition, vector SVG/PDF, >=300 DPI PNG,
 colorblind-safe palettes, redundant marker/line encodings, uncertainty, English

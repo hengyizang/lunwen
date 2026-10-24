@@ -186,6 +186,7 @@ def search(project, query, *, top_k=8, venues=None, years=None, tiers=None, patt
     gallery._cloud()
     if type(top_k) is not int or not 1 <= top_k <= gallery.MAX_TOP_K:
         raise ValueError("top_k must be 1 through 20")
+    clip_text(query)  # Reject malformed requests before any asset download.
     index = gallery.load_index(project)
     filters = gallery.normalize_filters({"venues": venues, "years": years, "tiers": tiers, "patterns": patterns, "topics": topics})
     selected = gallery.matching_figures(index, filters)

@@ -282,6 +282,78 @@ class FigureStoryTests(unittest.TestCase):
             with self.subTest(style=style), self.assertRaises(ValueError):
                 story.execute(self.project, "style_prepare", style)
 
+    def test_hidden_node_note_cannot_claim_a_visible_planned_marker(self):
+        ir = copy.deepcopy(self.ir)
+        ir["caption"] = "Input, calibration and output."
+        for node in ir["nodes"]:
+            node["note"] = "Planned module"
+        self.diagram = self.save(self.diagram["path"], ir)
+        with self.assertRaisesRegex(ValueError, "visibly marked"):
+            story.prepare(self.project, self.request())
+
+
+    def test_export_bound_story_rechecks_canonical_manuscript_includes_and_claims_at_g5(self):
+        from scripts import editable_figures
+        from scripts.figure_provenance import record_figure, validate_figure_provenance
+        request = self.request()
+        part = self.manuscript(request)
+        brief = story.prepare(self.project, request)
+        export_request = {"schema_version": "1.0", "diagram_spec": self.diagram["path"],
+            "expected_source_sha256": self.diagram["sha256"], "formats": ["svg"],
+            "story_ref": {key: brief[key] for key in ("path", "sha256")},
+            # The attached brief independently retains canonical text and claims.
+            "evidence": [{**self.protocol, "locator": "L1, synthetic method fixture"}]}
+        binding = self.save("program/editable-story-request.json", export_request)
+        report = editable_figures.export(self.project, self.project/binding["path"])
+        receipt = self.project/"papers/P01/figures/main.editable-export.json"
+        self.assertEqual(report["story_ref"], export_request["story_ref"])
+        self.assertEqual(report["story_alignment"]["manuscript_alignment"], "source_locations_checked")
+        self.assertTrue(report["story_alignment"]["semantic_alignment_requires_human_review"])
+        record_figure(self.project, "P01", report["outputs"][0]["path"], "conceptual_diagram",
+            report["renderer"]["path"], [self.protocol["path"]], [], self.diagram["path"], "Synthetic Reviewer")
+        paper = self.project/"papers/P01"
+        self.assertEqual(validate_figure_provenance(self.project, paper), [])
+        for name, relative in (("main", request["manuscript"]["path"]),
+                               ("include", part["path"]), ("claims", self.claims["path"])):
+            with self.subTest(source=name):
+                target = self.project/relative
+                original = target.read_bytes()
+                target.write_bytes(original+b"\n")
+                try:
+                    with self.assertRaises((ValueError, output_provenance.ProvenanceError)):
+                        editable_figures.verify_export(self.project, receipt)
+                    self.assertTrue(any("editable export is stale" in error
+                        for error in validate_figure_provenance(self.project, paper)))
+                finally:
+                    target.write_bytes(original)
+                self.assertEqual(editable_figures.verify_export(self.project, receipt), report)
+                self.assertEqual(validate_figure_provenance(self.project, paper), [])
+
+    def test_export_rejects_brief_for_other_ir_and_legacy_export_does_not_claim_alignment(self):
+        from scripts import editable_figures
+        from scripts.publication_figures import FigureSpecError
+        request = self.request()
+        brief = story.prepare(self.project, request)
+        alternate = copy.deepcopy(self.ir)
+        alternate["output_stem"] = "papers/P01/figures/alternate"
+        diagram = self.save("papers/P01/figures/alternate.spec.json", alternate)
+        export_request = {"schema_version": "1.0", "diagram_spec": diagram["path"],
+            "expected_source_sha256": diagram["sha256"], "formats": ["svg"],
+            "story_ref": {key: brief[key] for key in ("path", "sha256")},
+            "evidence": [{**self.protocol, "locator": "L1, synthetic method fixture"}]}
+        binding = self.save("program/alternate-export.json", export_request)
+        with self.assertRaisesRegex(FigureSpecError, "exact exported diagram source"):
+            editable_figures.export(self.project, self.project/binding["path"])
+        self.assertFalse((self.project/"papers/P01/figures/alternate.editable.svg").exists())
+        del export_request["story_ref"]
+        self.save(binding["path"], export_request)
+        report = editable_figures.export(self.project, self.project/binding["path"])
+        self.assertIsNone(report["story_ref"])
+        self.assertEqual(report["story_alignment"], {"status": "not_assessed",
+            "manuscript_alignment": "not_assessed", "semantic_alignment_requires_human_review": True})
+        self.assertEqual(editable_figures.verify_export(self.project,
+            self.project/"papers/P01/figures/alternate.editable-export.json"), report)
+
 
 if __name__ == "__main__":
     unittest.main()

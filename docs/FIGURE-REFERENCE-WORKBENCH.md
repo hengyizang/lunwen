@@ -79,13 +79,18 @@ and reading operations when scientific content, rather than layout, is needed.
 6. Export with `{"action":"editable_figure_export","request_file":"program/main-figure-export.json"}`:
 
 ```json
-{"schema_version":"1.0","diagram_spec":"papers/P01/figures/main.spec.json","expected_source_sha256":"CURRENT_IR_SHA256","formats":["svg","pptx","drawio"],"evidence":[{"path":"papers/P01/method.md","sha256":"CURRENT_METHOD_SHA256","locator":"Method, lines 1-8"}],"reference_notes":[]}
+{"schema_version":"1.0","diagram_spec":"papers/P01/figures/main.spec.json","expected_source_sha256":"CURRENT_IR_SHA256","formats":["svg","pptx","drawio"],"evidence":[{"path":"papers/P01/method.md","sha256":"CURRENT_METHOD_SHA256","locator":"Method, lines 1-8"}],"story_ref":{"path":"reports/figure-story/main-brief.json","sha256":"CURRENT_BRIEF_SHA256"},"reference_notes":[]}
 ```
 
 Source IRs require current non-Claude provenance. Outputs contain actual SVG
 text/shapes, native DrawingML text/shapes/attached connectors, and draw.io graph
 nodes/edges. They are not whole-image wrappers. The receipt preserves IR, layout,
 evidence, shared style, implementation and a replay renderer.
+For a story-based figure, always carry the current `story_ref` into the export.
+The final receipt then revalidates its canonical manuscript, include files,
+claims and other brief dependencies, not just the diagram and method file.
+Legacy exports without a brief remain usable but explicitly report narrative
+alignment as not assessed.
 `editable_figure_verify` takes `receipt` with its project-relative path. Story
 `validate` and `style_validate` take a `{path,sha256}` request file.
 

@@ -288,7 +288,7 @@ def build_report(project: Path, request: dict):
         _anchor(project, module["text_locator"], inputs, allowed)
         _check_phase(request, module, results)
         if module["phase"] == "planned":
-            _need(re.search(r"\b(planned|proposed|expected)\b", nodes[node_id].get("note", "")+" "+nodes[node_id]["label"]+" "+ir["caption"], re.I), "Planned module must be visibly marked")
+            _need(re.search(r"\b(planned|proposed|expected)\b", nodes[node_id]["label"]+" "+ir["caption"], re.I), "Planned module must be visibly marked")
     for connection in connections:
         _keys(connection, {"from", "to", "kind", "meaning", "phase", "text_locator"})
         pair = (connection["from"], connection["to"])

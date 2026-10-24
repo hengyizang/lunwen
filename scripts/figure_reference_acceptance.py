@@ -83,12 +83,14 @@ def _fixture(project, reference_report):
     brief = story.prepare(project, request)
     story.validate_saved_report(project, project/brief["path"])
     export_request = {"schema_version": "1.0", "diagram_spec": diagram["path"], "expected_source_sha256": diagram["sha256"],
+        "story_ref": {key: brief[key] for key in ("path", "sha256")},
         "formats": ["svg", "pptx", "drawio"], "evidence": [{**method, "locator": "L1, explicit synthetic fixture"}],
         "reference_notes": [{"source_url": entry["url"], "purpose": "layout_reference", "rights_status": "unverified", "note": entry["do_not_copy"]} for entry in references]}
     export_binding = _fixture_file(project, "program/synthetic-editable-export.json", export_request)
     export = editable_figures.export(project, project/export_binding["path"])
     receipt_path = project/"papers/P01/figures/synthetic-main.editable-export.json"
     editable_figures.verify_export(project, receipt_path)
+    _need(export["story_alignment"]["manuscript_alignment"] == "source_locations_checked", "Export must retain the current source-bound manuscript alignment")
     _need({row["format"] for row in export["outputs"]} == {"svg", "pptx", "drawio"}, "Missing requested native format")
     _need(all(row["editability"] == "native" and row["raster_elements"] == 0 for row in export["outputs"]), "Synthetic exports must use native editable objects")
     svg = project/next(row["path"] for row in export["outputs"] if row["format"] == "svg")
@@ -101,7 +103,8 @@ def _fixture(project, reference_report):
         _need(len(slide.findall(".//p:cxnSp", ns)) >= 2 and len(slide.findall(".//a:t", ns)) >= 4, "PPTX needs attached editable connectors and live text")
         _need(not any(name.startswith("ppt/media/") for name in archive.namelist()), "PPTX fixture must not hide flattened images")
     return {"brief": brief, "export": export, "receipt": receipt_path, "diagram": project/diagram["path"],
-            "style": project/style_ref["path"], "pptx": pptx}
+            "style": project/style_ref["path"], "manuscript": project/manuscript["path"],
+            "claims": project/claims["path"], "pptx": pptx}
 
 
 def _render_pptx(pptx, output):
@@ -128,7 +131,7 @@ def _render_pptx(pptx, output):
 
 def _staleness(project, artifacts):
     blocked = {}
-    for label in ("diagram", "style"):
+    for label in ("diagram", "style", "manuscript", "claims"):
         target = artifacts[label]
         original = target.read_bytes()
         target.write_bytes(original+b"\n")

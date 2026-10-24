@@ -15,6 +15,8 @@ claim-bound content and inspect original-image rights separately. Map every
 node/arrow and numeric label to located paper/protocol/data evidence. Native
 export requires current non-Claude IR provenance; it does not register a final
 figure or approve science/visuals. Revalidate after any source or style change.
+Carry the current brief as `story_ref` into its editable export so final checks
+also revalidate the actual manuscript, claims and all brief dependencies.
 
 1. Profile a real CSV/TSV/JSON with `scripts/figure_profile.py`; ask what registered claim the figure serves. Never infer significance, error bars, sample size, PCA coordinates or ROC metrics in a plotting prompt.
 2. Create `schemas/publication-figure-spec.schema.json`-compatible specs. Before `--record`, ensure the source spec has current non-Claude provenance: an actual Codex/GPT authorship record or `scripts/output_provenance.py attest` for a genuinely human-authored/reviewed spec. Use `scripts/publication_figures.py render`; review SVG/PDF/PNG layout, missing labels, legend occlusion and grayscale legibility. The 37 chart families cover trends, distributions, uncertainty, diagnostics, meta-analysis, survival/Kaplan–Meier, calibration, ROC/PR, correlation, volcano/PCA, Q–Q/funnel, Bland–Altman, SHAP summaries, nomograms, decision curves, Sankey/network/chord and precomputed geospatial views. Analytical coordinates, risk counts, intervals and weights are inputs, not computed or fitted by the renderer. Enable `source_data_export` only if redistribution is authorized. For specialized plot types, write a local Python renderer and retain identical source-run/claim/provenance checks.

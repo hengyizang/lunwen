@@ -8,6 +8,7 @@
     "schema_version": {"const": "1.0"},
     "diagram_spec": {"type": "string", "minLength": 1},
     "expected_source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "story_ref": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "pattern": "^reports/figure-story/[A-Za-z0-9][A-Za-z0-9_-]{0,63}\\.json$"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
     "formats": {"type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true, "items": {"enum": ["svg", "pptx", "drawio"]}},
     "evidence": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"$ref": "#/$defs/evidence"}},
     "reference_notes": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/reference"}},

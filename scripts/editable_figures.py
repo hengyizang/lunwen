@@ -307,6 +307,27 @@ def _bound_file(project: Path, record: dict[str, Any], field: str) -> Path:
     return path
 
 
+def _story_alignment(project: Path, story_ref: dict[str, str] | None,
+                     source: dict[str, str]) -> dict[str, Any]:
+    """Replay an explicitly attached brief, including its current source tree."""
+    if story_ref is None:
+        return {"status": "not_assessed", "manuscript_alignment": "not_assessed",
+                "semantic_alignment_requires_human_review": True}
+    target = _bound_file(project, story_ref, "story_ref")
+    if not re.fullmatch(r"reports/figure-story/[A-Za-z0-9][A-Za-z0-9_-]{0,63}\.json", story_ref["path"]):
+        raise FigureSpecError("story_ref must identify a native figure story report")
+    try:
+        from scripts.figure_story import validate_saved_report
+    except ImportError:
+        from figure_story import validate_saved_report  # type: ignore
+    story = validate_saved_report(project, target)
+    if story["request"]["diagram"] != source:
+        raise FigureSpecError("figure story must bind the exact exported diagram source")
+    return {"status": "current_source_bindings_checked",
+            "manuscript_alignment": story["manuscript_alignment"],
+            "semantic_alignment_requires_human_review": True}
+
+
 def verify_export(project: Path, receipt_path: Path) -> dict[str, Any]:
     _cloud()
     project = project.resolve();receipt_path = _file(project,receipt_path.resolve().relative_to(project).as_posix(),"receipt")
@@ -316,6 +337,12 @@ def verify_export(project: Path, receipt_path: Path) -> dict[str, Any]:
         _bound_file(project,receipt[field],field)
     source = _file(project,receipt["source"]["path"],"source")
     output_provenance.require_final_origins(project,[source])
+    request = _json(_file(project, receipt["request"]["path"], "request"))
+    _schema(request, "editable-figure-request.schema.json")
+    if request.get("story_ref") != receipt["story_ref"]:
+        raise FigureSpecError("editable export story binding differs from its request")
+    if receipt["story_alignment"] != _story_alignment(project, receipt["story_ref"], receipt["source"]):
+        raise FigureSpecError("editable export figure story alignment changed; rebuild is required")
     for item in receipt["evidence"] + receipt["outputs"]:
         _bound_file(project,item,"export dependency")
     if receipt.get("visual_style"):
@@ -337,6 +364,8 @@ def export(project: Path, request_path: Path) -> dict[str, Any]:
         raise FigureSpecError("diagram source hash is stale")
     output_provenance.require_final_origins(project,[source])
     ir = _json(source);research_diagrams.validate(ir);_schema(ir,"research-diagram.schema.json");_validate_strings(ir)
+    story_ref = dict(request["story_ref"]) if request.get("story_ref") else None
+    story_alignment = _story_alignment(project, story_ref, _record(project, source))
     evidence=[]
     for item in request["evidence"]:
         _bound_file(project,item,"evidence")
@@ -384,8 +413,11 @@ def export(project: Path, request_path: Path) -> dict[str, Any]:
         if sha256_file(request_path)!=request_sha256:raise FigureSpecError("request changed during export")
         for item in evidence:_bound_file(project,item,"evidence")
         if visual_style:_bound_file(project,visual_style,"visual_style")
+        if _story_alignment(project, story_ref, _record(project, source)) != story_alignment:
+            raise FigureSpecError("figure story changed during export")
         for build,destination in staged:os.replace(build,destination)
     report={"schema_version":"1.0","kind":"editable_method_diagram","source":_record(project,source),"request":_record(project,request_path),"source_snapshot":_record(project,snapshot),"layout":_record(project,layout),"renderer":_record(project,renderer),"visual_style":visual_style,"evidence":evidence,"reference_notes":request.get("reference_notes",[]),"implementation":_implementation(),"outputs":[{**_record(project,path),"format":fmt,"editability":"native","raster_elements":0} for fmt,path in zip(request["formats"],destinations)],"claim_ids":ir["claim_ids"],"caption":ir["caption"],"alt_text":ir["alt_text"],"human_review_required":True,"scientific_validation":"not_established","review_todos":["Check every node, edge and label against the method source and cited evidence.","Render and inspect each requested format at its final publication size, including font substitution, clipping and connector positions.","Review claim support and external-reference rights separately; export grants no reuse license.","Register approved manuscript-bound SVG through the existing figure-provenance human-review route."],"font_check":{"requested_family":design["font_family"],"availability":"not_established","substitution_review_required":True},"paid_calls":0}
+    report.update(story_ref=story_ref, story_alignment=story_alignment)
     _schema(report,"editable-figure-export.schema.json")
     receipt_path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     output_provenance.record_model_writes(project,destinations+[snapshot,layout,renderer,receipt_path],family="other",provider="deterministic-cloud-renderer",model="scripts/editable_figures.py",role="editable-method-diagram",run_id="editable-"+hashlib.sha256(request_path.read_bytes()).hexdigest()[:16])
