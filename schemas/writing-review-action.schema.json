@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Actionable material request attached to an existing writing review issue",
+  "description": "This optional issue field grants no scientific verification. Missing materials remain pending; supplied materials await the existing independent audit and human review.",
+  "type": "object", "additionalProperties": false,
+  "required": ["categories", "scope", "locations", "required_materials", "action", "completion_conditions"],
+  "properties": {
+    "categories": {"type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": {"enum": ["empty_evaluation", "missing_evidence", "inference_gap", "unclear_contribution_comparison", "unclear_mechanism", "unsupported_generality", "experimental_description_gap", "unclear_exposition", "redundant_framing", "terminology_inconsistency"]}},
+    "scope": {"type": "object", "additionalProperties": false, "required": ["paper_ids", "claim_ids", "sections", "boundary"], "properties": {
+      "paper_ids": {"type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": {"type": "string", "pattern": "^P0[1-6]$"}},
+      "claim_ids": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+      "sections": {"type": "array", "minItems": 1, "maxItems": 30, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+      "boundary": {"$ref": "#/$defs/text"}}},
+    "locations": {"type": "array", "minItems": 1, "maxItems": 30, "items": {"$ref": "#/$defs/anchor"}},
+    "required_materials": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"type": "object", "additionalProperties": false, "required": ["id", "kind", "description", "status", "reason", "sources"], "properties": {
+      "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"},
+      "kind": {"enum": ["data", "literature", "analysis", "proof", "protocol", "manuscript_edit"]},
+      "description": {"$ref": "#/$defs/text"}, "status": {"enum": ["missing", "supplied_pending_review", "not_applicable"]},
+      "reason": {"$ref": "#/$defs/text"}, "sources": {"type": "array", "maxItems": 30, "items": {"$ref": "#/$defs/anchor"}}},
+      "allOf": [{"if": {"properties": {"status": {"const": "missing"}}}, "then": {"properties": {"sources": {"maxItems": 0}}}, "else": {"properties": {"sources": {"minItems": 1}}}}]}},
+    "action": {"$ref": "#/$defs/text"}, "completion_conditions": {"type": "array", "minItems": 1, "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "revision_reason": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "anchor": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "locator", "excerpt"], "properties": {
+      "path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "locator": {"type": "string", "minLength": 1, "maxLength": 1000},
+      "excerpt": {"$ref": "#/$defs/text"}, "pdf_page": {"type": "integer", "minimum": 1}}}
+  }
+}

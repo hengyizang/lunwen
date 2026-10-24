@@ -7,6 +7,13 @@ disable-model-invocation: true
 
 # Audit
 
+Use `docs/EVIDENCE-FIRST-WRITING.md` for located empty evaluation, missing
+evidence and inference gaps. Independently judge why evidence supports each
+claim; source/hash checks do not establish this. Put consequential findings and
+specific data/literature/analysis/proof tasks into existing issue records with
+stable IDs, scope, actions and completion conditions. Do not invent a finding
+to fill a checklist or add a model call per paragraph.
+
 Read `references/research-integrity.md`. Do not repair findings silently.
 
 Check:

@@ -427,6 +427,7 @@ def _criteria(value):
 
 
 def _internal_review(project, data, previous, bindings, scope):
+    paper_scope = list(scope["paper_ids"])
     _keys(data, {"historical", "current", "criteria", "readiness_criteria", "issues", "readiness", "scope"},
           {"historical", "current", "criteria", "readiness_criteria", "issues", "readiness", "scope"}, "internal review")
     historical, current_file = [_file(project, data[k], bindings, tracked=True) for k in ("historical", "current")]
@@ -443,7 +444,7 @@ def _internal_review(project, data, previous, bindings, scope):
     inherited = {r["id"]: r for r in prior["issues"]} if prior else {}
     issues, ids = [], set()
     for row in _rows(data["issues"], "internal issues", 0, 300):
-        _keys(row, {"id", "first_seen_version", "status", "origin", "applies_to", "dimensions", "severity", "finding", "evidence", "resolution"},
+        _keys(row, {"id", "first_seen_version", "status", "origin", "applies_to", "dimensions", "severity", "finding", "evidence", "resolution", "writing_action"},
               {"id", "first_seen_version", "status", "origin", "applies_to", "dimensions", "severity", "finding", "evidence", "resolution"}, "internal issue")
         identifier = _id(row["id"])
         if identifier in ids or row["status"] not in ISSUE_STATES or row["origin"] not in {
@@ -464,16 +465,23 @@ def _internal_review(project, data, previous, bindings, scope):
         if identifier in inherited and (first_seen != inherited[identifier]["first_seen_version"] or dimensions != inherited[identifier]["dimensions"]
                                        or row["finding"] != inherited[identifier]["finding"]):
             raise ValueError("inherited issue definition changed")
+        if (identifier in inherited and inherited[identifier].get("writing_action", {}).get("status") not in {None, "not_assessed"}
+                and row["applies_to"] != inherited[identifier]["applies_to"]):
+            raise ValueError("Keep structured inherited issue applicability stable; preserve the old issue and record a separate scope change")
         evidence = _anchors(project, row["evidence"], bindings)
         required_paths = {historical["path"]} if row["applies_to"] == "historical" else {current_file["path"]}
         if row["applies_to"] == "both":
             required_paths.add(historical["path"])
         if required_paths - {a["path"] for a in evidence}:
             raise ValueError("issue must anchor each applicable manuscript version")
+        from scripts.writing_review_actions import assess
+        writing_action = assess(project, row.get("writing_action"),
+            previous=inherited.get(identifier, {}).get("writing_action"), paper_ids=paper_scope,
+            bind_source=lambda item: _file(project, item, bindings))
         issues.append({"id": identifier, "first_seen_version": first_seen, "status": row["status"], "origin": row["origin"],
             "applies_to": row["applies_to"], "dimensions": dimensions, "severity": row["severity"],
             "finding": _text(row["finding"], "issue finding"), "evidence": evidence, "resolution": _text(row["resolution"], "resolution or unresolved work"),
-            "semantic_resolution_verified": False})
+            "semantic_resolution_verified": False, "writing_action": writing_action})
     if set(inherited) - ids:
         raise ValueError("do not silently delete inherited issues")
     readiness, assessed = [], set()
@@ -490,11 +498,14 @@ def _internal_review(project, data, previous, bindings, scope):
         prior_status = inherited.get(issue["id"], {}).get("status")
         if prior_status != issue["status"] or issue["id"] not in inherited:
             changed.append({"issue_id": issue["id"], "previous_status": prior_status, "current_status": issue["status"], "origin": issue["origin"]})
-    improved = any(c["previous_status"] in {"unresolved", "partially_resolved"} and c["current_status"] in {"resolved", "not_applicable"} for c in changed)
+    pending_writing = {issue["id"] for issue in issues if issue.get("writing_action", {}).get("status") == "pending_materials"}
+    improved = any(c["previous_status"] in {"unresolved", "partially_resolved"} and c["current_status"] in {"resolved", "not_applicable"}
+                   and c["issue_id"] not in pending_writing for c in changed)
     regressed = any(c["origin"] in {"revision_regression", "newly_revealed_by_evidence"} and c["current_status"] in {"unresolved", "partially_resolved"} or
                     c["previous_status"] in {"resolved", "not_applicable"} and c["current_status"] in {"unresolved", "partially_resolved"} for c in changed)
     progress = "mixed" if improved and regressed else "improved" if improved else "regressed" if regressed else "unchanged" if prior else "initial_review_no_historical_progress_claim"
-    active = [i for i in issues if i["status"] in {"unresolved", "partially_resolved"} and i["applies_to"] != "historical"]
+    active = [i for i in issues if (i["status"] in {"unresolved", "partially_resolved"}
+              or i["writing_action"]["status"] == "pending_materials") and i["applies_to"] != "historical"]
     statuses = {r["status"] for r in readiness}
     stance = "blocked" if "blocked" in statuses or any(i["severity"] == "blocker" for i in active) else "revise" if "needs_revision" in statuses or active else "not_assessed" if "not_assessed" in statuses else "ready_for_human_review"
     return {"review_type": "internal", "scope": scope, "historical": {k: historical[k] for k in ("path", "sha256")},
@@ -545,6 +556,12 @@ def current(project: Path, operation: str, identifier: str) -> dict:
         observed = _bind(project, {k: binding[k] for k in ("path", "sha256")})
         if observed != binding:
             raise ValueError("CCFA input provenance changed; rebuild affected report")
+    if operation == "internal_review":
+        for issue in report["result"]["issues"]:
+            action = issue.get("writing_action", {})
+            if action.get("status") not in {None, "not_assessed"}:
+                if action.get("implementation_sha256") != sha(Path(__file__).with_name("writing_review_actions.py")):
+                    raise ValueError("Writing-action implementation changed; rebuild affected issue assessment")
     return report
 
 

@@ -1,0 +1,57 @@
+name: Evidence-first scientific writing
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/contribution_reporting.py'
+      - 'scripts/manuscript_audit.py'
+      - 'scripts/incremental_writing.py'
+      - 'scripts/research_increments.py'
+      - 'scripts/research_extensions.py'
+      - 'scripts/writing_review_actions.py'
+      - 'scripts/ccfa_science.py'
+      - 'scripts/api_orchestrator.py'
+      - 'schemas/*contribution*'
+      - 'schemas/*writing-review*'
+      - 'schemas/closest-work-comparison.schema.json'
+      - 'schemas/research-increments.schema.json'
+      - 'schemas/paper-facts.schema.json'
+      - 'tests/test_*reasoning.py'
+      - 'tests/test_contribution_reporting.py'
+      - 'tests/test_closest_work_axes.py'
+      - 'tests/test_writing*'
+      - '.github/workflows/evidence-first-writing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evidence-writing-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  located-arguments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install existing document and source-reading dependencies
+        run: python -m pip install --disable-pip-version-check '.[reader,figures]'
+      - name: Validate source-bound writing and original issue histories
+        env:
+          DR_OS_CLOUD_EXECUTOR: '1'
+        run: >-
+          python -m unittest tests.test_argument_reasoning tests.test_closest_work_axes
+          tests.test_writing_review_actions tests.test_writing_issue_history
+          tests.test_contribution_reporting tests.test_research_increments -v
+      - name: Check installed guidance and compile control-plane modules
+        run: |
+          python -m compileall -q scripts tests
+          python scripts/validate_repo.py
