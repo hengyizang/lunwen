@@ -28,6 +28,12 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For reference-image discovery, original main-figure briefs, shared six-paper
+visual tokens or editable SVG/PPTX/draw.io, read `skills/figures/SKILL.md` and
+`docs/FIGURE-REFERENCE-WORKBENCH.md`. Reuse source-bound reports and supply only
+explicitly selected references to model roles. Reference relevance and native
+editability never replace scientific evidence, image rights or human approval.
+
 Apply the complete pinned CCFA family through `docs/CCFA-INTEGRATION.md`: `ccf-humanization` then `ccf-common` are mandatory preflights, followed by the specialist for the actual task. All 17 native entries are available under `.agents/skills/`; API and CLI research roles load the same source-bound guidance through `scripts/research_methods.py`. Read complete relevant references or prepare a controlled CCFA task packet before specialist work. Do not replace native roles, stages, budgets, approvals or the experiment runner with upstream example paths or a parallel state system. Record all CFH01–CFH38 contextual dispositions at G5 alongside existing editorial criteria. Complete rule coverage never proves scientific validity or authorship.
 
 ```bash

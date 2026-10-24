@@ -8,6 +8,7 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -147,6 +148,20 @@ class FigureReferenceContextTests(unittest.TestCase):
         for relative in caches:
             self.assertTrue(checkpoint.excluded(relative))
             self.assertNotIn(relative, entries)
+        artifact = self.project / "checkpoint-transfer"
+        checkpoint.prepare(self.project, artifact, "123456")
+        # Replay the controller's small-Git-files plus optional archive route on
+        # a fresh project directory, checking binary source bytes after restore.
+        fresh = self.project / "fresh-cloud-runner"
+        for source in checkpoint.git_files(self.project):
+            destination = fresh / source.relative_to(self.project)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+        checkpoint.restore(fresh, artifact / "checkpoint.zip")
+        for relative, data in files.items():
+            self.assertEqual((fresh / relative).read_bytes(), data)
+        for relative in caches:
+            self.assertFalse((fresh / relative).exists())
 
 
 if __name__ == "__main__":

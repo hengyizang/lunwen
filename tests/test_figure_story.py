@@ -149,6 +149,9 @@ class FigureStoryTests(unittest.TestCase):
         with self.assertRaises((ValueError, output_provenance.ProvenanceError)):
             story.validate_saved_report(self.project, self.project/report["path"])
         changed = self.request()
+        # Restore and bind the canonical include tree before isolating a bad
+        # quotation; the earlier stale-source check must not mask this case.
+        self.manuscript(changed)
         changed["panels"][0]["text_locator"]["quote"] = "This source quotation does not exist."
         with self.assertRaisesRegex(ValueError, "quote"):
             story.prepare(self.project, changed)
