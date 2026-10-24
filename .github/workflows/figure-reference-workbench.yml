@@ -1,0 +1,73 @@
+name: Source-linked figure workbench
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/figure*'
+      - 'scripts/editable_figures.py'
+      - 'scripts/research_diagrams.py'
+      - 'scripts/literaturectl.py'
+      - 'scripts/cloud_job.py'
+      - 'scripts/cloud_research_steps.py'
+      - 'scripts/artifact_ownership.py'
+      - 'scripts/cloud_checkpoint.py'
+      - 'scripts/context_efficiency.py'
+      - 'schemas/*figure*'
+      - 'schemas/research-diagram.schema.json'
+      - 'integrations/*figure*'
+      - 'tests/test_figure*'
+      - 'tests/test_editable_figures.py'
+      - 'pyproject.toml'
+      - '.github/workflows/figure-reference-workbench.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/figure*'
+      - 'scripts/editable_figures.py'
+      - 'integrations/*figure*'
+      - '.github/workflows/figure-reference-workbench.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: figure-workbench-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpu-retrieval-editable:
+    name: Real CPU retrieval and native editable exports
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DR_OS_CLOUD_EXECUTOR: '1'
+      HF_HUB_OFFLINE: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      CUDA_VISIBLE_DEVICES: ''
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install fixed CPU retrieval and editable document runtime
+        run: python -m pip install --disable-pip-version-check '.[figures,reader,figure-retrieval]'
+      - name: Install independent presentation renderer
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils fonts-liberation
+      - name: Exercise source bindings and tamper failures without paid keys
+        run: python -m unittest tests.test_figure_gallery tests.test_figure_gallery_semantic tests.test_figure_reference_context tests.test_figure_operations tests.test_figure_story tests.test_editable_figures -v
+      - name: Execute actual pinned retrieval and render original synthetic diagrams
+        run: python -m scripts.figure_reference_acceptance --directory artifacts/figure-reference
+      - name: Preserve scoped software evidence and editable previews
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: figure-reference-workbench-acceptance
+          path: artifacts/figure-reference/
+          if-no-files-found: warn
+          retention-days: 30

@@ -22,7 +22,7 @@ DIRECTORIES = {"state", "intake", "program", "evidence", "data", "experiments", 
                "reports", "reviews", "papers", "literature", "results", "api_runs", ".cache"}
 GIT_SUFFIXES = {".json", ".jsonl", ".md", ".csv", ".tsv", ".txt", ".tex", ".bib", ".svg", ".lean",
                 ".png", ".pdf", ".docx", ".py", ".r", ".jl", ".yaml", ".yml", ".toml",
-                ".xml", ".html", ".css", ".sty", ".cls", ".bst", ".lock"}
+                  ".xml", ".html", ".css", ".sty", ".cls", ".bst", ".lock", ".pptx", ".drawio"}
 DATA_SUFFIXES = {".parquet", ".feather", ".npy", ".npz", ".h5", ".hdf5", ".pkl", ".pickle",
                  ".pt", ".pth", ".onnx", ".zip", ".gz", ".tar", ".zst", ".jpg", ".jpeg"}
 GIT_FILE_LIMIT = 2_000_000

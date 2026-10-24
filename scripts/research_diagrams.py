@@ -28,6 +28,17 @@ EDGE_KINDS={"data","control","causal","association","feedback","temporal"}
 PALETTE = ("#D9EDF1", "#E8E5F1", "#FAEAD8", "#DCEDE5", "#E7EAF0")
 
 
+def load_style(project: Path, ir: dict[str, Any]) -> dict[str, Any] | None:
+    """Apply only the exact source-bound project style; no style keeps legacy rendering."""
+    if "style_ref" not in ir:
+        return None
+    try:
+        from scripts.figure_story import load_visual_style
+    except ImportError:
+        from figure_story import load_visual_style  # type: ignore
+    return load_visual_style(project, ir["style_ref"])
+
+
 def validate(ir: dict[str, Any]) -> None:
     if ir.get("schema_version") != "1.0" or ir.get("type") not in TYPES:
         raise FigureSpecError("diagram requires schema_version 1.0 and a supported type")
@@ -78,6 +89,12 @@ def validate(ir: dict[str, Any]) -> None:
         if edge.get("kind","control") not in EDGE_KINDS:raise FigureSpecError("invalid edge kind")
     if not re.fullmatch(r"papers/P[0-9]{2}/figures/[A-Za-z0-9_-]+", str(ir.get("output_stem", ""))):
         raise FigureSpecError("output_stem must be papers/Pxx/figures/<name>")
+    if "style_ref" in ir:
+        style = ir["style_ref"]
+        if (not isinstance(style, dict) or set(style) != {"path", "sha256"}
+                or style.get("path") != "program/figure-visual-style.json"
+                or not re.fullmatch(r"[0-9a-f]{64}",str(style.get("sha256", "")))):
+            raise FigureSpecError("style_ref needs the exact shared style path and SHA-256")
 
 
 def layout(ir: dict[str, Any]) -> dict[str, tuple[float, float]]:
@@ -107,6 +124,7 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
     if project not in ir_path.parents or not ir_path.is_file():
         raise FigureSpecError("IR must be an existing project-local JSON file")
     ir = json.loads(ir_path.read_text(encoding="utf-8")); validate(ir)
+    style = load_style(project, ir)
     try:
         from scripts.publication_figures import _imports, inspect_layout
     except ImportError:
@@ -119,10 +137,11 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
     width=max(xs)-min(xs)+1;height=max(ys)-min(ys)+1
     fig, ax = plt.subplots(figsize=(max(6,width*2.1),max(3,height*1.7)),constrained_layout=True)
     ax.set(xlim=(min(xs)-.85,max(xs)+.85),ylim=(min(ys)-.65,max(ys)+.9));ax.axis("off")
+    font_kw = {"fontfamily":style["font_family"]} if style else {}
     for index, node in enumerate(ir["nodes"]):
         x, y = positions[node["id"]]
         ax.add_patch(FancyBboxPatch((x-.36, y-.22), .72, .44, boxstyle="round,pad=0.06",
-                                    facecolor=PALETTE[index % len(PALETTE)], edgecolor="#376175", linewidth=1.1, zorder=2))
+                                    facecolor=style["node_fills"][node.get("kind","process")] if style else PALETTE[index % len(PALETTE)], edgecolor="#376175", linewidth=1.1, zorder=2))
         label = node["label"]
         if len(label) > 19 and " " in label:
             words, lines, current = label.split(), [], ""
@@ -135,17 +154,26 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
             label = "\n".join(lines)
             if len(lines) > 3:
                 raise FigureSpecError(f"node {node['id']} label is too long for the box")
-        ax.text(x, y, label, ha="center", va="center", fontsize=8, color="#142C38", zorder=3)
+        ax.text(x, y, label, ha="center", va="center", fontsize=style["font_size_pt"] if style else 8,
+                color=style["text_color"] if style else "#142C38", zorder=3, **font_kw)
     for edge in ir["edges"]:
         x0, y0 = positions[edge["from"]]; x1, y1 = positions[edge["to"]]
-        kind=edge.get("kind","control");style={"association":"--","feedback":":"}.get(kind,"-");arrow="-" if kind=="association" else "-|>"
+        kind=edge.get("kind","control");line_style=({"solid":"-","dashed":"--","dotted":":"}[style["edge_styles"][kind]] if style else {"association":"--","feedback":":"}.get(kind,"-"));arrow="-" if kind=="association" else "-|>"
         ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle=arrow,
-                                     mutation_scale=11, linewidth=1.2, linestyle=style, color="#416779",
+                                     mutation_scale=11, linewidth=1.2, linestyle=line_style, color=style["edge_colors"][kind] if style else "#416779",
                                      shrinkA=31, shrinkB=31, connectionstyle="arc3,rad=.13", zorder=1))
         if edge.get("label"):
-            ax.text((x0+x1)/2, (y0+y1)/2+.08, edge["label"], ha="center", fontsize=6.5,
-                    bbox={"facecolor":"white","edgecolor":"none","alpha":.85}, zorder=4)
-    ax.set_title(ir["title"], loc="left", fontsize=11, pad=10)
+            ax.text((x0+x1)/2, (y0+y1)/2+.08, edge["label"], ha="center", fontsize=style["edge_label_size_pt"] if style else 6.5,
+                    bbox={"facecolor":"white","edgecolor":"none","alpha":.85}, zorder=4, **font_kw,
+                    **({"color":style["text_color"]} if style else {}))
+    if style and style["legend_policy"]["show_edge_kinds"] and ir["edges"]:
+        from matplotlib.lines import Line2D
+        kinds=sorted({edge.get("kind","control") for edge in ir["edges"]})
+        handles=[Line2D([0],[0],color=style["edge_colors"][kind],linestyle={"solid":"-","dashed":"--","dotted":":"}[style["edge_styles"][kind]],label=kind) for kind in kinds]
+        ax.legend(handles=handles,loc="lower center",bbox_to_anchor=(.5,-.06),ncol=min(3,len(kinds)),frameon=False,
+                  prop={"family":style["font_family"],"size":style["edge_label_size_pt"]})
+    ax.set_title(ir["title"], loc="left", fontsize=style["title_size_pt"] if style else 11, pad=10,
+                 **font_kw, **({"color":style["text_color"]} if style else {}))
     output = safe_file(project, ir["output_stem"], "output_stem")
     output.parent.mkdir(parents=True, exist_ok=True)
     results = []
@@ -165,7 +193,8 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
                     encoding="utf-8")
     canonical_ir = output.with_suffix(".layout.json")
     canonical_ir.write_text(json.dumps({"schema_version":"1.0","source_sha256":sha256_file(ir_path),
-                                        "node_positions":positions}, indent=2)+"\n", encoding="utf-8")
+                                        "node_positions":positions,
+                                        **({"visual_style":ir["style_ref"]} if style else {})}, indent=2)+"\n", encoding="utf-8")
     wrapper = output.with_suffix(".renderer.py")
     wrapper.write_text(
         "#!/usr/bin/env python3\nfrom pathlib import Path\nimport subprocess\nimport sys\n"
@@ -178,7 +207,8 @@ def render(project: Path, ir_path: Path) -> dict[str, Any]:
     return {"type": ir["type"], "outputs": results, "html": html.relative_to(project).as_posix(),
             "layout": canonical_ir.relative_to(project).as_posix(), "wrapper": wrapper.relative_to(project).as_posix(),
             "caption": ir["caption"], "alt_text": ir["alt_text"], "claim_ids": ir["claim_ids"],
-            "human_layout_check_required": True, "layout_warnings": layout_warnings}
+            "human_layout_check_required": True, "layout_warnings": layout_warnings,
+            **({"visual_style":ir["style_ref"]} if style else {})}
 
 
 def main() -> int:

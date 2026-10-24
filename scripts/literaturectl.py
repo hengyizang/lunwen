@@ -337,6 +337,30 @@ def analyze(project: Path, paper_id: str, *, config_path="program/literature-wor
 def execute_operation(project: Path, operation: dict, *, owner_authorization=None) -> dict:
     require_cloud()
     action = operation["action"]
+    if action == "figure_gallery_sync":
+        from scripts.figure_gallery import sync
+        return sync(project)
+    if action == "figure_gallery_search":
+        semantic = operation.get("semantic", False)
+        if type(semantic) is not bool:
+            raise ValueError("semantic must be an explicit boolean")
+        if semantic:
+            from scripts.figure_gallery_semantic import provision, search
+            provision(project)
+        else:
+            from scripts.figure_gallery import search
+        return search(project, operation["query"], **{key: operation[key] for key in
+            ("top_k", "venues", "years", "tiers", "patterns", "topics") if key in operation})
+    if action == "figure_story":
+        from scripts.figure_story import execute
+        request_path = path_in(project, operation["request_file"])
+        return execute(project, operation["operation"], read(request_path))
+    if action == "editable_figure_export":
+        from scripts.editable_figures import export
+        return export(project, path_in(project, operation["request_file"]))
+    if action == "editable_figure_verify":
+        from scripts.editable_figures import verify_export
+        return verify_export(project, path_in(project, operation["receipt"]))
     if action in {"ccfa_task", "ccfa_task_clear", "ccfa_science", "ccfa_humanization"}:
         from scripts.ccfa_runtime import execute
         return execute(project, operation)

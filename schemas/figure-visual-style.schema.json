@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shared six-paper visual semantic tokens",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "paper_ids", "font_family", "font_size_pt", "title_size_pt", "edge_label_size_pt", "text_color", "node_fills", "edge_colors", "edge_styles", "palette_semantics", "legend_policy"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"},
+    "paper_ids": {"const": ["P01", "P02", "P03", "P04", "P05", "P06"]},
+    "font_family": {"type": "string", "minLength": 1, "maxLength": 80, "pattern": "^[^<>;\\r\\n\\u0000-\\u001f]+$"},
+    "font_size_pt": {"type": "number", "minimum": 7, "maximum": 18},
+    "title_size_pt": {"type": "number", "minimum": 8, "maximum": 24},
+    "edge_label_size_pt": {"type": "number", "minimum": 6, "maximum": 16},
+    "text_color": {"$ref": "#/$defs/color"},
+    "node_fills": {"$ref": "#/$defs/nodeColors"},
+    "edge_colors": {"$ref": "#/$defs/edgeColors"},
+    "edge_styles": {
+      "type": "object", "additionalProperties": false,
+      "required": ["data", "control", "causal", "association", "feedback", "temporal"],
+      "properties": {"data": {"$ref": "#/$defs/lineStyle"}, "control": {"$ref": "#/$defs/lineStyle"}, "causal": {"$ref": "#/$defs/lineStyle"}, "association": {"const": "dashed"}, "feedback": {"const": "dotted"}, "temporal": {"$ref": "#/$defs/lineStyle"}}
+    },
+    "palette_semantics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input", "data", "process", "model", "decision", "output", "actor", "system", "construct"],
+      "properties": {"input": {"$ref": "#/$defs/meaning"}, "data": {"$ref": "#/$defs/meaning"}, "process": {"$ref": "#/$defs/meaning"}, "model": {"$ref": "#/$defs/meaning"}, "decision": {"$ref": "#/$defs/meaning"}, "output": {"$ref": "#/$defs/meaning"}, "actor": {"$ref": "#/$defs/meaning"}, "system": {"$ref": "#/$defs/meaning"}, "construct": {"$ref": "#/$defs/meaning"}}
+    },
+    "legend_policy": {"type": "object", "additionalProperties": false, "required": ["show_edge_kinds", "non_color_encoding"], "properties": {"show_edge_kinds": {"const": true}, "non_color_encoding": {"const": true}}}
+  },
+  "$defs": {
+    "color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+    "meaning": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "lineStyle": {"enum": ["solid", "dashed", "dotted"]},
+    "nodeColors": {"type": "object", "additionalProperties": false, "required": ["input", "data", "process", "model", "decision", "output", "actor", "system", "construct"], "properties": {"input": {"$ref": "#/$defs/color"}, "data": {"$ref": "#/$defs/color"}, "process": {"$ref": "#/$defs/color"}, "model": {"$ref": "#/$defs/color"}, "decision": {"$ref": "#/$defs/color"}, "output": {"$ref": "#/$defs/color"}, "actor": {"$ref": "#/$defs/color"}, "system": {"$ref": "#/$defs/color"}, "construct": {"$ref": "#/$defs/color"}}},
+    "edgeColors": {"type": "object", "additionalProperties": false, "required": ["data", "control", "causal", "association", "feedback", "temporal"], "properties": {"data": {"$ref": "#/$defs/color"}, "control": {"$ref": "#/$defs/color"}, "causal": {"$ref": "#/$defs/color"}, "association": {"$ref": "#/$defs/color"}, "feedback": {"$ref": "#/$defs/color"}, "temporal": {"$ref": "#/$defs/color"}}}
+  }
+}

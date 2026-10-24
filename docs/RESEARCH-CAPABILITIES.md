@@ -1,5 +1,11 @@
 # Research capabilities v2.3
 
+Source-linked paper figure discovery, real cloud-CPU semantic retrieval,
+source-bound figure stories, shared six-paper visual tokens and native editable
+SVG/PPTX/draw.io exports are documented in
+[Figure workbench](FIGURE-REFERENCE-WORKBENCH.md). They reuse existing scientific
+approvals, provenance, model roles and budget controls.
+
 ## Venue portfolio
 
 The default six-paper programme assigns P01–P03 to current JCR Q1 and P04–P06
