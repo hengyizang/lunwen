@@ -1499,7 +1499,9 @@ def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
         project / "data" / "quality" / f"{dataset_id}-confirmation.json"
         for dataset_id in dataset_ids
     ]
-    return [*common, *_design_paths(project, paper_id), *data_reports, *data_confirmations]
+    from scripts.empirical_workflow import preregistration_inputs as empirical_inputs
+    return [*common, *_design_paths(project, paper_id), *data_reports, *data_confirmations,
+            *empirical_inputs(project, paper_id)]
 
 
 def create_preregistration(project: Path, paper_id: str, actor: str) -> dict[str, Any]:

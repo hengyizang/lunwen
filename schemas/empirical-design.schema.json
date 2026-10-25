@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/empirical-design.schema.json",
+  "title": "Optional bounded empirical identification and specification card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "paper_id", "dataset_id", "estimand", "assignment", "assumptions", "rival_explanations", "diagnostics", "sample", "data", "runtime", "specifications", "specification_policy"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "dataset_id": {"$ref": "#/$defs/id"},
+    "estimand": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outcome", "population", "exposure", "contrast", "time_horizon", "inference_boundary"],
+      "properties": {
+        "outcome": {"$ref": "#/$defs/text"}, "population": {"$ref": "#/$defs/text"},
+        "exposure": {"$ref": "#/$defs/text"}, "contrast": {"$ref": "#/$defs/text"},
+        "time_horizon": {"$ref": "#/$defs/text"}, "inference_boundary": {"$ref": "#/$defs/text"}
+      }
+    },
+    "assignment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mechanism", "comparison_group", "timing"],
+      "properties": {"mechanism": {"$ref": "#/$defs/text"}, "comparison_group": {"$ref": "#/$defs/text"}, "timing": {"$ref": "#/$defs/text"}}
+    },
+    "sample": {
+      "type": "object", "additionalProperties": false,
+      "required": ["inclusion_rule", "exclusion_rule", "missingness_rule", "unit_column", "cluster_column"],
+      "properties": {
+        "inclusion_rule": {"$ref": "#/$defs/text"}, "exclusion_rule": {"$ref": "#/$defs/text"},
+        "missingness_rule": {"$ref": "#/$defs/text"}, "unit_column": {"$ref": "#/$defs/id"},
+        "cluster_column": {"type": ["string", "null"]}
+      }
+    },
+    "data": {"$ref": "#/$defs/binding"}, "runtime": {"$ref": "#/$defs/binding"},
+    "assumptions": {
+      "type": "array", "minItems": 1, "maxItems": 40,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "statement", "status", "evidence"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"}, "statement": {"$ref": "#/$defs/text"},
+          "status": {"enum": ["proposed", "source_supported", "unresolved"]},
+          "evidence": {"type": "array", "maxItems": 10, "items": {"$ref": "#/$defs/anchor"}}
+        }
+      }
+    },
+    "rival_explanations": {
+      "type": "array", "minItems": 1, "maxItems": 20,
+      "items": {"type": "object", "additionalProperties": false,
+        "required": ["id", "explanation", "discriminating_test"],
+        "properties": {"id": {"$ref": "#/$defs/id"}, "explanation": {"$ref": "#/$defs/text"}, "discriminating_test": {"$ref": "#/$defs/text"}}}
+    },
+    "diagnostics": {
+      "type": "array", "minItems": 1, "maxItems": 60,
+      "items": {"type": "object", "additionalProperties": false,
+        "required": ["id", "test", "purpose", "failure_action", "run_id", "output"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"}, "test": {"$ref": "#/$defs/text"}, "purpose": {"$ref": "#/$defs/text"},
+          "failure_action": {"$ref": "#/$defs/text"}, "run_id": {"$ref": "#/$defs/id"}, "output": {"$ref": "#/$defs/text"}
+        }}
+    },
+    "specification_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["selection_rule", "exploratory_rule", "changes_require_amendment"],
+      "properties": {
+        "selection_rule": {"const": "report_all_preregistered"}, "exploratory_rule": {"$ref": "#/$defs/text"},
+        "changes_require_amendment": {"const": true}
+      }
+    },
+    "specifications": {
+      "type": "array", "minItems": 1, "maxItems": 100,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "run_id", "method", "phase", "family", "claim_ids", "output", "outcome", "covariates", "confidence_level", "covariance"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"}, "run_id": {"$ref": "#/$defs/id"},
+          "method": {"enum": ["did_2x2", "iv_2sls", "sharp_rdd"]}, "phase": {"enum": ["confirmatory", "exploratory"]},
+          "family": {"$ref": "#/$defs/id"},
+          "claim_ids": {"type": "array", "minItems": 1, "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "output": {"type": "string", "pattern": "^papers/P[0-9]{2}/results/.+\\.json$"},
+          "outcome": {"$ref": "#/$defs/id"}, "covariates": {"type": "array", "maxItems": 30, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "confidence_level": {"type": "number", "minimum": 0.8, "exclusiveMaximum": 1},
+          "covariance": {"enum": ["cluster", "homoskedastic", "HC1"]},
+          "treatment": {"$ref": "#/$defs/id"}, "period": {"$ref": "#/$defs/id"},
+          "pre_value": {"$ref": "#/$defs/text"}, "post_value": {"$ref": "#/$defs/text"},
+          "minimum_clusters": {"type": "integer", "minimum": 10},
+          "endogenous": {"$ref": "#/$defs/id"},
+          "instruments": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "minimum_first_stage_f": {"type": "number", "minimum": 10}, "threshold_rationale": {"$ref": "#/$defs/text"},
+          "running": {"$ref": "#/$defs/id"}, "cutoff": {"type": "number"},
+          "bandwidth": {"type": "number", "exclusiveMinimum": 0}, "kernel": {"const": "triangular"},
+          "minimum_side_observations": {"type": "integer", "minimum": 10}
+        },
+        "allOf": [
+          {"if": {"properties": {"method": {"const": "did_2x2"}}},
+           "then": {"required": ["treatment", "period", "pre_value", "post_value", "minimum_clusters"], "properties": {"covariance": {"const": "cluster"}}}},
+          {"if": {"properties": {"method": {"const": "iv_2sls"}}},
+           "then": {"required": ["endogenous", "instruments", "minimum_first_stage_f", "threshold_rationale"], "properties": {"covariance": {"const": "homoskedastic"}}}},
+          {"if": {"properties": {"method": {"const": "sharp_rdd"}}},
+           "then": {"required": ["treatment", "running", "cutoff", "bandwidth", "kernel", "minimum_side_observations"], "properties": {"covariance": {"const": "HC1"}, "covariates": {"maxItems": 0}}}}
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 12000},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$"},
+    "binding": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/text"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "anchor": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "locator", "quote"],
+      "properties": {"path": {"$ref": "#/$defs/text"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "locator": {"$ref": "#/$defs/text"}, "quote": {"$ref": "#/$defs/text"}}}
+  }
+}

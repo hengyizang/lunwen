@@ -5,6 +5,8 @@ import json
 from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
+                  "reports/data-contracts", "reports/data-cleaning", "reports/empirical-reporting",
+                  "evidence/economic-data", "data/raw/economic-data", "data/processed", "data/processed-preview",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
                   "reports/manuscript-hygiene", "reports/reviewer-rounds",
                   "reports/publication-disclosure", "reports/statistical-watermarks",
@@ -97,6 +99,8 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
                 and value.endswith("/reviews/citation-audit.json"))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/manuscript-audit.json"))
+            or (len(parts) == 4 and value.startswith("papers/")
+                and (value.endswith("/reviews/empirical-design.json") or value.endswith("/tables/empirical-estimates.csv")))
             or (len(PurePosixPath(value).parts) == 4 and value.startswith("papers/")
                 and value.endswith("/reviews/ccfa-humanization.json"))
             or (len(PurePosixPath(value).parts) == 3 and value.startswith("papers/")

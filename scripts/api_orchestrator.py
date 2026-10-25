@@ -1523,6 +1523,11 @@ def incremental_feedback(project: str) -> str:
 def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] | None:
     """Run installed structural audits after writing; never generate source facts."""
     base = project_root(project)
+    if stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+        from scripts.empirical_workflow import refresh as refresh_empirical
+        empirical = refresh_empirical(base, stage, active_paper(project) if stage == "writing-and-review" else None)
+        if stage != "writing-and-review":
+            return None if empirical["status"] == "not_configured" else empirical
     if stage == "topic-intelligence":
         try:
             from scripts.research_candidates import audit_register
@@ -1575,6 +1580,8 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
     if stage == "writing-and-review":
         result["figure_layout"] = figures
         result["paper_facts"] = facts
+        result["empirical_workflow"] = empirical
+        result["pass"] = result["pass"] and not empirical["errors"]
         result["pass"] = result["pass"] and facts["pass"]
         result["pass"] = result["pass"] and figures["pass"]
     return result

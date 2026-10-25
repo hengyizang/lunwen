@@ -17,6 +17,8 @@ secrets/
 
 # Raw/licensed data and caches
 projects/**/data/raw/
+projects/**/data/processed/
+projects/**/data/processed-preview/
 projects/**/data/cache/
 projects/**/data/private/
 projects/**/state/model-usage.jsonl

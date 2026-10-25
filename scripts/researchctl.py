@@ -93,6 +93,8 @@ def gate_errors(slug,gate):
     from scripts.scientific_scope import validate as validate_scientific_scope
     errors.extend(validate_scientific_scope(project,gate,read_json(state_path(slug)).get("active_paper")))
     if gate in {"G3","G4","G5"}:
+        from scripts.empirical_workflow import gate_errors as empirical_errors
+        errors.extend(empirical_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
         from scripts.primary_recovery import gate_errors as primary_recovery_errors
         errors.extend(primary_recovery_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
     if gate in {"G2","G3","G4","G5"}:

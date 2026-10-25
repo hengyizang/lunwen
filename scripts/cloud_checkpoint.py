@@ -33,6 +33,7 @@ SECRET_NAMES = {"UUAPI_API_KEY", "UUAPI_OPENAI_API_KEY", "UUAPI_ANTHROPIC_API_KE
                 "BOCHA_JEV_API_KEY", "OPENALEX_API_KEY", "SEMANTIC_SCHOLAR_API_KEY",
                 "OPENCITATIONS_ACCESS_TOKEN", "TAVILY_API_KEY", "GH_TOKEN", "GITHUB_TOKEN"}
 SECRET_NAMES |= {"DR_OS_CHEAPAI_GPT_PRO_KEY", "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY",
+                 "FRED_API_KEY",
                  "DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY", "DR_OS_CODEKEY_DEEPSEEK_KEY",
                  "DR_OS_CODEKEY_GEMINI_KEY", "SERPAPI_API_KEY",
                  "DR_OS_CHEAPAI_KIRO_DISCOUNT_KEY", "DR_OS_CHEAPAI_CCMAX_KEY",
@@ -73,6 +74,8 @@ def excluded(value: str) -> bool:
     # These source responses are public bibliographic receipts, not raw datasets.
     if "raw" in parts and not value.startswith("evidence/literature/raw/"):
         return True
+    if len(parts) >= 2 and parts[0] == "data" and parts[1] in {"processed", "processed-preview"}:
+        return True  # Cleaning does not grant redistribution rights.
     return any(p in {"build", "__pycache__"} for p in parts)
 
 

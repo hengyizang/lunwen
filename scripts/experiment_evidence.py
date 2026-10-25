@@ -126,6 +126,7 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
     families: dict[str, float] = {}
     run_conditions: dict[str, tuple] = {}
     claim_baselines: dict[tuple, set[str]] = defaultdict(set)
+    empirical_runs, empirical_specifications = set(), set()
     for comp in comparisons:
         need(isinstance(comp, dict), "comparison must be an object")
         identifier = text(comp.get("comparison_id"), "comparison_id")
@@ -189,7 +190,33 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         need(number(power.get("alpha"), "power alpha", 0.000000001, 0.1) <= alpha / family_size + 1e-12,
              "power analysis must account for the prespecified family multiplicity")
         mode = comp.get("analysis_mode")
-        need(mode in {"paired_t", "welch_t", "registered_result"}, "unsupported analysis mode")
+        need(mode in {"paired_t", "welch_t", "registered_result", "empirical_estimator"}, "unsupported analysis mode")
+        if mode == "empirical_estimator":
+            from scripts.empirical_design import audit as audit_empirical
+            checked = audit_empirical(project, paper_id)
+            need(not checked.get("errors"), "empirical design is blocked: " + "; ".join(checked.get("errors", [])))
+            card = read(project / "papers" / paper_id / "empirical-design.json")
+            matches = [s for s in card["specifications"] if s["id"] == comp.get("empirical_specification_id")]
+            need(len(matches) == 1, "bind one actual empirical specification")
+            spec = matches[0]
+            binding = comp.get("registered_result", {})
+            run_id = spec["run_id"]
+            need(run_id not in empirical_runs, "do not reuse or relabel one empirical run as several comparator conditions")
+            empirical_runs.add(run_id)
+            empirical_specifications.add(spec["id"])
+            need(binding == {"run_id": run_id, "output": spec["output"], "method_id": spec["method"]}, "empirical result binding differs from the registered specification")
+            need(run_id in runs and run_id in design.get("run_ids", []) and run_id not in pilots
+                 and pilots & ancestors(run_id), "empirical estimation needs its designed run and a pilot dependency")
+            need(spec["output"] in runs[run_id].get("expected_outputs", []), "empirical result must be executor-declared")
+            need(spec["family"] == family and spec["phase"] == comp["analysis_phase"]
+                 and set(spec["claim_ids"]) == assigned_claims and card["dataset_id"] == comp["dataset_id"], "empirical claim/family/phase/dataset differs")
+            need(comp.get("unit_design") == "model" and comp.get("pairs") == []
+                 and comp.get("aggregation") == "model_based_on_declared_units", "model-based inference must not invent paired arms or seed averaging")
+            need(comp.get("unit_column") == card["sample"]["unit_column"] and comp.get("value_column") == spec["outcome"], "empirical unit/outcome column differs")
+            need(comp["decision_rule"] == "superiority" and margin == 0, "reviewed empirical adapter currently supports a zero-null superiority test only")
+            need(power.get("method") == "monte_carlo_simulation", "empirical estimators need design-specific simulation power/precision evidence")
+            need(number(spec.get("confidence_level"), "empirical confidence", 0, 1) >= 1-alpha/family_size-1e-12, "empirical interval must cover its declared multiplicity family")
+            continue
         unit_design = comp.get("unit_design", "independent" if mode == "welch_t" else "paired")
         need(unit_design in {"paired", "independent"}, "unsupported unit design")
         need(mode != "paired_t" or unit_design == "paired", "paired_t requires paired units")
@@ -240,6 +267,10 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
                  "custom statistical result must be an executor output")
             text(binding.get("method_id"), "registered method_id")
             need(used <= ancestors(run_id), "custom analysis must depend on every comparison arm")
+    empirical_card = project / "papers" / paper_id / "empirical-design.json"
+    if empirical_card.is_file():
+        required_specifications = {s["id"] for s in read(empirical_card)["specifications"]}
+        need(empirical_specifications == required_specifications, "every registered empirical specification must be mapped exactly once, including adverse/exploratory specifications")
     need(covered_claims == claims, "every contracted claim needs confirmatory primary comparisons")
     for design_id, design in designs.items():
         group = coverage[design_id]
@@ -304,6 +335,21 @@ def _unit_values(path: Path, comp: dict) -> dict[str, float]:
 
 
 def _measure(project: Path, comp: dict, registry: list[dict], plan_hash: str, family_size: int) -> dict:
+    if comp["analysis_mode"] == "empirical_estimator":
+        from scripts.empirical_reporting import measured
+        paper_id = next(r["paper_id"] for r in read(project/"experiments/plan.json")["runs"] if r["run_id"] == comp["registered_result"]["run_id"])
+        bound = measured(project, paper_id, comp["empirical_specification_id"])
+        actual = bound["result"]
+        sign = 1 if comp["direction"] == "higher" else -1
+        interval = sorted(sign * v for v in actual["confidence_interval"])
+        need(actual["n_units"] >= comp["minimum_units"], "fewer empirical units than preregistered")
+        need(actual["confidence_level"] >= 1-comp["alpha"]/family_size-1e-12, "empirical interval lacks family coverage")
+        return {"estimate": sign*actual["estimate"], "ci_low": interval[0], "ci_high": interval[1],
+                "ci_confidence": actual["confidence_level"], "p_value": actual["p_value"],
+                "standard_error": actual["standard_error"], "independent_units": actual["n_units"],
+                "n_observations": actual["n_observations"], "seeds": 1, "seed_effects": [], "seed_effect_sd": None,
+                "unit_design": "model", "aggregation": "model_based_on_declared_units", "method": actual["method"],
+                "recomputed_from_units": True, "sources": [bound["source"]], "scientific_validity_verified": False}
     if comp.get("unit_design", "independent" if comp["analysis_mode"] == "welch_t" else "paired") == "independent":
         return _measure_independent(project, comp, registry, plan_hash, family_size)
     sources, per_seed, expected = [], [], None

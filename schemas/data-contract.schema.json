@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/data-contract.schema.json",
+  "title": "Variable-level source-bound CSV data contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "manifest", "input", "variables", "joins", "cleaning_steps"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "dataset_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,79}$"},
+    "manifest": {"$ref": "#/$defs/binding"},
+    "input": {"$ref": "#/$defs/binding"},
+    "variables": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/variable"}},
+    "joins": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/join"}},
+    "cleaning_steps": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/step"}},
+    "cleaning_implementation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "cleaning_runtime_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "panel": {"$ref": "#/$defs/panel"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "strings": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "binding": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/text"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "variable": {"type": "object", "additionalProperties": false,
+      "required": ["name", "type", "definition", "unit", "source_field", "formula", "missing_codes", "required"],
+      "properties": {
+        "name": {"$ref": "#/$defs/text"}, "type": {"enum": ["string", "integer", "number", "date", "boolean"]},
+        "definition": {"$ref": "#/$defs/text"}, "unit": {"$ref": "#/$defs/text"},
+        "source_field": {"$ref": "#/$defs/text"}, "formula": {"$ref": "#/$defs/text"},
+        "missing_codes": {"allOf": [{"$ref": "#/$defs/strings"}], "maxItems": 30, "contains": {"const": ""}},
+        "required": {"type": "boolean"}
+      }},
+    "panel": {"type": "object", "additionalProperties": false,
+      "required": ["unit_columns", "time_column", "expected_times", "balance_policy"],
+      "properties": {
+        "unit_columns": {"$ref": "#/$defs/strings"}, "time_column": {"$ref": "#/$defs/text"},
+        "expected_times": {"allOf": [{"$ref": "#/$defs/strings"}], "maxItems": 10000},
+        "balance_policy": {"enum": ["require_balanced", "allow_unbalanced"]},
+        "treatment": {"type": "object", "additionalProperties": false,
+          "required": ["column", "untreated_values", "treated_values", "absorbing", "minimum_pre_periods", "minimum_post_periods"],
+          "properties": {"column": {"$ref": "#/$defs/text"}, "untreated_values": {"$ref": "#/$defs/strings"},
+            "treated_values": {"$ref": "#/$defs/strings"}, "absorbing": {"type": "boolean"},
+            "minimum_pre_periods": {"type": "integer", "minimum": 0}, "minimum_post_periods": {"type": "integer", "minimum": 0}}}
+      }},
+    "join": {"type": "object", "additionalProperties": false,
+      "required": ["id", "right", "left_keys", "right_keys", "right_key_units", "right_key_missing_codes", "cardinality", "minimum_match_rate", "reason"],
+      "properties": {
+        "id": {"$ref": "#/$defs/text"}, "right": {"$ref": "#/$defs/binding"},
+        "left_keys": {"$ref": "#/$defs/strings"}, "right_keys": {"$ref": "#/$defs/strings"},
+        "right_key_units": {"type": "object", "additionalProperties": {"$ref": "#/$defs/text"}},
+        "right_key_missing_codes": {"type": "object", "additionalProperties": {"$ref": "#/$defs/strings"}},
+        "cardinality": {"enum": ["one_to_one", "many_to_one"]},
+        "minimum_match_rate": {"type": "number", "minimum": 0, "maximum": 1}, "reason": {"$ref": "#/$defs/text"}
+      }},
+    "step": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["id", "reason", "operation", "column", "to"],
+        "properties": {"id": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"}, "operation": {"const": "rename"},
+          "column": {"$ref": "#/$defs/text"}, "to": {"$ref": "#/$defs/text"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "reason", "operation", "column"],
+        "properties": {"id": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"}, "operation": {"const": "normalize_missing"},
+          "column": {"$ref": "#/$defs/text"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "reason", "operation", "column", "from_unit", "to_unit", "factor", "offset"],
+        "properties": {"id": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"}, "operation": {"const": "linear_unit_conversion"},
+          "column": {"$ref": "#/$defs/text"}, "from_unit": {"$ref": "#/$defs/text"}, "to_unit": {"$ref": "#/$defs/text"},
+          "factor": {"type": "number"}, "offset": {"type": "number"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "reason", "operation", "column", "values"],
+        "properties": {"id": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"}, "operation": {"const": "exclude_values"},
+          "column": {"$ref": "#/$defs/text"}, "values": {"allOf": [{"$ref": "#/$defs/strings"}], "maxItems": 100}}}
+    ]}
+  }
+}

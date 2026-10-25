@@ -6,7 +6,9 @@
     "ars-codex",
     "academic-research-skills",
     "nature-skills",
-    "paperspine"
+    "paperspine",
+    "auto-empirical-methods",
+    "econ-data-methods"
   ],
   "modules": [
     {
@@ -52,6 +54,13 @@
         "academic-research-skills",
         "nature-skills"
       ]
+    },
+    {
+      "id": "empirical-data",
+      "stages": ["experiment-design", "experiment-execution", "writing-and-review"],
+      "path": "references/research-methods/empirical-data.md",
+      "sha256": "5a91b63f68bf910067a4f9622f98b38b9a64f29b99ed3f9aad48d47a246883cc",
+      "source_ids": ["auto-empirical-methods", "econ-data-methods"]
     },
     {
       "id": "submission-review",

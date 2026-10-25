@@ -282,6 +282,12 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
     recovery_errors = gate_errors(project, "G4")
     if recovery_errors:
         raise ExperimentError("; ".join(recovery_errors))
+    from scripts.empirical_workflow import preflight_run
+    for run in plan["runs"]:
+        try:
+            preflight_run(project, run)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise ExperimentError("empirical input preflight failed: " + str(exc)) from exc
     return plan, budget_ceiling(read_json(budget_path))
 
 
