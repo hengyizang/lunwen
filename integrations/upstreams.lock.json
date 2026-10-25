@@ -3,6 +3,28 @@
   "reviewed_at": "2026-09-30",
   "sources": [
     {
+      "id": "auto-empirical-methods",
+      "repository": "https://github.com/brycewang-stanford/Auto-Empirical-Research-Skills",
+      "commit": "7a2437b8fc972774fa23cf9c572df12ff5fd1334",
+      "license": "CC-BY-SA-4.0; community components have separate licences",
+      "license_source_url": "https://github.com/brycewang-stanford/Auto-Empirical-Research-Skills/blob/7a2437b8fc972774fa23cf9c572df12ff5fd1334/LICENSE",
+      "enabled_by_default": false,
+      "selected_skills": [],
+      "installation": "Independently expressed native designs, estimators and data contracts; no upstream code or SaaS runtime installed",
+      "selection_note": "Reviewed design/diagnostic concepts only; independent numerical reference tests required. No p-hacking skill, paid service or new model route."
+    },
+    {
+      "id": "econ-data-methods",
+      "repository": "https://github.com/meleantonio/awesome-econ-ai-stuff",
+      "commit": "dd890d51c789fb8f8e316a2d7e4ed5d4bd793c50",
+      "license": "CC0-1.0",
+      "license_source_url": "https://github.com/meleantonio/awesome-econ-ai-stuff/blob/dd890d51c789fb8f8e316a2d7e4ed5d4bd793c50/LICENSE",
+      "enabled_by_default": false,
+      "selected_skills": [],
+      "installation": "Independent native data/cleaning/panel methods and official-provider adapters",
+      "selection_note": "Source/version/units/cleaning and panel recipes reviewed. No automatic Stata installation or broad catalog execution."
+    },
+    {
       "id": "kdense-scientific-agent-skills",
       "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
       "commit": "5ad4aae76bc40257b914367afacc6fd686a282d5",

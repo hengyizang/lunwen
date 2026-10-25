@@ -28,6 +28,12 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For variable dictionaries, cleaning, panel/time checks, economic vintages or causal
+estimators, use docs/EMPIRICAL-DATA-WORKFLOW.md. Preserve raw inputs, every registered
+specification and source/runner seals. Do not promote a diagnostic or fit into a
+causal validity claim. Use the exact limited reviewed estimator or block for a
+suitable adapter; never silently substitute paired t tests or a different design.
+
 For concrete contributions, paragraph reasoning and actionable scientific writing
 findings, use `docs/EVIDENCE-FIRST-WRITING.md` within existing records. Preserve
 unknown evidence and stable issue history; source completeness is not semantic

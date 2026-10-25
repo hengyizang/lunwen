@@ -143,7 +143,21 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
     if errors or manifest["license"].get("confirmed_by_human") is not True:
         raise ResearchStepError("review data license, privacy and cloud-use rights before authorizing acquisition")
     download = manifest["download"]
-    if (not re.fullmatch(r"[a-fA-F0-9]{64}", download["sha256"])
+    economic_scope = manifest.get("provenance", {}).get("economic_scope")
+    if economic_scope is not None:
+        # API observation bytes are not known before acquisition. The owner
+        # instead approves one exact bounded variable/date/vintage request.
+        from scripts.economic_data import _spec
+        matches = []
+        for source in sorted((project/"data/economic-requests").glob("*.json")):
+            value, _ = _spec(project, source.stem)
+            fields = ("provider", "start", "end", "as_of", "vintage_mode", "series") if value["provider"] == "fred" else ("provider", "start", "end", "as_of", "vintage_mode", "countries", "indicators")
+            if (value.get("scope") == "observations" and economic_scope == {key:value[key] for key in fields}
+                    and value.get("dataset_manifest") == {"path": relative, "sha256": expected_sha256}):
+                matches.append(source)
+        if len(matches) != 1:
+            raise ResearchStepError("economic authorization needs exactly one complete source-bound observation request")
+    elif (not re.fullmatch(r"[a-fA-F0-9]{64}", download["sha256"])
             or type(download.get("expected_bytes")) is not int or not 0 < download["expected_bytes"] <= MAX_DATA_BYTES):
         raise ResearchStepError("cloud acquisition needs a pinned checksum and a positive byte ceiling up to 2 GB")
     values = read(project / AUTHORIZATIONS, {"schema_version": "1.0", "manifests": {}})
@@ -164,6 +178,9 @@ def acquire_data(project: Path) -> dict:
             blockers.append({"kind": "data_rights_review", "path": relative, "sha256": cloud_checkpoint.sha(manifest_path)})
             continue
         manifest = dataset_fetch.load_manifest(manifest_path)
+        if manifest.get("provenance", {}).get("economic_scope") is not None:
+            # Controlled API retrieval is requested explicitly through economic_data.
+            continue
         identifier = manifest.get("dataset_id", "")
         if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,100}", identifier):
             raise ResearchStepError("invalid dataset identifier")
@@ -216,8 +233,9 @@ def resume_experiments(project: Path) -> dict:
     if not pending:
         return {"completed_runs": sorted(completed), "pending_runs": 0, "blockers": []}
     run = pending[0]
+    from scripts.empirical_workflow import cloud_outputs_allowed
     if (run["isolation"]["kind"] != "container" or run["isolation"]["engine"] != "docker"
-            or run["timeout_seconds"] > 1200 or any(not p.startswith("results/") for p in run["expected_outputs"])):
+            or run["timeout_seconds"] > 1200 or not cloud_outputs_allowed(project, run)):
         return {"pending_runs": len(pending), "blockers": [{"kind": "cloud_experiment_plan",
                  "detail": "Use a pinned Docker image, <=1200 seconds per run and explicit results/ outputs"}]}
     results = experiment_runner.execute(project.name, [run["run_id"]], project_root=project)
@@ -297,6 +315,27 @@ def after_write(project: Path, stage: str) -> dict:
             elif action == "study_prepare" and stage == "experiment-design":
                 from scripts.study_routes import prepare_runtime
                 prepare_runtime(project, operation["paper_id"])
+            elif action == "data_cleaning_preview" and stage == "experiment-design":
+                from scripts.data_contracts import preview_cleaning
+                preview_cleaning(project, operation["dataset_id"])
+            elif action == "data_contract" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.data_contracts import refresh
+                result = refresh(project, operation["dataset_id"])
+                if result["errors"]:
+                    raise ResearchStepError("; ".join(result["errors"]))
+            elif action == "empirical_design" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+                from scripts.empirical_design import refresh
+                result = refresh(project, operation["paper_id"])
+                if result["status"] == "not_configured" or result["errors"]:
+                    raise ResearchStepError("empirical design requires complete current inputs: " + "; ".join(result["errors"]))
+            elif action == "empirical_reporting" and stage in {"experiment-execution", "writing-and-review"}:
+                from scripts.empirical_reporting import refresh
+                result = refresh(project, operation["paper_id"], require_mapping=stage == "writing-and-review")
+                if result["errors"]:
+                    raise ResearchStepError("; ".join(result["errors"]))
+            elif action == "economic_data" and stage in {"topic-intelligence", "experiment-design"}:
+                from scripts.economic_data import execute
+                execute(project, operation["request_id"], allow_observations=operation.get("allow_observations") is True)
             elif action == "data_quality" and stage == "experiment-design":
                 identifier = operation["dataset_id"]
                 if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,100}", identifier):

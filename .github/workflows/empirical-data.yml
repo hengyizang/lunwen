@@ -1,0 +1,50 @@
+name: Empirical data and estimator contracts
+on:
+  pull_request:
+    paths:
+      - 'scripts/*empirical*'
+      - 'scripts/data_contracts.py'
+      - 'scripts/data_cleaning_runtime.py'
+      - 'scripts/economic_data.py'
+      - 'scripts/experiment_evidence.py'
+      - 'scripts/experiment_runner.py'
+      - 'scripts/research_quality.py'
+      - 'tests/test_*empirical*'
+      - 'tests/test_data_contracts.py'
+      - 'tests/test_data_cleaning_runtime.py'
+      - 'tests/test_economic_data.py'
+      - 'schemas/*empirical*'
+      - 'schemas/data-contract.schema.json'
+      - 'schemas/economic-data-request.schema.json'
+      - '.github/workflows/empirical-data.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: empirical-data-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  offline-estimators:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install existing scientific runtime without provider keys
+        run: python -m pip install --disable-pip-version-check '.[reader,figures,research-quality]' jsonschema
+      - name: Verify data, temporal sources, estimators and current evidence
+        env:
+          DR_OS_CLOUD_EXECUTOR: '1'
+        run: >-
+          python -m unittest tests.test_data_contracts tests.test_data_cleaning_runtime
+          tests.test_economic_data tests.test_empirical_design tests.test_empirical_runtime
+          tests.test_empirical_reporting tests.test_empirical_evidence tests.test_empirical_workflow -v
+      - name: Validate guidance and control-plane syntax
+        run: |
+          python -m compileall -q scripts tests
+          python scripts/validate_repo.py

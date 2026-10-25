@@ -178,13 +178,15 @@
             "enum": [
               "paired_t",
               "welch_t",
-              "registered_result"
+              "registered_result",
+              "empirical_estimator"
             ]
           },
           "unit_design": {
             "enum": [
               "paired",
-              "independent"
+              "independent",
+              "model"
             ]
           },
           "unit_column": {
@@ -196,11 +198,12 @@
             "minLength": 1
           },
           "aggregation": {
-            "const": "mean_within_unit_then_mean_across_seeds"
+            "enum": ["mean_within_unit_then_mean_across_seeds", "model_based_on_declared_units"]
           },
+          "empirical_specification_id": {"type": "string", "minLength": 1},
           "pairs": {
             "type": "array",
-            "minItems": 1,
+            "minItems": 0,
             "items": {
               "type": "object",
               "additionalProperties": false,
@@ -277,6 +280,16 @@
           }
         },
         "allOf": [
+          {
+            "if": {"properties": {"analysis_mode": {"const": "empirical_estimator"}}},
+            "then": {"required": ["empirical_specification_id", "registered_result", "unit_design"], "properties": {
+              "unit_design": {"const": "model"}, "pairs": {"maxItems": 0},
+              "aggregation": {"const": "model_based_on_declared_units"},
+              "decision_rule": {"const": "superiority"}, "minimum_effect": {"const": 0}}},
+            "else": {"properties": {"pairs": {"minItems": 1},
+              "aggregation": {"const": "mean_within_unit_then_mean_across_seeds"},
+              "unit_design": {"enum": ["paired", "independent"]}}}
+          },
           {
             "if": {
               "properties": {

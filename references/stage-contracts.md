@@ -81,6 +81,12 @@ and frozen scientific records; a writing revision cannot authorize topic drift.
 
 ## Experiment design — G3
 
+For applicable tabular/causal studies, use [empirical data contracts](../docs/EMPIRICAL-DATA-WORKFLOW.md)
+within the existing paper contract. Freeze dictionaries, explicit cleaning,
+complete calendars, source vintages and all estimator specifications. Prepared
+data do not authorize estimation. Configured diagnostics and current numerical
+reporting remain required at G4/G5; unsupported estimators require a reviewed adapter.
+
 The empirical requirements below apply to empirical papers. Actual Meta/theory
 identities instead use the positive protocol, source, uncertainty/proof,
 isolated-replay and frozen-input requirements in
