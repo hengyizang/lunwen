@@ -1,5 +1,11 @@
 # Eight cloud research increments
 
+The existing paragraph records now carry explicit takeaway/warrant, review
+preparation and concrete material needs. G5 requires current preparation as well
+as coverage; see [Evidence-first writing](EVIDENCE-FIRST-WRITING.md). It also
+documents closest-work axes and executed-contribution checks within the existing
+paper-facts and issue records, with no extra paid model pass.
+
 These additions extend the scientific workflow. They do not select models,
 change reasoning effort, grant paid access, rent compute, train models, approve
 G0–G5 or certify doctoral/Q1 quality. Claude remains a read-only planner/reviewer;

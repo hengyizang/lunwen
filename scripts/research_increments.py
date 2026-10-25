@@ -426,6 +426,11 @@ def prompt_feedback(project):
     result = {"status": audit["status"], "missing": audit.get("missing", []),
               "errors": audit.get("errors", []), "editing": audit.get("groups", {}).get("editing", []),
               "voice_samples": []}
+    result["argument_preparation"] = [{"paper_id": row["paper_id"], "id": row["id"],
+        "reasoning_review": row["reasoning_review"], "paragraphs": [{"paragraph_id": p["paragraph_id"],
+            "reasoning_status": p["reasoning_status"], "review_gaps": p["review_gaps"], "material_needs": p["material_needs"]}
+            for p in row["reverse_outline"] if p["review_gaps"] or p["material_needs"]]}
+        for row in audit.get("groups", {}).get("arguments", [])]
     for voice in audit.get("groups", {}).get("voices", []):
         content = path_in(project, voice["path"]).read_text(encoding="utf-8")
         result["voice_samples"].append({**voice, "untrusted_style_data": content[:12000],
@@ -449,6 +454,10 @@ def gate_errors(project, gate="G5", paper_id=None):
                     values = [item for item in values if item.get("paper_id") == paper_id]
                 if not values:
                     errors.append("research increments need current " + group + " for " + str(paper_id))
+                if group == "arguments":
+                    for item in values:
+                        if item.get("reasoning_review", {}).get("ready_for_scientific_review") is not True:
+                            errors.append("research increments need explicit paragraph takeaways, warrants and resolved material preparation for " + str(paper_id))
         if not (project / REPORT).is_file():
             errors.append("research increments audit must be refreshed in cloud")
         elif read(project / REPORT) != current:

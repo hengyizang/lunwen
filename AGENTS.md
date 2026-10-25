@@ -28,6 +28,11 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For concrete contributions, paragraph reasoning and actionable scientific writing
+findings, use `docs/EVIDENCE-FIRST-WRITING.md` within existing records. Preserve
+unknown evidence and stable issue history; source completeness is not semantic
+validation. Reuse current author/critic cycles rather than extra paid passes.
+
 For reference-image discovery, original main-figure briefs, shared six-paper
 visual tokens or editable SVG/PPTX/draw.io, read `skills/figures/SKILL.md` and
 `docs/FIGURE-REFERENCE-WORKBENCH.md`. Reuse source-bound reports and supply only

@@ -298,12 +298,13 @@ class ResearchMethodTests(unittest.TestCase):
         self.source.write_text(self.source.read_text() + "Changed supplied material.\n")
         self.assertFalse(candidates.audit_card(self.project, path)["pass"])
 
-    def test_g5_refresh_preserves_no_approval_and_returns_figure_status(self):
+    def test_g5_refresh_blocks_missing_paper_facts_and_preserves_no_approval(self):
         _, _ = self.checklist()
         with patch.object(api_orchestrator, "project_root", return_value=self.project), \
              patch.object(api_orchestrator, "active_paper", return_value="P01"):
             result = api_orchestrator.refresh_research_method_audits("study", "writing-and-review")
-        self.assertTrue(result["pass"])
+        self.assertFalse(result["pass"])
+        self.assertEqual(result["paper_facts"]["status"], "input_missing")
         self.assertTrue(result["figure_layout"]["human_visual_review_required"])
         self.assertEqual(review.validate_saved_report(self.paper), [])
         self.assertFalse((self.project / "state/run.json").exists())

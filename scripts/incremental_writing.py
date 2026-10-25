@@ -8,6 +8,81 @@ from scripts.incremental_evidence import binding, digest, identifier, rows, stri
 from scripts.research_artifacts import path_in, read, sha, write, record
 
 ROOT = "reports/research-increments"
+REASONING_STATES = {"not_assessed", "ready_for_scientific_review", "needs_material", "not_applicable"}
+MATERIAL_TYPES = {"data", "literature", "analysis", "proof", "explanation", "scope", "other"}
+
+
+def paragraph_reasoning(item, function, claims, checked_evidence):
+    """Prepare a reviewable argument, without certifying what its evidence means.
+
+    A takeaway states one main purpose; it is not a sentence-counting template.
+    Warrants may explain a question, a proof or a method and need not be numerical.
+    Legacy purpose text is useful for an outline but is never an assessed takeaway.
+    """
+    declared = item.get("reasoning_status", "not_assessed")
+    if not isinstance(declared, str) or declared not in REASONING_STATES:
+        raise ValueError("unknown paragraph reasoning_status")
+    optional = function in {"transition", "non_argument"}
+    if declared == "not_applicable" and not optional:
+        raise ValueError("scientific paragraphs cannot exempt their argument from review")
+    explicit_takeaway = "takeaway" in item
+    takeaway = text(item["takeaway"], "paragraph takeaway", 2000) if explicit_takeaway else item["purpose"]
+    warrant = text(item["warrant"], "paragraph warrant", 6000) if "warrant" in item else None
+    needs = []
+    need_ids = set()
+    for need in rows(item.get("material_needs", []), "paragraph material needs", maximum=30):
+        nid = identifier(need.get("id"), "material need id")
+        if nid in need_ids:
+            raise ValueError("duplicate paragraph material need id")
+        need_ids.add(nid)
+        kind = need.get("material_type")
+        if not isinstance(kind, str) or kind not in MATERIAL_TYPES:
+            raise ValueError("unknown paragraph material type")
+        linked = strings(need.get("claim_ids", []), "material need claim_ids")
+        if set(linked) - set(claims):
+            raise ValueError("material need refers to a claim outside this paragraph")
+        needs.append({"id": nid, "material_type": kind,
+                      "description": text(need.get("description"), "specific missing material", 6000),
+                      "completion_condition": text(need.get("completion_condition"), "material completion condition", 6000),
+                      "claim_ids": linked, "status": "pending"})
+    if optional and needs:
+        raise ValueError("material-bearing paragraphs cannot be exempt transition/non_argument records")
+    gaps = []
+
+    def gap(code, material_type, description, completion_condition):
+        gaps.append({"code": code, "material_type": material_type, "description": description,
+                     "completion_condition": completion_condition, "claim_ids": claims})
+
+    if not optional and not explicit_takeaway:
+        gap("missing_explicit_takeaway", "explanation",
+            "The outline uses legacy purpose text; the actual paragraph's main point is not recorded.",
+            "Record one bounded main point in takeaway and compare it with the bound paragraph text.")
+    warrant_required = (not optional and (function != "context" or bool(claims or checked_evidence)))
+    if warrant_required and warrant is None:
+        gap("missing_warrant", "explanation",
+            "The link from the premises or evidence to the paragraph's main point is not recorded.",
+            "Explain why the bound evidence or premises support this point, retaining its inference boundary.")
+    if declared == "needs_material" and not needs:
+        gap("unspecified_material_need", "other",
+            "The paragraph declares missing material without a concrete task.",
+            "Add the missing data, literature, analysis, proof or explanation and its completion condition.")
+    if declared == "not_assessed" and not optional:
+        gap("reasoning_not_assessed", "explanation",
+            "The paragraph has not been prepared for scientific reasoning review.",
+            "Inspect the current text, main point, evidence, warrant and boundary; record any specific missing material.")
+    if optional:
+        readiness = "not_applicable"
+    elif needs or gaps:
+        readiness = "needs_material" if needs or declared != "not_assessed" else "not_assessed"
+    else:
+        readiness = "ready_for_scientific_review"
+    return {"takeaway": takeaway,
+            "takeaway_origin": "explicit" if explicit_takeaway else "legacy_purpose",
+            "warrant": warrant, "warrant_required": warrant_required,
+            "declared_reasoning_status": declared, "reasoning_status": readiness,
+            "material_needs": needs, "review_gaps": gaps,
+            "scientific_review_required": not optional,
+            "semantic_support_verified": False}
 
 
 def paper_path(project, paper_id):
@@ -172,10 +247,11 @@ def arguments(project, row):
             excerpts.append(unit["text"])
         if sorted(orders) != list(range(min(orders), max(orders) + 1)):
             raise ValueError("one paragraph plan cannot hide noncontiguous arguments")
+        reasoning = paragraph_reasoning(item, function, claims, checked)
         outlines.append({"paragraph_id": pid, "section": item["section"], "function": function,
                          "purpose": item["purpose"], "claim_ids": claims, "evidence": checked,
                          "order": min(orders), "text": "\n".join(excerpts),
-                         "inference_boundary": item["inference_boundary"]})
+                         "inference_boundary": item["inference_boundary"], **reasoning})
     if covered != set(by_unit):
         raise ValueError("argument ledger does not cover every current source paragraph")
     order_map = {item["paragraph_id"]: item["order"] for item in outlines}
@@ -190,9 +266,16 @@ def arguments(project, row):
     if (receipt.get("phase") != "before_writer" or receipt.get("concept_sha256") != digest(concept(row))
             or origin.get("status") != "tracked" or origin.get("provider") != "deterministic-control-plane"):
         raise ValueError("current argument requires a genuine pre-write frozen plan")
+    attention = [item["paragraph_id"] for item in outlines
+                 if item["reasoning_status"] in {"needs_material", "not_assessed"}]
     return {"id": key, "paper_id": row["paper_id"], "inventory": current,
             "reverse_outline": sorted(outlines, key=lambda item: item["order"]),
-            "paragraph_coverage": "complete", "semantic_support_verified": False}
+            "paragraph_coverage": "complete",
+            "reasoning_review": {"status": "needs_preparation" if attention else "ready_for_scientific_review",
+                                 "paragraph_ids_needing_attention": attention,
+                                 "ready_for_scientific_review": not attention,
+                                 "semantic_support_verified": False},
+            "semantic_support_verified": False}
 
 
 def voice(project, row, confirmation):

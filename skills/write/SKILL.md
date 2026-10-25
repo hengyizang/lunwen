@@ -7,6 +7,12 @@ disable-model-invocation: true
 
 # Write
 
+Apply `docs/EVIDENCE-FIRST-WRITING.md` in the existing paragraph, paper-facts,
+closest-work and review-issue records. Record takeaway/warrant and concrete
+missing materials; bind each contribution to actual results and frozen
+expectations. Use design-appropriate evidence for empirical, Meta, theoretical
+or qualitative findings. Reuse existing writer/critic passes.
+
 Require G4 approval for result-bearing prose. Read the paper contract, claim-evidence matrix, experiment registry and `references/research-integrity.md`.
 
 Claude may provide only a semantic outline and internal critique. GPT/OpenAI must independently write and revise every manuscript, table, caption, supplement, disclosure and submission-material text. Use `skills/figures/SKILL.md` for data charts, research diagrams and separately disclosed conceptual illustrations. Every result-bearing chart must be rendered locally from recorded experiment data, include uncertainty and accessible redundant encodings, and pass figure provenance. Never copy wording from a Claude plan or audit.
