@@ -210,7 +210,11 @@ class WritingReviewActionTests(unittest.TestCase):
         data["issues"][0].update(origin="inherited", severity="minor", status="resolved")
         with self.assertRaisesRegex(ValueError, "downgrade"):
             self.execute(data, previous=first["sha256"])
-        self.assertEqual(science.current(self.project, "internal_review", "writing-review"), first["report"])
+        self.assertEqual(sha(self.project/first["path"]), first["sha256"])
+        # The rejected update preserves the report, but its changed input must
+        # invalidate freshness rather than make the old assessment current.
+        with self.assertRaisesRegex(ValueError, "stale"):
+            science.current(self.project, "internal_review", "writing-review")
 
 
 if __name__ == "__main__":
