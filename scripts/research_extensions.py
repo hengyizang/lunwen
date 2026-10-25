@@ -139,7 +139,7 @@ def _closest_evaluation(project, evaluation, arm, paper_id, claim_id, library_pa
     return checked
 
 
-def closest_work_axes(project, value, differences):
+def closest_work_axes(project, value, differences, *, unknown_conditions, parent_disposition):
     """Extend an existing comparison; location checks never certify novelty."""
     if not isinstance(value, dict):
         raise ValueError("closest_work must be an object")
@@ -241,7 +241,8 @@ def closest_work_axes(project, value, differences):
             if not same_evaluation and (disposition == "comparable" or conclusion in {"superiority", "equivalence"}):
                 raise ValueError("different source-bound datasets, metrics or evaluation bases cannot establish superiority/equivalence")
         if conclusion in {"superiority", "equivalence"} and (
-                name != "result" or kind != "quantitative" or disposition != "comparable" or differences):
+                name != "result" or kind != "quantitative" or disposition != "comparable"
+                or parent_disposition != "comparable" or differences or unknown_conditions):
             raise ValueError("comparative benefit needs source-bound matched quantitative evaluation and matched declared conditions")
         result.update(disposition=disposition, conclusion_kind=conclusion,
                       source_location_check="needs_inputs" if incomplete else "source_bound",
@@ -293,7 +294,8 @@ def comparison(project, row):
             "conflict_resolution_verified": False, "experiment_executed": False}
     result["closest_work_axis_check"] = "not_assessed"
     if "closest_work" in row:
-        result["closest_work"] = closest_work_axes(project, row["closest_work"], differences)
+        result["closest_work"] = closest_work_axes(project, row["closest_work"], differences,
+            unknown_conditions=unknowns, parent_disposition=disposition)
         result["closest_work_axis_check"] = result["closest_work"]["source_location_check"]
     return result
 

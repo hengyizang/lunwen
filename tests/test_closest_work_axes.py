@@ -306,6 +306,30 @@ class ClosestWorkAxesTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "matched declared conditions"):
             extensions.comparison(self.project, row)
 
+    def test_equal_unknown_conditions_do_not_establish_a_comparative_benefit(self):
+        for conclusion in ("superiority", "equivalence"):
+            row = self.fixture()
+            row["disposition"] = "insufficient_evidence"
+            for arm in ("left", "right"):
+                row[arm]["conditions"]["assumptions"] = "unknown"
+            result = row["closest_work"]["axes"]["result"]
+            result["conclusion_kind"] = conclusion
+            with self.subTest(conclusion=conclusion), self.assertRaisesRegex(ValueError, "matched declared conditions"):
+                extensions.comparison(self.project, row)
+            result["conclusion_kind"] = "descriptive"
+            checked = extensions.comparison(self.project, row)
+            self.assertEqual(checked["different_conditions"], [])
+            self.assertEqual(len(checked["unknown_conditions"]), 2)
+            self.assertFalse(checked["comparability_verified"])
+
+    def test_parent_comparison_must_be_comparable_for_benefit_claim(self):
+        for parent in ("insufficient_evidence", "not_comparable"):
+            row = self.fixture()
+            row["disposition"] = parent
+            row["closest_work"]["axes"]["result"]["conclusion_kind"] = "superiority"
+            with self.subTest(parent=parent), self.assertRaisesRegex(ValueError, "matched declared conditions"):
+                extensions.comparison(self.project, row)
+
     def test_comparison_is_recomputed_inside_the_existing_extension_audit(self):
         row = self.fixture()
         write(self.project / extensions.INPUT, {"schema_version": "1.0", "comparisons": [row]})
