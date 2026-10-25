@@ -144,6 +144,13 @@ class EconomicDataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
         self.spec["dataset_manifest"]["sha256"] = sha(target); self.save()
+        with self.assertRaisesRegex(ValueError, "protected owner"):
+            economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        # Even a synthetic renewed permission cannot relabel the actual query.
+        auth_path = self.project/"state/data-authorizations.json"
+        auth = read(auth_path)
+        auth["manifests"][self.spec["dataset_manifest"]["path"]]["sha256"] = sha(target)
+        write(auth_path, auth)
         with self.assertRaisesRegex(ValueError, "exact economic"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
 

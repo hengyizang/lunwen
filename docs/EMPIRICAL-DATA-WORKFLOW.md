@@ -132,11 +132,12 @@ exact authorized reacquisition after checkpoint restore; unavailable data blocks
 recomputation rather than becoming a cached pass. Unconfigured Meta/theory and
 non-tabular projects keep their existing routes.
 
-Processed and preview data inherit source redistribution restrictions and are
-excluded from public Git/checkpoint export, just like original raw datasets.
-An actual run plan needs authorized rehydration/storage for every frozen dataset;
-missing bytes block the current audit. No invented cached verification replaces
-those bytes. No private or licensed dataset was uploaded in this engineering work.
+Processed and preview data inherit source restrictions and never enter public Git.
+They use the existing bounded cloud artifact checkpoint, retaining exact hashes
+across fresh runners. Owner-reviewed cloud storage/use rights remain required;
+restricted materials need an appropriate storage plan. Original raw bytes remain
+excluded and may need exact authorized reacquisition. Missing bytes block the
+current audit. No private or licensed dataset was uploaded in this engineering work.
 
 Reviewed method ideas: [AERS selection](https://github.com/brycewang-stanford/Auto-Empirical-Research-Skills/blob/7a2437b8fc972774fa23cf9c572df12ff5fd1334/docs/CHOOSING_A_SKILL.md),
 [Econ recipes](https://github.com/meleantonio/awesome-econ-ai-stuff/tree/dd890d51c789fb8f8e316a2d7e4ed5d4bd793c50/_skills),

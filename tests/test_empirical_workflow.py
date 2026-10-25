@@ -78,7 +78,7 @@ class EmpiricalWorkflowTests(unittest.TestCase):
         self.assertFalse(workflow.cloud_outputs_allowed(self.project, {"paper_id": "P01", "argv": [], "expected_outputs": ["data/raw/overwrite.csv"]}))
 
     def test_prepared_data_can_be_frozen_and_changed_preview_blocks(self):
-        write(self.project/"state/run.json", {"gate": "G3", "status": "awaiting_work"})
+        write(self.project/"state/run.json", {"stage": "experiment-design", "gate": "G3", "status": "awaiting_work"})
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             data_contracts.preview_cleaning(self.project, "fixture")
         paths = {p.relative_to(self.project).as_posix() for p in workflow.preregistration_inputs(self.project, "P01")}
@@ -89,8 +89,12 @@ class EmpiricalWorkflowTests(unittest.TestCase):
 
     def test_new_outputs_are_protected_from_author_models(self):
         from scripts import cloud_checkpoint
-        self.assertTrue(cloud_checkpoint.excluded("data/processed/fixture.csv"))
-        self.assertTrue(cloud_checkpoint.excluded("data/processed-preview/fixture.csv"))
+        target = self.project/"data/processed-preview/fixture.csv"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("id,value\na,1\n", encoding="utf-8")
+        entry = next(row for row in cloud_checkpoint.inventory(self.project) if row["path"] == "data/processed-preview/fixture.csv")
+        self.assertEqual(entry["storage"], "artifact")
+        self.assertNotIn(target, cloud_checkpoint.git_files(self.project))
         for relative in ("reports/data-contracts/fixture.json", "reports/data-cleaning/fixture.json", "reports/empirical-reporting/P01.json",
                          "evidence/economic-data/fixture/latest.json", "data/raw/economic-data/fixture/source.json", "data/processed-preview/fixture.csv",
                          "papers/P01/reviews/empirical-design.json", "papers/P01/tables/empirical-estimates.csv"):
@@ -98,7 +102,7 @@ class EmpiricalWorkflowTests(unittest.TestCase):
         self.assertFalse(artifact_ownership.executor_owned(self.project, "data/contracts/fixture.json"))
 
     def test_g3_preview_operation_and_audit_use_existing_queue(self):
-        write(self.project/"state/run.json", {"gate": "G3", "status": "awaiting_work"})
+        write(self.project/"state/run.json", {"stage": "experiment-design", "gate": "G3", "status": "awaiting_work"})
         write(self.project/"program/cloud-operations.json", {"operations": [
             {"stage": "experiment-design", "action": "data_contract", "dataset_id": "fixture"},
             {"stage": "experiment-design", "action": "data_cleaning_preview", "dataset_id": "fixture"}]})

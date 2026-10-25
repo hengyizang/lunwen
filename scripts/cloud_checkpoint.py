@@ -74,8 +74,6 @@ def excluded(value: str) -> bool:
     # These source responses are public bibliographic receipts, not raw datasets.
     if "raw" in parts and not value.startswith("evidence/literature/raw/"):
         return True
-    if len(parts) >= 2 and parts[0] == "data" and parts[1] in {"processed", "processed-preview"}:
-        return True  # Cleaning does not grant redistribution rights.
     return any(p in {"build", "__pycache__"} for p in parts)
 
 
@@ -110,7 +108,8 @@ def inventory(project: Path) -> list[dict]:
         if path.suffix.lower() not in GIT_SUFFIXES | DATA_SUFFIXES:
             raise CheckpointError(f"unsupported checkpoint file requires an explicit storage plan: {rel}")
         size = path.stat().st_size
-        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/", "state/citation-metadata/")) or rel in ARCHIVE_STATE_LOGS
+        internal = rel.startswith(("api_runs/", ".cache/", "experiments/runs/", "results/", "state/citation-metadata/",
+                                   "data/processed/", "data/processed-preview/")) or rel in ARCHIVE_STATE_LOGS
         in_git = (not internal and path.suffix.lower() in GIT_SUFFIXES and size <= GIT_FILE_LIMIT
                   and (rel == MANIFEST or used_git + size <= GIT_TOTAL_LIMIT))
         if rel.startswith("state/") and rel not in ARCHIVE_STATE_LOGS and not rel.startswith("state/citation-metadata/") and not in_git:
