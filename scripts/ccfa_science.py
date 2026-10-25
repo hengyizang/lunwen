@@ -468,6 +468,10 @@ def _internal_review(project, data, previous, bindings, scope):
         if (identifier in inherited and inherited[identifier].get("writing_action", {}).get("status") not in {None, "not_assessed"}
                 and row["applies_to"] != inherited[identifier]["applies_to"]):
             raise ValueError("Keep structured inherited issue applicability stable; preserve the old issue and record a separate scope change")
+        if identifier in inherited and inherited[identifier].get("writing_action", {}).get("status") not in {None, "not_assessed"}:
+            severity_rank = {"minor": 0, "major": 1, "blocker": 2}
+            if severity_rank[row["severity"]] < severity_rank[inherited[identifier]["severity"]]:
+                raise ValueError("Do not downgrade a structured inherited issue severity to bypass unresolved work")
         evidence = _anchors(project, row["evidence"], bindings)
         required_paths = {historical["path"]} if row["applies_to"] == "historical" else {current_file["path"]}
         if row["applies_to"] == "both":

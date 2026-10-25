@@ -381,6 +381,12 @@ def review(project, row, previous=None):
         raise ValueError("review severity required")
     if row.get("status") not in {"open", "answered_pending_review", "verified_resolved"}:
         raise ValueError("review finding status required")
+    if (previous or {}).get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}:
+        severity_rank = {"minor": 0, "major": 1, "fatal": 2}
+        if severity_rank[row["severity"]] < severity_rank[previous["severity"]]:
+            raise ValueError("Do not downgrade an inherited structured issue severity to bypass unresolved work")
+        if row["perspective"] != previous["perspective"]:
+            raise ValueError("Keep inherited structured issue perspective stable")
     result = {**row, "evidence": sources(project, row.get("evidence")),
               "independent_raters_verified": False}
     from scripts.writing_review_actions import assess
@@ -396,15 +402,6 @@ def review(project, row, previous=None):
 
 
 def audit(project: Path) -> dict:
-    path = path_in(project, INPUT, exists=False)
-    if not path.is_file():
-        return {"status": "needs_inputs", "errors": [], "pending": [INPUT],
-                "scientific_completion_verified": False, "gate_approved": False}
-    document = read(path)
-    if document.get("schema_version") != "1.0":
-        raise ValueError("unsupported research extensions schema")
-    output = {"schema_version": "1.0", "input_sha256": sha(path), "sections": {}, "errors": [],
-              "scientific_completion_verified": False, "gate_approved": False}
     previous = {}
     saved_path = path_in(project, OUTPUT, exists=False)
     if saved_path.is_file():
@@ -415,6 +412,19 @@ def audit(project: Path) -> dict:
         saved = read(saved_path)
         previous = {row["id"]: row for row in [*saved.get("retained_review_findings", []),
             *saved.get("sections", {}).get("review_findings", [])]}
+    path = path_in(project, INPUT, exists=False)
+    if not path.is_file():
+        retained = [row for row in previous.values()
+                    if row.get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}]
+        return {"schema_version": "1.0", "status": "blocked" if retained else "needs_inputs",
+                "errors": ["Do not delete the research extensions input containing existing structured writing issues"] if retained else [],
+                "sections": {}, "retained_review_findings": retained, "pending": [INPUT],
+                "scientific_completion_verified": False, "gate_approved": False}
+    document = read(path)
+    if document.get("schema_version") != "1.0":
+        raise ValueError("unsupported research extensions schema")
+    output = {"schema_version": "1.0", "input_sha256": sha(path), "sections": {}, "errors": [],
+              "scientific_completion_verified": False, "gate_approved": False}
     for section, builder in {"comparisons": comparison, "methods": method,
                              "reading_anchors": reading_anchor, "review_findings": review}.items():
         rows = document.get(section, [])
@@ -454,8 +464,6 @@ def refresh(project: Path) -> dict:
 
 
 def gate_errors(project: Path) -> list[str]:
-    if not (project / INPUT).exists():
-        return []
     try:
         result = audit(project)
         return result["errors"] + [f"{row['id']}: unresolved {row['perspective']} finding"

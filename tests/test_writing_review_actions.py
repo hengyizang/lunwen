@@ -205,6 +205,13 @@ class WritingReviewActionTests(unittest.TestCase):
         self.assertEqual(result["issues"][0]["applies_to"], "historical")
         self.assertEqual(result["issues"][0]["writing_action"]["status"], "not_assessed")
 
+    def test_structured_issue_cannot_downgrade_its_inherited_severity(self):
+        data = self.review(); first = self.execute(data)
+        data["issues"][0].update(origin="inherited", severity="minor", status="resolved")
+        with self.assertRaisesRegex(ValueError, "downgrade"):
+            self.execute(data, previous=first["sha256"])
+        self.assertEqual(science.current(self.project, "internal_review", "writing-review"), first["report"])
+
 
 if __name__ == "__main__":
     unittest.main()

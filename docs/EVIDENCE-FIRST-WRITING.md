@@ -104,6 +104,9 @@ in the same issue. Deleting a task, dropping a required material or changing an
 active issue to historical cannot erase pending work. A failed refresh retains
 the last protected issue definition, so a second refresh cannot wash it away.
 Model-declared resolved status never converts missing material into a pass.
+Inherited structured issues cannot be downgraded to avoid a blocker. Deleting the
+whole extensions input also retains protected issue history across failed refreshes;
+projects that never created this optional record remain compatible.
 
 ## Quality and cost
 

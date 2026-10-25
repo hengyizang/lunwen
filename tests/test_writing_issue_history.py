@@ -47,6 +47,33 @@ class WritingIssueHistoryTests(unittest.TestCase):
         self.assertEqual(result["sections"]["review_findings"][0]["writing_action_assessment"]["status"], "pending_materials")
         self.assertTrue(extensions.gate_errors(self.project))
 
+    def test_severity_downgrade_cannot_remove_missing_material_blocker(self):
+        self.issue.update(severity="minor", status="answered_pending_review", response_evidence=copy.deepcopy(self.issue["evidence"]))
+        write(self.project/extensions.INPUT, self.spec)
+        for _ in range(2):
+            result = extensions.refresh(self.project)
+            self.assertTrue(any("downgrade" in error for error in result["errors"]))
+            self.assertEqual(result["retained_review_findings"][0]["severity"], "major")
+            self.assertTrue(extensions.gate_errors(self.project))
+
+    def test_deleted_whole_input_preserves_history_across_refreshes_and_restore(self):
+        (self.project/extensions.INPUT).unlink()
+        for _ in range(2):
+            self.assertTrue(extensions.gate_errors(self.project))
+            result = extensions.refresh(self.project)
+            self.assertEqual(result["status"], "blocked")
+            self.assertEqual(result["retained_review_findings"][0]["id"], self.issue["id"])
+        self.spec["review_findings"] = []
+        write(self.project/extensions.INPUT, self.spec)
+        self.assertTrue(extensions.refresh(self.project)["errors"])
+
+    def test_never_created_optional_extensions_remain_optional(self):
+        fresh = self.project/"fresh-project"
+        fresh.mkdir()
+        self.assertEqual(extensions.gate_errors(fresh), [])
+        self.assertEqual(extensions.refresh(fresh)["status"], "needs_inputs")
+        self.assertEqual(extensions.gate_errors(fresh), [])
+
 
 if __name__ == "__main__":
     unittest.main()
