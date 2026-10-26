@@ -139,7 +139,7 @@ def source_blocks(project: Path, paper: dict) -> tuple[list[dict], list[dict]]:
         scope = workbench._reader(project, paper["reader"], source, files)
         binding = {"path": scope["path"], "sha256": scope["sha256"]}
     else:
-        binding = files.binding(paper.get("reader", source))
+        binding = files.binding(paper.get("reader") or source)
         if binding != source:
             raise ValueError("Text analysis cannot replace its original source with an unrelated reader")
         if Path(source["path"]).suffix.lower() not in {".md", ".txt"}:
