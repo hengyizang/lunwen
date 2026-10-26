@@ -14,6 +14,13 @@
   ],
   "modules": [
     {
+      "id": "research-task-prompts",
+      "stages": ["topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
+      "path": "references/research-methods/research-task-prompts.md",
+      "sha256": "9d814d266892033365697b07ed7b2af8e7dbdcd78654a92b7d6553ab8b78c227",
+      "source_ids": ["ars-codex", "paperai-reading", "openpaper-evidence-tables", "econ-data-methods"]
+    },
+    {
       "id": "literature-reading",
       "stages": ["topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
       "path": "references/research-methods/literature-reading.md",

@@ -426,6 +426,25 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_benchmark":
         from scripts.literature_benchmark import refresh
         return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))
+    if action == "data_row_prepare":
+        from scripts.data_row_provenance import prepare
+        return prepare(project, operation["dataset_id"], key_columns=operation.get("key_columns"))
+    if action == "data_row_provenance":
+        from scripts.data_row_provenance import refresh
+        return refresh(project, operation.get("request_file", "program/data-row-provenance.json"))
+    if action in {"literature_source_trace", "literature_screening_advice"}:
+        from scripts.literature_source_tasks import refresh
+        task = "source_trace" if action == "literature_source_trace" else "screening_advice"
+        return refresh(project, task, operation.get("request_file", "program/" + task.replace("_", "-") + ".json"))
+    if action == "literature_search_strategy":
+        from scripts.literature_search_strategy import refresh
+        return refresh(project, operation.get("request_file", "program/literature-search-strategy.json"))
+    if action == "literature_synthesis":
+        from scripts.literature_synthesis import refresh
+        return refresh(project, operation.get("request_file", "program/literature-synthesis.json"))
+    if action == "diagram_mermaid":
+        from scripts.diagram_mermaid import refresh
+        return refresh(project, operation.get("request_file", "program/diagram-mermaid.json"))
     if action in {"literature_feedback", "literature_feedback_propose", "literature_feedback_review"}:
         from scripts import literature_feedback as feedback
         if action == "literature_feedback":
