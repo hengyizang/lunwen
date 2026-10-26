@@ -487,6 +487,8 @@ def after_write(project: Path, stage: str) -> dict:
                             "literature_discover", "literature_register", "literature_resolve", "literature_figures",
                             "literature_analyze", "literature_workbench", "literature_search",
                             "literature_itinerary", "literature_compare", "literature_progress",
+                            "literature_retrieve", "literature_reading_index", "literature_coverage",
+                            "literature_matrix", "literature_benchmark",
                             "literature_feedback", "literature_feedback_propose"} and stage != "intake":
                 from scripts.literaturectl import execute_operation
                 result = execute_operation(project, operation)

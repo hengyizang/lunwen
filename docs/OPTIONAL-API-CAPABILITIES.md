@@ -19,6 +19,12 @@ budget. Enabling a route never grants a new budget or a scientific gate approval
 
 ## Native source Q&A
 
+The [reading upgrades](LITERATURE-EVIDENCE-READING.md) support optional bounded
+multi-query fusion and precomputed vectors through an explicit retrieval plan.
+This does not enable an embedding service or the upstream PaperQA2 paid SDK.
+New paid answers also map every answer statement to its individual citations;
+verbatim matching remains separate from semantic support.
+
 Supply explicit authorized project-relative `.md`, UTF-8 `.txt` or unencrypted
 `.pdf` sources. PDF extraction requires the optional reader dependency. No web
 crawler, embeddings, paid reranker or hidden model call is used for retrieval.

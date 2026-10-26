@@ -3,6 +3,124 @@
   "reviewed_at": "2026-09-30",
   "sources": [
     {
+          "id": "paperai-reading",
+          "repository": "https://github.com/neuml/paperai",
+          "commit": "18306961a6ba5d45551d7e10d9ab3668c6b402b3",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "Apache-2.0",
+          "license_source_url": "https://github.com/neuml/paperai/blob/18306961a6ba5d45551d7e10d9ab3668c6b402b3/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "field-extraction-configuration",
+                "source-bound-report-tables"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "zotero-reading-coverage",
+          "repository": "https://github.com/yilewang/llm-for-zotero",
+          "commit": "8737af2a0f6cad8df7aac00aa50c1fb093080e3d",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "AGPL-3.0",
+          "license_source_url": "https://github.com/yilewang/llm-for-zotero/blob/8737af2a0f6cad8df7aac00aa50c1fb093080e3d/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "question-coverage",
+                "content-fingerprint-reuse"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "beaver-sentence-evidence",
+          "repository": "https://github.com/jlegewie/beaver-zotero",
+          "commit": "8f17a35c30f2a54981fd595cf40c28749899af85",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "AGPL-3.0",
+          "license_source_url": "https://github.com/jlegewie/beaver-zotero/blob/8f17a35c30f2a54981fd595cf40c28749899af85/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "sentence-page-coordinate-navigation"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "openpaper-evidence-tables",
+          "repository": "https://github.com/khoj-ai/openpaper",
+          "commit": "7942c6bec0bc1d1df8045a1bac507e1f6b0e43b8",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "AGPL-3.0",
+          "license_source_url": "https://github.com/khoj-ai/openpaper/blob/7942c6bec0bc1d1df8045a1bac507e1f6b0e43b8/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "cell-evidence",
+                "original-pdf-numbers",
+                "retrieval-cost-evaluation"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "daily-paper-retrieval",
+          "repository": "https://github.com/ziwenhahaha/daily-paper-reader",
+          "commit": "3df419abafdd8e2c70cad730b6b3fdc9e8c5731e",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "MIT",
+          "license_source_url": "https://github.com/ziwenhahaha/daily-paper-reader/blob/3df419abafdd8e2c70cad730b6b3fdc9e8c5731e/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "query-fusion",
+                "layered-reading",
+                "version-aware-reuse"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "paperpilot-search-protocol",
+          "repository": "https://github.com/CHB-learner/PaperPilot",
+          "commit": "c21c73672e72838f75d0e0b8a745ce33d9c172c3",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "MIT",
+          "license_source_url": "https://github.com/CHB-learner/PaperPilot/blob/c21c73672e72838f75d0e0b8a745ce33d9c172c3/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "search-protocol-reference"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
+          "id": "paperlens-discovery-reference",
+          "repository": "https://github.com/vanthree31/PaperLens",
+          "commit": "5c9b625fd7eefc3ff34d5396fd61818ac719a6f2",
+          "upstream_version": "reviewed 2026-10-25 source snapshot",
+          "license": "custom noncommercial",
+          "license_source_url": "https://github.com/vanthree31/PaperLens/blob/5c9b625fd7eefc3ff34d5396fd61818ac719a6f2/LICENSE",
+          "enabled_by_default": false,
+          "local_adaptations_enabled": true,
+          "selected_components": [
+                "metadata-discovery-reference"
+          ],
+          "installation": "Independently expressed native cloud mechanisms; no upstream runtime or source code copied or installed",
+          "selected_skills": [],
+          "selection_note": "User-authorized selected useful reading improvements. Preserve current model routes, CNY 500 ceiling, source rights, gate authority and scientific review. Metadata/quote presence never proves support. No paid dependency enabled."
+    },
+    {
       "id": "auto-empirical-methods",
       "repository": "https://github.com/brycewang-stanford/Auto-Empirical-Research-Skills",
       "commit": "7a2437b8fc972774fa23cf9c572df12ff5fd1334",

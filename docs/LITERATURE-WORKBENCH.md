@@ -1,5 +1,11 @@
 # Literature discovery and reading workbench
 
+The [evidence reading upgrades](LITERATURE-EVIDENCE-READING.md) add question-scoped
+BM25/query fusion, optional already prepared vectors, original sentence/page
+navigation, attributed coverage reuse, field/numeric comparison tables and
+source-labelled quality/cost evaluation. They use this same authorized library
+and cloud request queue without enabling another model or paid service.
+
 All five native adaptations are committed under .agents/skills as well as
 skills/, so fresh Codex Cloud checkouts discover them without desktop setup.
 Selected actual discovery candidates enter the library through

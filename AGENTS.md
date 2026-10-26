@@ -28,6 +28,12 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For source-scoped literature retrieval, sentence/page navigation, question-level
+reading coverage, evidence matrices and quality/cost comparisons, use
+docs/LITERATURE-EVIDENCE-READING.md. Reuse existing model cycles and progress;
+preserve original ranges, unknowns, adverse evidence and actual cost receipts.
+Do not enable an embedding service or adopt a model from synthetic tests.
+
 For variable dictionaries, cleaning, panel/time checks, economic vintages or causal
 estimators, use docs/EMPIRICAL-DATA-WORKFLOW.md. Preserve raw inputs, every registered
 specification and source/runner seals. Do not promote a diagnostic or fit into a
