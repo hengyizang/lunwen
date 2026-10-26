@@ -111,6 +111,33 @@ class ZoteroCloudTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "changed"):
             zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))
 
+    def test_export_registers_metadata_in_actual_shared_search_without_scientific_approval(self):
+        source = self.project / "evidence/imports/zotero.json"
+        write(source, {"items": [item(title="Distinctive Zotero fixture calibration") ]})
+        spec = {"schema_version": "1.0", "id": "registered", "mode": "export", "export": {"path": "evidence/imports/zotero.json", "sha256": sha(source)}}
+        request = "program/literature-zotero.json"
+        write(self.project / request, spec)
+        zotero.refresh(self.project)
+        first = zotero.register(self.project, request, "ABC12345")
+        second = zotero.register(self.project, request, "ABC12345")
+        self.assertTrue(second["reused"])
+        self.assertEqual(first["attachment_status"], "metadata_only")
+        from scripts import literature_workbench as wb
+        found = wb.search(self.project, "Distinctive Zotero calibration")
+        self.assertTrue(any(r.get("paper_id") == first["paper_id"] for r in found["results"]))
+        self.assertFalse(first["human_screening_approved"])
+
+    def test_changed_implementation_invalidates_incremental_cache(self):
+        zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))
+        manifest = self.project / zotero.OUTPUT / "public/manifest.json"
+        value = read(manifest)
+        value["implementation_sha256"] = "0" * 64
+        write(manifest, value)
+        from scripts.research_artifacts import record
+        record(self.project, [manifest], "scripts/literature_zotero.py")
+        with self.assertRaisesRegex(ValueError, "implementation changed"):
+            zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))
+
 
 class LiteratureRoleTests(unittest.TestCase):
     def test_classification_retains_overlapping_core_adjacent_and_counterevidence(self):

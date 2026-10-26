@@ -22,23 +22,38 @@ def build(project, spec):
     if leads.get("kind") != "literature_discovery_intelligence":
         raise ValueError("classification needs native discovery output")
     scope = intelligence._scope(project, leads["doctoral_question"])
-    ledger = {r["receipt_id"]: r for r in intelligence.evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl")}
+    ledger = {}
+    for receipt in intelligence.evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl"):
+        identifier = receipt.get("receipt_id")
+        if not isinstance(identifier, str) or not identifier or identifier in ledger:
+            raise ValueError("classification needs unique actual literature receipt IDs")
+        ledger[identifier] = receipt
     search_log = intelligence.evidence.read_jsonl(project / "evidence/search-log.jsonl")
-    receipts = {}
+    receipts, source_works = {}, {}
     for ref in leads["source_receipts"]:
         identifier = ref["receipt_id"]
-        if identifier not in ledger:
-            raise ValueError("classification receipt missing")
+        if identifier not in ledger or identifier in receipts:
+            raise ValueError("classification receipt missing or repeated in discovery leads")
         actual = ledger[identifier]
-        intelligence._receipt_works(project, actual)
+        works, expected_ref = intelligence._receipt_works(project, actual)
+        if ref != expected_ref:
+            raise ValueError("classification discovery receipt binding differs from actual raw/normalized sources")
         receipts[identifier] = actual
+        source_works[identifier] = {work["source_refs"][0]["locator"]: work for work in works}
     rows = []
     for candidate in leads["candidates"]:
-        routes = []
+        routes, members, seen_refs = [], [], set()
         for ref in candidate.get("source_refs", []):
             identifier = ref["receipt_id"]
             if identifier not in receipts:
                 raise ValueError("candidate references unknown discovery receipt")
+            locator = ref.get("locator")
+            member = source_works[identifier].get(locator) if isinstance(locator, str) else None
+            marker = (identifier, locator)
+            if member is None or ref != member["source_refs"][0] or marker in seen_refs:
+                raise ValueError("candidate source locator/hash differs from its actual normalized work")
+            seen_refs.add(marker)
+            members.append(member)
             actual = receipts[identifier]
             matching = [entry for entry in search_log if entry.get("evidence_receipt_id") == identifier
                         and entry.get("response_sha256") == actual.get("response_sha256")
@@ -48,6 +63,13 @@ def build(project, spec):
             family = next(iter(families)) if len(families) == 1 else None
             routes.append({"receipt_id": identifier, "query_family": family,
                            "query": actual.get("query"), "role": FAMILIES.get(family, "unclassified_candidate")})
+        # Replay the native identity grouping on the exact cited works. Merely
+        # naming a real receipt must not transfer its query role to another work.
+        grouped = intelligence.deduplicate(members) if members else []
+        identity_fields = ("canonical_id", "title", "doi", "arxiv_id", "authors", "publication_year")
+        if (len(grouped) != 1 or any(candidate.get(k) != grouped[0].get(k) for k in identity_fields)
+                or intelligence.canonical_identity(candidate) != grouped[0]["canonical_id"]):
+            raise ValueError("classification candidate identity differs from its actual source works")
         roles = sorted({r["role"] for r in routes}) or ["unclassified_candidate"]
         rows.append({"candidate_id": candidate["canonical_id"], "title": candidate["title"], "roles": roles,
             "rationale": "Membership follows recorded query families; overlapping roles are retained.",

@@ -18,6 +18,7 @@ never supplies budget authority.
 | literature_semantic | program/literature-semantic.json | Actual pinned CPU embeddings and optional cross-encoder ranking |
 | literature_pdf | program/literature-pdf.json | Original page overlays, annotated PDF copy and optional OCR aid |
 | literature_zotero | program/literature-zotero.json | Read-only cloud Web API or hash-bound JSON export import |
+| literature_zotero_register | explicit request_file and item_key, optional paper_id | Add a selected current imported record to the same searchable metadata library |
 | literature_roles | program/literature-roles.json | Overlapping core/adjacent/counterevidence discovery categories |
 | literature_comparison | program/literature-comparison.json | Same-corpus retrieval versus complete-text model comparison |
 | literature_paperqa | program/literature-paperqa.json | Bounded upstream SDK vector-store bridge and centrally metered answer |
@@ -90,6 +91,11 @@ even from stored response projections. Original API response hashes are retained
 sanitized projections are not advertised as verbatim original response bytes.
 
 Bibliography import is not full-text acquisition or permission. The existing
+literature_zotero_register action takes the actual import request_file and
+item_key, validates its receipt, then registers a versioned metadata-only source
+in the shared workbench so library search can find it. It never approves a
+scientific inclusion, downloads an attachment or maps a paper to the thesis.
+The existing
 discovery/acquisition/registration process must verify each selected actual
 source before it can be cited or read. A missing key, actual user library or
 private-library approval cannot be simulated by a passing fixture.

@@ -50,13 +50,34 @@ class PdfContractTests(unittest.TestCase):
         report = {"question": "Does A | B differ?", "cells": [
             {"paper_id": "a", "field_id": "accuracy", "status": "unknown", "text": None, "evidence": []},
             {"paper_id": "b", "field_id": "accuracy", "status": "located_pending_semantic_review", "text": "A | B\n<script>",
-             "numeric": {"original_value": "95.0", "original_unit": "%", "comparator": "<"},
-             "evidence": [{"path": "evidence/source.md", "locator": "lines 1-2", "quote": "95.0 %"}]}]}
+             "numeric": {"original_value": "95.0", "original_unit": "%", "comparator": "<",
+                         "uncertainty": {"lower": "90.0", "upper": "99.0", "label": "95% CI"}},
+             "source_context": {"population": "Population A", "conditions": "fixed protocol", "row_header": "Method A",
+                                "column_header": "accuracy", "footnotes": ["One held-out cohort."]},
+             "inference_boundary": "A reported estimate, not an established benefit.",
+             "evidence": [{"path": "evidence/source.md", "sha256": "a" * 64, "locator": "lines 1-2", "quote": "95.0 %"}]}]}
         result = literature_matrix.markdown_text(report)
         self.assertIn("unknown", result)
         self.assertIn("A &#124; B<br>&lt;script&gt;", result)
         self.assertIn("&lt; 95.0 %", result)
         self.assertIn("95.0 %", result)
+        for value in ("a" * 64, "Population A", "fixed protocol", "Method A", "One held-out cohort.",
+                      "95% CI", "90.0", "99.0", "not an established benefit"):
+            self.assertIn(value, result)
+
+    def test_rotated_page_table_uses_already_displayed_asset_coordinates(self):
+        report = {"id": "fixture", "source": {"path": "evidence/source.pdf", "sha256": "a" * 64}, "annotated_pdf": None,
+            "pages": [{"pdf_page": 1, "page_size": [420, 560], "source_rotation": 90,
+                "text_status": "positioned_original_text_available", "image": {"path": "reports/literature-pdf/fixture/page-1.png"}}],
+            "sentences": [], "links": [{"kind": "table_cell", "id": "cell-example", "pdf_page": 1,
+                "target": "reports/literature-matrix/index.html#cell-example", "quote": "Located table",
+                "asset": {"bbox": [30, 50, 100, 150]}}]}
+        with patch("scripts.literature_workbench._href", return_value="../../source.pdf#page=1"):
+            result = pdf.html_text(Path("."), report)
+        self.assertIn('href="#cell-example"><rect x="30" y="50" width="70" height="100"', result)
+        report["links"][0]["asset"]["bbox"] = [30, 50, 500, 150]
+        with patch("scripts.literature_workbench._href", return_value="../../source.pdf#page=1"), self.assertRaisesRegex(ValueError, "displayed PDF page"):
+            pdf.html_text(Path("."), report)
 
 
 class PdfCloudAcceptanceTests(unittest.TestCase):
@@ -114,6 +135,8 @@ class PdfCloudAcceptanceTests(unittest.TestCase):
         for number, page in enumerate(original.pages):
             output.add_page(page)
             if number == 1:
+                output.pages[-1].cropbox.lower_left = (20, 40)
+                output.pages[-1].cropbox.upper_right = (580, 460)
                 output.pages[-1].rotate(90)
         buffer = io.BytesIO()
         output.write(buffer)
@@ -144,6 +167,26 @@ class PdfCloudAcceptanceTests(unittest.TestCase):
         self.assertIn("<svg", page)
         self.assertIn("annotated.pdf", page)
         self.assertIn("page-3.png", page)
+
+    def test_nonzero_cropbox_and_rotation_align_pdf_annotation_with_known_source_point(self):
+        result = pdf.refresh(self.project)
+        page = result["pages"][1]
+        self.assertEqual(page["source_rotation"], 90)
+        self.assertEqual(page["page_size"], [420, 560])
+        sentence = next(s for s in result["sentences"] if s["pdf_page"] == 2 and
+                        s["position_status"] == "located_unique_normalized_word_sequence")
+        for x0, y0, x1, y1 in sentence["rects"]:
+            self.assertTrue(0 <= x0 < x1 <= 420)
+            self.assertTrue(0 <= y0 < y1 <= 560)
+        annotation = next(a for a in result["annotations"] if a["sentence_id"] == sentence["sentence_id"])
+        left, bottom, right, top = annotation["rect_pdf_points_bottom_left"]
+        # The original baseline starts at (30,400). Transfer of the clockwise
+        # rotation maps that baseline to (400,570) in normalized PDF coordinates.
+        # This independent known source point detects a lost CropBox offset.
+        self.assertLess(left, 400)
+        self.assertGreater(right, 400)
+        self.assertAlmostEqual(top, 570, delta=2)
+        self.assertGreater(top, bottom)
 
     def test_actual_ocr_scan_is_assistance_never_native_evidence(self):
         if shutil.which("tesseract") is None:

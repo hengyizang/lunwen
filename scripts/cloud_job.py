@@ -83,6 +83,7 @@ LITERATURE_OPERATIONS = {
     "literature_semantic": ({"request_file"}, set()),
     "literature_pdf": ({"request_file"}, set()),
     "literature_zotero": ({"request_file"}, set()),
+    "literature_zotero_register": ({"request_file", "item_key", "paper_id"}, {"request_file", "item_key"}),
     "literature_roles": ({"request_file"}, set()),
     "literature_comparison": ({"request_file", "execute"}, set()),
     "literature_paperqa": ({"request_file", "execute"}, set()),

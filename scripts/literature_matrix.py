@@ -366,8 +366,16 @@ def markdown_text(report):
     for cell in report["cells"]:
         numeric = cell.get("numeric", {})
         original = " ".join(str(v) for v in (numeric.get("comparator"), numeric.get("original_value"), numeric.get("original_unit")) if v is not None)
-        evidence = "<br>".join(esc(a["path"]) + " - " + esc(a["locator"]) + ": " + esc(a["quote"]) for a in cell["evidence"])
+        evidence = "<br>".join(esc(a["path"]) + " - " + esc(a["locator"]) + " - SHA256 " +
+            esc(a.get("sha256", "unknown")) + ": " + esc(a["quote"]) for a in cell["evidence"])
         lines.append("| " + " | ".join(esc(v) for v in (cell["paper_id"], cell["field_id"], cell["status"], cell["text"], original)) + " | " + evidence + " |")
+    lines += ["", "## Complete cell records", "",
+              "Original and normalized values, uncertainty, source versions, conditions, table headers, footnotes and review boundaries are preserved below when present. Missing fields are not inferred."]
+    papers = {row["paper_id"]: row for row in report.get("papers", [])}
+    for cell in report["cells"]:
+        payload = {"cell": cell, "paper_source": papers.get(cell["paper_id"])}
+        lines += ["", "<details>", "<summary>" + html.escape(cell["paper_id"] + " / " + cell["field_id"]) + "</summary>", "",
+                  "<pre>" + html.escape(json.dumps(payload, ensure_ascii=False, indent=2)) + "</pre>", "</details>"]
     return "\n".join(lines) + "\n"
 
 

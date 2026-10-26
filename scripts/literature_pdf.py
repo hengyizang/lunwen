@@ -220,11 +220,12 @@ def html_text(project, report):
         for link in report["links"]:
             if link["kind"] != "table_cell" or link["pdf_page"] != number:
                 continue
-            # Figure assets use original unrotated PDF coordinates. Never guess
-            # their alignment after a rotation transform; page links remain usable.
-            if page["source_rotation"] == 0:
-                x0, y0, x1, y1 = link["asset"]["bbox"]
-                body.append('<a href="#' + esc(link["id"]) + '"><rect x="' + str(x0) + '" y="' + str(y0) + '" width="' + str(x1-x0) + '" height="' + str(y1-y0) + '"/></a>')
+            # Native asset manifests already use displayed CropBox points after
+            # page rotation, matching this normalized view's top-left coordinates.
+            x0, y0, x1, y1 = link["asset"]["bbox"]
+            if not 0 <= x0 < x1 <= width + 0.1 or not 0 <= y0 < y1 <= height + 0.1:
+                raise ValueError("table evidence rectangle exceeds the displayed PDF page")
+            body.append('<a href="#' + esc(link["id"]) + '"><rect x="' + str(x0) + '" y="' + str(y0) + '" width="' + str(x1-x0) + '" height="' + str(y1-y0) + '"/></a>')
         body.append('</svg></div><ol>')
         for sentence in report["sentences"]:
             if sentence["pdf_page"] == number:

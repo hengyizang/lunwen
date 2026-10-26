@@ -15,19 +15,21 @@ budget. Enabling a route never grants a new budget or a scientific gate approval
 | Conceptual image import | Authorized downloaded PNG import and source receipt remain available | Human visual review and actual AI-use disclosure remain mandatory |
 | Paid conceptual image generation | Disabled, including legacy `--execute` | Current key/model catalogs provide no verified image-generation permission or metered image adapter; no automatic paid request is possible |
 | Result figures and method diagrams | Existing deterministic data renderers and `research_diagrams.py` | Generated images cannot serve as measured experimental evidence |
-| Upstream PaperQA2/ToolUniverse model-backed operations | Remain paused where they bypass the central budget and identity receipts | Deterministic permitted tools remain usable; do not advertise unsupported paid SDK integration as complete |
+| PaperQA2 SDK vector retrieval | Explicit literature_paperqa uses the pinned real SDK vector store with source-bound CPU vectors and the centrally metered reader-qa answer | Its autonomous agent/provider transports remain outside this controlled adapter; ToolUniverse operations that bypass the meter stay paused |
 
 ## Native source Q&A
 
 The [reading upgrades](LITERATURE-EVIDENCE-READING.md) support optional bounded
 multi-query fusion and precomputed vectors through an explicit retrieval plan.
-This does not enable an embedding service or the upstream PaperQA2 paid SDK.
+Explicit literature_semantic now generates pinned CPU vectors/reranking without
+an embedding API. The controlled literature_paperqa bridge uses the actual SDK
+vector store and central metered answer; it never launches the upstream agent.
 New paid answers also map every answer statement to its individual citations;
 verbatim matching remains separate from semantic support.
 
 Supply explicit authorized project-relative `.md`, UTF-8 `.txt` or unencrypted
 `.pdf` sources. PDF extraction requires the optional reader dependency. No web
-crawler, embeddings, paid reranker or hidden model call is used for retrieval.
+crawler, live embedding API, paid reranker or hidden model call is used for retrieval.
 Control/private/raw directories, symlinks and paths escaping the project are
 rejected. Select at most 20 files, each at most 2 MB; total extracted text is
 bounded to 500,000 characters and each PDF to 100 pages. Retrieved context is

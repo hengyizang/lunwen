@@ -489,7 +489,7 @@ def after_write(project: Path, stage: str) -> dict:
                             "literature_itinerary", "literature_compare", "literature_progress",
                             "literature_retrieve", "literature_reading_index", "literature_coverage",
                             "literature_matrix", "literature_benchmark",
-                            "literature_semantic", "literature_pdf", "literature_zotero", "literature_roles",
+                            "literature_semantic", "literature_pdf", "literature_zotero", "literature_zotero_register", "literature_roles",
                             "literature_comparison", "literature_paperqa",
                             "data_row_prepare", "data_row_provenance", "literature_source_trace",
                             "literature_screening_advice", "literature_search_strategy", "literature_synthesis", "diagram_mermaid",

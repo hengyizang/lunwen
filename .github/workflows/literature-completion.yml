@@ -37,7 +37,7 @@ jobs:
         run: >-
           python -m unittest tests.test_literature_semantic tests.test_literature_pdf
           tests.test_literature_comparison tests.test_literature_zotero
-          tests.test_literature_paperqa tests.test_literature_completion_routes -v
+          tests.test_literature_paperqa tests.test_literature_roles tests.test_literature_completion_routes -v
       - name: Exercise real open paper with actual CPU ranking and PDF overlays
         run: python -m scripts.literature_completion_acceptance --directory artifacts/literature-completion
       - name: Verify repository contracts

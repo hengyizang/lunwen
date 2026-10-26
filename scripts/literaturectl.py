@@ -426,6 +426,9 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_benchmark":
         from scripts.literature_benchmark import refresh
         return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))
+    if action == "literature_zotero_register":
+        from scripts.literature_zotero import register
+        return register(project, operation["request_file"], operation["item_key"], paper_id=operation.get("paper_id"))
     if action in {"literature_semantic", "literature_pdf", "literature_zotero", "literature_roles"}:
         from importlib import import_module
         module = import_module("scripts." + action)

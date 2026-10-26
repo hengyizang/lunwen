@@ -41,9 +41,9 @@ def _get(url, authenticated):
                 raise ValueError("Zotero API redirected or exceeded the response bound")
             version = response.headers.get("Last-Modified-Version")
             total = response.headers.get("Total-Results")
-    except OSError as exc:
+    except OSError:
         # Do not persist a transport object's potentially credential-bearing repr.
-        raise ValueError("Zotero read failed; inspect library permission or service availability") from exc
+        raise ValueError("Zotero read failed; inspect library permission or service availability") from None
     if not str(version).isdigit() or (total is not None and not str(total).isdigit()):
         raise ValueError("Zotero response needs actual library version and numeric result count")
     return data, int(version), int(total) if total is not None else None
@@ -115,6 +115,8 @@ def _saved(project, directory):
         return None
     from scripts.output_provenance import current_origin
     manifest = wb._json(manifest_path.read_bytes())
+    if manifest.get("implementation_sha256") != sha(Path(__file__)):
+        raise ValueError("Zotero implementation changed; refresh with a new import ID")
     for binding in manifest.get("files", []):
         path = path_in(project, binding["path"])
         if sha(path) != binding["sha256"] or current_origin(project, path).get("status") != "tracked":
@@ -243,9 +245,55 @@ def refresh(project, request_path="program/literature-zotero.json"):
 def validate_saved_report(project, request_path="program/literature-zotero.json"):
     spec = wb._json(path_in(project, request_path).read_bytes())
     identifier, _ = _spec(project, spec)
-    report = _saved(project, path_in(project, OUTPUT + "/" + identifier))
+    report = _saved(project, path_in(project, OUTPUT + "/" + identifier, exists=False))
     if report is None:
         raise ValueError("Zotero report missing")
     if report.get("request_sha256") != wb._digest(spec):
         raise ValueError("Zotero request changed")
     return report
+
+
+def register(project, request_path, item_key, *, paper_id=None):
+    """Put one actual imported bibliography item in the shared metadata library.
+
+    Versioned source identities preserve older entries. No PDF right, reading
+    coverage, thesis mapping or scientific inclusion is granted by this bridge.
+    """
+    from scripts.literaturectl import require_cloud
+    require_cloud()
+    report = validate_saved_report(project, request_path)
+    matches = [row for row in report["items"] if row["key"] == item_key and row["status"] == "bibliographic_metadata_only"]
+    if len(matches) != 1:
+        raise ValueError("select one current actual bibliographic item key")
+    row = matches[0]
+    content = {"library": report["library"], "item": row}
+    identity = wb._digest(content)
+    identifier = wb._id(paper_id or "zotero-" + item_key.lower() + "-" + identity[:12])
+    relative = "literature/zotero-metadata/" + identity + ".md"
+    source = path_in(project, relative, exists=False)
+    work = row["work"]
+    text = "# Bibliographic discovery metadata\n\n" + work["title"] + "\n\nDOI: " + (work.get("doi") or "unknown") + \
+        "\n\nAuthors: " + ", ".join(work.get("authors", [])) + "\n\nAbstract as exported (unverified):\n" + \
+        (work.get("abstract") or "unknown") + "\n\nNot original full text, reading completion or scientific inclusion.\n\n" + json.dumps(content, ensure_ascii=False, sort_keys=True) + "\n"
+    if source.exists() and source.read_text(encoding="utf-8") != text:
+        raise ValueError("refusing to overwrite a different Zotero metadata source")
+    config_path = path_in(project, wb.CONFIG, exists=False)
+    config = wb._json(config_path.read_bytes()) if config_path.exists() else {"schema_version": "1.0", "papers": []}
+    papers = config.get("papers")
+    if not isinstance(papers, list):
+        raise ValueError("current shared library has invalid papers")
+    entry = {"id": identifier, "title": work["title"], "topic_id": "zotero-discovery",
+        "paper_ids": [], "source_scope": "metadata_only", "source": {"path": relative, "sha256": hashlib.sha256(text.encode()).hexdigest()}}
+    existing = [p for p in papers if p.get("id") == identifier]
+    if existing and existing != [entry]:
+        raise ValueError("paper ID already belongs to another source/version")
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_text(text, encoding="utf-8")
+    if not existing:
+        papers.append(entry)
+    write(config_path, config)
+    record(project, [source, config_path], "scripts/literature_zotero.py")
+    built = wb.build(project)
+    return {"paper_id": identifier, "source": entry["source"], "reused": bool(existing),
+        "attachment_status": "metadata_only", "human_screening_approved": False,
+        "paid_calls": 0, "workbench": built}
