@@ -8,9 +8,18 @@
     "nature-skills",
     "paperspine",
     "auto-empirical-methods",
-    "econ-data-methods"
+    "econ-data-methods",
+    "paperqa2", "paperai-reading", "zotero-reading-coverage", "beaver-sentence-evidence",
+    "openpaper-evidence-tables", "daily-paper-retrieval", "paperpilot-search-protocol", "paperlens-discovery-reference"
   ],
   "modules": [
+    {
+      "id": "literature-reading",
+      "stages": ["topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
+      "path": "references/research-methods/literature-reading.md",
+      "sha256": "ad50c504c463aea97020e77ce42f523c5ae803c05970e206e7877623b9ec143f",
+      "source_ids": ["paperqa2", "paperai-reading", "zotero-reading-coverage", "beaver-sentence-evidence", "openpaper-evidence-tables", "daily-paper-retrieval", "paperpilot-search-protocol", "paperlens-discovery-reference"]
+    },
     {
       "id": "topic-hypotheses",
       "stages": [

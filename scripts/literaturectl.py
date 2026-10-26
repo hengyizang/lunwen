@@ -139,7 +139,7 @@ def source_blocks(project: Path, paper: dict) -> tuple[list[dict], list[dict]]:
         scope = workbench._reader(project, paper["reader"], source, files)
         binding = {"path": scope["path"], "sha256": scope["sha256"]}
     else:
-        binding = files.binding(paper.get("reader", source))
+        binding = files.binding(paper.get("reader") or source)
         if binding != source:
             raise ValueError("Text analysis cannot replace its original source with an unrelated reader")
         if Path(source["path"]).suffix.lower() not in {".md", ".txt"}:
@@ -402,6 +402,30 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_progress":
         from scripts.literature_reasoning import record_progress
         return record_progress(project, operation["request"], progress_path=operation.get("progress"))
+    if action == "literature_retrieve":
+        from scripts.literature_review import refresh
+        return refresh(project, operation.get("request_file", "program/literature-retrieval.json"))
+    if action == "literature_reading_index":
+        from scripts.literature_reading import build_index
+        if type(operation.get("locate_pdf", False)) is not bool:
+            raise ValueError("locate_pdf must be an explicit boolean")
+        return build_index(project, operation["paper_id"], locate_pdf=operation.get("locate_pdf", False))
+    if action == "literature_coverage":
+        from scripts.literature_reading import coverage
+        request_file = operation.get("request_file", "program/literature-coverage.json")
+        if not isinstance(request_file, str) or not request_file.startswith("program/"):
+            raise ValueError("reading coverage request belongs under program/")
+        request_path = path_in(project, request_file)
+        if request_path.stat().st_size > 64000:
+            raise ValueError("reading coverage request exceeds 64 KB")
+        from scripts.literature_workbench import _json
+        return coverage(project, _json(request_path.read_bytes()))
+    if action == "literature_matrix":
+        from scripts.literature_matrix import refresh
+        return refresh(project, request_path=operation.get("request_file", "program/literature-extraction.json"))
+    if action == "literature_benchmark":
+        from scripts.literature_benchmark import refresh
+        return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))
     if action in {"literature_feedback", "literature_feedback_propose", "literature_feedback_review"}:
         from scripts import literature_feedback as feedback
         if action == "literature_feedback":
@@ -444,7 +468,8 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("install", "verify", "discover", "resolve", "figures",
-        "build", "search", "itinerary", "compare", "analyze", "register", "request"))
+        "build", "search", "itinerary", "compare", "analyze", "register", "request",
+        "retrieve", "reading-index", "coverage", "matrix", "benchmark"))
     parser.add_argument("--project")
     parser.add_argument("--plan", default="program/literature-plan.json")
     parser.add_argument("--config")
@@ -465,6 +490,7 @@ def main() -> int:
     parser.add_argument("--progress")
     parser.add_argument("--max-selected", type=int)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--locate-pdf", action="store_true", default=None)
     args = parser.parse_args()
     require_cloud()
     if args.action in {"install", "verify"}:
@@ -479,11 +505,12 @@ def main() -> int:
         print(json.dumps(execute_operation(ROOT / "projects" / args.project, operation), ensure_ascii=False, indent=2))
         return 0
     names = {"build": "workbench", "discover": "discover", "search": "search", "itinerary": "itinerary",
-             "compare": "compare", "resolve": "resolve", "figures": "figures", "analyze": "analyze", "register": "register"}
+             "compare": "compare", "resolve": "resolve", "figures": "figures", "analyze": "analyze", "register": "register",
+             "retrieve": "retrieve", "reading-index": "reading_index", "coverage": "coverage", "matrix": "matrix", "benchmark": "benchmark"}
     operation = {"action": "literature_" + names[args.action], "plan": args.plan, "output": args.output,
                  "execute": args.execute}
     for key in ("config", "query", "question", "url", "pdf", "manifest", "paper_id", "paper_ids",
-                "topic_id", "limit", "candidate_id", "expected_leads_sha256", "reasoning", "progress", "max_selected"):
+                "topic_id", "limit", "candidate_id", "expected_leads_sha256", "reasoning", "progress", "max_selected", "request_file", "locate_pdf"):
         if getattr(args, key) is not None:
             operation[key] = getattr(args, key)
     result = execute_operation(ROOT / "projects" / args.project, operation)
