@@ -134,7 +134,7 @@ class LiteratureReviewPipelineTests(WorkbenchFixture):
             self.assertTrue(executor_owned(self.project, "reports/" + directory + "/test.json"))
         operations[0]["execute"] = True
         write(self.project / "program/bad-operation.json", operations[0])
-        with self.assertRaises(ValueError):
+        with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.literature_operation(self.project, "program/bad-operation.json")
 
     def test_numeric_benchmark_revalidates_current_matrix_inputs(self):
