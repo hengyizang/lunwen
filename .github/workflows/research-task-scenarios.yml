@@ -1,0 +1,63 @@
+name: Research task scenario contracts
+on:
+  pull_request:
+    paths:
+      - 'scripts/data_row_provenance.py'
+      - 'scripts/literature_source_tasks.py'
+      - 'scripts/literature_search_strategy.py'
+      - 'scripts/literature_synthesis.py'
+      - 'scripts/diagram_mermaid.py'
+      - 'scripts/research_task_acceptance.py'
+      - 'scripts/literaturectl.py'
+      - 'scripts/cloud_job.py'
+      - 'tests/test_data_row_provenance.py'
+      - 'tests/test_literature_source_tasks.py'
+      - 'tests/test_literature_search_strategy.py'
+      - 'tests/test_literature_synthesis.py'
+      - 'tests/test_diagram_mermaid.py'
+      - 'tests/test_research_task_routes.py'
+      - '.github/workflows/research-task-scenarios.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: research-task-scenarios-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  task-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DR_OS_CLOUD_EXECUTOR: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install existing document tools without model credentials
+        run: python -m pip install --disable-pip-version-check '.[reader,figures]' 'reportlab>=4,<5'
+      - name: Check source, screening, query, synthesis and diagram contracts
+        run: >-
+          python -m unittest tests.test_data_row_provenance tests.test_literature_source_tasks
+          tests.test_literature_search_strategy tests.test_literature_synthesis
+          tests.test_diagram_mermaid tests.test_research_task_routes -v
+      - name: Validate repository and Python syntax
+        run: |
+          python -m compileall -q scripts tests
+          python scripts/validate_repo.py
+      - name: Install pinned Mermaid only for isolated cloud acceptance
+        run: npm install --prefix "$RUNNER_TEMP/research-task-mermaid" --ignore-scripts --no-audit --no-fund mermaid@12.2.0
+      - name: Render actual editable Mermaid with Chromium
+        run: >-
+          python -m scripts.research_task_acceptance --directory artifacts/research-task-scenarios
+          --mermaid-package "$RUNNER_TEMP/research-task-mermaid/node_modules/mermaid"
+      - name: Preserve software acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: research-task-scenarios-acceptance
+          path: artifacts/research-task-scenarios/
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,5 +1,10 @@
 # Literature evidence reading upgrades
 
+The [research task scenarios](RESEARCH-TASK-SCENARIOS.md) add row provenance,
+remembered-claim tracing, criterion-level screening advice, tiered bilingual
+queries, source-bound synthesis outlines and evidence-preserving Mermaid export.
+They reuse these same workbench sources, matrix and original-text boundaries.
+
 These native cloud mechanisms extend the existing workbench, reading progress,
 source rights, model runtime and budget. They do not install ten competing apps,
 require desktop Zotero, add a model, change reasoning effort, spend a new API

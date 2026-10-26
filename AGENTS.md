@@ -28,6 +28,12 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For row-level data provenance, remembered-claim tracing, criterion-level AI
+screening advice, tiered bilingual searches, matrix-based synthesis outlines or
+Mermaid export, use docs/RESEARCH-TASK-SCENARIOS.md. Reuse existing source, formal
+decision and figure-story authority; a suggestion or location never self-verifies
+science. Preserve unknown dates/counts, adverse evidence, phases and originals.
+
 For source-scoped literature retrieval, sentence/page navigation, question-level
 reading coverage, evidence matrices and quality/cost comparisons, use
 docs/LITERATURE-EVIDENCE-READING.md. Reuse existing model cycles and progress;
