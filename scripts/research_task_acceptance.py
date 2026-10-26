@@ -54,23 +54,25 @@ def exercise(directory: Path, mermaid_package: Path) -> dict:
         page.write_text('<!doctype html><meta charset="utf-8">' +
             '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' file:; style-src \'unsafe-inline\'; img-src data: file:; font-src data: file:">' +
             '<body data-status="pending"><div id="rendered"></div><script id="source" type="application/json">' + source + '</script>' +
-            '<script type="module">import mermaid from ' + json.dumps(entry.resolve().as_uri()) + ';' +
-            'try { mermaid.initialize({startOnLoad:false,securityLevel:"strict",fontFamily:"Arial",flowchart:{htmlLabels:false}});' +
+            '<script type="module">try { document.body.dataset.status="importing"; const {default:mermaid}=await import(' + json.dumps(entry.resolve().as_uri()) + ');' +
+            'document.body.dataset.status="rendering"; mermaid.initialize({startOnLoad:false,securityLevel:"strict",fontFamily:"Arial",flowchart:{htmlLabels:false}});' +
             'const code=JSON.parse(document.getElementById("source").textContent);await mermaid.parse(code);' +
             'const result=await mermaid.render("diagram",code);document.getElementById("rendered").innerHTML=result.svg;' +
             'document.body.dataset.nodes=String(document.querySelectorAll("g.node").length);' +
             'document.body.dataset.edges=String(document.querySelectorAll(".edgePaths path").length);' +
             'document.body.dataset.status="passed";' +
             '}catch(error){document.body.dataset.status="failed";document.body.dataset.error=String(error);}</script></body>', encoding="utf-8")
-        run = subprocess.run([browser, "--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
+        run = subprocess.run([browser, "--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--enable-logging=stderr",
             "--allow-file-access-from-files", "--dump-dom", "--virtual-time-budget=8000", page.resolve().as_uri()],
             capture_output=True, text=True, timeout=60, check=True)
         parsed = Rendered()
         parsed.feed(run.stdout)
+        (directory / f"mermaid-{number}.rendered.html").write_text(run.stdout, encoding="utf-8")
+        (directory / f"mermaid-{number}.stderr.log").write_text(run.stderr, encoding="utf-8")
         if parsed.status != "passed" or parsed.nodes != "3" or parsed.edges != "2":
             raise ValueError("actual Mermaid render failed: " + json.dumps({"status": parsed.status,
-                "nodes": parsed.nodes, "edges": parsed.edges, "error": parsed.error}))
-        (directory / f"mermaid-{number}.rendered.html").write_text(run.stdout, encoding="utf-8")
+                "nodes": parsed.nodes, "edges": parsed.edges, "error": parsed.error,
+                "browser_diagnostics": run.stderr[-3000:]}))
         cases.append({"case": number, "actual_nodes": int(parsed.nodes), "actual_edges": int(parsed.edges),
                       "status": "passed", "untrusted_label_test": changed})
     report = {"status": "pass", "runtime": "actual_headless_chromium", "mermaid_version": package["version"],
