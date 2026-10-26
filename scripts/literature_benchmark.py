@@ -54,7 +54,7 @@ def evaluate(project: Path, spec: dict) -> dict:
             or set(spec) - {"schema_version", "annotation", "cases", "numeric_cases", "cost_scope"}):
         raise ValueError("unsupported literature benchmark")
     annotation = spec.get("annotation")
-    if (not isinstance(annotation, dict) or annotation.get("kind") not in {"synthetic_fixture", "human_annotation"}
+    if (not isinstance(annotation, dict) or annotation.get("kind") not in {"synthetic_fixture", "primary_source_fixture", "human_annotation"}
             or not isinstance(annotation.get("by"), str) or not annotation["by"].strip()):
         raise ValueError("attribute gold labels; synthetic fixtures are not scientific validation")
     cases = spec.get("cases")

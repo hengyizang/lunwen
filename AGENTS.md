@@ -28,6 +28,14 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For actual CPU semantic retrieval/reranking, bounded PaperQA2 SDK vector-store
+use, complete-text reading comparisons, cloud Zotero reads, discovery categories
+or PDF overlays/annotated copies, use docs/LITERATURE-COMPLETION.md. These are
+explicit existing-cloud operations. Preserve unchanged indexes/requests, source
+rights, original versions, unknown semantic ratings and the central spending
+boundary. No upstream agent may bypass that boundary; OCR never self-verifies
+original evidence. Actual independent review is not supplied by acceptance tests.
+
 For row-level data provenance, remembered-claim tracing, criterion-level AI
 screening advice, tiered bilingual searches, matrix-based synthesis outlines or
 Mermaid export, use docs/RESEARCH-TASK-SCENARIOS.md. Reuse existing source, formal

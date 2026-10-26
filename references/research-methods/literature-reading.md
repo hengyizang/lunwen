@@ -15,7 +15,9 @@ is required. Read docs/LITERATURE-EVIDENCE-READING.md for executable interfaces.
    that same question. literature_retrieve fuses BM25 routes by RRF. Mark
    known contrary/mixed papers in stances; inability to fit them requests an
    explicit narrower scope, not silent deletion. Vectors are optional existing
-   source/query/model-version-bound caches. No embedding service is enabled.
+   source/query/model-version-bound caches. Explicit literature_semantic can
+   generate vectors and independent rerank scores with pinned cloud CPU models;
+   no paid embedding service or automatic route promotion is enabled.
 3. Request literature_reading_index for stable original sentence IDs, exact
    reader lines and physical PDF pages. locate_pdf=true explicitly uses the
    cloud PDF positioner; absent/ambiguous coordinates or page labels stay
@@ -45,3 +47,23 @@ PaperQA2, paperai, llm-for-zotero, Beaver, OpenPaper and daily-paper-reader
 references in integrations/upstreams.lock.json. PaperPilot/PaperLens inform
 discovery only: DOI format or a nonempty citation list does not prove identity,
 entailment, novelty or scientific strength. No upstream code is copied here.
+
+Completion operations are documented in docs/LITERATURE-COMPLETION.md. Use
+literature_pdf for actual page overlays/annotated copies and optional separate
+OCR assistance. The original page is authoritative; ambiguous positions and
+OCR text remain pending review. literature_matrix also exports Markdown.
+literature_zotero reads actual Web API libraries or a hash-bound export without
+server writes or desktop execution; source processing rights remain separate.
+literature_roles derives overlapping core/adjacent/counterevidence categories
+from current search receipts and never supplies a scientific inclusion decision.
+
+Use literature_comparison to prepare same-question/same-original-corpus
+retrieval-versus-complete-text arms. Full text must actually cover all registered
+pages and fit the declared context; do not truncate. Only explicit execute in an
+authorized cycle may request existing centrally metered reader-qa calls; exact
+requests/identical contexts reuse cache. Keep rejected/failed/unknown charges,
+stop subsequent work on unresolved billing, and send blinded review proposals
+through the existing protected owner review mechanism. Source-location probes
+are not independent human semantic ratings or real-topic quality equivalence.
+Optional literature_paperqa uses the pinned upstream SDK's local vector store
+and the same controlled answer route; do not launch its unmetered agent/CLI.

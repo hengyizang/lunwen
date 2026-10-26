@@ -15,7 +15,7 @@ OUTPUT = "reports/literature-retrieval"
 
 
 def prepare(project: Path, request: dict) -> dict:
-    allowed = {"schema_version", "question", "paper_ids", "query_expansions", "limit", "dense_cache", "stances"}
+    allowed = {"schema_version", "question", "paper_ids", "query_expansions", "limit", "dense_cache", "rerank_cache", "stances"}
     if not isinstance(request, dict) or set(request) - allowed or request.get("schema_version") != "1.0":
         raise ValueError("unsupported literature retrieval request")
     question = workbench._text(request.get("question"), "retrieval question", 1000)
@@ -52,7 +52,7 @@ def prepare(project: Path, request: dict) -> dict:
         source["ranges"].sort(key=lambda span: span["start_line"])
     spec = {"schema_version": "1.0", "query": question, "sources": list(sources.values()),
             "limit": request.get("limit", 8)}
-    for key in ("query_expansions", "dense_cache"):
+    for key in ("query_expansions", "dense_cache", "rerank_cache"):
         if key in request:
             spec[key] = request[key]
     return {"spec": spec, "paper_sources": paper_sources,
