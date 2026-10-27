@@ -54,7 +54,19 @@ class CCFAScienceTests(unittest.TestCase):
     def request(self, operation, data, *, identifier="case", previous=None, **changes):
         value = {"schema_version": "1.0", "operation": operation, "id": identifier,
                  "doctoral_question": self.question, "paper_ids": ["P01"], "data": data, **changes}
-        binding = self.json(f"program/ccfa-inputs/{operation}-{identifier}.json", value)
+        relative = f"program/ccfa-inputs/{operation}-{identifier}.json"
+        target = self.project / relative
+        expected = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        origin = output_provenance.current_origin(self.project, target) if target.is_file() else {}
+        # An exact queue replay reuses the existing authored input. Re-recording
+        # identical bytes would create a new provenance event across a clock tick.
+        if (target.is_file() and target.read_bytes() == expected
+                and all(origin.get(key) == item for key, item in {
+                    "status": "tracked", "family": "openai", "provider": "fixture",
+                    "model": "fixture-writer", "role": "writer", "run_id": "synthetic-ccfa-test"}.items())):
+            binding = {"path": relative, "sha256": sha(target)}
+        else:
+            binding = self.json(relative, value)
         return {"schema_version": "1.0", "id": identifier, "source": binding["path"],
             "expected_source_sha256": binding["sha256"], "expected_previous_sha256": previous}
 
@@ -191,6 +203,25 @@ class CCFAScienceTests(unittest.TestCase):
             self.run_op("continuity", data, previous=before["sha256"])
         self.assertEqual((self.project / after["path"]).read_bytes(), report_bytes)
         self.assertEqual(history_path.read_bytes(), history_bytes)
+
+    def test_revision_queue_replay_reuses_source_provenance_across_clock_ticks(self):
+        data = self.continuity()
+        with patch.object(output_provenance, "utc_now", return_value="2026-10-01T00:00:00+00:00"):
+            before = self.run_op("continuity", data)
+        data.update(goal_revision=2, objective="Narrow the transfer claim to sensor drift.",
+            transition={"basis": "intent_correction", "reason": "Align the plan to the supplied scope.", "evidence": [self.anchor()]})
+        with patch.object(output_provenance, "utc_now", return_value="2026-10-01T00:00:01+00:00"):
+            after = self.run_op("continuity", data, previous=before["sha256"])
+        source = self.project / after["report"]["source"]["path"]
+        origin = output_provenance.current_origin(self.project, source)
+        report_bytes = (self.project / after["path"]).read_bytes()
+        with patch.object(output_provenance, "utc_now", return_value="2026-10-01T00:00:02+00:00"):
+            replay = self.run_op("continuity", data, previous=before["sha256"])
+        self.assertTrue(replay["exact_request_replay"])
+        self.assertTrue(replay["reused"])
+        self.assertEqual(output_provenance.current_origin(self.project, source), origin)
+        self.assertEqual((self.project / after["path"]).read_bytes(), report_bytes)
+        self.assertEqual(sha(self.project / after["report"]["previous"]["path"]), before["sha256"])
 
     def test_material_route_change_and_recovery_need_fresh_basis(self):
         data = self.continuity()
