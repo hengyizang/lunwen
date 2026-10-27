@@ -2456,7 +2456,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.0101784,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "be87900215de4d8f9147a8a7e96accf8",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -2747,7 +2747,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "Foreman-Mackey et al. (2019) released emcee version 3.0 as a major update to the Python toolkit for affine-invariant ensemble sampling in Markov chain Monte Carlo (MCMC), approximately six years after the previous major release [JOSS01864]. The release delivered a full rewrite of the computational backend, several quality-of-life improvements, and new interfaces for storing sampling results and selecting ensemble proposals [JOSS01864]. A progress bar based on `tqdm` was added as a usability improvement [JOSS01864].\n\nThe backends interface enabled real-time serialization of sampling results. As in the original implementation, emcee retained in-memory storage by default; version 3.0 additionally provided an `HDFBackend` class, which serializes the chain to disk through `h5py` [JOSS01864]. Thus, the interface supported persistence during sampling while preserving the existing in-memory behavior.\n\nThe principal functional addition was the moves interface. Whereas earlier emcee implementations used the affine-invariant stretch move proposed by Goodman and Weare (2010), version 3.0 allowed users to select among multiple ensemble proposals and to define custom proposals [JOSS01864]. The release included the stretch move, differential evolution and differential evolution snooker update moves, and a kernel density proposal based on the implementation in `kombine` [JOSS01864]. This expansion addressed the documented observation that proposals other than the stretch move may perform better for certain applications [JOSS01864]. The source does not report a universal or numerical benchmark advantage for any move, so the release should be characterized as providing broader proposal support rather than establishing across-application performance superiority. The publication also documented community contributions to emcee and provided citation credit to academic contributors [JOSS01864].",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 5217,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 623,
+        "output_tokens_details": {
+          "reasoning_tokens": 252
+        }
+      },
+      "request_id": "resp_0cd26f0899c0018f016ae0c99f312081918a8c244e3eef0a5d",
+      "response_sha256": "e7fec7789430ea74d6f75437d5e313c5b0ff8e41b4de1139e0a6bc608eff89a5",
+      "completion_status": "completed",
+      "duration_seconds": 26.7835
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
