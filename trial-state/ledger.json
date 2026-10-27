@@ -2795,7 +2795,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.7671192,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "4702b6095504432682d010a2ccdab8e0",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -3094,7 +3094,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "Foreman-Mackey et al. (2019) reported version 3.0 of `emcee`, the first major release of the Python ensemble-sampling toolkit in approximately six years [JOSS01864]. The release delivered a full rewrite of the computational backend, several quality-of-life improvements, and new interfaces for storing sampling results and selecting ensemble proposals [JOSS01864]. The documented usability improvement included a progress bar based on `tqdm` [JOSS01864].\n\nThe backends interface added real-time serialization of sampling results. Sampling output remained stored in memory by default, as in the original implementation, while the new `HDFBackend` serialized chains to disk through `h5py` [JOSS01864]. This functionality distinguishes result persistence from the sampler’s computational execution: users could retain the in-memory behavior or write the evolving chain to an HDF5-backed store [JOSS01864].\n\nThe principal functional addition was the moves interface. Earlier versions implemented the affine-invariant stretch move proposed by Goodman and Weare; version 3.0 generalized proposal selection by including multiple ensemble moves and an interface for defining custom proposals [JOSS01864]. The supplied implementations comprised the stretch move, differential-evolution and differential-evolution snooker-update moves, and a kernel-density proposal based on the implementation in `kombine` [JOSS01864]. This extension addressed the documented limitation that alternative ensemble proposals may perform better for certain applications [JOSS01864].\n\nThese changes constitute delivered library features rather than measured experimental outcomes. The source reports no universal performance improvement and provides no numerical benchmark demonstrating that version 3.0, or any included move, dominates alternatives across applications [JOSS01864]. It instead characterizes the moves interface as enabling proposal choice and customization in settings where performance depends on the application [JOSS01864].",
+      "reported_model": "gpt-6-astra",
+      "usage": {
+        "input_tokens": 5217,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 712,
+        "output_tokens_details": {
+          "reasoning_tokens": 332
+        }
+      },
+      "request_id": "resp_0bb81d22667877bd016ae0c9d60e348191bedfa8bac350a882",
+      "response_sha256": "509325c2633111e3d9dbf0e605de3b44ea5f5985e0ecd18ff2cfb503b70a8820",
+      "completion_status": "completed",
+      "duration_seconds": 31.8108
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
