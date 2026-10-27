@@ -29,15 +29,6 @@
       "paper_id": null,
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
-    },
-    "e1ce56cbd4cf4acba87507f11dd1b78e": {
-      "at": "2026-10-27T15:43:44+00:00",
-      "call_id": "argon-native-high|intro-seaborn",
-      "kind": "new_call",
-      "max_cost_cny": 0.4674768,
-      "paper_id": null,
-      "run_id": "40533774483",
-      "writing_trial": "writing-comparison-20261027"
     }
   },
   "schema_version": "1.0",
@@ -45,8 +36,12 @@
     {
       "actual_cost_cny": 0.0073388,
       "receipt_id": "d5a97692951f4ef48d7b9a8ceaa933d2"
+    },
+    {
+      "actual_cost_cny": 0.0073388,
+      "receipt_id": "e1ce56cbd4cf4acba87507f11dd1b78e"
     }
   ],
-  "spent_cny": 0.0073388,
+  "spent_cny": 0.0146776,
   "tranche_cny": 300
 }
