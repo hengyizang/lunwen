@@ -58,7 +58,7 @@ jobs:
       - name: Install independent presentation renderer
         run: |
           # The hosted Azure mirror stalled this package download until the job timed out.
-          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
+          sudo sed -i -e 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' -e 's|mirror+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update -qq -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
           sudo apt-get install -y --no-install-recommends -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 libreoffice-impress poppler-utils fonts-liberation
       - name: Exercise source bindings and tamper failures without paid keys

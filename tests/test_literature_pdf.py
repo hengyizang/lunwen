@@ -23,7 +23,7 @@ class PdfContractTests(unittest.TestCase):
              patch.object(pdf.shutil, "which", return_value=None), patch.object(pdf, "_run", return_value=SimpleNamespace(stdout=b"")) as run:
             packages = pdf.provision(Path(directory), {"enabled": True, "language": "eng+chi_sim"})
             self.assertEqual(packages, ["poppler-utils", "tesseract-ocr", "tesseract-ocr-eng", "tesseract-ocr-chi-sim"])
-            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_count, 3)
             self.assertEqual(run.call_args.args[0][-4:], packages)
             self.assertEqual(run.call_args.args[0][:5], ["sudo", "-n", "apt-get", "install", "-y"])
 

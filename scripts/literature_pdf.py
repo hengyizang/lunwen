@@ -96,6 +96,9 @@ def provision(project, ocr):
         language_packages = {"eng": "tesseract-ocr-eng", "chi_sim": "tesseract-ocr-chi-sim"}
         packages += [language_packages[language] for language in ocr["language"].split("+") if language not in installed]
     if packages:
+        _run(["sudo", "-n", "sed", "-i", "-e", "s|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g",
+              "-e", "s|mirror+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu|g",
+              "/etc/apt/sources.list.d/ubuntu.sources"])
         _run(["sudo", "-n", "apt-get", "update", "-qq", "-o", "Acquire::Retries=1", "-o", "Acquire::https::Timeout=20"], timeout=180)
         _run(["sudo", "-n", "apt-get", "install", "-y", "--no-install-recommends", "-o", "Acquire::Retries=1",
               "-o", "Acquire::https::Timeout=20", *packages], timeout=240)
