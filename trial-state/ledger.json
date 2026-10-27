@@ -211,7 +211,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 0.4674768,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "failed",
       "project_reservation_id": "d5a97692951f4ef48d7b9a8ceaa933d2",
       "meter_before": {
         "provider": "codekey-gemini",
@@ -221,7 +221,9 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40532368313",
-      "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5"
+      "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5",
+      "diagnostic": "production response model ID missing or mismatched; quarantine route and reconcile billing",
+      "duration_seconds": 22.5713
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
