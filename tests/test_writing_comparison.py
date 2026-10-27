@@ -154,6 +154,31 @@ class WritingTransportAmendmentTests(unittest.TestCase):
             trial.reviewed_transport_amendment(ledger, scope, trial.REVIEWED_BASE_FAILURE)
 
 
+class IndependentContinuationTests(unittest.TestCase):
+    def ledger(self):
+        return {"status": "stopped", "stop_reason": "retained identity failures",
+            "entries": [{"call_id": key, "billing_status": "settled", "generation_status": "failed",
+                "diagnostic": "production response model ID missing or mismatched"}
+                for key in ("argon-high|intro-seaborn", "argon-native-high|intro-seaborn")]}
+
+    def test_settled_identity_failures_only_quarantine_argon_and_preserve_attempts(self):
+        ledger = self.ledger()
+        original = copy.deepcopy(ledger["entries"])
+        trial.continue_independent_routes(ledger, trial.REVIEWED_HIGH_FAILURE)
+        self.assertEqual(ledger["entries"], original)
+        self.assertEqual(ledger["quarantined_providers"], ["codekey-gemini"])
+        self.assertEqual(ledger["status"], "running")
+        self.assertNotIn("stop_reason", ledger)
+
+    def test_unknown_charge_or_another_ledger_cannot_resume(self):
+        ledger = self.ledger()
+        ledger["entries"][1]["billing_status"] = "reserved"
+        with self.assertRaises(ValueError):
+            trial.continue_independent_routes(ledger, trial.REVIEWED_HIGH_FAILURE)
+        with self.assertRaises(ValueError):
+            trial.continue_independent_routes(self.ledger(), "f" * 40)
+
+
 class WritingTrialLegacyExceptionTests(unittest.TestCase):
     def setUp(self):
         self.environment = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": relay_guard.REPOSITORY,

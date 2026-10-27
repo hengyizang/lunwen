@@ -81,6 +81,14 @@ case is omitted, leaving five Astra cases plus the failed base attempt:18 total
 requests maximum, still CNY30 new spending and the same CNY500 central budget.
 Any high-ID mismatch is also rejected; no further alias substitution is enabled.
 
+The high-ID introduction also failed identity validation (the response did not
+supply an acceptable model identifier), with independently settled cost
+CNY0.0073388. Both failed attempts remain charged, totaling CNY0.0146776.
+The exact two-failure ledger is reviewed before continuing only never-sent GPT
+tasks from the same frozen scope. CodeKey Gemini stays quarantined; its five
+remaining writing tasks are unattempted and unknown, never zero-quality scores.
+No Argon prose is accepted and no direct Argon/GPT quality comparison is claimed.
+
 Reject invented facts/results/citations, incorrect numbers or units, changed
 causal scope, incorrect attribution, or loss of an essential condition. For
 scientifically acceptable prose, assess argument clarity, concrete contribution,

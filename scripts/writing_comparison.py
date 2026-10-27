@@ -29,6 +29,7 @@ ROUTES = (
     {"id": "astra-high", "provider": "cheapai-gpt-pro", "model": "gpt-6-astra"},
 )
 REVIEWED_BASE_FAILURE = "7cedd3713aa45202c23c95051c31dfb60b658a5e"
+REVIEWED_HIGH_FAILURE = "2f59ecce09431cad59fbce15755f3411bc6b56e4"
 
 
 class State(gateway_trial.CloudState):
@@ -169,6 +170,22 @@ def reviewed_transport_amendment(ledger, scope, current_sha):
     ledger.update(status="running")
 
 
+def continue_independent_routes(ledger, current_sha):
+    """Continue only never-sent GPT tasks after two settled identity failures."""
+    if (current_sha != REVIEWED_HIGH_FAILURE or ledger.get("status") != "stopped"
+            or [row["call_id"] for row in ledger["entries"]] != [
+                "argon-high|intro-seaborn", "argon-native-high|intro-seaborn"]
+            or any(row.get("billing_status") != "settled" or row.get("generation_status") != "failed"
+                   or "model ID missing or mismatched" not in row.get("diagnostic", "")
+                   for row in ledger["entries"])):
+        raise ValueError("exact independently billed identity failures required; no new permission or replay")
+    ledger["independent_continuation"] = {"reviewed_ledger_blob": current_sha,
+        "previous_stop_reason": ledger.get("stop_reason"), "provider_quarantined": "codekey-gemini",
+        "reason": "Both Argon contracts failed identity; continue only already-authorized never-sent GPT tasks, with no Argon retries or new judge calls."}
+    ledger.update(status="running", quarantined_providers=["codekey-gemini"])
+    ledger.pop("stop_reason", None)
+
+
 class Budget:
     def __init__(self, token):
         self.state = State(token, "cloud-state/my-phd", "projects/my-phd/state")
@@ -291,6 +308,9 @@ def execute(plan, state):
     if ledger["scope"] != json.loads(json.dumps(scope)):
         reviewed_transport_amendment(ledger, scope, state.expected.get("ledger.json"))
         state.save("ledger.json", ledger)
+    if ledger.get("status") == "stopped" and state.expected.get("ledger.json") == REVIEWED_HIGH_FAILURE:
+        continue_independent_routes(ledger, state.expected["ledger.json"])
+        state.save("ledger.json", ledger)
     if ledger["status"] != "running":
         return ledger
     if any(entry["billing_status"] != "settled" for entry in ledger["entries"]):
@@ -302,6 +322,8 @@ def execute(plan, state):
         order = ROUTES[index % 3:] + ROUTES[:index % 3]
         for route in order:
             call_id = route["id"] + "|" + case["id"]
+            if route["provider"] in ledger.get("quarantined_providers", []):
+                continue
             if call_id not in scope["call_ceilings_cny"]:
                 continue
             if any(entry["call_id"] == call_id for entry in ledger["entries"]):
@@ -358,6 +380,7 @@ def execute(plan, state):
                 state.save("ledger.json", ledger)
                 return ledger
     ledger.update(status="closed", completed_at=datetime.now(timezone.utc).isoformat())
+    ledger["unattempted_unknown"] = sorted(set(scope["call_ceilings_cny"]) - {row["call_id"] for row in ledger["entries"]})
     state.save("ledger.json", ledger)
     return ledger
 
@@ -373,7 +396,7 @@ def main():
     if mode == "execute":
         plan = json.loads((ROOT / "config/writing-comparison-20261027.json").read_text(encoding="utf-8"))
         report = execute(plan, state)
-        if len(report["entries"]) == 18:
+        if report["status"] == "closed" and any(row["generation_status"] == "completed" for row in report["entries"]):
             export_review(plan, report)
     elif mode == "metadata":
         report = metadata()
