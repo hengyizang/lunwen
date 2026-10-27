@@ -2,13 +2,13 @@
   "schema_version": "1.0",
   "project": "my-phd",
   "should_run": false,
-  "reason": "production_configured_automatic_research_not_started",
+  "reason": "billing_reconciliation_pending",
   "stage": "topic-intelligence",
   "gate": "G1",
   "actor": "Hengyi Zang",
   "authorized_ceiling_cny": 500,
-  "spent_cny": 0.0,
-  "remaining_cny": 500.0,
-  "changed_at": "2026-10-23T20:37:27+00:00",
-  "source_run_id": "40020633474"
+  "spent_cny": 0.0873256,
+  "remaining_cny": 490.329064,
+  "changed_at": "2026-10-27T18:13:18+00:00",
+  "source_run_id": "40557888335"
 }
