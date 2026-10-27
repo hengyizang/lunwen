@@ -310,6 +310,39 @@ class RelayGuardTests(unittest.TestCase):
             "gateway_meter_before":old,"debit_evidence":proof}]})
         self.assertEqual(guard.source_holds(PROVIDER,self.store),[])
 
+    def test_original_cheapai_whole_key_prefix_survives_later_per_call_receipts(self):
+        cheap="cheapai-gpt-pro";branch,name=guard.SOURCES[0]
+        prefix=[]
+        for model,quota,at in (("gpt-6.1-sol",194,1792341993),("gpt-6-astra",1238,1792341999)):
+            prefix.append({"call_id":cheap+"|"+model+"|evidence","status":"gateway_debit_verified",
+                "gateway_debit_cny":quota/500000,"reserved_ceiling_cny":1,"debit_evidence":{
+                    "source":"https://cheapai.info/api/log/token","quota_per_unit":500000,
+                    "model":model,"quota":quota,"created_at":at,"prompt_tokens":165,"completion_tokens":143,
+                    "all_key_debits_match_attempt_count":True,"no_generation_retry":True}})
+        before_rows=[guard._row(entry["debit_evidence"]) for entry in prefix]
+        later={"call_id":cheap+"|gpt-6.1-sol|engineering","status":"gateway_debit_verified",
+            "gateway_debit_cny":284/500000,"reserved_ceiling_cny":1,
+            "gateway_meter_before":{"kind":"cheapai_quota_history","quota_per_unit":500000,"rows":before_rows},
+            "debit_evidence":{"source":"https://cheapai.info/api/log/token","quota_per_unit":500000,
+                "model":"gpt-6.1-sol","quota":284,"created_at":1792344019,"prompt_tokens":147,"completion_tokens":229,
+                "exactly_one_new_gateway_request":True}}
+        entries=prefix+[later]
+        self.store.put(branch,"trial-state",name,{"entries":entries})
+        self.assertEqual(guard.source_holds(cheap,self.store),[])
+        # A later unaccounted call remains held independently; valid old debits
+        # must not become unknown merely because the trial has been extended.
+        unknown={"call_id":cheap+"|gpt-6-astra|later-unknown","reserved_ceiling_cny":1,"status":"reserved_before_transport"}
+        self.store.put(branch,"trial-state",name,{"entries":entries+[unknown]})
+        self.assertEqual([row["call_id"] for row in guard.source_holds(cheap,self.store)],[unknown["call_id"]])
+        # The first incremental snapshot must contain the complete original
+        # bijection, and whole-key flags cannot resume after incremental calls.
+        missing=copy.deepcopy(entries);missing[-1]["gateway_meter_before"]["rows"].pop()
+        self.store.put(branch,"trial-state",name,{"entries":missing})
+        self.assertTrue({e["call_id"] for e in prefix} <= {h["call_id"] for h in guard.source_holds(cheap,self.store)})
+        resumed=copy.deepcopy(prefix[0]);resumed["call_id"]=cheap+"|gpt-6.1-sol|resumed-batch"
+        self.store.put(branch,"trial-state",name,{"entries":entries+[resumed]})
+        self.assertTrue({e["call_id"] for e in prefix} <= {h["call_id"] for h in guard.source_holds(cheap,self.store)})
+
     def trial(self):
         plan=json.loads((comparison.ROOT/"config/model-comparison-20261020.json").read_text(encoding="utf-8"))
         route=next(r for r in plan["candidates"] if r["provider"]==PROVIDER)

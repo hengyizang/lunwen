@@ -7,16 +7,37 @@ on:
       - config/writing-comparison-20261027.json
       - .github/workflows/writing-comparison-20261027.yml
   workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [metadata, execute]
+        default: metadata
 permissions:
   contents: read
 concurrency:
   group: owner-research-cloud-${{ github.repository }}
   cancel-in-progress: false
 jobs:
-  metadata:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify billing, authorization, source and replay controls without credentials
+        run: |
+          python -m unittest tests.test_writing_comparison tests.test_relay_guard -v
+          python -m py_compile scripts/writing_comparison.py scripts/relay_guard.py
+          git diff --check
+  comparison:
+    needs: validation
     if: github.repository == 'hengyizang/lunwen'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 60
     permissions:
       contents: write
     steps:
@@ -26,11 +47,13 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Compile the scoped comparison without credentials
-        run: python -m py_compile scripts/writing_comparison.py
-      - name: Inspect catalogs, counters and retained historical holds without generation
+      - name: Run only the owner-authorized finite cloud trial
         env:
           GH_TOKEN: ${{ github.token }}
+          # Initial publication remains metadata-only. A later exact commit
+          # enables the explicitly approved eighteen-call scope after validation.
+          WRITING_COMPARISON_MODE: ${{ inputs.mode || 'metadata' }}
+          WRITING_COMPARISON_AUTHORIZATION: writing-comparison-20261027-owner-paid-with-legacy-holds
           DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
           DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
         run: python -m scripts.writing_comparison
@@ -38,6 +61,8 @@ jobs:
         if: always()
         with:
           name: writing-comparison-${{ github.run_id }}
-          path: .runtime/writing-comparison*.json
+          path: |
+            .runtime/writing-comparison/
+            .runtime/writing-review/
           if-no-files-found: warn
           retention-days: 30
