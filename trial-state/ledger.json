@@ -218,7 +218,7 @@
     "production_routing_changed": false,
     "automatic_promotion": false
   },
-  "status": "running",
+  "status": "stopped",
   "entries": [
     {
       "call_id": "argon-high|intro-seaborn",
