@@ -26,6 +26,7 @@ jobs:
       - name: Install TeX for the independent submission ZIP compilation
         timeout-minutes: 7
         run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update -qq -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
           sudo apt-get install -y --no-install-recommends -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 texlive-latex-base
       - name: Verify source-bound reviews, thesis scope, recovery, literature and model guidance
