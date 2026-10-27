@@ -266,8 +266,9 @@ def export_review(plan, ledger):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(entry.get("text", "No completed text; inspect the failed attempt receipt."), encoding="utf-8")
             if status == "success":
+                native_family = ai_providers.provider_family(entry["provider"])
                 output_provenance.record_model_writes(project, [target],
-                    family=ai_providers.provider_family(entry["provider"]), provider=entry["provider"],
+                    family=native_family if native_family in {"openai", "anthropic"} else "other", provider=entry["provider"],
                     model=entry["requested_model"], role="internal-writing-evaluation", run_id=entry["run_id"])
             candidate = {"id": entry["candidate_id"], "author_id": entry["requested_model"],
                 "model": entry["requested_model"], "channel": entry["provider"],
