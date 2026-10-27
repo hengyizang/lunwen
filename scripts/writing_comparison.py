@@ -319,8 +319,10 @@ def execute(plan, state):
         return ledger
     if any(entry["billing_status"] != "settled" for entry in ledger["entries"]):
         raise ValueError("unsettled new trial request stops all further paid work")
-    inventory = {provider: production_readiness.catalog(provider, dict(os.environ)) for provider in PROVIDERS}
-    if any(route["model"] not in inventory[route["provider"]] for route in ROUTES):
+    active_routes = [route for route in ROUTES if route["provider"] not in ledger.get("quarantined_providers", [])]
+    inventory = {provider: production_readiness.catalog(provider, dict(os.environ))
+                 for provider in {route["provider"] for route in active_routes}}
+    if any(route["model"] not in inventory[route["provider"]] for route in active_routes):
         raise ValueError("exact trial model missing from authenticated catalog")
     for index, case in enumerate(plan["cases"]):
         order = ROUTES[index % 3:] + ROUTES[:index % 3]
