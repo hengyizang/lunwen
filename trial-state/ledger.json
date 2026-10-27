@@ -10,6 +10,270 @@
     "project_ceiling_cny": 500,
     "routes": [
       {
+        "id": "argon-native-high",
+        "provider": "codekey-gemini",
+        "model": "gemini-4-argon-high"
+      },
+      {
+        "id": "sol-high",
+        "provider": "cheapai-gpt-pro",
+        "model": "gpt-6.1-sol"
+      },
+      {
+        "id": "astra-high",
+        "provider": "cheapai-gpt-pro",
+        "model": "gpt-6-astra"
+      }
+    ],
+    "quotes": {
+      "argon-native-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-gemini",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon-high:generateContent",
+        "model": "gemini-4-argon-high",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "conservative-nonpromotion-2026-10-19-owner-numeric-CNY-x030",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "3ed5425994b4b4b1ae3d020fb2d977e36774ace8970307ad6321a93465c0fe4e"
+      },
+      "sol-high": {
+        "quote_schema": "2.0",
+        "provider": "cheapai-gpt-pro",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6.1-sol",
+        "billing_identity": {
+          "plan": "production",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "relay-public-2026-10-19-owner-numeric-CNY",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.44,
+            "output_per_million": 2.2,
+            "cache_read_per_million": 0.22,
+            "cache_write_per_million": 2.75,
+            "cache_write_5m_per_million": 2.75,
+            "cache_write_1h_per_million": 4.4
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.88,
+            "output_per_million": 3.3,
+            "cache_read_per_million": 0.44,
+            "cache_write_per_million": 5.5,
+            "cache_write_5m_per_million": 5.5,
+            "cache_write_1h_per_million": 8.8
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "047330c88861d9b3369cef6f320eb5e2ed8c1dabf9608365a823dd603e4d1767"
+      },
+      "astra-high": {
+        "quote_schema": "2.0",
+        "provider": "cheapai-gpt-pro",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6-astra",
+        "billing_identity": {
+          "plan": "production",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "relay-public-2026-10-19-owner-numeric-CNY",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 2.2,
+            "output_per_million": 11.0,
+            "cache_read_per_million": 0.22,
+            "cache_write_per_million": 2.75,
+            "cache_write_5m_per_million": 2.75,
+            "cache_write_1h_per_million": 4.4
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 4.4,
+            "output_per_million": 16.5,
+            "cache_read_per_million": 0.44,
+            "cache_write_per_million": 5.5,
+            "cache_write_5m_per_million": 5.5,
+            "cache_write_1h_per_million": 8.8
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "83c11119f5b1d8b95b0b31aed144e694c5ad41af44f25669976b74a4b3967c78"
+      },
+      "argon-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-gemini",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "model": "gemini-4-argon",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "conservative-nonpromotion-2026-10-19-owner-numeric-CNY-x030",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "e03124a38bed7f49b1b45af3f3ad223c109652015b4638aa24fe9802ffaf2e6e"
+      }
+    },
+    "call_ceilings_cny": {
+      "argon-native-high|intro-seaborn": 0.4674768,
+      "sol-high|intro-seaborn": 1.0942624,
+      "argon-native-high|methods-pingouin": 0.4437888,
+      "sol-high|methods-pingouin": 0.9205504,
+      "astra-high|methods-pingouin": 1.6774912,
+      "argon-native-high|abstract-corner": 0.4405212,
+      "sol-high|abstract-corner": 0.896588,
+      "astra-high|abstract-corner": 1.6535288,
+      "argon-native-high|discussion-arviz": 0.454692,
+      "sol-high|discussion-arviz": 1.0005072,
+      "astra-high|discussion-arviz": 1.757448,
+      "argon-native-high|results-emcee": 0.4560108,
+      "sol-high|results-emcee": 1.0101784,
+      "astra-high|results-emcee": 1.7671192,
+      "argon-native-high|edit-posthocs": 0.4551288,
+      "sol-high|edit-posthocs": 1.0037104,
+      "astra-high|edit-posthocs": 1.7606512,
+      "argon-high|intro-seaborn": 0.4674768
+    },
+    "rubric": {
+      "dimensions": [
+        {
+          "id": "evidence_fidelity",
+          "description": "Every factual statement follows the supplied source and its conditions.",
+          "value_type": "integer",
+          "min": 1,
+          "max": 5
+        },
+        {
+          "id": "argument",
+          "description": "A clear question, concrete contribution and evidence-linked explanation.",
+          "value_type": "integer",
+          "min": 1,
+          "max": 5
+        },
+        {
+          "id": "naturalness",
+          "description": "Natural academic English without filler, repetitive hedging or forced transitions.",
+          "value_type": "integer",
+          "min": 1,
+          "max": 5
+        },
+        {
+          "id": "precision",
+          "description": "Concise wording preserves distinctions and warranted uncertainty.",
+          "value_type": "integer",
+          "min": 1,
+          "max": 5
+        },
+        {
+          "id": "revision_effort",
+          "description": "Usability with little substantive correction (5 means least correction).",
+          "value_type": "integer",
+          "min": 1,
+          "max": 5
+        }
+      ],
+      "critical_errors": [
+        {
+          "id": "invented",
+          "criterion": "Invented fact, experiment, quantitative result or citation."
+        },
+        {
+          "id": "scope",
+          "criterion": "Changed causal meaning, applicability, attribution or necessary condition."
+        },
+        {
+          "id": "numeric",
+          "criterion": "Incorrect number, unit, interval or direction."
+        }
+      ]
+    },
+    "minimum_human_raters": 2,
+    "production_routing_changed": false,
+    "automatic_promotion": false
+  },
+  "status": "running",
+  "entries": [
+    {
+      "call_id": "argon-high|intro-seaborn",
+      "candidate_id": "argon-high",
+      "case_id": "intro-seaborn",
+      "case_sha256": "95cf78ceb667b49e09e5b98f5fd86549d4a7f92fc0445b56ce9892b09294ebc5",
+      "provider": "codekey-gemini",
+      "requested_model": "gemini-4-argon",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.4674768,
+      "billing_status": "settled",
+      "generation_status": "failed",
+      "project_reservation_id": "d5a97692951f4ef48d7b9a8ceaa933d2",
+      "meter_before": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 1,
+        "cost_cny": 0.0018948,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "run_id": "40532368313",
+      "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5",
+      "diagnostic": "production response model ID missing or mismatched; quarantine route and reconcile billing",
+      "duration_seconds": 22.5713,
+      "actual_cost_cny": 0.0073388,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 1,
+          "cost_cny": 0.0018948
+        },
+        "after": {
+          "requests": 2,
+          "cost_cny": 0.0092336
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
+    }
+  ],
+  "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+  "authorization_note": "Owner explicitly authorized this finite exception in chat on 2026-10-27; preserve both old Argon holds in full, new18/CNY30 within totalCNY500.",
+  "scientific_equivalence_verified": false,
+  "production_routing_changed": false,
+  "stop_reason": "failed generation retained; no paid retry authorized",
+  "original_scope": {
+    "authorization": "writing-comparison-20261027-owner-paid-with-legacy-holds",
+    "plan_sha256": "e92ac95e1cdf71649dedacd095563404611c3c3abc06a99a9a29fd70169fe0e5",
+    "max_calls": 18,
+    "new_call_limit_cny": 30.0,
+    "retained_legacy_hold_cny": 9.5836104,
+    "project": "my-phd",
+    "project_ceiling_cny": 500,
+    "routes": [
+      {
         "id": "argon-high",
         "provider": "codekey-gemini",
         "model": "gemini-4-argon"
@@ -199,50 +463,11 @@
     "production_routing_changed": false,
     "automatic_promotion": false
   },
-  "status": "stopped",
-  "entries": [
-    {
-      "call_id": "argon-high|intro-seaborn",
-      "candidate_id": "argon-high",
-      "case_id": "intro-seaborn",
-      "case_sha256": "95cf78ceb667b49e09e5b98f5fd86549d4a7f92fc0445b56ce9892b09294ebc5",
-      "provider": "codekey-gemini",
-      "requested_model": "gemini-4-argon",
-      "requested_effort": "high",
-      "reserved_ceiling_cny": 0.4674768,
-      "billing_status": "settled",
-      "generation_status": "failed",
-      "project_reservation_id": "d5a97692951f4ef48d7b9a8ceaa933d2",
-      "meter_before": {
-        "provider": "codekey-gemini",
-        "kind": "codekey_total_actual_cost",
-        "requests": 1,
-        "cost_cny": 0.0018948,
-        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
-      },
-      "run_id": "40532368313",
-      "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5",
-      "diagnostic": "production response model ID missing or mismatched; quarantine route and reconcile billing",
-      "duration_seconds": 22.5713,
-      "actual_cost_cny": 0.0073388,
-      "debit_evidence": {
-        "source": "https://codekey.ai/v1/usage",
-        "before": {
-          "requests": 1,
-          "cost_cny": 0.0018948
-        },
-        "after": {
-          "requests": 2,
-          "cost_cny": 0.0092336
-        },
-        "exactly_one_new_gateway_request": true,
-        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
-      }
-    }
-  ],
-  "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
-  "authorization_note": "Owner explicitly authorized this finite exception in chat on 2026-10-27; preserve both old Argon holds in full, new18/CNY30 within totalCNY500.",
-  "scientific_equivalence_verified": false,
-  "production_routing_changed": false,
-  "stop_reason": "failed generation retained; no paid retry authorized"
+  "transport_amendment": {
+    "reviewed_ledger_blob": "7cedd3713aa45202c23c95051c31dfb60b658a5e",
+    "reason": "Base identity failed; test the distinct advertised high-ID. Preserve the failure and cost; omit one never-sent Astra calibration task to retain18/CNY30.",
+    "base_alias_accepted": false,
+    "old_request_retried": false,
+    "review_run_id": "40533774483"
+  }
 }
