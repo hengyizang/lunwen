@@ -356,6 +356,33 @@ def csv_text(report):
     return output.getvalue()
 
 
+def markdown_text(report):
+    """Portable evidence table; escaping preserves literal source wording."""
+    esc = lambda value: html.escape("" if value is None else str(value)).replace("|", "&#124;").replace("\n", "<br>")
+    lines = ["# Literature evidence matrix", "", esc(report["question"]), "",
+             "Located evidence remains pending semantic and comparability review. Unknown values stay unknown.", "",
+             "| Paper | Field | Status | Text | Original number / unit | Evidence |",
+             "| --- | --- | --- | --- | --- | --- |"]
+    for cell in report["cells"]:
+        numeric = cell.get("numeric", {})
+        original = " ".join(str(v) for v in (numeric.get("comparator"), numeric.get("original_value"), numeric.get("original_unit")) if v is not None)
+        evidence = "<br>".join(esc(a["path"]) + " - " + esc(a["locator"]) + " - SHA256 " +
+            esc(a.get("sha256", "unknown")) + ": " + esc(a["quote"]) for a in cell["evidence"])
+        lines.append("| " + " | ".join(esc(v) for v in (cell["paper_id"], cell["field_id"], cell["status"], cell["text"], original)) + " | " + evidence + " |")
+    lines += ["", "## Complete cell records", "",
+              "Original and normalized values, uncertainty, source versions, conditions, table headers, footnotes and review boundaries are preserved below when present. Missing fields are not inferred."]
+    papers = {row["paper_id"]: row for row in report.get("papers", [])}
+    for cell in report["cells"]:
+        payload = {"cell": cell, "paper_source": papers.get(cell["paper_id"])}
+        lines += ["", "<details>", "<summary>" + html.escape(cell["paper_id"] + " / " + cell["field_id"]) + "</summary>", "",
+                  "<pre>" + html.escape(json.dumps(payload, ensure_ascii=False, indent=2)) + "</pre>", "</details>"]
+    return "\n".join(lines) + "\n"
+
+
+def cell_anchor(paper_id, field_id):
+    return "cell-" + workbench._digest([paper_id, field_id])[:24]
+
+
 def html_text(project, report):
     esc = lambda value: html.escape(str(value), quote=True)
     directory = Path(project) / OUTPUT
@@ -367,7 +394,7 @@ def html_text(project, report):
              '<table><thead><tr><th>Paper</th><th>Field</th><th>Status</th><th>Value and evidence</th></tr></thead><tbody>']
     papers = {p["paper_id"]: p for p in report["papers"]}
     for cell in report["cells"]:
-        parts.append('<tr><td>' + esc(cell["paper_id"]) + '</td><td>' + esc(cell["field_id"]) + '</td><td>' + esc(cell["status"]) + '</td><td>')
+        parts.append('<tr id="' + cell_anchor(cell["paper_id"], cell["field_id"]) + '"><td>' + esc(cell["paper_id"]) + '</td><td>' + esc(cell["field_id"]) + '</td><td>' + esc(cell["status"]) + '</td><td>')
         parts.append('<p>' + esc(cell["text"] if cell["text"] is not None else "Unknown; source review required") + '</p>')
         if cell.get("numeric"):
             parts.append('<pre>' + esc(json.dumps(cell["numeric"], ensure_ascii=False, indent=2)) + '</pre>')
@@ -403,10 +430,11 @@ def refresh(project: Path, request_path=REQUEST, *, workbench_dir=None) -> dict:
     if directory.exists() and any(directory.iterdir()) and not (directory / "manifest.json").is_file():
         raise ValueError("refusing to overwrite a directory owned by another tool")
     directory.mkdir(parents=True, exist_ok=True)
-    paths = [directory / "matrix.json", directory / "matrix.csv", directory / "index.html"]
+    paths = [directory / "matrix.json", directory / "matrix.csv", directory / "index.html", directory / "matrix.md"]
     write(paths[0], report)
     paths[1].write_text(csv_text(report), encoding="utf-8")
     paths[2].write_text(html_text(project, report), encoding="utf-8")
+    paths[3].write_text(markdown_text(report), encoding="utf-8")
     manifest = {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(project / request_path)},
                 "workbench_dir": report["workbench_output"], "fingerprint": report["fingerprint"],
                 "implementation_sha256": sha(Path(__file__)),
@@ -414,7 +442,7 @@ def refresh(project: Path, request_path=REQUEST, *, workbench_dir=None) -> dict:
                 "semantic_verification": False, "eligible_for_quantitative_synthesis": False}
     write(directory / "manifest.json", manifest)
     record(project, [*paths, directory / "manifest.json"], "scripts/literature_matrix.py")
-    return {"report": OUTPUT + "/matrix.json", "csv": OUTPUT + "/matrix.csv", "html": OUTPUT + "/index.html",
+    return {"report": OUTPUT + "/matrix.json", "csv": OUTPUT + "/matrix.csv", "html": OUTPUT + "/index.html", "markdown": OUTPUT + "/matrix.md",
             "cell_count": len(report["cells"]), "unknown_cell_count": report["unknown_cell_count"],
             "fingerprint": report["fingerprint"], "model_call_made": False}
 
@@ -432,7 +460,7 @@ def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
     fresh = build(project, _request(project, request_path), workbench_dir=manifest.get("workbench_dir"))
     if manifest.get("fingerprint") != fresh["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__)):
         raise ValueError("literature matrix inputs or implementation changed")
-    expected = {OUTPUT + "/matrix.json", OUTPUT + "/matrix.csv", OUTPUT + "/index.html"}
+    expected = {OUTPUT + "/matrix.json", OUTPUT + "/matrix.csv", OUTPUT + "/index.html", OUTPUT + "/matrix.md"}
     outputs = manifest.get("outputs")
     if not isinstance(outputs, list) or {o.get("path") for o in outputs} != expected or len(outputs) != len(expected):
         raise ValueError("literature matrix output inventory differs")
@@ -442,5 +470,7 @@ def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
     saved = workbench._json(path_in(project, OUTPUT + "/matrix.json").read_bytes())
     if saved != fresh or path_in(project, OUTPUT + "/matrix.csv").read_text(encoding="utf-8") != csv_text(fresh) or path_in(project, OUTPUT + "/index.html").read_text(encoding="utf-8") != html_text(project, fresh):
         raise ValueError("literature matrix no longer reproduces its source-bound extraction")
+    if path_in(project, OUTPUT + "/matrix.md").read_text(encoding="utf-8") != markdown_text(fresh):
+        raise ValueError("literature matrix Markdown no longer reproduces its source-bound extraction")
     return {"valid": True, "fingerprint": fresh["fingerprint"], "semantic_verification": False,
             "eligible_for_quantitative_synthesis": False}

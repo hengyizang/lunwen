@@ -74,6 +74,16 @@ class CloudRetryTests(unittest.TestCase):
         self.assertIn("partial", events[0]["diagnostic"])
         self.assertNotIn("token-a-long-secret", json.dumps(events))
 
+    def test_explicit_literature_installs_only_allow_the_reviewed_exact_packages(self):
+        for operation, package in (("figure-retrieval-runtime", ".[figure-retrieval]"),
+                                   ("literature-paperqa-runtime", "paper-qa==2026.8.12")):
+            command = [sys.executable, "-m", "pip", "install", "--disable-pip-version-check", package]
+            result, _, calls, _ = self.invoke(command, [subprocess.CompletedProcess([], 0, "installed", "")], operation)
+            self.assertEqual((result.returncode, calls), (0, 1))
+            for changed in (command + ["--upgrade"], command[:-1] + ["unreviewed-package"]):
+                with self.assertRaisesRegex(ValueError, "not an authorized"):
+                    self.invoke(changed, [], operation)
+
     def test_failed_model_entry_point_is_called_once(self):
         response = subprocess.CompletedProcess([], 1, "", "API response unavailable; reconcile billing")
         with patch.object(cloud_job.subprocess, "run", return_value=response) as runner:

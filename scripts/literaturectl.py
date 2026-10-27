@@ -426,6 +426,20 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_benchmark":
         from scripts.literature_benchmark import refresh
         return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))
+    if action == "literature_zotero_register":
+        from scripts.literature_zotero import register
+        return register(project, operation["request_file"], operation["item_key"], paper_id=operation.get("paper_id"))
+    if action in {"literature_semantic", "literature_pdf", "literature_zotero", "literature_roles"}:
+        from importlib import import_module
+        module = import_module("scripts." + action)
+        return module.refresh(project, operation.get("request_file", "program/" + action.replace("_", "-", 1) + ".json"))
+    if action in {"literature_comparison", "literature_paperqa"}:
+        from importlib import import_module
+        module = import_module("scripts." + action)
+        if type(operation.get("execute", False)) is not bool:
+            raise ValueError("execute must be an explicit boolean")
+        return module.refresh(project, operation.get("request_file", "program/" + action.replace("_", "-", 1) + ".json"),
+                              execute=operation.get("execute", False))
     if action == "data_row_prepare":
         from scripts.data_row_provenance import prepare
         return prepare(project, operation["dataset_id"], key_columns=operation.get("key_columns"))

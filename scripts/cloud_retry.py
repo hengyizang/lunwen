@@ -44,9 +44,12 @@ def run(command: list[str], *, operation: str, cwd: Path,
     git_operation = operation in {"git-ls-remote", "git-fetch", "git-push"}
     install = [__import__("sys").executable, "-m", "pip", "install", "--disable-pip-version-check",
                ".[figures,reader,research-quality,reference-tools]"]
+    fixed_installs = {"pinned-runtime-install": install,
+        "figure-retrieval-runtime": install[:-1] + [".[figure-retrieval]"],
+        "literature-paperqa-runtime": install[:-1] + ["paper-qa==2026.8.12"]}
     if not ((git_operation and command[:2] == ["git", operation[4:]]
              and not any(x.startswith("--force") or x.startswith("+") for x in command))
-            or (operation == "pinned-runtime-install" and command == install)):
+            or (operation in fixed_installs and command == fixed_installs[operation])):
         raise ValueError("this operation is not an authorized idempotent infrastructure retry")
     for attempt in range(1, ATTEMPTS + 1):
         try:

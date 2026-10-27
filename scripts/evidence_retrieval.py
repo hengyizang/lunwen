@@ -100,28 +100,7 @@ def tokens(text: str) -> list[str]:
     return words
 
 
-def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
-    if not isinstance(spec, dict):
-        raise ValueError("retrieval plan must be an object")
-    sources, query, limit = spec.get("sources"), spec.get("query"), spec.get("limit", 8)
-    if (spec.get("schema_version") != "1.0" or not isinstance(sources, list) or not 1 <= len(sources) <= 50
-            or type(limit) is not int or not 1 <= limit <= 20):
-        raise ValueError("retrieval needs 1-50 explicit sources, a query and limit 1-20")
-    query = _query(query, "query")
-    expansions = spec.get("query_expansions", [])
-    if not isinstance(expansions, list) or len(expansions) > 5:
-        raise ValueError("at most five explicit query expansions are allowed")
-    queries = [{"id": "original", "query": query, "reason": "original research question"}]
-    seen_queries = {query.casefold().strip()}
-    for number, expansion in enumerate(expansions, 1):
-        if (not isinstance(expansion, dict) or set(expansion) != {"query", "reason"}
-                or not isinstance(expansion["reason"], str) or not 1 <= len(expansion["reason"].strip()) <= 1000):
-            raise ValueError("query expansions need query and a concrete bounded reason")
-        value = _query(expansion["query"], "expanded query")
-        if value.casefold().strip() in seen_queries:
-            raise ValueError("duplicate query expansion")
-        seen_queries.add(value.casefold().strip())
-        queries.append({"id": f"expansion-{number}", **expansion})
+def corpus(project: Path, sources: list[dict], *, redact=lambda value: value) -> tuple[list[dict], list[dict]]:
     chunks, searched, total = [], [], 0
     for source in sources:
         if (not isinstance(source, dict) or not isinstance(source.get("path"), str)
@@ -170,6 +149,32 @@ def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
                                "counts": counts, "length": sum(counts.values())})
     if not chunks:
         raise ValueError("explicit retrieval corpus contains no text")
+    return chunks, searched
+
+
+def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
+    if not isinstance(spec, dict):
+        raise ValueError("retrieval plan must be an object")
+    sources, query, limit = spec.get("sources"), spec.get("query"), spec.get("limit", 8)
+    if (spec.get("schema_version") != "1.0" or not isinstance(sources, list) or not 1 <= len(sources) <= 50
+            or type(limit) is not int or not 1 <= limit <= 20):
+        raise ValueError("retrieval needs 1-50 explicit sources, a query and limit 1-20")
+    query = _query(query, "query")
+    expansions = spec.get("query_expansions", [])
+    if not isinstance(expansions, list) or len(expansions) > 5:
+        raise ValueError("at most five explicit query expansions are allowed")
+    queries = [{"id": "original", "query": query, "reason": "original research question"}]
+    seen_queries = {query.casefold().strip()}
+    for number, expansion in enumerate(expansions, 1):
+        if (not isinstance(expansion, dict) or set(expansion) != {"query", "reason"}
+                or not isinstance(expansion["reason"], str) or not 1 <= len(expansion["reason"].strip()) <= 1000):
+            raise ValueError("query expansions need query and a concrete bounded reason")
+        value = _query(expansion["query"], "expanded query")
+        if value.casefold().strip() in seen_queries:
+            raise ValueError("duplicate query expansion")
+        seen_queries.add(value.casefold().strip())
+        queries.append({"id": f"expansion-{number}", **expansion})
+    chunks, searched = corpus(project, sources, redact=redact)
     average = sum(row["length"] for row in chunks) / len(chunks) or 1
     routes, scores_by_route = [], []
     for route in queries:
@@ -225,6 +230,10 @@ def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
             row["selection_reason"] = "ranked_retrieval_lead"
             selected.append(row)
     selected.sort(key=lambda row: (-row["score"], row["path"], row["start_line"]))
+    rerank_evidence = None
+    if "rerank_cache" in spec:
+        from scripts.literature_semantic import apply_rerank_cache
+        rerank_evidence = apply_rerank_cache(project, spec, selected)
     results = []
     for row in selected:
         quote = row["quote"]
@@ -243,12 +252,13 @@ def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
         source["returned_chunks"] = sum(path == source["path"] for path, _ in selected_keys)
         source["source_integrity"] = "current_hash_checked"
     fingerprint = hashlib.sha256(json.dumps({"query": query, "queries": queries, "sources": searched,
-        "limit": limit, "dense_cache": dense, "implementation_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},
+        "limit": limit, "dense_cache": dense, "rerank_cache": rerank_evidence,
+        "implementation_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},
         sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     return {"schema_version": "1.0", "algorithm": "RRF k=60 over explicit BM25 queries and optional cached dense vectors" if fused else "BM25 k1=1.2 b=0.75; English terms and Chinese bigrams",
             "query": query, "searched_sources": searched, "chunk_count": len(chunks),
             "matching_chunks": len(ranked), "results": results, "not_returned_chunk_count": len(chunks) - len(results),
-            "routes": routes, "dense_cache": dense, "input_fingerprint": fingerprint,
+            "routes": routes, "dense_cache": dense, "rerank_cache": rerank_evidence, "input_fingerprint": fingerprint,
             "declared_counterevidence_sources": counter_sources,
             "counterevidence_retention_is_not_full_reading": True,
             "query_expansions_are_unverified_writer_inputs": True,

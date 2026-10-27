@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "policy": "Explicit cloud CPU retrieval only; no paid API, remote Python code, model route promotion or scientific approval.",
+  "runtime": {"onnxruntime": "1.23.2", "tokenizers": "0.22.1"},
+  "embedding": {
+    "id": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "2c4055b12046f11709e9df2c122e59ffbdc2f900",
+    "license": "Apache-2.0",
+    "language_scope": "multilingual; source-specific accuracy must be measured",
+    "dimension": 384,
+    "max_tokens": 128,
+    "stride": 24,
+    "weights": {"path": "onnx/model_int8.onnx", "bytes": 118054609, "sha256": "d6ea442ff6a891daefed7c83b2f596fc5dc66bf697e4d006236f64f34bbcf4c8"},
+    "tokenizer": {"path": "tokenizer.json", "max_bytes": 18000000, "sha256": "b60b6b43406a48bf3638526314f3d232d97058bc93472ff2de930d43686fa441"},
+    "sources": ["https://huggingface.co/Xenova/paraphrase-multilingual-MiniLM-L12-v2/commit/2c4055b12046f11709e9df2c122e59ffbdc2f900", "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"]
+  },
+  "reranker": {
+    "id": "Xenova/ms-marco-MiniLM-L-6-v2",
+    "revision": "a09144355adeed5f58c8ed011d209bf8ee5a1fec",
+    "license": "Apache-2.0",
+    "language_scope": "English; no Chinese reranking quality claim",
+    "max_tokens": 512,
+    "stride": 32,
+    "weights": {"path": "onnx/model_int8.onnx", "bytes": 23012404, "sha256": "a13ec391ca99f49886694e12d3e800521f36d4267d7d448c34421c541a2baf50"},
+    "tokenizer": {"path": "tokenizer.json", "max_bytes": 1000000, "sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"},
+    "sources": ["https://huggingface.co/Xenova/ms-marco-MiniLM-L-6-v2/commit/a09144355adeed5f58c8ed011d209bf8ee5a1fec", "https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2"]
+  }
+}

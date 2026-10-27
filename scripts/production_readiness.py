@@ -140,7 +140,7 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
             "model_generation_calls":0,"new_spending_authority":False,"scientific_completion":False,
             "inference_access_and_effort_passthrough_verified":False,
             "optional_image_generation":"disabled_no_selected_image_model",
-            "upstream_paperqa_sdk":"disabled_unmetered_native_source_qa_available",
+            "upstream_paperqa_sdk":"controlled_cpu_vector_bridge_and_metered_reader_qa_available_unmetered_agent_disabled",
             "automatic_research_enabled":env.get("DR_OS_AUTOMATIC_RESEARCH_ENABLED")=="true"}
 
 

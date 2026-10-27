@@ -1,5 +1,11 @@
 # Literature evidence reading upgrades
 
+The [completion operations](LITERATURE-COMPLETION.md) add explicitly triggered
+CPU vector generation and independent reranking, bounded upstream SDK use,
+paired complete-text reading plans/execution, cloud Zotero, discovery categories
+and actual PDF overlays/annotation copies. Default lexical execution and model
+routes remain unchanged. See that document for the current capability boundary.
+
 The [research task scenarios](RESEARCH-TASK-SCENARIOS.md) add row provenance,
 remembered-claim tracing, criterion-level screening advice, tiered bilingual
 queries, source-bound synthesis outlines and evidence-preserving Mermaid export.
@@ -20,7 +26,7 @@ All execute through the existing cloud literature request or writer queue:
 | literature_retrieve | request_file, default program/literature-retrieval.json | reports/literature-retrieval/latest.json and index.html |
 | literature_reading_index | paper_id; optional locate_pdf boolean | reports/literature-reading/ID/index.json and index.html |
 | literature_coverage | request_file, default program/literature-coverage.json | question-and-scope-bound coverage JSON/HTML under reports/literature-reading |
-| literature_matrix | request_file, default program/literature-extraction.json | reports/literature-matrix/matrix.json, matrix.csv, index.html, manifest.json |
+| literature_matrix | request_file, default program/literature-extraction.json | reports/literature-matrix/matrix.json, matrix.csv, matrix.md, index.html, manifest.json |
 | literature_benchmark | request_file, default program/literature-benchmark.json | reports/literature-benchmark/latest.json |
 
 These operations make zero model/embedding requests. The owner nonpaid
@@ -73,8 +79,9 @@ schema binds schema_version=1.0, model:{id,revision}, dimension, exact
 query:{text,sha256,vector}, sources:[{path,sha256,ranges?}] and complete
 blocks:[{path,sha256,start_line,end_line,excerpt_sha256,vector}]. The input
 digest, finite dimensions and complete block/source bindings must match.
-This performs CPU cosine similarity only; it neither downloads an embedding
-model nor enables an unmetered API. Missing or incorrect vectors are not
+This retrieval consumer performs CPU cosine similarity only; explicit
+literature_semantic can generate these vectors on the cloud using fixed models.
+Neither path enables an unmetered API. Missing or incorrect vectors are not
 silently reported as semantic retrieval. Model identity and embedding quality
 remain unverified inputs until actually evaluated.
 

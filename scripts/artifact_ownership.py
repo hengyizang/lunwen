@@ -14,6 +14,8 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "reports/literature-analysis", "reports/literature-feedback",
                   "reports/literature-retrieval", "reports/literature-reading", "reports/literature-matrix",
                   "reports/literature-benchmark",
+                  "reports/literature-semantic", "reports/literature-pdf", "reports/literature-zotero",
+                  "reports/literature-roles", "reports/literature-comparison", "reports/literature-paperqa",
                   "reports/data-row-provenance", "reports/literature-source-tasks",
                   "reports/literature-search-strategy", "reports/literature-synthesis", "reports/diagram-mermaid",
                   "reports/ccfa-tasks", "reports/ccfa-science", "reports/ccfa-humanization",
