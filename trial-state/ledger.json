@@ -1802,7 +1802,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.0005072,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "6f472da26fed4dd38cc3265b04ea61e2",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -2077,7 +2077,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "A central contribution of ArviZ is a common representation and analysis layer for Bayesian model outputs across inference tools. Kumar et al. (2019) distinguish this role from that of probabilistic programming languages (PPLs): systems such as PyStan, PyMC, Edward, emcee, and Pyro are intended to facilitate the construction and solution of Bayesian models, whereas ArviZ is intended to process and analyze the resulting outputs [JOSS01143]. This division preserves the specialization of inference software while providing a shared interface for subsequent statistical and visual work.\n\nThe representation is provided by the `InferenceData` class, which stores the different types of data produced by PPLs as labeled `xarray` datasets. Because Bayesian inference naturally produces high-dimensional data, labeled querying, metadata, and efficient algorithms are important for identifying and manipulating particular variables, dimensions, and posterior quantities [JOSS01143]. The datasets can also be stored together using `netCDF4` groups built on HDF5, providing persistent serialization in code and on disk. A single data structure further means that statistical and visualization functions can be implemented once and applied across supported inference outputs, including novel or bespoke Bayesian analyses when they are integrated with ArviZ.\n\nThis shared layer connects numerical checks to exploratory visual analysis. ArviZ supports calculation of effective sample size and the R-hat statistic for examining aspects of inference output, as well as PSIS-LOO-CV and WAIC for model comparison [JOSS01143]. It also supplies trace and forest plots, posterior predictive-check plots, pair plots, and parallel-coordinate plots. These tools address distinct tasks: inspecting sampled quantities, comparing parameter estimates, evaluating model predictions, exploring relationships among parameters, and examining model-comparison quantities. More broadly, the library supports inference diagnosis, criticism of model assumptions and predictions, model selection or averaging, and preparation of results for particular audiences [JOSS01143]. The contribution therefore lies in coordinating these numerical and visual analyses around a tool-independent representation, not in replacing probabilistic inference or establishing that any individual diagnostic certifies its quality.",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 5216,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 676,
+        "output_tokens_details": {
+          "reasoning_tokens": 248
+        }
+      },
+      "request_id": "resp_0e70febc77decd5e016ae0c92ece6c8191a10602c01e29044e",
+      "response_sha256": "329ec2c23c0f45a88f1a908a84f08d5e8418f90723cc3cd02542d0f5118dd784",
+      "completion_status": "completed",
+      "duration_seconds": 31.2375
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
