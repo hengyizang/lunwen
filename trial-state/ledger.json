@@ -218,7 +218,7 @@
     "production_routing_changed": false,
     "automatic_promotion": false
   },
-  "status": "running",
+  "status": "closed",
   "entries": [
     {
       "call_id": "argon-high|intro-seaborn",
@@ -4069,5 +4069,13 @@
   },
   "quarantined_providers": [
     "codekey-gemini"
+  ],
+  "completed_at": "2026-10-27T16:06:48.824100+00:00",
+  "unattempted_unknown": [
+    "argon-native-high|abstract-corner",
+    "argon-native-high|discussion-arviz",
+    "argon-native-high|edit-posthocs",
+    "argon-native-high|methods-pingouin",
+    "argon-native-high|results-emcee"
   ]
 }
