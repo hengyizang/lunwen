@@ -26,7 +26,7 @@ All execute through the existing cloud literature request or writer queue:
 | literature_retrieve | request_file, default program/literature-retrieval.json | reports/literature-retrieval/latest.json and index.html |
 | literature_reading_index | paper_id; optional locate_pdf boolean | reports/literature-reading/ID/index.json and index.html |
 | literature_coverage | request_file, default program/literature-coverage.json | question-and-scope-bound coverage JSON/HTML under reports/literature-reading |
-| literature_matrix | request_file, default program/literature-extraction.json | reports/literature-matrix/matrix.json, matrix.csv, index.html, manifest.json |
+| literature_matrix | request_file, default program/literature-extraction.json | reports/literature-matrix/matrix.json, matrix.csv, matrix.md, index.html, manifest.json |
 | literature_benchmark | request_file, default program/literature-benchmark.json | reports/literature-benchmark/latest.json |
 
 These operations make zero model/embedding requests. The owner nonpaid

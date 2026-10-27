@@ -22,7 +22,7 @@
     "max_tokens": 512,
     "stride": 32,
     "weights": {"path": "onnx/model_int8.onnx", "bytes": 23012404, "sha256": "a13ec391ca99f49886694e12d3e800521f36d4267d7d448c34421c541a2baf50"},
-    "tokenizer": {"path": "tokenizer.json", "max_bytes": 1000000},
+    "tokenizer": {"path": "tokenizer.json", "max_bytes": 1000000, "sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"},
     "sources": ["https://huggingface.co/Xenova/ms-marco-MiniLM-L-6-v2/commit/a09144355adeed5f58c8ed011d209bf8ee5a1fec", "https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2"]
   }
 }

@@ -32,7 +32,7 @@ class PaperQABridgeTests(WorkbenchFixture):
             "semantic": {"path": semantic.OUTPUT + "/latest.json", "sha256": sha(self.project / semantic.OUTPUT / "latest.json")}}
         write(self.project / bridge.REQUEST, self.spec)
 
-    def rank(self, query, chunks, dense):
+    def rank(self, query, chunks, dense, *, project=None):
         return [{"block_index": i, "cosine_similarity": 1.0 - i} for i in range(len(chunks))]
 
     def test_default_bridge_cannot_spend_and_reuses_current_result(self):
@@ -119,6 +119,34 @@ class PaperQABridgeTests(WorkbenchFixture):
         with patch.object(bridge.importlib.metadata, "version", return_value="different"):
             with self.assertRaisesRegex(ValueError, "exact package version"):
                 bridge.sdk_rank(prepared["prepared"]["question"], prepared["chunks"], prepared["dense"])
+
+    def test_optional_sdk_is_installed_only_on_explicit_cloud_provision(self):
+        missing = importlib.metadata.PackageNotFoundError("paper-qa")
+        with patch.object(bridge.importlib.metadata, "version", side_effect=[missing, bridge.SDK_VERSION]), \
+             patch("scripts.cloud_retry.run", return_value=SimpleNamespace(returncode=0)) as install, \
+             patch.object(bridge.model_runtime, "call", side_effect=AssertionError("dependency installation cannot spend on inference")):
+            self.assertEqual(bridge.provision(self.project), bridge.SDK_VERSION)
+        command = install.call_args.args[0]
+        self.assertEqual(command, [bridge.sys.executable, "-m", "pip", "install", "--disable-pip-version-check", "paper-qa==2026.8.12"])
+        self.assertEqual(install.call_args.kwargs["operation"], "literature-paperqa-runtime")
+        self.assertEqual(install.call_args.kwargs["receipt"], self.project / "state/cloud-retry.jsonl")
+        with patch.object(bridge.importlib.metadata, "version", return_value=bridge.SDK_VERSION), patch("scripts.cloud_retry.run") as install:
+            bridge.provision(self.project)
+            install.assert_not_called()
+
+    def test_optional_sdk_wrong_version_failed_install_and_noncloud_do_not_continue(self):
+        with patch.object(bridge.importlib.metadata, "version", return_value="different"), patch("scripts.cloud_retry.run") as install:
+            with self.assertRaisesRegex(ValueError, "exact package version"):
+                bridge.provision(self.project)
+            install.assert_not_called()
+        with patch.object(bridge.importlib.metadata, "version", side_effect=importlib.metadata.PackageNotFoundError("paper-qa")), \
+             patch("scripts.cloud_retry.run", return_value=SimpleNamespace(returncode=1)):
+            with self.assertRaisesRegex(RuntimeError, "could not be installed"):
+                bridge.provision(self.project)
+        with patch.object(semantic, "_cloud", side_effect=ValueError("cloud only")), patch("scripts.cloud_retry.run") as install:
+            with self.assertRaisesRegex(ValueError, "cloud"):
+                bridge.provision(self.project)
+            install.assert_not_called()
 
     def test_actual_pinned_sdk_uses_cached_vectors_without_any_network_or_model_call(self):
         required = os.environ.get("DR_OS_LITERATURE_SDK_REQUIRED") == "1"

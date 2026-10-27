@@ -12,6 +12,7 @@ import json
 import math
 import os
 from pathlib import Path
+import sys
 import uuid
 
 from scripts import evidence_retrieval, literature_review, literature_semantic, literature_workbench as wb
@@ -24,6 +25,25 @@ MODULE = "scripts/literature_paperqa.py"
 # Installed metadata normalizes the pinned requirement 2026.08.12 under PEP 440.
 SDK_VERSION = "2026.8.12"
 SDK_REVISION = "57e89f7223b0960d5ee5ea048c69e3c47e088572"
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def provision(project):
+    """Install the one pinned optional SDK only for an explicit cloud SDK task."""
+    literature_semantic._cloud()
+    try:
+        installed = importlib.metadata.version("paper-qa")
+    except importlib.metadata.PackageNotFoundError:
+        from scripts.cloud_retry import run
+        result = run([sys.executable, "-m", "pip", "install", "--disable-pip-version-check",
+                      "paper-qa==" + SDK_VERSION], cwd=ROOT, operation="literature-paperqa-runtime",
+                     receipt=Path(project) / "state/cloud-retry.jsonl", timeout=300)
+        if result.returncode:
+            raise RuntimeError("fixed cloud PaperQA2 SDK dependency could not be installed")
+        installed = importlib.metadata.version("paper-qa")
+    if installed != SDK_VERSION:
+        raise ValueError("PaperQA2 SDK differs from the reviewed exact package version")
+    return installed
 
 
 class _BoundQueryEmbedding:
@@ -41,13 +61,15 @@ class _BoundQueryEmbedding:
         return [self.vector]
 
 
-def sdk_rank(query, chunks, dense):
+def sdk_rank(query, chunks, dense, *, project=None):
     """Execute the real pinned SDK on source-bound, precomputed CPU embeddings."""
     literature_semantic._cloud()
     try:
         version = importlib.metadata.version("paper-qa")
     except importlib.metadata.PackageNotFoundError as exc:
-        raise RuntimeError("optional SDK bridge requires paper-qa==" + SDK_VERSION + " on the cloud runner") from exc
+        if project is None:
+            raise RuntimeError("optional SDK bridge requires paper-qa==" + SDK_VERSION + " on the cloud runner") from exc
+        version = provision(project)
     if version != SDK_VERSION:
         raise ValueError("PaperQA2 SDK differs from the reviewed exact package version")
     from paperqa.llms import NumpyVectorStore
@@ -204,7 +226,7 @@ def refresh(project: Path, request_file=REQUEST, *, execute=False):
             return {"report": target.relative_to(project).as_posix(), "cache_hit": True, **existing}
     elif directory.exists() and any(directory.iterdir()):
         raise ValueError("refusing to replace an unowned PaperQA2 bridge directory")
-    ranking = sdk_rank(prepared["prepared"]["question"], prepared["chunks"], prepared["dense"])
+    ranking = sdk_rank(prepared["prepared"]["question"], prepared["chunks"], prepared["dense"], project=project)
     context = _context(prepared, ranking, spec.get("max_source_chars", 24000), prepared["prepared"]["spec"]["limit"])
     report = {"schema_version": "1.0", "kind": "paperqa2_sdk_budgeted_bridge", "id": spec["id"],
         "fingerprint": prepared["fingerprint"], "question": prepared["prepared"]["question"],

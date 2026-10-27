@@ -37,6 +37,11 @@ Embedding is multilingual MiniLM; the independent MS MARCO cross encoder is
 English-oriented. Token windows are covered explicitly rather than silently
 truncated. Scores do not prove semantic support, Chinese reranker quality or
 scientific importance. Default lexical retrieval remains available.
+The SDK bridge similarly provisions only its exact pinned package when an
+explicit SDK task needs it. Missing Poppler/OCR tools and requested language data
+are installed for the explicit PDF operation; ordinary searches do not install
+these extras. The production workflows forward an optional ZOTERO_API_KEY Secret
+to the cloud worker, never to model prompts or experiment containers.
 
 Indexes bind every original block, source scope, model revision and code hash.
 Unchanged corpus vectors, query vectors and complete results are reused. Changed

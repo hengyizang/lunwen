@@ -17,6 +17,26 @@ from scripts.research_artifacts import read, sha, write
 
 
 class PdfContractTests(unittest.TestCase):
+    def test_explicit_cloud_ocr_provisions_only_missing_fixed_tools(self):
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+             patch.object(pdf.shutil, "which", return_value=None), patch.object(pdf, "_run", return_value=SimpleNamespace(stdout=b"")) as run:
+            packages = pdf.provision(Path(directory), {"enabled": True, "language": "eng+chi_sim"})
+            self.assertEqual(packages, ["poppler-utils", "tesseract-ocr", "tesseract-ocr-eng", "tesseract-ocr-chi-sim"])
+            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_args.args[0][-4:], packages)
+            self.assertEqual(run.call_args.args[0][:5], ["sudo", "-n", "apt-get", "install", "-y"])
+
+    def test_available_pdf_tools_need_no_install_and_provision_is_cloud_only(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+             patch.object(pdf.shutil, "which", return_value="/usr/bin/tool"), patch.object(pdf, "_run") as run:
+            self.assertEqual(pdf.provision(Path(directory), {"enabled": False, "language": "eng"}), [])
+            run.assert_not_called()
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), patch.object(pdf, "_run") as run:
+            with self.assertRaisesRegex(ValueError, "cloud"):
+                pdf.provision(Path("unused"), {"enabled": True, "language": "eng"})
+            run.assert_not_called()
+
     def test_cloud_guard_precedes_source_tools_or_writes(self):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "0"}):
             with self.assertRaisesRegex(ValueError, "cloud runner"):

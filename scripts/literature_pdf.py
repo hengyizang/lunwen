@@ -82,6 +82,29 @@ def _run(arguments, *, timeout=90):
     return subprocess.run(arguments, check=True, capture_output=True, timeout=timeout)
 
 
+def provision(project, ocr):
+    """Install only missing declared tools for this explicit cloud operation."""
+    _cloud()
+    packages = []
+    if any(shutil.which(name) is None for name in ("pdftotext", "pdftoppm")):
+        packages.append("poppler-utils")
+    if ocr["enabled"]:
+        has_ocr = shutil.which("tesseract") is not None
+        if not has_ocr:
+            packages.append("tesseract-ocr")
+        installed = set(_run(["tesseract", "--list-langs"]).stdout.decode("utf-8").splitlines()) if has_ocr else set()
+        language_packages = {"eng": "tesseract-ocr-eng", "chi_sim": "tesseract-ocr-chi-sim"}
+        packages += [language_packages[language] for language in ocr["language"].split("+") if language not in installed]
+    if packages:
+        _run(["sudo", "-n", "apt-get", "update", "-qq", "-o", "Acquire::Retries=1", "-o", "Acquire::https::Timeout=20"], timeout=180)
+        _run(["sudo", "-n", "apt-get", "install", "-y", "--no-install-recommends", "-o", "Acquire::Retries=1",
+              "-o", "Acquire::https::Timeout=20", *packages], timeout=240)
+        receipt = path_in(project, "reports/literature-pdf/runtime-provision.json", exists=False)
+        write(receipt, {"schema_version": "1.0", "packages": packages, "cloud_only": True, "paid_model_calls": 0})
+        record(project, [receipt], MODULE)
+    return packages
+
+
 def _normalize(source, destination):
     from pypdf import PdfReader, PdfWriter
     reader = PdfReader(str(source), strict=False)
@@ -254,6 +277,7 @@ def refresh(project: Path, request_path=REQUEST):
         result = read(directory / "report.json")
         return {"report": (directory / "report.json").relative_to(project).as_posix(), "cache_hit": True, **result}
     required = ("pdftotext", "pdftoppm") + (("tesseract",) if prepared["ocr"]["enabled"] else ())
+    provision(project, prepared["ocr"])
     if any(shutil.which(name) is None for name in required):
         raise RuntimeError("PDF view requires declared cloud tools: " + ", ".join(required))
     directory.mkdir(parents=True, exist_ok=True)
