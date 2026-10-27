@@ -1,0 +1,43 @@
+name: Source-bound writing comparison 20261027
+on:
+  push:
+    branches: [codex/writing-comparison-20261027]
+    paths:
+      - scripts/writing_comparison.py
+      - config/writing-comparison-20261027.json
+      - .github/workflows/writing-comparison-20261027.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  metadata:
+    if: github.repository == 'hengyizang/lunwen'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Compile the scoped comparison without credentials
+        run: python -m py_compile scripts/writing_comparison.py
+      - name: Inspect catalogs, counters and retained historical holds without generation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
+          DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
+        run: python -m scripts.writing_comparison
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: writing-comparison-${{ github.run_id }}
+          path: .runtime/writing-comparison*.json
+          if-no-files-found: warn
+          retention-days: 30
