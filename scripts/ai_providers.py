@@ -627,7 +627,10 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
 def _production_identity(requested: str, reported: Any) -> str:
     # An exact echo is a traceability condition, not proof of genuine weights.
     if not isinstance(reported, str) or reported != requested:
-        raise ProviderError("production response model ID missing or mismatched; quarantine route and reconcile billing")
+        error = ProviderError("production response model ID missing or mismatched; quarantine route and reconcile billing")
+        # Diagnostic identity only; the caller must still reject the response.
+        error.reported_model = reported if isinstance(reported, str) and re.fullmatch(r"[A-Za-z0-9._/-]{1,160}", reported) else None
+        raise error
     return reported
 
 

@@ -24,10 +24,11 @@ PROVIDERS = ("codekey-gemini", "cheapai-gpt-pro")
 LIMIT = 30.0
 OLD_HOLD = 9.5836104
 ROUTES = (
-    {"id": "argon-high", "provider": "codekey-gemini", "model": "gemini-4-argon"},
+    {"id": "argon-native-high", "provider": "codekey-gemini", "model": "gemini-4-argon-high"},
     {"id": "sol-high", "provider": "cheapai-gpt-pro", "model": "gpt-6.1-sol"},
     {"id": "astra-high", "provider": "cheapai-gpt-pro", "model": "gpt-6-astra"},
 )
+REVIEWED_BASE_FAILURE = "7cedd3713aa45202c23c95051c31dfb60b658a5e"
 
 
 class State(gateway_trial.CloudState):
@@ -132,6 +133,14 @@ def freeze_scope(plan):
         route["provider"], prompt(plan, case), plan["common_instruction"], 8192,
         quotes[route["id"]], {}, controlled=True)
         for case in plan["cases"] for route in ROUTES}
+    # Preserve the billed base-ID failure inside the same18-call allowance.
+    # The separately advertised exact high-ID contract is not an accepted alias.
+    del ceilings["astra-high|intro-seaborn"]
+    quotes["argon-high"] = model_runtime.pricing("codekey-gemini", "gemini-4-argon")
+    first = plan["cases"][0]
+    ceilings["argon-high|intro-seaborn"] = model_runtime.reservation_bound(
+        "codekey-gemini", prompt(plan, first), plan["common_instruction"], 8192,
+        quotes["argon-high"], {}, controlled=True)
     if len(ceilings) != 18 or sum(ceilings.values()) > LIMIT:
         raise ValueError("fixed request scope exceeds eighteen calls or CNY30")
     return {"authorization": AUTHORIZATION, "plan_sha256": digest(plan), "max_calls": 18,
@@ -140,6 +149,24 @@ def freeze_scope(plan):
             "routes": ROUTES, "quotes": quotes, "call_ceilings_cny": ceilings,
             "rubric": rubric(), "minimum_human_raters": 2,
             "production_routing_changed": False, "automatic_promotion": False}
+
+
+def reviewed_transport_amendment(ledger, scope, current_sha):
+    if (current_sha != REVIEWED_BASE_FAILURE or ledger.get("status") != "stopped"
+            or len(ledger.get("entries", [])) != 1
+            or ledger["entries"][0].get("call_id") != "argon-high|intro-seaborn"
+            or ledger["entries"][0].get("billing_status") != "settled"
+            or ledger["entries"][0].get("generation_status") != "failed"
+            or "model ID missing or mismatched" not in ledger["entries"][0].get("diagnostic", "")
+            or ledger["scope"].get("plan_sha256") != scope["plan_sha256"]):
+        raise ValueError("frozen trial scope changed; never reset allowance")
+    ledger["original_scope"] = ledger["scope"]
+    ledger["scope"] = scope
+    ledger["transport_amendment"] = {"reviewed_ledger_blob": current_sha,
+        "reason": "Base identity failed; test the distinct advertised high-ID. Preserve the failure and cost; omit one never-sent Astra calibration task to retain18/CNY30.",
+        "base_alias_accepted": False, "old_request_retried": False,
+        "review_run_id": os.environ.get("GITHUB_RUN_ID")}
+    ledger.update(status="running")
 
 
 class Budget:
@@ -262,7 +289,8 @@ def execute(plan, state):
                   "scientific_equivalence_verified": False, "production_routing_changed": False}
         state.save("ledger.json", ledger)
     if ledger["scope"] != json.loads(json.dumps(scope)):
-        raise ValueError("frozen trial scope changed; never reset allowance")
+        reviewed_transport_amendment(ledger, scope, state.expected.get("ledger.json"))
+        state.save("ledger.json", ledger)
     if ledger["status"] != "running":
         return ledger
     if any(entry["billing_status"] != "settled" for entry in ledger["entries"]):
@@ -274,6 +302,8 @@ def execute(plan, state):
         order = ROUTES[index % 3:] + ROUTES[:index % 3]
         for route in order:
             call_id = route["id"] + "|" + case["id"]
+            if call_id not in scope["call_ceilings_cny"]:
+                continue
             if any(entry["call_id"] == call_id for entry in ledger["entries"]):
                 continue
             ceiling = scope["call_ceilings_cny"][call_id]
@@ -307,6 +337,8 @@ def execute(plan, state):
                     completion_status=result.completion_status)
             except ai_providers.ProviderError as exc:
                 entry.update(generation_status="failed", diagnostic=gateway_trial.safe_text(str(exc)))
+                if hasattr(exc, "reported_model"):
+                    entry["reported_model_unverified"] = gateway_trial.safe_text(exc.reported_model or "missing")
             entry["duration_seconds"] = round(time.monotonic() - started, 4)
             state.save("ledger.json", ledger)
             try:

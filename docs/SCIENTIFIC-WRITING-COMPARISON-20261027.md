@@ -65,6 +65,22 @@ read-only metadata mode never generates or releases historical reservations.
 
 ## Interpretation and human review
 
+### Reviewed transport amendment before comparing prose
+
+Run40532368313 attempted the native base-ID introduction once. It failed exact
+model-identity validation and was independently billed CNY0.0073388. Its text is
+not an accepted Argon writing result. The failure and actual debit remain in the
+ledger; the base request is never retried and its returned alias is never accepted.
+
+The separately advertised `gemini-4-argon-high` native endpoint is a distinct
+configuration. A single source-bound amendment accepts only the exact stopped
+ledger blob7cedd3713aa45202c23c95051c31dfb60b658a5e and its independently settled
+identity failure. It preserves the original scope and every attempted ID. Six
+high-ID cases and six Sol cases are retained; one never-sent Astra introduction
+case is omitted, leaving five Astra cases plus the failed base attempt:18 total
+requests maximum, still CNY30 new spending and the same CNY500 central budget.
+Any high-ID mismatch is also rejected; no further alias substitution is enabled.
+
 Reject invented facts/results/citations, incorrect numbers or units, changed
 causal scope, incorrect attribution, or loss of an essential condition. For
 scientifically acceptable prose, assess argument clarity, concrete contribution,

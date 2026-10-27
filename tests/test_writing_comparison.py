@@ -70,7 +70,7 @@ class WritingComparisonTests(unittest.TestCase):
         self.assertFalse(scope["automatic_promotion"])
         self.assertFalse(scope["production_routing_changed"])
         self.assertEqual({route["model"] for route in scope["routes"]},
-                         {"gemini-4-argon", "gpt-6.1-sol", "gpt-6-astra"})
+                         {"gemini-4-argon-high", "gpt-6.1-sol", "gpt-6-astra"})
         with patch.object(trial.model_runtime, "pricing", return_value={"quote_sha256": "a" * 64}), \
                 patch.object(trial.model_runtime, "reservation_bound", return_value=2.0):
             with self.assertRaisesRegex(ValueError, "CNY30"):
@@ -127,6 +127,31 @@ class WritingComparisonTests(unittest.TestCase):
             budget.return_value.reserve.assert_not_called()
             state.save.assert_not_called()
             generate.assert_not_called()
+
+
+class WritingTransportAmendmentTests(unittest.TestCase):
+    def test_only_exact_reviewed_settled_failure_can_change_transport_without_replay(self):
+        scope = scope_for(source_plan())
+        original = {"plan_sha256": scope["plan_sha256"], "original_marker": True}
+        entry = {"call_id": "argon-high|intro-seaborn", "billing_status": "settled",
+                 "generation_status": "failed", "actual_cost_cny": 0.0073388,
+                 "diagnostic": "production response model ID missing or mismatched; quarantine route and reconcile billing"}
+        ledger = {"scope": original, "entries": [entry], "status": "stopped"}
+        saved = copy.deepcopy(entry)
+        trial.reviewed_transport_amendment(ledger, scope, trial.REVIEWED_BASE_FAILURE)
+        self.assertEqual(ledger["entries"], [saved])
+        self.assertEqual(ledger["original_scope"], original)
+        self.assertEqual(ledger["status"], "running")
+        self.assertEqual(len(scope["call_ceilings_cny"]), 18)
+        self.assertNotIn("astra-high|intro-seaborn", scope["call_ceilings_cny"])
+        self.assertIn("argon-high|intro-seaborn", scope["call_ceilings_cny"])
+        self.assertIn("argon-native-high|intro-seaborn", scope["call_ceilings_cny"])
+        with self.assertRaises(ValueError):
+            trial.reviewed_transport_amendment(ledger, scope, trial.REVIEWED_BASE_FAILURE)
+        ledger["status"] = "stopped"
+        ledger["entries"][0]["billing_status"] = "reserved"
+        with self.assertRaises(ValueError):
+            trial.reviewed_transport_amendment(ledger, scope, trial.REVIEWED_BASE_FAILURE)
 
 
 class WritingTrialLegacyExceptionTests(unittest.TestCase):
