@@ -257,6 +257,28 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "argon-native-high|intro-seaborn",
+      "candidate_id": "argon-native-high",
+      "case_id": "intro-seaborn",
+      "case_sha256": "95cf78ceb667b49e09e5b98f5fd86549d4a7f92fc0445b56ce9892b09294ebc5",
+      "provider": "codekey-gemini",
+      "requested_model": "gemini-4-argon-high",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.4674768,
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "project_reservation_id": "e1ce56cbd4cf4acba87507f11dd1b78e",
+      "meter_before": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.0092336,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "run_id": "40533774483",
+      "code_sha": "0c007139cc4e902bb46fa46f974b9c6c7007d804"
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
