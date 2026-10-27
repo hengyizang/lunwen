@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scripts import ai_providers, gateway_trial, model_comparison_clarified, model_runtime, model_spend
-from scripts import production_readiness, relay_billing, relay_guard, review_packets
+from scripts import model_comparison, output_provenance, production_readiness, relay_billing, relay_guard, review_packets
 
 ROOT = Path(__file__).resolve().parents[1]
 TRIAL = "writing-comparison-20261027"
@@ -265,6 +265,10 @@ def export_review(plan, ledger):
             target = project / "candidates" / (entry["call_id"].replace("|", "-") + ".txt")
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(entry.get("text", "No completed text; inspect the failed attempt receipt."), encoding="utf-8")
+            if status == "success":
+                output_provenance.record_model_writes(project, [target],
+                    family=ai_providers.provider_family(entry["provider"]), provider=entry["provider"],
+                    model=entry["requested_model"], role="internal-writing-evaluation", run_id=entry["run_id"])
             candidate = {"id": entry["candidate_id"], "author_id": entry["requested_model"],
                 "model": entry["requested_model"], "channel": entry["provider"],
                 "authorized_for_internal_review": True, "authorization_note": AUTHORIZATION,
@@ -332,7 +336,7 @@ def execute(plan, state):
             committed = sum(entry.get("actual_cost_cny", entry["reserved_ceiling_cny"]) for entry in ledger["entries"])
             if len(ledger["entries"]) >= 18 or committed + ceiling > LIMIT:
                 raise ValueError("bounded trial allowance prevents new call")
-            before = relay_billing.read_meter(route["provider"])
+            before = model_comparison.read_meter(route["provider"])
             receipt = budget.reserve(ceiling, call_id=call_id)
             entry = {"call_id": call_id, "candidate_id": route["id"], "case_id": case["id"],
                 "case_sha256": digest(case), "provider": route["provider"], "requested_model": route["model"],
@@ -395,15 +399,26 @@ def main():
     mode = env.get("WRITING_COMPARISON_MODE", "metadata")
     if mode == "execute":
         plan = json.loads((ROOT / "config/writing-comparison-20261027.json").read_text(encoding="utf-8"))
-        report = execute(plan, state)
-        if report["status"] == "closed" and any(row["generation_status"] == "completed" for row in report["entries"]):
-            export_review(plan, report)
+        try:
+            report = execute(plan, state)
+        finally:
+            saved = state.load("ledger.json")
+            if saved is not None:
+                snapshot = ROOT / ".runtime/writing-comparison/execute.json"
+                snapshot.parent.mkdir(parents=True, exist_ok=True)
+                snapshot.write_text(json.dumps(saved, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                if {row["case_id"] for row in saved["entries"] if row["generation_status"] == "completed"} == {row["id"] for row in plan["cases"]}:
+                    export_review(plan, saved)
     elif mode == "metadata":
         report = metadata()
         name = "metadata-" + env["GITHUB_RUN_ID"] + ".json"
         if state.load(name) is not None:
             raise ValueError("existing metadata run cannot be replaced")
         state.save(name, report)
+        saved = state.load("ledger.json")
+        if saved is not None and saved.get("status") == "closed":
+            plan = json.loads((ROOT / "config/writing-comparison-20261027.json").read_text(encoding="utf-8"))
+            export_review(plan, saved)
     else:
         raise ValueError("unknown trial mode")
     output = ROOT / ".runtime/writing-comparison" / (mode + ".json")

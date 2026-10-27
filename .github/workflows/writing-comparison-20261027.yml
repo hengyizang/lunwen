@@ -52,7 +52,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           # Owner approved the exact finite trial after its metadata and
           # credential-free controls passed on 2026-10-27.
-          WRITING_COMPARISON_MODE: ${{ inputs.mode || 'metadata' }}
+          WRITING_COMPARISON_MODE: ${{ inputs.mode || 'execute' }}
           WRITING_COMPARISON_AUTHORIZATION: writing-comparison-20261027-owner-paid-with-legacy-holds
           DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
           DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
