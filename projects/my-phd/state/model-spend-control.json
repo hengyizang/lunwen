@@ -29,6 +29,15 @@
       "paper_id": null,
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
+    },
+    "31d799098c834501b8670c33a23ebfac": {
+      "at": "2026-10-27T16:06:00+00:00",
+      "call_id": "sol-high|edit-posthocs",
+      "kind": "new_call",
+      "max_cost_cny": 1.0037104,
+      "paper_id": null,
+      "run_id": "40537491991",
+      "writing_trial": "writing-comparison-20261027"
     }
   },
   "schema_version": "1.0",
