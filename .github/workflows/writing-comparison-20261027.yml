@@ -50,9 +50,9 @@ jobs:
       - name: Run only the owner-authorized finite cloud trial
         env:
           GH_TOKEN: ${{ github.token }}
-          # Initial publication remains metadata-only. A later exact commit
-          # enables the explicitly approved eighteen-call scope after validation.
-          WRITING_COMPARISON_MODE: ${{ inputs.mode || 'metadata' }}
+          # Owner approved the exact finite trial after its metadata and
+          # credential-free controls passed on 2026-10-27.
+          WRITING_COMPARISON_MODE: ${{ inputs.mode || 'execute' }}
           WRITING_COMPARISON_AUTHORIZATION: writing-comparison-20261027-owner-paid-with-legacy-holds
           DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
           DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
@@ -65,4 +65,5 @@ jobs:
             .runtime/writing-comparison/
             .runtime/writing-review/
           if-no-files-found: warn
+          include-hidden-files: true
           retention-days: 30

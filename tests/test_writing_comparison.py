@@ -5,6 +5,7 @@ import copy
 import json
 import os
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
@@ -195,6 +196,41 @@ class WritingTrialLegacyExceptionTests(unittest.TestCase):
             with self.assertRaisesRegex(relay_guard.RelayGuardError, "historical"):
                 relay_guard.begin("codekey-gemini", scope=self.scope, max_cost_cny=0.5)
             self.assertEqual(self.value["legacy_holds"], self.held)
+
+
+class WritingTrialBudgetTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.budget = object.__new__(trial.Budget)
+        self.budget.root = Path(temporary.name)
+        control = trial.model_spend.initial()
+        trial.model_spend.write(self.budget.root, control)
+        trial.model_spend.grant(self.budget.root, new_ceiling_cny=300, actor="synthetic owner", run_id="fixture")
+        trial.model_spend.amend_ceiling(self.budget.root, new_ceiling_cny=500, actor="synthetic owner",
+                                       run_id="fixture", authorization_note="Synthetic approved ceiling fixture.")
+        self.budget.refresh = Mock(side_effect=lambda: trial.model_spend.read(self.budget.root, required=True))
+        self.budget.persist = Mock()
+
+    def test_retained_legacy_reservation_survives_restart_without_double_occupancy(self):
+        with patch.dict(os.environ, {"GITHUB_RUN_ID": "fixture"}, clear=True):
+            first = self.budget.reserve(trial.OLD_HOLD, kind="retained_legacy")
+            second = self.budget.reserve(trial.OLD_HOLD, kind="retained_legacy")
+        self.assertEqual(first, second)
+        control = trial.model_spend.read(self.budget.root, required=True)
+        self.assertEqual(len(control["reservations"]), 1)
+        self.assertEqual(trial.model_spend.reserved(control), trial.OLD_HOLD)
+        self.assertEqual(control["spent_cny"], 0)
+
+    def test_actual_debit_above_bound_is_persisted_before_stopping(self):
+        receipt = trial.model_spend.reserve(self.budget.root, max_cost_cny=0.25,
+            paper_id=None, paper_limit_cny=500, run_id="fixture")
+        with self.assertRaises(trial.model_spend.SpendControlError):
+            self.budget.settle(receipt, 0.5)
+        self.budget.persist.assert_called_once()
+        control = trial.model_spend.read(self.budget.root, required=True)
+        self.assertEqual(control["spent_cny"], 0.5)
+        self.assertNotIn(receipt, control["reservations"])
 
 
 if __name__ == "__main__":
