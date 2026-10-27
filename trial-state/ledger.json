@@ -218,7 +218,7 @@
     "production_routing_changed": false,
     "automatic_promotion": false
   },
-  "status": "stopped",
+  "status": "running",
   "entries": [
     {
       "call_id": "argon-high|intro-seaborn",
@@ -302,7 +302,6 @@
   "authorization_note": "Owner explicitly authorized this finite exception in chat on 2026-10-27; preserve both old Argon holds in full, new18/CNY30 within totalCNY500.",
   "scientific_equivalence_verified": false,
   "production_routing_changed": false,
-  "stop_reason": "failed generation retained; no paid retry authorized",
   "original_scope": {
     "authorization": "writing-comparison-20261027-owner-paid-with-legacy-holds",
     "plan_sha256": "e92ac95e1cdf71649dedacd095563404611c3c3abc06a99a9a29fd70169fe0e5",
@@ -508,5 +507,14 @@
     "base_alias_accepted": false,
     "old_request_retried": false,
     "review_run_id": "40533774483"
-  }
+  },
+  "independent_continuation": {
+    "reviewed_ledger_blob": "2f59ecce09431cad59fbce15755f3411bc6b56e4",
+    "previous_stop_reason": "failed generation retained; no paid retry authorized",
+    "provider_quarantined": "codekey-gemini",
+    "reason": "Both Argon contracts failed identity; continue only already-authorized never-sent GPT tasks, with no Argon retries or new judge calls."
+  },
+  "quarantined_providers": [
+    "codekey-gemini"
+  ]
 }
