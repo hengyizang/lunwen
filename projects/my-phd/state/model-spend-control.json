@@ -29,15 +29,6 @@
       "paper_id": null,
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
-    },
-    "cc66d3aab4514f918c124fef8ff167aa": {
-      "at": "2026-10-27T15:53:15+00:00",
-      "call_id": "sol-high|abstract-corner",
-      "kind": "new_call",
-      "max_cost_cny": 0.896588,
-      "paper_id": null,
-      "run_id": "40534791012",
-      "writing_trial": "writing-comparison-20261027"
     }
   },
   "schema_version": "1.0",
@@ -65,8 +56,12 @@
     {
       "actual_cost_cny": 0.009256,
       "receipt_id": "fc90b33abaa94ee8a02018fe3cc3c68d"
+    },
+    {
+      "actual_cost_cny": 0.002448,
+      "receipt_id": "cc66d3aab4514f918c124fef8ff167aa"
     }
   ],
-  "spent_cny": 0.0394076,
+  "spent_cny": 0.0418556,
   "tranche_cny": 300
 }
