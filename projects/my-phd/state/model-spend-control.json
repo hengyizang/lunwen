@@ -21,15 +21,6 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
-    "13eced3f5f1a4a0eb98ae0e37b0a9b36": {
-      "at": "2026-10-27T15:49:46+00:00",
-      "call_id": "sol-high|intro-seaborn",
-      "kind": "new_call",
-      "max_cost_cny": 1.0942624,
-      "paper_id": null,
-      "run_id": "40534791012",
-      "writing_trial": "writing-comparison-20261027"
-    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
@@ -49,8 +40,12 @@
     {
       "actual_cost_cny": 0.0073388,
       "receipt_id": "e1ce56cbd4cf4acba87507f11dd1b78e"
+    },
+    {
+      "actual_cost_cny": 0.003334,
+      "receipt_id": "13eced3f5f1a4a0eb98ae0e37b0a9b36"
     }
   ],
-  "spent_cny": 0.0146776,
+  "spent_cny": 0.0180116,
   "tranche_cny": 300
 }
