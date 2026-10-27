@@ -200,7 +200,30 @@
     "automatic_promotion": false
   },
   "status": "running",
-  "entries": [],
+  "entries": [
+    {
+      "call_id": "argon-high|intro-seaborn",
+      "candidate_id": "argon-high",
+      "case_id": "intro-seaborn",
+      "case_sha256": "95cf78ceb667b49e09e5b98f5fd86549d4a7f92fc0445b56ce9892b09294ebc5",
+      "provider": "codekey-gemini",
+      "requested_model": "gemini-4-argon",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.4674768,
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "project_reservation_id": "d5a97692951f4ef48d7b9a8ceaa933d2",
+      "meter_before": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 1,
+        "cost_cny": 0.0018948,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "run_id": "40532368313",
+      "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5"
+    }
+  ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
   "authorization_note": "Owner explicitly authorized this finite exception in chat on 2026-10-27; preserve both old Argon holds in full, new18/CNY30 within totalCNY500.",
   "scientific_equivalence_verified": false,
