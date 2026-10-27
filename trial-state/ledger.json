@@ -199,7 +199,7 @@
     "production_routing_changed": false,
     "automatic_promotion": false
   },
-  "status": "running",
+  "status": "stopped",
   "entries": [
     {
       "call_id": "argon-high|intro-seaborn",
@@ -243,5 +243,6 @@
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
   "authorization_note": "Owner explicitly authorized this finite exception in chat on 2026-10-27; preserve both old Argon holds in full, new18/CNY30 within totalCNY500.",
   "scientific_equivalence_verified": false,
-  "production_routing_changed": false
+  "production_routing_changed": false,
+  "stop_reason": "failed generation retained; no paid retry authorized"
 }
