@@ -881,7 +881,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.6774912,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "cc67ffe976a54f3782c3ff338a583e5f",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -1132,7 +1132,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "Vallat (2018) presents Pingouin as an open-source Python package intended to partially address the author’s historical characterization of Python as lagging behind R for general statistical analysis, despite Python’s growing use and extensive data-science ecosystem [JOSS01026]. The package provides easy-to-use functions for several statistical procedures commonly used in scientific research, including analyses of variance (ANOVAs), analyses of covariance (ANCOVAs), post-hoc tests, non-parametric tests, and effect-size calculations. It also includes more advanced methods, such as Bayesian t-tests, repeated-measures correlations, robust correlations, and circular statistics (Vallat, 2018) [JOSS01026]. Pingouin is written in Python 3 and is primarily built on the Pandas library. This implementation supports its use within a data-analysis pipeline by allowing statistical functions to operate in a workflow organized around Pandas data structures, thereby connecting data preparation and statistical computation within the Python environment. The package is accompanied by extensive documentation, an application programming interface, and several Jupyter notebook examples, which provide reference material for its functions and demonstrate their use in reproducible, notebook-based analysis workflows (Vallat, 2018) [JOSS01026]. The comparison between Python and R describes the statistical-software context identified by Vallat at the time of publication and should not be read as a current assessment of either ecosystem.",
+      "reported_model": "gpt-6-astra",
+      "usage": {
+        "input_tokens": 4934,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 506,
+        "output_tokens_details": {
+          "reasoning_tokens": 212
+        }
+      },
+      "request_id": "resp_0d887403c9c940a6016ae0c8945d508191ba06f90347772155",
+      "response_sha256": "3a8a2aa1c4c4c92dceb14d2ff2c70f9f804366dc586285289168a4199ba502d5",
+      "completion_status": "completed",
+      "duration_seconds": 22.5425
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
