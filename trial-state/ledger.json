@@ -210,7 +210,7 @@
       "requested_model": "gemini-4-argon",
       "requested_effort": "high",
       "reserved_ceiling_cny": 0.4674768,
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "failed",
       "project_reservation_id": "d5a97692951f4ef48d7b9a8ceaa933d2",
       "meter_before": {
@@ -223,7 +223,21 @@
       "run_id": "40532368313",
       "code_sha": "296097cb6b991b58d0ec5499cf2d7417e28bf2f5",
       "diagnostic": "production response model ID missing or mismatched; quarantine route and reconcile billing",
-      "duration_seconds": 22.5713
+      "duration_seconds": 22.5713,
+      "actual_cost_cny": 0.0073388,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 1,
+          "cost_cny": 0.0018948
+        },
+        "after": {
+          "requests": 2,
+          "cost_cny": 0.0092336
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
