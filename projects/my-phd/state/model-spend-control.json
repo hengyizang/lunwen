@@ -29,15 +29,6 @@
       "paper_id": null,
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
-    },
-    "4702b6095504432682d010a2ccdab8e0": {
-      "at": "2026-10-27T15:56:54+00:00",
-      "call_id": "astra-high|results-emcee",
-      "kind": "new_call",
-      "max_cost_cny": 1.7671192,
-      "paper_id": null,
-      "run_id": "40534791012",
-      "writing_trial": "writing-comparison-20261027"
     }
   },
   "schema_version": "1.0",
@@ -81,8 +72,12 @@
     {
       "actual_cost_cny": 0.002922,
       "receipt_id": "be87900215de4d8f9147a8a7e96accf8"
+    },
+    {
+      "actual_cost_cny": 0.012618,
+      "receipt_id": "4702b6095504432682d010a2ccdab8e0"
     }
   ],
-  "spent_cny": 0.0598596,
+  "spent_cny": 0.0724776,
   "tranche_cny": 300
 }
