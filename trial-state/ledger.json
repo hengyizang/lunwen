@@ -3497,7 +3497,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.0037104,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "31d799098c834501b8670c33a23ebfac",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -3812,7 +3812,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40537491991",
-      "code_sha": "bf4925426a125327a009ee0ee272604645629668"
+      "code_sha": "bf4925426a125327a009ee0ee272604645629668",
+      "text": "Terpilowski (2019) presents scikit-posthocs as a Python package for conducting multiple pairwise comparison tests after a statistically significant parametric or nonparametric analysis of variance (ANOVA). Its purpose is to help statisticians, data scientists, and researchers assess differences between group levels while addressing a gap in the Python ecosystem, which at the time lacked implementations of post hoc tests for factorial and block-design data. Although SciPy provided individual Student, Wilcoxon, and Mann–Whitney tests, these tests were not adapted to multiple pairwise comparisons, and the TukeyHSD implementation in Statsmodels required additional steps for integration into an analysis pipeline [JOSS01169].\n\nThe package includes parametric procedures such as Scheffe, Student T, Tamhane T2, and TukeyHSD, together with nonparametric tests for factorial designs, including Conover, Dunn, Dwass–Steel–Critchlow–Fligner, Mann–Whitney, Nemenyi, van Waerden, and Wilcoxon tests. It also implements nonparametric procedures for block designs, including Durbin and Conover, Miller, Quade, Siegel, and related tests, as well as Anderson–Darling, Mack–Wolfe, and Hayter tests [JOSS01169]. These functions provide alternative procedures suited to different designs and distributional assumptions; they do not imply that every significant omnibus result yields significant differences for every pair.\n\nIn addition, scikit-posthocs supplies outlier-detection algorithms based on the interquartile range, Grubbs, Tietjen–Moore, and generalized extreme Studentized deviate tests. Its plotting functionality presents pairwise-comparison results as heatmaps or significance plots, which summarize test outcomes rather than establish hypotheses independently. The package supports Python 2 and 3, integrates with Pandas and NumPy, and extends functionality from Statsmodels, SciPy, and PMCMRplus [JOSS01169].",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 5259,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 557,
+        "output_tokens_details": {
+          "reasoning_tokens": 148
+        }
+      },
+      "request_id": "resp_0edbe1fea7575ec2016ae0cbf6c6048191a7c7c61d7461f5b9",
+      "response_sha256": "b6a583ec3d764a6f60c43720ff5e5b4420c8da2f3239ac12aaa97e4efa40d9e1",
+      "completion_status": "completed",
+      "duration_seconds": 26.2899
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
