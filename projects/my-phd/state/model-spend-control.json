@@ -21,15 +21,6 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
-    "10e8e7e5fb394961b3eb8d3e9b59b99b": {
-      "at": "2026-10-27T15:55:04+00:00",
-      "call_id": "astra-high|discussion-arviz",
-      "kind": "new_call",
-      "max_cost_cny": 1.757448,
-      "paper_id": null,
-      "run_id": "40534791012",
-      "writing_trial": "writing-comparison-20261027"
-    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
@@ -73,8 +64,12 @@
     {
       "actual_cost_cny": 0.003038,
       "receipt_id": "6f472da26fed4dd38cc3265b04ea61e2"
+    },
+    {
+      "actual_cost_cny": 0.012044,
+      "receipt_id": "10e8e7e5fb394961b3eb8d3e9b59b99b"
     }
   ],
-  "spent_cny": 0.0448936,
+  "spent_cny": 0.0569376,
   "tranche_cny": 300
 }
