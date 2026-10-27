@@ -1,0 +1,452 @@
+{
+  "trial_id": "writing-comparison-20261027",
+  "at": "2026-10-27T15:59:07.416408+00:00",
+  "run_id": "40535707599",
+  "code_sha": "b3ef93f036cc2fc28d8f82c645720d68515e5d77",
+  "mode": "metadata",
+  "generation_calls": 0,
+  "production_routing_changed": false,
+  "scientific_equivalence_verified": false,
+  "providers": {
+    "codekey-gemini": {
+      "catalog": [
+        "gemini-2.5-flash",
+        "gemini-3.5-flash",
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
+        "gemini-3.8-flash",
+        "gemini-4-argon",
+        "gemini-4-argon-high",
+        "gemini-4-argon-low",
+        "gemini-4-argon-medium"
+      ],
+      "meter": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 3,
+        "cost_cny": 0.0165724,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "provider": "codekey-gemini",
+        "legacy_holds": [
+          {
+            "branch": "cloud-state/model-comparison-20261020",
+            "call_id": "codekey-argon-high|evidence_conflict",
+            "id": "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9",
+            "name": "model-comparison-20261020.json",
+            "provider": "codekey-gemini",
+            "request_binding": {
+              "call_id": "codekey-argon-high|evidence_conflict",
+              "candidate_id": "codekey-argon-high",
+              "case_id": "evidence_conflict",
+              "case_sha256": "b7696904561a8a9f79137cc36c21ea5a3eeafcf6706a7d9ceb9c7f4df96cf6bd",
+              "effort": "high",
+              "meter_before": {
+                "cost_cny": 0.006756,
+                "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+                "kind": "codekey_total_actual_cost",
+                "provider": "codekey-gemini",
+                "requests": 2
+              },
+              "model": "gemini-4-argon-high",
+              "provider": "codekey-gemini",
+              "quote_sha256": "3ed5425994b4b4b1ae3d020fb2d977e36774ace8970307ad6321a93465c0fe4e",
+              "reserved_ceiling_cny": 0.431508,
+              "run_id": "39429999330"
+            },
+            "reserved_ceiling_cny": 0.431508,
+            "source_blob_sha": "63ee401edc29539bfa065e820b57dc4d025adbd9"
+          },
+          {
+            "branch": "cloud-state/model-comparison-20261020",
+            "call_id": "native-argon-base-high|visual_chart",
+            "id": "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9",
+            "name": "model-comparison-20261020-argon-base-probe.json",
+            "provider": "codekey-gemini",
+            "request_binding": {
+              "call_id": "native-argon-base-high|visual_chart",
+              "case_sha256": "f1ad860914ddc2e2e2aec299e8e5aa4d3971b2b94067ac919a6e858aea643fdc",
+              "effort": "high",
+              "meter_before": {
+                "cost_cny": 0.006756,
+                "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+                "kind": "codekey_total_actual_cost",
+                "provider": "codekey-gemini",
+                "requests": 2
+              },
+              "requested_model": "gemini-4-argon",
+              "reserved_ceiling_cny": 9.1521024,
+              "run_id": "39573328873"
+            },
+            "reserved_ceiling_cny": 9.1521024,
+            "source_blob_sha": "9951824693a7ec7081671446aeca00a3a02c1a4d"
+          }
+        ],
+        "active": null,
+        "inference_eligible": false,
+        "catalog_access_does_not_release_holds": true
+      }
+    },
+    "cheapai-gpt-pro": {
+      "catalog": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "deepseek-v4-pro-0813",
+        "deepseek-v4.1-flash",
+        "deepseek-v4.1-flash-1017",
+        "glm-5.2",
+        "glm-5.3",
+        "gpt-5.4",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol",
+        "gpt-image-2.5-flare",
+        "gpt-image-2.5-sunburst",
+        "hy3",
+        "hy4-preview",
+        "kimi-k3",
+        "mimo-v2.5",
+        "minimax-m3",
+        "qwen3.7-max",
+        "qwen3.8-max"
+      ],
+      "meter": {
+        "provider": "cheapai-gpt-pro",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6026,
+            "created_at": 1793116718,
+            "prompt_tokens": 5259,
+            "completion_tokens": 652,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6309,
+            "created_at": 1793116660,
+            "prompt_tokens": 5217,
+            "completion_tokens": 712,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1461,
+            "created_at": 1793116601,
+            "prompt_tokens": 5217,
+            "completion_tokens": 623,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6022,
+            "created_at": 1793116548,
+            "prompt_tokens": 5216,
+            "completion_tokens": 660,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1519,
+            "created_at": 1793116493,
+            "prompt_tokens": 5216,
+            "completion_tokens": 676,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1224,
+            "created_at": 1793116436,
+            "prompt_tokens": 4838,
+            "completion_tokens": 514,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4628,
+            "created_at": 1793116383,
+            "prompt_tokens": 4838,
+            "completion_tokens": 482,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4865,
+            "created_at": 1793116329,
+            "prompt_tokens": 4934,
+            "completion_tokens": 506,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1205,
+            "created_at": 1793116283,
+            "prompt_tokens": 4934,
+            "completion_tokens": 447,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1667,
+            "created_at": 1793116236,
+            "prompt_tokens": 5403,
+            "completion_tokens": 773,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 227,
+            "created_at": 1792572988,
+            "prompt_tokens": 321,
+            "completion_tokens": 142,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1338,
+            "created_at": 1792572951,
+            "prompt_tokens": 321,
+            "completion_tokens": 179,
+            "id": 12
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 236,
+            "created_at": 1792572941,
+            "prompt_tokens": 321,
+            "completion_tokens": 150,
+            "id": 13
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 321,
+            "created_at": 1792572922,
+            "prompt_tokens": 383,
+            "completion_tokens": 215,
+            "id": 14
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1169,
+            "created_at": 1792572850,
+            "prompt_tokens": 383,
+            "completion_tokens": 136,
+            "id": 15
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 330,
+            "created_at": 1792572843,
+            "prompt_tokens": 383,
+            "completion_tokens": 223,
+            "id": 16
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 249,
+            "created_at": 1792572610,
+            "prompt_tokens": 258,
+            "completion_tokens": 175,
+            "id": 17
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 29,
+            "created_at": 1792572599,
+            "prompt_tokens": 258,
+            "completion_tokens": 176,
+            "id": 18
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1643,
+            "created_at": 1792516836,
+            "prompt_tokens": 209,
+            "completion_tokens": 257,
+            "id": 19
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 16532,
+            "created_at": 1792516668,
+            "prompt_tokens": 559,
+            "completion_tokens": 2894,
+            "id": 20
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 3060,
+            "created_at": 1792516633,
+            "prompt_tokens": 559,
+            "completion_tokens": 2670,
+            "id": 21
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 245,
+            "created_at": 1792516334,
+            "prompt_tokens": 279,
+            "completion_tokens": 167,
+            "id": 22
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 32,
+            "created_at": 1792516327,
+            "prompt_tokens": 279,
+            "completion_tokens": 199,
+            "id": 23
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 130,
+            "created_at": 1792515165,
+            "prompt_tokens": 254,
+            "completion_tokens": 67,
+            "id": 24
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 218,
+            "created_at": 1792515158,
+            "prompt_tokens": 282,
+            "completion_tokens": 142,
+            "id": 25
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 31,
+            "created_at": 1792515151,
+            "prompt_tokens": 254,
+            "completion_tokens": 194,
+            "id": 26
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 2071,
+            "created_at": 1792505531,
+            "prompt_tokens": 209,
+            "completion_tokens": 1841,
+            "id": 27
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 8373,
+            "created_at": 1792505467,
+            "prompt_tokens": 26531,
+            "completion_tokens": 106,
+            "id": 28
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 5942,
+            "created_at": 1792505458,
+            "prompt_tokens": 26531,
+            "completion_tokens": 96,
+            "id": 29
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1401,
+            "created_at": 1792505383,
+            "prompt_tokens": 279,
+            "completion_tokens": 199,
+            "id": 30
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 270,
+            "created_at": 1792505371,
+            "prompt_tokens": 279,
+            "completion_tokens": 190,
+            "id": 31
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1499,
+            "created_at": 1792505314,
+            "prompt_tokens": 258,
+            "completion_tokens": 221,
+            "id": 32
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 305,
+            "created_at": 1792505305,
+            "prompt_tokens": 258,
+            "completion_tokens": 226,
+            "id": 33
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1110,
+            "created_at": 1792504260,
+            "prompt_tokens": 254,
+            "completion_tokens": 151,
+            "id": 34
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 210,
+            "created_at": 1792504251,
+            "prompt_tokens": 254,
+            "completion_tokens": 140,
+            "id": 35
+          },
+          {
+            "model_name": "gpt-5.6-luna",
+            "quota": 29,
+            "created_at": 1792504242,
+            "prompt_tokens": 282,
+            "completion_tokens": 176,
+            "id": 36
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 1179,
+            "created_at": 1792501813,
+            "prompt_tokens": 282,
+            "completion_tokens": 158,
+            "id": 37
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 248,
+            "created_at": 1792500557,
+            "prompt_tokens": 282,
+            "completion_tokens": 169,
+            "id": 38
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "provider": "cheapai-gpt-pro",
+        "legacy_holds": [],
+        "active": null,
+        "inference_eligible": true,
+        "catalog_access_does_not_release_holds": true
+      }
+    }
+  }
+}
