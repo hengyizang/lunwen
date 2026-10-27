@@ -1179,7 +1179,7 @@
       "requested_model": "gpt-6-astra",
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.6535288,
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "project_reservation_id": "fc90b33abaa94ee8a02018fe3cc3c68d",
       "meter_before": {
@@ -1456,7 +1456,26 @@
       "request_id": "resp_0b5edaa3de61b67c016ae0c8ca2f588191b3223b9a5a773540",
       "response_sha256": "87a48fddb46fb0f0557826fe42a038ae73736321b735fb0c3df64f71c4d05609",
       "completion_status": "completed",
-      "duration_seconds": 22.1383
+      "duration_seconds": 22.1383,
+      "actual_cost_cny": 0.009256,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-6-astra",
+          "quota": 4628,
+          "created_at": 1793116383,
+          "prompt_tokens": 4838,
+          "completion_tokens": 482,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "f6325f1e24e490560d38cbdacfde3a577c66c9060ccde0c7eddfd22e659c7dd9",
+        "after_snapshot_sha256": "0927cf6d3718f06013d8ddea51d43fb9cda4bd24d60e77a1d497e2f23e0bb835",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
