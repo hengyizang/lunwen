@@ -66,13 +66,15 @@ def demonstrate(directory):
     plan = comparison.refresh(project)
     comparison.validate_saved_report(project)
     sentence_index = reading.build_index(project, paper_id)
-    selected = [s["sentence_id"] for s in sentence_index["sentences"] if s["pdf_page"] == 2 and "sns.relplot" in s["quote"]]
+    selected = [s["sentence_id"] for s in sentence_index["sentences"] if s["pdf_page"] == 2]
     if not selected:
-        raise ValueError("real plotting example sentence missing")
+        raise ValueError("real source page has no sentence candidates")
     write(project / "program/literature-pdf.json", {"schema_version": "1.0", "id": "public-paper",
         "paper_id": paper_id, "pages": [2], "sentence_ids": selected, "annotate_pdf": True})
     pdf = literature_pdf.refresh(project)
     literature_pdf.validate_saved_report(project)
+    print("PDF_POSITION_DIAGNOSTICS=" + json.dumps([{k: s.get(k) for k in
+        ("sentence_id", "quote", "position_status", "bbox")} for s in pdf["sentences"]], ensure_ascii=False))
     if not pdf["original_bytes_preserved"] or not pdf["annotations"]:
         raise ValueError("real PDF annotation must preserve original bytes and locate a real sentence")
     # Preserve a small actual page/overlay image for remote visual QA. Rendering
@@ -92,7 +94,9 @@ def demonstrate(directory):
         image.save(preview)
     result = {"schema_version": "1.0", "status": "engineering_acceptance_pass",
         "real_published_source": True, "doi": "10.21105/joss.03021", "location_cases": summaries,
-        "paired_reading_plan": plan, "pdf_overlay": {"html": pdf["html"], "annotations": len(pdf["annotations"])},
+        "paired_reading_plan": plan, "pdf_overlay": {"html": pdf["html"], "annotations": len(pdf["annotations"]),
+            "unlocated_or_ambiguous_sentences": [{"sentence_id": s["sentence_id"], "status": s["position_status"]}
+                for s in pdf["sentences"] if s["position_status"] != "located_unique_normalized_word_sequence"]},
         "paid_calls": 0, "model_answer_comparison_executed": False,
         "independent_human_semantic_review_completed": False, "route_promoted": False,
         "scientific_completion_verified": False}
