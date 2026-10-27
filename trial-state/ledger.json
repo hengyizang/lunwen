@@ -590,7 +590,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 0.9205504,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "589ea80831be4d289155d5e805418d32",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -833,7 +833,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "Vallat (2018) presents Pingouin as an open-source Python package intended to partially address the author’s stated gap between Python and R in general statistical analysis [JOSS01026]. In the historical context of the paper, Python is described as rapidly growing because of its ease of use, short learning curve, and extensive data-science and machine-learning package ecosystem, whereas scientists are reported to rely heavily on R for statistical analyses. Pingouin provides accessible functions for several commonly used statistical procedures, including analyses of variance (ANOVAs), analyses of covariance (ANCOVAs), post-hoc tests, non-parametric tests, and effect-size calculations [JOSS01026]. It also includes more advanced procedures, such as Bayesian *t*-tests, repeated-measures correlations, robust correlations, and circular statistics. The package is written in Python 3 and is built largely on the Pandas library, which supports its integration into a data-analysis pipeline [JOSS01026]. This integration situates statistical operations within a tabular data workflow rather than requiring a separate data representation for analysis. Pingouin is accompanied by extensive documentation, an application programming interface, and Jupyter Notebook examples, providing reference material for understanding and applying its functions [JOSS01026]. Thus, Vallat characterizes Pingouin as a Python-based interface to a defined collection of statistical methods, with Pandas serving as the principal foundation for incorporating those methods into broader data-processing workflows.",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4934,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 447,
+        "output_tokens_details": {
+          "reasoning_tokens": 145
+        }
+      },
+      "request_id": "resp_0b327df87eed071f016ae0c865e24881918bbdf78783f4dc40",
+      "response_sha256": "6fecab0ecc203ea6f55e1aa805a7d829943e16d66289ca1af351037400171bc1",
+      "completion_status": "completed",
+      "duration_seconds": 22.485
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
