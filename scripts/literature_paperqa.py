@@ -21,7 +21,8 @@ from scripts.research_artifacts import path_in, read, record, sha, write
 REQUEST = "program/literature-paperqa.json"
 OUTPUT = "reports/literature-paperqa"
 MODULE = "scripts/literature_paperqa.py"
-SDK_VERSION = "2026.08.12"
+# Installed metadata normalizes the pinned requirement 2026.08.12 under PEP 440.
+SDK_VERSION = "2026.8.12"
 SDK_REVISION = "57e89f7223b0960d5ee5ea048c69e3c47e088572"
 
 

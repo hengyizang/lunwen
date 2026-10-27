@@ -140,6 +140,35 @@ class LiteratureComparisonTests(unittest.TestCase):
         self.assertNotIn("synthetic_fixture", prompt)
         self.assertNotIn("full_text", prompt)
 
+    def test_dynamic_model_change_preserves_costs_and_blocks_remaining_paid_arms(self):
+        paper = self.config["papers"][0]
+        source = self.project / paper["source"]["path"]
+        source.write_text("# Methods\nThe sample contains 120 adults.\n" + "Unrelated recorded details.\n" * 70, encoding="utf-8")
+        paper["source"]["sha256"] = sha(source)
+        source_scope.record(self.project, paper["source"]["path"], "full_text", "Synthetic scope fixture")
+        self.build()
+        calls = []
+        original = self.fake_call()
+        def changed_model(project, **kwargs):
+            result = original(project, **kwargs)
+            calls.append(kwargs["run_id"])
+            if len(calls) == 2:
+                result.model = "another-reader"
+                result.reported_model = "another-reader"
+            return result
+        spec = self.spec(cases=[self.case("first"), self.case("later", expected_abstain=False)])
+        result, call = self.execute(spec, fake=changed_model)
+        self.assertEqual(call.call_count, 2)
+        self.assertEqual(result["status"], "stopped_incomparable_model_configuration")
+        self.assertFalse(result["same_model_configuration"])
+        self.assertFalse(result["configuration_mismatch"]["same_model_quality_comparison_valid"])
+        self.assertFalse(result["automatic_route_promotion"])
+        self.assertEqual(result["costs"]["known_model_cost_cny"], 0.02)
+        self.assertEqual(len(result["pending_routes"]), 2)
+        self.assertEqual({row["case_id"] for row in result["pending_routes"]}, {"later"})
+        self.assertEqual(len(result["routes"]), 2)
+        self.assertIn("incomparable", result["stop_reason"])
+
     def test_bad_citations_are_preserved_and_stop_remaining_paid_arms(self):
         invalid = {"answer": "Invented answer.", "abstain": False, "citations": [], "statements": []}
         result, call = self.execute(fake=self.fake_call(response=invalid))
@@ -278,6 +307,46 @@ class LiteratureComparisonTests(unittest.TestCase):
             return result
         with self.assertRaisesRegex(ValueError, "authorization changed"):
             self.execute(fake=changed)
+
+    def test_request_changed_during_first_call_preserves_receipt_and_stops(self):
+        request = self.request()
+        original = self.fake_call()
+        def changed(project, **kwargs):
+            result = original(project, **kwargs)
+            spec = read(project / request)
+            spec["cases"][0]["request"]["question"] = "A changed research question?"
+            write(project / request, spec)
+            return result
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+                patch.object(comparison.model_runtime, "call", side_effect=changed) as call:
+            with self.assertRaisesRegex(ValueError, "request changed during"):
+                comparison.refresh(self.project, request, execute=True)
+            self.assertEqual(call.call_count, 1)
+        directory = self.project / comparison.OUTPUT / "comparison-a"
+        receipt = read(directory / "routes/case-a-retrieval.json")
+        self.assertEqual(receipt["costs"]["known_model_cost_cny"], 0.01)
+        self.assertEqual(receipt["status"], "source_citations_checked_semantics_require_review")
+        self.assertFalse((directory / "routes/case-a-full_text.json").exists())
+
+    def test_rebuilt_workbench_during_first_call_cannot_change_paired_scope(self):
+        request = self.request()
+        original = self.fake_call()
+        def changed(project, **kwargs):
+            result = original(project, **kwargs)
+            config = read(project / wb.CONFIG)
+            config["papers"][0]["topic_id"] = "changed-topic"
+            write(project / wb.CONFIG, config)
+            wb.build(project)
+            return result
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+                patch.object(comparison.model_runtime, "call", side_effect=changed) as call:
+            with self.assertRaisesRegex(ValueError, "workbench scope or snapshot changed"):
+                comparison.refresh(self.project, request, execute=True)
+            self.assertEqual(call.call_count, 1)
+        directory = self.project / comparison.OUTPUT / "comparison-a"
+        receipt = read(directory / "routes/case-a-retrieval.json")
+        self.assertEqual(receipt["costs"]["known_model_cost_cny"], 0.01)
+        self.assertFalse((directory / "routes/case-a-full_text.json").exists())
 
 
 if __name__ == "__main__":

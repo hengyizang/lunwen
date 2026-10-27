@@ -20,6 +20,8 @@ jobs:
     env:
       DR_OS_CLOUD_EXECUTOR: '1'
       OMP_NUM_THREADS: '2'
+      DR_OS_LITERATURE_SEMANTIC_LIVE: '1'
+      DR_OS_LITERATURE_SDK_REQUIRED: '1'
     steps:
       - uses: actions/checkout@v7
         with:

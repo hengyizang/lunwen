@@ -82,7 +82,7 @@ def evaluate(project: Path, spec: dict) -> dict:
             if identity in unique_anchors:
                 raise ValueError("duplicate gold evidence anchor would distort recall")
             unique_anchors.add(identity)
-        baseline = {k: v for k, v in prepared["spec"].items() if k not in {"query_expansions", "dense_cache"}}
+        baseline = {k: v for k, v in prepared["spec"].items() if k not in {"query_expansions", "dense_cache", "rerank_cache"}}
         started = time.perf_counter()
         first = evidence_retrieval.retrieve(project, baseline)
         first_time = time.perf_counter() - started

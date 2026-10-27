@@ -204,6 +204,19 @@ def _check_dependencies(project, plan):
     for binding in plan["dependencies"]:
         if sha(path_in(project, binding["path"])) != binding["sha256"]:
             raise ValueError("original source, source scope or authorization changed during the comparison")
+    request = plan["request"]
+    if sha(path_in(project, request["path"])) != request["sha256"]:
+        raise ValueError("comparison request changed during execution; no further paid arm is allowed")
+    # A current manifest is not enough: it must be the exact snapshot used to
+    # prepare both arms. Replaying the snapshot also checks its current config,
+    # so editing the library without rebuilding cannot bypass this boundary.
+    try:
+        _, _, manifest = wb._snapshot(project)
+    except ValueError as exc:
+        raise ValueError("workbench scope or snapshot changed during the comparison") from exc
+    current_manifest = path_in(project, manifest["output_dir"] + "/manifest.json")
+    if sha(current_manifest) != plan["workbench_manifest_sha256"]:
+        raise ValueError("workbench scope or snapshot changed during the comparison")
 
 
 def _route(project, directory, case, arm, tokens):
@@ -356,6 +369,7 @@ def refresh(project: Path, request_path="program/literature-comparison.json", *,
         "status": "running", "scientific_validity_verified": False, "semantic_quality_validated": False,
         "automatic_route_promotion": False, "model_roles_changed": False}
     prompts, stopped = {}, False
+    first_configuration, configuration_mismatch = None, False
     for case in plan["cases"]:
         for arm in ROUTES:
             _check_dependencies(project, plan)
@@ -371,6 +385,17 @@ def refresh(project: Path, request_path="program/literature-comparison.json", *,
                 prompts[marker] = row
             _check_dependencies(project, plan)
             results["routes"].append(row)
+            if row.get("model_receipt"):
+                actual_configuration = tuple(row["model_receipt"].get(k) for k in
+                    ("provider", "requested_model", "reported_model", "requested_effort"))
+                if first_configuration is None:
+                    first_configuration = actual_configuration
+                elif actual_configuration != first_configuration:
+                    configuration_mismatch = True
+                    results["configuration_mismatch"] = {
+                        "case_id": case["id"], "route": arm,
+                        "first": list(first_configuration), "actual": list(actual_configuration),
+                        "same_model_quality_comparison_valid": False}
             if row["status"] in {"execution_failed_do_not_retry", "model_response_rejected_do_not_use"}:
                 stopped = True
                 break
@@ -378,11 +403,16 @@ def refresh(project: Path, request_path="program/literature-comparison.json", *,
                 stopped = True
                 results["stop_reason"] = "actual model cost is incomplete; reconcile before any new paid arm"
                 break
+            if configuration_mismatch:
+                stopped = True
+                results["stop_reason"] = "actual reader model/provider/effort changed; results are incomparable as a same-model reading-route experiment"
+                break
         if stopped:
             break
     run_ids = [r["run_id"] for r in results["routes"] if r.get("model_receipt") or r["status"] == "execution_failed_do_not_retry"]
     results["costs"] = _costs(project, run_ids) if run_ids else None
-    results["status"] = "stopped_preserved_attempts" if stopped else "completed_awaiting_independent_semantic_review"
+    results["status"] = ("stopped_incomparable_model_configuration" if configuration_mismatch else
+        "stopped_preserved_attempts" if stopped else "completed_awaiting_independent_semantic_review")
     results["same_model_configuration"] = len({tuple(r["model_receipt"].get(k) for k in
         ("provider", "requested_model", "reported_model", "requested_effort"))
         for r in results["routes"] if r.get("model_receipt")}) == 1 if any(r.get("model_receipt") for r in results["routes"]) else None

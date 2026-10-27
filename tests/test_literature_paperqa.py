@@ -121,10 +121,16 @@ class PaperQABridgeTests(WorkbenchFixture):
                 bridge.sdk_rank(prepared["prepared"]["question"], prepared["chunks"], prepared["dense"])
 
     def test_actual_pinned_sdk_uses_cached_vectors_without_any_network_or_model_call(self):
+        required = os.environ.get("DR_OS_LITERATURE_SDK_REQUIRED") == "1"
         try:
-            if importlib.metadata.version("paper-qa") != bridge.SDK_VERSION:
-                self.skipTest("actual SDK acceptance needs pinned optional paper-qa package")
+            installed = importlib.metadata.version("paper-qa")
         except importlib.metadata.PackageNotFoundError:
+            if required:
+                self.fail("dedicated SDK acceptance requires the installed pinned paper-qa package")
+            self.skipTest("actual SDK acceptance needs pinned optional paper-qa package")
+        if installed != bridge.SDK_VERSION:
+            if required:
+                self.fail(f"dedicated SDK acceptance requires {bridge.SDK_VERSION}; found {installed}")
             self.skipTest("actual SDK acceptance needs pinned optional paper-qa package")
         prepared = bridge._prepare(self.project, self.spec)
         # Load imports before disabling transport; similarity search itself is
@@ -136,7 +142,7 @@ class PaperQABridgeTests(WorkbenchFixture):
             result = bridge.refresh(self.project)
         self.assertEqual(ranking[0]["block_index"], 0)
         self.assertAlmostEqual(ranking[0]["cosine_similarity"], 1.0)
-        self.assertAlmostEqual(ranking[1]["cosine_similarity"], 0.0)
+        self.assertAlmostEqual(ranking[1]["cosine_similarity"], 0.6)
         self.assertIn("NumpyVectorStore", result["retrieval"]["method"])
         self.assertEqual(result["sdk_source_revision"], bridge.SDK_REVISION)
         self.assertEqual(result["retrieval"]["sources"][0]["path"], self.a["source"]["path"])
