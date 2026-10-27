@@ -2455,7 +2455,7 @@
       "requested_model": "gpt-6.1-sol",
       "requested_effort": "high",
       "reserved_ceiling_cny": 1.0101784,
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "project_reservation_id": "be87900215de4d8f9147a8a7e96accf8",
       "meter_before": {
@@ -2764,7 +2764,26 @@
       "request_id": "resp_0cd26f0899c0018f016ae0c99f312081918a8c244e3eef0a5d",
       "response_sha256": "e7fec7789430ea74d6f75437d5e313c5b0ff8e41b4de1139e0a6bc608eff89a5",
       "completion_status": "completed",
-      "duration_seconds": 26.7835
+      "duration_seconds": 26.7835,
+      "actual_cost_cny": 0.002922,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-6.1-sol",
+          "quota": 1461,
+          "created_at": 1793116601,
+          "prompt_tokens": 5217,
+          "completion_tokens": 623,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "31fa7875f11a2d70fda5414dbea3d15955add1757ed40e76be54bb4442d2fb97",
+        "after_snapshot_sha256": "0de4221bbe0558953f3eae4e83a67ddd8d16b76fb8ca1e270532e6d488517d66",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
