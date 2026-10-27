@@ -1487,7 +1487,7 @@
       "requested_effort": "high",
       "reserved_ceiling_cny": 0.896588,
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "project_reservation_id": "cc66d3aab4514f918c124fef8ff167aa",
       "meter_before": {
         "provider": "cheapai-gpt-pro",
@@ -1754,7 +1754,24 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "run_id": "40534791012",
-      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a"
+      "code_sha": "f6071abfb60fd738142d2163fa207162c9dfc79a",
+      "text": "corner.py is a Python module developed by Foreman-Mackey (2016) for visualizing multidimensional samples through a scatterplot matrix [JOSS00024]. It uses matplotlib to display every one- and two-dimensional projection of a sample: one-dimensional projections summarize the distributions of individual parameters, while two-dimensional projections expose relationships and covariances between parameter pairs. The package was originally conceived for inspecting the results of Markov Chain Monte Carlo simulations, and its default settings reflect that use case [JOSS00024]. Its visualization mechanism is nevertheless applicable to samples with qualitatively different origins, making it useful for exploratory analysis of multidimensional distributions beyond MCMC output. corner.py has also been used extensively in astronomical research, where such plots can support the inspection and communication of parameter distributions and covariances [JOSS00024]. The package is developed on GitHub, and its source code has been archived in Zenodo with a DOI; it has also circulated under the names `corner.py` and, previously, `triangle.py` [JOSS00024]. Thus, its contribution is a focused visualization tool for examining multidimensional sample structure through coordinated marginal and pairwise projections.",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4838,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3686
+        },
+        "output_tokens": 514,
+        "output_tokens_details": {
+          "reasoning_tokens": 271
+        }
+      },
+      "request_id": "resp_0d1411108eaea8c9016ae0c8fb19bc8191a099bde92a8bb2d5",
+      "response_sha256": "832adc6544edf34498077baef34285be26aaefe63c6b8d6dc32799f8737560ac",
+      "completion_status": "completed",
+      "duration_seconds": 25.8238
     }
   ],
   "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
