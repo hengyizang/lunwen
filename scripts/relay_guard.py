@@ -190,10 +190,18 @@ def _settled_receipt(entry, provider, name, ledger):
             raise RelayGuardError("independent source debit does not match its model/amount")
         if old and evidence.get("all_key_debits_match_attempt_count") is True:
             # The original paused acceptance trial matched the entire dedicated
-            # key history rather than a per-call delta. Keep its explicit bijection.
+            # key history rather than a per-call delta. Later incremental calls
+            # do not belong to that original batch; bind its complete prefix to
+            # the first incremental call's retained before snapshot instead.
             related = [r for r in ledger["entries"] if _entry_provider(r, name) == provider]
+            prefix = []
+            for index, item in enumerate(related):
+                if item.get("debit_evidence", {}).get("all_key_debits_match_attempt_count") is True:
+                    if index != len(prefix):
+                        raise RelayGuardError("original whole-key debit match is not a contiguous prefix")
+                    prefix.append(item)
             identities = []
-            for item in related:
+            for item in prefix:
                 proof = item.get("debit_evidence", {})
                 parts = str(item.get("call_id", "")).split("|")
                 if (item.get("status") != "gateway_debit_verified" or len(parts) < 3
@@ -209,6 +217,13 @@ def _settled_receipt(entry, provider, name, ledger):
                 identities.append(relay_billing._fingerprint(other))
             if len(set(identities)) != len(identities):
                 raise RelayGuardError("original whole-key debit match is ambiguous")
+            if len(prefix) < len(related):
+                first_incremental = _before(related[len(prefix)], provider)
+                if (first_incremental.get("kind") != "cheapai_quota_history"
+                        or first_incremental.get("quota_per_unit") != 500000
+                        or sorted(relay_billing._fingerprint(_row(r)) for r in first_incremental["rows"])
+                        != sorted(identities)):
+                    raise RelayGuardError("original whole-key prefix differs from the first incremental before meter")
             return {"actual_cost_cny": amount, "debit_evidence": evidence}
         before = _before(entry, provider)
         if old:
@@ -290,11 +305,37 @@ def inspect(provider, *, store=None):
             "catalog_access_does_not_release_holds": True}
 
 
-def begin(provider, *, scope, max_cost_cny, store=None):
+def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=False):
     if type(max_cost_cny) not in (int, float) or not math.isfinite(max_cost_cny) or max_cost_cny <= 0:
         raise RelayGuardError("shared relay reservation needs a positive bounded amount")
     store, name, value, expected = load(provider, store=store)
-    if value["legacy_holds"] or value["active"]:
+    exception = False
+    if writing_trial_exception:
+        # Exact owner exception on 2026-10-27. Historical holds stay intact;
+        # ordinary production calls still reject this credential.
+        permitted = {
+            "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": 0.431508,
+            "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024,
+        }
+        exception = (provider == "codekey-gemini" and isinstance(scope, dict)
+            and scope.get("trial") == "writing-comparison-20261027"
+            and scope.get("authorization") == "writing-comparison-20261027-owner-paid-with-legacy-holds"
+            and os.environ.get("WRITING_COMPARISON_AUTHORIZATION") == scope["authorization"]
+            and os.environ.get("GITHUB_ACTIONS") == "true"
+            and os.environ.get("GITHUB_REPOSITORY") == REPOSITORY
+            and os.environ.get("GITHUB_ACTOR") == "hengyizang"
+            and os.environ.get("GITHUB_REF") == "refs/heads/codex/writing-comparison-20261027"
+            and os.environ.get("GITHUB_EVENT_NAME") in {"push", "workflow_dispatch"}
+            and isinstance(scope.get("project_reservation_id"), str)
+            and re.fullmatch(r"[a-f0-9]{32}", scope["project_reservation_id"]) is not None
+            and isinstance(scope.get("legacy_budget_reservation_id"), str)
+            and re.fullmatch(r"[a-f0-9]{32}", scope["legacy_budget_reservation_id"]) is not None
+            and set(value["legacy_holds"]) == set(permitted)
+            and all(value["legacy_holds"][key]["reserved_ceiling_cny"] == amount
+                    for key, amount in permitted.items()))
+        if not exception:
+            raise RelayGuardError("writing trial exception differs from the exact owner authorization")
+    if (value["legacy_holds"] and not exception) or value["active"]:
         # Import historical unknown holds durably, even though no new POST is allowed.
         store.write(name, value, expected)
         raise RelayGuardError("credential has an unresolved historical or concurrent charge; no new paid call")

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "trial_id": "writing-comparison-20261027",
+  "status": "closed_with_argon_quality_unverified",
+  "authorization": "writing-comparison-20261027-owner-paid-with-legacy-holds",
+  "execution": "github-actions-cloud-only",
+  "closed_ledger_blob_sha": "b434efbcee444712f527e8124ffa97a10265906f",
+  "generation_attempts": 13,
+  "accepted_texts": 11,
+  "settled_cost_cny": 0.0873256,
+  "retained_old_reservation_cny": 9.5836104,
+  "total_project_ceiling_cny": 500,
+  "remaining_cny": 490.329064,
+  "by_model": {
+    "gemini-4-argon": {
+      "attempts": 1,
+      "completed": 0,
+      "cost": 0.0073388,
+      "durations": [
+        22.5713
+      ]
+    },
+    "gemini-4-argon-high": {
+      "attempts": 1,
+      "completed": 0,
+      "cost": 0.0073388,
+      "durations": [
+        21.7524
+      ]
+    },
+    "gpt-6.1-sol": {
+      "attempts": 6,
+      "completed": 6,
+      "cost": 0.016948,
+      "durations": [
+        34.2139,
+        22.485,
+        25.8238,
+        31.2375,
+        26.7835,
+        26.2899
+      ]
+    },
+    "gpt-6-astra": {
+      "attempts": 5,
+      "completed": 5,
+      "cost": 0.055700000000000006,
+      "durations": [
+        22.5425,
+        22.1383,
+        31.1714,
+        31.8108,
+        30.455
+      ]
+    }
+  },
+  "matched_five_case_costs": {
+    "gpt-6.1-sol": {
+      "cost": 0.013614000000000001,
+      "seconds": 132.6197,
+      "n": 5
+    },
+    "gpt-6-astra": {
+      "cost": 0.055700000000000006,
+      "seconds": 138.118,
+      "n": 5
+    }
+  },
+  "usage": {
+    "gpt-6.1-sol": {
+      "input": 30867,
+      "cached": 20581,
+      "cache_write": 0,
+      "output": 3590,
+      "reasoning": 1468
+    },
+    "gpt-6-astra": {
+      "input": 25464,
+      "cached": 16895,
+      "cache_write": 0,
+      "output": 3012,
+      "reasoning": 1234
+    }
+  },
+  "unattempted_unknown": [
+    "argon-native-high|abstract-corner",
+    "argon-native-high|discussion-arviz",
+    "argon-native-high|edit-posthocs",
+    "argon-native-high|methods-pingouin",
+    "argon-native-high|results-emcee"
+  ],
+  "ratings": {
+    "kind": "anonymous_codex_assisted_inspection",
+    "actual_independent_human_raters": 0,
+    "scientific_equivalence_verified": false,
+    "model_promotion_approved": false
+  },
+  "production_routing_changed": false,
+  "scientific_completion_verified": false
+}

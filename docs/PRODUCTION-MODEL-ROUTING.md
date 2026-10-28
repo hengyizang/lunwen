@@ -1,5 +1,11 @@
 # Production model routing
 
+Current writing-pilot evidence: [2026-10-28 results](SCIENTIFIC-WRITING-RESULTS-20261028.md).
+Two CodeKey Argon contracts failed response identity validation; no Argon prose
+was accepted or promoted. Eleven GPT candidates and their actual costs are
+recorded; independent human writing calibration remains pending. Formal roles
+below are unchanged, and shared credential isolation still applies.
+
 The assignments below are approved baselines. The cloud runtime now applies
 [dynamic task routing](DYNAMIC-MODEL-ROUTING.md) immediately before each request.
 Only separately accepted alternatives can replace a baseline. Unclassified
