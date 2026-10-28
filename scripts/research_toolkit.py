@@ -69,7 +69,7 @@ def _binding(project: Path, value: dict) -> dict:
     if not isinstance(value, dict) or set(value) != {"path", "sha256"}:
         raise ValueError("research-tool input needs exactly path and sha256")
     relative = value["path"]
-    if not isinstance(relative, str) or not relative.startswith(("program/", "papers/", "evidence/", "reports/", "experiments/", "data/")):
+    if not isinstance(relative, str) or not relative.startswith(("program/", "papers/", "evidence/", "literature/", "reports/", "experiments/", "data/")):
         raise ValueError("research-tool input must be an existing research artifact")
     target = path_in(project, relative)
     if sha(target) != value["sha256"]:

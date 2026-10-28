@@ -77,6 +77,19 @@ class ResearchToolkitTests(unittest.TestCase):
                 self.assertIn(self.request["task"], result)
         self.assertEqual(toolkit.task_context(None, "intake", "writer", "ordinary unrelated task", root=Path("missing")), "")
 
+    def test_current_literature_reader_note_is_a_source_and_changes_invalidate_packet(self):
+        source = self.project / "literature/readers/current.md"
+        source.parent.mkdir(parents=True)
+        source.write_text("Original methods text, section 3.\n", encoding="utf-8")
+        self.request["input_bindings"] = [{"path": "literature/readers/current.md", "sha256": sha(source)}]
+        write(self.project / self.relative, self.request)
+        packet = self.prepare()
+        self.assertIn(sha(source), toolkit.task_context(self.project, "experiment-design", "writer",
+            self.marker(packet), root=self.root))
+        source.write_text("Changed original text.\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "input changed"):
+            toolkit.task_context(self.project, "experiment-design", "writer", self.marker(packet), root=self.root)
+
     def test_changed_source_request_gate_or_recipe_invalidates_existing_packet(self):
         packet = self.prepare()
         marker = self.marker(packet)
