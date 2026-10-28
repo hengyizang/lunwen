@@ -211,19 +211,19 @@ promise a detector outcome, conceal assistance or weaken AI-use disclosure.
 """
 
 
-def critic_prompt(project: str, state: dict[str, Any]) -> str:
+def critic_prompt(project: str, state: dict[str, Any], context: str = "") -> str:
     # CLI critics receive the same filtered, bounded evidence packet as API
     # critics. Their invocation has no file-exploration tools, so an excluded
     # request/verdict cannot re-enter through a later Read/Glob tool call.
-    return api_orchestrator.critic_prompt(project, state["stage"], "") + (
+    return api_orchestrator.critic_prompt(project, state["stage"], context) + (
         "\nThis is a source-packet-only CLI independent assessment. Use only the "
         "current supplied sources and criteria. No file exploration, commands, "
         "prior verdicts or raw operation requests are available or authorized.")
 
 
 
-def remediation_prompt(project: str, state: dict[str, Any], review_path: Path) -> str:
-    return research_methods.stage_context(state['stage'], "remediator", project=api_orchestrator.project_root(project)) + "\n\n" + f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete rule-and-line findings without changing supported meaning, numbers, equations, citations, registered uncertainty or limitations. Do not vary established terminology merely to avoid repetition. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished. Do not resolve a finding by hiding an unfavorable result, demoting an experiment based on direction, or deleting a material limitation. Keep registered results locatable and state each necessary limitation once where it changes interpretation.
+def remediation_prompt(project: str, state: dict[str, Any], review_path: Path, context: str = "") -> str:
+    return research_methods.stage_context(state['stage'], "remediator", context=context, project=api_orchestrator.project_root(project)) + "\n\n" + f"""Resume as the non-Claude persistent writer for projects/{project}, stage {state['stage']} ({state['gate']}). Read the independent review at {review_path.relative_to(ROOT)}. Resolve every actionable finding against underlying evidence and repository contracts. Express revisions independently; never copy wording from the Claude plan or review. Update artifacts only where justified. Never weaken a gate merely to pass it. Do not edit state files, provenance metadata, independent-review files, or reviews/decision-log.md. Do not approve or advance. Keep every manuscript-bound artifact in English. At G5 read the protected academic-style audit and resolve its concrete rule-and-line findings without changing supported meaning, numbers, equations, citations, registered uncertainty or limitations. Do not vary established terminology merely to avoid repetition. Preserve AI-use disclosure; do not target a detector score or disguise assistance. Run the relevant validators when finished. Do not resolve a finding by hiding an unfavorable result, demoting an experiment based on direction, or deleting a material limitation. Keep registered results locatable and state each necessary limitation once where it changes interpretation.
 
 Complete editorial skill contract:
 {api_orchestrator.editorial_prompt_contract(state['stage'])}
@@ -1106,7 +1106,7 @@ def run_stage(
             from scripts import review_receipts
             material_paper = state.get("active_paper") if state["gate"] == "G5" else None
             initial_materials = review_receipts.material_snapshot(researchctl.project_dir(project),state["stage"],material_paper)
-            initial_prompt = critic_prompt(project,state)
+            initial_prompt = critic_prompt(project,state,context)
             critic = invoke(
                 "critic",
                 claude_command(
@@ -1151,7 +1151,7 @@ def run_stage(
                 protected_before_remediation,
                 "remediation",
                 codex_writer_command(
-                    remediation_prompt(project, state, review),
+                    remediation_prompt(project, state, review, context),
                     remediation_last_message,
                 ),
                 run_dir,
@@ -1186,7 +1186,7 @@ def run_stage(
                 project, state["stage"]
             )
             final_materials = review_receipts.material_snapshot(researchctl.project_dir(project),state["stage"],material_paper)
-            final_prompt = critic_prompt(project,state)
+            final_prompt = critic_prompt(project,state,context)
             final_critic = invoke(
                 "final-critic",
                 claude_command(

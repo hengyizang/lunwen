@@ -1,0 +1,95 @@
+name: Research automation toolkit installation
+on:
+  pull_request:
+    paths:
+      - 'integrations/research-automation-tools.json'
+      - 'integrations/codex-research-tools/**'
+      - 'scripts/research_toolkit.py'
+      - 'scripts/install-research-toolkit.ps1'
+      - 'scripts/research_methods.py'
+      - 'scripts/context_efficiency.py'
+      - 'tests/test_research_toolkit.py'
+      - '.github/workflows/research-automation-toolkit.yml'
+permissions:
+  contents: read
+jobs:
+  install-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Validate selected packets without provider credentials
+        env:
+          DR_OS_CLOUD_EXECUTOR: '1'
+        run: |
+          python -m unittest tests.test_research_toolkit tests.test_context_efficiency -v
+          python -m compileall -q scripts
+          python scripts/validate_repo.py
+          git diff --check
+      - name: Install all ten adapters using pinned official installer
+        env:
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_REVISION: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python -m pip install --disable-pip-version-check PyYAML==6.0.2
+          python - <<'PY'
+          import hashlib, json, os, pathlib, subprocess, sys, urllib.request
+          root = pathlib.Path('artifacts/research-toolkit-installation')
+          helper = root / 'official-helper'
+          helper.mkdir(parents=True)
+          catalog = json.loads(pathlib.Path('integrations/research-automation-tools.json').read_text())
+          pin = catalog['official_installer']['commit']
+          files = {
+              'install-skill-from-github.py': ('skill-installer/scripts/install-skill-from-github.py', '1c8ce89d0a4c54f1eb8ec00625e8fc0fa59301ae'),
+              'github_utils.py': ('skill-installer/scripts/github_utils.py', '711f597e4cf0c08b897083c1c337e13524a76260'),
+              'quick_validate.py': ('skill-creator/scripts/quick_validate.py', '0547b4041a5f58fa19892079a114a1df98286406'),
+              'LICENSE.txt': ('skill-installer/LICENSE.txt', 'd645695673349e3947e8e5ae42332d0ac3164cd7'),
+          }
+          for name, (path, blob) in files.items():
+              url = f'https://raw.githubusercontent.com/openai/skills/{pin}/skills/.system/{path}'
+              with urllib.request.urlopen(url, timeout=45) as response:
+                  data = response.read()
+              actual = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              assert actual == blob, name + ' official helper hash mismatch'
+              (helper / name).write_bytes(data)
+          skills = root / 'skills'
+          paths = [str(pathlib.PurePosixPath(row['skill_path']).parent) for row in catalog['tools']]
+          subprocess.run([sys.executable, str(helper / 'install-skill-from-github.py'),
+              '--repo', os.environ['SOURCE_REPOSITORY'], '--ref', os.environ['SOURCE_REVISION'],
+              '--method', 'download', '--dest', str(skills), '--path', *paths], check=True)
+          results = []
+          for row in catalog['tools']:
+              skill = skills / row['skill_name']
+              subprocess.run([sys.executable, str(helper / 'quick_validate.py'), str(skill)], check=True)
+              actual = hashlib.sha256((skill / 'SKILL.md').read_bytes()).hexdigest()
+              assert actual == row['recipe_sha256'], row['id'] + ' installed adapter differs'
+              results.append({'id': row['id'], 'sha256': actual, 'installed': True})
+          (root / 'receipt.json').write_text(json.dumps({'source_revision': os.environ['SOURCE_REVISION'],
+              'official_helper_revision': pin, 'paid_calls': 0, 'upstream_runtime_executed': False,
+              'installation_kind': 'adapted Codex skills', 'skills': results}, indent=2) + '\n')
+          PY
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: research-toolkit-installation
+          path: artifacts/research-toolkit-installation/
+          if-no-files-found: warn
+          retention-days: 30
+  windows-installer-syntax:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Parse file-copy installer without launching research software
+        shell: pwsh
+        run: |
+          $tokens = $null; $errors = $null
+          [Management.Automation.Language.Parser]::ParseFile((Resolve-Path 'scripts/install-research-toolkit.ps1'), [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }

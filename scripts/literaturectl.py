@@ -337,6 +337,9 @@ def analyze(project: Path, paper_id: str, *, config_path="program/literature-wor
 def execute_operation(project: Path, operation: dict, *, owner_authorization=None) -> dict:
     require_cloud()
     action = operation["action"]
+    if action == "research_toolkit":
+        from scripts.research_toolkit import refresh
+        return refresh(project, operation["request_file"])
     if action == "figure_gallery_sync":
         from scripts.figure_gallery import sync
         return sync(project)

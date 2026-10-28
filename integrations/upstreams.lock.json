@@ -2,6 +2,166 @@
   "schema_version": "1.0",
   "reviewed_at": "2026-09-30",
   "sources": [
+      {
+        "id": "deer-flow",
+        "repository": "https://github.com/bytedance/deer-flow",
+        "commit": "a7d8971078593461e14f9b464eafe6db6388e9d7",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "MIT",
+        "license_source_url": "https://github.com/bytedance/deer-flow/blob/a7d8971078593461e14f9b464eafe6db6388e9d7/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "gpt-researcher",
+        "repository": "https://github.com/assafelovic/gpt-researcher",
+        "commit": "3582a6841fe7dc801e2a34e34ee408641aea9bce",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0",
+        "license_source_url": "https://github.com/assafelovic/gpt-researcher/blob/3582a6841fe7dc801e2a34e34ee408641aea9bce/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "rd-agent",
+        "repository": "https://github.com/microsoft/RD-Agent",
+        "commit": "484776c211e4fbbeef03e0ec00d6bbee7362a4f4",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "MIT",
+        "license_source_url": "https://github.com/microsoft/RD-Agent/blob/484776c211e4fbbeef03e0ec00d6bbee7362a4f4/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "autoresearchclaw",
+        "repository": "https://github.com/aiming-lab/AutoResearchClaw",
+        "commit": "be4ba4755bf1b52220f25e13b2293b5956590070",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "MIT",
+        "license_source_url": "https://github.com/aiming-lab/AutoResearchClaw/blob/be4ba4755bf1b52220f25e13b2293b5956590070/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "mirothinker",
+        "repository": "https://github.com/MiroMindAI/MiroThinker",
+        "commit": "1c4253f6774bf40314271a827304b842100e054c",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0",
+        "license_source_url": "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "pi-autoresearch",
+        "repository": "https://github.com/davebcn87/pi-autoresearch",
+        "commit": "04b8a50dac7efe80ffc91648bd00ed9b022e24c2",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "MIT",
+        "license_source_url": "https://github.com/davebcn87/pi-autoresearch/blob/04b8a50dac7efe80ffc91648bd00ed9b022e24c2/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "paperbanana",
+        "repository": "https://github.com/dwzhu-pku/PaperBanana",
+        "commit": "f1da3db8d5f4c3add947dfd3ddd93dddd3394dc3",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0; skill frontmatter MIT-0",
+        "license_source_url": "https://github.com/dwzhu-pku/PaperBanana/blob/f1da3db8d5f4c3add947dfd3ddd93dddd3394dc3/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "aipoch-open-science",
+        "repository": "https://github.com/aipoch/open-science",
+        "commit": "a3d66566d478bc7cdd0539ad7cd3a5761fbce2a9",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0",
+        "license_source_url": "https://github.com/aipoch/open-science/blob/a3d66566d478bc7cdd0539ad7cd3a5761fbce2a9/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "evoscientist",
+        "repository": "https://github.com/EvoScientist/EvoScientist",
+        "commit": "0e87c5bdffdac1e6ced1e9a0a4fd556b8b2d3299",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0",
+        "license_source_url": "https://github.com/EvoScientist/EvoScientist/blob/0e87c5bdffdac1e6ced1e9a0a4fd556b8b2d3299/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
+      {
+        "id": "synthetic-openscience",
+        "repository": "https://github.com/synthetic-sciences/openscience",
+        "commit": "58aff317b3d4a1a23cc202ad1a500ac5c58effe7",
+        "upstream_version": "reviewed 2026-10-28 source snapshot",
+        "license": "Apache-2.0; bundled skills retain per-file notices",
+        "license_source_url": "https://github.com/synthetic-sciences/openscience/blob/58aff317b3d4a1a23cc202ad1a500ac5c58effe7/LICENSE",
+        "enabled_by_default": false,
+        "local_adaptations_enabled": true,
+        "selected_components": [
+          "task-selected-codex-research-guidance"
+        ],
+        "selected_skills": [],
+        "installation": "Adapted Codex entry with pinned complete source archive on D drive; standalone upstream runtime and model services not deployed.",
+        "selection_note": "Load only explicitly selected recipes in existing cloud roles; do not add a parallel orchestrator, new model route, paid provider or gate authority."
+      },
     {
           "id": "paperai-reading",
           "repository": "https://github.com/neuml/paperai",

@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "reviewed_on": "2026-10-28",
+  "tools": [
+    {
+      "id": "deer-flow",
+      "repository": "bytedance/deer-flow",
+      "commit": "a7d8971078593461e14f9b464eafe6db6388e9d7",
+      "license": "MIT",
+      "skill_name": "research-deer-flow",
+      "skill_path": "integrations/codex-research-tools/skills/research-deer-flow/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-deer-flow/SKILL.md",
+      "recipe_sha256": "2231458354d6da3c2fee9f8d0ff9df15732d6e6ab099b3dc4e125ec62fa9075b",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "native_operations": [
+        "literature_discover",
+        "literature_retrieve",
+        "literature_coverage",
+        "literature_matrix"
+      ],
+      "native_skill_paths": [
+        "skills/public/academic-paper-review",
+        "skills/public/github-deep-research",
+        "skills/public/systematic-literature-review"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "gpt-researcher",
+      "repository": "assafelovic/gpt-researcher",
+      "commit": "3582a6841fe7dc801e2a34e34ee408641aea9bce",
+      "license": "Apache-2.0",
+      "skill_name": "research-gpt-researcher",
+      "skill_path": "integrations/codex-research-tools/skills/research-gpt-researcher/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-gpt-researcher/SKILL.md",
+      "recipe_sha256": "6b75778135a4cebb4b9ae9bcc47e225cea8c9afa9a1ed7a1b4f15f1ad19081b9",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture"
+      ],
+      "native_operations": [
+        "literature_discover",
+        "literature_retrieve",
+        "literature_coverage"
+      ],
+      "native_skill_paths": [
+        "skills/gpt-researcher"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "rd-agent",
+      "repository": "microsoft/RD-Agent",
+      "commit": "484776c211e4fbbeef03e0ec00d6bbee7362a4f4",
+      "license": "MIT",
+      "skill_name": "research-rd-agent",
+      "skill_path": "integrations/codex-research-tools/skills/research-rd-agent/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-rd-agent/SKILL.md",
+      "recipe_sha256": "c90a1031022b9968a93460650027c23c3cd2bbc7535c3752887f0d6654913298",
+      "stages": [
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "native_operations": [],
+      "native_skill_paths": [],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "autoresearchclaw",
+      "repository": "aiming-lab/AutoResearchClaw",
+      "commit": "be4ba4755bf1b52220f25e13b2293b5956590070",
+      "license": "MIT",
+      "skill_name": "research-autoresearchclaw",
+      "skill_path": "integrations/codex-research-tools/skills/research-autoresearchclaw/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-autoresearchclaw/SKILL.md",
+      "recipe_sha256": "1168dd10b1c3b22bd63236434905ca1896c5379ff1a30c1679195783e816db5e",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "native_operations": [
+        "literature_discover",
+        "literature_coverage"
+      ],
+      "native_skill_paths": [
+        ".claude/skills/researchclaw",
+        ".claude/skills/hypothesis-formulation",
+        ".claude/skills/literature-search"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "mirothinker",
+      "repository": "MiroMindAI/MiroThinker",
+      "commit": "1c4253f6774bf40314271a827304b842100e054c",
+      "license": "Apache-2.0",
+      "skill_name": "research-mirothinker",
+      "skill_path": "integrations/codex-research-tools/skills/research-mirothinker/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-mirothinker/SKILL.md",
+      "recipe_sha256": "bab498f9034a45895683e5fc1b71cb077776847fd71333aa516a6610dfc36925",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design"
+      ],
+      "native_operations": [
+        "literature_retrieve",
+        "literature_coverage"
+      ],
+      "native_skill_paths": [],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "pi-autoresearch",
+      "repository": "davebcn87/pi-autoresearch",
+      "commit": "04b8a50dac7efe80ffc91648bd00ed9b022e24c2",
+      "license": "MIT",
+      "skill_name": "research-pi-autoresearch",
+      "skill_path": "integrations/codex-research-tools/skills/research-pi-autoresearch/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-pi-autoresearch/SKILL.md",
+      "recipe_sha256": "10ddcecad0cf0d4b374d0557f64bc25fa93288975a6f2d7fbbd7b61810edd764",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "native_operations": [],
+      "native_skill_paths": [
+        "skills/autoresearch-create",
+        "skills/autoresearch-finalize",
+        "skills/autoresearch-hooks"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "paperbanana",
+      "repository": "dwzhu-pku/PaperBanana",
+      "commit": "f1da3db8d5f4c3add947dfd3ddd93dddd3394dc3",
+      "license": "Apache-2.0; skill frontmatter MIT-0",
+      "skill_name": "research-paperbanana",
+      "skill_path": "integrations/codex-research-tools/skills/research-paperbanana/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-paperbanana/SKILL.md",
+      "recipe_sha256": "659390c1a5491c453c4d88afbb1cec9515b39509f9d105d7e3ae377776854338",
+      "stages": [
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "native_operations": [
+        "figure_story",
+        "editable_figure_export",
+        "editable_figure_verify"
+      ],
+      "native_skill_paths": [
+        "skill"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "aipoch-open-science",
+      "repository": "aipoch/open-science",
+      "commit": "a3d66566d478bc7cdd0539ad7cd3a5761fbce2a9",
+      "license": "Apache-2.0",
+      "skill_name": "research-aipoch-open-science",
+      "skill_path": "integrations/codex-research-tools/skills/research-aipoch-open-science/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-aipoch-open-science/SKILL.md",
+      "recipe_sha256": "3983512068cb322d7a84d8c3f19f3f81e2b7946cd372fa55a1791268f8c43377",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "native_operations": [
+        "figure_story",
+        "editable_figure_export",
+        "editable_figure_verify"
+      ],
+      "native_skill_paths": [
+        "resources/skills/figure-composer",
+        "resources/skills/figure-style",
+        "resources/skills/paper-narrative",
+        "resources/skills/literature-review"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "evoscientist",
+      "repository": "EvoScientist/EvoScientist",
+      "commit": "0e87c5bdffdac1e6ced1e9a0a4fd556b8b2d3299",
+      "license": "Apache-2.0",
+      "skill_name": "research-evoscientist",
+      "skill_path": "integrations/codex-research-tools/skills/research-evoscientist/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-evoscientist/SKILL.md",
+      "recipe_sha256": "2241672e3bb03b9c7312c18cde1d4160468a8be0dc2908580b965ae7e60d81f0",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "native_operations": [
+        "literature_matrix",
+        "literature_coverage"
+      ],
+      "native_skill_paths": [],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
+    {
+      "id": "synthetic-openscience",
+      "repository": "synthetic-sciences/openscience",
+      "commit": "58aff317b3d4a1a23cc202ad1a500ac5c58effe7",
+      "license": "Apache-2.0; bundled skills retain per-file notices",
+      "skill_name": "research-synthetic-openscience",
+      "skill_path": "integrations/codex-research-tools/skills/research-synthetic-openscience/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-synthetic-openscience/SKILL.md",
+      "recipe_sha256": "82cfd1f6402f156e9c0250cb20dbb95cbb732802b62022fdff55ae4b74fafdeb",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "native_operations": [],
+      "native_skill_paths": [
+        "backend/cli/skills/core/autoresearch",
+        "backend/cli/skills/core/paper-writing",
+        "backend/cli/skills/core/reproduce",
+        "backend/cli/skills/core/hypotheses",
+        "backend/cli/skills/core/citations",
+        "backend/cli/skills/research/research-workflows",
+        "backend/cli/skills/research/experimental-design",
+        "backend/cli/skills/research/statistical-power"
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    }
+  ],
+  "official_installer": {
+    "repository": "openai/skills",
+    "commit": "49f948faa9258a0c61caceaf225e179651397431",
+    "installer_path": "skills/.system/skill-installer/scripts/install-skill-from-github.py",
+    "validator_path": "skills/.system/skill-creator/scripts/quick_validate.py"
+  },
+  "installation_scope": "Adapted Codex entries plus pinned upstream source archives. Standalone services, inference models, desktop apps and paid providers are not deployed."
+}
