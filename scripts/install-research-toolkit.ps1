@@ -10,14 +10,23 @@ if ($env:CODEX_HOME) { $discovery = Join-Path $env:CODEX_HOME 'skills' }
 foreach ($tool in $catalog.tools) {
     if ($tool.skill_name -notmatch '^research-[a-z0-9-]+$') { throw 'Invalid skill name' }
     $source = Join-Path $repoRoot $tool.skill_path
-    if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $tool.recipe_sha256) { throw "Modified adapter: $($tool.id)" }
+    $skillBytes = [IO.File]::ReadAllBytes($source)
+    if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $tool.recipe_sha256) {
+        # Git may check a pinned LF blob out as CRLF on Windows. Accept only
+        # normalization that restores exactly the already approved bytes.
+        $normalized = [Text.UTF8Encoding]::new($false).GetBytes([IO.File]::ReadAllText($source).Replace("`r`n", "`n"))
+        $hasher = [Security.Cryptography.SHA256]::Create()
+        try { $digest = ([BitConverter]::ToString($hasher.ComputeHash($normalized))).Replace('-', '').ToLowerInvariant() } finally { $hasher.Dispose() }
+        if ($digest -ne $tool.recipe_sha256) { throw "Modified adapter: $($tool.id)" }
+        $skillBytes = $normalized
+    }
     $target = [IO.Path]::GetFullPath((Join-Path $InstallRoot "skills\$($tool.skill_name)"))
     $entry = Join-Path $target 'SKILL.md'
     if (Test-Path -LiteralPath $entry) {
         if ((Get-FileHash -LiteralPath $entry -Algorithm SHA256).Hash.ToLowerInvariant() -ne $tool.recipe_sha256) { throw "Existing different skill preserved: $entry" }
     } else {
         [IO.Directory]::CreateDirectory($target) | Out-Null
-        [IO.File]::WriteAllBytes($entry, [IO.File]::ReadAllBytes($source))
+        [IO.File]::WriteAllBytes($entry, $skillBytes)
     }
     $link = Join-Path $discovery $tool.skill_name
     if (Test-Path -LiteralPath $link) {

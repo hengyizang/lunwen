@@ -93,3 +93,27 @@ jobs:
           $tokens = $null; $errors = $null
           [Management.Automation.Language.Parser]::ParseFile((Resolve-Path 'scripts/install-research-toolkit.ps1'), [ref]$tokens, [ref]$errors) | Out-Null
           if ($errors.Count) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+      - name: Install actual Windows entries from Git checkout and verify exact bytes
+        shell: pwsh
+        run: |
+          $env:CODEX_HOME = Join-Path $env:RUNNER_TEMP 'codex-toolkit-test'
+          $installRoot = Join-Path $env:RUNNER_TEMP 'research-toolkit-test'
+          # Reproduce Git's common Windows LF-to-CRLF conversion for a pinned LF skill.
+          $catalog = Get-Content -Raw 'integrations/research-automation-tools.json' | ConvertFrom-Json
+          $source = $catalog.tools[0].skill_path
+          $text = [IO.File]::ReadAllText($source).Replace("`r`n", "`n").Replace("`n", "`r`n")
+          [IO.File]::WriteAllText($source, $text, [Text.UTF8Encoding]::new($false))
+          & ./scripts/install-research-toolkit.ps1 -InstallRoot $installRoot
+          & ./scripts/install-research-toolkit.ps1 -InstallRoot $installRoot
+          $receipt = Get-Content -Raw (Join-Path $installRoot 'installation.json') | ConvertFrom-Json
+          if ($receipt.tools.Count -ne 10 -or $receipt.paid_calls -ne 0) { throw 'Incomplete installation' }
+          foreach ($tool in $catalog.tools) {
+            $entry = Join-Path $env:CODEX_HOME ('skills/' + $tool.skill_name + '/SKILL.md')
+            if ((Get-FileHash $entry -Algorithm SHA256).Hash.ToLowerInvariant() -ne $tool.recipe_sha256) { throw 'Installed bytes differ' }
+          }
+          # Real edits must still fail rather than silently change an installed skill.
+          [IO.File]::AppendAllText($source, 'unauthorized changed content')
+          $rejected = $false
+          try { & ./scripts/install-research-toolkit.ps1 -InstallRoot $installRoot }
+          catch { if ($_.Exception.Message -notlike 'Modified adapter:*') { throw }; $rejected = $true }
+          if (-not $rejected) { throw 'Modified source was accepted' }
