@@ -309,6 +309,8 @@ def main() -> int:
     errors.extend(installation_errors(ROOT))
     from scripts.ccfa_runtime import installation_errors as ccfa_installation_errors
     errors.extend(ccfa_installation_errors(ROOT))
+    from scripts.research_toolkit import installation_errors as toolkit_installation_errors
+    errors.extend(toolkit_installation_errors(ROOT))
     try:
         from scripts.literaturectl import installation_errors as literature_installation_errors
         errors.extend(literature_installation_errors(ROOT))

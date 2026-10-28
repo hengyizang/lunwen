@@ -28,6 +28,12 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
+For task-selected methods from the ten research automation tools, read
+`docs/RESEARCH-AUTOMATION-TOOLKIT.md`. Use `research_toolkit` in the existing cloud
+literature control and pass only the selected immutable packet to existing model
+roles. Adapted Codex skills are not deployed upstream services. Preserve central
+budget/identity controls, independent review, all attempts and approved G3 execution.
+
 For actual CPU semantic retrieval/reranking, bounded PaperQA2 SDK vector-store
 use, complete-text reading comparisons, cloud Zotero reads, discovery categories
 or PDF overlays/annotated copies, use docs/LITERATURE-COMPLETION.md. These are

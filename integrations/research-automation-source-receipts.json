@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "staged_on": "2026-10-28",
+  "kind": "pinned upstream source archives; no dependencies, model weights or standalone services installed",
+  "source_root": "D:\\ad\\codex\\research-automation\\sources",
+  "per_file_receipt_directory": "D:\\ad\\codex\\research-automation\\receipts",
+  "paid_calls": 0,
+  "local_research_runtime_executed": false,
+  "tools": [
+    {
+      "id": "deer-flow",
+      "repository": "bytedance/deer-flow",
+      "commit": "a7d8971078593461e14f9b464eafe6db6388e9d7",
+      "file_count": 4393,
+      "archive_sha256": "90c8bfb886ae2cb796bce5b31334bd15fcd366c0727cc1e8728701f7707bdbaa",
+      "receipt_sha256": "335267b1262c2b0326f004b5d47a78ae6f932ac154b621daa49263b9caef8eaf",
+      "source_url": "https://codeload.github.com/bytedance/deer-flow/zip/a7d8971078593461e14f9b464eafe6db6388e9d7"
+    },
+    {
+      "id": "gpt-researcher",
+      "repository": "assafelovic/gpt-researcher",
+      "commit": "3582a6841fe7dc801e2a34e34ee408641aea9bce",
+      "file_count": 841,
+      "archive_sha256": "1ef0a4bd3a0c55ab2331aa1d804706091a9359d36bd00b26bca7b2b2f22fac88",
+      "receipt_sha256": "02353ed18116ca35acf6ba02fa8cd12faac7bd91aef1a11798cc9111dabc053a",
+      "source_url": "https://codeload.github.com/assafelovic/gpt-researcher/zip/3582a6841fe7dc801e2a34e34ee408641aea9bce"
+    },
+    {
+      "id": "rd-agent",
+      "repository": "microsoft/RD-Agent",
+      "commit": "484776c211e4fbbeef03e0ec00d6bbee7362a4f4",
+      "file_count": 920,
+      "archive_sha256": "061ffb79f59c6c7ad59e9f41c43db14ae997ac9eeb685ede1a43a2bc8d4f1be7",
+      "receipt_sha256": "a41567f9dacaf8c695f9ca87af8bc9b49773381c152c60fda2d48e1a47b143b0",
+      "source_url": "https://codeload.github.com/microsoft/RD-Agent/zip/484776c211e4fbbeef03e0ec00d6bbee7362a4f4"
+    },
+    {
+      "id": "autoresearchclaw",
+      "repository": "aiming-lab/AutoResearchClaw",
+      "commit": "be4ba4755bf1b52220f25e13b2293b5956590070",
+      "file_count": 756,
+      "archive_sha256": "9ce9572b79b2bea32aa790409ad09a977064fe5692c13e0a2f834978b2433cbe",
+      "receipt_sha256": "8060a480dd2f20caeb56b6565049c81545da9a2b5ec8f2d7fc336bb811e0bc68",
+      "source_url": "https://codeload.github.com/aiming-lab/AutoResearchClaw/zip/be4ba4755bf1b52220f25e13b2293b5956590070"
+    },
+    {
+      "id": "mirothinker",
+      "repository": "MiroMindAI/MiroThinker",
+      "commit": "1c4253f6774bf40314271a827304b842100e054c",
+      "file_count": 187,
+      "archive_sha256": "bbb28bede8282b60aad9228902c186ac3b08d47358d2a1fe9da119ca13b2e3f0",
+      "receipt_sha256": "8d8ad8db3d4545a94d6d3d03fab6965df2ea8051b5b6f9066695c1d89c7d4d25",
+      "source_url": "https://codeload.github.com/MiroMindAI/MiroThinker/zip/1c4253f6774bf40314271a827304b842100e054c"
+    },
+    {
+      "id": "pi-autoresearch",
+      "repository": "davebcn87/pi-autoresearch",
+      "commit": "04b8a50dac7efe80ffc91648bd00ed9b022e24c2",
+      "file_count": 65,
+      "archive_sha256": "685e5bdd399a1a103a894602b7b661c65084a99be2e9b94f0fbd84e7e4a7c397",
+      "receipt_sha256": "0714c45b7f36cc1a394af4969966adfb2f875004a1efbe738f75f36e03610b93",
+      "source_url": "https://codeload.github.com/davebcn87/pi-autoresearch/zip/04b8a50dac7efe80ffc91648bd00ed9b022e24c2"
+    },
+    {
+      "id": "paperbanana",
+      "repository": "dwzhu-pku/PaperBanana",
+      "commit": "f1da3db8d5f4c3add947dfd3ddd93dddd3394dc3",
+      "file_count": 95,
+      "archive_sha256": "f8fafd3334172b3157d0f66c224de3fd0bc80b7fa9c6769f99e4f56d37c8aee2",
+      "receipt_sha256": "c5694ba6bd2614feff46860f2681ac766c5869b2ccd8de8e4a17f95b1927d8e9",
+      "source_url": "https://codeload.github.com/dwzhu-pku/PaperBanana/zip/f1da3db8d5f4c3add947dfd3ddd93dddd3394dc3"
+    },
+    {
+      "id": "aipoch-open-science",
+      "repository": "aipoch/open-science",
+      "commit": "a3d66566d478bc7cdd0539ad7cd3a5761fbce2a9",
+      "file_count": 10369,
+      "archive_sha256": "518f11750633ca039e35885ea916f1736b8c4343c721f9c309bc1f4bfd83df68",
+      "receipt_sha256": "0fd65cf3f1d14ec2045321918a79844989c03d41717dc4d98635421566f81b1a",
+      "source_url": "https://codeload.github.com/aipoch/open-science/zip/a3d66566d478bc7cdd0539ad7cd3a5761fbce2a9"
+    },
+    {
+      "id": "evoscientist",
+      "repository": "EvoScientist/EvoScientist",
+      "commit": "0e87c5bdffdac1e6ced1e9a0a4fd556b8b2d3299",
+      "file_count": 680,
+      "archive_sha256": "76020b81f2d69cd450825b221c787fc3e01c1c5c86de6fdac1a3f2bb5df5fa4d",
+      "receipt_sha256": "012abb7726ac5d179ab46ee3e00bf6e04f5476551f65f1f69df343421f63c493",
+      "source_url": "https://codeload.github.com/EvoScientist/EvoScientist/zip/0e87c5bdffdac1e6ced1e9a0a4fd556b8b2d3299"
+    },
+    {
+      "id": "synthetic-openscience",
+      "repository": "synthetic-sciences/openscience",
+      "commit": "58aff317b3d4a1a23cc202ad1a500ac5c58effe7",
+      "file_count": 6081,
+      "archive_sha256": "a6264a872b605056e055e169119994d5ce901fad48c4a1ba689f7eebd34f4786",
+      "receipt_sha256": "74118b59859edff87917aa97f31f82ca4b515a664cec88d78b8c722752c5f5d4",
+      "source_url": "https://codeload.github.com/synthetic-sciences/openscience/zip/58aff317b3d4a1a23cc202ad1a500ac5c58effe7"
+    }
+  ]
+}

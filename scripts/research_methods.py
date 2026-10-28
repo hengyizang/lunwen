@@ -92,6 +92,10 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
     scientific_contract = scientific_reasoning.stage_prompt(stage, "writer" if role == "remediator" else role, root)
     if scientific_contract:
         blocks.append(scientific_contract)
+    from scripts.research_toolkit import task_context
+    selected_tools = task_context(project, stage, role, context, root=root)
+    if selected_tools:
+        blocks.append(selected_tools)
     if not blocks:
         return "(no additional methods for this stage)"
     if stage == "writing-and-review":
