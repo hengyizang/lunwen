@@ -177,6 +177,8 @@ def validate_spec(spec: dict[str, Any]) -> None:
             _english_text(uncertainty.get("upper"), f"{prefix}.uncertainty.upper")
         if panel.get("kind") == "errorbar" and uncertainty is None:
             raise FigureSpecError(f"{prefix}.uncertainty is required for errorbar")
+    if not isinstance(spec.get("reuse_panels", False), bool):
+        raise FigureSpecError("reuse_panels must be boolean")
     if not isinstance(spec.get("source_data_export", False), bool):
         raise FigureSpecError("source_data_export must be boolean")
 
@@ -453,49 +455,22 @@ def align_grid_rows(fig: Any, axes: Any) -> None:
                     colorbar.set_position([cb.x0, cb.y0 + delta, cb.width, cb.height])
 
 
-def render(project: Path, spec_path: Path) -> dict[str, Any]:
-    project = project.resolve()
-    spec_path = spec_path.resolve()
-    if project not in spec_path.parents or not spec_path.is_file():
-        raise FigureSpecError("spec must be an existing project file")
-    try:
-        spec_source = spec_path.read_bytes()
-        spec = json.loads(spec_source.decode("utf-8"))
-        spec_sha256 = hashlib.sha256(spec_source).hexdigest()
-    except (OSError, json.JSONDecodeError) as exc:
-        raise FigureSpecError(f"cannot read figure spec: {exc}") from exc
-    if not isinstance(spec, dict):
-        raise FigureSpecError("figure spec must be an object")
-    validate_spec(spec)
-    plt, np, pd = _imports()
-    style = spec["style"]
-    axes_face = {"minimal": "white", "technical": "#F8FAFC", "high-impact": "#F4F8FB"}[style]
-    plt.rcParams.update(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 8.5,
-            "axes.labelsize": 9,
-            "axes.titlesize": 9.5,
-            "axes.linewidth": 0.8,
-            "xtick.labelsize": 7.5,
-            "ytick.labelsize": 7.5,
-            "legend.fontsize": 7.4,
-            "figure.facecolor": "white",
-            "axes.facecolor": axes_face,
-            "savefig.facecolor": "white",
-            "svg.hashsalt": "doctoral-research-os-v2",
-            "svg.fonttype": "none",
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
-    )
-    panels = spec["panels"]
-    columns = min(int(spec.get("columns", 2 if len(panels) > 1 else 1)), 3)
-    rows = math.ceil(len(panels) / columns)
-    width = float(spec.get("width", 7.2 * columns / min(columns, 2)))
-    height = float(spec.get("height", 3.8 * rows))
-    if not (3 <= width <= 18 and 2.5 <= height <= 24):
-        raise FigureSpecError("figure width/height is outside publication-safe bounds")
+def _draw_panel(ax, panel, frame, np, pd, index):
+    if panel["kind"] == "heatmap":
+        _draw_heatmap(ax, panel, frame, np)
+    elif panel["kind"] == "forest":
+        _draw_forest(ax, panel, frame, np)
+    elif panel["kind"] in figure_recipes.KINDS:
+        try:
+            figure_recipes.draw(ax, panel, frame, np, pd, PALETTE)
+        except (ValueError, KeyError, TypeError, OverflowError) as exc:
+            raise FigureSpecError(f"panels[{index}]: {exc}") from exc
+    else:
+        _draw_standard(ax, panel, frame, np)
+    _decorate(ax, panel, chr(ord("a") + index))
+
+
+def _render_full(project, spec, plt, np, pd, panels, columns, rows, width, height):
     fig, axes = plt.subplots(rows, columns, figsize=(width, height), squeeze=False, constrained_layout=True)
     if rows >= 3:
         # A common minimum gutter dominates row-specific tick/risk-table padding.
@@ -514,18 +489,7 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
                 raise FigureSpecError("figure data changed while being read")
             relative = data_path.relative_to(project).as_posix()
             data_records[relative] = {"path": relative, "sha256": data_sha256, "rows": int(len(frame)), "columns": [str(item) for item in frame.columns]}
-            if panel["kind"] == "heatmap":
-                _draw_heatmap(ax, panel, frame, np)
-            elif panel["kind"] == "forest":
-                _draw_forest(ax, panel, frame, np)
-            elif panel["kind"] in figure_recipes.KINDS:
-                try:
-                    figure_recipes.draw(ax, panel, frame, np, pd, PALETTE)
-                except (ValueError, KeyError, TypeError, OverflowError) as exc:
-                    raise FigureSpecError(f"panels[{index}]: {exc}") from exc
-            else:
-                _draw_standard(ax, panel, frame, np)
-            _decorate(ax, panel, chr(ord("a") + index))
+            _draw_panel(ax, panel, frame, np, pd, index)
         for index in range(len(panels), rows * columns):
             axes[index // columns][index % columns].set_visible(False)
         align_grid_rows(fig, axes)
@@ -587,6 +551,74 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         layout_audit = figure_layout.save_audit(project, pdf, audit_path, alignment)
     finally:
         plt.close(fig)
+    return {"output_stem": output_stem, "data_records": data_records,
+            "source_records": source_records, "outputs": outputs,
+            "expected_labels": expected_labels, "layout_warnings": layout_warnings,
+            "layout_audit": layout_audit, "output_qa": output_qa}
+
+
+def render(project: Path, spec_path: Path, *, reuse_panels: bool | None = None) -> dict[str, Any]:
+    project = project.resolve()
+    spec_path = spec_path.resolve()
+    if project not in spec_path.parents or not spec_path.is_file():
+        raise FigureSpecError("spec must be an existing project file")
+    try:
+        spec_source = spec_path.read_bytes()
+        spec = json.loads(spec_source.decode("utf-8"))
+        spec_sha256 = hashlib.sha256(spec_source).hexdigest()
+    except (OSError, json.JSONDecodeError) as exc:
+        raise FigureSpecError(f"cannot read figure spec: {exc}") from exc
+    if not isinstance(spec, dict):
+        raise FigureSpecError("figure spec must be an object")
+    validate_spec(spec)
+    plt, np, pd = _imports()
+    style = spec["style"]
+    axes_face = {"minimal": "white", "technical": "#F8FAFC", "high-impact": "#F4F8FB"}[style]
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 8.5,
+            "axes.labelsize": 9,
+            "axes.titlesize": 9.5,
+            "axes.linewidth": 0.8,
+            "xtick.labelsize": 7.5,
+            "ytick.labelsize": 7.5,
+            "legend.fontsize": 7.4,
+            "figure.facecolor": "white",
+            "axes.facecolor": axes_face,
+            "savefig.facecolor": "white",
+            "svg.hashsalt": "doctoral-research-os-v2",
+            "svg.fonttype": "none",
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+        }
+    )
+    panels = spec["panels"]
+    columns = min(int(spec.get("columns", 2 if len(panels) > 1 else 1)), 3)
+    rows = math.ceil(len(panels) / columns)
+    width = float(spec.get("width", 7.2 * columns / min(columns, 2)))
+    height = float(spec.get("height", 3.8 * rows))
+    if not (3 <= width <= 18 and 2.5 <= height <= 24):
+        raise FigureSpecError("figure width/height is outside publication-safe bounds")
+    selected_reuse = spec.get("reuse_panels", False) if reuse_panels is None else reuse_panels
+    if not isinstance(selected_reuse, bool):
+        raise FigureSpecError("reuse_panels must be boolean")
+    if selected_reuse:
+        try:
+            from scripts import figure_panel_cache
+        except ImportError:
+            import figure_panel_cache
+        try:
+            materials = figure_panel_cache.render_panels(
+                project, spec, plt, np, pd, columns=columns, rows=rows, width=width, height=height)
+        except figure_panel_cache.PanelCacheError as exc:
+            raise FigureSpecError(str(exc)) from exc
+    else:
+        materials = _render_full(project, spec, plt, np, pd, panels, columns, rows, width, height)
+    output_stem, data_records = materials["output_stem"], materials["data_records"]
+    source_records, outputs = materials["source_records"], materials["outputs"]
+    expected_labels, output_qa = materials["expected_labels"], materials["output_qa"]
+    layout_warnings, layout_audit = materials["layout_warnings"], materials["layout_audit"]
     renderer = output_stem.with_suffix(".renderer.py")
     renderer.write_text(
         "#!/usr/bin/env python3\n"
@@ -597,7 +629,8 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         "repo = next(parent for parent in Path(__file__).resolve().parents "
         "if (parent / 'scripts' / 'publication_figures.py').is_file())\n"
         "subprocess.run([sys.executable, str(repo / 'scripts' / 'publication_figures.py'), "
-        f"'render', '--project', {project.name!r}, '--spec', {spec_path.relative_to(project).as_posix()!r}], check=True)\n",
+        f"'render', '--project', {project.name!r}, '--spec', {spec_path.relative_to(project).as_posix()!r}"
+        + (", '--reuse-panels'" if selected_reuse else "") + "], check=True)\n",
         encoding="utf-8",
     )
     try:
@@ -630,6 +663,8 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
             "expected_labels": expected_labels,
         },
     }
+    if "panel_cache" in materials:
+        report["panel_cache"] = materials["panel_cache"]
     report_path = output_stem.with_suffix(".figure-build.json")
     qa_report_path = output_stem.with_suffix(".output-qa.json")
     qa_report_path.write_text(json.dumps(output_qa, indent=2) + "\n", encoding="utf-8")
@@ -645,6 +680,8 @@ def render(project: Path, spec_path: Path) -> dict[str, Any]:
         "renderer": {"name": "publication_figures", "implementation_sha256": sha256_file(Path(__file__))},
         "execution": {"mode": "cloud" if cloud_mode else "local", "receipt_id": receipt_id},
         "visual_review_required": True, "output_qa_status": output_qa["status"]}
+    if "panel_cache" in report:
+        render_receipt["panel_cache"] = report["panel_cache"]
     render_receipt_path.write_text(json.dumps(render_receipt, indent=2) + "\n", encoding="utf-8")
     report["render_receipt"] = {"path": render_receipt_path.relative_to(project).as_posix(), "sha256": sha256_file(render_receipt_path)}
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=report_path.parent, delete=False) as handle:
@@ -679,6 +716,7 @@ def main() -> int:
     command.add_argument("--project", required=True)
     command.add_argument("--spec", required=True)
     command.add_argument("--record", action="store_true")
+    command.add_argument("--reuse-panels", action="store_true")
     command.add_argument("--run", action="append", default=[])
     command.add_argument("--language-checked-by")
     args = parser.parse_args()
@@ -687,7 +725,7 @@ def main() -> int:
     project = PROJECTS_ROOT / args.project
     try:
         spec_path = safe_file(project, args.spec, "spec")
-        report = render(project, spec_path)
+        report = render(project, spec_path, reuse_panels=True if args.reuse_panels else None)
         if args.record:
             if not args.run or not args.language_checked_by:
                 raise FigureSpecError("--record requires --run and --language-checked-by")

@@ -21,7 +21,8 @@
         "literature_discover",
         "literature_retrieve",
         "literature_coverage",
-        "literature_matrix"
+        "literature_matrix",
+        "research_frontier"
       ],
       "native_skill_paths": [
         "skills/public/academic-paper-review",
@@ -49,7 +50,8 @@
       "native_operations": [
         "literature_discover",
         "literature_retrieve",
-        "literature_coverage"
+        "literature_coverage",
+        "research_frontier"
       ],
       "native_skill_paths": [
         "skills/gpt-researcher"
@@ -73,7 +75,7 @@
         "experiment-design",
         "experiment-execution"
       ],
-      "native_operations": [],
+      "native_operations": ["research_iteration"],
       "native_skill_paths": [],
       "runtime_status": "codex-adapter-available",
       "standalone_runtime_deployed": false,
@@ -98,7 +100,8 @@
       ],
       "native_operations": [
         "literature_discover",
-        "literature_coverage"
+        "literature_coverage",
+        "research_iteration"
       ],
       "native_skill_paths": [
         ".claude/skills/researchclaw",
@@ -120,9 +123,12 @@
       "recipe_path": "integrations/codex-research-tools/skills/research-mirothinker/SKILL.md",
       "recipe_sha256": "bab498f9034a45895683e5fc1b71cb077776847fd71333aa516a6610dfc36925",
       "stages": [
+        "intake",
         "topic-intelligence",
         "paper-architecture",
-        "experiment-design"
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
       ],
       "native_operations": [
         "literature_retrieve",
@@ -147,7 +153,7 @@
         "experiment-design",
         "experiment-execution"
       ],
-      "native_operations": [],
+      "native_operations": ["research_iteration"],
       "native_skill_paths": [
         "skills/autoresearch-create",
         "skills/autoresearch-finalize",
@@ -231,7 +237,9 @@
       ],
       "native_operations": [
         "literature_matrix",
-        "literature_coverage"
+        "literature_coverage",
+        "research_iteration",
+        "research_frontier"
       ],
       "native_skill_paths": [],
       "runtime_status": "codex-adapter-available",
@@ -253,7 +261,7 @@
         "experiment-execution",
         "writing-and-review"
       ],
-      "native_operations": [],
+      "native_operations": ["research_iteration"],
       "native_skill_paths": [
         "backend/cli/skills/core/autoresearch",
         "backend/cli/skills/core/paper-writing",
