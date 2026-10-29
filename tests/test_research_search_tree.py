@@ -50,7 +50,7 @@ class ResearchSearchTreeTests(unittest.TestCase):
         self.assertEqual(result["nodes"][1]["consecutive_debug_depth"], 1)
         self.assertTrue(result["nodes"][1]["debug_preparation_limit_reached"])
         self.assertEqual(result["nodes"][2]["consecutive_debug_depth"], 0)
-        self.assertEqual(result["nodes"][1]["actual_analysis_phase"], "confirmatory")
+        self.assertEqual(result["nodes"][1]["actual_analysis_phase"], ["confirmatory"])
         self.assertFalse(result["nodes"][1]["workflow_phase_verified"])
         self.assertFalse(result["automatic_selection_or_pruning"])
         self.assertEqual(result["worklist_omitted"], 1)
