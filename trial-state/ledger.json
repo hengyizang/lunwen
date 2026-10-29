@@ -2451,9 +2451,44 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "**Synthetic fixture only:** The primary estimate is 0.08, below the 0.10 practical threshold, but its 95% interval (−0.04 to 0.20) spans zero and effects above that threshold. Whether the effect is practically meaningful is unresolved. The three preregistered seed effects range from −0.02 to 0.18; all runs passed integrity checks, but the results vary across seeds. They establish neither equivalence nor a software bug. The post hoc subgroup result is exploratory, not confirmatory.\n\n**Next discriminating check:** Repeat the same prespecified primary endpoint and analysis in a suitably precise, independently planned evaluation, retaining the full prespecified seed set rather than selecting seeds. Any subgroup claim should be tested in a prospectively registered follow-up.",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 557,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 1176,
+        "output_tokens_details": {
+          "reasoning_tokens": 821
+        }
+      },
+      "request_id": "resp_0ca5e6141e99f4ad016ae36fb0a39c8199a50288bbb23785e4",
+      "endpoint": "https://cheapai.info/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "19afb1c77489c5cd1fd244926eabc58d1dbbc8b8678fe1577b4ab3d057cb8f67",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "0.08": true,
+          "-0.04": false,
+          "0.20": true,
+          "0.10": true,
+          "exploratory": true
+        },
+        "forbidden_fragments_absent": {
+          "equivalence is established": true,
+          "the methods are equivalent": true,
+          "software bug caused": true,
+          "statistically significant improvement": true
+        }
+      },
+      "duration_seconds": 7.9387
     }
   ],
   "legacy_budget_reservations": {
