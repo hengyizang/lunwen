@@ -1643,9 +1643,52 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "{\n  \"defects\": [\n    {\n      \"line\": \"L2\",\n      \"quoted_line\": \"    kept = [v for v in values if v]\",\n      \"defect\": \"The truthiness filter discards numeric zeros, violating the requirement to retain them.\",\n      \"concrete_trigger\": \"mean_kept([0, 2]) currently computes 2 / 1 and returns 2 instead of the required mean of 1.\",\n      \"minimal_remedy\": \"Replace the line with: kept = list(values)\"\n    },\n    {\n      \"line\": \"L3\",\n      \"quoted_line\": \"    return sum(kept) / len(kept)\",\n      \"defect\": \"An empty input reaches division by zero, raising ZeroDivisionError instead of a clear ValueError.\",\n      \"concrete_trigger\": \"mean_kept([]) currently raises ZeroDivisionError.\",\n      \"minimal_remedy\": \"Immediately before L3, add: if not kept: raise ValueError(\\\"values must not be empty\\\")\"\n    }\n  ],\n  \"tests\": [\n    {\n      \"name\": \"test_retains_zero_when_computing_mean\",\n      \"input\": \"[0, 2]\",\n      \"expected\": \"Returns 1.\",\n      \"purpose\": \"Detects removal of numeric zeros.\"\n    },\n    {\n      \"name\": \"test_all_zero_input\",\n      \"input\": \"[0, 0]\",\n      \"expected\": \"Returns 0.\",\n      \"purpose\": \"Verifies that an input consisting entirely of zeros remains nonempty and valid.\"\n    },\n    {\n      \"name\": \"test_empty_sequence_raises_value_error\",\n      \"input\": \"[]\",\n      \"expected\": \"Raises ValueError with a clear message such as \\\"values must not be empty\\\".\",\n      \"purpose\": \"Verifies the required empty-sequence behavior.\"\n    }\n  ],\n  \"test_status\": \"Not run; these are proposed tests only.\"\n}",
+      "reported_model": "kimi-k3.1-pro",
+      "usage": {
+        "prompt_tokens": 307,
+        "completion_tokens": 939,
+        "completion_tokens_details": {
+          "reasoning_tokens": 522,
+          "cached_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "reasoning_tokens": 0,
+          "cached_tokens": 0
+        },
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 0,
+        "input_tokens": 307,
+        "output_tokens": 939,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 522
+        }
+      },
+      "request_id": "01a188643243797ab6351cf34ac27077",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "57c5b178647d1b02ebb83476b5f888b2e61e87fa211074680b70ba04b1714d23",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "if v": true,
+          "len(kept)": true,
+          "ValueError": true
+        },
+        "forbidden_fragments_absent": {
+          "all tests passed": true,
+          "tests have passed": true
+        }
+      },
+      "duration_seconds": 28.5184
     }
   ],
   "legacy_budget_reservations": {
