@@ -71,6 +71,12 @@ findings, use `docs/EVIDENCE-FIRST-WRITING.md` within existing records. Preserve
 unknown evidence and stable issue history; source completeness is not semantic
 validation. Reuse current author/critic cycles rather than extra paid passes.
 
+For innovation candidate screening, use `docs/INNOVATION-SCREENING.md` and the
+required innovation_screening section of the existing hypothesis register.
+Retain original rounds, explicit assumptions, all candidate comparisons, data
+exposure and candidate decisions. Reuse existing independent audits. Scores or
+structural completeness never verify novelty or authorize science or spending.
+
 For reference-image discovery, original main-figure briefs, shared six-paper
 visual tokens or editable SVG/PPTX/draw.io, read `skills/figures/SKILL.md` and
 `docs/FIGURE-REFERENCE-WORKBENCH.md`. Reuse source-bound reports and supply only

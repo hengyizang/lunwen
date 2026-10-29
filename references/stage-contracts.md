@@ -51,6 +51,14 @@ and decision_test with a focal observable prediction and distinguishable continu
 revise and stop conditions. The actual problem value and identifiability remain
 scientific judgments. See the strengthened research-hypotheses schema.
 
+The same register requires innovation_screening: explicit assumptions and source
+gaps, all candidate-pair differences and shared failure dependencies, retained
+generation rounds, prior data exposure, candidate-level dispositions and honest
+evaluation uncertainty. The native audit rechecks bindings and optional matrix
+calculations. Existing independent critics assess scientific meaning; records or
+scores cannot grant novelty, select a topic, override a gate or authorize spend.
+Use docs/INNOVATION-SCREENING.md. Keep all candidates within one doctoral scope.
+
 ## Paper architecture — G2
 
 Required:

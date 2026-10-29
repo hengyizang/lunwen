@@ -164,6 +164,11 @@ def audit_register(project: Path, spec: Path) -> dict[str, Any]:
         errors.append("duplicate hypothesis IDs")
     for index, hypothesis in enumerate(hypotheses):
         errors.extend(validate_idea(project, hypothesis, f"hypotheses[{index}]"))
+    try:
+        from scripts import innovation_screening
+    except ImportError:
+        import innovation_screening
+    errors.extend(innovation_screening.validate(project, value))
     argument = value.get("argument_plan")
     if not isinstance(argument, dict):
         errors.append("a proposal-first argument_plan is required")
@@ -179,7 +184,9 @@ def audit_register(project: Path, spec: Path) -> dict[str, Any]:
     return {"schema_version": "1.0", "spec_sha256": sha256(spec), "hypothesis_count": len(hypotheses),
             "implementation_sha256": sha256(Path(__file__)),
             "reasoning_implementation_sha256": sha256(Path(__file__).with_name("scientific_reasoning.py")),
+            "innovation_implementation_sha256": sha256(Path(__file__).with_name("innovation_screening.py")),
             "scientific_value_verified": False,
+            "semantic_independence_verified": False,
             "errors": errors, "pass": not errors, "scientific_validation": False,
             "novelty_granted": False, "human_review_required": True}
 

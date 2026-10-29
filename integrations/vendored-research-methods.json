@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-09-30",
+  "reviewed_at": "2026-10-29",
   "files": [
     {
       "path": "third_party/kdense/skills/hypothesis-generation/SKILL.md",
@@ -195,71 +195,71 @@
       "path": "third_party/kdense/skills/scientific-brainstorming/SKILL.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/SKILL.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "49ae9b430f3495a36de5fbfe4f053c0acc67440ad8b2bcb31749283e2286c48f"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "06f73b71556356a7f488c369b9445d7943543a3f14d159b2168fd3f621d6f8a9"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/references/brainstorming_methods.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/references/brainstorming_methods.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "a2dc4e248b43b257af8b3359c26ec973527e212064f5f4a0c1f5161fa7f27013"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "2c3749f38c4a9ba0f310b04679b870cbf603d923aa30b82dd92720a7d2977632"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/references/facilitation_workflows.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/references/facilitation_workflows.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
       "sha256": "bfb2acc43472f4649b10f2c3db02180fa9c86636f375f82d8bc36b28075a5ccc"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/references/idea_evaluation.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/references/idea_evaluation.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "415089ce7fb4234c2836c0a1652ca7407d5822c3b645564530ffb76bd594d110"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "5a5fcb319cdcc151a9acd17e0e501d270e55f7a9fb6a829c87c43af5b5705d14"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/references/responsible_ai.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/references/responsible_ai.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "7465647aaf261ce84124683bbebaafa2f57db0491c34b7ef1a650b05431b9cb1"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "d5b61b2555b72914d1e2cfb6e84496ce80fc2d24a3001c9eefa04cca336b9830"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/references/sources.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/references/sources.md",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "ab93a7b744c0fb2a026f6485eac5f54fbd3479e7349a6a1502287f1704a48d88"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "ab4ab107ea4f94b21ce85aec6e63d3701e56a546c4840ccfd8dab5f2cdd52210"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/scripts/_common.py",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/scripts/_common.py",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "a78ef369fe2613871e8026420b9c78a368f61aeab670947482517fd49711060d"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "271bc1a013d83dc1bab41dc3fd3d70bae3d6f7549db70c678debfc50251efe19"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/scripts/evaluate_matrix.py",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/scripts/evaluate_matrix.py",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "9056a5356c72d638277cc24f8e02f043c6bdb35d2b50e13fca3ac6ef860a1014"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "ed38f33a7b35045217fe40b6b57ebb370c584891392899b74f4e4530e72f2215"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/scripts/session_scaffold.py",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/scripts/session_scaffold.py",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
       "sha256": "0af7b297a8f92f1c7456b7e14c717a017315b4a71b603ca5402434dee98db5ba"
     },
     {
       "path": "third_party/kdense/skills/scientific-brainstorming/scripts/validate_register.py",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/scientific-brainstorming/scripts/validate_register.py",
-      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
-      "sha256": "9a28c5abc16c48babdf6e5f3ded1672eb272d2569283c53a3e1f09beed43197a"
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "sha256": "765e57854efe9e28b4965d23b073eb67ffdc8cc0c7ac0b47d9240e4cc8ea1bd5"
     },
     {
       "path": "third_party/kdense/LICENSE.md",

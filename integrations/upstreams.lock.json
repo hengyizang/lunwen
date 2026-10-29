@@ -3,6 +3,20 @@
   "reviewed_at": "2026-09-30",
   "sources": [
     {
+      "id": "kdense-brainstorming-20261029",
+      "repository": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "commit": "a92663a0214b3b9fa1ba6b958284ffd919c00a0c",
+      "upstream_version": "scientific-brainstorming 1.4",
+      "license": "MIT",
+      "license_source_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a92663a0214b3b9fa1ba6b958284ffd919c00a0c/LICENSE.md",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": ["scientific-brainstorming"],
+      "selected_skills": ["scientific-brainstorming"],
+      "installation": "Complete pinned scientific-brainstorming skill, references and standard-library helpers vendored; existing cloud-only control plane remains the execution route.",
+      "selection_note": "Owner authorized missing and improved innovation-screening methods on 2026-10-29. Preserve independent review, one doctoral question, human gates, central budgets and all candidate histories. No paid service or model route is enabled. Hypothesis-generation remains pinned separately at its prior revision."
+    },
+    {
       "id": "ai-scientist",
       "repository": "https://github.com/SakanaAI/AI-Scientist-v2",
       "commit": "96bd51617cfdbb494a9fc283af00fe090edfae48",
@@ -615,12 +629,10 @@
       "enabled_by_default": false,
       "local_adaptations_enabled": true,
       "selected_components": [
-        "scientific-brainstorming",
         "hypothesis-generation"
       ],
       "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
       "selected_skills": [
-        "scientific-brainstorming",
         "hypothesis-generation"
       ],
       "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."

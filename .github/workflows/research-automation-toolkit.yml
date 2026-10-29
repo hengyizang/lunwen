@@ -8,6 +8,10 @@ on:
       - 'scripts/research_iteration.py'
       - 'scripts/research_frontier.py'
       - 'scripts/research_search_tree.py'
+      - 'scripts/innovation_screening.py'
+      - 'scripts/research_candidates.py'
+      - 'config/research-methods.json'
+      - 'third_party/kdense/skills/scientific-brainstorming/**'
       - 'scripts/figure_panel_cache.py'
       - 'scripts/publication_figures.py'
       - 'scripts/install-research-toolkit.ps1'
@@ -18,6 +22,7 @@ on:
       - 'tests/test_research_iteration.py'
       - 'tests/test_research_frontier.py'
       - 'tests/test_research_search_tree.py'
+      - 'tests/test_innovation_screening.py'
       - 'tests/test_figure_panel_cache.py'
       - '.github/workflows/research-automation-toolkit.yml'
 permissions:
@@ -39,7 +44,7 @@ jobs:
         env:
           DR_OS_CLOUD_EXECUTOR: '1'
         run: |
-          python -m unittest tests.test_research_toolkit tests.test_research_tool_increments tests.test_research_iteration tests.test_research_search_tree tests.test_research_frontier tests.test_figure_panel_cache tests.test_ccfa_context_isolation -v
+          python -m unittest tests.test_innovation_screening tests.test_research_methods tests.test_research_toolkit tests.test_research_tool_increments tests.test_research_iteration tests.test_research_search_tree tests.test_research_frontier tests.test_figure_panel_cache tests.test_ccfa_context_isolation -v
           python -m compileall -q scripts
           python scripts/validate_repo.py
           git diff --check

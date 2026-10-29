@@ -14,6 +14,11 @@
 
 ## 云端调用与输入
 
+2026-10-29 补强：完整 `scientific-brainstorming` 更新至固定版 1.4，
+`hypothesis-generation` 保持原提交。创新候选的新记录、原生 G1 校验、
+可选评分重放和按任务选择的创造方法见 [创新筛选说明](INNOVATION-SCREENING.md)。
+当前登记须补齐 `innovation_screening` 后重审；没有新增付费角色或研究执行权限。
+
 `api_orchestrator.py` 和 `autopilot.py` 会自动将匹配阶段的适配模块提供给规划者、作者和批评者。仅加载短适配模块；上游的完整编排器、额外付费检索、图像服务和领域工具包不会因此启用。原文件按需阅读，辅助脚本只提供规划材料。
 
 在云端任务中运行：
