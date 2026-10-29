@@ -185,4 +185,14 @@ def task_context(project: Path | None, stage: str, role: str, context: str, *, r
     for row in packet["recipes"]:
         blocks.append(f"Reviewed adapter {row['id']} from {row['repository']}@{row['commit']} "
                       f"(SHA-256 {row['recipe_sha256']}):\n" + path_in(root, row["recipe_path"]).read_text(encoding="utf-8"))
+    # Only explicitly bound current reports enter the selected task. Historical
+    # envelopes are excluded from generic snapshots, including independent review.
+    from importlib import import_module
+    for binding in packet["input_bindings"]:
+        for prefix, module in (("reports/research-iteration/", "research_iteration"),
+                               ("reports/research-frontier/", "research_frontier")):
+            if binding["path"].startswith(prefix):
+                prepared = import_module("scripts." + module).model_context(project, binding["path"], role)
+                blocks.append("Current source-bound research preparation (not a scientific verdict):\n"
+                              + (prepared if isinstance(prepared, str) else json.dumps(prepared, ensure_ascii=False)))
     return "\n\n".join(blocks)

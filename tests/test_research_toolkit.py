@@ -120,6 +120,21 @@ class ResearchToolkitTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale"):
             toolkit.task_context(self.project, "experiment-design", "writer", self.marker(packet), root=self.root)
 
+    def test_explicit_native_report_is_revalidated_by_its_builder_for_each_role(self):
+        relative = "reports/research-iteration/prepared.json"
+        write(self.project / relative, {"status": "fixture_preparation"})
+        self.request["input_bindings"].append({"path": relative, "sha256": sha(self.project / relative)})
+        write(self.project / self.relative, self.request)
+        packet = self.prepare()
+        for role in ("planner", "writer", "critic", "remediator"):
+            with patch("scripts.research_iteration.model_context", return_value={"observed_fact": "source_bound"}) as load:
+                result = toolkit.task_context(self.project, "experiment-design", role, self.marker(packet), root=self.root)
+                self.assertIn("source_bound", result)
+                load.assert_called_once_with(self.project, relative, role)
+        with patch("scripts.research_iteration.model_context", side_effect=ValueError("underlying receipt changed")):
+            with self.assertRaisesRegex(ValueError, "underlying receipt changed"):
+                toolkit.task_context(self.project, "experiment-design", "writer", self.marker(packet), root=self.root)
+
     def test_unknown_stage_tool_duplicate_or_model_execution_override_is_rejected(self):
         for key, value in (("stage", "submission-ready"), ("tool_ids", ["unknown-tool"]),
                            ("tool_ids", ["fixture-tool", "fixture-tool"]), ("execute", True),

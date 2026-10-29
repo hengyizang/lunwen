@@ -56,6 +56,8 @@ EXTRA = {
 
 LITERATURE_OPERATIONS = {
     "research_toolkit": ({"request_file"}, {"request_file"}),
+    "research_iteration": ({"request_file"}, {"request_file"}),
+    "research_frontier": ({"request_file"}, {"request_file"}),
     "figure_gallery_sync": (set(), set()),
     "figure_gallery_search": ({"query", "top_k", "venues", "years", "tiers", "patterns", "topics", "semantic"}, {"query"}),
     "figure_story": ({"operation", "request_file"}, {"operation", "request_file"}),

@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "reviewed_on": "2026-10-29",
+  "scope": "Selected useful mechanisms implemented in the existing cloud control plane; upstream standalone services are not deployed.",
+  "paid_calls": 0,
+  "tools": [
+    {
+      "id": "deer-flow",
+      "mechanisms": [
+        "question-driven discovery",
+        "gap-to-next-action linkage",
+        "original-source method/code review"
+      ],
+      "native_implementations": [
+        "scripts/literature_reading.py",
+        "scripts/research_frontier.py"
+      ],
+      "verification": [
+        "tests/test_research_frontier.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "gpt-researcher",
+      "mechanisms": [
+        "bounded query frontier",
+        "canonical new-source yield",
+        "existing source/index/query cache reuse"
+      ],
+      "native_implementations": [
+        "scripts/literature_intelligence.py",
+        "scripts/literature_semantic.py",
+        "scripts/research_frontier.py"
+      ],
+      "verification": [
+        "tests/test_research_frontier.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "rd-agent",
+      "mechanisms": [
+        "hypothesis-experiment-feedback chain",
+        "condition-bound observed lessons",
+        "bounded next-iteration preparation"
+      ],
+      "native_implementations": [
+        "scripts/research_candidates.py",
+        "scripts/research_iteration.py"
+      ],
+      "verification": [
+        "tests/test_research_iteration.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "autoresearchclaw",
+      "mechanisms": [
+        "actual execution diagnostics",
+        "engineering failure versus scientific observation",
+        "source-bound repair proposals"
+      ],
+      "native_implementations": [
+        "scripts/primary_recovery.py",
+        "scripts/research_iteration.py"
+      ],
+      "verification": [
+        "tests/test_research_iteration.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "mirothinker",
+      "mechanisms": [
+        "durable evidence-preserving handoff",
+        "all research-stage selection",
+        "operational history separated from scientific sources"
+      ],
+      "native_implementations": [
+        "scripts/research_increments.py",
+        "scripts/context_efficiency.py",
+        "scripts/research_toolkit.py"
+      ],
+      "verification": [
+        "tests/test_research_tool_increments.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "pi-autoresearch",
+      "mechanisms": [
+        "bounded development iterations",
+        "all-attempt history",
+        "effective configuration duplicate advice and replication reasons"
+      ],
+      "native_implementations": [
+        "scripts/experiment_runner.py",
+        "scripts/research_iteration.py"
+      ],
+      "verification": [
+        "tests/test_research_iteration.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "paperbanana",
+      "mechanisms": [
+        "source-bound visual planning",
+        "semantic and presentation critique",
+        "editable panel-level incremental rendering"
+      ],
+      "native_implementations": [
+        "scripts/figure_story.py",
+        "scripts/publication_figures.py",
+        "scripts/figure_panel_cache.py"
+      ],
+      "verification": [
+        "tests/test_figure_panel_cache.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "aipoch-open-science",
+      "mechanisms": [
+        "figure-deck argument",
+        "panel reuse and final composed QA",
+        "explicit reproduction scope"
+      ],
+      "native_implementations": [
+        "scripts/figure_story.py",
+        "scripts/figure_panel_cache.py",
+        "scripts/research_quality.py"
+      ],
+      "verification": [
+        "tests/test_figure_panel_cache.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "evoscientist",
+      "mechanisms": [
+        "source-bound complementary/contradictory/superseding relations",
+        "preserved decision history",
+        "frozen evaluation and human adoption of lessons"
+      ],
+      "native_implementations": [
+        "scripts/research_notebook.py",
+        "scripts/research_frontier.py",
+        "scripts/incremental_rules.py"
+      ],
+      "verification": [
+        "tests/test_research_frontier.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    },
+    {
+      "id": "synthetic-openscience",
+      "mechanisms": [
+        "baseline-first candidate worklist",
+        "cross-ID effective-configuration deduplication",
+        "explicit unavailable observations and bounded iteration"
+      ],
+      "native_implementations": [
+        "scripts/experiment_runner.py",
+        "scripts/research_iteration.py"
+      ],
+      "verification": [
+        "tests/test_research_iteration.py"
+      ],
+      "semantic_judgment": "Existing independent review and human scientific judgment remain required."
+    }
+  ]
+}

@@ -19,6 +19,8 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "reports/data-row-provenance", "reports/literature-source-tasks",
                   "reports/literature-search-strategy", "reports/literature-synthesis", "reports/diagram-mermaid",
                   "reports/ccfa-tasks", "reports/ccfa-science", "reports/ccfa-humanization", "reports/research-toolkit",
+                  "reports/research-iteration", "reports/research-frontier",
+                  "reports/figure-panel-cache",
                   "reports/figure-data", "reports/figure-gallery", "reports/figure-gallery-semantic",
                   "reports/figure-story", "reports/figure-visual-style", "literature/figure-gallery",
                   "experiments/history", "experiments/recovery-artifacts",
