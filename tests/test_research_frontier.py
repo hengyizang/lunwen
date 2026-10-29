@@ -116,12 +116,23 @@ class ResearchFrontierTests(unittest.TestCase):
 
     def test_actual_receipts_canonical_dedup_and_new_paper_yield(self):
         first = self.search(dois=("10.1000/one", "10.1000/ONE"))
+        # The native provider normalizer already joins duplicate stable DOI IDs.
+        # Frontier observation counts must use its sealed normalized receipt,
+        # while canonical dedup also joins the same paper across actual calls.
+        raw = read(self.project / first["raw_response_path"])
+        normalized = read(self.project / first["normalized_results_path"])
+        self.assertEqual(len(raw["data"]), 2)
+        self.assertEqual(len(normalized["works"]), 1)
+        self.assertEqual(first["result_count"], len(normalized["works"]))
+        self.assertEqual(normalized["works"][0]["id"], "doi:10.1000/one")
+        duplicate = self.search("independent repeated metadata", ("10.1000/one",))
         second = self.search("calibration adverse transfer", ("10.1000/one", "10.1000/two"))
-        self.round("round-one", [first])
+        self.round("round-one", [first, duplicate])
         self.round("round-two", [second])
         self.round("round-cache", [second])
         report = frontier.refresh(self.project)
         one, two, cache = report["query_rounds"]
+        self.assertEqual(one["normalized_observation_count"], first["result_count"] + duplicate["result_count"])
         self.assertEqual((one["normalized_observation_count"], one["canonical_paper_count"], one["new_paper_count"]), (2, 1, 1))
         self.assertEqual(two["new_canonical_ids"], ["doi:10.1000/two"])
         self.assertEqual(cache["new_paper_count"], 0)
@@ -232,8 +243,17 @@ class ResearchFrontierTests(unittest.TestCase):
         self.request["query_rounds"] = []
         receipt = self.search()
         self.round("round-real", [receipt])
-        (self.project / receipt["raw_response_path"]).write_bytes(b"tampered")
+        raw_path = self.project / receipt["raw_response_path"]
+        original_raw = raw_path.read_bytes()
+        raw_path.write_bytes(b"tampered")
         with self.assertRaisesRegex(ValueError, "stale literature receipt"):
+            frontier.refresh(self.project)
+        raw_path.write_bytes(original_raw)
+        ledger_path = self.project / frontier.LEDGER
+        ledger = [json.loads(line) for line in ledger_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        ledger[0]["result_count"] += 1
+        ledger_path.write_text("".join(json.dumps(row) + "\n" for row in ledger), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "result count differs from its source"):
             frontier.refresh(self.project)
 
     def test_coverage_wrong_question_and_undeclared_hypotheses_are_rejected(self):
