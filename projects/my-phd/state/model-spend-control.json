@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "517dcce2b025423f882ea8a49caefe93": {
-      "at": "2026-10-29T15:59:28+00:00",
-      "call_id": "deepseek-high|engineering-review",
-      "kind": "new_call",
-      "max_cost_cny": 0.0601622,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -146,8 +137,12 @@
     {
       "actual_cost_cny": 0.00048222,
       "receipt_id": "7e463641dc52452198b6e3d8ebbba271"
+    },
+    {
+      "actual_cost_cny": 0.00175238,
+      "receipt_id": "517dcce2b025423f882ea8a49caefe93"
     }
   ],
-  "spent_cny": 0.11965259,
+  "spent_cny": 0.12140497,
   "tranche_cny": 300
 }
