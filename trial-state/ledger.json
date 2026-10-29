@@ -2261,9 +2261,56 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "**Supported:** In this synthetic fixture, the primary estimate is 0.08, but its 95% interval [−0.04, 0.20] includes no effect, effects below the 0.10 practical threshold, and effects above it. All three preregistered seed effects (−0.02, 0.08, 0.18) completed with integrity checks, showing variation across seeds; none should be privileged. The post hoc subgroup estimate of 0.35 is exploratory only.\n\n**Unresolved:** Whether the primary effect is nonzero and whether it is practically important remain unclear. The nonsignificant/imprecise result does not establish equivalence, and no equivalence test was registered.\n\n**Next discriminating check:** Conduct a new preregistered confirmatory replication with the unchanged primary endpoint and all prespecified seeds, designed for sufficient precision to distinguish null, subthreshold, and practically important effects. Any subgroup claim requires separate prospective confirmation.",
+      "reported_model": "kimi-k3.1-pro",
+      "usage": {
+        "prompt_tokens": 342,
+        "completion_tokens": 848,
+        "completion_tokens_details": {
+          "reasoning_tokens": 639,
+          "cached_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "reasoning_tokens": 0,
+          "cached_tokens": 0
+        },
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cached_tokens": 0,
+        "input_tokens": 342,
+        "output_tokens": 848,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 639
+        }
+      },
+      "request_id": "01a1886b60d2754bb05dc65c0f0fc670",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "ad3930a126006f326e8b37da9e9901470f643d46652bda7514c2cf161f71528b",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "0.08": true,
+          "-0.04": false,
+          "0.20": true,
+          "0.10": true,
+          "exploratory": true
+        },
+        "forbidden_fragments_absent": {
+          "equivalence is established": true,
+          "the methods are equivalent": true,
+          "software bug caused": true,
+          "statistically significant improvement": true
+        }
+      },
+      "duration_seconds": 29.7035
     }
   ],
   "legacy_budget_reservations": {
