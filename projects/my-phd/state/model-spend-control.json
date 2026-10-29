@@ -38,15 +38,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "9df44efe7d6c43f6bfec310b9a631a1f": {
-      "at": "2026-10-29T15:53:20+00:00",
-      "call_id": "terra-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 0.157437,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
@@ -110,8 +101,12 @@
     {
       "actual_cost_cny": 0.0048902,
       "receipt_id": "01bcfcaceb3c4dbaab51501da6068ec9"
+    },
+    {
+      "actual_cost_cny": 0.00039302,
+      "receipt_id": "9df44efe7d6c43f6bfec310b9a631a1f"
     }
   ],
-  "spent_cny": 0.0976835,
+  "spent_cny": 0.09807652,
   "tranche_cny": 300
 }
