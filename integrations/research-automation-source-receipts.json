@@ -1,12 +1,30 @@
 {
   "schema_version": "1.0",
-  "staged_on": "2026-10-28",
+  "staged_on": "2026-10-29",
   "kind": "pinned upstream source archives; no dependencies, model weights or standalone services installed",
   "source_root": "D:\\ad\\codex\\research-automation\\sources",
   "per_file_receipt_directory": "D:\\ad\\codex\\research-automation\\receipts",
   "paid_calls": 0,
   "local_research_runtime_executed": false,
   "tools": [
+    {
+      "id": "ai-scientist",
+      "repository": "SakanaAI/AI-Scientist-v2",
+      "commit": "96bd51617cfdbb494a9fc283af00fe090edfae48",
+      "file_count": 68,
+      "archive_sha256": "45ee6736802bfa54eae0ae2fd150b8617d29943e0d0ca7dbb88108f932fb7b2d",
+      "receipt_sha256": "1d6a18f4f4a34815355320167feefe3274464db725bc8c269ef628adc8fb2afa",
+      "source_url": "https://codeload.github.com/SakanaAI/AI-Scientist-v2/zip/96bd51617cfdbb494a9fc283af00fe090edfae48"
+    },
+    {
+      "id": "ai-scientist-v1",
+      "repository": "SakanaAI/AI-Scientist",
+      "commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+      "file_count": 2326,
+      "archive_sha256": "3c7a61994b456a016e472e68f77ab5fbee3b7423be0239a60699dd1646cb359e",
+      "receipt_sha256": "3d089278d4e8df67bf41b54ef377b571b97bd34cbbcd7aff8201e772f157f0af",
+      "source_url": "https://codeload.github.com/SakanaAI/AI-Scientist/zip/1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb"
+    },
     {
       "id": "deer-flow",
       "repository": "bytedance/deer-flow",

@@ -12,11 +12,11 @@ from scripts import artifact_ownership, cloud_job, context_efficiency, literatur
 
 
 class ResearchToolIncrementIntegrationTests(unittest.TestCase):
-    def test_useful_mechanisms_for_all_ten_tools_have_native_and_test_paths(self):
+    def test_useful_mechanisms_for_all_catalog_tools_have_native_and_test_paths(self):
         root = research_toolkit.ROOT
         coverage = json.loads((root / "integrations/research-automation-coverage.json").read_text(encoding="utf-8"))
         self.assertEqual({row["id"] for row in coverage["tools"]}, set(research_toolkit.catalog()))
-        self.assertEqual(len(coverage["tools"]), 10)
+        self.assertIn("ai-scientist", {row["id"] for row in coverage["tools"]})
         for tool in coverage["tools"]:
             self.assertTrue(tool["mechanisms"])
             self.assertTrue(tool["native_implementations"] and tool["verification"])
@@ -25,7 +25,7 @@ class ResearchToolIncrementIntegrationTests(unittest.TestCase):
 
     def test_every_declared_native_operation_has_existing_owner_cloud_dispatch(self):
         catalog = research_toolkit.catalog()
-        self.assertEqual(len(catalog), 10)
+        self.assertIn("ai-scientist", catalog)
         for tool in catalog.values():
             self.assertTrue(set(tool["native_operations"]).issubset(cloud_job.LITERATURE_OPERATIONS), tool["id"])
         self.assertEqual(set(catalog["mirothinker"]["stages"]), research_toolkit.STAGES)
@@ -34,7 +34,7 @@ class ResearchToolIncrementIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             project = Path(directory)
             (project / "program").mkdir()
-            for action in ("research_iteration", "research_frontier"):
+            for action in ("research_iteration", "research_frontier", "research_search_tree"):
                 operation = {"action": action, "request_file": "program/current-request.json"}
                 (project / "program/operation.json").write_text(json.dumps(operation), encoding="utf-8")
                 checked, _ = cloud_job.literature_operation(project, "program/operation.json")
@@ -50,7 +50,7 @@ class ResearchToolIncrementIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             (project / "program").mkdir()
-            for name in ("research_iteration", "research_frontier"):
+            for name in ("research_iteration", "research_frontier", "research_search_tree"):
                 relative = "program/custom-" + name + ".json"
                 (project / relative).write_text(json.dumps({"kind": name, "task": "AUTHOR_PREFERRED_OUTCOME"}), encoding="utf-8")
                 self.assertIn(relative, context_efficiency.instruction_paths(project))

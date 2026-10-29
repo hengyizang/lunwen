@@ -10,7 +10,7 @@ from pathlib import Path, PurePosixPath
 OPERATIONAL_PREFIXES = ("state/runs/", "state/citation-metadata/",
                         "state/review-receipts/", "state/scientific-scope/",
                         "reports/ccfa-tasks/", "reports/ccfa-science/history/", "reports/research-toolkit/",
-                        "reports/research-iteration/", "reports/research-frontier/",
+                        "reports/research-iteration/", "reports/research-frontier/", "reports/research-search-tree/",
                         "reports/figure-panel-cache/",
                         "literature/figure-gallery/", "reports/figure-gallery/", "reports/figure-gallery-semantic/",
                         ".cache/figure-gallery-models/")
@@ -60,8 +60,8 @@ def instruction_paths(project: Path) -> set[str]:
         operations = value.get("operations")
         queue = isinstance(operations, list) and any(isinstance(row, dict) and "action" in row for row in operations)
         if (queue or "desired_verdict" in value or "preferred_verdict" in value
-                or value.get("kind") in {"research_iteration", "research_frontier"}
-                or "action" in value and (value["action"] in {"research_toolkit", "research_iteration", "research_frontier"} or "request" in value or str(value["action"]).startswith(("ccfa_", "literature_", "figure_", "editable_figure_")))
+                or value.get("kind") in {"research_iteration", "research_frontier", "research_search_tree"}
+                or "action" in value and (value["action"] in {"research_toolkit", "research_iteration", "research_frontier", "research_search_tree"} or "request" in value or str(value["action"]).startswith(("ccfa_", "literature_", "figure_", "editable_figure_")))
                 or "task" in value and "skill" in value
                 or "task" in value and "tool_ids" in value and "input_bindings" in value
                 or "operation" in value and "request" in value):

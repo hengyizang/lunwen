@@ -340,7 +340,7 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "research_toolkit":
         from scripts.research_toolkit import refresh
         return refresh(project, operation["request_file"])
-    if action in {"research_iteration", "research_frontier"}:
+    if action in {"research_iteration", "research_frontier", "research_search_tree"}:
         from importlib import import_module
         return import_module("scripts." + action).refresh(project, operation["request_file"])
     if action == "figure_gallery_sync":

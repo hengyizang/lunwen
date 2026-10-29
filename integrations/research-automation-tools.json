@@ -1,7 +1,42 @@
 {
   "schema_version": "1.0",
-  "reviewed_on": "2026-10-28",
+  "reviewed_on": "2026-10-29",
   "tools": [
+    {
+      "id": "ai-scientist",
+      "repository": "SakanaAI/AI-Scientist-v2",
+      "commit": "96bd51617cfdbb494a9fc283af00fe090edfae48",
+      "license": "The AI Scientist Source Code License, Version 1.0, December 2025",
+      "skill_name": "research-ai-scientist",
+      "skill_path": "integrations/codex-research-tools/skills/research-ai-scientist/SKILL.md",
+      "recipe_path": "integrations/codex-research-tools/skills/research-ai-scientist/SKILL.md",
+      "recipe_sha256": "2671061cc7f9b281e47cdfbf2590d9da6a1466d0df4d62fbdba8261849ecf9dd",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "native_operations": [
+        "research_iteration",
+        "research_search_tree",
+        "research_frontier",
+        "figure_story"
+      ],
+      "native_skill_paths": [],
+      "additional_sources": [
+        {
+          "id": "ai-scientist-v1",
+          "repository": "SakanaAI/AI-Scientist",
+          "commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb"
+        }
+      ],
+      "runtime_status": "codex-adapter-available",
+      "standalone_runtime_deployed": false,
+      "enabled_by_default": false,
+      "paid_services_enabled": false
+    },
     {
       "id": "deer-flow",
       "repository": "bytedance/deer-flow",

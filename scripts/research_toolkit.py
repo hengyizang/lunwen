@@ -190,7 +190,8 @@ def task_context(project: Path | None, stage: str, role: str, context: str, *, r
     from importlib import import_module
     for binding in packet["input_bindings"]:
         for prefix, module in (("reports/research-iteration/", "research_iteration"),
-                               ("reports/research-frontier/", "research_frontier")):
+                               ("reports/research-frontier/", "research_frontier"),
+                               ("reports/research-search-tree/", "research_search_tree")):
             if binding["path"].startswith(prefix):
                 prepared = import_module("scripts." + module).model_context(project, binding["path"], role)
                 blocks.append("Current source-bound research preparation (not a scientific verdict):\n"

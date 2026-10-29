@@ -2,6 +2,40 @@
   "schema_version": "1.0",
   "reviewed_at": "2026-09-30",
   "sources": [
+    {
+      "id": "ai-scientist",
+      "repository": "https://github.com/SakanaAI/AI-Scientist-v2",
+      "commit": "96bd51617cfdbb494a9fc283af00fe090edfae48",
+      "upstream_version": "reviewed 2026-10-29 source snapshot",
+      "license": "The AI Scientist Source Code License, Version 1.0, December 2025",
+      "license_source_url": "https://github.com/SakanaAI/AI-Scientist-v2/blob/96bd51617cfdbb494a9fc283af00fe090edfae48/LICENSE",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "receipt-bound experiment branches",
+        "figure-caption-maintext-result review guidance"
+      ],
+      "selected_skills": [],
+      "installation": "Independent Codex adaptation; complete fixed source and license retained on D drive. Upstream runtime and paid services not deployed.",
+      "selection_note": "Use only selected methods in existing cloud roles. Custom source license requires prominent disclosure when upstream software generates a scientific manuscript; retain downstream conditions. No launcher, model route, budget or G0-G5 authority change."
+    },
+    {
+      "id": "ai-scientist-v1",
+      "repository": "https://github.com/SakanaAI/AI-Scientist",
+      "commit": "1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb",
+      "upstream_version": "reviewed 2026-10-29 source snapshot",
+      "license": "The AI Scientist Source Code License, Version 1.0, December 2025",
+      "license_source_url": "https://github.com/SakanaAI/AI-Scientist/blob/1de1dbc1f4ee2c5f61e9c94348d55eb51d7fa2eb/LICENSE",
+      "enabled_by_default": false,
+      "local_adaptations_enabled": true,
+      "selected_components": [
+        "receipt-bound experiment branches",
+        "figure-caption-maintext-result review guidance"
+      ],
+      "selected_skills": [],
+      "installation": "Independent Codex adaptation; complete fixed source and license retained on D drive. Upstream runtime and paid services not deployed.",
+      "selection_note": "Use only selected methods in existing cloud roles. Custom source license requires prominent disclosure when upstream software generates a scientific manuscript; retain downstream conditions. No launcher, model route, budget or G0-G5 authority change."
+    },
       {
         "id": "deer-flow",
         "repository": "https://github.com/bytedance/deer-flow",

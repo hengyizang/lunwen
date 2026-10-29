@@ -28,11 +28,17 @@ This repository is a research workflow, not a publication generator.
 
 Run repository checks after code or schema changes:
 
-For task-selected methods from the ten research automation tools, read
+For task-selected methods from the research automation tools, read
 `docs/RESEARCH-AUTOMATION-TOOLKIT.md`. Use `research_toolkit` in the existing cloud
 literature control and pass only the selected immutable packet to existing model
 roles. Adapted Codex skills are not deployed upstream services. Preserve central
 budget/identity controls, independent review, all attempts and approved G3 execution.
+
+For The AI Scientist V1/V2 methods, read `docs/AI-SCIENTIST-INTEGRATION.md`.
+Use receipt-bound `research_search_tree` only as a declared branch view within
+existing controls. It cannot prove a repair, select favorable results, reclassify
+frozen analysis phases or authorize execution. Raw upstream launchers remain
+disabled; preserve the pinned custom source license and required disclosures.
 
 For actual CPU semantic retrieval/reranking, bounded PaperQA2 SDK vector-store
 use, complete-text reading comparisons, cloud Zotero reads, discovery categories

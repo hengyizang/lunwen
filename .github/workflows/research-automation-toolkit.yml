@@ -7,6 +7,7 @@ on:
       - 'scripts/research_toolkit.py'
       - 'scripts/research_iteration.py'
       - 'scripts/research_frontier.py'
+      - 'scripts/research_search_tree.py'
       - 'scripts/figure_panel_cache.py'
       - 'scripts/publication_figures.py'
       - 'scripts/install-research-toolkit.ps1'
@@ -16,6 +17,7 @@ on:
       - 'tests/test_research_tool_increments.py'
       - 'tests/test_research_iteration.py'
       - 'tests/test_research_frontier.py'
+      - 'tests/test_research_search_tree.py'
       - 'tests/test_figure_panel_cache.py'
       - '.github/workflows/research-automation-toolkit.yml'
 permissions:
@@ -37,11 +39,11 @@ jobs:
         env:
           DR_OS_CLOUD_EXECUTOR: '1'
         run: |
-          python -m unittest tests.test_research_toolkit tests.test_research_tool_increments tests.test_research_iteration tests.test_research_frontier tests.test_figure_panel_cache tests.test_ccfa_context_isolation -v
+          python -m unittest tests.test_research_toolkit tests.test_research_tool_increments tests.test_research_iteration tests.test_research_search_tree tests.test_research_frontier tests.test_figure_panel_cache tests.test_ccfa_context_isolation -v
           python -m compileall -q scripts
           python scripts/validate_repo.py
           git diff --check
-      - name: Install all ten adapters using pinned official installer
+      - name: Install all catalog adapters using pinned official installer
         env:
           SOURCE_REPOSITORY: ${{ github.repository }}
           SOURCE_REVISION: ${{ github.event.pull_request.head.sha }}
@@ -116,7 +118,7 @@ jobs:
           & ./scripts/install-research-toolkit.ps1 -InstallRoot $installRoot
           & ./scripts/install-research-toolkit.ps1 -InstallRoot $installRoot
           $receipt = Get-Content -Raw (Join-Path $installRoot 'installation.json') | ConvertFrom-Json
-          if ($receipt.tools.Count -ne 10 -or $receipt.paid_calls -ne 0) { throw 'Incomplete installation' }
+          if ($receipt.tools.Count -ne $catalog.tools.Count -or $receipt.paid_calls -ne 0) { throw 'Incomplete installation' }
           foreach ($tool in $catalog.tools) {
             $entry = Join-Path $env:CODEX_HOME ('skills/' + $tool.skill_name + '/SKILL.md')
             if ((Get-FileHash $entry -Algorithm SHA256).Hash.ToLowerInvariant() -ne $tool.recipe_sha256) { throw 'Installed bytes differ' }
