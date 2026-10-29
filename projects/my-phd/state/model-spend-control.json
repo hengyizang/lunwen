@@ -38,6 +38,15 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
+    },
+    "fff1253bd2e84377b28813ea702f8abe": {
+      "at": "2026-10-29T16:04:20+00:00",
+      "call_id": "argon-chat-high|statistical-interpretation",
+      "kind": "new_call",
+      "max_cost_cny": 0.4306764,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
