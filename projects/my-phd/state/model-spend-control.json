@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "7bd65c9d0ba1451a8890312c2667b112": {
-      "at": "2026-10-29T15:54:59+00:00",
-      "call_id": "kimi-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 4.827865,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -122,8 +113,12 @@
     {
       "actual_cost_cny": 0.00025886,
       "receipt_id": "41aa0d58b8a94d1ab28070793b4f400d"
+    },
+    {
+      "actual_cost_cny": 0.00446745,
+      "receipt_id": "7bd65c9d0ba1451a8890312c2667b112"
     }
   ],
-  "spent_cny": 0.0987334,
+  "spent_cny": 0.10320085,
   "tranche_cny": 300
 }
