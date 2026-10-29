@@ -45,8 +45,47 @@ existing paper contract, claim matrix and paragraph argument ledger.
 
 Before drafting, compare each candidate with closest and adjacent work, use
 different perspectives without manufacturing agreement, and preserve rejected
-ideas with reasons. Use sensitivity analysis for direction weights only;
-do not let a weighted score waive originality or falsification requirements.
+ideas with reasons. Direction-ranking weights remain separate from optional
+candidate-rating weights; neither can waive originality or falsification.
+
+The register also requires innovation_screening (schema_version=1.0):
+- scope: focal_question matching argument_plan, one doctoral_question, in/out
+  scope and real/assumed/negotiable/unknown constraints;
+- generation: chosen method/reason, truthful contributors and represented/missing
+  perspectives, prior examples, independence/deviations, hash-bound initial and
+  post_evidence round records, and any cluster/merge/split events retaining originals;
+- assumptions: IDs, category/status, affected candidate IDs, located evidence,
+  test_or_check and failure_consequence;
+- candidates: exactly one record per hypothesis with mechanism, assumption_ids,
+  support/challenge anchors, evidence_gaps/search_limits, prior_exposure,
+  adversarial_checks, disposition and gate_status;
+- comparisons: every unordered candidate pair, mechanism/prediction differences,
+  distinguishing_test, exact shared_assumption_ids and common_failure_risk;
+- evaluation: explicit criteria/anchors, narrative or optional weighted_matrix,
+  original/revised ratings, missingness, dissent and limitations. Never fill a
+  missing rating with zero or present plausible ranges as confidence intervals.
+
+Keep the native schema and docs/INNOVATION-SCREENING.md available while preparing
+these records. Exact duplicate hypothesis/prediction/difference tuples fail;
+semantic independence remains a question for the existing independent critic.
+Candidates may share legitimate doctoral background assumptions. They must not
+silently become unrelated doctoral topics. Retain all rejected/deferred ideas.
+
+Record seen data, outcomes and analyses. Same-observation follow-up remains
+exploratory; describe new data or untouched holdout for a future confirmatory
+test. If human-first or independent generation did not happen, record that
+deviation rather than inventing participants or independence. Keep adversarial
+checks as proposed challenges/responses until actually independently reviewed.
+The existing critic must assess candidate differences, joint failure risks,
+source gaps and dispositions, and the writer resolves those findings item by item.
+
+Choose one useful creative method for the current obstacle: assumption reversal,
+boundary/scale change, source-to-target analogy with mismatches, morphological
+combinations, SCAMPER, constraint ladder or failure premortem. Use the relevant
+pinned brainstorming reference; do not stack all methods or manufacture an
+expert panel/Delphi process from repeated model samples. Separate source-system
+evidence from target-system predictions. Include an inconclusive/control-failure
+condition in the minimum test, alongside existing continue/revise/stop criteria.
 
 The control plane creates program/hypothesis-audit.json. Its pass means that
 the register is structurally complete and anchors are replayable. It does not

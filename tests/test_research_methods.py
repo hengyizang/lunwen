@@ -66,6 +66,7 @@ class ResearchMethodTests(unittest.TestCase):
                 "novelty_status": "prior_art_search_required", "evidence_status": "hypothesis"}
 
     def register(self):
+        from tests.test_innovation_screening import screening
         value = {"schema_version": "1.0", "scope": "specific_topics_after_direction_screening",
                  "direction_id": "screened-direction", "automatic_selection": False,
                  "hypotheses": [self.idea(f"H{i}") for i in range(3)],
@@ -74,6 +75,10 @@ class ResearchMethodTests(unittest.TestCase):
                                    "forbidden_claims": ["Causality has been established."],
                                    "planned_evidence": ["Preregistered intervention analysis"],
                                    "stopping_conditions": ["Data rights are unavailable."]}}
+        for index, hypothesis in enumerate(value["hypotheses"]):
+            hypothesis["hypothesis"] = f"Synthetic mechanism {index} changes the measured response."
+        value["innovation_screening"] = screening(self.project, value["hypotheses"], self.evidence,
+            question=value["argument_plan"]["research_question"])
         path = write_json(self.project / "program/hypothesis-register.json", value)
         return value, path
 
