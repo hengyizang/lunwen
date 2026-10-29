@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "7e463641dc52452198b6e3d8ebbba271": {
-      "at": "2026-10-29T15:58:52+00:00",
-      "call_id": "terra-medium|engineering-review",
-      "kind": "new_call",
-      "max_cost_cny": 0.157451,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -142,8 +133,12 @@
     {
       "actual_cost_cny": 0.00048822,
       "receipt_id": "e130000c522a47399be4a5a5efb870a8"
+    },
+    {
+      "actual_cost_cny": 0.00048222,
+      "receipt_id": "7e463641dc52452198b6e3d8ebbba271"
     }
   ],
-  "spent_cny": 0.11917037,
+  "spent_cny": 0.11965259,
   "tranche_cny": 300
 }
