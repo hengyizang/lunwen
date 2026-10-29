@@ -1622,6 +1622,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "kimi-high|engineering-review",
+      "route_id": "kimi-high",
+      "case_id": "engineering-review",
+      "task_class": "engineering-code-review",
+      "partition": "calibration",
+      "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+      "provider": "codekey-kimi",
+      "requested_model": "kimi-k3.1-pro",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 4.828047,
+      "project_reservation_id": "9668649a075e47ee80f07441f1deb587",
+      "meter_before": {
+        "provider": "codekey-kimi",
+        "kind": "codekey_total_actual_cost",
+        "requests": 1,
+        "cost_cny": 0.00446745,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "40905696013",
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
     }
   ],
   "legacy_budget_reservations": {
