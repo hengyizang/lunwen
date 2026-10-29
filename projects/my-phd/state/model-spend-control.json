@@ -38,6 +38,15 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
+    },
+    "a69ac4e2adea4934ad5a260510cf364d": {
+      "at": "2026-10-29T16:08:04+00:00",
+      "call_id": "kimi-high|statistical-interpretation",
+      "kind": "new_call",
+      "max_cost_cny": 4.837693,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
