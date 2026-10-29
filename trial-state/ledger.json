@@ -1211,9 +1211,52 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "{\"year\":2025,\"sample_size\":120,\"primary_difference\":-0.12,\"lower_ci\":-0.31,\"upper_ci\":0.07,\"reported_p_value\":null,\"causal_effect_established\":false,\"source_locations\":{\"year\":\"F1 L1\",\"sample_size\":\"F1 L1\",\"primary_difference\":\"F1 L2\",\"lower_ci\":\"F1 L2\",\"upper_ci\":\"F1 L2\",\"reported_p_value\":\"F1 L3\",\"causal_effect_established\":\"F1 L3\"}}",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4614,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 286,
+        "output_tokens_details": {
+          "reasoning_tokens": 170
+        }
+      },
+      "request_id": "resp_0a4f15a4834f4d66016ae36c8fe554819182b3116c3c7f7b73",
+      "endpoint": "https://cheapai.info/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "0dcdcde75c09e0dfd1c6d53875cae7b89f32f6407b6f2ca641f0fa73ce908ddb",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "2025": true,
+          "120": true,
+          "-0.12": true,
+          "-0.31": true,
+          "0.07": true,
+          "null": true
+        },
+        "forbidden_fragments_absent": {
+          "p < 0.05": true,
+          "p<0.05": true
+        },
+        "expected_json": {
+          "year": true,
+          "sample_size": true,
+          "primary_difference": true,
+          "lower_ci": true,
+          "upper_ci": true,
+          "reported_p_value": true,
+          "causal_effect_established": true
+        }
+      },
+      "duration_seconds": 10.855
     }
   ],
   "legacy_budget_reservations": {
