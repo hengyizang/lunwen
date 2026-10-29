@@ -21,15 +21,6 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
-    "01bcfcaceb3c4dbaab51501da6068ec9": {
-      "at": "2026-10-29T15:52:28+00:00",
-      "call_id": "argon-chat-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 0.4297692,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
@@ -106,8 +97,12 @@
     {
       "actual_cost_cny": 0.0054677,
       "receipt_id": "2eadb4d9dcb1437a87faa82bbb6d5c3a"
+    },
+    {
+      "actual_cost_cny": 0.0048902,
+      "receipt_id": "01bcfcaceb3c4dbaab51501da6068ec9"
     }
   ],
-  "spent_cny": 0.0927933,
+  "spent_cny": 0.0976835,
   "tranche_cny": 300
 }
