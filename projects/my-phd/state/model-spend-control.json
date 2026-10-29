@@ -38,15 +38,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "e130000c522a47399be4a5a5efb870a8": {
-      "at": "2026-10-29T15:58:16+00:00",
-      "call_id": "terra-high|engineering-review",
-      "kind": "new_call",
-      "max_cost_cny": 0.157451,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
@@ -138,8 +129,12 @@
     {
       "actual_cost_cny": 0.0076174,
       "receipt_id": "a9bf91a96e304edf80dd742e9bc3adf9"
+    },
+    {
+      "actual_cost_cny": 0.00048822,
+      "receipt_id": "e130000c522a47399be4a5a5efb870a8"
     }
   ],
-  "spent_cny": 0.11868215,
+  "spent_cny": 0.11917037,
   "tranche_cny": 300
 }
