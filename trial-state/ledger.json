@@ -2187,9 +2187,45 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "**Interpretation (synthetic fixture only; not scientific evidence):**\n\n- **Supported:** The prespecified primary effect was estimated at **0.08**, below the **0.10** practical threshold, and all three preregistered seed runs completed with integrity checks. The observed seed effects were **−0.02, 0.08, and 0.18**.\n- **Unresolved:** The 95% interval **[-0.04, 0.20]** includes both no effect and effects above the practical threshold, so practical benefit is not established and a meaningful effect is not excluded. Seed-to-seed variation is also unresolved. No equivalence margin or equivalence test was registered, so equivalence cannot be claimed. The exploratory subgroup effect of **0.35** is hypothesis-generating only because it was found after observing all outcomes.\n- **Next discriminating check:** A preregistered confirmatory study with adequate precision and a prespecified analysis of all seeds—and, if equivalence is the question, a prespecified equivalence margin and test. A preregistered subgroup test would be needed to evaluate the 0.35 signal. This is an imprecision/design issue, not a software bug.",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "prompt_tokens": 227,
+        "completion_tokens": 719,
+        "input_tokens": 227,
+        "output_tokens": 719,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "request_id": "fbc72118d138321d02fa9ad80ec2f998",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "deepseek_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "7a2abf0f692343f17d333f47da0a3ab926afd1b123989d382c9a50669db764a0",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "0.08": true,
+          "-0.04": true,
+          "0.20": true,
+          "0.10": true,
+          "exploratory": true
+        },
+        "forbidden_fragments_absent": {
+          "equivalence is established": true,
+          "the methods are equivalent": true,
+          "software bug caused": true,
+          "statistically significant improvement": true
+        }
+      },
+      "duration_seconds": 6.9902
     }
   ],
   "legacy_budget_reservations": {
