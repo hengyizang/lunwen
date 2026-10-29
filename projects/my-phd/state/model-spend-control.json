@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "2f2db4a47658447bb60628e5e99a73ad": {
-      "at": "2026-10-29T16:06:07+00:00",
-      "call_id": "terra-high|statistical-interpretation",
-      "kind": "new_call",
-      "max_cost_cny": 0.158193,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -166,8 +157,12 @@
     {
       "actual_cost_cny": 0.0167748,
       "receipt_id": "fff1253bd2e84377b28813ea702f8abe"
+    },
+    {
+      "actual_cost_cny": 0.00038082,
+      "receipt_id": "2f2db4a47658447bb60628e5e99a73ad"
     }
   ],
-  "spent_cny": 0.17431302,
+  "spent_cny": 0.17469384,
   "tranche_cny": 300
 }
