@@ -1,0 +1,616 @@
+{
+  "trial_id": "model-evaluation-20261029",
+  "scope": {
+    "authorization": "model-evaluation-20261029-owner-paid-with-legacy-holds",
+    "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+    "plan_sha256": "99c6bdc51f77c8075a43632507b05eb502c0d014d0fc079bfbb1237d06798ce7",
+    "prices_sha256": "8a1287ba4aa1560914b03d84719694a53dda1ad0a55a591a3c0659f78c71deb9",
+    "max_calls": 40,
+    "project": "my-phd",
+    "project_ceiling_cny": 500,
+    "gemini_legacy_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+    "gemini_legacy_cny": 9.5836104,
+    "deepseek_legacy_cny": 0.0625758,
+    "routes": [
+      {
+        "id": "argon-native-high",
+        "provider": "codekey-gemini",
+        "model": "gemini-4-argon",
+        "effort": "high"
+      },
+      {
+        "id": "argon-chat-high",
+        "provider": "codekey-gemini-chat",
+        "model": "gemini-4-argon",
+        "effort": "high"
+      },
+      {
+        "id": "terra-high",
+        "provider": "codekey-codex-pro",
+        "model": "gpt-6.1-terra",
+        "effort": "high"
+      },
+      {
+        "id": "terra-medium",
+        "provider": "codekey-codex-pro",
+        "model": "gpt-6.1-terra",
+        "effort": "medium",
+        "case_ids": [
+          "source-extraction",
+          "engineering-review",
+          "statistical-interpretation"
+        ]
+      },
+      {
+        "id": "deepseek-high",
+        "provider": "codekey-deepseek",
+        "model": "deepseek-v4.1-flash",
+        "effort": "high"
+      },
+      {
+        "id": "kimi-high",
+        "provider": "codekey-kimi",
+        "model": "kimi-k3.1-pro",
+        "effort": "high"
+      },
+      {
+        "id": "sol-high",
+        "provider": "cheapai-gpt-pro",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      }
+    ],
+    "quotes": {
+      "argon-native-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-gemini",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "model": "gemini-4-argon",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "conservative-nonpromotion-2026-10-19-owner-numeric-CNY-x030",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "e03124a38bed7f49b1b45af3f3ad223c109652015b4638aa24fe9802ffaf2e6e"
+      },
+      "argon-chat-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-gemini-chat",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "gemini-4-argon",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-gemini-chat",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "conservative-nonpromotion-2026-10-19-owner-numeric-CNY-x030",
+        "input_per_million": 1.2,
+        "output_per_million": 6.0,
+        "cache_read_per_million": 0.06,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "f124651ed70ee8e10088b0df6a4bfefc64c69d7bed0a7d96509ec6d18613b2aa"
+      },
+      "terra-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-codex-pro",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-6.1-terra",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-codex-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-conservative-ceiling-20261029-owner-numeric-CNY",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.2,
+            "output_per_million": 1.0,
+            "cache_read_per_million": 0.010000000000000002,
+            "cache_write_per_million": 0.5
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.4,
+            "output_per_million": 1.5,
+            "cache_read_per_million": 0.020000000000000004,
+            "cache_write_per_million": 1.0
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "4ac13d27e98f07c7bb143c7142f0e271df02fbb362d029d712aba7db82631cda"
+      },
+      "terra-medium": {
+        "quote_schema": "2.0",
+        "provider": "codekey-codex-pro",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "model": "gpt-6.1-terra",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-codex-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-conservative-ceiling-20261029-owner-numeric-CNY",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.2,
+            "output_per_million": 1.0,
+            "cache_read_per_million": 0.010000000000000002,
+            "cache_write_per_million": 0.5
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.4,
+            "output_per_million": 1.5,
+            "cache_read_per_million": 0.020000000000000004,
+            "cache_write_per_million": 1.0
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "4ac13d27e98f07c7bb143c7142f0e271df02fbb362d029d712aba7db82631cda"
+      },
+      "deepseek-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-deepseek",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "deepseek-v4.1-flash",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "official-domestic-CNY-peak-2026-10-19-x010",
+        "input_per_million": 0.2,
+        "output_per_million": 0.8,
+        "cache_read_per_million": 0.004,
+        "cache_write_per_million": 0.0,
+        "tool_fees": {},
+        "quote_sha256": "945b698dc980c1d1de5c97f82c1e954175dbb032df6cae8e1d4d56dc072387be"
+      },
+      "kimi-high": {
+        "quote_schema": "2.0",
+        "provider": "codekey-kimi",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "model": "kimi-k3.1-pro",
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-kimi",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "conservative-official-domestic-CNY-1x-until-relay-tariff-verified-20261029",
+        "input_per_million": 13.0,
+        "output_per_million": 68.0,
+        "cache_read_per_million": 1.3,
+        "cache_write_per_million": 13.0,
+        "tool_fees": {},
+        "quote_sha256": "06b784fb478a7e191e5be5c3a0104f42b2dff74e0cf400fa411b03d31fefba22"
+      },
+      "sol-high": {
+        "quote_schema": "2.0",
+        "provider": "cheapai-gpt-pro",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "model": "gpt-6.1-sol",
+        "billing_identity": {
+          "plan": "production",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "currency": "CNY",
+        "price_version": "relay-public-2026-10-19-owner-numeric-CNY",
+        "context_basis": "full_request_input_tokens",
+        "context_brackets": [
+          {
+            "min_input_tokens": 0,
+            "max_input_tokens": 272000,
+            "input_per_million": 0.44,
+            "output_per_million": 2.2,
+            "cache_read_per_million": 0.22,
+            "cache_write_per_million": 2.75,
+            "cache_write_5m_per_million": 2.75,
+            "cache_write_1h_per_million": 4.4
+          },
+          {
+            "min_input_tokens": 272001,
+            "max_input_tokens": null,
+            "input_per_million": 0.88,
+            "output_per_million": 3.3,
+            "cache_read_per_million": 0.44,
+            "cache_write_per_million": 5.5,
+            "cache_write_5m_per_million": 5.5,
+            "cache_write_1h_per_million": 8.8
+          }
+        ],
+        "tool_fees": {},
+        "quote_sha256": "047330c88861d9b3369cef6f320eb5e2ed8c1dabf9608365a823dd603e4d1767"
+      }
+    },
+    "queue": [
+      {
+        "call_id": "argon-native-high|source-extraction",
+        "route_id": "argon-native-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4297692
+      },
+      {
+        "call_id": "argon-chat-high|source-extraction",
+        "route_id": "argon-chat-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4297692
+      },
+      {
+        "call_id": "terra-high|source-extraction",
+        "route_id": "terra-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.157437
+      },
+      {
+        "call_id": "terra-medium|source-extraction",
+        "route_id": "terra-medium",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.157437
+      },
+      {
+        "call_id": "deepseek-high|source-extraction",
+        "route_id": "deepseek-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0601594
+      },
+      {
+        "call_id": "kimi-high|source-extraction",
+        "route_id": "kimi-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.827865
+      },
+      {
+        "call_id": "sol-high|source-extraction",
+        "route_id": "sol-high",
+        "case_id": "source-extraction",
+        "case_sha256": "4a735677a6f63dd09e92740109044f11fad65d8672b800210b9da2932ba90cce",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.81774
+      },
+      {
+        "call_id": "argon-native-high|engineering-review",
+        "route_id": "argon-native-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.429786
+      },
+      {
+        "call_id": "argon-chat-high|engineering-review",
+        "route_id": "argon-chat-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.429786
+      },
+      {
+        "call_id": "terra-high|engineering-review",
+        "route_id": "terra-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.157451
+      },
+      {
+        "call_id": "terra-medium|engineering-review",
+        "route_id": "terra-medium",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.157451
+      },
+      {
+        "call_id": "deepseek-high|engineering-review",
+        "route_id": "deepseek-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0601622
+      },
+      {
+        "call_id": "kimi-high|engineering-review",
+        "route_id": "kimi-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.828047
+      },
+      {
+        "call_id": "sol-high|engineering-review",
+        "route_id": "sol-high",
+        "case_id": "engineering-review",
+        "case_sha256": "64290427a6f96aee93f8b230ddece91089bdb87a920c814e7b658092759e1076",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.8178632
+      },
+      {
+        "call_id": "argon-native-high|statistical-interpretation",
+        "route_id": "argon-native-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4306764
+      },
+      {
+        "call_id": "argon-chat-high|statistical-interpretation",
+        "route_id": "argon-chat-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4306764
+      },
+      {
+        "call_id": "terra-high|statistical-interpretation",
+        "route_id": "terra-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.158193
+      },
+      {
+        "call_id": "terra-medium|statistical-interpretation",
+        "route_id": "terra-medium",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.158193
+      },
+      {
+        "call_id": "deepseek-high|statistical-interpretation",
+        "route_id": "deepseek-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0603106
+      },
+      {
+        "call_id": "kimi-high|statistical-interpretation",
+        "route_id": "kimi-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.837693
+      },
+      {
+        "call_id": "sol-high|statistical-interpretation",
+        "route_id": "sol-high",
+        "case_id": "statistical-interpretation",
+        "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.8243928
+      },
+      {
+        "call_id": "argon-native-high|discriminating-experiment",
+        "route_id": "argon-native-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4321632
+      },
+      {
+        "call_id": "argon-chat-high|discriminating-experiment",
+        "route_id": "argon-chat-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4321632
+      },
+      {
+        "call_id": "terra-high|discriminating-experiment",
+        "route_id": "terra-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.159432
+      },
+      {
+        "call_id": "deepseek-high|discriminating-experiment",
+        "route_id": "deepseek-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0605584
+      },
+      {
+        "call_id": "kimi-high|discriminating-experiment",
+        "route_id": "kimi-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.8538
+      },
+      {
+        "call_id": "sol-high|discriminating-experiment",
+        "route_id": "sol-high",
+        "case_id": "discriminating-experiment",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.835296
+      },
+      {
+        "call_id": "argon-native-high|writing-integrity",
+        "route_id": "argon-native-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4325916
+      },
+      {
+        "call_id": "argon-chat-high|writing-integrity",
+        "route_id": "argon-chat-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4325916
+      },
+      {
+        "call_id": "terra-high|writing-integrity",
+        "route_id": "terra-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.159789
+      },
+      {
+        "call_id": "deepseek-high|writing-integrity",
+        "route_id": "deepseek-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0606298
+      },
+      {
+        "call_id": "kimi-high|writing-integrity",
+        "route_id": "kimi-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.858441
+      },
+      {
+        "call_id": "sol-high|writing-integrity",
+        "route_id": "sol-high",
+        "case_id": "writing-integrity",
+        "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.8384376
+      },
+      {
+        "call_id": "argon-native-high|evidence-conflict",
+        "route_id": "argon-native-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4328436
+      },
+      {
+        "call_id": "argon-chat-high|evidence-conflict",
+        "route_id": "argon-chat-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.4328436
+      },
+      {
+        "call_id": "terra-high|evidence-conflict",
+        "route_id": "terra-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.159999
+      },
+      {
+        "call_id": "deepseek-high|evidence-conflict",
+        "route_id": "deepseek-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.0606718
+      },
+      {
+        "call_id": "kimi-high|evidence-conflict",
+        "route_id": "kimi-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 4.861171
+      },
+      {
+        "call_id": "sol-high|evidence-conflict",
+        "route_id": "sol-high",
+        "case_id": "evidence-conflict",
+        "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+        "max_output_tokens": 8192,
+        "timeout": 300,
+        "reserved_ceiling_cny": 0.8402856
+      }
+    ],
+    "automatic_promotion": false,
+    "independent_human_ratings_supplied": false,
+    "scientific_equivalence_verified": false
+  },
+  "status": "running",
+  "entries": [],
+  "legacy_budget_reservations": {
+    "gemini": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+    "deepseek": "97bdea2e1dd64aaaaa68dfa390e9ec76"
+  },
+  "quarantined_routes": [],
+  "authorization_note": "Owner requested four model tests and full task reassessment on 2026-10-29, then replied 不要在意费用 to the question explicitly naming the old unknown holds. Preserve the existing CNY500 project ceiling and the full CNY9.5836104 legacy hold; no CNY30 trial sublimit. New unknown charges stop. No automatic route promotion. Free metadata additionally identified one pre-existing DeepSeek unknown debit with a CNY0.0625758 ceiling. Occupy this full amount separately before the new paid trial; preserve its source ledger and never relabel it as settled. The unrelated discounted Codex credential is not selected or unblocked.",
+  "automatic_promotion": false,
+  "independent_human_ratings_supplied": false,
+  "scientific_equivalence_verified": false,
+  "production_routing_changed": false
+}
