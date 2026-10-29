@@ -147,6 +147,48 @@ class ResearchSearchTreeTests(unittest.TestCase):
         self.assertEqual(result["nodes"][-1]["status"], "executed_unknown_pending_scientific_review")
         self.assertIn("execution_status_unknown", result["nodes"][-1]["observed_conditions"])
 
+    def test_retired_failed_parent_connects_to_new_plan_without_relabeling_frozen_history(self):
+        frozen = ["experiments/plan.json", "experiments/registry.jsonl", "data/development.csv", "experiments/model.py", "state/run.json",
+                  "papers/P01/preregistration.json", "papers/P01/experiment-evidence-plan.json", "papers/P01/experiments/main.json"]
+        files, retained, receipts = [], [], []
+        for relative in frozen:
+            archive = "experiments/history/v001/files/" + relative
+            target = self.project / archive
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((self.project / relative).read_bytes())
+            files.append({"path": relative, "sha256": sha(target), "archive": archive})
+        for item in (self.one, self.two, self.three):
+            path = "experiments/runs/" + item["attempt_id"] + "/run.json"
+            receipts.append({"path": path, "sha256": sha(self.project / path)})
+            for output in item["outputs"]:
+                path = "experiments/recovery-artifacts/" + item["attempt_id"] + "/" + output["sha256"] + ".json"
+                target = self.project / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((self.project / output["path"]).read_bytes())
+                retained.append({"path": path, "sha256": output["sha256"], "original_path": output["path"], "attempt_id": item["attempt_id"]})
+        write(self.project / "experiments/history/v001/manifest.json", {"version": "v001", "files": files, "attempt_receipts": receipts, "retained_outputs": retained})
+        write(self.project / "state/primary-recovery/versions/v001.json", {"manifest_sha256": sha(self.project / "experiments/history/v001/manifest.json")})
+        (self.project / "experiments/registry.jsonl").write_text("", encoding="utf-8")
+        self.fixture.plan["runs"] = [{**self.fixture.plan["runs"][1], "run_id": "new-two"}]
+        write(self.project / "experiments/plan.json", self.fixture.plan)
+        self.iteration = self.fixture.prepare()
+        self.request["iteration_report"] = self.iteration["report_path"]
+        self.request["nodes"] = [self.request["nodes"][0], {"node_id": "repair", "parent_id": "initial", "branch_kind": "debug", "run_id": "new-two"}]
+        self.save()
+        result = self.prepare()
+        self.assertFalse(result["nodes"][0]["run_in_current_plan"])
+        self.assertEqual(result["nodes"][0]["history_version"], "v001")
+        self.assertEqual(result["nodes"][0]["actual_analysis_phase"], ["confirmatory"])
+        self.assertTrue(result["nodes"][0]["attempt_plan_binding"]["path"].startswith("experiments/history/v001/"))
+        self.assertEqual(result["nodes"][1]["status"], "planned_not_executed")
+        self.assertEqual(result["all_attempt_count"], 3)
+        self.assertEqual(result["unrepresented_attempt_count"], 2)
+        self.assertTrue(self.context(result))
+        self.request["nodes"][0].pop("attempt_id")
+        self.save()
+        with self.assertRaisesRegex(ValueError, "exact retired executor attempt"):
+            self.prepare()
+
     def test_changed_sources_module_or_report_invalidate_existing_context(self):
         result = self.prepare()
         for relative, base in (("experiments/model.py", self.project),

@@ -50,7 +50,7 @@ def _prepare(project, request_file, root):
     nodes = request.get("nodes")
     if not isinstance(nodes, list) or not 1 <= len(nodes) <= 50:
         raise ValueError("search tree needs one to fifty declared nodes")
-    indexed = {}
+    indexed, scopes = {}, {}
     for node in nodes:
         if (not isinstance(node, dict) or set(node) - {"node_id", "parent_id", "branch_kind", "run_id", "attempt_id", "workflow_phase"}
                 or not {"node_id", "parent_id", "branch_kind", "run_id"} <= set(node)):
@@ -58,8 +58,8 @@ def _prepare(project, request_file, root):
         name = _id(node["node_id"])
         if name in indexed:
             raise ValueError("duplicate search node ID")
-        if not isinstance(node["run_id"], str) or node["run_id"] not in planned:
-            raise ValueError("search node must identify an existing planned run")
+        if not isinstance(node["run_id"], str):
+            raise ValueError("search node must identify an existing run")
         if not isinstance(node["branch_kind"], str) or node["branch_kind"] not in {"root", "debug", "variation"}:
             raise ValueError("search branch must be root, debug or variation")
         if node["parent_id"] is not None:
@@ -69,9 +69,21 @@ def _prepare(project, request_file, root):
         if "attempt_id" in node and not isinstance(node["attempt_id"], str):
             raise ValueError("attempt_id must name an exact existing executor attempt")
         attempt = attempts.get(node.get("attempt_id"))
+        current_run = planned.get(node["run_id"])
         if "attempt_id" in node and (attempt is None or attempt["run_id"] != node["run_id"]
-                or attempt["paper_id"] != planned[node["run_id"]].get("paper_id")):
+                or current_run and attempt["paper_id"] != current_run.get("paper_id")):
             raise ValueError("node has no matching real executor attempt")
+        if current_run is None:
+            # Retired parent runs use their already sealed recovery history;
+            # no caller-supplied plan or unexecuted historical node is accepted.
+            binding = attempt.get("plan_binding") if attempt else None
+            if not attempt or not attempt["history_version"] or not binding:
+                raise ValueError("noncurrent run requires an exact retired executor attempt and sealed plan")
+            old_plan = path_in(project, binding["path"])
+            old_run = next((r for r in read(old_plan)["runs"] if r["run_id"] == node["run_id"]), None)
+            if sha(old_plan) != binding["sha256"] or not old_run or old_run.get("paper_id") != attempt["paper_id"]:
+                raise ValueError("retired attempt does not match its sealed plan")
+        scopes[name] = attempt["paper_id"] if attempt else current_run.get("paper_id")
         if (node["parent_id"] is None) != (node["branch_kind"] == "root"):
             raise ValueError("only root nodes have no parent")
         indexed[name] = node
@@ -88,7 +100,7 @@ def _prepare(project, request_file, root):
         if parent is not None and parent not in indexed:
             raise ValueError("search parent is absent")
         parent_depth = depth(parent) if parent is not None else 0
-        if parent is not None and planned[indexed[parent]["run_id"]].get("paper_id") != planned[node["run_id"]].get("paper_id"):
+        if parent is not None and scopes[parent] != scopes[name]:
             raise ValueError("a search branch cannot silently cross paper scope")
         depths[name] = (parent_depth + 1 if node["branch_kind"] == "debug" else 0)
         visiting.remove(name)
@@ -113,7 +125,8 @@ def _prepare(project, request_file, root):
         state = ("executed_" + status + "_pending_scientific_review" if attempt else
                  "attempt_not_selected" if known else "planned_not_executed")
         fact = {"node_id": name, "parent_id": node["parent_id"], "branch_kind": node["branch_kind"],
-                "run_id": node["run_id"], "paper_id": planned[node["run_id"]].get("paper_id"),
+                "run_id": node["run_id"], "paper_id": scopes[name],
+                "run_in_current_plan": node["run_id"] in planned,
                 "attempt_id": node.get("attempt_id"), "known_attempt_ids": known,
                 "status": state, "actual_analysis_phase": attempt["analysis_phase"] if attempt else None,
                 "declared_workflow_phase": node.get("workflow_phase"), "workflow_phase_verified": False,

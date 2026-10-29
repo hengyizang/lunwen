@@ -49,7 +49,7 @@
 {"action":"research_search_tree","request_file":"program/research-search-tree.json"}
 ```
 
-`kind`、`id`、`iteration_report`、`nodes` 必填。请求限 64 KB，节点 1–50 个。节点 ID 唯一，`run_id` 必须出自当前计划，指定的 `attempt_id` 必须对应 iteration 报告中的该运行；不会自动选择最后一次或最高分尝试。同一真实尝试不能扮演多个节点。多个根表示并列路径；非根须引用同论文内的既有父节点，循环或缺失父节点被拒绝。
+`kind`、`id`、`iteration_report`、`nodes` 必填。请求限 64 KB，节点 1–50 个。节点 ID 唯一，未执行的 `run_id` 必须出自当前计划，指定的 `attempt_id` 必须对应 iteration 报告中的该运行和论文。旧计划已按原恢复机制封存时，也可用精确历史尝试及其封印计划作为父节点，连接“旧失败→新计划”；不能填入未执行的历史节点或把旧尝试归到另一篇论文。报告分别显示当前计划成员、历史版本和真实尝试计划，不会自动选择最后一次或最高分尝试。同一真实尝试不能扮演多个节点。多个根表示并列路径；非根须引用同论文内的既有父节点，循环或缺失父节点被拒绝。
 
 - `branch_kind` 是 `root`、`debug` 或 `variation`。`debug` 的父节点必须绑定实际失败或超时、并具有工程失败或执行不完整诊断的回执。低分、无显著性和负结果不构成调试理由。
 - 可选 `workflow_phase` 为 `investigation`、`tuning`、`main`、`ablation`，只是声明的工作分类。报告同时保留原协议封印的真实 `analysis_phase`；声明不能重标探索性/验证性实验。
