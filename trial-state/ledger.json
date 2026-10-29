@@ -1573,9 +1573,41 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "{\n  \"defects\": [\n    {\n      \"quoted_line\": \"L2:     kept = [v for v in values if v]\",\n      \"trigger\": \"Calling mean_kept([0, 2]) filters out the numeric zero because 0 is falsy, producing 2.0 instead of the contract-required result 1.0.\",\n      \"minimal_remedy\": \"Replace the line with `kept = list(values)` so numeric zeros are retained.\"\n    },\n    {\n      \"quoted_line\": \"L3:     return sum(kept) / len(kept)\",\n      \"trigger\": \"Calling mean_kept([]) divides by zero and raises ZeroDivisionError instead of the contract-required clear ValueError.\",\n      \"minimal_remedy\": \"Add `if not kept: raise ValueError(\\\"mean_kept requires a non-empty sequence\\\")` before the return.\"\n    }\n  ],\n  \"tests\": [\n    {\n      \"name\": \"retains_numeric_zero\",\n      \"call\": \"mean_kept([0, 2])\",\n      \"expected\": 1.0,\n      \"status\": \"not_run\"\n    },\n    {\n      \"name\": \"retains_single_numeric_zero\",\n      \"call\": \"mean_kept([0])\",\n      \"expected\": 0.0,\n      \"status\": \"not_run\"\n    },\n    {\n      \"name\": \"empty_sequence_raises_clear_value_error\",\n      \"call\": \"mean_kept([])\",\n      \"expected_exception\": \"ValueError\",\n      \"expected_message_substring\": \"non-empty\",\n      \"status\": \"not_run\"\n    }\n  ]\n}",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "prompt_tokens": 197,
+        "completion_tokens": 3080,
+        "input_tokens": 197,
+        "output_tokens": 3080,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "request_id": "5f8046b14ab86e5b8264dda63c355554",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "deepseek_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "f84ca72984d73d8b8f72f81740fc64da23a43a64e5be7c24f412b9feaf3f6fc3",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "if v": true,
+          "len(kept)": true,
+          "ValueError": true
+        },
+        "forbidden_fragments_absent": {
+          "all tests passed": true,
+          "tests have passed": true
+        }
+      },
+      "duration_seconds": 16.6484
     }
   ],
   "legacy_budget_reservations": {
