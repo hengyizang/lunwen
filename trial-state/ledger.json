@@ -2166,6 +2166,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "deepseek-high|statistical-interpretation",
+      "route_id": "deepseek-high",
+      "case_id": "statistical-interpretation",
+      "task_class": "scientific-interpretation",
+      "partition": "calibration",
+      "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+      "provider": "codekey-deepseek",
+      "requested_model": "deepseek-v4.1-flash",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.0603106,
+      "project_reservation_id": "07afe99e0fd6439ab59d780825da33d9",
+      "meter_before": {
+        "provider": "codekey-deepseek",
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.00201124,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "40905696013",
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
     }
   ],
   "legacy_budget_reservations": {
