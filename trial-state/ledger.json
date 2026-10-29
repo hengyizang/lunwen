@@ -2529,9 +2529,11 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "failed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "diagnostic": "API HTTP 400; no automatic generation retry; reconcile billing",
+      "duration_seconds": 120.6389
     }
   ],
   "legacy_budget_reservations": {
