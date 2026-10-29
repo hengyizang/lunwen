@@ -1895,9 +1895,43 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "**Fixture & Governance Notice:** All source material (R1–R3) is a **synthetic software fixture, not scientific evidence**. This answer cannot approve research or change a frozen scientific plan.\n\n**Concise Interpretation:** Within this synthetic software fixture, the prespecified primary outcome (0.08; 95% interval [-0.04, 0.20]) is inconclusive due to estimation imprecision across preregistered seeds (-0.02, 0.08, 0.18), neither demonstrating an effect at or above the 0.10 practical threshold nor establishing equivalence/null effect.\n\n### Supported\n* **Execution integrity (not a software bug):** All three preregistered fixture runs (-0.02, 0.08, 0.18) completed and passed integrity checks (R2). Seed-to-seed spread and the wide 95% interval reflect statistical imprecision, not a software bug.\n* **Registered primary summary across all seeds:** Retaining all preregistered seeds without selecting favorable seeds (such as 0.18), the prespecified primary point estimate is 0.08 against a 0.10 practical threshold, with a 95% interval of [-0.04, 0.20] (R1, R2).\n* **Non-confirmatory status of subgroup and equivalence:** No equivalence margin or equivalence test was registered, and the 0.35 subgroup effect was observed post-hoc after inspecting all outcomes (R3); it is strictly exploratory and cannot replace the prespecified primary endpoint.\n\n### Unresolved & Abstentions\n* **Primary effect direction and practical magnitude:** Because the 95% interval [-0.04, 0.20] spans negative values (-0.04), zero, and values exceeding the 0.10 practical threshold (up to 0.20) (R1), whether the true synthetic software fixture effect is negative/null, positive but sub-threshold (< 0.10), or practically meaningful ($\\ge$ 0.10) remains unresolved.\n* **Equivalence:** Equivalence or absence of effect cannot be claimed from this nonsignificant interval because no equivalence margin or test was registered (R3) and effects above 0.10 remain compatible with the interval.\n* **Exploratory subgroup reproducibility:** Whether the post-hoc 0.35 subgroup outcome (R3) reflects a stable synthetic software fixture property or post-selection variance is unresolved.\n* **Abstentions for missing evidence:** The synthetic software fixture omits sample sizes, interval construction methods, power calculations, and seed-level or uncertainty estimates for the 0.35 subgroup; this interpretation abstains from any claims on those unprovided details.\n\n### Next Discriminating Check\n* Without modifying a frozen scientific plan or approving new execution, the check that would discriminate between a practically meaningful effect ($\\ge$ 0.10) and a sub-threshold/null effect—if separately authorized under a prospective protocol—is a higher-precision evaluation of the **unchanged prespecified primary endpoint** across a larger set of newly drawn, unselected preregistered seeds in the synthetic software fixture sufficient to narrow the 95% interval relative to 0 and 0.10 (with a prospectively registered equivalence margin and test if equivalence is to be evaluated). If the 0.35 subgroup is ever examined, it requires a separate prospective check on independent synthetic software fixture runs without altering the primary endpoint.",
+      "reported_model": "gemini-4-argon",
+      "usage": {
+        "input_tokens": 539,
+        "output_tokens": 6437,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 5692
+        }
+      },
+      "request_id": "Hm7japKNE8SUmtkPioKNsA8",
+      "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+      "protocol": "gemini_generate_content",
+      "completion_status": "completed",
+      "response_sha256": "0cc453fccf89a4b74f47f00fd4d636e784d84e3a86a61731fba0d80bf84831b2",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "0.08": true,
+          "-0.04": true,
+          "0.20": true,
+          "0.10": true,
+          "exploratory": true
+        },
+        "forbidden_fragments_absent": {
+          "equivalence is established": true,
+          "the methods are equivalent": true,
+          "software bug caused": true,
+          "statistically significant improvement": true
+        }
+      },
+      "duration_seconds": 87.5842
     }
   ],
   "legacy_budget_reservations": {
