@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "849577dc558e4bbf99e8f5415265ec03": {
-      "at": "2026-10-29T15:55:44+00:00",
-      "call_id": "sol-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 0.81774,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -126,8 +117,12 @@
     {
       "actual_cost_cny": 0.00446745,
       "receipt_id": "7bd65c9d0ba1451a8890312c2667b112"
+    },
+    {
+      "actual_cost_cny": 0.001916,
+      "receipt_id": "849577dc558e4bbf99e8f5415265ec03"
     }
   ],
-  "spent_cny": 0.10320085,
+  "spent_cny": 0.10511685,
   "tranche_cny": 300
 }
