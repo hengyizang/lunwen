@@ -601,7 +601,7 @@
     "independent_human_ratings_supplied": false,
     "scientific_equivalence_verified": false
   },
-  "status": "running",
+  "status": "stopped",
   "entries": [
     {
       "call_id": "argon-native-high|source-extraction",
@@ -2545,5 +2545,6 @@
   "automatic_promotion": false,
   "independent_human_ratings_supplied": false,
   "scientific_equivalence_verified": false,
-  "production_routing_changed": false
+  "production_routing_changed": false,
+  "stop_reason": "gateway debit has not uniquely appeared; retain reservation"
 }
