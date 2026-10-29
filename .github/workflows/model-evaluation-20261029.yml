@@ -1,0 +1,56 @@
+name: Owner model evaluation 20261029
+on:
+  push:
+    branches: [codex/model-evaluation-20261029]
+    paths:
+      - scripts/model_evaluation_20261029.py
+      - scripts/ai_providers.py
+      - config/model-pricing.json
+      - .github/workflows/model-evaluation-20261029.yml
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [metadata]
+        default: metadata
+permissions:
+  contents: read
+concurrency:
+  group: owner-research-cloud-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  metadata:
+    if: github.repository == 'hengyizang/lunwen' && github.actor == 'hengyizang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Check source syntax without provider credentials
+        run: python -m py_compile scripts/model_evaluation_20261029.py
+      - name: Inspect exact catalogs, independent meters and retained spending holds
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODEL_EVALUATION_MODE: ${{ inputs.mode || 'metadata' }}
+          MODEL_EVALUATION_AUTHORIZATION: model-evaluation-20261029-owner-paid-with-legacy-holds
+          DR_OS_CHEAPAI_GPT_PRO_KEY: ${{ secrets.DR_OS_CHEAPAI_GPT_PRO_KEY }}
+          DR_OS_CODEKEY_CODEX_PRO_KEY: ${{ secrets.DR_OS_CODEKEY_CODEX_PRO_KEY }}
+          DR_OS_CODEKEY_CODEX_DISCOUNT_KEY: ${{ secrets.DR_OS_CODEKEY_CODEX_DISCOUNT_KEY }}
+          DR_OS_CODEKEY_DEEPSEEK_KEY: ${{ secrets.DR_OS_CODEKEY_DEEPSEEK_KEY }}
+          DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
+          DR_OS_CODEKEY_KIMI_KEY: ${{ secrets.DR_OS_CODEKEY_KIMI_KEY }}
+        run: python -m scripts.model_evaluation_20261029
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: model-evaluation-${{ github.run_id }}
+          path: .runtime/model-evaluation-20261029/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
