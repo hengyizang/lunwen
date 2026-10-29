@@ -22,7 +22,7 @@ def screening(project, hypotheses, evidence, question=QUESTION):
     ids = [h["hypothesis_id"] for h in hypotheses]
     rounds = []
     for number, stage in enumerate(("independent", "post_evidence"), 1):
-        row = {"round_id": "round-" + str(number), "stage": stage, "candidate_ids": ids}
+        row = {"round_id": "round-" + str(number), "stage": stage, "candidate_ids": list(ids)}
         relative = "program/innovation-round-" + str(number) + ".json"
         write(project / relative, {**row, "ideas": [{"hypothesis_id": h["hypothesis_id"], "statement": h["hypothesis"], "prediction": h["prediction"], "precise_difference": h["precise_difference"]} for h in hypotheses],
             "evidence_inputs": [{"path": evidence["path"], "sha256": evidence["sha256"]}] if stage == "post_evidence" else [],
@@ -55,7 +55,7 @@ def screening(project, hypotheses, evidence, question=QUESTION):
             "independence": "unknown", "prior_examples": [], "deviations": ["AI-only synthetic fixture does not prove human-first or independent generation."],
             "rounds": rounds, "clustering_events": []},
         "assumptions": [{"assumption_id": "shared-measurement", "statement": "Measurement distinguishes the proposed mechanisms.",
-            "category": "measurement", "status": "untested", "candidate_ids": ids, "source_anchors": [],
+            "category": "measurement", "status": "untested", "candidate_ids": list(ids), "source_anchors": [],
             "test_or_check": "Compare an orthogonal measurement before expensive execution.", "failure_consequence": "All candidates relying on this instrument may fail together."}],
         "candidates": candidates, "comparisons": comparisons,
         "evaluation": {"mode": "narrative", "criteria": [{"criterion_id": "information_gain", "definition": "Potential to distinguish the competing mechanisms.",
