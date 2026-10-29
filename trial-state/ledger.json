@@ -785,9 +785,52 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "{\n  \"year\": 2025,\n  \"sample_size\": 120,\n  \"primary_difference\": -0.12,\n  \"lower_ci\": -0.31,\n  \"upper_ci\": 0.07,\n  \"reported_p_value\": null,\n  \"causal_effect_established\": false,\n  \"source_locations\": {\n    \"source_type\": \"Synthetic software test fixture, not a real study\",\n    \"year\": \"F1 L1\",\n    \"sample_size\": \"F1 L1\",\n    \"primary_difference\": \"F1 L2\",\n    \"lower_ci\": \"F1 L2\",\n    \"upper_ci\": \"F1 L2\",\n    \"reported_p_value\": \"F1 L3\",\n    \"causal_effect_established\": \"F1 L3\"\n  }\n}",
+      "reported_model": "gpt-6.1-terra",
+      "usage": {
+        "input_tokens": 6167,
+        "input_tokens_details": {
+          "cached_tokens": 5702,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 243,
+        "output_tokens_details": {
+          "reasoning_tokens": 32
+        }
+      },
+      "request_id": "resp_038a6a92bca25c2e016ae36bff6820819196ccb663146ce5b6",
+      "endpoint": "https://codekey.ai/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "45c702934717176944dca5a228e9ae2f0c0a96963350d719624ae7a0cfed26e8",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "2025": true,
+          "120": true,
+          "-0.12": true,
+          "-0.31": true,
+          "0.07": true,
+          "null": true
+        },
+        "forbidden_fragments_absent": {
+          "p < 0.05": true,
+          "p<0.05": true
+        },
+        "expected_json": {
+          "year": true,
+          "sample_size": true,
+          "primary_difference": true,
+          "lower_ci": true,
+          "upper_ci": true,
+          "reported_p_value": true,
+          "causal_effect_established": true
+        }
+      },
+      "duration_seconds": 4.2388
     }
   ],
   "legacy_budget_reservations": {
