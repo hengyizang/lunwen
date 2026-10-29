@@ -38,6 +38,15 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
+    },
+    "9e0ea235fcfb4a01acf4dd709c8631d0": {
+      "at": "2026-10-29T15:56:25+00:00",
+      "call_id": "argon-native-high|engineering-review",
+      "kind": "new_call",
+      "max_cost_cny": 0.429786,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
