@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "2eadb4d9dcb1437a87faa82bbb6d5c3a": {
-      "at": "2026-10-29T15:51:34+00:00",
-      "call_id": "argon-native-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 0.4297692,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -102,8 +93,12 @@
     {
       "actual_cost_cny": 0.002796,
       "receipt_id": "31d799098c834501b8670c33a23ebfac"
+    },
+    {
+      "actual_cost_cny": 0.0054677,
+      "receipt_id": "2eadb4d9dcb1437a87faa82bbb6d5c3a"
     }
   ],
-  "spent_cny": 0.0873256,
+  "spent_cny": 0.0927933,
   "tranche_cny": 300
 }
