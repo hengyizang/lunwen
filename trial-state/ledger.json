@@ -2508,6 +2508,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "argon-native-high|discriminating-experiment",
+      "route_id": "argon-native-high",
+      "case_id": "discriminating-experiment",
+      "task_class": "critical-experiment-design",
+      "partition": "holdout",
+      "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+      "provider": "codekey-gemini",
+      "requested_model": "gemini-4-argon",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.4321632,
+      "project_reservation_id": "f705e87ba4514cb99c961768f59f4278",
+      "meter_before": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 8,
+        "cost_cny": 0.0782824,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "40905696013",
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
     }
   ],
   "legacy_budget_reservations": {
