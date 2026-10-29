@@ -1297,9 +1297,39 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "```json\n{\n  \"fixture_label\": \"SYNTHETIC SOFTWARE TEST FIXTURE\",\n  \"execution_status\": \"No tests have been run.\",\n  \"defects\": [\n    {\n      \"id\": 1,\n      \"quoted_line\": \"L2:     kept = [v for v in values if v]\",\n      \"contract_violation\": \"retain numeric zeros\",\n      \"concrete_trigger\": \"Passing an input containing numeric zeros, such as [0, 2] (which evaluates to 2.0 instead of 1.0) or [0] (which filters out 0 and raises ZeroDivisionError).\",\n      \"minimal_remedy\": \"Filter explicitly Against None instead of truthiness: kept = [v for v in values if v is not None]\"\n    },\n    {\n      \"id\": 2,\n      \"quoted_line\": \"L3:     return sum(kept) / len(kept)\",\n      \"contract_violation\": \"reject an empty sequence with a clear ValueError\",\n      \"concrete_trigger\": \"Passing an empty sequence [] (or a sequence with no kept values such as [None]), which causes len(kept) to be 0 and raises ZeroDivisionError instead of ValueError.\",\n      \"minimal_remedy\": \"Guard against an empty kept list before division: if not kept: raise ValueError(\\\"Cannot compute mean of an empty sequence\\\")\"\n    }\n  ],\n  \"remedied_fixture_code\": [\n    \"def mean_kept(values):\",\n    \"    kept = [v for v in values if v is not None]\",\n    \"    if not kept:\",\n    \"        raise ValueError(\\\"Cannot compute mean of an empty sequence\\\")\",\n    \"    return sum(kept) / len(kept)\"\n  ],\n  \"tests\": [\n    {\n      \"name\": \"test_retain_numeric_zeros\",\n      \"description\": \"Verifies that numeric zeros are retained in the mean calculation (SYNTHETIC SOFTWARE TEST FIXTURE).\",\n      \"executed\": false,\n      \"code\": \"def test_retain_numeric_zeros():\\n    assert mean_kept([0, 2]) == 1.0\\n    assert mean_kept([0, 0.0, None, 3]) == 1.0\"\n    },\n    {\n      \"name\": \"test_reject_empty_sequence_with_value_error\",\n      \"description\": \"Verifies that an empty sequence raises ValueError rather than ZeroDivisionError (SYNTHETIC SOFTWARE TEST FIXTURE).\",\n      \"executed\": false,\n      \"code\": \"def test_reject_empty_sequence_with_value_error():\\n    for empty_input in ([], [None]):\\n        try:\\n            mean_kept(empty_input)\\n        except ValueError:\\n            pass\\n        else:\\n            raise AssertionError(f\\\"Expected ValueError for {empty_input}\\\")\"\n    }\n  ]\n}\n```",
+      "reported_model": "gemini-4-argon",
+      "usage": {
+        "input_tokens": 507,
+        "output_tokens": 1598,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 928
+        }
+      },
+      "request_id": "vWzjao2XK8W_qtsPoOuyiQ4",
+      "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+      "protocol": "gemini_generate_content",
+      "completion_status": "completed",
+      "response_sha256": "eb15584710a98f63c35fc2d87d36670d6c75778219e7ea298a87dd1fe90dcd80",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "if v": true,
+          "len(kept)": true,
+          "ValueError": true
+        },
+        "forbidden_fragments_absent": {
+          "all tests passed": true,
+          "tests have passed": true
+        }
+      },
+      "duration_seconds": 20.082
     }
   ],
   "legacy_budget_reservations": {
