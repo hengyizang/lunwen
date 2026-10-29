@@ -38,6 +38,15 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
+    },
+    "9df44efe7d6c43f6bfec310b9a631a1f": {
+      "at": "2026-10-29T15:53:20+00:00",
+      "call_id": "terra-high|source-extraction",
+      "kind": "new_call",
+      "max_cost_cny": 0.157437,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
