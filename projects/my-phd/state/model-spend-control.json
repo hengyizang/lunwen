@@ -38,6 +38,15 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
+    },
+    "b1b52e95b5194bb0bf51750f4de56203": {
+      "at": "2026-10-29T16:06:44+00:00",
+      "call_id": "terra-medium|statistical-interpretation",
+      "kind": "new_call",
+      "max_cost_cny": 0.158193,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
