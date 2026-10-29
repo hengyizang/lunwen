@@ -29,6 +29,15 @@
       "paper_id": null,
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
+    },
+    "97bdea2e1dd64aaaaa68dfa390e9ec76": {
+      "at": "2026-10-29T15:51:23+00:00",
+      "call_id": null,
+      "kind": "retained_deepseek_legacy",
+      "max_cost_cny": 0.0625758,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
