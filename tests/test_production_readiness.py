@@ -149,8 +149,10 @@ class ProductionReadinessTests(unittest.TestCase):
         self.assertNotIn("fixture key must not echo",json.dumps(value))
 
     def environment(self):
-        return {spec["key_setting"]: "fixture-secret-" + provider
-                for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items()}
+        environment = {}
+        for provider, spec in ai_providers.PRODUCTION_PROVIDERS.items():
+            environment.setdefault(spec["key_setting"], "fixture-secret-" + provider)
+        return environment
 
     def test_billing_failure_does_not_hide_independent_catalog_diagnostics(self):
         with patch.object(readiness.relay_billing,"read_meter",side_effect=readiness.relay_billing.BillingReconciliationError("private")), \
@@ -374,3 +376,4 @@ class ProductionReadinessTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
