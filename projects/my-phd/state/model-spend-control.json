@@ -38,15 +38,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "fa79aa78f7d046dc950dac1a103bb1b9": {
-      "at": "2026-10-29T16:01:14+00:00",
-      "call_id": "sol-high|engineering-review",
-      "kind": "new_call",
-      "max_cost_cny": 0.8178632,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
@@ -154,8 +145,12 @@
     {
       "actual_cost_cny": 0.01017645,
       "receipt_id": "9668649a075e47ee80f07441f1deb587"
+    },
+    {
+      "actual_cost_cny": 0.00305,
+      "receipt_id": "fa79aa78f7d046dc950dac1a103bb1b9"
     }
   ],
-  "spent_cny": 0.13158142,
+  "spent_cny": 0.13463142,
   "tranche_cny": 300
 }
