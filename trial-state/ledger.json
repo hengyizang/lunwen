@@ -1820,7 +1820,7 @@
         ],
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "run_id": "40905696013",
       "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
@@ -1854,7 +1854,26 @@
           "tests have passed": true
         }
       },
-      "duration_seconds": 26.9708
+      "duration_seconds": 26.9708,
+      "actual_cost_cny": 0.00305,
+      "debit_evidence": {
+        "source": "https://cheapai.info/api/log/token",
+        "unit_source": "https://cheapai.info/api/status",
+        "quota_per_unit": 500000,
+        "row": {
+          "model_name": "gpt-6.1-sol",
+          "quota": 1525,
+          "created_at": 1793289718,
+          "prompt_tokens": 4606,
+          "completion_tokens": 803,
+          "id": 1
+        },
+        "row_identity_rule": "billing_fields_excluding_display_id",
+        "before_snapshot_sha256": "19fdd145a1ce236327cac4ff32be8cf138b82fb9efa9c6fe2213169cd5aade57",
+        "after_snapshot_sha256": "43c687c63614b6fc0c79be33694b907476a226b6c3d807529646957d570d84ac",
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "legacy_budget_reservations": {
