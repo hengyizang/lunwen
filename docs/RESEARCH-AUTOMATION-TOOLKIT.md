@@ -1,6 +1,6 @@
-# 十个科研工具的 Codex 接入
+# 科研工具的 Codex 接入
 
-这次接入包含十个可发现、可按任务调用的 **Codex 适配技能**、固定上游版本的完整源码，以及将选定技能送入现有模型环节的云端任务包。适配技能有实际的研究操作步骤，并非十个软件的独立服务部署。上游桌面程序、服务器、模型权重、GPU 服务和付费接口均未启动。
+接入包含十个原有工具和 The AI Scientist V1/V2 的合并适配入口，共十一个可发现、可按任务调用的 **Codex 适配技能**、固定上游版本的完整源码，以及将选定技能送入现有模型环节的云端任务包。适配技能有实际的研究操作步骤；上游桌面程序、服务器、模型权重、GPU 服务和付费接口均未启动。
 
 ## 按实际任务选用
 
@@ -16,8 +16,9 @@
 | aipoch/open-science / `research-aipoch-open-science` | 论文图组论证、按面板修正、复现范围和阻断原因 | Electron/CLI 及其 notebook、artifactVersion、delegate 接口 |
 | EvoScientist / `research-evoscientist` | 可追溯的经验复用、证据关系、待人工审查的流程建议 | 独立 Python 代理及模型配置 |
 | synthetic-sciences/openscience / `research-synthetic-openscience` | 证据绑定的想法队列、配置去重、未完成/不可用状态 | Bun/TypeScript 工作台、study/experiments/compute_job 接口 |
+| The AI Scientist V1/V2 / `research-ai-scientist` | 模板/开放选题、真实实验分支及调试追踪、图文一致性审查 | 原流水线需 Linux/CUDA、模型与全文服务；保留自定义许可要求的披露，详见 [接入说明](AI-SCIENTIST-INTEGRATION.md) |
 
-十项的上游仓库、完整提交号、许可、原生技能目录、适配文件和哈希见 `integrations/research-automation-tools.json`；对应来源也登记在 `integrations/upstreams.lock.json`。不按文章中的星数判断研究质量。原始技能和各组件许可保留在完整上游源码中；未将全部上游技能混装为自动触发的全局规则。
+各项的上游仓库、完整提交号、许可、原生技能目录、适配文件和哈希见 `integrations/research-automation-tools.json`；对应来源也登记在 `integrations/upstreams.lock.json`。不按文章中的星数判断研究质量。原始技能和各组件许可保留在完整上游源码中；未将全部上游技能混装为自动触发的全局规则。
 
 ## 在 Codex 中调用
 
@@ -35,7 +36,7 @@ Windows 的技能主体位于 `D:\ad\codex\research-automation\skills`，发现�
 
 ## 让现有 API 模型按需使用
 
-不把十项说明无条件加入每次调用。为当前任务选择实际需要的技能，创建 `program/research-tool-task.json`：
+不把全部说明无条件加入每次调用。为当前任务选择实际需要的技能，创建 `program/research-tool-task.json`：
 
 ```json
 {
@@ -85,6 +86,6 @@ MiroThinker 的续接方法可在 intake、选题、架构、实验设计、实�
 - 检索、PDF、脚本、测试、实验和渲染继续在既有 GitHub 云端执行。实验必须通过批准的 G3 计划和 `experiment_runner.py`；各工具不能自批 G0–G5。
 - 中央预算、模型身份检查、原有独立审查和角色权限继续生效。本次安装不授权新的付费调用，也不启用上游默认搜索、嵌入、图像或模型账户。
 - 不采用上游的自动审批、模拟实验结果、只选最高分记录、破坏性清理和无限迭代。全部失败及不利证据保留；开发集改进不能代替冻结的最终检验。
-- 云端验收会用固定版本的 OpenAI 官方 Skill Installer 实际安装十个适配入口，使用官方校验器检查，并核对安装后字节哈希。测试覆盖任务包复用、证据变化、越界路径、阶段、权限和独立审查。验收不代表十套独立服务已经部署，也不构成论文科学完成的证明。
+- 云端验收会用固定版本的 OpenAI 官方 Skill Installer 实际安装全部适配入口，使用官方校验器检查，并核对安装后字节哈希。测试覆盖任务包复用、证据变化、越界路径、阶段、权限和独立审查。验收不代表上游独立服务已经部署，也不构成论文科学完成的证明。
 
 重复能力沿用现有检索、阅读覆盖、实验记录、图示和模型循环，没有再叠加一套科研控制系统。可移植方法已进入当前任务执行入口；独立服务若以后确有收益，再按具体任务验证其运行环境及费用。

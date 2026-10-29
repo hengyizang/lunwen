@@ -5,6 +5,27 @@
   "paid_calls": 0,
   "tools": [
     {
+      "id": "ai-scientist",
+      "mechanisms": [
+        "template-backed versus open-ended idea development",
+        "receipt-bound branch and debugging ancestry with all attempts retained",
+        "declared workflow versus sealed analysis phase",
+        "actual figure-caption-maintext-result consistency in existing reviews"
+      ],
+      "native_implementations": [
+        "scripts/research_search_tree.py",
+        "scripts/research_iteration.py",
+        "scripts/figure_story.py",
+        "scripts/figure_output_qa.py",
+        "scripts/research_toolkit.py"
+      ],
+      "verification": [
+        "tests/test_research_search_tree.py",
+        "tests/test_research_tool_increments.py"
+      ],
+      "semantic_judgment": "Ancestry is declared, not proof of a repair or scientific quality. Existing independent review and human scientific judgment remain required."
+    },
+    {
       "id": "deer-flow",
       "mechanisms": [
         "question-driven discovery",
