@@ -21,6 +21,15 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
+    "01bcfcaceb3c4dbaab51501da6068ec9": {
+      "at": "2026-10-29T15:52:28+00:00",
+      "call_id": "argon-chat-high|source-extraction",
+      "kind": "new_call",
+      "max_cost_cny": 0.4297692,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
