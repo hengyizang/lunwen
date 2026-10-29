@@ -38,15 +38,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "fff1253bd2e84377b28813ea702f8abe": {
-      "at": "2026-10-29T16:04:20+00:00",
-      "call_id": "argon-chat-high|statistical-interpretation",
-      "kind": "new_call",
-      "max_cost_cny": 0.4306764,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
     }
   },
   "schema_version": "1.0",
@@ -162,8 +153,12 @@
     {
       "actual_cost_cny": 0.0229068,
       "receipt_id": "6dc8ca40509c477f942905bce7b2b3e5"
+    },
+    {
+      "actual_cost_cny": 0.0167748,
+      "receipt_id": "fff1253bd2e84377b28813ea702f8abe"
     }
   ],
-  "spent_cny": 0.15753822,
+  "spent_cny": 0.17431302,
   "tranche_cny": 300
 }
