@@ -30,6 +30,15 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
+    "517dcce2b025423f882ea8a49caefe93": {
+      "at": "2026-10-29T15:59:28+00:00",
+      "call_id": "deepseek-high|engineering-review",
+      "kind": "new_call",
+      "max_cost_cny": 0.0601622,
+      "paper_id": null,
+      "run_id": "40905696013",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
