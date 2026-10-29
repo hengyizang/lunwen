@@ -2041,9 +2041,44 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "**Supported:** In this synthetic software fixture, the prespecified primary effect was 0.08, with a 95% interval of [-0.04, 0.20]. All three preregistered seed runs completed and passed integrity checks.\n\n**Unresolved:** The interval includes zero and values above the 0.10 practical threshold, so the result does not establish either a practically meaningful effect or equivalence. The seed effects range from -0.02 to 0.18; their variation is not evidence of a software bug. The subgroup effect of 0.35 is exploratory because it was identified after observing the outcomes.\n\n**Next discriminating check:** Assess whether a prespecified replication or precision analysis, if available under the frozen plan, can narrow the primary-effect interval enough to distinguish effects below and above 0.10. The supplied material does not establish that such a check is registered.",
+      "reported_model": "gpt-6.1-terra",
+      "usage": {
+        "input_tokens": 6201,
+        "input_tokens_details": {
+          "cached_tokens": 5702,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 224,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "request_id": "resp_04fac1341de366cd016ae36f00aba481979c396da945f32841",
+      "endpoint": "https://codekey.ai/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "3a89e12df94eee68ac000ad9ca2d38b75885de0721c63c9b97100dde45f03c89",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "0.08": true,
+          "-0.04": true,
+          "0.20": true,
+          "0.10": true,
+          "exploratory": true
+        },
+        "forbidden_fragments_absent": {
+          "equivalence is established": true,
+          "the methods are equivalent": true,
+          "software bug caused": true,
+          "statistically significant improvement": true
+        }
+      },
+      "duration_seconds": 4.3508
     }
   ],
   "legacy_budget_reservations": {
