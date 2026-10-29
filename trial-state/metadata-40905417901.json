@@ -1,0 +1,569 @@
+{
+  "schema_version": "1.0",
+  "trial_id": "model-evaluation-20261029",
+  "mode": "metadata",
+  "at": "2026-10-29T15:49:40.043811+00:00",
+  "run_id": "40905417901",
+  "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+  "model_generation_calls": 0,
+  "new_reservations": 0,
+  "production_routing_changed": false,
+  "scientific_equivalence_verified": false,
+  "paid_execution_enabled": false,
+  "project_budget": {
+    "project": "my-phd",
+    "authorized_ceiling_cny": 500,
+    "spent_cny": 0.0873256,
+    "held_cny": 9.5836104,
+    "remaining_after_holds_cny": 490.329064,
+    "state_blob": "763bd3c8ba45d27d28d751cf6d497bd6b89db27c",
+    "reservations": [
+      {
+        "id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+        "max_cost_cny": 9.5836104,
+        "kind": "retained_legacy",
+        "writing_trial": "writing-comparison-20261027"
+      }
+    ],
+    "authority_changed": false
+  },
+  "providers": {
+    "cheapai-gpt-pro": {
+      "provider": "cheapai-gpt-pro",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "cheapai-gpt-pro",
+        "family": "openai",
+        "root": "https://cheapai.info",
+        "configured": true,
+        "model": "gpt-6.1-sol",
+        "protocol": "openai_responses",
+        "endpoint": "https://cheapai.info/v1/responses",
+        "key_setting": "DR_OS_CHEAPAI_GPT_PRO_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "cheapai-gpt-pro",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "gpt-6.1-sol",
+          "gpt-6-astra",
+          "gpt-5.6-luna",
+          "gpt-6.1-terra"
+        ],
+        "allowed_reasoning_efforts": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "claude-fable-5",
+        "claude-fable-5-1",
+        "claude-haiku-4-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-6",
+        "claude-opus-4-6-thinking",
+        "claude-opus-4-7",
+        "claude-opus-4-7-thinking",
+        "claude-opus-4-8",
+        "claude-opus-4-8-thinking",
+        "claude-opus-5",
+        "claude-opus-5-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-6-thinking",
+        "claude-sonnet-5",
+        "claude-sonnet-5-5",
+        "codex-auto-review",
+        "deepseek-v4-pro-0813",
+        "deepseek-v4.1-flash",
+        "deepseek-v4.1-flash-1017",
+        "glm-5.2",
+        "glm-5.3",
+        "gpt-5.4",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol",
+        "gpt-image-2.5",
+        "gpt-image-2.5-flare",
+        "gpt-image-2.5-sunburst",
+        "hy3",
+        "hy4-preview",
+        "kimi-k3",
+        "mimo-v2.5",
+        "minimax-m3",
+        "qwen3.7-max",
+        "qwen3.8-max"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "cheapai-gpt-pro",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+        "row_count": 11,
+        "latest_debits": [
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1398,
+            "created_at": 1793117200,
+            "prompt_tokens": 5259,
+            "completion_tokens": 557,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6026,
+            "created_at": 1793116718,
+            "prompt_tokens": 5259,
+            "completion_tokens": 652,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6309,
+            "created_at": 1793116660,
+            "prompt_tokens": 5217,
+            "completion_tokens": 712,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1461,
+            "created_at": 1793116601,
+            "prompt_tokens": 5217,
+            "completion_tokens": 623,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6022,
+            "created_at": 1793116548,
+            "prompt_tokens": 5216,
+            "completion_tokens": 660,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1519,
+            "created_at": 1793116493,
+            "prompt_tokens": 5216,
+            "completion_tokens": 676,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1224,
+            "created_at": 1793116436,
+            "prompt_tokens": 4838,
+            "completion_tokens": 514,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4628,
+            "created_at": 1793116383,
+            "prompt_tokens": 4838,
+            "completion_tokens": 482,
+            "id": 8
+          }
+        ],
+        "full_response_exported": false
+      },
+      "shared_guard": {
+        "inference_eligible": true,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [],
+        "active": null
+      }
+    },
+    "codekey-codex-pro": {
+      "provider": "codekey-codex-pro",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "codekey-codex-pro",
+        "family": "openai",
+        "root": "https://codekey.ai",
+        "configured": true,
+        "model": "gpt-6.1-sol",
+        "protocol": "openai_responses",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "key_setting": "DR_OS_CODEKEY_CODEX_PRO_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-codex-pro",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "gpt-6.1-sol",
+          "gpt-6-astra",
+          "gpt-5.6-luna",
+          "gpt-6.1-terra"
+        ],
+        "allowed_reasoning_efforts": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "codex-auto-review",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol",
+        "gpt-6.1-terra"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "codekey-codex-pro",
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "inference_eligible": true,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [],
+        "active": null
+      }
+    },
+    "codekey-codex-discount": {
+      "provider": "codekey-codex-discount",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "codekey-codex-discount",
+        "family": "openai",
+        "root": "https://codekey.ai",
+        "configured": true,
+        "model": "gpt-6.1-sol",
+        "protocol": "openai_responses",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "key_setting": "DR_OS_CODEKEY_CODEX_DISCOUNT_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-codex-discount",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "gpt-6.1-sol",
+          "gpt-6-astra",
+          "gpt-5.6-luna",
+          "gpt-6.1-terra"
+        ],
+        "allowed_reasoning_efforts": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "codex-auto-review",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6.1-sol",
+        "gpt-6.1-terra"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "codekey-codex-discount",
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "inference_eligible": false,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [
+          {
+            "id": "1eed9cdba2f9a3f401a2a6e07b724c390e06644725e3d264e98c95849cf16042",
+            "provider": "codekey-codex-discount",
+            "requested_model": null,
+            "reserved_ceiling_cny": 0.1,
+            "source_branch": null,
+            "source_file": null,
+            "source_blob": null
+          }
+        ],
+        "active": null
+      }
+    },
+    "codekey-deepseek": {
+      "provider": "codekey-deepseek",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "codekey-deepseek",
+        "family": "deepseek",
+        "root": "https://codekey.ai",
+        "configured": true,
+        "model": "deepseek-v4.1-flash",
+        "protocol": "deepseek_chat_completions",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "key_setting": "DR_OS_CODEKEY_DEEPSEEK_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-deepseek",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "deepseek-v4.1-flash"
+        ],
+        "allowed_reasoning_efforts": [
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "deepseek-v4-flash",
+        "deepseek-v4-pro",
+        "deepseek-v4.1-flash"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "codekey-deepseek",
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "inference_eligible": false,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [
+          {
+            "id": "09b68c08573ed0ebbd0abd6f9d2eedf402a1edfab5bcbccd8d0e3f19022f318c",
+            "provider": "codekey-deepseek",
+            "requested_model": null,
+            "reserved_ceiling_cny": 0.0625758,
+            "source_branch": null,
+            "source_file": null,
+            "source_blob": null
+          }
+        ],
+        "active": null
+      }
+    },
+    "codekey-gemini": {
+      "provider": "codekey-gemini",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "codekey-gemini",
+        "family": "google",
+        "root": "https://codekey.ai",
+        "configured": true,
+        "model": "gemini-4-argon",
+        "protocol": "gemini_generate_content",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "key_setting": "DR_OS_CODEKEY_GEMINI_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-gemini",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "gemini-4-argon",
+          "gemini-4-argon-high"
+        ],
+        "allowed_reasoning_efforts": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "gemini-4-argon",
+        "gemini-4-argon-high",
+        "gemini-4-argon-low",
+        "gemini-4-argon-medium"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "codekey-gemini",
+        "kind": "codekey_total_actual_cost",
+        "requests": 2,
+        "cost_cny": 0.0146776,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "inference_eligible": false,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [
+          {
+            "id": "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9",
+            "provider": "codekey-gemini",
+            "requested_model": null,
+            "reserved_ceiling_cny": 0.431508,
+            "source_branch": null,
+            "source_file": null,
+            "source_blob": null
+          },
+          {
+            "id": "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9",
+            "provider": "codekey-gemini",
+            "requested_model": null,
+            "reserved_ceiling_cny": 9.1521024,
+            "source_branch": null,
+            "source_file": null,
+            "source_blob": null
+          }
+        ],
+        "active": null
+      }
+    },
+    "codekey-kimi": {
+      "provider": "codekey-kimi",
+      "generation_calls": 0,
+      "configuration": {
+        "provider": "codekey-kimi",
+        "family": "moonshot",
+        "root": "https://codekey.ai",
+        "configured": true,
+        "model": "kimi-k3.1-pro",
+        "protocol": "openai_chat_completions",
+        "endpoint": "https://codekey.ai/v1/chat/completions",
+        "key_setting": "DR_OS_CODEKEY_KIMI_KEY",
+        "strict_model_id": true,
+        "billing_identity": {
+          "plan": "production",
+          "group": "codekey-kimi",
+          "mode": "standard"
+        },
+        "allowed_models": [
+          "kimi-k3.1-pro"
+        ],
+        "allowed_reasoning_efforts": [
+          "high"
+        ],
+        "configuration_error": null
+      },
+      "catalog": [
+        "kimi-k3",
+        "kimi-k3.1-pro"
+      ],
+      "catalog_access_verified": true,
+      "meter": {
+        "provider": "codekey-kimi",
+        "kind": "codekey_total_actual_cost",
+        "requests": 0,
+        "cost_cny": 0.0,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "shared_guard": {
+        "inference_eligible": true,
+        "catalog_access_does_not_release_holds": true,
+        "legacy_holds": [],
+        "active": null
+      }
+    }
+  },
+  "gemini_catalog_endpoints": {
+    "schema_version": "1.0",
+    "provider": "codekey-gemini",
+    "requested_model": "gemini-4-argon",
+    "endpoints": [
+      {
+        "root": "https://codekey.ai",
+        "path": "/v1/models",
+        "method": "GET",
+        "schema": "openai-list",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon",
+          "gemini-4-argon-high",
+          "gemini-4-argon-low",
+          "gemini-4-argon-medium"
+        ]
+      },
+      {
+        "root": "https://codekey.ai",
+        "path": "/v1beta/models",
+        "method": "GET",
+        "schema": "google-list",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon",
+          "gemini-4-argon-high",
+          "gemini-4-argon-low",
+          "gemini-4-argon-medium"
+        ],
+        "additional_pages_advertised": false
+      },
+      {
+        "root": "https://codekey.ai",
+        "path": "/v1beta/models/gemini-4-argon",
+        "method": "GET",
+        "schema": "google-model",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon"
+        ]
+      },
+      {
+        "root": "https://api.codekey.ai",
+        "path": "/v1/models",
+        "method": "GET",
+        "schema": "openai-list",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon",
+          "gemini-4-argon-high",
+          "gemini-4-argon-low",
+          "gemini-4-argon-medium"
+        ]
+      },
+      {
+        "root": "https://api.codekey.ai",
+        "path": "/v1beta/models",
+        "method": "GET",
+        "schema": "google-list",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon",
+          "gemini-4-argon-high",
+          "gemini-4-argon-low",
+          "gemini-4-argon-medium"
+        ],
+        "additional_pages_advertised": false
+      },
+      {
+        "root": "https://api.codekey.ai",
+        "path": "/v1beta/models/gemini-4-argon",
+        "method": "GET",
+        "schema": "google-model",
+        "http_status": 200,
+        "metadata_access_verified": true,
+        "model_ids": [
+          "gemini-4-argon"
+        ]
+      }
+    ],
+    "model_generation_calls": 0,
+    "new_spending_authority": false,
+    "inference_access_verified": false,
+    "scientific_completion": false
+  }
+}
