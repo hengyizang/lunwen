@@ -420,7 +420,7 @@ def execute(plan, state):
         print(json.dumps({"call_id": call_id, "generation": entry["generation_status"],
             "actual_cost_cny": entry["actual_cost_cny"], "route_quarantined": route["id"] in ledger["quarantined_routes"]}), flush=True)
     ledger.update(status="closed", completed_at=datetime.now(timezone.utc).isoformat(),
-        "unattempted_call_ids": [row["call_id"] for row in scope["queue"] if row["call_id"] not in attempted])
+        unattempted_call_ids=[row["call_id"] for row in scope["queue"] if row["call_id"] not in attempted])
     state.save("ledger.json", ledger)
     return ledger
 
