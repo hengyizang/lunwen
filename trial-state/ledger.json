@@ -1365,9 +1365,41 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "```json\n{\n  \"fixture_label\": \"SYNTHETIC SOFTWARE TEST FIXTURE\",\n  \"evaluation_notice\": \"Source-bound internal evaluation only. No tests or checks have been executed. This output does not approve research or modify any frozen scientific plan.\",\n  \"defects\": [\n    {\n      \"id\": \"DEFECT-1\",\n      \"contract_violation\": \"Contract requires retaining numeric zeros ('retain numeric zeros').\",\n      \"quoted_line\": \"L2:     kept = [v for v in values if v]\",\n      \"concrete_trigger\": \"mean_kept([0, 2]) or mean_kept([0])\",\n      \"observed_mechanism\": \"The truthiness check `if v` evaluates to False for numeric zeros (0, 0.0), dropping them from `kept`. For `mean_kept([0, 2])`, `kept` becomes `[2]` (yielding 2.0 instead of 1.0); for `mean_kept([0])`, `kept` becomes `[]` (causing a downstream ZeroDivisionError).\",\n      \"minimal_remedy\": \"Replace truthiness filtering with an explicit identity check if filtering missing values (`kept = [v for v in values if v is not None]`). Note: the supplied contract does not specify which non-numeric values should be filtered out; this remedy preserves numeric zeros while only excluding `None`.\"\n    },\n    {\n      \"id\": \"DEFECT-2\",\n      \"contract_violation\": \"Contract requires rejecting an empty sequence with a clear ValueError ('reject an empty sequence with a clear ValueError').\",\n      \"quoted_line\": \"L3:     return sum(kept) / len(kept)\",\n      \"concrete_trigger\": \"mean_kept([])\",\n      \"observed_mechanism\": \"When `values` (or `kept`) is empty, `len(kept)` is 0, and dividing by `len(kept)` raises `ZeroDivisionError` instead of a `ValueError`.\",\n      \"minimal_remedy\": \"Guard against an empty sequence before division: `if not kept: raise ValueError(\\\"Cannot compute mean of an empty sequence\\\")` prior to `return sum(kept) / len(kept)`.\"\n    }\n  ],\n  \"minimal_remediated_fixture\": {\n    \"fixture_label\": \"SYNTHETIC SOFTWARE TEST FIXTURE\",\n    \"code\": [\n      \"def mean_kept(values):\",\n      \"    kept = [v for v in values if v is not None]\",\n      \"    if not kept:\",\n      \"        raise ValueError(\\\"Cannot compute mean of an empty sequence\\\")\",\n      \"    return sum(kept) / len(kept)\"\n    ]\n  },\n  \"tests\": {\n    \"fixture_label\": \"SYNTHETIC SOFTWARE TEST FIXTURE\",\n    \"execution_status\": \"NOT_RUN\",\n    \"cases\": [\n      {\n        \"name\": \"test_retains_numeric_zeros_with_positive_numbers\",\n        \"call\": \"mean_kept([0, 2])\",\n        \"expected\": 1.0,\n        \"targets_defect\": \"DEFECT-1\"\n      },\n      {\n        \"name\": \"test_retains_single_numeric_zero\",\n        \"call\": \"mean_kept([0.0])\",\n        \"expected\": 0.0,\n        \"targets_defect\": \"DEFECT-1\"\n      },\n      {\n        \"name\": \"test_rejects_empty_sequence_with_value_error\",\n        \"call\": \"mean_kept([])\",\n        \"expected_exception\": \"ValueError\",\n        \"targets_defect\": \"DEFECT-2\"\n      }\n    ],\n    \"pytest_snippet\": [\n      \"# SYNTHETIC SOFTWARE TEST FIXTURE (UNEXECUTED)\",\n      \"import pytest\",\n      \"\",\n      \"def test_retains_numeric_zeros():\",\n      \"    assert mean_kept([0, 2]) == 1.0\",\n      \"    assert mean_kept([0.0]) == 0.0\",\n      \"\",\n      \"def test_empty_sequence_raises_value_error():\",\n      \"    with pytest.raises(ValueError):\",\n      \"        mean_kept([])\"\n    ]\n  },\n  \"abstentions\": [\n    \"No test execution results are reported because no tools or runtime environment were used and no tests have been run.\",\n    \"The supplied source data does not specify whether `mean_kept` is intended to filter `None` or any other sentinel; abstaining from defining filtering rules beyond retaining numeric zeros and excluding booleans per the stated input contract.\"\n  ]\n}\n```",
+      "reported_model": "gemini-4-argon",
+      "usage": {
+        "prompt_tokens": 507,
+        "completion_tokens": 2075,
+        "input_tokens": 507,
+        "output_tokens": 2075,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "request_id": "msg_2f94fce1a75f9978aa701b49",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "527757f47eed4f10d3e5d2fbf76e2d1738306315fbe2d1087ce9746b7f2f58f2",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "if v": true,
+          "len(kept)": true,
+          "ValueError": true
+        },
+        "forbidden_fragments_absent": {
+          "all tests passed": true,
+          "tests have passed": true
+        }
+      },
+      "duration_seconds": 23.835
     }
   ],
   "legacy_budget_reservations": {
