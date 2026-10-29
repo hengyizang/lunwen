@@ -703,9 +703,53 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "40905696013",
-      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+      "text": "{\n  \"year\": 2025,\n  \"sample_size\": 120,\n  \"primary_difference\": -0.12,\n  \"lower_ci\": -0.31,\n  \"upper_ci\": 0.07,\n  \"reported_p_value\": null,\n  \"causal_effect_established\": false,\n  \"source_locations\": [\n    \"F1 L1\",\n    \"F1 L2\",\n    \"F1 L3\"\n  ]\n}",
+      "reported_model": "gemini-4-argon",
+      "usage": {
+        "prompt_tokens": 531,
+        "completion_tokens": 1291,
+        "input_tokens": 531,
+        "output_tokens": 1291,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "request_id": "msg_b44f7cf52de11187df388fc6",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "4ef282d0b58ac114220ccfef6692a6821ab660c609c3b4510d1ee9acc1fe1fdc",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "2025": true,
+          "120": true,
+          "-0.12": true,
+          "-0.31": true,
+          "0.07": true,
+          "null": true
+        },
+        "forbidden_fragments_absent": {
+          "p < 0.05": true,
+          "p<0.05": true
+        },
+        "expected_json": {
+          "year": true,
+          "sample_size": true,
+          "primary_difference": true,
+          "lower_ci": true,
+          "upper_ci": true,
+          "reported_p_value": true,
+          "causal_effect_established": true
+        }
+      },
+      "duration_seconds": 18.6405
     }
   ],
   "legacy_budget_reservations": {
