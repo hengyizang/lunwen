@@ -153,6 +153,17 @@ coverage locations/status/attributed evidence, contrary IDs and executed-query
 facts. Proposed queries, relation reasons, worklists, notebook decision rationale,
 native next-action advice and query continuation advice are omitted.
 
+Every role receives a deterministic bounded projection after full validation:
+at most forty source/dimension observations, twenty executed-round summaries and
+ten source bindings. Question, unknown, contrary, attempt and omitted-row counts
+remain explicit. Scientific observation prose and original quotes stay in the
+immutable report; existing stage sources load separately. Writer/planner/remediator
+action groups each contain at most `max_actions` rows. Text longer than 240
+characters is omitted whole, with its length and original record locator retained.
+JSON pointers resolve within `report_path` and `report_sha256`; no evidence is
+shortened or edited to fit the context. A concise context never means all sources
+were read or all history was supplied.
+
 ## Validation scope
 
 `tests/test_research_frontier.py` exercises native coverage and append-only

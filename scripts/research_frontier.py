@@ -352,7 +352,7 @@ def _prepare(project, request_file):
     return {"schema_version": "1.0", "kind": "research_frontier", "id": identity,
         "request_binding": {"path": request_file, "sha256": sha(request_path)},
         "input_bindings": sorted(bindings, key=lambda row: row["path"]), "module_hashes": modules,
-        "questions": list(questions.values()), "query_rounds": rounds,
+        "questions": list(questions.values()), "query_rounds": rounds, "max_actions": maximum,
         "worklist": worklist[:maximum], "deferred_action_count": max(0, len(worklist) - maximum),
         "proposed_queries": proposals, "relations": relations,
         "attempt_summary": [{"receipt_id": r["receipt_id"], "status": r["status"],
@@ -386,7 +386,7 @@ def refresh(project: Path, request_file: str = DEFAULT) -> dict:
 
 
 def model_context(project: Path, report_relative: str, role: str) -> dict:
-    """Validate without writing; critics receive observations without proposals."""
+    """Fully validate, then project a bounded summary without copying evidence."""
     if role not in {"writer", "planner", "critic", "remediator"}:
         raise ValueError("unsupported frontier model role")
     project = Path(project).resolve()
@@ -398,18 +398,114 @@ def model_context(project: Path, report_relative: str, role: str) -> dict:
     expected = _envelope(_prepare(project, report.get("request_binding", {}).get("path", "")))
     if report != expected or report_relative != expected["report_path"]:
         raise ValueError("frontier report is stale or changed; refresh from current sources")
-    if role != "critic":
-        return report
-    facts = []
-    for question in report["questions"]:
-        coverage = [{**paper, "dimensions": [{k: v for k, v in dimension.items() if k != "next_action"}
-            for dimension in paper["dimensions"]]} for paper in question["coverage"]]
-        facts.append({"question_id": question["question_id"], "question": question["question"],
-            "paper_ids": question["paper_ids"], "dimensions": question["dimensions"], "coverage": coverage,
-            "contrary_evidence_ids": question["contrary_evidence_ids"]})
-    rounds = [{key: value for key, value in row.items() if key not in {"advice"}}
-              for row in report["query_rounds"]]
-    return {"kind": "research_frontier_factual_context", "questions": facts, "query_rounds": rounds,
-        "attempt_summary": report["attempt_summary"], "input_bindings": report["input_bindings"],
-        "module_hashes": report["module_hashes"], "scientific_saturation_verified": False,
-        "semantic_support_verified": False, "gate_approved": False}
+    return _context_projection(report, role)
+
+
+def _context_text(row, source, fields):
+    # Omit long text whole and preserve its durable record locator. Original
+    # evidence is never shortened or edited to meet a prompt budget.
+    for field in fields:
+        value = source.get(field)
+        if isinstance(value, str):
+            if len(value) <= 240:
+                row[field] = value
+            else:
+                row[field + "_omitted_characters"] = len(value)
+    return row
+
+
+def _context_projection(report, role):
+    facts, questions, sources, source_ids = [], [], [], set()
+    total_facts = unknown = contrary = 0
+    evidence_count = decision_count = 0
+    for qi, question in enumerate(report["questions"]):
+        notebook_record = question["notebook"]
+        evidence_count += len(notebook_record["evidence"])
+        decision_count += len(notebook_record["decisions"])
+        current_unknown = sum(not d.get("reusable_evidence") and d["dimension"] != "metadata"
+            for p in question["coverage"] for d in p["dimensions"])
+        unknown += current_unknown
+        contrary += len(question["contrary_evidence_ids"])
+        questions.append(_context_text({"question_id": question["question_id"],
+            "paper_ids": question["paper_ids"][:5], "paper_count": len(question["paper_ids"]),
+            "paper_ids_omitted": max(0, len(question["paper_ids"]) - 5),
+            "dimensions": question["dimensions"], "unknown_dimension_count": current_unknown,
+            "contrary_evidence_count": len(question["contrary_evidence_ids"]),
+            "locator": f"#/questions/{qi}"}, question, ("question",)))
+        for pi, paper in enumerate(question["coverage"]):
+            if paper["paper_id"] not in source_ids:
+                source_ids.add(paper["paper_id"])
+                if len(sources) < 10:
+                    sources.append({"paper_id": paper["paper_id"], "path": paper["source"]["path"],
+                        "sha256": paper["source"]["sha256"],
+                        "locator": f"#/questions/{qi}/coverage/{pi}/source"})
+            for di, dimension in enumerate(paper["dimensions"]):
+                total_facts += 1
+                if len(facts) < 40:
+                    answers = dimension.get("reusable_evidence", [])
+                    facts.append({"question_id": question["question_id"], "paper_id": paper["paper_id"],
+                        "dimension": dimension["dimension"], "status": dimension["status"],
+                        "location_count": len(dimension["locations"]), "attributed_answer_count": len(answers),
+                        "contrary_answer_count": sum(e.get("outcome") == "contradicts" for e in answers),
+                        "semantic_support_verified": False,
+                        "locator": f"#/questions/{qi}/coverage/{pi}/dimensions/{di}"})
+    rounds = []
+    for index, original in enumerate(report["query_rounds"][:20]):
+        keys = ("id", "question_id", "dimension", "normalized_observation_count", "canonical_paper_count",
+                "new_paper_count", "failed_attempt_count", "successful_attempt_count",
+                "new_attributed_evidence_dimension_count", "evidence_round_association")
+        row = {key: original[key] for key in keys}
+        row.update(receipt_count=len(original["receipt_ids"]), receipt_ids=original["receipt_ids"][:3],
+            receipt_ids_omitted=max(0, len(original["receipt_ids"]) - 3),
+            reused_receipt_count=len(original["reused_receipt_ids"]),
+            new_canonical_ids=original["new_canonical_ids"][:3],
+            new_canonical_ids_omitted=max(0, len(original["new_canonical_ids"]) - 3),
+            locator=f"#/query_rounds/{index}")
+        if role != "critic":
+            row["advice"] = original["advice"]
+        rounds.append(row)
+    context = {"kind": "research_frontier_factual_context" if role == "critic" else "research_frontier_action_context",
+        "report_path": report["report_path"], "report_sha256": report["report_sha256"],
+        "locator_basis": "JSON pointers resolve within this immutable report; scientific sources load separately.",
+        "limits": {"coverage_observations": 40, "query_rounds": 20, "source_bindings": 10,
+                   "action_rows_per_kind": report["max_actions"]},
+        "counts": {"questions": len(report["questions"]), "coverage_observations": total_facts,
+            "unknown_dimensions": unknown, "contrary_notebook_observations": contrary,
+            "notebook_evidence_records": evidence_count, "notebook_decision_records": decision_count,
+            "query_rounds": len(report["query_rounds"]), "source_bindings": len(source_ids),
+            "input_bindings": len(report["input_bindings"]), "actual_attempts": len(report["attempt_summary"]),
+            "failed_attempts": sum(r["status"] == "failed" for r in report["attempt_summary"])},
+        "questions": questions, "coverage_observations": facts, "query_rounds": rounds, "source_bindings": sources,
+        "omitted_counts": {"coverage_observations": total_facts - len(facts),
+            "query_rounds": len(report["query_rounds"]) - len(rounds), "source_bindings": len(source_ids) - len(sources),
+            "input_binding_rows": len(report["input_bindings"]), "attempt_rows": len(report["attempt_summary"]),
+            "notebook_evidence_rows": evidence_count, "notebook_decision_rows": decision_count},
+        "detail_locators": {"all_inputs": "#/input_bindings", "all_attempts": "#/attempt_summary",
+            "all_questions_and_original_evidence": "#/questions", "all_rounds": "#/query_rounds"},
+        "original_evidence_copied": False, "all_sources_read": False,
+        "scientific_saturation_verified": False, "semantic_support_verified": False, "gate_approved": False}
+    if role == "critic":
+        return context
+    action_keys = {
+        "worklist": ("gap_id", "kind", "question_id", "paper_id", "dimension", "evidence_id", "reuse_source_id"),
+        "proposed_queries": ("question_id", "dimension", "gap_id", "executed", "status"),
+        "relations": ("id", "kind", "from", "to", "status", "originals_retained", "automatic_truth_or_supersession")}
+    for field, keys in action_keys.items():
+        rows = []
+        for index, original in enumerate(report[field][:report["max_actions"]]):
+            row = {key: original[key] for key in keys if key in original}
+            row["locator"] = f"#/{field}/{index}"
+            if "hypothesis_ids" in original:
+                row["hypothesis_ids"] = original["hypothesis_ids"][:3]
+                row["hypothesis_ids_omitted"] = max(0, len(original["hypothesis_ids"]) - 3)
+            if field == "relations":
+                # Endpoints need existing IDs, not the complete source-evidence list.
+                for endpoint in ("from", "to"):
+                    row[endpoint] = {key: original[endpoint][key] for key in ("question_id", "kind", "id")}
+            _context_text(row, original, ("query", "reason", "applicability"))
+            rows.append(row)
+        context[field] = rows
+        context["omitted_counts"][field + "_rows"] = len(report[field]) - len(rows)
+        context["detail_locators"][field] = "#/" + field
+    context["deferred_action_count"] = report["deferred_action_count"]
+    return context

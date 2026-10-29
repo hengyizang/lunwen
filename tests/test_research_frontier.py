@@ -1,4 +1,5 @@
 """Cloud software fixtures, never scientific saturation or independent review."""
+import copy
 import json
 from pathlib import Path
 import tempfile
@@ -110,6 +111,67 @@ class ResearchFrontierTests(unittest.TestCase):
         for forbidden in ("PREFERRED_PROPOSED_QUERY", "PREFERRED_QUERY_REASON", "AUTHOR_PREFERRED_RATIONALE",
                           "RELATION_AUTHOR_PREFERENCE", '"relations"', '"worklist"', '"next_action"'):
             self.assertNotIn(forbidden, text)
+        after = {p.relative_to(self.project).as_posix(): p.read_bytes()
+                 for p in self.project.rglob("*") if p.is_file()}
+        self.assertEqual(before, after)
+
+    def test_large_history_context_is_bounded_discloses_omissions_and_preserves_originals(self):
+        original_observation = "FULL_ORIGINAL_NOTEBOOK_OBSERVATION " * 100
+        for index in range(2, 14):
+            self.question["evidence"].append({"id": f"E{index}", "stance": "unknown",
+                "read_scope": "fulltext", "observation": original_observation,
+                "source": {**self.source, "locator": "Synthetic original record"}})
+        notebook_questions = []
+        original_scope = copy.deepcopy(self.request["questions"][0])
+        self.request["questions"] = []
+        for index in range(20):
+            question = copy.deepcopy(self.question)
+            question["id"] = f"Q{index + 1}"
+            notebook_questions.append(question)
+            self.request["questions"].append({**copy.deepcopy(original_scope), "question_id": question["id"]})
+        write(self.project / frontier.NOTEBOOK, {"questions": notebook_questions})
+        receipt = self.search()
+        self.request["query_rounds"] = [{"id": f"round-{index}", "question_id": "Q1", "dimension": "results",
+            "receipt_ids": [receipt["receipt_id"]]} for index in range(30)]
+        self.request["proposed_queries"] = [{"question_id": "Q1", "dimension": "results",
+            "query": f"Synthetic query {index} " + "Q" * 1000,
+            "reason": "COMPLETE_PROPOSAL_REASON " * 100} for index in range(30)]
+        self.request["relations"] = [{"id": f"relation-{index}", "kind": "complements",
+            "from": {"question_id": "Q1", "kind": "evidence", "id": "E1"},
+            "to": {"question_id": "Q1", "kind": "decision", "id": "D1"},
+            "reason": "COMPLETE_RELATION_REASON " * 100, "applicability": "Synthetic source scope"}
+            for index in range(30)]
+        self.save()
+        report = frontier.refresh(self.project)
+        self.assertIn(original_observation, (self.project / report["report_path"]).read_text(encoding="utf-8"))
+        before = {p.relative_to(self.project).as_posix(): p.read_bytes()
+                  for p in self.project.rglob("*") if p.is_file()}
+        writer = frontier.model_context(self.project, report["report_path"], "writer")
+        critic = frontier.model_context(self.project, report["report_path"], "critic")
+        self.assertEqual(writer, frontier.model_context(self.project, report["report_path"], "writer"))
+        self.assertFalse(frontier.refresh(self.project)["changed"])
+        for context in (writer, critic):
+            self.assertEqual(len(context["coverage_observations"]), 40)
+            self.assertEqual(context["omitted_counts"]["coverage_observations"], 20)
+            self.assertEqual(len(context["query_rounds"]), 20)
+            self.assertEqual(context["omitted_counts"]["query_rounds"], 10)
+            self.assertEqual(context["omitted_counts"]["notebook_evidence_rows"], 260)
+            self.assertEqual(context["report_path"], report["report_path"])
+            self.assertEqual(context["report_sha256"], report["report_sha256"])
+            self.assertFalse(context["all_sources_read"])
+            text = json.dumps(context)
+            self.assertLess(len(text), 40000)
+            self.assertNotIn("FULL_ORIGINAL_NOTEBOOK_OBSERVATION", text)
+            self.assertNotIn("The transfer fails under drift.", text)
+        self.assertEqual(len(writer["proposed_queries"]), 2)
+        self.assertEqual(writer["omitted_counts"]["proposed_queries_rows"], 28)
+        self.assertEqual(len(writer["relations"]), 2)
+        self.assertEqual(writer["omitted_counts"]["relations_rows"], 28)
+        self.assertGreater(writer["proposed_queries"][0]["query_omitted_characters"], 240)
+        self.assertNotIn("COMPLETE_PROPOSAL_REASON", json.dumps(writer))
+        for field in ("worklist", "proposed_queries", "relations"):
+            self.assertNotIn(field, critic)
+        self.assertNotIn('"advice"', json.dumps(critic))
         after = {p.relative_to(self.project).as_posix(): p.read_bytes()
                  for p in self.project.rglob("*") if p.is_file()}
         self.assertEqual(before, after)
