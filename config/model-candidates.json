@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "policy_version": "2026-10-20.2",
+  "policy_version": "2026-10-29.1",
   "minimum_paired_cases": 6,
   "minimum_holdout_cases": 3,
   "cooldown_seconds": 600,
@@ -1635,6 +1635,67 @@
         "pdf"
       ],
       "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-terra--high--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-terra",
+      "family": "openai",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 8192,
+      "timeout_seconds": 300,
+      "modalities": [
+        "text"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-codex-pro--gpt-6.1-terra--medium--standard",
+      "provider": "codekey-codex-pro",
+      "model": "gpt-6.1-terra",
+      "family": "openai",
+      "reasoning_effort": "medium",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 8192,
+      "timeout_seconds": 300,
+      "modalities": [
+        "text"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-kimi--kimi-k3.1-pro--high--standard",
+      "provider": "codekey-kimi",
+      "model": "kimi-k3.1-pro",
+      "family": "moonshot",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 8192,
+      "timeout_seconds": 300,
+      "modalities": [
+        "text"
+      ],
+      "status": "candidate"
+    },
+    {
+      "candidate_id": "codekey-gemini-chat--gemini-4-argon--high--standard",
+      "provider": "codekey-gemini-chat",
+      "model": "gemini-4-argon",
+      "family": "google",
+      "reasoning_effort": "high",
+      "context_band": "standard",
+      "max_input_bytes": 64000,
+      "max_output_tokens": 8192,
+      "timeout_seconds": 300,
+      "modalities": [
+        "text"
+      ],
+      "status": "candidate"
     }
   ]
 }
+

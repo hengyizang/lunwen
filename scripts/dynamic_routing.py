@@ -473,8 +473,8 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
                 raise RoutingError("Claude remains limited to read-only scientific planning and independent audits")
             if baseline_route.get("persistent_output") and family != "openai":
                 raise RoutingError("persistent scientific writer must remain OpenAI")
-            if baseline_route.get("persistent_output") and candidate["model"] not in {"gpt-6.1-sol", "gpt-6-astra"}:
-                raise RoutingError("persistent scientific writers remain Sol or Astra")
+            if baseline_route.get("persistent_output") and candidate["model"] not in {"gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra"}:
+                raise RoutingError("persistent scientific writers require an allowed OpenAI model and scoped acceptance")
             if candidate["model"] == "gpt-5.6-luna" and baseline_route.get("role") not in {"metadata-extraction", *model_routing.APPROVED_HEALTH_ROLES}:
                 raise RoutingError("Luna remains limited to its validated metadata source-contract role")
             if baseline_route.get("role") in model_routing.READ_ONLY_ROLES and family != "anthropic":

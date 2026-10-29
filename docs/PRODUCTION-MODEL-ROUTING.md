@@ -75,6 +75,7 @@ The existing keys are imported into these GitHub Actions Secrets:
 * `DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY`
 * `DR_OS_CODEKEY_DEEPSEEK_KEY`
 * `DR_OS_CODEKEY_GEMINI_KEY`
+* `DR_OS_CODEKEY_KIMI_KEY` (Kimi candidate transport; no automatic role promotion)
 
 Owner research and continuation workflows set `DR_OS_ROUTING_PROFILE=production`
 and inject only those model keys. No official OpenAI or Anthropic key is needed
@@ -217,3 +218,4 @@ requests and cannot grant spending authority. Cloud unit tests use fake
 transports to verify protocols, per-role effort, reservations, meter failures,
 cache isolation and source contracts. Neither check establishes real research
 findings, empirical quality, scientific completion or journal acceptance.
+
