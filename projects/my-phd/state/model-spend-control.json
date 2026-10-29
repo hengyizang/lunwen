@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "41aa0d58b8a94d1ab28070793b4f400d": {
-      "at": "2026-10-29T15:54:26+00:00",
-      "call_id": "deepseek-high|source-extraction",
-      "kind": "new_call",
-      "max_cost_cny": 0.0601594,
-      "paper_id": null,
-      "run_id": "40905696013",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -118,8 +109,12 @@
     {
       "actual_cost_cny": 0.00039802,
       "receipt_id": "51cda0a051b14ae0b913548f69ee5fa4"
+    },
+    {
+      "actual_cost_cny": 0.00025886,
+      "receipt_id": "41aa0d58b8a94d1ab28070793b4f400d"
     }
   ],
-  "spent_cny": 0.09847454,
+  "spent_cny": 0.0987334,
   "tranche_cny": 300
 }
