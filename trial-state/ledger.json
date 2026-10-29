@@ -1966,7 +1966,7 @@
         "cost_cny": 0.0615076,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
-      "billing_status": "reserved",
+      "billing_status": "settled",
       "generation_status": "completed",
       "run_id": "40905696013",
       "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
@@ -2005,7 +2005,21 @@
           "statistically significant improvement": true
         }
       },
-      "duration_seconds": 66.8785
+      "duration_seconds": 66.8785,
+      "actual_cost_cny": 0.0167748,
+      "debit_evidence": {
+        "source": "https://codekey.ai/v1/usage",
+        "before": {
+          "requests": 7,
+          "cost_cny": 0.0615076
+        },
+        "after": {
+          "requests": 8,
+          "cost_cny": 0.0782824
+        },
+        "exactly_one_new_gateway_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      }
     }
   ],
   "legacy_budget_reservations": {
