@@ -305,7 +305,8 @@ def inspect(provider, *, store=None):
             "catalog_access_does_not_release_holds": True}
 
 
-def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=False):
+def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=False,
+          evaluation_trial_exception=False):
     if type(max_cost_cny) not in (int, float) or not math.isfinite(max_cost_cny) or max_cost_cny <= 0:
         raise RelayGuardError("shared relay reservation needs a positive bounded amount")
     store, name, value, expected = load(provider, store=store)
@@ -335,6 +336,34 @@ def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=
                     for key, amount in permitted.items()))
         if not exception:
             raise RelayGuardError("writing trial exception differs from the exact owner authorization")
+    if evaluation_trial_exception:
+        # Separate owner authorization on 2026-10-29. Old ledgers/holds remain
+        # intact; this does not reopen the closed writing trial or production.
+        permitted = ({"09b68c08573ed0ebbd0abd6f9d2eedf402a1edfab5bcbccd8d0e3f19022f318c": 0.0625758}
+            if provider == "codekey-deepseek" else {
+                "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": 0.431508,
+                "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024,
+            })
+        legacy_id = scope.get("legacy_budget_reservation_id") if isinstance(scope, dict) else None
+        legacy_bound = (isinstance(legacy_id, str) and re.fullmatch(r"[a-f0-9]{32}", legacy_id) is not None
+            if provider == "codekey-deepseek" else legacy_id == "2b9e5e82da8a4f0bb9bfb6520ba814d1")
+        exception = (provider in {"codekey-gemini", "codekey-gemini-chat", "codekey-deepseek"}
+            and isinstance(scope, dict) and scope.get("trial") == "model-evaluation-20261029"
+            and scope.get("authorization") == "model-evaluation-20261029-owner-paid-with-legacy-holds"
+            and os.environ.get("MODEL_EVALUATION_AUTHORIZATION") == scope["authorization"]
+            and os.environ.get("GITHUB_ACTIONS") == "true"
+            and os.environ.get("GITHUB_REPOSITORY") == REPOSITORY
+            and os.environ.get("GITHUB_ACTOR") == "hengyizang"
+            and os.environ.get("GITHUB_REF") == "refs/heads/codex/model-evaluation-20261029"
+            and os.environ.get("GITHUB_EVENT_NAME") in {"push", "workflow_dispatch"}
+            and isinstance(scope.get("project_reservation_id"), str)
+            and re.fullmatch(r"[a-f0-9]{32}", scope["project_reservation_id"]) is not None
+            and legacy_bound
+            and set(value["legacy_holds"]) == set(permitted)
+            and all(value["legacy_holds"][key]["reserved_ceiling_cny"] == amount
+                    for key, amount in permitted.items()))
+        if not exception:
+            raise RelayGuardError("model evaluation exception differs from the exact owner authorization")
     if (value["legacy_holds"] and not exception) or value["active"]:
         # Import historical unknown holds durably, even though no new POST is allowed.
         store.write(name, value, expected)
@@ -562,3 +591,4 @@ def reconcile(project, source, actor, review_sha256, run_id, note):
         value.setdefault("reconciled_legacy_ids", []).extend(proposal["hold_ids"])
     value["events"].append({"status": "owner_reconciliation", **authority})
     store.write(name, value, expected)
+

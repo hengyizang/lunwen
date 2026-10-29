@@ -27,17 +27,17 @@ class ProductionProviderTests(unittest.TestCase):
 
     def env(self):
         return {"GITHUB_ACTIONS":"true", **{spec["key_setting"]: f"fixture-only-{name}"
-                for name, spec in providers.PRODUCTION_PROVIDERS.items()}}
+                for name, spec in providers.PRODUCTION_PROVIDERS.items() if name != "codekey-gemini-chat"}}
 
-    def response(self, family="openai", model="gpt-6.1-sol"):
-        if family == "google":
+    def response(self, family="openai", model="gpt-6.1-sol", protocol=None):
+        if family == "google" and protocol != "openai_chat_completions":
             return {"modelVersion": model, "responseId": "gemini-fixture",
                     "candidates": [{"finishReason": "STOP", "content": {"parts": [
                         {"text": "private thought", "thought": True}, {"text": "final text"}]}}],
                     "usageMetadata": {"promptTokenCount": 100, "cachedContentTokenCount": 30,
                                       "candidatesTokenCount": 10, "thoughtsTokenCount": 20,
                                       "totalTokenCount": 130}}
-        if family == "deepseek":
+        if family == "deepseek" or protocol == "openai_chat_completions":
             return {"model": model, "id": "ds-fixture", "choices": [{"finish_reason": "stop",
                     "message": {"content": "final text", "reasoning_content": "private thought"}}],
                     "usage": {"prompt_tokens": 100, "completion_tokens": 30,
@@ -57,7 +57,7 @@ class ProductionProviderTests(unittest.TestCase):
 
     def invoke(self, route, response=None, **kwargs):
         spec = providers.PRODUCTION_PROVIDERS[route]
-        response = response or self.response(spec["family"], kwargs.get("model", spec["model"]))
+        response = response or self.response(spec["family"], kwargs.get("model", spec["model"]), spec["protocol"])
         with patch.dict(os.environ, self.env(), clear=True), patch.object(
                 providers, "_production_request", return_value=response) as transport:
             result = providers.call(route, "prompt fixture", system="system fixture", **kwargs)
@@ -81,9 +81,9 @@ class ProductionProviderTests(unittest.TestCase):
                 self.assertFalse(providers.configuration(route, {})["configured"])
             transport.assert_not_called()
 
-    def test_four_families_never_infer_independence_from_endpoint(self):
+    def test_families_never_infer_independence_from_endpoint(self):
         self.assertEqual({providers.provider_family(route) for route in providers.PRODUCTION_PROVIDERS},
-                         {"openai", "anthropic", "deepseek", "google"})
+                         {"openai", "anthropic", "deepseek", "google", "moonshot"})
         self.assertEqual(providers.provider_family("cheapai-gpt-pro"),
                          providers.provider_family("cheapai-gpt-discount"))
 
@@ -202,8 +202,8 @@ class ProductionProviderTests(unittest.TestCase):
     def test_missing_and_mismatched_identity_cannot_be_disabled(self):
         for route, spec in providers.PRODUCTION_PROVIDERS.items():
             for reported in (None, "unverified-alias"):
-                response = self.response(spec["family"], spec["model"])
-                response["modelVersion" if spec["family"] == "google" else "model"] = reported
+                response = self.response(spec["family"], spec["model"], spec["protocol"])
+                response["modelVersion" if spec["protocol"] == "gemini_generate_content" else "model"] = reported
                 with self.subTest(route=route, reported=reported), patch.dict(os.environ,
                         {**self.env(), "UUAPI_STRICT_MODEL_ID": "false"}, clear=True), patch.object(
                         providers, "_production_request", return_value=response) as transport:
@@ -216,7 +216,7 @@ class ProductionProviderTests(unittest.TestCase):
                     ("codekey-kiro-enterprise", "stop_reason", "max_tokens")]
         for route, field, value in examples:
             spec = providers.PRODUCTION_PROVIDERS[route]
-            response = self.response(spec["family"], spec["model"])
+            response = self.response(spec["family"], spec["model"], spec["protocol"])
             response[field] = value
             with patch.dict(os.environ, self.env(), clear=True), patch.object(
                     providers, "_production_request", return_value=response):
@@ -303,3 +303,4 @@ class ProductionProviderTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -49,8 +49,11 @@ class DynamicProviderTests(unittest.TestCase):
                 self.assertNotIn("fixture-only-secret", json.dumps(config))
                 self.assertEqual(config["billing_identity"]["group"], name)
                 self.assertFalse(providers.configuration(name, {"OPENAI_API_KEY": "unrelated"})["configured"])
-        self.assertEqual(len({spec["key_setting"] for spec in providers.PRODUCTION_PROVIDERS.values()}),
-                         len(providers.PRODUCTION_PROVIDERS))
+        shared = {}
+        for name, spec in providers.PRODUCTION_PROVIDERS.items():
+            shared.setdefault(spec["key_setting"], set()).add(name)
+        self.assertEqual([names for names in shared.values() if len(names) > 1],
+                         [{"codekey-gemini", "codekey-gemini-chat"}])
 
     def test_optional_missing_key_never_uses_another_groups_key(self):
         for name in NEW_GROUPS:
@@ -62,7 +65,7 @@ class DynamicProviderTests(unittest.TestCase):
                 transport.assert_not_called()
 
     def test_openai_groups_keep_exact_allowlist_and_effort_payload(self):
-        models = {"gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"}
+        models = {"gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna", "gpt-6.1-terra"}
         for name, spec in providers.PRODUCTION_PROVIDERS.items():
             if spec["family"] != "openai":
                 continue
@@ -209,6 +212,15 @@ class DynamicProviderTests(unittest.TestCase):
         for name, spec in providers.PRODUCTION_PROVIDERS.items():
             for model in spec["models"]:
                 config = providers.configuration(name, {})
+                if (name, model) not in raw:
+                    # Evaluation-only candidates need a separately authorized
+                    # exact quote; adding transport support never invents one.
+                    self.assertTrue(model == "gpt-6.1-terra" or
+                                    name in {"codekey-kimi", "codekey-gemini-chat"})
+                    with self.assertRaises(ValueError):
+                        billing_quotes.select(document, name,
+                            spec["root"] + spec["path"].format(model=model), model, config["billing_identity"])
+                    continue
                 quote = billing_quotes.select(document, name, spec["root"] + spec["path"].format(model=model),
                                                model, config["billing_identity"])
                 self.assertEqual(quote["billing_identity"]["group"], name)
@@ -233,3 +245,4 @@ class DynamicProviderTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

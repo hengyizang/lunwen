@@ -868,8 +868,12 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
         messages.append({"role": "user", "content": prompt})
         payload = {"model": model, "messages": messages, "max_tokens": max_output_tokens,
                    "reasoning_effort": effort}
-        if family in {"deepseek", "moonshot"}:
+        if family == "deepseek":
             payload["thinking"] = {"type": "enabled"}
+        elif family == "moonshot":
+            # K3.1 Pro is always-thinking; its documented cap includes reasoning
+            # and answer tokens. Do not send an undocumented thinking toggle.
+            payload["max_completion_tokens"] = payload.pop("max_tokens")
     elif native_google:
         headers = {"x-goog-api-key": key}
         parts = [{"text": prompt}] + [{"inlineData": {"mimeType": item["mime_type"], "data": item["data_base64"]}} for item in media]
@@ -1014,3 +1018,4 @@ def call(provider: str, prompt: str, **kwargs: Any) -> ModelResult:
     if provider == "uuapi-anthropic":
         return call_uuapi_anthropic(prompt, **kwargs)
     raise ProviderError(f"Unknown provider: {provider}")
+

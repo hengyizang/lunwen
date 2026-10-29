@@ -187,7 +187,8 @@ def continue_independent_routes(ledger, current_sha):
 
 
 class Budget:
-    def __init__(self, token):
+    def __init__(self, token, *, trial_id=TRIAL):
+        self.trial_id = trial_id
         self.state = State(token, "cloud-state/my-phd", "projects/my-phd/state")
         self.root = ROOT / ".runtime/writing-budget"
 
@@ -205,7 +206,7 @@ class Budget:
         control = self.refresh()
         if kind == "retained_legacy":
             found = [(identifier, row) for identifier, row in control["reservations"].items()
-                     if row.get("writing_trial") == TRIAL and row.get("kind") == kind]
+                     if row.get("writing_trial") == self.trial_id and row.get("kind") == kind]
             if found:
                 if len(found) != 1 or found[0][1]["max_cost_cny"] != OLD_HOLD:
                     raise ValueError("retained old trial reservation differs; no allowance reset")
@@ -213,7 +214,7 @@ class Budget:
         identifier = model_spend.reserve(self.root, max_cost_cny=amount, paper_id=None,
             paper_limit_cny=500, run_id=os.environ["GITHUB_RUN_ID"])
         control = model_spend.read(self.root, required=True)
-        control["reservations"][identifier].update(writing_trial=TRIAL, kind=kind, call_id=call_id)
+        control["reservations"][identifier].update(writing_trial=self.trial_id, kind=kind, call_id=call_id)
         model_spend.write(self.root, control)
         self.persist()
         return identifier
@@ -433,3 +434,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
