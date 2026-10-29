@@ -2325,6 +2325,135 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "sol-high|statistical-interpretation",
+      "route_id": "sol-high",
+      "case_id": "statistical-interpretation",
+      "task_class": "scientific-interpretation",
+      "partition": "calibration",
+      "case_sha256": "f2bb824559711ad5012a2a493e77a4ec2f16bc4db679253b3d764028f950c49e",
+      "provider": "cheapai-gpt-pro",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.8243928,
+      "project_reservation_id": "3428b6072b6047ec8494512d24c1adf9",
+      "meter_before": {
+        "provider": "cheapai-gpt-pro",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1525,
+            "created_at": 1793289718,
+            "prompt_tokens": 4606,
+            "completion_tokens": 803,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 958,
+            "created_at": 1793289370,
+            "prompt_tokens": 4614,
+            "completion_tokens": 286,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1398,
+            "created_at": 1793117200,
+            "prompt_tokens": 5259,
+            "completion_tokens": 557,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6026,
+            "created_at": 1793116718,
+            "prompt_tokens": 5259,
+            "completion_tokens": 652,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6309,
+            "created_at": 1793116660,
+            "prompt_tokens": 5217,
+            "completion_tokens": 712,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1461,
+            "created_at": 1793116601,
+            "prompt_tokens": 5217,
+            "completion_tokens": 623,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6022,
+            "created_at": 1793116548,
+            "prompt_tokens": 5216,
+            "completion_tokens": 660,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1519,
+            "created_at": 1793116493,
+            "prompt_tokens": 5216,
+            "completion_tokens": 676,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1224,
+            "created_at": 1793116436,
+            "prompt_tokens": 4838,
+            "completion_tokens": 514,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4628,
+            "created_at": 1793116383,
+            "prompt_tokens": 4838,
+            "completion_tokens": 482,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4865,
+            "created_at": 1793116329,
+            "prompt_tokens": 4934,
+            "completion_tokens": 506,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1205,
+            "created_at": 1793116283,
+            "prompt_tokens": 4934,
+            "completion_tokens": 447,
+            "id": 12
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1667,
+            "created_at": 1793116236,
+            "prompt_tokens": 5403,
+            "completion_tokens": 773,
+            "id": 13
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "40905696013",
+      "code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
     }
   ],
   "legacy_budget_reservations": {
