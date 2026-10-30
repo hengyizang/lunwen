@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "59ca231cb0e74a57b4a05c5f3375d0b0": {
-      "at": "2026-10-30T09:13:14+00:00",
-      "call_id": "sol-high|discriminating-experiment",
-      "kind": "new_call",
-      "max_cost_cny": 0.835296,
-      "paper_id": null,
-      "run_id": "41031366106",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -207,9 +198,13 @@
     {
       "actual_cost_cny": 0.0239526,
       "receipt_id": "39d93b3fbdbe42efbd85f7eb678a3926"
+    },
+    {
+      "actual_cost_cny": 0.00401,
+      "receipt_id": "59ca231cb0e74a57b4a05c5f3375d0b0"
     }
   ],
-  "spent_cny": 0.21557438,
+  "spent_cny": 0.21958438,
   "tranche_cny": 300,
   "unsent_events": [
     {
