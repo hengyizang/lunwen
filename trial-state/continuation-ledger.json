@@ -740,6 +740,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "terra-high|writing-integrity",
+      "route_id": "terra-high",
+      "case_id": "writing-integrity",
+      "task_class": "local-writing",
+      "partition": "holdout",
+      "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+      "provider": "codekey-codex-pro",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.159789,
+      "project_reservation_id": "687a0077618b437e8076782fb8bd6ad6",
+      "meter_before": {
+        "provider": "codekey-codex-pro",
+        "kind": "codekey_total_actual_cost",
+        "requests": 7,
+        "cost_cny": 0.003259898,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "41031366106",
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
     }
   ],
   "legacy_budget_reservations": {
