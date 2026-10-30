@@ -489,9 +489,54 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"focal_prediction\": \"Across 40 paired synthetic disruption draws, the adaptive mechanism will have lower mean allocation loss than a nonadaptive comparator that fixes reserve allocation using the initial bottleneck. Both policies receive and deploy exactly the same reserve capacity; the adaptive policy will shift reserve toward the new bottleneck after each scheduled shift. Positive paired improvement under these conditions supports adaptation to the shifting bottleneck rather than additional reserve spending.\",\n  \"rival_prediction\": \"With reserve deployment and disruption draws matched, the adaptive mechanism will show no allocation-loss advantage. Any advantage observed without matched deployment would instead be attributable to greater reserve-capacity spending.\",\n  \"comparison\": \"Run one fixed-horizon, 100-period paired comparison per draw, with bottleneck shifts at periods 25, 50, and 75. The primary estimand is the mean paired difference: nonadaptive allocation loss minus adaptive allocation loss, so positive values favor the focal mechanism. Report a 95% paired confidence interval; no tuning or additional draws are permitted.\",\n  \"matched_resource_budget\": {\n    \"reserve_capacity\": \"The same pre-specified capacity-period budget B for each policy within each paired draw; both must deploy exactly B, differing only in allocation timing and location.\",\n    \"disruptions\": \"Identical disruption draws, initial conditions, demand, capacities, and bottleneck-shift sequence through common random seeds.\",\n    \"other_resources\": \"Identical activation-latency functions, switching-cost functions, and scoring rules.\"\n  },\n  \"controls\": [\n    \"Verify that each scheduled bottleneck shift occurs and is observable to the adaptive policy.\",\n    \"Verify that the nonadaptive policy does not reallocate after initialization and that the adaptive policy reallocates toward the measured bottleneck.\",\n    \"Audit per-draw reserve deployment for exact budget equality and reject any pair with a mismatch.\",\n    \"Calculate allocation loss identically for both policies, with activation delays reducing delivered capacity and switching penalties included.\",\n    \"Record activation latency and switching cost for every activation and switch, alongside reserve locations and bottleneck measurements.\",\n    \"Use fixed policies, horizon, draw count, and analysis before execution.\"\n  ],\n  \"observable\": {\n    \"primary\": \"Total allocation loss over the fixed horizon under the common scoring rule.\",\n    \"mechanism_check\": \"Post-shift reserve share assigned to the currently measured bottleneck.\",\n    \"required_logs\": \"Reserve deployment by period and location, activation latencies, switching costs, disruption seeds, and paired allocation losses.\"\n  },\n  \"falsifier\": \"The focal prediction is falsified in this experiment if mean paired improvement is zero or negative, or if the adaptive policy fails to move reserve toward shifted bottlenecks. The rival prediction is falsified if the adaptive policy achieves a positive improvement whose 95% confidence interval excludes zero while reserve deployment and all paired controls remain matched.\",\n  \"inconclusive_condition\": \"The outcome is inconclusive if any manipulation or measurement control fails, including unequal reserve deployment, mismatched disruption draws, absent or unobserved bottleneck shifts, failed policy-behavior checks, inconsistent loss measurement, or missing latency or switching-cost logs. A confidence interval crossing zero also does not establish a confirmed adaptive advantage.\",\n  \"stopping_rule\": \"Stop after exactly 40 valid paired draws and conduct the single pre-specified analysis. Do not add draws based on results. Stop early and declare the experiment inconclusive if a control failure cannot be corrected without changing the pre-specified design.\",\n  \"execution_status\": \"Proposal only; not permission to execute. No dataset, simulation, experimental run, or empirical result exists.\"\n}",
+      "reported_model": "kimi-k3.1-pro",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_tokens": 2294,
+        "completion_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 1550
+        },
+        "prompt_tokens": 284,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "input_tokens": 284,
+        "output_tokens": 2294,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 1550
+        }
+      },
+      "request_id": "ac5c968a6e3569dff6b8e734249c1307",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "81eaf1ed10d0144cb759191eb227d269a3eb0be7994ca4342eac5b63a0117aa0",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "switching": true,
+          "latency": true,
+          "inconclusive": true
+        },
+        "forbidden_fragments_absent": {
+          "experiments demonstrate": true,
+          "results prove": true,
+          "novelty is verified": true,
+          "we achieved": true
+        }
+      },
+      "duration_seconds": 97.7486
     }
   ],
   "legacy_budget_reservations": {
