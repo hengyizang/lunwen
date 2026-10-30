@@ -39,15 +39,6 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
-    "b3308386362c4928aac28d35fbcc803e": {
-      "at": "2026-10-30T09:14:15+00:00",
-      "call_id": "deepseek-high|writing-integrity",
-      "kind": "new_call",
-      "max_cost_cny": 0.0606298,
-      "paper_id": null,
-      "run_id": "41031366106",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
@@ -215,9 +206,13 @@
     {
       "actual_cost_cny": 0.00025956,
       "receipt_id": "687a0077618b437e8076782fb8bd6ad6"
+    },
+    {
+      "actual_cost_cny": 0.00061768,
+      "receipt_id": "b3308386362c4928aac28d35fbcc803e"
     }
   ],
-  "spent_cny": 0.21984394,
+  "spent_cny": 0.22046162,
   "tranche_cny": 300,
   "unsent_events": [
     {
