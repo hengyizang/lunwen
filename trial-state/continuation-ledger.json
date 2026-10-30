@@ -882,6 +882,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "kimi-high|writing-integrity",
+      "route_id": "kimi-high",
+      "case_id": "writing-integrity",
+      "task_class": "local-writing",
+      "partition": "holdout",
+      "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+      "provider": "codekey-kimi",
+      "requested_model": "kimi-k3.1-pro",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 4.858441,
+      "project_reservation_id": "4b6bfc636cec4b3a9431006a1aeb1a2a",
+      "meter_before": {
+        "provider": "codekey-kimi",
+        "kind": "codekey_total_actual_cost",
+        "requests": 4,
+        "cost_cny": 0.047913,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "41031366106",
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
     }
   ],
   "legacy_budget_reservations": {
