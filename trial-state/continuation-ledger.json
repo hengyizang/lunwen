@@ -321,7 +321,7 @@
       }
     }
   },
-  "status": "running",
+  "status": "closed",
   "entries": [
     {
       "call_id": "terra-high|discriminating-experiment",
@@ -1969,5 +1969,7 @@
       "new_code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
       "authorization": "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon"
     }
-  ]
+  ],
+  "completed_at": "2026-10-30T09:19:25.938010+00:00",
+  "unattempted_call_ids": []
 }
