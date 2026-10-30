@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "7bd90530c6e947a9a3dec815f42858f6": {
-      "at": "2026-10-30T09:16:25+00:00",
-      "call_id": "terra-high|evidence-conflict",
-      "kind": "new_call",
-      "max_cost_cny": 0.159999,
-      "paper_id": null,
-      "run_id": "41031366106",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -227,9 +218,13 @@
     {
       "actual_cost_cny": 0.001856,
       "receipt_id": "7002e103cc5e4755960414fa34ad8381"
+    },
+    {
+      "actual_cost_cny": 0.00047898,
+      "receipt_id": "7bd90530c6e947a9a3dec815f42858f6"
     }
   ],
-  "spent_cny": 0.22859557,
+  "spent_cny": 0.22907455,
   "tranche_cny": 300,
   "unsent_events": [
     {
