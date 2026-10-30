@@ -685,9 +685,42 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"focal_prediction\": \"In a bounded software-fixture experiment with shifting bottlenecks, an adaptive allocation policy will achieve better task performance or faster recovery than a capacity-matched nonadaptive policy, even when both receive identical total reserve capacity and identical disruption draws. The focal advantage should remain after recording activation latency and switching cost.\",\n  \"rival_prediction\": \"Under identical total reserve-capacity budgets and disruption draws, the adaptive policy will not outperform the capacity-matched nonadaptive policy once reserve spending is matched. Any observed gain should be attributable to differences in reserve consumption rather than adaptation to the shifting bottleneck.\",\n  \"comparison\": \"Run paired episodes using the same initial state and replayed disruption trace. In one condition, the focal policy reallocates reserve capacity in response to the currently measured bottleneck. In the rival condition, reserve capacity follows a prespecified nonadaptive allocation schedule with the same total budget and the same allowed reserve-spending opportunities. Compare task performance, recovery time, and disruption impact between paired episodes, while separately accounting for activation latency and switching cost.\",\n  \"matched_resource_budget\": \"Each paired condition receives the same fixed total reserve-capacity budget, identical per-episode compute and time limits, identical initial state, and the same replayed disruption draws. The nonadaptive condition must be permitted to spend reserve capacity on the same schedule or at the same total amount as the adaptive condition; unused reserve capacity is recorded rather than silently reallocated.\",\n  \"controls\": [\n    \"Use identical initial states and paired, replayed disruption traces across conditions.\",\n    \"Randomize condition order across episodes while preserving trace pairing.\",\n    \"Include a no-shift control in which the bottleneck remains stable, to test whether any advantage is specific to shifting bottlenecks.\",\n    \"Include instrumentation checks for reserve-budget accounting, bottleneck measurement, activation timing, switching events, and disruption-trace identity.\",\n    \"Predefine the allocation schedule, performance metric, latency metric, switching-cost metric, and analysis rule before running the fixture.\"\n  ],\n  \"observable\": \"Primary observable: paired difference in task performance or recovery time on shifting-bottleneck episodes. Secondary observables: performance on stable-bottleneck episodes, total reserve capacity consumed, activation latency after a bottleneck shift, number and cost of allocation switches, and disruption-related performance loss.\",\n  \"falsifier\": \"The focal mechanism is falsified for this fixture if, with valid manipulation and measurement controls, the adaptive policy shows no improvement over the capacity-matched nonadaptive policy on the prespecified primary observable across shifting-bottleneck episodes, or if any apparent improvement disappears after matching and accounting for reserve consumption, activation latency, and switching cost.\",\n  \"inconclusive_condition\": \"The result is inconclusive if reserve budgets or disruption draws are not matched, if bottleneck measurement or manipulation fails, if activation latency or switching cost cannot be recorded reliably, if paired traces differ, or if the prespecified primary observable cannot be computed for the required episodes.\",\n  \"stopping_rule\": \"Stop after the prespecified fixed set of paired software-fixture episodes has been completed, or stop earlier if any manipulation, resource-accounting, disruption-replay, or measurement-control failure is detected. Do not stop early because one condition appears favorable.\",\n  \"execution_status\": \"Proposal only. No dataset, simulation, or experimental run exists, and no result or novelty claim is being made.\"\n}",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4634,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3200
+        },
+        "output_tokens": 1216,
+        "output_tokens_details": {
+          "reasoning_tokens": 516
+        }
+      },
+      "request_id": "resp_069fd9b9d72cb92e016ae45fb29dc48190855faa5ce1cb59e1",
+      "endpoint": "https://cheapai.info/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "acf78a39e2b3a07c5fbed6e59ded9064bdea8eb673f81cd17886df58ede8e1b7",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "switching": true,
+          "latency": true,
+          "inconclusive": true
+        },
+        "forbidden_fragments_absent": {
+          "experiments demonstrate": true,
+          "results prove": true,
+          "novelty is verified": true,
+          "we achieved": true
+        }
+      },
+      "duration_seconds": 10.4996
     }
   ],
   "legacy_budget_reservations": {
