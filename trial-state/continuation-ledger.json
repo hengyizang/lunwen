@@ -809,6 +809,30 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "deepseek-high|writing-integrity",
+      "route_id": "deepseek-high",
+      "case_id": "writing-integrity",
+      "task_class": "local-writing",
+      "partition": "holdout",
+      "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+      "provider": "codekey-deepseek",
+      "requested_model": "deepseek-v4.1-flash",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.0606298,
+      "project_reservation_id": "b3308386362c4928aac28d35fbcc803e",
+      "meter_before": {
+        "provider": "codekey-deepseek",
+        "kind": "codekey_total_actual_cost",
+        "requests": 4,
+        "cost_cny": 0.00567308,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "41031366106",
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
     }
   ],
   "legacy_budget_reservations": {
