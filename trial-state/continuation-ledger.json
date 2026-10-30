@@ -343,9 +343,42 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41027978880",
-      "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b"
+      "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+      "text": "{\n  \"focal_prediction\": \"In a synthetic planning fixture with a shifting bottleneck, adaptive allocation will produce better net service performance than a fixed allocation under the same reserve-capacity budget and disruption draws.\",\n  \"rival_prediction\": \"Once reserve-capacity spending is matched, adaptive allocation will not improve net service performance over fixed allocation; any apparent gain from greater reserve spending will disappear.\",\n  \"comparison\": \"Propose a paired simulation experiment in which both methods face the same sequence of disruptions and bottleneck shifts. The adaptive method reallocates reserve capacity in response to the observed bottleneck; the fixed method uses a prespecified allocation. Compare paired net service performance, accounting for switching cost and activation latency.\",\n  \"matched_resource_budget\": \"Give each method the same total reserve-capacity budget over each paired run and require equal reserve-capacity expenditure. Record expenditure to verify the match.\",\n  \"controls\": [\n    \"Use identical disruption draws, initial conditions, demand, and bottleneck-shift sequences within each pair.\",\n    \"Prespecify the fixed allocation and the adaptive reallocation rule before evaluating outcomes.\",\n    \"Apply the same measurement definitions and cost accounting to both methods.\",\n    \"Include a stable-bottleneck condition to check whether any adaptive advantage is specific to shifting bottlenecks.\",\n    \"Verify that the intended bottleneck shifts occur and that both methods' resource expenditures and outcomes are measured correctly.\"\n  ],\n  \"observable\": \"The paired difference in net service performance, using a prespecified service metric and deducting switching costs; also record activation latency, switching cost, and reserve-capacity expenditure for each method.\",\n  \"falsifier\": \"The focal prediction is not supported if, in valid shifting-bottleneck runs with matched reserve expenditure, the prespecified paired comparison shows no improvement in net service performance for adaptive allocation.\",\n  \"inconclusive_condition\": \"The outcome is inconclusive if the bottleneck-shift manipulation, budget matching, or measurement controls fail, or if the prespecified comparison cannot distinguish an improvement from no improvement.\",\n  \"stopping_rule\": \"Before any run, specify the number of paired disruption sequences, the service metric, and the decision threshold. Stop after that fixed number of pairs; do not extend the experiment based on interim results.\",\n  \"execution_status\": \"Proposal only, using a synthetic planning fixture. No dataset, simulation, or run exists; this is not permission to execute a study or change a frozen scientific plan.\"\n}",
+      "reported_model": "gpt-6.1-terra",
+      "usage": {
+        "input_tokens": 6194,
+        "input_tokens_details": {
+          "cached_tokens": 5702,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 681,
+        "output_tokens_details": {
+          "reasoning_tokens": 74
+        }
+      },
+      "request_id": "resp_081f581d00d7f996016ae4582347d48193bbbe46daf6d2b498",
+      "endpoint": "https://codekey.ai/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "7aecb83525eea3c8681b1e7750ef10add015deedc97e1e1ef5f96a9e490a8916",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "switching": true,
+          "latency": true,
+          "inconclusive": true
+        },
+        "forbidden_fragments_absent": {
+          "experiments demonstrate": true,
+          "results prove": true,
+          "novelty is verified": true,
+          "we achieved": true
+        }
+      },
+      "duration_seconds": 10.4337
     }
   ],
   "legacy_budget_reservations": {
