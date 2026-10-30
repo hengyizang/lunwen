@@ -1249,9 +1249,45 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"condition_specific_findings\": [\n    \"A:L1, A:L2: The adaptive policy was evaluated with zero switching cost and immediate activation, and it reduced delay under those conditions.\",\n    \"B:L1, B:L2: The same family of policies was tested with nonzero switching costs and activation delays; no clear advantage was identified in the high-cost, slow-activation condition.\",\n    \"C:L1: A related method is proposed in an abstract only; full methods and results are unavailable.\"\n  ],\n  \"conflict_or_boundary\": \"The A and B findings are condition-bounded rather than a direct contradiction: A:L2 reports delay reduction only under the zero-switching-cost and immediate-activation conditions stated in A:L1, while B:L2 reports no clear advantage under the nonzero-cost and delayed-activation conditions stated in B:L1. B:L1 says 'same family of policies,' not the identical policy, so cross-source equivalence is not established. C:L1 cannot be compared beyond its abstract proposal.\",\n  \"unsupported_claims\": [\n    \"Generalizing the delay reduction in A:L2 to nonzero switching costs or activation delays.\",\n    \"Generalizing the no-clear-advantage result in B:L2 to zero switching cost or immediate activation.\",\n    \"Treating B:L1's 'same family of policies' as the identical policy evaluated in A:L1.\",\n    \"Inferring methods or results for C beyond the abstract statement in C:L1.\",\n    \"Drawing any novelty conclusion from the incomplete bounded keyword search.\"\n  ],\n  \"missing_evidence\": [\n    \"Policy identity and parameters linking the A and B evaluations.\",\n    \"The magnitudes of the nonzero switching costs and activation delays in B:L1.\",\n    \"Sample sizes, metrics, baselines, and uncertainty estimates for A:L2 and B:L2.\",\n    \"Full methods and results for C:L1.\",\n    \"A completed bounded search report.\"\n  ],\n  \"next_check\": \"Obtain and compare full method and result details for A and B, specifically whether the identical policy instance was evaluated and the exact switching-cost and activation-delay values, before interpreting the results as condition-specific rather than conflicting.\"\n}",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "completion_tokens": 1431,
+        "completion_tokens_details": {
+          "reasoning_tokens": 978
+        },
+        "prompt_tokens": 294,
+        "input_tokens": 294,
+        "output_tokens": 1431,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 978
+        }
+      },
+      "request_id": "a3a0f81ad9984b2cb98301535807f263",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "deepseek_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "f8ca79e80b0c38cd39955b28bd47b1149f3c26d231225ce71d8eb574d2877ca3",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "A:L1": true,
+          "B:L1": true,
+          "C:L1": true
+        },
+        "forbidden_fragments_absent": {
+          "never been studied": true,
+          "novelty is confirmed": true,
+          "C proves": true
+        }
+      },
+      "duration_seconds": 9.903
     }
   ],
   "legacy_budget_reservations": {
