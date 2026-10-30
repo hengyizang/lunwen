@@ -830,9 +830,44 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "According to [D1], the package provides multiple pairwise comparison tests that can be applied after an omnibus analysis. It includes both parametric and nonparametric procedures intended for factorial and block designs, and it integrates with common scientific Python tools. The package also provides heatmaps of pairwise test results, which can support the presentation and inspection of those results. These capabilities are descriptive: [D1] reports no runtime benchmark, numerical speedup, universal significance guarantee, or priority claim. Accordingly, the package should not be described as a first or universal solution, as doubling performance on every workload, or as guaranteeing significant discoveries. Likewise, a heatmap of pairwise results should not be interpreted as proof of all hypotheses. The source supports only the stated functionality and applicable design contexts, namely pairwise comparisons following an omnibus analysis in factorial and block designs, together with integration with common scientific Python tools and heatmap output for pairwise test results.",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "completion_tokens": 978,
+        "completion_tokens_details": {
+          "reasoning_tokens": 793
+        },
+        "prompt_tokens": 264,
+        "input_tokens": 264,
+        "output_tokens": 978,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 793
+        }
+      },
+      "request_id": "6cac81e703b84cf98d88eede4c4f2774",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "deepseek_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "5b0931619b2df54d86f45cfc82f59b5b4f486e28a1ffa86d51f60a423cc16e11",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "[D1]": true
+        },
+        "forbidden_fragments_absent": {
+          "doubles performance": true,
+          "guarantees significant": true,
+          "first universal": true,
+          "proves all hypotheses": true
+        }
+      },
+      "duration_seconds": 35.3875
     }
   ],
   "legacy_budget_reservations": {
