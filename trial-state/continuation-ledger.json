@@ -2,7 +2,7 @@
   "trial_id": "model-evaluation-20261029",
   "scope": {
     "authorization": "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon",
-    "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+    "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
     "plan_sha256": "99c6bdc51f77c8075a43632507b05eb502c0d014d0fc079bfbb1237d06798ce7",
     "prices_sha256": "8a1287ba4aa1560914b03d84719694a53dda1ad0a55a591a3c0659f78c71deb9",
     "max_calls": 12,
@@ -321,7 +321,7 @@
       }
     }
   },
-  "status": "stopped",
+  "status": "running",
   "entries": [
     {
       "call_id": "terra-high|discriminating-experiment",
@@ -393,31 +393,6 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
-    },
-    {
-      "call_id": "deepseek-high|discriminating-experiment",
-      "route_id": "deepseek-high",
-      "case_id": "discriminating-experiment",
-      "task_class": "critical-experiment-design",
-      "partition": "holdout",
-      "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
-      "provider": "codekey-deepseek",
-      "requested_model": "deepseek-v4.1-flash",
-      "requested_effort": "high",
-      "reserved_ceiling_cny": 0.0605584,
-      "project_reservation_id": "5d63ab62a5f64f66ae40952fc56fadaf",
-      "meter_before": {
-        "provider": "codekey-deepseek",
-        "kind": "codekey_total_actual_cost",
-        "requests": 3,
-        "cost_cny": 0.00244566,
-        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
-      },
-      "billing_status": "reserved",
-      "generation_status": "not_sent",
-      "run_id": "41027978880",
-      "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
-      "diagnostic": "shared relay write readback failed"
     }
   ],
   "legacy_budget_reservations": {
@@ -430,5 +405,374 @@
   "independent_human_ratings_supplied": false,
   "scientific_equivalence_verified": false,
   "production_routing_changed": false,
-  "stop_reason": "Shared credential reservation failed before transport; preserve central hold."
+  "preflight_events": [
+    {
+      "status": "not_sent_recovered",
+      "repair": {
+        "source_blob": "4687efee7987c3ef0bd9749f75e11629555ef2b0",
+        "source_code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+        "reservation_id": "5d63ab62a5f64f66ae40952fc56fadaf",
+        "ticket_id": "1e2cda05f6044fe7a87a412dfa33f7b6",
+        "generation_sent": false
+      },
+      "original_entry": {
+        "call_id": "deepseek-high|discriminating-experiment",
+        "route_id": "deepseek-high",
+        "case_id": "discriminating-experiment",
+        "task_class": "critical-experiment-design",
+        "partition": "holdout",
+        "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+        "provider": "codekey-deepseek",
+        "requested_model": "deepseek-v4.1-flash",
+        "requested_effort": "high",
+        "reserved_ceiling_cny": 0.0605584,
+        "project_reservation_id": "5d63ab62a5f64f66ae40952fc56fadaf",
+        "meter_before": {
+          "provider": "codekey-deepseek",
+          "kind": "codekey_total_actual_cost",
+          "requests": 3,
+          "cost_cny": 0.00244566,
+          "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+        },
+        "billing_status": "reserved",
+        "generation_status": "not_sent",
+        "run_id": "41027978880",
+        "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+        "diagnostic": "shared relay write readback failed"
+      },
+      "generation_calls": 0
+    }
+  ],
+  "repair_amendments": [
+    {
+      "source_blob": "4687efee7987c3ef0bd9749f75e11629555ef2b0",
+      "source_code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+      "reservation_id": "5d63ab62a5f64f66ae40952fc56fadaf",
+      "ticket_id": "1e2cda05f6044fe7a87a412dfa33f7b6",
+      "generation_sent": false,
+      "previous_scope": {
+        "authorization": "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon",
+        "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b",
+        "plan_sha256": "99c6bdc51f77c8075a43632507b05eb502c0d014d0fc079bfbb1237d06798ce7",
+        "prices_sha256": "8a1287ba4aa1560914b03d84719694a53dda1ad0a55a591a3c0659f78c71deb9",
+        "max_calls": 12,
+        "project": "my-phd",
+        "project_ceiling_cny": 500,
+        "gemini_legacy_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+        "gemini_legacy_cny": 9.5836104,
+        "deepseek_legacy_cny": 0.0625758,
+        "routes": [
+          {
+            "id": "terra-high",
+            "provider": "codekey-codex-pro",
+            "model": "gpt-6.1-terra",
+            "effort": "high"
+          },
+          {
+            "id": "deepseek-high",
+            "provider": "codekey-deepseek",
+            "model": "deepseek-v4.1-flash",
+            "effort": "high"
+          },
+          {
+            "id": "kimi-high",
+            "provider": "codekey-kimi",
+            "model": "kimi-k3.1-pro",
+            "effort": "high"
+          },
+          {
+            "id": "sol-high",
+            "provider": "cheapai-gpt-pro",
+            "model": "gpt-6.1-sol",
+            "effort": "high"
+          }
+        ],
+        "quotes": {
+          "terra-high": {
+            "quote_schema": "2.0",
+            "provider": "codekey-codex-pro",
+            "endpoint": "https://codekey.ai/v1/responses",
+            "model": "gpt-6.1-terra",
+            "billing_identity": {
+              "plan": "production",
+              "group": "codekey-codex-pro",
+              "mode": "standard"
+            },
+            "currency": "CNY",
+            "price_version": "official-conservative-ceiling-20261029-owner-numeric-CNY",
+            "context_basis": "full_request_input_tokens",
+            "context_brackets": [
+              {
+                "min_input_tokens": 0,
+                "max_input_tokens": 272000,
+                "input_per_million": 0.2,
+                "output_per_million": 1.0,
+                "cache_read_per_million": 0.010000000000000002,
+                "cache_write_per_million": 0.5
+              },
+              {
+                "min_input_tokens": 272001,
+                "max_input_tokens": null,
+                "input_per_million": 0.4,
+                "output_per_million": 1.5,
+                "cache_read_per_million": 0.020000000000000004,
+                "cache_write_per_million": 1.0
+              }
+            ],
+            "tool_fees": {},
+            "quote_sha256": "4ac13d27e98f07c7bb143c7142f0e271df02fbb362d029d712aba7db82631cda"
+          },
+          "deepseek-high": {
+            "quote_schema": "2.0",
+            "provider": "codekey-deepseek",
+            "endpoint": "https://codekey.ai/v1/chat/completions",
+            "model": "deepseek-v4.1-flash",
+            "billing_identity": {
+              "plan": "production",
+              "group": "codekey-deepseek",
+              "mode": "standard"
+            },
+            "currency": "CNY",
+            "price_version": "official-domestic-CNY-peak-2026-10-19-x010",
+            "input_per_million": 0.2,
+            "output_per_million": 0.8,
+            "cache_read_per_million": 0.004,
+            "cache_write_per_million": 0.0,
+            "tool_fees": {},
+            "quote_sha256": "945b698dc980c1d1de5c97f82c1e954175dbb032df6cae8e1d4d56dc072387be"
+          },
+          "kimi-high": {
+            "quote_schema": "2.0",
+            "provider": "codekey-kimi",
+            "endpoint": "https://codekey.ai/v1/chat/completions",
+            "model": "kimi-k3.1-pro",
+            "billing_identity": {
+              "plan": "production",
+              "group": "codekey-kimi",
+              "mode": "standard"
+            },
+            "currency": "CNY",
+            "price_version": "conservative-official-domestic-CNY-1x-until-relay-tariff-verified-20261029",
+            "input_per_million": 13.0,
+            "output_per_million": 68.0,
+            "cache_read_per_million": 1.3,
+            "cache_write_per_million": 13.0,
+            "tool_fees": {},
+            "quote_sha256": "06b784fb478a7e191e5be5c3a0104f42b2dff74e0cf400fa411b03d31fefba22"
+          },
+          "sol-high": {
+            "quote_schema": "2.0",
+            "provider": "cheapai-gpt-pro",
+            "endpoint": "https://cheapai.info/v1/responses",
+            "model": "gpt-6.1-sol",
+            "billing_identity": {
+              "plan": "production",
+              "group": "cheapai-gpt-pro",
+              "mode": "standard"
+            },
+            "currency": "CNY",
+            "price_version": "relay-public-2026-10-19-owner-numeric-CNY",
+            "context_basis": "full_request_input_tokens",
+            "context_brackets": [
+              {
+                "min_input_tokens": 0,
+                "max_input_tokens": 272000,
+                "input_per_million": 0.44,
+                "output_per_million": 2.2,
+                "cache_read_per_million": 0.22,
+                "cache_write_per_million": 2.75,
+                "cache_write_5m_per_million": 2.75,
+                "cache_write_1h_per_million": 4.4
+              },
+              {
+                "min_input_tokens": 272001,
+                "max_input_tokens": null,
+                "input_per_million": 0.88,
+                "output_per_million": 3.3,
+                "cache_read_per_million": 0.44,
+                "cache_write_per_million": 5.5,
+                "cache_write_5m_per_million": 5.5,
+                "cache_write_1h_per_million": 8.8
+              }
+            ],
+            "tool_fees": {},
+            "quote_sha256": "047330c88861d9b3369cef6f320eb5e2ed8c1dabf9608365a823dd603e4d1767"
+          }
+        },
+        "queue": [
+          {
+            "call_id": "terra-high|discriminating-experiment",
+            "route_id": "terra-high",
+            "case_id": "discriminating-experiment",
+            "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.159432
+          },
+          {
+            "call_id": "deepseek-high|discriminating-experiment",
+            "route_id": "deepseek-high",
+            "case_id": "discriminating-experiment",
+            "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.0605584
+          },
+          {
+            "call_id": "kimi-high|discriminating-experiment",
+            "route_id": "kimi-high",
+            "case_id": "discriminating-experiment",
+            "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 4.8538
+          },
+          {
+            "call_id": "sol-high|discriminating-experiment",
+            "route_id": "sol-high",
+            "case_id": "discriminating-experiment",
+            "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.835296
+          },
+          {
+            "call_id": "terra-high|writing-integrity",
+            "route_id": "terra-high",
+            "case_id": "writing-integrity",
+            "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.159789
+          },
+          {
+            "call_id": "deepseek-high|writing-integrity",
+            "route_id": "deepseek-high",
+            "case_id": "writing-integrity",
+            "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.0606298
+          },
+          {
+            "call_id": "kimi-high|writing-integrity",
+            "route_id": "kimi-high",
+            "case_id": "writing-integrity",
+            "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 4.858441
+          },
+          {
+            "call_id": "sol-high|writing-integrity",
+            "route_id": "sol-high",
+            "case_id": "writing-integrity",
+            "case_sha256": "3251b5302f3871d1b91fc862bfd543b7a28bd16c3321c12d892a2cb576e173d8",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.8384376
+          },
+          {
+            "call_id": "terra-high|evidence-conflict",
+            "route_id": "terra-high",
+            "case_id": "evidence-conflict",
+            "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.159999
+          },
+          {
+            "call_id": "deepseek-high|evidence-conflict",
+            "route_id": "deepseek-high",
+            "case_id": "evidence-conflict",
+            "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.0606718
+          },
+          {
+            "call_id": "kimi-high|evidence-conflict",
+            "route_id": "kimi-high",
+            "case_id": "evidence-conflict",
+            "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 4.861171
+          },
+          {
+            "call_id": "sol-high|evidence-conflict",
+            "route_id": "sol-high",
+            "case_id": "evidence-conflict",
+            "case_sha256": "19e917c94a37c2983f1f953ee477878597bd33881d2ff4094e94701be8488d92",
+            "max_output_tokens": 8192,
+            "timeout": 300,
+            "reserved_ceiling_cny": 0.8402856
+          }
+        ],
+        "automatic_promotion": false,
+        "independent_human_ratings_supplied": false,
+        "scientific_equivalence_verified": false,
+        "original_binding": {
+          "source_blob": "65406a6cd6344c20ba4ec608ca12b0b8602c1a50",
+          "source_sha256": "fae6b3a6abe8d9c731c7c17f4d10bed0d2c24ea4519b4bb9de2cba01eae1d285",
+          "source_code_sha": "7ab623c3d1702d03d171bff3309d0b57a3ef87a1",
+          "source_plan_sha256": "99c6bdc51f77c8075a43632507b05eb502c0d014d0fc079bfbb1237d06798ce7",
+          "source_prices_sha256": "8a1287ba4aa1560914b03d84719694a53dda1ad0a55a591a3c0659f78c71deb9",
+          "original_attempted_call_ids": [
+            "argon-native-high|source-extraction",
+            "argon-chat-high|source-extraction",
+            "terra-high|source-extraction",
+            "terra-medium|source-extraction",
+            "deepseek-high|source-extraction",
+            "kimi-high|source-extraction",
+            "sol-high|source-extraction",
+            "argon-native-high|engineering-review",
+            "argon-chat-high|engineering-review",
+            "terra-high|engineering-review",
+            "terra-medium|engineering-review",
+            "deepseek-high|engineering-review",
+            "kimi-high|engineering-review",
+            "sol-high|engineering-review",
+            "argon-native-high|statistical-interpretation",
+            "argon-chat-high|statistical-interpretation",
+            "terra-high|statistical-interpretation",
+            "terra-medium|statistical-interpretation",
+            "deepseek-high|statistical-interpretation",
+            "kimi-high|statistical-interpretation",
+            "sol-high|statistical-interpretation",
+            "argon-native-high|discriminating-experiment"
+          ],
+          "original_queue_size": 39,
+          "unknown_reservation_id": "f705e87ba4514cb99c961768f59f4278",
+          "unknown_reserved_cny": 0.4321632,
+          "active_gemini_ticket": {
+            "credential_sha256": "6bd4251b63f620353fb11c81fcc9316c3c69212d5583eb0ef0f61f42493bad79",
+            "id": "381830bce3954c0fbc628b548e2b031e",
+            "max_cost_cny": 0.4321632,
+            "provider": "codekey-gemini",
+            "run_id": "40905696013",
+            "scope": {
+              "authorization": "model-evaluation-20261029-owner-paid-with-legacy-holds",
+              "call_id": "argon-native-high|discriminating-experiment",
+              "legacy_budget_reservation_id": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+              "project_reservation_id": "f705e87ba4514cb99c961768f59f4278",
+              "trial": "model-evaluation-20261029"
+            }
+          },
+          "gemini_legacy_holds": {
+            "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": 0.431508,
+            "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024
+          },
+          "continuation_credential_sha256": {
+            "codekey-codex-pro": "f0c6f21e5f28d2ef3faa61fba3acf20537f855684bde421ee299e185d60cdabe",
+            "codekey-deepseek": "aa1bba4b05d07c7390df201f3c385af3a30d3876ad1849b82340fd45f37a40b4",
+            "codekey-kimi": "f7dc29b0c05dad371f56bf5ef7359e1b6b6e7e80181fe3be033734de096248f0",
+            "cheapai-gpt-pro": "6016717e6262b7872ee75e57e52b5d6508f317dea3f3dc8c8f8c7117132269d5"
+          }
+        }
+      },
+      "new_code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "authorization": "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon"
+    }
+  ]
 }
