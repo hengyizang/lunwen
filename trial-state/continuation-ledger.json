@@ -903,9 +903,52 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "The package provides procedures for conducting pairwise comparisons following an omnibus analysis. Its scope includes both parametric and nonparametric tests, with applicability to factorial and block designs, enabling multiple comparison approaches within these design settings. The software also integrates with commonly used scientific Python tools, situating its functionality within existing computational workflows. In addition, it generates heatmaps of pairwise test results, offering a visual representation of the outcomes produced by the available comparisons. These documented capabilities concern analysis, workflow integration, and result presentation; the source does not describe a performed experimental evaluation of the package. In particular, it reports no runtime benchmark, numerical speedup, universal guarantee of significance, or priority claim. The description therefore supports a bounded account of the package’s functions without presenting its heatmaps as confirmation of hypotheses or making broader claims about performance and discovery [D1].",
+      "reported_model": "kimi-k3.1-pro",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_tokens": 561,
+        "completion_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 377
+        },
+        "prompt_tokens": 285,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "input_tokens": 285,
+        "output_tokens": 561,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 377
+        }
+      },
+      "request_id": "c37086ad400a189d770ac30e5cdc1cfa",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "02e70f3a7a437221208a7d369f155437e37b3db7061a32688dc04e73df1ea778",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "[D1]": true
+        },
+        "forbidden_fragments_absent": {
+          "doubles performance": true,
+          "guarantees significant": true,
+          "first universal": true,
+          "proves all hypotheses": true
+        }
+      },
+      "duration_seconds": 19.6353
     }
   ],
   "legacy_budget_reservations": {
