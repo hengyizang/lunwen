@@ -1179,9 +1179,41 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"condition_specific_findings\": [\n    {\n      \"finding\": \"The adaptive policy reduced delay when evaluated with zero switching cost and immediate activation.\",\n      \"source_locators\": [\"A:L1\", \"A:L2\"]\n    },\n    {\n      \"finding\": \"For the same family of policies, no clear advantage was identified in the high-cost, slow-activation condition.\",\n      \"source_locators\": [\"B:L1\", \"B:L2\"]\n    },\n    {\n      \"finding\": \"A related method is proposed, but only its abstract is available.\",\n      \"source_locators\": [\"C:L1\"]\n    }\n  ],\n  \"conflict_or_boundary\": \"The findings in A and B concern different switching-cost and activation conditions; they do not establish a direct conflict. A's delay reduction is supported only under its stated conditions, while B reports no clear advantage in the high-cost, slow-activation condition. Sources: A:L1, A:L2, B:L1, B:L2.\",\n  \"unsupported_claims\": [\n    \"The adaptive policy reduces delay under nonzero switching costs or activation delays.\",\n    \"The related method in C used particular methods or achieved particular results beyond what its abstract states.\",\n    \"A lack of a search match proves novelty.\"\n  ],\n  \"missing_evidence\": [\n    \"The full methods and results for the related method in C are unavailable. Source: C:L1.\",\n    \"The bounded keyword search is incomplete, so no novelty conclusion is available. Source: Search status.\"\n  ],\n  \"next_check\": \"Obtain and review the full methods and results for the related method described at C:L1.\",\n  \"fixture_label\": \"Synthetic source-bound reading fixture\"\n}",
+      "reported_model": "gpt-6.1-terra",
+      "usage": {
+        "input_tokens": 331,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 466,
+        "output_tokens_details": {
+          "reasoning_tokens": 35
+        }
+      },
+      "request_id": "resp_07c779e681fd2725016ae46072e7f087d0a083f1bab63cb6d9",
+      "endpoint": "https://codekey.ai/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "e5d25fab4493e0b1014dcdeb6cb846c8f69cccc626b30f43e1159395b3ffc84e",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "A:L1": true,
+          "B:L1": true,
+          "C:L1": true
+        },
+        "forbidden_fragments_absent": {
+          "never been studied": true,
+          "novelty is confirmed": true,
+          "C proves": true
+        }
+      },
+      "duration_seconds": 9.4267
     }
   ],
   "legacy_budget_reservations": {
