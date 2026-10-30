@@ -30,6 +30,15 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
+    "7002e103cc5e4755960414fa34ad8381": {
+      "at": "2026-10-30T09:15:52+00:00",
+      "call_id": "sol-high|writing-integrity",
+      "kind": "new_call",
+      "max_cost_cny": 0.8384376,
+      "paper_id": null,
+      "run_id": "41031366106",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
