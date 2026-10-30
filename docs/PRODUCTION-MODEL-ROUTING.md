@@ -1,6 +1,11 @@
 # Production model routing
 
 Current writing-pilot evidence: [2026-10-28 results](SCIENTIFIC-WRITING-RESULTS-20261028.md).
+
+Current candidate connectivity, task tests and isolation evidence:
+[2026-10-29/30 evaluation](MODEL-EVALUATION-RESULTS-20261029.md).
+Use the [48-task assignments](MODEL-TASK-ASSIGNMENTS-20261029.md) for normal and
+incident review. Short fixtures do not promote a candidate or waive a scientific role.
 Two CodeKey Argon contracts failed response identity validation; no Argon prose
 was accepted or promoted. Eleven GPT candidates and their actual costs are
 recorded; independent human writing calibration remains pending. Formal roles
