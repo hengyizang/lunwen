@@ -21,15 +21,6 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
-    "0512d942a3aa4f7e855de6571a645e31": {
-      "at": "2026-10-30T09:10:13+00:00",
-      "call_id": "deepseek-high|discriminating-experiment",
-      "kind": "new_call",
-      "max_cost_cny": 0.0605584,
-      "paper_id": null,
-      "run_id": "41031366106",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
@@ -199,9 +190,13 @@
     {
       "actual_cost_cny": 0.000752778,
       "receipt_id": "a30ef3a2e8d44bfb8f056320bc2331b3"
+    },
+    {
+      "actual_cost_cny": 0.00322742,
+      "receipt_id": "0512d942a3aa4f7e855de6571a645e31"
     }
   ],
-  "spent_cny": 0.18839436,
+  "spent_cny": 0.19162178,
   "tranche_cny": 300,
   "unsent_events": [
     {
