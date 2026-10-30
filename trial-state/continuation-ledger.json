@@ -1534,9 +1534,41 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"condition_specific_findings\": [\n    {\n      \"source_locators\": [\n        \"A:L1\",\n        \"A:L2\"\n      ],\n      \"finding\": \"The adaptive policy reduced delay when switching cost was zero and activation was immediate.\"\n    },\n    {\n      \"source_locators\": [\n        \"B:L1\",\n        \"B:L2\"\n      ],\n      \"finding\": \"No clear advantage was identified for the same family of policies under nonzero switching costs and activation delays, specifically in the high-cost, slow-activation condition.\"\n    },\n    {\n      \"source_locators\": [\n        \"C:L1\"\n      ],\n      \"finding\": \"A related method is proposed, but its methods and results cannot be assessed from the abstract alone.\"\n    }\n  ],\n  \"conflict_or_boundary\": \"A and B describe different operating conditions, so their results do not establish a direct contradiction. The evidence supports a condition-dependent comparison: benefit was observed under zero switching cost and immediate activation, while no clear advantage was identified under high switching cost and slow activation.\",\n  \"unsupported_claims\": [\n    \"That the adaptive policy generally outperforms alternatives across conditions.\",\n    \"That the policy has no benefit outside the conditions in A:L1.\",\n    \"That the related method in C:L1 has a particular performance profile.\",\n    \"That the method is novel; the bounded keyword search is incomplete and provides no novelty conclusion.\"\n  ],\n  \"missing_evidence\": [\n    \"Full methods and results for the related method in C:L1.\",\n    \"Evidence covering intermediate switching costs and activation delays, beyond the specific conditions reported in A:L1 and B:L1.\",\n    \"A complete search sufficient to assess novelty.\"\n  ],\n  \"one_next_check\": \"Obtain the full methods and results for the related method described at C:L1, while retaining the condition definitions needed to compare it with A:L1-L2 and B:L1-L2.\"\n}",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4656,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3208
+        },
+        "output_tokens": 620,
+        "output_tokens_details": {
+          "reasoning_tokens": 214
+        }
+      },
+      "request_id": "resp_01790f396ac4ac1e016ae4610e1c3c8193abcade151bceb10c",
+      "endpoint": "https://cheapai.info/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "8f056c85db44add7177959edb3660599ac53ba0e7d9aeae08860b3f2a0b86a73",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "A:L1": true,
+          "B:L1": true,
+          "C:L1": true
+        },
+        "forbidden_fragments_absent": {
+          "never been studied": true,
+          "novelty is confirmed": true,
+          "C proves": true
+        }
+      },
+      "duration_seconds": 30.715
     }
   ],
   "legacy_budget_reservations": {
