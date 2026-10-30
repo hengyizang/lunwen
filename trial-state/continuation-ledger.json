@@ -1323,9 +1323,53 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"condition_specific_findings\": [\n    {\n      \"sources\": [\"A:L1\", \"A:L2\"],\n      \"finding\": \"The adaptive policy reduced delay when evaluated with zero switching cost and immediate activation.\",\n      \"scope\": \"This finding is limited to those conditions.\"\n    },\n    {\n      \"sources\": [\"B:L1\", \"B:L2\"],\n      \"finding\": \"For the same family of policies tested with nonzero switching costs and activation delays, no clear advantage was identified in the high-cost, slow-activation condition.\",\n      \"scope\": \"This finding concerns that condition and does not establish results for every nonzero cost or activation delay.\"\n    }\n  ],\n  \"conflict_or_boundary\": {\n    \"assessment\": \"The results are not a direct contradiction because they concern different evaluation conditions.\",\n    \"boundary\": \"A:L2 supports a delay reduction at zero switching cost with immediate activation, while B:L2 marks a high-cost, slow-activation condition where no clear advantage was identified. The evidence does not locate an exact threshold between these outcomes or establish that A's specific policy and B's tested policies are identical.\"\n  },\n  \"unsupported_claims\": [\n    {\n      \"claim\": \"The adaptive policy generally reduces delay regardless of switching cost or activation delay.\",\n      \"reason\": \"A:L2 is condition-specific, and B:L2 reports no clear advantage in a different condition.\"\n    },\n    {\n      \"claim\": \"C's related method has particular implementation details or demonstrated effectiveness.\",\n      \"reason\": \"C:L1 is abstract-only; full methods and results are unavailable.\"\n    },\n    {\n      \"claim\": \"The related method is novel.\",\n      \"reason\": \"One bounded keyword search is incomplete, and the supplied search status explicitly states that no novelty conclusion is available.\"\n    }\n  ],\n  \"missing_evidence\": [\n    \"A controlled comparison of the same policy across matched switching-cost and activation-delay conditions, including measurements sufficient to assess the size and uncertainty of any delay effect.\",\n    \"The full methods and results associated with C:L1.\",\n    \"A completed and appropriately documented search before making any novelty assessment; an incomplete search or absence of a match would not prove novelty.\"\n  ],\n  \"next_check\": \"Run a controlled evaluation of the same policy across switching-cost and activation-delay conditions spanning A:L1 and B:L1 to determine whether and where its delay advantage changes.\"\n}",
+      "reported_model": "kimi-k3.1-pro",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_tokens": 1189,
+        "completion_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 681
+        },
+        "prompt_tokens": 307,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "input_tokens": 307,
+        "output_tokens": 1189,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 681
+        }
+      },
+      "request_id": "fcf5b67a9be1f7347536afac2e9bb117",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "openai_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "195faff81a8c48816de302cddc8bd118c57f51cc62acbba1c953618d88b52104",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "A:L1": true,
+          "B:L1": true,
+          "C:L1": true
+        },
+        "forbidden_fragments_absent": {
+          "never been studied": true,
+          "novelty is confirmed": true,
+          "C proves": true
+        }
+      },
+      "duration_seconds": 46.6595
     }
   ],
   "legacy_budget_reservations": {
