@@ -85,8 +85,7 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_cloud_store_requires_exact_blob_identity_and_put_readback(self):
         store=guard.CloudStore()
-        with patch.object(store,"api",side_effect=[{"tree":[{"path":"relay-guard","sha":"tree"}]},
-                {"tree":[{"path":"fixture.json","sha":"a"*40}]},{"content":base64.b64encode(b"{}").decode()}]):
+        with patch.object(store,"api",side_effect=[{"sha":"a"*40},{"content":base64.b64encode(b"{}").decode()}]):
             with self.assertRaisesRegex(guard.RelayGuardError,"blob identity"):
                 store.read(guard.BRANCH,"relay-guard","fixture.json")
         with patch.object(store,"api",side_effect=[{"object":{"sha":"main"}},{"content":{"sha":"b"*40}}]), \

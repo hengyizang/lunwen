@@ -47,6 +47,8 @@ class CloudStore:
         if os.environ.get("GITHUB_ACTIONS") != "true" or os.environ.get("GITHUB_REPOSITORY") != REPOSITORY:
             raise RelayGuardError("shared relay state is restricted to the repository cloud runner")
         command = ["gh", "api", "--method", method, "repos/" + REPOSITORY + "/" + path]
+        if method == "GET":
+            command += ["-H", "Cache-Control: no-cache"]
         if payload is not None:
             command += ["--input", "-"]
         environment = dict(os.environ)
@@ -63,17 +65,14 @@ class CloudStore:
             raise RelayGuardError("shared relay state response invalid") from None
 
     def read(self, branch, directory, name):
-        tree = self.api("git/trees/" + quote(branch, safe=""), missing=branch == BRANCH)
-        if tree is None:
-            return None, None
-        item = next((x for x in tree["tree"] if x["path"] == directory), None)
+        # Resolve the current file through contents, rather than a cached tree
+        # addressed by a mutable branch name. Then validate immutable bytes.
+        item = self.api("contents/" + directory + "/" + name + "?ref=" + quote(branch, safe=""),
+            missing=branch == BRANCH)
         if item is None:
             return None, None
-        subtree = self.api("git/trees/" + item["sha"])
-        blob = next((x for x in subtree["tree"] if x["path"] == name), None)
-        if blob is None:
-            return None, None
-        return self.read_blob(blob["sha"]), blob["sha"]
+        blob_sha = item.get("sha") if isinstance(item, dict) else None
+        return self.read_blob(blob_sha), blob_sha
 
     def read_blob(self, blob_sha):
         """Read the exact immutable historical ledger, never a moving ref."""
