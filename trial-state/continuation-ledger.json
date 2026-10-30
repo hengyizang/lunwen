@@ -322,7 +322,32 @@
     }
   },
   "status": "running",
-  "entries": [],
+  "entries": [
+    {
+      "call_id": "terra-high|discriminating-experiment",
+      "route_id": "terra-high",
+      "case_id": "discriminating-experiment",
+      "task_class": "critical-experiment-design",
+      "partition": "holdout",
+      "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+      "provider": "codekey-codex-pro",
+      "requested_model": "gpt-6.1-terra",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.159432,
+      "project_reservation_id": "a30ef3a2e8d44bfb8f056320bc2331b3",
+      "meter_before": {
+        "provider": "codekey-codex-pro",
+        "kind": "codekey_total_actual_cost",
+        "requests": 6,
+        "cost_cny": 0.00250712,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "41027978880",
+      "code_sha": "86315b06344078679570e8f301e0ea8166f05b9b"
+    }
+  ],
   "legacy_budget_reservations": {
     "gemini": "2b9e5e82da8a4f0bb9bfb6520ba814d1",
     "deepseek": "97bdea2e1dd64aaaaa68dfa390e9ec76"
