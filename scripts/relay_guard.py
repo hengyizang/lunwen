@@ -347,9 +347,18 @@ def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=
         legacy_id = scope.get("legacy_budget_reservation_id") if isinstance(scope, dict) else None
         legacy_bound = (isinstance(legacy_id, str) and re.fullmatch(r"[a-f0-9]{32}", legacy_id) is not None
             if provider == "codekey-deepseek" else legacy_id == "2b9e5e82da8a4f0bb9bfb6520ba814d1")
+        authorization = scope.get("authorization") if isinstance(scope, dict) else None
+        authorized_scope = authorization == "model-evaluation-20261029-owner-paid-with-legacy-holds"
+        authorized_scope |= (provider == "codekey-deepseek"
+            and authorization == "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon"
+            and os.environ.get("MODEL_EVALUATION_MODE") == "continue-isolated"
+            and scope.get("continuation_source_blob") == "65406a6cd6344c20ba4ec608ca12b0b8602c1a50"
+            and scope.get("retained_unknown_reservation_id") == "f705e87ba4514cb99c961768f59f4278"
+            and legacy_id == "97bdea2e1dd64aaaaa68dfa390e9ec76"
+            and scope.get("call_id") in {"deepseek-high|discriminating-experiment", "deepseek-high|writing-integrity", "deepseek-high|evidence-conflict"})
         exception = (provider in {"codekey-gemini", "codekey-gemini-chat", "codekey-deepseek"}
             and isinstance(scope, dict) and scope.get("trial") == "model-evaluation-20261029"
-            and scope.get("authorization") == "model-evaluation-20261029-owner-paid-with-legacy-holds"
+            and authorized_scope
             and os.environ.get("MODEL_EVALUATION_AUTHORIZATION") == scope["authorization"]
             and os.environ.get("GITHUB_ACTIONS") == "true"
             and os.environ.get("GITHUB_REPOSITORY") == REPOSITORY

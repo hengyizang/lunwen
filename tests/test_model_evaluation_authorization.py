@@ -84,6 +84,30 @@ class ModelEvaluationAuthorizationTests(unittest.TestCase):
             self.assertEqual(saved["legacy_holds"], holds)
             self.assertEqual(saved["active"], ticket)
 
+    def test_isolated_continuation_never_reopens_gemini_and_binds_deepseek_remaining_cases(self):
+        authorization = "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon"
+        scope = {**self.scope, "authorization": authorization,
+            "continuation_source_blob": "65406a6cd6344c20ba4ec608ca12b0b8602c1a50",
+            "retained_unknown_reservation_id": "f705e87ba4514cb99c961768f59f4278",
+            "legacy_budget_reservation_id": "97bdea2e1dd64aaaaa68dfa390e9ec76",
+            "call_id": "deepseek-high|writing-integrity"}
+        with patch.dict(os.environ, {"MODEL_EVALUATION_AUTHORIZATION": authorization,
+                "MODEL_EVALUATION_MODE": "continue-isolated", "DR_OS_CODEKEY_DEEPSEEK_KEY": "synthetic-deepseek-key"}):
+            for provider in ("codekey-gemini", "codekey-gemini-chat"):
+                with self.subTest(provider=provider), self.assertRaises(guard.RelayGuardError):
+                    guard.begin(provider, scope=scope, max_cost_cny=1, store=self.store, evaluation_trial_exception=True)
+            identity = guard.fingerprint("codekey-deepseek")
+            holds = {"09b68c08573ed0ebbd0abd6f9d2eedf402a1edfab5bcbccd8d0e3f19022f318c": {"reserved_ceiling_cny": .0625758}}
+            self.store.put(guard.BRANCH, "relay-guard", identity + ".json", {"schema_version": "1.0", "credential_sha256": identity,
+                "legacy_holds": holds, "active": None, "events": []})
+            for field in ("call_id", "continuation_source_blob", "retained_unknown_reservation_id", "legacy_budget_reservation_id"):
+                with self.subTest(field=field), self.assertRaises(guard.RelayGuardError):
+                    guard.begin("codekey-deepseek", scope={**scope, field: "wrong"}, max_cost_cny=1,
+                        store=self.store, evaluation_trial_exception=True)
+            ticket = guard.begin("codekey-deepseek", scope=scope, max_cost_cny=1,
+                store=self.store, evaluation_trial_exception=True)
+            self.assertEqual(ticket["scope"], scope)
+
 
 if __name__ == "__main__":
     unittest.main()

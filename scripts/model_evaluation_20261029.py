@@ -29,6 +29,19 @@ GEMINI_LEGACY_CNY = 9.5836104
 DEEPSEEK_LEGACY_CNY = 0.0625758
 DEEPSEEK_LEGACY_KIND = "retained_deepseek_legacy"
 EXCEPTION_PROVIDERS = {"codekey-gemini", "codekey-gemini-chat", "codekey-deepseek"}
+CONTINUATION_AUTHORIZATION = TRIAL + "-owner-isolated-continuation-retain-unknown-argon"
+CONTINUATION_FILE = "continuation-ledger.json"
+ORIGINAL_BLOB = "65406a6cd6344c20ba4ec608ca12b0b8602c1a50"
+ORIGINAL_CODE = "7ab623c3d1702d03d171bff3309d0b57a3ef87a1"
+ORIGINAL_PLAN_SHA = "99c6bdc51f77c8075a43632507b05eb502c0d014d0fc079bfbb1237d06798ce7"
+ORIGINAL_PRICES_SHA = "8a1287ba4aa1560914b03d84719694a53dda1ad0a55a591a3c0659f78c71deb9"
+UNKNOWN_ARGON_CALL = "argon-native-high|discriminating-experiment"
+UNKNOWN_ARGON_ID = "f705e87ba4514cb99c961768f59f4278"
+UNKNOWN_ARGON_CNY = 0.4321632
+UNKNOWN_ARGON_TICKET = "381830bce3954c0fbc628b548e2b031e"
+DEEPSEEK_LEGACY_ID = "97bdea2e1dd64aaaaa68dfa390e9ec76"
+CONTINUATION_ROUTES = ("terra-high", "deepseek-high", "kimi-high", "sol-high")
+CONTINUATION_CASES = ("discriminating-experiment", "writing-integrity", "evidence-conflict")
 
 
 def _safe_error(error):
@@ -229,7 +242,145 @@ def freeze_scope(plan):
         "scientific_equivalence_verified": False}
 
 
-def _legacy_budget(budget):
+def continuation_plan(plan, original, original_blob, active_guard):
+    """GET-only proposal; possession of this preview never authorizes transport."""
+    validate_plan(plan)
+    old = original.get("scope", {})
+    if (original_blob != ORIGINAL_BLOB or original.get("trial_id") != TRIAL
+            or original.get("status") != "stopped" or old.get("code_sha") != ORIGINAL_CODE
+            or old.get("authorization") != AUTHORIZATION or old.get("max_calls") != 40
+            or old.get("project_ceiling_cny") != 500 or old.get("project") != "my-phd"
+            or old.get("plan_sha256") != ORIGINAL_PLAN_SHA
+            or gateway_trial.digest(plan) != ORIGINAL_PLAN_SHA
+            or old.get("prices_sha256") != ORIGINAL_PRICES_SHA
+            or hashlib.sha256((ROOT / PRICES).read_bytes()).hexdigest() != ORIGINAL_PRICES_SHA
+            or old.get("routes") != plan["routes"]
+            or original.get("legacy_budget_reservations") != {"gemini": GEMINI_LEGACY_ID, "deepseek": DEEPSEEK_LEGACY_ID}):
+        raise ValueError("exact immutable stopped source and unchanged original plan/prices required")
+    entries, queue = original.get("entries", []), old.get("queue", [])
+    attempted = [row["call_id"] for row in entries]
+    if (len(queue) != 39 or len(entries) != 22 or len(set(attempted)) != 22
+            or attempted != [row["call_id"] for row in queue[:22]]
+            or any(row.get("billing_status") != "settled" for row in entries[:21])):
+        raise ValueError("only the exact twenty-one settled attempts plus unknown Argon attempt may be isolated")
+    failed = entries[-1]
+    if (failed.get("call_id") != UNKNOWN_ARGON_CALL or failed.get("billing_status") != "reserved"
+            or failed.get("generation_status") != "failed" or failed.get("provider") != "codekey-gemini"
+            or failed.get("project_reservation_id") != UNKNOWN_ARGON_ID
+            or failed.get("reserved_ceiling_cny") != UNKNOWN_ARGON_CNY):
+        raise ValueError("unknown Argon attempt and its full reservation must remain unchanged")
+    active = active_guard.get("active")
+    expected_holds = {"44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": .431508,
+        "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024}
+    holds = active_guard.get("legacy_holds")
+    if (not isinstance(holds, list) or len(holds) != 2 or any(not isinstance(h, dict) for h in holds)
+            or {h.get("id"): h.get("reserved_ceiling_cny") for h in holds} != expected_holds):
+        raise ValueError("exact historic Gemini holds required; newly discovered unknown charges stop continuation")
+    if (active_guard.get("provider") != "codekey-gemini" or not isinstance(active, dict)
+            or active.get("id") != UNKNOWN_ARGON_TICKET or active.get("provider") != "codekey-gemini"
+            or not re.fullmatch(r"[a-f0-9]{64}", active.get("credential_sha256", ""))
+            or active.get("max_cost_cny") != UNKNOWN_ARGON_CNY
+            or active.get("run_id") != failed.get("run_id")
+            or active.get("scope") != {"trial": TRIAL, "call_id": UNKNOWN_ARGON_CALL,
+                "authorization": AUTHORIZATION, "project_reservation_id": UNKNOWN_ARGON_ID,
+                "legacy_budget_reservation_id": GEMINI_LEGACY_ID}):
+        raise ValueError("exact active Gemini credential ticket must stay isolated and held")
+    selected = [row for row in queue if row["route_id"] in CONTINUATION_ROUTES
+        and row["case_id"] in CONTINUATION_CASES and row["call_id"] not in attempted]
+    expected = {route + "|" + case for route in CONTINUATION_ROUTES for case in CONTINUATION_CASES}
+    if len(selected) != 12 or {row["call_id"] for row in selected} != expected:
+        raise ValueError("continuation is limited to twelve never-attempted original holdout calls")
+    cases = {case["id"]: case for case in plan["cases"]}
+    if any(row["case_sha256"] != gateway_trial.digest(cases[row["case_id"]]) for row in selected):
+        raise ValueError("original holdout source or instruction changed")
+    binding = {"source_blob": ORIGINAL_BLOB, "source_sha256": gateway_trial.digest(original),
+        "source_code_sha": ORIGINAL_CODE, "source_plan_sha256": ORIGINAL_PLAN_SHA,
+        "source_prices_sha256": ORIGINAL_PRICES_SHA, "original_attempted_call_ids": attempted,
+        "original_queue_size": 39, "unknown_reservation_id": UNKNOWN_ARGON_ID,
+        "unknown_reserved_cny": UNKNOWN_ARGON_CNY, "active_gemini_ticket": active,
+        "gemini_legacy_holds": expected_holds}
+    scope = {**old, "authorization": CONTINUATION_AUTHORIZATION, "code_sha": code_revision(),
+        "max_calls": 12, "original_binding": binding,
+        "routes": [route for route in old["routes"] if route["id"] in CONTINUATION_ROUTES],
+        "quotes": {route: old["quotes"][route] for route in CONTINUATION_ROUTES}, "queue": selected}
+    return json.loads(json.dumps({"mode": "continue-isolated", "required_owner_authorization": CONTINUATION_AUTHORIZATION,
+        "authorization_is_not_granted_by_preview": True, "state_file": CONTINUATION_FILE,
+        "original_ledger_will_be_modified": False, "new_request_count": 12,
+        "overall_attempts_if_all_sent": len(entries) + len(selected), "original_request_cap": 40,
+        "scope": scope}))
+
+
+class _Continuation:
+    """Specific immutable source binding, not a general unknown-cost bypass."""
+
+    def __init__(self, plan, source):
+        self.plan, self.source = plan, source
+        original, sha = source.read("ledger.json")
+        self.preview = continuation_plan(plan, original, sha, relay_guard.inspect("codekey-gemini"))
+        self._bind_credentials(self.preview)
+        self.scope = self.preview["scope"]
+
+    @staticmethod
+    def _bind_credentials(preview):
+        binding = preview["scope"]["original_binding"]
+        identities = {route["provider"]: relay_guard.fingerprint(route["provider"])
+            for route in preview["scope"]["routes"]}
+        if binding["active_gemini_ticket"]["credential_sha256"] in identities.values():
+            raise ValueError("isolated Gemini credential cannot be reused by any continuation route")
+        binding["continuation_credential_sha256"] = identities
+
+    def check(self, budget):
+        original, sha = self.source.read("ledger.json")
+        current = continuation_plan(self.plan, original, sha, relay_guard.inspect("codekey-gemini"))
+        self._bind_credentials(current)
+        if current != self.preview:
+            raise ValueError("isolated continuation source or credential binding changed")
+        control = budget.refresh()
+        reservations = control["reservations"]
+        if (control.get("authorized_ceiling_cny") != 500
+                or set(reservations) != {GEMINI_LEGACY_ID, DEEPSEEK_LEGACY_ID, UNKNOWN_ARGON_ID}
+                or reservations[GEMINI_LEGACY_ID].get("kind") != "retained_legacy"
+                or reservations[GEMINI_LEGACY_ID].get("max_cost_cny") != GEMINI_LEGACY_CNY
+                or reservations[DEEPSEEK_LEGACY_ID].get("kind") != DEEPSEEK_LEGACY_KIND
+                or reservations[DEEPSEEK_LEGACY_ID].get("writing_trial") != TRIAL
+                or reservations[DEEPSEEK_LEGACY_ID].get("max_cost_cny") != DEEPSEEK_LEGACY_CNY
+                or reservations[UNKNOWN_ARGON_ID].get("writing_trial") != TRIAL
+                or reservations[UNKNOWN_ARGON_ID].get("call_id") != UNKNOWN_ARGON_CALL
+                or reservations[UNKNOWN_ARGON_ID].get("max_cost_cny") != UNKNOWN_ARGON_CNY):
+            raise ValueError("retain all three exact full holds; any new unknown cost stops continuation")
+        return {"gemini": GEMINI_LEGACY_ID, "deepseek": DEEPSEEK_LEGACY_ID}
+
+
+class _ContinuationState:
+    """Only the separate continuation file can be loaded or saved by execute."""
+
+    def __init__(self, source):
+        self.source = source
+
+    def load(self, name):
+        if name != "ledger.json":
+            raise ValueError("unexpected isolated state name")
+        return self.source.load(CONTINUATION_FILE)
+
+    def save(self, name, value):
+        if name != "ledger.json":
+            raise ValueError("unexpected isolated state name")
+        return self.source.save(CONTINUATION_FILE, value)
+
+
+def continue_isolated(plan, state):
+    if (os.environ.get("MODEL_EVALUATION_MODE") != "continue-isolated"
+            or os.environ.get("MODEL_EVALUATION_AUTHORIZATION") != CONTINUATION_AUTHORIZATION):
+        raise ValueError("new exact owner exception required before isolated continuation")
+    context = _Continuation(plan, state)
+    return execute(plan, _ContinuationState(state), _continuation=context)
+
+
+def _legacy_budget(budget, *, _continuation=None):
+    if _continuation is not None:
+        if type(_continuation) is not _Continuation:
+            raise ValueError("invalid isolated continuation binding")
+        return _continuation.check(budget)
     control = budget.refresh()
     gemini = control["reservations"].get(GEMINI_LEGACY_ID)
     if not gemini or gemini.get("max_cost_cny") != GEMINI_LEGACY_CNY or gemini.get("kind") != "retained_legacy":
@@ -297,14 +448,19 @@ def restore_quarantine(ledger, scope, state):
         state.save("ledger.json", ledger)
 
 
-def execute(plan, state):
+def execute(plan, state, *, _continuation=None):
     env = os.environ
+    authorization = AUTHORIZATION
+    if _continuation is not None:
+        if type(_continuation) is not _Continuation or env.get("MODEL_EVALUATION_MODE") != "continue-isolated":
+            raise ValueError("invalid isolated continuation mode")
+        authorization = CONTINUATION_AUTHORIZATION
     if (env.get("GITHUB_ACTIONS") != "true" or env.get("GITHUB_REPOSITORY") != gateway_trial.REPO
             or env.get("GITHUB_REF") != "refs/heads/" + BRANCH or env.get("GITHUB_ACTOR") != "hengyizang"
             or env.get("GITHUB_EVENT_NAME") not in {"push", "workflow_dispatch"}
-            or env.get("MODEL_EVALUATION_AUTHORIZATION") != AUTHORIZATION):
+            or env.get("MODEL_EVALUATION_AUTHORIZATION") != authorization):
         raise ValueError("exact owner authorization and cloud evaluation branch required")
-    scope = json.loads(json.dumps(freeze_scope(plan)))
+    scope = json.loads(json.dumps(_continuation.scope if _continuation is not None else freeze_scope(plan)))
     ledger = state.load("ledger.json")
     if ledger is not None:
         if ledger.get("trial_id") != TRIAL or ledger.get("scope") != scope:
@@ -320,11 +476,12 @@ def execute(plan, state):
         # persist that consequence before considering any later queue item.
         restore_quarantine(ledger, scope, state)
     budget = writing_comparison.Budget(env["GH_TOKEN"], trial_id=TRIAL)
-    legacy = _legacy_budget(budget)
+    legacy = _legacy_budget(budget, _continuation=_continuation)
     if ledger is None:
         ledger = {"trial_id": TRIAL, "scope": scope, "status": "running", "entries": [],
             "legacy_budget_reservations": legacy, "quarantined_routes": [],
-            "authorization_note": plan["authorization_note"], "automatic_promotion": False,
+            "authorization_note": ("New owner-authorized isolated continuation; retain original unknown Argon charge in full."
+                if _continuation is not None else plan["authorization_note"]), "automatic_promotion": False,
             "independent_human_ratings_supplied": False, "scientific_equivalence_verified": False,
             "production_routing_changed": False}
         state.save("ledger.json", ledger)
@@ -359,7 +516,7 @@ def execute(plan, state):
             continue
         # Recheck central holds before each reservation. A new ambiguous charge
         # or another process's outstanding request cannot be silently ignored.
-        if _legacy_budget(budget) != legacy:
+        if _legacy_budget(budget, _continuation=_continuation) != legacy:
             raise ValueError("project legacy reservation changed during execution")
         receipt = budget.reserve(request["reserved_ceiling_cny"], call_id=call_id)
         entry = {"call_id": call_id, "route_id": route["id"], "case_id": case["id"],
@@ -374,9 +531,12 @@ def execute(plan, state):
         ticket = None
         try:
             exception = provider in EXCEPTION_PROVIDERS
-            ticket = relay_guard.begin(provider, scope={"trial": TRIAL, "call_id": call_id,
-                "authorization": AUTHORIZATION, "project_reservation_id": receipt,
-                "legacy_budget_reservation_id": legacy["deepseek" if provider == "codekey-deepseek" else "gemini"]},
+            guard_scope = {"trial": TRIAL, "call_id": call_id,
+                "authorization": authorization, "project_reservation_id": receipt,
+                "legacy_budget_reservation_id": legacy["deepseek" if provider == "codekey-deepseek" else "gemini"]}
+            if _continuation is not None:
+                guard_scope.update(continuation_source_blob=ORIGINAL_BLOB, retained_unknown_reservation_id=UNKNOWN_ARGON_ID)
+            ticket = relay_guard.begin(provider, scope=guard_scope,
                 max_cost_cny=request["reserved_ceiling_cny"], evaluation_trial_exception=exception)
             relay_guard.bind_meter(ticket, model, before)
         except (ValueError, OSError, KeyError) as exc:
@@ -457,20 +617,20 @@ def main():
         if state.load(name) is not None:
             raise ValueError("an existing metadata receipt cannot be overwritten")
         state.save(name, report)
-    elif mode == "execute":
+    elif mode in {"execute", "continue-isolated"}:
         plan = json.loads((ROOT / PLAN).read_text(encoding="utf-8"))
+        name = CONTINUATION_FILE if mode == "continue-isolated" else "ledger.json"
         try:
-            report = execute(plan, state)
+            report = continue_isolated(plan, state) if mode == "continue-isolated" else execute(plan, state)
         finally:
-            saved = state.load("ledger.json")
+            saved = state.load(name)
             if saved is not None:
                 export(saved, output)
-        name = "ledger.json"
     else:
         raise ValueError("unknown model evaluation mode")
     print(json.dumps({"mode": mode, "trial_id": TRIAL, "state_branch": STATE,
         "state_file": name, "model_generation_calls": 0 if mode == "metadata" else len(report.get("entries", [])),
-        "paid_execution_enabled": mode == "execute"}))
+        "paid_execution_enabled": mode in {"execute", "continue-isolated"}}))
 
 
 if __name__ == "__main__":
