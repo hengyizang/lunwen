@@ -551,6 +551,143 @@
         "exactly_one_new_gateway_request": true,
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       }
+    },
+    {
+      "call_id": "sol-high|discriminating-experiment",
+      "route_id": "sol-high",
+      "case_id": "discriminating-experiment",
+      "task_class": "critical-experiment-design",
+      "partition": "holdout",
+      "case_sha256": "2973f76d0f66e7c637581632466146c4fae14ef38e53f94e449c460b82a4de65",
+      "provider": "cheapai-gpt-pro",
+      "requested_model": "gpt-6.1-sol",
+      "requested_effort": "high",
+      "reserved_ceiling_cny": 0.835296,
+      "project_reservation_id": "59ca231cb0e74a57b4a05c5f3375d0b0",
+      "meter_before": {
+        "provider": "cheapai-gpt-pro",
+        "kind": "cheapai_quota_history",
+        "quota_per_unit": 500000,
+        "rows": [
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1416,
+            "created_at": 1793290167,
+            "prompt_tokens": 557,
+            "completion_tokens": 1176,
+            "id": 1
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1525,
+            "created_at": 1793289718,
+            "prompt_tokens": 4606,
+            "completion_tokens": 803,
+            "id": 2
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 958,
+            "created_at": 1793289370,
+            "prompt_tokens": 4614,
+            "completion_tokens": 286,
+            "id": 3
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1398,
+            "created_at": 1793117200,
+            "prompt_tokens": 5259,
+            "completion_tokens": 557,
+            "id": 4
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6026,
+            "created_at": 1793116718,
+            "prompt_tokens": 5259,
+            "completion_tokens": 652,
+            "id": 5
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6309,
+            "created_at": 1793116660,
+            "prompt_tokens": 5217,
+            "completion_tokens": 712,
+            "id": 6
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1461,
+            "created_at": 1793116601,
+            "prompt_tokens": 5217,
+            "completion_tokens": 623,
+            "id": 7
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 6022,
+            "created_at": 1793116548,
+            "prompt_tokens": 5216,
+            "completion_tokens": 660,
+            "id": 8
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1519,
+            "created_at": 1793116493,
+            "prompt_tokens": 5216,
+            "completion_tokens": 676,
+            "id": 9
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1224,
+            "created_at": 1793116436,
+            "prompt_tokens": 4838,
+            "completion_tokens": 514,
+            "id": 10
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4628,
+            "created_at": 1793116383,
+            "prompt_tokens": 4838,
+            "completion_tokens": 482,
+            "id": 11
+          },
+          {
+            "model_name": "gpt-6-astra",
+            "quota": 4865,
+            "created_at": 1793116329,
+            "prompt_tokens": 4934,
+            "completion_tokens": 506,
+            "id": 12
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1205,
+            "created_at": 1793116283,
+            "prompt_tokens": 4934,
+            "completion_tokens": 447,
+            "id": 13
+          },
+          {
+            "model_name": "gpt-6.1-sol",
+            "quota": 1667,
+            "created_at": 1793116236,
+            "prompt_tokens": 5403,
+            "completion_tokens": 773,
+            "id": 14
+          }
+        ],
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
+      },
+      "billing_status": "reserved",
+      "generation_status": "not_sent",
+      "run_id": "41031366106",
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
     }
   ],
   "legacy_budget_reservations": {
