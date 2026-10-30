@@ -1105,9 +1105,40 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "The package provides a set of pairwise comparison procedures intended for use after an omnibus analysis. Its capabilities include both parametric and nonparametric tests, with support for factorial and block designs. The available procedures can therefore be selected according to the design and distributional assumptions relevant to a given analysis, rather than being treated as universally applicable. The package also integrates with common scientific Python tools, supporting its use within established computational workflows. In addition, it generates heatmaps that present the results of pairwise tests in a visual format, which may assist users in inspecting patterns of comparisons and communicating analytical outputs. These heatmaps should be interpreted as summaries of the pairwise test results; they do not, by themselves, establish the truth of hypotheses or guarantee statistically significant findings. The software description does not report runtime benchmarks, numerical performance improvements, universal significance guarantees, or claims of priority over other solutions [D1].",
+      "reported_model": "gpt-6.1-sol",
+      "usage": {
+        "input_tokens": 4634,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3379
+        },
+        "output_tokens": 255,
+        "output_tokens_details": {
+          "reasoning_tokens": 69
+        }
+      },
+      "request_id": "resp_093606b9b06c2206016ae46051582081918953b5cddbc1981c",
+      "endpoint": "https://cheapai.info/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "f5db41b5913cca29d2126fb63aca5111f828aef6641b52d1b899e89dfcc5273e",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "[D1]": true
+        },
+        "forbidden_fragments_absent": {
+          "doubles performance": true,
+          "guarantees significant": true,
+          "first universal": true,
+          "proves all hypotheses": true
+        }
+      },
+      "duration_seconds": 10.7264
     }
   ],
   "legacy_budget_reservations": {
