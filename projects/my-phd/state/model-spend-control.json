@@ -39,15 +39,6 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
-    "a30ef3a2e8d44bfb8f056320bc2331b3": {
-      "at": "2026-10-30T08:40:56+00:00",
-      "call_id": "terra-high|discriminating-experiment",
-      "kind": "new_call",
-      "max_cost_cny": 0.159432,
-      "paper_id": null,
-      "run_id": "41027978880",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
@@ -195,8 +186,12 @@
     {
       "actual_cost_cny": 0.002832,
       "receipt_id": "3428b6072b6047ec8494512d24c1adf9"
+    },
+    {
+      "actual_cost_cny": 0.000752778,
+      "receipt_id": "a30ef3a2e8d44bfb8f056320bc2331b3"
     }
   ],
-  "spent_cny": 0.18764158,
+  "spent_cny": 0.18839436,
   "tranche_cny": 300
 }
