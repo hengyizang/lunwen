@@ -29,7 +29,7 @@ def catalog(provider: str, environment: dict) -> set[str]:
     key = environment.get(spec["key_setting"], "")
     if not isinstance(key, str) or not key.strip() or any(ch.isspace() or ord(ch) < 32 for ch in key.strip()):
         raise ValueError("catalog production credential is missing or invalid")
-    native_google = spec["family"] == "google"
+    native_google = spec["protocol"] == "gemini_generate_content"
     path = "/v1beta/models" if native_google else "/v1/models"
     credentials = {"x-goog-api-key": key.strip()} if native_google else {"Authorization": "Bearer " + key.strip()}
     request = urllib.request.Request(spec["root"] + path, method="GET",
@@ -161,3 +161,4 @@ def main():
 
 if __name__=="__main__":
     raise SystemExit(main())
+

@@ -173,14 +173,19 @@ class ComparisonMatrixTests(unittest.TestCase):
         self.assertFalse(config["policy"]["auto_promote_routes"])
         self.assertTrue(config["policy"]["stop_on_unknown_charge"])
 
-    def test_all_22_quoted_routes_and_only_the_seven_configured_models(self):
+    def test_historical_22_route_matrix_stays_frozen_as_new_quotes_are_registered(self):
         candidates = self.config["candidates"]
         quotes = json.loads((ROOT / "config/model-pricing.json").read_text())["quotes"]
         pairs = {(x["provider"], x["model"]) for x in candidates}
         self.assertEqual(len(candidates), 22)
         quoted_pairs = {(x["provider"], x["model"]) for x in quotes}
         self.assertTrue(pairs <= quoted_pairs)
-        self.assertEqual(quoted_pairs - pairs, {("codekey-gemini", "gemini-4-argon")})
+        self.assertEqual(quoted_pairs - pairs, {
+            ("codekey-gemini", "gemini-4-argon"),
+            ("cheapai-gpt-pro", "gpt-6.1-terra"), ("cheapai-gpt-discount", "gpt-6.1-terra"),
+            ("codekey-codex-pro", "gpt-6.1-terra"), ("codekey-codex-discount", "gpt-6.1-terra"),
+            ("codekey-kimi", "kimi-k3.1-pro"), ("codekey-gemini-chat", "gemini-4-argon"),
+            ("codekey-gemini-chat", "gemini-4-argon-high")})
         self.assertEqual(len({x["provider"] for x in candidates}), 10)
         self.assertEqual(len({x["model"] for x in candidates}), 7)
         self.assertTrue(all(x["baseline"] for x in candidates[:7]))
@@ -212,3 +217,4 @@ class ComparisonMatrixTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

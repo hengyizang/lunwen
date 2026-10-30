@@ -63,6 +63,7 @@ jobs:
           DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY: ${{ secrets.DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY }}
           DR_OS_CODEKEY_DEEPSEEK_KEY: ${{ secrets.DR_OS_CODEKEY_DEEPSEEK_KEY }}
           DR_OS_CODEKEY_GEMINI_KEY: ${{ secrets.DR_OS_CODEKEY_GEMINI_KEY }}
+          DR_OS_CODEKEY_KIMI_KEY: ${{ secrets.DR_OS_CODEKEY_KIMI_KEY }}
           SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
           ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
           DR_OS_TEX_IMAGE: ${{ vars.DR_OS_TEX_IMAGE }}
@@ -103,3 +104,4 @@ jobs:
         run: >-
           python -m scripts.cloud_continuation enqueue-followup
           --decision .runtime/continuation-followup.json
+

@@ -253,6 +253,7 @@ class WritingTrialBudgetTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.budget = object.__new__(trial.Budget)
+        self.budget.trial_id = trial.TRIAL
         self.budget.root = Path(temporary.name)
         control = trial.model_spend.initial()
         trial.model_spend.write(self.budget.root, control)
@@ -285,3 +286,4 @@ class WritingTrialBudgetTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

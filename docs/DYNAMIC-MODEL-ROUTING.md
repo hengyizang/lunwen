@@ -209,6 +209,17 @@ simulated transports. Such tests verify control behavior; they do not certify
 new model/channel quality, doctoral merit, experimental completion or publication
 readiness.
 
+## Task-level operational review, 2026-10-29
+
+The [2026-10-29 task assignment and review policy](MODEL-TASK-ASSIGNMENTS-20261029.md)
+registers 48 fine-grained task classes. `dynamic_routing.validate_profile` applies
+their risk floors before model resolution. Each enabled selection and the status
+command expose `management_review` from existing receipts and spending authority;
+normal review, identity/completion failures, source defects, cost/latency changes
+and optional current catalog/quote observations never trigger an extra paid call.
+Declare the actual task class before execution. A new candidate cannot replace
+the baseline without the existing scoped acceptance, role and quality controls.
+
 ## Cloud comparison evidence, 2026-10-21
 
 The [model and gateway report](MODEL-COMPARISON-RESULTS-20261021.md) records
@@ -227,3 +238,4 @@ gain-shift evaluation, and enforce resource limits across active workers,
 preprocessing, inference and statistics. Stopping new launches alone does not
 enforce a total wall-clock, CPU or memory ceiling. These checks preserve the
 existing scientific gates; model-generated proposals cannot approve themselves.
+

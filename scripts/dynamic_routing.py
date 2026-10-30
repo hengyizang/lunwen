@@ -68,7 +68,8 @@ def validate_profile(value: Any, *, stage: str | None = None, role: str | None =
             if type(value[key]) is not int or not 1 <= value[key] <= ceiling:
                 raise RoutingError(f"{key} must be a positive integer up to {ceiling}")
             result[key] = value[key]
-    return result
+    from scripts.route_review import classify
+    return classify(result, stage=stage)["effective_task_profile"]
 
 
 def load_policy() -> tuple[dict, str]:
@@ -420,6 +421,9 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
     policy, policy_sha = load_policy()
     rows = _ledger(project)
     _check_holds(project, rows)
+    from scripts.route_review import review
+    decision["management_review"] = review(project, task_profile=profile,
+        stage=baseline_route.get("stage"), role=baseline_route.get("role"))
     input_bytes = len(prompt.encode("utf-8")) + len((system or "").encode("utf-8"))
     media = ai_providers.validate_attachments(attachments) if attachments else []
     modalities = {"text"} | ({"pdf" if item.get("mime_type") == "application/pdf" else "text" if item.get("mime_type") == "text/plain" else "image" for item in media} if media else set())
@@ -469,8 +473,8 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
                 raise RoutingError("Claude remains limited to read-only scientific planning and independent audits")
             if baseline_route.get("persistent_output") and family != "openai":
                 raise RoutingError("persistent scientific writer must remain OpenAI")
-            if baseline_route.get("persistent_output") and candidate["model"] not in {"gpt-6.1-sol", "gpt-6-astra"}:
-                raise RoutingError("persistent scientific writers remain Sol or Astra")
+            if baseline_route.get("persistent_output") and candidate["model"] not in {"gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra"}:
+                raise RoutingError("persistent scientific writers require an allowed OpenAI model and scoped acceptance")
             if candidate["model"] == "gpt-5.6-luna" and baseline_route.get("role") not in {"metadata-extraction", *model_routing.APPROVED_HEALTH_ROLES}:
                 raise RoutingError("Luna remains limited to its validated metadata source-contract role")
             if baseline_route.get("role") in model_routing.READ_ONLY_ROLES and family != "anthropic":
@@ -550,9 +554,11 @@ def main(argv: list[str] | None = None) -> int:
     policy, policy_sha = load_policy()
     if args.command == "status":
         target = path_in(project, ACCEPTANCES, exists=False)
+        from scripts.route_review import review
         print(json.dumps({"mode": os.environ.get("DR_OS_DYNAMIC_ROUTING", "production"), "policy_sha256": policy_sha,
                           "candidate_count": len(policy["candidates"]), "candidates": policy["candidates"],
                           "acceptances": read(target) if target.is_file() else None,
+                          "management_review": review(project),
                           "paid_calls_executed": 0, "scientific_equivalence_verified": False}, indent=2))
         return 0
     target = path_in(project, args.profile_file)
@@ -568,3 +574,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

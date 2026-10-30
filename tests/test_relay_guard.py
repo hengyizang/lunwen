@@ -85,14 +85,21 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_cloud_store_requires_exact_blob_identity_and_put_readback(self):
         store=guard.CloudStore()
-        with patch.object(store,"api",side_effect=[{"tree":[{"path":"relay-guard","sha":"tree"}]},
-                {"tree":[{"path":"fixture.json","sha":"a"*40}]},{"content":base64.b64encode(b"{}").decode()}]):
+        with patch.object(store,"api",side_effect=[{"sha":"a"*40},{"content":base64.b64encode(b"{}").decode()}]):
             with self.assertRaisesRegex(guard.RelayGuardError,"blob identity"):
                 store.read(guard.BRANCH,"relay-guard","fixture.json")
         with patch.object(store,"api",side_effect=[{"object":{"sha":"main"}},{"content":{"sha":"b"*40}}]), \
-                patch.object(store,"read",return_value=({"different":"bytes"},"b"*40)):
+                patch.object(store,"read_blob",return_value={"different":"bytes"}):
             with self.assertRaisesRegex(guard.RelayGuardError,"readback"):
                 store.write("fixture.json",{"intended":"bytes"},None)
+
+    def test_write_verifies_immutable_put_result_despite_a_stale_branch_tree(self):
+        store=guard.CloudStore()
+        with patch.object(store,"api",side_effect=[{"object":{"sha":"main"}},{"content":{"sha":"b"*40}}]), \
+                patch.object(store,"read",side_effect=AssertionError("moving refs may be stale")), \
+                patch.object(store,"read_blob",return_value={"intended":"bytes"}) as exact:
+            self.assertEqual(store.write("fixture.json",{"intended":"bytes"},None),"b"*40)
+        exact.assert_called_once_with("b"*40)
 
     def test_cloud_store_historical_blob_checks_immutable_git_identity(self):
         import hashlib
@@ -475,3 +482,4 @@ class RelayGuardTests(unittest.TestCase):
 
 
 if __name__=="__main__":unittest.main()
+

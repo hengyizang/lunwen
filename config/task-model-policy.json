@@ -1,0 +1,601 @@
+{
+  "schema_version": "1.0",
+  "reviewed_on": "2026-10-29",
+  "normal_review_hours": 24,
+  "acceptance_review_days": 7,
+  "recent_request_window": 20,
+  "latency_regression_ratio": 1.5,
+  "cost_regression_ratio": 1.25,
+  "quality_first": true,
+  "automatic_paid_probes": false,
+  "automatic_paid_retry": false,
+  "tasks": [
+    {
+      "task_class": "intake-clarification",
+      "stages": [
+        "intake"
+      ],
+      "science_risk": "routine",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Clarify actual goals and missing constraints without inventing materials."
+    },
+    {
+      "task_class": "constraint-normalization",
+      "stages": [
+        "intake"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Validate structured intake, budget, deadline and human availability."
+    },
+    {
+      "task_class": "cloud-feasibility",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Verify data rights and runner/compute feasibility for current paper claims."
+    },
+    {
+      "task_class": "direction-evidence",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Located primary evidence for direction criteria; no unsupported job or venue statistics."
+    },
+    {
+      "task_class": "direction-scoring",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Apply approved weights after feasibility; novelty is a separate hard requirement."
+    },
+    {
+      "task_class": "literature-query-design",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Problem-led bilingual queries, adjacent fields, counterevidence and search limits."
+    },
+    {
+      "task_class": "literature-retrieval",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Provider receipts, source/version deduplication, rights and raw search logs."
+    },
+    {
+      "task_class": "metadata-extraction",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "auxiliary",
+      "baseline_model_key": "luna",
+      "native_role": "metadata-extraction",
+      "quality_requirement": "Exact source fields, quotes and locators only; unknowns remain unknown."
+    },
+    {
+      "task_class": "literature-screening",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture"
+      ],
+      "science_risk": "scientific",
+      "execution": "auxiliary",
+      "baseline_model_key": "sol",
+      "native_role": "screening-assist",
+      "quality_requirement": "Advisory inclusion/exclusion evidence; preserve all formal human decisions."
+    },
+    {
+      "task_class": "reader-translation",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "auxiliary",
+      "baseline_model_key": "sol",
+      "native_role": "reader-translation",
+      "quality_requirement": "Faithful personal translation with pages, quantities, terminology and uncertainty."
+    },
+    {
+      "task_class": "reader-qa",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "auxiliary",
+      "baseline_model_key": "sol",
+      "native_role": "reader-qa",
+      "quality_requirement": "Source-bound answers with exact pages; abstain when needed text is absent."
+    },
+    {
+      "task_class": "evidence-synthesis",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design"
+      ],
+      "science_risk": "scientific",
+      "execution": "auxiliary",
+      "baseline_model_key": "sol",
+      "native_role": "evidence-synthesis",
+      "quality_requirement": "Preserve source distinctions, conflicts and unassessed support."
+    },
+    {
+      "task_class": "novelty",
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Full-text closest/adjacent-work differences and falsification; search absence is not novelty."
+    },
+    {
+      "task_class": "candidate-assumption-review",
+      "stages": [
+        "topic-intelligence"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Actual mechanisms, all candidate pairs, joint failures and evidence-gap decisions."
+    },
+    {
+      "task_class": "hypothesis-falsification",
+      "stages": [
+        "topic-intelligence",
+        "experiment-design"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Discriminating predictions, rivals, null value and continue/revise/stop criteria."
+    },
+    {
+      "task_class": "paper-architecture",
+      "stages": [
+        "paper-architecture"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Six standalone contributions under one doctorate; no salami slicing or topic drift."
+    },
+    {
+      "task_class": "critical-experiment-design",
+      "stages": [
+        "experiment-design"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Registered estimands, baselines, budget fairness, controls, leakage and stopping."
+    },
+    {
+      "task_class": "data-quality",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Full-scan units, missingness, splits, vintages, duplicates and raw input preservation."
+    },
+    {
+      "task_class": "power-calculation",
+      "stages": [
+        "experiment-design"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Run actual declared power/precision calculations; scientific assumptions need Astra/Opus review."
+    },
+    {
+      "task_class": "key-algorithm",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Implement the scientific mechanism and core algorithm against approved evidence."
+    },
+    {
+      "task_class": "routine-implementation",
+      "stages": [
+        "experiment-execution"
+      ],
+      "science_risk": "routine",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Bounded software implementation with real regression checks; escalate scientific changes."
+    },
+    {
+      "task_class": "engineering-diagnosis",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "routine",
+      "execution": "auxiliary",
+      "baseline_model_key": "deepseek",
+      "native_role": "engineering-diagnosis",
+      "quality_requirement": "Actual log/code triage; no scientific or gate decisions."
+    },
+    {
+      "task_class": "engineering-code-review",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "routine",
+      "execution": "auxiliary",
+      "baseline_model_key": "deepseek",
+      "native_role": "engineering-code-review",
+      "quality_requirement": "Located routine defects and verification steps; OpenAI owns implemented fixes."
+    },
+    {
+      "task_class": "engineering-test-design",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "routine",
+      "execution": "auxiliary",
+      "baseline_model_key": "deepseek",
+      "native_role": "engineering-test-design",
+      "quality_requirement": "Software boundary/regression proposals only; no post-hoc scientific metric changes."
+    },
+    {
+      "task_class": "engineering-reproducibility",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "routine",
+      "execution": "auxiliary",
+      "baseline_model_key": "deepseek",
+      "native_role": "engineering-reproducibility",
+      "quality_requirement": "Environment/dependency/log diagnostics; preserve frozen inputs, seeds and failures."
+    },
+    {
+      "task_class": "experiment-execution",
+      "stages": [
+        "experiment-execution"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Approved G3 runner, sealed inputs, resource bounds and every failed/negative attempt."
+    },
+    {
+      "task_class": "statistical-calculation",
+      "stages": [
+        "experiment-execution"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Execute registered estimators and diagnostics; model prose never supplies numeric results."
+    },
+    {
+      "task_class": "scientific-interpretation",
+      "stages": [
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Effect sizes, uncertainty, rivals, adverse evidence and claim scope."
+    },
+    {
+      "task_class": "meta-protocol",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Actual secondary-data eligibility, extraction/estimand assumptions and registered synthesis."
+    },
+    {
+      "task_class": "theory-development",
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Explicit definitions, propositions, proof dependencies and counterexamples."
+    },
+    {
+      "task_class": "formal-proof-check",
+      "stages": [
+        "experiment-execution"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Actual kernel verification of registered propositions and transitive axioms."
+    },
+    {
+      "task_class": "data-figure-rendering",
+      "stages": [
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Render charts from exact registered outputs; retain data/figure provenance."
+    },
+    {
+      "task_class": "method-diagram-design",
+      "stages": [
+        "experiment-design",
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Editable conceptual diagram with justified relations and no invented causal arrows."
+    },
+    {
+      "task_class": "multimodal-inspection",
+      "stages": [
+        "topic-intelligence",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "auxiliary",
+      "baseline_model_key": "argon",
+      "native_role": "multimodal-inspection",
+      "quality_requirement": "Inspect actual hashed image/PDF inputs; unavailable media stays unassessed."
+    },
+    {
+      "task_class": "core-story",
+      "stages": [
+        "paper-architecture",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Strongest supported mechanism, contribution and conclusion within the common doctorate."
+    },
+    {
+      "task_class": "manuscript-outline",
+      "stages": [
+        "paper-architecture",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Evidence-first paper structure and closest-work contribution, not a chronology of runs."
+    },
+    {
+      "task_class": "source-bound-local-writing",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Write bounded English passages from located facts/results, preserving quantities and uncertainty."
+    },
+    {
+      "task_class": "language-editing",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Targeted clarity/humanization/anti-defensive editing with claim/citation/numeric integrity."
+    },
+    {
+      "task_class": "citation-verification",
+      "stages": [
+        "topic-intelligence",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "DOI/version checks plus exact primary-text support; metadata alone is insufficient."
+    },
+    {
+      "task_class": "manuscript-consistency",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Cross-section numeric, claim, figure/caption, terminology and scientific-logic consistency."
+    },
+    {
+      "task_class": "initial-independent-review",
+      "stages": [
+        "intake",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "sonnet",
+      "native_role": "independent-critic-initial",
+      "quality_requirement": "Fresh read-only independent findings; core scientific work instead uses Opus."
+    },
+    {
+      "task_class": "final-independent-review",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "opus",
+      "native_role": "independent-critic-final",
+      "quality_requirement": "Fresh final independent scientific audit; no same-family replacement."
+    },
+    {
+      "task_class": "complex-revision",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-remediator",
+      "quality_requirement": "Point-by-point reviewer response tied to evidence and approved additional experiments."
+    },
+    {
+      "task_class": "review-comment-triage",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "scientific",
+      "execution": "cycle",
+      "baseline_model_key": "sol",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Preserve original reviewer meaning, decision scope and unresolved requirements."
+    },
+    {
+      "task_class": "revision-new-experiment",
+      "stages": [
+        "experiment-design",
+        "experiment-execution"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Separate approved execution route; never retroactively refreeze observed final tests."
+    },
+    {
+      "task_class": "thesis-synthesis",
+      "stages": [
+        "paper-architecture",
+        "writing-and-review"
+      ],
+      "science_risk": "critical",
+      "execution": "cycle",
+      "baseline_model_key": "astra",
+      "native_role": "persistent-writer",
+      "quality_requirement": "Cumulative contribution of all six papers to one doctoral question."
+    },
+    {
+      "task_class": "export-and-package",
+      "stages": [
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Real LaTeX/Word/PDF build, provenance and G5 checks; human submission."
+    },
+    {
+      "task_class": "route-management-review",
+      "stages": [
+        "intake",
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
+      "science_risk": "auxiliary",
+      "execution": "deterministic",
+      "baseline_model_key": "deterministic",
+      "native_role": null,
+      "quality_requirement": "Read catalogs, current receipts, actual costs and scoped acceptance without a model judge call."
+    }
+  ]
+}
+

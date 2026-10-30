@@ -1,6 +1,11 @@
 # Production model routing
 
 Current writing-pilot evidence: [2026-10-28 results](SCIENTIFIC-WRITING-RESULTS-20261028.md).
+
+Current candidate connectivity, task tests and isolation evidence:
+[2026-10-29/30 evaluation](MODEL-EVALUATION-RESULTS-20261029.md).
+Use the [48-task assignments](MODEL-TASK-ASSIGNMENTS-20261029.md) for normal and
+incident review. Short fixtures do not promote a candidate or waive a scientific role.
 Two CodeKey Argon contracts failed response identity validation; no Argon prose
 was accepted or promoted. Eleven GPT candidates and their actual costs are
 recorded; independent human writing calibration remains pending. Formal roles
@@ -75,6 +80,7 @@ The existing keys are imported into these GitHub Actions Secrets:
 * `DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY`
 * `DR_OS_CODEKEY_DEEPSEEK_KEY`
 * `DR_OS_CODEKEY_GEMINI_KEY`
+* `DR_OS_CODEKEY_KIMI_KEY` (Kimi candidate transport; no automatic role promotion)
 
 Owner research and continuation workflows set `DR_OS_ROUTING_PROFILE=production`
 and inject only those model keys. No official OpenAI or Anthropic key is needed
@@ -217,3 +223,4 @@ requests and cannot grant spending authority. Cloud unit tests use fake
 transports to verify protocols, per-role effort, reservations, meter failures,
 cache isolation and source contracts. Neither check establishes real research
 findings, empirical quality, scientific completion or journal acceptance.
+

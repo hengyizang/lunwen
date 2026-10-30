@@ -97,13 +97,40 @@ class DynamicRoutingTests(unittest.TestCase):
             return routing.record_acceptance(self.project, self.candidate["candidate_id"], self.baseline,
                 task_profile=self.profile, packet_id="routing-paired", actor="Codex manager synthetic fixture")
 
-    def test_registry_covers_ten_groups_and_does_not_self_accept(self):
-        self.assertEqual(len({row["provider"] for row in self.policy["candidates"]}), 10)
-        self.assertEqual(len(self.policy["candidates"]), 98)
+    def test_registry_covers_twelve_groups_and_does_not_self_accept(self):
+        self.assertEqual(len({row["provider"] for row in self.policy["candidates"]}), 12)
+        self.assertEqual(len(self.policy["candidates"]), 102)
         self.assertEqual({row["status"] for row in self.policy["candidates"]}, {"candidate"})
         result = self.select()
         self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
         self.assertEqual(result["route"]["policy_sha256"], self.baseline["policy_sha256"])
+
+    def test_terra_routine_writer_stays_baseline_until_scoped_quality_and_billing_acceptance(self):
+        self.baseline = model_routing.select("intake", "persistent-writer")
+        self.profile = {"task_class": "intake-clarification", "science_risk": "routine", "priority": "cost"}
+        self.candidate = next(row for row in self.policy["candidates"]
+            if row["candidate_id"] == "codekey-codex-pro--gpt-6.1-terra--high--standard")
+        self.assertEqual(self.select()["decision"]["selected_candidate_id"], "baseline")
+        # These independent ratings and source/billing receipts are synthetic
+        # control fixtures, never acceptance for the real 20261029 trial.
+        self.calibration()
+        self.accept()
+        with patch.object(routing, "_available"):
+            result = self.select()
+        self.assertEqual(result["route"]["model"], "gpt-6.1-terra")
+        self.assertTrue(result["route"]["persistent_output"])
+
+    def test_new_candidates_cannot_lower_core_floor_or_make_kimi_a_persistent_writer(self):
+        self.baseline = model_routing.select("writing-and-review", "persistent-writer", "core-story")
+        self.profile = {"task_class": "core-story", "science_risk": "critical", "priority": "cost"}
+        result = self.select()
+        self.assertEqual(result["route"]["model"], "gpt-6-astra")
+        terra = next(row for row in result["decision"]["excluded"]
+            if row["candidate_id"] == "codekey-codex-pro--gpt-6.1-terra--high--standard")
+        self.assertIn("floor cannot be lowered", terra["reason"])
+        kimi = next(row for row in result["decision"]["excluded"]
+            if row["candidate_id"] == "codekey-kimi--kimi-k3.1-pro--high--standard")
+        self.assertIn("must remain OpenAI", kimi["reason"])
 
     def test_profiles_reject_transport_budget_and_unsafe_values(self):
         for field in ("provider", "model", "budget", "reasoning_effort"):
@@ -319,3 +346,4 @@ class DynamicRoutingTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

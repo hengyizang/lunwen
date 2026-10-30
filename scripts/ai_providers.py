@@ -35,6 +35,8 @@ PROVIDERS = (
     "codekey-kiro-standard",
     "codekey-deepseek",
     "codekey-gemini",
+    "codekey-gemini-chat",
+    "codekey-kimi",
 )
 # Exact transport routes, not assertions about gateway authenticity or quality.
 # UUAPI remains a deprecated compatibility adapter for historical run receipts.
@@ -42,12 +44,12 @@ PRODUCTION_PROVIDERS = {
     "cheapai-gpt-pro": {
         "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
         "key_setting": "DR_OS_CHEAPAI_GPT_PRO_KEY", "model": "gpt-6.1-sol",
-        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna", "gpt-6.1-terra"),
     },
     "cheapai-gpt-discount": {
         "family": "openai", "root": "https://cheapai.info", "path": "/v1/responses",
         "key_setting": "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY", "model": "gpt-5.6-luna",
-        "protocol": "openai_responses", "models": ("gpt-5.6-luna", "gpt-6.1-sol", "gpt-6-astra"),
+        "protocol": "openai_responses", "models": ("gpt-5.6-luna", "gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra"),
     },
     "cheapai-kiro-discount": {
         "family": "anthropic", "root": "https://cheapai.info", "path": "/v1/messages",
@@ -62,12 +64,12 @@ PRODUCTION_PROVIDERS = {
     "codekey-codex-pro": {
         "family": "openai", "root": "https://codekey.ai", "path": "/v1/responses",
         "key_setting": "DR_OS_CODEKEY_CODEX_PRO_KEY", "model": "gpt-6.1-sol",
-        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna", "gpt-6.1-terra"),
     },
     "codekey-codex-discount": {
         "family": "openai", "root": "https://codekey.ai", "path": "/v1/responses",
         "key_setting": "DR_OS_CODEKEY_CODEX_DISCOUNT_KEY", "model": "gpt-6.1-sol",
-        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna"),
+        "protocol": "openai_responses", "models": ("gpt-6.1-sol", "gpt-6-astra", "gpt-5.6-luna", "gpt-6.1-terra"),
     },
     "codekey-kiro-enterprise": {
         "family": "anthropic", "root": "https://codekey.ai", "path": "/v1/messages",
@@ -88,6 +90,18 @@ PRODUCTION_PROVIDERS = {
         "family": "google", "root": "https://codekey.ai", "path": "/v1beta/models/{model}:generateContent",
         "key_setting": "DR_OS_CODEKEY_GEMINI_KEY", "model": "gemini-4-argon",
         "protocol": "gemini_generate_content", "models": ("gemini-4-argon", "gemini-4-argon-high"),
+    },
+    # Explicit diagnostic transport: never an automatic native-Gemini fallback.
+    # Both Gemini routes share one credential and its central spending guard.
+    "codekey-gemini-chat": {
+        "family": "google", "root": "https://codekey.ai", "path": "/v1/chat/completions",
+        "key_setting": "DR_OS_CODEKEY_GEMINI_KEY", "model": "gemini-4-argon",
+        "protocol": "openai_chat_completions", "models": ("gemini-4-argon", "gemini-4-argon-high"),
+    },
+    "codekey-kimi": {
+        "family": "moonshot", "root": "https://codekey.ai", "path": "/v1/chat/completions",
+        "key_setting": "DR_OS_CODEKEY_KIMI_KEY", "model": "kimi-k3.1-pro",
+        "protocol": "openai_chat_completions", "models": ("kimi-k3.1-pro",),
     },
 }
 UUAPI_ANTHROPIC_UA = "claude-cli/2.0.76 (external, cli)"
@@ -641,15 +655,22 @@ def _token_count(value: Any, name: str) -> int:
     return value
 
 
-def _production_usage(data: dict[str, Any], family: str) -> dict[str, Any]:
-    raw = data.get("usageMetadata" if family == "google" else "usage")
+def _production_usage(data: dict[str, Any], family: str, protocol: str | None = None) -> dict[str, Any]:
+    native_google = family == "google" and protocol != "openai_chat_completions"
+    raw = data.get("usageMetadata" if native_google else "usage")
     if not isinstance(raw, dict):
         raise ProviderError("missing production token usage; reconcile billing")
     usage = dict(raw)
-    if family == "deepseek":
+    if family == "deepseek" or protocol == "openai_chat_completions":
         inputs = _token_count(raw.get("prompt_tokens"), "prompt_tokens")
         outputs = _token_count(raw.get("completion_tokens"), "completion_tokens")
-        cached = _token_count(raw.get("prompt_cache_hit_tokens", 0), "prompt_cache_hit_tokens")
+        prompt_details = raw.get("prompt_tokens_details", {})
+        if not isinstance(prompt_details, dict):
+            raise ProviderError("malformed prompt token details; reconcile billing")
+        detail_cached = _token_count(prompt_details.get("cached_tokens", 0), "cached_tokens")
+        cached = _token_count(raw.get("prompt_cache_hit_tokens", detail_cached), "prompt_cache_hit_tokens")
+        if "prompt_cache_hit_tokens" in raw and "cached_tokens" in prompt_details and cached != detail_cached:
+            raise ProviderError("cache usage receipts disagree; reconcile billing")
         if cached > inputs:
             raise ProviderError("cache hit tokens exceed total input; reconcile billing")
         if "prompt_cache_miss_tokens" in raw:
@@ -666,7 +687,7 @@ def _production_usage(data: dict[str, Any], family: str) -> dict[str, Any]:
         if reasoning > outputs:
             raise ProviderError("reasoning tokens exceed output total; reconcile billing")
         usage["output_tokens_details"] = {"reasoning_tokens": reasoning}
-    elif family == "google":
+    elif native_google:
         inputs = _token_count(raw.get("promptTokenCount"), "promptTokenCount")
         candidates = _token_count(raw.get("candidatesTokenCount"), "candidatesTokenCount")
         thoughts = _token_count(raw.get("thoughtsTokenCount", 0), "thoughtsTokenCount")
@@ -812,7 +833,9 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
     if not isinstance(effort, str) or effort not in supported_efforts:
         raise ProviderError("reasoning effort is not supported by this production route")
     media = _validated_attachments(attachments)
-    if media and family not in {"openai", "google"}:
+    native_google = spec["protocol"] == "gemini_generate_content"
+    chat_protocol = spec["protocol"] in {"deepseek_chat_completions", "openai_chat_completions"}
+    if media and family != "openai" and not native_google:
         raise ProviderError("attachments are not supported on this production route")
     key = os.environ.get(spec["key_setting"], "").strip()
     if not key or any(ch.isspace() or ord(ch) < 32 for ch in key):
@@ -840,12 +863,18 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
                    "output_config": {"effort": effort}, "tools": []}
         if system:
             payload["system"] = system
-    elif family == "deepseek":
+    elif chat_protocol:
         messages = ([{"role": "system", "content": system}] if system else [])
         messages.append({"role": "user", "content": prompt})
         payload = {"model": model, "messages": messages, "max_tokens": max_output_tokens,
-                   "thinking": {"type": "enabled"}, "reasoning_effort": effort}
-    else:
+                   "reasoning_effort": effort}
+        if family == "deepseek":
+            payload["thinking"] = {"type": "enabled"}
+        elif family == "moonshot":
+            # K3.1 Pro is always-thinking; its documented cap includes reasoning
+            # and answer tokens. Do not send an undocumented thinking toggle.
+            payload["max_completion_tokens"] = payload.pop("max_tokens")
+    elif native_google:
         headers = {"x-goog-api-key": key}
         parts = [{"text": prompt}] + [{"inlineData": {"mimeType": item["mime_type"], "data": item["data_base64"]}} for item in media]
         payload = {"contents": [{"role": "user", "parts": parts}],
@@ -853,28 +882,30 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
                                         "thinkingConfig": {"thinkingLevel": effort.upper()}}, "tools": []}
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
+    else:
+        raise ProviderError("unsupported production transport protocol")
     data = _production_request(endpoint, headers, payload, timeout)
-    reported = _production_identity(model, data.get("modelVersion") if family == "google" else data.get("model"))
-    if family == "google":
+    reported = _production_identity(model, data.get("modelVersion") if native_google else data.get("model"))
+    if native_google:
         text, status = _google_text(data)
     else:
-        protocol = "openai_chat_completions" if family == "deepseek" else spec["protocol"]
-        if family == "deepseek":
+        protocol = "openai_chat_completions" if chat_protocol else spec["protocol"]
+        if chat_protocol:
             choices = data.get("choices")
             if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
-                raise ProviderError("DeepSeek response requires one choice; reconcile billing")
+                raise ProviderError("chat response requires one choice; reconcile billing")
             message = choices[0].get("message")
             if not isinstance(message, dict) or message.get("tool_calls") or message.get("function_call"):
-                raise ProviderError("unexpected DeepSeek tool response; reconcile billing")
+                raise ProviderError("unexpected chat tool response; reconcile billing")
         text = (_anthropic_text(data) if family == "anthropic" else
-                _chat_completions_text(data) if family == "deepseek" else _openai_text(data))
+                _chat_completions_text(data) if chat_protocol else _openai_text(data))
         status = completion_status(data, protocol)
     # Production never accepts unknown or partial termination, even when the
     # deprecated compatibility strictness switch was disabled historically.
     if status != "completed":
         raise ProviderError(f"production model response did not complete ({status}); reconcile billing")
-    return ModelResult(provider, model, text, _production_usage(data, family),
-                       data.get("responseId") if family == "google" else data.get("id"),
+    return ModelResult(provider, model, text, _production_usage(data, family, spec["protocol"]),
+                       data.get("responseId") if native_google else data.get("id"),
                        reported, spec["protocol"], endpoint,
                        "cheapai" if provider.startswith("cheapai-") else "codekey",
                        completion_status=status, requested_effort=effort,
@@ -987,3 +1018,4 @@ def call(provider: str, prompt: str, **kwargs: Any) -> ModelResult:
     if provider == "uuapi-anthropic":
         return call_uuapi_anthropic(prompt, **kwargs)
     raise ProviderError(f"Unknown provider: {provider}")
+
