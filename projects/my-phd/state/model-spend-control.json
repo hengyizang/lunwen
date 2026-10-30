@@ -21,15 +21,6 @@
   "paper_spent_cny": {},
   "reconciliation_events": [],
   "reservations": {
-    "037dfeab144b4341a09529951d6e27d1": {
-      "at": "2026-10-30T09:17:28+00:00",
-      "call_id": "kimi-high|evidence-conflict",
-      "kind": "new_call",
-      "max_cost_cny": 4.861171,
-      "paper_id": null,
-      "run_id": "41031366106",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
       "call_id": null,
@@ -235,9 +226,13 @@
     {
       "actual_cost_cny": 0.00087556,
       "receipt_id": "ccf2c5082ef44c6e8d17bb03a6902963"
+    },
+    {
+      "actual_cost_cny": 0.01272645,
+      "receipt_id": "037dfeab144b4341a09529951d6e27d1"
     }
   ],
-  "spent_cny": 0.22995011,
+  "spent_cny": 0.24267656,
   "tranche_cny": 300,
   "unsent_events": [
     {
