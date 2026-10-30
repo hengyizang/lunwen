@@ -761,9 +761,40 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "The package provides multiple pairwise comparison tests for use after an omnibus analysis. It includes both parametric and nonparametric procedures applicable to factorial and block designs, allowing pairwise comparisons to be conducted in these analytical settings. The package also integrates with common scientific Python tools and provides heatmaps of pairwise test results [D1]. These heatmaps present the results of the pairwise tests; they do not establish that all hypotheses are supported. The available description identifies the package’s analytical and visualization capabilities but does not report a runtime benchmark or a numerical speedup. It likewise provides no basis for claiming that the package is universally applicable, guarantees statistically significant findings, or was the first solution of its kind. The description is a statement of software capabilities, not a report of a performed experiment.",
+      "reported_model": "gpt-6.1-terra",
+      "usage": {
+        "input_tokens": 302,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 228,
+        "output_tokens_details": {
+          "reasoning_tokens": 32
+        }
+      },
+      "request_id": "resp_09acf7ff176d5fcd016ae45fd396e887d0999e5ac59e68ab57",
+      "endpoint": "https://codekey.ai/v1/responses",
+      "protocol": "openai_responses",
+      "completion_status": "completed",
+      "response_sha256": "9a12d8567fc6cfdac2f8ef0179f49ea6fbbb3e75424694d40ccd7f39cc9069a5",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "[D1]": true
+        },
+        "forbidden_fragments_absent": {
+          "doubles performance": true,
+          "guarantees significant": true,
+          "first universal": true,
+          "proves all hypotheses": true
+        }
+      },
+      "duration_seconds": 5.5156
     }
   ],
   "legacy_budget_reservations": {
