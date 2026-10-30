@@ -42,6 +42,10 @@ UNKNOWN_ARGON_TICKET = "381830bce3954c0fbc628b548e2b031e"
 DEEPSEEK_LEGACY_ID = "97bdea2e1dd64aaaaa68dfa390e9ec76"
 CONTINUATION_ROUTES = ("terra-high", "deepseek-high", "kimi-high", "sol-high")
 CONTINUATION_CASES = ("discriminating-experiment", "writing-integrity", "evidence-conflict")
+UNSENT_REPAIR_BLOB = "4687efee7987c3ef0bd9749f75e11629555ef2b0"
+UNSENT_REPAIR_CODE = "86315b06344078679570e8f301e0ea8166f05b9b"
+UNSENT_RESERVATION = "5d63ab62a5f64f66ae40952fc56fadaf"
+UNSENT_TICKET = "1e2cda05f6044fe7a87a412dfa33f7b6"
 
 
 def _safe_error(error):
@@ -354,12 +358,16 @@ class _Continuation:
 class _ContinuationState:
     """Only the separate continuation file can be loaded or saved by execute."""
 
-    def __init__(self, source):
+    def __init__(self, source, initial=None):
         self.source = source
+        self.initial = initial
 
     def load(self, name):
         if name != "ledger.json":
             raise ValueError("unexpected isolated state name")
+        if self.initial is not None:
+            value, self.initial = self.initial, None
+            return value
         return self.source.load(CONTINUATION_FILE)
 
     def save(self, name, value):
@@ -368,12 +376,75 @@ class _ContinuationState:
         return self.source.save(CONTINUATION_FILE, value)
 
 
+def repair_unstarted(plan, state, context):
+    """One reviewed pre-POST failure; preserve its receipt and all real costs."""
+    ledger = state.load(CONTINUATION_FILE)
+    if not ledger or ledger.get("status") != "stopped" or len(ledger.get("entries", [])) != 2:
+        return None
+    source, blob = state.read(CONTINUATION_FILE)
+    if blob != UNSENT_REPAIR_BLOB:
+        return None
+    row = ledger["entries"][-1]
+    scope = ledger["scope"]
+    if (source != ledger or scope.get("code_sha") != UNSENT_REPAIR_CODE
+            or {**scope, "code_sha": code_revision()} != context.scope
+            or ledger["entries"][0].get("billing_status") != "settled"
+            or row.get("call_id") != "deepseek-high|discriminating-experiment"
+            or row.get("generation_status") != "not_sent" or row.get("billing_status") != "reserved"
+            or row.get("diagnostic") != "shared relay write readback failed"
+            or row.get("project_reservation_id") != UNSENT_RESERVATION
+            or row.get("code_sha") != UNSENT_REPAIR_CODE or row.get("run_id") != "41027978880"
+            or row.get("reserved_ceiling_cny") != .0605584):
+        raise ValueError("exact independently reviewed pre-transport interruption required")
+    store, name, shared, expected = relay_guard.load("codekey-deepseek", import_legacy=False)
+    ticket = shared.get("active")
+    marker = {"source_blob": blob, "source_code_sha": UNSENT_REPAIR_CODE,
+        "reservation_id": UNSENT_RESERVATION, "ticket_id": UNSENT_TICKET, "generation_sent": False}
+    if ticket is not None:
+        if (ticket.get("id") != UNSENT_TICKET or ticket.get("provider") != "codekey-deepseek"
+                or ticket.get("credential_sha256") != relay_guard.fingerprint("codekey-deepseek")
+                or ticket.get("scope", {}).get("project_reservation_id") != UNSENT_RESERVATION
+                or ticket.get("scope", {}).get("call_id") != row["call_id"]
+                or ticket.get("run_id") != row["run_id"] or ticket.get("max_cost_cny") != row["reserved_ceiling_cny"]
+                or "active_meter" in shared):
+            raise ValueError("a meter-bound or different request cannot be cancelled as unsent")
+        shared["events"].append({"status": "not_sent_recovered", "ticket": ticket, "repair": marker})
+        shared["active"] = None
+        store.write(name, shared, expected)
+    elif not any(event.get("repair") == marker for event in shared.get("events", [])):
+        raise ValueError("missing exact unsent shared cancellation receipt")
+    budget = writing_comparison.Budget(os.environ["GH_TOKEN"], trial_id=TRIAL)
+    control = budget.refresh()
+    held = control["reservations"].get(UNSENT_RESERVATION)
+    if held is not None:
+        if (held.get("call_id") != row["call_id"] or held.get("run_id") != row["run_id"]
+                or held.get("writing_trial") != TRIAL or held.get("max_cost_cny") != row["reserved_ceiling_cny"]):
+            raise ValueError("unstarted central reservation differs from reviewed failure")
+        model_spend.cancel_unsent(budget.root, UNSENT_RESERVATION,
+            reason="Immutable pre-POST failure " + blob + "; shared ticket has no bound meter; no generation was authorized.")
+        budget.persist()
+    elif not any(event.get("receipt_id") == UNSENT_RESERVATION and event.get("generation_sent") is False
+            for event in control.get("unsent_events", [])):
+        raise ValueError("missing exact central unsent cancellation receipt")
+    # Keep the never-sent lease as an event, so its call may be sent ONCE later.
+    ledger.setdefault("preflight_events", []).append({"status": "not_sent_recovered", "repair": marker,
+        "original_entry": ledger["entries"].pop(), "generation_calls": 0})
+    ledger.setdefault("repair_amendments", []).append({**marker, "previous_scope": scope,
+        "new_code_sha": code_revision(), "authorization": CONTINUATION_AUTHORIZATION})
+    ledger["scope"] = context.scope
+    ledger["status"] = "running"
+    ledger.pop("stop_reason", None)
+    state.save(CONTINUATION_FILE, ledger)
+    return ledger
+
+
 def continue_isolated(plan, state):
     if (os.environ.get("MODEL_EVALUATION_MODE") != "continue-isolated"
             or os.environ.get("MODEL_EVALUATION_AUTHORIZATION") != CONTINUATION_AUTHORIZATION):
         raise ValueError("new exact owner exception required before isolated continuation")
     context = _Continuation(plan, state)
-    return execute(plan, _ContinuationState(state), _continuation=context)
+    repaired = repair_unstarted(plan, state, context)
+    return execute(plan, _ContinuationState(state, initial=repaired), _continuation=context)
 
 
 def _legacy_budget(budget, *, _continuation=None):

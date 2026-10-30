@@ -101,8 +101,8 @@ class CloudStore:
         if expected:
             body["sha"] = expected
         response = self.api("contents/relay-guard/" + name, body, "PUT")
-        actual, new_sha = self.read(BRANCH, "relay-guard", name)
-        if actual != value or new_sha != response["content"]["sha"]:
+        new_sha = response["content"]["sha"]
+        if self.read_blob(new_sha) != value:
             raise RelayGuardError("shared relay write readback failed")
         return new_sha
 
