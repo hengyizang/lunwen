@@ -30,6 +30,15 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
+    "687a0077618b437e8076782fb8bd6ad6": {
+      "at": "2026-10-30T09:13:46+00:00",
+      "call_id": "terra-high|writing-integrity",
+      "kind": "new_call",
+      "max_cost_cny": 0.159789,
+      "paper_id": null,
+      "run_id": "41031366106",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
