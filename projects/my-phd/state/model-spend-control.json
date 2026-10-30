@@ -30,6 +30,15 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
+    "4b6bfc636cec4b3a9431006a1aeb1a2a": {
+      "at": "2026-10-30T09:15:11+00:00",
+      "call_id": "kimi-high|writing-integrity",
+      "kind": "new_call",
+      "max_cost_cny": 4.858441,
+      "paper_id": null,
+      "run_id": "41031366106",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
