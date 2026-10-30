@@ -30,15 +30,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "5d63ab62a5f64f66ae40952fc56fadaf": {
-      "at": "2026-10-30T08:41:34+00:00",
-      "call_id": "deepseek-high|discriminating-experiment",
-      "kind": "new_call",
-      "max_cost_cny": 0.0605584,
-      "paper_id": null,
-      "run_id": "41027978880",
-      "writing_trial": "model-evaluation-20261029"
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -202,5 +193,21 @@
     }
   ],
   "spent_cny": 0.18839436,
-  "tranche_cny": 300
+  "tranche_cny": 300,
+  "unsent_events": [
+    {
+      "generation_sent": false,
+      "reason": "Immutable pre-POST failure 4687efee7987c3ef0bd9749f75e11629555ef2b0; shared ticket has no bound meter; no generation was authorized.",
+      "receipt_id": "5d63ab62a5f64f66ae40952fc56fadaf",
+      "reservation": {
+        "at": "2026-10-30T08:41:34+00:00",
+        "call_id": "deepseek-high|discriminating-experiment",
+        "kind": "new_call",
+        "max_cost_cny": 0.0605584,
+        "paper_id": null,
+        "run_id": "41027978880",
+        "writing_trial": "model-evaluation-20261029"
+      }
+    }
+  ]
 }
