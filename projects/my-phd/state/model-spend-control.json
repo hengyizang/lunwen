@@ -39,6 +39,15 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
+    "a30ef3a2e8d44bfb8f056320bc2331b3": {
+      "at": "2026-10-30T08:40:56+00:00",
+      "call_id": "terra-high|discriminating-experiment",
+      "kind": "new_call",
+      "max_cost_cny": 0.159432,
+      "paper_id": null,
+      "run_id": "41027978880",
+      "writing_trial": "model-evaluation-20261029"
+    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
