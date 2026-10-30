@@ -414,9 +414,46 @@
         "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX"
       },
       "billing_status": "reserved",
-      "generation_status": "not_sent",
+      "generation_status": "completed",
       "run_id": "41031366106",
-      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489"
+      "code_sha": "6161d8ffd61358df6a0cafc286b270b387b9f489",
+      "text": "{\n  \"focal_prediction\": \"With total reserve capacity and disruption draws matched, the adaptive mechanism would show lower normalized allocation regret (or higher throughput) than the matched static-reserve control under a shifting bottleneck, with the advantage concentrated in post-shift blocks and not explained by total reserve spend; the advantage would be attenuated or absent under a stable bottleneck.\",\n  \"rival_prediction\": \"With total reserve capacity and disruption draws matched, the adaptive and static-reserve arms would not differ; any gain would track reserve capacity/spend rather than adaptation, so the shifting-minus-stable difference-in-differences would be zero.\",\n  \"comparison\": \"2x2 between-arm/between-regime contrast: mechanism (adaptive vs matched static reserve) × bottleneck regime (shifting vs stable). Primary estimate is difference-in-differences: (adaptive − static | shifting) − (adaptive − static | stable). Within each regime, both arms receive identical disruption draw IDs and identical total reserve-capacity budgets. Activation latency and switching cost are logged but not used to add reserve.\",\n  \"matched_resource_budget\": \"All arms and regimes receive the same total reserve-capacity units per episode, same episode length, same evaluation windows, and identical disruption draw IDs within regime; no extra reserve, episodes, or draws are given to any arm. Any timing differences in reserve release are logged as part of the mechanism and audited against total spend.\",\n  \"controls\": [\n    \"Manipulation check: verify scheduled bottleneck shifts occur and are observable in logs; if shifts are absent or undetected, outcome is inconclusive.\",\n    \"Measurement control: independent audit that total reserve units spent and disruption draw IDs match across arms within regime; mismatch makes outcome inconclusive.\",\n    \"Static-reserve control receives the same bottleneck information but uses a fixed non-adaptive allocation rule, isolating adaptation from information access.\",\n    \"Stable-bottleneck negative control tests for generic effort or latency effects; H1 predicts attenuated adaptive advantage there.\",\n    \"Record activation latency and switching cost for every arm; missing or unrecordable values make outcome inconclusive.\",\n    \"Pre-specify primary outcome and analysis; no outcome-dependent stopping or reanalysis.\"\n  ],\n  \"observable\": \"Primary: normalized allocation regret over post-shift evaluation blocks (lower is better), computed from logged bottleneck state, allocations, and completion/loss. Secondary: post-shift reallocation accuracy, activation latency, switching cost, and audited total reserve spend. No values are asserted because no run exists.\",\n  \"falsifier\": \"H1 would be falsified if, with all controls passing and reserve/disruption draws matched, the adaptive arm fails to outperform the matched static-reserve arm under shifting bottleneck, or the shifting-minus-stable difference-in-differences is not positive, or any apparent advantage is fully attributable to logged reserve spend rather than post-shift reallocation. H2 would be falsified by a positive adaptive advantage under matched reserve spend and matched disruption draws.\",\n  \"inconclusive_condition\": \"Outcome is inconclusive if the bottleneck-shift manipulation check fails, the reserve-spend or disruption-draw matching audit fails, activation latency or switching cost cannot be recorded, primary outcome logs are missing or invalid, or the stable-bottleneck control is not stable. No empirical claim is made in that case.\",\n  \"stopping_rule\": \"Single fixed-horizon run with a pre-specified number of disruption blocks per arm per regime (proposed design horizon: 32 blocks per arm per regime), no interim efficacy looks and no optional stopping. Stop early only for a failed control check and label the result inconclusive; do not extend or re-run based on observed outcome.\",\n  \"execution_status\": \"proposal_only; synthetic planning fixture; not executed; no dataset, simulation, or run exists; not permission, approval, or a frozen-plan change.\"\n}",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "completion_tokens": 5636,
+        "completion_tokens_details": {
+          "reasoning_tokens": 4831
+        },
+        "prompt_tokens": 273,
+        "input_tokens": 273,
+        "output_tokens": 5636,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 4831
+        }
+      },
+      "request_id": "9304f2b7fa2f4bf1bb34b184cb8ed8c6",
+      "endpoint": "https://codekey.ai/v1/chat/completions",
+      "protocol": "deepseek_chat_completions",
+      "completion_status": "completed",
+      "response_sha256": "1d1908298c3c08835a12fe2cb03c2965a703d262a32adeab3a138faa6b9122fb",
+      "mechanical_checks": {
+        "scope": "mechanical contract checks only, not scientific quality scores",
+        "required_fragments": {
+          "switching": true,
+          "latency": true,
+          "inconclusive": true
+        },
+        "forbidden_fragments_absent": {
+          "experiments demonstrate": true,
+          "results prove": true,
+          "novelty is verified": true,
+          "we achieved": true
+        }
+      },
+      "duration_seconds": 37.4565
     }
   ],
   "legacy_budget_reservations": {
