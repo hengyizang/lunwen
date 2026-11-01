@@ -1,0 +1,723 @@
+{
+  "schema_version": "1.0",
+  "stage": "topic-intelligence",
+  "blockers": [],
+  "control_only": true,
+  "data": {
+    "acquired": [],
+    "blockers": []
+  },
+  "paid_model_cycle": false,
+  "literature": {
+    "receipts": [
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080436z-crossref-19bb06bbf0",
+        "mode": "live_search",
+        "provider": "crossref",
+        "provider_name": "Crossref",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset&rows=15",
+        "final_url": "https://api.crossref.org/works?query.bibliographic=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset&rows=15",
+        "requested_at": "2026-11-01T08:04:36+00:00",
+        "completed_at": "2026-11-01T08:04:37+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/json",
+        "result_count": 15,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 15,
+          "accepted_count": 15,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "5ddab9bca98182712ae9a05e09708753fbbd0e076c87623d1518002248131d16",
+        "normalized_results_sha256": "378121b2d51e1c9a87c9a5d9aeafca7d32f0218658e9f6477c3899ad053e6900",
+        "raw_response_path": "evidence/literature/raw/20261101t080436z-crossref-19bb06bbf0.json",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080436z-crossref-19bb06bbf0.json"
+      },
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080437z-arxiv-c4b36481ec",
+        "mode": "live_search",
+        "provider": "arxiv",
+        "provider_name": "arXiv",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3ADevelop+AND+all%3Asix+AND+all%3Adistinct+AND+all%3Aindependently+AND+all%3Adefensible+AND+all%3Adoctoral-level+AND+all%3AEnglish+AND+all%3Aaround+AND+all%3Acore+AND+all%3Athesis+AND+all%3Adataset&start=0&max_results=15",
+        "final_url": "https://export.arxiv.org/api/query?search_query=all%3ADevelop+AND+all%3Asix+AND+all%3Adistinct+AND+all%3Aindependently+AND+all%3Adefensible+AND+all%3Adoctoral-level+AND+all%3AEnglish+AND+all%3Aaround+AND+all%3Acore+AND+all%3Athesis+AND+all%3Adataset&start=0&max_results=15",
+        "requested_at": "2026-11-01T08:04:37+00:00",
+        "completed_at": "2026-11-01T08:04:37+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/atom+xml; charset=utf-8",
+        "result_count": 0,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 0,
+          "accepted_count": 0,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false,
+          "server_date_prefilter": {
+            "applied": false,
+            "field": null,
+            "meaning": "arXiv initial submission, not journal publication; returned metadata rechecked"
+          }
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "c1aabb570760dee447f7a694fbf004ec08f249410b4895850b96cb39a7e6121c",
+        "normalized_results_sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "raw_response_path": "evidence/literature/raw/20261101t080437z-arxiv-c4b36481ec.xml",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080437z-arxiv-c4b36481ec.json"
+      },
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080437z-hal-0bb9b3709f",
+        "mode": "live_search",
+        "provider": "hal",
+        "provider_name": "HAL",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "final_url": "https://api.archives-ouvertes.fr/search/?q=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "requested_at": "2026-11-01T08:04:37+00:00",
+        "completed_at": "2026-11-01T08:04:39+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/json; charset=utf-8",
+        "result_count": 0,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 0,
+          "accepted_count": 0,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "raw_response_path": "evidence/literature/raw/20261101t080437z-hal-0bb9b3709f.json",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080437z-hal-0bb9b3709f.json"
+      },
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080439z-crossref-907ef1f1cf",
+        "mode": "live_search",
+        "provider": "crossref",
+        "provider_name": "Crossref",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset baseline benchmark",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset+baseline+benchmark&rows=15",
+        "final_url": "https://api.crossref.org/works?query.bibliographic=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset+baseline+benchmark&rows=15",
+        "requested_at": "2026-11-01T08:04:39+00:00",
+        "completed_at": "2026-11-01T08:04:39+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/json",
+        "result_count": 15,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 15,
+          "accepted_count": 15,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "2e62936a0e78847b6acfa0de8f12aa20f65d0cd0ae79a91b2426e5eec9a28d4c",
+        "normalized_results_sha256": "da4b52434f8f3161301dbaed589f622df1d9b84bd6a2597c8ed3faab1ea609f3",
+        "raw_response_path": "evidence/literature/raw/20261101t080439z-crossref-907ef1f1cf.json",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080439z-crossref-907ef1f1cf.json"
+      },
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080439z-arxiv-4b57e24a39",
+        "mode": "live_search",
+        "provider": "arxiv",
+        "provider_name": "arXiv",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset baseline benchmark",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3ADevelop+AND+all%3Asix+AND+all%3Adistinct+AND+all%3Aindependently+AND+all%3Adefensible+AND+all%3Adoctoral-level+AND+all%3AEnglish+AND+all%3Aaround+AND+all%3Acore+AND+all%3Athesis+AND+all%3Adataset+AND+all%3Abaseline+AND+all%3Abenchmark&start=0&max_results=15",
+        "final_url": "https://export.arxiv.org/api/query?search_query=all%3ADevelop+AND+all%3Asix+AND+all%3Adistinct+AND+all%3Aindependently+AND+all%3Adefensible+AND+all%3Adoctoral-level+AND+all%3AEnglish+AND+all%3Aaround+AND+all%3Acore+AND+all%3Athesis+AND+all%3Adataset+AND+all%3Abaseline+AND+all%3Abenchmark&start=0&max_results=15",
+        "requested_at": "2026-11-01T08:04:39+00:00",
+        "completed_at": "2026-11-01T08:04:40+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/atom+xml; charset=utf-8",
+        "result_count": 0,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 0,
+          "accepted_count": 0,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false,
+          "server_date_prefilter": {
+            "applied": false,
+            "field": null,
+            "meaning": "arXiv initial submission, not journal publication; returned metadata rechecked"
+          }
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "8a4177a9bd75a99c1e3edc364d55e46a0cf3813a97c778788f87221d4d968606",
+        "normalized_results_sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "raw_response_path": "evidence/literature/raw/20261101t080439z-arxiv-4b57e24a39.xml",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080439z-arxiv-4b57e24a39.json"
+      },
+      {
+        "schema_version": "1.0",
+        "receipt_id": "20261101t080440z-hal-8c7a04e924",
+        "mode": "live_search",
+        "provider": "hal",
+        "provider_name": "HAL",
+        "query": "Develop six distinct independently defensible doctoral-level English around core thesis dataset baseline benchmark",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset+baseline+benchmark&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "final_url": "https://api.archives-ouvertes.fr/search/?q=Develop+six+distinct+independently+defensible+doctoral-level+English+around+core+thesis+dataset+baseline+benchmark&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "requested_at": "2026-11-01T08:04:40+00:00",
+        "completed_at": "2026-11-01T08:04:41+00:00",
+        "status": "success",
+        "http_status": 200,
+        "content_type": "application/json; charset=utf-8",
+        "result_count": 0,
+        "declared_date_range": "all indexed years; inspect dates before claiming novelty",
+        "declared_filters": "unfiltered relevance discovery; pending human screening",
+        "request_context": null,
+        "actual_conditions": {
+          "constraints": {},
+          "unapplied_declarations": [
+            {
+              "field": "date_range",
+              "declared": "all indexed years; inspect dates before claiming novelty"
+            },
+            {
+              "field": "filters",
+              "declared": "unfiltered relevance discovery; pending human screening"
+            }
+          ],
+          "status": "unfiltered_declared_only",
+          "server_requested": [],
+          "postfilter_checked": [],
+          "postfilter_only": [],
+          "returned_before_filters": 0,
+          "accepted_count": 0,
+          "coverage": "bounded_result_window_not_complete_corpus",
+          "provider_filter_compliance_verified": false
+        },
+        "filtered_out_count": 0,
+        "unresolved_filter_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "raw_response_path": "evidence/literature/raw/20261101t080440z-hal-8c7a04e924.json",
+        "normalized_results_path": "evidence/literature/normalized/20261101t080440z-hal-8c7a04e924.json"
+      }
+    ],
+    "works": [
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Suhorukovs Vadims"
+        ],
+        "citation_count": 1,
+        "document_types": [
+          "dissertation"
+        ],
+        "doi": "10.25143/prom-rsu_2012-02_dts",
+        "id": "doi:10.25143/prom-rsu_2012-02_dts",
+        "primary_source_url": "https://doi.org/10.25143/prom-rsu_2012-02_dts",
+        "provider": "Crossref",
+        "provider_id": "10.25143/prom-rsu_2012-02_dts",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "The Role of Core Biopsy in Kidney Graft Pathology Diagnostics. Summary of the Doctoral Thesis",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": "<jats:p>My article investigates the situation, goals, and discourse praxis of professors supervising doctoral students writing in English. It is part of a wider project examining student-teacher interaction which is designed to improve written communication, particularly at the higher levels of academic study. Like the students they supervise, the five professors studied are English as a Foreign Language users, and all give instruction exclusively in English. Based on separate interviews with each professor, my study demonstrates that there is a tendency among doctoral supervisors to focus on the content and form of the thesis to the detriment of socio-cultural practice, i.e., the discourse between the professor and student, as well as the recognition of the text as a piece of social practice, shaped by a particular kind of academic public and the rules of scholarship that have been developed over time. The type of social practice that students bring with them varies from culture to culture. I argue that a doctoral thesis bears witness not only to the student’s ability to conduct research at a high level, but also to the creation of a distinct scholarly identity that is the result of effective discourse between professor and student, whereby the professor communicates “the rules of the game” that lead to a successful career both at university and after. My paper reflects on how we as teachers/supervisors can promote the formation of scholarly identity through the medium of English as a Foreign Language. I do so by focusing on the five supervisors’ knowledge of English, their ability to provide guidance in English, and their awareness of the importance of promoting scholarly identity in English. The article concludes with some reflections on the type of support required, if any, from native English teachers.</jats:p>",
+        "arxiv_id": null,
+        "authors": [
+          "Jane Mattisson"
+        ],
+        "citation_count": 0,
+        "document_types": [
+          "journal-article"
+        ],
+        "doi": "10.15388/respectus.2014.25.30.8",
+        "id": "doi:10.15388/respectus.2014.25.30.8",
+        "primary_source_url": "https://doi.org/10.15388/respectus.2014.25.30.8",
+        "provider": "Crossref",
+        "provider_id": "10.15388/respectus.2014.25.30.8",
+        "publication_date": "2014-04-25",
+        "publication_year": 2014,
+        "title": "Supervising in English: The Doctoral Thesis, Professor/Student Discourse, and Social Practice",
+        "venue": "Respectus Philologicus",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.1142/9789819822652_0001",
+        "id": "doi:10.1142/9789819822652_0001",
+        "primary_source_url": "https://doi.org/10.1142/9789819822652_0001",
+        "provider": "Crossref",
+        "provider_id": "10.1142/9789819822652_0001",
+        "publication_date": "2026-02",
+        "publication_year": 2026,
+        "title": "Text of Ernst Ising’s Thesis in German and in English",
+        "venue": "Ernst Ising's Doctoral Thesis — One Hundred Years On",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "dataset"
+        ],
+        "doi": "10.1037/e590672007-016",
+        "id": "doi:10.1037/e590672007-016",
+        "primary_source_url": "https://doi.org/10.1037/e590672007-016",
+        "provider": "Crossref",
+        "provider_id": "10.1037/e590672007-016",
+        "publication_date": "2007",
+        "publication_year": 2007,
+        "title": "Where Can a Doctoral Student Develop Competence Working with LGBTQ Clients?",
+        "venue": "PsycEXTRA Dataset",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.4135/9781506374727.n4",
+        "id": "doi:10.4135/9781506374727.n4",
+        "primary_source_url": "https://doi.org/10.4135/9781506374727.n4",
+        "provider": "Crossref",
+        "provider_id": "10.4135/9781506374727.n4",
+        "publication_date": "2014",
+        "publication_year": 2014,
+        "title": "Do You Know How to Develop Your Research Design and Methodology?",
+        "venue": "Writing your Doctoral Dissertation or Thesis Faster: A Proven Map to Success",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": "<p>On December 28, 1885, Gilles de la Tourette defended his doctoral thesis in medicine with his teacher, Jean-Martin Charcot, presiding over the jury. The subject, proposed by Charcot himself, involved studying footprints made on sheets of white paper and establishing gait anomalies during various stages of neurological disorders. Gilles de la Tourette spent 1884 and 1885 working on his thesis. His footprints graphical study, which may appear simplistic, is the first of its kind in neurology, making it innovative and valuable. It drew on similar orthopedic studies previously conducted in other European countries. These studies are reviewed here, and the genesis, technical aspects, and results of Gilles de la Tourette’s study are analyzed. The impact of his thesis is examined based on summaries published in the medical press and the fact that Gilles de la Tourette was awarded a prize by the Académie de Médecine for this work.</p>",
+        "arxiv_id": null,
+        "authors": [
+          "Olivier Walusinski"
+        ],
+        "citation_count": 5,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.1093/med/9780190636036.003.0008",
+        "id": "doi:10.1093/med/9780190636036.003.0008",
+        "primary_source_url": "https://doi.org/10.1093/med/9780190636036.003.0008",
+        "provider": "Crossref",
+        "provider_id": "10.1093/med/9780190636036.003.0008",
+        "publication_date": "2018-10",
+        "publication_year": 2018,
+        "title": "Doctoral Thesis",
+        "venue": "Georges Gilles de la Tourette",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Boobani Behnam"
+        ],
+        "citation_count": 1,
+        "document_types": [
+          "dissertation"
+        ],
+        "doi": "10.25143/prom-rsu-lspa_2023-03_dt",
+        "id": "doi:10.25143/prom-rsu-lspa_2023-03_dt",
+        "primary_source_url": "https://doi.org/10.25143/prom-rsu-lspa_2023-03_dt",
+        "provider": "Crossref",
+        "provider_id": "10.25143/prom-rsu-lspa_2023-03_dt",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Effect of Outdoor Recreation Activity on Stress Level and Mental Toughness on Taekwondo Athletes in the Competition Period. Doctoral Thesis",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.1093/oed/3087322323",
+        "id": "doi:10.1093/oed/3087322323",
+        "primary_source_url": "https://doi.org/10.1093/oed/3087322323",
+        "provider": "Crossref",
+        "provider_id": "10.1093/oed/3087322323",
+        "publication_date": "2023-03-02",
+        "publication_year": 2023,
+        "title": "defensible, adj.",
+        "venue": "Oxford English Dictionary",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Satu Uusiautti"
+        ],
+        "citation_count": 1,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.1007/978-94-6091-678-6_27",
+        "id": "doi:10.1007/978-94-6091-678-6_27",
+        "primary_source_url": "https://doi.org/10.1007/978-94-6091-678-6_27",
+        "provider": "Crossref",
+        "provider_id": "10.1007/978-94-6091-678-6_27",
+        "publication_date": "2012",
+        "publication_year": 2012,
+        "title": "Going With the Research Flow from Master’s thesis to Doctoral Thesis and Beyond",
+        "venue": "Obsessed with the Doctoral Theses",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "dataset"
+        ],
+        "doi": "10.1037/e533302012-001",
+        "id": "doi:10.1037/e533302012-001",
+        "primary_source_url": "https://doi.org/10.1037/e533302012-001",
+        "provider": "Crossref",
+        "provider_id": "10.1037/e533302012-001",
+        "publication_date": "2011",
+        "publication_year": 2011,
+        "title": "Cognitive Behavior Therapy Workshop Level I: Student and Post-Doctoral Fellow",
+        "venue": "PsycEXTRA Dataset",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "D. Smith Bailey",
+          "American Psychological Association"
+        ],
+        "citation_count": 0,
+        "document_types": [
+          "dataset"
+        ],
+        "doi": "10.1037/e451422006-019",
+        "id": "doi:10.1037/e451422006-019",
+        "primary_source_url": "https://doi.org/10.1037/e451422006-019",
+        "provider": "Crossref",
+        "provider_id": "10.1037/e451422006-019",
+        "publication_date": "2006",
+        "publication_year": 2006,
+        "title": "Doctoral program primes students for peace research around the globe",
+        "venue": "PsycEXTRA Dataset",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Vedmedovska Natālija"
+        ],
+        "citation_count": 1,
+        "document_types": [
+          "dissertation"
+        ],
+        "doi": "10.25143/prom-rsu_2011-26_dt",
+        "id": "doi:10.25143/prom-rsu_2011-26_dt",
+        "primary_source_url": "https://doi.org/10.25143/prom-rsu_2011-26_dt",
+        "provider": "Crossref",
+        "provider_id": "10.25143/prom-rsu_2011-26_dt",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Fetal Growth Restriction. Doctoral Thesis",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0",
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "book-chapter"
+        ],
+        "doi": "10.4135/9781506374727.n1",
+        "id": "doi:10.4135/9781506374727.n1",
+        "primary_source_url": "https://doi.org/10.4135/9781506374727.n1",
+        "provider": "Crossref",
+        "provider_id": "10.4135/9781506374727.n1",
+        "publication_date": "2014",
+        "publication_year": 2014,
+        "title": "Do You Understand What Is Required in a Doctoral Dissertation or Thesis?",
+        "venue": "Writing your Doctoral Dissertation or Thesis Faster: A Proven Map to Success",
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Boobani Behnam"
+        ],
+        "citation_count": 1,
+        "document_types": [
+          "dissertation"
+        ],
+        "doi": "10.25143/prom-rsu-lspa_2023-03_dts",
+        "id": "doi:10.25143/prom-rsu-lspa_2023-03_dts",
+        "primary_source_url": "https://doi.org/10.25143/prom-rsu-lspa_2023-03_dts",
+        "provider": "Crossref",
+        "provider_id": "10.25143/prom-rsu-lspa_2023-03_dts",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Effect of Outdoor Recreation Activity on Stress Level and Mental Toughness on Taekwondo Athletes in the Competition Period. Summary of the Doctoral Thesis",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Keith Flemming"
+        ],
+        "citation_count": 0,
+        "document_types": [
+          "dissertation"
+        ],
+        "doi": "10.33015/dominican.edu/2015.edu.07",
+        "id": "doi:10.33015/dominican.edu/2015.edu.07",
+        "primary_source_url": "https://doi.org/10.33015/dominican.edu/2015.edu.07",
+        "provider": "Crossref",
+        "provider_id": "10.33015/dominican.edu/2015.edu.07",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Helping English Language Learners Develop Writing Proficiency Using the Thesis Evidence Model in the High School Social Studies Classroom",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080436z-crossref-19bb06bbf0"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "component"
+        ],
+        "doi": "10.1021/acs.jctc.2c00617.s001",
+        "id": "doi:10.1021/acs.jctc.2c00617.s001",
+        "primary_source_url": "https://doi.org/10.1021/acs.jctc.2c00617.s001",
+        "provider": "Crossref",
+        "provider_id": "10.1021/acs.jctc.2c00617.s001",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Benchmark of GW Methods for Core-Level Binding Energies",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [],
+        "citation_count": 0,
+        "document_types": [
+          "component"
+        ],
+        "doi": "10.7717/peerjcs.2757/table-3",
+        "id": "doi:10.7717/peerjcs.2757/table-3",
+        "primary_source_url": "https://doi.org/10.7717/peerjcs.2757/table-3",
+        "provider": "Crossref",
+        "provider_id": "10.7717/peerjcs.2757/table-3",
+        "publication_date": null,
+        "publication_year": null,
+        "title": "Table 3: Comparing the Eternal-MAML with six baseline methods, learning a 3-way classifier on six sub-datasets of MVTec dataset.",
+        "venue": null,
+        "source_receipt_ids": [
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      },
+      {
+        "abstract": null,
+        "arxiv_id": null,
+        "authors": [
+          "Ignacio Morgado Bernal"
+        ],
+        "citation_count": 0,
+        "document_types": [
+          "journal-article"
+        ],
+        "doi": "10.5565/rev/qpsicologia.409",
+        "id": "doi:10.5565/rev/qpsicologia.409",
+        "primary_source_url": "https://doi.org/10.5565/rev/qpsicologia.409",
+        "provider": "Crossref",
+        "provider_id": "10.5565/rev/qpsicologia.409",
+        "publication_date": "2009-09-22",
+        "publication_year": 2009,
+        "title": "Intracranial Electrical Self-Stimulation, Amphetamine, and Baseline Levels of Activity in the Central Nervous System. (Doctoral Thesis)",
+        "venue": "Quaderns de Psicologia",
+        "source_receipt_ids": [
+          "20261101t080439z-crossref-907ef1f1cf"
+        ]
+      }
+    ],
+    "provider_errors": [],
+    "pending_searches": 3,
+    "new_search_calls": 6,
+    "work_count": 18,
+    "works_omitted": 0,
+    "bounded_metadata_only": true,
+    "human_screening_required": false,
+    "model_screening_required": true,
+    "novelty_proven": false
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "python": "3.12.15",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "versions": {
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "PyMuPDF": "1.28.2",
+    "pypdf": "6.21.4",
+    "python-docx": "1.2.0",
+    "python-pptx": "1.0.2",
+    "statsmodels": "0.15.0",
+    "ref-verify": "1.2.0"
+  },
+  "docker_available": true,
+  "disk_free_bytes": 91144663040,
+  "cpu_count": 4,
+  "experiment_limits": {
+    "cpus": 2,
+    "memory_gb": 4,
+    "timeout_seconds_per_run": 1200
+  },
+  "model_credentials_in_experiment_environment": false
+}
