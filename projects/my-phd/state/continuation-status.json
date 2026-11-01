@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
   "project": "my-phd",
-  "should_run": true,
-  "reason": "current_stage_work_allowed",
+  "should_run": false,
+  "reason": "previous_cycle_failed_requires_inspection",
   "stage": "topic-intelligence",
   "gate": "G1",
   "actor": "Hengyi Zang",
   "authorized_ceiling_cny": 500,
   "spent_cny": 0.24538256,
   "remaining_cny": 489.67626804,
-  "last_cycle_exit_code": 0,
-  "changed_at": "2026-11-01T08:04:41+00:00",
-  "source_run_id": "41287248175"
+  "last_cycle_exit_code": 1,
+  "changed_at": "2026-11-01T08:05:25+00:00",
+  "source_run_id": "41287314302"
 }

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/8NsXXGoBgV7SX4YYnx1jhCrwwTU</id>
+  <title>arXiv Query: search_query=all:Develop AND all:six AND all:distinct AND all:independently AND all:defensible AND all:doctoral-level AND all:English AND all:around AND all:core AND all:thesis AND all:dataset AND all:limitations AND all:failure AND all:robustness&amp;id_list=&amp;start=0&amp;max_results=15</title>
+  <updated>2026-11-01T08:05:24Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:Develop+AND+(all:six+AND+(all:distinct+AND+(all:independently+AND+(all:defensible+AND+(all:doctoral-level+AND+(all:English+AND+(all:around+AND+(all:core+AND+(all:thesis+AND+(all:dataset+AND+(all:limitations+AND+(all:failure+AND+all:robustness))))))))))))&amp;start=0&amp;max_results=15&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>15</opensearch:itemsPerPage>
+  <opensearch:totalResults>0</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+</feed>

@@ -4,10 +4,10 @@
       "family": "other",
       "model": "scripts/literature_evidence.py",
       "provider": "deterministic-control-plane",
-      "recorded_at": "2026-11-01T08:04:41+00:00",
+      "recorded_at": "2026-11-01T08:05:25+00:00",
       "role": "literature-metadata-acquisition",
-      "run_id": "20261101t080440z-hal-8c7a04e924",
-      "sha256": "c74d05f14d498acd1bf3a34b2d372020f9f3c48a4d6609625d7bd65a6016e41b"
+      "run_id": "20261101t080524z-hal-d5bb84cfea",
+      "sha256": "00931618cf9c24efdb3c26360414a7c35b01624e50b99ce965badb142ce85d6f"
     },
     "evidence/literature/normalized/20261101t080436z-crossref-19bb06bbf0.json": {
       "family": "other",
@@ -63,6 +63,33 @@
       "run_id": "20261101t080440z-hal-8c7a04e924",
       "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e"
     },
+    "evidence/literature/normalized/20261101t080523z-arxiv-600f307e0d.json": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:24+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080523z-arxiv-600f307e0d",
+      "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a"
+    },
+    "evidence/literature/normalized/20261101t080523z-crossref-70ac78d0f8.json": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:23+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080523z-crossref-70ac78d0f8",
+      "sha256": "5bd11614daaa58913d833d6aabc2e49850b19110e7514d65a6764c65bf5eb284"
+    },
+    "evidence/literature/normalized/20261101t080524z-hal-d5bb84cfea.json": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:25+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080524z-hal-d5bb84cfea",
+      "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e"
+    },
     "evidence/literature/raw/20261101t080436z-crossref-19bb06bbf0.json": {
       "family": "other",
       "model": "scripts/literature_evidence.py",
@@ -115,6 +142,33 @@
       "recorded_at": "2026-11-01T08:04:41+00:00",
       "role": "literature-metadata-acquisition",
       "run_id": "20261101t080440z-hal-8c7a04e924",
+      "sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064"
+    },
+    "evidence/literature/raw/20261101t080523z-arxiv-600f307e0d.xml": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:24+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080523z-arxiv-600f307e0d",
+      "sha256": "43b4be2f40d16725d1a3946ba78cb52393ebfd8b523c94434f15667eb69a43fe"
+    },
+    "evidence/literature/raw/20261101t080523z-crossref-70ac78d0f8.json": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:23+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080523z-crossref-70ac78d0f8",
+      "sha256": "52255fe2ff6f2453f41de336dc8851c94bc468bf634d01712ee8d4256c71cc8f"
+    },
+    "evidence/literature/raw/20261101t080524z-hal-d5bb84cfea.json": {
+      "family": "other",
+      "model": "scripts/literature_evidence.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-01T08:05:25+00:00",
+      "role": "literature-metadata-acquisition",
+      "run_id": "20261101t080524z-hal-d5bb84cfea",
       "sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064"
     },
     "intake/capabilities.json": {
@@ -218,5 +272,5 @@
     }
   },
   "schema_version": "1.0",
-  "updated_at": "2026-11-01T08:04:41+00:00"
+  "updated_at": "2026-11-01T08:05:25+00:00"
 }

@@ -14,7 +14,7 @@
     "ref-verify": "1.2.0"
   },
   "docker_available": true,
-  "disk_free_bytes": 91144663040,
+  "disk_free_bytes": 91140632576,
   "cpu_count": 4,
   "experiment_limits": {
     "cpus": 2,
