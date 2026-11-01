@@ -85,15 +85,15 @@ class ProductionContinuationTests(unittest.TestCase):
         self.environment.stop()
         ContinuationTests.tearDown(self)
 
-    def test_configured_production_is_idle_until_automatic_flag_is_explicitly_true(self):
+    def test_configured_production_uses_existing_total_without_extra_start_opt_in(self):
         for value in (None, "", "false", "TRUE", "1"):
             env = dict(self.env)
             if value is not None:
                 env["DR_OS_AUTOMATIC_RESEARCH_ENABLED"] = value
             with self.subTest(value=value), patch("scripts.model_runtime.call") as paid_call:
                 decision = cloud_continuation.evaluate("my-phd", env)
-                self.assertFalse(decision["should_run"])
-                self.assertEqual(decision["reason"], "production_configured_automatic_research_not_started")
+                self.assertTrue(decision["should_run"])
+                self.assertEqual(decision["reason"], "current_stage_work_allowed")
                 paid_call.assert_not_called()
         self.assertTrue(cloud_continuation.evaluate("my-phd", {**self.env, "DR_OS_AUTOMATIC_RESEARCH_ENABLED": "true"})["should_run"])
 
@@ -107,7 +107,7 @@ class ProductionContinuationTests(unittest.TestCase):
             for _ in range(2):
                 report = cloud_continuation.startup_report("my-phd", self.env)
                 self.assertTrue(report["configuration_ready"])
-                self.assertFalse(report["ready_to_continue"])
+                self.assertTrue(report["ready_to_continue"])
                 self.assertEqual(report["paid_calls"], 0)
                 self.assertFalse(report["provider_authentication_verified"])
                 self.assertFalse(report["scientific_completion_verified"])
@@ -134,12 +134,13 @@ class ProductionContinuationTests(unittest.TestCase):
         self.assertEqual(cloud_continuation.evaluate("my-phd", env)["reason"], "human_gate_pending")
         self.assertEqual(model_spend.read(self.project)["authorized_ceiling_cny"], 300)
 
-    def test_existing_unknown_charge_reservation_is_retained_and_blocks_restart(self):
+    def test_existing_unknown_charge_reservation_counts_without_blocking_remaining_budget(self):
         reservation = model_spend.reserve(self.project, max_cost_cny=5, paper_id="P01", paper_limit_cny=60, run_id="ambiguous-before-production")
         before = (self.project / model_spend.FILE).read_bytes()
         env = {**self.env, "DR_OS_AUTOMATIC_RESEARCH_ENABLED": "true"}
         report = cloud_continuation.startup_report("my-phd", env)
-        self.assertEqual(report["continuation"]["reason"], "billing_reconciliation_pending")
+        self.assertTrue(report["continuation"]["should_run"])
+        self.assertEqual(report["budget"]["remaining_cny"], 295)
         self.assertEqual(report["budget"]["reserved_cny"], 5)
         self.assertEqual(before, (self.project / model_spend.FILE).read_bytes())
         self.assertIn(reservation, model_spend.read(self.project)["reservations"])

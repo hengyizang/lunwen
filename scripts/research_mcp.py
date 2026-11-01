@@ -16,7 +16,7 @@ def route_request(project:str,request:str)->dict[str,Any]:
     for candidate,pattern,target in ROUTES:
         if re.search(pattern,request,re.I):intent=candidate;skill=target;break
     match=re.search(r"\bP\d{2}\b",request,re.I)
-    return {"project":project,"paper":match.group(0).upper() if match else None,"intent":intent,"skill":skill,"paid_call_started":False,"gate_approved":False,"submission_started":False,"next":"Read the routed Skill, inspect state, preflight costs, run deterministic checks, and stop at human gates."}
+    return {"project":project,"paper":match.group(0).upper() if match else None,"intent":intent,"skill":skill,"paid_call_started":False,"gate_approved":False,"submission_started":False,"next":"Read the routed Skill, inspect state, preflight costs, run deterministic checks, and stop only for G1/G2 topic selection."}
 def status(project:str)->dict[str,Any]:
     safe_project(project);path=ROOT/"projects"/project/"state"/"run.json"
     if not path.is_file():return {"exists":False,"project":project,"paid_call_started":False}
@@ -38,25 +38,29 @@ def context(request:str,project:str|None=None)->dict[str,Any]:
     if selected:safe_project(selected);resolution="explicit"
     elif len(inventory)==1:selected=str(inventory[0]["project"]);resolution="automatic-single-project"
     elif not inventory:
-        return {"project":None,"project_resolution":"none","selection_required":False,"initialization_required":True,"skill":"start","intent":"start","paid_call_started":False,"gate_approved":False,"submission_started":False,"must_stop":True,"next":"Collect the research goal and constraints, then initialize a project only after the user confirms them."}
+        return {"project":None,"project_resolution":"none","selection_required":False,"initialization_required":True,"skill":"start","intent":"start","paid_call_started":False,"gate_approved":False,"submission_started":False,"must_stop":False,"next":"Collect missing research goals and constraints, then initialize under the user's existing task authorization. Do not invent inputs or spending authority."}
     else:
         return {"project":None,"project_resolution":"ambiguous","selection_required":True,"candidates":[item["project"] for item in inventory],"paid_call_started":False,"gate_approved":False,"submission_started":False,"must_stop":True,"next":"Ask the user to select one initialized project."}
     current=status(selected);routed=route_request(selected,request)
     state=current.get("status")
     if not current.get("exists"):
-        next_action="Confirm the research goal and constraints, then use the start Skill to initialize this project."
-        must_stop=True;human_action="confirm-project-initialization"
+        next_action="Use the start Skill to initialize from supplied goals and constraints; request only missing inputs and retain actual spending authority."
+        must_stop=False;human_action=None
     elif state=="awaiting_approval":
-        next_action="Present the gate dossier. Stop for explicit human approval, or reopen the gate if revision is requested."
-        must_stop=True;human_action="approve-or-reopen-gate"
+        if current.get("gate") in {"G1", "G2"}:
+            next_action="Present the doctoral topic or the individual paper topics for explicit human selection."
+            must_stop=True;human_action="approve-topic-or-revise"
+        else:
+            next_action="Recheck the legacy pending stage and record its automated decision through researchctl."
+            must_stop=False;human_action=None
     elif state=="approved":
         next_action="Advance the already approved gate, reload state, then resume through the routed Skill."
         must_stop=False;human_action=None
     elif state=="submission_ready":
-        next_action="Run deterministic package checks and request a named final human review before any submission."
-        must_stop=True;human_action="final-package-review"
+        next_action="Build the checked complete manuscript package. Publisher submission remains a separate action."
+        must_stop=False;human_action=None
     else:
-        next_action="Read the routed Skill, run deterministic preflight, disclose estimated cost before any paid call, and stop at the next human gate."
+        next_action="Read the routed Skill, run deterministic preflight within actual spending authority, and stop only for G1/G2 topic selection."
         must_stop=False;human_action=None
     return {**routed,"project_resolution":resolution,"project_state":current,"selection_required":False,"initialization_required":not current.get("exists",False),"must_stop":must_stop,"human_action":human_action,"paid_call_authorized":False,"next":next_action}
 TOOLS=[{"name":"research_context","description":"Resolve the project, route a natural-language request, and report the safe next action in one zero-cost read-only call.","inputSchema":{"type":"object","required":["request"],"properties":{"project":{"type":"string"},"request":{"type":"string"}}}},{"name":"research_projects","description":"List initialized local research projects and their current stages without mutation.","inputSchema":{"type":"object","properties":{}}},{"name":"research_route","description":"Route a natural-language research request without paid calls.","inputSchema":{"type":"object","required":["project","request"],"properties":{"project":{"type":"string"},"request":{"type":"string"}}}},{"name":"research_status","description":"Read current project stage and gate without mutation.","inputSchema":{"type":"object","required":["project"],"properties":{"project":{"type":"string"}}}}]

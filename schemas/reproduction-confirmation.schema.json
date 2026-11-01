@@ -52,6 +52,9 @@
     "source_run_id": {
       "type": "string",
       "pattern": "^[0-9]+$"
+    },
+    "confirmation_kind": {
+      "const": "automated"
     }
   }
 }

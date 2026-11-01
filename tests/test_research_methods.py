@@ -203,6 +203,15 @@ class ResearchMethodTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             methods.load_vendored_module("../unreviewed.py")
 
+    def test_pinned_text_hash_normalizes_checkout_newlines_but_detects_changes(self):
+        path = Path(self.temp.name) / "method.txt"
+        path.write_bytes(b"one\ntwo\n")
+        expected = methods.pinned_text_sha256(path)
+        path.write_bytes(b"one\r\ntwo\r\n")
+        self.assertEqual(methods.pinned_text_sha256(path), expected)
+        path.write_bytes(b"one\r\nchanged\r\n")
+        self.assertNotEqual(methods.pinned_text_sha256(path), expected)
+
     def test_line_locator_cannot_be_invented_or_point_elsewhere(self):
         self.assertEqual(candidates.anchor_errors(self.project, self.evidence), [])
         wrong = {**self.evidence, "locator": "L2"}

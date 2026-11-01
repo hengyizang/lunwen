@@ -204,8 +204,11 @@ class EditorialIntegrationTests(unittest.TestCase):
             target.parent.mkdir(parents=True)
             target.write_text("original receipt", encoding="utf-8")
             (project / "program").mkdir()
-            (project / "program/receipt-alias.json").symlink_to(target)
-            (project / "program/reports-alias").symlink_to(target.parent, target_is_directory=True)
+            try:
+                (project / "program/receipt-alias.json").symlink_to(target)
+                (project / "program/reports-alias").symlink_to(target.parent, target_is_directory=True)
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"This runner cannot create the symlinks required by this test: {exc}")
             for alias in ("program/receipt-alias.json", "program/reports-alias/receipt.json"):
                 with self.subTest(alias=alias), self.assertRaisesRegex(ValueError, "symlink"):
                     api_orchestrator.apply_bundle("demo", {"stage": "writing-and-review", "artifacts": [

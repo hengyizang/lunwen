@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -40,6 +41,58 @@ def record(project: Path, source: str, scope: str, confirmed_by: str) -> Path:
     return output
 
 
+def _registered_basis(project: Path, paper_id: str) -> tuple[dict, dict]:
+    """Identify the supplied PDF via its controlled registration and acquisition."""
+    from scripts.literaturectl import approved_pdf
+    from scripts.research_artifacts import path_in, read, sha
+    if not isinstance(paper_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,100}", paper_id):
+        raise ValueError("invalid registered paper identifier")
+    config_path = path_in(project, "program/literature-workbench.json")
+    config_origin = output_provenance.current_origin(project, config_path)
+    if config_origin.get("status") != "tracked" or config_origin.get("model") != "scripts/literature_registration.py":
+        raise ValueError("registered source needs the current executor-owned library")
+    papers = read(config_path).get("papers", [])
+    rows = [row for row in papers if isinstance(row, dict) and row.get("id") == paper_id]
+    if len(rows) != 1 or rows[0].get("source_scope") != "full_text":
+        raise ValueError("registered supplied full-text source is required")
+    spec = rows[0]; primary = spec.get("source")
+    metadata_path = path_in(project, f"literature/metadata/{paper_id}.json")
+    metadata_origin = output_provenance.current_origin(project, metadata_path)
+    if metadata_origin.get("status") != "tracked" or metadata_origin.get("model") != "scripts/literature_registration.py":
+        raise ValueError("source registration metadata lacks executor provenance")
+    metadata = read(metadata_path); binding = metadata.get("acquisition_receipt", {})
+    acquired_path = path_in(project, binding.get("path", ""))
+    if sha(acquired_path) != binding.get("sha256"):
+        raise ValueError("source acquisition receipt is stale")
+    acquired_origin = output_provenance.current_origin(project, acquired_path)
+    if acquired_origin.get("status") != "tracked" or acquired_origin.get("family") == "anthropic":
+        raise ValueError("source acquisition receipt lacks executor provenance")
+    if not isinstance(primary, dict):
+        raise ValueError("registered PDF identity is missing")
+    pdf = approved_pdf(project, primary["path"], spec["manifest"])
+    if sha(pdf) != primary.get("sha256") or not any(p.get("path") == primary["path"] and p.get("sha256") == primary["sha256"] for p in read(acquired_path).get("pdfs", [])):
+        raise ValueError("registered PDF differs from acquisition receipt")
+    basis = {"paper_id": paper_id, "registration_path": metadata_path.relative_to(project).as_posix(),
+             "registration_sha256": sha(metadata_path), "acquisition_path": binding["path"],
+             "acquisition_sha256": binding["sha256"], "manifest_path": spec["manifest"],
+             "manifest_sha256": sha(path_in(project, spec["manifest"]))}
+    return primary, basis
+
+
+def record_registered(project: Path, paper_id: str) -> Path:
+    primary, basis = _registered_basis(project, paper_id)
+    digest = primary["sha256"]
+    output = project / "evidence/source-scopes" / (digest + ".json")
+    payload = {"schema_version": "1.1", "primary_source": primary, "provided_scope": "full_text",
+               "basis": basis, "scope_meaning": "full_text_supplied_by_registered_acquisition_not_completeness_verified",
+               "human_read_scope": "not_declared", "semantic_verification": False}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    output_provenance.record_model_writes(project, [output], family="other", provider=PROVIDER,
+        model="scripts/source_scope.py", role="registered-source-scope", run_id="source-scope-" + digest[:16])
+    return output
+
+
 def verify(project: Path, primary: object, receipt: object, expected_scope: str) -> list[str]:
     errors: list[str] = []
     if not isinstance(primary, dict) or not isinstance(receipt, dict):
@@ -56,10 +109,16 @@ def verify(project: Path, primary: object, receipt: object, expected_scope: str)
                 origin.get("provider") != PROVIDER):
             errors.append("source scope record lacks current deterministic control provenance")
         value = json.loads(path.read_text(encoding="utf-8"))
-        if value.get("schema_version") != "1.0" or value.get("primary_source") != primary:
+        if value.get("schema_version") not in {"1.0", "1.1"} or value.get("primary_source") != primary:
             errors.append("source scope record refers to a different primary source")
-        if value.get("provided_scope") != expected_scope or not value.get("confirmed_by"):
+        if value.get("schema_version") == "1.1":
+            registered, basis = _registered_basis(project, value["basis"]["paper_id"])
+            if registered != primary or basis != value.get("basis") or value.get("scope_meaning") != "full_text_supplied_by_registered_acquisition_not_completeness_verified":
+                errors.append("source_scope_unconfirmed: registered acquisition changed")
+        elif not value.get("confirmed_by"):
             errors.append("source_scope_unconfirmed: supplied scope is not human-confirmed")
+        if value.get("provided_scope") != expected_scope:
+            errors.append("source_scope_unconfirmed: supplied scope differs")
         if value.get("human_read_scope") != "not_declared" or value.get("semantic_verification") is not False:
             errors.append("a supplied-scope record cannot attest reading or scientific verification")
     except (OSError, ValueError, TypeError, KeyError, RuntimeError) as exc:

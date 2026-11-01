@@ -1,5 +1,6 @@
 """Cloud-run synthetic primary recovery; host fixtures are not scientific evidence."""
 import json
+import errno
 import os
 from pathlib import Path
 import sys
@@ -17,7 +18,11 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.project = Path(self.temporary.name) / "test-phd"
         self.project.mkdir()
-        self.environment = patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "DR_OS_CLOUD_EXECUTOR": "1"})
+        # This test executes synthetic local subprocesses, not a live Actions
+        # runner with authenticated remote state. Production reservation failure
+        # behavior is covered by test_experiment_runner's cloud tests.
+        self.environment = patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "1",
+                                                   "DR_OS_REQUIRE_REMOTE_RESERVATION": "0"})
         self.environment.start()
         self.addCleanup(self.environment.stop)
         self.put("papers/P01/experiment-evidence-plan.json", {"comparisons": [{"analysis_phase": "confirmatory"}],
@@ -90,10 +95,12 @@ class PrimaryRecoveryTests(unittest.TestCase):
         failure_receipt = self.project / "experiments/runs/primary-attempt-001/run.json"
         preserved_receipt = failure_receipt.read_bytes()
         self.assertTrue(failed["input_integrity"]["passed"])
-        with self.assertRaisesRegex(runner.ExperimentError, "owner authorization"):
+        with self.assertRaisesRegex(runner.ExperimentError, "recovery authorization"):
             self.execute()
+        self.assertFalse((self.project / "state/experiment-execution-lease.json").exists())
+
         paused = cloud_research_steps.resume_experiments(self.project)
-        self.assertEqual(paused["blockers"][0]["kind"], "experiment_inspection")
+        self.assertEqual(paused["blockers"][0]["kind"], "experiment_failure_diagnosis")
         self.authorize_retry(failed)
         self.assertEqual((self.project / "experiments/plan.json").read_bytes(), plan_before)
         archive = recovery.preserved_output(self.project, failed, failed["outputs"][0])
@@ -122,6 +129,22 @@ class PrimaryRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(runner.ExperimentError, "cannot be rerun"):
             self.execute()
 
+    def test_changed_frozen_input_prevents_machine_recovery_without_leaking_a_lease(self):
+        source = self.project / "analysis/input.json"
+        source.parent.mkdir()
+        source.write_text('{"fixture":1}', encoding="utf-8")
+        self.plan["runs"][0]["inputs"] = [{"path": "analysis/input.json", "sha256": recovery.sha(source)}]
+        self.put("experiments/plan.json", self.plan)
+        self.freeze()
+        failed = self.launch_failure()
+        source.write_text('{"fixture":2}', encoding="utf-8")
+        result = recovery.automatic_retry(self.project, failed)
+        self.assertFalse(result["retry_authorized"])
+        self.assertFalse((self.project / "state/experiment-execution-lease.json").exists())
+        with self.assertRaises(runner.ExperimentError):
+            self.execute()
+        self.assertFalse((self.project / "state/experiment-execution-lease.json").exists())
+
     def test_retry_proposals_reject_scientific_changes_repeated_approval_and_changed_archive(self):
         failed = self.execute()
         source = self.proposal("approve_primary_retry", failed_attempt_id=failed["attempt_id"], failure_category="method_bug")
@@ -134,6 +157,191 @@ class PrimaryRecoveryTests(unittest.TestCase):
         archive.write_text("Corrupted old evidence.", encoding="utf-8")
         with self.assertRaisesRegex(runner.ExperimentError, "preserved failed output changed"):
             self.execute()
+
+    def launch_failure(self):
+        original = runner.subprocess.Popen
+        def unavailable(command, *args, **kwargs):
+            if command[0] == sys.executable:
+                raise FileNotFoundError(errno.ENOENT, "Synthetic unavailable executor")
+            return original(command, *args, **kwargs)
+        with patch.object(runner.subprocess, "Popen", side_effect=unavailable):
+            return self.execute()
+
+    def test_executor_proven_no_start_allows_one_honest_machine_recovery(self):
+        failed = self.launch_failure()
+        self.assertFalse(failed["launch"]["process_started"])
+        self.assertEqual(failed["launch"]["os_error_errno"], errno.ENOENT)
+        receipt = self.project / f"experiments/runs/{failed['attempt_id']}/run.json"
+        original = receipt.read_bytes()
+        decision = recovery.automatic_retry(self.project, failed)
+        self.assertTrue(decision["retry_authorized"])
+        authority = recovery._approval(self.project, failed)
+        self.assertFalse(authority["human_confirmation"])
+        self.assertEqual(authority["actor"], "deterministic_control_plane")
+        self.assertEqual(authority["next_attempt_number"], 2)
+        (self.project / "infrastructure-ready.flag").write_text("Synthetic restored fixture environment.", encoding="utf-8")
+        success = self.execute()
+        self.assertEqual(success["status"], "succeeded")
+        self.assertEqual(receipt.read_bytes(), original)
+        self.assertEqual(recovery.selected_attempt(self.project, "primary", recovery.records(self.project)), success)
+        self.assertEqual(results_validation.validate_registry(self.project, self.plan, recovery.records(self.project)), [])
+
+    def test_machine_recovery_refuses_scientific_failure_unknown_lease_and_budget_overrun(self):
+        scientific = self.execute()
+        self.assertTrue(scientific["launch"]["process_started"])
+        self.assertFalse(recovery.automatic_retry(self.project, scientific)["retry_authorized"])
+        self.assertFalse((self.project / recovery.CONTROL / "retries" / (scientific["attempt_id"] + ".json")).exists())
+
+    def test_unknown_cost_reservation_is_not_cleared_by_machine_recovery(self):
+        failed = self.launch_failure()
+        lease = self.project / "state/experiment-execution-lease.json"
+        lease.write_text('{"status":"running","synthetic_fixture":true}', encoding="utf-8")
+        original = lease.read_bytes()
+        result = recovery.automatic_retry(self.project, failed)
+        self.assertFalse(result["retry_authorized"])
+        self.assertIn("unresolved", result["blocker"])
+        self.assertEqual(lease.read_bytes(), original)
+
+    def test_machine_retry_budget_counts_the_failed_attempt_conservatively(self):
+        self.put("experiments/budget.json", {"status": "ready_for_review", "hard_ceiling_usd": 0.2})
+        self.freeze()
+        failed = self.launch_failure()
+        result = recovery.automatic_retry(self.project, failed)
+        self.assertFalse(result["retry_authorized"])
+        self.assertIn("compute budget", result["blocker"])
+
+    def test_second_no_start_failure_cannot_start_an_automatic_retry_loop(self):
+        first = self.launch_failure()
+        self.assertTrue(recovery.automatic_retry(self.project, first)["retry_authorized"])
+        second = self.launch_failure()
+        self.assertEqual(second["attempt_id"], "primary-attempt-002")
+        self.assertFalse(recovery.automatic_retry(self.project, second)["retry_authorized"])
+        with self.assertRaisesRegex(runner.ExperimentError, "recovery authorization"):
+            self.execute()
+
+    def free_failed_protocol(self):
+        self.plan["runs"][0]["estimated_cost_usd"] = 0
+        self.put("experiments/plan.json", self.plan)
+        self.freeze()
+        failed = self.execute()
+        self.assertEqual(failed["status"], "failed")
+        return failed
+
+    def machine_retirement_proposal(self):
+        context = recovery.diagnosis_context(self.project)
+        self.assertEqual(context["status"], "eligible", context)
+        value = {"schema_version": "1.0", "operation": "retire_primary_plan",
+                 "prior_outcomes_seen": True, "observed_prior_results": True,
+                 "new_analysis_phase": "exploratory", "failure_category": "implementation_failure",
+                 "reason": "Synthetic observed implementation failure; retain original logs and design a distinct exploratory repair.",
+                 **{key: context[key] for key in ("plan_sha256", "budget_sha256", "version", "failed_attempt_ids", "diagnostic_evidence")}}
+        self.put(recovery.AUTOMATIC_PROPOSAL, value)
+        from scripts.output_provenance import record_model_writes
+        record_model_writes(self.project, [self.project / recovery.AUTOMATIC_PROPOSAL], family="openai",
+                            provider="synthetic-writer-fixture", model="synthetic-no-model-call", role="writer", run_id="machine-diagnosis")
+        return value
+
+    def test_free_failed_protocol_uses_actual_same_cycle_reviews_before_machine_retirement(self):
+        failed = self.free_failed_protocol()
+        state_before = self.read("state/run.json")
+        proposal = self.machine_retirement_proposal()
+        before = (self.project / "experiments/registry.jsonl").read_bytes()
+        blocked = recovery.automatic_retirement(self.project, run_id="machine-diagnosis")
+        self.assertEqual(blocked["status"], "blocked")
+        self.assertEqual((self.project / "experiments/registry.jsonl").read_bytes(), before)
+        from tests.review_scope_fixtures import seal_review
+        seal_review(self.project, state_before, gate="G4", run_id="machine-diagnosis")
+        wrong = recovery.automatic_retirement(self.project, run_id="another-cycle")
+        self.assertEqual(wrong["status"], "blocked")
+        self.assertIn("exact writer/critic cycle", wrong["blocker"])
+        result = recovery.automatic_retirement(self.project, run_id="machine-diagnosis")
+        self.assertTrue(result["retired"], result)
+        current = self.read("state/run.json")
+        self.assertEqual((current["gate"], current["status"]), ("G3", "awaiting_work"))
+        self.assertEqual([a for a in current["approvals"] if a.get("gate") in {"G1", "G2"}],
+                         [a for a in state_before["approvals"] if a.get("gate") in {"G1", "G2"}])
+        history = recovery.histories(self.project)[0]
+        self.assertEqual(history["decision_kind"], "automated")
+        self.assertFalse(history["human_confirmation"])
+        self.assertNotIn("cloud_review_sha256", history)
+        self.assertEqual(history["proposal"], proposal)
+        self.assertEqual(len(history["review_evidence"]), 4)
+        archive = self.project / "experiments/history/v001/files/experiments/registry.jsonl"
+        self.assertEqual(archive.read_bytes(), before)
+        self.assertEqual((self.project / failed["outputs"][0]["path"]).read_text(), "partial failure")
+        self.assertTrue((self.project / "experiments/history/v001/files" / failed["logs"]["stderr"]).is_file())
+        self.assertFalse((self.project / "papers/P01/preregistration.json").exists())
+        self.assertEqual(recovery.historical_cost(self.project), 0)
+        plan = self.amend(phase="exploratory", cost=0)
+        plan["runs"][0]["argv"] = [sys.executable, "-c", "raise SystemExit(2)"]
+        self.put("experiments/plan.json", plan)
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "failed")
+        capped = recovery.diagnosis_context(self.project)
+        self.assertEqual(capped["status"], "blocked")
+        self.assertIn("hard limit", capped["blocker"])
+
+    def test_paid_failure_is_accounted_without_extra_approval_but_running_lease_blocks_duplicate_work(self):
+        failed = self.execute()
+        self.assertEqual(failed["status"], "failed")
+        paid = recovery.diagnosis_context(self.project)
+        self.assertEqual(paid["status"], "eligible")
+        self.assertEqual(paid["committed_compute_usd"], 0.2)
+        self.assertIn("conservative_plan_estimate", paid["cost_accounting_basis"])
+        self.assertIsNone(failed["reported_cost_usd"])
+        self.put("state/experiment-execution-lease.json", {"status": "running", "synthetic_fixture": True})
+        unknown = recovery.diagnosis_context(self.project)
+        self.assertEqual(unknown["status"], "blocked")
+        self.assertIn("unresolved", unknown["blocker"])
+
+    def test_failed_compute_estimate_cannot_disappear_at_total_limit(self):
+        self.execute()
+        self.put("intake/constraints.json", {"cloud_compute_budget_usd": 0.1})
+        result = recovery.diagnosis_context(self.project)
+        self.assertEqual(result["status"], "blocked")
+        self.assertIn("cumulative compute budget", result["blocker"])
+
+    def test_complete_failure_logs_cannot_forward_configured_credentials_to_models(self):
+        failed = self.free_failed_protocol()
+        secret = "synthetic-fixture-secret-never-send"
+        log = self.project / failed["logs"]["stderr"]
+        log.write_text("Synthetic error containing " + secret, encoding="utf-8")
+        with patch.dict(os.environ, {"SYNTHETIC_API_KEY": secret}):
+            result = recovery.diagnosis_context(self.project)
+        self.assertEqual(result["status"], "blocked")
+        self.assertNotIn(secret, json.dumps(result))
+        self.assertIn("credential", result["blocker"])
+        self.assertIn(secret, log.read_text(encoding="utf-8"))
+
+    def test_failed_runs_may_reach_normal_diagnosis_cycle_without_human_pause(self):
+        self.free_failed_protocol()
+        from scripts import cloud_progress
+        self.put("state/research-steps.json", {"blockers": [{"kind": "experiment_inspection"}]})
+        self.assertEqual(cloud_progress.external_blockers(self.project, []), [])
+        with patch.object(cloud_research_steps, "acquire_data", return_value={"blockers": []}):
+            result = cloud_research_steps.before_cycle(self.project, "experiment-execution")
+        self.assertFalse(result["control_only"])
+        self.assertEqual(result["failure_diagnosis"]["status"], "eligible")
+        self.assertFalse((self.project / "experiments/history/v001/manifest.json").exists())
+
+    def test_first_no_start_failure_reaches_controller_retry_after_scheduled_checkpoint(self):
+        failed = self.launch_failure()
+        from scripts import cloud_progress
+        self.put("state/research-steps.json", {"blockers": [{"kind": "experiment_inspection"}]})
+        self.assertEqual(recovery.failure_control_status(self.project)["status"], "retry_pending")
+        self.assertEqual(cloud_progress.external_blockers(self.project, []), [])
+        self.assertIsNone(recovery._approval(self.project, failed))
+        self.put("state/experiment-execution-lease.json", {"status": "running", "synthetic_fixture": True})
+        self.assertTrue(cloud_progress.external_blockers(self.project, []))
+
+    def test_successful_negative_outcome_never_becomes_automatic_failed_protocol(self):
+        self.plan["runs"][0].update(estimated_cost_usd=0, argv=[sys.executable, "-c",
+            "from pathlib import Path; Path('results').mkdir(exist_ok=True); Path('results/value.txt').write_text('valid negative outcome')"])
+        self.put("experiments/plan.json", self.plan)
+        self.freeze()
+        self.assertEqual(self.execute()["status"], "succeeded")
+        self.assertEqual(recovery.diagnosis_context(self.project)["status"], "not_needed")
+        self.assertEqual(recovery.automatic_retirement(self.project, run_id="synthetic")["status"], "not_configured")
 
     def test_study_report_selects_authorized_success_but_does_not_certify_host_isolation(self):
         failed = self.execute()
@@ -189,7 +397,8 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.amend(phase="confirmatory", cost=0.9)
         self.assertEqual(recovery.gate_errors(self.project, "G3"), [])
         self.put("experiments/budget.json", {"status": "ready_for_review", "hard_ceiling_usd": 2.0})
-        self.assertIn("cannot reset or enlarge", " ".join(recovery.gate_errors(self.project, "G3")))
+        self.assertEqual(recovery.gate_errors(self.project, "G3"), [])
+        self.assertEqual(runner.project_compute_ceiling(self.project, self.read("experiments/budget.json")), 1.0)
         self.put("experiments/budget.json", {"status": "ready_for_review", "hard_ceiling_usd": 1.0})
         self.freeze()
         with self.assertRaisesRegex(runner.ExperimentError, "Budget ceiling exceeded"):

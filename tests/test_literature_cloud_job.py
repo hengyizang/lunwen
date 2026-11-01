@@ -57,11 +57,15 @@ class LiteratureCloudJobTests(unittest.TestCase):
             yield SimpleNamespace(restore=restore, persist=persist, checkpoint=checkpoint, acquire=acquire, execute=execute,
                                   commands=commands, read_budget=read_budget, grant=grant)
 
-    def test_owner_issue_requires_nonpaid_flag_and_program_json_path(self):
+    def test_owner_issue_keeps_identity_and_program_path_without_paid_opt_in(self):
         self.assertEqual(cloud_job.issue_request(issue(request())), request())
+        self.assertEqual(cloud_job.issue_request(issue(request(allow_paid=True))), request(allow_paid=True))
+        without_flag = request()
+        without_flag.pop("allow_paid")
+        self.assertEqual(cloud_job.issue_request(issue(without_flag)), without_flag)
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request(), owner=42))
-        for change in ({"allow_paid": True}, {"allow_paid": 0}, {"request_file": "../request.json"},
+        for change in ({"allow_paid": 0}, {"request_file": "../request.json"},
                        {"request_file": "state/request.json"}, {"request_file": "program/request.txt"},
                        {"request_file": "program/../request.json"}, {"request_file": "C:/program/request.json"},
                        {"request_file": "program/request.json", "execute": True}):
@@ -72,10 +76,9 @@ class LiteratureCloudJobTests(unittest.TestCase):
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.validate_request(missing)
 
-    def test_operation_is_one_strict_action_and_cannot_enable_paid_analysis(self):
+    def test_operation_is_one_strict_action_with_budgeted_analysis_allowed(self):
         invalid = [[{"action": "literature_workbench"}], {"operations": [{"action": "literature_workbench"}]},
                    {"action": "authorize_budget", "new_ceiling_cny": 300},
-                   {"action": "literature_analyze", "paper_id": "paper-one", "execute": True},
                    {"action": "literature_analyze", "paper_id": "paper-one", "execute": 1},
                    {"action": "literature_analyze", "paper_id": "paper-one", "execute": "true"},
                    {"action": "literature_search"}, {"action": "literature_workbench", "shell": "unapproved"}]
@@ -83,6 +86,8 @@ class LiteratureCloudJobTests(unittest.TestCase):
             self.operation.write_text(json.dumps(value))
             with self.subTest(value=value), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.literature_operation(self.project, "program/literature-request.json")
+        self.operation.write_text(json.dumps({"action": "literature_analyze", "paper_id": "paper-one", "execute": True}))
+        self.assertTrue(cloud_job.literature_operation(self.project, "program/literature-request.json")[0]["execute"])
         self.operation.write_text('{"action":"literature_workbench","action":"literature_analyze"}')
         with self.assertRaisesRegex(cloud_job.CloudJobError, "duplicate"):
             cloud_job.literature_operation(self.project, "program/literature-request.json")
@@ -155,20 +160,23 @@ class LiteratureCloudJobTests(unittest.TestCase):
             mocks.grant.assert_not_called()
         receipt = json.loads((self.runtime / "cloud-artifact/literature-result.json").read_text())
         self.assertFalse(receipt["gate_approved"])
-        self.assertEqual(receipt["paid_model_calls"], 0)
+        self.assertEqual(receipt["model_usage_records"], 0)
         self.assertEqual(receipt["request"]["path"], "program/literature-request.json")
         failure = json.loads((self.runtime / "cloud-artifact/failure.json").read_text())
         self.assertTrue(failure["checkpoint_persisted"])
         self.assertTrue(failure["execution_started"])
-        self.assertIn("one nonpaid literature operation", (self.runtime / "cloud-summary.md").read_text())
+        self.assertIn("one controlled literature operation", (self.runtime / "cloud-summary.md").read_text())
 
-    def test_disallowed_paid_operation_never_reaches_execute_and_failed_results_are_preserved(self):
+    def test_metered_operation_executes_and_failed_results_are_preserved(self):
         self.operation.write_text(json.dumps({"action": "literature_analyze", "paper_id": "one", "execute": True}))
-        with self.mocked_job() as mocks:
-            self.assertEqual(cloud_job.run_job(request(), "502"), 1)
-            mocks.execute.assert_not_called()
+        with self.mocked_job() as mocks, patch.object(cloud_job.model_runtime, "ledger_entries", side_effect=[[], [{"fixture": "metered call"}] ]):
+            self.assertEqual(cloud_job.run_job(request(), "502"), 0)
+            mocks.execute.assert_called_once_with(self.project, {"action": "literature_analyze", "paper_id": "one", "execute": True})
             mocks.persist.assert_called_once()
             mocks.commands.assert_not_called()
+            mocks.grant.assert_not_called()
+        receipt = json.loads((self.runtime / "cloud-artifact/literature-result.json").read_text())
+        self.assertEqual(receipt["model_usage_records"], 1)
         self.worktree.mkdir(exist_ok=True)
         self.operation.write_text(json.dumps({"action": "literature_workbench"}))
         with self.mocked_job(failure=ValueError("source changed")) as mocks:

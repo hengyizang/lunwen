@@ -14,6 +14,11 @@ from scripts.publication_figures import FigureSpecError, sha256_file
 
 
 class EditableFigureTests(unittest.TestCase):
+    def setUp(self):
+        self.environment = patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1", "GITHUB_ACTIONS": "false"})
+        self.environment.start()
+        self.addCleanup(self.environment.stop)
+
     def fixture(self, directory: str, formats: list[str] | None = None):
         project=Path(directory)/"study"
         figures=project/"papers/P01/figures";figures.mkdir(parents=True)

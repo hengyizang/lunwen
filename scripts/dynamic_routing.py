@@ -121,14 +121,14 @@ def _ledger(project: Path) -> list[dict]:
 
 def _check_holds(project: Path, rows: list[dict]) -> None:
     state = model_spend.read(project)
-    if state and state["reservations"]:
-        raise RoutingError("billing reconciliation is required; outstanding reservations block route changes and new paid requests")
     reconciled = {event.get("receipt_id") for event in (state or {}).get("reconciliation_events", [])}
     for row in rows:
         if ((row.get("cost_status") in {"unknown_reconcile_required", "estimated_reconcile_required"}
              or row.get("usage_estimated") is True)
+                and row.get("cost_status") != "estimated_upper_bound"
+                and row.get("reservation_id") not in (state or {}).get("reservations", {})
                 and (not row.get("reservation_id") or row["reservation_id"] not in reconciled)):
-            raise RoutingError("unknown request costs require reconciliation before selection")
+            raise RoutingError("unknown request costs have no accounted upper bound for the project total")
 
 
 def _id(route: dict) -> dict:
@@ -388,8 +388,8 @@ def _budget_feasible(project: Path, candidate: dict, baseline: dict, prompt: str
                                             controlled=model_spend.read(project) is not None, has_media=has_media)
     paper = model_runtime._paper_for_stage(project, str(baseline.get("stage", "")))
     budget = model_runtime.budget_status(project, paper)
-    if bound > budget["project_remaining"] or (paper is not None and bound > budget["paper_remaining"]):
-        raise RoutingError("candidate worst-case reservation does not fit the remaining project or paper budget")
+    if bound > budget["project_remaining"]:
+        raise RoutingError("candidate reservation does not fit the remaining project total")
     return bound
 
 
@@ -452,16 +452,6 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
         return (bool(row.get("transport_error")) or bool(row.get("transport_error_type")) or row.get("validation_status") in {
             "source_contract_failed_no_retry", "completion_failed_no_retry"}
             or row.get("completion_status") not in {None, "completed"})
-    baseline_failures = [row for row in recent if row.get("dynamic_candidate_id") in {None, "baseline"} and failure(row)]
-    failed_run_scopes = {(row.get("run_id"), row.get("provider"), row.get("model"), row.get("role")) for row in baseline_failures}
-    baseline_completions = [row for row in recent if row.get("dynamic_candidate_id") in {None, "baseline"} and row.get("completion_status") == "completed" and not failure(row)
-                            and (row.get("run_id"), row.get("provider"), row.get("model"), row.get("role")) not in failed_run_scopes]
-    if len(baseline_failures) >= 2:
-        last_failures = baseline_failures[-2:]
-        newest_pass = max((row.get("at", "") for row in baseline_completions), default="")
-        reviewed_after = max((item.get("accepted_at", "") for item in records if item.get("scope") == scope), default="")
-        if newest_pass < last_failures[0].get("at", "") and reviewed_after < last_failures[-1].get("at", ""):
-            raise RoutingError("repeated baseline failures require manager review before further paid requests")
     for candidate in policy["candidates"]:
         name = candidate["candidate_id"]
         try:

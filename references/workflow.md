@@ -1,5 +1,18 @@
 # Workflow
 
+Current financial policy: [TOTAL-COST-POLICY.md](../docs/TOTAL-COST-POLICY.md).
+Calculate costs and enforce configured cumulative project totals only; older
+per-paper caps, paid opt-ins, tranche steps and manual billing gates are superseded.
+
+## Human topic decisions
+
+The owner requires human decisions on the doctoral topic and each paper topic.
+Other stage decisions are automated and recorded as such. Never label an
+automated decision as human. The existing cumulative spending authority, source
+rights, evidence checks and experiment seals still apply. Missing evidence or
+unsupported checks remain blockers. Software tests alone do not demonstrate a
+successful unattended research project or scientific validity.
+
 ## Operating model
 
 Use one deterministic control plane and bounded model roles:
@@ -8,7 +21,7 @@ Use one deterministic control plane and bounded model roles:
 2. Claude supplies a read-only semantic plan and may perform internal independent criticism. Its text is stored only in run/audit records, never as a persistent scientific or submission artifact.
 3. Codex/OpenAI independently expresses and remediates every persistent text artifact. It uses Claude's ideas as requirements, not wording to copy.
 4. Codex writes plotting code/specifications; deterministic tools on the runner render result-bearing figures from recorded data and experiment outputs. A separately disclosed GPT Image conceptual illustration can supplement but never replace a data figure.
-5. The human approves G0–G5 and owns authorship, scientific judgment, ethics, venue choice, and submission.
+5. The human selects the doctoral topic at G1 and every paper topic at G2. Other stage decisions use recorded automated checks and independent model audits. Authorship and external ethics or submission obligations still apply.
 
 Do not ask multiple agents to produce one blended answer without preserving their separate evidence and disagreements. Store unresolved disagreements in `reviews/decision-log.md`.
 
@@ -28,7 +41,7 @@ and actual analysis phase while preserving registered outcomes and frozen plans.
 
 Use the [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md) for actual
 Meta/formal-theory identities and separate reviewer-requested experiments.
-These routes keep the shared evidence, budget, writer/critic and human gates.
+These routes keep the shared evidence, budget, writer/critic and topic decisions.
 
 For the current stage:
 
@@ -48,10 +61,10 @@ For the current stage:
 5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
 6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
 7. Run `gate-check`, then `ready`.
-8. Present a concise gate dossier to the human and stop.
-9. After explicit approval, record it with `approve`; `autopilot.py resume` may then advance and run the next stage. Cloud-only projects use separate hash-bound owner issues for `ready`, `approve` and `advance`, as described in [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md); a scheduled continuation never supplies the human decision.
+8. At G1 present the doctoral topic dossier; at G2 present each paper topic for its own recorded decision. Stop only for those topic decisions. A changed topic or mapping invalidates the affected approval.
+9. Record actual topic decisions with `approve` (G2 also requires `--paper Pxx`). The serialized continuation runs `ready` and `advance` when their checks pass. G0/G3/G4/G5 receive explicit machine decision records. [Cloud topic controls](../docs/CLOUD-HUMAN-CONTROLS.md) authenticate human topic decisions; scheduled work never supplies a human identity or increases the spending ceiling.
 
-`scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never invokes `approve`. At G5 it works only on `state.active_paper`; an approved `advance` marks that paper ready and selects the next paper until all configured papers are complete.
+`scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never supplies a human `approve`. At G5 it works only on `state.active_paper`; a checked automatic `advance` marks that paper ready and selects the next paper until all configured papers are complete.
 
 ## Evidence rules
 
@@ -92,13 +105,13 @@ The non-Claude writer must respond item by item. A different model agreeing is s
 
 ## Completion boundary
 
-`submission-ready` means every configured paper passed its own G5 checks and human approval. It does not mean submitted, accepted, publishable, ethically cleared, or guaranteed to meet a degree requirement.
+`submission-ready` means every configured paper passed its own G5 checks and recorded machine decision after the actual G1/G2 topic decisions. It does not mean submitted, accepted, publishable, ethically cleared, or guaranteed to meet a degree requirement.
 
 After a real submission, use [Reviewer rounds](../docs/REVIEWER-ROUNDS.md) to import
 the original decision and comments through a hash-bound owner decision. Each real
 round retains its original submitted manuscript and receipt; an old G5 approval
 cannot approve the changed paper. The same writer, independent critics, source
-checks, cloud budgets and human G5 controls apply again. A request for additional
+checks, cloud budgets and automatic G5 controls apply again. A request for additional
 experiments is a scientific planning requirement, not execution permission; the
 original confirmatory plan must never be retrospectively re-frozen.
 

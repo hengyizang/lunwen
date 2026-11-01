@@ -137,7 +137,10 @@ def source(relative, root=ROOT):
     data = path_in(root, VENDOR + "/" + relative).read_bytes()
     if hashlib.sha256(canonical(data)).hexdigest() != rows[relative]["canonical_lf_sha256"]:
         raise ValueError("CCFA source is stale or modified: " + relative)
-    return data.decode("utf-8-sig")
+    # The pin is canonical LF, and model guidance must use the same text on
+    # Windows and Linux. Preserve all content and final newlines, normalizing
+    # only Git's checkout newline conversion.
+    return data.decode("utf-8-sig").replace("\r\n", "\n")
 
 
 def installation_errors(root=ROOT, *, discovery=True):

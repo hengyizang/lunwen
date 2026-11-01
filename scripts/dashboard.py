@@ -345,11 +345,11 @@ def project_state(slug: str) -> dict[str, Any]:
     if status == "awaiting_work":
         next_action = "运行当前阶段" if errors else "检查产物并标记 ready"
     elif status == "awaiting_approval":
-        next_action = "人工审批，或 reopen 后修改"
+        next_action = "确认博士课题或逐篇论文选题" if state.get("gate") in {"G1", "G2"} else "重新运行自动阶段检查"
     elif status == "approved":
         next_action = "advance 进入下一阶段"
     elif status == "submission_ready":
-        next_action = "逐篇生成并人工检查投稿包"
+        next_action = "逐篇生成已核验的完整论文包"
     else:
         next_action = "检查项目状态"
     risk = "attention" if errors else "clear"
@@ -644,8 +644,6 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
     if action == "gate_check":
         return [python, "scripts/researchctl.py", "gate-check", "--project", slug], "检查当前闸门", slug
     if action == "ready":
-        if not note:
-            raise ValueError("标记 ready 前必须填写人工检查说明")
         return [python, "scripts/researchctl.py", "ready", "--project", slug, "--note", note], "锁定当前闸门产物", slug
     if action == "reopen":
         if not note:
@@ -654,9 +652,14 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
     if action == "approve":
         actor = bounded_text(payload.get("actor"), "审批人", 200, required=True)
         gate = state.get("gate")
-        if not gate:
-            raise ValueError("项目已经没有待审批闸门")
-        return [python, "scripts/researchctl.py", "approve", "--project", slug, "--gate", str(gate), "--actor", actor, "--note", note], f"人工批准 {gate}", slug
+        if gate not in {"G1", "G2"}:
+            raise ValueError("仅博士课题和逐篇论文选题需要人工确认")
+        command=[python, "scripts/researchctl.py", "approve", "--project", slug, "--gate", str(gate), "--actor", actor, "--note", note]
+        if gate=="G2":
+            paper=bounded_text(payload.get("paper"), "论文编号", 3, required=True)
+            if not PAPER_RE.fullmatch(paper):raise ValueError("论文编号必须为P01等具体编号")
+            command.extend(["--paper",paper])
+        return command, f"确认 {gate} 选题", slug
     if action == "advance":
         return [python, "scripts/researchctl.py", "advance", "--project", slug], "进入下一阶段", slug
     if action == "experiment":
@@ -730,21 +733,7 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
             command.append("--derived")
         return command, f"审计数据质量：{dataset_id}", slug
     if action == "confirm_data_quality":
-        dataset_id = bounded_text(payload.get("dataset_id"), "数据集 ID", 128, required=True)
-        if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", dataset_id):
-            raise ValueError("数据集 ID 含有不安全字符")
-        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
-        return [
-            python,
-            "scripts/research_quality.py",
-            "confirm-data-quality",
-            "--project",
-            slug,
-            "--dataset-id",
-            dataset_id,
-            "--actor",
-            actor,
-        ], f"确认数据质量报告：{dataset_id}", slug
+        return [python, "scripts/automated_quality.py", "--project", slug], "自动核验当前阶段证据", slug
     if action == "power_analysis":
         paper = bounded_text(payload.get("paper"), "论文编号", 3, required=True)
         method = bounded_text(payload.get("method"), "功效方法", 40, required=True)
@@ -775,14 +764,9 @@ def build_command(action: str, payload: dict[str, Any]) -> tuple[list[str], str,
             command = [python, "scripts/research_quality.py", "power", "--project", slug, "--paper", paper, "--method", method, "--effect-size", str(effect), "--effect-size-basis", effect_size_basis, "--alpha", str(alpha), "--power", str(power_value), "--ratio", str(ratio), "--groups", str(groups)]
         return command, f"计算 {paper} 统计功效", slug
     if action == "freeze_preregistration":
-        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
-        return [python, "scripts/research_quality.py", "freeze", "--project", slug, "--all", "--actor", actor], "冻结全部论文预注册", slug
+        return [python, "scripts/automated_quality.py", "--project", slug], "自动检查并冻结预注册", slug
     if action == "confirm_reproduction":
-        paper = bounded_text(payload.get("paper"), "论文编号", 3, required=True)
-        actor = bounded_text(payload.get("actor"), "确认人", 200, required=True)
-        if not PAPER_RE.fullmatch(paper) or not (project / "papers" / paper).is_dir():
-            raise ValueError("论文编号必须是项目中现有编号，例如 P01")
-        return [python, "scripts/research_quality.py", "confirm-reproduction", "--project", slug, "--paper", paper, "--actor", actor], f"确认 {paper} 复现证据", slug
+        return [python, "scripts/automated_quality.py", "--project", slug], "自动核验复现证据", slug
     if action in {"dataset_validate", "dataset_download"}:
         manifest = safe_project_path(slug, payload.get("manifest"), ".json")
         command = [python, "scripts/dataset_fetch.py", "validate", str(manifest)]

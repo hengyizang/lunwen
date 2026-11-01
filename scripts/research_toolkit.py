@@ -47,7 +47,9 @@ def catalog(root: Path = ROOT) -> dict:
         recipe = row.get("recipe_path")
         if recipe != row.get("skill_path") or not isinstance(recipe, str) or not recipe.startswith("integrations/codex-research-tools/skills/"):
             raise ValueError("research-tool recipe must be its installed adapter skill")
-        if sha(path_in(root, recipe)) != row.get("recipe_sha256"):
+        from scripts.research_methods import pinned_text_sha256
+        recipe_file = path_in(root, recipe)
+        if row.get("recipe_sha256") not in {sha(recipe_file), pinned_text_sha256(recipe_file)}:
             raise ValueError("research-tool recipe changed: " + identity)
         stages, operations = row.get("stages"), row.get("native_operations")
         if (not isinstance(stages, list) or not stages or any(not isinstance(s, str) or s not in STAGES for s in stages)
@@ -128,7 +130,7 @@ def _prepare(project: Path, relative: str, root: Path) -> dict:
             "input_bindings": bindings, "authority_bindings": authority, "recipes": recipes,
             "catalog_sha256": sha(path_in(root, CATALOG)), "builder_sha256": sha(path_in(root, MODULE)),
             "paid_calls": 0, "upstream_runtime_executed": False, "scientific_validation": "not_assessed",
-            "execution_authority": "Existing cloud controls, approved G3 runner and G0-G5 human gates remain required."}
+            "execution_authority": "Existing cloud controls, frozen G3 runner and actual budget authority remain required. Only doctoral G1 and individual paper G2 topic selections require human review; other stage decisions use recorded automated checks."}
 
 
 def refresh(project: Path, relative: str, *, root: Path = ROOT) -> dict:

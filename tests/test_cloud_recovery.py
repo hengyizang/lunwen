@@ -114,7 +114,7 @@ class RecoveryTests(unittest.TestCase):
                 self.assertFalse(recovery.checks_pass(run))
         self.assertFalse(recovery.checks_pass(source_run(status="in_progress", conclusion=None)))
 
-    def test_authority_stops_ambiguous_billing_changed_approvals_and_failed_experiments(self):
+    def test_authority_counts_ambiguous_costs_but_keeps_scientific_evidence_guards(self):
         control = {"reservations": {}, "spent_cny": 0, "authorized_ceiling_cny": 300}
         with tempfile.TemporaryDirectory() as directory:
             project = self.project(directory)
@@ -122,7 +122,9 @@ class RecoveryTests(unittest.TestCase):
                     patch.object(recovery.cloud_progress, "pause_reason", return_value=None):
                 self.assertIsNone(recovery.authority(project))
                 control["reservations"] = {"unknown-charge": {"max_cost_cny": 1}}
-                self.assertEqual(recovery.authority(project), "billing_reconciliation_pending")
+                self.assertIsNone(recovery.authority(project))
+                control["reservations"]["unknown-charge"]["max_cost_cny"] = 300
+                self.assertEqual(recovery.authority(project), "budget_boundary")
                 control["reservations"] = {}
                 (project / "experiments").mkdir()
                 (project / "experiments/registry.jsonl").write_text('{"status":"failed"}\n')
@@ -145,6 +147,34 @@ class RecoveryTests(unittest.TestCase):
                 self.write(project / "state/run.json", original)
                 with patch.object(recovery.cloud_progress, "pause_reason", return_value={"reason": "no_semantic_progress"}):
                     self.assertEqual(recovery.authority(project), "no_semantic_progress")
+
+    def test_machine_g0_preserves_owner_hash_and_billing_authority(self):
+        control = {"reservations": {}, "spent_cny": 0, "authorized_ceiling_cny": 300}
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.project(directory)
+            state_path = project / "state/run.json"
+            state = recovery.read(state_path)
+            state["approvals"][0].update(actor="deterministic-control-plane", decision_type="deterministic")
+            self.write(state_path, state)
+            with patch.object(recovery.model_spend, "read", return_value=control), \
+                    patch.object(recovery.cloud_progress, "pause_reason", return_value=None):
+                self.assertIsNone(recovery.authority(project))
+                for change in ({"actor": "another-controller"}, {"decision_type": "human"}, {"artifact_sha256": "0" * 64}):
+                    changed = copy.deepcopy(state)
+                    changed["approvals"][0].update(change)
+                    self.write(state_path, changed)
+                    self.assertEqual(recovery.authority(project), "continuation_authority_changed")
+                self.write(state_path, state)
+                control["reservations"] = {"unsettled": {"max_cost_cny": 1}}
+                self.assertIsNone(recovery.authority(project))
+                control["reservations"] = {}
+                control["spent_cny"] = 300
+                self.assertEqual(recovery.authority(project), "budget_boundary")
+                policy_path = project / cloud_continuation.POLICY
+                owner_policy = recovery.read(policy_path)
+                owner_policy["actor"] = ""
+                self.write(policy_path, owner_policy)
+                self.assertEqual(recovery.authority(project), "continuation_authority_changed")
 
     def test_resume_preserves_budget_approvals_counters_and_previous_failure(self):
         with tempfile.TemporaryDirectory() as directory:

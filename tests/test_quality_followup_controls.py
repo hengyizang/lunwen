@@ -59,7 +59,8 @@ class FollowupControlTests(unittest.TestCase):
         followup = contract["quality_followup"]
         self.assertIn("NOT_CALIBRATED", followup["review_packets"])
         self.assertIn("seeds_are_independent_units=false", followup["statistical_semantics"])
-        self.assertIn("Existing independent human authorization", followup["revision_ledger"])
+        self.assertIn("existing independent critics assess scientific validity", followup["revision_ledger"])
+        self.assertIn("current machine record", followup["revision_ledger"])
 
 
 if __name__ == "__main__":

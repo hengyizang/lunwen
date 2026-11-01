@@ -25,7 +25,6 @@ class ContinuationTests(unittest.TestCase):
         value.update(human_review_mode="on_request", weekly_hours=None, system_execution_hours_per_day=24)
         researchctl.write_json(self.constraints, value)
         researchctl.mark_ready(types.SimpleNamespace(project="my-phd", note="Reviewed dossier"))
-        researchctl.approve(types.SimpleNamespace(project="my-phd", gate="G0", actor="Owner", note="Confirmed"))
         approval = researchctl.load_state("my-phd")["approvals"][0]
         researchctl.advance(types.SimpleNamespace(project="my-phd"))
         self.policy = {"schema_version": "1.0", "enabled": True, "actor": "Owner",
@@ -65,14 +64,79 @@ class ContinuationTests(unittest.TestCase):
         researchctl.write_json(self.project / continuation.POLICY, self.policy)
         self.assertEqual(self.decision()["reason"], "g0_confirmation_pending")
 
+    def test_machine_g0_requires_exact_controller_identity(self):
+        state = researchctl.load_state("my-phd")
+        approval = next(a for a in state["approvals"] if a["gate"] == "G0")
+        self.assertEqual(approval["decision_type"], "deterministic")
+        self.assertEqual(approval["actor"], "deterministic-control-plane")
+        approval["actor"] = "another-controller"
+        researchctl.save_state("my-phd", state)
+        self.assertEqual(self.decision()["reason"], "g0_confirmation_pending")
+        approval["actor"] = "deterministic-control-plane"
+        approval["decision_type"] = "human_topic"
+        researchctl.save_state("my-phd", state)
+        self.assertEqual(self.decision()["reason"], "g0_confirmation_pending")
+
     def test_completed_stage_or_awaiting_review_never_advances_a_gate(self):
         with patch.object(researchctl, "gate_errors", return_value=[]):
-            self.assertEqual(self.decision()["reason"], "human_gate_pending")
+            self.assertEqual(self.decision()["reason"], "automatic_gate_ready")
         state = researchctl.load_state("my-phd")
         state["status"] = "awaiting_approval"
         researchctl.write_json(self.project / "state/run.json", state)
         self.assertEqual(self.decision()["reason"], "human_gate_pending")
         self.assertEqual(researchctl.load_state("my-phd")["approved_gates"], ["G0"])
+
+    def test_ready_topic_stops_for_real_human_decision(self):
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            decision = self.decision()
+            self.assertTrue(continuation.transition_ready_gate("my-phd", decision))
+        state = researchctl.load_state("my-phd")
+        self.assertEqual(state["gate"], "G1")
+        self.assertEqual(state["status"], "awaiting_approval")
+        self.assertNotIn("G1", state["approved_gates"])
+
+    def test_legacy_non_topic_pending_stage_reopens_for_machine_work(self):
+        state = researchctl.load_state("my-phd")
+        state.update(stage_index=3, stage="experiment-design", gate="G3", status="awaiting_approval")
+        for gate in ("G1", "G2"):
+            state["approved_gates"].append(gate)
+            state["approvals"].append({"gate": gate, "actor": "Owner", "decision_type": "human_topic"})
+        researchctl.save_state("my-phd", state)
+        with patch.object(researchctl, "gate_errors", return_value=["current evidence incomplete"]):
+            decision = self.decision()
+            self.assertEqual(decision["reason"], "automatic_gate_reopen")
+            self.assertTrue(continuation.transition_ready_gate("my-phd", decision))
+            self.assertTrue(self.decision()["should_run"])
+        current = researchctl.load_state("my-phd")
+        self.assertEqual(current["status"], "awaiting_work")
+        self.assertEqual(current["history"][-1]["decision_type"], "deterministic")
+        self.assertNotIn("G3", current["approved_gates"])
+
+    def test_legacy_g0_pending_stage_uses_exact_bound_automatic_decision(self):
+        state = researchctl.load_state("my-phd")
+        state.update(stage_index=0, stage="intake", gate="G0", status="awaiting_approval",
+                     approved_gates=[], approvals=[])
+        researchctl.save_state("my-phd", state)
+        self.policy["g0_approval_artifact_sha256"] = researchctl.artifact_hash("my-phd", "G0")
+        researchctl.write_json(self.project / continuation.POLICY, self.policy)
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            decision = self.decision()
+            self.assertEqual(decision["reason"], "automatic_gate_ready")
+            self.assertTrue(continuation.transition_ready_gate("my-phd", decision))
+        current = researchctl.load_state("my-phd")
+        self.assertEqual(current["gate"], "G1")
+        self.assertEqual(current["approvals"][0]["decision_type"], "deterministic")
+
+    def test_legacy_g2_pending_topic_still_requires_human_decisions(self):
+        state = researchctl.load_state("my-phd")
+        state.update(stage_index=2, stage="paper-architecture", gate="G2", status="awaiting_approval")
+        state["approved_gates"].append("G1")
+        state["approvals"].append({"gate": "G1", "actor": "Owner", "decision_type": "human_topic"})
+        researchctl.save_state("my-phd", state)
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            self.assertEqual(self.decision()["reason"], "human_gate_pending")
+        self.assertFalse(continuation.transition_ready_gate("my-phd", self.decision()))
+        self.assertEqual(researchctl.load_state("my-phd")["status"], "awaiting_approval")
 
     def test_missing_configuration_is_a_successful_idle_job_without_model_transport(self):
         self.assertEqual(self.decision({})["reason"], "configuration_pending")
@@ -162,7 +226,7 @@ class ContinuationTests(unittest.TestCase):
         self.assertFalse((runtime / "continuation-followup.json").exists())
         self.assertNotIn(self.env["UUAPI_API_KEY"], json.dumps(report))
 
-    def test_cumulative_paper_and_unsettled_call_boundaries_block_calls(self):
+    def test_only_cumulative_remaining_cost_capacity_blocks_calls(self):
         value = model_spend.read(self.project)
         value["spent_cny"] = 300
         model_spend.write(self.project, value)
@@ -170,12 +234,15 @@ class ContinuationTests(unittest.TestCase):
         value["spent_cny"] = 60
         value["paper_spent_cny"] = {"P01": 60}
         model_spend.write(self.project, value)
-        self.assertEqual(self.decision()["reason"], "paper_budget_boundary")
+        self.assertTrue(self.decision()["should_run"])
         value["spent_cny"] = 0
         value["paper_spent_cny"] = {}
         model_spend.write(self.project, value)
         model_spend.reserve(self.project, max_cost_cny=5, paper_id="P01", paper_limit_cny=60, run_id="ambiguous")
-        self.assertEqual(self.decision()["reason"], "billing_reconciliation_pending")
+        self.assertTrue(self.decision()["should_run"])
+        self.assertEqual(self.decision()["remaining_cny"], 295)
+        model_spend.reserve(self.project, max_cost_cny=295, paper_id="P01", paper_limit_cny=60, run_id="remaining")
+        self.assertEqual(self.decision()["reason"], "cumulative_budget_boundary")
 
     def test_failed_cycle_requires_inspection_and_unchanged_idle_checkpoint_is_stable(self):
         continuation.checkpoint("my-phd", self.decision(), "failed-run", cycle_exit_code=124)
@@ -234,7 +301,7 @@ class ContinuationTests(unittest.TestCase):
             self.assertEqual(command.call_args.args[0], ["gh", "api", "--method", "PUT",
                                                         f"repos/{cloud_job.REPOSITORY}/actions/workflows/research-continuation.yml/disable"])
 
-    def test_prose_churn_stops_and_reviewed_resume_does_not_grant_a_gate(self):
+    def test_model_cycle_counters_do_not_add_an_extra_paid_approval_gate(self):
         from scripts import cloud_progress
         researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[]})
         with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
@@ -242,7 +309,7 @@ class ContinuationTests(unittest.TestCase):
                 before=cloud_progress.snapshot('my-phd')
                 (self.project/'program/topic.md').write_text('Rephrased draft '+str(index))
                 cloud_progress.record('my-phd',before,str(index),0)
-            self.assertEqual(self.decision()['reason'],'no_semantic_progress')
+            self.assertTrue(self.decision()['should_run'])
             continuation.checkpoint('my-phd',self.decision(),'123')
             status=self.project/continuation.STATUS
             with self.assertRaises(ValueError):
@@ -255,8 +322,33 @@ class ContinuationTests(unittest.TestCase):
     def test_external_blocker_pauses_after_draft_and_new_owner_input_allows_recheck(self):
         from scripts import cloud_progress
         before=cloud_progress.snapshot('my-phd')
-        researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[{'kind':'data_rights_review'}]})
+        researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[{'kind':'restricted_source_access'}]})
         cloud_progress.record('my-phd',before,'123',0)
         self.assertEqual(self.decision()['reason'],'external_input_required')
         researchctl.write_json(self.project/'state/data-authorizations.json',{'manifests':{'fixture':{'actor':'Owner'}}})
         self.assertTrue(self.decision()['should_run'])
+
+    def test_legacy_external_review_blocker_is_rechecked_without_resetting_limits(self):
+        from scripts import cloud_progress
+        researchctl.write_json(self.project / "state/research-steps.json", {"blockers": [{"kind": "data_rights_review"}]})
+        value = {"schema_version": "1.0", "scope": "topic-intelligence:P01",
+                 "human_inputs": cloud_progress.human_inputs(self.project),
+                 "errors": ["named human screening required"],
+                 "external_blockers": [{"kind": "literature_screening"}],
+                 "model_cycles": 0, "stalled_cycles": 0, "control_cycles": 0}
+        path = self.project / cloud_progress.FILE
+        researchctl.write_json(path, value)
+        original = path.read_bytes()
+        with patch.object(researchctl, "gate_errors", return_value=["recorded model screening required"]):
+            self.assertIsNone(cloud_progress.pause_reason("my-phd"))
+        self.assertEqual(path.read_bytes(), original)
+        value["model_cycles"] = 100
+        value["stalled_cycles"] = 100
+        researchctl.write_json(path, value)
+        with patch.object(researchctl, "gate_errors", return_value=["recorded model screening required"]):
+            self.assertIsNone(cloud_progress.pause_reason("my-phd"))
+        value["control_cycles"] = cloud_progress.MAX_CONTROL_CYCLES
+        researchctl.write_json(path, value)
+        with patch.object(researchctl, "gate_errors", return_value=["recorded model screening required"]):
+            self.assertEqual(cloud_progress.pause_reason("my-phd")["reason"], "control_retry_limit")
+        self.assertEqual(model_spend.read(self.project)["authorized_ceiling_cny"], 300)

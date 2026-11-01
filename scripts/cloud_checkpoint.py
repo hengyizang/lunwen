@@ -199,6 +199,50 @@ def sync_billing(project: Path) -> None:
         git("push", "origin", f"HEAD:refs/heads/{branch}")
 
 
+def sync_experiment_reservation(project: Path, *, completed: bool) -> None:
+    """Persist the execution reservation, and the ledger when an attempt ends.
+
+    The reservation remains on the remote until the normal full checkpoint
+    replaces it. A lost runner therefore restores a blocking reservation even
+    when the attempt's larger output artifacts were never uploaded.
+    """
+    required = os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") == "1"
+    if not required and os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    worktree = os.environ.get("DR_OS_STATE_WORKTREE")
+    branch = os.environ.get("DR_OS_STATE_BRANCH")
+    if os.environ.get("GITHUB_ACTIONS") != "true" or not worktree or branch != f"cloud-state/{project.name}":
+        raise CheckpointError("cloud experiment reservation is not configured")
+    checkout = Path(worktree)
+    relatives = ["state/experiment-execution-lease.json"]
+    if completed:
+        relatives.append("experiments/registry.jsonl")
+    paths = []
+    for relative in relatives:
+        source = project / relative
+        if not source.is_file():
+            raise CheckpointError("experiment reservation or completed ledger is missing")
+        check_file(source, project)
+        rel = f"projects/{project.name}/{relative}"
+        target = checkout / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        paths.append(rel)
+
+    def git(*args: str) -> subprocess.CompletedProcess:
+        result = subprocess.run(["git", *args], cwd=checkout, capture_output=True, check=False)
+        if result.returncode:
+            raise CheckpointError("could not persist experiment reservation and ledger")
+        return result
+
+    git("-c", "core.autocrlf=false", "add", "--", *paths)
+    if git("diff", "--cached", "--name-only", "--", *paths).stdout.strip():
+        git("-c", "core.autocrlf=false", "-c", "user.name=research-cloud", "-c", "user.email=research-cloud@users.noreply.github.com",
+            "commit", "-m", "Persist experiment cost reservation", "--", *paths)
+    # Retry an earlier locally committed push even when there is no staged diff.
+    git("push", "origin", f"HEAD:refs/heads/{branch}")
+
+
 def download_archive(manifest: dict, directory: Path) -> Path:
     run_id = str(manifest.get("run_id", ""))
     if not re.fullmatch(r"[0-9]+", run_id) or manifest.get("artifact_name") != f"research-checkpoint-{run_id}":

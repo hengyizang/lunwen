@@ -15,6 +15,7 @@ import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any, Mapping
 
 try:
@@ -255,7 +256,20 @@ def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[st
         raise ContinuationError("invalid scientific approval records")
     approved = set(gates)
     g0 = next((item for item in reversed(approvals) if item.get("gate") == "G0"), None)
-    if ("G0" not in approved or not g0 or g0.get("actor") != policy["actor"]
+    if state["gate"] == "G0" and not g0:
+        if researchctl.artifact_hash(slug, "G0") != policy["g0_approval_artifact_sha256"]:
+            return {**result, "reason": "g0_confirmation_pending"}
+        result.update({"stage": state["stage"], "gate": "G0", "actor": policy["actor"]})
+        if state["status"] in {"awaiting_work", "awaiting_approval"}:
+            if not researchctl.gate_errors(slug, "G0"):
+                return {**result, "reason": "automatic_gate_ready"}
+            if state["status"] == "awaiting_approval":
+                return {**result, "reason": "automatic_gate_reopen"}
+        return {**result, "reason": "g0_constraints_pending"}
+    if ("G0" not in approved or not g0
+            or (g0.get("actor") != policy["actor"] and not (
+                g0.get("decision_type") == "deterministic"
+                and g0.get("actor") == "deterministic-control-plane"))
             or g0.get("artifact_sha256") != policy["g0_approval_artifact_sha256"]):
         return {**result, "reason": "g0_confirmation_pending"}
     result.update({"stage": state["stage"], "gate": state["gate"], "actor": policy["actor"]})
@@ -278,27 +292,24 @@ def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[st
                     or approval.get("paper_artifact_sha256") != researchctl.paper_artifact_hash(slug, paper_id)):
                 return {**result, "reason": "incomplete_or_changed_paper_approval"}
         return {**result, "reason": "all_papers_submission_ready"}
-    if state["gate"] == "G0" or state["status"] in {"awaiting_approval", "approved"}:
-        return {**result, "reason": "human_gate_pending"}
+    if state["status"] == "approved":
+        return {**result, "reason": "approved_gate_ready_to_advance"}
+    if state["status"] == "awaiting_approval":
+        if state["gate"] in {"G1", "G2"}:
+            return {**result, "reason": "human_gate_pending"}
+        return {**result, "reason": "automatic_gate_reopen" if researchctl.gate_errors(slug, state["gate"]) else "automatic_gate_ready"}
     if not researchctl.gate_errors(slug, state["gate"]):
-        return {**result, "reason": "human_gate_pending"}
+        return {**result, "reason": "automatic_gate_ready"}
     control = model_spend.read(project, required=True)
     assert control is not None
     remaining = control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control)
     result.update({"authorized_ceiling_cny": control["authorized_ceiling_cny"],
                    "spent_cny": control["spent_cny"], "remaining_cny": round(remaining, 8)})
-    if control["reservations"]:
-        return {**result, "reason": "billing_reconciliation_pending"}
     if remaining <= 0:
         return {**result, "reason": "cumulative_budget_boundary"}
-    budget = model_runtime.budget_status(project, state["active_paper"])
-    if budget["paper_remaining"] <= 0:
-        return {**result, "reason": "paper_budget_boundary"}
     errors = configuration_errors(env)
     if errors:
         return {**result, "reason": "configuration_pending", "configuration_errors": errors}
-    if env.get("DR_OS_ROUTING_PROFILE")=="production" and env.get("DR_OS_AUTOMATIC_RESEARCH_ENABLED")!="true":
-        return {**result,"reason":"production_configured_automatic_research_not_started"}
     previous = _object(project / STATUS) if (project / STATUS).is_file() else {}
     if previous.get("last_cycle_exit_code", 0) != 0:
         return {**result, "reason": "previous_cycle_failed_requires_inspection"}
@@ -323,6 +334,30 @@ def checkpoint(slug: str, decision: dict[str, Any], run_id: str,
         value.update({"changed_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
                       "source_run_id": run_id})
         researchctl.write_json(project / STATUS, value)
+
+
+def transition_ready_gate(slug: str, decision: dict[str, Any]) -> bool:
+    """Run one checked control transition under the serialized cloud job."""
+    reason = decision.get("reason")
+    if reason == "automatic_gate_reopen":
+        state = researchctl.load_state(slug)
+        if state["gate"] in {"G1", "G2"}:
+            raise ContinuationError("human topic decisions cannot be reopened automatically")
+        researchctl.reopen(SimpleNamespace(project=slug, note="Automatic controller reopened a legacy non-topic stage because current checks failed; no human decision or scientific approval was recorded."))
+        state = researchctl.load_state(slug)
+        state["history"][-1]["decision_type"] = "deterministic"
+        researchctl.save_state(slug, state)
+        return True
+    if reason == "automatic_gate_ready":
+        researchctl.mark_ready(SimpleNamespace(project=slug, note="Deterministic gate checks passed."))
+        if researchctl.load_state(slug)["status"] != "approved":
+            return True  # Topic selection still needs the owner's actual decision.
+        researchctl.advance(SimpleNamespace(project=slug))
+        return True
+    if reason == "approved_gate_ready_to_advance":
+        researchctl.advance(SimpleNamespace(project=slug))
+        return True
+    return False
 
 
 def scheduled_request(event: dict[str, Any], environment: Mapping[str, str]) -> dict[str, Any]:

@@ -955,7 +955,7 @@ def validate_data_quality_report(
 
 
 def create_data_quality_confirmation(
-    project: Path, dataset_id: str, actor: str
+    project: Path, dataset_id: str, actor: str, *, automated: bool = False
 ) -> dict[str, Any]:
     if not actor.strip():
         raise ResearchQualityError("actor is required")
@@ -967,7 +967,7 @@ def create_data_quality_confirmation(
             "cannot confirm an invalid data-quality report: " + "; ".join(errors)
         )
     warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
-    return {
+    result = {
         "schema_version": "1.0",
         "dataset_id": dataset_id,
         "generated_by": "deterministic_local_control_plane",
@@ -980,6 +980,14 @@ def create_data_quality_confirmation(
             "label validity and the scientific suitability limits that deterministic scanning cannot establish."
         ),
     }
+    if automated:
+        result["confirmation_kind"] = "automated"
+        result["confirmed_by"] = "deterministic_control_plane"
+        result["unresolved_warning_count"] = len(warnings)
+        result.pop("reviewed_warning_count")
+        result["statement"] = ("Automated validation checked the report and its hashes; warnings, "
+                               "source provenance, label validity and scientific suitability remain unresolved.")
+    return result
 
 
 def validate_data_quality_confirmation(
@@ -993,7 +1001,12 @@ def validate_data_quality_confirmation(
     _text(confirmation.get("confirmed_by"), "confirmed_by", errors)
     _text(confirmation.get("confirmed_at"), "confirmed_at", errors)
     _text(confirmation.get("statement"), "statement", errors)
-    warning_count = confirmation.get("reviewed_warning_count")
+    automated = confirmation.get("confirmation_kind") == "automated"
+    if "confirmation_kind" in confirmation and not automated:
+        errors.append("unknown confirmation kind")
+    if automated and (confirmation.get("confirmed_by") != "deterministic_control_plane" or "reviewed_warning_count" in confirmation):
+        errors.append("automated confirmation cannot claim a human reviewer or reviewed warnings")
+    warning_count = confirmation.get("unresolved_warning_count" if automated else "reviewed_warning_count")
     if not isinstance(warning_count, int) or isinstance(warning_count, bool) or warning_count < 0:
         errors.append("reviewed_warning_count must be a non-negative integer")
     report_path = project / "data" / "quality" / f"{dataset_id}.json"
@@ -1504,7 +1517,7 @@ def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
             *empirical_inputs(project, paper_id)]
 
 
-def create_preregistration(project: Path, paper_id: str, actor: str) -> dict[str, Any]:
+def create_preregistration(project: Path, paper_id: str, actor: str, *, automated: bool = False) -> dict[str, Any]:
     if not actor.strip():
         raise ResearchQualityError("actor is required")
     registry = project / "experiments" / "registry.jsonl"
@@ -1542,7 +1555,7 @@ def create_preregistration(project: Path, paper_id: str, actor: str) -> dict[str
         "paper_id": paper_id,
         "status": "frozen",
         "frozen_at": utc_now(),
-        "frozen_by": actor.strip(),
+        "frozen_by": "deterministic_control_plane" if automated else actor.strip(),
         "generated_by": "deterministic_local_control_plane",
         "confirmatory_lock": True,
         "files": [
@@ -1553,7 +1566,8 @@ def create_preregistration(project: Path, paper_id: str, actor: str) -> dict[str
             "Any post-freeze change must be logged before inspecting the affected outcome, "
             "justified, and labeled protocol deviation or exploratory analysis."
         ),
-        "human_confirmation": True,
+        "human_confirmation": not automated,
+        **({"confirmation_kind": "automated"} if automated else {}),
     }
 
 
@@ -1565,8 +1579,12 @@ def validate_preregistration(report: dict[str, Any], paper_id: str, project: Pat
         errors.append(f"paper_id must be {paper_id}")
     if report.get("generated_by") != "deterministic_local_control_plane":
         errors.append("preregistration must be generated locally")
-    if report.get("confirmatory_lock") is not True or report.get("human_confirmation") is not True:
-        errors.append("confirmatory lock and human confirmation must be true")
+    valid_confirmation = (report.get("human_confirmation") is True and "confirmation_kind" not in report) or (
+        report.get("human_confirmation") is False and report.get("confirmation_kind") == "automated")
+    if report.get("confirmatory_lock") is not True or not valid_confirmation:
+        errors.append("confirmatory lock and an honestly identified confirmation are required")
+    if report.get("confirmation_kind") == "automated" and report.get("frozen_by") != "deterministic_control_plane":
+        errors.append("automated preregistration must identify its control-plane origin")
     _text(report.get("frozen_by"), "frozen_by", errors)
     _text(report.get("deviation_policy"), "deviation_policy", errors)
     files = report.get("files")
@@ -2038,7 +2056,7 @@ def validate_clean_room_reproduction(
     return errors
 
 
-def create_reproduction_confirmation(project: Path, paper_id: str, actor: str) -> dict[str, Any]:
+def create_reproduction_confirmation(project: Path, paper_id: str, actor: str, *, automated: bool = False) -> dict[str, Any]:
     if not actor.strip():
         raise ResearchQualityError("actor is required")
     registry = _registry(project)
@@ -2052,7 +2070,7 @@ def create_reproduction_confirmation(project: Path, paper_id: str, actor: str) -
     errors.extend(validate_clean_room_reproduction(clean, paper_id, project, registry))
     if errors:
         raise ResearchQualityError("cannot confirm invalid reproduction evidence: " + "; ".join(errors))
-    return {
+    result = {
         "schema_version": "1.0",
         "paper_id": paper_id,
         "generated_by": "deterministic_local_control_plane",
@@ -2065,6 +2083,12 @@ def create_reproduction_confirmation(project: Path, paper_id: str, actor: str) -
             "separate-checkout record and independent-operator identity."
         ),
     }
+    if automated:
+        result["confirmation_kind"] = "automated"
+        result["confirmed_by"] = "deterministic_control_plane"
+        result["statement"] = ("Automated validation checked registered runs, tolerances and current evidence hashes; "
+                               "scientific interpretation and operator independence are not established by this record.")
+    return result
 
 
 def validate_reproduction_confirmation(
@@ -2078,6 +2102,9 @@ def validate_reproduction_confirmation(
     _text(confirmation.get("confirmed_by"), "confirmed_by", errors)
     _text(confirmation.get("confirmed_at"), "confirmed_at", errors)
     _text(confirmation.get("statement"), "statement", errors)
+    if "confirmation_kind" in confirmation and (confirmation.get("confirmation_kind") != "automated" or
+            confirmation.get("confirmed_by") != "deterministic_control_plane"):
+        errors.append("automated confirmation must identify its control-plane origin")
     expected = {
         "baseline_report_sha256": project / "papers" / paper_id / "baseline-reproduction.json",
         "clean_room_report_sha256": project / "papers" / paper_id / "clean-room-reproduction.json",

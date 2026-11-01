@@ -123,7 +123,7 @@ def rollback(current: str, previous: str, path: str) -> str:
 
 
 def authority(project: Path) -> str | None:
-    """Recheck unchanged continuation authority and unresolved billing/evidence."""
+    """Recheck continuation authority, cumulative cost capacity and evidence."""
     policy = read(project / cloud_continuation.POLICY, {})
     constraints_path = project / "intake/constraints.json"
     state = read(project / "state/run.json", {})
@@ -131,16 +131,17 @@ def authority(project: Path) -> str | None:
     g0 = next((x for x in reversed(approvals) if x.get("gate") == "G0"), {})
     constraints = read(constraints_path, {})
     if (policy.get("enabled") is not True or not constraints_path.is_file()
+            or not isinstance(policy.get("actor"), str) or not policy["actor"].strip()
             or cloud_checkpoint.sha(constraints_path) != policy.get("constraints_sha256")
             or constraints.get("execution_mode") != "cloud_only"
             or "G0" not in state.get("approved_gates", [])
-            or g0.get("actor") != policy.get("actor")
+            or (g0.get("actor") != policy.get("actor") and not (
+                g0.get("decision_type") == "deterministic"
+                and g0.get("actor") == "deterministic-control-plane"))
             or g0.get("artifact_sha256") != policy.get("g0_approval_artifact_sha256")):
         return "continuation_authority_changed"
     control = model_spend.read(project, required=True)
-    if control["reservations"]:
-        return "billing_reconciliation_pending"
-    if control["spent_cny"] >= control["authorized_ceiling_cny"]:
+    if control["spent_cny"] + model_spend.reserved(control) >= control["authorized_ceiling_cny"]:
         return "budget_boundary"
     if state.get("status") in {"awaiting_approval", "approved", "submission_ready"} or state.get("gate") is None:
         return "human_gate_pending"

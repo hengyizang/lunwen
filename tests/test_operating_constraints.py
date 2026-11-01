@@ -33,7 +33,7 @@ class OperatingConstraintsTests(unittest.TestCase):
                    "Historical initial tranche of CNY 300 was approved separately; cloud execution only.",
                    "Historical observed event on 2026-10-07 and 2026-10-06 must stay recorded."])
         write(target, constraints)
-        for operation in ("ready", "approve", "advance"):
+        for operation in ("ready", "advance"):
             acceptance.decide(operation, selectors={"gate": "G0"})
         state = researchctl.load_state(self.project.name)
         self.actor = acceptance.request("status")["actor"]
@@ -83,9 +83,10 @@ class OperatingConstraintsTests(unittest.TestCase):
                          {k: v for k, v in current.items() if k not in {"notes", "research_goal", "model_api_budget_cny", "target_submission_ready_date"}})
         self.assertIn("2026-10-26", current["research_goal"])
         self.assertIn("2026-10-25", current["notes"][0])
-        self.assertIn("CNY 45 per-paper warning and CNY 60", current["notes"][1])
+        self.assertNotIn("per-paper", current["notes"][1])
         self.assertIn("CNY 500", current["notes"][2])
-        self.assertIn("CNY 800", current["notes"][2])
+        self.assertNotIn("CNY 800", current["notes"][2])
+        self.assertIn("current total ceiling is CNY 500", current["notes"][2])
         self.assertEqual(current["notes"][3], original["notes"][3])
         self.assertEqual(current["notes"][4], original["notes"][4])
         state = researchctl.load_state(self.project.name)
@@ -105,7 +106,9 @@ class OperatingConstraintsTests(unittest.TestCase):
         for key in set(policy) - {"constraints_sha256", "g0_approval_artifact_sha256"}:
             self.assertEqual(policy[key], old_policy[key])
         self.assertEqual(receipt["paid_calls"], 0)
-        self.assertEqual(cloud_continuation.evaluate(self.project.name, {})["reason"], "billing_reconciliation_pending")
+        decision = cloud_continuation.evaluate(self.project.name, {})
+        self.assertNotEqual(decision["reason"], "billing_reconciliation_pending")
+        self.assertEqual(decision["remaining_cny"], 482)
         audit = read(self.project / "state/operating-constraints-amendments/21.json")
         self.assertEqual(audit["constraints_before"], original)
         self.assertTrue(audit["planning_date_is_not_a_completion_guarantee"])
@@ -134,6 +137,17 @@ class OperatingConstraintsTests(unittest.TestCase):
         before = model_spend.read(self.project, required=True)
         self.decide(new_ceiling_cny=300, target_submission_ready_date="2026-10-26")
         self.assertEqual(model_spend.read(self.project, required=True), before)
+
+    def test_deterministic_intake_cannot_replace_named_spending_owner(self):
+        state = researchctl.load_state(self.project.name)
+        state["approvals"][-1]["actor"] = "arbitrary-model-name"
+        researchctl.save_state(self.project.name, state)
+        self.assertIn("original named G0", self.dossier()["blockers"][0])
+        state["approvals"][-1]["actor"] = "deterministic-control-plane"
+        researchctl.save_state(self.project.name, state)
+        other = controls.execute(acceptance.request("review_dossier", operation="amend_operating_constraints",
+            actor="Another owner", **self.selectors), "20")
+        self.assertFalse(other["ready_for_operation"])
 
     def test_advanced_or_scientifically_approved_projects_are_not_silently_rebound(self):
         baseline = researchctl.load_state(self.project.name)

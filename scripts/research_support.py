@@ -433,7 +433,7 @@ def _method(project: Path, row: dict, pending: list) -> dict:
             raise ValueError("; ".join(errors))
         scope_confirmed = True
     if assessed and not scope_confirmed:
-        raise ValueError("methods_assessed requires actual protected human-confirmed supplied full text")
+        raise ValueError("methods_assessed requires actual full text with current protected source-scope evidence")
     if not assessed:
         pending.append(identifier + ": methods not assessed; unseen details remain pending")
     fields = row.get("fields")

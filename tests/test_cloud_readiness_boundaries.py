@@ -29,7 +29,7 @@ class CloudReadinessBoundaries(unittest.TestCase):
             self.assertFalse((project / "experiments/registry.jsonl").exists())
             self.assertTrue((project / "experiments/code/analysis.py").exists())
 
-    def test_lost_generation_response_keeps_reservation_and_blocks_second_transport(self):
+    def test_lost_generation_response_counts_each_attempt_within_total(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             model_spend.write(project, model_spend.initial())
@@ -44,11 +44,11 @@ class CloudReadinessBoundaries(unittest.TestCase):
                             prompt="fixture", max_output_tokens=100)
                 with self.assertRaises(ai_providers.ProviderError):
                     model_runtime.call(project, **args)
-                with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation"):
+                with self.assertRaises(ai_providers.ProviderError):
                     model_runtime.call(project, **args)
-            self.assertEqual(transport.call_count, 1)
+            self.assertEqual(transport.call_count, 2)
             control = model_spend.read(project)
-            self.assertEqual(len(control["reservations"]), 1)
+            self.assertEqual(len(control["reservations"]), 2)
             self.assertEqual(control["spent_cny"], 0)
 
     def test_non_json_response_is_not_silently_retried(self):
@@ -80,7 +80,7 @@ class CloudReadinessBoundaries(unittest.TestCase):
                     with self.subTest(path=path),self.assertRaisesRegex(ValueError,'Executor-owned'):
                         api_orchestrator.safe_target('acceptance-fixture',path)
 
-    def test_mismatched_model_keeps_reservation_and_never_retries(self):
+    def test_mismatched_model_is_rejected_and_each_requested_attempt_is_accounted(self):
         from tests.test_uuapi_provider import FakeResponse
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
@@ -97,13 +97,13 @@ class CloudReadinessBoundaries(unittest.TestCase):
                             provider="uuapi-openai", prompt="fixture", max_output_tokens=100)
                 with self.assertRaises(ai_providers.ProviderError):
                     model_runtime.call(project, **args)
-                with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation"):
+                with self.assertRaises(ai_providers.ProviderError):
                     model_runtime.call(project, **args)
-                transport.assert_called_once()
-            self.assertEqual(len(model_spend.read(project)["reservations"]), 1)
+                self.assertEqual(transport.call_count,2)
+            self.assertEqual(len(model_spend.read(project)["reservations"]), 2)
             self.assertFalse((project / ".cache/model-responses").exists())
 
-    def test_missing_usage_blocks_next_paid_step_until_billing_reconciliation(self):
+    def test_missing_usage_uses_conservative_cost_without_an_extra_payment_gate(self):
         from tests.test_uuapi_provider import FakeResponse
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
@@ -119,10 +119,10 @@ class CloudReadinessBoundaries(unittest.TestCase):
                 args = dict(run_id="fixture", stage="topic-intelligence", role="writer",
                             provider="uuapi-openai", max_output_tokens=100)
                 model_runtime.call(project, prompt="first", **args)
-                with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation"):
-                    model_runtime.call(project, prompt="second", **args)
-                transport.assert_called_once()
-            self.assertEqual(len(model_spend.read(project)["reservations"]), 1)
+                model_runtime.call(project, prompt="second", **args)
+                self.assertEqual(transport.call_count,2)
+            self.assertEqual(len(model_spend.read(project)["reservations"]), 0)
+            self.assertGreater(model_spend.read(project)["spent_cny"],0)
             self.assertTrue(model_runtime.ledger_entries(project)[0]["usage_estimated"])
 
     def test_separate_keys_are_rejected_from_checkpoint_contents(self):

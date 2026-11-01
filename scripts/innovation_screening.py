@@ -116,8 +116,9 @@ def _matrix(project, evaluation, criteria, current, candidate_ids):
     # network, models or experiment authority, and writes nothing without --output.
     manifest = json.loads((ROOT / "integrations/vendored-research-methods.json").read_text(encoding="utf-8"))
     pinned = {r["path"]: r for r in manifest["files"]}
+    from scripts.research_methods import pinned_text_sha256
     for relative in (SOURCE + "_common.py", SOURCE + "evaluate_matrix.py"):
-        _need(relative in pinned and sha(path_in(ROOT, relative)) == pinned[relative]["sha256"], "pinned evaluation helper changed")
+        _need(relative in pinned and pinned_text_sha256(path_in(ROOT, relative)) == pinned[relative]["sha256"], "pinned evaluation helper changed")
     completed = subprocess.run([sys.executable, str(ROOT / SOURCE / "evaluate_matrix.py"), str(scores), "--config", str(config),
                                 "--weight-delta", str(delta)], capture_output=True, text=True, timeout=30,
                                env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})

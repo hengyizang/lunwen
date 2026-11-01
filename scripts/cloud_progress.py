@@ -1,4 +1,4 @@
-"""Bounded continuation based on gate/evidence progress, never prose churn."""
+"""Record continuation progress; the cumulative ceiling governs model spending."""
 from __future__ import annotations
 
 import hashlib
@@ -9,8 +9,6 @@ from pathlib import Path
 from scripts import researchctl
 
 FILE = "state/continuation-progress.json"
-MAX_MODEL_CYCLES = 6
-MAX_STALLED_CYCLES = 2
 MAX_CONTROL_CYCLES = 12
 
 
@@ -23,8 +21,8 @@ def digest(value) -> str:
 
 
 def human_inputs(project: Path) -> str:
-    # Only owner/control-plane files can restart a paused stage. Author-edited
-    # drafts, timestamps and audit wording must not reset the paid repair bound.
+    # Only owner/control-plane files reset a paused control attempt. Draft
+    # timestamps and audit wording do not establish new scientific evidence.
     paths = ["state/run.json", "state/data-authorizations.json", "state/human-inputs.json"]
     return digest({p: read(project / p) for p in paths})
 
@@ -42,19 +40,26 @@ def snapshot(slug: str) -> dict:
             item = json.loads(line)
             if item.get("status") in {"success", "succeeded"}:
                 receipts.append(item.get("response_sha256") or digest(item.get("outputs", [])))
+    from scripts import literature_evidence, literature_model_screening
+    for item in literature_evidence.read_jsonl(project / "evidence/search-log.jsonl"):
+        if str(item.get("screened_by", "")).startswith("model:") and not literature_model_screening.verify(project, item):
+            receipts.append(digest({"receipt": item["evidence_receipt_id"], "screened_by": item["screened_by"],
+                                    "included": item["included_work_ids"], "excluded": item["exclusion_reasons"]}))
     return {"scope": f"{state['stage']}:{state['active_paper']}", "errors": errors,
             "receipts": sorted(set(receipts)), "human_inputs": human_inputs(project)}
 
 
 def external_blockers(project: Path, errors: list[str]) -> list[dict]:
     report = read(project / "state/research-steps.json", {})
-    blockers = list(report.get("blockers", []))
+    automatic_kinds = {"data_rights_evidence", "data_rights_review", "data_quality_confirmation", "reproduction_confirmation", "figure_visual_review", "literature_screening"}
+    blockers = [item for item in report.get("blockers", []) if item.get("kind") not in automatic_kinds]
+    if any(item.get("kind") in {"experiment_inspection", "experiment_failure_diagnosis"} for item in blockers):
+        from scripts.primary_recovery import failure_control_status
+        status = failure_control_status(project)
+        if status["status"] in {"eligible", "retry_pending"}:
+            blockers = [item for item in blockers if item.get("kind") not in {"experiment_inspection", "experiment_failure_diagnosis"}]
     patterns = {
-        "literature_screening": ("named human screening", "human screening", "screening decisions"),
-        "data_quality_confirmation": ("missing named confirmation", "named human confirmation"),
         "jcr_source_required": ("licensed jcr", "jcr verification", "jcr source"),
-        "reproduction_confirmation": ("reproduction-confirmation.json",),
-        "figure_visual_review": ("human visual", "visual confirmation"),
     }
     for kind, phrases in patterns.items():
         matches = [e for e in errors if any(p in e.casefold() for p in phrases)]
@@ -90,13 +95,12 @@ def pause_reason(slug: str) -> dict | None:
     if (value.get("scope") != f"{state['stage']}:{state['active_paper']}"
             or value.get("human_inputs") != human_inputs(project)):
         return None
-    if value.get("external_blockers"):
-        return {"reason": "external_input_required", "blockers": value["external_blockers"]}
-    for field, limit, reason in (("model_cycles", MAX_MODEL_CYCLES, "stage_repair_limit"),
-                                 ("stalled_cycles", MAX_STALLED_CYCLES, "no_semantic_progress"),
-                                 ("control_cycles", MAX_CONTROL_CYCLES, "control_retry_limit")):
-        if value.get(field, 0) >= limit:
-            return {"reason": reason, "attempts": value[field], "limit": limit}
+    current_errors = researchctl.gate_errors(slug, state["gate"]) if state.get("gate") else []
+    current_external = external_blockers(project, current_errors)
+    if current_external:
+        return {"reason": "external_input_required", "blockers": current_external}
+    if value.get("control_cycles", 0) >= MAX_CONTROL_CYCLES:
+        return {"reason": "control_retry_limit", "attempts": value["control_cycles"], "limit": MAX_CONTROL_CYCLES}
     return None
 
 

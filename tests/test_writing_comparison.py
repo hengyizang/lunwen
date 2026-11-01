@@ -273,15 +273,19 @@ class WritingTrialBudgetTests(unittest.TestCase):
         self.assertEqual(trial.model_spend.reserved(control), trial.OLD_HOLD)
         self.assertEqual(control["spent_cny"], 0)
 
-    def test_actual_debit_above_bound_is_persisted_before_stopping(self):
+    def test_actual_debit_can_exceed_estimate_but_not_project_total(self):
         receipt = trial.model_spend.reserve(self.budget.root, max_cost_cny=0.25,
             paper_id=None, paper_limit_cny=500, run_id="fixture")
-        with self.assertRaises(trial.model_spend.SpendControlError):
-            self.budget.settle(receipt, 0.5)
+        self.budget.settle(receipt, 0.5)
         self.budget.persist.assert_called_once()
         control = trial.model_spend.read(self.budget.root, required=True)
         self.assertEqual(control["spent_cny"], 0.5)
         self.assertNotIn(receipt, control["reservations"])
+        another = trial.model_spend.reserve(self.budget.root,max_cost_cny=.25,
+            paper_id=None,paper_limit_cny=500,run_id="fixture-total")
+        with self.assertRaises(trial.model_spend.SpendControlError):
+            self.budget.settle(another,500)
+        self.assertEqual(trial.model_spend.read(self.budget.root,required=True)["spent_cny"],500.5)
 
 
 if __name__ == "__main__":

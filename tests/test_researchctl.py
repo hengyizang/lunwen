@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import types
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts import researchctl
 
@@ -35,6 +37,15 @@ class ResearchCtlTests(unittest.TestCase):
         value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.25,"job_market_and_salary":0.25,"future_growth_potential":0.15,"phd_position_competition":0.075,"job_market_competition":0.075,"background_fit":0.10,"application_route_fit":0.10}})
         researchctl.write_json(path,value)
 
+    def test_advance_rechecks_expired_evidence_after_approval(self) -> None:
+        project = self.init_project()
+        self.complete_constraints(project)
+        researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note="ready"))
+        with patch.object(researchctl, "gate_errors", return_value=["evidence expired"]):
+            with self.assertRaisesRegex(researchctl.ResearchCtlError, "no longer pass"):
+                researchctl.advance(types.SimpleNamespace(project="test-phd"))
+        self.assertEqual(researchctl.load_state("test-phd")["gate"], "G0")
+
     def test_initialize_creates_state_papers_and_trial_venue(self) -> None:
         project = self.init_project()
         state = json.loads((project / "state" / "run.json").read_text())
@@ -53,6 +64,79 @@ class ResearchCtlTests(unittest.TestCase):
         spending = json.loads((project / "state" / "model-spend-control.json").read_text())
         self.assertEqual(spending["authorized_ceiling_cny"], 0)
         self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
+
+    def test_each_paper_topic_needs_a_separate_current_approval(self) -> None:
+        project = self.init_project(paper_count=3)
+        state = researchctl.load_state("test-phd")
+        state.update(gate="G2", stage="paper-architecture", stage_index=2)
+        researchctl.save_state("test-phd", state)
+        with patch.object(researchctl, "gate_errors", return_value=[]), patch("scripts.scientific_scope.seal_approval") as seal:
+            researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note=""))
+            for paper in ("P01", "P02"):
+                researchctl.approve(types.SimpleNamespace(project="test-phd", gate="G2", paper=paper, actor="Human", note=""))
+            self.assertEqual(researchctl.load_state("test-phd")["status"], "awaiting_approval")
+            contract = project / "papers/P01/paper-contract.json"
+            value = json.loads(contract.read_text(encoding="utf-8")); value["research_question"] = "A changed topic?"
+            researchctl.write_json(contract, value)
+            with self.assertRaisesRegex(researchctl.ResearchCtlError, "changed after ready"):
+                researchctl.approve(types.SimpleNamespace(project="test-phd", gate="G2", paper="P03", actor="Human", note=""))
+            researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note=""))
+            for paper in ("P01", "P02", "P03"):
+                researchctl.approve(types.SimpleNamespace(project="test-phd", gate="G2", paper=paper, actor="Human", note=""))
+            state = researchctl.load_state("test-phd")
+            self.assertEqual(state["status"], "approved")
+            self.assertEqual({v["paper_id"] for v in state["approvals"][-1]["paper_topic_approvals"]}, {"P01", "P02", "P03"})
+            seal.assert_called_once()
+
+    def prepare_automatic_g3_compute(self, project: Path) -> None:
+        self.complete_constraints(project)
+        state = researchctl.load_state("test-phd")
+        state.update(gate="G3", stage="experiment-design", stage_index=3,
+                     approved_gates=["G0"], approvals=[{"gate": "G0", "actor": "Owner", "artifact_sha256": "a" * 64}])
+        researchctl.save_state("test-phd", state)
+        researchctl.write_json(project / "state/continuation.json", {
+            "schema_version": "1.0", "actor": "Owner",
+            "constraints_sha256": researchctl.file_sha256(project / "intake/constraints.json"),
+            "g0_approval_artifact_sha256": "a" * 64})
+        researchctl.write_json(project / "experiments/plan.json", {"schema_version": "1.0", "status": "ready_for_review", "runs": [{
+            "run_id": "baseline", "paper_id": "P01", "argv": [sys.executable, "-c", "print('fixture')"],
+            "cwd": ".", "seed": 1, "timeout_seconds": 30, "estimated_cost_usd": 10,
+            "isolation": {"kind": "host"}, "inputs": [], "expected_outputs": ["results/fixture.json"]}]})
+        researchctl.write_json(project / "experiments/budget.json", {
+            "schema_version": "1.0", "status": "ready_for_review", "hard_ceiling_usd": 100})
+
+    def test_automatic_g3_seals_existing_compute_authority_without_increasing_it(self) -> None:
+        project = self.init_project()
+        self.prepare_automatic_g3_compute(project)
+        before = (project / "intake/constraints.json").read_bytes()
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note="Deterministic test fixture"))
+        state = researchctl.load_state("test-phd")
+        self.assertEqual(state["status"], "approved")
+        approval = state["approvals"][-1]
+        self.assertEqual(approval["decision_type"], "deterministic")
+        self.assertEqual(approval["compute_budget_authority"]["cloud_compute_budget_usd"], 200)
+        self.assertEqual(approval["compute_budget_authority"]["actor"], "project-total-cost-control")
+        self.assertEqual((project / "intake/constraints.json").read_bytes(), before)
+
+    def test_g3_checks_actual_estimates_against_total_without_another_budget_confirmation(self) -> None:
+        project = self.init_project()
+        self.prepare_automatic_g3_compute(project)
+        researchctl.write_json(project / "experiments/budget.json", {
+            "schema_version": "1.0", "status": "ready_for_review", "hard_ceiling_usd": 201})
+        plan = researchctl.read_json(project / "experiments/plan.json")
+        plan["runs"][0]["estimated_cost_usd"] = 201
+        researchctl.write_json(project / "experiments/plan.json", plan)
+        errors = researchctl.gate_errors("test-phd", "G3")
+        self.assertTrue(any("exceed the project total" in error for error in errors))
+        with self.assertRaises(researchctl.ResearchCtlError):
+            researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note=""))
+        self.assertNotIn("G3", researchctl.load_state("test-phd")["approved_gates"])
+        (project / "state/continuation.json").unlink()
+        plan["runs"][0]["estimated_cost_usd"] = 10
+        researchctl.write_json(project / "experiments/plan.json", plan)
+        errors = researchctl.gate_errors("test-phd", "G3")
+        self.assertFalse(any("experiment compute authority" in error for error in errors))
 
     def test_six_paper_initialization_assigns_three_q1_and_three_q2_targets(self) -> None:
         project = self.init_project(paper_count=6)
@@ -146,16 +230,8 @@ class ResearchCtlTests(unittest.TestCase):
             types.SimpleNamespace(project="test-phd", note="prepared")
         )
         state = researchctl.load_state("test-phd")
-        self.assertEqual(state["status"], "awaiting_approval")
-
-        researchctl.approve(
-            types.SimpleNamespace(
-                project="test-phd",
-                gate="G0",
-                actor="Human Researcher",
-                note="reviewed",
-            )
-        )
+        self.assertEqual(state["status"], "approved")
+        self.assertEqual(state["approvals"][-1]["decision_type"], "deterministic")
         state = researchctl.load_state("test-phd")
         self.assertIn("G0", state["approved_gates"])
         self.assertEqual(len(state["approvals"][0]["artifact_sha256"]), 64)
@@ -176,11 +252,6 @@ class ResearchCtlTests(unittest.TestCase):
         self.complete_constraints(project)
         constraints = json.loads(constraints_path.read_text())
         researchctl.mark_ready(types.SimpleNamespace(project="test-phd", note="ready"))
-        researchctl.approve(
-            types.SimpleNamespace(
-                project="test-phd", gate="G0", actor="Human", note="approved"
-            )
-        )
         constraints["notes"].append("changed after approval")
         researchctl.write_json(constraints_path, constraints)
         with self.assertRaises(researchctl.ResearchCtlError):
@@ -242,11 +313,12 @@ class ResearchCtlTests(unittest.TestCase):
         project=self.init_project();self.complete_constraints(project)
         researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
         path=project/"intake"/"constraints.json";value=json.loads(path.read_text());value["notes"].append("changed");researchctl.write_json(path,value)
-        with self.assertRaisesRegex(researchctl.ResearchCtlError,"changed after ready"):
-            researchctl.approve(types.SimpleNamespace(project="test-phd",gate="G0",actor="Human",note="old review"))
+        with self.assertRaisesRegex(researchctl.ResearchCtlError,"changed after approval"):
+            researchctl.advance(types.SimpleNamespace(project="test-phd"))
 
     def test_reopen_returns_gate_to_model_editable_work(self) -> None:
-        project=self.init_project();self.complete_constraints(project);researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
+        project=self.init_project();state=researchctl.load_state("test-phd");state.update(gate="G1",stage="topic-intelligence",stage_index=1);researchctl.save_state("test-phd",state)
+        with patch.object(researchctl,"gate_errors",return_value=[]):researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
         researchctl.reopen(types.SimpleNamespace(project="test-phd",note="Needs another model revision"))
         state=researchctl.load_state("test-phd");self.assertEqual(state["status"],"awaiting_work");self.assertNotIn("ready_artifact_sha256",state)
 
@@ -282,7 +354,8 @@ class ResearchCtlTests(unittest.TestCase):
         )
         researchctl.save_state("test-phd", state)
 
-        researchctl.advance(types.SimpleNamespace(project="test-phd"))
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            researchctl.advance(types.SimpleNamespace(project="test-phd"))
         state = researchctl.load_state("test-phd")
         self.assertEqual(state["active_paper"], "P02")
         self.assertEqual(state["paper_statuses"]["P01"], "submission_ready")
@@ -299,7 +372,8 @@ class ResearchCtlTests(unittest.TestCase):
                 }
             )
             researchctl.save_state("test-phd", state)
-            researchctl.advance(types.SimpleNamespace(project="test-phd"))
+            with patch.object(researchctl, "gate_errors", return_value=[]):
+                researchctl.advance(types.SimpleNamespace(project="test-phd"))
             state = researchctl.load_state("test-phd")
 
         self.assertEqual(state["stage"], "submission-ready")

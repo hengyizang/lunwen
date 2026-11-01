@@ -21,6 +21,8 @@ from typing import Any, Iterable
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(ROOT))
 PROJECTS_ROOT = ROOT / "projects"
 RUN_ID_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$")
 PAPER_RE = re.compile(r"^P[0-9]{2}$")
@@ -37,8 +39,14 @@ class ExperimentError(RuntimeError):
     pass
 
 
+class ProcessTreeTerminationError(ExperimentError):
+    pass
+
+
 def allowed_executable(value: str) -> bool:
     name = Path(value).name
+    if name.lower().endswith(".exe"):
+        name = name[:-4]
     return name in DEFAULT_EXECUTABLES or bool(re.fullmatch(r"python(?:3(?:\.\d+)?)?", name))
 
 
@@ -232,6 +240,65 @@ def budget_ceiling(budget: dict[str, Any]) -> float:
     return float(value)
 
 
+def compute_budget_authority(project: Path, budget: dict[str, Any], plan: dict[str, Any]) -> dict[str, Any]:
+    """Check planned costs against the existing project total, without paid reviews.
+
+    The frozen budget remains a protocol input, but a smaller per-plan value
+    is informational. It cannot impose another spending approval boundary.
+    """
+    budget_ceiling(budget)
+    authority = _compute_total_authority(project)
+    ceiling = authority["cloud_compute_budget_usd"]
+    if authority["cash_budget_usd"] is not None:
+        ceiling = min(ceiling, authority["cash_budget_usd"])
+    errors = validate_plan(plan)
+    if errors:
+        raise ExperimentError("; ".join(errors))
+    if sum(float(run["estimated_cost_usd"]) for run in plan["runs"]) > ceiling:
+        raise ExperimentError("planned experiment estimates exceed the project total compute or cash USD ceiling")
+    return authority
+
+
+def _compute_total_authority(project: Path) -> dict[str, Any]:
+    constraints_path = resolve_inside(compute_project(project), "intake/constraints.json", "compute total")
+    constraints = read_json(constraints_path)
+    owner_ceiling = constraints.get("cloud_compute_budget_usd")
+    cash_ceiling = constraints.get("cash_budget_usd")
+    for name, value in (("cloud_compute_budget_usd", owner_ceiling), ("cash_budget_usd", cash_ceiling)):
+        if name == "cash_budget_usd" and value is None:
+            continue
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+            raise ExperimentError("owner " + name + " must be a finite non-negative USD ceiling")
+    return {"constraints_sha256": sha256_file(constraints_path), "actor": "project-total-cost-control",
+            "cloud_compute_budget_usd": owner_ceiling, "cash_budget_usd": cash_ceiling}
+
+
+def compute_project(project: Path) -> Path:
+    """Use the parent total for the existing supplemental study layout."""
+    if len(project.parents) >= 5:
+        root = project.parents[4]
+        if re.fullmatch(r"experiments/supplemental/P[0-9]{2}/R[0-9]{3}/s[0-9]{3}", project.relative_to(root).as_posix()):
+            return root
+    return project
+
+
+def project_compute_ceiling(project: Path, budget: dict[str, Any]) -> float:
+    budget_ceiling(budget)
+    root = compute_project(project)
+    if not (root / "intake/constraints.json").is_file():
+        # Existing sealed projects without intake retain their one recorded
+        # total ceiling; absence of a new per-plan value never means unlimited.
+        ceiling = budget_ceiling(read_json(root / "experiments/budget.json") if root != project else budget)
+        from scripts.primary_recovery import histories
+        previous = histories(root)
+        return min([ceiling, *(float(row["compute_ceiling_usd"]) for row in previous)])
+    authority = _compute_total_authority(root)
+    values = [authority["cloud_compute_budget_usd"]]
+    if authority["cash_budget_usd"] is not None:
+        values.append(authority["cash_budget_usd"])
+    return float(min(values))
+
+
 def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[dict[str, Any], float]:
     state = read_json(project / "state" / "run.json")
     from scripts.scientific_scope import validate as scope_errors
@@ -251,21 +318,23 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
         None,
     )
     if not approval:
-        raise ExperimentError("G3 has no recorded human approval")
+        raise ExperimentError("G3 has no recorded checked protocol seal")
     expected_plan = approval.get("experiment_plan_sha256")
     expected_budget = approval.get("experiment_budget_sha256")
     if not expected_plan or not expected_budget:
-        raise ExperimentError("G3 approval predates the executable plan contract; approve G3 again")
+        raise ExperimentError("G3 seal predates the executable plan contract; rerun the current G3 checks and sealing")
     if sha256_file(plan_path) != expected_plan or sha256_file(budget_path) != expected_budget:
         raise ExperimentError("Experiment plan or budget changed after G3 approval")
     plan = read_json(plan_path)
     errors = validate_plan(plan)
     if errors:
         raise ExperimentError("; ".join(errors))
+    budget = read_json(budget_path)
+    ceiling = project_compute_ceiling(project, budget)
     frozen = approval.get("frozen_protocol_sha256")
     required = {f"papers/{run['paper_id']}/preregistration.json" for run in plan["runs"]}
     if not isinstance(frozen, dict) or not required <= set(frozen):
-        raise ExperimentError("G3 approval has no frozen protocol hashes; review and approve G3 again")
+        raise ExperimentError("G3 seal has no frozen protocol hashes; rerun the current G3 checks and sealing")
     for relative in sorted(required):
         path = resolve_inside(project, relative, "frozen protocol")
         if not path.is_file() or sha256_file(path) != frozen[relative]:
@@ -288,7 +357,7 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
             preflight_run(project, run)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise ExperimentError("empirical input preflight failed: " + str(exc)) from exc
-    return plan, budget_ceiling(read_json(budget_path))
+    return plan, ceiling
 
 
 def safe_environment(run_id: str, seed: int) -> dict[str, str]:
@@ -460,10 +529,151 @@ def read_capped(path: Path, limit: int = MAX_LOG_BYTES) -> tuple[str, bool]:
     return payload[:limit].decode("utf-8", errors="replace"), truncated
 
 
+def read_capped_stream(handle, limit: int = MAX_LOG_BYTES) -> tuple[str, bool]:
+    handle.seek(0)
+    payload = handle.read(limit + 1)
+    return payload[:limit].decode("utf-8", errors="replace"), len(payload) > limit
+
+
+class WindowsProcessJob:
+    def __init__(self, process: subprocess.Popen, *, suspended: bool = False):
+        import ctypes
+        from ctypes import wintypes
+        kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel.CreateJobObjectW.restype = wintypes.HANDLE
+        kernel.AssignProcessToJobObject.argtypes = [wintypes.HANDLE, wintypes.HANDLE]
+        kernel.AssignProcessToJobObject.restype = wintypes.BOOL
+        kernel.TerminateJobObject.argtypes = [wintypes.HANDLE, wintypes.UINT]
+        kernel.TerminateJobObject.restype = wintypes.BOOL
+        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+        self.kernel = kernel
+        self.handle = kernel.CreateJobObjectW(None, None)
+        if not self.handle:
+            raise ProcessTreeTerminationError("could not create Windows job")
+        if not kernel.AssignProcessToJobObject(self.handle, int(process._handle)):
+            self.close()
+            raise ProcessTreeTerminationError("could not assign process to Windows job")
+        if suspended:
+            try:
+                self._resume_primary_thread(process.pid)
+            except Exception:
+                try:
+                    self.terminate()
+                finally:
+                    self.close()
+                raise
+
+    def _resume_primary_thread(self, process_id: int) -> None:
+        """Resume only after job assignment, before any experiment code runs.
+
+        Popen closes the initial thread handle. Toolhelp supplies that thread's
+        ID while CREATE_SUSPENDED guarantees it has not started experiment code.
+        https://learn.microsoft.com/en-us/windows/win32/procthread/thread-walking
+        """
+        import ctypes
+        from ctypes import wintypes
+
+        class ThreadEntry(ctypes.Structure):
+            _fields_ = [(name, kind) for name, kind in (
+                ("dwSize", wintypes.DWORD), ("cntUsage", wintypes.DWORD),
+                ("th32ThreadID", wintypes.DWORD), ("th32OwnerProcessID", wintypes.DWORD),
+                ("tpBasePri", wintypes.LONG), ("tpDeltaPri", wintypes.LONG), ("dwFlags", wintypes.DWORD))]
+
+        kernel = self.kernel
+        kernel.CreateToolhelp32Snapshot.argtypes = [wintypes.DWORD, wintypes.DWORD]
+        kernel.CreateToolhelp32Snapshot.restype = wintypes.HANDLE
+        for name in ("Thread32First", "Thread32Next"):
+            operation = getattr(kernel, name)
+            operation.argtypes = [wintypes.HANDLE, ctypes.POINTER(ThreadEntry)]
+            operation.restype = wintypes.BOOL
+        kernel.OpenThread.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+        kernel.OpenThread.restype = wintypes.HANDLE
+        kernel.ResumeThread.argtypes = [wintypes.HANDLE]
+        kernel.ResumeThread.restype = wintypes.DWORD
+        snapshot = kernel.CreateToolhelp32Snapshot(0x00000004, 0)  # TH32CS_SNAPTHREAD
+        if snapshot == ctypes.c_void_p(-1).value:
+            raise ProcessTreeTerminationError("could not inspect the suspended experiment thread")
+        try:
+            entry = ThreadEntry()
+            entry.dwSize = ctypes.sizeof(entry)
+            available = kernel.Thread32First(snapshot, ctypes.byref(entry))
+            thread_ids = []
+            while available:
+                if entry.th32OwnerProcessID == process_id:
+                    thread_ids.append(entry.th32ThreadID)
+                entry.dwSize = ctypes.sizeof(entry)
+                available = kernel.Thread32Next(snapshot, ctypes.byref(entry))
+            if ctypes.get_last_error() != 18 or len(thread_ids) != 1:  # ERROR_NO_MORE_FILES
+                raise ProcessTreeTerminationError("could not identify one suspended experiment thread")
+            thread = kernel.OpenThread(0x0002, False, thread_ids[0])  # THREAD_SUSPEND_RESUME
+            if not thread:
+                raise ProcessTreeTerminationError("could not open the suspended experiment thread")
+            try:
+                if kernel.ResumeThread(thread) != 1:
+                    raise ProcessTreeTerminationError("could not resume the assigned experiment thread")
+            finally:
+                kernel.CloseHandle(thread)
+        finally:
+            kernel.CloseHandle(snapshot)
+
+    def terminate(self) -> None:
+        if not self.kernel.TerminateJobObject(self.handle, 1):
+            raise ProcessTreeTerminationError("could not terminate the Windows job")
+
+    def close(self) -> None:
+        if self.handle:
+            self.kernel.CloseHandle(self.handle)
+            self.handle = None
+
+
+def terminate_process_tree(process: subprocess.Popen, job: WindowsProcessJob | None = None) -> None:
+    if os.name == "nt":
+        if job is not None:
+            job.terminate()
+            return
+        # taskkill /T targets descendants before the parent, including children
+        # that would survive process.kill(). Do not invoke a command shell.
+        try:
+            result = subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                                    stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.PIPE, check=False, timeout=15)
+        except (OSError, subprocess.SubprocessError) as exc:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+            raise ProcessTreeTerminationError("could not terminate the complete Windows process tree") from exc
+        if result.returncode:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+            raise ProcessTreeTerminationError("could not terminate the complete Windows process tree")
+    else:
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError as exc:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+            raise ProcessTreeTerminationError("could not terminate the complete process group") from exc
+
+
 def append_registry(path: Path, entry: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def accounted_run_cost(entry: dict[str, Any]) -> float:
+    """Charge every finished attempt conservatively; never invent actual billing."""
+    estimate = entry.get("estimated_cost_usd")
+    actual = entry.get("reported_cost_usd")
+    if type(estimate) not in (int, float) or not math.isfinite(estimate) or estimate < 0:
+        raise ExperimentError("experiment ledger needs finite non-negative estimated costs")
+    if actual is not None and (type(actual) not in (int, float) or not math.isfinite(actual) or actual < 0):
+        raise ExperimentError("experiment ledger has invalid reported costs")
+    return max(float(estimate), float(actual) if actual is not None else 0.0)
 
 
 def prior_estimated_cost(registry: Path) -> float:
@@ -475,12 +685,9 @@ def prior_estimated_cost(registry: Path) -> float:
             continue
         try:
             entry = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if entry.get("status") in {"succeeded", "failed", "timed_out"}:
-            value = entry.get("estimated_cost_usd", 0)
-            if isinstance(value, (int, float)) and not isinstance(value, bool):
-                total += float(value)
+        except json.JSONDecodeError as exc:
+            raise ExperimentError("experiment cost ledger contains invalid JSON") from exc
+        total += accounted_run_cost(entry)
     return total
 
 
@@ -520,9 +727,8 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
                 raise ExperimentError(f"Dependency {parent} output changed")
 
 
-def run_one(
-    project: Path, run: dict[str, Any], registry: Path, plan_sha256: str
-) -> dict[str, Any]:
+def preflight_run(project: Path, run: dict[str, Any], registry: Path, plan_sha256: str):
+    """Reject an unstartable attempt before arming a cost reservation."""
     from scripts.primary_recovery import require_next_attempt, records
     try:
         require_next_attempt(project, run["run_id"], records(project), plan_sha256)
@@ -552,6 +758,16 @@ def run_one(
                 "sha256": actual,
             }
         )
+    return cwd, outputs, input_records
+
+
+def run_one(
+    project: Path, run: dict[str, Any], registry: Path, plan_sha256: str
+) -> dict[str, Any]:
+    # Recheck immediately before execution as inputs may change while a remote
+    # reservation is being persisted.
+    cwd, outputs, input_records = preflight_run(project, run, registry, plan_sha256)
+    run_id = run["run_id"]
     attempt = 1
     if registry.is_file():
         for line in registry.read_text(encoding="utf-8").splitlines():
@@ -579,6 +795,7 @@ def run_one(
     exit_code: int | None = None
     error: str | None = None
     timed_out = False
+    launch = {"process_started": False, "failure_kind": None, "os_error_errno": None}
     environment = safe_environment(run_id, run["seed"])
     isolation = isolation_record(project, cwd, run["isolation"], attempt_id)
     if run.get("runtime"):
@@ -588,39 +805,58 @@ def run_one(
             command, execution_cwd, execution_environment = execution_command(
                 project, cwd, run, environment
             )
-            process = subprocess.Popen(
-                command,
-                cwd=execution_cwd,
-                env=execution_environment,
-                stdin=subprocess.DEVNULL,
-                stdout=stdout,
-                stderr=stderr,
-                shell=False,
-                start_new_session=os.name != "nt",
-            )
             try:
-                exit_code = process.wait(timeout=run["timeout_seconds"])
-            except subprocess.TimeoutExpired as exc:
-                if os.name != "nt":
+                process = subprocess.Popen(
+                    command,
+                    cwd=execution_cwd,
+                    env=execution_environment,
+                    stdin=subprocess.DEVNULL,
+                    stdout=stdout,
+                    stderr=stderr,
+                    shell=False,
+                    start_new_session=os.name != "nt",
+                    creationflags=0x00000004 if os.name == "nt" else 0,  # CREATE_SUSPENDED
+                )
+            except OSError as exc:
+                launch.update(failure_kind="process_launch_oserror", os_error_errno=exc.errno)
+                raise
+            launch["process_started"] = True
+            job = None
+            try:
+                if os.name == "nt":
                     try:
-                        os.killpg(process.pid, signal.SIGKILL)
-                    except OSError:
-                        pass
+                        job = WindowsProcessJob(process, suspended=True)
+                    except ProcessTreeTerminationError:
+                        process.kill()
+                        process.wait()
+                        raise
+                try:
+                    exit_code = process.wait(timeout=run["timeout_seconds"])
+                except subprocess.TimeoutExpired as exc:
+                    terminate_process_tree(process, job)
+                    process.wait()
+                    status = "timed_out"
+                    timed_out = True
+                    error = str(exc)
                 else:
-                    process.kill()
-                process.wait()
-                status = "timed_out"
-                timed_out = True
-                error = str(exc)
-            else:
-                status = "succeeded" if exit_code == 0 else "failed"
+                    status = "succeeded" if exit_code == 0 else "failed"
+            finally:
+                if job is not None:
+                    try:
+                        # A parent exiting successfully must not leave workers
+                        # changing files after the executor seals its receipt.
+                        job.terminate()
+                    finally:
+                        job.close()
+        except ProcessTreeTerminationError:
+            raise
         except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
             status = "failed"
             error = str(exc)
         stdout.flush()
         stderr.flush()
-        stdout_text, stdout_truncated = read_capped(Path(stdout.name))
-        stderr_text, stderr_truncated = read_capped(Path(stderr.name))
+        stdout_text, stdout_truncated = read_capped_stream(stdout)
+        stderr_text, stderr_truncated = read_capped_stream(stderr)
     (log_dir / "stdout.txt").write_text(stdout_text, encoding="utf-8")
     (log_dir / "stderr.txt").write_text(stderr_text, encoding="utf-8")
     changed_inputs: list[dict[str, Any]] = []
@@ -673,9 +909,12 @@ def run_one(
         "seed": run["seed"],
         "timeout_seconds": run["timeout_seconds"],
         "timed_out": timed_out,
+        "launch": launch,
         "exit_code": exit_code,
         "estimated_cost_usd": float(run["estimated_cost_usd"]),
         "reported_cost_usd": None,
+        "cost_accounting": {"basis": "conservative_plan_estimate", "actual_cost_known": False,
+                            "accounted_cost_usd": float(run["estimated_cost_usd"])},
         "git_commit": git_commit(cwd),
         "approved_plan_sha256": plan_sha256,
         "inputs": input_records,
@@ -717,6 +956,31 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
         raise ExperimentError("project root does not match the requested slug")
     # Boundary helpers return resolved paths; keep their project base absolute too.
     project = project.resolve()
+    lease = project / "state" / "experiment-execution-lease.json"
+    try:
+        descriptor = os.open(lease, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    except FileExistsError as exc:
+        raise ExperimentError("another execution or an unresolved interrupted execution exists; reconcile its lease before continuing") from exc
+    armed = False
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            json.dump({"status": "checking", "started_at": now()}, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+        return _execute_locked(project, selected_run_ids, lease)
+    finally:
+        # An armed lease survives exceptions and process termination. Its cost
+        # may be unknown, so another run must not silently reuse the budget.
+        if lease.exists():
+            try:
+                armed = read_json(lease).get("status") in {"running", "completed"}
+            except ExperimentError:
+                armed = True
+            if not armed:
+                lease.unlink()
+
+
+def _execute_locked(project: Path, selected_run_ids: Iterable[str] | None, lease: Path) -> list[dict[str, Any]]:
     plan_path = project / "experiments" / "plan.json"
     budget_path = project / "experiments" / "budget.json"
     plan, ceiling = approved_plan(project, plan_path, budget_path)
@@ -727,8 +991,8 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
     if missing:
         raise ExperimentError(f"Unknown run ids: {', '.join(sorted(missing))}")
     registry = project / "experiments" / "registry.jsonl"
-    from scripts.primary_recovery import historical_cost
-    committed = prior_estimated_cost(registry) + historical_cost(project)
+    from scripts.supplemental_experiments import all_compute_cost
+    committed = all_compute_cost(compute_project(project))
     requested = sum(float(run["estimated_cost_usd"]) for run in runs)
     if committed + requested > ceiling:
         raise ExperimentError(
@@ -736,8 +1000,39 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
             f"> approved {ceiling:.2f} USD"
         )
     results: list[dict[str, Any]] = []
+    from scripts.cloud_checkpoint import CheckpointError, sync_experiment_reservation
     for run in runs:
-        results.append(run_one(project, run, registry, plan_sha256))
+        preflight_run(project, run, registry, plan_sha256)
+        with lease.open("w", encoding="utf-8") as handle:
+            json.dump({"status": "running", "run_id": run["run_id"],
+                       "estimated_cost_usd": run["estimated_cost_usd"],
+                       "approved_plan_sha256": plan_sha256, "started_at": now()}, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            sync_experiment_reservation(project, completed=False)
+        except CheckpointError as exc:
+            raise ExperimentError(str(exc)) from exc
+        entry = run_one(project, run, registry, plan_sha256)
+        results.append(entry)
+        with lease.open("w", encoding="utf-8") as handle:
+            receipt = project / "experiments" / "runs" / entry["attempt_id"] / "run.json"
+            json.dump({"status": "completed", "run_id": run["run_id"],
+                       "attempt_id": entry["attempt_id"],
+                       "estimated_cost_usd": run["estimated_cost_usd"],
+                       "approved_plan_sha256": plan_sha256,
+                       "receipt_sha256": sha256_file(receipt),
+                       "registry_sha256": sha256_file(registry)}, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            sync_experiment_reservation(project, completed=True)
+        except CheckpointError as exc:
+            raise ExperimentError(str(exc)) from exc
+        with lease.open("w", encoding="utf-8") as handle:
+            json.dump({"status": "checking"}, handle)
+            handle.flush()
+            os.fsync(handle.fileno())
     return results
 
 

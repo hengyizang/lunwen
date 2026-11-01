@@ -17,7 +17,7 @@ def summarize(entries: list[dict]) -> dict:
         if item.get("cache_hit") is True:
             continue
         role = str(item.get("role") or "")
-        if str(item.get("cost_status") or "").startswith(("unknown", "estimated")):
+        if str(item.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper")):
             unknown += 1
         if role.startswith("independent-critic") or role in {"independent-critique", "endpoint-health"}:
             fresh += 1
@@ -38,8 +38,8 @@ def summarize(entries: list[dict]) -> dict:
                            "provider": key[3], "model": key[4], "cache_key": key[-1],
                            "attempt_count": len(rows), "run_ids": [r.get("run_id") for r in rows],
                            "known_recorded_cost_cny": round(sum(float(r.get("cost_cny") or 0)
-                               for r in rows if not str(r.get("cost_status") or "").startswith(("unknown", "estimated"))), 8),
-                           "billing_uncertain": any(str(r.get("cost_status") or "").startswith(("unknown", "estimated")) for r in rows),
+                               for r in rows if not str(r.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper"))), 8),
+                           "billing_uncertain": any(str(r.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper")) for r in rows),
                            "action": "inspect purpose and receipts; never skip automatically"})
     return {"schema_version": "1.0", "ledger_entries": len(entries),
             "cache_hits": sum(item.get("cache_hit") is True for item in entries),

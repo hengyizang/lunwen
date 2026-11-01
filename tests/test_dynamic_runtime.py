@@ -81,26 +81,27 @@ class DynamicRuntimeTests(unittest.TestCase):
         self.assertEqual(decisions[0]["timeout_seconds"], 73)
         self.assertTrue(decisions[0]["not_scientific_evidence"])
 
-    def test_selected_transport_failure_keeps_unknown_debit_and_blocks_second_post(self):
+    def test_selected_transport_failure_reserves_cost_and_allows_next_request_within_total(self):
         with (patch.object(dynamic_routing, "choose", side_effect=self.selected),
                 patch.object(ai_providers, "call", side_effect=ai_providers.ProviderError("API HTTP 502")) as post,
                 patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}) as meter,
                 patch.object(relay_billing, "settle") as settle):
             with self.assertRaises(ai_providers.ProviderError):
                 self.call(task_profile=self.profile())
-            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation"):
+            with self.assertRaises(ai_providers.ProviderError):
                 self.call(task_profile=self.profile(), run_id="must-not-fallback", prompt="different uncached work")
-        post.assert_called_once()
-        meter.assert_called_once_with("codekey-codex-pro")
+        self.assertEqual(post.call_count,2)
+        self.assertEqual(meter.call_count,2)
+        self.assertTrue(all(call.args==("codekey-codex-pro",) for call in meter.call_args_list))
         settle.assert_not_called()
         state = model_spend.read(self.project)
         self.assertEqual(state["spent_cny"], 0)
-        self.assertEqual(len(state["reservations"]), 1)
+        self.assertEqual(len(state["reservations"]), 2)
         self.assertGreater(model_spend.reserved(state), 0)
         rows = model_runtime.ledger_entries(self.project)
-        self.assertEqual(len(rows), 1)
+        self.assertEqual(len(rows), 2)
         self.assertEqual(rows[0]["provider"], "codekey-codex-pro")
-        self.assertEqual(rows[0]["cost_status"], "unknown_reconcile_required")
+        self.assertEqual(rows[0]["cost_status"], "accounted_upper_bound")
         self.assertTrue(rows[0]["zero_cost_not_confirmed"])
         self.assertEqual(rows[0]["dynamic_candidate_id"], "fixture-accepted-codex-sol-low")
         self.assertGreaterEqual(rows[0]["duration_seconds"], 0)

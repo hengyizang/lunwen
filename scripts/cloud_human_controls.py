@@ -45,11 +45,18 @@ class HumanControlError(RuntimeError):
     pass
 
 
+def selectors_for(value: dict, operation: str) -> set[str]:
+    selectors = set(SELECTORS[operation])
+    if operation == "approve" and value.get("gate") == "G2":
+        selectors.add("paper_id")
+    return selectors
+
+
 def validate_fields(value: dict) -> str:
     operation = value.get("operation") if value["action"] == "review_dossier" else value["action"]
     if not isinstance(operation, str) or operation not in ACTIONS:
         raise HumanControlError("select a supported human operation")
-    selectors = SELECTORS[operation]
+    selectors = selectors_for(value, operation)
     if not selectors <= set(value):
         raise HumanControlError("missing human operation selectors")
     if operation == "amend_operating_constraints":
@@ -179,6 +186,8 @@ def _check_and_prepare(value: dict, operation: str) -> list[tuple[Path, dict]]:
             raise HumanControlError("reviewed gate is not the current gate")
         if operation == "approve" and state["status"] != "awaiting_approval":
             raise HumanControlError("ready and explicit human review are required before approval")
+        if operation == "approve" and state["gate"] == "G2":
+            _papers(project, value)
         if operation == "advance" and state["status"] != "approved":
             raise HumanControlError("current gate needs explicit approval before advance")
         if operation == "reopen" and state["status"] != "awaiting_approval":
@@ -256,7 +265,7 @@ def dossier(value: dict) -> dict:
     )
     implementation = {p.relative_to(repository).as_posix(): cp.sha(p) for p in implementation_paths}
     snapshot = {"schema_version": "1.0", "project": value["project"], "operation": operation,
-                "actor": value["actor"], "selectors": {k: value[k] for k in sorted(SELECTORS[operation])},
+                "actor": value["actor"], "selectors": {k: value[k] for k in sorted(selectors_for(value, operation))},
                 "state": {"stage": state["stage"], "gate": state["gate"], "status": state["status"],
                           "active_paper": state["active_paper"]},
                 "gate_artifact_sha256": researchctl.artifact_hash(value["project"], state["gate"]) if state["gate"] else None,
@@ -312,14 +321,18 @@ def execute(value: dict, run_id: str) -> dict:
         from scripts.scientific_scope import apply_amendment
         apply_amendment(project, value["source"], value["actor"], reviewed["review_sha256"], str(run_id), value["note"])
     elif operation in GATE_ACTIONS:
-        args = SimpleNamespace(project=value["project"], gate=value.get("gate"),
+        args = SimpleNamespace(project=value["project"], gate=value.get("gate"), paper=value.get("paper_id"),
                                actor=value["actor"], note=value["note"])
         {"ready": researchctl.mark_ready, "approve": researchctl.approve,
          "advance": researchctl.advance, "reopen": researchctl.reopen}[operation](args)
         if operation == "approve":
             state = researchctl.load_state(value["project"])
-            state["approvals"][-1].update({"cloud_review_sha256": reviewed["review_sha256"],
-                                         "source_run_id": str(run_id)})
+            if value.get("gate") == "G2":
+                vote = next(x for x in state["paper_topic_approvals"] if x["paper_id"] == value["paper_id"])
+                vote.update({"cloud_review_sha256": reviewed["review_sha256"], "source_run_id": str(run_id)})
+            if state["status"] == "approved":
+                state["approvals"][-1].update({"cloud_review_sha256": reviewed["review_sha256"],
+                                             "source_run_id": str(run_id)})
             researchctl.save_state(value["project"], state)
     elif operation == "start_revision":
         from scripts.reviewer_rounds import start_revision

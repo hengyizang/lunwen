@@ -20,7 +20,7 @@ class BrowserTests(WorkbenchFixture):
         paper = self.add_paper("one", "The example describes a baseline with held-out devices.")
         self.card(paper, field="baseline")
         self.build()
-        page = (self.project / workbench.OUTPUT / "index.html").read_text()
+        page = (self.project / workbench.OUTPUT / "index.html").read_text(encoding="utf-8")
         self.assertIn('id="literature-search"', page)
         self.assertIn('id="reading-paper"', page)
         self.assertIn("script-src 'sha256-" + browser.script_hash(), page)

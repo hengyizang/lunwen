@@ -281,7 +281,7 @@ class CacheWriteBillingTests(unittest.TestCase):
                     call(project, billing_identity={} if MODEL in prices else IDENTITY)
                 transport.assert_not_called()
 
-    def test_ambiguous_cache_receipts_hold_reservations_and_cannot_be_retried(self):
+    def test_ambiguous_cache_receipts_are_accounted_as_estimates_and_can_be_cached(self):
         base = {"input_tokens": 1000, "output_tokens": 20}
         receipts = [
             (quote(), {"input_tokens_details": {"cached_tokens": 400, "cache_write_tokens": 601}}),
@@ -308,15 +308,14 @@ class CacheWriteBillingTests(unittest.TestCase):
                 authorized(project)
                 with runtime(document(prices), response(usage)) as transport:
                     for _ in range(2):
-                        with self.assertRaises(model_runtime.ModelBudgetError):
-                            call(project)
+                        call(project)
                     transport.assert_called_once()
-                self.assertGreater(model_spend.reserved(model_spend.read(project)), 0)
-                self.assertEqual(model_spend.read(project)["spent_cny"], 0)
+                self.assertEqual(model_spend.reserved(model_spend.read(project)), 0)
+                self.assertGreater(model_spend.read(project)["spent_cny"], 0)
                 entry = model_runtime.ledger_entries(project)[0]
-                self.assertEqual(entry["cost_status"], "unknown_reconcile_required")
-                self.assertEqual(entry["usage_receipt"], usage)
-                self.assertFalse(list((project / ".cache" / "model-responses").glob("*.json")))
+                self.assertEqual(entry["cost_status"], "estimated_upper_bound")
+                self.assertEqual(entry["billing"]["usage_receipt"], usage)
+                self.assertTrue(list((project / ".cache" / "model-responses").glob("*.json")))
 
     def test_one_hour_write_price_can_block_an_otherwise_affordable_request(self):
         prices = quote(cache_write_5m_per_million=3, cache_write_1h_per_million=1_000_000)
@@ -387,7 +386,7 @@ class ToolBillingTests(unittest.TestCase):
             self.assertNotIn("tools", transport.call_args.kwargs)
             self.assertEqual(model_spend.read(project)["spent_cny"], 0.0004)
 
-    def test_unpriced_malformed_or_unbound_tool_receipts_remain_reserved_and_block_retry(self):
+    def test_malformed_tool_receipts_charge_reserved_upper_bound_without_extra_approval(self):
         receipts = [None, [], tool_receipt(complete=False), tool_receipt(request_id="another-response"),
                     tool_receipt({"tool": "unknown", "unit": "query", "units": 1}),
                     tool_receipt({"tool": "web_search", "unit": "query", "units": 4}),
@@ -401,18 +400,16 @@ class ToolBillingTests(unittest.TestCase):
                 project = Path(directory)
                 authorized(project)
                 with runtime(document(quote(tool_fees=self.FEES)), response(usage)) as transport:
-                    with self.assertRaises(model_runtime.ModelBudgetError):
-                        call(project, declared_tool_limits={"web_search": 3, "retrieval": 1})
-                    with self.assertRaises(model_runtime.ModelBudgetError):
-                        call(project, declared_tool_limits={"web_search": 3, "retrieval": 1})
+                    call(project, declared_tool_limits={"web_search": 3, "retrieval": 1})
+                    call(project, declared_tool_limits={"web_search": 3, "retrieval": 1})
                     self.assertEqual(transport.call_count, 1)
                 state = model_spend.read(project)
-                self.assertGreater(model_spend.reserved(state), 0)
-                self.assertEqual(state["spent_cny"], 0)
+                self.assertEqual(model_spend.reserved(state), 0)
+                self.assertGreaterEqual(state["spent_cny"], .9)
                 entry = model_runtime.ledger_entries(project)[0]
-                self.assertEqual(entry["cost_status"], "unknown_reconcile_required")
+                self.assertEqual(entry["cost_status"], "estimated_upper_bound")
                 self.assertTrue(entry["reservation_id"])
-                self.assertFalse(list((project / ".cache" / "model-responses").glob("*.json")))
+                self.assertTrue(list((project / ".cache" / "model-responses").glob("*.json")))
 
     def test_worst_bracket_cache_premium_and_tools_reserve_before_transport(self):
         prices = bracket_quote(tool_fees=self.FEES)
@@ -454,13 +451,13 @@ class ToolBillingTests(unittest.TestCase):
                 project = Path(directory)
                 authorized(project)
                 with runtime(document(quote()), response(usage)) as transport:
-                    with self.assertRaises(model_runtime.ModelBudgetError):
-                        call(project)
-                    with self.assertRaises(model_runtime.ModelBudgetError):
-                        call(project)
+                    call(project)
+                    call(project)
                     self.assertEqual(transport.call_count, 1)
-                self.assertGreater(model_runtime.budget_status(project)["reserved"], 0)
-                self.assertEqual(model_runtime.ledger_entries(project)[0]["usage_receipt"], usage)
+                self.assertEqual(model_runtime.budget_status(project)["reserved"], 0)
+                self.assertGreater(model_runtime.budget_status(project)["spent"], 0)
+                self.assertEqual(model_runtime.ledger_entries(project)[0]["cost_status"], "estimated_upper_bound")
+                self.assertEqual(model_runtime.ledger_entries(project)[0]["billing"]["usage_receipt"], usage)
 
 
 if __name__ == "__main__":

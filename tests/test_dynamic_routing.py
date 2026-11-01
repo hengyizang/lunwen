@@ -149,7 +149,7 @@ class DynamicRoutingTests(unittest.TestCase):
         with patch.dict(os.environ, {"DR_OS_DYNAMIC_ROUTING": "auto-try-cheap"}), self.assertRaises(ValueError):
             routing.enabled()
 
-    def test_unknown_cost_or_outstanding_hold_blocks_new_paid_selection(self):
+    def test_only_unaccounted_costs_block_selection_not_bounded_reservations(self):
         self.ledger([{"usage_estimated": True, "cost_cny": .01}])
         with self.assertRaisesRegex(ValueError, "unknown request"):
             self.select()
@@ -159,8 +159,10 @@ class DynamicRoutingTests(unittest.TestCase):
         state = model_spend.initial()
         state["reservations"]["pending"] = {"paper_id": None, "max_cost_cny": .1}
         model_spend.write(self.project, state)
-        with self.assertRaisesRegex(ValueError, "reservations"):
-            self.select()
+        self.ledger([{"cost_status": "unknown_reconcile_required", "reservation_id": "pending"}])
+        self.assertEqual(self.select()["decision"]["selected_candidate_id"], "baseline")
+        self.ledger([{"cost_status": "estimated_upper_bound", "usage_estimated": True, "cost_cny": .1}])
+        self.assertEqual(self.select()["decision"]["selected_candidate_id"], "baseline")
 
     def test_explicit_receipt_reconciliation_removes_stale_unknown_block(self):
         self.ledger([{"cost_status": "unknown_reconcile_required", "reservation_id": "old"}])
@@ -222,8 +224,11 @@ class DynamicRoutingTests(unittest.TestCase):
                     patch("scripts.model_runtime.budget_status", return_value=remaining), \
                     patch("scripts.model_runtime._paper_for_stage", return_value=paper):
                 result = self.select()
-            self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
-            self.assertTrue(any("reservation does not fit" in item["reason"] for item in result["decision"]["excluded"]))
+            if remaining["project_remaining"] < .02:
+                self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
+                self.assertTrue(any("reservation does not fit" in item["reason"] for item in result["decision"]["excluded"]))
+            else:
+                self.assertEqual(result["decision"]["selected_candidate_id"], self.candidate["candidate_id"])
             self.assertTrue(bound_.called)
 
     def test_arbitrary_pass_json_without_protected_manager_origin_is_rejected(self):

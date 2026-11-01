@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import tempfile
+import threading
 import unittest
 from pathlib import Path
 
@@ -85,18 +86,18 @@ class ExactOwnerCeilingTests(unittest.TestCase):
         self.assertEqual(result["spent_cny"], 301)
         self.assertEqual(result["paper_spent_cny"], {"P01": 301})
         self.assertEqual(result["settlement_events"], before["settlement_events"])
-        with self.assertRaises(model_spend.SpendControlError):
-            model_spend.reserve(self.project, max_cost_cny=1, paper_id="P01", paper_limit_cny=60, run_id="paper-still-over")
+        model_spend.reserve(self.project, max_cost_cny=1, paper_id="P01", paper_limit_cny=60, run_id="remaining-total")
 
-    def test_500_budget_is_enforced_and_existing_paper_limit_still_applies(self):
+    def test_only_500_total_budget_is_enforced_across_paper_allocations(self):
         self.amend()
         original = (self.project / model_spend.FILE).read_bytes()
-        for maximum, paper_id in ((500.01, None), (60.01, "P01")):
+        for maximum, paper_id in ((500.01, None), (500.01, "P01")):
             with self.subTest(maximum=maximum, paper=paper_id), self.assertRaises(model_spend.SpendControlError):
                 model_spend.reserve(self.project, max_cost_cny=maximum, paper_id=paper_id,
                                     paper_limit_cny=60, run_id="blocked")
             self.assertEqual((self.project / model_spend.FILE).read_bytes(), original)
-        model_spend.reserve(self.project, max_cost_cny=500, paper_id=None, paper_limit_cny=60, run_id="exact-limit")
+        model_spend.reserve(self.project, max_cost_cny=200, paper_id="P01", paper_limit_cny=60, run_id="first-paper")
+        model_spend.reserve(self.project, max_cost_cny=300, paper_id="P01", paper_limit_cny=60, run_id="same-paper-total")
         with self.assertRaises(model_spend.SpendControlError):
             model_spend.reserve(self.project, max_cost_cny=0.01, paper_id=None, paper_limit_cny=60, run_id="extra")
 
@@ -119,17 +120,40 @@ class ExactOwnerCeilingTests(unittest.TestCase):
         self.assertEqual((event["actor"], event["run_id"], event["authorization_note"]),
                          ("Owner", "run-123", "Approve 500 CNY."))
 
-    def test_old_grants_stay_exactly_300_before_and_after_amendment(self):
+    def test_total_configuration_is_not_restricted_to_300_tranches(self):
         model_spend.grant(self.project, new_ceiling_cny=600, actor="Owner", run_id="old-second")
         self.assertEqual(model_spend.read(self.project)["authorized_ceiling_cny"], 600)
         self.amend(500)
-        for wrong in (600, 700, 900):
-            with self.subTest(wrong=wrong), self.assertRaises(model_spend.SpendControlError):
-                model_spend.grant(self.project, new_ceiling_cny=wrong, actor="Owner", run_id="wrong")
-        model_spend.grant(self.project, new_ceiling_cny=800, actor="Owner", run_id="next-300")
+        model_spend.grant(self.project, new_ceiling_cny=725, actor="Owner", run_id="exact-total")
         result = model_spend.read(self.project, required=True)
-        self.assertEqual(result["authorized_ceiling_cny"], 800)
-        self.assertEqual([item["ceiling_cny"] for item in result["authorization_events"]], [300, 600, 500, 800])
+        self.assertEqual(result["authorized_ceiling_cny"], 725)
+        self.assertEqual([item["ceiling_cny"] for item in result["authorization_events"]], [300, 600, 500, 725])
+
+    def test_concurrent_reservations_cannot_overbook_the_total_or_lose_charges(self):
+        barrier = threading.Barrier(6)
+        accepted, rejected = [], []
+        def reserve(index):
+            barrier.wait()
+            try:
+                accepted.append(model_spend.reserve(self.project, max_cost_cny=100, paper_id="P01",
+                    paper_limit_cny=1, run_id=str(index)))
+            except model_spend.SpendControlError:
+                rejected.append(index)
+        threads = [threading.Thread(target=reserve, args=(index,)) for index in range(6)]
+        for thread in threads: thread.start()
+        for thread in threads: thread.join(15)
+        self.assertTrue(all(not thread.is_alive() for thread in threads))
+        self.assertEqual((len(accepted), len(rejected)), (3, 3))
+        state = model_spend.read(self.project)
+        self.assertEqual(set(accepted), set(state["reservations"]))
+        self.assertEqual(model_spend.reserved(state), 300)
+
+    def test_actual_cost_above_reservation_only_blocks_when_total_is_exhausted(self):
+        receipt = model_spend.reserve(self.project, max_cost_cny=1, paper_id="P01", paper_limit_cny=1, run_id="estimate")
+        model_spend.settle(self.project, receipt, actual_cost_cny=10)
+        model_spend.reserve(self.project, max_cost_cny=290, paper_id="P01", paper_limit_cny=1, run_id="remaining")
+        with self.assertRaises(model_spend.SpendControlError):
+            model_spend.reserve(self.project, max_cost_cny=0.01, paper_id=None, paper_limit_cny=1, run_id="exhausted")
 
     def test_nontranche_ceiling_needs_a_valid_complete_authorization_chain(self):
         self.amend()

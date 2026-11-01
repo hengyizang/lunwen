@@ -304,7 +304,7 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("scripts/literature_evidence.py", command)
         self.assertEqual(command[command.index("--provider") + 1], "openalex")
 
-    def test_data_quality_confirmation_is_named_and_argument_safe(self) -> None:
+    def test_data_quality_check_uses_machine_record_without_human_identity(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "dashboard-test").mkdir()
@@ -320,8 +320,17 @@ class DashboardTests(unittest.TestCase):
                     },
                 )
         self.assertEqual(project, "dashboard-test")
-        self.assertIn("confirm-data-quality", command)
-        self.assertIn("Researcher Name", command)
+        self.assertIn("scripts/automated_quality.py", command)
+        self.assertNotIn("Researcher Name", command)
+
+    def test_paper_topic_approval_passes_exact_paper_selector(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/"dashboard-test").mkdir()
+            with patch("scripts.dashboard.PROJECTS_ROOT",root), patch("scripts.dashboard.researchctl.load_state",return_value={"gate":"G2"}):
+                command,_,_=build_command("approve",{"project":"dashboard-test","actor":"Owner","paper":"P02","note":"Selected topic"})
+                self.assertEqual(command[command.index("--paper")+1],"P02")
+                with self.assertRaises(ValueError):
+                    build_command("approve",{"project":"dashboard-test","actor":"Owner","note":"Missing paper"})
 
     def test_project_slug_rejects_shell_metacharacters(self) -> None:
         with self.assertRaises(ValueError):

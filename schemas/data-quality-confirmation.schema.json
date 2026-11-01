@@ -11,7 +11,6 @@
     "confirmed_by",
     "confirmed_at",
     "data_quality_report_sha256",
-    "reviewed_warning_count",
     "statement"
   ],
   "properties": {
@@ -52,6 +51,37 @@
     "source_run_id": {
       "type": "string",
       "pattern": "^[0-9]+$"
+    },
+    "confirmation_kind": {
+      "const": "automated"
+    },
+    "unresolved_warning_count": {
+      "type": "integer",
+      "minimum": 0
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "confirmation_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "unresolved_warning_count"
+        ],
+        "not": {
+          "required": [
+            "reviewed_warning_count"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "reviewed_warning_count"
+        ]
+      }
+    }
+  ]
 }

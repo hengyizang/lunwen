@@ -57,7 +57,7 @@ def projection(project: Path, gate: str) -> dict:
         result["paper_map"] = {"papers": sorted(rows, key=lambda r: r["paper_id"]),
                                "pairwise_distinctness": sorted(mapping.get("pairwise_distinctness", []), key=lambda r: (r.get("paper_a", ""), r.get("paper_b", ""))),
                                "thesis_synthesis": mapping.get("thesis_synthesis")}
-        fields = ("paper_id", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension",
+        fields = ("paper_id", "working_title", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension",
                   "falsification_conditions", "dependencies", "independence", "target_jcr_quartile")
         result["paper_contracts"] = []
         for pid in sorted(expected):
@@ -143,6 +143,15 @@ def validate(project: Path, gate: str, paper_id: str | None = None) -> list[str]
             seal = read(target)
             if seal.get("gate") != prior_gate or seal.get("projection") != projection(project, prior_gate):
                 raise ValueError("approved " + prior_gate + " doctoral question or paper mapping changed; request an explicit human scope amendment")
+            if prior_gate == "G2":
+                approval = seal.get("approval", {})
+                votes = approval.get("paper_topic_approvals")
+                expected = {f"P{n:02d}" for n in range(1, state["paper_count"] + 1)}
+                if (not isinstance(votes, list) or len(votes) != len(expected)
+                    or any(not isinstance(v, dict) or not isinstance(v.get("actor"), str) or not v["actor"].strip()
+                           or v.get("artifact_sha256") != approval.get("artifact_sha256") for v in votes)
+                    or {v.get("paper_id") for v in votes} != expected):
+                    raise ValueError("G2 requires an individual human topic approval for every paper")
             if not any(a.get("gate") == prior_gate and a.get("artifact_sha256") == seal.get("approval", {}).get("artifact_sha256")
                        and a.get("actor") == seal.get("actor") for a in state.get("approvals", [])):
                 raise ValueError("scope seal lacks its named original human approval")
@@ -157,6 +166,15 @@ def seal_approval(project: Path, gate: str, actor: str, approval: dict) -> None:
     _cloud()
     if not actor.strip() or approval.get("actor") != actor or approval.get("gate") != gate or not approval.get("artifact_sha256"):
         raise ValueError("scope sealing requires the actual named human gate approval")
+    if gate == "G2":
+        state = read(project / "state/run.json")
+        expected = {f"P{n:02d}" for n in range(1, state["paper_count"] + 1)}
+        votes = approval.get("paper_topic_approvals")
+        if (not isinstance(votes, list) or len(votes) != len(expected)
+            or any(not isinstance(v, dict) or not isinstance(v.get("actor"), str) or not v["actor"].strip()
+                   or v.get("artifact_sha256") != approval.get("artifact_sha256") for v in votes)
+            or {v.get("paper_id") for v in votes} != expected):
+            raise ValueError("G2 requires an individual human topic approval for every paper")
     target = path_in(project, f"{PREFIX}/{gate}.json", exists=False)
     pending = _pending(project)
     current = projection(project, gate)

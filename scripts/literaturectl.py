@@ -379,11 +379,25 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
         return resolve(project, operation["url"])
     if action == "literature_register":
         from scripts.literature_registration import register
-        return register(project, operation["candidate_id"],
+        result = register(project, operation["candidate_id"],
             expected_leads_sha256=operation["expected_leads_sha256"],
             paper_id=operation.get("paper_id"), acquisition_receipt=operation.get("acquisition_receipt"),
             manifest=operation.get("manifest"), reader=operation.get("reader"),
             config_path=operation.get("config", "program/literature-workbench.json"))
+        if result.get("attachment_status") == "authorized_full_text_attached_semantics_pending":
+            from scripts.source_scope import record_registered
+            scope = record_registered(project, result["paper_id"])
+            result["supplied_scope_record"] = {"path": scope.relative_to(project).as_posix(), "sha256": sha(scope)}
+            result["completeness_verified"] = False
+        return result
+    if action == "literature_screening_prepare":
+        from scripts.literature_model_screening import prepare_record
+        return prepare_record(project, operation["receipt_id"], operation["question"])
+    if action == "literature_source_scope":
+        from scripts.source_scope import record_registered
+        scope = record_registered(project, operation["paper_id"])
+        return {"path": scope.relative_to(project).as_posix(), "sha256": sha(scope),
+                "scope": "full_text_supplied", "completeness_verified": False, "paid_model_calls": 0}
     if action == "literature_figures":
         from scripts.literature_assets import extract
         approved_pdf(project, operation["pdf"], operation["manifest"])

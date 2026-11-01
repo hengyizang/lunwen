@@ -89,6 +89,8 @@ class ProductionCycleTests(unittest.TestCase):
         gate = "G1" if stage == "topic-intelligence" else "G4"
         state = {"stage": stage, "gate": gate, "status": "awaiting_work", "paper_count": 1, "active_paper": "P01"}
         (self.project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
+        (self.project / "intake").mkdir(exist_ok=True)
+        (self.project / "intake/constraints.json").write_text(json.dumps({"research_goal":"Synthetic route fixture; no research was conducted."}), encoding="utf-8")
         if gate == "G4":
             from tests.review_scope_fixtures import prepare_scope
             prepare_scope(self.project, state)
@@ -111,6 +113,7 @@ class ProductionCycleTests(unittest.TestCase):
         self.assertFalse(runtime.call_args_list[2].kwargs["use_cache"])
         self.assertFalse(runtime.call_args_list[4].kwargs["use_cache"])
         self.assertEqual(manifest["output_policy"]["persistent_writer_family"], "openai")
+
         self.assertEqual(manifest["provider_audit"]["critic_1"]["requested_model"], "claude-sonnet-5-5")
         self.assertEqual(manifest["provider_audit"]["critic_final"]["requested_model"], "claude-opus-5-5")
         self.assertEqual(len(manifest["cost_controls"]["route_preflight"]), 3)
@@ -125,6 +128,25 @@ class ProductionCycleTests(unittest.TestCase):
         self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], 0.005)
         self.assertEqual(model_spend.read(self.project)["reservations"], {})
         self.assertEqual(json.loads((self.project / "state/run.json").read_text())["status"], "awaiting_work")
+
+    def test_failure_controller_runs_only_after_current_independent_audits(self):
+        from scripts import primary_recovery, review_receipts
+
+        def withdraw(project, *, run_id):
+            self.assertEqual(self.index, 5)
+            self.assertEqual(review_receipts.validate_gate(project, "G4"), [])
+            pointer = json.loads((project/"state/review-receipts/G4/latest.json").read_text(encoding="utf-8"))
+            final = json.loads((project/pointer["path"]).read_text(encoding="utf-8"))
+            self.assertEqual(final["run_id"], run_id)
+            return {"retired": True, "status": "retired", "paid_calls": 0}
+
+        with patch.object(ai_providers, "call", side_effect=self.transport), patch.object(
+            primary_recovery, "automatic_retirement", side_effect=withdraw
+        ) as controller:
+            manifest = self.run_cycle()
+        controller.assert_called_once()
+        self.assertTrue(manifest["primary_recovery"]["retired"])
+        self.assertIn("unchanged cumulative budget", manifest["next_action"])
 
     def test_core_stage_keeps_opus_and_astra_across_all_five_roles(self):
         with patch.object(ai_providers, "call", side_effect=self.transport) as post:

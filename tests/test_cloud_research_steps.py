@@ -19,7 +19,7 @@ class ControlledResearchTests(unittest.TestCase):
             payload=b'a,b\n1,2\n';manifest['download'].update(sha256=hashlib.sha256(payload).hexdigest(),expected_bytes=len(payload))
             steps.write(path,manifest)
             with patch.object(steps.dataset_fetch,'download_dataset') as fetch:
-                self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_review')
+                self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_evidence')
                 fetch.assert_not_called()
             steps.authorize_data(project,'data/manifests/example.json',cp.sha(path),'Fixture reviewer','123')
             def download(_manifest,destination,*args):
@@ -33,7 +33,7 @@ class ControlledResearchTests(unittest.TestCase):
                 (project/first['acquired'][0]['path']).unlink();steps.acquire_data(project)
                 self.assertEqual(fetch.call_count,2)
             path.write_text(path.read_text()+'\n')
-            self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_review')
+            self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_evidence')
 
     def test_literature_failure_does_not_suppress_other_databases_or_repeat_failed_first_six(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -138,7 +138,7 @@ class CloudCleanupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project = self.project(directory)
             source = project / "papers/P01/manuscript/main.txt"
-            source.write_text("Ordinary\u200b prose.")
+            source.write_text("Ordinary\u200b prose.", encoding="utf-8")
             report = self.build(project, source)
             receipt = self.receipt_path(project, report)
             relative = receipt.relative_to(project).as_posix()
@@ -163,7 +163,7 @@ class CloudCleanupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project = self.project(directory)
             source = project / "papers/P01/manuscript/main.txt"
-            source.write_text("Ordinary\u200b prose.")
+            source.write_text("Ordinary\u200b prose.", encoding="utf-8")
             output_provenance.record_model_writes(project, [source], family="anthropic", provider="synthetic-test",
                                                  model="test-model", role="test-source", run_id="original")
             report = self.build(project, source)
@@ -177,7 +177,7 @@ class CloudCleanupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project = self.project(directory)
             source = project / "papers/P01/manuscript/main.txt"
-            source.write_text("Ordinary\u200b prose.")
+            source.write_text("Ordinary\u200b prose.", encoding="utf-8")
             original_process = cleanup._process
             def changed_during_processing(payload, suffix):
                 result = original_process(payload, suffix)

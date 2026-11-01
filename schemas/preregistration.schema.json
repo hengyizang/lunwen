@@ -67,7 +67,7 @@
       "minLength": 1
     },
     "human_confirmation": {
-      "const": true
+      "type": "boolean"
     },
     "cloud_review_sha256": {
       "type": "string",
@@ -76,6 +76,32 @@
     "source_run_id": {
       "type": "string",
       "pattern": "^[0-9]+$"
+    },
+    "confirmation_kind": {
+      "const": "automated"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "confirmation_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "human_confirmation": {
+            "const": false
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "human_confirmation": {
+            "const": true
+          }
+        }
+      }
+    }
+  ]
 }

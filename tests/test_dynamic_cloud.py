@@ -34,7 +34,7 @@ class DynamicCloudProfileTests(unittest.TestCase):
             stack.enter_context(patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}))
             stack.enter_context(patch.object(cloud_job, "ROOT", self.root))
             stack.enter_context(patch.object(cloud_progress, "pause_reason", return_value=None))
-            stack.enter_context(patch.object(cloud_job.model_spend, "read", return_value={"authorized_ceiling_cny": 300}))
+            stack.enter_context(patch.object(cloud_job.model_spend, "read", return_value={"authorized_ceiling_cny": 300, "spent_cny": 0, "reservations": {}}))
             stack.enter_context(patch.object(cloud_job.cloud_continuation, "configuration_errors", return_value=[]))
             stack.enter_context(patch.object(cloud_job.researchctl, "load_state", return_value={
                 "stage": "experiment-execution", "gate": "G4", "status": "awaiting_work"}))
@@ -121,7 +121,8 @@ class DynamicCloudProfileTests(unittest.TestCase):
     def test_set_profile_cloud_request_is_nonpaid_strict_and_stage_bound(self):
         job = request("set_routing_profile", stage="experiment-execution", task_profile=ROUTINE)
         self.assertEqual(cloud_job.validate_request(job), job)
-        for changes in ({"allow_paid": True}, {"task_profile": None}, {"stage": []},
+        self.assertEqual(cloud_job.validate_request({**job,"allow_paid":True})["action"],job["action"])
+        for changes in ({"task_profile": None}, {"stage": []},
                         {"expected_profile_sha256": "x"}, {"model": "cheapest"}, {"budget_cny": 300}):
             with self.subTest(changes=changes), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request({**job, **changes})
@@ -133,7 +134,8 @@ class DynamicCloudProfileTests(unittest.TestCase):
                       profile_file=profile_file, expected_profile_sha256="a" * 64,
                       stage="experiment-execution", role="persistent-writer")
         self.assertEqual(cloud_job.validate_request(job), job)
-        for changes in ({"allow_paid": True}, {"provider": "unapproved"}, {"model": "other"},
+        self.assertEqual(cloud_job.validate_request({**job,"allow_paid":True})["action"],job["action"])
+        for changes in ({"provider": "unapproved"}, {"model": "other"},
                         {"budget_cny": 300}, {"profile_file": "../private.json"},
                         {"profile_file": "state/run.json"}, {"candidate_id": "x;cmd"},
                         {"expected_profile_sha256": "b" * 63}, {"role": "approve"}):

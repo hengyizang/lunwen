@@ -27,6 +27,9 @@ DIMENSIONS = {
 class QualityGateError(RuntimeError):
     pass
 
+def _nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
 def _score(value: Any, field: str, errors: list[str]) -> float | None:
     if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0 <= value <= 10:
         errors.append(f"{field} must be a number from 0 to 10")
@@ -55,9 +58,9 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
         for index, item in enumerate(evidence, 1):
             if not isinstance(item, dict): errors.append(f"evidence[{index}] must be an object"); continue
             for field in ("id", "source", "claim_supported", "source_date"):
-                if not str(item.get(field, "")).strip(): errors.append(f"evidence[{index}] needs {field}")
+                if not _nonempty_string(item.get(field)): errors.append(f"evidence[{index}] needs {field}")
     for field in ("novelty_claim", "feasibility_claim", "scientific_contribution"):
-        if not str(report.get(field, "")).strip(): errors.append(f"{field} is required")
+        if not _nonempty_string(report.get(field)): errors.append(f"{field} is required")
     if report.get("novelty_basis") not in {"comparative_primary_literature", "comparative_literature_and_patents"}:
         errors.append("novelty_basis must be comparative_primary_literature or comparative_literature_and_patents")
     if report.get("novelty_is_absence_only") is not False: errors.append("novelty_is_absence_only must be false")
@@ -66,17 +69,17 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
     else:
         for field, minimum in (("closest_prior_work_ids", 3), ("adjacent_fields_checked", 3), ("non_novel_elements", 1), ("differentiating_claims", 1)):
             value = originality.get(field)
-            if not isinstance(value, list) or len(value) < minimum or any(not str(item).strip() for item in value):
+            if not isinstance(value, list) or len(value) < minimum or any(not _nonempty_string(item) for item in value):
                 errors.append(f"originality_assessment.{field} needs at least {minimum} non-empty item(s)")
         if originality.get("counterevidence_considered") is not True: errors.append("originality_assessment.counterevidence_considered must be true")
-        if not str(originality.get("residual_risk", "")).strip(): errors.append("originality_assessment.residual_risk is required")
+        if not _nonempty_string(originality.get("residual_risk")): errors.append("originality_assessment.residual_risk is required")
     doctoral = report.get("doctoral_readiness")
     if not isinstance(doctoral, dict): errors.append("doctoral_readiness object is required")
     else:
         for field in ("unifying_thesis", "original_knowledge_contribution", "synthesis_beyond_individual_papers", "methodological_progression", "scope_boundaries"):
-            if not str(doctoral.get(field, "")).strip(): errors.append(f"doctoral_readiness.{field} is required")
+            if not _nonempty_string(doctoral.get(field)): errors.append(f"doctoral_readiness.{field} is required")
         challenges = doctoral.get("examiner_challenges")
-        if not isinstance(challenges, list) or len(challenges) < 3 or any(not str(item).strip() for item in challenges):
+        if not isinstance(challenges, list) or len(challenges) < 3 or any(not _nonempty_string(item) for item in challenges):
             errors.append("doctoral_readiness.examiner_challenges needs at least 3 non-empty items")
     venue = report.get("venue_readiness")
     if not isinstance(venue, dict): errors.append("venue_readiness object is required")
@@ -99,7 +102,7 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
             if candidate.get("indexing") not in {"SCIE", "SCI"}: errors.append(f"candidate venue {index} must be SCI/SCIE")
             if not str(candidate.get("source_url", "")).startswith("https://"): errors.append(f"candidate venue {index} needs an HTTPS primary source")
             for field in ("name", "category", "scope_fit", "article_type"):
-                if not str(candidate.get(field, "")).strip(): errors.append(f"candidate venue {index} needs {field}")
+                if not _nonempty_string(candidate.get(field)): errors.append(f"candidate venue {index} needs {field}")
             year = candidate.get("jcr_year")
             if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}: errors.append(f"candidate venue {index} needs the current or immediately previous JCR year")
     blockers = report.get("blockers")

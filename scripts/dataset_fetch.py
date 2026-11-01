@@ -143,6 +143,22 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def license_errors(manifest: dict[str, Any], *, manifest_path: Path | None = None,
+                   project: Path | None = None) -> list[str]:
+    """Accept legacy human decisions or protected automated source evidence."""
+    license_value = manifest.get("license")
+    if isinstance(license_value, dict) and license_value.get("confirmed_by_human") is True:
+        return []
+    if project is None and manifest_path is not None:
+        manifest_path = manifest_path.resolve()
+        if manifest_path.parent.name == "manifests" and manifest_path.parent.parent.name == "data":
+            project = manifest_path.parents[2]
+    if project is None:
+        return ["source-bound data-rights evidence is required"]
+    from scripts.data_rights import verify
+    return verify(project, manifest)
+
+
 def download_dataset(
     manifest_path: Path,
     destination: Path,
@@ -157,11 +173,11 @@ def download_dataset(
     errors = validate_manifest(manifest)
     if errors:
         raise DatasetError("; ".join(errors))
-    license_value = manifest["license"]
-    if not accept_license or license_value.get("confirmed_by_human") is not True:
-        raise DatasetError(
-            "Human license confirmation is required in the manifest and via --accept-license"
-        )
+    issues = license_errors(manifest, manifest_path=manifest_path)
+    if issues:
+        raise DatasetError("; ".join(issues))
+    if manifest["license"].get("confirmed_by_human") is True and not accept_license:
+        raise DatasetError("Existing human license decisions require --accept-license; automatic rights evidence requires no human confirmation")
 
     url = manifest["download"]["url"]
     try:

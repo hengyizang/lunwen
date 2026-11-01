@@ -153,7 +153,7 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
                 timeout_seconds=10,
             )
             self.assertEqual(result["status"], "succeeded")
-            self.assertEqual(result["stdout_bytes"], b"adapter-smoke\n")
+        self.assertEqual(result["stdout_bytes"], ("adapter-smoke" + os.linesep).encode())
 
 
 if __name__ == "__main__":

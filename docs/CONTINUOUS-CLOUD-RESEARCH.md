@@ -8,15 +8,19 @@ review time each week. For cloud-only intake use `human_review_mode: on_request`
 `weekly_hours: null` and `system_execution_hours_per_day: 24`; record actual human
 hours only when the researcher supplies them.
 
-## Standing confirmation and scientific gates
+## Standing execution authority and topic decisions
 
 The protected `state/continuation.json` records the named owner, the original
-confirmation time and words, the exact intake SHA-256 and the actual G0 approval
-artifact SHA-256. It cannot grant a spending tranche or approve G1–G5. A changed
-intake, a missing prior approval, a complete current-stage dossier or a stage
-awaiting human approval stops model work. Present that dossier to the owner and
-use the separate human control plane to record their decision. Automatic continuation never invokes `ready`, `approve`, `advance` or submission.
-Explicit owner decisions are recorded through [cloud human controls](CLOUD-HUMAN-CONTROLS.md).
+confirmation time and words, the exact intake SHA-256 and the actual G0 decision
+artifact SHA-256. G0 may be a deterministic decision. This execution authority
+cannot grant a spending tranche or supply a human topic decision. A changed
+intake, missing prior decision or failed evidence check stops
+dependent work. The serialized controller invokes `ready` and `advance` after
+successful checks. It stops for the doctoral topic at G1 and each paper topic at
+G2; it never invokes human `approve` or submission. Old non-topic stages waiting
+for approval are rechecked and either completed automatically or reopened for
+machine work with a recorded reason.
+Actual human topic decisions use [cloud topic controls](CLOUD-HUMAN-CONTROLS.md).
 
 One allowed cycle uses Claude for read-only planning and independent criticism,
 and the configured OpenAI model for persistent authorship. All existing evidence,
@@ -54,24 +58,25 @@ followup jobs explicitly select continuation. See [gateway startup](GATEWAY-STAR
 
 ## Spending and pauses
 
-The confirmed first tranche is cumulative CNY 300. Calls inside the unused
-approved amount need no separate approval. At 300, 600, 900 and subsequent
-boundaries, obtain the next explicit CNY 300 increment. Per-paper warning and
-hard limits remain 45 and 60 CNY. Call reservations and settlement use the same
-ledger as manual cycles. Missing authority, a hard limit or an unresolved charge
-blocks a new paid call. PaperQA2 and ToolUniverse actions whose external charges
-cannot be counted in this ledger remain paused.
+The configured cumulative project total is the only model spending limit;
+the default is CNY 300. There is no per-paper cap, paid opt-in, fixed increment
+or separate billing approval. All attempts reserve and account their cost in
+the same ledger. Verified actual fees are used when available; otherwise a
+clearly labeled conservative upper estimate counts against the total. Pending
+bounded reservations leave the remaining total usable. PaperQA2 and ToolUniverse
+need a calculable external cost or upper bound that can enter that total.
+See [the current cost policy](TOTAL-COST-POLICY.md).
 
-A failed cycle pauses further automatic model work until its cause and any
-unresolved provider bill are inspected. After the owner-authorized control plane
-repairs the fault, it can reset the protected failed-cycle checkpoint and resume.
-The controller does not blindly retry a failed paid request. Configuration and
-gate waits remain visible and are rechecked by the recovery schedule.
+A failed scientific or execution check remains visible for repair. A pending
+provider bill is not an independent approval gate when its upper cost is already
+accounted. After the controller repairs an actual fault, it can reset the failed
+checkpoint and resume within the unchanged total. Configuration and gate waits
+remain visible and are rechecked by the recovery schedule.
 
 ## Completion
 
 The schedule stops only when every expected paper has `submission_ready` status,
-its own named human G5 approval and a SHA-256 matching the current approved paper
+its own recorded G5 machine decision and a SHA-256 matching the current checked paper
 files. A status label alone is insufficient. On completion the workflow disables
 its own future schedule. Publisher submission remains a separate human action.
 
@@ -91,6 +96,7 @@ An owner may request an immediate recheck using only this issue body:
 ```
 ````
 
-Use the title prefix `[research-cloud]`. `allow_paid: true` marks a potentially
-billable cycle; the bound policy and cumulative ledger determine whether a call
-is actually authorized. Never put a key in an issue, commit, artifact or chat.
+Use the title prefix `[research-cloud]`. `allow_paid` is an optional legacy field,
+not a payment approval. The requested operation and remaining cumulative total
+determine whether work can proceed. Never put a key in an issue, commit, artifact
+or chat.

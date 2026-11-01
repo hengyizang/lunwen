@@ -465,20 +465,22 @@ class RelayGuardTests(unittest.TestCase):
             self.assertIsNone(self.active()["active"])
             self.assertEqual(self.active()["events"][-2]["status"],"owner_settled_active")
 
-    def test_real_production_runtime_catalog_pass_cannot_bypass_historical_unknown_hold(self):
+    def test_historical_shared_hold_does_not_add_a_project_payment_gate(self):
         provider="cheapai-gpt-pro";key=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
         self.historical(provider)
         with tempfile.TemporaryDirectory() as temporary,patch.dict(os.environ,{key:"synthetic-production-key","DR_OS_ROUTING_PROFILE":"production","DR_OS_REQUIRE_MODEL_AUTH":"1","DR_OS_REQUIRE_REMOTE_RESERVATION":"1"}):
             project=Path(temporary)/"production-fixture";write(project/"state/run.json",{"active_paper":"P01"})
             model_spend.write(project,model_spend.initial());model_spend.grant(project,new_ceiling_cny=300,actor="Synthetic Owner",run_id="fixture-only")
-            with patch.object(guard,"CloudStore",return_value=self.store),patch("scripts.production_readiness.catalog",return_value={"gpt-6.1-sol"}) as catalog, \
-                    patch("scripts.cloud_checkpoint.sync_billing"),patch.object(relay_billing,"read_meter") as meter,patch.object(ai_providers,"call") as post:
-                with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
-                    model_runtime.call(project,run_id="fixture",stage="intake",role="persistent-writer",provider="openai",prompt="Synthetic work only",max_output_tokens=100)
-                catalog.assert_called_once();meter.assert_not_called();post.assert_not_called()
+            def reply(provider,prompt,**kwargs):
+                return ai_providers.ModelResult(provider,kwargs["model"],"Synthetic reply",{"input_tokens":10,"output_tokens":5},
+                    "fixture-request",kwargs["model"],completion_status="completed")
+            with patch.object(guard,"CloudStore",return_value=self.store) as shared,patch("scripts.production_readiness.catalog") as catalog, \
+                    patch("scripts.cloud_checkpoint.sync_billing"),patch.object(relay_billing,"read_meter",side_effect=relay_billing.BillingReconciliationError("Synthetic meter unavailable")) as meter,patch.object(ai_providers,"call",side_effect=reply) as post:
+                model_runtime.call(project,run_id="fixture",stage="intake",role="persistent-writer",provider="openai",prompt="Synthetic work only",max_output_tokens=100)
+                shared.assert_not_called();catalog.assert_not_called();meter.assert_called_once();post.assert_called_once()
             state=model_spend.read(project)
-            self.assertEqual(state["spent_cny"],0);self.assertEqual(state["reservations"],{})
-            self.assertEqual(len(state["unsent_events"]),1)
+            self.assertGreater(state["spent_cny"],0);self.assertEqual(state["reservations"],{})
+            self.assertEqual(model_runtime.ledger_entries(project)[0]["cost_status"],"estimated_upper_bound")
 
 
 if __name__=="__main__":unittest.main()

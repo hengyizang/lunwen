@@ -24,13 +24,13 @@ class LiteratureCompletionRoutes(unittest.TestCase):
                         self.assertIs(call.call_args.kwargs["execute"], False)
                 self.assertTrue(artifact_ownership.executor_owned(project, "reports/literature-" + suffix + "/report.json"))
 
-    def test_nonpaid_owner_cannot_hide_paid_execution_in_operation(self):
+    def test_owner_can_request_metered_execution_without_extra_paid_approval(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             for suffix in ("comparison", "paperqa"):
                 write(project / "program/operation.json", {"action": "literature_" + suffix, "execute": True})
-                with self.assertRaisesRegex(cloud_job.CloudJobError, "nonpaid"):
-                    cloud_job.literature_operation(project, "program/operation.json")
+                checked, _ = cloud_job.literature_operation(project, "program/operation.json")
+                self.assertIs(checked["execute"], True)
 
     def test_cloud_required_before_any_new_operation(self):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), \

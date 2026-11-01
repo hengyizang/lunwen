@@ -23,7 +23,7 @@ class ScientificScopeTests(unittest.TestCase):
     def test_all_six_papers_share_current_approved_scope_and_progress_can_update(self):
         with tempfile.TemporaryDirectory() as temp:
             project, _ = self.fixture(Path(temp))
-            for relative in ("program/core-thesis.json", "program/extension-thesis.json", "papers/P01/paper-contract.json"):
+            for relative in ("program/core-thesis.json", "program/extension-thesis.json"):
                 value = read(project / relative)
                 value.update(status="writing", working_title="New precise writing title")
                 write(project / relative, value)
@@ -32,7 +32,7 @@ class ScientificScopeTests(unittest.TestCase):
 
     def test_drift_in_doctoral_question_extension_or_other_paper_mapping_blocks_later_work(self):
         for relative, field in (("program/core-thesis.json", "doctoral_question"), ("program/extension-thesis.json", "distinct_contribution"),
-                                ("papers/P06/paper-contract.json", "research_question")):
+                                ("papers/P06/paper-contract.json", "research_question"), ("papers/P06/paper-contract.json", "working_title")):
             with self.subTest(relative=relative), tempfile.TemporaryDirectory() as temp:
                 project, _ = self.fixture(Path(temp))
                 value = read(project / relative)
@@ -76,7 +76,8 @@ class ScientificScopeTests(unittest.TestCase):
             current["approvals"].append(approval)
             write(project / "state/run.json", current)
             self.assertTrue(scientific_scope.validate(project, "G3"))
-            second = {"gate": "G2", "actor": "Named human", "artifact_sha256": "c" * 64}
+            second = {"gate": "G2", "actor": "Named human", "artifact_sha256": "c" * 64,
+                      "paper_topic_approvals": [{"paper_id": f"P{n:02d}", "actor": "Named human", "artifact_sha256": "c" * 64} for n in range(1, 7)]}
             scientific_scope.seal_approval(project, "G2", "Named human", second)
             current["approved_gates"].append("G2")
             current["approvals"].append(second)

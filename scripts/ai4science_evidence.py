@@ -184,15 +184,17 @@ def safe_environment(project: Path, tool: str) -> tuple[dict[str, str], list[str
     return environment, present_secrets
 
 
-def _read_capped(path: Path, max_bytes: int) -> tuple[bytes, bool, str]:
+def _read_capped(handle, max_bytes: int) -> tuple[bytes, bool, str]:
     digest = hashlib.sha256()
     captured = bytearray()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-            if len(captured) < max_bytes:
-                captured.extend(chunk[: max_bytes - len(captured)])
-    return bytes(captured), path.stat().st_size > max_bytes, digest.hexdigest()
+    size = 0
+    handle.seek(0)
+    for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+        digest.update(chunk)
+        size += len(chunk)
+        if len(captured) < max_bytes:
+            captured.extend(chunk[: max_bytes - len(captured)])
+    return bytes(captured), size > max_bytes, digest.hexdigest()
 
 
 def run_process(
@@ -244,10 +246,10 @@ def run_process(
         stdout.flush()
         stderr.flush()
         stdout_bytes, stdout_truncated, stdout_full_sha256 = _read_capped(
-            Path(stdout.name), max_capture_bytes
+            stdout, max_capture_bytes
         )
         stderr_bytes, stderr_truncated, stderr_full_sha256 = _read_capped(
-            Path(stderr.name), max_capture_bytes
+            stderr, max_capture_bytes
         )
     if timed_out:
         status = "timed_out"

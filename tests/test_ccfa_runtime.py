@@ -39,6 +39,22 @@ def cloud():
 
 
 class CCFARuntimeTests(unittest.TestCase):
+    def test_source_normalizes_checkout_newlines_without_hiding_content_changes(self):
+        relative = "ccf-common/SKILL.md"
+        content = "# Source\n\nPinned text with a final newline.\n"
+        expected = hashlib.sha256(runtime.canonical(content.encode("utf-8"))).hexdigest()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / runtime.VENDOR / relative
+            target.parent.mkdir(parents=True)
+            with patch.object(runtime, "lock", return_value={"files": [{"path": relative, "canonical_lf_sha256": expected}]}):
+                for data in (content.encode("utf-8"), content.replace("\n", "\r\n").encode("utf-8")):
+                    target.write_bytes(data)
+                    self.assertEqual(runtime.source(relative, root), content)
+                target.write_bytes(content.replace("Pinned", "Changed").encode("utf-8"))
+                with self.assertRaisesRegex(ValueError, "stale or modified"):
+                    runtime.source(relative, root)
+
     def project(self, root):
         project = root / "project"
         put(project / "state/run.json", {"stage": "topic-intelligence", "gate": "G1", "status": "in_progress", "active_paper": "P01"})

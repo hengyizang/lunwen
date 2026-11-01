@@ -118,12 +118,15 @@ All research and submission-bound artifacts must be written in English.</textare
 
             <div class="human-gate">
               <div>
-                <p class="eyebrow">HUMAN GATE</p>
-                <h3>模型不能替你批准</h3>
+                <p class="eyebrow">TOPIC SELECTION</p>
+                <h3>仅博士课题和逐篇论文选题由您确认</h3>
               </div>
               <label class="field">
                 <span>审批人</span>
                 <input id="approvalActor" value="Hengyi Zang">
+              </label>
+              <label class="field" id="topicPaperField" hidden>
+                <span>本次确认的论文选题</span><select id="topicPaper"></select>
               </label>
               <label class="field">
                 <span>检查说明 / 修改原因</span>
@@ -131,8 +134,8 @@ All research and submission-bound artifacts must be written in English.</textare
               </label>
               <div class="button-row wrap">
                 <button id="gateCheck" class="button secondary">检查闸门</button>
-                <button id="markReady" class="button secondary">锁定并等待审批</button>
-                <button id="approveGate" class="button success">人工批准</button>
+                <button id="markReady" class="button secondary">核验并锁定阶段</button>
+                <button id="approveGate" class="button success">确认选题</button>
                 <button id="advanceGate" class="button primary">进入下一阶段</button>
                 <button id="reopenGate" class="button danger-ghost">重新打开</button>
               </div>
@@ -219,8 +222,8 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                   </div>
                   <button id="runLiteratureSearch" class="button secondary">执行并保存检索证据</button>
                 </div>
-                <div class="tool-card">
-                  <h3>人工筛选检索结果</h3>
+                <div class="tool-card" hidden>
+                  <h3>旧版人工筛选入口</h3>
                   <p>从任务日志复制 receipt ID；纳入 ID 必须来自对应的规范化结果。每行一个 ID 或排除理由。</p>
                   <input id="literatureReceipt" placeholder="receipt ID">
                   <div class="two-columns">
@@ -353,8 +356,8 @@ industrial robot anomaly detection multivariate sensor data</textarea>
                 <button id="runExperiment" class="button secondary">执行实验</button>
               </div>
               <div class="tool-card">
-                <h3>人工确认复现证据</h3>
-                <p>模型完成两份复现报告后，选择论文。程序会先重算容差、运行状态、环境和文件哈希，再把你的姓名与两份报告哈希锁定。</p>
+                <h3>自动核验复现证据</h3>
+                <p>系统核对实际运行、容差、环境和文件哈希，并记录机器核验结果。</p>
                 <select id="reproductionPaper"><option>P01</option><option>P02</option><option>P03</option><option>P04</option><option>P05</option><option>P06</option></select>
                 <button id="confirmReproduction" class="button primary">核验并确认该论文</button>
               </div>

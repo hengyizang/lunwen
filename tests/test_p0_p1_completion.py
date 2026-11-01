@@ -59,7 +59,7 @@ class P0P1CompletionTests(unittest.TestCase):
                 self.assertEqual(value["project_resolution"], "automatic-single-project")
                 self.assertEqual(value["skill"], "continue")
                 self.assertTrue(value["must_stop"])
-                self.assertEqual(value["human_action"], "approve-or-reopen-gate")
+                self.assertEqual(value["human_action"], "approve-topic-or-revise")
                 self.assertFalse(value["paid_call_started"])
                 self.assertFalse(value["paid_call_authorized"])
 
@@ -67,7 +67,12 @@ class P0P1CompletionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             with patch.object(research_mcp, "ROOT", root):
-                self.assertTrue(context("开始研究")["initialization_required"])
+                initial = context("开始研究")
+                self.assertTrue(initial["initialization_required"])
+                self.assertFalse(initial["must_stop"])
+                explicit = context("开始研究", "new-study")
+                self.assertFalse(explicit["must_stop"])
+                self.assertIsNone(explicit["human_action"])
                 for slug in ("study-one", "study-two"):
                     state = root / "projects" / slug / "state"
                     state.mkdir(parents=True)
@@ -130,7 +135,7 @@ class P0P1CompletionTests(unittest.TestCase):
             self.assertEqual(report["engine"], "python-docx")
             self.assertTrue(output.is_file())
             paper = project / "papers" / "P01"
-            self.assertIn("named, completed visual", " ".join(validate_saved_report(paper)))
+            self.assertIn("automated visual", " ".join(validate_saved_report(paper)))
             approve_visual_review(project, paper, "Researcher")
             self.assertEqual(validate_saved_report(paper), [])
             source.write_text(source.read_text() + "\nA later unbuilt edit.\n")

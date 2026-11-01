@@ -6,6 +6,7 @@ from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from typing import Any,Iterable
 ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULTS_PATH=ROOT/"config/defaults.json"
+if __package__ in {None,""}:sys.path.insert(0,str(ROOT))
 STAGES=[{"name":"intake","gate":"G0"},{"name":"topic-intelligence","gate":"G1"},{"name":"paper-architecture","gate":"G2"},{"name":"experiment-design","gate":"G3"},{"name":"experiment-execution","gate":"G4"},{"name":"writing-and-review","gate":"G5"},{"name":"submission-ready","gate":None}]
 SLUG_RE=re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$"); PAPER_RE=re.compile(r"^P[0-9]{2}$")
 class ResearchCtlError(RuntimeError): pass
@@ -229,7 +230,8 @@ def gate_errors(slug,gate):
                 for issue in validate_manifest(d):errors.append(f"datasets.jsonl entry {i}: {issue}")
                 license_value=d.get("license") if isinstance(d.get("license"),dict) else {}
                 download_value=d.get("download") if isinstance(d.get("download"),dict) else {}
-                if license_value.get("confirmed_by_human") is not True:errors.append(f"datasets.jsonl entry {i}: license needs human confirmation")
+                from scripts.dataset_fetch import license_errors
+                errors.extend(f"datasets.jsonl entry {i}: {issue}" for issue in license_errors(d, project=project))
                 if download_value.get("sha256")=="pending":errors.append(f"datasets.jsonl entry {i}: SHA-256 remains pending")
         except ImportError as exc:errors.append(f"dataset validator unavailable: {exc}")
         plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
@@ -300,6 +302,10 @@ def gate_errors(slug,gate):
             if budget.get("status")!="ready_for_review":errors.append("experiments/budget.json status must be ready_for_review")
             ceiling=budget.get("hard_ceiling_usd")
             if not isinstance(ceiling,(int,float)) or isinstance(ceiling,bool) or ceiling<0:errors.append("experiments/budget.json needs non-negative hard_ceiling_usd")
+            if plan:
+                from scripts.experiment_runner import ExperimentError,compute_budget_authority
+                try:compute_budget_authority(project,budget,plan)
+                except ExperimentError as exc:errors.append("experiment compute authority: "+str(exc))
         try:
             from scripts.research_quality import ResearchQualityError,validate_g3_quality
             errors.extend(f"research quality: {x}" for x in validate_g3_quality(project))
@@ -418,7 +424,7 @@ def gate_errors(slug,gate):
             errors.extend(f"research support: {x}" for x in validate_support(project))
         if (project/"program/review-packets.json").exists():
             from scripts.review_packets import validate_gate_reviews
-            errors.extend(f"review packets: {x}" for x in validate_gate_reviews(project))
+            errors.extend(f"review packets: {x}" for x in validate_gate_reviews(project,pid))
         venue=load_nonempty_json(paper/"venue.json",errors)
         try:
             from scripts.journal_dossier import validate_saved_report as validate_dossier
@@ -449,16 +455,28 @@ def gate_errors(slug,gate):
             bibliography=paper/"manuscript"/"references.bib"
             manuscript=manuscripts[0] if manuscripts else None
             if not nonempty(bibliography) or citation.get("bibliography_sha256")!=file_sha256(bibliography):errors.append(f"{pid} citation audit is stale for references.bib")
+            elif bibliography.is_file():
+                from scripts.citation_audit import validate_provider_identities
+                errors.extend(f"{pid} citation identity evidence: {issue}" for issue in validate_provider_identities(bibliography,citation))
             if manuscript:
                 try:
                     from scripts.citation_audit import manuscript_digest
                     current_manuscript_digest=manuscript_digest(manuscript)
                 except (ImportError,ValueError) as exc:errors.append(f"{pid} citation manuscript digest failed: {exc}");current_manuscript_digest=None
                 if citation.get("manuscript_sha256")!=current_manuscript_digest:errors.append(f"{pid} citation audit is stale for the manuscript source tree")
+                if manuscript.suffix.lower()==".tex":
+                    from scripts.automated_visual_review import verify as verify_visual_review
+                    errors.extend(f"{pid}: {issue}" for issue in verify_visual_review(project,pid,f"papers/{pid}/manuscript/main.tex"))
                 usage=citation.get("citation_usage") if isinstance(citation.get("citation_usage"),dict) else {}
                 if manuscript.suffix.lower()==".docx":
-                    if usage.get("status")!="human_verified" or not isinstance(usage.get("verified_by"),str) or not usage["verified_by"].strip():errors.append(f"{pid} DOCX in-text citations need named human verification")
-                    else:require_recent_timestamp(usage,"verified_at",f"{pid} DOCX citation mapping",errors,180)
+                    if usage.get("status")!="checked_automatically" or usage.get("mapping_errors"):errors.append(f"{pid} DOCX in-text citation keys need a complete automatic bibliography mapping")
+                    try:
+                        from scripts.citation_audit import docx_citation_keys, parse_bibtex
+                        current_keys,mapping_errors=docx_citation_keys(manuscript)
+                        bib_keys={item["key"] for item in parse_bibtex(bibliography.read_text(encoding="utf-8"))}
+                        if mapping_errors or current_keys-bib_keys or sorted(current_keys)!=usage.get("cited_keys"):
+                            errors.append(f"{pid} DOCX citation mapping is incomplete or stale")
+                    except (OSError,ValueError,KeyError) as exc:errors.append(f"{pid} DOCX citation mapping failed: {exc}")
         compliance=load_nonempty_json(paper/"reviews"/"venue-compliance.json",errors)
         if compliance and compliance.get("status")!="pass":errors.append(f"{pid} venue compliance report must pass")
         if compliance:
@@ -566,7 +584,14 @@ def mark_ready(args):
     if gate is None:raise ResearchCtlError("Project is already submission-ready.")
     errors=gate_errors(args.project,gate)
     if errors:raise ResearchCtlError(f"{gate} cannot be marked ready: {len(errors)} requirement(s) remain")
-    state["status"]="awaiting_approval";state["ready_gate"]=gate;state["ready_artifact_sha256"]=artifact_hash(args.project,gate);state["history"].append({"at":now(),"event":"gate_marked_ready","gate":gate,"note":args.note,"artifact_sha256":state["ready_artifact_sha256"]});save_state(args.project,state);print(f"{gate} is awaiting explicit human approval.")
+    current_hash=artifact_hash(args.project,gate)
+    if gate=="G2":
+        state["paper_topic_approvals"]=[x for x in state.get("paper_topic_approvals",[]) if x.get("artifact_sha256")==current_hash]
+    state["status"]="awaiting_approval";state["ready_gate"]=gate;state["ready_artifact_sha256"]=current_hash;state["history"].append({"at":now(),"event":"gate_marked_ready","gate":gate,"note":args.note,"artifact_sha256":current_hash});save_state(args.project,state)
+    if gate in {"G1","G2"}:
+        print(f"{gate} is awaiting human topic approval.")
+    else:
+        _record_gate_decision(args.project,gate,"deterministic-control-plane",args.note,current_hash,"deterministic")
 def reopen(args):
     state=load_state(args.project);gate=state["gate"]
     if gate is None:raise ResearchCtlError("Submission-ready projects have no gate to reopen.")
@@ -580,19 +605,38 @@ def approve(args):
     if gate_errors(args.project,gate):raise ResearchCtlError("Gate artifacts or quality report changed and no longer pass checks.")
     current_hash=artifact_hash(args.project,gate)
     if state.get("ready_gate")!=gate or state.get("ready_artifact_sha256")!=current_hash:raise ResearchCtlError("Artifacts changed after ready; review them and run ready again before approval.")
-    if not args.actor.strip():raise ResearchCtlError("actor must identify the human approver")
-    approval={"gate":gate,"actor":args.actor.strip(),"at":now(),"note":args.note,"artifact_sha256":current_hash}
+    if gate not in {"G1","G2"}:raise ResearchCtlError("Only doctoral and paper topics require human approval.")
+    if not args.actor.strip() or args.actor.strip()=="deterministic-control-plane":raise ResearchCtlError("actor must identify the human approver")
+    if gate=="G2":
+        paper=getattr(args,"paper",None)
+        expected={f"P{n:02d}" for n in range(1,int(state["paper_count"])+1)}
+        if paper not in expected:raise ResearchCtlError("G2 requires --paper for a declared paper topic")
+        votes=[x for x in state.get("paper_topic_approvals",[]) if x.get("artifact_sha256")==current_hash and x.get("paper_id")!=paper]
+        votes.append({"paper_id":paper,"actor":args.actor.strip(),"at":now(),"artifact_sha256":current_hash,"note":args.note})
+        state["paper_topic_approvals"]=votes
+        state["history"].append({"at":now(),"event":"paper_topic_approved","paper_id":paper,"actor":args.actor.strip(),"artifact_sha256":current_hash})
+        save_state(args.project,state)
+        if {v["paper_id"] for v in votes}!=expected:
+            print(f"Recorded topic approval for {paper}; remaining paper topics require approval.");return
+    _record_gate_decision(args.project,gate,args.actor.strip(),args.note,current_hash,"human_topic")
+
+def _record_gate_decision(slug,gate,actor,note,current_hash,decision_type):
+    state=load_state(slug)
+    approval={"gate":gate,"actor":actor,"decision_type":decision_type,"at":now(),"note":note,"artifact_sha256":current_hash}
+    if gate=="G2":approval["paper_topic_approvals"]=list(state.get("paper_topic_approvals",[]))
     if gate=="G3":
-        p=project_dir(args.project);approval["experiment_plan_sha256"]=file_sha256(p/"experiments/plan.json");approval["experiment_budget_sha256"]=file_sha256(p/"experiments/budget.json")
+        p=project_dir(slug);approval["experiment_plan_sha256"]=file_sha256(p/"experiments/plan.json");approval["experiment_budget_sha256"]=file_sha256(p/"experiments/budget.json")
         approval["frozen_protocol_sha256"]={path.relative_to(p).as_posix():file_sha256(path) for path in sorted((p/"papers").glob("P[0-9][0-9]/preregistration.json"))}
+        from scripts.experiment_runner import compute_budget_authority
+        approval["compute_budget_authority"]=compute_budget_authority(p,read_json(p/"experiments/budget.json"),read_json(p/"experiments/plan.json"))
     key=gate
-    if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(args.project,state["active_paper"]);key=f"G5:{state['active_paper']}"
+    if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(slug,state["active_paper"]);key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)
     if key not in state["approved_gates"]:state["approved_gates"].append(key)
     if gate in {"G1","G2"}:
         from scripts.scientific_scope import seal_approval
-        seal_approval(project_dir(args.project),gate,args.actor.strip(),approval)
-    state["status"]="approved";state["history"].append({"at":now(),"event":"gate_approved","gate":gate});save_state(args.project,state);print(f"Recorded human approval for {gate}. Run advance to continue.")
+        seal_approval(project_dir(slug),gate,actor,approval)
+    state["status"]="approved";state["history"].append({"at":now(),"event":"gate_approved" if decision_type=="human_topic" else "gate_auto_decided","gate":gate,"decision_type":decision_type});save_state(slug,state);print(f"Recorded {decision_type} decision for {gate}. Run advance to continue.")
 def advance(args):
     state=load_state(args.project);gate=state["gate"]
     if gate is None:raise ResearchCtlError("Project is already at the final stage.")
@@ -600,6 +644,7 @@ def advance(args):
     if state["status"]!="approved" or key not in state["approved_gates"]:raise ResearchCtlError(f"{gate} has not been approved.")
     matching=next((x for x in reversed(state.get("approvals",[])) if x.get("gate")==gate and (gate!="G5" or x.get("paper_id")==state["active_paper"])),None)
     if not matching or matching.get("artifact_sha256")!=artifact_hash(args.project,gate):raise ResearchCtlError("Artifacts changed after approval; run gate-check, ready and approve again.")
+    if gate_errors(args.project,gate):raise ResearchCtlError("Gate checks no longer pass; review current evidence before advancing.")
     if gate=="G5":
         done=state["active_paper"];state.setdefault("paper_statuses",{})[done]="submission_ready";remaining=[f"P{n:02d}" for n in range(1,int(state["paper_count"])+1) if state["paper_statuses"].get(f"P{n:02d}")!="submission_ready"]
         if remaining:
@@ -620,7 +665,7 @@ def parser():
     p=cmd.add_parser("gate-check");p.add_argument("--project",required=True);p.add_argument("--gate");p.set_defaults(func=check_gate)
     p=cmd.add_parser("ready");p.add_argument("--project",required=True);p.add_argument("--note",default="");p.set_defaults(func=mark_ready)
     p=cmd.add_parser("reopen");p.add_argument("--project",required=True);p.add_argument("--note",required=True);p.set_defaults(func=reopen)
-    p=cmd.add_parser("approve");p.add_argument("--project",required=True);p.add_argument("--gate",required=True);p.add_argument("--actor",required=True);p.add_argument("--note",default="");p.set_defaults(func=approve)
+    p=cmd.add_parser("approve");p.add_argument("--project",required=True);p.add_argument("--gate",required=True);p.add_argument("--actor",required=True);p.add_argument("--paper",default=None);p.add_argument("--note",default="");p.set_defaults(func=approve)
     p=cmd.add_parser("advance");p.add_argument("--project",required=True);p.set_defaults(func=advance)
     p=cmd.add_parser("set-venue");p.add_argument("--project",required=True);p.add_argument("--paper",required=True);p.add_argument("--venue",required=True);p.set_defaults(func=set_venue)
     p=cmd.add_parser("stages");p.set_defaults(func=list_stages);return root

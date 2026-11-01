@@ -79,7 +79,7 @@ def build(project:Path,source:Path,metadata_path:Path,output:Path,reference_doc:
         engine="pandoc"
     else:warnings.extend(_python_docx(source,metadata,output,paper))
     if not output.is_file() or output.stat().st_size<1000:raise ValueError("DOCX build did not produce a valid-sized file")
-    report={"schema_version":"1.0","created_at":now(),"engine":engine,"source":{"path":source.relative_to(project).as_posix(),"sha256":sha256_file(source),"origin":output_provenance.current_origin(project,source)},"metadata":{"path":metadata_path.relative_to(project).as_posix(),"sha256":sha256_file(metadata_path),"origin":output_provenance.current_origin(project,metadata_path)},"output":{"path":output.relative_to(project).as_posix(),"sha256":sha256_file(output),"size_bytes":output.stat().st_size},"warnings":warnings,"visual_human_review_required":True,"visual_review":{"status":"pending","reviewed_by":None,"reviewed_at":None},"content_origin":"deterministic conversion of recorded English source"}
+    report={"schema_version":"1.0","created_at":now(),"engine":engine,"source":{"path":source.relative_to(project).as_posix(),"sha256":sha256_file(source),"origin":output_provenance.current_origin(project,source)},"metadata":{"path":metadata_path.relative_to(project).as_posix(),"sha256":sha256_file(metadata_path),"origin":output_provenance.current_origin(project,metadata_path)},"output":{"path":output.relative_to(project).as_posix(),"sha256":sha256_file(output),"size_bytes":output.stat().st_size},"warnings":warnings,"visual_human_review_required":False,"visual_review":{"kind":"automated","status":"pending"},"content_origin":"deterministic conversion of recorded English source"}
     receipt=paper/"reviews"/"docx-build.json";receipt.parent.mkdir(parents=True,exist_ok=True);receipt.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8");output_provenance.record_model_writes(project,[output,receipt],family="other",provider="deterministic-docx-builder",model=engine,role="format-conversion",run_id="docx-"+report["source"]["sha256"][:16]);return report
 def approve_visual_review(project:Path,paper:Path,reviewed_by:str)->dict[str,Any]:
     project=project.resolve();paper=paper.resolve()
@@ -100,7 +100,10 @@ def validate_saved_report(paper:Path)->list[str]:
     errors=[]
     if value.get("output",{}).get("sha256")!=sha256_file(manuscript):errors.append("DOCX build receipt is stale")
     visual=value.get("visual_review",{})
-    if visual.get("status")!="passed" or not str(visual.get("reviewed_by","")).strip() or not str(visual.get("reviewed_at","")).strip():errors.append("DOCX needs a named, completed visual human review")
+    legacy_human=(visual.get("status")=="passed" and isinstance(visual.get("reviewed_by"),str) and visual["reviewed_by"].strip() and isinstance(visual.get("reviewed_at"),str) and visual["reviewed_at"].strip())
+    if not legacy_human:
+        from scripts.automated_visual_review import verify
+        errors.extend(verify(project,paper.name,manuscript.relative_to(project).as_posix()))
     for field in ("source","metadata"):
         record=value.get(field,{}) if isinstance(value.get(field),dict) else {}
         relative=Path(str(record.get("path") or ""))

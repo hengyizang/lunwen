@@ -138,16 +138,20 @@ class RouteReviewTests(unittest.TestCase):
         self.append("state/model-route-decisions.jsonl", [newer])
         self.assertIn("last_catalog_preflight_failed", self.codes(self.review()))
 
-    def test_unknown_charge_and_reservations_block_even_when_a_good_alternative_exists(self):
+    def test_pending_cost_accounting_does_not_add_a_paid_approval_gate(self):
         self.append("state/model-usage.jsonl", [self.row(cost_status="unknown_reconcile_required", reservation_id="hold-1")])
         result = self.review(catalogs={"cheapai-gpt-pro": ["gpt-6.1-sol", "gpt-6-astra"]})
-        self.assertTrue(result["billing_blocks_new_paid_work"])
-        self.assertEqual(result["status"], "blocked")
+        self.assertFalse(result["billing_blocks_new_paid_work"])
+        self.assertIn("cost_estimates_pending", self.codes(result))
         state = model_spend.read(self.project)
         state["reconciliation_events"].append({"receipt_id": "hold-1", "note": "Synthetic reconciliation."})
         model_spend.write(self.project, state)
         self.assertFalse(self.review()["billing_blocks_new_paid_work"])
         model_spend.reserve(self.project, max_cost_cny=1, paper_id=None, paper_limit_cny=0, run_id="pending")
+        self.assertFalse(self.review()["billing_blocks_new_paid_work"])
+        state = model_spend.read(self.project)
+        state["reservations"]["exhausted"] = {"paper_id": None, "max_cost_cny": 499, "run_id": "fixture"}
+        model_spend.write(self.project, state)
         self.assertTrue(self.review()["billing_blocks_new_paid_work"])
 
     def test_incomplete_quality_failures_and_duplicate_validation_rows_preserve_one_attempt(self):

@@ -20,6 +20,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Callable, Iterable
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 try:
     from scripts import api_orchestrator, output_provenance, researchctl, research_methods
 except ImportError:  # Direct execution from scripts/.
@@ -322,8 +325,6 @@ def claude_command(
             str(ROOT),
             "--output-format",
             "json",
-            "--max-budget-usd",
-            str(max_budget_usd),
             "--tools",
             "" if source_packet_only else "Read,Glob,Grep,WebSearch,WebFetch,Bash",
             *(["--allowedTools", *allowed_tools] if allowed_tools else []),
@@ -975,7 +976,7 @@ def show_plan(project: str, context: str, mode: str) -> dict[str, Any]:
             {"actor": "local", "action": f"validate {state['gate']} contract"},
             {
                 "actor": "local",
-                "action": "mark ready only if checks pass; stop before human approval",
+                "action": "record checked automatic decisions; stop only for G1/G2 topic selection",
             },
         ]
     )
@@ -1009,12 +1010,19 @@ def run_stage(
         state = researchctl.load_state(project)
         if state["gate"] is None:
             return {"project": project, "status": "submission_ready", "runs": []}
+    if state["status"] == "awaiting_approval" and state["gate"] not in {"G1", "G2"}:
+        from scripts.cloud_continuation import transition_ready_gate
+        reason = "automatic_gate_reopen" if researchctl.gate_errors(project, state["gate"]) else "automatic_gate_ready"
+        transition_ready_gate(project, {"reason": reason})
+        state = researchctl.load_state(project)
+        if state["gate"] is None:
+            return {"project": project, "status": "submission_ready", "runs": []}
     if state["status"] == "awaiting_approval":
         return {
             "project": project,
             "stage": state["stage"],
             "gate": state["gate"],
-            "status": "awaiting_human_approval",
+            "status": "awaiting_human_topic_approval",
             "runs": [],
         }
     config = load_stage_config().get(state["stage"])
@@ -1215,6 +1223,13 @@ def run_stage(
                 phase="final",audit_path=final_review,prompt=final_prompt,identity=review_receipts.cli_identity(run_dir/"final-critic.stdout.txt"),
                 writer_family="openai",materials=final_materials,notes=dispositions)
             api_orchestrator.append_decision_log(project,state["stage"],token,review,final_review,dispositions,final_audit)
+        if state["stage"] == "experiment-execution":
+            from scripts.primary_recovery import automatic_retirement
+            recovery = automatic_retirement(researchctl.project_dir(project), run_id=token)
+            journal["primary_recovery"] = recovery
+            if recovery.get("retired"):
+                journal["status"] = "protocol_retired_to_G3"
+                return journal
         errors = researchctl.gate_errors(project, state["gate"])
         if errors:
             journal["status"] = "needs_work"
@@ -1223,7 +1238,13 @@ def run_stage(
             current = researchctl.load_state(project)
             if current["status"] == "awaiting_work":
                 researchctl.mark_ready(SimpleNamespace(project=project, note=f"autopilot {token}"))
-            journal["status"] = "awaiting_human_approval"
+            if researchctl.load_state(project)["status"] == "approved":
+                researchctl.advance(SimpleNamespace(project=project))
+                journal["status"] = "stage_advanced"
+            elif state["gate"] in {"G1", "G2"}:
+                journal["status"] = "awaiting_human_topic_approval"
+            else:
+                raise AutopilotError("The checked non-topic gate did not record its automatic decision")
             journal["gate_errors"] = []
     except Exception as exc:
         journal["status"] = "failed"
@@ -1255,7 +1276,7 @@ def parser() -> argparse.ArgumentParser:
         item.add_argument("--claude-mode", choices=("standard", "minimal"), default="standard")
         item.add_argument("--timeout", type=int, default=3600)
         item.add_argument("--max-output-bytes", type=int, default=DEFAULT_MAX_OUTPUT)
-        item.add_argument("--claude-max-budget-usd", type=float, default=5.0)
+        item.add_argument("--claude-max-budget-usd", type=float, default=5.0, help="Legacy compatibility option; no separate per-call spending cap is applied")
         if command == "start":
             item.add_argument("--paper-count", type=int)
             item.add_argument("--venue")
@@ -1268,9 +1289,8 @@ def main(argv: Iterable[str] | None = None) -> int:
         if (
             args.timeout <= 0
             or args.max_output_bytes <= 0
-            or args.claude_max_budget_usd <= 0
         ):
-            raise AutopilotError("timeout, max-output-bytes and budget must be positive")
+            raise AutopilotError("timeout and max-output-bytes must be positive")
         if args.command == "start":
             initialize_if_needed(args.project, args.paper_count, args.venue)
         elif not researchctl.project_dir(args.project).is_dir():

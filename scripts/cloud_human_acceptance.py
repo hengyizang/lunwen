@@ -11,7 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from scripts import cloud_checkpoint as cp, cloud_human_controls as controls
-from scripts import cloud_job, researchctl, research_quality as quality
+from scripts import automated_quality, cloud_job, researchctl, research_quality as quality
 
 
 def request(action: str, **fields) -> dict:
@@ -165,21 +165,26 @@ def run(directory: Path, *, real_power: bool = True) -> dict:
         intake = cp.sha(project / "intake/constraints.json")
         if researchctl.gate_errors(project.name, "G0"):
             raise RuntimeError("G0 fixture must pass the real intake validator")
-        decide("ready", selectors={"gate": "G0"})
-        decide("approve", selectors={"gate": "G0"})
-        decide("advance", selectors={"gate": "G0"})
+        researchctl.mark_ready(SimpleNamespace(project=project.name, note="Synthetic automatic intake"))
+        g0 = researchctl.load_state(project.name)
+        if g0["approvals"][-1]["decision_type"] != "deterministic":
+            raise RuntimeError("G0 must record a deterministic decision")
+        researchctl.advance(SimpleNamespace(project=project.name))
         if researchctl.load_state(project.name)["gate"] != "G1" or not review("ready", gate="G1")["blockers"]:
             raise RuntimeError("missing scientific evidence must still block G1")
         set_fixture_stage(project, "G3")
         quality_fixture(project, real_power=real_power)
-        decide("confirm_data_quality", selectors={"dataset_id": "d1"})
-        decide("freeze_preregistration", selectors={"paper_id": "all"})
+        automated_quality._store(project, project / "data/quality/d1-confirmation.json",
+            quality.create_data_quality_confirmation(project, "d1", automated_quality.ACTOR, automated=True))
+        automated_quality._store(project, project / "papers/P01/preregistration.json",
+            quality.create_preregistration(project, "P01", automated_quality.ACTOR, automated=True))
         prereg = researchctl.read_json(project / "papers/P01/preregistration.json")
-        if quality.validate_preregistration(prereg, "P01", project):
+        if quality.validate_preregistration(prereg, "P01", project) or prereg["human_confirmation"] is not False:
             raise RuntimeError("preregistration fixture failed its original validator")
         set_fixture_stage(project, "G4")
         reproduction_fixture(project)
-        decide("confirm_reproduction", selectors={"paper_id": "P01"})
+        automated_quality._store(project, project / "papers/P01/reproduction-confirmation.json",
+            quality.create_reproduction_confirmation(project, "P01", automated_quality.ACTOR, automated=True))
         confirmation = researchctl.read_json(project / "papers/P01/reproduction-confirmation.json")
         if quality.validate_reproduction_confirmation(confirmation, "P01", project):
             raise RuntimeError("reproduction fixture failed its original validator")
@@ -191,12 +196,12 @@ def run(directory: Path, *, real_power: bool = True) -> dict:
         result = {
             "schema_version": "1.0", "status": "pass", "scope": "synthetic software controls only",
             "scientific_completion_verified": False, "paid_provider_calls": 0,
-            "checks": ["real G0 ready/approve/advance", "incomplete G1 still blocked",
-                       "named data quality confirmation", "all-paper preregistration freeze",
-                       "named reproduction confirmation", "spending and intake unchanged",
+            "checks": ["deterministic G0 ready/advance", "incomplete G1 still blocked",
+                       "automated data quality confirmation", "automated preregistration freeze",
+                       "automated reproduction confirmation", "spending and intake unchanged",
                        "no G3/G4 scientific approval"],
             "real_statsmodels_power": real_power,
-            "decision_log_sha256": cp.sha(project / controls.AUDIT),
+            "decision_log_sha256": cp.sha(project / controls.AUDIT) if (project / controls.AUDIT).is_file() else None,
             "spend_control_sha256": spend_before,
         }
         directory.mkdir(parents=True, exist_ok=True)

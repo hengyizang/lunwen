@@ -133,12 +133,18 @@ function renderProject() {
   renderMetrics(detail.metrics);
   $("gateErrors").innerHTML = state.gate_errors.length
     ? state.gate_errors.map((error) => `<li>${esc(error)}</li>`).join("")
-    : '<li class="muted">当前确定性检查没有发现缺项；仍需人工阅读内容。</li>';
+    : '<li class="muted">当前阶段检查没有发现缺项；选题确认后由系统继续。</li>';
   renderResearchQuality(detail.research_quality || {});
   const awaitingWork = state.status === "awaiting_work";
   $("runCycle").disabled = !awaitingWork;
   $("markReady").disabled = state.status !== "awaiting_work" || !state.gate_ready;
-  $("approveGate").disabled = state.status !== "awaiting_approval";
+  const topicGate = ["G1", "G2"].includes(state.gate);
+  $("approveGate").disabled = !topicGate || state.status !== "awaiting_approval";
+  $("topicPaperField").hidden = state.gate !== "G2";
+  const decidedTopics = new Set((state.paper_topic_approvals || []).filter(v => v.artifact_sha256 === state.ready_artifact_sha256).map(v => v.paper_id));
+  const topicPapers = Array.from({length: state.paper_count || 0}, (_, i) => `P${String(i+1).padStart(2,"0")}`);
+  $("topicPaper").innerHTML = topicPapers.map(p => `<option value="${p}">${p} · ${decidedTopics.has(p) ? "已确认" : "待确认"}</option>`).join("");
+  $("topicPaper").value = topicPapers.find(p => !decidedTopics.has(p)) || topicPapers[0] || "";
   $("reopenGate").disabled = state.status !== "awaiting_approval";
   $("advanceGate").disabled = state.status !== "approved";
   $("venueId").innerHTML = '<option value="">选择已安装期刊配置</option>' + detail.venues.map((venue) => `<option value="${esc(venue)}">${esc(venue)}</option>`).join("");
@@ -168,8 +174,8 @@ function renderProject() {
             ? "Harper 运行异常（不阻断核心检查）"
             : "Harper 未记录";
     $("styleAuditStatus").textContent = styleAudit.status === "pass"
-      ? `通过 · ${Number(styleAudit.word_count || 0).toLocaleString()} 词 · ${warnings} 项人工提示 · ${proselint} · ${harper}；仍需本人阅读全文`
-      : `需要修改 · ${unresolved} 项硬问题 · ${warnings} 项人工提示 · ${proselint} · ${harper}`;
+      ? `通过 · ${Number(styleAudit.word_count || 0).toLocaleString()} 词 · ${warnings} 项编辑提示 · ${proselint} · ${harper}`
+      : `需要修改 · ${unresolved} 项硬问题 · ${warnings} 项编辑提示 · ${proselint} · ${harper}`;
     const findings = styleAudit.formulaic_findings || [];
     $("styleAuditFindings").innerHTML = findings.length
       ? findings.map((item) => `<li><strong>${esc(item.rule_id || "style")}</strong> · 第 ${Number(item.line || 0)} 行：${esc(item.message || "请结合上下文复核")}</li>`).join("")
@@ -189,12 +195,12 @@ function renderResearchQuality(quality) {
     [quality.theme_b_independent === true, "Theme B 独立硬闸门", quality.theme_b_independent ? "通过" : "未通过"],
     [quality.venue_candidates_valid === true, "期刊候选库", quality.venue_candidates_valid ? "当前且哈希一致" : "缺失或失效"],
     [quality.novelty_claim_matrix === true, "新颖性主张矩阵", quality.novelty_claim_matrix ? "已生成" : "缺失"],
-    [Number(quality.data_quality_confirmations || 0) === datasetCount && datasetCount > 0, "数据质量报告及人工确认", `${Number(quality.data_quality_confirmations || 0)}/${datasetCount}`],
+    [Number(quality.data_quality_confirmations || 0) === datasetCount && datasetCount > 0, "数据质量报告及自动核验", `${Number(quality.data_quality_confirmations || 0)}/${datasetCount}`],
     [Number(quality.power_reports || 0) === paperCount && paperCount > 0, "可执行功效分析", `${Number(quality.power_reports || 0)}/${paperCount}`],
     [Number(quality.preregistrations || 0) === paperCount && paperCount > 0, "冻结预注册", `${Number(quality.preregistrations || 0)}/${paperCount}`],
     [Number(quality.baseline_reproductions || 0) === paperCount && paperCount > 0, "强基线复现", `${Number(quality.baseline_reproductions || 0)}/${paperCount}`],
     [Number(quality.clean_room_reproductions || 0) === paperCount && paperCount > 0, "隔离环境复现", `${Number(quality.clean_room_reproductions || 0)}/${paperCount}`],
-    [Number(quality.reproduction_confirmations || 0) === paperCount && paperCount > 0, "人工复现确认", `${Number(quality.reproduction_confirmations || 0)}/${paperCount}`],
+    [Number(quality.reproduction_confirmations || 0) === paperCount && paperCount > 0, "自动复现核验", `${Number(quality.reproduction_confirmations || 0)}/${paperCount}`],
   ];
   $("researchQualitySummary").innerHTML = items.map(([pass, label, value]) => `<li class="${pass ? "status-candidate" : ""}">${pass ? "✓" : "○"} ${esc(label)}：${esc(value)}</li>`).join("");
 }
@@ -286,7 +292,7 @@ function candidateRow(item) {
     <td><a class="dataset-title" href="${esc(safeUrl(item.landing_url))}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a><div class="dataset-desc">${esc(description)}</div></td>
     <td><div class="source-tags">${providers.map((name) => `<span class="source-tag">${esc(name)}</span>`).join("")}</div></td>
     <td>${doi}${license}<span class="meta-line">匹配查询: ${esc((item.matched_queries || []).length)}</span></td>
-    <td class="status-candidate">${status}<br>需科学、许可与人工审查</td>
+    <td class="status-candidate">${status}<br>需科学判断、许可来源与独立核验</td>
   </tr>`;
 }
 
@@ -332,7 +338,7 @@ function currentProject() {
 }
 
 function gateValues() {
-  return {project: currentProject(), actor: $("approvalActor").value, note: $("gateNote").value};
+  return {project: currentProject(), actor: $("approvalActor").value, note: $("gateNote").value, paper: $("topicPaper").value};
 }
 
 function updateSearchScale() {
@@ -396,12 +402,12 @@ function bindEvents() {
     } catch (error) { toast(error.message, "error"); }
   });
   $("runExperiment").addEventListener("click", () => startJob("experiment", {project:currentProject(), run_id:$("experimentRun").value}).catch((e) => toast(e.message, "error")));
-  $("confirmReproduction").addEventListener("click", () => { if (confirm("请确认你已经核对运行、数值容差、证据文件、独立环境与执行者身份。继续吗？")) startJob("confirm_reproduction", {project:currentProject(), paper:$("reproductionPaper").value, actor:$("approvalActor").value}).catch((e) => toast(e.message, "error")); });
+  $("confirmReproduction").addEventListener("click", () => startJob("confirm_reproduction", {project:currentProject()}).catch((e) => toast(e.message, "error")));
   $("checkResearchQuality").addEventListener("click", () => startJob("research_quality_check", {project:currentProject()}).catch((e) => toast(e.message, "error")));
   $("runDataQuality").addEventListener("click", () => startJob("data_quality", {project:currentProject(), dataset_id:$("qualityDatasetId").value, path:$("qualityDataPath").value, actor:$("approvalActor").value, label_column:$("qualityLabelColumn").value, split_column:$("qualitySplitColumn").value, group_column:$("qualityGroupColumn").value, derived:$("qualityDerived").checked}).catch((e) => toast(e.message, "error")));
-  $("confirmDataQuality").addEventListener("click", () => { if (confirm("请先在任务日志中阅读完整报告和所有警告，并人工核对来源、标签有效性、选择偏倚及科学适用性。确认已经完成吗？")) startJob("confirm_data_quality", {project:currentProject(), dataset_id:$("qualityDatasetId").value, actor:$("approvalActor").value}).catch((e) => toast(e.message, "error")); });
+  $("confirmDataQuality").addEventListener("click", () => startJob("confirm_data_quality", {project:currentProject()}).catch((e) => toast(e.message, "error")));
   $("runPower").addEventListener("click", () => startJob("power_analysis", {project:currentProject(), paper:$("powerPaper").value, method:$("powerMethod").value, effect_size:Number($("powerEffect").value), effect_size_basis:$("powerEffectBasis").value, alpha:Number($("powerAlpha").value), power:Number($("powerTarget").value), ratio:Number($("powerRatio").value), groups:Number($("powerGroups").value), simulation_script:$("powerSimulationScript").value, simulation_evidence:$("powerSimulationEvidence").value, simulation_count:Number($("powerSimulationCount").value), achieved_power:Number($("powerAchieved").value), simulation_method_note:$("powerSimulationNote").value}).catch((e) => toast(e.message, "error")));
-  $("freezePreregistration").addEventListener("click", () => { if (confirm("冻结后，改变数据、设计、功效或计划会使预注册失效。确定已经逐篇检查并冻结全部论文吗？")) startJob("freeze_preregistration", {project:currentProject(), actor:$("approvalActor").value}).catch((e) => toast(e.message, "error")); });
+  $("freezePreregistration").addEventListener("click", () => startJob("freeze_preregistration", {project:currentProject()}).catch((e) => toast(e.message, "error")));
   $("validateDataset").addEventListener("click", () => startJob("dataset_validate", {project:currentProject(), manifest:$("datasetManifest").value}).catch((e) => toast(e.message, "error")));
   $("downloadDataset").addEventListener("click", () => startJob("dataset_download", {project:currentProject(), manifest:$("datasetManifest").value, accept_license:$("acceptLicense").checked}).catch((e) => toast(e.message, "error")));
   $("buildPackage").addEventListener("click", () => startJob("package", {project:currentProject(), paper:$("packagePaper").value}).catch((e) => toast(e.message, "error")));

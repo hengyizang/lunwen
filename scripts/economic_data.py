@@ -20,7 +20,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from scripts import network_safety
-from scripts.dataset_fetch import validate_manifest
+from scripts.dataset_fetch import license_errors, validate_manifest
 from scripts.research_artifacts import path_in, read, record, sha, write
 
 MODULE = "scripts/economic_data.py"
@@ -133,14 +133,18 @@ def _rights(project, spec, allow_observations):
     permission = read(authorizations).get("manifests", {}).get(binding["path"], {}) if authorizations.is_file() else {}
     if (permission.get("sha256") != binding["sha256"] or permission.get("cloud_use_confirmed") is not True
             or not isinstance(permission.get("actor"), str) or not permission["actor"].strip()):
-        raise ValueError("economic observations require the existing protected owner data authorization")
+        raise ValueError("economic observations require current protected data-rights authorization")
+    if permission.get("decision_kind") == "automated" and (
+            permission.get("actor") != "deterministic_control_plane" or permission.get("human_confirmation") is not False):
+        raise ValueError("automatic data-rights authorization has an invalid controller identity")
     manifest = read(manifest_path)
     errors = validate_manifest(manifest)
-    if errors or manifest.get("license", {}).get("confirmed_by_human") is not True:
-        raise ValueError("observation acquisition needs a valid human-confirmed research-use licence")
+    errors.extend(license_errors(manifest, project=project))
+    if errors:
+        raise ValueError("observation acquisition needs valid source-bound research-use rights: " + "; ".join(errors))
     scope_fields = ("provider", "start", "end", "as_of", "vintage_mode", "series") if spec["provider"] == "fred" else ("provider", "start", "end", "as_of", "vintage_mode", "countries", "indicators")
     if manifest.get("provenance", {}).get("economic_scope") != {key: spec[key] for key in scope_fields}:
-        raise ValueError("human-confirmed dataset manifest must cover these exact economic series, dates and vintage")
+        raise ValueError("authorized dataset manifest must cover these exact economic series, dates and vintage")
     hosts = {"fred": {"fred.stlouisfed.org", "api.stlouisfed.org"}, "worldbank": {"data.worldbank.org", "api.worldbank.org"}}[spec["provider"]]
     if any(urllib.parse.urlsplit(manifest[field]["url"] if field == "download" else manifest[field]).hostname not in hosts for field in ("source_url", "download")):
         raise ValueError("dataset manifest source and download must identify the selected official provider")

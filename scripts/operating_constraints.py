@@ -56,15 +56,14 @@ def _updated_constraints(original: dict, ceiling: int, deadline: str) -> dict:
                 token = f"initial cumulative model API envelope of CNY {old_budget:g}"
                 if token in text:
                     text = text.replace(token, f"current cumulative model API envelope of CNY {ceiling}")
+                    text = re.sub(r", with CNY [\d.]+ per-paper warning and CNY [\d.]+ per-paper hard limits", "", text)
                     text = text.replace(
                         "This intake is not a ledger grant; the separate owner cloud authorize_budget job records the first tranche before any paid transport.",
                         "The hash-bound owner operating amendment records this exact cumulative ceiling; no paid transport is started by the amendment.")
                 if text.startswith("Spending authorization is cumulative: initial approval for CNY "):
-                    text = (f"Spending authorization is cumulative: the current owner-approved ceiling is CNY {ceiling}. "
-                            f"A later explicit owner tranche approval may add CNY {model_spend.STEP_CNY}, "
-                            f"for example CNY {ceiling + model_spend.STEP_CNY}; no automatic increase is authorized. "
-                            "Calls within the approved unused ceiling need no repeated spending approval. "
-                            "A larger ceiling must not silently override a separately agreed paper hard limit.")
+                    text = (f"Spending is cumulative: the current total ceiling is CNY {ceiling}. "
+                            "Calls within its unused capacity need no separate spending approval, tranche or per-paper limit. "
+                            "Actual charges or conservative bounded estimates count toward the same total; no automatic increase is authorized.")
             updated.append(text)
         value[key] = updated[0] if key == "research_goal" else updated
     return value
@@ -100,7 +99,10 @@ def prepare(project: Path, new_ceiling_cny: int, target_submission_ready_date: s
     approval = state["approvals"][-1]
     if (set(policy) != cloud_continuation.POLICY_FIELDS or policy.get("schema_version") != "1.0"
             or type(policy.get("enabled")) is not bool or policy.get("actor") != actor
-            or approval.get("actor") != actor or policy.get("constraints_sha256") != sha(constraints_path)
+            or (approval.get("actor") != actor and not (
+                approval.get("decision_type") == "deterministic"
+                and approval.get("actor") == "deterministic-control-plane"))
+            or policy.get("constraints_sha256") != sha(constraints_path)
             or policy.get("g0_approval_artifact_sha256") != approval.get("artifact_sha256")
             or not re.fullmatch(r"[a-f0-9]{64}", str(approval.get("artifact_sha256")))
             or policy.get("system_execution_hours_per_day") != 24

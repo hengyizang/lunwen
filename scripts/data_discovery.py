@@ -90,7 +90,7 @@ def _candidate(
         "version": _text(str(version)) if version is not None else None,
         "doi": _text(doi),
         "license_claim": _text(license_name),
-        "license_status": "unverified_requires_human_review",
+        "license_status": "unverified_requires_source_evidence",
         "updated_at": _text(updated_at),
         "download": None,
         "fitness_status": "candidate_only",
@@ -472,7 +472,7 @@ def discover_many(
         candidate["metadata_relevance_score"] = score
         candidate["screening_reasons"] = reasons
         candidate["matched_queries"] = sorted(set(candidate.get("matched_queries", [])) | set(matched))
-        candidate["fitness_status"] = "candidate_only_requires_scientific_and_human_review"
+        candidate["fitness_status"] = "candidate_only_requires_source_bound_scientific_review"
     ranked.sort(
         key=lambda item: (
             -int(item["metadata_relevance_score"]),

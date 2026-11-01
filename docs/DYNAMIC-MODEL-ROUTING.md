@@ -239,3 +239,10 @@ preprocessing, inference and statistics. Stopping new launches alone does not
 enforce a total wall-clock, CPU or memory ceiling. These checks preserve the
 existing scientific gates; model-generated proposals cannot approve themselves.
 
+# Current financial policy
+
+[TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md) supersedes historical paid opt-ins,
+paper caps, billing holds and separate paid-retry approvals. Scientific model
+quality, identity and independent-review requirements remain. Bounded estimates
+and reservations count against the project total without an extra payment gate.
+

@@ -132,44 +132,33 @@ class ProductionRuntimeTests(unittest.TestCase):
                 meter.assert_not_called()
                 grant.assert_not_called()
 
-    def test_google_high_catalog_entry_does_not_authorize_the_exact_base_route(self):
+    def test_catalog_alias_does_not_add_a_payment_approval_gate(self):
         self.catalog.side_effect = None
         self.catalog.return_value = {"gemini-4-argon-high"}
-        with (patch.object(relay_billing, "read_meter") as meter,
-                patch.object(ai_providers, "call") as post,
-                patch.object(model_spend, "reserve") as reserve):
-            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "model_not_advertised"):
-                self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
-        meter.assert_not_called()
-        post.assert_not_called()
-        reserve.assert_not_called()
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(relay_billing, "settle", return_value=self.debit()),
+                patch.object(ai_providers, "call", side_effect=self.result) as post):
+            result = self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
+        self.assertEqual(result.reported_model, "gemini-4-argon")
+        self.assertEqual(post.call_args.kwargs["model"], "gemini-4-argon")
+        self.catalog.assert_not_called()
 
-    def test_missing_model_or_catalog_blocks_before_meter_reservation_and_generation(self):
-        for failure in ("model_not_advertised", "catalog_unavailable"):
-            with self.subTest(failure=failure):
-                self.catalog.side_effect = ValueError("catalog unavailable") if failure == "catalog_unavailable" else None
-                self.catalog.return_value = set()
-                with (patch.object(relay_billing, "read_meter") as meter,
-                        patch.object(ai_providers, "call") as post,
-                        patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
-                    with self.assertRaisesRegex(model_runtime.ModelBudgetError, failure):
-                        self.call()
-                    meter.assert_not_called()
-                    reserve.assert_not_called()
-                    post.assert_not_called()
-                state = model_spend.read(self.project)
-                self.assertEqual(state["spent_cny"], 0)
-                self.assertEqual(state["reservations"], {})
-                event = json.loads((self.project / "state/model-route-decisions.jsonl").read_text().splitlines()[-1])
-                self.assertEqual(event["availability_error"], failure)
-                self.assertFalse(event["generation_sent"])
+    def test_unavailable_catalog_does_not_block_a_configured_identity_bound_call(self):
+        self.catalog.side_effect = ValueError("catalog unavailable")
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(relay_billing, "settle", return_value=self.debit()),
+                patch.object(ai_providers, "call", side_effect=self.result) as post):
+            self.call()
+        post.assert_called_once()
+        self.catalog.assert_not_called()
+        self.assertEqual(model_spend.read(self.project)["spent_cny"], 0.001)
 
     def test_exact_cache_replay_needs_no_live_catalog_or_paid_request(self):
         with (patch.object(ai_providers, "call", side_effect=self.result) as post,
                 patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}) as meter,
                 patch.object(relay_billing, "settle", return_value=self.debit())):
             self.call()
-            self.catalog.assert_called_once()
+            self.catalog.assert_not_called()
             self.catalog.reset_mock(side_effect=True)
             self.catalog.side_effect = ValueError("catalog unavailable")
             result = self.call(run_id="cached-offline")
@@ -178,41 +167,40 @@ class ProductionRuntimeTests(unittest.TestCase):
             post.assert_called_once()
             meter.assert_called_once()
 
-    def test_pre_generation_meter_429_cancels_unsent_reservation_without_post(self):
+    def test_unavailable_fee_read_uses_accounted_upper_bound_and_allows_work(self):
         with (patch.object(relay_billing, "read_meter", side_effect=relay_billing.BillingReconciliationError("HTTP 429")),
-                patch.object(model_runtime.ai_providers, "call") as post,
-                patch.object(model_spend, "reserve", wraps=model_spend.reserve) as reserve):
-            with self.assertRaises(relay_billing.BillingReconciliationError):
-                self.call()
-            post.assert_not_called()
-            reserve.assert_called_once()
-        self.assertEqual(model_spend.read(self.project)["reservations"], {})
-        self.assertEqual(len(model_spend.read(self.project)["unsent_events"]),1)
-
-    def test_noncloud_or_optional_remote_checkpoint_mode_blocks_before_meter_and_post(self):
-        for field in ("GITHUB_ACTIONS","DR_OS_REQUIRE_REMOTE_RESERVATION"):
-            with self.subTest(field=field), patch.dict("os.environ",{field:""}), \
-                 patch.object(relay_billing,"read_meter") as meter, \
-                 patch.object(ai_providers,"call") as post:
-                with self.assertRaisesRegex(model_runtime.ModelBudgetError,"cloud runner"):
-                    self.call()
-                meter.assert_not_called()
-                post.assert_not_called()
-                self.assertEqual(model_spend.read(self.project)["reservations"],{})
-
-    def test_ambiguous_post_meter_keeps_hold_and_blocks_any_second_generation(self):
-        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
-                patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
-                patch.object(relay_billing, "settle", side_effect=relay_billing.BillingReconciliationError("concurrent debits"))):
-            with self.assertRaises(relay_billing.BillingReconciliationError):
-                self.call()
-            with self.assertRaises(model_runtime.ModelBudgetError):
-                self.call(run_id="second-must-block")
-        self.assertEqual(post.call_count, 1)
+                patch.object(ai_providers, "call", side_effect=self.result) as post):
+            self.call()
+            self.call(prompt="different second request")
+        self.assertEqual(post.call_count, 2)
         state = model_spend.read(self.project)
-        self.assertEqual(state["spent_cny"], 0)
-        self.assertEqual(len(state["reservations"]), 1)
-        self.assertTrue(model_runtime.ledger_entries(self.project)[0]["cost_status"].startswith("unknown"))
+        self.assertEqual(state["reservations"], {})
+        self.assertGreater(state["spent_cny"], 0)
+        self.assertTrue(all(event["cost_basis"] == "conservative_upper_bound" for event in state["settlement_events"]))
+        self.assertTrue(all("actual_cost_cny" not in event for event in state["settlement_events"]))
+        self.assertTrue(all(row["cost_status"] == "estimated_upper_bound" for row in model_runtime.ledger_entries(self.project)))
+
+    def test_execution_location_adds_no_extra_payment_permission(self):
+        with (patch.dict("os.environ", {"GITHUB_ACTIONS": "", "DR_OS_REQUIRE_REMOTE_RESERVATION": ""}),
+                patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(relay_billing, "settle", return_value=self.debit()),
+                patch.object(ai_providers, "call", side_effect=self.result) as post):
+            self.call()
+        post.assert_called_once()
+        self.assertEqual(model_spend.read(self.project)["spent_cny"], 0.001)
+
+    def test_ambiguous_fee_is_counted_conservatively_without_an_approval_pause(self):
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(ai_providers, "call", side_effect=self.result) as post,
+                patch.object(relay_billing, "settle", side_effect=relay_billing.BillingReconciliationError("concurrent debits"))):
+            self.call()
+            self.call(prompt="second bounded request")
+        self.assertEqual(post.call_count, 2)
+        state = model_spend.read(self.project)
+        self.assertGreater(state["spent_cny"], 0)
+        self.assertEqual(state["reservations"], {})
+        self.assertLess(state["spent_cny"], state["authorized_ceiling_cny"])
+        self.assertTrue(all(row["usage_estimated"] for row in model_runtime.ledger_entries(self.project)))
 
     def test_502_has_one_post_no_fallback_and_keeps_full_reservation(self):
         with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
@@ -224,47 +212,44 @@ class ProductionRuntimeTests(unittest.TestCase):
         settle.assert_not_called()
         self.assertGreater(model_spend.reserved(model_spend.read(self.project)), 0)
         self.assertTrue(model_runtime.ledger_entries(self.project)[0]["zero_cost_not_confirmed"])
+        held = model_spend.reserved(model_spend.read(self.project))
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(ai_providers, "call", side_effect=self.result) as next_post,
+                patch.object(relay_billing, "settle", return_value=self.debit())):
+            self.call(prompt="independent bounded work after the unresolved transport")
+        next_post.assert_called_once()
+        self.assertEqual(model_spend.reserved(model_spend.read(self.project)), held)
+        self.assertGreater(model_spend.read(self.project)["spent_cny"], 0)
 
-    def test_confirmed_debit_above_ceiling_expands_pending_hold_without_grant_or_double_spend(self):
-        observed = {}
-        authority = model_spend.read(self.project)["authorization_events"]
-        def gateway_settlement(provider, model, before):
-            pending = model_spend.read(self.project)["reservations"]
-            self.assertEqual(len(pending), 1)
-            observed["original_ceiling"] = next(iter(pending.values()))["max_cost_cny"]
-            observed["actual_debit"] = observed["original_ceiling"] + 0.125
-            return self.debit(observed["actual_debit"])
-        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}) as meter,
-                patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
-                patch.object(relay_billing, "settle", side_effect=gateway_settlement) as wallet,
-                patch.object(model_spend, "settle", wraps=model_spend.settle) as spend_settle,
-                patch.object(model_spend, "grant", wraps=model_spend.grant) as grant):
-            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "exceeded the reserved ceiling"):
+    def test_unresolved_reservation_only_blocks_when_remaining_total_is_insufficient(self):
+        model_spend.reserve(self.project, max_cost_cny=299.999999, paper_id=None,
+                            paper_limit_cny=1, run_id="unresolved-previous-request")
+        with patch.object(ai_providers, "call") as post, patch.object(relay_billing, "read_meter") as meter:
+            with self.assertRaises(model_runtime.ModelBudgetError):
                 self.call()
-            with self.assertRaisesRegex(model_runtime.ModelBudgetError, "reconciliation is required"):
-                self.call(run_id="blocked-after-confirmed-overage", prompt="different work must wait")
-            post.assert_called_once()
-            meter.assert_called_once()
-            wallet.assert_called_once()
-            spend_settle.assert_not_called()
-            grant.assert_not_called()
+        post.assert_not_called()
+        meter.assert_not_called()
+
+    def test_actual_charge_above_estimate_uses_remaining_total_without_extra_approval(self):
+        authority = model_spend.read(self.project)["authorization_events"]
+        charges = []
+        def gateway_settlement(provider, model, before):
+            pending = next(iter(model_spend.read(self.project)["reservations"].values()))
+            charges.append(pending["max_cost_cny"] + 0.125)
+            return self.debit(charges[-1])
+        with (patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(ai_providers, "call", side_effect=self.result) as post,
+                patch.object(relay_billing, "settle", side_effect=gateway_settlement),
+                patch.object(model_spend, "grant", wraps=model_spend.grant) as grant):
+            self.call()
+            self.call(prompt="different request can use the remaining total")
+        self.assertEqual(post.call_count, 2)
+        grant.assert_not_called()
         state = model_spend.read(self.project)
-        self.assertEqual(state["authorized_ceiling_cny"], 300)
+        self.assertAlmostEqual(state["spent_cny"], sum(charges))
+        self.assertEqual(state["reservations"], {})
         self.assertEqual(state["authorization_events"], authority)
-        self.assertEqual(state["spent_cny"], 0)
-        self.assertEqual(len(state["reservations"]), 1)
-        hold = next(iter(state["reservations"].values()))
-        self.assertGreater(hold["max_cost_cny"], observed["original_ceiling"])
-        self.assertEqual(hold["max_cost_cny"], observed["actual_debit"])
-        self.assertEqual(hold["confirmed_gateway_debit_cny"], observed["actual_debit"])
-        self.assertEqual(hold["review_reason"], "gateway_debit_exceeded_reserved_ceiling")
-        self.assertEqual(self.sync.call_count, 2)
-        self.assertAlmostEqual(model_runtime.budget_status(self.project)["project_remaining"],
-                               300 - observed["actual_debit"])
-        entries = model_runtime.ledger_entries(self.project)
-        self.assertEqual(len(entries), 1)
-        self.assertEqual(entries[0]["cost_cny"], 0)
-        self.assertEqual(entries[0]["independent_gateway_debit"]["actual_cost_cny"], observed["actual_debit"])
+        self.assertAlmostEqual(model_runtime.budget_status(self.project)["project_remaining"], 300-sum(charges))
 
     def test_independent_wallet_debit_settles_missing_cache_ttl_and_promotion(self):
         def cached_response(provider, prompt, **kwargs):
@@ -282,7 +267,7 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.assertFalse(receipt["usage_estimated"])
         self.assertEqual(receipt["billing"]["independent_gateway_debit"]["actual_cost_cny"], 0.000123)
 
-    def test_media_reservation_uses_full_context_and_sevenfold_cost_ceiling(self):
+    def test_media_reservation_uses_declared_context_rates_without_arbitrary_multiplier(self):
         original = model_runtime.billing_quotes.reserve_cost
         ceilings = []
         def quote(*args, **kwargs):
@@ -296,7 +281,7 @@ class ProductionRuntimeTests(unittest.TestCase):
             self.call(stage="auxiliary", role="multimodal-inspection", attachments=[self.attachment()])
         self.assertEqual(ceilings[0][0], 1048576)
         production_quote = model_runtime.pricing("codekey-gemini", "gemini-4-argon")
-        expected = round(7 * original(production_quote, 1048576, 100, {}), 8)
+        expected = round(original(production_quote, 1048576, 100, {}), 8)
         self.assertEqual(reserve.call_args.kwargs["max_cost_cny"], expected)
 
     def test_cache_identity_includes_effort_attachment_policy_and_billing_scope(self):
@@ -425,11 +410,11 @@ class ProductionRuntimeTests(unittest.TestCase):
         with (patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
                 patch.object(relay_billing, "read_meter", return_value=self.counter()),
                 patch.object(relay_billing.time, "sleep")):
-            with self.assertRaises(relay_billing.BillingReconciliationError):
-                self.call(stage="auxiliary", role="engineering-diagnosis", prompt="unverified zero", use_cache=False)
+            self.call(stage="auxiliary", role="engineering-diagnosis", prompt="unverified zero", use_cache=False)
         post.assert_called_once()
-        self.assertEqual(model_spend.read(self.project)["spent_cny"], 0)
-        self.assertEqual(len(model_spend.read(self.project)["reservations"]), 1)
+        self.assertGreater(model_spend.read(self.project)["spent_cny"], 0)
+        self.assertEqual(model_spend.read(self.project)["reservations"], {})
+        self.assertEqual(model_runtime.ledger_entries(self.project)[-1]["cost_status"], "estimated_upper_bound")
 
 
 if __name__ == "__main__":

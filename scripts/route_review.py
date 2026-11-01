@@ -158,12 +158,11 @@ def review(project: Path, *, task_profile: dict | None = None, stage: str | None
         unknown = [r for r in usage if (r.get("cost_status") in {"unknown_reconcile_required", "estimated_reconcile_required"} or r.get("usage_estimated") is True)
                    and (not r.get("reservation_id") or r["reservation_id"] not in reconciled)]
         if unknown or (spend or {}).get("reservations"):
-            blocking = True
-            add("billing_reconciliation_required", "blocked", unresolved_request_count=len(unknown), pending_reservation_count=len((spend or {}).get("reservations", {})))
+            add("cost_estimates_pending", "info", unresolved_request_count=len(unknown), pending_reservation_count=len((spend or {}).get("reservations", {})))
         if spend is None:
             add("spending_authority_unavailable", "blocked")
             blocking = True
-        elif spend["authorized_ceiling_cny"] <= spend["spent_cny"]:
+        elif spend["authorized_ceiling_cny"] <= spend["spent_cny"] + model_spend.reserved(spend):
             add("existing_budget_exhausted_or_not_authorized", "blocked")
             blocking = True
         accepts_path = path_in(project, "state/dynamic-routing-acceptances.json", exists=False)

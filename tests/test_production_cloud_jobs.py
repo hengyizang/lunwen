@@ -59,7 +59,8 @@ class ProductionCloudJobTests(unittest.TestCase):
     def test_auxiliary_owner_request_manifest_and_paid_flag_are_strict(self):
         valid=request(manifest="evidence/auxiliary-jobs/metadata.json")
         self.assertEqual(cloud_job.issue_request(issue(valid)),valid)
-        for changes in ({"allow_paid":False},{"allow_paid":1},{"manifest":"../private.json"},
+        self.assertEqual(cloud_job.validate_request({**valid,"allow_paid":False})["action"],valid["action"])
+        for changes in ({"allow_paid":1},{"manifest":"../private.json"},
                         {"manifest":"/tmp/private.json"},{"manifest":"C:/private.json"},
                         {"manifest":"evidence/auxiliary-jobs/../private.json"},
                         {"manifest":"state/request.json"},{"manifest":"evidence/auxiliary-jobs/request.txt"},

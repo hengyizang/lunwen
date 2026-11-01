@@ -162,10 +162,9 @@ def prepare_approval(project, paper_id, actor):
     parent_claims = set(read(project / "papers" / paper_id / "paper-contract.json").get("independence", {}).get("unique_claim_ids", []))
     child_claims = set(read(child / "papers" / paper_id / "paper-contract.json").get("independence", {}).get("unique_claim_ids", []))
     need(bool(child_claims) and child_claims <= parent_claims, "supplemental claims must belong to the unchanged parent paper contract")
-    constraints = read(project / "intake/constraints.json")
-    cap = constraints.get("cloud_compute_budget_usd")
-    need(type(cap) in (float, int) and math.isfinite(cap) and cap >= 0, "explicit parent compute authorization required")
-    need(budget <= cap and sum(r["estimated_cost_usd"] for r in plan["runs"]) <= budget, "supplemental budget exceeds owner compute authorization")
+    cap = runner.project_compute_ceiling(project, read(project / "experiments/budget.json"))
+    need(all_compute_cost(project) + sum(r["estimated_cost_usd"] for r in plan["runs"]) <= cap,
+         "supplemental estimates exceed the project total compute ceiling")
     # The owner is explicitly reviewing these newly generated data reports in
     # this dossier; no model-supplied confirmation is copied or trusted.
     confirmations = []
@@ -311,12 +310,9 @@ def all_compute_cost(project):
         path = scope / "experiments/registry.jsonl"
         if not path.is_file():
             continue
-        # Invalid or non-finite ledger entries must never release budget.
-        for line in path.read_text(encoding="utf-8").splitlines():
-            row = json.loads(line)
-            value = row["estimated_cost_usd"]
-            need(type(value) in (float, int) and math.isfinite(value) and value >= 0, "invalid supplemental cost ledger")
-            total += value
+        # The executor's same accounting applies to parent and every child;
+        # failed attempts and above-estimate reported charges remain counted.
+        total += runner.prior_estimated_cost(path)
     return total
 
 
@@ -346,7 +342,7 @@ def resume(project, paper_id):
             from scripts.experiment_evidence import refresh
             refresh(child)
             continue
-        cap = read(project / "intake/constraints.json")["cloud_compute_budget_usd"]
+        cap = runner.project_compute_ceiling(project, read(project / "experiments/budget.json"))
         need(all_compute_cost(project) + pending[0]["estimated_cost_usd"] <= cap, "aggregate parent/supplemental compute budget exhausted")
         result = runner.execute(child.name, [pending[0]["run_id"]], project_root=child)[0]
         return {"status": "executed" if result["status"] == "succeeded" else "inspection_required", "executed": True,

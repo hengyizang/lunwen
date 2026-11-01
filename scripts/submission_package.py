@@ -14,6 +14,9 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 try:
     from researchctl import ResearchCtlError, file_sha256, load_state, paper_artifact_hash, project_dir, validate_paper_id
 except ModuleNotFoundError:  # Support `python -m unittest` package imports.
@@ -170,17 +173,15 @@ def select_files(paper: Path) -> list[Path]:
 
 
 def checklist(project: str, paper_id: str) -> bytes:
-    text = f"""# Manual submission checklist — {project}/{paper_id}
+    text = f"""# Journal upload checklist — {project}/{paper_id}
 
 This archive was prepared locally. It has **not** been submitted anywhere.
 
-- [ ] Open and visually inspect the final PDF/DOCX.
-- [ ] Confirm title, authors, affiliations, corresponding author and ORCID values.
-- [ ] Confirm author order and obtain every co-author's approval.
-- [ ] Recheck journal scope, article type, current JCR status, fees and deadlines.
-- [ ] Recheck word limits, figure/table limits and required separate upload files.
-- [ ] Verify ethics, consent, funding, conflicts, AI-use and data/code statements.
-- [ ] Verify every citation and DOI; resolve all editorial placeholders.
+Research-stage checks are completed by the recorded automated workflow after
+human selection of the doctoral topic and every paper topic. Packaging does not
+waive external authorship, consent or publisher requirements.
+
+- [ ] Satisfy the journal's author agreement and any co-author consent requirements.
 - [ ] Match portal metadata to the manuscript exactly.
 - [ ] Upload files manually and preview the portal-generated proof.
 - [ ] Save the portal receipt and submitted version outside this archive.
@@ -194,7 +195,7 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     paper_id = validate_paper_id(paper_id)
     state = load_state(slug)
     if state.get("paper_statuses", {}).get(paper_id) != "submission_ready":
-        raise ResearchCtlError(f"{paper_id} has not passed its G5 human gate.")
+        raise ResearchCtlError(f"{paper_id} has not passed its G5 checks.")
     paper = project_dir(slug) / "papers" / paper_id
     if not paper.is_dir():
         raise ResearchCtlError(f"Missing paper directory: {paper}")
@@ -202,7 +203,7 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     project = paper.parent.parent
     approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==paper_id),None)
     if not approval or approval.get("paper_artifact_sha256")!=paper_artifact_hash(slug,paper_id):
-        raise ResearchCtlError("Paper changed after G5 approval or approval predates the per-paper hash; re-run G5 review and approval")
+        raise ResearchCtlError("Paper changed after the G5 decision or lacks its current per-paper hash; re-run G5 checks")
     try:
         try:from scripts.jcr_verify import verify as verify_jcr_payload
         except ModuleNotFoundError:from jcr_verify import verify as verify_jcr_payload
@@ -216,10 +217,20 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         except ModuleNotFoundError:from manuscript_language import analyze_submission
         language=analyze_submission(paper)
         if language.get("status")!="pass":raise ResearchCtlError("English submission validation failed: "+"; ".join(language.get("errors",[])))
+        from scripts.citation_audit import validate_provider_identities
+        citation_identity_errors=validate_provider_identities(paper/"manuscript/references.bib",load_object(paper/"reviews/citation-audit.json"))
+        if citation_identity_errors:raise ResearchCtlError("Citation identity evidence failed: "+"; ".join(citation_identity_errors))
         try:from scripts.figure_provenance import validate_figure_provenance
         except ModuleNotFoundError:from figure_provenance import validate_figure_provenance
         figure_errors=validate_figure_provenance(project,paper)
         if figure_errors:raise ResearchCtlError("Figure provenance failed: "+"; ".join(figure_errors))
+        from scripts.manuscript_docx import validate_saved_report as validate_docx_build
+        docx_errors=validate_docx_build(paper)
+        if docx_errors:raise ResearchCtlError("DOCX build/visual checks failed: "+"; ".join(docx_errors))
+        if (paper/"manuscript/main.tex").is_file():
+            from scripts.automated_visual_review import verify as verify_visual
+            visual_errors=verify_visual(project,paper_id,f"papers/{paper_id}/manuscript/main.tex")
+            if visual_errors:raise ResearchCtlError("Final PDF visual checks failed: "+"; ".join(visual_errors))
         from scripts.docx_revision import validate_saved_report as validate_word_revision
         revision_errors=validate_word_revision(project,paper_id)
         from scripts.revision_ledger import validate_saved_report as validate_revision_ledger
@@ -229,7 +240,7 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
             revision_errors.extend(validate_support(project))
         if (project/"program/review-packets.json").exists():
             from scripts.review_packets import validate_gate_reviews
-            revision_errors.extend(validate_gate_reviews(project))
+            revision_errors.extend(validate_gate_reviews(project,paper_id))
         from scripts.research_extensions import gate_errors as extension_errors
         revision_errors.extend(extension_errors(project))
         from scripts.research_increments import gate_errors as increment_errors

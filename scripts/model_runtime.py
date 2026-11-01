@@ -246,33 +246,25 @@ def budget_status(project_root: Path, paper_id: str | None = None) -> dict[str, 
     spent = round(sum(float(item.get("cost_cny", 0.0)) for item in values), 8) if control is None else control["spent_cny"]
     paper_spent = round(sum(float(item.get("cost_cny", 0.0)) for item in values if paper_id and item.get("paper_id") == paper_id), 8) if control is None else control["paper_spent_cny"].get(paper_id, 0.0)
     reserved = model_spend.reserved(control) if control is not None else 0.0
-    paper_reserved = model_spend.reserved(control, paper_id) if control is not None and paper_id else 0.0
     defaults = _defaults()
     configured_project_limit = _float_env(
         "DR_OS_PROJECT_BUDGET_CNY", float(defaults.get("project_hard_limit", 300.0))
     )
     project_limit = float(control["authorized_ceiling_cny"]) if control is not None else configured_project_limit
-    paper_limit = _float_env(
-        "DR_OS_PAPER_BUDGET_CNY", float(defaults.get("paper_hard_limit", 60.0))
-    )
-    paper_warning = _float_env(
-        "DR_OS_PAPER_WARNING_CNY",
-        min(float(defaults.get("paper_warning_limit", 45.0)), paper_limit),
-    )
-    if paper_warning > paper_limit:
-        raise ModelBudgetError("paper warning limit cannot exceed paper hard limit")
+    remaining = round(project_limit - spent - reserved, 8)
     return {
         "currency": "CNY",
         "spent": spent,
         "reserved": reserved,
         "project_hard_limit": project_limit,
-        "project_remaining": round(project_limit - spent - reserved, 8),
+        "project_remaining": remaining,
         "paper_id": paper_id,
         "paper_spent": paper_spent if paper_id else None,
-        "paper_warning_limit": paper_warning if paper_id else None,
-        "paper_warning_reached": paper_spent >= paper_warning if paper_id else None,
-        "paper_hard_limit": paper_limit if paper_id else None,
-        "paper_remaining": round(paper_limit - paper_spent - paper_reserved, 8) if paper_id else None,
+        "paper_warning_limit": None,
+        "paper_warning_reached": None,
+        "paper_hard_limit": project_limit if paper_id else None,
+        "paper_remaining": remaining if paper_id else None,
+        "limit_scope": "project_total_only",
     }
 
 
@@ -443,12 +435,12 @@ def reservation_bound(provider: str, prompt: str, system: str | None, max_output
     conservative = controlled or quote.get("quote_schema") == "2.0"
     inputs = max(predicted, len(request_text.encode("utf-8")) + 1000) if conservative else predicted
     production = provider in ai_providers.PRODUCTION_PROVIDERS
-    if production:
-        inputs = max(inputs + 8192, 65536 if ai_providers.provider_family(provider) == "anthropic" else 8192)
-        if has_media:
-            inputs = max(inputs, 1048576)
+    if production and has_media:
+        # Media can consume the full multimodal context; text requests use
+        # their actual encoded request size rather than a flat 65k minimum.
+        inputs = max(inputs, 1048576)
     cost = billing_quotes.reserve_cost(quote, inputs, max_output_tokens, limits)
-    return round(7 * cost, 8) if production else cost
+    return round(cost, 8)
 
 
 def call(
@@ -662,11 +654,6 @@ def call(
     controlled = control is not None
     if production and not controlled:
         raise ModelBudgetError("production calls require the persisted owner-approved spending ledger")
-    if production and (os.environ.get("GITHUB_ACTIONS") != "true"
-                       or os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") != "1"):
-        raise ModelBudgetError("production generation requires the cloud runner and durable remote reservation mode")
-    if control and control["reservations"]:
-        raise ModelBudgetError("billing reconciliation is required before another paid request")
     reserved_cost = reservation_bound(provider, prompt, system, max_output_tokens, quote, limits,
                                       controlled=controlled, has_media=bool(media))
     if reserved_cost > float(status["project_remaining"]):
@@ -674,56 +661,23 @@ def call(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "
             f"remaining CNY {status['project_remaining']:.4f}"
         )
-    if paper_id and reserved_cost > float(status["paper_remaining"]):
-        raise ModelBudgetError(
-            f"request could exceed {paper_id} model budget: reserve up to CNY {reserved_cost:.4f}, "
-            f"remaining CNY {status['paper_remaining']:.4f}"
-        )
     meter_before = None
     if production:
         if not configuration.get("configured"):
             raise ModelBudgetError("production route credentials are missing")
-        from scripts.production_readiness import catalog
-        availability_error = None
-        try:
-            if effective_model not in catalog(provider, dict(os.environ)):
-                availability_error = "model_not_advertised"
-        except ValueError:
-            availability_error = "catalog_unavailable"
-        if availability_error:
-            _append(project_root / "state/model-route-decisions.jsonl", {
-                "schema_version": "1.0", "at": utc_now(), "run_id": run_id,
-                "stage": stage, "role": role, **request_metrics,
-                "provider": provider, "model": effective_model,
-                "availability_error": availability_error, "generation_sent": False,
-                "not_scientific_evidence": True,
-            })
-            raise ModelBudgetError(
-                f"production route unavailable ({availability_error}); no generation sent"
-            )
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
     if reservation_id:
         from scripts.cloud_checkpoint import sync_billing
         sync_billing(project_root)
 
-    shared_ticket = None
     if production:
-        from scripts import relay_guard
         try:
-            shared_ticket = relay_guard.begin(provider,
-                scope={"project": project_root.name, "run_id": run_id, "reservation_id": reservation_id},
-                max_cost_cny=reserved_cost)
             meter_before = relay_billing.read_meter(provider)
-            relay_guard.bind_meter(shared_ticket, effective_model, meter_before)
-        except Exception:
-            # No provider POST has been entered. This is not an unknown charge.
-            if shared_ticket:
-                relay_guard.finish(shared_ticket, not_sent=True)
-            if reservation_id:
-                model_spend.cancel_unsent(project_root, reservation_id, reason="shared_guard_or_pre_call_meter_blocked")
-                sync_billing(project_root)
-            raise
+        except (relay_billing.BillingReconciliationError, OSError, ValueError):
+            # Independent fee reads improve the calculation; their availability
+            # is not a separate authorization gate. The quote remains reserved.
+            meter_before = None
 
     request_started = time.monotonic()
     try:
@@ -739,7 +693,7 @@ def call(
             **request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id,
             "stage": stage, "paper_id": paper_id, "role": role, "provider": provider,
             "model": effective_model, "cache_hit": False, "cache_key": key,
-            "cost_cny": 0.0, "cost_status": "unknown_reconcile_required",
+            "cost_cny": 0.0 if controlled else reserved_cost, "cost_status": "accounted_upper_bound",
             "reservation_id": reservation_id, "reserved_cost_cny": reserved_cost,
             "billing_identity": identity["billing_identity"],
             "billing_quote_sha256": identity["billing_quote_sha256"],
@@ -756,65 +710,51 @@ def call(
     result.dynamic_candidate_id = request_metrics["dynamic_candidate_id"]
     result.routing_policy_sha256 = route.get("policy_sha256")
     settled = None
+    billing_details = {}
+    actual_cost, estimated = reserved_cost, True
+    cache_price_unknown = True
     try:
         input_tokens, output_tokens = usage_counts(result.usage)
         estimated = input_tokens is None or output_tokens is None
-        if estimated and quote.get("quote_schema") == "2.0":
-            raise ModelBudgetError("conditional billing needs actual token usage; reconcile the outstanding reservation")
         input_tokens = input_tokens if input_tokens is not None else predicted_input
         output_tokens = output_tokens if output_tokens is not None else estimate_tokens(result.text)
-        try:
+        if not estimated:
             actual_cost, cache_price_unknown, billing_details = billed_cost(provider, result.usage, effective_model, input_tokens, output_tokens,
                                                                           quote=quote, declared_tool_limits=limits, request_id=result.request_id)
-        except ModelBudgetError:
-            if not production:
-                raise
-            # Independent gateway settlement can resolve missing cache TTL or
-            # a promotional price without fabricating a precise token quote.
-            actual_cost, cache_price_unknown = reserved_cost, True
-            billing_details = {"modeled_cost_unknown":True,"usage_receipt":result.usage}
-        if production:
-            if output_tokens > max_output_tokens:
-                raise ModelBudgetError("provider output exceeded the reserved ceiling")
+            estimated = cache_price_unknown
+            if estimated:
+                actual_cost = reserved_cost
+    except ModelBudgetError as exc:
+        input_tokens, output_tokens = predicted_input, estimate_tokens(result.text)
+        actual_cost, estimated = reserved_cost, True
+        billing_details = {"calculation_error": str(exc), "usage_receipt": result.usage}
+    if production and meter_before is not None:
+        try:
             settled = relay_billing.settle(provider, effective_model, meter_before)
-            if settled["actual_cost_cny"] > reserved_cost:
-                if reservation_id:
-                    # Keep a pending hold for the known debit, rather than
-                    # releasing it and permitting another underquoted call.
-                    # This records an existing liability, not new authority.
-                    control = model_spend.read(project_root, required=True)
-                    pending = control["reservations"][reservation_id]
-                    pending["max_cost_cny"] = settled["actual_cost_cny"]
-                    pending["confirmed_gateway_debit_cny"] = settled["actual_cost_cny"]
-                    pending["review_reason"] = "gateway_debit_exceeded_reserved_ceiling"
-                    model_spend.write(project_root, control)
-                    from scripts.cloud_checkpoint import sync_billing
-                    sync_billing(project_root)
-                raise ModelBudgetError("gateway debit exceeded the reserved ceiling; hold for reconciliation")
             billing_details = {**billing_details,"modeled_cost_cny":None if cache_price_unknown else actual_cost,
                                "independent_gateway_debit":settled}
-            actual_cost, cache_price_unknown, estimated = settled["actual_cost_cny"], False, False
-    except (ModelBudgetError, relay_billing.BillingReconciliationError) as exc:
-        _append(_ledger(project_root), {**request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id, "stage": stage,
-                                      "paper_id": paper_id, "role": role, "provider": provider,
-                                      "model": result.reported_model or result.model, "cache_hit": False,
-                                      "cache_key": key, "cost_cny": 0.0, "cost_status": "unknown_reconcile_required",
-                                      "reservation_id": reservation_id, "reserved_cost_cny": reserved_cost,
-                                      "billing_identity": identity["billing_identity"], "billing_quote_sha256": identity["billing_quote_sha256"],
-                                      "declared_tool_limits": limits, "request_id": result.request_id,
-                                      "billing_error": str(exc), "usage_receipt": result.usage,
-                                      "independent_gateway_debit": settled,
-                                      "completion_status": result.completion_status,
-                                      "endpoint": result.endpoint, "gateway": result.gateway, "protocol": result.protocol})
-        raise
-    estimated = estimated or cache_price_unknown
+            actual_cost, estimated = settled["actual_cost_cny"], False
+        except (relay_billing.BillingReconciliationError, OSError, ValueError) as exc:
+            billing_details["gateway_fee_unavailable"] = str(exc)
+            # Token calculations alone are not an independently verified relay
+            # bill. Count the original upper bound without pretending otherwise.
+            actual_cost, estimated = reserved_cost, True
+    elif production:
+        actual_cost, estimated = reserved_cost, True
+    billing_details["cost_basis"] = ("conservative_upper_bound" if estimated else
+                                      "verified_gateway_debit" if settled else "calculated_usage")
+    if estimated:
+        billing_details["usage_receipt"] = result.usage
     result.cache_key = key
-    if reservation_id and not estimated:
-        model_spend.settle(project_root, reservation_id, actual_cost_cny=actual_cost)
-        if production:
-            from scripts.cloud_checkpoint import sync_billing
-            sync_billing(project_root)
-            relay_guard.finish(shared_ticket, settled)
+    budget_error = None
+    if reservation_id:
+        try:
+            model_spend.settle(project_root, reservation_id, actual_cost_cny=actual_cost,
+                               cost_basis=billing_details["cost_basis"])
+        except model_spend.SpendControlError as exc:
+            budget_error = exc
+        from scripts.cloud_checkpoint import sync_billing
+        sync_billing(project_root)
     _append(
         _ledger(project_root),
         {
@@ -843,10 +783,12 @@ def call(
             "billing_quote_sha256": identity["billing_quote_sha256"],
             "declared_tool_limits": limits,
             "reservation_id": reservation_id,
-            "cost_status": ("estimated_reconcile_required" if estimated else
-                            "settled_gateway_debit" if production else "settled_usage_receipt"),
+            "cost_status": ("estimated_upper_bound" if estimated else
+                            "settled_gateway_debit" if settled else "settled_usage_receipt"),
         },
     )
+    if budget_error is not None:
+        raise budget_error
     # Account for the billable response first. Truncated/refused answers must
     # never become cached scientific artifacts, even if their text parses.
     ai_providers.require_complete(result)
@@ -859,7 +801,7 @@ def call(
                 "cost_cny":0.0,"validation_status":"source_contract_failed_no_retry",
                 "request_id":result.request_id,"not_scientific_evidence":True})
             raise
-    if use_cache and not estimated:
+    if use_cache:
         _write_cache(
             cache_path,
             {

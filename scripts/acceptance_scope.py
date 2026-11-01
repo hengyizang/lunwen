@@ -53,6 +53,8 @@ def prepare_scope(project, state):
     with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
         for gate in ("G1", "G2"):
             approval = {"gate": gate, "actor": "Synthetic fixture human", "artifact_sha256": sha(project / "program" / ("core-thesis.json" if gate == "G1" else "paper-map.json"))}
+            if gate == "G2":
+                approval["paper_topic_approvals"] = [{"paper_id": pid, "actor": "Synthetic fixture human", "artifact_sha256": approval["artifact_sha256"]} for pid in ids]
             state["approvals"].append(approval)
             if gate not in state["approved_gates"]:
                 state["approved_gates"].append(gate)

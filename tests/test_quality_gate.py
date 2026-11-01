@@ -81,6 +81,16 @@ def report(gate):
 
 
 class QualityGateTests(unittest.TestCase):
+    def test_required_text_rejects_null_and_non_strings(self):
+        value = report("G1")
+        value["evidence"][0]["source"] = None
+        value["novelty_claim"] = None
+        value["originality_assessment"]["closest_prior_work_ids"][0] = None
+        value["doctoral_readiness"]["unifying_thesis"] = 42
+        value["venue_readiness"]["candidate_venues"][0]["name"] = None
+        errors = validate_report(value, "G1")
+        for expected in ("evidence[1] needs source", "novelty_claim", "closest_prior_work_ids", "unifying_thesis", "candidate venue 1 needs name"):
+            self.assertTrue(any(expected in error for error in errors), errors)
     def test_all_gates_pass(self):
         for gate in DIMENSIONS:
             self.assertEqual(validate_report(report(gate), gate), [])

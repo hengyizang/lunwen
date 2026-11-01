@@ -6,7 +6,7 @@ from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
                   "reports/data-contracts", "reports/data-cleaning", "reports/empirical-reporting",
-                  "evidence/economic-data", "data/raw/economic-data", "data/processed", "data/processed-preview",
+                  "evidence/economic-data", "evidence/data-rights", "data/raw/economic-data", "data/processed", "data/processed-preview",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
                   "reports/manuscript-hygiene", "reports/reviewer-rounds",
                   "reports/publication-disclosure", "reports/statistical-watermarks",

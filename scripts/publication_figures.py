@@ -727,8 +727,8 @@ def main() -> int:
         spec_path = safe_file(project, args.spec, "spec")
         report = render(project, spec_path, reuse_panels=True if args.reuse_panels else None)
         if args.record:
-            if not args.run or not args.language_checked_by:
-                raise FigureSpecError("--record requires --run and --language-checked-by")
+            if not args.run:
+                raise FigureSpecError("--record requires sealed --run identifiers")
             try:
                 from scripts.figure_provenance import record_figure
             except ImportError:
@@ -748,7 +748,7 @@ def main() -> int:
                     inputs,
                     args.run,
                     args.spec,
-                    args.language_checked_by,
+                    args.language_checked_by or "",
                 )
     except FigureSpecError as exc:
         raise SystemExit(f"error: {exc}") from exc

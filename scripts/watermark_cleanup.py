@@ -414,7 +414,7 @@ def build(project: Path, paper_id: str, source: str, expected_sha256: str) -> di
     output.parent.mkdir(parents=True, exist_ok=False)
     changes, diff, receipt_path = output.parent / "changes.json", output.parent / "diff.txt", output.parent / "receipt.json"
     output.write_bytes(derived)
-    changes.write_text(json.dumps(details, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    changes.write_bytes((json.dumps(details, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
     diff.write_bytes(_diff(before, after))
     result = {"schema_version": "1.0", "status": "candidate_created", "paper_id": paper_id, "id": identifier,
               "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),

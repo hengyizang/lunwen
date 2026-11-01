@@ -28,7 +28,7 @@ class DataDiscoveryTests(unittest.TestCase):
         self.assertEqual(report["candidate_count"], 1)
         self.assertEqual(
             report["candidates"][0]["license_status"],
-            "unverified_requires_human_review",
+            "unverified_requires_source_evidence",
         )
 
     def test_provider_failure_is_reported_without_fabricating_results(self) -> None:
@@ -78,7 +78,7 @@ class DataDiscoveryTests(unittest.TestCase):
         self.assertIn("found through 2 provider families", candidate["screening_reasons"])
         self.assertEqual(
             candidate["fitness_status"],
-            "candidate_only_requires_scientific_and_human_review",
+            "candidate_only_requires_source_bound_scientific_review",
         )
 
 

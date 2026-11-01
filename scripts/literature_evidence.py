@@ -126,10 +126,21 @@ def safe_project_file(project: Path, value: str) -> Path:
 
 
 def append_jsonl(path: Path, value: dict[str, Any]) -> None:
+    acquisition_ledger = path.name == "literature-api-ledger.jsonl" and path.parent.name == "evidence"
+    if acquisition_ledger and any(part.is_symlink() for part in (path, *path.parents)):
+        raise LiteratureEvidenceError("acquisition ledger cannot use a symlink path")
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n")
         handle.flush()
+    if acquisition_ledger:
+        try:
+            from scripts.output_provenance import record_model_writes
+        except ImportError:
+            from output_provenance import record_model_writes
+        record_model_writes(path.parent.parent, [path], family="other", provider="deterministic-control-plane",
+            model="scripts/literature_evidence.py", role="literature-metadata-acquisition",
+            run_id=str(value.get("receipt_id", "acquisition-ledger-append")))
 
 
 def replace_jsonl(path: Path, values: list[dict[str, Any]]) -> None:
@@ -1204,6 +1215,15 @@ def execute_search(
         project / "evidence" / "search-log.jsonl",
         _search_record(receipt, query_family.strip(), _declared(date_range), _declared(filters)),
     )
+    # Retained metadata may establish bibliographic identity, never claim
+    # support. Record the actual acquisition origin, not a human verification.
+    try:
+        from scripts.output_provenance import record_model_writes
+    except ImportError:
+        from output_provenance import record_model_writes
+    record_model_writes(project, [raw_path, normalized_path, project / "evidence/literature-api-ledger.jsonl"],
+        family="other", provider="deterministic-control-plane", model="scripts/literature_evidence.py",
+        role="literature-metadata-acquisition", run_id=receipt_id)
     return receipt
 
 
@@ -1403,7 +1423,10 @@ def validate_search_evidence(project: Path, records: list[dict[str, Any]]) -> li
         if unknown:
             errors.append(f"{prefix} includes IDs absent from the executed result: {', '.join(unknown)}")
         if not isinstance(record.get("screened_by"), str) or not record["screened_by"].strip():
-            errors.append(f"{prefix} requires a named human screening decision")
+            errors.append(f"{prefix} requires a recorded screening decision")
+        elif record["screened_by"].startswith("model:"):
+            from scripts.literature_model_screening import verify
+            errors.extend(f"{prefix}: {issue}" for issue in verify(project, record))
     return errors
 
 

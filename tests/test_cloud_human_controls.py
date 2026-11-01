@@ -64,8 +64,9 @@ class CloudHumanControlTests(unittest.TestCase):
         controls.execute(job, "11")
         with self.assertRaisesRegex(controls.HumanControlError, "changed"):
             controls.execute(job, "12")
-        approved = self.decide("approve", gate="G0")
-        self.assertEqual(approved["state_after"]["status"], "approved")
+        state = researchctl.load_state(self.project.name)
+        self.assertEqual(state["status"], "approved")
+        self.assertEqual(state["approvals"][-1]["decision_type"], "deterministic")
         advance = acceptance.review("advance", gate="G0")
         constraints = self.project / "intake/constraints.json"
         constraints.write_text(constraints.read_text() + "\n", encoding="utf-8")
@@ -74,18 +75,59 @@ class CloudHumanControlTests(unittest.TestCase):
                                           note="I reviewed this approved gate snapshot."), "13")
         self.assertTrue(acceptance.review("advance", gate="G0")["blockers"])
         self.decide("ready", gate="G0")
-        self.decide("approve", gate="G0")
         self.decide("advance", gate="G0")
         self.assertEqual(researchctl.load_state(self.project.name)["gate"], "G1")
         self.assertTrue(acceptance.review("ready", gate="G1")["blockers"])
 
     def test_reopen_records_revision_without_granting_a_gate(self):
-        self.decide("ready", gate="G0")
-        self.decide("reopen", gate="G0")
+        acceptance.set_fixture_stage(self.project, "G1")
+        with patch.object(researchctl, "gate_errors", return_value=[]):
+            self.decide("ready", gate="G1")
+            self.decide("reopen", gate="G1")
         state = researchctl.load_state(self.project.name)
         self.assertEqual(state["status"], "awaiting_work")
         self.assertNotIn("ready_artifact_sha256", state)
         self.assertEqual(state["approved_gates"], [])
+
+    def test_topic_gates_require_named_review_and_each_paper_vote(self):
+        acceptance.set_fixture_stage(self.project, "G1")
+        with patch.object(researchctl, "gate_errors", return_value=[]), \
+             patch("scripts.scientific_scope.seal_approval"):
+            self.decide("ready", gate="G1")
+            self.assertEqual(researchctl.load_state(self.project.name)["status"], "awaiting_approval")
+            self.decide("approve", gate="G1")
+            state = researchctl.load_state(self.project.name)
+            self.assertEqual(state["approvals"][-1]["decision_type"], "human_topic")
+            self.assertEqual(state["approvals"][-1]["actor"], acceptance.request("status")["actor"])
+            acceptance.set_fixture_stage(self.project, "G2")
+            state = researchctl.load_state(self.project.name)
+            state["paper_count"] = 2
+            researchctl.save_state(self.project.name, state)
+            (self.project / "papers/P02").mkdir()
+            self.decide("ready", gate="G2")
+            self.decide("approve", gate="G2", paper_id="P01")
+            state = researchctl.load_state(self.project.name)
+            self.assertEqual(state["status"], "awaiting_approval")
+            self.assertEqual([x["paper_id"] for x in state["paper_topic_approvals"]], ["P01"])
+            self.decide("approve", gate="G2", paper_id="P02")
+            state = researchctl.load_state(self.project.name)
+            self.assertEqual(state["status"], "approved")
+            self.assertEqual({x["paper_id"] for x in state["paper_topic_approvals"]}, {"P01", "P02"})
+            self.assertTrue(all(x["actor"] == acceptance.request("status")["actor"] for x in state["paper_topic_approvals"]))
+
+    def test_changed_paper_topic_cannot_reuse_an_earlier_vote(self):
+        acceptance.set_fixture_stage(self.project, "G2")
+        state = researchctl.load_state(self.project.name)
+        state["paper_count"] = 2
+        researchctl.save_state(self.project.name, state)
+        (self.project / "papers/P02").mkdir()
+        with patch.object(researchctl, "gate_errors", return_value=[]), \
+             patch("scripts.scientific_scope.seal_approval"):
+            self.decide("ready", gate="G2")
+            self.decide("approve", gate="G2", paper_id="P01")
+            (self.project / "papers/P02/paper-contract.json").write_text('{"research_question":"changed"}', encoding="utf-8")
+            self.assertTrue(acceptance.review("approve", gate="G2", paper_id="P02")["blockers"])
+            self.assertEqual(researchctl.load_state(self.project.name)["status"], "awaiting_approval")
 
     def test_missing_evidence_and_wrong_reviewer_cannot_be_confirmed(self):
         self.prepare_quality()
@@ -207,7 +249,8 @@ class CloudHumanControlTests(unittest.TestCase):
             self.assertTrue(receipt["ready_for_operation"])
             self.assertEqual(cloud_job.run_job(self.request("ready", gate="G0",
                              expected_sha256=receipt["review_sha256"], note="Review the synthetic cloud intake."), "19"), 0)
-            self.assertEqual(researchctl.load_state(self.project.name)["status"], "awaiting_approval")
+            self.assertEqual(researchctl.load_state(self.project.name)["status"], "approved")
+            self.assertEqual(researchctl.load_state(self.project.name)["approvals"][-1]["decision_type"], "deterministic")
             self.assertEqual(before, cp.sha(self.project / "state/model-spend-control.json"))
             self.assertEqual(restore.call_count, 2)
             self.assertEqual(acquire.call_count, 2)
@@ -225,7 +268,8 @@ class CloudHumanControlTests(unittest.TestCase):
             cloud_job.issue_request(event)
         event["issue"]["user"]["id"] = cloud_job.OWNER_ID
         self.assertEqual(cloud_job.issue_request(event), value)
-        for fields in ({"allow_paid": True}, {"paper_id": "P01"}, {"operation": "shell"}, {"gate": "G6"}):
+        self.assertEqual(cloud_job.validate_request({**value,"allow_paid":True})["action"],value["action"])
+        for fields in ({"paper_id": "P01"}, {"operation": "shell"}, {"gate": "G6"}):
             with self.subTest(fields=fields), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request({**value, **fields})
         with self.assertRaises(cloud_job.CloudJobError):

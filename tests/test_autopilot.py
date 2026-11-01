@@ -10,13 +10,37 @@ from scripts import autopilot
 
 
 class AutopilotTests(unittest.TestCase):
+    def test_legacy_non_topic_pending_gate_advances_without_human_wait(self) -> None:
+        pending = {"stage": "writing-and-review", "gate": "G5", "status": "awaiting_approval"}
+        approved = {**pending, "status": "approved"}
+        done = {"stage": "complete", "gate": None, "status": "submission_ready"}
+        with mock.patch.object(autopilot.researchctl, "load_state", side_effect=[pending, approved, done]), mock.patch(
+            "scripts.scientific_scope.validate", return_value=[]
+        ), mock.patch.object(autopilot.researchctl, "gate_errors", return_value=[]), mock.patch.object(
+            autopilot.researchctl, "mark_ready"
+        ) as ready, mock.patch.object(autopilot.researchctl, "advance") as advance:
+            result = autopilot.run_stage("test-phd", "", "standard", 1, 100, 0)
+        self.assertEqual(result["status"], "submission_ready")
+        ready.assert_called_once()
+        advance.assert_called_once()
+
+    def test_pending_topic_still_requires_actual_human_selection(self) -> None:
+        for gate in ("G1", "G2"):
+            with self.subTest(gate=gate), mock.patch.object(autopilot.researchctl, "load_state", return_value={
+                "stage": "topic-intelligence", "gate": gate, "status": "awaiting_approval"
+            }), mock.patch("scripts.scientific_scope.validate", return_value=[]), mock.patch.object(
+                autopilot.researchctl, "mark_ready"
+            ) as ready:
+                result = autopilot.run_stage("test-phd", "", "standard", 1, 100, 0)
+                self.assertEqual(result["status"], "awaiting_human_topic_approval")
+                ready.assert_not_called()
+
     @mock.patch("scripts.autopilot.shutil.which", return_value="/usr/bin/claude")
     def test_claude_command_is_read_only_bounded_and_redacted(self, _which) -> None:
         prompt = "You are Claude " + "x" * 600
         command = autopilot.claude_command(prompt, "standard", 3.5)
         self.assertIn("-p", command)
-        self.assertIn("--max-budget-usd", command)
-        self.assertIn("3.5", command)
+        self.assertNotIn("--max-budget-usd", command)
         self.assertIn("Bash(python3 scripts/researchctl.py gate-check *)", command)
         self.assertNotIn("Bash(python3 scripts/researchctl.py approve *)", command)
         tools = command[command.index("--tools") + 1]

@@ -108,18 +108,37 @@ class StudyRouteTests(unittest.TestCase):
         write(self.project / "papers/P01/experiment-evidence.json", {"status": "complete", "errors": []})
         self.assertNotEqual(study_routes.build_report(self.project, "P01")["status"], "complete")
 
+    def test_automated_confirmation_requires_complete_evidence_and_never_claims_human_review(self):
+        self.fixture(); fixtures.freeze(self.project)
+        with self.assertRaises(ValueError):
+            study_routes.create_confirmation(self.project, "P01", "controller", automated=True)
+        # This synthetic report isolates confirmation binding, not scientific
+        # validity. The unmocked missing-run check above must remain blocking.
+        report = {"status": "complete", "errors": [], "comparisons": [], "synthetic_fixture_only": True}
+        with patch.object(study_routes, "build_report", return_value=report):
+            value = study_routes.create_confirmation(self.project, "P01", "ignored", automated=True)
+            self.assertFalse(value["human_confirmation"])
+            self.assertEqual(value["actor"], "deterministic_control_plane")
+            self.assertEqual(study_routes.confirmation_errors(self.project, "P01", value), [])
+            value["actor"] = "Claimed human reviewer"
+            self.assertIn("cannot claim human", " ".join(study_routes.confirmation_errors(self.project, "P01", value)))
+
     def test_child_state_registry_and_frozen_sources_are_protected(self):
         prefix = "experiments/supplemental/P01/R001/s001/"
         for relative in ("state/run.json", "experiments/registry.jsonl", "data/quality/a-confirmation.json", "results/result.json"):
             self.assertTrue(artifact_ownership.executor_owned(self.project, prefix + relative), relative)
         self.assertFalse(artifact_ownership.executor_owned(self.project, prefix + "papers/P01/study-protocol.json"))
 
-    def test_scientific_confirmation_is_nonbillable_and_paper_specific(self):
+    def test_scientific_confirmation_ignores_paid_optin_but_stays_paper_specific(self):
         for action in ("confirm_study_validation", "approve_supplemental", "confirm_supplemental"):
             value = {"schema_version": "1.0", "action": action, "project": "demo", "actor": "Synthetic reviewer", "allow_paid": False,
                      "paper_id": "P01", "expected_sha256": "a" * 64, "note": "Review the actual bound evidence."}
             self.assertEqual(cloud_job.validate_request(value)["action"], action)
             value["allow_paid"] = True
+            self.assertEqual(cloud_job.validate_request(value)["action"], action)
+            value.pop("allow_paid")
+            self.assertEqual(cloud_job.validate_request(value)["paper_id"], "P01")
+            value.pop("paper_id")
             with self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request(value)
 
@@ -180,7 +199,10 @@ class SupplementalGuardTests(unittest.TestCase):
 
     def test_zero_parent_compute_budget_cannot_be_raised_by_child(self):
         write(self.child / "experiments/budget.json", {"status": "ready_for_review", "hard_ceiling_usd": 1})
-        with self.assertRaisesRegex(ValueError, "compute authorization"):
+        plan = read(self.child / "experiments/plan.json")
+        plan["runs"][0]["estimated_cost_usd"] = 0.1
+        write(self.child / "experiments/plan.json", plan)
+        with self.assertRaisesRegex(ValueError, "project total compute ceiling"):
             supplemental.prepare_approval(self.parent, "P01", "Synthetic reviewer")
 
     def test_changed_original_plan_cannot_be_reused(self):

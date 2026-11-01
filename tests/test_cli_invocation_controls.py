@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from contextlib import contextmanager
@@ -73,6 +74,16 @@ def call_writer(run, before, name="writer", max_output=4096):
 
 @unittest.skipUnless(os.open in os.supports_dir_fd, "safe invocation execution requires openat")
 class CliInvocationControlsTests(unittest.TestCase):
+    def test_direct_entrypoints_work_without_pythonpath_or_project_cwd(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as directory:
+            for name in ("researchctl", "experiment_runner", "submission_package", "api_orchestrator", "autopilot"):
+                with self.subTest(entrypoint=name):
+                    result = subprocess.run([sys.executable, "-E", str(root/"scripts"/(name+".py")), "--help"],
+                        cwd=directory, capture_output=True, text=True, encoding="utf-8", timeout=30)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn("usage:", result.stdout.lower())
+
     def test_run_stage_completes_writer_and_remediation_with_real_control_checks(self):
         with fixture() as (_, project, _, state):
             prepare_scope(project, state)
@@ -117,6 +128,11 @@ class CliInvocationControlsTests(unittest.TestCase):
                 source_packet_modes.append((prompt, source_packet_only))
                 return ["mock-claude", prompt]
 
+            def checked_ready(_args):
+                current = json.loads((project / "state/run.json").read_text(encoding="utf-8"))
+                current["status"] = "approved"
+                (project / "state/run.json").write_text(json.dumps(current), encoding="utf-8")
+
             with patch.object(autopilot, "load_stage_config", return_value={state["stage"]: {}}), patch.object(
                 autopilot, "planner_prompt", return_value="planner"
             ), patch.object(autopilot, "writer_prompt", return_value="writer"), patch.object(
@@ -128,14 +144,15 @@ class CliInvocationControlsTests(unittest.TestCase):
             ), patch.object(autopilot, "refresh_post_write_evidence", return_value={"controlled_steps": None, "academic_style_audit": None}), patch.object(
                 api_orchestrator, "refresh_research_method_audits", return_value=None
             ), patch.object(autopilot.researchctl, "gate_errors", return_value=[]), patch.object(
-                autopilot.researchctl, "mark_ready"
-            ) as ready, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1",
+                autopilot.researchctl, "mark_ready", side_effect=checked_ready
+            ) as ready, patch.object(autopilot.researchctl, "advance") as advance, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1",
                     "ANTHROPIC_MODEL": "claude-synthetic-fixture"}):
                 journal = autopilot.run_stage("demo", "", "standard", 1, capture_limit, 3.5)
             self.assertEqual(names, ["planner", "writer", "critic", "remediation", "final-critic"])
             self.assertEqual(source_packet_modes, [("planner", False), ("critic", True), ("final-critic", True)])
-            self.assertEqual(journal["status"], "awaiting_human_approval")
+            self.assertEqual(journal["status"], "stage_advanced")
             ready.assert_called_once()
+            advance.assert_called_once()
             current = json.loads((project / "state/run.json").read_text())
             self.assertEqual(current["approvals"], original_approvals)
             self.assertEqual(current["approved_gates"], original_approved_gates)

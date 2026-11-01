@@ -129,10 +129,10 @@ def literature_context(project: Path, query: str) -> dict:
             "pending_searches": pending, "new_search_calls": calls,
             "work_count": len(works), "works_omitted": max(0, len(works) - 90),
             "bounded_metadata_only": True,
-            "human_screening_required": True, "novelty_proven": False}
+            "human_screening_required": False, "model_screening_required": True, "novelty_proven": False}
 
 
-def authorize_data(project: Path, relative: str, expected_sha256: str, actor: str, run_id: str) -> dict:
+def authorize_data(project: Path, relative: str, expected_sha256: str, actor: str, run_id: str, *, automated=False) -> dict:
     manifest_path = path_in(project, relative)
     if not relative.startswith("data/manifests/") or manifest_path.suffix != ".json":
         raise ResearchStepError("authorize an exact data/manifests/*.json file")
@@ -140,8 +140,12 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
         raise ResearchStepError("data authorization must name the reviewer and exact reviewed manifest hash")
     manifest = dataset_fetch.load_manifest(manifest_path)
     errors = dataset_fetch.validate_manifest(manifest)
-    if errors or manifest["license"].get("confirmed_by_human") is not True:
+    if errors or (not automated and manifest["license"].get("confirmed_by_human") is not True):
         raise ResearchStepError("review data license, privacy and cloud-use rights before authorizing acquisition")
+    if automated:
+        issues = dataset_fetch.license_errors(manifest, project=project)
+        if issues or actor != "deterministic_control_plane":
+            raise ResearchStepError("; ".join(issues) or "automatic authorization needs its control-plane identity")
     download = manifest["download"]
     economic_scope = manifest.get("provenance", {}).get("economic_scope")
     if economic_scope is not None:
@@ -162,7 +166,8 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
         raise ResearchStepError("cloud acquisition needs a pinned checksum and a positive byte ceiling up to 2 GB")
     values = read(project / AUTHORIZATIONS, {"schema_version": "1.0", "manifests": {}})
     values["manifests"][relative] = {"sha256": expected_sha256, "actor": actor, "source_run_id": str(run_id),
-                                    "cloud_use_confirmed": True, "confirmed_at": datetime.now(timezone.utc).isoformat()}
+                                    "cloud_use_confirmed": True, "confirmed_at": datetime.now(timezone.utc).isoformat(),
+                                    **({"decision_kind": "automated", "human_confirmation": False} if automated else {})}
     write(project / AUTHORIZATIONS, values)
     return values["manifests"][relative]
 
@@ -174,10 +179,22 @@ def acquire_data(project: Path) -> dict:
     for manifest_path in manifests:
         relative = manifest_path.relative_to(project).as_posix()
         auth = authorizations.get(relative, {})
-        if auth.get("sha256") != cloud_checkpoint.sha(manifest_path) or auth.get("cloud_use_confirmed") is not True:
-            blockers.append({"kind": "data_rights_review", "path": relative, "sha256": cloud_checkpoint.sha(manifest_path)})
-            continue
         manifest = dataset_fetch.load_manifest(manifest_path)
+        if auth.get("sha256") != cloud_checkpoint.sha(manifest_path) or auth.get("cloud_use_confirmed") is not True:
+            try:
+                from scripts.data_rights import prepare
+                prepare(project, manifest_path)
+                auth = authorize_data(project, relative, cloud_checkpoint.sha(manifest_path),
+                                      "deterministic_control_plane", "automated-data-rights", automated=True)
+            except (ValueError, OSError, KeyError, TypeError, RuntimeError) as exc:
+                blockers.append({"kind": "data_rights_evidence", "path": relative,
+                                 "sha256": cloud_checkpoint.sha(manifest_path), "detail": str(exc)})
+                continue
+        if auth.get("decision_kind") == "automated":
+            issues = dataset_fetch.license_errors(manifest, project=project)
+            if issues:
+                blockers.append({"kind": "data_rights_evidence", "path": relative, "detail": "; ".join(issues)})
+                continue
         if manifest.get("provenance", {}).get("economic_scope") is not None:
             # Controlled API retrieval is requested explicitly through economic_data.
             continue
@@ -211,7 +228,7 @@ def resume_experiments(project: Path) -> dict:
     plan, _ = experiment_runner.approved_plan(project, plan_path, budget_path)
     plan_sha = cloud_checkpoint.sha(plan_path)
     registry = literature_evidence.read_jsonl(project / "experiments/registry.jsonl")
-    completed, failures = set(), []
+    completed, failures, recovery_decisions = set(), [], []
     for record in registry:
         if record.get("approved_plan_sha256") != plan_sha:
             raise ResearchStepError("experiment registry differs from the approved plan; inspection required")
@@ -219,16 +236,20 @@ def resume_experiments(project: Path) -> dict:
         if read(receipt) != record:
             raise ResearchStepError("experiment registry lacks its matching executor receipt")
         if record.get("status") != "succeeded":
-            from scripts.primary_recovery import _approval
+            from scripts.primary_recovery import _approval, automatic_retry
             if not _approval(project, record):
-                failures.append(record["attempt_id"])
+                decision = automatic_retry(project, record)
+                recovery_decisions.append(decision)
+                if not decision["retry_authorized"]:
+                    failures.append(record["attempt_id"])
         else:
             for output in record.get("outputs", []):
                 if cloud_checkpoint.sha(path_in(project, output["path"])) != output["sha256"]:
                     raise ResearchStepError("registered experiment output changed or was not restored")
             completed.add(record["run_id"])
     if failures:
-        return {"blockers": [{"kind": "experiment_inspection", "attempt_ids": failures}], "pending_runs": 0}
+        return {"blockers": [{"kind": "experiment_failure_diagnosis", "attempt_ids": failures,
+                               "recovery_decisions": recovery_decisions}], "pending_runs": 0}
     pending = [run for run in plan["runs"] if run["run_id"] not in completed]
     if not pending:
         return {"completed_runs": sorted(completed), "pending_runs": 0, "blockers": []}
@@ -268,9 +289,16 @@ def before_cycle(project: Path, stage: str) -> dict:
             report["experiments"] = resume_experiments(project)
             report["blockers"].extend(report["experiments"].get("blockers", []))
             # One real attempt/checkpoint per job; only analyze once all planned
-            # runs have completed. Failed attempts require exact owner recovery authorization.
+            # runs have completed. Only executor-proven no-start failures permit
+            # one budget-bound automatic retry; other failures retain diagnostics.
             report["control_only"] = bool(report["experiments"].get("executed_attempt") or report["blockers"])
-            if not report["control_only"] and report["experiments"].get("pending_runs") == 0:
+            if report["blockers"] and all(item.get("kind") == "experiment_failure_diagnosis" for item in report["blockers"]):
+                from scripts.primary_recovery import diagnosis_context
+                report["failure_diagnosis"] = diagnosis_context(project)
+                # No experiment is authorized here. The normal metered writer
+                # and independent critics may inspect this bounded failure.
+                report["control_only"] = report["failure_diagnosis"]["status"] != "eligible"
+            if not report["control_only"] and not report["blockers"] and report["experiments"].get("pending_runs") == 0:
                 from scripts.experiment_evidence import refresh
                 report["statistical_evidence"] = refresh(project)
                 for paper, evidence in report["statistical_evidence"].items():
@@ -374,7 +402,9 @@ def after_write(project: Path, stage: str) -> dict:
                 derive(project, operation["paper_id"], request["output"], request["transform"], request["source_run_ids"])
             elif action == "render_figure" and stage == "writing-and-review":
                 from scripts.publication_figures import render
-                render(project, path_in(project, operation["spec"]))
+                rendered=render(project, path_in(project, operation["spec"]))
+                from scripts.figure_provenance import register_rendered_figures
+                register_rendered_figures(project,rendered)
             elif action == "read_paper" and stage == "topic-intelligence":
                 from scripts.paper_reader import build, reusable_reader
                 source = path_in(project, operation["pdf"])
@@ -493,7 +523,7 @@ def after_write(project: Path, stage: str) -> dict:
                             "literature_semantic", "literature_pdf", "literature_zotero", "literature_zotero_register", "literature_roles",
                             "literature_comparison", "literature_paperqa",
                             "data_row_prepare", "data_row_provenance", "literature_source_trace",
-                            "literature_screening_advice", "literature_search_strategy", "literature_synthesis", "diagram_mermaid",
+                            "literature_screening_advice", "literature_screening_prepare", "literature_source_scope", "literature_search_strategy", "literature_synthesis", "diagram_mermaid",
                             "literature_feedback", "literature_feedback_propose"} and stage != "intake":
                 from scripts.literaturectl import execute_operation
                 result = execute_operation(project, operation)

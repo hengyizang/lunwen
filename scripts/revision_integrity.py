@@ -92,8 +92,16 @@ def load_authorization(path: Path | None) -> dict[str, Any] | None:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise RevisionIntegrityError(f"cannot read revision authorization: {exc}") from exc
-    if not isinstance(value, dict) or value.get("schema_version") != "1.0":
+    if not isinstance(value, dict) or value.get("schema_version") not in {"1.0", "1.1"}:
         raise RevisionIntegrityError("revision authorization must use schema_version 1.0")
+    if value.get("schema_version") == "1.1":
+        from scripts.output_provenance import current_origin
+        project = path.parents[3]
+        origin = current_origin(project, path)
+        if (value.get("decision_kind") != "automated_change_record" or origin.get("status") != "tracked"
+                or origin.get("provider") != "deterministic-control-plane" or origin.get("model") != "scripts/revision_integrity.py"):
+            raise RevisionIntegrityError("automatic change record lacks controller provenance")
+        return value
     if not str(value.get("approved_by", "")).strip() or not str(value.get("approved_at", "")).strip():
         raise RevisionIntegrityError("revision authorization needs approved_by and approved_at")
     return value
@@ -117,8 +125,13 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
     has_changes = any(value[side] for value in changes.values() for side in ("removed", "added"))
     errors: list[str] = []
     if has_changes and authorization is None:
-        errors.append("protected revision changes require named human authorization")
+        errors.append("protected revision changes need a current source-bound change record and independent review")
     if authorization is not None:
+        if authorization.get("schema_version") == "1.1" and (authorization.get("base_sha256") != manuscript_digest(base)
+                or authorization.get("current_sha256") != manuscript_digest(current)):
+            errors.append("automatic change record is stale")
+        if authorization.get("schema_version") == "1.1" and authorization.get("revision_ledger_input_sha256") != sha256_file(paper / "reviews/revision-ledger.json"):
+            errors.append("automatic change record is stale for the source-bound ledger")
         for key, actual in changes.items():
             expected = authorization.get(key, {"removed": [], "added": []})
             if not isinstance(expected, dict) or actual != {
@@ -155,16 +168,55 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
         "current": {"path": current.relative_to(paper).as_posix(), "sha256": manuscript_digest(current)},
         "authorization": (
             {"path": auth_path.relative_to(paper).as_posix(), "sha256": sha256_file(auth_path),
-             "approved_by": authorization["approved_by"], "approved_at": authorization["approved_at"]}
+             "approved_by": authorization.get("approved_by"), "approved_at": authorization.get("approved_at"),
+             "decision_kind": authorization.get("decision_kind", "human")}
             if authorization is not None else None
         ),
         "changes": changes,
         "errors": errors,
         "semantic_equivalence_proven": False,
-        "human_scientific_review_required": True,
+        "human_scientific_review_required": False,
+        "independent_scientific_review_required": True,
         "character_findings": character_audit(extract_text(current)),
         **({"revision_ledger": ledger_binding} if ledger_binding is not None else {}),
     }
+
+
+def record_automated_changes(paper: Path) -> dict:
+    """Record exact justified deltas; existing independent critics decide validity."""
+    from scripts import revision_ledger
+    from scripts.research_artifacts import record
+    project = paper.parent.parent
+    ledger_errors = revision_ledger.validate_saved_report(project, paper.name)
+    if ledger_errors:
+        raise RevisionIntegrityError("source-bound revision ledger required: " + "; ".join(ledger_errors))
+    current = canonical_manuscript(paper)
+    base = paper / "reviews/revision-base" / current.name
+    if not base.is_file():
+        raise RevisionIntegrityError("canonical revision baseline is required")
+    before, after = tokens(base), tokens(current)
+    changes = {key + "_changes": multiset_delta(before[key], after[key]) for key in ("numeric", "citation", "claim_language", "formula")}
+    changes["scientific_context_changes"] = context_changes(scientific_text(base), scientific_text(current))
+    reason = "Exact changes and source-bound author reasons are recorded in the current revision ledger; independent scientific audits remain required."
+    value = {"schema_version": "1.1", "decision_kind": "automated_change_record", "recorded_at": now(),
+             "base_sha256": manuscript_digest(base), "current_sha256": manuscript_digest(current),
+             "revision_ledger_input_sha256": sha256_file(paper / "reviews/revision-ledger.json"),
+             "claim_language_rationale": reason, "scientific_context_rationale": reason, "formula_rationale": reason,
+             "human_review": False, "scientific_validity_verified": False, **changes}
+    destination = paper / "reviews/revision-authorizations.json"
+    if destination.exists():
+        old = load_authorization(destination)
+        if old and old.get("decision_kind") != "automated_change_record":
+            archive = project / "state/revision-control-history" / paper.name / (sha256_file(destination) + ".json")
+            if not archive.exists():
+                atomic_json(archive, old)
+                record(project, [archive], "scripts/revision_integrity.py")
+        if old and {k:v for k,v in old.items() if k!="recorded_at"} == {k:v for k,v in value.items() if k!="recorded_at"}:
+            return old
+    atomic_json(destination, value)
+    record(project, [destination], "scripts/revision_integrity.py")
+    revision_ledger.refresh(project, paper.name)
+    return value
 
 
 def validate_saved_report(paper: Path) -> list[str]:

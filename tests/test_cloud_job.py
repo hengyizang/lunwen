@@ -23,18 +23,19 @@ def issue(value, *, owner=cloud_job.OWNER_ID):
 
 
 class CloudJobTests(unittest.TestCase):
-    def test_owner_single_object_and_billable_action_flag(self):
+    def test_owner_single_object_and_optional_legacy_paid_flag(self):
         self.assertEqual(cloud_job.issue_request(issue(request()))["action"], "status")
         self.assertEqual(cloud_job.issue_request(issue(request("free_jev_probe")))["action"], "free_jev_probe")
         self.assertEqual(cloud_job.issue_request(issue(request("bocha_jev_probe")))["action"], "bocha_jev_probe")
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.issue_request(issue(request(), owner=42))
+        for action, legacy in (("cycle", False), ("status", True), ("free_jev_probe", True)):
+            self.assertEqual(cloud_job.issue_request(issue(request(action, allow_paid=legacy)))["action"], action)
+        without_flag = request("cycle")
+        without_flag.pop("allow_paid")
+        self.assertEqual(cloud_job.issue_request(issue(without_flag)), without_flag)
         with self.assertRaises(cloud_job.CloudJobError):
-            cloud_job.issue_request(issue(request("cycle", allow_paid=False)))
-        with self.assertRaises(cloud_job.CloudJobError):
-            cloud_job.issue_request(issue(request("status", allow_paid=True)))
-        with self.assertRaises(cloud_job.CloudJobError):
-            cloud_job.issue_request(issue(request("free_jev_probe", allow_paid=True)))
+            cloud_job.validate_request(request("cycle", allow_paid="true"))
         with self.assertRaises(cloud_job.CloudJobError):
             cloud_job.validate_request(request("bocha_jev_probe", live=True))
         self.assertEqual(cloud_job.validate_request(request("bocha_jev_probe", live=True,
@@ -65,7 +66,8 @@ class CloudJobTests(unittest.TestCase):
         change = request("amend_operating_constraints", expected_sha256="a" * 64,
                          note="Owner explicitly changed cumulative budget and target date.", **selectors)
         self.assertEqual(cloud_job.issue_request(issue(change))["action"], "amend_operating_constraints")
-        for invalid in (dict(change, allow_paid=True), dict(change, model="unapproved-model"),
+        self.assertEqual(cloud_job.validate_request(dict(change, allow_paid=True))["action"], "amend_operating_constraints")
+        for invalid in (dict(change, model="unapproved-model"),
                         dict(review, gate="G1"), dict(review, operation="approve")):
             with self.subTest(invalid=invalid), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request(invalid)
@@ -99,7 +101,10 @@ class CloudJobTests(unittest.TestCase):
                 target = root / rel
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text("safe", encoding="utf-8")
-            (root / "reviews" / "linked.md").symlink_to(root / "reviews" / "a.md")
+            try:
+                (root / "reviews" / "linked.md").symlink_to(root / "reviews" / "a.md")
+            except (OSError, NotImplementedError) as exc:
+                self.skipTest(f"This runner cannot create the symlink required by this test: {exc}")
             with self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.selected_files(root)
             (root / "reviews" / "linked.md").unlink()

@@ -288,7 +288,7 @@ def register(project, request_path, item_key, *, paper_id=None):
     if existing and existing != [entry]:
         raise ValueError("paper ID already belongs to another source/version")
     source.parent.mkdir(parents=True, exist_ok=True)
-    source.write_text(text, encoding="utf-8")
+    source.write_bytes(text.encode("utf-8"))
     if not existing:
         papers.append(entry)
     write(config_path, config)

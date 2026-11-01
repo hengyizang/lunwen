@@ -64,8 +64,8 @@ class ModelRuntimeTests(unittest.TestCase):
                 self.assertEqual(model_runtime.budget_status(project)["spent"], first["spent"])
                 model_spend.grant(project, new_ceiling_cny=600, actor="Hengyi", run_id="approval-2")
                 self.assertEqual(model_runtime.budget_status(project)["project_hard_limit"], 600)
-                with self.assertRaises(model_spend.SpendControlError):
-                    model_spend.grant(project, new_ceiling_cny=1200, actor="Hengyi", run_id="skip")
+                model_spend.grant(project, new_ceiling_cny=1200, actor="Hengyi", run_id="configured-total")
+                self.assertEqual(model_runtime.budget_status(project)["project_hard_limit"], 1200)
 
     def test_ambiguous_provider_failure_keeps_cumulative_reservation(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -86,7 +86,7 @@ class ModelRuntimeTests(unittest.TestCase):
                                   evidence_note="Gateway billing report confirms no charge.")
             self.assertEqual(model_runtime.budget_status(project)["reserved"], 0)
 
-    def test_missing_provider_usage_keeps_reservation_for_bill_reconciliation(self):
+    def test_missing_provider_usage_is_counted_at_the_reserved_upper_bound(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "demo"
             model_spend.write(project, model_spend.initial())
@@ -99,8 +99,9 @@ class ModelRuntimeTests(unittest.TestCase):
                  patch("scripts.model_runtime.ai_providers.call", return_value=result):
                 model_runtime.call(project, run_id="missing-usage", stage="intake", role="writer", provider="uuapi-openai", prompt="first", max_output_tokens=100)
             status = model_runtime.budget_status(project)
-            self.assertGreater(status["reserved"], 0)
-            self.assertEqual(status["spent"], 0)
+            self.assertEqual(status["reserved"], 0)
+            self.assertGreater(status["spent"], 0)
+            self.assertEqual(model_runtime.ledger_entries(project)[0]["cost_status"], "estimated_upper_bound")
 
     def test_reported_overage_is_recorded_and_blocks_next_call(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -114,7 +115,7 @@ class ModelRuntimeTests(unittest.TestCase):
             with self.assertRaises(model_spend.SpendControlError):
                 model_spend.reserve(project, max_cost_cny=1, paper_id=None, paper_limit_cny=60, run_id="next")
 
-    def test_lower_paper_hard_limit_clamps_default_warning(self):
+    def test_legacy_paper_limits_do_not_add_an_independent_spending_boundary(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "demo"
             project.mkdir()
@@ -124,8 +125,9 @@ class ModelRuntimeTests(unittest.TestCase):
                 clear=True,
             ):
                 status = model_runtime.budget_status(project, "P01")
-            self.assertEqual(status["paper_hard_limit"], 20.0)
-            self.assertEqual(status["paper_warning_limit"], 20.0)
+            self.assertEqual(status["paper_hard_limit"], status["project_hard_limit"])
+            self.assertEqual(status["paper_remaining"], status["project_remaining"])
+            self.assertIsNone(status["paper_warning_limit"])
 
     def test_usage_summary_groups_paid_calls_and_cache_hits(self):
         with tempfile.TemporaryDirectory() as directory:

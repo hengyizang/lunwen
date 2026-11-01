@@ -1,5 +1,11 @@
 # Production model routing
 
+The current [total-cost policy](TOTAL-COST-POLICY.md) replaces earlier payment
+approval restrictions. Financial controls calculate costs and enforce the
+configured cumulative project totals only. Paper caps, paid opt-ins, tranche
+steps, extra start switches and manual billing gates do not apply. Scientific
+model quality, role separation, identity and evidence checks still apply.
+
 Current writing-pilot evidence: [2026-10-28 results](SCIENTIFIC-WRITING-RESULTS-20261028.md).
 
 Current candidate connectivity, task tests and isolation evidence:
@@ -90,20 +96,17 @@ translation and safe alternatives are described in
 [OPTIONAL-API-CAPABILITIES.md](OPTIONAL-API-CAPABILITIES.md).
 
 All project execution, model calls, tests and experiments run in GitHub cloud.
-The production runtime rejects paid calls outside that runner or without the
-mandatory remote-reservation mode; the low-level generation transport also
-rejects non-cloud execution. A reservation push failure blocks the POST.
-Importing configuration does not start research. The repository variable
-`DR_OS_AUTOMATIC_RESEARCH_ENABLED=false` prevents the older 24-hour continuation
-confirmation from unexpectedly starting paid work during this configuration
-change. Setting it to `true` starts no new budget: the controller still checks
-the existing owner confirmation, persisted cumulative spending authority,
-unknown reservations, approved current stage and human gates. An explicitly
-requested manual paid cycle also uses only that existing authority.
+The declared cloud research mode and low-level transport controls remain in
+place. Every metered request accounts its cost against the configured project
+total, and cloud checkpoints preserve that total across runners. A failed
+reservation push cannot silently lose committed cost. There is no additional
+paid-start environment switch or per-request opt-in. Bounded pending fees count
+against the total while remaining funds stay usable. G1/G2 topic decisions and
+scientific stage checks still apply.
 
 The earlier CNY30 relay-test allowance stays closed and separate. Its ledger is
 never reset or reused for production. No implementation or readiness check
-grants a CNY300 tranche, resets actual spending or advances G0–G5.
+increases a configured project total, resets spending or supplies a topic decision.
 
 ## Pricing, caching and reconciliation
 

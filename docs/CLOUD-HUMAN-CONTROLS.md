@@ -1,85 +1,106 @@
-# Cloud human review controls
+# Cloud topic decisions and compatible controls
 
-The owner can complete G0–G5 control transitions on GitHub Actions. No local checkout or execution is required. These scientific operations call the existing deterministic validators and never call a model, change spending authority, auto-submit, or certify scientific completion. A separate, narrowly scoped [operating amendment](OPERATING-CONSTRAINT-AMENDMENTS.md) can record an explicit owner change to the cumulative model budget and target date before G1 approval; it does not approve a scientific gate or start research.
+Only the doctoral topic at G1 and each paper topic at G2 require a human research
+selection. G0, G3, G4 and each paper's G5 use evidence-bound machine decisions.
+The controller records the actual decision kind and never invents a human
+signature. Existing spending authority, data rights, independent model audits,
+frozen protocols, hashes and scientific checks remain required.
 
-## Request a review
+## Review and select a topic
 
-Create an issue in this repository from the owner's GitHub account. Its title must start with `[research-cloud]`. The body must contain exactly the marker and one JSON block; no extra prose. Replace the gate and operation with the current pending decision.
+The serialized continuation marks a passing topic stage ready. It then stops
+for the actual topic decision. A read-only dossier exposes the exact current
+materials and implementation hash; obtaining it records no selection.
 
+For cloud controls, use an issue created by the repository owner's GitHub
+account, with title prefix `[research-cloud]` and exactly the marker and JSON
+block below. G1 selects the doctoral topic; omit `paper_id` for G1. G2 requires
+one exact `paper_id` per decision.
+
+````markdown
 <!-- doctoral-research-os-cloud-job -->
 
 ```json
 {
   "schema_version": "1.0",
   "action": "review_dossier",
-  "operation": "ready",
+  "operation": "approve",
   "project": "my-phd",
   "actor": "Hengyi Zang",
   "allow_paid": false,
-  "gate": "G1"
+  "gate": "G2",
+  "paper_id": "P01"
 }
 ```
+````
 
-The issue's Actions result returns `human-control-receipt.json`, an exact `review_sha256`, the current stage/gate/paper, blockers, file hashes and the script/schema/configuration/workflow hashes. The original gate artifact digest also binds internal audit files omitted from the displayed inventory. Inspect the actual evidence in the tracked-results snapshot and checkpoint, not just the digest. The dossier itself records no decision. Public artifacts must contain only checkpoint-safe evidence with appropriate distribution rights.
+Inspect the actual topic and evidence in the dossier and tracked-results
+snapshot. Then record that decision with `action: "approve"`, the same gate and
+paper selectors, its exact `expected_sha256`, and a `note` explaining the topic
+selection. The placeholder below is deliberately invalid.
 
-## Record the decision
-
-After reviewing the materials, create a separate owner issue with the same selectors and actor. Use the returned digest as `expected_sha256` and explain the human decision in `note`.
-
+````markdown
 <!-- doctoral-research-os-cloud-job -->
 
 ```json
 {
   "schema_version": "1.0",
-  "action": "ready",
+  "action": "approve",
   "project": "my-phd",
   "actor": "Hengyi Zang",
   "allow_paid": false,
-  "gate": "G1",
+  "gate": "G2",
+  "paper_id": "P01",
   "expected_sha256": "REPLACE_WITH_THE_REVIEWED_DOSSIER_SHA256",
-  "note": "Describe your review of the exact materials and any scientific limitations."
+  "note": "Explain selection of this exact paper topic and its doctoral contribution."
 }
 ```
+````
 
-The placeholder above is deliberately invalid. The job refuses a missing or stale digest. A change to evidence, state, the active G5 paper, the reviewer, selectors or controller implementation requires a new review. Checkpoint packaging and routine continuation-status timestamps alone do not invalidate a review.
+Every G2 paper needs its own decision on the same current artifact snapshot.
+Selecting P01 does not select P02. Each decision changes protected state, so
+obtain a fresh dossier for the next decision. Changed topics or mappings require
+fresh affected G1/G2 decisions. Old portfolio-level G2 approvals cannot be
+silently converted into individual selections.
 
-| Operation | Selectors | Prerequisite and effect |
-|---|---|---|
-| `ready` | `gate` | All original gate checks pass. Records the current ready hash and waits for approval. |
-| `approve` | `gate` | Gate is awaiting approval, original checks still pass, and the ready hash matches. Records explicit named human approval and its cloud review/run identifiers. |
-| `advance` | `gate` | Current approval and artifact hash match; gate checks are run again. Advances one stage, or one active G5 paper. |
-| `reopen` | `gate` | Gate is awaiting approval. Returns it to work with a recorded revision reason. |
-| `confirm_data_quality` | `dataset_id` | G3 is open for work. Validates the current acquired files/report, then writes a separate named confirmation. |
-| `freeze_preregistration` | `paper_id` (`P01` etc. or `all`) | G3 is open; data confirmation, power and all frozen inputs validate; there are no registered experiment attempts. Every selected paper is prepared before any preregistration is written. |
-| `confirm_reproduction` | `paper_id` | G4 is open. Current preregistration, baseline and clean-room reports, attempts, isolation and output hashes pass the original checks. |
-| `screen_literature` | `receipt_id` | G1 is open. Exact successful raw/normalized provider evidence is present. Decision additionally requires `included_work_ids` (possibly empty) and explicit `exclusion_reasons`. Unknown work IDs are rejected. |
-| `confirm_source_scope` | `source`, `scope` | A gate is open for work; supplied checkpoint-safe source exists. Scope is `full_text`, `abstract`, `excerpt` or `metadata`. This explicitly does not attest human reading or semantic verification. |
+## Automatic stage work
 
-For every operation, first request `review_dossier` with `operation` and only that operation's selectors. Then request the operation with its selectors, `expected_sha256`, `note` and any decision fields. All require `allow_paid:false`. Actor text is a named human attribution; authorization comes from the authenticated owner-created issue, never from a model-authored name or boolean.
+A scheduled job may call `ready` and `advance` after rechecking the current
+stage. It never supplies the human `approve`. G0/G3/G4/G5 decisions identify the
+deterministic controller; G3 still binds plan, budget and every preregistration
+hash, and G5 still binds each paper's complete current artifact hash.
 
-## Gate sequence and cloud continuation
+The normal path performs controlled literature screening in the existing writer
+call, source-range registration from actual acquisition evidence, data-quality
+checks, preregistration, reproduction or study checks, revision records and
+final Word/PDF/figure visual checks. Machine records identify their source and
+retain unknowns. Missing files, rights, current audits, registered runs or
+supported adapters remain blockers. Automated records are not human reviews or
+proof of scientific validity. See [automatic data rights](AUTOMATED-DATA-RIGHTS.md).
 
-Dedicated [study/supplemental controls](SCIENTIFIC-STUDY-ROUTES.md) use the same
-exact dossier/owner-decision flow and paper_id selector: confirm_study_validation
-at G4; approve_supplemental, confirm_supplemental and retire_supplemental during
-the selected paper's real reviewer G5 round. They call no paid provider and
-cannot raise API or compute authority. Supplemental approval/confirmation applies
-only to its separate scope, never to the original G3 or final parent G5.
+Old non-topic `awaiting_approval` states are rechecked automatically. Passing
+checks produce the machine decision; failed checks reopen that stage for machine
+work with a recorded reason. A changed approved topic is never reopened or
+selected automatically.
 
-Request fresh dossiers between `ready`, `approve` and `advance`: each step changes state and consumes a different review scope. To revise an awaiting-approval gate, review and use `reopen` first. Confirmations/freeze never grant G3 or G4; the full scientific gate still needs separate `ready` and `approve`. G5 remains paper-specific and cannot approve the whole portfolio in one action.
+## Compatible manual operations and external authority
 
-Owner jobs share the existing serialization group with scheduled research, restore the state branch and hash-verified checkpoint, and rehydrate only owner-authorized raw data before checking quality. Raw data stays out of Git and artifacts. Missing rights, files or checkpoints fail closed. Protected receipts stay unavailable to the model writer and the model-authored cloud-operations queue.
+The old `ready`, `advance`, `reopen`, data-quality, preregistration, reproduction,
+source-scope and screening commands remain available for compatible explicit
+control operations. They are not additional mandatory human review steps in the
+normal topic-only workflow. An explicitly used legacy human operation continues
+to require its authenticated owner issue and fresh hash-bound dossier; a model
+cannot manufacture that identity or a human annotation.
 
-An approved gate waits for the separate owner `advance` operation. The next scheduled continuation rechecks the standing policy, prior gates, provider configuration, per-paper limits, remaining cumulative budget, reservations and failure/progress guards. Neither approval nor advance raises the CNY ceiling or starts a model call. A paused failed cycle still needs the existing inspected `resume` procedure.
+Budget authorization and unknown-charge reconciliation are spending controls,
+not scientific review. A machine decision never raises the cumulative allowance,
+licenses restricted material or authorizes access that the source does not grant.
+Actual author/co-author, ethics, institutional and publisher obligations still
+apply. No workflow logs into a publisher portal or submits a manuscript.
 
-Decisions are traceable through `state/cloud-human-decisions.jsonl`, original gate approval records, protected confirmation/preregistration files, output provenance and the Actions artifact/run ID. Never infer scientific completion from a successful control receipt.
-
-## Software acceptance
-
-`Cloud human review controls` in the required validation workflow runs real control functions and validators against an isolated synthetic project without provider credentials. It exercises G0 ready/approve/advance, an incomplete G1 remaining blocked, data confirmation, all-paper freeze and reproduction confirmation, using pinned statsmodels for the acceptance power calculation. The G3/G4 datasets and registry records are explicitly synthetic test inputs; they do not demonstrate real study validity or replace the separate real Docker executor acceptance.
-
-Regression tests cover stale/replayed decisions, reviewer mismatch, active G5 paper changes, checkpoint digest stability, invalid or changed data/outputs, all-paper preparation failures, freezing after any attempt, owner-only requests, supplied-source limits and no paid-command dispatch. CI artifacts retain the scoped acceptance receipt and decision-log hash for 14 days.
-
-Real project work remains dependent on configured gateway credentials/exact model prices, verified primary evidence, appropriate data rights and fresh human decisions. The October 7 target does not weaken these checks.
-
-The scoped [2026-10-02 acceptance receipt](acceptance/cloud-human-controls-2026-10-02.json) binds passing source commit, PR merge snapshot, 331 tests per Python version, cloud control/pipeline run URLs and artifact digests. Its verified R32/R33 statuses refer only to software controls; actual research remains unverified.
+Human topic decisions remain traceable through `state/cloud-human-decisions.jsonl`,
+per-paper topic records and scope seals. Machine decisions retain their own
+provenance and history. The historical [2026-10-02 acceptance receipt](acceptance/cloud-human-controls-2026-10-02.json)
+records the earlier software-control tests, not validation of the new policy or
+a real completed research project. Current synthetic tests exercise control
+behavior without provider credentials or scientific conclusions.

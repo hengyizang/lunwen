@@ -1,9 +1,9 @@
-"""Persist owner-approved model spending ceilings across cloud research jobs.
+"""Persist calculated model costs and one cumulative project ceiling.
 
 Only aggregate CNY estimates and pending reservations are committed to the
 project state branch. Prompts, responses and the detailed usage ledger stay out
-of Git. A reservation left by a failed or interrupted call remains charged
-against the approved ceiling until a human reconciles the provider bill.
+of Git. Unresolved calls retain their conservative upper-bound reservation;
+other calls may use the remaining total without a separate billing approval.
 """
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ import math
 import os
 import tempfile
 import uuid
+from contextlib import contextmanager
+from functools import wraps
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -24,6 +26,40 @@ FILE = Path("state/model-spend-control.json")
 
 class SpendControlError(RuntimeError):
     pass
+
+
+@contextmanager
+def _mutation_lock(project_root: Path):
+    """Serialize the total's read-modify-write across processes and threads."""
+    path = project_root / "state/.model-spend-control.lock"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a+b") as handle:
+        if handle.tell() == 0:
+            handle.write(b"0")
+            handle.flush()
+        handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            handle.seek(0)
+            if os.name == "nt":
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def _locked(operation):
+    @wraps(operation)
+    def mutate(project_root, *args, **kwargs):
+        with _mutation_lock(project_root):
+            return operation(project_root, *args, **kwargs)
+    return mutate
 
 
 def initial() -> dict[str, Any]:
@@ -89,7 +125,7 @@ def read(project_root: Path, *, required: bool = False) -> dict[str, Any] | None
         kind = item.get("kind")
         if kind is None:
             valid = item["ceiling_cny"] == recorded_ceiling + STEP_CNY
-        elif kind == "ceiling_amendment":
+        elif kind in {"ceiling_amendment", "ceiling_set"}:
             valid = (
                 type(item.get("previous_ceiling_cny")) is int
                 and item["previous_ceiling_cny"] == recorded_ceiling
@@ -119,16 +155,21 @@ def write(project_root: Path, state: dict[str, Any]) -> None:
     os.replace(temporary, path)
 
 
+@_locked
 def grant(project_root: Path, *, new_ceiling_cny: int, actor: str, run_id: str) -> dict[str, Any]:
     state = read(project_root, required=True)
     assert state is not None
-    if type(new_ceiling_cny) is not int or new_ceiling_cny != state["authorized_ceiling_cny"] + STEP_CNY:
-        raise SpendControlError("a new owner approval can add exactly CNY 300 to the existing ceiling")
+    if type(new_ceiling_cny) is not int or new_ceiling_cny <= state["authorized_ceiling_cny"]:
+        raise SpendControlError("the configured total ceiling must increase by a positive CNY amount")
     if not actor.strip() or not run_id.strip():
         raise SpendControlError("a named owner and a GitHub run are required")
+    previous = state["authorized_ceiling_cny"]
     state["authorized_ceiling_cny"] = new_ceiling_cny
     state["authorization_events"].append({
         "ceiling_cny": new_ceiling_cny,
+        "kind": "ceiling_set",
+        "previous_ceiling_cny": previous,
+        "authorization_note": "Configured cumulative project ceiling; no per-call or per-paper approval.",
         "actor": actor.strip(),
         "run_id": run_id,
         "at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -137,6 +178,7 @@ def grant(project_root: Path, *, new_ceiling_cny: int, actor: str, run_id: str) 
     return state
 
 
+@_locked
 def amend_ceiling(project_root: Path, *, new_ceiling_cny: int, actor: str,
                   run_id: str, authorization_note: str) -> dict[str, Any]:
     """Record an explicit owner amendment without resetting spending history.
@@ -184,6 +226,7 @@ def reserved(state: dict[str, Any], paper_id: str | None = None) -> float:
                      if paper_id is None or item["paper_id"] == paper_id), 8)
 
 
+@_locked
 def reserve(project_root: Path, *, max_cost_cny: float, paper_id: str | None, paper_limit_cny: float, run_id: str) -> str:
     state = read(project_root, required=True)
     assert state is not None
@@ -191,9 +234,7 @@ def reserve(project_root: Path, *, max_cost_cny: float, paper_id: str | None, pa
     if maximum <= 0:
         raise SpendControlError("model call needs a positive cost reservation")
     if state["spent_cny"] + reserved(state) + maximum > state["authorized_ceiling_cny"] + 1e-8:
-        raise SpendControlError("the next model call would cross the approved CNY tranche")
-    if paper_id and state["paper_spent_cny"].get(paper_id, 0.0) + reserved(state, paper_id) + maximum > paper_limit_cny + 1e-8:
-        raise SpendControlError(f"the next model call would cross {paper_id}'s hard budget")
+        raise SpendControlError("the next model call would cross the cumulative project ceiling")
     receipt_id = uuid.uuid4().hex
     state["reservations"][receipt_id] = {
         "max_cost_cny": round(maximum, 8),
@@ -205,6 +246,7 @@ def reserve(project_root: Path, *, max_cost_cny: float, paper_id: str | None, pa
     return receipt_id
 
 
+@_locked
 def cancel_unsent(project_root: Path, receipt_id: str, *, reason: str) -> None:
     """Only the pre-transport control path may withdraw a never-sent reservation."""
     state = read(project_root, required=True)
@@ -214,25 +256,29 @@ def cancel_unsent(project_root: Path, receipt_id: str, *, reason: str) -> None:
     write(project_root, state)
 
 
-def settle(project_root: Path, receipt_id: str, *, actual_cost_cny: float) -> None:
+@_locked
+def settle(project_root: Path, receipt_id: str, *, actual_cost_cny: float,
+           cost_basis: str = "verified_charge_or_usage") -> None:
     state = read(project_root, required=True)
     assert state is not None
     reservation = state["reservations"].get(receipt_id)
     if reservation is None:
         raise SpendControlError("model call reservation is missing")
     cost = _amount(actual_cost_cny, "actual_cost_cny")
-    over_estimate = cost > reservation["max_cost_cny"] + 1e-8
     state["spent_cny"] = round(state["spent_cny"] + cost, 8)
     paper_id = reservation["paper_id"]
     if paper_id:
         state["paper_spent_cny"][paper_id] = round(state["paper_spent_cny"].get(paper_id, 0.0) + cost, 8)
     del state["reservations"][receipt_id]
-    state.setdefault("settlement_events", []).append({"receipt_id": receipt_id, "actual_cost_cny": cost})
+    event = {"receipt_id": receipt_id, "cost_basis": cost_basis}
+    event["accounted_cost_cny" if cost_basis in {"conservative_upper_bound", "calculated_usage"} else "actual_cost_cny"] = cost
+    state.setdefault("settlement_events", []).append(event)
     write(project_root, state)
-    if over_estimate or state["spent_cny"] + reserved(state) > state["authorized_ceiling_cny"] + 1e-8:
-        raise SpendControlError("provider usage exceeded the reserved estimate or approved ceiling; actual estimated spend was recorded and further calls are blocked")
+    if state["spent_cny"] + reserved(state) > state["authorized_ceiling_cny"] + 1e-8:
+        raise SpendControlError("recorded costs exceeded the cumulative project ceiling; further calls are blocked")
 
 
+@_locked
 def reconcile(project_root: Path, receipt_id: str, *, actual_cost_cny: float,
               actor: str, run_id: str, evidence_note: str) -> dict[str, Any]:
     state = read(project_root, required=True)

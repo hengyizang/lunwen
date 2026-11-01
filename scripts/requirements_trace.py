@@ -56,7 +56,7 @@ def validate(path: Path = MATRIX) -> list[str]:
             if row.get("acceptance") == "verified":
                 receipt = row.get("verification", {})
                 proof = evidence_path(receipt.get("path", ""))
-                if hashlib.sha256(proof.read_bytes()).hexdigest() != receipt.get("sha256"):
+                if hashlib.sha256(proof.read_bytes().replace(b"\r\n", b"\n")).hexdigest() != receipt.get("sha256"):
                     raise ValueError("verification receipt hash changed")
                 report = json.loads(proof.read_text(encoding="utf-8"))
                 if (report.get("status") != "passed" or identifier not in report.get("requirement_ids", [])

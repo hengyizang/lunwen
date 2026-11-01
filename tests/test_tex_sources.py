@@ -89,9 +89,15 @@ class TexSourcesTests(unittest.TestCase):
         self.main.write_text("\\input{missing}")
         with self.assertRaisesRegex(ValueError,"Missing"):
             tex_sources.expand(self.main)
+
+    def test_symlink_source_is_rejected_when_supported(self):
         self.main.write_text("\\input{alias}")
         target=self.source/"sections/real.tex";target.write_text("safe")
-        (self.source/"alias.tex").symlink_to(target)
+        try:
+            (self.source/"alias.tex").symlink_to(target)
+        except OSError as exc:
+            if getattr(exc,"winerror",None)==1314:self.skipTest("Windows account cannot create symlinks")
+            raise
         with self.assertRaisesRegex(ValueError,"symlink"):
             tex_sources.expand(self.main)
 

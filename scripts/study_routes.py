@@ -375,14 +375,34 @@ def build_report(project, paper_id):
     return report
 
 
-def create_confirmation(project, paper_id, actor):
-    need(isinstance(actor, str) and actor.strip(), "named human scientific reviewer required")
+def create_confirmation(project, paper_id, actor, *, automated=False):
+    need(isinstance(actor, str) and actor.strip(), "study confirmation actor required")
     report = build_report(project, paper_id)
     need(report["status"] == "complete", "; ".join(report["errors"]))
-    return {"schema_version": "1.0", "paper_id": paper_id, "actor": actor,
+    return {"schema_version": "1.0", "paper_id": paper_id,
+            "actor": "deterministic_control_plane" if automated else actor,
+            **({"confirmation_kind": "automated", "human_confirmation": False} if automated else {}),
             "report_sha256": hashlib.sha256(json.dumps(report, sort_keys=True).encode()).hexdigest(),
-            "review_scope": "Source/extraction validity, independence, assumptions, non-vacuity, manuscript meaning, scope and isolated replay; no automatic novelty certification.",
+            "review_scope": ("Current source, frozen protocol, actual executor receipts, computed study/proof output and isolated replay checks; scientific interpretation and novelty are not certified."
+                             if automated else "Source/extraction validity, independence, assumptions, non-vacuity, manuscript meaning, scope and isolated replay; no automatic novelty certification."),
             "scientific_completion_verified": False}
+
+
+def confirmation_errors(project, paper_id, value):
+    report = build_report(project, paper_id)
+    errors = list(report["errors"])
+    if (report.get("status") != "complete" or value.get("paper_id") != paper_id
+            or value.get("report_sha256") != hashlib.sha256(json.dumps(report, sort_keys=True).encode()).hexdigest()
+            or value.get("scientific_completion_verified") is not False):
+        errors.append("study-validation confirmation is stale")
+    if value.get("confirmation_kind") == "automated":
+        if value.get("actor") != "deterministic_control_plane" or value.get("human_confirmation") is not False:
+            errors.append("automated study confirmation cannot claim human review")
+    elif ("confirmation_kind" in value or not value.get("actor")
+            or not re.fullmatch(r"[0-9]+", str(value.get("source_run_id", "")))
+            or not re.fullmatch(r"[0-9a-f]{64}", str(value.get("cloud_review_sha256", "")))):
+        errors.append("study-validation confirmation lacks its recorded decision")
+    return errors
 
 
 def validation_errors(project, paper_id, *, confirmation=True):
@@ -394,13 +414,16 @@ def validation_errors(project, paper_id, *, confirmation=True):
     if confirmation:
         path = project / "papers" / paper_id / CONFIRMATION
         if not path.is_file():
-            errors.append("named human study-validation confirmation required")
+            errors.append("evidence-bound study-validation confirmation required")
         else:
             value = read(path)
-            if (not value.get("actor") or not re.fullmatch(r"[0-9]+", str(value.get("source_run_id", "")))
-                    or not re.fullmatch(r"[0-9a-f]{64}", str(value.get("cloud_review_sha256", "")))
-                    or value.get("report_sha256") != hashlib.sha256(json.dumps(report, sort_keys=True).encode()).hexdigest()):
-                errors.append("study-validation confirmation is stale")
+            errors.extend(confirmation_errors(project, paper_id, value))
+            if value.get("confirmation_kind") == "automated":
+                from scripts.output_provenance import current_origin
+                origin = current_origin(project, path)
+                if (origin.get("status") != "tracked" or origin.get("provider") != "automated-quality-control"
+                        or origin.get("model") != "scripts/automated_quality.py"):
+                    errors.append("automated study confirmation lacks current control-plane provenance")
     return errors
 
 

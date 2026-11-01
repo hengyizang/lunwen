@@ -251,6 +251,12 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertEqual(
                 validate_data_quality_confirmation(confirmation, "d1", project), []
             )
+            automatic = create_data_quality_confirmation(project, "d1", "control", automated=True)
+            self.assertEqual(automatic["confirmed_by"], "deterministic_control_plane")
+            self.assertNotIn("reviewed_warning_count", automatic)
+            self.assertEqual(automatic["unresolved_warning_count"], len(report["warnings"]))
+            self.assertEqual(validate_data_quality_confirmation(automatic, "d1", project), [])
+            self.assertTrue(validate_data_quality_confirmation({**automatic, "confirmed_by": "Researcher"}, "d1", project))
             report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
             self.assertTrue(
                 any(
@@ -377,6 +383,11 @@ class ResearchQualityTests(unittest.TestCase):
             )
             prereg = create_preregistration(project, "P01", "Researcher")
             self.assertEqual(validate_preregistration(prereg, "P01", project), [])
+            automatic = create_preregistration(project, "P01", "control", automated=True)
+            self.assertFalse(automatic["human_confirmation"])
+            self.assertEqual(automatic["frozen_by"], "deterministic_control_plane")
+            self.assertEqual(validate_preregistration(automatic, "P01", project), [])
+            self.assertTrue(validate_preregistration({**automatic, "human_confirmation": True}, "P01", project))
             design.write_text(json.dumps({"paper_id": "P01", "design_id": "CHANGED"}), encoding="utf-8")
             self.assertTrue(
                 any("changed" in error for error in validate_preregistration(prereg, "P01", project))
@@ -619,6 +630,10 @@ class ResearchQualityTests(unittest.TestCase):
             clean_path.write_text(json.dumps(clean), encoding="utf-8")
             confirmation = create_reproduction_confirmation(project, "P01", "Researcher")
             self.assertEqual(validate_reproduction_confirmation(confirmation, "P01", project), [])
+            automatic = create_reproduction_confirmation(project, "P01", "control", automated=True)
+            self.assertEqual(automatic["confirmed_by"], "deterministic_control_plane")
+            self.assertEqual(validate_reproduction_confirmation(automatic, "P01", project), [])
+            self.assertTrue(validate_reproduction_confirmation({**automatic, "confirmed_by": "Researcher"}, "P01", project))
             clean_path.write_text(json.dumps({**clean, "status": "changed"}), encoding="utf-8")
             self.assertTrue(any("stale" in error for error in validate_reproduction_confirmation(confirmation, "P01", project)))
             clean["metric_comparisons"][0]["reproduction_value"] = 0.50

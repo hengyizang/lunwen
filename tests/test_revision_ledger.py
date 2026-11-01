@@ -9,10 +9,28 @@ from pathlib import Path
 
 from scripts import revision_ledger
 from scripts.research_artifacts import sha, write
-from scripts.revision_integrity import audit as integrity_audit
+from scripts.revision_integrity import audit as integrity_audit, record_automated_changes
 
 
 class RevisionLedgerTests(unittest.TestCase):
+    def test_automatic_exact_change_record_preserves_scientific_review_and_stale_check(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            paper = self.fixture(project, "Observed effect: 10.", "Observed effect: 12.")
+            self.supplied(project, scientific=True)
+            self.assertEqual(revision_ledger.refresh(project, "P01")["status"], "pass")
+            self.assertEqual(integrity_audit(paper)["status"], "fail")
+            record = record_automated_changes(paper)
+            self.assertFalse(record["human_review"])
+            self.assertFalse(record["scientific_validity_verified"])
+            self.assertEqual(integrity_audit(paper)["status"], "pass")
+            (paper / "manuscript/main.tex").write_text("Observed effect: 13.", encoding="utf-8")
+            self.assertEqual(integrity_audit(paper)["status"], "fail")
+            (paper / "manuscript/main.tex").write_text("Observed effect: 12. The interpretation remains provisional.", encoding="utf-8")
+            self.supplied(project, scientific=True)
+            self.assertEqual(revision_ledger.refresh(project, "P01")["status"], "pass")
+            record_automated_changes(paper)
+            self.assertEqual(integrity_audit(paper)["status"], "pass")
     def fixture(self, project: Path, before="The method works.", after="The method performs."):
         paper = project / "papers/P01"
         (paper / "manuscript").mkdir(parents=True)
@@ -150,7 +168,8 @@ class RevisionLedgerTests(unittest.TestCase):
                 paper = self.fixture(project, before, after)
                 value = self.supplied(project)
                 self.assertEqual(value["changes"][0]["kind"], "scientific")
-                self.assertEqual(revision_ledger.audit(project, "P01")["status"], "fail")
+                self.assertEqual(revision_ledger.audit(project, "P01")["status"], "pass")
+                self.assertEqual(integrity_audit(paper)["status"], "fail")
                 self.authorize(paper)
                 self.assertEqual(revision_ledger.audit(project, "P01")["status"], "pass")
                 value["changes"][0]["kind"] = "editorial"

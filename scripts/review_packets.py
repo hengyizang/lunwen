@@ -100,6 +100,18 @@ def plan(project):
     return value, {"path": INPUT, "sha256": sha(target)}
 
 
+def applies_to_paper(packet: dict, paper_id: str) -> bool:
+    """Scope visual gates to the paper being completed, not future papers."""
+    if not re.fullmatch(r"P[0-9]{2}", paper_id):
+        raise ValueError("invalid paper ID for visual review")
+    rows = packet.get("artifacts")
+    if not isinstance(rows, list) or not rows or any(not isinstance(row, dict)
+            or not isinstance(row.get("artifact"), dict)
+            or not isinstance(row["artifact"].get("path"), str) for row in rows):
+        return True  # Keep malformed selected inputs visible to the validator.
+    return any(row["artifact"]["path"].startswith(f"papers/{paper_id}/") for row in rows)
+
+
 def base(project, packet_id):
     return path_in(project, f"reports/review-packets/{identifier(packet_id)}/manifest.json", exists=False).parent
 
@@ -447,22 +459,52 @@ def create_confirmation(project: Path, packet_id: str, actor: str, judgments: di
                     "scientific_completion_verified": False, "rater_independence_verified": False}
 
 
-def validate_gate_reviews(project: Path) -> list[str]:
-    """Declared visual packets require actual current human observations."""
+def validate_gate_reviews(project: Path, paper_id: str | None = None) -> list[str]:
+    """Declared visual packets require actual current automated observations.
+
+    Human calibration ratings remain optional genuine observations. Historical
+    adverse visual observations are retained and cannot be outvoted on unchanged
+    material by a subsequent machine pass.
+    """
     if not (project / INPUT).is_file():
         return []
     try:
-        result = audit(project)
-        return result["errors"] + [f"{packet['id']}: visual packet requires current passing human inspection"
-            for packet in result["packets"] if packet["kind"] == "visual" and packet.get("visual_checklist_passed_by_human") is not True]
+        from scripts import automated_visual_review
+        result = audit(project, paper_id=paper_id)
+        errors = list(result["errors"])
+        for packet in result["packets"]:
+            if packet["kind"] != "visual" or packet.get("status") != "pass":
+                continue
+            snapshot = review_snapshot(project, packet["id"])
+            for row in snapshot["roster"]:
+                artifact = row["artifact"]["path"]
+                match = re.match(r"papers/(P[0-9]{2})/", artifact)
+                if match is None:
+                    errors.append(f"{packet['id']}: visual artifact must belong to an identified paper")
+                    continue
+                owner = match[1]
+                if paper_id is not None and owner != paper_id:
+                    continue
+                target = automated_visual_review.packet_target(packet["id"], row["artifact_id"])
+                errors.extend(f"{packet['id']}/{row['artifact_id']}: {issue}" for issue
+                              in automated_visual_review.verify(project, owner, target))
+                for confirmation in packet["confirmations"]:
+                    for attempt in confirmation["attempts"]:
+                        if attempt["current"] and any(
+                            inspection["artifact_id"] == row["artifact_id"] and not all(inspection["checks"].values())
+                            for inspection in attempt["judgments"]["inspections"]):
+                            errors.append(f"{packet['id']}/{row['artifact_id']}: unchanged adverse visual observation requires a correction")
+        return errors
     except (ValueError, OSError, KeyError, TypeError) as exc:
         return ["review packet validation failed: " + str(exc)]
 
 
-def audit(project: Path) -> dict:
+def audit(project: Path, *, paper_id: str | None = None) -> dict:
     document, _ = plan(project)
     packets, errors = [], []
     for packet in document["packets"]:
+        if packet["kind"] == "visual" and paper_id is not None and not applies_to_paper(packet, paper_id):
+            continue
         row = {"id": packet["id"], "kind": packet["kind"], "confirmations": [], "review_status": "needs_human_review"}
         try:
             snapshot = review_snapshot(project, packet["id"])
@@ -493,6 +535,19 @@ def audit(project: Path) -> dict:
             row.update(status="pass", current_independent_rater_ids=sorted(rater_ids),
                        review_status="human_observations_recorded" if rater_ids else "needs_human_review",
                        visual_checklist_passed_by_human=bool(visual_observations) and all(visual_observations) if packet["kind"] == "visual" else None)
+            if packet["kind"] == "visual":
+                from scripts import automated_visual_review
+                machine_errors = []
+                for artifact in snapshot["roster"]:
+                    owner = re.match(r"papers/(P[0-9]{2})/", artifact["artifact"]["path"])
+                    if owner is None:
+                        machine_errors.append("visual artifact has no paper identity")
+                        continue
+                    target = automated_visual_review.packet_target(packet["id"], artifact["artifact_id"])
+                    machine_errors.extend(automated_visual_review.verify(project, owner[1], target))
+                row.update(human_observations_recorded=bool(rater_ids),
+                           review_status="automated_visual_review_pending" if machine_errors else "automated_visual_observations_recorded",
+                           automated_visual_check_errors=machine_errors)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             row.update(status="fail", error=str(exc))
             errors.append(f"{packet['id']}: {exc}")

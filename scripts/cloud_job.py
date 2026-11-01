@@ -53,8 +53,11 @@ EXTRA = {
     "auxiliary": {"manifest"},
     "literature": {"request_file"},
 }
+EXTRA["approve"] = EXTRA["approve"] | {"paper_id"}
 
 LITERATURE_OPERATIONS = {
+    "literature_screening_prepare": ({"receipt_id", "question"}, {"receipt_id", "question"}),
+    "literature_source_scope": ({"paper_id"}, {"paper_id"}),
     "research_toolkit": ({"request_file"}, {"request_file"}),
     "research_iteration": ({"request_file"}, {"request_file"}),
     "research_frontier": ({"request_file"}, {"request_file"}),
@@ -133,7 +136,7 @@ def validate_request(value: object) -> dict:
     action = value.get("action")
     if not isinstance(action, str) or action not in EXTRA:
         raise CloudJobError("unsupported action")
-    if set(value) - COMMON - EXTRA[action] or COMMON - set(value):
+    if set(value) - COMMON - EXTRA[action] or (COMMON - {"allow_paid"}) - set(value):
         raise CloudJobError("missing or unsupported job properties")
     if not isinstance(value["project"], str):
         raise CloudJobError("project must be a slug")
@@ -141,21 +144,21 @@ def validate_request(value: object) -> dict:
     if (not isinstance(value["actor"], str) or not 0 < len(value["actor"].strip()) <= 100
             or any(ord(ch) < 32 for ch in value["actor"])):
         raise CloudJobError("actor must name the human requester")
-    if type(value["allow_paid"]) is not bool or value["allow_paid"] != (action in PAID):
-        raise CloudJobError("billable actions require allow_paid=true; non-billable actions require false")
+    if "allow_paid" in value and type(value["allow_paid"]) is not bool:
+        raise CloudJobError("legacy allow_paid must be a boolean when supplied")
     if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
         try:
             operation = cloud_human_controls.validate_fields(value)
-            allowed = cloud_human_controls.SELECTORS[operation]
+            allowed = cloud_human_controls.selectors_for(value, operation)
             if action != "review_dossier":
                 allowed = allowed | {"expected_sha256", "note"} | cloud_human_controls.DECISIONS.get(operation, set())
+                if set(value) - COMMON - allowed:
+                    raise CloudJobError("decision selectors must match the requested operation")
             elif set(value) - COMMON - allowed - {"operation"}:
                 raise CloudJobError("dossier selectors must match the requested human operation")
         except (cloud_human_controls.HumanControlError, cloud_checkpoint.CheckpointError) as exc:
             raise CloudJobError(str(exc)) from exc
     if action == "authorize_budget" and (type(value.get("new_ceiling_cny")) is not int or value["new_ceiling_cny"] <= 0):
-        # The stateful grant still requires exactly +300. An owner-reviewed
-        # operating amendment can establish a different base, e.g. 500 -> 800.
         raise CloudJobError("new_ceiling_cny must be a positive integer cumulative CNY ceiling")
     if action == "reconcile_budget":
         if (not isinstance(value.get("reservation_id"), str) or not re.fullmatch(r"[a-f0-9]{32}", value["reservation_id"])
@@ -247,7 +250,7 @@ def validate_request(value: object) -> dict:
 
 
 def literature_operation(project: Path, relative: str) -> tuple[dict, dict]:
-    """Read one strict nonpaid operation; never accept a batch or paid analysis."""
+    """Read one controlled operation; metered execution uses the total ceiling."""
     from scripts.research_artifacts import path_in, sha
     relative = project_relative(relative)
     if len(relative) > 250 or not relative.startswith("program/") or not relative.endswith(".json"):
@@ -267,8 +270,8 @@ def literature_operation(project: Path, relative: str) -> tuple[dict, dict]:
     allowed, required = LITERATURE_OPERATIONS[action]
     if set(operation) - {"action"} - allowed or required - set(operation):
         raise CloudJobError("missing or unsupported literature operation properties")
-    if "execute" in operation and (type(operation["execute"]) is not bool or operation["execute"] is not False):
-        raise CloudJobError("nonpaid literature jobs forbid execute=true; paid analysis needs the normal authorized writer cycle")
+    if "execute" in operation and type(operation["execute"]) is not bool:
+        raise CloudJobError("literature execute must be a boolean")
     return operation, {"path": relative, "sha256": sha(source)}
 
 
@@ -478,6 +481,7 @@ def run_job(job: dict, run_id: str) -> int:
                 operation, binding = literature_operation(project, job["request_file"])
                 phase = "execution"
                 execution_started = True
+                usage_before = len(model_runtime.ledger_entries(project))
                 if operation["action"] == "literature_feedback_review":
                     # Reauthenticate the owner event at the mutation boundary.
                     # A model-authored operation cannot supply this authority.
@@ -491,13 +495,14 @@ def run_job(job: dict, run_id: str) -> int:
                     result = literaturectl.execute_operation(project, operation, owner_authorization=proof)
                 else:
                     result = literaturectl.execute_operation(project, operation)
+                usage_records = len(model_runtime.ledger_entries(project)) - usage_before
                 (ARTIFACT / "literature-result.json").write_text(json.dumps({"request": binding,
-                    "operation": operation, "result": result, "paid_model_calls": 0,
+                    "operation": operation, "result": result, "model_usage_records": usage_records,
                     "gate_approved": False}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                 logs.append(json.dumps({"action": operation["action"], "request": binding,
                     "status": result.get("status", "completed") if isinstance(result, dict) else "completed",
-                    "paid_model_calls": 0, "gate_approved": False}, ensure_ascii=False))
-                detail = f"Executed one nonpaid literature operation `{operation['action']}` from `{binding['path']}`; no scientific gate was approved.\n\n"
+                    "model_usage_records": usage_records, "gate_approved": False}, ensure_ascii=False))
+                detail = f"Executed one controlled literature operation `{operation['action']}` from `{binding['path']}`; no scientific gate was approved.\n\n"
                 cmd = None
             elif action == "set_routing_profile":
                 if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
@@ -546,6 +551,22 @@ def run_job(job: dict, run_id: str) -> int:
             elif action in {"cycle", "continuation"}:
                 if action == "continuation":
                     continuation_decision = cloud_continuation.evaluate(slug)
+                    quality_waits = {"current_stage_work_allowed", "external_input_required", "cumulative_budget_boundary",
+                                     "configuration_pending"}
+                    if (continuation_decision.get("reason") in quality_waits and continuation_decision.get("actor") == job["actor"]
+                            and continuation_decision.get("gate") in {"G3", "G4"}):
+                        from scripts.automated_quality import run as run_automated_quality
+                        from scripts.scientific_scope import validate as validate_scope
+                        scope_issues = validate_scope(ROOT / "projects" / slug, continuation_decision["gate"])
+                        try:
+                            quality_result = ({"blockers": scope_issues, "paid_calls": 0} if scope_issues
+                                              else run_automated_quality(ROOT / "projects" / slug))
+                        except (OSError, ValueError, RuntimeError) as exc:
+                            quality_result = {"blockers": [str(exc)], "paid_calls": 0}
+                        logs.append(json.dumps(quality_result, ensure_ascii=False))
+                        continuation_decision = cloud_continuation.evaluate(slug)
+                    if continuation_decision.get("actor") == job["actor"] and cloud_continuation.transition_ready_gate(slug, continuation_decision):
+                        continuation_decision = cloud_continuation.evaluate(slug)
                     cloud_continuation.checkpoint(slug, continuation_decision, run_id)
                     detail = f"Continuation: `{continuation_decision['reason']}`.\n\n"
                     logs.append(json.dumps(continuation_decision, ensure_ascii=False, indent=2))
@@ -566,8 +587,8 @@ def run_job(job: dict, run_id: str) -> int:
                     raise CloudJobError("bounded auxiliary jobs require the production routing profile")
                 project = ROOT / "projects" / slug
                 control = model_spend.read(project, required=True)
-                if control["authorized_ceiling_cny"] <= 0 or control["reservations"]:
-                    raise CloudJobError("auxiliary work needs existing owner budget and no outstanding reservations")
+                if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
+                    raise CloudJobError("auxiliary work has reached the cumulative spending ceiling")
                 os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
                 os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
                 cmd = ["scripts/auxiliary_job.py", "--project", slug, "--manifest", job["manifest"],
@@ -590,8 +611,8 @@ def run_job(job: dict, run_id: str) -> int:
                 question.parent.mkdir(parents=True, exist_ok=True)
                 question.write_text(job["question"], encoding="utf-8")
                 control = model_spend.read(project, required=True)
-                if control["authorized_ceiling_cny"] <= 0 or control["reservations"]:
-                    raise CloudJobError("source QA needs existing owner budget and no outstanding reservations")
+                if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
+                    raise CloudJobError("source QA has reached the cumulative spending ceiling")
                 os.environ["DR_OS_REQUIRE_MODEL_AUTH"]="1"
                 os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"]="1"
                 cmd = ["scripts/paper_qa.py", "--project", slug, "--question-file", question.relative_to(project).as_posix(),
@@ -599,7 +620,7 @@ def run_job(job: dict, run_id: str) -> int:
                 for source in sources:
                     cmd += ["--source", source.relative_to(project).as_posix()]
             else:
-                raise CloudJobError("ToolUniverse can use unmetered paid APIs; its paid cloud action is paused until its charges can count against the approved tranche")
+                raise CloudJobError("ToolUniverse requires a cost adapter that can count actual charges or a bounded upper estimate against the cumulative ceiling")
             if cmd is not None:
                 phase = "execution"
                 execution_started = True
@@ -615,6 +636,8 @@ def run_job(job: dict, run_id: str) -> int:
                 if action == "continuation":
                     cloud_continuation.checkpoint(slug, continuation_decision, run_id, cycle_exit_code=code)
                     continuation_decision = cloud_continuation.evaluate(slug)
+                    if not code and continuation_decision.get("actor") == job["actor"] and cloud_continuation.transition_ready_gate(slug, continuation_decision):
+                        continuation_decision = cloud_continuation.evaluate(slug)
                     cloud_continuation.checkpoint(slug, continuation_decision, run_id, cycle_exit_code=code)
                     detail = f"Continuation after cycle: `{continuation_decision['reason']}`.\n\n"
                 if code:
@@ -706,8 +729,8 @@ def cycle_command(job: dict, slug: str) -> list[str]:
     if pause:
         raise CloudJobError("Continuation needs external input or an inspected repair: " + pause["reason"])
     control = model_spend.read(ROOT / "projects" / slug, required=True)
-    if not control or control["authorized_ceiling_cny"] <= 0:
-        raise CloudJobError("an initial CNY 300 owner budget approval is needed before paid model calls")
+    if not control or control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
+        raise CloudJobError("the cumulative model spending ceiling has no remaining capacity")
     errors = cloud_continuation.configuration_errors(os.environ)
     if errors:
         raise CloudJobError("Gateway configuration pending: " + "; ".join(errors))

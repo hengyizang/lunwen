@@ -285,8 +285,7 @@ class ReviewerRoundTests(unittest.TestCase):
                                          "note": "I reviewed the actual synthetic comments and archived version."})
         with self.assertRaisesRegex(controls.HumanControlError, "changed"):
             controls.execute({**job, "expected_sha256": "0" * 64}, "123")
-        with self.assertRaises(cloud_job.CloudJobError):
-            cloud_job.validate_request({**job, "allow_paid": True})
+        self.assertEqual(cloud_job.validate_request({**job, "allow_paid": True})["action"], "start_revision")
         with patch("scripts.model_runtime.call", side_effect=AssertionError("no paid calls")):
             result = controls.execute(job, "123")
         self.assertEqual(result["state_after"]["gate"], "G5")

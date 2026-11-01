@@ -57,9 +57,10 @@ class ReviewPacketControlTests(unittest.TestCase):
         with self.assertRaises((ValueError, controls.HumanControlError)):
             controls.execute(self.request("confirm_review_packet", packet_id="calibration-one", judgments={},
                 expected_sha256=reviewed["review_sha256"], note="Review these synthetic materials."), "104")
-        with self.assertRaises(cloud_job.CloudJobError):
-            self.request("confirm_review_packet", packet_id="calibration-one", judgments={}, allow_paid=True,
-                expected_sha256=reviewed["review_sha256"], note="Review these synthetic materials.")
+        allowed = self.request("confirm_review_packet", packet_id="calibration-one", judgments={}, allow_paid=True,
+            expected_sha256=reviewed["review_sha256"], note="Review these synthetic materials.")
+        with self.assertRaises((ValueError,controls.HumanControlError)):
+            controls.execute(allowed,"105")
         self.assertFalse((self.project / "state/review-packet-confirmations").exists())
 
 

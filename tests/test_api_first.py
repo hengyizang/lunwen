@@ -203,7 +203,7 @@ class ApiFirstTests(unittest.TestCase):
                                 "license_claim": "CC-BY-4.0",
                                 "metadata_relevance_score": 82,
                                 "screening_reasons": ["title-term match"],
-                                "fitness_status": "candidate_only_requires_scientific_and_human_review",
+                                "fitness_status": "candidate_only_requires_source_bound_scientific_review",
                                 "automatic_screening": {
                                     "rank": 1,
                                     "status": "metadata_shortlist",
@@ -263,7 +263,7 @@ class ApiFirstTests(unittest.TestCase):
 
     def test_safe_target_accepts_scientific_artifact(self):
         target = api_orchestrator.safe_target("demo", "papers/P01/manuscript.md")
-        self.assertTrue(str(target).endswith("projects/demo/papers/P01/manuscript.md"))
+        self.assertEqual(target.parts[-5:], ("projects", "demo", "papers", "P01", "manuscript.md"))
 
     def test_extract_bundle(self):
         value = api_orchestrator.extract_json(json.dumps({
@@ -495,6 +495,12 @@ class ApiFirstTests(unittest.TestCase):
             )
             state = root / "projects" / "demo" / "state"
             state.mkdir(parents=True)
+            intake = state.parent / "intake"
+            intake.mkdir()
+            (intake / "constraints.json").write_text(
+                json.dumps({"research_goal": "Compare synthetic candidates for software testing."}),
+                encoding="utf-8",
+            )
             (state / "run.json").write_text(
                 json.dumps(
                     {
@@ -566,7 +572,7 @@ class ApiFirstTests(unittest.TestCase):
                 ModelResult("uuapi-openai", "gpt-test", remediation, {}),
                 ModelResult("uuapi-anthropic", "claude-test", final_audit, {}, reported_model="claude-test", completion_status="completed"),
             ]
-            with patch.object(api_orchestrator, "ROOT", root), patch(
+            with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
                 side_effect=responses,
             ) as model_call, patch.object(api_orchestrator, "discover_context", return_value=json.dumps({

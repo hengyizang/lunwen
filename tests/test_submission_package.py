@@ -15,7 +15,13 @@ from scripts.submission_package import build_package
 
 
 class SubmissionPackageTests(unittest.TestCase):
-    def make_project(self, root: Path, ready: bool = True) -> Path:
+    def make_project(self, root: Path, ready: bool = True, *, mock_visual: bool = True) -> Path:
+        if mock_visual:
+            # These synthetic cases isolate packaging; actual attachment/model
+            # binding is tested in test_automated_visual_review. They never
+            # represent completed rendering or a scientific manuscript.
+            visual = patch("scripts.automated_visual_review.verify", return_value=[])
+            visual.start(); self.addCleanup(visual.stop)
         project = root / "demo-study"
         paper = project / "papers" / "P01"
         for name in ("manuscript", "figures", "tables", "supplement", "submission-materials", "reviews"):
@@ -134,6 +140,14 @@ class SubmissionPackageTests(unittest.TestCase):
         finally:researchctl.PROJECTS_ROOT=old
         (project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         return project
+
+    def test_missing_final_render_or_visual_receipt_blocks_complete_package(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            self.make_project(root,mock_visual=False)
+            with patch.object(researchctl,"PROJECTS_ROOT",root), patch("scripts.submission_package.project_dir",lambda slug:root/slug):
+                with self.assertRaisesRegex(researchctl.ResearchCtlError,"Final PDF visual checks"):
+                    build_package("demo-study","P01",root/"blocked.zip")
 
     def test_builds_deterministic_manual_package(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

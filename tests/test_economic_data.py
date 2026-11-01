@@ -51,11 +51,11 @@ class EconomicDataTests(unittest.TestCase):
         auth = self.project/"state/data-authorizations.json"
         original = read(auth)
         auth.unlink()
-        with self.assertRaisesRegex(ValueError, "protected owner"):
+        with self.assertRaisesRegex(ValueError, "protected data-rights"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
         original["manifests"]["data/manifests/synthetic-econ.json"]["sha256"] = "0"*64
         write(auth, original)
-        with self.assertRaisesRegex(ValueError, "protected owner"):
+        with self.assertRaisesRegex(ValueError, "protected data-rights"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
 
     def fred(self, url, **kwargs):
@@ -133,8 +133,34 @@ class EconomicDataTests(unittest.TestCase):
             economic.execute(self.project, "fixture", fetcher=self.fred)
         self.assertEqual(self.urls, [])
         self.rights(confirmed=False)
-        with self.assertRaisesRegex(ValueError, "human-confirmed"):
+        with self.assertRaisesRegex(ValueError, "source-bound research-use rights"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+
+    def test_machine_authorization_reuses_rights_verifier_without_human_flag(self):
+        self.rights(confirmed=False)
+        auth_path = self.project/"state/data-authorizations.json"
+        auth = read(auth_path)
+        auth["manifests"][self.spec["dataset_manifest"]["path"]].update(
+            actor="deterministic_control_plane", decision_kind="automated", human_confirmation=False)
+        write(auth_path, auth)
+        # This unit fixture supplies a verifier result, not a provider licence.
+        # Actual protected source evidence is exercised in test_data_rights.
+        with patch.object(economic, "license_errors", return_value=[]) as verify:
+            result = economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        self.assertEqual(result["report"]["observation_count"], 2)
+        verify.assert_called_with(self.manifest, project=self.project)
+        self.assertFalse(self.manifest["license"]["confirmed_by_human"])
+
+    def test_automatic_rights_authorization_rejects_wrong_controller_before_network(self):
+        self.rights(confirmed=False)
+        auth_path = self.project/"state/data-authorizations.json"
+        auth = read(auth_path)
+        auth["manifests"][self.spec["dataset_manifest"]["path"]].update(
+            decision_kind="automated", human_confirmation=False)
+        write(auth_path, auth)
+        with self.assertRaisesRegex(ValueError, "controller identity"):
+            economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        self.assertEqual(self.urls, [])
 
     def test_manifest_source_scope_and_current_hash_are_bound(self):
         self.rights()
@@ -144,7 +170,7 @@ class EconomicDataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
         self.spec["dataset_manifest"]["sha256"] = sha(target); self.save()
-        with self.assertRaisesRegex(ValueError, "protected owner"):
+        with self.assertRaisesRegex(ValueError, "protected data-rights"):
             economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
         # Even a synthetic renewed permission cannot relabel the actual query.
         auth_path = self.project/"state/data-authorizations.json"

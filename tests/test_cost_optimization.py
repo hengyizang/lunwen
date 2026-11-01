@@ -93,7 +93,7 @@ class LosslessContextTests(unittest.TestCase):
             project = Path(directory)
             text = "INVARIANT_NEGATIVE_EVIDENCE\n"
             write(project / "evidence/source.md", text)
-            digest = hashlib.sha256(text.encode()).hexdigest()
+            digest = hashlib.sha256((project / "evidence/source.md").read_bytes()).hexdigest()
             items = [{"path": "evidence/source.md", "reason": "Inspect reported effect", "stance": "supports"},
                      {"path": "evidence/source.md", "reason": "Inspect contradictory finding", "stance": "contradicts"}]
             write(project / evidence_context.PLAN, {"schema_version": "1.0", "stages": {"topic-intelligence": {
@@ -122,8 +122,9 @@ class LosslessContextTests(unittest.TestCase):
         topic = api.stage_writing_instructions("topic-intelligence")
         design = api.stage_writing_instructions("experiment-design")
         writing = api.stage_writing_instructions("writing-and-review")
-        for required in ("human-confirmed G0 weights", "closest works", "citation chaining", "rejection"):
+        for required in ("recorded owner-supplied G0 weights", "closest works", "citation chaining", "rejection"):
             self.assertIn(required, topic)
+        self.assertNotIn("human-confirmed G0 weights", topic)
         for required in ("strong", "negative controls", "stopping rules", "power", "preregistration", "clean-room"):
             self.assertIn(required, design)
         for required in ("every registered result locatable", "unfavorable", "AI-use disclosure", "strongest supported contribution", "post-hoc"):

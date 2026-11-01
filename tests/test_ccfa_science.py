@@ -56,11 +56,11 @@ class CCFAScienceTests(unittest.TestCase):
                  "doctoral_question": self.question, "paper_ids": ["P01"], "data": data, **changes}
         relative = f"program/ccfa-inputs/{operation}-{identifier}.json"
         target = self.project / relative
-        expected = (json.dumps(value, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        expected = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
         origin = output_provenance.current_origin(self.project, target) if target.is_file() else {}
         # An exact queue replay reuses the existing authored input. Re-recording
         # identical bytes would create a new provenance event across a clock tick.
-        if (target.is_file() and target.read_bytes() == expected
+        if (target.is_file() and target.read_text(encoding="utf-8") == expected
                 and all(origin.get(key) == item for key, item in {
                     "status": "tracked", "family": "openai", "provider": "fixture",
                     "model": "fixture-writer", "role": "writer", "run_id": "synthetic-ccfa-test"}.items())):

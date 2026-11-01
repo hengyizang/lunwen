@@ -1,8 +1,11 @@
 """Synthetic cloud fixtures: isolated continuation never releases unknown debits."""
 import copy
 from contextlib import ExitStack
+import hashlib
 import json
 import os
+from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -92,6 +95,20 @@ def fixture():
 
 class ModelEvaluationContinuationTests(unittest.TestCase):
     def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        fixture_root = Path(temporary.name)
+        # The historical cloud trial froze exact LF bytes. A Windows checkout
+        # may translate them; use an isolated copy of those original bytes,
+        # without changing the production constants or runtime hash checks.
+        for relative in (trial.PLAN, trial.PRICES):
+            target = fixture_root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((trial.ROOT / relative).read_bytes().replace(b"\r\n", b"\n"))
+        self.assertEqual(hashlib.sha256((fixture_root / trial.PRICES).read_bytes()).hexdigest(), trial.ORIGINAL_PRICES_SHA)
+        root_patch = patch.object(trial, "ROOT", fixture_root)
+        root_patch.start()
+        self.addCleanup(root_patch.stop)
         self.plan, self.original, self.guard = fixture()
         self.state, self.budget = MemoryState(self.original), Budget()
 
@@ -154,6 +171,16 @@ class ModelEvaluationContinuationTests(unittest.TestCase):
         budget.assert_not_called()
         generate.assert_not_called()
         self.assertFalse(self.state.writes)
+
+    def test_runtime_still_rejects_changed_frozen_price_bytes(self):
+        path = trial.ROOT / trial.PRICES
+        frozen = path.read_bytes()
+        self.assertNotIn(b"\r\n", frozen)
+        path.write_bytes(frozen.replace(b"\n", b"\r\n"))
+        with self.assertRaisesRegex(ValueError, "immutable stopped source"):
+            self.preview()
+        path.write_bytes(frozen)
+        self.assertEqual(self.preview()["new_request_count"], 12)
 
     def run_continuation(self, *, unknown=False, after_call=None, fail_first=False):
         calls, meters = [], []
