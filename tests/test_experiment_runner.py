@@ -326,6 +326,18 @@ class ExperimentRunnerTests(unittest.TestCase):
         run.assert_not_called()
         self.assertEqual(json.loads((project / "state/experiment-execution-lease.json").read_text())["status"], "running")
 
+    def test_remote_reservation_requires_the_research_runner_not_ambient_ci(self) -> None:
+        from scripts import cloud_checkpoint
+        project = self.project()
+        with mock.patch.dict(os.environ,{"GITHUB_ACTIONS":"true","DR_OS_REQUIRE_REMOTE_RESERVATION":"0"},clear=True), mock.patch.object(
+            cloud_checkpoint.subprocess,"run"
+        ) as process:
+            cloud_checkpoint.sync_experiment_reservation(project,completed=False)
+            process.assert_not_called()
+        with mock.patch.dict(os.environ,{"GITHUB_ACTIONS":"true","DR_OS_REQUIRE_REMOTE_RESERVATION":"1"},clear=True):
+            with self.assertRaisesRegex(cloud_checkpoint.CheckpointError,"not configured"):
+                cloud_checkpoint.sync_experiment_reservation(project,completed=False)
+
     def test_cloud_completion_failure_preserves_ledger_and_blocks_retry(self) -> None:
         from scripts.cloud_checkpoint import CheckpointError
         project = self.project()

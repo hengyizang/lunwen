@@ -207,7 +207,9 @@ def sync_experiment_reservation(project: Path, *, completed: bool) -> None:
     when the attempt's larger output artifacts were never uploaded.
     """
     required = os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") == "1"
-    if not required and os.environ.get("GITHUB_ACTIONS") != "true":
+    # Ordinary CI jobs also set GITHUB_ACTIONS. Only the configured research
+    # runner has a state branch to persist, as with sync_billing above.
+    if not required:
         return
     worktree = os.environ.get("DR_OS_STATE_WORKTREE")
     branch = os.environ.get("DR_OS_STATE_BRANCH")

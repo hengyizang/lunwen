@@ -116,6 +116,7 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
                  "active_paper": "P01", "approved_gates": ["G0"],
                  "fixture_only": True, "scientific_completion_verified": False}
         write(project / "state/run.json", state)
+        write(project / "intake/constraints.json", {"research_goal": "Synthetic gateway acceptance only; no research findings or real spending."})
         (root / "config").mkdir()
         shutil.copyfile(ROOT / "config/stages.json", root / "config/stages.json")
         model_spend.write(project, model_spend.initial())
@@ -133,6 +134,7 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
             "commit", "-m", "Isolated fixture")
         git(checkout, "remote", "add", "origin", str(remote))
         env = {
+            **{name:os.environ[name] for name in ("PATH","SystemRoot","SYSTEMROOT","TEMP","TMP") if name in os.environ},
             "UUAPI_OPENAI_MODEL": "gpt-fixture", "UUAPI_ANTHROPIC_MODEL": "claude-fixture",
             "UUAPI_OPENAI_PROTOCOL": protocol, "UUAPI_OPENAI_CHAT_TOKEN_FIELD": token_field,
             "UUAPI_STRICT_MODEL_ID": "true", "DR_OS_REQUIRE_MODEL_AUTH": "1",
