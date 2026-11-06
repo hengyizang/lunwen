@@ -204,4 +204,3 @@ class IndependentPaperTests(unittest.TestCase):
         state=execution.state(self.project)
         self.assertEqual((state["active_paper"],state["gate"],state["stage"]),("P02","G3","experiment-design"))
         self.assertEqual(state["paper_statuses"]["P01"],"submission_ready")
-
