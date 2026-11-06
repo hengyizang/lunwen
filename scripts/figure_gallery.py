@@ -17,10 +17,10 @@ import os
 from pathlib import Path
 import re
 import tempfile
-from urllib.parse import quote, urlsplit
+from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
-from scripts.research_artifacts import path_in, record, sha, write
+from scripts.research_artifacts import path_in, record, sha, write, strict_json
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCK = ROOT / "integrations/topconf-figure-gallery.lock.json"
@@ -100,16 +100,8 @@ def digest(value):
 
 
 def _json(raw):
-    def pairs(items):
-        obj = {}
-        for key, value in items:
-            if key in obj:
-                raise ValueError("duplicate JSON field in figure gallery metadata")
-            obj[key] = value
-        return obj
-    def constant(_):
-        raise ValueError("nonfinite gallery metadata")
-    return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)
+    return strict_json(raw, duplicate_error="duplicate JSON field in figure gallery metadata",
+                       nonfinite_error="nonfinite gallery metadata")
 
 
 def _lock():

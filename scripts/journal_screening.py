@@ -6,12 +6,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+try:
+    from scripts.research_artifacts import write as atomic_json, regular_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import write as atomic_json, regular_file
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,13 +52,8 @@ def canonical_hash(value: Any) -> str:
 
 
 def safe_file(project: Path, relative: str) -> Path:
-    value = Path(relative)
-    if value.is_absolute() or not value.parts or ".." in value.parts:
-        raise JournalScreeningError("input path must be project-relative")
-    path = (project / value).resolve()
-    if project.resolve() not in path.parents or not path.is_file() or path.is_symlink():
-        raise JournalScreeningError(f"not a regular project file: {relative}")
-    return path
+    return regular_file(project, relative, JournalScreeningError,
+                        invalid="input path must be project-relative", missing="not a regular project file")
 
 
 def load_object(path: Path, label: str) -> dict[str, Any]:
@@ -225,15 +223,6 @@ def validate_saved_report(project: Path) -> list[str]:
         if saved.get(key) != current.get(key):
             errors.append(f"journal screening is stale or altered for {key}")
     return errors
-
-
-def atomic_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        json.dump(value, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = handle.name
-    os.replace(temporary, path)
 
 
 def main() -> int:

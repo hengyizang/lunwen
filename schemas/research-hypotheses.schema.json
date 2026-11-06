@@ -201,7 +201,7 @@
             },
             "rounds": {
               "type": "array",
-              "minItems": 2,
+              "minItems": 1,
               "items": {
                 "type": "object",
                 "required": [
@@ -632,7 +632,7 @@
         },
         "comparisons": {
           "type": "array",
-          "minItems": 3,
+          "minItems": 0,
           "items": {
             "type": "object",
             "required": [
@@ -699,7 +699,7 @@
             },
             "criteria": {
               "type": "array",
-              "minItems": 1,
+              "minItems": 0,
               "items": {
                 "type": "object",
                 "required": [
@@ -928,6 +928,41 @@
                   }
                 }
               ]
+            }
+          }
+        },
+        "mode": {
+          "enum": [
+            "exploratory",
+            "decision"
+          ]
+        },
+        "comparison_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "focal_candidate_ids",
+            "rationale"
+          ],
+          "properties": {
+            "mode": {
+              "const": "focused"
+            },
+            "focal_candidate_ids": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 30,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
             }
           }
         }
@@ -1252,6 +1287,12 @@
           }
         }
       }
+    },
+    "status": {
+      "enum": [
+        "in_progress",
+        "ready_for_review"
+      ]
     }
   }
 }

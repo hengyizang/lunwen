@@ -81,6 +81,20 @@ class StandaloneCleaningTests(unittest.TestCase):
         self.assertEqual(result["output_dictionary"], list(expected_definitions.values()))
         self.assertEqual(result["steps"], expected_history)
 
+    def test_controller_entry_reuses_the_exact_standalone_execution_receipt(self):
+        # A second entry point must not maintain a competing transform or
+        # receipt format for the same approved run and unchanged raw inputs.
+        first = self.execute()
+        with patch.dict(os.environ, {"RESEARCH_OS_RUN_ID": "synthetic-approved-fixture"}), \
+                patch("scripts.experiment_runner.approved_plan", return_value=({"runs": [{
+                    "run_id": "synthetic-approved-fixture", "expected_outputs": [self.output, self.receipt],
+                    "inputs": contracts.audit(self.project, "fixture")["inputs"]}]}, 0)):
+            second = contracts.clean(self.project, "fixture", self.output, self.receipt)
+        self.assertEqual(first, second)
+        self.assertEqual(read(self.project/self.receipt), first)
+        self.assertEqual(first["implementation_sha256"], sha(Path(runtime.__file__)))
+        self.assertEqual(first["controller_implementation_sha256"], sha(Path(contracts.__file__)))
+
     def test_nonfinite_unsupported_operation_and_overwrite_fail_closed(self):
         self.fixture.spec["cleaning_steps"][0]["factor"] = float("inf"); self.fixture.save()
         with self.assertRaisesRegex(ValueError, "finite"):

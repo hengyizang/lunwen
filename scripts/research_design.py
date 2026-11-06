@@ -2,8 +2,9 @@
 """Deterministic validators for doctoral novelty and paper-level study design.
 
 These checks validate explicit evidence and design structure. They do not prove
-novelty, doctoral merit, reliability, or journal acceptance; those judgments
-remain human responsibilities at G1--G5.
+novelty, doctoral merit, reliability, or journal acceptance. Independent scientific
+audits assess meaning; G1/G2 topic decisions and external author obligations remain
+human responsibilities. Other stage decisions use evidence-bound automated checks.
 """
 from __future__ import annotations
 

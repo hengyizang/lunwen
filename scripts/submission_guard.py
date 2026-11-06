@@ -19,7 +19,7 @@ def verify_jcr(path:Path,required_quartile="Q1")->dict:
     return data
 def build_guarded_package(project,paper,output=None):
     paper=validate_paper_id(paper);state=load_state(project)
-    if state.get("paper_statuses",{}).get(paper)!="submission_ready":raise ResearchCtlError(f"{paper} has not passed its G5 human gate")
+    if state.get("paper_statuses",{}).get(paper)!="submission_ready":raise ResearchCtlError(f"{paper} has no recorded G5 submission-ready decision")
     paper_dir=project_dir(project)/"papers"/paper
     try:
         from scripts.venue_policy import target_from_contract

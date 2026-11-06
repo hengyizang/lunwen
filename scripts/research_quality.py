@@ -24,6 +24,11 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
@@ -41,20 +46,16 @@ POWER_RERUN_TIMEOUT_SECONDS = 300
 POWER_RERUN_MAX_BYTES = 16 * 1024 * 1024
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
+from scripts.paper_execution import paper_scoped
+
 class ResearchQualityError(RuntimeError):
     """Raised for unsafe paths, invalid evidence or unavailable calculations."""
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _atomic_json(path: Path, value: dict[str, Any]) -> None:
@@ -123,11 +124,15 @@ def _string_list(
 
 
 def _paper_ids(project: Path) -> list[str]:
-    return [path.name for path in sorted((project / "papers").glob("P[0-9][0-9]"))]
+    from scripts.paper_execution import papers
+    return papers(project)
 
 
 def _manifest_map(project: Path) -> dict[str, dict[str, Any]]:
-    path = project / "data" / "datasets.jsonl"
+    from scripts.paper_execution import enabled, dataset_snapshot, selected
+    path = dataset_snapshot(project)
+    if not path.is_file():
+        path = project / "data/datasets.jsonl"
     manifests: dict[str, dict[str, Any]] = {}
     if not path.is_file():
         return manifests
@@ -145,11 +150,15 @@ def _manifest_map(project: Path) -> dict[str, dict[str, Any]]:
                     f"duplicate dataset_id in datasets.jsonl: {dataset_id}"
                 )
             manifests[dataset_id] = item
+    if enabled(project):
+        contract = _load_json(project / "papers" / selected(project) / "paper-contract.json")
+        wanted = set(contract.get("datasets", []))
+        return {key: row for key, row in manifests.items() if key in wanted}
     return manifests
 
 
 def _registry(project: Path) -> list[dict[str, Any]]:
-    path = project / "experiments" / "registry.jsonl"
+    path = experiment_path(project, 'experiments/registry.jsonl')
     if not path.is_file():
         return []
     records: list[dict[str, Any]] = []
@@ -261,15 +270,17 @@ def _saturation_executions(project: Path, searches: list[dict], supporting: list
 
 def validate_novelty_claim_matrix(
     matrix: dict[str, Any], originality: dict[str, Any], searches: list[dict[str, Any]] | None = None,
-    *, project: Path | None = None,
+    *, project: Path | None = None, require_saturation: bool = True,
 ) -> list[str]:
     """Require claim-level closest-work differences and search saturation."""
 
     errors: list[str] = []
     if matrix.get("schema_version") not in {"1.0", "1.1"}:
         errors.append("schema_version must be 1.0 or 1.1")
-    if matrix.get("status") != "ready_for_review":
-        errors.append("status must be ready_for_review")
+    if matrix.get("status") not in {"in_progress","ready_for_review"}:
+        errors.append("status must be in_progress or ready_for_review")
+    elif require_saturation and matrix.get("status") != "ready_for_review":
+        errors.append("G1 topic approval requires a ready_for_review matrix; exploration remains in progress")
     works_value = originality.get("closest_prior_work")
     works = works_value if isinstance(works_value, list) else []
     known_works = {
@@ -334,29 +345,42 @@ def validate_novelty_claim_matrix(
     if not isinstance(saturation, dict):
         errors.append("search_saturation must be an object")
     else:
+        saturation_status=saturation.get("status","saturated")
+        saturated=saturation_status=="saturated"
+        if saturation_status not in {"exploring","saturated","reopened"}:
+            errors.append("search_saturation.status must be exploring, saturated or reopened")
+        if require_saturation and not saturated:
+            errors.append("search_saturation is not currently saturated; resolve affected claims and execute the next searches before G1 approval")
+        if not saturated:
+            affected=_string_list(saturation.get("affected_claim_ids"),"search_saturation.affected_claim_ids",errors,1)
+            if set(affected)-seen:errors.append("search_saturation.affected_claim_ids reference unknown claims")
+            _string_list(saturation.get("next_searches"),"search_saturation.next_searches",errors,1)
         for field in ("exact_query_rounds", "adjacent_field_rounds"):
             value = saturation.get(field)
-            if not isinstance(value, int) or isinstance(value, bool) or value < 2:
-                errors.append(f"search_saturation.{field} must be an integer >= 2")
-        if saturation.get("backward_chaining_complete") is not True:
+            minimum=2 if saturated else 0
+            if not isinstance(value, int) or isinstance(value, bool) or value < minimum:
+                errors.append(f"search_saturation.{field} must be an integer >= {minimum}")
+        if type(saturation.get("backward_chaining_complete")) is not bool or (saturated and saturation["backward_chaining_complete"] is not True):
             errors.append("search_saturation.backward_chaining_complete must be true")
-        if saturation.get("forward_chaining_complete") is not True:
+        if type(saturation.get("forward_chaining_complete")) is not bool or (saturated and saturation["forward_chaining_complete"] is not True):
             errors.append("search_saturation.forward_chaining_complete must be true")
         supporting = _string_list(
             saturation.get("supporting_search_ids"),
             "search_saturation.supporting_search_ids",
             errors,
-            4,
+            4 if saturated else 0,
         )
         backward = _string_list(
             saturation.get("backward_chaining_search_ids"),
             "search_saturation.backward_chaining_search_ids",
             errors,
+            1 if saturated else 0,
         )
         forward = _string_list(
             saturation.get("forward_chaining_search_ids"),
             "search_saturation.forward_chaining_search_ids",
             errors,
+            1 if saturated else 0,
         )
         if not set(backward + forward).issubset(set(supporting)):
             errors.append("citation-chaining search IDs must be included in supporting_search_ids")
@@ -373,13 +397,14 @@ def validate_novelty_claim_matrix(
                     + ", ".join(unknown_searches)
                 )
         rounds = saturation.get("consecutive_no_material_new_work_rounds")
-        if not isinstance(rounds, int) or isinstance(rounds, bool) or rounds < (0 if modern else 2):
+        minimum_rounds = 2 if saturated and not modern else 0
+        if not isinstance(rounds, int) or isinstance(rounds, bool) or rounds < minimum_rounds:
             errors.append(
-                "search_saturation.consecutive_no_material_new_work_rounds must be >= 2"
+                "search_saturation.consecutive_no_material_new_work_rounds must be >= " + str(minimum_rounds)
             )
         no_new_rounds = saturation.get("no_material_new_work_rounds")
-        if not isinstance(no_new_rounds, list) or len(no_new_rounds) < (0 if modern else 2):
-            errors.append("search_saturation.no_material_new_work_rounds must contain at least two rounds")
+        if not isinstance(no_new_rounds, list) or len(no_new_rounds) < minimum_rounds:
+            errors.append("search_saturation.no_material_new_work_rounds must contain at least " + str(minimum_rounds) + " rounds")
             no_new_rounds = []
         round_ids: set[str] = set()
         used_round_searches: set[str] = set()
@@ -402,10 +427,18 @@ def validate_novelty_claim_matrix(
             if type(item.get("material_new_closest_work_count")) is not int or item["material_new_closest_work_count"] != 0:
                 errors.append(f"{prefix}.material_new_closest_work_count must be zero")
             _text(item.get("stopping_reason"), f"{prefix}.stopping_reason", errors)
-        if isinstance(rounds, int) and not isinstance(rounds, bool) and rounds != len(no_new_rounds):
-            errors.append("consecutive_no_material_new_work_rounds must equal the recorded round count")
-        if not modern and saturation.get("unresolved_search_gaps") != []:
+        current_rounds=saturation.get("current_no_material_new_work_round_ids")
+        if current_rounds is not None:
+            current_ids=_string_list(current_rounds,"search_saturation.current_no_material_new_work_round_ids",errors,0)
+            ordered_ids=[item.get("round_id") for item in no_new_rounds if isinstance(item,dict)]
+            if len(current_ids)!=rounds or (current_ids and current_ids!=ordered_ids[-len(current_ids):]):
+                errors.append("current consecutive round IDs must match the latest recorded rounds and current round count")
+        elif isinstance(rounds, int) and not isinstance(rounds, bool) and rounds != len(no_new_rounds):
+            errors.append("consecutive_no_material_new_work_rounds must equal the recorded round count; retain history and declare current round IDs after reopening")
+        if saturated and not modern and saturation.get("unresolved_search_gaps") != []:
             errors.append("search_saturation.unresolved_search_gaps must be an empty array")
+        elif not saturated:
+            _string_list(saturation.get("unresolved_search_gaps"),"search_saturation.unresolved_search_gaps",errors,1)
         if modern:
             if saturation.get("stopping_rule") not in {"coverage_assessed", "budget_limit", "time_limit"}:
                 errors.append("search_saturation.stopping_rule must explain the actual bounded stopping condition")
@@ -903,7 +936,7 @@ def create_data_quality_report(
         "blockers": blockers,
         "warnings": warnings,
         "initiated_by": actor.strip(),
-        "human_review_required": True,
+        "human_review_required": False,
         "status": "pass" if not blockers else "block",
     }
     return report
@@ -934,8 +967,8 @@ def validate_data_quality_report(
         if report.get("manifest_download_sha256") != current_manifest_hash:
             errors.append("manifest_download_sha256 differs from the current dataset manifest")
     _text(report.get("initiated_by"), "initiated_by", errors)
-    if report.get("human_review_required") is not True:
-        errors.append("human_review_required must be true")
+    if type(report.get("human_review_required")) is not bool:
+        errors.append("human_review_required must honestly identify the current or legacy review policy")
     inventory = report.get("inventory")
     if not isinstance(inventory, list) or not inventory:
         errors.append("inventory must be non-empty")
@@ -1051,10 +1084,12 @@ def optional_tool_status() -> dict[str, dict[str, Any]]:
     return result
 
 
+@paper_scoped
 def _design_paths(project: Path, paper_id: str) -> list[Path]:
     return sorted((project / "papers" / paper_id / "experiments").glob("*.json"))
 
 
+@paper_scoped
 def create_power_report(
     project: Path,
     paper_id: str,
@@ -1141,10 +1176,11 @@ def create_power_report(
             for path in bindings
         ],
         "status": "ready_for_review",
-        "human_review_required": True,
+        "human_review_required": False,
     }
 
 
+@paper_scoped
 def create_simulation_power_report(
     project: Path,
     paper_id: str,
@@ -1350,10 +1386,11 @@ def create_simulation_power_report(
             for path in bindings
         ],
         "status": "ready_for_review",
-        "human_review_required": True,
+        "human_review_required": False,
     }
 
 
+@paper_scoped
 def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) -> list[str]:
     errors: list[str] = []
     if report.get("schema_version") != "1.0":
@@ -1362,8 +1399,8 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
         errors.append(f"paper_id must be {paper_id}")
     if report.get("status") != "ready_for_review":
         errors.append("status must be ready_for_review")
-    if report.get("human_review_required") is not True:
-        errors.append("human_review_required must be true")
+    if type(report.get("human_review_required")) is not bool:
+        errors.append("human_review_required must honestly identify the current or legacy review policy")
     _text(report.get("effect_size_basis"), "effect_size_basis", errors)
     engine = report.get("generated_by")
     if engine == "statsmodels":
@@ -1494,16 +1531,21 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
     return errors
 
 
+@paper_scoped
 def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
+    from scripts.research_phase import exploratory, preregistration_inputs
+    if exploratory(project, paper_id):
+        return preregistration_inputs(project, paper_id)
     from scripts import study_routes
+    from scripts.paper_execution import dataset_snapshot
     if study_routes.route(project, paper_id) != "empirical":
         return study_routes.preregistration_inputs(project, paper_id)
     contract = project / "papers" / paper_id / "paper-contract.json"
     power = project / "papers" / paper_id / "power-analysis.json"
     common = [
-        project / "data" / "datasets.jsonl",
-        project / "experiments" / "plan.json",
-        project / "experiments" / "budget.json",
+        dataset_snapshot(project, paper_id),
+        experiment_path(project, 'experiments/plan.json'),
+        experiment_path(project, 'experiments/budget.json'),
         contract,
         power,
         project / "papers" / paper_id / "experiment-evidence-plan.json",
@@ -1523,12 +1565,26 @@ def _preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
             *empirical_inputs(project, paper_id)]
 
 
+@paper_scoped
 def create_preregistration(project: Path, paper_id: str, actor: str, *, automated: bool = False) -> dict[str, Any]:
     if not actor.strip():
         raise ResearchQualityError("actor is required")
-    registry = project / "experiments" / "registry.jsonl"
+    registry = experiment_path(project, 'experiments/registry.jsonl')
     if registry.is_file() and registry.read_text(encoding="utf-8").strip():
         raise ResearchQualityError("cannot freeze a preregistration after experiment attempts exist")
+    from scripts.research_phase import exploratory, design_errors
+    if exploratory(project, paper_id):
+        errors = design_errors(project)
+        if errors:
+            raise ResearchQualityError("; ".join(errors))
+        return {"schema_version": "1.0", "paper_id": paper_id, "status": "frozen",
+                "research_phase": "exploratory", "protocol_lock": True, "confirmatory_lock": False,
+                "frozen_at": utc_now(), "frozen_by": "deterministic_control_plane" if automated else actor.strip(),
+                "generated_by": "deterministic_local_control_plane", "human_confirmation": not automated,
+                **({"confirmation_kind": "automated"} if automated else {}),
+                "files": [{"path": p.relative_to(project).as_posix(), "sha256": sha256_file(p)}
+                          for p in _preregistration_inputs(project, paper_id)],
+                "deviation_policy": "Retain all exploratory observations; new prospective claims require a new frozen protocol."}
     inputs = _preregistration_inputs(project, paper_id)
     missing = [path.relative_to(project).as_posix() for path in inputs if not path.is_file()]
     if missing:
@@ -1551,7 +1607,7 @@ def create_preregistration(project: Path, paper_id: str, actor: str, *, automate
                 )
             )
         else:
-            issues.append("named human data-quality confirmation is missing")
+            issues.append("protected data-quality confirmation is missing")
         if str(dataset_id) not in manifests:
             issues.append("dataset is absent from data/datasets.jsonl")
         if issues:
@@ -1577,8 +1633,13 @@ def create_preregistration(project: Path, paper_id: str, actor: str, *, automate
     }
 
 
+@paper_scoped
 def validate_preregistration(report: dict[str, Any], paper_id: str, project: Path) -> list[str]:
     errors: list[str] = []
+    from scripts.research_phase import exploratory
+    exploration = exploratory(project, paper_id)
+    if report.get("research_phase", "confirmatory") != ("exploratory" if exploration else "confirmatory"):
+        errors.append("preregistration phase differs from the current protocol")
     if report.get("schema_version") != "1.0" or report.get("status") != "frozen":
         errors.append("preregistration must be schema 1.0 with status frozen")
     if report.get("paper_id") != paper_id:
@@ -1587,7 +1648,9 @@ def validate_preregistration(report: dict[str, Any], paper_id: str, project: Pat
         errors.append("preregistration must be generated locally")
     valid_confirmation = (report.get("human_confirmation") is True and "confirmation_kind" not in report) or (
         report.get("human_confirmation") is False and report.get("confirmation_kind") == "automated")
-    if report.get("confirmatory_lock") is not True or not valid_confirmation:
+    locked = ((report.get("confirmatory_lock") is False and report.get("protocol_lock") is True)
+              if exploration else report.get("confirmatory_lock") is True)
+    if not locked or not valid_confirmation:
         errors.append("confirmatory lock and an honestly identified confirmation are required")
     if report.get("confirmation_kind") == "automated" and report.get("frozen_by") != "deterministic_control_plane":
         errors.append("automated preregistration must identify its control-plane origin")
@@ -1625,6 +1688,7 @@ def _successful_runs(registry: list[dict[str, Any]], paper_id: str) -> set[str]:
     }
 
 
+@paper_scoped
 def _planned_reproduction(
     project: Path, paper_id: str
 ) -> tuple[dict[str, set[str]], dict[str, float], dict[str, dict[str, str]], list[str]]:
@@ -1819,14 +1883,15 @@ def _validate_evidence_files(
     return recorded
 
 
+@paper_scoped
 def validate_baseline_reproduction(
     report: dict[str, Any], paper_id: str, project: Path, registry: list[dict[str, Any]]
 ) -> list[str]:
     errors: list[str] = []
     if report.get("schema_version") != "1.0" or report.get("paper_id") != paper_id:
         errors.append("baseline report schema/paper does not match")
-    if report.get("status") != "pass" or report.get("human_review_required") is not True:
-        errors.append("baseline report must pass and require human review")
+    if report.get("status") != "pass" or type(report.get("human_review_required")) is not bool:
+        errors.append("baseline report must pass and identify its current or legacy review policy")
     successful = _successful_runs(registry, paper_id)
     planned, tolerances, baseline_specs, plan_errors = _planned_reproduction(project, paper_id)
     errors.extend(plan_errors)
@@ -1910,14 +1975,15 @@ def validate_baseline_reproduction(
     return errors
 
 
+@paper_scoped
 def validate_clean_room_reproduction(
     report: dict[str, Any], paper_id: str, project: Path, registry: list[dict[str, Any]]
 ) -> list[str]:
     errors: list[str] = []
     if report.get("schema_version") != "1.0" or report.get("paper_id") != paper_id:
         errors.append("clean-room report schema/paper does not match")
-    if report.get("status") != "pass" or report.get("human_review_required") is not True:
-        errors.append("clean-room report must pass and require human review")
+    if report.get("status") != "pass" or type(report.get("human_review_required")) is not bool:
+        errors.append("clean-room report must pass and identify its current or legacy review policy")
     _text(report.get("independent_operator"), "independent_operator", errors)
     successful = _successful_runs(registry, paper_id)
     planned, tolerances, _baseline_specs, plan_errors = _planned_reproduction(project, paper_id)
@@ -2062,6 +2128,7 @@ def validate_clean_room_reproduction(
     return errors
 
 
+@paper_scoped
 def create_reproduction_confirmation(project: Path, paper_id: str, actor: str, *, automated: bool = False) -> dict[str, Any]:
     if not actor.strip():
         raise ResearchQualityError("actor is required")
@@ -2097,6 +2164,7 @@ def create_reproduction_confirmation(project: Path, paper_id: str, actor: str, *
     return result
 
 
+@paper_scoped
 def validate_reproduction_confirmation(
     confirmation: dict[str, Any], paper_id: str, project: Path
 ) -> list[str]:
@@ -2201,12 +2269,22 @@ def refresh_runtime_evidence_catalog(project: Path) -> Path:
         "note": "Use exact successful attempt_id values and only current_hash_match=true outputs. Multi-attempt environment digests must be computed with the local environment-digest command.",
         "runs": runs,
     }
-    path = project / "reports" / "runtime-evidence-catalog.json"
+    path = experiment_path(project, "reports/runtime-evidence-catalog.json")
     _atomic_json(path, catalog)
     return path
 
 
 def validate_g3_quality(project: Path, *, require_preregistration: bool = True) -> list[str]:
+    from scripts.research_phase import exploratory, design_errors
+    if exploratory(project):
+        errors = design_errors(project)
+        if require_preregistration:
+            for paper in _paper_ids(project):
+                try:
+                    errors.extend(validate_preregistration(_load_json(project / "papers" / paper / "preregistration.json"), paper, project))
+                except (OSError, ValueError, ResearchQualityError) as exc:
+                    errors.append(str(exc))
+        return errors
     from scripts.experiment_evidence import validate_plan as validate_evidence_plan
     errors: list[str] = []
     manifests = _manifest_map(project)
@@ -2281,6 +2359,9 @@ def validate_g3_quality(project: Path, *, require_preregistration: bool = True) 
 
 def validate_g4_quality(project: Path, *, require_confirmation: bool = True) -> list[str]:
     from scripts.experiment_evidence import validate_report
+    from scripts.research_phase import exploratory
+    if exploratory(project):
+        return [error for paper in _paper_ids(project) for error in validate_report(project, paper)]
     errors: list[str] = []
     registry = _registry(project)
     for paper_id in _paper_ids(project):
@@ -2346,7 +2427,7 @@ def validate_g4_quality(project: Path, *, require_confirmation: bool = True) -> 
 
 def quality_summary(project: Path) -> dict[str, Any]:
     manifests = _manifest_map(project)
-    papers = _paper_ids(project)
+    papers = [path.name for path in sorted((project/"papers").glob("P[0-9][0-9]"))]
     count = lambda paths: sum(1 for path in paths if path.is_file())
     novelty = project / "program" / "novelty-claim-matrix.json"
     search_log = project / "evidence" / "search-log.jsonl"
@@ -2522,9 +2603,24 @@ def _cmd_confirm_reproduction(args: argparse.Namespace) -> None:
     print(path.relative_to(project).as_posix())
 
 
+def _cmd_novelty(args: argparse.Namespace) -> None:
+    project=_project(args.project)
+    from scripts.literature_evidence import read_jsonl
+    errors=validate_novelty_claim_matrix(_load_json(project/"program/novelty-claim-matrix.json"),
+        _load_json(project/"program/originality-audit.json"),read_jsonl(project/"evidence/search-log.jsonl"),
+        project=project,require_saturation=args.for_gate)
+    print(json.dumps({"matrix_check":"blocked" if errors else "pass","for_gate":args.for_gate,
+        "errors":errors,"scientific_validity_verified":False},ensure_ascii=False,indent=2))
+    if errors:raise ResearchQualityError("novelty matrix needs the recorded corrections")
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     sub = root.add_subparsers(dest="command", required=True)
+    novelty=sub.add_parser("novelty-check",help="Check an exploration record or the stricter topic-decision saturation requirements")
+    novelty.add_argument("--project",required=True)
+    novelty.add_argument("--for-gate",action="store_true")
+    novelty.set_defaults(func=_cmd_novelty)
     audit = sub.add_parser("data-audit", help="Create a local hash-bound data-quality report")
     audit.add_argument("--project", required=True)
     audit.add_argument("--dataset-id", required=True)
@@ -2591,7 +2687,7 @@ def parser() -> argparse.ArgumentParser:
     catalog = sub.add_parser("runtime-catalog", help="Refresh verified G4 registry evidence")
     catalog.add_argument("--project", required=True)
     catalog.set_defaults(func=_cmd_runtime_catalog)
-    confirm = sub.add_parser("confirm-reproduction", help="Bind named human review to G4 reproduction reports")
+    confirm = sub.add_parser("confirm-reproduction", help="Optional explicit human review of G4 reports; normal continuation records automated checks")
     confirm.add_argument("--project", required=True)
     confirm.add_argument("--paper", required=True)
     confirm.add_argument("--actor", required=True)

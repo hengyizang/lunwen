@@ -17,7 +17,7 @@ not prove instrument validity; a single pre-period cannot test parallel trends.
 Use model-based empirical_estimator evidence rather than invented paired arms.
 Freeze all preprocessing/specifications and keep every attempted result, including
 adverse and exploratory results. Existing pilot, power, multiplicity, independent
-review, human approval and thesis-scope requirements remain. Never search for a
+review, actual G1/G2 topic decisions, automated protocol checks and thesis-scope requirements remain. Never search for a
 preferred significance result or pick the most favorable specification.
 
 Economic data requests explicitly bind variable scope, dates and vintage. FRED

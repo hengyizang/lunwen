@@ -17,9 +17,11 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from scripts.ref_verify_adapter import canonical_manuscript as select_manuscript
     from scripts.manuscript_language import extract_text
     from scripts.venue_compliance import manuscript_tree_sha256
 except ImportError:  # Direct execution from scripts/.
+    from ref_verify_adapter import canonical_manuscript as select_manuscript
     from manuscript_language import extract_text  # type: ignore
     from venue_compliance import manuscript_tree_sha256  # type: ignore
 
@@ -102,19 +104,7 @@ def now() -> str:
 
 
 def canonical_manuscript(paper: Path) -> Path:
-    candidates = [
-        path
-        for path in (
-            paper / "manuscript" / "main.tex",
-            paper / "manuscript" / "main.docx",
-        )
-        if path.is_file() and not path.is_symlink()
-    ]
-    if len(candidates) != 1:
-        raise AcademicStyleError(
-            "exactly one canonical manuscript/main.tex or manuscript/main.docx is required"
-        )
-    return candidates[0]
+    return select_manuscript(paper, error_type=AcademicStyleError)
 
 
 def _sentences(text: str) -> list[str]:
@@ -687,7 +677,7 @@ def build_audit(paper: Path) -> dict[str, Any]:
         "detector_score_used": False,
         "detector_evasion_prohibited": True,
         "disclosure_must_be_preserved": True,
-        "human_review_required": True,
+        "human_review_required": False,
         "manuscript": {
             "path": manuscript.relative_to(paper).as_posix() if manuscript else None,
             "source_tree_sha256": manuscript_tree_sha256(manuscript) if manuscript else None,
@@ -748,8 +738,8 @@ def validate_saved_audit(paper: Path) -> list[str]:
         errors.append("academic style audit must prohibit detector evasion")
     if report.get("disclosure_must_be_preserved") is not True:
         errors.append("academic style audit must preserve AI-use disclosure")
-    if report.get("human_review_required") is not True:
-        errors.append("academic style audit must require human review")
+    if type(report.get("human_review_required")) is not bool:
+        errors.append("academic style audit needs an explicit review-boundary flag")
     analysis = report.get("analysis")
     if not isinstance(analysis, dict):
         errors.append("academic style audit analysis is missing")

@@ -122,6 +122,18 @@ class CCFARuntimeTests(unittest.TestCase):
                     self.assertEqual(reference["text"], runtime.source(reference["path"]))
                 self.assertIn(identifier + "/SKILL.md", result["resources"])
 
+    def test_single_inventory_preserves_original_vendored_and_ancillary_identities(self):
+        raw = json.loads((runtime.ROOT / runtime.LOCK).read_text(encoding="utf-8"))
+        self.assertEqual(raw["schema_version"], "2.0")
+        self.assertNotIn("files", raw)
+        manifest = runtime.lock()
+        for field, keys, expected in (
+            ("files", ("path", "git_blob_sha", "canonical_lf_sha256"), "2521a5b22f195045546127a8e80f6de44c90d3415cfd0a99ed5e147692c35f49"),
+            ("resources", ("path", "git_blob_sha", "size"), "27e810f3aeb8bbf12fe3c6bb235e1308159ca8b20572ff46511f58230ab23ede"),
+        ):
+            rows = sorted(tuple(row[key] for key in keys) for row in manifest[field])
+            self.assertEqual(hashlib.sha256(json.dumps(rows, separators=(",", ":")).encode()).hexdigest(), expected)
+
     def test_explicit_selection_includes_universal_preflights_without_unrelated_stage_skills(self):
         chosen = runtime.selected("writing-and-review", skill="ccf-literature-monitor")
         self.assertEqual(chosen, ["ccf-humanization", "ccf-common", "ccf-literature-monitor"])
@@ -133,11 +145,10 @@ class CCFARuntimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runtime.selected("intake", skill="ccf-nonexistent")
 
-    def test_roles_share_full_humanization_but_never_grant_new_paid_work_or_persistent_claude_authorship(self):
+    def test_roles_share_humanization_baseline_but_never_grant_new_paid_work_or_persistent_claude_authorship(self):
         for role in runtime.ROLES:
             result = runtime.model_contract("topic-intelligence", role, skill="ccf-idea-reviewer")
-            self.assertIn("中文审稿预判", result)
-            self.assertIn("Smoke-Test Scope", result)
+            self.assertIn(runtime.source("ccf-humanization/SKILL.md"), result)
             self.assertIn("Claude planner/critic remain read-only", result)
             self.assertIn("paid requests, model changes", result)
             self.assertIn("ccf-idea-reviewer", result)

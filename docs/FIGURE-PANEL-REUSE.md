@@ -78,7 +78,7 @@ reproduction controls remain authoritative:
 | Full immutable inputs/helpers and actual execution receipts | `experiment_runner.py` checks approved frozen protocol hashes, full declared input files and successful dependency receipts. |
 | Pinned isolated environment and captured runtime | `study_environment.py` and `research_quality.validate_clean_room_reproduction` retain locked runtime, image digest, disabled network, read-only root, disjoint isolation instances and exact source commit. |
 | Actual scientific output comparison | `research_quality.validate_baseline_reproduction` and `validate_clean_room_reproduction` check exact successful attempts, complete current output sets and G3-predeclared metric tolerances. |
-| Scope and independent human judgment | G3-declared original/clean-room run sets and `create_reproduction_confirmation` bind a named reviewer to both current reports. Downstream rendering grants none of these judgments. |
+| Scope and independent scientific judgment | G3-declared original/clean-room run sets and `create_reproduction_confirmation` bind protected automated checks to both current reports; independent audits assess scientific meaning. Downstream rendering grants none of these judgments. |
 
 The upstream AIPOCH notebook barriers for truncated source, partial helper
 capture or partial environment locks are not imported as new local notebook

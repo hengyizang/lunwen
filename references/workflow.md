@@ -43,13 +43,60 @@ Use the [dedicated study routes](../docs/SCIENTIFIC-STUDY-ROUTES.md) for actual
 Meta/formal-theory identities and separate reviewer-requested experiments.
 These routes keep the shared evidence, budget, writer/critic and topic decisions.
 
+After the existing six-paper G2 architecture and each paper's recorded human
+topic decision, the native `advance` initializes independent execution for new
+unexecuted portfolios. P01 completes G3 → G4 → G5 before P02 enters G3; a paper does not
+wait for the other five experiment designs or results. Scientific topic scope and
+the cumulative project totals remain shared. Protocols, budget declarations and
+attempt ledgers and source-bound dataset snapshots use `experiments/papers/Pxx/`; claim records use
+`claims/papers/Pxx/claim-evidence.csv`. The ordinary API/CLI prompts supply the exact
+current paths. A copied budget declaration creates no additional allowance or
+per-paper cap. All papers and follow-ups remain charged to the original totals.
+Already executed/frozen legacy batch protocols are not silently rewritten.
+
+Exploration may retain `status: in_progress`, unsaturated searches, untested
+assumptions and provisional candidates. `research_quality.py novelty-check` checks
+that record without claiming a topic decision; `--for-gate` applies the final G1
+requirements. A reopened search retains all historical rounds, affected claim
+IDs and the next actual queries. Candidate screening can use a focused decision
+or narrative dispositions without manufactured numeric ratings.
+
+Scientific exploration uses the same G3/G4 state and executor. An explicit
+`plan.json.research_phase: exploratory` declares `exploration` with the unknown,
+discriminating test, continue/revise/stop conditions, claim limit and prior outcome
+exposure. It retains rights, source/input hashes, the frozen run plan, independent
+initial/final audits and the cumulative total; it need not invent a final power
+analysis or complete confirmatory baseline suite. Checked G4 archives every actual
+attempt and returns that paper to G3. Confirmatory work uses a separate frozen
+protocol, new run/output identities and source-bound prior-exploration records.
+Exploratory outcomes cannot supply confirmatory claims or pass final G5.
+
+Writing starts in `scientific`: refine evidence, claims, comparisons and argument
+under source/claim integrity checks and fresh independent audits. The frozen paper
+contract may declare an initial preference; the controller records each paper's
+current phase in existing `state.writing_phases`. After scientific checks and
+both scientific audits pass, it advances automatically to `submission` for the
+next G5 cycle. That cycle runs the full editorial, format, venue, actual
+rendered-file inspection and package checks with fresh submission audits. Only
+the complete submission phase can pass G5. Writers do not edit frozen contracts
+to change phase. Pending supplemental protocols keep their bounded design
+review and cannot pass the parent paper.
+
+Internal scientific review can request a separate `Ixxx` follow-up through the
+same supplemental executor used for external `Rxxx` reviewer work. A protected
+actual independent finding supplies its trigger. The existing model cycle
+reviews the exact child protocol, and checked automatic records seal it and
+validate actual results. A protocol-only verdict cannot pass parent G5 or verify
+any outcome. Original G3 inputs, prior exposure, adverse results, source rights,
+model identities and the cumulative spending authority remain unchanged.
+
 For the current stage:
 
 1. Run `python3 scripts/researchctl.py status --project <slug> --json`, or use `python3 scripts/autopilot.py plan --project <slug>`.
 2. Read the matching stage contract in `references/stage-contracts.md`.
 3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
 4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
-   At G5, run the deterministic academic-style audit after writing and again
+   At submission-phase G5, run the deterministic academic-style audit after writing and again
    after remediation; use it to improve authentic academic expression. Mandatory
    automatic Unicode hygiene runs before builders and scans the resulting text
    after each pass; preserved originals, protected spans, source ancestry and
@@ -59,12 +106,24 @@ For the current stage:
    removes disclosure. Run citation identity, DOI-bound abstract
    claim, commitment-trace and revision-integrity checks against the final snapshot.
 5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
-6. Ask Codex/OpenAI to resolve findings explicitly; do not silently discard adverse feedback, then request a fresh independent audit.
+6. Ask Codex/OpenAI to resolve actionable findings explicitly; do not silently discard adverse feedback. When the initial audit is clean and the writer already supplied the applicable dispositions, retain that record without another revision call. Always obtain the fresh independent final audit.
 7. Run `gate-check`, then `ready`.
 8. At G1 present the doctoral topic dossier; at G2 present each paper topic for its own recorded decision. Stop only for those topic decisions. A changed topic or mapping invalidates the affected approval.
 9. Record actual topic decisions with `approve` (G2 also requires `--paper Pxx`). The serialized continuation runs `ready` and `advance` when their checks pass. G0/G3/G4/G5 receive explicit machine decision records. [Cloud topic controls](../docs/CLOUD-HUMAN-CONTROLS.md) authenticate human topic decisions; scheduled work never supplies a human identity or increases the spending ceiling.
 
-`scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never supplies a human `approve`. At G5 it works only on `state.active_paper`; a checked automatic `advance` marks that paper ready and selects the next paper until all configured papers are complete.
+`scripts/autopilot.py` implements this loop with Claude read-only tool permissions, Codex workspace writing, protected control/audit files, output-provenance hashes, bounded non-interactive CLI calls, local checkpoints and output limits. It never supplies a human `approve`. In independent execution G3–G5 operate on `state.active_paper`; a checked automatic `advance` marks that paper ready and selects the next paper at G3 until all configured papers are complete.
+
+Each G1-G5 model cycle appends its current decision to the existing
+`program/research-notebook.json`. The question states the consequential unknown;
+the decision binds this `cycle_id`, stage/paper, discriminating test, outcome,
+method/claim decision, rationale, next action, actual `evidence_ids`, failure
+condition and stop rule. Outcomes include `pending`, `unchanged`, `changed`,
+`failed` and `stopped`. Pending/unchanged may lack evidence only with explicit
+`missing_evidence` and the next action; no invented breakthrough is required.
+The fresh final critic reviews the current notebook. G0 is exempt. Continuation
+shows the source/review-bound decision alongside control progress and actual
+attempts; fewer errors, new receipts or a recorded decision alone do not
+establish scientific validity or an improved paper.
 
 ## Evidence rules
 

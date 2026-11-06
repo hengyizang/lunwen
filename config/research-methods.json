@@ -49,7 +49,7 @@
         "topic-intelligence"
       ],
       "path": "references/research-methods/paper-cards.md",
-      "sha256": "05d749d37e81e77c9826c9fa7f2a3ebcf71127addfb190417c460f171ac95d88",
+      "sha256": "ba40e4b7936b55e78f149db30a0d28354df6b4ae8c47d758b2b872703daef9ab",
       "source_ids": [
         "nature-skills",
         "kdense-topic-methods"
@@ -65,7 +65,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/evidence-arguments.md",
-      "sha256": "2caeeefd5fd181330324959027536bb40b3d6628b22b33cd05167ecd634bfbee",
+      "sha256": "ba0c664d2f220730daa4783cec652c590206e4bd8581c99e35c14916449d1600",
       "source_ids": [
         "paperspine",
         "ars-codex",
@@ -77,7 +77,7 @@
       "id": "empirical-data",
       "stages": ["experiment-design", "experiment-execution", "writing-and-review"],
       "path": "references/research-methods/empirical-data.md",
-      "sha256": "5a91b63f68bf910067a4f9622f98b38b9a64f29b99ed3f9aad48d47a246883cc",
+      "sha256": "97490b71c750a05df581868a11a2846a84b53b3d54a006c99891c69559dc38d6",
       "source_ids": ["auto-empirical-methods", "econ-data-methods"]
     },
     {
@@ -86,7 +86,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/submission-review.md",
-      "sha256": "2101f556a431af2c9d930931efefc8dec78bc27dfdb7d9317e7bf2e1946fb291",
+      "sha256": "e10004467adaa7e93bac71ac61a6e7f147cb689f709e313bca9af9de1b38338f",
       "source_ids": [
         "academic-research-skills",
         "ars-codex",

@@ -69,6 +69,8 @@ class ReviewReceiptTests(unittest.TestCase):
     def test_gate_revalidates_all_editorial_dispositions_and_matching_phases(self):
         with tempfile.TemporaryDirectory() as temp:
             project, state = self.fixture(Path(temp))
+            state["writing_phases"]={"P01":"submission"}
+            write(project/"state/run.json",state)
             seal_review(project, state)
             final = project / "state/review-receipts/G5-P01/fixture-review/final.json"
             value = read(final)
@@ -78,6 +80,53 @@ class ReviewReceiptTests(unittest.TestCase):
             write(pointer, {"path": final.relative_to(project).as_posix(), "sha256": sha(final)})
             record(project, [final, pointer], review_receipts.MODULE)
             self.assertTrue(any("CFH38" in error for error in review_receipts.validate_gate(project, "G5", "P01")))
+
+    def test_protocol_review_does_not_require_parent_novelty_assessment(self):
+        for with_matrix in (False, True):
+            with self.subTest(with_matrix=with_matrix), tempfile.TemporaryDirectory() as temp:
+                project, state = self.fixture(Path(temp))
+                if with_matrix:
+                    write(project / "program/novelty-claim-matrix.json", {"schema_version": "1.1", "claims": [
+                        {"claim_id": "N1", "paper_ids": ["P01"], "closest_work_ids": ["W1", "W2", "W3"]}]})
+                with patch("scripts.supplemental_experiments.proposal_pending", return_value=True):
+                    seal_review(project, state, notes=[])
+                    self.assertEqual(review_receipts.validate_gate(
+                        project, "G5", "P01", expected_purpose="supplemental_protocol"), [])
+
+    def test_protocol_review_cannot_approve_scientific_writing_or_submission(self):
+        for phase, purpose in (("scientific", "scientific_writing"), ("submission", "stage")):
+            with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temp:
+                project, state = self.fixture(Path(temp))
+                state["writing_phases"] = {"P01": phase}
+                write(project / "state/run.json", state)
+                with patch("scripts.supplemental_experiments.proposal_pending", return_value=True):
+                    seal_review(project, state, notes=[])
+                    self.assertTrue(any("cannot approve the parent" in error for error in
+                        review_receipts.validate_gate(project, "G5", "P01", expected_purpose=purpose)))
+
+    def test_parent_reviews_still_require_novelty_assessment(self):
+        for phase in ("scientific", "submission"):
+            with self.subTest(phase=phase), tempfile.TemporaryDirectory() as temp:
+                project, state = self.fixture(Path(temp))
+                state["writing_phases"] = {"P01": phase}
+                write(project / "state/run.json", state)
+                write(project / "program/novelty-claim-matrix.json", {"schema_version": "1.1", "claims": [
+                    {"claim_id": "N1", "paper_ids": ["P01"], "closest_work_ids": ["W1", "W2", "W3"]}]})
+                seal_review(project, state)
+                self.assertTrue(any("novelty_assessment" in error for error in
+                    review_receipts.validate_gate(project, "G5", "P01")))
+
+    def test_novelty_findings_require_remediation_despite_existing_writer_notes(self):
+        audit = {"verdict": "pass-with-conditions", **{field: [] for field in review_receipts.FIELDS - {"verdict"}}}
+        for decision in ("overlap", "unresolved"):
+            with self.subTest(decision=decision):
+                audit["novelty_assessment"] = [{"claim_id": "N1", "decision": decision}]
+                self.assertTrue(api_orchestrator.remediation_required(audit, "scientific-writing", [
+                    "rejected: N1 The writer's prior position does not resolve the independent novelty finding."]))
+        audit["novelty_assessment"] = [{"claim_id": "N1", "decision": "distinct"}]
+        audit["uncertainty"] = ["Synthetic evidence remains provisional pending replication."]
+        self.assertFalse(api_orchestrator.remediation_required(audit, "scientific-writing", [
+            "The finite synthetic sample limits mechanism generalization."]))
 
     def test_receipt_rejects_cached_same_family_mismatched_or_changed_during_call(self):
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):

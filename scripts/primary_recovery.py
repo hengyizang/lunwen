@@ -16,6 +16,8 @@ AUTOMATIC_PROPOSAL = "program/primary-recovery.json"
 MODULE = "scripts/primary_recovery.py"
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 class RecoveryError(ValueError):
     pass
 
@@ -47,7 +49,7 @@ def path_in(project, relative):
 
 
 def records(project):
-    path = project / "experiments/registry.jsonl"
+    path = experiment_path(project, 'experiments/registry.jsonl')
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()] if path.exists() else []
 
 
@@ -68,7 +70,7 @@ def _approval(project, item):
     approval = read(path)
     if (approval.get("failed_receipt_sha256") != sha(receipt(project, item))
             or approval.get("plan_sha256") != item.get("approved_plan_sha256")
-            or approval.get("plan_sha256") != sha(project / "experiments/plan.json")
+            or approval.get("plan_sha256") != sha(experiment_path(project, 'experiments/plan.json'))
             or not approval.get("actor")):
         raise RecoveryError("primary retry authorization is stale")
     if approval.get("decision_kind") == "automated":
@@ -79,7 +81,7 @@ def _approval(project, item):
                 or approval.get("actor") != "deterministic_control_plane"
                 or approval.get("human_confirmation") is not False
                 or approval.get("next_attempt_number") != 2
-                or approval.get("budget_sha256") != sha(project / "experiments/budget.json")
+                or approval.get("budget_sha256") != sha(experiment_path(project, 'experiments/budget.json'))
                 or approval.get("diagnosis") != _no_start_evidence(project, item)):
             raise RecoveryError("automatic primary recovery evidence is stale")
     elif not approval.get("cloud_review_sha256"):
@@ -118,7 +120,8 @@ def _retained_output(project, item, output):
             "original_path": output["path"], "attempt_id": item["attempt_id"]}
 
 
-def selected_attempt(project, run_id, rows, *, plan_sha256=None):
+def latest_attempt(project, run_id, rows, *, plan_sha256=None):
+    """Validate the original retry chain without calling a failed attempt successful."""
     attempts = [r for r in rows if r.get("run_id") == run_id]
     if not attempts:
         raise RecoveryError("run has no executor attempt")
@@ -137,6 +140,13 @@ def selected_attempt(project, run_id, rows, *, plan_sha256=None):
             if attempts[index + 1].get("attempt_id") != f"{run_id}-attempt-{index + 2:03d}":
                 raise RecoveryError("retry did not use its reviewed next attempt")
         item = attempts[-1]
+    if plan_sha256 and item.get("approved_plan_sha256") != plan_sha256:
+        raise RecoveryError("run has no current approved attempt")
+    return item
+
+
+def selected_attempt(project, run_id, rows, *, plan_sha256=None):
+    item = latest_attempt(project, run_id, rows)
     if item.get("status") != "succeeded" or (plan_sha256 and item.get("approved_plan_sha256") != plan_sha256):
         raise RecoveryError("run has no current successful approved attempt")
     return item
@@ -208,14 +218,14 @@ def automatic_retry(project, item):
         receipt(project, item)
         if (project / "state/experiment-execution-lease.json").exists():
             raise RecoveryError("execution reservation is unresolved; no automatic retry")
-        plan, ceiling = runner.approved_plan(project, project / "experiments/plan.json", project / "experiments/budget.json")
+        plan, ceiling = runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
         rows = records(project)
         attempts = [r for r in rows if r.get("run_id") == item.get("run_id")]
         if attempts != [item]:
             raise RecoveryError("one automatic recovery attempt per run is the hard limit")
         diagnosis = _no_start_evidence(project, item)
         matches = [r for r in plan["runs"] if r["run_id"] == item.get("run_id")]
-        if len(matches) != 1 or item.get("approved_plan_sha256") != sha(project / "experiments/plan.json"):
+        if len(matches) != 1 or item.get("approved_plan_sha256") != sha(experiment_path(project, 'experiments/plan.json')):
             raise RecoveryError("failed attempt differs from the approved plan")
         run = matches[0]
         if item.get("cwd") != run.get("cwd", "."):
@@ -239,8 +249,8 @@ def automatic_retry(project, item):
             _approval(project, item)
         else:
             value = {"decision_kind": "automated", "human_confirmation": False,
-                     "actor": "deterministic_control_plane", "plan_sha256": sha(project / "experiments/plan.json"),
-                     "budget_sha256": sha(project / "experiments/budget.json"),
+                     "actor": "deterministic_control_plane", "plan_sha256": sha(experiment_path(project, 'experiments/plan.json')),
+                     "budget_sha256": sha(experiment_path(project, 'experiments/budget.json')),
                      "failed_receipt_sha256": sha(receipt(project, item)), "next_attempt_number": 2,
                      "preserved_outputs": [], "diagnosis": diagnosis,
                      "budget_check": {"committed_usd": committed, "next_estimate_usd": requested, "ceiling_usd": ceiling}}
@@ -283,7 +293,7 @@ def diagnosis_context(project):
         errors = scientific_scope.validate(project, "G4")
         if errors:
             raise RecoveryError("; ".join(errors))
-        plan, ceiling = runner.approved_plan(project, project / "experiments/plan.json", project / "experiments/budget.json")
+        plan, ceiling = runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
         planned = {row["run_id"]: row for row in plan["runs"]}
         if not rows or len(rows) > 100 or len({row.get("attempt_id") for row in rows}) != len(rows):
             raise RecoveryError("bounded unique failed executor attempts are required")
@@ -291,7 +301,7 @@ def diagnosis_context(project):
         for item in rows:
             source = receipt(project, item)
             run = planned.get(item.get("run_id"), {})
-            if (item.get("approved_plan_sha256") != sha(project / "experiments/plan.json")
+            if (item.get("approved_plan_sha256") != sha(experiment_path(project, 'experiments/plan.json'))
                     or item.get("launch", {}).get("process_started") is not True
                     or item.get("input_integrity", {}).get("passed") is not True
                     or item.get("input_integrity", {}).get("verified_after_run") is not True
@@ -343,8 +353,8 @@ def diagnosis_context(project):
         if not re.fullmatch(r"v[0-9]{3}", next_version):
             raise RecoveryError("primary history version limit reached")
         return {**result, "status": "eligible", "proposal_path": AUTOMATIC_PROPOSAL,
-                "plan_sha256": sha(project / "experiments/plan.json"),
-                "budget_sha256": sha(project / "experiments/budget.json"),
+                "plan_sha256": sha(experiment_path(project, 'experiments/plan.json')),
+                "budget_sha256": sha(experiment_path(project, 'experiments/budget.json')),
                 "version": next_version, "failed_attempt_ids": sorted(row["attempt_id"] for row in rows),
                 "diagnostic_evidence": sorted(evidence, key=lambda row: row["path"]),
                 "failure_logs": failure_logs,
@@ -373,7 +383,7 @@ def failure_control_status(project):
             return context
         if (project / "state/experiment-execution-lease.json").exists():
             return context
-        plan, ceiling = runner.approved_plan(project, project / "experiments/plan.json", project / "experiments/budget.json")
+        plan, ceiling = runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
         rows = records(project)
         failures = [row for row in rows if row.get("status") != "succeeded"]
         requested = 0.0
@@ -385,7 +395,7 @@ def failure_control_status(project):
             if attempts != [item] or len(matches) != 1:
                 return context
             run = matches[0]
-            if item.get("approved_plan_sha256") != sha(project / "experiments/plan.json"):
+            if item.get("approved_plan_sha256") != sha(experiment_path(project, 'experiments/plan.json')):
                 return context
             program = run["isolation"].get("engine") if run["isolation"]["kind"] == "container" else run["argv"][0]
             if not shutil.which(program):
@@ -463,11 +473,11 @@ def prepare(project, source, actor, operation):
     state = read(project / "state/run.json")
     if state.get("gate") != "G4" or state.get("status") != "awaiting_work":
         raise RecoveryError("primary recovery requires the open G4 stage")
-    runner.approved_plan(project, project / "experiments/plan.json", project / "experiments/budget.json")
+    runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
     proposal = read(path_in(project, source))
     if (not actor or proposal.get("schema_version") != "1.0" or proposal.get("operation") != operation
-            or proposal.get("plan_sha256") != sha(project / "experiments/plan.json")
-            or proposal.get("budget_sha256") != sha(project / "experiments/budget.json")
+            or proposal.get("plan_sha256") != sha(experiment_path(project, 'experiments/plan.json'))
+            or proposal.get("budget_sha256") != sha(experiment_path(project, 'experiments/budget.json'))
             or not isinstance(proposal.get("reason"), str) or len(proposal["reason"].strip()) < 20):
         raise RecoveryError("recovery needs an exact plan/budget-bound proposal and substantive reason")
     rows = records(project)
@@ -501,7 +511,7 @@ def prepare(project, source, actor, operation):
         raise RecoveryError("protocol history versions must increase monotonically")
     if proposal.get("prior_outcomes_seen") is not True or proposal.get("new_analysis_phase") not in {"exploratory", "prospective_followup"}:
         raise RecoveryError("amended protocols must disclose observed prior outcomes and the new analysis phase")
-    for run in read(project / "experiments/plan.json")["runs"]:
+    for run in read(experiment_path(project, 'experiments/plan.json'))["runs"]:
         for item in run["inputs"]:
             _original_input(project, item["path"], item["sha256"])
     for prereg in (project / "papers").glob("P[0-9][0-9]/preregistration.json"):
@@ -540,8 +550,8 @@ def _retire(project, prepared, authority):
     proposal = prepared["proposal"]
     version = proposal["version"]
     folder = project / HISTORY / version
-    plan = read(project / "experiments/plan.json")
-    frozen = {"experiments/plan.json", "experiments/budget.json", "experiments/registry.jsonl", "state/run.json"}
+    plan = read(experiment_path(project, 'experiments/plan.json'))
+    frozen = {experiment_path(project,p).relative_to(project).as_posix() for p in ("experiments/plan.json", "experiments/budget.json", "experiments/registry.jsonl", "state/run.json")}
     expected_hashes = {}
 
     def require_original(relative, expected_hash):
@@ -552,7 +562,8 @@ def _retire(project, prepared, authority):
         expected_hashes[relative] = expected_hash
         frozen.add(relative)
 
-    preregs = list((project / "papers").glob("P[0-9][0-9]/preregistration.json"))
+    from scripts.paper_execution import papers
+    preregs = [p for p in (project / "papers").glob("P[0-9][0-9]/preregistration.json") if p.parent.name in papers(project)]
     for path in preregs:
         frozen.add(path.relative_to(project).as_posix())
         for item in read(path).get("files", []):
@@ -591,7 +602,7 @@ def _retire(project, prepared, authority):
     manifest = {**authority, "version": version, "files": files,
                 "run_ids": [r["run_id"] for r in plan["runs"]],
                 "output_paths": [p for r in plan["runs"] for p in r["expected_outputs"]],
-                "compute_ceiling_usd": runner.project_compute_ceiling(project, read(project / "experiments/budget.json")),
+                "compute_ceiling_usd": runner.project_compute_ceiling(project, read(experiment_path(project, 'experiments/budget.json'))),
                 "cost_usd": sum(runner.accounted_run_cost(r) for r in prepared["rows"]),
                 "attempt_receipts": [{"path": f"experiments/runs/{r['attempt_id']}/run.json", "sha256": sha(receipt(project, r))} for r in prepared["rows"]],
                 "retained_outputs": retained_outputs}
@@ -599,7 +610,12 @@ def _retire(project, prepared, authority):
     write(project / CONTROL / "versions" / (version + ".json"), {"manifest_sha256": sha(folder / "manifest.json")})
     # This owner decision withdraws old execution authority; it grants no new execution authority.
     state = prepared["state"]
-    state["approved_gates"] = [g for g in state.get("approved_gates", []) if g not in {"G3", "G4"} and not g.startswith("G5")]
+    from scripts.paper_execution import enabled,selected
+    if enabled(project):
+        retired_gates={f"{gate}:{selected(project)}" for gate in ("G3","G4","G5")}
+        state["approved_gates"]=[g for g in state.get("approved_gates",[]) if g not in retired_gates]
+    else:
+        state["approved_gates"] = [g for g in state.get("approved_gates", []) if g not in {"G3", "G4"} and not g.startswith("G5")]
     state.update(stage_index=3, stage="experiment-design", gate="G3", status="awaiting_work")
     for key in ("ready_gate", "ready_artifact_sha256"):
         state.pop(key, None)
@@ -607,7 +623,7 @@ def _retire(project, prepared, authority):
         **{key: value for key, value in authority.items() if key in {
             "actor", "source_run_id", "cloud_review_sha256", "decision_kind", "human_confirmation"}}})
     write(project / "state/run.json", state)
-    (project / "experiments/registry.jsonl").write_text("", encoding="utf-8")
+    (experiment_path(project, 'experiments/registry.jsonl')).write_text("", encoding="utf-8")
     for path in preregs:
         path.unlink()
 
@@ -664,7 +680,7 @@ def gate_errors(project, gate, paper_id=None):
         versions = histories(project)
         if not versions:
             return []
-        plan, budget = read(project / "experiments/plan.json"), read(project / "experiments/budget.json")
+        plan, budget = read(experiment_path(project, 'experiments/plan.json')), read(experiment_path(project, 'experiments/budget.json'))
         retired_runs = {r for v in versions for r in v["run_ids"]}
         retired_outputs = {p for v in versions for p in v["output_paths"]}
         if any(r["run_id"] in retired_runs or set(r["expected_outputs"]) & retired_outputs for r in plan["runs"]):

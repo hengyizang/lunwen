@@ -1,14 +1,10 @@
 """Owner-authorized writing comparison; metadata never generates or releases holds."""
 from __future__ import annotations
 
-import base64
 import hashlib
 import json
 import os
-import re
 import time
-import urllib.parse
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -41,16 +37,7 @@ class State(gateway_trial.CloudState):
         self.directory = directory
 
     def read(self, name):
-        tree = self.api("git/trees/" + urllib.parse.quote(self.branch, safe=""))
-        for segment in self.directory.split("/"):
-            item = next((row for row in tree["tree"] if row["path"] == segment), None)
-            if item is None:
-                return None, None
-            tree = self.api("git/trees/" + item["sha"])
-        item = next((row for row in tree["tree"] if row["path"] == name), None)
-        if item is None:
-            return None, None
-        return model_comparison_clarified.blob_json(self.api("git/blobs/" + item["sha"]), item["sha"]), item["sha"]
+        return super().read(name, directory=self.directory, reader=model_comparison_clarified.blob_json)
 
     def load(self, name):
         value, sha = self.read(name)
@@ -60,16 +47,9 @@ class State(gateway_trial.CloudState):
     def save(self, name, value):
         if name not in self.expected:
             raise ValueError("read state before writing")
-        raw = (json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
-        body = {"message": TRIAL + ": preserve " + name, "branch": self.branch,
-                "content": base64.b64encode(raw).decode()}
-        if self.expected[name]:
-            body["sha"] = self.expected[name]
-        reply = self.api("contents/" + self.directory + "/" + name, body, "PUT")
-        sha = reply["content"]["sha"]
-        if model_comparison_clarified.blob_json(self.api("git/blobs/" + sha), sha) != value:
-            raise ValueError("comparison state readback mismatch")
-        self.expected[name] = sha
+        self.expected[name] = self.commit_json(name, value, self.expected[name],
+            TRIAL + ": preserve " + name, model_comparison_clarified.blob_json,
+            directory=self.directory, error=ValueError, readback_error="comparison state readback mismatch")
 
 
 def metadata():

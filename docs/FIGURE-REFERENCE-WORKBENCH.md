@@ -95,8 +95,8 @@ alignment as not assessed.
 `validate` and `style_validate` take a `{path,sha256}` request file.
 
 7. Inspect each format at publication size. Export cannot establish scientific
-   validity, font availability or final visual quality. Use the existing named
-   human-review figure provenance route for final SVG registration, retaining
+   validity, font availability or final visual quality. Use the existing source-bound automated
+   visual inspection and figure-provenance route for final SVG registration, retaining
    the receipt's renderer/IR and all evidence/style dependencies. G5 rechecks all
    existing editable receipts: source/request/evidence/style/implementation/output
    changes require rebuilding. Data-result charts keep their existing registered

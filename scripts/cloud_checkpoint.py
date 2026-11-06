@@ -218,7 +218,8 @@ def sync_experiment_reservation(project: Path, *, completed: bool) -> None:
     checkout = Path(worktree)
     relatives = ["state/experiment-execution-lease.json"]
     if completed:
-        relatives.append("experiments/registry.jsonl")
+        from scripts.paper_execution import artifact_path
+        relatives.append(artifact_path(project,"experiments/registry.jsonl").relative_to(project).as_posix())
     paths = []
     for relative in relatives:
         source = project / relative

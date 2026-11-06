@@ -1,17 +1,19 @@
-# Executable study routes and reviewer follow-up experiments
+# Executable study routes and scientific follow-up experiments
 
 Implemented 2026-10-17. These are software execution/validation routes. They do
 not select a real topic, establish novelty, produce data, approve science or
 guarantee doctoral merit/publication. Model IDs, reasoning effort, API spending
-authority, G0–G5 approvals and manual submission remain unchanged.
+authority, G1/G2 human topic decisions, recorded automated stage checks and manual
+submission remain unchanged.
 
 ## Shared execution boundary
 
-All routes use `scripts/experiment_runner.py`, a named human G3 approval, exact
+All routes use `scripts/experiment_runner.py`, a checked G3 protocol seal, exact
 plan/budget/preregistration hashes, read-only declared inputs, bounded
 network-disabled Docker execution, separate output files, immutable attempt
 receipts and post-run input checks. Failed/negative/inconclusive results remain.
-G4 requires real executor evidence and a human scientific confirmation. G5
+G4 requires real executor evidence and an honestly labeled automated evidence
+confirmation. Independent scientific audits remain required. G5
 requires source-bound manuscript reporting and the original independent audits.
 
 Empirical studies retain their data, power, baseline, ablation, negative-control
@@ -38,7 +40,7 @@ minimum requirements when this explicit alternative is absent.
   and current text-source hashes/line anchors;
 - two separately attributed extractions per effect and an actual source-bound
   adjudication when they disagree. Attribution fields do not prove independent
-  work; the human reviewer must inspect authenticity and independence;
+  work; existing scientific audits assess authenticity and independence;
 - prespecified outcomes, populations, comparability, estimands, practical
   thresholds, alpha, multiplicity families, precision rationale and limitations;
 - two distinct original/replay run IDs and result JSON paths, exact source
@@ -89,9 +91,14 @@ compiler failures and missing obligations block evidence. A second isolated
 execution must agree. Symbolic simplification and numerical examples are not
 accepted as universal proofs.
 
-`confirm_study_validation` records named human G4 review of source authenticity,
-assumptions, non-vacuity, scope, manuscript correspondence and replay. A checked
-formal statement is not proof that its English interpretation is correct or novel.
+The normal G4 continuation records a protected automated study-validation
+confirmation of current sources, frozen protocol, actual executor receipts,
+computed outputs and isolated replay. It sets `human_confirmation: false` and
+does not certify interpretation or novelty. `confirm_study_validation` retains
+authenticated explicit interventions; it is not a required new human stage gate.
+Existing scientific audits assess assumptions, non-vacuity, scope and manuscript
+correspondence. A checked formal statement is not proof that its English
+interpretation is correct or novel.
 
 ## Provisioning and manuscript integration
 
@@ -122,7 +129,7 @@ follow-ups must be explicitly identified in the manuscript.
 All source excerpts must have checkpoint/distribution rights. Keep copyrighted
 full texts, private/raw datasets and credentials outside tracked project outputs.
 
-## Reviewer-requested additional experiments
+## Separate internal and external follow-up experiments
 
 After the existing real `start_revision` operation, prepare
 papers/Pxx/reviews/reviewer-required-experiment-plan.json. It records exact paper,
@@ -132,29 +139,36 @@ comment IDs, prior outcome access, exploratory/prospective-followup status,
 scientific rationale, scope/claim limits and the unchanged original G3 hashes.
 
 The new child study is stored at
-experiments/supplemental/Pxx/Rxxx/s001. It has its own plan, hard budget,
+experiments/supplemental/Pxx/Rxxx/s001. It has its own plan, budget declaration,
 data/quality/power/design or Meta/theory protocol, preregistration, registry and
-results. Model-authored child state, confirmations, registered outputs and
+results. Its declaration grants no extra allowance or per-paper financial cap;
+all actual attempts, including failures, consume the same project total.
+Model-authored child state, confirmations, registered outputs and
 receipts are protected. `supplemental_prepare` initializes an **unapproved**
 candidate, imports exact declared existing data/evidence and runs the same
 deterministic G3 builders. It grants no execution authority.
 
-Use separate authenticated owner dossiers/decisions:
+The normal continuation uses the existing model cycle and automatic checks:
 
-1. `approve_supplemental`, paper_id: review the entire current child design,
-   actual data quality, budget and parent linkage. This creates the
-   child confirmations/preregistration and its separate G3 approval.
+1. The existing writer and independent initial/final critics review the exact
+   proposed child design, actual data quality, remaining total and parent linkage.
+   The recorded audit purpose is `supplemental_protocol`; it cannot pass parent
+   G5. Successful current checks permit the controller to create honestly labeled
+   automated data confirmations, preregistration and a separate G3 seal. Missing
+   rights or evidence remains blocked. Authenticated owner dossiers are available
+   for explicit interventions, not a required step in ordinary continuation.
 2. Healthy G5 continuation executes at most one approved child run per job.
    Aggregate parent and supplemental costs share the G0 compute ceiling.
    Missing approval, changed inputs, a failed attempt or an ambiguous registry
    stops execution. Data imports are restored only from exact reviewed bytes.
-3. `confirm_supplemental`, paper_id: inspect actual child G4 analyses, complete
-   claim coverage and isolated reproduction; record a separate scientific
-   confirmation bound to current outputs. This does not approve parent G5.
+3. Actual child G4 analyses, complete claim coverage and isolated reproduction
+   undergo the native evidence checks. The controller records their current hashes
+   with `decision_kind: automated` and `human_confirmation: false`. This does not
+   certify scientific meaning or approve parent G5.
 4. Map every new result into the actual revised parent manuscript. The reviewer
    audit blocks missing requests, missing approval/confirmation, changed results
    and missing or incorrect reporting. Existing response coverage, independent
-   audits and fresh human G5 approval still apply.
+   audits and the checked automatic G5 decision still apply.
    Supplemental approvals, inputs, attempts, results, exports and reporting maps
    are hashed into the reviewer audit and parent G5 approval; any change requires
    a fresh review. Read-only validation remains available during final approval
@@ -169,6 +183,18 @@ deleted automatically. `retire_supplemental` lets the owner seal an inspected
 failed scope with a reason, retaining logs/costs and requiring an explicit failure
 statement in the manuscript. It grants no scientific result; requested experiments
 remain incomplete until a separate approved scope supplies the required evidence.
+
+Internal scientific findings use the same executor at
+`experiments/supplemental/Pxx/Ixxx/s001`, with `trigger_kind: internal_review`
+and `source_review: {path, sha256}` referencing an actual protected independent
+G5 review receipt. Stable `internal-...` comment IDs come from that audit's
+findings, exposed to the existing remediation call. An internal finding is never
+recorded as an external reviewer round. Its parent protocol and original results
+remain unchanged, and every I/R scope is included in cumulative compute costs.
+Pending protocol work uses experiment-design guidance; publication style and
+package checks resume for the full parent paper. Internal studies, confirmed
+outputs, failed attempts and reporting maps remain part of the paper's review
+binding, including when another paper becomes active.
 
 ## Topic-specific candidates
 

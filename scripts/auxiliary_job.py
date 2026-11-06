@@ -13,13 +13,14 @@ import json
 import os
 from pathlib import Path, PureWindowsPath
 import re
+import sys
 
-try:
-    from scripts import ai_providers, metadata_contract, model_routing, task_router, engineering_contract
-    from scripts.publication_figures import PROJECTS_ROOT
-except ImportError:
-    import ai_providers, metadata_contract, model_routing, task_router, engineering_contract  # type: ignore
-    from publication_figures import PROJECTS_ROOT  # type: ignore
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.research_artifacts import strict_json
+from scripts import ai_providers, metadata_contract, model_routing, task_router, engineering_contract
+from scripts.publication_figures import PROJECTS_ROOT
 
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
@@ -66,17 +67,9 @@ def _path(project: Path, value: object, label: str, *, existing=True, limit=MAX_
 
 
 def _strict_json(raw: bytes) -> object:
-    def pairs(items):
-        value = {}
-        for key, item in items:
-            if key in value:
-                raise ValueError("manifest/contract JSON contains a duplicate field")
-            value[key] = item
-        return value
-    def invalid_constant(_):
-        raise ValueError("manifest/contract JSON contains a nonfinite number")
     try:
-        return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=invalid_constant)
+        return strict_json(raw.decode("utf-8"), duplicate_error="manifest/contract JSON contains a duplicate field",
+                           nonfinite_error="manifest/contract JSON contains a nonfinite number")
     except (UnicodeError, json.JSONDecodeError, RecursionError) as exc:
         raise ValueError("manifest/contract must contain bounded strict UTF-8 JSON") from exc
 

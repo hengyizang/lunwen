@@ -22,6 +22,10 @@ MAX_CSV_BYTES = 20_000_000
 MAX_ROWS = 200_000
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
+from scripts.paper_execution import paper_scoped
+
 class EvidenceError(ValueError):
     pass
 
@@ -73,12 +77,14 @@ def read(path: Path) -> dict:
     return value
 
 
+@paper_scoped
 def paper_plan(project: Path, paper_id: str) -> Path:
     need(isinstance(paper_id, str) and len(paper_id) == 3 and paper_id[0] == "P"
          and paper_id[1:].isdigit(), "invalid paper ID")
     return project / "papers" / paper_id / PLAN
 
 
+@paper_scoped
 def validate_plan(project: Path, paper_id: str) -> list[str]:
     try:
         _validate_plan(project, paper_id)
@@ -126,6 +132,7 @@ def _scientific_bindings(project: Path, paper_id: str, protocol: dict) -> None:
     need(seen == set(conditions), "executable comparisons must cover every contracted falsification condition")
 
 
+@paper_scoped
 def validate_scientific_bindings(project: Path, paper_id: str, gate: str = "G3") -> list[str]:
     """Strict current-gate entry; 1.0 remains readable only for historical diagnostics.
 
@@ -149,11 +156,17 @@ def validate_scientific_bindings(project: Path, paper_id: str, gate: str = "G3")
         return [str(exc)]
 
 
+@paper_scoped
 def _validate_plan(project: Path, paper_id: str) -> dict:
+    from scripts.research_phase import exploratory, design_errors
+    if exploratory(project, paper_id):
+        errors = design_errors(project)
+        need(not errors, "; ".join(errors))
+        return read(experiment_path(project, "experiments/plan.json"))
     protocol = read(paper_plan(project, paper_id))
     need(protocol.get("schema_version") in {"1.0", "1.1"} and protocol.get("paper_id") == paper_id
          and protocol.get("status") == "ready_for_review", "invalid experiment evidence plan identity/status")
-    runs_value = read(project / "experiments/plan.json").get("runs")
+    runs_value = read(experiment_path(project, 'experiments/plan.json')).get("runs")
     need(isinstance(runs_value, list), "execution plan runs must be an array")
     runs = {r["run_id"]: r for r in runs_value if isinstance(r, dict) and r.get("paper_id") == paper_id}
     power = read(project / "papers" / paper_id / "power-analysis.json")
@@ -401,7 +414,7 @@ def _unit_values(path: Path, comp: dict) -> dict[str, float]:
 def _measure(project: Path, comp: dict, registry: list[dict], plan_hash: str, family_size: int) -> dict:
     if comp["analysis_mode"] == "empirical_estimator":
         from scripts.empirical_reporting import measured
-        paper_id = next(r["paper_id"] for r in read(project/"experiments/plan.json")["runs"] if r["run_id"] == comp["registered_result"]["run_id"])
+        paper_id = next(r["paper_id"] for r in read(experiment_path(project, 'experiments/plan.json'))["runs"] if r["run_id"] == comp["registered_result"]["run_id"])
         bound = measured(project, paper_id, comp["empirical_specification_id"])
         actual = bound["result"]
         sign = 1 if comp["direction"] == "higher" else -1
@@ -541,7 +554,11 @@ def _measure_independent(project: Path, comp: dict, registry: list[dict], plan_h
             "aggregation": comp["aggregation"], "sources": sources}
 
 
+@paper_scoped
 def build_report(project: Path, paper_id: str) -> dict:
+    from scripts.research_phase import exploratory, build_report as exploration_report
+    if exploratory(project, paper_id):
+        return exploration_report(project, paper_id)
     from scripts import study_routes
     if study_routes.route(project, paper_id) != "empirical":
         return study_routes.build_report(project, paper_id)
@@ -551,12 +568,13 @@ def build_report(project: Path, paper_id: str) -> dict:
     if errors:
         return report
     protocol = read(paper_plan(project, paper_id))
-    plan_path, registry_path = project / "experiments/plan.json", project / "experiments/registry.jsonl"
+    plan_path, registry_path = experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/registry.jsonl')
     prereg_path = project / "papers" / paper_id / "preregistration.json"
     from scripts.research_quality import validate_preregistration
     try:
         state = read(project / "state/run.json")
-        approval = next((a for a in reversed(state.get("approvals", [])) if a.get("gate") == "G3"), {})
+        from scripts.paper_execution import approval as paper_approval
+        approval = paper_approval(project,"G3",paper_id) or {}
         need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg_path),
              "preregistration differs from the G3-approved frozen protocol")
         errors.extend(validate_preregistration(read(prereg_path), paper_id, project))
@@ -624,7 +642,9 @@ def refresh(project: Path) -> dict:
     from scripts.researchctl import write_json
     from scripts.output_provenance import record_model_writes
     summaries = {}
-    for paper in sorted((project / "papers").glob("P[0-9][0-9]")):
+    from scripts.paper_execution import papers
+    for paper_id in papers(project):
+        paper=project / "papers" / paper_id
         report = build_report(project, paper.name)
         path = paper / REPORT
         write_json(path, report)
@@ -637,6 +657,7 @@ def refresh(project: Path) -> dict:
     return summaries
 
 
+@paper_scoped
 def validate_report(project: Path, paper_id: str) -> list[str]:
     try:
         expected = build_report(project, paper_id)

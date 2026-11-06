@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import io
 import os
 import sys
 import tempfile
 import time
 import unittest
+import types
+from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -14,11 +17,65 @@ from scripts.dashboard import (
     SessionConfig,
     build_command,
     project_detail,
+    project_state,
     update_config,
 )
 
 
 class DashboardTests(unittest.TestCase):
+    def test_repeated_screening_checks_are_grouped_without_hiding_other_blockers(self):
+        errors = [f"search-log record {index} requires a recorded screening decision" for index in range(118)]
+        errors.extend(["Missing experiment source", "Dataset license remains unknown"])
+        state = {"stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work"}
+        with patch("scripts.dashboard.researchctl.load_state", return_value=state), patch(
+                "scripts.dashboard.researchctl.gate_errors", return_value=errors):
+            result = project_state("demo")
+        self.assertFalse(result["gate_ready"])
+        self.assertEqual(result["gate_error_count"], 120)
+        self.assertEqual(result["gate_errors"], errors)
+        groups = result["gate_error_groups"]
+        self.assertEqual(len(groups), 3)
+        self.assertEqual(groups[0]["id"], "literature_screening")
+        self.assertEqual(groups[0]["count"], 118)
+        self.assertEqual(groups[0]["checks"], errors[:118])
+        self.assertTrue(all(group["next_action"] for group in groups))
+        self.assertEqual([check for group in groups for check in group["checks"]], errors)
+
+    def test_identical_checks_keep_occurrence_count_and_unknown_causes_stay_separate(self):
+        from scripts.researchctl import summarize_gate_errors
+        errors = ["Missing evidence A", "Missing evidence A", "Missing evidence B"]
+        groups = summarize_gate_errors(errors)
+        self.assertEqual(len(groups), 2)
+        self.assertEqual(groups[0]["count"], 2)
+        self.assertEqual(groups[0]["checks"], ["Missing evidence A"])
+        self.assertNotEqual(groups[0]["id"], groups[1]["id"])
+
+    def test_grouping_never_turns_an_invalid_state_into_a_ready_gate(self):
+        with patch("scripts.dashboard.researchctl.load_state", side_effect=ValueError("Broken state")):
+            result = project_state("demo")
+        self.assertEqual(result["status"], "invalid")
+        self.assertFalse(result["gate_ready"])
+        self.assertEqual(result["gate_error_groups"][0]["checks"], ["Broken state"])
+
+    def test_cli_status_summarizes_checks_and_json_retains_every_original(self):
+        from scripts import researchctl
+        state = {"project": "demo", "stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work"}
+        errors = [f"record {index} requires a recorded screening decision" for index in range(3)]
+        errors.append("Unknown research issue")
+        with patch.object(researchctl, "load_state", return_value=state), patch.object(researchctl, "gate_errors", return_value=errors):
+            output = io.StringIO()
+            with redirect_stdout(output):
+                researchctl.print_status(types.SimpleNamespace(project="demo", json=False))
+            self.assertIn("3 check messages", output.getvalue())
+            self.assertIn("Unknown research issue", output.getvalue())
+            self.assertNotIn("record 2", output.getvalue())
+            output = io.StringIO()
+            with redirect_stdout(output):
+                researchctl.print_status(types.SimpleNamespace(project="demo", json=True))
+            result = json.loads(output.getvalue())
+            self.assertEqual(result["gate_errors"], errors)
+            self.assertFalse(result["gate_ready"])
+
     def test_project_detail_uses_newest_report_by_modification_time(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             projects = Path(directory)

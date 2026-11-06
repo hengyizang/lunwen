@@ -15,6 +15,9 @@ REQUIRED = ("method", "analysis_unit", "independent_units", "estimate", "ci_low"
 NUMERIC = {"independent_units", "estimate", "ci_low", "ci_high", "ci_confidence", "p_value", "p_adjusted", "seeds", "family_size"}
 
 
+from scripts.paper_execution import paper_scoped
+
+@paper_scoped
 def reporting_semantics(project: Path, paper_id: str, item: dict, actual: dict) -> dict:
     """Audit explicit reporting declarations, without claiming their truth."""
     value = item.get("reporting_semantics")
@@ -62,6 +65,7 @@ def display_value(value, decimals: int = 6) -> str:
     return str(value)
 
 
+@paper_scoped
 def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *, manuscript_sources: set[str] | None = None, figure_claims: set[str] | None = None) -> dict:
     errors, bindings, semantics = [], [], []
     comparisons = {row["comparison_id"]: row for row in evidence.get("comparisons", [])}
@@ -142,6 +146,7 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
             "human_scientific_review_required": True, "scientific_completion_verified": False}
 
 
+@paper_scoped
 def audit(project: Path, paper_id: str) -> dict:
     from scripts import study_routes
     if study_routes.route(project, paper_id) != "empirical":
@@ -169,6 +174,7 @@ def audit(project: Path, paper_id: str) -> dict:
     return result
 
 
+@paper_scoped
 def refresh(project: Path, paper_id: str) -> dict:
     value = audit(project, paper_id)
     output = project / "papers" / paper_id / "reviews/statistical-reporting.json"
@@ -177,6 +183,7 @@ def refresh(project: Path, paper_id: str) -> dict:
     return value
 
 
+@paper_scoped
 def validate_saved_report(project: Path, paper_id: str) -> list[str]:
     try:
         expected = audit(project, paper_id)

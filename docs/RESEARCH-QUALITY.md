@@ -29,8 +29,7 @@ SerpApi Google Scholar available as an explicit quota-limited supplemental sourc
 control plane stores the exact response bytes, a normalized work list and both
 SHA-256 values. OpenCitations expands DOI citation graphs; authorized Web of
 Science and Scopus CSV/JSON exports can be imported locally without automating
-or bypassing their access controls. Every receipt remains blocked until a named
-person screens the exact returned IDs and records exclusion reasons.
+or bypassing their access controls. Every claimed screening result binds the exact returned IDs and actual inclusion/exclusion/uncertain decisions; the existing metered writer cycle can supply attributed model screening without impersonating a person.
 
 Theme B is a separate hard contract, not a status label. It must declare its
 own doctoral question, claim IDs, paper IDs, primary-evidence plan,
@@ -58,7 +57,7 @@ PaperQA2 and ToolUniverse are reviewed, disabled-by-default upstream options.
 They can support local-corpus synthesis or topic-appropriate AI4Science work,
 but never replace primary-source checks. Bind real local inputs and outputs
 with `scripts/ai4science_evidence.py`; these receipts remain advisory and
-require human verification.
+require independent source and scientific assessment.
 
 ## G2: complete venue candidates
 
@@ -83,7 +82,7 @@ not redistributed.
 
 ## G3: data quality
 
-After a candidate becomes a human-confirmed entry in `data/datasets.jsonl` and
+After actual rights/provenance checks authorize an entry in `data/datasets.jsonl` and
 the licensed file is local, use the G3 **本地数据质量审计** card. Supply the exact
 `dataset_id`, the project-relative local path, and—where available—the label,
 split and group columns. The core scanner checks current SHA-256, complete scan,
@@ -109,15 +108,11 @@ python3 scripts/research_quality.py data-audit \
   --actor 'Your Name'
 ```
 
-Read the complete report and every warning. Only then use **阅读报告后确认**;
-the confirmation is a separate protected file bound to the report hash:
-
-```bash
-python3 scripts/research_quality.py confirm-data-quality \
-  --project my-phd --dataset-id bearing-v1 --actor 'Your Name'
-```
-
-Changing the report or underlying data invalidates the confirmation.
+The normal controller reads the actual report and unresolved warnings, applies
+native checks and records a separate protected automated confirmation bound to
+the current report/data hash. It does not claim human review or certify scientific
+fitness. Genuine historical manual confirmations remain supported as explicit
+interventions. Changed reports or underlying data invalidate either record.
 
 For processed data, add `--derived`; the manifest must already contain the
 transformation history. A warning still requires scientific review even when
@@ -248,24 +243,25 @@ python3 scripts/research_quality.py environment-digest \
   --attempt p01-original-seed-2-attempt-001
 ```
 
-After Codex produces both reports for a paper, use the G4 **人工确认复现证据**
-button. It reruns every deterministic check before creating the protected,
-named and hash-bound `reproduction-confirmation.json`. The model cannot create
-or edit that file. CLI equivalent:
-
-```bash
-python3 scripts/research_quality.py confirm-reproduction \
-  --project my-phd --paper P01 --actor 'Your Name'
-```
+After the existing writer prepares both reproduction reports, the controller
+reruns all deterministic checks and creates the protected, current hash-bound
+`reproduction-confirmation.json` with an automated identity. Models cannot create
+or edit it. A historical manual command remains an optional explicit intervention,
+not a required human G4 approval.
 
 A failed reproduction remains a result; do not increase a tolerance after
 seeing it. Revise or narrow the claim and preserve the negative outcome.
 
-## What remains human
+## Scientific judgment and actual owner decisions
 
-The program can reject missing, stale, internally inconsistent or numerically
-false evidence. It cannot establish that the chosen construct is meaningful,
-that every adjacent literature was found, that a second operator was genuinely
-independent, or that a study is doctoral-level and publishable. Those judgments
-remain explicit G1–G5 human approvals, informed by domain experts and the target
-journal's current requirements.
+The program rejects missing, stale, inconsistent or numerically false evidence.
+These checks do not establish construct validity, exhaustive literature coverage,
+actual independence, doctoral merit or publishability; existing independent
+scientific audits assess those questions with the real evidence. The owner makes
+the doctoral topic decision at G1 and each paper topic decision at G2. Other
+stages record automated checks, without fabricated signatures. External author,
+data-rights, ethics and publisher obligations remain applicable.
+
+The detailed power/baseline requirements above describe confirmatory work.
+Bounded exploration and scientific-versus-submission writing use the same native
+stages, as defined in [the stage contracts](../references/stage-contracts.md).

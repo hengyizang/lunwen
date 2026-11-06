@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import io
 import sys
 import tempfile
 import types
 import unittest
 from pathlib import Path
+from contextlib import redirect_stderr, redirect_stdout
 from unittest.mock import patch
 
 from scripts import researchctl
@@ -36,6 +38,35 @@ class ResearchCtlTests(unittest.TestCase):
         value=json.loads(path.read_text())
         value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.25,"job_market_and_salary":0.25,"future_growth_potential":0.15,"phd_position_competition":0.075,"job_market_competition":0.075,"background_fit":0.10,"application_route_fit":0.10}})
         researchctl.write_json(path,value)
+
+    def test_gate_check_and_ready_group_repeated_checks_and_keep_original_json_details(self):
+        state = {"project": "test-phd", "stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work"}
+        errors = [f"record {index} requires a recorded screening decision" for index in range(118)]
+        with patch.object(researchctl, "load_state", return_value=state), \
+             patch.object(researchctl, "gate_errors", return_value=errors), \
+             patch.object(researchctl, "save_state") as save:
+            for command in ("gate-check", "ready"):
+                with self.subTest(command=command):
+                    output, error_output = io.StringIO(), io.StringIO()
+                    with redirect_stdout(output), redirect_stderr(error_output):
+                        code = researchctl.main([command, "--project", "test-phd"])
+                    self.assertEqual(code, 2)
+                    self.assertEqual(output.getvalue().count("  - "), 1)
+                    self.assertIn("118 check messages", output.getvalue())
+                    self.assertIn("集中核对检索结果", output.getvalue())
+                    self.assertNotIn("record 117", output.getvalue())
+                    self.assertIn("1 issue group(s), 118 check messages", error_output.getvalue())
+                    self.assertNotIn("requirement", error_output.getvalue())
+                    self.assertIn("status --project test-phd --json", error_output.getvalue())
+            save.assert_not_called()
+            output = io.StringIO()
+            with redirect_stdout(output):
+                self.assertEqual(researchctl.main(["status", "--project", "test-phd", "--json"]), 0)
+            details = json.loads(output.getvalue())
+            self.assertFalse(details["gate_ready"])
+            self.assertEqual(details["gate_errors"], errors)
+            self.assertEqual(len(details["gate_error_groups"]), 1)
+            self.assertEqual(details["gate_error_groups"][0]["checks"], errors)
 
     def test_advance_rechecks_expired_evidence_after_approval(self) -> None:
         project = self.init_project()
@@ -305,6 +336,7 @@ class ResearchCtlTests(unittest.TestCase):
                 "gate": "G5",
                 "status": "awaiting_work",
                 "active_paper": "P01",
+                "writing_phases":{"P01":"submission"},
             }
         )
         researchctl.save_state("test-phd", state)
@@ -334,6 +366,7 @@ class ResearchCtlTests(unittest.TestCase):
                 "stage": "writing-and-review",
                 "gate": "G5",
                 "active_paper": "P01",
+                "writing_phases":{"P01":"submission"},
             }
         )
         researchctl.save_state("test-phd", state)

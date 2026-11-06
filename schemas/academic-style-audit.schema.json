@@ -29,7 +29,7 @@
     "detector_score_used": {"const": false},
     "detector_evasion_prohibited": {"const": true},
     "disclosure_must_be_preserved": {"const": true},
-    "human_review_required": {"const": true},
+    "human_review_required": {"type": "boolean"},
     "manuscript": {
       "type": "object",
       "additionalProperties": false,

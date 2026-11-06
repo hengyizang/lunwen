@@ -3,7 +3,7 @@
 
 AI may propose scores and evidence, but this module only accepts structured evidence
 that satisfies hard thresholds. It cannot prove publication or acceptance; it enforces
-a declared Q1/Q2 venue floor before a human can approve a gate.
+a declared Q1/Q2 venue floor before the native stage decision.
 """
 from __future__ import annotations
 
@@ -127,7 +127,10 @@ def validate_report(report: dict[str, Any], gate: str, *, project: Path | None =
     blockers = report.get("blockers")
     if not isinstance(blockers, list): errors.append("blockers must be a list")
     elif blockers: errors.append("quality report has unresolved blockers")
-    if report.get("human_review_required") is not True: errors.append("human_review_required must be true")
+    if gate in {"G1", "G2"} and report.get("human_review_required") is not True:
+        errors.append("human_review_required must be true for topic decisions")
+    elif type(report.get("human_review_required")) is not bool:
+        errors.append("human_review_required must be a boolean; only G1/G2 require human stage decisions")
     return errors
 
 def validate_file(path: Path, gate: str, *, project: Path | None = None, require_facts: bool = False) -> list[str]:

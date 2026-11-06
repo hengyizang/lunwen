@@ -25,6 +25,8 @@ EXEMPLAR_MOVES = {"story", "abstract", "introduction", "method", "evidence", "ci
 ISSUE_STATES = {"unresolved", "partially_resolved", "resolved", "not_applicable"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def _digest(value):
     return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
         separators=(",", ":"), allow_nan=False).encode()).hexdigest()
@@ -246,15 +248,15 @@ def _lineage(project, data, previous, bindings, scope):
                     or run.get("paper_id") not in set(scope["paper_ids"])
                     or not run.get("input_integrity", {}).get("passed") or not run.get("outputs")):
                 raise ValueError("measured candidate requires a successful exact native experiment receipt")
-            plan = path_in(project, "experiments/plan.json")
+            plan = experiment_path(project, 'experiments/plan.json', run["paper_id"])
             if run.get("approved_plan_sha256") != sha(plan):
                 raise ValueError("measurement plan changed")
-            _file(project, {"path": "experiments/plan.json", "sha256": sha(plan)}, bindings)
+            _file(project, {"path": plan.relative_to(project).as_posix(), "sha256": sha(plan)}, bindings)
             config = next((r for r in read(plan).get("runs", []) if r.get("run_id") == run["run_id"]), None)
             configuration = _file(project, measurement["configuration"], bindings)
             canonical_config = {k: configuration[k] for k in ("path", "sha256")}
-            registry = path_in(project, "experiments/registry.jsonl")
-            _file(project, {"path": "experiments/registry.jsonl", "sha256": sha(registry)}, bindings)
+            registry = experiment_path(project, 'experiments/registry.jsonl', run["paper_id"])
+            _file(project, {"path": registry.relative_to(project).as_posix(), "sha256": sha(registry)}, bindings)
             attempts = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines() if line.strip()]
             if (not config or config.get("paper_id") != run.get("paper_id") or canonical_config not in config.get("inputs", [])
                     or not any(r.get("path") == configuration["path"] and r.get("sha256") == configuration["sha256"] for r in run.get("inputs", []))

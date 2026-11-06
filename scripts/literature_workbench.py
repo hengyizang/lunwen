@@ -20,7 +20,7 @@ from pathlib import Path
 import re
 from urllib.parse import quote, urlsplit
 
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, strict_json
 
 CONFIG = "program/literature-workbench.json"
 OUTPUT = "reports/literature-workbench"
@@ -52,16 +52,8 @@ def _implementation_hash():
 
 
 def _json(data):
-    def pairs(items):
-        result = {}
-        for key, value in items:
-            if key in result:
-                raise ValueError("duplicate JSON field in workbench input")
-            result[key] = value
-        return result
-    def constant(_):
-        raise ValueError("nonfinite JSON value in workbench input")
-    return json.loads(data, object_pairs_hook=pairs, parse_constant=constant)
+    return strict_json(data, duplicate_error="duplicate JSON field in workbench input",
+                       nonfinite_error="nonfinite JSON value in workbench input")
 
 
 def _digest(value):

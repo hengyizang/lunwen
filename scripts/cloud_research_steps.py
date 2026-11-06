@@ -19,6 +19,8 @@ AUTHORIZATIONS = "state/data-authorizations.json"
 MAX_DATA_BYTES = 2_000_000_000
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 class ResearchStepError(RuntimeError):
     pass
 
@@ -180,6 +182,11 @@ def acquire_data(project: Path) -> dict:
         relative = manifest_path.relative_to(project).as_posix()
         auth = authorizations.get(relative, {})
         manifest = dataset_fetch.load_manifest(manifest_path)
+        from scripts.paper_execution import enabled,selected
+        if enabled(project):
+            contract = read(project / "papers" / selected(project) / "paper-contract.json")
+            if manifest.get("dataset_id") not in contract.get("datasets",[]):
+                continue
         if auth.get("sha256") != cloud_checkpoint.sha(manifest_path) or auth.get("cloud_use_confirmed") is not True:
             try:
                 from scripts.data_rights import prepare
@@ -223,13 +230,44 @@ def acquire_data(project: Path) -> dict:
     return {"acquired": acquired, "blockers": blockers}
 
 
+def _cloud_run_eligible(project: Path, run: dict) -> bool:
+    from scripts.empirical_workflow import cloud_outputs_allowed
+    isolation = run.get("isolation", {})
+    return (isolation.get("kind") == "container" and isolation.get("engine") == "docker"
+            and run["timeout_seconds"] <= 1200 and cloud_outputs_allowed(project, run))
+
+
 def resume_experiments(project: Path) -> dict:
-    plan_path, budget_path = project / "experiments/plan.json", project / "experiments/budget.json"
+    from scripts.research_phase import exploratory
+    exploring = exploratory(project)
+    plan_path, budget_path = experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json')
     plan, _ = experiment_runner.approved_plan(project, plan_path, budget_path)
     plan_sha = cloud_checkpoint.sha(plan_path)
-    registry = literature_evidence.read_jsonl(project / "experiments/registry.jsonl")
+    registry = literature_evidence.read_jsonl(experiment_path(project, 'experiments/registry.jsonl'))
+    if exploring:
+        from scripts.research_phase import exploration_execution
+        execution = exploration_execution(project, plan, registry)
+        detail = {"unexecuted_runs": execution["unexecuted_runs"],
+                  "all_planned_runs_executed": execution["all_planned_runs_executed"]}
+        if execution["errors"]:
+            return {**detail, "pending_runs": len(execution["pending_run_ids"]), "blockers": [
+                {"kind": "experiment_inspection", "detail": execution["errors"]}]}
+        pending = [run for run in plan["runs"] if run["run_id"] in execution["pending_run_ids"]]
+        if pending and pending[0]["run_id"] in execution["unstarted_run_ids"]:
+            from scripts.primary_recovery import latest_attempt, automatic_retry, _approval
+            item = latest_attempt(project, pending[0]["run_id"], registry, plan_sha256=plan_sha)
+            if not _approval(project, item):
+                recovery = automatic_retry(project, item)
+                if not recovery["retry_authorized"]:
+                    return {**detail, "pending_runs": len(pending), "blockers": [
+                        {"kind": "experiment_inspection", "attempt_id": item["attempt_id"], "detail": recovery}]}
+        if not pending:
+            return {**detail, "attempted_runs": [item["run_id"] for item in execution["observations"]],
+                    "pending_runs": 0, "blockers": []}
+    else:
+        pending = None
     completed, failures, recovery_decisions = set(), [], []
-    for record in registry:
+    for record in ([] if exploring else registry):
         if record.get("approved_plan_sha256") != plan_sha:
             raise ResearchStepError("experiment registry differs from the approved plan; inspection required")
         receipt = path_in(project, f"experiments/runs/{record['attempt_id']}/run.json")
@@ -250,17 +288,21 @@ def resume_experiments(project: Path) -> dict:
     if failures:
         return {"blockers": [{"kind": "experiment_failure_diagnosis", "attempt_ids": failures,
                                "recovery_decisions": recovery_decisions}], "pending_runs": 0}
-    pending = [run for run in plan["runs"] if run["run_id"] not in completed]
+    if pending is None:
+        pending = [run for run in plan["runs"] if run["run_id"] not in completed]
     if not pending:
         return {"completed_runs": sorted(completed), "pending_runs": 0, "blockers": []}
     run = pending[0]
-    from scripts.empirical_workflow import cloud_outputs_allowed
-    if (run["isolation"]["kind"] != "container" or run["isolation"]["engine"] != "docker"
-            or run["timeout_seconds"] > 1200 or not cloud_outputs_allowed(project, run)):
+    if not _cloud_run_eligible(project, run):
         return {"pending_runs": len(pending), "blockers": [{"kind": "cloud_experiment_plan",
                  "detail": "Use a pinned Docker image, <=1200 seconds per run and explicit results/ outputs"}]}
     results = experiment_runner.execute(project.name, [run["run_id"]], project_root=project)
     result = results[0]
+    if exploring:
+        execution = exploration_execution(project, plan, literature_evidence.read_jsonl(experiment_path(project, 'experiments/registry.jsonl')))
+        return {"executed_attempt": result["attempt_id"], "pending_runs": len(execution["pending_run_ids"]),
+                "unexecuted_runs": execution["unexecuted_runs"], "all_planned_runs_executed": execution["all_planned_runs_executed"],
+                "blockers": [{"kind": "experiment_inspection", "detail": execution["errors"]}] if execution["errors"] else []}
     return {"executed_attempt": result["attempt_id"], "pending_runs": len(pending) - 1,
             "blockers": [] if result["status"] == "succeeded" else [{"kind": "experiment_inspection", "attempt_ids": [result["attempt_id"]]}]}
 
@@ -275,7 +317,26 @@ def before_cycle(project: Path, stage: str) -> dict:
         paper = read(project / "state/run.json").get("active_paper")
         if (project / "papers" / str(paper) / supplemental.PROPOSAL).is_file():
             try:
+                report["supplemental_approval"]=supplemental.automatic_approval(project,paper,"cloud-continuation")
+                if report["supplemental_approval"]["status"]=="protocol_sealed":
+                    report["control_only"]=True
+                    write(project/REPORT,report)
+                    return report
+                if supplemental.proposal_pending(project,paper):
+                    # No child execution authority exists yet. Keep the normal
+                    # writer/critic cycle available to repair or rebind a stale
+                    # proposal; this is not a failed executed scope.
+                    report["supplemental"]={"status":"protocol_review_pending","executed":False,
+                        "blockers":report["supplemental_approval"].get("blockers",[])}
+                    write(project/REPORT,report)
+                    return report
                 report["supplemental"] = supplemental.resume(project, paper)
+                if report["supplemental"]["status"]=="awaiting_scientific_confirmation":
+                    report["supplemental_confirmation"]=supplemental.automatic_confirmation(project,paper,"cloud-continuation")
+                    if report["supplemental_confirmation"]["status"]=="automated_evidence_checked":
+                        report["control_only"]=True
+                        write(project/REPORT,report)
+                        return report
                 report["control_only"] = bool(report["supplemental"].get("executed") or report["supplemental"]["status"] == "inspection_required")
                 if report["supplemental"]["status"] == "inspection_required":
                     report["blockers"].append({"kind": "supplemental_inspection", "detail": report["supplemental"]})
@@ -288,9 +349,9 @@ def before_cycle(project: Path, stage: str) -> dict:
         else:
             report["experiments"] = resume_experiments(project)
             report["blockers"].extend(report["experiments"].get("blockers", []))
-            # One real attempt/checkpoint per job; only analyze once all planned
-            # runs have completed. Only executor-proven no-start failures permit
-            # one budget-bound automatic retry; other failures retain diagnostics.
+            # One real attempt/checkpoint per job. Exploration also reviews actual
+            # failures and the descendants they prevented, without inventing runs.
+            # Formal no-start retries retain their existing evidence/budget checks.
             report["control_only"] = bool(report["experiments"].get("executed_attempt") or report["blockers"])
             if report["blockers"] and all(item.get("kind") == "experiment_failure_diagnosis" for item in report["blockers"]):
                 from scripts.primary_recovery import diagnosis_context
@@ -315,8 +376,20 @@ def before_cycle(project: Path, stage: str) -> dict:
 def after_write(project: Path, stage: str) -> dict:
     """Run declared deterministic builders; never treat model output as a receipt."""
     from scripts import research_quality
-    report = read(project / REPORT, {"schema_version": "1.0", "stage": stage, "blockers": []})
+    report = read(project / REPORT, {})
+    if report.get("stage") != stage:
+        report = {"schema_version": "1.0", "stage": stage, "blockers": []}
     report["operation_errors"] = []
+    from scripts.supplemental_experiments import proposal_pending,automatic_confirmation
+    from scripts.research_phase import exploratory, requires_submission
+    protocol_only=stage=="writing-and-review" and proposal_pending(project)
+    exploring=stage in {"experiment-design","experiment-execution"} and exploratory(project)
+    if stage == "experiment-design":
+        from scripts.paper_execution import prepare_datasets
+        try:
+            prepare_datasets(project)
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            report["operation_errors"].append({"action": "dataset_snapshot", "error": str(exc)[:700]})
     if stage == "topic-intelligence":
         from scripts import direction_evidence
         try:
@@ -335,6 +408,13 @@ def after_write(project: Path, stage: str) -> dict:
         if operation.get("stage") != stage:
             continue
         action = operation.get("action")
+        if protocol_only and action!="supplemental_prepare":
+            continue
+        if exploring and action in {"power", "empirical_design", "empirical_reporting", "method_tools"}:
+            continue
+        if stage=="writing-and-review" and not requires_submission(project) and action in {
+                "docx", "compile_tex", "journal_dossiers", "journal_sources"}:
+            continue
         operation_sha = hashlib.sha256(json.dumps(operation, sort_keys=True).encode()).hexdigest()
         try:
             if action == "supplemental_prepare" and stage == "writing-and-review":
@@ -575,6 +655,9 @@ def after_write(project: Path, stage: str) -> dict:
                 raise ResearchStepError("operation is unsupported in this stage; no arbitrary commands or approvals are allowed")
         except (ValueError, OSError, RuntimeError, KeyError, TypeError, ImportError) as exc:
             report["operation_errors"].append({"action": action, "error": str(exc)[:700]})
+    if stage=="writing-and-review":
+        paper=read(project/"state/run.json",{}).get("active_paper")
+        if paper:report["supplemental_confirmation"]=automatic_confirmation(project,paper,"post-write-check")
     write(project / REPORT, report)
     write(cache_path, cache)
     return report

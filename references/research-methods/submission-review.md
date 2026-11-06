@@ -34,7 +34,7 @@ The control plane runs scripts/pre_submission_review.py and creates
 reviews/pre-submission-review.json. It checks coverage, anchors and current
 hashes and blocks unresolved criteria. This mechanical pass is not independent
 scientific validation; keep the existing independent model-family reviews and
-human G5 approval.
+the recorded automated submission-phase G5 decision.
 
 Give each critic the same immutable manuscript/evidence packet and its
 predeclared focus. Exclude prior reviews, writer preferences and desired
@@ -54,4 +54,4 @@ For each rendered figure, inspect the entire figure and each panel at final
 physical size. Apply the pinned Nature panel-alignment and PDF collision
 helpers through scripts/figure_layout.py. A mechanical failure requires source
 repair; an unauditable figure cannot be called passed. Review warnings and
-retain human visual inspection. AI imagery cannot substantiate data.
+retain actual source-bound automated visual inspection. AI imagery cannot substantiate data.

@@ -26,8 +26,10 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 try:
+    from scripts.research_artifacts import sha as sha256_file
     from scripts.network_safety import DEFAULT_JSON_LIMIT, fetch_bytes
 except ImportError:
+    from research_artifacts import sha as sha256_file
     from network_safety import DEFAULT_JSON_LIMIT, fetch_bytes  # type: ignore
 
 
@@ -88,14 +90,6 @@ def utc_now() -> str:
 
 def sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def canonical_json_bytes(value: Any) -> bytes:

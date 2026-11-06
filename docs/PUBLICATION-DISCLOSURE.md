@@ -9,8 +9,7 @@ policy.
 
 At G5 and packaging, the cloud control plane checks a current, evidence-bound
 `ai_policy` inside `papers/Pxx/disclosures.json`. The author still reviews the
-actual journal rule, its applicability to the actual work and the final upload
-placement at the human gate. The program verifies source hashes, quotes, dates
+actual journal rule, its applicability to the actual work and the final upload placement as part of external authorship and submission responsibility; this adds no human G5 stage approval. The program verifies source hashes, quotes, dates
 and locations; it cannot independently authenticate a manually preserved policy
 page or decide the meaning of its exceptions.
 
@@ -60,8 +59,7 @@ policy. Replace every illustrative value with the actual work and evidence.
 
 The policy URL must be HTTPS on an official domain declared in `venue.json`
 (`official_domains`, its official scope page, publisher page or template
-guidelines). A named human confirms that the domain and saved source really
-belong to the selected journal. Recheck the policy within 30 days; stale,
+guidelines). Current official-source evidence and independent checks must establish the declared journal/domain relationship; do not fill a human confirmation or assume an arbitrary saved page is genuine. Recheck the policy within 30 days; stale,
 future-dated, unresolved or mismatched policies block completion.
 
 `requirement` is either `required` or `not_required`. A conditional publisher
@@ -88,6 +86,8 @@ section merely because it is easier to upload.
 
 ## Protected report and completion boundary
 
+Current reports distinguish independent policy/source review from external author responsibility. Compatibility `human_*_review_required` flags are false; they introduce no human G5 signature. Actual usage, rights, official policy evidence and required disclosures remain mandatory.
+
 `scripts/publication_disclosure.py` provides `audit`, `refresh`,
 `validate_saved_report`, `review_binding` and `prompt_feedback`. Refresh requires
 an authorized cloud runner. It saves the protected deterministic report at
@@ -95,9 +95,7 @@ an authorized cloud runner. It saves the protected deterministic report at
 call, and never rewrites or inserts manuscript prose. G5 approval binds this
 report and the current disclosure/policy/statement sources; a changed source,
 policy interpretation, declaration, report or implementation requires another
-review. Passing mechanical checks does not substitute for human confirmation
-that the source is genuine, the policy interpretation is correct and the
-usage statement is truthful.
+review. Passing mechanical checks does not establish that the source is genuine, the interpretation is correct or the usage statement truthful. Preserve actual evidence, independent assessment and external author responsibility; never manufacture consent or a human stage signature.
 
 Known Unicode cleanup does not prove statistical-watermark absence, establish
 human authorship or remove a disclosure requirement. Preserve substantive

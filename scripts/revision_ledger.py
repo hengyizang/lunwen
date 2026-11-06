@@ -30,6 +30,8 @@ CITE = re.compile(r"\\(?:cite|citep|citet|parencite|textcite|autocite)\*?(?:\[[^
 FORMULA = re.compile(r"(?<!\\)\$\$[\s\S]*?(?<!\\)\$\$|(?<![\\$])\$(?!\$)[\s\S]*?(?<![\\$])\$(?!\$)|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\\begin\{(equation\*?|align\*?|gather\*?|multline\*?|math|displaymath)\}[\s\S]*?\\end\{\1\}")
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def _hash(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
@@ -238,7 +240,7 @@ def needs_ledger(project: Path, paper_id: str) -> bool:
 
 
 def _claims(project: Path, paper_id: str) -> tuple[dict, dict]:
-    path = path_in(project, "claims/claim-evidence.csv")
+    path = experiment_path(project, 'claims/claim-evidence.csv', paper_id)
     claims = {}
     with path.open(encoding="utf-8", newline="") as handle:
         rows = csv.DictReader(handle)
@@ -249,7 +251,7 @@ def _claims(project: Path, paper_id: str) -> tuple[dict, dict]:
             if not identifier or identifier in claims:
                 raise ValueError("claim registry contains empty or duplicate claim IDs")
             claims[identifier] = row
-    return {identifier: row for identifier, row in claims.items() if row["paper_id"] == paper_id}, {"path": "claims/claim-evidence.csv", "sha256": sha(path)}
+    return {identifier: row for identifier, row in claims.items() if row["paper_id"] == paper_id}, {"path": path.relative_to(project).as_posix(), "sha256": sha(path)}
 
 
 def _evidence(project: Path, anchor: dict, forbidden: set[str]) -> dict:

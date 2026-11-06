@@ -18,6 +18,8 @@ MODULE = "scripts/operating_constraints.py"
 PREFIX = "state/operating-constraints-amendments"
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def validate_selectors(new_ceiling_cny: int, target_submission_ready_date: str) -> None:
     if type(new_ceiling_cny) is not int or new_ceiling_cny <= 0:
         raise ValueError("cumulative model API ceiling must be a positive integer CNY amount")
@@ -83,7 +85,7 @@ def prepare(project: Path, new_ceiling_cny: int, target_submission_ready_date: s
         raise ValueError("operating amendment is limited to open G1 with only the actual G0 approval")
     if state.get("supplemental_context") is not None:
         raise ValueError("supplemental projects cannot amend parent operating authority")
-    registry = path_in(project, "experiments/registry.jsonl", exists=False)
+    registry = experiment_path(project, 'experiments/registry.jsonl')
     if registry.exists() and registry.read_text(encoding="utf-8").strip():
         raise ValueError("operating amendment cannot rebind an executed experiment protocol")
     for candidate in (project / "papers").glob("P[0-9][0-9]/preregistration.json"):

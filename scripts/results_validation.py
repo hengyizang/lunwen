@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import json
 import math
 import re
 from pathlib import Path
 from typing import Any
+
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
 
 
 STATUS_VALUES = {"succeeded", "failed", "timed_out"}
@@ -19,12 +23,7 @@ CLAIM_COLUMNS = {
 }
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+from scripts.paper_execution import artifact_path as experiment_path, paper_scoped
 
 
 def _resolve(project: Path, value: Any, field: str, errors: list[str]) -> Path | None:
@@ -40,7 +39,7 @@ def _resolve(project: Path, value: Any, field: str, errors: list[str]) -> Path |
 
 
 def validate_registry(
-    project: Path, plan: dict[str, Any], registry: list[dict[str, Any]]
+    project: Path, plan: dict[str, Any], registry: list[dict[str, Any]], *, require_successful_retries: bool = True
 ) -> list[str]:
     errors: list[str] = []
     run_values = plan.get("runs")
@@ -51,7 +50,7 @@ def validate_registry(
         for run in run_values
         if isinstance(run, dict) and run.get("run_id")
     }
-    plan_path = project / "experiments" / "plan.json"
+    plan_path = experiment_path(project, 'experiments/plan.json')
     current_plan_hash = sha256_file(plan_path) if plan_path.is_file() else ""
     approval_hash = None
     state_path = project / "state" / "run.json"
@@ -59,15 +58,13 @@ def validate_registry(
         import json
         try:
             state = json.loads(state_path.read_text(encoding="utf-8"))
-            approval = next(
-                (item for item in reversed(state.get("approvals", [])) if item.get("gate") == "G3"),
-                None,
-            )
+            from scripts.paper_execution import approval as paper_approval
+            approval = paper_approval(project, "G3")
             approval_hash = approval.get("experiment_plan_sha256") if isinstance(approval, dict) else None
         except (OSError, ValueError):
             errors.append("state/run.json cannot establish the G3-approved plan")
     if not approval_hash or approval_hash != current_plan_hash:
-        errors.append("current experiment plan does not match the recorded G3 human approval")
+        errors.append("current experiment plan does not match the recorded G3 protocol decision")
 
     seen_attempts: set[str] = set()
     attempted: set[str] = set()
@@ -159,11 +156,12 @@ def validate_registry(
     missing = sorted(set(planned) - attempted)
     if missing:
         errors.append(f"planned runs without registry attempts: {', '.join(missing)}")
-    from scripts.primary_recovery import selected_attempt
+    from scripts.primary_recovery import selected_attempt, latest_attempt
+    select = selected_attempt if require_successful_retries else latest_attempt
     for run_id in planned:
         if len([r for r in registry if r.get("run_id") == run_id]) > 1:
             try:
-                selected_attempt(project, run_id, registry, plan_sha256=current_plan_hash)
+                select(project, run_id, registry, plan_sha256=current_plan_hash)
             except (ValueError, OSError, KeyError) as exc:
                 errors.append(f"{run_id}: {exc}")
     return errors
@@ -199,6 +197,7 @@ def _outcome_error(status: str, comparisons: list[dict], *, empirical: bool) -> 
     return None
 
 
+@paper_scoped
 def claim_outcomes(project: Path, paper_id: str) -> dict:
     """Read the existing matrix and recompute its sealed evidence for one paper.
 
@@ -211,7 +210,7 @@ def claim_outcomes(project: Path, paper_id: str) -> dict:
     report = evidence.build_report(project, paper_id)
     evidence.need(report.get("status") == "complete" and not report.get("errors"),
                   "current outcome evidence is blocked: " + "; ".join(report.get("errors", [])))
-    matrix = evidence.path_in(project, "claims/claim-evidence.csv")
+    matrix = experiment_path(project, "claims/claim-evidence.csv")
     with matrix.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         evidence.need(CLAIM_COLUMNS.issubset(reader.fieldnames or []), "formal claim matrix has missing columns")
@@ -219,7 +218,7 @@ def claim_outcomes(project: Path, paper_id: str) -> dict:
     evidence.need(len(rows) == len(expected) and {r.get("claim_id") for r in rows} == expected,
                   "formal claim matrix must cover every paper claim exactly once")
     empirical = study_routes.route(project, paper_id) == "empirical"
-    registry = [json.loads(line) for line in (project / "experiments/registry.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+    registry = [json.loads(line) for line in experiment_path(project, "experiments/registry.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
     known_runs = {row.get("run_id") for row in registry if row.get("paper_id") == paper_id}
     claims = {}
     for row in rows:
@@ -242,6 +241,7 @@ def claim_outcomes(project: Path, paper_id: str) -> dict:
             "evidence_plan_sha256": evidence.sha(protocol), "claims": claims}
 
 
+@paper_scoped
 def validate_result_statuses(project: Path, paper_id: str, alignments: list[dict] | None = None) -> list[str]:
     """G4/G5 adapter; manuscript tags must match current formal numeric outcomes."""
     try:
@@ -274,7 +274,11 @@ def validate_claim_evidence(
     except (OSError, csv.Error) as exc:
         return [f"cannot read CSV: {exc}"]
     expected: dict[str, str] = {}
+    from scripts.paper_execution import papers
+    selected_papers = set(papers(project))
     for contract_path in sorted((project / "papers").glob("P[0-9][0-9]/paper-contract.json")):
+        if contract_path.parent.name not in selected_papers:
+            continue
         import json
         try:
             contract = json.loads(contract_path.read_text(encoding="utf-8"))

@@ -17,7 +17,7 @@ from pathlib import Path
 import re
 
 from scripts import literature_workbench as workbench
-from scripts.research_artifacts import path_in, record, sha, write
+from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest
 
 REQUEST = "program/literature-extraction.json"
 OUTPUT = "reports/literature-matrix"
@@ -435,24 +435,19 @@ def refresh(project: Path, request_path=REQUEST, *, workbench_dir=None) -> dict:
     paths[1].write_text(csv_text(report), encoding="utf-8")
     paths[2].write_text(html_text(project, report), encoding="utf-8")
     paths[3].write_text(markdown_text(report), encoding="utf-8")
-    manifest = {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(project / request_path)},
-                "workbench_dir": report["workbench_output"], "fingerprint": report["fingerprint"],
-                "implementation_sha256": sha(Path(__file__)),
-                "outputs": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in paths],
-                "semantic_verification": False, "eligible_for_quantitative_synthesis": False}
-    write(directory / "manifest.json", manifest)
-    record(project, [*paths, directory / "manifest.json"], "scripts/literature_matrix.py")
+    seal_manifest(project, paths, directory / "manifest.json", "scripts/literature_matrix.py",
+        {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(project / request_path)},
+         "workbench_dir": report["workbench_output"], "fingerprint": report["fingerprint"],
+         "semantic_verification": False, "eligible_for_quantitative_synthesis": False})
     return {"report": OUTPUT + "/matrix.json", "csv": OUTPUT + "/matrix.csv", "html": OUTPUT + "/index.html", "markdown": OUTPUT + "/matrix.md",
             "cell_count": len(report["cells"]), "unknown_cell_count": report["unknown_cell_count"],
             "fingerprint": report["fingerprint"], "model_call_made": False}
 
 
 def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
-    from scripts.output_provenance import current_origin
     project = Path(project).resolve()
     manifest_path = path_in(project, OUTPUT + "/manifest.json")
-    origin = current_origin(project, manifest_path)
-    if origin.get("status") != "tracked" or origin.get("family") != "other" or origin.get("model") != "scripts/literature_matrix.py":
+    if not matches_origin(project, manifest_path, family="other", model="scripts/literature_matrix.py"):
         raise ValueError("literature matrix requires current deterministic output provenance")
     manifest = workbench._json(manifest_path.read_bytes())
     if manifest.get("request") != {"path": request_path, "sha256": sha(path_in(project, request_path))}:

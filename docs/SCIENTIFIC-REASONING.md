@@ -1,7 +1,6 @@
 # Scientific reasoning and paper quality
 
-Reviewed 2026-10-18. This extends the existing G1-G5 contracts and five role
-calls. It changes no model, effort, gateway, paid service, budget, approval or
+Reviewed 2026-10-18. This extends the existing G1-G5 contracts and model roles, with remediation only when needed. It changes no model, effort, gateway, paid service, budget, approval or
 experiment execution. Engineering checks do not establish novelty, doctoral
 merit or journal acceptance.
 

@@ -115,7 +115,8 @@ def audit_outputs(project: Path, outputs: list[dict], expected_text=None, *, fin
               "pending_human_checks": [], "visual_review_required": True, "accessibility_verified": False,
               "color_vision_model": {"doi": "10.1109/TVCG.2009.113", "severity": 100, "matrix_source": MACHADO_SOURCE,
                                      "linear_srgb": True, "gamut_clipping": True, "individual_vision_not_predicted": True},
-              "grayscale_and_color_vision_human_review_required": True,
+              "grayscale_and_color_vision_human_review_required": False,
+              "grayscale_and_color_vision_independent_review_required": True,
               "scientific_data_checked": False}
     for item in outputs:
         original = project / item["path"]

@@ -129,10 +129,13 @@ def _matrix(project, evaluation, criteria, current, candidate_ids):
           "matrix result is stale, changed or selects a winner")
 
 
-def _validate(project, register):
+def _validate(project, register, *, require_decision=True):
     _need(isinstance(register, dict), "hypothesis register must be an object")
     value = register.get("innovation_screening")
     _need(isinstance(value, dict) and value.get("schema_version") == "1.0", "innovation_screening schema_version=1.0 is required")
+    mode=value.get("mode","decision")
+    _choice(mode,{"exploratory","decision"},"screening mode")
+    _need(not require_decision or mode=="decision","exploratory screening is still in progress; complete the decision-specific evidence before G1 approval")
     hypotheses = {h["hypothesis_id"]: h for h in register["hypotheses"]}
     ids = set(hypotheses)
     _need(3 <= len(ids) <= 30, "innovation screening needs three to thirty candidate hypotheses")
@@ -163,7 +166,7 @@ def _validate(project, register):
         _text(contributor["tool_and_purpose"], "tool_and_purpose")
     _need(any(c["kind"] == "human" for c in contributors) or bool(generation["deviations"]), "AI-only ideation must disclose its human-first process adaptation")
     stages, round_ids, retained_ideas = [], set(), {}
-    for row in _rows(generation["rounds"], "generation rounds", 2, 20):
+    for row in _rows(generation["rounds"], "generation rounds", 2 if mode=="decision" else 1, 20):
         identity = _text(row["round_id"], "round_id")
         _need(identity not in round_ids, "duplicate generation round ID")
         round_ids.add(identity)
@@ -186,7 +189,7 @@ def _validate(project, register):
             _binding(project, binding)
         _need(row["stage"] != "post_evidence" or bool(inputs or limits), "evidence reopening needs bound inputs or explicit search limits")
         stages.append(row["stage"])
-    _need(stages[0] == "independent" and "post_evidence" in stages[1:], "retain an initial independent declaration and evidence-aware reopening")
+    _need(stages[0] == "independent" and (mode=="exploratory" or "post_evidence" in stages[1:]), "retain an initial independent declaration and evidence-aware reopening")
     _need(set(retained_ideas) == ids, "every current candidate needs a retained original idea")
     for identity, idea in retained_ideas.items():
         _need(all(" ".join(idea[left].casefold().split()) == " ".join(hypotheses[identity][right].casefold().split())
@@ -267,14 +270,24 @@ def _validate(project, register):
             _text(row[key], "comparison " + key)
         shared = _strings(row["shared_assumption_ids"], "shared assumptions")
         _need(len(set(shared)) == len(shared) and set(shared) == set(candidates[pair[0]]["assumption_ids"]) & set(candidates[pair[1]]["assumption_ids"]), "shared-assumption comparison must expose every declared common dependency")
-    _need(pairs == set(itertools.combinations(sorted(ids), 2)), "every candidate pair requires a difference and common-failure review")
+    policy=value.get("comparison_policy")
+    if policy is not None:
+        _need(isinstance(policy,dict) and set(policy)=={"mode","focal_candidate_ids","rationale"},"focused comparison policy needs its actual candidates and rationale")
+        _choice(policy["mode"],{"focused"},"comparison policy")
+        focal=set(_strings(policy["focal_candidate_ids"],"focal candidates",1))
+        _need(focal<=ids,"comparison policy references an unknown focal candidate")
+        _text(policy["rationale"],"decision-specific comparison rationale")
+        required={tuple(sorted((left,right))) for left in focal for right in ids if left!=right}
+        _need(required<=pairs,"every focal candidate needs a discriminating comparison against each alternative")
+    elif mode=="decision":
+        _need(pairs == set(itertools.combinations(sorted(ids), 2)), "every candidate pair requires a difference and common-failure review")
     evaluation = value["evaluation"]
     _choice(evaluation["mode"], {"narrative", "weighted_matrix"}, "evaluation mode")
     _text(evaluation["method_limits"], "evaluation limits")
     for key in ("dissent", "reconciliation"):
         _strings(evaluation[key], key)
     criteria = {}
-    for criterion in _rows(evaluation["criteria"], "evaluation criteria", 1, 25):
+    for criterion in _rows(evaluation["criteria"], "evaluation criteria", 1 if evaluation["mode"]=="weighted_matrix" else 0, 25):
         key = _text(criterion["criterion_id"], "criterion ID")
         _need(key not in criteria, "duplicate evaluation criterion")
         criteria[key] = criterion
@@ -285,7 +298,7 @@ def _validate(project, register):
         if criterion["weight"] is not None:
             _need(_number(criterion["weight"], "criterion weight") > 0, "criterion weights must be positive")
     ratings, replaced, current = {}, set(), {}
-    for rating in _rows(evaluation["ratings"], "ratings", 1, 1000):
+    for rating in _rows(evaluation["ratings"], "ratings", 1 if criteria else 0, 1000):
         identity = _text(rating["rating_id"], "rating ID")
         _need(identity not in ratings, "duplicate rating ID")
         h, c, rater = rating["hypothesis_id"], rating["criterion_id"], _text(rating["rater_id"], "rater ID")
@@ -316,10 +329,10 @@ def _validate(project, register):
         _need(evaluation["matrix"] is None, "narrative evaluation cannot silently attach a weighted winner")
 
 
-def validate(project: Path, register: dict) -> list[str]:
+def validate(project: Path, register: dict, *, require_decision: bool = True) -> list[str]:
     """Validate declared records only; no paid calls, state changes or approval."""
     try:
-        _validate(project, register)
+        _validate(project, register,require_decision=require_decision)
     except (ValueError, TypeError, KeyError, OSError, csv.Error, subprocess.SubprocessError) as exc:
         return ["innovation_screening: " + str(exc)]
     return []

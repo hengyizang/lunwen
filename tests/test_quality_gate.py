@@ -81,6 +81,16 @@ def report(gate):
 
 
 class QualityGateTests(unittest.TestCase):
+    def test_only_topic_quality_records_require_human_review(self):
+        for gate in ("G1", "G2", "G3", "G4", "G5"):
+            value = report(gate)
+            value["human_review_required"] = False
+            errors = validate_report(value, gate)
+            if gate in {"G1", "G2"}:
+                self.assertTrue(any("topic decisions" in error for error in errors))
+            else:
+                self.assertEqual(errors, [])
+
     def test_current_factual_assessments_replace_scores_and_bind_real_evidence(self):
         import tempfile
         from pathlib import Path
@@ -91,6 +101,7 @@ class QualityGateTests(unittest.TestCase):
             source.write_text("Synthetic evidence for a controlled factual assessment.\n", encoding="utf-8")
             value = report("G3")
             value["schema_version"] = "1.2"
+            value["human_review_required"] = False
             value.pop("scores")
             value["assessments"] = {key: {"status": "satisfied", "rationale": "Synthetic located criterion evidence",
                 "source_anchors": [{"path": "facts.txt", "sha256": sha(source), "locator": "L1",
@@ -103,6 +114,24 @@ class QualityGateTests(unittest.TestCase):
             source.write_text("Changed source bytes\n", encoding="utf-8")
             self.assertTrue(validate_report(value, "G3", project=project, require_facts=True))
         self.assertTrue(any("migration" in e for e in validate_report(report("G3"), "G3", require_facts=True)))
+
+    def test_source_bound_novelty_version_preserves_reopened_history_and_blocks_final(self):
+        from scripts.research_quality import validate_novelty_claim_matrix
+        from tests.test_research_quality import ResearchQualityTests
+        originality, matrix = ResearchQualityTests().novelty_inputs()
+        matrix.update(schema_version="1.1", status="in_progress")
+        saturation = matrix["search_saturation"]
+        saturation.update(status="reopened", stopping_rule="time_limit",
+            consecutive_no_material_new_work_rounds=0, current_no_material_new_work_round_ids=[],
+            affected_claim_ids=["N1"], next_searches=["Read the newly located adjacent work."],
+            unresolved_search_gaps=["That work may invalidate the current distinction."])
+        retained = copy.deepcopy(matrix)
+        self.assertEqual(validate_novelty_claim_matrix(matrix, originality, require_saturation=False), [])
+        self.assertEqual(matrix, retained)
+        self.assertEqual(len(saturation["no_material_new_work_rounds"]), 2)
+        matrix["status"] = "ready_for_review"
+        self.assertTrue(any("not currently saturated" in error
+                            for error in validate_novelty_claim_matrix(matrix, originality)))
 
     def test_required_text_rejects_null_and_non_strings(self):
         value = report("G1")

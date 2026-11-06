@@ -37,7 +37,7 @@ primary source. Preserve the shared evidence graph through all sections,
 tables, figures and supplements.
 
 Retain the current revision baseline, numeric/citation/claim-strength
-conservation, itemized response trace and named human authorizations. Editing
+conservation, itemized response trace and exact source-bound automated change records. Editing
 cannot upgrade association to causality, remove unfavorable evidence, or turn
 an unsupported claim into a supported one by adding cautious wording.
 

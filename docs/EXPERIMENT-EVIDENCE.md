@@ -21,7 +21,7 @@ External validity must be either tested through actual registered comparisons or
 
 Use `depends_on` in the execution plan. Dependencies must name earlier runs of the same paper. Every evidence arm needs a pilot ancestor; use appropriate pilots for different datasets/environments. Freeze the pilot code, expected outputs and technical success criteria before G3. Encode criteria as assertions that fail the pilot when unmet. A zero exit status only verifies those encoded assertions; human review must assess their adequacy.
 
-The executor checks the successful pilot receipt, current output hashes, approved plan and frozen protocol before launching a dependent process. Failed or repeated pilot attempts require inspection. Protocol or code changes require an explicit reviewed amendment; they cannot be silently refrozen after results exist. Existing controls preserve failed/negative runs and block unapproved spending. G0–G5 human approval is unchanged.
+The executor checks the successful pilot receipt, current output hashes, approved plan and frozen protocol before launching a dependent process. Failed or repeated pilot attempts require inspection. Protocol or code changes require an explicit reviewed amendment; they cannot be silently refrozen after results exist. Existing controls preserve failed/negative runs and block unapproved spending. Actual G1/G2 human topic decisions and evidence-bound automated G0/G3/G4/G5 checks remain required.
 
 ## Statistical evidence produced from executed data
 

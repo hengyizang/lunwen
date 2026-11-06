@@ -8,7 +8,6 @@ matrix can isolate unknown charges while retaining their complete holds.
 from __future__ import annotations
 
 import argparse
-import base64
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -59,28 +58,12 @@ class CloudState(gateway_trial.CloudState):
     def save(self, ledger):
         if not self.loaded:
             raise ComparisonError("ledger_read_required")
-        payload = {"message": TRIAL + ": preserve comparison ledger", "branch": STATE,
-                   "content": base64.b64encode((json.dumps(ledger, ensure_ascii=False, indent=2,
-                                            allow_nan=False) + "\n").encode()).decode()}
-        if self.expected_sha:
-            payload["sha"] = self.expected_sha
-        response = self.api("contents/trial-state/" + FILE, payload, "PUT")
-        new_sha = response.get("content", {}).get("sha")
-        if not isinstance(new_sha, str):
-            raise ComparisonError("ledger_persistence_not_confirmed")
-        # Mutable branch/tree metadata can briefly lag a successful write.
-        # Verify the immutable blob returned by that committed PUT instead;
-        # the next write still requires its exact file SHA for optimistic CAS.
-        blob = self.api("git/blobs/" + new_sha)
-        if blob.get("sha") != new_sha or blob.get("encoding") != "base64":
-            raise ComparisonError("ledger_readback_mismatch_no_generation")
-        try:
-            value = json.loads(base64.b64decode(blob["content"]))
-        except (KeyError, ValueError, TypeError, UnicodeError):
-            raise ComparisonError("ledger_readback_mismatch_no_generation") from None
-        if value != ledger:
-            raise ComparisonError("ledger_readback_mismatch_no_generation")
-        self.expected_sha = new_sha
+        mismatch = "ledger_readback_mismatch_no_generation"
+        self.expected_sha = self.commit_json(FILE, ledger, self.expected_sha,
+            TRIAL + ": preserve comparison ledger",
+            lambda blob, sha: gateway_trial.blob_json(blob, sha, ComparisonError, mismatch),
+            error=ComparisonError, persistence_error="ledger_persistence_not_confirmed",
+            readback_error=mismatch, strict_sha=False, branch=STATE)
 
 
 def validate_plan(plan):
@@ -336,6 +319,28 @@ def reconcile_attempt(ledger, entry, persist):
     settle_entry(ledger, entry, settlement, persist)
 
 
+def record_generation(ledger, entry, route, item, persist, score, **request_options):
+    """One already-reserved synthetic call; save its response before settlement."""
+    started = time.monotonic()
+    try:
+        result = ai_providers.call_production(route["provider"], item["prompt"],
+            system=item.get("system"), model=route["model"], reasoning_effort=route["effort"],
+            max_output_tokens=route["max_output_tokens"], timeout=route["timeout"], **request_options)
+        keys = [os.environ.get(s["key_setting"], "") for s in ai_providers.PRODUCTION_PROVIDERS.values()]
+        entry.update(generation_status="completed", reported_model=result.reported_model,
+            request_id=gateway_trial.safe_text(result.request_id or "", keys),
+            text=gateway_trial.safe_text(result.text, keys), usage=gateway_trial.receipt_numbers(result.usage),
+            completion_status=result.completion_status, protocol=result.protocol,
+            response_sha256=hashlib.sha256(result.text.encode()).hexdigest(),
+            grade=score(entry["case_id"], result.text))
+    except ai_providers.ProviderError as exc:
+        entry.update(generation_status="response_failed", diagnostic=gateway_trial.safe_text(str(exc)))
+    except Exception:
+        entry.update(generation_status="response_failed", diagnostic="unexpected_response_processing_failure")
+    entry["duration_seconds"] = round(time.monotonic() - started, 4)
+    persist(ledger)
+
+
 def run_one(ledger, route, case_id, phase, persist):
     if route["id"] in ledger.get("quarantined_candidates", []):
         return "quarantined_no_generation"
@@ -386,27 +391,7 @@ def run_one(ledger, route, case_id, phase, persist):
     if not reserve(ledger, entry, persist, phase_limit=phase_limit):
         relay_guard.finish(shared_ticket, not_sent=True)
         return "budget_or_call_limit"
-    started = time.monotonic()
-    try:
-        result = ai_providers.call_production(route["provider"], item["prompt"],
-            system=item.get("system"), model=route["model"], reasoning_effort=route["effort"],
-            max_output_tokens=route["max_output_tokens"], timeout=route["timeout"],
-            attachments=media or None)
-        # Model text is synthetic test output, never a persistent research artifact.
-        keys = [os.environ.get(s["key_setting"], "") for s in ai_providers.PRODUCTION_PROVIDERS.values()]
-        entry.update(generation_status="completed", reported_model=result.reported_model,
-                     request_id=gateway_trial.safe_text(result.request_id or "", keys),
-                     text=gateway_trial.safe_text(result.text, keys), usage=gateway_trial.receipt_numbers(result.usage),
-                     completion_status=result.completion_status, protocol=result.protocol,
-                     response_sha256=hashlib.sha256(result.text.encode()).hexdigest(),
-                     grade=fixtures.score(case_id, result.text))
-    except ai_providers.ProviderError as exc:
-        entry.update(generation_status="response_failed", diagnostic=gateway_trial.safe_text(str(exc)))
-        # No retry and no silent alternate route. Preserve the paid attempt.
-    except Exception:
-        entry.update(generation_status="response_failed", diagnostic="unexpected_response_processing_failure")
-    entry["duration_seconds"] = round(time.monotonic() - started, 4)
-    persist(ledger)  # Preserve any available response before read-only reconciliation.
+    record_generation(ledger, entry, route, item, persist, fixtures.score, attachments=media or None)
     try:
         reconcile_attempt(ledger, entry, persist)
     except relay_billing.BillingReconciliationError:

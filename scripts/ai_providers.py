@@ -388,6 +388,32 @@ def _uuapi_headers(protocol: str) -> dict[str, str]:
     }
 
 
+def _responses_payload(prompt: str, model: str, system: str | None, limit: int) -> dict[str, Any]:
+    content = ([{"role": "developer", "content": system}, {"role": "user", "content": prompt}]
+               if system else prompt)
+    return {"model": model, "input": content, "max_output_tokens": limit}
+
+
+def _anthropic_payload(prompt: str, model: str, system: str | None, limit: int) -> dict[str, Any]:
+    payload = {"model": model, "max_tokens": limit, "messages": [{"role": "user", "content": prompt}]}
+    if system:
+        payload["system"] = system
+    return payload
+
+
+def _compatibility_result(provider: str, model: str, data: dict[str, Any],
+                          protocol: str, endpoint: str) -> ModelResult:
+    reported = _reported_model(data)
+    gateway = provider.startswith("uuapi-")
+    if gateway:
+        _strict_model_check(model, reported)
+    reader = {"openai_responses": _openai_text, "openai_chat_completions": _chat_completions_text,
+              "anthropic_messages": _anthropic_text}[protocol]
+    return ModelResult(provider, model, reader(data), data.get("usage", {}) or {}, data.get("id"),
+        reported, protocol, endpoint if gateway else _safe_endpoint_for_audit(endpoint),
+        "uuapi" if gateway else "official-or-custom", completion_status=completion_status(data, protocol))
+
+
 def call_openai(
     prompt: str,
     *,
@@ -400,37 +426,16 @@ def call_openai(
     if not key:
         raise ProviderError("OPENAI_API_KEY is not configured")
     model = model or os.environ.get("OPENAI_MODEL", "gpt-5.6")
-    content: Any = prompt
-    if system:
-        content = [
-            {"role": "developer", "content": system},
-            {"role": "user", "content": prompt},
-        ]
     endpoint = os.environ.get(
         "OPENAI_BASE_URL", "https://api.openai.com/v1/responses"
     )
     data = _request(
         endpoint,
         {"Authorization": f"Bearer {key}"},
-        {
-            "model": model,
-            "input": content,
-            "max_output_tokens": max_output_tokens,
-        },
+        _responses_payload(prompt, model, system, max_output_tokens),
         timeout,
     )
-    return ModelResult(
-        "openai",
-        model,
-        _openai_text(data),
-        data.get("usage", {}) or {},
-        data.get("id"),
-        _reported_model(data),
-        "openai_responses",
-        _safe_endpoint_for_audit(endpoint),
-        "official-or-custom",
-        completion_status=completion_status(data, "openai_responses"),
-    )
+    return _compatibility_result("openai", model, data, "openai_responses", endpoint)
 
 
 def call_anthropic(
@@ -449,13 +454,6 @@ def call_anthropic(
         raise ProviderError(
             "ANTHROPIC_MODEL is not configured; set it to a current model ID"
         )
-    payload: dict[str, Any] = {
-        "model": model,
-        "max_tokens": max_output_tokens,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    if system:
-        payload["system"] = system
     endpoint = os.environ.get(
         "ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1/messages"
     )
@@ -467,21 +465,10 @@ def call_anthropic(
                 "ANTHROPIC_VERSION", "2023-06-01"
             ),
         },
-        payload,
+        _anthropic_payload(prompt, model, system, max_output_tokens),
         timeout,
     )
-    return ModelResult(
-        "anthropic",
-        model,
-        _anthropic_text(data),
-        data.get("usage", {}) or {},
-        data.get("id"),
-        _reported_model(data),
-        "anthropic_messages",
-        _safe_endpoint_for_audit(endpoint),
-        "official-or-custom",
-        completion_status=completion_status(data, "anthropic_messages"),
-    )
+    return _compatibility_result("anthropic", model, data, "anthropic_messages", endpoint)
 
 
 def call_uuapi_openai(
@@ -509,18 +496,7 @@ def call_uuapi_openai(
         endpoint = _uuapi_endpoint("chat/completions", "uuapi-openai")
         audit_protocol = "openai_chat_completions"
     else:
-        content: Any = prompt
-        if system:
-            content = [
-                {"role": "developer", "content": system},
-                {"role": "user", "content": prompt},
-            ]
-        payload = {
-            "model": model,
-            "input": content,
-            "max_output_tokens": max_output_tokens,
-            "store": False,
-        }
+        payload = {**_responses_payload(prompt, model, system, max_output_tokens), "store": False}
         endpoint = _uuapi_endpoint("responses", "uuapi-openai")
         audit_protocol = "openai_responses"
     data = _request(
@@ -529,20 +505,7 @@ def call_uuapi_openai(
         payload,
         timeout,
     )
-    reported = _reported_model(data)
-    _strict_model_check(model, reported)
-    return ModelResult(
-        "uuapi-openai",
-        model,
-        _chat_completions_text(data) if protocol == "chat_completions" else _openai_text(data),
-        data.get("usage", {}) or {},
-        data.get("id"),
-        reported,
-        audit_protocol,
-        endpoint,
-        "uuapi",
-        completion_status=completion_status(data, audit_protocol),
-    )
+    return _compatibility_result("uuapi-openai", model, data, audit_protocol, endpoint)
 
 
 def call_uuapi_anthropic(
@@ -556,34 +519,14 @@ def call_uuapi_anthropic(
     model = model or os.environ.get("UUAPI_ANTHROPIC_MODEL", "").strip()
     if not model:
         raise ProviderError("UUAPI_ANTHROPIC_MODEL is not configured")
-    payload: dict[str, Any] = {
-        "model": model,
-        "max_tokens": max_output_tokens,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    if system:
-        payload["system"] = system
     endpoint = _uuapi_endpoint("messages", "uuapi-anthropic")
     data = _request(
         endpoint,
         _uuapi_headers("anthropic_messages"),
-        payload,
+        _anthropic_payload(prompt, model, system, max_output_tokens),
         timeout,
     )
-    reported = _reported_model(data)
-    _strict_model_check(model, reported)
-    return ModelResult(
-        "uuapi-anthropic",
-        model,
-        _anthropic_text(data),
-        data.get("usage", {}) or {},
-        data.get("id"),
-        reported,
-        "anthropic_messages",
-        endpoint,
-        "uuapi",
-        completion_status=completion_status(data, "anthropic_messages"),
-    )
+    return _compatibility_result("uuapi-anthropic", model, data, "anthropic_messages", endpoint)
 
 
 def uuapi_usage(timeout: int = 30) -> dict[str, Any]:
@@ -858,11 +801,8 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
                    "reasoning": {"effort": effort}, "store": False, "tools": [], "service_tier": "default"}
     elif family == "anthropic":
         headers = {"x-api-key": key, "anthropic-version": "2023-06-01"}
-        payload = {"model": model, "messages": [{"role": "user", "content": prompt}],
-                   "max_tokens": max_output_tokens, "thinking": {"type": "adaptive"},
-                   "output_config": {"effort": effort}, "tools": []}
-        if system:
-            payload["system"] = system
+        payload = {**_anthropic_payload(prompt, model, system, max_output_tokens),
+                   "thinking": {"type": "adaptive"}, "output_config": {"effort": effort}, "tools": []}
     elif chat_protocol:
         messages = ([{"role": "system", "content": system}] if system else [])
         messages.append({"role": "user", "content": prompt})

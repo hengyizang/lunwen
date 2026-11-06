@@ -308,7 +308,8 @@ class FigureStoryTests(unittest.TestCase):
         receipt = self.project/"papers/P01/figures/main.editable-export.json"
         self.assertEqual(report["story_ref"], export_request["story_ref"])
         self.assertEqual(report["story_alignment"]["manuscript_alignment"], "source_locations_checked")
-        self.assertTrue(report["story_alignment"]["semantic_alignment_requires_human_review"])
+        self.assertFalse(report["story_alignment"]["semantic_alignment_requires_human_review"])
+        self.assertTrue(report["story_alignment"]["semantic_alignment_requires_independent_review"])
         record_figure(self.project, "P01", report["outputs"][0]["path"], "conceptual_diagram",
             report["renderer"]["path"], [self.protocol["path"]], [], self.diagram["path"], "Synthetic Reviewer")
         paper = self.project/"papers/P01"
@@ -350,7 +351,7 @@ class FigureStoryTests(unittest.TestCase):
         report = editable_figures.export(self.project, self.project/binding["path"])
         self.assertIsNone(report["story_ref"])
         self.assertEqual(report["story_alignment"], {"status": "not_assessed",
-            "manuscript_alignment": "not_assessed", "semantic_alignment_requires_human_review": True})
+            "manuscript_alignment": "not_assessed", "semantic_alignment_requires_human_review": False, "semantic_alignment_requires_independent_review": True})
         self.assertEqual(editable_figures.verify_export(self.project,
             self.project/"papers/P01/figures/alternate.editable-export.json"), report)
 

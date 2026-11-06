@@ -79,7 +79,7 @@ class ResearchIdentityTests(unittest.TestCase):
         write(self.project / "experiments/runs/synthesis-attempt-001/run.json", receipt)
         (self.project / "experiments/registry.jsonl").write_text(json.dumps(receipt) + "\n", encoding="utf-8")
         state = read(self.project / "state/run.json")
-        state.update(approved_gates=["G3"], approvals=[{"gate": "G3", "actor": "Synthetic human", "experiment_plan_sha256": sha(plan_path)}])
+        state.update(approved_gates=["G3"], approvals=[{"gate": "G3", "actor": "synthetic-deterministic-controller", "experiment_plan_sha256": sha(plan_path)}])
         write(self.project / "state/run.json", state)
         self.identity["analysis_evidence"] = [{"attempt_id": receipt["attempt_id"], "path": relative, "sha256": sha(output)}]
         self.save()
@@ -206,16 +206,17 @@ class ResearchIdentityTests(unittest.TestCase):
             errors = researchctl.gate_errors("identity-study", "G2")
         self.assertTrue(any("original-research policy" in x for x in errors))
 
-    def test_secondary_completion_needs_named_human_and_current_receipt(self):
+    def test_secondary_completion_needs_recorded_g3_actor_and_current_receipt(self):
         self.secondary()
         self.receipt()
         state_path = self.project / "state/run.json"
         state = read(state_path)
         state["approvals"][0]["actor"] = ""
         write(state_path, state)
-        self.assertIn("named human", " ".join(policy.validate(self.project, "P01", "G4")))
-        state["approvals"][0]["actor"] = "Synthetic human"
+        self.assertIn("recorded G3", " ".join(policy.validate(self.project, "P01", "G4")))
+        state["approvals"][0]["actor"] = "synthetic-deterministic-controller"
         write(state_path, state)
+        self.assertEqual(policy.validate(self.project, "P01", "G4"), [])
         receipt_path = self.project / "experiments/runs/synthesis-attempt-001/run.json"
         receipt = read(receipt_path)
         receipt["status"] = "failed"

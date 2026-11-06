@@ -48,15 +48,6 @@ def _text(value: Any) -> str | None:
     return None
 
 
-def _first_text(value: Any) -> str | None:
-    if isinstance(value, list):
-        for item in value:
-            result = _text(item)
-            if result:
-                return result
-    return _text(value)
-
-
 def _plain_text(value: Any) -> str | None:
     text = _text(value)
     if not text:

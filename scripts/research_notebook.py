@@ -6,14 +6,16 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from scripts.research_artifacts import path_in, read, write, bound_source, record
+from scripts.research_artifacts import path_in, read, write, bound_source, record, sha
 
 PHASES = {"idea", "planned", "running", "exploratory", "confirmatory", "failed", "stopped"}
 STANCES = {"supports", "contradicts", "mixed", "unknown"}
+CYCLE_OUTCOMES = {"pending", "unchanged", "changed", "failed", "stopped"}
+NOTEBOOK = "program/research-notebook.json"
 
 
 def build(project: Path) -> dict:
-    inputs = read(path_in(project, "program/research-notebook.json"))
+    inputs = read(path_in(project, NOTEBOOK))
     questions, errors, seen = [], [], set()
     for question in inputs.get("questions", []):
         try:
@@ -42,7 +44,9 @@ def build(project: Path) -> dict:
                 if decision.get("phase") not in PHASES or not decision.get("decision") or not decision.get("rationale"):
                     raise ValueError("decision needs phase, rationale and decision text")
                 links = decision.get("evidence_ids", [])
-                if not links or not set(links).issubset(evidence_ids):
+                honest_pending = decision.get("cycle_id") and decision.get("outcome") in {"pending", "unchanged"} and missing
+                if (not isinstance(links, list) or len(links) != len(set(links))
+                        or (not links and not honest_pending) or not set(links).issubset(evidence_ids)):
                     raise ValueError("decision must link actual evidence, including contrary evidence where present")
                 contrary = {e["id"] for e in evidence if e["stance"] in {"contradicts", "mixed"}}
                 if contrary - set(links) and not decision.get("contrary_evidence_rationale"):
@@ -59,6 +63,149 @@ def build(project: Path) -> dict:
     return {"schema_version": "1.0", "input_fingerprint": fingerprint, "questions": questions,
             "status": "needs_scientific_review" if not errors else "blocked", "errors": errors,
             "gate_approved": False, "scientific_completion_verified": False}
+
+
+def cycle_prompt(run_id: str) -> str:
+    """One decision in the existing notebook, including an honest pending result."""
+    return ("RESEARCH CYCLE DECISION: Update program/research-notebook.json; preserve existing questions, evidence and decisions. "
+        "Append a decision under the most consequential question, with id, cycle_id=" + json.dumps(str(run_id)) +
+        ", stage=current state.stage, paper_id=current active paper for G3-G5, phase, outcome "
+        "(pending|unchanged|changed|failed|stopped), discriminating_test, decision, rationale, next_action, "
+        "evidence_ids, failure_condition and stop_rule. The question states the unknown; discriminating_test explains "
+        "which observation separates the competing explanations; decision states its effect on the method or claim. "
+        "Reuse question evidence entries (id, stance, observation, read_scope, source:{path,sha256,locator}) and reference "
+        "their actual IDs. A pending/unchanged decision may have no evidence only with explicit question.missing_evidence "
+        "and next_action; never invent a result to fill this record. Include contrary/mixed evidence or explain its disposition. "
+        "No new report, extra model role or claimed scientific improvement is required.")
+
+
+def cycle_review(project: Path, stage: str, run_id: str, *, paper_id: str | None = None) -> dict:
+    """Validate a current-cycle research decision; independent critics assess its meaning."""
+    from scripts.scientific_reasoning import STAGES, concrete
+    if stage not in STAGES:
+        return {"status": "not_applicable", "decisions": []}
+    report = build(project)
+    if report["errors"]:
+        raise ValueError("research cycle decision: " + "; ".join(report["errors"]))
+    state_path = project / "state/run.json"
+    state = read(state_path) if state_path.is_file() else {}
+    decisions = []
+    for question in report["questions"]:
+        evidence = {row["id"]: row for row in question["evidence"]}
+        for decision in question["decisions"]:
+            if decision.get("cycle_id") != str(run_id):
+                continue
+            concrete(question["question"], "cycle research question")
+            for key in ("id", "discriminating_test", "decision", "rationale", "next_action", "failure_condition", "stop_rule"):
+                concrete(decision.get(key), "cycle decision." + key)
+            if decision.get("stage") != stage or decision.get("outcome") not in CYCLE_OUTCOMES:
+                raise ValueError("cycle decision must identify its actual stage and honest outcome")
+            if stage in {"experiment-design", "experiment-execution", "writing-and-review"} and decision.get("paper_id") != (paper_id or state.get("active_paper")):
+                raise ValueError("cycle decision must belong to the current paper")
+            sources = [evidence[key]["source"] for key in decision["evidence_ids"]]
+            if any(source["path"] == NOTEBOOK or source["path"].startswith(("state/", "reviews/", "reports/research-notebook"))
+                   for source in sources):
+                raise ValueError("a decision must cite scientific evidence, not its own notebook or control receipts")
+            decisions.append({"question_id": question["id"], "question": question["question"],
+                **decision, "sources": sources, "missing_evidence": question["missing_evidence"]})
+    if not decisions:
+        raise ValueError("this research cycle needs an unknown, discriminating test and source-bound or explicitly pending notebook decision")
+    if len({row["id"] for row in decisions}) != len(decisions):
+        raise ValueError("cycle decision IDs must be unique across questions")
+    return {"status": "recorded_requires_independent_review", "cycle_id": str(run_id), "decisions": decisions,
+            "notebook": {"path": NOTEBOOK, "sha256": sha(path_in(project, NOTEBOOK))},
+            "scientific_completion_verified": False}
+
+
+def cycle_assessment(project: Path, stage: str, run_id: str | None = None, *, paper_id: str | None = None) -> dict:
+    """Expose the actual decision/evidence/critic chain without certifying scientific validity."""
+    try:
+        from scripts.scientific_reasoning import STAGES
+        if stage not in STAGES:
+            return {"status": "not_applicable", "decisions": []}
+        from scripts import review_receipts
+        state = read(project / "state/run.json")
+        gate = next(gate for gate, name in review_receipts.STAGES.items() if name == stage)
+        from scripts.paper_execution import enabled
+        paper = (paper_id or state.get("active_paper")) if gate == "G5" or (enabled(project) and gate in {"G3", "G4"}) else None
+        latest = project / review_receipts.PREFIX / review_receipts._key(gate, paper) / "latest.json"
+        pointer = read(latest)
+        receipt = read(path_in(project, pointer["path"]))
+        run_id = str(run_id) if run_id is not None else receipt.get("run_id")
+        result = cycle_review(project, stage, run_id, paper_id=paper_id)
+        purpose = receipt.get("materials", {}).get("review_purpose", "stage")
+        issues = review_receipts.validate_gate(project, gate, paper, expected_purpose=purpose)
+        if receipt.get("run_id") != str(run_id):
+            issues.append("the latest critic did not assess this research cycle")
+        current = result["notebook"]
+        if current not in receipt.get("materials", {}).get("files", []):
+            issues.append("the actual final critic did not bind the current research notebook")
+        historical = None
+        if issues == ["source-bound independent review: independent final review is stale for current scientific inputs"]:
+            historical = _historical_assessment(project, latest, pointer, receipt)
+            if historical:
+                issues = []
+        result.update(status="independently_reviewed" if not issues else "awaiting_independent_review",
+                      independent_review=pointer if not issues else None, review_errors=issues)
+        if historical:
+            result.update(status="historically_reviewed", assessment_scope=historical, current_stage_authorized=False)
+        return result
+    except (OSError, ValueError, KeyError, TypeError, StopIteration) as exc:
+        return {"status": "pending", "decisions": [], "errors": [str(exc)], "scientific_completion_verified": False}
+
+
+def _historical_assessment(project, latest, pointer, final):
+    """Read past scientific work after a controller transition; grant no gate authority."""
+    from scripts import review_receipts, research_phase
+    from scripts.researchctl import audit_document_valid
+    from scripts.api_orchestrator import validate_remediation_notes
+    state = read(project / "state/run.json")
+    paper, purpose = final.get("paper_id"), final["materials"].get("review_purpose", "stage")
+    mapping, scope = {}, None
+    if (final.get("gate") == "G5" and purpose == "scientific_writing"
+            and research_phase.writing_phase(project, paper) == "submission"
+            and any(row.get("event") == "submission_preparation_started" and row.get("paper_id") == paper
+                    for row in state.get("history", []))):
+        scope = "completed_scientific_writing"
+    elif final.get("gate") == "G4":
+        reviewed = {row["path"]: row["sha256"] for row in final["materials"]["files"]}
+        for archive in research_phase.histories(project, paper):
+            plan = next(row for row in archive["files"] if row["archive_path"] == archive["plan_path"])
+            if reviewed.get(plan["source"]) == plan["sha256"]:
+                mapping = {row["source"]: row["archive_path"] for row in archive["files"]}
+                scope = "archived_exploration"
+                break
+    if scope is None:
+        return None
+    for row in final["materials"]["files"]:
+        if sha(path_in(project, mapping.get(row["path"], row["path"]))) != row["sha256"]:
+            raise ValueError("historically reviewed scientific source changed: " + row["path"])
+    review_receipts._owned(project, latest)
+    target = path_in(project, pointer["path"])
+    review_receipts._owned(project, target)
+    if sha(target) != pointer["sha256"]:
+        raise ValueError("historical final receipt pointer changed")
+    initial_path = path_in(project, final["initial"]["path"])
+    review_receipts._owned(project, initial_path)
+    initial = read(initial_path)
+    if (sha(initial_path) != final["initial"]["sha256"] or initial.get("phase") != "initial"
+            or final.get("phase") != "final" or initial["materials"].get("review_purpose", "stage") != purpose
+            or any(initial.get(key) != final.get(key) for key in ("gate", "stage", "paper_id", "run_id", "cycle_required"))):
+        raise ValueError("historical review needs its unchanged matching initial and final invocations")
+    errors, audits = [], []
+    for receipt in (initial, final):
+        review_receipts._identity(receipt["identity"], receipt["writer_family"])
+        audit_path = path_in(project, receipt["audit"]["path"])
+        review_receipts._owned(project, audit_path)
+        if sha(audit_path) != receipt["audit"]["sha256"]:
+            raise ValueError("historical independent audit changed")
+        audit = read(audit_path); audits.append(audit)
+        audit_document_valid(audit_path, audit, errors, final=receipt["phase"] == "final")
+    validate_remediation_notes({"notes": final["dispositions"],
+        "stage": "scientific-writing" if purpose == "scientific_writing" else final["stage"]}, audits[0])
+    if errors or any(note.strip().lower().startswith("unresolved:") for note in final["dispositions"]):
+        raise ValueError("historical scientific review has unresolved findings")
+    return scope
 
 
 def _delta(before: dict, after: dict) -> dict:
@@ -126,7 +273,7 @@ def daily_brief(project: Path, *, at: datetime | None = None, timezone_name: str
               "event_ids": [e["event_id"] for e in events], "event_count": len(events),
               "changes": combined, "undated_legacy_snapshots": undated,
               "failed_refreshes": [e["event_id"] for e in events if e.get("snapshot", {}).get("status") == "blocked"],
-              "resolution_verified": False, "human_scientific_review_required": True}
+              "resolution_verified": False, "independent_scientific_review_required": True}
     directory = project / "reports/research-notebook-daily"
     output, summary = directory / f"{day}.json", directory / f"{day}.md"
     changed = not output.is_file() or read(output) != result

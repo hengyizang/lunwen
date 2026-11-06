@@ -5,8 +5,10 @@ import hashlib
 import json
 
 try:
+    from scripts.research_artifacts import strict_json
     from scripts import metadata_contract
 except ImportError:
+    from research_artifacts import strict_json
     import metadata_contract  # type: ignore
 
 
@@ -55,17 +57,9 @@ def validate_response(text: str, contract: object) -> dict:
     sources = {s["source_id"]: s for s in validate_contract(contract)["sources"]}
     if not isinstance(text, str) or not text.strip() or len(text) > 100_000:
         raise ValueError("engineering response must be bounded JSON")
-    def pairs(items):
-        value = {}
-        for key, item in items:
-            if key in value:
-                raise ValueError("engineering response contains duplicate keys")
-            value[key] = item
-        return value
-    def invalid(_):
-        raise ValueError("engineering response contains nonfinite numbers")
     try:
-        value = json.loads(text, object_pairs_hook=pairs, parse_constant=invalid)
+        value = strict_json(text, duplicate_error="engineering response contains duplicate keys",
+                            nonfinite_error="engineering response contains nonfinite numbers")
     except (json.JSONDecodeError, RecursionError) as exc:
         raise ValueError("engineering response must be strict JSON") from exc
     if (not isinstance(value, dict) or set(value) != {"findings", "abstain"}

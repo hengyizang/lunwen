@@ -20,6 +20,8 @@ FIELDS = {"schema_version", "paper_id", "research_kind", "design_family", "metho
 POLICY = "original-research-first-v1"
 
 
+from scripts.paper_execution import paper_scoped
+
 def template(paper_id: str) -> dict:
     return {"schema_version": "1.0", "paper_id": paper_id, "research_kind": "unassigned",
             "design_family": "unassigned", "methods": [], "reporting_description": "",
@@ -67,6 +69,7 @@ def _anchor(project, value):
     return quote
 
 
+@paper_scoped
 def _venues(project, paper_id, identity, contract, gate):
     venues = identity.get("venue_classifications")
     if not isinstance(venues, list) or not 1 <= len(venues) <= 20 or any(not isinstance(v, dict) for v in venues):
@@ -82,7 +85,8 @@ def _venues(project, paper_id, identity, contract, gate):
                       for v in row.get("candidates", [])]
     required_names = {v["name"] for v in targets}
     selected = None
-    if gate == "G5":
+    from scripts.research_phase import requires_submission
+    if gate == "G5" and requires_submission(project, paper_id=paper_id):
         selected = read(path_in(project, f"papers/{paper_id}/venue.json"))
         if not selected.get("name") or selected["name"] not in required_names:
             raise ValueError("selected venue must match an exact paper-contract target")
@@ -114,22 +118,24 @@ def _venues(project, paper_id, identity, contract, gate):
             raise ValueError("preserved official quote must identify the actual article category")
         _text(item.get("rationale"), "design-specific journal eligibility rationale", 60)
     # Source authenticity, policy interpretation and scientific merit still need
-    # the existing independent audit and named human gate; booleans are not proof.
+    # the existing independent audit and recorded stage decision; booleans are not proof.
 
 
+@paper_scoped
 def _analysis(project, paper_id, evidence):
     if not isinstance(evidence, list) or not 1 <= len(evidence) <= 50:
         raise ValueError("secondary quantitative research needs actual executor-issued analysis evidence")
     from scripts.research_quality import _registry
     registry = _registry(project)
-    plan_path = path_in(project, "experiments/plan.json")
+    from scripts.paper_execution import artifact_path,approval as paper_approval,enabled
+    plan_path = artifact_path(project, "experiments/plan.json",paper_id)
     plan = read(plan_path)
     state = read(path_in(project, "state/run.json"))
-    approval = next((a for a in reversed(state.get("approvals", [])) if a.get("gate") == "G3"), None)
-    if ("G3" not in state.get("approved_gates", []) or not approval
+    approval = paper_approval(project,"G3",paper_id)
+    if ((not enabled(project) and "G3" not in state.get("approved_gates", [])) or not approval
             or approval.get("experiment_plan_sha256") != sha(plan_path)):
-        raise ValueError("secondary analysis needs the current human-approved G3 experiment-plan hash")
-    _text(approval.get("actor"), "named human G3 approver", 2, 200)
+        raise ValueError("secondary analysis needs the current checked G3 experiment-plan hash")
+    _text(approval.get("actor"), "recorded G3 decision actor", 2, 200)
     seen = set()
     for item in evidence:
         if not isinstance(item, dict) or not isinstance(item.get("attempt_id"), str):
@@ -157,6 +163,7 @@ def _analysis(project, paper_id, evidence):
     # independence and reproduction checks remain mandatory in addition to this.
 
 
+@paper_scoped
 def validate(project: Path, paper_id: str, gate: str) -> list[str]:
     if gate not in {"G2", "G3", "G4", "G5"}:
         return []
@@ -215,6 +222,7 @@ def validate(project: Path, paper_id: str, gate: str) -> list[str]:
         return [f"{paper_id} original-research policy: {exc}"]
 
 
+@paper_scoped
 def review_binding(project: Path, paper_id: str) -> dict:
     """Bind classification policy/evidence into the existing paper approval hash."""
     target = path_in(project, f"papers/{paper_id}/research-identity.json", exists=False)
@@ -256,6 +264,6 @@ def prompt_contract() -> str:
         "scientific checklist. Never rename a venue's actual Review category, hide synthesis or promise "
         "degree eligibility. At G2 create papers/Pxx/research-identity.json for every paper using "
         "schemas/research-identity.schema.json and docs/ORIGINAL-RESEARCH-POLICY.md. Keep types unassigned "
-        "until actual topic/material assessment. Existing G3/G4 experiments and all human approvals remain "
+        "until actual topic/material assessment. Existing G3/G4 experiments and human G1/G2 topic decisions remain "
         "required; this policy introduces no alternative executor, paid call, budget grant, or model switch.\n"
         "Input contract (field names and constraints, never evidence): " + json.dumps(shape, separators=(",", ":")))

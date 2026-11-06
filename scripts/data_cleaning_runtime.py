@@ -2,7 +2,7 @@
 
 Copy this file unchanged into the experiment project and declare it, the
 contract and every contract source as frozen inputs. The native runner verifies
-G3 and the exact command before launching this process. No plan/state import,
+G3 and the exact command before launching this process. No native package dependency,
 network access, model call, automatic sample selection or scientific approval.
 """
 from __future__ import annotations
@@ -49,6 +49,31 @@ def _binding(root, binding):
     return dict(binding)
 
 
+def _dataset_registry(root, run_id, relative=None):
+    """Use the frozen paper snapshot without requiring the controller package."""
+    match = re.match(r"(P[0-9]{2})-", run_id)
+    paper = match[1] if match else None
+    state_file = _safe(root, "state/run.json", exists=False)
+    state = _read(state_file) if state_file.is_file() else {}
+    independent = state.get("paper_execution_mode") == "independent"
+    if independent:
+        paper = paper or state.get("active_paper")
+        count = state.get("paper_count")
+        if (not isinstance(paper, str) or not re.fullmatch(r"P[0-9]{2}", paper)
+                or type(count) is not int or not 1 <= int(paper[1:]) <= count):
+            raise ValueError("independent cleaning requires a declared paper dataset snapshot")
+    scoped = f"experiments/papers/{paper}/datasets.jsonl" if paper else None
+    scoped_present = bool(scoped and _safe(root, scoped, exists=False).is_file())
+    if relative is None:
+        relative = scoped if independent or scoped_present else "data/datasets.jsonl"
+    if (not isinstance(relative, str) or not (relative == "data/datasets.jsonl" or
+            re.fullmatch(r"experiments/papers/P[0-9]{2}/datasets\.jsonl", relative))):
+        raise ValueError("cleaning requires the canonical dataset registry or paper snapshot")
+    if (independent or scoped_present or relative.startswith("experiments/papers/")) and paper and relative != scoped:
+        raise ValueError("cleaning dataset snapshot belongs to a different paper")
+    return relative, _safe(root, relative)
+
+
 def _number(value):
     if len(str(value)) > 128: raise ValueError("numeric value too long")
     try: number = Decimal(str(value))
@@ -78,7 +103,44 @@ def _check(rows, definitions):
     return summary
 
 
-def transform(fields, rows, variables, steps):
+def validate_steps(steps, variables):
+    """Validate the recipe once for both preview audits and isolated execution."""
+    if not isinstance(steps, list) or len(steps) > 100:
+        raise ValueError("bounded cleaning steps required")
+    current, seen = copy.deepcopy(variables), set()
+    for step in steps:
+        if (not isinstance(step, dict) or any(not isinstance(step.get(key), str) or not step[key].strip()
+                or len(step[key]) > 4000 for key in ("id", "reason")) or step["id"] in seen):
+            raise ValueError("unique bounded cleaning step ID and reason required")
+        seen.add(step["id"])
+        op, column = step.get("operation"), step.get("column")
+        if not isinstance(column, str) or column not in current:
+            raise ValueError("cleaning column is absent")
+        base = {"id", "reason", "operation", "column"}
+        if op == "rename":
+            if set(step) != base|{"to"} or not isinstance(step["to"], str) or not step["to"].strip() or step["to"] in current:
+                raise ValueError("rename needs an existing column and unused target")
+            current[step["to"]] = current.pop(column); current[step["to"]]["name"] = step["to"]
+        elif op == "normalize_missing":
+            if set(step) != base: raise ValueError("missing normalization has unexpected fields")
+        elif op == "linear_unit_conversion":
+            if (set(step) != base|{"from_unit", "to_unit", "factor", "offset"}
+                    or current[column]["type"] not in {"integer", "number"}
+                    or current[column]["unit"] != step["from_unit"] or _number(step["factor"]) == 0
+                    or not isinstance(step["to_unit"], str) or not step["to_unit"].strip() or len(step["to_unit"]) > 4000):
+                raise ValueError("unit conversion needs a matching numeric source unit and nonzero factor")
+            _number(step["offset"])
+            current[column].update(unit=step["to_unit"], type="number")
+        elif op == "exclude_values":
+            if (set(step) != base|{"values"} or not isinstance(step["values"], list) or not 1 <= len(step["values"]) <= 100
+                    or any(not isinstance(value, str) for value in step["values"])):
+                raise ValueError("row exclusion needs explicit bounded values")
+        else:
+            raise ValueError("unsupported cleaning operation; no arbitrary code or automatic trimming")
+    return current
+
+
+def transform(fields, rows, variables, steps, *, check_data=True):
     definitions = {item["name"]: copy.deepcopy(item) for item in variables}
     if len(definitions) != len(variables) or set(definitions) != set(fields): raise ValueError("dictionary needs every unique column")
     for item in definitions.values():
@@ -88,34 +150,22 @@ def transform(fields, rows, variables, steps):
                 or not isinstance(item["missing_codes"], list) or "" not in item["missing_codes"]
                 or any(not isinstance(value, str) for value in item["missing_codes"])):
             raise ValueError("explicit variable meanings/types/units/missing codes required")
-    _check(rows, definitions)
-    if not isinstance(steps, list) or len(steps) > 100: raise ValueError("bounded declared cleaning steps required")
-    fields, rows, history, seen = list(fields), copy.deepcopy(rows), [], set()
+    if check_data: _check(rows, definitions)
+    validate_steps(steps, definitions)
+    fields, rows, history = list(fields), copy.deepcopy(rows), []
     for step in steps:
-        if (not isinstance(step, dict) or not isinstance(step.get("id"), str) or not step["id"].strip() or step["id"] in seen
-                or not isinstance(step.get("reason"), str) or not step["reason"].strip()):
-            raise ValueError("unique cleaning step ID and reason required")
-        seen.add(step["id"])
-        op, column = step.get("operation"), step.get("column")
-        if column not in definitions: raise ValueError("cleaning column is absent")
-        base = {"id", "reason", "operation", "column"}; before = len(rows); changed = 0
+        op, column = step["operation"], step["column"]
+        before = len(rows); changed = 0
         if op == "rename":
-            if set(step) != base|{"to"} or not isinstance(step["to"], str) or not step["to"].strip() or step["to"] in definitions:
-                raise ValueError("rename needs an unused explicit target")
             fields[fields.index(column)] = step["to"]
             for row in rows: row[step["to"]] = row.pop(column)
             definitions[step["to"]] = definitions.pop(column); definitions[step["to"]]["name"] = step["to"]
             changed = len(rows)
         elif op == "normalize_missing":
-            if set(step) != base: raise ValueError("missing normalization has unexpected fields")
             for row in rows:
                 if row[column] in definitions[column]["missing_codes"] and row[column] != "": row[column] = ""; changed += 1
             definitions[column]["formula"] = "normalize_missing(" + definitions[column]["formula"] + ", codes=" + json.dumps(definitions[column]["missing_codes"]) + ")"
         elif op == "linear_unit_conversion":
-            if (set(step) != base|{"from_unit", "to_unit", "factor", "offset"} or definitions[column]["unit"] != step["from_unit"]
-                    or definitions[column]["type"] not in {"number", "integer"} or not isinstance(step["to_unit"], str) or not step["to_unit"].strip()
-                    or _number(step["factor"]) == 0): raise ValueError("unit conversion needs matching numeric source unit and explicit nonzero factor")
-            _number(step["offset"])
             for row in rows:
                 if row[column] not in definitions[column]["missing_codes"]:
                     with localcontext() as context:
@@ -125,17 +175,14 @@ def transform(fields, rows, variables, steps):
             definitions[column].update(unit=step["to_unit"], type="number",
                 formula="("+definitions[column]["formula"]+") * "+str(step["factor"])+" + "+str(step["offset"]))
         elif op == "exclude_values":
-            if (set(step) != base|{"values"} or not isinstance(step["values"], list) or not 1 <= len(step["values"]) <= 100
-                    or any(not isinstance(value, str) for value in step["values"])): raise ValueError("exclusion needs explicit bounded values")
             rows = [row for row in rows if row[column] not in step["values"]]; changed = before-len(rows)
-        else: raise ValueError("unsupported cleaning operation; no arbitrary code or automatic trimming")
         history.append({"id": step["id"], "operation": op, "reason": step["reason"], "rows_before": before,
             "rows_after": len(rows), "rows_changed_or_excluded": changed})
     if not rows: raise ValueError("cleaning excluded every row")
-    return fields, rows, definitions, history, _check(rows, definitions)
+    return fields, rows, definitions, history, _check(rows, definitions) if check_data else None
 
 
-def execute(root, contract_path, dataset_id, output, receipt):
+def execute(root, contract_path, dataset_id, output, receipt, *, dataset_registry=None):
     root = Path(root)
     run_id = os.environ.get("RESEARCH_OS_RUN_ID")
     if not run_id: raise ValueError("cleaning requires its already approved cloud executor run")
@@ -150,7 +197,7 @@ def execute(root, contract_path, dataset_id, output, receipt):
     if manifest["path"] != f"data/manifests/{dataset_id}.json": raise ValueError("canonical manifest required")
     if not source["path"].startswith("data/") or not source["path"].endswith(".csv"): raise ValueError("bounded data CSV source required")
     declared = _read(_safe(root, manifest["path"]))
-    registry_file = _safe(root, "data/datasets.jsonl")
+    registry_relative, registry_file = _dataset_registry(root, run_id, dataset_registry)
     if registry_file.stat().st_size > 64_000_000: raise ValueError("dataset registry exceeds bounded size")
     registered = [json.loads(line) for line in registry_file.read_text(encoding="utf-8").splitlines() if line.strip()]
     if any(not isinstance(item, dict) for item in registered): raise ValueError("dataset registry entries must be objects")
@@ -158,7 +205,7 @@ def execute(root, contract_path, dataset_id, output, receipt):
     if (len(matches) != 1 or matches[0] != declared or declared.get("dataset_id") != dataset_id
             or declared.get("download", {}).get("sha256") != source["sha256"]):
         raise ValueError("original CSV, canonical manifest and registered dataset must agree")
-    inputs.extend([manifest, source, {"path": "data/datasets.jsonl", "sha256": _sha(registry_file)}])
+    inputs.extend([manifest, source, {"path": registry_relative, "sha256": _sha(registry_file)}])
     for join in contract.get("joins", []): inputs.append(_binding(root, join["right"]))
     if (not output.startswith("data/processed/") or not output.endswith(".csv")
             or not receipt.startswith("reports/data-cleaning/") or not receipt.endswith(".json")
@@ -194,8 +241,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contract", required=True); parser.add_argument("--dataset-id", required=True)
     parser.add_argument("--output", required=True); parser.add_argument("--receipt", required=True)
+    parser.add_argument("--dataset-registry", help="Exact frozen canonical registry or paper snapshot declared in the approved run")
     args = parser.parse_args()
-    execute(Path.cwd(), args.contract, args.dataset_id, args.output, args.receipt)
+    execute(Path.cwd(), args.contract, args.dataset_id, args.output, args.receipt, dataset_registry=args.dataset_registry)
 
 
 if __name__ == "__main__": main()

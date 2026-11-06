@@ -13,6 +13,7 @@ from unittest.mock import patch
 
 from scripts import api_orchestrator, autopilot, review_receipts
 from scripts.acceptance_scope import prepare_scope
+from tests.research_cycle_fixtures import pending_decision
 
 
 AUDIT = {"verdict": "pass-with-conditions", "fatal_findings": [], "major_findings": [],
@@ -77,7 +78,8 @@ class CliInvocationControlsTests(unittest.TestCase):
     def test_direct_entrypoints_work_without_pythonpath_or_project_cwd(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
-            for name in ("researchctl", "experiment_runner", "submission_package", "api_orchestrator", "autopilot"):
+            for name in ("researchctl", "experiment_runner", "submission_package", "api_orchestrator", "autopilot",
+                         "auxiliary_job", "cloud_continuation", "paper_qa", "ccfa_runtime"):
                 with self.subTest(entrypoint=name):
                     result = subprocess.run([sys.executable, "-E", str(root/"scripts"/(name+".py")), "--help"],
                         cwd=directory, capture_output=True, text=True, encoding="utf-8", timeout=30)
@@ -86,6 +88,7 @@ class CliInvocationControlsTests(unittest.TestCase):
 
     def test_run_stage_completes_writer_and_remediation_with_real_control_checks(self):
         with fixture() as (_, project, _, state):
+            state["writing_phases"] = {"P01": "submission"}
             prepare_scope(project, state)
             original_approvals = list(state["approvals"])
             original_approved_gates = list(state["approved_gates"])
@@ -113,6 +116,7 @@ class CliInvocationControlsTests(unittest.TestCase):
                     manuscript = project / "papers/P01/manuscript/main.tex"
                     manuscript.parent.mkdir(parents=True, exist_ok=True)
                     manuscript.write_text(f"The registered {name} comparison preserves every observed outcome.", encoding="utf-8")
+                    pending_decision(project, state["stage"], message.parent.name.removesuffix("-" + state["stage"]), "P01")
                     payload = b"Codex event log"
                 else:
                     name = command[-1]

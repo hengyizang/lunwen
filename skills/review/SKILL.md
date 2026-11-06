@@ -28,9 +28,7 @@ once in the location where it changes interpretation.
 
 Claude review text is an internal control record only. Codex/OpenAI must independently write all persistent revision text and response materials; never copy sentences from the Claude audit.
 
-Before revision, snapshot the canonical manuscript tree under `reviews/revision-base/`; API cycles do this automatically before the writer changes an existing manuscript. After revision, run `scripts/revision_trace.py` to prove that promised changes exist, and `scripts/revision_integrity.py` to detect numeric, citation and claim-strength drift. Any protected change must exactly match a named human authorization in `reviews/revision-authorizations.json`; the checker never silently approves a strengthened claim.
-
-The authorization file uses `schema_version`, `approved_by`, timezone-aware `approved_at`, and the exact arrays emitted by a failed integrity run: `numeric_changes`, `citation_changes`, and `claim_language_changes`, each with `removed` and `added`. Add `claim_language_rationale` whenever claim-language tokens change. The human reviews those exact changes; do not ask a model to impersonate approval.
+Before revision, snapshot the canonical manuscript tree under `reviews/revision-base/`; API cycles do this automatically before the writer changes an existing manuscript. After revision, run `scripts/revision_trace.py` to verify promised changes and `scripts/revision_integrity.py` to detect numeric, citation and claim-strength drift. Protected changes require exact source-bound entries in the existing revision ledger and a current control-plane change record. Independent scientific audits assess whether the changed claim is justified; no model may invent a human authorization. Historical genuine human records remain readable. See `docs/RESEARCH-IMPROVEMENTS.md` for the current change-record contract.
 
 For G5, also run `scripts/citation_audit.py`, `scripts/ref_verify_adapter.py` and `scripts/venue_compliance.py`; preserve the reports under the active paper's `reviews/` directory.
 

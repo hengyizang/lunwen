@@ -35,8 +35,9 @@ Do not treat a card's candidate idea as a proved original contribution.
 
 For full_text cards, require primary_source (path and sha256) and scope_record
 (path and sha256) pointing to a current protected record under
-evidence/source-scopes/. Only a named human's actual source-scope confirmation
-through scripts/source_scope.py can create that record. It confirms supplied
-material scope, never human full-text reading or semantic verification.
+evidence/source-scopes/. The controller can bind scope from an actual registered source through
+scripts/source_scope.py record_registered; genuine explicitly supplied human
+scope records remain supported. A record confirms supplied material scope,
+never human full-text reading or semantic verification.
 Without it return source_scope_unconfirmed; keep partial scope assessments
 false. Anchor full-text observations to the confirmed primary file.

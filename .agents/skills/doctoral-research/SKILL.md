@@ -1,6 +1,6 @@
 ---
 name: doctoral-research
-description: Orchestrate or independently audit a human-gated doctoral research program covering topic selection, paper architecture, public datasets, experiments, statistics, writing, journal templates, peer review and reproducibility. Use in this repository when starting, continuing, checking or retargeting a research project; never use it to guarantee publication or bypass human gates.
+description: Orchestrate or independently audit a doctoral research program with human G1/G2 topic decisions and evidence-bound automated stage checks. Use when starting, continuing, checking or retargeting research; never guarantee publication or invent authority.
 ---
 
 # Doctoral Research
@@ -10,7 +10,7 @@ Locate the repository root, then read `references/workflow.md`, `references/rese
 Interpret the request as one of:
 
 - `start <slug>`: initialize through the API-first `scripts/start.sh` path and prepare G0;
-- `continue <slug>`: inspect `researchctl.py status`, run the current stage through `scripts/api_orchestrator.py cycle`, and stop at its gate;
+- `continue <slug>`: inspect `researchctl.py status`, run the current stage through `scripts/api_orchestrator.py cycle`, and advance after its recorded checks; request human decisions only for G1/G2 topics;
 - `topic <slug>`: attack topic novelty, feasibility and doctoral architecture;
 - `experiment <slug> <design|run>`: design or audit reproducible experiments;
 - `review <slug> [paper]`: audit code, statistics, claims and reproducibility;
@@ -28,9 +28,9 @@ Interpret the request as one of:
 
 For a natural chat request, use the project MCP server in `.mcp.json` to call `research_route` or `research_status` first. These tools are deliberately zero-cost and cannot approve gates, start paid calls or submit. Then read the routed Skill and continue through the existing state machine.
 
-Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Default to the external API worker so this Codex conversation remains a thin manager; do not invoke `autopilot.py`, Claude Code or Codex CLI unless the user explicitly requests CLI mode. Claude is restricted to read-only semantic planning and internal independent audits. GPT/OpenAI independently writes and remediates every persistent text artifact and plotting specification; `scripts/publication_figures.py` renders final charts from recorded data. Require initial and final independent model-family audits at G1–G5. Preserve the configured CNY hard budgets and exact-request cache. Never edit gate approvals by hand. Never approve a gate for the user.
+Use deterministic scripts for state, discovery, manifests, downloads, approved experiments, citations and archives. Default to the external API worker so this Codex conversation remains a thin manager; do not invoke `autopilot.py`, Claude Code or Codex CLI unless the user explicitly requests CLI mode. Claude is restricted to read-only semantic planning and internal independent audits. GPT/OpenAI independently writes and remediates every persistent text artifact and plotting specification; `scripts/publication_figures.py` renders final charts from recorded data. Require initial and final independent model-family audits at G1–G5; a clean initial review with complete writer dispositions can skip an extra remediation call. Preserve existing project cumulative totals, model assignments, reasoning efforts and exact-request cache. Never edit gate approvals by hand or impersonate a G1/G2 topic decision. The controller records G0/G3/G4/G5 decisions after current automated checks pass.
 
-At G2, run `scripts/journal_screening.py` and retain decomposed scores, official evidence, risks and challenge/target/safety roles. At G5, follow `skills/citations/SKILL.md`, route the applicable reporting guideline, snapshot the pre-revision manuscript, then run `scripts/ref_verify_adapter.py`, `scripts/reporting_checklist.py`, `scripts/manuscript_audit.py`, `scripts/rebuttal_triage.py`, `scripts/revision_trace.py` and `scripts/revision_integrity.py`. Abstract support is never full-text support. Numeric, citation or claim-strength drift needs exact named human authorization. A Word path additionally requires a current `reviews/docx-build.json` and named final visual approval.
+At G2, retain the complete six-paper architecture and each paper's human topic decision. Then finish P01's G3–G5 before P02 enters G3. In G3, explicitly exploratory protocols retain a bounded scientific question, discriminating test and decision rules; they still require rights, hashes, remaining budget, frozen inputs and the native runner. Their results return the same paper to G3 for a separate confirmatory protocol and cannot pass G5. At G5, scientific drafting is the default; the frozen contract gives only an initial preference. The controller records `state.writing_phases[Pxx]=submission` after scientific checks and both audits pass; the next cycle performs all editorial, venue and package checks with fresh submission audits. Only submission can pass final G5, and writers never change the frozen contract to switch phase. Read `references/stage-contracts.md` for the applicable checks. Protected numeric/citation/claim changes need the exact evidence-bound revision ledger and current machine change record; independent scientific audits assess meaning. Word requires current build/render receipts and an actual source-bound automated visual inspection, without a new mandatory human stage decision.
 
 For new bounded capabilities, read the matching Skill under `skills/figures`, `skills/systematic-review`, `skills/paper-audit`, `skills/library-import`, `skills/api-tasks` or `skills/skill-catalog`. Their outputs are complements to the existing state machine, never alternative approvals. A user-triggered ChatGPT-web task may yield a manually imported, hash-bound artifact; do not treat a consumer browser session as an unattended API or a source of experimental truth.
 
@@ -53,7 +53,7 @@ When acting as the independent critic:
 5. Report blockers, major and minor findings, residual uncertainty and a verdict.
 6. Preserve findings under `projects/<slug>/reviews/independent/`.
 
-Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude. Measured figures remain deterministic; GPT Image may supply only explicitly labeled conceptual illustrations after human inspection and disclosure.
+Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude. Measured figures remain deterministic; GPT Image may supply only explicitly labeled conceptual illustrations after actual visual inspection, rights checks and required disclosure.
 
 Never invent missing data, citations or results. Packaging is local-only: never request portal credentials, upload files or auto-submit.
 

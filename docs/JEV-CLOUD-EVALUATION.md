@@ -4,7 +4,7 @@ Status: proposal, 2026-09-29. No provider has been enabled and no model call or 
 
 ## Decision
 
-Use a decision model only to **prioritize a review queue of public literature or dataset metadata** after the provider contract and a small labeled trial pass. Keep all retrieved records available for ordinary review. Do not let a classifier discard a source, declare novelty, judge doctoral depth, verify a license, choose the doctoral direction, approve a scientific gate, write manuscript content, or act as the independent model-family critic. Exact source provenance, human scientific review, and the G0–G5 gates remain authoritative.
+Use a decision model only to **prioritize a review queue of public literature or dataset metadata** after the provider contract and a small labeled trial pass. Keep all retrieved records available for ordinary review. Do not let a classifier discard a source, declare novelty, judge doctoral depth, verify a license, choose the doctoral direction, approve a scientific gate, write manuscript content, or act as the independent model-family critic. Exact source provenance, independent scientific audits, human G1/G2 topic decisions and evidence-bound automated G0/G3/G4/G5 checks remain authoritative.
 
 | Candidate | What the accessible first-party material establishes | Decision for this sprint |
 |---|---|---|

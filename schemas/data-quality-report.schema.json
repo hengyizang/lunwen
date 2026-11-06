@@ -21,7 +21,7 @@
     "blockers": {"type": "array", "items": {"type": "string"}},
     "warnings": {"type": "array", "items": {"type": "string"}},
     "initiated_by": {"type": "string", "minLength": 1},
-    "human_review_required": {"const": true},
+    "human_review_required": {"type": "boolean"},
     "status": {"enum": ["pass", "block"]}
   }
 }

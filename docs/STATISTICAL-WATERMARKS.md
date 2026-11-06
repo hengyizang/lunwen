@@ -66,7 +66,7 @@ See the [official detector documentation](https://huggingface.co/docs/transforme
 and [official SynthID Text implementation](https://github.com/google-deepmind/synthid-text).
 
 Protected assessments live under `reports/statistical-watermarks/P01/`. Current
-source/provenance/config/cache/implementation hashes enter human G5 approval.
+source/provenance/config/cache/implementation hashes enter the recorded automated G5 decision.
 The separate cloud CPU regression creates a tiny tokenizer and known marked and
 unmarked token sequences using the actual library, without weights or provider
 calls. These are engineering fixtures, not calibration on a research manuscript

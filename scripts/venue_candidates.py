@@ -12,12 +12,15 @@ import argparse
 import csv
 import hashlib
 import json
-import os
 import re
-import tempfile
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
+
+try:
+    from scripts.research_artifacts import sha as sha256_file, write as atomic_json, regular_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file, write as atomic_json, regular_file
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,14 +34,6 @@ class VenueCandidateError(RuntimeError):
 
 def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def canonical_hash(value: Any) -> str:
@@ -56,22 +51,8 @@ def project_path(slug: str) -> Path:
 
 
 def safe_file(project: Path, relative: str) -> Path:
-    value = Path(relative)
-    if value.is_absolute() or not value.parts or ".." in value.parts:
-        raise VenueCandidateError("file must be project-relative and cannot contain ..")
-    path = (project / value).resolve()
-    if project.resolve() not in path.parents or not path.is_file() or path.is_symlink():
-        raise VenueCandidateError(f"file is not a regular project file: {relative}")
-    return path
-
-
-def atomic_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        json.dump(value, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = handle.name
-    os.replace(temporary, path)
+    return regular_file(project, relative, VenueCandidateError,
+                        invalid="file must be project-relative and cannot contain ..", missing="file is not a regular project file")
 
 
 def rows(path: Path) -> list[dict[str, Any]]:

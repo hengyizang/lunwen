@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from contextlib import ExitStack
 import json
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -79,6 +80,11 @@ class ProductionCycleTests(unittest.TestCase):
         spec = ai_providers.PRODUCTION_PROVIDERS[provider]
         model = kwargs["model"]
         body = self.payloads()[self.index]
+        if self.index in {1, 3}:
+            from tests.research_cycle_fixtures import pending_decision
+            cycle_id = re.search(r'cycle_id="([^"]+)"', prompt).group(1)
+            notebook = pending_decision(self.root/"response-fixture", self.stage, cycle_id, "P01")
+            body["artifacts"].append({"path":"program/research-notebook.json", "content":json.dumps(notebook)})
         self.index += 1
         return ai_providers.ModelResult(provider, model, json.dumps(body), {"input_tokens": 100, "output_tokens": 20},
             f"fixture-request-{self.index}", model, spec["protocol"], spec["root"] + spec["path"].format(model=model),
@@ -121,6 +127,8 @@ class ProductionCycleTests(unittest.TestCase):
         self.assertEqual(provenance["files"]["program/fixture.md"]["family"], "openai")
         self.assertEqual(provenance["files"]["program/fixture.md"]["role"], "persistent-remediator")
         self.assertEqual(provenance["files"]["program/fixture.md"]["model"], "gpt-6.1-sol")
+        self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"], "openai")
+        self.assertEqual(manifest["research_decision"]["status"], "independently_reviewed")
         reviews = list((self.project / "reviews/independent").glob("*.json"))
         self.assertEqual(len(reviews), 2)
         self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))

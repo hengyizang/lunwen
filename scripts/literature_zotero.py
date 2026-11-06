@@ -16,7 +16,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 from scripts import literature_evidence as evidence, literature_workbench as wb
-from scripts.research_artifacts import path_in, record, sha, write
+from scripts.research_artifacts import path_in, record, sha, write, matches_origin, seal_manifest
 
 OUTPUT = "reports/literature-zotero"
 KEY = re.compile(r"^[A-Z0-9]{8}$")
@@ -113,15 +113,14 @@ def _saved(project, directory):
     manifest_path = directory / "manifest.json"
     if not manifest_path.exists():
         return None
-    from scripts.output_provenance import current_origin
     manifest = wb._json(manifest_path.read_bytes())
     if manifest.get("implementation_sha256") != sha(Path(__file__)):
         raise ValueError("Zotero implementation changed; refresh with a new import ID")
     for binding in manifest.get("files", []):
         path = path_in(project, binding["path"])
-        if sha(path) != binding["sha256"] or current_origin(project, path).get("status") != "tracked":
+        if sha(path) != binding["sha256"] or not matches_origin(project, path):
             raise ValueError("Zotero receipt/output changed")
-    if current_origin(project, manifest_path).get("status") != "tracked":
+    if not matches_origin(project, manifest_path):
         raise ValueError("Zotero manifest lacks executor provenance")
     return wb._json((directory / "index.json").read_bytes())
 
@@ -227,9 +226,7 @@ def build(project, spec, *, fetch=None):
         "<li>" + html.escape(r.get("work", {}).get("title", r["status"])) + "</li>" for r in report["items"]) + "</ul>", encoding="utf-8")
     files += [index, page]
     manifest = directory / "manifest.json"
-    write(manifest, {"implementation_sha256": sha(Path(__file__)), "files": [
-        {"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in dict.fromkeys(files)]})
-    record(project, [*dict.fromkeys(files), manifest], "scripts/literature_zotero.py")
+    seal_manifest(project, list(dict.fromkeys(files)), manifest, "scripts/literature_zotero.py", {}, files_key="files")
     return {**report, "report_path": relative + "/index.json", "html_path": relative + "/index.html"}
 
 

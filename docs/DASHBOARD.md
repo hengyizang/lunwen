@@ -59,15 +59,10 @@ to skip a gate.
 | 6 | G5 writing and review | English writing, natural-style audit, figures, review and venue setup |
 | 7 | Submission ready | Local manual-submission package generation |
 
-1. Create a project and provide complete, truthful G0 constraints.
-2. Wait for the live job to finish and inspect the log.
-3. Read the project files and the dashboard's deterministic gate errors.
-4. Use **检查闸门**. A successful check is necessary but not sufficient for
-   scientific approval.
-5. Add a meaningful review note and use **锁定并等待审批**.
-6. Approve only after reading the exact locked version. If it needs changes,
-   use **重新打开** instead.
-7. Use **进入下一阶段** only after approval.
+1. Create a project with actual G0 constraints; keep missing material facts explicit.
+2. Inspect current sources and the grouped gate findings; expand a group to see every original check.
+3. Run the same `gate-check` and `ready` controls as the native workflow. G0/G3/G4/G5 receive recorded automated decisions; only G1 and each G2 paper topic require the owner's actual decision.
+4. Continue after current decisions pass. G2 retains the complete six-paper architecture; independent execution then completes the active paper's G3-G5 before the next paper starts G3. No button fabricates rights, evidence, signatures or additional money.
 
 The main action card always calls the current stage from `state/run.json`; the
 dashboard does not accept a user-supplied stage and therefore cannot skip a
@@ -76,7 +71,7 @@ gate.
 ## Broad dataset discovery
 
 G1 and G3 now run dataset discovery automatically before any paid model call.
-At G1, queries are derived from the human-confirmed G0 goal, preferred domains,
+At G1, queries are derived from the actual recorded G0 goal, preferred domains,
 data constraints and optional focus query. At G3, the query builder prioritizes
 the title, research question, hypotheses and data needs of every paper contract.
 The current job log shows when automatic search starts and how many candidates
@@ -142,8 +137,7 @@ The dashboard reports:
 
 It cannot truthfully decide data rights, doctoral originality, causal validity,
 authorship, ethics, current JCR category evidence, or final submission fitness.
-Those decisions remain named human actions. Model consensus is not scientific
-validation.
+Existing independent audits assess scientific interpretation; actual G1/G2 topic choices and external authorship or ethics obligations remain with the owner. Model consensus is not scientific validation.
 
 The G1 workspace also exposes evidence-producing literature retrieval for
 OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP and HAL. An
@@ -161,31 +155,22 @@ Before G3, install the pinned analytical power dependency:
 bash scripts/bootstrap-wsl.sh --with-research-quality-tools
 ```
 
-The G3 workspace then provides three local actions:
+The G3 workspace can generate deterministic data-quality and executable power
+reports and request a preregistration seal. The ordinary cloud continuation
+records separate protected automated confirmations bound to current data/report
+hashes; changed sources invalidate them. These checks do not establish construct
+validity, data fitness or a justified scientific interpretation.
 
-1. **本地数据质量审计** reads a project-local dataset, verifies current hashes
-   and scans tables, images, WAV, NumPy, HDF5 and Parquet for content validity,
-   duplicates, labels and split/group
-   overlap. It does not claim human review. After reading the report and all
-   warnings, **阅读报告后确认** records a named, hash-bound confirmation; changing
-   the report or data makes it stale.
-2. **可执行统计功效** runs pinned `statsmodels` for supported classical designs,
-   or reruns a >=1,000-run Monte Carlo script twice in clean directories for
-   complex ML metrics, cross-checking exact output, power, seeds and script hash.
-3. **全部检查后冻结预注册** refuses to proceed until every paper's data,
-   designs, plan, budget and power evidence are complete, then stores their
-   hashes. It also refuses to freeze after experiment attempts exist.
+The active confirmatory paper retains the full data/design/power/baseline and
+isolated-replay requirements. Explicit exploratory protocols use the bounded
+G3/G4 route and return the same paper to G3 after the actual round. The G4
+controller builds current executor evidence, verifies reproduction tolerances and
+records the protected automated confirmation. Optional local intervention controls
+remain compatible with historical genuine records; they add no human G3/G4 gate.
+See [the stage contracts](../references/stage-contracts.md) for phase requirements
+and [research-quality fields](RESEARCH-QUALITY.md) for commands and reports.
 
-The project monitor shows counts, while **检查科研质量硬闸门** runs the same
-deterministic validator used by G3/G4. During G4 the control plane derives a
-protected runtime-evidence catalog from successful experiment records. Baseline
-and clean-room reports must cite that catalog, pass recalculated tolerances and
-use current evidence hashes. The G4 **人工确认复现证据** button creates a protected
-named-human confirmation bound to both current report hashes; models cannot
-write it. See `docs/RESEARCH-QUALITY.md` for field meanings,
-simulation-power and environment-digest commands.
-
-At G5 the control plane automatically runs `scripts/academic_style.py` after the
+At submission-phase G5 the control plane automatically runs `scripts/academic_style.py` after the
 initial Codex draft and again after remediation. The dashboard also provides a
 manual rerun button. The audit detects stock framing, repeated sentences and
 openings, transition overuse, very long sentences and unusually uniform cadence.
@@ -214,7 +199,7 @@ use. Harper remains optional and is not downloaded silently.
 ## Experiment and submission controls
 
 The experiment button delegates to `scripts/experiment_runner.py`. It will fail
-unless the current plan and budget exactly match the human-approved G3 hashes.
+unless the current plan and budget exactly match the checked G3 seal hashes.
 Failed, timed-out and negative runs remain registered.
 
 The submission button delegates to `scripts/submission_package.py`. It creates

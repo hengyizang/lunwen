@@ -36,7 +36,7 @@ Required fields:
 
 G2 assesses a proposal, not completed results. The existing originality audit,
 closest-work searches, paper independence, independent scientific criticism and
-named human approval remain necessary. Structural completeness cannot determine
+actual G1/G2 human topic decisions and recorded automated stage checks remain necessary. Structural completeness cannot determine
 whether a question or result is scientifically novel.
 
 ## Secondary quantitative exception
@@ -50,7 +50,7 @@ to licensing, provenance, complete selection and negative-result preservation.
 
 At G4/G5, `analysis_evidence` must contain one or more
 `{attempt_id, path, sha256}` entries for exact successful executor attempts of
-this paper. The current human G3 plan hash, predeclared output path, registry row,
+this paper. The current checked G3 plan hash, predeclared output path, registry row,
 stored run receipt and current output hash must match. Existing G4 all-attempt,
 statistics, independence, preregistration and clean-room checks still apply.
 This additional binding is not a substitute for substantive statistical review.

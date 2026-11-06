@@ -7,17 +7,14 @@ Parent results and billing holds remain frozen at an explicitly reviewed blob.
 from __future__ import annotations
 
 import argparse
-import base64
 import copy
-import hashlib
 import json
 import math
 import os
 from pathlib import Path
 import re
-import time
 
-from scripts import ai_providers, gateway_trial, model_comparison as parent_trial
+from scripts import gateway_trial, model_comparison as parent_trial
 from scripts import model_comparison_cases_v2 as fixtures
 from scripts import model_runtime, relay_billing
 
@@ -41,19 +38,7 @@ def digest(value):
 
 
 def blob_json(blob, expected_sha):
-    if blob.get("sha") != expected_sha or blob.get("encoding") != "base64":
-        raise ClarifiedError("immutable_blob_readback_mismatch")
-    try:
-        raw = base64.b64decode(blob["content"])
-        actual_sha = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
-        if actual_sha != expected_sha:
-            raise ClarifiedError("immutable_blob_readback_mismatch")
-        value = json.loads(raw)
-    except (KeyError, ValueError, TypeError, UnicodeError):
-        raise ClarifiedError("immutable_blob_readback_mismatch") from None
-    if not isinstance(value, dict):
-        raise ClarifiedError("immutable_blob_readback_mismatch")
-    return value
+    return gateway_trial.blob_json(blob, expected_sha, ClarifiedError, git_hash=True)
 
 
 def current_parent(state, expected_sha):
@@ -78,19 +63,9 @@ class CloudState(gateway_trial.CloudState):
     def save(self, ledger):
         if not self.loaded:
             raise ClarifiedError("ledger_read_required")
-        raw = (json.dumps(ledger, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
-        payload = {"message": TRIAL + ": preserve clarified comparison", "branch": STATE,
-                   "content": base64.b64encode(raw).decode()}
-        if self.expected_sha:
-            payload["sha"] = self.expected_sha
-        response = self.api("contents/trial-state/" + FILE, payload, "PUT")
-        new_sha = response.get("content", {}).get("sha")
-        if not isinstance(new_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", new_sha):
-            raise ClarifiedError("ledger_persistence_not_confirmed")
-        value = blob_json(self.api("git/blobs/" + new_sha), new_sha)
-        if value != ledger:
-            raise ClarifiedError("immutable_blob_readback_mismatch")
-        self.expected_sha = new_sha
+        self.expected_sha = self.commit_json(FILE, ledger, self.expected_sha,
+            TRIAL + ": preserve clarified comparison", blob_json, error=ClarifiedError,
+            persistence_error="ledger_persistence_not_confirmed", branch=STATE)
 
 
 def routes(plan):
@@ -265,23 +240,7 @@ def run_one(ledger, route, case_id, persist):
         raise ClarifiedError("clarified_cap_prevented_call")
     ledger["entries"].append(entry)
     persist(ledger)  # Confirmed durable reservation before the single generation POST.
-    started = time.monotonic()
-    try:
-        result = ai_providers.call_production(route["provider"], item["prompt"], system=item.get("system"),
-            model=route["model"], reasoning_effort=route["effort"],
-            max_output_tokens=route["max_output_tokens"], timeout=route["timeout"])
-        secrets = [os.environ.get(spec["key_setting"], "") for spec in ai_providers.PRODUCTION_PROVIDERS.values()]
-        entry.update(generation_status="completed", reported_model=result.reported_model,
-            request_id=gateway_trial.safe_text(result.request_id or "", secrets),
-            text=gateway_trial.safe_text(result.text, secrets), usage=gateway_trial.receipt_numbers(result.usage),
-            completion_status=result.completion_status, protocol=result.protocol,
-            response_sha256=hashlib.sha256(result.text.encode()).hexdigest(), grade=fixtures.score(case_id, result.text))
-    except ai_providers.ProviderError as exc:
-        entry.update(generation_status="response_failed", diagnostic=gateway_trial.safe_text(str(exc)))
-    except Exception:
-        entry.update(generation_status="response_failed", diagnostic="unexpected_response_processing_failure")
-    entry["duration_seconds"] = round(time.monotonic() - started, 4)
-    persist(ledger)
+    parent_trial.record_generation(ledger, entry, route, item, persist, fixtures.score)
     try:
         settlement = relay_billing.settle(route["provider"], route["model"], before)
     except relay_billing.BillingReconciliationError as exc:

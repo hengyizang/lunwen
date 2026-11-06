@@ -60,7 +60,9 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.assertEqual(self.manuscript.read_bytes(), original)
         self.assertFalse(result["manuscript_label_added"])
         self.assertEqual(result["paid_calls"], 0)
-        self.assertTrue(result["human_policy_interpretation_review_required"])
+        self.assertFalse(result["human_policy_interpretation_review_required"])
+        self.assertTrue(result["independent_policy_and_source_review_required"])
+        self.assertTrue(result["external_author_responsibility_retained"])
 
     def test_not_required_keeps_internal_usage_without_manuscript_branding(self):
         policy = self.inputs["ai_policy"]

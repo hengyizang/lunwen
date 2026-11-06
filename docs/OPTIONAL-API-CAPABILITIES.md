@@ -79,6 +79,6 @@ The old direct image API transport is removed. Paid generation fails before
 credentials or network transport are accessed, even if `--execute` is supplied.
 Adding that feature later requires a verified supported model/endpoint,
 explicit image pricing and permissions, central durable reservations and debit
-reconciliation, and human approval of the conceptual illustration. Importing an
+reconciliation, and actual source-bound visual/rights/disclosure checks of the conceptual illustration. Importing an
 authorized PNG and deterministic figures/diagrams provide working alternatives
 today. These availability limits are not claims about final scientific quality.

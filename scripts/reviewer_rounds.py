@@ -168,13 +168,13 @@ def prepare_start(project: Path, paper_id: str, source: str, actor: str, *, prev
     _text(actor, "named human actor", 128)
     state = read(path_in(project, "state/run.json"))
     if state.get("paper_statuses", {}).get(paper_id) != "submission_ready":
-        raise ValueError("a new external round requires the prior paper to have completed its human G5 gate")
+        raise ValueError("a new external round requires the prior paper to have completed its recorded G5 checks")
     if state.get("stage") != "submission-ready" and state.get("active_paper") != paper_id:
         raise ValueError("cannot replace another paper's active unfinished work")
     approval = next((row for row in reversed(state.get("approvals", []))
                      if row.get("gate") == "G5" and row.get("paper_id") == paper_id), None)
     if not approval or not approval.get("paper_artifact_sha256"):
-        raise ValueError("original named paper-level G5 approval required")
+        raise ValueError("original recorded paper-level G5 decision required")
     from scripts import researchctl
     if researchctl.project_dir(state["project"]).resolve() != project.resolve():
         raise ValueError("revision project does not match the protected runtime project")

@@ -54,7 +54,8 @@ class EditorialIntegrationTests(unittest.TestCase):
             errors = academic_style.validate_saved_audit(manuscript.parent.parent)
             self.assertTrue(any("humanizer_review" in error for error in errors))
 
-    def test_both_writer_paths_receive_full_skills_only_at_g5(self):
+    @patch("scripts.research_phase.writing_phase",return_value="submission")
+    def test_both_writer_paths_receive_full_skills_in_submission_phase(self, phase):
         api_prompt = api_orchestrator.writer_prompt("missing-project", "writing-and-review", "")
         api_remediation = api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}")
         state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
@@ -111,7 +112,7 @@ class EditorialIntegrationTests(unittest.TestCase):
             project = Path(directory) / "projects/demo"
             state_path = project / "state/run.json"
             state_path.parent.mkdir(parents=True)
-            state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
+            state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01", "writing_phases":{"P01":"submission"}}
             state_path.write_text(json.dumps(state), encoding="utf-8")
             protected = defensive_review.audit_text("\n\n".join(
                 "We do not claim causal identification from this observational analysis." for _ in range(16)
@@ -164,7 +165,7 @@ class EditorialIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
             project = Path(directory) / "projects/demo"
             (project / "state").mkdir(parents=True)
-            (project / "state/run.json").write_text('{"active_paper":"P01"}', encoding="utf-8")
+            (project / "state/run.json").write_text('{"active_paper":"P01","writing_phases":{"P01":"submission"}}', encoding="utf-8")
             audit_path = project / "papers/P01/style/academic-style-audit.json"
             audit_path.parent.mkdir(parents=True)
             audit_path.write_text(json.dumps({"analysis": {
@@ -280,7 +281,10 @@ class EditorialIntegrationTests(unittest.TestCase):
                 result = autopilot.refresh_post_write_evidence("demo", "writing-and-review", "run", "initial")
             self.assertEqual(result["controlled_steps"]["operation_errors"], [])
             self.assertEqual(len(list((project / "reports/watermark-cleanup").glob("*/candidate.txt"))), 1)
-            self.assertIsNone(autopilot.refresh_post_write_evidence("demo", "topic-intelligence", "run", "initial")["controlled_steps"])
+            other_stage = autopilot.refresh_post_write_evidence("demo", "topic-intelligence", "run", "initial")["controlled_steps"]
+            self.assertEqual(other_stage["stage"], "topic-intelligence")
+            self.assertEqual(other_stage["operation_errors"], [])
+            self.assertEqual(len(list((project / "reports/watermark-cleanup").glob("*/candidate.txt"))), 1)
 
     def test_both_controllers_audit_the_built_word_manuscript_after_each_pass(self):
         for controller in (api_orchestrator, autopilot):
@@ -299,7 +303,7 @@ class EditorialIntegrationTests(unittest.TestCase):
                     "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Test Author"}],
                     "keywords": ["cohort", "comparison", "uncertainty"]}), encoding="utf-8")
                 (project / "state").mkdir()
-                (project / "state/run.json").write_text(json.dumps({"active_paper": "P01"}), encoding="utf-8")
+                (project / "state/run.json").write_text(json.dumps({"active_paper": "P01", "writing_phases":{"P01":"submission"}}), encoding="utf-8")
                 (project / "program").mkdir()
                 (project / "program/cloud-operations.json").write_text(json.dumps({"operations": [{
                     "stage": "writing-and-review", "action": "docx", "source": source.relative_to(project).as_posix(),

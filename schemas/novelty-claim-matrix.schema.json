@@ -19,7 +19,10 @@
       ]
     },
     "status": {
-      "const": "ready_for_review"
+      "enum": [
+        "in_progress",
+        "ready_for_review"
+      ]
     },
     "claims": {
       "type": "array",
@@ -226,21 +229,21 @@
       "properties": {
         "exact_query_rounds": {
           "type": "integer",
-          "minimum": 2
+          "minimum": 0
         },
         "adjacent_field_rounds": {
           "type": "integer",
-          "minimum": 2
+          "minimum": 0
         },
         "backward_chaining_complete": {
-          "const": true
+          "type": "boolean"
         },
         "forward_chaining_complete": {
-          "const": true
+          "type": "boolean"
         },
         "supporting_search_ids": {
           "type": "array",
-          "minItems": 4,
+          "minItems": 0,
           "uniqueItems": true,
           "items": {
             "type": "string",
@@ -249,7 +252,7 @@
         },
         "backward_chaining_search_ids": {
           "type": "array",
-          "minItems": 1,
+          "minItems": 0,
           "uniqueItems": true,
           "items": {
             "type": "string",
@@ -258,7 +261,7 @@
         },
         "forward_chaining_search_ids": {
           "type": "array",
-          "minItems": 1,
+          "minItems": 0,
           "uniqueItems": true,
           "items": {
             "type": "string",
@@ -315,6 +318,37 @@
         "saturation_rationale": {
           "type": "string",
           "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "exploring",
+            "saturated",
+            "reopened"
+          ]
+        },
+        "affected_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "next_searches": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "current_no_material_new_work_round_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "stopping_rule": {
           "enum": [
@@ -395,7 +429,89 @@
             }
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "exploring",
+                  "reopened"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "affected_claim_ids",
+              "next_searches"
+            ],
+            "properties": {
+              "affected_claim_ids": {
+                "minItems": 1
+              },
+              "next_searches": {
+                "minItems": 1
+              },
+              "unresolved_search_gaps": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "not": {
+                  "required": [
+                    "status"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "const": "saturated"
+                  }
+                }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "exact_query_rounds": {
+                "minimum": 2
+              },
+              "adjacent_field_rounds": {
+                "minimum": 2
+              },
+              "backward_chaining_complete": {
+                "const": true
+              },
+              "forward_chaining_complete": {
+                "const": true
+              },
+              "supporting_search_ids": {
+                "minItems": 4
+              },
+              "backward_chaining_search_ids": {
+                "minItems": 1
+              },
+              "forward_chaining_search_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
     },
     "human_review_required": {
       "const": true
@@ -425,6 +541,53 @@
               "retrieval_dispositions",
               "search_rounds"
             ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.0"
+          },
+          "search_saturation": {
+            "anyOf": [
+              {
+                "not": {
+                  "required": [
+                    "status"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "const": "saturated"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "search_saturation": {
+            "properties": {
+              "consecutive_no_material_new_work_rounds": {
+                "minimum": 2
+              },
+              "no_material_new_work_rounds": {
+                "minItems": 2
+              },
+              "unresolved_search_gaps": {
+                "maxItems": 0
+              }
+            }
           }
         }
       }

@@ -4,7 +4,6 @@ This is a distinct native contract, not a retry of the failed high alias.
 No provider registry or parent ledger is changed. Prior holds remain held.
 """
 from __future__ import annotations
-import base64
 import hashlib
 import json
 import os
@@ -36,18 +35,10 @@ class CloudState(clarified.CloudState):
     def save(self, ledger):
         if not self.loaded:
             raise ProbeError("ledger_read_required")
-        raw = (json.dumps(ledger, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
-        body = {"message": AUTHORIZATION + ": preserve one native probe", "branch": parent_trial.STATE,
-                "content": base64.b64encode(raw).decode()}
-        if self.expected_sha:
-            body["sha"] = self.expected_sha
-        reply = self.api("contents/trial-state/" + FILE, body, "PUT")
-        sha = reply.get("content", {}).get("sha")
-        if not isinstance(sha, str) or not re.fullmatch("[a-f0-9]{40}", sha):
-            raise ProbeError("probe_write_not_verified")
-        if clarified.blob_json(self.api("git/blobs/" + sha), sha) != ledger:
-            raise ProbeError("probe_write_not_verified")
-        self.expected_sha = sha
+        self.expected_sha = self.commit_json(FILE, ledger, self.expected_sha,
+            AUTHORIZATION + ": preserve one native probe", clarified.blob_json,
+            error=ProbeError, persistence_error="probe_write_not_verified",
+            readback_error="probe_write_not_verified", branch=parent_trial.STATE)
 
 
 def quote():

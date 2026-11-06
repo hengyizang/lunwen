@@ -30,6 +30,9 @@ class ResearchToolkitTests(unittest.TestCase):
             "recipe_path": self.recipe.relative_to(self.root).as_posix(), "recipe_sha256": sha(self.recipe),
             "stages": ["experiment-design"], "native_operations": ["literature_compare"]}]}
         write(self.root / toolkit.CATALOG, self.catalog)
+        policy = self.root / "config/scientific-reasoning.json"
+        policy.parent.mkdir(parents=True)
+        policy.write_bytes((research_methods.ROOT / "config/scientific-reasoning.json").read_bytes())
         write(self.project / "state/run.json", {"stage": "experiment-design", "approved_gates": ["G0", "G1", "G2"]})
         write(self.project / "intake/constraints.json", {"execution_mode": "cloud_only", "budget_cny": 500})
         self.source = self.project / "evidence/current-source.txt"
@@ -179,7 +182,6 @@ class ResearchToolkitTests(unittest.TestCase):
         with patch.object(research_methods, "installation_errors", return_value=[]), \
              patch.object(research_methods, "load_catalog", return_value={"modules": []}), \
              patch("scripts.ccfa_runtime.model_contract", return_value="Existing CCFA contract"), \
-             patch.object(research_methods.scientific_reasoning, "stage_prompt", return_value=""), \
              patch.object(toolkit, "task_context", wraps=toolkit.task_context) as selected:
             # Root is forwarded; normal unselected calls do not open this catalog.
             prompt = research_methods.stage_context("experiment-design", "writer", root=self.root,
@@ -209,4 +211,12 @@ class ResearchToolkitTests(unittest.TestCase):
              patch.object(api_orchestrator, "project_root", return_value=self.project):
             prompt = autopilot.remediation_prompt("study", state, autopilot.ROOT / "review.json", marker)
         self.assertIn("Selected method", prompt)
+        methods.assert_called_once_with("experiment-design", "remediator", context=marker, project=self.project)
+
+    def test_api_remediation_keeps_the_remediator_tool_role(self):
+        marker = self.marker(self.prepare())
+        with patch.object(research_methods, "stage_context", return_value="Selected remediation method") as methods, \
+             patch.object(api_orchestrator, "project_root", return_value=self.project):
+            prompt = api_orchestrator.remediation_prompt("study", "experiment-design", marker, "{}")
+        self.assertIn("Selected remediation method", prompt)
         methods.assert_called_once_with("experiment-design", "remediator", context=marker, project=self.project)

@@ -19,6 +19,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
+
 
 ROOT = Path(__file__).resolve().parents[1]
 if __package__ in {None, ""}:
@@ -34,6 +39,8 @@ FILE_ARGUMENT_SUFFIXES = {
     ".h5", ".hdf5", ".wav", ".txt", ".lean",
 }
 
+
+from scripts.paper_execution import artifact_path as experiment_path
 
 class ExperimentError(RuntimeError):
     pass
@@ -64,14 +71,6 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def resolve_inside(root: Path, relative: Any, field: str) -> Path:
     if not isinstance(relative, str) or not relative.strip():
         raise ExperimentError(f"{field} must be a non-empty relative path")
@@ -86,7 +85,8 @@ def resolve_inside(root: Path, relative: Any, field: str) -> Path:
 
 
 def validate_plan(plan: dict[str, Any]) -> list[str]:
-    errors: list[str] = []
+    from scripts.research_phase import plan_errors
+    errors: list[str] = plan_errors(plan)
     if plan.get("status") != "ready_for_review":
         errors.append("status must remain ready_for_review after G3 approval")
     runs = plan.get("runs")
@@ -277,7 +277,7 @@ def compute_project(project: Path) -> Path:
     """Use the parent total for the existing supplemental study layout."""
     if len(project.parents) >= 5:
         root = project.parents[4]
-        if re.fullmatch(r"experiments/supplemental/P[0-9]{2}/R[0-9]{3}/s[0-9]{3}", project.relative_to(root).as_posix()):
+        if re.fullmatch(r"experiments/supplemental/P[0-9]{2}/[RI][0-9]{3}/s[0-9]{3}", project.relative_to(root).as_posix()):
             return root
     return project
 
@@ -288,7 +288,14 @@ def project_compute_ceiling(project: Path, budget: dict[str, Any]) -> float:
     if not (root / "intake/constraints.json").is_file():
         # Existing sealed projects without intake retain their one recorded
         # total ceiling; absence of a new per-plan value never means unlimited.
-        ceiling = budget_ceiling(read_json(root / "experiments/budget.json") if root != project else budget)
+        from scripts.paper_execution import enabled
+        if enabled(root):
+            # The retained master is the legacy total authority. A new paper's
+            # editable budget copy cannot increase it without owner intake.
+            authority_budget = read_json(root / "experiments/budget.json")
+        else:
+            authority_budget = read_json(experiment_path(root, 'experiments/budget.json')) if root != project else budget
+        ceiling = budget_ceiling(authority_budget)
         from scripts.primary_recovery import histories
         previous = histories(root)
         return min([ceiling, *(float(row["compute_ceiling_usd"]) for row in previous)])
@@ -313,10 +320,8 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
         raise ExperimentError(
             "Experiments may run only during the open G4 experiment-execution stage"
         )
-    approval = next(
-        (item for item in reversed(state.get("approvals", [])) if item.get("gate") == "G3"),
-        None,
-    )
+    from scripts.paper_execution import approval as paper_approval, plan_errors
+    approval = paper_approval(project, "G3")
     if not approval:
         raise ExperimentError("G3 has no recorded checked protocol seal")
     expected_plan = approval.get("experiment_plan_sha256")
@@ -326,7 +331,11 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
     if sha256_file(plan_path) != expected_plan or sha256_file(budget_path) != expected_budget:
         raise ExperimentError("Experiment plan or budget changed after G3 approval")
     plan = read_json(plan_path)
-    errors = validate_plan(plan)
+    from scripts.research_phase import exposure_errors
+    errors = validate_plan(plan) + plan_errors(project, plan) + exposure_errors(project, plan)
+    from scripts.research_phase import exploratory, design_errors
+    if exploratory(project):
+        errors.extend(design_errors(project))
     if errors:
         raise ExperimentError("; ".join(errors))
     budget = read_json(budget_path)
@@ -698,7 +707,7 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
         return
     records = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines()
                if line.strip()] if registry.is_file() else []
-    plan = read_json(project / "experiments/plan.json")
+    plan = read_json(experiment_path(project, 'experiments/plan.json'))
     planned = {r["run_id"]: r for r in plan["runs"]}
     pending, visited = list(parents), set()
     while pending:
@@ -981,8 +990,8 @@ def execute(project_slug: str, selected_run_ids: Iterable[str] | None = None,
 
 
 def _execute_locked(project: Path, selected_run_ids: Iterable[str] | None, lease: Path) -> list[dict[str, Any]]:
-    plan_path = project / "experiments" / "plan.json"
-    budget_path = project / "experiments" / "budget.json"
+    plan_path = experiment_path(project, 'experiments/plan.json')
+    budget_path = experiment_path(project, 'experiments/budget.json')
     plan, ceiling = approved_plan(project, plan_path, budget_path)
     plan_sha256 = sha256_file(plan_path)
     selected = set(selected_run_ids or [])
@@ -990,7 +999,7 @@ def _execute_locked(project: Path, selected_run_ids: Iterable[str] | None, lease
     missing = selected - {run["run_id"] for run in runs}
     if missing:
         raise ExperimentError(f"Unknown run ids: {', '.join(sorted(missing))}")
-    registry = project / "experiments" / "registry.jsonl"
+    registry = experiment_path(project, 'experiments/registry.jsonl')
     from scripts.supplemental_experiments import all_compute_cost
     committed = all_compute_cost(compute_project(project))
     requested = sum(float(run["estimated_cost_usd"]) for run in runs)

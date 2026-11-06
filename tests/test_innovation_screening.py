@@ -86,6 +86,27 @@ class InnovationScreeningTests(unittest.TestCase):
     def errors(self):
         return innovation.validate(self.project, self.register)
 
+    def test_exploration_preserves_actual_rounds_without_fabricated_reopening_or_numeric_scales(self):
+        value=self.register["innovation_screening"]
+        value["mode"]="exploratory"
+        value["generation"]["rounds"]=value["generation"]["rounds"][:1]
+        value["comparisons"]=[]
+        value["evaluation"].update(criteria=[],ratings=[])
+        before=self.snapshot()
+        self.assertEqual(innovation.validate(self.project,self.register,require_decision=False),[])
+        self.assertEqual(self.snapshot(),before)
+        self.assertTrue(any("still in progress" in e for e in self.errors()))
+
+    def test_focused_decision_compares_each_alternative_without_unneeded_all_pairs(self):
+        value=self.register["innovation_screening"]
+        value["comparison_policy"]={"mode":"focused","focal_candidate_ids":["H0"],
+            "rationale":"The current decision is whether H0 improves on either remaining mechanism."}
+        value["comparisons"]=[row for row in value["comparisons"] if "H0" in row["candidate_ids"]]
+        value["evaluation"].update(criteria=[],ratings=[])
+        self.assertEqual(self.errors(),[])
+        value["comparisons"].pop()
+        self.assertTrue(any("each alternative" in e for e in self.errors()))
+
     def snapshot(self):
         return {p.relative_to(self.project).as_posix(): p.read_bytes() for p in self.project.rglob("*") if p.is_file()}
 

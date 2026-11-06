@@ -455,6 +455,9 @@ def _contains(value: str, quote: str) -> bool:
 
 
 def _datasets(project: Path) -> tuple[dict, dict]:
+    # FAIR/access metadata is a shared program inventory, including datasets for
+    # papers that have not entered G3. It does not authorize experiment inputs;
+    # those use the selected paper's frozen snapshot in data_contracts.
     path = path_in(project, "data/datasets.jsonl")
     values = {}
     for raw in path.read_text(encoding="utf-8").splitlines():

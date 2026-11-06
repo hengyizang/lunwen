@@ -338,6 +338,7 @@ def project_state(slug: str) -> dict[str, Any]:
             "gate_ready": False,
             "gate_errors": [str(exc)],
             "gate_error_count": 1,
+            "gate_error_groups": researchctl.summarize_gate_errors([str(exc)]),
             "next_action": "修复项目状态文件",
             "risk": "high",
         }
@@ -358,8 +359,9 @@ def project_state(slug: str) -> dict[str, Any]:
     return {
         **state,
         "gate_ready": bool(state.get("gate")) and not errors,
-        "gate_errors": errors[:40],
+        "gate_errors": errors,
         "gate_error_count": len(errors),
+        "gate_error_groups": researchctl.summarize_gate_errors(errors),
         "next_action": next_action,
         "risk": risk,
     }
@@ -465,10 +467,10 @@ def project_detail(slug: str) -> dict[str, Any]:
                 ),
             }
         )
-    registry = project / "experiments" / "registry.jsonl"
-    attempts = 0
-    if registry.is_file():
-        attempts = sum(1 for line in registry.read_text(encoding="utf-8").splitlines() if line.strip())
+    from scripts.paper_execution import primary_registry_paths
+    registries=primary_registry_paths(project)
+    registries.extend((project/"experiments/supplemental").glob("P[0-9][0-9]/[RI][0-9][0-9][0-9]/s[0-9][0-9][0-9]/experiments/registry.jsonl"))
+    attempts=sum(1 for path in registries for line in path.read_text(encoding="utf-8").splitlines() if line.strip())
     datasets = project / "data" / "datasets.jsonl"
     dataset_count = 0
     if datasets.is_file():

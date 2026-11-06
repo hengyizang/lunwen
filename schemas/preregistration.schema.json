@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/hengyizang/lunwen/schemas/preregistration.schema.json",
-  "title": "Hash-frozen confirmatory preregistration",
+  "title": "Hash-frozen paper protocol",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -39,7 +39,7 @@
       "const": "deterministic_local_control_plane"
     },
     "confirmatory_lock": {
-      "const": true
+      "type": "boolean"
     },
     "files": {
       "type": "array",
@@ -79,6 +79,15 @@
     },
     "confirmation_kind": {
       "const": "automated"
+    },
+    "research_phase": {
+      "enum": [
+        "exploratory",
+        "confirmatory"
+      ]
+    },
+    "protocol_lock": {
+      "const": true
     }
   },
   "allOf": [
@@ -98,6 +107,35 @@
       "else": {
         "properties": {
           "human_confirmation": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "research_phase"
+        ],
+        "properties": {
+          "research_phase": {
+            "const": "exploratory"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "protocol_lock"
+        ],
+        "properties": {
+          "confirmatory_lock": {
+            "const": false
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "confirmatory_lock": {
             "const": true
           }
         }

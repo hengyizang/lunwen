@@ -13,14 +13,15 @@ import json
 import os
 from pathlib import Path
 import re
+import sys
 import uuid
 
-try:
-    from scripts import model_runtime, output_provenance
-    from scripts.publication_figures import PROJECTS_ROOT, FigureSpecError, safe_file, sha256_file
-except ImportError:
-    import model_runtime, output_provenance  # type: ignore
-    from publication_figures import PROJECTS_ROOT, FigureSpecError, safe_file, sha256_file  # type: ignore
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.research_artifacts import strict_json
+from scripts import model_runtime, output_provenance
+from scripts.publication_figures import PROJECTS_ROOT, FigureSpecError, safe_file, sha256_file
 
 
 MAX_FILE_BYTES = 2_000_000
@@ -169,16 +170,7 @@ def retrieve(project: Path, sources: list[str], question: str, *, max_source_cha
 
 
 def validate_response(text: str, blocks: list[dict], *, require_statement_citations=False) -> dict:
-    def pairs(items):
-        result = {}
-        for key, value in items:
-            if key in result:
-                raise ValueError("duplicate answer JSON field")
-            result[key] = value
-        return result
-    def invalid_constant(_):
-        raise ValueError("nonfinite answer JSON")
-    data = json.loads(text, object_pairs_hook=pairs, parse_constant=invalid_constant)
+    data = strict_json(text, duplicate_error="duplicate answer JSON field", nonfinite_error="nonfinite answer JSON")
     if (not isinstance(data, dict) or set(data) not in
             ({"answer", "abstain", "citations"}, {"answer", "abstain", "citations", "statements"})):
         raise ValueError("answer must contain answer, abstain, citations and optional mapped statements")

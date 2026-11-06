@@ -10,14 +10,7 @@ AD01–AD08 mechanisms, preserving both sets of individual dispositions.
 
 ## Every Task Receives the Baseline
 
-`scripts.ccfa_humanization.prompt_contract(stage, role)` supplies the complete
-three policy documents to the existing model request. Planning, literature
-retrieval, criticism, experiments, figures and maintenance apply direct,
-evidence-faithful communication without inventing a prose-edit pass. An already
-active baseline is reused at handoffs; no recursive invocation, extra agent or
-extra model call is needed. Only authorized writers edit persistent prose;
-critics remain read-only. Repository cloud execution, budget, G0–G5 approval,
-six-paper thesis and provenance controls retain precedence.
+`scripts.ccfa_humanization.prompt_contract(stage, role)` supplies the compact native baseline in ordinary model requests, with exact pinned source identities available for retrieval. An explicit Humanization/full-reference task loads the complete selected original bodies. Current task and submission rules remain active; absent full text is never claimed as consumed. Writers preserve evidence and uncertainty; critics remain read-only. No extra model call, report or parallel stage authority is created.
 
 The policy applies different evidence boundaries to proposed mechanisms,
 planned experiments and reported observations. It does not require completed
@@ -48,7 +41,7 @@ The full original bilingual examples are present in each applicable contract.
 They explain how to replace defensive framing with its scientific payload and
 when an accurate negation, uncertainty, contrast or technical property must stay.
 
-At G5, `disposition_contract()` uses the existing remediation-note format:
+At submission-phase G5, `disposition_contract()` uses the existing remediation-note format:
 `fixed: CFH01 <contextual reason>`, `rejected: CFH01 <contextual reason>` or
 `unresolved: CFH01 <contextual reason>`. `validate_dispositions(notes, stage)`
 requires all 38 current IDs exactly once and a substantive reason of at least
@@ -56,7 +49,7 @@ requires all 38 current IDs exactly once and a substantive reason of at least
 retain their native validators. Unknown IDs, duplicates, ranges standing in for
 individual items, repeated pass flags and a checklist-wide copied rationale are
 rejected. Related criteria may share an actual inapplicability explanation;
-unresolved records remain for the fresh independent critic and human gate.
+unresolved records remain for the fresh independent critic and recorded automated G5 decision.
 `validate_disposition_records()` supports structured `id`, `disposition` and
 `reason` fields without changing the native bundle schema. Neither adapter
 claims to verify the truth of a reason or to replace source-bound semantic

@@ -25,6 +25,11 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Iterable
 
+try:
+    from scripts.research_artifacts import sha as sha256_file, regular_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file, regular_file
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS_ROOT = ROOT / "projects"
@@ -82,14 +87,6 @@ def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def project_path(slug: str) -> Path:
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,62}", slug):
         raise AI4ScienceEvidenceError("invalid project slug")
@@ -100,13 +97,8 @@ def project_path(slug: str) -> Path:
 
 
 def safe_file(project: Path, value: str) -> Path:
-    relative = Path(value)
-    if relative.is_absolute() or not relative.parts or ".." in relative.parts:
-        raise AI4ScienceEvidenceError("files must be project-relative and cannot contain ..")
-    path = (project / relative).resolve()
-    if project.resolve() not in path.parents or not path.is_file() or path.is_symlink():
-        raise AI4ScienceEvidenceError(f"not a regular project file: {value}")
-    return path
+    return regular_file(project, value, AI4ScienceEvidenceError,
+                        invalid="files must be project-relative and cannot contain ..", missing="not a regular project file")
 
 
 def file_record(project: Path, path: Path) -> dict[str, Any]:

@@ -577,14 +577,8 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                                      "configuration_pending"}
                     if (continuation_decision.get("reason") in quality_waits and continuation_decision.get("actor") == job["actor"]
                             and continuation_decision.get("gate") in {"G3", "G4"}):
-                        from scripts.automated_quality import run as run_automated_quality
-                        from scripts.scientific_scope import validate as validate_scope
-                        scope_issues = validate_scope(ROOT / "projects" / slug, continuation_decision["gate"])
-                        try:
-                            quality_result = ({"blockers": scope_issues, "paid_calls": 0} if scope_issues
-                                              else run_automated_quality(ROOT / "projects" / slug))
-                        except (OSError, ValueError, RuntimeError) as exc:
-                            quality_result = {"blockers": [str(exc)], "paid_calls": 0}
+                        from scripts.automated_quality import checked_run
+                        quality_result = checked_run(ROOT / "projects" / slug, continuation_decision["stage"])
                         logs.append(json.dumps(quality_result, ensure_ascii=False))
                         continuation_decision = cloud_continuation.evaluate(slug)
                     if continuation_decision.get("actor") == job["actor"] and cloud_continuation.transition_ready_gate(slug, continuation_decision):

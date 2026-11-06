@@ -18,7 +18,7 @@ Read `references/research-integrity.md`. Do not repair findings silently.
 
 Check:
 
-- gate state and recorded human approvals;
+- gate state, actual G1/G2 human topic decisions and the other stages' evidence-bound automated decisions;
 - source existence, exact support and retraction/correction status;
 - dataset rights, provenance, checksum, transformations and split leakage;
 - experiment/config/code/data traceability and failed-run retention;

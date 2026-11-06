@@ -18,6 +18,8 @@ FIELDS = ("estimate", "standard_error", "ci_low", "ci_high", "confidence_level",
           "p_value", "p_adjusted", "n_observations", "n_units")
 
 
+from scripts.paper_execution import paper_scoped
+
 def _need(ok, message):
     if not ok:
         raise ValueError(message)
@@ -35,6 +37,7 @@ def _same(actual, expected):
     return actual == expected
 
 
+@paper_scoped
 def measured(project: Path, paper_id: str, specification_id: str) -> dict:
     from scripts import empirical_design, empirical_runtime
     from scripts.figure_lineage import run_seal
@@ -55,6 +58,7 @@ def measured(project: Path, paper_id: str, specification_id: str) -> dict:
     return {"specification": spec, "result": output, "source": source, "executor": seal}
 
 
+@paper_scoped
 def _diagnostics(project, paper_id, card):
     from scripts.figure_lineage import run_seal
     bindings = []
@@ -81,6 +85,7 @@ def table_bytes(rows):
     return stream.getvalue().encode("utf-8")
 
 
+@paper_scoped
 def _map_errors(project, paper_id, rows, *, require_mapping):
     mapping_path = project/f"papers/{paper_id}/empirical-reporting-map.json"
     if not mapping_path.is_file():
@@ -132,6 +137,7 @@ def _map_errors(project, paper_id, rows, *, require_mapping):
     return errors, inputs
 
 
+@paper_scoped
 def audit(project: Path, paper_id: str, *, require_mapping=False):
     _need(re.fullmatch(r"P[0-9]{2}", paper_id), "explicit paper ID required")
     result = {"schema_version": "1.0", "paper_id": paper_id, "status": "blocked", "errors": [], "rows": [],
@@ -164,6 +170,7 @@ def audit(project: Path, paper_id: str, *, require_mapping=False):
     return result
 
 
+@paper_scoped
 def refresh(project, paper_id, *, require_mapping=False):
     result = audit(project, paper_id, require_mapping=require_mapping)
     outputs = []
@@ -178,6 +185,7 @@ def refresh(project, paper_id, *, require_mapping=False):
     return result
 
 
+@paper_scoped
 def validate_saved_report(project, paper_id, *, require_mapping=False):
     expected = audit(project, paper_id, require_mapping=require_mapping)
     errors = list(expected["errors"])

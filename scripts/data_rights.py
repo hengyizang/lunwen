@@ -92,7 +92,10 @@ def _assessment(project, manifest, metadata_path):
     issues = review_receipts.validate_gate(project, gate)
     if issues:
         raise ValueError("current independent scientific review of data rights is required: " + "; ".join(issues))
-    latest = read(path_in(project, f"state/review-receipts/{gate}/latest.json"))
+    from scripts.paper_execution import enabled, selected
+    paper = selected(project) if enabled(project) and gate == "G3" else None
+    key = review_receipts._key(gate, paper)
+    latest = read(path_in(project, f"state/review-receipts/{key}/latest.json"))
     final = path_in(project, latest["path"])
     if latest.get("sha256") != sha(final):
         raise ValueError("independent review receipt changed")
