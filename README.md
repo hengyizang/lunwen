@@ -33,6 +33,10 @@ Humanizer 全部 26 项规则、anti-defensive-writing 完整学术审查及实�
 
 ## 云端运行（无需本地科研运行环境）
 
+Codex Cloud 的可复用开发环境使用 [`docs/CODEX-CLOUD.md`](docs/CODEX-CLOUD.md) 和
+`bash scripts/bootstrap-codex-cloud.sh`。它安装代码维护、文献处理、绘图和文档导出工具；
+正式科研作业继续使用下述 GitHub Actions 入口与既有证据、预算和实验控制。
+
 通过 Codex 管理仓库所有者授权的 GitHub 云端作业。GitHub Actions 完成依赖安装、受控文献检索、许可检查后的数据获取、G3 封存后的 Docker 实验、检查点恢复和论文导出。API 使用当前配置的项目累计总额度，默认 300 元；不再设单篇额度或固定追加阶梯。持续运行在总额度不足、G1/G2 选题决定或实际资料缺失时暂停；待核对费用有可计算上限且总额仍足够时可继续。
 
 中转站密钥到位后的配置清单、免费启动检查和立即启动入口见 [`docs/GATEWAY-STARTUP.md`](docs/GATEWAY-STARTUP.md)，支持 OpenAI 与 Claude 使用独立地址和密钥。

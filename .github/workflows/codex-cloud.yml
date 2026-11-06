@@ -1,0 +1,74 @@
+name: Codex Cloud development setup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/bootstrap-codex-cloud.sh
+      - pyproject.toml
+      - .github/workflows/codex-cloud.yml
+  pull_request:
+    paths:
+      - scripts/bootstrap-codex-cloud.sh
+      - pyproject.toml
+      - .github/workflows/codex-cloud.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codex-cloud-setup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux-bootstrap:
+    name: Install and exercise reusable Linux tools
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Check shell syntax and prepare environment without credentials
+        run: |
+          bash -n scripts/bootstrap-codex-cloud.sh
+          bash scripts/bootstrap-codex-cloud.sh
+      - name: Check restart and actual PDF and Word exports
+        shell: bash
+        run: |
+          source .runtime/codex-cloud-env.sh
+          python -m pip check
+          mkdir -p .runtime/codex-cloud-smoke
+          python - <<'PY'
+          from pathlib import Path
+          from docx import Document
+          root = Path('.runtime/codex-cloud-smoke')
+          root.joinpath('latex.tex').write_text(
+              r'\documentclass{article}\begin{document}Cloud setup smoke test.\end{document}',
+              encoding='utf-8',
+          )
+          document = Document()
+          document.add_paragraph('Cloud setup smoke test.')
+          document.save(root / 'word.docx')
+          PY
+          latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=.runtime/codex-cloud-smoke .runtime/codex-cloud-smoke/latex.tex
+          libreoffice "-env:UserInstallation=file://$PWD/.runtime/codex-cloud-smoke/office-profile" --headless --convert-to pdf --outdir .runtime/codex-cloud-smoke .runtime/codex-cloud-smoke/word.docx
+          test -s .runtime/codex-cloud-smoke/latex.pdf
+          test -s .runtime/codex-cloud-smoke/word.pdf
+          pdftotext .runtime/codex-cloud-smoke/word.pdf .runtime/codex-cloud-smoke/word.txt
+          python - <<'PY'
+          from pathlib import Path
+          assert 'Cloud setup smoke test.' in Path('.runtime/codex-cloud-smoke/word.txt').read_text()
+          PY
+      - name: Preserve development setup evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: codex-cloud-development-smoke
+          path: .runtime/codex-cloud-smoke/
+          if-no-files-found: ignore
+          retention-days: 7

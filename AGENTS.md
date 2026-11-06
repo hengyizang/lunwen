@@ -26,6 +26,18 @@ This repository is a research workflow, not a publication generator.
 22. Keep all six papers within one overarching doctoral question and cumulative knowledge contribution. Core theme A and independently evidenced extension B must serve that same doctoral topic. Each paper needs standalone value and an explicit contribution to the approved thesis synthesis. Evidence-led reframing stays within that scope; a substantive change to the doctoral question or paper-to-thesis mapping needs human review of the affected G1/G2 records before dependent work continues. Never silently turn the portfolio into unrelated topics or waive paper independence.
 23. Manage dynamic routes through the structured task profiles and cloud controls in `docs/DYNAMIC-MODEL-ROUTING.md`. Classify work before execution; never label a core scientific task routine to obtain a cheaper route. Transport/group/effort/context candidates require task-specific evidence before scientific promotion. Preserve selected-route receipts and independent audits. The current payment policy in `docs/TOTAL-COST-POLICY.md` overrides older payment restrictions: calculate and record costs and enforce existing cumulative project totals only. Do not add per-paper/per-request sublimits, paid opt-ins, tranche steps, manual billing approvals or blanket stops on bounded reservations. Use verified charges when available and honestly labeled conservative upper estimates otherwise. Every attempt counts; never increase the configured total automatically.
 
+## Codex Cloud development environment
+
+Use `bash scripts/bootstrap-codex-cloud.sh` for the reusable Linux Codex Cloud
+setup; see `docs/CODEX-CLOUD.md`. Do not run the Windows/D-drive installer there.
+Before Python commands in a cloud task, run
+`source .runtime/codex-cloud-env.sh` from the repository root. If that file is
+missing, run the bootstrap first. This activates the repository virtual
+environment and keeps its caches and temporary output under `.runtime/`.
+Installing development tools does not make Codex Cloud an approved scientific
+executor. Continue actual research through the existing cloud controls and
+experiment runner; do not copy secrets or reset project records during setup.
+
 Run repository checks after code or schema changes:
 
 For task-selected methods from the research automation tools, read
