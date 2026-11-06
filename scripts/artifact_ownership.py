@@ -7,7 +7,7 @@ from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
                   "reports/data-contracts", "reports/data-cleaning", "reports/empirical-reporting",
-                  "evidence/economic-data", "evidence/data-rights", "data/raw/economic-data", "data/processed", "data/processed-preview",
+                  "evidence/economic-data", "evidence/data-rights", "data/raw", "data/processed", "data/processed-preview",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",
                   "reports/manuscript-hygiene", "reports/reviewer-rounds",
                   "reports/publication-disclosure", "reports/statistical-watermarks",
@@ -30,30 +30,64 @@ EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/late
                   "program/topic-leads.json", "program/literature-progress.json"}
 
 
+def _controlled_paper_record(relative: str) -> bool:
+    """Apply the existing authoring boundary to a nested study's paper records."""
+    parts = PurePosixPath(relative).parts
+    if len(parts) < 3 or parts[0] != "papers" or not re.fullmatch(r"p[0-9]{2}", parts[1]):
+        return False
+    if len(parts) == 3:
+        return parts[2] in {"power-analysis.json", "preregistration.json",
+                            "reproduction-confirmation.json", "watermark-assessment.json"}
+    if parts[2:] == ("style", "academic-style-audit.json"):
+        return True
+    if parts[2:4] == ("submission-materials", "revision"):
+        return True
+    return parts[2] == "reviews" and parts[3] in {
+        "revision-base", "ref-verify.json", "revision-trace.json", "revision-integrity.json",
+        "revision-ledger-report.json", "revision-render.json", "cloud-tex-build.json",
+        "reporting-guideline.json", "revision-authorizations.json", "revision-base.tex",
+        "revision-base.docx", "pre-submission-review.json", "statistical-reporting.json",
+        "docx-revision.json",
+    }
+
+
 def declared_outputs(root: Path) -> set[str]:
     """Include old registry outputs even if a writer proposes a different plan."""
     values: set[str] = set()
-    plan = root / "experiments/plan.json"
-    if plan.is_file():
+    from scripts.paper_execution import enabled, refreshable_preregistration
+    scoped = enabled(root)
+    state_path = root / "state/run.json"
+    state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
+    preregistrations = sorted((root / "papers").glob("P[0-9][0-9]/preregistration.json"))
+    fixed_preregistrations = [p for p in preregistrations if not refreshable_preregistration(root, p.parent.name)]
+    plans = [root / "experiments/plan.json", *sorted((root / "experiments/papers").glob("P[0-9][0-9]/plan.json"))]
+    for plan in plans:
+        if not plan.is_file():
+            continue
         try:
             value = json.loads(plan.read_text(encoding="utf-8"))
             for run in value.get("runs", []):
                 values.update(p for p in run.get("expected_outputs", []) if isinstance(p, str))
-            state_path = root / "state/run.json"
-            state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
-            if state.get("stage") in {"experiment-execution", "writing-and-review", "submission-ready"}:
-                values.update({"experiments/plan.json", "experiments/budget.json"})
-                for prereg in (root / "papers").glob("P[0-9][0-9]/preregistration.json"):
+            locked = ((not scoped and state.get("stage") in {"experiment-execution", "writing-and-review", "submission-ready"})
+                      or (scoped and any(p.parent.name == plan.parent.name for p in fixed_preregistrations)))
+            if locked:
+                values.update({plan.relative_to(root).as_posix(), (plan.parent / "budget.json").relative_to(root).as_posix()})
+                values.update(item["path"] for run in value.get("runs", []) for item in run.get("inputs", [])
+                              if isinstance(item, dict) and isinstance(item.get("path"), str))
+            if scoped or locked:
+                for prereg in preregistrations:
                     values.add(prereg.relative_to(root).as_posix())
+                    if prereg not in fixed_preregistrations:
+                        continue
                     frozen = json.loads(prereg.read_text(encoding="utf-8"))
                     values.update(item["path"] for item in frozen.get("files", [])
                                   if isinstance(item, dict) and isinstance(item.get("path"), str))
-                values.update(item["path"] for run in value.get("runs", []) for item in run.get("inputs", [])
-                              if isinstance(item, dict) and isinstance(item.get("path"), str))
         except (ValueError, TypeError, AttributeError):
             pass  # A draft plan can be repaired; it grants no execution authority.
-    registry = root / "experiments/registry.jsonl"
-    if registry.is_file():
+    registries = [root / "experiments/registry.jsonl", *sorted((root / "experiments/papers").glob("P[0-9][0-9]/registry.jsonl"))]
+    for registry in registries:
+        if not registry.is_file():
+            continue
         try:
             for line in registry.read_text(encoding="utf-8").splitlines():
                 if line.strip():
@@ -68,6 +102,18 @@ def declared_outputs(root: Path) -> set[str]:
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     parts = PurePosixPath(relative).parts
+    from scripts.paper_execution import enabled,selected,ALIASES
+    if enabled(root):
+        paper = selected(root)
+        if value in ALIASES:
+            return True
+        if len(parts) >= 4 and parts[:2] in {("experiments","papers"),("claims","papers")}:
+            if parts[2] != paper or (parts[:2] == ("experiments","papers") and parts[3] in {"registry.jsonl","datasets.jsonl"}):
+                return True
+        if len(parts) >= 2 and parts[0] == "papers" and re.fullmatch(r"P[0-9]{2}",parts[1]) and parts[1] != paper:
+            return True
+        if len(parts)==4 and parts[0]=="papers" and parts[2:]==("reports","runtime-evidence-catalog.json"):
+            return True
     if len(parts) == 2 and parts[0] == "data" and re.fullmatch(r"discovery-broad-auto-\d{8}T\d{12}Z\.json", parts[1]):
         return True
     if value == "intake/constraints.json":
@@ -91,6 +137,8 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
         child = root.joinpath(*parts[:5])
         child_relative = PurePosixPath(*parts[5:]).as_posix()
         child_lower = child_relative.casefold()
+        if _controlled_paper_record(child_lower):
+            return True
         if child_lower.startswith(("state/", "reviews/independent/", "reviews/codex/", "data/quality/", "data/acquisition/")) or child_lower in {
                 "evidence/literature-api-ledger.jsonl", "evidence/search-log.jsonl", "reviews/decision-log.md"}:
             return True

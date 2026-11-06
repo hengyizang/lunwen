@@ -1,4 +1,4 @@
-"""All 17 skills reach actual API/CLI roles without provider requests."""
+"""All 17 pinned skills remain explicitly reachable through API/CLI roles."""
 import json
 import re
 from pathlib import Path
@@ -6,46 +6,109 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from scripts import api_orchestrator as api, autopilot, ccfa_runtime as runtime
+from scripts import ccfa_humanization as humanization
+from scripts.research_artifacts import read, record, sha, write
 
 class CCFAModelHandoffTests(unittest.TestCase):
-    def test_every_skill_and_full_references_reach_each_existing_authorized_role(self):
-        with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
-            project = Path(directory)
-            (project / "state").mkdir()
-            state = {"stage": "topic-intelligence", "gate": "G1", "active_paper": "P01"}
-            (project / "state/run.json").write_text(json.dumps(state))
-            (project / "program").mkdir()
-            (project / "program/core-thesis.json").write_text(json.dumps({"doctoral_question": "Synthetic integration fixture, not a real thesis."}))
-            config = {"contract": "G1", "gate": "G1", "author_task": "Source-bound integration fixture"}
-            with patch.object(api, "project_root", return_value=project), patch.object(api, "stage_config", return_value=config), patch("scripts.model_runtime.call", side_effect=AssertionError("No model call authorized")):
-                for identifier in (row["id"] for row in runtime.registry()["routes"]):
-                    with self.subTest(skill=identifier):
-                        packet = runtime.prepare(project, {"schema_version": "1.0", "id": identifier,
-                            "skill": identifier, "task": "Author preference: predetermined positive verdict.",
-                            "stage": state["stage"], "paper_id": "P01", "inputs": []})
-                        prompts = {
-                            "api planner": api.planning_prompt("fixture", state["stage"], ""),
-                            "api writer": api.writer_prompt("fixture", state["stage"], ""),
-                            "api critic": api.critic_prompt("fixture", state["stage"], ""),
-                            "api remediation": api.remediation_prompt("fixture", state["stage"], "", "{}"),
-                            "cli planner": autopilot.planner_prompt("fixture", state, config, ""),
-                            "cli writer": autopilot.writer_prompt("fixture", state, config, "", autopilot.ROOT / "plan.md"),
-                            "cli critic": autopilot.critic_prompt("fixture", state),
-                            "cli remediation": autopilot.remediation_prompt("fixture", state, autopilot.ROOT / "review.json")}
-                        for name, prompt in prompts.items():
-                            self.assertIn("CCFA PROJECT ADAPTER", prompt, name)
-                            self.assertIn("Smoke-Test Scope", prompt, name)
-                            self.assertIn(runtime.source("ccf-humanization/SKILL.md"), prompt, name)
-                            for guide in packet["complete_skill_guidance"]:
-                                if guide["skill"] != "ccf-humanization":
-                                    self.assertIn(guide["text"], prompt, name)
-                                    for relative in runtime.reference_paths(guide["skill"], packet["request"]["task"]):
-                                        self.assertIn(runtime.source(relative), prompt, name)
-                            hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
-                            self.assertEqual(len(hashes), len(set(hashes)), name)
-                            self.assertEqual(prompt.count(runtime.source("ccf-humanization/SKILL.md")), 1, name)
-                            if "critic" in name:
-                                self.assertNotIn("Author preference: predetermined positive verdict.", prompt)
-                            else:
-                                self.assertIn("Author preference: predetermined positive verdict.", prompt)
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.project = Path(temporary.name)
+        self.state = {"stage": "topic-intelligence", "gate": "G1", "active_paper": "P01"}
+        write(self.project / "state/run.json", self.state)
+        write(self.project / "program/core-thesis.json", {
+            "doctoral_question": "Synthetic integration fixture, not a real thesis."})
+        self.config = {"contract": "G1", "gate": "G1", "author_task": "Source-bound integration fixture"}
+        for mocked in (
+            patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}),
+            patch.object(api, "project_root", return_value=self.project),
+            patch.object(api, "stage_config", return_value=self.config),
+            patch("scripts.model_runtime.call", side_effect=AssertionError("No model call authorized")),
+        ):
+            mocked.start()
+            self.addCleanup(mocked.stop)
+
+    def prompts(self):
+        stage = self.state["stage"]
+        return {
+            "api planner": lambda: api.planning_prompt("fixture", stage, ""),
+            "api writer": lambda: api.writer_prompt("fixture", stage, ""),
+            "api critic": lambda: api.critic_prompt("fixture", stage, ""),
+            "api remediation": lambda: api.remediation_prompt("fixture", stage, "", "{}"),
+            "cli planner": lambda: autopilot.planner_prompt("fixture", self.state, self.config, ""),
+            "cli writer": lambda: autopilot.writer_prompt("fixture", self.state, self.config, "", autopilot.ROOT / "plan.md"),
+            "cli critic": lambda: autopilot.critic_prompt("fixture", self.state),
+            "cli remediation": lambda: autopilot.remediation_prompt("fixture", self.state, autopilot.ROOT / "review.json"),
+        }
+
+    def prepare(self, identifier, *, full=False):
+        task = ("full-reference-review; " if full else "") + "Author preference: predetermined positive verdict."
+        references = runtime.reference_paths(identifier, full=True)
+        request = {"schema_version": "1.0", "id": identifier + ("-full" if full else "-scoped"),
+            "skill": identifier, "task": task, "stage": self.state["stage"], "paper_id": "P01", "inputs": []}
+        if references and not full:
+            request["references"] = references[:1]
+        return runtime.prepare(self.project, request)
+
+    def assert_role_boundaries(self, name, prompt):
+        self.assertIn("CCFA PROJECT ADAPTER", prompt)
+        self.assertEqual(prompt.count("native core preflight"), 1)
+        for binding in humanization.policy_receipt()["sources"]:
+            self.assertIn(binding["path"], prompt)
+            self.assertIn(binding["sha256"], prompt)
+        hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
+        self.assertEqual(len(hashes), len(set(hashes)))
+        if "critic" in name:
+            self.assertNotIn("Author preference: predetermined positive verdict.", prompt)
+        else:
+            self.assertIn("Author preference: predetermined positive verdict.", prompt)
+
+    def test_every_explicit_skill_reaches_all_roles_without_unrequested_preflight_bundles(self):
+        identifiers = [row["id"] for row in runtime.registry()["routes"]]
+        self.assertEqual(len(identifiers), 17)
+        for identifier in identifiers:
+            packet = self.prepare(identifier)
+            for name, render in self.prompts().items():
+                with self.subTest(skill=identifier, role=name):
+                    prompt = render()
+                    self.assert_role_boundaries(name, prompt)
+                    self.assertEqual(prompt.count(runtime.source(identifier + "/SKILL.md")), 1)
+                    for reference in packet["selected_references"]:
+                        self.assertIn(reference["text"], prompt)
+                        self.assertIn(reference["sha256"], prompt)
+                    baseline = runtime.source("ccf-humanization/SKILL.md")
+                    self.assertEqual(prompt.count(baseline), int(identifier == "ccf-humanization"))
+                    if identifier not in {"ccf-common", "ccf-humanization"}:
+                        self.assertNotIn(runtime.source("ccf-common/references/routing.md"), prompt)
+
+    def test_full_reference_requests_reach_each_existing_authorized_role(self):
+        for identifier in (row["id"] for row in runtime.registry()["routes"]):
+            packet = self.prepare(identifier, full=True)
+            references = runtime.reference_paths(identifier, packet["request"]["task"], full=True)
+            for name, render in self.prompts().items():
+                with self.subTest(skill=identifier, role=name):
+                    prompt = render()
+                    self.assert_role_boundaries(name, prompt)
+                    self.assertEqual(prompt.count(runtime.source(identifier + "/SKILL.md")), 1)
+                    for relative in references:
+                        self.assertIn(runtime.source(relative), prompt)
+                    for binding in humanization.prompt_sources(self.state["stage"], full=True):
+                        relative = binding["path"].removeprefix(runtime.VENDOR + "/")
+                        self.assertEqual(prompt.count(runtime.source(relative)), 1)
+
+    def test_changed_pinned_task_guidance_is_rejected_by_every_role(self):
+        self.prepare("ccf-experiment-designer")
+        active = self.project / "reports/ccfa-tasks/active.json"
+        binding = read(active)
+        target = self.project / binding["path"]
+        packet = read(target)
+        packet["complete_skill_guidance"][-1]["text"] += "\nChanged fixture guidance."
+        packet["packet_id"] = runtime.digest({key: value for key, value in packet.items() if key != "packet_id"})
+        write(target, packet)
+        write(active, {**binding, "sha256": sha(target)})
+        # Even correctly bound controller bytes cannot change the pinned source.
+        record(self.project, [target, active], "scripts/ccfa_runtime.py")
+        for name, render in self.prompts().items():
+            with self.subTest(role=name), self.assertRaisesRegex(ValueError, "task guidance changed"):
+                render()
 

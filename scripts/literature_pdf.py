@@ -18,7 +18,7 @@ import tempfile
 from urllib.parse import quote
 
 from scripts import literature_reading as reading, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest
 
 REQUEST = "program/literature-pdf.json"
 OUTPUT = "reports/literature-pdf"
@@ -340,21 +340,18 @@ def refresh(project: Path, request_path=REQUEST):
     write(target, report)
     dashboard.write_text(html_text(project, report), encoding="utf-8")
     outputs.extend([target, dashboard])
-    write(manifest_path, {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(project / request_path)},
-        "fingerprint": prepared["fingerprint"], "implementation_sha256": sha(Path(__file__)),
-        "outputs": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in outputs]})
-    record(project, [*outputs, manifest_path], MODULE)
+    seal_manifest(project, outputs, manifest_path, MODULE,
+        {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(project / request_path)},
+         "fingerprint": prepared["fingerprint"]})
     return {"report": target.relative_to(project).as_posix(), "html": dashboard.relative_to(project).as_posix(), "cache_hit": False, **report}
 
 
 def validate_saved_report(project: Path, request_path=REQUEST):
-    from scripts.output_provenance import current_origin
     project = Path(project).resolve()
     prepared = _prepare(project, _request(project, request_path))
     directory = path_in(project, OUTPUT + "/" + prepared["id"], exists=False)
     manifest_path = path_in(project, OUTPUT + "/" + prepared["id"] + "/manifest.json")
-    origin = current_origin(project, manifest_path)
-    if origin.get("status") != "tracked" or origin.get("model") != MODULE or origin.get("family") != "other":
+    if not matches_origin(project, manifest_path, model=MODULE, family="other"):
         raise ValueError("PDF view needs current deterministic output provenance")
     manifest = read(manifest_path)
     if (manifest.get("fingerprint") != prepared["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__))

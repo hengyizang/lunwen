@@ -1,6 +1,6 @@
 ---
 name: package
-description: Build and inspect a deterministic manual journal-upload package for a paper that has passed its G5 human gate. Use when preparing final submission files; never log into, upload to or submit through a journal portal.
+description: Build and inspect a deterministic manual journal-upload package after the paper passes its submission-phase G5 checks and recorded automated decision. Never log into, upload to or submit through a journal portal.
 ---
 
 # Package for manual submission

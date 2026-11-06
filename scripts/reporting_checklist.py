@@ -3,20 +3,18 @@
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import json
-import os
-import re
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
+    from scripts.research_artifacts import write as atomic_json, paper_audit_cli
     from scripts.citation_audit import manuscript_digest
     from scripts.ref_verify_adapter import canonical_manuscript
 except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import write as atomic_json, paper_audit_cli
     from citation_audit import manuscript_digest  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
 
@@ -120,31 +118,8 @@ def validate_saved_report(paper: Path) -> list[str]:
     return errors
 
 
-def atomic_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        json.dump(value, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = handle.name
-    os.replace(temporary, path)
-
-
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--project", required=True)
-    parser.add_argument("--paper", required=True)
-    args = parser.parse_args()
-    paper = PROJECTS_ROOT / args.project / "papers" / args.paper
-    try:
-        if not paper.is_dir() or not re.fullmatch(r"P[0-9]{2}", args.paper):
-            raise ReportingChecklistError("project/paper does not exist")
-        report = audit(paper)
-        atomic_json(paper / "reviews" / "reporting-guideline.json", report)
-        print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 0 if report["status"] == "pass" else 1
-    except ReportingChecklistError as exc:
-        print(f"error: {exc}")
-        return 2
+    return paper_audit_cli(__doc__, PROJECTS_ROOT, audit, "reporting-guideline.json", ReportingChecklistError)
 
 
 if __name__ == "__main__":

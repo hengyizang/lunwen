@@ -38,7 +38,7 @@ The controller rejects source changes during a critique, cached criticism,
 unverified model identity and same-family author/critic combinations. A final
 receipt requires its matching initial phase and the actual author dispositions.
 
-At G5 the same native H01–H26, AD01–AD08 and CFH01–CFH38 records are checked again
+At final submission-phase G5 the same native H01–H26, AD01–AD08 and CFH01–CFH38 records are checked again
 at the gate and packaging. Their presence is record coverage, not semantic
 clearance. Scientific sources changing after the last critique require a real
 fresh critique; editing a score, log or receipt cannot substitute for one.

@@ -29,6 +29,10 @@
     "dependency_bindings"
   ],
   "properties": {
+    "writing_phase": {
+      "enum": ["scientific", "submission"],
+      "description": "Scientific drafting precedes explicit submission preparation; final G5 requires submission."
+    },
     "schema_version": {
       "const": "2.0"
     },

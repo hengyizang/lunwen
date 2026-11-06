@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Hash-bound screening ledger, PRISMA flow and interchange exports.
 
-This is an execution layer over existing literature receipts. Only a named
-human can make study-level inclusion/exclusion decisions. No pending decision
+This is an execution layer over existing literature receipts. Study-level inclusion/exclusion decisions retain their actual screening identity and evidence. No pending decision
 is silently converted to included or excluded.
 """
 from __future__ import annotations
@@ -76,7 +75,7 @@ def seed(project: Path, receipt_ids: list[str], mode: str, criteria: str, actor:
         raise ValueError("refusing to overwrite existing screening decisions")
     protocol_record=None
     if mode in {"deep","audit"}:
-        if protocol is None:raise ValueError("deep/audit requires a preregistered or named-human-approved protocol")
+        if protocol is None:raise ValueError("deep/audit requires a preregistered or author-approved protocol")
         value=json.loads(protocol.read_text(encoding="utf-8"))
         if value.get("status") not in {"registered","author-approved"} or not str(value.get("approved_by") or value.get("registration_id") or "").strip():raise ValueError("protocol needs registered/author-approved status and named authority")
         protocol_record={"path":protocol.relative_to(project).as_posix(),"sha256":sha256_file(protocol),"status":value["status"]}
@@ -182,7 +181,7 @@ def assess(project: Path, ledger_path: Path) -> dict[str, Any]:
             "pending_decisions":pending,"complete":pending==0,"exclusion_reasons":dict(sorted(reasons.items())),
             "search_receipt_ids":ledger["receipt_ids"],
             "screening_method":"dual independent + third adjudicator on conflict" if ledger["mode"] in {"deep","audit"} else "named single screening",
-            "warning":"PRISMA-style accounting remains subject to completed human screening and checklist verification."}
+            "warning":"PRISMA-style accounting remains subject to completed independently attributed screening and checklist verification."}
 
 
 def _svg(counts: dict[str, Any]) -> str:

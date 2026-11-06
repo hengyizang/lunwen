@@ -54,6 +54,13 @@ class AutomatedQualityTests(unittest.TestCase):
             automated_quality.run(self.project)
         self.assertFalse((self.project / "data/quality/d1-confirmation.json").exists())
 
+    def test_supplemental_controller_accepts_its_actual_p02_identity(self):
+        (self.project/"papers/P01").rename(self.project/"papers/P02")
+        self.state.write_text(json.dumps({"stage":"experiment-design","gate":"G3","status":"awaiting_work",
+            "active_paper":"P02","paper_count":1,"supplemental_context":{"paper_id":"P02"}}),encoding="utf-8")
+        result=automated_quality.run(self.project)
+        self.assertNotIn("paper directories do not match the current project state",result["blockers"])
+
     def test_stale_machine_record_refreshes_before_freeze_and_preserves_history(self):
         report = research_quality.create_data_quality_report(self.project, "d1", "data/raw/dataset.csv", actor="test")
         report_path=self.project / "data/quality/d1.json"

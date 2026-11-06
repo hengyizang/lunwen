@@ -10,6 +10,8 @@ automated records. Preserve every
 scientific, source-rights, budget, identity and execution check; unknown
 evidence remains unknown. Missing rights, data or successful execution block the
 affected work; they are never converted into invented human approval.
+Quality reports at G1/G2 require their human-topic-review flag; G3/G4/G5 use
+automated decisions. A legacy report flag never creates or replaces authority.
 
 Current review-remediation contracts: [REVIEW-REMEDIATION.md](../docs/REVIEW-REMEDIATION.md).
 Formal G1-G5 quality reports use schema 1.2 factual assessments. The current
@@ -26,7 +28,7 @@ the existing G1-G5 contracts. Missing inputs block; completeness never proves
 scientific validity, doctoral merit or Q1 acceptance.
 
 Experiment/evidence extensions: [RESEARCH-EXTENSIONS.md](../docs/RESEARCH-EXTENSIONS.md).
-Declared comparability, pinned baseline adoption, fine-grained reading anchors and review worklists are revalidated at research gates. Actual topics, data, method trials and independent human ratings remain required; no template or regression fixture fills those gaps. Model routing and effort remain unchanged.
+Declared comparability, pinned baseline adoption, fine-grained reading anchors and review worklists are revalidated at research gates. Actual topics, data and method trials remain required; optional human calibration needs real attributed ratings when requested. No template or regression fixture fills those gaps. Model routing and effort remain unchanged.
 
 Follow-up quality input and receipt contracts: [RESEARCH-IMPROVEMENTS-FOLLOWUP.md](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Changed frozen canonical manuscripts require a complete revision ledger at G5; statistics require explicit sample-flow/missingness/repetition declarations bound to actual sources. Optional research-support and review-packet inputs require fresh protected audits when present. Their reports and human ratings never establish scientific completion automatically.
 
@@ -38,7 +40,7 @@ Required:
 - target application routes and time horizon;
 - available skills, time, budget, compute, data and equipment;
 - keep system availability separate from human time: cloud-only projects may explicitly use `human_review_mode: on_request` with `weekly_hours: null`; `system_execution_hours_per_day: 24` describes cloud automation, never 168 hours of weekly human work. Human topic decisions apply at G1/G2; G0 uses its recorded automated checks;
-- an explicit cumulative model/API total and cloud compute/cash totals, preserving all spending history. The model default is CNY 300; configured totals are never silently increased. No per-paper ceiling, fixed-tranche increment or manual billing gate is added;
+- explicit cumulative model/API and cloud compute/cash totals with their actual authorization history; the model default is CNY 300 and configured totals never increase automatically. Preserve every charge, failure and bounded reservation under [TOTAL-COST-POLICY.md](../docs/TOTAL-COST-POLICY.md); do not add fixed tranches, per-paper/per-call caps, paid opt-ins or routine manual billing gates. A material budget/date amendment uses the existing hash-bound [operating amendment](../docs/OPERATING-CONSTRAINT-AMENDMENTS.md) without rewriting prior authority or costs;
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
@@ -66,16 +68,33 @@ Required:
 
 Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.” Reject a proposed topic that lacks a defensible original contribution or doctoral depth, regardless of its direction ranking score.
 
+These are the final G1 decision requirements. During exploration, the novelty
+matrix may remain `status: in_progress`, with `search_saturation.status` set to
+`exploring` or `reopened`. Preserve unresolved gaps, affected claim IDs and next
+searches; retain historical rounds when the current no-new-work count resets.
+Do not invent completed chaining, empty gaps or two saturation rounds.
+`research_quality.py novelty-check` checks a draft without granting a gate;
+`--for-gate` requires the current decision-ready source-bound record. Schema 1.1
+records the actual bounded stopping rule, retrieval dispositions and remaining
+limitations rather than requiring universal saturation. Formal G1/G2/G5 novelty
+decisions still require the actual current independent assessments, verified
+candidate-to-prior-work differences and resolution of blocking scientific
+objections. An honest search limit never supplies missing evidence or novelty.
+
 Every hypothesis also requires scientific_value with located importance evidence
 and decision_test with a focal observable prediction and distinguishable continue,
 revise and stop conditions. The actual problem value and identifiability remain
 scientific judgments. See the strengthened research-hypotheses schema.
 
 The same register requires innovation_screening: explicit assumptions and source
-gaps, all candidate-pair differences and shared failure dependencies, retained
-generation rounds, prior data exposure, candidate-level dispositions and honest
-evaluation uncertainty. The native audit rechecks bindings and optional matrix
-calculations. Existing independent critics assess scientific meaning; records or
+gaps, decision-relevant candidate differences and shared failure dependencies,
+retained generation rounds, prior data exposure, candidate-level dispositions
+and honest evaluation uncertainty. Exploratory mode retains the rounds actually
+performed. Final decision mode requires a real post-evidence round and either
+full pair coverage or a justified focused policy comparing every focal candidate
+with every alternative. Narrative evaluation may omit numerical criteria and
+ratings. The native audit rechecks bindings and optional matrix calculations.
+Existing independent critics assess scientific meaning; records or
 scores cannot grant novelty, select a topic, override a gate or authorize spend.
 Use docs/INNOVATION-SCREENING.md. Keep all candidates within one doctoral scope.
 
@@ -109,25 +128,45 @@ and frozen scientific records; a writing revision cannot authorize topic drift.
 
 ## Experiment design — G3
 
-For applicable tabular/causal studies, use [empirical data contracts](../docs/EMPIRICAL-DATA-WORKFLOW.md)
+After G2, new unexecuted portfolios use one paper at a time through G3–G5.
+The requirements below apply to the active paper. Native canonical plan, budget
+declaration, ledger and source-bound dataset snapshot paths are
+`experiments/papers/Pxx/`. Legacy names used below resolve to the active canonical
+paths in native prompts and helpers; sealed legacy work retains its original
+paths and scope. Migration refuses previously frozen or executed protocols.
+Other papers need not have experiments or results yet. All share the same
+doctoral scope and cumulative project totals; no copied budget creates money.
+
+An explicit `plan.json.research_phase: exploratory` selects a bounded scientific
+experiment. Missing phase remains `confirmatory`. The plan's `exploration`
+object requires `unknown`, `discriminating_test`, `continue_if`, `revise_if`,
+`stop_if`, `claim_limit` and the boolean `prior_outcomes_seen`. It still needs
+actual rights/provenance, data/input hashes, remaining cumulative authority, a
+machine-frozen plan and the native runner with independent initial/final audits.
+Do not fill unknown power or a final baseline suite merely to start a justified
+exploration. The detailed confirmatory requirements below remain mandatory
+before the separate formal protocol runs. Exploration never waives G3 or permits
+arbitrary commands, fabricated outcomes or expanded claims.
+
+For confirmatory tabular/causal studies, use [empirical data contracts](../docs/EMPIRICAL-DATA-WORKFLOW.md)
 within the existing paper contract. Freeze dictionaries, explicit cleaning,
 complete calendars, source vintages and all estimator specifications. Prepared
 data do not authorize estimation. Configured diagnostics and current numerical
 reporting remain required at G4/G5; unsupported estimators require a reviewed adapter.
 
-The empirical requirements below apply to empirical papers. Actual Meta/theory
+The empirical requirements below apply to confirmatory empirical papers. Actual Meta/theory
 identities instead use the positive protocol, source, uncertainty/proof,
 isolated-replay and frozen-input requirements in
 [SCIENTIFIC-STUDY-ROUTES.md](../docs/SCIENTIFIC-STUDY-ROUTES.md). They still need
 the same automated G3 decision, sealed execution plan and actual budget authority. Never fabricate empirical
 datasets, baseline classes or power calculations for another research design.
 
-Required:
+Required for confirmatory empirical work:
 
-- `data/datasets.jsonl` with licenses and provenance;
+- selected dataset rows with licenses and provenance: independent execution captures `data/datasets.jsonl` rows in the current paper's immutable `experiments/papers/Pxx/datasets.jsonl` snapshot before sealing; legacy protocols retain their original manifest. Raw data and rights evidence remain canonical and cannot be changed after freezing;
 - a deterministic `data/quality/<dataset_id>.json` for every selected dataset, bound to current local file hashes and checking complete-scan status, missingness, duplicates, imbalance and split/group overlap where applicable, plus a separate protected `<dataset_id>-confirmation.json` identifying the automated checks, unresolved warnings and current report hash;
 - `experiments/plan.json` conforming to `schemas/experiment-plan.schema.json`;
-- one or more JSON design files under `papers/Pxx/experiments/` for every configured paper, each conforming to `schemas/paper-experiment-design.schema.json`, with every global plan run assigned to exactly one design;
+- one or more JSON design files under the active `papers/Pxx/experiments/`, each conforming to `schemas/paper-experiment-design.schema.json`, with every selected paper plan run assigned to exactly one design;
 - `experiments/budget.json` with `status: ready_for_review` and `hard_ceiling_usd`;
 - hypotheses; traceable simple, domain-standard and strong-recent baselines with source, version, license and comparable tuning budgets; ablations; splits; primary/secondary metrics; estimands; practical-significance thresholds; effect sizes; confidence intervals; multiplicity handling; power/precision rationale; at least three seeds for stochastic designs; robustness, negative controls and stopping rules;
 - leakage, privacy, bias and external-validity assessment.
@@ -139,10 +178,22 @@ Freeze the confirmatory plan before final runs. Label later exploration as explo
 
 ## Experiment execution — G4
 
-Meta/theory use their dedicated computed study evidence and named
-confirm_study_validation decision in place of empirical baseline/power reports.
-Every route requires exact approved executor receipts, complete claim coverage,
+Validate the active paper's registered attempts and contracted claims. Its claim
+matrix is `claims/papers/Pxx/claim-evidence.csv`; its reproducibility report and
+quality records stay with that paper. Failed attempts from every paper and
+supplemental scope continue to consume the same cumulative project total.
+
+Meta/theory use their dedicated computed study evidence and protected automated
+study-validation confirmation in place of empirical baseline/power reports.
+Confirmatory routes require exact approved executor receipts, complete claim coverage,
 isolated replay, unchanged inputs and independent scientific audits.
+
+Exploratory G4 checks the exact registered attempt and bounded test, preserving
+all failures, outputs, decisions and costs. Checked continuation archives that
+round and returns the same paper to G3. The next formal plan binds
+`prior_exploration: [{path, sha256}]` and `prior_outcomes_seen: true`; its separate
+protocol, run IDs and outputs cannot relabel exploratory results as confirmatory.
+The confirmatory requirements below apply before result-bearing G5 claims.
 
 Required:
 
@@ -151,13 +202,33 @@ Required:
 - `claims/claim-evidence.csv` exactly covering every contracted unique claim; supported claims reference successful registered analyses;
 - `reports/reproducibility.md`;
 - statistical audit and sensitivity analysis.
-- `papers/Pxx/baseline-reproduction.json` for every paper, covering the G3-declared domain-standard and strong-recent comparators with exact successful registry attempt IDs, comparable protocols, unchanged source URLs, predeclared tolerances and the complete current output set of those attempts;
-- `papers/Pxx/clean-room-reproduction.json` for every paper, using the exact G3-declared disjoint run IDs, exact successful attempt IDs, executor-issued isolation receipts from a digest-pinned, network-disabled container, identifier-independent registry environment digests, predeclared numeric equivalence checks and the complete current output set;
+- the active `papers/Pxx/baseline-reproduction.json`, covering the G3-declared domain-standard and strong-recent comparators with exact successful registry attempt IDs, comparable protocols, unchanged source URLs, predeclared tolerances and the complete current output set of those attempts;
+- the active `papers/Pxx/clean-room-reproduction.json`, using the exact G3-declared disjoint run IDs, exact successful attempt IDs, executor-issued isolation receipts from a digest-pinned, network-disabled container, identifier-independent registry environment digests, predeclared numeric equivalence checks and the complete current output set;
 - protected `papers/Pxx/reproduction-confirmation.json`, created by the automated control plane after both reproduction reports and deterministic checks pass; its hashes become stale if either report changes. It does not assert human review or certify scientific interpretation.
 
 Do not write a favorable conclusion before the claim matrix and negative results are visible.
 
 ## Writing and review — G5
+
+Scientific drafting is the default. A frozen paper contract can declare its
+initial `writing_phase`; the controller stores the current paper phase in the
+existing `state.writing_phases`, without editing the frozen contract. Scientific
+drafting retains source/fact/citation/numeric/claim integrity, the result-to-claim
+argument, current revision records and fresh independent initial/final audits.
+It does not require every editorial criterion, venue check or package file each
+cycle, and cannot pass final G5. Passing scientific checks and both audits lets
+the controller record `submission` for the next G5 cycle. Submission runs all
+final requirements below and fresh submission audits; scientific receipts cannot
+approve the final package. Existing sealed legacy submission states keep that
+scope. No extra human stage decision is required.
+
+Every G1-G5 cycle also appends the actual current decision to
+`program/research-notebook.json`: `cycle_id`, stage/paper, phase, outcome,
+discriminating test, decision, rationale, next action, evidence IDs, failure
+condition and stop rule under the relevant question. Pending/unchanged decisions
+can state explicit missing evidence; changed claims require actual evidence.
+The final independent audit binds that current record. G0 is exempt, and this
+record adds no report, paid role or automatic claim of scientific improvement.
 
 Apply [evidence-first writing](../docs/EVIDENCE-FIRST-WRITING.md) in existing
 records: current paragraph takeaway/warrant preparation, located three-axis
@@ -174,7 +245,14 @@ location. Keep the review/synthesis scientific checklist when applicable even if
 the publisher calls the paper Research. The dedicated study routes supply the
 applicable Meta/formal-theory G3/G4 checks; unsupported methods remain blocked.
 
-The complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and human gates remain protected.
+At submission, the complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. An extra remediation call is unnecessary only when the initial independent audit has no actionable findings and the writer already supplied all applicable dispositions. The fresh independent final audit and decision log remain required. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and G1/G2 topic decisions remain protected.
+
+A source-bound internal review may request a separate `Ixxx` supplemental study;
+real external reviewer requests retain `Rxxx`. Both use the existing child
+protocol, executor and cumulative total. A `supplemental_protocol` audit can seal
+only that reviewed child design. Its automated result confirmation records
+evidence checks, not scientific validity or parent G5 approval. Full parent
+manuscript and independent G5 audits resume after actual results are reported.
 
 Required:
 
@@ -208,11 +286,11 @@ Required:
 - an applicable reporting-guideline checklist routed from `references/reporting-guidelines.md`, with manuscript locations and explicit reasons for genuinely non-applicable items.
 - a current `reviews/paper-facts.json` plus passing `reviews/manuscript-audit.json`, covering source-bound facts, canonical claims, allowed versus actual inference strength, result status, title/abstract/question/results/conclusion anchors, theory→measurement chains, paragraph argument roles, terminology/acronyms and mathematical symbols;
 - current concern-card artifacts for the final simulated or external review set: original comments, one card per comment, coverage JSON, internal full response, concise venue-budgeted response and editor/Area Chair summary;
-- when Word is canonical, `manuscript/main.docx` plus current `reviews/docx-build.json` bound to non-Claude Markdown/metadata sources and a named completed visual inspection.
+- when Word is canonical, `manuscript/main.docx` plus current `reviews/docx-build.json` bound to non-Claude Markdown/metadata sources and an actual source-bound automated visual inspection.
 
 Result-bearing charts still require deterministic data/run provenance. An optional conceptual illustration from GPT Image or a user-operated ChatGPT web session is separate: the source/prompt hash, claimed model ID, named visual inspection and AI-use disclosure location must be registered before it can appear in the package. Such imagery cannot substantiate a result, replace a method/data chart or hide uncertainty.
 
-Repeat G5 for `state.active_paper`. A checked machine decision moves to the next configured paper; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP and manifest. Actual publisher submission remains outside this research workflow; agents do not log into portals, upload or submit.
+Complete G5 for `state.active_paper`. In independent execution, a checked machine decision moves the next configured paper to G3; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP and manifest. Actual publisher submission remains outside this research workflow; agents do not log into portals, upload or submit.
 
 ## Executable experiment evidence supplement (G3 and G4)
 
@@ -223,6 +301,6 @@ existing protocol; they alter no execution authority. Protected G4 summaries
 expose every linked numeric decision while retaining unresolved alternatives.
 Meta/theory retain their dedicated route contracts.
 
-G3 also requires each paper's `experiment-evidence-plan.json`, following `schemas/experiment-evidence-plan.schema.json` and [the experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md). It binds claims to hypotheses, datasets, outcomes, exact comparator runs, all seeds, independent units, inference scope, practical thresholds and multiplicity families. Every design baseline, ablation, negative control and robustness condition must have executable coverage. Preregistration includes this plan; G3 approval binds every paper's frozen preregistration hash. Pilot assertions and technical success criteria are locked before full runs.
+G3 also requires the active empirical paper's `experiment-evidence-plan.json`, following `schemas/experiment-evidence-plan.schema.json` and [the experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md). It binds claims to hypotheses, datasets, outcomes, exact comparator runs, all seeds, independent units, inference scope, practical thresholds and multiplicity families. Every design baseline, ablation, negative control and robustness condition must have executable coverage. Preregistration includes this plan; the paper-scoped G3 approval binds that paper's frozen preregistration hash. Legacy batch approvals retain their original scope. Pilot assertions and technical success criteria are locked before full runs.
 
-At G4 the cloud control plane computes `papers/Pxx/experiment-evidence.json` from exact successful executor receipts. Claims must list every linked `comparison_ids` and source `analysis_ids`; supported claims cannot omit adverse or inconclusive confirmatory comparisons. The numerical report cannot be written by a model. Successful execution, a small p-value or passing software acceptance never establishes novelty, causal identification, scientific completion, doctoral merit or journal acceptance. Keep the named human gates and independent scientific audits.
+At G4 the cloud control plane computes `papers/Pxx/experiment-evidence.json` from exact successful executor receipts. Claims must list every linked `comparison_ids` and source `analysis_ids`; supported claims cannot omit adverse or inconclusive confirmatory comparisons. The numerical report cannot be written by a model. Successful execution, a small p-value or passing software acceptance never establishes novelty, causal identification, scientific completion, doctoral merit or journal acceptance. Keep the G1/G2 human topic decisions and independent scientific audits.

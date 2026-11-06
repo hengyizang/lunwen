@@ -183,6 +183,183 @@ class MetaNumericalTests(unittest.TestCase):
 
 
 class SupplementalGuardTests(unittest.TestCase):
+    def internal_candidate(self):
+        """Protected synthetic internal finding, not an external reviewer event."""
+        from scripts import review_receipts
+        path=self.parent/"papers/P01"/supplemental.PROPOSAL
+        original=read(path)
+        path.unlink()
+        audit={"verdict":"revise","fatal_findings":[],"major_findings":["The mechanism needs a matched ablation to distinguish the stated competing explanation."],
+               "minor_findings":[],"missing_evidence":[],"remediation_steps":[],"uncertainty":["Synthetic software fixture; no real scientific review."]}
+        identity={"provider":"uuapi-anthropic","family":"anthropic","requested_model":"claude-synthetic",
+                  "reported_model":"claude-synthetic","completion_status":"completed","cache_hit":False}
+        source=self.parent/"reviews/independent/internal-trigger-initial.json"
+        write(source,audit)
+        review_receipts.seal_phase(self.parent,stage="writing-and-review",run_id="internal-trigger",phase="initial",audit_path=source,
+            prompt="Synthetic internal finding fixture.",identity=identity,writer_family="openai",
+            materials=review_receipts.material_snapshot(self.parent,"writing-and-review","P01"))
+        trigger=supplemental.internal_trigger_context(self.parent,"P01")
+        ids=[row["comment_id"] for row in trigger["findings"]]
+        proposal={**original,"trigger_kind":"internal_review","round_id":trigger["round_id"],"source_review":trigger["source_review"],
+                  "comment_ids":ids,"comment_dispositions":[{"comment_id":key,"requires_experiment":True,
+                    "rationale":"Test the located competing explanation from the actual internal finding."} for key in ids]}
+        write(path,proposal)
+        child=self.parent/"experiments/supplemental/P01"/proposal["round_id"]/proposal["scope_id"]
+        fixtures.make_study(child,"meta_analysis",analysis_phase="exploratory")
+        supplemental.prepare(self.parent,"P01")
+        return child,proposal,identity
+
+    def protocol_review(self,identity):
+        from scripts import review_receipts
+        audit={"verdict":"pass-with-conditions","fatal_findings":[],"major_findings":[],"minor_findings":[],
+               "missing_evidence":[],"remediation_steps":[],"uncertainty":["Protocol-only software fixture; no parent G5 completion."]}
+        for phase in ("initial","final"):
+            path=self.parent/f"reviews/independent/internal-protocol-{phase}.json"
+            write(path,audit)
+            review_receipts.seal_phase(self.parent,stage="writing-and-review",run_id="internal-protocol",phase=phase,
+                audit_path=path,prompt="Independently assess the exact pending protocol, not parent results.",identity=identity,
+                writer_family="openai",materials=review_receipts.material_snapshot(self.parent,"writing-and-review","P01"),
+                notes=[] if phase=="final" else None)
+
+    def test_internal_followup_does_not_require_or_invent_an_external_round(self):
+        child,proposal,_=self.internal_candidate()
+        with patch.object(reviewer_rounds,"_index",side_effect=AssertionError("An internal review must not look up an external round")):
+            manifest,intake=supplemental.current(self.parent,"P01")
+            value,found,_=supplemental.candidate(self.parent,"P01")
+        self.assertEqual((manifest["round_id"],manifest["kind"]),("I001","internal_review"))
+        self.assertEqual(found,child)
+        self.assertEqual(value,proposal)
+        self.assertTrue(all(row["comment_id"].startswith("internal-") for row in intake["comments"]))
+
+    def test_internal_protocol_is_automatically_sealed_only_after_both_actual_review_phases(self):
+        from scripts import review_receipts
+        child,proposal,identity=self.internal_candidate()
+        original={name:(self.parent/name).read_bytes() for name in ("experiments/plan.json","papers/P01/preregistration.json")}
+        with patch("scripts.experiment_runner.execute",side_effect=AssertionError("Sealing a protocol never executes it")):
+            blocked=supplemental.automatic_approval(self.parent,"P01","software-test")
+            self.assertEqual(blocked["status"],"protocol_review_or_inputs_pending")
+            self.assertEqual(read(child/"state/run.json")["gate"],"G3")
+            self.protocol_review(identity)
+            self.assertTrue(any("protocol-only" in e for e in review_receipts.validate_gate(self.parent,"G5","P01")))
+            self.assertEqual(review_receipts.validate_gate(self.parent,"G5","P01",expected_purpose="supplemental_protocol"),[])
+            result=supplemental.automatic_approval(self.parent,"P01","software-test")
+        self.assertEqual(result["status"],"protocol_sealed",result)
+        control=supplemental.controls(self.parent,"P01",proposal["round_id"])[0][1]
+        self.assertEqual(control["decision_kind"],"automated")
+        self.assertFalse(control["human_confirmation"])
+        self.assertEqual(control["actor"],"deterministic_control_plane")
+        self.assertTrue(control["independent_review"])
+        self.assertEqual(read(child/"state/run.json")["gate"],"G4")
+        for name,value in original.items():self.assertEqual((self.parent/name).read_bytes(),value)
+        self.assertEqual(read(self.parent/"state/run.json")["gate"],"G5")
+        self.assertEqual(supplemental.automatic_confirmation(self.parent,"P01","software-test")["status"],"execution_pending")
+
+    def test_changed_child_protocol_invalidates_the_automatic_decision(self):
+        child,_,identity=self.internal_candidate()
+        self.protocol_review(identity)
+        value=read(child/"papers/P01/study-protocol.json")
+        value["question"]+=" Changed after criticism."
+        write(child/"papers/P01/study-protocol.json",value)
+        result=supplemental.automatic_approval(self.parent,"P01","software-test")
+        self.assertEqual(result["status"],"protocol_review_or_inputs_pending")
+        self.assertEqual(read(child/"state/run.json")["gate"],"G3")
+
+    def test_parent_initial_audit_cannot_replace_the_child_protocol_initial_audit(self):
+        from scripts import review_receipts
+        child,_,identity=self.internal_candidate()
+        path=self.parent/"reviews/independent/internal-trigger-final.json"
+        write(path,{"verdict":"pass-with-conditions","fatal_findings":[],"major_findings":[],"minor_findings":[],
+            "missing_evidence":[],"remediation_steps":[],"uncertainty":["Synthetic protocol-only final audit."]})
+        review_receipts.seal_phase(self.parent,stage="writing-and-review",run_id="internal-trigger",phase="final",audit_path=path,
+            prompt="Assess the newly proposed child protocol.",identity=identity,writer_family="openai",
+            materials=review_receipts.material_snapshot(self.parent,"writing-and-review","P01"),
+            notes=["fixed: Proposed a scoped experiment for fresh protocol review; no scientific result is claimed."])
+        errors=review_receipts.validate_gate(self.parent,"G5","P01",expected_purpose="supplemental_protocol")
+        self.assertTrue(any("both assess" in error for error in errors),errors)
+        result=supplemental.automatic_approval(self.parent,"P01","software-test")
+        self.assertEqual(result["status"],"protocol_review_or_inputs_pending",result)
+        self.assertEqual(read(child/"state/run.json")["gate"],"G3")
+        self.protocol_review(identity)
+        self.assertEqual(supplemental.automatic_approval(self.parent,"P01","software-test")["status"],"protocol_sealed")
+
+    def test_automated_protocol_binds_raw_declarations_and_runner_rechecks_actual_bytes(self):
+        from scripts import review_receipts
+        child,_,identity=self.internal_candidate()
+        protocol_path=child/"papers/P01/study-protocol.json"
+        protocol=read(protocol_path)
+        old=protocol["extraction_file"]
+        relative="data/raw/extraction.json"
+        target=child/relative;target.parent.mkdir(parents=True,exist_ok=True)
+        (child/old).rename(target)
+        protocol["extraction_file"]=relative
+        write(protocol_path,protocol)
+        plan=read(child/"experiments/plan.json")
+        for run in plan["runs"]:
+            run["argv"]=[relative if arg==old else arg for arg in run["argv"]]
+            for item in run["inputs"]:
+                if item["path"]==old:item["path"]=relative
+                item["sha256"]=sha(child/item["path"])
+        write(child/"experiments/plan.json",plan)
+        snapshot=review_receipts.material_snapshot(self.parent,"writing-and-review","P01")
+        full=target.relative_to(self.parent).as_posix()
+        self.assertNotIn(full,{item["path"] for item in snapshot["files"]})
+        self.assertIn((full,sha(target)),{(r["path"],r["sha256"]) for r in snapshot["declared_raw_inputs"]})
+        self.protocol_review(identity)
+        result=supplemental.automatic_approval(self.parent,"P01","software-test")
+        self.assertEqual(result["status"],"protocol_sealed",result)
+        checked,_=runner.approved_plan(child,child/"experiments/plan.json",child/"experiments/budget.json")
+        self.assertEqual(checked,plan)
+        target.write_text(target.read_text()+"\n",encoding="utf-8")
+        with self.assertRaisesRegex(runner.ExperimentError,"Preregistered input changed"):
+            runner.approved_plan(child,child/"experiments/plan.json",child/"experiments/budget.json")
+
+    def test_unsealed_stale_internal_trigger_keeps_writer_and_critics_available(self):
+        from scripts import cloud_research_steps
+        path=self.parent/"papers/P01/manuscript/main.tex"
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_text("Original synthetic manuscript assessed by the trigger review.",encoding="utf-8")
+        _,_,identity=self.internal_candidate()
+        path.write_text("Changed synthetic manuscript after the trigger review.",encoding="utf-8")
+        with patch.object(cloud_research_steps,"acquire_data",return_value={"blockers":[]}), \
+                patch.object(supplemental,"resume",side_effect=AssertionError("unsealed protocol cannot execute")):
+            result=cloud_research_steps.before_cycle(self.parent,"writing-and-review")
+        self.assertFalse(result["control_only"],result)
+        self.assertEqual(result["blockers"],[])
+        self.assertEqual(result["supplemental"]["status"],"protocol_review_pending")
+        self.assertIn("source_material_changes",supplemental.audit_contract(self.parent,"writing-and-review"))
+        intake=supplemental.current(self.parent,"P01")[1]
+        self.assertIn("papers/P01/manuscript/main.tex",{row["path"] for row in intake["source_material_changes"]})
+        # A historical concern is reassessed by both fresh protocol critics;
+        # the immutable trigger alone cannot approve the changed manuscript.
+        self.protocol_review(identity)
+        approved=supplemental.automatic_approval(self.parent,"P01","software-test")
+        self.assertEqual(approved["status"],"protocol_sealed",approved)
+
+    def test_cli_schedules_one_approved_child_attempt_before_any_model_invocation(self):
+        from scripts import autopilot, cloud_research_steps
+        child,_,identity=self.internal_candidate()
+        self.protocol_review(identity)
+        self.assertEqual(supplemental.automatic_approval(self.parent,"P01","software-test")["status"],"protocol_sealed")
+        with patch.object(researchctl,"PROJECTS_ROOT",self.parent.parent), \
+                patch.object(cloud_research_steps,"acquire_data",return_value={"blockers":[]}), \
+                patch.object(runner,"execute",return_value=[{"status":"succeeded","attempt_id":"mock-native-attempt"}]) as execute, \
+                patch.object(autopilot,"invoke",side_effect=AssertionError("no model call during native execution")):
+            result=autopilot.run_stage("demo","","standard",1,100,0)
+        self.assertFalse(result["paid_model_cycle"])
+        self.assertEqual(result["runs"],[])
+        self.assertEqual(result["controlled_steps"]["supplemental"]["status"],"executed")
+        run=read(child/"experiments/plan.json")["runs"][0]["run_id"]
+        execute.assert_called_once_with(child.name,[run],project_root=child)
+
+    def test_unprotected_model_text_cannot_supply_an_internal_review_authority(self):
+        _,proposal,_=self.internal_candidate()
+        receipt=self.parent/proposal["source_review"]["path"]
+        value=read(receipt);value["prompt_sha256"]="0"*64;write(receipt,value)
+        proposal["source_review"]["sha256"]=sha(receipt)
+        write(self.parent/"papers/P01"/supplemental.PROPOSAL,proposal)
+        with self.assertRaisesRegex(ValueError,"provenance"):
+            supplemental.candidate(self.parent,"P01")
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(); self.addCleanup(temporary.cleanup)
         self.parent = Path(temporary.name) / "demo"

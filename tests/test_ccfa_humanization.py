@@ -21,7 +21,7 @@ class CCFAHumanizationTests(unittest.TestCase):
             shutil.copyfile(human.ROOT / human.SOURCE / relative, target)
 
     def test_complete_policy_bilingual_examples_and_experiment_rules_are_in_existing_prompt(self):
-        prompt = human.prompt_contract("G5", "writer")
+        prompt = human.prompt_contract("G5", "writer",full=True)
         for relative in human.FILES:
             if relative.endswith(".md"):
                 source = (human.ROOT / human.SOURCE / relative).read_text(encoding="utf-8")

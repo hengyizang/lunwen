@@ -1,7 +1,7 @@
 # Sealed plot data and complete TeX sources
 
 Final data figures bind every plotted input to an exact successful executor
-attempt under the named human G3 plan, budget and frozen protocol. A matching
+attempt under the checked G3 plan, budget and frozen protocol. A matching
 run ID alone is insufficient. Registration and G5/package validation recompute
 the approved run definition, executor receipt, post-run input integrity, complete
 expected output set and current output hashes. Unrelated hand-written CSVs,
@@ -91,7 +91,7 @@ current named redistribution-rights evidence in the internal
 This human-reviewed permission is not inferred from an available download or an
 MIT license on another repository. The license evidence enters the source ZIP;
 the internal review ledger does not. Current scope seals, independent-review
-receipts, human G5 approval, protected figure lineage and all existing package
+receipts, the recorded automated G5 decision, protected figure lineage and all existing package
 validators still run before creating the manual-upload ZIP. Nobody submits it
 automatically. Cloud regressions include extracting this selected source ZIP,
 removing the original tree and compiling the isolated source with shell escape

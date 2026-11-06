@@ -15,6 +15,11 @@ import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
 from xml.etree import ElementTree
 
 try:
@@ -45,14 +50,6 @@ def read_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ComplianceError(f"Expected JSON object: {path}")
     return value
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def manuscript_tree_sha256(manuscript: Path) -> str:

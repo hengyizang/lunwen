@@ -1,7 +1,7 @@
 """Synthetic component acceptance; never a scientific approval or real dataset.
 
 The seeded G3 receipt exists only inside temporary acceptance fixtures. Production
-decisions still require researchctl's complete deterministic G3 checks.
+execution still requires researchctl's complete deterministic G3 checks and protocol seal.
 """
 from __future__ import annotations
 

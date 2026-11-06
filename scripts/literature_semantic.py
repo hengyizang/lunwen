@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from scripts import evidence_retrieval, literature_review, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCK = ROOT / "integrations/literature-semantic.lock.json"
@@ -55,10 +55,7 @@ def provision(project):
 
 
 def _current(project, target):
-    from scripts.output_provenance import current_origin
-    origin = current_origin(project, target)
-    return (origin.get("status") == "tracked" and origin.get("family") == "other"
-            and origin.get("model") == MODULE)
+    return matches_origin(project, target, family="other", model=MODULE)
 
 
 class _HubRedirect(HTTPRedirectHandler):

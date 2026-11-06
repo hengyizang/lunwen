@@ -10,7 +10,7 @@ import argparse
 import copy
 import csv
 from collections import Counter
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Decimal, InvalidOperation
 import hashlib
 import io
 import json
@@ -19,11 +19,15 @@ from pathlib import Path
 import re
 
 from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts import data_cleaning_runtime as cleaning
+from scripts.data_cleaning_runtime import _number
 
 MAX_BYTES = 64_000_000
 MAX_ROWS = 1_000_000
 TYPES = {"string", "integer", "number", "date", "boolean"}
 
+
+from scripts.paper_execution import artifact_path as experiment_path
 
 def _id(value):
     if not isinstance(value, str) or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,79}", value):
@@ -65,18 +69,6 @@ def _csv(project, binding):
     if not rows:
         raise ValueError("CSV needs actual rows")
     return fields, rows
-
-
-def _number(value):
-    if len(str(value)) > 128:
-        raise ValueError("numeric value is too long")
-    try:
-        result = Decimal(str(value))
-    except InvalidOperation as exc:
-        raise ValueError("invalid numeric value") from exc
-    if not result.is_finite() or abs(result.adjusted()) > 100:
-        raise ValueError("numeric value must be finite and bounded")
-    return result
 
 
 def _variables(value, fields):
@@ -246,40 +238,6 @@ def _joins(project, rows, joins, variables, errors):
     return results, bindings
 
 
-def _clean_plan(steps, variables):
-    if not isinstance(steps, list) or len(steps) > 100:
-        raise ValueError("bounded cleaning steps required")
-    current, seen = copy.deepcopy(variables), set()
-    for step in steps:
-        if not isinstance(step, dict): raise ValueError("cleaning step must be an object")
-        _text(step.get("id"), "cleaning step ID"); _text(step.get("reason"), "cleaning step reason")
-        if step["id"] in seen: raise ValueError("duplicate cleaning step ID")
-        seen.add(step["id"]); op = step.get("operation")
-        if op == "rename":
-            _keys(step, {"id", "reason", "operation", "column", "to"})
-            if step["column"] not in current or not isinstance(step["to"], str) or not step["to"].strip() or step["to"] in current:
-                raise ValueError("rename needs an existing column and unused target")
-            current[step["to"]] = current.pop(step["column"]); current[step["to"]]["name"] = step["to"]
-        elif op == "normalize_missing":
-            _keys(step, {"id", "reason", "operation", "column"})
-            if step["column"] not in current: raise ValueError("missing normalization column is absent")
-        elif op == "linear_unit_conversion":
-            _keys(step, {"id", "reason", "operation", "column", "from_unit", "to_unit", "factor", "offset"})
-            if (step["column"] not in current or current[step["column"]]["type"] not in {"integer", "number"}
-                    or current[step["column"]]["unit"] != step["from_unit"] or _number(step["factor"]) == 0):
-                raise ValueError("unit conversion needs a matching source unit, numeric column and nonzero factor")
-            _number(step["offset"]); _text(step["to_unit"], "target unit")
-            current[step["column"]].update(unit=step["to_unit"], type="number")
-        elif op == "exclude_values":
-            _keys(step, {"id", "reason", "operation", "column", "values"})
-            if (step["column"] not in current or not isinstance(step["values"], list) or not step["values"]
-                    or len(step["values"]) > 100 or any(not isinstance(x, str) for x in step["values"])):
-                raise ValueError("row exclusion needs an existing column and explicit bounded values")
-        else:
-            raise ValueError("unsupported cleaning operation; arbitrary code and automatic outlier trimming are forbidden")
-    return current
-
-
 def _load(project, dataset_id):
     dataset_id = _id(dataset_id)
     relative = f"data/contracts/{dataset_id}.json"; contract = read(path_in(project, relative))
@@ -293,7 +251,9 @@ def _load(project, dataset_id):
     manifest = _binding(project, contract["manifest"])
     if manifest["path"] != f"data/manifests/{dataset_id}.json": raise ValueError("use the dataset's canonical manifest")
     declared = read(path_in(project, manifest["path"]))
-    registry = path_in(project, "data/datasets.jsonl")
+    from scripts.paper_execution import dataset_snapshot
+    registry = dataset_snapshot(project)
+    registry = path_in(project, registry.relative_to(project).as_posix())
     registered = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines() if line.strip()]
     if any(not isinstance(item, dict) for item in registered): raise ValueError("dataset registry entries must be objects")
     matches = [item for item in registered if item.get("dataset_id") == dataset_id]
@@ -306,7 +266,7 @@ def _load(project, dataset_id):
         raise ValueError("data contract input must be a CSV in data/")
     fields, rows = _csv(project, source); variables = _variables(contract["variables"], fields)
     return contract, fields, rows, variables, [{"path": relative, "sha256": sha(project/relative)}, manifest, source,
-        {"path": "data/datasets.jsonl", "sha256": sha(registry)}]
+        {"path": registry.relative_to(project).as_posix(), "sha256": sha(registry)}]
 
 
 def audit(project: Path, dataset_id: str) -> dict:
@@ -317,7 +277,7 @@ def audit(project: Path, dataset_id: str) -> dict:
         columns = _column_summary(rows, variables, errors)
         panel = _panel(rows, contract["panel"], variables, errors, warnings) if "panel" in contract else None
         joins, join_bindings = _joins(project, rows, contract["joins"], variables, errors)
-        _clean_plan(contract["cleaning_steps"], variables)
+        cleaning.validate_steps(contract["cleaning_steps"], variables)
         return {"schema_version": "1.0", "dataset_id": dataset_id, "pass": not errors, "errors": errors,
             "warnings": warnings, "inputs": bindings+join_bindings, "implementation_sha256": sha(Path(__file__)),
             "rows": len(rows), "columns": columns, "panel": panel, "joins": joins,
@@ -347,38 +307,8 @@ def validate_saved_report(project: Path, dataset_id: str) -> list[str]:
 
 
 def _clean_rows(fields, rows, variables, steps):
-    """Pure bounded transform for approved execution and cloud fixture tests."""
-    _clean_plan(steps, variables)
-    fields, rows, definitions = list(fields), copy.deepcopy(rows), copy.deepcopy(variables)
-    history = []
-    for step in steps:
-        before = len(rows); op, column = step["operation"], step["column"]
-        changed = 0
-        if op == "rename":
-            fields[fields.index(column)] = step["to"]
-            for row in rows: row[step["to"]] = row.pop(column)
-            definitions[step["to"]] = definitions.pop(column); definitions[step["to"]]["name"] = step["to"]
-            changed = len(rows)
-        elif op == "normalize_missing":
-            for row in rows:
-                if row[column] in definitions[column]["missing_codes"] and row[column] != "":
-                    row[column] = ""; changed += 1
-            definitions[column]["formula"] = "normalize_missing(" + definitions[column]["formula"] + ", codes=" + json.dumps(definitions[column]["missing_codes"]) + ")"
-        elif op == "linear_unit_conversion":
-            for row in rows:
-                if row[column] not in definitions[column]["missing_codes"]:
-                    with localcontext() as context:
-                        context.prec = 512
-                        converted = _number(row[column]) * _number(step["factor"]) + _number(step["offset"])
-                    _number(converted); row[column] = format(converted, "f"); changed += 1
-            definitions[column].update(unit=step["to_unit"], type="number",
-                formula="("+definitions[column]["formula"]+") * "+str(step["factor"])+" + "+str(step["offset"]))
-        elif op == "exclude_values":
-            rows = [row for row in rows if row[column] not in step["values"]]; changed = before-len(rows)
-        history.append({"id": step["id"], "operation": op, "reason": step["reason"], "rows_before": before,
-            "rows_after": len(rows), "rows_changed_or_excluded": changed})
-    if not rows: raise ValueError("cleaning excluded every row")
-    return fields, rows, definitions, history
+    """Use the isolated runtime's transform; callers collect all data diagnostics."""
+    return cleaning.transform(fields, rows, list(variables.values()), steps, check_data=False)[:4]
 
 
 def _preview(project, dataset_id):
@@ -408,14 +338,21 @@ def preview_cleaning(project: Path, dataset_id: str) -> dict:
     state = read(path_in(project, "state/run.json"))
     if state.get("stage") != "experiment-design" or state.get("gate") != "G3" or state.get("status") != "awaiting_work":
         raise ValueError("data preparation requires the open G3 experiment-design stage")
-    registry = path_in(project, "experiments/registry.jsonl", exists=False)
+    registry = experiment_path(project, 'experiments/registry.jsonl')
     if registry.is_file() and registry.read_text(encoding="utf-8").strip():
         raise ValueError("data preparation cannot change a dataset after experimental attempts")
-    if any(read(path).get("status") == "frozen" for path in (project/"papers").glob("P[0-9][0-9]/preregistration.json")):
+    from scripts.paper_execution import enabled
+    frozen=[path for path in (project/"papers").glob("P[0-9][0-9]/preregistration.json") if read(path).get("status")=="frozen"]
+    if frozen and not enabled(project):
         raise ValueError("data preparation must precede frozen preregistration")
     payload, report = _preview(project, _id(dataset_id))
     target = path_in(project, report["output"]["path"], exists=False)
     receipt = path_in(project, f"reports/data-cleaning/preview-{dataset_id}.json", exists=False)
+    if enabled(project):
+        locked={item["path"] for path in frozen for item in read(path).get("files",[]) if isinstance(item,dict) and isinstance(item.get("path"),str)}
+        for path,unchanged in ((target,target.is_file() and target.read_bytes()==payload),(receipt,receipt.is_file() and read(receipt)==report)):
+            if path.relative_to(project).as_posix() in locked and not unchanged:
+                raise ValueError("data preparation cannot change another paper's frozen inputs")
     outputs = []
     if receipt.is_file() and read(receipt) != report:
         # Preserve the earlier recipe, source hashes and sample-flow record.
@@ -448,43 +385,23 @@ def clean(project: Path, dataset_id: str, output: str, receipt: str) -> dict:
     run_id = os.environ.get("RESEARCH_OS_RUN_ID")
     if not run_id: raise ValueError("cleaning requires the approved experiment runner")
     from scripts.experiment_runner import approved_plan
-    plan, _ = approved_plan(project, project/"experiments/plan.json", project/"experiments/budget.json")
+    plan, _ = approved_plan(project, experiment_path(project, "experiments/plan.json"), experiment_path(project, "experiments/budget.json"))
     runs = [run for run in plan["runs"] if run["run_id"] == run_id]
     if len(runs) != 1 or set(runs[0]["expected_outputs"]) != {output, receipt}:
         raise ValueError("cleaning outputs differ from the exact approved run")
     if not output.startswith("data/processed/") or not output.endswith(".csv") or not receipt.startswith("reports/data-cleaning/") or not receipt.endswith(".json"):
         raise ValueError("cleaning outputs must use data/processed CSV and reports/data-cleaning JSON")
-    target, log_path = path_in(project, output, exists=False), path_in(project, receipt, exists=False)
     result = audit(project, dataset_id)
     if not result["pass"]: raise ValueError("data contract failed: " + "; ".join(result["errors"]))
-    contract, fields, rows, variables, bindings = _load(project, dataset_id)
+    contract = read(path_in(project, f"data/contracts/{dataset_id}.json"))
     if contract.get("cleaning_implementation_sha256") != sha(Path(__file__)):
         raise ValueError("cleaning implementation must be hash-bound in the frozen contract")
-    all_bindings = result["inputs"]
     declared = {(item["path"], item["sha256"]) for item in runs[0]["inputs"]}
-    if any((item["path"], item["sha256"]) not in declared for item in all_bindings):
+    if any((item["path"], item["sha256"]) not in declared for item in result["inputs"]):
         raise ValueError("every data contract source must be declared in the approved run inputs")
-    if output in {item["path"] for item in all_bindings} or receipt in {item["path"] for item in all_bindings}:
-        raise ValueError("raw input and cleaning outputs must be disjoint")
-    fields, cleaned, definitions, history = _clean_rows(fields, rows, variables, contract["cleaning_steps"])
-    errors = []; summary = _column_summary(cleaned, definitions, errors)
-    if errors: raise ValueError("cleaning produced invalid data: " + "; ".join(errors))
-    handle = io.StringIO(newline=""); writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
-    writer.writeheader(); writer.writerows(cleaned); payload = handle.getvalue().encode("utf-8")
-    report = {"schema_version": "1.0", "dataset_id": dataset_id, "run_id": run_id, "inputs": all_bindings,
-        "implementation_sha256": sha(Path(__file__)), "output": {"path": output, "sha256": hashlib.sha256(payload).hexdigest()},
-        "rows_before": len(rows), "rows_after": len(cleaned), "steps": history, "columns": summary,
-        "output_dictionary": list(definitions.values()), "raw_input_unchanged": True, "scientific_validity_verified": False,
-        "data_rights_verified": False, "gate_approved": False}
-    # Re-read every source after processing and before publishing either output.
-    for binding in all_bindings: _binding(project, binding)
-    log_bytes = (json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)+"\n").encode("utf-8")
-    for path, content in ((target, payload), (log_path, log_bytes)):
-        if path.exists() and path.read_bytes() != content:
-            raise ValueError("refusing to overwrite a different generated cleaning artifact")
-    target.parent.mkdir(parents=True, exist_ok=True); log_path.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(payload); log_path.write_bytes(log_bytes)
-    return report
+    from scripts.paper_execution import dataset_snapshot
+    return cleaning.execute(project, f"data/contracts/{dataset_id}.json", dataset_id, output, receipt,
+                            dataset_registry=dataset_snapshot(project).relative_to(project).as_posix())
 
 
 def main():

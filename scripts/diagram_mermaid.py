@@ -8,7 +8,7 @@ import html
 from pathlib import Path
 
 from scripts import editable_figures, research_diagrams, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest
 
 OUTPUT = "reports/diagram-mermaid"
 
@@ -77,22 +77,16 @@ def refresh(project: Path, request_path="program/diagram-mermaid.json") -> dict:
     directory = path_in(project, OUTPUT + "/" + report["id"], exists=False)
     paths = [directory / "report.json", directory / "diagram.mmd", directory / "index.html"]
     for target in paths:
-        if target.exists():
-            from scripts.output_provenance import current_origin
-            origin = current_origin(project, target)
-            if origin.get("status") != "tracked" or origin.get("model") != "scripts/diagram_mermaid.py":
-                raise ValueError("preserve altered Mermaid output before rebuilding")
+        if target.exists() and not matches_origin(project, target, model="scripts/diagram_mermaid.py"):
+            raise ValueError("preserve altered Mermaid output before rebuilding")
     write(paths[0], report)
     paths[1].write_text(report["mermaid"], encoding="utf-8")
     paths[2].write_text('<!doctype html><meta charset="utf-8"><title>Editable Mermaid source</title>' +
         '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'">' +
         '<h1>Editable research diagram</h1><p>' + html.escape(report["caption"]) + '</p><p>Same source topology and relation kinds. Confirm scientific meaning and inspect the final rendered diagram.</p>' +
         '<a href="diagram.mmd">Download editable Mermaid</a><pre>' + html.escape(report["mermaid"]) + '</pre>', encoding="utf-8")
-    manifest = {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(source)},
-        "outputs": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in paths],
-        "implementation_sha256": sha(Path(__file__))}
-    write(directory / "manifest.json", manifest)
-    record(project, [*paths, directory / "manifest.json"], "scripts/diagram_mermaid.py")
+    seal_manifest(project, paths, directory / "manifest.json", "scripts/diagram_mermaid.py",
+        {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(source)}})
     return {"report": paths[0].relative_to(project).as_posix(), "mermaid": paths[1].relative_to(project).as_posix(),
             "html": paths[2].relative_to(project).as_posix(), "scientific_approval": False, "paid_calls": 0}
 
@@ -102,9 +96,7 @@ def validate_saved_report(project: Path, request_path="program/diagram-mermaid.j
     fresh = build(project, request)
     directory = path_in(project, OUTPUT + "/" + fresh["id"], exists=False)
     manifest_path = directory / "manifest.json"
-    from scripts.output_provenance import current_origin
-    origin = current_origin(project, manifest_path)
-    if origin.get("status") != "tracked" or origin.get("model") != "scripts/diagram_mermaid.py":
+    if not matches_origin(project, manifest_path, model="scripts/diagram_mermaid.py"):
         raise ValueError("Mermaid manifest has no current deterministic provenance")
     manifest = read(manifest_path)
     if manifest["request"] != {"path": request_path, "sha256": sha(path_in(project, request_path))}:

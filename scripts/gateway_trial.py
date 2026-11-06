@@ -110,18 +110,20 @@ class CloudState:
             {'Authorization':'Bearer '+self.token, 'X-GitHub-Api-Version':'2022-11-28'},
             body, method=method, github=True)[0]
 
-    def read(self, name):
+    def read(self, name, *, directory="trial-state", reader=None):
         # Git trees use a ref as a path segment, so no credentials in query strings.
         tree = self.api('git/trees/'+urllib.parse.quote(self.branch, safe=''))
-        directory = next((x for x in tree['tree'] if x['path']=='trial-state'), None)
-        if not directory:
-            return None, None
-        entries = self.api('git/trees/'+directory['sha'])
-        blob = next((x for x in entries['tree'] if x['path']==name), None)
+        for segment in directory.split("/"):
+            item = next((row for row in tree["tree"] if row["path"] == segment), None)
+            if item is None:
+                return None, None
+            tree = self.api("git/trees/" + item["sha"])
+        blob = next((x for x in tree['tree'] if x['path']==name), None)
         if not blob:
             return None, None
         data = self.api('git/blobs/'+blob['sha'])
-        return json.loads(base64.b64decode(data['content'])), blob['sha']
+        value = json.loads(base64.b64decode(data['content'])) if reader is None else reader(data, blob['sha'])
+        return value, blob['sha']
 
     def write(self, name, value):
         _, sha = self.read(name)
@@ -130,6 +132,42 @@ class CloudState:
         if sha:
             payload['sha'] = sha
         self.api('contents/trial-state/'+name, payload, 'PUT')
+
+    def commit_json(self, name, value, expected_sha, message, reader, *,
+                    directory="trial-state", error=TrialError,
+                    persistence_error=None, readback_error="immutable_blob_readback_mismatch",
+                    strict_sha=True, branch=None):
+        """CAS one ledger and verify the immutable blob before accepting its SHA."""
+        raw = (json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
+        body = {"message": message, "branch": self.branch if branch is None else branch,
+                "content": base64.b64encode(raw).decode()}
+        if expected_sha:
+            body["sha"] = expected_sha
+        reply = self.api("contents/" + directory + "/" + name, body, "PUT")
+        if persistence_error is None:
+            sha = reply["content"]["sha"]
+        else:
+            sha = reply.get("content", {}).get("sha")
+            if not isinstance(sha, str) or (strict_sha and not re.fullmatch(r"[0-9a-f]{40}", sha)):
+                raise error(persistence_error)
+        if reader(self.api("git/blobs/" + sha), sha) != value:
+            raise error(readback_error)
+        return sha
+
+
+def blob_json(blob, expected_sha, error=TrialError, message="immutable_blob_readback_mismatch", *, git_hash=False):
+    if blob.get("sha") != expected_sha or blob.get("encoding") != "base64":
+        raise error(message)
+    try:
+        raw = base64.b64decode(blob["content"])
+        if git_hash and hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest() != expected_sha:
+            raise error(message)
+        value = json.loads(raw)
+    except (KeyError, ValueError, TypeError, UnicodeError):
+        raise error(message) from None
+    if git_hash and not isinstance(value, dict):
+        raise error(message)
+    return value
 
 
 def validate_ledger(ledger, plan_hash):

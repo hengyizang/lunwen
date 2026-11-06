@@ -10,8 +10,10 @@ from scripts.research_artifacts import path_in, read, sha, write, record, bound_
 TEST_KINDS = {"original_example", "unseen_input", "invalid_input", "reference_comparison"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def qualification(project: Path, tool: dict, plan: dict) -> dict:
-    registry_path = project / "experiments/registry.jsonl"
+    registry_path = experiment_path(project, 'experiments/registry.jsonl')
     if not registry_path.is_file():
         return {"status": "pending_cloud_validation", "errors": []}
     registry = [json.loads(line) for line in registry_path.read_text().splitlines() if line.strip()]
@@ -60,7 +62,7 @@ def qualification(project: Path, tool: dict, plan: dict) -> dict:
 def inspect(project: Path) -> dict:
     manifest = read(path_in(project, "program/method-tools.json"))
     tools, errors, seen = [], [], set()
-    plan = read(path_in(project, "experiments/plan.json"))
+    plan = read(experiment_path(project, "experiments/plan.json"))
     planned = {r["run_id"]: r for r in plan.get("runs", [])}
     for tool in manifest.get("tools", []):
         try:

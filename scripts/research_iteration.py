@@ -17,6 +17,8 @@ HASH = re.compile(r"[0-9a-f]{64}")
 CODE_SUFFIXES = {".py", ".r", ".jl", ".sh", ".cpp", ".c", ".rs"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path, enabled, scope
+
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
                                      ensure_ascii=False).encode("utf-8")).hexdigest()
@@ -217,12 +219,20 @@ def _diagnostics(item, log_evidence, input_facts, output_facts):
 
 def _prepare(project, relative, root):
     request = _request(project, relative)
+    if enabled(project) and request.get("paper_id"):
+        with scope(project, request["paper_id"]):
+            return _prepare_request(project, relative, root, request)
+    return _prepare_request(project, relative, root, request)
+
+
+def _prepare_request(project, relative, root, request):
     sources = {}
 
     def bind(name):
-        target = path_in(project, name, exists=False)
-        value = {"path": name, "sha256": sha(target) if target.is_file() else None}
-        sources[name] = value
+        target = experiment_path(project, name)
+        actual_name = target.relative_to(project).as_posix()
+        value = {"path": actual_name, "sha256": sha(target) if target.is_file() else None}
+        sources[actual_name] = value
         return target
 
     bind(relative)
@@ -278,7 +288,7 @@ def _prepare(project, relative, root):
 
     current_specs = [p.relative_to(project).as_posix() for p in sorted((project / "papers").rglob("*.json"))
                      if relevant(p.relative_to(project).as_posix())]
-    plan_path = project / "experiments/plan.json"
+    plan_path = experiment_path(project, 'experiments/plan.json')
     if plan_path.is_file():
         add_plan(plan_path, current_specs)
     rows = primary_recovery.records(project)
@@ -294,8 +304,9 @@ def _prepare(project, relative, root):
             if entry.get("archive"):
                 bind(entry["archive"])
                 archived[(history["version"], entry["path"])] = entry["archive"]
-        old_plan = by_name.get("experiments/plan.json", {}).get("archive")
-        if old_plan:
+        old_plans = [row.get("archive") for name, row in by_name.items()
+                     if name == "experiments/plan.json" or re.fullmatch(r"experiments/papers/P[0-9]{2}/plan\.json", name)]
+        for old_plan in filter(None, old_plans):
             add_plan(bind(old_plan), [r["archive"] for r in history["files"] if r.get("archive") and relevant(r["path"])],
                      {r["path"]: r["archive"] for r in history["files"] if r.get("archive")})
         for source in history["attempt_receipts"]:
@@ -469,7 +480,7 @@ def _prepare(project, relative, root):
             "hypotheses": selected_hypotheses, "next_iteration_worklist": worklist[:maximum],
             "worklist_total": len(worklist), "worklist_omitted": max(0, len(worklist) - maximum),
             "paid_calls": 0, "experiments_executed": 0, "scientific_validation": "not_assessed",
-            "authority": "Existing plans, independent review, approved G3 runner, budgets and human G0-G5 gates remain authoritative."}
+            "authority": "Existing plans, independent review, approved G3 runner and cumulative budgets remain authoritative; G1/G2 topic decisions are human and other stage decisions use recorded automated checks."}
 
 
 def _report(project, relative, root):

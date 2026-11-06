@@ -14,4 +14,4 @@ scripts directory. Their outputs are planning aids; only the existing
 research_quality.py may create the authoritative preregistration.
 Keep observations, hypotheses, predictions and observed results separate.
 Do not grant novelty, make causal claims from predictive performance or
-relax human approval, data rights or model role separation.
+relax actual G1/G2 topic decisions, automated evidence checks, data rights or model role separation.

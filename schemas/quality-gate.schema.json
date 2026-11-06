@@ -263,7 +263,7 @@
       "maxItems": 0
     },
     "human_review_required": {
-      "const": true
+      "type": "boolean"
     },
     "assessments": {
       "type": "object",
@@ -322,6 +322,25 @@
         "required": [
           "scores"
         ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "gate": {
+            "enum": [
+              "G1",
+              "G2"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "human_review_required": {
+            "const": true
+          }
+        }
       }
     }
   ]

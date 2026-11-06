@@ -27,6 +27,10 @@ MODULE = "scripts/figure_lineage.py"
 PREFIX = "reports/figure-data"
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
+from scripts.paper_execution import paper_scoped
+
 def need(value, message):
     if not value:raise ValueError(message)
 
@@ -41,11 +45,12 @@ def _owned(project,path,model):
          "Plot lineage requires current deterministic control-plane provenance")
 
 
+@paper_scoped
 def _scope(project,paper_id,identifier):
     if "/" not in identifier:
         need(bool(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,127}",identifier)),"Unsafe source run ID")
         return project,identifier,None
-    matched=re.fullmatch(r"supplemental/(P\d{2})/(R\d{3})/(s\d{3})/([A-Za-z0-9][A-Za-z0-9_.-]{0,127})",identifier)
+    matched=re.fullmatch(r"supplemental/(P\d{2})/([RI]\d{3})/(s\d{3})/([A-Za-z0-9][A-Za-z0-9_.-]{0,127})",identifier)
     need(matched and matched[1]==paper_id,"Supplemental source run belongs to another paper or namespace")
     _,round_id,scope,run_id=matched.groups()
     control_path=path_in(project,f"state/supplemental-experiments/{paper_id}/{round_id}/{scope}.json")
@@ -58,7 +63,7 @@ def _scope(project,paper_id,identifier):
     need(sha(child/"state/run.json")==control.get("child_state_sha256"),"Supplemental approved state changed")
     need(read(child/"state/run.json").get("approvals")==[control.get("approval")],"Supplemental G3 authority changed")
     proposal=control.get("proposal",{})
-    need(proposal.get("original_plan_sha256")==sha(project/"experiments/plan.json") and proposal.get("original_preregistration_sha256")==sha(project/f"papers/{paper_id}/preregistration.json"),"Parent protocol changed after supplemental approval")
+    need(proposal.get("original_plan_sha256")==sha(experiment_path(project,"experiments/plan.json",paper_id)) and proposal.get("original_preregistration_sha256")==sha(project/f"papers/{paper_id}/preregistration.json"),"Parent protocol changed after supplemental approval")
     confirmation=control.get("confirmation")
     need(not control.get("retirement") and isinstance(confirmation,dict) and confirmation.get("actor") and confirmation.get("source_run_id")
          and re.fullmatch(r"[0-9a-f]{64}",str(confirmation.get("cloud_review_sha256",""))),"Supplemental plotted data needs named scientific confirmation")
@@ -69,16 +74,18 @@ def _scope(project,paper_id,identifier):
     return child,run_id,{"path":control_path.relative_to(project).as_posix(),"sha256":sha(control_path)}
 
 
+@paper_scoped
 def run_seal(project:Path,paper_id:str,identifier:str)->dict:
     root,run_id,scope=_scope(project,paper_id,identifier)
-    plan_path=path_in(root,"experiments/plan.json")
+    plan_path=experiment_path(root, 'experiments/plan.json')
     plan=read(plan_path)
     state=read(path_in(root,"state/run.json"))
-    approval=next((a for a in reversed(state.get("approvals",[])) if a.get("gate")=="G3"),{})
+    from scripts.paper_execution import approval as paper_approval
+    approval=paper_approval(root,"G3",paper_id) or {}
     plan_hash=sha(plan_path)
-    need("G3" in state.get("approved_gates",[]) and approval.get("actor") and approval.get("experiment_plan_sha256")==plan_hash,
+    need(approval.get("actor") and approval.get("experiment_plan_sha256")==plan_hash,
          "Plot source has no current named G3 plan approval")
-    need(approval.get("experiment_budget_sha256")==sha(path_in(root,"experiments/budget.json")),"Plot source budget differs from G3 approval")
+    need(approval.get("experiment_budget_sha256")==sha(experiment_path(root, 'experiments/budget.json')),"Plot source budget differs from G3 approval")
     runs=[r for r in plan.get("runs",[]) if r.get("run_id")==run_id]
     need(len(runs)==1 and runs[0].get("paper_id")==paper_id,"Plot source run is not an approved run for this paper")
     run=runs[0]
@@ -94,7 +101,7 @@ def run_seal(project:Path,paper_id:str,identifier:str)->dict:
         # chart. Their immutable expected hashes remain in the G3/attempt seal.
         if target.is_file() or not excluded(row["path"]):
             need(target.is_file() and sha(target)==row["sha256"],"Plot source frozen input changed: "+row["path"])
-    registry_path=path_in(root,"experiments/registry.jsonl")
+    registry_path=experiment_path(root, 'experiments/registry.jsonl')
     records=[json.loads(line) for line in registry_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     try:
         from scripts.primary_recovery import selected_attempt
@@ -193,6 +200,7 @@ def _csv_transform(project,spec):
     return stream.getvalue().encode("utf-8")
 
 
+@paper_scoped
 def lineage(project,paper_id,inputs,runs,*,_stack=()):
     need(len(_stack)<20,"Derived plot-data ancestry exceeds 20 transformations")
     need(isinstance(runs,list) and runs and all(isinstance(r,str) for r in runs) and len(runs)<=100 and len(runs)==len(set(runs)),"Plot needs distinct explicit sealed source runs")
@@ -227,6 +235,7 @@ def lineage(project,paper_id,inputs,runs,*,_stack=()):
     return {"schema_version":"1.0","paper_id":paper_id,"inputs":bound,"runs":seals}
 
 
+@paper_scoped
 def derive(project,paper_id,output,transform,runs):
     need(os.environ.get("GITHUB_ACTIONS")=="true" or os.environ.get("DR_OS_CLOUD_EXECUTOR")=="1","Plot-data derivation requires the cloud executor")
     need(bool(re.fullmatch(r"P\d{2}",paper_id)),"Exact plot paper ID required")

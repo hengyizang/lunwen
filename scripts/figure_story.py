@@ -230,7 +230,9 @@ def build_report(project: Path, request: dict):
     paper = request["paper_id"]
     _need(re.fullmatch(r"P\d{2}", str(paper)), "Invalid paper ID")
     inputs = []
-    _need(request["paper_contract"].get("path") == f"papers/{paper}/paper-contract.json" and request["claims"].get("path") == "claims/claim-evidence.csv", "Figure brief must bind canonical contract and claim matrix")
+    from scripts.paper_execution import artifact_path
+    canonical_claims = artifact_path(project, "claims/claim-evidence.csv", paper).relative_to(project).as_posix()
+    _need(request["paper_contract"].get("path") == f"papers/{paper}/paper-contract.json" and request["claims"].get("path") == canonical_claims, "Figure brief must bind canonical contract and claim matrix")
     contract = read(_binding(project, request["paper_contract"], inputs))
     _authored(project, project/request["paper_contract"]["path"])
     _need(contract.get("paper_id") == paper, "Contract paper differs from figure paper")
@@ -320,7 +322,7 @@ def build_report(project: Path, request: dict):
             "inputs": inputs, "implementation_sha256": sha(Path(__file__)), "implementation": _implementation(), "visual_style": style_report,
             "manuscript_alignment": manuscript_status, "checks": {"actual_module_and_arrow_inventory": True,
                 "located_text_quotes": True, "numeric_source_bindings": True, "gallery_metadata_bindings": True},
-            "limits": {"scientific_approval": False, "semantic_alignment_requires_human_review": True,
+            "limits": {"scientific_approval": False, "semantic_alignment_requires_human_review": False, "semantic_alignment_requires_independent_review": True,
                 "reference_images_inspected": False, "external_results_reusable_as_our_results": False,
                 "final_render_inspection_required": True, "paid_model_calls": 0}}
 

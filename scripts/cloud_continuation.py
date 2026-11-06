@@ -13,19 +13,17 @@ import math
 import os
 import re
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Mapping
 
-try:
-    from scripts import ai_providers, intake_validation, model_runtime, model_spend, researchctl
-except ImportError:
-    import ai_providers  # type: ignore
-    import intake_validation  # type: ignore
-    import model_runtime  # type: ignore
-    import model_spend  # type: ignore
-    import researchctl  # type: ignore
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.research_artifacts import strict_json
+from scripts import ai_providers, intake_validation, model_runtime, model_spend, researchctl
 
 POLICY = Path("state/continuation.json")
 STATUS = Path("state/continuation-status.json")
@@ -54,16 +52,8 @@ def task_profile(project: Path, stage: str) -> dict[str, Any] | None:
     if not path.is_file() or path.stat().st_size > 16000:
         raise ContinuationError("task routing profile must be a bounded JSON control file")
 
-    def unique(pairs):
-        value = {}
-        for key, item in pairs:
-            if key in value:
-                raise ValueError("duplicate task routing profile property")
-            value[key] = item
-        return value
-
     try:
-        value = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique)
+        value = strict_json(path.read_text(encoding="utf-8"), duplicate_error="duplicate task routing profile property")
         if (not isinstance(value, dict) or set(value) != {"schema_version", "stage", "task_profile"}
                 or value["schema_version"] != "1.0" or value["stage"] != stage
                 or not isinstance(value["task_profile"], dict)):
@@ -278,7 +268,15 @@ def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[st
         raise ContinuationError("invalid paper portfolio size")
     paper_ids = [f"P{index:02d}" for index in range(1, count + 1)]
     required = [f"G{index}" for index in range(min(state["stage_index"], 5))]
-    if any(gate not in approved or not any(item.get("gate") == gate for item in approvals) for gate in required):
+    from scripts.paper_execution import enabled, selected
+    independent = enabled(project)
+    paper = selected(project) if independent else None
+    def prior_approved(gate):
+        scoped = independent and gate in {"G3", "G4"}
+        key = f"{gate}:{paper}" if scoped else gate
+        return key in approved and any(item.get("gate") == gate
+            and (not scoped or item.get("paper_id") == paper) for item in approvals)
+    if any(not prior_approved(gate) for gate in required):
         return {**result, "reason": "prior_human_gate_missing"}
     if state["gate"] is None:
         if state["status"] != "submission_ready":

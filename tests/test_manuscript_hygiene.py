@@ -291,7 +291,7 @@ class ManuscriptHygieneTests(unittest.TestCase):
                 metadata = self.source("manuscript/metadata.json", json.dumps({"schema_version": "1.0", "title": "Registered comparison",
                     "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Fixture Author"}],
                     "keywords": ["cohort", "comparison", "uncertainty"]}))
-                write(self.project / "state/run.json", {"active_paper": "P01"})
+                write(self.project / "state/run.json", {"active_paper": "P01", "writing_phases":{"P01":"submission"}})
                 write(self.project / "program/cloud-operations.json", {"operations": [{"stage": "writing-and-review", "action": "docx",
                     "source": source.relative_to(self.project).as_posix(), "metadata": metadata.relative_to(self.project).as_posix(),
                     "output": "papers/P01/manuscript/main.docx"}]})

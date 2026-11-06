@@ -14,7 +14,7 @@ are not evidence of doctoral quality, scientific equivalence or journal acceptan
 | Context overflow | The legacy fallback could send partial files or omit later files. | Stop before inference when a required file or full packet exceeds its bound. Require explicit source ranges, complete constraints and full active counterevidence; do not silently compress scientific meaning. |
 | Scoped evidence | A mandatory source could be selected again with another stance/reason. | Render an identical source range once, retaining all bindings, reasons and opposing stances. Partial counterevidence and stale hashes still fail. |
 | Writer instructions | Every stage received long instructions for all other stages. | Retain shared constraints and every instruction applicable to the current stage. Stage contracts and independent scientific audits remain. |
-| Artifact regeneration | Returning unchanged chapters could churn files and provenance. | Ask for changed artifacts only, allow a justified empty change set, and do not rewrite identical bytes or replace their authorship ancestry. G5's 34 contextual editorial dispositions remain required. |
+| Artifact regeneration | Returning unchanged chapters could churn files and provenance. | Ask for changed artifacts only, allow a justified empty change set, and do not rewrite identical bytes or replace their authorship ancestry. Submission-phase G5 retains complete contextual editorial dispositions; scientific drafting uses the applicable scientific checks. |
 | Search requests | Identical searches in one plan could run twice; cache lookup did not bind the requested limit. | Update the in-cycle receipt index immediately and match the exact request URL/limit, provider, query family, age and raw/normalized hashes. Identical work metadata share source-receipt IDs. Bounded metadata previews disclose omissions. |
 | Citation checks | Repeated checks could fetch the same public metadata again. | The controlled `citation_audit` operation can reuse 24h hash-bound metadata; every bibliography/manuscript decision is recomputed. Changed titles, expired/corrupt/future cache records and explicit refresh cannot reuse a PASS. |
 | Native PDF readers | Existence of an output alone could suppress a newly required extraction. | Reuse only an exact native-reader source, implementation, selected page scope, reader and source-map hash. Preserve stale readers and request a new output path. Never silently overwrite old source-bound evidence. |
@@ -30,7 +30,7 @@ dataset hashing/quality, power calculations, statistical analysis, Meta-analysis
 Lean kernel, experiment executor, scientific figure renderer and document checks
 remain deterministic. They are not reassigned to LLM arithmetic or rewritten
 through additional model calls. Baselines, seeds, negative results, independent
-replay, statistical assumptions and human confirmations are not reduced.
+replay, statistical assumptions, actual G1/G2 topic decisions and evidence-bound automated confirmations remain.
 
 Native PDF extraction remains the first route. OCR/vision is required when text
 extraction is inadequate, but no paid OCR, embedding, reranker or translation
@@ -97,17 +97,19 @@ cache writes, and `--refresh-metadata` for an explicit public refresh.
 
 ## Required model roles are not redundant calls
 
-The API stage still has five roles: Claude planning, OpenAI writing, fresh
-initial criticism, OpenAI remediation, fresh final criticism. G5 editorial review
-uses the existing writing/remediation passes, not new rewrite agents. Different
-perspectives inside a critic are not extra paid agents or independent raters.
+The existing roles remain Claude planning, OpenAI writing, fresh initial criticism,
+OpenAI remediation when required, and fresh final criticism. A clean initial
+audit with complete applicable writer dispositions skips the extra remediation
+call. Submission editorial work reuses those passes; scientific drafting does
+not require a full editorial scorecard. Different perspectives inside one critic
+are not independent raters or additional paid agents.
 
 Do not remove a review just because the prompt or manuscript did not change.
 A fresh final assessment can identify a missed problem. Conversely, unchanged
 chapters need not be regenerated: the remediator can return reasoned dispositions
-without a gratuitous edit. The final critic and all G0-G5 human gates still run.
-Model family separation, approval, frozen experiments and manual submission are
-unchanged. No independent review is fulfilled by a response-cache hit.
+without a gratuitous edit. The fresh final critic, actual G1/G2 human topic
+decisions and automated evidence checks still run. Model-family separation,
+frozen experiments and manual submission remain. No independent review is fulfilled by a response-cache hit.
 
 The zero-call `health` command is unchanged. For a deliberately billable check,
 use `health --live --project PROJECT --provider PROVIDER` only within an existing

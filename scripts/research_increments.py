@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from scripts.incremental_evidence import (DIGEST, binding, digest, gaps, identifier, ingest, jsonl,
-                                          lineage, rows, strings, text)
+                                          lineage, primary_attempts, rows, strings, text)
 from scripts.research_artifacts import path_in, read, record, sha, write
 
 PLAN = "program/research-increments.json"
@@ -14,6 +15,8 @@ REPORT = ROOT + "/audit.json"
 GROUPS = ("arguments", "lineage", "gaps", "ingestion", "lessons", "dependencies", "voices", "editing")
 CONFIRMATIONS = "state/research-increment-confirmations"
 
+
+from scripts.paper_execution import enabled, paper_scoped, selected
 
 def initialize(project):
     target = project / PLAN
@@ -80,6 +83,7 @@ def context_dependencies(project):
     return result
 
 
+@paper_scoped
 def paper_review_binding(project, paper_id):
     """Bind shared increment inputs to the existing per-paper human approval."""
     if not (project / PLAN).is_file():
@@ -191,7 +195,7 @@ def dependencies(project, row):
     identifier(row.get("id"))
     nodes = rows(row.get("nodes"), "dependency nodes", 1000, 1)
     by_id, stale = {}, {}
-    registry = jsonl(project, "experiments/registry.jsonl")
+    registry = primary_attempts(project)
     for node in nodes:
         key = identifier(node.get("id"))
         if key in by_id:
@@ -262,6 +266,31 @@ def build(project):
     from scripts import incremental_writing as writing, incremental_rules as rules
     results = {key: [] for key in GROUPS}
     errors = []
+    paper_owners = {}
+    if enabled(project):
+        if (project / REPORT).is_file():
+            from scripts.output_provenance import current_origin
+            origin = current_origin(project, project / REPORT)
+            if origin.get("status") != "tracked" or origin.get("provider") != "deterministic-control-plane":
+                raise ValueError("research increments saved audit is stale or lacks control-plane provenance")
+            prior = read(project / REPORT)
+            paper_owners = dict(prior.get("paper_owners", {}))
+            for group in ("arguments", "lineage", "editing"):
+                for row in prior.get("groups", {}).get(group, []):
+                    if row.get("paper_id"):
+                        paper_owners.setdefault(group + "/" + row["id"], row["paper_id"])
+            for row in prior.get("errors", []):
+                if row.get("group") in {"arguments", "lineage", "editing"} and row.get("paper_id"):
+                    paper_owners.setdefault(row["group"] + "/" + row["id"], row["paper_id"])
+        for group in ("arguments", "lineage", "editing"):
+            for row in spec[group]:
+                owner = row.get("paper_id")
+                key = group + "/" + row["id"]
+                if key in paper_owners and paper_owners[key] != owner:
+                    errors.append({"group": group, "id": row["id"], "paper_id": paper_owners[key],
+                                   "ownership_changed": True, "error": "keep inherited increment paper ownership stable"})
+                elif isinstance(owner, str) and re.fullmatch(r"P[0-9]{2}", owner):
+                    paper_owners.setdefault(key, owner)
     processors = {"arguments": writing.arguments, "lineage": lineage, "gaps": gaps,
                   "ingestion": ingest, "lessons": rules.evaluate, "dependencies": dependencies}
     for group in GROUPS:
@@ -307,6 +336,7 @@ def build(project):
     missing = [key for key in spec["required_at_submission"] if not results[key]]
     return {"schema_version": "1.0", "plan_sha256": sha(project / PLAN),
             "implementation": implementations(), "groups": results, "active_rules": active,
+            **({"paper_owners": paper_owners} if enabled(project) else {}),
             "status": "blocked" if errors else "needs_inputs" if missing else "mechanically_checked",
             "errors": errors, "missing": missing, "model_calls": 0,
             "scientific_completion_verified": False, "quality_level_verified": False}
@@ -326,7 +356,7 @@ def handoff(project, audit):
                 "remaining_after_reservations": spend["authorized_ceiling_cny"] - spend["spent_cny"] - reserved,
                 "billing_reconciled": not bool(spend["reservations"]),
                 "amount_basis": "persisted estimates; provider invoice controls final billing"}
-    attempts = jsonl(project, "experiments/registry.jsonl")
+    attempts = primary_attempts(project)
     counts = {status: sum(item.get("status") == status for item in attempts)
               for status in ("succeeded", "failed", "timed_out", "stopped")}
     blockers = list(audit.get("errors", []))
@@ -345,7 +375,7 @@ def handoff(project, audit):
             "approved_gates": state.get("approved_gates", []), "cost": cost,
             "registered_attempt_counts": counts, "increment_blockers": blockers[:50],
             "blockers_truncated": len(blockers) > 50, "other_checks": checks,
-            "next_action": "resolve recorded blockers then request the existing human gate decision",
+            "next_action": "resolve recorded blockers then run the existing checked stage decision",
             "state_verified": bool(state),
             "source_bindings": [*([{"path": "state/run.json", "sha256": sha(state_path)}] if state else []),
                                 *([{"path": "state/model-spend-control.json",
@@ -438,6 +468,7 @@ def prompt_feedback(project):
     return json.dumps(result, ensure_ascii=False)
 
 
+@paper_scoped
 def gate_errors(project, gate="G5", paper_id=None):
     # Other stage gates already require their scientific contracts. These increments
     # cannot manufacture approvals or substitute for those checks.
@@ -445,14 +476,29 @@ def gate_errors(project, gate="G5", paper_id=None):
         return ["research increments not initialized"] if gate == "G5" else []
     try:
         current = build(project)
+        focus = selected(project, paper_id) if enabled(project) and gate in {"G3", "G4", "G5"} else None
+
+        def applicable(item):
+            if (focus is None or item.get("ownership_changed")
+                    or item.get("group") not in {"arguments", "lineage", "editing"}):
+                return True
+            owner = item.get("paper_id")
+            try:
+                return selected(project, owner) == focus or not (project / "papers" / owner).is_dir()
+            except (ValueError, TypeError):
+                return True
+
         errors = []
         for item in current.get("errors", []):
-            if gate == "G5" and item.get("group") == "dependencies":
+            if not applicable(item):
+                continue
+            target_paper = focus or paper_id
+            if gate == "G5" and target_paper is not None and item.get("group") == "dependencies":
                 graph = next((g for g in current.get("groups", {}).get("dependencies", [])
                               if g.get("id") == item.get("id")), None)
                 # A source change only blocks papers which actually consume it.
                 # Structural graph errors still fail closed (no valid graph).
-                if graph is not None and not any(node["id"] in graph["stale"] and paper_id in node["paper_ids"]
+                if graph is not None and not any(node["id"] in graph["stale"] and target_paper in node["paper_ids"]
                                                  for node in graph["nodes"]):
                     continue
             errors.append("research increments: " + item["error"])

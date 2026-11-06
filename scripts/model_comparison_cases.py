@@ -10,11 +10,11 @@ from __future__ import annotations
 import base64
 import copy
 import hashlib
-import json
 import math
 import re
 import struct
 import zlib
+from scripts.research_artifacts import strict_json
 
 
 SYSTEM = (
@@ -291,18 +291,8 @@ def _json_object(text: str) -> dict:
         if match:
             stripped = match.group(1).strip()
 
-    def pairs(items):
-        result = {}
-        for key, value in items:
-            if key in result:
-                raise ValueError("duplicate JSON key")
-            result[key] = value
-        return result
-
     try:
-        result = json.loads(stripped, object_pairs_hook=pairs,
-                            parse_constant=lambda _: (_ for _ in ()).throw(
-                                ValueError("non-finite JSON number")))
+        result = strict_json(stripped, duplicate_error="duplicate JSON key", nonfinite_error="non-finite JSON number")
     except (ValueError, TypeError) as exc:
         raise ValueError("answer is not one valid JSON object") from exc
     if not isinstance(result, dict):

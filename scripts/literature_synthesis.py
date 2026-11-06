@@ -8,7 +8,7 @@ import html
 from pathlib import Path
 
 from scripts import literature_matrix, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin
 
 OUTPUT = "reports/literature-synthesis"
 AXES = {"construct", "population", "data", "method", "identification", "measurement", "statistics", "protocol", "scope"}
@@ -173,11 +173,9 @@ def refresh(project: Path, request_path="program/literature-synthesis.json") -> 
     report["request"] = {"path": request_path, "sha256": sha(source)}
     directory = path_in(project, OUTPUT, exists=False)
     target = directory / "latest.json"
-    from scripts.output_provenance import current_origin
     page = directory / "index.html"
     for output in (target, page):
-        if output.exists() and (current_origin(project, output).get("status") != "tracked"
-                or current_origin(project, output).get("model") != "scripts/literature_synthesis.py"):
+        if output.exists() and not matches_origin(project, output, model="scripts/literature_synthesis.py"):
             raise ValueError("preserve altered synthesis output before rebuilding")
     write(target, report)
     page.write_text(_html(report), encoding="utf-8")
@@ -190,9 +188,8 @@ def validate_saved_report(project: Path, request_path="program/literature-synthe
     fresh = build(project, wb._json(source.read_bytes()))
     fresh["request"] = {"path": request_path, "sha256": sha(source)}
     target = path_in(project, OUTPUT + "/latest.json")
-    from scripts.output_provenance import current_origin
     page = path_in(project, OUTPUT + "/index.html")
-    if (current_origin(project, target).get("status") != "tracked" or read(target) != fresh
-            or current_origin(project, page).get("status") != "tracked" or page.read_text(encoding="utf-8") != _html(fresh)):
+    if (not matches_origin(project, target) or read(target) != fresh
+            or not matches_origin(project, page) or page.read_text(encoding="utf-8") != _html(fresh)):
         raise ValueError("synthesis inputs or output changed")
     return {"valid": True, "semantic_support_verified": False}

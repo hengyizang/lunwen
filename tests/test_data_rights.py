@@ -1,5 +1,6 @@
 """Automatic rights adapter controls; all provider/model data are synthetic."""
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -87,6 +88,29 @@ class DataRightsTests(unittest.TestCase):
         self.assertEqual(authority["decision_kind"], "automated")
         self.path.write_text(self.path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
         self.assertTrue(dataset_fetch.license_errors(self.manifest, project=self.project))
+
+    def test_independent_g3_authorization_binds_the_actual_p02_review(self):
+        self.prepare_assessment()
+        write(self.project / "state/run.json", {"gate": "G3", "stage": "experiment-design", "status": "awaiting_work",
+            "paper_execution_mode": "independent", "paper_count": 2, "active_paper": "P02"})
+        write(self.project / "papers/P02/paper-contract.json", {"paper_id": "P02", "datasets": [self.manifest["dataset_id"]]})
+        audit = {"verdict": "pass-with-conditions", "fatal_findings": [], "major_findings": [], "minor_findings": [],
+                 "missing_evidence": [], "remediation_steps": [], "uncertainty": ["Synthetic rights adapter fixture only."]}
+        identity = {"provider": "synthetic-anthropic", "family": "anthropic", "requested_model": "synthetic-critic",
+                    "reported_model": "synthetic-critic", "completion_status": "completed", "cache_hit": False}
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            for phase in ("initial", "final"):
+                target = self.project / f"reviews/independent/rights-P02-{phase}.json"
+                write(target, audit)
+                binding = data_rights.review_receipts.seal_phase(self.project, stage="experiment-design", run_id="rights-P02",
+                    phase=phase, audit_path=target, prompt="Assess the preserved synthetic source rights.", identity=identity,
+                    writer_family="openai", materials=data_rights.review_receipts.material_snapshot(self.project, "experiment-design", "P02"),
+                    notes=[] if phase == "final" else None)
+            data_rights.prepare(self.project, self.path, fetcher=self.fetch)
+        receipt = read(self.project / "state/data-rights/example-v1.json")
+        self.assertEqual(receipt["review"]["receipt"], binding)
+        self.assertIn("/G3-P02/", binding["path"])
+        self.assertEqual(dataset_fetch.license_errors(self.manifest, project=self.project), [])
 
     def test_unknown_license_restricted_access_wrong_file_and_personal_data_do_not_authorize(self):
         for change in (lambda m: m["metadata"].update(access_right="restricted"),

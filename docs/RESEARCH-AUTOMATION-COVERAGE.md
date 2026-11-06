@@ -45,5 +45,5 @@
 
 科学复现沿用 `research_quality.validate_baseline_reproduction`、
 `validate_clean_room_reproduction` 和 `create_reproduction_confirmation`，核查实际 G3、
-隔离环境、执行回执、预设容差和人工确认。图形的下游面板重组不能扩大该确认范围。
+隔离环境、执行回执、预设容差和绑定当前报告的自动复现确认。图形的下游面板重组不能扩大该确认范围。
 所有六篇论文继续服务同一个博士问题，模型分工、独立审查和中央付费控制不变。

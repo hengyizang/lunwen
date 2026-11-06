@@ -64,10 +64,10 @@ than an invented universal “Q1 checklist”:
   plan and every contracted claim to trace to registered analyses. Every paper
   must reproduce domain-standard and strong-recent baselines and pass a
   registry-bound independent-environment reproduction within locked tolerances.
-- G5 requires current human-verified paper-specific JCR Q1/Q2 SCI/SCIE status, venue-specific
+- G5 requires current source-verified paper-specific JCR Q1/Q2 SCI/SCIE status, venue-specific
   checks, deterministic English validation for all submission text, and local
   figure provenance tied to real experiment outputs.
 
 ## Experiment evidence and calibrated conclusions
 
-Use [the executable experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md) at G3–G4. The tool now checks that text promises correspond to real comparator runs, preserves unfavorable evidence, and links conclusions to independently counted units and preregistered statistical decisions. Method suitability, substantive importance, baseline fairness, data representativeness, mechanism and causal identification still require scientific review. The current project remains unverified until real experiments and human gates are completed; there is no automatic doctoral/Q1 certification.
+Use [the executable experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md) at G3–G4. The tool now checks that text promises correspond to real comparator runs, preserves unfavorable evidence, and links conclusions to independently counted units and preregistered statistical decisions. Method suitability, substantive importance, baseline fairness, data representativeness, mechanism and causal identification still require scientific review. The current project remains unverified until real experiments, independent scientific audits and actual G1/G2 topic decisions are completed; there is no automatic doctoral/Q1 certification.

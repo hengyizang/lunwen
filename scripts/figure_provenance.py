@@ -20,6 +20,8 @@ FIGURE_SUFFIXES={".png",".svg",".pdf",".eps",".tif",".tiff"}
 FIGURE_TYPES={"data_chart","conceptual_diagram","conceptual_illustration"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def _relative(project:Path,value:str,field:str)->tuple[Path,str]:
     candidate=Path(value)
     if candidate.is_absolute() or not value or ".." in candidate.parts or "\\" in value or ":" in value:raise ValueError(f"{field} must be project-relative")
@@ -153,7 +155,7 @@ def register_rendered_figures(project:Path,report:dict)->list[str]:
     declared={(row.get("path"),row.get("sha256")) for row in receipt.get("outputs",[])}
     if any((row["path"],row["sha256"]) not in declared for row in outputs):
         raise ValueError("final figure differs from its renderer receipt")
-    registry=path_in(project,"experiments/registry.jsonl")
+    registry=experiment_path(project, 'experiments/registry.jsonl')
     attempts=[json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines() if line.strip()]
     runs=set()
     for row in inputs:

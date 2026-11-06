@@ -3,7 +3,7 @@ from pathlib import Path
 import html
 
 from scripts import literature_intelligence as intelligence, literature_workbench as wb
-from scripts.research_artifacts import path_in, record, sha, write
+from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest
 
 OUTPUT = "reports/literature-roles"
 FAMILIES = {"direct": "core_candidate", "adjacent": "adjacent_candidate", "counterevidence": "counterevidence_candidate"}
@@ -15,8 +15,7 @@ def build(project, spec):
             or set(spec["leads"]) != {"path", "sha256"} or spec["leads"]["path"] != "program/topic-leads.json"):
         raise ValueError("classification needs the canonical discovery leads binding")
     source = path_in(project, spec["leads"]["path"])
-    from scripts.output_provenance import current_origin
-    if sha(source) != spec["leads"]["sha256"] or current_origin(project, source).get("status") != "tracked":
+    if sha(source) != spec["leads"]["sha256"] or not matches_origin(project, source):
         raise ValueError("classification leads changed or lack executor provenance")
     leads = wb._json(source.read_bytes())
     if leads.get("kind") != "literature_discovery_intelligence":
@@ -96,21 +95,18 @@ def refresh(project, request_path="program/literature-roles.json"):
     page.write_text("<!doctype html><meta charset='utf-8'><title>Literature roles</title><h1>Discovery roles</h1>"
         "<p>Provisional, overlapping query roles. No scientific inclusion/exclusion.</p><ul>" + "".join(
         "<li>" + html.escape(r["title"] + ": " + ", ".join(r["roles"])) + "</li>" for r in report["items"]) + "</ul>", encoding="utf-8")
-    write(manifest, {"request": report["request"], "implementation_sha256": sha(Path(__file__)),
-        "files": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in (target, page)]})
-    record(project, [target, page, manifest], "scripts/literature_roles.py")
+    seal_manifest(project, [target, page], manifest, "scripts/literature_roles.py", {"request": report["request"]}, files_key="files")
     return report
 
 
 def validate_saved_report(project, request_path="program/literature-roles.json"):
     source = path_in(project, request_path)
     manifest = wb._json(path_in(project, OUTPUT + "/manifest.json").read_bytes())
-    from scripts.output_provenance import current_origin
     if manifest["request"] != {"path": request_path, "sha256": sha(source)} or manifest["implementation_sha256"] != sha(Path(__file__)):
         raise ValueError("classification request/implementation changed")
     for binding in manifest["files"]:
         path = path_in(project, binding["path"])
-        if sha(path) != binding["sha256"] or current_origin(project, path).get("status") != "tracked":
+        if sha(path) != binding["sha256"] or not matches_origin(project, path):
             raise ValueError("classification output changed")
     actual = wb._json(path_in(project, OUTPUT + "/latest.json").read_bytes())
     expected = build(project, wb._json(source.read_bytes()))

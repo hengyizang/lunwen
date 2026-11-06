@@ -2,7 +2,7 @@
 
 The external reviewer lifecycle continues a paper after a real human submission.
 It is separate from the two simulated pre-submission reviews. Every round starts
-from a current, human-approved, submission-ready paper. A named owner reviews a
+from a current, checked, submission-ready paper. A named owner reviews a
 hash-bound cloud dossier before starting it. The control plane retains the prior
 G5 approval as history, removes its current effective approval flag, opens a fresh
 G5 cycle, and selects the requested paper. Another paper's active unfinished work
@@ -125,13 +125,13 @@ After each existing writer/remediator pass, the cloud control plane generates
 concern-response coverage, revision trace and numeric/citation integrity reports
 from the current writer inputs. Writers cannot forge those protected reports.
 Existing numerical, citation, claim-strength, revision-ledger, independent-audit
-and human G5 controls remain required. A passing report is a reviewable package,
+and automated G5 controls remain required. A passing report is a reviewable package,
 not scientific approval or journal acceptance.
 
 `refresh`, `audit`, `validate_saved_report`, `review_binding` and `prompt_feedback`
 provide deterministic integration points. Saved reports become stale when current
 responses, evidence or source text change. Each subsequent external round requires
-completion of the new human G5 cycle and a newly supplied submission receipt.
+completion of a fresh submission-phase G5 cycle and a newly supplied submission receipt.
 
 ## Supplemental experiment boundary
 
@@ -144,10 +144,12 @@ spending permission.
 
 The existing experiment engine forbids re-freezing an already executed G3
 preregistration. Create a separate experiments/supplemental/Pxx/Rxxx/s001 child
-study, keeping the original plan and approval unchanged. The authenticated owner
-reviews and uses approve_supplemental for a distinct G3 protocol/budget; bounded
-continuation then executes actual child runs through the same experiment runner.
-confirm_supplemental binds human review to the actual G4 evidence. Current parent
+study, keeping the original plan and approval unchanged. The existing writer and independent initial/final critics review the exact
+child design. Native checks create its automated G3 seal before bounded execution
+through the same runner; current automated G4 evidence checks bind the actual
+outputs without certifying their scientific meaning. Explicit owner interventions
+remain available, not a required stage step. Internal findings use Ixxx with an
+actual protected source_review binding; they never invent an external Rxxx round. Current parent
 manuscript locations must cover every requested experiment and result before G5.
 Failed attempts pause, remain registered and can only be retired through a separate
 owner decision with failure disclosure; a new scope needs fresh approval. Textual

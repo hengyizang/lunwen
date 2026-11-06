@@ -15,6 +15,8 @@ OUTPUT = "reports/research-search-tree"
 PHASES = {"investigation", "tuning", "main", "ablation"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
@@ -45,7 +47,7 @@ def _prepare(project, request_file, root):
     report_file = path_in(project, report_path)
     report = read(report_file)
     attempts = {a["attempt_id"]: a for a in report["attempts"]}
-    plan_file = path_in(project, "experiments/plan.json")
+    plan_file = experiment_path(project, 'experiments/plan.json', report.get("request", {}).get("paper_id"))
     planned = {r["run_id"]: r for r in read(plan_file).get("runs", [])}
     nodes = request.get("nodes")
     if not isinstance(nodes, list) or not 1 <= len(nodes) <= 50:
@@ -146,7 +148,7 @@ def _prepare(project, request_file, root):
     payload = {"schema_version": "1.0", "kind": "research_search_tree", "id": identity,
         "request_binding": {"path": request_file, "sha256": sha(source)},
         "iteration_binding": {"path": report_path, "sha256": sha(report_file)},
-        "plan_binding": {"path": "experiments/plan.json", "sha256": sha(plan_file)},
+        "plan_binding": {"path": plan_file.relative_to(project).as_posix(), "sha256": sha(plan_file)},
         "module_sha256": sha(path_in(root, MODULE)), "nodes": facts,
         "root_ids": [n["node_id"] for n in facts if n["parent_id"] is None],
         "leaf_ids": [name for name in indexed if not any(n["parent_id"] == name for n in facts)],

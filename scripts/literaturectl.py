@@ -66,17 +66,9 @@ def install(root: Path = ROOT, destination: str = ".agents/skills") -> dict:
     if destination != ".agents/skills":
         raise ValueError("Install project skills only under .agents/skills")
     installed = []
+    from scripts.skill_discovery import install as install_discovery
     for name in SKILLS:
-        origin = root / "skills" / name
-        target = path_in(root, destination + "/" + name, exists=False)
-        if target.exists():
-            existing = {p.relative_to(target).as_posix(): sha(p) for p in target.rglob("*") if p.is_file()}
-            desired = {p.relative_to(origin).as_posix(): sha(p) for p in origin.rglob("*") if p.is_file()}
-            if existing != desired:
-                raise ValueError("Preserve changed installed skill before reinstalling: " + name)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(origin, target)
+        install_discovery(root, name)
         installed.append(name)
     return {"skills": installed, "destination": destination, "cloud_only": True,
             "upstream_commit": "ef3a594841081703259545c828c98b52af835817", "paid_calls": 0}

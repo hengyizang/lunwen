@@ -30,7 +30,7 @@ and genuinely small effects remain protected. Inline code, supported TeX math
 and code environments are excluded while retaining honest source offsets.
 The protected review binds the checker hash as well as rules and upstream sources.
 
-## Existing two-pass workflow
+## Submission editorial passes
 
 The [evidence-led narrative guide](EVIDENCE-LED-NARRATIVE.md) gives central
 claims, decisive figures and exact advantages priority over equal coverage.
@@ -40,11 +40,11 @@ and optional extensions; the manuscript states the supported contribution and
 necessary boundaries. Reframing follows the evidence while preserving original
 hypotheses, outcomes, fair comparisons and actual analysis phases.
 
-API and Codex orchestration receive compact full-skill contracts at G5, reusing the existing initial author and remediation calls. Both existing independent critics also receive the complete criteria in read-only review mode, without author dispositions or new output fields. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
+Explicit submission-phase G5 receives the complete editorial contracts through the existing author and required remediation calls; scientific drafting keeps its scientific audits without a compulsory full editorial scorecard. Both existing independent critics also receive the complete criteria in read-only review mode, without author dispositions or new output fields. No extra model/detector API or repeated paid rewrite loop is introduced. The added context still consumes tokens within the existing budget.
 
-Both controllers finish deterministic operations, including canonical Word construction, before auditing the resulting manuscript. The controller saves separate initial/final academic-audit snapshots and hashes. Final remediation requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.
+Both controllers finish deterministic operations, including canonical Word construction, before auditing the resulting manuscript. The controller saves separate initial/final academic-audit snapshots and hashes. Final submission review requires one substantive `fixed:`, `rejected:` or `unresolved:` disposition per H01–H26 and AD01–AD08. An intentional scientific exception needs a reasoned retention. Recording the writer's judgement is not independent scientific verification.
 
-The protected academic audit contains both complete reviews. G5 recomputes them against current manuscript and rule hashes. A partial/stale coverage report cannot pass merely by setting a boolean. Existing scientific editing, human revision authorization, exact revision ledger, citation/claim checks, English-language requirements and human approval remain mandatory.
+The protected academic audit contains both complete reviews. G5 recomputes them against current manuscript and rule hashes. A partial/stale coverage report cannot pass merely by setting a boolean. The exact source-bound revision ledger, current automated change record, citation/claim checks, English-language requirements and independent scientific audits remain mandatory. Actual G1/G2 human topic decisions remain; no additional human G5 decision is required.
 
 API and CLI remediation also receive up to 12 compact protected-context signals
 (160-character matches, 320-character context excerpts and explicit truncation flags),
@@ -80,7 +80,7 @@ Only supported prose is cleaned. Mathematics, citations, URLs/link targets, code
 
 Explicit-operation candidates never overwrite canonical sources or gain automatic promotion. They can inform a subsequent evidence-preserving edit by the existing OpenAI writer, subject to normal revision checks. Claude source ancestry cannot be converted to OpenAI/human authorship by cleanup.
 
-The separate [automatic hygiene contract](MANUSCRIPT-HYGIENE.md) applies to every G5 author/remediation pass. Eligible current OpenAI or human-authored prose has supported character artifacts removed before builders; original bytes and differences are retained outside the manuscript. Generated outputs and structured metadata are scanned without blind edits. A final scan, protected report recomputation and ordinary scientific integrity/human gates remain mandatory.
+The separate [automatic hygiene contract](MANUSCRIPT-HYGIENE.md) applies to every G5 author/remediation pass. Eligible current OpenAI or human-authored prose has supported character artifacts removed before builders; original bytes and differences are retained outside the manuscript. Generated outputs and structured metadata are scanned without blind edits. A final scan, protected report recomputation and ordinary scientific integrity checks and G1/G2 topic decisions remain mandatory.
 
 ## Limits
 

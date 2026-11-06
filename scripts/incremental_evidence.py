@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from scripts.research_artifacts import path_in, read, sha
+from scripts.paper_execution import artifact_path, primary_registry_paths, paper_scoped
 
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}")
 DIGEST = re.compile(r"[a-f0-9]{64}")
@@ -110,7 +111,22 @@ def jsonl(project, relative):
     return rows(result, relative, 100000)
 
 
+def primary_attempts(project):
+    """Keep earlier papers' registered evidence available to shared lineage."""
+    return [row for path in primary_registry_paths(project)
+            for row in jsonl(project, path.relative_to(project).as_posix())]
+
+
+@paper_scoped
+def _paper_lineage(project: Path, row: dict, paper_id: str) -> dict:
+    return _lineage(project, row)
+
+
 def lineage(project: Path, row: dict) -> dict:
+    return _paper_lineage(project, row, row.get("paper_id"))
+
+
+def _lineage(project: Path, row: dict) -> dict:
     identifier(row.get("id"))
     paper = text(row.get("paper_id"), "paper_id", 3)
     if not re.fullmatch(r"P[0-9]{2}", paper):
@@ -172,7 +188,7 @@ def lineage(project: Path, row: dict) -> dict:
             if node["research_state"] in {"exploratory", "confirmatory"}:
                 raise ValueError("an interpretation cannot be promoted into an executed observation")
         if node["kind"] == "project_observation":
-            attempts = [item for item in jsonl(project, "experiments/registry.jsonl")
+            attempts = [item for item in primary_attempts(project)
                         if item.get("attempt_id") == node.get("attempt_id")]
             failure = node["research_state"] in {"failed", "stopped"}
             statuses = {"failed", "timed_out", "stopped"} if failure else {"succeeded"}
@@ -192,7 +208,7 @@ def lineage(project: Path, row: dict) -> dict:
                     raise ValueError("executor output changed")
             if not failure and node["research_state"] not in {"exploratory", "confirmatory"}:
                 raise ValueError("completed observations require their registered analysis state")
-            plan = read(path_in(project, "experiments/plan.json"))
+            plan = read(artifact_path(project, "experiments/plan.json", paper))
             run = next((item for item in plan.get("runs", []) if item.get("run_id") == attempt.get("run_id")), None)
             if run is None or run.get("paper_id") != paper:
                 raise ValueError("observation is not in the registered plan")

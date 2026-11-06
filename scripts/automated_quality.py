@@ -18,7 +18,8 @@ ACTOR = "deterministic_control_plane"
 
 
 def _target(project: Path, relative: str) -> Path:
-    target = project / relative
+    from scripts.paper_execution import artifact_path
+    target = artifact_path(project, relative)
     if not target.resolve().is_relative_to(project.resolve()):
         raise quality.ResearchQualityError("quality record escapes the project")
     if any(p.is_symlink() for p in (target, *target.parents) if p != project.parent):
@@ -33,6 +34,27 @@ def _store(project: Path, path: Path, value: dict) -> None:
         model="scripts/automated_quality.py", role="automated-evidence-check",
         run_id="automated-quality",
     )
+
+
+def checked_run(project: Path, stage: str) -> dict | None:
+    """Use the same scientific-scope check for CLI, API and cloud quality work."""
+    if not isinstance(stage, str) or stage not in {"experiment-design", "experiment-execution"}:
+        return None
+    blocked = {"stage": stage, "created": [], "refreshed": [], "existing": [], "blockers": [], "paid_calls": 0}
+    try:
+        state = quality._load_json(_target(project, "state/run.json"))
+        gate = "G3" if stage == "experiment-design" else "G4"
+        if (state.get("stage"), state.get("gate"), state.get("status")) != (stage, gate, "awaiting_work"):
+            raise quality.ResearchQualityError("quality work requires the matching actual open G3 or G4 stage")
+        from scripts.scientific_scope import validate
+        issues = validate(project, gate, state.get("active_paper"))
+        if issues:
+            blocked["blockers"] = issues
+            return blocked
+        return run(project)
+    except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
+        blocked["blockers"].append(str(exc))
+        return blocked
 
 
 def run(project: Path) -> dict:
@@ -51,7 +73,11 @@ def run(project: Path) -> dict:
     results = {"stage": stage, "created": [], "refreshed": [], "existing": [], "blockers": [], "paid_calls": 0}
     papers = quality._paper_ids(project)
     count = state.get("paper_count")
-    if not papers or (count is not None and (type(count) is not int or papers != [f"P{n:02d}" for n in range(1, count + 1)])):
+    all_papers = [p.name for p in sorted((project / "papers").glob("P[0-9][0-9]"))]
+    context = state.get("supplemental_context")
+    expected_papers = ([context.get("paper_id")] if isinstance(context, dict)
+                       else [f"P{n:02d}" for n in range(1, count + 1)] if type(count) is int else [])
+    if not papers or (count is not None and (type(count) is not int or count != len(expected_papers) or all_papers != expected_papers)):
         results["blockers"].append("paper directories do not match the current project state")
         return results
 
@@ -74,7 +100,9 @@ def run(project: Path) -> dict:
             if errors and owned and value.get("confirmation_kind") == "automated":
                 if stage == "experiment-design":
                     registry = _target(project, "experiments/registry.jsonl")
-                    if (registry.is_file() and registry.read_text(encoding="utf-8").strip()) or "G3" in state.get("approved_gates", []):
+                    from scripts.paper_execution import enabled,selected
+                    gate_key=f"G3:{selected(project)}" if enabled(project) else "G3"
+                    if (registry.is_file() and registry.read_text(encoding="utf-8").strip()) or gate_key in state.get("approved_gates",[]):
                         results["blockers"].append(relative + ": frozen or executed inputs cannot be refreshed")
                         return
                     plan = _target(project, "experiments/plan.json")
@@ -106,7 +134,14 @@ def run(project: Path) -> dict:
             results["blockers"].append(relative + ": " + str(exc))
 
     if stage == "experiment-design":
-        for dataset_id in sorted(quality._manifest_map(project)):
+        from scripts.paper_execution import prepare_datasets
+        try:
+            prepare_datasets(project)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            results["blockers"].append(str(exc))
+            return results
+        from scripts.research_phase import exploratory
+        for dataset_id in ([] if exploratory(project) else sorted(quality._manifest_map(project))):
             if not quality.DATASET_RE.fullmatch(dataset_id):
                 results["blockers"].append("invalid dataset ID")
                 continue
@@ -122,6 +157,9 @@ def run(project: Path) -> dict:
                        lambda value, p=paper_id: quality.validate_preregistration(value, p, project))
     else:
         results["blockers"].extend(quality.validate_g4_quality(project, require_confirmation=False))
+        from scripts.research_phase import exploratory
+        if exploratory(project):
+            return results
         if not results["blockers"]:
             from scripts import study_routes
             for paper_id in papers:
@@ -143,7 +181,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     args = parser.parse_args()
-    result = run(researchctl.project_dir(args.project))
+    project = researchctl.project_dir(args.project)
+    stage = quality._load_json(_target(project, "state/run.json")).get("stage")
+    result = checked_run(project, stage) or {"blockers": ["automated quality requires an open G3 or G4 stage"], "paid_calls": 0}
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 1 if result["blockers"] else 0
 

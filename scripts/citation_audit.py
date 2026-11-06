@@ -17,6 +17,11 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
+
+try:
     from scripts.network_safety import NetworkSafetyError, fetch_json, validate_https_url
 except ModuleNotFoundError:  # Direct execution from scripts/.
     from network_safety import (  # type: ignore[no-redef]
@@ -50,14 +55,6 @@ def normalize_title(value: str) -> str:
 
 def title_similarity(left: str, right: str) -> float:
     return SequenceMatcher(None, normalize_title(left), normalize_title(right)).ratio()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def tex_source_paths(path: Path, root: Path | None=None, seen: set[Path] | None=None)->set[Path]:

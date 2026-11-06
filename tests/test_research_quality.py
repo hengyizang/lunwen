@@ -32,6 +32,36 @@ from scripts.research_quality import (
 
 
 class ResearchQualityTests(unittest.TestCase):
+    def test_reopened_search_keeps_history_and_checks_as_an_honest_draft(self):
+        originality,matrix=self.novelty_inputs()
+        matrix["status"]="in_progress"
+        saturation=matrix["search_saturation"]
+        saturation.update(status="reopened",consecutive_no_material_new_work_rounds=0,
+            current_no_material_new_work_round_ids=[],affected_claim_ids=["N1"],
+            unresolved_search_gaps=["New adjacent work may challenge the proposed difference."],
+            next_searches=["Inspect that work and execute backward/forward chaining around its DOI."])
+        original=copy.deepcopy(matrix)
+        self.assertEqual(validate_novelty_claim_matrix(matrix,originality,require_saturation=False),[])
+        self.assertEqual(matrix,original)
+        errors=validate_novelty_claim_matrix(matrix,originality)
+        self.assertTrue(any("not currently saturated" in e for e in errors),errors)
+        self.assertFalse(any("must be zero" in e for e in errors),errors)
+        self.assertEqual(len(saturation["no_material_new_work_rounds"]),2)
+
+    def test_unsaturated_state_cannot_be_promoted_by_changing_the_ready_label(self):
+        originality,matrix=self.novelty_inputs()
+        matrix["search_saturation"].update(status="exploring",affected_claim_ids=["N1"],
+            next_searches=["Execute the missing adjacent-field search."],unresolved_search_gaps=["Missing adjacent evidence."])
+        self.assertTrue(any("not currently saturated" in e for e in validate_novelty_claim_matrix(matrix,originality)))
+        matrix["search_saturation"]["affected_claim_ids"]=["invented-claim"]
+        self.assertTrue(any("unknown claims" in e for e in validate_novelty_claim_matrix(matrix,originality,require_saturation=False)))
+
+    def test_saturation_draft_mode_still_checks_claimed_saturation(self):
+        originality,matrix=self.novelty_inputs()
+        matrix["search_saturation"]["status"]="saturated"
+        matrix["search_saturation"]["consecutive_no_material_new_work_rounds"]=0
+        self.assertTrue(any("must be >= 2" in e for e in validate_novelty_claim_matrix(matrix,originality,require_saturation=False)))
+
     def novelty_inputs(self) -> tuple[dict, dict]:
         originality = {
             "closest_prior_work": [{"id": f"W{index}"} for index in range(1, 6)],
@@ -243,6 +273,8 @@ class ResearchQualityTests(unittest.TestCase):
             )
             self.assertEqual(report["status"], "pass")
             self.assertEqual(validate_data_quality_report(report, "d1", project), [])
+            self.assertFalse(report["human_review_required"])
+            self.assertEqual(validate_data_quality_report({**report, "human_review_required": True}, "d1", project), [])
             report_path = project / "data" / "quality" / "d1.json"
             report_path.write_text(json.dumps(report), encoding="utf-8")
             confirmation = create_data_quality_confirmation(
@@ -422,6 +454,9 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertEqual(report["required_sample_size"], {"group_1": 64, "group_2": 64})
             self.assertEqual(report["generated_by"], "statsmodels")
             self.assertEqual(len(report["bound_files"]), 2)
+            self.assertFalse(report["human_review_required"])
+            self.assertEqual(validate_power_report(report, "P01", project), [])
+            self.assertEqual(validate_power_report({**report, "human_review_required": True}, "P01", project), [])
 
     def test_simulation_power_cross_checks_executable_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -477,6 +512,7 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertEqual(report["generated_by"], "simulation_rerun")
             self.assertEqual(len(report["rerun_receipts"]), 2)
             self.assertEqual(validate_power_report(report, "P01", project), [])
+            self.assertFalse(report["human_review_required"])
             tampered_report = copy.deepcopy(report)
             tampered_report["rerun_receipts"][0]["output_sha256"] = "f" * 64
             self.assertTrue(
@@ -586,6 +622,7 @@ class ResearchQualityTests(unittest.TestCase):
                 ],
             }
             self.assertEqual(validate_baseline_reproduction(baseline, "P01", project, registry), [])
+            self.assertEqual(validate_baseline_reproduction({**baseline, "human_review_required": False}, "P01", project, registry), [])
             clean = {
                 "schema_version": "1.0", "paper_id": "P01", "status": "pass", "human_review_required": True,
                 "independent_operator": "Independent researcher",
@@ -604,6 +641,7 @@ class ResearchQualityTests(unittest.TestCase):
                 "evidence_files": evidence_files,
             }
             self.assertEqual(validate_clean_room_reproduction(clean, "P01", project, registry), [])
+            self.assertEqual(validate_clean_room_reproduction({**clean, "human_review_required": False}, "P01", project, registry), [])
             same_environment = copy.deepcopy(registry)
             same_environment[-1]["cwd"] = "env-a"
             same_environment[-1]["runtime"] = {"python": "3.12", "platform": "linux-a"}

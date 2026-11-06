@@ -17,6 +17,10 @@ METHODS = {"did_2x2", "iv_2sls", "sharp_rdd"}
 MODULE = "scripts/empirical_design.py"
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
+from scripts.paper_execution import paper_scoped
+
 def _text(value, label):
     if not isinstance(value, str) or not value.strip() or len(value) > 12000:
         raise ValueError(label + " needs explicit bounded text")
@@ -105,6 +109,7 @@ def _anchor(project, value):
     return {**bound, "locator": value["locator"], "quote": quote}
 
 
+@paper_scoped
 def audit(project: Path, paper_id: str, *, require_frozen=False) -> dict:
     if not re.fullmatch(r"P[0-9]{2}", paper_id):
         raise ValueError("explicit paper ID required")
@@ -177,7 +182,7 @@ def audit(project: Path, paper_id: str, *, require_frozen=False) -> dict:
         for row in rivals:
             _text(row.get("explanation"), "rival explanation")
             _text(row.get("discriminating_test"), "discriminating test")
-        plan_path = path_in(project, "experiments/plan.json")
+        plan_path = experiment_path(project, 'experiments/plan.json')
         result["plan_sha256"] = sha(plan_path)
         plan = read(plan_path)
         planned = {row["run_id"]: row for row in plan.get("runs", [])}
@@ -249,6 +254,7 @@ def audit(project: Path, paper_id: str, *, require_frozen=False) -> dict:
     return result
 
 
+@paper_scoped
 def refresh(project: Path, paper_id: str) -> dict:
     report = audit(project, paper_id)
     if report["status"] != "not_configured":
@@ -258,6 +264,7 @@ def refresh(project: Path, paper_id: str) -> dict:
     return report
 
 
+@paper_scoped
 def validate_saved_report(project: Path, paper_id: str) -> list[str]:
     current = audit(project, paper_id, require_frozen=True)
     if current["status"] == "not_configured":

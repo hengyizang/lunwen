@@ -64,7 +64,7 @@ required licensed dependency. The native runtime uses CPU numpy/scipy, which mus
 be installed in the chosen pinned container. Copy empirical_runtime.py unchanged
 and use exact command `python <runtime> --design papers/Pxx/empirical-design.json
 --data <CSV> --spec <ID> --output papers/Pxx/results/<ID>.json`. Data, design and
-runtime hashes are frozen. No actual estimate runs before human G3 approval.
+runtime hashes are frozen. No actual estimate runs before the checked G3 protocol seal.
 
 In existing experiment-evidence-plan comparisons use analysis_mode
 `empirical_estimator`, empirical_specification_id, and
@@ -118,7 +118,7 @@ remains locatable in the manuscript or supplement under the existing narrative r
 Runtime JSON includes records:[{estimate,ci_low,ci_high,...}]. Existing
 derive_figure_data with operation:json_rows, record_path:records, selected columns
 and exact sealed source runs creates figure CSV through existing lineage. Reuse
-registered renderers and human visual approval; do not redraw numbers by model.
+registered renderers and actual source-bound automated visual inspection; do not redraw numbers by model.
 
 ## Cloud operations and sources
 

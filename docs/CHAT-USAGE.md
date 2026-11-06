@@ -31,7 +31,7 @@
 
 最终打包：
 
-> 请对 P01 执行 G5 最终检查。若且仅若全部闸门与人工审批有效，生成本地投稿包；
+> 请对 P01 执行 G5 最终检查。若且仅若当前投稿阶段全部检查、自动 G5 决定与既有 G1/G2 选题决定有效，生成本地投稿包；
 > 不要登录期刊网站或替我提交。
 
 ## Codex 会怎样节约额度
@@ -54,7 +54,7 @@ python3 scripts/api_orchestrator.py cost my-phd
 python3 scripts/api_orchestrator.py cost my-phd --paper P01
 ```
 
-直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts、理论测量链和数学符号”“把审稿意见拆成 concern cards 和编辑摘要”“把 Markdown 转成需要人工目视验收的 Word 主稿”“先估算一次低成本抽取任务”等，Codex 会先经 MCP 零成本路由，再使用对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
+直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts、理论测量链和数学符号”“把审稿意见拆成 concern cards 和编辑摘要”“把 Markdown 转成有实际渲染和自动视觉检查的 Word 主稿”“先估算一次低成本抽取任务”等，Codex 会先经 MCP 零成本路由，再使用对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
 
 当你明确要求、且当前 ChatGPT Work/桌面浏览器可用时，可以人工登录网页工具、导出合法文件，再由脚本导入并记录哈希。ChatGPT 网页版不是后台 API，不复用 Cookie 或绕过验证码；Codex CLI 不自动共享网页会话。GPT Image 的概念插图需额外人工检查和 AI 使用披露。
 

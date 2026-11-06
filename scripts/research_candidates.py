@@ -142,7 +142,8 @@ def validate_idea(project: Path, idea: Any, prefix: str) -> list[str]:
     return errors
 
 
-def audit_register(project: Path, spec: Path) -> dict[str, Any]:
+def audit_register(project: Path, spec: Path, *, require_decision: bool = False) -> dict[str, Any]:
+    """Check an honest draft by default; topic approval always requests a decision."""
     value = json.loads(spec.read_text(encoding="utf-8"))
     errors: list[str] = []
     if not isinstance(value, dict):
@@ -168,7 +169,7 @@ def audit_register(project: Path, spec: Path) -> dict[str, Any]:
         from scripts import innovation_screening
     except ImportError:
         import innovation_screening
-    errors.extend(innovation_screening.validate(project, value))
+    errors.extend(innovation_screening.validate(project, value, require_decision=require_decision))
     argument = value.get("argument_plan")
     if not isinstance(argument, dict):
         errors.append("a proposal-first argument_plan is required")
@@ -181,7 +182,11 @@ def audit_register(project: Path, spec: Path) -> dict[str, Any]:
                 {item.strip() for item in allowed if isinstance(item, str)} &
                 {item.strip() for item in forbidden if isinstance(item, str)}):
             errors.append("an argument claim is simultaneously allowed and forbidden")
+    screening = value.get("innovation_screening")
+    exploratory = isinstance(screening, dict) and screening.get("mode") == "exploratory"
     return {"schema_version": "1.0", "spec_sha256": sha256(spec), "hypothesis_count": len(hypotheses),
+            "for_gate": require_decision,
+            "status": "blocked" if errors else "in_progress" if exploratory else "ready_for_review",
             "implementation_sha256": sha256(Path(__file__)),
             "reasoning_implementation_sha256": sha256(Path(__file__).with_name("scientific_reasoning.py")),
             "innovation_implementation_sha256": sha256(Path(__file__).with_name("innovation_screening.py")),
@@ -253,11 +258,18 @@ def validate_saved_register(project: Path) -> list[str]:
     if not spec.is_file() or not report.is_file():
         return ["hypothesis register and deterministic hypothesis audit are required"]
     try:
-        current = audit_register(project, spec)
         saved = json.loads(report.read_text())
+        if not isinstance(saved, dict):
+            raise ValueError("hypothesis audit must be an object")
+        current = audit_register(project, spec, require_decision=saved.get("for_gate") is True)
+        strict = audit_register(project, spec, require_decision=True)
+        # Older audits lack these presentation fields. Their existing source and
+        # implementation hashes still have to match, and the gate is recomputed.
+        current = {key: value for key, value in current.items()
+                   if key not in {"for_gate", "status"} or key in saved}
         if saved != current:
-            return current["errors"] + ["hypothesis audit is stale or modified"]
-        return current["errors"]
+            return strict["errors"] + ["hypothesis audit is stale or modified"]
+        return strict["errors"]
     except (OSError, ValueError, TypeError, KeyError) as exc:
         return [f"cannot validate hypothesis register: {exc}"]
 
@@ -268,10 +280,13 @@ def main() -> int:
     parser.add_argument("--project", required=True)
     parser.add_argument("--spec", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--for-gate", action="store_true", help="Apply final G1 topic-decision requirements")
     args = parser.parse_args()
     project = safe_path(ROOT / "projects", args.project)
     spec, output = safe_path(project, args.spec), safe_path(project, args.output)
-    report = audit_register(project, spec) if args.kind == "hypotheses" else audit_card(project, spec)
+    if args.for_gate and args.kind != "hypotheses":
+        parser.error("--for-gate applies only to hypotheses")
+    report = audit_register(project, spec, require_decision=args.for_gate) if args.kind == "hypotheses" else audit_card(project, spec)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))

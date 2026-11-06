@@ -5,6 +5,9 @@ from pathlib import Path
 from scripts.research_artifacts import path_in, read
 
 
+from scripts.paper_execution import paper_scoped
+
+@paper_scoped
 def requirements(project, paper_id):
     if not re.fullmatch(r"P[0-9]{2}", paper_id):
         raise ValueError("explicit paper ID required")
@@ -36,10 +39,13 @@ def requirements(project, paper_id):
     return {"data_contract_ids": sorted(ids), "causal_design": causal, "reporting": reporting or causal, "economic_request_ids": economic}
 
 
+@paper_scoped
 def papers(project, paper_id=None):
-    return [paper_id] if paper_id else [p.name for p in sorted((project/"papers").glob("P[0-9][0-9]"))]
+    from scripts.paper_execution import papers as selected_papers
+    return [paper_id] if paper_id else selected_papers(project)
 
 
+@paper_scoped
 def preregistration_inputs(project, paper_id):
     from scripts import data_contracts, empirical_design
     wanted, inputs = requirements(project, paper_id), {}
@@ -71,6 +77,14 @@ def preregistration_inputs(project, paper_id):
 
 
 def preflight_run(project, run):
+    from scripts.paper_execution import enabled, scope
+    if enabled(project) and run.get("paper_id") is not None:
+        with scope(project, run["paper_id"]):
+            return _preflight_run(project, run)
+    return _preflight_run(project, run)
+
+
+def _preflight_run(project, run):
     """Inspect native runtime commands before the existing G3 runner launches."""
     from scripts import data_contracts, empirical_design
     from scripts.research_artifacts import sha
@@ -85,11 +99,17 @@ def preflight_run(project, run):
         if checked["status"] == "not_configured" or checked["errors"]:
             raise ValueError("native empirical runtime requires current frozen design: " + "; ".join(checked["errors"]))
     if argv[1] == "analysis/data_cleaning_runtime.py":
-        if len(argv) != 10 or argv[2::2] != ["--contract", "--dataset-id", "--output", "--receipt"]:
+        flags = ["--contract", "--dataset-id", "--output", "--receipt"]
+        if len(argv) not in {10, 12} or argv[2::2] != flags + (["--dataset-registry"] if len(argv) == 12 else []):
             raise ValueError("use the exact standalone cleaning command")
         dataset, output, receipt = argv[5], argv[7], argv[9]
         if argv[3] != f"data/contracts/{dataset}.json" or run.get("cwd", ".") != ".":
             raise ValueError("cleaning requires canonical contract and project-root cwd")
+        if len(argv) == 12:
+            from scripts.paper_execution import dataset_snapshot
+            registry = dataset_snapshot(project, run.get("paper_id"))
+            if argv[11] != registry.relative_to(project).as_posix():
+                raise ValueError("cleaning command must select this paper's canonical dataset snapshot")
         runtime = Path(__file__).with_name("data_cleaning_runtime.py")
         if not script.is_file() or sha(script) != sha(runtime):
             raise ValueError("standalone cleaning runtime differs from the reviewed implementation")
@@ -121,6 +141,7 @@ def cloud_outputs_allowed(project, run):
         return False
 
 
+@paper_scoped
 def gate_errors(project, gate, paper_id=None):
     if gate not in {"G3", "G4", "G5"}:
         return []
@@ -149,6 +170,7 @@ def gate_errors(project, gate, paper_id=None):
     return errors
 
 
+@paper_scoped
 def refresh(project, stage, paper_id=None):
     from scripts import data_contracts, empirical_design, empirical_reporting
     result = {"status": "not_configured", "errors": [], "datasets": {}, "papers": {}, "paid_calls": 0}

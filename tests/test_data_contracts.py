@@ -91,6 +91,28 @@ class DataContractTests(unittest.TestCase):
         registry.write_text(json.dumps(changed)+"\n", encoding="utf-8")
         self.assertFalse(self.report()["pass"])
 
+    def test_independent_empirical_freeze_does_not_bind_later_paper_dataset_registry(self):
+        from scripts import empirical_workflow, paper_execution
+        write(self.project/"state/run.json", {"paper_execution_mode":"independent", "paper_count":2,
+            "active_paper":"P01", "stage":"experiment-design", "gate":"G3", "approved_gates":[], "approvals":[]})
+        write(self.project/"papers/P01/paper-contract.json", {"datasets":[self.dataset],
+            "empirical_workflow":{"data_contract_ids":[self.dataset]}})
+        paper_execution.prepare_datasets(self.project)
+        inputs = empirical_workflow.preregistration_inputs(self.project, "P01")
+        frozen = {path.relative_to(self.project).as_posix():sha(path) for path in inputs}
+        self.assertIn("experiments/papers/P01/datasets.jsonl", frozen)
+        self.assertNotIn("data/datasets.jsonl", frozen)
+        registry = self.project/"data/datasets.jsonl"
+        with registry.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({"dataset_id":"p02-later"})+"\n")
+        state = read(self.project/"state/run.json"); state["active_paper"]="P02"
+        write(self.project/"state/run.json", state)
+        reread = empirical_workflow.preregistration_inputs(self.project, "P01")
+        self.assertEqual({p.relative_to(self.project).as_posix():sha(p) for p in reread}, frozen)
+        self.source.write_text(self.source.read_text()+"b,2021,500,0\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "changed"):
+            empirical_workflow.preregistration_inputs(self.project, "P01")
+
     def test_full_calendar_detects_a_wholly_absent_period(self):
         self.spec["panel"]["expected_times"] = ["2019", "2020", "2021"]
         self.save(); result = self.report()

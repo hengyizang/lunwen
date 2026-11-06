@@ -52,6 +52,8 @@ def _lexical_support_hints(claim: str, excerpts: str, claim_id: str) -> list[str
     return hints
 
 
+from scripts.paper_execution import paper_scoped
+
 def _nonempty(item: dict[str, Any], fields: tuple[str, ...], errors: list[str], prefix: str)->None:
     for field in fields:
         if not str(item.get(field,"")).strip():errors.append(f"{prefix}.{field} is required")
@@ -267,6 +269,7 @@ def validate_saved_report(paper: Path) -> list[str]:
     return errors
 
 
+@paper_scoped
 def refresh(project: Path, paper_id: str) -> dict[str, Any]:
     """Use the existing protected paper audit after initial writing/remediation."""
     if not re.fullmatch(r"P[0-9]{2}", paper_id):

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.metadata
 import json
 import re
@@ -17,8 +16,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from scripts.research_artifacts import sha as sha256_file, regular_file
     from scripts.citation_audit import manuscript_digest, normalize_doi
 except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file, regular_file
     from citation_audit import manuscript_digest, normalize_doi  # type: ignore
 
 
@@ -40,15 +41,7 @@ def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def canonical_manuscript(paper: Path) -> Path:
+def canonical_manuscript(paper: Path, *, error_type=RefVerifyAdapterError) -> Path:
     candidates = [
         path
         for path in (
@@ -58,7 +51,7 @@ def canonical_manuscript(paper: Path) -> Path:
         if path.is_file() and not path.is_symlink()
     ]
     if len(candidates) != 1:
-        raise RefVerifyAdapterError(
+        raise error_type(
             "exactly one canonical manuscript/main.tex or manuscript/main.docx is required"
         )
     return candidates[0]
@@ -76,13 +69,8 @@ def project_paper(project: str, paper_id: str) -> Path:
 
 
 def safe_paper_file(paper: Path, relative: str) -> Path:
-    value = Path(relative)
-    if value.is_absolute() or not value.parts or ".." in value.parts:
-        raise RefVerifyAdapterError("claims path must be paper-relative and cannot contain ..")
-    path = (paper / value).resolve()
-    if paper.resolve() not in path.parents or not path.is_file() or path.is_symlink():
-        raise RefVerifyAdapterError(f"claims file is not a regular paper file: {relative}")
-    return path
+    return regular_file(paper, relative, RefVerifyAdapterError,
+                        invalid="claims path must be paper-relative and cannot contain ..", missing="claims file is not a regular paper file")
 
 
 def load_claims(path: Path) -> list[dict[str, str]]:

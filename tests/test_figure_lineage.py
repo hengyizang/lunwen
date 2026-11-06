@@ -64,18 +64,18 @@ class FigureLineageTests(unittest.TestCase):
         self.assertIn("O1,2.5,1.2",(self.project/output).read_text())
         self.assertEqual(len(lineage.lineage(self.project,"P01",[output],["r1"])["runs"]),1)
 
-    def supplemental(self):
-        namespace="experiments/supplemental/P01/R001/s001"
+    def supplemental(self,*,round_id="R001",parent_plan="experiments/plan.json"):
+        namespace=f"experiments/supplemental/P01/{round_id}/s001"
         child=self.project/namespace
         _,approval,_=sealed_run(child,run_id="review-run")
-        control_path=self.project/"state/supplemental-experiments/P01/R001/s001.json"
+        control_path=self.project/f"state/supplemental-experiments/P01/{round_id}/s001.json"
         files={path.relative_to(child).as_posix():sha(path) for path in child.rglob("*") if path.is_file() and path.relative_to(child).parts[0] in {"experiments","results"}}
-        control={"schema_version":"1.0","paper_id":"P01","round_id":"R001","scope_id":"s001","scope_root":namespace,
+        control={"schema_version":"1.0","paper_id":"P01","round_id":round_id,"scope_id":"s001","scope_root":namespace,
             "child_state_sha256":sha(child/"state/run.json"),"approval":approval,"proposal":{
-                "original_plan_sha256":sha(self.project/"experiments/plan.json"),"original_preregistration_sha256":sha(self.project/"papers/P01/preregistration.json")},
+                "original_plan_sha256":sha(self.project/parent_plan),"original_preregistration_sha256":sha(self.project/"papers/P01/preregistration.json")},
             "confirmation":{"actor":"Synthetic reviewer","source_run_id":"123","cloud_review_sha256":"a"*64,"files":files}}
         write(control_path,control);record(self.project,[control_path],"scripts/supplemental_experiments.py")
-        return child,control_path,control,namespace+"/results/metrics.csv","supplemental/P01/R001/s001/review-run"
+        return child,control_path,control,namespace+"/results/metrics.csv",f"supplemental/P01/{round_id}/s001/review-run"
 
     def test_confirmed_supplemental_namespace_passes_and_stale_or_unconfirmed_fails(self):
         child,path,control,data,run=self.supplemental()
@@ -90,6 +90,36 @@ class FigureLineageTests(unittest.TestCase):
         (child/"results/metrics.csv").write_text("group,value\nA,9\n")
         with self.assertRaisesRegex(ValueError,"Confirmed supplemental source changed"):
             lineage.lineage(self.project,"P01",[data],[run])
+
+    def test_confirmed_internal_supplemental_namespace_binds_exact_scope(self):
+        child,path,control,data,run=self.supplemental(round_id="I001")
+        result=lineage.lineage(self.project,"P01",[data],[run])
+        seal=result["runs"][0]
+        self.assertEqual(seal["run_id"],"supplemental/P01/I001/s001/review-run")
+        self.assertEqual(seal["scope"],{"path":path.relative_to(self.project).as_posix(),"sha256":sha(path)})
+        self.assertEqual(seal["outputs"],[{"path":data,"sha256":sha(child/"results/metrics.csv")}])
+        self.assertEqual(control["round_id"],"I001")
+
+    def test_supplemental_parent_binding_uses_scoped_plan_and_detects_its_changes(self):
+        scoped_plan="experiments/papers/P01/plan.json"
+        plan=read(self.project/"experiments/plan.json");plan["synthetic_scope"]="P01"
+        write(self.project/scoped_plan,plan)
+        state=read(self.project/"state/run.json")
+        state.update(paper_execution_mode="independent",paper_count=2,active_paper="P02")
+        write(self.project/"state/run.json",state)
+        for round_id in ("R001","I001"):
+            with self.subTest(round_id=round_id):
+                write(self.project/scoped_plan,plan)
+                _,_,control,data,run=self.supplemental(round_id=round_id,parent_plan=scoped_plan)
+                self.assertNotEqual(control["proposal"]["original_plan_sha256"],sha(self.project/"experiments/plan.json"))
+                result=lineage.lineage(self.project,"P01",[data],[run])
+                legacy=read(self.project/"experiments/plan.json");legacy["unrelated_change"]=round_id
+                write(self.project/"experiments/plan.json",legacy)
+                self.assertEqual(lineage.lineage(self.project,"P01",[data],[run]),result)
+                write(self.project/scoped_plan,{**plan,"changed_after_sealing":True})
+                with self.assertRaisesRegex(ValueError,"Parent protocol changed"):
+                    lineage.lineage(self.project,"P01",[data],[run])
+        self.assertEqual(read(self.project/"state/run.json")["active_paper"],"P02")
 
     def test_native_publication_renderer_registers_only_sealed_data(self):
         from scripts.publication_figures import render

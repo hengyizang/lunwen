@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 
 from scripts import literature_evidence as evidence, literature_intelligence as intelligence
 from scripts import literature_workbench as workbench
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin
 
 REQUEST = "program/literature-search-strategy.json"
 OUTPUT = "reports/literature-search-strategy"
@@ -288,9 +288,7 @@ def build(project: Path, spec: dict) -> dict:
 
 
 def _trusted(project, target):
-    from scripts.output_provenance import current_origin
-    origin = current_origin(project, target)
-    if origin.get("status") != "tracked" or origin.get("family") != "other" or origin.get("model") != MODULE:
+    if not matches_origin(project, target, family="other", model=MODULE):
         raise ValueError("search strategy history/output changed outside the deterministic builder")
 
 

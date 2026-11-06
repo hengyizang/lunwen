@@ -18,6 +18,62 @@ CLOSEST_CONTEXT = {
 }
 
 
+class SharedIntegrityError(ValueError):
+    """Shared evidence or inherited issue integrity cannot be scoped away."""
+
+
+def _paper_scope(section, row):
+    """Only native, explicit ownership narrows a draft's stage blocker."""
+    if section == "methods":
+        papers = [row.get("paper_id")]
+    elif section == "comparisons":
+        closest = row.get("closest_work")
+        papers = [closest.get("paper_id")] if isinstance(closest, dict) else []
+    elif section == "review_findings":
+        action = row.get("writing_action")
+        assessment = row.get("writing_action_assessment")
+        definition = assessment.get("definition") if isinstance(assessment, dict) else None
+        scope = action.get("scope") if isinstance(action, dict) else None
+        if not isinstance(scope, dict) and isinstance(definition, dict):
+            scope = definition.get("scope")
+        papers = scope.get("paper_ids", []) if isinstance(scope, dict) else []
+        if not papers:
+            papers = [row.get("paper_id")]
+        elif row.get("paper_id") and row["paper_id"] not in papers:
+            return []
+    else:
+        return []
+    if not isinstance(papers, list) or not papers or any(
+            not isinstance(paper, str) or not re.fullmatch(r"P[0-9]{2}", paper) for paper in papers):
+        return []
+
+    def conflicts(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in {"path", "design_path"} and isinstance(item, str):
+                    match = re.match(r"(?:papers/|(?:experiments|claims)/papers/|results/)(P[0-9]{2})/", item)
+                    if match and match[1] not in papers:
+                        return True
+                if conflicts(item):
+                    return True
+        elif isinstance(value, list):
+            return any(conflicts(item) for item in value)
+        return False
+
+    if conflicts(row):
+        return []
+    return sorted(set(papers))
+
+
+def _scope_call(project, section, row, operation):
+    from scripts.paper_execution import enabled, scope
+    owners = _paper_scope(section, row)
+    if enabled(project) and len(owners) == 1:
+        with scope(project, owners[0]):
+            return operation()
+    return operation()
+
+
 def nonempty(value, name):
     if not isinstance(value, str) or not value.strip() or len(value) > 12000:
         raise ValueError(f"{name} needs explicit bounded text")
@@ -25,6 +81,13 @@ def nonempty(value, name):
 
 
 def sources(project, rows):
+    try:
+        return _sources(project, rows)
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        raise SharedIntegrityError(str(exc)) from exc
+
+
+def _sources(project, rows):
     if not isinstance(rows, list) or not 1 <= len(rows) <= 30:
         raise ValueError("one to thirty actual evidence anchors required")
     result = []
@@ -73,7 +136,10 @@ def _closest_prior_anchor(project, anchor, paper):
     permitted = {paper["source"]["path"], (paper.get("reader") or {}).get("path")}
     if anchor.get("path") not in permitted:
         raise ValueError("prior axis evidence must cite its registered original source or controlled reader, not notes/reviews")
-    return validate_anchor(project, paper, anchor)
+    try:
+        return validate_anchor(project, paper, anchor)
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        raise SharedIntegrityError(str(exc)) from exc
 
 
 def _closest_evaluation(project, evaluation, arm, paper_id, claim_id, library_paper):
@@ -155,8 +221,11 @@ def closest_work_axes(project, value, differences, *, unknown_conditions, parent
     for key, relative in CLOSEST_CONTEXT.items():
         if not isinstance(context[key], dict) or context[key].get("path") != relative:
             raise ValueError("closest-work context must use the existing canonical " + key)
-        bindings[key] = bound_source(project, context[key])
-        documents[key] = read(path_in(project, relative))
+        try:
+            bindings[key] = bound_source(project, context[key])
+            documents[key] = read(path_in(project, relative))
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            raise SharedIntegrityError(str(exc)) from exc
     matches = [claim for claim in documents["novelty_matrix"].get("claims", [])
                if claim.get("claim_id") == claim_id]
     if (len(matches) != 1 or paper_id not in matches[0].get("paper_ids", []) or
@@ -301,6 +370,10 @@ def comparison(project, row):
 
 
 def method(project, row):
+    return _scope_call(project, "methods", row, lambda: _method(project, row))
+
+
+def _method(project, row):
     if not re.fullmatch(r"P[0-9]{2}", row.get("paper_id", "")):
         raise ValueError("method adoption needs paper ID")
     contract = read(path_in(project, f"papers/{row['paper_id']}/paper-contract.json"))
@@ -312,7 +385,7 @@ def method(project, row):
     from scripts.method_tools import inspect
     report = inspect(project)
     if report["errors"]:
-        raise ValueError("method contracts are blocked: " + "; ".join(report["errors"]))
+        raise SharedIntegrityError("method contracts are blocked: " + "; ".join(report["errors"]))
     selected = next((item for item in report["tools"] if item["id"] == row.get("method_tool_id")), None)
     if selected is None:
         raise ValueError("method adoption requires a registered pinned method tool")
@@ -376,6 +449,10 @@ def reading_anchor(project, row):
 
 
 def review(project, row, previous=None):
+    return _scope_call(project, "review_findings", row, lambda: _review(project, row, previous))
+
+
+def _review(project, row, previous=None):
     if row.get("perspective") not in PERSPECTIVES:
         raise ValueError("review perspective must be method, statistics or contribution")
     nonempty(row.get("question"), "review question")
@@ -383,12 +460,14 @@ def review(project, row, previous=None):
         raise ValueError("review severity required")
     if row.get("status") not in {"open", "answered_pending_review", "verified_resolved"}:
         raise ValueError("review finding status required")
-    if (previous or {}).get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}:
+    if previous:
+        if _paper_scope("review_findings", row) != _paper_scope("review_findings", previous):
+            raise SharedIntegrityError("Keep an inherited review finding's paper scope stable")
         severity_rank = {"minor": 0, "major": 1, "fatal": 2}
         if severity_rank[row["severity"]] < severity_rank[previous["severity"]]:
-            raise ValueError("Do not downgrade an inherited structured issue severity to bypass unresolved work")
+            raise SharedIntegrityError("Do not downgrade an inherited structured issue severity to bypass unresolved work")
         if row["perspective"] != previous["perspective"]:
-            raise ValueError("Keep inherited structured issue perspective stable")
+            raise SharedIntegrityError("Keep inherited structured issue perspective stable")
     result = {**row, "evidence": sources(project, row.get("evidence")),
               "independent_raters_verified": False}
     from scripts.writing_review_actions import assess
@@ -416,16 +495,16 @@ def audit(project: Path) -> dict:
             *saved.get("sections", {}).get("review_findings", [])]}
     path = path_in(project, INPUT, exists=False)
     if not path.is_file():
-        retained = [row for row in previous.values()
-                    if row.get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}]
+        retained = list(previous.values())
+        errors = ["Do not delete the research extensions input containing existing structured writing issues"] if retained else []
         return {"schema_version": "1.0", "status": "blocked" if retained else "needs_inputs",
-                "errors": ["Do not delete the research extensions input containing existing structured writing issues"] if retained else [],
+                "errors": errors, "error_details": [{"error": errors[0], "paper_ids": []}] if errors else [],
                 "sections": {}, "retained_review_findings": retained, "pending": [INPUT],
                 "scientific_completion_verified": False, "gate_approved": False}
     document = read(path)
     if document.get("schema_version") != "1.0":
         raise ValueError("unsupported research extensions schema")
-    output = {"schema_version": "1.0", "input_sha256": sha(path), "sections": {}, "errors": [],
+    output = {"schema_version": "1.0", "input_sha256": sha(path), "sections": {}, "errors": [], "error_details": [],
               "scientific_completion_verified": False, "gate_approved": False}
     for section, builder in {"comparisons": comparison, "methods": method,
                              "reading_anchors": reading_anchor, "review_findings": review}.items():
@@ -435,23 +514,30 @@ def audit(project: Path) -> dict:
         seen, checked = set(), []
         for row in rows:
             if not isinstance(row, dict):
-                output["errors"].append(f"{section}: row must be an object")
+                error = f"{section}: row must be an object"
+                output["errors"].append(error)
+                output["error_details"].append({"error": error, "paper_ids": []})
                 continue
+            identified = False
             try:
                 identifier = row.get("id")
                 if not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", identifier) or identifier in seen:
                     raise ValueError("unique bounded row ID required")
                 seen.add(identifier)
+                identified = True
                 checked.append(builder(project, row, previous.get(identifier)) if section == "review_findings" else builder(project, row))
             except (KeyError, ValueError, TypeError, OSError, RuntimeError) as exc:
-                output["errors"].append(f"{section}/{row.get('id', '?')}: {exc}")
+                error = f"{section}/{row.get('id', '?')}: {exc}"
+                output["errors"].append(error)
+                output["error_details"].append({"error": error, "paper_ids": _paper_scope(section, row)
+                    if identified and not isinstance(exc, SharedIntegrityError) else []})
         output["sections"][section] = checked
     current_issues = {row["id"] for row in output["sections"].get("review_findings", [])}
-    output["retained_review_findings"] = [row for key, row in previous.items() if key not in current_issues
-        and row.get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}]
-    if any(row.get("writing_action_assessment", {}).get("status") not in {None, "not_assessed"}
-           for key, row in previous.items() if key not in current_issues):
-        output["errors"].append("Do not silently delete an existing structured writing issue; retain its disposition and history")
+    output["retained_review_findings"] = [row for key, row in previous.items() if key not in current_issues]
+    for row in output["retained_review_findings"]:
+        error = "Do not silently delete an existing structured writing issue; retain its disposition and history: " + row["id"]
+        output["errors"].append(error)
+        output["error_details"].append({"error": error, "paper_ids": _paper_scope("review_findings", row)})
     output["pending"] = [name for name, rows in output["sections"].items() if not rows]
     output["status"] = "blocked" if output["errors"] else "needs_scientific_review"
     return output
@@ -468,8 +554,21 @@ def refresh(project: Path) -> dict:
 def gate_errors(project: Path) -> list[str]:
     try:
         result = audit(project)
-        return result["errors"] + [f"{row['id']}: unresolved {row['perspective']} finding"
-            for row in result.get("sections", {}).get("review_findings", [])
+        from scripts.paper_execution import enabled, selected
+        paper = selected(project) if enabled(project) else None
+
+        def applicable(owners):
+            if paper is None or not owners or paper in owners:
+                return True
+            try:
+                return any(selected(project, owner) != owner or not (project / "papers" / owner).is_dir() for owner in owners)
+            except ValueError:
+                return True
+
+        details = result.get("error_details", [{"error": error, "paper_ids": []} for error in result["errors"]])
+        return [row["error"] for row in details if applicable(row["paper_ids"])] + [f"{row['id']}: unresolved {row['perspective']} finding"
+            for row in [*result.get("sections", {}).get("review_findings", []), *result.get("retained_review_findings", [])]
+            if applicable(_paper_scope("review_findings", row))
             if row["severity"] in {"fatal", "major"} and (row["status"] == "open"
                 or row.get("writing_action_assessment", {}).get("status") == "pending_materials")]
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:

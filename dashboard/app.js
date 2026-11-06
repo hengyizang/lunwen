@@ -126,13 +126,17 @@ function renderProject() {
     ? `自动搜索并运行 ${state.gate}`
     : "运行当前阶段";
   const alert = $("gateAlert");
+  const errorGroups = state.gate_error_groups;
   alert.classList.toggle("hidden", state.gate_error_count === 0);
-  alert.textContent = state.gate_error_count ? `当前还有 ${state.gate_error_count} 项硬性要求未满足。运行模型不代表可以批准，请查看右侧缺项。` : "";
+  alert.textContent = state.gate_error_count
+    ? `当前有 ${errorGroups ? errorGroups.length : state.gate_error_count} 组待解决缺口，涉及 ${state.gate_error_count} 条检查提示。请查看各组的下一步和原始检查。`
+    : "";
   renderStages(state);
   renderPhaseCards(state);
   renderMetrics(detail.metrics);
-  $("gateErrors").innerHTML = state.gate_errors.length
-    ? state.gate_errors.map((error) => `<li>${esc(error)}</li>`).join("")
+  $("gateErrors").innerHTML = errorGroups && errorGroups.length
+    ? errorGroups.map((group) => `<li><strong>${esc(group.title)}</strong><p>${esc(group.next_action)}</p><details><summary>${group.count} 条检查提示</summary><ul>${group.checks.map((error) => `<li>${esc(error)}</li>`).join("")}</ul></details></li>`).join("")
+    : state.gate_errors.length ? state.gate_errors.map((error) => `<li>${esc(error)}</li>`).join("")
     : '<li class="muted">当前阶段检查没有发现缺项；选题确认后由系统继续。</li>';
   renderResearchQuality(detail.research_quality || {});
   const awaitingWork = state.status === "awaiting_work";

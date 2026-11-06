@@ -27,7 +27,7 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 | topic-intelligence | `citation_graph`, `doi`, `direction` (`forward` or `backward`) | Controlled citation API receipt; one failed source does not establish search saturation. |
 | topic-intelligence | `read_paper`, `pdf`, `output`, `manifest`, optional `max_pages` | Bounded PDF extraction to `literature/readers/`. The exact manifest must have owner-confirmed research/cloud/redistribution rights and match the PDF hash. Personal-use-only papers must not be published to Git or public artifacts. Extraction is not a human read declaration. |
 | topic-intelligence | `triage_leads`, `receipt_id`, `provider` (`openrouter` or `bocha`), optional `limit` ≤8 | Optional labels on public metadata from a valid search receipt. Retains every lead; cannot certify novelty, quality, eligibility or source inclusion. No private project text is sent. |
-| experiment-design | `data_quality`, `dataset_id`, `path`, optional `label_column`, `split_column`, `group_column` | Measures actual acquired data; leaves named human confirmation pending. Changed operation arguments invalidate the cached report. |
+| experiment-design | `data_quality`, `dataset_id`, `path`, optional `label_column`, `split_column`, `group_column` | Measures actual acquired data; the controller records a separate current hash-bound automated confirmation after applicable checks pass. Changed operation arguments invalidate the cached report. |
 | experiment-design | `power`, `paper_id`, `method`, `effect_size`, `alpha`, `target_power`, `ratio`, `effect_size_basis`, optional `groups` | Uses the declared statistics runtime and existing research-quality contract. An assumed effect size requires a defensible source. It does not freeze a preregistration. |
 | writing-and-review | `render_figure`, `spec` | Executes the deterministic figure renderer on actual registered data. |
 | writing-and-review | `docx`, `source`, `metadata`, `output` | Creates genuine DOCX from provenance-bound English source and metadata using python-docx. |
@@ -144,5 +144,5 @@ notes before requesting full-text reanalysis. Do not alter model routing.
 Acquisition quarantines raw full text; reader/figure persistence requires the
 existing exact owner-approved full-text manifest. The non-billable owner cloud
 job literature can execute one request_file operation without a paid cycle and
-forbids execute:true. No operation approves human screening or G0-G5.
+forbids execute:true. No operation supplies a human topic decision or bypasses G0-G5.
 

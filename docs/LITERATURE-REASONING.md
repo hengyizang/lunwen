@@ -122,7 +122,7 @@ Within the existing authorized G1/G3 scientific-writing call:
 5. Resolve data rights, pinned versions, executable cloud resources and compute
    ceilings using existing controls. Map independent paper value and cumulative
    thesis contribution to P01-P06. Keep all claims provisional until the existing
-   independent audits, executed evidence and named human gate approvals.
+   independent audits, executed evidence, actual G1/G2 topic decisions and recorded automated stage checks.
 6. Record reading answers using the current step hash and exact evidence, rather
    than marking whole papers “read” based on a generated summary. Use the new
    missing-evidence questions to direct the next source acquisition or reading.

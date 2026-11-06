@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 from scripts import literature_workbench as wb, systematic_review
-from scripts.research_artifacts import path_in, record, sha, write
+from scripts.research_artifacts import path_in, record, sha, write, matches_origin
 
 OUTPUT = "reports/literature-source-tasks"
 OPERATIONS = {"source_trace", "screening_advice"}
@@ -304,7 +304,6 @@ def _paths(project, operation, identifier):
 
 
 def _existing(project, report, manifest):
-    from scripts.output_provenance import current_origin
     if not report.exists() and not manifest.exists():
         return None
     if not report.is_file() or not manifest.is_file():
@@ -316,11 +315,9 @@ def _existing(project, report, manifest):
         raise ValueError("source task output inventory differs")
     for item in outputs:
         target = path_in(project, item["path"])
-        origin = current_origin(project, target)
-        if sha(target) != item["sha256"] or origin.get("status") != "tracked" or origin.get("model") != "scripts/literature_source_tasks.py":
+        if sha(target) != item["sha256"] or not matches_origin(project, target, model="scripts/literature_source_tasks.py"):
             raise ValueError("source task output changed outside its controlled builder")
-    origin = current_origin(project, manifest)
-    if origin.get("status") != "tracked" or origin.get("model") != "scripts/literature_source_tasks.py":
+    if not matches_origin(project, manifest, model="scripts/literature_source_tasks.py"):
         raise ValueError("source task manifest provenance is not current")
     history = record_value.get("history", [])
     if not isinstance(history, list):
@@ -330,8 +327,7 @@ def _existing(project, report, manifest):
         raise ValueError("source task history inventory changed or an archive was deleted")
     for item in history:
         target = path_in(project, item["path"])
-        origin = current_origin(project, target)
-        if sha(target) != item.get("sha256") or origin.get("status") != "tracked" or origin.get("model") != "scripts/literature_source_tasks.py":
+        if sha(target) != item.get("sha256") or not matches_origin(project, target, model="scripts/literature_source_tasks.py"):
             raise ValueError("source task history archive changed")
     return wb._json(report.read_bytes())
 

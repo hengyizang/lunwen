@@ -21,11 +21,17 @@ CONFIRMATION = "study-validation-confirmation.json"
 IDENTITY_LOCK = "study-identity-lock.json"
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
+from scripts.paper_execution import paper_scoped
+
+@paper_scoped
 def identity_projection(project, paper_id):
     value = read(project / "papers" / paper_id / "research-identity.json")
     return {k: value[k] for k in ("research_kind", "design_family", "methods", "claim_ids", "reporting_description", "secondary_protocol")}
 
 
+@paper_scoped
 def route(project, paper_id):
     identity = project / "papers" / paper_id / "research-identity.json"
     if not identity.is_file():
@@ -39,6 +45,7 @@ def route(project, paper_id):
     return "empirical"
 
 
+@paper_scoped
 def protocol_path(project, paper_id):
     if not re.fullmatch(r"P[0-9]{2}", paper_id):
         raise ValueError("exact paper ID required")
@@ -183,6 +190,7 @@ def _theory_inputs(project, value):
     return sources
 
 
+@paper_scoped
 def validate_protocol(project, paper_id):
     kind = route(project, paper_id)
     need(kind != "empirical", "select a supported study-specific route")
@@ -209,7 +217,7 @@ def validate_protocol(project, paper_id):
     sources.extend(anchor(project, item) for item in references)
     run_ids = ids(value.get("execution_runs"), "original and isolated reproduction runs", 2)
     need(len(run_ids) == 2, "declare exactly one original and one independent replay")
-    plan = read(project / "experiments/plan.json")
+    plan = read(experiment_path(project, 'experiments/plan.json'))
     from scripts.experiment_runner import validate_plan as validate_execution_plan
     need(not validate_execution_plan(plan), "; ".join(validate_execution_plan(plan)))
     runs = [r for r in plan["runs"] if r.get("paper_id") == paper_id]
@@ -240,6 +248,7 @@ def validate_protocol(project, paper_id):
     return value, sorted(set(sources))
 
 
+@paper_scoped
 def prepare_runtime(project, paper_id):
     state = read(project / "state/run.json")
     need(state.get("gate") == "G3" and state.get("status") == "awaiting_work", "runtime preparation requires an open G3")
@@ -267,7 +276,7 @@ def prepare_runtime(project, paper_id):
     if identity_lock.is_file() and read(identity_lock) != identity_projection(project, paper_id):
         need(not prereg.is_file(), "frozen study identity changed")
     write(identity_lock, identity_projection(project, paper_id))
-    plan_path = project / "experiments/plan.json"
+    plan_path = experiment_path(project, 'experiments/plan.json')
     if plan_path.is_file():
         from scripts.study_environment import prepare
         plan = read(plan_path)
@@ -293,11 +302,13 @@ def prepare_runtime(project, paper_id):
     return target
 
 
+@paper_scoped
 def preregistration_inputs(project, paper_id):
     _, inputs = validate_protocol(project, paper_id)
-    return [*inputs, project / "experiments/plan.json", project / "experiments/budget.json"]
+    return [*inputs, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json')]
 
 
+@paper_scoped
 def plan_errors(project, paper_id):
     try:
         validate_protocol(project, paper_id)
@@ -316,20 +327,22 @@ def _equivalent(left, right, tolerance):
     return type(left) is type(right) and left == right
 
 
+@paper_scoped
 def build_report(project, paper_id):
     report = {"schema_version": "1.0", "paper_id": paper_id, "route": route(project, paper_id),
               "status": "blocked", "errors": [], "comparisons": [], "scientific_completion_verified": False}
     try:
         value, _ = validate_protocol(project, paper_id)
         from scripts import research_quality as quality, results_validation
-        plan_path = project / "experiments/plan.json"
-        registry_path = project / "experiments/registry.jsonl"
+        plan_path = experiment_path(project, 'experiments/plan.json')
+        registry_path = experiment_path(project, 'experiments/registry.jsonl')
         registry = quality._registry(project)
         errors = results_validation.validate_registry(project, read(plan_path), registry)
         prereg = project / "papers" / paper_id / "preregistration.json"
         state = read(project / "state/run.json")
-        approval = next((a for a in reversed(state.get("approvals", [])) if a.get("gate") == "G3"), {})
-        need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg), "study preregistration differs from the human G3 approval")
+        from scripts.paper_execution import approval as paper_approval
+        approval = paper_approval(project,"G3",paper_id) or {}
+        need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg), "study preregistration differs from the G3 protocol decision")
         errors += quality.validate_preregistration(read(prereg), paper_id, project)
         need(not errors, "; ".join(errors))
         results, sources = [], []
@@ -375,6 +388,7 @@ def build_report(project, paper_id):
     return report
 
 
+@paper_scoped
 def create_confirmation(project, paper_id, actor, *, automated=False):
     need(isinstance(actor, str) and actor.strip(), "study confirmation actor required")
     report = build_report(project, paper_id)
@@ -388,6 +402,7 @@ def create_confirmation(project, paper_id, actor, *, automated=False):
             "scientific_completion_verified": False}
 
 
+@paper_scoped
 def confirmation_errors(project, paper_id, value):
     report = build_report(project, paper_id)
     errors = list(report["errors"])
@@ -405,6 +420,7 @@ def confirmation_errors(project, paper_id, value):
     return errors
 
 
+@paper_scoped
 def validation_errors(project, paper_id, *, confirmation=True):
     report = build_report(project, paper_id)
     errors = list(report["errors"])
@@ -427,6 +443,7 @@ def validation_errors(project, paper_id, *, confirmation=True):
     return errors
 
 
+@paper_scoped
 def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name="statistical-reporting-map.json"):
     """Map every actual result/proof to the canonical manuscript, including nulls."""
     from scripts.ref_verify_adapter import canonical_manuscript
@@ -470,6 +487,7 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
             "scientific_completion_verified": False, "human_scientific_review_required": True}
 
 
+@paper_scoped
 def export_results(project, paper_id):
     """Keep the full registered sensitivity/proof results in the submission tree."""
     report = build_report(project, paper_id)
@@ -486,6 +504,7 @@ def export_results(project, paper_id):
     return outputs
 
 
+@paper_scoped
 def export_errors(project, paper_id):
     try:
         report = build_report(project, paper_id)
@@ -504,4 +523,4 @@ def prompt_contract():
             "preregistered PM/modified-HKSJ outcomes, DL/leave-one-out/bias sensitivities and isolated replay. Theory needs exact Lean types, "
             "proof, assumption-witness and scope-check obligations for every claim; numerical examples are not proofs. "
             "Do not invent empirical datasets, baseline classes or power calculations for these routes. Prepare the reserved runtime through "
-            "study_prepare; hash-declare all protocol/source/runtime inputs and two distinct Docker result files. G3/G4 approvals remain human.")
+            "study_prepare; hash-declare all protocol/source/runtime inputs and two distinct Docker result files. G3/G4 use recorded automated checks and independent review; G1/G2 retain human topic decisions.")

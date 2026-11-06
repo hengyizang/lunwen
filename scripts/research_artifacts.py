@@ -9,7 +9,11 @@ from pathlib import Path
 
 
 def sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def path_in(project: Path, relative: str, *, exists: bool = True) -> Path:
@@ -24,11 +28,33 @@ def path_in(project: Path, relative: str, *, exists: bool = True) -> Path:
     return target
 
 
+def regular_file(project: Path, relative: str, error_type, *, invalid: str, missing: str) -> Path:
+    value = Path(relative)
+    if value.is_absolute() or not value.parts or ".." in value.parts:
+        raise error_type(invalid)
+    path = (project / value).resolve()
+    if project.resolve() not in path.parents or not path.is_file() or path.is_symlink():
+        raise error_type(f"{missing}: {relative}")
+    return path
+
+
 def read(path: Path) -> dict:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("artifact must be a JSON object")
     return value
+
+
+def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = None):
+    def unique(pairs):
+        result = dict(pairs)
+        if len(result) != len(pairs):
+            raise ValueError(duplicate_error)
+        return result
+    def nonfinite(_):
+        raise ValueError(nonfinite_error)
+    return json.loads(value, object_pairs_hook=unique,
+                      **({"parse_constant": nonfinite} if nonfinite_error is not None else {}))
 
 
 def write(path: Path, value: dict) -> None:
@@ -44,6 +70,40 @@ def record(project: Path, paths: list[Path], module: str) -> None:
     from scripts.output_provenance import record_model_writes
     record_model_writes(project, paths, family="other", provider="deterministic-control-plane",
                         model=module, role="artifact-builder", run_id="quality-refresh")
+
+
+def matches_origin(project: Path, path: Path, **expected) -> bool:
+    from scripts.output_provenance import current_origin
+    origin = current_origin(project, path)
+    return origin.get("status") == "tracked" and all(origin.get(key) == value for key, value in expected.items())
+
+
+def seal_manifest(project: Path, paths: list[Path], manifest: Path, module: str,
+                  metadata: dict, *, files_key="outputs", record_outputs=True) -> None:
+    """Bind existing outputs; callers retain their report and execution policies."""
+    write(manifest, {**metadata, "implementation_sha256": sha(Path(__file__).resolve().parents[1] / module),
+                    files_key: [{"path": path.relative_to(project).as_posix(), "sha256": sha(path)} for path in paths]})
+    record(project, [*(paths if record_outputs else []), manifest], module)
+
+
+def paper_audit_cli(description, projects_root, audit, report_name, error_type) -> int:
+    import argparse
+    import re
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument("--project", required=True)
+    parser.add_argument("--paper", required=True)
+    args = parser.parse_args()
+    paper = projects_root / args.project / "papers" / args.paper
+    try:
+        if not paper.is_dir() or not re.fullmatch(r"P[0-9]{2}", args.paper):
+            raise error_type("project/paper does not exist")
+        report = audit(paper)
+        write(paper / "reviews" / report_name, report)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0 if report["status"] == "pass" else 1
+    except error_type as exc:
+        print(f"error: {exc}")
+        return 2
 
 
 def bound_source(project: Path, value: dict) -> dict:

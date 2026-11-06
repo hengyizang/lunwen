@@ -8,7 +8,7 @@ Doctoral Research OS can run without Claude Code or Codex CLI. The Python contro
 export ANTHROPIC_API_KEY='...'
 export ANTHROPIC_MODEL='your-current-Anthropic-model-id'
 export OPENAI_API_KEY='...'
-export OPENAI_MODEL='gpt-5.6'
+export OPENAI_MODEL='your-current-OpenAI-model-id'
 ```
 
 The full `cycle` requires both model families. Claude plans and audits; OpenAI/Codex writes. API keys are read only from environment variables and are never written to project state.
@@ -54,8 +54,7 @@ python3 scripts/api_orchestrator.py cost my-phd
 python3 scripts/api_orchestrator.py cost my-phd --paper P01
 ```
 
-The requested stage must match an `awaiting_work` `state/run.json`; API writing is blocked while a gate is awaiting human approval or already approved. Initialize first, and use the
-human `ready` → `approve` → `advance` sequence between stages.
+The requested stage must match an `awaiting_work` `state/run.json`; writing is blocked while a decision is pending or already recorded. Use `gate-check` → `ready`; only G1 and each G2 paper topic require human `approve`. Other stages receive recorded automated decisions before `advance`. See [the workflow](../references/workflow.md) for paper-scoped execution and exploration/scientific/submission phases.
 
 For G1 and G3, `cycle` and the one-pass `stage` command automatically derive up
 to eight dataset-query variants, search the eight reviewed public metadata

@@ -15,6 +15,7 @@ from pathlib import Path
 import sys
 
 from scripts import gateway_trial as trial
+from scripts.research_artifacts import strict_json
 
 SUPPLEMENT = 'luna-replacement-20261019'
 ORIGINAL_PLAN = '1a0bd20fdcf73910fbe1bd6f207575a000110ab7bfb79abfa4bcd654ecbdf3c7'
@@ -110,18 +111,7 @@ page. Unknown does not mean ineligible; never fill missing facts by inference.''
 
 
 def _strict_json(text):
-    def pairs(items):
-        value = {}
-        for key, item in items:
-            if key in value:
-                raise ValueError('duplicate JSON member')
-            value[key] = item
-        return value
-
-    def invalid_constant(_):
-        raise ValueError('nonfinite JSON number')
-
-    return json.loads(text.strip(), object_pairs_hook=pairs, parse_constant=invalid_constant)
+    return strict_json(text.strip(), duplicate_error='duplicate JSON member', nonfinite_error='nonfinite JSON number')
 
 
 def _typed_equal(actual, expected):

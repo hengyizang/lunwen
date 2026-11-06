@@ -35,6 +35,8 @@ REQUIRED = {"Cloud executor and checkpoint", "Fresh runner restore and scientifi
 SHA = re.compile(r"[a-f0-9]{40}")
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -145,7 +147,7 @@ def authority(project: Path) -> str | None:
         return "budget_boundary"
     if state.get("status") in {"awaiting_approval", "approved", "submission_ready"} or state.get("gate") is None:
         return "human_gate_pending"
-    registry = project / "experiments/registry.jsonl"
+    registry = experiment_path(project, 'experiments/registry.jsonl')
     for line in registry.read_text(encoding="utf-8").splitlines() if registry.is_file() else []:
         if json.loads(line).get("status") in {"failed", "fail", "error", "timed_out", "cancelled"}:
             return "failed_experiment_requires_review"

@@ -10,6 +10,23 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
+    def test_only_a_clean_review_with_complete_editorial_records_can_skip_remediation(self):
+        audit={"verdict":"pass-with-conditions","fatal_findings":[],"major_findings":[],"minor_findings":[],
+               "missing_evidence":[],"remediation_steps":[],"uncertainty":["Known limits remain."]}
+        self.assertFalse(api_orchestrator.remediation_required(audit,"topic-intelligence"))
+        self.assertTrue(api_orchestrator.remediation_required(audit,"writing-and-review"))
+        for field in ("fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps"):
+            self.assertTrue(api_orchestrator.remediation_required({**audit,field:["Actual unresolved finding."]},"topic-intelligence"))
+        self.assertTrue(api_orchestrator.remediation_required({**audit,"verdict":"revise"},"topic-intelligence"))
+        for stage in ("topic-intelligence", "experiment-design", "scientific-writing"):
+            self.assertFalse(api_orchestrator.remediation_required(audit, stage,
+                ["The scientific interpretation remains provisional."]))
+            self.assertTrue(api_orchestrator.remediation_required(audit, stage,
+                ["unresolved: the writer identified an unsupported mechanism."]))
+            with self.assertRaises(ValueError):
+                api_orchestrator.validate_remediation_notes({"stage": stage, "notes": ["Unstructured response."]},
+                    {**audit, "major_findings": ["The comparison is missing."]})
+
     def test_g5_revision_baseline_preserves_included_sources(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -19,7 +36,7 @@ class ApiFirstTests(unittest.TestCase):
             state.mkdir(parents=True)
             manuscript_dir.mkdir(parents=True)
             (state / "run.json").write_text(
-                json.dumps({"active_paper": "P01"}), encoding="utf-8"
+                json.dumps({"active_paper": "P01", "writing_phases":{"P01":"submission"}}), encoding="utf-8"
             )
             (manuscript_dir / "main.tex").write_text(
                 "\\documentclass{article}\\begin{document}\\input{results}\\end{document}",
@@ -52,7 +69,7 @@ class ApiFirstTests(unittest.TestCase):
             state.mkdir(parents=True)
             manuscript.parent.mkdir(parents=True)
             (state / "run.json").write_text(
-                json.dumps({"active_paper": "P01"}), encoding="utf-8"
+                json.dumps({"active_paper": "P01", "writing_phases":{"P01":"submission"}}), encoding="utf-8"
             )
             manuscript.write_text(
                 " ".join(
@@ -76,8 +93,10 @@ class ApiFirstTests(unittest.TestCase):
             "missing-project", "topic-intelligence", ""
         )
         for required in (
-            "human-confirmed G0 weights",
-            "novelty, doctoral depth and original contribution",
+            "owner-supplied G0 weights",
+            "novelty",
+            "doctoral",
+            "original contribution",
             "no-laboratory feasibility",
             "employment/salary",
             "PhD competition",
@@ -86,10 +105,11 @@ class ApiFirstTests(unittest.TestCase):
             "leakage",
             "external validity",
             "novelty-claim-matrix.json",
-            "closest_work_ids(minimum 3)",
+            "closest_work_ids(actual verified work; final G1 minimum 3)",
         ):
             self.assertIn(required, prompt)
-        self.assertIn("mandatory specific-topic requirements after direction screening", prompt)
+        self.assertIn("doctoral novelty and original contribution remain separate scientific requirements",prompt)
+        self.assertIn("Only the formal G1 topic decision",prompt)
         self.assertNotIn("G0 weights for novelty", prompt)
 
     def test_g4_api_writer_receives_exact_reproduction_contract(self):
@@ -476,6 +496,22 @@ class ApiFirstTests(unittest.TestCase):
             api_orchestrator.reject_long_source_copy(source, target, "plan")
 
     def test_cycle_persists_gate_audits_and_decision_log(self):
+        self._assert_cycle_records()
+
+    def test_clean_initial_review_skips_remediator_but_retains_fresh_final_review(self):
+        self._assert_cycle_records(clean_initial=True)
+
+    def test_clean_review_preserves_ordinary_uncertainty_notes_without_an_extra_model_call(self):
+        self._assert_cycle_records(clean_initial=True,
+            writer_notes=["The scientific interpretation remains provisional."])
+
+    def test_missing_cycle_decision_remains_repairable_work(self):
+        self._assert_cycle_records(with_decision=False)
+
+    def _assert_cycle_records(self, clean_initial=False, with_decision=True, writer_notes=None):
+        from dataclasses import replace
+        import re
+        from tests.research_cycle_fixtures import pending_decision
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "config").mkdir()
@@ -530,7 +566,7 @@ class ApiFirstTests(unittest.TestCase):
                     "artifacts": [
                         {"path": "program/topic.md", "content": "draft"}
                     ],
-                    "notes": [],
+                    "notes": writer_notes or [],
                 }
             )
             initial_audit = json.dumps(
@@ -565,6 +601,10 @@ class ApiFirstTests(unittest.TestCase):
                     "uncertainty": ["external facts remain provisional"],
                 }
             )
+            if clean_initial:
+                initial_audit=json.dumps({"verdict":"pass-with-conditions","fatal_findings":[],
+                    "major_findings":[],"minor_findings":[],"missing_evidence":[],"remediation_steps":[],
+                    "uncertainty":["Synthetic invocation only; no real scientific validation."]})
             responses = [
                 ModelResult("uuapi-anthropic", "claude-test", semantic_plan, {}),
                 ModelResult("uuapi-openai", "gpt-test", writer_bundle, {}),
@@ -572,9 +612,19 @@ class ApiFirstTests(unittest.TestCase):
                 ModelResult("uuapi-openai", "gpt-test", remediation, {}),
                 ModelResult("uuapi-anthropic", "claude-test", final_audit, {}, reported_model="claude-test", completion_status="completed"),
             ]
+            if clean_initial:responses.pop(3)
+            def respond(provider, prompt, **kwargs):
+                result=responses.pop(0)
+                if result.provider=="uuapi-openai" and with_decision:
+                    cycle_id=re.search(r'cycle_id="([^"]+)"',prompt).group(1)
+                    value=pending_decision(root/"response-fixture","topic-intelligence",cycle_id)
+                    bundle=json.loads(result.text)
+                    bundle["artifacts"].append({"path":"program/research-notebook.json","content":json.dumps(value)})
+                    result=replace(result,text=json.dumps(bundle))
+                return result
             with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
-                side_effect=responses,
+                side_effect=respond,
             ) as model_call, patch.object(api_orchestrator, "discover_context", return_value=json.dumps({
                 "literature": {"receipts": [{"fixture_only": True}], "pending_searches": 0}})):
                 manifest = api_orchestrator.run_cycle(
@@ -589,7 +639,7 @@ class ApiFirstTests(unittest.TestCase):
                 )
             self.assertEqual(
                 [item.kwargs["max_output_tokens"] for item in model_call.call_args_list],
-                [4000, 12000, 4000, 12000, 4000],
+                [4000,12000,4000,4000] if clean_initial else [4000,12000,4000,12000,4000],
             )
             self.assertEqual(manifest["cost_controls"]["control_max_output_tokens"], 4000)
             reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
@@ -599,7 +649,17 @@ class ApiFirstTests(unittest.TestCase):
             log = (root / "projects" / "demo" / "reviews" / "decision-log.md").read_text(
                 encoding="utf-8"
             )
-            self.assertIn("fixed: added the requested comparison", log)
+            if clean_initial:
+                self.assertTrue(manifest["cost_controls"]["remediation_skipped"])
+                for note in writer_notes or []:
+                    self.assertIn(note, log)
+                self.assertEqual(manifest["provider_audit"]["remediation"]["status"],"not_called")
+                run=root/"projects"/"demo"/"api_runs"/manifest["run_id"]
+                self.assertTrue((run/"remediation-decision.json").is_file())
+                self.assertFalse((run/"remediation-response.txt").exists())
+            else:
+                self.assertIn("fixed: added the requested comparison", log)
+                self.assertFalse(manifest["cost_controls"]["remediation_skipped"])
             self.assertEqual(
                 manifest["independent_audit"]["final_verdict"],
                 "pass-with-conditions",
@@ -610,6 +670,12 @@ class ApiFirstTests(unittest.TestCase):
             self.assertEqual(
                 provenance["files"]["program/topic.md"]["family"], "openai"
             )
+            if with_decision:
+                self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"],"openai")
+                self.assertEqual(manifest["research_decision"]["status"],"independently_reviewed")
+            else:
+                self.assertEqual(manifest["status"],"needs_work")
+                self.assertTrue(manifest["research_decision"].get("errors"))
 
     def test_cycle_requires_current_initialized_stage(self):
         with self.assertRaises(ValueError):

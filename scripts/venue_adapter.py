@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
 import shutil
@@ -14,6 +13,11 @@ import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Any
+
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
 
 
 MAX_MEMBERS = 5000
@@ -116,14 +120,6 @@ def inspect_archive(path: Path) -> dict[str, Any]:
             ),
         },
     }
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def ingest_archive(archive_path: Path, destination: Path) -> dict[str, Any]:

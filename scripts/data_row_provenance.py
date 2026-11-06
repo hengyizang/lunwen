@@ -17,7 +17,7 @@ from urllib.parse import parse_qsl, urlsplit
 
 from scripts import data_contracts, dataset_fetch
 from scripts.network_safety import validate_https_url
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest
 
 REQUEST = "program/data-row-provenance.json"
 OUTPUT = "reports/data-row-provenance"
@@ -299,11 +299,9 @@ def refresh(project: Path, request_path=REQUEST) -> dict:
     output, table, manifest_path = directory / "rows.json", directory / "rows.csv", directory / "manifest.json"
     write(output, report)
     table.write_text(csv_text(report), encoding="utf-8")
-    manifest = {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(path_in(project, request_path))},
-        "fingerprint": report["fingerprint"], "implementation_sha256": sha(Path(__file__)),
-        "outputs": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in (output, table)]}
-    write(manifest_path, manifest)
-    record(project, [output, table, manifest_path], "scripts/data_row_provenance.py")
+    seal_manifest(project, [output, table], manifest_path, "scripts/data_row_provenance.py",
+        {"schema_version": "1.0", "request": {"path": request_path, "sha256": sha(path_in(project, request_path))},
+         "fingerprint": report["fingerprint"]})
     return {"report": output.relative_to(project).as_posix(), "csv": table.relative_to(project).as_posix(),
             "manifest": manifest_path.relative_to(project).as_posix(), "row_count": report["row_count"],
             "duplicate_key_rows": report["duplicate_key_rows"], "model_call_made": False, "raw_values_exported": False}
@@ -315,10 +313,7 @@ def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
     report = build(project, spec)
     prefix = OUTPUT + "/" + report["dataset_id"]
     manifest_path = path_in(project, prefix + "/manifest.json")
-    from scripts.output_provenance import current_origin
-    origin = current_origin(project, manifest_path)
-    if (origin.get("status") != "tracked" or origin.get("family") != "other"
-            or origin.get("model") != "scripts/data_row_provenance.py"):
+    if not matches_origin(project, manifest_path, family="other", model="scripts/data_row_provenance.py"):
         raise ValueError("row provenance manifest lacks current deterministic execution provenance")
     manifest = read(manifest_path)
     if manifest.get("request") != {"path": request_path, "sha256": sha(path_in(project, request_path))}:

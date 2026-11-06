@@ -190,6 +190,96 @@
           }
         }
       }
+    },
+    "research_phase": {
+      "enum": [
+        "exploratory",
+        "confirmatory"
+      ]
+    },
+    "prior_outcomes_seen": {
+      "type": "boolean"
+    },
+    "prior_exploration": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "exploration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unknown",
+        "discriminating_test",
+        "continue_if",
+        "revise_if",
+        "stop_if",
+        "claim_limit",
+        "prior_outcomes_seen"
+      ],
+      "properties": {
+        "unknown": {
+          "type": "string",
+          "minLength": 1
+        },
+        "discriminating_test": {
+          "type": "string",
+          "minLength": 1
+        },
+        "continue_if": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revise_if": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stop_if": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_limit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prior_outcomes_seen": {
+          "type": "boolean"
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "research_phase"
+        ],
+        "properties": {
+          "research_phase": {
+            "const": "exploratory"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "exploration"
+        ]
+      }
+    }
+  ]
 }

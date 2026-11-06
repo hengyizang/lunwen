@@ -8,7 +8,6 @@ mislabelled as model output.
 """
 from __future__ import annotations
 
-import hashlib
 import argparse
 import json
 import os
@@ -18,6 +17,11 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
+
+try:
+    from scripts.research_artifacts import sha as sha256_file
+except ImportError:  # Direct execution from scripts/.
+    from research_artifacts import sha as sha256_file
 
 
 SCHEMA_VERSION = "1.0"
@@ -42,14 +46,6 @@ class ProvenanceError(RuntimeError):
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _relative(project: Path, path: Path) -> str:

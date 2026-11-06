@@ -96,7 +96,7 @@ def _supplemental_scope(project: Path, state: dict, gate: str) -> list[str]:
         raise ValueError("invalid supplemental scientific context")
     parent = project.parents[4]
     pid, round_id, scope_id = (context.get(k) for k in ("paper_id", "round_id", "scope_id"))
-    if (not re.fullmatch(r"P[0-9]{2}", str(pid)) or not re.fullmatch(r"R[0-9]{3}", str(round_id))
+    if (not re.fullmatch(r"P[0-9]{2}", str(pid)) or not re.fullmatch(r"[RI][0-9]{3}", str(round_id))
             or not re.fullmatch(r"s[0-9]{3}", str(scope_id)) or context.get("parent_project") != parent.name
             or project != parent / "experiments/supplemental" / pid / round_id / scope_id):
         raise ValueError("supplemental scope must match its exact parent/paper/round directory")
@@ -106,7 +106,7 @@ def _supplemental_scope(project: Path, state: dict, gate: str) -> list[str]:
     control_path = path_in(parent, f"state/supplemental-experiments/{pid}/{round_id}/{scope_id}.json")
     origin = output_provenance.current_origin(parent, control_path)
     if origin.get("status") != "tracked" or origin.get("provider") != "deterministic-control-plane" or origin.get("model") != "scripts/supplemental_experiments.py":
-        raise ValueError("supplemental scope requires its actual protected parent human approval")
+        raise ValueError("supplemental scope requires its actual protected parent protocol decision")
     control = read(control_path)
     if (control.get("scope_root") != project.relative_to(parent).as_posix() or control.get("paper_id") != pid
             or control.get("round_id") != round_id or control.get("scope_id") != scope_id
@@ -114,7 +114,41 @@ def _supplemental_scope(project: Path, state: dict, gate: str) -> list[str]:
             or state.get("approvals") != [control.get("approval")] or control.get("retirement")):
         raise ValueError("supplemental authority/child state is stale or belongs to another scope")
     proposal = control["proposal"]
-    if (sha(path_in(parent, "experiments/plan.json")) != proposal.get("original_plan_sha256")
+    if control.get("decision_kind")=="automated":
+        from scripts import review_receipts
+        binding=control.get("independent_review",{})
+        target=path_in(parent,str(binding.get("path","")))
+        review_receipts._owned(parent,target)
+        if sha(target)!=binding.get("sha256"):
+            raise ValueError("automatic supplemental authority needs its unchanged independent protocol receipt")
+        final=read(target)
+        if (final.get("paper_id")!=pid or final.get("phase")!="final"
+                or final.get("materials",{}).get("review_purpose")!="supplemental_protocol"):
+            raise ValueError("a paper audit or another scope cannot seal this supplemental protocol")
+        review_receipts._identity(final["identity"],final["writer_family"])
+        initial_binding=final["initial"]
+        initial_path=path_in(parent,initial_binding["path"])
+        review_receipts._owned(parent,initial_path)
+        initial=read(initial_path)
+        if (sha(initial_path)!=initial_binding["sha256"] or initial.get("phase")!="initial"
+                or initial.get("materials",{}).get("review_purpose")!="supplemental_protocol"
+                or any(initial.get(key)!=final.get(key) for key in ("gate","stage","paper_id","run_id"))):
+            raise ValueError("automatic supplemental authority requires two actual same-purpose protocol audits")
+        review_receipts._identity(initial["identity"],initial["writer_family"])
+        reviewed={item["path"]:item["sha256"] for item in final["materials"]["files"]}
+        declared_raw={(item["path"], item["sha256"]) for item in final["materials"].get("declared_raw_inputs", [])
+                      if item.get("declared_in") in reviewed}
+        prereg=read(path_in(project,f"papers/{pid}/preregistration.json"))
+        for item in prereg["files"]:
+            if item["path"].startswith("data/quality/") and item["path"].endswith("-confirmation.json"):
+                continue
+            full=control["scope_root"]+"/"+item["path"]
+            if "raw" in Path(item["path"]).parts and (full,item["sha256"]) in declared_raw:
+                continue
+            if reviewed.get(full)!=item["sha256"]:
+                raise ValueError("supplemental frozen inputs differ from the independently reviewed protocol")
+    from scripts.paper_execution import artifact_path
+    if (sha(artifact_path(parent, "experiments/plan.json",pid)) != proposal.get("original_plan_sha256")
             or sha(path_in(parent, f"papers/{pid}/preregistration.json")) != proposal.get("original_preregistration_sha256")):
         raise ValueError("supplemental work cannot change its original parent protocol")
     child_claims = set(read(path_in(project, f"papers/{pid}/paper-contract.json")).get("independence", {}).get("unique_claim_ids", []))

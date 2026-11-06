@@ -6,7 +6,7 @@ This repository is a research workflow, not a publication generator.
 2. Treat every scientific claim as provisional until linked to evidence in the claim-evidence matrix.
 3. Use current primary sources for journal rules, degree rules, datasets, software APIs, and market facts. Record the URL and access date.
 4. Never confuse JCR/JIF quartiles, CiteScore quartiles, SJR quartiles, and Chinese Academy of Sciences partitions.
-5. Require explicit recorded human decisions on the doctoral topic at G1 and each paper topic at G2. Other research-stage transitions use recorded automated checks and must not fabricate human decisions. Retain actual budget authority and all evidence, rights, identity and experiment controls. The migration to this policy is incomplete until all existing confirmation paths are converted and tested; do not claim unattended end-to-end operation prematurely.
+5. Require explicit recorded human decisions on the doctoral topic at G1 and each paper topic at G2. Other research-stage transitions use recorded automated checks and must not fabricate human decisions. Retain actual budget authority and all evidence, rights, identity and experiment controls. Test affected confirmation paths; software acceptance alone never establishes a successful unattended research project.
 6. Keep raw datasets, publisher template archives, secrets, credentials, and large experiment artifacts out of Git.
 7. Before acquiring data, verify license, research-use rights, privacy, terms, provenance, version, and leakage risk. Do not bypass access controls.
 8. Pre-register paper-level hypotheses, baselines, splits, metrics, statistics, compute ceiling, and falsification criteria before final experiments.
@@ -22,9 +22,10 @@ This repository is a research workflow, not a publication generator.
 18. Never package a file whose current provenance hash identifies Anthropic/Claude as its persistent writer. Human or deterministic local edits must create a new file hash; do not use paraphrasing merely to conceal AI use.
 19. Enforce the declared six-paper venue portfolio: at least three current JCR Q1 SCI/SCIE targets and every remainder at least current JCR Q2, all with IF >1.0. Q2 changes only the venue target and never weakens doctoral/originality/experiment/writing gates. Re-check category/year evidence.
 20. Write every manuscript-bound artifact in English. G5 must pass the deterministic manuscript-language check; a model's assertion that prose is English is not sufficient.
-21. At G5, use line-level academic-style findings for targeted evidence-preserving revision. A user-supplied detector score may guide a separate optional editing pass, but it cannot override scientific quality, claim/citation/numeric integrity or required AI-use disclosure. Never spin synonyms, remove warranted uncertainty or conceal model assistance.
+21. At submission-phase G5, use line-level academic-style findings for targeted evidence-preserving revision. A user-supplied detector score may guide a separate optional editing pass, but it cannot override scientific quality, claim/citation/numeric integrity or required AI-use disclosure. Never spin synonyms, remove warranted uncertainty or conceal model assistance.
 22. Keep all six papers within one overarching doctoral question and cumulative knowledge contribution. Core theme A and independently evidenced extension B must serve that same doctoral topic. Each paper needs standalone value and an explicit contribution to the approved thesis synthesis. Evidence-led reframing stays within that scope; a substantive change to the doctoral question or paper-to-thesis mapping needs human review of the affected G1/G2 records before dependent work continues. Never silently turn the portfolio into unrelated topics or waive paper independence.
 23. Manage dynamic routes through the structured task profiles and cloud controls in `docs/DYNAMIC-MODEL-ROUTING.md`. Classify work before execution; never label a core scientific task routine to obtain a cheaper route. Transport/group/effort/context candidates require task-specific evidence before scientific promotion. Preserve selected-route receipts and independent audits. The current payment policy in `docs/TOTAL-COST-POLICY.md` overrides older payment restrictions: calculate and record costs and enforce existing cumulative project totals only. Do not add per-paper/per-request sublimits, paid opt-ins, tranche steps, manual billing approvals or blanket stops on bounded reservations. Use verified charges when available and honestly labeled conservative upper estimates otherwise. Every attempt counts; never increase the configured total automatically.
+24. Keep the six-paper G2 architecture and individual human topic decisions. After checked G2 decisions, new unexecuted portfolios complete the active paper's G3–G5 before the next paper enters G3. Use the canonical per-paper plan, ledger, dataset snapshot and claim paths; preserve other papers' sealed inputs and results. Never silently migrate an already frozen or executed legacy batch protocol. All primary and supplemental attempts share the original cumulative totals.
 
 ## Codex Cloud development environment
 
@@ -85,8 +86,10 @@ validation. Reuse current author/critic cycles rather than extra paid passes.
 
 For innovation candidate screening, use `docs/INNOVATION-SCREENING.md` and the
 required innovation_screening section of the existing hypothesis register.
-Retain original rounds, explicit assumptions, all candidate comparisons, data
-exposure and candidate decisions. Reuse existing independent audits. Scores or
+Retain original rounds, explicit assumptions, existing candidate comparisons, data
+exposure and candidate decisions. Exploratory records may remain incomplete;
+final decisions require their applicable focused or full comparison coverage.
+Narrative dispositions need no invented scores. Reuse existing independent audits. Scores or
 structural completeness never verify novelty or authorize science or spending.
 
 For reference-image discovery, original main-figure briefs, shared six-paper
@@ -95,7 +98,7 @@ visual tokens or editable SVG/PPTX/draw.io, read `skills/figures/SKILL.md` and
 explicitly selected references to model roles. Reference relevance and native
 editability never replace scientific evidence, image rights or human approval.
 
-Apply the complete pinned CCFA family through `docs/CCFA-INTEGRATION.md`: `ccf-humanization` then `ccf-common` are mandatory preflights, followed by the specialist for the actual task. All 17 native entries are available under `.agents/skills/`; API and CLI research roles load the same source-bound guidance through `scripts/research_methods.py`. Read complete relevant references or prepare a controlled CCFA task packet before specialist work. Do not replace native roles, stages, budgets, approvals or the experiment runner with upstream example paths or a parallel state system. Record all CFH01–CFH38 contextual dispositions at G5 alongside existing editorial criteria. Complete rule coverage never proves scientific validity or authorship.
+Use the pinned CCFA family through `docs/CCFA-INTEGRATION.md`. Humanization and Common establish the shared baseline before the task specialist. Ordinary API/CLI cycles receive compact native rules, current scientific evidence and exact retrievable source identities. Load complete pinned entries/references for explicitly selected skills, full-reference review or a concrete dependent task; do not attach every stage guide to every call. All 17 authoritative native entries are under `skills/`; `.agents/skills/` contains generated discovery pointers. Preserve native roles, stages, cumulative budgets, G1/G2 topic decisions and the experiment runner. Require complete CFH01–CFH38 and other contextual editorial dispositions in submission-phase G5; scientific drafting needs dispositions for actual scientific findings. Rule coverage never proves validity or authorship.
 
 ```bash
 python3 -m unittest discover -s tests -v

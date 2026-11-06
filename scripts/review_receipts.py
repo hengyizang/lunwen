@@ -31,6 +31,41 @@ def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
 
+def _declared_raw_inputs(project: Path, files: list[dict]) -> list[dict]:
+    """Bind reviewed raw-input declarations, without loading private raw bodies.
+
+    Native G3 checks and execution preflight still hash the actual bytes. A
+    declaration grants no access rights and cannot replace those checks.
+    """
+    declarations = {}
+    for source in files:
+        match = re.match(r"^(experiments/supplemental/P\d{2}/[RI]\d{3}/s\d{3})/", source["path"])
+        if not match or not source["path"].endswith(".json"):
+            continue
+        target = path_in(project, source["path"])
+        if target.stat().st_size > 2 * 1024 * 1024:
+            continue
+        pending = [read(target)]
+        visited = 0
+        while pending:
+            value = pending.pop()
+            visited += 1
+            if visited > 100000:
+                raise ValueError("reviewed raw-input declaration inventory exceeds its bound")
+            if isinstance(value, list):
+                pending.extend(value)
+            elif isinstance(value, dict):
+                relative, digest = value.get("path"), value.get("sha256")
+                if (isinstance(relative, str) and "raw" in Path(relative).parts
+                        and isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest)):
+                    full = match[1] + "/" + relative
+                    path_in(project, full, exists=False)
+                    declarations[(full, digest, source["path"])] = {
+                        "path": full, "sha256": digest, "declared_in": source["path"]}
+                pending.extend(value.values())
+    return [declarations[key] for key in sorted(declarations)]
+
+
 def material_snapshot(project: Path, stage: str, paper_id: str | None = None) -> dict:
     """Hash scientific inputs, excluding requests, verdicts and volatile bookkeeping.
 
@@ -39,7 +74,12 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
     results, decision logs and this receipt cannot invalidate their own review.
     """
     from scripts.context_efficiency import operational_path, instruction_paths
+    from scripts.paper_execution import enabled, selected, relevant
+    if enabled(project) and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+        paper_id = selected(project, paper_id)
     ignored = instruction_paths(project)
+    from scripts.research_phase import requires_submission,submission_only
+    scientific_writing=stage=="writing-and-review" and not requires_submission(project,stage,paper_id)
     rows = []
     review_inputs = {"paper-facts.json", "citation-claims.jsonl", "original-comments.json", "concern-cards.json",
                      "reviewer-response.json", "response-matrix.csv", "revision-ledger.json",
@@ -47,6 +87,10 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
     roots = {"intake", "program", "literature", "evidence", "claims", "experiments", "results", "data", "papers"}
     for target in sorted(project.rglob("*")):
         relative = target.relative_to(project).as_posix()
+        if scientific_writing and submission_only(relative):
+            continue
+        if paper_id and not relevant(project,relative,paper_id):
+            continue
         parts = Path(relative).parts
         if not parts or parts[0] not in roots or any(p.startswith(".") or p in {"raw", "build", "submission"} for p in parts):
             continue
@@ -66,7 +110,16 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         rows.append({"path": relative, "sha256": sha(target)})
         if len(rows) > 10000:
             raise ValueError("review material inventory exceeds its bound")
-    return {"stage": stage, "paper_id": paper_id, "files": rows, "sha256": _digest(rows)}
+    from scripts.supplemental_experiments import proposal_pending
+    purpose="supplemental_protocol" if stage=="writing-and-review" and proposal_pending(project,paper_id) else "stage"
+    if purpose=="stage" and stage=="writing-and-review":
+        from scripts.research_phase import requires_submission
+        if not requires_submission(project,stage,paper_id):purpose="scientific_writing"
+    snapshot = {"stage": stage, "paper_id": paper_id, "files": rows, "sha256": _digest(rows),"review_purpose":purpose}
+    if purpose == "supplemental_protocol":
+        snapshot["declared_raw_inputs"] = _declared_raw_inputs(project, rows)
+        snapshot["sha256"] = _digest({"files": rows, "declared_raw_inputs": snapshot["declared_raw_inputs"]})
+    return snapshot
 
 
 def _identity(identity: dict, writer_family: str) -> dict:
@@ -104,7 +157,9 @@ def cli_identity(stdout: Path) -> dict:
 def _key(gate, paper_id):
     if gate not in STAGES or (gate == "G5" and not re.fullmatch(r"P[0-9]{2}", str(paper_id))):
         raise ValueError("review needs a scientific gate and, at G5, the exact paper")
-    return gate + ("-" + paper_id if gate == "G5" else "")
+    if paper_id is not None and not re.fullmatch(r"P[0-9]{2}",str(paper_id)):
+        raise ValueError("review paper must be a declared Pxx identity")
+    return gate + ("-" + paper_id if paper_id is not None and gate in {"G3","G4","G5"} else "")
 
 
 def _owned(project, path):
@@ -114,13 +169,15 @@ def _owned(project, path):
 
 
 def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path: Path, prompt: str,
-               identity: dict, writer_family: str, materials: dict, notes: list[str] | None = None) -> dict:
+               identity: dict, writer_family: str, materials: dict, notes: list[str] | None = None,
+               cycle_required: bool = False) -> dict:
     _cloud()
     if phase not in {"initial", "final"} or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", run_id):
         raise ValueError("safe actual critic run/phase required")
     gate = next((g for g, s in STAGES.items() if s == stage), None)
     state = read(project / "state/run.json")
-    paper_id = state.get("active_paper") if gate == "G5" else None
+    from scripts.paper_execution import enabled
+    paper_id = state.get("active_paper") if gate == "G5" or (enabled(project) and gate in {"G3","G4"}) else None
     key = _key(gate, paper_id)
     if materials != material_snapshot(project, stage, paper_id):
         raise ValueError("scientific inputs changed during independent criticism; review current sources again")
@@ -146,10 +203,14 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
         first = read(initial_path)
         if first.get("run_id") != run_id or first.get("stage") != stage or first.get("paper_id") != paper_id:
             raise ValueError("final review requires its same-run initial phase")
+        if bool(first.get("cycle_required")) != cycle_required:
+            raise ValueError("initial and final reviews must retain the same research-cycle requirement")
         if not isinstance(notes, list) or any(not isinstance(n, str) for n in notes):
             raise ValueError("final review needs actual writer dispositions")
         from scripts.api_orchestrator import validate_remediation_notes
-        validate_remediation_notes({"notes": notes, "stage": stage}, read(project / first["audit"]["path"]))
+        note_stage=("experiment-design" if materials.get("review_purpose")=="supplemental_protocol" else
+                    "scientific-writing" if materials.get("review_purpose")=="scientific_writing" else stage)
+        validate_remediation_notes({"notes": notes, "stage": note_stage}, read(project / first["audit"]["path"]))
         initial = {"path": initial_path.relative_to(project).as_posix(), "sha256": sha(initial_path)}
     value = {"schema_version": "1.0", "gate": gate, "stage": stage, "paper_id": paper_id, "run_id": run_id,
              "phase": phase, "created_at": datetime.now(timezone.utc).isoformat(),
@@ -157,6 +218,7 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
              "identity": actual_identity, "writer_family": writer_family,
              "audit": {"path": relative, "sha256": sha(audit_path)}, "initial": initial,
              "dispositions": notes if phase == "final" else None, "scientific_completion_verified": False}
+    if cycle_required:value["cycle_required"]=True
     write(target, value)
     paths = [target, audit_path]
     if phase == "final":
@@ -167,10 +229,15 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
     return {"path": target.relative_to(project).as_posix(), "sha256": sha(target)}
 
 
-def validate_gate(project: Path, gate: str, paper_id: str | None = None) -> list[str]:
+def validate_gate(project: Path, gate: str, paper_id: str | None = None, *, expected_purpose: str = "stage") -> list[str]:
     if gate not in STAGES:
         return []
     try:
+        if gate=="G5" and expected_purpose=="stage":
+            from scripts.research_phase import requires_submission
+            if not requires_submission(project,paper_id=paper_id):expected_purpose="scientific_writing"
+        from scripts.paper_execution import enabled,selected
+        if enabled(project) and gate in {"G3","G4","G5"}:paper_id=selected(project,paper_id)
         key = _key(gate, paper_id)
         latest = path_in(project, f"{PREFIX}/{key}/latest.json")
         _owned(project, latest)
@@ -180,9 +247,12 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None) -> list
             raise ValueError("latest independent receipt pointer changed")
         _owned(project, final_path)
         final = read(final_path)
-        if (final.get("gate"), final.get("stage"), final.get("paper_id"), final.get("phase")) != (gate, STAGES[gate], paper_id if gate == "G5" else None, "final"):
+        expected_paper=paper_id if gate=="G5" or (enabled(project) and gate in {"G3","G4"}) else None
+        if (final.get("gate"), final.get("stage"), final.get("paper_id"), final.get("phase")) != (gate, STAGES[gate], expected_paper, "final"):
             raise ValueError("independent review receipt gate/paper/phase mismatch")
-        if final["materials"] != material_snapshot(project, STAGES[gate], paper_id if gate == "G5" else None):
+        if final["materials"].get("review_purpose","stage")!=expected_purpose:
+            raise ValueError("a protocol-only independent audit cannot approve the parent scientific stage")
+        if final["materials"] != material_snapshot(project, STAGES[gate], expected_paper):
             raise ValueError("independent final review is stale for current scientific inputs")
         _identity(final["identity"], final["writer_family"])
         initial_path = path_in(project, final["initial"]["path"])
@@ -192,6 +262,13 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None) -> list
         initial = read(initial_path)
         if any(initial.get(k) != final.get(k) for k in ("gate", "stage", "paper_id", "run_id")) or initial.get("phase") != "initial":
             raise ValueError("initial/final review receipt runs are not matched")
+        if initial.get("materials",{}).get("review_purpose","stage") != expected_purpose:
+            raise ValueError("initial and final independent audits must both assess the requested review purpose")
+        if bool(initial.get("cycle_required")) != bool(final.get("cycle_required")):
+            raise ValueError("initial and final research-cycle requirements differ")
+        if final.get("cycle_required"):
+            from scripts.research_notebook import cycle_review
+            cycle_review(project,final["stage"],final["run_id"])
         _identity(initial["identity"], initial["writer_family"])
         from scripts.researchctl import audit_document_valid
         errors = []
@@ -205,11 +282,14 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None) -> list
             audits.append(audit)
             audit_document_valid(audit_path, audit, errors, final=receipt["phase"] == "final")
         from scripts.api_orchestrator import validate_remediation_notes
-        validate_remediation_notes({"notes": final["dispositions"], "stage": final["stage"]}, audits[0])
+        note_stage=("experiment-design" if expected_purpose=="supplemental_protocol" else
+                    "scientific-writing" if expected_purpose=="scientific_writing" else final["stage"])
+        validate_remediation_notes({"notes": final["dispositions"], "stage": note_stage}, audits[0])
         if any(re.match(r"^unresolved:", note.strip(), re.I) for note in final["dispositions"]):
             errors.append("independent review has unresolved author dispositions")
         matrix_path = project / "program/novelty-claim-matrix.json"
-        if gate in {"G1", "G2", "G5"} and matrix_path.is_file():
+        if (expected_purpose != "supplemental_protocol"
+                and gate in {"G1", "G2", "G5"} and matrix_path.is_file()):
             matrix = read(matrix_path)
             if matrix.get("schema_version") == "1.1":
                 from scripts.innovation_screening import validate_novelty_review

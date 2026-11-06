@@ -13,9 +13,22 @@ G0、G3、G4、G5 由系统在证据、质量、独立审计、预算和来源�
 隐私/条款判断的公开 Zenodo CC 数据；其他来源缺证据时停止获取。
 这次改造的测试验证软件行为，未启动真实付费研究或证明六篇论文已经完成。
 
+G2 仍先形成同一博士问题下的六篇架构，并逐篇记录人工选题决定。之后新建、未封存或执行的组合按
+P01 的 G3 → G4 → G5，再 P02 的 G3 → G4 → G5 顺序推进。当前篇的计划、预算声明、登记和数据清单快照在
+`experiments/papers/Pxx/`，主张矩阵在 `claims/papers/Pxx/claim-evidence.csv`；其他论文的封存输入和结果保持原样。
+已封存或执行的旧批量协议沿用原记录，不自动迁移。所有论文、补充实验和失败尝试共用既有项目累计总额。
+
+探索阶段可如实保留未饱和检索、未知项和待查候选，重新检索时保留历史轮次、受影响主张及下一查询；
+正式 G1 仍须满足选题证据要求。候选可采用有理由的聚焦比较或文字判断。真实内部独立审查可触发单独的
+`Ixxx` 补充实验，无需虚构外部审稿；方案和结果经过原有执行器及自动检查，最终论文仍须接受完整 G5 审查。
+初审无问题且作者已提供适用处置记录时跳过额外修订调用，初审、独立终审和决定日志均保留。
+进度分别记录控制检查和实际实验活动，不把错误减少或新增回执当作科学有效性。
+
+普通科研探索仍通过 G3 封存和原执行器，显式标记 `research_phase: exploratory`；结果保留后回到同篇 G3，正式验证另立协议并记录已见结果。写作先完成证据与论证及两次独立科学审查，再由控制器转入完整 `submission` 检查；科学草稿不能直接通过 G5。当前决策写入既有研究 notebook，可如实记录待证或没有变化。
+
 当前付费规则仅保留**费用计算与项目总额度**，见 [`docs/TOTAL-COST-POLICY.md`](docs/TOTAL-COST-POLICY.md)。取消单篇限额、逐次付费确认、额外启动开关、固定 300 元递增和人工对账关卡。待核对费用按明确标记的保守上限计入总额，余额足够即可继续；不会自动提高已有总额度。
 
-CCFA-Skills 的全部 17 项技能已接入现有模型与云端工具，逐项入口、任务请求及来源固定说明见 [`docs/CCFA-INTEGRATION.md`](docs/CCFA-INTEGRATION.md)。完整 `ccf-humanization` 政策、中英文示例及原版检查器覆盖现有写作与审查；G5 要求逐项处理 CFH01–CFH38，并继续保留 H01–H26、AD01–AD08。详细参考资料按任务提供，不增加一套付费调用或实验执行器。工程验收与真实科研效果分开记录。
+CCFA-Skills 的全部 17 项技能已接入现有模型与云端工具，逐项入口、任务请求及来源固定说明见 [`docs/CCFA-INTEGRATION.md`](docs/CCFA-INTEGRATION.md)。每次使用 Humanization/Common 基线和当前任务适用的专业指导；详细实验规则按研究阶段加载，完整编辑与投稿规则在 submission 阶段加载。完整政策、中英文示例和原版检查器仍可使用；submission 阶段要求逐项处理 CFH01–CFH38，并继续保留 H01–H26、AD01–AD08。不增加一套付费调用或实验执行器。工程验收与真实科研效果分开记录。
 
 正式云端模型现已改用 **CheapAI＋CodeKey**，不再需要 UUAPI。逐任务模型、推理档位、五组 Actions Secrets、缓存与费用计算见 [`docs/PRODUCTION-MODEL-ROUTING.md`](docs/PRODUCTION-MODEL-ROUTING.md)。已有项目总额度与正常继续执行条件满足时，无需另设付费启动审批；单一博士主题、六篇论文要求与 G1/G2 选题决定继续适用。
 
@@ -49,43 +62,19 @@ P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [
 
 面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
 
-“一键”指：创建或恢复项目，运行当前阶段的 Claude只读规划 → Codex写入 → Claude独立审查 → Codex修订 → Claude终审流程，通过检查后自动推进；G1 博士选题、G2 逐篇论文选题等待真实人工决定。数据许可、费用或实验事实缺证据时保持阻塞，不凭空补齐，也不自动投稿。
+“一键”指：创建或恢复项目，运行当前阶段的 Claude只读规划 → Codex写入 → Claude独立初审 → 必要时 Codex修订 → Claude独立终审流程，通过检查后自动推进；G1 博士选题、G2 逐篇论文选题等待真实人工决定。数据许可、费用或实验事实缺证据时保持阻塞，不凭空补齐，也不自动投稿。既有逐任务模型、路由和推理档位保持原样。
 
-## 已实现的闭环
+## 能力与规则
 
-- G0–G5 状态机中仅 G1/G2 记录人工选题决定，其他阶段记录自动检查决定；G0 不允许把未知时间、预算和设备仅改成 `ready` 后通过；决定前后产物变化均由哈希锁检测。
-- 正式 CLI 和云端流程支持 6 篇论文；G5 按 P01 → P06 逐篇完成，全部通过后才进入 `submission-ready`。少量低层测试夹具不构成其他篇数的完整流程支持。
-- G1 强制最接近的 5 项既有研究、3 个相邻领域、反证与剩余原创性风险；G2 对全部论文两两检查，六篇时必须覆盖 15 组比较，阻止“切香肠”。
-- G1 使用 1.1 版 `novelty-claim-matrix`：每项原创性主张至少逐项对照 3 项最近工作，绑定真实来源、原文定位、精确差异、非显然理由和区分性预测。检索按真实回执计算新增文献身份，并记录最近相关、相关、边缘或未决处置；覆盖评估、时间或预算停止均须如实解释，不能把新增 DOI 数当作新增重要近作数。有限检索不证明全球新颖性，未解决的科学异议仍须在既有审查中处理。
-- G1 默认真实调用 OpenAlex、Crossref、Semantic Scholar、arXiv、Europe PMC、DBLP、HAL 和 OpenCitations；另提供有密钥、配额受控的 SerpApi Google Scholar 补充检索。全部路径保存原始响应与规范化结果哈希；Web of Science/Scopus 仅导入本地授权导出。筛选复用现有受计费控制的作者调用，完整覆盖原始结果并保留不确定项；模型不能自填检索回执。
-- Theme B 是独立硬闸门：独立问题、claim、论文、主证据、证伪条件和失败后退路都必须明确，且 Theme A 失败时仍能成立。
-- G3 要求每篇论文单独提交实验设计：简单/领域标准/强近期基线、消融、泄漏控制、效应量与区间、多重性、功效或精度、随机种子、稳健性、负对照、外部有效性、停止和证伪规则。
-- G3 对表格、图像、WAV、NumPy、HDF5 与 Parquet 生成本地哈希绑定质量报告；未知格式或缺失内容处理器会阻断。每篇论文必须有 `statsmodels` 或至少 1,000 次 Monte Carlo 的可执行功效证据，Monte Carlo 由控制层在两个干净目录中重跑并精确比对。
-- 六篇期刊组合固定为至少三篇当前 JCR Q1 SCI/SCIE、其余最低 Q2，且 JIF 均须大于 1.0；Q2 只改变期刊目标，不降低博士级新颖性、实验、统计、复现、审稿或写作阈值。完整候选库从本地授权 JCR 导出生成；二次筛选按范围、文章类型、受众、分区、实务、费用和声誉分项计分，保留风险证据，并为每篇形成仍满足其分区底线的 challenge/target/safety 组合。
-- 最终题目、摘要、正文、图表标题、补充材料、回复信和投稿材料必须使用英文；G5 对主稿和全部投稿目录文本执行确定性语言检查。
-- G5 在 Codex 首稿和修订后自动执行自然学术表达审计。内置规则选取 `avoid-ai-writing`、`vale-ai-tells`、`No AI Slop` 与 `Anti-Defensive Writing` 中适合学术英文且不损害科研诚信的部分，逐行检查模板化套话、空洞拔高、含糊归因、失准断言、机械结构、重复、防御性开场和异常均匀的节奏；真实限制、不确定性、负结果和披露不会被自动删除。可选 `proselint` 与 Harper 只在本地追加语法建议。该模块不计算“AI率”或规避检测器。
-- G5 叠加摘要级 claim verification、paper-facts/理论测量/五区段/术语符号一致性、concern cards/编辑摘要、审稿承诺落稿检查和修订漂移检查：`ref-verify` 只核对 DOI 绑定的主结论/数值与摘要，机制/方法/表图仍须全文证据；数字、引用或主张强度变化必须有精确修订账本、当前机器记录及独立科学审查。Word 主稿必须有非 Claude 源文件收据和基于实际渲染的完整自动视觉检查。
-- Claude Code 只有只读规划/审查权限；不可写项目产物。Codex 负责持久文本、修订和绘图代码；本地确定性工具从真实数据渲染图表。
-- 每个模型调用都有超时、输出上限、断点日志和敏感环境值脱敏；独立终审未通过时闸门保持关闭。
-- API-first 模式：无需 Claude Code/Codex CLI 即可运行 Claude语义计划与OpenAI/Codex持久写入；模型生成文件受路径、大小、状态文件、审稿文件和凭据保护约束。
-- 输出来源登记：控制层保存文件哈希、写入模型家族、供应商和角色；程序拒绝Codex持久产物中复制Claude计划/审查的长原文片段。每个最终上传文件必须有当前 Codex、本地工具或明确人工证明的来源；未登记、登记后修改或Claude/Anthropic来源都会阻止 G5 与打包。
-- 正式流程使用 CheapAI OpenAI Responses、CodeKey Anthropic Messages、DeepSeek Chat 和 Gemini 原生多模态协议；逐任务模型与档位、身份核对及独立科学审查保持原样。所有调用、修复和重试均计入同一项目总额；实际扣费可用时核对，否则保守估计并明确标识。
-- Claude 与 GPT 继续各司其职；模型运行层按配置的人民币单价统计每次调用，默认项目总额度 300 元。单篇成本只用于统计，不再单独限制。完全相同的合法请求仍可复用零成本缓存。
-- G1/G3 默认自动生成多组数据查询，调用 DataCite、Zenodo、Hugging Face、OpenML、Figshare、Dryad、Harvard Dataverse、Data.gov/CKAN 八类官方接口并行检索、跨查询去重和元数据初筛；G3 优先按六篇论文分别构造查询。候选许可和科学适用性必须另有来源证据与独立判断，发现元数据不能代替使用权。
-- 本地可视化研究驾驶舱：浏览器内配置临时 API 会话、创建项目、运行 G0–G5、监控任务/Token/人民币模型费用/实验/缺项、搜索数据、执行人工闸门和生成投稿包；密钥不写入仓库或客户端存储。
-- 数据清单验证、受保护的来源许可证据、SHA-256，以及对私网/回环/带凭据 URL 和不安全重定向的拒绝；历史真实人工许可记录兼容读取。
-- G3 批准后的实验计划哈希锁定、无 shell 命令执行、预算硬上限、超时、输出哈希，以及成功/失败/超时的统一登记。G4 会复核每次运行与批准计划、种子、论文、输出文件和当前哈希，并要求 claim matrix 精确覆盖全部论文 contract claim。
-- G4 每篇论文必须复现领域标准和强近期基线；clean-room 运行只接受锁定摘要、禁网且只读根文件系统的 Docker/Podman 容器。linked Git worktree 仅算独立检出目录，不再被视为隔离执行器。容差、执行器隔离收据、环境与证据哈希均由控制层复核，不能由模型自报。
-- PaperQA2 与 ToolUniverse 作为按课题启用的成熟 AI4Science 上游；默认关闭。可执行适配器会真实调用官方 CLI/dictionary API，登记成功、失败、超时、包版本、输入完整性、stdout/stderr 和结果哈希；输出仅为建议，不能自行验证科学结论。
-- 开放全文解析器联合 OpenAlex、Unpaywall 与 Crossref 生成合法全文候选，不绕过访问控制，也不把元数据中的许可声明自动当作下载授权。
-- SciencePro 无 API 时可把人工下载的 PDF/DOCX/CSV/BibTeX 导入 Git 忽略的私有区；系统提取 DOI/HTTPS 线索并生成哈希收据，结论始终标记为需要独立核验。
-- 高级科研绘图器用 Python 从登记数据确定性生成 SVG/PDF 与至少 300 DPI PNG，覆盖 37 类常见 SCI 图，包括分布/不确定性/诊断/生存/校准/Bland–Altman/SHAP/nomogram/decision curve/network/chord/geospatial，采用英文标签、替代文本、claim 绑定和输出哈希；禁止用装饰性 3D 图替代证据。
-- GitHub Actions 在 Python 3.10/3.12/3.13 上运行确定性回归；每周和手动工作流真实调用全部公开文献接口，并用 digest 固定镜像验证 Docker 隔离。WSL2 本机验收另存环境与原始调用证据，Linux CI 不冒充 WSL2。
-- BibTeX DOI 的 Crossref 核验、重复 DOI、标题和年份不一致检查；无 DOI 来源必须有可追溯的书目身份依据，历史真实人工记录仍可读取。身份核验不等于主张支持核验。
-- 出版商模板 ZIP 安全导入、文件完整性复核、稿件占位符/章节/篇幅检查，以及可用时的 `latexmk` 无 shell-escape 编译。
-- 已通过单篇 G5 后生成确定性的人工投稿 ZIP、逐文件 SHA-256 清单和人工检查表；不访问期刊门户。
+- [阶段与论文执行](references/workflow.md)：正式流程保留六篇共同博士问题与逐篇价值，G2 完成整体架构及各篇选题决定后，逐篇推进 G3–G5；低层少量论文测试夹具不扩大正式支持范围。
+- [科研质量与证据](references/stage-contracts.md)：探索、正式验证、科学写作与投稿的适用要求；G1/G2 人工选题，其他阶段以当前证据和自动检查决定。
+- [创新性与审查依据](docs/REVIEW-REMEDIATION.md)：1.1 来源绑定比较、真实检索处置、独立创新性初审/终审与 1.2 逐项事实判断；未知或科学异议不能靠自评分消除。
+- [数据使用权](docs/AUTOMATED-DATA-RIGHTS.md)与[研究质量工具](docs/RESEARCH-QUALITY.md)：实际来源、哈希、功效、预注册和复现。
+- [正式模型与费用](docs/PRODUCTION-MODEL-ROUTING.md)：既有模型分工、身份核查、累计总额及全部尝试。
+- [写作与图件](docs/NEW-CAPABILITIES.md)：真实结果、英文正文、可编辑图件、引用、修订和视觉检查。
+- [投稿准备](docs/PUBLICATION-DISCLOSURE.md)：当前期刊规则、真实作者/伦理/披露记录和人工提交。
 
-系统不会把模型一致意见当作科学验证。最终 PDF/DOCX、数据权利和当年 JCR 信息须通过各自证据检查；作者资格、必要伦理许可和实际投稿仍适用外部要求。
+工程验收不代表科学有效、博士资格或期刊录用；当前状态与缺项以项目证据为准。
 
 ## 推荐架构
 
@@ -203,114 +192,27 @@ http://127.0.0.1:8765
 
 新颖性、数据质量、可执行功效、预注册、基线复现和隔离复现的完整操作见 [`docs/RESEARCH-QUALITY.md`](docs/RESEARCH-QUALITY.md)。
 
-## API-first 模式（推荐长期使用）
+## 入口与恢复
 
-配置环境变量：
-
-```bash
-export ANTHROPIC_API_KEY='...'
-export ANTHROPIC_MODEL='你的当前Anthropic模型ID'
-export OPENAI_API_KEY='...'
-export OPENAI_MODEL='gpt-5.6'
-```
-
-检查：
+正式云端入口、既有模型与推理档位以 [正式路由配置](docs/PRODUCTION-MODEL-ROUTING.md) 和 [持续云端研究](docs/CONTINUOUS-CLOUD-RESEARCH.md) 为准。运行前后可用零模型调用的状态命令查看当前篇与缺口：
 
 ```bash
-python3 scripts/api_orchestrator.py health
+python3 scripts/researchctl.py status --project my-phd --json
+python3 scripts/researchctl.py gate-check --project my-phd
 ```
 
-执行阶段：
-
-```bash
-python3 scripts/researchctl.py init --project my-phd --paper-count 6
-python3 scripts/api_orchestrator.py cycle my-phd intake \
-  --planner-provider anthropic \
-  --writer-provider openai \
-  --critic-provider anthropic \
-  --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU.'
-```
-
-API 模式会把 Claude 语义计划、原始响应、结构化 bundle 和写入清单放在本地且被 Git 忽略的 `projects/<project>/api_runs/<run-id>/`。Claude计划不会写进普通科研文件；只有非Anthropic writer可以写项目产物。模型不能修改 `state/`、`api_runs/`、独立审稿记录、凭据、`.env`、隐藏文件，不能批准/推进闸门，也不能执行任意 shell 命令。
-
-完整说明见 [`docs/API-FIRST.md`](docs/API-FIRST.md)。
-如果希望只在 Codex 聊天框里下达自然语言指令，由 Codex 管理闸门、脚本和外部 API，见 [`docs/CHAT-USAGE.md`](docs/CHAT-USAGE.md)。
-v1.4 全链路要求追踪与剩余人工边界见 [`docs/AUDIT-V1.4.md`](docs/AUDIT-V1.4.md)。
-
-使用 UUAPI + CC Switch 时，先阅读
-[`docs/UUAPI-CC-SWITCH.md`](docs/UUAPI-CC-SWITCH.md)，完成非计费配置检查、余额查询和两次最小实时探针后，再运行真实研究项目。
-
-## API 一键首次试跑
-
-```bash
-bash scripts/start.sh my-phd "目标、已有背景、每周时间、预算和设备条件"
-```
-
-该命令默认初始化 6 篇论文并用 `uuapi-anthropic` 只读规划/审查、`uuapi-openai` 持久写入。项目已存在时不会覆盖；按 `status` 显示的当前阶段手动运行 `api_orchestrator.py cycle`。
-
-## 可选 CLI 启动与恢复
-
-只有已经安装并配置 Claude Code 与 Codex CLI 时才使用：
-
-```bash
-bash scripts/start.sh --cli my-phd "目标、已有背景、每周时间、预算和设备条件"
-```
-
-预览下一次动作，不调用模型：
-
-```bash
-python3 scripts/autopilot.py plan --project my-phd
-```
-
-人类批准并继续：
-
-```bash
-python3 scripts/researchctl.py approve \
-  --project my-phd --gate G0 --actor "Hengyi" --note "constraints reviewed"
-python3 scripts/autopilot.py resume --project my-phd
-```
-
-批准前必须先运行 `gate-check` 和 `ready`；`ready` 后若修改任何工件，必须重新检查和 `ready`。
-若 `ready` 后决定让模型继续修改，先显式退回并记录原因：
-
-```bash
-python3 scripts/researchctl.py reopen --project my-phd \
-  --note 'Human review found issues requiring another model revision'
-```
-
-`resume` 只会跨越已经记录批准的闸门。若当前阶段仍缺证据或许可，它会保留检查错误并停下。运行日志在本地 `projects/<slug>/state/runs/`；最新断点摘要在 `state/autopilot.json`。
-
-默认每次 Claude 调用上限为 5 美元，可显式下调：
-
-```bash
-python3 scripts/autopilot.py resume \
-  --project my-phd --claude-max-budget-usd 2.00 --timeout 1800
-```
-
-`--claude-mode minimal` 使用 Claude Code 的 bare/minimal 模式；默认 `standard` 会加载仓库配置。Claude命令不开放 Write/Edit；Codex写入使用临时会话和 workspace-write，并由控制层检查受保护状态、审稿文件和输出来源哈希。
-
-也可在 Claude Code 交互模式使用插件：
-
-```bash
-claude --plugin-dir .
-```
-
-```text
-/doctoral-research-os:start my-phd
-```
-
-Codex 会发现 `.agents/skills/doctoral-research`。
+独立配置的 API-first 兼容入口见 [API-FIRST.md](docs/API-FIRST.md)；`scripts/start.sh` 当前兼容默认仍使用 UUAPI，不是正式 CheapAI＋CodeKey 云端入口。只有明确选择本地 CLI 时才用 `scripts/start.sh --cli` 或 `autopilot.py`，命令和限制见 [CHAT-USAGE.md](docs/CHAT-USAGE.md)。这些入口共用同一状态、权利、累计预算、实验执行器和独立审查，不会提供额外额度或代填 G1/G2 选题决定。
 
 ## 阶段决定
 
 | 闸门 | 决定方式 | 通过后允许 |
 |---|---|---|
 | G0 | 系统检查已提供的目标、时间、预算和资源；金额授权独立保留 | 选题情报 |
-| G1 | 三个以上候选、逐条最近工作差异、检索饱和、原创性风险、核心命题 A、扩展命题 B、博士论证 | 论文组合架构 |
+| G1 | 人工确认博士选题；系统检查三个以上候选、最近工作差异、检索饱和、原创性风险、A/B 命题和博士论证 | 论文组合架构 |
 | G2 | 人工逐篇确认选题；系统仍检查独立性、博士主线和期刊组合 | 数据与实验设计 |
-| G3 | 系统检查许可、质量、设计、功效、预注册和实际预算，封存方案 | 执行锁定计划 |
-| G4 | 系统核验全部尝试、负结果、主张证据、基线和隔离复现 | 结果约束写作 |
-| G5 | 独立模型审计、引用和数值核验、实际渲染视觉检查、披露和期刊规则检查 | 标记该篇就绪；转下一篇 |
+| G3 | 系统检查当前篇的许可、质量、设计、适用功效、预注册和累计预算，封存方案 | 执行该篇锁定计划 |
+| G4 | 系统核验当前篇全部尝试、负结果、主张证据、基线和隔离复现 | 该篇结果约束写作 |
+| G5 | 独立模型审计、引用和数值核验、实际渲染视觉检查、披露和期刊规则检查 | 标记该篇就绪；下一篇进入 G3 |
 
 查看状态和精确缺口：
 
@@ -346,11 +248,11 @@ python3 scripts/dataset_fetch.py download \
 
 ## 实验执行
 
-每篇论文在 `papers/Pxx/experiments/` 下建立一份或多份 JSON 设计文件，均符合 `schemas/paper-experiment-design.schema.json`；其中的假设、数据集、设计 ID、种子和运行 ID 必须分别与论文 contract、数据清单及全局 `experiments/plan.json` 完整对上，不允许遗漏或重复分配运行。每个基线还要记录原始来源、年份、实现版本、许可和调参预算，并说明公平比较协议。全局计划与 `experiments/budget.json` 一起通过 G3 自动检查并封存，预算不得超过现有所有者授权。示例单次运行：
+当前论文在 `papers/Pxx/experiments/` 下建立一份或多份 JSON 设计文件，均符合 `schemas/paper-experiment-design.schema.json`；其中的假设、数据集、设计 ID、种子和运行 ID 必须分别与论文 contract、源数据清单快照及 `experiments/papers/Pxx/plan.json` 完整对上，不允许遗漏或重复分配运行。每个基线还要记录原始来源、年份、实现版本、许可和调参预算，并说明公平比较协议。当前计划与 `experiments/papers/Pxx/budget.json` 一起通过 G3 自动检查并封存；预算声明不增加项目总额度，也不形成单篇金额限制。已封存或执行的旧批量项目继续使用原 `experiments/plan.json` 与 `experiments/budget.json`。示例单次运行：
 
 ```json
 {
-  "run_id": "p01-baseline-seed-7",
+  "run_id": "P01-baseline-seed-7",
   "paper_id": "P01",
   "argv": ["python3", "experiments/code/train.py", "--seed", "7"],
   "cwd": ".",
@@ -358,7 +260,7 @@ python3 scripts/dataset_fetch.py download \
   "timeout_seconds": 7200,
   "estimated_cost_usd": 0,
   "inputs": [{"path": "data/processed/split.parquet", "sha256": "<64 hex>"}],
-  "expected_outputs": ["experiments/results/p01-baseline-seed-7.json"]
+  "expected_outputs": ["results/P01/P01-baseline-seed-7.json"]
 }
 ```
 
@@ -366,12 +268,12 @@ python3 scripts/dataset_fetch.py download \
 
 ```bash
 python3 scripts/experiment_runner.py --project my-phd
-python3 scripts/experiment_runner.py --project my-phd --run p01-baseline-seed-7
+python3 scripts/experiment_runner.py --project my-phd --run P01-baseline-seed-7
 ```
 
 计划或预算在 G3 后被修改会被拒绝。运行器不是恶意代码沙箱：它只执行你已经批准的本地研究代码，并通过无 shell 调用、可执行文件白名单、项目内路径、精简环境、超时和预算减少误操作。
 
-G4 的 `claims/claim-evidence.csv` 必须逐项覆盖每篇 `paper-contract.json` 中的唯一 claim ID；标记为 `supported` 或 `partially_supported` 的主张必须引用至少一个成功的 `analysis_ids`，且对应输出文件的当前哈希必须与实验登记一致。
+G4 的 `claims/papers/Pxx/claim-evidence.csv` 必须逐项覆盖当前篇 `paper-contract.json` 中的唯一 claim ID；标记为 `supported` 或 `partially_supported` 的主张必须引用至少一个成功的 `analysis_ids`，且对应输出文件的当前哈希必须与该篇实验登记一致。旧批量协议沿用其原主张矩阵和范围。
 
 ## 确定性图表与来源
 
@@ -383,8 +285,8 @@ python3 scripts/figure_provenance.py record \
   --figure papers/P01/figures/result.png \
   --type data_chart \
   --renderer experiments/code/render_p01.py \
-  --input experiments/results/p01-metrics.csv \
-  --run p01-primary-seed-7 \
+  --input results/P01/P01-metrics.csv \
+  --run P01-primary-seed-7 \
   --language-checked-by 'your-name'
 
 python3 scripts/figure_provenance.py validate --project my-phd --paper P01

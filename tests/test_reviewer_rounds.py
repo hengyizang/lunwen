@@ -197,7 +197,7 @@ class ReviewerRoundTests(unittest.TestCase):
 
     def test_second_round_requires_new_human_g5_and_chains_previous_round(self):
         first = self.start()
-        with self.assertRaisesRegex(ValueError, "completed its human G5"):
+        with self.assertRaisesRegex(ValueError, "completed its recorded G5 checks"):
             self.start()
         self.response()
         rounds.refresh(self.project, "P01")

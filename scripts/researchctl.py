@@ -9,6 +9,8 @@ ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULT
 if __package__ in {None,""}:sys.path.insert(0,str(ROOT))
 STAGES=[{"name":"intake","gate":"G0"},{"name":"topic-intelligence","gate":"G1"},{"name":"paper-architecture","gate":"G2"},{"name":"experiment-design","gate":"G3"},{"name":"experiment-execution","gate":"G4"},{"name":"writing-and-review","gate":"G5"},{"name":"submission-ready","gate":None}]
 SLUG_RE=re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$"); PAPER_RE=re.compile(r"^P[0-9]{2}$")
+from scripts.paper_execution import artifact_path as experiment_path
+
 class ResearchCtlError(RuntimeError): pass
 def now(): return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 def read_json(path):
@@ -79,17 +81,60 @@ def audit_document_valid(path,audit,errors,final=False):
         if audit.get("verdict")!="pass-with-conditions" or blockers:errors.append(f"{path.name}: final audit must pass with no fatal/major findings, missing evidence or remediation steps");valid=False
     return valid
 def independent_audit_errors(project,gate,errors,paper_id=None):
+    from scripts.paper_execution import enabled, selected
+    if enabled(project) and gate in {"G3", "G4"}:paper_id=selected(project)
     from scripts.review_receipts import validate_gate
     errors.extend(validate_gate(project,gate,paper_id))
     if not nonempty(project/"reviews"/"decision-log.md"):errors.append("reviews/decision-log.md must disposition independent findings")
 def quality_path(project,gate,paper_id=None):
-    return {"G1":project/"program"/"quality-G1.json","G2":project/"papers"/str(paper_id)/"quality-G2.json","G3":project/"experiments"/"quality-G3.json","G4":project/"reports"/"quality-G4.json","G5":project/"papers"/str(paper_id)/"reviews"/"quality-G5.json"}[gate]
+    return {"G1":project/"program"/"quality-G1.json","G2":project/"papers"/str(paper_id)/"quality-G2.json","G3":experiment_path(project, 'experiments/quality-G3.json'),"G4":experiment_path(project, 'reports/quality-G4.json'),"G5":project/"papers"/str(paper_id)/"reviews"/"quality-G5.json"}[gate]
 def quality_errors(project,gate,errors,paper_id=None):
     try:from scripts.quality_gate import validate_file
     except ImportError as exc:errors.append(f"quality gate validator unavailable: {exc}");return
     path=quality_path(project,gate,paper_id);errors.extend(f"{path}: {e}" for e in validate_file(path,gate,project=project,require_facts=True))
+
+def summarize_gate_errors(errors):
+    """Group repeated checks for presentation without changing gate authority.
+
+    Only known shared causes are combined. Unrecognized issues keep their exact
+    text and separate identity; each original check remains available below it.
+    Counts describe validator messages, never independent scientific problems.
+    """
+    groups = {}
+    rules = (
+        ("novelty_search", ("search_saturation", "saturation search", "saturation round", "citation chaining"),
+         "文献检索与创新主张仍有待核对", "根据受影响的主张补查文献，并如实更新当前检索状态。"),
+        ("literature_screening", ("requires a recorded screening decision",),
+         "文献检索结果尚未完成筛选记录", "集中核对检索结果，记录纳入、排除和待定理由。"),
+        ("source_integrity", ("source hash changed", "preregistered input changed", "output changed", "provenance"),
+         "证据来源或冻结输入需要核对", "先定位变更的原始来源和运行记录，保留原版本后重新核验受影响证据。"),
+        ("data_rights", ("license", "data rights", "research-use rights"),
+         "数据使用依据尚未满足", "核对受影响数据集的使用条款与授权，或选择已获准的替代数据。"),
+        ("experiment_protocol", ("power-analysis", "preregistration", "experiment design", "exploration."),
+         "当前研究方案仍有缺口", "围绕关键未知补齐当前研究强度所需方案；探索无需伪造正式验证参数。"),
+        ("experiment_execution", ("executor receipt", "registered attempt", "experiment registry", "execution pending"),
+         "实验执行证据尚未齐备", "检查原生执行记录和完整日志，保留失败结果并决定下一项区分性检验。"),
+        ("claim_support", ("claim-evidence", "claim evidence", "critical test", "unsupported claim"),
+         "主张与区分性证据尚未对应", "定位受影响的主张、竞争解释和实际结果，补证据或收窄结论。"),
+        ("independent_review", ("independent review", "independent audit"),
+         "当前材料仍需独立审查", "针对当前科学问题完成独立初审、逐项决定和终审。"),
+        ("submission_preparation", ("submission preparation", "academic-style", "venue-compliance", "pre-submission criteria"),
+         "投稿准备尚未完成", "科学写作完成后集中处理投稿格式、风格、期刊要求和打包。"),
+    )
+    for error in errors:
+        message = str(error)
+        match = next((row for row in rules if any(term in message.casefold() for term in row[1])), None)
+        identifier, title, action = ((match[0], match[2], match[3]) if match else
+            ("check-" + hashlib.sha256(message.encode("utf-8")).hexdigest()[:16], message, "按原始检查定位并解决缺口。"))
+        group = groups.setdefault(identifier, {"id": identifier, "title": title, "next_action": action, "count": 0, "checks": []})
+        group["count"] += 1
+        if message not in group["checks"]:
+            group["checks"].append(message)
+    return list(groups.values())
+
 def gate_errors(slug,gate):
     project=project_dir(slug);errors=[]
+    from scripts.paper_execution import papers as selected_papers
     if gate is None:return errors
     if gate in {"G2","G5"}:
         from scripts.research_design import validate_portfolio_evidence
@@ -102,23 +147,29 @@ def gate_errors(slug,gate):
         if matrix and originality:
             pid=read_json(state_path(slug)).get("active_paper") if gate=="G5" else None
             errors.extend(validate_novelty_gate(project,matrix,originality,gate,pid))
-    if gate in {"G3","G4","G5"}:
-        from scripts.experiment_evidence import validate_scientific_bindings
-        state=read_json(state_path(slug))
-        selected=[state.get("active_paper")] if gate=="G5" else [f"P{i:02d}" for i in range(1,int(state["paper_count"])+1)]
-        for pid in selected:errors.extend(validate_scientific_bindings(project,pid,gate))
     from scripts.scientific_scope import validate as validate_scientific_scope
     errors.extend(validate_scientific_scope(project,gate,read_json(state_path(slug)).get("active_paper")))
+    from scripts.research_phase import exploratory
+    try:
+        exploring = gate in {"G3", "G4"} and exploratory(project)
+    except (OSError, ValueError) as exc:
+        return errors + ["research phase: " + str(exc)]
+    if gate in {"G3","G4","G5"} and not exploring:
+        from scripts.experiment_evidence import validate_scientific_bindings
+        state=read_json(state_path(slug))
+        selected=[state.get("active_paper")] if gate=="G5" else selected_papers(project,gate)
+        for pid in selected:errors.extend(validate_scientific_bindings(project,pid,gate))
     if gate in {"G3","G4","G5"}:
         from scripts.empirical_workflow import gate_errors as empirical_errors
-        errors.extend(empirical_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
+        if not exploring:
+            errors.extend(empirical_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
         from scripts.primary_recovery import gate_errors as primary_recovery_errors
         errors.extend(primary_recovery_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
     if gate in {"G2","G3","G4","G5"}:
         from scripts.research_identity import validate as validate_research_identity
         state=read_json(state_path(slug))
-        selected=[state.get("active_paper")] if gate=="G5" else [f"P{i:02d}" for i in range(1,int(state["paper_count"])+1)]
-        for paper_id in selected:errors.extend(validate_research_identity(project,paper_id,gate))
+        selected=[state.get("active_paper")] if gate=="G5" else selected_papers(project,gate)
+        for paper_id in selected:errors.extend(validate_research_identity(project,paper_id,"G3" if exploring else gate))
     if gate != "G0":
         from scripts.research_extensions import gate_errors as extension_errors
         errors.extend(f"research extensions: {x}" for x in extension_errors(project))
@@ -236,9 +287,19 @@ def gate_errors(slug,gate):
                 quality_errors(project,gate,errors,pd.name)
         independent_audit_errors(project,gate,errors);return errors
     if gate=="G3":
-        datasets=jsonl_objects(project/"data"/"datasets.jsonl",errors)
+        from scripts.research_phase import exploratory, exposure_errors
+        if exploratory(project):
+            from scripts.research_quality import validate_g3_quality
+            errors.extend(validate_g3_quality(project))
+            independent_audit_errors(project,gate,errors)
+            return errors
+        errors.extend(exposure_errors(project))
+        from scripts.paper_execution import dataset_snapshot
         from scripts import study_routes
-        if not datasets and any(study_routes.route(project,p.name)=="empirical" for p in (project/"papers").glob("P[0-9][0-9]")):
+        manifest_path=dataset_snapshot(project)
+        empirical=any(study_routes.route(project,p)=="empirical" for p in selected_papers(project,gate))
+        datasets=jsonl_objects(manifest_path,errors) if empirical or (manifest_path.is_file() and manifest_path.stat().st_size) else []
+        if not datasets and any(study_routes.route(project,p)=="empirical" for p in selected_papers(project,gate)):
             errors.append("at least one licensed dataset manifest is required")
         try:
             from scripts.dataset_fetch import validate_manifest
@@ -250,11 +311,13 @@ def gate_errors(slug,gate):
                 errors.extend(f"datasets.jsonl entry {i}: {issue}" for issue in license_errors(d, project=project))
                 if download_value.get("sha256")=="pending":errors.append(f"datasets.jsonl entry {i}: SHA-256 remains pending")
         except ImportError as exc:errors.append(f"dataset validator unavailable: {exc}")
-        plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
+        plan=load_nonempty_json(experiment_path(project, 'experiments/plan.json'),errors)
         if plan:
             try:
                 from scripts.experiment_runner import validate_plan
                 errors.extend(f"experiments/plan.json: {x}" for x in validate_plan(plan))
+                from scripts.paper_execution import plan_errors
+                errors.extend(plan_errors(project,plan))
             except ImportError as exc:errors.append(f"experiment plan validator unavailable: {exc}")
             try:
                 from scripts.research_design import validate_experiment_design
@@ -264,6 +327,7 @@ def gate_errors(slug,gate):
                 paper_dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
                 state=read_json(state_path(slug))
                 if len(paper_dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(paper_dirs)}")
+                paper_dirs=[p for p in paper_dirs if p.name in selected_papers(project,gate)]
                 for paper_dir in paper_dirs:
                     contract=load_nonempty_json(paper_dir/"paper-contract.json",errors)
                     if study_routes.route(project,paper_dir.name)!="empirical":
@@ -313,7 +377,7 @@ def gate_errors(slug,gate):
                             if missing:errors.append(f"{paper_dir.name} is missing contracted experiment designs: {', '.join(missing)}")
                             if extra:errors.append(f"{paper_dir.name} has uncontracted experiment designs: {', '.join(extra)}")
             except ImportError as exc:errors.append(f"paper experiment-design validator unavailable: {exc}")
-        budget=load_nonempty_json(project/"experiments"/"budget.json",errors)
+        budget=load_nonempty_json(experiment_path(project, 'experiments/budget.json'),errors)
         if budget:
             if budget.get("status")!="ready_for_review":errors.append("experiments/budget.json status must be ready_for_review")
             ceiling=budget.get("hard_ceiling_usd")
@@ -329,16 +393,22 @@ def gate_errors(slug,gate):
         except ResearchQualityError as exc:errors.append(f"research-quality evidence is invalid: {exc}")
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G4":
-        registry=jsonl_objects(project/"experiments"/"registry.jsonl",errors)
+        from scripts.research_phase import exploratory
+        if exploratory(project):
+            from scripts.research_quality import validate_g4_quality
+            errors.extend(validate_g4_quality(project))
+            independent_audit_errors(project,gate,errors)
+            return errors
+        registry=jsonl_objects(experiment_path(project, 'experiments/registry.jsonl'),errors)
         if not registry:errors.append("at least one experiment registry entry is required")
-        plan=load_nonempty_json(project/"experiments"/"plan.json",errors)
-        claim=project/"claims"/"claim-evidence.csv"
+        plan=load_nonempty_json(experiment_path(project, 'experiments/plan.json'),errors)
+        claim=experiment_path(project, 'claims/claim-evidence.csv')
         try:
             from scripts.results_validation import validate_claim_evidence,validate_registry
             if plan:errors.extend(f"experiments/registry.jsonl: {x}" for x in validate_registry(project,plan,registry))
             errors.extend(f"claims/claim-evidence.csv: {x}" for x in validate_claim_evidence(project,claim,registry))
         except ImportError as exc:errors.append(f"results validator unavailable: {exc}")
-        if not nonempty(project/"reports"/"reproducibility.md"):errors.append("reports/reproducibility.md is required")
+        if not nonempty(experiment_path(project, 'reports/reproducibility.md')):errors.append("reports/reproducibility.md is required")
         try:
             from scripts.research_quality import ResearchQualityError,validate_g4_quality
             errors.extend(f"research quality: {x}" for x in validate_g4_quality(project))
@@ -347,11 +417,50 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
-        from scripts.submission_package import validate_selected_venue
-        errors.extend(validate_selected_venue(project,pid))
+        from scripts.research_phase import exploratory
+        try:
+            prereg=read_json(paper/"preregistration.json") if (paper/"preregistration.json").is_file() else {}
+            if exploratory(project,pid) or prereg.get("research_phase")=="exploratory":
+                errors.append(f"{pid}: exploratory observations cannot enter G5; return to a reviewed confirmatory G3 protocol")
+                return errors
+        except (OSError,ValueError,KeyError,TypeError) as exc:
+            errors.append(f"{pid} research phase: {exc}")
+            return errors
+        from scripts.research_phase import requires_submission,SUBMISSION_PENDING
+        submission=requires_submission(project,paper_id=pid)
+        from scripts.supplemental_experiments import internal_errors
+        errors.extend("internal follow-up: "+e for e in internal_errors(project,pid))
+        if submission:
+            from scripts.submission_package import validate_selected_venue
+            errors.extend(validate_selected_venue(project,pid))
         from scripts import study_routes
         if study_routes.route(project,pid)!="empirical":
-            errors.extend(study_routes.validation_errors(project,pid));errors.extend(study_routes.export_errors(project,pid))
+            errors.extend(study_routes.validation_errors(project,pid))
+            if submission:errors.extend(study_routes.export_errors(project,pid))
+        if not submission:
+            from scripts import manuscript_audit,ref_verify_adapter,statistical_reporting,revision_integrity,revision_ledger,figure_provenance
+            for label,check in (
+                ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
+                ("citation claims",lambda:ref_verify_adapter.validate_saved_report(paper)),
+                ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
+                ("revision integrity",lambda:revision_integrity.validate_saved_report(paper)),
+                ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
+                ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper))):
+                try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
+                except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:errors.append(f"{pid} {label}: {exc}")
+            manuscripts=[p for p in (paper/"manuscript/main.tex",paper/"manuscript/main.docx") if nonempty(p)]
+            if not manuscripts:errors.append(f"{pid} requires a scientific manuscript")
+            citation=load_nonempty_json(paper/"reviews/citation-audit.json",errors)
+            if citation:
+                from scripts.citation_audit import validate_provider_identities,manuscript_digest
+                bibliography=paper/"manuscript/references.bib"
+                if citation.get("status")!="pass":errors.append(f"{pid} citation audit must pass")
+                if not nonempty(bibliography) or citation.get("bibliography_sha256")!=file_sha256(bibliography):errors.append(f"{pid} citation audit is stale for references.bib")
+                else:errors.extend(f"{pid} citation identity evidence: {issue}" for issue in validate_provider_identities(bibliography,citation))
+                if manuscripts and citation.get("manuscript_sha256")!=manuscript_digest(manuscripts[0]):errors.append(f"{pid} citation audit is stale for the scientific manuscript")
+            independent_audit_errors(project,gate,errors,pid)
+            errors.append(SUBMISSION_PENDING)
+            return errors
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors) or {}
         map_portfolio=paper_map.get("papers",[]) if isinstance(paper_map.get("papers"),list) else []
         map_targets={str(item.get("paper_id")):str(item.get("target_jcr_quartile") or "").upper() for item in map_portfolio if isinstance(item,dict) and item.get("paper_id")}
@@ -521,9 +630,11 @@ def gate_errors(slug,gate):
 def active_paper_id(slug):return validate_paper_id(str(read_json(state_path(slug)).get("active_paper")))
 def artifact_hash(slug,gate):
     project=project_dir(slug);d=hashlib.sha256()
+    from scripts.paper_execution import relevant
     for path in sorted(project.rglob("*")):
         rel=path.relative_to(project)
         if not path.is_file() or rel.parts[0]=="state" or "raw" in rel.parts or "venue-template" in rel.parts or "build" in rel.parts or rel.parts[:2]==("experiments","runs"):continue
+        if gate in {"G3","G4","G5"} and not relevant(project,rel.as_posix()):continue
         d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
     d.update(gate.encode("ascii"));return d.hexdigest()
 def paper_artifact_hash(slug,paper_id):
@@ -545,6 +656,8 @@ def paper_artifact_hash(slug,paper_id):
     d.update(json.dumps(research_identity_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     from scripts import review_receipts,scientific_scope
     for module in (review_receipts,scientific_scope):d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
+    from scripts.supplemental_experiments import internal_binding
+    d.update(json.dumps(internal_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
@@ -609,18 +722,32 @@ def initialize(args):
     if venue_id:set_venue_values(slug,"P01",venue_id)
     print(f"Initialized {dest}")
 def print_status(args):
-    state=load_state(args.project);errors=gate_errors(args.project,state["gate"]);out={**state,"gate_ready":not errors and state["gate"] is not None,"gate_errors":errors}
+    state=load_state(args.project);errors=gate_errors(args.project,state["gate"]);out={**state,"gate_ready":not errors and state["gate"] is not None,"gate_errors":errors,"gate_error_groups":summarize_gate_errors(errors)}
     if args.json:print(json.dumps(out,ensure_ascii=False,indent=2));return
-    print(f"Project: {state['project']}\nStage:   {state['stage']}\nGate:    {state['gate'] or '-'}\nStatus:  {state['status']}\nReady:   {'yes' if not errors else 'no'}");[print(f"  - {e}") for e in errors]
+    print(f"Project: {state['project']}\nStage:   {state['stage']}\nGate:    {state['gate'] or '-'}\nStatus:  {state['status']}\nReady:   {'yes' if not errors else 'no'}")
+    print_gate_error_groups(out["gate_error_groups"])
+def print_gate_error_groups(groups):
+    summary=f"{len(groups)} issue group(s), {sum(group['count'] for group in groups)} check messages"
+    if groups:print(f"Checks: {summary}")
+    for group in groups:
+        if group["count"] == 1 and group["title"] == group["checks"][0]:
+            print(f"  - {group['title']}")
+        else:
+            print(f"  - {group['title']} ({group['count']} check messages)\n    {group['next_action']}")
+    return summary
 def check_gate(args):
     state=load_state(args.project);gate=args.gate or state["gate"];errors=gate_errors(args.project,gate)
-    if errors:[print(f"  - {e}") for e in errors];raise ResearchCtlError(f"{gate} is not ready: {len(errors)} requirement(s) remain")
+    if errors:
+        summary=print_gate_error_groups(summarize_gate_errors(errors))
+        raise ResearchCtlError(f"{gate} is not ready: {summary} remain; use status --project {args.project} --json for all original checks")
     print(f"{gate} artifact and quality checks passed.")
 def mark_ready(args):
     state=load_state(args.project);gate=state["gate"]
     if gate is None:raise ResearchCtlError("Project is already submission-ready.")
     errors=gate_errors(args.project,gate)
-    if errors:raise ResearchCtlError(f"{gate} cannot be marked ready: {len(errors)} requirement(s) remain")
+    if errors:
+        summary=print_gate_error_groups(summarize_gate_errors(errors))
+        raise ResearchCtlError(f"{gate} cannot be marked ready: {summary} remain; use status --project {args.project} --json for all original checks")
     current_hash=artifact_hash(args.project,gate)
     if gate=="G2":
         state["paper_topic_approvals"]=[x for x in state.get("paper_topic_approvals",[]) if x.get("artifact_sha256")==current_hash]
@@ -659,14 +786,17 @@ def approve(args):
 
 def _record_gate_decision(slug,gate,actor,note,current_hash,decision_type):
     state=load_state(slug)
+    from scripts.paper_execution import enabled, papers as selected_papers
+    scoped=enabled(project_dir(slug)) and gate in {"G3","G4","G5"}
     approval={"gate":gate,"actor":actor,"decision_type":decision_type,"at":now(),"note":note,"artifact_sha256":current_hash}
     if gate=="G2":approval["paper_topic_approvals"]=list(state.get("paper_topic_approvals",[]))
     if gate=="G3":
-        p=project_dir(slug);approval["experiment_plan_sha256"]=file_sha256(p/"experiments/plan.json");approval["experiment_budget_sha256"]=file_sha256(p/"experiments/budget.json")
-        approval["frozen_protocol_sha256"]={path.relative_to(p).as_posix():file_sha256(path) for path in sorted((p/"papers").glob("P[0-9][0-9]/preregistration.json"))}
+        p=project_dir(slug);approval["experiment_plan_sha256"]=file_sha256(experiment_path(p, 'experiments/plan.json'));approval["experiment_budget_sha256"]=file_sha256(experiment_path(p, 'experiments/budget.json'))
+        approval["frozen_protocol_sha256"]={path.relative_to(p).as_posix():file_sha256(path) for path in sorted((p/"papers").glob("P[0-9][0-9]/preregistration.json")) if path.parent.name in selected_papers(p,"G3")}
         from scripts.experiment_runner import compute_budget_authority
-        approval["compute_budget_authority"]=compute_budget_authority(p,read_json(p/"experiments/budget.json"),read_json(p/"experiments/plan.json"))
+        approval["compute_budget_authority"]=compute_budget_authority(p,read_json(experiment_path(p, 'experiments/budget.json')),read_json(experiment_path(p, 'experiments/plan.json')))
     key=gate
+    if scoped:approval["paper_id"]=state["active_paper"];key=f"{gate}:{state['active_paper']}"
     if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(slug,state["active_paper"]);key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)
     if key not in state["approved_gates"]:state["approved_gates"].append(key)
@@ -676,16 +806,28 @@ def _record_gate_decision(slug,gate,actor,note,current_hash,decision_type):
     state["status"]="approved";state["history"].append({"at":now(),"event":"gate_approved" if decision_type=="human_topic" else "gate_auto_decided","gate":gate,"decision_type":decision_type});save_state(slug,state);print(f"Recorded {decision_type} decision for {gate}. Run advance to continue.")
 def advance(args):
     state=load_state(args.project);gate=state["gate"]
+    from scripts.paper_execution import enabled, enable
+    scoped=enabled(project_dir(args.project)) and gate in {"G3","G4","G5"}
     if gate is None:raise ResearchCtlError("Project is already at the final stage.")
-    key=f"G5:{state['active_paper']}" if gate=="G5" else gate
+    key=f"{gate}:{state['active_paper']}" if scoped or gate=="G5" else gate
     if state["status"]!="approved" or key not in state["approved_gates"]:raise ResearchCtlError(f"{gate} has not been approved.")
-    matching=next((x for x in reversed(state.get("approvals",[])) if x.get("gate")==gate and (gate!="G5" or x.get("paper_id")==state["active_paper"])),None)
+    matching=next((x for x in reversed(state.get("approvals",[])) if x.get("gate")==gate and (not scoped and gate!="G5" or x.get("paper_id")==state["active_paper"])),None)
     if not matching or matching.get("artifact_sha256")!=artifact_hash(args.project,gate):raise ResearchCtlError("Artifacts changed after approval; run gate-check, ready and approve again.")
     if gate_errors(args.project,gate):raise ResearchCtlError("Gate checks no longer pass; review current evidence before advancing.")
+    from scripts.research_phase import exploratory, archive_and_reopen
+    if gate=="G4" and exploratory(project_dir(args.project)):
+        archive_and_reopen(project_dir(args.project))
+        print("Archived exploratory observations; prepare a new G3 protocol with prior exposure retained.")
+        return
+    if gate=="G2":
+        enable(project_dir(args.project));state["paper_execution_mode"]="independent"
+        state["history"].append({"at":now(),"event":"independent_paper_execution_enabled"})
     if gate=="G5":
         done=state["active_paper"];state.setdefault("paper_statuses",{})[done]="submission_ready";remaining=[f"P{n:02d}" for n in range(1,int(state["paper_count"])+1) if state["paper_statuses"].get(f"P{n:02d}")!="submission_ready"]
         if remaining:
-            nxt=remaining[0];state["active_paper"]=nxt;state["paper_statuses"][nxt]="active";state["status"]="awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None);state["history"].append({"at":now(),"event":"paper_advanced","from":done,"to":nxt});save_state(args.project,state);print(f"Marked {done} submission-ready; continuing G5 with {nxt}.");return
+            nxt=remaining[0];state["active_paper"]=nxt;state["paper_statuses"][nxt]="active";state["status"]="awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None)
+            if enabled(project_dir(args.project)):state.update(stage_index=3,stage="experiment-design",gate="G3")
+            state["history"].append({"at":now(),"event":"paper_advanced","from":done,"to":nxt});save_state(args.project,state);print(f"Marked {done} submission-ready; continuing {state['gate']} with {nxt}.");return
     i=state["stage_index"]+1;next_stage=STAGES[i];prev=state["stage"];state["stage_index"]=i;state["stage"]=next_stage["name"];state["gate"]=next_stage["gate"];state["status"]="submission_ready" if next_stage["gate"] is None else "awaiting_work";state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None);state["history"].append({"at":now(),"event":"stage_advanced","from":prev,"to":next_stage["name"]});save_state(args.project,state);print(f"Advanced to {next_stage['name']}.")
 def set_venue_values(slug,paper_id,venue_id):
     validate_paper_id(paper_id);source=ROOT/"venues"/venue_id/"venue.json"

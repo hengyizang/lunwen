@@ -21,6 +21,8 @@ MATERIAL_STATES = {"missing", "supplied_pending_review", "not_applicable"}
 EDITORIAL_CATEGORIES = {"empty_evaluation", "unclear_exposition", "redundant_framing", "terminology_inconsistency"}
 
 
+from scripts.paper_execution import artifact_path as experiment_path
+
 def _need(value, message):
     if not value:
         raise ValueError(message)
@@ -107,12 +109,13 @@ def assess(project: Path, action=None, *, previous=None, paper_ids=None, bind_so
         return checked
 
     if claims:
-        claim_path = path_in(project, "claims/claim-evidence.csv", exists=False)
+        claim_paths = list(dict.fromkeys(experiment_path(project, 'claims/claim-evidence.csv', paper) for paper in papers))
         csv_rows, matrix_rows = [], None
-        if claim_path.is_file():
-            binding({"path": "claims/claim-evidence.csv", "sha256": sha(claim_path)})
-            with claim_path.open(encoding="utf-8", newline="") as handle:
-                csv_rows = list(csv.DictReader(handle))
+        for claim_path in claim_paths:
+            if claim_path.is_file():
+                binding({"path": claim_path.relative_to(project).as_posix(), "sha256": sha(claim_path)})
+                with claim_path.open(encoding="utf-8", newline="") as handle:
+                    csv_rows.extend(csv.DictReader(handle))
         for claim_id in claims:
             matching = [row for row in csv_rows if row.get("claim_id") == claim_id]
             if matching:

@@ -430,9 +430,13 @@ def main() -> int:
             first = skill_names[name]
             try:
                 identical = first.read_bytes() == path.read_bytes()
-            except OSError:
+                from scripts.skill_discovery import current
+                pair = {first.relative_to(ROOT).as_posix(), path.relative_to(ROOT).as_posix()}
+                generated = pair == {f"skills/{path.parent.name}/SKILL.md", f".agents/skills/{path.parent.name}/SKILL.md"} and current(ROOT, path.parent.name)
+            except (OSError, ValueError):
                 identical = False
-            if not identical:
+                generated = False
+            if not identical and not generated:
                 errors.append(f"duplicate skill name with different content: {name}")
         elif name:
             skill_names[name] = path

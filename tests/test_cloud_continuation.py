@@ -127,6 +127,42 @@ class ContinuationTests(unittest.TestCase):
         self.assertEqual(current["gate"], "G1")
         self.assertEqual(current["approvals"][0]["decision_type"], "deterministic")
 
+    def test_independent_execution_and_writing_accept_only_the_current_paper_prior_seals(self):
+        baseline = researchctl.load_state("my-phd")
+        for gate in ("G1", "G2"):
+            baseline["approved_gates"].append(gate)
+            baseline["approvals"].append({"gate": gate, "actor": "Synthetic topic fixture"})
+        for index, stage, gate in ((4, "experiment-execution", "G4"), (5, "writing-and-review", "G5")):
+            for paper in ("P01", "P02"):
+                with self.subTest(gate=gate, paper=paper):
+                    state = json.loads(json.dumps(baseline))
+                    state.update(stage_index=index, stage=stage, gate=gate, active_paper=paper,
+                                 paper_execution_mode="independent")
+                    for prior in ("G3", "G4")[:index - 3]:
+                        state["approved_gates"].append(f"{prior}:{paper}")
+                        state["approvals"].append({"gate": prior, "paper_id": paper,
+                                                   "actor": "Synthetic checked protocol fixture"})
+                    researchctl.save_state("my-phd", state)
+                    with patch.object(researchctl, "gate_errors", return_value=["Synthetic evidence pending"]):
+                        self.assertTrue(self.decision()["should_run"])
+                        state["approvals"][-1]["paper_id"] = "P03"
+                        researchctl.save_state("my-phd", state)
+                        self.assertEqual(self.decision()["reason"], "prior_human_gate_missing")
+                        state["approvals"][-1]["paper_id"] = paper
+                        state["approved_gates"].remove(f"{state['approvals'][-1]['gate']}:{paper}")
+                        researchctl.save_state("my-phd", state)
+                        self.assertEqual(self.decision()["reason"], "prior_human_gate_missing")
+
+    def test_legacy_execution_keeps_global_prior_protocol_seals(self):
+        state = researchctl.load_state("my-phd")
+        state.update(stage_index=4, stage="experiment-execution", gate="G4")
+        for gate in ("G1", "G2", "G3"):
+            state["approved_gates"].append(gate)
+            state["approvals"].append({"gate": gate, "actor": "Synthetic legacy fixture"})
+        researchctl.save_state("my-phd", state)
+        with patch.object(researchctl, "gate_errors", return_value=["Synthetic evidence pending"]):
+            self.assertTrue(self.decision()["should_run"])
+
     def test_legacy_g2_pending_topic_still_requires_human_decisions(self):
         state = researchctl.load_state("my-phd")
         state.update(stage_index=2, stage="paper-architecture", gate="G2", status="awaiting_approval")
@@ -318,6 +354,31 @@ class ContinuationTests(unittest.TestCase):
             self.assertTrue(self.decision()['should_run'])
         self.assertEqual(researchctl.load_state('my-phd')['approved_gates'],['G0'])
         self.assertEqual(model_spend.read(self.project)['authorized_ceiling_cny'],300)
+
+    def test_fewer_check_errors_do_not_claim_scientific_progress(self):
+        from scripts import cloud_progress
+        with patch.object(researchctl,"gate_errors",return_value=["A","B"]):
+            before=cloud_progress.snapshot("my-phd")
+        with patch.object(researchctl,"gate_errors",return_value=["A"]):
+            result=cloud_progress.record("my-phd",before,"software-control-test",0)
+        self.assertTrue(result["control_progress"])
+        self.assertIsNone(result["semantic_progress"])
+        self.assertFalse(result["scientific_progress_verified"])
+        self.assertEqual(result["new_experiment_attempts"],0)
+
+    def test_failed_internal_attempt_is_retained_as_activity_without_claiming_scientific_success(self):
+        from scripts import cloud_progress
+        with patch.object(researchctl,"gate_errors",return_value=["Evidence pending"]):
+            before=cloud_progress.snapshot("my-phd")
+            root=self.project/"experiments/supplemental/P01/I001/s001"
+            row={"attempt_id":"P01-software-fixture","paper_id":"P01","status":"failed",
+                 "estimated_cost_usd":0,"outputs":[],"synthetic_fixture_only":True}
+            researchctl.write_json(root/"experiments/runs/P01-software-fixture/run.json",row)
+            (root/"experiments/registry.jsonl").write_text(json.dumps(row)+"\n",encoding="utf-8")
+            result=cloud_progress.record("my-phd",before,"software-evidence-test",0)
+        self.assertEqual(result["new_experiment_attempts"],1)
+        self.assertEqual(result["experiment_attempts"][0]["status"],"failed")
+        self.assertFalse(result["scientific_progress_verified"])
 
     def test_external_blocker_pauses_after_draft_and_new_owner_input_allows_recheck(self):
         from scripts import cloud_progress

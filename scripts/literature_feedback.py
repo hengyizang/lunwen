@@ -31,6 +31,8 @@ ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,95}\Z")
 MODULE = "scripts/literature_feedback.py"
 
 
+from scripts.paper_execution import primary_registry_paths
+
 def digest(value) -> str:
     return hashlib.sha256(evidence.canonical_json_bytes(value)).hexdigest()
 
@@ -149,11 +151,12 @@ def _experiment_evidence(project, bindings, paper_ids):
     receipts = [row for row in bindings if row["path"].startswith("experiments/runs/") and row["path"].endswith("/run.json")]
     if not receipts:
         raise ValueError("experiment_utility used needs an actual successful executor receipt")
-    registry = evidence.read_jsonl(path_in(project, "experiments/registry.jsonl"))
+    registry = [entry for path in primary_registry_paths(project) for entry in evidence.read_jsonl(path)]
     for binding in receipts:
         entry = read(path_in(project, binding["path"]))
         expected_path = "experiments/runs/" + str(entry.get("attempt_id", "")) + "/run.json"
-        if (binding["path"] != expected_path or entry not in registry or entry.get("status") != "succeeded"
+        matches = [row for row in registry if row.get("attempt_id") == entry.get("attempt_id")]
+        if (binding["path"] != expected_path or matches != [entry] or entry.get("status") != "succeeded"
                 or entry.get("paper_id") not in paper_ids or not entry.get("input_integrity", {}).get("passed")
                 or not re.fullmatch(r"[a-f0-9]{64}", str(entry.get("approved_plan_sha256", "")))
                 or not entry.get("outputs")):

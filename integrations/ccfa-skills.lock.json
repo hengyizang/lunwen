@@ -1,1474 +1,7 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
   "repository": "mikubaka88/CCFA-Skills",
   "upstream_commit": "f157d7ed2777b655809471873b32b9632e784cfa",
-  "files": [
-    {
-      "path": "ccf-common/SKILL.md",
-      "git_blob_sha": "73555f03410ba4dd6ced0744bc37b034c17351e8",
-      "canonical_lf_sha256": "95ab8a7b57e5e1f7d99c4c39459590d728e9eaaccd253bf8b0c273d82b57ad31"
-    },
-    {
-      "path": "ccf-common/agents/openai.yaml",
-      "git_blob_sha": "ec18a91b41f90527d1a9643e2c18624564dbecdd",
-      "canonical_lf_sha256": "56c8a6035cd2ab2da450839ebb34b0fc1c7cd1ab3a5be5c600a990e5934cdd4f"
-    },
-    {
-      "path": "ccf-common/assets/configurator/app.js",
-      "git_blob_sha": "85fd0ab8f1daedae5bd61877d607af8ac2be0ce5",
-      "canonical_lf_sha256": "dbae303103a82e23195401ddc6b777c66a2721bbfb738a30dd7006ed2d48d9d8"
-    },
-    {
-      "path": "ccf-common/assets/configurator/index.html",
-      "git_blob_sha": "78acbc7f4566572f63efeb0336b0548eeb35c060",
-      "canonical_lf_sha256": "75a33cd940f579a7c38d9c3bcbc77a97356d4b71131e9f926d51fedfa3df6d0b"
-    },
-    {
-      "path": "ccf-common/assets/configurator/styles.css",
-      "git_blob_sha": "68cae607ec39c3f68673820de9d0b02107a53bc7",
-      "canonical_lf_sha256": "9a45c6e4628e49684b6c6846be6fd685be5b40f78fa75666d6254bfd098be384"
-    },
-    {
-      "path": "ccf-common/references/artifact-contracts.md",
-      "git_blob_sha": "30cb30fde752703b5cebf073ea51f31e1fa3ab0a",
-      "canonical_lf_sha256": "4423361dd6123df93012759302c71ac01bd1ee8e88ec783750100b091655776d"
-    },
-    {
-      "path": "ccf-common/references/ccf-a-venue-map.md",
-      "git_blob_sha": "65b524ea3331af71e0ee1489e227f5ad5eeb04ce",
-      "canonical_lf_sha256": "ef97fdb224692b23ba6a11279b2a931fb072ef79a44d6fdd0813c0ff15224458"
-    },
-    {
-      "path": "ccf-common/references/ccfa-yaml-contract.md",
-      "git_blob_sha": "b31319d7fe094eb8658f454a78f5edb2762135e9",
-      "canonical_lf_sha256": "45a9d42decf6ea8b921a2656a4fef3485e30f9a2bd1a3b12924890dab358e17c"
-    },
-    {
-      "path": "ccf-common/references/continuity.md",
-      "git_blob_sha": "b67147c008ff25ab559be03e75bb8cb08ff17fe9",
-      "canonical_lf_sha256": "a08448d92e55f736f909f847282853d5045e96ee315f7226eb27be0a2f96617b"
-    },
-    {
-      "path": "ccf-common/references/handoff-modes.md",
-      "git_blob_sha": "5c5e49743495b79e88da3b362c1a7434f8dadb24",
-      "canonical_lf_sha256": "1846bd84fab1a19e5baea090de612b7c03def8d34ba73c8263bce82c5c628127"
-    },
-    {
-      "path": "ccf-common/references/preferences.md",
-      "git_blob_sha": "4a77dc4f7daadcc42842313af63843df2ace77f0",
-      "canonical_lf_sha256": "ba691abebeaf13906ba28d7e05dcb41746915462eaf9101b274760a4b2ff9750"
-    },
-    {
-      "path": "ccf-common/references/privacy-and-evidence.md",
-      "git_blob_sha": "417b1d5d17a3cea275427db912a3ad3d93f93f4c",
-      "canonical_lf_sha256": "fcc23f10953f586e5dea7f4f65304085606f88bd04c940a095ca79382253f44e"
-    },
-    {
-      "path": "ccf-common/references/review-output-standards.md",
-      "git_blob_sha": "7822935cd0fc55037e06fc8b68aa66e3a1001e01",
-      "canonical_lf_sha256": "ab87d79b6eee03bebf4c5f0bb1db305fca1e7aaabd144d4798cf181e3064f077"
-    },
-    {
-      "path": "ccf-common/references/routing.md",
-      "git_blob_sha": "c81741bea5c8ba5441a2b4f6e894c3f80611e9b1",
-      "canonical_lf_sha256": "d2bef650c587f66621de4e5cc62badef3a71493b5eb628fb55e5e58a88df859b"
-    },
-    {
-      "path": "ccf-common/references/skill-trigger-registry.yaml",
-      "git_blob_sha": "2b6557e14c1b1f4851a6f5b4cc671c520ab488a7",
-      "canonical_lf_sha256": "b1406c8d8b2c8931fdf09ad984c4a8f067f4ae5d2870752201e8802e3c5203b0"
-    },
-    {
-      "path": "ccf-common/references/source-registry.yaml",
-      "git_blob_sha": "663a438c4063c717154410f113a20d412c4e5aee",
-      "canonical_lf_sha256": "462141c3a77d229dd63d71f72a20b5320a633c44f63bb73386d9b55069af9890"
-    },
-    {
-      "path": "ccf-common/references/task-modes.md",
-      "git_blob_sha": "cd45969db23a0d0600ab8581a19bfafd0bfb8c1f",
-      "canonical_lf_sha256": "2c37c50d0530d6dc3173f688110856cf318c9937dcc2ad6adc1825f19e91b48a"
-    },
-    {
-      "path": "ccf-common/scripts/check_markdown_links.py",
-      "git_blob_sha": "900f0af58e22ef8a36e05bb5c5543cdff257586c",
-      "canonical_lf_sha256": "0b1908f2099638a5a9e376a53e2b8eee0e4909f37811039c4b8c4f5920b4fb90"
-    },
-    {
-      "path": "ccf-common/scripts/check_path_privacy.py",
-      "git_blob_sha": "9baa2eaa389c84c8bfe2011140e4f348da8110df",
-      "canonical_lf_sha256": "f6afd319b355a9d271331de0f668250dde72782d8b1bcba4a92a5944ddaecb86"
-    },
-    {
-      "path": "ccf-common/scripts/check_sources.py",
-      "git_blob_sha": "f90903faa168f0744e8f7bee8ecbd04f5499c45c",
-      "canonical_lf_sha256": "fb4a01dca3937794104ae1531182969bc9a3cc3a722c86a2691e29de631e5949"
-    },
-    {
-      "path": "ccf-common/scripts/check_v04.py",
-      "git_blob_sha": "5d4808078a5572f7ea0cb66440667f9788e32385",
-      "canonical_lf_sha256": "7cf9a4d24bb0c6d9575fdec36d8ce4d77d4715615847e5a8cd1c4073626385a8"
-    },
-    {
-      "path": "ccf-common/scripts/continuity.py",
-      "git_blob_sha": "6dcfc065062791d4f85c45121e974d727ebfc448",
-      "canonical_lf_sha256": "b0197d4d2a8865e6380f56c928b38ec355032242e22083649bbc4a7048f5f2f8"
-    },
-    {
-      "path": "ccf-common/scripts/preferences.py",
-      "git_blob_sha": "9c15460350f6bb1d833fe61bd9580bf37a3e156b",
-      "canonical_lf_sha256": "41b2f6f101fe6a7fe3d5067583025f074f7214e620e58527f32f322ec949dddc"
-    },
-    {
-      "path": "ccf-common/scripts/test_configurator.js",
-      "git_blob_sha": "4c020a0360390b30b5293ec1276ba7e739982edf",
-      "canonical_lf_sha256": "3bfbe38ffa67ce7657b7dacd6795beffdb2ec65596fbd96ab27e28d424f9e055"
-    },
-    {
-      "path": "ccf-common/scripts/test_continuity.py",
-      "git_blob_sha": "39e7a7903e45d45d2c15a05668111abd8bdcc68d",
-      "canonical_lf_sha256": "f46ff917c190604b43b2392780f6a8f3a836d4cc6449fdaf0986eafe363abee5"
-    },
-    {
-      "path": "ccf-common/scripts/test_preferences.py",
-      "git_blob_sha": "b3de0b0db013076e1b02b68662ecb4db137b3d70",
-      "canonical_lf_sha256": "514804ff789b883991a71a5b1818c59baa78663b4d2925b98a798248b9d54f57"
-    },
-    {
-      "path": "ccf-experiment-designer/SKILL.md",
-      "git_blob_sha": "dd1994c3d4acd9854999a616fe35a09e9e82a0ce",
-      "canonical_lf_sha256": "c895032dc23dc4334404adb672d91a07e32b57cfe30819d48a7758d9cbff0bb3"
-    },
-    {
-      "path": "ccf-experiment-designer/agents/openai.yaml",
-      "git_blob_sha": "afc35ecb287e1089848f34818e06b734ce58dde9",
-      "canonical_lf_sha256": "9e6c51bb4bb4493a6269528ac030ba59f5dc2b299137ddd4b441b8ad92616c7b"
-    },
-    {
-      "path": "ccf-experiment-designer/references/evidence-design.md",
-      "git_blob_sha": "6b85566b04e34df8ed2ad432d0b3efee8feb7480",
-      "canonical_lf_sha256": "c4bba38c0b331f46fbf1631c6c2a3308db0a8d37681920d32470c71925f9dc45"
-    },
-    {
-      "path": "ccf-experiment-designer/references/result-templates.md",
-      "git_blob_sha": "485a21003c3871623b7ba607d067c61d611cec89",
-      "canonical_lf_sha256": "67d95ab6b96189a5ef175af34a612da142b93cf11bd615ddbd1127da858b8895"
-    },
-    {
-      "path": "ccf-humanization/SKILL.md",
-      "git_blob_sha": "34cc0f8eacb0a5b88c47e4dfcc0980adfa999224",
-      "canonical_lf_sha256": "4050e2cf954e350d02cde5210ba4313ccfbd1edc7ccef751d4380714a3e7dfd1"
-    },
-    {
-      "path": "ccf-humanization/agents/openai.yaml",
-      "git_blob_sha": "42cfc5ffedd95c3b4087758cd9799d27f6dbcb1c",
-      "canonical_lf_sha256": "95f862018d2da155ea012cefab7fd7693b7e1aa1e35e358f77291af8658ce4a3"
-    },
-    {
-      "path": "ccf-humanization/references/experiment-discipline.md",
-      "git_blob_sha": "ac471e5d4451492a6e620d00a2397371b498aebe",
-      "canonical_lf_sha256": "bbd23d60149bd96e5aa37ba3fc25ca5dc1c4344f4b12a226e056244f227c8f28"
-    },
-    {
-      "path": "ccf-humanization/references/humanization-policy.md",
-      "git_blob_sha": "131a23791ee835bc114762fae6eb45551bf73e09",
-      "canonical_lf_sha256": "14bd93bdb17c9d100130641e40bb8c2f4c2177e2fd168758f642c70f7ce23091"
-    },
-    {
-      "path": "ccf-idea-optimizer/SKILL.md",
-      "git_blob_sha": "520af95634c5aa7993d4e6448c75ed2d3fde23ee",
-      "canonical_lf_sha256": "d646f9c236520b8d721b2986faa36fb5312b0b6f95edb0d589fbccc89dd23694"
-    },
-    {
-      "path": "ccf-idea-optimizer/agents/openai.yaml",
-      "git_blob_sha": "10aa3744ff69e36c7a5c2ec0cb4e2a599c2637f2",
-      "canonical_lf_sha256": "5e52cf0edbe25c399ca46f7860a4f508fcfca3ce8c4c56b52eaba01702043261"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/experiment-design.md",
-      "git_blob_sha": "1907e67b0226062aa2617e4b111454f64ddeb48c",
-      "canonical_lf_sha256": "edf504c33d51fd5516a05d363d25e6d13779e2963f36b85e6f3b38e3ef1bfd82"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/frontier-ideation.md",
-      "git_blob_sha": "abb1ad6bd7f506406dd94c0867e5c1f669db90b3",
-      "canonical_lf_sha256": "751cb2421ad69418b08c8ef1544f12c191af0e96883af40814e9a9984580134e"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/idea-intake.md",
-      "git_blob_sha": "06e48e26c3beede910203777159f08a15b77934c",
-      "canonical_lf_sha256": "185896d213beeabcea4b9bf025bb3d8232b1dbdab2b433f563c0d945eecc03d7"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/literature-grounded-evolution.md",
-      "git_blob_sha": "5353e408b7a69a2d0b2c8df60df9f7c5e31466f4",
-      "canonical_lf_sha256": "1cf8e71acb3c7d2a19b824a459f2c4ca565cc88e16fe140df2e1cd79d39dde65"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/problem-method-blueprint.md",
-      "git_blob_sha": "9bf40e59677f7b8171f5399deb9afc3b73697d3d",
-      "canonical_lf_sha256": "e7c7453ce537e9275eecb4b5768a845dda2f4b8316211c9b9451833e124eeff2"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/research-taste.md",
-      "git_blob_sha": "9989181d8b10d7199b03a554cbbefa0bcfa5c38a",
-      "canonical_lf_sha256": "0a87ddb10e844ed0cd4bc49beb8dd4005fa079373d998e9321d3e891ec2a31fa"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/source-notes.md",
-      "git_blob_sha": "5c2bd0523ccf81ec8243baf59347719ee071af7f",
-      "canonical_lf_sha256": "0eafd12e51ebc8cc3db9c7eadf3ff9d80c99baf2c59146f5f15bcc75db659cf7"
-    },
-    {
-      "path": "ccf-idea-optimizer/references/venue-idea-adapters.md",
-      "git_blob_sha": "be2984a64982d7eb9ea07c4585ebd4eddede92fa",
-      "canonical_lf_sha256": "fc79a7ec82c7a5c6fd2c1df62cee8ee783e41db8cb6ce6931cb9f5f395696fe6"
-    },
-    {
-      "path": "ccf-idea-reviewer/SKILL.md",
-      "git_blob_sha": "c606087c47eb87d502f56b6ef734644d8ac4aba7",
-      "canonical_lf_sha256": "baa0359fd70cdaade00103bef091cefd1a3fedbd4b7949baee3fd6635a4f232c"
-    },
-    {
-      "path": "ccf-idea-reviewer/agents/openai.yaml",
-      "git_blob_sha": "5efc2d883607cffa473e24f19291bee36b3b1511",
-      "canonical_lf_sha256": "7df9576a0e908149e89eeb6aba13fdabd99f5db7b2d4589089fbd2002b8d465f"
-    },
-    {
-      "path": "ccf-idea-reviewer/references/calibration.md",
-      "git_blob_sha": "68a3400032237a3d11b7c22b80ca4ac3baa3a6ef",
-      "canonical_lf_sha256": "011326dea0ffaca1b51789607ee80d7645c92b1dc17baa48ea32afa5a6d6df29"
-    },
-    {
-      "path": "ccf-idea-reviewer/references/expert-panel.md",
-      "git_blob_sha": "0cdd1142c6168ea96cc1cb2c1922010e3aa5a93b",
-      "canonical_lf_sha256": "641f2359a3d6749a2dea6a0a70bf17f3d9501d7666fd68ba08416c4b66ab0581"
-    },
-    {
-      "path": "ccf-idea-reviewer/references/rubric.md",
-      "git_blob_sha": "f5a3efed757eb7b9a1ece0c00a8b9cebfb582b9d",
-      "canonical_lf_sha256": "7adb6ae28f122dc8da04aca3b8cf57758eee4bdcec80e5712af0dbf4639e2269"
-    },
-    {
-      "path": "ccf-idea-reviewer/references/source-notes.md",
-      "git_blob_sha": "9c8794f1b7a5988c3ab39086365d351d021c8e2f",
-      "canonical_lf_sha256": "b4be20f07d0c034c603d0c3636aeac3e35605cf9a6d0898c738f25e5ab0074d3"
-    },
-    {
-      "path": "ccf-idea-reviewer/references/strict-idea-review.md",
-      "git_blob_sha": "c91ca3f05f72ffdeee2a065d93708e7ec869e1d9",
-      "canonical_lf_sha256": "67e43a72375c82bb5b0809eac622651216ad2a5fd547d538e9fb507f62154394"
-    },
-    {
-      "path": "ccf-integrity-auditor/SKILL.md",
-      "git_blob_sha": "8d60a2aadd0bafee59aa1866ca928285e0c3b222",
-      "canonical_lf_sha256": "fc7e557cd4f6fe163e7a12db5fde27cd323e7277a9a5b0ffe213e77c8c8ad82f"
-    },
-    {
-      "path": "ccf-integrity-auditor/agents/openai.yaml",
-      "git_blob_sha": "d6425136937d84f583b5b35db00d40e693023d54",
-      "canonical_lf_sha256": "1a785528d3e8e616e5dc25d99e8c52e9aa33063748d16570bc6376951bd21fc7"
-    },
-    {
-      "path": "ccf-literature-monitor/SKILL.md",
-      "git_blob_sha": "7370991f2eced0484669eb635b3feb0a521ae587",
-      "canonical_lf_sha256": "b96a9952d9314fd776f97d72456f23d7f90a86061583a22ae682ff1b1138231c"
-    },
-    {
-      "path": "ccf-literature-monitor/agents/openai.yaml",
-      "git_blob_sha": "a4d0316dc70f4e486b26f8eb538e00d39a262bcf",
-      "canonical_lf_sha256": "338dc86295350f8f59129583a0950fdebfebbf1ce89590a7ad387a2590bffc99"
-    },
-    {
-      "path": "ccf-literature-monitor/references/monitoring-workflow.md",
-      "git_blob_sha": "e1e854415f860c52bdb0ea546698de6b65368d87",
-      "canonical_lf_sha256": "b4f42db63be69c8269350df1c7218463b9ab53f400fd51c650f97ff71230c7e4"
-    },
-    {
-      "path": "ccf-literature-monitor/references/report-template.md",
-      "git_blob_sha": "3bd158ef3adddd26ab07a82bdb6fefc9ab7175d5",
-      "canonical_lf_sha256": "20d0b01d6d1480db885d5058846530881d02f6af4796151f3ad6ff8341711f92"
-    },
-    {
-      "path": "ccf-literature-searcher/SKILL.md",
-      "git_blob_sha": "b2ec8b5108ef8903fa7d3afc7a02cf083b2354bc",
-      "canonical_lf_sha256": "943f955efde445bd38f6a7555d204ba660ee440ea0e06d8da637fc26d6aea16d"
-    },
-    {
-      "path": "ccf-literature-searcher/agents/openai.yaml",
-      "git_blob_sha": "eef9b7a6e135c24466c60d99c021f2cb90b21792",
-      "canonical_lf_sha256": "f866473c93ae37a85e87c2c741ad80924981d1c738aaab9144c145e11c905b82"
-    },
-    {
-      "path": "ccf-literature-searcher/references/report-template.md",
-      "git_blob_sha": "4a76beb88ecbf2d556dfc8a75b14e3729a4f006d",
-      "canonical_lf_sha256": "3a6558695b749db760cdff128168c630e228aafdf6b0357ad9737dd6507a62a8"
-    },
-    {
-      "path": "ccf-literature-searcher/references/search-and-scoring.md",
-      "git_blob_sha": "d0327c8e6d5c5e9d4684fa6742ed52c255d677c6",
-      "canonical_lf_sha256": "76319b00217b1b8c3096c88ec57754ce3800136123ad4882800064885d05a491"
-    },
-    {
-      "path": "ccf-paper-reviewer/SKILL.md",
-      "git_blob_sha": "de03c5c8160aa0150bd68a5e7f3af22676251f48",
-      "canonical_lf_sha256": "33982820ee09fad5434ff9795f9eae8a1f313b02f3ba58b898f1c15305066dac"
-    },
-    {
-      "path": "ccf-paper-reviewer/agents/openai.yaml",
-      "git_blob_sha": "01cc78cbc26eb3a7c21f50f56a471fbbbbf454ab",
-      "canonical_lf_sha256": "a34800c04de1ec825a61a43a5fab427965b9c3720b1517d9ba5082e2b4659c23"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/calibration-and-rank.md",
-      "git_blob_sha": "426d95e3e7047a9e2f190b8c77ea5b399cf020ee",
-      "canonical_lf_sha256": "f012e1d26abe1f65530161eda1275d7d9f42a27a674b10512a1d55b4fb658523"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/desk-checks.md",
-      "git_blob_sha": "5d05461545f96b306f13a3a867e6a21e7a00cbae",
-      "canonical_lf_sha256": "fbb007d41cf3e2d008c66f954c1378e76ae214f08f5a1729d18fc1a5baf50a65"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/fixed-output-format.md",
-      "git_blob_sha": "5352703835d80a22365ff2ff66300d926e07565b",
-      "canonical_lf_sha256": "d2be1a59fee9d812ef2bcc65ae568131b09e7cafbfd09d9c372beb5ed9bf848f"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/review-workflow.md",
-      "git_blob_sha": "81c05fba3468f6de91a425cf6a39f05a1cece738",
-      "canonical_lf_sha256": "44ab85b117fae9b966332c2c91ea12ae620c333cf573a14d3fcae5f23f915806"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/reviewer-panel.md",
-      "git_blob_sha": "6aff06b2e490b4b6c0d89373865c1348cd109b15",
-      "canonical_lf_sha256": "6d4c58337eedaaae10fec9b30b394ed407729909f12c099280e6b8e66d77ebab"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/source-notes.md",
-      "git_blob_sha": "c721dc072381500bb0fa10d55e7be3032b6d3ff1",
-      "canonical_lf_sha256": "d1586a88c646f5956911bfaa7d7454a00344721a001823580aa758c94e88ddb9"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/universal-review-rubric.md",
-      "git_blob_sha": "6be5ad03ecfcf9d35bfab7e649f1ddf1e1a918bd",
-      "canonical_lf_sha256": "f447c8295e427fd91a1586701dd6816147e6cead1d2cfb3bd690d11d594009f9"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/venue-review-styles.md",
-      "git_blob_sha": "4024834116fd6d3f9858d86bcb0b5a4364146f64",
-      "canonical_lf_sha256": "d1b54c084c50fd1f772123682e022afb9040d215233e5be8c35eb05d5359e379"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/version-comparison.md",
-      "git_blob_sha": "1a37999629cda37e92d93cdf345d77e5ebc6f5fe",
-      "canonical_lf_sha256": "a15a37c46eb36608ca4758a2342683f065d5aea5c8e84b74abc00cd4a424e049"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/latex-format-audit.md",
-      "git_blob_sha": "6643eae8ab21694a2c80656acb3826493762cf52",
-      "canonical_lf_sha256": "65e2147832c5b93d4cacec4b21410bc46467a8f231fd36ce5744208908d6790c"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/paragraph-review-protocol.md",
-      "git_blob_sha": "4a1025c168c2ccf0fc79beeb60bf1e5c0c168958",
-      "canonical_lf_sha256": "f02f1ce88df77563b6be439aaf1ee9c2b931db45abd4123ed47e03743e3a11c8"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/review-checklists.md",
-      "git_blob_sha": "1f9c796598086fa9b6ba5e36733929321ee5aa6e",
-      "canonical_lf_sha256": "515f76a911baa85d912a45aba542c938b52c0e761e555276fdcf2f084aca42a8"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/revision-actions.md",
-      "git_blob_sha": "db7f293aff205d0b0bdc212e1b9d4a584f42ab1f",
-      "canonical_lf_sha256": "2d6f5692fba7457663c91c356505e83327f626d28a0e7236a85175d124f6561c"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/source-notes.md",
-      "git_blob_sha": "ab1db3cb24e512c21871018bd4c987a57d932932",
-      "canonical_lf_sha256": "e3951c2941580341993a83debeb5a81f120a32eba22c954814edcad0030130a1"
-    },
-    {
-      "path": "ccf-paper-reviewer/references/writing-review/writing-review-rubric.md",
-      "git_blob_sha": "0f00d01d319a5821e103207646038754d47577f7",
-      "canonical_lf_sha256": "089498a80d5799e24f4b969fd5e42bcf098320186c4974d6f5045da3d39964f6"
-    },
-    {
-      "path": "ccf-paper-reviewer/scripts/validate_version_comparison.py",
-      "git_blob_sha": "cf8f103da6f6cef6aa8fa601c81b888410254907",
-      "canonical_lf_sha256": "501875b8be355936a70f3a16fb8751b29fac45c55c5192d9c3035f1822dbdd74"
-    },
-    {
-      "path": "ccf-paper-to-exemplar/SKILL.md",
-      "git_blob_sha": "5276a6f6a5327baaacab6df40b8c39b2357beeb6",
-      "canonical_lf_sha256": "7192039ead4f227f25fe933a7781774cfa42f29dec26383344f55bd9110fbce2"
-    },
-    {
-      "path": "ccf-paper-to-exemplar/scripts/convert.py",
-      "git_blob_sha": "a82d01bf34e6264e2c19859d4cf0398fe6b51ae2",
-      "canonical_lf_sha256": "22aaf18b7143b00576ea25ea1a294fa06ab35084a065e83f5daab129a2237a69"
-    },
-    {
-      "path": "ccf-paper-writer/SKILL.md",
-      "git_blob_sha": "e09aac63737f0198098d34b8af794fda1eeff557",
-      "canonical_lf_sha256": "63b5553313a2e89d1f7a0f693824963a20002d9263f8ddc0629091c2785f8f63"
-    },
-    {
-      "path": "ccf-paper-writer/agents/openai.yaml",
-      "git_blob_sha": "3cc9f7a43c3b9b08a0370bad17a6cbb6c71ad382",
-      "canonical_lf_sha256": "b83dcbf20c7d1104fcf40d30c950e7f92f0d4374567ca3f6519a7b8e8817133a"
-    },
-    {
-      "path": "ccf-paper-writer/references/ccf-a-venue-map.md",
-      "git_blob_sha": "8874997bc492679d07c65f391f9bec04b1b5a915",
-      "canonical_lf_sha256": "9d45739242465bbd07d2a034f1856751baa4a023f0719711383daa04fd7ac8a9"
-    },
-    {
-      "path": "ccf-paper-writer/references/citation-workflow.md",
-      "git_blob_sha": "1140f9fbed56918e7968ffa5603890f769384fd3",
-      "canonical_lf_sha256": "a4127cff79100ed7d82a484f67c3050a28550e8c393a62dd3440800a8ff246a3"
-    },
-    {
-      "path": "ccf-paper-writer/references/compression-rules.md",
-      "git_blob_sha": "fe7617304fcc9b7c80c56e3b1badeb35c0b743e9",
-      "canonical_lf_sha256": "cfa2d0c8fe0a39cdeb8357ae78612b5b026773ad6b4f8fdab4e4e7e9bf8dc4ee"
-    },
-    {
-      "path": "ccf-paper-writer/references/custom-format/default-user-format.md",
-      "git_blob_sha": "76c1920c5688d5c69378b7f38b3e741495703e43",
-      "canonical_lf_sha256": "c603739e833dd9739ff1dabd6688259824f188034cf7d39c3920d4bbf7adacdf"
-    },
-    {
-      "path": "ccf-paper-writer/references/custom-format/evaluation/self-test-default-custom-format.md",
-      "git_blob_sha": "ab75d97927cd2c7cb3fd3e62722cff065777629b",
-      "canonical_lf_sha256": "1b4583762b2ad1c6b1075355c428ceecae2b332d5b2d524fc4c825dcb872c1b7"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplar-style-analysis.md",
-      "git_blob_sha": "ca0db94e4b4969d8633a1e5d9fee5e727dd2d43e",
-      "canonical_lf_sha256": "c5433febadd7c7a36ae99d13274ca3833cf5464bfe5b2495fbe10b3b58d24843"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/aaai-2024-gxvaes.md",
-      "git_blob_sha": "e6fe1650d35b4168b75cf2bd28b736d94e997f8b",
-      "canonical_lf_sha256": "f11aae0d32814dbbea2a1b0b36d97dab5d52eb558a5cc25cac61347cbaaf5a9f"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/aaai-2025-every-bit-helps.md",
-      "git_blob_sha": "cad2393165aa2e06acce43247dcba926fd2b9d55",
-      "canonical_lf_sha256": "183721b44d27ab20363f604eb7081ffad39a825024f4bbe2917a41e855991b9a"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/acl-2024-mission-impossible.md",
-      "git_blob_sha": "a8b7e572059e1c39b55935ebd3412a29161f8ead",
-      "canonical_lf_sha256": "564f90bfef444494d7a000a1ca8430a90a7f84e2a7cb2b892b515620aa9e67e9"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/acl-2025-minilongbench.md",
-      "git_blob_sha": "270818f5e2ac432aff8860ca7e96ce4aa687b9ff",
-      "canonical_lf_sha256": "ec99b6e6be2618292c8d4f5e200f6222b705a6e6495389dd5dba7f88f0b004ef"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/acmmm-2024-speaker-to-dubber.md",
-      "git_blob_sha": "2b51f29d7a0d5f8d9c23b7441af9ad47aa834ade",
-      "canonical_lf_sha256": "a490a88028c62bd37ea58a73d975af58ac9afef413b9ebba088c22665d87dd73"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/acmmm-2025-aff3dfunc.md",
-      "git_blob_sha": "e2cc5d32403917d898b5d25beacefcf9f587f6d0",
-      "canonical_lf_sha256": "cc53cd7b4db140b86b6f62ea7d6af51395bc4a1b4fdbd0d1feed08d640628b5e"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/chi-2024-constrained-highlighting.md",
-      "git_blob_sha": "1cee93ad7c2d93b22a8d6f803414ae415c9f0c0b",
-      "canonical_lf_sha256": "028e045dc8c2556549540ff6a06b86b02ebb50c279b7f7180bd70e5f6a2e6d57"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2023-best-papers.md",
-      "git_blob_sha": "77ce39d05c5346be93743efc2b651eb26b689ed8",
-      "canonical_lf_sha256": "9f953580f5ad13eb8c624f7d3936791731552810410ebe2d46b9d66550c6292d"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2024-best-papers.md",
-      "git_blob_sha": "4cbe88faa0f82e2714ea63e82ae6437810e40ca5",
-      "canonical_lf_sha256": "f7884d4c41953a250c0ecce68335f9d1ecc6d04c36b7504e406de8f8fca8a888"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2025-vggt-best-paper.md",
-      "git_blob_sha": "f91a9b6554029a60bc41fba2b7116431f3015b39",
-      "canonical_lf_sha256": "d1863b394667629fe4d68b1bc72352ea58c65000daa6266dfbbaffbe1f7dc4c9"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/eccv-2022-partial-distance-correlation.md",
-      "git_blob_sha": "55a9dd2c02e9eba18fa5216b1196c27c1da95883",
-      "canonical_lf_sha256": "d4a8639225ca5811cd0812c21ab76ebb1752333c733f07147c1194ff36290819"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/eccv-2024-minimalist-vision.md",
-      "git_blob_sha": "7beb3232369a52be770c4ae7839aaa676ed0d164",
-      "canonical_lf_sha256": "c9ff344135adae439a43aa8eda2d4f76dc18f00363a90082b44196140b9a7a8e"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/iccv-2023-passive-ultra-wideband.md",
-      "git_blob_sha": "4f925fc63f814d4b3e715523e0c19b92808007f9",
-      "canonical_lf_sha256": "e6d40d307666425b01467cd810ddd7577ccb87f662c1d994924dc873b5ea8bd6"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/iccv-2025-brickgpt.md",
-      "git_blob_sha": "4acf67dba666888b0546be758bd030f142e2fed6",
-      "canonical_lf_sha256": "56c4f5b41801d127a8f79593de3bf4f6aa1c77d116a2e9c0733282486263138a"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/iclr-2024-outstanding-papers.md",
-      "git_blob_sha": "e0b2649ede6bc52de32a9fffd61377fdfc43dd7e",
-      "canonical_lf_sha256": "654044b0d471b508b01a006f65fb9077de5b1ac66c2407101364b08c98c844a0"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/iclr-2025-outstanding-papers.md",
-      "git_blob_sha": "a3c7cf6f2acae08c3b60aaccbb7e7cfb0f5b8314",
-      "canonical_lf_sha256": "09231e7ec5aee42ff06b5c83b32775b777d6b52668bcc584b4552171149b16ca"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/iclr-2026-outstanding-papers.md",
-      "git_blob_sha": "2b0c60c3a58200f8ce4ab2fc930dc67ca2204133",
-      "canonical_lf_sha256": "6688395119a942080656b5fd4c17395e6b4da35e2186c667b811a88e9d683cc4"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/icml-2024-videopoet.md",
-      "git_blob_sha": "0de44c660c6a92d5cd80aa538f67a43fbec641b0",
-      "canonical_lf_sha256": "f63069995f803ea21d93b00a0840367edd53b739b0d05b9dc4713bcff8bfe28e"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/icml-2025-collabllm.md",
-      "git_blob_sha": "8ee433a3dd2c01fb3ea76fa532395404615316c4",
-      "canonical_lf_sha256": "9b378864fe335560918c33dcd83205d90ffa45413f61f04f1bd169a5d0ef9910"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/llava-4d.md",
-      "git_blob_sha": "91dac2dc62e8ce28fb72a1d9667f8d6679eed67d",
-      "canonical_lf_sha256": "7196244a10c2c4e3b314254817b6873102bc3d1c60e28d3d48113cb1b8ef56df"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/neurips-2024-var.md",
-      "git_blob_sha": "0bdbde717aef3842be56e58a80c1a2e5a2d76d89",
-      "canonical_lf_sha256": "53046f4eb049fbe04c941afaccc73c1cb298f1cbb0ab81a9fd8e53052c84c074"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/neurips-2025-1000-layer-ssl-rl.md",
-      "git_blob_sha": "b4720a60ecf7ca51bb40a883f768b0b552b1da78",
-      "canonical_lf_sha256": "a871c9807868531f58bd3de772ea849831e90374dbed0c2744bbaf89b475dc69"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/popl-2024-megalibm.md",
-      "git_blob_sha": "8f1d1c02400dec4df01ff127eb40ae639c55bc6b",
-      "canonical_lf_sha256": "ff21ccaaff696989c94bd389714454e1254ffcb579474b770fe131719f871fa8"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/sigcomm-2024-l25gc-plus.md",
-      "git_blob_sha": "73a31cf4ba2daa2cd9ab0a40479066b9ce0a3eb7",
-      "canonical_lf_sha256": "11bcfd4ab80ea467f655d7d55cf4023bdbdcffd7467343f2247fbbb2bca33078"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/sigmod-2024-polardb-mp.md",
-      "git_blob_sha": "1083601525f7efed58775381d31d361f894f854a",
-      "canonical_lf_sha256": "7f7f8d438c5e34453f32e884bd5da226aea482cd2f80c9f08b681dbf8576e9c4"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/stoc-2024-theory-best-paper.md",
-      "git_blob_sha": "1313beec3b8300a18f019969b16a2a721057902b",
-      "canonical_lf_sha256": "51cfa782fb3e0a3e47e81d937fd118f7fe4c8f12fa27e2978aca4f6041dca654"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/transformer-writing-style.md",
-      "git_blob_sha": "3cdc9b05f3d47ce82281dbcf4e22fee2a3f21046",
-      "canonical_lf_sha256": "602aa3313b69395f7a0a03db229dd7c0dc539c59a155518d639c25c7e08ee5ab"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/usenix-security-2024-inspectre-gadget.md",
-      "git_blob_sha": "77c7c2b00d704d555e1ab470658abc7d79c310a9",
-      "canonical_lf_sha256": "33d945271d6d3b7f131c810414790af4232287e544c15ef1e317fda53a6877a6"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/cards/vggt.md",
-      "git_blob_sha": "52c9f82352dedee38363c536c5b794ad3faf5fac",
-      "canonical_lf_sha256": "7978cc17dbedff632f020583ee1e4122fe80747a567ec1b236a95e799ec49b78"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/evaluation/self-test-dynamic-scene-memory.md",
-      "git_blob_sha": "71d34370f3dc7dedbcefe3aa46a02231c6282f3f",
-      "canonical_lf_sha256": "32883ac33201d14f7d3f60c45d5ea4bcebfd3189eeaa9a6fd8e8a9809c41ecbb"
-    },
-    {
-      "path": "ccf-paper-writer/references/exemplars/index.md",
-      "git_blob_sha": "bc8609c3339232bcd4ba23a50e2165fca0716a48",
-      "canonical_lf_sha256": "7451d8ab13fb81ab2f2422c2493d6d0360b991aaac488c00ded9a38c4aa88d9a"
-    },
-    {
-      "path": "ccf-paper-writer/references/expert-review-loop.md",
-      "git_blob_sha": "2de7b8cddfb09f7de4f136ba5ec735d86f4f4b87",
-      "canonical_lf_sha256": "e2f3bef1723e558318b0023be30030d656b04104dc2cc389995a3a017432adfa"
-    },
-    {
-      "path": "ccf-paper-writer/references/length-budget-policy.md",
-      "git_blob_sha": "c21463702463282941ba307c63feeac88246365c",
-      "canonical_lf_sha256": "9f19621c890172f6341127059f16f0ed7397cdfeece3884c469475dfe25a82de"
-    },
-    {
-      "path": "ccf-paper-writer/references/materials-to-manuscript.md",
-      "git_blob_sha": "7df8254da9521400622b7aa7f8a1760436062cd5",
-      "canonical_lf_sha256": "e3422a07cf5a6186a07a899867aac77e2f05e2678f44e435d7d8eb550daf771a"
-    },
-    {
-      "path": "ccf-paper-writer/references/output-style-policy.md",
-      "git_blob_sha": "4c90fb730438f2631dced5716a603b7ddeb5cb88",
-      "canonical_lf_sha256": "9c3062cf35784600c32b8f3edb18623bdc884b9a5d5a2681d5b0fe0af83953ed"
-    },
-    {
-      "path": "ccf-paper-writer/references/prose-quality-guardrails.md",
-      "git_blob_sha": "7c8f41cf0dfb4641669a87178fc02d7436cba3ab",
-      "canonical_lf_sha256": "7160c174602b0d32023f883ecb6f0d934f42a9b1fa431d405a090090769bb42b"
-    },
-    {
-      "path": "ccf-paper-writer/references/research-writing-patterns.md",
-      "git_blob_sha": "58232536d483b8d9153a341d08a235450098a5c9",
-      "canonical_lf_sha256": "4cd7369e1eeb4bc230b403f15c8cc7179c05927268e6aeda1e399eea676fbb81"
-    },
-    {
-      "path": "ccf-paper-writer/references/score-lifting-loop.md",
-      "git_blob_sha": "7b65102bad5611f4d6cfafead8997a55b0ea2e95",
-      "canonical_lf_sha256": "083b949a63480599479ba83059cf5bd0911fa63c8406c82d653c5f4bb11407a1"
-    },
-    {
-      "path": "ccf-paper-writer/references/section-modules.md",
-      "git_blob_sha": "8702fb2ac8e2f3df5818e5a4250a8a4511f5bbb6",
-      "canonical_lf_sha256": "e8cdeff4406e4771ce67f7e230f56645f933afe337ed3196c0f9e05a15243744"
-    },
-    {
-      "path": "ccf-paper-writer/references/source-notes.md",
-      "git_blob_sha": "b8088387c6aa90266643d297d94c855c2f5e2e1f",
-      "canonical_lf_sha256": "80159d54b96b66ffb1374361279614352da7ff29221ef7fbe7ce3fea52ebe2d4"
-    },
-    {
-      "path": "ccf-paper-writer/references/storyline-blueprint.md",
-      "git_blob_sha": "e73bf15be0db25f2b5db83ec92fffcd862a1bd3b",
-      "canonical_lf_sha256": "b08e1df814262379699dd2d6d6c2b9f5be235ee4a1a55bb75678435dea3a5b07"
-    },
-    {
-      "path": "ccf-paper-writer/references/table-style-guide.md",
-      "git_blob_sha": "d3d227cd6619d7acf765f6459a3f28d023517d8b",
-      "canonical_lf_sha256": "fbe5b993397eb3ed99300a2aa2a601caa8ec337d902755476258d899dc0214f3"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-adapters.md",
-      "git_blob_sha": "678d3a622de28e0a9eca8316ddd4d0c9220af6a4",
-      "canonical_lf_sha256": "0d7d47b4b82af5c754c723ff924d14721b6b1fc21de52c3bb5022ec08fd22d3d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/aaai.md",
-      "git_blob_sha": "b27ab7ab5de70253a245460748eb3041562286c1",
-      "canonical_lf_sha256": "f1a9f2b6fb652c9c55e1a5ab4da101172164f71f3a083e72d573a64dbb4ccb0b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/acl.md",
-      "git_blob_sha": "cba3767f60223e1ce94832ce3cee74bf00ff0ddd",
-      "canonical_lf_sha256": "e8efbba1acea4a3ef62c123f50a99d4c7062d1bd069582f2c42c07752aacc71c"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/acmmm.md",
-      "git_blob_sha": "097c1160e31a2f0596fd6c7e7abc42b15fe0145b",
-      "canonical_lf_sha256": "fc7bfba38688dbe34c050e2c72d95543f9b3c20b3c24155ee87b525c2fe2c451"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ase.md",
-      "git_blob_sha": "a5c520d5b68036ab0456c342843679d7606cdd64",
-      "canonical_lf_sha256": "1f5814934805e510e77c551388dbec1164630db204def93b8197e89fbcca464e"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/asplos.md",
-      "git_blob_sha": "249fb6292b0c6f60e0943629317e0520255ee6dc",
-      "canonical_lf_sha256": "9c8103b7229324f7a4debbe1941f69f37d7125f0295e564ecb0764d4e95f7835"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/bibm.md",
-      "git_blob_sha": "f548d51f1c1735d40f7414c39a4239624709c33d",
-      "canonical_lf_sha256": "d16ae88c4c29f198c0cda17212ccec7412def747e1ff34c361129ed38e83db4d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cade.md",
-      "git_blob_sha": "6aecc80214f18c9c3940806f28562d0c48b2136c",
-      "canonical_lf_sha256": "7efb52eae70adaecbdad6cb5191fed7e8b59ae48baecedf35147f0f9c09fa85e"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cav.md",
-      "git_blob_sha": "61dfb620cc76c0310c8632c096e542d0c33e3935",
-      "canonical_lf_sha256": "09a92352fe851f86d0060e5dd22f42dca22e713840d0a7a3f89bd340d233bcd1"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ccc.md",
-      "git_blob_sha": "49dd73c393779e60d7c6278794ace3771dd03f66",
-      "canonical_lf_sha256": "d55a231528b50cfea416594e930e205e506bd0fbc4f4d302d5a5915c510b14c8"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ccs.md",
-      "git_blob_sha": "f90495480a08bd9a786104224fd28cb4a5a27525",
-      "canonical_lf_sha256": "83c9735859e5eae32baba55f0723a3504af927fc8dec1204498a1e60884dcd6b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ches.md",
-      "git_blob_sha": "cbd2595ef02a216c5600266314d456e10d36e438",
-      "canonical_lf_sha256": "d1edf675dd3e89f6cea167ab810ac1711f0772e94fa3bb245e7e871c47abe96d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/chi.md",
-      "git_blob_sha": "8389a6355fbab2678c10dae87a02ce3fa24e9f60",
-      "canonical_lf_sha256": "8233131cb674cc55ceb2323196964e76788b3b4e164687e026fc09ce38990dd9"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cikm.md",
-      "git_blob_sha": "2c388f534a920b546915a6f79a78f3b4826a795c",
-      "canonical_lf_sha256": "29b23b2d23e585c4f090af8b8c642d87bfe9fa3c8e74a5bfd249ccdc93f5b6d5"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cluster.md",
-      "git_blob_sha": "a92d68156091a131a1234e47e3a822884471de81",
-      "canonical_lf_sha256": "49a9af2849adeb1b6fc6782b3a83b229da48385eeb55033c243d536c2bd1d1ac"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/coling.md",
-      "git_blob_sha": "4a652f2fc13282d47db3dae147bba921bdbfb122",
-      "canonical_lf_sha256": "354fe83295821ce3d6decdfdfa22dee57a2897adabf56036dc06cc5f52223a9e"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/concur.md",
-      "git_blob_sha": "dbc1fcacc7b1f014fdbe6f46028689e80045c4c7",
-      "canonical_lf_sha256": "66e131a21162420680eafbb073f5edb17f214edc1da75704d14ac125500fef8b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/conext.md",
-      "git_blob_sha": "5b213da71cd6baf0d7f045250b468cfa8e1aa071",
-      "canonical_lf_sha256": "829cae4232dc72fe6406f2058d46d549d81bbd62251c7ba794a6f8769a915d4a"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/crypto.md",
-      "git_blob_sha": "ce661cdb603e50e518a0e89a371c59bc30cd4f66",
-      "canonical_lf_sha256": "0db1df24ec6c3c5bbf8dc4ff2d90f968d0234c46dc26582177f6322d2dd58060"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cscw.md",
-      "git_blob_sha": "4d704722d836aee386783ec578b7013f601727cd",
-      "canonical_lf_sha256": "72d2fc0d56eae3f4ba2c13f65fb3141d7a17886aedf978e2bc9f4db2d2756776"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/cvpr.md",
-      "git_blob_sha": "17a48e578de41d761980618457773c5ed0d65f0a",
-      "canonical_lf_sha256": "8d69a0010ab3d33db49b49344ee7d923abb9cf06b7b36f844ab4c9cf3328d98d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/dac.md",
-      "git_blob_sha": "466d7e100a2149bd9503d256b6aecf8a55bb1201",
-      "canonical_lf_sha256": "d243e9ac012b535a36d959d67ae2d6d8feae4577af21bbd618d5c862c6c1f32a"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/dasfaa.md",
-      "git_blob_sha": "a16917f8f2b454fd34052c2d2e11882db65fb818",
-      "canonical_lf_sha256": "51970a3d486a5f29b17055dd9bb327faddbdc222add42fa7c4ead1928653700a"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/date.md",
-      "git_blob_sha": "abfe07bf34532bf7d1543861cf4d0ed1378f9f38",
-      "canonical_lf_sha256": "d36a30a712f923656f38fbde7f772a2066232dd6bfee0c76235a61dfb2a7bd9f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/eccv.md",
-      "git_blob_sha": "5fc1e4a376274131221bdb98e286c7bb61799e3d",
-      "canonical_lf_sha256": "404ca92d5af1f00d47a95c64fdcf3b1a567561f0b764e6fe4c6ccce270bbf733"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ecml-pkdd.md",
-      "git_blob_sha": "964037f9938c36e1830597a7f890d66ad156f7b8",
-      "canonical_lf_sha256": "e41f8188f3a8d553068ff4ae92da37b1bd54cc539f7c0b21c3acecf864feaf3d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ecoop.md",
-      "git_blob_sha": "0a990327cb7e6e3cfe2227409f1fdb1f761b3d6b",
-      "canonical_lf_sha256": "1b9c83369b6e8b0dec8f38b462fbe5976f309fad0fb1e85df99cdaa1dec4ce1a"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/emnlp.md",
-      "git_blob_sha": "633487c5a71280e1369604a572e51730f97c8a93",
-      "canonical_lf_sha256": "f11216a5a8df646187b6240923ba92d851c52fed7ba07bb4175ca7e7a1912f87"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/esa.md",
-      "git_blob_sha": "4f1181b16c2e7b0a19cb33a5f1adf6011bfbfb39",
-      "canonical_lf_sha256": "17d9ab4af0d234864343757538cdd68c2f97e950d23b64dc3e5e6260422012fa"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/eurocrypt.md",
-      "git_blob_sha": "56d170ee1242a42e12cb0fbf1b19c10cb4627a33",
-      "canonical_lf_sha256": "45367f0621bb119124fe69bd37e5c0afb7c93a0ffdaf36495aa06982d66c48e9"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/eurosys.md",
-      "git_blob_sha": "1e15bf0919b9f118beb8e596bd4d349518cc5cb7",
-      "canonical_lf_sha256": "f38102627ec2d4afb6973a9bab5036b1b937be136fe512465b6c399cb57cda9f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/fast.md",
-      "git_blob_sha": "f98d9d2dedea4cad1689e206add8282ee69d622e",
-      "canonical_lf_sha256": "eefb0503c749e4e5c3967e0ac6283cca3198bed0e66c6766779e2aaa68bcdce8"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/fm.md",
-      "git_blob_sha": "a8992c9814128097dc19ec3b6903cbde6cee9e4f",
-      "canonical_lf_sha256": "03c0371ec4f766a347a7d05fdb4cfbc760ed5481f58cee8b159abdc0f2311d1c"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/focs.md",
-      "git_blob_sha": "816f2b3f5160cafc9baab885fd700320acab1826",
-      "canonical_lf_sha256": "98870fc7b3dda8c6fedf21375a77c3059fcf16b22f2e6fbd4af0011d32c6a6af"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/fse.md",
-      "git_blob_sha": "fe440ba9bf4b5c463b809bfe04b29b3ba67a3a41",
-      "canonical_lf_sha256": "60c877fd4249ffccc7cf5d58dfbe1f31c45c3aba31d32958fa6cf1f9ffd2b108"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/hotnets.md",
-      "git_blob_sha": "de33726e29aca31ae3ec6676f86908d693a6516e",
-      "canonical_lf_sha256": "d93055b1ab9b86188ea207230e3abb6d943e97943ad77d97147454c7c0c29ba1"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/hotstorage.md",
-      "git_blob_sha": "20ea1ea6de6429837ac353685ef8663e0e476fc2",
-      "canonical_lf_sha256": "ef46af9be5f4752247d0c75b03e376df516c62c760b921b0a7aefd5f621e3171"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/hpca.md",
-      "git_blob_sha": "3851e7257658c4c91944de26aea3cb814bf328a9",
-      "canonical_lf_sha256": "f33903bf00940305e76322202fbf8ebd199887307676f1675608f0b88775778f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icalp.md",
-      "git_blob_sha": "df6091370f82c99390372897703eb24cf859fec6",
-      "canonical_lf_sha256": "65718f9d05a3bf55b0d99f6237e00c04b0bb529585ff92dfb2b67ec120ea2645"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icassp.md",
-      "git_blob_sha": "6efe05bdc97014fee427feec31048fc863aba691",
-      "canonical_lf_sha256": "050f9de3eed57f24fc4177b6d6ad5ce4d98d0c987ac35394c00a74a687aef052"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/iccad.md",
-      "git_blob_sha": "b6a023004579f81c913438a8c4a1a38f1a9f23cb",
-      "canonical_lf_sha256": "e2ad8987fe52dbf1cea689eac64b4a107e48ef6cbe7f3f0ea53e6653fc86eda7"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/iccd.md",
-      "git_blob_sha": "2ebf0f03cace23f8ed7c5b5969a0989b23b6e6e8",
-      "canonical_lf_sha256": "811b0ff70f5bf67e567c834e04c22ec31168580041329fc2514a95d65b5bb28d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/iccv.md",
-      "git_blob_sha": "9f13b94dbe022061ab96509177b41be52235e372",
-      "canonical_lf_sha256": "71cb0efaa4407046490f0e7327726897226eb7375f2f0f1e25eeb0e33b6f528d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icdcs.md",
-      "git_blob_sha": "9e4a4b34e771b63f61b22b3c7ef34311bf511615",
-      "canonical_lf_sha256": "4492876d40d78557e3d0e604263946ee22adb56e5c441e4ee3074ca5a342077f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icde.md",
-      "git_blob_sha": "3e4b4789d5003b4780c6e3859c3e03f95460e511",
-      "canonical_lf_sha256": "22e6c9f3b7f3d5d9d39d4450ff305bbca3631ad4aaff6e9a976b056de9ae2049"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icdm.md",
-      "git_blob_sha": "d50eb58cc73e5aaa03919c3ffd5783898b16c3ab",
-      "canonical_lf_sha256": "35f57d84356ec879052150847a07800c1dadd6789676557c0084d7371d524153"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icfp.md",
-      "git_blob_sha": "8d4a3be0ef87feeb28eb5c20999d8c5163a68d58",
-      "canonical_lf_sha256": "bbab11b2ff15f83167acae0f0784567ca4b32975cc93ab643c41b4e41913b1d1"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/iclr.md",
-      "git_blob_sha": "73f8bf21f8c59cff988f6e68460c3fedfbf6d83b",
-      "canonical_lf_sha256": "748f713b304a206c7ba56cf416dea603aab29ce5e2ae9ac595d726404a5d97a4"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icme.md",
-      "git_blob_sha": "81658c6663af623b0cbdb4993b404704fe256b59",
-      "canonical_lf_sha256": "b8dcf3641c46111afd87b000d84db3e8ef71b3972341fb6dce6d091aa3263967"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icml.md",
-      "git_blob_sha": "7086ae6a83b9114499c112fe7e8c70e9f29753f3",
-      "canonical_lf_sha256": "fd495c55bfa7d201e27ad6eeb53b42346edfa7433e0ec8f6503ca4ab8b42ab12"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icpp.md",
-      "git_blob_sha": "4f20a129b93c1dc3ebf4586ca61b8a005d4385f4",
-      "canonical_lf_sha256": "6af8014ac259942267611cbd2959a0c98cfaecf6c8c4d8e361827599ef319adf"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icpr.md",
-      "git_blob_sha": "6e7d932e9c330041376c1ccc397d6e16d5cc988d",
-      "canonical_lf_sha256": "5e941913400266a4a5f1e0844260aaa68e8aeb6d8f704d34aee31e0692034a21"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icra.md",
-      "git_blob_sha": "645527ba60d6fa6b4c7c384858d4bd628f83003a",
-      "canonical_lf_sha256": "7455b1fcc7e0b1c2e1365640c686c19368815b65aeb4db1dbf7a006f23bd163b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ics.md",
-      "git_blob_sha": "545c712f94bd1ee553a5df417b41df2eb04530ab",
-      "canonical_lf_sha256": "d08796ade00e276ce31f1cba1085b74ddf07e0b547edaafc96cccfcaeaf34385"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/icse.md",
-      "git_blob_sha": "bfa241f054ace7a2152514394997bc828b93d535",
-      "canonical_lf_sha256": "9936aae1886a58432ee0499295ca8d05d3f8ed52362728e185f520cf44cfc6d0"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ieee-sp.md",
-      "git_blob_sha": "0c7321dddc41c81c614e3d574d51af04fe51c3a8",
-      "canonical_lf_sha256": "98067667ec926e3fddb7a4276ed897b18838e72266a03f39dc1e063d14a9f2fe"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ijcai.md",
-      "git_blob_sha": "6da176e1b9f4552fcbff0942488398d67ff8d2af",
-      "canonical_lf_sha256": "a29da8987939d3b8307b540e5d8f6324fa059cf349c62c524a7d9e716ba17608"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/imc.md",
-      "git_blob_sha": "22b12627f275dc30f0cee8233e1ba5abf81a3272",
-      "canonical_lf_sha256": "963805fbdfb8db30c94ad997cbcd28e04f60f4a41c964e00e6dd9c49c19f3112"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/index.md",
-      "git_blob_sha": "62ca6c25c8ee635c89462b3db8e2bd106f93f592",
-      "canonical_lf_sha256": "eb6433b46146cb8224a8a50f6f3c87f0f2f49681ebfff74dcdcb6de7eb9faacb"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/infocom.md",
-      "git_blob_sha": "d0fc86cb72b15aff9ae32c611f91c39f8d940cf0",
-      "canonical_lf_sha256": "737aff4000b1fc70f8db8ab818bf2aa2c1f27e3df3769d4d682797d35c42b1c5"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ipdps.md",
-      "git_blob_sha": "dfeff1c05d8c4e7e4bcddc500f3be6c8c6e6c5b9",
-      "canonical_lf_sha256": "c4df279066dcefce9aef554b1ceb449dd8c7cd443837b8753b0ad91f044bfb00"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/isca.md",
-      "git_blob_sha": "c5b4fee4e363ed4a822fe3613e9baf02107ceeba",
-      "canonical_lf_sha256": "a564392ce2972f7fd6d42c95eed388327cb430738ae9db56e07412975b4618ba"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/iscas.md",
-      "git_blob_sha": "c96c8b8c34842d89838751543708927f97d291f1",
-      "canonical_lf_sha256": "80307fac1c129e59fe0aa48703ce8b2d70d1706956d71d8910dafb5870d213e0"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ismb.md",
-      "git_blob_sha": "74f3311a5155499879bab0a9fab5a7177adb2f92",
-      "canonical_lf_sha256": "803b32b9cce8cc0e678d0fa4038e03eb5cf51e4be14d1d563bac5637b357a6ca"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/issta.md",
-      "git_blob_sha": "bc444000108fc9b82754c0ff210adb3f3bf0c148",
-      "canonical_lf_sha256": "5ad25c73a8ff57350ef4a9d342932864c258d1181d6dbaac9262d5a2760dd293"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/lics.md",
-      "git_blob_sha": "6fd6dc242fd986806af62d8fee0c7fea16326ecd",
-      "canonical_lf_sha256": "4bf0d31dcdc61ef9e7a4babf98db36a12480e8885723a73187444ea6de05b867"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/miccai.md",
-      "git_blob_sha": "ce18550cd6952867772598e0a851769cdd182cea",
-      "canonical_lf_sha256": "4803fee531b88066015718fc54e4bd9f8e0dca79bfb23bf34909e5a84e6fb2ca"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/micro.md",
-      "git_blob_sha": "ac3846fdf6357e905f3bc2643202f61030f80f3f",
-      "canonical_lf_sha256": "cac6250c65a241870a3d61dc8e74f481ad611916c6cd4ef70e9d390612338e14"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/mobicom.md",
-      "git_blob_sha": "00750cc50d76b64809fff0ac747d1727840d6921",
-      "canonical_lf_sha256": "8dbaebc6c2cccf3a3895b1b2b0c7d7c3fad52ba727d1ebcdd47fe43afa1aeaa3"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/mobisys.md",
-      "git_blob_sha": "cd1414850095436152657037b87236f77a509cf0",
-      "canonical_lf_sha256": "f1947937c85579bdbfb0f933a2b97e8d1ae18b944194878e60f3b769d4b778ed"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/msst.md",
-      "git_blob_sha": "abc0f3b71299172edab91b06c976dec1aa5522d0",
-      "canonical_lf_sha256": "135473bede72ea894a48980aa8b7c02d1fb13dfa04a78e771436598f7d97a6bd"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/naacl.md",
-      "git_blob_sha": "f29a626db9c09dab519a1255cfa243476d5cd1fd",
-      "canonical_lf_sha256": "42522e2c0f746bc63645f76712b76743b4930b96e8a31fe227bd390ff6189e97"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ndss.md",
-      "git_blob_sha": "3dfa87a3de3e1a882af5e297f2fe4a0adb52144f",
-      "canonical_lf_sha256": "0c683bfd71957280bc9d2a3906cc63c305110f676f649d1a685449a33c287542"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/neurips.md",
-      "git_blob_sha": "4073c402a4af799d97bcd24abef2859f368cd558",
-      "canonical_lf_sha256": "43a2e6419123f4391363fadbb39340db32ac6f3538d90e686faa9ba831833bbf"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/nsdi.md",
-      "git_blob_sha": "c5527105ecb82a37b7594dd28568e006110a5da6",
-      "canonical_lf_sha256": "d2c2c5c57d5b7d9a5323b306550aaa84d145b1304bcd6529e4b56100da224840"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/oopsla.md",
-      "git_blob_sha": "a1fbe5df9448681763429b7e3f46381e5e2a85bd",
-      "canonical_lf_sha256": "4791b2488495179b5c54815af72eb6890f475d9f174a325c00012e59ef7e1751"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/osdi.md",
-      "git_blob_sha": "e840aacbf564156245be4f36f0a95abe7ecb05e3",
-      "canonical_lf_sha256": "03632cdc5733fe75e813ca968a0be3982a0a65230927f4134b1e436b252caf43"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/percom.md",
-      "git_blob_sha": "6629d3a3f6512e749895a339b0411d8d881169df",
-      "canonical_lf_sha256": "0384a591997920e1ace80b9b6f9a8c5b3323695de8bbfa20983c1b0dd8cb379d"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/pkc.md",
-      "git_blob_sha": "577125af1f32b4d2f4c527038463018a1d9cb098",
-      "canonical_lf_sha256": "0e02ff9061aae68b7ce58d356c3c53edfd48804d15d6ba5d3687e7ec74ca4181"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/pldi.md",
-      "git_blob_sha": "ed13116856c62b9ae675e25ada088ab8f7edd53a",
-      "canonical_lf_sha256": "9868f8d6d5eca32e21ab1c19c8b3a20f5c648ec386957a17b7d45528b670abbc"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/pods.md",
-      "git_blob_sha": "dc57227cd58dbc86415d4ed6e1aac02c8deb769b",
-      "canonical_lf_sha256": "b24607bb20a160804e8c7b6487f137d12b29dacd53df48f384d7eb673544181f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/popl.md",
-      "git_blob_sha": "e4574118c4411008d88b43801d82c2682768a859",
-      "canonical_lf_sha256": "0eaea374d0107b1da346814b5edddd47d4786e15faf54f2b0dbe67f92ab8c389"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ppopp.md",
-      "git_blob_sha": "52743adb8dcca36c915e98af5f6684dd360ea492",
-      "canonical_lf_sha256": "734cab0e3259dc5f87146f6774cb503044af2ef6a48ab0f733f2c67faa4c19da"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/raid.md",
-      "git_blob_sha": "80e61b86640589910989deaac77de3bab0573f58",
-      "canonical_lf_sha256": "927f21208f859c3e181ad3dffeb7775e9421a58fa406f47a762a5a42b1920007"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/recomb.md",
-      "git_blob_sha": "8ac3a602b4845b21476b4cdac2572b4d94f6221c",
-      "canonical_lf_sha256": "4a0e88e45bf34c19d0fc65b5caa76639d90a1233ee890e46fafb29e1b4309f4b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/rtas.md",
-      "git_blob_sha": "0095f78ffd2d67a8d7e0344c1f1e8f1aa04bfe50",
-      "canonical_lf_sha256": "adb73a95504a8e2700a3827d0af236150462c435000d7a762cade4a7eaeebbd5"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/rtss.md",
-      "git_blob_sha": "caecc9aa191b20ee48a261f6676a70ccbae77ec8",
-      "canonical_lf_sha256": "ae91781774b43f45c441c1ada405a54bb82f57d9d3658ed082fc461c8ba99743"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sas.md",
-      "git_blob_sha": "8ccdb3154c94288b852b647e0f3af531dd41f5fb",
-      "canonical_lf_sha256": "003823812829464713e66a7d3b7e1233a54f329db7588e52c06155e3f09df79e"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sc.md",
-      "git_blob_sha": "7e03dedda6d38c4eb653bc760e33af209696c913",
-      "canonical_lf_sha256": "3bec2afcf071beb143c4b8e69b27460579b28a667ba99d0ec60f72c71b8482cd"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sensys.md",
-      "git_blob_sha": "5f0b1d3c3e29ff0348387d5210112a8771d885d9",
-      "canonical_lf_sha256": "7abcd418762131e533372b7483f88a329c8c1764b44e57140a461ec56a918c85"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sigcomm.md",
-      "git_blob_sha": "a2bce653fb4936a6ca7e9a8ab517801a72466b18",
-      "canonical_lf_sha256": "9513c1c31894869857d2008817a2c6cbe713f4e59ffcf6947cd8e7132fd64e70"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/siggraph.md",
-      "git_blob_sha": "f40d760145b2d54234a98bc128e174dadfe991a4",
-      "canonical_lf_sha256": "12598cd08eb2c08900d20a4176615269a4677c4c546b7c97e1417d24176c9f07"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sigir.md",
-      "git_blob_sha": "b8b94d40c8b79fe24cdb019e9f4977292d067597",
-      "canonical_lf_sha256": "55aba2626432a6f051c3256ddf07674a1dbc8c1547d0fb41b7ee8268dfc7736b"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sigkdd.md",
-      "git_blob_sha": "72376337e794df794673cf206ee1528fe45f6422",
-      "canonical_lf_sha256": "28720753d4b9f3493f4a2458a1d6c5973e17b89d08b9cb156fe82021b1519ec6"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sigmetrics.md",
-      "git_blob_sha": "b97090d4dacfc7d5c5e81a2f7745bf7fbebbcce2",
-      "canonical_lf_sha256": "c4376ac47f5b6be8176575dc988a16fe4b7ef8ed4ca617b657c56eec700b8f31"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sigmod.md",
-      "git_blob_sha": "4391d299f3d0185ac94fd93e1eb0379eb7b303e1",
-      "canonical_lf_sha256": "9d9fe25d0f3123c89b12b1dbee854051f83a486b70c3ebf7782bef4a0826fc2c"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/socc.md",
-      "git_blob_sha": "9d4df0780305043f20d7718903cb6b5a78b24952",
-      "canonical_lf_sha256": "6ae1cb0472bca07b52f27e115316217d9a44005138e9eb470f703dc61345f6ee"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/socg.md",
-      "git_blob_sha": "05067092849985a48da3ae73d3f709d30578944e",
-      "canonical_lf_sha256": "7841f22465af189e8d8409df40f2b24899f542e8369e150e5544f86ef5e5c538"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/sosp.md",
-      "git_blob_sha": "c5ee77fca25b26399c269e1a7effd4d7330d59b0",
-      "canonical_lf_sha256": "146251d4f7f71346f72197c86d57708b78e3bf041a67e398a4a5fcce6777d189"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/stoc.md",
-      "git_blob_sha": "1d6370bd65f3c93b37ea350264a6b32f424000c0",
-      "canonical_lf_sha256": "718df655bf55fd8bda974fa9ceded0ed7825c7445902e394667dfe27eb64eac3"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/tcc.md",
-      "git_blob_sha": "f7ca29f8b2391c85367092b47b5d87ab74fdffcb",
-      "canonical_lf_sha256": "bfa2d44c1350b4ea28063afc10c06a030cd44f01d3f86d58f5b6342f733311f1"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/ubicomp.md",
-      "git_blob_sha": "a088ea6b77ba1da93128961c78bb762cb75796ef",
-      "canonical_lf_sha256": "d837ef3194e2b5615ef2cc892b38041186310ae3adc7cd13500127ab46c56a01"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/uist.md",
-      "git_blob_sha": "fd7c1b830b46c6be4f552e9b0f8dcd6b466bf191",
-      "canonical_lf_sha256": "7b2f1c6f9fe6ed37c8a0dabe75ff6b359102a50fa04f6ffdac256f6c9ba2aa07"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/usenix-security.md",
-      "git_blob_sha": "f5d673555e3318ce08df9a39e3000abd758d4d2f",
-      "canonical_lf_sha256": "0398139d5f9f3753d1d5c36e9f4e090807dbc82852df061324cb0f7423acf02a"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/vee.md",
-      "git_blob_sha": "8a0b8ad83fc1ec45b85849df0bd52eac227a933c",
-      "canonical_lf_sha256": "4ec4de5963d750d66fa6e6d2c31d6e31afe48516cb1997acfed966c0509b280f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/vldb.md",
-      "git_blob_sha": "924953be4fced9e26505038f4bc7e187674d9767",
-      "canonical_lf_sha256": "8ad14a891053a4a572ca77a5b426e1b6c66e5d95156d88b652391111ebdfe377"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/vmcai.md",
-      "git_blob_sha": "847173766eea167bd1f76094990b2dc6fbb8f10a",
-      "canonical_lf_sha256": "e70e9f53a4034cd05173864aa2da0a63a7b4bcd762c090369336488be221b9b0"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/vr.md",
-      "git_blob_sha": "bdc9406acfba8690b8d058911064c4d4e51618a5",
-      "canonical_lf_sha256": "cf0f552acc213abdcf028f609f1fe9eff9096dfae3d17a58a7a3f3e425bb7a4f"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/wine.md",
-      "git_blob_sha": "c38a49e613077f155e53ae3dbeb5fcfddfacad7a",
-      "canonical_lf_sha256": "ed7595eb8a154316640ccf01825e654bbc459899ec4476f7f1261e3ba37394de"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/wsdm.md",
-      "git_blob_sha": "cfbf6b44750319bd66e4d53985aab0ad514eeb3d",
-      "canonical_lf_sha256": "804a331192b4dbfc85b1d9baa9b687c9e1f84761f5528fe163a89a370ca2cef6"
-    },
-    {
-      "path": "ccf-paper-writer/references/venue-guides/www.md",
-      "git_blob_sha": "86912c06a68f42ad2d9a3d3dcebc8dad13e9fda2",
-      "canonical_lf_sha256": "0f68e993dd372335d94ceb1190c96e468ca6e3a6bf1ffcc1e6070a5dedf43851"
-    },
-    {
-      "path": "ccf-paper-writer/references/writing-checklists.md",
-      "git_blob_sha": "071d9eddb76a8b845d03bb475c6ec84769ee7ae3",
-      "canonical_lf_sha256": "69fc5c0927f2e3f0383c8ad53ece9abed53865bc65a7becd05f234dbf1e1635e"
-    },
-    {
-      "path": "ccf-paper-writer/scripts/check_prose_quality.py",
-      "git_blob_sha": "74139e34ff6075005bb9ed677a8c9d1255c0e01d",
-      "canonical_lf_sha256": "4fcc1f02d836dd14e500707b821644463e75f869f838e7928696957a5d44cc1b"
-    },
-    {
-      "path": "ccf-paper-writer/scripts/convert_pdf_to_card.py",
-      "git_blob_sha": "f4c197321c9af16e2a47cfc04966980b755f5ae3",
-      "canonical_lf_sha256": "36b3e60198234b1a02d391dfae515ebfe4e9462327da97f03264769b910f3bff"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/SKILL.md",
-      "git_blob_sha": "287e8d302711d4a743a1b9d526218fea7dfd7f5b",
-      "canonical_lf_sha256": "32ce58d3a151a8649dec7ea21595bfb1e6841a8494a8e848034a25334ba84257"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/agents/openai.yaml",
-      "git_blob_sha": "c1a0ca3387b7d68b39ee76c4a9381801e117e544",
-      "canonical_lf_sha256": "894fed1e02acac119cd2f74576290fdebe00c2b51be105a2e2cdd1347dc715e0"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/references/autonomous-research.md",
-      "git_blob_sha": "94a556007dddd33647025b4f5828537332d6336f",
-      "canonical_lf_sha256": "868e86cd2743dedb9c2121e7bb2d5b918dcbf1cdd0462e49f06721c9793b3b28"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/references/workflow-planning/approach-options.md",
-      "git_blob_sha": "60e1fa862f80c06ed691384ca0d810ff1ac941c9",
-      "canonical_lf_sha256": "aaa39fa7c40a778f19d78f0d589a3c461d0954f3bb37c2cbd7283be276c932fe"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/references/workflow-planning/design-brief-template.md",
-      "git_blob_sha": "088bd61ba2b2578d0d1d7676e6927d54e1717f8d",
-      "canonical_lf_sha256": "fffda02e9e56abe38ee39a56ace9a363d5eb30db3c7b88bfce91e358b92d59eb"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/references/workflow-planning/intake-protocol.md",
-      "git_blob_sha": "4d78f43858f3e841e1c1fcf9dacfbababde84ed6",
-      "canonical_lf_sha256": "7f9ab640b7b6c2a97d9498eacb7a3c3e5ee2642a3de3779b49f1974359f607da"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/scripts/research_loop.py",
-      "git_blob_sha": "cb5b95a31cf07a35337df0833a03a02db9bee482",
-      "canonical_lf_sha256": "d3b3e958234b14c1af05febe204b0dfdd3a876c08eb4f0cfa6c214fd9e692650"
-    },
-    {
-      "path": "ccf-pipeline-orchestrator/scripts/test_research_loop.py",
-      "git_blob_sha": "4b6fcc22e088286bdcaf5c996684b5247ebddaa5",
-      "canonical_lf_sha256": "3032dedfb22cddd4968cdd7ff2ab271d0de26464ef5d1987597e40f7202e1131"
-    },
-    {
-      "path": "ccf-project-scaffolder/SKILL.md",
-      "git_blob_sha": "b3461718b4adf91bab33117775650cc32f306100",
-      "canonical_lf_sha256": "c7ce0ea609ece5b2d9d42a2bba9ad127de2e3b4b9ee3e57d95d9a0cc38ee1e07"
-    },
-    {
-      "path": "ccf-project-scaffolder/agents/openai.yaml",
-      "git_blob_sha": "92e248b1bb6248dc0db7562ab7b6c869583b496b",
-      "canonical_lf_sha256": "fce5b903d688cefbb049dc49805368731c8072a0534badd67ddf9a877c9212b4"
-    },
-    {
-      "path": "ccf-project-scaffolder/assets/ccfa.yaml",
-      "git_blob_sha": "82a04f30b0a5a9b97f7638ba1a9609803002abc9",
-      "canonical_lf_sha256": "e7a6b44df46daa03069eed6b07401602bb30e30dccfb1a4ce954c0ec62ba9920"
-    },
-    {
-      "path": "ccf-rebuttal-writer/SKILL.md",
-      "git_blob_sha": "5d9050953eb547c646aa4ee945342a149769a86d",
-      "canonical_lf_sha256": "78039cca6e58f83a2e22d512e3b1d405078f05219711b5c15b4e608ab6d4077e"
-    },
-    {
-      "path": "ccf-rebuttal-writer/agents/openai.yaml",
-      "git_blob_sha": "5ae6f9101fa1c1ea421bcc588430b7a72c3f1834",
-      "canonical_lf_sha256": "c30e9f3611aa9bf94d0ba512b5282b0c6a15410273c94bd5c3251d6c01f8a63f"
-    },
-    {
-      "path": "ccf-rebuttal-writer/assets/templates/ac-focused-response.tex",
-      "git_blob_sha": "bf45f1547a03b6be55888f47eaccdd440c31e234",
-      "canonical_lf_sha256": "3c28e54d05e32edbfd02e38066243450ee08d4fd56e3f76527d8cab22e1d1fa2"
-    },
-    {
-      "path": "ccf-rebuttal-writer/assets/templates/compact-response.tex",
-      "git_blob_sha": "efdb6a65fc7f3875695127c79c49e7716a59028a",
-      "canonical_lf_sha256": "867597712e30315fc4c9f2a8655da791d22e53d5b83760c8ad75c2e8fd44a2da"
-    },
-    {
-      "path": "ccf-rebuttal-writer/assets/templates/default-general-common-reviewer.tex",
-      "git_blob_sha": "dc3127510ce703fdc80e24ac6e0f2210fb86d2cc",
-      "canonical_lf_sha256": "0be4042d1d8e7da5fa050bbe3b605bda3acf5bed437ea169a8649fd3d62bf126"
-    },
-    {
-      "path": "ccf-rebuttal-writer/assets/templates/reviewer-specific-response.tex",
-      "git_blob_sha": "553399feee661437331202724c3845898691e667",
-      "canonical_lf_sha256": "8088ab526536d87a3a6d875a8af32d6baf0388fdbe2849aee5f014ab961ed233"
-    },
-    {
-      "path": "ccf-rebuttal-writer/references/response-checklists.md",
-      "git_blob_sha": "6877a3680ad1fccd75f4a734bf6c270d13c3e482",
-      "canonical_lf_sha256": "15a111fe8d45ab305a59436a91b5104e1b475241577ee14e0612788e0119d434"
-    },
-    {
-      "path": "ccf-rebuttal-writer/references/response-strategy.md",
-      "git_blob_sha": "12614240e6a2595429cad7f5d3fb4de2d521cafc",
-      "canonical_lf_sha256": "944a5cf864bdead852c61e1a594c8cec77353eb3750860615b828e5f97df3a70"
-    },
-    {
-      "path": "ccf-rebuttal-writer/references/revision-ledger.md",
-      "git_blob_sha": "ed64a6e8d92f192f436a7e7346251187d6563ab2",
-      "canonical_lf_sha256": "2464a35c56eac3ebac7a6433527e3e365a7a107365282701cda6be1ebf83bb83"
-    },
-    {
-      "path": "ccf-rebuttal-writer/references/tex-templates.md",
-      "git_blob_sha": "5081ba9e48215c75d83ec6e5b948688a7afdce66",
-      "canonical_lf_sha256": "b625fe0201020fc39656418adf09ff6e1f289363d1f121a6683b2e2ffa7c58c3"
-    },
-    {
-      "path": "ccf-skill-forger/SKILL.md",
-      "git_blob_sha": "dfd9bb16fde822f9f726506492242ef14f4fb726",
-      "canonical_lf_sha256": "5da8fbc592626bc2a2e240e97f9f53658b6f9abca30482f4a51f4dc7b2ef1b58"
-    },
-    {
-      "path": "ccf-skill-forger/agents/openai.yaml",
-      "git_blob_sha": "609306cfe60fc15799db6a1b99b82ecc581093d7",
-      "canonical_lf_sha256": "fb60b2c058e542345ae83ecbf88dddb1cc835a51d584300c5b245ad0e6fe5429"
-    },
-    {
-      "path": "ccf-skill-forger/references/design-checklist.md",
-      "git_blob_sha": "cd549b6fc1ea4a0660e16f4cf9caf7e8a70dc041",
-      "canonical_lf_sha256": "b4317d2ecd53113f69627952e16fc25762e167100d98ca01dcaa01f75e685a3f"
-    },
-    {
-      "path": "ccf-skill-forger/references/local-commands.md",
-      "git_blob_sha": "47230b517043fe9651e9483eece1cd5b3930778c",
-      "canonical_lf_sha256": "39dcdeb541fbdc144f6f7d4e6a5833966676bc4a5e4918e11c024da0de08bc55"
-    },
-    {
-      "path": "ccf-skill-forger/references/patterns.md",
-      "git_blob_sha": "87d35d694f325f2b643d107f767d85af620f8e0d",
-      "canonical_lf_sha256": "8098f3b40ee8a436629aef1eab284fecc23cac473dbdb4d9e639cc5138130aa2"
-    },
-    {
-      "path": "ccf-skill-forger/references/svg-style-guide.md",
-      "git_blob_sha": "230ff8cf1e68fbe4b44cc884973bfc6c08a87caa",
-      "canonical_lf_sha256": "7e87ec30b523df693c63d3f13a28f808cfbbfd2b57dc4a4763516017d0d459c0"
-    },
-    {
-      "path": "ccf-submission-checker/SKILL.md",
-      "git_blob_sha": "41f367c3253d2b92c12b95bfe56699e57df37b0e",
-      "canonical_lf_sha256": "3a7a00a17c595bfd96cba427feacdeceb57dafb1ae7d17ec5e8e11731ea6d3ab"
-    },
-    {
-      "path": "ccf-submission-checker/agents/openai.yaml",
-      "git_blob_sha": "4d4c922d136491f5980504a1254516307adc6598",
-      "canonical_lf_sha256": "9dfad95185c4d04e68b735c0367b56340cc6947d47ee7fcb33417854322dcb33"
-    },
-    {
-      "path": "ccf-visual-composer/SKILL.md",
-      "git_blob_sha": "9235fb518025420ad6dcbc9b965e35c5c605d065",
-      "canonical_lf_sha256": "3b4c5c2f338aa22be322d5f16eee47d17481a296b34f43ac4bb48124ab987b0e"
-    },
-    {
-      "path": "ccf-visual-composer/agents/openai.yaml",
-      "git_blob_sha": "4e9bd6f77f436f407a361098660148267dfead82",
-      "canonical_lf_sha256": "9e2d5ee435ccc1379a372d5e16d7d444f22ee589499143758b1df8a149708838"
-    },
-    {
-      "path": "ccf-visual-composer/references/adaptive-architecture-style.md",
-      "git_blob_sha": "7ba5d5a2acc5121056e5b2ba8eb4780d62065c53",
-      "canonical_lf_sha256": "3a443602f845617b37288bcaaebc38eba5068c12644161c82a2517c5de215a48"
-    },
-    {
-      "path": "ccf-visual-composer/references/architecture-diagram-generation.md",
-      "git_blob_sha": "11a4b917b97170afd6b9ed8e159c2f350c08a0b3",
-      "canonical_lf_sha256": "f02e53d7c744d64725dff783cd4aaeea820b7eaf8eb2909f6cc83ec01332e773"
-    },
-    {
-      "path": "ccf-visual-composer/references/editable-pptx.md",
-      "git_blob_sha": "1fa89d2e31fc98bf8bf436d7ee98beb426fea572",
-      "canonical_lf_sha256": "fdcb12c8959b5c2f3a16cbc230120d1bf3adcd630922862142c7ec257a8c591e"
-    },
-    {
-      "path": "ccf-visual-composer/references/figure-table-layout.md",
-      "git_blob_sha": "beeedff32701899de405c055e4c3d6969091fe7c",
-      "canonical_lf_sha256": "5b009765fc5c87fd8d470e6008028e23310a4afca4e47d0d3b1849bee84ea090"
-    },
-    {
-      "path": "ccf-visual-composer/references/icon-system.md",
-      "git_blob_sha": "86e5ced8d6c124f855e55ecb66eae483f968006c",
-      "canonical_lf_sha256": "c697b771a4aa679f3e9898192381fd9db645784c8c587b625f3ed4cd87960c6a"
-    },
-    {
-      "path": "ccf-visual-composer/references/palette-and-accessibility.md",
-      "git_blob_sha": "d58623548ac92cbb24dd0c44e5ef039607cc11ab",
-      "canonical_lf_sha256": "c881f3303feaf90c27cccfd3c76e3744204e5df64f8a22b62a32c0fd14d4b931"
-    },
-    {
-      "path": "ccf-visual-composer/references/paper-vs-presentation-diagrams.md",
-      "git_blob_sha": "87c4026a1dd5eb2fe4a61d42478efa1f6a46d140",
-      "canonical_lf_sha256": "a02cfe2e8520bf2717ccd78a7b50355d7e0e4678d5094d5a7f708b378008664a"
-    },
-    {
-      "path": "ccf-visual-composer/references/plot-inspiration-map.md",
-      "git_blob_sha": "79a05bf2019c7910cfabeb0d4af4796329d9573f",
-      "canonical_lf_sha256": "759b1c665c160625a175782b837d9598d5adeafc2a595a42b9b55641feead09c"
-    },
-    {
-      "path": "ccf-visual-composer/references/python-plot-recipes.md",
-      "git_blob_sha": "2011d45abbdfd1eaf35796c2fba0da4354f3c5a8",
-      "canonical_lf_sha256": "7d15e30b1951de18a55d728d1e1c025d66a0666c0065f8cd80b438939092974e"
-    },
-    {
-      "path": "ccf-visual-composer/references/reference-layout-blueprint.md",
-      "git_blob_sha": "2018f76e3331fe70447caeef1fbc783e2cae03d1",
-      "canonical_lf_sha256": "541cd6b102a6daf26771976dc6163f4f5989093ec5a94322e55863df0ba06d26"
-    },
-    {
-      "path": "ccf-visual-composer/references/render-qa.md",
-      "git_blob_sha": "b0b3072e82e1cd80742382a55d74733f354da315",
-      "canonical_lf_sha256": "c7e334a96f11bdf3fa412cc1b4a187e35fc6a22fd8422d048fa02a29339cc8fe"
-    },
-    {
-      "path": "ccf-visual-composer/references/visual-contract.md",
-      "git_blob_sha": "94f823a8083d63cc9610f7cf4f8b32bbe1d0aa68",
-      "canonical_lf_sha256": "191a86ac644901ada027f7129180a9dfa23c21b36ad6ca7881a372b9087732f4"
-    },
-    {
-      "path": "ccf-visual-composer/resources/python/ccfa_plot_recipes.py",
-      "git_blob_sha": "0c8309bab0bd136198699b9bd70de8a6d6e61d8d",
-      "canonical_lf_sha256": "abdcd20e404aa9faa13bb0c0b9ce24aced78ff3b0420d93d3cae1be7edcd98f5"
-    },
-    {
-      "path": "ccf-visual-composer/scripts/test_plot_recipes.py",
-      "git_blob_sha": "a5b50601b4cb270bb2ded12bc5d9579da0d14500",
-      "canonical_lf_sha256": "af817add41a40ee0ff7d0aa2f92d9572e08a832313a34120ff3209d8829e35e2"
-    },
-    {
-      "path": "LICENSE",
-      "git_blob_sha": "53026953e24de40eaea86840bca4abe32501dbad",
-      "canonical_lf_sha256": "1ac138d752fc345d61c5790df57caed3487e4d66d59879d6bd60272765d087d2"
-    },
-    {
-      "path": "README.md",
-      "git_blob_sha": "2a55ec4c41f8155b41f62be74776617d12f4807a",
-      "canonical_lf_sha256": "5abd511d5c96fcb4734c57b0b9fea8866714b6161c9ccc29eaafcb22370ea62f"
-    },
-    {
-      "path": "ccf-latex-templates/README.md",
-      "git_blob_sha": "e085ae8fdb2a34e5a1400ba8dcb1b30a473b4511",
-      "canonical_lf_sha256": "22e0b5dc32557e1902e661c0f7d1b00325a1e9cc7c63c69da53b15c02c67da66"
-    }
-  ],
   "resources": [
     {
       "path": ".claude-plugin/plugin.json",
@@ -1508,7 +41,8 @@
     {
       "path": "LICENSE",
       "git_blob_sha": "53026953e24de40eaea86840bca4abe32501dbad",
-      "size": 1067
+      "size": 1067,
+      "canonical_lf_sha256": "1ac138d752fc345d61c5790df57caed3487e4d66d59879d6bd60272765d087d2"
     },
     {
       "path": "README.en.md",
@@ -1518,7 +52,8 @@
     {
       "path": "README.md",
       "git_blob_sha": "2a55ec4c41f8155b41f62be74776617d12f4807a",
-      "size": 37897
+      "size": 37897,
+      "canonical_lf_sha256": "5abd511d5c96fcb4734c57b0b9fea8866714b6161c9ccc29eaafcb22370ea62f"
     },
     {
       "path": "README.zh-CN.md",
@@ -1793,267 +328,320 @@
     {
       "path": "ccf-common/SKILL.md",
       "git_blob_sha": "73555f03410ba4dd6ced0744bc37b034c17351e8",
-      "size": 9682
+      "size": 9682,
+      "canonical_lf_sha256": "95ab8a7b57e5e1f7d99c4c39459590d728e9eaaccd253bf8b0c273d82b57ad31"
     },
     {
       "path": "ccf-common/agents/openai.yaml",
       "git_blob_sha": "ec18a91b41f90527d1a9643e2c18624564dbecdd",
-      "size": 446
+      "size": 446,
+      "canonical_lf_sha256": "56c8a6035cd2ab2da450839ebb34b0fc1c7cd1ab3a5be5c600a990e5934cdd4f"
     },
     {
       "path": "ccf-common/assets/configurator/app.js",
       "git_blob_sha": "85fd0ab8f1daedae5bd61877d607af8ac2be0ce5",
-      "size": 56466
+      "size": 56466,
+      "canonical_lf_sha256": "dbae303103a82e23195401ddc6b777c66a2721bbfb738a30dd7006ed2d48d9d8"
     },
     {
       "path": "ccf-common/assets/configurator/index.html",
       "git_blob_sha": "78acbc7f4566572f63efeb0336b0548eeb35c060",
-      "size": 9480
+      "size": 9480,
+      "canonical_lf_sha256": "75a33cd940f579a7c38d9c3bcbc77a97356d4b71131e9f926d51fedfa3df6d0b"
     },
     {
       "path": "ccf-common/assets/configurator/styles.css",
       "git_blob_sha": "68cae607ec39c3f68673820de9d0b02107a53bc7",
-      "size": 26131
+      "size": 26131,
+      "canonical_lf_sha256": "9a45c6e4628e49684b6c6846be6fd685be5b40f78fa75666d6254bfd098be384"
     },
     {
       "path": "ccf-common/references/artifact-contracts.md",
       "git_blob_sha": "30cb30fde752703b5cebf073ea51f31e1fa3ab0a",
-      "size": 20180
+      "size": 20180,
+      "canonical_lf_sha256": "4423361dd6123df93012759302c71ac01bd1ee8e88ec783750100b091655776d"
     },
     {
       "path": "ccf-common/references/ccf-a-venue-map.md",
       "git_blob_sha": "65b524ea3331af71e0ee1489e227f5ad5eeb04ce",
-      "size": 1457
+      "size": 1457,
+      "canonical_lf_sha256": "ef97fdb224692b23ba6a11279b2a931fb072ef79a44d6fdd0813c0ff15224458"
     },
     {
       "path": "ccf-common/references/ccfa-yaml-contract.md",
       "git_blob_sha": "b31319d7fe094eb8658f454a78f5edb2762135e9",
-      "size": 2413
+      "size": 2413,
+      "canonical_lf_sha256": "45a9d42decf6ea8b921a2656a4fef3485e30f9a2bd1a3b12924890dab358e17c"
     },
     {
       "path": "ccf-common/references/continuity.md",
       "git_blob_sha": "b67147c008ff25ab559be03e75bb8cb08ff17fe9",
-      "size": 15201
+      "size": 15201,
+      "canonical_lf_sha256": "a08448d92e55f736f909f847282853d5045e96ee315f7226eb27be0a2f96617b"
     },
     {
       "path": "ccf-common/references/handoff-modes.md",
       "git_blob_sha": "5c5e49743495b79e88da3b362c1a7434f8dadb24",
-      "size": 16278
+      "size": 16278,
+      "canonical_lf_sha256": "1846bd84fab1a19e5baea090de612b7c03def8d34ba73c8263bce82c5c628127"
     },
     {
       "path": "ccf-common/references/preferences.md",
       "git_blob_sha": "4a77dc4f7daadcc42842313af63843df2ace77f0",
-      "size": 9816
+      "size": 9816,
+      "canonical_lf_sha256": "ba691abebeaf13906ba28d7e05dcb41746915462eaf9101b274760a4b2ff9750"
     },
     {
       "path": "ccf-common/references/privacy-and-evidence.md",
       "git_blob_sha": "417b1d5d17a3cea275427db912a3ad3d93f93f4c",
-      "size": 5317
+      "size": 5317,
+      "canonical_lf_sha256": "fcc23f10953f586e5dea7f4f65304085606f88bd04c940a095ca79382253f44e"
     },
     {
       "path": "ccf-common/references/review-output-standards.md",
       "git_blob_sha": "7822935cd0fc55037e06fc8b68aa66e3a1001e01",
-      "size": 8446
+      "size": 8446,
+      "canonical_lf_sha256": "ab87d79b6eee03bebf4c5f0bb1db305fca1e7aaabd144d4798cf181e3064f077"
     },
     {
       "path": "ccf-common/references/routing.md",
       "git_blob_sha": "c81741bea5c8ba5441a2b4f6e894c3f80611e9b1",
-      "size": 19645
+      "size": 19645,
+      "canonical_lf_sha256": "d2bef650c587f66621de4e5cc62badef3a71493b5eb628fb55e5e58a88df859b"
     },
     {
       "path": "ccf-common/references/skill-trigger-registry.yaml",
       "git_blob_sha": "2b6557e14c1b1f4851a6f5b4cc671c520ab488a7",
-      "size": 11584
+      "size": 11584,
+      "canonical_lf_sha256": "b1406c8d8b2c8931fdf09ad984c4a8f067f4ae5d2870752201e8802e3c5203b0"
     },
     {
       "path": "ccf-common/references/source-registry.yaml",
       "git_blob_sha": "663a438c4063c717154410f113a20d412c4e5aee",
-      "size": 68521
+      "size": 68521,
+      "canonical_lf_sha256": "462141c3a77d229dd63d71f72a20b5320a633c44f63bb73386d9b55069af9890"
     },
     {
       "path": "ccf-common/references/task-modes.md",
       "git_blob_sha": "cd45969db23a0d0600ab8581a19bfafd0bfb8c1f",
-      "size": 16706
+      "size": 16706,
+      "canonical_lf_sha256": "2c37c50d0530d6dc3173f688110856cf318c9937dcc2ad6adc1825f19e91b48a"
     },
     {
       "path": "ccf-common/scripts/check_markdown_links.py",
       "git_blob_sha": "900f0af58e22ef8a36e05bb5c5543cdff257586c",
-      "size": 3558
+      "size": 3558,
+      "canonical_lf_sha256": "0b1908f2099638a5a9e376a53e2b8eee0e4909f37811039c4b8c4f5920b4fb90"
     },
     {
       "path": "ccf-common/scripts/check_path_privacy.py",
       "git_blob_sha": "9baa2eaa389c84c8bfe2011140e4f348da8110df",
-      "size": 5231
+      "size": 5231,
+      "canonical_lf_sha256": "f6afd319b355a9d271331de0f668250dde72782d8b1bcba4a92a5944ddaecb86"
     },
     {
       "path": "ccf-common/scripts/check_sources.py",
       "git_blob_sha": "f90903faa168f0744e8f7bee8ecbd04f5499c45c",
-      "size": 4648
+      "size": 4648,
+      "canonical_lf_sha256": "fb4a01dca3937794104ae1531182969bc9a3cc3a722c86a2691e29de631e5949"
     },
     {
       "path": "ccf-common/scripts/check_v04.py",
       "git_blob_sha": "5d4808078a5572f7ea0cb66440667f9788e32385",
-      "size": 59756
+      "size": 59756,
+      "canonical_lf_sha256": "7cf9a4d24bb0c6d9575fdec36d8ce4d77d4715615847e5a8cd1c4073626385a8"
     },
     {
       "path": "ccf-common/scripts/continuity.py",
       "git_blob_sha": "6dcfc065062791d4f85c45121e974d727ebfc448",
-      "size": 11255
+      "size": 11255,
+      "canonical_lf_sha256": "b0197d4d2a8865e6380f56c928b38ec355032242e22083649bbc4a7048f5f2f8"
     },
     {
       "path": "ccf-common/scripts/preferences.py",
       "git_blob_sha": "9c15460350f6bb1d833fe61bd9580bf37a3e156b",
-      "size": 19761
+      "size": 19761,
+      "canonical_lf_sha256": "41b2f6f101fe6a7fe3d5067583025f074f7214e620e58527f32f322ec949dddc"
     },
     {
       "path": "ccf-common/scripts/test_configurator.js",
       "git_blob_sha": "4c020a0360390b30b5293ec1276ba7e739982edf",
-      "size": 17769
+      "size": 17769,
+      "canonical_lf_sha256": "3bfbe38ffa67ce7657b7dacd6795beffdb2ec65596fbd96ab27e28d424f9e055"
     },
     {
       "path": "ccf-common/scripts/test_continuity.py",
       "git_blob_sha": "39e7a7903e45d45d2c15a05668111abd8bdcc68d",
-      "size": 13637
+      "size": 13637,
+      "canonical_lf_sha256": "f46ff917c190604b43b2392780f6a8f3a836d4cc6449fdaf0986eafe363abee5"
     },
     {
       "path": "ccf-common/scripts/test_preferences.py",
       "git_blob_sha": "b3de0b0db013076e1b02b68662ecb4db137b3d70",
-      "size": 18771
+      "size": 18771,
+      "canonical_lf_sha256": "514804ff789b883991a71a5b1818c59baa78663b4d2925b98a798248b9d54f57"
     },
     {
       "path": "ccf-experiment-designer/SKILL.md",
       "git_blob_sha": "dd1994c3d4acd9854999a616fe35a09e9e82a0ce",
-      "size": 10418
+      "size": 10418,
+      "canonical_lf_sha256": "c895032dc23dc4334404adb672d91a07e32b57cfe30819d48a7758d9cbff0bb3"
     },
     {
       "path": "ccf-experiment-designer/agents/openai.yaml",
       "git_blob_sha": "afc35ecb287e1089848f34818e06b734ce58dde9",
-      "size": 727
+      "size": 727,
+      "canonical_lf_sha256": "9e6c51bb4bb4493a6269528ac030ba59f5dc2b299137ddd4b441b8ad92616c7b"
     },
     {
       "path": "ccf-experiment-designer/references/evidence-design.md",
       "git_blob_sha": "6b85566b04e34df8ed2ad432d0b3efee8feb7480",
-      "size": 9794
+      "size": 9794,
+      "canonical_lf_sha256": "c4bba38c0b331f46fbf1631c6c2a3308db0a8d37681920d32470c71925f9dc45"
     },
     {
       "path": "ccf-experiment-designer/references/result-templates.md",
       "git_blob_sha": "485a21003c3871623b7ba607d067c61d611cec89",
-      "size": 2909
+      "size": 2909,
+      "canonical_lf_sha256": "67d95ab6b96189a5ef175af34a612da142b93cf11bd615ddbd1127da858b8895"
     },
     {
       "path": "ccf-humanization/SKILL.md",
       "git_blob_sha": "34cc0f8eacb0a5b88c47e4dfcc0980adfa999224",
-      "size": 8875
+      "size": 8875,
+      "canonical_lf_sha256": "4050e2cf954e350d02cde5210ba4313ccfbd1edc7ccef751d4380714a3e7dfd1"
     },
     {
       "path": "ccf-humanization/agents/openai.yaml",
       "git_blob_sha": "42cfc5ffedd95c3b4087758cd9799d27f6dbcb1c",
-      "size": 500
+      "size": 500,
+      "canonical_lf_sha256": "95f862018d2da155ea012cefab7fd7693b7e1aa1e35e358f77291af8658ce4a3"
     },
     {
       "path": "ccf-humanization/references/experiment-discipline.md",
       "git_blob_sha": "ac471e5d4451492a6e620d00a2397371b498aebe",
-      "size": 4847
+      "size": 4847,
+      "canonical_lf_sha256": "bbd23d60149bd96e5aa37ba3fc25ca5dc1c4344f4b12a226e056244f227c8f28"
     },
     {
       "path": "ccf-humanization/references/humanization-policy.md",
       "git_blob_sha": "131a23791ee835bc114762fae6eb45551bf73e09",
-      "size": 17790
+      "size": 17790,
+      "canonical_lf_sha256": "14bd93bdb17c9d100130641e40bb8c2f4c2177e2fd168758f642c70f7ce23091"
     },
     {
       "path": "ccf-idea-optimizer/SKILL.md",
       "git_blob_sha": "520af95634c5aa7993d4e6448c75ed2d3fde23ee",
-      "size": 8664
+      "size": 8664,
+      "canonical_lf_sha256": "d646f9c236520b8d721b2986faa36fb5312b0b6f95edb0d589fbccc89dd23694"
     },
     {
       "path": "ccf-idea-optimizer/agents/openai.yaml",
       "git_blob_sha": "10aa3744ff69e36c7a5c2ec0cb4e2a599c2637f2",
-      "size": 514
+      "size": 514,
+      "canonical_lf_sha256": "5e52cf0edbe25c399ca46f7860a4f508fcfca3ce8c4c56b52eaba01702043261"
     },
     {
       "path": "ccf-idea-optimizer/references/experiment-design.md",
       "git_blob_sha": "1907e67b0226062aa2617e4b111454f64ddeb48c",
-      "size": 4649
+      "size": 4649,
+      "canonical_lf_sha256": "edf504c33d51fd5516a05d363d25e6d13779e2963f36b85e6f3b38e3ef1bfd82"
     },
     {
       "path": "ccf-idea-optimizer/references/frontier-ideation.md",
       "git_blob_sha": "abb1ad6bd7f506406dd94c0867e5c1f669db90b3",
-      "size": 5576
+      "size": 5576,
+      "canonical_lf_sha256": "751cb2421ad69418b08c8ef1544f12c191af0e96883af40814e9a9984580134e"
     },
     {
       "path": "ccf-idea-optimizer/references/idea-intake.md",
       "git_blob_sha": "06e48e26c3beede910203777159f08a15b77934c",
-      "size": 3537
+      "size": 3537,
+      "canonical_lf_sha256": "185896d213beeabcea4b9bf025bb3d8232b1dbdab2b433f563c0d945eecc03d7"
     },
     {
       "path": "ccf-idea-optimizer/references/literature-grounded-evolution.md",
       "git_blob_sha": "5353e408b7a69a2d0b2c8df60df9f7c5e31466f4",
-      "size": 7405
+      "size": 7405,
+      "canonical_lf_sha256": "1cf8e71acb3c7d2a19b824a459f2c4ca565cc88e16fe140df2e1cd79d39dde65"
     },
     {
       "path": "ccf-idea-optimizer/references/problem-method-blueprint.md",
       "git_blob_sha": "9bf40e59677f7b8171f5399deb9afc3b73697d3d",
-      "size": 6029
+      "size": 6029,
+      "canonical_lf_sha256": "e7c7453ce537e9275eecb4b5768a845dda2f4b8316211c9b9451833e124eeff2"
     },
     {
       "path": "ccf-idea-optimizer/references/research-taste.md",
       "git_blob_sha": "9989181d8b10d7199b03a554cbbefa0bcfa5c38a",
-      "size": 4149
+      "size": 4149,
+      "canonical_lf_sha256": "0a87ddb10e844ed0cd4bc49beb8dd4005fa079373d998e9321d3e891ec2a31fa"
     },
     {
       "path": "ccf-idea-optimizer/references/source-notes.md",
       "git_blob_sha": "5c2bd0523ccf81ec8243baf59347719ee071af7f",
-      "size": 1523
+      "size": 1523,
+      "canonical_lf_sha256": "0eafd12e51ebc8cc3db9c7eadf3ff9d80c99baf2c59146f5f15bcc75db659cf7"
     },
     {
       "path": "ccf-idea-optimizer/references/venue-idea-adapters.md",
       "git_blob_sha": "be2984a64982d7eb9ea07c4585ebd4eddede92fa",
-      "size": 2856
+      "size": 2856,
+      "canonical_lf_sha256": "fc79a7ec82c7a5c6fd2c1df62cee8ee783e41db8cb6ce6931cb9f5f395696fe6"
     },
     {
       "path": "ccf-idea-reviewer/SKILL.md",
       "git_blob_sha": "c606087c47eb87d502f56b6ef734644d8ac4aba7",
-      "size": 8203
+      "size": 8203,
+      "canonical_lf_sha256": "baa0359fd70cdaade00103bef091cefd1a3fedbd4b7949baee3fd6635a4f232c"
     },
     {
       "path": "ccf-idea-reviewer/agents/openai.yaml",
       "git_blob_sha": "5efc2d883607cffa473e24f19291bee36b3b1511",
-      "size": 390
+      "size": 390,
+      "canonical_lf_sha256": "7df9576a0e908149e89eeb6aba13fdabd99f5db7b2d4589089fbd2002b8d465f"
     },
     {
       "path": "ccf-idea-reviewer/references/calibration.md",
       "git_blob_sha": "68a3400032237a3d11b7c22b80ca4ac3baa3a6ef",
-      "size": 3034
+      "size": 3034,
+      "canonical_lf_sha256": "011326dea0ffaca1b51789607ee80d7645c92b1dc17baa48ea32afa5a6d6df29"
     },
     {
       "path": "ccf-idea-reviewer/references/expert-panel.md",
       "git_blob_sha": "0cdd1142c6168ea96cc1cb2c1922010e3aa5a93b",
-      "size": 1912
+      "size": 1912,
+      "canonical_lf_sha256": "641f2359a3d6749a2dea6a0a70bf17f3d9501d7666fd68ba08416c4b66ab0581"
     },
     {
       "path": "ccf-idea-reviewer/references/rubric.md",
       "git_blob_sha": "f5a3efed757eb7b9a1ece0c00a8b9cebfb582b9d",
-      "size": 4010
+      "size": 4010,
+      "canonical_lf_sha256": "7adb6ae28f122dc8da04aca3b8cf57758eee4bdcec80e5712af0dbf4639e2269"
     },
     {
       "path": "ccf-idea-reviewer/references/source-notes.md",
       "git_blob_sha": "9c8794f1b7a5988c3ab39086365d351d021c8e2f",
-      "size": 2328
+      "size": 2328,
+      "canonical_lf_sha256": "b4be20f07d0c034c603d0c3636aeac3e35605cf9a6d0898c738f25e5ab0074d3"
     },
     {
       "path": "ccf-idea-reviewer/references/strict-idea-review.md",
       "git_blob_sha": "c91ca3f05f72ffdeee2a065d93708e7ec869e1d9",
-      "size": 8625
+      "size": 8625,
+      "canonical_lf_sha256": "67e43a72375c82bb5b0809eac622651216ad2a5fd547d538e9fb507f62154394"
     },
     {
       "path": "ccf-integrity-auditor/SKILL.md",
       "git_blob_sha": "8d60a2aadd0bafee59aa1866ca928285e0c3b222",
-      "size": 4677
+      "size": 4677,
+      "canonical_lf_sha256": "fc7e557cd4f6fe163e7a12db5fde27cd323e7277a9a5b0ffe213e77c8c8ad82f"
     },
     {
       "path": "ccf-integrity-auditor/agents/openai.yaml",
       "git_blob_sha": "d6425136937d84f583b5b35db00d40e693023d54",
-      "size": 448
+      "size": 448,
+      "canonical_lf_sha256": "1a785528d3e8e616e5dc25d99e8c52e9aa33063748d16570bc6376951bd21fc7"
     },
     {
       "path": "ccf-latex-templates/AAAI/aaai2026.bst",
@@ -5078,7 +3666,8 @@
     {
       "path": "ccf-latex-templates/README.md",
       "git_blob_sha": "e085ae8fdb2a34e5a1400ba8dcb1b30a473b4511",
-      "size": 9310
+      "size": 9310,
+      "canonical_lf_sha256": "22e0b5dc32557e1902e661c0f7d1b00325a1e9cc7c63c69da53b15c02c67da66"
     },
     {
       "path": "ccf-latex-templates/RECOMB/llncs.cls",
@@ -6353,152 +4942,182 @@
     {
       "path": "ccf-literature-monitor/SKILL.md",
       "git_blob_sha": "7370991f2eced0484669eb635b3feb0a521ae587",
-      "size": 6315
+      "size": 6315,
+      "canonical_lf_sha256": "b96a9952d9314fd776f97d72456f23d7f90a86061583a22ae682ff1b1138231c"
     },
     {
       "path": "ccf-literature-monitor/agents/openai.yaml",
       "git_blob_sha": "a4d0316dc70f4e486b26f8eb538e00d39a262bcf",
-      "size": 474
+      "size": 474,
+      "canonical_lf_sha256": "338dc86295350f8f59129583a0950fdebfebbf1ce89590a7ad387a2590bffc99"
     },
     {
       "path": "ccf-literature-monitor/references/monitoring-workflow.md",
       "git_blob_sha": "e1e854415f860c52bdb0ea546698de6b65368d87",
-      "size": 4220
+      "size": 4220,
+      "canonical_lf_sha256": "b4f42db63be69c8269350df1c7218463b9ab53f400fd51c650f97ff71230c7e4"
     },
     {
       "path": "ccf-literature-monitor/references/report-template.md",
       "git_blob_sha": "3bd158ef3adddd26ab07a82bdb6fefc9ab7175d5",
-      "size": 3498
+      "size": 3498,
+      "canonical_lf_sha256": "20d0b01d6d1480db885d5058846530881d02f6af4796151f3ad6ff8341711f92"
     },
     {
       "path": "ccf-literature-searcher/SKILL.md",
       "git_blob_sha": "b2ec8b5108ef8903fa7d3afc7a02cf083b2354bc",
-      "size": 12289
+      "size": 12289,
+      "canonical_lf_sha256": "943f955efde445bd38f6a7555d204ba660ee440ea0e06d8da637fc26d6aea16d"
     },
     {
       "path": "ccf-literature-searcher/agents/openai.yaml",
       "git_blob_sha": "eef9b7a6e135c24466c60d99c021f2cb90b21792",
-      "size": 504
+      "size": 504,
+      "canonical_lf_sha256": "f866473c93ae37a85e87c2c741ad80924981d1c738aaab9144c145e11c905b82"
     },
     {
       "path": "ccf-literature-searcher/references/report-template.md",
       "git_blob_sha": "4a76beb88ecbf2d556dfc8a75b14e3729a4f006d",
-      "size": 4350
+      "size": 4350,
+      "canonical_lf_sha256": "3a6558695b749db760cdff128168c630e228aafdf6b0357ad9737dd6507a62a8"
     },
     {
       "path": "ccf-literature-searcher/references/search-and-scoring.md",
       "git_blob_sha": "d0327c8e6d5c5e9d4684fa6742ed52c255d677c6",
-      "size": 7595
+      "size": 7595,
+      "canonical_lf_sha256": "76319b00217b1b8c3096c88ec57754ce3800136123ad4882800064885d05a491"
     },
     {
       "path": "ccf-paper-reviewer/SKILL.md",
       "git_blob_sha": "de03c5c8160aa0150bd68a5e7f3af22676251f48",
-      "size": 12683
+      "size": 12683,
+      "canonical_lf_sha256": "33982820ee09fad5434ff9795f9eae8a1f313b02f3ba58b898f1c15305066dac"
     },
     {
       "path": "ccf-paper-reviewer/agents/openai.yaml",
       "git_blob_sha": "01cc78cbc26eb3a7c21f50f56a471fbbbbf454ab",
-      "size": 458
+      "size": 458,
+      "canonical_lf_sha256": "a34800c04de1ec825a61a43a5fab427965b9c3720b1517d9ba5082e2b4659c23"
     },
     {
       "path": "ccf-paper-reviewer/references/calibration-and-rank.md",
       "git_blob_sha": "426d95e3e7047a9e2f190b8c77ea5b399cf020ee",
-      "size": 10375
+      "size": 10375,
+      "canonical_lf_sha256": "f012e1d26abe1f65530161eda1275d7d9f42a27a674b10512a1d55b4fb658523"
     },
     {
       "path": "ccf-paper-reviewer/references/desk-checks.md",
       "git_blob_sha": "5d05461545f96b306f13a3a867e6a21e7a00cbae",
-      "size": 1836
+      "size": 1836,
+      "canonical_lf_sha256": "fbb007d41cf3e2d008c66f954c1378e76ae214f08f5a1729d18fc1a5baf50a65"
     },
     {
       "path": "ccf-paper-reviewer/references/fixed-output-format.md",
       "git_blob_sha": "5352703835d80a22365ff2ff66300d926e07565b",
-      "size": 14936
+      "size": 14936,
+      "canonical_lf_sha256": "d2be1a59fee9d812ef2bcc65ae568131b09e7cafbfd09d9c372beb5ed9bf848f"
     },
     {
       "path": "ccf-paper-reviewer/references/review-workflow.md",
       "git_blob_sha": "81c05fba3468f6de91a425cf6a39f05a1cece738",
-      "size": 4437
+      "size": 4437,
+      "canonical_lf_sha256": "44ab85b117fae9b966332c2c91ea12ae620c333cf573a14d3fcae5f23f915806"
     },
     {
       "path": "ccf-paper-reviewer/references/reviewer-panel.md",
       "git_blob_sha": "6aff06b2e490b4b6c0d89373865c1348cd109b15",
-      "size": 3782
+      "size": 3782,
+      "canonical_lf_sha256": "6d4c58337eedaaae10fec9b30b394ed407729909f12c099280e6b8e66d77ebab"
     },
     {
       "path": "ccf-paper-reviewer/references/source-notes.md",
       "git_blob_sha": "c721dc072381500bb0fa10d55e7be3032b6d3ff1",
-      "size": 2179
+      "size": 2179,
+      "canonical_lf_sha256": "d1586a88c646f5956911bfaa7d7454a00344721a001823580aa758c94e88ddb9"
     },
     {
       "path": "ccf-paper-reviewer/references/universal-review-rubric.md",
       "git_blob_sha": "6be5ad03ecfcf9d35bfab7e649f1ddf1e1a918bd",
-      "size": 3284
+      "size": 3284,
+      "canonical_lf_sha256": "f447c8295e427fd91a1586701dd6816147e6cead1d2cfb3bd690d11d594009f9"
     },
     {
       "path": "ccf-paper-reviewer/references/venue-review-styles.md",
       "git_blob_sha": "4024834116fd6d3f9858d86bcb0b5a4364146f64",
-      "size": 9255
+      "size": 9255,
+      "canonical_lf_sha256": "d1b54c084c50fd1f772123682e022afb9040d215233e5be8c35eb05d5359e379"
     },
     {
       "path": "ccf-paper-reviewer/references/version-comparison.md",
       "git_blob_sha": "1a37999629cda37e92d93cdf345d77e5ebc6f5fe",
-      "size": 9555
+      "size": 9555,
+      "canonical_lf_sha256": "a15a37c46eb36608ca4758a2342683f065d5aea5c8e84b74abc00cd4a424e049"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/latex-format-audit.md",
       "git_blob_sha": "6643eae8ab21694a2c80656acb3826493762cf52",
-      "size": 2752
+      "size": 2752,
+      "canonical_lf_sha256": "65e2147832c5b93d4cacec4b21410bc46467a8f231fd36ce5744208908d6790c"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/paragraph-review-protocol.md",
       "git_blob_sha": "4a1025c168c2ccf0fc79beeb60bf1e5c0c168958",
-      "size": 4612
+      "size": 4612,
+      "canonical_lf_sha256": "f02f1ce88df77563b6be439aaf1ee9c2b931db45abd4123ed47e03743e3a11c8"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/review-checklists.md",
       "git_blob_sha": "1f9c796598086fa9b6ba5e36733929321ee5aa6e",
-      "size": 6093
+      "size": 6093,
+      "canonical_lf_sha256": "515f76a911baa85d912a45aba542c938b52c0e761e555276fdcf2f084aca42a8"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/revision-actions.md",
       "git_blob_sha": "db7f293aff205d0b0bdc212e1b9d4a584f42ab1f",
-      "size": 11144
+      "size": 11144,
+      "canonical_lf_sha256": "2d6f5692fba7457663c91c356505e83327f626d28a0e7236a85175d124f6561c"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/source-notes.md",
       "git_blob_sha": "ab1db3cb24e512c21871018bd4c987a57d932932",
-      "size": 1397
+      "size": 1397,
+      "canonical_lf_sha256": "e3951c2941580341993a83debeb5a81f120a32eba22c954814edcad0030130a1"
     },
     {
       "path": "ccf-paper-reviewer/references/writing-review/writing-review-rubric.md",
       "git_blob_sha": "0f00d01d319a5821e103207646038754d47577f7",
-      "size": 7941
+      "size": 7941,
+      "canonical_lf_sha256": "089498a80d5799e24f4b969fd5e42bcf098320186c4974d6f5045da3d39964f6"
     },
     {
       "path": "ccf-paper-reviewer/scripts/validate_version_comparison.py",
       "git_blob_sha": "cf8f103da6f6cef6aa8fa601c81b888410254907",
-      "size": 26161
+      "size": 26161,
+      "canonical_lf_sha256": "501875b8be355936a70f3a16fb8751b29fac45c55c5192d9c3035f1822dbdd74"
     },
     {
       "path": "ccf-paper-to-exemplar/SKILL.md",
       "git_blob_sha": "5276a6f6a5327baaacab6df40b8c39b2357beeb6",
-      "size": 6220
+      "size": 6220,
+      "canonical_lf_sha256": "7192039ead4f227f25fe933a7781774cfa42f29dec26383344f55bd9110fbce2"
     },
     {
       "path": "ccf-paper-to-exemplar/scripts/convert.py",
       "git_blob_sha": "a82d01bf34e6264e2c19859d4cf0398fe6b51ae2",
-      "size": 8678
+      "size": 8678,
+      "canonical_lf_sha256": "22aaf18b7143b00576ea25ea1a294fa06ab35084a065e83f5daab129a2237a69"
     },
     {
       "path": "ccf-paper-writer/SKILL.md",
       "git_blob_sha": "e09aac63737f0198098d34b8af794fda1eeff557",
-      "size": 12648
+      "size": 12648,
+      "canonical_lf_sha256": "63b5553313a2e89d1f7a0f693824963a20002d9263f8ddc0629091c2785f8f63"
     },
     {
       "path": "ccf-paper-writer/agents/openai.yaml",
       "git_blob_sha": "3cc9f7a43c3b9b08a0370bad17a6cbb6c71ad382",
-      "size": 586
+      "size": 586,
+      "canonical_lf_sha256": "b83dcbf20c7d1104fcf40d30c950e7f92f0d4374567ca3f6519a7b8e8817133a"
     },
     {
       "path": "ccf-paper-writer/paper_ref/LLaVA-4D.pdf",
@@ -6518,187 +5137,224 @@
     {
       "path": "ccf-paper-writer/references/ccf-a-venue-map.md",
       "git_blob_sha": "8874997bc492679d07c65f391f9bec04b1b5a915",
-      "size": 5307
+      "size": 5307,
+      "canonical_lf_sha256": "9d45739242465bbd07d2a034f1856751baa4a023f0719711383daa04fd7ac8a9"
     },
     {
       "path": "ccf-paper-writer/references/citation-workflow.md",
       "git_blob_sha": "1140f9fbed56918e7968ffa5603890f769384fd3",
-      "size": 4866
+      "size": 4866,
+      "canonical_lf_sha256": "a4127cff79100ed7d82a484f67c3050a28550e8c393a62dd3440800a8ff246a3"
     },
     {
       "path": "ccf-paper-writer/references/compression-rules.md",
       "git_blob_sha": "fe7617304fcc9b7c80c56e3b1badeb35c0b743e9",
-      "size": 5359
+      "size": 5359,
+      "canonical_lf_sha256": "cfa2d0c8fe0a39cdeb8357ae78612b5b026773ad6b4f8fdab4e4e7e9bf8dc4ee"
     },
     {
       "path": "ccf-paper-writer/references/custom-format/default-user-format.md",
       "git_blob_sha": "76c1920c5688d5c69378b7f38b3e741495703e43",
-      "size": 5456
+      "size": 5456,
+      "canonical_lf_sha256": "c603739e833dd9739ff1dabd6688259824f188034cf7d39c3920d4bbf7adacdf"
     },
     {
       "path": "ccf-paper-writer/references/custom-format/evaluation/self-test-default-custom-format.md",
       "git_blob_sha": "ab75d97927cd2c7cb3fd3e62722cff065777629b",
-      "size": 2781
+      "size": 2781,
+      "canonical_lf_sha256": "1b4583762b2ad1c6b1075355c428ceecae2b332d5b2d524fc4c825dcb872c1b7"
     },
     {
       "path": "ccf-paper-writer/references/exemplar-style-analysis.md",
       "git_blob_sha": "ca0db94e4b4969d8633a1e5d9fee5e727dd2d43e",
-      "size": 4435
+      "size": 4435,
+      "canonical_lf_sha256": "c5433febadd7c7a36ae99d13274ca3833cf5464bfe5b2495fbe10b3b58d24843"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/aaai-2024-gxvaes.md",
       "git_blob_sha": "e6fe1650d35b4168b75cf2bd28b736d94e997f8b",
-      "size": 2120
+      "size": 2120,
+      "canonical_lf_sha256": "f11aae0d32814dbbea2a1b0b36d97dab5d52eb558a5cc25cac61347cbaaf5a9f"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/aaai-2025-every-bit-helps.md",
       "git_blob_sha": "cad2393165aa2e06acce43247dcba926fd2b9d55",
-      "size": 2197
+      "size": 2197,
+      "canonical_lf_sha256": "183721b44d27ab20363f604eb7081ffad39a825024f4bbe2917a41e855991b9a"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/acl-2024-mission-impossible.md",
       "git_blob_sha": "a8b7e572059e1c39b55935ebd3412a29161f8ead",
-      "size": 1905
+      "size": 1905,
+      "canonical_lf_sha256": "564f90bfef444494d7a000a1ca8430a90a7f84e2a7cb2b892b515620aa9e67e9"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/acl-2025-minilongbench.md",
       "git_blob_sha": "270818f5e2ac432aff8860ca7e96ce4aa687b9ff",
-      "size": 2055
+      "size": 2055,
+      "canonical_lf_sha256": "ec99b6e6be2618292c8d4f5e200f6222b705a6e6495389dd5dba7f88f0b004ef"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/acmmm-2024-speaker-to-dubber.md",
       "git_blob_sha": "2b51f29d7a0d5f8d9c23b7441af9ad47aa834ade",
-      "size": 2258
+      "size": 2258,
+      "canonical_lf_sha256": "a490a88028c62bd37ea58a73d975af58ac9afef413b9ebba088c22665d87dd73"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/acmmm-2025-aff3dfunc.md",
       "git_blob_sha": "e2cc5d32403917d898b5d25beacefcf9f587f6d0",
-      "size": 1928
+      "size": 1928,
+      "canonical_lf_sha256": "cc53cd7b4db140b86b6f62ea7d6af51395bc4a1b4fdbd0d1feed08d640628b5e"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/chi-2024-constrained-highlighting.md",
       "git_blob_sha": "1cee93ad7c2d93b22a8d6f803414ae415c9f0c0b",
-      "size": 1814
+      "size": 1814,
+      "canonical_lf_sha256": "028e045dc8c2556549540ff6a06b86b02ebb50c279b7f7180bd70e5f6a2e6d57"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2023-best-papers.md",
       "git_blob_sha": "77ce39d05c5346be93743efc2b651eb26b689ed8",
-      "size": 1364
+      "size": 1364,
+      "canonical_lf_sha256": "9f953580f5ad13eb8c624f7d3936791731552810410ebe2d46b9d66550c6292d"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2024-best-papers.md",
       "git_blob_sha": "4cbe88faa0f82e2714ea63e82ae6437810e40ca5",
-      "size": 1399
+      "size": 1399,
+      "canonical_lf_sha256": "f7884d4c41953a250c0ecce68335f9d1ecc6d04c36b7504e406de8f8fca8a888"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/cvpr-2025-vggt-best-paper.md",
       "git_blob_sha": "f91a9b6554029a60bc41fba2b7116431f3015b39",
-      "size": 1400
+      "size": 1400,
+      "canonical_lf_sha256": "d1863b394667629fe4d68b1bc72352ea58c65000daa6266dfbbaffbe1f7dc4c9"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/eccv-2022-partial-distance-correlation.md",
       "git_blob_sha": "55a9dd2c02e9eba18fa5216b1196c27c1da95883",
-      "size": 2164
+      "size": 2164,
+      "canonical_lf_sha256": "d4a8639225ca5811cd0812c21ab76ebb1752333c733f07147c1194ff36290819"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/eccv-2024-minimalist-vision.md",
       "git_blob_sha": "7beb3232369a52be770c4ae7839aaa676ed0d164",
-      "size": 2214
+      "size": 2214,
+      "canonical_lf_sha256": "c9ff344135adae439a43aa8eda2d4f76dc18f00363a90082b44196140b9a7a8e"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/iccv-2023-passive-ultra-wideband.md",
       "git_blob_sha": "4f925fc63f814d4b3e715523e0c19b92808007f9",
-      "size": 2012
+      "size": 2012,
+      "canonical_lf_sha256": "e6d40d307666425b01467cd810ddd7577ccb87f662c1d994924dc873b5ea8bd6"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/iccv-2025-brickgpt.md",
       "git_blob_sha": "4acf67dba666888b0546be758bd030f142e2fed6",
-      "size": 2393
+      "size": 2393,
+      "canonical_lf_sha256": "56c4f5b41801d127a8f79593de3bf4f6aa1c77d116a2e9c0733282486263138a"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/iclr-2024-outstanding-papers.md",
       "git_blob_sha": "e0b2649ede6bc52de32a9fffd61377fdfc43dd7e",
-      "size": 1860
+      "size": 1860,
+      "canonical_lf_sha256": "654044b0d471b508b01a006f65fb9077de5b1ac66c2407101364b08c98c844a0"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/iclr-2025-outstanding-papers.md",
       "git_blob_sha": "a3c7cf6f2acae08c3b60aaccbb7e7cfb0f5b8314",
-      "size": 1537
+      "size": 1537,
+      "canonical_lf_sha256": "09231e7ec5aee42ff06b5c83b32775b777d6b52668bcc584b4552171149b16ca"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/iclr-2026-outstanding-papers.md",
       "git_blob_sha": "2b0c60c3a58200f8ce4ab2fc930dc67ca2204133",
-      "size": 1522
+      "size": 1522,
+      "canonical_lf_sha256": "6688395119a942080656b5fd4c17395e6b4da35e2186c667b811a88e9d683cc4"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/icml-2024-videopoet.md",
       "git_blob_sha": "0de44c660c6a92d5cd80aa538f67a43fbec641b0",
-      "size": 1975
+      "size": 1975,
+      "canonical_lf_sha256": "f63069995f803ea21d93b00a0840367edd53b739b0d05b9dc4713bcff8bfe28e"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/icml-2025-collabllm.md",
       "git_blob_sha": "8ee433a3dd2c01fb3ea76fa532395404615316c4",
-      "size": 2342
+      "size": 2342,
+      "canonical_lf_sha256": "9b378864fe335560918c33dcd83205d90ffa45413f61f04f1bd169a5d0ef9910"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/llava-4d.md",
       "git_blob_sha": "91dac2dc62e8ce28fb72a1d9667f8d6679eed67d",
-      "size": 2964
+      "size": 2964,
+      "canonical_lf_sha256": "7196244a10c2c4e3b314254817b6873102bc3d1c60e28d3d48113cb1b8ef56df"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/neurips-2024-var.md",
       "git_blob_sha": "0bdbde717aef3842be56e58a80c1a2e5a2d76d89",
-      "size": 2032
+      "size": 2032,
+      "canonical_lf_sha256": "53046f4eb049fbe04c941afaccc73c1cb298f1cbb0ab81a9fd8e53052c84c074"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/neurips-2025-1000-layer-ssl-rl.md",
       "git_blob_sha": "b4720a60ecf7ca51bb40a883f768b0b552b1da78",
-      "size": 2175
+      "size": 2175,
+      "canonical_lf_sha256": "a871c9807868531f58bd3de772ea849831e90374dbed0c2744bbaf89b475dc69"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/popl-2024-megalibm.md",
       "git_blob_sha": "8f1d1c02400dec4df01ff127eb40ae639c55bc6b",
-      "size": 1884
+      "size": 1884,
+      "canonical_lf_sha256": "ff21ccaaff696989c94bd389714454e1254ffcb579474b770fe131719f871fa8"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/sigcomm-2024-l25gc-plus.md",
       "git_blob_sha": "73a31cf4ba2daa2cd9ab0a40479066b9ce0a3eb7",
-      "size": 1810
+      "size": 1810,
+      "canonical_lf_sha256": "11bcfd4ab80ea467f655d7d55cf4023bdbdcffd7467343f2247fbbb2bca33078"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/sigmod-2024-polardb-mp.md",
       "git_blob_sha": "1083601525f7efed58775381d31d361f894f854a",
-      "size": 2072
+      "size": 2072,
+      "canonical_lf_sha256": "7f7f8d438c5e34453f32e884bd5da226aea482cd2f80c9f08b681dbf8576e9c4"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/stoc-2024-theory-best-paper.md",
       "git_blob_sha": "1313beec3b8300a18f019969b16a2a721057902b",
-      "size": 1776
+      "size": 1776,
+      "canonical_lf_sha256": "51cfa782fb3e0a3e47e81d937fd118f7fe4c8f12fa27e2978aca4f6041dca654"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/transformer-writing-style.md",
       "git_blob_sha": "3cdc9b05f3d47ce82281dbcf4e22fee2a3f21046",
-      "size": 4115
+      "size": 4115,
+      "canonical_lf_sha256": "602aa3313b69395f7a0a03db229dd7c0dc539c59a155518d639c25c7e08ee5ab"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/usenix-security-2024-inspectre-gadget.md",
       "git_blob_sha": "77c7c2b00d704d555e1ab470658abc7d79c310a9",
-      "size": 1891
+      "size": 1891,
+      "canonical_lf_sha256": "33d945271d6d3b7f131c810414790af4232287e544c15ef1e317fda53a6877a6"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/cards/vggt.md",
       "git_blob_sha": "52c9f82352dedee38363c536c5b794ad3faf5fac",
-      "size": 3021
+      "size": 3021,
+      "canonical_lf_sha256": "7978cc17dbedff632f020583ee1e4122fe80747a567ec1b236a95e799ec49b78"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/evaluation/self-test-dynamic-scene-memory.md",
       "git_blob_sha": "71d34370f3dc7dedbcefe3aa46a02231c6282f3f",
-      "size": 3001
+      "size": 3001,
+      "canonical_lf_sha256": "32883ac33201d14f7d3f60c45d5ea4bcebfd3189eeaa9a6fd8e8a9809c41ecbb"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/index.md",
       "git_blob_sha": "bc8609c3339232bcd4ba23a50e2165fca0716a48",
-      "size": 9163
+      "size": 9163,
+      "canonical_lf_sha256": "7451d8ab13fb81ab2f2422c2493d6d0360b991aaac488c00ded9a38c4aa88d9a"
     },
     {
       "path": "ccf-paper-writer/references/exemplars/papers/1706.03762.md",
@@ -7023,782 +5679,938 @@
     {
       "path": "ccf-paper-writer/references/expert-review-loop.md",
       "git_blob_sha": "2de7b8cddfb09f7de4f136ba5ec735d86f4f4b87",
-      "size": 2126
+      "size": 2126,
+      "canonical_lf_sha256": "e2f3bef1723e558318b0023be30030d656b04104dc2cc389995a3a017432adfa"
     },
     {
       "path": "ccf-paper-writer/references/length-budget-policy.md",
       "git_blob_sha": "c21463702463282941ba307c63feeac88246365c",
-      "size": 4702
+      "size": 4702,
+      "canonical_lf_sha256": "9f19621c890172f6341127059f16f0ed7397cdfeece3884c469475dfe25a82de"
     },
     {
       "path": "ccf-paper-writer/references/materials-to-manuscript.md",
       "git_blob_sha": "7df8254da9521400622b7aa7f8a1760436062cd5",
-      "size": 12900
+      "size": 12900,
+      "canonical_lf_sha256": "e3422a07cf5a6186a07a899867aac77e2f05e2678f44e435d7d8eb550daf771a"
     },
     {
       "path": "ccf-paper-writer/references/output-style-policy.md",
       "git_blob_sha": "4c90fb730438f2631dced5716a603b7ddeb5cb88",
-      "size": 4382
+      "size": 4382,
+      "canonical_lf_sha256": "9c3062cf35784600c32b8f3edb18623bdc884b9a5d5a2681d5b0fe0af83953ed"
     },
     {
       "path": "ccf-paper-writer/references/prose-quality-guardrails.md",
       "git_blob_sha": "7c8f41cf0dfb4641669a87178fc02d7436cba3ab",
-      "size": 12696
+      "size": 12696,
+      "canonical_lf_sha256": "7160c174602b0d32023f883ecb6f0d934f42a9b1fa431d405a090090769bb42b"
     },
     {
       "path": "ccf-paper-writer/references/research-writing-patterns.md",
       "git_blob_sha": "58232536d483b8d9153a341d08a235450098a5c9",
-      "size": 14096
+      "size": 14096,
+      "canonical_lf_sha256": "4cd7369e1eeb4bc230b403f15c8cc7179c05927268e6aeda1e399eea676fbb81"
     },
     {
       "path": "ccf-paper-writer/references/score-lifting-loop.md",
       "git_blob_sha": "7b65102bad5611f4d6cfafead8997a55b0ea2e95",
-      "size": 3346
+      "size": 3346,
+      "canonical_lf_sha256": "083b949a63480599479ba83059cf5bd0911fa63c8406c82d653c5f4bb11407a1"
     },
     {
       "path": "ccf-paper-writer/references/section-modules.md",
       "git_blob_sha": "8702fb2ac8e2f3df5818e5a4250a8a4511f5bbb6",
-      "size": 17010
+      "size": 17010,
+      "canonical_lf_sha256": "e8cdeff4406e4771ce67f7e230f56645f933afe337ed3196c0f9e05a15243744"
     },
     {
       "path": "ccf-paper-writer/references/source-notes.md",
       "git_blob_sha": "b8088387c6aa90266643d297d94c855c2f5e2e1f",
-      "size": 1578
+      "size": 1578,
+      "canonical_lf_sha256": "80159d54b96b66ffb1374361279614352da7ff29221ef7fbe7ce3fea52ebe2d4"
     },
     {
       "path": "ccf-paper-writer/references/storyline-blueprint.md",
       "git_blob_sha": "e73bf15be0db25f2b5db83ec92fffcd862a1bd3b",
-      "size": 18489
+      "size": 18489,
+      "canonical_lf_sha256": "b08e1df814262379699dd2d6d6c2b9f5be235ee4a1a55bb75678435dea3a5b07"
     },
     {
       "path": "ccf-paper-writer/references/table-style-guide.md",
       "git_blob_sha": "d3d227cd6619d7acf765f6459a3f28d023517d8b",
-      "size": 7720
+      "size": 7720,
+      "canonical_lf_sha256": "fbe5b993397eb3ed99300a2aa2a601caa8ec337d902755476258d899dc0214f3"
     },
     {
       "path": "ccf-paper-writer/references/venue-adapters.md",
       "git_blob_sha": "678d3a622de28e0a9eca8316ddd4d0c9220af6a4",
-      "size": 7416
+      "size": 7416,
+      "canonical_lf_sha256": "0d7d47b4b82af5c754c723ff924d14721b6b1fc21de52c3bb5022ec08fd22d3d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/aaai.md",
       "git_blob_sha": "b27ab7ab5de70253a245460748eb3041562286c1",
-      "size": 12067
+      "size": 12067,
+      "canonical_lf_sha256": "f1a9f2b6fb652c9c55e1a5ab4da101172164f71f3a083e72d573a64dbb4ccb0b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/acl.md",
       "git_blob_sha": "cba3767f60223e1ce94832ce3cee74bf00ff0ddd",
-      "size": 14406
+      "size": 14406,
+      "canonical_lf_sha256": "e8efbba1acea4a3ef62c123f50a99d4c7062d1bd069582f2c42c07752aacc71c"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/acmmm.md",
       "git_blob_sha": "097c1160e31a2f0596fd6c7e7abc42b15fe0145b",
-      "size": 6859
+      "size": 6859,
+      "canonical_lf_sha256": "fc7bfba38688dbe34c050e2c72d95543f9b3c20b3c24155ee87b525c2fe2c451"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ase.md",
       "git_blob_sha": "a5c520d5b68036ab0456c342843679d7606cdd64",
-      "size": 6194
+      "size": 6194,
+      "canonical_lf_sha256": "1f5814934805e510e77c551388dbec1164630db204def93b8197e89fbcca464e"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/asplos.md",
       "git_blob_sha": "249fb6292b0c6f60e0943629317e0520255ee6dc",
-      "size": 6765
+      "size": 6765,
+      "canonical_lf_sha256": "9c8103b7229324f7a4debbe1941f69f37d7125f0295e564ecb0764d4e95f7835"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/bibm.md",
       "git_blob_sha": "f548d51f1c1735d40f7414c39a4239624709c33d",
-      "size": 5569
+      "size": 5569,
+      "canonical_lf_sha256": "d16ae88c4c29f198c0cda17212ccec7412def747e1ff34c361129ed38e83db4d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cade.md",
       "git_blob_sha": "6aecc80214f18c9c3940806f28562d0c48b2136c",
-      "size": 4583
+      "size": 4583,
+      "canonical_lf_sha256": "7efb52eae70adaecbdad6cb5191fed7e8b59ae48baecedf35147f0f9c09fa85e"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cav.md",
       "git_blob_sha": "61dfb620cc76c0310c8632c096e542d0c33e3935",
-      "size": 8492
+      "size": 8492,
+      "canonical_lf_sha256": "09a92352fe851f86d0060e5dd22f42dca22e713840d0a7a3f89bd340d233bcd1"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ccc.md",
       "git_blob_sha": "49dd73c393779e60d7c6278794ace3771dd03f66",
-      "size": 4363
+      "size": 4363,
+      "canonical_lf_sha256": "d55a231528b50cfea416594e930e205e506bd0fbc4f4d302d5a5915c510b14c8"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ccs.md",
       "git_blob_sha": "f90495480a08bd9a786104224fd28cb4a5a27525",
-      "size": 8295
+      "size": 8295,
+      "canonical_lf_sha256": "83c9735859e5eae32baba55f0723a3504af927fc8dec1204498a1e60884dcd6b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ches.md",
       "git_blob_sha": "cbd2595ef02a216c5600266314d456e10d36e438",
-      "size": 6485
+      "size": 6485,
+      "canonical_lf_sha256": "d1edf675dd3e89f6cea167ab810ac1711f0772e94fa3bb245e7e871c47abe96d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/chi.md",
       "git_blob_sha": "8389a6355fbab2678c10dae87a02ce3fa24e9f60",
-      "size": 9275
+      "size": 9275,
+      "canonical_lf_sha256": "8233131cb674cc55ceb2323196964e76788b3b4e164687e026fc09ce38990dd9"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cikm.md",
       "git_blob_sha": "2c388f534a920b546915a6f79a78f3b4826a795c",
-      "size": 4848
+      "size": 4848,
+      "canonical_lf_sha256": "29b23b2d23e585c4f090af8b8c642d87bfe9fa3c8e74a5bfd249ccdc93f5b6d5"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cluster.md",
       "git_blob_sha": "a92d68156091a131a1234e47e3a822884471de81",
-      "size": 5107
+      "size": 5107,
+      "canonical_lf_sha256": "49a9af2849adeb1b6fc6782b3a83b229da48385eeb55033c243d536c2bd1d1ac"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/coling.md",
       "git_blob_sha": "4a652f2fc13282d47db3dae147bba921bdbfb122",
-      "size": 3300
+      "size": 3300,
+      "canonical_lf_sha256": "354fe83295821ce3d6decdfdfa22dee57a2897adabf56036dc06cc5f52223a9e"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/concur.md",
       "git_blob_sha": "dbc1fcacc7b1f014fdbe6f46028689e80045c4c7",
-      "size": 4699
+      "size": 4699,
+      "canonical_lf_sha256": "66e131a21162420680eafbb073f5edb17f214edc1da75704d14ac125500fef8b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/conext.md",
       "git_blob_sha": "5b213da71cd6baf0d7f045250b468cfa8e1aa071",
-      "size": 6450
+      "size": 6450,
+      "canonical_lf_sha256": "829cae4232dc72fe6406f2058d46d549d81bbd62251c7ba794a6f8769a915d4a"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/crypto.md",
       "git_blob_sha": "ce661cdb603e50e518a0e89a371c59bc30cd4f66",
-      "size": 7052
+      "size": 7052,
+      "canonical_lf_sha256": "0db1df24ec6c3c5bbf8dc4ff2d90f968d0234c46dc26582177f6322d2dd58060"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cscw.md",
       "git_blob_sha": "4d704722d836aee386783ec578b7013f601727cd",
-      "size": 7623
+      "size": 7623,
+      "canonical_lf_sha256": "72d2fc0d56eae3f4ba2c13f65fb3141d7a17886aedf978e2bc9f4db2d2756776"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/cvpr.md",
       "git_blob_sha": "17a48e578de41d761980618457773c5ed0d65f0a",
-      "size": 12262
+      "size": 12262,
+      "canonical_lf_sha256": "8d69a0010ab3d33db49b49344ee7d923abb9cf06b7b36f844ab4c9cf3328d98d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/dac.md",
       "git_blob_sha": "466d7e100a2149bd9503d256b6aecf8a55bb1201",
-      "size": 6792
+      "size": 6792,
+      "canonical_lf_sha256": "d243e9ac012b535a36d959d67ae2d6d8feae4577af21bbd618d5c862c6c1f32a"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/dasfaa.md",
       "git_blob_sha": "a16917f8f2b454fd34052c2d2e11882db65fb818",
-      "size": 4005
+      "size": 4005,
+      "canonical_lf_sha256": "51970a3d486a5f29b17055dd9bb327faddbdc222add42fa7c4ead1928653700a"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/date.md",
       "git_blob_sha": "abfe07bf34532bf7d1543861cf4d0ed1378f9f38",
-      "size": 5027
+      "size": 5027,
+      "canonical_lf_sha256": "d36a30a712f923656f38fbde7f772a2066232dd6bfee0c76235a61dfb2a7bd9f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/eccv.md",
       "git_blob_sha": "5fc1e4a376274131221bdb98e286c7bb61799e3d",
-      "size": 7937
+      "size": 7937,
+      "canonical_lf_sha256": "404ca92d5af1f00d47a95c64fdcf3b1a567561f0b764e6fe4c6ccce270bbf733"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ecml-pkdd.md",
       "git_blob_sha": "964037f9938c36e1830597a7f890d66ad156f7b8",
-      "size": 4560
+      "size": 4560,
+      "canonical_lf_sha256": "e41f8188f3a8d553068ff4ae92da37b1bd54cc539f7c0b21c3acecf864feaf3d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ecoop.md",
       "git_blob_sha": "0a990327cb7e6e3cfe2227409f1fdb1f761b3d6b",
-      "size": 6135
+      "size": 6135,
+      "canonical_lf_sha256": "1b9c83369b6e8b0dec8f38b462fbe5976f309fad0fb1e85df99cdaa1dec4ce1a"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/emnlp.md",
       "git_blob_sha": "633487c5a71280e1369604a572e51730f97c8a93",
-      "size": 11968
+      "size": 11968,
+      "canonical_lf_sha256": "f11216a5a8df646187b6240923ba92d851c52fed7ba07bb4175ca7e7a1912f87"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/esa.md",
       "git_blob_sha": "4f1181b16c2e7b0a19cb33a5f1adf6011bfbfb39",
-      "size": 4272
+      "size": 4272,
+      "canonical_lf_sha256": "17d9ab4af0d234864343757538cdd68c2f97e950d23b64dc3e5e6260422012fa"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/eurocrypt.md",
       "git_blob_sha": "56d170ee1242a42e12cb0fbf1b19c10cb4627a33",
-      "size": 6884
+      "size": 6884,
+      "canonical_lf_sha256": "45367f0621bb119124fe69bd37e5c0afb7c93a0ffdaf36495aa06982d66c48e9"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/eurosys.md",
       "git_blob_sha": "1e15bf0919b9f118beb8e596bd4d349518cc5cb7",
-      "size": 6039
+      "size": 6039,
+      "canonical_lf_sha256": "f38102627ec2d4afb6973a9bab5036b1b937be136fe512465b6c399cb57cda9f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/fast.md",
       "git_blob_sha": "f98d9d2dedea4cad1689e206add8282ee69d622e",
-      "size": 5294
+      "size": 5294,
+      "canonical_lf_sha256": "eefb0503c749e4e5c3967e0ac6283cca3198bed0e66c6766779e2aaa68bcdce8"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/fm.md",
       "git_blob_sha": "a8992c9814128097dc19ec3b6903cbde6cee9e4f",
-      "size": 5779
+      "size": 5779,
+      "canonical_lf_sha256": "03c0371ec4f766a347a7d05fdb4cfbc760ed5481f58cee8b159abdc0f2311d1c"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/focs.md",
       "git_blob_sha": "816f2b3f5160cafc9baab885fd700320acab1826",
-      "size": 7571
+      "size": 7571,
+      "canonical_lf_sha256": "98870fc7b3dda8c6fedf21375a77c3059fcf16b22f2e6fbd4af0011d32c6a6af"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/fse.md",
       "git_blob_sha": "fe440ba9bf4b5c463b809bfe04b29b3ba67a3a41",
-      "size": 6286
+      "size": 6286,
+      "canonical_lf_sha256": "60c877fd4249ffccc7cf5d58dfbe1f31c45c3aba31d32958fa6cf1f9ffd2b108"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/hotnets.md",
       "git_blob_sha": "de33726e29aca31ae3ec6676f86908d693a6516e",
-      "size": 6318
+      "size": 6318,
+      "canonical_lf_sha256": "d93055b1ab9b86188ea207230e3abb6d943e97943ad77d97147454c7c0c29ba1"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/hotstorage.md",
       "git_blob_sha": "20ea1ea6de6429837ac353685ef8663e0e476fc2",
-      "size": 4742
+      "size": 4742,
+      "canonical_lf_sha256": "ef46af9be5f4752247d0c75b03e376df516c62c760b921b0a7aefd5f621e3171"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/hpca.md",
       "git_blob_sha": "3851e7257658c4c91944de26aea3cb814bf328a9",
-      "size": 6556
+      "size": 6556,
+      "canonical_lf_sha256": "f33903bf00940305e76322202fbf8ebd199887307676f1675608f0b88775778f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icalp.md",
       "git_blob_sha": "df6091370f82c99390372897703eb24cf859fec6",
-      "size": 4273
+      "size": 4273,
+      "canonical_lf_sha256": "65718f9d05a3bf55b0d99f6237e00c04b0bb529585ff92dfb2b67ec120ea2645"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icassp.md",
       "git_blob_sha": "6efe05bdc97014fee427feec31048fc863aba691",
-      "size": 5338
+      "size": 5338,
+      "canonical_lf_sha256": "050f9de3eed57f24fc4177b6d6ad5ce4d98d0c987ac35394c00a74a687aef052"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/iccad.md",
       "git_blob_sha": "b6a023004579f81c913438a8c4a1a38f1a9f23cb",
-      "size": 5011
+      "size": 5011,
+      "canonical_lf_sha256": "e2ad8987fe52dbf1cea689eac64b4a107e48ef6cbe7f3f0ea53e6653fc86eda7"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/iccd.md",
       "git_blob_sha": "2ebf0f03cace23f8ed7c5b5969a0989b23b6e6e8",
-      "size": 5026
+      "size": 5026,
+      "canonical_lf_sha256": "811b0ff70f5bf67e567c834e04c22ec31168580041329fc2514a95d65b5bb28d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/iccv.md",
       "git_blob_sha": "9f13b94dbe022061ab96509177b41be52235e372",
-      "size": 3626
+      "size": 3626,
+      "canonical_lf_sha256": "71cb0efaa4407046490f0e7327726897226eb7375f2f0f1e25eeb0e33b6f528d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icdcs.md",
       "git_blob_sha": "9e4a4b34e771b63f61b22b3c7ef34311bf511615",
-      "size": 5096
+      "size": 5096,
+      "canonical_lf_sha256": "4492876d40d78557e3d0e604263946ee22adb56e5c441e4ee3074ca5a342077f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icde.md",
       "git_blob_sha": "3e4b4789d5003b4780c6e3859c3e03f95460e511",
-      "size": 5765
+      "size": 5765,
+      "canonical_lf_sha256": "22e6c9f3b7f3d5d9d39d4450ff305bbca3631ad4aaff6e9a976b056de9ae2049"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icdm.md",
       "git_blob_sha": "d50eb58cc73e5aaa03919c3ffd5783898b16c3ab",
-      "size": 4247
+      "size": 4247,
+      "canonical_lf_sha256": "35f57d84356ec879052150847a07800c1dadd6789676557c0084d7371d524153"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icfp.md",
       "git_blob_sha": "8d4a3be0ef87feeb28eb5c20999d8c5163a68d58",
-      "size": 6271
+      "size": 6271,
+      "canonical_lf_sha256": "bbab11b2ff15f83167acae0f0784567ca4b32975cc93ab643c41b4e41913b1d1"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/iclr.md",
       "git_blob_sha": "73f8bf21f8c59cff988f6e68460c3fedfbf6d83b",
-      "size": 14948
+      "size": 14948,
+      "canonical_lf_sha256": "748f713b304a206c7ba56cf416dea603aab29ce5e2ae9ac595d726404a5d97a4"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icme.md",
       "git_blob_sha": "81658c6663af623b0cbdb4993b404704fe256b59",
-      "size": 6263
+      "size": 6263,
+      "canonical_lf_sha256": "b8dcf3641c46111afd87b000d84db3e8ef71b3972341fb6dce6d091aa3263967"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icml.md",
       "git_blob_sha": "7086ae6a83b9114499c112fe7e8c70e9f29753f3",
-      "size": 12795
+      "size": 12795,
+      "canonical_lf_sha256": "fd495c55bfa7d201e27ad6eeb53b42346edfa7433e0ec8f6503ca4ab8b42ab12"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icpp.md",
       "git_blob_sha": "4f20a129b93c1dc3ebf4586ca61b8a005d4385f4",
-      "size": 5732
+      "size": 5732,
+      "canonical_lf_sha256": "6af8014ac259942267611cbd2959a0c98cfaecf6c8c4d8e361827599ef319adf"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icpr.md",
       "git_blob_sha": "6e7d932e9c330041376c1ccc397d6e16d5cc988d",
-      "size": 5303
+      "size": 5303,
+      "canonical_lf_sha256": "5e941913400266a4a5f1e0844260aaa68e8aeb6d8f704d34aee31e0692034a21"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icra.md",
       "git_blob_sha": "645527ba60d6fa6b4c7c384858d4bd628f83003a",
-      "size": 5890
+      "size": 5890,
+      "canonical_lf_sha256": "7455b1fcc7e0b1c2e1365640c686c19368815b65aeb4db1dbf7a006f23bd163b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ics.md",
       "git_blob_sha": "545c712f94bd1ee553a5df417b41df2eb04530ab",
-      "size": 5707
+      "size": 5707,
+      "canonical_lf_sha256": "d08796ade00e276ce31f1cba1085b74ddf07e0b547edaafc96cccfcaeaf34385"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/icse.md",
       "git_blob_sha": "bfa241f054ace7a2152514394997bc828b93d535",
-      "size": 8899
+      "size": 8899,
+      "canonical_lf_sha256": "9936aae1886a58432ee0499295ca8d05d3f8ed52362728e185f520cf44cfc6d0"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ieee-sp.md",
       "git_blob_sha": "0c7321dddc41c81c614e3d574d51af04fe51c3a8",
-      "size": 5551
+      "size": 5551,
+      "canonical_lf_sha256": "98067667ec926e3fddb7a4276ed897b18838e72266a03f39dc1e063d14a9f2fe"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ijcai.md",
       "git_blob_sha": "6da176e1b9f4552fcbff0942488398d67ff8d2af",
-      "size": 8353
+      "size": 8353,
+      "canonical_lf_sha256": "a29da8987939d3b8307b540e5d8f6324fa059cf349c62c524a7d9e716ba17608"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/imc.md",
       "git_blob_sha": "22b12627f275dc30f0cee8233e1ba5abf81a3272",
-      "size": 5817
+      "size": 5817,
+      "canonical_lf_sha256": "963805fbdfb8db30c94ad997cbcd28e04f60f4a41c964e00e6dd9c49c19f3112"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/index.md",
       "git_blob_sha": "62ca6c25c8ee635c89462b3db8e2bd106f93f592",
-      "size": 47664
+      "size": 47664,
+      "canonical_lf_sha256": "eb6433b46146cb8224a8a50f6f3c87f0f2f49681ebfff74dcdcb6de7eb9faacb"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/infocom.md",
       "git_blob_sha": "d0fc86cb72b15aff9ae32c611f91c39f8d940cf0",
-      "size": 6333
+      "size": 6333,
+      "canonical_lf_sha256": "737aff4000b1fc70f8db8ab818bf2aa2c1f27e3df3769d4d682797d35c42b1c5"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ipdps.md",
       "git_blob_sha": "dfeff1c05d8c4e7e4bcddc500f3be6c8c6e6c5b9",
-      "size": 5195
+      "size": 5195,
+      "canonical_lf_sha256": "c4df279066dcefce9aef554b1ceb449dd8c7cd443837b8753b0ad91f044bfb00"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/isca.md",
       "git_blob_sha": "c5b4fee4e363ed4a822fe3613e9baf02107ceeba",
-      "size": 7151
+      "size": 7151,
+      "canonical_lf_sha256": "a564392ce2972f7fd6d42c95eed388327cb430738ae9db56e07412975b4618ba"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/iscas.md",
       "git_blob_sha": "c96c8b8c34842d89838751543708927f97d291f1",
-      "size": 5024
+      "size": 5024,
+      "canonical_lf_sha256": "80307fac1c129e59fe0aa48703ce8b2d70d1706956d71d8910dafb5870d213e0"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ismb.md",
       "git_blob_sha": "74f3311a5155499879bab0a9fab5a7177adb2f92",
-      "size": 5572
+      "size": 5572,
+      "canonical_lf_sha256": "803b32b9cce8cc0e678d0fa4038e03eb5cf51e4be14d1d563bac5637b357a6ca"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/issta.md",
       "git_blob_sha": "bc444000108fc9b82754c0ff210adb3f3bf0c148",
-      "size": 8236
+      "size": 8236,
+      "canonical_lf_sha256": "5ad25c73a8ff57350ef4a9d342932864c258d1181d6dbaac9262d5a2760dd293"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/lics.md",
       "git_blob_sha": "6fd6dc242fd986806af62d8fee0c7fea16326ecd",
-      "size": 7509
+      "size": 7509,
+      "canonical_lf_sha256": "4bf0d31dcdc61ef9e7a4babf98db36a12480e8885723a73187444ea6de05b867"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/miccai.md",
       "git_blob_sha": "ce18550cd6952867772598e0a851769cdd182cea",
-      "size": 6709
+      "size": 6709,
+      "canonical_lf_sha256": "4803fee531b88066015718fc54e4bd9f8e0dca79bfb23bf34909e5a84e6fb2ca"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/micro.md",
       "git_blob_sha": "ac3846fdf6357e905f3bc2643202f61030f80f3f",
-      "size": 7408
+      "size": 7408,
+      "canonical_lf_sha256": "cac6250c65a241870a3d61dc8e74f481ad611916c6cd4ef70e9d390612338e14"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/mobicom.md",
       "git_blob_sha": "00750cc50d76b64809fff0ac747d1727840d6921",
-      "size": 6667
+      "size": 6667,
+      "canonical_lf_sha256": "8dbaebc6c2cccf3a3895b1b2b0c7d7c3fad52ba727d1ebcdd47fe43afa1aeaa3"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/mobisys.md",
       "git_blob_sha": "cd1414850095436152657037b87236f77a509cf0",
-      "size": 7067
+      "size": 7067,
+      "canonical_lf_sha256": "f1947937c85579bdbfb0f933a2b97e8d1ae18b944194878e60f3b769d4b778ed"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/msst.md",
       "git_blob_sha": "abc0f3b71299172edab91b06c976dec1aa5522d0",
-      "size": 5091
+      "size": 5091,
+      "canonical_lf_sha256": "135473bede72ea894a48980aa8b7c02d1fb13dfa04a78e771436598f7d97a6bd"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/naacl.md",
       "git_blob_sha": "f29a626db9c09dab519a1255cfa243476d5cd1fd",
-      "size": 4608
+      "size": 4608,
+      "canonical_lf_sha256": "42522e2c0f746bc63645f76712b76743b4930b96e8a31fe227bd390ff6189e97"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ndss.md",
       "git_blob_sha": "3dfa87a3de3e1a882af5e297f2fe4a0adb52144f",
-      "size": 10240
+      "size": 10240,
+      "canonical_lf_sha256": "0c683bfd71957280bc9d2a3906cc63c305110f676f649d1a685449a33c287542"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/neurips.md",
       "git_blob_sha": "4073c402a4af799d97bcd24abef2859f368cd558",
-      "size": 11995
+      "size": 11995,
+      "canonical_lf_sha256": "43a2e6419123f4391363fadbb39340db32ac6f3538d90e686faa9ba831833bbf"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/nsdi.md",
       "git_blob_sha": "c5527105ecb82a37b7594dd28568e006110a5da6",
-      "size": 6005
+      "size": 6005,
+      "canonical_lf_sha256": "d2c2c5c57d5b7d9a5323b306550aaa84d145b1304bcd6529e4b56100da224840"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/oopsla.md",
       "git_blob_sha": "a1fbe5df9448681763429b7e3f46381e5e2a85bd",
-      "size": 6115
+      "size": 6115,
+      "canonical_lf_sha256": "4791b2488495179b5c54815af72eb6890f475d9f174a325c00012e59ef7e1751"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/osdi.md",
       "git_blob_sha": "e840aacbf564156245be4f36f0a95abe7ecb05e3",
-      "size": 10287
+      "size": 10287,
+      "canonical_lf_sha256": "03632cdc5733fe75e813ca968a0be3982a0a65230927f4134b1e436b252caf43"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/percom.md",
       "git_blob_sha": "6629d3a3f6512e749895a339b0411d8d881169df",
-      "size": 4812
+      "size": 4812,
+      "canonical_lf_sha256": "0384a591997920e1ace80b9b6f9a8c5b3323695de8bbfa20983c1b0dd8cb379d"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/pkc.md",
       "git_blob_sha": "577125af1f32b4d2f4c527038463018a1d9cb098",
-      "size": 7021
+      "size": 7021,
+      "canonical_lf_sha256": "0e02ff9061aae68b7ce58d356c3c53edfd48804d15d6ba5d3687e7ec74ca4181"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/pldi.md",
       "git_blob_sha": "ed13116856c62b9ae675e25ada088ab8f7edd53a",
-      "size": 6404
+      "size": 6404,
+      "canonical_lf_sha256": "9868f8d6d5eca32e21ab1c19c8b3a20f5c648ec386957a17b7d45528b670abbc"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/pods.md",
       "git_blob_sha": "dc57227cd58dbc86415d4ed6e1aac02c8deb769b",
-      "size": 5580
+      "size": 5580,
+      "canonical_lf_sha256": "b24607bb20a160804e8c7b6487f137d12b29dacd53df48f384d7eb673544181f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/popl.md",
       "git_blob_sha": "e4574118c4411008d88b43801d82c2682768a859",
-      "size": 6099
+      "size": 6099,
+      "canonical_lf_sha256": "0eaea374d0107b1da346814b5edddd47d4786e15faf54f2b0dbe67f92ab8c389"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ppopp.md",
       "git_blob_sha": "52743adb8dcca36c915e98af5f6684dd360ea492",
-      "size": 7811
+      "size": 7811,
+      "canonical_lf_sha256": "734cab0e3259dc5f87146f6774cb503044af2ef6a48ab0f733f2c67faa4c19da"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/raid.md",
       "git_blob_sha": "80e61b86640589910989deaac77de3bab0573f58",
-      "size": 7211
+      "size": 7211,
+      "canonical_lf_sha256": "927f21208f859c3e181ad3dffeb7775e9421a58fa406f47a762a5a42b1920007"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/recomb.md",
       "git_blob_sha": "8ac3a602b4845b21476b4cdac2572b4d94f6221c",
-      "size": 5170
+      "size": 5170,
+      "canonical_lf_sha256": "4a0e88e45bf34c19d0fc65b5caa76639d90a1233ee890e46fafb29e1b4309f4b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/rtas.md",
       "git_blob_sha": "0095f78ffd2d67a8d7e0344c1f1e8f1aa04bfe50",
-      "size": 5129
+      "size": 5129,
+      "canonical_lf_sha256": "adb73a95504a8e2700a3827d0af236150462c435000d7a762cade4a7eaeebbd5"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/rtss.md",
       "git_blob_sha": "caecc9aa191b20ee48a261f6676a70ccbae77ec8",
-      "size": 9791
+      "size": 9791,
+      "canonical_lf_sha256": "ae91781774b43f45c441c1ada405a54bb82f57d9d3658ed082fc461c8ba99743"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sas.md",
       "git_blob_sha": "8ccdb3154c94288b852b647e0f3af531dd41f5fb",
-      "size": 6146
+      "size": 6146,
+      "canonical_lf_sha256": "003823812829464713e66a7d3b7e1233a54f329db7588e52c06155e3f09df79e"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sc.md",
       "git_blob_sha": "7e03dedda6d38c4eb653bc760e33af209696c913",
-      "size": 6224
+      "size": 6224,
+      "canonical_lf_sha256": "3bec2afcf071beb143c4b8e69b27460579b28a667ba99d0ec60f72c71b8482cd"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sensys.md",
       "git_blob_sha": "5f0b1d3c3e29ff0348387d5210112a8771d885d9",
-      "size": 6935
+      "size": 6935,
+      "canonical_lf_sha256": "7abcd418762131e533372b7483f88a329c8c1764b44e57140a461ec56a918c85"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sigcomm.md",
       "git_blob_sha": "a2bce653fb4936a6ca7e9a8ab517801a72466b18",
-      "size": 6537
+      "size": 6537,
+      "canonical_lf_sha256": "9513c1c31894869857d2008817a2c6cbe713f4e59ffcf6947cd8e7132fd64e70"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/siggraph.md",
       "git_blob_sha": "f40d760145b2d54234a98bc128e174dadfe991a4",
-      "size": 7764
+      "size": 7764,
+      "canonical_lf_sha256": "12598cd08eb2c08900d20a4176615269a4677c4c546b7c97e1417d24176c9f07"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sigir.md",
       "git_blob_sha": "b8b94d40c8b79fe24cdb019e9f4977292d067597",
-      "size": 11475
+      "size": 11475,
+      "canonical_lf_sha256": "55aba2626432a6f051c3256ddf07674a1dbc8c1547d0fb41b7ee8268dfc7736b"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sigkdd.md",
       "git_blob_sha": "72376337e794df794673cf206ee1528fe45f6422",
-      "size": 11295
+      "size": 11295,
+      "canonical_lf_sha256": "28720753d4b9f3493f4a2458a1d6c5973e17b89d08b9cb156fe82021b1519ec6"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sigmetrics.md",
       "git_blob_sha": "b97090d4dacfc7d5c5e81a2f7745bf7fbebbcce2",
-      "size": 5817
+      "size": 5817,
+      "canonical_lf_sha256": "c4376ac47f5b6be8176575dc988a16fe4b7ef8ed4ca617b657c56eec700b8f31"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sigmod.md",
       "git_blob_sha": "4391d299f3d0185ac94fd93e1eb0379eb7b303e1",
-      "size": 6164
+      "size": 6164,
+      "canonical_lf_sha256": "9d9fe25d0f3123c89b12b1dbee854051f83a486b70c3ebf7782bef4a0826fc2c"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/socc.md",
       "git_blob_sha": "9d4df0780305043f20d7718903cb6b5a78b24952",
-      "size": 6024
+      "size": 6024,
+      "canonical_lf_sha256": "6ae1cb0472bca07b52f27e115316217d9a44005138e9eb470f703dc61345f6ee"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/socg.md",
       "git_blob_sha": "05067092849985a48da3ae73d3f709d30578944e",
-      "size": 5131
+      "size": 5131,
+      "canonical_lf_sha256": "7841f22465af189e8d8409df40f2b24899f542e8369e150e5544f86ef5e5c538"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/sosp.md",
       "git_blob_sha": "c5ee77fca25b26399c269e1a7effd4d7330d59b0",
-      "size": 10273
+      "size": 10273,
+      "canonical_lf_sha256": "146251d4f7f71346f72197c86d57708b78e3bf041a67e398a4a5fcce6777d189"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/stoc.md",
       "git_blob_sha": "1d6370bd65f3c93b37ea350264a6b32f424000c0",
-      "size": 8199
+      "size": 8199,
+      "canonical_lf_sha256": "718df655bf55fd8bda974fa9ceded0ed7825c7445902e394667dfe27eb64eac3"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/tcc.md",
       "git_blob_sha": "f7ca29f8b2391c85367092b47b5d87ab74fdffcb",
-      "size": 7547
+      "size": 7547,
+      "canonical_lf_sha256": "bfa2d44c1350b4ea28063afc10c06a030cd44f01d3f86d58f5b6342f733311f1"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/ubicomp.md",
       "git_blob_sha": "a088ea6b77ba1da93128961c78bb762cb75796ef",
-      "size": 7673
+      "size": 7673,
+      "canonical_lf_sha256": "d837ef3194e2b5615ef2cc892b38041186310ae3adc7cd13500127ab46c56a01"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/uist.md",
       "git_blob_sha": "fd7c1b830b46c6be4f552e9b0f8dcd6b466bf191",
-      "size": 8031
+      "size": 8031,
+      "canonical_lf_sha256": "7b2f1c6f9fe6ed37c8a0dabe75ff6b359102a50fa04f6ffdac256f6c9ba2aa07"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/usenix-security.md",
       "git_blob_sha": "f5d673555e3318ce08df9a39e3000abd758d4d2f",
-      "size": 12163
+      "size": 12163,
+      "canonical_lf_sha256": "0398139d5f9f3753d1d5c36e9f4e090807dbc82852df061324cb0f7423acf02a"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/vee.md",
       "git_blob_sha": "8a0b8ad83fc1ec45b85849df0bd52eac227a933c",
-      "size": 5999
+      "size": 5999,
+      "canonical_lf_sha256": "4ec4de5963d750d66fa6e6d2c31d6e31afe48516cb1997acfed966c0509b280f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/vldb.md",
       "git_blob_sha": "924953be4fced9e26505038f4bc7e187674d9767",
-      "size": 7327
+      "size": 7327,
+      "canonical_lf_sha256": "8ad14a891053a4a572ca77a5b426e1b6c66e5d95156d88b652391111ebdfe377"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/vmcai.md",
       "git_blob_sha": "847173766eea167bd1f76094990b2dc6fbb8f10a",
-      "size": 5918
+      "size": 5918,
+      "canonical_lf_sha256": "e70e9f53a4034cd05173864aa2da0a63a7b4bcd762c090369336488be221b9b0"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/vr.md",
       "git_blob_sha": "bdc9406acfba8690b8d058911064c4d4e51618a5",
-      "size": 7189
+      "size": 7189,
+      "canonical_lf_sha256": "cf0f552acc213abdcf028f609f1fe9eff9096dfae3d17a58a7a3f3e425bb7a4f"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/wine.md",
       "git_blob_sha": "c38a49e613077f155e53ae3dbeb5fcfddfacad7a",
-      "size": 5872
+      "size": 5872,
+      "canonical_lf_sha256": "ed7595eb8a154316640ccf01825e654bbc459899ec4476f7f1261e3ba37394de"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/wsdm.md",
       "git_blob_sha": "cfbf6b44750319bd66e4d53985aab0ad514eeb3d",
-      "size": 4888
+      "size": 4888,
+      "canonical_lf_sha256": "804a331192b4dbfc85b1d9baa9b687c9e1f84761f5528fe163a89a370ca2cef6"
     },
     {
       "path": "ccf-paper-writer/references/venue-guides/www.md",
       "git_blob_sha": "86912c06a68f42ad2d9a3d3dcebc8dad13e9fda2",
-      "size": 8081
+      "size": 8081,
+      "canonical_lf_sha256": "0f68e993dd372335d94ceb1190c96e468ca6e3a6bf1ffcc1e6070a5dedf43851"
     },
     {
       "path": "ccf-paper-writer/references/writing-checklists.md",
       "git_blob_sha": "071d9eddb76a8b845d03bb475c6ec84769ee7ae3",
-      "size": 11285
+      "size": 11285,
+      "canonical_lf_sha256": "69fc5c0927f2e3f0383c8ad53ece9abed53865bc65a7becd05f234dbf1e1635e"
     },
     {
       "path": "ccf-paper-writer/scripts/check_prose_quality.py",
       "git_blob_sha": "74139e34ff6075005bb9ed677a8c9d1255c0e01d",
-      "size": 17608
+      "size": 17608,
+      "canonical_lf_sha256": "4fcc1f02d836dd14e500707b821644463e75f869f838e7928696957a5d44cc1b"
     },
     {
       "path": "ccf-paper-writer/scripts/convert_pdf_to_card.py",
       "git_blob_sha": "f4c197321c9af16e2a47cfc04966980b755f5ae3",
-      "size": 1776
+      "size": 1776,
+      "canonical_lf_sha256": "36b3e60198234b1a02d391dfae515ebfe4e9462327da97f03264769b910f3bff"
     },
     {
       "path": "ccf-pipeline-orchestrator/SKILL.md",
       "git_blob_sha": "287e8d302711d4a743a1b9d526218fea7dfd7f5b",
-      "size": 7552
+      "size": 7552,
+      "canonical_lf_sha256": "32ce58d3a151a8649dec7ea21595bfb1e6841a8494a8e848034a25334ba84257"
     },
     {
       "path": "ccf-pipeline-orchestrator/agents/openai.yaml",
       "git_blob_sha": "c1a0ca3387b7d68b39ee76c4a9381801e117e544",
-      "size": 847
+      "size": 847,
+      "canonical_lf_sha256": "894fed1e02acac119cd2f74576290fdebe00c2b51be105a2e2cdd1347dc715e0"
     },
     {
       "path": "ccf-pipeline-orchestrator/references/autonomous-research.md",
       "git_blob_sha": "94a556007dddd33647025b4f5828537332d6336f",
-      "size": 21620
+      "size": 21620,
+      "canonical_lf_sha256": "868e86cd2743dedb9c2121e7bb2d5b918dcbf1cdd0462e49f06721c9793b3b28"
     },
     {
       "path": "ccf-pipeline-orchestrator/references/workflow-planning/approach-options.md",
       "git_blob_sha": "60e1fa862f80c06ed691384ca0d810ff1ac941c9",
-      "size": 2362
+      "size": 2362,
+      "canonical_lf_sha256": "aaa39fa7c40a778f19d78f0d589a3c461d0954f3bb37c2cbd7283be276c932fe"
     },
     {
       "path": "ccf-pipeline-orchestrator/references/workflow-planning/design-brief-template.md",
       "git_blob_sha": "088bd61ba2b2578d0d1d7676e6927d54e1717f8d",
-      "size": 2004
+      "size": 2004,
+      "canonical_lf_sha256": "fffda02e9e56abe38ee39a56ace9a363d5eb30db3c7b88bfce91e358b92d59eb"
     },
     {
       "path": "ccf-pipeline-orchestrator/references/workflow-planning/intake-protocol.md",
       "git_blob_sha": "4d78f43858f3e841e1c1fcf9dacfbababde84ed6",
-      "size": 2313
+      "size": 2313,
+      "canonical_lf_sha256": "7f9ab640b7b6c2a97d9498eacb7a3c3e5ee2642a3de3779b49f1974359f607da"
     },
     {
       "path": "ccf-pipeline-orchestrator/scripts/research_loop.py",
       "git_blob_sha": "cb5b95a31cf07a35337df0833a03a02db9bee482",
-      "size": 36794
+      "size": 36794,
+      "canonical_lf_sha256": "d3b3e958234b14c1af05febe204b0dfdd3a876c08eb4f0cfa6c214fd9e692650"
     },
     {
       "path": "ccf-pipeline-orchestrator/scripts/test_research_loop.py",
       "git_blob_sha": "4b6fcc22e088286bdcaf5c996684b5247ebddaa5",
-      "size": 25239
+      "size": 25239,
+      "canonical_lf_sha256": "3032dedfb22cddd4968cdd7ff2ab271d0de26464ef5d1987597e40f7202e1131"
     },
     {
       "path": "ccf-project-scaffolder/SKILL.md",
       "git_blob_sha": "b3461718b4adf91bab33117775650cc32f306100",
-      "size": 4086
+      "size": 4086,
+      "canonical_lf_sha256": "c7ce0ea609ece5b2d9d42a2bba9ad127de2e3b4b9ee3e57d95d9a0cc38ee1e07"
     },
     {
       "path": "ccf-project-scaffolder/agents/openai.yaml",
       "git_blob_sha": "92e248b1bb6248dc0db7562ab7b6c869583b496b",
-      "size": 584
+      "size": 584,
+      "canonical_lf_sha256": "fce5b903d688cefbb049dc49805368731c8072a0534badd67ddf9a877c9212b4"
     },
     {
       "path": "ccf-project-scaffolder/assets/ccfa.yaml",
       "git_blob_sha": "82a04f30b0a5a9b97f7638ba1a9609803002abc9",
-      "size": 597
+      "size": 597,
+      "canonical_lf_sha256": "e7a6b44df46daa03069eed6b07401602bb30e30dccfb1a4ce954c0ec62ba9920"
     },
     {
       "path": "ccf-rebuttal-writer/SKILL.md",
       "git_blob_sha": "5d9050953eb547c646aa4ee945342a149769a86d",
-      "size": 5824
+      "size": 5824,
+      "canonical_lf_sha256": "78039cca6e58f83a2e22d512e3b1d405078f05219711b5c15b4e608ab6d4077e"
     },
     {
       "path": "ccf-rebuttal-writer/agents/openai.yaml",
       "git_blob_sha": "5ae6f9101fa1c1ea421bcc588430b7a72c3f1834",
-      "size": 494
+      "size": 494,
+      "canonical_lf_sha256": "c30e9f3611aa9bf94d0ba512b5282b0c6a15410273c94bd5c3251d6c01f8a63f"
     },
     {
       "path": "ccf-rebuttal-writer/assets/templates/ac-focused-response.tex",
       "git_blob_sha": "bf45f1547a03b6be55888f47eaccdd440c31e234",
-      "size": 2233
+      "size": 2233,
+      "canonical_lf_sha256": "3c28e54d05e32edbfd02e38066243450ee08d4fd56e3f76527d8cab22e1d1fa2"
     },
     {
       "path": "ccf-rebuttal-writer/assets/templates/compact-response.tex",
       "git_blob_sha": "efdb6a65fc7f3875695127c79c49e7716a59028a",
-      "size": 1510
+      "size": 1510,
+      "canonical_lf_sha256": "867597712e30315fc4c9f2a8655da791d22e53d5b83760c8ad75c2e8fd44a2da"
     },
     {
       "path": "ccf-rebuttal-writer/assets/templates/default-general-common-reviewer.tex",
       "git_blob_sha": "dc3127510ce703fdc80e24ac6e0f2210fb86d2cc",
-      "size": 4515
+      "size": 4515,
+      "canonical_lf_sha256": "0be4042d1d8e7da5fa050bbe3b605bda3acf5bed437ea169a8649fd3d62bf126"
     },
     {
       "path": "ccf-rebuttal-writer/assets/templates/reviewer-specific-response.tex",
       "git_blob_sha": "553399feee661437331202724c3845898691e667",
-      "size": 2051
+      "size": 2051,
+      "canonical_lf_sha256": "8088ab526536d87a3a6d875a8af32d6baf0388fdbe2849aee5f014ab961ed233"
     },
     {
       "path": "ccf-rebuttal-writer/references/response-checklists.md",
       "git_blob_sha": "6877a3680ad1fccd75f4a734bf6c270d13c3e482",
-      "size": 5411
+      "size": 5411,
+      "canonical_lf_sha256": "15a111fe8d45ab305a59436a91b5104e1b475241577ee14e0612788e0119d434"
     },
     {
       "path": "ccf-rebuttal-writer/references/response-strategy.md",
       "git_blob_sha": "12614240e6a2595429cad7f5d3fb4de2d521cafc",
-      "size": 7379
+      "size": 7379,
+      "canonical_lf_sha256": "944a5cf864bdead852c61e1a594c8cec77353eb3750860615b828e5f97df3a70"
     },
     {
       "path": "ccf-rebuttal-writer/references/revision-ledger.md",
       "git_blob_sha": "ed64a6e8d92f192f436a7e7346251187d6563ab2",
-      "size": 3019
+      "size": 3019,
+      "canonical_lf_sha256": "2464a35c56eac3ebac7a6433527e3e365a7a107365282701cda6be1ebf83bb83"
     },
     {
       "path": "ccf-rebuttal-writer/references/tex-templates.md",
       "git_blob_sha": "5081ba9e48215c75d83ec6e5b948688a7afdce66",
-      "size": 1896
+      "size": 1896,
+      "canonical_lf_sha256": "b625fe0201020fc39656418adf09ff6e1f289363d1f121a6683b2e2ffa7c58c3"
     },
     {
       "path": "ccf-skill-forger/SKILL.md",
       "git_blob_sha": "dfd9bb16fde822f9f726506492242ef14f4fb726",
-      "size": 7890
+      "size": 7890,
+      "canonical_lf_sha256": "5da8fbc592626bc2a2e240e97f9f53658b6f9abca30482f4a51f4dc7b2ef1b58"
     },
     {
       "path": "ccf-skill-forger/agents/openai.yaml",
       "git_blob_sha": "609306cfe60fc15799db6a1b99b82ecc581093d7",
-      "size": 473
+      "size": 473,
+      "canonical_lf_sha256": "fb60b2c058e542345ae83ecbf88dddb1cc835a51d584300c5b245ad0e6fe5429"
     },
     {
       "path": "ccf-skill-forger/references/design-checklist.md",
       "git_blob_sha": "cd549b6fc1ea4a0660e16f4cf9caf7e8a70dc041",
-      "size": 9567
+      "size": 9567,
+      "canonical_lf_sha256": "b4317d2ecd53113f69627952e16fc25762e167100d98ca01dcaa01f75e685a3f"
     },
     {
       "path": "ccf-skill-forger/references/local-commands.md",
       "git_blob_sha": "47230b517043fe9651e9483eece1cd5b3930778c",
-      "size": 4136
+      "size": 4136,
+      "canonical_lf_sha256": "39dcdeb541fbdc144f6f7d4e6a5833966676bc4a5e4918e11c024da0de08bc55"
     },
     {
       "path": "ccf-skill-forger/references/patterns.md",
       "git_blob_sha": "87d35d694f325f2b643d107f767d85af620f8e0d",
-      "size": 3060
+      "size": 3060,
+      "canonical_lf_sha256": "8098f3b40ee8a436629aef1eab284fecc23cac473dbdb4d9e639cc5138130aa2"
     },
     {
       "path": "ccf-skill-forger/references/svg-style-guide.md",
       "git_blob_sha": "230ff8cf1e68fbe4b44cc884973bfc6c08a87caa",
-      "size": 1177
+      "size": 1177,
+      "canonical_lf_sha256": "7e87ec30b523df693c63d3f13a28f808cfbbfd2b57dc4a4763516017d0d459c0"
     },
     {
       "path": "ccf-submission-checker/SKILL.md",
       "git_blob_sha": "41f367c3253d2b92c12b95bfe56699e57df37b0e",
-      "size": 4695
+      "size": 4695,
+      "canonical_lf_sha256": "3a7a00a17c595bfd96cba427feacdeceb57dafb1ae7d17ec5e8e11731ea6d3ab"
     },
     {
       "path": "ccf-submission-checker/agents/openai.yaml",
       "git_blob_sha": "4d4c922d136491f5980504a1254516307adc6598",
-      "size": 480
+      "size": 480,
+      "canonical_lf_sha256": "9dfad95185c4d04e68b735c0367b56340cc6947d47ee7fcb33417854322dcb33"
     },
     {
       "path": "ccf-visual-composer/SKILL.md",
       "git_blob_sha": "9235fb518025420ad6dcbc9b965e35c5c605d065",
-      "size": 9880
+      "size": 9880,
+      "canonical_lf_sha256": "3b4c5c2f338aa22be322d5f16eee47d17481a296b34f43ac4bb48124ab987b0e"
     },
     {
       "path": "ccf-visual-composer/agents/openai.yaml",
       "git_blob_sha": "4e9bd6f77f436f407a361098660148267dfead82",
-      "size": 745
+      "size": 745,
+      "canonical_lf_sha256": "9e2d5ee435ccc1379a372d5e16d7d444f22ee589499143758b1df8a149708838"
     },
     {
       "path": "ccf-visual-composer/references/66520a88cbdb4da9f45191ef3ef8f613.jpg",
@@ -7808,12 +6620,14 @@
     {
       "path": "ccf-visual-composer/references/adaptive-architecture-style.md",
       "git_blob_sha": "7ba5d5a2acc5121056e5b2ba8eb4780d62065c53",
-      "size": 10730
+      "size": 10730,
+      "canonical_lf_sha256": "3a443602f845617b37288bcaaebc38eba5068c12644161c82a2517c5de215a48"
     },
     {
       "path": "ccf-visual-composer/references/architecture-diagram-generation.md",
       "git_blob_sha": "11a4b917b97170afd6b9ed8e159c2f350c08a0b3",
-      "size": 12004
+      "size": 12004,
+      "canonical_lf_sha256": "f02e53d7c744d64725dff783cd4aaeea820b7eaf8eb2909f6cc83ec01332e773"
     },
     {
       "path": "ccf-visual-composer/references/bf744d51b865c5e705b25fc558407cf9.jpg",
@@ -7823,7 +6637,8 @@
     {
       "path": "ccf-visual-composer/references/editable-pptx.md",
       "git_blob_sha": "1fa89d2e31fc98bf8bf436d7ee98beb426fea572",
-      "size": 5853
+      "size": 5853,
+      "canonical_lf_sha256": "fdcb12c8959b5c2f3a16cbc230120d1bf3adcd630922862142c7ec257a8c591e"
     },
     {
       "path": "ccf-visual-composer/references/f32d9325102aaf8ffab93d4b613c3318.jpg",
@@ -7833,12 +6648,14 @@
     {
       "path": "ccf-visual-composer/references/figure-table-layout.md",
       "git_blob_sha": "beeedff32701899de405c055e4c3d6969091fe7c",
-      "size": 4094
+      "size": 4094,
+      "canonical_lf_sha256": "5b009765fc5c87fd8d470e6008028e23310a4afca4e47d0d3b1849bee84ea090"
     },
     {
       "path": "ccf-visual-composer/references/icon-system.md",
       "git_blob_sha": "86e5ced8d6c124f855e55ecb66eae483f968006c",
-      "size": 4937
+      "size": 4937,
+      "canonical_lf_sha256": "c697b771a4aa679f3e9898192381fd9db645784c8c587b625f3ed4cd87960c6a"
     },
     {
       "path": "ccf-visual-composer/references/image.png",
@@ -7848,47 +6665,56 @@
     {
       "path": "ccf-visual-composer/references/palette-and-accessibility.md",
       "git_blob_sha": "d58623548ac92cbb24dd0c44e5ef039607cc11ab",
-      "size": 5207
+      "size": 5207,
+      "canonical_lf_sha256": "c881f3303feaf90c27cccfd3c76e3744204e5df64f8a22b62a32c0fd14d4b931"
     },
     {
       "path": "ccf-visual-composer/references/paper-vs-presentation-diagrams.md",
       "git_blob_sha": "87c4026a1dd5eb2fe4a61d42478efa1f6a46d140",
-      "size": 4376
+      "size": 4376,
+      "canonical_lf_sha256": "a02cfe2e8520bf2717ccd78a7b50355d7e0e4678d5094d5a7f708b378008664a"
     },
     {
       "path": "ccf-visual-composer/references/plot-inspiration-map.md",
       "git_blob_sha": "79a05bf2019c7910cfabeb0d4af4796329d9573f",
-      "size": 4996
+      "size": 4996,
+      "canonical_lf_sha256": "759b1c665c160625a175782b837d9598d5adeafc2a595a42b9b55641feead09c"
     },
     {
       "path": "ccf-visual-composer/references/python-plot-recipes.md",
       "git_blob_sha": "2011d45abbdfd1eaf35796c2fba0da4354f3c5a8",
-      "size": 10538
+      "size": 10538,
+      "canonical_lf_sha256": "7d15e30b1951de18a55d728d1e1c025d66a0666c0065f8cd80b438939092974e"
     },
     {
       "path": "ccf-visual-composer/references/reference-layout-blueprint.md",
       "git_blob_sha": "2018f76e3331fe70447caeef1fbc783e2cae03d1",
-      "size": 5731
+      "size": 5731,
+      "canonical_lf_sha256": "541cd6b102a6daf26771976dc6163f4f5989093ec5a94322e55863df0ba06d26"
     },
     {
       "path": "ccf-visual-composer/references/render-qa.md",
       "git_blob_sha": "b0b3072e82e1cd80742382a55d74733f354da315",
-      "size": 7839
+      "size": 7839,
+      "canonical_lf_sha256": "c7e334a96f11bdf3fa412cc1b4a187e35fc6a22fd8422d048fa02a29339cc8fe"
     },
     {
       "path": "ccf-visual-composer/references/visual-contract.md",
       "git_blob_sha": "94f823a8083d63cc9610f7cf4f8b32bbe1d0aa68",
-      "size": 12258
+      "size": 12258,
+      "canonical_lf_sha256": "191a86ac644901ada027f7129180a9dfa23c21b36ad6ca7881a372b9087732f4"
     },
     {
       "path": "ccf-visual-composer/resources/python/ccfa_plot_recipes.py",
       "git_blob_sha": "0c8309bab0bd136198699b9bd70de8a6d6e61d8d",
-      "size": 49334
+      "size": 49334,
+      "canonical_lf_sha256": "abdcd20e404aa9faa13bb0c0b9ce24aced78ff3b0420d93d3cae1be7edcd98f5"
     },
     {
       "path": "ccf-visual-composer/scripts/test_plot_recipes.py",
       "git_blob_sha": "a5b50601b4cb270bb2ded12bc5d9579da0d14500",
-      "size": 22594
+      "size": 22594,
+      "canonical_lf_sha256": "af817add41a40ee0ff7d0aa2f92d9572e08a832313a34120ff3209d8829e35e2"
     },
     {
       "path": "demo/attention-is-all-you-need/README.md",

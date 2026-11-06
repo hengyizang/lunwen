@@ -6,8 +6,7 @@ navigation, attributed coverage reuse, field/numeric comparison tables and
 source-labelled quality/cost evaluation. They use this same authorized library
 and cloud request queue without enabling another model or paid service.
 
-All five native adaptations are committed under .agents/skills as well as
-skills/, so fresh Codex Cloud checkouts discover them without desktop setup.
+All five native adaptations live under `skills/`; generated `.agents/skills/` pointers make them discoverable in fresh Codex Cloud checkouts without a second maintained instruction copy or desktop setup.
 Selected actual discovery candidates enter the library through
 literature_register(candidate_id,expected_leads_sha256,paper_id?,
 acquisition_receipt?,manifest?,reader?). Metadata-only entries remain explicitly

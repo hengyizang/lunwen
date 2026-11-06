@@ -21,8 +21,10 @@ claim, experiment and revision ledgers.
 
 At writing-and-review, read references/research-methods/submission-review.md.
 Write the criterion-bound checklist and run scripts/pre_submission_review.py.
-Keep reviewers independent, all persistent scientific wording non-Claude,
-the CNY 300 cumulative authorization tranches and human G0-G5 gates.
+Keep reviewers independent and all persistent scientific wording non-Claude.
+Enforce the existing cumulative project totals without tranches or per-call or
+per-paper caps. Only G1 doctoral-topic and G2 paper-topic decisions are human;
+other stages use evidence-bound automated checks without invented signatures.
 
 Execute helpers on the selected cloud runner. Do not install a runtime on the
 researcher's computer or invoke paid services just to use these methods.

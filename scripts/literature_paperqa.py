@@ -17,7 +17,7 @@ import uuid
 
 from scripts import evidence_retrieval, literature_review, literature_semantic, literature_workbench as wb
 from scripts import model_runtime, output_provenance, paper_qa
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest
 
 REQUEST = "program/literature-paperqa.json"
 OUTPUT = "reports/literature-paperqa"
@@ -246,10 +246,9 @@ def refresh(project: Path, request_file=REQUEST, *, execute=False):
             model=result.model, role="reader-qa-diagnostic", run_id=report["model_receipt"]["run_id"])
     else:
         record(project, [target], MODULE)
-    write(manifest_path, {"schema_version": "1.0", "request": {"path": request_file, "sha256": sha(project / request_file)},
-        "fingerprint": prepared["fingerprint"], "implementation_sha256": sha(Path(__file__)),
-        "outputs": [{"path": target.relative_to(project).as_posix(), "sha256": sha(target)}]})
-    record(project, [manifest_path], MODULE)
+    seal_manifest(project, [target], manifest_path, MODULE,
+        {"schema_version": "1.0", "request": {"path": request_file, "sha256": sha(project / request_file)},
+         "fingerprint": prepared["fingerprint"]}, record_outputs=False)
     return {"report": target.relative_to(project).as_posix(), "cache_hit": False, **report}
 
 
@@ -259,8 +258,7 @@ def validate_saved_report(project: Path, request_file=REQUEST):
     prepared = _prepare(project, spec)
     directory = path_in(project, OUTPUT + "/" + spec["id"], exists=False)
     manifest_path = path_in(project, OUTPUT + "/" + spec["id"] + "/manifest.json")
-    origin = output_provenance.current_origin(project, manifest_path)
-    if origin.get("status") != "tracked" or origin.get("family") != "other" or origin.get("model") != MODULE:
+    if not matches_origin(project, manifest_path, family="other", model=MODULE):
         raise ValueError("PaperQA2 bridge requires current deterministic manifest provenance")
     manifest = read(manifest_path)
     target = path_in(project, OUTPUT + "/" + spec["id"] + "/report.json")

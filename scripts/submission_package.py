@@ -207,6 +207,15 @@ Do not upload `SUBMISSION-MANIFEST.json` or this checklist unless the journal re
 
 
 def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
+    from scripts.paper_execution import enabled,scope
+    project=project_dir(slug)
+    if enabled(project):
+        with scope(project,paper_id):
+            return _build_package(slug,paper_id,output)
+    return _build_package(slug,paper_id,output)
+
+
+def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     paper_id = validate_paper_id(paper_id)
     state = load_state(slug)
     if state.get("paper_statuses", {}).get(paper_id) != "submission_ready":
