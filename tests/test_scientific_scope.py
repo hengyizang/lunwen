@@ -46,6 +46,30 @@ class ScientificScopeTests(unittest.TestCase):
             write(project / "program/paper-map.json", mapping)
             self.assertTrue(scientific_scope.validate(project, "G3"))
 
+    def test_measured_synthesis_progress_does_not_create_another_topic_vote(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project, _ = self.fixture(Path(temp))
+            mapping = read(project / "program/paper-map.json")
+            mapping["thesis_synthesis"]["evidence_alignment"] = [{"claim_id": "SYNTHETIC_P01", "result_status": "not_supported"}]
+            write(project / "program/paper-map.json", mapping)
+            self.assertEqual(scientific_scope.validate(project, "G5", "P01"), [])
+
+    def test_primary_endpoint_is_topic_scope_but_statistical_parameters_are_g3_details(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project, _ = self.fixture(Path(temp))
+            target = project / "papers/P01/paper-contract.json"
+            contract = read(target)
+            contract["hypotheses"] = [{"id": "H1", "statement": "A bounded testable hypothesis", "primary_outcome": "Registered outcome"}]
+            contract["scientific_bindings"] = {"hypotheses": [{"hypothesis_id": "H1", "primary_metric": "original_metric", "minimum_effect": 0}]}
+            write(target, contract)
+            frozen = scientific_scope.projection(project, "G2")
+            contract["scientific_bindings"]["hypotheses"][0].update(minimum_effect=0.2, aggregation="A declared aggregation")
+            write(target, contract)
+            self.assertEqual(scientific_scope.projection(project, "G2"), frozen)
+            contract["scientific_bindings"]["hypotheses"][0]["primary_metric"] = "different_metric"
+            write(target, contract)
+            self.assertNotEqual(scientific_scope.projection(project, "G2"), frozen)
+
     def test_legacy_approval_without_scope_seal_never_silently_migrates(self):
         with tempfile.TemporaryDirectory() as temp:
             project, _ = self.fixture(Path(temp))

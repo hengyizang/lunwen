@@ -516,7 +516,7 @@ def claude_result_text(stdout_path: Path) -> str:
     except json.JSONDecodeError:
         return raw
     if isinstance(value, dict):
-        if set(value) == api_orchestrator.AUDIT_FIELDS:
+        if api_orchestrator.AUDIT_FIELDS <= set(value) and not set(value) - api_orchestrator.AUDIT_FIELDS - {"novelty_assessment"}:
             return json.dumps(value, ensure_ascii=False)
         for key in ("structured_output", "result"):
             result = value.get(key)

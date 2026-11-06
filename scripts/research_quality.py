@@ -266,8 +266,8 @@ def validate_novelty_claim_matrix(
     """Require claim-level closest-work differences and search saturation."""
 
     errors: list[str] = []
-    if matrix.get("schema_version") != "1.0":
-        errors.append("schema_version must be 1.0")
+    if matrix.get("schema_version") not in {"1.0", "1.1"}:
+        errors.append("schema_version must be 1.0 or 1.1")
     if matrix.get("status") != "ready_for_review":
         errors.append("status must be ready_for_review")
     works_value = originality.get("closest_prior_work")
@@ -330,6 +330,7 @@ def validate_novelty_claim_matrix(
             errors.append("matrix contains claims absent from originality audit: " + ", ".join(extra))
 
     saturation = matrix.get("search_saturation")
+    modern = matrix.get("schema_version") == "1.1"
     if not isinstance(saturation, dict):
         errors.append("search_saturation must be an object")
     else:
@@ -372,12 +373,12 @@ def validate_novelty_claim_matrix(
                     + ", ".join(unknown_searches)
                 )
         rounds = saturation.get("consecutive_no_material_new_work_rounds")
-        if not isinstance(rounds, int) or isinstance(rounds, bool) or rounds < 2:
+        if not isinstance(rounds, int) or isinstance(rounds, bool) or rounds < (0 if modern else 2):
             errors.append(
                 "search_saturation.consecutive_no_material_new_work_rounds must be >= 2"
             )
         no_new_rounds = saturation.get("no_material_new_work_rounds")
-        if not isinstance(no_new_rounds, list) or len(no_new_rounds) < 2:
+        if not isinstance(no_new_rounds, list) or len(no_new_rounds) < (0 if modern else 2):
             errors.append("search_saturation.no_material_new_work_rounds must contain at least two rounds")
             no_new_rounds = []
         round_ids: set[str] = set()
@@ -403,8 +404,13 @@ def validate_novelty_claim_matrix(
             _text(item.get("stopping_reason"), f"{prefix}.stopping_reason", errors)
         if isinstance(rounds, int) and not isinstance(rounds, bool) and rounds != len(no_new_rounds):
             errors.append("consecutive_no_material_new_work_rounds must equal the recorded round count")
-        if saturation.get("unresolved_search_gaps") != []:
+        if not modern and saturation.get("unresolved_search_gaps") != []:
             errors.append("search_saturation.unresolved_search_gaps must be an empty array")
+        if modern:
+            if saturation.get("stopping_rule") not in {"coverage_assessed", "budget_limit", "time_limit"}:
+                errors.append("search_saturation.stopping_rule must explain the actual bounded stopping condition")
+            if not isinstance(saturation.get("unresolved_search_gaps"), list):
+                errors.append("search_saturation.unresolved_search_gaps must retain the actual remaining limitations")
         _text(saturation.get("saturation_rationale"), "search_saturation.saturation_rationale", errors)
         if project is not None:
             errors.extend(_saturation_executions(Path(project), searches or [], supporting, backward, forward, no_new_rounds))

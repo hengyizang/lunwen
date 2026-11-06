@@ -81,6 +81,29 @@ def report(gate):
 
 
 class QualityGateTests(unittest.TestCase):
+    def test_current_factual_assessments_replace_scores_and_bind_real_evidence(self):
+        import tempfile
+        from pathlib import Path
+        from scripts.research_artifacts import sha
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            source = project / "facts.txt"
+            source.write_text("Synthetic evidence for a controlled factual assessment.\n", encoding="utf-8")
+            value = report("G3")
+            value["schema_version"] = "1.2"
+            value.pop("scores")
+            value["assessments"] = {key: {"status": "satisfied", "rationale": "Synthetic located criterion evidence",
+                "source_anchors": [{"path": "facts.txt", "sha256": sha(source), "locator": "L1",
+                                    "excerpt": "Synthetic evidence for a controlled factual assessment."}]}
+                for key in DIMENSIONS["G3"]}
+            self.assertEqual(validate_report(value, "G3", project=project, require_facts=True), [])
+            value["assessments"]["leakage_control"]["status"] = "unresolved"
+            self.assertTrue(validate_report(value, "G3", project=project, require_facts=True))
+            value["assessments"]["leakage_control"]["status"] = "satisfied"
+            source.write_text("Changed source bytes\n", encoding="utf-8")
+            self.assertTrue(validate_report(value, "G3", project=project, require_facts=True))
+        self.assertTrue(any("migration" in e for e in validate_report(report("G3"), "G3", require_facts=True)))
+
     def test_required_text_rejects_null_and_non_strings(self):
         value = report("G1")
         value["evidence"][0]["source"] = None

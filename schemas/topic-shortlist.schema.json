@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/topic-shortlist.schema.json",
+  "title": "Source-bound doctoral topic shortlist",
+  "type": "object",
+  "required": [
+    "candidates",
+    "selection_decision",
+    "selected_direction_cloud_feasibility"
+  ],
+  "properties": {
+    "candidates": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object"
+      }
+    },
+    "selection_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chosen_candidate_id",
+        "strongest_rival_candidate_id",
+        "why_selected_over_rival",
+        "change_of_mind_evidence"
+      ],
+      "properties": {
+        "chosen_candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "strongest_rival_candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "why_selected_over_rival": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change_of_mind_evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "selected_direction_cloud_feasibility": {
+      "type": "object",
+      "required": [
+        "current_papers_feasible",
+        "no_future_lab_dependency",
+        "authorized_data_plan",
+        "cloud_experiment_plan",
+        "current_paper_scope",
+        "feasibility_evidence"
+      ],
+      "properties": {
+        "current_papers_feasible": {
+          "const": true
+        },
+        "no_future_lab_dependency": {
+          "const": true
+        },
+        "authorized_data_plan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cloud_experiment_plan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "current_paper_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "feasibility_evidence": {
+          "type": "object",
+          "required": [
+            "data_access",
+            "research_rights",
+            "compute_cost",
+            "pilot"
+          ],
+          "properties": {
+            "data_access": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "sha256",
+                  "locator",
+                  "quote"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "locator": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "research_rights": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "sha256",
+                  "locator",
+                  "quote"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "locator": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "compute_cost": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "sha256",
+                  "locator",
+                  "quote"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "locator": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "pilot": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "unknown",
+                    "not_run",
+                    "executed"
+                  ]
+                },
+                "limitation": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "attempt_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "status": {
+                        "const": "executed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "attempt_id"
+                    ]
+                  },
+                  "else": {
+                    "required": [
+                      "limitation"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

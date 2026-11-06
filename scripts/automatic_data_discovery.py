@@ -264,6 +264,8 @@ def run_automatic_discovery(
     output = project_root / "data" / f"discovery-broad-auto-{stamp}.json"
     data_discovery.save_report(report, output)
     _append_search_log(project_root, report, output)
+    from scripts.research_artifacts import record
+    record(project_root, [output, project_root / "evidence/dataset-search-log.jsonl"], "scripts/automatic_data_discovery.py")
     summary = report["automatic_screening_summary"]
     return {
         "report_path": output.relative_to(project_root).as_posix(),

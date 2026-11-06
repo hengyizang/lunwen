@@ -3,7 +3,39 @@
 在现有 `program/hypothesis-register.json` 内填写 `innovation_screening`，
 由 `scripts/research_candidates.py hypotheses` 生成原有 `program/hypothesis-audit.json`。
 G1 读取并重算这一审计；API 和 CLI 的既有规划、写作、初审、终审使用相同阶段指导。
-没有新增模型角色、自动选题器或付费研究循环，预算与 G0–G5 权限沿用当前项目。
+没有新增模型角色、自动选题器或付费研究循环。人工只决定 G1 博士选题和 G2 各篇选题；
+费用只计算并约束现有项目累计总额度，见 [TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md)。
+
+## 当前创新性硬性要求与迁移
+
+候选筛选不替代 `program/novelty-claim-matrix.json` 的来源核验。新矩阵使用
+`schema_version: "1.1"`；每条主张的 `prior_art_comparisons` 必须覆盖其最近工作集合。
+比较对象是本研究的候选贡献与每项前人工作，而非仅比较前人工作彼此是否不同。
+每条比较绑定 `work_id`、已登记的 `library_id`、真实 `retrieval_receipt_id` 和
+`retrieved_work_id`，以及当前原文的哈希、行范围和引句；PDF 可附原始页码。
+`already_known`、`precise_difference`、`non_obvious_reason` 和
+`discriminating_prediction` 应陈述可核对的实质，不以长度或“首次”等词代替证据。
+
+处置为 `distinct`、`overlap` 或 `unresolved`；未解决的异议必须保留。
+G1/G2/G5 的原有初审和终审对当前矩阵出具 `novelty_assessment`：覆盖实际
+`claim_id`、`inspected_work_ids`、判断、理由和剩余不确定性。审查须来自与作者不同
+的模型家族，并绑定当前材料及真实调用；旧评审、缓存标志或三份自报支持不能代替它。
+主张重合、来源不匹配或关键异议未解时，不能靠总分、改编号或重复措辞获得放行。
+
+1.1 版 `search_saturation` 新增 `stopping_rule`、`retrieval_dispositions` 和
+`search_rounds`。新增身份集合可重算，实质相关性仍需有理由的逐项处置，不能把新 DOI
+机械等同于重要近作。`coverage_assessed`、`budget_limit` 或 `time_limit` 描述实际停止
+原因；保留 `unresolved_search_gaps` 和未决项，不虚构“两轮零新增”或完整知识边界。
+范围有限的检索可以诚实停止；它不自动解决来源缺失、贡献重合或科学判断的未决问题。
+
+选题还须在原 `topic-shortlist` 中保存 `selection_decision` 和
+`feasibility_evidence`。候选裁决说明选中了谁、最强替代方案及什么证据会改变选择，
+最终 G1 决定仍由用户作出。`pilot.status: not_run` 必须说明限制，执行过的 pilot
+必须有真实执行依据，不能仅凭公开数据 URL 宣称完成实验。
+
+旧项目保留原登记与回执，由既有 writer 根据真实材料补齐并重跑相关检查。
+空白初始化模板保持草稿，不能成为创新性证据；详细字段迁移见
+[REVIEW-REMEDIATION.md](REVIEW-REMEDIATION.md)。内部审查和软件通过均不证明全球新颖性或期刊录用。
 
 ## 吸收的方法与记录
 

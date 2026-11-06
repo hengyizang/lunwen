@@ -65,6 +65,21 @@ def load_object(path: Path) -> dict[str, Any]:
     return value
 
 
+def validate_selected_venue(project: Path, paper_id: str) -> list[str]:
+    """Example-only venue metadata is never a submission target."""
+    if not re.fullmatch(r"P[0-9]{2}", paper_id):
+        return ["an exact paper ID is required for venue validation"]
+    try:
+        venue = load_object(project / "papers" / paper_id / "venue.json")
+    except ResearchCtlError as exc:
+        return [str(exc)]
+    if "trial_only" in venue and type(venue["trial_only"]) is not bool:
+        return [f"{paper_id}/venue.json: trial_only must be a boolean"]
+    if venue.get("trial_only") is True or venue.get("selection_status") == "trial":
+        return [f"{paper_id}/venue.json: trial_only example venue cannot enter submission-ready; select a verified target"]
+    return []
+
+
 def safe_file(path: Path, paper: Path) -> None:
     if any(item.is_symlink() for item in (path,*path.parents)):
         raise ResearchCtlError(f"Refusing symlink in submission package: {path}")
@@ -201,6 +216,9 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
         raise ResearchCtlError(f"Missing paper directory: {paper}")
 
     project = paper.parent.parent
+    venue_errors = validate_selected_venue(project, paper_id)
+    if venue_errors:
+        raise ResearchCtlError("; ".join(venue_errors))
     approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==paper_id),None)
     if not approval or approval.get("paper_artifact_sha256")!=paper_artifact_hash(slug,paper_id):
         raise ResearchCtlError("Paper changed after the G5 decision or lacks its current per-paper hash; re-run G5 checks")

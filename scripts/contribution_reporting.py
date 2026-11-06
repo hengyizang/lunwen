@@ -165,6 +165,17 @@ def audit(project: Path, paper_id: str, config: dict):
                 except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
                     comparison_errors.append(str(exc))
     rows, errors = [], comparison_errors
+    outcome_binding = None
+    # Legacy source audits remain diagnostic. Current 1.1 scientific gates also
+    # require this join, and cannot reuse a manuscript's self-reported outcome.
+    protocol = project / "papers" / paper_id / "experiment-evidence-plan.json"
+    if protocol.is_file() and read(protocol).get("schema_version") == "1.1":
+        from scripts.results_validation import claim_outcomes, validate_result_statuses
+        try:
+            outcome_binding = claim_outcomes(project, paper_id)
+            errors.extend(validate_result_statuses(project, paper_id, config.get("claim_alignment")))
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            errors.append("formal outcome binding: " + str(exc))
     for link in config.get("claim_alignment", []):
         if not isinstance(link, dict) or not isinstance(link.get("claim_id"), str):
             errors.append("contribution requires a current claim alignment")
@@ -181,6 +192,7 @@ def audit(project: Path, paper_id: str, config: dict):
     return {"status": "needs_preparation" if errors else "ready_for_scientific_review",
             "claims": rows, "errors": errors, "semantic_support_verified": False,
             "scientific_completion_verified": False,
+            "outcome_binding": outcome_binding,
             "implementation_sha256": sha(Path(__file__)), "paid_model_calls": 0}
 
 

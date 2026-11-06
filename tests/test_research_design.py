@@ -88,6 +88,13 @@ def venue(name, quartile):
     }
 
 
+def negative_plan():
+    return {"informative_if_unsupported": "Report the bounded null or adverse comparison without a success story.",
+            "precision_limitations": "An imprecise interval does not establish equivalence or no effect.",
+            "stop_rule": "Stop after the registered observations; retain every attempt.",
+            "claim_boundary": "Interpret only the measured population and registered endpoints."}
+
+
 def paper_contract():
     return {
         "schema_version": "2.0",
@@ -133,6 +140,15 @@ def paper_contract():
             "reproducibility_plan": "Locked environment and seeds.",
         },
         "falsification_conditions": ["No improvement over strong baseline."],
+        "negative_result_plan": negative_plan(),
+        "dependency_bindings": [],
+        "scientific_bindings": {"schema_version": "1.0", "hypotheses": [{
+            "hypothesis_id": "H1", "primary_outcome_statement": "Macro F1", "primary_metric": "Macro F1",
+            "direction": "higher", "aggregation": "per machine then mean", "decision_rule": "superiority",
+            "minimum_effect": 0, "condition_ids": ["FC1"], "rationale": "Prespecified synthetic primary endpoint."}],
+            "falsification_conditions": [{"condition_id": "FC1", "hypothesis_id": "H1",
+                "statement": "No improvement over strong baseline.", "metric": "Macro F1", "decision_rule": "superiority",
+                "threshold": 0, "rationale": "Failure to exceed the registered null cannot support improvement."}]},
         "dependencies": [],
         "independence": {
             "unique_claim_ids": ["C-P01"],
@@ -174,6 +190,7 @@ def experiment_design():
             "leakage_controls": ["Fit preprocessing on train only.", "Keep machines disjoint."],
             "preprocessing_fit_scope": "Training partition only.",
             "external_validation": "Later time period and second plant.",
+            "model_selection": {"status": "not_tuned", "rationale": "All synthetic baseline settings are fixed before evaluation."},
         },
         "metrics": {
             "primary": [{"name": "Macro F1", "direction": "higher", "aggregation": "per machine then mean", "uncertainty": "95% bootstrap CI", "rationale": "Class imbalance."}],
@@ -270,7 +287,7 @@ class ResearchDesignTests(unittest.TestCase):
                 {"paper_a": left, "paper_b": right, "distinct_research_questions": True, "distinct_primary_claims": True, "independent_primary_evidence": True, "standalone_scientific_value": True, "shared_primary_outcome": False, "shared_outcome_justification": "No primary outcome is shared.", "overlap_risk": "low", "why_separate": "Different claims.", "merge_trigger": "Merge if claims become identical."}
                 for left, right in (("P01", "P02"), ("P01", "P03"), ("P02", "P03"))
             ],
-            "thesis_synthesis": {"core_thesis": "Core.", "extension_thesis": "Extension.", "cumulative_progression": "Progression.", "integrated_contribution": "Synthesis.", "dependency_logic": "Dependencies."},
+            "thesis_synthesis": {"core_thesis": "Core.", "extension_thesis": "Extension.", "cumulative_progression": "Progression.", "integrated_contribution": "Synthesis.", "dependency_logic": "Dependencies.", "argument_links": [{"step_id": "synthesis", "claim_ids": [f"C-P{n:02}" for n in range(1, 4)], "contribution": "Each synthetic claim informs the same question.", "what_changes_if_unsupported": "Retain the boundary rather than claiming success."}]},
         }
         self.assertEqual(validate_paper_map(value, ("P01", "P02", "P03")), [])
         duplicate = copy.deepcopy(value)
@@ -308,6 +325,8 @@ class ResearchDesignTests(unittest.TestCase):
                 {"paper_id": "P03", "theme_id": "B", "unique_claim_ids": ["B1", "B2"]},
             ]
         }
+        core["negative_result_plan"] = negative_plan()
+        extension["negative_result_plan"] = negative_plan()
         self.assertEqual(validate_theme_independence(core, extension), [])
         self.assertEqual(validate_theme_mapping(paper_map, core, extension), [])
         extension["novelty_claim_ids"][0] = "A1"
@@ -336,6 +355,13 @@ class ResearchDesignTests(unittest.TestCase):
             "cloud_experiment_plan": "Run on GitHub Actions within recorded budgets.",
             "current_paper_scope": "P01-P06 have independent cloud-only primary evidence.",
         }}
+        shortlist["candidates"] = [{"candidate_id": key} for key in ("A", "B", "C")]
+        shortlist["selection_decision"] = {"chosen_candidate_id": "A", "strongest_rival_candidate_id": "B",
+            "why_selected_over_rival": "Synthetic A has an observable contrast.", "change_of_mind_evidence": "Reject A if the contrast is unidentifiable."}
+        anchor = {"path": "evidence/feasibility.txt", "sha256": "a" * 64, "locator": "Synthetic fixture", "quote": "Bounded source."}
+        shortlist["selected_direction_cloud_feasibility"]["feasibility_evidence"] = {
+            "data_access": [anchor], "research_rights": [anchor], "compute_cost": [anchor],
+            "pilot": {"status": "not_run", "limitation": "Synthetic protocol has not been executed."}}
         self.assertEqual(validate_selected_direction_cloud_feasibility(shortlist), [])
         shortlist["selected_direction_cloud_feasibility"]["current_papers_feasible"] = False
         self.assertTrue(any("current_papers_feasible" in e for e in validate_selected_direction_cloud_feasibility(shortlist)))
@@ -358,7 +384,7 @@ class ResearchDesignTests(unittest.TestCase):
                 {"paper_a": f"P{left:02d}", "paper_b": f"P{right:02d}", "distinct_research_questions": True, "distinct_primary_claims": True, "independent_primary_evidence": True, "standalone_scientific_value": True, "shared_primary_outcome": False, "shared_outcome_justification": "Separate outcomes.", "overlap_risk": "low", "why_separate": "Different claims.", "merge_trigger": "Merge if claims converge."}
                 for left in range(1, 7) for right in range(left + 1, 7)
             ],
-            "thesis_synthesis": {"core_thesis": "Core.", "extension_thesis": "Extension.", "cumulative_progression": "Progression.", "integrated_contribution": "Synthesis.", "dependency_logic": "Dependencies."},
+            "thesis_synthesis": {"core_thesis": "Core.", "extension_thesis": "Extension.", "cumulative_progression": "Progression.", "integrated_contribution": "Synthesis.", "dependency_logic": "Dependencies.", "argument_links": [{"step_id": "synthesis", "claim_ids": [f"C{n}" for n in range(1, 7)], "contribution": "Each synthetic claim informs the same question.", "what_changes_if_unsupported": "Retain the boundary rather than claiming success."}]},
         }
         expected = tuple(f"P{i:02d}" for i in range(1, 7))
         self.assertEqual(validate_paper_map(value, expected), [])

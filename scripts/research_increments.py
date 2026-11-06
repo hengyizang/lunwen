@@ -445,7 +445,17 @@ def gate_errors(project, gate="G5", paper_id=None):
         return ["research increments not initialized"] if gate == "G5" else []
     try:
         current = build(project)
-        errors = ["research increments: " + item["error"] for item in current.get("errors", [])]
+        errors = []
+        for item in current.get("errors", []):
+            if gate == "G5" and item.get("group") == "dependencies":
+                graph = next((g for g in current.get("groups", {}).get("dependencies", [])
+                              if g.get("id") == item.get("id")), None)
+                # A source change only blocks papers which actually consume it.
+                # Structural graph errors still fail closed (no valid graph).
+                if graph is not None and not any(node["id"] in graph["stale"] and paper_id in node["paper_ids"]
+                                                 for node in graph["nodes"]):
+                    continue
+            errors.append("research increments: " + item["error"])
         if gate == "G5":
             spec = load(project)
             for group in spec["required_at_submission"]:

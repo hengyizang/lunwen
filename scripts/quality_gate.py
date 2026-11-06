@@ -38,18 +38,37 @@ def _score(value: Any, field: str, errors: list[str]) -> float | None:
         errors.append(f"{field}={value:g} is below hard floor {MIN_SCORE:g}")
     return float(value)
 
-def validate_report(report: dict[str, Any], gate: str) -> list[str]:
+def validate_report(report: dict[str, Any], gate: str, *, project: Path | None = None,
+                    require_facts: bool = False) -> list[str]:
     errors: list[str] = []
-    if report.get("schema_version") != "1.1": errors.append("schema_version must be 1.1")
+    version = report.get("schema_version")
+    if version not in {"1.1", "1.2"}: errors.append("schema_version must be 1.1 or 1.2")
+    if require_facts and version != "1.2": errors.append("quality report migration required: 1.2 evidence assessments replace numerical self-scores")
     if report.get("gate") != gate: errors.append(f"gate must be {gate}")
     if report.get("status") not in {"ready_for_review", "approved"}: errors.append("status must be ready_for_review or approved")
-    dimensions = report.get("scores")
-    if not isinstance(dimensions, dict): errors.append("scores object is required"); dimensions = {}
-    scores: list[float] = []
-    for field in DIMENSIONS.get(gate, ()):
-        value = _score(dimensions.get(field), f"scores.{field}", errors)
-        if value is not None: scores.append(value)
-    if scores and sum(scores) / len(scores) < MIN_OVERALL: errors.append(f"overall mean score must be >= {MIN_OVERALL:g}")
+    if version == "1.2":
+        assessments = report.get("assessments")
+        if not isinstance(assessments, dict):
+            errors.append("assessments object is required"); assessments = {}
+        if set(assessments) != set(DIMENSIONS.get(gate, ())): errors.append("assessments must cover the exact gate criteria")
+        from scripts.research_candidates import anchor_errors
+        for criterion in DIMENSIONS.get(gate, ()):
+            row = assessments.get(criterion)
+            if not isinstance(row, dict): errors.append(criterion + " needs an evidence assessment"); continue
+            if row.get("status") != "satisfied": errors.append(criterion + " has unresolved or failed evidence")
+            if not _nonempty_string(row.get("rationale")): errors.append(criterion + " needs its factual rationale")
+            anchors = row.get("source_anchors")
+            if not isinstance(anchors, list) or not anchors: errors.append(criterion + " needs located factual evidence")
+            elif project is not None:
+                for anchor in anchors: errors.extend(criterion + ": " + e for e in anchor_errors(project, anchor))
+    else:
+        dimensions = report.get("scores")
+        if not isinstance(dimensions, dict): errors.append("scores object is required"); dimensions = {}
+        scores: list[float] = []
+        for field in DIMENSIONS.get(gate, ()):
+            value = _score(dimensions.get(field), f"scores.{field}", errors)
+            if value is not None: scores.append(value)
+        if scores and sum(scores) / len(scores) < MIN_OVERALL: errors.append(f"overall mean score must be >= {MIN_OVERALL:g}")
     evidence = report.get("evidence")
     minimum_evidence = MIN_EVIDENCE.get(gate, 3)
     if not isinstance(evidence, list) or len(evidence) < minimum_evidence:
@@ -111,9 +130,9 @@ def validate_report(report: dict[str, Any], gate: str) -> list[str]:
     if report.get("human_review_required") is not True: errors.append("human_review_required must be true")
     return errors
 
-def validate_file(path: Path, gate: str) -> list[str]:
+def validate_file(path: Path, gate: str, *, project: Path | None = None, require_facts: bool = False) -> list[str]:
     try: report = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError: return [f"missing quality report: {path}"]
     except json.JSONDecodeError as exc: return [f"invalid JSON in quality report {path}: {exc}"]
     if not isinstance(report, dict): return [f"quality report must be an object: {path}"]
-    return validate_report(report, gate)
+    return validate_report(report, gate, project=project, require_facts=require_facts)

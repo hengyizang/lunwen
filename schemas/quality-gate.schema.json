@@ -3,71 +3,326 @@
   "$id": "https://github.com/hengyizang/lunwen/schemas/quality-gate.schema.json",
   "title": "Doctoral Research OS quality gate report",
   "type": "object",
-  "required": ["schema_version", "gate", "status", "scores", "evidence", "novelty_claim", "feasibility_claim", "scientific_contribution", "novelty_basis", "novelty_is_absence_only", "originality_assessment", "doctoral_readiness", "venue_readiness", "blockers", "human_review_required"],
+  "required": [
+    "schema_version",
+    "gate",
+    "status",
+    "evidence",
+    "novelty_claim",
+    "feasibility_claim",
+    "scientific_contribution",
+    "novelty_basis",
+    "novelty_is_absence_only",
+    "originality_assessment",
+    "doctoral_readiness",
+    "venue_readiness",
+    "blockers",
+    "human_review_required"
+  ],
   "properties": {
-    "schema_version": {"const": "1.1"},
-    "gate": {"enum": ["G1", "G2", "G3", "G4", "G5"]},
-    "status": {"enum": ["ready_for_review", "approved"]},
-    "scores": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 10}},
-    "evidence": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["id", "source", "claim_supported", "source_date"]}},
-    "novelty_claim": {"type": "string", "minLength": 1},
-    "feasibility_claim": {"type": "string", "minLength": 1},
-    "scientific_contribution": {"type": "string", "minLength": 1},
-    "novelty_basis": {"enum": ["comparative_primary_literature", "comparative_literature_and_patents"]},
-    "novelty_is_absence_only": {"const": false},
+    "schema_version": {
+      "enum": [
+        "1.1",
+        "1.2"
+      ]
+    },
+    "gate": {
+      "enum": [
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5"
+      ]
+    },
+    "status": {
+      "enum": [
+        "ready_for_review",
+        "approved"
+      ]
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "claim_supported",
+          "source_date"
+        ]
+      }
+    },
+    "novelty_claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "feasibility_claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scientific_contribution": {
+      "type": "string",
+      "minLength": 1
+    },
+    "novelty_basis": {
+      "enum": [
+        "comparative_primary_literature",
+        "comparative_literature_and_patents"
+      ]
+    },
+    "novelty_is_absence_only": {
+      "const": false
+    },
     "originality_assessment": {
       "type": "object",
-      "required": ["closest_prior_work_ids", "adjacent_fields_checked", "non_novel_elements", "differentiating_claims", "counterevidence_considered", "residual_risk"],
+      "required": [
+        "closest_prior_work_ids",
+        "adjacent_fields_checked",
+        "non_novel_elements",
+        "differentiating_claims",
+        "counterevidence_considered",
+        "residual_risk"
+      ],
       "properties": {
-        "closest_prior_work_ids": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
-        "adjacent_fields_checked": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
-        "non_novel_elements": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-        "differentiating_claims": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-        "counterevidence_considered": {"const": true},
-        "residual_risk": {"type": "string", "minLength": 1}
+        "closest_prior_work_ids": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "adjacent_fields_checked": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "non_novel_elements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "differentiating_claims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "counterevidence_considered": {
+          "const": true
+        },
+        "residual_risk": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "doctoral_readiness": {
       "type": "object",
-      "required": ["unifying_thesis", "original_knowledge_contribution", "synthesis_beyond_individual_papers", "methodological_progression", "scope_boundaries", "examiner_challenges"],
+      "required": [
+        "unifying_thesis",
+        "original_knowledge_contribution",
+        "synthesis_beyond_individual_papers",
+        "methodological_progression",
+        "scope_boundaries",
+        "examiner_challenges"
+      ],
       "properties": {
-        "unifying_thesis": {"type": "string", "minLength": 1},
-        "original_knowledge_contribution": {"type": "string", "minLength": 1},
-        "synthesis_beyond_individual_papers": {"type": "string", "minLength": 1},
-        "methodological_progression": {"type": "string", "minLength": 1},
-        "scope_boundaries": {"type": "string", "minLength": 1},
-        "examiner_challenges": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}}
+        "unifying_thesis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original_knowledge_contribution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "synthesis_beyond_individual_papers": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodological_progression": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope_boundaries": {
+          "type": "string",
+          "minLength": 1
+        },
+        "examiner_challenges": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "venue_readiness": {
       "type": "object",
-      "required": ["minimum_jcr_quartile", "preferred_jcr_quartile", "candidate_venues", "current_verification_required", "venue_specific_guidelines_required"],
+      "required": [
+        "minimum_jcr_quartile",
+        "preferred_jcr_quartile",
+        "candidate_venues",
+        "current_verification_required",
+        "venue_specific_guidelines_required"
+      ],
       "properties": {
-        "minimum_jcr_quartile": {"enum": ["Q1", "Q2"]},
-        "preferred_jcr_quartile": {"const": "Q1"},
+        "minimum_jcr_quartile": {
+          "enum": [
+            "Q1",
+            "Q2"
+          ]
+        },
+        "preferred_jcr_quartile": {
+          "const": "Q1"
+        },
         "candidate_venues": {
-          "type": "array", "minItems": 2,
+          "type": "array",
+          "minItems": 2,
           "items": {
             "type": "object",
-            "required": ["name", "quartile", "indexing", "category", "jcr_year", "source_url", "scope_fit", "article_type"],
+            "required": [
+              "name",
+              "quartile",
+              "indexing",
+              "category",
+              "jcr_year",
+              "source_url",
+              "scope_fit",
+              "article_type"
+            ],
             "properties": {
-              "name": {"type": "string", "minLength": 1},
-              "quartile": {"enum": ["Q1", "Q2"]},
-              "indexing": {"enum": ["SCI", "SCIE"]},
-              "category": {"type": "string", "minLength": 1},
-              "jcr_year": {"type": "integer", "minimum": 2000},
-              "source_url": {"type": "string", "pattern": "^https://"},
-              "scope_fit": {"type": "string", "minLength": 1},
-              "article_type": {"type": "string", "minLength": 1}
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quartile": {
+                "enum": [
+                  "Q1",
+                  "Q2"
+                ]
+              },
+              "indexing": {
+                "enum": [
+                  "SCI",
+                  "SCIE"
+                ]
+              },
+              "category": {
+                "type": "string",
+                "minLength": 1
+              },
+              "jcr_year": {
+                "type": "integer",
+                "minimum": 2000
+              },
+              "source_url": {
+                "type": "string",
+                "pattern": "^https://"
+              },
+              "scope_fit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "article_type": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           }
         },
-        "current_verification_required": {"const": true},
-        "venue_specific_guidelines_required": {"const": true}
+        "current_verification_required": {
+          "const": true
+        },
+        "venue_specific_guidelines_required": {
+          "const": true
+        }
       }
     },
-    "blockers": {"type": "array", "maxItems": 0},
-    "human_review_required": {"const": true}
+    "blockers": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "human_review_required": {
+      "const": true
+    },
+    "assessments": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "status",
+          "rationale",
+          "source_anchors"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "satisfied",
+              "unresolved",
+              "failed"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_anchors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "locator",
+                "excerpt"
+              ]
+            }
+          }
+        }
+      }
+    }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "assessments"
+        ]
+      },
+      "else": {
+        "required": [
+          "scores"
+        ]
+      }
+    }
+  ]
 }

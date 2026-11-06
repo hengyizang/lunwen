@@ -69,7 +69,7 @@ def jsonl_objects(path,errors):
     return out
 def audit_document_valid(path,audit,errors,final=False):
     expected={"verdict","fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps","uncertainty"};valid=True
-    if set(audit)!=expected:errors.append(f"{path.name}: audit must contain exactly {', '.join(sorted(expected))}");valid=False
+    if not expected<=set(audit) or set(audit)-expected-{"novelty_assessment"}:errors.append(f"{path.name}: audit must contain the required fields and optional novelty_assessment only");valid=False
     if audit.get("verdict") not in {"block","revise","pass-with-conditions"}:errors.append(f"{path.name}: invalid verdict");valid=False
     for field in expected-{"verdict"}:
         value=audit.get(field)
@@ -87,10 +87,26 @@ def quality_path(project,gate,paper_id=None):
 def quality_errors(project,gate,errors,paper_id=None):
     try:from scripts.quality_gate import validate_file
     except ImportError as exc:errors.append(f"quality gate validator unavailable: {exc}");return
-    path=quality_path(project,gate,paper_id);errors.extend(f"{path}: {e}" for e in validate_file(path,gate))
+    path=quality_path(project,gate,paper_id);errors.extend(f"{path}: {e}" for e in validate_file(path,gate,project=project,require_facts=True))
 def gate_errors(slug,gate):
     project=project_dir(slug);errors=[]
     if gate is None:return errors
+    if gate in {"G2","G5"}:
+        from scripts.research_design import validate_portfolio_evidence
+        pid=read_json(state_path(slug)).get("active_paper") if gate=="G5" else None
+        errors.extend(validate_portfolio_evidence(project,pid,gate=gate))
+    if gate in {"G1","G2","G5"}:
+        from scripts.innovation_screening import validate_novelty_gate
+        matrix=load_nonempty_json(project/"program/novelty-claim-matrix.json",errors)
+        originality=load_nonempty_json(project/"program/originality-audit.json",errors)
+        if matrix and originality:
+            pid=read_json(state_path(slug)).get("active_paper") if gate=="G5" else None
+            errors.extend(validate_novelty_gate(project,matrix,originality,gate,pid))
+    if gate in {"G3","G4","G5"}:
+        from scripts.experiment_evidence import validate_scientific_bindings
+        state=read_json(state_path(slug))
+        selected=[state.get("active_paper")] if gate=="G5" else [f"P{i:02d}" for i in range(1,int(state["paper_count"])+1)]
+        for pid in selected:errors.extend(validate_scientific_bindings(project,pid,gate))
     from scripts.scientific_scope import validate as validate_scientific_scope
     errors.extend(validate_scientific_scope(project,gate,read_json(state_path(slug)).get("active_paper")))
     if gate in {"G3","G4","G5"}:
@@ -132,7 +148,7 @@ def gate_errors(slug,gate):
             if not isinstance(cs,list) or len(cs)<3:errors.append("topic-shortlist.json requires at least three candidates")
             try:
                 from scripts.research_design import validate_selected_direction_cloud_feasibility
-                errors.extend(f"program/topic-shortlist.json: {x}" for x in validate_selected_direction_cloud_feasibility(s))
+                errors.extend(f"program/topic-shortlist.json: {x}" for x in validate_selected_direction_cloud_feasibility(s,project=project))
             except ImportError as exc:errors.append(f"cloud feasibility validator unavailable: {exc}")
         core_thesis=load_nonempty_json(project/"program/core-thesis.json",errors)
         extension_thesis=load_nonempty_json(project/"program/extension-thesis.json",errors)
@@ -331,6 +347,8 @@ def gate_errors(slug,gate):
         quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
+        from scripts.submission_package import validate_selected_venue
+        errors.extend(validate_selected_venue(project,pid))
         from scripts import study_routes
         if study_routes.route(project,pid)!="empirical":
             errors.extend(study_routes.validation_errors(project,pid));errors.extend(study_routes.export_errors(project,pid))
@@ -531,10 +549,14 @@ def paper_artifact_hash(slug,paper_id):
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
-    defaults=read_json(DEFAULTS_PATH);count=args.paper_count or int(defaults["paper_count"])
+    defaults=read_json(DEFAULTS_PATH);count=args.paper_count if args.paper_count is not None else int(defaults["paper_count"])
     portfolio=defaults.get("venue_portfolio",{}) if isinstance(defaults.get("venue_portfolio"),dict) else {}
     minimum_q1=int(portfolio.get("minimum_q1_papers",3))
     if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
+    if count!=6:
+        if getattr(args,"command",None)=="init" or os.environ.get("DR_OS_ROUTING_PROFILE")=="production" or os.environ.get("DR_OS_ROUTING_CONFIG"):
+            raise ResearchCtlError("The supported doctoral workflow requires exactly six papers.")
+        print("Non-six-paper initialization is a partial low-level fixture; the complete doctoral workflow supports six papers only.")
     for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","data/quality","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","execution_mode":"cloud_only","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"target_submission_ready_date":None,"weekly_hours":None,"cash_budget_usd":None,"model_api_budget_cny":None,"cloud_compute_budget_usd":None,"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","topic_quality_requirements":{"novelty_evidence_required":True,"doctoral_depth_required":True,"original_contribution_required":True,"current_papers_cloud_feasible_required":True},"ranking_weights":{"funded_position_supply":None,"job_market_and_salary":None,"future_growth_potential":None,"phd_position_competition":None,"job_market_competition":None,"background_fit":None,"application_route_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"GitHub Actions Linux runner","orchestrator":"Codex control and API-first cloud orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
@@ -544,8 +566,23 @@ def initialize(args):
     try:from scripts.model_spend import initial as initial_model_spend
     except ImportError:from model_spend import initial as initial_model_spend
     write_json(dest/"state"/"model-spend-control.json",initial_model_spend())
-    write_json(dest/"program"/"core-thesis.json",{"schema_version":"1.0","theme_id":"A","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","novelty_claim_ids":[],"planned_paper_ids":[],"falsification_conditions":[],"human_review_required":True})
-    write_json(dest/"program"/"extension-thesis.json",{"schema_version":"1.0","theme_id":"B","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","mechanism_or_rationale":"","novelty_claim_ids":[],"planned_paper_ids":[],"independent_evidence_plan":[],"falsification_conditions":[],"boundary_conditions":[],"relationship_to_core":{"shared_foundation":[],"independent_question":False,"independent_claims":False,"independent_primary_evidence":False,"survives_core_failure":False,"non_dependency_rationale":""},"fallback_if_unsupported":"","human_review_required":True})
+    negative_result_plan={"informative_if_unsupported":"","precision_limitations":"","stop_rule":"","claim_boundary":""}
+    write_json(dest/"program"/"core-thesis.json",{"schema_version":"1.0","theme_id":"A","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","novelty_claim_ids":[],"planned_paper_ids":[],"falsification_conditions":[],"negative_result_plan":negative_result_plan,"human_review_required":True})
+    write_json(dest/"program"/"extension-thesis.json",{"schema_version":"1.0","theme_id":"B","status":"draft","title":"","doctoral_question":"","distinct_contribution":"","mechanism_or_rationale":"","novelty_claim_ids":[],"planned_paper_ids":[],"independent_evidence_plan":[],"falsification_conditions":[],"boundary_conditions":[],"relationship_to_core":{"shared_foundation":[],"independent_question":False,"independent_claims":False,"independent_primary_evidence":False,"survives_core_failure":False,"non_dependency_rationale":""},"fallback_if_unsupported":"","negative_result_plan":negative_result_plan,"human_review_required":True})
+    write_json(dest/"program"/"topic-shortlist.json",{
+        "candidates":[],
+        "selection_decision":{"chosen_candidate_id":"","strongest_rival_candidate_id":"","why_selected_over_rival":"","change_of_mind_evidence":""},
+        "selected_direction_cloud_feasibility":{"current_papers_feasible":False,"no_future_lab_dependency":False,
+            "authorized_data_plan":"","cloud_experiment_plan":"","current_paper_scope":"",
+            "feasibility_evidence":{"data_access":[],"research_rights":[],"compute_cost":[],"pilot":{"status":"not_run","limitation":""}}}})
+    write_json(dest/"program"/"paper-map.json",{"schema_version":"1.0","status":"draft","papers":[],"pairwise_distinctness":[],
+        "thesis_synthesis":{"core_thesis":"","extension_thesis":"","cumulative_progression":"","integrated_contribution":"",
+            "dependency_logic":"","argument_links":[],"evidence_alignment":[]}})
+    write_json(dest/"program"/"novelty-claim-matrix.json",{"schema_version":"1.1","status":"draft","claims":[],
+        "search_saturation":{"exact_query_rounds":0,"adjacent_field_rounds":0,"backward_chaining_complete":False,
+            "forward_chaining_complete":False,"supporting_search_ids":[],"backward_chaining_search_ids":[],"forward_chaining_search_ids":[],
+            "consecutive_no_material_new_work_rounds":0,"no_material_new_work_rounds":[],"unresolved_search_gaps":[],"saturation_rationale":"",
+            "stopping_rule":"","retrieval_dispositions":[],"search_rounds":[]},"human_review_required":True})
     for rel in [
         "evidence/search-log.jsonl",
         "evidence/literature-api-ledger.jsonl",
@@ -554,7 +591,7 @@ def initialize(args):
         "experiments/registry.jsonl",
     ]:
         write_text(dest / rel, "")
-    write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,support,uncertainty,status\n")
+    write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,comparison_ids,support,uncertainty,status\n")
     for n in range(1,count+1):
         pid=f"P{n:02d}";paper=dest/"papers"/pid
         for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
@@ -564,7 +601,7 @@ def initialize(args):
             from scripts.venue_policy import default_target
         except ImportError:
             from venue_policy import default_target
-        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","cloud_feasibility":{"current_paper_cloud_executable":False,"no_future_lab_dependency":False,"data_access_plan":"","cloud_execution_plan":"","evidence_and_claim_scope":""},"originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"dependencies":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
+        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","cloud_feasibility":{"current_paper_cloud_executable":False,"no_future_lab_dependency":False,"data_access_plan":"","cloud_execution_plan":"","evidence_and_claim_scope":""},"originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"negative_result_plan":negative_result_plan,"scientific_bindings":{"schema_version":"1.0","hypotheses":[],"falsification_conditions":[]},"dependencies":[],"dependency_bindings":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
         write_text(paper/"reviews"/"citation-claims.jsonl","")
         write_text(paper/"reviews"/"response-matrix.csv","comment_id,commitment_id,fulfillment_status,location,revised_text,unfulfilled_rationale\n")
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)

@@ -208,6 +208,14 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None) -> list
         validate_remediation_notes({"notes": final["dispositions"], "stage": final["stage"]}, audits[0])
         if any(re.match(r"^unresolved:", note.strip(), re.I) for note in final["dispositions"]):
             errors.append("independent review has unresolved author dispositions")
+        matrix_path = project / "program/novelty-claim-matrix.json"
+        if gate in {"G1", "G2", "G5"} and matrix_path.is_file():
+            matrix = read(matrix_path)
+            if matrix.get("schema_version") == "1.1":
+                from scripts.innovation_screening import validate_novelty_review
+                for receipt, audit in zip((initial, final), audits):
+                    errors.extend(validate_novelty_review(audit, matrix, gate, paper_id,
+                                                         final=receipt["phase"] == "final"))
         return errors
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
         return ["source-bound independent review: " + str(exc)]

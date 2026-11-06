@@ -32,6 +32,24 @@ MATH_TOKEN=re.compile(r"\\[A-Za-z]+|[A-Za-z]")
 GREEK={"alpha","beta","gamma","delta","epsilon","varepsilon","zeta","eta","theta","vartheta","iota","kappa","lambda","mu","nu","xi","pi","varpi","rho","varrho","sigma","varsigma","tau","upsilon","phi","varphi","chi","psi","omega"}
 RESULT_STATUSES={"supported","partially_supported","not_supported","contradicted","inconclusive"}
 INFERENCE_LEVELS={"descriptive":0,"association":1,"prediction":2,"causal":3,"mechanism":4}
+LEXICAL_SCOPE = re.compile(r"\b(?:all|every|any|always|never|wherever|regardless)\b|所有|全部|任意|任何|不需要", re.I)
+LEXICAL_COMPARISON = re.compile(r"\b(?:better|faster|more|higher|lower|superior|outperform(?:s|ed|ing)?|improv(?:e|es|ed|ement|ements))\b|优于|更快|更高|更低|更好", re.I)
+
+
+def _lexical_support_hints(claim: str, excerpts: str, claim_id: str) -> list[str]:
+    """Advisory wording checks only; they do not verify semantic claim support.
+
+    Matching words do not establish entailment. These patterns do not detect
+    reproducibility promises, representation changes or publication-era errors.
+    """
+    hints = []
+    for label, pattern in (("universal scope", LEXICAL_SCOPE), ("comparison", LEXICAL_COMPARISON)):
+        terms = sorted({match.group(0).casefold() for match in pattern.finditer(claim)})
+        if terms and not pattern.search(excerpts):
+            hints.append(f"{claim_id}: lexical overclaim hint ({label}: {', '.join(terms)}): "
+                         "bound evidence excerpts lack corresponding wording; advisory only, "
+                         "word matching does not establish or disprove scientific support")
+    return hints
 
 
 def _nonempty(item: dict[str, Any], fields: tuple[str, ...], errors: list[str], prefix: str)->None:
@@ -123,6 +141,7 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
             else:
                 warnings.append(f"{identifier}: location in PDF/image needs human visual verification")
         except (KeyError, OSError, ValueError) as exc:errors.append(f"{identifier}: {exc}")
+    facts_by_id = {str(fact.get("id", "")): fact for fact in config["facts"]}
     for link in config.get("claim_alignment",[]):
         identifier=str(link.get("claim_id",""))
         if identifier in claim_ids:errors.append(f"duplicate claim alignment: {identifier}")
@@ -137,6 +156,9 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
         if not isinstance(evidence_ids,list) or not evidence_ids or any(not isinstance(id_,str) for id_ in evidence_ids):
             errors.append(f"{identifier}: evidence_ids must be a nonempty array of fact IDs")
         elif not set(evidence_ids).issubset(fact_ids):errors.append(f"{identifier}: unknown fact IDs")
+        else:
+            excerpts = "\n".join(str(facts_by_id[key].get("verbatim_evidence", "")) for key in evidence_ids)
+            warnings.extend(_lexical_support_hints(str(link.get("canonical_claim", "")), excerpts, identifier))
         locations=link.get("sections",{})
         if not isinstance(locations,dict) or not SECTION.issubset(locations):
             errors.append(f"{identifier}: title/abstract/question/results/conclusion locations required")

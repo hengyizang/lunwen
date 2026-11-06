@@ -292,10 +292,17 @@ def dossier(value: dict) -> dict:
             "scientific_completion_verified": False}
 
 
-def execute(value: dict, run_id: str) -> dict:
+def execute(value: dict, run_id: str, *, owner_authorization: dict | None = None) -> dict:
     operation = validate_fields(value)
+    actor_identity = {"source": "local_operator_declaration", "verified": False}
+    if owner_authorization is not None:
+        from scripts.cloud_job import authenticated_owner_event
+        current = authenticated_owner_event(value, run_id)
+        if current is None or current != owner_authorization:
+            raise HumanControlError("owner identity must match the current authenticated GitHub event")
+        actor_identity = current
     if value["action"] == "review_dossier":
-        return dossier(value)
+        return {**dossier(value), "actor_identity": actor_identity}
     if not re.fullmatch(r"[0-9]+", str(run_id)):
         raise HumanControlError("a numeric cloud run ID is required for a human decision")
     reviewed = dossier(value)
@@ -329,10 +336,11 @@ def execute(value: dict, run_id: str) -> dict:
             state = researchctl.load_state(value["project"])
             if value.get("gate") == "G2":
                 vote = next(x for x in state["paper_topic_approvals"] if x["paper_id"] == value["paper_id"])
-                vote.update({"cloud_review_sha256": reviewed["review_sha256"], "source_run_id": str(run_id)})
+                vote.update({"cloud_review_sha256": reviewed["review_sha256"], "source_run_id": str(run_id),
+                             "actor_identity": actor_identity})
             if state["status"] == "approved":
                 state["approvals"][-1].update({"cloud_review_sha256": reviewed["review_sha256"],
-                                             "source_run_id": str(run_id)})
+                                             "source_run_id": str(run_id), "actor_identity": actor_identity})
             researchctl.save_state(value["project"], state)
     elif operation == "start_revision":
         from scripts.reviewer_rounds import start_revision
@@ -367,6 +375,7 @@ def execute(value: dict, run_id: str) -> dict:
         )
     receipt = {"schema_version": "1.0", "operation": operation, "project": value["project"],
                "actor": value["actor"], "review_sha256": reviewed["review_sha256"],
+               "actor_identity": actor_identity,
                "source_run_id": str(run_id), "note": value["note"],
                "selectors": reviewed["selectors"], "state_before": reviewed["state"],
                "state_after": {k: researchctl.load_state(value["project"])[k] for k in reviewed["state"]},

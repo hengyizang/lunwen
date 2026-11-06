@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import json
+import math
 import re
 from pathlib import Path
 from typing import Any
 
 
 STATUS_VALUES = {"succeeded", "failed", "timed_out"}
-SUPPORT_VALUES = {"supported", "partially_supported", "not_supported", "contradicted"}
+SUPPORT_VALUES = {"supported", "partially_supported", "not_supported", "contradicted", "inconclusive"}
 CLAIM_COLUMNS = {
     "claim_id", "paper_id", "claim", "evidence_ids", "analysis_ids",
     "support", "uncertainty", "status",
@@ -169,6 +171,92 @@ def validate_registry(
 
 def _ids(value: str | None) -> set[str]:
     return {item.strip() for item in re.split(r"[;,]", value or "") if item.strip()}
+
+
+def _outcome_error(status: str, comparisons: list[dict], *, empirical: bool) -> str | None:
+    """Prevent stronger numeric labels; negative/uncertain interpretations stay possible."""
+    if status not in SUPPORT_VALUES:
+        return "invalid formal claim result_status"
+    confirmatory = [c for c in comparisons if c.get("analysis_phase", "confirmatory") in {"confirmatory", "formal_verification"}]
+    primary = [c for c in confirmatory if c.get("role") in {"primary", "main"}]
+    passing = {"meets_preregistered_threshold", "kernel_checked"}
+    if status == "supported" and (not primary or any(c.get("decision") not in passing for c in confirmatory)):
+        return "supported claim does not meet every confirmatory threshold"
+    if status == "partially_supported" and not any(c.get("decision") in passing for c in primary):
+        return "partial support needs a passing confirmatory primary comparison"
+    if status == "contradicted" and empirical:
+        opposite = []
+        for comp in primary:
+            low, high, margin = comp.get("ci_low"), comp.get("ci_high"), comp.get("minimum_effect")
+            if not all(type(value) in (int, float) and math.isfinite(value) for value in (low, high, margin)):
+                continue
+            if comp.get("decision_rule") == "equivalence":
+                opposite.append(low > margin or high < -margin)
+            else:
+                opposite.append(high < -margin)
+        if not any(opposite):
+            return "contradicted claim needs a confirmatory primary interval establishing the opposite; absence of significance is insufficient"
+    return None
+
+
+def claim_outcomes(project: Path, paper_id: str) -> dict:
+    """Read the existing matrix and recompute its sealed evidence for one paper.
+
+    This is a current view, never a new ledger. Exact same claim IDs and all
+    comparisons/attempts remain visible, including adverse and exploratory work.
+    """
+    from scripts import experiment_evidence as evidence, study_routes
+    contract = evidence.read(project / "papers" / paper_id / "paper-contract.json")
+    expected = set(evidence.strings(contract.get("independence", {}).get("unique_claim_ids"), "contract claim IDs"))
+    report = evidence.build_report(project, paper_id)
+    evidence.need(report.get("status") == "complete" and not report.get("errors"),
+                  "current outcome evidence is blocked: " + "; ".join(report.get("errors", [])))
+    matrix = evidence.path_in(project, "claims/claim-evidence.csv")
+    with matrix.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        evidence.need(CLAIM_COLUMNS.issubset(reader.fieldnames or []), "formal claim matrix has missing columns")
+        rows = [row for row in reader if row.get("paper_id") == paper_id]
+    evidence.need(len(rows) == len(expected) and {r.get("claim_id") for r in rows} == expected,
+                  "formal claim matrix must cover every paper claim exactly once")
+    empirical = study_routes.route(project, paper_id) == "empirical"
+    registry = [json.loads(line) for line in (project / "experiments/registry.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+    known_runs = {row.get("run_id") for row in registry if row.get("paper_id") == paper_id}
+    claims = {}
+    for row in rows:
+        claim = row["claim_id"]
+        linked = [c for c in report["comparisons"] if claim in c.get("claim_ids", [])]
+        comparison_ids = {c["comparison_id"] for c in linked}
+        evidence.need(bool(linked) and _ids(row.get("comparison_ids")) == comparison_ids,
+                      claim + ": retain every actual comparison in the formal matrix")
+        sources = {s["run_id"] for c in linked for s in c.get("sources", [])}
+        actual_ids = _ids(row.get("analysis_ids"))
+        evidence.need(sources <= actual_ids <= known_runs,
+                      claim + ": formal matrix omits actual result runs or references an unknown/wrong-paper run")
+        error = _outcome_error(row.get("support", ""), linked, empirical=empirical)
+        evidence.need(error is None, claim + ": " + str(error))
+        claims[claim] = {"result_status": row["support"], "comparison_ids": sorted(comparison_ids),
+                         "analysis_ids": sorted(sources)}
+    protocol = (project / "papers" / paper_id / evidence.PLAN if empirical else
+                study_routes.protocol_path(project, paper_id))
+    return {"paper_id": paper_id, "claim_matrix_sha256": evidence.sha(matrix),
+            "evidence_plan_sha256": evidence.sha(protocol), "claims": claims}
+
+
+def validate_result_statuses(project: Path, paper_id: str, alignments: list[dict] | None = None) -> list[str]:
+    """G4/G5 adapter; manuscript tags must match current formal numeric outcomes."""
+    try:
+        current = claim_outcomes(project, paper_id)
+        if alignments is None:
+            return []
+        if not isinstance(alignments, list) or any(not isinstance(row, dict) for row in alignments):
+            return ["claim_alignment must contain current claim objects"]
+        claims = current["claims"]
+        if len(alignments) != len(claims) or {r.get("claim_id") for r in alignments} != set(claims):
+            return ["manuscript claim_alignment must cover every formal paper claim exactly once"]
+        return [str(row["claim_id"]) + ": manuscript result_status differs from its current formal outcome"
+                for row in alignments if row.get("result_status") != claims[row["claim_id"]]["result_status"]]
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, csv.Error) as exc:
+        return [str(exc)]
 
 
 def validate_claim_evidence(

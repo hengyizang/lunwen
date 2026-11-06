@@ -346,11 +346,17 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
         for receipt in reversed(ledger):
             if receipt.get("request_url") == url and receipt.get("status") == "failed":
                 try:
-                    stamp = datetime.fromisoformat(receipt["completed_at"].replace("Z", "+00:00"))
+                    completed_at = receipt["completed_at"]
+                    if not isinstance(completed_at, str):
+                        raise ValueError("completed_at must be a timestamp string")
+                    stamp = datetime.fromisoformat(completed_at.replace("Z", "+00:00"))
                     if timedelta(0) <= now - stamp < timedelta(hours=6):
                         raise evidence.LiteratureEvidenceError("recent provider failure is in a six-hour cooldown; inspect the retained receipt")
-                except (KeyError, ValueError):
-                    pass
+                except (KeyError, TypeError, ValueError) as exc:
+                    raise evidence.LiteratureEvidenceError(
+                        "matching failed provider receipt has an invalid completed_at; "
+                        "repair the retained receipt before retrying"
+                    ) from exc
             if receipt.get("status") != "success" or receipt.get("request_url") != url or receipt.get("provider") != provider:
                 continue
             # Old receipts do not attest that structured constraints were applied.

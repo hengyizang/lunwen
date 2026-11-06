@@ -15,7 +15,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.0"
+      "enum": ["1.0", "1.1"]
     },
     "paper_id": {
       "type": "string",
@@ -73,6 +73,12 @@
           "pairs"
         ],
         "properties": {
+          "condition_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1},
+            "description": "Schema 1.1 joins contracted falsification conditions to their exact executable comparison; primary comparisons require at least one."
+          },
           "comparison_id": {
             "type": "string",
             "minLength": 1
@@ -492,5 +498,9 @@
         }
       }
     }
-  }
+  },
+  "allOf": [{
+    "if": {"properties": {"schema_version": {"const": "1.1"}}},
+    "then": {"properties": {"comparisons": {"items": {"required": ["condition_ids"]}}}}
+  }]
 }

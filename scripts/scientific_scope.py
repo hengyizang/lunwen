@@ -54,15 +54,25 @@ def projection(project: Path, gate: str) -> dict:
         expected = {f"P{n:02d}" for n in range(1, count + 1)}
         if not isinstance(rows, list) or any(not isinstance(r, dict) for r in rows) or {r.get("paper_id") for r in rows} != expected or len(rows) != count:
             raise ValueError("scientific mapping must cover every declared paper exactly once")
+        synthesis = mapping.get("thesis_synthesis")
         result["paper_map"] = {"papers": sorted(rows, key=lambda r: r["paper_id"]),
                                "pairwise_distinctness": sorted(mapping.get("pairwise_distinctness", []), key=lambda r: (r.get("paper_a", ""), r.get("paper_b", ""))),
-                               "thesis_synthesis": mapping.get("thesis_synthesis")}
+                               # Measured outcomes are progress, not a new topic vote.
+                               "thesis_synthesis": {key: value for key, value in synthesis.items()
+                                                    if key != "evidence_alignment"} if isinstance(synthesis, dict) else synthesis}
         fields = ("paper_id", "working_title", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension",
                   "falsification_conditions", "dependencies", "independence", "target_jcr_quartile")
         result["paper_contracts"] = []
         for pid in sorted(expected):
             contract = read(path_in(project, f"papers/{pid}/paper-contract.json"))
             row = {k: contract.get(k) for k in fields}
+            if isinstance(contract.get("scientific_bindings"), dict):
+                # Topic authority covers the hypothesis and endpoint identity.
+                # G3 freezes aggregation, margins and other experiment details.
+                row["hypothesis_outcomes"] = [{key: h.get(key) for key in ("id", "statement", "primary_outcome")}
+                                               for h in contract.get("hypotheses", []) if isinstance(h, dict)]
+                row["primary_metrics"] = [{key: h.get(key) for key in ("hypothesis_id", "primary_metric")}
+                                          for h in contract["scientific_bindings"].get("hypotheses", []) if isinstance(h, dict)]
             boundary = contract.get("originality_boundary", {})
             row["originality_boundary"] = {k: boundary.get(k) for k in ("novel_elements", "reused_elements", "differentiation", "claim_limitations")}
             result["paper_contracts"].append(row)

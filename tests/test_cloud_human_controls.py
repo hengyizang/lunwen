@@ -45,6 +45,33 @@ class CloudHumanControlTests(unittest.TestCase):
         self.assertEqual(first["review_sha256"], second["review_sha256"])
         self.assertEqual(researchctl.load_state(self.project.name)["approved_gates"], [])
 
+    def test_receipt_keeps_verified_owner_distinct_from_actor_display(self):
+        reviewed = acceptance.review("ready", gate="G0")
+        value = self.request("ready", gate="G0", expected_sha256=reviewed["review_sha256"],
+                             note="Synthetic authenticated owner operation.")
+        event = {"action": "opened", "repository": {"full_name": cloud_job.REPOSITORY,
+                 "owner": {"id": cloud_job.OWNER_ID}}, "issue": {"number": 123,
+                 "user": {"id": cloud_job.OWNER_ID, "login": "actual-owner-login"},
+                 "title": "[research-cloud] ready", "body": cloud_job.MARKER + "\n```json\n" + json.dumps(value) + "\n```"}}
+        event_path = self.root / "owner-event.json"
+        event_path.write_text(json.dumps(event), encoding="utf-8")
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true", "GITHUB_EVENT_PATH": str(event_path), "GITHUB_RUN_ID": "903"}):
+            proof = cloud_job.authenticated_owner_event(value, "903")
+            receipt = controls.execute(value, "903", owner_authorization=proof)
+        self.assertEqual(receipt["actor"], value["actor"])
+        self.assertEqual(receipt["actor_identity"]["actor_login"], "actual-owner-login")
+        self.assertTrue(receipt["actor_identity"]["verified"])
+        saved = [json.loads(line) for line in (self.project / controls.AUDIT).read_text(encoding="utf-8").splitlines()]
+        self.assertEqual(saved[-1]["actor_identity"], proof)
+
+    def test_self_reported_identity_cannot_supply_cloud_authentication(self):
+        value = self.request("review_dossier", operation="ready", gate="G0")
+        with patch.dict("os.environ", {}, clear=True):
+            with self.assertRaisesRegex(controls.HumanControlError, "authenticated GitHub event"):
+                controls.execute(value, "904", owner_authorization={"verified": True, "actor_id": cloud_job.OWNER_ID})
+            dossier = controls.execute(value, "904")
+        self.assertFalse(dossier["actor_identity"]["verified"])
+
     def test_internal_audit_change_invalidates_review_even_if_not_listed(self):
         audit = self.project / "api_runs/internal-audit.json"
         audit.parent.mkdir()

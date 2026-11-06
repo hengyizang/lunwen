@@ -1,7 +1,7 @@
 """Synthetic component acceptance; never a scientific approval or real dataset.
 
 The seeded G3 receipt exists only inside temporary acceptance fixtures. Production
-approvals still require researchctl's complete human G3 gate.
+decisions still require researchctl's complete deterministic G3 checks.
 """
 from __future__ import annotations
 
@@ -88,7 +88,7 @@ def freeze_fixture(project: Path) -> None:
     write(state_path, state)
 
 
-def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False) -> dict:
+def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False, current_protocol: bool = False) -> dict:
     if project.exists():
         raise ValueError("fixture must start in a fresh directory")
     code_path = project / "experiments/code/measure.py"
@@ -171,6 +171,32 @@ def fixture(project: Path, *, container: bool = False, fail_pilot: bool = False)
         "external_validity": {"mode": "scope_limited", "rationale": "Synthetic software fixture.",
                               "claim_limit": "No real population or doctoral/publication claim."},
     }
+    if current_protocol:
+        # These fixed values are synthetic software input, set before any scope
+        # or G3 fixture is sealed. They never migrate an executed real project.
+        contract_path = project / "papers/P01/paper-contract.json"
+        contract = evidence.read(contract_path)
+        statement = "Fixture falsification"
+        contract["hypotheses"] = [{"id": "H1", "primary_outcome": "Synthetic score gain"}]
+        contract["falsification_conditions"] = [statement]
+        contract["scientific_bindings"] = {
+            "schema_version": "1.0",
+            "hypotheses": [{"hypothesis_id": "H1", "primary_outcome_statement": "Synthetic score gain",
+                "primary_metric": "synthetic_score", "direction": "higher",
+                "aggregation": "mean_within_unit_then_mean_across_seeds", "decision_rule": "superiority",
+                "minimum_effect": .1, "condition_ids": ["F1"], "rationale": "Synthetic comparison join only."}],
+            "falsification_conditions": [{"condition_id": "F1", "hypothesis_id": "H1", "statement": statement,
+                "metric": "synthetic_score", "decision_rule": "superiority", "threshold": .1,
+                "rationale": "Test contracted thresholds in execution."}],
+        }
+        write(contract_path, contract)
+        design_path = project / "papers/P01/experiments/primary.json"
+        design = evidence.read(design_path)
+        design["falsification_criteria"] = [statement]
+        write(design_path, design)
+        protocol["schema_version"] = "1.1"
+        for comp in protocol["comparisons"]:
+            comp["condition_ids"] = ["F1"] if comp["role"] == "primary" else []
     write(project / "papers/P01" / evidence.PLAN, protocol)
     freeze_fixture(project)
     return protocol

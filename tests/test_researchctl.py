@@ -65,6 +65,38 @@ class ResearchCtlTests(unittest.TestCase):
         self.assertEqual(spending["authorized_ceiling_cny"], 0)
         self.assertTrue((project / "papers" / "P01" / "experiments").is_dir())
 
+    def test_new_project_exposes_current_contracts_without_inventing_evidence(self) -> None:
+        project = self.init_project(paper_count=6)
+        state = researchctl.load_state("test-phd")
+        self.assertEqual(state["approved_gates"], [])
+        shortlist = researchctl.read_json(project / "program/topic-shortlist.json")
+        self.assertEqual(shortlist["candidates"], [])
+        self.assertEqual(shortlist["selection_decision"]["chosen_candidate_id"], "")
+        feasibility = shortlist["selected_direction_cloud_feasibility"]
+        self.assertFalse(feasibility["current_papers_feasible"])
+        self.assertEqual(feasibility["feasibility_evidence"]["data_access"], [])
+        self.assertEqual(feasibility["feasibility_evidence"]["pilot"]["status"], "not_run")
+        matrix = researchctl.read_json(project / "program/novelty-claim-matrix.json")
+        self.assertEqual((matrix["schema_version"], matrix["status"], matrix["claims"]), ("1.1", "draft", []))
+        self.assertEqual(matrix["search_saturation"]["retrieval_dispositions"], [])
+        self.assertEqual(matrix["search_saturation"]["search_rounds"], [])
+        synthesis = researchctl.read_json(project / "program/paper-map.json")["thesis_synthesis"]
+        self.assertEqual(synthesis["argument_links"], [])
+        self.assertEqual(synthesis["evidence_alignment"], [])
+        for relative in ("program/core-thesis.json", "program/extension-thesis.json", "papers/P01/paper-contract.json"):
+            record = researchctl.read_json(project / relative)
+            self.assertEqual(set(record["negative_result_plan"]),
+                             {"informative_if_unsupported", "precision_limitations", "stop_rule", "claim_boundary"})
+            self.assertFalse(any(record["negative_result_plan"].values()))
+        contract = researchctl.read_json(project / "papers/P01/paper-contract.json")
+        self.assertEqual(contract["scientific_bindings"],
+                         {"schema_version": "1.0", "hypotheses": [], "falsification_conditions": []})
+        self.assertEqual(contract["dependency_bindings"], [])
+        self.assertIn("comparison_ids", (project / "claims/claim-evidence.csv").read_text(encoding="utf-8").splitlines()[0].split(","))
+        self.assertEqual((project / "experiments/registry.jsonl").stat().st_size, 0)
+        self.assertEqual((project / "evidence/literature-api-ledger.jsonl").stat().st_size, 0)
+        self.assertTrue(researchctl.gate_errors("test-phd", "G1"))
+
     def test_each_paper_topic_needs_a_separate_current_approval(self) -> None:
         project = self.init_project(paper_count=3)
         state = researchctl.load_state("test-phd")

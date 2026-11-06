@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
@@ -67,6 +68,8 @@ def declared_outputs(root: Path) -> set[str]:
 def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -> bool:
     value = PurePosixPath(relative).as_posix().casefold()
     parts = PurePosixPath(relative).parts
+    if len(parts) == 2 and parts[0] == "data" and re.fullmatch(r"discovery-broad-auto-\d{8}T\d{12}Z\.json", parts[1]):
+        return True
     if value == "intake/constraints.json":
         # G0 writers may prepare intake, but an approved owner's constraints can
         # change only through the authenticated operating-amendment controller.

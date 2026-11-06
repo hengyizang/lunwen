@@ -1,6 +1,10 @@
 import tempfile
 import unittest
+from importlib.util import find_spec
 from pathlib import Path
+missing = [name for name in ("numpy", "PIL", "matplotlib", "fitz") if find_spec(name) is None]
+if missing:
+    raise unittest.SkipTest("figure accessibility tests require the figures extra and Pillow: " + ", ".join(missing))
 import numpy as np
 from PIL import Image
 from scripts import figure_output_qa as qa

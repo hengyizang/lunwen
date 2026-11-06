@@ -14,12 +14,92 @@
     "uncertainty"
   ],
   "properties": {
-    "verdict": {"enum": ["block", "revise", "pass-with-conditions"]},
-    "fatal_findings": {"type": "array", "items": {"type": "string"}},
-    "major_findings": {"type": "array", "items": {"type": "string"}},
-    "minor_findings": {"type": "array", "items": {"type": "string"}},
-    "missing_evidence": {"type": "array", "items": {"type": "string"}},
-    "remediation_steps": {"type": "array", "items": {"type": "string"}},
-    "uncertainty": {"type": "array", "items": {"type": "string"}}
+    "verdict": {
+      "enum": [
+        "block",
+        "revise",
+        "pass-with-conditions"
+      ]
+    },
+    "fatal_findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "major_findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "minor_findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "remediation_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "uncertainty": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "novelty_assessment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "inspected_work_ids",
+          "decision",
+          "rationale",
+          "remaining_uncertainty"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inspected_work_ids": {
+            "type": "array",
+            "minItems": 3,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "decision": {
+            "enum": [
+              "distinct",
+              "overlap",
+              "unresolved"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "remaining_uncertainty": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
   }
 }

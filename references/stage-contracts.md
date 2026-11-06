@@ -11,6 +11,15 @@ scientific, source-rights, budget, identity and execution check; unknown
 evidence remains unknown. Missing rights, data or successful execution block the
 affected work; they are never converted into invented human approval.
 
+Current review-remediation contracts: [REVIEW-REMEDIATION.md](../docs/REVIEW-REMEDIATION.md).
+Formal G1-G5 quality reports use schema 1.2 factual assessments. The current
+novelty matrix uses 1.1 source-bound candidate/prior-work comparisons, bounded
+retrieval dispositions and actual initial/final independent novelty assessments
+at G1/G2/G5. G2 scientific bindings preserve primary outcomes and falsification
+conditions through G3-G5; negative-result plans, typed dependencies and thesis
+claim/result alignment retain failures and uncertainty. Empty templates and
+legacy scores are not evidence and cannot waive these requirements.
+
 Scientific reasoning: [SCIENTIFIC-REASONING.md](../docs/SCIENTIFIC-REASONING.md)
 strengthens source-bound problem value, discriminating tests and conclusions in
 the existing G1-G5 contracts. Missing inputs block; completeness never proves
@@ -28,8 +37,8 @@ Required:
 - `intake/constraints.json` conforming to `schemas/intake-constraints.schema.json`, with every material feasibility value explicit and status `ready_for_review`;
 - target application routes and time horizon;
 - available skills, time, budget, compute, data and equipment;
-- keep system availability separate from human time: cloud-only projects may explicitly use `human_review_mode: on_request` with `weekly_hours: null`; `system_execution_hours_per_day: 24` describes cloud automation, never 168 hours of weekly human work. Human gate approval remains mandatory;
-- a proposed model API first tranche of CNY 300 with initial cumulative authorization at CNY 0; a named owner approval raises the ceiling by CNY 300 at a time and applies across cloud cycles. An explicit exact-budget/date request before G1 approval uses the separate hash-bound [operating amendment](../docs/OPERATING-CONSTRAINT-AMENDMENTS.md), preserving the old authority history and all costs. Every paper and scientific gate still requires its own evidence and human review;
+- keep system availability separate from human time: cloud-only projects may explicitly use `human_review_mode: on_request` with `weekly_hours: null`; `system_execution_hours_per_day: 24` describes cloud automation, never 168 hours of weekly human work. Human topic decisions apply at G1/G2; G0 uses its recorded automated checks;
+- an explicit cumulative model/API total and cloud compute/cash totals, preserving all spending history. The model default is CNY 300; configured totals are never silently increased. No per-paper ceiling, fixed-tranche increment or manual billing gate is added;
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
@@ -50,7 +59,7 @@ Required:
 - `program/extension-thesis.json` for separately doctoral-level extension B, with disjoint claims/papers, independent primary evidence, falsification conditions and a survives-core-failure rationale;
 - one overarching doctoral question and integrated knowledge contribution for all six papers. Core A and extension B must serve that same topic; B's independent claims and evidence protect scientific validity if A fails, rather than create an unrelated second doctoral topic. Explain this relationship in the existing doctoral case and `relationship_to_core` records;
 - `program/originality-audit.json` conforming to `schemas/originality-audit.schema.json`, including at least five closest primary works, three adjacent fields, three query families, counterevidence, residual novelty risk, a doctoral case and a reliability strategy;
-- `program/novelty-claim-matrix.json` conforming to `schemas/novelty-claim-matrix.schema.json`; every originality claim must distinguish already-known elements from the precise proposed difference, cite at least three closest works, specify mechanism, falsification, expected evidence if false, boundary conditions and residual risk, and document forward/backward citation chaining plus two consecutive saturation rounds;
+- `program/novelty-claim-matrix.json` schema 1.1; every originality claim distinguishes known elements from the candidate contribution, compares against at least three closest works with actual retrieval and original-source anchors, and records mechanism, falsification, predictions, boundaries and residual uncertainty. Bind retrieval dispositions and round counts to executed receipts; explain coverage-, time- or budget-based stopping honestly rather than inventing saturation or equating all new DOIs with new closest works;
 - `program/topic-decision.md` with novelty, contribution, feasibility, competition, PhD-position supply and job-market evidence.
 - automatic broad-data evidence followed by Codex scientific-fit screening against the human-confirmed G0 ranking weights; preserve rejected datasets and unresolved license, sample, bias, leakage, compute and external-validity concerns.
 - `program/topic-shortlist.json` records `selected_direction_cloud_feasibility` with `current_papers_feasible: true`, `no_future_lab_dependency: true`, and concrete authorized-data, cloud-experiment and current-paper-scope plans. If a proposed direction requires post-admission laboratory work to establish a current paper's result, reject it before weighted ranking. Future laboratory extensions can be retained as separate, unproven plans.

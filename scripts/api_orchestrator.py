@@ -159,7 +159,7 @@ def research_quality_artifact_contract(stage: str) -> str:
         "topic-intelligence": {
             "path": "program/novelty-claim-matrix.json",
             "top_level": [
-                "schema_version=1.0", "status=ready_for_review", "claims",
+                "schema_version=1.1", "status=ready_for_review", "claims",
                 "search_saturation", "human_review_required=true",
             ],
             "claim_fields": [
@@ -302,6 +302,23 @@ def research_quality_artifact_contract(stage: str) -> str:
         },
     }
     value = contracts.get(stage)
+    if value is not None:
+        value["review_remediation_contract"] = (
+            "Read docs/REVIEW-REMEDIATION.md. Current novelty matrix 1.1 requires one prior_art_comparison "
+            "per closest work, registered full-text source anchors, executed retrieval receipt/work IDs, "
+            "and actual independent novelty_assessment at G1/G2/G5. Search rounds retain actual returned "
+            "identity counts and relevance dispositions; budget/time stopping discloses limits, never proves novelty. "
+            "Use quality report 1.2 assessments, not numerical self-scores: each gate criterion needs "
+            "status=satisfied/unresolved/failed, factual rationale and current source_anchors "
+            "{path,sha256,locator,excerpt}. Missing or adverse evidence stays unresolved. "
+            "G2 contracts require scientific_bindings, negative_result_plan and typed dependency_bindings. "
+            "G3 empirical comparison protocol is 1.1 and binds the G2 primary outcome and condition_ids. "
+            "G5 labels and thesis evidence_alignment must match actual claim_outcomes; keep negative and uncertain results. "
+            "Empirical data_protocol.model_selection declares tuned/not_tuned/not_applicable with rationale. "
+            "Tuned designs need selection_split=training/validation/nested_cross_validation, a finite "
+            "search_space, selection_metric and same-design run_ids; never choose models on test/final/holdout. "
+            "Do not rewrite an executed frozen protocol. Preserve six papers and current G1/G2 topic decisions."
+        )
     if value:
         value["quality_followup"] = {
             "research_task_prompts": "Use docs/RESEARCH-TASK-SCENARIOS.md and the stage-scoped research-task-prompts guidance for row-level provenance, source tracing, criterion-level screening advice, actual analysis status, source-bound synthesis outlines, existing-arrow Mermaid export and bilingual tiered search plans. Prepare specifications through the existing writer and metered controller operations within the cumulative project total. Never create human decisions, infer dates/verification, change screening rules or model routes, or substitute a returned count for database coverage.",
@@ -371,7 +388,7 @@ def project_snapshot(
 ) -> str:
     """Return a bounded, text-only project snapshot suitable for model input."""
 
-    from scripts.context_efficiency import lossless_text, operational_path, instruction_paths
+    from scripts.context_efficiency import lossless_text, operational_path, instruction_paths, discovery_navigation_index
     root = project_root(project)
     if not root.exists():
         return "(new project)"
@@ -428,7 +445,12 @@ def project_snapshot(
         except UnicodeDecodeError as exc:
             raise ValueError(f"Required context source is not UTF-8: {relative}; prepare a verified text extract") from exc
         content = redact(content)
+        original_text = content
         content, representation = lossless_text(relative.as_posix(), content)
+        if len(content.encode("utf-8")) > MAX_SNAPSHOT_FILE_BYTES:
+            navigation = discovery_navigation_index(relative.as_posix(), original_text, hashlib.sha256(payload).hexdigest())
+            if navigation is not None:
+                content, representation = navigation, "complete-dataset-discovery-navigation-index; original-source-not-read"
         if len(content.encode("utf-8")) > MAX_SNAPSHOT_FILE_BYTES:
             raise ValueError(f"Required context source exceeds the rendered file limit: {relative}; select explicit source ranges in program/context-plan.json")
         digest = hashlib.sha256(payload).hexdigest()
@@ -881,10 +903,21 @@ missing uncertainty where applicable, inaccessible color-only encoding,
 raster-only delivery, unbound source data, or captions beyond registered
 evidence.
 
-Return ONLY one JSON object with exactly these keys:
+At G1/G2/G5, when novelty-claim-matrix.json uses schema 1.1, also return
+novelty_assessment: one object per current claim (G5: active paper only), with
+claim_id, inspected_work_ids (every linked closest work), decision
+(distinct|overlap|unresolved), rationale and remaining_uncertainty. Inspect
+each registered original source and compare OUR claim with each closest work.
+A high score, absent search hits, multiple model votes or a prior-versus-prior
+comparison cannot establish novelty. Initial uncertainty may require revision;
+final overlap or unresolved novelty blocks advancement. Do not invent an
+experiment to assess a proposed conceptual difference.
+
+Return ONLY one JSON object with these required keys:
 verdict, fatal_findings, major_findings, minor_findings, missing_evidence,
 remediation_steps, uncertainty. Verdict must be block, revise, or
-pass-with-conditions. Every other value must be an array of strings. Use an
+pass-with-conditions. These other required values must be arrays of strings.
+novelty_assessment is the sole optional additional key, with the objects above. Use an
 empty array when there are no findings. Do not wrap the JSON in Markdown.
 """
 
@@ -1009,7 +1042,7 @@ def extract_json(text: str) -> dict[str, Any]:
 
 def extract_audit_json(text: str) -> dict[str, Any]:
     value = _json_object(text, "Critic")
-    if set(value) != AUDIT_FIELDS:
+    if not AUDIT_FIELDS <= set(value) or set(value) - AUDIT_FIELDS - {"novelty_assessment"}:
         raise ValueError("Audit fields do not match model-audit.schema.json")
     if value["verdict"] not in {"block", "revise", "pass-with-conditions"}:
         raise ValueError("Invalid audit verdict")
@@ -1018,6 +1051,9 @@ def extract_audit_json(text: str) -> dict[str, Any]:
             isinstance(item, str) and item.strip() for item in value[field]
         ):
             raise ValueError(f"Audit field {field} must be an array of strings")
+    if "novelty_assessment" in value and (not isinstance(value["novelty_assessment"], list)
+            or any(not isinstance(row, dict) for row in value["novelty_assessment"])):
+        raise ValueError("novelty_assessment must be an array of claim-specific assessments")
     return value
 
 
@@ -1092,6 +1128,8 @@ def validate_remediation_notes(
 ) -> list[str]:
     notes = bundle["notes"]
     actionable = any(audit[field] for field in AUDIT_FIELDS - {"verdict", "uncertainty"})
+    novelty_findings = [row for row in audit.get("novelty_assessment", []) if row.get("decision") != "distinct"]
+    actionable = actionable or bool(novelty_findings)
     if actionable and not notes:
         raise ValueError("Remediation bundle must disposition the audit findings")
     allowed = re.compile(r"^(?:fixed|rejected|unresolved):\s*\S", re.IGNORECASE)
@@ -1099,6 +1137,10 @@ def validate_remediation_notes(
         raise ValueError(
             "Each remediation note must begin with fixed:, rejected:, or unresolved:"
         )
+    for row in novelty_findings:
+        claim_id = row.get("claim_id")
+        if not isinstance(claim_id, str) or not any(claim_id in note for note in notes):
+            raise ValueError("Each independent novelty finding needs an itemized claim-ID disposition")
     validate_editorial_dispositions(notes, bundle.get("stage"))
     return notes
 
@@ -1668,9 +1710,9 @@ def validate_roles(
     critic_family = ai_providers.provider_family(critic_provider)
     if planner_family != "anthropic":
         raise ValueError("The semantic planner must be a Claude/Anthropic provider")
-    if writer_family == "anthropic":
+    if writer_family != "openai":
         raise ValueError(
-            "Persistent artifacts cannot be written by Claude/Anthropic; use an OpenAI/Codex writer"
+            "Persistent artifacts require an OpenAI/Codex writer; other model families are not supported"
         )
     if writer_family == critic_family:
         raise ValueError(

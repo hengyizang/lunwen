@@ -8,8 +8,10 @@ remain human responsibilities at G1--G5.
 from __future__ import annotations
 
 import itertools
+import math
 import re
 from datetime import date
+from pathlib import Path
 from typing import Any, Iterable
 
 
@@ -77,6 +79,117 @@ def _https(value: Any, field: str, errors: list[str]) -> None:
         errors.append(f"{field} must be an HTTPS primary-source URL")
 
 
+def validate_negative_result_plan(value: Any, field: str = "negative_result_plan") -> list[str]:
+    """Require an information/precision boundary, never a promise of publication."""
+    errors: list[str] = []
+    plan = _object(value, field, errors)
+    for key in ("informative_if_unsupported", "precision_limitations", "stop_rule", "claim_boundary"):
+        _text(plan.get(key), f"{field}.{key}", errors)
+    return errors
+
+
+def validate_scientific_bindings(contract: dict[str, Any]) -> list[str]:
+    """Bind G2 wording to explicit G3 comparisons without running experiments."""
+    errors: list[str] = []
+    value = _object(contract.get("scientific_bindings"), "scientific_bindings (migration required)", errors)
+    if value.get("schema_version") != "1.0":
+        errors.append("scientific_bindings.schema_version must be 1.0; migrate the scientific contract explicitly")
+    original_hypotheses = contract.get("hypotheses")
+    hypotheses = {h.get("id"): h for h in original_hypotheses if isinstance(h, dict) and isinstance(h.get("id"), str)} if isinstance(original_hypotheses, list) else {}
+    empirical = contract.get("study_route", "empirical") == "empirical"
+    bindings = _list(value.get("hypotheses"), "scientific_bindings.hypotheses", errors, minimum=int(empirical))
+    conditions = _list(value.get("falsification_conditions"), "scientific_bindings.falsification_conditions", errors, minimum=int(empirical))
+    by_id: dict[str, dict] = {}
+    statements: list[str] = []
+    for index, item in enumerate(conditions):
+        prefix = f"scientific_bindings.falsification_conditions[{index}]"
+        condition = _object(item, prefix, errors)
+        key = _text(condition.get("condition_id"), prefix + ".condition_id", errors)
+        if key in by_id:
+            errors.append(prefix + ".condition_id is duplicated")
+        if key:
+            by_id[key] = condition
+        statement = _text(condition.get("statement"), prefix + ".statement", errors)
+        if statement:
+            statements.append(statement)
+        if not isinstance(condition.get("hypothesis_id"), str) or condition["hypothesis_id"] not in hypotheses:
+            errors.append(prefix + ".hypothesis_id must name a contracted hypothesis")
+        _text(condition.get("metric"), prefix + ".metric", errors)
+        _text(condition.get("rationale"), prefix + ".rationale", errors)
+        if condition.get("decision_rule") not in {"superiority", "equivalence"}:
+            errors.append(prefix + ".decision_rule has no reviewed comparison adapter")
+        threshold = condition.get("threshold")
+        if type(threshold) not in (int, float) or not math.isfinite(threshold) or threshold < 0:
+            errors.append(prefix + ".threshold must be a finite nonnegative effect threshold")
+    original_conditions = contract.get("falsification_conditions")
+    if empirical and (not isinstance(original_conditions, list) or any(not isinstance(s, str) for s in original_conditions)
+                      or sorted(statements) != sorted(original_conditions)):
+        errors.append("scientific_bindings conditions must preserve every exact contracted falsification statement")
+    seen: set[str] = set()
+    used: set[str] = set()
+    for index, item in enumerate(bindings):
+        prefix = f"scientific_bindings.hypotheses[{index}]"
+        binding = _object(item, prefix, errors)
+        key = binding.get("hypothesis_id")
+        if not isinstance(key, str) or key not in hypotheses or key in seen:
+            errors.append(prefix + ".hypothesis_id must uniquely name a contracted hypothesis")
+        else:
+            seen.add(key)
+            if binding.get("primary_outcome_statement") != hypotheses[key].get("primary_outcome"):
+                errors.append(prefix + ".primary_outcome_statement differs from the original primary outcome")
+        for field in ("primary_metric", "aggregation", "rationale"):
+            _text(binding.get(field), prefix + "." + field, errors)
+        if binding.get("direction") not in {"higher", "lower"}:
+            errors.append(prefix + ".direction must be higher or lower")
+        if binding.get("decision_rule") not in {"superiority", "equivalence"}:
+            errors.append(prefix + ".decision_rule has no reviewed comparison adapter")
+        effect = binding.get("minimum_effect")
+        if type(effect) not in (int, float) or not math.isfinite(effect) or effect < 0:
+            errors.append(prefix + ".minimum_effect must be a finite nonnegative number")
+        elif binding.get("decision_rule") == "equivalence" and effect <= 0:
+            errors.append(prefix + ".minimum_effect needs a positive equivalence margin")
+        selected = _string_list(binding.get("condition_ids"), prefix + ".condition_ids", errors)
+        own = {cid for cid, condition in by_id.items() if condition.get("hypothesis_id") == key}
+        if set(selected) != own:
+            errors.append(prefix + ".condition_ids must cover every condition of this hypothesis exactly")
+        used.update(selected)
+        if not any(by_id[cid].get("metric") == binding.get("primary_metric")
+                   and by_id[cid].get("decision_rule") == binding.get("decision_rule")
+                   and by_id[cid].get("threshold") == effect for cid in selected if cid in by_id):
+            errors.append(prefix + " needs a falsification condition for its exact primary comparison")
+    if seen != set(hypotheses) or used != set(by_id):
+        errors.append("scientific_bindings must cover all hypotheses and conditions without orphan records")
+    return errors
+
+
+def _paper_dependencies(papers: list[dict], expected: set[str], errors: list[str]) -> dict[str, list[str]]:
+    graph: dict[str, list[str]] = {}
+    for row in papers:
+        if not isinstance(row, dict) or not isinstance(row.get("paper_id"), str) or row["paper_id"] not in expected:
+            continue
+        pid = row["paper_id"]
+        parents = _string_list(row.get("dependencies"), pid + ".dependencies", errors, minimum=0)
+        graph[pid] = parents
+        if pid in parents or set(parents) - expected:
+            errors.append(pid + ".dependencies contain a self-reference or unknown paper")
+    visiting, done = set(), set()
+    def visit(pid):
+        if pid in visiting:
+            errors.append("paper dependencies must be acyclic: " + pid)
+            return
+        if pid in done:
+            return
+        visiting.add(pid)
+        for parent in graph.get(pid, []):
+            if parent in expected:
+                visit(parent)
+        visiting.remove(pid)
+        done.add(pid)
+    for pid in graph:
+        visit(pid)
+    return graph
+
+
 def validate_venue_candidates(
     value: Any,
     field: str = "target_venues",
@@ -123,6 +236,7 @@ def validate_thesis_theme(value: dict[str, Any], expected_theme_id: str) -> list
         errors.append("status must be ready_for_review or approved")
     for key in ("title", "doctoral_question", "distinct_contribution"):
         _text(value.get(key), key, errors)
+    errors.extend(validate_negative_result_plan(value.get("negative_result_plan")))
     _string_list(value.get("novelty_claim_ids"), "novelty_claim_ids", errors, minimum=2)
     paper_ids = _string_list(value.get("planned_paper_ids"), "planned_paper_ids", errors)
     for paper_id in paper_ids:
@@ -223,7 +337,7 @@ def validate_theme_mapping(
     return errors
 
 
-def validate_selected_direction_cloud_feasibility(shortlist: dict[str, Any]) -> list[str]:
+def validate_selected_direction_cloud_feasibility(shortlist: dict[str, Any], project: Path | None = None) -> list[str]:
     """Block G1 until the selected direction has a cloud-only current-paper path."""
 
     errors: list[str] = []
@@ -233,6 +347,72 @@ def validate_selected_direction_cloud_feasibility(shortlist: dict[str, Any]) -> 
             errors.append(f"selected_direction_cloud_feasibility.{key} must be true")
     for key in ("authorized_data_plan", "cloud_experiment_plan", "current_paper_scope"):
         _text(feasibility.get(key), f"selected_direction_cloud_feasibility.{key}", errors)
+    candidates = shortlist.get("candidates")
+    ids = [row.get("candidate_id", row.get("id")) for row in candidates if isinstance(row, dict)] if isinstance(candidates, list) else []
+    if len(ids) < 3 or any(not isinstance(key, str) or not key.strip() for key in ids) or len(set(ids)) != len(ids):
+        errors.append("candidates need at least three distinct candidate_id values")
+    decision = _object(shortlist.get("selection_decision"), "selection_decision (migration required)", errors)
+    chosen, rival = decision.get("chosen_candidate_id"), decision.get("strongest_rival_candidate_id")
+    if not isinstance(chosen, str) or chosen not in ids:
+        errors.append("selection_decision.chosen_candidate_id must name a listed candidate")
+    if not isinstance(rival, str) or rival not in ids or rival == chosen:
+        errors.append("selection_decision.strongest_rival_candidate_id must name another listed candidate")
+    for key in ("why_selected_over_rival", "change_of_mind_evidence"):
+        _text(decision.get(key), "selection_decision." + key, errors)
+    evidence = _object(feasibility.get("feasibility_evidence"), "feasibility_evidence (migration required)", errors)
+    for kind in ("data_access", "research_rights", "compute_cost"):
+        anchors = _list(evidence.get(kind), "feasibility_evidence." + kind, errors)
+        for index, item in enumerate(anchors):
+            prefix = f"feasibility_evidence.{kind}[{index}]"
+            anchor = _object(item, prefix, errors)
+            for key in ("path", "locator", "quote"):
+                _text(anchor.get(key), prefix + "." + key, errors)
+            if not re.fullmatch(r"[a-f0-9]{64}", str(anchor.get("sha256", ""))):
+                errors.append(prefix + ".sha256 must bind saved source bytes")
+            if project is not None:
+                try:
+                    from scripts.research_artifacts import bound_source, path_in
+                    from scripts.output_provenance import current_origin
+                    bound_source(project, anchor)
+                    source = path_in(project, anchor["path"])
+                    origin = current_origin(project, source)
+                    if (origin.get("status") != "tracked" or origin.get("family") != "other"
+                            or not (str(origin.get("provider", "")).startswith("deterministic-")
+                                    or origin.get("provider") == "human-attestation")):
+                        raise ValueError("feasibility evidence needs current acquired/local/supplied provenance, not model self-attestation")
+                    content = source.read_text(encoding="utf-8")
+                    if not isinstance(anchor.get("quote"), str) or not anchor["quote"].strip() or anchor["quote"] not in content:
+                        raise ValueError("quoted feasibility evidence is not in the saved source")
+                except (OSError, ValueError, TypeError, KeyError) as exc:
+                    errors.append(prefix + ": " + str(exc))
+    pilot = _object(evidence.get("pilot"), "feasibility_evidence.pilot", errors)
+    if pilot.get("status") in {"unknown", "not_run"}:
+        _text(pilot.get("limitation"), "feasibility_evidence.pilot.limitation", errors)
+    elif pilot.get("status") == "executed":
+        attempt = _text(pilot.get("attempt_id"), "feasibility_evidence.pilot.attempt_id", errors)
+        if project is None:
+            errors.append("executed pilot needs project-bound executor verification")
+        else:
+            try:
+                from scripts.research_artifacts import read, path_in, sha
+                import json
+                registry = path_in(project, "experiments/registry.jsonl")
+                matches = [row for line in registry.read_text(encoding="utf-8").splitlines() if line.strip()
+                           for row in [json.loads(line)] if row.get("attempt_id") == attempt]
+                if not isinstance(attempt, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", attempt) or len(matches) != 1:
+                    raise ValueError("executed pilot needs one real registered attempt")
+                row = matches[0]
+                if row.get("status") != "succeeded" or row.get("input_integrity", {}).get("passed") is not True:
+                    raise ValueError("pilot has no successful integrity-checked execution")
+                if read(path_in(project, f"experiments/runs/{attempt}/run.json")) != row or not row.get("outputs"):
+                    raise ValueError("pilot receipt or outputs are missing")
+                for output in row["outputs"]:
+                    if sha(path_in(project, output["path"])) != output.get("sha256"):
+                        raise ValueError("pilot output is missing or changed")
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                errors.append("feasibility_evidence.pilot: " + str(exc))
+    else:
+        errors.append("feasibility_evidence.pilot.status must be unknown, not_run or executed")
     return errors
 
 
@@ -453,6 +633,7 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
         _string_list(paper.get("dependencies"), f"{prefix}.dependencies", errors, minimum=0)
     if sorted(seen) != expected:
         errors.append(f"papers must contain exactly: {', '.join(expected)}")
+    _paper_dependencies(papers, set(expected), errors)
     try:
         from scripts.venue_policy import validate_portfolio
     except ImportError:
@@ -507,6 +688,28 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
         "dependency_logic",
     ):
         _text(synthesis.get(key), f"thesis_synthesis.{key}", errors)
+    links = _list(synthesis.get("argument_links"), "thesis_synthesis.argument_links (migration required)", errors)
+    covered: set[str] = set()
+    steps: set[str] = set()
+    for index, item in enumerate(links):
+        prefix = f"thesis_synthesis.argument_links[{index}]"
+        link = _object(item, prefix, errors)
+        step = _text(link.get("step_id"), prefix + ".step_id", errors)
+        if step in steps:
+            errors.append(prefix + ".step_id is duplicated")
+        if step:
+            steps.add(step)
+        for key in ("contribution", "what_changes_if_unsupported"):
+            _text(link.get(key), prefix + "." + key, errors)
+        claims = _string_list(link.get("claim_ids"), prefix + ".claim_ids", errors)
+        if set(claims) - global_claim_ids:
+            errors.append(prefix + ".claim_ids reference an unknown portfolio claim")
+        covered.update(claims)
+    for row in papers:
+        if isinstance(row, dict):
+            claims = row.get("unique_claim_ids")
+            if not isinstance(claims, list) or not any(isinstance(claim, str) and claim in covered for claim in claims):
+                errors.append(str(row.get("paper_id")) + " needs a claim in thesis_synthesis.argument_links")
     return errors
 
 
@@ -593,6 +796,30 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *,
         _text(planned.get(key), f"planned_experiments.{key}", errors)
 
     _string_list(contract.get("falsification_conditions"), "falsification_conditions", errors)
+    errors.extend(validate_negative_result_plan(contract.get("negative_result_plan")))
+    errors.extend(validate_scientific_bindings({**contract, "study_route": study_route}))
+    parents = _string_list(contract.get("dependencies"), "dependencies", errors, minimum=0)
+    if expected_paper_id in parents or any(not PAPER_RE.fullmatch(pid) for pid in parents):
+        errors.append("dependencies must name other exact paper IDs")
+    bindings = _list(contract.get("dependency_bindings"), "dependency_bindings (migration required)", errors, minimum=0)
+    seen_parents = set()
+    for index, item in enumerate(bindings):
+        prefix = f"dependency_bindings[{index}]"
+        binding = _object(item, prefix, errors)
+        parent = binding.get("paper_id")
+        if not isinstance(parent, str) or parent not in parents or parent in seen_parents:
+            errors.append(prefix + ".paper_id must uniquely bind one declared dependency")
+        if isinstance(parent, str):
+            seen_parents.add(parent)
+        if binding.get("kind") not in {"scientific_premise", "shared_asset"}:
+            errors.append(prefix + ".kind must identify a scientific premise or shared asset")
+        _string_list(binding.get("claim_ids"), prefix + ".claim_ids", errors,
+                     minimum=1 if binding.get("kind") == "scientific_premise" else 0)
+        _string_list(binding.get("node_ids"), prefix + ".node_ids", errors)
+        for key in ("graph_id", "rationale", "inherited_scope"):
+            _text(binding.get(key), prefix + "." + key, errors)
+    if seen_parents != set(parents):
+        errors.append("dependency_bindings must explain every declared paper dependency")
     independence = _object(contract.get("independence"), "independence", errors)
     _string_list(independence.get("unique_claim_ids"), "independence.unique_claim_ids", errors)
     _string_list(independence.get("shared_assets"), "independence.shared_assets", errors, minimum=0)
@@ -610,6 +837,108 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *,
         )
     )
     return errors
+
+
+def validate_portfolio_evidence(project: Path, paper_id: str | None = None, gate: str = "G5") -> list[str]:
+    """Join the existing portfolio/claim/lineage records, without new result state.
+
+    G2 checks declared relationships. G5 checks only the current paper's actual
+    contribution and dependencies; an upstream paper need not be submission-ready.
+    """
+    from scripts.research_artifacts import read, path_in
+    errors: list[str] = []
+    try:
+        state = read(path_in(project, "state/run.json"))
+        expected = {f"P{n:02d}" for n in range(1, int(state["paper_count"]) + 1)}
+        mapping = read(path_in(project, "program/paper-map.json"))
+        errors.extend(validate_paper_map(mapping, expected))
+        rows = {row["paper_id"]: row for row in mapping.get("papers", []) if isinstance(row, dict) and row.get("paper_id") in expected}
+        contracts = {pid: read(path_in(project, f"papers/{pid}/paper-contract.json")) for pid in expected}
+        for pid, contract in contracts.items():
+            if set(contract.get("dependencies", [])) != set(rows.get(pid, {}).get("dependencies", [])):
+                errors.append(pid + ": paper-map and contract dependencies disagree")
+        if gate != "G5" or errors:
+            return errors
+        if paper_id not in expected:
+            return ["portfolio evidence needs the current exact paper ID"]
+        from scripts.results_validation import claim_outcomes
+        actual = claim_outcomes(project, paper_id)
+        owners = {claim: pid for pid, row in rows.items() for claim in row.get("unique_claim_ids", [])}
+        synthesis = mapping["thesis_synthesis"]
+        required = {claim for link in synthesis["argument_links"] for claim in link["claim_ids"]
+                    if owners.get(claim) == paper_id}
+        alignments = _list(synthesis.get("evidence_alignment"), "thesis_synthesis.evidence_alignment", errors)
+        selected: dict[str, dict] = {}
+        for index, value in enumerate(alignments):
+            row = _object(value, f"thesis_synthesis.evidence_alignment[{index}]", errors)
+            claim = row.get("claim_id")
+            if not isinstance(claim, str) or claim not in owners:
+                errors.append("thesis evidence alignment references an unknown claim")
+            elif owners[claim] == paper_id:
+                if claim in selected:
+                    errors.append("duplicate current-paper thesis evidence alignment: " + claim)
+                selected[claim] = row
+        if not required <= set(selected):
+            errors.append(paper_id + ": thesis synthesis lacks current actual claim outcomes")
+        for claim, row in selected.items():
+            outcome = actual["claims"].get(claim)
+            if outcome is None:
+                errors.append("thesis claim has no registered outcome: " + claim)
+                continue
+            if row.get("result_status") != outcome["result_status"] or sorted(row.get("comparison_ids", [])) != sorted(outcome["comparison_ids"]):
+                errors.append("thesis synthesis contradicts actual claim outcome/comparisons: " + claim)
+            if any(row.get(key) != actual[key] for key in ("claim_matrix_sha256", "evidence_plan_sha256")):
+                errors.append("thesis evidence alignment has stale result bindings: " + claim)
+            if row.get("disposition") not in {"retain", "narrow", "reframe", "unsupported"}:
+                errors.append("thesis alignment needs an explicit evidence interpretation: " + claim)
+            elif outcome["result_status"] in {"not_supported", "contradicted", "inconclusive"} and row["disposition"] == "retain":
+                errors.append("adverse/uncertain evidence cannot retain the original thesis success narrative: " + claim)
+            _text(row.get("claim_boundary"), "thesis alignment claim_boundary: " + claim, errors)
+
+        contract = contracts[paper_id]
+        parents = contract.get("dependencies", [])
+        bindings = contract.get("dependency_bindings", [])
+        if not isinstance(bindings, list) or {row.get("paper_id") for row in bindings if isinstance(row, dict)} != set(parents):
+            errors.append(paper_id + ": every paper dependency needs its typed evidence binding")
+            return errors
+        if bindings:
+            from scripts import research_increments as increments
+            graphs = {row["id"]: row for row in increments.load(project)["dependencies"]}
+            for binding in bindings:
+                parent = binding["paper_id"]
+                if parent not in expected or parent == paper_id:
+                    errors.append(paper_id + ": invalid dependency parent")
+                    continue
+                graph = increments.dependencies(project, graphs[binding["graph_id"]])
+                nodes = {row["id"]: row for row in graph["nodes"]}
+                chosen = set(binding["node_ids"])
+                if not chosen or not chosen <= set(nodes):
+                    errors.append(paper_id + ": dependency needs exact existing graph nodes")
+                    continue
+                closure = set(chosen)
+                pending = list(chosen)
+                while pending:
+                    for ancestor in nodes[pending.pop()].get("depends_on", []):
+                        if ancestor not in closure:
+                            closure.add(ancestor)
+                            pending.append(ancestor)
+                if any(key in graph["stale"] for key in chosen):
+                    errors.append(paper_id + ": dependency evidence changed; review the affected inherited claim/asset")
+                if not any(paper_id in nodes[key]["paper_ids"] for key in chosen) or not any(parent in nodes[key]["paper_ids"] for key in closure):
+                    errors.append(paper_id + ": dependency graph does not bind consumer and source paper")
+                if binding["kind"] == "scientific_premise":
+                    parent_actual = claim_outcomes(project, parent)
+                    claims = binding["claim_ids"]
+                    if not claims or any(owners.get(cid) != parent or parent_actual["claims"].get(cid, {}).get("result_status") != "supported" for cid in claims):
+                        errors.append(paper_id + ": inherited scientific premise is unsupported, changed or unknown; reassess its scope")
+                elif binding["kind"] == "shared_asset":
+                    if not any(nodes[key]["kind"] == "shared_asset" and parent in nodes[key]["paper_ids"] for key in closure):
+                        errors.append(paper_id + ": shared-asset dependency needs an actual declared shared asset node")
+                else:
+                    errors.append(paper_id + ": unknown dependency kind")
+        return errors
+    except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
+        return [*errors, "portfolio evidence: " + str(exc)]
 
 
 def validate_experiment_design(
@@ -708,6 +1037,27 @@ def validate_experiment_design(
     ):
         _text(data.get(key), f"data_protocol.{key}", errors)
     _string_list(data.get("leakage_controls"), "data_protocol.leakage_controls", errors, minimum=2)
+    selection = _object(data.get("model_selection"), "data_protocol.model_selection (migration required)", errors)
+    _text(selection.get("rationale"), "data_protocol.model_selection.rationale", errors)
+    status = selection.get("status")
+    if status not in {"tuned", "not_tuned", "not_applicable"}:
+        errors.append("data_protocol.model_selection.status must be tuned, not_tuned or not_applicable")
+    if status == "tuned":
+        if selection.get("selection_split") not in {"training", "validation", "nested_cross_validation"}:
+            errors.append("model selection must use training/validation/nested cross-validation, never test/final/holdout data")
+        _text(selection.get("selection_metric"), "data_protocol.model_selection.selection_metric", errors)
+        space = _object(selection.get("search_space"), "data_protocol.model_selection.search_space", errors)
+        if not space:
+            errors.append("tuned model selection needs its declared parameter search space")
+        for key, values in space.items():
+            if (not isinstance(key, str) or not key.strip() or not isinstance(values, list) or not values
+                    or any(type(v) not in (str, int, float, bool) or (type(v) is float and not math.isfinite(v)) for v in values)):
+                errors.append("model_selection.search_space must map parameter names to explicit finite candidate values")
+        tuning_runs = _string_list(selection.get("run_ids"), "data_protocol.model_selection.run_ids", errors)
+        if not set(tuning_runs) <= set(run_ids):
+            errors.append("model_selection.run_ids must belong to this declared paper design")
+    elif selection.get("run_ids") or selection.get("search_space") or selection.get("selection_split") not in {None, "none"}:
+        errors.append("untuned/not-applicable selection must not invent tuning runs, a search space or a selection split")
 
     metrics = _object(design.get("metrics"), "metrics", errors)
     primary_metrics = _list(metrics.get("primary"), "metrics.primary", errors)

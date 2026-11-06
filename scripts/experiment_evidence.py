@@ -87,9 +87,71 @@ def validate_plan(project: Path, paper_id: str) -> list[str]:
         return [str(exc)]
 
 
+def _scientific_bindings(project: Path, paper_id: str, protocol: dict) -> None:
+    """Join the topic contract to executable comparisons, without a second result ledger."""
+    need(protocol.get("schema_version") == "1.1",
+         "current scientific gates require experiment-evidence-plan schema_version 1.1; "
+         "migrate before freezing G3, retaining any previously frozen/executed protocol")
+    contract = read(project / "papers" / paper_id / "paper-contract.json")
+    from scripts.research_design import validate_scientific_bindings
+    errors = validate_scientific_bindings(contract)
+    need(not errors, "scientific bindings: " + "; ".join(errors))
+    bindings = contract["scientific_bindings"]
+    hypotheses = {row["hypothesis_id"]: row for row in bindings["hypotheses"]}
+    conditions = {row["condition_id"]: row for row in bindings["falsification_conditions"]}
+    designs = {}
+    for path in sorted((project / "papers" / paper_id / "experiments").glob("*.json")):
+        design = read(path)
+        designs[design["design_id"]] = design
+    seen = set()
+    for comp in protocol["comparisons"]:
+        hypothesis = hypotheses.get(comp["hypothesis_id"])
+        need(hypothesis is not None, "comparison has no contract scientific hypothesis binding")
+        selected = strings(comp.get("condition_ids"), "comparison condition_ids", empty=comp["role"] != "primary")
+        need(set(selected) <= set(hypothesis["condition_ids"]), "comparison condition_ids differ from the contract hypothesis")
+        for identifier in selected:
+            condition = conditions[identifier]
+            need((condition["hypothesis_id"], condition["metric"], condition["decision_rule"], condition["threshold"])
+                 == (comp["hypothesis_id"], comp["metric"], comp["decision_rule"], comp["minimum_effect"]),
+                 "comparison falsification metric/rule/threshold differs from its contract condition")
+            need(condition["statement"] in designs[comp["design_id"]].get("falsification_criteria", []),
+                 "designed falsification criteria omit the exact contracted condition")
+            seen.add(identifier)
+        if comp["role"] == "primary":
+            fields = ("metric", "direction", "aggregation", "decision_rule", "minimum_effect")
+            expected = (hypothesis["primary_metric"], hypothesis["direction"], hypothesis["aggregation"],
+                        hypothesis["decision_rule"], hypothesis["minimum_effect"])
+            need(tuple(comp[key] for key in fields) == expected,
+                 "primary comparison differs from the contracted primary outcome metric/direction/aggregation/rule/effect")
+    need(seen == set(conditions), "executable comparisons must cover every contracted falsification condition")
+
+
+def validate_scientific_bindings(project: Path, paper_id: str, gate: str = "G3") -> list[str]:
+    """Strict current-gate entry; 1.0 remains readable only for historical diagnostics.
+
+    No executed protocol is rewritten here. A changed frozen protocol needs a
+    separately recorded prospective protocol/validation, retaining its old results.
+    """
+    try:
+        from scripts import study_routes
+        if study_routes.route(project, paper_id) == "empirical":
+            protocol = _validate_plan(project, paper_id)
+            _scientific_bindings(project, paper_id, protocol)
+        if gate in {"G4", "G5"}:
+            from scripts.results_validation import validate_result_statuses
+            alignments = None
+            if gate == "G5":
+                alignments = read(project / "papers" / paper_id / "reviews/paper-facts.json").get("claim_alignment")
+                need(isinstance(alignments, list), "G5 requires current manuscript claim_alignment records")
+            return validate_result_statuses(project, paper_id, alignments)
+        return []
+    except (EvidenceError, OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return [str(exc)]
+
+
 def _validate_plan(project: Path, paper_id: str) -> dict:
     protocol = read(paper_plan(project, paper_id))
-    need(protocol.get("schema_version") == "1.0" and protocol.get("paper_id") == paper_id
+    need(protocol.get("schema_version") in {"1.0", "1.1"} and protocol.get("paper_id") == paper_id
          and protocol.get("status") == "ready_for_review", "invalid experiment evidence plan identity/status")
     runs_value = read(project / "experiments/plan.json").get("runs")
     need(isinstance(runs_value, list), "execution plan runs must be an array")
@@ -295,6 +357,8 @@ def _validate_plan(project: Path, paper_id: str) -> dict:
         text(external.get("claim_limit"), "scope-limited claim boundary")
     from scripts.scientific_reasoning import validate_critical_tests
     validate_critical_tests(protocol, project)
+    if protocol.get("schema_version") == "1.1":
+        _scientific_bindings(project, paper_id, protocol)
     return protocol
 
 
@@ -522,6 +586,8 @@ def build_report(project: Path, paper_id: str) -> dict:
         row = {key: comp[key] for key in ("comparison_id", "design_id", "hypothesis_id", "claim_ids",
                "role", "analysis_phase", "family", "alpha", "decision_rule", "minimum_effect", "analysis_unit",
                "metric", "dataset_id", "direction", "population_scope", "assumptions", "sample_size_rationale")}
+        if protocol["schema_version"] == "1.1":
+            row["condition_ids"] = comp["condition_ids"]
         try:
             row.update(_measure(project, comp, registry, sha(plan_path), family_size))
             row["status"] = "computed"
@@ -550,7 +616,7 @@ def build_report(project: Path, paper_id: str) -> dict:
     report["status"] = "complete" if not errors else "blocked"
     report["interpretation"] = ("Numeric evidence only. Paired/Welch t inference assumes independent units and suitable "
         "difference distributions; repeated rows and seeds are averaged within units. Registered custom analyses "
-        "are hash-checked but not statistically recomputed here. Human scientific review remains required.")
+        "are hash-checked but not statistically recomputed here. Independent scientific review remains required.")
     return report
 
 

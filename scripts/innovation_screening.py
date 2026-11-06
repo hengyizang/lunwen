@@ -323,3 +323,174 @@ def validate(project: Path, register: dict) -> list[str]:
     except (ValueError, TypeError, KeyError, OSError, csv.Error, subprocess.SubprocessError) as exc:
         return ["innovation_screening: " + str(exc)]
     return []
+
+
+def novelty_claims(matrix: dict, gate: str, paper_id: str | None = None) -> list[dict]:
+    """Scope the existing novelty record; no scores or model calls."""
+    claims = _rows(matrix.get("claims"), "novelty claims", 1)
+    identifiers = [_text(c.get("claim_id"), "novelty claim ID") for c in claims]
+    _need(len(identifiers) == len(set(identifiers)), "novelty claim IDs must be unique")
+    if gate == "G5":
+        claims = [c for c in claims if paper_id in c.get("paper_ids", [])]
+        _need(bool(claims), "the current paper needs its own novelty claims")
+    return claims
+
+
+def validate_novelty_gate(project: Path, matrix: dict, originality: dict,
+                         gate: str, paper_id: str | None = None) -> list[str]:
+    """Hard source requirements, followed by the actual independent review.
+
+    Quotations and retrieval establish inspected inputs, not scientific novelty.
+    Unresolved overlap cannot be offset by a score or majority vote.
+    """
+    try:
+        from scripts.research_artifacts import read
+        from scripts import literature_evidence as literature, output_provenance
+        from scripts.research_extensions import _closest_prior_anchor
+        from scripts.source_scope import _registered_basis
+        _need(matrix.get("schema_version") == "1.1",
+              "novelty matrix migration required: use 1.1 with per-work comparisons")
+        prior = {w["id"]: w for w in _rows(originality.get("closest_prior_work"), "closest work", 5)}
+        library = _rows(read(project / "program/literature-workbench.json").get("papers"), "literature library", 1, 10000)
+        searches = literature.read_jsonl(project / "evidence/search-log.jsonl")
+        ledger = {r["receipt_id"]: r for r in literature.read_jsonl(project / "evidence/literature-api-ledger.jsonl")}
+        from scripts.research_quality import validate_novelty_claim_matrix
+        issues = validate_novelty_claim_matrix(matrix, originality, searches, project=project)
+        _need(not issues, "; ".join(issues))
+        validate_retrieval_dispositions(project, matrix, searches, ledger)
+        for claim in novelty_claims(matrix, gate, paper_id):
+            label = "novelty " + _text(claim.get("claim_id"), "claim ID")
+            _text(claim.get("claim"), label + " statement")
+            expected = set(_strings(claim.get("closest_work_ids"), label + " closest works", 3))
+            _need(len(expected) >= 3, label + " needs three distinct closest works")
+            comparisons = _rows(claim.get("prior_art_comparisons"), label + " prior_art_comparisons", 3)
+            seen = set()
+            for comparison in comparisons:
+                work_id = _text(comparison.get("work_id"), label + " work ID")
+                _need(work_id in expected and work_id in prior and work_id not in seen,
+                      label + " needs one comparison against each named closest work")
+                seen.add(work_id)
+                work = prior[work_id]
+                for key in ("already_known", "precise_difference", "non_obvious_reason", "discriminating_prediction"):
+                    _text(comparison.get(key), label + "." + key)
+                _need(comparison.get("disposition") == "distinct",
+                      label + ": overlapping or unresolved prior art blocks the novelty gate")
+                _need(comparison.get("unresolved_objections") == [], label + " has unresolved novelty objections")
+                matches = [p for p in library if p.get("id") == comparison.get("library_id")]
+                _need(len(matches) == 1, label + " requires one registered original source")
+                paper = matches[0]
+                registered, basis = _registered_basis(project, paper["id"])
+                _need(registered == paper.get("source"), label + " library source differs from its protected acquisition")
+                registration = read(path_in(project, basis["registration_path"]))
+                candidate = registration.get("candidate", {})
+                _need(isinstance(candidate, dict), label + " protected source identity is malformed")
+                title = _text(work.get("title"), "closest work title")
+                _need(paper.get("source_scope") == "full_text" and paper.get("url") == work.get("primary_source_url")
+                      and _text(paper.get("title"), "library title").casefold() == title.casefold(),
+                      label + " original source identity/full-text scope differs from the closest work")
+                _need(candidate.get("canonical_id") == paper.get("candidate_id")
+                      and isinstance(candidate.get("title"), str) and candidate["title"].strip().casefold() == title.casefold()
+                      and candidate.get("primary_source_url") == work.get("primary_source_url"),
+                      label + " source identity differs from its protected registration metadata")
+                source = paper.get("source", {})
+                if not str(source.get("path", "")).startswith("data/raw/literature/"):
+                    origin = output_provenance.current_origin(project, path_in(project, source.get("path", "")))
+                    _need(origin.get("status") == "tracked" and origin.get("provider") in
+                          {"deterministic-control-plane", "human-attestation"},
+                          label + " original source cannot be untracked or model-authored prose")
+                anchors = _rows(comparison.get("source_anchors"), label + " source anchors", 1, 20)
+                for anchor in anchors:
+                    _closest_prior_anchor(project, anchor, paper)
+                receipt_id = comparison.get("retrieval_receipt_id")
+                receipt = ledger.get(receipt_id, {})
+                bound = [r for r in searches if r.get("evidence_receipt_id") == receipt_id]
+                _need(receipt.get("status") == "success" and bool(bound), label + " needs a successful retrieval receipt")
+                issues = literature.validate_search_evidence(project, bound)
+                _need(not issues, label + " retrieval evidence: " + "; ".join(issues))
+                normalized = read(path_in(project, receipt["normalized_results_path"]))
+                candidates = [w for w in normalized.get("works", []) if w.get("id") == comparison.get("retrieved_work_id")]
+                _need(len(candidates) == 1 and isinstance(candidates[0].get("title"), str) and
+                      candidates[0]["title"].strip().casefold() == title.casefold(),
+                      label + " closest work is absent from its executed retrieval")
+                doi = literature._doi(work.get("primary_source_url"))
+                _need((doi and literature._doi(candidates[0].get("doi")) == doi) or
+                      (not doi and candidates[0].get("url") == work.get("primary_source_url")),
+                      label + " retrieved DOI/URL differs from the claimed source identity")
+            _need(seen == expected, label + " omits a closest-work comparison")
+        if gate in {"G2", "G5"}:
+            contracts = sorted((project / "papers").glob("P[0-9][0-9]/paper-contract.json"))
+            for target in contracts:
+                pid = target.parent.name
+                if gate == "G5" and pid != paper_id:
+                    continue
+                declared = set(_strings(read(target).get("independence", {}).get("unique_claim_ids"), "paper claims", 1))
+                linked = {c["claim_id"] for c in matrix["claims"] if pid in c.get("paper_ids", [])}
+                _need(declared == linked, pid + " contracted claims must exactly match its novelty comparisons")
+        return []
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        return ["innovation hard gate: " + str(exc)]
+
+
+def validate_retrieval_dispositions(project, matrix, searches, ledger):
+    """Recompute returned/new identities; relevance remains an audited judgement."""
+    from scripts.research_artifacts import read
+    saturation = matrix["search_saturation"]
+    records = {r["search_id"]: r for r in searches}
+    by_search, universe = {}, set()
+    for key in saturation["supporting_search_ids"]:
+        receipt = ledger[records[key]["evidence_receipt_id"]]
+        works = read(path_in(project, receipt["normalized_results_path"]))["works"]
+        by_search[key] = {w["id"] for w in works}
+        universe.update((receipt["receipt_id"], w["id"]) for w in works)
+    dispositions = {}
+    for row in _rows(saturation.get("retrieval_dispositions"), "retrieval_dispositions", 0, 10000):
+        key = (row.get("receipt_id"), row.get("work_id"))
+        _need(key in universe and key not in dispositions, "retrieval disposition is duplicated or absent from actual results")
+        _choice(row.get("relevance"), {"closest", "relevant", "peripheral"}, "retrieval relevance")
+        _text(row.get("rationale"), "retrieval relevance rationale")
+        dispositions[key] = row["relevance"]
+    _need(set(dispositions) == universe, "every retrieved work requires a relevance disposition; unknown relevance cannot count as zero")
+    seen_searches, seen_works, round_ids, execution_ids = set(), set(), set(), set()
+    for row in _rows(saturation.get("search_rounds"), "actual search rounds", 1):
+        identifier = _text(row.get("round_id"), "search round ID")
+        _need(identifier not in round_ids, "search round IDs cannot repeat")
+        round_ids.add(identifier)
+        keys = _strings(row.get("search_ids"), "round search IDs", 1)
+        _need(len(keys) == len(set(keys)) and not seen_searches.intersection(keys)
+              and set(keys) <= set(by_search), "search rounds must partition actual supporting searches")
+        receipts = {records[k]["evidence_receipt_id"] for k in keys}
+        _need(len(receipts) == len(keys) and not receipts.intersection(execution_ids), "renaming a search cannot create another executed round")
+        execution_ids.update(receipts)
+        returned = set().union(*(by_search[k] for k in keys))
+        new = returned - seen_works
+        closest = {work for receipt, work in dispositions if receipt in receipts and dispositions[(receipt, work)] == "closest"}
+        for name, count in (("new_work_count", len(new)), ("new_closest_work_count", len(new & closest))):
+            _need(type(row.get(name)) is int and row[name] == count, name + " differs from the actual returned identities and relevance dispositions")
+        seen_searches.update(keys); seen_works.update(returned)
+    _need(seen_searches == set(by_search), "search rounds must include every supporting retrieval")
+
+
+def validate_novelty_review(audit: dict, matrix: dict, gate: str,
+                            paper_id: str | None = None, *, final: bool = True) -> list[str]:
+    """Claim-specific findings belong to the existing actual critic invocation."""
+    try:
+        claims = novelty_claims(matrix, gate, paper_id)
+        expected = {c["claim_id"]: set(c["closest_work_ids"]) for c in claims}
+        rows = _rows(audit.get("novelty_assessment"), "independent novelty_assessment", 1)
+        seen = set()
+        for row in rows:
+            key = row.get("claim_id")
+            _need(key in expected and key not in seen, "independent novelty review contains an unknown or duplicate claim")
+            seen.add(key)
+            inspected = _strings(row.get("inspected_work_ids"), "inspected closest works", 3)
+            _need(len(inspected) == len(set(inspected)) and set(inspected) == expected[key],
+                  "independent novelty review must inspect every linked closest work")
+            _choice(row.get("decision"), {"distinct", "overlap", "unresolved"}, "novelty decision")
+            _text(row.get("rationale"), "independent novelty rationale")
+            _text(row.get("remaining_uncertainty"), "remaining novelty uncertainty")
+            if final:
+                _need(row["decision"] == "distinct", "overlap or unresolved novelty blocks advancement")
+        _need(seen == set(expected), "independent novelty review omits a current claim")
+        return []
+    except (ValueError, KeyError, TypeError) as exc:
+        return ["innovation hard gate: " + str(exc)]

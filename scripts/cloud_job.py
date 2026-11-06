@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.metadata
 import json
 import os
@@ -174,8 +175,8 @@ def validate_request(value: object) -> dict:
                 raise CloudJobError("authorize an exact data/manifests/*.json file")
         elif not isinstance(value.get("repair_note"), str) or not 10 <= len(value["repair_note"].strip()) <= 500:
             raise CloudJobError("resume needs a 10–500 character explanation of the inspected repair")
-    if action == "init" and (type(value.get("paper_count", 6)) is not int or not 1 <= value.get("paper_count", 6) <= 20):
-        raise CloudJobError("paper_count must be 1–20")
+    if action == "init" and (type(value.get("paper_count", 6)) is not int or value.get("paper_count", 6) != 6):
+        raise CloudJobError("the supported doctoral workflow requires exactly six papers")
     if action == "bocha_jev_probe":
         if type(value.get("live", False)) is not bool:
             raise CloudJobError("live must be a boolean")
@@ -384,7 +385,28 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
         return 124, "Command timed out. Partial project files will be preserved for inspection."
 
 
-def run_job(job: dict, run_id: str) -> int:
+def authenticated_owner_event(job: dict, run_id: str) -> dict | None:
+    """Bind cloud authority to the actual owner issue, never the displayed actor."""
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return None
+    event_path = os.environ.get("GITHUB_EVENT_PATH")
+    if not event_path or os.environ.get("GITHUB_RUN_ID") != str(run_id):
+        raise CloudJobError("cloud execution needs its actual GitHub event and matching run ID")
+    payload = Path(event_path).read_bytes()
+    event = json.loads(payload.decode("utf-8"), object_pairs_hook=unique_pairs)
+    if issue_request(event) != job:
+        raise CloudJobError("cloud execution request differs from its authenticated owner issue")
+    issue = event["issue"]
+    login, number = issue["user"].get("login"), issue.get("number")
+    if not isinstance(login, str) or not login.strip() or type(number) is not int or number < 1:
+        raise CloudJobError("authenticated owner issue needs its login and issue number")
+    return {"source": "github_owner_issue", "verified": True,
+            "actor_id": issue["user"]["id"], "actor_login": login,
+            "repository": REPOSITORY, "issue_number": number,
+            "source_run_id": str(run_id), "event_sha256": hashlib.sha256(payload).hexdigest()}
+
+
+def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) -> int:
     RUNTIME.mkdir(exist_ok=True)
     ARTIFACT.mkdir(exist_ok=True)
     slug, action = job["project"], job["action"]
@@ -462,7 +484,7 @@ def run_job(job: dict, run_id: str) -> int:
             if not project_exists:
                 raise CloudJobError("project does not exist; create it with init first")
             if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
-                result = cloud_human_controls.execute(job, run_id)
+                result = cloud_human_controls.execute(job, run_id, owner_authorization=owner_authorization)
                 (ARTIFACT / "human-control-receipt.json").write_text(
                     json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                 logs.append(json.dumps(result, ensure_ascii=False, indent=2))
@@ -794,7 +816,10 @@ def main() -> int:
                     handle.write(f"action={job['action']}\n")
             return 0
         if args.command == "execute":
-            return run_job(validate_request(json.loads(args.config.read_text(encoding="utf-8"), object_pairs_hook=unique_pairs)), args.run_id)
+            job = validate_request(json.loads(args.config.read_text(encoding="utf-8"), object_pairs_hook=unique_pairs))
+            owner_authorization = (authenticated_owner_event(job, args.run_id)
+                                   if job["action"] == "review_dossier" or job["action"] in cloud_human_controls.ACTIONS else None)
+            return run_job(job, args.run_id, owner_authorization=owner_authorization)
         if not args.summary.is_file():
             raise CloudJobError("no cloud summary to post")
         return subprocess.run(["gh", "api", "-X", "POST", f"repos/{REPOSITORY}/issues/{args.issue}/comments",

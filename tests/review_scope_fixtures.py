@@ -9,13 +9,15 @@ from scripts.research_artifacts import read, write, sha
 from scripts.acceptance_scope import prepare_scope
 
 
-def seal_review(project, state, *, gate="G5", run_id="fixture-review", notes=None):
+def seal_review(project, state, *, gate="G5", run_id="fixture-review", notes=None, novelty_assessment=None):
     stage = review_receipts.STAGES[gate]
     paper = state.get("active_paper") if gate == "G5" else None
     identity = {"provider": "synthetic-critic-fixture", "family": "anthropic", "requested_model": "synthetic-critic-model",
                 "reported_model": "synthetic-critic-model", "completion_status": "completed", "cache_hit": False,
                 "request_id": "synthetic-fixture-no-model-call"}
     audit = {"verdict": "pass-with-conditions", **{f: [] for f in review_receipts.FIELDS - {"verdict"}}}
+    if novelty_assessment is not None:
+        audit["novelty_assessment"] = novelty_assessment
     if notes is None:
         codes = [f"H{n:02d}" for n in range(1, 27)] + [f"AD{n:02d}" for n in range(1, 9)] + [f"CFH{n:02d}" for n in range(1, 39)]
         from scripts.ccfa_humanization import review_checklist
