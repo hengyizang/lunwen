@@ -236,7 +236,6 @@ def design_errors(project: Path) -> list[str]:
         raw_hashes = set()
         for identifier, manifest in manifests.items():
             errors.extend(identifier + ": " + e for e in dataset_fetch.validate_manifest(manifest))
-            errors.extend(identifier + ": " + e for e in dataset_fetch.license_errors(manifest, project=project))
             digest = manifest.get("download", {}).get("sha256")
             if not isinstance(digest, str) or digest == "pending":
                 errors.append(identifier + ": original dataset hash is unknown")

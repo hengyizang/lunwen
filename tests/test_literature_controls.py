@@ -149,7 +149,7 @@ class LiteratureControlTests(unittest.TestCase):
         pdf, _, _, _, manifest = self.authorized_pdf()
         self.assertEqual(control.approved_pdf(self.project, self.paper["source"]["path"], self.paper["manifest"]), pdf)
         (self.project / "state/data-authorizations.json").unlink()
-        with self.assertRaisesRegex(ValueError, "Owner-reviewed"):
+        with self.assertRaisesRegex(ValueError, "current source binding"):
             control.approved_pdf(self.project, self.paper["source"]["path"], self.paper["manifest"])
         # A public/reusable declaration inside the manifest is not owner authority.
         write(manifest, {"license": {"redistribution_allowed": True, "owner_approved": True},
@@ -314,7 +314,7 @@ class LiteratureControlTests(unittest.TestCase):
         pdf.unlink()
         authority["manifests"][manifest_relative]["cloud_use_confirmed"] = False
         write(self.project / "state/data-authorizations.json", authority)
-        with self.assertRaisesRegex(ValueError, "Owner-reviewed"):
+        with self.assertRaisesRegex(ValueError, "current source binding"):
             control.approved_pdf(self.project, self.paper["source"]["path"], manifest_relative)
         self.assertFalse(pdf.exists())
 

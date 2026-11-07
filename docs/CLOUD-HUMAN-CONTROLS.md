@@ -76,7 +76,7 @@ checks, preregistration, reproduction or study checks, revision records and
 final Word/PDF/figure visual checks. Machine records identify their source and
 retain unknowns. Missing files, rights, current audits, registered runs or
 supported adapters remain blockers. Automated records are not human reviews or
-proof of scientific validity. See [automatic data rights](AUTOMATED-DATA-RIGHTS.md).
+proof of scientific validity. See [source-bound acquisition](AUTOMATED-DATA-RIGHTS.md).
 
 Old non-topic `awaiting_approval` states are rechecked automatically. Passing
 checks produce the machine decision; failed checks reopen that stage for machine

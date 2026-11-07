@@ -90,7 +90,7 @@ class GateCheckLevelTests(unittest.TestCase):
         self.assertEqual(revision_integrity.validate_saved_report(self.paper, include_ledger=False), [])
         self.assertTrue(revision_integrity.validate_saved_report(self.paper, include_ledger=True))
 
-    def test_fresh_report_cannot_approve_number_or_negative_null_failed_disclosure_loss(self):
+    def test_scientific_changes_stay_blocking_while_optional_disclosure_is_editable(self):
         before = ("\\section{Results}\n"
             "The estimate is 12.3 mg.\n"
             "The negative finding remains important.\n"
@@ -108,9 +108,9 @@ class GateCheckLevelTests(unittest.TestCase):
         for name, after in changes.items():
             with self.subTest(removed=name):
                 result = self.save_integrity(before, after)
-                self.assertEqual(result["status"], "fail")
+                self.assertEqual(result["status"], "pass" if name == "disclosure" else "fail")
                 errors = revision_integrity.validate_saved_report(self.paper, include_ledger=False)
-                self.assertTrue(any("protected revision changes" in error for error in errors), errors)
+                self.assertEqual(any("protected revision changes" in error for error in errors), name != "disclosure", errors)
                 self.assertFalse(any("stale" in error for error in errors), errors)
 
     def test_missing_optional_quality_report_is_only_a_warning(self):

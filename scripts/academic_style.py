@@ -304,7 +304,7 @@ def build_audit(paper: Path) -> dict[str, Any]:
         "purpose": "authentic_academic_style_and_readability",
         "detector_score_used": False,
         "detector_evasion_prohibited": True,
-        "disclosure_must_be_preserved": True,
+        "disclosure_must_be_preserved": False,
         "human_review_required": False,
         "manuscript": {
             "path": manuscript.relative_to(paper).as_posix() if manuscript else None,

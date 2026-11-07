@@ -347,15 +347,12 @@ def gate_errors(slug,gate,*,warnings=None):
         empirical=any(study_routes.route(project,p)=="empirical" for p in selected_papers(project,gate))
         datasets=jsonl_objects(manifest_path,errors) if empirical or (manifest_path.is_file() and manifest_path.stat().st_size) else []
         if not datasets and any(study_routes.route(project,p)=="empirical" for p in selected_papers(project,gate)):
-            errors.append("at least one licensed dataset manifest is required")
+            errors.append("at least one source/version-bound dataset manifest is required")
         try:
             from scripts.dataset_fetch import validate_manifest
             for i,d in enumerate(datasets,1):
                 for issue in validate_manifest(d):errors.append(f"datasets.jsonl entry {i}: {issue}")
-                license_value=d.get("license") if isinstance(d.get("license"),dict) else {}
                 download_value=d.get("download") if isinstance(d.get("download"),dict) else {}
-                from scripts.dataset_fetch import license_errors
-                errors.extend(f"datasets.jsonl entry {i}: {issue}" for issue in license_errors(d, project=project))
                 if download_value.get("sha256")=="pending":errors.append(f"datasets.jsonl entry {i}: SHA-256 remains pending")
         except ImportError as exc:errors.append(f"dataset validator unavailable: {exc}")
         plan=load_nonempty_json(experiment_path(project, 'experiments/plan.json'),errors)

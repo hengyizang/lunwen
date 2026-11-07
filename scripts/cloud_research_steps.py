@@ -150,12 +150,10 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
         raise ResearchStepError("data authorization must name the reviewer and exact reviewed manifest hash")
     manifest = dataset_fetch.load_manifest(manifest_path)
     errors = dataset_fetch.validate_manifest(manifest)
-    if errors or (not automated and manifest["license"].get("confirmed_by_human") is not True):
-        raise ResearchStepError("review data license, privacy and cloud-use rights before authorizing acquisition")
-    if automated:
-        issues = dataset_fetch.license_errors(manifest, project=project)
-        if issues or actor != "deterministic_control_plane":
-            raise ResearchStepError("; ".join(issues) or "automatic authorization needs its control-plane identity")
+    if errors:
+        raise ResearchStepError("; ".join(errors))
+    if automated and actor != "deterministic_control_plane":
+        raise ResearchStepError("automatic acquisition binding needs its control-plane identity")
     download = manifest["download"]
     economic_scope = manifest.get("provenance", {}).get("economic_scope")
     if economic_scope is not None:
@@ -177,6 +175,7 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
     values = read(project / AUTHORIZATIONS, {"schema_version": "1.0", "manifests": {}})
     values["manifests"][relative] = {"sha256": expected_sha256, "actor": actor, "source_run_id": str(run_id),
                                     "cloud_use_confirmed": True, "confirmed_at": datetime.now(timezone.utc).isoformat(),
+                                    "license_review_performed": False, "research_use_rights_verified": False,
                                     **({"decision_kind": "automated", "human_confirmation": False} if automated else {})}
     write(project / AUTHORIZATIONS, values)
     return values["manifests"][relative]
@@ -197,18 +196,11 @@ def acquire_data(project: Path) -> dict:
                 continue
         if auth.get("sha256") != cloud_checkpoint.sha(manifest_path) or auth.get("cloud_use_confirmed") is not True:
             try:
-                from scripts.data_rights import prepare
-                prepare(project, manifest_path)
                 auth = authorize_data(project, relative, cloud_checkpoint.sha(manifest_path),
-                                      "deterministic_control_plane", "automated-data-rights", automated=True)
+                                      "deterministic_control_plane", "automated-source-binding", automated=True)
             except (ValueError, OSError, KeyError, TypeError, RuntimeError) as exc:
-                blockers.append({"kind": "data_rights_evidence", "path": relative,
+                blockers.append({"kind": "source_binding", "path": relative,
                                  "sha256": cloud_checkpoint.sha(manifest_path), "detail": str(exc)})
-                continue
-        if auth.get("decision_kind") == "automated":
-            issues = dataset_fetch.license_errors(manifest, project=project)
-            if issues:
-                blockers.append({"kind": "data_rights_evidence", "path": relative, "detail": "; ".join(issues)})
                 continue
         if manifest.get("provenance", {}).get("economic_scope") is not None:
             # Controlled API retrieval is requested explicitly through economic_data.
@@ -512,7 +504,6 @@ def after_write(project: Path, stage: str) -> dict:
                 manifest_path = path_in(project, manifest_rel)
                 manifest = read(manifest_path, {})
                 if (authorization.get("sha256") != cloud_checkpoint.sha(manifest_path)
-                        or manifest.get("license", {}).get("redistribution_allowed") is not True
                         or manifest.get("download", {}).get("sha256") != cloud_checkpoint.sha(source)):
                     raise ResearchStepError("persisted cloud readers require an owner-reviewed redistributable full-text manifest")
                 if not output.exists():

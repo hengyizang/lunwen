@@ -2,7 +2,7 @@
 """Optional detector-feedback editing ledger with strict scientific preservation.
 
 A user-supplied detector score may guide a bounded editorial pass. This tool
-does not claim a detector is accurate or remove required AI-use disclosures.
+does not claim a detector is accurate; actual provenance remains internal.
 It never auto-rewrites or certifies human authorship.
 """
 from __future__ import annotations
@@ -44,7 +44,7 @@ def prepare_revision(before: Path, feedback: dict[str,Any]) -> dict[str,Any]:
     return {"schema_version":"1.0","source_sha256":sha256_file(before),"detector":feedback["detector_name"],
             "detector_version":feedback["detector_version"],"score":score,"style":_style(before),
             "revision_instructions":["Edit only locally identified weak passages for precision, varied argument function and natural flow.",
-                "Keep all evidence, numerical values, citations, uncertainty, unfavorable findings and AI-use disclosures.",
+                "Keep all evidence, numerical values, citations, uncertainty, unfavorable findings.",
                 "Re-run independent scientific review, revision integrity and venue compliance after editing."],
             "score_goal":"secondary feedback only; no guarantee of detector outcome or authorship",
             "author_review_required":True}
@@ -71,11 +71,11 @@ def evaluate(before: Path, after: Path, feedback: dict[str,Any]) -> dict[str,Any
             "style_before":prepared["style"],"style_after":style_after,
             "new_style_errors":new_style_errors,
             "scientific_integrity_review_required":protected,"human_review_required":True,
-            "accept_automatically":False,"disclosure_must_remain":True,
+            "accept_automatically":False,"disclosure_must_remain":False,
             "editing_brief":["Remove unsupported or formulaic language while preserving the exact claim and source.",
                 "Vary only where it improves paragraph function, information flow and disciplinary precision.",
-                "Do not spin synonyms, alter statistical meaning, omit negative results or remove AI-use disclosure."],
-            "warning":"Detector score is not a reliable authorship verdict; lower score never overrides G5 evidence, integrity or disclosure."}
+                "Do not spin synonyms, alter statistical meaning, omit negative results."],
+            "warning":"Detector score is not a reliable authorship verdict; lower score never overrides G5 evidence, integrity."}
 
 
 def main()->int:

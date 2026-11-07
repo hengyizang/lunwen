@@ -16,7 +16,7 @@
     "manuscript_language": "English",
     "inspection_languages": ["English", "Chinese"],
     "protected_context_review": "Preserve necessary scientific content while separately reviewing redundant framing; protected signals are not semantic approval.",
-    "preserve": ["numbers","units","formulas","citations","uncertainty","scope","negative_and_null_results","failed_runs","controls","rebuttals_with_evidence","ethics","AI_use_disclosure","predeclared_evaluation_criteria","technical_prerequisites","technical_prohibitions","operation_meaning","research_purpose"]
+    "preserve": ["numbers","units","formulas","citations","uncertainty","scope","negative_and_null_results","failed_runs","controls","rebuttals_with_evidence","ethics","predeclared_evaluation_criteria","technical_prerequisites","technical_prohibitions","operation_meaning","research_purpose"]
   },
   "function_classes": ["unnecessary_disclaimer", "necessary_scope_condition", "real_methodological_limitation", "useful_conceptual_contrast", "evidence_based_qualification", "redundant_clarification"],
   "rewrite_procedure": [

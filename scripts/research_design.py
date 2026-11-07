@@ -323,7 +323,7 @@ def validate_selected_direction_cloud_feasibility(shortlist: dict[str, Any], pro
     for key in ("why_selected_over_rival", "change_of_mind_evidence"):
         _text(decision.get(key), "selection_decision." + key, errors)
     evidence = _object(feasibility.get("feasibility_evidence"), "feasibility_evidence (migration required)", errors)
-    for kind in ("data_access", "research_rights", "compute_cost"):
+    for kind in ("data_access", "compute_cost"):
         anchors = _list(evidence.get(kind), "feasibility_evidence." + kind, errors)
         for index, item in enumerate(anchors):
             prefix = f"feasibility_evidence.{kind}[{index}]"

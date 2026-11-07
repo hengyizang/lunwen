@@ -14,6 +14,19 @@ from scripts import publication_disclosure as disclosure
 from scripts.research_artifacts import read, sha, write
 
 
+class OptionalDisclosureEditingTests(unittest.TestCase):
+    def test_removing_optional_statement_does_not_change_scientific_signatures(self):
+        from scripts.scientific_editing import context_changes
+        before = "The effect was 2.0 units.\nAI assistance improved wording."
+        after = "The effect was 2.0 units."
+        self.assertEqual(context_changes(before, after), {"removed": [], "added": []})
+        self.assertTrue(context_changes(before, "The effect was 3.0 units.")["removed"])
+
+    def test_absent_disclosure_does_not_require_a_statement(self):
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertEqual(disclosure.integrity_errors(Path(folder), "P01"), [])
+
+
 class PublicationDisclosureTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()

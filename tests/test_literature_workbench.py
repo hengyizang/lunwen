@@ -372,14 +372,14 @@ class NativeReaderTests(WorkbenchFixture):
         grant = read(authority)
         grant["manifests"][paper["manifest"]]["cloud_use_confirmed"] = False
         write(authority, grant)
-        with self.assertRaisesRegex(ValueError, "Owner-reviewed"):
+        with self.assertRaisesRegex(ValueError, "current source binding"):
             workbench.search(self.project, "scalar gain")
         self.assertEqual(self.build()["status"], "blocked")
 
     def test_absent_raw_restore_or_unreviewed_manifest_blocks(self):
         paper, raw, _ = self.raw_fixture()
         (self.project / "state/data-authorizations.json").unlink()
-        with self.assertRaisesRegex(ValueError, "Owner-reviewed"):
+        with self.assertRaisesRegex(ValueError, "current source binding"):
             workbench.source_binding(self.project, paper["source"], manifest=paper["manifest"])
         raw.unlink()
         self.assertEqual(self.build()["status"], "blocked")

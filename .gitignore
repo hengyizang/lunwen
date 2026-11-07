@@ -34,6 +34,7 @@ projects/**/papers/**/venue-template/
 projects/**/experiments/runs/**/artifacts/
 projects/**/experiments/runs/**/checkpoints/
 projects/**/experiments/runs/
+projects/**/experiments/archive/
 projects/**/papers/**/build/
 projects/**/state/runs/
 projects/**/api_runs/

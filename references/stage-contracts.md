@@ -7,8 +7,8 @@ controls. Older payment approval or fixed-tranche examples below do not apply.
 The owner's current policy requires human decisions for the doctoral topic and
 each paper topic only. Other research-stage decisions use evidence-bound
 automated records. Preserve every
-scientific-integrity, source-rights, budget, identity and execution check; C observations do not create blocking gates. Unknown
-evidence remains unknown. Missing rights, data or successful execution block the
+scientific-integrity, source/version, privacy, budget, identity and execution check; C observations do not create blocking gates. Unknown
+evidence remains unknown. Licence/research-use verification is optional. Missing data or successful execution blocks the
 affected work; they are never converted into invented human approval.
 Quality reports at G1/G2 require their human-topic-review flag; G3/G4/G5 use
 automated decisions. A legacy report flag never creates or replaces authority.
@@ -249,7 +249,7 @@ Required scientific evidence:
   selects suitable existing views. Reuse these reviews without an extra paid loop;
 - current source-bound paper facts and claim/inference limits. Numeric/citation/
   conclusion-strength edits must agree with actual evidence; preserve originals,
-  negative/null/failed findings and existing disclosures during editing;
+  interpretation-changing negative/null findings; archive complete runs separately;
 - deterministic result-figure source/run/output/renderer provenance. Conceptual
   illustrations remain separate, labeled and unable to substantiate results;
 - current output provenance showing no final scientific file persistently
@@ -263,8 +263,7 @@ compile/render, export, bibliographic identity, reporting checklist and truthful
 existing author/funding/conflict/ethics/data/code statements. A missing renderer
 or `skipped_tool_missing` is not a successful export. There is no fixed 120/180-day
 expiry, Q1/Q2/IF gate, automatic AI branding, mandatory AI-use statement or
-journal AI-policy gate. Existing disclosure statements must retain their actual
-hash-bound location and cannot be silently erased. Real external author, rights
+journal AI-policy gate. AI-use statements may be edited or removed by the author; truthful internal tool/provenance records remain. Real external author, rights
 and ethics obligations remain applicable.
 
 `papers/Pxx/reviews/panel-inputs.json` supplies the three distinct final source

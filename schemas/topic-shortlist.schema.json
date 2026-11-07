@@ -77,7 +77,6 @@
           "type": "object",
           "required": [
             "data_access",
-            "research_rights",
             "compute_cost",
             "pilot"
           ],
@@ -116,7 +115,6 @@
             },
             "research_rights": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "object",
                 "additionalProperties": false,

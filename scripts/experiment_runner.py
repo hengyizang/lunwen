@@ -16,14 +16,15 @@ import time
 import platform
 import signal
 import shutil
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, path_in
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, path_in
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -801,6 +802,37 @@ def append_registry(path: Path, entry: dict[str, Any]) -> None:
         handle.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + "\n")
 
 
+def archive_attempt(project: Path, entry: dict, log_dir: Path) -> Path:
+    """Back up every attempt, independently of manuscript presentation."""
+    target = path_in(project, f"experiments/archive/{entry['paper_id']}/{entry['attempt_id']}.zip", exists=False)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        raise ExperimentError("attempt backup already exists; never overwrite history")
+    files = {path for path in log_dir.rglob("*") if path.is_file()}
+    files.update(resolve_inside(project, row["path"], "backup output") for row in entry["outputs"])
+    files.update(path for path in (experiment_path(project, "experiments/plan.json"),
+                                  experiment_path(project, "experiments/budget.json")) if path.is_file())
+    files.update(path for path in (project / "papers" / entry["paper_id"] / name
+        for name in ("experiment-evidence-plan.json", "preregistration.json", "paper-contract.json")) if path.is_file())
+    with tempfile.NamedTemporaryFile(dir=target.parent, suffix=".tmp", delete=False) as handle:
+        temporary = Path(handle.name)
+    try:
+        bindings = []
+        with zipfile.ZipFile(temporary, "w", zipfile.ZIP_DEFLATED) as bundle:
+            for path in sorted(files):
+                if path.is_symlink():
+                    raise ExperimentError("attempt backups require original regular files")
+                relative = path.relative_to(project).as_posix()
+                bindings.append({"path": relative, "sha256": sha256_file(path)})
+                bundle.write(path, relative)
+            bundle.writestr("backup-manifest.json", json.dumps({"attempt": entry, "files": bindings,
+                "scope": "complete attempt backup; paper presentation assessed separately"}, ensure_ascii=False, indent=2))
+        temporary.replace(target)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return target
+
+
 def accounted_run_cost(entry: dict[str, Any]) -> float:
     """Charge every finished attempt conservatively; never invent actual billing."""
     estimate = entry.get("estimated_cost_usd")
@@ -1092,6 +1124,7 @@ def run_one(
     (log_dir / "run.json").write_text(
         json.dumps(entry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    archive_attempt(project, entry, log_dir)
     return entry
 
 

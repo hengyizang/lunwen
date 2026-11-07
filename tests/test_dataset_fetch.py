@@ -55,13 +55,17 @@ class DatasetFetchTests(unittest.TestCase):
         with self.assertRaises(DatasetError):
             safe_filename(manifest)
 
-    def test_license_must_allow_research(self) -> None:
+    def test_license_research_use_flag_is_optional_metadata(self) -> None:
         manifest = valid_manifest()
         manifest["license"]["research_use_allowed"] = False
-        self.assertIn(
-            "license.research_use_allowed must be true",
-            validate_manifest(manifest),
-        )
+        self.assertEqual(validate_manifest(manifest), [])
+
+    def test_missing_license_is_allowed_but_source_version_is_still_required(self) -> None:
+        manifest = valid_manifest()
+        manifest.pop("license")
+        self.assertEqual(validate_manifest(manifest), [])
+        manifest["version"] = ""
+        self.assertTrue(any("version" in issue for issue in validate_manifest(manifest)))
 
 
 if __name__ == "__main__":

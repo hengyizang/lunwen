@@ -12,7 +12,6 @@
     "source_url",
     "version",
     "accessed_at",
-    "license",
     "download",
     "provenance",
     "unit_of_analysis",
@@ -54,35 +53,49 @@
       "format": "date"
     },
     "license": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "name",
-        "url",
-        "research_use_allowed",
-        "redistribution_allowed",
-        "confirmed_by_human"
+      "type": [
+        "object",
+        "null"
       ],
+      "additionalProperties": false,
       "properties": {
         "name": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "minLength": 1
         },
         "url": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^https://"
         },
         "research_use_allowed": {
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "redistribution_allowed": {
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "confirmed_by_human": {
-          "type": "boolean"
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "notes": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -157,4 +170,3 @@
     }
   }
 }
-

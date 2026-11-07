@@ -66,7 +66,8 @@ class NewCapabilitiesTests(unittest.TestCase):
             record_generated_illustration(project,"P01",image["figure"],image["receipt"],"Researcher","AI-use statement")
             self.assertEqual(validate_figure_provenance(project,project/"papers"/"P01"),["unregistered final figures: papers/P01/figures/flow.pdf, papers/P01/figures/flow.png, papers/P01/figures/flow.svg"])
             (project/"papers"/"P01"/"disclosures.json").write_text(json.dumps({"ai_use":"not used"}))
-            self.assertTrue(any("actual AI-use disclosure" in issue for issue in validate_figure_provenance(project,project/"papers"/"P01")))
+            from scripts.publication_disclosure import integrity_errors
+            self.assertTrue(integrity_errors(project, "P01"))
 
     def test_screening_prisma_and_exports(self):
         with tempfile.TemporaryDirectory() as temp:

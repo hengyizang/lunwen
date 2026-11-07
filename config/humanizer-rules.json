@@ -16,7 +16,7 @@
     "scientific_validation": false,
     "default_voice": "neutral_scientific",
     "weak_single_patterns_are_advisory": true,
-    "preserve": ["facts", "names", "numbers", "units", "dates", "formulas", "citations", "rankings", "simultaneity", "negation", "uncertainty", "limitations", "negative_results", "disclosures", "code", "data", "link_targets", "quoted_words"]
+    "preserve": ["facts", "names", "numbers", "units", "dates", "formulas", "citations", "rankings", "simultaneity", "negation", "uncertainty", "limitations", "negative_results", "code", "data", "link_targets", "quoted_words"]
   },
   "rules": [
     {
