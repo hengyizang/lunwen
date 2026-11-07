@@ -123,21 +123,11 @@ by its image, not the controller's host Python. Separately mounted Meta/theory
 toolchains use their existing study-route exports. Unknown PIDs, missing rights
 or incompatible environments are not invented.
 
-For a shared gateway, configure GitHub repository secret `UUAPI_API_KEY` and repository
-variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, `UUAPI_OPENAI_MODEL` and
-`DR_OS_MODEL_PRICING_JSON` with the exact model IDs and each model's verified
-CNY input/output rates per million tokens, e.g. an object keyed by exact model
-ID with `input_per_million` and `output_per_million` numbers. Missing rates
-block the paid call. Alternatively configure complete `UUAPI_OPENAI_API_KEY` /
-`UUAPI_OPENAI_BASE_URL` and `UUAPI_ANTHROPIC_API_KEY` /
-`UUAPI_ANTHROPIC_BASE_URL` pairs. Both cloud entry points pass
-`UUAPI_OPENAI_PROTOCOL` and `UUAPI_OPENAI_CHAT_TOKEN_FIELD` to the same validated
-adapter. See [startup](GATEWAY-STARTUP.md) for the non-billable check and immediate
-manual start modes. The runner fixes the roles to `uuapi-anthropic` for
-planning and independent criticism and `uuapi-openai` for persistent writing.
-Strict reported-model checking is enabled. PaperQA2 may require its own
-`OPENAI_API_KEY` secret according to the approved local settings; no key is
-placed in an issue, commit, ZIP, or comment.
+Both cloud entry points use the current [production routes](PRODUCTION-MODEL-ROUTING.md),
+the configured seven-model roster and central cost/identity controls. UUAPI belongs
+to the separately documented [compatibility entry point](API-FIRST.md), not cloud
+setup. Native PaperQA2 work uses the existing metered reader route. No key belongs
+in an issue, commit, ZIP or comment.
 
 `acceptance` is a Linux GitHub runner result. It cannot establish that Docker
 Desktop or the D-drive path works on a Windows computer. It excludes
@@ -153,9 +143,12 @@ OpenAlex's [authentication](https://help.openalex.org/api/authentication/) and
 [deprecation](https://help.openalex.org/api/deprecations/) guidance was checked
 on 2026-09-28.
 
-The exact input contract is in `schemas/cloud-job.schema.json`. The script
-also enforces action-specific properties, owner ID, a single JSON object,
-strict paths and the paid-action flag before any project is restored.
+The transport contract in `schemas/cloud-job.schema.json` is generated from the
+native action and selector tables by `python -m scripts.cloud_job schema`.
+Repository validation rejects a stale export. The script also checks the owner
+identity, one JSON object, strict paths and operation-specific semantics before
+restoring a project. `allow_paid` is an optional legacy annotation; actual cumulative
+budget records govern paid work.
 
 For an optional `free_jev_probe`, configure the repository secret
 `OPENROUTER_API_KEY` with a **dedicated key whose per-key limit and

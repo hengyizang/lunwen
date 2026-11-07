@@ -17,7 +17,7 @@ from urllib.parse import parse_qsl, urlsplit
 
 from scripts import data_contracts, dataset_fetch
 from scripts.network_safety import validate_https_url
-from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest
+from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest, validate_manifest
 
 REQUEST = "program/data-row-provenance.json"
 OUTPUT = "reports/data-row-provenance"
@@ -313,18 +313,11 @@ def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
     report = build(project, spec)
     prefix = OUTPUT + "/" + report["dataset_id"]
     manifest_path = path_in(project, prefix + "/manifest.json")
-    if not matches_origin(project, manifest_path, family="other", model="scripts/data_row_provenance.py"):
-        raise ValueError("row provenance manifest lacks current deterministic execution provenance")
-    manifest = read(manifest_path)
-    if manifest.get("request") != {"path": request_path, "sha256": sha(path_in(project, request_path))}:
-        raise ValueError("row provenance declaration changed")
-    if manifest.get("fingerprint") != report["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__)):
-        raise ValueError("row provenance source, dictionary, permission or implementation changed")
-    expected = {prefix + "/rows.json", prefix + "/rows.csv"}
-    outputs = manifest.get("outputs")
-    if not isinstance(outputs, list) or len(outputs) != 2 or {o.get("path") for o in outputs} != expected:
-        raise ValueError("row provenance output inventory changed")
-    for binding in outputs:
+    manifest = validate_manifest(project, manifest_path, "scripts/data_row_provenance.py",
+        {prefix + "/rows.json", prefix + "/rows.csv"},
+        metadata={"request": {"path": request_path, "sha256": sha(path_in(project, request_path))},
+                  "fingerprint": report["fingerprint"]})
+    for binding in manifest["outputs"]:
         data_contracts._binding(project, binding)
     if read(path_in(project, prefix + "/rows.json")) != report or path_in(project, prefix + "/rows.csv").read_text(encoding="utf-8") != csv_text(report):
         raise ValueError("row provenance no longer reproduces its complete source-bound output")

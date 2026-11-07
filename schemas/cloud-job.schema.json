@@ -4,11 +4,10 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version",
     "action",
-    "project",
     "actor",
-    "allow_paid"
+    "project",
+    "schema_version"
   ],
   "properties": {
     "schema_version": {
@@ -16,35 +15,47 @@
     },
     "action": {
       "enum": [
-        "preflight",
+        "accept_route",
         "acceptance",
-        "free_jev_probe",
-        "bocha_jev_probe",
-        "init",
-        "status",
-        "authorize_budget",
-        "reconcile_budget",
-        "cycle",
-        "continuation",
-        "paperqa",
-        "tooluniverse",
-        "authorize_data",
-        "resume",
-        "review_dossier",
-        "ready",
-        "approve",
         "advance",
-        "reopen",
-        "freeze_preregistration",
+        "amend_operating_constraints",
+        "approve",
+        "approve_primary_retry",
+        "approve_scope_amendment",
+        "approve_supplemental",
+        "authorize_budget",
+        "authorize_data",
+        "auxiliary",
+        "bocha_jev_probe",
         "confirm_data_quality",
         "confirm_reproduction",
-        "screen_literature",
+        "confirm_research_increment",
+        "confirm_review_packet",
         "confirm_source_scope",
         "confirm_study_validation",
-        "approve_supplemental",
         "confirm_supplemental",
+        "continuation",
+        "cycle",
+        "free_jev_probe",
+        "freeze_preregistration",
+        "init",
+        "literature",
+        "paperqa",
+        "preflight",
+        "ready",
+        "reconcile_budget",
+        "reconcile_relay_guard",
+        "reopen",
+        "resume",
+        "retire_primary_plan",
         "retire_supplemental",
-        "amend_operating_constraints"
+        "review_dossier",
+        "routing_status",
+        "screen_literature",
+        "set_routing_profile",
+        "start_revision",
+        "status",
+        "tooluniverse"
       ]
     },
     "project": {
@@ -89,9 +100,7 @@
       "maxLength": 300
     },
     "paper_count": {
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 20
+      "const": 6
     },
     "context": {
       "type": "string",
@@ -104,7 +113,8 @@
         "paper-architecture",
         "experiment-design",
         "experiment-execution",
-        "writing-and-review"
+        "writing-and-review",
+        "auxiliary"
       ]
     },
     "corpus": {
@@ -129,7 +139,7 @@
     },
     "manifest": {
       "type": "string",
-      "pattern": "^data/manifests/.+\\.json$"
+      "pattern": "^(data/manifests|evidence/auxiliary-jobs)/.+\\.json$"
     },
     "expected_sha256": {
       "type": "string",
@@ -142,20 +152,27 @@
     },
     "operation": {
       "enum": [
-        "ready",
-        "approve",
         "advance",
-        "reopen",
-        "freeze_preregistration",
+        "amend_operating_constraints",
+        "approve",
+        "approve_primary_retry",
+        "approve_scope_amendment",
+        "approve_supplemental",
         "confirm_data_quality",
         "confirm_reproduction",
-        "screen_literature",
+        "confirm_research_increment",
+        "confirm_review_packet",
         "confirm_source_scope",
         "confirm_study_validation",
-        "approve_supplemental",
         "confirm_supplemental",
+        "freeze_preregistration",
+        "ready",
+        "reconcile_relay_guard",
+        "reopen",
+        "retire_primary_plan",
         "retire_supplemental",
-        "amend_operating_constraints"
+        "screen_literature",
+        "start_revision"
       ]
     },
     "gate": {
@@ -216,43 +233,79 @@
         "minLength": 1,
         "maxLength": 500
       }
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$"
+    },
+    "packet_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$"
+    },
+    "expected_profile_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "profile_file": {
+      "type": "string",
+      "pattern": "^evidence/routing-profiles/.+\\.json$",
+      "maxLength": 250
+    },
+    "role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "task_kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "task_profile": {
+      "type": "object",
+      "description": "Validated by the native dynamic routing profile contract; never changes task risk or budget authority."
+    },
+    "judgments": {
+      "type": "object"
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
     }
   },
   "allOf": [
     {
       "if": {
         "properties": {
-          "action": {"const": "amend_operating_constraints"}
-        }
-      },
-      "then": {
-        "required": ["new_ceiling_cny", "target_submission_ready_date", "expected_sha256", "note"],
-        "properties": {"allow_paid": {"const": false}},
-        "not": {"required": ["operation"]}
-      }
-    },
-    {
-      "if": {
-        "properties": {
           "action": {
-            "const": "ready"
+            "const": "accept_route"
           }
         }
       },
       "then": {
-        "required": [
-          "gate",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "candidate_id",
+            "expected_profile_sha256",
+            "packet_id",
+            "profile_file",
+            "project",
+            "role",
+            "schema_version",
+            "stage"
           ]
         }
       }
@@ -261,24 +314,18 @@
       "if": {
         "properties": {
           "action": {
-            "const": "approve"
+            "const": "acceptance"
           }
         }
       },
       "then": {
-        "required": [
-          "gate",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -292,19 +339,16 @@
         }
       },
       "then": {
-        "required": [
-          "gate",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "gate",
+            "note",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -313,24 +357,22 @@
       "if": {
         "properties": {
           "action": {
-            "const": "reopen"
+            "const": "amend_operating_constraints"
           }
         }
       },
       "then": {
-        "required": [
-          "gate",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "new_ceiling_cny",
+            "note",
+            "project",
+            "schema_version",
+            "target_submission_ready_date"
           ]
         }
       }
@@ -339,24 +381,177 @@
       "if": {
         "properties": {
           "action": {
-            "const": "freeze_preregistration"
+            "const": "approve"
           }
         }
       },
       "then": {
-        "required": [
-          "paper_id",
-          "expected_sha256",
-          "note"
-        ],
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "gate",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
         "properties": {
-          "allow_paid": {
-            "const": false
+          "action": {
+            "const": "approve_primary_retry"
           }
-        },
-        "not": {
-          "required": [
-            "operation"
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "approve_scope_amendment"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "approve_supplemental"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "authorize_budget"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "new_ceiling_cny",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "authorize_data"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "manifest",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "auxiliary"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "manifest",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "bocha_jev_probe"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "free_policy_checked_on",
+            "live",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -370,19 +565,16 @@
         }
       },
       "then": {
-        "required": [
-          "dataset_id",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "dataset_id",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -396,19 +588,16 @@
         }
       },
       "then": {
-        "required": [
-          "paper_id",
-          "expected_sha256",
-          "note"
-        ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
-        "not": {
-          "required": [
-            "operation"
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -417,26 +606,47 @@
       "if": {
         "properties": {
           "action": {
-            "const": "screen_literature"
+            "const": "confirm_research_increment"
           }
         }
       },
       "then": {
-        "required": [
-          "receipt_id",
-          "expected_sha256",
-          "note",
-          "included_work_ids",
-          "exclusion_reasons"
-        ],
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "decision",
+            "expected_sha256",
+            "kind",
+            "note",
+            "project",
+            "record_id",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
         "properties": {
-          "allow_paid": {
-            "const": false
+          "action": {
+            "const": "confirm_review_packet"
           }
-        },
-        "not": {
-          "required": [
-            "operation"
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "judgments",
+            "note",
+            "packet_id",
+            "project",
+            "schema_version"
           ]
         }
       }
@@ -450,17 +660,600 @@
         }
       },
       "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version",
+            "scope",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "confirm_study_validation"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "confirm_supplemental"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "continuation"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "cycle"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "context",
+            "project",
+            "schema_version",
+            "stage",
+            "task_kind",
+            "task_profile"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "free_jev_probe"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "freeze_preregistration"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "init"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "paper_count",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "literature"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "request_file",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "paperqa"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "corpus",
+            "project",
+            "question",
+            "schema_version",
+            "settings"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "preflight"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "ready"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "gate",
+            "note",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "reconcile_budget"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "actual_cost_cny",
+            "allow_paid",
+            "evidence_note",
+            "project",
+            "reservation_id",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "reconcile_relay_guard"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "reopen"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "gate",
+            "note",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "resume"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "project",
+            "repair_note",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "retire_primary_plan"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "project",
+            "schema_version",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "retire_supplemental"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "review_dossier"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "dataset_id",
+            "decision",
+            "gate",
+            "kind",
+            "new_ceiling_cny",
+            "operation",
+            "packet_id",
+            "paper_id",
+            "project",
+            "receipt_id",
+            "record_id",
+            "schema_version",
+            "scope",
+            "source",
+            "target_submission_ready_date"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "routing_status"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "screen_literature"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "exclusion_reasons",
+            "expected_sha256",
+            "included_work_ids",
+            "note",
+            "project",
+            "receipt_id",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "set_routing_profile"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_profile_sha256",
+            "project",
+            "schema_version",
+            "stage",
+            "task_profile"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "start_revision"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "expected_sha256",
+            "note",
+            "paper_id",
+            "project",
+            "schema_version",
+            "source"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "status"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "tooluniverse"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "project",
+            "request_file",
+            "schema_version"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "advance",
+              "amend_operating_constraints",
+              "approve",
+              "approve_primary_retry",
+              "approve_scope_amendment",
+              "approve_supplemental",
+              "confirm_data_quality",
+              "confirm_reproduction",
+              "confirm_research_increment",
+              "confirm_review_packet",
+              "confirm_source_scope",
+              "confirm_study_validation",
+              "confirm_supplemental",
+              "freeze_preregistration",
+              "ready",
+              "reconcile_relay_guard",
+              "reopen",
+              "retire_primary_plan",
+              "retire_supplemental",
+              "screen_literature",
+              "start_revision"
+            ]
+          }
+        }
+      },
+      "then": {
         "required": [
-          "source",
-          "scope",
           "expected_sha256",
           "note"
         ],
-        "properties": {
-          "allow_paid": {
-            "const": false
-          }
-        },
         "not": {
           "required": [
             "operation"
@@ -479,150 +1272,415 @@
       "then": {
         "required": [
           "operation"
-        ],
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "confirm_data_quality"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "confirm_data_quality"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "dataset_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "confirm_research_increment"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "confirm_research_increment"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "decision",
+          "kind",
+          "record_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "advance",
+                  "approve",
+                  "ready",
+                  "reopen"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "advance",
+                  "approve",
+                  "ready",
+                  "reopen"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "gate"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "amend_operating_constraints"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "amend_operating_constraints"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "new_ceiling_cny",
+          "target_submission_ready_date"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "confirm_review_packet"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "confirm_review_packet"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "packet_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "approve_supplemental",
+                  "confirm_reproduction",
+                  "confirm_study_validation",
+                  "confirm_supplemental",
+                  "freeze_preregistration",
+                  "retire_supplemental"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "approve_supplemental",
+                  "confirm_reproduction",
+                  "confirm_study_validation",
+                  "confirm_supplemental",
+                  "freeze_preregistration",
+                  "retire_supplemental"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "paper_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "start_revision"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "start_revision"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "paper_id",
+          "source"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "screen_literature"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "screen_literature"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "receipt_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "confirm_source_scope"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "confirm_source_scope"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "scope",
+          "source"
+        ]
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "action": {
+                "enum": [
+                  "approve_primary_retry",
+                  "approve_scope_amendment",
+                  "reconcile_relay_guard",
+                  "retire_primary_plan"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "action": {
+                "const": "review_dossier"
+              },
+              "operation": {
+                "enum": [
+                  "approve_primary_retry",
+                  "approve_scope_amendment",
+                  "reconcile_relay_guard",
+                  "retire_primary_plan"
+                ]
+              }
+            },
+            "required": [
+              "operation"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "source"
+        ]
+      }
+    },
+    {
+      "if": {
         "properties": {
-          "allow_paid": {
-            "const": false
+          "action": {
+            "const": "confirm_review_packet"
           }
-        },
-        "allOf": [
-          {
-            "if": {
-              "properties": {"operation": {"const": "amend_operating_constraints"}}
-            },
-            "then": {
-              "required": ["new_ceiling_cny", "target_submission_ready_date"]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "ready"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "gate"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "approve"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "gate"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "advance"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "gate"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "reopen"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "gate"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "freeze_preregistration"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "paper_id"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "confirm_data_quality"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "dataset_id"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "confirm_reproduction"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "paper_id"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "screen_literature"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "receipt_id"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "operation": {
-                  "const": "confirm_source_scope"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "source",
-                "scope"
-              ]
-            }
+        }
+      },
+      "then": {
+        "required": [
+          "judgments"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "screen_literature"
           }
+        }
+      },
+      "then": {
+        "required": [
+          "exclusion_reasons",
+          "included_work_ids"
         ]
       }
     }
-  ]
+  ],
+  "description": "Cloud job transport envelope. Action fields and human selectors are generated from the native control tables. Operation-specific semantics, source integrity and budget authority are checked by scripts/cloud_job.py and the selected native operation. The legacy allow_paid annotation grants no spending authority."
 }

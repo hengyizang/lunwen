@@ -170,7 +170,7 @@ class DataRowProvenanceTests(unittest.TestCase):
         self.assertTrue(provenance.validate_saved_report(self.project)["valid"])
         self.spec["variables"][0]["definition"] = "Changed variable meaning"
         self.save()
-        with self.assertRaisesRegex(ValueError, "dictionary"):
+        with self.assertRaisesRegex(ValueError, "fingerprint changed"):
             provenance.validate_saved_report(self.project)
 
     def test_unrelated_owner_authorization_does_not_invalidate_exact_permission(self):
@@ -185,7 +185,7 @@ class DataRowProvenanceTests(unittest.TestCase):
         self.request()
         result = provenance.refresh(self.project)
         (self.project / result["csv"]).write_text("forged row\n", encoding="utf-8")
-        with self.assertRaisesRegex(ValueError, "source hash changed"):
+        with self.assertRaisesRegex(ValueError, "output changed"):
             provenance.validate_saved_report(self.project)
 
     def test_csv_is_formula_safe(self):

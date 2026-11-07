@@ -104,6 +104,32 @@ def seal_manifest(project: Path, paths: list[Path], manifest: Path, module: str,
     record(project, [*(paths if record_outputs else []), manifest], module)
 
 
+def validate_manifest(project: Path, manifest: Path, module: str, expected: set[str],
+                      *, files_key="outputs", metadata=None) -> dict:
+    """Verify one builder's exact inventory, current implementation and inputs.
+
+    This is the inverse of seal_manifest, not scientific approval. Source rights,
+    reproducible content and experiment/annotation semantics stay with callers.
+    """
+    if not matches_origin(project, manifest, family="other", model=module):
+        raise ValueError("manifest requires current deterministic output provenance")
+    value = read(manifest)
+    if value.get("implementation_sha256") != sha(Path(__file__).resolve().parents[1] / module):
+        raise ValueError("manifest implementation changed")
+    for key, binding in (metadata or {}).items():
+        if value.get(key) != binding:
+            raise ValueError("manifest " + key + " changed")
+    outputs = value.get(files_key)
+    if (not isinstance(outputs, list) or len(outputs) != len(expected)
+            or any(not isinstance(item, dict) or not isinstance(item.get("path"), str) for item in outputs)
+            or {item["path"] for item in outputs} != expected):
+        raise ValueError("manifest output inventory changed")
+    for binding in outputs:
+        if sha(path_in(project, binding["path"])) != binding.get("sha256"):
+            raise ValueError("manifest output changed")
+    return value
+
+
 def paper_audit_cli(description, projects_root, audit, report_name, error_type) -> int:
     import argparse
     import re

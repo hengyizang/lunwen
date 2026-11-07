@@ -16,10 +16,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, regular_file
+    from scripts.research_artifacts import sha as sha256_file, regular_file, write as atomic_write
     from scripts.citation_audit import manuscript_digest, normalize_doi
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, regular_file
+    from research_artifacts import sha as sha256_file, regular_file, write as atomic_write
     from citation_audit import manuscript_digest, normalize_doi  # type: ignore
 
 
@@ -332,17 +332,6 @@ def validate_saved_report(paper: Path) -> list[str]:
     if claims:
         errors.extend(_validate_engine_payload(report, claims))
     return errors
-
-
-def atomic_write(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=path.parent, delete=False
-    ) as handle:
-        json.dump(payload, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = Path(handle.name)
-    temporary.replace(path)
 
 
 def main() -> int:

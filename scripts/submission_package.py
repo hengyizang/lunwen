@@ -97,7 +97,7 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
     # Quartiles and impact factors describe targets; they are not scientific
     # validity or automatic venue-fit cutoffs. Preserve unknown metadata.
     if warnings is not None:
-        try:jcr_verify.verify(load_object(paper/"jcr-verification.json"),venue_policy.target_from_contract(load_object(paper/"paper-contract.json")))
+        try:warnings.extend(f"{paper_id} JCR planning observation: {issue}" for issue in jcr_verify.verify(load_object(paper/"jcr-verification.json"),venue_policy.target_from_contract(load_object(paper/"paper-contract.json"))))
         except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:warnings.append(f"{paper_id} JCR planning observation: {exc}")
     try:
         venue=load_object(paper/"venue.json")
@@ -190,7 +190,7 @@ def submission_check_binding(project: Path, paper_id: str) -> str:
         paths.add(latest)
         sources(load_object(latest))
         for row in review_panel.responses(project,paper_id):sources(row["receipt"])
-    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py","citation_audit.py","manuscript_docx.py","automated_visual_review.py","reporting_checklist.py","publication_disclosure.py","review_panel.py")
+    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py","citation_audit.py","manuscript_docx.py","automated_visual_review.py","reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py")
     payload={"schema_version":"1.0","paper_id":paper_id,"journal_dossiers":selected,"journal_receipts":receipts,
         "files":{path.relative_to(project).as_posix():file_sha256(path) for path in sorted(paths)},
         "validators":{name:file_sha256(Path(__file__).parent/name) if (Path(__file__).parent/name).is_file() else None for name in module_names},

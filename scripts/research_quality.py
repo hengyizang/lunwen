@@ -25,9 +25,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, write as _atomic_json
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, write as _atomic_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,17 +56,6 @@ class ResearchQualityError(RuntimeError):
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def _atomic_json(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=path.parent, delete=False
-    ) as handle:
-        handle.write(payload)
-        temporary = handle.name
-    os.replace(temporary, path)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
