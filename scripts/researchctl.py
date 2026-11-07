@@ -504,19 +504,21 @@ def artifact_hash(slug,gate):
         d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
     d.update(gate.encode("ascii"));return d.hexdigest()
 def paper_artifact_hash(slug,paper_id):
+    from scripts.artifact_ownership import paper_observation_path
     paper=project_dir(slug)/"papers"/validate_paper_id(paper_id);d=hashlib.sha256()
     for path in sorted(paper.rglob("*")):
         if not path.is_file() or path.is_symlink():continue
         rel=path.relative_to(paper)
         if any(part in {"build","submission","venue-template"} for part in rel.parts):continue
+        if paper_observation_path(rel.as_posix()):continue
         d.update(rel.as_posix().encode());d.update(b"\0");d.update(path.read_bytes());d.update(b"\0")
     from scripts.research_increments import paper_review_binding
     binding=paper_review_binding(project_dir(slug),paper_id)
     d.update(json.dumps(binding,sort_keys=True,separators=(",",":")).encode())
-    from scripts.manuscript_hygiene import review_binding as hygiene_review_binding
+    from scripts.manuscript_hygiene import integrity_binding as hygiene_review_binding
     d.update(json.dumps(hygiene_review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
-    from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
-    for module in (reviewer_rounds,publication_disclosure,statistical_watermarks):
+    from scripts import reviewer_rounds, publication_disclosure
+    for module in (reviewer_rounds,publication_disclosure):
         d.update(json.dumps(module.review_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     from scripts.research_identity import review_binding as research_identity_binding
     d.update(json.dumps(research_identity_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())

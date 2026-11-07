@@ -131,6 +131,16 @@ class GateCheckLevelTests(unittest.TestCase):
             researchctl.paper_scientific_errors(self.project, "P01")
         check.assert_called_once_with(self.project, "P01", require_support=True)
 
+    def test_cleanup_scan_refresh_does_not_change_binding_but_original_loss_remains_a(self):
+        receipt = self.cleanup()
+        before = hygiene.integrity_binding(self.project, "P01")
+        latest = self.project / hygiene.PREFIX / "P01/latest.json"
+        latest.unlink()
+        self.assertEqual(hygiene.integrity_binding(self.project, "P01"), before)
+        self.assertEqual(hygiene.integrity_errors(self.project, "P01"), [])
+        (receipt.parent / "original.tex").unlink()
+        self.assertTrue(hygiene.integrity_errors(self.project, "P01"))
+
     def test_scientific_response_fields_are_validated_in_the_existing_audit(self):
         audit = {"verdict": "pass-with-conditions", **{field: [] for field in (
             "fatal_findings", "major_findings", "minor_findings", "missing_evidence", "remediation_steps", "uncertainty")},

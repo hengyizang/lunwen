@@ -409,6 +409,27 @@ class IncrementTests(unittest.TestCase):
             self.put("evidence/source.md", "Changed upstream scientific source.")
             self.assertNotEqual(researchctl.paper_artifact_hash("fixture-project", "P01"), current)
 
+    def test_optional_editing_cannot_invalidate_science_or_require_fresh_bookkeeping(self):
+        self.spec["arguments"] = [self.argument()]
+        self.spec["lineage"] = [self.lineage()]
+        self.save(); increments.refresh(self.project)
+        before = increments.paper_review_binding(self.project, "P01")
+        from scripts import review_receipts, cloud_research_steps
+        reviewed = review_receipts.material_snapshot(self.project, "writing-and-review", "P01")
+        self.spec["editing"] = [{"id": "OPTIONAL", "paper_id": "P01", "purpose": "not-a-supported-edit"}]
+        self.spec["required_at_submission"].extend(["editing", "voices"])
+        self.save()
+        self.assertTrue(any(row["group"] == "editing" for row in increments.build(self.project)["errors"]))
+        self.assertEqual(increments.paper_review_binding(self.project, "P01"), before)
+        self.assertEqual(review_receipts.material_snapshot(self.project, "writing-and-review", "P01"), reviewed)
+        self.assertEqual(increments.gate_errors(self.project, "G5", "P01"), [])
+        feedback = json.loads(increments.prompt_feedback(self.project))
+        self.assertEqual(feedback["errors"], [])
+        self.assertTrue(feedback["observations"])
+        write(self.project / "program/cloud-operations.json", {"operations": [
+            {"action": "research_increments", "stage": "writing-and-review"}]})
+        self.assertEqual(cloud_research_steps.after_write(self.project, "writing-and-review")["operation_errors"], [])
+
     def test_actual_cloud_owner_dossier_authorizes_voice_and_rejects_stale_review(self):
         from scripts import cloud_human_controls as controls, cloud_job, researchctl
         sample = self.put("evidence/author.txt", "A grounded sample with an explicit observation. " * 5)

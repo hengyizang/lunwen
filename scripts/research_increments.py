@@ -13,6 +13,7 @@ PLAN = "program/research-increments.json"
 ROOT = "reports/research-increments"
 REPORT = ROOT + "/audit.json"
 GROUPS = ("arguments", "lineage", "gaps", "ingestion", "lessons", "dependencies", "voices", "editing")
+OBSERVATIONS = {"voices", "editing"}
 CONFIRMATIONS = "state/research-increment-confirmations"
 
 
@@ -50,12 +51,19 @@ def implementations():
         "incremental_rules.py", "evidence_context.py", "source_scope.py", "research_artifacts.py")]}
 
 
-def context_dependencies(project):
+def scientific_spec(spec):
+    return {**{key: spec[key] for key in GROUPS if key not in OBSERVATIONS},
+        "required_at_submission": [key for key in spec["required_at_submission"] if key not in OBSERVATIONS]}
+
+
+def context_dependencies(project, *, scientific_only=False):
     """Invalidate narrow packets when any declared increment source changes."""
     if not (project / PLAN).is_file():
         return []
     spec = load(project)
-    paths = {PLAN}
+    if scientific_only:
+        spec = scientific_spec(spec)
+    paths = set() if scientific_only else {PLAN}
 
     def collect(value):
         if isinstance(value, dict):
@@ -85,12 +93,12 @@ def context_dependencies(project):
 
 @paper_scoped
 def paper_review_binding(project, paper_id):
-    """Bind shared increment inputs to the existing per-paper human approval."""
+    """Bind shared scientific inputs to the existing per-paper decision."""
     if not (project / PLAN).is_file():
         return {"status": "not_initialized"}
     spec = load(project)
     selected = {key: [row for row in spec[key] if row.get("paper_id") == paper_id]
-                for key in ("arguments", "lineage", "editing")}
+                for key in ("arguments", "lineage")}
     selected["dependencies"] = []
     for graph in spec["dependencies"]:
         nodes = {row["id"]: row for row in graph["nodes"]}
@@ -106,8 +114,6 @@ def paper_review_binding(project, paper_id):
                     pending.append(parent)
         if keep:
             selected["dependencies"].append({"id": graph["id"], "nodes": [nodes[key] for key in sorted(keep)]})
-    voices = {row.get("voice_id") for row in selected["editing"]}
-    selected["voices"] = [row for row in spec["voices"] if row["id"] in voices]
     matrix_path = project / "program/novelty-claim-matrix.json"
     claims = read(matrix_path).get("claims", []) if matrix_path.is_file() else []
     claim_ids = {row.get("claim_id") for row in claims if paper_id in row.get("paper_ids", [])}
@@ -135,7 +141,17 @@ def paper_review_binding(project, paper_id):
         source = path_in(project, relative, exists=False)
         sources.append({"path": relative, "sha256": sha(source) if source.is_file() else None})
     return {"specification": selected, "sources": sources, "implementation": implementations(),
-            "required_at_submission": spec["required_at_submission"]}
+            "required_at_submission": [group for group in spec["required_at_submission"] if group not in OBSERVATIONS]}
+
+
+def scientific_audit(value):
+    """Compare actual scientific results without requiring fresh C bookkeeping."""
+    return {**{key: value.get(key) for key in ("schema_version", "implementation", "scientific_plan_sha256", "active_rules",
+                "model_calls", "scientific_completion_verified", "quality_level_verified")},
+        "groups": {key: value.get("groups", {}).get(key) for key in GROUPS if key not in OBSERVATIONS},
+        "errors": [row for row in value.get("errors", []) if row.get("group") not in OBSERVATIONS],
+        "missing": [key for key in value.get("missing", []) if key not in OBSERVATIONS],
+        "paper_owners": {key: owner for key, owner in value.get("paper_owners", {}).items() if not key.startswith("editing/")}}
 
 
 def confirmation(project, kind, key, spec, decision):
@@ -335,6 +351,7 @@ def build(project):
         errors.append({"group": "lessons", "id": "active_rules", "error": str(exc)})
     missing = [key for key in spec["required_at_submission"] if not results[key]]
     return {"schema_version": "1.0", "plan_sha256": sha(project / PLAN),
+            "scientific_plan_sha256": digest(scientific_spec(spec)),
             "implementation": implementations(), "groups": results, "active_rules": active,
             **({"paper_owners": paper_owners} if enabled(project) else {}),
             "status": "blocked" if errors else "needs_inputs" if missing else "mechanically_checked",
@@ -359,10 +376,11 @@ def handoff(project, audit):
     attempts = primary_attempts(project)
     counts = {status: sum(item.get("status") == status for item in attempts)
               for status in ("succeeded", "failed", "timed_out", "stopped")}
-    blockers = list(audit.get("errors", []))
+    scientific = scientific_audit(audit)
+    blockers = list(scientific["errors"])
     if not state:
         blockers.append({"group": "state", "error": "project state is unavailable; restore the cloud checkpoint"})
-    blockers.extend({"group": "inputs", "error": item} for item in audit.get("missing", []))
+    blockers.extend({"group": "inputs", "error": item} for item in scientific["missing"])
     checks = {}
     for name in ("state/research-steps.json", "reports/research-extensions/audit.json"):
         if (project / name).is_file():
@@ -453,8 +471,11 @@ def prompt_feedback(project):
         audit = build(project)
     except (ValueError, RuntimeError, OSError, KeyError, TypeError) as exc:
         return json.dumps({"status": "blocked", "error": str(exc)[:1000], "scientific_completion_verified": False})
-    result = {"status": audit["status"], "missing": audit.get("missing", []),
-              "errors": audit.get("errors", []), "editing": audit.get("groups", {}).get("editing", []),
+    scientific = scientific_audit(audit)
+    result = {"status": "blocked" if scientific["errors"] else "needs_inputs" if scientific["missing"] else "mechanically_checked",
+              "missing": scientific["missing"], "errors": scientific["errors"],
+              "observations": [row for row in audit.get("errors", []) if row.get("group") in OBSERVATIONS],
+              "editing": audit.get("groups", {}).get("editing", []),
               "voice_samples": []}
     result["argument_preparation"] = [{"paper_id": row["paper_id"], "id": row["id"],
         "reasoning_review": row["reasoning_review"], "paragraphs": [{"paragraph_id": p["paragraph_id"],
@@ -479,6 +500,8 @@ def gate_errors(project, gate="G5", paper_id=None):
         focus = selected(project, paper_id) if enabled(project) and gate in {"G3", "G4", "G5"} else None
 
         def applicable(item):
+            if item.get("group") in OBSERVATIONS:
+                return False
             if (focus is None or item.get("ownership_changed")
                     or item.get("group") not in {"arguments", "lineage", "editing"}):
                 return True
@@ -505,6 +528,8 @@ def gate_errors(project, gate="G5", paper_id=None):
         if gate == "G5":
             spec = load(project)
             for group in spec["required_at_submission"]:
+                if group in OBSERVATIONS:
+                    continue
                 values = current.get("groups", {}).get(group, [])
                 if group in {"arguments", "lineage"}:
                     values = [item for item in values if item.get("paper_id") == paper_id]
@@ -516,7 +541,7 @@ def gate_errors(project, gate="G5", paper_id=None):
                             errors.append("research increments need explicit paragraph takeaways, warrants and resolved material preparation for " + str(paper_id))
         if not (project / REPORT).is_file():
             errors.append("research increments audit must be refreshed in cloud")
-        elif read(project / REPORT) != current:
+        elif scientific_audit(read(project / REPORT)) != scientific_audit(current):
             errors.append("research increments saved audit is stale")
         else:
             from scripts import output_provenance

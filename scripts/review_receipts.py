@@ -79,6 +79,14 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         paper_id = selected(project, paper_id)
     from scripts.literature_source_tasks import excluded_context_paths
     ignored = instruction_paths(project) | set(excluded_context_paths(project))
+    from scripts import research_increments
+    from scripts.artifact_ownership import paper_observation_path
+    increment_inputs = None
+    if (project / research_increments.PLAN).is_file():
+        ignored.add(research_increments.PLAN)
+        increment_inputs = {"specification": research_increments.scientific_spec(research_increments.load(project)),
+            "implementation": research_increments.implementations(),
+            "sources": research_increments.context_dependencies(project, scientific_only=True)}
     from scripts.research_phase import requires_submission,submission_only
     scientific_writing=stage=="writing-and-review" and not requires_submission(project,stage,paper_id)
     rows = []
@@ -93,6 +101,8 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         if paper_id and not relevant(project,relative,paper_id):
             continue
         parts = Path(relative).parts
+        if parts and parts[0] == "papers" and len(parts) > 2 and paper_observation_path(Path(*parts[2:]).as_posix()):
+            continue
         if not parts or parts[0] not in roots or any(p.startswith(".") or p in {"raw", "build", "submission"} for p in parts):
             continue
         if relative in ignored or operational_path(relative, exclude_reviews=True):
@@ -122,9 +132,13 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         from scripts.research_phase import requires_submission
         if not requires_submission(project,stage,paper_id):purpose="scientific_writing"
     snapshot = {"stage": stage, "paper_id": paper_id, "files": rows, "sha256": _digest(rows),"review_purpose":purpose}
+    if increment_inputs is not None:
+        snapshot["research_increments"] = increment_inputs
+        snapshot["sha256"] = _digest({"files": rows, "research_increments": increment_inputs})
     if purpose == "supplemental_protocol":
         snapshot["declared_raw_inputs"] = _declared_raw_inputs(project, rows)
-        snapshot["sha256"] = _digest({"files": rows, "declared_raw_inputs": snapshot["declared_raw_inputs"]})
+        snapshot["sha256"] = _digest({"files": rows, "declared_raw_inputs": snapshot["declared_raw_inputs"],
+            **({"research_increments": increment_inputs} if increment_inputs is not None else {})})
     return snapshot
 
 

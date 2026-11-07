@@ -544,7 +544,7 @@
         "tests/test_gate_check_levels.py",
         "tests/test_submission_package.py"
       ],
-      "remaining": "Run merged checks; B requires actual selected venue/template/render evidence and preserves existing disclosures. No fixed 120/180-day, journal AI-policy, ranking or editorial-score gate.",
+      "remaining": "Current A/B/C enforcement includes final G5, manual packaging, protected review material snapshots, cloud operations and research-increment handoffs. C-only scans, optional ledgers and voice/edit preferences do not invalidate unchanged science or force another paid pass. Actual manuscript/source changes, missing full-text support, scientific revision drift and lost cleanup originals still block. Run actual project evidence and final renders; software acceptance alone does not establish scientific quality.",
       "source_sections": [
         "compendium: A/B/C reclassification and removed compliance friction"
       ]
@@ -681,7 +681,7 @@
         "tests/test_cli_control_integrity.py",
         "tests/test_research_design.py"
       ],
-      "remaining": "Measured from f8a1492: production Python 76815 to 76004 lines (-811; 723 added, 1534 removed). Compared with earlier 3e9f56b, production remains +1613 lines because new research capabilities were added; no cumulative 40–50% code saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged.",
+      "remaining": "Measured from f8a1492: production Python 76815 to 76059 lines (-756; 806 added, 1562 removed). Compared with earlier 3e9f56b, production remains +1668 lines because new research capabilities were added; no cumulative 40–50% code saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ]
