@@ -18,10 +18,9 @@ from urllib.parse import urlsplit, urlunsplit
 from scripts import network_safety
 from scripts.cloud_research_steps import path_in, read, write
 from scripts.cloud_checkpoint import sha
+from scripts.intake_validation import WEIGHT_FIELDS as FACTORS
 
 ROOT = Path(__file__).resolve().parents[1]
-FACTORS = ("funded_position_supply", "job_market_and_salary", "future_growth_potential",
-           "phd_position_competition", "job_market_competition", "background_fit", "application_route_fit")
 
 
 class DirectionEvidenceError(ValueError):

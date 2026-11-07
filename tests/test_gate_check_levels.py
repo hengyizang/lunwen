@@ -131,6 +131,34 @@ class GateCheckLevelTests(unittest.TestCase):
             researchctl.paper_scientific_errors(self.project, "P01")
         check.assert_called_once_with(self.project, "P01", require_support=True)
 
+    def test_figure_appearance_is_c_but_changed_data_and_deleted_figures_remain_a(self):
+        from scripts import figure_provenance
+        from tests.figure_lineage_fixtures import sealed_run
+        sealed_run(self.project)
+        renderer = self.project / "analysis/chart.py"
+        renderer.write_text("# Deterministic synthetic source, not a research result.\n")
+        output_provenance.record_model_writes(self.project, [renderer], family="openai",
+            provider="synthetic-gate-fixture", model="fixture", role="renderer", run_id="fixture")
+        figure = self.paper / "figures/result.png"
+        figure.parent.mkdir(parents=True)
+        figure.write_bytes(b"Synthetic output identity fixture")
+        figure_provenance.record_figure(self.project, "P01", "papers/P01/figures/result.png",
+            "data_chart", "analysis/chart.py", ["results/metrics.csv"], ["r1"])
+        with patch("scripts.automated_visual_review.verify", return_value=["layout and English labels need revision"]) as visual:
+            errors = researchctl.paper_scientific_errors(self.project, "P01")
+            self.assertFalse(any("figure provenance" in issue for issue in errors), errors)
+            visual.assert_not_called()
+            warnings = []
+            researchctl.paper_observations(self.project, "P01", warnings)
+            self.assertTrue(any("figure appearance" in issue and "English labels" in issue for issue in warnings), warnings)
+            data = self.project / "results/metrics.csv"
+            data.write_text("Unsealed changed result data\n")
+            errors = researchctl.paper_scientific_errors(self.project, "P01")
+            self.assertTrue(any("figure provenance" in issue and "input hash is stale" in issue for issue in errors), errors)
+            figure.unlink()
+            errors = researchctl.paper_scientific_errors(self.project, "P01")
+            self.assertTrue(any("stale/extra figure records" in issue for issue in errors), errors)
+
     def test_cleanup_scan_refresh_does_not_change_binding_but_original_loss_remains_a(self):
         receipt = self.cleanup()
         before = hygiene.integrity_binding(self.project, "P01")
@@ -171,3 +199,24 @@ class GateCheckLevelTests(unittest.TestCase):
         errors = []
         researchctl.quality_errors(self.project, "G1", errors, warnings=warnings)
         self.assertTrue(any("stale source hash" in error for error in errors), errors)
+
+    def test_stale_c_level_assessment_source_remains_an_observation(self):
+        from scripts.quality_gate import DIMENSIONS, OBSERVATIONAL_CRITERIA
+        science = self.project / "facts.txt"
+        observation = self.project / "venue-notes.txt"
+        science.write_text("Synthetic located scientific evidence.\n", encoding="utf-8")
+        observation.write_text("Synthetic publication planning observation.\n", encoding="utf-8")
+        value = quality_fixtures.report("G1")
+        value["schema_version"] = "1.2"
+        value["assessments"] = {}
+        for criterion in DIMENSIONS["G1"]:
+            source = observation if criterion in OBSERVATIONAL_CRITERIA else science
+            value["assessments"][criterion] = {"status": "satisfied", "rationale": "Synthetic source-bound fixture",
+                "source_anchors": [{"path": source.name, "sha256": sha(source), "locator": "L1",
+                                    "excerpt": source.read_text().strip()}]}
+        write(self.project / "program/quality-G1.json", value)
+        observation.write_text("Changed optional publication planning note.\n", encoding="utf-8")
+        errors, warnings = [], []
+        researchctl.quality_errors(self.project, "G1", errors, warnings=warnings)
+        self.assertEqual(errors, [])
+        self.assertTrue(any("publication_potential: stale source hash" in note for note in warnings), warnings)

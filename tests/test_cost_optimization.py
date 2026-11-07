@@ -127,7 +127,7 @@ class LosslessContextTests(unittest.TestCase):
         self.assertNotIn("human-confirmed G0 weights", topic)
         for required in ("strong", "negative controls", "stopping rules", "power", "preregistration", "clean-room"):
             self.assertIn(required, design)
-        for required in ("Preserve every registered result", "unfavorable", "existing disclosure", "strongest supported contribution", "post-hoc"):
+        for required in ("Preserve every registered result", "unfavorable", "author-editable", "experiments/archive", "strongest supported contribution", "post-hoc"):
             self.assertIn(required, writing)
         self.assertNotIn("At G5 write", topic)
         self.assertNotIn("At G1 also create", writing)
@@ -210,6 +210,22 @@ class CostRuntimeTests(unittest.TestCase):
         self.assertEqual(report["fresh_review_or_health_attempts"], 2)
         self.assertEqual(report["cache_hits"], 1)
         self.assertFalse(report["duplicate_candidates_prove_waste"])
+
+    def test_legacy_missing_or_invalid_costs_remain_unknown_in_repeat_diagnostics(self):
+        for amount in (None, float("nan"), float("inf"), -1, True, 10 ** 1000):
+            with self.subTest(amount=str(amount)[:50]):
+                row = {"role": "persistent-writer", "cache_key": "same-request", "cost_cny": amount}
+                report = cost_audit.summarize([row, row])
+                candidate = report["duplicate_paid_request_candidates"][0]
+                self.assertEqual(report["uncertain_billing_entries"], 2)
+                self.assertTrue(candidate["billing_uncertain"])
+                self.assertIsNone(candidate["known_recorded_cost_cny"])
+                json.dumps(report, allow_nan=False)
+        unknown = {"role": "persistent-writer", "cache_key": "same-request"}
+        report = cost_audit.summarize([unknown, {**unknown, "cost_cny": 0}])
+        candidate = report["duplicate_paid_request_candidates"][0]
+        self.assertEqual(candidate["known_recorded_cost_cny"], 0)
+        self.assertTrue(candidate["billing_uncertain"])
 
 
 class MetadataCacheTests(unittest.TestCase):

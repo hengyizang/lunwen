@@ -89,6 +89,26 @@ class ReviewPanelTests(unittest.TestCase):
                     review_panel.run(self.project, "P01", "unsafe")
                 call.assert_not_called()
 
+    def test_copied_full_material_cannot_impersonate_distinct_views(self):
+        spec = read(self.project / review_panel.request_path("P01"))
+        for index, (seat, rows) in enumerate(spec["views"].items()):
+            for row in rows:
+                source = self.project / f"papers/P01/manuscript/{seat}-{row['kind']}.txt"
+                source.write_text("Same full manuscript.\n" if index == 0 else "  Same   full\nmanuscript. \n", encoding="utf-8")
+                row["path"] = source.relative_to(self.project).as_posix()
+                row["sha256"] = sha(source)
+        write(self.project / review_panel.request_path("P01"), spec)
+        with patch.object(model_runtime, "call") as call, self.assertRaisesRegex(ValueError, "identical material contents"):
+            review_panel.run(self.project, "P01", "copied-views")
+        call.assert_not_called()
+
+    def test_distinct_views_may_share_the_actual_numeric_table(self):
+        packet = review_panel.prepare(self.project, "P01")
+        domain = next(row for row in packet["views"]["domain"]["sources"] if row.get("kind") == "numeric_table")
+        statistics = next(row for row in packet["views"]["statistics"]["sources"] if row.get("kind") == "numeric_table")
+        self.assertEqual(domain, statistics)
+        self.assertNotEqual(packet["views"]["domain"]["sha256"], packet["views"]["statistics"]["sha256"])
+
     def test_partial_failure_retained_and_same_id_never_repaid(self):
         count = 0
         def fail(project, **kwargs):

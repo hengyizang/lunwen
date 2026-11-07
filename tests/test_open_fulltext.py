@@ -47,7 +47,13 @@ class OpenFullTextTests(unittest.TestCase):
         value = resolve("https://doi.org/10.1234/Example", email="research@example.org", fetcher=fetcher)
         self.assertEqual(value["doi"], "10.1234/example")
         self.assertEqual(len(value["candidates"]), 2)
-        self.assertTrue(value["policy"]["license_and_terms_human_confirmation_required"])
+        self.assertFalse(value["policy"]["license_and_terms_human_confirmation_required"])
+        self.assertEqual(value["policy"]["license_and_terms_verification"], "optional_metadata")
+        self.assertEqual([item["version"] for item in value["candidates"]], ["acceptedVersion", "vor"])
+        self.assertTrue(all(not item["license_verified"] for item in value["candidates"]))
+        self.assertIsNone(value["candidates"][1]["license_claim"])
+        self.assertTrue(value["policy"]["access_controls_must_not_be_bypassed"])
+        self.assertTrue(value["policy"]["publisher_or_library_entitlement_is_not_inferred"])
         self.assertTrue(all(not item["download_authorized"] for item in value["candidates"]))
 
     def test_invalid_doi_is_rejected(self):

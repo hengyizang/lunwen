@@ -444,7 +444,7 @@ def validation_errors(project, paper_id, *, confirmation=True):
 
 @paper_scoped
 def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name="statistical-reporting-map.json"):
-    """Map every actual result/proof to the canonical manuscript, including nulls."""
+    """Check presented results/proofs; retain unreported obligations separately."""
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.revision_trace import verify_location, normalized
     manuscript_project = manuscript_project or project
@@ -452,12 +452,18 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
     evidence = build_report(project, paper_id)
     errors = list(evidence["errors"])
     mapping_path = project / "papers" / paper_id / mapping_name
-    bindings = []
+    bindings, archived, archive = [], [], None
     try:
         mapping = read(mapping_path)
         rows = mapping["items"]
         expected = {c["comparison_id"]: c for c in evidence["comparisons"]}
-        need(len(rows) == len(expected) and {r["result_id"] for r in rows} == set(expected), "report every preregistered outcome and proof obligation")
+        need(isinstance(rows, list) and all(isinstance(row, dict) and isinstance(row.get("result_id"), str) for row in rows), "reported study items require result IDs")
+        selected = [row["result_id"] for row in rows]
+        need(len(selected) == len(set(selected)) and set(selected) <= set(expected), "reported study result IDs must be unique and registered")
+        archived = sorted(set(expected) - set(selected))
+        if archived:
+            from scripts.experiment_evidence import comparison_archive
+            archive = comparison_archive(project, paper_id, evidence)
         canonical = canonical_manuscript(paper)
         for row in rows:
             result = expected[row["result_id"]]
@@ -473,7 +479,8 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
                 need(set(row["values"]) == set(fields), "Meta reporting must include count, estimate, uncertainty, heterogeneity and adjusted test")
                 for key, value in fields.items():
                     rendered = row["values"][key]
-                    need(isinstance(rendered, str) and rendered in row["excerpt"] and math.isclose(float(rendered), value, rel_tol=1e-4, abs_tol=5e-6), "reported statistic differs from computed " + key)
+                    need(isinstance(rendered, str) and re.search(r"(?<![\w.])" + re.escape(rendered) + r"(?!\w|\.\d)", row["excerpt"])
+                         and math.isclose(float(rendered), value, rel_tol=1e-4, abs_tol=5e-6), "reported statistic differs from computed " + key)
             else:
                 need(normalized(result["proof"]["natural_language_statement"]) in normalized(row["excerpt"]), "manuscript must state the registered theorem obligation")
                 need(row.get("formal_type") == result["proof"]["checked_type"], "theory reporting must bind the exact checked formal type")
@@ -483,34 +490,56 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
     return {"schema_version": "1.0", "paper_id": paper_id, "route": evidence["route"], "status": "pass" if not errors else "fail",
             "errors": errors, "bindings": bindings, "mapping_sha256": sha(mapping_path) if mapping_path.is_file() else None,
             "evidence_digest": hashlib.sha256(json.dumps(evidence, sort_keys=True).encode()).hexdigest(),
+            "archived_result_ids": archived, "comparison_archive": archive,
+            "coverage_basis": "declared presented results/proofs; complete registered evidence archived separately",
+            "full_manuscript_semantic_coverage_verified": False,
             "scientific_completion_verified": False, "human_scientific_review_required": True}
+
+
+def _result_exports(project, paper_id, report, *, create=False):
+    from scripts.experiment_evidence import comparison_archive
+    from scripts.research_artifacts import record
+    archive = comparison_archive(project, paper_id, report, create=create)
+    folder = str(Path(archive["path"]).parent / ("study-results-" + archive["sha256"]))
+    outputs, created = [], []
+    for source in report["sources"]:
+        original = path_in(project, source["path"])
+        need(sha(original) == source["sha256"], "full study source result changed")
+        target = path_in(project, folder + "/" + source["run_id"] + ".json", exists=False)
+        if create and not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(original, target)
+            created.append(target)
+        need(target.is_file() and sha(target) == source["sha256"], "complete study results archive is missing or changed")
+        outputs.append(target)
+    if created:
+        record(project, created, "scripts/study_routes.py")
+    return outputs
 
 
 @paper_scoped
 def export_results(project, paper_id):
-    """Keep the full registered sensitivity/proof results in the submission tree."""
+    """Back up full registered sensitivity/proof results outside manuscript files."""
     report = build_report(project, paper_id)
     need(report["status"] == "complete", "; ".join(report["errors"]))
-    folder = project / "papers" / paper_id / "supplement/study-results"
-    folder.mkdir(parents=True, exist_ok=True)
-    outputs = []
-    for source in report["sources"]:
-        path = path_in(project, source["path"])
-        target = folder / (source["run_id"] + ".json")
-        shutil.copyfile(path, target); outputs.append(target)
-    from scripts.research_artifacts import record
-    record(project, outputs, "scripts/study_routes.py")
-    return outputs
+    return _result_exports(project, paper_id, report, create=True)
 
 
 @paper_scoped
 def export_errors(project, paper_id):
     try:
+        if route(project, paper_id) == "empirical":
+            return []
         report = build_report(project, paper_id)
         need(report["status"] == "complete", "; ".join(report["errors"]))
-        for source in report["sources"]:
-            target = project / "papers" / paper_id / "supplement/study-results" / (source["run_id"] + ".json")
-            need(target.is_file() and sha(target) == source["sha256"], "full study/sensitivity results are missing or changed in the supplement")
+        try:
+            _result_exports(project, paper_id, report)
+        except (OSError, ValueError):
+            # Existing sealed projects may retain their exact former exports.
+            # Read them without rewriting/deleting historical paper material.
+            for source in report["sources"]:
+                legacy = path_in(project, f"papers/{paper_id}/supplement/study-results/{source['run_id']}.json", exists=False)
+                need(legacy.is_file() and sha(legacy) == source["sha256"], "complete study results archive is missing or changed")
         return []
     except (OSError, ValueError, KeyError, TypeError) as exc:
         return [str(exc)]

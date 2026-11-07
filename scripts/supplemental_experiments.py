@@ -76,8 +76,8 @@ def _internal_context(project,paper_id,value,*,require_current=True):
                 continue
             source=path_in(project,item["path"],exists=False)
             current_hash=sha(source) if source.is_file() else None
-            if current_hash!=item["sha256"]:
-                changes.append({"path":item["path"],"reviewed_sha256":item["sha256"],"current_sha256":current_hash})
+            if not source.is_file() or not review_receipts.source_matches(project,item):
+                changes.append({"path":item["path"],"reviewed_sha256":item.get("source_sha256",item["sha256"]),"current_sha256":current_hash})
     return {"round_id":round_id,"kind":"internal_review","source_review":binding}, {
         "needs_new_experiments":True,"comments":comments,"kind":"internal_review","source_material_changes":changes}
 
@@ -429,7 +429,7 @@ def review_binding(project, paper_id, round_ids):
     return {"scopes": scopes, "implementation_sha256": sha(Path(__file__))} if scopes else None
 
 
-def checked_child(project, control):
+def checked_child(project, control, *, retired=False):
     child = path_in(project, control["scope_root"], exists=False)
     need(child.is_dir(), "approved supplemental study is missing")
     for item in control["proposal"].get("imports", []):
@@ -446,7 +446,14 @@ def checked_child(project, control):
     paper = control["paper_id"]
     frozen = project / "papers" / paper / "preregistration.json"
     need(sha(frozen) == control["proposal"]["original_preregistration_sha256"] and sha(experiment_path(project, 'experiments/plan.json')) == control["proposal"]["original_plan_sha256"], "parent protocol changed during supplemental work")
-    runner.approved_plan(child, experiment_path(child, 'experiments/plan.json'), experiment_path(child, 'experiments/budget.json'))
+    if retired:
+        # A retired scope is inspected from its original seal, never reopened
+        # through the active-execution authority that correctly rejects it.
+        preregistration = child / "papers" / paper / "preregistration.json"
+        expected = control["approval"].get("frozen_protocol_sha256", {}).get(f"papers/{paper}/preregistration.json")
+        need(control.get("retirement") and expected == sha(preregistration), "retired supplemental preregistration changed")
+    else:
+        runner.approved_plan(child, experiment_path(child, 'experiments/plan.json'), experiment_path(child, 'experiments/budget.json'))
     return child
 
 
@@ -481,7 +488,7 @@ def resume(project, paper_id):
     if not candidates:
         return {"status": "awaiting_separate_protocol_approval", "executed": False}
     for _, control in candidates:
-        child = checked_child(project, control)
+        child = checked_child(project, control, retired=bool(control.get("retirement")))
         if control.get("retirement"):
             for relative, digest in control["retirement"]["files"].items():
                 need(sha(path_in(child, relative)) == digest, "retired failed scope changed")
@@ -536,19 +543,24 @@ def confirm(project, paper_id, actor, review_sha256, run_id, *, automated=False)
     child, control_path, control, target, payload = prepare_confirmation(project, paper_id, actor,automated=automated)
     payload.update(source_run_id=run_id, cloud_review_sha256=review_sha256)
     write(target, payload)
+    sources = [child / "papers" / paper_id / "experiment-evidence.json"]
+    if study_routes.route(child, paper_id) != "empirical":
+        sources.extend(study_routes.export_results(child, paper_id))
     bound = {p.relative_to(child).as_posix(): sha(p) for p in child.rglob("*") if p.is_file()
              and (p.relative_to(child).parts[0] in {"claims", "results", "experiments"} or p.name in {"experiment-evidence.json", "baseline-reproduction.json", "clean-room-reproduction.json", "reproduction-confirmation.json", study_routes.CONFIRMATION})}
     control["confirmation"] = {"actor": actor, "source_run_id": run_id, "cloud_review_sha256": review_sha256, "files": bound,
                                "scientific_completion_verified": False}
     if automated:control["confirmation"].update(decision_kind="automated",human_confirmation=False)
-    sources = [child / "papers" / paper_id / "experiment-evidence.json"]
-    if study_routes.route(child, paper_id) != "empirical":
-        sources.extend((child / "papers" / paper_id / "supplement/study-results").glob("*.json"))
     exports = []
     for source in sources:
-        target = project / "papers" / paper_id / "supplement/reviewer-experiments" / control["round_id"] / control["scope_id"] / source.name
-        target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
-        exports.append({"source": source.relative_to(child).as_posix(), "target": target.relative_to(project).as_posix(), "sha256": sha(target)})
+        digest = sha(source)
+        relative = f"experiments/archive/{paper_id}/reviewer-experiments/{control['round_id']}/{control['scope_id']}/{digest}-{source.name}"
+        target = path_in(project, relative, exists=False)
+        if not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+        need(sha(target) == digest, "supplemental archive changed; never overwrite retained evidence")
+        exports.append({"source": source.relative_to(child).as_posix(), "target": relative, "sha256": digest})
     control["parent_exports"] = exports
     write(control_path, control)
     record(project, [control_path, *[project / e["target"] for e in exports]], "scripts/supplemental_experiments.py")
@@ -616,12 +628,13 @@ def revision_errors(project, paper_id, *, require_reporting=True, proposal=None)
         need(bool(values), "reviewer requests new experiments: a separately approved supplemental protocol and budget are required")
         errors, covered = [], set()
         for _, control in values:
-            child = checked_child(project, control)
+            child = checked_child(project, control, retired=bool(control.get("retirement")))
             if control.get("retirement"):
                 retirement = control["retirement"]
                 for relative, digest in retirement["files"].items():
                     need(sha(path_in(child, relative)) == digest, "retired failed scope changed")
-                if require_reporting:
+                covered.update(control["proposal"]["comment_ids"])
+                if require_reporting and (child / "papers" / paper_id / "failed-study-reporting.json").is_file():
                     from scripts.ref_verify_adapter import canonical_manuscript
                     from scripts.revision_trace import verify_location
                     mapping = read(child / "papers" / paper_id / "failed-study-reporting.json")
@@ -636,7 +649,7 @@ def revision_errors(project, paper_id, *, require_reporting=True, proposal=None)
                 need(confirmation.get("human_confirmation") is False and confirmation["actor"]=="deterministic_control_plane","automated supplemental checks must never impersonate human review")
             for relative, digest in confirmation["files"].items():
                 need(sha(path_in(child, relative)) == digest, "confirmed supplemental evidence changed")
-            need(bool(control.get("parent_exports")), "supplemental aggregate evidence must be included in the parent submission supplement")
+            need(bool(control.get("parent_exports")), "complete supplemental evidence needs a parent archive or unchanged retained legacy export")
             for exported in control["parent_exports"]:
                 need(sha(path_in(child, exported["source"])) == exported["sha256"]
                      and sha(path_in(project, exported["target"])) == exported["sha256"], "supplemental submission evidence changed")
@@ -657,7 +670,7 @@ def revision_errors(project, paper_id, *, require_reporting=True, proposal=None)
                         shutil.copytree(project / "papers" / paper_id, view / "papers" / paper_id)
                         shutil.copyfile(child / "papers" / paper_id / "experiment-evidence-plan.json", view / "papers" / paper_id / "experiment-evidence-plan.json")
                         mapping = read(child / "papers" / paper_id / "statistical-reporting-map.json")
-                        errors.extend(check_mapping(view, paper_id, evidence, mapping)["errors"])
+                        errors.extend(check_mapping(view, paper_id, evidence, mapping, archive_project=child)["errors"])
         requested = {c["comment_id"] for _, control in values for c in control["proposal"]["comment_dispositions"] if c["requires_experiment"]}
         need(not requested or requested <= covered, "supplemental scopes omit reviewer experiment requests")
         return errors

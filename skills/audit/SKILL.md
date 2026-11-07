@@ -20,12 +20,12 @@ Check:
 
 - gate state, actual G1/G2 human topic decisions and the other stages' evidence-bound automated decisions;
 - source existence, exact support and retraction/correction status;
-- dataset rights, provenance, checksum, transformations and split leakage;
+- dataset source/version, provenance, checksum, transformations, privacy/access restrictions and split leakage; licence/research-use review remains optional metadata;
 - experiment/config/code/data traceability and failed-run retention;
 - statistical assumptions, multiplicity, uncertainty and robustness;
 - claim-evidence coverage and unsupported generalization;
 - actual selected venue fit and source-bound template/export requirements at submission; ranking unknowns remain explicit, without a rank or AI-policy gate;
-- actual authorship, funding, conflict, ethics and data/code statements, and preservation of any existing disclosure;
+- actual authorship, funding, conflict, ethics and data/code statements; public AI-use statements are optional and author-editable, while internal provenance remains truthful;
 - secrets, raw/private data and publisher files accidentally tracked by Git.
 
 Use the current critique and final three-view panel defined in [workflow.md](../../references/workflow.md). Keep model-family independence, actual sources, stable issue IDs and disagreement. Report A scientific-integrity failures separately from B final-submission checks and C observations; only actual blocking problems require repair. Preserve the decision log and current output-provenance hashes; Claude cannot persist final scientific files. Do not turn a style warning, legacy score or administrative receipt into a new gate.

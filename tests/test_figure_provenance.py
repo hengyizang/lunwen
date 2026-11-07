@@ -41,7 +41,7 @@ class FigureProvenanceTests(unittest.TestCase):
             sealed_run(project)
             renderer=project/"analysis/chart.py";renderer.write_text("# synthetic renderer\n",encoding="utf-8")
             figure=figures/"chart.png";figure.write_bytes(b"synthetic rendered pixels")
-            spec=figures/"chart.json";write(spec,{"synthetic":True})
+            spec=figures/"chart.json";write(spec,{"synthetic":True,"claim_ids":["C1"]})
             output_provenance.record_model_writes(project,[renderer,spec],family="other",provider="fixture",model="fixture",role="fixture",run_id="fixture")
             ref=lambda path:{"path":path.relative_to(project).as_posix(),"sha256":sha(path)}
             receipt=figures/"chart.render-receipt.json"
@@ -52,5 +52,11 @@ class FigureProvenanceTests(unittest.TestCase):
             row=json.loads((figures/"figure-provenance.json").read_text())["figures"][0]
             self.assertEqual(row["review_kind"],"automated");self.assertEqual(row["source_run_ids"],["r1"])
             self.assertNotIn("language_checked_by",row)
+            build=figures/"chart.figure-build.json";write(build,report)
+            output_provenance.record_model_writes(project,[build],family="other",provider="deterministic-local-renderer",model="scripts/publication_figures.py",role="figure-renderer-control",run_id="fixture")
+            from scripts.research_case import _observed_figure
+            _observed_figure(project,"P01",{"claim_ids":["C1"],"source":ref(build)})
+            with self.assertRaisesRegex(ValueError,"claim scope"):
+                _observed_figure(project,"P01",{"claim_ids":["C2"],"source":ref(build)})
             (project/"results/metrics.csv").write_text("changed\n",encoding="utf-8")
             with self.assertRaises(ValueError):register_rendered_figures(project,report)

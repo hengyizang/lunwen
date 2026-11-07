@@ -1,5 +1,7 @@
 # Jev-class cloud services: limited research-workflow trial
 
+> Historical record: the original results and configuration below retain their dated scope. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Old all-gate human approvals, fixed tranches, per-paper caps, mandatory pre-use licence checks and AI-statement preservation are superseded; these examples do not change current models or grant research authority.
+
 Status: proposal, 2026-09-29. No provider has been enabled and no model call or spending approval is implied. This record concerns the six-paper `my-phd` sprint ending 2026-10-07 (Asia/Shanghai).
 
 ## Decision

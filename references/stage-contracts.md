@@ -163,7 +163,7 @@ datasets, baseline classes or power calculations for another research design.
 
 Required for confirmatory empirical work:
 
-- selected dataset rows with licenses and provenance: independent execution captures `data/datasets.jsonl` rows in the current paper's immutable `experiments/papers/Pxx/datasets.jsonl` snapshot before sealing; legacy protocols retain their original manifest. Raw data and rights evidence remain canonical and cannot be changed after freezing;
+- selected dataset rows with source, version, hashes and provenance (licence/research-use metadata is optional): independent execution captures `data/datasets.jsonl` rows in the current paper's immutable `experiments/papers/Pxx/datasets.jsonl` snapshot before sealing; legacy protocols retain their original manifest. Raw sources and recorded access restrictions remain canonical after freezing;
 - a deterministic `data/quality/<dataset_id>.json` for every selected dataset, bound to current local file hashes and checking complete-scan status, missingness, duplicates, imbalance and split/group overlap where applicable, plus a separate protected `<dataset_id>-confirmation.json` identifying the automated checks, unresolved warnings and current report hash;
 - `experiments/plan.json` conforming to `schemas/experiment-plan.schema.json`;
 - one or more JSON design files under the active `papers/Pxx/experiments/`, each conforming to `schemas/paper-experiment-design.schema.json`, with every selected paper plan run assigned to exactly one design;

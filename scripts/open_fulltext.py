@@ -2,8 +2,9 @@
 """Resolve lawful open-access full-text candidates without bypassing controls.
 
 The resolver combines public metadata from OpenAlex, Unpaywall and Crossref.
-Every URL remains a candidate until a human or downstream license check confirms
-that the exact file may be downloaded and used for the project.
+License/research-use verification is optional metadata, not a human pre-use gate.
+Candidates do not establish access entitlement or the exact acquired file's
+source, version and integrity; known access controls still apply.
 """
 from __future__ import annotations
 
@@ -219,7 +220,8 @@ def resolve(
         "provider_failures": failures,
         "policy": {
             "advisory_only": True,
-            "license_and_terms_human_confirmation_required": True,
+            "license_and_terms_human_confirmation_required": False,
+            "license_and_terms_verification": "optional_metadata",
             "access_controls_must_not_be_bypassed": True,
             "publisher_or_library_entitlement_is_not_inferred": True,
         },

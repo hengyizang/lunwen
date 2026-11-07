@@ -44,6 +44,49 @@ class ReviewReceiptTests(unittest.TestCase):
                 errors = review_receipts.validate_gate(project, "G5", "P01")
                 self.assertTrue(any("stale" in error for error in errors))
 
+    def test_quality_projection_preserves_raw_audit_and_ignores_only_C_fields(self):
+        from tests.test_quality_gate import report
+        with tempfile.TemporaryDirectory() as temp:
+            project, state = self.fixture(Path(temp))
+            path = project / "program/quality-G1.json"
+            quality = report("G1")
+            write(path, quality)
+            before = review_receipts.material_snapshot(project, "writing-and-review", "P01")
+            seal_review(project, state)
+            quality["scores"] = {"novelty": 1, "publication_potential": 0}
+            quality["generated_at"] = "2026-11-07T18:00:00+00:00"
+            quality["venue_readiness"] = {}
+            quality["assessments"] = {"venue_fit": {"status": "unresolved"}}
+            write(path, quality)
+            after = review_receipts.material_snapshot(project, "writing-and-review", "P01")
+            self.assertEqual(before["sha256"], after["sha256"])
+            self.assertTrue(review_receipts.materials_match(before, after))
+            self.assertNotEqual(next(row for row in before["files"] if row["path"] == "program/quality-G1.json")["source_sha256"], sha(path))
+            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01"), [])
+            quality["novelty_claim"] = "Changed scientific claim."
+            write(path, quality)
+            self.assertNotEqual(after["sha256"], review_receipts.material_snapshot(project, "writing-and-review", "P01")["sha256"])
+            self.assertTrue(review_receipts.validate_gate(project, "G5", "P01"))
+
+    def test_legacy_review_keeps_raw_identity_instead_of_silently_adopting_projection(self):
+        from tests.test_quality_gate import report
+        with tempfile.TemporaryDirectory() as temp:
+            project, state = self.fixture(Path(temp))
+            path = project / "program/quality-G1.json"
+            quality = report("G1")
+            write(path, quality)
+            snapshot = review_receipts.material_snapshot
+            with patch.object(review_receipts, "material_snapshot", side_effect=lambda *args, **kwargs: snapshot(*args, _version="1.0")):
+                seal_review(project, state)
+            pointer = read(project / "state/review-receipts/G5-P01/latest.json")
+            receipt = read(project / pointer["path"])
+            self.assertNotIn("schema_version", receipt["materials"])
+            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01"), [])
+            quality["scores"]["publication_potential"] = 1
+            write(path, quality)
+            self.assertTrue(review_receipts.validate_gate(project, "G5", "P01"))
+            self.assertEqual(sha(project / pointer["path"]), pointer["sha256"])
+
     def test_latest_actual_receipt_not_lexical_run_name(self):
         with tempfile.TemporaryDirectory() as temp:
             project, state = self.fixture(Path(temp))

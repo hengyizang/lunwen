@@ -57,11 +57,11 @@ def prepare(project: Path, spec: dict) -> dict:
         seen.add(key)
         statement = wb._text(claim.get("claim"), "actual manuscript claim")
         cite = claim.get("citation_key")
-        if (statement, cite) in scientific_claims:
+        normalized = citation_audit.citation_prose(statement, tex=manuscript.suffix == ".tex")
+        if (normalized, cite) in scientific_claims:
             raise ValueError("renamed duplicate claims cannot inflate the sampling population")
-        scientific_claims.add((statement, cite))
-        local = [row for row in usages if row["citation_key"] == cite and row["claim_text"] ==
-            citation_audit.citation_prose(statement, tex=manuscript.suffix == ".tex")]
+        scientific_claims.add((normalized, cite))
+        local = [row for row in usages if row["citation_key"] == cite and row["claim_text"] == normalized]
         if not local or cite not in entries:
             raise ValueError("claim text and citation key must identify the same complete current manuscript citation scope")
         doi = citation_audit.normalize_doi(entries[cite]["fields"].get("doi", ""))
@@ -106,7 +106,11 @@ def prepare(project: Path, spec: dict) -> dict:
             "full_text_ready": not missing, "missing_evidence": missing, "outcome": "insufficient"})
     fingerprint = wb._digest({"claims": [{**{k: row[k] for k in ("claim_id", "claim", "citation_key", "doi", "source", "reader", "evidence", "source_basis", "manuscript_usages")},
         **({"source_identity_url": row["source_identity_url"]} if not row["doi"] else {})} for row in claims], "citation_usages": usages})
-    sample = sorted(claims, key=lambda row: wb._digest([fingerprint, row["claim_id"]]))[:math.ceil(.15 * len(claims))]
+    # Select scientific citation scopes, not author-chosen aliases or request
+    # order. Keep the full fingerprint above for human-label version binding.
+    population = wb._digest(usages)
+    sample = sorted(claims, key=lambda row: wb._digest([population,
+        [use["usage_id"] for use in row["manuscript_usages"]]]))[:math.ceil(.15 * len(claims))]
     return {"schema_version": "1.0", "operation": "claim_evidence", "id": identifier, "paper_id": owner,
         "manuscript_sha256": citation_audit.manuscript_digest(manuscript), "bibliography_sha256": sha(bibliography),
         "claims": claims, "citation_usages": usages,

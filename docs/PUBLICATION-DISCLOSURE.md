@@ -23,4 +23,4 @@ see [workflow.md](../references/workflow.md).
 
 Character cleanup never establishes human authorship, statistical-watermark
 absence or an exemption from external obligations. Preserve scientific evidence,
-negative/null/failed results and existing disclosures with their source history.
+complete negative/null/failed records in the separate experiment archive and truthful internal source history. Public AI-use statements remain optional and author-editable.

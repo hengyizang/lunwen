@@ -135,7 +135,7 @@ def _supplemental_scope(project: Path, state: dict, gate: str) -> list[str]:
                 or any(initial.get(key)!=final.get(key) for key in ("gate","stage","paper_id","run_id"))):
             raise ValueError("automatic supplemental authority requires two actual same-purpose protocol audits")
         review_receipts._identity(initial["identity"],initial["writer_family"])
-        reviewed={item["path"]:item["sha256"] for item in final["materials"]["files"]}
+        reviewed={item["path"]:item.get("source_sha256",item["sha256"]) for item in final["materials"]["files"]}
         declared_raw={(item["path"], item["sha256"]) for item in final["materials"].get("declared_raw_inputs", [])
                       if item.get("declared_in") in reviewed}
         prereg=read(path_in(project,f"papers/{pid}/preregistration.json"))

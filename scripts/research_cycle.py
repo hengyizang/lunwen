@@ -12,6 +12,12 @@ def research_decision(project, stage, run_id, *, reviewed=False):
         return {"status": "pending", "errors": [str(exc)], "scientific_completion_verified": False}
 
 
+def decision_errors(decision):
+    """Use both the notebook and its actual independent assessment in adapters."""
+    return ["research decision: " + issue for issue in dict.fromkeys(
+        [*decision.get("errors", []), *decision.get("review_errors", [])])]
+
+
 def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remediate,
                  refresh, writer_notes, log):
     """Planner/writer run in adapters; one fresh critique completes an ordinary round.
@@ -100,12 +106,14 @@ def submission_cycle(project, run_id, *, writer_family, refresh):
 def after_reviews(project, stage, run_id, decision, gate_errors):
     """Apply bounded follow-ups without treating advisory opinions as approval."""
     result = {}
+    if decision_errors(decision):
+        return result
     if stage == "writing-and-review":
         from scripts.supplemental_experiments import automatic_approval
         from scripts.research_phase import enter_submission
         result["supplemental_approval"] = automatic_approval(
             project, read(project / "state/run.json")["active_paper"], run_id)
-        if not decision.get("errors") and enter_submission(project, gate_errors()):
+        if enter_submission(project, gate_errors()):
             result["writing_phase_transition"] = "submission"
     elif stage == "experiment-execution":
         from scripts.primary_recovery import automatic_retirement

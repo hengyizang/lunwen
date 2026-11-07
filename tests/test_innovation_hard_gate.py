@@ -82,6 +82,9 @@ class InnovationHardGateTests(unittest.TestCase):
 
     def test_bound_sources_allow_honest_bounded_search(self):
         self.assertEqual(self.check(), [])
+        # Renaming an already-inspected paper cannot increase source coverage.
+        self.originality["closest_prior_work"][4]["primary_source_url"] = "https://dx.doi.org/10.1000/PRIOR1#renamed"
+        self.assertTrue(any("distinct source identities" in issue for issue in self.check()))
 
     def test_missing_claim_forged_quote_wrong_source_and_omitted_prior_block(self):
         for case in ("claim", "quote", "source", "omit", "overlap", "identity", "count", "unassessed"):

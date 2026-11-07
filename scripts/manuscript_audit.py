@@ -244,7 +244,9 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
             "spec_sha256":sha256_file(spec),"fact_count":len(fact_ids),"claim_count":len(claim_ids),
             "measurement_chains":len(config.get("measurement",[])),"paragraphs":len(config.get("argument_ledger",[])),
             "symbol_count":len(declared),"used_math_symbols":sorted(used),"section_regions_found":sorted(k for k,v in section_buckets.items() if v.strip()),"source_locations":source_locations,"errors":errors,"warnings":warnings,"pass":not errors,
-            "human_review_required":True,"contribution_reporting":contribution_review}
+            "human_review_required":True,"contribution_reporting":contribution_review,
+            "coverage_basis":"declared fact/claim/argument anchors; complete source-unit coverage is checked separately by research increments",
+            "semantic_coverage_verified":False}
 
 
 def validate_saved_report(paper: Path) -> list[str]:
@@ -263,7 +265,7 @@ def validate_saved_report(paper: Path) -> list[str]:
         errors.extend("contribution reporting: " + item for item in current["contribution_reporting"].get("errors", []))
         if not current["contribution_reporting"].get("errors"):
             errors.append("current contribution reporting is not assessed")
-    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs","symbol_count","used_math_symbols","section_regions_found","source_locations","contribution_reporting"):
+    for key in ("manuscript_sha256","spec_sha256","errors","fact_count","claim_count","measurement_chains","paragraphs","symbol_count","used_math_symbols","section_regions_found","source_locations","contribution_reporting","coverage_basis","semantic_coverage_verified"):
         if saved.get(key)!=current.get(key):errors.append(f"stale paper-facts audit field: {key}")
     return errors
 

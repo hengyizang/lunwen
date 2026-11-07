@@ -220,7 +220,7 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
         raise ValueError("attribute actual public reviews or explicitly synthetic fixtures")
     space = anchors.get("label_space", "claim_support_and_novelty")
     _anchor_label("", space)
-    labels, cases, partitions, paper_partitions = {}, [], {}, {}
+    labels, cases, partitions, paper_partitions, source_papers = {}, [], {}, {}, {}
     incoming = anchors.get("cases")
     if not isinstance(incoming, list) or not 1 <= len(incoming) <= 200:
         raise ValueError("anchor set needs bounded source-located cases")
@@ -240,6 +240,9 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
         doi = normalize_doi(doi)
         if not re.fullmatch(r"10\.\d{4,9}/\S+", doi, re.I):
             raise ValueError("anchor paper needs a valid DOI identity; arbitrary labels cannot count as distinct papers")
+        if source["sha256"] in source_papers and source_papers[source["sha256"]] != doi:
+            raise ValueError("the same original source cannot count under different paper DOIs")
+        source_papers[source["sha256"]] = doi
         partition = row["partition"]
         for identity, mapping in ((source["sha256"], partitions), (doi, paper_partitions)):
             if identity in mapping and mapping[identity] != partition:
@@ -267,8 +270,10 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
             if not str(row.get("review_url", "")).startswith("https://"):
                 raise ValueError("real review anchors require their original public URL")
         labels[key] = row["label"]
-        cases.append({"id": key, "paper_doi": doi, "partition": partition, "source": source,
-            "quote": quote, "question": workbench._text(row.get("question"), "blind evidence question")})
+        case = {"id": key, "paper_doi": doi, "partition": partition, "source": source,
+            "quote": quote, "question": workbench._text(row.get("question"), "blind evidence question")}
+        case["case_sha256"] = workbench._digest({k: v for k, v in case.items() if k != "partition"})
+        cases.append(case)
     evaluations, bindings, retained = [], [], []
     for binding in spec.get("predictions", []):
         checked = bound_source(project, binding)
@@ -276,21 +281,26 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
         origin = current_origin(project, path)
         if origin.get("status") != "tracked" or origin.get("role") not in {"independent-critic", "independent-critic-initial", "independent-critic-final", "review-panel-response"}:
             raise ValueError("benchmark predictions need retained actual independent-review provenance")
-        retained.append((checked, read(path), origin.get("model")))
-    if observed is None and spec.get("paper_id"):
+        retained.append((checked, read(path), origin.get("model"), False))
+    protected_observations = observed is None
+    if observed is None:
         from scripts.literature_source_tasks import judgment_responses
-        observed = judgment_responses(project, spec["paper_id"])
+        observed = judgment_responses(project, spec.get("paper_id"))
     for row in observed or []:
         if "anchor_labels" in row["response"]:
             receipt = row["receipt"]
             checked = bound_source(project, {**receipt["response"], "locator": "actual independent anchor response"})
-            if not any(prior[0]["path"] == checked["path"] for prior in retained):
-                retained.append((checked, row["response"], receipt["identity"]["requested_model"]))
-    for checked, payload, model in retained:
+            retained = [prior for prior in retained if prior[0]["path"] != checked["path"]]
+            retained.append((checked, row["response"], receipt["identity"]["requested_model"], protected_observations))
+    case_hashes = {row["id"]: row["case_sha256"] for row in cases}
+    for checked, payload, model, runtime_verified in retained:
         predictions = {}
         for row in payload.get("anchor_labels", []):
             if row.get("case_id") not in labels or row.get("case_id") in predictions or not _anchor_label(row.get("outcome"), space):
                 raise ValueError("duplicate or out-of-scope benchmark prediction")
+            if row.get("case_sha256") != case_hashes[row["case_id"]]:
+                raise ValueError("benchmark prediction belongs to different blind source/question versions")
+            workbench._text(row.get("rationale"), "benchmark prediction rationale")
             predictions[row["case_id"]] = row["outcome"]
         bindings.append(checked)
         results = {}
@@ -298,17 +308,24 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
             ids = [r["id"] for r in cases if r["partition"] == partition]
             complete = bool(ids) and all(key in predictions for key in ids)
             results[partition] = {"cases": len(ids), "predictions": sum(key in predictions for key in ids),
+                "missing_case_ids": [key for key in ids if key not in predictions],
                 "agreement": sum(predictions.get(key) == labels[key] for key in ids) / len(ids) if complete else None}
         merge_ids = [key for key, label in labels.items() if label == "should_merge"]
-        evaluations.append({"prediction": checked, "model": model, "partitions": results,
+        evaluations.append({"prediction": checked, "model": model, "runtime_receipt_verified": runtime_verified,
+            "comparison_complete": set(predictions) == set(labels), "prediction_count": len(predictions), "partitions": results,
             "should_merge_detection": sum(predictions.get(k) == "should_merge" for k in merge_ids) / len(merge_ids)
                 if merge_ids and all(k in predictions for k in merge_ids) else None})
+    predicted = any(row["prediction_count"] for row in evaluations)
+    execution = "complete" if evaluations and all(row["comparison_complete"] for row in evaluations) else "partial" if predicted else "no_predictions"
+    design_complete = anchors["kind"] == "public_review" and 20 <= len(paper_partitions) <= 30 and set(paper_partitions.values()) == {"calibration", "holdout"}
     return {"schema_version": "1.0", "operation": "judgment_benchmark", "id": workbench._id(spec["id"]),
         "anchor_set": bound, "annotation_kind": anchors["kind"], "blind_cases": cases, "prediction_sources": bindings,
         "results": evaluations, "attributed_public_paper_count": len(paper_partitions) if anchors["kind"] == "public_review" else 0,
-        "requested_anchor_design_complete": anchors["kind"] == "public_review" and 20 <= len(paper_partitions) <= 30 and set(paper_partitions.values()) == {"calibration", "holdout"},
-        "label_space": space, "calibration_status": "NOT_CALIBRATED", "model_call_made": False, "scientific_completion_verified": False,
-        "role_contract": "Use blind_cases only; never inspect anchor labels or the answer-key source. Return anchor_labels:[{case_id,outcome,rationale}]. " +
+        "requested_anchor_design_complete": design_complete, "execution_status": execution,
+        "label_space": space, "calibration_status": "EMPIRICAL_COMPARISON_COMPLETE" if execution == "complete" and design_complete
+            and all(row["runtime_receipt_verified"] for row in evaluations) else "NOT_CALIBRATED",
+        "numeric_score_calibration_verified": False, "model_call_made": False, "scientific_completion_verified": False,
+        "role_contract": "Use blind_cases only; never inspect anchor labels or the answer-key source. Return anchor_labels:[{case_id,case_sha256,outcome,rationale}], copying each exact blind case hash. " +
             ("Use the eLife evidence-strength taxonomy: " + ", ".join(sorted(ELIFE_STRENGTHS)) + ". For multiple applicable categories return their alphabetically sorted names joined by +. These are published assessment categories, not claim-support labels. "
              if space == "elife_evidence_strength" else "Preserve insufficient and should_merge. ") +
             "Agreement on attributed reviews is not scientific validity, a quality score calibration or an acceptance probability."}

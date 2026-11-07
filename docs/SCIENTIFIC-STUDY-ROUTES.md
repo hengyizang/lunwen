@@ -119,10 +119,16 @@ After execution the control plane computes experiment-evidence.json, compares
 original/replay outputs and, for Meta, independently recomputes numerical results.
 The existing claim matrix must reference every assigned outcome/obligation and
 both source runs. It cannot call inconclusive or exploratory evidence supported.
-Full result JSONs, including sensitivities, are copied deterministically into
-supplement/study-results and verified again at G5. Statistical-reporting-map.json
-maps every outcome/proof to actual canonical manuscript locations; Meta values
-must match estimates, counts, intervals, heterogeneity and adjusted tests.
+Full result JSONs, including sensitivities and proof obligations, are retained
+in content-addressed `experiments/archive/Pxx/` backups and verified again at G5.
+They are not automatically inserted into the manuscript or its supplements.
+Unchanged backups are reused; existing sealed legacy exports remain readable
+without rewriting or deleting them. `statistical-reporting-map.json` maps the
+outcomes/proofs actually presented to canonical manuscript locations; unreported
+items need no per-result manual archive row and remain bound to the complete
+comparison archive. Reported Meta values must match estimates, counts, intervals,
+heterogeneity and adjusted tests. Selection does not waive the original proof,
+registered protocol, claim obligations or independent scientific review.
 Meta map items also carry the actual analysis_phase and decision; exploratory
 follow-ups must be explicitly identified in the manuscript.
 
@@ -155,7 +161,8 @@ The normal continuation uses the existing model cycle and automatic checks:
    The recorded audit purpose is `supplemental_protocol`; it cannot pass parent
    G5. Successful current checks permit the controller to create honestly labeled
    automated data confirmations, preregistration and a separate G3 seal. Missing
-   rights or evidence remains blocked. Authenticated owner dossiers are available
+   source/version, integrity or scientific evidence remains blocked; optional
+   licence/research-use metadata is not a pre-use gate. Authenticated owner dossiers are available
    for explicit interventions, not a required step in ordinary continuation.
 2. Healthy G5 continuation executes at most one approved child run per job.
    Aggregate parent and supplemental costs share the G0 compute ceiling.
@@ -165,9 +172,11 @@ The normal continuation uses the existing model cycle and automatic checks:
    undergo the native evidence checks. The controller records their current hashes
    with `decision_kind: automated` and `human_confirmation: false`. This does not
    certify scientific meaning or approve parent G5.
-4. Map every new result into the actual revised parent manuscript. The reviewer
-   audit blocks missing requests, missing approval/confirmation, changed results
-   and missing or incorrect reporting. Existing response coverage, independent
+4. Back up complete new results under the parent's independent experiment archive;
+   map only the results actually presented into the revised manuscript. Existing
+   sealed legacy exports remain readable without relocation. The reviewer audit
+   blocks missing request dispositions, approval/confirmation, changed evidence
+   and incorrect claimed reporting. Existing response coverage, independent
    audits and the checked automatic G5 decision still apply.
    Supplemental approvals, inputs, attempts, results, exports and reporting maps
    are hashed into the reviewer audit and parent G5 approval; any change requires
@@ -180,9 +189,12 @@ The normal continuation uses the existing model cycle and automatic checks:
 Do not re-freeze the original study after execution. A changed proposal needs a
 new supplemental scope and new approval. Failed attempts are never retried or
 deleted automatically. `retire_supplemental` lets the owner seal an inspected
-failed scope with a reason, retaining logs/costs and requiring an explicit failure
-statement in the manuscript. It grants no scientific result; requested experiments
-remain incomplete until a separate approved scope supplies the required evidence.
+failed scope with a reason, retaining logs/costs in the separate archive. Failed
+attempts need not be copied into the manuscript; if a failure statement is
+actually supplied, its source and current location are verified. A retired failure
+is an explicit request disposition, not a successful scientific result or a
+replacement for needed evidence. The existing independent review assesses its
+effect on the conclusions; any new attempt needs a separate approved scope.
 
 Internal scientific findings use the same executor at
 `experiments/supplemental/Pxx/Ixxx/s001`, with `trigger_kind: internal_review`

@@ -230,6 +230,39 @@ class SubmissionPackageTests(unittest.TestCase):
                 with self.assertRaisesRegex(researchctl.ResearchCtlError,"LaTeX compilation|final PDF"):
                     build_package("demo-study","P01",root/"blocked.zip")
 
+    def test_final_pdf_uses_real_render_bindings_while_appearance_stays_an_observation(self):
+        import fitz
+        from scripts import revision_render, submission_package as packaging
+        from scripts.research_artifacts import write, sha
+        with tempfile.TemporaryDirectory() as temporary:
+            project = self.make_project(Path(temporary), mock_visual=False, mock_submission=False)
+            paper = project / "papers/P01"
+            pdf = paper / "manuscript/main.pdf"
+            with fitz.open() as document:
+                document.new_page().insert_text((72, 72), "Synthetic rendering fixture only.")
+                document.save(pdf)
+            receipt = paper / "reviews/cloud-tex-build.json"
+            write(receipt, {"schema_version": "1.0", "status": "pass",
+                "inputs": [{"path": (paper / row["path"]).relative_to(project).as_posix(), "sha256": row["sha256"]}
+                           for row in revision_render.source_hashes(paper)],
+                "outputs": [{"path": pdf.relative_to(project).as_posix(), "sha256": sha(pdf)}],
+                "renderer": {"name": "cloud_runtime", "implementation_sha256": sha(Path(revision_render.__file__).parent / "cloud_runtime.py")},
+                "execution": {"mode": "cloud", "receipt_id": "synthetic-render-binding-fixture"}})
+            output_provenance.record_model_writes(project, [receipt, pdf], family="other",
+                provider="cloud-tex-renderer", model="scripts/cloud_runtime.py", role="render-receipt", run_id="synthetic-render-binding-fixture")
+            revision_render.build_render_manifest(paper, pdf, "synthetic-render-fixture", "1", rendering_receipt=receipt)
+            with patch("scripts.model_runtime.call", side_effect=AssertionError("no model calls")), \
+                 patch("scripts.automated_visual_review.verify", return_value=["layout needs revision"]):
+                errors = packaging.submission_checks(project, "P01")
+                self.assertFalse(any("final PDF" in issue for issue in errors), errors)
+                warnings = []
+                researchctl.paper_observations(project, "P01", warnings)
+                self.assertTrue(any("manuscript appearance" in issue and "layout needs revision" in issue for issue in warnings), warnings)
+                binding = packaging.submission_check_binding(project, "P01")
+                receipt.unlink()
+                self.assertNotEqual(binding, packaging.submission_check_binding(project, "P01"))
+                self.assertTrue(any("final PDF" in issue for issue in packaging.submission_checks(project, "P01")))
+
     def test_builds_deterministic_manual_package(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

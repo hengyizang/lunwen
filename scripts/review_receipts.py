@@ -20,6 +20,7 @@ PREFIX = "state/review-receipts"
 STAGES = {"G1": "topic-intelligence", "G2": "paper-architecture", "G3": "experiment-design",
           "G4": "experiment-execution", "G5": "writing-and-review"}
 FIELDS = {"verdict", "fatal_findings", "major_findings", "minor_findings", "missing_evidence", "remediation_steps", "uncertainty"}
+QUALITY_PROJECTION = "quality-science-v1"
 
 
 def _cloud():
@@ -29,6 +30,43 @@ def _cloud():
 
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+
+
+def _quality_path(relative):
+    return re.fullmatch(r"(?:program/quality-G1|papers/P[0-9]{2}/quality-G2|experiments/(?:papers/P[0-9]{2}/)?quality-G3|reports/quality-G4|papers/P[0-9]{2}/reviews/quality-G[45])\.json", relative) is not None
+
+
+def _scientific_file(path):
+    from scripts.quality_gate import scientific_projection
+    return _digest(scientific_projection(read(path)))
+
+
+def _material_identity(materials):
+    version = materials.get("schema_version", "1.0")
+    if version not in {"1.0", "2.0"}:
+        raise ValueError("unsupported scientific review material identity")
+    files = []
+    for row in materials["files"]:
+        kind = row.get("hash_kind")
+        if kind and (version != "2.0" or kind != QUALITY_PROJECTION or not _quality_path(row["path"])
+                     or not re.fullmatch(r"[0-9a-f]{64}", str(row.get("source_sha256", "")))):
+            raise ValueError("scientific review projection is not valid for this source/version")
+        files.append({key: value for key, value in row.items() if key != "source_sha256" or not kind})
+    return {**materials, "files": files}
+
+
+def materials_match(recorded, current):
+    return _material_identity(recorded) == _material_identity(current)
+
+
+def source_matches(project, binding, *, relative=None):
+    """Legacy receipts retain raw identities; typed quality bindings retain A fields."""
+    target = path_in(project, relative or binding["path"])
+    if binding.get("hash_kind"):
+        if binding["hash_kind"] != QUALITY_PROJECTION or not _quality_path(binding["path"]):
+            raise ValueError("unknown scientific source projection")
+        return _scientific_file(target) == binding["sha256"]
+    return sha(target) == binding["sha256"]
 
 
 def _declared_raw_inputs(project: Path, files: list[dict]) -> list[dict]:
@@ -45,7 +83,11 @@ def _declared_raw_inputs(project: Path, files: list[dict]) -> list[dict]:
         target = path_in(project, source["path"])
         if target.stat().st_size > 2 * 1024 * 1024:
             continue
-        pending = [read(target)]
+        value = read(target)
+        if source.get("hash_kind") == QUALITY_PROJECTION:
+            from scripts.quality_gate import scientific_projection
+            value = scientific_projection(value)
+        pending = [value]
         visited = 0
         while pending:
             value = pending.pop()
@@ -66,13 +108,15 @@ def _declared_raw_inputs(project: Path, files: list[dict]) -> list[dict]:
     return [declarations[key] for key in sorted(declarations)]
 
 
-def material_snapshot(project: Path, stage: str, paper_id: str | None = None) -> dict:
+def material_snapshot(project: Path, stage: str, paper_id: str | None = None, *, _version="2.0") -> dict:
     """Hash scientific inputs, excluding requests, verdicts and volatile bookkeeping.
 
     Bind all program/evidence/experiment inputs and current paper files, including
     review *inputs* such as paper-facts and reviewer comments. Generated review
     results, decision logs and this receipt cannot invalidate their own review.
     """
+    if _version not in {"1.0", "2.0"}:
+        raise ValueError("unsupported scientific review material identity")
     from scripts.context_efficiency import operational_path, instruction_paths
     from scripts.paper_execution import enabled, selected, relevant
     if enabled(project) and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
@@ -118,7 +162,10 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         if any(marker in target.name.casefold() for marker in ("api_key", "apikey", "credential", "password", "secret")):
             continue
         path_in(project, relative)
-        rows.append({"path": relative, "sha256": sha(target)})
+        binding = {"path": relative, "sha256": sha(target)}
+        if _version == "2.0" and _quality_path(relative):
+            binding.update(hash_kind=QUALITY_PROJECTION, source_sha256=binding["sha256"], sha256=_scientific_file(target))
+        rows.append(binding)
         if len(rows) > 10000:
             raise ValueError("review material inventory exceeds its bound")
     from scripts.literature_source_tasks import selected_context
@@ -131,13 +178,16 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
     if purpose=="stage" and stage=="writing-and-review":
         from scripts.research_phase import requires_submission
         if not requires_submission(project,stage,paper_id):purpose="scientific_writing"
-    snapshot = {"stage": stage, "paper_id": paper_id, "files": rows, "sha256": _digest(rows),"review_purpose":purpose}
+    identities = _material_identity({"files": rows, "schema_version": _version})["files"]
+    snapshot = {"stage": stage, "paper_id": paper_id, "files": rows, "sha256": _digest(identities),"review_purpose":purpose}
+    if _version == "2.0":
+        snapshot["schema_version"] = _version
     if increment_inputs is not None:
         snapshot["research_increments"] = increment_inputs
-        snapshot["sha256"] = _digest({"files": rows, "research_increments": increment_inputs})
+        snapshot["sha256"] = _digest({"files": identities, "research_increments": increment_inputs})
     if purpose == "supplemental_protocol":
         snapshot["declared_raw_inputs"] = _declared_raw_inputs(project, rows)
-        snapshot["sha256"] = _digest({"files": rows, "declared_raw_inputs": snapshot["declared_raw_inputs"],
+        snapshot["sha256"] = _digest({"files": identities, "declared_raw_inputs": snapshot["declared_raw_inputs"],
             **({"research_increments": increment_inputs} if increment_inputs is not None else {})})
     return snapshot
 
@@ -199,7 +249,8 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
     from scripts.paper_execution import enabled
     paper_id = state.get("active_paper") if gate == "G5" or (enabled(project) and gate in {"G3","G4"}) else None
     key = _key(gate, paper_id)
-    if materials != material_snapshot(project, stage, paper_id):
+    if not materials_match(materials, material_snapshot(project, stage, paper_id,
+                                                      _version=materials.get("schema_version", "1.0"))):
         raise ValueError("scientific inputs changed during independent criticism; review current sources again")
     relative = audit_path.relative_to(project).as_posix()
     path_in(project, relative)
@@ -267,6 +318,7 @@ def observation(project: Path, stage: str, paper_id: str | None = None) -> dict:
             or receipt.get("stage") != stage or receipt.get("paper_id") != paper
             or receipt.get("gate_authority") is not False):
         raise ValueError("advisory observation identity or source binding changed")
+    _material_identity(receipt["materials"])
     _identity(receipt["identity"], receipt["writer_family"])
     audit = path_in(project, receipt["audit"]["path"])
     _owned(project, audit)
@@ -298,7 +350,8 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None, *, expe
             raise ValueError("independent review receipt gate/paper/phase mismatch")
         if final["materials"].get("review_purpose","stage")!=expected_purpose:
             raise ValueError("a protocol-only independent audit cannot approve the parent scientific stage")
-        if final["materials"] != material_snapshot(project, STAGES[gate], expected_paper):
+        if not materials_match(final["materials"], material_snapshot(project, STAGES[gate], expected_paper,
+                                                                    _version=final["materials"].get("schema_version", "1.0"))):
             raise ValueError("independent final review is stale for current scientific inputs")
         _identity(final["identity"], final["writer_family"])
         initial_path = path_in(project, final["initial"]["path"])

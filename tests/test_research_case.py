@@ -111,6 +111,18 @@ class ResearchCaseTests(unittest.TestCase):
         self.assertNotIn("case", limited)
         self.assertNotIn("variants", limited)
 
+    def test_evidence_refresh_reuses_complete_comparison_archive_separate_from_manuscript(self):
+        evidence.refresh(self.project)
+        archives = list((self.project / "experiments/archive/P01").glob("comparisons-*.json"))
+        self.assertEqual(len(archives), 1)
+        saved = read(archives[0])
+        self.assertEqual(saved["comparisons"], evidence.build_report(self.project, "P01")["comparisons"])
+        before = archives[0].stat().st_mtime_ns
+        evidence.refresh(self.project)
+        self.assertEqual(list((self.project / "experiments/archive/P01").glob("comparisons-*.json")), archives)
+        self.assertEqual(archives[0].stat().st_mtime_ns, before)
+        self.assertFalse((self.project / "papers/P01/manuscript").exists())
+
     def test_paper_identity_and_symlink_sources_cannot_cross_scope(self):
         self.spec["paper_id"] = "P02"
         self.save()
@@ -132,14 +144,23 @@ class ResearchCaseTests(unittest.TestCase):
     def test_contribution_and_figures_use_actual_claim_and_test_ids(self):
         self.spec["contribution"] = {"headline_claim": "Mechanism works under condition X.", "counterclaim": "Mechanism works under condition X.",
                                      "claim_ids": ["other-paper"], "test_ids": ["invented"],
-                                     "reader_benefits": [{"reader": str(i), "benefit": "Know the boundary."} for i in range(3)]}
+                                     "reader_benefits": [{"reader": role, "benefit": "Know the boundary."} for role in ("Researcher", " researcher ", "RESEARCHER")]}
         self.spec["figure_first"] = [{"role": "negative_boundary", "claim_ids": ["C1"], "comparison_ids": ["weak"]}]
         self.save()
         findings = "; ".join(case.build_packet(self.project, "P01")["missing_evidence"])
         self.assertIn("distinguishable alternative", findings)
         self.assertIn("contracted claims", findings)
         self.assertIn("actual discriminating tests", findings)
+        self.assertIn("three distinct readers", findings)
         self.assertIn("adverse/control", findings)
+
+    def test_observed_figure_cannot_use_an_arbitrary_located_note(self):
+        note = text(self.project, "papers/P01/figure-note.txt", "An unverified observed figure claim.")
+        self.spec["figure_first"] = [{"role": "main_result", "phase": "observed", "claim_ids": ["C1"],
+            "comparison_ids": ["weak"], "source": {**note, "locator": "L1", "excerpt": "An unverified observed figure claim."}}]
+        self.save()
+        findings = case.build_packet(self.project, "P01")["missing_evidence"]
+        self.assertTrue(any("actual figure_story/publication_figures report" in item for item in findings))
 
     def test_preprint_uses_current_native_results_and_unknown_pid(self):
         self.manuscript()
@@ -383,6 +404,33 @@ class ResearchCaseTests(unittest.TestCase):
         self.assertEqual(environment["RESEARCH_OS_SEED"], "0")
         self.assertEqual(environment["PYTHONHASHSEED"], "0")
         self.assertEqual(hashes, {path: sha(root / "sources" / path) for path in hashes})
+
+    def test_host_replay_rejects_changed_or_symlinked_inputs_and_outputs_before_execution(self):
+        self.reproduction()
+        release = case.export(self.project, "P01", "reproduction")
+        root = self.project / release["path"]
+        for relative, mutation in (("experiments/code/table-input.json", "changed"),
+                                   ("experiments/code/table.py", "changed"),
+                                   ("experiments/code/table-input.json", "symlink"),
+                                   ("results/replayed-table.csv", "symlink")):
+            with self.subTest(relative=relative, mutation=mutation):
+                target = root / "sources" / relative
+                original = target.read_bytes()
+                if mutation == "changed":
+                    target.write_bytes(original + b"\nchanged after export\n")
+                else:
+                    outside = self.project.parent / "outside-replay-input"
+                    outside.write_bytes(original)
+                    target.unlink()
+                    target.symlink_to(outside)
+                try:
+                    with patch("subprocess.run") as invoke:
+                        with self.assertRaisesRegex(SystemExit, "frozen hash|without symlinks"):
+                            runpy.run_path(str(root / "reproduce.py"), run_name="__main__")
+                        invoke.assert_not_called()
+                finally:
+                    target.unlink()
+                    target.write_bytes(original)
 
     def test_docker_timeout_removes_only_its_own_container_and_keeps_inputs(self):
         # Unit-test the transport lifecycle only; the separate Docker acceptance

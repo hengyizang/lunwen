@@ -89,11 +89,14 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
     No check here acquires data, runs an experiment, submits, or invokes a model.
     """
     from scripts import citation_audit, journal_dossier, jcr_verify, venue_policy, venue_compliance
-    from scripts import manuscript_docx, automated_visual_review, reporting_checklist, study_routes, publication_disclosure
+    from scripts import manuscript_docx, revision_render, reporting_checklist, study_routes, publication_disclosure
     paper=project/"papers"/paper_id;errors=validate_selected_venue(project,paper_id)
     def check(label, callback):
         try:errors.extend(f"{paper_id} {label}: {issue}" for issue in callback())
         except (OSError,ValueError,RuntimeError,KeyError,TypeError,ImportError) as exc:errors.append(f"{paper_id} {label}: {exc}")
+    def rendered_pdf():
+        revision_render.validate_render_manifest(paper)
+        return []
     # Quartiles and impact factors describe targets; they are not scientific
     # validity or automatic venue-fit cutoffs. Preserve unknown metadata.
     if warnings is not None:
@@ -124,11 +127,11 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
             usage=citation.get("citation_usage",{})
             if mapping_errors or current_keys-bib_keys or usage.get("status")!="checked_automatically" or sorted(current_keys)!=usage.get("cited_keys"):
                 errors.append(f"{paper_id} DOCX citation mapping is incomplete or stale")
-        else:check("final PDF",lambda:automated_visual_review.verify(project,paper_id,f"papers/{paper_id}/manuscript/main.tex"))
+        else:check("final PDF",rendered_pdf)
         files=select_files(paper)
         require_final_origins(project,files)
     except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:errors.append(f"{paper_id} final package: {exc}")
-    check("DOCX export",lambda:manuscript_docx.validate_saved_report(paper))
+    check("DOCX export",lambda:manuscript_docx.validate_saved_report(paper,include_visual=False))
     check("reporting guideline",lambda:reporting_checklist.validate_saved_report(paper))
     check("research exports",lambda:study_routes.export_errors(project,paper_id))
     # Check truthful internal usage; public AI-use statements are author-editable.
@@ -177,7 +180,7 @@ def submission_check_binding(project: Path, paper_id: str) -> str:
             for path in base.rglob("*"):
                 if path.is_symlink():raise ResearchCtlError("Submission inputs cannot use symlinks")
                 if path.is_file():paths.add(path)
-    fixed=("venue.json","jcr-verification.json","reviews/venue-compliance.json","reviews/citation-audit.json","reviews/panel-inputs.json","disclosures.json")
+    fixed=("venue.json","jcr-verification.json","reviews/venue-compliance.json","reviews/citation-audit.json","reviews/panel-inputs.json","reviews/revision-render.json","reviews/cloud-tex-build.json","reviews/cloud-word-build.json","disclosures.json")
     paths.update(paper/name for name in fixed if (paper/name).is_file())
     for name in ("jcr-verification.json","reviews/citation-audit.json","reviews/panel-inputs.json"):
         if (paper/name).is_file():sources(load_object(paper/name))
@@ -190,7 +193,7 @@ def submission_check_binding(project: Path, paper_id: str) -> str:
         paths.add(latest)
         sources(load_object(latest))
         for row in review_panel.responses(project,paper_id):sources(row["receipt"])
-    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py","citation_audit.py","manuscript_docx.py","automated_visual_review.py","reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py")
+    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py","citation_audit.py","manuscript_docx.py","revision_render.py","cloud_runtime.py","word_render.py","reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py")
     payload={"schema_version":"1.0","paper_id":paper_id,"journal_dossiers":selected,"journal_receipts":receipts,
         "files":{path.relative_to(project).as_posix():file_sha256(path) for path in sorted(paths)},
         "validators":{name:file_sha256(Path(__file__).parent/name) if (Path(__file__).parent/name).is_file() else None for name in module_names},

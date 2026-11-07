@@ -12,6 +12,35 @@ from tests.research_cycle_fixtures import pending_decision
 
 
 class ReviewCycleModeTests(unittest.TestCase):
+    def test_current_scientific_decision_survives_C_only_refresh_after_actual_review(self):
+        from tests.test_quality_gate import report
+        write(self.project / "state/run.json", {"stage": "topic-intelligence", "gate": "G1", "active_paper": "P01"})
+        pending_decision(self.project, "topic-intelligence", "actual")
+        quality = report("G1")
+        write(self.project / "program/quality-G1.json", quality)
+        def refresh_C(*args):
+            quality["scores"]["publication_potential"] = 1
+            quality["assessments"] = {"publication_potential": {"status": "unresolved"}}
+            write(self.project / "program/quality-G1.json", quality)
+        result = research_cycle.review_cycle(self.project, "topic-intelligence", "actual", writer_family="openai",
+            prompt=lambda: "Inspect current synthetic sources", invoke=self.invoke, remediate=lambda *args: self.fail("No repair"),
+            refresh=lambda phase: ({}, {}), writer_notes=[], log=refresh_C)
+        self.assertEqual(result["research_decision"]["status"], "independently_observed")
+        self.assertEqual(research_cycle.decision_errors(result["research_decision"]), [])
+        self.assertEqual(self.calls, ["initial"])
+
+    def test_independent_assessment_errors_prevent_submission_transition(self):
+        decision = {"errors": [], "review_errors": ["the latest critic assessed a different cycle"]}
+        with patch("scripts.supplemental_experiments.automatic_approval", return_value={}) as approve, patch(
+            "scripts.research_phase.enter_submission"
+        ) as transition:
+            result = research_cycle.after_reviews(self.project, "writing-and-review", "actual", decision, lambda: [])
+        transition.assert_not_called()
+        approve.assert_not_called()
+        self.assertNotIn("writing_phase_transition", result)
+        self.assertEqual(research_cycle.decision_errors(decision),
+                         ["research decision: the latest critic assessed a different cycle"])
+
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)

@@ -22,9 +22,10 @@ class JudgmentSupportTests(unittest.TestCase):
         target.write_text(text, encoding="utf-8"); record(self.project, [target], "synthetic-source-fixture")
         return {"path": relative, "sha256": sha(target), "locator": "whole retained source"}
 
-    def anchors(self, *, public=False):
+    def anchors(self, *, public=False, count=2):
         cases = []
-        for index, partition in enumerate(("calibration", "holdout")):
+        for index in range(count):
+            partition = "holdout" if index == count - 1 or index % 3 == 2 else "calibration"
             source = self.text(f"literature/anchors/paper-{index}.txt", f"Synthetic original method {index}.")
             row = {"id": "case-" + str(index), "paper_doi": f"10.1000/fixture-{index}", "partition": partition,
                 "source": source, "quote": f"Synthetic original method {index}.", "label": "should_merge",
@@ -45,7 +46,10 @@ class JudgmentSupportTests(unittest.TestCase):
 
     def prediction(self, name, outcome):
         target = self.project / f"evidence/predictions/{name}.json"
-        write(target, {"anchor_labels": [{"case_id": "case-" + str(i), "outcome": outcome} for i in range(2)]})
+        packet = benchmark.judgment_benchmark(self.project, {"schema_version": "1.0", "id": "anchors",
+            "anchor_set": {"path": "program/anchor-labels.json", "sha256": sha(self.project / "program/anchor-labels.json"), "locator": "fixture"}})
+        write(target, {"anchor_labels": [{"case_id": row["id"], "case_sha256": row["case_sha256"], "outcome": outcome,
+            "rationale": "Synthetic outcome fixture, not an empirical model prediction."} for row in packet["blind_cases"]]})
         provenance.record_model_writes(self.project, [target], family="anthropic", provider="fixture",
             model=name, role="independent-critic", run_id="synthetic-prediction")
         return {"path": target.relative_to(self.project).as_posix(), "sha256": sha(target), "locator": "whole original response"}
@@ -56,6 +60,7 @@ class JudgmentSupportTests(unittest.TestCase):
         self.assertFalse(result["requested_anchor_design_complete"])
         self.assertEqual(result["results"], [])
         self.assertEqual(result["calibration_status"], "NOT_CALIBRATED")
+        self.assertEqual(result["execution_status"], "no_predictions")
 
     def test_real_label_mechanism_separates_original_papers_and_review_answers(self):
         spec = self.anchors(public=True)
@@ -76,9 +81,67 @@ class JudgmentSupportTests(unittest.TestCase):
     def test_wrong_predictions_are_measured_and_distinct_models_not_averaged(self):
         spec = self.anchors()
         spec["predictions"] = [self.prediction("wrong", "distinct"), self.prediction("matching", "should_merge")]
-        rows = benchmark.judgment_benchmark(self.project, spec)["results"]
+        report = benchmark.judgment_benchmark(self.project, spec)
+        rows = report["results"]
+        self.assertEqual(report["execution_status"], "complete")
+        self.assertFalse(report["numeric_score_calibration_verified"])
+        self.assertTrue(all(row["comparison_complete"] and not row["runtime_receipt_verified"] for row in rows))
         self.assertEqual([r["should_merge_detection"] for r in rows], [0, 1])
         self.assertEqual([r["partitions"]["holdout"]["agreement"] for r in rows], [0, 1])
+
+    def test_benchmark_distinguishes_partial_predictions_and_rejects_different_case_sources(self):
+        spec = self.anchors()
+        prediction = self.prediction("partial", "should_merge")
+        path = self.project / prediction["path"]
+        payload = read(path)
+        payload["anchor_labels"].pop()
+        write(path, payload)
+        provenance.record_model_writes(self.project, [path], family="anthropic", provider="fixture",
+            model="partial", role="independent-critic", run_id="synthetic-prediction")
+        prediction["sha256"] = sha(path)
+        spec["predictions"] = [prediction]
+        result = benchmark.judgment_benchmark(self.project, spec)
+        self.assertEqual(result["execution_status"], "partial")
+        self.assertEqual(result["results"][0]["partitions"]["holdout"]["missing_case_ids"], ["case-1"])
+        self.assertIsNone(result["results"][0]["partitions"]["holdout"]["agreement"])
+        anchor_path = self.project / spec["anchor_set"]["path"]
+        anchors = read(anchor_path)
+        anchors["cases"][0]["question"] = "A different scientific question with the same case ID."
+        write(anchor_path, anchors)
+        spec["anchor_set"]["sha256"] = sha(anchor_path)
+        with self.assertRaisesRegex(ValueError, "different blind source/question"):
+            benchmark.judgment_benchmark(self.project, spec)
+
+    def test_global_benchmark_reuses_current_protected_observation_without_a_new_model_call(self):
+        spec = self.anchors()
+        prediction = self.prediction("existing", "should_merge")
+        response = {"receipt": {"response": {"path": prediction["path"], "sha256": prediction["sha256"]},
+            "identity": {"requested_model": "existing"}}, "response": read(self.project / prediction["path"])}
+        with patch.object(tasks, "judgment_responses", return_value=[response]) as observations:
+            report = benchmark.judgment_benchmark(self.project, spec)
+        observations.assert_called_once_with(self.project, None)
+        self.assertTrue(report["results"][0]["runtime_receipt_verified"])
+        self.assertEqual(report["execution_status"], "complete")
+        self.assertFalse(report["model_call_made"])
+
+    def test_complete_public_design_needs_protected_runtime_before_claiming_empirical_comparison(self):
+        # This is a synthetic 24-case transport fixture, not a new public corpus.
+        spec = self.anchors(public=True, count=24)
+        prediction = self.prediction("existing", "should_merge")
+        spec["predictions"] = [prediction]
+        report = benchmark.judgment_benchmark(self.project, spec)
+        self.assertTrue(report["requested_anchor_design_complete"])
+        self.assertEqual(report["execution_status"], "complete")
+        self.assertEqual(report["calibration_status"], "NOT_CALIBRATED")
+        response = {"receipt": {"response": {"path": prediction["path"], "sha256": prediction["sha256"]},
+            "identity": {"requested_model": "existing"}}, "response": read(self.project / prediction["path"])}
+        with patch.object(tasks, "judgment_responses", return_value=[response]):
+            report = benchmark.judgment_benchmark(self.project, spec)
+        self.assertEqual(report["calibration_status"], "EMPIRICAL_COMPARISON_COMPLETE")
+        self.assertEqual([report["results"][0]["partitions"][part]["predictions"]
+            for part in ("calibration", "holdout")], [16, 8])
+        self.assertFalse(report["numeric_score_calibration_verified"])
+        self.assertFalse(report["scientific_completion_verified"])
 
     def test_anchor_paper_identity_requires_a_real_doi_shape(self):
         for public in (False, True):
@@ -95,6 +158,13 @@ class JudgmentSupportTests(unittest.TestCase):
         values = read(target); values["cases"][1]["paper_doi"] = values["cases"][0]["paper_doi"]; write(target, values)
         spec["anchor_set"]["sha256"] = sha(target)
         with self.assertRaisesRegex(ValueError, "leak"):
+            benchmark.judgment_benchmark(self.project, spec)
+        spec = self.anchors()
+        values = read(target)
+        values["cases"][1].update(source=values["cases"][0]["source"], quote=values["cases"][0]["quote"], partition="calibration")
+        write(target, values)
+        spec["anchor_set"]["sha256"] = sha(target)
+        with self.assertRaisesRegex(ValueError, "different paper DOIs"):
             benchmark.judgment_benchmark(self.project, spec)
 
     def test_model_authored_text_cannot_impersonate_published_review_anchor(self):
@@ -118,6 +188,40 @@ class JudgmentSupportTests(unittest.TestCase):
         self.assertEqual(result["pairs"][0]["decision"], "insufficient")
         self.assertTrue(result["source_validation_errors"])
         self.assertFalse(result["novelty_verified"])
+
+    def test_each_novelty_pair_needs_its_own_bound_neighbours_and_adjacent_fields(self):
+        claims = [{"claim_id": "N" + str(i), "paper_ids": ["P01" if i % 2 else "P02"],
+                   "closest_work_ids": ["W" + str(n) for n in range(1, 4 if i <= 2 else 6)]}
+                  for i in range(1, 5)]
+        write(self.project / "program/novelty-claim-matrix.json", {"claims": claims})
+        originality = {"closest_prior_work": [{"id": "W" + str(i), "primary_source_url": f"https://doi.org/10.1000/fixture-{i}"}
+                                             for i in range(1, 6)],
+                       "search_scope": {"adjacent_fields": ["Field A", "Field B", "Field C"]}}
+        write(self.project / "program/originality-audit.json", originality)
+        spec = {"schema_version": "1.0", "id": "pair-coverage", "paper_id": "P01", "pairs": [
+            {"claim_ids": ids, "question": "Does this synthetic contrast change a prediction?"}
+            for ids in (["N1", "N2"], ["N3", "N4"])]}
+        observed = [{"receipt": {"response": {"path": "fixture-review", "sha256": "a" * 64},
+                                 "identity": {"family": "anthropic"}},
+                     "response": {"novelty_adjudication": [
+                         {"claim_ids": row["claim_ids"], "decision": "distinct",
+                          **dict.fromkeys(("rationale", "shared_mechanism", "discriminating_prediction", "remaining_uncertainty"),
+                                          "Synthetic finding, not scientific clearance.")}
+                         for row in spec["pairs"]]}}]
+        # Source authenticity is separately exercised by the hard-gate tests;
+        # isolate whether global coverage can conceal a deficient pair here.
+        with patch.object(innovation, "validate_novelty_gate", return_value=[]):
+            report = innovation.adjudication(self.project, spec, observed=observed)
+            self.assertEqual(len(report["nearest_works"]), 5)
+            self.assertEqual([p["decision"] for p in report["pairs"]], ["insufficient", "distinct"])
+            self.assertIn("five distinct", report["pairs"][0]["coverage_gaps"][0])
+            originality["search_scope"]["adjacent_fields"] = ["Field A", "field a", "Field B"]
+            write(self.project / "program/originality-audit.json", originality)
+            observed[0]["response"]["novelty_adjudication"][0]["decision"] = "should_merge"
+            report = innovation.adjudication(self.project, spec, observed=observed)
+            self.assertEqual([p["decision"] for p in report["pairs"]], ["insufficient", "insufficient"])
+            self.assertTrue(report["pairs"][0]["merge_concern_present"])
+            self.assertFalse(report["novelty_verified"])
 
     def test_failed_memory_keeps_original_evidence_and_does_not_recycle_model_text_as_fact(self):
         original = self.text("results/failed-check.txt", "The discriminating check did not resolve the mechanism.")

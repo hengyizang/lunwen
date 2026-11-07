@@ -42,7 +42,16 @@ def work_inputs(project: Path) -> str:
     paths.extend((project / "experiments/papers").glob("P[0-9][0-9]/plan.json"))
     paths.extend((project / "papers").glob("P[0-9][0-9]/preregistration.json"))
     paths.extend(primary_registry_paths(project))
-    return digest({p.relative_to(project).as_posix(): sha(p)
+
+    def fingerprint(path):
+        if path.suffix == ".json":
+            try:
+                return digest(read(path))
+            except (ValueError, UnicodeDecodeError):
+                pass  # Retain unreadable/invalid input identity for diagnosis.
+        return sha(path)
+
+    return digest({p.relative_to(project).as_posix(): fingerprint(p)
                    for p in sorted(set(paths)) if p.is_file() and not p.is_symlink()})
 
 

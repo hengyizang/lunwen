@@ -89,7 +89,22 @@ def approve_visual_review(project:Path,paper:Path,reviewed_by:str)->dict[str,Any
     value=json.loads(receipt.read_text());
     if value.get("output",{}).get("sha256")!=sha256_file(manuscript):raise ValueError("stale DOCX receipt")
     value["visual_review"]={"status":"passed","reviewed_by":reviewed_by.strip(),"reviewed_at":now()};receipt.write_text(json.dumps(value,indent=2,ensure_ascii=False)+"\n");output_provenance.record_model_writes(project,[receipt],family="other",provider="human-visual-review",model="manual-docx-inspection",role="docx-visual-approval",run_id="docx-review-"+value["output"]["sha256"][:16]);return value
-def validate_saved_report(paper:Path)->list[str]:
+def visual_observations(paper:Path,value:dict|None=None)->list[str]:
+    manuscript=paper/"manuscript"/"main.docx"
+    if not manuscript.is_file():return []
+    if value is None:
+        try:value=json.loads((paper/"reviews"/"docx-build.json").read_text())
+        except (OSError,ValueError) as exc:return [f"DOCX appearance observation unavailable: {exc}"]
+    if not isinstance(value,dict):return ["DOCX appearance record must be an object"]
+    visual=value.get("visual_review",{})
+    if not isinstance(visual,dict):return ["DOCX appearance record is malformed"]
+    if visual.get("status")=="passed" and all(isinstance(visual.get(key),str) and visual[key].strip() for key in ("reviewed_by","reviewed_at")):
+        return []
+    from scripts.automated_visual_review import verify
+    return verify(paper.parents[1],paper.name,manuscript.relative_to(paper.parents[1]).as_posix())
+
+
+def validate_saved_report(paper:Path,*,include_visual:bool=True)->list[str]:
     manuscript=paper/"manuscript"/"main.docx"
     if not manuscript.is_file():return []
     project=paper.parents[1]
@@ -97,13 +112,10 @@ def validate_saved_report(paper:Path)->list[str]:
     if not receipt.is_file():return ["Word manuscript requires reviews/docx-build.json"]
     try:value=json.loads(receipt.read_text())
     except (OSError,json.JSONDecodeError) as exc:return [f"cannot read DOCX receipt: {exc}"]
+    if not isinstance(value,dict):return ["DOCX build receipt must be an object"]
     errors=[]
     if value.get("output",{}).get("sha256")!=sha256_file(manuscript):errors.append("DOCX build receipt is stale")
-    visual=value.get("visual_review",{})
-    legacy_human=(visual.get("status")=="passed" and isinstance(visual.get("reviewed_by"),str) and visual["reviewed_by"].strip() and isinstance(visual.get("reviewed_at"),str) and visual["reviewed_at"].strip())
-    if not legacy_human:
-        from scripts.automated_visual_review import verify
-        errors.extend(verify(project,paper.name,manuscript.relative_to(project).as_posix()))
+    if include_visual:errors.extend(visual_observations(paper,value))
     for field in ("source","metadata"):
         record=value.get(field,{}) if isinstance(value.get(field),dict) else {}
         relative=Path(str(record.get("path") or ""))

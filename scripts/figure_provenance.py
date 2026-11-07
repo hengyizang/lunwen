@@ -127,8 +127,8 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
     return relative
 
 
-def register_rendered_figures(project:Path,report:dict)->list[str]:
-    """Register a native render from its exact executor/data lineage, pending visual QA."""
+def rendered_sources(project:Path,report:dict):
+    """Inspect current native render bindings without registering or approving it."""
     from scripts.research_artifacts import path_in, read, sha
     from scripts.figure_lineage import receipt_path
     rendering=report.get("render_receipt",{})
@@ -165,17 +165,45 @@ def register_rendered_figures(project:Path,report:dict)->list[str]:
             derived_path=receipt_path(project,row["path"])
             derived=read(derived_path)
             runs.update(derived.get("source_run_ids",[]))
+    if any(not row["path"].startswith(f"papers/{paper_id}/figures/") for row in outputs):
+        raise ValueError("mixed paper figure outputs")
+    return paper_id,inputs,sorted(runs)
+
+
+def register_rendered_figures(project:Path,report:dict)->list[str]:
+    """Register a native render from its exact executor/data lineage, pending visual QA."""
+    paper_id,inputs,runs=rendered_sources(project,report)
     # record_figure -> figure_lineage.lineage replays every derived input and
     # revalidates full G3/executor seals; matching a path alone grants nothing.
     registered=[]
-    for row in outputs:
-        if not row["path"].startswith(f"papers/{paper_id}/figures/"):raise ValueError("mixed paper figure outputs")
+    for row in report["outputs"]:
         registered.append(record_figure(project,paper_id,row["path"],"data_chart",
             report["renderer_wrapper"]["path"],[row["path"] for row in inputs],sorted(runs),report["spec"]["path"]))
     return registered
 
 
-def validate_figure_provenance(project:Path,paper:Path)->list[str]:
+def _visual_observations(project:Path,paper:Path,relative:str,item:dict)->list[str]:
+    if item.get("review_kind")=="automated":
+        from scripts.automated_visual_review import verify
+        return [f"{relative}: {issue}" for issue in verify(project,paper.name,relative)]
+    errors=[]
+    if item.get("figure_type")=="conceptual_illustration" and not str(item.get("human_content_checked_by","")).strip():
+        errors.append(f"{relative}: conceptual illustration content check is missing")
+    for kind in ("language","visual"):
+        if any(not isinstance(item.get(kind+"_checked_"+field),str) or not item[kind+"_checked_"+field].strip() for field in ("by","at")):
+            errors.append(f"{relative}: {'English-label' if kind=='language' else 'visual'} check is missing")
+    return errors
+
+
+def visual_observations(project:Path,paper:Path)->list[str]:
+    """Read appearance observations without repeating scientific source checks."""
+    registry=_load_registry(paper/"figures"/"figure-provenance.json")
+    return [issue for item in registry["figures"]
+            if isinstance(item,dict) and isinstance(item.get("figure_path"),str)
+            for issue in _visual_observations(project,paper,item["figure_path"],item)]
+
+
+def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=True)->list[str]:
     errors=[];figures_dir=paper/"figures"
     # Editable exports are auxiliary source-bearing artifacts, not an implicit
     # figure approval. Bind them to current sources even when no SVG was
@@ -189,8 +217,7 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
             errors.append(f"{receipt.relative_to(project).as_posix()}: editable export is stale or invalid: {exc}")
     actual={path.relative_to(project).as_posix() for path in figures_dir.rglob("*") if path.is_file() and path.suffix.lower() in FIGURE_SUFFIXES}
     registry_path=figures_dir/"figure-provenance.json"
-    if not actual:
-        if registry_path.is_file() and registry_path.stat().st_size:return errors
+    if not actual and (not registry_path.is_file() or not registry_path.stat().st_size):
         return errors
     try:registry=_load_registry(registry_path)
     except (OSError,ValueError,json.JSONDecodeError) as exc:return [f"cannot read registry: {exc}"]
@@ -208,18 +235,13 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
             illustration=item.get("figure_type")=="conceptual_illustration"
             if item.get("figure_type") not in FIGURE_TYPES:errors.append(f"{relative}: invalid figure type")
             if illustration:
-                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or (item.get("review_kind")!="automated" and not str(item.get("human_content_checked_by","")).strip()) or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
-                    errors.append(f"{relative}: conceptual illustration needs explicit source and actual visual review")
+                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
+                    errors.append(f"{relative}: conceptual illustration needs explicit source and prompt identity")
                 origin=output_provenance.current_origin(project,path)
                 if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: illustration needs current non-Claude provenance")
             elif item.get("deterministic") is not True or item.get("generated_by")!="local-tool":
                 errors.append(f"{relative}: invalid deterministic rendering declaration")
-            if item.get("review_kind")=="automated":
-                from scripts.automated_visual_review import verify
-                errors.extend(f"{relative}: {error}" for error in verify(project,paper.name,relative))
-            else:
-                if not isinstance(item.get("language_checked_by"),str) or not item["language_checked_by"].strip() or not isinstance(item.get("language_checked_at"),str) or not item["language_checked_at"].strip():errors.append(f"{relative}: English-label check is missing")
-                if not isinstance(item.get("visual_checked_by"),str) or not item["visual_checked_by"].strip() or not isinstance(item.get("visual_checked_at"),str) or not item["visual_checked_at"].strip():errors.append(f"{relative}: visual check is missing")
+            if include_visual:errors.extend(_visual_observations(project,paper,relative,item))
             renderer=item.get("renderer") if isinstance(item.get("renderer"),dict) else {};renderer_path,_=_relative(project,str(renderer.get("path","")),"renderer")
             if not renderer_path.is_file() or renderer.get("sha256")!=output_provenance.sha256_file(renderer_path):errors.append(f"{relative}: renderer hash is stale")
             origin=output_provenance.current_origin(project,renderer_path)

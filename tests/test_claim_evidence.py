@@ -298,6 +298,9 @@ class ClaimEvidenceTests(unittest.TestCase):
         bad["claims"].append({**bad["claims"][0], "claim_id": "renamed"})
         with self.assertRaisesRegex(ValueError, "duplicate claims"):
             claims.prepare(self.project, bad)
+        bad["claims"][1]["claim"] = bad["claims"][1]["claim"].replace(" ", "  ")
+        with self.assertRaisesRegex(ValueError, "duplicate claims"):
+            claims.prepare(self.project, bad)
         (self.paper / "references.bib").write_text('@article{known,doi={10.1000/other}}', encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "DOI/URL differs"):
             claims.prepare(self.project, self.spec)
@@ -307,6 +310,17 @@ class ClaimEvidenceTests(unittest.TestCase):
         packet = claims.prepare(self.project, self.spec)
         self.assertEqual(len(packet["sample_claim_ids"]), 3)
         self.assertEqual(packet["sample_claim_ids"], claims.prepare(self.project, self.spec)["sample_claim_ids"])
+        changed_request = copy.deepcopy(self.spec)
+        for row in changed_request["claims"]:
+            row["claim_id"] = "alias-" + row["claim_id"]
+            row["claim"] = row["claim"].replace(" ", "  ")
+        changed_request["claims"].reverse()
+        changed_packet = claims.prepare(self.project, changed_request)
+        def sampled_scopes(value):
+            return {tuple(use["usage_id"] for use in row["manuscript_usages"])
+                for row in value["claims"] if row["claim_id"] in value["sample_claim_ids"]}
+        self.assertEqual(sampled_scopes(packet), sampled_scopes(changed_packet))
+        self.assertNotEqual(packet["claim_fingerprint"], changed_packet["claim_fingerprint"])
         report = claims.assess(self.project, packet, [])
         self.assertIsNone(report["spot_check"]["target_met"])
         labels_path = self.project / "evidence/annotations/spot-check.json"

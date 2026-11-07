@@ -12,7 +12,7 @@ from unittest.mock import patch
 from scripts import artifact_ownership, cloud_checkpoint, cloud_job, experiment_runner as runner
 from scripts import meta_analysis_runtime as meta, research_quality as quality, study_route_acceptance as fixtures, study_routes
 from scripts import supplemental_experiments as supplemental, researchctl, cloud_human_controls, reviewer_rounds
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import read, sha, write, record
 
 
 class StudyRouteTests(unittest.TestCase):
@@ -23,6 +23,82 @@ class StudyRouteTests(unittest.TestCase):
 
     def fixture(self, kind="meta_analysis"):
         return fixtures.make_study(self.project, kind)
+
+    def test_empirical_paper_does_not_require_meta_or_theory_export(self):
+        with patch.object(study_routes, "build_report", side_effect=AssertionError("unrelated study route must not run")):
+            self.assertEqual(study_routes.export_errors(self.project, "P01"), [])
+
+    def presentation_report(self, kind):
+        """Source-backed presentation fixture, not a claimed executor success."""
+        protocol = self.fixture(kind)
+        if kind == "meta_analysis":
+            outcomes = meta.calculate(protocol, read(self.project / "evidence/extraction.json"))["outcomes"]
+            outcomes.append({**outcomes[0], "id": "unreported-extra"})
+            comparisons = [{"comparison_id": row["id"], "statistics": row} for row in outcomes]
+        else:
+            comparisons = [{"comparison_id": row["id"], "proof": {
+                "natural_language_statement": row["statement"],
+                "checked_type": row["declaration"] + " : " + row["formal_type"]}} for row in protocol["theorems"]]
+        source = self.project / "results/synthetic-presentation.json"
+        write(source, {"synthetic_presentation_fixture": True, "comparisons": comparisons})
+        return {"schema_version": "1.0", "paper_id": "P01", "route": kind, "status": "complete", "errors": [],
+            "comparisons": comparisons, "synthetic_presentation_fixture": True,
+            "sources": [{"run_id": "study-original", "path": source.relative_to(self.project).as_posix(), "sha256": sha(source)}]}
+
+    def test_meta_and_theory_presented_subset_keeps_complete_separate_archive(self):
+        from scripts.experiment_evidence import comparison_archive
+        for kind in ("meta_analysis", "theory"):
+            with self.subTest(kind=kind):
+                self.project = Path(self.temporary.name) / ("presentation-" + kind)
+                report = self.presentation_report(kind)
+                fixtures.reporting_fixture(self.project, {**report, "comparisons": report["comparisons"][:1]})
+                archive = comparison_archive(self.project, "P01", report, create=True)
+                with patch.object(study_routes, "build_report", return_value=report):
+                    audit = study_routes.reporting_audit(self.project, "P01")
+                    self.assertEqual(audit["errors"], [], audit)
+                    self.assertEqual(len(audit["bindings"]), 1)
+                    self.assertEqual(audit["archived_result_ids"], sorted(row["comparison_id"] for row in report["comparisons"][1:]))
+                    self.assertEqual(audit["comparison_archive"], archive)
+                    mapping = read(self.project / "papers/P01/statistical-reporting-map.json")
+                    if kind == "meta_analysis":
+                        row = mapping["items"][0]
+                        before = row["excerpt"]
+                        row["excerpt"] = before.replace("estimate=" + row["values"]["estimate"], "estimate=1" + row["values"]["estimate"])
+                        manuscript = self.project / "papers/P01/manuscript/main.tex"
+                        manuscript.write_text(manuscript.read_text().replace(before, row["excerpt"]))
+                        row["location"]["sha256"] = sha(manuscript)
+                        write(self.project / "papers/P01/statistical-reporting-map.json", mapping)
+                        self.assertIn("computed estimate", " ".join(study_routes.reporting_audit(self.project, "P01")["errors"]))
+                    mapping["items"].append(mapping["items"][0])
+                    write(self.project / "papers/P01/statistical-reporting-map.json", mapping)
+                    self.assertIn("unique and registered", " ".join(study_routes.reporting_audit(self.project, "P01")["errors"]))
+                (self.project / "papers/P01/manuscript/main.tex").unlink()
+
+    def test_complete_study_export_uses_immutable_archive_without_auto_supplement(self):
+        report = self.presentation_report("meta_analysis")
+        with patch.object(study_routes, "build_report", return_value=report):
+            outputs = study_routes.export_results(self.project, "P01")
+            self.assertTrue(all(path.relative_to(self.project).as_posix().startswith("experiments/archive/P01/") for path in outputs))
+            before = outputs[0].stat().st_mtime_ns
+            self.assertEqual(study_routes.export_results(self.project, "P01"), outputs)
+            self.assertEqual(outputs[0].stat().st_mtime_ns, before)
+            self.assertEqual(study_routes.export_errors(self.project, "P01"), [])
+            self.assertFalse((self.project / "papers/P01/supplement/study-results").exists())
+            outputs[0].write_text("Changed archive")
+            self.assertTrue(study_routes.export_errors(self.project, "P01"))
+            with self.assertRaises(ValueError):
+                study_routes.export_results(self.project, "P01")
+
+    def test_legacy_study_exports_are_verified_without_relocation_or_overwrite(self):
+        report = self.presentation_report("theory")
+        legacy = self.project / "papers/P01/supplement/study-results/study-original.json"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_bytes((self.project / report["sources"][0]["path"]).read_bytes())
+        before = legacy.read_bytes(), legacy.stat().st_mtime_ns
+        with patch.object(study_routes, "build_report", return_value=report):
+            self.assertEqual(study_routes.export_errors(self.project, "P01"), [])
+            study_routes.export_results(self.project, "P01")
+        self.assertEqual((legacy.read_bytes(), legacy.stat().st_mtime_ns), before)
 
     def change(self, relative, callback):
         path = self.project / relative; value = read(path); callback(value); write(path, value)
@@ -415,6 +491,52 @@ class SupplementalGuardTests(unittest.TestCase):
         supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
         errors = supplemental.revision_errors(self.parent, "P01", require_reporting=False)
         self.assertTrue(any("confirmation" in e for e in errors))
+
+    def test_failed_supplemental_scope_is_archived_without_forcing_manuscript_text(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        plan = read(self.child / "experiments/plan.json")
+        entry = {"run_id": plan["runs"][0]["run_id"], "paper_id": "P01", "attempt_id": "synthetic-failure",
+            "status": "failed", "approved_plan_sha256": sha(self.child / "experiments/plan.json"), "estimated_cost_usd": 0}
+        write(self.child / "experiments/runs/synthetic-failure/run.json", entry)
+        (self.child / "experiments/registry.jsonl").write_text(json.dumps(entry) + "\n")
+        retired = supplemental.retire(self.parent, "P01", "Synthetic reviewer", "b" * 64, "124", "Retain this failed software fixture; no scientific success is claimed.")
+        self.assertFalse((self.child / "papers/P01/failed-study-reporting.json").exists())
+        self.assertEqual(supplemental.revision_errors(self.parent, "P01"), [])
+        self.assertFalse(supplemental.resume(self.parent, "P01")["executed"])
+        self.assertIn("no result is inferred", retired["failure_statement"])
+        with self.assertRaises(runner.ExperimentError):
+            runner.approved_plan(self.child, self.child / "experiments/plan.json", self.child / "experiments/budget.json")
+        (self.child / "experiments/runs/synthetic-failure/run.json").write_text("Changed failed record")
+        self.assertTrue(supplemental.revision_errors(self.parent, "P01"))
+
+    def test_confirmed_supplemental_exports_default_to_archive_and_keep_legacy_paths_readable(self):
+        supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")
+        control_path, control = supplemental.controls(self.parent, "P01", "R001")[0]
+        source = self.child / "results/synthetic-export.json"
+        write(source, {"synthetic_software_fixture_only": True})
+        report = {"paper_id": "P01", "route": "meta_analysis", "status": "complete", "errors": [], "comparisons": [],
+            "sources": [{"run_id": "study-original", "path": source.relative_to(self.child).as_posix(), "sha256": sha(source)}]}
+        write(self.child / "papers/P01/experiment-evidence.json", report)
+        payload = {"schema_version": "1.0", "paper_id": "P01", "scientific_completion_verified": False}
+        target = self.child / "papers/P01" / study_routes.CONFIRMATION
+        with patch.object(supplemental, "prepare_confirmation", return_value=(self.child, control_path, control, target, payload)), \
+                patch.object(study_routes, "build_report", return_value=report):
+            supplemental.confirm(self.parent, "P01", "Synthetic reviewer", "b" * 64, "124")
+        updated = read(control_path)
+        self.assertTrue(all(row["target"].startswith("experiments/archive/P01/") for row in updated["parent_exports"]))
+        self.assertFalse((self.parent / "papers/P01/supplement/reviewer-experiments").exists())
+        with patch.object(quality, "validate_g4_quality", return_value=[]):
+            self.assertEqual(supplemental.revision_errors(self.parent, "P01", require_reporting=False), [])
+            export = updated["parent_exports"][0]
+            legacy = self.parent / "papers/P01/supplement/reviewer-experiments/R001/s001/legacy.json"
+            legacy.parent.mkdir(parents=True)
+            legacy.write_bytes((self.parent / export["target"]).read_bytes())
+            export["target"] = legacy.relative_to(self.parent).as_posix()
+            write(control_path, updated)
+            record(self.parent, [control_path], "scripts/supplemental_experiments.py")
+            before = legacy.read_bytes(), legacy.stat().st_mtime_ns
+            self.assertEqual(supplemental.revision_errors(self.parent, "P01", require_reporting=False), [])
+            self.assertEqual((legacy.read_bytes(), legacy.stat().st_mtime_ns), before)
 
     def test_exploratory_followup_cannot_be_relabelled_confirmatory(self):
         path = self.child / "papers/P01/study-protocol.json"; value = read(path)

@@ -2,6 +2,11 @@
 
 Version 2.3 closes the requested implementation gaps without claiming that user-specific research, accounts or hardware have already been accepted. The machine-readable source of truth is `config/requirements-traceability.json`; run `python3 scripts/requirements_trace.py` to verify that every requirement still points to an existing implementation artifact.
 
+The owner's later [156-item eight-aspect checklist](acceptance/eight-aspects-2026-11-07.csv)
+separately records software verification, unmet numerical and architecture targets,
+missing real research and unavailable historical evidence. This P0/P1 capability
+table does not declare that broader checklist fully satisfied.
+
 ## P0 — operational foundation
 
 | Capability | Implemented evidence | Still requires |

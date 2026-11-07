@@ -52,3 +52,5 @@ class ManuscriptLexicalHintsTests(unittest.TestCase):
         self.assertEqual(result["errors"], [])
         self.assertTrue(result["pass"])
         self.assertFalse(any("lexical overclaim hint" in warning for warning in result["warnings"]))
+        self.assertFalse(result["semantic_coverage_verified"])
+        self.assertIn("declared fact/claim/argument anchors", result["coverage_basis"])
