@@ -18,7 +18,7 @@ import tempfile
 from urllib.parse import quote
 
 from scripts import literature_reading as reading, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-pdf.json"
 OUTPUT = "reports/literature-pdf"
@@ -351,21 +351,12 @@ def validate_saved_report(project: Path, request_path=REQUEST):
     prepared = _prepare(project, _request(project, request_path))
     directory = path_in(project, OUTPUT + "/" + prepared["id"], exists=False)
     manifest_path = path_in(project, OUTPUT + "/" + prepared["id"] + "/manifest.json")
-    if not matches_origin(project, manifest_path, model=MODULE, family="other"):
-        raise ValueError("PDF view needs current deterministic output provenance")
-    manifest = read(manifest_path)
-    if (manifest.get("fingerprint") != prepared["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__))
-            or manifest.get("request") != {"path": request_path, "sha256": sha(path_in(project, request_path))}):
-        raise ValueError("PDF view source, rights, request or implementation changed")
-    outputs = manifest.get("outputs", [])
-    if not isinstance(outputs, list) or len({x.get("path") for x in outputs}) != len(outputs):
-        raise ValueError("PDF view output inventory is invalid")
     expected = {p.relative_to(project).as_posix() for p in directory.iterdir() if p.is_file() and p != manifest_path}
-    if {x.get("path") for x in outputs} != expected or not {OUTPUT + "/" + prepared["id"] + "/report.json", OUTPUT + "/" + prepared["id"] + "/index.html"} <= expected:
+    if not {(directory / name).relative_to(project).as_posix() for name in ("report.json", "index.html")} <= expected:
         raise ValueError("PDF view output inventory changed")
-    for item in outputs:
-        if not item["path"].startswith(OUTPUT + "/" + prepared["id"] + "/") or sha(path_in(project, item["path"])) != item.get("sha256"):
-            raise ValueError("PDF view output changed")
+    validate_manifest(project, manifest_path, MODULE, expected,
+        metadata={"request": {"path": request_path, "sha256": sha(path_in(project, request_path))},
+                  "fingerprint": prepared["fingerprint"]})
     report = read(directory / "report.json")
     links, matrix_binding = _links(project, directory, prepared["paper"], prepared["sentences"])
     if (report.get("fingerprint") != prepared["fingerprint"] or report.get("source") != prepared["paper"]["source"]

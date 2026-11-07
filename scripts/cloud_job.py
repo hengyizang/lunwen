@@ -322,6 +322,38 @@ def git(*argv: str, cwd: Path | None = None, check: bool = True) -> subprocess.C
     return result
 
 
+def job_schema() -> dict:
+    """Export the envelope from the same action/selector tables as execution.
+
+    Types live in the schema. Scientific decisions, exact source/receipt checks
+    and operation-specific semantics remain in the existing native validators.
+    """
+    schema = json.loads((ROOT / "schemas/cloud-job.schema.json").read_text(encoding="utf-8"))
+    schema["required"] = sorted(COMMON - {"allow_paid"})
+    schema["properties"]["action"]["enum"] = sorted(EXTRA)
+    schema["properties"]["operation"]["enum"] = sorted(cloud_human_controls.ACTIONS)
+    clauses = [{"if": {"properties": {"action": {"const": action}}},
+                "then": {"propertyNames": {"enum": sorted(COMMON | fields)}}}
+               for action, fields in sorted(EXTRA.items())]
+    clauses += [
+        {"if": {"properties": {"action": {"enum": sorted(cloud_human_controls.ACTIONS)}}},
+         "then": {"required": ["expected_sha256", "note"], "not": {"required": ["operation"]}}},
+        {"if": {"properties": {"action": {"const": "review_dossier"}}}, "then": {"required": ["operation"]}}]
+    groups = {}
+    for action, fields in cloud_human_controls.SELECTORS.items():
+        groups.setdefault(tuple(sorted(fields)), []).append(action)
+    for fields, actions in sorted(groups.items()):
+        clauses.append({"if": {"anyOf": [
+            {"properties": {"action": {"enum": sorted(actions)}}},
+            {"properties": {"action": {"const": "review_dossier"}, "operation": {"enum": sorted(actions)}},
+             "required": ["operation"]}]}, "then": {"required": list(fields)}})
+    for action, fields in sorted(cloud_human_controls.DECISIONS.items()):
+        clauses.append({"if": {"properties": {"action": {"const": action}}},
+                        "then": {"required": sorted(fields)}})
+    schema["allOf"] = clauses
+    return schema
+
+
 def restore_state(slug: str) -> tuple[Path, str]:
     branch = f"cloud-state/{slug}"
     remote = git("ls-remote", "--exit-code", "origin", f"refs/heads/{branch}", check=False)
@@ -814,6 +846,7 @@ def cycle_command(job: dict, slug: str) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("schema", help="Print the current cloud job envelope as JSON Schema")
     validate = sub.add_parser("validate-event")
     validate.add_argument("--event", type=Path, required=True)
     validate.add_argument("--output", type=Path, required=True)
@@ -826,6 +859,9 @@ def main() -> int:
     comment.add_argument("--summary", type=Path, required=True)
     args = parser.parse_args()
     try:
+        if args.command == "schema":
+            print(json.dumps(job_schema(), ensure_ascii=False, indent=2))
+            return 0
         if args.command == "validate-event":
             job = issue_request(json.loads(args.event.read_text(encoding="utf-8"), object_pairs_hook=unique_pairs))
             args.output.parent.mkdir(parents=True, exist_ok=True)

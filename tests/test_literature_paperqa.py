@@ -111,7 +111,7 @@ class PaperQABridgeTests(WorkbenchFixture):
         payload = read(output)
         payload["semantic_support_verified"] = True
         write(output, payload)
-        with self.assertRaisesRegex(ValueError, "output or implementation changed"):
+        with self.assertRaisesRegex(ValueError, "output changed"):
             bridge.validate_saved_report(self.project)
 
     def test_sdk_version_mismatch_is_rejected_before_import(self):

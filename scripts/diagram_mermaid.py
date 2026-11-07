@@ -8,7 +8,7 @@ import html
 from pathlib import Path
 
 from scripts import editable_figures, research_diagrams, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest
+from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest, validate_manifest
 
 OUTPUT = "reports/diagram-mermaid"
 
@@ -96,19 +96,11 @@ def validate_saved_report(project: Path, request_path="program/diagram-mermaid.j
     fresh = build(project, request)
     directory = path_in(project, OUTPUT + "/" + fresh["id"], exists=False)
     manifest_path = directory / "manifest.json"
-    if not matches_origin(project, manifest_path, model="scripts/diagram_mermaid.py"):
-        raise ValueError("Mermaid manifest has no current deterministic provenance")
-    manifest = read(manifest_path)
-    if manifest["request"] != {"path": request_path, "sha256": sha(path_in(project, request_path))}:
-        raise ValueError("Mermaid request changed")
+    validate_manifest(project, manifest_path, "scripts/diagram_mermaid.py",
+        {(directory / name).relative_to(project).as_posix() for name in ("report.json", "diagram.mmd", "index.html")},
+        metadata={"request": {"path": request_path, "sha256": sha(path_in(project, request_path))}})
     if read(directory / "report.json") != fresh:
         raise ValueError("Mermaid source, evidence or report changed")
-    expected = {(directory / name).relative_to(project).as_posix() for name in ("report.json", "diagram.mmd", "index.html")}
-    if {item.get("path") for item in manifest["outputs"]} != expected or len(manifest["outputs"]) != 3:
-        raise ValueError("Mermaid output inventory changed")
     if (directory / "diagram.mmd").read_text(encoding="utf-8") != fresh["mermaid"]:
         raise ValueError("Mermaid code no longer matches the source topology")
-    for item in manifest["outputs"]:
-        if sha(path_in(project, item["path"])) != item["sha256"]:
-            raise ValueError("Mermaid output changed")
     return {"valid": True, "scientific_approval": False}

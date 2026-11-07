@@ -17,7 +17,7 @@ import uuid
 
 from scripts import evidence_retrieval, literature_review, literature_semantic, literature_workbench as wb
 from scripts import model_runtime, output_provenance, paper_qa
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-paperqa.json"
 OUTPUT = "reports/literature-paperqa"
@@ -258,14 +258,10 @@ def validate_saved_report(project: Path, request_file=REQUEST):
     prepared = _prepare(project, spec)
     directory = path_in(project, OUTPUT + "/" + spec["id"], exists=False)
     manifest_path = path_in(project, OUTPUT + "/" + spec["id"] + "/manifest.json")
-    if not matches_origin(project, manifest_path, family="other", model=MODULE):
-        raise ValueError("PaperQA2 bridge requires current deterministic manifest provenance")
-    manifest = read(manifest_path)
     target = path_in(project, OUTPUT + "/" + spec["id"] + "/report.json")
-    if (manifest.get("request") != {"path": request_file, "sha256": sha(project / request_file)}
-            or manifest.get("fingerprint") != prepared["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__))
-            or manifest.get("outputs") != [{"path": target.relative_to(project).as_posix(), "sha256": sha(target)}]):
-        raise ValueError("PaperQA2 bridge source, request, output or implementation changed")
+    validate_manifest(project, manifest_path, MODULE, {target.relative_to(project).as_posix()},
+        metadata={"request": {"path": request_file, "sha256": sha(path_in(project, request_file))},
+                  "fingerprint": prepared["fingerprint"]})
     report = read(target)
     if (report.get("fingerprint") != prepared["fingerprint"] or report.get("semantic_report") != prepared["semantic_report"]
             or report.get("sdk_version") != SDK_VERSION or report.get("sdk_source_revision") != SDK_REVISION):

@@ -23,6 +23,40 @@ def issue(value, *, owner=cloud_job.OWNER_ID):
 
 
 class CloudJobTests(unittest.TestCase):
+    def test_published_schema_matches_actual_actions_and_accepts_current_owner_envelopes(self):
+        from jsonschema import Draft202012Validator
+        schema = json.loads((cloud_job.ROOT / "schemas/cloud-job.schema.json").read_text())
+        self.assertEqual(schema, cloud_job.job_schema())
+        self.assertEqual(set(schema["properties"]["action"]["enum"]), set(cloud_job.EXTRA))
+        self.assertLessEqual(set.union(*cloud_job.EXTRA.values()), set(schema["properties"]))
+        validator = Draft202012Validator(schema)
+        for value in (
+            request("literature", request_file="program/reading-operation.json"),
+            request("auxiliary", manifest="evidence/auxiliary-jobs/check.json"),
+            request("routing_status"),
+            request("review_dossier", operation="confirm_review_packet", packet_id="review-one"),
+            request("amend_operating_constraints", allow_paid=True, new_ceiling_cny=300,
+                    target_submission_ready_date="2026-12-01", expected_sha256="a" * 64,
+                    note="The owner reviewed this actual cumulative operating amendment.")):
+            with self.subTest(action=value["action"]):
+                self.assertEqual(cloud_job.validate_request(value), value)
+                validator.validate(value)
+        value = request("cycle")
+        value.pop("allow_paid")
+        self.assertEqual(cloud_job.validate_request(value), value)
+        validator.validate(value)
+
+    def test_schema_and_runtime_reject_wrong_action_fields_and_incomplete_human_decisions(self):
+        from jsonschema import Draft202012Validator
+        validator = Draft202012Validator(cloud_job.job_schema())
+        for value in (request("status", request_file="program/reading-operation.json"),
+                      request("cycle", allow_paid="yes"), request("approve", gate="G1"),
+                      request("review_dossier", operation="confirm_review_packet")):
+            with self.subTest(value=value):
+                self.assertFalse(validator.is_valid(value))
+                with self.assertRaises(cloud_job.CloudJobError):
+                    cloud_job.validate_request(value)
+
     def test_owner_single_object_and_optional_legacy_paid_flag(self):
         self.assertEqual(cloud_job.issue_request(issue(request()))["action"], "status")
         self.assertEqual(cloud_job.issue_request(issue(request("free_jev_probe")))["action"], "free_jev_probe")

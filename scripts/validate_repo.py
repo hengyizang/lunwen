@@ -291,6 +291,9 @@ def main() -> int:
 
     for path in sorted((ROOT / "schemas").glob("*.json")):
         load_json(path, errors)
+    from scripts.cloud_job import job_schema
+    if load_json(ROOT / "schemas/cloud-job.schema.json", errors) != job_schema():
+        errors.append("cloud-job schema is stale; regenerate with python -m scripts.cloud_job schema")
     for path in sorted((ROOT / "venues").glob("*/venue.json")):
         validate_venue(path, errors)
     upstream_path = ROOT / "integrations" / "upstreams.lock.json"

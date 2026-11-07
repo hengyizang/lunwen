@@ -52,6 +52,36 @@ class LiteratureRoleBindingTests(unittest.TestCase):
             self.assertIsNone(item["inclusion_decision"])
         self.assertFalse(result["automatic_scientific_exclusion"])
 
+    @patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"})
+    def test_incomplete_or_rebound_output_inventory_cannot_lend_trust_to_a_report(self):
+        request = self.project / "program/literature-roles.json"
+        manifest = self.project / roles.OUTPUT / "manifest.json"
+        write(request, self.spec())
+        for mutation in (lambda value: value.update(files=[]),
+                         lambda value: value["files"].append(copy.deepcopy(value["files"][0])),
+                         lambda value: value.update(implementation_sha256="0" * 64)):
+            roles.refresh(self.project)
+            value = read(manifest)
+            mutation(value)
+            write(manifest, value)
+            record(self.project, [manifest], "scripts/literature_roles.py")
+            with self.assertRaisesRegex(ValueError, "inventory|implementation"):
+                roles.validate_saved_report(self.project)
+
+    @patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"})
+    def test_changed_report_and_resealed_hash_still_need_output_provenance(self):
+        write(self.project / "program/literature-roles.json", self.spec())
+        roles.refresh(self.project)
+        target = self.project / roles.OUTPUT / "index.html"
+        target.write_text("Untracked replacement", encoding="utf-8")
+        manifest = self.project / roles.OUTPUT / "manifest.json"
+        value = read(manifest)
+        next(item for item in value["files"] if item["path"].endswith("index.html"))["sha256"] = sha(target)
+        write(manifest, value)
+        record(self.project, [manifest], "scripts/literature_roles.py")
+        with self.assertRaisesRegex(ValueError, "output changed"):
+            roles.validate_saved_report(self.project)
+
     def test_duplicate_ledger_receipt_is_rejected_instead_of_last_row_wins(self):
         rows = intelligence.evidence.read_jsonl(self.ledger)
         self.jsonl(self.ledger, rows + [rows[0]])

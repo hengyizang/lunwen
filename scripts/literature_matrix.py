@@ -17,7 +17,7 @@ from pathlib import Path
 import re
 
 from scripts import literature_workbench as workbench
-from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest
+from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-extraction.json"
 OUTPUT = "reports/literature-matrix"
@@ -447,21 +447,12 @@ def refresh(project: Path, request_path=REQUEST, *, workbench_dir=None) -> dict:
 def validate_saved_report(project: Path, request_path=REQUEST) -> dict:
     project = Path(project).resolve()
     manifest_path = path_in(project, OUTPUT + "/manifest.json")
-    if not matches_origin(project, manifest_path, family="other", model="scripts/literature_matrix.py"):
-        raise ValueError("literature matrix requires current deterministic output provenance")
-    manifest = workbench._json(manifest_path.read_bytes())
-    if manifest.get("request") != {"path": request_path, "sha256": sha(path_in(project, request_path))}:
-        raise ValueError("literature extraction request changed")
+    manifest = validate_manifest(project, manifest_path, "scripts/literature_matrix.py",
+        {OUTPUT + "/" + name for name in ("matrix.json", "matrix.csv", "index.html", "matrix.md")},
+        metadata={"request": {"path": request_path, "sha256": sha(path_in(project, request_path))}})
     fresh = build(project, _request(project, request_path), workbench_dir=manifest.get("workbench_dir"))
-    if manifest.get("fingerprint") != fresh["fingerprint"] or manifest.get("implementation_sha256") != sha(Path(__file__)):
+    if manifest.get("fingerprint") != fresh["fingerprint"]:
         raise ValueError("literature matrix inputs or implementation changed")
-    expected = {OUTPUT + "/matrix.json", OUTPUT + "/matrix.csv", OUTPUT + "/index.html", OUTPUT + "/matrix.md"}
-    outputs = manifest.get("outputs")
-    if not isinstance(outputs, list) or {o.get("path") for o in outputs} != expected or len(outputs) != len(expected):
-        raise ValueError("literature matrix output inventory differs")
-    for item in outputs:
-        if sha(path_in(project, item["path"])) != item.get("sha256"):
-            raise ValueError("literature matrix output changed")
     saved = workbench._json(path_in(project, OUTPUT + "/matrix.json").read_bytes())
     if saved != fresh or path_in(project, OUTPUT + "/matrix.csv").read_text(encoding="utf-8") != csv_text(fresh) or path_in(project, OUTPUT + "/index.html").read_text(encoding="utf-8") != html_text(project, fresh):
         raise ValueError("literature matrix no longer reproduces its source-bound extraction")
