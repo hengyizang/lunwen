@@ -239,6 +239,33 @@ class ResearchMethodTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "5000"):
             scientific_reasoning.load_policy(root)
 
+    def test_legacy_intake_cannot_reintroduce_retired_gates_through_api_or_cli_context(self):
+        root = Path(self.temp.name)
+        project = root / "projects/legacy"
+        intake = write_json(project / "intake/constraints.json", {
+            "model_api_budget_cny": 500, "target_submission_ready_date": "2026-10-26",
+            "notes": ["CNY 60 per-paper hard limits and later explicit owner tranche approval.",
+                      "Human approval at every G0-G5 gate; Q1/Q2 and IF > 1.0 required."]})
+        original, digest = intake.read_bytes(), methods.sha256(intake)
+        write_json(root / "config/stages.json", {"stages": {"topic-intelligence": {"gate": "G1"}}})
+        state = {"stage": "topic-intelligence", "gate": "G1"}
+        with patch.object(api_orchestrator, "ROOT", root), patch.object(autopilot, "ROOT", root):
+            snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True)
+            prompts = [api_orchestrator.planning_prompt("legacy", state["stage"], ""),
+                       api_orchestrator.writer_prompt("legacy", state["stage"], ""),
+                       api_orchestrator.critic_prompt("legacy", state["stage"], ""),
+                       autopilot.planner_prompt("legacy", state, {}, ""),
+                       autopilot.writer_prompt("legacy", state, {}, "", project / "plan.json"),
+                       autopilot.critic_prompt("legacy", state)]
+        self.assertIn(digest, snapshot)
+        self.assertIn("CNY 60 per-paper hard limits", snapshot)
+        for prompt in prompts:
+            self.assertIn("CURRENT OPERATING POLICY overrides conflicting historical intake/template prose", prompt)
+            self.assertIn("Only actual G1/G2 topic choices need human approval", prompt)
+            self.assertIn("per-paper/per-call limits, tranche steps and paid opt-ins are superseded", prompt)
+            self.assertIn("never scientific or packaging floors", prompt)
+        self.assertEqual(intake.read_bytes(), original)
+
     def checklist(self):
         self.paper = self.project / "papers/P01"
         manuscript = self.paper / "manuscript/main.tex"

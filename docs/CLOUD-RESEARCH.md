@@ -150,6 +150,11 @@ identity, one JSON object, strict paths and operation-specific semantics before
 restoring a project. `allow_paid` is an optional legacy annotation; actual cumulative
 budget records govern paid work.
 
+Historical intake files retain their original bytes and approval hashes. The
+shared scientific role contract explicitly applies current gate, budget and venue
+rules when old prose describes per-paper limits, tranches or human approval at
+every gate. This changes no recorded budget total, deadline or G1/G2 topic choice.
+
 For an optional `free_jev_probe`, configure the repository secret
 `OPENROUTER_API_KEY` with a **dedicated key whose per-key limit and
 remaining limit are both USD 0, with BYOK usage included in the limit**.

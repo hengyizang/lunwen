@@ -763,13 +763,15 @@
         "scripts/output_provenance.py",
         "scripts/experiment_runner.py",
         "references/upstream-components.md",
-        "THIRD-PARTY-NOTICES.md"
+        "THIRD-PARTY-NOTICES.md",
+        "config/scientific-reasoning.json"
       ],
       "tests": [
         "tests/test_output_provenance.py",
-        "tests/test_experiment_evidence.py"
+        "tests/test_experiment_evidence.py",
+        "tests/test_research_methods.py"
       ],
-      "remaining": "Preserve existing requested/reported identity, secrets/HTTPS, raw source SHA, rights, all adverse results and actual G1/G2 choices. Preparation exports and software acceptance grant no publication or scientific authority. New panel/case/claim modules are native; no Markdown-as-Python import, full external orchestration, ARIS patent/what-if feature or 701-skill dump. Existing selected CC BY-NC adaptations retain attribution/license and pinned SHA; pinned implementation sources/licenses remain unchanged. The small public eLife excerpt manifest is separately attributed under CC BY 4.0; raw publisher responses stay outside Git.",
+      "remaining": "Preserve existing requested/reported identity, secrets/HTTPS, raw source SHA, rights, all adverse results and actual G1/G2 choices. Preparation exports and software acceptance grant no publication or scientific authority. New panel/case/claim modules are native; no Markdown-as-Python import, full external orchestration, ARIS patent/what-if feature or 701-skill dump. Existing selected CC BY-NC adaptations retain attribution/license and pinned SHA; pinned implementation sources/licenses remain unchanged. The small public eLife excerpt manifest is separately attributed under CC BY 4.0; raw publisher responses stay outside Git. The same bounded scientific role contract now explicitly supersedes conflicting historical intake prose on per-paper limits, tranche steps, all-gate human approval and venue floors. API and CLI planner/writer/critic handoffs preserve the original intake bytes and approval hashes; current rules neither change recorded totals/dates nor invent G1/G2 choices.",
       "source_sections": [
         "compendium: retained absolute constraints and untrusted upstream boundaries"
       ]
