@@ -14,6 +14,18 @@ from scripts import evidence_retrieval, literature_review, literature_workbench 
 from scripts.research_artifacts import path_in, record, sha, write
 
 OUTPUT = "reports/literature-benchmark/latest.json"
+ELIFE_STRENGTHS = {"inadequate", "incomplete", "solid", "convincing", "compelling", "exceptional"}
+
+
+def _anchor_label(value, space):
+    if not isinstance(value, str):
+        return False
+    if space == "claim_support_and_novelty":
+        return value in {"supports", "contradicts", "insufficient", "distinct", "should_merge"}
+    if space == "elife_evidence_strength":
+        parts = value.split("+")
+        return parts == sorted(set(parts)) and set(parts) <= ELIFE_STRENGTHS
+    raise ValueError("unsupported public-review label space")
 
 
 def _bound_json(project, binding, prefix):
@@ -206,6 +218,8 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
     anchors = read(anchor_file)
     if anchors.get("kind") not in {"public_review", "synthetic_fixture"}:
         raise ValueError("attribute actual public reviews or explicitly synthetic fixtures")
+    space = anchors.get("label_space", "claim_support_and_novelty")
+    _anchor_label("", space)
     labels, cases, partitions, paper_partitions = {}, [], {}, {}
     incoming = anchors.get("cases")
     if not isinstance(incoming, list) or not 1 <= len(incoming) <= 200:
@@ -219,7 +233,7 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
         quote = workbench._text(row.get("quote"), "public review quote")
         if target.stat().st_size > 4_000_000 or quote not in target.read_text(encoding="utf-8"):
             raise ValueError("anchor quote must occur in its exact original public review")
-        if row.get("label") not in {"supports", "contradicts", "insufficient", "distinct", "should_merge"}:
+        if not _anchor_label(row.get("label"), space):
             raise ValueError("unsupported actual anchor label")
         doi = workbench._text(row.get("paper_doi"), "original paper DOI")
         from scripts.citation_audit import normalize_doi
@@ -275,7 +289,7 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
     for checked, payload, model in retained:
         predictions = {}
         for row in payload.get("anchor_labels", []):
-            if row.get("case_id") not in labels or row.get("case_id") in predictions or row.get("outcome") not in {"supports", "contradicts", "insufficient", "distinct", "should_merge"}:
+            if row.get("case_id") not in labels or row.get("case_id") in predictions or not _anchor_label(row.get("outcome"), space):
                 raise ValueError("duplicate or out-of-scope benchmark prediction")
             predictions[row["case_id"]] = row["outcome"]
         bindings.append(checked)
@@ -293,5 +307,8 @@ def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
         "anchor_set": bound, "annotation_kind": anchors["kind"], "blind_cases": cases, "prediction_sources": bindings,
         "results": evaluations, "attributed_public_paper_count": len(paper_partitions) if anchors["kind"] == "public_review" else 0,
         "requested_anchor_design_complete": anchors["kind"] == "public_review" and 20 <= len(paper_partitions) <= 30 and set(paper_partitions.values()) == {"calibration", "holdout"},
-        "calibration_status": "NOT_CALIBRATED", "model_call_made": False, "scientific_completion_verified": False,
-        "role_contract": "Use blind_cases only; never inspect anchor labels or the answer-key source. Return anchor_labels:[{case_id,outcome,rationale}]. Preserve insufficient and should_merge; agreement on attributed reviews is not scientific validity, a quality score calibration or an acceptance probability."}
+        "label_space": space, "calibration_status": "NOT_CALIBRATED", "model_call_made": False, "scientific_completion_verified": False,
+        "role_contract": "Use blind_cases only; never inspect anchor labels or the answer-key source. Return anchor_labels:[{case_id,outcome,rationale}]. " +
+            ("Use the eLife evidence-strength taxonomy: " + ", ".join(sorted(ELIFE_STRENGTHS)) + ". For multiple applicable categories return their alphabetically sorted names joined by +. These are published assessment categories, not claim-support labels. "
+             if space == "elife_evidence_strength" else "Preserve insufficient and should_merge. ") +
+            "Agreement on attributed reviews is not scientific validity, a quality score calibration or an acceptance probability."}

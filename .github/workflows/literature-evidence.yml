@@ -5,9 +5,12 @@ on:
       - 'scripts/literature*'
       - 'scripts/evidence_retrieval.py'
       - 'scripts/paper_qa.py'
+      - 'scripts/public_review_anchors.py'
       - 'scripts/cloud_job.py'
       - 'scripts/cloud_research_steps.py'
       - 'tests/test_literature*'
+      - 'tests/test_public_review_anchors.py'
+      - 'docs/acceptance/elife-public-anchors-*.json'
       - 'config/research-methods.json'
       - 'references/research-methods/literature-reading.md'
       - '.github/workflows/literature-evidence.yml'
@@ -18,6 +21,45 @@ concurrency:
   group: literature-evidence-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  public-review-anchors:
+    name: Replay 24 licensed public-review papers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install base contracts without model credentials
+        run: python -m pip install --disable-pip-version-check .
+      - name: Reacquire exact original versions and separate review answers
+        run: >-
+          python -m scripts.public_review_anchors --cache artifacts/public-review-anchors
+          --replay docs/acceptance/elife-public-anchors-2026-11-07.json
+          --manifest artifacts/public-review-anchors-replay.json
+      - name: Preserve acquisition and license proof with the review key
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: public-review-anchors-source-proof-and-key
+          path: |
+            artifacts/public-review-anchors-replay.json
+            artifacts/public-review-anchors/originals/
+            artifacts/public-review-anchors/project/program/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve primary texts separately for blind assessment
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: public-review-anchors-blind-primary-texts
+          path: |
+            artifacts/public-review-anchors/project/evidence/public-review-anchors/**/primary.txt
+            artifacts/public-review-anchors/project/evidence/public-review-anchors/**/source-attribution.txt
+          if-no-files-found: error
+          retention-days: 14
   source-evidence:
     runs-on: ubuntu-latest
     timeout-minutes: 15

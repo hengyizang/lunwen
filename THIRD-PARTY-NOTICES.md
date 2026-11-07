@@ -37,3 +37,13 @@ included by this installation.
 
 `third_party/ccfa-skills/` contains the complete functional text/code/reference inventory of all 17 skills from [mikubaka88/CCFA-Skills](https://github.com/mikubaka88/CCFA-Skills), pinned to `f157d7ed2777b655809471873b32b9632e784cfa`. MIT license, copyright (c) 2026 Chaoyue Li; the unmodified license is included alongside the source. Canonical source hashes and the complete upstream Git blob/resource inventory are in `integrations/ccfa-skills.lock.json`. Binary templates and cached exemplar papers are available by exact pinned retrieval in cloud storage, not redistributed into this repository. Their individual research-use and redistribution rights must be checked separately. Project adapters in `skills/ccf-*` and `.agents/skills/ccf-*` preserve native model roles, approvals, evidence and budgets; see `docs/CCFA-INTEGRATION.md`.
 
+# Public eLife review anchors
+
+`docs/acceptance/elife-public-anchors-2026-11-07.json` contains attributed excerpts
+from 24 published eLife assessments, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Each record identifies its paper authors, paper and assessment DOI, source URLs,
+and the assessment's own Crossref license record. HTML markup was removed,
+entities decoded and excerpts shortened; no assessment label was invented.
+Full publisher responses remain outside Git. Cloud artifacts keep source texts
+with their attribution sidecars and keep review answers in a separate artifact.
+

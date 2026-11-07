@@ -6,6 +6,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
+from functools import lru_cache
 
 
 def sha(path: Path) -> str:
@@ -112,3 +113,91 @@ def bound_source(project: Path, value: dict) -> dict:
     if value.get("sha256") != actual or not str(value.get("locator", "")).strip():
         raise ValueError("source needs its current hash and a page/section/record locator")
     return {"path": value["path"], "sha256": actual, "locator": value["locator"]}
+
+
+@lru_cache(maxsize=64)
+def _schema_validator(source: bytes):
+    import math
+    from jsonschema import Draft202012Validator, ValidationError, validators
+    def number(checker, value):
+        try:
+            return type(value) in (int, float) and math.isfinite(value)
+        except OverflowError:
+            return False
+    def nonblank(validator, minimum, value, schema):
+        if isinstance(value, str) and len(value.strip()) < minimum:
+            yield ValidationError("string is empty or shorter than its declared minimum")
+    def unique(validator, required, value, schema):
+        normalized = [item.strip() if isinstance(item, str) else item for item in value] if isinstance(value, list) else value
+        yield from Draft202012Validator.VALIDATORS["uniqueItems"](validator, required, normalized, schema)
+    types = Draft202012Validator.TYPE_CHECKER.redefine_many({
+        "number": number, "integer": lambda checker, value: type(value) is int})
+    cls = validators.extend(Draft202012Validator, {"minLength": nonblank, "uniqueItems": unique}, type_checker=types)
+    return cls(json.loads(source))
+
+
+def _schema_source(name: str) -> bytes:
+    if Path(name).name != name or not name.endswith(".schema.json"):
+        raise ValueError("an exact repository schema name is required")
+    return (Path(__file__).resolve().parents[1] / "schemas" / name).read_bytes()
+
+
+def schema_contract(name: str) -> dict:
+    """Derive compact writer navigation from the same schema as validation."""
+    source = _schema_source(name)
+    document, required, conditions = json.loads(source), {}, {}
+    def visit(node, path):
+        if not isinstance(node, dict):
+            return
+        if node.get("required"):
+            required[path or "root"] = node["required"]
+        for key, child in node.get("properties", {}).items():
+            visit(child, (path + "." if path else "") + key)
+        if isinstance(node.get("items"), dict):
+            visit(node["items"], path + "[]")
+        for clause in node.get("allOf", []):
+            if "if" in clause:
+                conditions.setdefault(path or "root", []).append({"if": clause["if"], "required": clause.get("then", {}).get("required", [])})
+    visit(document, "")
+    root_values = []
+    for key, node in document.get("properties", {}).items():
+        values = node.get("enum", [node["const"]] if "const" in node else [])
+        if values:
+            root_values.append(key + "=" + "|".join(value if isinstance(value, str) else json.dumps(value) for value in values))
+    return {"schema": "schemas/" + name, "sha256": hashlib.sha256(source).hexdigest(),
+        "required_fields": required, "conditional_required_fields": conditions,
+        "root_values": root_values,
+        "optional_root_fields": sorted(set(document.get("properties", {})) - set(document.get("required", []))),
+        "scope": "field navigation; exact type/value and conditional rules remain in the referenced schema"}
+
+
+
+def schema_errors(value, name: str) -> list[str]:
+    """Use repository schemas once; scientific cross-record checks stay local.
+
+    Cache by current schema bytes, not a clock. Diagnostics never echo input
+    values, which can contain private research text.
+    """
+    validator = _schema_validator(_schema_source(name))
+    errors = []
+    for error in validator.iter_errors(value):
+        path = "".join(f"[{key}]" if isinstance(key, int) else ("." if index else "") + key
+                       for index, key in enumerate(error.absolute_path))
+        kind, expected = error.validator, error.validator_value
+        if kind == "required":
+            key = next((key for key in expected if f"{key!r} is a required property" == error.message), "required_field")
+            path += ("." if path else "") + key
+            message = "must be provided"
+        elif kind == "const": message = "must be " + str(expected)
+        elif kind == "enum":
+            message = "must be one of " + ", ".join(map(str, expected))
+            if None in expected:
+                message += " when supplied"
+        elif kind == "minItems": message = f"must contain at least {expected} item(s)"
+        elif kind == "minLength": message = "must be a non-empty string"
+        elif kind == "uniqueItems": message = "must not contain duplicates"
+        elif kind == "type": message = "must have type " + str(expected)
+        elif kind == "pattern" and expected == "^https://": message = "must use an HTTPS primary-source URL"
+        else: message = str(kind) + " constraint failed"
+        errors.append(f"{path or name}: {message}")
+    return list(dict.fromkeys(errors))

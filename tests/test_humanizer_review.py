@@ -226,13 +226,12 @@ class HumanizerReviewTests(unittest.TestCase):
         self.assertNotIn("gate", matches)
         self.assertNotIn("key", matches)
 
-    def test_prompt_requires_first_draft_self_review_and_final_with_stable_ids(self):
+    def test_prompt_retains_scientific_protection_without_compulsory_style_scorecards(self):
         prompt = review.prompt_contract()
         for number in range(1, 27):
             self.assertIn(f"H{number:02d} / {number}.", prompt)
-        self.assertIn("first draft", prompt)
-        self.assertIn("final version", prompt)
-        self.assertIn("fixed, rejected or unresolved", prompt)
+        self.assertIn("exhaustive per-ID notes and completed scorecards are not required", prompt)
+        self.assertNotIn("record EACH ID", prompt)
         self.assertIn("never fabricate personal experience", prompt)
         self.assertIn("code blocks, inline code, commands, paths, YAML metadata, data and link targets exactly", prompt)
         self.assertIn("unchanged model/effort", prompt)

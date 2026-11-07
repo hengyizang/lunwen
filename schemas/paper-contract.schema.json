@@ -29,7 +29,10 @@
   ],
   "properties": {
     "writing_phase": {
-      "enum": ["scientific", "submission"],
+      "enum": [
+        "scientific",
+        "submission"
+      ],
       "description": "Scientific drafting precedes explicit submission preparation; final G5 requires submission."
     },
     "schema_version": {
@@ -85,10 +88,12 @@
       ],
       "properties": {
         "current_paper_cloud_executable": {
-          "type": "boolean"
+          "type": "boolean",
+          "const": true
         },
         "no_future_lab_dependency": {
-          "type": "boolean"
+          "type": "boolean",
+          "const": true
         },
         "data_access_plan": {
           "type": "string"
@@ -312,7 +317,9 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string",

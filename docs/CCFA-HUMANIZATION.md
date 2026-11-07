@@ -37,25 +37,33 @@ they are not a claimed upstream rule count. They cover:
 - actual full-method comparisons, intended controlled/minimal studies, labeled
   ablations, proportionate smoke checks and experiment-to-paper consistency.
 
-The full original bilingual examples are present in each applicable contract.
+The full original bilingual examples are available in explicitly selected full-reference contracts.
 They explain how to replace defensive framing with its scientific payload and
 when an accurate negation, uncertainty, contrast or technical property must stay.
 
 For an explicitly selected complete editorial review, `disposition_contract()` supports the existing remediation-note format:
 `fixed: CFH01 <contextual reason>`, `rejected: CFH01 <contextual reason>` or
 `unresolved: CFH01 <contextual reason>`. `validate_dispositions(notes, stage)`
-can validate all 38 current IDs exactly once and a substantive reason of at least
-20 characters for every item. Other Humanizer, AD and actionable-finding notes
-retain their native validators. Unknown IDs, duplicates, ranges standing in for
-individual items, repeated pass flags and a checklist-wide copied rationale are
-rejected. Related criteria may share an actual inapplicability explanation;
-unresolved records remain visible C observations. A complete 38-row table is not required for G5 or packaging.
+validates only supplied optional observations, with unique current IDs and bounded
+nonempty reasons. Empty and partial lists are valid. Related observations may
+share an actual explanation; the parser checks format and never certifies that
+the reason is scientifically sound. Unresolved records remain visible C
+observations. Exhaustive CFH/H/AD tables are not required for G5 or packaging.
 `validate_disposition_records()` supports structured `id`, `disposition` and
 `reason` fields without changing the native bundle schema. Neither adapter
 claims to verify the truth of a reason or to replace source-bound semantic
 review.
 
 ## Deterministic Checks and Protected Information
+
+The native academic-style wrapper reuses one bounded adapter for proselint and
+Harper. Tool failures are reported as errors rather than empty successful output.
+Located native prose observations stay advisory. Stock-phrase density, minimum
+500-word eligibility, sentence-length ratios and cadence thresholds have been
+retired; the pinned upstream checker below remains optional contextual advice.
+Actual suppression of adverse evidence remains an integrity finding. Author
+field navigation and validation share the current repository JSON Schemas, so
+optional venue planning cannot become a hidden ranking or candidate-count gate.
 
 `audit_text()` reuses every upstream prose signal: English and Chinese defensive
 framing, openings, internal engineering status, vague terminology, repeated

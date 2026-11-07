@@ -230,6 +230,6 @@ def prompt_contract() -> str:
     ]
     sections.extend(f"Rewrite step {row['step']}: {row['task']}" for row in rules["rewrite_procedure"])
     sections.append("Full upstream checklist: " + "; ".join(row["text"] for row in rules["checklist"]) + ".")
-    sections.append("Record a disposition for every local review group: " + "; ".join(row["review_id"] + " " + row["id"] for row in rules["groups"]) + ". Each needs fixed/rejected/unresolved and an evidence-bound reason. Coverage is a review record, never proof of scientific adequacy or a replacement for independent/human review.")
+    sections.append("Available optional local review groups: " + "; ".join(row["review_id"] + " " + row["id"] for row in rules["groups"]) + ". Record only relevant actual findings with source-bound reasons; no exhaustive dispositions are required. Coverage is not scientific adequacy or independent/human review.")
     sections.append("Before returning, perform a second self-review of every revision against the source and scientific boundaries. Record an itemized change log: original text, revised text, sentence function, rationale, protected facts, exact evidence locations and unresolved questions. Pattern flags are advisory; do not auto-delete results or assert semantic/scientific completion. Existing Claude plans/criticism stay read-only internal; the existing authorized non-Claude writer authors persistent text.")
     return "\n\n".join(sections)

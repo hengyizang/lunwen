@@ -239,9 +239,13 @@ class ResearchDesignTests(unittest.TestCase):
         value["closest_prior_work"] = value["closest_prior_work"][:4]
         self.assertTrue(any("at least 5" in error for error in validate_originality_audit(value)))
 
-    def test_originality_search_must_be_current(self):
+    def test_originality_search_has_no_arbitrary_expiration(self):
         value=originality_audit();value["search_scope"]["cutoff_date"]="2020-01-01"
-        self.assertTrue(any("within 120 days" in error for error in validate_originality_audit(value)))
+        self.assertEqual(validate_originality_audit(value), [])
+        value["search_scope"]["cutoff_date"]="2099-01-01"
+        self.assertTrue(any("future" in error for error in validate_originality_audit(value)))
+        value["search_scope"]["cutoff_date"]="2026-02-30"
+        self.assertTrue(any("calendar" in error for error in validate_originality_audit(value)))
 
     def test_search_log_traces_claimed_scope_and_closest_works(self):
         audit = originality_audit()
@@ -274,6 +278,12 @@ class ResearchDesignTests(unittest.TestCase):
             )
         ]
         self.assertEqual(validate_search_log(records, audit), [])
+        for record in records:
+            record["searched_at"] = "2020-01-01T00:00:00Z"
+        self.assertEqual(validate_search_log(records, audit), [])
+        records[0]["searched_at"] = "2099-01-01T00:00:00Z"
+        self.assertTrue(any("future" in error for error in validate_search_log(records, audit)))
+        records[0]["searched_at"] = "2020-01-01T00:00:00Z"
         records[2]["included_work_ids"] = []
         self.assertTrue(any("W5" in error for error in validate_search_log(records, audit)))
 
@@ -488,6 +498,17 @@ class ResearchDesignTests(unittest.TestCase):
         errors = validate_experiment_design(value, "P01", runs)
         self.assertTrue(any("last five years" in error for error in errors))
         self.assertTrue(any("primary-source URL" in error for error in errors))
+
+    def test_schema_contracts_reject_malformed_arrays_and_nonfinite_reproduction_tolerances(self):
+        for venues in (None, 1, {}):
+            value = paper_contract()
+            value["target_venues"] = venues
+            self.assertTrue(validate_paper_contract(value, "P01"))
+        for tolerance in (float("nan"), float("inf"), True):
+            value = experiment_design()
+            value["reproduction_plan"]["metric_tolerances"][0]["absolute_tolerance"] = tolerance
+            errors = validate_experiment_design(value, "P01", {})
+            self.assertTrue(any("absolute_tolerance" in error for error in errors))
 
     def test_english_manuscript_check(self):
         with tempfile.TemporaryDirectory() as temp:

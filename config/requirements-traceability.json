@@ -672,12 +672,16 @@
       "evidence": [
         "scripts/run_tests.py",
         "config/test-suites.json",
-        ".github/workflows/validate.yml"
+        ".github/workflows/validate.yml",
+        "scripts/research_artifacts.py",
+        "scripts/artifact_ownership.py"
       ],
       "tests": [
-        "tests/test_test_suites.py"
+        "tests/test_test_suites.py",
+        "tests/test_cli_control_integrity.py",
+        "tests/test_research_design.py"
       ],
-      "remaining": "Measured against 3e9f56b: production Python 74391 to 76815 lines (+2424; 3161 added, 737 removed); tests 43002 to 45774 (+2772); docs 19160 to 9748 (-9412); complete tracked/nonignored tree 239891 to 236165 (-3726). The deleted 9550-line historical model JSON is documentation, preserved at its immutable Git blob, not a production-code saving. CLI/workflow/documented/dynamic roots reach 217 of 218 original Python modules; the remaining file is scripts/__init__.py. Historical 65-dead-file and 40–50% savings estimates are not established. New capabilities increased production code and total bytes; no large code reduction is claimed. Pinned sources/licenses remain unchanged.",
+      "remaining": "Measured from parent f8a1492: production Python 76815 to 75922 lines (-893; 613 added, 1506 removed). Compared with earlier 3e9f56b, production remains +1531 lines because new research capabilities were added; no cumulative 40–50% code saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 still has seven paper-level A checks plus shared global and final B checks; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ]
@@ -689,13 +693,17 @@
       "acceptance": "research-not-yet-executed",
       "evidence": [
         "scripts/claim_evidence.py",
-        "scripts/literature_benchmark.py"
+        "scripts/literature_benchmark.py",
+        "scripts/public_review_anchors.py",
+        "docs/acceptance/elife-public-anchors-2026-11-07.json",
+        ".github/workflows/literature-evidence.yml"
       ],
       "tests": [
         "tests/test_claim_evidence.py",
-        "tests/test_judgment_support.py"
+        "tests/test_judgment_support.py",
+        "tests/test_public_review_anchors.py"
       ],
-      "remaining": "No real anchor set or current independent 15% sample labels have been supplied. Collect lawful source-bound papers/reviews, separate calibration/holdout and actual independent labels; report null agreement/target until observations exist. Agreement is not truth or acceptance probability.",
+      "remaining": "24 real CC BY 4.0 eLife assessment papers are source-bound and replayable (16 calibration, 8 holdout), with each assessment DOI/license checked independently in Crossref. Official evidence-strength categories remain distinct from claim-support/novelty labels. No independent predictions, current human 15% claim sample or field-specific calibration has been executed: agreement and should-merge detection remain null, status NOT_CALIBRATED. Life-science assessments cannot establish transfer to the eventual doctoral topic, numerical 8/8.5 calibration or acceptance probability.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]
@@ -716,7 +724,7 @@
         "tests/test_output_provenance.py",
         "tests/test_experiment_evidence.py"
       ],
-      "remaining": "Preserve existing requested/reported identity, secrets/HTTPS, raw source SHA, rights, all adverse results and actual G1/G2 choices. Preparation exports and software acceptance grant no publication or scientific authority. New panel/case/claim modules are native; no Markdown-as-Python import, full external orchestration, ARIS patent/what-if feature or 701-skill dump. Existing selected CC BY-NC adaptations retain attribution/license and pinned SHA; no new third-party source is copied.",
+      "remaining": "Preserve existing requested/reported identity, secrets/HTTPS, raw source SHA, rights, all adverse results and actual G1/G2 choices. Preparation exports and software acceptance grant no publication or scientific authority. New panel/case/claim modules are native; no Markdown-as-Python import, full external orchestration, ARIS patent/what-if feature or 701-skill dump. Existing selected CC BY-NC adaptations retain attribution/license and pinned SHA; pinned implementation sources/licenses remain unchanged. The small public eLife excerpt manifest is separately attributed under CC BY 4.0; raw publisher responses stay outside Git.",
       "source_sections": [
         "compendium: retained absolute constraints and untrusted upstream boundaries"
       ]

@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import autopilot
+from scripts import autopilot, api_orchestrator
 
 
 class CliControlIntegrityTests(unittest.TestCase):
@@ -39,6 +39,34 @@ class CliControlIntegrityTests(unittest.TestCase):
         self.assertEqual(self.receipt.read_bytes(), self.receipt_bytes)
         self.assertEqual(self.candidate.read_bytes(), self.candidate_bytes)
         self.assertTrue(self.receipt.parent.is_dir())
+
+    def test_api_and_cli_share_the_source_and_quality_record_inventory(self):
+        records = ("evidence/journal-sources/index.json", "evidence/source-scopes/source.txt",
+                   "program/hypothesis-audit.json", "papers/P01/reviews/revision-base/main.tex")
+        for relative in records:
+            path = self.project / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"Original protected record.\n")
+        before = autopilot.protected_control_snapshot("demo")
+        with patch.object(api_orchestrator, "ROOT", self.base):
+            for relative in records:
+                with self.subTest(path=relative), self.assertRaises(ValueError):
+                    api_orchestrator.safe_target("demo", relative)
+                (self.project / relative).write_bytes(b"Untrusted modification.\n")
+        with self.assertRaises(autopilot.AutopilotError):
+            autopilot.ensure_protected_control_unchanged("demo", before)
+        for relative in records:
+            self.assertEqual((self.project / relative).read_bytes(), b"Original protected record.\n")
+
+    def test_atomic_controller_write_does_not_follow_a_predictable_temporary_symlink(self):
+        outside = self.base / "private-sentinel.txt"
+        outside.write_bytes(b"Keep external content.\n")
+        target = self.project / "state/controller-record.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        self.symlink(target.with_name("." + target.name + ".tmp"), outside)
+        api_orchestrator.write_json_atomic(target, {"record": "trusted"})
+        self.assertEqual(outside.read_bytes(), b"Keep external content.\n")
+        self.assertEqual(target.read_text(), '{\n  "record": "trusted"\n}\n')
 
     def test_equal_bytes_file_symlink_is_rejected_and_replaced_with_real_record(self):
         before = autopilot.protected_control_snapshot("demo")
