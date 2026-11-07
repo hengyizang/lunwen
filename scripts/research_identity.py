@@ -71,6 +71,9 @@ def _anchor(project, value):
 
 @paper_scoped
 def _venues(project, paper_id, identity, contract, gate):
+    from scripts.research_phase import requires_submission
+    if gate != "G5" or not requires_submission(project, paper_id=paper_id):
+        return
     venues = identity.get("venue_classifications")
     if not isinstance(venues, list) or not 1 <= len(venues) <= 20 or any(not isinstance(v, dict) for v in venues):
         raise ValueError("declare source-bound research-article classifications for target venues")
@@ -83,21 +86,17 @@ def _venues(project, paper_id, identity, contract, gate):
     candidates = read(path_in(project, "program/venue-candidates.json"))
     candidate_rows = [v for row in candidates.get("papers", []) if row.get("paper_id") == paper_id
                       for v in row.get("candidates", [])]
-    required_names = {v["name"] for v in targets}
-    selected = None
-    from scripts.research_phase import requires_submission
-    if gate == "G5" and requires_submission(project, paper_id=paper_id):
-        selected = read(path_in(project, f"papers/{paper_id}/venue.json"))
-        if not selected.get("name") or selected["name"] not in required_names:
-            raise ValueError("selected venue must match an exact paper-contract target")
-        required_names = {selected["name"]}
+    selected = read(path_in(project, f"papers/{paper_id}/venue.json"))
+    if not isinstance(selected.get("name"), str) or not selected["name"].strip():
+        raise ValueError("select an exact actual venue name before submission")
+    required_names = {selected["name"]}
     if not required_names or not required_names <= set(names):
         raise ValueError("missing research-article classification for a required target venue")
     now = datetime.now(timezone.utc)
     for name in sorted(required_names):
         item = next(v for v in venues if v["venue_name"] == name)
-        target = next(v for v in targets if v["name"] == name)
         matches = [v for v in candidate_rows if v.get("name") == name]
+        target = next((v for v in targets if v.get("name") == name), matches[0] if len(matches) == 1 else selected)
         if len(matches) != 1:
             raise ValueError("article-category evidence needs one matching registered venue candidate")
         hosts = {_host(matches[0][key]) for key in ("official_guidelines_url", "policy_source_url")}

@@ -3,12 +3,20 @@
 For data_contract, data_cleaning_preview, empirical_design, empirical_reporting
 and economic_data, see [empirical data workflow](../docs/EMPIRICAL-DATA-WORKFLOW.md).
 These reuse the stage-scoped queue. Preparation/retrieval never grants G3, and
-observation acquisition requires protected owner authorization. Estimation and
+observation acquisition requires protected, source-bound rights verification.
+The controller records lawful automatic decisions without inventing human review. Estimation and
 cleaning replay remain exact approved experiment commands.
 
 The controlled operations `research_extensions`, `evidence_context`, `calibration_analysis` and `word_render` are documented in [Experiment and evidence extensions](../docs/RESEARCH-EXTENSIONS.md). `read_paper` accepts optional `pages` (unique original 1-based page numbers) for bounded reading without paid translation. No operation changes model roles, approves a scientific gate or starts unapproved paid computation.
 
 The model authors plans and code. The GitHub controller retrieves evidence, executes approved experiments and builds final files. A model-authored JSON boolean is never human approval. Unknown facts remain missing. No action below grants a scientific gate, submits a paper or changes the cumulative CNY spending ceiling.
+
+The [workflow](workflow.md) is authoritative: ordinary planner → writer → one
+fresh advisory critic means three calls; actual findings trigger repair/recheck.
+Final B preparation uses one source-bound three-family blind panel and the
+actual venue/export checks, reused while that snapshot remains unchanged.
+G1/G2 retain owner topic decisions, and A checks protect real scientific
+integrity. Numeric ratings and CFH/H/AD/editorial observations are C, not gates.
 
 ## Request format
 
@@ -25,7 +33,7 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 |---|---|---|
 | topic-intelligence | `direction_search`, `queries` (1–3 strings; one operation) | Optional Tavily search with explicit CNY/credit pricing, shared budget reservation and exact usage settlement. Seven-day query cache. Results are leads, not primary evidence. Without its key/rate, supply official URLs from Codex web research. |
 | topic-intelligence | `citation_graph`, `doi`, `direction` (`forward` or `backward`) | Controlled citation API receipt; one failed source does not establish search saturation. |
-| topic-intelligence | `read_paper`, `pdf`, `output`, `manifest`, optional `max_pages` | Bounded PDF extraction to `literature/readers/`. The exact manifest must have owner-confirmed research/cloud/redistribution rights and match the PDF hash. Personal-use-only papers must not be published to Git or public artifacts. Extraction is not a human read declaration. |
+| topic-intelligence | `read_paper`, `pdf`, `output`, `manifest`, optional `max_pages` | Bounded PDF extraction to `literature/readers/`. The exact manifest must have source-verified research/cloud/redistribution rights recorded by the controller and match the PDF hash. A real owner decision can also supply reviewed evidence. Personal-use-only papers must not be published to Git or public artifacts. Extraction is not a human read declaration. |
 | topic-intelligence | `triage_leads`, `receipt_id`, `provider` (`openrouter` or `bocha`), optional `limit` ≤8 | Optional labels on public metadata from a valid search receipt. Retains every lead; cannot certify novelty, quality, eligibility or source inclusion. No private project text is sent. |
 | experiment-design | `data_quality`, `dataset_id`, `path`, optional `label_column`, `split_column`, `group_column` | Measures actual acquired data; the controller records a separate current hash-bound automated confirmation after applicable checks pass. Changed operation arguments invalidate the cached report. |
 | experiment-design | `power`, `paper_id`, `method`, `effect_size`, `alpha`, `target_power`, `ratio`, `effect_size_basis`, optional `groups` | Uses the declared statistics runtime and existing research-quality contract. An assumed effect size requires a defensible source. It does not freeze a preregistration. |
@@ -37,7 +45,7 @@ Write `program/cloud-operations.json` as `{"schema_version":"1.0","operations":[
 | experiment-design or experiment-execution | `method_tools` | Inspects pinned `program/method-tools.json` contracts and registered validation outputs; never directly executes methods. |
 | paper-architecture or writing-and-review | `journal_dossiers` | Rechecks dated official cost/OA/timing/policy sources from `program/journal-dossiers.json`; unknown values remain unknown. |
 | paper-architecture or writing-and-review | `journal_sources` | Fetches declared public publisher URLs with network safeguards, at most twenty GETs per operation; records protected raw/normalized hashes and pending URLs. |
-| writing-and-review | `statistical_reporting`, `paper_id` | Reruns actual numerical evidence and binds all comparisons to current Methods/Results/caption passages. Fresh passing report required at G5. |
+| writing-and-review | `statistical_reporting`, `paper_id` | Checks actual numerical evidence against current Methods/Results/caption passages. False or mismatched numbers remain A blockers; the final checked report binds the current sources and is reused only while unchanged. |
 | writing-and-review | `citation_audit`, `paper_id`, optional `manual_verifications` (owner-controlled `state/` path), `refresh_metadata:true` | Rechecks the current canonical references.bib and manuscript. Reuses only hash-bound Crossref metadata younger than 24h, never an old PASS; expired, changed or corrupt records are fetched again. Offline/failed requests never become verified. Manual names and DOCX human checks cannot be invented by the queue. The report is controller-owned. |
 | writing-and-review | `docx_revision`, `paper_id` | Builds genuine Word clean/tracked/response package after revision controls pass; unsupported complex changes are refused. |
 | writing-and-review | `watermark_cleanup`, `paper_id`, `source`, `expected_sha256` | Runs the pinned upstream Unicode cleaner on supported prose; creates a protected derived candidate/diff/receipt and reuses a still-valid receipt. Does not overwrite canonical text or verify statistical watermark absence. |
@@ -48,11 +56,58 @@ Input contracts and limits for the added quality operations are in [Research imp
 
 ## Literature and data
 
-G1 controlled literature search runs before paid authoring. `program/literature-search-plan.json` can contain `searches` with `provider`, `query`, `query_family`, and `limit` (≤50). Use direct, adjacent, counterevidence and citation chaining. Defaults query Crossref, arXiv and HAL (OpenAlex when configured). At most six fresh calls run per job; a second job completes the batch without paid authoring. Raw/normalized hashes and search-log/API-ledger records are persisted. Fresh successful searches are reused for seven days. Failed queries have a six-hour cooldown so they cannot starve remaining providers. A total failure stops paid authoring. Coverage, screening and saturation must still be honestly reviewed.
+G1 controlled literature search runs before paid authoring.
+`program/literature-search-plan.json` can contain 1–60 `searches`, each with
+`provider`, `query`, `query_family`, and `limit` (≤50). Defaults cover Crossref,
+Semantic Scholar, arXiv, Europe PMC, DBLP and HAL; configured OpenAlex adds the
+seventh provider. The default direct, method-alternative and counterevidence
+query families create 18 or 21 planned searches. Each invocation performs at
+most 12 fresh calls by default; explicit `max_search_calls` accepts integers
+1–60. Remaining searches continue through the existing queue and receipts.
+Citation chaining supplies additional source-bound leads, not proof of saturation.
+Raw/normalized hashes and search-log/API-ledger records are persisted. Fresh
+successful searches are reused for seven days. Failed queries have a six-hour
+cooldown so they cannot starve remaining providers. A total failure stops paid
+authoring. Coverage, screening and saturation remain evidence-bound judgments.
 
-Write proposed downloads under `data/manifests/`, following `schemas/dataset-manifest.schema.json`. Pin the exact SHA-256 and expected bytes (up to 2 GB per file). The owner reviews the exact manifest and its cloud-use rights through `authorize_data`; the controller records the hash under protected `state/data-authorizations.json`. Merely setting `confirmed_by_human` in a generated manifest is insufficient. Acquisition preserves a hash-bound receipt and re-downloads missing raw files after a runner change. Raw/private data is excluded from checkpoints. Use a reviewed redistribution/storage plan for derived data too.
+Write proposed downloads under `data/manifests/`, following
+`schemas/dataset-manifest.schema.json`. Pin the exact SHA-256 and expected bytes
+(up to 2 GB per file). The controller verifies primary license, privacy,
+research/cloud-use and storage evidence and records the exact manifest hash in
+protected `state/data-authorizations.json`. Sufficient lawful evidence enables
+an explicitly automated authorization; missing or conflicting evidence stays
+blocked. `authorize_data` also preserves actual owner-reviewed decisions, but
+does not impose another human approval on every lawful acquisition. A generated
+`confirmed_by_human` boolean cannot supply either kind of evidence. Acquisition
+preserves a hash-bound receipt and re-downloads missing raw files after a runner
+change. Raw/private data is excluded from checkpoints; derived data also need
+verified redistribution/storage rights.
 
-At G4 the controller executes one pending run per job using the exact G3-approved plan and budget. Use digest-pinned Docker, ≤1,200 seconds per run, 2 CPUs, 4 GB memory, hash-declared inputs, and distinct explicit `results/` output paths. No shell, host execution, network, credentials or control-state writes are available inside a cloud experiment. Failed and negative results remain registered; a failure pauses for inspection rather than silently retrying. A new plan requires a new G3 review.
+At G4 the controller executes one pending run per job using the exact G3-frozen
+plan and budget. Use digest-pinned Docker, hash-declared inputs and distinct
+explicit `results/` output paths. Optional run `resources` declares positive
+`cpu` and `memory_gb` and an integer `gpu` count ≥0; omitted fields default to
+2 CPUs / 4 GB / 0 GPUs. These defaults are not hard research-scale ceilings.
+Before reserving compute cost, the runner checks actual CPU affinity, cgroup
+limits, daemon capacity and, for GPU requests, visible NVIDIA devices and the
+Docker NVIDIA runtime. Insufficient or unknown capacity produces an actionable
+failure; no hardware is rented or silently substituted. The default GitHub
+Ubuntu runner does not supply a GPU.
+
+`timeout_seconds` must fit the current controller deadline with 120 seconds left
+for receipts/checkpoints. The two 65-minute cloud workflows establish a
+60-minute work deadline at their first step; nested command deadlines cannot
+extend their parent. Without a controller deadline the conservative fallback is
+1,200 seconds. A larger frozen request therefore needs an actually capable
+controlled runner and sufficient remaining execution time, within the same
+cumulative compute/cash total. Changed resources invalidate the existing G3
+plan hash; no new per-run budget or payment approval is created.
+
+The container keeps network disabled, a read-only root, dropped capabilities,
+credential exclusion and only named output files writable. Receipts record the
+requested and observed capacity without claiming measured utilization. Failed
+and negative results remain registered; actual recovery conditions govern a
+retry, and changed protocols return to G3 without erasing earlier attempts.
 
 ## Direction assessment contract
 
@@ -63,9 +118,21 @@ Write `program/direction-assessments.json` with a shared recent `window_start`/`
 - Job `salary`: `amount`, `currency`, `period` (`year` or `month`), `basis:"gross"`, matching `career_stage`, and `evidence:{url,quote}` containing the actual number. Non-CNY salaries also need `fx_to_cny` and dated `fx_evidence`. Missing salary is a blocker, not an invented midpoint.
 - `assessments` for `future_growth_potential`, `phd_position_competition`, `job_market_competition`, `background_fit`, `application_route_fit`. Each needs `score` (0–5, higher is more favorable), `method` (`measured`, `proxy`, `assessment`), `confidence`, `rationale`, `anchor_description`, and `evidence:[{url,quote}]`. Background fit instead binds the current `constraints_sha256`. Explain proxies and unknown applicant counts; never invent a competition rate.
 
-The controller retrieves allowed primary URLs, saves their content/hash/date, deduplicates employer/title/country within each posting type and writes protected `program/direction-ranking.json`. Only verified observations contribute. Weights stay 25% funded positions, 25% employment/salary, 15% growth, 7.5% PhD competition, 7.5% job competition, 10% background, 10% application route. The provisional count anchors are 1/5/15/30/60 observed eligible postings. Employment combines job counts and gross annual salary equally; nominal CNY salary anchors are 100k/200k/300k/500k/800k. These are decision aids to review, not population estimates, purchasing-power comparisons or admission probabilities. The report includes ±20% weight sensitivity. Novelty, doctoral depth and originality are mandatory topic/design checks, never compensable direction scores.
+The controller retrieves allowed primary URLs, saves their content/hash/date,
+deduplicates employer/title/country within each posting type and writes protected
+`program/direction-ranking.json`. Only verified observations contribute. When
+this optional career-ranking adapter is selected, use the project's declared
+`intake/constraints.json.ranking_weights`, with all seven factors summing to one;
+the historical user's 25/25/15/7.5/7.5/10/10 preference is not a universal default.
+The adapter's provisional count anchors are 1/5/15/30/60 observed eligible
+postings. Employment combines job counts and gross annual salary equally;
+nominal CNY salary anchors are 100k/200k/300k/500k/800k. These C decision aids and
+±20% weight sensitivity do not estimate populations, purchasing power or
+admission probabilities, and do not select a doctoral topic. Missing evidence
+cannot be replaced with invented scores. Scientific novelty and independence
+require evidence-based judgment and the actual G1/G2 topic decisions.
 
-## Separate owner review operations
+## Protected controls and optional owner review
 
 The [eight research increments](../docs/RESEARCH-INCREMENTS.md) add
 non-billable research_increments, increments_inventory (paper_id at G5) and
@@ -79,7 +146,14 @@ dossier flow. These operations never approve science or change paid authority.
 
 Follow-up deterministic builders are documented in [Quality controls follow-up](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Add `research_support`, `support_sources`, `research_notebook_daily` or `review_packets` at their documented stages, or `revision_ledger` plus `paper_id` at writing-and-review. Only `support_sources` performs bounded public metadata GETs; none enables paid calls or experiments. Owner-only `confirm_review_packet` uses `packet_id`, exact dossier SHA and structured human `judgments`; it never grants a scientific gate.
 
-The model-authored operations queue cannot approve a gate, confirm data/reproduction, screen literature as a human, or freeze preregistration. The authenticated owner issue boundary provides these non-billable actions with exact reviewed dossier hashes. See [Cloud human review controls](../docs/CLOUD-HUMAN-CONTROLS.md) for `review_dossier`, `ready`, `approve`, `advance`, `reopen`, quality confirmations, freeze and named source/screening decisions. All original scientific checks remain mandatory.
+The model-authored queue cannot write protected approvals, receipts or a human
+identity. The controller performs applicable source/evidence checks, records
+automated data/reproduction/protocol decisions honestly, and advances checked
+G0/G3/G4/G5 states. Only G1/G2 topic decisions require the owner. Existing
+authenticated actions remain available for real owner decisions and exceptional
+corrections; their presence is not a new mandatory review at every stage. See
+[Cloud topic controls](../docs/CLOUD-HUMAN-CONTROLS.md) for exact dossier-bound
+`review_dossier`, `ready`, `approve`, `advance`, `reopen` and source decisions.
 # Literature workbench operations
 
 Figure-reference operations use the existing non-billable `literature` boundary
@@ -122,7 +196,7 @@ exclusions, contrary evidence, gates and budgets cannot be changed through feedb
 literature_register selects a real candidate from the exact current topic-leads
 hash using candidate_id and expected_leads_sha256. Optional paper_id,
 acquisition_receipt {path,sha256}, manifest and reader {path,sha256} link an
-owner-authorized full text; metadata-only registration grants no screening or
+lawfully authorized full text; metadata-only registration grants no screening or
 full-text-read decision.
 
 See [LITERATURE-WORKBENCH.md](../docs/LITERATURE-WORKBENCH.md). At any research
@@ -142,7 +216,7 @@ No paid call occurs except explicit literature_analyze execute:true through the
 existing authorized OpenAI evidence-synthesis route. Use metadata and current
 notes before requesting full-text reanalysis. Do not alter model routing.
 Acquisition quarantines raw full text; reader/figure persistence requires the
-existing exact owner-approved full-text manifest. The non-billable owner cloud
+existing exact manifest with controller-recorded lawful rights. The non-billable owner cloud
 job literature can execute one request_file operation without a paid cycle and
 forbids execute:true. No operation supplies a human topic decision or bypasses G0-G5.
 

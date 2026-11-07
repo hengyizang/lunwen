@@ -38,6 +38,12 @@ def _text(value: Any, field: str, errors: list[str]) -> str | None:
     return value.strip()
 
 
+def _planning_quartile(value: Any, field: str, errors: list[str]) -> None:
+    """Optional rank metadata never supplies a scientific quality threshold."""
+    if value is not None and (not isinstance(value, str) or value not in {"Q1", "Q2", "Q3", "Q4", "unknown"}):
+        errors.append(f"{field} must be Q1-Q4, unknown or null when supplied")
+
+
 def _list(
     value: Any,
     field: str,
@@ -621,8 +627,7 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
             seen.append(paper_id)
         if paper.get("theme_id") not in {"A", "B"}:
             errors.append(f"{prefix}.theme_id must be A or B")
-        if paper.get("target_jcr_quartile") not in VENUE_QUARTILES:
-            errors.append(f"{prefix}.target_jcr_quartile must be Q1 or Q2")
+        _planning_quartile(paper.get("target_jcr_quartile"), f"{prefix}.target_jcr_quartile", errors)
         for key in ("portfolio_role", "distinct_contribution"):
             _text(paper.get(key), f"{prefix}.{key}", errors)
         claim_ids = _string_list(paper.get("unique_claim_ids"), f"{prefix}.unique_claim_ids", errors)
@@ -635,19 +640,19 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
     if sorted(seen) != expected:
         errors.append(f"papers must contain exactly: {', '.join(expected)}")
     _paper_dependencies(papers, set(expected), errors)
-    try:
-        from scripts.venue_policy import validate_portfolio
-    except ImportError:
-        from venue_policy import validate_portfolio
-    errors.extend(validate_portfolio(papers, expected_count=len(expected)))
+    # Quartile targets describe the user's portfolio ambition. Evidence-led
+    # scientific independence is not decided by a venue rank/count threshold.
 
+    cumulative_mode = value.get("independence_basis") == "cumulative"
+    if value.get("independence_basis", "legacy_pairwise") not in {"cumulative", "legacy_pairwise"}:
+        errors.append("independence_basis must be cumulative or legacy_pairwise")
     required_pairs = {tuple(pair) for pair in itertools.combinations(expected, 2)}
     found_pairs: set[tuple[str, str]] = set()
     comparisons = _list(
-        value.get("pairwise_distinctness"),
+        value.get("pairwise_distinctness", []),
         "pairwise_distinctness",
         errors,
-        minimum=len(required_pairs),
+        minimum=0 if cumulative_mode else len(required_pairs),
     )
     for index, item in enumerate(comparisons):
         prefix = f"pairwise_distinctness[{index}]"
@@ -674,13 +679,33 @@ def validate_paper_map(value: dict[str, Any], expected_paper_ids: Iterable[str])
         for key in ("shared_outcome_justification", "why_separate", "merge_trigger"):
             _text(comparison.get(key), f"{prefix}.{key}", errors)
     missing_pairs = sorted(required_pairs - found_pairs)
-    if missing_pairs:
+    if missing_pairs and not cumulative_mode:
         errors.append(
             "pairwise_distinctness is missing: "
             + ", ".join(f"{left}/{right}" for left, right in missing_pairs)
         )
 
     synthesis = _object(value.get("thesis_synthesis"), "thesis_synthesis", errors)
+    if cumulative_mode:
+        contributions = _list(synthesis.get("cumulative_contributions"), "thesis_synthesis.cumulative_contributions", errors, minimum=len(expected))
+        by_paper = {row.get("paper_id"): row for row in papers if isinstance(row, dict)}
+        contribution_papers = []
+        for index, item in enumerate(contributions):
+            prefix = f"thesis_synthesis.cumulative_contributions[{index}]"
+            item = _object(item, prefix, errors)
+            pid = item.get("paper_id")
+            contribution_papers.append(pid)
+            if not isinstance(pid, str) or pid not in by_paper:
+                errors.append(prefix + ".paper_id must identify a declared paper")
+                continue
+            ids = _string_list(item.get("claim_ids"), prefix + ".claim_ids", errors)
+            if set(ids) != set(by_paper[pid].get("unique_claim_ids", [])):
+                errors.append(prefix + ".claim_ids must cover this paper's exact unique claims")
+            for key in ("knowledge_increment", "standalone_value", "merge_trigger"):
+                _text(item.get(key), prefix + "." + key, errors)
+            _string_list(item.get("primary_evidence"), prefix + ".primary_evidence", errors)
+        if sorted(str(p) for p in contribution_papers) != expected:
+            errors.append("cumulative_contributions must cover every paper exactly once")
     for key in (
         "core_thesis",
         "extension_thesis",
@@ -726,9 +751,7 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *,
         errors.append(f"paper_id must be {expected_paper_id}")
     if contract.get("writing_language") != "en":
         errors.append("writing_language must be en")
-    target_quartile = contract.get("target_jcr_quartile")
-    if target_quartile not in VENUE_QUARTILES:
-        errors.append("target_jcr_quartile must be Q1 or Q2")
+    _planning_quartile(contract.get("target_jcr_quartile"), "target_jcr_quartile", errors)
     if contract.get("status") not in {"ready_for_review", "approved"}:
         errors.append("status must be ready_for_review or approved")
     for key in (
@@ -831,12 +854,17 @@ def validate_paper_contract(contract: dict[str, Any], expected_paper_id: str, *,
         minimum=0,
     )
     _text(independence.get("why_not_merge"), "independence.why_not_merge", errors)
-    errors.extend(
-        validate_venue_candidates(
-            contract.get("target_venues"),
-            target_quartile=str(target_quartile or "Q1"),
-        )
-    )
+    # Candidates can be incomplete while the scientific question is decided.
+    # The explicit venue diagnostic remains available; submission fit uses actual
+    # publisher evidence, never a model-filled count or JCR floor as merit.
+    if not isinstance(contract.get("target_venues", []), list):
+        errors.append("target_venues must be an array of provisional candidates")
+    else:
+        for index, item in enumerate(contract.get("target_venues", [])):
+            field = f"target_venues[{index}]"
+            venue = _object(item, field, errors)
+            _text(venue.get("name"), field + ".name", errors)
+            _planning_quartile(venue.get("quartile"), field + ".quartile", errors)
     return errors
 
 

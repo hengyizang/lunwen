@@ -412,9 +412,11 @@ def project_snapshot(
     root = project_root(project)
     if not root.exists():
         return "(new project)"
+    from scripts.literature_source_tasks import excluded_context_paths
+    hidden = set(excluded_context_paths(root))
     if stage and (root / "program/context-plan.json").is_file():
         from scripts.evidence_context import build
-        packet = build(root, stage, redact=redact, max_bytes=MAX_SNAPSHOT_TOTAL_BYTES)
+        packet = build(root, stage, redact=redact, max_bytes=MAX_SNAPSHOT_TOTAL_BYTES, excluded_paths=hidden)
         return (packet["context"] + "\n--- OMITTED FILES (not judged irrelevant; request explicit evidence before concluding) ---\n"
                 + "\n".join(packet["omitted_paths"]))
     from scripts.paper_execution import enabled,relevant
@@ -422,7 +424,7 @@ def project_snapshot(
     from scripts.research_phase import requires_submission,submission_only
     scientific_writing=stage=="writing-and-review" and not requires_submission(root,stage)
     blocks: list[str] = []
-    requests = instruction_paths(root) if exclude_reviews else set()
+    requests = (instruction_paths(root) if exclude_reviews else set()) | hidden
     total = 0
     included = 0
     for path in sorted(root.rglob("*")):
@@ -507,14 +509,33 @@ def task_guidance(project: str, stage: str, role: str, context: str = "") -> str
     if requires_submission(project_root(project),stage):
         rules+="\n\n"+editorial_prompt_contract(stage,role="critic" if role=="critic" else "writer",project=project)
         rules+="\n"+publication_feedback(project,stage)+"\n"+hygiene_feedback(project,stage)
+    if role in {"writer", "remediator", "planner"} and stage == "writing-and-review" and active_paper(project):
+        from scripts import review_panel
+        rules += "\n" + review_panel.author_context(project_root(project), active_paper(project))
+    if role == "critic":
+        from scripts.literature_source_tasks import selected_context
+        selected = selected_context(project_root(project), stage, paper_id=active_paper(project))
+        if selected["tasks"]:
+            rules += "\nSelected scientific judgments, using only their blind source packets:\n" + json.dumps(selected["tasks"], ensure_ascii=False)
     return rules
 
 
 def author_context(project: str, stage: str, context: str = "", *, role: str = "writer") -> str:
     rules=task_guidance(project,stage,role,context)
+    paper = active_paper(project)
+    if paper and (project_root(project) / "papers" / paper / "research-case.json").is_file():
+        from scripts.research_case import build_packet
+        sections = {"topic-intelligence": ["competition"], "paper-architecture": ["contribution", "thesis_synthesis"],
+            "experiment-design": ["pre_mortem", "critical_tests", "figure_first"],
+            "experiment-execution": ["claim_rows", "cumulative_results"],
+            "writing-and-review": ["contribution", "claim_rows", "figure_first"]}.get(stage, [])
+        if sections:
+            rules += "\nCurrent research-case sections:\n" + json.dumps(build_packet(project_root(project), paper, sections=sections), ensure_ascii=False)
     if stage=="writing-and-review":
         rules+="\n"+incremental_feedback(project)
-        if requires_submission(project_root(project),stage):rules+="\n"+editorial_feedback(project,stage)
+        if paper and requires_submission(project_root(project),stage):
+            from scripts.review_panel import contract
+            rules += "\n" + editorial_feedback(project,stage) + "\n" + contract(active_paper(project))
     return rules
 
 
@@ -551,16 +572,15 @@ no final prose, file contents, invented outcomes, approvals or execution authori
 
 def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str | None = None) -> str:
     if stage != "writing-and-review":
-        return "(full editorial pass applies at G5)"
+        return "(targeted editorial observations apply during writing)"
     if project is not None:
         from scripts.research_phase import requires_submission, writing_contract
         if not requires_submission(project_root(project),stage):
             return writing_contract(project_root(project),stage)
-    from scripts import humanizer_review, defensive_review, ccfa_humanization
+    from scripts import ccfa_humanization
     if role == "critic":
-        return "\n\n".join((humanizer_review.prompt_contract(), defensive_review.prompt_contract(),
-            "Apply every CFH01-CFH38, H01-H26 and AD01-AD08 criterion as a read-only independent review. "
-            "The drafting and rewriting guidance above defines quality criteria; do not draft "
+        return "\n\n".join((ccfa_humanization.disposition_contract(),
+            "Use actual scientific sources and relevant observations in a read-only independent review. Do not draft "
             "replacement prose, edit artifacts, or adopt the writer's dispositions as evidence. "
             "Check the manuscript against scientific sources and legitimate-use exceptions. "
             "Report concrete actionable findings in the existing review JSON fields; no new "
@@ -571,7 +591,7 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
     if role != "writer":
         raise ValueError("editorial role must be writer or critic")
     return "\n\n".join((
-        humanizer_review.prompt_contract(), defensive_review.prompt_contract(), ccfa_humanization.disposition_contract(),
+        ccfa_humanization.disposition_contract(),
         "Automatic manuscript hygiene runs before deterministic builders and scans again after "
         "each existing writing/remediation pass. It invokes pinned watermarks-remover, preserves "
         "original bytes/change receipts, and removes supported character artifacts only from "
@@ -586,15 +606,11 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
         "Do not randomly shuffle sentences or rotate synonyms: neither establishes quality or "
         "a detector outcome. Preserve hypothesis-to-method-to-result links, numbers, citations, "
         "causal direction and warranted uncertainty; record substantive edits in the ledger.",
-        "Use the existing initial writer and remediation as the two editorial passes. "
-        "In remediation notes, explicitly dispose of H01 through H26 and each defensive "
-        "review group: changed, retained with scientific/contextual reason, or unresolved. "
-        "Use fixed:, rejected: or unresolved: prefixes, followed by exactly one pattern "
-        "ID H01-H26 or AD01-AD08 and a substantive contextual reason for each. Read the current protected audit; "
-        "semantic_review_required means a real contextual judgement is still needed. "
+        "Use the existing writing pass; actual actionable findings alone justify remediation and another review. "
+        "Read relevant current protected audit findings as observations, without mandatory per-pattern notes. "
         "Inspect protected_signals as well as findings: protected facts stay, while surrounding "
-        "redundant framing still needs review. Truncated examples are not resolved findings; "
-        "use the complete current audit and manuscript for each group disposition.",
+        "framing may warrant a targeted revision. Truncated examples are not resolved findings; "
+        "use the complete current audit and manuscript to judge an actual concern.",
     ))
 
 
@@ -726,7 +742,8 @@ Return ONLY one JSON object with these required keys:
 verdict, fatal_findings, major_findings, minor_findings, missing_evidence,
 remediation_steps, uncertainty. Verdict must be block, revise, or
 pass-with-conditions. These other required values must be arrays of strings.
-novelty_assessment is the sole optional additional key, with the objects above.
+novelty_assessment and explicitly selected scientific-task response fields are the optional additional keys.
+Selected fields are claim_evidence, novelty_adjudication, citation_extraction and anchor_labels; include only requested tasks.
 For a pending supplemental protocol, assess that protocol's exact evidence and scope;
 the audit cannot approve parent manuscript novelty or final G5.
 Empty findings are valid. Never draft replacement prose, reuse a preferred verdict,
@@ -813,8 +830,10 @@ def extract_json(text: str) -> dict[str, Any]:
 
 def extract_audit_json(text: str) -> dict[str, Any]:
     value = _json_object(text, "Critic")
-    if not AUDIT_FIELDS <= set(value) or set(value) - AUDIT_FIELDS - {"novelty_assessment"}:
+    from scripts.literature_source_tasks import RESPONSE_FIELDS, validate_response_fields
+    if not AUDIT_FIELDS <= set(value) or set(value) - AUDIT_FIELDS - {"novelty_assessment"} - RESPONSE_FIELDS:
         raise ValueError("Audit fields do not match model-audit.schema.json")
+    validate_response_fields(value)
     if value["verdict"] not in {"block", "revise", "pass-with-conditions"}:
         raise ValueError("Invalid audit verdict")
     for field in AUDIT_FIELDS - {"verdict"}:
@@ -876,22 +895,11 @@ def reject_long_source_copy(source: Any, target: Any, label: str) -> None:
 
 
 def validate_editorial_dispositions(notes: list[str], stage: str | None) -> None:
+    """Validate supplied observation syntax, without requiring style coverage."""
     if stage != "writing-and-review":
         return
     from scripts.ccfa_humanization import validate_dispositions
-    validate_dispositions(notes, stage)
-    required = {f"H{i:02d}" for i in range(1, 27)} | {f"AD{i:02d}" for i in range(1, 9)}
-    seen = set()
-    for note in notes:
-        match = re.match(r"^(?:fixed|rejected|unresolved):\s*(H\d{2}|AD\d{2})\b[\s:;-]*(.+)$", note.strip(), re.I)
-        if not match:
-            continue
-        code, rationale = match.group(1).upper(), match.group(2).strip()
-        if code not in required or code in seen or len(rationale) < 20:
-            raise ValueError("Editorial dispositions require unique current pattern IDs and substantive reasons")
-        seen.add(code)
-    if missing := sorted(required - seen):
-        raise ValueError("Missing per-pattern editorial dispositions: " + ", ".join(missing))
+    validate_dispositions(notes, stage, include_editorial=True)
 
 
 def validate_remediation_notes(
@@ -914,15 +922,16 @@ def validate_remediation_notes(
         claim_id = row.get("claim_id")
         if not isinstance(claim_id, str) or not any(claim_id in note for note in notes):
             raise ValueError("Each independent novelty finding needs an itemized claim-ID disposition")
-    validate_editorial_dispositions(notes, bundle.get("stage"))
+    # CFH/H/AD are contextual observations, not a compulsory disposition matrix.
     return notes
 
 
 def remediation_required(audit: dict[str,Any],stage: str,writer_notes: list[str] | None = None) -> bool:
-    """Reuse an author's valid no-finding record; both independent audits remain."""
-    if audit.get("verdict")!="pass-with-conditions" or any(audit.get(field) for field in
+    """Actual findings justify repair; verdict labels and style coverage do not."""
+    if any(audit.get(field) for field in
             ("fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps")) or any(
-            row.get("decision") != "distinct" for row in audit.get("novelty_assessment", [])):
+            row.get("decision") != "distinct" for row in audit.get("novelty_assessment", [])) or any(
+            row.get("outcome") == "contradicts" for row in audit.get("claim_evidence", [])):
         return True
     try:
         validate_remediation_notes({"stage":stage,"notes":writer_notes or []},audit)
@@ -1178,7 +1187,7 @@ def append_decision_log(
     project: str,
     stage: str,
     run_id: str,
-    initial_path: Path,
+    initial_path: Path | None,
     final_path: Path,
     notes: list[str],
     final_audit: dict[str, Any],
@@ -1188,15 +1197,15 @@ def append_decision_log(
     existing = path.read_text(encoding="utf-8") if path.exists() else "# Review decision log\n"
     if existing and not existing.endswith("\n"):
         existing += "\n"
-    relative_initial = initial_path.relative_to(project_root(project)).as_posix()
+    relative_initial = initial_path.relative_to(project_root(project)).as_posix() if initial_path else None
     relative_final = final_path.relative_to(project_root(project)).as_posix()
     lines = [
         "",
         f"## {utc_now()} — {stage} API cycle {run_id}",
         "",
-        f"- Initial independent audit: `{relative_initial}`",
-        f"- Final independent audit: `{relative_final}`",
-        f"- Final verdict: `{final_audit['verdict']}`",
+        f"- Initial independent audit: `{relative_initial}`" if relative_initial else "- One fresh advisory critique; no second review invocation was required.",
+        f"- Reviewed audit: `{relative_final}`",
+        f"- Advisory verdict: `{final_audit['verdict']}` (not a publication decision)",
         "- Non-Claude writer dispositions:",
     ]
     lines.extend(f"  - {note}" for note in (notes or ["fixed: no actionable findings were reported"]))
@@ -1772,6 +1781,8 @@ def run_cycle(
     if controlled_steps["control_only"]:
         return {"stage": stage, "controlled_steps": controlled_steps, "paid_model_cycle": False}
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    if (project_root(project) / "api_runs" / run_id).exists():
+        raise ValueError("model cycle run ID already exists; never overwrite an earlier attempt")
     try:
         evidence, automatic_discovery = prepare_discovery_evidence(
             project,
@@ -1792,6 +1803,10 @@ def run_cycle(
             controlled_steps["blockers"].append({"kind": "literature_service_unavailable", "detail": "No controlled search receipts; inspect the source/plan before spending."})
         write_step_report(project_root(project) / REPORT, controlled_steps)
         return {"stage": stage, "controlled_steps": controlled_steps, "paid_model_cycle": False}
+    if requires_submission(project_root(project), stage):
+        for role in model_routing.PANEL_MODELS:
+            route = model_routing.select(stage, role)
+            model_runtime.preflight_route(route["provider"], model=route["model"])
     # Discover a missing writer/critic configuration or quote before paying the
     # planner. This is readiness checking, not a whole-cycle cost guarantee.
     if production_routes:
@@ -1868,7 +1883,7 @@ def run_cycle(
     save_run(project, run_id, "writer-bundle.json", bundle)
     record_editing_attempt(project_root(project))
     from scripts import review_receipts
-    from scripts.research_cycle import review_cycle, after_reviews
+    from scripts.research_cycle import review_cycle, submission_cycle, after_reviews
     revised = None
     critics = {}
     prefix = review_prefix(project, stage)
@@ -1909,23 +1924,30 @@ def run_cycle(
         save_run(project, run_id, "remediation-bundle.json", revised_bundle)
         return notes
 
-    reviews = review_cycle(project_root(project), stage, run_id,
-        writer_family=ai_providers.provider_family(writer.provider),
-        prompt=lambda: critic_prompt(project, stage, context), invoke=call_critic,
-        remediate=repair, refresh=refresh_review, writer_notes=bundle["notes"],
-        log=lambda first, last, notes, audit: append_decision_log(project, stage, run_id, first, last, notes, audit))
-    review, final = critics["initial"], critics["final"]
-    initial_path, final_path = reviews["paths"]["initial"], reviews["paths"]["final"]
-    final_audit, decision_log = reviews["audits"]["final"], reviews["decision_log"]
-    initial_evidence, final_evidence = reviews["evidence"]["initial"], reviews["evidence"]["final"]
+    if requires_submission(project_root(project), stage):
+        reviews = submission_cycle(project_root(project), run_id,
+            writer_family=ai_providers.provider_family(writer.provider), refresh=refresh_review)
+    else:
+        reviews = review_cycle(project_root(project), stage, run_id,
+            writer_family=ai_providers.provider_family(writer.provider),
+            prompt=lambda: critic_prompt(project, stage, context), invoke=call_critic,
+            remediate=repair, refresh=refresh_review, writer_notes=bundle["notes"],
+            log=lambda first, last, notes, audit: append_decision_log(project, stage, run_id, first, last, notes, audit))
+    review, final = critics.get("initial"), critics.get("final")
+    last_critic = final or review
+    initial_path, final_path = reviews["paths"].get("initial"), reviews["paths"].get("final")
+    final_audit, decision_log = reviews["audits"].get("final", reviews["audits"].get("initial", {})), reviews["decision_log"]
+    initial_evidence = reviews["evidence"]["initial"]
+    final_evidence = reviews["evidence"].get("final", initial_evidence)
     initial_style_audit, final_style_audit = initial_evidence["academic_style_audit"], final_evidence["academic_style_audit"]
     controlled_steps = final_evidence["controlled_steps"]
     remediation_skipped = reviews["remediation_skipped"]
     research_decision = reviews["decision_before_review"]
     if remediation_skipped:
         save_run(project, run_id, "remediation-decision.json", {
-            "status": "not_required", "reason": "No actionable initial findings; writer notes retained.",
-            "model_call_made": False, "final_independent_review_required": True})
+            "status": "panel_observations_recorded" if reviews.get("panel") else "not_required",
+            "reason": "Read frozen panel concerns and retain source-bound author responses; scientific validity is not established." if reviews.get("panel") else "No actionable initial findings; writer notes retained.",
+            "model_call_made": False, "final_independent_review_required": False})
     manifest = {
         "research_decision":reviews["research_decision"],
         "controlled_steps": controlled_steps,
@@ -1947,10 +1969,10 @@ def run_cycle(
                               ("independent-critic-final", final)) if result is not None},
         "planner_provider": planner.provider,
         "writer_provider": writer.provider,
-        "critic_provider": final.provider,
+        "critic_provider": last_critic.provider if last_critic else None,
         "planner_model": planner.model,
         "writer_model": writer.model,
-        "critic_model": final.model,
+        "critic_model": last_critic.model if last_critic else None,
         "output_policy": {
             "claude_role": "read-only semantic planner and independent critic",
             "persistent_writer_family": ai_providers.provider_family(writer.provider),
@@ -1973,9 +1995,9 @@ def run_cycle(
         "provider_audit": {
             "planner": result_audit(planner),
             "writer": result_audit(writer),
-            "critic_1": result_audit(review),
+            "critic_1": result_audit(review) if review else {"status": "not_called", "reason": "submission_panel"},
             "remediation": result_audit(revised) if revised else {"status": "not_called", "reason": "no_actionable_findings"},
-            "critic_final": result_audit(final),
+            "critic_final": result_audit(final) if final else {"status": "not_called", "reason": "no_repair_required"},
         },
         "independent_audit": {
             "initial": (
@@ -1985,15 +2007,17 @@ def run_cycle(
             "decision_log": (
                 str(decision_log.relative_to(ROOT)) if decision_log else None
             ),
-            "final_verdict": final_audit["verdict"],
+            "final_verdict": final_audit.get("verdict"),
+            "gate_authority": False,
+            "panel": reviews.get("panel"),
         },
         "written": sorted(set(written)),
         "usage": {
             "planner": planner.usage,
             "writer": writer.usage,
-            "critic_1": review.usage,
+            "critic_1": review.usage if review else {},
             "remediation": revised.usage if revised else {},
-            "critic_final": final.usage,
+            "critic_final": final.usage if final else {},
         },
         "model_budget": model_runtime.budget_status(
             project_root(project),
@@ -2020,13 +2044,19 @@ def run_cycle(
         "generated_at": utc_now(),
         "next_action": "Request G1/G2 topic selection when ready; other stages use recorded automatic checks and continuation.",
     }
+    if reviews.get("panel"):
+        manifest["actual_routes"].update(reviews["panel"].get("actual_routes", {}))
+        manifest["usage"]["panel"] = reviews["panel"].get("usage", {})
+        manifest["cost_controls"]["review_mode"] = "three_blind_submission_views"
+        if reviews["panel"].get("record_errors"):
+            manifest.update(status="needs_work", next_action="Record evidence-bound responses to the frozen panel concerns; retain unresolved disagreements.")
     from scripts.cost_audit import refresh as refresh_cost_audit
     manifest["cost_diagnostics"] = refresh_cost_audit(project_root(project))
     from scripts import researchctl
     manifest.update(after_reviews(project_root(project), stage, run_id, research_decision,
                                  lambda: researchctl.gate_errors(project, "G5")))
     if manifest.get("writing_phase_transition"):
-        manifest["next_action"] = "Continue G5 submission preparation with fresh initial/final submission audits; the scientific-writing audit grants no final clearance."
+        manifest["next_action"] = "Continue G5 submission preparation with three mutually blind source views; recorded opinions grant no scientific clearance."
     if research_decision.get("errors"):
         manifest.update(status="needs_work",next_action="Repair the recorded research decision in the next existing writer/review cycle; no stage decision is authorized.")
     if manifest.get("primary_recovery", {}).get("retired"):

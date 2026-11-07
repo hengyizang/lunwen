@@ -53,16 +53,14 @@ The register also requires innovation_screening (schema_version=1.0):
   scope and real/assumed/negotiable/unknown constraints;
 - generation: chosen method/reason, truthful contributors and represented/missing
   perspectives, prior examples, independence/deviations, hash-bound initial and
-  post_evidence round records, and any cluster/merge/split events retaining originals;
+  post_evidence round records when actually performed, and cluster/merge/split events retaining originals. Exploratory drafts retain their real rounds without inventing a second round;
 - assumptions: IDs, category/status, affected candidate IDs, located evidence,
   test_or_check and failure_consequence;
 - candidates: exactly one record per hypothesis with mechanism, assumption_ids,
   support/challenge anchors, evidence_gaps/search_limits, prior_exposure,
   adversarial_checks, disposition and gate_status;
-- comparisons: every unordered candidate pair, mechanism/prediction differences,
-  distinguishing_test, exact shared_assumption_ids and common_failure_risk;
-- evaluation: explicit criteria/anchors, narrative or optional weighted_matrix,
-  original/revised ratings, missingness, dissent and limitations. Never fill a
+- comparisons: full decision mode covers all pairs; a justified focused mode compares every focal candidate with alternatives. Exploratory drafts may retain incomplete comparisons. Record actual mechanism/prediction differences, distinguishing tests and shared failure risks;
+- evaluation: narrative reasons may omit numerical criteria and ratings. An optional weighted_matrix retains actual criteria/anchors, original/revised ratings, missingness, dissent and limitations. Never fill a
   missing rating with zero or present plausible ranges as confidence intervals.
 
 Keep the native schema and docs/INNOVATION-SCREENING.md available while preparing

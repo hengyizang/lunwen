@@ -54,7 +54,7 @@ abstract/introduction/conclusion to the strongest supported bounded finding,
 preserving original hypotheses and unfavorable outcomes. Unknown evidence stays
 pending. A filled form or exact quote cannot certify semantic support.
 
-Use the existing initial/final independent review and issue ledger for empty
+Use the current independent critique, final blind panel and existing issue ledger for empty
 evaluation, missing evidence and inference gaps. Retain exact location, claim,
 needed data/literature/analysis/proof, concrete action and completion condition.
 Do not add a paid pass per paragraph or create another worklist.

@@ -8,15 +8,12 @@ approvals, provenance, model roles and budget controls.
 
 ## Venue portfolio
 
-The default six-paper programme assigns P01–P03 to current JCR Q1 and P04–P06
-to at least current JCR Q2. A later redesign may choose more than three Q1
-papers, but never fewer. Every venue must be SCI/SCIE with JIF greater than
-1.0. The target is stored in each `paper-contract.json` and repeated in the
-paper map and venue registry.
-
-Q2 is a venue target, not a lower scientific tier. All papers keep the same
-novelty, baseline, leakage, statistics, power, external-validity,
-reproducibility, English-writing and adversarial-review gates.
+Existing Q1/Q2 ambitions remain planning observations. Real venue fit uses
+scope, article type, audience and desk-rejection evidence; unknown ranking
+stays unknown. Neither ranking nor IF blocks scientific gates or packaging.
+Every paper keeps actual source/claim integrity, frozen confirmatory inputs,
+negative results and standalone value in one cumulative doctoral contribution.
+See [the current stage contracts](../references/stage-contracts.md).
 
 ## Model roles, protocols and budget
 

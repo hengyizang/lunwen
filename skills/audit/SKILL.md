@@ -24,8 +24,8 @@ Check:
 - experiment/config/code/data traceability and failed-run retention;
 - statistical assumptions, multiplicity, uncertainty and robustness;
 - claim-evidence coverage and unsupported generalization;
-- current venue identity, JCR evidence, template provenance and policy compliance;
-- authorship, funding, conflict, ethics, data/code and AI-use disclosures;
+- actual selected venue fit and source-bound template/export requirements at submission; ranking unknowns remain explicit, without a rank or AI-policy gate;
+- actual authorship, funding, conflict, ethics and data/code statements, and preservation of any existing disclosure;
 - secrets, raw/private data and publisher files accidentally tracked by Git.
 
-Use a model family different from the Codex/OpenAI persistent writer for the independent initial and final schema-bound passes. Require Codex/OpenAI to disposition and remediate every finding. Also verify `state/output-provenance.json` and block current Anthropic-authored final files. Emit blocking, major and minor findings with exact paths and remediation evidence. Do not mark a gate ready while blockers remain.
+Use the current critique and final three-view panel defined in [workflow.md](../../references/workflow.md). Keep model-family independence, actual sources, stable issue IDs and disagreement. Report A scientific-integrity failures separately from B final-submission checks and C observations; only actual blocking problems require repair. Preserve the decision log and current output-provenance hashes; Claude cannot persist final scientific files. Do not turn a style warning, legacy score or administrative receipt into a new gate.

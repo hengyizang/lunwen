@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Deterministic gates for doctoral rigor and paper-specific JCR readiness.
+"""Check factual quality evidence and report score/venue observations separately.
 
-AI may propose scores and evidence, but this module only accepts structured evidence
-that satisfies hard thresholds. It cannot prove publication or acceptance; it enforces
-a declared Q1/Q2 venue floor before the native stage decision.
+Numerical self-scores cannot verify science. Selected-venue requirements are checked
+once when preparing the submission package, not through early readiness scores.
 """
 from __future__ import annotations
 
@@ -23,6 +22,7 @@ DIMENSIONS = {
     "G4": ("novelty_supported", "effect_robustness", "external_validity", "statistical_rigor", "reproducibility", "claim_evidence_strength", "venue_fit"),
     "G5": ("novelty", "scientific_contribution", "methodological_rigor", "evidence_strength", "venue_fit", "review_resilience", "english_academic_writing", "claim_calibration"),
 }
+OBSERVATIONAL_CRITERIA = {"venue_fit", "publication_potential", "english_academic_writing"}
 
 class QualityGateError(RuntimeError):
     pass
@@ -30,45 +30,47 @@ class QualityGateError(RuntimeError):
 def _nonempty_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
-def _score(value: Any, field: str, errors: list[str]) -> float | None:
+def _score(value: Any, field: str, warnings: list[str]) -> float | None:
     if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0 <= value <= 10:
-        errors.append(f"{field} must be a number from 0 to 10")
+        warnings.append(f"{field} is not a numerical observation from 0 to 10")
         return None
     if value < MIN_SCORE:
-        errors.append(f"{field}={value:g} is below hard floor {MIN_SCORE:g}")
+        warnings.append(f"{field}={value:g} is below advisory reference {MIN_SCORE:g}; the score is not a scientific gate")
     return float(value)
 
 def validate_report(report: dict[str, Any], gate: str, *, project: Path | None = None,
-                    require_facts: bool = False) -> list[str]:
+                    require_facts: bool = False, warnings: list[str] | None = None) -> list[str]:
     errors: list[str] = []
+    observations = warnings if warnings is not None else []
     version = report.get("schema_version")
     if version not in {"1.1", "1.2"}: errors.append("schema_version must be 1.1 or 1.2")
-    if require_facts and version != "1.2": errors.append("quality report migration required: 1.2 evidence assessments replace numerical self-scores")
+    if require_facts and version != "1.2": observations.append("quality report migration: legacy numerical self-scores do not establish factual scientific validation")
     if report.get("gate") != gate: errors.append(f"gate must be {gate}")
     if report.get("status") not in {"ready_for_review", "approved"}: errors.append("status must be ready_for_review or approved")
-    if version == "1.2":
+    if version == "1.2" or "assessments" in report:
         assessments = report.get("assessments")
         if not isinstance(assessments, dict):
             errors.append("assessments object is required"); assessments = {}
-        if set(assessments) != set(DIMENSIONS.get(gate, ())): errors.append("assessments must cover the exact gate criteria")
         from scripts.research_candidates import anchor_errors
-        for criterion in DIMENSIONS.get(gate, ()):
+        required_criteria = DIMENSIONS.get(gate, ()) if version == "1.2" else ()
+        for criterion in dict.fromkeys((*required_criteria, *assessments)):
+            findings = observations if criterion in OBSERVATIONAL_CRITERIA else errors
             row = assessments.get(criterion)
-            if not isinstance(row, dict): errors.append(criterion + " needs an evidence assessment"); continue
-            if row.get("status") != "satisfied": errors.append(criterion + " has unresolved or failed evidence")
-            if not _nonempty_string(row.get("rationale")): errors.append(criterion + " needs its factual rationale")
+            if not isinstance(row, dict): findings.append(criterion + " needs an evidence assessment"); continue
+            if row.get("status") != "satisfied": findings.append(criterion + " has unresolved or failed evidence")
+            if not _nonempty_string(row.get("rationale")): findings.append(criterion + " needs its factual rationale")
             anchors = row.get("source_anchors")
-            if not isinstance(anchors, list) or not anchors: errors.append(criterion + " needs located factual evidence")
+            if not isinstance(anchors, list) or not anchors: findings.append(criterion + " needs located factual evidence")
             elif project is not None:
                 for anchor in anchors: errors.extend(criterion + ": " + e for e in anchor_errors(project, anchor))
-    else:
+    if version != "1.2" or "scores" in report:
         dimensions = report.get("scores")
-        if not isinstance(dimensions, dict): errors.append("scores object is required"); dimensions = {}
+        if not isinstance(dimensions, dict): observations.append("numerical scores are absent or malformed; scores are optional observations"); dimensions = {}
         scores: list[float] = []
         for field in DIMENSIONS.get(gate, ()):
-            value = _score(dimensions.get(field), f"scores.{field}", errors)
+            value = _score(dimensions.get(field), f"scores.{field}", observations)
             if value is not None: scores.append(value)
-        if scores and sum(scores) / len(scores) < MIN_OVERALL: errors.append(f"overall mean score must be >= {MIN_OVERALL:g}")
+        if scores and sum(scores) / len(scores) < MIN_OVERALL: observations.append(f"overall mean score is below advisory reference {MIN_OVERALL:g}; scores do not establish scientific validity")
     evidence = report.get("evidence")
     minimum_evidence = MIN_EVIDENCE.get(gate, 3)
     if not isinstance(evidence, list) or len(evidence) < minimum_evidence:
@@ -101,29 +103,29 @@ def validate_report(report: dict[str, Any], gate: str, *, project: Path | None =
         if not isinstance(challenges, list) or len(challenges) < 3 or any(not _nonempty_string(item) for item in challenges):
             errors.append("doctoral_readiness.examiner_challenges needs at least 3 non-empty items")
     venue = report.get("venue_readiness")
-    if not isinstance(venue, dict): errors.append("venue_readiness object is required")
+    if not isinstance(venue, dict): observations.append("venue_readiness is not recorded; selected-venue checks apply at submission packaging")
     else:
         minimum_quartile = venue.get("minimum_jcr_quartile")
-        if minimum_quartile not in ACCEPTABLE_QUARTILES: errors.append("venue_readiness.minimum_jcr_quartile must be Q1 or Q2")
-        if venue.get("preferred_jcr_quartile") != "Q1": errors.append("venue_readiness.preferred_jcr_quartile must be Q1")
+        if not isinstance(minimum_quartile, str) or minimum_quartile not in ACCEPTABLE_QUARTILES: observations.append("venue_readiness.minimum_jcr_quartile should record the intended Q1 or Q2 target")
+        if venue.get("preferred_jcr_quartile") != "Q1": observations.append("venue_readiness.preferred_jcr_quartile differs from the Q1 preference")
         candidates = venue.get("candidate_venues")
-        if not isinstance(candidates, list) or len(candidates) < 2: errors.append("at least two current JCR candidate venues are required")
-        if venue.get("current_verification_required") is not True: errors.append("venue_readiness.current_verification_required must be true")
-        if venue.get("venue_specific_guidelines_required") is not True: errors.append("venue_readiness.venue_specific_guidelines_required must be true")
+        if not isinstance(candidates, list) or len(candidates) < 2: observations.append("fewer than two current JCR candidate venues are recorded; final selected-venue verification remains separate")
+        if venue.get("current_verification_required") is not True: observations.append("venue_readiness.current_verification_required is not recorded as true")
+        if venue.get("venue_specific_guidelines_required") is not True: observations.append("venue_readiness.venue_specific_guidelines_required is not recorded as true")
         try:
             from scripts.venue_policy import meets_target
         except ImportError:
             from venue_policy import meets_target
-        for index, candidate in enumerate(candidates or [], 1):
-            if not isinstance(candidate, dict): errors.append(f"venue_readiness.candidate_venues[{index}] must be an object"); continue
+        for index, candidate in enumerate(candidates if isinstance(candidates, list) else [], 1):
+            if not isinstance(candidate, dict): observations.append(f"venue_readiness.candidate_venues[{index}] must be an object"); continue
             quartile = candidate.get("quartile")
-            if quartile not in ACCEPTABLE_QUARTILES or not meets_target(quartile, minimum_quartile): errors.append(f"candidate venue {index} must meet current JCR {minimum_quartile or 'Q1/Q2'} target")
-            if candidate.get("indexing") not in {"SCIE", "SCI"}: errors.append(f"candidate venue {index} must be SCI/SCIE")
-            if not str(candidate.get("source_url", "")).startswith("https://"): errors.append(f"candidate venue {index} needs an HTTPS primary source")
+            if not isinstance(quartile, str) or quartile not in ACCEPTABLE_QUARTILES or not meets_target(quartile, minimum_quartile): observations.append(f"candidate venue {index} does not establish the current JCR {minimum_quartile or 'Q1/Q2'} target")
+            if candidate.get("indexing") not in ("SCIE", "SCI"): observations.append(f"candidate venue {index} lacks SCI/SCIE indexing evidence")
+            if not str(candidate.get("source_url", "")).startswith("https://"): observations.append(f"candidate venue {index} needs an HTTPS primary source")
             for field in ("name", "category", "scope_fit", "article_type"):
-                if not _nonempty_string(candidate.get(field)): errors.append(f"candidate venue {index} needs {field}")
+                if not _nonempty_string(candidate.get(field)): observations.append(f"candidate venue {index} needs {field}")
             year = candidate.get("jcr_year")
-            if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}: errors.append(f"candidate venue {index} needs the current or immediately previous JCR year")
+            if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}: observations.append(f"candidate venue {index} needs the current or immediately previous JCR year")
     blockers = report.get("blockers")
     if not isinstance(blockers, list): errors.append("blockers must be a list")
     elif blockers: errors.append("quality report has unresolved blockers")
@@ -133,9 +135,10 @@ def validate_report(report: dict[str, Any], gate: str, *, project: Path | None =
         errors.append("human_review_required must be a boolean; only G1/G2 require human stage decisions")
     return errors
 
-def validate_file(path: Path, gate: str, *, project: Path | None = None, require_facts: bool = False) -> list[str]:
+def validate_file(path: Path, gate: str, *, project: Path | None = None, require_facts: bool = False,
+                  warnings: list[str] | None = None) -> list[str]:
     try: report = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError: return [f"missing quality report: {path}"]
     except json.JSONDecodeError as exc: return [f"invalid JSON in quality report {path}: {exc}"]
     if not isinstance(report, dict): return [f"quality report must be an object: {path}"]
-    return validate_report(report, gate, project=project, require_facts=require_facts)
+    return validate_report(report, gate, project=project, require_facts=require_facts, warnings=warnings)

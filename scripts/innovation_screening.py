@@ -507,3 +507,60 @@ def validate_novelty_review(audit: dict, matrix: dict, gate: str,
         return []
     except (ValueError, KeyError, TypeError) as exc:
         return ["innovation hard gate: " + str(exc)]
+
+
+def adjudication(project: Path, spec: dict, *, observed=None) -> dict:
+    """Prepare current closest-work/merge questions; retain actual panel dissent."""
+    from scripts.research_artifacts import read, sha
+    _need(isinstance(spec, dict) and set(spec) <= {"schema_version", "id", "paper_id", "pairs"}
+          and spec.get("schema_version") == "1.0", "unsupported novelty adjudication")
+    identifier = _text(spec.get("id"), "adjudication ID")
+    paper_id = _text(spec.get("paper_id"), "current paper")
+    matrix_path = path_in(project, "program/novelty-claim-matrix.json")
+    matrix = read(matrix_path)
+    state_path = path_in(project, "state/run.json", exists=False)
+    state = read(state_path) if state_path.is_file() else {}
+    gate = state.get("gate", "G1")
+    originality = {}
+    try:
+        originality = read(path_in(project, "program/originality-audit.json"))
+        source_errors = validate_novelty_gate(project, matrix, originality, gate, paper_id)
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        source_errors = [str(exc)]
+    claims = {c["claim_id"]: c for c in novelty_claims(matrix, "G1")}
+    pairs = []
+    for pair in _rows(spec.get("pairs"), "actual merge questions", 1, 100):
+        ids = _strings(pair.get("claim_ids"), "claims to contrast", 2)
+        _need(len(ids) == len(set(ids)) == 2 and set(ids) <= set(claims), "merge question needs two distinct current claims")
+        _need(any(paper_id in claims[k].get("paper_ids", []) for k in ids), "merge question must concern the current paper")
+        pairs.append({"claim_ids": ids, "claims": [claims[k] for k in ids],
+            "question": _text(pair.get("question"), "scientific merge question"), "judgments": []})
+    if observed is None:
+        from scripts.literature_source_tasks import judgment_responses
+        observed = judgment_responses(project, paper_id)
+    claim_judgments = []
+    for item in observed:
+        for row in item["response"].get("novelty_assessment", []):
+            if row.get("claim_id") in claims:
+                claim_judgments.append({**row, "review": item["receipt"]["response"], "identity": item["receipt"]["identity"]})
+        for row in item["response"].get("novelty_adjudication", []):
+            ids = row.get("claim_ids")
+            matches = [p for p in pairs if isinstance(ids, list) and set(ids) == set(p["claim_ids"])]
+            _need(len(matches) == 1 and row.get("decision") in {"distinct", "should_merge", "insufficient"}, "novelty judgment outside its current pair")
+            for key in ("rationale", "shared_mechanism", "discriminating_prediction", "remaining_uncertainty"):
+                _text(row.get(key), "independent novelty " + key)
+            matches[0]["judgments"].append({**row, "review": item["receipt"]["response"], "identity": item["receipt"]["identity"]})
+    for pair in pairs:
+        decisions = {r["decision"] for r in pair["judgments"]}
+        pair["decision"] = next(iter(decisions)) if len(decisions) == 1 and not source_errors else "insufficient"
+        pair["merge_concern_present"] = "should_merge" in decisions
+        pair["disagreement"] = len(decisions) > 1
+    work_ids = {work for pair in pairs for claim in pair["claims"] for work in claim.get("closest_work_ids", [])}
+    nearest = [work for work in originality.get("closest_prior_work", []) if work.get("id") in work_ids]
+    adjacent = originality.get("search_scope", {}).get("adjacent_fields", [])
+    return {"schema_version": "1.0", "operation": "novelty_adjudication", "id": identifier,
+        "paper_id": paper_id, "matrix": {"path": matrix_path.relative_to(project).as_posix(), "sha256": sha(matrix_path)},
+        "pairs": pairs, "claim_novelty_judgments": claim_judgments, "source_validation_errors": source_errors,
+        "nearest_works": nearest, "adjacent_fields": adjacent,
+        "model_call_made": False, "novelty_verified": False, "scientific_completion_verified": False,
+        "role_contract": "Return novelty_adjudication:[{claim_ids:[left,right],decision:distinct|should_merge|insufficient,rationale,shared_mechanism,discriminating_prediction,remaining_uncertainty}]. Compare OUR mechanisms with 5–8 original nearest works and at least three adjacent fields; if that source coverage is missing, retain insufficient and name the gap. Do not discard contrary works to fit a count. Test whether removing the proposed novelty leaves the same method or predictions. should_merge is a valid finding. Do not vote away dissent or infer global novelty from missing hits."}

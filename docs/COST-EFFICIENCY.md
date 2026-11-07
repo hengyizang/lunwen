@@ -1,9 +1,12 @@
 # Cost efficiency with scientific controls intact
 
-Reviewed against main `f7548a0215edab1512ff67a9e989751518736218` on
-2026-10-18 (Asia/Shanghai). These changes select no new model, reasoning effort,
-gateway, paid service, scientific method or spending ceiling. Engineering checks
-are not evidence of doctoral quality, scientific equivalence or journal acceptance.
+The original efficiency review used main
+`f7548a0215edab1512ff67a9e989751518736218` on 2026-10-18 (Asia/Shanghai).
+That date identifies historical findings, not the current call-count or approval
+policy. The operating guidance below follows the current
+[workflow](../references/workflow.md) and [total-cost policy](TOTAL-COST-POLICY.md).
+Engineering checks do not establish doctoral quality, model equivalence or
+journal acceptance, and do not change the configured spending ceiling.
 
 ## Changes and findings
 
@@ -14,7 +17,7 @@ are not evidence of doctoral quality, scientific equivalence or journal acceptan
 | Context overflow | The legacy fallback could send partial files or omit later files. | Stop before inference when a required file or full packet exceeds its bound. Require explicit source ranges, complete constraints and full active counterevidence; do not silently compress scientific meaning. |
 | Scoped evidence | A mandatory source could be selected again with another stance/reason. | Render an identical source range once, retaining all bindings, reasons and opposing stances. Partial counterevidence and stale hashes still fail. |
 | Writer instructions | Every stage received long instructions for all other stages. | Retain shared constraints and every instruction applicable to the current stage. Stage contracts and independent scientific audits remain. |
-| Artifact regeneration | Returning unchanged chapters could churn files and provenance. | Ask for changed artifacts only, allow a justified empty change set, and do not rewrite identical bytes or replace their authorship ancestry. Submission-phase G5 retains complete contextual editorial dispositions; scientific drafting uses the applicable scientific checks. |
+| Artifact regeneration | Returning unchanged chapters could churn files and provenance. | Ask for changed artifacts only, allow a justified empty change set, and do not rewrite identical bytes or replace their authorship ancestry. Editorial dispositions remain C observations; scientific drafting uses actual evidence checks and final B work binds only the unchanged submission snapshot. |
 | Search requests | Identical searches in one plan could run twice; cache lookup did not bind the requested limit. | Update the in-cycle receipt index immediately and match the exact request URL/limit, provider, query family, age and raw/normalized hashes. Identical work metadata share source-receipt IDs. Bounded metadata previews disclose omissions. |
 | Citation checks | Repeated checks could fetch the same public metadata again. | The controlled `citation_audit` operation can reuse 24h hash-bound metadata; every bibliography/manuscript decision is recomputed. Changed titles, expired/corrupt/future cache records and explicit refresh cannot reuse a PASS. |
 | Native PDF readers | Existence of an output alone could suppress a newly required extraction. | Reuse only an exact native-reader source, implementation, selected page scope, reader and source-map hash. Preserve stale readers and request a new output path. Never silently overwrite old source-bound evidence. |
@@ -22,6 +25,28 @@ are not evidence of doctoral quality, scientific equivalence or journal acceptan
 | Live health probes | The legacy API health `--live` path bypassed project accounting. | Require an existing project, spending authority and exact rates. Both health entry points now use the shared runtime, fresh responses and ledger; default configuration checks remain free. A blocked request is not labeled as paid. |
 | Response caching | A request key did not explicitly separate stage/role; auxiliary review or health calls could replay an old response. | Cache version 4 binds stage, role, model, transport, strict identity, API version and billing identity. Validate response text hashes. Reviews and health always require fresh calls. |
 | Cost observability | Ambiguous transport failures had reservations but little request-level diagnostic detail. | Record request hashes/bytes, output ceilings, cache policy and uncertain failures. Duplicate paid requests are inspection candidates, not proof of waste. Unknown charges are never certified free. |
+
+## Six-paper scenario estimates
+
+`cost_audit.portfolio_forecast` separates planner, writer, critic and other
+actual ledger use. Its illustrative six-paper scenarios contain 87, 147 and 264
+calls: three per ordinary cycle and one final five-call planner/writer/three-view
+panel cycle per paper. These are assumptions, not quotas or completed work.
+Costs and serial model-service seconds use comparable observed role samples
+(low/median/high). Missing role/cost/time samples leave the affected total null;
+unknown charges are not zero. Repairs, repeated panels, source acquisition and
+experiments are additional. API CNY and compute USD remain separate. Service
+seconds never estimate scientific completion days or guarantee acceptance.
+Regression scope: `tests/test_research_planning_costs.py`.
+
+## Measured test partitions
+
+`python scripts/run_tests.py fast` gives quick deterministic feedback; `slow`
+runs the explicitly measured integration files and `all` retains every test.
+New files enter `fast` automatically. CI runs fast then slow on Python 3.12
+without repeating its fast partition; Python 3.10 and 3.13 retain complete
+compatibility checks. Import failures remain failures and optional skips remain
+visible. This partition changes feedback time, not scientific acceptance.
 
 ## The recommendations already handled by programs
 
@@ -35,8 +60,9 @@ replay, statistical assumptions, actual G1/G2 topic decisions and evidence-bound
 Native PDF extraction remains the first route. OCR/vision is required when text
 extraction is inadequate, but no paid OCR, embedding, reranker or translation
 service is enabled by this change. There are no real topic/data materials here
-that establish a need for one. Optional translation still requires explicit paid
-authorization. Large language models are not self-hosted on the CPU runner.
+that establish a need for one. A selected translation task uses the existing
+metered route and cumulative total, without a separate payment approval.
+Large language models are not self-hosted on the default CPU runner.
 
 ## Lexical retrieval before paid semantic tools
 
@@ -95,21 +121,19 @@ unless explicitly given `--cache-metadata`. This avoids mutation of protected
 state from inside a writer/critic invocation. Use the controller for persistent
 cache writes, and `--refresh-metadata` for an explicit public refresh.
 
-## Required model roles are not redundant calls
+## Calls follow the actual research decision
 
-The existing roles remain Claude planning, OpenAI writing, fresh initial criticism,
-OpenAI remediation when required, and fresh final criticism. A clean initial
-audit with complete applicable writer dispositions skips the extra remediation
-call. Submission editorial work reuses those passes; scientific drafting does
-not require a full editorial scorecard. Different perspectives inside one critic
-are not independent raters or additional paid agents.
+The ordinary cycle uses Claude planning, OpenAI writing and one fresh independent
+critique. Actual actionable findings alone justify repair and re-review; a clean
+critique does not manufacture another model call. Final submission replaces the
+ordinary critic with three mutually blind, different-family source views, frozen
+before synthesis without votes or acceptance estimates. See the authoritative
+[workflow](../references/workflow.md). C observations do not create repair loops.
 
-Do not remove a review just because the prompt or manuscript did not change.
-A fresh final assessment can identify a missed problem. Conversely, unchanged
-chapters need not be regenerated: the remediator can return reasoned dispositions
-without a gratuitous edit. The fresh final critic, actual G1/G2 human topic
-decisions and automated evidence checks still run. Model-family separation,
-frozen experiments and manual submission remain. No independent review is fulfilled by a response-cache hit.
+Unchanged chapters need not be regenerated. Preserve actual G1/G2 choices,
+source/claim integrity, writer-family separation, frozen experiments and every
+charge. Reuse final B checks/panel only for their unchanged bound snapshot;
+response-cache hits never impersonate a new independent review.
 
 The zero-call `health` command is unchanged. For a deliberately billable check,
 use `health --live --project PROJECT --provider PROVIDER` only within an existing
@@ -137,9 +161,13 @@ the research, and no blanket savings percentage is claimed.
 The existing gateway CI job also runs `scripts.cost_quality_acceptance` on a
 cloud runner, with a mock transport and no provider credentials. Its receipt
 checks lossless source content/hashes, preserved contrary evidence, excluded
-historical verdicts, an exact writer response reuse and two fresh assessments.
-The existing separate gateway acceptance still exercises a full cross-family
-five-role cycle. Unit coverage adds stale/changed caches, overflowing context,
+historical verdicts, an exact writer response reuse and two deliberately invoked
+fresh assessments. That cache-freshness fixture does not require two critics in
+an ordinary cycle. The separate gateway acceptance exercises a conditional
+five-call repair case: its initial critic reports an actionable defect, then the
+writer repairs it and a fresh critic rechecks it. This is not the baseline
+three-call cost or a substitute for the final three-family panel. Unit coverage
+adds stale/changed caches, overflowing context,
 metadata/reader invalidation, changed search limits and duplicate diagnostics.
 
 The receipt's byte counts and call counts are synthetic engineering evidence.

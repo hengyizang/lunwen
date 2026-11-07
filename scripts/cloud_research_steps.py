@@ -63,13 +63,17 @@ def fresh(receipt: dict, project: Path, days: int = 7) -> bool:
 def literature_context(project: Path, query: str) -> dict:
     plan = read(project / "program/literature-search-plan.json")
     if plan is None:
-        providers = ["crossref", "arxiv", "openalex" if os.environ.get("OPENALEX_API_KEY") else "hal"]
+        providers = [p for p in literature_evidence.DEFAULT_SEARCH_PROVIDERS
+                     if p != "openalex" or os.environ.get("OPENALEX_API_KEY")]
         searches = [{"provider": provider, "query": text, "query_family": family, "limit": 15}
-                    for family, text in (("direct", query), ("adjacent", query + " baseline benchmark"),
+                    for family, text in (("direct", query), ("method_alternatives", query + " comparison alternative methods"),
                                          ("counterevidence", query + " limitations failure robustness"))
                     for provider in providers]
     else:
         searches = plan.get("searches")
+    max_calls = (plan or {}).get("max_search_calls", 12)
+    if type(max_calls) is not int or not 1 <= max_calls <= 60:
+        raise ResearchStepError("max_search_calls must be an integer between 1 and 60")
     if not isinstance(searches, list) or not 1 <= len(searches) <= 60:
         raise ResearchStepError("literature-search-plan needs 1–60 explicit searches")
     ledger = literature_evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl")
@@ -99,7 +103,7 @@ def literature_context(project: Path, query: str) -> dict:
             if failed.get("at") and datetime.now(timezone.utc) - datetime.fromisoformat(failed["at"]) < timedelta(hours=6):
                 errors.append({"provider": provider, "query_family": family, "error": failed["error"]})
                 continue
-            if calls >= 6:
+            if calls >= max_calls:
                 pending += 1
                 continue
             calls += 1
@@ -128,6 +132,10 @@ def literature_context(project: Path, query: str) -> dict:
     works = list(unique_works.values())
     write(attempts_path, attempts)
     return {"receipts": results, "works": works[:90], "provider_errors": errors,
+            "planned_providers": sorted({item["provider"] for item in searches}),
+            "searched_providers": sorted({item["provider"] for item in results}),
+            "default_discovery_only": plan is None,
+            "next_query_guidance": "Use actual closest-work gaps, cited/citing works and named adjacent fields in the next explicit search plan; fallback suffixes do not establish saturation.",
             "pending_searches": pending, "new_search_calls": calls,
             "work_count": len(works), "works_omitted": max(0, len(works) - 90),
             "bounded_metadata_only": True,
@@ -232,9 +240,11 @@ def acquire_data(project: Path) -> dict:
 
 def _cloud_run_eligible(project: Path, run: dict) -> bool:
     from scripts.empirical_workflow import cloud_outputs_allowed
+    from scripts.cloud_runtime import execution_window
     isolation = run.get("isolation", {})
     return (isolation.get("kind") == "container" and isolation.get("engine") == "docker"
-            and run["timeout_seconds"] <= 1200 and cloud_outputs_allowed(project, run))
+            and run["timeout_seconds"] <= execution_window()["max_run_timeout_seconds"]
+            and not experiment_runner.resource_errors(run) and cloud_outputs_allowed(project, run))
 
 
 def resume_experiments(project: Path) -> dict:
@@ -294,8 +304,11 @@ def resume_experiments(project: Path) -> dict:
         return {"completed_runs": sorted(completed), "pending_runs": 0, "blockers": []}
     run = pending[0]
     if not _cloud_run_eligible(project, run):
+        from scripts.cloud_runtime import execution_window
+        diagnostics=experiment_runner.resource_errors(run)
         return {"pending_runs": len(pending), "blockers": [{"kind": "cloud_experiment_plan",
-                 "detail": "Use a pinned Docker image, <=1200 seconds per run and explicit results/ outputs"}]}
+                 "detail": {"requirements":"Use a pinned Docker image, explicit results/ outputs and a capable controlled runner",
+                            "execution_window":execution_window(),"resource_errors":diagnostics}}]}
     results = experiment_runner.execute(project.name, [run["run_id"]], project_root=project)
     result = results[0]
     if exploring:
@@ -592,7 +605,7 @@ def after_write(project: Path, stage: str) -> dict:
             elif action in {"ccfa_task", "ccfa_task_clear", "ccfa_science", "ccfa_humanization"}:
                 from scripts.ccfa_runtime import execute
                 report.setdefault("ccfa", []).append({"action": action, "result": execute(project, operation)})
-            elif action in {"research_toolkit", "research_iteration", "research_frontier", "research_search_tree",
+            elif action in {"scientific_judgment", "research_case", "research_toolkit", "research_iteration", "research_frontier", "research_search_tree",
                             "figure_gallery_sync", "figure_gallery_search", "figure_story",
                             "editable_figure_export", "editable_figure_verify",
                             "literature_discover", "literature_register", "literature_resolve", "literature_figures",

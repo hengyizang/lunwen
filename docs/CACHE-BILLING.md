@@ -87,7 +87,7 @@ provider's cache TTL or hit rate applies to another.
 [Gemini cache support](https://ai.google.dev/gemini-api/docs/caching).
 
 Provider prefix caching reuses input processing while generating a new answer.
-It does not replace the required fresh initial/final independent reviews with
+It does not replace the current independent critique and final blind panel with
 an old response. The existing response-cache freshness rules, model-family
 separation, human gates and cloud-only experiment controls remain in force.
 

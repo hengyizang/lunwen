@@ -1,0 +1,22 @@
+{
+  "test_ccfa_model_handoffs.py": "Cross-role prompt and full pinned reference checks: 32.42 seconds at 3e9f56b.",
+  "test_figure_panel_cache.py": "Actual figure rendering and panel cache checks: 5.46 seconds.",
+  "test_study_routes.py": "Meta-analysis and formal-study integration: 4.44 seconds.",
+  "test_ccfa_runtime.py": "Complete pinned skill installation and source checks: 4.10 seconds.",
+  "test_dynamic_routing.py": "Route selection and evidence-profile integration: 3.96 seconds.",
+  "test_research_exploration.py": "Real local synthetic experiment processes: 3.82 seconds.",
+  "test_new_capabilities.py": "Optional reader, Office and figure toolchains: 3.23 seconds.",
+  "test_live_acceptance.py": "Acceptance command adapters with synthetic transport: 3.00 seconds; no live services enabled.",
+  "test_p0_p1_completion.py": "Complete export, provenance and figure integration: 2.61 seconds.",
+  "test_scientific_result_bindings.py": "Synthetic end-to-end source and result bindings: 2.50 seconds.",
+  "test_experiment_evidence.py": "Statistical evidence integration: 2.43 seconds.",
+  "test_cloud_human_controls.py": "Recorded human decision and freeze workflows: 2.35 seconds.",
+  "test_ccfa_reference_routing.py": "Full reference expansion and routing: 2.25 seconds.",
+  "test_operating_constraints.py": "Cloud resource and protocol integration: 1.89 seconds.",
+  "test_primary_recovery.py": "Real failed-attempt recovery fixtures: 1.86 seconds.",
+  "test_figure_accessibility.py": "Actual SVG/PDF rendering and image inspection: 1.80 seconds; optional dependencies may skip.",
+  "test_portfolio_evidence.py": "Six-paper evidence and portfolio integration: 1.59 seconds.",
+  "test_editorial_integration.py": "Complete editorial source integration: 1.53 seconds.",
+  "test_research_frontier.py": "Source-bound research frontier integration: 1.17 seconds.",
+  "test_publication_figures.py": "Actual publication figure rendering: 1.03 seconds."
+}

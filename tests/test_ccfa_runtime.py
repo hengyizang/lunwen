@@ -155,6 +155,16 @@ class CCFARuntimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runtime.model_contract("topic-intelligence", "scientific-executor")
 
+    def test_native_defaults_do_not_restore_upstream_exhaustive_or_double_review_rules(self):
+        for role in runtime.ROLES:
+            with self.subTest(role=role):
+                result = runtime.model_contract("writing-and-review", role)
+                self.assertIn("planner -> writer -> critic", result)
+                self.assertIn("final three-family mutually blind panel", result)
+                self.assertIn("Empty or partial observation lists are valid", result)
+                self.assertNotIn("initial/final independent audits", result)
+                self.assertNotIn("AVAILABLE OBSERVATION CATALOG", result)
+
     def test_prepare_is_idempotent_source_bound_and_context_contains_complete_guidance_without_calls(self):
         with tempfile.TemporaryDirectory() as directory, cloud(), patch("scripts.network_safety.fetch_bytes", side_effect=AssertionError("No network authorized")), patch("scripts.model_runtime.authorized_calls", side_effect=AssertionError("No model call authorized")):
             project, source = self.project(Path(directory))

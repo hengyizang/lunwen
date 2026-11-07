@@ -57,6 +57,8 @@ EXTRA = {
 EXTRA["approve"] = EXTRA["approve"] | {"paper_id"}
 
 LITERATURE_OPERATIONS = {
+    "scientific_judgment": ({"task", "request_file"}, {"task", "request_file"}),
+    "research_case": ({"paper_id", "kind"}, {"paper_id"}),
     "literature_screening_prepare": ({"receipt_id", "question"}, {"receipt_id", "question"}),
     "literature_source_scope": ({"paper_id"}, {"paper_id"}),
     "research_toolkit": ({"request_file"}, {"request_file"}),
@@ -373,9 +375,22 @@ def run_command(argv: list[str], *, timeout: int = 3600) -> tuple[int, str]:
     if not argv or not argv[0].startswith("scripts/") or not argv[0].endswith(".py"):
         raise CloudJobError("only repository Python entry points may run")
     module = argv[0][:-3].replace("/", ".")
+    import time,math
+    environment=os.environ.copy()
+    deadline=time.time()+timeout
+    for key in ("DR_OS_CLOUD_JOB_DEADLINE_EPOCH","DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH"):
+        if key in environment:
+            try:
+                current=float(environment[key])
+                if not math.isfinite(current):raise ValueError("nonfinite deadline")
+                deadline=min(deadline,current)
+            except (TypeError,ValueError):return 124,"Invalid controller execution deadline; no command was started."
+    remaining=min(timeout,deadline-time.time())
+    if remaining<=0:return 124,"The current cloud execution window has ended; no command was started."
+    environment["DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH"]=str(deadline)
     try:
         result = subprocess.run([sys.executable, "-m", module, *argv[1:]], cwd=ROOT, capture_output=True,
-                                text=True, errors="replace", timeout=timeout)
+                                text=True, errors="replace", timeout=remaining,env=environment)
         raw = (result.stdout + "\n" + result.stderr)[-50000:]
         for key in cloud_checkpoint.SECRET_NAMES | {"LITERATURE_CONTACT_EMAIL"} | {name for name in os.environ if name.startswith("DR_OS_WATERMARK_KEY_")}:
             if len(os.environ.get(key, "")) >= 8:
@@ -635,8 +650,18 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                        "--output", "evidence/qa/" + run_id + ".json", "--execute"]
                 for source in sources:
                     cmd += ["--source", source.relative_to(project).as_posix()]
+            elif action == "tooluniverse":
+                from scripts.ai4science_evidence import public_tooluniverse_request, AI4ScienceEvidenceError
+                try:
+                    public_tooluniverse_request(ROOT / "projects" / slug, job["request_file"])
+                except AI4ScienceEvidenceError as exc:
+                    raise CloudJobError(str(exc)) from exc
+                cmd = ["scripts/ai4science_evidence.py", "tooluniverse", "--project", slug,
+                       "--request", job["request_file"], "--actor", job["actor"],
+                       "--purpose", "Retrieve a reviewed public UniProt record with no model calls."]
+                detail = "Execute the reviewed credential-free UniProt SDK path; preserve request, output, HTTP attempts and zero model/API cost evidence.\n\n"
             else:
-                raise CloudJobError("ToolUniverse requires a cost adapter that can count actual charges or a bounded upper estimate against the cumulative ceiling")
+                raise CloudJobError("unsupported execution action")
             if cmd is not None:
                 phase = "execution"
                 execution_started = True

@@ -39,7 +39,7 @@ does not request a scientific approval to override it.
 
 The next scheduled controller can revisit its own experiment-inspection report.
 It does not treat that report as a request for human scientific review.
-`diagnosis_context` permits the existing metered writer and initial/final
+`diagnosis_context` permits the existing metered writer and current independent
 independent critic cycle to inspect complete source-bound failure logs only
 when all recorded attempts failed, frozen inputs are unchanged, compute is
 zero-cost, no reservation is unresolved, and the approved thesis/paper topics

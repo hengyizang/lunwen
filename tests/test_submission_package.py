@@ -15,7 +15,84 @@ from scripts.submission_package import build_package
 
 
 class SubmissionPackageTests(unittest.TestCase):
-    def make_project(self, root: Path, ready: bool = True, *, mock_visual: bool = True) -> Path:
+    def test_final_binding_includes_protected_panel_outside_the_paper_tree(self):
+        from scripts import submission_package as packaging, review_panel, model_runtime, ai_providers
+        from scripts.research_artifacts import read
+        from tests.test_review_panel import panel_inputs
+        def response(project, **kwargs):
+            seat=kwargs["role"].removeprefix("independent-critic-panel-")
+            return ai_providers.ModelResult(kwargs["provider"],kwargs["model"],json.dumps({
+                "view":seat,"findings":[],"uncertainty":["Synthetic transport fixture only"]}),{},
+                reported_model=kwargs["model"],completion_status="completed",cache_hit=False)
+        with tempfile.TemporaryDirectory() as directory:
+            project=self.make_project(Path(directory),mock_submission=False)
+            panel_inputs(project)
+            with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1"}), \
+                 patch.object(model_runtime,"preflight_route",return_value={}), \
+                 patch.object(model_runtime,"call",side_effect=response):
+                review_panel.run(project,"P01","binding-fixture")
+            original=packaging.submission_check_binding(project,"P01")
+            latest=project/review_panel.PREFIX/"P01/latest.json"
+            saved=latest.read_bytes()
+            latest.unlink()
+            self.assertNotEqual(original,packaging.submission_check_binding(project,"P01"))
+            latest.write_bytes(saved)
+            records=review_panel.responses(project,"P01")
+            response_path=project/records[0]["receipt"]["response"]["path"]
+            response_path.write_text(response_path.read_text()+" ")
+            with self.assertRaisesRegex(ValueError,"changed|provenance"):
+                packaging.submission_check_binding(project,"P01")
+
+    def test_final_checks_reuse_the_existing_g5_binding_and_detect_changed_external_source(self):
+        from scripts import submission_package as packaging
+        from scripts.research_artifacts import read,write,sha
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);project=self.make_project(root,mock_submission=False)
+            source=project/"evidence/journal-scope.txt"
+            source.write_text("Synthetic official scope snapshot, not real journal evidence.",encoding="utf-8")
+            venue=read(project/"papers/P01/venue.json")
+            write(project/"program/journal-dossiers.json",{"journals":[{"venue_id":venue["venue_id"],"fields":{
+                "apc":{"status":"unknown","reason":"Synthetic binding fixture only",
+                       "source":{"path":source.relative_to(project).as_posix(),"sha256":sha(source)}},
+                "ai_policy":{"source":{"path":"../../ignored-policy"}}}}]})
+            with patch.object(researchctl,"PROJECTS_ROOT",root),patch("scripts.submission_package.project_dir",lambda slug:root/slug), \
+                 patch("scripts.manuscript_audit.validate_saved_report",return_value=[]), \
+                 patch.object(packaging,"submission_checks",return_value=[]) as checked:
+                # The stub is an explicit synthetic B result. This test checks
+                # reuse/invalidations; native compilation is tested separately.
+                self.assertEqual(packaging.submission_checks(project,"P01"),[])
+                state=read(project/"state/run.json")
+                state["approvals"][-1]["submission_checks_sha256"]=packaging.submission_check_binding(project,"P01")
+                write(project/"state/run.json",state)
+                build_package("demo-study","P01",root/"first.zip")
+                build_package("demo-study","P01",root/"second.zip")
+                self.assertEqual(checked.call_count,1)
+                source.write_text("Changed actual official-source bytes.",encoding="utf-8")
+                with self.assertRaisesRegex(researchctl.ResearchCtlError,"submission inputs changed|Paper changed after"):
+                    build_package("demo-study","P01",root/"changed.zip")
+                self.assertEqual(checked.call_count,1)
+
+    def test_submission_check_rejects_legacy_silent_tool_skip_without_fixed_age_expiry(self):
+        from scripts.submission_package import submission_checks
+        from scripts.research_artifacts import read,write
+        with tempfile.TemporaryDirectory() as directory:
+            project=self.make_project(Path(directory),mock_submission=False)
+            paper=project/"papers/P01"
+            for name in ("venue.json","reviews/venue-compliance.json","reviews/citation-audit.json"):
+                value=read(paper/name)
+                value.update(created_at="2001-01-01T00:00:00Z",g5_reverified_at="2001-01-01T00:00:00Z")
+                write(paper/name,value)
+            with patch("scripts.model_runtime.call",side_effect=AssertionError("No model calls")):
+                errors=submission_checks(project,"P01")
+            self.assertTrue(any("actual LaTeX compilation must pass" in issue for issue in errors),errors)
+            self.assertFalse(any("within 120" in issue or "within 180" in issue for issue in errors),errors)
+
+    def make_project(self, root: Path, ready: bool = True, *, mock_visual: bool = True, mock_submission: bool = True) -> Path:
+        if mock_submission:
+            # ZIP and A-integrity unit tests use an explicitly synthetic B result;
+            # actual missing-tool/phase/binding checks are exercised separately.
+            checks=patch("scripts.submission_package.submission_checks",return_value=[])
+            checks.start();self.addCleanup(checks.stop)
         if mock_visual:
             # These synthetic cases isolate packaging; actual attachment/model
             # binding is tested in test_automated_visual_review. They never
@@ -144,9 +221,9 @@ class SubmissionPackageTests(unittest.TestCase):
     def test_missing_final_render_or_visual_receipt_blocks_complete_package(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
-            self.make_project(root,mock_visual=False)
+            self.make_project(root,mock_visual=False,mock_submission=False)
             with patch.object(researchctl,"PROJECTS_ROOT",root), patch("scripts.submission_package.project_dir",lambda slug:root/slug):
-                with self.assertRaisesRegex(researchctl.ResearchCtlError,"Final PDF visual checks"):
+                with self.assertRaisesRegex(researchctl.ResearchCtlError,"LaTeX compilation|final PDF"):
                     build_package("demo-study","P01",root/"blocked.zip")
 
     def test_builds_deterministic_manual_package(self) -> None:

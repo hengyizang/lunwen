@@ -39,7 +39,7 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
 ```
 
 The writer/remediator output ceiling defaults to 12,000 tokens. Read-only
-planning and both independent audits use a separate 4,000-token ceiling, which
+planning and independent critique use a separate 4,000-token ceiling, which
 can be changed for one session with `DR_OS_CONTROL_MAX_OUTPUT_TOKENS`. Writing
 snapshots contain the complete active paper but only the contracts of inactive
 papers; prior reviews remain excluded and are supplied to the appropriate
@@ -67,18 +67,19 @@ deliberate CLI-only diagnostics; the visual dashboard keeps automation enabled.
 
 The API mode writes Claude's semantic plan and all raw responses under `projects/my-phd/api_runs/<run-id>/`; this local audit/debug directory is ignored by Git and excluded from submission packages. It sends a bounded text snapshot of the current project, excluding raw/private data, prior API responses, build/cache directories, hidden files, obvious credential files and—during independent review—prior reviews. Only the non-Anthropic writer bundle can become a persistent artifact. Traversal, hidden files, credentials, `.env`, state/provenance files, independent audits and the decision log are protected. No model can call `approve`, `advance`, execute shell commands, or submit a manuscript.
 
-For G1–G5, `cycle` validates Claude critic JSON against the independent-audit contract,
-writes matching initial/final audits under `reviews/independent/`, and deterministically appends the
-non-Claude writer's itemized dispositions to `reviews/decision-log.md` after the final audit. Fatal or major findings, missing evidence, remediation steps, unresolved dispositions, or a stale/mismatched log keep the gate closed.
+Ordinary `cycle` uses planner → writer → one source-bound independent critique.
+Actual actionable findings alone trigger repair and fresh re-review. The current
+observation receipt binds the notebook decision and has no independent gate
+authority; legacy dual-review records remain readable history. At final submission
+the three-family mutually blind panel replaces the ordinary critic. A actual
+source/claim/numeric failures block; C observations do not manufacture repairs.
+See [workflow.md](../references/workflow.md) for exact views and B snapshot reuse.
 
-G1 additionally requires `program/originality-audit.json`; G2 requires a
-complete pairwise paper-distinctness matrix and paper-contract schema 2.0; G3
-requires one or more linked experiment designs per paper, with every planned run
-assigned exactly once. Theme B must own disjoint claims, papers and primary
-evidence and survive failure of Theme A. Candidate and selected venues are
-bound to a human-imported local JCR export. The six-paper portfolio must retain
-at least three current JCR Q1 SCI/SCIE targets and every remainder at least Q2;
-Q2 does not relax any scientific-quality gate.
+G1 uses source-bound closest-work evidence and honest stopping limits. G2 uses
+cumulative contribution/evidence rows and paper contracts, preserving standalone
+value and one doctoral question instead of fifteen repeated pair forms. G3 binds
+the active paper's actual rights, design, frozen inputs and appropriate methods.
+Venue ranking is truthful planning metadata; actual fit replaces rank floors.
 At G4 the registry and claim matrix are hash-linked to the approved plan and
 outputs; clean-room claims require an executor-issued, digest-pinned container
 isolation receipt. A linked worktree alone does not qualify. At G5 the control plane checks the final source and

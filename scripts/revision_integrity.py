@@ -218,19 +218,19 @@ def record_automated_changes(paper: Path) -> dict:
     return value
 
 
-def validate_saved_report(paper: Path) -> list[str]:
+def validate_saved_report(paper: Path, *, include_ledger: bool = True) -> list[str]:
     path = paper / "reviews" / "revision-integrity.json"
     if not path.is_file():
         return ["reviews/revision-integrity.json is required"]
     try:
         saved = json.loads(path.read_text(encoding="utf-8"))
-        current = audit(paper)
+        current = audit(paper, include_ledger=include_ledger)
     except (OSError, json.JSONDecodeError, RevisionIntegrityError, ValueError) as exc:
         return [f"cannot validate revision integrity: {exc}"]
     errors: list[str] = []
-    if saved.get("schema_version") != "1.0" or saved.get("status") != "pass":
+    if saved.get("schema_version") != "1.0" or (include_ledger and saved.get("status") != "pass"):
         errors.append("revision integrity must be a passing schema_version 1.0 report")
-    for key in ("base", "current", "authorization", "revision_ledger"):
+    for key in ("base", "current", "authorization", *(("revision_ledger",) if include_ledger else ())):
         if saved.get(key) != current.get(key):
             errors.append(f"revision integrity is stale for {key}")
     if saved.get("changes") != current.get("changes"):

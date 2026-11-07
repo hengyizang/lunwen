@@ -36,6 +36,8 @@ class ResearchCtlTests(unittest.TestCase):
     def complete_constraints(self, project: Path) -> None:
         path=project/"intake"/"constraints.json"
         value=json.loads(path.read_text())
+        value["preferred_domains"]=["Fixture mechanical engineering"]
+        value["candidate_application_routes"]=["Fixture doctoral programme"]
         value.update({"status":"ready_for_review","research_goal":"Develop a rigorous doctoral research programme.","researcher_background":"Mechanical engineering and data/AI.","available_skills":["Python","machine learning","mechanical engineering"],"time_horizon_years":3,"weekly_hours":30,"cash_budget_usd":1000,"cloud_compute_budget_usd":200,"local_compute":{"gpu":"none","ram_gb":16,"storage_gb":512},"ranking_weights":{"funded_position_supply":0.25,"job_market_and_salary":0.25,"future_growth_potential":0.15,"phd_position_competition":0.075,"job_market_competition":0.075,"background_fit":0.10,"application_route_fit":0.10}})
         researchctl.write_json(path,value)
 
@@ -326,7 +328,7 @@ class ResearchCtlTests(unittest.TestCase):
         errors=researchctl.gate_errors("test-phd","G0")
         self.assertTrue(any("weekly_hours" in error for error in errors))
 
-    def test_g5_requires_current_academic_style_audit(self) -> None:
+    def test_g5_observes_academic_style_without_blocking_scientific_work(self) -> None:
         self.init_project()
         state = researchctl.load_state("test-phd")
         state.update(
@@ -340,10 +342,12 @@ class ResearchCtlTests(unittest.TestCase):
             }
         )
         researchctl.save_state("test-phd", state)
-        errors = researchctl.gate_errors("test-phd", "G5")
-        self.assertTrue(any("academic style audit" in error for error in errors))
+        warnings=[]
+        errors = researchctl.gate_errors("test-phd", "G5",warnings=warnings)
+        self.assertFalse(any("academic style audit" in error for error in errors))
+        self.assertTrue(any("academic style audit" in warning for warning in warnings))
 
-    def test_g5_rechecks_six_paper_venue_portfolio(self) -> None:
+    def test_g5_does_not_use_planning_quartiles_as_scientific_thresholds(self) -> None:
         project = self.init_project(paper_count=6)
         paper_map = {
             "papers": [
@@ -371,8 +375,8 @@ class ResearchCtlTests(unittest.TestCase):
         )
         researchctl.save_state("test-phd", state)
         errors = researchctl.gate_errors("test-phd", "G5")
-        self.assertTrue(any("P03 target JCR quartile" in item for item in errors))
-        self.assertTrue(any("at least 3 Q1" in item for item in errors))
+        self.assertFalse(any("P03 target JCR quartile" in item for item in errors))
+        self.assertFalse(any("at least 3 Q1" in item for item in errors))
 
     def test_change_after_ready_requires_fresh_human_review(self) -> None:
         project=self.init_project();self.complete_constraints(project)
@@ -387,14 +391,15 @@ class ResearchCtlTests(unittest.TestCase):
         researchctl.reopen(types.SimpleNamespace(project="test-phd",note="Needs another model revision"))
         state=researchctl.load_state("test-phd");self.assertEqual(state["status"],"awaiting_work");self.assertNotIn("ready_artifact_sha256",state)
 
-    def test_final_audit_blocks_major_findings_and_unresolved_dispositions(self) -> None:
+    def test_legacy_stage_review_is_observational_instead_of_a_second_stage_gate(self) -> None:
         project=self.init_project();review_dir=project/"reviews"/"independent";review_dir.mkdir(parents=True,exist_ok=True)
         base={"verdict":"revise","fatal_findings":[],"major_findings":[],"minor_findings":[],"missing_evidence":[],"remediation_steps":[],"uncertainty":[]}
         initial=review_dir/"G1-run-initial.json";final=review_dir/"G1-run-final.json";researchctl.write_json(initial,base)
         bad={**base,"verdict":"pass-with-conditions","major_findings":["weak baseline"]};researchctl.write_json(final,bad)
         (project/"reviews"/"decision-log.md").write_text("# Review decision log\n\n## latest\n- Initial independent audit: `reviews/independent/G1-run-initial.json`\n- Final independent audit: `reviews/independent/G1-run-final.json`\n  - unresolved: baseline remains\n",encoding="utf-8")
-        errors=[];researchctl.independent_audit_errors(project,"G1",errors)
-        self.assertTrue(any("source-bound independent review" in error for error in errors))
+        errors=[];warnings=[];researchctl.independent_audit_errors(project,"G1",errors,warnings=warnings)
+        self.assertEqual(errors,[])
+        self.assertTrue(any("source-bound independent review" in warning for warning in warnings))
         # Bare legacy verdicts/logs cannot stand in for a current controller
         # receipt. Detailed final-verdict/notes tests live in test_review_receipts.
 

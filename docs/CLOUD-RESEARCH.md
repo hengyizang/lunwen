@@ -30,6 +30,16 @@ zero. A later non-model expense needs an explicit budget decision. Any draft
 budget number remains subject to human review. A draft ceiling does not grant
 spending authority or approve a scientific gate.
 
+Default controlled literature search covers all seven available public sources
+(six without an OpenAlex key) and permits twelve actual new search calls per
+cycle. An explicit `program/literature-search-plan.json` may set
+`max_search_calls` from 1 to 60; this is throughput, not a paid allowance or proof
+of coverage. Fallback `direct`, `method_alternatives` and `counterevidence`
+queries are broad leads, never invented adjacent-field evidence or saturation.
+Topic-specific queries and actual citation chains still need source receipts.
+The seven direction weights are the owner's actual finite nonnegative values
+summing to one; the system does not force equal employment/PhD weights.
+
 Only a new issue created by the `hengyizang` repository owner, with a title
 starting exactly `[research-cloud]`, starts `.github/workflows/cloud-research.yml`.
 Use the marker and one fenced JSON object; no prose or credentials:
@@ -68,36 +78,45 @@ a new job is not a new spending approval.
 | `free_jev_probe` | none | One fixed, synthetic public-metadata request to OpenRouter `typesafe/jev-router`, only with a dedicated API key capped at USD 0 (BYOK counted). Require zero provider prices, an exact serving model and a zero-cost generation receipt. No research data or scientific gate change. |
 | `init` | `paper_count` (default 6) | Create a six-paper project in its state branch. |
 | `status` | none | Read the persisted stage, gate and blockers. |
-| `authorize_budget` | `new_ceiling_cny` | Record the owner's next CNY 300 cumulative model API tranche. No model call. |
+| `authorize_budget` | `new_ceiling_cny` | Record an actual authorized cumulative project total; no fixed increment or routine approval layer. No model call. |
 | `reconcile_budget` | `reservation_id`, `actual_cost_cny`, `evidence_note` | Record the checked gateway bill for an ambiguous or interrupted call and release its reservation. No model call. |
 | `cycle` | `context`, optional `stage` and critical `task_kind` | One current-stage Claude plan/critic and GPT writer/remediation cycle through the production task routes. |
 | `continuation` | none | Recheck the bound owner policy, gates, configuration and ledger; run one permitted current-stage cycle and continue only while healthy. |
 | `paperqa` | `corpus`, `question`, optional compatibility `settings` | Bounded native source Q&A with deterministic retrieval and Sol high through the central budget; not the upstream paid PaperQA2 SDK. |
 | `auxiliary` | `manifest` | One bounded metadata/engineering/multimodal/format/screening helper from evidence/auxiliary-jobs/*.json; no model override or budget grant. |
-| `tooluniverse` | `request_file` | Paused as a paid cloud action until any external API charges are meterable against the tranche. |
+| `literature` | `request_file` | Execute one declared operation from a project `program/*.json` file, including the scientific preparation operations below. |
+| `tooluniverse` | `request_file` | Reviewed ToolUniverse 1.5.1 `UniProt_get_entry_by_accession` only: canonical accession, compact output, one fixed public HTTPS GET, no credentials/model calls, hash-bound attempts and cost basis. Other tools require a metered cost adapter. |
 
-Only `cycle`, `continuation`, `paperqa`, `auxiliary`, and `tooluniverse` accept `allow_paid: true`; every
-other action requires `false`. `allow_paid: true` identifies a potentially
-billable job, not a fresh spending approval. The owner first approves a
-**cumulative** ceiling of CNY 300 with a separate `authorize_budget` issue,
-then CNY 600, CNY 900 and so on by one CNY 300 increment each time. Subsequent
-cycles inside the approved unused ceiling need no new spending approval. The
-owner issue remains the manual-cycle trigger; approved continuation uses native
-workflow wakeups. The initial ceiling is zero;
-the CNY 300 default in `config/defaults.json` is only a legacy local safety
-limit. An approval example uses `action: "authorize_budget"`,
-`new_ceiling_cny: 300` and `allow_paid: false`; the next approval must request
-600. Before a cycle, estimate and disclose its possible gateway charges. The
-runner persists aggregate CNY estimates and reserves a conservative per-call
-amount before transport. Interrupted or ambiguous calls keep their reservation
-until the actual provider bill is reconciled through an owner issue. A provider
-usage report above the reservation is recorded and blocks further calls if the
-approved ceiling is exceeded. These are estimates, so compare
-them with the gateway bill before a threshold decision. The `cycle` uses
-the current stage stored in `state/run.json`; it refuses a mismatched `stage`
-and stops at a pending human gate. Automatic cycles never invoke `ready`, `approve` or `advance`. Explicit owner
-operations use the separate [hash-bound human controls](CLOUD-HUMAN-CONTROLS.md).
-No workflow performs a publisher login or submission.
+`allow_paid: true` identifies a potentially billable action, not fresh spending
+authority. Apply [the current cost policy](TOTAL-COST-POLICY.md): actual existing
+cumulative totals, all attempts and conservative unknown-charge bounds, without
+fixed CNY 300 steps, per-paper/per-call caps, startup opt-ins or manual billing
+gates. Never increase a configured total automatically. Current routes and
+secrets are documented in [production routing](PRODUCTION-MODEL-ROUTING.md).
+
+The serialized controller checks the exact current stage, runs `ready` and
+`advance` after A/B checks, and records automated G0/G3/G4/G5 decisions. Only
+actual G1/G2 topic choices require authenticated owner decisions. A stalled
+research decision needs actual new input rather than a new budget approval.
+No workflow logs into a publisher portal or submits a manuscript.
+
+The existing `literature` action accepts these additional operation files:
+
+| Operation JSON | Result |
+|---|---|
+| `{"action":"scientific_judgment","task":"claim_evidence","request_file":"program/claim-check.json"}` | Refresh the source-bound report using actual protected critic/panel responses; absent responses remain preparation. Other declared tasks are `citation_crosscheck`, `novelty_adjudication`, `judgment_benchmark` and `research_memory`. |
+| `{"action":"research_case","paper_id":"P01"}` | Inspect `papers/P01/research-case.json` against the [research-case schema](../schemas/research-case.schema.json), current claims, sources and results; report missing evidence without filling it. |
+| `{"action":"research_case","paper_id":"P01","kind":"reproduction"}` | Prepare a local, content-addressed release from the actual recorded runner inputs/results. Other exports are `case`, `preprint`, `rebuttal` and `retarget`; they retain history and never publish externally. |
+
+To supply a scientific judgment to an existing model invocation, select its
+`operation`, `request_file`, actual stage names and optional `paper_id` in
+`program/research-control.json.scientific_judgments`; `panel_views` selects the
+applicable final seats (`domain`, `editorial`, `statistics`). Source bindings
+are checked again when consuming the protected response. Calibration answer
+keys and independent sample labels are excluded from reviewer context. This
+selection adds work to the existing call, not another automatic paid role.
+Reproduction requires an actually completed, portable recorded Python run;
+unknown PIDs, missing rights or incompatible environments are not invented.
 
 For a shared gateway, configure GitHub repository secret `UUAPI_API_KEY` and repository
 variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, `UUAPI_OPENAI_MODEL` and

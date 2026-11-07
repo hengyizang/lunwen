@@ -15,6 +15,7 @@ import tempfile
 import time
 import platform
 import signal
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
@@ -33,6 +34,7 @@ RUN_ID_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$")
 PAPER_RE = re.compile(r"^P[0-9]{2}$")
 DEFAULT_EXECUTABLES = {"python", "python3", "Rscript", "julia"}
 MAX_LOG_BYTES = 2 * 1024 * 1024
+DEFAULT_RESOURCES = {"cpu": 2, "memory_gb": 4, "gpu": 0}
 FILE_ARGUMENT_SUFFIXES = {
     ".py", ".r", ".jl", ".json", ".jsonl", ".yaml", ".yml", ".toml",
     ".ini", ".cfg", ".csv", ".tsv", ".parquet", ".npy", ".npz",
@@ -48,6 +50,117 @@ class ExperimentError(RuntimeError):
 
 class ProcessTreeTerminationError(ExperimentError):
     pass
+
+
+def positive_finite_number(value: Any) -> bool:
+    return type(value) in (int, float) and 0 < value <= sys.float_info.max
+
+
+def requested_resources(run: dict[str, Any]) -> dict[str, Any]:
+    """Resources belong to the existing frozen run, never to a spending grant."""
+    value = run.get("resources", {})
+    if not isinstance(value, dict) or set(value) - set(DEFAULT_RESOURCES):
+        raise ExperimentError("resources must contain only cpu, memory_gb and gpu")
+    result = {**DEFAULT_RESOURCES, **value}
+    for key in ("cpu", "memory_gb"):
+        amount = result[key]
+        if not positive_finite_number(amount):
+            raise ExperimentError(f"resources.{key} must be a finite positive number")
+    memory_bytes=result["memory_gb"] * 1024**3
+    if not positive_finite_number(memory_bytes) or memory_bytes < 1:
+        raise ExperimentError("resources.memory_gb must represent a finite positive byte count")
+    if type(result["gpu"]) is not int or result["gpu"] < 0:
+        raise ExperimentError("resources.gpu must be a non-negative integer count")
+    isolation = run.get("isolation", {})
+    if not isinstance(isolation,dict):isolation={}
+    if "resources" in run and isolation.get("kind") != "container":
+        raise ExperimentError("explicit resource limits require the isolated container executor")
+    if result["gpu"] and isolation.get("engine") != "docker":
+        raise ExperimentError("GPU execution requires the reviewed Docker NVIDIA runtime")
+    return result
+
+
+def runner_capabilities(engine: str = "docker") -> dict[str, Any]:
+    """Inspect this runner and its local daemon; never start or rent hardware."""
+    try:cpu = float(len(os.sched_getaffinity(0))) if hasattr(os, "sched_getaffinity") else os.cpu_count()
+    except OSError:cpu = os.cpu_count()
+    memory = None
+    try:memory = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+    except (AttributeError, OSError, ValueError):pass
+    for name in ("/sys/fs/cgroup/memory.max", "/sys/fs/cgroup/memory/memory.limit_in_bytes"):
+        try:
+            limit = int(Path(name).read_text().strip())
+            if limit > 0:memory = min(memory, limit) if memory is not None else limit
+        except (OSError, ValueError):pass
+    for quota_path, period_path in (
+        ("/sys/fs/cgroup/cpu.max", None),
+        ("/sys/fs/cgroup/cpu/cpu.cfs_quota_us", "/sys/fs/cgroup/cpu/cpu.cfs_period_us"),
+        ("/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_quota_us", "/sys/fs/cgroup/cpu,cpuacct/cpu.cfs_period_us"),
+    ):
+        try:
+            quota, period = (Path(quota_path).read_text().split() if period_path is None
+                             else (Path(quota_path).read_text(), Path(period_path).read_text()))
+            if int(quota) > 0 and int(period) > 0:
+                limit = int(quota) / int(period)
+                cpu = min(cpu, limit) if cpu is not None else limit
+        except (OSError, ValueError):pass
+    environment = {key:value for key,value in os.environ.items() if key in {"PATH", "LANG", "LC_ALL", "TZ"}}
+    def inspect(argv):
+        try:
+            result = subprocess.run(argv, capture_output=True, text=True, timeout=10, check=False, env=environment)
+            return result.stdout.strip() if result.returncode == 0 and len(result.stdout) <= 100_000 else None
+        except (OSError, ValueError, subprocess.SubprocessError):return None
+    daemon = None
+    if engine in {"docker", "podman"} and shutil.which(engine):
+        raw = inspect([engine, "info", "--format", "{{json .}}"])
+        try:daemon = json.loads(raw) if raw else None
+        except (ValueError, TypeError):pass
+    runtime_verified = False
+    if isinstance(daemon, dict):
+        host = daemon if engine == "docker" else daemon.get("host")
+        if isinstance(host, dict):
+            daemon_cpu = host.get("NCPU" if engine == "docker" else "cpus")
+            daemon_memory = host.get("MemTotal" if engine == "docker" else "memTotal")
+            runtime_verified = (positive_finite_number(daemon_cpu)
+                                and type(daemon_memory) is int and daemon_memory > 0)
+            if runtime_verified:
+                cpu = min(cpu, daemon_cpu) if cpu is not None else daemon_cpu
+                memory = min(memory, daemon_memory) if memory is not None else daemon_memory
+    # Podman's resource controls are supported, but no unverified GPU/CDI device
+    # mount is inferred from the mere presence of a graphics card.
+    gpu_count = None
+    if shutil.which("nvidia-smi"):
+        value = inspect(["nvidia-smi", "--query-gpu=uuid", "--format=csv,noheader"])
+        if value is not None:
+            identifiers = [line.strip() for line in value.splitlines() if line.strip()]
+            if all(re.fullmatch(r"(?:GPU|MIG)-[A-Za-z0-9/-]+",item) for item in identifiers):gpu_count=len(set(identifiers))
+    runtimes=daemon.get("Runtimes",{}) if isinstance(daemon,dict) else {}
+    gpu_runtime_verified = engine == "docker" and runtime_verified and isinstance(runtimes,dict) and "nvidia" in runtimes
+    return {"cpu":cpu,"memory_gb":memory / 1024**3 if memory is not None else None,
+            "gpu":gpu_count,"engine":engine,"container_runtime_verified":runtime_verified,
+            "gpu_runtime_verified":gpu_runtime_verified,"observed_at":now(),
+            "hardware_provisioned":False,"new_spending_authority":False}
+
+
+def resource_errors(run: dict[str, Any], capabilities: dict[str, Any] | None = None) -> list[str]:
+    try:requested = requested_resources(run)
+    except ExperimentError as exc:return [str(exc)]
+    if not isinstance(run.get("isolation"),dict) or run["isolation"].get("kind") != "container":return []
+    actual = capabilities if capabilities is not None else runner_capabilities(run["isolation"]["engine"])
+    errors=[]
+    if actual.get("engine") != run["isolation"].get("engine"):
+        errors.append("resource observation belongs to a different container engine; inspect the run's actual executor")
+    if actual.get("container_runtime_verified") is not True:
+        errors.append("container runtime capacity cannot be verified; restore the local Docker/Podman daemon before starting the frozen run")
+    for key in ("cpu", "memory_gb"):
+        available=actual.get(key)
+        if not positive_finite_number(available):
+            errors.append(f"runner {key} capacity is unknown; inspect the controlled runner before execution")
+        elif requested[key] > available:
+            errors.append(f"run requests {requested[key]:g} {key}, but the controlled runner exposes {available:g}; use a capable runner or revise the protocol before a new G3 freeze")
+    if requested["gpu"] and (actual.get("gpu_runtime_verified") is not True or type(actual.get("gpu")) is not int or actual["gpu"] < requested["gpu"]):
+        errors.append(f"run requests {requested['gpu']} GPU(s); a verified NVIDIA Docker runtime with that many visible devices is required; no GPU service was provisioned")
+    return errors
 
 
 def allowed_executable(value: str) -> bool:
@@ -119,7 +232,7 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
                 f"{prefix}.argv executable must be Python, Rscript, or Julia"
             )
         timeout = run.get("timeout_seconds")
-        if not isinstance(timeout, int) or not 1 <= timeout <= 7 * 24 * 60 * 60:
+        if type(timeout) is not int or not 1 <= timeout <= 7 * 24 * 60 * 60:
             errors.append(f"{prefix}.timeout_seconds must be between 1 and 604800")
         estimate = run.get("estimated_cost_usd")
         if not isinstance(estimate, (int, float)) or isinstance(estimate, bool) or not math.isfinite(estimate) or estimate < 0:
@@ -132,6 +245,8 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
                 errors.append(f"{prefix}.isolation.engine must be docker or podman")
             if not re.fullmatch(r"[^\s]+@sha256:[0-9a-f]{64}", str(isolation.get("image", ""))):
                 errors.append(f"{prefix}.isolation.image must be pinned by sha256 digest")
+        try:requested_resources(run)
+        except ExperimentError as exc:errors.append(f"{prefix}.{exc}")
         if "runtime" in run:
             from scripts.study_environment import definition
             runtime = run["runtime"]
@@ -499,9 +614,13 @@ def execution_command(
     command = [
         isolation["engine"], "run", "--rm", "--user", container_user(), "--network=none", "--read-only",
         "--tmpfs", "/tmp:rw,nosuid,nodev,noexec,size=512m", "--security-opt", "no-new-privileges",
-        "--cap-drop=ALL", "--pids-limit=256", "--cpus=2", "--memory=4g",
+        "--cap-drop=ALL", "--pids-limit=256",
         "-v", f"{project.resolve()}:/workspace:ro", "-w", workdir,
     ]
+    resources=requested_resources(run)
+    memory=f"{resources['memory_gb']:g}g" if float(resources["memory_gb"]).is_integer() else str(int(resources["memory_gb"] * 1024**3))
+    command.extend([f"--cpus={resources['cpu']:g}",f"--memory={memory}"])
+    if resources["gpu"]:command.extend(["--gpus",f"count={resources['gpu']}"])
     for item in run["inputs"]:
         source = resolve_inside(project, item["path"], f"{run['run_id']}.inputs")
         target = f"/workspace/{Path(item['path']).as_posix()}"
@@ -736,7 +855,7 @@ def verify_dependencies(project: Path, run: dict, registry: Path, plan_sha256: s
                 raise ExperimentError(f"Dependency {parent} output changed")
 
 
-def preflight_run(project: Path, run: dict[str, Any], registry: Path, plan_sha256: str):
+def preflight_run(project: Path, run: dict[str, Any], registry: Path, plan_sha256: str, *, include_resources: bool = False):
     """Reject an unstartable attempt before arming a cost reservation."""
     from scripts.primary_recovery import require_next_attempt, records
     try:
@@ -767,7 +886,18 @@ def preflight_run(project: Path, run: dict[str, Any], registry: Path, plan_sha25
                 "sha256": actual,
             }
         )
-    return cwd, outputs, input_records
+    container=run.get("isolation",{}).get("kind")=="container"
+    actual=runner_capabilities(run["isolation"]["engine"]) if container else None
+    errors=resource_errors(run,actual)
+    if os.environ.get("GITHUB_ACTIONS")=="true" or os.environ.get("DR_OS_CLOUD_EXECUTOR")=="1":
+        from scripts.cloud_runtime import execution_window
+        window=execution_window()
+        if run["timeout_seconds"] > window["max_run_timeout_seconds"]:
+            errors.append(f"run timeout {run['timeout_seconds']}s exceeds the current cloud execution window of {window['max_run_timeout_seconds']}s; split the prospective run or use a controlled runner/workflow with a sufficient actual deadline")
+    if errors:raise ExperimentError("; ".join(errors))
+    allocation={"requested":requested_resources(run),"observed":actual,"container_limits_configured":container,
+                "actual_resource_use_measured":False}
+    return (cwd,outputs,input_records,allocation) if include_resources else (cwd,outputs,input_records)
 
 
 def run_one(
@@ -775,7 +905,7 @@ def run_one(
 ) -> dict[str, Any]:
     # Recheck immediately before execution as inputs may change while a remote
     # reservation is being persisted.
-    cwd, outputs, input_records = preflight_run(project, run, registry, plan_sha256)
+    cwd, outputs, input_records, allocation = preflight_run(project, run, registry, plan_sha256, include_resources=True)
     run_id = run["run_id"]
     attempt = 1
     if registry.is_file():
@@ -938,6 +1068,7 @@ def run_one(
             "platform": platform.platform(),
         },
         "executor_isolation": isolation,
+        "resource_allocation": allocation,
         "outputs": output_records,
         "missing_outputs": missing_outputs,
         "preexisting_output_snapshots": previous_outputs,

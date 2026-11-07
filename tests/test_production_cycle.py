@@ -128,7 +128,7 @@ class ProductionCycleTests(unittest.TestCase):
         self.assertEqual(provenance["files"]["program/fixture.md"]["role"], "persistent-remediator")
         self.assertEqual(provenance["files"]["program/fixture.md"]["model"], "gpt-6.1-sol")
         self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"], "openai")
-        self.assertEqual(manifest["research_decision"]["status"], "independently_reviewed")
+        self.assertEqual(manifest["research_decision"]["status"], "independently_observed")
         reviews = list((self.project / "reviews/independent").glob("*.json"))
         self.assertEqual(len(reviews), 2)
         self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))

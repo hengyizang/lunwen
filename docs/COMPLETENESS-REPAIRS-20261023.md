@@ -1,5 +1,15 @@
 # Completeness repair acceptance map
 
+> Historical record — 2026-10-23. The findings, implementation claims and test
+> mapping below describe that repair and are preserved as dated evidence. They
+> are not the current operating policy. The [workflow](../references/workflow.md)
+> and [total-cost policy](TOTAL-COST-POLICY.md) now govern ordinary three-call
+> cycles, problem-triggered repair/recheck, the final three-family blind panel,
+> G1/G2 owner topic decisions and cumulative budgets. CFH/H/AD coverage and
+> editorial scores are C observations; final B preparation is reused for an
+> unchanged snapshot. Historical manual retry/billing steps, mandatory dual
+> reviews and full-reference defaults below do not reinstate those requirements.
+
 This update closes the eleven engineering findings in the 2026-10-23 completeness audit. Acceptance is the cloud checks for the exact PR commit, including the dedicated completeness regression, the full Python-version matrix, literature acceptance and all-seventeen CCFA acceptance. The tests use synthetic inputs and no paid model credentials. Their results establish software behavior, not research validity or publication merit.
 
 | Finding | Implemented boundary | Primary cloud regression |

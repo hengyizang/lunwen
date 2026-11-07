@@ -131,6 +131,6 @@ Gemini 的基础型号与 high 后缀分别绑定请求端点、价格、缓存�
 | v2 | [07d3cdeb16e4ff06f29dcfe4624d9c8298faf177](https://api.github.com/repos/hengyizang/lunwen/git/blobs/07d3cdeb16e4ff06f29dcfe4624d9c8298faf177) |
 | native-base-image | [9951824693a7ec7081671446aeca00a3a02c1a4d](https://api.github.com/repos/hengyizang/lunwen/git/blobs/9951824693a7ec7081671446aeca00a3a02c1a4d) |
 
-对应云端运行：[原始矩阵最终补齐](https://github.com/hengyizang/lunwen/actions/runs/39571949378)、[澄清题](https://github.com/hengyizang/lunwen/actions/runs/39572571264)、[Gemini 原生图片](https://github.com/hengyizang/lunwen/actions/runs/39573328873)。逐请求摘要见 [结构化结果](MODEL-COMPARISON-RESULTS-20261021.json)。
+对应云端运行：[原始矩阵最终补齐](https://github.com/hengyizang/lunwen/actions/runs/39571949378)、[澄清题](https://github.com/hengyizang/lunwen/actions/runs/39572571264)、[Gemini 原生图片](https://github.com/hengyizang/lunwen/actions/runs/39573328873)。逐请求摘要见固定提交中的 [完整结构化结果](https://github.com/hengyizang/lunwen/blob/3e9f56b056885506c8dcb9754c67f6ccda16d888/docs/MODEL-COMPARISON-RESULTS-20261021.json)，文件 SHA-256 为 `cfa5edee9a13588b53833a21f00c7e19066e9f00768f7d154aa016745e54fd19`。该历史副本已从当前工作树移除；原有 120 条请求、失败与未知状态、旧评分及更正仍完整保留在固定版本和上面的原始账本中。当前运行与校准不读取该文档副本；需离线复核时，可从包含该提交的 Git 历史恢复原文件。
 
 中转站返回的型号和请求档位属于运输回执，不能独立证明上游权重与实际推理档位。这里记录测试中真实收到的结果，不认证中转站的全部能力或未来稳定性。

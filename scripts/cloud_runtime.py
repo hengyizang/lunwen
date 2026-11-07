@@ -9,18 +9,40 @@ import re
 import shutil
 import subprocess
 import sys
+import time
+import math
 from pathlib import Path
 
 from scripts.cloud_research_steps import path_in, write
 from scripts import output_provenance
 from scripts.cloud_checkpoint import sha
-from scripts.experiment_runner import container_user
+from scripts.experiment_runner import container_user,runner_capabilities,requested_resources,resource_errors,DEFAULT_RESOURCES
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGES = ("matplotlib", "numpy", "pandas", "PyMuPDF", "pypdf", "python-docx", "python-pptx", "statsmodels", "ref-verify")
+PACKAGES = ("matplotlib", "numpy", "pandas", "PyMuPDF", "pypdf", "python-docx", "python-pptx", "statsmodels", "ref-verify", "jsonschema")
 # Publisher's linux/amd64 digest, inspected 2026-10-01:
 # https://github.com/xu-cheng/latex-docker/pkgs/container/texlive-small
 DEFAULT_TEX_IMAGE = "ghcr.io/xu-cheng/texlive-small@sha256:f6a08603f17dcc949352829fee6109c7e319429718b5e630a0fa32ee9006f98a"
+
+
+def execution_window(*, environment=None, current_time: float | None = None) -> dict:
+    """Honor controller deadlines, keeping room for receipts and checkpoints."""
+    env=os.environ if environment is None else environment
+    current=time.time() if current_time is None else current_time
+    deadlines=[]
+    for key in ("DR_OS_CLOUD_JOB_DEADLINE_EPOCH","DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH"):
+        if key in env:
+            try:
+                value=float(env[key])
+                if not math.isfinite(value):raise ValueError("nonfinite deadline")
+                deadlines.append(value)
+            except (TypeError,ValueError):
+                return {"max_run_timeout_seconds":0,"basis":"invalid_controller_deadline","checkpoint_margin_seconds":120}
+    if not deadlines:
+        return {"max_run_timeout_seconds":1200,"basis":"conservative_default_without_controller_deadline","checkpoint_margin_seconds":120}
+    deadline=min(deadlines)
+    return {"max_run_timeout_seconds":max(0,min(604800,int(deadline-current-120))),
+            "deadline_epoch":deadline,"basis":"controller_deadline","checkpoint_margin_seconds":120}
 
 
 def prepare(project: Path) -> dict:
@@ -32,10 +54,38 @@ def prepare(project: Path) -> dict:
         from scripts.cloud_retry import redact
         raise RuntimeError("declared cloud dependencies could not be installed; inspect the pinned package environment\n"
                            + redact((result.stdout + result.stderr)[-3000:]))
+    capabilities=runner_capabilities()
+    engines={"docker":capabilities}
+    requested=[]
+    request_errors=[]
+    from scripts.paper_execution import artifact_path
+    plan=artifact_path(project,"experiments/plan.json")
+    if plan.is_file():
+        try:
+            value=json.loads(path_in(project,plan.relative_to(project).as_posix()).read_text(encoding="utf-8"))
+            runs=value.get("runs",[]) if isinstance(value,dict) else None
+            if not isinstance(runs,list):raise ValueError("draft plan runs must be an array")
+            for run in runs:
+                if not isinstance(run,dict):
+                    request_errors.append("draft plan contains a non-object run")
+                    continue
+                try:resources=requested_resources(run)
+                except ValueError:resources=run.get("resources")
+                except RuntimeError:resources=run.get("resources")
+                isolation=run.get("isolation",{})
+                engine=isolation.get("engine") if isinstance(isolation,dict) else None
+                if engine in {"docker","podman"} and engine not in engines:
+                    engines[engine]=runner_capabilities(engine)
+                requested.append({"run_id":run.get("run_id"),"resources":resources,
+                                  "timeout_seconds":run.get("timeout_seconds"),
+                                  "readiness_errors":resource_errors(run,engines.get(engine,capabilities))})
+        except (OSError,ValueError,RuntimeError) as exc:request_errors.append(str(exc))
     report = {"schema_version": "1.0", "python": platform.python_version(), "platform": platform.platform(),
               "versions": {package: importlib.metadata.version(package) for package in PACKAGES},
               "docker_available": bool(shutil.which("docker")), "disk_free_bytes": shutil.disk_usage(project).free,
-              "cpu_count": os.cpu_count(), "experiment_limits": {"cpus": 2, "memory_gb": 4, "timeout_seconds_per_run": 1200},
+              "cpu_count": os.cpu_count(), "available_resources":capabilities,"container_engines":engines,
+              "requested_runs":requested,"request_errors":request_errors,
+              "experiment_limits": {"default_resources":DEFAULT_RESOURCES,**execution_window()},
               "model_credentials_in_experiment_environment": False}
     write(project / "state/cloud-runtime.json", report)
     return report

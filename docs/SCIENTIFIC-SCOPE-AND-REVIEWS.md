@@ -30,20 +30,19 @@ fresh scientific reviews and named human reapproval. It authorizes no experiment
 paid calls, automatic continuation or scientific completion. A subsequent change
 to the human-reviewed candidate invalidates that amendment's CAS.
 
-Both API and CLI orchestration seal actual initial/final independent critic
-invocations under protected `state/review-receipts/`. Each phase records the
-exact audit hash, stage/paper/run/phase, current scientific-source inventory,
-prompt hash, actual requested/reported model, family and fresh completion status.
-The controller rejects source changes during a critique, cached criticism,
-unverified model identity and same-family author/critic combinations. A final
-receipt requires its matching initial phase and the actual author dispositions.
+API and CLI ordinary cycles use one fresh independent critique after planner and
+writer. Protected `state/review-receipts/.../observation.json` and
+`observation-latest.json` bind actual source hashes, notebook cycle, prompt and
+verified requested/reported identity. Their `gate_authority: false` records an
+observation, never scientific clearance. Actual actionable problems may trigger
+repair/re-review; legacy initial/final receipts remain historical compatibility.
 
-At final submission-phase G5 the same native H01–H26, AD01–AD08 and CFH01–CFH38 records are checked again
-at the gate and packaging. Their presence is record coverage, not semantic
-clearance. Scientific sources changing after the last critique require a real
-fresh critique; editing a score, log or receipt cannot substitute for one.
-Checkpoint logs, cost diagnostics, approval status and the receipt itself do not
-invalidate a review merely because bookkeeping advanced.
+Final submission uses the distinct domain/editorial/statistics views and frozen
+three-family panel in [workflow.md](../references/workflow.md). The controller
+rejects changed sources, exposed earlier opinions and same-family critics. It
+preserves disagreement without votes or acceptance estimates. C editorial
+coverage is not a gate. A integrity checks and B final source/template/export
+bindings still apply; ordinary bookkeeping does not invalidate scientific sources.
 
 Raw operation/request envelopes are withheld from independent critic snapshots,
 including custom filenames and explicit context-plan selections. Their scientific

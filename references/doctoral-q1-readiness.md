@@ -6,11 +6,11 @@ Accessed: 2026-09-01.
 
 JCR quartiles rank journals within a JIF category; they are not a universal
 experimental-design standard and may differ by category and annual edition.
-The workflow therefore requires **at least three of six current JCR Q1
-SCI/SCIE targets and every remainder at least current JCR Q2**, all with JIF
-above 1.0, and separately enforces identical scientific-design checks. It never
-treats a gate score as proof of novelty, doctoral merit, acceptance or
-publication.
+The existing six-paper ≥3 Q1 and remaining Q2 ambitions are planning targets,
+not scientific or packaging thresholds. Use actual venue fit and final
+source/template/export requirements. Ranking and IF missing from lawful sources
+stay unknown. Keep scientific-integrity requirements independent of venue rank;
+no score establishes novelty, doctoral merit or publication.
 
 Primary sources:
 
@@ -45,28 +45,15 @@ than an invented universal “Q1 checklist”:
 
 ## Repository consequences
 
-- G1 requires comparative closest-work evidence, adjacent-field searches,
-  counterevidence, non-novel components, residual novelty risk, a coherent
-  doctoral case and a reliability strategy. Each novelty claim is separately
-  mapped to at least three closest works and a falsification test, and the search
-  must reach recorded forward/backward-chaining saturation.
-- G2 requires structured contracts, two current venues meeting each paper's
-  declared Q1/Q2 target, at least three Q1 papers across the portfolio, and a
-  complete pairwise anti-salami matrix.
-- G3 requires one or more designs per paper, traceable strong/domain-standard/simple baselines,
-  ablations, leakage controls, primary metrics, effect sizes, intervals,
-  multiplicity handling, power or precision, repeated seeds for stochastic
-  work, robustness, negative controls, external validity and reproducibility.
-  Local data-quality reports with separate named hash-bound confirmations,
-  executable power calculations, hash-frozen
-  preregistrations and preplanned clean-room/baseline runs are mandatory.
-- G4 requires every attempt and current output hash to match the G3-approved
-  plan and every contracted claim to trace to registered analyses. Every paper
-  must reproduce domain-standard and strong-recent baselines and pass a
-  registry-bound independent-environment reproduction within locked tolerances.
-- G5 requires current source-verified paper-specific JCR Q1/Q2 SCI/SCIE status, venue-specific
-  checks, deterministic English validation for all submission text, and local
-  figure provenance tied to real experiment outputs.
+The authoritative current A/B/C rules are in [workflow.md](workflow.md) and
+[stage-contracts.md](stage-contracts.md). G1 retains real closest/adjacent-work
+comparisons, counterevidence and an honest bounded retrieval stop. G2 uses
+cumulative contribution/evidence rows and standalone paper value. G3/G4 retain
+rights, frozen confirmatory inputs, the actual runner, every adverse attempt and
+appropriate registered methods/replay; explicit exploration keeps its bounded
+claim limit and separate subsequent confirmation. Final G5 uses the blind panel
+and actual B venue/template/export evidence. Editorial and numeric observations
+remain visible rather than extra gates.
 
 ## Experiment evidence and calibrated conclusions
 

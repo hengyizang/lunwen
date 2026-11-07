@@ -1,8 +1,8 @@
 # Completing the literature-reading mechanisms
 
 These operations extend the existing cloud workbench, not ten separately hosted
-apps. Use the same sources, author/critic roles, cumulative CNY 500 authorization,
-provenance and human gates. No local project execution or default route change.
+apps. Use the same sources, author/critic roles, existing cumulative project totals,
+provenance and actual G1/G2 topic decisions. No local project execution or default route change.
 
 ## Operations
 

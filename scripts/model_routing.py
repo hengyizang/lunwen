@@ -25,6 +25,8 @@ CYCLE_ROLES = (
 )
 WRITER_ROLES = {"persistent-writer", "persistent-remediator", "writer"}
 READ_ONLY_ROLES = {"semantic-planner", "independent-critic-initial", "independent-critic-final"}
+PANEL_MODELS = {"independent-critic-panel-domain": "opus", "independent-critic-panel-editorial": "argon",
+                "independent-critic-panel-statistics": "deepseek"}
 APPROVED_MODELS = {
     "sol": ("cheapai-gpt-pro", "gpt-6.1-sol", "openai"),
     "astra": ("cheapai-gpt-pro", "gpt-6-astra", "openai"),
@@ -172,6 +174,19 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
         key = candidates[0][0]
         ceiling = 256
         boundary = "Endpoint identity/instrumentation only; never scientific-quality evidence."
+    elif role in PANEL_MODELS:
+        if stage != "writing-and-review":
+            raise ValueError("the three-view panel is a submission checkpoint, not an every-stage audit")
+        choices = policy.get("panel_routes", PANEL_MODELS)
+        if set(choices) != set(PANEL_MODELS) or any(key not in policy["models"] for key in choices.values()):
+            raise ValueError("panel routes need exactly the three scientific views")
+        families = {policy["models"][key]["family"] for key in choices.values()}
+        if len(families) != 3 or "openai" in families:
+            raise ValueError("panel needs three different critic families, each different from the writer")
+        key = choices[role]
+        ceiling = policy["models"][key]["max_output_tokens"]
+        task_kind = "scientific-judgment"
+        boundary = "Read-only mutually blinded source-view criticism; no voting, acceptance estimate or persistent scientific writing."
     elif role in CYCLE_ROLES:
         if stage not in policy["stage_routes"]:
             raise ValueError(f"no production stage route: {stage}")

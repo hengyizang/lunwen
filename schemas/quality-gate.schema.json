@@ -15,7 +15,6 @@
     "novelty_is_absence_only",
     "originality_assessment",
     "doctoral_readiness",
-    "venue_readiness",
     "blockers",
     "human_review_required"
   ],
@@ -42,12 +41,7 @@
       ]
     },
     "scores": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 10
-      }
+      "description": "Optional numerical self-scores are observations, never a scientific pass threshold."
     },
     "evidence": {
       "type": "array",
@@ -177,86 +171,7 @@
       }
     },
     "venue_readiness": {
-      "type": "object",
-      "required": [
-        "minimum_jcr_quartile",
-        "preferred_jcr_quartile",
-        "candidate_venues",
-        "current_verification_required",
-        "venue_specific_guidelines_required"
-      ],
-      "properties": {
-        "minimum_jcr_quartile": {
-          "enum": [
-            "Q1",
-            "Q2"
-          ]
-        },
-        "preferred_jcr_quartile": {
-          "const": "Q1"
-        },
-        "candidate_venues": {
-          "type": "array",
-          "minItems": 2,
-          "items": {
-            "type": "object",
-            "required": [
-              "name",
-              "quartile",
-              "indexing",
-              "category",
-              "jcr_year",
-              "source_url",
-              "scope_fit",
-              "article_type"
-            ],
-            "properties": {
-              "name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "quartile": {
-                "enum": [
-                  "Q1",
-                  "Q2"
-                ]
-              },
-              "indexing": {
-                "enum": [
-                  "SCI",
-                  "SCIE"
-                ]
-              },
-              "category": {
-                "type": "string",
-                "minLength": 1
-              },
-              "jcr_year": {
-                "type": "integer",
-                "minimum": 2000
-              },
-              "source_url": {
-                "type": "string",
-                "pattern": "^https://"
-              },
-              "scope_fit": {
-                "type": "string",
-                "minLength": 1
-              },
-              "article_type": {
-                "type": "string",
-                "minLength": 1
-              }
-            }
-          }
-        },
-        "current_verification_required": {
-          "const": true
-        },
-        "venue_specific_guidelines_required": {
-          "const": true
-        }
-      }
+      "description": "Optional early venue notes are advisory; verify the actual selected venue at submission packaging."
     },
     "blockers": {
       "type": "array",
@@ -300,6 +215,17 @@
             }
           }
         }
+      },
+      "properties": {
+        "venue_fit": {
+          "description": "Optional observational criterion; any actual source anchor remains subject to factual integrity checks."
+        },
+        "publication_potential": {
+          "description": "Optional observational criterion; any actual source anchor remains subject to factual integrity checks."
+        },
+        "english_academic_writing": {
+          "description": "Optional observational criterion; any actual source anchor remains subject to factual integrity checks."
+        }
       }
     }
   },
@@ -316,11 +242,6 @@
       "then": {
         "required": [
           "assessments"
-        ]
-      },
-      "else": {
-        "required": [
-          "scores"
         ]
       }
     },

@@ -74,7 +74,7 @@ class CLICleanReviewTests(unittest.TestCase):
             stack.enter_context(patch("scripts.model_runtime.call", side_effect=AssertionError("No paid model calls")))
             result = autopilot.run_stage("demo", "", "standard", 1, 10000, 0)
 
-        self.assertEqual(calls, ["planner", "writer", "critic", "final-critic"])
+        self.assertEqual(calls, ["planner", "writer", "critic"])
         self.assertEqual([row["name"] for row in result["runs"]], calls)
         self.assertEqual(result["status"], "needs_work")
         self.assertEqual(result["remediation"]["status"], "not_required")
@@ -84,42 +84,42 @@ class CLICleanReviewTests(unittest.TestCase):
         self.assertFalse((run_dir / "remediation.stdout.txt").exists())
         key = gate + ("-P01" if gate == "G5" else "")
         receipt_root = project / review_receipts.PREFIX / key / token
-        initial, final = read(receipt_root / "initial.json"), read(receipt_root / "final.json")
-        self.assertEqual((initial["phase"], final["phase"]), ("initial", "final"))
-        self.assertEqual(initial["run_id"], final["run_id"])
-        self.assertNotEqual(initial["prompt_sha256"], final["prompt_sha256"])
+        final = read(receipt_root / "observation.json")
+        self.assertFalse((receipt_root / "initial.json").exists())
+        self.assertFalse((receipt_root / "final.json").exists())
+        self.assertEqual(final["phase"], "observation")
         self.assertEqual(final["dispositions"], writer_notes or [])
-        self.assertEqual(initial["identity"]["request_id"], "critic-fixture")
-        self.assertEqual(final["identity"]["request_id"], "final-critic-fixture")
+        self.assertEqual(final["identity"]["request_id"], "critic-fixture")
         self.assertFalse(final["identity"]["cache_hit"])
         self.assertFalse(final["scientific_completion_verified"])
+        self.assertFalse(final["gate_authority"])
         decision = cycle_review(project, stage, token)
         self.assertEqual(decision["decisions"][0]["outcome"], "pending")
         self.assertFalse(decision["scientific_completion_verified"])
         log = (project / "reviews/decision-log.md").read_text(encoding="utf-8")
-        self.assertIn("Initial independent audit", log)
-        self.assertIn("Final independent audit", log)
+        self.assertIn("One fresh advisory critique", log)
+        self.assertNotIn("Final independent audit", log)
         for note in writer_notes or ["no actionable findings"]:
             self.assertIn(note, log)
         self.assertEqual(output_provenance.current_origin(project, target)["family"], "openai")
         self.assertEqual(read(project / "state/run.json"), state)
         return project, result, final
 
-    def test_clean_initial_review_skips_cli_remediation_and_keeps_fresh_final_review(self):
+    def test_clean_initial_review_needs_only_one_actual_critic(self):
         project, _, _ = self.run_clean_cycle()
-        self.assertEqual(review_receipts.validate_gate(project, "G1"), [])
+        self.assertFalse(review_receipts.observation(project, "topic-intelligence")["receipt"]["gate_authority"])
 
-    def test_plain_uncertainty_notes_survive_both_fresh_cli_reviews_without_remediation(self):
+    def test_plain_uncertainty_notes_survive_advisory_observation(self):
         notes = ["The scientific interpretation remains provisional."]
         project, _, final = self.run_clean_cycle(writer_notes=notes)
         self.assertEqual(final["dispositions"], notes)
-        self.assertEqual(review_receipts.validate_gate(project, "G1"), [])
+        self.assertFalse(review_receipts.observation(project, "topic-intelligence")["receipt"]["gate_authority"])
 
-    def test_scientific_writing_clean_review_skips_editorial_matrix_and_keeps_both_audits(self):
+    def test_scientific_writing_clean_review_keeps_actual_observation(self):
         project, _, final = self.run_clean_cycle("writing-and-review", "G5", 5)
         self.assertEqual(final["dispositions"], [])
         self.assertEqual(final["materials"]["review_purpose"], "scientific_writing")
-        self.assertEqual(review_receipts.validate_gate(project, "G5", "P01", expected_purpose="scientific_writing"), [])
+        self.assertFalse(review_receipts.observation(project, "writing-and-review", "P01")["receipt"]["gate_authority"])
         self.assertEqual(read(project / "papers/P01/paper-contract.json")["writing_phase"], "scientific")
         self.assertFalse((project / "papers/P01/submission").exists())
         state = read(project / "state/run.json")

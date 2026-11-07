@@ -14,6 +14,42 @@ CYCLE_OUTCOMES = {"pending", "unchanged", "changed", "failed", "stopped"}
 NOTEBOOK = "program/research-notebook.json"
 
 
+def failed_memory(project: Path, spec: dict) -> dict:
+    """Reuse original failed/stopped decisions as leads, never as new evidence."""
+    if not isinstance(spec, dict) or set(spec) - {"schema_version", "id", "question"} or spec.get("schema_version") != "1.0":
+        raise ValueError("unsupported research-memory request")
+    from scripts.literature_workbench import _id
+    report = build(project)
+    if report["errors"]:
+        raise ValueError("research memory source is invalid: " + "; ".join(report["errors"]))
+    entries = []
+    for question in report["questions"]:
+        evidence = {r["id"]: r for r in question["evidence"]}
+        for decision in question["decisions"]:
+            if decision.get("outcome") not in {"failed", "stopped"} and decision.get("phase") not in {"failed", "stopped"}:
+                continue
+            sources, missing = [], []
+            for key in decision.get("evidence_ids", []):
+                item = evidence[key]
+                relative = item["source"]["path"]
+                if relative == NOTEBOOK or relative.startswith(("state/", "reviews/", "reports/", "program/")):
+                    missing.append("Memory/control/generated summaries cannot support a scientific assertion: " + relative)
+                    continue
+                from scripts.output_provenance import current_origin
+                origin = current_origin(project, path_in(project, relative))
+                if origin.get("status") != "tracked" or origin.get("provider") not in {"deterministic-control-plane", "human-attestation"}:
+                    missing.append("Model-authored or untracked memory needs original source evidence: " + relative)
+                    continue
+                sources.append(item)
+            entries.append({"question_id": question["id"], "question": question["question"], "decision": decision,
+                "original_evidence": sources, "missing_evidence": missing,
+                "reuse_as": "prior_attempt_lead_not_scientific_fact", "interpretation_verified": False})
+    return {"schema_version": "1.0", "operation": "research_memory", "id": _id(spec.get("id")),
+        "question": spec.get("question"), "notebook": {"path": NOTEBOOK, "sha256": sha(path_in(project, NOTEBOOK))},
+        "failed_or_stopped_ideas": entries, "model_call_made": False, "scientific_completion_verified": False,
+        "role_contract": "Inspect relevant prior failed/stopped ideas before proposing a repeat. Keep the original question, failure, contrary evidence and revisit condition. Memory is a search lead: reopen the original sources and never cite model summaries or earlier model agreement as independent scientific support."}
+
+
 def build(project: Path) -> dict:
     inputs = read(path_in(project, NOTEBOOK))
     questions, errors, seen = [], [], set()
@@ -128,6 +164,34 @@ def cycle_assessment(project: Path, stage: str, run_id: str | None = None, *, pa
         gate = next(gate for gate, name in review_receipts.STAGES.items() if name == stage)
         from scripts.paper_execution import enabled
         paper = (paper_id or state.get("active_paper")) if gate == "G5" or (enabled(project) and gate in {"G3", "G4"}) else None
+        from scripts.research_phase import requires_submission
+        from scripts import review_panel
+        panel_pointer = project / review_panel.PREFIX / str(paper) / "latest.json"
+        if gate == "G5" and requires_submission(project, stage, paper) and panel_pointer.exists():
+            responses = review_panel.responses(project, paper)
+            actual_run = responses[0]["receipt"]["run_id"]
+            result = cycle_review(project, stage, str(run_id) if run_id is not None else actual_run, paper_id=paper_id)
+            result.update(status="recorded_with_limited_panel_observations", panel_review=read(panel_pointer),
+                assessment_scope="selected_panel_sources_only_not_notebook_decision_validation",
+                current_stage_authorized=False, gate_authority=False,
+                review_errors=[], independent_review=None)
+            return result
+        observed = project / review_receipts.PREFIX / review_receipts._key(gate, paper) / "observation-latest.json"
+        if observed.is_file():
+            actual = review_receipts.observation(project, stage, paper)
+            receipt = actual["receipt"]
+            run_id = str(run_id) if run_id is not None else receipt["run_id"]
+            if receipt["run_id"] != run_id:
+                raise ValueError("the latest observation belongs to a different research cycle")
+            result = cycle_review(project, stage, run_id, paper_id=paper_id)
+            if result["notebook"] not in receipt["materials"]["files"]:
+                raise ValueError("the actual observation did not bind this research notebook")
+            for source in receipt["materials"]["files"]:
+                if sha(path_in(project, source["path"])) != source["sha256"]:
+                    raise ValueError("observed scientific source changed: " + source["path"])
+            result.update(status="independently_observed", independent_review=actual["pointer"],
+                review_errors=[], current_stage_authorized=False, assessment_scope="reviewed_sources_only")
+            return result
         latest = project / review_receipts.PREFIX / review_receipts._key(gate, paper) / "latest.json"
         pointer = read(latest)
         receipt = read(path_in(project, pointer["path"]))

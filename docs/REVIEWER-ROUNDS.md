@@ -1,7 +1,7 @@
 # External reviewer rounds
 
 The external reviewer lifecycle continues a paper after a real human submission.
-It is separate from the two simulated pre-submission reviews. Every round starts
+It is separate from the final mutually blind pre-submission panel. Every round starts
 from a current, checked, submission-ready paper. A named owner reviews a
 hash-bound cloud dossier before starting it. The control plane retains the prior
 G5 approval as history, removes its current effective approval flag, opens a fresh
@@ -144,7 +144,7 @@ spending permission.
 
 The existing experiment engine forbids re-freezing an already executed G3
 preregistration. Create a separate experiments/supplemental/Pxx/Rxxx/s001 child
-study, keeping the original plan and approval unchanged. The existing writer and independent initial/final critics review the exact
+study, keeping the original plan and approval unchanged. The existing writer and current independent critique review the exact
 child design. Native checks create its automated G3 seal before bounded execution
 through the same runner; current automated G4 evidence checks bind the actual
 outputs without certifying their scientific meaning. Explicit owner interventions

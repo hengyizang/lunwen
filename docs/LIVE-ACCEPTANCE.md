@@ -170,10 +170,22 @@ SHA-256。OpenAI、Anthropic 等 key 只从允许的环境变量传入，收据�
   --purpose 'Retrieve an advisory public database record.'
 ```
 
-窄化 worker 只加载请求中的一个工具，并调用官方
-`ToolUniverse.run({"name": ..., "arguments": ...})`。请求文件、结果、stdout、
-stderr、包版本、退出码、超时和输入完整性全部写入
-`evidence/ai4science-ledger.jsonl`。失败和超时同样保留，但没有可用 `output`。
+窄化 worker 只允许上面的 `UniProt_get_entry_by_accession`，使用固定的
+ToolUniverse 1.5.1 官方 `UniProtRESTTool.run`。执行前核对已审查的源码和
+工具元数据 SHA-256；accession 必须符合 UniProt 的 6 或 10 字符格式，
+`compact` 只能省略或为 `true`。它只发起一次固定端点的 HTTPS GET，
+禁止重定向，不加载其他工具、代理或模型。其他工具必须先接入可计量成本的
+适配器，不能仅凭 SDK 名称认定免费。
+
+子进程保留代理和 CA 配置，但不传模型或 API 密钥。请求文件、SDK compact
+结果、stdout、stderr、包版本、退出码、超时、执行前后输入完整性以及每次
+HTTP 尝试全部写入 `evidence/ai4science-ledger.jsonl`。失败和超时同样保留，
+没有可用 `output`；若进程被终止而未输出 HTTP 日志，尝试明细保留为未知。
+回执的 `cost_accounting` 说明该公开端点的模型调用为 0、模型/API 费用为 0，
+这不含云主机或网络费用，也不适用于任意 ToolUniverse 工具。公开访问依据见
+[UniProt API 文档](https://rest.uniprot.org/help/api_queries)，数据遵循
+[CC BY 4.0](https://rest.uniprot.org/help/license)，需保留 UniProt 署名。
+返回的 compact 数据是条目摘要，不能充当完整原始条目或科学核验。
 
 最后检查全部收据：
 

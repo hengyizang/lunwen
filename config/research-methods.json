@@ -10,23 +10,55 @@
     "paperspine",
     "auto-empirical-methods",
     "econ-data-methods",
-    "paperqa2", "paperai-reading", "zotero-reading-coverage", "beaver-sentence-evidence",
-    "openpaper-evidence-tables", "daily-paper-retrieval", "paperpilot-search-protocol", "paperlens-discovery-reference"
+    "paperqa2",
+    "paperai-reading",
+    "zotero-reading-coverage",
+    "beaver-sentence-evidence",
+    "openpaper-evidence-tables",
+    "daily-paper-retrieval",
+    "paperpilot-search-protocol",
+    "paperlens-discovery-reference"
   ],
   "modules": [
     {
       "id": "research-task-prompts",
-      "stages": ["topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
       "path": "references/research-methods/research-task-prompts.md",
       "sha256": "9d814d266892033365697b07ed7b2af8e7dbdcd78654a92b7d6553ab8b78c227",
-      "source_ids": ["ars-codex", "paperai-reading", "openpaper-evidence-tables", "econ-data-methods"]
+      "source_ids": [
+        "ars-codex",
+        "paperai-reading",
+        "openpaper-evidence-tables",
+        "econ-data-methods"
+      ]
     },
     {
       "id": "literature-reading",
-      "stages": ["topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"],
+      "stages": [
+        "topic-intelligence",
+        "paper-architecture",
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
       "path": "references/research-methods/literature-reading.md",
       "sha256": "52e7b137c2889afdaebfad2ba18043c3a36cda7a44c8077b276febc03d773fa8",
-      "source_ids": ["paperqa2", "paperai-reading", "zotero-reading-coverage", "beaver-sentence-evidence", "openpaper-evidence-tables", "daily-paper-retrieval", "paperpilot-search-protocol", "paperlens-discovery-reference"]
+      "source_ids": [
+        "paperqa2",
+        "paperai-reading",
+        "zotero-reading-coverage",
+        "beaver-sentence-evidence",
+        "openpaper-evidence-tables",
+        "daily-paper-retrieval",
+        "paperpilot-search-protocol",
+        "paperlens-discovery-reference"
+      ]
     },
     {
       "id": "topic-hypotheses",
@@ -36,7 +68,7 @@
         "experiment-design"
       ],
       "path": "references/research-methods/topic-hypotheses.md",
-      "sha256": "3b5ff5b913ebe5c06c4216d7f18107d5af3759d8f87a8a79484b5b8a3fd833d1",
+      "sha256": "fa0e5644694676095d37404cf658ce2eff278813a20ea02c6d402280eac60027",
       "source_ids": [
         "kdense-topic-methods",
         "kdense-brainstorming-20261029",
@@ -65,7 +97,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/evidence-arguments.md",
-      "sha256": "ba0c664d2f220730daa4783cec652c590206e4bd8581c99e35c14916449d1600",
+      "sha256": "79a5ca6e81e91fcaeb9c343478506fc0fa1b172a9102d307ae2d47675d26e447",
       "source_ids": [
         "paperspine",
         "ars-codex",
@@ -75,10 +107,17 @@
     },
     {
       "id": "empirical-data",
-      "stages": ["experiment-design", "experiment-execution", "writing-and-review"],
+      "stages": [
+        "experiment-design",
+        "experiment-execution",
+        "writing-and-review"
+      ],
       "path": "references/research-methods/empirical-data.md",
       "sha256": "97490b71c750a05df581868a11a2846a84b53b3d54a006c99891c69559dc38d6",
-      "source_ids": ["auto-empirical-methods", "econ-data-methods"]
+      "source_ids": [
+        "auto-empirical-methods",
+        "econ-data-methods"
+      ]
     },
     {
       "id": "submission-review",
@@ -86,7 +125,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/submission-review.md",
-      "sha256": "e10004467adaa7e93bac71ac61a6e7f147cb689f709e313bca9af9de1b38338f",
+      "sha256": "0262e9b27dae730a90ef2acd913e4f074df7c7105f25216a6952f793fd4ba81a",
       "source_ids": [
         "academic-research-skills",
         "ars-codex",

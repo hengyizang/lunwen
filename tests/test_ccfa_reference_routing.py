@@ -69,7 +69,8 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertNotIn(prose,prompt)
             self.assertNotIn(experiment,prompt)
             self.assertIn("native core preflight",prompt)
-            self.assertEqual("LOCAL COMPLETE COVERAGE" in prompt, stage == "writing-and-review")
+            self.assertNotIn("AVAILABLE OBSERVATION CATALOG", prompt)
+            self.assertIn("Empty or partial observation lists are valid", prompt)
         explicit = runtime.model_contract("topic-intelligence", "writer", skill="ccf-humanization")
         for item in human.prompt_sources("topic-intelligence", full=True):
             self.assertIn((runtime.ROOT / item["path"]).read_text(encoding="utf-8"), explicit)

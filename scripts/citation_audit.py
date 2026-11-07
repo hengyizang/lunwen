@@ -564,6 +564,90 @@ def audit(
     }
 
 
+CROSSCHECK_ROLE_CONTRACT = "Independently return citation_extraction:{source,records:[{citation_key,doi,title,year,authors}]}. Read only the bound original source; do not inspect another extractor, prior differences or prior verdicts. Unknown fields remain null."
+
+
+def crosscheck(project: Path, spec: dict) -> dict:
+    """Mechanical comparison of two separately retained extraction artifacts.
+
+    Distinct files and extractor identities are observable. Their claimed mutual
+    blindness and the semantic correctness of either extraction are not inferred.
+    """
+    from scripts.research_artifacts import bound_source, path_in, read
+    from scripts.output_provenance import current_origin
+    from scripts.literature_workbench import _id, _text
+    if not isinstance(spec, dict) or set(spec) - {"schema_version", "id", "source", "extractions", "paper_id"} or spec.get("schema_version") != "1.0":
+        raise ValueError("citation crosscheck needs a source and two retained extractions")
+    from scripts.literature_source_tasks import citation_source
+    source = citation_source(project, spec)
+    incoming = spec.get("extractions")
+    panel = {}
+    if incoming is None:
+        from scripts.literature_source_tasks import judgment_responses
+        incoming = []
+        for row in judgment_responses(project, spec.get("paper_id")):
+            extracted = row["response"].get("citation_extraction")
+            if extracted is not None:
+                receipt = row["receipt"]
+                binding = {**receipt["response"], "locator": "original independent citation extraction"}
+                incoming.append(binding)
+                panel[binding["path"]] = {**extracted, "extractor": receipt["role"] + ":" + receipt["identity"]["requested_model"]}
+        if len(incoming) < 2:
+            return {"schema_version": "1.0", "operation": "citation_crosscheck", "id": _id(spec["id"]),
+                "source": source, "extractions": incoming, "status": "awaiting_two_independent_extractions",
+                "differences": [], "unknown_fields": [], "blindness_verified": False, "semantic_support_verified": False,
+                "model_call_made": False, "scientific_completion_verified": False,
+                "role_contract": CROSSCHECK_ROLE_CONTRACT}
+    if not isinstance(incoming, list) or len(incoming) != 2:
+        raise ValueError("exactly two frozen extraction bindings are required")
+    extractions, methods, paths = [], set(), set()
+    for binding in incoming:
+        bound = bound_source(project, binding)
+        target = path_in(project, bound["path"])
+        origin = current_origin(project, target)
+        if origin.get("status") != "tracked" or bound["path"] in paths or target.stat().st_size > 2_000_000:
+            raise ValueError("extraction must be a distinct current provenance-bound artifact")
+        paths.add(bound["path"])
+        payload = panel.get(bound["path"]) or read(target)
+        method = _text(payload.get("extractor"), "actual extractor identity")
+        if payload.get("source") != source or method in methods:
+            raise ValueError("extractors must be distinct and bind the same original source")
+        methods.add(method)
+        records = payload.get("records")
+        if not isinstance(records, list) or not 1 <= len(records) <= 5000:
+            raise ValueError("extraction needs bounded citation records")
+        by_key = {}
+        for row in records:
+            key = _text(row.get("citation_key"), "extracted citation key", 200)
+            if key in by_key:
+                raise ValueError("duplicate extracted citation key")
+            if set(row) - {"citation_key", "doi", "title", "year", "authors"}:
+                raise ValueError("unsupported extracted citation fields")
+            by_key[key] = row
+        extractions.append({"binding": bound, "extractor": method, "origin": origin, "records": by_key})
+    left, right = (e["records"] for e in extractions)
+    differences, unknown = [], []
+    for key in sorted(left.keys() | right.keys()):
+        if key not in left or key not in right:
+            differences.append({"citation_key": key, "field": "record", "left": left.get(key), "right": right.get(key)})
+            continue
+        for field in ("doi", "title", "year", "authors"):
+            a, b = left[key].get(field), right[key].get(field)
+            if a in (None, "", []) or b in (None, "", []):
+                unknown.append({"citation_key": key, "field": field, "left": a, "right": b})
+                continue
+            if field == "doi": a, b = normalize_doi(str(a)), normalize_doi(str(b))
+            if field == "title": a, b = normalize_title(str(a)), normalize_title(str(b))
+            if a != b:
+                differences.append({"citation_key": key, "field": field, "left": a, "right": b})
+    return {"schema_version": "1.0", "operation": "citation_crosscheck", "id": _id(spec["id"]),
+        "source": source, "extractions": extractions, "differences": differences, "unknown_fields": unknown,
+        "status": "differences_need_source_review" if differences else "incomplete_extraction" if unknown else "fields_agree",
+        "blindness_verified": False, "bibliographic_truth_verified": False, "semantic_support_verified": False,
+        "model_call_made": False, "scientific_completion_verified": False,
+        "role_contract": CROSSCHECK_ROLE_CONTRACT}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("bibliography", type=Path)

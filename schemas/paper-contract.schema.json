@@ -8,7 +8,6 @@
     "schema_version",
     "paper_id",
     "writing_language",
-    "target_jcr_quartile",
     "working_title",
     "research_question",
     "distinct_contribution",
@@ -44,9 +43,14 @@
       "const": "en"
     },
     "target_jcr_quartile": {
+      "description": "Optional planning observation, not a scientific threshold. Preserve existing user targets; unknown or absent remains unresolved.",
       "enum": [
         "Q1",
-        "Q2"
+        "Q2",
+        "Q3",
+        "Q4",
+        "unknown",
+        null
       ]
     },
     "working_title": {
@@ -303,29 +307,26 @@
     },
     "target_venues": {
       "type": "array",
-      "minItems": 2,
+      "minItems": 0,
+      "description": "Provisional venue leads; unknown fields may be completed during venue-fit preparation. Quartile is a planning target, not a scientific gate.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "quartile",
-          "indexing",
-          "category",
-          "jcr_year",
-          "source_url",
-          "scope_fit",
-          "article_type"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
             "minLength": 1
           },
           "quartile": {
+            "description": "Source-bound rank observation when known; no Q1/Q2 floor applies.",
             "enum": [
               "Q1",
-              "Q2"
+              "Q2",
+              "Q3",
+              "Q4",
+              "unknown",
+              null
             ]
           },
           "indexing": {

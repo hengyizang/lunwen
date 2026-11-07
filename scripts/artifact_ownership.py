@@ -40,7 +40,7 @@ def _controlled_paper_record(relative: str) -> bool:
                             "reproduction-confirmation.json", "watermark-assessment.json"}
     if parts[2:] == ("style", "academic-style-audit.json"):
         return True
-    if parts[2:4] == ("submission-materials", "revision"):
+    if parts[2:4] == ("submission-materials", "revision") or parts[2] == "release-preparation":
         return True
     return parts[2] == "reviews" and parts[3] in {
         "revision-base", "ref-verify.json", "revision-trace.json", "revision-integrity.json",
@@ -144,6 +144,7 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
             return True
         return executor_owned(child, child_relative)
     return (value in EXECUTOR_FILES
+            or (len(parts) >= 4 and parts[0] == "papers" and parts[2] == "release-preparation")
             or value.endswith((".editable.svg", ".editable.pptx", ".editable.drawio",
                                ".editable-export.json", ".editable-layout.json", ".editable-source.json", ".editable.renderer.py"))
             or (len(parts) >= 5 and value.startswith("papers/") and parts[2:4] == ("figures", "source-data"))

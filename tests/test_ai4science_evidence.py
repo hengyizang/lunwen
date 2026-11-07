@@ -105,7 +105,8 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
             payload = b'{"result":{"primaryAccession":"P12345"},"tool":"UniProt_get_entry_by_accession"}\n'
             with (
                 patch("scripts.ai4science_evidence.metadata.version", return_value="1.5.1"),
-                patch("scripts.ai4science_evidence.run_process", return_value=self.completed(payload)),
+                patch("scripts.ai4science_evidence.run_process", return_value=self.completed(payload)) as invoke,
+                patch.dict(os.environ, {"OPENAI_API_KEY": "never-pass-model-secret", "CUSTOM_PROVIDER_TOKEN": "never-pass-custom-secret", "HTTPS_PROXY": "https://proxy.example", "REQUESTS_CA_BUNDLE": "/tmp/trusted-ca.pem"}),
             ):
                 receipt = execute_tooluniverse(
                     project,
@@ -115,6 +116,14 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
                 )
             self.assertEqual(receipt["status"], "succeeded")
             self.assertEqual(receipt["inputs"][0]["path"], "requests/uniprot.json")
+            self.assertEqual(receipt["cost_accounting"]["model_calls"], 0)
+            self.assertEqual(receipt["cost_accounting"]["public_api_cost_cny"], 0)
+            environment = invoke.call_args.kwargs["environment"]
+            self.assertNotIn("OPENAI_API_KEY", environment)
+            self.assertNotIn("CUSTOM_PROVIDER_TOKEN", environment)
+            self.assertEqual(environment["HTTPS_PROXY"], "https://proxy.example")
+            self.assertEqual(environment["REQUESTS_CA_BUNDLE"], "/tmp/trusted-ca.pem")
+            self.assertEqual(receipt["execution"]["secret_environment_names"], [])
             output = project / receipt["output"]["path"]
             self.assertEqual(json.loads(output.read_text())["result"]["primaryAccession"], "P12345")
             self.assertEqual(validate(project, [receipt]), [])
@@ -124,12 +133,12 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
             project = Path(directory) / "demo"
             request = project / "request.json"
             request.parent.mkdir(parents=True)
-            request.write_text('{"name":"list_tools","arguments":{}}', encoding="utf-8")
+            request.write_text('{"name":"UniProt_get_entry_by_accession","arguments":{"accession":"P12345"}}', encoding="utf-8")
             with (
                 patch("scripts.ai4science_evidence.metadata.version", return_value="1.5.1"),
                 patch(
                     "scripts.ai4science_evidence.run_process",
-                    return_value=self.completed(b"", exit_code=1, error="upstream failed"),
+                    return_value=self.completed(b'{"status":"failed","http_attempts":[{"http_status":503}]}', exit_code=1, error="upstream failed"),
                 ),
             ):
                 with self.assertRaises(AI4ScienceEvidenceError):
@@ -142,7 +151,33 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
             ledger = read_ledger(project / "evidence" / "ai4science-ledger.jsonl")
             self.assertEqual(ledger[0]["status"], "failed")
             self.assertIsNone(ledger[0]["output"])
+            self.assertEqual(ledger[0]["cost_accounting"]["http_attempts"], [{"http_status": 503}])
             self.assertEqual(validate(project, ledger), [])
+
+    def test_unreviewed_tools_and_versions_never_start_process(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            request = project / "request.json"
+            for value, version in (({"name": "list_tools", "arguments": {}}, "1.5.1"),
+                ({"name": "UniProt_get_entry_by_accession", "arguments": {"accession": "P12345"}}, "1.5.2")):
+                request.write_text(json.dumps(value))
+                with patch("scripts.ai4science_evidence.metadata.version", return_value=version), patch("scripts.ai4science_evidence.run_process") as invoke:
+                    with self.assertRaises(AI4ScienceEvidenceError):
+                        execute_tooluniverse(project, "request.json", "Researcher", "Review")
+                    invoke.assert_not_called()
+
+    def test_tooluniverse_request_mutation_is_detected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            request = project / "request.json"
+            request.write_text('{"name":"UniProt_get_entry_by_accession","arguments":{"accession":"P12345"}}')
+            def mutate(*args, **kwargs):
+                request.write_text('{"name":"UniProt_get_entry_by_accession","arguments":{"accession":"P04637"}}')
+                return self.completed(b'{"result":{"primaryAccession":"P12345"}}')
+            with patch("scripts.ai4science_evidence.metadata.version", return_value="1.5.1"), patch("scripts.ai4science_evidence.run_process", side_effect=mutate):
+                with self.assertRaisesRegex(AI4ScienceEvidenceError, "input files changed"):
+                    execute_tooluniverse(project, "request.json", "Researcher", "Review")
+            self.assertEqual(read_ledger(project / "evidence/ai4science-ledger.jsonl")[0]["status"], "failed")
 
     def test_process_runner_uses_argv_without_shell_and_captures_output(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

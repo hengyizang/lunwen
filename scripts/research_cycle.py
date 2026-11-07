@@ -1,4 +1,4 @@
-"""The shared fresh-review lifecycle; transports retain their own write authority."""
+"""One ordinary critique; actual findings alone trigger repair and re-review."""
 from scripts import review_receipts
 from scripts.research_artifacts import read
 from scripts.research_phase import disposition_stage
@@ -14,14 +14,30 @@ def research_decision(project, stage, run_id, *, reviewed=False):
 
 def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remediate,
                  refresh, writer_notes, log):
-    """Refresh → initial critic → optional repair → refresh → fresh final critic.
+    """Planner/writer run in adapters; one fresh critique completes an ordinary round.
 
-    Adapters perform actual calls and protected writes. Both transports share the
-    same source snapshots, receipt sealing, disposition and decision requirements.
+    Adapters perform actual calls and protected writes. A material finding may justify repair and fresh re-review. Ordinary observations
+    retain evidence and dissent but do not manufacture a second invocation or gate.
     """
     from scripts.api_orchestrator import remediation_required, validate_remediation_notes
     paper = read(project / "state/run.json").get("active_paper") if stage == "writing-and-review" else None
     note_stage = disposition_stage(project, stage)
+    if stage in review_receipts.STAGES.values():
+        import re
+        if not isinstance(run_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", run_id):
+            raise ValueError("safe actual review invocation ID required")
+        review_receipts._cloud()
+        # Reserve before any actual reviewer call, including calls that fail to
+        # return parseable output. Replaying this ID never retries paid work.
+        from scripts.research_artifacts import path_in, write, record
+        gate = next(g for g, name in review_receipts.STAGES.items() if name == stage)
+        state = read(project / "state/run.json")
+        from scripts.paper_execution import enabled
+        scoped = state.get("active_paper") if gate == "G5" or (enabled(project) and gate in {"G3", "G4"}) else None
+        attempt = path_in(project, f"{review_receipts.PREFIX}/{review_receipts._key(gate, scoped)}/{run_id}/attempt.json", exists=False)
+        attempt.parent.mkdir(parents=True, exist_ok=False)
+        write(attempt, {"run_id":run_id, "stage":stage, "status":"started", "scientific_completion_verified":False})
+        record(project, [attempt], review_receipts.MODULE)
     result = {"audits": {}, "paths": {}, "evidence": {}, "methods": {}}
     notes = []
     for phase in ("initial", "final"):
@@ -30,31 +46,59 @@ def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remed
         quality = checked_run(project, stage)
         if quality is not None:
             result["evidence"][phase]["automated_quality"] = quality
-        if phase == "final":
-            result["decision_before_review"] = research_decision(project, stage, run_id)
+        result["decision_before_review"] = research_decision(project, stage, run_id)
         materials = review_receipts.material_snapshot(project, stage, paper)
         request = prompt()
         audit, path, identity = invoke(phase, request)
         result["audits"][phase], result["paths"][phase] = audit, path
-        if path:
-            review_receipts.seal_phase(project, stage=stage, run_id=run_id, phase=phase,
-                audit_path=path, prompt=request, identity=identity, writer_family=writer_family,
-                materials=materials, notes=notes if phase == "final" else None, cycle_required=True)
         if phase == "initial":
             notes = writer_notes(audit, note_stage) if callable(writer_notes) else writer_notes
             result["remediation_skipped"] = not remediation_required(audit, note_stage, notes)
-            if not result["remediation_skipped"]:
-                notes = remediate(audit, path, note_stage)
+        protocol_review = materials.get("review_purpose") == "supplemental_protocol"
+        seal_phase = "observation" if phase == "initial" and result["remediation_skipped"] and not protocol_review else phase
+        if path:
+            review_receipts.seal_phase(project, stage=stage, run_id=run_id, phase=seal_phase,
+                audit_path=path, prompt=request, identity=identity, writer_family=writer_family,
+                materials=materials, notes=notes if seal_phase in {"final", "observation"} else None, cycle_required=True)
+        if phase == "initial":
+            if result["remediation_skipped"]:
+                if not protocol_review:
+                    break
+                # An existing supplemental execution protocol still needs its
+                # two actual authority receipts, even when no repair is needed.
+                continue
+            notes = remediate(audit, path, note_stage)
             notes = validate_remediation_notes({"stage": note_stage, "notes": notes}, audit)
+        elif path:
+            review_receipts.seal_phase(project, stage=stage, run_id=run_id, phase="observation",
+                audit_path=path, prompt=request, identity=identity, writer_family=writer_family,
+                materials=materials, notes=notes, cycle_required=True)
     result["dispositions"] = notes
-    initial, final = result["paths"]["initial"], result["paths"]["final"]
-    result["decision_log"] = log(initial, final, notes, result["audits"]["final"]) if initial and final else None
+    initial, final = result["paths"].get("initial"), result["paths"].get("final")
+    result["decision_log"] = log(initial if final else None, final or initial, notes,
+        result["audits"].get("final", result["audits"]["initial"])) if initial else None
     result["research_decision"] = research_decision(project, stage, run_id, reviewed=True)
     return result
 
 
+def submission_cycle(project, run_id, *, writer_family, refresh):
+    """The final checkpoint replaces the ordinary critic with three blind views."""
+    from scripts import review_panel
+    paper = read(project / "state/run.json")["active_paper"]
+    evidence, methods = refresh("initial")
+    decision = research_decision(project, "writing-and-review", run_id)
+    panel = review_panel.run(project, paper, run_id, writer_family=writer_family)
+    final_evidence, final_methods = refresh("panel")
+    return {"panel": panel, "audits": {}, "paths": {}, "decision_log": None,
+        "evidence": {"initial": evidence, "final": final_evidence},
+        "methods": {"initial": methods, "panel": final_methods}, "remediation_skipped": True,
+        "decision_before_review": decision, "research_decision": {**decision,
+            "assessment_scope": "notebook_record_only_panel_judgments_cover_their_declared_sources",
+            "current_stage_authorized": False, "scientific_completion_verified": False}}
+
+
 def after_reviews(project, stage, run_id, decision, gate_errors):
-    """Apply the same bounded follow-ups after both independently sealed reviews."""
+    """Apply bounded follow-ups without treating advisory opinions as approval."""
     result = {}
     if stage == "writing-and-review":
         from scripts.supplemental_experiments import automatic_approval

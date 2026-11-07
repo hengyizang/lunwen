@@ -7,7 +7,7 @@ controls. Older payment approval or fixed-tranche examples below do not apply.
 The owner's current policy requires human decisions for the doctoral topic and
 each paper topic only. Other research-stage decisions use evidence-bound
 automated records. Preserve every
-scientific, source-rights, budget, identity and execution check; unknown
+scientific-integrity, source-rights, budget, identity and execution check; C observations do not create blocking gates. Unknown
 evidence remains unknown. Missing rights, data or successful execution block the
 affected work; they are never converted into invented human approval.
 Quality reports at G1/G2 require their human-topic-review flag; G3/G4/G5 use
@@ -16,8 +16,8 @@ automated decisions. A legacy report flag never creates or replaces authority.
 Current review-remediation contracts: [REVIEW-REMEDIATION.md](../docs/REVIEW-REMEDIATION.md).
 Formal G1-G5 quality reports use schema 1.2 factual assessments. The current
 novelty matrix uses 1.1 source-bound candidate/prior-work comparisons, bounded
-retrieval dispositions and actual initial/final independent novelty assessments
-at G1/G2/G5. G2 scientific bindings preserve primary outcomes and falsification
+retrieval dispositions and actual current independent novelty assessments
+at G1/G2/G5. A scientific-integrity failures block; B submission checks bind the final unchanged snapshot; C numeric/editorial and administrative findings are warnings. G2 scientific bindings preserve primary outcomes and falsification
 conditions through G3-G5; negative-result plans, typed dependencies and thesis
 claim/result alignment retain failures and uncertainty. Empty templates and
 legacy scores are not evidence and cannot waive these requirements.
@@ -30,7 +30,7 @@ scientific validity, doctoral merit or Q1 acceptance.
 Experiment/evidence extensions: [RESEARCH-EXTENSIONS.md](../docs/RESEARCH-EXTENSIONS.md).
 Declared comparability, pinned baseline adoption, fine-grained reading anchors and review worklists are revalidated at research gates. Actual topics, data and method trials remain required; optional human calibration needs real attributed ratings when requested. No template or regression fixture fills those gaps. Model routing and effort remain unchanged.
 
-Follow-up quality input and receipt contracts: [RESEARCH-IMPROVEMENTS-FOLLOWUP.md](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Changed frozen canonical manuscripts require a complete revision ledger at G5; statistics require explicit sample-flow/missingness/repetition declarations bound to actual sources. Optional research-support and review-packet inputs require fresh protected audits when present. Their reports and human ratings never establish scientific completion automatically.
+Follow-up quality input and receipt contracts: [RESEARCH-IMPROVEMENTS-FOLLOWUP.md](../docs/RESEARCH-IMPROVEMENTS-FOLLOWUP.md). Revision ledgers remain visible observations; actual unsupported numerical, citation or claim changes block as scientific-integrity failures. Confirmatory statistics require explicit sample-flow/missingness/repetition declarations bound to actual sources. Optional research-support and review-packet inputs require fresh protected audits when present. Their reports and human ratings never establish scientific completion automatically.
 
 ## Intake — G0
 
@@ -44,7 +44,7 @@ Required:
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
-- direction ranking weights for funded PhD position supply, employment and salary, future growth, separately scored funded-PhD and job-market competition, background fit and application-route fit, applied only after feasibility and data-rights screening;
+- direction ranking weights for funded PhD position supply, employment and salary, future growth, separately scored funded-PhD and job-market competition, background fit and application-route fit, using the actual user-supplied weights, never forced equal weights, applied only after feasibility and data-rights screening;
 - use `references/direction-ranking.md` to collect dated, route-specific primary evidence and score the seven factors without double-counting positions;
 - novelty evidence, doctoral depth and original contribution as mandatory topic and research-plan requirements that cannot be traded against direction scores.
 
@@ -63,7 +63,7 @@ Required:
 - `program/originality-audit.json` conforming to `schemas/originality-audit.schema.json`, including at least five closest primary works, three adjacent fields, three query families, counterevidence, residual novelty risk, a doctoral case and a reliability strategy;
 - `program/novelty-claim-matrix.json` schema 1.1; every originality claim distinguishes known elements from the candidate contribution, compares against at least three closest works with actual retrieval and original-source anchors, and records mechanism, falsification, predictions, boundaries and residual uncertainty. Bind retrieval dispositions and round counts to executed receipts; explain coverage-, time- or budget-based stopping honestly rather than inventing saturation or equating all new DOIs with new closest works;
 - `program/topic-decision.md` with novelty, contribution, feasibility, competition, PhD-position supply and job-market evidence.
-- automatic broad-data evidence followed by Codex scientific-fit screening against the human-confirmed G0 ranking weights; preserve rejected datasets and unresolved license, sample, bias, leakage, compute and external-validity concerns.
+- automatic broad-data evidence followed by Codex scientific-fit screening against the actual user-supplied G0 ranking weights; preserve rejected datasets and unresolved license, sample, bias, leakage, compute and external-validity concerns.
 - `program/topic-shortlist.json` records `selected_direction_cloud_feasibility` with `current_papers_feasible: true`, `no_future_lab_dependency: true`, and concrete authorized-data, cloud-experiment and current-paper-scope plans. If a proposed direction requires post-admission laboratory work to establish a current paper's result, reject it before weighted ranking. Future laboratory extensions can be retained as separate, unproven plans.
 
 Stress-test novelty against adjacent literatures, not only exact keywords. Distinguish “not found” from “novel.” Reject a proposed topic that lacks a defensible original contribution or doctoral depth, regardless of its direction ranking score.
@@ -77,7 +77,7 @@ Do not invent completed chaining, empty gaps or two saturation rounds.
 `--for-gate` requires the current decision-ready source-bound record. Schema 1.1
 records the actual bounded stopping rule, retrieval dispositions and remaining
 limitations rather than requiring universal saturation. Formal G1/G2/G5 novelty
-decisions still require the actual current independent assessments, verified
+decisions still require the actual current independent assessments, source-bound
 candidate-to-prior-work differences and resolution of blocking scientific
 objections. An honest search limit never supplies missing evidence or novelty.
 
@@ -102,7 +102,7 @@ Use docs/INNOVATION-SCREENING.md. Keep all candidates within one doctoral scope.
 
 Required:
 
-- `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, including every pairwise paper comparison, independently sufficient primary evidence, standalone value and a justification for any shared outcome;
+- `program/paper-map.json` conforming to `schemas/paper-map.schema.json`, using `independence_basis: cumulative` and one `thesis_synthesis.cumulative_contributions` row per paper: knowledge increment, primary evidence, standalone value, merge trigger and exact claims. Existing legacy pair tables remain readable; fifteen repeated pair forms are not required;
 - six default paper contracts under `papers/P01`–`papers/P06`;
 - `papers/Pxx/research-identity.json` for each paper, following
   `schemas/research-identity.schema.json` and
@@ -113,7 +113,7 @@ Required:
   after assessing real research questions and materials;
 - for each current paper, a cloud-feasibility declaration with a specific authorized data-access plan, GitHub Actions compute plan and rationale that no laboratory or local hardware is required. The current claim and primary evidence may not depend on post-admission laboratory work, including for papers assigned to extension B;
 - dependency graph, shared assets, independent contribution, falsification condition and fallback venue for each paper;
-- `program/venue-candidates.json`, generated from a local authorized JCR export, with at least two current SCI/SCIE candidates meeting each paper's declared Q1/Q2 target and current official policy links; the six-paper portfolio needs at least three Q1 targets;
+- source-bound venue candidates and fit evidence for scope, audience, actual article type and desk-rejection risks. Preserve existing Q1/Q2 ambitions as planning observations; no ranking/IF floor blocks science or packaging. Use lawful JCR evidence when available and record missing ranking as unknown;
 - `program/journal-screening.json`, deterministically bound to the JCR registry and dated official evidence, with decomposed scope/article/audience/tier/practicality/access/reputation scores, explicit risk flags and challenge/target/safety choices for every paper;
 - thesis synthesis showing how all six papers answer the same overarching doctoral question through distinct subquestions and cumulative contributions. Use each paper contract's `relationship_to_core` / `relationship_to_extension` and the paper map's existing role, dependencies and `thesis_synthesis` fields to make the connection explicit; shared data, tools or keywords alone do not establish doctoral coherence.
 
@@ -142,7 +142,7 @@ experiment. Missing phase remains `confirmatory`. The plan's `exploration`
 object requires `unknown`, `discriminating_test`, `continue_if`, `revise_if`,
 `stop_if`, `claim_limit` and the boolean `prior_outcomes_seen`. It still needs
 actual rights/provenance, data/input hashes, remaining cumulative authority, a
-machine-frozen plan and the native runner with independent initial/final audits.
+machine-frozen plan and the native runner with the current independent scientific critique.
 Do not fill unknown power or a final baseline suite merely to start a justified
 exploration. The detailed confirmatory requirements below remain mandatory
 before the separate formal protocol runs. Exploration never waives G3 or permits
@@ -210,87 +210,87 @@ Do not write a favorable conclusion before the claim matrix and negative results
 
 ## Writing and review — G5
 
-Scientific drafting is the default. A frozen paper contract can declare its
-initial `writing_phase`; the controller stores the current paper phase in the
-existing `state.writing_phases`, without editing the frozen contract. Scientific
-drafting retains source/fact/citation/numeric/claim integrity, the result-to-claim
-argument, current revision records and fresh independent initial/final audits.
-It does not require every editorial criterion, venue check or package file each
-cycle, and cannot pass final G5. Passing scientific checks and both audits lets
-the controller record `submission` for the next G5 cycle. Submission runs all
-final requirements below and fresh submission audits; scientific receipts cannot
-approve the final package. Existing sealed legacy submission states keep that
-scope. No extra human stage decision is required.
+The current active paper starts in `scientific`. The frozen contract's
+`writing_phase` is only an initial preference; `state.writing_phases` records the
+current phase. Source/fact/citation/numeric/claim integrity and the actual
+result-to-claim argument apply throughout. A reviewed scientific decision and
+passing A checks allow automatic transition to `submission`; this adds no human
+stage signature and does not edit the frozen contract. Scientific or
+supplemental-protocol review alone cannot approve parent G5.
 
-Every G1-G5 cycle also appends the actual current decision to
-`program/research-notebook.json`: `cycle_id`, stage/paper, phase, outcome,
-discriminating test, decision, rationale, next action, evidence IDs, failure
-condition and stop rule under the relevant question. Pending/unchanged decisions
-can state explicit missing evidence; changed claims require actual evidence.
-The final independent audit binds that current record. G0 is exempt, and this
-record adds no report, paid role or automatic claim of scientific improvement.
+Use the A/B/C classification and three-call/repair/final-panel rules in
+[workflow.md](workflow.md). C observations are shown separately and never require
+an empty CFH/H/AD/style ledger, two simulated review rounds or numeric 8/8.5
+scores. Keep existing observation tools available for targeted improvements.
+Actual unsupported claims, false numbers/citations or silent removal of negative
+results remain A failures. Quality schema 1.2 records located factual judgments;
+a score or a complete template cannot establish scientific validity.
 
-Apply [evidence-first writing](../docs/EVIDENCE-FIRST-WRITING.md) in existing
-records: current paragraph takeaway/warrant preparation, located three-axis
-closest-work comparison, design-specific contribution facts tied to real executor
-outputs, and an explicit frozen-expectation versus observed-outcome review.
-The existing manuscript and increment audits revalidate these at G5 and packaging.
-Missing inputs block preparation; scientific meaning still requires the existing
-independent scientific review. Human selection is limited to G1/G2 topics.
+Required scientific evidence:
 
-Revalidate the actual study identity and selected venue's research-article policy.
-Secondary quantitative studies need successful approved executor evidence; the
-manuscript must state the actual secondary/Meta method at a verified canonical
-location. Keep the review/synthesis scientific checklist when applicable even if
-the publisher calls the paper Research. The dedicated study routes supply the
-applicable Meta/formal-theory G3/G4 checks; unsupported methods remain blocked.
+- complete actual registered results and statistical-reporting mappings, with
+  independent units, uncertainty, multiplicity, assumptions and concrete
+  Methods/Results/table/figure locations; adverse results cannot be omitted;
+- the current manuscript, figures, tables and supplement, canonical claim matrix,
+  real source identities and full lawful primary passages for deeper claims;
+  preserve `supports`, `contradicts` and `insufficient` judgments and unresolved
+  disagreements instead of converting a DOI/abstract match into semantic proof;
+- current source-bound paper facts and claim/inference limits. Numeric/citation/
+  conclusion-strength edits must agree with actual evidence; preserve originals,
+  negative/null/failed findings and existing disclosures during editing;
+- deterministic result-figure source/run/output/renderer provenance. Conceptual
+  illustrations remain separate, labeled and unable to substantiate results;
+- current output provenance showing no final scientific file persistently
+  written by Claude/Anthropic; a cleanup cannot launder writer ancestry;
+- actual external review comments and source-bound responses when a real round
+  exists. Simulated comments cannot replace those originals.
 
-At submission, the complete [editorial skill contract](../docs/EDITORIAL-SKILLS.md) applies: Humanizer H01–H26 and defensive AD01–AD08 are reviewed in the existing writer/remediation calls with individual reasoned dispositions; the protected academic audit is recomputed. An extra remediation call is unnecessary only when the initial independent audit has no actionable findings and the writer already supplied all applicable dispositions. The fresh independent final audit and decision log remain required. Mandatory [automatic manuscript hygiene](../docs/MANUSCRIPT-HYGIENE.md) cleans eligible source prose before builders, scans after each pass, and is recomputed at G5 and packaging. Protected originals, differences, current source hashes and unchanged authorship ancestry are required; unknown statistical watermarks never become a passing absence claim. The optional explicit watermark_cleanup operation still creates traceable candidates only. Scientific meaning, disclosure and G1/G2 topic decisions remain protected.
+At submission, B checks validate the actual selected venue and article type,
+source-bound ranking where known, official template/format, real successful
+compile/render, export, bibliographic identity, reporting checklist and truthful
+existing author/funding/conflict/ethics/data/code statements. A missing renderer
+or `skipped_tool_missing` is not a successful export. There is no fixed 120/180-day
+expiry, Q1/Q2/IF gate, automatic AI branding, mandatory AI-use statement or
+journal AI-policy gate. Existing disclosure statements must retain their actual
+hash-bound location and cannot be silently erased. Real external author, rights
+and ethics obligations remain applicable.
 
-A source-bound internal review may request a separate `Ixxx` supplemental study;
-real external reviewer requests retain `Rxxx`. Both use the existing child
-protocol, executor and cumulative total. A `supplemental_protocol` audit can seal
-only that reviewed child design. Its automated result confirmation records
-evidence checks, not scientific validity or parent G5 approval. Full parent
-manuscript and independent G5 audits resume after actual results are reported.
+`papers/Pxx/reviews/panel-inputs.json` supplies the three distinct final source
+views documented in workflow.md. The controller freezes three genuinely
+independent-family responses before synthesis and preserves disagreement. It
+does not vote, infer scientific validity or predict acceptance. The final machine
+approval binds `submission_checks_sha256`; `advance` and ZIP creation reuse B
+only while the manuscript, actual source/template bindings, implementation and
+provenance remain unchanged. Changed evidence requires recomputation.
 
-Required:
+The existing notebook decision binds the current cycle, stage/paper, unknown,
+discriminating test, outcome, rationale, next action and real evidence IDs.
+`pending`/`unchanged` may retain missing evidence rather than fabricate progress.
+The current critique binds that decision. C warning counts, tests or new receipts
+do not become scientific results.
 
-- fresh passing `reviews/statistical-reporting.json` from the cloud control plane, with `statistical-reporting-map.json` covering every registered comparison, independent sample counts, seed/repetition layers, uncertainty, raw/adjusted p, multiplicity, assumptions and actual Methods/Results/caption locations; no omission of adverse results;
-- if a tracked DOCX revision package exists, a fresh passing `reviews/docx-revision.json` and verified clean/tracked/baseline/response hashes and accept/reject round trips; real Word visual inspection remains mandatory.
+An actual internal finding can trigger a separate `Ixxx` supplemental protocol;
+external review uses `Rxxx`. Preserve protected source-review hashes, frozen
+parent inputs, prior exposure, cumulative costs and the original runner. A child
+protocol/result confirmation cannot approve parent G5. Retain all adverse results
+and resume the parent scientific/final review with the actual new evidence.
 
-- manuscript source, figures, tables, supplement and data/code availability statements;
-- citation audit with zero unresolved fabricated/unverified references;
-- passing `reviews/ref-verify.json` for DOI-bound abstract-level topline and numeric claims, while mechanism, procedure, table and figure claims retain exact full-text evidence locations;
-- two simulated review rounds and itemized response matrices;
-- when real reviewer rounds have been opened, complete coverage of the exact
-  frozen external comments, source-bound responses and a fresh protected
-  reviewer-round audit; simulated reviews cannot fulfill this requirement;
-- a current, venue-bound official AI disclosure policy assessment and verified
-  statement location where required; no automatic AI-generated branding;
-- a fresh configured-statistical-watermark assessment, with unknown schemes
-  explicitly unassessed; missing configured prerequisites and positive results
-  require resolution, while a negative result never proves universal absence;
-- `reviews/pre-submission-checklist.json` conforming to `schemas/pre-submission-checklist.schema.json`, covering all seven universal criteria and the applicable article-type criteria in `config/pre-submission-criteria.json`; every assessed criterion needs current manuscript/evidence anchors, rationale, uncertainty and a resolution test. Run `scripts/pre_submission_review.py` to generate the protected `reviews/pre-submission-review.json`. Unresolved criteria block G5; judgements are categorical and never aggregated into acceptance odds;
-- passing, current `reviews/revision-trace.json` proving promised response-matrix changes are present, and `reviews/revision-integrity.json` proving numeric, citation and claim-strength changes match the exact source-bound revision record. Current independent audits assess the scientific meaning;
-- official venue manifest and imported template inventory;
-- passing venue compliance report and successful compile/render when tooling permits;
-- author contributions, conflicts, funding, ethics and AI-use disclosures;
-- current JCR/venue-policy re-verification;
-- current output-provenance hashes showing no packaged manuscript, table, figure, supplement, disclosure, response or cover-letter file was persistently written by Claude/Anthropic;
-- figures registered in `figures/figure-provenance.json` and rendered by deterministic local code from recorded data, with current input, run, output and non-Claude renderer hashes retained, plus actual rendered-file visual/English-label checks bound to model identity and the central usage ledger;
-- native publication figures retain a hash-bound layout audit generated at export: panel-alignment checks and final-PDF text/line collision checks are recomputed at G5. A missing dependency, stale source or mechanical failure cannot pass; the actual final rendering also needs a current automated visual record;
-- all manuscript-bound text—including title, abstract, body, captions, tables, supplement, responses and cover material—written in English, with `scripts/manuscript_language.py` passing on the final manuscript source.
-- `style/academic-style-audit.json` generated by `scripts/academic_style.py`, passing and hash-matched to the current manuscript source tree. Resolve its line-level academic findings—including stock phrasing, conversational artifacts, empty significance claims, vague attribution, mechanical transitions, repeated openings/sentences and excessive sentence-length patterns—without changing scientific meaning, numbers, equations, citations, limitations or uncertainty. Reviewed GitHub pattern sources must be recorded in the report; optional local grammar tools remain advisory. This is a writing-quality control, not an AI-authorship detector or evasion tool.
-- evidence-led result placement: lead the abstract and conclusion with the strongest supported contribution and its decisive evidence. Reframe the narrative when a different bounded contribution is better supported, retaining original hypotheses, outcomes and actual analysis phases. Use the existing claim/argument records; a scope or frozen-protocol change still follows the approved revision route. Every registered outcome remains locatable in the manuscript or supplement. Main-text versus supplement placement follows predeclared role, relevance and statistical adequacy rather than result direction; primary outcomes, falsification tests, required baselines, material robustness failures and interpretation-changing results stay visible in the main text. State exact advantages under justified comparison conditions; material limitations qualify the relevant claim once, without repeated apologetic caveats. Apply [the evidence-led narrative guide](../docs/EVIDENCE-LED-NARRATIVE.md).
-- an applicable reporting-guideline checklist routed from `references/reporting-guidelines.md`, with manuscript locations and explicit reasons for genuinely non-applicable items.
-- a current `reviews/paper-facts.json` plus passing `reviews/manuscript-audit.json`, covering source-bound facts, canonical claims, allowed versus actual inference strength, result status, title/abstract/question/results/conclusion anchors, theory→measurement chains, paragraph argument roles, terminology/acronyms and mathematical symbols;
-- current concern-card artifacts for the final simulated or external review set: original comments, one card per comment, coverage JSON, internal full response, concise venue-budgeted response and editor/Area Chair summary;
-- when Word is canonical, `manuscript/main.docx` plus current `reviews/docx-build.json` bound to non-Claude Markdown/metadata sources and an actual source-bound automated visual inspection.
+Research preparation is progressive in `papers/Pxx/research-case.json`: one
+falsifiable headline/counterclaim and three reader benefits; a G3 rejection
+pre-mortem linked to critical tests; real retrieved competition measures;
+main/baseline/negative-boundary figure plans; title/abstract variants and keywords;
+source-bound related-work, venue-fit and cover-letter evidence; and local
+preprint, reproducibility, rebuttal and retarget assets. Use only the current
+task's fields. `research_case.py` exports content-addressed local preparation
+packages, preserves prior versions and unknown PIDs, and never uploads or submits.
+Reproduction exports require actual runner replay, result CSV, environment lock,
+license and rights; no raw/private/large data or secrets enter the package.
 
-Result-bearing charts still require deterministic data/run provenance. An optional conceptual illustration from GPT Image or a user-operated ChatGPT web session is separate: the source/prompt hash, claimed model ID, named visual inspection and AI-use disclosure location must be registered before it can appear in the package. Such imagery cannot substantiate a result, replace a method/data chart or hide uncertainty.
-
-Complete G5 for `state.active_paper`. In independent execution, a checked machine decision moves the next configured paper to G3; only the last paper can move the project to `submission-ready`. After a paper is marked `submission_ready`, `scripts/submission_package.py` may create a deterministic local ZIP and manifest. Actual publisher submission remains outside this research workflow; agents do not log into portals, upload or submit.
+Complete G5 for `state.active_paper`; checked continuation selects the next paper
+at G3. Only the final configured paper can make the project `submission-ready`.
+A deterministic local ZIP is preparation, never actual publisher submission.
+Software acceptance does not complete six real papers, demonstrate 0.85 semantic
+agreement, supply 20–30 real review anchors or establish doctoral/publishing merit.
 
 ## Executable experiment evidence supplement (G3 and G4)
 

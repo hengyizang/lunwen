@@ -57,8 +57,8 @@ class WritingPhaseTests(unittest.TestCase):
         self.state["writing_phases"]={"P01":"submission"}
         write(self.project/"state/run.json",self.state)
         submission=research_methods.stage_context("writing-and-review","writer",project=self.project)
-        self.assertIn("LOCAL COMPLETE COVERAGE",submission)
-        self.assertIn("full CFH/H/AD editorial records",submission)
+        self.assertNotIn("LOCAL COMPLETE COVERAGE",submission)
+        self.assertIn("CFH/H/AD, style/hygiene and numeric scores are C observations",submission)
         self.assertIn("submission-review",submission)
 
     def seal(self, *, decision):
@@ -88,7 +88,7 @@ class WritingPhaseTests(unittest.TestCase):
         self.state["writing_phases"]={"P01":"submission"}
         write(self.project/"state/run.json",self.state)
         self.assertTrue(review_receipts.validate_gate(self.project,"G5","P01"))
-        self.assertTrue(api.remediation_required({"verdict":"pass-with-conditions",**{key:[] for key in review_receipts.FIELDS-{"verdict"}}},"writing-and-review",[]))
+        self.assertFalse(api.remediation_required({"verdict":"pass-with-conditions",**{key:[] for key in review_receipts.FIELDS-{"verdict"}}},"writing-and-review",[]))
 
     def test_g5_never_accepts_resumed_exploratory_plan_or_preregistration(self):
         case=fixtures.IndependentPaperTests()

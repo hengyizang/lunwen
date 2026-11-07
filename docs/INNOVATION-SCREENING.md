@@ -2,7 +2,7 @@
 
 在现有 `program/hypothesis-register.json` 内填写 `innovation_screening`，
 由 `scripts/research_candidates.py hypotheses` 生成原有 `program/hypothesis-audit.json`。
-G1 读取并重算这一审计；API 和 CLI 的既有规划、写作、初审、终审使用相同阶段指导。
+G1 读取并重算这一审计；API 和 CLI 的既有规划、写作及当前独立批评使用相同阶段指导。
 没有新增模型角色、自动选题器或付费研究循环。人工只决定 G1 博士选题和 G2 各篇选题；
 费用只计算并约束现有项目累计总额度，见 [TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md)。
 
@@ -19,7 +19,7 @@ G1 读取并重算这一审计；API 和 CLI 的既有规划、写作、初审�
 `discriminating_prediction` 应陈述可核对的实质，不以长度或“首次”等词代替证据。
 
 处置为 `distinct`、`overlap` 或 `unresolved`；未解决的异议必须保留。
-G1/G2/G5 的原有初审和终审对当前矩阵出具 `novelty_assessment`：覆盖实际
+G1/G2/G5 的当前独立审查对当前矩阵出具 `novelty_assessment`：覆盖实际
 `claim_id`、`inspected_work_ids`、判断、理由和剩余不确定性。审查须来自与作者不同
 的模型家族，并绑定当前材料及真实调用；旧评审、缓存标志或三份自报支持不能代替它。
 主张重合、来源不匹配或关键异议未解时，不能靠总分、改编号或重复措辞获得放行。

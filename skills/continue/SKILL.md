@@ -11,7 +11,7 @@ disable-model-invocation: true
 2. Run `python3 scripts/researchctl.py status --project $ARGUMENTS --json`.
 3. Read only the current section of `references/stage-contracts.md`.
 4. Run `python3 scripts/api_orchestrator.py cycle <slug> <current-stage> --planner-provider uuapi-anthropic --writer-provider uuapi-openai --critic-provider uuapi-anthropic --context <confirmed-context>`. Do not invoke local model CLIs unless the user explicitly selects CLI mode. Preserve evidence, disagreements and uncertainty.
-5. Require initial and final schema-bound independent audits at G1–G5. Save both plus the non-Claude writer's itemized resolution. A clean initial audit with complete applicable writer dispositions may skip an extra remediation call; the fresh final audit remains required.
+5. Use one current independent critique after planning/writing. Repair and re-review only actual actionable findings. Final submission uses the mutually blind three-family panel; preserve sources, disagreements and itemized responses. See the A/B/C rules in workflow.md; C observations never create a repair loop.
 6. Create required persistent artifacts only through Codex/OpenAI; Claude output stays in internal planning/audit records.
 7. Run `gate-check` and `ready`. The controller records automated G0/G3/G4/G5 decisions after current checks pass; continue through `advance` within the authorized scope.
 8. At G1 and G2 present the actual topic dossier and retain the owner's decision. Never fabricate human approval, source rights, data, experiment receipts or additional spending authority.

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import copy
+import json
 import tempfile
 import unittest
+import jsonschema
 from datetime import date
 from pathlib import Path
 
@@ -339,7 +341,10 @@ class ResearchDesignTests(unittest.TestCase):
         value["target_venues"][1]["quartile"] = "Q3"
         errors = validate_paper_contract(value, "P01")
         self.assertTrue(any("writing_language" in error for error in errors))
-        self.assertTrue(any("JCR Q1 target" in error for error in errors))
+        self.assertFalse(any("JCR Q1 target" in error for error in errors))
+        value["writing_language"] = "en"
+        value["target_venues"] = []
+        self.assertEqual(validate_paper_contract(value, "P01"), [])
 
     def test_current_paper_cloud_feasibility_blocks_future_lab_dependency(self):
         value = paper_contract()
@@ -372,7 +377,38 @@ class ResearchDesignTests(unittest.TestCase):
         value["target_venues"][1]["quartile"] = "Q2"
         self.assertEqual(validate_paper_contract(value, "P01"), [])
 
-    def test_six_paper_portfolio_requires_at_least_three_q1_targets(self):
+    def test_contract_rank_metadata_is_optional_and_keeps_scientific_identity(self):
+        schema = json.loads((Path(__file__).resolve().parents[1] / "schemas/paper-contract.schema.json").read_text())
+        for target in ("absent", "unknown", None, "Q3", "Q4"):
+            with self.subTest(target=target):
+                value = paper_contract()
+                if target == "absent":
+                    value.pop("target_jcr_quartile")
+                else:
+                    value["target_jcr_quartile"] = target
+                value["target_venues"] = [venue("SourceBoundQ3", "Q3"), venue("SourceBoundQ4", "Q4"),
+                                          {"name": "Rank not known"}, {"name": "Explicit unknown", "quartile": "unknown"}]
+                original = copy.deepcopy(value)
+                self.assertEqual(validate_paper_contract(value, "P01"), [])
+                jsonschema.validate(value, schema)
+                self.assertEqual(value, original, "Observing rank metadata must never rewrite the user's targets")
+                value["paper_id"] = "P02"
+                self.assertIn("paper_id must be P01", validate_paper_contract(value, "P01"))
+        for invalid in ([], {}, 3, True):
+            value = paper_contract()
+            value["target_jcr_quartile"] = invalid
+            self.assertTrue(any("when supplied" in error for error in validate_paper_contract(value, "P01")))
+            with self.assertRaises(jsonschema.ValidationError):
+                jsonschema.validate(value, schema)
+            value = paper_contract()
+            value["target_venues"][0]["quartile"] = invalid
+            self.assertTrue(any("target_venues[0].quartile" in error for error in validate_paper_contract(value, "P01")))
+        value = paper_contract()
+        value["target_venues"][0].update(quartile="Q3", source_url="unverified text")
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(value, schema)
+
+    def test_six_paper_portfolio_rank_targets_are_planning_not_scientific_evidence(self):
         value = {
             "schema_version": "2.0",
             "status": "ready_for_review",
@@ -388,8 +424,36 @@ class ResearchDesignTests(unittest.TestCase):
         }
         expected = tuple(f"P{i:02d}" for i in range(1, 7))
         self.assertEqual(validate_paper_map(value, expected), [])
+        schema = json.loads((Path(__file__).resolve().parents[1] / "schemas/paper-map.schema.json").read_text())
+        for target in ("absent", "unknown", None, "Q3", "Q4"):
+            with self.subTest(target=target):
+                observed = copy.deepcopy(value)
+                for row in observed["papers"]:
+                    if target == "absent":
+                        row.pop("target_jcr_quartile")
+                    else:
+                        row["target_jcr_quartile"] = target
+                original = copy.deepcopy(observed)
+                self.assertEqual(validate_paper_map(observed, expected), [])
+                jsonschema.validate(observed, schema)
+                self.assertEqual(observed, original)
+        malformed = copy.deepcopy(value)
+        malformed["papers"][0]["target_jcr_quartile"] = []
+        self.assertTrue(any("when supplied" in error for error in validate_paper_map(malformed, expected)))
         value["papers"][2]["target_jcr_quartile"] = "Q2"
-        self.assertTrue(any("at least 3 Q1" in item for item in validate_paper_map(value, expected)))
+        self.assertEqual(validate_paper_map(value, expected), [])
+        value["independence_basis"] = "cumulative"
+        del value["pairwise_distinctness"]
+        value["thesis_synthesis"]["cumulative_contributions"] = [
+            {"paper_id": row["paper_id"], "claim_ids": row["unique_claim_ids"],
+             "knowledge_increment": row["distinct_contribution"], "primary_evidence": ["planned: " + row["paper_id"]],
+             "standalone_value": "Useful even if the other mechanisms fail.", "merge_trigger": "Merge if the same evidence answers the same question."}
+            for row in value["papers"]]
+        self.assertEqual(validate_paper_map(value, expected), [])
+        value["thesis_synthesis"]["cumulative_contributions"][0]["claim_ids"] = ["C2"]
+        self.assertIn("exact unique claims", "; ".join(validate_paper_map(value, expected)))
+        value["thesis_synthesis"]["cumulative_contributions"].pop()
+        self.assertIn("every paper exactly once", "; ".join(validate_paper_map(value, expected)))
 
     def test_experiment_design_links_three_stochastic_seeds(self):
         runs = {

@@ -33,6 +33,22 @@ class CCFAHumanizationTests(unittest.TestCase):
         self.assertEqual([item["id"] for item in human.review_checklist()],
                          [f"CFH{index:02d}" for index in range(1, 39)])
         self.assertEqual(len({item["key"] for item in human.review_checklist()}), 38)
+        self.assertTrue(all(not item["blocking"] for item in human.review_checklist()))
+
+    def test_default_prompt_uses_optional_observations_and_loads_full_catalog_only_on_request(self):
+        for stage in ("topic-intelligence", "scientific-writing", "writing-and-review", "G5"):
+            with self.subTest(stage=stage):
+                prompt = human.prompt_contract(stage, "writer")
+                self.assertIn("Empty or partial observation lists are valid", prompt)
+                self.assertIn("Ordinary cycles use planner -> writer -> critic", prompt)
+                self.assertIn("three mutually blind, different-family source views", prompt)
+                self.assertIn("Native A/B/C rules override", prompt)
+                self.assertIn("numbers, uncertainty, negative findings and AI-use disclosure", prompt)
+                self.assertNotIn("AVAILABLE OBSERVATION CATALOG", prompt)
+                self.assertNotIn("each ID CFH01 through CFH38 exactly once", prompt)
+        full = human.prompt_contract("G5", "critic", full=True)
+        self.assertIn("AVAILABLE OBSERVATION CATALOG", full)
+        self.assertIn("Native A/B/C rules override", full)
 
     def test_tampered_policy_is_never_loaded_or_claimed_pinned(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -189,39 +205,38 @@ class CCFAHumanizationTests(unittest.TestCase):
         return [f"rejected: {row['id']} Fixture review of {row['key']}: {row['guidance']}"
                 for row in human.review_checklist()]
 
-    def test_native_dispositions_need_every_individual_id_and_allow_unresolved(self):
+    def test_native_dispositions_are_optional_and_preserve_unresolved_observations(self):
         notes = self.disposition_notes()
         notes[4] = "unresolved: CFH05 Results line 12 needs the actual confidence interval before claim strength is settled."
         result = human.validate_dispositions(["fixed: H01 A separate current Humanizer contextual record.", *notes], "writing-and-review")
         self.assertEqual(len(result), 38)
         self.assertEqual(result[4]["disposition"], "unresolved")
         self.assertTrue(all(not row["semantic_review_verified"] for row in result))
-        for bad in (notes[:-1], notes + [notes[0]], ["fixed: CFH01 done"] + notes[1:],
+        self.assertEqual(human.validate_dispositions([], "G5"), [])
+        self.assertEqual(len(human.validate_dispositions(notes[:-1], "G5")), 37)
+        self.assertEqual(human.validate_dispositions([notes[4]], "G5"), [result[4]])
+        for bad in (notes + [notes[0]], ["fixed: CFH01"], ["fixed: CFH99 Invented ID"],
                     ["fixed: CFH01-CFH38 all checked"]):
             with self.subTest(notes=bad), self.assertRaises(ValueError):
                 human.validate_dispositions(bad, "G5")
         self.assertEqual(human.validate_dispositions([], "topic-intelligence"), [])
 
-    def test_dispositions_reject_checklist_wide_blanket_but_allow_related_inapplicability(self):
-        blanket = [f"rejected: {row['id']} This item was checked and there are no problems in the document."
-                   for row in human.review_checklist()]
-        with self.assertRaisesRegex(ValueError, "blanket"):
-            human.validate_dispositions(blanket)
-        notes = self.disposition_notes()
-        for index in (33, 34, 35, 37):
-            notes[index] = (f"rejected: CFH{index+1:02d} No executed-method comparisons occur in this theoretical proposal; "
-                            "the full experiment gate is inapplicable at this planning stage.")
-        self.assertEqual(len(human.validate_dispositions(notes)), 38)
-        repeated_pass = self.disposition_notes()
-        repeated_pass[0] = "fixed: CFH01 PASS PASS PASS PASS PASS PASS"
-        with self.assertRaisesRegex(ValueError, "pass flag"):
-            human.validate_dispositions(repeated_pass)
+    def test_concise_or_shared_reasons_never_establish_semantic_clearance(self):
+        records = human.validate_dispositions([
+            "rejected: CFH34 Methods 2: planned.", "rejected: CFH35 Methods 2: planned.",
+            "fixed: CFH01 PASS PASS PASS",
+        ])
+        self.assertEqual(len(records), 3)
+        self.assertTrue(all(not row["semantic_review_verified"] for row in records))
+        self.assertTrue(all(row["validation_scope"] == "supplied_observation_format_only" for row in records))
 
     def test_structured_dispositions_use_same_native_contract_and_never_claim_semantic_clearance(self):
         records = [{"id": row["id"], "disposition": "rejected",
                     "reason": f"Fixture review of {row['key']}: {row['guidance']}"}
                    for row in human.review_checklist()]
         self.assertEqual(len(human.validate_disposition_records(records)), 38)
+        self.assertEqual(human.validate_disposition_records([]), [])
+        self.assertEqual(len(human.validate_disposition_records(records[:1])), 1)
         with self.assertRaises(ValueError):
             human.validate_disposition_records(records + [{"id": "CFH39", "disposition": "fixed", "reason": "Invented coverage cannot replace an actual current criterion."}])
         with self.assertRaises(ValueError):

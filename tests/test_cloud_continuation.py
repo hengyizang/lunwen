@@ -337,7 +337,7 @@ class ContinuationTests(unittest.TestCase):
             self.assertEqual(command.call_args.args[0], ["gh", "api", "--method", "PUT",
                                                         f"repos/{cloud_job.REPOSITORY}/actions/workflows/research-continuation.yml/disable"])
 
-    def test_model_cycle_counters_do_not_add_an_extra_paid_approval_gate(self):
+    def test_stalled_rephrasing_stops_without_changing_spending_authority(self):
         from scripts import cloud_progress
         researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[]})
         with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
@@ -345,7 +345,8 @@ class ContinuationTests(unittest.TestCase):
                 before=cloud_progress.snapshot('my-phd')
                 (self.project/'program/topic.md').write_text('Rephrased draft '+str(index))
                 cloud_progress.record('my-phd',before,str(index),0)
-            self.assertTrue(self.decision()['should_run'])
+            self.assertFalse(self.decision()['should_run'])
+            self.assertEqual(self.decision()['reason'], 'no_new_research_inputs')
             continuation.checkpoint('my-phd',self.decision(),'123')
             status=self.project/continuation.STATUS
             with self.assertRaises(ValueError):
@@ -354,6 +355,25 @@ class ContinuationTests(unittest.TestCase):
             self.assertTrue(self.decision()['should_run'])
         self.assertEqual(researchctl.load_state('my-phd')['approved_gates'],['G0'])
         self.assertEqual(model_spend.read(self.project)['authorized_ceiling_cny'],300)
+
+    def test_new_work_inputs_resume_a_stall_but_a_draft_timestamp_does_not(self):
+        from scripts import cloud_progress
+        researchctl.write_json(self.project / 'state/research-steps.json', {'paid_model_cycle': True, 'blockers': []})
+        with patch.object(researchctl, 'gate_errors', return_value=['Missing controlled evidence']):
+            for index in range(cloud_progress.MAX_STALLED_CYCLES):
+                before = cloud_progress.snapshot('my-phd')
+                cloud_progress.record('my-phd', before, str(index), 0)
+            self.assertFalse(self.decision()['should_run'])
+            (self.project / 'program/topic.md').write_text('A different description of the same idea')
+            self.assertFalse(self.decision()['should_run'])
+            researchctl.write_json(self.project / 'program/literature-search-plan.json',
+                                   {'queries': ['new discriminating source query']})
+            self.assertTrue(self.decision()['should_run'])
+            before = cloud_progress.snapshot('my-phd')
+            report = cloud_progress.record('my-phd', before, 'new-input', 0)
+            self.assertEqual(report['stalled_cycles'], 1)
+            self.assertTrue(self.decision()['should_run'])
+        self.assertEqual(model_spend.read(self.project)['authorized_ceiling_cny'], 300)
 
     def test_fewer_check_errors_do_not_claim_scientific_progress(self):
         from scripts import cloud_progress
@@ -365,6 +385,24 @@ class ContinuationTests(unittest.TestCase):
         self.assertIsNone(result["semantic_progress"])
         self.assertFalse(result["scientific_progress_verified"])
         self.assertEqual(result["new_experiment_attempts"],0)
+
+    def test_new_executable_input_during_the_cycle_is_not_discarded_by_stall_detection(self):
+        from scripts import cloud_progress
+        researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[]})
+        with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
+            for index in range(2):
+                before=cloud_progress.snapshot('my-phd')
+                researchctl.write_json(self.project/'program/literature-search-plan.json',
+                                       {'queries':['new discriminating query '+str(index)]})
+                report=cloud_progress.record('my-phd',before,'input-'+str(index),0)
+                self.assertTrue(report['new_work_inputs'])
+                self.assertEqual(report['stalled_cycles'],0)
+                self.assertFalse(report['scientific_progress_verified'])
+                self.assertTrue(self.decision()['should_run'])
+            before=cloud_progress.work_inputs(self.project)
+            researchctl.write_json(self.project/'program/literature-workbench.json',
+                                   {'papers':[{'id':'new-original-source','source':{'path':'literature/new.txt'}}]})
+            self.assertNotEqual(before,cloud_progress.work_inputs(self.project))
 
     def test_failed_internal_attempt_is_retained_as_activity_without_claiming_scientific_success(self):
         from scripts import cloud_progress
@@ -407,7 +445,7 @@ class ContinuationTests(unittest.TestCase):
         value["stalled_cycles"] = 100
         researchctl.write_json(path, value)
         with patch.object(researchctl, "gate_errors", return_value=["recorded model screening required"]):
-            self.assertIsNone(cloud_progress.pause_reason("my-phd"))
+            self.assertEqual(cloud_progress.pause_reason("my-phd")["reason"], "no_new_research_inputs")
         value["control_cycles"] = cloud_progress.MAX_CONTROL_CYCLES
         researchctl.write_json(path, value)
         with patch.object(researchctl, "gate_errors", return_value=["recorded model screening required"]):

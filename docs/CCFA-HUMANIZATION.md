@@ -6,7 +6,7 @@ including its full policy, bilingual repair examples, experimental discipline an
 the upstream paper writer's exact nonmutating `check_prose_quality.py` checker.
 Pinned originals remain under `third_party/ccfa-skills/`; source changes fail
 closed. This supplements the existing Humanizer H01–H26 and anti-defensive
-AD01–AD08 mechanisms, preserving both sets of individual dispositions.
+AD01–AD08 mechanisms, keeping optional contextual review available.
 
 ## Every Task Receives the Baseline
 
@@ -41,15 +41,15 @@ The full original bilingual examples are present in each applicable contract.
 They explain how to replace defensive framing with its scientific payload and
 when an accurate negation, uncertainty, contrast or technical property must stay.
 
-At submission-phase G5, `disposition_contract()` uses the existing remediation-note format:
+For an explicitly selected complete editorial review, `disposition_contract()` supports the existing remediation-note format:
 `fixed: CFH01 <contextual reason>`, `rejected: CFH01 <contextual reason>` or
 `unresolved: CFH01 <contextual reason>`. `validate_dispositions(notes, stage)`
-requires all 38 current IDs exactly once and a substantive reason of at least
+can validate all 38 current IDs exactly once and a substantive reason of at least
 20 characters for every item. Other Humanizer, AD and actionable-finding notes
 retain their native validators. Unknown IDs, duplicates, ranges standing in for
 individual items, repeated pass flags and a checklist-wide copied rationale are
 rejected. Related criteria may share an actual inapplicability explanation;
-unresolved records remain for the fresh independent critic and recorded automated G5 decision.
+unresolved records remain visible C observations. A complete 38-row table is not required for G5 or packaging.
 `validate_disposition_records()` supports structured `id`, `disposition` and
 `reason` fields without changing the native bundle schema. Neither adapter
 claims to verify the truth of a reason or to replace source-bound semantic

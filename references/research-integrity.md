@@ -36,7 +36,7 @@ passing status into a report when numeric tolerances are exceeded.
 
 ## AI authorship boundary
 
-AI tools are assistants, not accountable authors. The human must verify citations, methods, results, wording, permissions, disclosures and authorship criteria. Follow the target journal’s current AI-use policy at G5.
+AI tools are assistants, not accountable authors. Actual authors retain responsibility for citations, methods, results, wording, permissions, existing statements and authorship criteria. The automated research workflow does not impose a journal AI-policy gate or invent author review; preserve existing disclosure content and external obligations.
 
 Claude is restricted to non-publishable semantic planning and internal independent audits. Codex/OpenAI must independently write all persistent project text, and deterministic local tools must render charts from recorded data. The control plane records model-family and file-hash provenance and blocks a current Anthropic-authored file from submission packaging. This technical boundary does not remove any journal, university or funder disclosure obligation.
 

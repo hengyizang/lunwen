@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-10-02",
+  "updated_at": "2026-11-07",
   "requirements": [
     {
       "id": "R01",
@@ -46,24 +46,33 @@
     },
     {
       "id": "R04",
-      "requirement": "Executable PaperQA2 ToolUniverse and ref-verify adapters",
-      "implementation": "partial",
-      "acceptance": "blocked-unmetered",
+      "requirement": "Controlled native PaperQA2 SDK vector retrieval/answer and ref-verify; separately bounded ToolUniverse adapter",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
       "evidence": [
+        "scripts/literature_paperqa.py",
         "scripts/ai4science_evidence.py",
         "scripts/tooluniverse_worker.py",
-        "scripts/ref_verify_adapter.py"
+        "scripts/ref_verify_adapter.py",
+        "scripts/cloud_job.py"
       ],
       "tests": [
-        "tests/test_ai4science_evidence.py"
+        "tests/test_literature_paperqa.py",
+        "tests/test_literature_completion_routes.py",
+        "tests/test_ai4science_evidence.py",
+        "tests/test_tooluniverse_worker.py"
       ],
-      "remaining": "ref-verify is available; optional PaperQA2 and arbitrary ToolUniverse paid SDK calls remain disabled until every charge is metered. Core evidence uses controlled public APIs."
+      "remaining": "The pinned native PaperQA2 vector-store bridge and centrally metered reader answer are implemented. ToolUniverse 1.5.1 now exposes the reviewed credential-free UniProt_get_entry_by_accession SDK tool through the cloud dispatcher. Actual public HTTPS acceptance succeeded with zero model calls; the preceding failed attempt remains recorded. Arbitrary SDK tools and external agents remain outside this tested scope and require their own cost/permission adapters; this receipt proves no scientific result.",
+      "verification": {
+        "path": "docs/acceptance/tooluniverse-public-sdk-2026-11-07.json",
+        "sha256": "e4b44b9dca0db329288fbcb3877ee14222dd939ece6e6bb398aa0ace29eb87a7"
+      }
     },
     {
       "id": "R05",
       "requirement": "Natural Codex chat routing through Skills and MCP",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         ".mcp.json",
         "scripts/research_mcp.py"
@@ -100,7 +109,7 @@
       "tests": [
         "tests/test_model_runtime.py"
       ],
-      "remaining": "Configure exact gateway credentials, model IDs and CNY rates, then validate actual usage settlement inside the authorized cumulative tranche."
+      "remaining": "Configure exact existing gateways/models/rates and validate real identity/usage settlement against the original cumulative project totals; no tranche or per-call approval is added."
     },
     {
       "id": "R08",
@@ -114,13 +123,13 @@
       "tests": [
         "tests/test_literature_evidence.py"
       ],
-      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+      "remaining": "Default controlled search uses all seven available public sources (six without OpenAlex key), twelve new calls per cycle; explicit max_search_calls 1–60 controls throughput only. Fallback direct/method_alternatives/counterevidence queries never establish adjacent-field coverage or saturation. Verify actual topic queries, receipts and citation chains."
     },
     {
       "id": "R09",
       "requirement": "Lawful full-text and manual SciencePro or ChatGPT-web import",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/open_fulltext.py",
         "scripts/sciencepro_import.py",
@@ -135,7 +144,7 @@
       "id": "R10",
       "requirement": "37-family deterministic scientific figure engine",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/publication_figures.py",
         "scripts/figure_recipes.py"
@@ -149,7 +158,7 @@
       "id": "R11",
       "requirement": "Typed editable research diagrams",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/research_diagrams.py",
         "schemas/research-diagram.schema.json"
@@ -163,7 +172,7 @@
       "id": "R12",
       "requirement": "GPT Image only as disclosed conceptual supplement",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/concept_illustrations.py",
         "scripts/figure_provenance.py"
@@ -177,7 +186,7 @@
       "id": "R13",
       "requirement": "Protocol dual review multi-report risk-of-bias PRISMA and exports",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/systematic_review.py"
       ],
@@ -188,9 +197,9 @@
     },
     {
       "id": "R14",
-      "requirement": "Mandatory paper facts theory-measurement argument and full-section audit",
+      "requirement": "Source-bound paper facts, theory-measurement and full-section claim integrity",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/manuscript_audit.py",
         "schemas/paper-facts.schema.json"
@@ -204,7 +213,7 @@
       "id": "R15",
       "requirement": "Terminology acronym and mathematical-symbol consistency",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/manuscript_audit.py"
       ],
@@ -215,9 +224,9 @@
     },
     {
       "id": "R16",
-      "requirement": "Mandatory reviewer concern cards and editor summary",
+      "requirement": "Available reviewer concern cards and editor-summary preparation as C observations",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/rebuttal_triage.py",
         "scripts/researchctl.py"
@@ -244,7 +253,7 @@
       "id": "R18",
       "requirement": "Skill inventory security lint MCP inventory and token-gated operations",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/skill_catalog.py"
       ],
@@ -257,7 +266,7 @@
       "id": "R19",
       "requirement": "Evidence-preserving language and optional detector feedback",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/academic_style.py",
         "scripts/detector_feedback.py"
@@ -269,7 +278,7 @@
     },
     {
       "id": "R20",
-      "requirement": "Independent implementation without copying restricted Skills",
+      "requirement": "Native adapters with attributed, license-preserving selected reference adaptations",
       "implementation": "implemented",
       "acceptance": "ci-required",
       "evidence": [
@@ -284,7 +293,7 @@
       "id": "R21",
       "requirement": "LaTeX and genuine provenance-bound DOCX paths",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/manuscript_docx.py",
         "schemas/docx-manuscript-metadata.schema.json"
@@ -296,9 +305,9 @@
     },
     {
       "id": "R22",
-      "requirement": "Six-paper portfolio at least three current JCR Q1 and rest Q2",
+      "requirement": "Truthful venue-fit evidence with existing Q1/Q2 ambitions retained as planning observations",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/venue_policy.py",
         "scripts/jcr_verify.py"
@@ -306,13 +315,13 @@
       "tests": [
         "tests/test_journal_screening.py"
       ],
-      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+      "remaining": "Use actual venue scope, article type and audience; preserve current target choices and lawful ranking provenance. Missing ranking stays unknown and no Q1/Q2/IF floor blocks science or packaging."
     },
     {
       "id": "R23",
       "requirement": "Negative and unfavorable registered results remain locatable",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "AGENTS.md",
         "scripts/revision_integrity.py"
@@ -334,7 +343,7 @@
       "tests": [
         "tests/test_researchctl.py"
       ],
-      "remaining": "Six real papers need original contributions, registered experiments, valid current JCR evidence, independent review and explicit final human approval before October 7; software tests cannot satisfy this requirement."
+      "remaining": "Six actual papers require real original contributions, registered lawful experiments where applicable, complete adverse results, source-bound venue fit and final independent review after actual G1/G2 choices. No software fixture, expired historical deadline or automatic author signature satisfies this requirement."
     },
     {
       "id": "R25",
@@ -364,7 +373,7 @@
       "tests": [
         "tests/test_cloud_readiness_boundaries.py"
       ],
-      "remaining": "Synthetic Docker mutation denial and author-boundary regressions passed. This does not validate any scientific finding; real G3-approved experiments and human review remain required.",
+      "remaining": "Historical synthetic Docker mutation/writer-boundary acceptance passed within its receipt scope. Real studies still require lawful inputs, frozen runner execution and independent scientific judgment; no human G3/G4 signature is invented.",
       "verification": {
         "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
         "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
@@ -398,52 +407,52 @@
     },
     {
       "id": "R29",
-      "requirement": "Equal funded PhD and employment weights with dated primary evidence and separate competition measures",
+      "requirement": "User-chosen seven direction-ranking weights with dated primary evidence and separate competition measures",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/direction_evidence.py"
       ],
       "tests": [
         "tests/test_cloud_research_steps.py"
       ],
-      "remaining": "Populate at least three comparable directions, inspect missingness, eligibility, salary basis, proxies and sensitivity; no fabricated neutral scores."
+      "remaining": "Supply actual feasibility/background/resources and user-selected weights; preserve missingness, eligibility, salary basis, proxies and sensitivity. Do not force equal PhD/employment weights or fabricate neutral scores."
     },
     {
       "id": "R30",
-      "requirement": "Owner-reviewed data manifests and approved Docker experiments dispatched from the cloud cycle",
+      "requirement": "Evidence-bound lawful data manifests and sealed active-paper experiments through cloud controls",
       "implementation": "implemented",
-      "acceptance": "human-review-required",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/cloud_research_steps.py"
       ],
       "tests": [
         "tests/test_cloud_research_steps.py"
       ],
-      "remaining": "Exact data rights and G3 plan/budget approval are required before actual study execution."
+      "remaining": "Actual data rights and active-paper frozen G3 plan/budget hashes are required before execution; protected machine records do not claim human approval."
     },
     {
       "id": "R31",
       "requirement": "Declared cloud dependencies and native DOCX, figures and isolated TeX export",
       "implementation": "implemented",
-      "acceptance": "verified",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/cloud_runtime.py"
       ],
       "tests": [
         "tests/test_cloud_pipeline_acceptance.py"
       ],
-      "remaining": "Synthetic native DOCX, PNG/SVG/PDF figures and isolated TeX PDF acceptance passed. Each real final paper still requires provenance checks and named human visual review.",
-      "verification": {
+      "remaining": "Historical synthetic DOCX/figure/TeX acceptance passed within the preserved receipt scope. Real final sources still need current provenance and actual successful render; C visual/style observations do not add human stage approval.",
+      "historical_verification": {
         "path": "docs/acceptance/cloud-pipeline-2026-10-02.json",
         "sha256": "3d1f83745ae006b60f6c17ca447da274d1681cc627c6d23445ff5a596a5935e8"
       }
     },
     {
       "id": "R32",
-      "requirement": "Cloud-only owner gate review, ready, approval, advance and reopening with exact reviewed hashes",
+      "requirement": "Cloud owner-bound G1/G2 topic decisions and evidence-bound automated continuation",
       "implementation": "implemented",
-      "acceptance": "verified",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/cloud_human_controls.py",
         "scripts/cloud_job.py",
@@ -453,17 +462,17 @@
       "tests": [
         "tests/test_cloud_human_controls.py"
       ],
-      "remaining": "Synthetic owner-boundary and state-transition acceptance passed in cloud CI. Actual G0-G5 scientific decisions remain evidence dependent and human; repeat CI on the final merge.",
-      "verification": {
+      "remaining": "Historical synthetic owner-boundary receipt is retained at its original commit/scope. Revalidate current G1/G2 ownership and automated G0/G3/G4/G5 behavior on the merged commit; actual scientific evidence remains separate.",
+      "historical_verification": {
         "path": "docs/acceptance/cloud-human-controls-2026-10-02.json",
         "sha256": "1b7b7307464e8a75f7313d133490565d4f4372bc34d866cd2815f80c96acd5f7"
       }
     },
     {
       "id": "R33",
-      "requirement": "Protected cloud human confirmations and all-paper preregistration freeze before any experiment attempt",
+      "requirement": "Protected automated quality confirmations and paper-scoped preregistration freeze",
       "implementation": "implemented",
-      "acceptance": "verified",
+      "acceptance": "ci-required",
       "evidence": [
         "scripts/cloud_human_controls.py",
         "scripts/research_quality.py",
@@ -472,8 +481,8 @@
       "tests": [
         "tests/test_cloud_human_controls.py"
       ],
-      "remaining": "Synthetic named data/reproduction confirmations, source/screening boundaries and preregistration freeze checks passed. Real dataset/reproduction validity, scientific reading and human gate approvals remain unverified.",
-      "verification": {
+      "remaining": "Historical confirmation/batch-freeze receipt is retained as history, not proof of current per-paper automatic behavior. New unexecuted portfolios use scoped G3-G5; sealed/executed legacy inputs are not silently migrated. Real validity remains unverified.",
+      "historical_verification": {
         "path": "docs/acceptance/cloud-human-controls-2026-10-02.json",
         "sha256": "1b7b7307464e8a75f7313d133490565d4f4372bc34d866cd2815f80c96acd5f7"
       }
@@ -515,12 +524,216 @@
       "tests": [
         "tests/test_experiment_evidence.py"
       ],
-      "remaining": "Cloud software acceptance passed on synthetic container experiments with preserved adverse evidence and blocked failed-pilot dependencies. Real study validity, method suitability, novelty, human G3/G4 approval and doctoral/Q1 merit remain unverified.",
+      "remaining": "Historical synthetic executable-comparison receipt retains adverse/pilot checks only within its scope. Real study suitability, novelty, interpretation and doctoral merit remain unverified; no human G3/G4 approval is invented.",
       "verification": {
         "path": "docs/acceptance/experiment-evidence-2026-10-03.json",
         "sha256": "2c71a13f3be9c0dff7961a83a2a6bf0de48256e0ede4e5ed7a76cee64f52c761"
       }
+    },
+    {
+      "id": "R36",
+      "requirement": "A scientific integrity; B final unchanged-snapshot preparation; C nonblocking observations",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/researchctl.py",
+        "scripts/submission_package.py",
+        "references/workflow.md"
+      ],
+      "tests": [
+        "tests/test_gate_check_levels.py",
+        "tests/test_submission_package.py"
+      ],
+      "remaining": "Run merged checks; B requires actual selected venue/template/render evidence and preserves existing disclosures. No fixed 120/180-day, journal AI-policy, ranking or editorial-score gate.",
+      "source_sections": [
+        "compendium: A/B/C reclassification and removed compliance friction"
+      ]
+    },
+    {
+      "id": "R37",
+      "requirement": "Ordinary three-call cycles, problem-triggered repairs and final three-family mutually blind source views",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/research_cycle.py",
+        "scripts/review_panel.py",
+        "scripts/review_receipts.py"
+      ],
+      "tests": [
+        "tests/test_research_cycle_decisions.py",
+        "tests/test_review_panel.py",
+        "tests/test_submission_panel_adapters.py"
+      ],
+      "remaining": "Run merged transport/panel tests with existing model routes. Real panel judgments and all charges require actual authorized calls; no majority vote, preferred verdict, forced two rounds or quality claim.",
+      "source_sections": [
+        "compendium: routine five-to-three calls; final model panel"
+      ]
+    },
+    {
+      "id": "R38",
+      "requirement": "Lawful full-passage claim supports/contradicts/insufficient, deterministic 15% sample and independent citation differences",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/claim_evidence.py",
+        "scripts/citation_audit.py",
+        "scripts/literature_source_tasks.py"
+      ],
+      "tests": [
+        "tests/test_claim_evidence.py",
+        "tests/test_judgment_support.py"
+      ],
+      "remaining": "Populate real current manuscripts, registered lawful sources and distinct provenance-bound citation extractions. Sample labels and semantic judgments are not supplied by tests; missing evidence stays insufficient.",
+      "source_sections": [
+        "compendium: claim evidence, citation extraction and sampling"
+      ]
+    },
+    {
+      "id": "R39",
+      "requirement": "Source-bound near-work novelty judgments, real public-review calibration intake and failed-idea memory",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/innovation_screening.py",
+        "scripts/literature_benchmark.py",
+        "scripts/research_notebook.py"
+      ],
+      "tests": [
+        "tests/test_judgment_support.py"
+      ],
+      "remaining": "Real closest/adjacent readings, counterexamples and failure evidence remain necessary; records and model agreement do not prove novelty, correctness or acceptance.",
+      "source_sections": [
+        "compendium: novelty adjudication; anchors; failure memory"
+      ]
+    },
+    {
+      "id": "R40",
+      "requirement": "Positive research preparation 1–16 and cumulative thesis contribution instead of fifteen pair forms",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/research_case.py",
+        "scripts/research_design.py",
+        "schemas/paper-map.schema.json"
+      ],
+      "tests": [
+        "tests/test_research_design.py",
+        "tests/test_research_case.py",
+        "tests/test_compendium_entrypoints.py"
+      ],
+      "remaining": "Fill only the active research task from real evidence: headline/readers/counterclaim, pre-mortem/tests, crowding, figure-first, reproduction, cumulative synthesis, venue fit, panel, variants, cover letter, related work, preprint, numeric tables, falsifiability, rebuttal and retarget. Exports stay local; no upload or fabricated PID.",
+      "source_sections": [
+        "compendium: accepted positive capabilities 1–7 and final panel 8; preparation 9–16"
+      ]
+    },
+    {
+      "id": "R41",
+      "requirement": "Generic feasibility intake, actual seven weights and pause after two unchanged cycles without new input",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/intake_validation.py",
+        "scripts/direction_evidence.py",
+        "scripts/cloud_progress.py"
+      ],
+      "tests": [
+        "tests/test_cloud_continuation.py",
+        "tests/test_cloud_research_steps.py"
+      ],
+      "remaining": "Use actual user background/constraints/resources and real evidence changes; no new budget-approval layer or fabricated inputs. Resume depends on actual new input/checked state.",
+      "source_sections": [
+        "compendium: real vertical slice, stalls and direction weights"
+      ]
+    },
+    {
+      "id": "R42",
+      "requirement": "Whole-project scenario estimates and actual cloud resource profile without model changes",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/cost_audit.py",
+        "scripts/cloud_runtime.py"
+      ],
+      "tests": [
+        "tests/test_research_planning_costs.py",
+        "tests/test_experiment_resources.py"
+      ],
+      "remaining": "Six-paper illustrative call scenarios are 87/147/264 (ordinary three calls, one final five-call cycle per paper); role-ledger observed low/median/high costs/service seconds remain null when any required role or metric is missing. No science completion deadline or acceptance prediction. Keep existing routes/efforts, currencies, cumulative totals and all failed attempts.",
+      "source_sections": [
+        "compendium: six-paper time/cost scenarios and cloud resources"
+      ]
+    },
+    {
+      "id": "R43",
+      "requirement": "Measured redundancy audit and fast/slow/full tests without weakening scientific checks",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "scripts/run_tests.py",
+        "config/test-suites.json",
+        ".github/workflows/validate.yml"
+      ],
+      "tests": [
+        "tests/test_test_suites.py"
+      ],
+      "remaining": "Measured against 3e9f56b: production Python 74391 to 76723 lines (+2332; 3069 added, 737 removed); tests 43002 to 45438 (+2436); docs 19160 to 9743 (-9417); complete tracked/nonignored tree 239891 to 235721 (-4170). The deleted 9550-line historical model JSON is documentation, preserved at its immutable Git blob, not a production-code saving. CLI/workflow/documented/dynamic roots reach 217 of 218 original Python modules; the remaining file is scripts/__init__.py. Historical 65-dead-file and 40–50% savings estimates are not established. New capabilities increased production code and total bytes; no large code reduction is claimed. Pinned sources/licenses remain unchanged.",
+      "source_sections": [
+        "compendium: code/test density, unused-module claims and repeated test cost"
+      ]
+    },
+    {
+      "id": "R44",
+      "requirement": "Empirical claim-label agreement target of 0.85 and 20–30 real public-review anchor papers",
+      "implementation": "partial",
+      "acceptance": "research-not-yet-executed",
+      "evidence": [
+        "scripts/claim_evidence.py",
+        "scripts/literature_benchmark.py"
+      ],
+      "tests": [
+        "tests/test_claim_evidence.py",
+        "tests/test_judgment_support.py"
+      ],
+      "remaining": "No real anchor set or current independent 15% sample labels have been supplied. Collect lawful source-bound papers/reviews, separate calibration/holdout and actual independent labels; report null agreement/target until observations exist. Agreement is not truth or acceptance probability.",
+      "source_sections": [
+        "compendium: real semantic calibration and reviewed-paper anchors"
+      ]
+    },
+    {
+      "id": "R45",
+      "requirement": "Current models, writer permissions, provenance/rights, frozen confirmatory records and no automatic submission",
+      "implementation": "implemented",
+      "acceptance": "ci-required",
+      "evidence": [
+        "AGENTS.md",
+        "scripts/output_provenance.py",
+        "scripts/experiment_runner.py",
+        "references/upstream-components.md",
+        "THIRD-PARTY-NOTICES.md"
+      ],
+      "tests": [
+        "tests/test_output_provenance.py",
+        "tests/test_experiment_evidence.py"
+      ],
+      "remaining": "Preserve existing requested/reported identity, secrets/HTTPS, raw source SHA, rights, all adverse results and actual G1/G2 choices. Preparation exports and software acceptance grant no publication or scientific authority. New panel/case/claim modules are native; no Markdown-as-Python import, full external orchestration, ARIS patent/what-if feature or 701-skill dump. Existing selected CC BY-NC adaptations retain attribution/license and pinned SHA; no new third-party source is copied.",
+      "source_sections": [
+        "compendium: retained absolute constraints and untrusted upstream boundaries"
+      ]
     }
   ],
-  "execution_mode": "cloud_only"
+  "execution_mode": "cloud_only",
+  "source_documents": [
+    {
+      "id": "shared-audit",
+      "url": "https://chatgpt.com/s/cx_6aed70674504819184f8dfa5df112200",
+      "interpretation": "Read together with the supplied compendium and current explicit user instructions; historical/rejected suggestions are not active requirements."
+    },
+    {
+      "id": "compendium-2026-11-05",
+      "filename": "conversation-compendium-2026-11-05.md",
+      "sha256": "4f00e16ad16e7b73b30f2c6dc4429bdd046792e76983907f2fd4acb4673da2d6",
+      "lines": 560
+    }
+  ],
+  "interpretation": "Implementation is software capability, not research completion. A blocks scientific-integrity failures; B binds final submission sources once per unchanged snapshot; C observations do not create gates. Historical verified receipts retain their exact original scope and do not certify this merged revision or scientific quality. Historical estimates, Windows stash commands and rejected AI-policy gates are not current execution instructions."
 }

@@ -10,18 +10,16 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
-import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, write as write_artifact
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, write as write_artifact
 
 
 SCHEMA_VERSION = "1.0"
@@ -73,15 +71,7 @@ def _load(project: Path) -> dict[str, Any]:
 
 
 def _write(project: Path, value: dict[str, Any]) -> None:
-    path = project / REGISTRY_RELATIVE
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=path.parent, delete=False
-    ) as handle:
-        handle.write(payload)
-        temporary = Path(handle.name)
-    os.replace(temporary, path)
+    write_artifact(project / REGISTRY_RELATIVE, value, sort_keys=True)
 
 
 def record_model_writes(

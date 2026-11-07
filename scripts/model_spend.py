@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import math
 import os
-import tempfile
 import uuid
 from contextlib import contextmanager
 from functools import wraps
@@ -18,6 +17,11 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
+
+try:
+    from scripts.research_artifacts import write as write_artifact
+except ImportError:
+    from research_artifacts import write as write_artifact
 
 
 STEP_CNY = 300
@@ -146,13 +150,7 @@ def read(project_root: Path, *, required: bool = False) -> dict[str, Any] | None
 
 
 def write(project_root: Path, state: dict[str, Any]) -> None:
-    path = project_root / FILE
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        json.dump(state, handle, ensure_ascii=False, indent=2, sort_keys=True)
-        handle.write("\n")
-        temporary = Path(handle.name)
-    os.replace(temporary, path)
+    write_artifact(project_root / FILE, state, sort_keys=True)
 
 
 @_locked

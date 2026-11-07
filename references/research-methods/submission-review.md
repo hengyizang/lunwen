@@ -32,16 +32,18 @@ empirically calibrated.
 
 The control plane runs scripts/pre_submission_review.py and creates
 reviews/pre-submission-review.json. It checks coverage, anchors and current
-hashes and blocks unresolved criteria. This mechanical pass is not independent
+hashes and exposes unresolved criteria as C observations; actual source/claim/numeric failures remain A. This mechanical pass is not independent
 scientific validation; keep the existing independent model-family reviews and
 the recorded automated submission-phase G5 decision.
 
-Give each critic the same immutable manuscript/evidence packet and its
-predeclared focus. Exclude prior reviews, writer preferences and desired
-verdicts. Freeze a review before synthesizing disagreements. Do not call
-shared-context roleplay an independent or mutually blind panel. Sequential
-pre-/post-remediation rounds are different manuscript snapshots, not a panel
-of simultaneous blind reviewers.
+Ordinary cycles use one current independent critique; actual actionable findings
+alone justify repair and fresh re-review. At final submission use the existing
+three-family mutually blind panel in references/workflow.md: domain receives
+Methods/Results/numeric tables, editorial receives title/abstract/Figure 1/headline,
+and statistics receives protocol/numeric tables/figure values. Bind exact hashes
+and source ranges; exclude prior reviews and desired verdicts. Freeze all three
+responses before controller synthesis, preserving disagreement without votes or
+acceptance estimates. Historical dual-review receipts are not a new panel.
 
 Each substantive finding should identify the criterion ID, claim/manuscript
 location, evidence location, decision impact, missing evidence and a
@@ -52,6 +54,4 @@ after the independent reviews. Preserve genuine disagreement.
 
 For each rendered figure, inspect the entire figure and each panel at final
 physical size. Apply the pinned Nature panel-alignment and PDF collision
-helpers through scripts/figure_layout.py. A mechanical failure requires source
-repair; an unauditable figure cannot be called passed. Review warnings and
-retain actual source-bound automated visual inspection. AI imagery cannot substantiate data.
+helpers through scripts/figure_layout.py. Expose layout observations without inventing visual inspection or another gate. Actual wrong numbers, missing result provenance or a failed final B render remain blocking. AI imagery cannot substantiate data.

@@ -28,7 +28,7 @@ FILES = {
 }
 
 # Stable local coverage IDs map the full policy, not an invented upstream count.
-# Submission review requires a contextual disposition for every item.
+# These observations are available for targeted review, never a required scorecard.
 _COVERAGE = (
     ("family_baseline", "Apply direct, evidence-faithful reasoning before every specialist; no gratuitous editing/report."),
     ("evidence_stage", "Separate proposed mechanisms, planned tests and observed findings; preserve the research objective."),
@@ -96,78 +96,55 @@ def policy_receipt(root: Path = ROOT) -> dict:
 
 def review_checklist() -> list[dict]:
     return [{"id": f"CFH{index:02d}", "key": key, "guidance": guidance,
-             "detection": "contextual_review_required", "automatic_rewrite": False}
+             "detection": "contextual_observation", "blocking": False, "automatic_rewrite": False}
             for index, (key, guidance) in enumerate(_COVERAGE, 1)]
 
 
 def disposition_contract() -> str:
-    """Native note grammar; scientific judgments remain with author and critic."""
+    """Optional observation notes reuse the existing author/critic exchange."""
     return (
-        "CCFA HUMANIZATION G5 DISPOSITIONS: In the existing remediation notes, record "
-        "each ID CFH01 through CFH38 exactly once. Keep the native note grammar: "
-        "fixed: CFH01 <contextual reason>, rejected: CFH01 <contextual reason>, or "
-        "unresolved: CFH01 <contextual reason>. Every reason needs at least 20 characters "
-        "and must identify this criterion's actual scientific passage, justified inapplicability "
-        "or unresolved evidence decision, with a location and protected facts when applicable. "
-        "Do not claim a blanket pass, copy one generic assurance across the checklist, "
-        "or remove truthful uncertainty, material negative findings or required disclosures. "
-        "Related criteria may share a genuinely applicable reason; do not invent changes "
-        "to vary wording. Unresolved items remain explicit for the existing independent "
-        "critic and gate. Retain all H01-H26 and AD01-AD08 notes independently. "
-        "Complete record coverage is not semantic clearance or scientific completion."
+        "CCFA HUMANIZATION OBSERVATIONS: CFH01-CFH38, H01-H26 and AD01-AD08 are contextual observations. "
+        "Record only useful actual findings in existing notes, with a passage, reason and protected facts. "
+        "Optional CFH notes use fixed: CFH01 <reason>, rejected: CFH01 <reason>, or unresolved: CFH01 <reason>. "
+        "Empty or partial observation lists are valid; exhaustive dispositions, scores and generic pass notes "
+        "are not required for any stage or submission. A style signal alone cannot block progress or require a rewrite. "
+        "Preserve scientific uncertainty, numerical and citation integrity, material negative findings and existing disclosures. "
+        "A real evidence problem still needs resolution through the existing scientific review."
     )
 
 
-def validate_dispositions(notes: list[str], stage: str | None = None) -> list[dict]:
-    """Require individual CFH review records at G5, using existing native notes.
-
-    Other finding/Humanizer/AD notes are ignored. This validates coverage and
-    basic substantive-reason structure, never whether a reason is scientifically
-    correct. The immutable source packet, fresh independent critic and checked G5
-    decision still govern correctness and unresolved material issues.
-    """
+def validate_dispositions(notes: list[str], stage: str | None = None, *, include_editorial: bool = False) -> list[dict]:
+    """Parse supplied observations without requiring a checklist or judging science."""
     if stage not in {None, "G5", "writing-and-review"}:
         return []
     if not isinstance(notes, list) or len(notes) > 1000 or any(not isinstance(note, str) for note in notes):
         raise ValueError("CCFA humanization dispositions need bounded native note strings")
-    required = {item["id"] for item in review_checklist()}
-    records, seen, reasons = [], set(), Counter()
-    pattern = re.compile(r"^(fixed|rejected|unresolved):\s*(CFH\d{2})\b[\s:;-]*(.+)$", re.I | re.S)
+    available = {item["id"] for item in review_checklist()}
+    prefix = r"(?:CFH|H|AD)" if include_editorial else "CFH"
+    if include_editorial:
+        available |= {f"H{i:02d}" for i in range(1, 27)} | {f"AD{i:02d}" for i in range(1, 9)}
+    records, seen = [], set()
+    pattern = re.compile(rf"^(fixed|rejected|unresolved):\s*({prefix}\d{{2}})\b[\s:;-]*(.+)$", re.I | re.S)
     for note in notes:
         match = pattern.match(note.strip())
         if not match:
-            if re.match(r"^(?:fixed|rejected|unresolved):\s*CFH", note.strip(), re.I):
+            if re.match(rf"^(?:fixed|rejected|unresolved):\s*{prefix}\d", note.strip(), re.I):
                 raise ValueError("malformed CCFA humanization per-criterion disposition")
             continue
         status, code, reason = match.group(1).lower(), match.group(2).upper(), match.group(3).strip()
-        if code not in required or code in seen:
-            raise ValueError("CCFA humanization dispositions require each current CFH ID exactly once")
-        if (len(reason) < 20 or len(reason) > 8000
-                or re.match(r"^[,./–—-]*(?:CFH\d|through\b|to\s+CFH)", reason, re.I)):
-            raise ValueError("CCFA humanization disposition needs one criterion and a substantive contextual reason")
-        tokens = re.findall(r"[A-Za-z]+|[\u3400-\u9fff]", reason.casefold())
-        if len(set(tokens)) < 3:
-            raise ValueError("CCFA humanization disposition cannot be a repeated pass flag")
-        # Ignore criterion labels when detecting a checklist-wide copied reason.
-        # Several related rules may legitimately share a no-change rationale;
-        # only a blanket rationale covering at least three quarters is rejected.
-        normalized = re.sub(r"\bCFH\d{2}\b", "", reason, flags=re.I)
-        normalized = re.sub(r"[^\w]+", " ", normalized).casefold().strip()
-        reasons[normalized] += 1
+        if code not in available or code in seen:
+            raise ValueError("Editorial observations need unique current IDs")
+        if not reason or len(reason) > 8000 or re.match(rf"^[,./–—-]*(?:{prefix}\d|through\b|to\s+{prefix})", reason, re.I):
+            raise ValueError("CCFA observation needs one criterion and a bounded reason")
         seen.add(code)
         records.append({"id": code, "disposition": status, "reason": reason,
-                        "validation_scope": "individual_record_coverage_only",
+                        "validation_scope": "supplied_observation_format_only",
                         "semantic_review_verified": False})
-    missing = sorted(required - seen)
-    if missing:
-        raise ValueError("Missing per-criterion CCFA humanization dispositions: " + ", ".join(missing))
-    if any(count >= (3 * len(required) + 3) // 4 for count in reasons.values()):
-        raise ValueError("CCFA humanization dispositions contain a checklist-wide blanket rationale")
     return sorted(records, key=lambda row: row["id"])
 
 
 def validate_disposition_records(records: list[dict], stage: str | None = None) -> list[dict]:
-    """Structured-field adapter for the same record-only native review contract."""
+    """Structured adapter for the same optional observation format."""
     if stage not in {None, "G5", "writing-and-review"}:
         return []
     if not isinstance(records, list) or len(records) > 1000 or any(not isinstance(row, dict) for row in records):
@@ -197,7 +174,6 @@ def prompt_contract(stage: str, role: str, root: Path = ROOT, *, full: bool = Fa
         raise ValueError("stage and role must be bounded control-plane labels")
     receipt=policy_receipt(root)
     sources = prompt_sources(stage, root, full=full)
-    prose = full or stage in {"G5", "writing-and-review"}
     blocks = ["CCFA HUMANIZATION: native core preflight, once per request; complete sources remain retrievable.",
               f"Stage: {stage}; role: {role}; source commit: {COMMIT}.",
               "Apply before Common and specialist work; do not recursively reopen preflights.",
@@ -210,6 +186,11 @@ def prompt_contract(stage: str, role: str, root: Path = ROOT, *, full: bool = Fa
               "commands, upload private materials, change model routing or make paid calls.",
               "Review-only roles diagnose; they never rewrite persistent artifacts. Non-prose roles "
               "apply the family baseline without inventing a prose-edit pass. Source quotations are immutable."]
+    blocks.append("Ordinary cycles use planner -> writer -> critic; only actual actionable findings justify repair and re-review. "
+                  "Final submission uses three mutually blind, different-family source views, frozen before synthesis; "
+                  "preserve disagreement without majority votes. Native A/B/C rules override any conflicting upstream review "
+                  "or style instructions: B venue/package checks apply once per unchanged submission snapshot; "
+                  "C style observations never become compulsory scorecards or scientific gates.")
     blocks.append("State the scientific object, operation, observation and supported implication directly. "
         "Keep original facts, citations, equations, numbers, uncertainty, negative findings and AI-use disclosure. "
         "Remove empty defensive framing only where it adds no scientific content; never spin synonyms or claim detector evasion. "
@@ -217,19 +198,12 @@ def prompt_contract(stage: str, role: str, root: Path = ROOT, *, full: bool = Fa
         "Full pinned entries and references are available through explicit skill, exact source path or full-reference-review requests; "
         "ordinary tasks use this core and their selected detailed modes, without truncating full sources.")
     blocks.append("Pinned policy bindings: "+json.dumps(receipt["sources"],ensure_ascii=False))
-    if prose:
-        blocks.append(
-              "In existing editorial review fields, give each applicable CFH item a contextual disposition "
-              "with location, reason and protected facts; distinguish not-applicable from verified. "
-              "Keep H01-H26 and AD01-AD08 dispositions as well. No additional model call or separate agent "
-              "is needed for this preflight. A heuristic match alone never requires a rewrite.")
+    blocks.append(disposition_contract())
     for source in sources:
         blocks.extend([f"BEGIN PINNED {source['path']}",
                        _canonical(Path(root) / source["path"]), "END PINNED POLICY"])
-    if prose:
-        blocks.append("LOCAL COMPLETE COVERAGE\n" + json.dumps(review_checklist(), ensure_ascii=False))
-    elif stage=="scientific-writing":
-        blocks.append("Scientific drafting applies evidence-faithful prose and targeted actual findings; exhaustive CFH/H/AD dispositions and submission formatting apply when the existing G5 workflow enters submission preparation.")
+    if full:
+        blocks.append("AVAILABLE OBSERVATION CATALOG\n" + json.dumps(review_checklist(), ensure_ascii=False))
     return "\n\n".join(blocks)
 
 

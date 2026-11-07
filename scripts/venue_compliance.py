@@ -159,14 +159,16 @@ def inspect_manuscript(paper_dir: Path, venue: dict[str, Any]) -> tuple[dict[str
 
 def compile_latex(manuscript: Path, timeout: int, no_compile: bool) -> dict[str, Any]:
     if manuscript.suffix.lower() != ".tex":
-        return {"status": "not_applicable", "reason": "canonical source is DOCX"}
+        return {"status": "not_applicable", "required": False, "reason": "LaTeX compilation does not apply to canonical DOCX source"}
     latexmk = shutil.which("latexmk")
     if no_compile:
-        return {"status": "not_requested", "reason": "--no-compile was supplied"}
+        return {"status": "not_requested", "required": True,
+                "reason": "--no-compile was supplied; required LaTeX compilation remains unchecked"}
     if not latexmk:
         return {
             "status": "skipped_tool_missing",
-            "reason": "latexmk is not installed; human PDF inspection remains required",
+            "required": True,
+            "reason": "latexmk is not installed; install it in the build environment and rerun venue compliance",
         }
     build = manuscript.parent.parent / "build"
     build.mkdir(parents=True, exist_ok=True)
@@ -213,6 +215,7 @@ def compile_latex(manuscript: Path, timeout: int, no_compile: bool) -> dict[str,
         status = "pass" if result.returncode == 0 and pdf.is_file() else "fail"
         return {
             "status": status,
+            "required": True,
             "exit_code": result.returncode,
             "command": command,
             "pdf": str(pdf) if pdf.is_file() else None,
@@ -220,7 +223,7 @@ def compile_latex(manuscript: Path, timeout: int, no_compile: bool) -> dict[str,
             "log_tail": output,
         }
     except (OSError, subprocess.TimeoutExpired) as exc:
-        return {"status": "fail", "error": str(exc), "command": command}
+        return {"status": "fail", "required": True, "error": str(exc), "command": command}
 
 
 def compliance_report(paper_dir: Path, timeout: int = 180, no_compile: bool = False) -> dict[str, Any]:
@@ -228,7 +231,7 @@ def compliance_report(paper_dir: Path, timeout: int = 180, no_compile: bool = Fa
     template = audit_template(paper_dir / "venue-template")
     manuscript, manuscript_path = inspect_manuscript(paper_dir, venue)
     compile_result = compile_latex(manuscript_path, timeout, no_compile)
-    allowed_compile = {"pass", "not_applicable", "skipped_tool_missing"}
+    allowed_compile = {"pass", "not_applicable"}
     status = (
         "pass"
         if template["status"] == manuscript["status"] == "pass"
@@ -245,6 +248,9 @@ def compliance_report(paper_dir: Path, timeout: int = 180, no_compile: bool = Fa
         "template": template,
         "manuscript": manuscript,
         "compile": compile_result,
+        "gaps": ([compile_result.get("reason") or compile_result.get("error") or
+                  "LaTeX compilation failed; inspect the build log and rerun venue compliance"]
+                 if compile_result["status"] not in allowed_compile else []),
         "human_checks_remaining": [
             "Inspect the final PDF or DOCX visually.",
             "Re-check current official venue policies and portal fields.",

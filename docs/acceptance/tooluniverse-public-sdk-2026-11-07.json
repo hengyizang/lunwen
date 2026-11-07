@@ -1,0 +1,82 @@
+{
+  "acceptance": "ToolUniverse reviewed public SDK integration",
+  "attempts": [
+    {
+      "error_summary": "HTTP 200 retrieval succeeded, but the initial worker checked primaryAccession at the wrong compact-result level. Corrected the nested data lookup and replaced package attribute import with exact module import to avoid unrelated tool discovery.",
+      "http_attempts": [
+        {
+          "http_status": 200,
+          "method": "GET",
+          "status": "completed",
+          "url": "https://rest.uniprot.org/uniprotkb/P12345.json"
+        }
+      ],
+      "model_calls": 0,
+      "output_sha256": null,
+      "receipt_id": "20261107t044834z-tooluniverse-6c4ec5925f",
+      "receipt_sha256": "5ac4363927d53494db15f5b523df22b43395107f946bbbfa5fc415b7df5a803e",
+      "recorded_at": "2026-11-07T04:48:36+00:00",
+      "status": "failed"
+    },
+    {
+      "http_attempts": [
+        {
+          "http_status": 200,
+          "method": "GET",
+          "status": "completed",
+          "url": "https://rest.uniprot.org/uniprotkb/P12345.json"
+        }
+      ],
+      "model_calls": 0,
+      "output_sha256": "699349035c44799ca021eeb65ed62ee6f782ed84b8aa3c8d484463b06f6612fb",
+      "receipt_id": "20261107t044919z-tooluniverse-313180f409",
+      "receipt_sha256": "9ab303aefd3fee0ce2fd71d1e63760dd81a0972b29818ef53dae0c46d0306057",
+      "recorded_at": "2026-11-07T04:49:20+00:00",
+      "status": "succeeded"
+    }
+  ],
+  "configuration_sha256": "120f482e08674ea3f8680e861037fc400e4970649dd6fc7267f22a7c8e9f2a74",
+  "cost_basis": {
+    "access_documentation": "https://rest.uniprot.org/help/api_queries",
+    "attribution": "UniProt Consortium; https://www.uniprot.org/help/publications",
+    "cost_basis": "Unauthenticated public UniProt REST retrieval; no model or paid API is invoked. Hosting/network costs are excluded.",
+    "data_license": "CC BY 4.0",
+    "license_source": "https://rest.uniprot.org/help/license",
+    "model_api_cost_cny": 0,
+    "model_calls": 0,
+    "public_api_cost_cny": 0
+  },
+  "implementation_sha256": "4b973f7fd3a3c5e7a6fc99c7661ea944cf2fa34b41474ae3ba605c912d695cb9",
+  "ledger_sha256": "57c0cab98e168a2288158140de4101f6d1fd6292a599301db9766e18be6ece40",
+  "limitations": [
+    "The SDK compact result is a bounded summary, not the full UniProt source entry.",
+    "The initial integration failure remains in the original ledger; no attempt was erased.",
+    "Original receipts and response artifacts remain available in the execution workspace; raw source responses, credentials and environment paths are excluded from this summary.",
+    "The temporary validation environment installed the official wheel without all optional-tool dependencies; only the audited UniProt implementation and its required dependencies were executed."
+  ],
+  "official_wheel_sha256": "c3879d3c304616045bfbaa2557abcc60897166bfa44f907881debf68152bcc18",
+  "package": "tooluniverse",
+  "package_version": "1.5.1",
+  "receipt_hash_encoding": "SHA-256 over the original UTF-8 JSONL record bytes, excluding its line ending.",
+  "recorded_at": "2026-11-07T04:50:58+00:00",
+  "request": {
+    "arguments": {
+      "accession": "P12345"
+    },
+    "name": "UniProt_get_entry_by_accession"
+  },
+  "request_sha256": "734dc6df873e6674ed1567ef2551a6b276919d564a72a3001de4a70dd624ecf7",
+  "result": {
+    "compact": true,
+    "output_sha256": "699349035c44799ca021eeb65ed62ee6f782ed84b8aa3c8d484463b06f6612fb",
+    "primary_accession": "P12345"
+  },
+  "schema_version": "1.0",
+  "scope": "Software integration acceptance only; not scientific validation or approval of arbitrary SDK tools.",
+  "validation": {
+    "command": "ai4science_evidence.validate(project, all_real_receipts)",
+    "errors": [],
+    "focused_unit_tests": 17,
+    "unit_test_command": "python -m unittest tests.test_ai4science_evidence tests.test_tooluniverse_worker tests.test_cloud_job -q"
+  }
+}

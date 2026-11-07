@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hengyizang/lunwen/schemas/research-case.schema.json",
+  "title": "Progressive paper case; preparation rather than scientific approval",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "paper_id"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+    "contribution": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "headline_claim": {"type": "string", "description": "One falsifiable sentence, with the tested conditions."},
+        "counterclaim": {"type": "string"},
+        "claim_ids": {"$ref": "#/$defs/ids"}, "test_ids": {"$ref": "#/$defs/ids"},
+        "reader_benefits": {"type": "array", "maxItems": 3, "items": {"type": "object", "properties": {"reader": {"type": "string"}, "benefit": {"type": "string"}, "source": {"$ref": "#/$defs/anchor"}}}}
+      }
+    },
+    "pre_mortem": {"type": "array", "items": {"type": "object", "properties": {
+      "id": {"type": "string"}, "rejection_reason": {"type": "string"}, "severity": {"enum": ["fatal", "major", "minor", "unknown"]},
+      "test_ids": {"$ref": "#/$defs/ids"}, "response": {"type": "string"}, "decision": {"type": "string"}
+    }}},
+    "competition": {"type": "object", "properties": {
+      "receipt_ids": {"$ref": "#/$defs/ids"}, "same_problem_ids": {"$ref": "#/$defs/ids"}, "closest_work_id": {"type": "string"},
+      "decision": {"enum": ["continue", "revise", "stop", "unknown"]}, "decision_reason": {"type": "string"}
+    }},
+    "positioning": {"type": "array", "description": "Located related-work shared elements, differences and discriminating predictions. Unknowns remain explicit.", "items": {"type": "object", "properties": {
+      "work_id": {"type": "string"}, "shared": {"type": "string"}, "difference": {"type": "string"}, "prediction": {"type": "string"}, "source": {"$ref": "#/$defs/anchor"}
+    }}},
+    "figure_first": {"type": "array", "items": {"type": "object", "properties": {
+      "role": {"enum": ["main_result", "strongest_baseline", "negative_boundary"]}, "phase": {"enum": ["planned", "observed"]},
+      "claim_ids": {"$ref": "#/$defs/ids"}, "comparison_ids": {"$ref": "#/$defs/ids"}, "purpose": {"type": "string"}, "source": {"$ref": "#/$defs/anchor"}
+    }}},
+    "variants": {"type": "array", "items": {"type": "object", "properties": {
+      "id": {"type": "string"}, "title": {"type": "string"}, "abstract": {"type": "string"}, "keywords": {"$ref": "#/$defs/ids"},
+      "claim_ids": {"$ref": "#/$defs/ids"}, "reason": {"type": "string"}
+    }}},
+    "selected_variant": {"type": "string"},
+    "venue_fit": {"type": "object", "properties": {
+      "venue_id": {"type": "string"}, "scope": {"$ref": "#/$defs/venue"}, "editorial_interest": {"$ref": "#/$defs/venue"},
+      "article_type": {"$ref": "#/$defs/venue"}, "desk_reject_risks": {"$ref": "#/$defs/venue"}
+    }},
+    "cover_letter": {"type": "object", "properties": {"text": {"type": "string"}, "evidence_sources": {"type": "array", "items": {"$ref": "#/$defs/anchor"}}}},
+    "preprint": {"$ref": "#/$defs/release"},
+    "retarget": {"allOf": [{"$ref": "#/$defs/release"}, {"type": "object", "properties": {
+      "previous_venue_id": {"type": "string"}, "target_venue_id": {"type": "string"}, "changes": {"$ref": "#/$defs/ids"},
+      "previous_manuscript": {"type": "array", "items": {"$ref": "#/$defs/binding"}}
+    }}]},
+    "rebuttal": {"type": "array", "items": {"type": "object", "properties": {
+      "id": {"type": "string"}, "concern": {"type": "string"}, "response": {"type": "string"}, "claim_ids": {"$ref": "#/$defs/ids"},
+      "evidence_sources": {"type": "array", "items": {"$ref": "#/$defs/anchor"}}
+    }}},
+    "reproduction": {"type": "object", "properties": {
+      "replay_run_id": {"type": "string"}, "result_table": {"type": "string"},
+      "license": {"$ref": "#/$defs/binding"}, "environment": {"$ref": "#/$defs/binding", "description": "Frozen replay input with python==recorded.version and exact distribution==version pins; installed dependency versions are not independently verified."},
+      "files": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/binding"}, {"type": "object", "properties": {"license": {"type": "string"}, "rights_source": {"$ref": "#/$defs/anchor"}}}]}}
+    }}
+  },
+  "$defs": {
+    "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "binding": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "anchor": {"allOf": [{"$ref": "#/$defs/binding"}, {"type": "object", "required": ["locator", "excerpt"], "properties": {"locator": {"type": "string"}, "excerpt": {"type": "string"}, "pdf_page": {"type": "integer", "minimum": 1}}}]},
+    "venue": {"type": "object", "properties": {"statement": {"type": "string"}, "url": {"type": "string", "pattern": "^https://"}, "source": {"$ref": "#/$defs/anchor"}}},
+    "release": {"type": "object", "properties": {
+      "manuscript_sources": {"type": "array", "items": {"$ref": "#/$defs/binding"}},
+      "persistent_identifier": {"type": "object", "properties": {"status": {"enum": ["unknown", "registered"]}, "reason": {"type": "string"}, "value": {"type": "string"}, "receipt_id": {"type": "string", "description": "Actual hashed bibliographic retrieval matching this retained manuscript title and DOI."}, "source": {"$ref": "#/$defs/anchor"}}}
+    }}
+  }
+}

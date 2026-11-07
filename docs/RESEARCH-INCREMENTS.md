@@ -212,7 +212,7 @@ mixed notebook evidence. Hashes bind task, chapter, plan, implementation, slices
 and dependencies. Declared increment sources are also hashed even outside the
 selected chapter slice. A compact protected context-summary avoids duplicating
 the full manuscript in the packet. Per-task reports identify changed/removed inputs;
-no model-cache hit is claimed. Independent initial/final reviews remain fresh.
+no model-cache hit is claimed. Current independent critiques and final panel views remain fresh for their bound sources.
 
 reports/research-increments/handoff.json contains stage/gate/status, actual
 approved gates, registry success/failure counts, blockers, persisted spend,

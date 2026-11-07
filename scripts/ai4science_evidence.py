@@ -27,8 +27,10 @@ from typing import Any, Iterable
 
 try:
     from scripts.research_artifacts import sha as sha256_file, regular_file
+    from scripts import tooluniverse_worker
 except ImportError:  # Direct execution from scripts/.
     from research_artifacts import sha as sha256_file, regular_file
+    import tooluniverse_worker
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,7 +43,6 @@ PACKAGES = {
 ADAPTER_VERSION = "1.0"
 MAX_CAPTURE_BYTES = 8 * 1024 * 1024
 MAX_TIMEOUT_SECONDS = 24 * 60 * 60
-TOOL_NAME_RE = re.compile(r"^[A-Za-z0-9_.:-]{1,200}$")
 SETTING_RE = re.compile(r"^[A-Za-z0-9_.-]{1,100}$")
 BASE_ENV_NAMES = {
     "PATH",
@@ -158,7 +159,7 @@ def safe_environment(project: Path, tool: str) -> tuple[dict[str, str], list[str
     environment = {
         name: value for name, value in os.environ.items() if name in BASE_ENV_NAMES
     }
-    present_secrets = sorted(name for name in SECRET_ENV_NAMES if os.environ.get(name))
+    present_secrets = sorted(name for name in SECRET_ENV_NAMES if os.environ.get(name)) if tool != "tooluniverse" else []
     for name in present_secrets:
         environment[name] = os.environ[name]
     environment.update(
@@ -304,6 +305,7 @@ def _finish_execution(
     receipt_id: str,
     output_name: str,
     parse_json_output: bool,
+    cost_accounting: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     run_dir = project / "evidence" / "ai4science" / receipt_id
     run_dir.mkdir(parents=True, exist_ok=False)
@@ -383,6 +385,15 @@ def _finish_execution(
         "advisory_only": True,
         "human_verification_required": True,
     }
+    if cost_accounting is not None:
+        # A killed/failed-to-start worker may not have emitted its attempt log;
+        # preserve that uncertainty instead of claiming no HTTP request happened.
+        try:
+            worker_output = json.loads(result["stdout_bytes"].decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            worker_output = {}
+        receipt["cost_accounting"] = {**cost_accounting, "adapter_attempts": 1,
+            "http_attempts": worker_output.get("http_attempts") if isinstance(worker_output, dict) else None}
     append(project / "evidence" / "ai4science-ledger.jsonl", receipt)
     if status != "succeeded":
         raise AI4ScienceEvidenceError(
@@ -446,6 +457,14 @@ def execute_paperqa(
     )
 
 
+def public_tooluniverse_request(project: Path, request_file: str) -> tuple[Path, dict[str, Any]]:
+    request_path = safe_file(project, request_file)
+    try:
+        return request_path, tooluniverse_worker.read_request(request_path)
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        raise AI4ScienceEvidenceError(f"invalid ToolUniverse public API request: {exc}") from exc
+
+
 def execute_tooluniverse(
     project: Path,
     request_file: str,
@@ -456,22 +475,12 @@ def execute_tooluniverse(
 ) -> dict[str, Any]:
     if not actor.strip() or not purpose.strip():
         raise AI4ScienceEvidenceError("actor and purpose are required")
-    package, version = package_version("tooluniverse")
     request_path = safe_file(project, request_file)
-    try:
-        request = json.loads(request_path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise AI4ScienceEvidenceError(f"invalid ToolUniverse request JSON: {exc}") from exc
-    if not isinstance(request, dict) or set(request) != {"name", "arguments"}:
-        raise AI4ScienceEvidenceError(
-            "ToolUniverse request must contain exactly name and arguments"
-        )
-    if not isinstance(request.get("name"), str) or not TOOL_NAME_RE.fullmatch(
-        request["name"]
-    ):
-        raise AI4ScienceEvidenceError("ToolUniverse tool name is invalid")
-    if not isinstance(request.get("arguments"), dict):
-        raise AI4ScienceEvidenceError("ToolUniverse arguments must be an object")
+    inputs = [file_record(project, request_path)]
+    _, request = public_tooluniverse_request(project, request_file)
+    package, version = package_version("tooluniverse")
+    if version != tooluniverse_worker.SDK_VERSION:
+        raise AI4ScienceEvidenceError(f"reviewed ToolUniverse version {tooluniverse_worker.SDK_VERSION} is required")
     environment, secret_names = safe_environment(project, "tooluniverse")
     worker = ROOT / "scripts" / "tooluniverse_worker.py"
     command = [sys.executable, str(worker), str(request_path)]
@@ -491,7 +500,7 @@ def execute_tooluniverse(
         version=version,
         actor=actor,
         purpose=purpose,
-        inputs=[file_record(project, request_path)],
+        inputs=inputs,
         public_argv=[
             "python",
             "scripts/tooluniverse_worker.py",
@@ -505,6 +514,7 @@ def execute_tooluniverse(
         receipt_id=receipt_id,
         output_name="result.json",
         parse_json_output=True,
+        cost_accounting=tooluniverse_worker.public_api_policy(request),
     )
 
 
