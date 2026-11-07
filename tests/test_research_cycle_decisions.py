@@ -118,15 +118,20 @@ class ResearchCycleDecisionTests(unittest.TestCase):
 
     def test_scientific_decision_survives_submission_transition_without_approving_submission(self):
         from scripts import research_phase, review_receipts
+        from tests.test_quality_gate import report
         self.stage="writing-and-review"
         self.state.update(stage=self.stage,stage_index=5,gate="G5")
         write(self.project/"state/run.json",self.state)
         write(self.project/"papers/P01/paper-contract.json",{"paper_id":"P01"})
+        quality = report("G1")
+        write(self.project/"program/quality-G1.json", quality)
         with patch.object(researchctl,"PROJECTS_ROOT",self.project.parent),patch.object(researchctl,"gate_errors",return_value=["Science pending"]):
             before=cloud_progress.snapshot("demo")
             pending_decision(self.project,self.stage,self.cycle,"P01")
             seal_review(self.project,self.state,run_id=self.cycle)
             self.assertTrue(research_phase.enter_submission(self.project,[research_phase.SUBMISSION_PENDING]))
+            quality["scores"]["publication_potential"] = 1
+            write(self.project/"program/quality-G1.json", quality)
             self.assertTrue(review_receipts.validate_gate(self.project,"G5","P01"))
             result=cloud_progress.record("demo",before,"workflow-job",0)
         self.assertEqual(result["research_decision"]["status"],"historically_reviewed",result["research_decision"])

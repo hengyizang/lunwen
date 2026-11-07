@@ -1,5 +1,7 @@
 # Cloud readiness acceptance follow-up — 2026-10-02
 
+> Historical record: the original results and configuration below retain their dated scope. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Old all-gate human approvals, fixed tranches, per-paper caps, mandatory pre-use licence checks and AI-statement preservation are superseded; these examples do not change current models or grant research authority.
+
 This record concerns software validation for PR #57, not scientific completion of `my-phd`.
 
 The first GitHub acceptance run failed before Docker execution because a relative project root was compared against resolved input paths. After normalizing the executor and acceptance paths, the real container run exposed a file-ownership mismatch: dropping all Linux capabilities removed the root user's ability to write runner-owned output files. Both the experiment and TeX containers now use the cloud runner's UID/GID while retaining read-only inputs, disabled networking, resource limits and dropped capabilities. The DOCX and TeX acceptance fixtures also use separate paper directories to preserve the one-canonical-manuscript rule.

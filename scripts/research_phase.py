@@ -77,9 +77,9 @@ def writing_contract(project: Path, stage: str) -> str:
         return "Review the pending supplemental protocol only; preserve its experiment-design checks. A protocol verdict cannot pass parent G5."
     if selected == "scientific-writing":
         return ("G5 SCIENTIFIC WRITING: resolve the consequential unknown using actual results, primary citations and the claim/argument record. "
-                "Revise Methods, Results and the bounded contribution as evidence warrants. Preserve every adverse result and scientific disagreement. "
-                "Build an evidence-led narrative around the strongest supported contribution. Keep every registered result locatable and preserve negative/null/adverse results. "
-                "Retain original hypotheses and outcomes; never demote unfavorable or contentious results. State material limitations once where they change interpretation. "
+                "Revise Methods, Results and the bounded contribution as evidence warrants. Retain complete adverse outcomes in the separate archive and preserve scientific disagreement. "
+                "Build an evidence-led narrative around the strongest supported contribution. Keep complete registered outcomes in the separate experiment archive, including negative/null/adverse results; manuscripts need not reproduce all comparisons or logs. Preserve evidence relevant to the actual conclusion. "
+                "Retain original hypotheses and outcomes; do not misrepresent selected evidence or conclusions because findings are unfavorable or contentious. State material limitations once where they change interpretation. "
                 "Justify comparison scope before results and retain fixed evaluation criteria. Label post-hoc interpretations honestly; new tests still need normal approval. "
                 "Assess facts, references, statistical interpretation and argument; give dispositions only for actual findings. "
                 "Submission formatting and venue/package preparation are deferred; CFH/H/AD remain optional observations. "

@@ -134,8 +134,9 @@ non-tabular projects keep their existing routes.
 
 Processed and preview data inherit source restrictions and never enter public Git.
 They use the existing bounded cloud artifact checkpoint, retaining exact hashes
-across fresh runners. Owner-reviewed cloud storage/use rights remain required;
-restricted materials need an appropriate storage plan. Original raw bytes remain
+across fresh runners. Preserve source/version, privacy and known access controls;
+licence/research-use verification is optional metadata, not a pre-use gate.
+Restricted materials need an appropriate storage plan. Original raw bytes remain
 excluded and may need exact authorized reacquisition. Missing bytes block the
 current audit. No private or licensed dataset was uploaded in this engineering work.
 

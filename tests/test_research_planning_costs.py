@@ -49,6 +49,16 @@ class PlanningCostsTests(unittest.TestCase):
         self.assertNotIn('research', [row['group'] for row in report['questions']])
         self.assertFalse(report['domain_or_application_route_assumed'])
         self.assertNotIn('robotics', json.dumps(report))
+        for weights in ({}, {'background_fit': 1}):
+            report = intake_validation.guidance({'candidate_application_routes': ['Owner-selected route'],
+                                                'ranking_weights': weights})
+            question = next(row for row in report['questions'] if row['group'] == 'preferences')
+            self.assertEqual(question['missing_fields'], ['ranking_weights'])
+        weights = dict.fromkeys(intake_validation.WEIGHT_FIELDS, 0)
+        weights['background_fit'] = 1
+        report = intake_validation.guidance({'candidate_application_routes': ['Owner-selected route'],
+                                            'ranking_weights': weights})
+        self.assertNotIn('preferences', [row['group'] for row in report['questions']])
 
     def test_actual_transport_failure_zero_placeholders_remain_unknown(self):
         rows = [{'role': role, 'cost_cny': 0.0, 'reserved_cost_cny': 7.5,

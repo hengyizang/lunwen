@@ -277,7 +277,7 @@ def audit(project: Path, paper_id: str) -> dict:
                            "unknown_vendor_schemes": "unknown", "image_watermarks": "not_assessed",
                            "C2PA_EXIF_PDF_objects": "not_assessed", "unassessed_files": [row["path"] for row in files]},
               "negative_result_meaning": "Not detected means only this configured scheme, key and extracted canonical text at this threshold; it does not establish absence or human authorship.",
-              "remediation": "C observation only: a detected signal does not block G5 or packaging. Consider source-preserving edits in the existing writer pass, retaining originals and existing disclosures. Do not add paid loops, change models, randomly shuffle or spin synonyms.",
+              "remediation": "C observation only: a detected signal does not block G5 or packaging. Consider source-preserving edits in the existing writer pass, retaining originals and truthful internal provenance; public AI statements remain author-editable. Do not add paid loops, change models, randomly shuffle or spin synonyms.",
               **LIMITS}
     relative = f"papers/{paper_id}/watermark-assessment.json"
     profile_path = path_in(project, relative, exists=False)
@@ -353,7 +353,7 @@ def prompt_feedback(project: Path, paper_id: str) -> str:
     return json.dumps({"report": target.relative_to(project).as_posix(), "status": value.get("status"),
         "errors": value.get("errors", []), "warnings": value.get("warnings", []),
         "watermark_absence_verified": False, "all_watermark_types_assessed": False,
-        "instruction": "C observation, never a G5/package gate or a reason for another paid pass. Preserve evidence and existing disclosures; optional edits use the current writer pass. Unknown coverage is not watermark absence."}, separators=(",", ":"))
+        "instruction": "C observation, never a G5/package gate or a reason for another paid pass. Preserve scientific evidence and internal provenance; public AI statements are author-editable and optional edits use the current writer pass. Unknown coverage is not watermark absence."}, separators=(",", ":"))
 
 
 def _worker() -> int:

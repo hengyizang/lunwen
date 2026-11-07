@@ -185,7 +185,8 @@ def judgment_responses(project: Path, paper_id: str | None = None) -> list[dict]
         pointer = directory / "observation-latest.json"
         if pointer.exists() or pointer.is_symlink():
             receipt = review_receipts.observation(project, stage, paper)["receipt"]
-            if receipt["materials"] != review_receipts.material_snapshot(project, stage, paper):
+            if not review_receipts.materials_match(receipt["materials"], review_receipts.material_snapshot(
+                    project, stage, paper, _version=receipt["materials"].get("schema_version", "1.0"))):
                 raise ValueError("scientific judgment observation is stale for its current task/source inputs")
             result.append({"receipt": {**receipt, "response": receipt["audit"], "role": "independent-critic-observation"},
                 "response": read(path_in(project, receipt["audit"]["path"]))})

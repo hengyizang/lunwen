@@ -144,7 +144,7 @@ def paper_scientific_errors(project, pid):
         ("full-text citation support",lambda:literature_source_tasks.integrity_errors(project,pid,require_support=requires_submission(project,paper_id=pid))),
         ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
         ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False)),
-        ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper)),
+        ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper,include_visual=False)),
         ("preserved originals",lambda:manuscript_hygiene.integrity_errors(project,pid))):
         try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
         except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:errors.append(f"{pid} {label}: {exc}")
@@ -156,7 +156,7 @@ def paper_scientific_errors(project, pid):
 def paper_observations(project,pid,warnings):
     """C: diagnostics never acquire data, call a model or grant scientific approval."""
     if warnings is None:return
-    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,revision_trace,revision_ledger,docx_revision,rebuttal_triage
+    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,rebuttal_triage
     paper=project/"papers"/pid
     for label,check in (
         ("academic style",lambda:academic_style.validate_saved_audit(paper)),
@@ -165,6 +165,9 @@ def paper_observations(project,pid,warnings):
         ("watermark observation",lambda:statistical_watermarks.validate_saved_report(project,pid)),
         ("pre-submission suggestions",lambda:pre_submission_review.validate_saved_report(paper)),
         ("figure layout",lambda:figure_layout.validate_saved_figures(paper)),
+        ("figure appearance",lambda:figure_provenance.visual_observations(project,paper)),
+        ("manuscript appearance",lambda:manuscript_docx.visual_observations(paper) if (paper/"manuscript/main.docx").is_file()
+            else automated_visual_review.verify(project,pid,f"papers/{pid}/manuscript/main.tex") if (paper/"manuscript/main.tex").is_file() else []),
         ("revision trace",lambda:revision_trace.validate_saved_report(paper)),
         ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
         ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid)),

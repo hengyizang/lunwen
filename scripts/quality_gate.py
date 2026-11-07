@@ -24,6 +24,18 @@ DIMENSIONS = {
 }
 OBSERVATIONAL_CRITERIA = {"venue_fit", "publication_potential", "english_academic_writing"}
 
+
+def scientific_projection(report):
+    """Retain factual assessments without scores or final-venue observations."""
+    result = {key: value for key, value in report.items() if key not in {
+        "scores", "venue_readiness", "created_at", "updated_at", "generated_at", "reviewed_at"}}
+    if isinstance(result.get("assessments"), dict):
+        result["assessments"] = {name: row for name, row in result["assessments"].items() if name not in OBSERVATIONAL_CRITERIA}
+        if not result["assessments"]:
+            result.pop("assessments")
+    return result
+
+
 class QualityGateError(RuntimeError):
     pass
 
@@ -62,7 +74,7 @@ def validate_report(report: dict[str, Any], gate: str, *, project: Path | None =
             anchors = row.get("source_anchors")
             if not isinstance(anchors, list) or not anchors: findings.append(criterion + " needs located factual evidence")
             elif project is not None:
-                for anchor in anchors: errors.extend(criterion + ": " + e for e in anchor_errors(project, anchor))
+                for anchor in anchors: findings.extend(criterion + ": " + e for e in anchor_errors(project, anchor))
     if version != "1.2" or "scores" in report:
         dimensions = report.get("scores")
         if not isinstance(dimensions, dict): observations.append("numerical scores are absent or malformed; scores are optional observations"); dimensions = {}

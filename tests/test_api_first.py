@@ -136,7 +136,8 @@ class ApiFirstTests(unittest.TestCase):
             "strongest supported contribution",
             "original hypotheses and outcomes",
             "post-hoc",
-            "every registered result locatable",
+            "complete registered outcomes in the separate experiment archive",
+            "manuscripts need not reproduce all comparisons or logs",
             "unfavorable or contentious",
             "material limitations once",
         ):
@@ -508,7 +509,10 @@ class ApiFirstTests(unittest.TestCase):
     def test_missing_cycle_decision_remains_repairable_work(self):
         self._assert_cycle_records(with_decision=False)
 
-    def _assert_cycle_records(self, clean_initial=False, with_decision=True, writer_notes=None):
+    def test_current_independent_assessment_errors_are_not_replaced_by_the_prereview_record(self):
+        self._assert_cycle_records(clean_initial=True, review_problem="the final critic assessed another cycle")
+
+    def _assert_cycle_records(self, clean_initial=False, with_decision=True, writer_notes=None, review_problem=None):
         from dataclasses import replace
         import re
         from tests.research_cycle_fixtures import pending_decision
@@ -622,7 +626,11 @@ class ApiFirstTests(unittest.TestCase):
                     bundle["artifacts"].append({"path":"program/research-notebook.json","content":json.dumps(value)})
                     result=replace(result,text=json.dumps(bundle))
                 return result
-            with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), patch.object(api_orchestrator, "ROOT", root), patch(
+            from scripts.research_notebook import cycle_assessment
+            def assessment(*args, **kwargs):
+                result = cycle_assessment(*args, **kwargs)
+                return {**result, "review_errors": [review_problem]} if review_problem else result
+            with patch("scripts.research_notebook.cycle_assessment", side_effect=assessment), patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), patch.object(api_orchestrator, "ROOT", root), patch(
                 "scripts.api_orchestrator.ai_providers.call",
                 side_effect=respond,
             ) as model_call, patch.object(api_orchestrator, "discover_context", return_value=json.dumps({
@@ -677,6 +685,9 @@ class ApiFirstTests(unittest.TestCase):
             if with_decision:
                 self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"],"openai")
                 self.assertEqual(manifest["research_decision"]["status"],"independently_observed")
+                if review_problem:
+                    self.assertEqual(manifest["status"], "needs_work")
+                    self.assertEqual(manifest["research_decision"]["review_errors"], [review_problem])
             else:
                 self.assertEqual(manifest["status"],"needs_work")
                 self.assertTrue(manifest["research_decision"].get("errors"))

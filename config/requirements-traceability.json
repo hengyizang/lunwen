@@ -346,7 +346,7 @@
       "tests": [
         "tests/test_researchctl.py"
       ],
-      "remaining": "Six actual papers require real original contributions, registered lawful experiments where applicable, complete adverse results, source-bound venue fit and final independent review after actual G1/G2 choices. No software fixture, expired historical deadline or automatic author signature satisfies this requirement."
+      "remaining": "Six actual papers require real original contributions, registered experiments where applicable, independently archived complete outcomes/failed attempts, source-bound venue fit and final independent review after actual G1/G2 choices. Manuscripts need not reproduce every comparison or log. No software fixture, expired historical deadline or automatic author signature satisfies this requirement."
     },
     {
       "id": "R25",
@@ -432,7 +432,7 @@
       "tests": [
         "tests/test_cloud_research_steps.py"
       ],
-      "remaining": "Actual data rights and active-paper frozen G3 plan/budget hashes are required before execution; protected machine records do not claim human approval."
+      "remaining": "Actual source/version, input integrity, privacy/known access controls and active-paper frozen G3 plan/budget hashes remain required before execution; blanket licence/research-use verification is optional metadata. Protected machine records do not claim human approval."
     },
     {
       "id": "R31",
@@ -586,7 +586,7 @@
         "tests/test_claim_evidence.py",
         "tests/test_judgment_support.py"
       ],
-      "remaining": "Every supported literal TeX/include or mapped Word citation occurrence now binds its complete local assertion and current source position. Distinct uses of a repeated key cannot share an unrelated judgment; partial clauses, unsupported citation commands and unsupported mappings remain blocked. The controlled citation-audit exposes the inventory. Incomplete coverage cannot produce a passing 15% agreement score, and the sample fingerprint includes the whole current citation inventory. Real original evidence, protected model judgments and independent human labels remain necessary; this software does not certify semantics or identify all uncited assertions.",
+      "remaining": "Every supported literal TeX/include or mapped Word citation occurrence now binds its complete local assertion and current source position. Distinct uses of a repeated key cannot share an unrelated judgment; partial clauses, unsupported citation commands and unsupported mappings remain blocked. The controlled citation-audit exposes the inventory. Incomplete coverage cannot produce a passing 15% agreement score, and the sample fingerprint includes the whole current citation inventory. Real original evidence, protected model judgments and independent human labels remain necessary; this software does not certify semantics or identify all uncited assertions. The deterministic 15% scientific-claim sample is stable under claim aliases, request order and equivalent whitespace; genuine changed scientific uses still invalidate current judgments and human labels.",
       "source_sections": [
         "compendium: claim evidence, citation extraction and sampling"
       ]
@@ -604,7 +604,7 @@
       "tests": [
         "tests/test_judgment_support.py"
       ],
-      "remaining": "Real closest/adjacent readings, counterexamples and failure evidence remain necessary; records and model agreement do not prove novelty, correctness or acceptance.",
+      "remaining": "Real closest/adjacent readings, counterexamples and failure evidence remain necessary; records and model agreement do not prove novelty, correctness or acceptance. Current pair adjudication counts only each pair own source-bound near works and distinct adjacent fields; DOI/arXiv/URL aliases cannot inflate the nearest-work population. Missing coverage stays insufficient rather than distinct.",
       "source_sections": [
         "compendium: novelty adjudication; anchors; failure memory"
       ]
@@ -687,7 +687,9 @@
         "scripts/research_operations.py",
         ".github/actions/setup-runtime/action.yml",
         "scripts/ccfa_runtime.py",
-        "scripts/cloud_checkpoint.py"
+        "scripts/cloud_checkpoint.py",
+        "docs/acceptance/eight-aspects-2026-11-07.csv",
+        "docs/acceptance/module-dispositions-7765bd5-2026-11-07.csv"
       ],
       "tests": [
         "tests/test_test_suites.py",
@@ -701,7 +703,7 @@
         "tests/test_cloud_checkpoint.py",
         "tests/test_ccfa_runtime.py"
       ],
-      "remaining": "Structural consolidation from 887ef94 is measured by category in docs/CODEBASE-AUDIT-2026-11-07.md. Shared operation/parameter/stage dispatch, elementary helpers, pruned scans, per-call gate state and CI setup replace duplicates. The cloud-only project retires the parallel local dashboard and its exclusive tests; native CLI, cloud controls and scientific assertions remain. The 291 upstream CCFA functional files become pinned, hash-verified setup dependencies; all 17 native skills, source inventories and licenses remain. Dependency distribution savings are reported separately from native production code. Python 3.12 retains the complete fast+slow suite on ordinary changes; 3.10/3.13 use compatibility samples and retain full periodic/manual/repair validation. Dedicated Docker/Lean/TeX/SDK acceptance remains. Models/routes, cumulative totals, human G1/G2 decisions, project state and experiment evidence are unchanged. This engineering refactor does not establish scientific completion or remove every possible redundancy.",
+      "remaining": "Structural consolidation from 887ef94 is measured by category in docs/CODEBASE-AUDIT-2026-11-07.md. Shared operation/parameter/stage dispatch, elementary helpers, pruned scans, per-call gate state and CI setup replace duplicates. The cloud-only project retires the parallel local dashboard and its exclusive tests; native CLI, cloud controls and scientific assertions remain. The 291 upstream CCFA functional files become pinned, hash-verified setup dependencies; all 17 native skills, source inventories and licenses remain. Dependency distribution savings are reported separately from native production code. Python 3.12 retains the complete fast+slow suite on ordinary changes; 3.10/3.13 use compatibility samples and retain full periodic/manual/repair validation. Dedicated Docker/Lean/TeX/SDK acceptance remains. Models/routes, cumulative totals, human G1/G2 decisions, project state and experiment evidence are unchanged. This engineering refactor does not establish scientific completion or remove every possible redundancy. The owner eight-aspect checklist now records all 156 items separately. The 40–50% native reduction, about 30% tree reduction and overall native decrease from 7765bd5 are not achieved; same-scope measurements and incomplete architecture remain explicit. All 214 original modules have individual current dispositions, without claiming the missing historical 65-row CSV was recovered.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ],
@@ -767,7 +769,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "24 real CC BY 4.0 eLife assessment papers are source-bound and replayable (16 calibration, 8 holdout), with each assessment DOI/license checked independently in Crossref. Official evidence-strength categories remain distinct from claim-support/novelty labels. No independent predictions, current human 15% claim sample or field-specific calibration has been executed: agreement and should-merge detection remain null, status NOT_CALIBRATED. Life-science assessments cannot establish transfer to the eventual doctoral topic, numerical 8/8.5 calibration or acceptance probability.",
+      "remaining": "24 real CC BY 4.0 eLife assessment papers are source-bound and replayable (16 calibration, 8 holdout), with each assessment DOI/license checked independently in Crossref. Official evidence-strength categories remain distinct from claim-support/novelty labels. No independent predictions, current human 15% claim sample or field-specific calibration has been executed: agreement and should-merge detection remain null, status NOT_CALIBRATED. Life-science assessments cannot establish transfer to the eventual doctoral topic, numerical 8/8.5 calibration or acceptance probability. Benchmarks now separate no_predictions/partial/complete file-comparison execution from scientific or numeric-score calibration, bind every response to the actual blind case SHA, and distinguish protected-runtime observations from explicitly supplied unverified prediction files. Current real predictions remain zero.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]
@@ -816,5 +818,21 @@
       "lines": 560
     }
   ],
-  "interpretation": "Implementation is software capability, not research completion. A blocks scientific-integrity failures; B binds final submission sources once per unchanged snapshot; C observations do not create gates. Historical verified receipts retain their exact original scope and do not certify this merged revision or scientific quality. Historical estimates, Windows stash commands and rejected AI-policy gates are not current execution instructions. The latest direct owner changes override historical mandatory pre-use licence/research-use checks and AI-statement-preservation instructions; they do not authorize false source/provenance claims or result-direction-based scientific reporting."
+  "interpretation": "Implementation is software capability, not research completion. A blocks scientific-integrity failures; B binds final submission sources once per unchanged snapshot; C observations do not create gates. Historical verified receipts retain their exact original scope and do not certify this merged revision or scientific quality. Historical estimates, Windows stash commands and rejected AI-policy gates are not current execution instructions. The latest direct owner changes override historical mandatory pre-use licence/research-use checks and AI-statement-preservation instructions; they do not authorize false source/provenance claims or result-direction-based scientific reporting.",
+  "owner_checklist": {
+    "source": "Owner-supplied eight-group checklist and later explicit three-policy amendment, 2026-11-07",
+    "items": 156,
+    "path": "docs/acceptance/eight-aspects-2026-11-07.csv",
+    "source_checklist_sha256": "a2e2046e6a12fe540601dc6b6b97f3f461a92bd10c36cabc92fdec8e384cf1d1",
+    "status_counts": {
+      "research-evidence-missing": 60,
+      "software-verified": 57,
+      "historical-source-missing": 10,
+      "not-achieved": 6,
+      "partially-implemented": 5,
+      "optional-alternative": 18
+    },
+    "all_156_requirements_fulfilled": false,
+    "interpretation": "Software-scoped verification, actual research evidence, numerical targets, incomplete architecture and missing historical sources remain distinct. A completed measurement is not an achieved numerical target. Existing user policy is unchanged."
+  }
 }

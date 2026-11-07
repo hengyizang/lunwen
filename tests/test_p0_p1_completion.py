@@ -116,7 +116,7 @@ class P0P1CompletionTests(unittest.TestCase):
         self.assertIn(".venv/bin/python -m pip --version", bootstrap)
         self.assertIn("python3 -m venv --clear .venv", bootstrap)
 
-    def test_genuine_docx_requires_non_claude_sources_and_named_visual_review(self):
+    def test_genuine_docx_keeps_source_integrity_separate_from_visual_observations(self):
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp) / "study"
             manuscript = project / "papers" / "P01" / "manuscript"
@@ -136,10 +136,16 @@ class P0P1CompletionTests(unittest.TestCase):
             self.assertTrue(output.is_file())
             paper = project / "papers" / "P01"
             self.assertIn("automated visual", " ".join(validate_saved_report(paper)))
+            self.assertEqual(validate_saved_report(paper, include_visual=False), [])
+            report["visual_review"] = []
+            (paper / "reviews/docx-build.json").write_text(json.dumps(report))
+            self.assertIn("appearance record is malformed", " ".join(validate_saved_report(paper)))
+            self.assertEqual(validate_saved_report(paper, include_visual=False), [])
             approve_visual_review(project, paper, "Researcher")
             self.assertEqual(validate_saved_report(paper), [])
             source.write_text(source.read_text() + "\nA later unbuilt edit.\n")
             self.assertIn("changed after the build", " ".join(validate_saved_report(paper)))
+            self.assertIn("changed after the build", " ".join(validate_saved_report(paper, include_visual=False)))
 
     def test_manuscript_audit_requires_declared_math_symbols_and_all_sections(self):
         with tempfile.TemporaryDirectory() as temp:

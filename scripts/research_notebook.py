@@ -187,7 +187,7 @@ def cycle_assessment(project: Path, stage: str, run_id: str | None = None, *, pa
             if result["notebook"] not in receipt["materials"]["files"]:
                 raise ValueError("the actual observation did not bind this research notebook")
             for source in receipt["materials"]["files"]:
-                if sha(path_in(project, source["path"])) != source["sha256"]:
+                if not review_receipts.source_matches(project, source):
                     raise ValueError("observed scientific source changed: " + source["path"])
             result.update(status="independently_observed", independent_review=actual["pointer"],
                 review_errors=[], current_stage_authorized=False, assessment_scope="reviewed_sources_only")
@@ -241,8 +241,9 @@ def _historical_assessment(project, latest, pointer, final):
                 break
     if scope is None:
         return None
+    review_receipts._material_identity(final["materials"])
     for row in final["materials"]["files"]:
-        if sha(path_in(project, mapping.get(row["path"], row["path"]))) != row["sha256"]:
+        if not review_receipts.source_matches(project, row, relative=mapping.get(row["path"], row["path"])):
             raise ValueError("historically reviewed scientific source changed: " + row["path"])
     review_receipts._owned(project, latest)
     target = path_in(project, pointer["path"])

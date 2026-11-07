@@ -1,5 +1,7 @@
 # 当前代码能否满足研究需求：2026-10-01 审计
 
+> Historical record: the original results and configuration below retain their dated scope. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Old all-gate human approvals, fixed tranches, per-paper caps, mandatory pre-use licence checks and AI-statement preservation are superseded; these examples do not change current models or grant research authority.
+
 目前不能完整满足需求。代码已有较完整的研究规则、模型角色分工、独立审查和关卡校验，但云端自动研究的执行闭环仍有关键缺口。补齐 API 配置是必要条件，不能单独解决这些问题；现有测试通过也不等于六篇论文已具备真实实验或投稿条件。
 
 本次只做代码审查、隔离复现和状态读取，没有修补生产代码、调用付费模型、执行正式实验、批准新研究关卡或修改真实科研记录。

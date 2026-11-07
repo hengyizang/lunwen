@@ -233,8 +233,8 @@ class QualityGateTests(unittest.TestCase):
                 self.assertTrue(any("venue_fit" in note for note in warnings))
                 value["assessments"]["venue_fit"]["source_anchors"] = [{"path": "style.txt", "sha256": "0" * 64,
                     "locator": "L1", "excerpt": "Synthetic optional venue note."}]
-                self.assertTrue(any("stale source hash" in error for error in
-                    validate_report(value, gate, project=project, require_facts=True, warnings=warnings)))
+                self.assertEqual(validate_report(value, gate, project=project, require_facts=True, warnings=warnings), [])
+                self.assertTrue(any("venue_fit: stale source hash" in warning for warning in warnings))
                 value["assessments"].pop("venue_fit")
                 value["assessments"][next(iter(value["assessments"]))]["status"] = "failed"
                 self.assertTrue(validate_report(value, gate, project=project, require_facts=True, warnings=warnings))

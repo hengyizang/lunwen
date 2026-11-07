@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from scripts import ai_providers, model_runtime, scientific_editing, statistical_reporting
 from scripts import research_notebook, docx_revision, journal_dossier, method_tools, style_evaluation
-from scripts.research_artifacts import sha, write
+from scripts.research_artifacts import read, sha, write
 
 
 class CompletionTests(unittest.TestCase):
@@ -180,13 +180,40 @@ class StatisticalMappingTests(unittest.TestCase):
             self.assertEqual(result["status"], "fail")
             self.assertTrue(any("SD or SE" in e for e in result["errors"]))
 
-    def test_adverse_comparison_cannot_be_omitted(self):
+    def test_unreported_comparisons_are_backed_up_without_manuscript_locations(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             evidence, mapping = self.fixture(project)
             mapping["comparisons"] = []
+            (project / "papers/P01/manuscript/results.md").write_text("No numerical comparisons presented here.")
             result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
-            self.assertTrue(any("every registered" in e for e in result["errors"]))
+            self.assertTrue(any("archive" in e for e in result["errors"]))
+            from scripts.experiment_evidence import comparison_archive
+            archive = comparison_archive(project, "P01", evidence, create=True)
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
+            self.assertEqual(result["status"], "pass", result)
+            self.assertEqual(result["archived_comparison_ids"], ["negative"])
+            self.assertEqual(result["comparison_archive"], archive)
+            self.assertEqual(result["bindings"], [])
+            saved = read(project / archive["path"])
+            self.assertEqual(saved["comparisons"], evidence["comparisons"])
+            self.assertEqual(comparison_archive(project, "P01", evidence, create=True), archive)
+            (project / archive["path"]).write_text("Changed archive")
+            self.assertEqual(statistical_reporting.check_mapping(project, "P01", evidence, mapping)["status"], "fail")
+
+    def test_reported_subset_stays_verified_and_archive_cannot_hide_declared_reporting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            evidence, mapping = self.fixture(project)
+            from scripts.experiment_evidence import comparison_archive
+            evidence["comparisons"].append({**evidence["comparisons"][0], "comparison_id": "exploratory"})
+            comparison_archive(project, "P01", evidence, create=True)
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
+            self.assertEqual(result["status"], "pass", result)
+            self.assertEqual(result["archived_comparison_ids"], ["exploratory"])
+            mapping["comparisons"][0]["disposition"] = "archived"
+            result = statistical_reporting.check_mapping(project, "P01", evidence, mapping)
+            self.assertTrue(any("also declare" in e for e in result["errors"]))
 
     def test_orphan_text_and_hidden_figure_mapping_cannot_pass(self):
         with tempfile.TemporaryDirectory() as directory:

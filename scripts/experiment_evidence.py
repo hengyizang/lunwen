@@ -6,6 +6,7 @@ causality, representativeness, doctoral merit or journal acceptance.
 from __future__ import annotations
 
 import csv
+import hashlib
 import importlib.metadata
 import json
 import math
@@ -639,6 +640,21 @@ def build_report(project: Path, paper_id: str) -> dict:
     return report
 
 
+def comparison_archive(project: Path, paper_id: str, report: dict, *, create=False) -> dict:
+    """Retain complete comparison evidence independently of manuscript selection."""
+    from scripts.research_artifacts import path_in, write, record
+    payload = json.dumps(report, ensure_ascii=False, indent=2).encode() + b"\n"
+    digest = hashlib.sha256(payload).hexdigest()
+    relative = f"experiments/archive/{paper_id}/comparisons-{digest}.json"
+    target = path_in(project, relative, exists=False)
+    if create and not target.exists():
+        write(target, report)
+        record(project, [target], "scripts/experiment_evidence.py")
+    if not target.is_file() or target.read_bytes() != payload:
+        raise ValueError("complete comparison archive is missing or changed; refresh experiment evidence")
+    return {"path": relative, "sha256": digest}
+
+
 def refresh(project: Path) -> dict:
     from scripts.researchctl import write_json
     from scripts.output_provenance import record_model_writes
@@ -649,6 +665,8 @@ def refresh(project: Path) -> dict:
         report = build_report(project, paper.name)
         path = paper / REPORT
         write_json(path, report)
+        if report.get("comparisons"):
+            comparison_archive(project, paper_id, report, create=True)
         from scripts import study_routes
         if study_routes.route(project, paper.name) != "empirical" and report["status"] == "complete":
             study_routes.export_results(project, paper.name)

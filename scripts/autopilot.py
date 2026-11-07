@@ -863,7 +863,7 @@ def run_stage(
         )
         record_editing_attempt(researchctl.project_dir(project))
         from scripts import review_receipts
-        from scripts.research_cycle import review_cycle, submission_cycle, after_reviews
+        from scripts.research_cycle import review_cycle, submission_cycle, after_reviews, decision_errors
         def refresh_review(phase):
             return (refresh_post_write_evidence(project, state["stage"], token, phase),
                     api_orchestrator.refresh_research_method_audits(project, state["stage"]))
@@ -936,7 +936,7 @@ def run_stage(
             journal["status"] = "protocol_retired_to_G3"
             return journal
         errors = researchctl.gate_errors(project, state["gate"])
-        errors.extend("research decision: "+issue for issue in journal.get("research_decision",{}).get("errors",[]))
+        errors.extend(decision_errors(journal.get("research_decision", {})))
         if errors:
             journal["status"] = "needs_work"
             journal["gate_errors"] = errors

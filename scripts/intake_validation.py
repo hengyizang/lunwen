@@ -171,11 +171,13 @@ def guidance(value: dict[str, Any]) -> dict[str, Any]:
     )
     def missing(field):
         item = value.get(field)
+        if field == "ranking_weights":
+            return not isinstance(item, dict) or any(item.get(key) is None for key in WEIGHT_FIELDS)
         if field == "target_submission_ready_date" and value.get("time_horizon_years") is not None:
             return False
         if field == "model_api_budget_cny" and value.get("cash_budget_usd") is not None:
             return False
-        return item is None or item == "" or item == [] or (isinstance(item, dict) and any(v is None for v in item.values()))
+        return item is None or item == "" or item == [] or item == {} or (isinstance(item, dict) and any(v is None for v in item.values()))
     return {"questions": [{"group": name, "question": question,
                            "missing_fields": [field for field in fields if missing(field)]}
                           for name, fields, question in groups if any(missing(field) for field in fields)],

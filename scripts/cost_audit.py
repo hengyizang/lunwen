@@ -38,6 +38,11 @@ def _recorded_cost(row):
     return _amount(row.get("cost_cny"))
 
 
+def _uncertain_billing(row):
+    return (_recorded_cost(row) is None
+            or str(row.get("cost_status", "")).startswith(("unknown", "estimated", "accounted_upper")))
+
+
 def portfolio_forecast(entries: list[dict], paper_count: int = 6) -> dict:
     """Observed-call scenarios, never a promise about papers, quality or elapsed days."""
     if type(paper_count) is not int or paper_count < 1:
@@ -92,7 +97,7 @@ def summarize(entries: list[dict]) -> dict:
         if item.get("cache_hit") is True:
             continue
         role = str(item.get("role") or "")
-        if str(item.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper")):
+        if _uncertain_billing(item):
             unknown += 1
         if role.startswith("independent-critic") or role in {"independent-critique", "endpoint-health"}:
             fresh += 1
@@ -109,12 +114,12 @@ def summarize(entries: list[dict]) -> dict:
     for key, rows in groups.items():
         if len(rows) < 2:
             continue
+        known_costs = [_recorded_cost(row) for row in rows if not _uncertain_billing(row)]
         candidates.append({"stage": key[0], "paper_id": key[1], "role": key[2],
                            "provider": key[3], "model": key[4], "cache_key": key[-1],
                            "attempt_count": len(rows), "run_ids": [r.get("run_id") for r in rows],
-                           "known_recorded_cost_cny": round(sum(float(r.get("cost_cny") or 0)
-                               for r in rows if not str(r.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper"))), 8),
-                           "billing_uncertain": any(str(r.get("cost_status") or "").startswith(("unknown", "estimated", "accounted_upper")) for r in rows),
+                           "known_recorded_cost_cny": round(sum(known_costs), 8) if known_costs else None,
+                           "billing_uncertain": any(_uncertain_billing(row) for row in rows),
                            "action": "inspect purpose and receipts; never skip automatically"})
     return {"schema_version": "1.0", "ledger_entries": len(entries),
             "cache_hits": sum(item.get("cache_hit") is True for item in entries),

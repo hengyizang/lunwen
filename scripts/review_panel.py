@@ -38,7 +38,8 @@ def contract(paper):
     return ("Submission checkpoint: prepare " + request_path(paper) + " with paper_id and views. Each view is an array of "
         "{kind,path,sha256,start_line,end_line}; use actual scientific sources and exact line ranges, never prior reviews or preferred verdicts. "
         "Required kinds by view: " + json.dumps({key: sorted(value) for key, value in VIEWS.items()}) +
-        ". figure_one may instead bind a real PNG/JPEG by path/sha256. Preserve all registered numeric results. "
+        ". figure_one may instead bind a real PNG/JPEG by path/sha256. Keep complete registered outcomes in the separate archive; "
+        "select manuscript materials by scientific relevance and retain material contrary evidence. "
         "These are three different source views, not three copies of the full manuscript. Existing protected panel reports are immutable; "
         "respond to a prior concern in this file's dispositions:[{finding_id,status:maintained|addressed|disagreed,rationale,evidence:[{path,sha256}]}]. "
         "A withdrawal or changed answer requires actual new evidence and an explanation; model agreement is not evidence.")
@@ -71,8 +72,10 @@ def prepare(project, paper):
     if spec.get("paper_id") != paper or set(spec.get("views", {})) != set(VIEWS):
         raise ValueError("panel needs its paper and three distinct declared source views")
     result = {"paper_id": paper, "request": {"path": request_path(paper), "sha256": sha(target)}, "views": {}}
+    material_views = set()
     for seat, required in VIEWS.items():
         entries, blocks, bindings, attachments, kinds = spec["views"][seat], [], [], [], set()
+        material_contents = set()
         if not isinstance(entries, list) or not 1 <= len(entries) <= 30:
             raise ValueError("each panel view needs bounded actual source selections")
         for row in entries:
@@ -90,23 +93,29 @@ def prepare(project, paper):
                 attachments.append({"mime_type": "image/png" if source.suffix.lower() == ".png" else "image/jpeg",
                     "data_base64": base64.b64encode(source.read_bytes()).decode(), "sha256": row["sha256"], "filename": source.name})
                 blocks.append(json.dumps(binding) + " [attached actual figure]")
+                material_contents.add(row["sha256"])
             else:
                 lines = source.read_text(encoding="utf-8").splitlines()
                 first, last = row.get("start_line"), row.get("end_line")
                 if type(first) is not int or type(last) is not int or not 1 <= first <= last <= len(lines):
                     raise ValueError("panel source needs exact existing line ranges")
                 binding.update(start_line=first, end_line=last)
-                blocks.append(json.dumps(binding) + "\n" + "\n".join(lines[first - 1:last]))
+                selected_text = "\n".join(lines[first - 1:last])
+                blocks.append(json.dumps(binding) + "\n" + selected_text)
+                material_contents.add(digest(re.sub(r"\s+", " ", selected_text).strip()))
             bindings.append(binding)
         if kinds != required:
             raise ValueError("panel " + seat + " is missing view-specific scientific material")
         text = "\n\n".join(blocks)
         if len(text.encode()) > 150_000:
             raise ValueError("panel view exceeds its bound; select precise sources, never silently truncate")
+        material_views.add(digest(sorted(material_contents)))
         result["views"][seat] = {"sources": bindings, "sha256": digest(bindings), "text": text, "attachments": attachments}
     if len({digest(sorted(set((r["path"], r.get("start_line", 0), r.get("end_line", 0)) for r in view["sources"])))
             for view in result["views"].values()}) != 3:
         raise ValueError("the panel cannot receive identical views under different labels")
+    if len(material_views) != len(VIEWS):
+        raise ValueError("the panel cannot receive identical material contents under different paths or labels")
     from scripts.literature_source_tasks import selected_context
     for seat, view in result["views"].items():
         selected = selected_context(project, "writing-and-review", paper_id=paper, seat=seat)

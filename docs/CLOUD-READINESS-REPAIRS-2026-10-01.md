@@ -1,5 +1,7 @@
 # Cloud readiness repairs, 2026-10-01
 
+> Historical record: the original results and configuration below retain their dated scope. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Old all-gate human approvals, fixed tranches, per-paper caps, mandatory pre-use licence checks and AI-statement preservation are superseded; these examples do not change current models or grant research authority.
+
 This change addresses the reproducible failures in `CODE-READINESS-AUDIT-2026-10-01.md`. It changes software capabilities, not the scientific status of `my-phd`. The six real papers have not been completed by these tests.
 
 | Audit gap | Repair | Verification |

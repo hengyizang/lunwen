@@ -1,5 +1,7 @@
 # v1.4 全链路审查结论
 
+> Historical record: the original results and configuration below retain their dated scope. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Old all-gate human approvals, fixed tranches, per-paper caps, mandatory pre-use licence checks and AI-statement preservation are superseded; these examples do not change current models or grant research authority.
+
 审查范围包括 UUAPI/CC Switch 接入、模型角色、G0–G5 状态机、原创性与博士论证、六篇论文边界、逐篇实验设计、实验执行、引用、英文投稿材料、图表、JCR Q1/Q2 组合、人工审批和投稿包。
 
 ## 结论

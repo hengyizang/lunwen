@@ -32,25 +32,12 @@ export UUAPI_OPENAI_PROTOCOL='chat_completions'
 No automatic protocol or model fallback is permitted. Requested and reported
 model IDs must still match.
 
-The default prices and hard ceilings are in `config/defaults.json`:
-
-- Claude: CNY 2/M input and CNY 10/M output;
-- GPT: CNY 2.2/M input and CNY 11/M output;
-- local legacy project hard limit: CNY 300; cloud jobs start with zero
-  authorization and use owner-approved CNY 300 cumulative tranches;
-- active-paper hard limit at G5: CNY 60.
-
-Override a ceiling for one WSL session only when the user authorizes it:
-
-```bash
-export DR_OS_PROJECT_BUDGET_CNY='300'
-export DR_OS_PAPER_WARNING_CNY='45'
-export DR_OS_PAPER_BUDGET_CNY='60'
-export DR_OS_ANTHROPIC_INPUT_CNY_PER_M='2'
-export DR_OS_ANTHROPIC_OUTPUT_CNY_PER_M='10'
-export DR_OS_OPENAI_INPUT_CNY_PER_M='2.2'
-export DR_OS_OPENAI_OUTPUT_CNY_PER_M='11'
-```
+Use the current [production routing](PRODUCTION-MODEL-ROUTING.md) and
+[total-cost policy](TOTAL-COST-POLICY.md). The configured cumulative project
+total is the spending boundary, with CNY 300 only a default for new configuration;
+preserve existing authorized totals. There are no per-paper caps, fixed tranche
+increments or per-call approval steps. Exact route pricing comes from the current
+model-price records, not the historical provider examples on this page.
 
 `state/model-usage.jsonl` records role, model, tokens, estimated CNY cost and
 cache status. It is local and ignored by Git. The exact-request cache is keyed
@@ -61,14 +48,11 @@ required planner or critic role.
 For GitHub cloud jobs, `state/model-spend-control.json` carries only aggregate
 cost estimates, outstanding reservations and owner approval events across jobs.
 The cloud runner uses its approved ceiling even when a local budget environment
-variable is larger. The first paid call requires a recorded CNY 300 approval;
-another owner approval raises the cumulative ceiling to CNY 600, then 900, and
-so on. Each subsequent call within unused authorized capacity can proceed
-without a new approval. Set `DR_OS_MODEL_PRICING_JSON` with verified rates
-keyed by the exact gateway model IDs; cloud calls fail closed if a rate is
-missing. Provider invoices still need reconciliation with the
-estimated ledger; an interrupted call leaves a reservation until the owner
-records the checked bill with `reconcile_budget`.
+variable is larger. Calls within the existing cumulative authority require no
+new approval. Never raise the total automatically. Verified charges or honestly
+labeled bounded upper estimates count toward that same total, including failed
+attempts and pending reservations. Reconcile actual bills through the existing
+ledger; a pending bounded reservation alone does not add a manual billing gate.
 
 ## Lawful open-full-text resolution
 

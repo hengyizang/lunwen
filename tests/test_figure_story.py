@@ -111,6 +111,18 @@ class FigureStoryTests(unittest.TestCase):
         self.assertEqual(validated["visual_style"]["status"], "not_assessed")
         self.assertFalse((self.project/"state/run.json").exists())
 
+    def test_research_case_observed_figure_reuses_native_scope_and_source_verification(self):
+        from scripts.research_case import _observed_figure
+        request, result = self.observed()
+        saved = story.prepare(self.project, request)
+        figure = {"claim_ids": ["C1"], "source": {"path": saved["path"], "sha256": saved["sha256"]}}
+        _observed_figure(self.project, "P01", figure)
+        with self.assertRaisesRegex(ValueError, "paper or claim scope"):
+            _observed_figure(self.project, "P02", figure)
+        (self.project / result["path"]).write_text("Changed result after figure preparation.")
+        with self.assertRaises(ValueError):
+            _observed_figure(self.project, "P01", figure)
+
     def test_saved_request_report_and_style_match_their_closed_schemas(self):
         from scripts.editable_figures import _schema
         request = self.request()

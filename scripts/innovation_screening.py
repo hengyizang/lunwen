@@ -48,6 +48,20 @@ def _choice(value, options, label):
     _need(isinstance(value, str) and value in options, label + " has an unsupported status")
 
 
+def _prior_identity(work):
+    """One source work cannot become several neighbours by changing local IDs."""
+    from urllib.parse import urlsplit, urlunsplit
+    from scripts.literature_evidence import _doi
+    from scripts.literature_intelligence import _arxiv
+    url = _text(work.get("primary_source_url"), "closest work source URL")
+    parsed = urlsplit(url)
+    identity_url = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
+    doi = _doi(identity_url)
+    arxiv, _ = _arxiv({"doi": doi, "primary_source_url": identity_url})
+    return ("arxiv:" + arxiv if arxiv else "doi:" + doi if doi else
+            urlunsplit((parsed.scheme.lower(), parsed.netloc.lower(), parsed.path, parsed.query, "")))
+
+
 def _anchors(project, values, label):
     try:
         from scripts.research_candidates import anchor_errors
@@ -363,7 +377,10 @@ def validate_novelty_gate(project: Path, matrix: dict, originality: dict,
         from scripts.source_scope import _registered_basis
         _need(matrix.get("schema_version") == "1.1",
               "novelty matrix migration required: use 1.1 with per-work comparisons")
-        prior = {w["id"]: w for w in _rows(originality.get("closest_prior_work"), "closest work", 5)}
+        prior_rows = _rows(originality.get("closest_prior_work"), "closest work", 5)
+        prior = {w["id"]: w for w in prior_rows}
+        _need(len(prior) == len(prior_rows) and len({_prior_identity(w) for w in prior_rows}) == len(prior_rows),
+              "closest works must have distinct source identities, not aliases of the same DOI, arXiv paper or URL")
         library = _rows(read(project / "program/literature-workbench.json").get("papers"), "literature library", 1, 10000)
         searches = literature.read_jsonl(project / "evidence/search-log.jsonl")
         ledger = {r["receipt_id"]: r for r in literature.read_jsonl(project / "evidence/literature-api-ledger.jsonl")}
@@ -550,14 +567,28 @@ def adjudication(project: Path, spec: dict, *, observed=None) -> dict:
             for key in ("rationale", "shared_mechanism", "discriminating_prediction", "remaining_uncertainty"):
                 _text(row.get(key), "independent novelty " + key)
             matches[0]["judgments"].append({**row, "review": item["receipt"]["response"], "identity": item["receipt"]["identity"]})
-    for pair in pairs:
-        decisions = {r["decision"] for r in pair["judgments"]}
-        pair["decision"] = next(iter(decisions)) if len(decisions) == 1 and not source_errors else "insufficient"
-        pair["merge_concern_present"] = "should_merge" in decisions
-        pair["disagreement"] = len(decisions) > 1
     work_ids = {work for pair in pairs for claim in pair["claims"] for work in claim.get("closest_work_ids", [])}
     nearest = [work for work in originality.get("closest_prior_work", []) if work.get("id") in work_ids]
     adjacent = originality.get("search_scope", {}).get("adjacent_fields", [])
+    adjacent_ids = {field.strip().casefold() for field in adjacent if isinstance(field, str) and field.strip()}
+    available = {}
+    for work in nearest:
+        try:
+            available[work["id"]] = _prior_identity(work)
+        except ValueError as exc:
+            source_errors.append(str(exc))
+    for pair in pairs:
+        linked = {work for claim in pair["claims"] for work in claim.get("closest_work_ids", [])}
+        pair["coverage_gaps"] = []
+        if len({available[key] for key in linked & available.keys()}) < 5:
+            pair["coverage_gaps"].append("The compared claims need at least five distinct source-bound nearest works.")
+        if len(adjacent_ids) < 3:
+            pair["coverage_gaps"].append("The comparison needs at least three distinct adjacent fields.")
+        decisions = {r["decision"] for r in pair["judgments"]}
+        pair["decision"] = next(iter(decisions)) if len(decisions) == 1 and not source_errors and not pair["coverage_gaps"] else "insufficient"
+        pair["merge_concern_present"] = "should_merge" in decisions
+        pair["disagreement"] = len(decisions) > 1
+    source_errors.extend("/".join(pair["claim_ids"]) + ": " + gap for pair in pairs for gap in pair["coverage_gaps"])
     return {"schema_version": "1.0", "operation": "novelty_adjudication", "id": identifier,
         "paper_id": paper_id, "matrix": {"path": matrix_path.relative_to(project).as_posix(), "sha256": sha(matrix_path)},
         "pairs": pairs, "claim_novelty_judgments": claim_judgments, "source_validation_errors": source_errors,

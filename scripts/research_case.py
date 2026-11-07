@@ -56,6 +56,33 @@ def _ids(value, allowed):
             and len(set(value)) == len(value) and set(value) <= allowed)
 
 
+def _observed_figure(project, paper_id, figure):
+    """An observed plan points to existing native evidence, never a free-text claim."""
+    source = _binding(project, figure.get("source"))
+    relative = source.relative_to(project).as_posix()
+    if relative.startswith("reports/figure-story/"):
+        from scripts.figure_story import validate_saved_report
+        report = validate_saved_report(project, source)
+        if report["phase"] != "observed":
+            raise ValueError("observed figure cannot use a planned figure-story report")
+        actual_paper, claims = report["paper_id"], report["request"]["claim_ids"]
+    elif relative.startswith(f"papers/{paper_id}/figures/") and relative.endswith(".figure-build.json"):
+        from scripts.output_provenance import current_origin
+        from scripts.figure_provenance import rendered_sources
+        from scripts.figure_lineage import lineage
+        report = read(source)
+        origin = current_origin(project, source)
+        if origin.get("status") != "tracked" or origin.get("model") != "scripts/publication_figures.py":
+            raise ValueError("observed figure needs the actual native render report")
+        actual_paper, inputs, runs = rendered_sources(project, report)
+        lineage(project, actual_paper, [item["path"] for item in inputs], runs)
+        claims = read(_binding(project, report["spec"]))["claim_ids"]
+    else:
+        raise ValueError("observed figure needs an actual figure_story/publication_figures report")
+    if actual_paper != paper_id or not set(figure["claim_ids"]) <= set(claims):
+        raise ValueError("observed figure belongs to another paper or claim scope")
+
+
 def competition(project, spec, *, today=None):
     """Count a retrieved, explicitly selected problem cohort, never the whole field.
 
@@ -140,7 +167,7 @@ def _case_findings(project, case, contract, protocol):
     readers = contribution.get("reader_benefits", [])
     if (len(readers) != 3 or any(not isinstance(r, dict) or not _nonempty(r.get("reader"))
                                or not _nonempty(r.get("benefit")) for r in readers)
-            or len({r.get("reader") for r in readers if isinstance(r, dict)}) != 3):
+            or len({" ".join(r["reader"].split()).casefold() for r in readers if isinstance(r, dict)}) != 3):
         missing.append("contribution.reader_benefits needs three distinct readers and their benefit")
     premortem = case.get("pre_mortem", [])
     if not premortem:
@@ -159,8 +186,11 @@ def _case_findings(project, case, contract, protocol):
             selected = [comparisons[c] for c in figure["comparison_ids"]]
             if figure.get("role") == "negative_boundary" and not any(c.get("role") in {"negative_control", "robustness", "external_validation"} for c in selected):
                 missing.append("negative_boundary needs a registered adverse/control or boundary comparison")
-        if figure.get("phase", "planned") != "planned" and not figure.get("source"):
-            missing.append("observed figure needs its actual figure_story/publication_figures source")
+        if figure.get("phase", "planned") == "observed":
+            try:
+                _observed_figure(project, case["paper_id"], figure)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                missing.append("observed figure: " + str(exc))
     variants = case.get("variants", [])
     identifiers = [row.get("id") for row in variants]
     if len(set(identifiers)) != len(identifiers) or case.get("selected_variant") not in identifiers:
@@ -546,7 +576,6 @@ def _reproduction(project, paper_id, spec, report, copy, put):
         raise ValueError("minimal replay currently supports a portable recorded Python argv")
     if (Path(cwd) / argv[1]).as_posix() not in paths & frozen_paths:
         raise ValueError("recorded replay script must be one of the exported frozen inputs")
-    output_dirs = sorted({str(Path(output).parent) for output in outputs})
     if container:
         replay = {"image": isolation["image"], "argv": argv, "cwd": cwd, "seed": run["seed"],
             "run_id": run["run_id"], "timeout_seconds": run["timeout_seconds"], "resources": resources,
@@ -561,37 +590,43 @@ def _reproduction(project, paper_id, spec, report, copy, put):
             "An unknown Python version may remain omitted; historical installed dependencies were not independently verified. "
             "No host Python version is presented as the container's interpreter. Separately mounted study toolchains are excluded.")
     else:
-        put("reproduce.py", "import hashlib, importlib.metadata, os, pathlib, platform, subprocess, sys\n"
-        + "root = pathlib.Path(__file__).resolve().parent / 'sources'\n"
+        put("reproduce.py", "import hashlib, importlib.metadata, os, pathlib, platform, subprocess, sys\n" + _REPLAY_PATHS
         + "if platform.python_version() != " + repr(python_version) + ": raise SystemExit('Use the recorded Python version.')\n"
         + "for pin in " + repr(dependency_pins) + ":\n name, version = pin.split('==')\n"
         + " if importlib.metadata.version(name.split('[')[0]) != version: raise SystemExit('Install requirements.txt: ' + name)\n"
-        + "for directory in " + repr(output_dirs) + ": (root / directory).mkdir(parents=True, exist_ok=True)\n"
+        + "verify_inputs(" + repr(run["inputs"]) + ")\n"
+        + "for relative in " + repr(sorted(outputs)) + ": target(relative).parent.mkdir(parents=True, exist_ok=True)\n"
         + "environment = {**os.environ, **" + repr({"RESEARCH_OS_RUN_ID": run["run_id"], "RESEARCH_OS_SEED": str(run["seed"]), "PYTHONHASHSEED": str(run["seed"])}) + "}\n"
-        + "subprocess.run([sys.executable, *" + repr(argv[1:]) + "], cwd=root / " + repr(cwd) + ", env=environment, timeout=" + repr(run["timeout_seconds"]) + ", check=True)\n"
-        + "if hashlib.sha256((root / " + repr(table) + ").read_bytes()).hexdigest() != " + repr(result_binding["sha256"]) + ": raise SystemExit('Replay table differs from the recorded result.')\n")
+        + "subprocess.run([sys.executable, *" + repr(argv[1:]) + "], cwd=target(" + repr(cwd) + "), env=environment, timeout=" + repr(run["timeout_seconds"]) + ", check=True)\n"
+        + "if hashlib.sha256(target(" + repr(table) + ").read_bytes()).hexdigest() != " + repr(result_binding["sha256"]) + ": raise SystemExit('Replay table differs from the recorded result.')\n")
         instructions = ("Install the exact environment in `" + environment_name
-            + "`. Use its Python version and `python -m pip install -r requirements.txt`. The lock was a frozen run input; recorded-runtime.json retains the actual runner Python/platform. Historical installed dependency versions were not independently captured. Run `python reproduce.py` from this directory to verify the environment, rerun the recorded result-table unit and compare its exact output hash.")
+            + "`. Use its Python version and `python -m pip install -r requirements.txt`. The lock was a frozen run input; recorded-runtime.json retains the actual runner Python/platform. Historical installed dependency versions were not independently captured. Run `python reproduce.py` from this directory to verify the environment and every frozen input before execution, rerun the recorded result-table unit and compare its exact output hash. Input/output paths must remain inside this package without symlinks.")
     put("README.md", "# Local reproduction package\n\n" + instructions + "\n\n"
         + "License: `" + license_name + "`. All registered comparisons are in results.csv; failures and inconclusive decisions remain visible in results.json.\n"
         + "This package was prepared locally, not uploaded. Replay success does not establish scientific validity.\n")
 
 
-_DOCKER_REPLAY = '''import hashlib, json, os, pathlib, subprocess, uuid
-folder = pathlib.Path(__file__).resolve().parent
+_REPLAY_PATHS = '''folder = pathlib.Path(__file__).resolve().parent
 root = folder / 'sources'
-run = json.loads((folder / 'replay-run.json').read_text())
-if not hasattr(os, 'getuid'): raise SystemExit('Use a compatible POSIX Docker host.')
 def target(relative):
     path = root / relative
-    if pathlib.Path(relative).is_absolute() or '..' in pathlib.Path(relative).parts or any(c in str(path) for c in (',', ':', '\\\\')):
+    if pathlib.Path(relative).is_absolute() or '..' in pathlib.Path(relative).parts or any(c in relative for c in (',', ':', '\\\\')):
         raise SystemExit('Unsafe replay path.')
     if any(item.is_symlink() for item in (path, *path.parents)) or not path.resolve().is_relative_to(root.resolve()):
         raise SystemExit('Replay paths must stay inside the package without symlinks.')
     return path
-for item in run['inputs']:
-    if hashlib.sha256(target(item['path']).read_bytes()).hexdigest() != item['sha256']:
-        raise SystemExit('Replay input differs from its frozen hash: ' + item['path'])
+def verify_inputs(inputs):
+    for item in inputs:
+        if hashlib.sha256(target(item['path']).read_bytes()).hexdigest() != item['sha256']:
+            raise SystemExit('Replay input differs from its frozen hash: ' + item['path'])
+'''
+
+
+_DOCKER_REPLAY = '''import hashlib, json, os, pathlib, subprocess, uuid
+''' + _REPLAY_PATHS + '''run = json.loads((folder / 'replay-run.json').read_text())
+if not hasattr(os, 'getuid'): raise SystemExit('Use a compatible POSIX Docker host.')
+if any(c in str(root.resolve()) for c in (',', ':', '\\\\')): raise SystemExit('Unsafe Docker replay path.')
+verify_inputs(run['inputs'])
 resources = run['resources']
 memory = f"{resources['memory_gb']:g}g" if float(resources['memory_gb']).is_integer() else str(int(resources['memory_gb'] * 1024**3))
 container_name = 'lunwen-replay-' + uuid.uuid4().hex

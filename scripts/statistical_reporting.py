@@ -65,7 +65,7 @@ def display_value(value, decimals: int = 6) -> str:
 
 
 @paper_scoped
-def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *, manuscript_sources: set[str] | None = None, figure_claims: set[str] | None = None) -> dict:
+def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *, manuscript_sources: set[str] | None = None, figure_claims: set[str] | None = None, archive_project: Path | None = None) -> dict:
     errors, bindings, semantics = [], [], []
     comparisons = {row["comparison_id"]: row for row in evidence.get("comparisons", [])}
     if not comparisons:
@@ -74,8 +74,9 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
     if not isinstance(rows, list):
         raise ValueError("statistical map comparisons must be an array")
     ids = [row.get("comparison_id") for row in rows if isinstance(row, dict)]
-    if len(ids) != len(set(ids)) or set(ids) != set(comparisons):
-        errors.append("map must cover every registered comparison exactly once, including adverse/exploratory results")
+    if len(ids) != len(set(ids)) or set(ids) - set(comparisons):
+        errors.append("reported comparisons must be unique and use registered comparison IDs")
+    archived = set(comparisons) - set(ids)
     paper_prefix = f"papers/{paper_id}/"
     for item in rows:
         if not isinstance(item, dict) or item.get("comparison_id") not in comparisons:
@@ -83,6 +84,15 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
             continue
         identifier = item["comparison_id"]
         actual = comparisons[identifier]
+        disposition = item.get("disposition", "reported")
+        if disposition == "archived":
+            archived.add(identifier)
+            if item.get("locations") or item.get("has_figure"):
+                errors.append(f"{identifier}: archived comparison cannot also declare manuscript/figure reporting")
+            continue
+        if disposition != "reported":
+            errors.append(f"{identifier}: disposition must be reported or archived")
+            continue
         required = set(REQUIRED) | ({"treatment_units", "comparator_units"} if actual.get("unit_design") == "independent" else set())
         if actual.get("status") != "computed":
             errors.append(f"{identifier}: blocked evidence cannot support manuscript statistics")
@@ -140,8 +150,18 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
             semantics.append({"comparison_id": identifier, **reporting_semantics(project, paper_id, item, actual)})
         except (ValueError, OSError, KeyError, TypeError) as exc:
             errors.append(f"{identifier}: {exc}")
+    archive = None
+    if archived:
+        from scripts.experiment_evidence import comparison_archive
+        try:
+            archive = comparison_archive(archive_project or project, paper_id, evidence)
+        except (OSError, ValueError) as exc:
+            errors.append(str(exc))
     return {"schema_version": "1.0", "status": "pass" if not errors else "fail", "paper_id": paper_id,
             "bindings": bindings, "reporting_semantics": semantics, "errors": errors, "semantic_support_verified": False,
+            "archived_comparison_ids": sorted(archived), "comparison_archive": archive,
+            "coverage_basis": "declared manuscript statistics; unreported registered comparisons retained separately",
+            "full_manuscript_semantic_coverage_verified": False,
             "human_scientific_review_required": True, "scientific_completion_verified": False}
 
 

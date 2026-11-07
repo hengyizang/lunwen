@@ -358,6 +358,9 @@ class ContinuationTests(unittest.TestCase):
 
     def test_new_work_inputs_resume_a_stall_but_a_draft_timestamp_does_not(self):
         from scripts import cloud_progress
+        query_plan = self.project / 'program/literature-search-plan.json'
+        original_plan = {'queries': ['existing discriminating query'], 'max_search_calls': 12}
+        researchctl.write_json(query_plan, original_plan)
         researchctl.write_json(self.project / 'state/research-steps.json', {'paid_model_cycle': True, 'blockers': []})
         with patch.object(researchctl, 'gate_errors', return_value=['Missing controlled evidence']):
             for index in range(cloud_progress.MAX_STALLED_CYCLES):
@@ -365,6 +368,8 @@ class ContinuationTests(unittest.TestCase):
                 cloud_progress.record('my-phd', before, str(index), 0)
             self.assertFalse(self.decision()['should_run'])
             (self.project / 'program/topic.md').write_text('A different description of the same idea')
+            self.assertFalse(self.decision()['should_run'])
+            query_plan.write_text(json.dumps(original_plan, sort_keys=True, indent=4) + '\n\n')
             self.assertFalse(self.decision()['should_run'])
             researchctl.write_json(self.project / 'program/literature-search-plan.json',
                                    {'queries': ['new discriminating source query']})

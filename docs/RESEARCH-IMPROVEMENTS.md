@@ -11,7 +11,7 @@ This increment applies the worthwhile gaps identified in the 19-article assessme
 | Billing identity | Provider/endpoint/model scoped quotes, quote version, cache read/write and total output billing; unknown cache pricing keeps the reservation for reconciliation | Supply verified CNY quotes; official dollar prices and channel multipliers are not invoices |
 | Evidence and decisions | Question-centred notebook with opposing evidence, reading scope, hashes, locators, failure conditions and stop rules; append-only incremental snapshots | Interpretations and decisions require review and cannot grant G0–G5 approval |
 | Paper-method reuse | Pinned source/license/entrypoint contracts, four validation categories, evidence-bound cloud qualification, runner delegation | Select relevant methods after G1; reproduce actual methods after approved G3; no fabricated pilot qualification |
-| Statistical reporting | Rerun actual experiment evidence; map every comparison to Methods/Results, and captions when applicable; preserve adverse/exploratory evidence | Choose suitable designs/estimands/tests and review semantic meaning; mechanical matching is not statistical or causal validity |
+| Statistical reporting | Rerun actual experiment evidence; archive all registered comparisons separately, and map statistics actually presented to Methods/Results and applicable captions | Choose suitable designs/estimands/tests and review semantic meaning; mechanical matching is not statistical or causal validity |
 | Actual figure QA | Editable SVG text, expected label checks, PDF physical size/font measurements and separate grayscale previews | Review mathematical labels, color-vision discrimination and readability at final publication size |
 | Word revision package | Real OOXML `w:ins`/`w:del`, clean/tracked/response/change-note package, source hashes, accept/reject round trips | Text paragraph changes supported; structural or changed fields/equations/images/tables are refused; Word visual inspection remains required |
 | Journal economics and policies | Dated official-source APC, tax, OA choice, waivers, page charges, review-time definitions, portal and AI policies | Official evidence and authorized JCR information must be supplied/rechecked; no acceptance probability or guaranteed decision date |
@@ -68,13 +68,21 @@ Stances: `supports`, `contradicts`, `mixed`, `unknown`. Reading scope: `metadata
 
 ## Statistical mapping at G5
 
-`papers/Pxx/statistical-reporting-map.json` contains one row per actual `experiment-evidence.json` comparison. All registered comparisons, including negative, ablation, robustness and exploratory comparisons, must be covered exactly once. For each row:
+`papers/Pxx/statistical-reporting-map.json` contains rows for comparisons actually
+presented in the manuscript. Experiment-evidence refresh automatically retains
+the complete current comparison evidence, including negative, ablation, robustness
+and exploratory results, under content-addressed `experiments/archive/Pxx/`
+snapshots. Unreported comparisons need no manuscript locations or hand-filled
+archive rows. Existing snapshots are reused; changed evidence creates a separate
+backup. The audit verifies that unreported comparisons still have that exact
+backup. An optional `disposition: "archived"` row cannot also declare manuscript
+locations or a reported figure. For each reported row:
 
 - `comparison_id`, `reporting_notes` covering exclusions/missingness/repetition/assumptions; `has_figure: true` if figure reporting is present.
 - `locations`: field, project-relative path within this paper's final materials, unique actual quote, section (`Methods`, `Results`, `Caption`, `Table`, `Supplement`), and exact evidence `value` for semantic fields.
 - Numeric fields have `decimals` from 0–12. Only `ci_confidence` supports explicit `display_scale: 100` for percentage display. Numeric conversions in other fields are refused.
 
-Required fields: `method`, `analysis_unit`, `independent_units`, `estimate`, `ci_low`, `ci_high`, `ci_confidence`, `p_value`, `p_adjusted`, `seeds`, `aggregation`, `family`, `family_size`, `direction`, `assumptions`, `sample_size_rationale`, `decision`, `analysis_phase`. Both Methods and Results anchors are required; declared statistical figures also need caption anchors. The independent sample count cannot be substituted with the seed count. CI confidence locations must declare `uncertainty: "CI"`; SD or SE are not interchangeable.
+Required fields for reported comparisons: `method`, `analysis_unit`, `independent_units`, `estimate`, `ci_low`, `ci_high`, `ci_confidence`, `p_value`, `p_adjusted`, `seeds`, `aggregation`, `family`, `family_size`, `direction`, `assumptions`, `sample_size_rationale`, `decision`, `analysis_phase`. Both Methods and Results anchors are required for those comparisons; declared statistical figures also need caption anchors. The independent sample count cannot be substituted with the seed count. CI confidence locations must declare `uncertainty: "CI"`; SD or SE are not interchangeable.
 
 Example location (replace quote and values with actual manuscript/evidence):
 
@@ -86,7 +94,7 @@ Example location (replace quote and values with actual manuscript/evidence):
 
 The author can use readable prose while the mapping's `value` preserves the machine decision. The report explicitly does not verify that a paraphrase entails its mapped scientific meaning. G5 requires a fresh passing `reviews/statistical-reporting.json`, produced by the control plane against rerun numerical evidence. Seed effects and within-unit repetitions remain separate from independent units. Existing registered custom analyses are hash-bound; their statistical appropriateness still requires review.
 
-Methods/Results locations must belong to the canonical manuscript and its actual TeX includes; unrelated draft files cannot satisfy these anchors. Figure build records sharing a comparison's claim IDs require a caption anchor even if the proposed map sets `has_figure` to false. Numeric matching distinguishes registered `20` from `120`, supports sentence punctuation, and preserves declared precision.
+Methods/Results locations must belong to the canonical manuscript and its actual TeX includes; unrelated draft files cannot satisfy these anchors. Figure build records sharing a reported comparison's claim IDs require a caption anchor even if the proposed map sets `has_figure` to false. Numeric matching distinguishes registered `20` from `120`, supports sentence punctuation, and preserves declared precision. Selection is not proof that all prose assertions have been identified: full-manuscript semantic coverage remains unverified and the existing independent scientific review must assess omissions that affect a conclusion. Archiving does not waive executor, frozen-protocol, numerical-integrity or scientific review checks.
 
 ## Pinned method-tool contracts
 

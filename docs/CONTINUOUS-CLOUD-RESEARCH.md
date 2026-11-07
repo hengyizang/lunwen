@@ -13,7 +13,7 @@ hours only when the researcher supplies them.
 The protected `state/continuation.json` records the named owner, the original
 confirmation time and words, the exact intake SHA-256 and the actual G0 decision
 artifact SHA-256. G0 may be a deterministic decision. This execution authority
-cannot grant a spending tranche or supply a human topic decision. A changed
+cannot raise the configured cumulative total or supply a human topic decision. A changed
 intake, missing prior decision or failed evidence check stops
 dependent work. The serialized controller invokes `ready` and `advance` after
 successful checks. It stops for the doctoral topic at G1 and each paper topic at
@@ -40,7 +40,7 @@ GitHub schedules can be delayed or dropped. Its concurrency group also has one
 running job and one pending job by default; a later wakeup can replace an older
 pending job. Check a manually requested job's actual run and ledger receipt
 before claiming that its command took effect. Recovery retries do not grant
-another CNY 300 tranche. See GitHub's primary documentation on
+additional spending authority. See GitHub's primary documentation on
 [schedule events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows),
 [concurrency](https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency)
 and [workflow token triggers](https://docs.github.com/en/actions/concepts/security/github_token).

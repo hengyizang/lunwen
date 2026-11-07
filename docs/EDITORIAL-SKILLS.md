@@ -49,7 +49,7 @@ for targeted improvement, not paid rewrites to empty a checklist.
 The controller retains deterministic audit snapshots and current hashes. Actual
 citation/numeric/claim changes, missing scientific evidence, removed adverse
 results and falsified provenance remain A problems. Originals, protected spans
-and existing disclosure content stay preserved. Apply the current critique and
+stay preserved. Public AI-use statements are optional and author-editable; truthful internal provenance is retained. Apply the current critique and
 final blind panel from [workflow.md](../references/workflow.md), without forced
 two-round reviews. Actual G1/G2 human topic choices remain unchanged.
 
