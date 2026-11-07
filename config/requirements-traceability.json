@@ -8,12 +8,15 @@
       "implementation": "implemented",
       "acceptance": "ci-required",
       "evidence": [
-        ".github/workflows/validate.yml"
+        ".github/workflows/validate.yml",
+        "pyproject.toml",
+        ".github/workflows/cloud-research.yml",
+        ".github/workflows/research-continuation.yml"
       ],
       "tests": [
         "tests/test_cloud_job.py"
       ],
-      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+      "remaining": "The issue-driven and scheduled cloud controllers install declared core dependencies before any gate evaluation, including non-billable status/check actions. A fresh core-only virtual environment reproduced all 32 current G1 missing-evidence messages without the former missing-jsonschema error. Require the exact merged cloud status receipt; neither available validators nor a completed status job establishes scientific completion."
     },
     {
       "id": "R02",
@@ -687,7 +690,7 @@
         "tests/test_v1_guards.py",
         "tests/test_literature_roles.py"
       ],
-      "remaining": "Measured from f8a1492: production Python 76815 to 76168 lines (-647; 1100 added, 1747 removed). Compared with earlier 3e9f56b, production remains +1777 lines because research capabilities were added; no cumulative 40–50% saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules. Seven deterministic manifest readers now share exact inventory, implementation, request and content-hash validation. JCR recording preserves actual Q1–Q4/low-IF/historical metadata, with target differences and unknown current rankings as observations. The actual compendium Git baseline 7765bd5 has 71743 production lines: current production is +4425, so an overall compendium-baseline reduction is also not claimed. Historical working-tree counts contain unattached changes. The cloud transport schema now derives action fields and human selectors from existing native control tables; repository validation rejects stale exports. Its formerly missing 12 runtime operations and optional legacy paid annotation are covered without changing models, budget authority or actual stage inputs. Two duplicated atomic JSON writers now call the existing shared implementation.",
+      "remaining": "Measured from f8a1492: production Python 76815 to 76168 lines (-647; 1101 added, 1748 removed). Compared with earlier 3e9f56b, production remains +1777 lines because research capabilities were added; no cumulative 40–50% saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules. Seven deterministic manifest readers now share exact inventory, implementation, request and content-hash validation. JCR recording preserves actual Q1–Q4/low-IF/historical metadata, with target differences and unknown current rankings as observations. The actual compendium Git baseline 7765bd5 has 71743 production lines: current production is +4425, so an overall compendium-baseline reduction is also not claimed. Historical working-tree counts contain unattached changes. The cloud transport schema now derives action fields and human selectors from existing native control tables; repository validation rejects stale exports. Its formerly missing 12 runtime operations and optional legacy paid annotation are covered without changing models, budget authority or actual stage inputs. Two duplicated atomic JSON writers now call the existing shared implementation.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ],

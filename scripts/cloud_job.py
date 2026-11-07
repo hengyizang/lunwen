@@ -786,7 +786,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                    f"{detail}"
                    f"[GitHub Actions run](https://github.com/{REPOSITORY}/actions/runs/{run_id}) · "
                    f"State branch (when used): `cloud-state/{slug}` · Changed files: {len(changed)}.\n\n"
-                   "The run artifact contains redacted logs and tracked results. Only explicit human decisions grant gates; software receipts do not establish scientific completion.\n")
+                   "The run artifact contains redacted logs and tracked results. G1/G2 topic decisions require the owner; other gate transitions use recorded automatic checks. Software receipts do not establish scientific completion.\n")
         (RUNTIME / "cloud-summary.md").write_text(summary, encoding="utf-8")
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as output:

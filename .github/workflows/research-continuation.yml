@@ -39,6 +39,8 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+      - name: Install core control-plane dependencies
+        run: python -m pip install --disable-pip-version-check .
       - name: Validate the default-branch wakeup
         run: >-
           python -m scripts.cloud_continuation scheduled-request
