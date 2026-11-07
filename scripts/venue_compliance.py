@@ -12,14 +12,13 @@ import shutil
 import subprocess
 import sys
 import zipfile
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, utc_now as now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, utc_now as now
 from xml.etree import ElementTree
 
 try:
@@ -36,10 +35,6 @@ PLACEHOLDER_RE = re.compile(
 
 class ComplianceError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def read_json(path: Path) -> dict[str, Any]:

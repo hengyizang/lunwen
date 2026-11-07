@@ -24,6 +24,3 @@ class ResultsValidationTests(unittest.TestCase):
             self.assertEqual(validate_claim_evidence(project,claim,registry),[])
             output.write_text('{"changed":true}',encoding="utf-8")
             self.assertTrue(any("hash changed" in error for error in validate_registry(project,plan,registry)))
-
-
-if __name__=="__main__":unittest.main()

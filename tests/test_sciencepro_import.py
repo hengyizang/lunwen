@@ -23,7 +23,3 @@ class ScienceProImportTests(unittest.TestCase):
             self.assertTrue((project / report["source"]["private_path"]).is_file())
             self.assertEqual(report["evidence_status"], "advisory_requires_independent_verification")
             self.assertEqual(report["extraction"]["doi_candidates"], ["10.1234/example"])
-
-
-if __name__ == "__main__":
-    unittest.main()

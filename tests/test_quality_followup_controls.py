@@ -61,7 +61,3 @@ class FollowupControlTests(unittest.TestCase):
         self.assertIn("seeds_are_independent_units=false", followup["statistical_semantics"])
         self.assertIn("existing independent critics assess scientific validity", followup["revision_ledger"])
         self.assertIn("current machine record", followup["revision_ledger"])
-
-
-if __name__ == "__main__":
-    unittest.main()

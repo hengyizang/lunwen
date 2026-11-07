@@ -105,7 +105,3 @@ class JournalDossierTests(unittest.TestCase):
         self.save()
         with self.assertRaisesRegex(ValueError, "declared publisher domains"):
             dossier.fetch_sources(self.project)
-
-
-if __name__ == "__main__":
-    unittest.main()

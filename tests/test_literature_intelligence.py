@@ -297,7 +297,3 @@ class LiteratureIntelligenceTests(unittest.TestCase):
         self.assertEqual(operation["query_family"], "conference-fallback-not-dblp")
         with self.assertRaisesRegex(ValueError, "exact source venue"):
             intelligence.conference_fallback({"fallback": {"provider": "arxiv", "venue": "ICML"}}, venue, 2025)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -27,9 +27,11 @@ C 分数、编辑、语言和格式观察显示为警告。没有强制两轮模
 
 Codex Cloud 的可复用开发环境使用 [`docs/CODEX-CLOUD.md`](docs/CODEX-CLOUD.md) 和
 `bash scripts/bootstrap-codex-cloud.sh`。它安装代码维护、文献处理、绘图和文档导出工具；
+并按固定 commit 和哈希安装 CCFA 技能资源到 Git 忽略的依赖缓存。其他开发环境也可先运行
+`python -m scripts.ccfa_runtime bootstrap`；首次需联网，缓存完整后可离线使用。
 正式科研作业继续使用下述 GitHub Actions 入口与既有证据、预算和实验控制。
 
-通过 Codex 管理仓库所有者授权的 GitHub 云端作业。GitHub Actions 完成依赖安装、受控文献检索、许可检查后的数据获取、G3 封存后的 Docker 实验、检查点恢复和论文导出。API 使用当前配置的项目累计总额度，默认 300 元；不再设单篇额度或固定追加阶梯。持续运行在总额度不足、G1/G2 选题决定或实际资料缺失时暂停；待核对费用有可计算上限且总额仍足够时可继续。
+通过 Codex 管理仓库所有者授权的 GitHub 云端作业。GitHub Actions 完成依赖安装、受控文献检索、来源与版本核对后的数据获取、G3 封存后的 Docker 实验、检查点恢复和论文导出。API 使用当前配置的项目累计总额度，默认 300 元；不再设单篇额度或固定追加阶梯。持续运行在总额度不足、G1/G2 选题决定或实际资料缺失时暂停；待核对费用有可计算上限且总额仍足够时可继续。
 
 中转站密钥到位后的配置清单、免费启动检查和立即启动入口见 [`docs/GATEWAY-STARTUP.md`](docs/GATEWAY-STARTUP.md)，支持 OpenAI 与 Claude 使用独立地址和密钥。
 
@@ -143,33 +145,11 @@ bash scripts/bootstrap-wsl.sh --with-kdense
 
 该选项只安装锁定提交中的筛选子集，默认不开启。许可、固定版本和边界见 `references/upstream-components.md`。
 
-## 本地可视化客户端（新手推荐）
+## 统一云端入口
 
-无需安装 Node、数据库或桌面框架。在 WSL2 项目目录运行：
-
-```bash
-bash scripts/start-dashboard.sh
-```
-
-客户端默认只监听本机 `127.0.0.1:8765`，并尝试自动打开 Windows 浏览器。若浏览器没有自动打开，请访问：
-
-```text
-http://127.0.0.1:8765
-```
-
-在“API 设置”中输入 UUAPI 地址、Key、Claude 模型 ID 和 GPT/Codex 模型 ID。Key 只保存在当前 Python 进程内存中，页面不会读回密钥，关闭终端即清除。客户端覆盖：
-
-- API 配置检查、计费探针与余额查询；
-- 项目创建、阶段运行、闸门检查、`ready/reopen/approve/advance`；
-- G1/G3 自动执行八类数据源的多查询并行检索与候选排序，页面仍可手动补充搜索；
-- 数据清单验证、许可证确认后的安全下载；
-- 已批准实验执行、实时日志、Token 与完成度监控；
-- 新颖性矩阵、数据质量及来源绑定确认、统计功效、预注册、强基线复现和隔离复现状态；
-- 六篇论文的顺序状态和本地投稿 ZIP。
-
-完整说明、安全边界和故障处理见 [`docs/DASHBOARD.md`](docs/DASHBOARD.md)。CLI 仍然保留，并与客户端共享完全相同的项目状态。
-
-新颖性、数据质量、可执行功效、预注册、基线复现和隔离复现的完整操作见 [`docs/RESEARCH-QUALITY.md`](docs/RESEARCH-QUALITY.md)。
+本项目使用现有 GitHub 云端控制和原生命令行。旧本地可视化客户端已退休；
+项目创建、G1/G2 选题决定、阶段检查、实验执行、状态与投稿包均复用同一套控制。
+操作入口见 [云端研究](docs/CLOUD-RESEARCH.md) 与 [持续研究](docs/CONTINUOUS-CLOUD-RESEARCH.md)。
 
 ## 入口与恢复
 

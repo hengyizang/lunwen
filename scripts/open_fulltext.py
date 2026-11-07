@@ -13,13 +13,14 @@ import json
 import re
 import tempfile
 import urllib.parse
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from scripts.research_artifacts import utc_now
     from scripts.network_safety import fetch_json
 except ImportError:
+    from research_artifacts import utc_now
     from network_safety import fetch_json  # type: ignore
 
 
@@ -30,10 +31,6 @@ DOI_RE = re.compile(r"^10\.\d{4,9}/\S+$", re.I)
 
 class FullTextResolverError(RuntimeError):
     pass
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def normalize_doi(value: str) -> str:

@@ -270,7 +270,3 @@ class QualityGateTests(unittest.TestCase):
         value = report("G1")
         value["doctoral_readiness"]["unifying_thesis"] = ""
         self.assertTrue(any("unifying_thesis" in error for error in validate_report(value, "G1")))
-
-
-if __name__ == "__main__":
-    unittest.main()

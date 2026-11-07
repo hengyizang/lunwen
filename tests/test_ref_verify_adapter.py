@@ -83,7 +83,3 @@ class RefVerifyAdapterTests(unittest.TestCase):
             claims.write_text(json.dumps(value) + "\n", encoding="utf-8")
             with self.assertRaisesRegex(RefVerifyAdapterError, "full-text"):
                 load_claims(claims)
-
-
-if __name__ == "__main__":
-    unittest.main()

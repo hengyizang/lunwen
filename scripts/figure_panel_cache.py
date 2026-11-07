@@ -20,8 +20,10 @@ class PanelCacheError(RuntimeError):
     pass
 
 
-def _digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import sha as _digest
+except ImportError:
+    from research_artifacts import sha as _digest
 
 
 def _canonical(value):

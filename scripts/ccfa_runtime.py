@@ -12,6 +12,8 @@ import os
 from pathlib import Path
 import re
 import sys
+import subprocess
+import tempfile
 from urllib.parse import quote
 
 if __package__ in {None, ""}:
@@ -359,6 +361,60 @@ def install(root=ROOT):
             "cloud_only": True, "model_calls": 0, "scientific_completion_verified": False}
 
 
+def _checkout_sources(destination, paths):
+    def git(*arguments):
+        subprocess.run(["git", *arguments], check=True, capture_output=True, timeout=90)
+    git("clone", "--quiet", "--filter=blob:none", "--depth=1", "--no-checkout",
+        "https://github.com/mikubaka88/CCFA-Skills.git", str(destination))
+    git("-C", str(destination), "fetch", "--quiet", "--depth=1", "--filter=blob:none", "origin", COMMIT)
+    git("-C", str(destination), "config", "core.sparseCheckout", "true")
+    git("-C", str(destination), "config", "core.sparseCheckoutCone", "false")
+    patterns = ["/" + re.sub(r"([*?\[\]#!\\])", r"\\\1", relative) for relative in paths]
+    (destination / ".git/info/sparse-checkout").write_text("\n".join(patterns) + "\n", encoding="utf-8")
+    git("-C", str(destination), "checkout", "--quiet", "--detach", COMMIT)
+
+
+def bootstrap(root=ROOT):
+    """Install immutable upstream resources, without research or model execution."""
+    rows = lock(root)["files"]
+    missing = []
+    for row in rows:
+        target = path_in(root, VENDOR + "/" + row["path"], exists=False)
+        if not target.is_file():
+            missing.append(row)
+        elif hashlib.sha256(canonical(target.read_bytes())).hexdigest() != row["canonical_lf_sha256"]:
+            raise ValueError("Modified pinned CCFA source: " + row["path"])
+    if missing:
+        verified = {}
+        runtime = root / ".runtime"
+        runtime.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="ccfa-source-", dir=runtime) as temporary:
+            checkout = Path(temporary) / "source"
+            _checkout_sources(checkout, [row["path"] for row in missing])
+            blobs = subprocess.run(["git", "-C", str(checkout), "cat-file", "--batch"],
+                input="".join(COMMIT + ":" + row["path"] + "\n" for row in missing).encode(),
+                capture_output=True, check=True, timeout=90).stdout
+            position = 0
+            for row in missing:
+                end = blobs.index(b"\n", position)
+                identity, kind, size = blobs[position:end].split()
+                if kind != b"blob" or int(size) != row["size"] or identity.decode() != row["git_blob_sha"]:
+                    raise ValueError("Pinned CCFA resource size differs: " + row["path"])
+                position = end + 1
+                payload = blobs[position:position + int(size)]
+                position += int(size) + 1
+                blob = hashlib.sha1(b"blob " + str(len(payload)).encode() + b"\0" + payload).hexdigest()
+                if blob != row["git_blob_sha"] or hashlib.sha256(canonical(payload)).hexdigest() != row["canonical_lf_sha256"]:
+                    raise ValueError("Pinned CCFA resource hash differs: " + row["path"])
+                verified[row["path"]] = canonical(payload)
+        for relative, payload in verified.items():
+            target = path_in(root, VENDOR + "/" + relative, exists=False)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(payload)
+    return {"status": "resources_ready", "upstream_commit": COMMIT,
+            "resources": len(rows), "downloaded": len(missing), "model_calls": 0}
+
+
 def resource(relative, *, root=ROOT):
     """Retrieve one exact pinned ancillary asset; this grants no research-data rights."""
     cloud()
@@ -574,11 +630,14 @@ def execute(project, operation):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("verify", "install", "resource", "request"))
+    parser.add_argument("action", choices=("bootstrap", "verify", "install", "resource", "request"))
     parser.add_argument("--project")
     parser.add_argument("--request-file")
     parser.add_argument("--resource")
     args = parser.parse_args()
+    if args.action == "bootstrap":
+        print(json.dumps(bootstrap()))
+        return 0
     cloud()
     if args.action == "verify":
         errors = installation_errors()

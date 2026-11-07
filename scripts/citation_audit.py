@@ -18,9 +18,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, utc_now as now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, utc_now as now
 
 try:
     from scripts.network_safety import NetworkSafetyError, fetch_json, validate_https_url
@@ -41,10 +41,6 @@ MARKER_RE = re.compile(r"\[[^\]]*?@[^\]]+\]")
 
 class CitationAuditError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def normalize_doi(value: str) -> str:

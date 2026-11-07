@@ -55,7 +55,3 @@ class BochaJevProbeTests(unittest.TestCase):
         self.assertEqual([method for method, _, _, _ in transport.calls], ["GET", "POST"])
         with self.assertRaisesRegex(bocha_jev_probe.ProbeError, "actual serving model"):
             bocha_jev_probe.trial(KEY, TODAY.isoformat(), FakeTransport(actual_model="other"), today=TODAY)
-
-
-if __name__ == "__main__":
-    unittest.main()

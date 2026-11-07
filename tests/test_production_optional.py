@@ -119,7 +119,3 @@ class ProductionOptionalTests(unittest.TestCase):
             receipt=json.loads((project/report["receipt"]).read_text())
             self.assertEqual(receipt["translation_calls"][0]["provider"],"cheapai-gpt-pro")
             self.assertEqual(receipt["translation_calls"][0]["reported_model"],"gpt-6.1-sol")
-
-
-if __name__=="__main__":
-    unittest.main()

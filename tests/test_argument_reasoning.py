@@ -158,7 +158,3 @@ class ArgumentReasoningTests(unittest.TestCase):
         required = schema["$defs"]["argument_material_need"]["required"]
         self.assertIn("completion_condition", required)
         self.assertIn("claim_ids", required)
-
-
-if __name__ == "__main__":
-    unittest.main()

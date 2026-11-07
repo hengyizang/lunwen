@@ -186,7 +186,3 @@ class EmpiricalRuntimeTests(unittest.TestCase):
         self.data.write_bytes(self.data.read_bytes() + b"\n")
         with self.assertRaisesRegex(ValueError, "hash changed"):
             self.calculate()
-
-
-if __name__ == "__main__":
-    unittest.main()

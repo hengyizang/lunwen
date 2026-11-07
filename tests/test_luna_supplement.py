@@ -203,7 +203,3 @@ class LunaSupplementTests(unittest.TestCase):
     def test_luna_supplement_refuses_local_execution(self):
         with patch.dict(os.environ, {}, clear=True), self.assertRaises(trial.TrialError):
             luna.main()
-
-
-if __name__ == '__main__':
-    unittest.main()

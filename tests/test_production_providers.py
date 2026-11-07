@@ -300,7 +300,3 @@ class ProductionProviderTests(unittest.TestCase):
         with self.assertRaises(providers.ProviderError):
             providers.call("uuapi-openai", "fixture", reasoning_effort="high")
 
-
-if __name__ == "__main__":
-    unittest.main()
-

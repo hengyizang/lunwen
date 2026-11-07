@@ -90,7 +90,3 @@ class CloudRetryTests(unittest.TestCase):
             code, _ = cloud_job.run_command(["scripts/api_orchestrator.py", "cycle", "my-phd", "topic-intelligence"])
         self.assertEqual(code, 1)
         self.assertEqual(runner.call_count, 1)
-
-
-if __name__ == "__main__":
-    unittest.main()

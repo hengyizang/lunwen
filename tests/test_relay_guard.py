@@ -482,6 +482,3 @@ class RelayGuardTests(unittest.TestCase):
             self.assertGreater(state["spent_cny"],0);self.assertEqual(state["reservations"],{})
             self.assertEqual(model_runtime.ledger_entries(project)[0]["cost_status"],"estimated_upper_bound")
 
-
-if __name__=="__main__":unittest.main()
-

@@ -293,7 +293,3 @@ class ModelEvaluationTrialTests(unittest.TestCase):
         value = dict(value, causal_effect_established=0)
         self.assertFalse(trial.mechanical_checks(case, json.dumps(value))["expected_json"]["causal_effect_established"])
 
-
-if __name__ == "__main__":
-    unittest.main()
-

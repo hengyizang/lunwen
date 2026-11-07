@@ -242,6 +242,3 @@ class NewCapabilitiesTests(unittest.TestCase):
             spec.write_text(json.dumps(invalid))
             with self.assertRaisesRegex(ValueError,"actual 1-based PDF page"):
                 build_deck(project,spec,reader.with_name("invalid.pptx"))
-
-
-if __name__=="__main__":unittest.main()

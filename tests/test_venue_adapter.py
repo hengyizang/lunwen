@@ -49,7 +49,3 @@ class VenueAdapterTests(unittest.TestCase):
                 handle.writestr("run.exe", "bad")
             with self.assertRaises(TemplateError):
                 inspect_archive(archive)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -20,11 +20,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
-      - name: Install repository validation dependencies
-        run: python -m pip install --disable-pip-version-check '.[figures,reader,research-quality]' 'reportlab>=4,<5'
+          python-version: "3.12"
+          packages: '[".[figures,reader,research-quality]", "reportlab>=4,<5"]'
       - name: Test deterministic controls with fake credentials only
         run: python -m unittest discover -s tests -v
       - name: Compile and validate
@@ -43,9 +42,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Inspect closed Luna supplement without generation
         env:
           TRIAL_GITHUB_TOKEN: ${{ github.token }}

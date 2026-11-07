@@ -10,6 +10,16 @@ from scripts.research_artifacts import write
 
 
 class ResearchTaskRouteTests(unittest.TestCase):
+    def test_canonical_default_request_paths_survive_shared_dispatch(self):
+        defaults = {"literature_search_strategy": "literature-search-strategy",
+                    "data_row_provenance": "data-row-provenance", "literature_synthesis": "literature-synthesis",
+                    "diagram_mermaid": "diagram-mermaid", "literature_semantic": "literature-semantic"}
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            for action, stem in defaults.items():
+                with self.subTest(action=action), patch("scripts." + action + ".refresh") as execute:
+                    literaturectl.execute_operation(Path("unused"), {"action": action})
+                    execute.assert_called_once_with(Path("unused"), "program/" + stem + ".json")
+
     def test_nonpaid_owner_requests_dispatch_to_the_existing_controller(self):
         cases = [
             ("data_row_provenance", "scripts.data_row_provenance.refresh", "program/rows.json"),

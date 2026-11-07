@@ -150,7 +150,3 @@ class EmpiricalDesignTests(unittest.TestCase):
         fresh = self.project / "other"; fresh.mkdir()
         self.assertEqual(empirical.audit(fresh, "P01")["status"], "not_configured")
         self.assertEqual(empirical.validate_saved_report(fresh, "P01"), [])
-
-
-if __name__ == "__main__":
-    unittest.main()

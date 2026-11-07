@@ -171,7 +171,3 @@ class GateCheckLevelTests(unittest.TestCase):
         errors = []
         researchctl.quality_errors(self.project, "G1", errors, warnings=warnings)
         self.assertTrue(any("stale source hash" in error for error in errors), errors)
-
-
-if __name__ == "__main__":
-    unittest.main()

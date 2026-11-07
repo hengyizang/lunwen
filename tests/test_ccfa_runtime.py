@@ -39,6 +39,40 @@ def cloud():
 
 
 class CCFARuntimeTests(unittest.TestCase):
+    def test_dependency_bootstrap_verifies_every_blob_before_installing_and_reuses_cache(self):
+        from types import SimpleNamespace
+        payloads = {"ccf-common/SKILL.md": b"Pinned common fixture\r\n\r\n", "README.md": b"Pinned readme fixture"}
+        rows = [{"path": name, "size": len(data), "git_blob_sha": blob(data),
+                 "canonical_lf_sha256": hashlib.sha256(runtime.canonical(data)).hexdigest()}
+                for name, data in payloads.items()]
+        def stream(changed=False):
+            result = b""
+            for row in rows:
+                data = payloads[row["path"]]
+                if changed and row["path"] == "README.md":
+                    data = b"X" + data[1:]
+                result += (row["git_blob_sha"] + " blob " + str(len(data)) + "\n").encode() + data + b"\n"
+            return SimpleNamespace(stdout=result)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(runtime, "lock", return_value={"files": rows}), \
+                 patch.object(runtime, "_checkout_sources") as checkout, \
+                 patch.object(runtime.subprocess, "run", return_value=stream(True)) as fetch:
+                with self.assertRaisesRegex(ValueError, "hash differs"):
+                    runtime.bootstrap(root)
+                self.assertFalse(any((root / runtime.VENDOR / row["path"]).exists() for row in rows))
+                fetch.return_value = stream()
+                self.assertEqual(runtime.bootstrap(root)["downloaded"], 2)
+                for name, payload in payloads.items():
+                    self.assertEqual((root / runtime.VENDOR / name).read_bytes(), runtime.canonical(payload))
+                checkout.reset_mock()
+                self.assertEqual(runtime.bootstrap(root)["downloaded"], 0)
+                checkout.assert_not_called()
+                (root / runtime.VENDOR / "README.md").write_text("Tampered cache")
+                with self.assertRaisesRegex(ValueError, "Modified pinned"):
+                    runtime.bootstrap(root)
+                checkout.assert_not_called()
+
     def test_source_normalizes_checkout_newlines_without_hiding_content_changes(self):
         relative = "ccf-common/SKILL.md"
         content = "# Source\n\nPinned text with a final newline.\n"
@@ -537,7 +571,3 @@ class CCFARuntimeTests(unittest.TestCase):
                            lambda: runtime.execute(Path("."), {"action": "ccfa_task_clear", "expected_active_sha256": "a" * 64})):
                 with self.assertRaisesRegex(ValueError, "authorized cloud"):
                     action()
-
-
-if __name__ == "__main__":
-    unittest.main()

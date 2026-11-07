@@ -477,7 +477,3 @@ class IncrementTests(unittest.TestCase):
         row["nodes"][0]["research_state"] = "confirmatory"
         with self.assertRaises(ValueError):
             evidence.lineage(self.project, row)
-
-
-if __name__ == "__main__":
-    unittest.main()

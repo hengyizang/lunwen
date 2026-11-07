@@ -468,7 +468,3 @@ class SupplementalGuardTests(unittest.TestCase):
         self.assertEqual(before, reviewer_rounds.review_binding(self.parent, "P01"))
         frozen["files"][-1]["sha256"] = "0" * 64; write(frozen_path, frozen)
         self.assertNotEqual(before, reviewer_rounds.review_binding(self.parent, "P01"))
-
-
-if __name__ == "__main__":
-    unittest.main()

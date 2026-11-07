@@ -373,7 +373,3 @@ class ClosestWorkAxesTests(unittest.TestCase):
         row["closest_work"]["axes"]["method"]["prior"]["evidence"][0]["pdf_page"] = 2
         with self.assertRaisesRegex(ValueError, "exact PDF page"):
             extensions.comparison(self.project, row)
-
-
-if __name__ == "__main__":
-    unittest.main()

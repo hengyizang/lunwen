@@ -80,7 +80,3 @@ class OutputProvenanceTests(unittest.TestCase):
             with self.assertRaises(output_provenance.ProvenanceError):output_provenance.require_final_origins(project,[artifact])
             output_provenance.attest_human_files(project,[artifact],actor="Researcher",note="Independently reviewed and not Claude-derived")
             output_provenance.require_final_origins(project,[artifact])
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -537,7 +537,3 @@ class ResearchDesignTests(unittest.TestCase):
                 encoding="utf-8",
             )
             self.assertEqual(analyze(path)["status"], "fail")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -73,7 +73,3 @@ class WritingIssueHistoryTests(unittest.TestCase):
         self.assertEqual(extensions.gate_errors(fresh), [])
         self.assertEqual(extensions.refresh(fresh)["status"], "needs_inputs")
         self.assertEqual(extensions.gate_errors(fresh), [])
-
-
-if __name__ == "__main__":
-    unittest.main()

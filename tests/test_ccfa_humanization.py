@@ -76,7 +76,7 @@ class CCFAHumanizationTests(unittest.TestCase):
             self.copy_sources(root)
             for relative in human.FILES:
                 path = root / human.SOURCE / relative
-                raw = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+                raw = path.read_bytes().replace(b"\r\n", b"\n").rstrip(b"\n").replace(b"\n", b"\r\n") + b"\r\n\r\n"
                 path.write_bytes(raw)
             self.assertEqual(human.policy_receipt(root), human.policy_receipt())
 
@@ -241,7 +241,3 @@ class CCFAHumanizationTests(unittest.TestCase):
             human.validate_disposition_records(records + [{"id": "CFH39", "disposition": "fixed", "reason": "Invented coverage cannot replace an actual current criterion."}])
         with self.assertRaises(ValueError):
             human.validate_disposition_records([{"id": "CFH01", "disposition": True, "reason": "A boolean cannot serve as a scientific decision."}])
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -231,7 +231,3 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertTrue(
             any("direction-dependent-omission" in error for error in result["errors"])
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

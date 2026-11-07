@@ -328,12 +328,10 @@ def analyze(project: Path, paper_id: str, *, config_path="program/literature-wor
 def execute_operation(project: Path, operation: dict, *, owner_authorization=None) -> dict:
     require_cloud()
     action = operation["action"]
-    if action == "research_toolkit":
-        from scripts.research_toolkit import refresh
-        return refresh(project, operation["request_file"])
-    if action in {"research_iteration", "research_frontier", "research_search_tree"}:
-        from importlib import import_module
-        return import_module("scripts." + action).refresh(project, operation["request_file"])
+    from scripts.research_operations import handler
+    selected = handler(action)
+    if selected is not None:
+        return selected(project, operation)
     if action == "figure_gallery_sync":
         from scripts.figure_gallery import sync
         return sync(project)
@@ -413,9 +411,6 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_progress":
         from scripts.literature_reasoning import record_progress
         return record_progress(project, operation["request"], progress_path=operation.get("progress"))
-    if action == "literature_retrieve":
-        from scripts.literature_review import refresh
-        return refresh(project, operation.get("request_file", "program/literature-retrieval.json"))
     if action == "literature_reading_index":
         from scripts.literature_reading import build_index
         if type(operation.get("locate_pdf", False)) is not bool:
@@ -431,9 +426,6 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
             raise ValueError("reading coverage request exceeds 64 KB")
         from scripts.literature_workbench import _json
         return coverage(project, _json(request_path.read_bytes()))
-    if action == "literature_matrix":
-        from scripts.literature_matrix import refresh
-        return refresh(project, request_path=operation.get("request_file", "program/literature-extraction.json"))
     if action == "scientific_judgment":
         from scripts.literature_source_tasks import JUDGMENTS, refresh
         if operation.get("task") not in JUDGMENTS:
@@ -444,42 +436,12 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
         if "kind" in operation:
             return research_case.export(project, operation["paper_id"], operation["kind"])
         return research_case.build_packet(project, operation["paper_id"])
-    if action == "literature_benchmark":
-        from scripts.literature_benchmark import refresh
-        return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))
     if action == "literature_zotero_register":
         from scripts.literature_zotero import register
         return register(project, operation["request_file"], operation["item_key"], paper_id=operation.get("paper_id"))
-    if action in {"literature_semantic", "literature_pdf", "literature_zotero", "literature_roles"}:
-        from importlib import import_module
-        module = import_module("scripts." + action)
-        return module.refresh(project, operation.get("request_file", "program/" + action.replace("_", "-", 1) + ".json"))
-    if action in {"literature_comparison", "literature_paperqa"}:
-        from importlib import import_module
-        module = import_module("scripts." + action)
-        if type(operation.get("execute", False)) is not bool:
-            raise ValueError("execute must be an explicit boolean")
-        return module.refresh(project, operation.get("request_file", "program/" + action.replace("_", "-", 1) + ".json"),
-                              execute=operation.get("execute", False))
     if action == "data_row_prepare":
         from scripts.data_row_provenance import prepare
         return prepare(project, operation["dataset_id"], key_columns=operation.get("key_columns"))
-    if action == "data_row_provenance":
-        from scripts.data_row_provenance import refresh
-        return refresh(project, operation.get("request_file", "program/data-row-provenance.json"))
-    if action in {"literature_source_trace", "literature_screening_advice"}:
-        from scripts.literature_source_tasks import refresh
-        task = "source_trace" if action == "literature_source_trace" else "screening_advice"
-        return refresh(project, task, operation.get("request_file", "program/" + task.replace("_", "-") + ".json"))
-    if action == "literature_search_strategy":
-        from scripts.literature_search_strategy import refresh
-        return refresh(project, operation.get("request_file", "program/literature-search-strategy.json"))
-    if action == "literature_synthesis":
-        from scripts.literature_synthesis import refresh
-        return refresh(project, operation.get("request_file", "program/literature-synthesis.json"))
-    if action == "diagram_mermaid":
-        from scripts.diagram_mermaid import refresh
-        return refresh(project, operation.get("request_file", "program/diagram-mermaid.json"))
     if action in {"literature_feedback", "literature_feedback_propose", "literature_feedback_review"}:
         from scripts import literature_feedback as feedback
         if action == "literature_feedback":

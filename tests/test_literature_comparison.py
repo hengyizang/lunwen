@@ -347,7 +347,3 @@ class LiteratureComparisonTests(unittest.TestCase):
         receipt = read(directory / "routes/case-a-retrieval.json")
         self.assertEqual(receipt["costs"]["known_model_cost_cny"], 0.01)
         self.assertFalse((directory / "routes/case-a-full_text.json").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

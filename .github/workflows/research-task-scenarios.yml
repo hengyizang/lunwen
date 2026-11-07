@@ -2,6 +2,7 @@ name: Research task scenario contracts
 on:
   pull_request:
     paths:
+      - '.github/actions/**'
       - 'scripts/data_row_provenance.py'
       - 'scripts/literature_source_tasks.py'
       - 'scripts/literature_search_strategy.py'
@@ -33,11 +34,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
-      - name: Install existing document tools without model credentials
-        run: python -m pip install --disable-pip-version-check '.[reader,figures]' 'reportlab>=4,<5'
+          python-version: "3.12"
+          packages: '[".[reader,figures]", "reportlab>=4,<5"]'
       - name: Check source, screening, query, synthesis and diagram contracts
         run: >-
           python -m unittest tests.test_data_row_provenance tests.test_literature_source_tasks

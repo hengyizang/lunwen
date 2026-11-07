@@ -243,6 +243,3 @@ class EmpiricalReportingTests(unittest.TestCase):
         mapping["specifications"][-1]["locations"][-1]["quote"] = "exploratory phase = confirmatory"
         write(self.paper/"empirical-reporting-map.json", mapping)
         self.assertTrue(any("analysis phase" in x for x in reporting.audit(self.project, "P01", require_mapping=True)["errors"]))
-
-
-if __name__ == "__main__": unittest.main()

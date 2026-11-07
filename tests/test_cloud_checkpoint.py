@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 import tempfile
 import unittest
@@ -10,6 +11,29 @@ from scripts import cloud_checkpoint as cp
 
 
 class CloudCheckpointTests(unittest.TestCase):
+    def test_pruned_scan_keeps_public_raw_sources_and_response_cache(self):
+        from scripts.research_artifacts import walk_files
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            wanted = {"state/run.json", "evidence/literature/raw/source.json", ".cache/model-responses/response.json"}
+            excluded = {"data/raw/private.csv", "data/cache/unneeded.json", ".cache/other/unneeded.json"}
+            for relative in wanted | excluded:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("{}")
+            visited = []
+            original = os.scandir
+            def scan(path):
+                visited.append(Path(path).relative_to(root).as_posix())
+                return original(path)
+            with patch.object(os, "scandir", side_effect=scan):
+                actual = {p.relative_to(root).as_posix() for p in walk_files(root,
+                    prune=lambda relative: relative != ".cache" and cp.excluded(relative + "/"))
+                    if not cp.excluded(p.relative_to(root).as_posix())}
+            self.assertEqual(actual, wanted | {"data/cache/unneeded.json"})
+            self.assertNotIn("data/raw", visited)
+            self.assertNotIn(".cache/other", visited)
+
     def test_fresh_runner_restores_code_source_responses_results_and_api_audits(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

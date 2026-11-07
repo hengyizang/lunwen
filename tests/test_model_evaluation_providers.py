@@ -169,7 +169,3 @@ class ModelEvaluationProviderTests(unittest.TestCase):
                 self.assertEqual("x-goog-api-key" in headers, native)
                 self.assertEqual("authorization" in headers, not native)
 
-
-if __name__ == "__main__":
-    unittest.main()
-

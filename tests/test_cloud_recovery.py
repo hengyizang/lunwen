@@ -449,6 +449,3 @@ class RecoveryTests(unittest.TestCase):
                     self.assertEqual(mutations, ["alert", "persist"])
                     if outcome == "failure":
                         merge.assert_not_called()
-
-if __name__ == "__main__":
-    unittest.main()

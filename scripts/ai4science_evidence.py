@@ -26,10 +26,10 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, regular_file
+    from scripts.research_artifacts import sha as sha256_file, regular_file, utc_now as now
     from scripts import tooluniverse_worker
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, regular_file
+    from research_artifacts import sha as sha256_file, regular_file, utc_now as now
     import tooluniverse_worker
 
 
@@ -82,10 +82,6 @@ SECRET_ENV_NAMES = {
 
 class AI4ScienceEvidenceError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def project_path(slug: str) -> Path:

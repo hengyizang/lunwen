@@ -60,7 +60,3 @@ class VenueCandidateTests(unittest.TestCase):
             registry["papers"][0]["candidates"][0]["fit_score"] = 92.0
             export.write_text(export.read_text(encoding="utf-8").replace("3.2", "3.3"), encoding="utf-8")
             self.assertTrue(any("hash changed" in item for item in validate_registry(project, registry)))
-
-
-if __name__ == "__main__":
-    unittest.main()

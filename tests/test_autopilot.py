@@ -126,7 +126,3 @@ class AutopilotTests(unittest.TestCase):
                 self.assertEqual(power.read_text(), '{"generated_by":"statsmodels"}')
             finally:
                 autopilot.researchctl.PROJECTS_ROOT = old_root
-
-
-if __name__ == "__main__":
-    unittest.main()

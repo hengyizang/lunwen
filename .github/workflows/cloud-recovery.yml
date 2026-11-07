@@ -40,9 +40,9 @@ jobs:
         with:
           ref: main
           persist-credentials: true
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Diagnose and recover using trusted main code, without model credentials
         env:
           GH_TOKEN: ${{ github.token }}

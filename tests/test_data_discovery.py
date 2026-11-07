@@ -80,7 +80,3 @@ class DataDiscoveryTests(unittest.TestCase):
             candidate["fitness_status"],
             "candidate_only_requires_source_bound_scientific_review",
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

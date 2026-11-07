@@ -260,7 +260,3 @@ class ControlledQualityCycleTests(unittest.TestCase):
             paper_execution.prepare_datasets(self.project)
         self.assertEqual(sha(snapshot), sealed_snapshot)
         self.assertEqual(sha(raw), raw_hash)
-
-
-if __name__ == "__main__":
-    unittest.main()

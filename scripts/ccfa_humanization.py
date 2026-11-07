@@ -24,7 +24,7 @@ FILES = {
     "ccf-humanization/SKILL.md": "4050e2cf954e350d02cde5210ba4313ccfbd1edc7ccef751d4380714a3e7dfd1",
     "ccf-humanization/references/humanization-policy.md": "14bd93bdb17c9d100130641e40bb8c2f4c2177e2fd168758f642c70f7ce23091",
     "ccf-humanization/references/experiment-discipline.md": "bbd23d60149bd96e5aa37ba3fc25ca5dc1c4344f4b12a226e056244f227c8f28",
-    "ccf-paper-writer/scripts/check_prose_quality.py": "eb0af0dc017752a52f12f70ee111b8c4eb3aaf2dde6d9e68046f1712c33db95c",
+    "ccf-paper-writer/scripts/check_prose_quality.py": "4fcc1f02d836dd14e500707b821644463e75f869f838e7928696957a5d44cc1b",
 }
 
 # Stable local coverage IDs map the full policy, not an invented upstream count.
@@ -78,7 +78,8 @@ def _sha(text: str) -> str:
 def _canonical(path: Path) -> str:
     if path.is_symlink() or any(parent.is_symlink() for parent in path.parents):
         raise ValueError("CCFA policy sources cannot be symlinks")
-    return path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    from scripts.ccfa_runtime import canonical
+    return canonical(path.read_bytes()).decode("utf-8")
 
 
 def policy_receipt(root: Path = ROOT) -> dict:
@@ -91,7 +92,7 @@ def policy_receipt(root: Path = ROOT) -> dict:
             raise ValueError(f"pinned CCFA humanization source changed: {relative}")
         sources.append({"path": f"{SOURCE}/{relative}", "sha256": expected,
                         "upstream_url": f"https://github.com/mikubaka88/CCFA-Skills/blob/{COMMIT}/{relative}"})
-    return {"commit": COMMIT, "sources": sources, "canonicalization": "UTF-8 LF; final newlines preserved"}
+    return {"commit": COMMIT, "sources": sources, "canonicalization": "UTF-8 LF; one terminal newline, matching the resource inventory"}
 
 
 def review_checklist() -> list[dict]:

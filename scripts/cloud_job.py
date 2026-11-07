@@ -56,59 +56,7 @@ EXTRA = {
 }
 EXTRA["approve"] = EXTRA["approve"] | {"paper_id"}
 
-LITERATURE_OPERATIONS = {
-    "scientific_judgment": ({"task", "request_file"}, {"task", "request_file"}),
-    "research_case": ({"paper_id", "kind"}, {"paper_id"}),
-    "literature_screening_prepare": ({"receipt_id", "question"}, {"receipt_id", "question"}),
-    "literature_source_scope": ({"paper_id"}, {"paper_id"}),
-    "research_toolkit": ({"request_file"}, {"request_file"}),
-    "research_iteration": ({"request_file"}, {"request_file"}),
-    "research_frontier": ({"request_file"}, {"request_file"}),
-    "research_search_tree": ({"request_file"}, {"request_file"}),
-    "figure_gallery_sync": (set(), set()),
-    "figure_gallery_search": ({"query", "top_k", "venues", "years", "tiers", "patterns", "topics", "semantic"}, {"query"}),
-    "figure_story": ({"operation", "request_file"}, {"operation", "request_file"}),
-    "editable_figure_export": ({"request_file"}, {"request_file"}),
-    "editable_figure_verify": ({"receipt"}, {"receipt"}),
-    "ccfa_task": ({"request"}, {"request"}),
-    "ccfa_task_clear": ({"expected_active_sha256"}, {"expected_active_sha256"}),
-    "ccfa_science": ({"operation", "request"}, {"operation", "request"}),
-    "ccfa_humanization": ({"paper_id"}, set()),
-    "literature_discover": ({"plan", "output"}, set()),
-    "literature_resolve": ({"url"}, {"url"}),
-    "literature_figures": ({"pdf", "manifest", "figures", "source_receipt", "question", "max_selected", "auto_discover"}, {"pdf", "manifest"}),
-    "literature_register": ({"candidate_id", "expected_leads_sha256", "paper_id", "acquisition_receipt", "manifest", "reader", "config"},
-                            {"candidate_id", "expected_leads_sha256"}),
-    "literature_analyze": ({"paper_id", "config", "execute", "max_output_tokens"}, {"paper_id"}),
-    "literature_workbench": ({"config"}, set()),
-    "literature_search": ({"query", "paper_id", "topic_id", "limit"}, {"query"}),
-    "literature_itinerary": ({"question", "paper_id", "topic_id", "limit", "reasoning", "progress"}, {"question"}),
-    "literature_compare": ({"paper_ids", "question", "reasoning"}, {"paper_ids"}),
-    "literature_progress": ({"request", "progress"}, {"request"}),
-    "literature_retrieve": ({"request_file"}, set()),
-    "literature_reading_index": ({"paper_id", "locate_pdf"}, {"paper_id"}),
-    "literature_coverage": ({"request_file"}, set()),
-    "literature_matrix": ({"request_file"}, set()),
-    "literature_benchmark": ({"request_file"}, set()),
-    "literature_semantic": ({"request_file"}, set()),
-    "literature_pdf": ({"request_file"}, set()),
-    "literature_zotero": ({"request_file"}, set()),
-    "literature_zotero_register": ({"request_file", "item_key", "paper_id"}, {"request_file", "item_key"}),
-    "literature_roles": ({"request_file"}, set()),
-    "literature_comparison": ({"request_file", "execute"}, set()),
-    "literature_paperqa": ({"request_file", "execute"}, set()),
-    "data_row_prepare": ({"dataset_id", "key_columns"}, {"dataset_id"}),
-    "data_row_provenance": ({"request_file"}, set()),
-    "literature_source_trace": ({"request_file"}, set()),
-    "literature_screening_advice": ({"request_file"}, set()),
-    "literature_search_strategy": ({"request_file"}, set()),
-    "literature_synthesis": ({"request_file"}, set()),
-    "diagram_mermaid": ({"request_file"}, set()),
-    "literature_feedback": ({"feedback", "expected_leads_sha256", "plan"}, {"feedback", "expected_leads_sha256"}),
-    "literature_feedback_propose": ({"event_ids", "expected_plan_sha256", "proposal", "plan"}, {"event_ids", "expected_plan_sha256"}),
-    "literature_feedback_review": ({"proposal_id", "expected_proposal_sha256", "expected_plan_sha256", "decision", "reviewed_by", "reason", "plan"},
-                                  {"proposal_id", "expected_proposal_sha256", "expected_plan_sha256", "decision", "reviewed_by", "reason"}),
-}
+from scripts.research_operations import FIELDS as LITERATURE_OPERATIONS
 
 
 class CloudJobError(RuntimeError):
@@ -332,9 +280,12 @@ def job_schema() -> dict:
     schema["required"] = sorted(COMMON - {"allow_paid"})
     schema["properties"]["action"]["enum"] = sorted(EXTRA)
     schema["properties"]["operation"]["enum"] = sorted(cloud_human_controls.ACTIONS)
-    clauses = [{"if": {"properties": {"action": {"const": action}}},
-                "then": {"propertyNames": {"enum": sorted(COMMON | fields)}}}
-               for action, fields in sorted(EXTRA.items())]
+    fields_by_actions = {}
+    for action, fields in sorted(EXTRA.items()):
+        fields_by_actions.setdefault(tuple(sorted(COMMON | fields)), []).append(action)
+    clauses = [{"if": {"properties": {"action": {"enum": actions}}},
+                "then": {"propertyNames": {"enum": list(fields)}}}
+               for fields, actions in fields_by_actions.items()]
     clauses += [
         {"if": {"properties": {"action": {"enum": sorted(cloud_human_controls.ACTIONS)}}},
          "then": {"required": ["expected_sha256", "note"], "not": {"required": ["operation"]}}},

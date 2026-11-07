@@ -198,7 +198,3 @@ class RouteReviewTests(unittest.TestCase):
         self.assertEqual(by_id["metadata-extraction"]["baseline_model_key"], "luna")
         self.assertFalse({"terra", "kimi"} & {row["baseline_model_key"] for row in tasks})
 
-
-if __name__ == "__main__":
-    unittest.main()
-

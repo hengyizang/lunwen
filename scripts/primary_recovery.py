@@ -22,12 +22,10 @@ class RecoveryError(ValueError):
     pass
 
 
-def read(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import load_json as read, sha
+except ImportError:
+    from research_artifacts import load_json as read, sha
 
 
 def digest(value):

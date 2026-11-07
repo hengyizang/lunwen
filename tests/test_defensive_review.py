@@ -217,7 +217,3 @@ class DefensiveReviewTests(unittest.TestCase):
         self.assertEqual(len(report["implementation_sha256"]), 64)
         self.assertFalse(review.audit_text("")["semantic_review_required"])
         self.assertFalse(review.audit_text(chr(96) + "may potentially" + chr(96))["semantic_review_required"])
-
-
-if __name__ == "__main__":
-    unittest.main()

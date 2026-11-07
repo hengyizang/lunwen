@@ -67,7 +67,3 @@ class RevisionControlTests(unittest.TestCase):
                 json.dumps(authorization), encoding="utf-8"
             )
             self.assertEqual(integrity_audit(paper)["status"], "pass")
-
-
-if __name__ == "__main__":
-    unittest.main()

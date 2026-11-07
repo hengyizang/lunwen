@@ -124,7 +124,3 @@ class ClarifiedComparisonCaseTests(unittest.TestCase):
         self.assertNotEqual(clarified.case("evidence_conflict_v2")["prompt"], "changed")
         with self.assertRaisesRegex(ValueError, "unknown clarified"):
             clarified.score("evidence_conflict", "{}")
-
-
-if __name__ == "__main__":
-    unittest.main()

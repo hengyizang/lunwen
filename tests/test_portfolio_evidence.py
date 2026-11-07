@@ -285,7 +285,3 @@ class ModelSelectionDeclarationTests(unittest.TestCase):
         self.assertTrue(self.check())
         row["status"] = "not_tuned"
         self.assertTrue(any("must not invent" in e for e in self.check()))
-
-
-if __name__ == "__main__":
-    unittest.main()

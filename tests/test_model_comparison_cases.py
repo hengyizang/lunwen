@@ -214,7 +214,3 @@ class ComparisonMatrixTests(unittest.TestCase):
         for item in self.config["focused_settings"]:
             self.assertNotIn("scientific_plan", item["focused_cases"])
 
-
-if __name__ == "__main__":
-    unittest.main()
-

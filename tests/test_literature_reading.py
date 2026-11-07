@@ -359,7 +359,3 @@ class ReadingTests(unittest.TestCase):
                 self.assertNotIn("start_line", location)
                 self.assertFalse(reading._overlaps({**paper["reader"], "start_line": 4, "end_line": 4,
                     "pdf_page": location["pdf_page"], "quote": "Unrelated body text."}, location))
-
-
-if __name__ == "__main__":
-    unittest.main()

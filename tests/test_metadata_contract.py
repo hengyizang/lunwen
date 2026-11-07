@@ -153,7 +153,3 @@ class MetadataContractTests(unittest.TestCase):
             self.assertTrue(complete["estimated_cost_complete"])
             self.assertTrue(complete["ready_for_execution"])
             self.assertGreater(complete["input_tokens_estimated"], incomplete["input_tokens_estimated"])
-
-
-if __name__ == "__main__":
-    unittest.main()

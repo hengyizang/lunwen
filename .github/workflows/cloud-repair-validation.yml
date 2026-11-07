@@ -28,9 +28,9 @@ jobs:
         with:
           ref: main
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Verify pending owner repair and protected scope
         id: identity
         env:

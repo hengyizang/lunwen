@@ -146,7 +146,3 @@ class ScientificResultBindingTests(unittest.TestCase):
         folder.mkdir(exist_ok=True)
         acceptance.write(folder / "paper-facts.json", {})
         self.assertTrue(evidence.validate_scientific_bindings(self.project, "P01", "G5"))
-
-
-if __name__ == "__main__":
-    unittest.main()

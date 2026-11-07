@@ -415,7 +415,3 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.assertGreater(model_spend.read(self.project)["spent_cny"], 0)
         self.assertEqual(model_spend.read(self.project)["reservations"], {})
         self.assertEqual(model_runtime.ledger_entries(self.project)[-1]["cost_status"], "estimated_upper_bound")
-
-
-if __name__ == "__main__":
-    unittest.main()

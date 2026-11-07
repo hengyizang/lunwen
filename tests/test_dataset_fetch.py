@@ -67,7 +67,3 @@ class DatasetFetchTests(unittest.TestCase):
         manifest["version"] = ""
         self.assertTrue(any("version" in issue for issue in validate_manifest(manifest)))
 
-
-if __name__ == "__main__":
-    unittest.main()
-

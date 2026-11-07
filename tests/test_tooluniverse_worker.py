@@ -67,7 +67,3 @@ class ToolUniversePublicTests(unittest.TestCase):
             http_get.assert_called_once_with("https://rest.uniprot.org/uniprotkb/P12345.json", timeout=15, allow_redirects=False)
             self.assertEqual(json.loads(stdout.getvalue())["http_attempts"][0]["http_status"], 503)
             self.assertIn("retrieval failed", stderr.getvalue())
-
-
-if __name__ == "__main__":
-    unittest.main()

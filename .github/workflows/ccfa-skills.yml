@@ -17,11 +17,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
-      - name: Install only offline scientific validation dependencies
-        run: python -m pip install --disable-pip-version-check '.[reader,figures,research-quality]' PyYAML seaborn
+          python-version: "3.12"
+          packages: '[".[reader,figures,research-quality]", "PyYAML", "seaborn"]'
       - name: Install every original skill using the pinned official installer
         run: >-
           python third_party/codex-skill-installer/install-skill-from-github.py

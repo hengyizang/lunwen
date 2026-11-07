@@ -239,7 +239,3 @@ class ProviderIdentityTests(unittest.TestCase):
         self.assertEqual(self.checked()["status"], "fail")
         self.save_bib(url="https://arxiv.org/abs/2401.12345v2", extra=", eprint={2401.12345v1}")
         self.assertEqual(self.checked()["status"], "fail")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -348,7 +348,3 @@ class DynamicRoutingTests(unittest.TestCase):
         self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
         self.assertTrue(any("suspend" in item["reason"] for item in result["decision"]["excluded"]))
 
-
-if __name__ == "__main__":
-    unittest.main()
-

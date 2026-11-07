@@ -7,14 +7,14 @@ import argparse
 import hashlib
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as atomic_json, regular_file
+    from scripts.research_artifacts import write as atomic_json, regular_file, utc_now as now, sha as sha256_file
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import write as atomic_json, regular_file
+    from research_artifacts import write as atomic_json, regular_file, utc_now as now, sha as sha256_file
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,14 +36,6 @@ EVIDENCE_CATEGORIES = {"scope", "article_type", "audience", "practicality", "acc
 
 class JournalScreeningError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def canonical_hash(value: Any) -> str:

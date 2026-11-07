@@ -102,7 +102,3 @@ class AutomaticDataDiscoveryTests(unittest.TestCase):
                 providers=["zenodo"],
                 fetcher=fetcher,
             )
-
-
-if __name__ == "__main__":
-    unittest.main()

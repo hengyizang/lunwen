@@ -147,7 +147,3 @@ class LiteratureRoleBindingTests(unittest.TestCase):
         target = rows[0]["evidence_receipt_id"]
         self.assertTrue(all(next(r for r in item["routes"] if r["receipt_id"] == target)["role"] == "unclassified_candidate"
             for item in result["items"]))
-
-
-if __name__ == "__main__":
-    unittest.main()

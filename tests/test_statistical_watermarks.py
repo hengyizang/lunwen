@@ -158,7 +158,3 @@ class StatisticalWatermarkTests(unittest.TestCase):
                 self.assertGreaterEqual(result["result"]["scored_tokens"], 100)
                 self.assertEqual(bool(wm.validate_saved_report(self.project, "P01")), expected == "detected")
                 self.assertFalse(result["watermark_absence_verified"])
-
-
-if __name__ == "__main__":
-    unittest.main()

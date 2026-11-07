@@ -12,14 +12,13 @@ import json
 import re
 import shutil
 import zipfile
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, write
+    from scripts.research_artifacts import sha as sha256_file, write, utc_now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, write
+    from research_artifacts import sha as sha256_file, write, utc_now
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,10 +31,6 @@ URL_RE = re.compile(r"https://[^\s<>\"']+")
 
 class ScienceProImportError(RuntimeError):
     pass
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def _text(path: Path) -> tuple[str, str]:

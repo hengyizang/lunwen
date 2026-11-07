@@ -232,7 +232,3 @@ class ProductionAuxiliaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "requires explicit source attachments"):
                 task_router.run(Path(directory), "multimodal-inspection", "codekey-gemini", "Inspect supplied figure")
             paid_call.assert_not_called()
-
-
-if __name__ == "__main__":
-    unittest.main()

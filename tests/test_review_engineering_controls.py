@@ -110,7 +110,3 @@ class ReviewEngineeringControlsTests(unittest.TestCase):
                 self.assertFalse((Path(directory) / "blocked.zip").exists())
             venue.write_text('{"trial_only":false,"selection_status":"candidate"}', encoding="utf-8")
             self.assertEqual(submission_package.validate_selected_venue(project, "P01"), [])
-
-
-if __name__ == "__main__":
-    unittest.main()

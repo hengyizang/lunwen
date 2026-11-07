@@ -15,8 +15,10 @@ MAX_CONTROL_CYCLES = 12
 MAX_STALLED_CYCLES = 2
 
 
-def read(path: Path, default=None):
-    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else default
+try:
+    from scripts.research_artifacts import read_optional as read
+except ImportError:
+    from research_artifacts import read_optional as read
 
 
 def digest(value) -> str:

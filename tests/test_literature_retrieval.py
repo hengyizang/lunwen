@@ -229,7 +229,3 @@ class LiteratureRetrievalTests(unittest.TestCase):
         for spec in cases:
             with self.subTest(spec=spec), self.assertRaises(ValueError):
                 evidence_retrieval.retrieve(self.project, spec)
-
-
-if __name__ == "__main__":
-    unittest.main()

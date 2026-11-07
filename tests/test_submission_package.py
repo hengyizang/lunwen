@@ -360,7 +360,3 @@ class SubmissionPackageTests(unittest.TestCase):
             ):
                 with self.assertRaises(researchctl.ResearchCtlError):
                     build_package("demo-study", "P01", root / "blocked.zip")
-
-
-if __name__ == "__main__":
-    unittest.main()

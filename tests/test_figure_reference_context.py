@@ -162,7 +162,3 @@ class FigureReferenceContextTests(unittest.TestCase):
             self.assertEqual((fresh / relative).read_bytes(), data)
         for relative in caches:
             self.assertFalse((fresh / relative).exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

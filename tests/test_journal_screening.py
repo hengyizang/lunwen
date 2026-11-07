@@ -67,7 +67,3 @@ class JournalScreeningTests(unittest.TestCase):
             registry["papers"][0]["candidates"][0]["name"] = "Changed"
             registry_path.write_text(json.dumps(registry), encoding="utf-8")
             self.assertTrue(validate_saved_report(project))
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -354,7 +354,3 @@ class FigureStoryTests(unittest.TestCase):
             "manuscript_alignment": "not_assessed", "semantic_alignment_requires_human_review": False, "semantic_alignment_requires_independent_review": True})
         self.assertEqual(editable_figures.verify_export(self.project,
             self.project/"papers/P01/figures/alternate.editable-export.json"), report)
-
-
-if __name__ == "__main__":
-    unittest.main()

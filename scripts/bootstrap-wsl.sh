@@ -97,6 +97,7 @@ if [[ -x ".venv/bin/python" ]]; then
   runtime_python=".venv/bin/python"
 fi
 
+"$runtime_python" -m scripts.ccfa_runtime bootstrap
 "$runtime_python" scripts/check_env.py --mode api --soft
 "$runtime_python" -m unittest discover -s tests -v
 "$runtime_python" scripts/validate_repo.py
@@ -107,7 +108,7 @@ if [[ "$install_kdense" == true ]]; then
 fi
 
 echo "Bootstrap checks complete."
-echo "Visual dashboard: bash scripts/start-dashboard.sh"
+echo "Cloud project controls: follow docs/CLOUD-RESEARCH.md"
 echo "API-first CLI: follow docs/UUAPI-CC-SWITCH.md"
 echo "Optional local prose checks: bash scripts/bootstrap-wsl.sh --with-writing-tools"
 echo "Executable power analysis: bash scripts/bootstrap-wsl.sh --with-research-quality-tools"

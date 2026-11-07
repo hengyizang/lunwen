@@ -127,7 +127,3 @@ class CLICleanReviewTests(unittest.TestCase):
         write(project / "state/run.json", state)
         self.assertTrue(review_receipts.validate_gate(project, "G5", "P01"),
                         "A scientific-writing audit cannot stand in for the submission review")
-
-
-if __name__ == "__main__":
-    unittest.main()

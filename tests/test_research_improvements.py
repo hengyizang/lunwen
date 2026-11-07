@@ -373,7 +373,3 @@ class JournalAndMethodTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     method_tools.execute(project, "method", ["unknown"])
                 self.assertEqual(runner.call_count, 1)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -3,6 +3,7 @@ name: Source-linked figure workbench
 on:
   pull_request:
     paths:
+      - '.github/actions/**'
       - 'scripts/figure*'
       - 'scripts/editable_figures.py'
       - 'scripts/research_diagrams.py'
@@ -22,6 +23,7 @@ on:
   push:
     branches: [main]
     paths:
+      - '.github/actions/**'
       - 'scripts/figure*'
       - 'scripts/editable_figures.py'
       - 'integrations/*figure*'
@@ -49,12 +51,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
-          cache: pip
-      - name: Install fixed CPU retrieval and editable document runtime
-        run: python -m pip install --disable-pip-version-check '.[figures,reader,figure-retrieval]'
+          python-version: "3.12"
+          packages: '[".[figures,reader,figure-retrieval]"]'
       - name: Install independent presentation renderer
         run: |
           # The hosted Azure mirror stalled this package download until the job timed out.

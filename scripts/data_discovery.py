@@ -10,7 +10,6 @@ import json
 import re
 import sys
 import urllib.parse
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -38,8 +37,10 @@ class DiscoveryError(RuntimeError):
     pass
 
 
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+try:
+    from scripts.research_artifacts import utc_now as now
+except ImportError:
+    from research_artifacts import utc_now as now
 
 
 def _text(value: Any) -> str | None:

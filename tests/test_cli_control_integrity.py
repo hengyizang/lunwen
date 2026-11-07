@@ -147,7 +147,3 @@ class CliControlIntegrityTests(unittest.TestCase):
         with self.assertRaises(autopilot.AutopilotError):
             autopilot.protected_control_snapshot("demo")
         self.assertEqual(outside.read_bytes(), self.receipt_bytes)
-
-
-if __name__ == "__main__":
-    unittest.main()

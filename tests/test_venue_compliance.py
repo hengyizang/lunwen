@@ -74,7 +74,3 @@ class VenueComplianceTests(unittest.TestCase):
         self.assertEqual(report["status"], "pass")
         self.assertEqual(report["compile"]["status"], "not_applicable")
         self.assertFalse(report["compile"]["required"])
-
-
-if __name__ == "__main__":
-    unittest.main()

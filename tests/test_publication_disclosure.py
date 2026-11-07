@@ -247,7 +247,3 @@ class PublicationDisclosureTests(unittest.TestCase):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "0"}):
             with self.assertRaisesRegex(ValueError, "cloud"):
                 disclosure.refresh(self.project, "P01")
-
-
-if __name__ == "__main__":
-    unittest.main()

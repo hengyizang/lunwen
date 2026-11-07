@@ -218,7 +218,3 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertNotIn("critical_tests",exploration)
             self.assertNotIn("clean_room_run_ids",exploration)
             self.assertIn("preserve every failed/adverse attempt",exploration)
-
-
-if __name__ == "__main__":
-    unittest.main()

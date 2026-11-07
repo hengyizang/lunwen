@@ -186,7 +186,3 @@ class OperatingConstraintsTests(unittest.TestCase):
                 self.decide()
         after = {path: path.read_bytes() for path in self.project.rglob("*") if path.is_file()}
         self.assertEqual(after, before)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -174,7 +174,3 @@ class CloudJobTests(unittest.TestCase):
                 self.assertEqual((project / "state" / "run.json").read_text(), '{"stage":"intake"}')
                 cloud_job.git("worktree", "remove", "--force", str(worktree))
                 self.assertIn("refs/heads/cloud-state/my-phd", git("ls-remote", "origin", "refs/heads/cloud-state/my-phd"))
-
-
-if __name__ == "__main__":
-    unittest.main()

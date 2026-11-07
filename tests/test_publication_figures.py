@@ -97,7 +97,3 @@ class PublicationFigureTests(unittest.TestCase):
         from scripts.publication_figures import validate_spec
         with self.assertRaises(FigureSpecError):
             validate_spec(spec)
-
-
-if __name__ == "__main__":
-    unittest.main()

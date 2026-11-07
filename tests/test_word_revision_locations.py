@@ -313,7 +313,3 @@ class RevisionLocationTests(unittest.TestCase):
             self.assertEqual(revision_trace.validate_saved_report(paper), [])
             self.matrix(paper, "Discussion")
             self.assertTrue(revision_trace.validate_saved_report(paper))
-
-
-if __name__ == "__main__":
-    unittest.main()

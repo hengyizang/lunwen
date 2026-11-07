@@ -700,7 +700,3 @@ class ApiFirstTests(unittest.TestCase):
             (root/"projects"/"demo"/"state"/"run.json").write_text(json.dumps({"stage":"intake","gate":"G0","status":"awaiting_approval"}),encoding="utf-8")
             with patch.object(api_orchestrator,"ROOT",root),self.assertRaisesRegex(ValueError,"awaiting_work"):
                 api_orchestrator.require_current_stage("demo","intake")
-
-
-if __name__ == "__main__":
-    unittest.main()

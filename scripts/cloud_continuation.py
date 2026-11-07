@@ -7,7 +7,6 @@ the original owner confirmation, exact constraints and the cumulative ledger.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import os
@@ -22,7 +21,7 @@ from typing import Any, Mapping
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.research_artifacts import strict_json
+from scripts.research_artifacts import strict_json, sha as _sha
 from scripts import ai_providers, intake_validation, model_spend, researchctl
 
 POLICY = Path("state/continuation.json")
@@ -110,10 +109,6 @@ def _object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ContinuationError(f"control file must contain an object: {path.name}")
     return value
-
-
-def _sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def configuration_errors(environment: Mapping[str, str]) -> list[str]:

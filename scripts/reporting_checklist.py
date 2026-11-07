@@ -3,18 +3,16 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import paper_audit_cli
+    from scripts.research_artifacts import paper_audit_cli, utc_now as now, sha as sha256_file
     from scripts.citation_audit import manuscript_digest
     from scripts.ref_verify_adapter import canonical_manuscript
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import paper_audit_cli
+    from research_artifacts import paper_audit_cli, utc_now as now, sha as sha256_file
     from citation_audit import manuscript_digest  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
 
@@ -25,14 +23,6 @@ PROJECTS_ROOT = ROOT / "projects"
 
 class ReportingChecklistError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def load_input(path: Path) -> dict[str, Any]:

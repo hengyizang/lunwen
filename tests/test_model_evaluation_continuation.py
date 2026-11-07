@@ -293,7 +293,3 @@ class ModelEvaluationContinuationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "outstanding"):
             trial._legacy_budget(self.budget)
 
-
-if __name__ == "__main__":
-    unittest.main()
-

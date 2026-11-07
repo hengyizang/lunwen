@@ -498,7 +498,3 @@ class ResearchCtlTests(unittest.TestCase):
         )
         errors = researchctl.gate_errors("test-phd", "G3")
         self.assertTrue(any("omit planned runs: run-2, run-3" in error for error in errors))
-
-
-if __name__ == "__main__":
-    unittest.main()

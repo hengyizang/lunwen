@@ -40,8 +40,10 @@ class AutopilotError(RuntimeError):
     pass
 
 
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+try:
+    from scripts.research_artifacts import utc_now as now
+except ImportError:
+    from research_artifacts import utc_now as now
 
 
 def run_token() -> str:

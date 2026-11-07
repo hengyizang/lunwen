@@ -217,7 +217,3 @@ class FigureGalleryTests(unittest.TestCase):
             row["id"] = unsafe
             with self.assertRaises(ValueError):
                 gallery.normalize_figures([row], self.lock)
-
-
-if __name__ == "__main__":
-    unittest.main()

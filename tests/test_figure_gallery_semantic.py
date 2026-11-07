@@ -44,7 +44,3 @@ class SemanticFigureTests(unittest.TestCase):
                              "papers/P01/figures/main.editable-export.json"):
                 self.assertTrue(artifact_ownership.executor_owned(project, relative))
             self.assertFalse(artifact_ownership.executor_owned(project, "papers/P01/figures/main.spec.json"))
-
-
-if __name__ == "__main__":
-    unittest.main()

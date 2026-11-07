@@ -2,6 +2,7 @@ name: Literature completion acceptance
 on:
   pull_request:
     paths:
+      - '.github/actions/**'
       - 'scripts/literature*'
       - 'scripts/evidence_retrieval.py'
       - 'tests/test_literature*'
@@ -26,9 +27,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup-runtime
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Install CPU and PDF runtime without provider credentials
         run: |
           python -m pip install --disable-pip-version-check '.[reader,figure-retrieval]' 'paper-qa==2026.08.12' 'Pillow>=10,<13' 'reportlab>=4,<5'

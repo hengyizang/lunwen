@@ -102,7 +102,3 @@ class FigureAccessibilityTests(unittest.TestCase):
                 math_label = next(item for item in row["label_checks"] if item["role"] == "xlabel")
                 self.assertTrue(math_label["glyphs_verified"])
                 self.assertFalse(math_label["mathematical_layout_verified"])
-
-
-if __name__ == "__main__":
-    unittest.main()

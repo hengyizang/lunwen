@@ -302,7 +302,3 @@ class JudgmentSupportTests(unittest.TestCase):
         packet = tasks.prepare_panel_task(fixture.project, "citation_crosscheck", "program/citation-original.json", paper_id="P01")
         self.assertIn("The original PDF reports a controlled method.", packet["packet"]["source_text"])
         self.assertIn("literature/metadata/W1.json", {row["path"] for row in packet["sources"]})
-
-
-if __name__ == "__main__":
-    unittest.main()

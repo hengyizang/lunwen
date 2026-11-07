@@ -28,10 +28,10 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, utc_now
     from scripts.network_safety import fetch_bytes
 except ImportError:
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, utc_now
     from network_safety import fetch_bytes  # type: ignore
 
 
@@ -84,10 +84,6 @@ RETRY_SCHEDULES = {
 
 class LiteratureEvidenceError(RuntimeError):
     """Raised when evidence cannot be produced or verified safely."""
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def sha256_bytes(payload: bytes) -> str:

@@ -683,7 +683,11 @@
         "scripts/jcr_verify.py",
         "docs/CODEBASE-AUDIT-2026-11-07.md",
         "scripts/output_provenance.py",
-        ".github/workflows/completeness-repairs.yml"
+        ".github/workflows/completeness-repairs.yml",
+        "scripts/research_operations.py",
+        ".github/actions/setup-runtime/action.yml",
+        "scripts/ccfa_runtime.py",
+        "scripts/cloud_checkpoint.py"
       ],
       "tests": [
         "tests/test_test_suites.py",
@@ -692,9 +696,12 @@
         "tests/test_cloud_job.py",
         "tests/test_v1_guards.py",
         "tests/test_literature_roles.py",
-        "tests/test_output_provenance.py"
+        "tests/test_output_provenance.py",
+        "tests/test_research_task_routes.py",
+        "tests/test_cloud_checkpoint.py",
+        "tests/test_ccfa_runtime.py"
       ],
-      "remaining": "Measured from f8a1492: production Python 76815 to 75763 lines (-1052; 1245 added, 2297 removed). Compared with earlier 3e9f56b, production remains +1372 lines because research capabilities were added; no cumulative 40–50% saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules. Seven deterministic manifest readers now share exact inventory, implementation, request and content-hash validation. JCR recording preserves actual Q1–Q4/low-IF/historical metadata, with target differences and unknown current rankings as observations. The actual compendium Git baseline 7765bd5 has 71743 production lines: current production is +4020, so an overall compendium-baseline reduction is also not claimed. Historical working-tree counts contain unattached changes. The cloud transport schema now derives action fields and human selectors from existing native control tables; repository validation rejects stale exports. Its formerly missing 12 runtime operations and optional legacy paid annotation are covered without changing models, budget authority or actual stage inputs. Two duplicated atomic JSON writers now call the existing shared implementation. The owner-retired automatic licence/rights-review module and its seven obsolete feature tests have been removed; source/version acquisition, input integrity and archive tests replace the retired gate. The 2026-11-07 repository-wide audit removed one retired discovery module, five unused helper functions, unused imports/assignments and two duplicated JSON writers; production decreases by 181 lines from a096dfd. Batch provenance reads one fresh registry per operation (600-file synthetic median 0.439753 to 0.036619 seconds). Native TeX acceptance retains eight cases and removes 218 duplicate executions. Large dispatchers, directory traversal, cross-version CI policy, shared test fixtures and pinned resource distribution remain explicit refactoring candidates, not completed savings.",
+      "remaining": "Structural consolidation from 887ef94 is measured by category in docs/CODEBASE-AUDIT-2026-11-07.md. Shared operation/parameter/stage dispatch, elementary helpers, pruned scans, per-call gate state and CI setup replace duplicates. The cloud-only project retires the parallel local dashboard and its exclusive tests; native CLI, cloud controls and scientific assertions remain. The 291 upstream CCFA functional files become pinned, hash-verified setup dependencies; all 17 native skills, source inventories and licenses remain. Dependency distribution savings are reported separately from native production code. Python 3.12 retains the complete fast+slow suite on ordinary changes; 3.10/3.13 use compatibility samples and retain full periodic/manual/repair validation. Dedicated Docker/Lean/TeX/SDK acceptance remains. Models/routes, cumulative totals, human G1/G2 decisions, project state and experiment evidence are unchanged. This engineering refactor does not establish scientific completion or remove every possible redundancy.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ],
@@ -735,6 +742,11 @@
         "scripts/rebuttal_triage.py": {
           "action": "retained_observation",
           "reason": "Optional source-bound response preparation; genuine reviewer originals remain protected."
+        },
+        "scripts/dashboard.py": {
+          "action": "removed",
+          "replacement": "docs/CLOUD-RESEARCH.md",
+          "reason": "Parallel local HTTP/UI control plane retired for the cloud-only project; existing owner cloud controls and native CLI retained."
         }
       }
     },

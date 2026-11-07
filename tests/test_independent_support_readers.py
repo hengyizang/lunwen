@@ -353,7 +353,3 @@ class IndependentSupportReaderTests(unittest.TestCase):
         next(row for row in broken["inputs"] if row["path"] == "experiments/papers/P01/datasets.jsonl")["sha256"] = "0" * 64
         with self.assertRaisesRegex(ValueError, "every frozen source"):
             empirical.preflight_run(case.project, broken)
-
-
-if __name__ == "__main__":
-    unittest.main()

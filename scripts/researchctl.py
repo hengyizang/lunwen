@@ -2,7 +2,6 @@
 """Human-gated Doctoral Research OS state manager with publication-quality floors."""
 from __future__ import annotations
 import argparse,hashlib,json,os,re,sys
-from datetime import datetime,timezone
 from pathlib import Path
 from typing import Iterable
 ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULTS_PATH=ROOT/"config/defaults.json"
@@ -10,10 +9,9 @@ if __package__ in {None,""}:sys.path.insert(0,str(ROOT))
 STAGES=[{"name":"intake","gate":"G0"},{"name":"topic-intelligence","gate":"G1"},{"name":"paper-architecture","gate":"G2"},{"name":"experiment-design","gate":"G3"},{"name":"experiment-execution","gate":"G4"},{"name":"writing-and-review","gate":"G5"},{"name":"submission-ready","gate":None}]
 SLUG_RE=re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$"); PAPER_RE=re.compile(r"^P[0-9]{2}$")
 from scripts.paper_execution import artifact_path as experiment_path
-from scripts.research_artifacts import write as write_json
+from scripts.research_artifacts import write as write_json, utc_now as now
 
 class ResearchCtlError(RuntimeError): pass
-def now(): return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 def read_json(path):
     try:return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:raise ResearchCtlError(f"Missing file: {path}") from exc
@@ -178,19 +176,20 @@ def gate_errors(slug,gate,*,warnings=None):
     project=project_dir(slug);errors=[]
     from scripts.paper_execution import papers as selected_papers
     if gate is None:return errors
+    state=read_json(state_path(slug))
     if gate in {"G2","G5"}:
         from scripts.research_design import validate_portfolio_evidence
-        pid=read_json(state_path(slug)).get("active_paper") if gate=="G5" else None
+        pid=state.get("active_paper") if gate=="G5" else None
         errors.extend(validate_portfolio_evidence(project,pid,gate=gate))
     if gate in {"G1","G2","G5"}:
         from scripts.innovation_screening import validate_novelty_gate
         matrix=load_nonempty_json(project/"program/novelty-claim-matrix.json",errors)
         originality=load_nonempty_json(project/"program/originality-audit.json",errors)
         if matrix and originality:
-            pid=read_json(state_path(slug)).get("active_paper") if gate=="G5" else None
+            pid=state.get("active_paper") if gate=="G5" else None
             errors.extend(validate_novelty_gate(project,matrix,originality,gate,pid))
     from scripts.scientific_scope import validate as validate_scientific_scope
-    errors.extend(validate_scientific_scope(project,gate,read_json(state_path(slug)).get("active_paper")))
+    errors.extend(validate_scientific_scope(project,gate,state.get("active_paper")))
     from scripts.research_phase import exploratory
     try:
         exploring = gate in {"G3", "G4"} and exploratory(project)
@@ -198,25 +197,23 @@ def gate_errors(slug,gate,*,warnings=None):
         return errors + ["research phase: " + str(exc)]
     if gate in {"G3","G4","G5"} and not exploring:
         from scripts.experiment_evidence import validate_scientific_bindings
-        state=read_json(state_path(slug))
         selected=[state.get("active_paper")] if gate=="G5" else selected_papers(project,gate)
         for pid in selected:errors.extend(validate_scientific_bindings(project,pid,gate))
     if gate in {"G3","G4","G5"}:
         from scripts.empirical_workflow import gate_errors as empirical_errors
         if not exploring:
-            errors.extend(empirical_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
+            errors.extend(empirical_errors(project,gate,state.get("active_paper")))
         from scripts.primary_recovery import gate_errors as primary_recovery_errors
-        errors.extend(primary_recovery_errors(project,gate,read_json(state_path(slug)).get("active_paper")))
+        errors.extend(primary_recovery_errors(project,gate,state.get("active_paper")))
     if gate in {"G2","G3","G4","G5"}:
         from scripts.research_identity import validate as validate_research_identity
-        state=read_json(state_path(slug))
         selected=[state.get("active_paper")] if gate=="G5" else selected_papers(project,gate)
         for paper_id in selected:errors.extend(validate_research_identity(project,paper_id,"G3" if exploring else gate))
     if gate != "G0":
         from scripts.research_extensions import gate_errors as extension_errors
         errors.extend(f"research extensions: {x}" for x in extension_errors(project))
         from scripts.research_increments import gate_errors as increment_errors
-        errors.extend(increment_errors(project, gate, read_json(project/"state/run.json").get("active_paper")))
+        errors.extend(increment_errors(project, gate, state.get("active_paper")))
     if gate=="G0":
         c=load_nonempty_json(project/"intake"/"constraints.json",errors)
         if c:
@@ -274,7 +271,7 @@ def gate_errors(slug,gate,*,warnings=None):
         except ImportError as exc:errors.append(f"hypothesis validator unavailable: {exc}")
         quality_errors(project,gate,errors,warnings=warnings);independent_audit_errors(project,gate,errors,warnings=warnings);return errors
     if gate=="G2":
-        paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
+        paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
         venue_observations=[]
         venue_registry=load_nonempty_json(project/"program"/"venue-candidates.json",venue_observations);venue_names_by_paper={}
         if venue_registry:
@@ -366,7 +363,6 @@ def gate_errors(slug,gate,*,warnings=None):
                 plan_runs={str(run.get("run_id")):run for run in run_values if isinstance(run,dict) and run.get("run_id")}
                 manifest_ids={str(item.get("dataset_id")) for item in datasets if item.get("dataset_id")}
                 paper_dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
-                state=read_json(state_path(slug))
                 if len(paper_dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(paper_dirs)}")
                 paper_dirs=[p for p in paper_dirs if p.name in selected_papers(project,gate)]
                 for paper_dir in paper_dirs:
@@ -472,7 +468,6 @@ def gate_errors(slug,gate,*,warnings=None):
         paper_observations(project,pid,warnings)
         if requires_submission(project,paper_id=pid):
             from scripts.submission_package import submission_checks,submission_check_binding
-            state=read_json(state_path(slug))
             approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==pid),None)
             sealed=(state.get("status")=="approved" and f"G5:{pid}" in state.get("approved_gates",[])
                     and approval and approval.get("submission_checks_sha256")

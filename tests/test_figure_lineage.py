@@ -140,6 +140,3 @@ class FigureLineageTests(unittest.TestCase):
             self.assertEqual(row["source_lineage"]["runs"][0]["plan_sha256"],sha(self.project/"experiments/plan.json"))
             self.assertEqual(row["inputs"],[{"path":"results/plot.csv","sha256":sha(self.project/"results/plot.csv")}])
         self.assertEqual(figure_provenance.validate_figure_provenance(self.project,paper),[])
-
-
-if __name__=="__main__":unittest.main()

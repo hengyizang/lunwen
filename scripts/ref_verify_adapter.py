@@ -11,15 +11,14 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, regular_file, write as atomic_write
+    from scripts.research_artifacts import sha as sha256_file, regular_file, write as atomic_write, utc_now as now
     from scripts.citation_audit import manuscript_digest, normalize_doi
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, regular_file, write as atomic_write
+    from research_artifacts import sha as sha256_file, regular_file, write as atomic_write, utc_now as now
     from citation_audit import manuscript_digest, normalize_doi  # type: ignore
 
 
@@ -35,10 +34,6 @@ ALLOWED_SOURCES = {"auto", "crossref", "openalex", "semantic-scholar", "pubmed"}
 
 class RefVerifyAdapterError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def canonical_manuscript(paper: Path, *, error_type=RefVerifyAdapterError) -> Path:

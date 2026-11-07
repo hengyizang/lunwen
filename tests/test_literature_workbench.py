@@ -390,7 +390,3 @@ class NativeReaderTests(WorkbenchFixture):
         paper["reader"] = native["reader"]
         with self.assertRaisesRegex(ValueError, "original PDF"):
             workbench.validate_card(self.project, paper, {"schema_version": "1.0", "paper_id": "text", "fields": {}})
-
-
-if __name__ == "__main__":
-    unittest.main()

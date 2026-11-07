@@ -187,7 +187,3 @@ class LiteratureCloudJobTests(unittest.TestCase):
         failure = json.loads((self.runtime / "cloud-artifact/failure.json").read_text())
         self.assertTrue(failure["checkpoint_persisted"])
         self.assertIn("source changed", failure["diagnostic"])
-
-
-if __name__ == "__main__":
-    unittest.main()

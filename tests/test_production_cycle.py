@@ -192,7 +192,3 @@ class ProductionCycleTests(unittest.TestCase):
                 patch.object(ai_providers, "call", side_effect=self.transport) as post):
             self.run_cycle()
         self.assertEqual(post.call_count, 5)
-
-
-if __name__ == "__main__":
-    unittest.main()

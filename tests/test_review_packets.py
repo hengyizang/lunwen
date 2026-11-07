@@ -191,7 +191,3 @@ class ReviewPacketTests(unittest.TestCase):
             self.assertEqual(report["status"], "pass")
             self.assertFalse(report["packets"][0]["visual_checklist_passed_by_human"])
             self.assertEqual(len(report["packets"][0]["confirmations"][0]["attempts"]), 2)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -5,24 +5,18 @@ the declared six-paper portfolio; existing Q1/Q2 ambitions remain planning obser
 replace an advisor, statistician, domain expert, data steward or named human
 approver.
 
-## Recommended visual workflow
+## Cloud workflow
 
-Start the dashboard:
-
-```bash
-bash scripts/bootstrap-wsl.sh --with-research-quality-tools
-bash scripts/start-dashboard.sh
-```
-
-The quality panel reports six independent evidence states: novelty matrix, data
-quality, power, preregistration, baseline reproduction and clean-room
-reproduction. The ordinary `gate-check` remains authoritative and lists the
-exact missing or stale artifact.
+Use the owner controls in [CLOUD-RESEARCH.md](CLOUD-RESEARCH.md) to inspect the
+novelty matrix, data quality, power, preregistration, baseline reproduction and
+clean-room reproduction. The native `gate-check` remains authoritative and lists
+the exact missing or stale artifact. The retired local dashboard is described
+in [DASHBOARD.md](DASHBOARD.md).
 
 ## G1: novelty and doctoral contribution
 
 G1 literature evidence must come from executed retrievals, not model-authored
-search summaries. Use the dashboard or `scripts/literature_evidence.py` to query
+search summaries. Use the cloud literature controls or `scripts/literature_evidence.py` to query
 OpenAlex, Crossref, Semantic Scholar, arXiv, Europe PMC, DBLP or HAL, with
 SerpApi Google Scholar available as an explicit quota-limited supplemental source. The
 control plane stores the exact response bytes, a normalized work list and both

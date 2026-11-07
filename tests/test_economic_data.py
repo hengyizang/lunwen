@@ -290,7 +290,3 @@ class EconomicDataTests(unittest.TestCase):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
             with self.assertRaisesRegex(ValueError, "cloud executor"):
                 economic.execute(self.project, "fixture", fetcher=self.fred)
-
-
-if __name__ == "__main__":
-    unittest.main()

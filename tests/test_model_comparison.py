@@ -703,7 +703,3 @@ class ComparisonCloudStateTests(unittest.TestCase):
             with self.assertRaisesRegex(comparison.ComparisonError, "readback_mismatch"):
                 state.save(ledger)
         self.assertEqual(state.expected_sha, self.OLD_SHA)
-
-
-if __name__ == "__main__":
-    unittest.main()

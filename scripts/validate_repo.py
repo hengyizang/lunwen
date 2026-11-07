@@ -400,7 +400,9 @@ def main() -> int:
         for marker in (
             "python scripts/run_tests.py fast",
             "python scripts/run_tests.py ${{ matrix.suite }}",
-            "suite: all", "suite: slow", "needs: fast-tests",
+            "&& 'all' || 'compat'", "suite: slow", "needs: fast-tests",
+            "github.event_name == 'schedule'", "inputs.repair_ref != ''",
+            "uses: ./.github/actions/setup-runtime",
             "python -m compileall -q scripts tests",
             "python scripts/validate_repo.py",
             "scripts/live_acceptance.py literature",

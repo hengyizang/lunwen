@@ -259,7 +259,3 @@ class ResearchIdentityTests(unittest.TestCase):
             self.assertEqual(identity["design_family"], "unassigned")
         self.assertEqual(read(project / "state/run.json")["approved_gates"], [])
         self.assertEqual(read(project / "state/model-spend-control.json")["authorized_ceiling_cny"], 0)
-
-
-if __name__ == "__main__":
-    unittest.main()

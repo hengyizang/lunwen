@@ -5,7 +5,6 @@ Secrets/private paths are never archived. Missing/expired artifacts fail closed.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
@@ -16,6 +15,7 @@ import tempfile
 import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
+from scripts.research_artifacts import sha, walk_files
 
 MANIFEST = "state/cloud-checkpoint.json"
 DIRECTORIES = {"state", "intake", "program", "evidence", "data", "experiments", "claims", "analysis",
@@ -43,14 +43,6 @@ SECRET_NAMES |= {"DR_OS_CHEAPAI_GPT_PRO_KEY", "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY",
 
 class CheckpointError(RuntimeError):
     pass
-
-
-def sha(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def relative(value: str) -> str:
@@ -98,7 +90,8 @@ def inventory(project: Path) -> list[dict]:
     if project.is_symlink() or not project.is_dir():
         raise CheckpointError("project must be a regular directory")
     entries, used_git, used_archive = [], 0, 0
-    paths = sorted(project.rglob("*"), key=lambda p: (p.relative_to(project).parts[0] != "state", str(p)))
+    paths = sorted(walk_files(project, prune=lambda relative: relative != ".cache" and excluded(relative + "/")),
+                   key=lambda p: (p.relative_to(project).parts[0] != "state", str(p)))
     for path in paths:
         rel = path.relative_to(project).as_posix()
         if excluded(rel) or not path.is_file():

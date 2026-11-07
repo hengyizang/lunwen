@@ -134,7 +134,3 @@ class AuxiliaryJobTests(unittest.TestCase):
                 auxiliary_job.run(self.project,manifest,"evidence/auxiliary/changed.json",execute=True)
         execute.assert_not_called()
         self.assertFalse((self.project/"evidence/auxiliary/changed.json").exists())
-
-
-if __name__=="__main__":
-    unittest.main()

@@ -437,7 +437,3 @@ class ClarifiedCloudStateTests(unittest.TestCase):
                     with self.assertRaises((gateway_trial.TrialError, trial.ClarifiedError)):
                         state.save(ledger)
                 self.assertEqual(state.expected_sha, "a" * 40)
-
-
-if __name__ == "__main__":
-    unittest.main()

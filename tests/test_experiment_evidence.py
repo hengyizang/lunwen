@@ -351,7 +351,3 @@ class ExperimentEvidenceTests(unittest.TestCase):
         report["comparisons"][0]["estimate"] = 10000
         acceptance.write(self.project / "papers/P01" / evidence.REPORT, report)
         self.assertIn("stale", "; ".join(evidence.validate_report(self.project, "P01")))
-
-
-if __name__ == "__main__":
-    unittest.main()
