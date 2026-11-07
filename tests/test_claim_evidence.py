@@ -110,6 +110,59 @@ class ClaimEvidenceTests(unittest.TestCase):
         with patch.object(tasks, "judgment_responses", side_effect=ValueError("protected source is stale")):
             self.assertIn("stale", tasks.integrity_errors(self.project, "P01")[0])
 
+    def test_final_submission_needs_current_full_text_judgments_for_every_cited_key(self):
+        self.assertEqual(tasks.integrity_errors(self.project, "P01"), [])
+        self.assertTrue(any("covering cited keys: known" in issue
+            for issue in tasks.integrity_errors(self.project, "P01", require_support=True)))
+        request = "program/claim-evidence.json"
+        write(self.project / request, self.spec)
+        write(self.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+            "request_file": request, "paper_id": "P01", "stages": ["writing-and-review"]}]})
+        self.assertTrue(any("unverified or insufficient: C0" in issue
+            for issue in tasks.integrity_errors(self.project, "P01", require_support=True)))
+        for outcome in claims.OUTCOMES:
+            with self.subTest(outcome=outcome), patch.object(tasks, "judgment_responses", return_value=[self.response(outcome)]):
+                errors = tasks.integrity_errors(self.project, "P01", require_support=True)
+                self.assertEqual(not errors, outcome == "supports", errors)
+        with (self.paper / "references.bib").open("a", encoding="utf-8") as target:
+            target.write('\n@article{unverified,doi={10.1000/other}}')
+        with (self.paper / "main.tex").open("a", encoding="utf-8") as target:
+            target.write(r"An additional source claim.\cite{unverified}")
+        with patch.object(tasks, "judgment_responses", return_value=[self.response("supports")]):
+            self.assertTrue(any("covering cited keys: unverified" in issue
+                for issue in tasks.integrity_errors(self.project, "P01", require_support=True)))
+
+    def test_claim_task_reuses_domain_panel_by_default_without_exposing_other_views(self):
+        request = "program/claim-evidence.json"
+        write(self.project / request, self.spec)
+        write(self.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+            "request_file": request, "paper_id": "P01", "stages": ["writing-and-review"]}]})
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("reuse the existing panel")):
+            domain = tasks.selected_context(self.project, "writing-and-review", "P01", seat="domain")
+            editorial = tasks.selected_context(self.project, "writing-and-review", "P01", seat="editorial")
+        self.assertEqual(len(domain["tasks"]), 1)
+        self.assertEqual(domain["tasks"][0]["operation"], "claim_evidence")
+        self.assertEqual(editorial["tasks"], [])
+
+    def test_original_https_source_without_doi_uses_the_same_rights_and_support_checks(self):
+        url = "https://primary.example.org/open-book"
+        self.fixture.paper["url"] = url
+        self.fixture.save_config()
+        record(self.project, [self.project / wb.CONFIG], "scripts/literature_registration.py")
+        wb.build(self.project)
+        (self.paper / "references.bib").write_text('@book{known,url={' + url + '}}', encoding="utf-8")
+        packet = claims.prepare(self.project, self.spec)
+        self.assertEqual(packet["claims"][0]["doi"], "")
+        self.assertEqual(packet["claims"][0]["source_identity_url"], url)
+        self.assertTrue(packet["claims"][0]["full_text_ready"])
+        self.assertEqual(claims.assess(self.project, packet, [self.response("supports")])["claims"][0]["outcome"], "supports")
+        (self.paper / "references.bib").write_text('@book{known,url={https://other.example.org/book}}', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "source DOI/URL differs"):
+            claims.prepare(self.project, self.spec)
+        (self.paper / "references.bib").write_text('@book{known,title={An unidentified source}}', encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "original HTTPS source URL"):
+            claims.prepare(self.project, self.spec)
+
     def test_later_human_sample_does_not_leak_into_or_invalidate_protected_model_judgment(self):
         self.spec["sample_labels"] = "evidence/annotations/human-labels.json"
         write(self.project / "state/run.json", {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"})
@@ -170,7 +223,7 @@ class ClaimEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate claims"):
             claims.prepare(self.project, bad)
         (self.paper / "references.bib").write_text('@article{known,doi={10.1000/other}}', encoding="utf-8")
-        with self.assertRaisesRegex(ValueError, "DOI differs"):
+        with self.assertRaisesRegex(ValueError, "DOI/URL differs"):
             claims.prepare(self.project, self.spec)
 
     def test_fifteen_percent_sample_is_reproducible_and_needs_actual_labels(self):

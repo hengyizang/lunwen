@@ -85,7 +85,7 @@ def selected_context(project: Path, stage: str, paper_id: str | None = None, *, 
     for row in _selections(project):
         if stage not in row["stages"] or (paper_id is not None and row.get("paper_id") and row["paper_id"] != paper_id):
             continue
-        if seat is not None and seat not in row.get("panel_views", []):
+        if seat is not None and seat not in row.get("panel_views", ["domain"] if row["operation"] == "claim_evidence" else []):
             continue
         operation = row["operation"]
         if operation in seen:
@@ -101,9 +101,22 @@ def selected_context(project: Path, stage: str, paper_id: str | None = None, *, 
         "hidden_paths": sorted(excluded_context_paths(project))}
 
 
-def integrity_errors(project: Path, paper_id: str) -> list[str]:
-    """Surface actual selected G5 contradictions; pending judgments grant no PASS."""
+def integrity_errors(project: Path, paper_id: str, *, require_support=False) -> list[str]:
+    """Keep drafts provisional; final submission needs actual current source review."""
     errors = []
+    expected_citations, covered_citations = set(), set()
+    if require_support:
+        try:
+            from scripts import citation_audit
+            from scripts.ref_verify_adapter import canonical_manuscript
+            manuscript = canonical_manuscript(path_in(project, "papers/" + paper_id, exists=False))
+            if manuscript.suffix == ".tex":
+                expected_citations = citation_audit.tex_citation_keys(manuscript)
+            else:
+                expected_citations, mapping_errors = citation_audit.docx_citation_keys(manuscript)
+                errors.extend("full-text citation coverage: " + issue for issue in mapping_errors)
+        except (OSError, ValueError, RuntimeError) as exc:
+            errors.append("full-text citation coverage cannot be checked: " + str(exc))
     try:
         selected = _selections(project)
     except (OSError, ValueError, KeyError, TypeError) as exc:
@@ -122,12 +135,18 @@ def integrity_errors(project: Path, paper_id: str) -> list[str]:
             report = build(project, operation, spec)
             if operation == "claim_evidence":
                 for claim in report["claims"]:
+                    covered_citations.add(claim["citation_key"])
                     if any(row["outcome"] == "contradicts" for row in claim["judgments"]):
                         errors.append("source-bound citation contradiction remains unresolved: " + claim["claim_id"])
+                    elif require_support and (not claim["full_text_ready"] or not claim["judgments"] or claim["outcome"] != "supports"):
+                        errors.append("full-text citation support remains unverified or insufficient: " + claim["claim_id"])
             elif report["differences"]:
                 errors.append("independent citation extraction has unresolved bibliographic differences: " + spec["id"])
         except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
             errors.append("scientific judgment " + operation + ": " + str(exc))
+    if expected_citations - covered_citations:
+        errors.append("final submission needs a current full-text claim_evidence task covering cited keys: "
+            + ", ".join(sorted(expected_citations - covered_citations)))
     return errors
 
 

@@ -277,7 +277,7 @@ def audit(project: Path, paper_id: str) -> dict:
                            "unknown_vendor_schemes": "unknown", "image_watermarks": "not_assessed",
                            "C2PA_EXIF_PDF_objects": "not_assessed", "unassessed_files": [row["path"] for row in files]},
               "negative_result_meaning": "Not detected means only this configured scheme, key and extracted canonical text at this threshold; it does not establish absence or human authorship.",
-              "remediation": "A detected signal blocks release. Use the existing evidence-preserving writer/remediator pass, retain originals and required disclosures, then rerun. Do not add paid loops, change models, randomly shuffle or spin synonyms.",
+              "remediation": "C observation only: a detected signal does not block G5 or packaging. Consider source-preserving edits in the existing writer pass, retaining originals and existing disclosures. Do not add paid loops, change models, randomly shuffle or spin synonyms.",
               **LIMITS}
     relative = f"papers/{paper_id}/watermark-assessment.json"
     profile_path = path_in(project, relative, exists=False)
@@ -299,7 +299,7 @@ def audit(project: Path, paper_id: str) -> dict:
         report["coverage"]["hf_greenlist"] = "assessed_exact_configured_canonical_text"
         report["coverage"]["unassessed_files"] = [row["path"] for row in files if row["path"] not in safe["source_paths"]]
         if result["status"] == "detected":
-            report["errors"].append("Configured greenlist watermark signal detected; preserve evidence, revise and rescan before release.")
+            report["errors"].append("Configured greenlist watermark signal detected; contextual C observation, not scientific invalidity or a release gate.")
         elif result["status"] == "insufficient_length":
             report["errors"].append("Configured watermark detector has insufficient independent scored tokens; absence cannot be assessed.")
     except (ValueError, OSError, KeyError, TypeError, AttributeError, ImportError, RuntimeError, RecursionError):
@@ -338,7 +338,7 @@ def validate_saved_report(project: Path, paper_id: str) -> list[str]:
             raise ValueError("statistical watermark report is stale or differs from full source/cache recomputation")
         return actual["errors"]
     except (ValueError, OSError, KeyError, TypeError, AttributeError, RuntimeError):
-        return ["Statistical watermark report is missing, stale, modified, untrusted or currently blocking release."]
+        return ["Statistical watermark observation is missing, stale, modified, untrusted or unresolved; no absence result was established."]
 
 
 def review_binding(project: Path, paper_id: str) -> dict:
@@ -353,7 +353,7 @@ def prompt_feedback(project: Path, paper_id: str) -> str:
     return json.dumps({"report": target.relative_to(project).as_posix(), "status": value.get("status"),
         "errors": value.get("errors", []), "warnings": value.get("warnings", []),
         "watermark_absence_verified": False, "all_watermark_types_assessed": False,
-        "instruction": "Preserve evidence and mandatory disclosures. Resolve configured positive/error findings within existing passes; unknown coverage is not watermark absence."}, separators=(",", ":"))
+        "instruction": "C observation, never a G5/package gate or a reason for another paid pass. Preserve evidence and existing disclosures; optional edits use the current writer pass. Unknown coverage is not watermark absence."}, separators=(",", ":"))
 
 
 def _worker() -> int:

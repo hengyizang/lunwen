@@ -235,6 +235,14 @@ Required scientific evidence:
   real source identities and full lawful primary passages for deeper claims;
   preserve `supports`, `contradicts` and `insufficient` judgments and unresolved
   disagreements instead of converting a DOI/abstract match into semantic proof;
+  before final G5, select `claim_evidence` for this paper in the existing
+  `program/research-control.json` and cover every cited key with actual manuscript
+  claims, lawful registered original text and located evidence. A source may use
+  its DOI or, when no DOI exists, the exact registered original HTTPS URL.
+  The current protected critic/domain-panel response records support; missing,
+  contradictory or insufficient judgments cannot clear final submission.
+  The domain panel receives claim tasks by default; explicit `panel_views`
+  selects suitable existing views. Reuse these reviews without an extra paid loop;
 - current source-bound paper facts and claim/inference limits. Numeric/citation/
   conclusion-strength edits must agree with actual evidence; preserve originals,
   negative/null/failed findings and existing disclosures during editing;
