@@ -19,10 +19,16 @@ from urllib.parse import quote, urlsplit
 from scripts.literature_benchmark import ELIFE_STRENGTHS, judgment_benchmark
 from scripts.literature_evidence import fetch_provider_bytes
 from scripts.network_safety import fetch_bytes
-from scripts.research_artifacts import read, record, sha, write
+from scripts.research_artifacts import read, record, sha, write, json_field_spans
 
 API = "https://api.elifesciences.org"
 LICENSE = "https://creativecommons.org/licenses/by/4.0/"
+PRIMARY_FIELDS = ("title", "abstract", "body", "references", "dataSets", "ethics", "additionalFiles", "impactStatement", "keywords")
+
+
+def primary_json(raw):
+    spans = json_field_spans(raw)
+    return "{\n" + ",\n".join(json.dumps(key) + ":" + raw[slice(*spans[key])] for key in PRIMARY_FIELDS if key in spans) + "\n}"
 
 
 def _fetch(url, cache):
@@ -88,10 +94,10 @@ def _acquire(root, candidate, originals):
     strengths = assessment.get("strength", [])
     if not strengths or not set(strengths) <= ELIFE_STRENGTHS:
         raise ValueError("published evidence category is missing or unknown")
-    primary = _plain({"title": article["title"], "content": article.get("abstract", []), "body": article.get("body", [])})
+    primary = primary_json(article_path.read_text(encoding="utf-8"))
     review = _plain(assessment.get("content", []))
     abstract = _plain(article.get("abstract", []))
-    if len(primary) < 5_000 or not review or not abstract or review in primary:
+    if not article.get("body") or len(primary) < 5_000 or not review or not abstract or review in primary:
         raise ValueError("complete primary text and a separate public assessment are required")
     def text(name, content):
         target = base / name
@@ -99,13 +105,14 @@ def _acquire(root, candidate, originals):
         target.write_text(content + "\n", encoding="utf-8")
         return {"path": target.relative_to(root).as_posix(), "sha256": sha(target), "locator": "complete source text"}
     source, review_source = text("primary.txt", primary), text("assessment.txt", review)
-    attribution = text("source-attribution.txt", f"{_plain(article['title'])}\n{article['authorLine']}\nhttps://doi.org/{article['doi']}\nCC BY 4.0: {LICENSE}\nHTML markup removed and entities decoded; scientific content retained.")
+    source["locator"] = "complete original API scientific fields; linked figures/attachments not visually assessed"
+    attribution = text("source-attribution.txt", f"{_plain(article['title'])}\n{article['authorLine']}\nhttps://doi.org/{article['doi']}\nCC BY 4.0: {LICENSE}\nOriginal scientific API JSON values retained; review metadata excluded. Linked media not visually assessed.")
     declaration = base / "rights.json"
     write(declaration, {"reuse_allowed": True, "license_url": LICENSE, "paper_source_sha256": source["sha256"],
         "review_sha256": review_source["sha256"], "paper_copyright": article["copyright"],
         "assessment_doi": assessment_doi, "license_registry_url": crossref, "license_registry_sha256": sha(rights_path)})
     case = {"id": "elife-" + identifier, "paper_doi": article["doi"], "partition": candidate["partition"],
-        "source": source, "quote": abstract[:1500], "review": review_source, "review_quote": review[:1500],
+        "source": source, "quote": primary[:1500], "review": review_source, "review_quote": review[:1500],
         "label": "+".join(sorted(set(strengths))), "review_url": "https://doi.org/" + assessment_doi,
         "attribution": attribution,
         "rights": {"path": declaration.relative_to(root).as_posix(), "sha256": sha(declaration), "locator": "publisher and Crossref license records"},
@@ -152,7 +159,10 @@ def collect(root: Path, frozen=None):
         "workflow_run_url": ("https://github.com/" + os.environ["GITHUB_REPOSITORY"] + "/actions/runs/" + os.environ["GITHUB_RUN_ID"])
             if os.environ.get("GITHUB_REPOSITORY") and os.environ.get("GITHUB_RUN_ID") else None,
         "implementation_sha256": sha(Path(__file__)), "model_calls": 0,
-        "excerpt_transformation": "HTML markup removed and entities decoded; manifest excerpts truncated at 1500 characters; full originals retained outside the blind project",
+        "extraction_implementation_sha256": {"scripts/public_review_anchors.py": sha(Path(__file__)),
+            "scripts/research_artifacts.py": sha(Path(__file__).with_name("research_artifacts.py"))},
+        "primary_format": "original scientific JSON values, including all body/table/equation nodes and exact numeric lexemes; review fields excluded; linked media not visually assessed",
+        "excerpt_transformation": "Review HTML markup removed and entities decoded; review excerpts truncated at 1500 characters; full originals retained outside the blind project",
         "sampling": "first 24 CC BY 4.0 research articles with assessments in the dated descending official listing; every third paper held out",
         "source": API, "anchors": [row[1] for row in acquired], "public_papers": checked["attributed_public_paper_count"],
         "requested_anchor_design_complete": checked["requested_anchor_design_complete"],

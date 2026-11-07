@@ -42,9 +42,12 @@ class PublicReviewAnchorTests(unittest.TestCase):
         self.assertIn("api.crossref.org", self.calls[0])
 
     def test_original_answer_payloads_stay_outside_the_blind_project(self):
+        self.article["body"].extend([{"type": "equation", "tex": "E=mc^2"},
+            {"type": "table", "rows": [["comparison", "estimate"], ["adverse", "-0.4"]]}])
         case, receipt = self.acquire()
         primary = (self.root / "project" / case["source"]["path"]).read_text()
         self.assertNotIn("ANSWER_KEY_TEXT", primary)
+        self.assertEqual(json.loads(primary)["body"], self.article["body"])
         self.assertEqual(receipt["label"], "solid")
         self.assertFalse(list((self.root / "project").rglob("article.json")))
         self.assertTrue((self.root / "originals/12345/article.json").is_file())
@@ -72,6 +75,23 @@ class PublicReviewAnchorTests(unittest.TestCase):
         self.assertEqual([row["status"] for row in attempts], [429, 200, 200])
         self.assertEqual(attempts[0]["retry_after"], "7")
         self.assertIn(7, [call.args[0] for call in sleep.call_args_list])
+
+    def test_elife_transport_negotiates_the_publishers_vendor_json(self):
+        url = "https://api.elifesciences.org/articles/12345/versions/1"
+        def transport(request_url, **kwargs):
+            self.assertEqual(kwargs["headers"]["Accept"], "*/*")
+            return b'{"source":"vendor JSON fixture"}', request_url, 200, "application/vnd.elife.article+json; version=8"
+        with patch.object(corpus, "fetch_bytes", side_effect=transport):
+            self.assertEqual(corpus._fetch(url, self.root / "article.json"), {"source": "vendor JSON fixture"})
+
+    def test_scientific_json_keeps_original_number_lexemes_and_excludes_review_keys(self):
+        raw = '{"body":{"estimate":1.0000000000000000001,"quote":"x,{}"},"elifeAssessment":{"answer":"hidden"}}'
+        result = corpus.primary_json(raw)
+        self.assertIn('1.0000000000000000001', result)
+        self.assertNotIn('hidden', result)
+        self.assertIn('"quote":"x,{}"', result)
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            corpus.primary_json('{"body":[],"body":[]}')
 
     def test_retained_live_manifest_has_24_distinct_licensed_partitioned_papers(self):
         path = Path(__file__).resolve().parents[1] / "docs/acceptance/elife-public-anchors-2026-11-07.json"

@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
 from functools import lru_cache
@@ -56,6 +57,22 @@ def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = No
         raise error_type(nonfinite_error)
     return json.loads(value, object_pairs_hook=unique,
                       **({"parse_constant": nonfinite} if nonfinite_error is not None else {}))
+
+
+def json_field_spans(text: str) -> dict[str, tuple[int, int]]:
+    """Locate top-level JSON values without reserializing scientific numbers."""
+    root = strict_json(text, duplicate_error="duplicate JSON keys", nonfinite_error="nonfinite JSON constant")
+    if not isinstance(root, dict):
+        raise ValueError("a JSON object is required")
+    decoder, spaces = json.JSONDecoder(), re.compile(r"[ \t\r\n]*")
+    cursor, spans = text.index("{") + 1, {}
+    for key in root:
+        _, cursor = decoder.raw_decode(text, spaces.match(text, cursor).end())
+        start = spaces.match(text, spaces.match(text, cursor).end() + 1).end()
+        _, cursor = decoder.raw_decode(text, start)
+        spans[key] = (start, cursor)
+        cursor = spaces.match(text, cursor).end() + 1
+    return spans
 
 
 def write(path: Path, value: dict, *, indent=2, sort_keys=False) -> None:

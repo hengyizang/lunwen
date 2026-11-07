@@ -42,8 +42,8 @@ included by this installation.
 `docs/acceptance/elife-public-anchors-2026-11-07.json` contains attributed excerpts
 from 24 published eLife assessments, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 Each record identifies its paper authors, paper and assessment DOI, source URLs,
-and the assessment's own Crossref license record. HTML markup was removed,
-entities decoded and excerpts shortened; no assessment label was invented.
+and the assessment's own Crossref license record. Review excerpt markup was
+removed, entities decoded and excerpts shortened; no assessment label was invented.
 Full publisher responses remain outside Git. Cloud artifacts keep source texts
 with their attribution sidecars and keep review answers in a separate artifact.
 

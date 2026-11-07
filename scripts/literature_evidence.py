@@ -196,6 +196,8 @@ def provider_headers(provider: str) -> dict[str, str]:
         headers["Accept"] = "application/atom+xml, application/xml, text/xml, */*;q=0.1"
     elif provider == "dblp":
         headers["Accept"] = "application/sparql-results+json"
+    elif provider == "elife":
+        headers["Accept"] = "*/*"  # versioned application/vnd.elife.*+json
     else:
         headers["Accept"] = "application/json"
     if provider == "semantic-scholar":
