@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import re
+from fnmatch import fnmatchcase
 from pathlib import Path, PurePosixPath
 
 EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
@@ -28,6 +29,40 @@ EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/re
                   "state/primary-recovery", "state/review-receipts", "state/scientific-scope", "state/scientific-scope-amendments")
 EXECUTOR_FILES = {"experiments/registry.jsonl", "reports/evidence-retrieval/latest.json",
                   "program/topic-leads.json", "program/literature-progress.json"}
+
+# The API target check and CLI snapshot/restoration use this same inventory.
+# Executor ownership below additionally covers frozen and plan-declared outputs.
+CONTROL_ROOTS = ("state", "reviews/codex", "reviews/independent", "data/quality",
+    "evidence/literature", "evidence/direction-sources", "evidence/lead-triage", "evidence/web-search",
+    "evidence/journal-sources", "evidence/support-sources", "evidence/model-screening",
+    "evidence/model-screening-prepared", "evidence/source-scopes", "literature/readers",
+    "reports/watermark-cleanup", "reports/figure-output-qa")
+CONTROL_FILES = {"reviews/decision-log.md", "evidence/dataset-search-log.jsonl", "evidence/search-log.jsonl",
+    "evidence/literature-api-ledger.jsonl", "evidence/ai4science-ledger.jsonl", "program/venue-candidates.json",
+    "program/journal-screening.json", "program/direction-ranking.json", "program/hypothesis-audit.json",
+    "program/journal-dossier-report.json", "reports/runtime-evidence-catalog.json",
+    "reports/research-support.json", "reports/method-tools.json"}
+CONTROL_PATTERNS = ("reports/research-notebook*", "data/discovery-broad-auto-*",
+                    "*.render-receipt.json", "*.output-qa.json")
+
+
+def controller_owned(relative: str) -> bool:
+    value = relative.casefold()
+    return (value in CONTROL_FILES or _controlled_paper_record(value)
+            or any(value == prefix or value.startswith(prefix + "/") for prefix in CONTROL_ROOTS)
+            or any(fnmatchcase(value, pattern) for pattern in CONTROL_PATTERNS))
+
+
+def control_roots(root: Path) -> list[Path]:
+    return [*(root / name for name in (*CONTROL_ROOTS, *EXECUTOR_ROOTS)),
+            *root.glob("reports/research-notebook*"),
+            *root.glob("papers/P[0-9][0-9]/reviews/revision-base")]
+
+
+def control_files(root: Path) -> list[Path]:
+    return [*(root / name for name in CONTROL_FILES),
+            *(path for path in root.rglob("*") if controller_owned(path.relative_to(root).as_posix())
+              and (path.is_file() or path.is_symlink()))]
 
 
 def _controlled_paper_record(relative: str) -> bool:

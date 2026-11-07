@@ -60,23 +60,8 @@ def load_stage_config() -> dict[str, Any]:
     return stages
 
 
-def secret_values() -> list[str]:
-    marker = re.compile(r"(?:API[_-]?KEY|WATERMARK_KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL)", re.IGNORECASE)
-    return sorted(
-        {
-            value
-            for key, value in os.environ.items()
-            if marker.search(key) and isinstance(value, str) and len(value) >= 8
-        },
-        key=len,
-        reverse=True,
-    )
-
-
-def redact(text: str) -> str:
-    for value in secret_values():
-        text = text.replace(value, "<redacted-secret>")
-    return text
+secret_values = api_orchestrator.secret_values
+redact = api_orchestrator.redact
 
 
 def read_capped(path: Path, max_bytes: int) -> tuple[str, bool, str]:
@@ -92,15 +77,7 @@ def read_capped(path: Path, max_bytes: int) -> tuple[str, bool, str]:
     return redact(bytes(kept).decode("utf-8", errors="replace")), total > max_bytes, digest.hexdigest()
 
 
-def write_json(path: Path, value: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=path.parent, delete=False
-    ) as handle:
-        handle.write(payload)
-        temporary = handle.name
-    os.replace(temporary, path)
+write_json = api_orchestrator.write_json_atomic
 
 
 def planner_prompt(project: str, state: dict[str, Any], config: dict[str, Any], context: str) -> str:
@@ -500,52 +477,10 @@ def protected_control_snapshot(
             require_regular_ancestry(path)
             if path.is_file():
                 executor_records[path.relative_to(root).as_posix()] = path.read_bytes()
-    paths = [
-        root / "state" / "run.json",
-        root / "state" / "output-provenance.json",
-        root / "reviews" / "decision-log.md",
-    ]
-    paths.extend(extra_paths or [])
-    for directory in (root / "state", root / "evidence/direction-sources", root / "literature/readers", root / "evidence/lead-triage", root / "evidence/web-search", root / "reports/watermark-cleanup"):
-        paths.extend(p for p in directory.rglob("*") if p.is_file())
-    paths.append(root / "program/direction-ranking.json")
-    paths.extend((root / "evidence" / "source-scopes").glob("*.json"))
-    paths.extend(
-        root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
-    )
-    for name in (
-        "ref-verify.json", "revision-trace.json", "revision-integrity.json", "reporting-guideline.json",
-        "revision-authorizations.json", "revision-base.tex", "revision-base.docx",
-        "pre-submission-review.json",
-    ):
-        paths.extend(root.glob(f"papers/P[0-9][0-9]/reviews/{name}"))
-    paths.extend(
-        path
-        for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base")
-        if directory.is_dir()
-        for path in directory.rglob("*")
-        if path.is_file()
-    )
-    paths.extend((root / "data" / "quality").glob("*.json"))
-    paths.extend(root.glob("papers/P[0-9][0-9]/power-analysis.json"))
-    paths.extend(root.glob("papers/P[0-9][0-9]/preregistration.json"))
-    paths.extend(root.glob("papers/P[0-9][0-9]/watermark-assessment.json"))
-    paths.extend(root.glob("papers/P[0-9][0-9]/reproduction-confirmation.json"))
-    paths.append(root / "reports" / "runtime-evidence-catalog.json")
-    paths.append(root / "evidence" / "literature-api-ledger.jsonl")
-    paths.append(root / "evidence" / "search-log.jsonl")
-    paths.append(root / "evidence" / "ai4science-ledger.jsonl")
-    paths.append(root / "program" / "venue-candidates.json")
-    paths.append(root / "program" / "journal-screening.json")
-    paths.append(root / "program" / "hypothesis-audit.json")
-    if (root / "evidence" / "literature").is_dir():
-        paths.extend(
-            path for path in (root / "evidence" / "literature").rglob("*")
-            if path.is_file()
-        )
-    for dirname in (root / "reviews" / "independent", root / "reviews" / "codex"):
-        if dirname.is_dir():
-            paths.extend(path for path in dirname.rglob("*") if path.is_file())
+    from scripts.artifact_ownership import control_files, control_roots
+    paths = [*control_files(root), *(extra_paths or [])]
+    for directory in control_roots(root):
+        paths.extend(path for path in directory.rglob("*") if path.is_file() or path.is_symlink())
     records = dict(executor_records)
     for path in paths:
         require_regular_ancestry(path)
@@ -561,15 +496,7 @@ def protected_control_snapshot(
                 raise AutopilotError("Protected control records cannot use symlinks: " + relative)
             if path != target and path != root:
                 directories.add(path)
-    recursive_roots = (
-        root / "state", root / "evidence/direction-sources", root / "literature/readers",
-        root / "evidence/lead-triage", root / "evidence/web-search", root / "evidence/literature",
-        root / "reports/watermark-cleanup", root / "reviews/independent", root / "reviews/codex",
-        root / "experiments/runs", root / "results", root / "data/acquisition",
-        root / "reports/reviewer-rounds", root / "reports/publication-disclosure",
-        root / "reports/statistical-watermarks",
-        *root.glob("papers/P[0-9][0-9]/reviews/revision-base"),
-    )
+    recursive_roots = control_roots(root)
     for directory in recursive_roots:
         for path in (directory, *directory.parents):
             if path != root and root not in path.parents:
@@ -622,20 +549,8 @@ def ensure_protected_control_unchanged(
                 values.add(relative + "/" if path.is_dir() and not path.is_symlink() else relative)
         return values
 
-    protected_roots = (
-        root / "reports/watermark-cleanup",
-        root / "state",
-        root / "evidence/direction-sources",
-        root / "evidence/lead-triage",
-        root / "evidence/web-search",
-        root / "literature/readers",
-        root / "reviews" / "independent",
-        root / "reviews" / "codex",
-        root / "experiments/runs",
-        root / "results",
-        root / "data/acquisition",
-    )
-    current_paths = set().union(*(tree_paths(directory) for directory in protected_roots))
+    from scripts.artifact_ownership import control_files, control_roots
+    current_paths = set().union(*(tree_paths(directory) for directory in control_roots(root)))
     current_paths.update(allowed)
     # A corrupted protected registry must be restored, not abort restoration while
     # trying to use the writer's new contents as an ownership authority.
@@ -647,65 +562,8 @@ def ensure_protected_control_unchanged(
         current_paths.update(path.relative_to(root).as_posix() for path in root.rglob("*")
                              if (path.is_file() or path.is_symlink())
                              and executor_owned(root, path.relative_to(root).as_posix(), outputs))
-    if (root / "program/direction-ranking.json").is_file():
-        current_paths.add("program/direction-ranking.json")
-    current_paths.update(
-        relative
-        for relative in ("state/run.json", "state/output-provenance.json", "reviews/decision-log.md")
-        if (root / relative).is_file()
-    )
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for path in (root / "evidence" / "source-scopes").glob("*.json")
-        if path.is_file()
-    )
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for path in root.glob("papers/P[0-9][0-9]/style/academic-style-audit.json")
-        if path.is_file()
-    )
-    for directory in root.glob("papers/P[0-9][0-9]/reviews/revision-base"):
-        current_paths.update(tree_paths(directory))
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for name in (
-            "ref-verify.json", "revision-trace.json", "revision-integrity.json", "reporting-guideline.json",
-            "revision-authorizations.json", "revision-base.tex", "revision-base.docx",
-            "pre-submission-review.json",
-        )
-        for path in root.glob(f"papers/P[0-9][0-9]/reviews/{name}")
-        if path.is_file()
-    )
-    if (root / "reports" / "runtime-evidence-catalog.json").is_file():
-        current_paths.add("reports/runtime-evidence-catalog.json")
-    if (root / "evidence" / "literature-api-ledger.jsonl").is_file():
-        current_paths.add("evidence/literature-api-ledger.jsonl")
-    if (root / "evidence" / "search-log.jsonl").is_file():
-        current_paths.add("evidence/search-log.jsonl")
-    if (root / "evidence" / "ai4science-ledger.jsonl").is_file():
-        current_paths.add("evidence/ai4science-ledger.jsonl")
-    if (root / "program" / "venue-candidates.json").is_file():
-        current_paths.add("program/venue-candidates.json")
-    if (root / "program" / "journal-screening.json").is_file():
-        current_paths.add("program/journal-screening.json")
-    if (root / "program" / "hypothesis-audit.json").is_file():
-        current_paths.add("program/hypothesis-audit.json")
-    current_paths.update(tree_paths(root / "evidence/literature"))
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for path in (root / "data" / "quality").glob("*.json")
-        if path.is_file()
-    )
-    current_paths.update(
-        path.relative_to(root).as_posix()
-        for pattern in (
-            "papers/P[0-9][0-9]/power-analysis.json",
-            "papers/P[0-9][0-9]/preregistration.json",
-            "papers/P[0-9][0-9]/reproduction-confirmation.json",
-        )
-        for path in root.glob(pattern)
-        if path.is_file()
-    )
+    current_paths.update(path.relative_to(root).as_posix() for path in control_files(root)
+                         if path.is_file() or path.is_symlink())
     def unchanged(relative: str) -> bool:
         path = root / relative.rstrip("/")
         if has_link(path):

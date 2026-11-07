@@ -188,154 +188,37 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
             "sources":["schemas/experiment-plan.schema.json","scripts/research_phase.py","references/stage-contracts.md"],
             "review_remediation_contract":review_contract,
         },ensure_ascii=False)
-    contracts: dict[str, Any] = {
-        "topic-intelligence": {
-            "path": "program/novelty-claim-matrix.json",
-            "top_level": [
-                "schema_version=1.1", "status=in_progress|ready_for_review", "claims",
-                "search_saturation", "human_review_required=true",
-            ],
-            "claim_fields": [
-                "claim_id", "paper_ids", "claim", "closest_work_ids(actual verified work; final G1 minimum 3)",
-                "already_known", "precise_difference", "mechanism_or_rationale",
-                "falsification_test", "expected_if_false", "boundary_conditions",
-                "residual_risk",
-            ],
-            "search_saturation_fields": [
-                "status=exploring|reopened|saturated; preserve unknown/current gaps",
-                "exact_query_rounds(actual)", "adjacent_field_rounds(actual)",
-                "backward_chaining_complete=actual", "forward_chaining_complete=actual",
-                "supporting_search_ids(actual records in evidence/search-log.jsonl)",
-                "backward_chaining_search_ids", "forward_chaining_search_ids",
-                "consecutive_no_material_new_work_rounds=actual current count; never fake zero-new rounds",
-                "no_material_new_work_rounds[{round_id,search_ids,material_new_closest_work_count=0,stopping_reason}]",
-                "unresolved_search_gaps", "affected_claim_ids", "next_searches", "saturation_rationale",
-            ],
-            "theme_b_independence": [
-                "core and extension follow their dedicated schemas",
-                "A/B claim IDs and planned paper IDs are disjoint",
-                "B has independent question/evidence/falsification and survives core failure",
-            ],
-            "question_notebook": "program/research-notebook.json groups questions, supporting and contrary evidence by ID, source path/hash/locator and read_scope. Decisions need evidence_ids, rationale, failure_condition and stop_rule. A notebook phase never grants G3 approval. Request the research_notebook cloud operation; generated reports/history are protected.",
-            "protected_local_outputs_do_not_write": [
-                "evidence/search-log.jsonl",
-                "evidence/literature-api-ledger.jsonl",
-                "evidence/literature/**",
-                "evidence/ai4science-ledger.jsonl",
-            ],
-        },
-        "paper-architecture": {
-            "venue_portfolio": {
-                "paper_count": 6,
-                "minimum_q1_papers": 3,
-                "minimum_remaining_quartile": "Q2",
-                "impact_factor_floor": ">1.0",
-                "same_scientific_quality_gates_for_all_papers": True,
-            },
-            "paper_map_each_paper_requires": ["target_jcr_quartile=Q1|Q2"],
-            "paper_contract_each_requires": [
-                "target_jcr_quartile matching paper-map",
-                "at least two current JCR candidates meeting that target",
-            ],
-        },
-        "experiment-design": {
-            "experiment_evidence_plan": {
-                "path": "papers/Pxx/experiment-evidence-plan.json",
-                "schema": "schemas/experiment-evidence-plan.schema.json",
-                "top_level": ["schema_version=1.1", "paper_id", "status=ready_for_review",
-                              "pilot_run_ids", "pilot_success_criteria", "comparisons", "critical_tests",
-                              "hypothesis_register{path=program/hypothesis-register.json,sha256} when that register exists",
-                              "external_validity{mode=tested|scope_limited,rationale,claim_limit if scope_limited}"],
-                "comparison_fields": [
-                    "comparison_id", "design_id", "hypothesis_id", "claim_ids", "condition_ids", "comparator_id",
-                    "role=primary|ablation|negative_control|robustness|external_validation",
-                    "analysis_phase=confirmatory|exploratory", "metric", "dataset_id", "direction=higher|lower",
-                    "analysis_unit", "population_scope", "independence_rationale", "assumptions", "rationale",
-                    "sample_size_rationale", "decision_rule=superiority|equivalence", "minimum_effect",
-                    "alpha", "family", "minimum_units", "analysis_mode=paired_t|registered_result",
-                    "unit_column", "value_column", "aggregation=mean_within_unit_then_mean_across_seeds",
-                    "pairs[{seed,treatment:{run_id,output},comparator:{run_id,output}}]",
-                    "registered_result:{run_id,output,method_id} when analysis_mode=registered_result",
-                ],
-                "coverage": "Every claim needs primary comparisons to all design baselines. Bind every ablation, negative control and robustness item to actual comparator runs for every design seed. One run cannot stand for different conditions.",
-                "pilot": "All evidence arms depend_on earlier same-paper pilot runs. Put prespecified technical success assertions in the frozen pilot code; a failed pilot blocks downstream processes.",
-                "registered_result_output_fields": ["schema_version=1.0", "comparison_id", "method_id", "decision_rule", "direction", "minimum_effect", "aggregation", "analysis_unit", "independent_units", "source_hashes{every arm CSV path:sha256}", "estimate", "ci_low", "ci_high", "p_value", "ci_confidence>=1-alpha/family_size"],
-                "statistics": "Choose a suitable method and independent unit, justify practical thresholds and assumptions. Paired t uses unit means conditional on the registered seeds. Other models require a frozen executor analysis run depending on every source arm, with exact source_hashes and registered metadata; see docs/EXPERIMENT-EVIDENCE.md. Power alpha must account for the comparison family and minimum_units cannot undercut calculated sample size.",
-            },
-            "each_paper_experiment_design_requires": {
-                "reproduction_plan": {
-                    "baseline_runs": {
-                        "domain_standard": ["approved run IDs"],
-                        "strong_recent": ["approved run IDs"],
-                    },
-                    "original_run_ids": ["approved run IDs"],
-                    "clean_room_run_ids": ["disjoint run IDs with digest-pinned container isolation"],
-                    "independent_operator_plan": "text",
-                    "isolated_environment_plan": "text",
-                    "environment_capture_plan": "text",
-                    "metric_tolerances": [
-                        {"metric": "name", "absolute_tolerance": 0.0, "rationale": "text"}
-                    ],
-                }
-            },
-            "protected_local_outputs_do_not_write": [
-                "data/quality/<dataset_id>.json",
-                "data/quality/<dataset_id>-confirmation.json",
-                "papers/Pxx/power-analysis.json",
-                "papers/Pxx/preregistration.json",
-            ],
-        },
-        "experiment-execution": {
-            "computed_statistical_report": "papers/Pxx/experiment-evidence.json is generated by the cloud control plane after all registered runs. Never write or edit it.",
-            "claim_matrix_contract": "Add comparison_ids containing ALL comparisons assigned to each claim and analysis_ids containing every registered source run, including adverse or inconclusive evidence. supported requires every confirmatory comparison to meet its preregistered threshold; partially_supported needs a passing primary comparison and explicit limits. Explorer results cannot establish confirmation. These numeric decisions never establish scientific completion.",
-            "baseline_path": "papers/Pxx/baseline-reproduction.json",
-            "baseline_top_level": [
-                "schema_version=1.0", "paper_id", "status=pass", "baselines",
-                "human_review_required=false (recorded independent checks; never invent human confirmation)",
-            ],
-            "each_baseline_fields": [
-                "baseline_id", "class(domain_standard|strong_recent)", "metric",
-                "reference_source_url(https)", "reference_value", "observed_value",
-                "absolute_tolerance", "comparable_protocol=true", "within_tolerance=true",
-                "run_ids(exactly as frozen at G3)", "attempt_ids(exact successful registry attempts)",
-                "evidence_files[{path,sha256}](all outputs of those attempts)", "comparison_notes",
-            ],
-            "clean_room_path": "papers/Pxx/clean-room-reproduction.json",
-            "clean_room_top_level": [
-                "schema_version=1.0", "paper_id", "status=pass", "independent_operator",
-                "original_run_ids", "reproduction_run_ids", "original_attempt_ids",
-                "reproduction_attempt_ids", "isolation",
-                "metric_comparisons", "evidence_files[{path,sha256}]",
-                "human_review_required=false (recorded independent checks; never invent human confirmation)",
-            ],
-            "isolation_fields": [
-                "reproduction_kind=container", "isolated_executor=true",
-                "original_isolation_ids", "reproduction_isolation_ids",
-                "original_environment_digest", "reproduction_environment_digest",
-                "source_commit",
-            ],
-            "each_metric_comparison_fields": [
-                "metric", "original_value", "reproduction_value",
-                "absolute_tolerance", "within_tolerance=true",
-            ],
-            "deterministic_source": "reports/runtime-evidence-catalog.json; use exact attempt_id, current output hashes and single_attempt_environment_digest; never infer values",
-            "protected_evidence_confirmation": "papers/Pxx/reproduction-confirmation.json is created only by the automated_quality controller after evidence checks; do not write it",
-        },
-        "writing-and-review": {
-            "citation_audit": "Request the deterministic citation_audit cloud operation for the active paper. It rechecks the current bibliography/manuscript using 24h hash-bound public metadata, never a cached PASS. Do not author reviews/citation-audit.json. Manual verifications must come from protected owner state, not invented names.",
-            "statistical_reporting": "Write papers/Pxx/statistical-reporting-map.json using docs/RESEARCH-IMPROVEMENTS.md. Cover every experiment-evidence comparison including adverse/exploratory results; bind method, independent unit/n, effect, CI, adjusted p, decision and phase to unique actual Methods/Results text passages. Figure statistics also need caption bindings. Use statistical_reporting cloud operation; never write its deterministic report.",
-            "statistical_map_fields": {
-                "comparisons": "[{comparison_id,reporting_notes,has_figure,locations:[{field,path,quote,section,value,decimals,uncertainty}]}]",
-                "required_fields": ["method", "analysis_unit", "independent_units", "estimate", "ci_low", "ci_high", "ci_confidence", "p_value", "p_adjusted", "seeds", "aggregation", "family", "family_size", "direction", "assumptions", "sample_size_rationale", "decision", "analysis_phase"],
-                "location_rules": "project-relative text source in this paper's manuscript/figures/tables/supplement; unique actual quote; Methods and Results required, Caption when has_figure; value equals actual evidence field; decimals 0-12; ci_confidence requires uncertainty=CI and optionally display_scale=100 for percent; no other conversions",
-                "operation": {"stage": "writing-and-review", "action": "statistical_reporting", "paper_id": "Pxx"},
-            },
-            "word_revision": "Optional docx_revision operation produces real OOXML revisions after revision-integrity and response trace checks. It refuses unsupported structural changes. Do not fabricate author approvals or visual inspection.",
-            "journal_dossiers": "Use evidence-bound publisher costs/OA/timing/policy fields; unknown is not zero. Request journal_sources first for controlled public retrieval, then bind source path/hash and accessed_at to evidence/journal-sources/index.json. Request journal_dossiers to audit; never write either receipt yourself.",
-            "protected_local_outputs_do_not_write": ["papers/Pxx/reviews/statistical-reporting.json", "papers/Pxx/reviews/docx-revision.json", "reports/research-notebook*", "reports/method-tools.json", "program/journal-dossier-report.json"],
-        },
+    from scripts.research_artifacts import schema_contract
+    schemas = {
+        "topic-intelligence": ("novelty-claim-matrix", "core-thesis", "extension-thesis"),
+        "paper-architecture": ("paper-map", "paper-contract"),
+        "experiment-design": ("paper-experiment-design", "experiment-evidence-plan"),
+        "experiment-execution": ("baseline-reproduction", "clean-room-reproduction"),
+        "writing-and-review": ("paper-facts", "contribution-reporting"),
     }
-    value = contracts.get(stage)
+    if stage not in schemas:
+        return "(none for this stage)"
+    value = {"schemas": [schema_contract(name + ".schema.json") for name in schemas[stage]]}
+    value["artifact_paths"] = {
+        "topic-intelligence": ["program/novelty-claim-matrix.json", "program/core-thesis.json", "program/extension-thesis.json"],
+        "paper-architecture": ["program/paper-map.json", "papers/Pxx/paper-contract.json"],
+        "experiment-design": ["papers/Pxx/experiments/<design_id>.json", "papers/Pxx/experiment-evidence-plan.json"],
+        "experiment-execution": ["papers/Pxx/baseline-reproduction.json", "papers/Pxx/clean-room-reproduction.json"],
+        "writing-and-review": ["papers/Pxx/reviews/paper-facts.json", "papers/Pxx/statistical-reporting-map.json"],
+    }[stage]
+    instructions = {
+        "topic-intelligence": "Retain every actual search round, source anchor and contrary finding. A bounded search or a notebook phase cannot establish novelty or authorize G3. Use the recorded seven owner weights; never invent a score or theme decision.",
+        "paper-architecture": "Use one cumulative thesis question and a six-paper map; preserve each paper's independent claims, primary evidence, merge trigger and negative_result_plan. Venue ranks are optional planning observations: unknown ranking stays unknown; no rank, JCR-year, IF or candidate-count floor is a scientific gate.",
+        "experiment-design": "Bind comparison protocol 1.1 to G2 primary outcomes and condition_ids. Cover primary baselines, ablations, negative controls, robustness and every registered seed. Evidence arms depend_on earlier pilots with prespecified technical success assertions. Justify independent units, thresholds, multiplicity and power. Other statistical models require a frozen registered_result analysis run depending on every arm and exact source_hashes; never substitute paired t tests. Original and container clean-room attempts remain disjoint.",
+        "experiment-execution": "experiment-evidence.json is computed by the controller. Claim comparison_ids and analysis_ids cover all assigned comparisons/runs including adverse and inconclusive evidence; supported requires all confirmatory thresholds, partially_supported needs a passing primary comparison and explicit limits. Exploratory evidence cannot establish confirmation. Use exact registry attempt IDs and reports/runtime-evidence-catalog.json hashes; never author computed reports or reproduction-confirmation.json.",
+        "writing-and-review": "Request the deterministic citation_audit and statistical_reporting cloud operations. Never author their receipts. statistical-reporting-map.json covers every actual comparison, including adverse/exploratory outcomes, with unique Methods/Results passages and caption bindings. Each location has field,path,quote,section,value,decimals,uncertainty; values equal actual evidence, decimals 0–12 and CI confidence may explicitly display_scale=100. Preserve unknown journal costs and timing; use controlled journal_sources then journal_dossiers only for submission. Optional docx_revision preserves actual revision and response trace evidence.",
+    }
+    value["scientific_instructions"] = instructions[stage]
+    if stage == "topic-intelligence":
+        value["scientific_instructions"] += " Final G1 needs closest_work_ids(actual verified work; final G1 minimum 3). Exploration may retain an honest in_progress matrix without inventing completed searches."
+    if stage == "writing-and-review":
+        from scripts.statistical_reporting import REQUIRED
+        value["statistical_reporting_fields"] = list(REQUIRED)
     if value is not None:
         value["review_remediation_contract"] = review_contract
     if value:
@@ -351,11 +234,6 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
     if value and stage=="writing-and-review" and project is not None:
         from scripts.research_phase import requires_submission,disposition_stage
         value["writing_phase"]=disposition_stage(project_root(project),stage)
-        if not requires_submission(project_root(project),stage):
-            for key in ("word_revision","journal_dossiers"):
-                value.pop(key,None)
-            for key in ("word_render","review_packets"):
-                value.get("quality_followup",{}).pop(key,None)
     if value and stage=="writing-and-review":
         value["quality_followup"]={
             "statistical_semantics":"Bind estimand, sample flow, exclusions, missingness, independence and uncertainty to original protocol/result sources; seeds_are_independent_units=false.",
@@ -363,7 +241,7 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
         }
         if project is None or requires_submission(project_root(project),stage):
             value["quality_followup"]["review_packets"]="Use actual source-bound visual checks; optional human calibration remains NOT_CALIBRATED without genuine ratings."
-    return json.dumps(value, ensure_ascii=False, indent=2) if value else "(none for this stage)"
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":")) if value else "(none for this stage)"
 
 
 def secret_values() -> list[str]:
@@ -974,96 +852,12 @@ def safe_target(project: str, relative: str) -> Path:
     from scripts.artifact_ownership import executor_owned
     if executor_owned(project_root(project), relative):
         raise ValueError(f"Executor-owned result or record is protected: {relative}")
-    lower_parts = tuple(part.lower() for part in candidate.parts)
-    if lower_parts and lower_parts[0] == "state":
-        raise ValueError(f"Protected state path: {relative}")
-    if lower_parts[:2] in {
-        ("reviews", "codex"),
-        ("reviews", "independent"),
-    } or lower_parts == ("reviews", "decision-log.md"):
-        raise ValueError(f"Independent review path is protected: {relative}")
-    if (
-        lower_parts == ("evidence", "dataset-search-log.jsonl")
-        or lower_parts == ("evidence", "search-log.jsonl")
-        or lower_parts == ("evidence", "literature-api-ledger.jsonl")
-        or lower_parts == ("evidence", "ai4science-ledger.jsonl")
-        or lower_parts == ("program", "venue-candidates.json")
-        or lower_parts == ("program", "journal-screening.json")
-        or lower_parts[:2] == ("evidence", "literature")
-        or lower_parts[:2] == ("evidence", "direction-sources")
-        or lower_parts[:2] == ("evidence", "lead-triage")
-        or lower_parts[:2] == ("evidence", "web-search")
-        or lower_parts[:2] == ("evidence", "journal-sources")
-        or lower_parts[:2] == ("evidence", "support-sources")
-        or lower_parts[:2] in {("evidence", "model-screening"), ("evidence", "model-screening-prepared")}
-        or lower_parts == ("program", "direction-ranking.json")
-        or lower_parts[:2] == ("literature", "readers")
-        or (
-            lower_parts
-            and lower_parts[0] == "data"
-            and candidate.name.startswith("discovery-broad-auto-")
-        )
-    ):
-        raise ValueError(f"Automatic discovery evidence is protected: {relative}")
-    if (
-        len(lower_parts) == 4
-        and lower_parts[0] == "papers"
-        and re.fullmatch(r"p[0-9]{2}", lower_parts[1])
-        and lower_parts[2:] == ("style", "academic-style-audit.json")
-    ):
-        raise ValueError(f"Deterministic academic style audit is protected: {relative}")
-    if (
-        len(lower_parts) >= 4
-        and lower_parts[0] == "papers"
-        and re.fullmatch(r"p[0-9]{2}", lower_parts[1])
-        and lower_parts[2] == "reviews"
-        and (lower_parts[3] == "revision-base" or lower_parts[3] in {
-            "ref-verify.json",
-            "revision-trace.json",
-            "revision-integrity.json",
-            "revision-ledger-report.json",
-            "revision-render.json",
-            "cloud-tex-build.json",
-            "reporting-guideline.json",
-            "revision-authorizations.json",
-            "revision-base.tex",
-            "revision-base.docx",
-            "pre-submission-review.json",
-        })
-    ):
-        raise ValueError(f"Deterministic or human revision control is protected: {relative}")
-    if len(lower_parts) == 3 and lower_parts[:2] == ("data", "quality"):
-        raise ValueError(f"Deterministic data-quality report is protected: {relative}")
-    if (
-        len(lower_parts) == 3
-        and lower_parts[0] == "papers"
-        and re.fullmatch(r"p[0-9]{2}", lower_parts[1])
-        and lower_parts[2] in {
-            "power-analysis.json",
-            "preregistration.json",
-            "reproduction-confirmation.json",
-            "watermark-assessment.json",
-        }
-    ):
-        raise ValueError(f"Deterministic research-quality record is protected: {relative}")
-    if lower_parts == ("reports", "runtime-evidence-catalog.json"):
-        raise ValueError(f"Deterministic runtime evidence is protected: {relative}")
-    if lower_parts[:2] == ("reports", "watermark-cleanup"):
-        raise ValueError(f"Deterministic watermark cleanup candidate and receipt are protected: {relative}")
-    if lower_parts == ("reports", "research-support.json") or lower_parts[:2] == ("reports", "review-packets"):
-        raise ValueError(f"Deterministic research support/review packet is protected: {relative}")
-    if lower_parts[:2] == ("reports", "figure-output-qa") or candidate.name.endswith((".render-receipt.json", ".output-qa.json")):
-        raise ValueError(f"Actual figure rendering/QA receipt is protected: {relative}")
-    if (len(lower_parts) >= 2 and lower_parts[0] == "reports" and lower_parts[1].startswith("research-notebook")) or lower_parts == ("reports", "method-tools.json") or lower_parts == ("program", "journal-dossier-report.json"):
-        raise ValueError(f"Deterministic research improvement report is protected: {relative}")
-    if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2] == "reviews" and lower_parts[3] in {"statistical-reporting.json", "docx-revision.json"}:
-        raise ValueError(f"Deterministic statistical/Word receipt is protected: {relative}")
-    if len(lower_parts) >= 4 and lower_parts[0] == "papers" and lower_parts[2:4] == ("submission-materials", "revision"):
-        raise ValueError(f"Deterministic Word revision package is protected: {relative}")
-    if lower_parts == ("program", "hypothesis-audit.json"):
-        raise ValueError(f"Deterministic hypothesis audit is protected: {relative}")
-    if lower_parts[:2] == ("evidence", "source-scopes"):
-        raise ValueError(f"Human-confirmed source scope is protected: {relative}")
+    from scripts.artifact_ownership import controller_owned
+    if controller_owned(relative):
+        label = ("Protected state" if relative.casefold().startswith("state/") else
+                 "Deterministic academic style audit is protected" if relative.endswith("/style/academic-style-audit.json") else
+                 "Deterministic or human control record is protected")
+        raise ValueError(f"{label}: {relative}")
     target = unresolved.resolve()
     if not target.is_relative_to(root):
         raise ValueError(f"Artifact escapes project: {relative}")
@@ -1143,12 +937,8 @@ def save_run(project: str, run_id: str, name: str, payload: Any) -> Path:
 
 
 def write_json_atomic(path: Path, payload: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    os.replace(temporary, path)
+    from scripts.research_artifacts import write
+    write(path, payload)
 
 
 def review_prefix(project: str, stage: str) -> str | None:

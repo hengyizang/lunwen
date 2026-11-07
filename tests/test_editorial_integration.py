@@ -36,8 +36,8 @@ class EditorialIntegrationTests(unittest.TestCase):
             manuscript = project / "papers/P01/manuscript/main.tex"
             manuscript.parent.mkdir(parents=True)
             manuscript.write_text(manuscript_text(), encoding="utf-8")
-            with patch.object(academic_style, "run_proselint", return_value={"status": "unavailable", "name": "proselint"}), patch.object(
-                academic_style, "run_harper", return_value={"status": "unavailable", "name": "harper"}
+            with patch.object(academic_style, "find_proselint", return_value=None), patch.object(
+                academic_style, "find_harper", return_value=None
             ):
                 _, report = academic_style.write_audit(project, "P01")
             humanizer = report["analysis"]["humanizer_review"]
@@ -156,8 +156,8 @@ class EditorialIntegrationTests(unittest.TestCase):
             manuscript = project / "papers/P01/manuscript/main.tex"
             manuscript.parent.mkdir(parents=True)
             manuscript.write_text(manuscript_text(), encoding="utf-8")
-            with patch.object(academic_style, "run_proselint", return_value={"status": "unavailable", "name": "proselint"}), patch.object(
-                academic_style, "run_harper", return_value={"status": "unavailable", "name": "harper"}
+            with patch.object(academic_style, "find_proselint", return_value=None), patch.object(
+                academic_style, "find_harper", return_value=None
             ):
                 _, report = academic_style.write_audit(project, "P01")
             report["analysis"]["anti_defensive_review"]["implementation_sha256"] = "0" * 64
@@ -294,8 +294,8 @@ class EditorialIntegrationTests(unittest.TestCase):
             with self.subTest(controller=controller.__name__), tempfile.TemporaryDirectory() as directory, patch.dict(
                 os.environ, {"GITHUB_ACTIONS": "true"}, clear=False
             ), patch.object(api_orchestrator, "ROOT", Path(directory)), patch.object(
-                academic_style, "run_proselint", return_value={"status": "unavailable", "name": "proselint"}
-            ), patch.object(academic_style, "run_harper", return_value={"status": "unavailable", "name": "harper"}):
+                academic_style, "find_proselint", return_value=None
+            ), patch.object(academic_style, "find_harper", return_value=None):
                 project = Path(directory) / "projects/demo"
                 paper = project / "papers/P01"
                 source = paper / "manuscript/draft.md"

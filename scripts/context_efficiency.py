@@ -33,21 +33,8 @@ def discovery_navigation_index(relative: str, text: str, source_sha256: str) -> 
             position += 1
         return position
 
-    # Locate the actual root candidates array, ignoring similar words in data.
-    cursor = whitespace(0) + 1
-    while True:
-        key, cursor = decoder.raw_decode(text, whitespace(cursor))
-        cursor = whitespace(cursor)
-        if text[cursor] != ":":
-            raise ValueError("invalid discovery receipt key")
-        cursor = whitespace(cursor + 1)
-        if key == "candidates":
-            break
-        _, cursor = decoder.raw_decode(text, cursor)
-        cursor = whitespace(cursor)
-        if text[cursor] != ",":
-            raise ValueError("discovery receipt lacks its candidate array")
-        cursor += 1
+    from scripts.research_artifacts import json_field_spans
+    cursor = json_field_spans(text)["candidates"][0]
     if text[cursor] != "[":
         raise ValueError("discovery candidates must be an array")
     cursor += 1

@@ -68,15 +68,15 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertGreaterEqual(result["word_count"], 500)
         self.assertEqual(result["errors"], [])
 
-    def test_template_repetition_requires_revision(self) -> None:
+    def test_template_repetition_is_contextual_advice(self) -> None:
         sentence = (
             "It is important to note that this method plays a crucial role in the "
             "rapidly evolving field and provides a comprehensive understanding of results."
         )
         result = analyze_text(" ".join([sentence] * 30))
-        self.assertTrue(result["errors"])
+        self.assertEqual(result["errors"], [])
         self.assertTrue(result["duplicate_sentences"])
-        self.assertGreater(len(result["stock_phrase_hits"]), 1)
+        self.assertTrue(result["warnings"])
 
     def test_github_informed_rules_produce_line_level_findings(self) -> None:
         filler = " ".join(
@@ -91,7 +91,8 @@ class AcademicStyleTests(unittest.TestCase):
         findings = result["formulaic_pattern_findings"]
         self.assertTrue(any(item["rule_id"] == "chatbot-artifact" for item in findings))
         self.assertTrue(any(item["line"] == 1 for item in findings))
-        self.assertTrue(result["errors"])
+        self.assertEqual(result["errors"], [])
+        self.assertTrue(result["warnings"])
 
     def test_proselint_json_is_normalized_as_local_advice(self) -> None:
         payload = {
@@ -159,6 +160,15 @@ class AcademicStyleTests(unittest.TestCase):
         self.assertTrue(result["local_only"])
         self.assertFalse(result["detector"])
         self.assertEqual(result["diagnostics"][0]["check"], "AnA")
+
+    def test_failed_cli_or_missing_output_never_becomes_a_pass(self) -> None:
+        for lint, output in ((run_proselint, '{"result": {}}'), (run_harper, '[]')):
+            for code, body in ((2, output), (0, ''), (0, 'null')):
+                with self.subTest(tool=lint.__name__, code=code, body=body):
+                    result = lint("Scientific text.", executable="local-linter",
+                                  runner=lambda *args, **kwargs: SimpleNamespace(stdout=body, returncode=code))
+                    self.assertEqual(result["status"], "error")
+                    self.assertFalse(result["required"])
 
     def test_saved_audit_is_bound_to_current_manuscript_tree(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

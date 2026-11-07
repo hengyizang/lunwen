@@ -202,8 +202,6 @@ def validate_academic_style_rules(
             rule_ids.add(rule_id)
         if rule.get("confidence") not in {"high", "moderate"}:
             errors.append(f"{path.relative_to(ROOT)}: invalid confidence for {rule_id}")
-        if not isinstance(rule.get("block_on_any"), bool):
-            errors.append(f"{path.relative_to(ROOT)}: block_on_any must be boolean for {rule_id}")
         source_ids = rule.get("source_ids")
         if not isinstance(source_ids, list) or not source_ids or any(
             source_id not in configured_ids for source_id in source_ids
