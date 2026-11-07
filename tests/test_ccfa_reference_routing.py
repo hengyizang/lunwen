@@ -139,7 +139,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                                  "ccf-common/references/privacy-and-evidence.md"):
                     self.assertNotIn(runtime.source(relative),prompt)
                 self.assertIn("critical_tests",prompt)
-                self.assertIn("data rights",prompt)
+                self.assertIn("source/version",prompt)
                 self.assertNotIn("BEGIN PINNED CCFA ccf-paper-writer/references/venue-guides/", prompt)
             reference="ccf-experiment-designer/references/evidence-design.md"
             with patch.object(api,"project_root",return_value=project):

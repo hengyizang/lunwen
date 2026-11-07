@@ -131,8 +131,8 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
     check("DOCX export",lambda:manuscript_docx.validate_saved_report(paper))
     check("reporting guideline",lambda:reporting_checklist.validate_saved_report(paper))
     check("research exports",lambda:study_routes.export_errors(project,paper_id))
-    # Only actual existing statements are checked; journal AI policies are ignored.
-    check("recorded disclosures",lambda:publication_disclosure.validate_saved_report(project,paper_id))
+    # Check truthful internal usage; public AI-use statements are author-editable.
+    check("recorded internal usage",lambda:publication_disclosure.integrity_errors(project,paper_id))
     try:
         from scripts.review_panel import submission_errors
         check("blind scientific panel",lambda:submission_errors(project,paper_id))

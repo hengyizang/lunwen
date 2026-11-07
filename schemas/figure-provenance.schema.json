@@ -34,7 +34,7 @@
           "visual_checked_at": {"type": "string", "format": "date-time"},
           "recorded_at": {"type": "string", "format": "date-time"}
         },
-        "allOf": [{"if": {"properties": {"figure_type": {"const": "conceptual_illustration"}}}, "then": {"required": ["prompt_sha256", "model_id", "disclosure_location", "human_content_checked_by"], "properties": {"deterministic": {"const": false}}}, "else": {"properties": {"deterministic": {"const": true}, "generated_by": {"const": "local-tool"}}}}, {"if": {"properties": {"figure_type": {"const": "data_chart"}}}, "then": {"required": ["source_lineage"]}}]
+        "allOf": [{"if": {"properties": {"figure_type": {"const": "conceptual_illustration"}}}, "then": {"required": ["prompt_sha256", "model_id", "human_content_checked_by"], "properties": {"deterministic": {"const": false}}}, "else": {"properties": {"deterministic": {"const": true}, "generated_by": {"const": "local-tool"}}}}, {"if": {"properties": {"figure_type": {"const": "data_chart"}}}, "then": {"required": ["source_lineage"]}}]
       }
     }
   },

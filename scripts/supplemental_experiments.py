@@ -296,11 +296,6 @@ def prepare_approval(project, paper_id, actor, *, automated=False):
         from scripts.dataset_fetch import validate_manifest
         manifest = quality._manifest_map(child)[dataset]
         errors.extend(validate_manifest(manifest))
-        if automated:
-            from scripts.dataset_fetch import license_errors
-            errors.extend(license_errors(manifest,project=child))
-        else:
-            need(manifest.get("license", {}).get("confirmed_by_human") is True,"supplemental data rights require their actual authorization")
         need(manifest.get("download", {}).get("sha256") != "pending","supplemental acquisition hashes are still unknown")
         path = child / "data/quality" / f"{dataset}.json"
         need(path.is_file(), "supplemental data needs a complete quality report")

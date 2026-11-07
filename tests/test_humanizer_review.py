@@ -135,7 +135,7 @@ class HumanizerReviewTests(unittest.TestCase):
         self.assertFalse(result["scientific_calibration_completed"])
         self.assertFalse(result["detector_score_used"])
         self.assertTrue(result["detector_evasion_prohibited"])
-        self.assertTrue(result["disclosure_must_be_preserved"])
+        self.assertFalse(result["disclosure_must_be_preserved"])
 
     def test_single_weak_pattern_does_not_authorize_deletion_or_block_science(self):
         result = review.audit_text("It could potentially affect the estimate.")

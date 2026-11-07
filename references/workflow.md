@@ -82,7 +82,7 @@ supplemental verdicts cannot approve the parent G5.
 
 Checks have three levels, shared by `gate-check`, `ready`, `advance` and packaging:
 
-- **A — scientific integrity:** real sources and lawful data, complete registered
+- **A — scientific integrity:** real source/version-bound data, complete registered
   results, source/claim/citation/numeric consistency, frozen protocols, preserved
   adverse findings, actual runner provenance and existing writer permissions.
   Missing or false evidence blocks the affected work.
@@ -103,7 +103,7 @@ Checks have three levels, shared by `gate-check`, `ready`, `advance` and packagi
   change-ledger completeness and per-stage audit administration. Expose their
   warnings and uncertainty; do not create another gate or paid repair merely to
   make these lists empty. Actual loss of evidence, a false number or a removed
-  negative finding remains A regardless of the tool that discovered it.
+  interpretation-changing negative finding remains A regardless of the tool that discovered it.
 
 C report refreshes, edit-ledger completeness and style/voice preferences do not
 revoke an unchanged scientific decision or invalidate its independent review.
@@ -217,8 +217,7 @@ experiments is a scientific planning requirement, not execution permission; the
 original confirmatory plan must never be retrospectively re-frozen.
 
 The workflow adds no automatic AI-generated branding and does not require a
-journal AI-policy assessment as a gate. Existing truthful disclosure statements
-and their current locations remain protected against silent deletion; actual
+journal AI-policy assessment as a gate. AI-use statements are optional author-editable text; internal assistance/provenance remains truthful. Complete experiment backups live under `experiments/archive/` and are excluded from default writing snapshots. Raw logs need not be inserted into a manuscript; material evidence belongs in the manuscript or supplements. Actual
 external author obligations remain outside the automated workflow.
 [Configured statistical watermark detection](../docs/STATISTICAL-WATERMARKS.md)
 is separate from character cleaning: an unknown scheme remains unknown, and a

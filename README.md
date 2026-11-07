@@ -48,7 +48,7 @@ P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [
 - [阶段与论文执行](references/workflow.md)：正式流程保留六篇共同博士问题与逐篇价值，G2 完成整体架构及各篇选题决定后，逐篇推进 G3–G5；低层少量论文测试夹具不扩大正式支持范围。
 - [科研质量与证据](references/stage-contracts.md)：探索、正式验证、科学写作与投稿的适用要求；G1/G2 人工选题，其他阶段以当前证据和自动检查决定。
 - [创新性与审查依据](docs/REVIEW-REMEDIATION.md)：1.1 来源绑定比较、真实检索处置、当前独立创新性判断与 1.2 逐项事实判断；未知或科学异议不能靠自评分消除。
-- [数据使用权](docs/AUTOMATED-DATA-RIGHTS.md)与[研究质量工具](docs/RESEARCH-QUALITY.md)：实际来源、哈希、功效、预注册和复现。
+- [数据来源与版本](docs/AUTOMATED-DATA-RIGHTS.md)与[研究质量工具](docs/RESEARCH-QUALITY.md)：实际来源、哈希、功效、预注册和复现。
 - [正式模型与费用](docs/PRODUCTION-MODEL-ROUTING.md)：既有模型分工、身份核查、累计总额及全部尝试。
 - [写作与图件](docs/NEW-CAPABILITIES.md)：真实结果、英文正文、可编辑图件、引用、修订和视觉检查。
 - [投稿准备](docs/PUBLICATION-DISCLOSURE.md)：真实作者/伦理记录、已有披露保全和外部提交边界。
@@ -369,3 +369,5 @@ existing-note search and linked reading views. See
 inputs and the evidence/budget boundaries. Abstract keywords remain explainable
 discovery signals; they do not assess our manuscript's scientific quality.
 
+
+当前数据与写作规则（2026-11-07）：数据许可及研究用途核验为可选信息，不作为获取前置门槛；来源、版本、校验和、访问安全和隐私检查保留。每次实验的输出、日志及注册比较在 `experiments/archive/Pxx/` 独立备份并纳入云端 checkpoint，默认写作快照不加载备份。论文不必逐条展示全部日志和结果，但影响结论的证据仍需在正文或补充材料交代。已有 AI 使用陈述可由作者修改或删除，内部工具调用和来源记录保持真实。

@@ -76,8 +76,8 @@ def _dataset(project, dataset_id):
         raise ValueError("row provenance requires the canonical dataset manifest")
     manifest = read(path_in(project, manifest_binding["path"]))
     errors = dataset_fetch.validate_manifest(manifest)
-    if errors or manifest.get("license", {}).get("confirmed_by_human") is not True:
-        raise ValueError("row provenance needs the existing reviewed dataset license")
+    if errors:
+        raise ValueError("row provenance needs a valid source/version manifest: " + "; ".join(errors))
     authorizations = read(path_in(project, "state/data-authorizations.json"))
     permission = authorizations.get("manifests", {}).get(manifest_binding["path"], {})
     if (permission.get("sha256") != manifest_binding["sha256"] or permission.get("cloud_use_confirmed") is not True

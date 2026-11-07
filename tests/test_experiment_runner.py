@@ -9,6 +9,7 @@ import tempfile
 import threading
 import time
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -101,6 +102,27 @@ class ExperimentRunnerTests(unittest.TestCase):
         self.assertTrue((project / "result.txt").is_file())
         registry = (project / "experiments" / "registry.jsonl").read_text()
         self.assertIn('"run_id": "baseline"', registry)
+        backup = project / "experiments/archive/P01" / (results[0]["attempt_id"] + ".zip")
+        with zipfile.ZipFile(backup) as archive:
+            self.assertEqual(archive.read("result.txt"), b"ok")
+            original_plan = archive.read("experiments/plan.json")
+        (project / "result.txt").write_text("later output")
+        with zipfile.ZipFile(backup) as archive:
+            self.assertEqual(archive.read("result.txt"), b"ok")
+            self.assertEqual(archive.read("experiments/plan.json"), original_plan)
+
+    def test_backup_directory_cannot_redirect_writes_outside_the_project(self):
+        project = self.project()
+        outside = Path(self.temp.name) / "outside-backups"
+        outside.mkdir()
+        try:
+            (project / "experiments/archive").symlink_to(outside, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("filesystem cannot create symlinks")
+        with self.assertRaises(ValueError):
+            experiment_runner.archive_attempt(project, {"paper_id": "P01", "attempt_id": "fixture", "outputs": []},
+                                              project / "experiments")
+        self.assertEqual(list(outside.iterdir()), [])
 
     def automatic_compute_authority(self, project: Path) -> dict:
         constraints = project / "intake/constraints.json"
@@ -545,6 +567,10 @@ class ExperimentRunnerTests(unittest.TestCase):
         result = experiment_runner.execute("test-phd")[0]
 
         self.assertEqual(result["status"], "failed")
+        with zipfile.ZipFile(project / "experiments/archive/P01" / (result["attempt_id"] + ".zip")) as archive:
+            backup = json.loads(archive.read("backup-manifest.json"))
+            self.assertEqual(backup["attempt"]["status"], "failed")
+            self.assertIn("experiments/plan.json", archive.namelist())
         self.assertFalse(result["input_integrity"]["passed"])
         self.assertEqual(
             result["input_integrity"]["mutated_or_missing"][0]["reason"],

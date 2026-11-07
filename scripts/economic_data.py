@@ -20,7 +20,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from scripts import network_safety
-from scripts.dataset_fetch import license_errors, validate_manifest
+from scripts.dataset_fetch import validate_manifest
 from scripts.research_artifacts import path_in, read, record, sha, write
 
 MODULE = "scripts/economic_data.py"
@@ -139,9 +139,8 @@ def _rights(project, spec, allow_observations):
         raise ValueError("automatic data-rights authorization has an invalid controller identity")
     manifest = read(manifest_path)
     errors = validate_manifest(manifest)
-    errors.extend(license_errors(manifest, project=project))
     if errors:
-        raise ValueError("observation acquisition needs valid source-bound research-use rights: " + "; ".join(errors))
+        raise ValueError("observation acquisition needs a valid source/version-bound manifest: " + "; ".join(errors))
     scope_fields = ("provider", "start", "end", "as_of", "vintage_mode", "series") if spec["provider"] == "fred" else ("provider", "start", "end", "as_of", "vintage_mode", "countries", "indicators")
     if manifest.get("provenance", {}).get("economic_scope") != {key: spec[key] for key in scope_fields}:
         raise ValueError("authorized dataset manifest must cover these exact economic series, dates and vintage")

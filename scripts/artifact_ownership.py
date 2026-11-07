@@ -16,7 +16,7 @@ def paper_observation_path(relative: str) -> bool:
     """Paper-relative C records, excluded from scientific decision fingerprints."""
     return relative.startswith("style/") or relative in PAPER_OBSERVATION_FILES
 
-EXECUTOR_ROOTS = ("experiments/runs", "results", "data/acquisition", "reports/research-extensions",
+EXECUTOR_ROOTS = ("experiments/archive", "experiments/runs", "results", "data/acquisition", "reports/research-extensions",
                   "reports/data-contracts", "reports/data-cleaning", "reports/empirical-reporting",
                   "evidence/economic-data", "evidence/data-rights", "data/raw", "data/processed", "data/processed-preview",
                   "reports/word-render", "reports/review-packets", "reports/research-increments",

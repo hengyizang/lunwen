@@ -13,27 +13,27 @@ from tests.test_dataset_fetch import valid_manifest
 
 
 class ControlledResearchTests(unittest.TestCase):
-    def test_model_declared_license_does_not_authorize_download_and_changed_manifest_invalidates_review(self):
+    def test_public_data_acquisition_binds_source_without_license_confirmation(self):
         with tempfile.TemporaryDirectory() as directory:
             project=Path(directory);path=project/'data/manifests/example.json';manifest=valid_manifest()
-            payload=b'a,b\n1,2\n';manifest['download'].update(sha256=hashlib.sha256(payload).hexdigest(),expected_bytes=len(payload))
+            payload=b'a,b\n1,2\n';manifest.pop('license')
+            manifest['download'].update(sha256=hashlib.sha256(payload).hexdigest(),expected_bytes=len(payload))
             steps.write(path,manifest)
-            with patch.object(steps.dataset_fetch,'download_dataset') as fetch:
-                self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_evidence')
-                fetch.assert_not_called()
-            steps.authorize_data(project,'data/manifests/example.json',cp.sha(path),'Fixture reviewer','123')
             def download(_manifest,destination,*args):
                 destination.mkdir(parents=True,exist_ok=True);target=destination/'data.csv';target.write_bytes(payload);return target
             with patch.object(steps.dataset_fetch,'download_dataset',side_effect=download) as fetch:
                 first=steps.acquire_data(project);steps.acquire_data(project)
+                self.assertEqual(first['blockers'],[])
                 self.assertEqual(fetch.call_count,1)
                 self.assertEqual(first['acquired'][0]['sha256'],hashlib.sha256(payload).hexdigest())
-                # Raw data is absent on a new runner and is rehydrated under the
-                # same exact authorization, while the acquisition receipt stays.
+                self.assertFalse(first['acquired'][0]['authorization']['license_review_performed'])
                 (project/first['acquired'][0]['path']).unlink();steps.acquire_data(project)
                 self.assertEqual(fetch.call_count,2)
-            path.write_text(path.read_text()+'\n')
-            self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'data_rights_evidence')
+            manifest['version']=''
+            steps.write(path,manifest)
+            with patch.object(steps.dataset_fetch,'download_dataset') as fetch:
+                self.assertEqual(steps.acquire_data(project)['blockers'][0]['kind'],'source_binding')
+                fetch.assert_not_called()
 
     def test_literature_failure_does_not_suppress_other_databases_or_repeat_failed_first_six(self):
         with tempfile.TemporaryDirectory() as directory:

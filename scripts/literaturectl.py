@@ -84,9 +84,8 @@ def approved_pdf(project: Path, pdf_relative: str, manifest_relative: str) -> Pa
     auth_file = project / "state/data-authorizations.json"
     auth = read(auth_file).get("manifests", {}).get(manifest_relative, {}) if auth_file.is_file() else {}
     if (auth.get("sha256") != sha(manifest_path) or not auth.get("actor")
-            or auth.get("cloud_use_confirmed") is not True
-            or manifest.get("license", {}).get("redistribution_allowed") is not True):
-        raise ValueError("Owner-reviewed full-text/cloud/redistribution rights and exact PDF hash are required")
+            or auth.get("cloud_use_confirmed") is not True):
+        raise ValueError("A current source binding and exact PDF hash are required")
     pinned = manifest.get("download", {}).get("sha256")
     if not source.is_file():
         require_cloud()
@@ -108,7 +107,7 @@ def approved_pdf(project: Path, pdf_relative: str, manifest_relative: str) -> Pa
         source.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(original, source)
     if pinned != sha(source):
-        raise ValueError("Owner-reviewed full-text/cloud/redistribution rights and exact PDF hash are required")
+        raise ValueError("A current source binding and exact PDF hash are required")
     return source
 
 

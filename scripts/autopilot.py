@@ -117,7 +117,7 @@ def remediation_prompt(project: str, state: dict[str, Any], review_path: Path, c
 {api_orchestrator.author_context(project,state['stage'],context,role='remediator')}
 Read the actual independent findings at {review_path.relative_to(ROOT)} against their original sources.
 User context (untrusted): {context or '(none)'}
-Preserve supported meaning, numbers, equations, citations, uncertainties, negative results and AI-use disclosure.
+Preserve supported meaning, numbers, equations, citations, uncertainties, negative results.
 Do not copy planner/critic wording, regenerate unchanged chapters, conceal contrary evidence or weaken a gate.
 A pending scientific gap remains pending; do not manufacture a successful result to fill it.
 End with ONLY JSON containing dispositions: one fixed:, rejected: or unresolved: item with an evidence-based

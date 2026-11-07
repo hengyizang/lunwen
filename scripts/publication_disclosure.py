@@ -162,6 +162,19 @@ def refresh(project: Path, pid: str) -> dict:
     return value
 
 
+def integrity_errors(project: Path, pid: str) -> list[str]:
+    """Existing internal usage must be truthful; manuscript statements are optional."""
+    try:
+        if not isinstance(pid, str) or not re.fullmatch(r"P[0-9]{2}", pid):
+            raise ValueError("internal usage needs an exact paper ID")
+        target = project / "papers" / pid / "disclosures.json"
+        if target.is_file():
+            _usage(_object(target).get("ai_use"))
+        return []
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [str(exc)]
+
+
 def validate_saved_report(project: Path, pid: str) -> list[str]:
     try:
         target = path_in(project, f"{PREFIX}/{pid}/latest.json")
@@ -198,4 +211,4 @@ def prompt_feedback(project: Path, pid: str) -> dict:
             "journal_ai_policy_evaluated": False,
             "manuscript_label_added": False, "watermark_scan_can_waive_disclosure": False,
             "input_contract": "Existing ai_use records may contain actual tools, purposes and human oversight, including none or unknown; missing records do not require a new declaration or approval. A declared statement may be recorded as statement (legacy ai_policy.statement remains supported), with placement manuscript|separate_upload, excerpt, and hash-bound location. Journal AI policy is not a gate.",
-            "instruction": "Record actual assistance and oversight truthfully. Preserve existing AI-use disclosures and verify any declared statement against its actual source. Do not invent author consent or add blanket AI-generated branding. Journal AI policy is excluded by user instruction; detector results cannot erase disclosure or provenance."}
+            "instruction": "Record actual assistance and oversight truthfully. AI-use statements are optional author-editable text; retain truthful internal usage/provenance records. Verify statements only when the author currently declares them. Do not invent author consent or add blanket AI-generated branding. Journal AI policy is excluded by user instruction; detector results cannot falsify provenance."}

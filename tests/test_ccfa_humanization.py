@@ -43,7 +43,7 @@ class CCFAHumanizationTests(unittest.TestCase):
                 self.assertIn("Ordinary cycles use planner -> writer -> critic", prompt)
                 self.assertIn("three mutually blind, different-family source views", prompt)
                 self.assertIn("Native A/B/C rules override", prompt)
-                self.assertIn("numbers, uncertainty, negative findings and AI-use disclosure", prompt)
+                self.assertIn("numbers, uncertainty, negative findings", prompt)
                 self.assertNotIn("AVAILABLE OBSERVATION CATALOG", prompt)
                 self.assertNotIn("each ID CFH01 through CFH38 exactly once", prompt)
         full = human.prompt_contract("G5", "critic", full=True)

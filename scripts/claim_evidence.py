@@ -77,7 +77,7 @@ def prepare(project: Path, spec: dict) -> dict:
         if not paper:
             if claim.get("evidence"):
                 raise ValueError("unregistered original source cannot supply evidence")
-            missing.append("Locate and lawfully acquire the cited work's original open-access full text.")
+            missing.append("Locate and acquire through available authorized access the cited work's original open-access full text.")
         else:
             if ((doi and citation_audit.normalize_doi(paper.get("url", "")) != doi)
                     or (not doi and paper.get("url", "").rstrip("/") != url.rstrip("/"))):
@@ -95,13 +95,8 @@ def prepare(project: Path, spec: dict) -> dict:
                     raise ValueError("registered full-text source differs from the evidence library")
                 if not _full_text_available(project, paper):
                     missing.append("Complete original full-text scope is unavailable.")
-                grant = read(path_in(project, basis["manifest_path"])).get("license", {})
-                license_url = grant.get("url", "")
-                if (grant.get("research_use_allowed") is not True or not isinstance(license_url, str)
-                        or not license_url.startswith(("https://creativecommons.org/licenses/", "https://creativecommons.org/publicdomain/"))):
-                    missing.append("This OA-only checker needs the recorded public license grant; other full text stays insufficient.")
             else:
-                missing.append("Full-text rights and controlled acquisition still need source registration evidence.")
+                missing.append("Full-text source identity and controlled acquisition still need source registration evidence.")
         if not anchors:
             missing.append("Locate the relevant original paragraph/page, including contrary context.")
         claims.append({"claim_id": key, "claim": statement, "citation_key": cite, "doi": doi, "source_identity_url": identity_url,

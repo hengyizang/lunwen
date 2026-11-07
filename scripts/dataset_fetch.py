@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and safely download a licensed public dataset over HTTPS."""
+"""Validate and safely download a source/version-bound public dataset over HTTPS."""
 
 from __future__ import annotations
 
@@ -63,7 +63,6 @@ def validate_manifest(value: dict[str, Any]) -> list[str]:
         "source_url",
         "version",
         "accessed_at",
-        "license",
         "download",
         "provenance",
         "unit_of_analysis",
@@ -79,25 +78,11 @@ def validate_manifest(value: dict[str, Any]) -> list[str]:
     except DatasetError as exc:
         errors.append(str(exc))
 
-    license_value = value.get("license")
-    if not isinstance(license_value, dict):
-        errors.append("license must be an object")
-    else:
-        for key in [
-            "name",
-            "url",
-            "research_use_allowed",
-            "redistribution_allowed",
-            "confirmed_by_human",
-        ]:
-            if key not in license_value:
-                errors.append(f"missing license field: {key}")
-        try:
-            https_url(license_value.get("url"), "license.url")
-        except DatasetError as exc:
-            errors.append(str(exc))
-        if license_value.get("research_use_allowed") is not True:
-            errors.append("license.research_use_allowed must be true")
+    for key in ("dataset_id", "title", "provider", "version", "accessed_at"):
+        if not isinstance(value.get(key), str) or not value[key].strip():
+            errors.append(f"{key} must identify the actual source/version")
+    if value.get("license") is not None and not isinstance(value["license"], dict):
+        errors.append("optional license metadata must be an object or null")
 
     download = value.get("download")
     if not isinstance(download, dict):
@@ -143,22 +128,6 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def license_errors(manifest: dict[str, Any], *, manifest_path: Path | None = None,
-                   project: Path | None = None) -> list[str]:
-    """Accept legacy human decisions or protected automated source evidence."""
-    license_value = manifest.get("license")
-    if isinstance(license_value, dict) and license_value.get("confirmed_by_human") is True:
-        return []
-    if project is None and manifest_path is not None:
-        manifest_path = manifest_path.resolve()
-        if manifest_path.parent.name == "manifests" and manifest_path.parent.parent.name == "data":
-            project = manifest_path.parents[2]
-    if project is None:
-        return ["source-bound data-rights evidence is required"]
-    from scripts.data_rights import verify
-    return verify(project, manifest)
-
-
 def download_dataset(
     manifest_path: Path,
     destination: Path,
@@ -173,12 +142,6 @@ def download_dataset(
     errors = validate_manifest(manifest)
     if errors:
         raise DatasetError("; ".join(errors))
-    issues = license_errors(manifest, manifest_path=manifest_path)
-    if issues:
-        raise DatasetError("; ".join(issues))
-    if manifest["license"].get("confirmed_by_human") is True and not accept_license:
-        raise DatasetError("Existing human license decisions require --accept-license; automatic rights evidence requires no human confirmation")
-
     url = manifest["download"]["url"]
     try:
         public_url = require_public_https_url(
@@ -285,7 +248,7 @@ def main() -> int:
     download = sub.add_parser("download")
     download.add_argument("manifest", type=Path)
     download.add_argument("destination", type=Path)
-    download.add_argument("--accept-license", action="store_true")
+    download.add_argument("--accept-license", action="store_true", help="Legacy annotation; licence approval is not required")
     download.add_argument("--max-bytes", type=int, default=DEFAULT_MAX_BYTES)
     download.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()

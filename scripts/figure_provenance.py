@@ -92,8 +92,6 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
                                   checked_by:str="",disclosure_location:str="")->str:
     """Register illustration provenance and disclosure, pending recorded visual QA."""
     if not re.fullmatch(r"P[0-9]{2}",paper_id):raise ValueError("invalid paper ID")
-    if not disclosure_location.strip():
-        raise ValueError("AI-use disclosure location is required")
     path,relative=_relative(project,figure,"figure")
     source,source_rel=_relative(project,source_record,"source_record")
     if not path.is_file() or path.suffix.lower() not in {".png",".tif",".tiff"} or not source.is_file():
@@ -210,8 +208,8 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
             illustration=item.get("figure_type")=="conceptual_illustration"
             if item.get("figure_type") not in FIGURE_TYPES:errors.append(f"{relative}: invalid figure type")
             if illustration:
-                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or (item.get("review_kind")!="automated" and not str(item.get("human_content_checked_by","")).strip()) or not str(item.get("disclosure_location","")).strip() or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
-                    errors.append(f"{relative}: conceptual illustration needs explicit source, approval and disclosure")
+                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or (item.get("review_kind")!="automated" and not str(item.get("human_content_checked_by","")).strip()) or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
+                    errors.append(f"{relative}: conceptual illustration needs explicit source and actual visual review")
                 origin=output_provenance.current_origin(project,path)
                 if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: illustration needs current non-Claude provenance")
             elif item.get("deterministic") is not True or item.get("generated_by")!="local-tool":
@@ -245,24 +243,13 @@ def validate_figure_provenance(project:Path,paper:Path)->list[str]:
                 if item.get("source_lineage")!=current:errors.append(f"{relative}: sealed executor/data lineage is stale or missing")
             if illustration and (inputs or runs):errors.append(f"{relative}: conceptual illustration may not assert experimental inputs or runs")
         except (OSError,ValueError,KeyError,TypeError,AttributeError) as exc:errors.append(f"{relative}: {exc}")
-    if any(item.get("figure_type")=="conceptual_illustration" for item in records.values() if isinstance(item,dict)):
-        disclosure_file=paper/"disclosures.json"
-        if disclosure_file.is_file():
-            try:
-                disclosures=json.loads(disclosure_file.read_text(encoding="utf-8"))
-                ai_use=disclosures.get("ai_use","") if isinstance(disclosures,dict) else ""
-                statement=ai_use if isinstance(ai_use,str) else json.dumps(ai_use,ensure_ascii=False)
-                if not statement.strip() or re.fullmatch(r"\s*(none|no|not used|n/a)\s*\.?",statement,re.I):
-                    errors.append("conceptual illustration requires an actual AI-use disclosure; source receipt alone is insufficient")
-            except (OSError,json.JSONDecodeError):
-                errors.append("cannot verify conceptual illustration AI-use disclosure")
     return errors
 
 
 def main()->int:
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest="command",required=True)
     record=sub.add_parser("record");record.add_argument("--project",required=True);record.add_argument("--paper",required=True);record.add_argument("--figure",required=True);record.add_argument("--type",required=True,choices=sorted(FIGURE_TYPES-{"conceptual_illustration"}));record.add_argument("--renderer",required=True);record.add_argument("--input",action="append",default=[],dest="inputs");record.add_argument("--run",action="append",default=[],dest="runs");record.add_argument("--config");record.add_argument("--language-checked-by",default="")
-    illustration=sub.add_parser("approve-illustration");illustration.add_argument("--project",required=True);illustration.add_argument("--paper",required=True);illustration.add_argument("--figure",required=True);illustration.add_argument("--receipt",required=True);illustration.add_argument("--checked-by",default="");illustration.add_argument("--disclosure-location",required=True)
+    illustration=sub.add_parser("approve-illustration");illustration.add_argument("--project",required=True);illustration.add_argument("--paper",required=True);illustration.add_argument("--figure",required=True);illustration.add_argument("--receipt",required=True);illustration.add_argument("--checked-by",default="");illustration.add_argument("--disclosure-location",default="")
     validate=sub.add_parser("validate");validate.add_argument("--project",required=True);validate.add_argument("--paper",required=True)
     args=parser.parse_args();root=Path(__file__).resolve().parents[1];project=root/"projects"/args.project;paper=project/"papers"/args.paper
     try:

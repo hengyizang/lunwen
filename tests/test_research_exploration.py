@@ -382,7 +382,7 @@ class NativeExplorationTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     research_phase.phase(self.project)
 
-    def test_selected_original_data_still_needs_its_real_source_rights(self):
+    def test_selected_original_data_needs_source_version_not_license_approval(self):
         from tests.test_dataset_fetch import valid_manifest
         raw = self.project / "data/raw/fixture.csv"; raw.parent.mkdir(parents=True)
         raw.write_text("synthetic,value\na,1\n", encoding="utf-8")
@@ -396,7 +396,10 @@ class NativeExplorationTests(unittest.TestCase):
         self.plan["runs"][0]["inputs"].append({"path": "data/raw/fixture.csv", "sha256": sha(raw)})
         write(self.plan_path, self.plan)
         self.assertEqual(research_phase.design_errors(self.project), [])
-        manifest["license"]["confirmed_by_human"] = False
+        manifest.pop("license")
+        snapshot.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+        self.assertEqual(research_phase.design_errors(self.project), [])
+        manifest["version"] = ""
         snapshot.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
         self.assertTrue(research_phase.design_errors(self.project))
 

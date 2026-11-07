@@ -65,6 +65,7 @@ SNAPSHOT_SUFFIXES = {
     ".yml",
 }
 SNAPSHOT_SKIPPED_PARTS = {
+    "archive",
     ".git",
     "api_runs",
     "build",

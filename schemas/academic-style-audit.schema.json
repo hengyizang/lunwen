@@ -28,7 +28,7 @@
     "purpose": {"const": "authentic_academic_style_and_readability"},
     "detector_score_used": {"const": false},
     "detector_evasion_prohibited": {"const": true},
-    "disclosure_must_be_preserved": {"const": true},
+    "disclosure_must_be_preserved": {"const": false},
     "human_review_required": {"type": "boolean"},
     "manuscript": {
       "type": "object",

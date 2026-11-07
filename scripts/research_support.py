@@ -475,10 +475,7 @@ def _availability(project: Path, row: dict, datasets: dict, requests: dict, curr
     if identifier not in datasets or row.get("version") != datasets[identifier].get("version"):
         raise ValueError("data availability must bind an existing registered dataset and its exact version")
     manifest = datasets[identifier]
-    license = manifest.get("license")
-    if not isinstance(license, dict) or any(not isinstance(license.get(key), bool) for key in ("research_use_allowed", "redistribution_allowed", "confirmed_by_human")):
-        raise ValueError("data availability needs explicit existing license/permission fields")
-    _text(license.get("name"), "registered license name")
+    license = manifest.get("license") or {}
     access = row.get("access_mode")
     if access not in {"open", "restricted", "embargoed", "unavailable"}:
         raise ValueError("availability must distinguish open, restricted, embargoed and unavailable access")
@@ -525,17 +522,14 @@ def _availability(project: Path, row: dict, datasets: dict, requests: dict, curr
         if deposit.get("uploaded") is True or deposit.get("availability_verified") is True:
             raise ValueError("a planned/unavailable deposit cannot claim a completed upload")
     warnings = []
-    if license["confirmed_by_human"] is not True or license["research_use_allowed"] is not True:
-        warnings.append("Existing research-use/license human authorization is incomplete; this report grants no access.")
-        pending.append(identifier + ": license/research-use approval pending")
-    if license["redistribution_allowed"] is not True:
+    if license.get("redistribution_allowed") is not True:
         warnings.append("Public metadata or viewing access does not grant redistribution; publication of data remains unauthorized.")
     return {"dataset_id": identifier, "version": row["version"], "access_mode": access, "fair": normalized,
             "deposit": deposit, "metadata_receipt": receipt, "registered_rights": license, "warnings": warnings,
             "fair_certified": False, "fair_requires_unrestricted_open_access": False,
             "metadata_record_observed": receipt is not None, "upload_ownership_verified": False,
             "data_files_retrieved_or_verified": False, "publishing_authorized": False,
-            "human_license_and_access_review_required": True}
+            "human_license_and_access_review_required": False}
 
 
 def audit(project: Path, *, now: datetime | None = None) -> dict:

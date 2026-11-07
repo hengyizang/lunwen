@@ -133,8 +133,8 @@ class EconomicDataTests(unittest.TestCase):
             economic.execute(self.project, "fixture", fetcher=self.fred)
         self.assertEqual(self.urls, [])
         self.rights(confirmed=False)
-        with self.assertRaisesRegex(ValueError, "source-bound research-use rights"):
-            economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        result = economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        self.assertEqual(result["report"]["observation_count"], 2)
 
     def test_machine_authorization_reuses_rights_verifier_without_human_flag(self):
         self.rights(confirmed=False)
@@ -143,12 +143,8 @@ class EconomicDataTests(unittest.TestCase):
         auth["manifests"][self.spec["dataset_manifest"]["path"]].update(
             actor="deterministic_control_plane", decision_kind="automated", human_confirmation=False)
         write(auth_path, auth)
-        # This unit fixture supplies a verifier result, not a provider licence.
-        # Actual protected source evidence is exercised in test_data_rights.
-        with patch.object(economic, "license_errors", return_value=[]) as verify:
-            result = economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
+        result = economic.execute(self.project, "fixture", allow_observations=True, fetcher=self.fred)
         self.assertEqual(result["report"]["observation_count"], 2)
-        verify.assert_called_with(self.manifest, project=self.project)
         self.assertFalse(self.manifest["license"]["confirmed_by_human"])
 
     def test_automatic_rights_authorization_rejects_wrong_controller_before_network(self):
