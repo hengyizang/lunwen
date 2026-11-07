@@ -15,9 +15,18 @@ from scripts.research_artifacts import path_in, read, sha
 OUTCOMES = {"supports", "contradicts", "insufficient"}
 
 
+def manuscript_usages(project: Path, paper_id: str) -> list[dict]:
+    from scripts.ref_verify_adapter import canonical_manuscript
+    manuscript = canonical_manuscript(path_in(project, "papers/" + paper_id, exists=False))
+    rows = citation_audit.citation_usages(manuscript)
+    for row in rows:
+        row["source"]["path"] = (manuscript.parent / row["source"]["path"]).relative_to(project).as_posix()
+        row["usage_id"] = wb._digest({k: row[k] for k in ("citation_key", "source", "context")})[:24]
+    return rows
+
+
 def prepare(project: Path, spec: dict) -> dict:
     from scripts.ref_verify_adapter import canonical_manuscript
-    from scripts.manuscript_language import extract_text
     from scripts.literature_source_tasks import _anchors, _full_text_available, _library
     from scripts.source_scope import _registered_basis
     if not isinstance(spec, dict) or set(spec) - {"schema_version", "id", "paper_id", "claims", "sample_labels"} or spec.get("schema_version") != "1.0":
@@ -33,9 +42,7 @@ def prepare(project: Path, spec: dict) -> dict:
     if len({e["key"] for e in entries}) != len(entries):
         raise ValueError("duplicate citation keys")
     entries = {e["key"]: e for e in entries}
-    text = extract_text(manuscript)
-    cited = (citation_audit.tex_citation_keys(manuscript) if manuscript.suffix == ".tex"
-             else citation_audit.docx_citation_keys(manuscript)[0])
+    usages = manuscript_usages(project, owner)
     papers = _library(project)[0] if (project / wb.CONFIG).is_file() else {}
     incoming = spec.get("claims")
     if not isinstance(incoming, list) or not 1 <= len(incoming) <= 500:
@@ -53,8 +60,10 @@ def prepare(project: Path, spec: dict) -> dict:
         if (statement, cite) in scientific_claims:
             raise ValueError("renamed duplicate claims cannot inflate the sampling population")
         scientific_claims.add((statement, cite))
-        if statement not in text or cite not in cited or cite not in entries:
-            raise ValueError("claim text and citation key must occur in the current manuscript/bibliography")
+        local = [row for row in usages if row["citation_key"] == cite and row["claim_text"] ==
+            citation_audit.citation_prose(statement, tex=manuscript.suffix == ".tex")]
+        if not local or cite not in entries:
+            raise ValueError("claim text and citation key must identify the same complete current manuscript citation scope")
         doi = citation_audit.normalize_doi(entries[cite]["fields"].get("doi", ""))
         url = entries[cite]["fields"].get("url", "").strip()
         if doi and not re.fullmatch(r"10\.\d{4,9}/\S+", doi, re.I):
@@ -96,17 +105,21 @@ def prepare(project: Path, spec: dict) -> dict:
         if not anchors:
             missing.append("Locate the relevant original paragraph/page, including contrary context.")
         claims.append({"claim_id": key, "claim": statement, "citation_key": cite, "doi": doi, "source_identity_url": identity_url,
+            "manuscript_usages": local,
             "library_id": claim.get("library_id"), "evidence": anchors, "source_basis": basis,
             "source": paper["source"] if paper else None, "reader": paper.get("reader") if paper else None,
             "full_text_ready": not missing, "missing_evidence": missing, "outcome": "insufficient"})
-    fingerprint = wb._digest([{**{k: row[k] for k in ("claim_id", "claim", "citation_key", "doi", "source", "reader", "evidence", "source_basis")},
-        **({"source_identity_url": row["source_identity_url"]} if not row["doi"] else {})} for row in claims])
+    fingerprint = wb._digest({"claims": [{**{k: row[k] for k in ("claim_id", "claim", "citation_key", "doi", "source", "reader", "evidence", "source_basis", "manuscript_usages")},
+        **({"source_identity_url": row["source_identity_url"]} if not row["doi"] else {})} for row in claims], "citation_usages": usages})
     sample = sorted(claims, key=lambda row: wb._digest([fingerprint, row["claim_id"]]))[:math.ceil(.15 * len(claims))]
     return {"schema_version": "1.0", "operation": "claim_evidence", "id": identifier, "paper_id": owner,
         "manuscript_sha256": citation_audit.manuscript_digest(manuscript), "bibliography_sha256": sha(bibliography),
-        "claims": claims, "claim_fingerprint": fingerprint, "sample_claim_ids": [r["claim_id"] for r in sample],
+        "claims": claims, "citation_usages": usages,
+        "uncovered_usages": [row for row in usages if row["usage_id"] not in
+            {use["usage_id"] for claim in claims for use in claim["manuscript_usages"]}],
+        "claim_fingerprint": fingerprint, "sample_claim_ids": [r["claim_id"] for r in sample],
         "sample_fraction": .15, "semantic_support_verified": False, "scientific_completion_verified": False,
-        "model_call_made": False, "role_contract": "Return claim_evidence:[{claim_id,outcome:supports|contradicts|insufficient,rationale,evidence:[original anchors],missing_evidence:[text]}]. Preserve contrary evidence and uncertainty; insufficient is valid. A quote match never proves support."}
+        "model_call_made": False, "role_contract": "Return claim_evidence:[{claim_id,outcome:supports|contradicts|insufficient,rationale,evidence:[original anchors],missing_evidence:[text]}]. Assess the entire located manuscript citation scope, including all assertions and contrary context. Preserve uncovered uses as missing evidence. Insufficient is valid; a quote match never proves support."}
 
 
 def assess(project: Path, packet: dict, responses: list[dict], labels: dict | None = None) -> dict:
@@ -158,9 +171,11 @@ def assess(project: Path, packet: dict, responses: list[dict], labels: dict | No
             checked.append(key)
             agreements += int(bool(claims[key]["judgments"]) and claims[key]["outcome"] == row["outcome"])
     complete = set(checked) == set(sample)
-    agreement = agreements / len(sample) if complete and all(claims[k]["judgments"] for k in sample) else None
+    covered = not packet["uncovered_usages"]
+    agreement = agreements / len(sample) if covered and complete and all(claims[k]["judgments"] for k in sample) else None
     return {**packet, "claims": list(claims.values()), "spot_check": {"sample_claim_ids": sample,
-        "reviewed_claim_ids": checked, "label_source": labels, "status": "recorded_human_comparison" if complete else "awaiting_real_labels",
+        "reviewed_claim_ids": checked, "label_source": labels, "coverage_complete": covered,
+        "status": "awaiting_complete_citation_coverage" if not covered else "recorded_human_comparison" if complete else "awaiting_real_labels",
         "agreement": agreement, "target_agreement": .85, "target_met": agreement >= .85 if agreement is not None else None,
         "scientific_validity_verified": False}}
 

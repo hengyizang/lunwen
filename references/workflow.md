@@ -88,7 +88,8 @@ Checks have three levels, shared by `gate-check`, `ready`, `advance` and packagi
   Missing or false evidence blocks the affected work.
   Final G5 citation support uses the current selected `claim_evidence` task,
   lawful original full text and protected source judgments covering the actual
-  manuscript's cited keys. Missing or insufficient support stays pending;
+  manuscript's distinct citation uses and complete local assertion scopes,
+  including different claims citing the same work. Missing or insufficient support stays pending;
   abstract-only `ref-verify` reports cannot replace this check. Drafts may retain
   unfinished checks, while actual contradictions remain visible and blocking.
 - **B — submission preparation:** the actual selected venue, source-bound ranking

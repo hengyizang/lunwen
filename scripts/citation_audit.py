@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from bisect import bisect_right
 import hashlib
 import json
 import re
@@ -34,6 +35,8 @@ except ModuleNotFoundError:  # Direct execution from scripts/.
 ENTRY_RE = re.compile(r"@([A-Za-z]+)\s*\{\s*([^,\s]+)\s*,", re.MULTILINE)
 FIELD_RE = re.compile(r"(?s)^\s*([A-Za-z][A-Za-z0-9_-]*)\s*=\s*(.*?)\s*$")
 DOI_PREFIX_RE = re.compile(r"^(?:https?://(?:dx\.)?doi\.org/|doi:\s*)", re.IGNORECASE)
+CITE_RE = re.compile(r"\\(cite|citep|citet|parencite|textcite|autocite|citeauthor|citeyear|citeyearpar|footcite|footcitetext)\*?(?:\[[^]]*\])*\{([^}]*)\}")
+MARKER_RE = re.compile(r"\[[^\]]*?@[^\]]+\]")
 
 
 class CitationAuditError(RuntimeError):
@@ -76,36 +79,144 @@ def manuscript_digest(path: Path) -> str:
 
 
 def tex_citation_keys(path: Path) -> set[str]:
-    keys: set[str] = set()
-    for source in tex_source_paths(path):
-        text = re.sub(r"(?m)(?<!\\)%.*$", "", source.read_text(encoding="utf-8"))
-        for match in re.finditer(r"\\(?:cite|citep|citet|parencite|textcite|autocite|citeauthor|citeyear|citeyearpar|footcite|footcitetext)\*?(?:\[[^]]*\])*\{([^}]*)\}",text):keys.update(key.strip() for key in match.group(1).split(",") if key.strip())
-    return keys
+    return {row["citation_key"] for row in citation_usages(path)}
+
+
+def citation_prose(value: str, *, tex=False) -> str:
+    """Normalize literal citation scopes for matching, never scientific inference."""
+    if tex:
+        value = CITE_RE.sub("", value)
+        value = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^]]*\])*", "", value).replace("{", "").replace("}", "")
+    else:
+        value = MARKER_RE.sub("", value)
+    return " ".join(value.split()).strip().rstrip(".!?;").strip()
+
+
+def _citation_scopes(text, matches, source, *, tex=False):
+    """Each literal citation occurrence keeps its local prose and source position."""
+    if len(matches) > 5000:
+        raise CitationAuditError("citation inventory exceeds 5000 explicit occurrences")
+    boundaries = [0]
+    for boundary in re.finditer(r"\n[ \t]*\n|[.!?;][\"')\]]*\s+(?=[A-Z\\\[])", text):
+        if not CITE_RE.match(text, boundary.end()) and not MARKER_RE.match(text, boundary.end()):
+            boundaries.append(boundary.end())
+    if tex:
+        boundaries.extend(m.end() for m in re.finditer(r"\\(?:begin|end)\{[^}]+\}|\\(?:section|subsection|subsubsection|paragraph|title)\*?(?:\[[^]]*\])*\{[^{}]*\}", text))
+    boundaries.sort()
+    result, previous = [], None
+    for ordinal, (start, end, keys, prefix) in enumerate(matches, 1):
+        left = boundaries[bisect_right(boundaries, start) - 1]
+        if previous and citation_prose(text[previous[1]:start], tex=tex).strip(",:()[]"):
+            left = max(left, previous[1])
+        right = end
+        if prefix or not citation_prose(text[left:start], tex=tex):
+            stop = re.search(r"[.!?;](?=\s|$)|\n[ \t]*\n", text[end:])
+            right = end + stop.end() if stop else len(text)
+        else:
+            punctuation = re.match(r"[ \t]*[.!?;]", text[end:])
+            if punctuation:
+                right += punctuation.end()
+        context = text[left:right].strip()
+        location = {**source(start), "citation_ordinal": ordinal}
+        for key in keys:
+            binding = {"citation_key": key, "source": location, "context": context}
+            result.append({"usage_id": hashlib.sha256(json.dumps(binding, sort_keys=True).encode()).hexdigest()[:24],
+                **binding, "claim_text": citation_prose(context, tex=tex)})
+        previous = (start, end)
+    return result
+
+
+def _docx_usage_inventory(path):
+    try:
+        with zipfile.ZipFile(path) as archive:
+            member = archive.getinfo("word/document.xml")
+            if member.file_size > 10 * 1024 * 1024:
+                raise CitationAuditError("DOCX citation XML exceeds 10 MiB")
+            root = ET.fromstring(archive.read(member))
+    except (KeyError, zipfile.BadZipFile, ET.ParseError) as exc:
+        raise CitationAuditError("DOCX citation source is not a readable document XML package") from exc
+    w = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    result, errors, visible, paragraphs, stack = [], [], [], [], []
+    digest = sha256_file(path)
+    def marker(instruction):
+        if "CSL_CITATION" in instruction:
+            errors.append("unsupported CSL citation keys require an explicit bibliography mapping")
+        keys = re.findall(r"\bCITATION\s+([A-Za-z0-9_:.+/-]+)", instruction)
+        if keys:
+            keys.extend(re.findall(r"\\m\s+([A-Za-z0-9_:.+/-]+)", instruction))
+        return "[" + "; ".join("@" + key for key in keys) + "]" if keys else ""
+    for index, paragraph in enumerate(root.iter(w + "p"), 1):
+        pieces = []
+        paragraphs.append((index, pieces))
+        simple_results = {id(node) for field in paragraph.iter(w + "fldSimple")
+            if re.search(r"\bCITATION\s", field.get(w + "instr", "")) for node in field.iter(w + "t")}
+        for node in paragraph.iter():
+            if node.tag == w + "fldSimple":
+                pieces.append(marker(node.get(w + "instr", "")))
+            elif node.tag == w + "fldChar":
+                kind = node.get(w + "fldCharType")
+                if kind == "begin":
+                    stack.append([pieces, len(pieces), []]); pieces.append("")
+                elif kind == "end" and stack:
+                    field_pieces, position, instruction = stack.pop()
+                    field_pieces[position] = marker("".join(instruction))
+            elif node.tag == w + "instrText":
+                if stack: stack[-1][2].append(node.text or "")
+                else: pieces.append(marker(node.text or ""))
+            elif node.tag == w + "t":
+                field_result = id(node) in simple_results or any(re.search(r"\bCITATION\s", "".join(field[2])) for field in stack)
+                if not field_result:
+                    pieces.append(node.text or "")
+                    visible.append(node.text or "")
+            elif node.tag in {w + "tab", w + "br", w + "cr"}:
+                pieces.append(" ")
+    if stack:
+        errors.append("DOCX contains an unterminated citation field")
+    for index, pieces in paragraphs:
+        text = "".join(pieces)
+        matches = [(m.start(), m.end(), re.findall(r"@([A-Za-z0-9_:.+/-]+)", m.group()), False) for m in MARKER_RE.finditer(text)]
+        result.extend(_citation_scopes(text, matches, lambda offset: {"path": path.name, "sha256": digest,
+            "paragraph": index, "coordinates": "word_paragraph_and_citation_order"}))
+    if not result:
+        errors.append("DOCX has no explicit citation-key mapping; retain [@key] markers or Word CITATION fields")
+    if re.search(r"\[\d+(?:\s*[,–-]\s*\d+)*\]", " ".join(visible)):
+        errors.append("numeric DOCX citations require an explicit bibliography-key mapping")
+    return result, list(dict.fromkeys(errors))
+
+
+def citation_usages(path: Path) -> list[dict]:
+    """Located literal citation uses; the existing reviewer judges their meaning."""
+    if path.suffix.lower() == ".docx":
+        rows, errors = _docx_usage_inventory(path)
+        if errors:
+            raise CitationAuditError("; ".join(errors))
+        return rows
+    if path.suffix.lower() != ".tex":
+        raise CitationAuditError("citation scopes require canonical TeX or DOCX")
+    try:from scripts.tex_sources import expand
+    except ModuleNotFoundError:from tex_sources import expand
+    expanded = expand(path)
+    digests = {p.relative_to(path.parent.resolve()).as_posix(): sha256_file(p) for p in expanded.files}
+    def location(offset):
+        value = expanded.locate(offset)
+        return {**value, "sha256": digests[value["path"]], "coordinates": "source_line_and_citation_order"}
+    begin = expanded.text.find(r"\begin{document}")
+    start = begin + len(r"\begin{document}") if begin >= 0 else 0
+    end = expanded.text.find(r"\end{document}", start)
+    body = expanded.text[start:end if end >= 0 else len(expanded.text)]
+    supported = {"cite", "citep", "citet", "parencite", "textcite", "autocite", "citeauthor", "citeyear",
+        "citeyearpar", "footcite", "footcitetext", "nocite", "citestyle", "setcitestyle", "citereset"}
+    if any(m[1] not in supported for m in re.finditer(r"\\([A-Za-z@]*cite[A-Za-z@]*)\b", body)):
+        raise CitationAuditError("unsupported citation command needs an explicit literal citation-key source export")
+    matches = [(m.start(), m.end(), [key.strip() for key in m[2].split(",") if key.strip()],
+        m[1] in {"citet", "textcite", "citeauthor"}) for m in CITE_RE.finditer(expanded.text, start, end if end >= 0 else len(expanded.text))]
+    return _citation_scopes(expanded.text, matches, location, tex=True)
 
 
 def docx_citation_keys(path: Path) -> tuple[set[str], list[str]]:
     """Map explicit bibliography keys; unsupported formatted citations fail closed."""
-    with zipfile.ZipFile(path) as archive:
-        root = ET.fromstring(archive.read("word/document.xml"))
-    ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
-    text = "\n".join("".join(p.itertext()) for p in root.findall(".//w:p", ns))
-    keys = {key for group in re.findall(r"\[[^\]]*@[^\]]+\]", text)
-            for key in re.findall(r"@([A-Za-z0-9_:.+/-]+)", group)}
-    instructions = ["".join(node.text or "" for node in paragraph.findall(".//w:instrText", ns))
-                    for paragraph in root.findall(".//w:p", ns)]
-    instructions.extend(node.get("{" + ns["w"] + "}instr", "") for node in root.findall(".//w:fldSimple", ns))
-    errors = []
-    for instruction in instructions:
-        keys.update(re.findall(r"\bCITATION\s+([A-Za-z0-9_:.+/-]+)", instruction))
-        if re.search(r"\bCITATION\s", instruction):
-            keys.update(re.findall(r"\\m\s+([A-Za-z0-9_:.+/-]+)", instruction))
-        if "CSL_CITATION" in instruction:
-            errors.append("unsupported CSL citation keys require an explicit bibliography mapping")
-    if not keys:
-        errors.append("DOCX has no explicit citation-key mapping; retain [@key] markers or Word CITATION fields")
-    if re.search(r"\[\d+(?:\s*[,–-]\s*\d+)*\]", text):
-        errors.append("numeric DOCX citations require an explicit bibliography-key mapping")
-    return keys, errors
+    rows, errors = _docx_usage_inventory(path)
+    return {row["citation_key"] for row in rows}, errors
 
 
 def parse_bibtex(text: str) -> list[dict[str, Any]]:
@@ -522,11 +633,13 @@ def audit(
     manuscript_path = tex_path if tex_path.is_file() else docx_path if docx_path.is_file() else None
     usage_errors = []
     if tex_path.is_file():
-        cited_keys = tex_citation_keys(tex_path)
+        occurrences = citation_usages(tex_path)
+        cited_keys = {row["citation_key"] for row in occurrences}
     elif docx_path.is_file():
-        cited_keys, usage_errors = docx_citation_keys(docx_path)
+        occurrences, usage_errors = _docx_usage_inventory(docx_path)
+        cited_keys = {row["citation_key"] for row in occurrences}
     else:
-        cited_keys = set()
+        cited_keys, occurrences = set(), []
     unresolved.extend("usage:" + error for error in usage_errors)
     missing_citations = sorted(cited_keys - bibliography_keys)
     if missing_citations:
@@ -553,6 +666,7 @@ def audit(
             "verified_by": docx_verified_by.strip() if isinstance(docx_verified_by,str) and docx_verified_by.strip() else None,
             "verified_at": now() if docx_path.is_file() and isinstance(docx_verified_by,str) and docx_verified_by.strip() else None,
             "cited_keys": sorted(cited_keys),
+            "occurrences": occurrences,
             "missing_bibliography_keys": missing_citations,
             "unused_bibliography_keys": sorted(bibliography_keys - cited_keys)
             if tex_path.is_file()
