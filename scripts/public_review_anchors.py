@@ -11,13 +11,14 @@ import html
 import json
 import os
 import re
-from concurrent.futures import ThreadPoolExecutor
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote, urlsplit
-from urllib.request import Request, urlopen
 
 from scripts.literature_benchmark import ELIFE_STRENGTHS, judgment_benchmark
+from scripts.literature_evidence import fetch_provider_bytes
+from scripts.network_safety import fetch_bytes
 from scripts.research_artifacts import read, record, sha, write
 
 API = "https://api.elifesciences.org"
@@ -27,10 +28,25 @@ LICENSE = "https://creativecommons.org/licenses/by/4.0/"
 def _fetch(url, cache):
     if urlsplit(url).hostname not in {"api.elifesciences.org", "api.crossref.org"} or not url.startswith("https://"):
         raise ValueError("only the two public source APIs are permitted")
-    with urlopen(Request(url, headers={"User-Agent": "DoctoralResearchOS-public-review-anchors/1.0"}), timeout=40) as response:
-        body = response.read(12_000_001)
-    if len(body) > 12_000_000:
-        raise ValueError("public response exceeds 12 MB")
+    history = cache.with_name(cache.stem + "-attempts.json")
+    attempts = read(history)["attempts"] if history.is_file() else []
+    def transport(request_url, **kwargs):
+        if urlsplit(request_url).hostname == "api.crossref.org":
+            time.sleep(2)  # anonymous Crossref pool; one connection at a time
+        event = {"url": request_url, "attempt": len(attempts) + 1, "at": datetime.now(timezone.utc).isoformat()}
+        try:
+            response = fetch_bytes(request_url, timeout=40, max_bytes=12_000_000, headers=kwargs["headers"])
+            event["status"] = response[2]
+            return response
+        except Exception as exc:
+            cause = exc.__cause__ or exc
+            event.update(status=getattr(cause, "code", None), error=type(exc).__name__,
+                         retry_after=(getattr(cause, "headers", None) or {}).get("Retry-After"))
+            raise
+        finally:
+            attempts.append(event)
+            write(history, {"attempts": attempts})
+    body, _, _, _ = fetch_provider_bytes(transport, url, "crossref" if "api.crossref.org" in url else "elife")
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.write_bytes(body)
     return json.loads(body)
@@ -120,8 +136,7 @@ def collect(root: Path, frozen=None):
         raise ValueError("exactly 24 distinct frozen papers are required")
     if sum(row.get("partition") == "calibration" for row in candidates) != 16 or sum(row.get("partition") == "holdout" for row in candidates) != 8:
         raise ValueError("the frozen design requires 16 calibration and 8 holdout papers")
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        acquired = list(pool.map(lambda row: _acquire(project, row, root / "originals"), candidates))
+    acquired = [_acquire(project, row, root / "originals") for row in candidates]
     anchors = project / "program/public-review-anchors.json"
     write(anchors, {"kind": "public_review", "label_space": "elife_evidence_strength", "cases": [row[0] for row in acquired]})
     sources = [project / case[key]["path"] for case, _ in acquired for key in ("source", "review", "rights", "attribution")]

@@ -6,6 +6,9 @@ import unittest
 import urllib.parse
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
+from datetime import datetime, timedelta, timezone
+from email.utils import format_datetime
 
 from scripts.literature_evidence import (
     LiteratureEvidenceError,
@@ -255,6 +258,29 @@ class LiteratureEvidenceTests(unittest.TestCase):
         self.assertEqual(len(calls), 3)
         self.assertTrue(all("application/atom+xml" in item["Accept"] for item in calls))
         self.assertEqual([item.args[0] for item in sleep.call_args_list], [5, 20])
+
+    def test_retry_after_is_honored_and_large_server_windows_are_not_retried_early(self):
+        future = format_datetime(datetime.now(timezone.utc) + timedelta(seconds=45), usegmt=True)
+        for header, expected_calls in (("7", 2), (future, 2), ("120", 1)):
+            calls = []
+            def fetcher(url, **kwargs):
+                calls.append(url)
+                if len(calls) == 1:
+                    raise HTTPError(url, 429, "Too Many Requests", {"Retry-After": header}, None)
+                return b"{}", url, 200, "application/json"
+            with patch("scripts.literature_evidence.time.sleep") as sleep:
+                if header == "120":
+                    with self.assertRaisesRegex(LiteratureEvidenceError, "no early retry"):
+                        fetch_provider_bytes(fetcher, "https://api.crossref.org/works/example", "crossref")
+                    sleep.assert_not_called()
+                else:
+                    self.assertEqual(fetch_provider_bytes(fetcher, "https://api.crossref.org/works/example", "crossref")[2], 200)
+                    if header == "7":
+                        self.assertEqual(sleep.call_args.args[0], 7)
+                    else:
+                        self.assertGreater(sleep.call_args.args[0], 42)
+                        self.assertLessEqual(sleep.call_args.args[0], 45)
+            self.assertEqual(len(calls), expected_calls)
 
     def test_openalex_key_stays_in_header_and_is_redacted_on_error(self) -> None:
         url = build_search_url("openalex", "robot learning", 1)

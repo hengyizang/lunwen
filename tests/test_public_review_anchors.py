@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from scripts import public_review_anchors as corpus, literature_benchmark as benchmark
 
@@ -57,6 +58,20 @@ class PublicReviewAnchorTests(unittest.TestCase):
         for label in ("supports", "solid+incomplete", "solid+solid", ""):
             self.assertFalse(benchmark._anchor_label(label, "elife_evidence_strength"))
         self.assertFalse(benchmark._anchor_label("solid", "claim_support_and_novelty"))
+
+    def test_rate_limited_public_request_preserves_its_failed_attempt(self):
+        url = "https://api.crossref.org/works/10.7554/eLife.12345.1.sa0"
+        target = self.root / "originals/crossref.json"
+        responses = [HTTPError(url, 429, "Too Many Requests", {"Retry-After": "7"}, None),
+                     (b'{"source":"synthetic transport fixture"}', url, 200, "application/json"),
+                     (b'{"source":"synthetic transport fixture"}', url, 200, "application/json")]
+        with patch.object(corpus, "fetch_bytes", side_effect=responses), patch("scripts.literature_evidence.time.sleep") as sleep:
+            self.assertEqual(corpus._fetch(url, target), {"source": "synthetic transport fixture"})
+            self.assertEqual(corpus._fetch(url, target), {"source": "synthetic transport fixture"})
+        attempts = json.loads(target.with_name("crossref-attempts.json").read_text())["attempts"]
+        self.assertEqual([row["status"] for row in attempts], [429, 200, 200])
+        self.assertEqual(attempts[0]["retry_after"], "7")
+        self.assertIn(7, [call.args[0] for call in sleep.call_args_list])
 
     def test_retained_live_manifest_has_24_distinct_licensed_partitioned_papers(self):
         path = Path(__file__).resolve().parents[1] / "docs/acceptance/elife-public-anchors-2026-11-07.json"

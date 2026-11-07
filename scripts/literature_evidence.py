@@ -13,6 +13,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -22,6 +23,7 @@ import urllib.parse
 import uuid
 import xml.etree.ElementTree as ET
 from datetime import date, datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -263,6 +265,21 @@ def _safe_provider_url(provider: str, value: Any) -> str:
     )
 
 
+def _retry_after(exc: Exception) -> float:
+    while exc.__cause__ is not None:
+        exc = exc.__cause__
+    value = (getattr(exc, "headers", None) or {}).get("Retry-After")
+    try:
+        seconds = float(value)
+    except (TypeError, ValueError):
+        try:
+            instant = parsedate_to_datetime(value)
+            seconds = (instant.replace(tzinfo=instant.tzinfo or timezone.utc) - datetime.now(timezone.utc)).total_seconds()
+        except (TypeError, ValueError, OverflowError):
+            return 0
+    return max(0, seconds) if math.isfinite(seconds) else 0
+
+
 def fetch_provider_bytes(
     fetcher: Callable[..., tuple[bytes, str, int | None, str | None]],
     request_url: str,
@@ -276,7 +293,9 @@ def fetch_provider_bytes(
         if provider == "serpapi-google-scholar"
         else request_url
     )
+    server_delay = 0
     for attempt, delay in enumerate(schedule, 1):
+        delay = max(delay, server_delay)
         if delay:
             time.sleep(delay)
         try:
@@ -311,6 +330,9 @@ def fetch_provider_bytes(
                 raise LiteratureEvidenceError(
                     _redact_provider_text(provider, exc)
                 ) from exc
+            server_delay = _retry_after(exc)
+            if server_delay > 60:
+                raise LiteratureEvidenceError("Source Retry-After exceeds the bounded retry window; no early retry was sent") from exc
     raise AssertionError("unreachable provider retry state")
 
 
