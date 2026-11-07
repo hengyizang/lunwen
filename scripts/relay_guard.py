@@ -2,15 +2,20 @@
 from __future__ import annotations
 
 import base64
+from contextlib import contextmanager
 from contextvars import ContextVar
+from functools import partial
 import hashlib
 import json
 import math
 import os
+from pathlib import Path
 import re
 import subprocess
 from urllib.parse import quote
 import uuid
+
+from scripts.research_artifacts import json_digest
 
 REPOSITORY = "hengyizang/lunwen"
 BRANCH = "cloud-state/relay-guard"
@@ -23,6 +28,19 @@ SOURCES = (
 ALIASES = {"cheapai-kiro": "cheapai-kiro-discount", "codekey-codex-pure": "codekey-codex-pro"}
 _TICKET = ContextVar("relay_generation_ticket", default=None)
 TRIAL_SOURCES = {name.removesuffix(".json"): (branch, name) for branch, name in SOURCES[1:3]}
+EVALUATION_TRIAL = "model-evaluation-20261029"
+EVALUATION_ORIGINAL_BLOB = "65406a6cd6344c20ba4ec608ca12b0b8602c1a50"
+EVALUATION_TICKET = "381830bce3954c0fbc628b548e2b031e"
+TRIAL_SOURCES[EVALUATION_TRIAL] = ("cloud-state/" + EVALUATION_TRIAL, "ledger.json")
+# Independently inspected originals: neither proposals nor moving branches can
+# select a different request, response or authorization for a retired trial.
+TRIAL_ORIGINALS = {
+    "model-comparison-20261020": "63ee401edc29539bfa065e820b57dc4d025adbd9",
+    "model-comparison-clarified-20261020": "07d3cdeb16e4ff06f29dcfe4624d9c8298faf177",
+    EVALUATION_TRIAL: EVALUATION_ORIGINAL_BLOB,
+}
+ROOT = Path(__file__).resolve().parents[1]
+_digest = partial(json_digest, allow_nan=False)
 REQUEST_FIELDS = ("call_id", "provider", "model", "requested_model", "candidate_id", "effort", "case_id",
                   "case_sha256", "quote_sha256", "meter_before", "gateway_meter_before", "run_id", "reserved_ceiling_cny")
 
@@ -234,8 +252,8 @@ def _settled_receipt(entry, provider, name, ledger):
     return settlement
 
 
-def _source_entry(store, branch, name, call_id, provider):
-    if (branch, name) not in SOURCES:
+def _source_entry(store, branch, name, call_id, provider, *, trial=False):
+    if (branch, name) not in (TRIAL_SOURCES.values() if trial else SOURCES):
         raise RelayGuardError("source ledger is not an allowlisted original trial")
     value, blob = store.read(branch, "trial-state", name)
     if not isinstance(value, dict) or not isinstance(value.get("entries"), list) or not blob:
@@ -304,75 +322,11 @@ def inspect(provider, *, store=None):
             "catalog_access_does_not_release_holds": True}
 
 
-def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=False,
-          evaluation_trial_exception=False):
+def begin(provider, *, scope, max_cost_cny, store=None):
     if type(max_cost_cny) not in (int, float) or not math.isfinite(max_cost_cny) or max_cost_cny <= 0:
         raise RelayGuardError("shared relay reservation needs a positive bounded amount")
     store, name, value, expected = load(provider, store=store)
-    exception = False
-    if writing_trial_exception:
-        # Exact owner exception on 2026-10-27. Historical holds stay intact;
-        # ordinary production calls still reject this credential.
-        permitted = {
-            "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": 0.431508,
-            "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024,
-        }
-        exception = (provider == "codekey-gemini" and isinstance(scope, dict)
-            and scope.get("trial") == "writing-comparison-20261027"
-            and scope.get("authorization") == "writing-comparison-20261027-owner-paid-with-legacy-holds"
-            and os.environ.get("WRITING_COMPARISON_AUTHORIZATION") == scope["authorization"]
-            and os.environ.get("GITHUB_ACTIONS") == "true"
-            and os.environ.get("GITHUB_REPOSITORY") == REPOSITORY
-            and os.environ.get("GITHUB_ACTOR") == "hengyizang"
-            and os.environ.get("GITHUB_REF") == "refs/heads/codex/writing-comparison-20261027"
-            and os.environ.get("GITHUB_EVENT_NAME") in {"push", "workflow_dispatch"}
-            and isinstance(scope.get("project_reservation_id"), str)
-            and re.fullmatch(r"[a-f0-9]{32}", scope["project_reservation_id"]) is not None
-            and isinstance(scope.get("legacy_budget_reservation_id"), str)
-            and re.fullmatch(r"[a-f0-9]{32}", scope["legacy_budget_reservation_id"]) is not None
-            and set(value["legacy_holds"]) == set(permitted)
-            and all(value["legacy_holds"][key]["reserved_ceiling_cny"] == amount
-                    for key, amount in permitted.items()))
-        if not exception:
-            raise RelayGuardError("writing trial exception differs from the exact owner authorization")
-    if evaluation_trial_exception:
-        # Separate owner authorization on 2026-10-29. Old ledgers/holds remain
-        # intact; this does not reopen the closed writing trial or production.
-        permitted = ({"09b68c08573ed0ebbd0abd6f9d2eedf402a1edfab5bcbccd8d0e3f19022f318c": 0.0625758}
-            if provider == "codekey-deepseek" else {
-                "44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9": 0.431508,
-                "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9": 9.1521024,
-            })
-        legacy_id = scope.get("legacy_budget_reservation_id") if isinstance(scope, dict) else None
-        legacy_bound = (isinstance(legacy_id, str) and re.fullmatch(r"[a-f0-9]{32}", legacy_id) is not None
-            if provider == "codekey-deepseek" else legacy_id == "2b9e5e82da8a4f0bb9bfb6520ba814d1")
-        authorization = scope.get("authorization") if isinstance(scope, dict) else None
-        authorized_scope = authorization == "model-evaluation-20261029-owner-paid-with-legacy-holds"
-        authorized_scope |= (provider == "codekey-deepseek"
-            and authorization == "model-evaluation-20261029-owner-isolated-continuation-retain-unknown-argon"
-            and os.environ.get("MODEL_EVALUATION_MODE") == "continue-isolated"
-            and scope.get("continuation_source_blob") == "65406a6cd6344c20ba4ec608ca12b0b8602c1a50"
-            and scope.get("retained_unknown_reservation_id") == "f705e87ba4514cb99c961768f59f4278"
-            and legacy_id == "97bdea2e1dd64aaaaa68dfa390e9ec76"
-            and scope.get("call_id") in {"deepseek-high|discriminating-experiment", "deepseek-high|writing-integrity", "deepseek-high|evidence-conflict"})
-        exception = (provider in {"codekey-gemini", "codekey-gemini-chat", "codekey-deepseek"}
-            and isinstance(scope, dict) and scope.get("trial") == "model-evaluation-20261029"
-            and authorized_scope
-            and os.environ.get("MODEL_EVALUATION_AUTHORIZATION") == scope["authorization"]
-            and os.environ.get("GITHUB_ACTIONS") == "true"
-            and os.environ.get("GITHUB_REPOSITORY") == REPOSITORY
-            and os.environ.get("GITHUB_ACTOR") == "hengyizang"
-            and os.environ.get("GITHUB_REF") == "refs/heads/codex/model-evaluation-20261029"
-            and os.environ.get("GITHUB_EVENT_NAME") in {"push", "workflow_dispatch"}
-            and isinstance(scope.get("project_reservation_id"), str)
-            and re.fullmatch(r"[a-f0-9]{32}", scope["project_reservation_id"]) is not None
-            and legacy_bound
-            and set(value["legacy_holds"]) == set(permitted)
-            and all(value["legacy_holds"][key]["reserved_ceiling_cny"] == amount
-                    for key, amount in permitted.items()))
-        if not exception:
-            raise RelayGuardError("model evaluation exception differs from the exact owner authorization")
-    if (value["legacy_holds"] and not exception) or value["active"]:
+    if value["legacy_holds"] or value["active"]:
         # Import historical unknown holds durably, even though no new POST is allowed.
         store.write(name, value, expected)
         raise RelayGuardError("credential has an unresolved historical or concurrent charge; no new paid call")
@@ -384,13 +338,40 @@ def begin(provider, *, scope, max_cost_cny, store=None, writing_trial_exception=
     return ticket
 
 
-def authorize_transport(url, headers):
+@contextmanager
+def project_transport(project, receipt_id, provider, model, *, max_cost_cny, paper_id, run_id):
+    """One operation-local POST on an already authorized cumulative reservation."""
+    from scripts import ai_providers, model_spend
+    from scripts.cloud_checkpoint import sync_billing
+    if _TICKET.get() is not None:
+        raise RelayGuardError("a model transport lease is already active in this operation")
+    binding = {"provider": provider, "model": model, "endpoint": ai_providers.production_endpoint(provider, model),
+               "credential_sha256": fingerprint(provider)}
+    claimed = model_spend.claim_transport(project, receipt_id, max_cost_cny=max_cost_cny,
+                                         paper_id=paper_id, run_id=run_id, binding=binding)
+    sync_billing(project)
+    current = model_spend.read(project, required=True)["reservations"].get(receipt_id)
+    if _digest(current) != _digest(claimed) or fingerprint(provider) != binding["credential_sha256"]:
+        raise RelayGuardError("synced model transport differs from its exact project reservation")
+    ticket = {**binding, "id": claimed["transport"]["lease_id"], "sent": False, "meter_bound": True,
+              "native_google": ai_providers.PRODUCTION_PROVIDERS[provider]["protocol"] == "gemini_generate_content"}
+    token = _TICKET.set(ticket)
+    try:
+        yield ticket
+    finally:
+        _TICKET.reset(token)
+
+
+def authorize_transport(url, headers, *, payload=None):
     from urllib.parse import urlsplit
     ticket = _TICKET.get()
     key = headers.get("x-api-key") or headers.get("x-goog-api-key") or headers.get("Authorization", "").removeprefix("Bearer ")
     key_id = hashlib.sha256(("https://" + urlsplit(url).netloc + "\0" + key).encode()).hexdigest()
     if not ticket or ticket["credential_sha256"] != key_id or ticket["sent"] or not ticket.get("meter_bound"):
         raise RelayGuardError("production POST requires its unused durable shared credential reservation")
+    if ticket.get("endpoint") and (url != ticket["endpoint"] or not isinstance(payload, dict)
+            or ("model" in payload if ticket["native_google"] else payload.get("model") != ticket["model"])):
+        raise RelayGuardError("production POST differs from its exact selected endpoint/model")
     ticket["sent"] = True
 
 
@@ -455,46 +436,123 @@ def validate_debit(meter, settlement):
         raise RelayGuardError("unrecognized independent debit meter")
 
 
-def _trial_settlement(store, active, meter):
-    """Reconcile a comparison's already-accounted call without reopening it."""
-    from scripts import model_comparison as comparison, model_comparison_clarified as clarified, relay_billing
+def _immutable_trial_source(store, trial, ledger, entry):
+    """Only an originally reserved target may gain explicit settlement fields."""
+    original = store.read_blob(TRIAL_ORIGINALS[trial])
+    originals = [row for row in original.get("entries", [])
+                 if isinstance(row, dict) and row.get("call_id") == entry["call_id"]]
+    if original.get("trial_id") != trial or len(originals) != 1:
+        raise RelayGuardError("immutable original trial/call identity mismatch")
+    billing = {"billing_status", "actual_cost_cny", "debit_evidence", "reconciled_at"} if originals[0].get("billing_status") == "reserved" else set()
+    def preserved(value):
+        rows = value.get("entries")
+        if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+            raise RelayGuardError("immutable trial source entries are malformed")
+        return {**value, "entries": [{key: item for key, item in row.items() if key not in billing}
+                if row.get("call_id") == entry["call_id"] else row for row in rows]}
+    if _digest(preserved(ledger)) != _digest(preserved(original)):
+        raise RelayGuardError("trial source differs from the immutable original request/response/scope")
+    return original
+
+
+def _evaluation_source(active, original, entry):
+    """Bind Oct29's shared ticket to its frozen project, plan and request."""
+    frozen = original["scope"]
+    plan = json.loads((ROOT / "config/model-evaluation-20261029.json").read_text(encoding="utf-8"))
+    prices = (ROOT / "config/model-evaluation-pricing-20261029.json").read_bytes()
+    if (_digest(plan) != frozen["plan_sha256"] or hashlib.sha256(prices).hexdigest() != frozen["prices_sha256"]
+            or _digest(plan["routes"]) != _digest(frozen["routes"])):
+        raise RelayGuardError("evaluation plan, prices or frozen routes changed")
+    def select(rows, key, value):
+        found = [row for row in rows if isinstance(row, dict) and row.get(key) == value]
+        if len(found) != 1:
+            raise RelayGuardError("evaluation request needs its exact unique route/case binding")
+        return found[0]
+    request = select(frozen["queue"], "call_id", entry["call_id"])
+    route = select(plan["routes"], "id", request["route_id"])
+    case = select(plan["cases"], "id", request["case_id"])
+    expected = {key: request[key] for key in ("call_id", "route_id", "case_id", "case_sha256", "reserved_ceiling_cny")}
+    expected.update(provider=route["provider"], requested_model=route["model"], requested_effort=route["effort"],
+                    task_class=case["task_class"], partition=case["partition"], code_sha=frozen["code_sha"])
+    scope = {"trial": EVALUATION_TRIAL, "call_id": entry["call_id"], "authorization": frozen["authorization"],
+             "project_reservation_id": entry["project_reservation_id"],
+             "legacy_budget_reservation_id": original["legacy_budget_reservations"]["gemini"]}
+    if (active.get("id") != EVALUATION_TICKET or case["partition"] not in {"calibration", "holdout"}
+            or _digest(case) != request["case_sha256"]
+            or request["case_id"] not in route.get("case_ids", [row["id"] for row in plan["cases"]])
+            or request["max_output_tokens"] != route.get("max_output_tokens", plan["max_output_tokens"])
+            or request["timeout"] != route.get("timeout", 300)
+            or _digest({key: entry[key] for key in expected}) != _digest(expected)
+            or _digest(active["scope"]) != _digest(scope)):
+        raise RelayGuardError("evaluation route/case/partition or exact shared ticket binding changed")
+    return frozen["project"]
+
+
+def _project_settlement(project, reservation, settled):
+    from scripts import model_spend
+    if not isinstance(reservation, str) or not reservation:
+        raise RelayGuardError("shared ticket lacks its original project reservation")
+    control = model_spend.read(project, required=True)
+    if reservation in control["reservations"]:
+        raise RelayGuardError("reconcile the original project budget before releasing its shared hold")
+    matching = [row for row in control["reconciliation_events"] + control.get("settlement_events", [])
+                if row.get("receipt_id") == reservation and row.get("actual_cost_cny") == settled["actual_cost_cny"]]
+    if len(matching) != 1:
+        raise RelayGuardError("independent debit does not match the original project reconciliation")
+    return matching[0]
+
+
+def _trial_settlement(store, active, meter, project=None):
+    """Reconcile a frozen historical call without its retired generator."""
+    from scripts import relay_billing
     scope = active.get("scope")
     if not isinstance(scope, dict) or scope.get("trial") not in TRIAL_SOURCES or not scope.get("call_id"):
         raise RelayGuardError("shared ticket does not name an allowlisted original comparison")
     branch, name = TRIAL_SOURCES[scope["trial"]]
-    ledger, entry, blob = _source_entry(store, branch, name, scope["call_id"], active["provider"])
-    plan = json.loads((comparison.ROOT / "config/model-comparison-20261020.json").read_text(encoding="utf-8"))
-    comparison.validate_plan(plan)
-    if scope["trial"] == comparison.TRIAL:
-        comparison.validate_ledger(ledger, plan)
-        original_parent_blob = None
-    else:
-        original_parent_blob = ledger.get("scope", {}).get("parent_blob_sha")
-        if not isinstance(original_parent_blob, str) or not re.fullmatch(r"[a-f0-9]{40}", original_parent_blob):
-            raise RelayGuardError("original clarified parent blob identity is missing")
-        parent, current_parent_blob = store.read(comparison.STATE, "trial-state", comparison.FILE)
-        if current_parent_blob != original_parent_blob:
-            parent = store.read_blob(original_parent_blob)
-        if not isinstance(parent, dict):
-            raise RelayGuardError("original parent comparison is unavailable")
-        contract = clarified.reconciliation_contract(plan, ledger, parent, original_parent_blob)
-        clarified.validate(ledger, contract)
-    if (ledger.get("trial_id") != scope["trial"] or entry.get("model") != meter["model"]
-            or entry.get("meter_before") != meter["before"]
-            or entry.get("run_id") != active["run_id"]
-            or entry.get("reserved_ceiling_cny") != active["max_cost_cny"]):
+    ledger, entry, blob = _source_entry(store, branch, name, scope["call_id"], active["provider"], trial=True)
+    original_parent_blob = None
+    evaluation = scope["trial"] == EVALUATION_TRIAL
+    try:
+        original = _immutable_trial_source(store, scope["trial"], ledger, entry)
+        if evaluation:
+            owner_project = _evaluation_source(active, original, entry)
+            if project is None or project.name != owner_project:
+                raise RelayGuardError("settle the evaluation in its original project")
+        else:
+            if _digest(scope) != _digest({"trial": scope["trial"], "call_id": entry["call_id"]}):
+                raise RelayGuardError("comparison exact shared ticket scope changed")
+            if scope["trial"] == "model-comparison-clarified-20261020":
+                contract = original["scope"]
+                original_parent_blob = contract["parent_blob_sha"]
+                if original_parent_blob != TRIAL_ORIGINALS["model-comparison-20261020"]:
+                    raise RelayGuardError("clarified comparison original parent blob mismatch")
+                parent = store.read_blob(original_parent_blob)
+                if (parent.get("trial_id") != "model-comparison-20261020"
+                        or _digest(parent) != contract["parent_ledger_sha256"]
+                        or parent["plan_sha256"] != contract["parent_plan_sha256"]):
+                    raise RelayGuardError("clarified comparison original parent contract changed")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        raise RelayGuardError("historical trial source binding is invalid: " + str(exc)) from exc
+    if _digest({"model": entry.get("model", entry.get("requested_model")), "before": entry["meter_before"],
+                "run_id": entry["run_id"], "ceiling": entry["reserved_ceiling_cny"]}) != _digest({
+                "model": meter["model"], "before": meter["before"], "run_id": active["run_id"], "ceiling": active["max_cost_cny"]}):
         raise RelayGuardError("comparison call differs from the exact shared ticket and before meter")
     recorded = _settled_receipt(entry, active["provider"], name, ledger)
+    event = _project_settlement(project, entry["project_reservation_id"], recorded) if evaluation else None
     current = relay_billing.settle(active["provider"], meter["model"], meter["before"])
     validate_debit(meter, current)
     if (current.get("actual_cost_cny") != recorded["actual_cost_cny"]
             or current["actual_cost_cny"] > active["max_cost_cny"]):
         raise RelayGuardError("independent debit differs from the original accounted trial cost")
-    return {"branch": branch, "name": name, "call_id": scope["call_id"], "source_blob_sha": blob,
+    result = {"branch": branch, "name": name, "call_id": scope["call_id"], "source_blob_sha": blob,
+            "original_trial_blob_sha": TRIAL_ORIGINALS[scope["trial"]],
             "original_parent_blob_sha": original_parent_blob,
             "hold_id": hashlib.sha256((branch + "\0" + name + "\0" + scope["call_id"]).encode()).hexdigest(),
             "entry_sha256": relay_billing._fingerprint(entry), "recorded_settlement": recorded,
             "independent_settlement": current}
+    if evaluation:
+        result["project_reconciliation_sha256"] = relay_billing._fingerprint(event)
+    return result
 
 
 def prepare_reconciliation(project, source, actor, *, store=None):
@@ -515,7 +573,7 @@ def prepare_reconciliation(project, source, actor, *, store=None):
         proposal = {**proposal, "previous_shared_blob_sha": old_blob,
                     "previous_shared_state_sha256": hashlib.sha256(json.dumps(old, sort_keys=True, allow_nan=False).encode()).hexdigest()}
     elif proposal.get("kind") == "settled_active":
-        from scripts import model_spend, relay_billing
+        from scripts import relay_billing
         active, meter = value.get("active"), value.get("active_meter")
         if not active or proposal.get("ticket_id") != active["id"] or not meter:
             raise RelayGuardError("select the exact shared active ticket and retained meter")
@@ -523,19 +581,15 @@ def prepare_reconciliation(project, source, actor, *, store=None):
         if not isinstance(scope, dict) or scope.get("project") != project.name:
             raise RelayGuardError("settle the outstanding call in its original project")
         settled = relay_billing.settle(provider, meter["model"], meter["before"])
-        control = model_spend.read(project, required=True)
-        if scope.get("reservation_id") in control["reservations"]:
-            raise RelayGuardError("reconcile the original project budget before releasing its shared hold")
-        matching = [r for r in control["reconciliation_events"] + control.get("settlement_events", []) if r["receipt_id"] == scope.get("reservation_id")
-                    and r["actual_cost_cny"] == settled["actual_cost_cny"]]
-        if len(matching) != 1 or settled["actual_cost_cny"] > active["max_cost_cny"]:
+        _project_settlement(project, scope.get("reservation_id"), settled)
+        if settled["actual_cost_cny"] > active["max_cost_cny"]:
             raise RelayGuardError("independent debit does not match the original project reconciliation")
         proposal = {**proposal, "independent_settlement": settled}
     elif proposal.get("kind") == "settled_trial":
         active, meter = value.get("active"), value.get("active_meter")
         if not active or proposal.get("ticket_id") != active["id"] or not meter:
             raise RelayGuardError("select the exact shared comparison ticket and retained meter")
-        proposal = {**proposal, "resolved_trial": _trial_settlement(store, active, meter)}
+        proposal = {**proposal, "resolved_trial": _trial_settlement(store, active, meter, project)}
     elif proposal.get("kind") == "settled_legacy":
         ids = proposal.get("hold_ids")
         if not isinstance(ids, list) or not ids or not set(ids) <= set(value["legacy_holds"]):

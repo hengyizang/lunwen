@@ -1,5 +1,7 @@
 # 四类模型复测与任务分工：2026-10-29 至 2026-10-30
 
+一次性评测的[历史启动器](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/model_evaluation_20261029.py)及日期工作流已从当前主树退役，原计划、定价、结果与云端账本保留。`closed` 的续跑不结清原 Argon 未知费用；原占用继续由现行共享凭据控制核对。
+
 本轮短任务测评及隔离续测已结束：34 个不同的生成尝试中，33 个响应完成了身份、完整性和实扣费用核对；
 Argon 原生接口的实验设计题返回 HTTP 400，该次费用仍未知。其余 5 项 Gemini 请求保持隔离、未发送。
 Terra high、DeepSeek、Kimi、Sol 各完成六题，Terra medium 完成三道校准题；没有重复发送已生成的请求。

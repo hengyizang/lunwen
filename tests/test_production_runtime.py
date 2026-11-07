@@ -12,17 +12,18 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import urllib.error
 from unittest.mock import patch
 
-from scripts import ai_providers, metadata_contract, model_runtime, model_spend, relay_billing
+from scripts import ai_providers, metadata_contract, model_runtime, model_spend, relay_billing, relay_guard
 
 
 class ProductionRuntimeTests(unittest.TestCase):
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
-        from tests.relay_guard_fixtures import install_fake_guard
-        self.shared_guard=install_fake_guard(self.stack)
+        relay_guard._TICKET.set(None)
+        self.addCleanup(lambda:relay_guard._TICKET.set(None))
         directory = self.stack.enter_context(tempfile.TemporaryDirectory())
         self.project = Path(directory) / "fixture-project"
         (self.project / "state").mkdir(parents=True)
@@ -117,6 +118,85 @@ class ProductionRuntimeTests(unittest.TestCase):
                 patch("scripts.cloud_checkpoint.sync_billing", side_effect=lambda project: events.append("synced"))):
             self.call()
         self.assertEqual(model_spend.read(self.project)["spent_cny"], 0.001)
+
+    def test_real_provider_transport_uses_the_persisted_project_reservation(self):
+        response={"model":"gpt-6.1-sol","id":"synthetic-transport-response","status":"completed",
+            "output_text":"Synthetic source-bound answer","usage":{"input_tokens":100,"output_tokens":20}}
+        def response_body(limit):
+            state=model_spend.read(self.project,required=True)
+            self.assertEqual(len(state["reservations"]),1)
+            self.assertTrue(self.sync.called)
+            return json.dumps(response).encode()
+        with patch.object(ai_providers.urllib.request,"build_opener") as network, \
+                patch.object(relay_billing,"read_meter",side_effect=relay_billing.BillingReconciliationError("Synthetic meter unavailable")), \
+                patch.object(relay_guard,"CloudStore",side_effect=AssertionError("no global historical payment gate")):
+            network.return_value.open.return_value.__enter__.return_value.read.side_effect=response_body
+            result=self.call(use_cache=False)
+        self.assertEqual(result.reported_model,"gpt-6.1-sol")
+        self.assertEqual(network.return_value.open.call_count,1)
+        request=network.return_value.open.call_args.args[0]
+        self.assertEqual(request.full_url,ai_providers.production_endpoint("cheapai-gpt-pro","gpt-6.1-sol"))
+        self.assertEqual(json.loads(request.data)["reasoning"],{"effort":"high"})
+        self.assertIsNone(relay_guard._TICKET.get())
+        self.assertEqual(model_spend.read(self.project)["reservations"],{})
+        self.assertGreater(model_spend.read(self.project)["spent_cny"],0)
+
+    def test_operation_lease_requires_exact_transport_and_prevents_reentry_and_replay(self):
+        provider="cheapai-gpt-pro";model="gpt-6.1-sol";endpoint=ai_providers.production_endpoint(provider,model)
+        headers={"Authorization":"Bearer fixture-no-real-key"};payload={"model":model}
+        receipt=model_spend.reserve(self.project,max_cost_cny=1,paper_id=None,paper_limit_cny=0,run_id="fixture-run")
+        def lease(**overrides):
+            options={"max_cost_cny":1,"paper_id":None,"run_id":"fixture-run"};options.update(overrides)
+            return relay_guard.project_transport(self.project,receipt,provider,model,**options)
+        with patch.object(ai_providers.urllib.request,"build_opener") as network:
+            network.return_value.open.return_value.__enter__.return_value.read.return_value=b'{"synthetic":"one POST"}'
+            with self.assertRaises(relay_guard.RelayGuardError):
+                ai_providers._production_request(endpoint,headers,payload,30)
+            for mismatch in ({"run_id":"wrong-run"},{"max_cost_cny":2},{"paper_id":"P02"}):
+                with self.subTest(mismatch=mismatch),self.assertRaises(model_spend.SpendControlError):
+                    with lease(**mismatch):pass
+            with lease():
+                for url,keys,body in (("https://cheapai.info/v1/messages",headers,payload),
+                        (endpoint,{"Authorization":"Bearer different-fixture-key"},payload),
+                        (endpoint,headers,{"model":"gpt-6-astra"})):
+                    with self.subTest(url=url,model=body.get("model")),self.assertRaises(relay_guard.RelayGuardError):
+                        ai_providers._production_request(url,keys,body,30)
+                network.assert_not_called()
+                with self.assertRaisesRegex(relay_guard.RelayGuardError,"already active"):
+                    with lease():pass
+                ai_providers._production_request(endpoint,headers,payload,30)
+                with self.assertRaises(relay_guard.RelayGuardError):
+                    ai_providers._production_request(endpoint,headers,payload,30)
+            self.assertIsNone(relay_guard._TICKET.get())
+            with self.assertRaisesRegex(model_spend.SpendControlError,"unclaimed"):
+                with lease():pass
+            self.assertEqual(network.return_value.open.call_count,1)
+        self.assertIn(receipt,model_spend.read(self.project)["reservations"])
+
+    def test_real_transport_sync_and_http_failures_reset_lease_and_retain_each_claim(self):
+        with patch.object(ai_providers.urllib.request,"build_opener") as network, \
+                patch.object(relay_billing,"read_meter",side_effect=relay_billing.BillingReconciliationError("Synthetic fee unavailable")) as meter:
+            self.sync.side_effect=RuntimeError("Synthetic sync failed")
+            with self.assertRaisesRegex(RuntimeError,"Synthetic sync failed"):
+                self.call(use_cache=False)
+            self.assertIsNone(relay_guard._TICKET.get());meter.assert_not_called();network.assert_not_called()
+            first=model_spend.read(self.project)["reservations"]
+            self.assertEqual(len(first),1);self.assertIn("transport",next(iter(first.values())))
+            self.sync.side_effect=None
+            network.return_value.open.side_effect=urllib.error.URLError("Synthetic response lost")
+            with self.assertRaisesRegex(ai_providers.ProviderError,"no automatic generation retry"):
+                self.call(use_cache=False)
+            self.assertIsNone(relay_guard._TICKET.get())
+            pending=model_spend.read(self.project)["reservations"]
+            self.assertEqual(len(pending),2);self.assertTrue(set(first)<=set(pending))
+            self.assertEqual(network.return_value.open.call_count,1)
+            network.return_value.open.side_effect=None
+            network.return_value.open.return_value.__enter__.return_value.read.return_value=json.dumps({
+                "model":"gpt-6.1-sol","id":"synthetic-after-failure","status":"completed","output_text":"Synthetic answer",
+                "usage":{"input_tokens":100,"output_tokens":20}}).encode()
+            self.call(use_cache=False)
+            self.assertEqual(model_spend.read(self.project)["reservations"],pending)
+            self.assertIsNone(relay_guard._TICKET.get())
 
     def test_missing_or_zero_owner_ledger_never_grants_itself_or_calls_model(self):
         for missing in (False, True):

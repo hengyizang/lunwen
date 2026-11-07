@@ -58,6 +58,7 @@ def validate_saved_figures(paper: Path) -> list[str]:
     """Recompute geometry checks; never accept a writer's PASS flag."""
     project = paper.parent.parent
     errors: list[str] = []
+    builds: dict[Path, dict] = {}
     try:
         from scripts.publication_figures import validate_spec
     except ImportError:
@@ -72,7 +73,7 @@ def validate_saved_figures(paper: Path) -> list[str]:
             build_path = stem.with_suffix(".figure-build.json")
             if not build_path.is_file():
                 raise ValueError("native spec has no rendered build and layout audit")
-            build = json.loads(build_path.read_text())
+            builds[build_path.resolve()] = build = json.loads(build_path.read_text())
             if (build.get("renderer") != "scripts/publication_figures.py" or
                     build.get("spec", {}).get("path") != spec.relative_to(project).as_posix()):
                 raise ValueError("native spec does not match its declared renderer/build")
@@ -84,7 +85,9 @@ def validate_saved_figures(paper: Path) -> list[str]:
                 from scripts import output_provenance
             except ImportError:
                 import output_provenance
-            build = json.loads(build_path.read_text())
+            build = builds.get(build_path.resolve())
+            if build is None:
+                build = json.loads(build_path.read_text())
             if build.get("renderer") != "scripts/publication_figures.py":
                 continue
             if build.get("renderer_sha256") != sha256(Path(__file__).with_name("publication_figures.py")):

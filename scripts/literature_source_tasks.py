@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 from scripts import literature_workbench as wb, systematic_review
-from scripts.research_artifacts import path_in, record, sha, write, matches_origin
+from scripts.research_artifacts import path_in, record, sha, write, matches_origin, verify_files, object_fields as _keys
 
 OUTPUT = "reports/literature-source-tasks"
 OPERATIONS = {"source_trace", "screening_advice"}
@@ -193,11 +193,6 @@ def judgment_responses(project: Path, paper_id: str | None = None) -> list[dict]
         elif directory.exists() and any(directory.glob("*/observation.json")):
             raise ValueError("scientific judgment observation history exists but its latest pointer is missing")
     return result
-
-
-def _keys(value, allowed, label):
-    if not isinstance(value, dict) or set(value) - set(allowed):
-        raise ValueError(label + " has unsupported fields")
 
 
 def _text(value, label, limit=4000):
@@ -494,12 +489,8 @@ def _existing(project, report, manifest):
     record_value = wb._json(manifest.read_bytes())
     outputs = record_value.get("outputs")
     expected = {report.relative_to(project).as_posix(), report.with_name("index.html").relative_to(project).as_posix()}
-    if not isinstance(outputs, list) or len(outputs) != 2 or {o.get("path") for o in outputs} != expected:
-        raise ValueError("source task output inventory differs")
-    for item in outputs:
-        target = path_in(project, item["path"])
-        if sha(target) != item["sha256"] or not matches_origin(project, target, model="scripts/literature_source_tasks.py"):
-            raise ValueError("source task output changed outside its controlled builder")
+    verify_files(project, outputs, expected, origin={"model": "scripts/literature_source_tasks.py"},
+        inventory_error="source task output inventory differs", changed_error="source task output changed outside its controlled builder")
     if not matches_origin(project, manifest, model="scripts/literature_source_tasks.py"):
         raise ValueError("source task manifest provenance is not current")
     history = record_value.get("history", [])
@@ -508,10 +499,8 @@ def _existing(project, report, manifest):
     actual = {p.relative_to(project).as_posix() for p in report.parent.glob("history/*.json")}
     if len(history) != len(actual) or {h.get("path") for h in history} != actual:
         raise ValueError("source task history inventory changed or an archive was deleted")
-    for item in history:
-        target = path_in(project, item["path"])
-        if sha(target) != item.get("sha256") or not matches_origin(project, target, model="scripts/literature_source_tasks.py"):
-            raise ValueError("source task history archive changed")
+    verify_files(project, history, origin={"model": "scripts/literature_source_tasks.py"},
+        changed_error="source task history archive changed")
     return wb._json(report.read_bytes())
 
 

@@ -19,7 +19,7 @@ from urllib.parse import quote
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, json_digest as digest
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMIT = "f157d7ed2777b655809471873b32b9632e784cfa"
@@ -123,10 +123,6 @@ def cloud():
 
 def canonical(data: bytes) -> bytes:
     return data.replace(b"\r\n", b"\n").rstrip(b"\n") + b"\n"
-
-
-def digest(value) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
 
 
 def safe_text(text):

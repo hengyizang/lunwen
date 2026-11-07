@@ -8,13 +8,11 @@ in program/literature-reasoning.json. No network or model call occurs here.
 from __future__ import annotations
 
 from datetime import datetime
-import hashlib
 import itertools
-import json
 from pathlib import Path
 import re
 
-from scripts.research_artifacts import record, sha, write
+from scripts.research_artifacts import record, sha, write, json_digest as _digest
 
 EXTENDED_FIELDS = (
     "hypotheses", "competing_explanations", "assumptions", "datasets", "protocols",
@@ -76,11 +74,6 @@ OUTCOMES = {"supports", "contradicts", "insufficient", "unclear"}
 def _wb():
     from scripts import literature_workbench
     return literature_workbench
-
-
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True,
-                                    separators=(",", ":")).encode()).hexdigest()
 
 
 def _keys(value, allowed, label):

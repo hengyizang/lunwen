@@ -1,5 +1,7 @@
 # 写作实测结果：2026年10月27—28日
 
+这份结果保留原样解读；已闭合的一次性[启动器](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/writing_comparison.py)及日期工作流已退役。原计划、响应、费用账本和历史占用不删除、不重开、不因退役视为结清。
+
 目前不能确认 CodeKey Argon 的论文写作质量，也不能据此将它提升为主笔。
 原生基础 ID 和 high ID 各尝试一次，均未通过严格的响应模型身份校验；
 没有接受或评价任何 Argon 正文。其余取得11份有效 GPT 文本，供来源约束下

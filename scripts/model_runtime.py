@@ -12,7 +12,7 @@ import json
 import math
 import os
 import time
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from typing import Any
 
@@ -656,27 +656,33 @@ def call(
             raise ModelBudgetError("production route credentials are missing")
     reservation_id = model_spend.reserve(project_root, max_cost_cny=reserved_cost, paper_id=paper_id,
                                          paper_limit_cny=float(status["paper_hard_limit"] or 0), run_id=run_id) if controlled else None
-    if reservation_id:
+    if reservation_id and not production:
         from scripts.cloud_checkpoint import sync_billing
         sync_billing(project_root)
-
-    if production:
-        try:
-            meter_before = relay_billing.read_meter(provider)
-        except (relay_billing.BillingReconciliationError, OSError, ValueError):
-            # Independent fee reads improve the calculation; their availability
-            # is not a separate authorization gate. The quote remains reserved.
-            meter_before = None
 
     request_started = time.monotonic()
     try:
         inference_options = {"reasoning_effort": reasoning_effort} if reasoning_effort is not None else {}
         if attachments:
             inference_options["attachments"] = attachments
-        result = ai_providers.call(
-            provider, prompt, system=system, max_output_tokens=max_output_tokens,
-            timeout=timeout, model=model, **inference_options,
-        )
+        if production:
+            from scripts.relay_guard import project_transport
+            transport = project_transport(project_root, reservation_id, provider, effective_model,
+                max_cost_cny=reserved_cost, paper_id=paper_id, run_id=run_id)
+        else:
+            transport = nullcontext()
+        with transport:
+            if production:
+                try:
+                    meter_before = relay_billing.read_meter(provider)
+                except (relay_billing.BillingReconciliationError, OSError, ValueError):
+                    # Fee reads improve the cost calculation, not authority.
+                    meter_before = None
+            request_started = time.monotonic()
+            result = ai_providers.call(
+                provider, prompt, system=system, max_output_tokens=max_output_tokens,
+                timeout=timeout, model=model, **inference_options,
+            )
     except Exception as exc:
         _append(_ledger(project_root), {
             **request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id,

@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
-import tempfile
 from pathlib import Path
 from typing import Any
 
 try:
     from scripts import output_provenance
+    from scripts.research_artifacts import path_in, read, sha, write, verify_files
 except ImportError:
     import output_provenance  # type: ignore
+    from research_artifacts import path_in, read, sha, write, verify_files
 
 
 FIGURE_SUFFIXES={".png",".svg",".pdf",".eps",".tif",".tiff"}
@@ -23,13 +23,9 @@ FIGURE_TYPES={"data_chart","conceptual_diagram","conceptual_illustration"}
 from scripts.paper_execution import artifact_path as experiment_path
 
 def _relative(project:Path,value:str,field:str)->tuple[Path,str]:
-    candidate=Path(value)
-    if candidate.is_absolute() or not value or ".." in candidate.parts or "\\" in value or ":" in value:raise ValueError(f"{field} must be project-relative")
-    unresolved=project/candidate
-    if any(p.is_symlink() for p in (unresolved,*unresolved.parents)):raise ValueError(f"{field} cannot use a symlink")
-    path=(project/candidate).resolve();root=project.resolve()
-    if path==root or root not in path.parents:raise ValueError(f"{field} escapes the project")
-    return path,path.relative_to(root).as_posix()
+    path=path_in(project,value,exists=False).resolve()
+    if path==project.resolve():raise ValueError(f"{field} escapes the project")
+    return path,path.relative_to(project.resolve()).as_posix()
 
 
 def _load_registry(path:Path)->dict[str,Any]:
@@ -37,13 +33,6 @@ def _load_registry(path:Path)->dict[str,Any]:
     value=json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value,dict) or value.get("schema_version")!="1.0" or not isinstance(value.get("figures"),list):raise ValueError("unsupported figure provenance registry")
     return value
-
-
-def _write(path:Path,value:dict[str,Any])->None:
-    path.parent.mkdir(parents=True,exist_ok=True)
-    payload=json.dumps(value,ensure_ascii=False,indent=2,sort_keys=True)+"\n"
-    with tempfile.NamedTemporaryFile("w",encoding="utf-8",dir=path.parent,delete=False) as handle:handle.write(payload);temporary=Path(handle.name)
-    os.replace(temporary,path)
 
 
 def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:str,inputs:list[str],runs:list[str],config:str|None=None,language_checked_by:str="")->str:
@@ -83,7 +72,7 @@ def record_figure(project:Path,paper_id:str,figure:str,figure_type:str,renderer:
         for field in ("language_checked_by","language_checked_at","visual_checked_by","visual_checked_at"):record.pop(field)
     if source_lineage is not None:record["source_lineage"]=source_lineage
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=figure_rel]+[record]
-    _write(registry_path,registry)
+    write(registry_path,registry,sort_keys=True)
     output_provenance.record_model_writes(project,[figure_path,registry_path],family="other",provider="deterministic-local-renderer",model=renderer_rel,role="final-figure",run_id="figure-"+output_provenance.utc_now().replace(":","-"))
     return figure_rel
 
@@ -121,7 +110,7 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
     if not checked_by.strip():
         for field in ("human_content_checked_by","language_checked_by","language_checked_at","visual_checked_by","visual_checked_at"):record.pop(field)
     registry["figures"]=[item for item in registry["figures"] if isinstance(item,dict) and item.get("figure_path")!=relative]+[record]
-    _write(registry_path,registry)
+    write(registry_path,registry,sort_keys=True)
     output_provenance.record_model_writes(project,[registry_path],family="other",provider="local-provenance-check",
         model="scripts/figure_provenance.py",role="illustration-approval",run_id="illustration-"+timestamp.replace(":","-"))
     return relative
@@ -129,7 +118,6 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
 
 def rendered_sources(project:Path,report:dict):
     """Inspect current native render bindings without registering or approving it."""
-    from scripts.research_artifacts import path_in, read, sha
     from scripts.figure_lineage import receipt_path
     rendering=report.get("render_receipt",{})
     render_path=path_in(project,rendering.get("path",""))
@@ -148,8 +136,7 @@ def rendered_sources(project:Path,report:dict):
     paper_id=match[1]
     inputs=report.get("data",[])
     if not inputs:raise ValueError("data-figure registration needs actual sealed inputs")
-    for row in [report["spec"],report["renderer_wrapper"],*inputs,*outputs]:
-        if sha(path_in(project,row["path"]))!=row.get("sha256"):raise ValueError("render source/output changed before registration")
+    verify_files(project,[report["spec"],report["renderer_wrapper"],*inputs,*outputs],changed_error="render source/output changed before registration")
     declared={(row.get("path"),row.get("sha256")) for row in receipt.get("outputs",[])}
     if any((row["path"],row["sha256"]) not in declared for row in outputs):
         raise ValueError("final figure differs from its renderer receipt")
@@ -228,6 +215,7 @@ def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=Tru
         records[item["figure_path"]]=item
     if actual-set(records):errors.append("unregistered final figures: "+", ".join(sorted(actual-set(records))))
     if set(records)-actual:errors.append("stale/extra figure records: "+", ".join(sorted(set(records)-actual)))
+    lineages={}
     for relative,item in records.items():
         try:
             path,_=_relative(project,relative,"figure_path")
@@ -261,7 +249,9 @@ def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=Tru
             if item.get("figure_type")=="data_chart":
                 try:from scripts.figure_lineage import lineage
                 except ModuleNotFoundError:from figure_lineage import lineage
-                current=lineage(project,paper.name,[row["path"] for row in inputs],sorted(runs))
+                key=(tuple(row["path"] for row in inputs),tuple(sorted(runs)))
+                if key not in lineages:lineages[key]=lineage(project,paper.name,list(key[0]),list(key[1]))
+                current=lineages[key]
                 if item.get("source_lineage")!=current:errors.append(f"{relative}: sealed executor/data lineage is stale or missing")
             if illustration and (inputs or runs):errors.append(f"{relative}: conceptual illustration may not assert experimental inputs or runs")
         except (OSError,ValueError,KeyError,TypeError,AttributeError) as exc:errors.append(f"{relative}: {exc}")

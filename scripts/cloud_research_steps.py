@@ -526,9 +526,6 @@ def after_write(project: Path, stage: str) -> dict:
                 record(project, [output], "scripts/citation_audit.py")
                 if result["status"] != "pass":
                     raise ResearchStepError("citation audit has unresolved references")
-            elif action == "word_render" and stage == "writing-and-review":
-                from scripts.word_render import render
-                render(project, operation["paper_id"], operation.get("source"))
             elif action == "research_increments" and stage != "intake":
                 from scripts.research_increments import initialize, refresh, scientific_audit
                 initialize(project)
@@ -541,9 +538,6 @@ def after_write(project: Path, stage: str) -> dict:
                 output = project / "reports/research-increments" / ("inventory-" + operation["paper_id"] + ".json")
                 write(output, inventory(project, operation["paper_id"]))
                 record(project, [output], "incremental-source-inventory")
-            elif action == "increments_freeze" and stage != "intake":
-                from scripts.research_increments import freeze
-                freeze(project, operation["kind"], operation["record_id"])
             elif action == "research_extensions" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.research_extensions import refresh
                 result = refresh(project)

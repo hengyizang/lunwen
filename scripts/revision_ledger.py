@@ -7,8 +7,8 @@ quotes. A passing ledger proves correspondence and coverage, never equivalence.
 from __future__ import annotations
 
 import csv
+import copy
 import hashlib
-import json
 import re
 import zipfile
 from collections import Counter
@@ -20,8 +20,8 @@ from xml.etree import ElementTree as ET
 
 from scripts.citation_audit import manuscript_digest, tex_source_paths
 from scripts.ref_verify_adapter import canonical_manuscript
-from scripts.research_artifacts import path_in, read, record, sha, write
-from scripts.scientific_editing import NUMBER, PROTECTED, SI_UNITS, signatures
+from scripts.research_artifacts import path_in, read, record, sha, write, json_bytes, json_digest
+from scripts.scientific_editing import NUMBER, PROTECTED, SI_UNITS, signatures, WordSource
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
@@ -36,14 +36,12 @@ def _hash(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _json(value) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-
-
 def _xml(node) -> str:
     """Expanded namespace names avoid prefix-only differences and retain content."""
-    return _json([node.tag, sorted(node.attrib.items()), node.text or "", node.tail or "",
-                  [json.loads(_xml(child)) for child in node]])
+    def tree(element):
+        return [element.tag, sorted(element.attrib.items()), element.text or "", element.tail or "",
+                [tree(child) for child in element]]
+    return json_bytes(tree(node)).decode("utf-8")
 
 
 def _paper(project: Path, paper_id: str) -> Path:
@@ -70,10 +68,11 @@ def _sentences(text: str) -> list[tuple[int, int]]:
     Blank paragraphs always delimit units. This intentionally keeps an ambiguous
     abbreviation or display environment together rather than inventing syntax.
     """
-    spans, start, depth, math, index = [], 0, 0, None, 0
+    spans, start, depth, math, index, slashes = [], 0, 0, None, 0, 0
     while index < len(text):
         char = text[index]
-        escaped = index > 0 and (len(text[:index]) - len(text[:index].rstrip("\\"))) % 2 == 1
+        escaped = slashes % 2 == 1
+        slashes = slashes + 1 if char == "\\" else 0
         if char == "$" and not escaped:
             token = "$$" if text[index:index + 2] == "$$" else "$"
             if math is None:
@@ -128,7 +127,7 @@ def _unit(project: Path, source: Path, kind: str, location: str, text: str, iden
             "protected_facts": _facts(text, formulas=formulas, citations=citations)}
 
 
-def source_snapshot(project: Path, canonical: Path) -> dict:
+def source_snapshot(project: Path, canonical: Path, *, _documents=None) -> dict:
     """Read the complete canonical tree, including TeX includes and OOXML parts."""
     path_in(project, canonical.relative_to(project).as_posix())
     units, sources = [], []
@@ -145,12 +144,8 @@ def source_snapshot(project: Path, canonical: Path) -> dict:
     elif canonical.suffix == ".docx":
         source_sha256 = sha(canonical)
         sources.append({"path": canonical.relative_to(project).as_posix(), "sha256": source_sha256})
-        with zipfile.ZipFile(canonical) as archive:
-            names = archive.namelist()
-            if len(names) != len(set(names)) or sum(info.file_size for info in archive.infolist()) > 50_000_000:
-                raise ValueError("duplicate or oversized Word package")
-            parts = {name: archive.read(name) for name in names}
-        root = ET.fromstring(parts["word/document.xml"])
+        document = (_documents or {}).get(canonical.resolve()) or WordSource(canonical, complete=True)
+        parts, root = document.parts, copy.deepcopy(document.root)
         if any(node.tag in {W + "ins", W + "del", W + "moveFrom", W + "moveTo"} for node in root.iter()):
             raise ValueError("resolve existing Word revisions before ledger comparison")
         relations = {}
@@ -200,11 +195,11 @@ def _aggregate(units: list[dict]) -> dict:
             for key in ("numeric", "citation", "qualifier", "unit", "formula", "contextual")}
 
 
-def change_manifest(project: Path, paper_id: str) -> dict:
+def change_manifest(project: Path, paper_id: str, *, _documents=None) -> dict:
     """Draft author input with exact anchors; reasons/evidence are never fabricated."""
     paper = _paper(project, paper_id)
     current = canonical_manuscript(paper)
-    old, new = source_snapshot(project, _baseline(paper, current)), source_snapshot(project, current)
+    old, new = (source_snapshot(project, path, _documents=_documents) for path in (_baseline(paper, current), current))
     # Relative paths within each tree align includes while allowing distinct roots.
     def key(unit, snapshot):
         root = Path(snapshot["path"]).parent
@@ -221,7 +216,7 @@ def change_manifest(project: Path, paper_id: str) -> dict:
             unit_operation = "replace" if before and after else "delete" if before else "insert"
             protected = {"before": _aggregate(before), "after": _aggregate(after)}
             delta = _delta(protected["before"], protected["after"])
-            changes.append({"change_id": _hash(_json([unit_operation, before, after])), "operation": unit_operation,
+            changes.append({"change_id": json_digest([unit_operation, before, after]), "operation": unit_operation,
                             "before": before, "after": after, "protected_facts": protected, "protected_changes": delta,
                             "kind": "scientific" if any(item[side] for item in delta.values() for side in ("removed", "added")) else "editorial",
                             "claim_ids": [], "evidence": [], "reason": ""})
@@ -279,9 +274,9 @@ def _evidence(project: Path, anchor: dict, forbidden: set[str]) -> dict:
             "start": start, "end": start + len(quote)}
 
 
-def audit(project: Path, paper_id: str) -> dict:
+def audit(project: Path, paper_id: str, *, _documents=None) -> dict:
     paper = _paper(project, paper_id)
-    expected = change_manifest(project, paper_id)
+    expected = change_manifest(project, paper_id, _documents=_documents)
     input_path = paper / "reviews/revision-ledger.json"
     errors, entries, source_bindings = [], [], {}
     claim_binding = None
@@ -353,13 +348,13 @@ def audit(project: Path, paper_id: str) -> dict:
                         "claim_records": [claims[item] for item in claim_ids if item in claims]})
     # Coverage can be prepared before a change decision. G5 separately enforces
     # the exact change record and independent scientific audits.
-    from scripts.revision_integrity import audit as integrity_audit
-    integrity = integrity_audit(paper, include_ledger=False)
+    from scripts.revision_integrity import revision_authorization
+    _, authorization = revision_authorization(paper)
     return {"schema_version": "1.0", "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
             "status": "pass" if not errors else "fail", "base": expected["base"], "current": expected["current"],
             "input": {"path": input_path.relative_to(project).as_posix(), "sha256": sha(input_path)} if input_path.is_file() else None,
             "claim_registry": claim_binding, "evidence_sources": [{"path": path, "sha256": digest} for path, digest in sorted(source_bindings.items())],
-            "authorization": integrity["authorization"], "changes": entries, "change_count": len(expected["changes"]),
+            "authorization": authorization, "changes": entries, "change_count": len(expected["changes"]),
             "errors": errors, "coverage_complete": not any("covered exactly once" in error or "does not match actual source units" in error for error in errors),
             "semantic_equivalence_proven": False, "evidence_entailment_verified": False, "human_scientific_review_required": True,
             "scope": "TeX source sentences/includes; Word paragraphs, document structure and package parts",
@@ -374,7 +369,7 @@ def refresh(project: Path, paper_id: str) -> dict:
     return result
 
 
-def validate_saved_report(project: Path, paper_id: str, *, require_when_changed: bool = False) -> list[str]:
+def validate_saved_report(project: Path, paper_id: str, *, require_when_changed: bool = False, _documents=None) -> list[str]:
     paper = _paper(project, paper_id)
     input_path, output = paper / "reviews/revision-ledger.json", paper / "reviews/revision-ledger-report.json"
     if not input_path.exists() and not output.exists():
@@ -384,7 +379,7 @@ def validate_saved_report(project: Path, paper_id: str, *, require_when_changed:
             return [f"cannot check revision ledger requirement: {exc}"]
     try:
         saved = read(path_in(project, output.relative_to(project).as_posix()))
-        current = audit(project, paper_id)
+        current = audit(project, paper_id, _documents=_documents)
         errors = list(current["errors"])
         if saved.get("schema_version") != "1.0" or saved.get("status") != "pass":
             errors.append("revision ledger report must pass")

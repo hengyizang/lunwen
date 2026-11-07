@@ -10,17 +10,23 @@ from scripts import relay_guard
 
 class MemoryStore:
     def __init__(self):
-        self.files={};self.writes=[];self.fail_write=False;self.before_write=None
+        self.files={};self.blobs={};self.writes=[];self.fail_write=False;self.before_write=None
         for branch,name in relay_guard.SOURCES:self.put(branch,"trial-state",name,{"entries":[]})
 
     def put(self,branch,directory,name,value):
         import hashlib,json
         blob=hashlib.sha1(json.dumps(value,sort_keys=True).encode()).hexdigest()
         self.files[(branch,directory,name)]=(deepcopy(value),blob)
+        self.blobs[blob]=deepcopy(value)
         return blob
 
     def read(self,branch,directory,name):
         return deepcopy(self.files.get((branch,directory,name),(None,None)))
+
+    def read_blob(self,blob):
+        if blob not in self.blobs:
+            raise relay_guard.RelayGuardError("original historical blob unavailable")
+        return deepcopy(self.blobs[blob])
 
     def write(self,name,value,expected):
         if self.before_write:

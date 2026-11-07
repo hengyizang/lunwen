@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.output_provenance import current_origin
 from scripts.publication_figures import FigureSpecError, render
@@ -79,7 +80,15 @@ class PublicationFigureTests(unittest.TestCase):
             self.assertEqual(current_origin(project, build_report)["status"], "tracked")
             self.assertTrue(report["quality"]["layout_audit"]["pass"])
             paper = project / "papers" / "P01"
-            self.assertEqual(figure_layout.validate_saved_figures(paper), [])
+            reads = []
+            read_text = Path.read_text
+            def count_build(path, *args, **kwargs):
+                if path == build_report:
+                    reads.append(path)
+                return read_text(path, *args, **kwargs)
+            with patch.object(Path, "read_text", count_build):
+                self.assertEqual(figure_layout.validate_saved_figures(paper), [])
+            self.assertEqual(len(reads), 1)
             audit_record = report["quality"]["layout_audit"]
             audit_path = project / audit_record["path"]
             audit = json.loads(audit_path.read_text())

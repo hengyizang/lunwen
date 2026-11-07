@@ -19,20 +19,15 @@ from pathlib import Path
 from lxml import etree as ET
 
 try:
-    from scripts.research_artifacts import sha, read, write, record, path_in
+    from scripts.research_artifacts import sha, read, write, record, path_in, verify_files
+    from scripts.scientific_editing import word_package as package
 except ImportError:
-    from research_artifacts import sha, read, write, record, path_in  # type: ignore
+    from research_artifacts import sha, read, write, record, path_in, verify_files  # type: ignore
+    from scientific_editing import word_package as package
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
 DOCUMENT = "word/document.xml"
-
-
-def package(path: Path) -> dict[str, bytes]:
-    with zipfile.ZipFile(path) as archive:
-        if len(archive.namelist()) != len(set(archive.namelist())) or sum(i.file_size for i in archive.infolist()) > 50_000_000:
-            raise ValueError("duplicate or oversized OOXML package")
-        return {name: archive.read(name) for name in archive.namelist()}
 
 
 def canonical(element: ET.Element):
@@ -238,6 +233,17 @@ class Tracker:
             result.append(self.wrapper(tag, units))
         return result
 
+    def block(self, previous, current):
+        if previous.tag != current.tag:
+            raise ValueError("table topology/section boundaries changed")
+        if previous.tag == W + "p":
+            return self.paragraph(previous, current)
+        if previous.tag in {W + "tbl", W + "tr", W + "tc"}:
+            return self.blocks(previous, current)
+        if canonical(previous) == canonical(current):
+            return copy.deepcopy(current)
+        raise ValueError("table properties, grid, styles or section content changed")
+
     def blocks(self, before: ET.Element, after: ET.Element) -> ET.Element:
         """Only paragraphs may change length; tables retain rows/cells/grid."""
         if before.tag != after.tag or before.attrib != after.attrib:
@@ -254,16 +260,7 @@ class Tracker:
             old, new = left[a:b], right[c:d]
             if len(old) == len(new):
                 for previous, current in zip(old, new):
-                    if previous.tag != current.tag:
-                        raise ValueError("table topology/section boundaries changed")
-                    if previous.tag == W + "p":
-                        result.append(self.paragraph(previous, current))
-                    elif previous.tag in {W + "tbl", W + "tr", W + "tc"}:
-                        result.append(self.blocks(previous, current))
-                    elif canonical(previous) == canonical(current):
-                        result.append(copy.deepcopy(current))
-                    else:
-                        raise ValueError("table properties, grid, styles or section content changed")
+                    result.append(self.block(previous, current))
             else:
                 if any(x.tag != W + "p" for x in old + new):
                     # Preserve table/section anchors even when adjoining prose
@@ -281,13 +278,7 @@ class Tracker:
                         new_part.extend(copy.deepcopy(x) for x in new[new_start:j])
                         result.extend(self.blocks(old_part, new_part))
                         if i < len(old):
-                            previous, current = old[i], new[j]
-                            if previous.tag in {W + "tbl", W + "tr", W + "tc"}:
-                                result.append(self.blocks(previous, current))
-                            elif canonical(previous) == canonical(current):
-                                result.append(copy.deepcopy(current))
-                            else:
-                                raise ValueError("table properties, grid, styles or section content changed")
+                            result.append(self.block(old[i], new[j]))
                         old_start, new_start = i + 1, j + 1
                     continue
                 paired = min(len(old), len(new))
@@ -383,9 +374,7 @@ def validate_saved_report(project: Path, paper_id: str) -> list[str]:
         saved = read(report)
         if saved.get("status") != "pass" or saved.get("schema_version") != "1.0":
             raise ValueError("Word revision manifest must pass")
-        for item in saved["inputs"] + saved["outputs"]:
-            if sha(path_in(project, item["path"])) != item["sha256"]:
-                raise ValueError("Word revision, clean manuscript or response matrix changed after packaging")
+        verify_files(project, saved["inputs"] + saved["outputs"], changed_error="Word revision, clean manuscript or response matrix changed after packaging")
         base, clean = (package(path_in(project, saved["inputs"][i]["path"])) for i in (0, 1))
         tracked = package(path_in(project, saved["outputs"][1]["path"]))
         if set(clean) != set(tracked) or any(clean[k] != tracked[k] for k in clean if k != DOCUMENT):

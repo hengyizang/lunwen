@@ -5,6 +5,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts import revision_ledger
 from scripts.research_artifacts import sha, write
@@ -119,6 +120,18 @@ class RevisionLedgerTests(unittest.TestCase):
                     value["changes"][0]["change_id"] = "fabricated"
                 write(project / "papers/P01/reviews/revision-ledger.json", value)
                 self.assertTrue(any("covered exactly once" in error for error in revision_ledger.audit(project, "P01")["errors"]))
+
+    def test_saved_report_distinguishes_missing_keys_and_explicit_null(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            self.fixture(project)
+            self.supplied(project)
+            saved = revision_ledger.refresh(project, "P01")
+            output = project / "papers/P01/reviews/revision-ledger-report.json"
+            self.assertEqual(revision_ledger.validate_saved_report(project, "P01"), [])
+            for altered in ({**saved, "unexpected_null": None}, {k:v for k,v in saved.items() if k != "authorization"}):
+                write(output, altered)
+                self.assertIn("revision ledger report differs from a clean rerun", revision_ledger.validate_saved_report(project, "P01"))
 
     def test_source_anchor_and_protected_facts_cannot_be_self_attested(self):
         for field in ("before", "after", "protected_facts", "protected_changes"):
@@ -262,6 +275,11 @@ class RevisionLedgerTests(unittest.TestCase):
             self.supplied(project)
             self.authorize(paper)
             self.assertEqual(revision_ledger.audit(project, "P01")["status"], "pass")
+            revision_ledger.refresh(project, "P01")
+            from scripts.scientific_editing import word_package
+            with patch("scripts.scientific_editing.word_package", wraps=word_package) as opened:
+                self.assertEqual(integrity_audit(paper)["status"], "pass")
+            self.assertEqual(opened.call_count, 2)
             # External/resource changes are captured even when paragraph text is unchanged.
             with zipfile.ZipFile(current) as archive:
                 parts = {name: archive.read(name) for name in archive.namelist()}

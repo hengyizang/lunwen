@@ -2,7 +2,7 @@
 import html
 
 from scripts import literature_intelligence as intelligence, literature_workbench as wb
-from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, sha, write, seal_manifest, validate_manifest, matches_origin
 
 OUTPUT = "reports/literature-roles"
 FAMILIES = {"direct": "core_candidate", "adjacent": "adjacent_candidate", "counterevidence": "counterevidence_candidate"}
@@ -100,13 +100,9 @@ def refresh(project, request_path="program/literature-roles.json"):
 
 def validate_saved_report(project, request_path="program/literature-roles.json"):
     source = path_in(project, request_path)
-    manifest = validate_manifest(project, path_in(project, OUTPUT + "/manifest.json"),
+    validate_manifest(project, path_in(project, OUTPUT + "/manifest.json"),
         "scripts/literature_roles.py", {OUTPUT + "/latest.json", OUTPUT + "/index.html"}, files_key="files",
-        metadata={"request": {"path": request_path, "sha256": sha(source)}})
-    for binding in manifest["files"]:
-        path = path_in(project, binding["path"])
-        if not matches_origin(project, path):
-            raise ValueError("classification output changed")
+        metadata={"request": {"path": request_path, "sha256": sha(source)}}, output_origin={})
     actual = wb._json(path_in(project, OUTPUT + "/latest.json").read_bytes())
     expected = build(project, wb._json(source.read_bytes()))
     if {k: v for k, v in actual.items() if k != "request"} != expected:

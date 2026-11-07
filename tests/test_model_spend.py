@@ -23,6 +23,25 @@ class ExactOwnerCeilingTests(unittest.TestCase):
         arguments.update(overrides)
         return model_spend.amend_ceiling(self.project, **arguments)
 
+    def test_one_persisted_reservation_can_only_be_claimed_by_one_transport(self):
+        receipt=model_spend.reserve(self.project,max_cost_cny=1,paper_id=None,paper_limit_cny=0,run_id="transport-race")
+        barrier=threading.Barrier(2);claimed=[];rejected=[]
+        def compete():
+            barrier.wait()
+            try:
+                claimed.append(model_spend.claim_transport(self.project,receipt,max_cost_cny=1,
+                    paper_id=None,run_id="transport-race",binding={"provider":"synthetic","model":"synthetic"}))
+            except model_spend.SpendControlError as error:
+                rejected.append(error)
+        workers=[threading.Thread(target=compete) for _ in range(2)]
+        for worker in workers:worker.start()
+        for worker in workers:worker.join(timeout=5)
+        self.assertFalse(any(worker.is_alive() for worker in workers))
+        self.assertEqual(len(claimed),1);self.assertEqual(len(rejected),1)
+        state=model_spend.read(self.project)
+        self.assertEqual(state["reservations"][receipt],claimed[0])
+        self.assertEqual(state["spent_cny"],0);self.assertEqual(model_spend.reserved(state),1)
+
     def test_exact_500_preserves_all_existing_costs_holds_and_history(self):
         settled = model_spend.reserve(self.project, max_cost_cny=4, paper_id="P01", paper_limit_cny=60, run_id="completed")
         model_spend.settle(self.project, settled, actual_cost_cny=3.25)

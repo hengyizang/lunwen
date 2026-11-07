@@ -6,22 +6,24 @@ from __future__ import annotations
 import json
 import re
 import sys
+import zipfile
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from xml.etree.ElementTree import ParseError
 
 try:
-    from scripts.research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file
+    from scripts.research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file, changed_fields
     from scripts.citation_audit import manuscript_digest, tex_source_paths
     from scripts.manuscript_language import extract_text
     from scripts.ref_verify_adapter import canonical_manuscript
-    from scripts.scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens
+    from scripts.scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens, WordSource
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file
+    from research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file, changed_fields
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from manuscript_language import extract_text  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
-    from scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens  # type: ignore
+    from scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens, WordSource  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,9 +50,9 @@ def multiset_delta(before: list[str], after: list[str]) -> dict[str, list[str]]:
     }
 
 
-def citation_tokens(path: Path) -> list[str]:
+def citation_tokens(path: Path, *, document=None) -> list[str]:
     if path.suffix.lower() == ".docx":
-        return docx_citations(path)
+        return docx_citations(path, document=document)
     if path.suffix.lower() != ".tex":
         return []
     values: list[str] = []
@@ -64,14 +66,28 @@ def citation_tokens(path: Path) -> list[str]:
     return values
 
 
-def tokens(path: Path) -> dict[str, list[str]]:
-    text = scientific_text(path)
+def _facts(path: Path, *, documents=None):
+    document = None
+    if path.suffix.lower() == ".docx":
+        try:
+            document = WordSource(path, complete=documents is not None)
+        except (OSError, KeyError, zipfile.BadZipFile) as exc:
+            raise ValueError(f"cannot read DOCX manuscript: {exc}") from exc
+        except ParseError as exc:
+            raise ValueError(f"invalid DOCX document XML: {exc}") from exc
+        if documents is not None:
+            documents[path.resolve()] = document
+    text = scientific_text(path, document=document)
     return {
         "numeric": NUMBER_RE.findall(text),
-        "citation": citation_tokens(path),
+        "citation": citation_tokens(path, document=document),
         "claim_language": [match.group(0).casefold() for match in SIGNAL_RE.finditer(text)],
-        "formula": formula_tokens(path),
-    }
+        "formula": formula_tokens(path, document=document),
+    }, text
+
+
+def tokens(path: Path) -> dict[str, list[str]]:
+    return _facts(path)[0]
 
 
 def load_authorization(path: Path | None) -> dict[str, Any] | None:
@@ -96,6 +112,15 @@ def load_authorization(path: Path | None) -> dict[str, Any] | None:
     return value
 
 
+def revision_authorization(paper: Path):
+    path = paper / "reviews/revision-authorizations.json"
+    value = load_authorization(path if path.is_file() else None)
+    binding = ({"path": path.relative_to(paper).as_posix(), "sha256": sha256_file(path),
+                "approved_by": value.get("approved_by"), "approved_at": value.get("approved_at"),
+                "decision_kind": value.get("decision_kind", "human")} if value is not None else None)
+    return value, binding
+
+
 def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
     current = canonical_manuscript(paper)
     preferred = paper / "reviews" / "revision-base" / current.name
@@ -103,21 +128,23 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
     base = preferred if preferred.is_file() else legacy
     if not base.is_file() or base.is_symlink():
         raise RevisionIntegrityError(f"reviews/revision-base/{current.name} is required")
-    auth_path = paper / "reviews" / "revision-authorizations.json"
-    authorization = load_authorization(auth_path if auth_path.is_file() else None)
-    before, after = tokens(base), tokens(current)
+    authorization, auth_binding = revision_authorization(paper)
+    use_ledger = include_ledger and any((paper / "reviews" / name).exists() for name in ("revision-ledger.json", "revision-ledger-report.json"))
+    documents = {} if use_ledger else None
+    (before, base_text), (after, current_text) = _facts(base, documents=documents), _facts(current, documents=documents)
+    digests = {path: manuscript_digest(path) for path in (base, current)}
     changes = {
         key + "_changes": multiset_delta(before[key], after[key])
         for key in ("numeric", "citation", "claim_language", "formula")
     }
-    changes["scientific_context_changes"] = context_changes(scientific_text(base), scientific_text(current))
+    changes["scientific_context_changes"] = context_changes(base_text, current_text)
     has_changes = any(value[side] for value in changes.values() for side in ("removed", "added"))
     errors: list[str] = []
     if has_changes and authorization is None:
         errors.append("protected revision changes need a current source-bound change record and independent review")
     if authorization is not None:
-        if authorization.get("schema_version") == "1.1" and (authorization.get("base_sha256") != manuscript_digest(base)
-                or authorization.get("current_sha256") != manuscript_digest(current)):
+        if authorization.get("schema_version") == "1.1" and (authorization.get("base_sha256") != digests[base]
+                or authorization.get("current_sha256") != digests[current]):
             errors.append("automatic change record is stale")
         if authorization.get("schema_version") == "1.1" and authorization.get("revision_ledger_input_sha256") != sha256_file(paper / "reviews/revision-ledger.json"):
             errors.append("automatic change record is stale for the source-bound ledger")
@@ -141,10 +168,10 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
         ).strip():
             errors.append("formula changes require an authorization rationale")
     ledger_binding = None
-    if include_ledger and any((paper / "reviews" / name).exists() for name in ("revision-ledger.json", "revision-ledger-report.json")):
+    if use_ledger:
         try:
             from scripts.revision_ledger import validate_saved_report as ledger_errors
-            errors.extend("revision ledger: " + error for error in ledger_errors(paper.parent.parent, paper.name))
+            errors.extend("revision ledger: " + error for error in ledger_errors(paper.parent.parent, paper.name, _documents=documents))
             ledger_path = paper / "reviews/revision-ledger-report.json"
             ledger_binding = {"path": ledger_path.relative_to(paper).as_posix(), "sha256": sha256_file(ledger_path)} if ledger_path.is_file() else None
         except (OSError, ValueError, RuntimeError) as exc:
@@ -153,20 +180,15 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
         "schema_version": "1.0",
         "created_at": now(),
         "status": "pass" if not errors else "fail",
-        "base": {"path": base.relative_to(paper).as_posix(), "sha256": manuscript_digest(base)},
-        "current": {"path": current.relative_to(paper).as_posix(), "sha256": manuscript_digest(current)},
-        "authorization": (
-            {"path": auth_path.relative_to(paper).as_posix(), "sha256": sha256_file(auth_path),
-             "approved_by": authorization.get("approved_by"), "approved_at": authorization.get("approved_at"),
-             "decision_kind": authorization.get("decision_kind", "human")}
-            if authorization is not None else None
-        ),
+        "base": {"path": base.relative_to(paper).as_posix(), "sha256": digests[base]},
+        "current": {"path": current.relative_to(paper).as_posix(), "sha256": digests[current]},
+        "authorization": auth_binding,
         "changes": changes,
         "errors": errors,
         "semantic_equivalence_proven": False,
         "human_scientific_review_required": False,
         "independent_scientific_review_required": True,
-        "character_findings": character_audit(extract_text(current)),
+        "character_findings": character_audit(current_text if current.suffix.lower() == ".docx" else extract_text(current)),
         **({"revision_ledger": ledger_binding} if ledger_binding is not None else {}),
     }
 
@@ -183,15 +205,13 @@ def record_automated_changes(paper: Path) -> dict:
     base = paper / "reviews/revision-base" / current.name
     if not base.is_file():
         raise RevisionIntegrityError("canonical revision baseline is required")
-    before, after = tokens(base), tokens(current)
-    changes = {key + "_changes": multiset_delta(before[key], after[key]) for key in ("numeric", "citation", "claim_language", "formula")}
-    changes["scientific_context_changes"] = context_changes(scientific_text(base), scientific_text(current))
+    facts = audit(paper, include_ledger=False)
     reason = "Exact changes and source-bound author reasons are recorded in the current revision ledger; independent scientific audits remain required."
     value = {"schema_version": "1.1", "decision_kind": "automated_change_record", "recorded_at": now(),
-             "base_sha256": manuscript_digest(base), "current_sha256": manuscript_digest(current),
+             "base_sha256": facts["base"]["sha256"], "current_sha256": facts["current"]["sha256"],
              "revision_ledger_input_sha256": sha256_file(paper / "reviews/revision-ledger.json"),
              "claim_language_rationale": reason, "scientific_context_rationale": reason, "formula_rationale": reason,
-             "human_review": False, "scientific_validity_verified": False, **changes}
+             "human_review": False, "scientific_validity_verified": False, **facts["changes"]}
     destination = paper / "reviews/revision-authorizations.json"
     if destination.exists():
         old = load_authorization(destination)
@@ -220,9 +240,8 @@ def validate_saved_report(paper: Path, *, include_ledger: bool = True) -> list[s
     errors: list[str] = []
     if saved.get("schema_version") != "1.0" or (include_ledger and saved.get("status") != "pass"):
         errors.append("revision integrity must be a passing schema_version 1.0 report")
-    for key in ("base", "current", "authorization", *(("revision_ledger",) if include_ledger else ())):
-        if saved.get(key) != current.get(key):
-            errors.append(f"revision integrity is stale for {key}")
+    errors.extend(f"revision integrity is stale for {key}" for key in changed_fields(
+        saved, current, ("base", "current", "authorization", *(("revision_ledger",) if include_ledger else ()))))
     if saved.get("changes") != current.get("changes"):
         errors.append("revision integrity changes differ from a clean rerun")
     errors.extend(current["errors"])

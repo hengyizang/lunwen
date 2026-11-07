@@ -19,9 +19,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as write_artifact
+    from scripts.research_artifacts import write as write_artifact, json_digest
 except ImportError:
-    from research_artifacts import write as write_artifact
+    from research_artifacts import write as write_artifact, json_digest
 
 
 STEP_CNY = 300
@@ -242,6 +242,26 @@ def reserve(project_root: Path, *, max_cost_cny: float, paper_id: str | None, pa
     }
     write(project_root, state)
     return receipt_id
+
+
+@_locked
+def claim_transport(project_root: Path, receipt_id: str, *, max_cost_cny: float,
+                    paper_id: str | None, run_id: str, binding: dict) -> dict:
+    """Consume one existing reservation's transport claim before its cloud sync."""
+    state = read(project_root, required=True)
+    reservation = state["reservations"].get(receipt_id)
+    expected = {"max_cost_cny": round(_amount(max_cost_cny, "max_cost_cny"), 8),
+                "paper_id": paper_id, "run_id": run_id}
+    if (expected["max_cost_cny"] <= 0 or not isinstance(run_id, str) or not run_id.strip()
+            or not isinstance(reservation, dict) or "transport" in reservation
+            or any(key not in reservation for key in expected)
+            or json_digest({key: reservation[key] for key in expected}, allow_nan=False) != json_digest(expected, allow_nan=False)):
+        raise SpendControlError("transport needs its exact unclaimed project reservation")
+    if state["spent_cny"] + reserved(state) > state["authorized_ceiling_cny"] + 1e-8:
+        raise SpendControlError("transport would exceed the cumulative project ceiling")
+    reservation["transport"] = {**binding, "lease_id": uuid.uuid4().hex}
+    write(project_root, state)
+    return reservation
 
 
 @_locked

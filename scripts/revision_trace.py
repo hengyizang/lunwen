@@ -16,12 +16,14 @@ try:
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.research_artifacts import path_in
     from scripts.revision_render import validate_render_manifest
+    from scripts.scientific_editing import word_package, W
 except ImportError:  # Direct execution from scripts/.
     from research_artifacts import paper_audit_cli, utc_now as now, sha as sha256_file
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
     from research_artifacts import path_in
     from revision_render import validate_render_manifest  # type: ignore
+    from scientific_editing import word_package, W
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -84,13 +86,8 @@ def source_text(value: str) -> str:
 
 
 def docx_blocks(manuscript: Path) -> tuple[list, list]:
-    from lxml import etree as ET
-    try:
-        from scripts.docx_revision import package, W
-    except ImportError:
-        from docx_revision import package, W  # type: ignore
-    root = ET.fromstring(package(manuscript)["word/document.xml"],
-                         parser=ET.XMLParser(resolve_entities=False, no_network=True))
+    from docx.oxml import parse_xml
+    root = parse_xml(word_package(manuscript)["word/document.xml"])
     body = root.find(W + "body")
     if body is None:
         raise RevisionTraceError("DOCX body is missing")
@@ -115,7 +112,7 @@ def positive_index(value: Any, name: str) -> int:
     return value
 
 
-def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str) -> dict:
+def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str, *, blocks=None) -> dict:
     """Verify a current, source-bound position rather than a nonempty label.
 
     Preferred CSV location is JSON. Source-line and Word positions need the
@@ -138,7 +135,7 @@ def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str) -> 
             locator = {"kind": "source_lines", "path": match.group(1), "sha256": sha256_file(target),
                        "start_line": int(match.group(2)), "end_line": int(match.group(3) or match.group(2))}
         else:
-            return legacy_section(paper, manuscript, value, excerpt)
+            return legacy_section(paper, manuscript, value, excerpt, blocks=blocks)
     if not isinstance(locator, dict):
         raise RevisionTraceError("location must be a JSON object or a uniquely verified section")
     kind = locator.get("kind")
@@ -176,21 +173,23 @@ def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str) -> 
         elif kind in {"docx_paragraph", "docx_table_cell"}:
             if target != manuscript or target.suffix.lower() != ".docx":
                 raise RevisionTraceError("Word location requires the canonical main.docx")
-            paragraphs, tables = docx_blocks(target)
+            paragraphs, tables = blocks if blocks is not None else docx_blocks(target)
             paragraph = positive_index(locator.get("paragraph", 1), "paragraph")
             if kind == "docx_paragraph":
                 if paragraph > len(paragraphs):
                     raise RevisionTraceError("Word paragraph does not exist")
                 selected = paragraphs[paragraph - 1]
             else:
-                from docx import Document
+                from docx.table import Table
                 table = positive_index(locator.get("table"), "table")
                 row = positive_index(locator.get("row"), "row")
                 column = positive_index(locator.get("column"), "column")
-                document = Document(target)
-                if table > len(tables) or row > len(document.tables[table - 1].rows) or column > len(document.tables[table - 1].columns):
+                if table > len(tables):
                     raise RevisionTraceError("Word table/cell does not exist")
-                cell = document.tables[table - 1].cell(row - 1, column - 1)
+                selected_table = Table(tables[table - 1], None)
+                if row > len(selected_table.rows) or column > len(selected_table.columns):
+                    raise RevisionTraceError("Word table/cell does not exist")
+                cell = selected_table.cell(row - 1, column - 1)
                 if paragraph > len(cell.paragraphs):
                     raise RevisionTraceError("Word table-cell paragraph does not exist")
                 selected = cell.paragraphs[paragraph - 1]._p
@@ -203,7 +202,7 @@ def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str) -> 
     return {**result, "verified": True, "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()}
 
 
-def legacy_section(paper: Path, manuscript: Path, label: str, excerpt: str) -> dict:
+def legacy_section(paper: Path, manuscript: Path, label: str, excerpt: str, *, blocks=None) -> dict:
     label = normalized(re.sub(r"^(?:section|sec\.)\s+", "", label, flags=re.I)).casefold()
     matches = []
     if manuscript.suffix.lower() == ".tex":
@@ -219,11 +218,7 @@ def legacy_section(paper: Path, manuscript: Path, label: str, excerpt: str) -> d
                                         "sha256": sha256_file(source), "section": item.group(1),
                                         "start_line": text[:item.start()].count("\n") + 1})
     else:
-        try:
-            from scripts.docx_revision import W
-        except ImportError:
-            from docx_revision import W  # type: ignore
-        paragraphs, _ = docx_blocks(manuscript)
+        paragraphs, _ = blocks if blocks is not None else docx_blocks(manuscript)
         for index, paragraph in enumerate(paragraphs):
             if word_text(paragraph).casefold() != label:
                 continue
@@ -252,8 +247,9 @@ def audit(paper: Path) -> dict[str, Any]:
     if not matrix.is_file() or matrix.is_symlink():
         raise RevisionTraceError("reviews/response-matrix.csv is required")
     manuscript = canonical_manuscript(paper)
+    blocks = None
     if manuscript.suffix.lower() == ".docx":
-        paragraphs, tables = docx_blocks(manuscript)
+        paragraphs, tables = blocks = docx_blocks(manuscript)
         body = normalized(" ".join(word_text(item) for item in paragraphs + tables))
     else:
         body = normalized(" ".join(source_text(p.read_text(encoding="utf-8")) for p in sorted(source_paths(manuscript))))
@@ -269,7 +265,7 @@ def audit(paper: Path) -> dict[str, Any]:
         verified = None
         if status in {"fulfilled", "partial"}:
             try:
-                verified = verify_location(paper, manuscript, row["location"], excerpt)
+                verified = verify_location(paper, manuscript, row["location"], excerpt, blocks=blocks)
             except (OSError, ValueError, RevisionTraceError, KeyError, IndexError) as exc:
                 findings.append(f"{row['commitment_id']}: {exc}")
         if status == "fulfilled":

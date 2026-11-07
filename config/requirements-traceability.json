@@ -703,7 +703,7 @@
         "tests/test_cloud_checkpoint.py",
         "tests/test_ccfa_runtime.py"
       ],
-      "remaining": "Structural consolidation from 887ef94 is measured by category in docs/CODEBASE-AUDIT-2026-11-07.md. Shared operation/parameter/stage dispatch, elementary helpers, pruned scans, per-call gate state and CI setup replace duplicates. The cloud-only project retires the parallel local dashboard and its exclusive tests; native CLI, cloud controls and scientific assertions remain. The 291 upstream CCFA functional files become pinned, hash-verified setup dependencies; all 17 native skills, source inventories and licenses remain. Dependency distribution savings are reported separately from native production code. Python 3.12 retains the complete fast+slow suite on ordinary changes; 3.10/3.13 use compatibility samples and retain full periodic/manual/repair validation. Dedicated Docker/Lean/TeX/SDK acceptance remains. Models/routes, cumulative totals, human G1/G2 decisions, project state and experiment evidence are unchanged. This engineering refactor does not establish scientific completion or remove every possible redundancy. The owner eight-aspect checklist now records all 156 items separately. The 40–50% native reduction, about 30% tree reduction and overall native decrease from 7765bd5 are not achieved; same-scope measurements and incomplete architecture remain explicit. All 214 original modules have individual current dispositions, without claiming the missing historical 65-row CSV was recovered.",
+      "remaining": "Measured category-level changes against both the merged bda8abe phase and attachment Git 7765bd5 are recorded in docs/CODEBASE-AUDIT-2026-11-07.md. Completed one-off model generators and their dedicated workflows/tests are retired; immutable original plans, results, ledgers, unresolved charges and owner-only reconciliation remain. Exact historical Git records replace regeneration of old comparisons and current-quote recomputation. The actual runtime/provider/guard path now consumes one persisted, synced project reservation before a single exact-endpoint/model POST; missing legacy tickets no longer block every production request. Shared manifest, canonical JSON, operation dispatch and operation-local source inspection replace actual repeated work. The 156-item owner checklist keeps numerical targets, incomplete architecture, real research evidence and missing historical materials separate; a measurement or software test does not establish scientific completion. The 40–50% native reduction and about 30% source-tree reduction remain unachieved. All 214 original modules have current dispositions, without claiming recovery of the missing old 65-row CSV. Models, routes, reasoning levels, cumulative budgets, human G1/G2 decisions, actual project records and the three current owner policy amendments are unchanged.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ],
@@ -826,9 +826,9 @@
     "source_checklist_sha256": "a2e2046e6a12fe540601dc6b6b97f3f461a92bd10c36cabc92fdec8e384cf1d1",
     "status_counts": {
       "research-evidence-missing": 60,
-      "software-verified": 57,
+      "software-verified": 58,
       "historical-source-missing": 10,
-      "not-achieved": 6,
+      "not-achieved": 5,
       "partially-implemented": 5,
       "optional-alternative": 18
     },
