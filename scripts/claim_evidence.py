@@ -56,18 +56,23 @@ def prepare(project: Path, spec: dict) -> dict:
         if statement not in text or cite not in cited or cite not in entries:
             raise ValueError("claim text and citation key must occur in the current manuscript/bibliography")
         doi = citation_audit.normalize_doi(entries[cite]["fields"].get("doi", ""))
-        if not re.fullmatch(r"10\.\d{4,9}/\S+", doi, re.I):
-            raise ValueError("citation claim needs its registered DOI")
+        url = entries[cite]["fields"].get("url", "").strip()
+        if doi and not re.fullmatch(r"10\.\d{4,9}/\S+", doi, re.I):
+            raise ValueError("citation claim DOI is invalid")
+        if not doi and not url.startswith("https://"):
+            raise ValueError("citation claim needs its registered DOI or original HTTPS source URL")
+        identity_url = "https://doi.org/" + doi if doi else url
         paper = papers.get(claim.get("library_id"))
         anchors = _anchors(project, paper, claim.get("evidence", [])) if paper else []
         missing, basis = [], None
         if not paper:
             if claim.get("evidence"):
                 raise ValueError("unregistered original source cannot supply evidence")
-            missing.append("Locate and lawfully acquire the DOI's original open-access full text.")
+            missing.append("Locate and lawfully acquire the cited work's original open-access full text.")
         else:
-            if citation_audit.normalize_doi(paper.get("url", "")) != doi:
-                raise ValueError("registered source DOI differs from the cited work")
+            if ((doi and citation_audit.normalize_doi(paper.get("url", "")) != doi)
+                    or (not doi and paper.get("url", "").rstrip("/") != url.rstrip("/"))):
+                raise ValueError("registered source DOI/URL differs from the cited work")
             from scripts.output_provenance import current_origin
             registration = path_in(project, "literature/metadata/" + paper["id"] + ".json", exists=False)
             config_origin = current_origin(project, path_in(project, wb.CONFIG))
@@ -90,11 +95,12 @@ def prepare(project: Path, spec: dict) -> dict:
                 missing.append("Full-text rights and controlled acquisition still need source registration evidence.")
         if not anchors:
             missing.append("Locate the relevant original paragraph/page, including contrary context.")
-        claims.append({"claim_id": key, "claim": statement, "citation_key": cite, "doi": doi,
+        claims.append({"claim_id": key, "claim": statement, "citation_key": cite, "doi": doi, "source_identity_url": identity_url,
             "library_id": claim.get("library_id"), "evidence": anchors, "source_basis": basis,
             "source": paper["source"] if paper else None, "reader": paper.get("reader") if paper else None,
             "full_text_ready": not missing, "missing_evidence": missing, "outcome": "insufficient"})
-    fingerprint = wb._digest([{k: row[k] for k in ("claim_id", "claim", "citation_key", "doi", "source", "reader", "evidence", "source_basis")} for row in claims])
+    fingerprint = wb._digest([{**{k: row[k] for k in ("claim_id", "claim", "citation_key", "doi", "source", "reader", "evidence", "source_basis")},
+        **({"source_identity_url": row["source_identity_url"]} if not row["doi"] else {})} for row in claims])
     sample = sorted(claims, key=lambda row: wb._digest([fingerprint, row["claim_id"]]))[:math.ceil(.15 * len(claims))]
     return {"schema_version": "1.0", "operation": "claim_evidence", "id": identifier, "paper_id": owner,
         "manuscript_sha256": citation_audit.manuscript_digest(manuscript), "bibliography_sha256": sha(bibliography),

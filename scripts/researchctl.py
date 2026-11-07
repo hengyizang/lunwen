@@ -141,12 +141,12 @@ def _observe(warnings, label, check):
 
 def paper_scientific_errors(project, pid):
     """A: factual evidence and preservation checks shared by both writing phases."""
-    from scripts import manuscript_audit,ref_verify_adapter,statistical_reporting,revision_integrity,figure_provenance,manuscript_hygiene,literature_source_tasks
+    from scripts import manuscript_audit,statistical_reporting,revision_integrity,figure_provenance,manuscript_hygiene,literature_source_tasks
+    from scripts.research_phase import requires_submission
     paper=project/"papers"/pid;errors=[]
     for label,check in (
         ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
-        ("citation claims",lambda:ref_verify_adapter.validate_saved_report(paper)),
-        ("source evidence conflicts",lambda:literature_source_tasks.integrity_errors(project,pid)),
+        ("full-text citation support",lambda:literature_source_tasks.integrity_errors(project,pid,require_support=requires_submission(project,paper_id=pid))),
         ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
         ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False)),
         ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper)),

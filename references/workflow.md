@@ -86,6 +86,11 @@ Checks have three levels, shared by `gate-check`, `ready`, `advance` and packagi
   results, source/claim/citation/numeric consistency, frozen protocols, preserved
   adverse findings, actual runner provenance and existing writer permissions.
   Missing or false evidence blocks the affected work.
+  Final G5 citation support uses the current selected `claim_evidence` task,
+  lawful original full text and protected source judgments covering the actual
+  manuscript's cited keys. Missing or insufficient support stays pending;
+  abstract-only `ref-verify` reports cannot replace this check. Drafts may retain
+  unfinished checks, while actual contradictions remain visible and blocking.
 - **B — submission preparation:** the actual selected venue, source-bound ranking
   where known, article type, reporting requirements, imported template,
   successful render/export and final panel. The machine approval binds these

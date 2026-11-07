@@ -122,8 +122,14 @@ class GateCheckLevelTests(unittest.TestCase):
     def test_actual_source_conflicts_reach_the_native_scientific_check(self):
         with patch("scripts.literature_source_tasks.integrity_errors", return_value=["claim C1 contradicts its current source"]) as check:
             errors = researchctl.paper_scientific_errors(self.project, "P01")
-        check.assert_called_once_with(self.project, "P01")
-        self.assertIn("P01 source evidence conflicts: claim C1 contradicts its current source", errors)
+        check.assert_called_once_with(self.project, "P01", require_support=False)
+        self.assertIn("P01 full-text citation support: claim C1 contradicts its current source", errors)
+
+    def test_final_writing_requires_support_in_the_shared_scientific_check(self):
+        write(self.project / "state/run.json", {"active_paper": "P01", "writing_phases": {"P01": "submission"}})
+        with patch("scripts.literature_source_tasks.integrity_errors", return_value=[]) as check:
+            researchctl.paper_scientific_errors(self.project, "P01")
+        check.assert_called_once_with(self.project, "P01", require_support=True)
 
     def test_scientific_response_fields_are_validated_in_the_existing_audit(self):
         audit = {"verdict": "pass-with-conditions", **{field: [] for field in (
