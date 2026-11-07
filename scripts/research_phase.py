@@ -85,12 +85,7 @@ def writing_contract(project: Path, stage: str) -> str:
                 "Submission formatting and venue/package preparation are deferred; CFH/H/AD remain optional observations. "
                 "After current source-bound scientific checks and the recorded research decision, the existing controller records entry into submission preparation. Advisory opinions do not authorize that transition. "
                 "That transition cannot pass G5; the next G5 cycle must satisfy all final submission requirements. Never edit a frozen contract to switch phase.")
-    return "G5 SUBMISSION PREPARATION: complete the three-view blind panel and source-bound venue, rendering, existing-disclosure preservation and package checks once for the unchanged final snapshot. Editorial observations remain optional; opinions and scores do not prove scientific validity."
-
-
-def writing_task(project: Path, stage: str, configured: str) -> str:
-    if stage=="writing-and-review":return "Work on the current paper's "+disposition_stage(project,stage)+" task."
-    return "Resolve the current evidence-bearing task in "+stage+"; use the phase rules below."
+    return "G5 SUBMISSION PREPARATION: complete the three-view blind panel and source-bound venue, rendering, truthful internal provenance and package checks once for the unchanged final snapshot. Public AI-use statements are author-editable. Editorial observations remain optional; opinions and scores do not prove scientific validity."
 
 
 def stage_rules(project: Path | None, stage: str, role: str = "writer", root: Path | None = None) -> str:

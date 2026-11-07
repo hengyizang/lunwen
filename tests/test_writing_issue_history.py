@@ -3,7 +3,7 @@ import copy
 import unittest
 
 from scripts import research_extensions as extensions
-from scripts.research_artifacts import read, write
+from scripts.research_artifacts import write
 from tests import test_writing_review_actions as review_fixtures
 
 

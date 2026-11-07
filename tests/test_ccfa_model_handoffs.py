@@ -1,5 +1,4 @@
 """All 17 pinned skills remain explicitly reachable through API/CLI roles."""
-import json
 import re
 from pathlib import Path
 import tempfile

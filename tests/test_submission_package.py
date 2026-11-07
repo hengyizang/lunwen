@@ -17,7 +17,6 @@ from scripts.submission_package import build_package
 class SubmissionPackageTests(unittest.TestCase):
     def test_final_binding_includes_protected_panel_outside_the_paper_tree(self):
         from scripts import submission_package as packaging, review_panel, model_runtime, ai_providers
-        from scripts.research_artifacts import read
         from tests.test_review_panel import panel_inputs
         def response(project, **kwargs):
             seat=kwargs["role"].removeprefix("independent-critic-panel-")

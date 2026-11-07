@@ -2,11 +2,11 @@
 import os
 from unittest.mock import patch
 
-from scripts import review_receipts, scientific_scope
-from scripts.research_artifacts import read, write, sha
+from scripts import review_receipts
+from scripts.research_artifacts import write
+from scripts.acceptance_scope import prepare_scope as prepare_scope
 
 
-from scripts.acceptance_scope import prepare_scope
 
 
 def seal_review(project, state, *, gate="G5", run_id="fixture-review", notes=None, novelty_assessment=None):

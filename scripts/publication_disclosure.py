@@ -11,7 +11,7 @@ from pathlib import Path
 from scripts import output_provenance
 from scripts.ref_verify_adapter import canonical_manuscript
 from scripts.research_artifacts import path_in, read, sha, write
-from scripts.revision_trace import RevisionTraceError, normalized, verify_location
+from scripts.revision_trace import normalized, verify_location
 
 PREFIX = "reports/publication-disclosure"
 PROVIDER = "deterministic-publication-disclosure"

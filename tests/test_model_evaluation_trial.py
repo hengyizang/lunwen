@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from scripts import ai_providers, relay_billing, model_evaluation_20261029 as trial
 

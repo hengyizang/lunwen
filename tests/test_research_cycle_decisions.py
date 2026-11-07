@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import cloud_progress, research_notebook as notebook, researchctl
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import sha, write
 from tests.research_cycle_fixtures import pending_decision
 from tests.review_scope_fixtures import seal_review
 
@@ -165,7 +165,7 @@ class ResearchCycleDecisionTests(unittest.TestCase):
         model_spend.write(self.project, model_spend.initial())
         model_spend.grant(self.project, new_ceiling_cny=300, actor="Synthetic fixture owner", run_id="fixture-grant")
         failed = model_spend.reserve(self.project, max_cost_cny=5, paper_id="P01", paper_limit_cny=300, run_id=self.cycle)
-        interrupted = model_spend.reserve(self.project, max_cost_cny=2, paper_id="P01", paper_limit_cny=300, run_id=self.cycle)
+        model_spend.reserve(self.project, max_cost_cny=2, paper_id="P01", paper_limit_cny=300, run_id=self.cycle)
         rows = [
             {"run_id": self.cycle, "role": "persistent-writer", "duration_seconds": 4, "cost_cny": 2, "cost_status": "settled_gateway_debit", "completion_status": "completed"},
             {"run_id": self.cycle, "role": "independent-critic-initial", "duration_seconds": 2, "cost_cny": 0, "reserved_cost_cny": 5,

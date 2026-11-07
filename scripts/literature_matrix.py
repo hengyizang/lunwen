@@ -17,7 +17,7 @@ from pathlib import Path
 import re
 
 from scripts import literature_workbench as workbench
-from scripts.research_artifacts import path_in, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, sha, write, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-extraction.json"
 OUTPUT = "reports/literature-matrix"

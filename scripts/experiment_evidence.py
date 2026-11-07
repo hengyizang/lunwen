@@ -572,7 +572,7 @@ def build_report(project: Path, paper_id: str) -> dict:
     prereg_path = project / "papers" / paper_id / "preregistration.json"
     from scripts.research_quality import validate_preregistration
     try:
-        state = read(project / "state/run.json")
+        read(project / "state/run.json")
         from scripts.paper_execution import approval as paper_approval
         approval = paper_approval(project,"G3",paper_id) or {}
         need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg_path),

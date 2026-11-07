@@ -5,7 +5,7 @@ import io
 from unittest.mock import patch
 
 from scripts import literature_matrix as matrix
-from scripts.research_artifacts import read, record, sha, write
+from scripts.research_artifacts import read, sha, write
 from tests.test_literature_workbench import WorkbenchFixture
 
 

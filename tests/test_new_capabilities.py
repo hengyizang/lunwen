@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import figure_recipes, output_provenance
+from scripts import figure_recipes
 from scripts.concept_illustrations import prepare
 from scripts.detector_feedback import evaluate, prepare_revision
 from scripts.figure_profile import profile

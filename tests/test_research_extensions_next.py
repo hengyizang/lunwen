@@ -8,8 +8,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import research_extensions as extensions, evidence_context, calibration_analysis
-from scripts import review_packets, output_provenance, artifact_ownership, api_orchestrator, word_render
-from scripts.research_artifacts import read, sha, write
+from scripts import review_packets, artifact_ownership, api_orchestrator, word_render
+from scripts.research_artifacts import sha, write
 
 
 class ExtensionFixture(unittest.TestCase):

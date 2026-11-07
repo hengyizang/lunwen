@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from urllib.parse import urlsplit
 from scripts.research_artifacts import path_in, read, record, sha, write
 
 

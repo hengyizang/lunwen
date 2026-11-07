@@ -193,7 +193,7 @@ def candidate(project, paper_id):
     original_plan = experiment_path(project, 'experiments/plan.json')
     original_prereg = project / "papers" / paper_id / "preregistration.json"
     need(sha(original_plan) == value.get("original_plan_sha256") and sha(original_prereg) == value.get("original_preregistration_sha256"), "original approved experiment inputs changed")
-    state = read(project / "state/run.json")
+    read(project / "state/run.json")
     from scripts.paper_execution import approval as paper_approval
     approval = paper_approval(project,"G3",paper_id) or {}
     need(approval.get("experiment_plan_sha256") == sha(original_plan)

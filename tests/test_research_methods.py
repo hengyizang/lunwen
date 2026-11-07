@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, autopilot, figure_layout, output_provenance
+from scripts import api_orchestrator, autopilot, figure_layout
 from scripts import pre_submission_review as review
 from scripts import research_candidates as candidates
 from scripts import research_methods as methods

@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 from scripts import literature_evidence, literature_workbench, literaturectl
-from scripts.research_artifacts import record, sha, write
+from scripts.research_artifacts import sha, write
 
 
 def demonstrate(directory: Path, live: bool = False) -> dict:

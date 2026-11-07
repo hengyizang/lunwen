@@ -5,7 +5,6 @@ No provider credentials or paid language-model calls are used by this entrypoint
 """
 import argparse
 import base64
-import io
 import json
 import re
 from pathlib import Path
@@ -13,7 +12,7 @@ from scripts import literature_real_acceptance as original
 from scripts import literature_semantic as semantic, literature_pdf, literature_comparison as comparison
 from scripts import literature_reading as reading, literature_workbench as wb, literature_benchmark
 from scripts import literature_paperqa
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import sha, write
 
 
 def demonstrate(directory):

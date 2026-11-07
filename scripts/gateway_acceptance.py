@@ -17,7 +17,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import ai_providers, api_orchestrator, cloud_checkpoint, model_runtime, model_spend
+from scripts import api_orchestrator, cloud_checkpoint, model_runtime, model_spend
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "gateway-fixture"
@@ -216,7 +216,6 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
                 "persistent-remediator", "independent-critic-final"]
             assert len(requests) == 5 and all(not entry["usage_estimated"] for entry in entries)
             provenance = json.loads((project / "state/output-provenance.json").read_text())
-            output = project / "program/topic.md"
             recorded = provenance["files"]["program/topic.md"]
             assert recorded["family"] == "openai" and recorded["role"] == "persistent-remediator"
             assert manifest["independent_audit"]["final_verdict"] == "pass-with-conditions"

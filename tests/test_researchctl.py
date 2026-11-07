@@ -386,7 +386,7 @@ class ResearchCtlTests(unittest.TestCase):
             researchctl.advance(types.SimpleNamespace(project="test-phd"))
 
     def test_reopen_returns_gate_to_model_editable_work(self) -> None:
-        project=self.init_project();state=researchctl.load_state("test-phd");state.update(gate="G1",stage="topic-intelligence",stage_index=1);researchctl.save_state("test-phd",state)
+        self.init_project();state=researchctl.load_state("test-phd");state.update(gate="G1",stage="topic-intelligence",stage_index=1);researchctl.save_state("test-phd",state)
         with patch.object(researchctl,"gate_errors",return_value=[]):researchctl.mark_ready(types.SimpleNamespace(project="test-phd",note="ready"))
         researchctl.reopen(types.SimpleNamespace(project="test-phd",note="Needs another model revision"))
         state=researchctl.load_state("test-phd");self.assertEqual(state["status"],"awaiting_work");self.assertNotIn("ready_artifact_sha256",state)

@@ -212,9 +212,3 @@ def executor_owned(root: Path, relative: str, outputs: set[str] | None = None) -
                 and value.endswith("/experiment-evidence.json"))
             or any(value == prefix or value.startswith(prefix + "/") for prefix in EXECUTOR_ROOTS)
             or value in (declared_outputs(root) if outputs is None else outputs))
-
-
-def executor_snapshot(root: Path) -> dict[str, bytes]:
-    outputs = declared_outputs(root)
-    return {p.relative_to(root).as_posix(): p.read_bytes() for p in root.rglob("*")
-            if p.is_file() and executor_owned(root, p.relative_to(root).as_posix(), outputs)}

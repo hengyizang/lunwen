@@ -10,7 +10,6 @@ import hashlib
 import html
 import json
 import os
-from pathlib import Path
 import re
 from urllib.parse import urlencode
 from urllib.request import Request, build_opener, HTTPRedirectHandler

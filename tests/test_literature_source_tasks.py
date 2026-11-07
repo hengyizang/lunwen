@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import literature_source_tasks as tasks, literature_workbench as wb, paper_reader, systematic_review, literature_evidence, source_scope
+from scripts import literature_source_tasks as tasks, paper_reader, systematic_review, literature_evidence, source_scope
 from scripts.research_artifacts import read, record, sha, write
 from tests.test_literature_workbench import WorkbenchFixture
 

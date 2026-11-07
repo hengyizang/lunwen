@@ -11,16 +11,15 @@ import argparse
 import json
 import re
 import shutil
-import tempfile
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import sha as sha256_file
+    from scripts.research_artifacts import sha as sha256_file, write
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file
+    from research_artifacts import sha as sha256_file, write
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -117,14 +116,7 @@ def import_export(project: Path, source: Path, actor: str) -> tuple[Path, dict[s
         "human_review_required": True,
     }
     output = project / "evidence" / "sciencepro" / f"{receipt_id}.json"
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=output.parent, delete=False
-    ) as handle:
-        json.dump(report, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-        temporary = Path(handle.name)
-    temporary.replace(output)
+    write(output, report)
     return output, report
 
 

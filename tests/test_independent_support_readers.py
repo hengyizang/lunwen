@@ -9,9 +9,9 @@ import unittest
 from unittest.mock import patch
 
 from scripts import incremental_evidence as evidence, research_increments as increments
-from scripts import research_extensions as extensions, research_iteration as iteration
+from scripts import research_extensions as extensions
 from scripts import literature_feedback as feedback, figure_story as story, writing_review_actions as actions
-from scripts import ccfa_science as science, data_cleaning_runtime as cleaning, data_contracts
+from scripts import data_cleaning_runtime as cleaning, data_contracts
 from scripts import research_support as support
 from scripts import empirical_workflow as empirical
 from scripts.research_artifacts import read, sha, write

@@ -17,7 +17,7 @@ import uuid
 
 from scripts import evidence_retrieval, literature_review, literature_semantic, literature_workbench as wb
 from scripts import model_runtime, output_provenance, paper_qa
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, read, record, sha, write, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-paperqa.json"
 OUTPUT = "reports/literature-paperqa"
@@ -256,7 +256,6 @@ def validate_saved_report(project: Path, request_file=REQUEST):
     project = Path(project).resolve()
     spec = _request(project, request_file)
     prepared = _prepare(project, spec)
-    directory = path_in(project, OUTPUT + "/" + spec["id"], exists=False)
     manifest_path = path_in(project, OUTPUT + "/" + spec["id"] + "/manifest.json")
     target = path_in(project, OUTPUT + "/" + spec["id"] + "/report.json")
     validate_manifest(project, manifest_path, MODULE, {target.relative_to(project).as_posix()},

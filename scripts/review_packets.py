@@ -303,7 +303,7 @@ def refresh(project: Path) -> dict:
     document, bound = plan(project)
     packets, errors, metadata = [], [], []
     for packet in document["packets"]:
-        directory = base(project, packet["id"])
+        base(project, packet["id"])
         answer_path = path_in(project, f"reports/review-packets/{packet['id']}/answer-key.json", exists=False)
         manifest_path = path_in(project, f"reports/review-packets/{packet['id']}/manifest.json", exists=False)
         try:

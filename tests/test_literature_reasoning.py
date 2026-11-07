@@ -80,7 +80,7 @@ class LiteratureReasoningTests(unittest.TestCase):
         self.assertFalse(plan["semantic_verification"])
 
     def test_plan_contains_mechanism_protocol_challenge_and_falsification_dependencies(self):
-        a = self.add(fields={"methods": 2, "counterevidence": 4})
+        self.add(fields={"methods": 2, "counterevidence": 4})
         self.build()
         plan = reasoning.itinerary(self.project, "calibration transfer")
         self.assertEqual(plan["steps"][0]["phase"], "challenge")
@@ -208,7 +208,7 @@ class LiteratureReasoningTests(unittest.TestCase):
 
     def test_full_source_bound_candidate_and_nearest_work_matrix(self):
         a = self.add("a", fields={"methods": 2, "limitations": 4})
-        b = self.add("b", fields={"methods": 2})
+        self.add("b", fields={"methods": 2})
         self.build()
         candidate = {"id": "device-transfer", "question": "Does device-held-out tuning separate drift from calibration?",
             "source_paper_ids": ["a", "b"], "nearest_work_ids": ["a", "b"], "paper_ids": ["P01", "P02"],

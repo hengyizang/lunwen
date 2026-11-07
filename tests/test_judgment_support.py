@@ -1,5 +1,4 @@
 """Mechanical scientific-judgment support; every example is synthetic."""
-import copy
 import json
 import os
 import tempfile

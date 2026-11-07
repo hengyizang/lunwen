@@ -5,8 +5,7 @@ import json
 import re
 from pathlib import Path
 
-from scripts.incremental_evidence import (DIGEST, binding, digest, gaps, identifier, ingest, jsonl,
-                                          lineage, primary_attempts, rows, strings, text)
+from scripts.incremental_evidence import (DIGEST, digest, gaps, identifier, ingest, lineage, primary_attempts, rows, strings, text)
 from scripts.research_artifacts import path_in, read, record, sha, write
 
 PLAN = "program/research-increments.json"

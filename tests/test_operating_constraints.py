@@ -1,5 +1,4 @@
 """Owner operating amendments preserve science, accounting and stopped execution."""
-import copy
 import os
 import tempfile
 import unittest

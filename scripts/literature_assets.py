@@ -17,12 +17,11 @@ import re
 import shutil
 import subprocess
 import tempfile
-import uuid
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path, PurePosixPath
 from typing import Any
-from urllib.parse import parse_qsl, unquote, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, unquote, urljoin, urlsplit
 from xml.etree import ElementTree
 
 try:

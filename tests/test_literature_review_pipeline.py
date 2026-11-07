@@ -1,11 +1,10 @@
 """Synthetic software acceptance; no scientific paper or paid model evaluation."""
-import copy
 import json
 import os
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from scripts import cloud_job, evidence_retrieval, literature_benchmark, literature_matrix, literature_review, literaturectl, paper_qa
+from scripts import cloud_job, literature_benchmark, literature_matrix, literature_review, literaturectl, paper_qa
 from scripts.research_artifacts import read, record, sha, write
 from tests.test_literature_workbench import WorkbenchFixture
 

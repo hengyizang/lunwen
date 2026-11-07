@@ -115,8 +115,14 @@ def record_model_writes(
 def current_origin(project: Path, path: Path) -> dict[str, Any]:
     """Return the current tracked origin without guessing untracked authorship."""
 
+    return _origin(project, path, _load(project)["files"])
+
+
+def _origin(project: Path, path: Path, records: dict) -> dict[str, Any]:
+    """Check current bytes against a registry loaded for this operation only."""
+
     relative = _relative(project, path)
-    record = _load(project)["files"].get(relative)
+    record = records.get(relative)
     if not isinstance(record, dict):
         return {"status": "untracked", "path": relative}
     if not path.is_file():
@@ -133,10 +139,7 @@ def current_origin(project: Path, path: Path) -> dict[str, Any]:
 
 def reject_current_anthropic_outputs(project: Path, paths: Iterable[Path]) -> None:
     blocked: list[str] = []
-    for path in paths:
-        if not path.is_file():
-            continue
-        origin = current_origin(project, path)
+    for origin in provenance_report(project, (path for path in paths if path.is_file())):
         if origin.get("status") == "tracked" and origin.get("family") == "anthropic":
             blocked.append(origin["path"])
     if blocked:
@@ -149,10 +152,7 @@ def require_final_origins(project: Path, paths: Iterable[Path]) -> None:
     """Require a current, explicitly non-Anthropic origin for final files."""
 
     blocked: list[str] = []
-    for path in paths:
-        if not path.is_file():
-            continue
-        origin = current_origin(project, path)
+    for origin in provenance_report(project, (path for path in paths if path.is_file())):
         if origin.get("status") != "tracked":
             blocked.append(f"{origin['path']} ({origin['status']})")
         elif origin.get("family") == "anthropic":
@@ -165,7 +165,9 @@ def require_final_origins(project: Path, paths: Iterable[Path]) -> None:
 
 
 def provenance_report(project: Path, paths: Iterable[Path]) -> list[dict[str, Any]]:
-    return [current_origin(project, path) for path in sorted(paths)]
+    selected = sorted(paths)
+    records = _load(project)["files"] if selected else {}
+    return [_origin(project, path, records) for path in selected]
 
 
 def artifact_snapshot(project: Path) -> dict[str, str]:
