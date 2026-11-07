@@ -106,6 +106,7 @@ fi
 python -m pip install --disable-pip-version-check -e ".[${extras}]" \
   'reportlab>=4,<5' 'Pillow>=10,<13' PyYAML seaborn jsonschema
 python -m pip check
+python -m scripts.ccfa_runtime bootstrap
 python - <<'PY'
 import importlib
 import sys

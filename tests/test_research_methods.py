@@ -567,7 +567,3 @@ class ResearchMethodTests(unittest.TestCase):
         write_json(paper / "figures/unrendered.spec.json", {"output_stem": "papers/P01/figures/x"})
         self.assertFalse(figure_layout.refresh_native_figures(paper)["pass"])
         self.assertTrue(any("unrendered.spec.json" in e for e in figure_layout.validate_saved_figures(paper)))
-
-
-if __name__ == "__main__":
-    unittest.main()

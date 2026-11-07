@@ -457,7 +457,3 @@ class ToolBillingTests(unittest.TestCase):
                 self.assertGreater(model_runtime.budget_status(project)["spent"], 0)
                 self.assertEqual(model_runtime.ledger_entries(project)[0]["cost_status"], "estimated_upper_bound")
                 self.assertEqual(model_runtime.ledger_entries(project)[0]["billing"]["usage_receipt"], usage)
-
-
-if __name__ == "__main__":
-    unittest.main()

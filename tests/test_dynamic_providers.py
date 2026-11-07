@@ -242,7 +242,3 @@ class DynamicProviderTests(unittest.TestCase):
                             expected = Decimal(str(prior[field])) * factors[name] / source_factor
                             self.assertLessEqual(abs(Decimal(str(current[field])) - expected), Decimal("0.000000000001"))
 
-
-if __name__ == "__main__":
-    unittest.main()
-

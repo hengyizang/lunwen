@@ -185,7 +185,3 @@ class ProductionCloudJobTests(unittest.TestCase):
         self.assertEqual(command[command.index("--critic-provider")+1],"codekey-kiro-enterprise")
         self.assertFalse(any("uuapi" in value for value in command))
         grant.assert_not_called()
-
-
-if __name__=="__main__":
-    unittest.main()

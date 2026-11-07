@@ -239,7 +239,3 @@ class LiteratureReasoningTests(unittest.TestCase):
         self.semantic_config(a, candidates=[candidate])
         with self.assertRaisesRegex(ValueError, "P01-P06"):
             reasoning.comparison_packet(self.project, ["a", "b"])
-
-
-if __name__ == "__main__":
-    unittest.main()

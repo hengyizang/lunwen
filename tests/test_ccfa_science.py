@@ -434,7 +434,3 @@ class CCFAScienceTests(unittest.TestCase):
             science.current(self.project, "internal_review", "case")
         with self.assertRaisesRegex(ValueError, "stale"):
             self.run_op("internal_review", data, previous=result["sha256"])
-
-
-if __name__ == "__main__":
-    unittest.main()

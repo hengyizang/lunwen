@@ -120,7 +120,3 @@ class UnsentTrialRepairTests(unittest.TestCase):
         self.assertEqual(len(model_spend.read(self.root)["unsent_events"]), 1)
         self.assertEqual(len(self.store.read(relay_guard.BRANCH, "relay-guard", self.name)[0]["events"]), 1)
 
-
-if __name__ == "__main__":
-    unittest.main()
-

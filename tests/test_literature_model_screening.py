@@ -97,7 +97,3 @@ class ModelScreeningTests(unittest.TestCase):
                 self.assertFalse(json.loads(output.read_text())["semantic_verification"])
                 acquired.write_text('{}', encoding="utf-8")
                 self.assertTrue(source_scope.verify(project, primary, binding, "full_text"))
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -52,7 +52,3 @@ class FreeJevProbeTests(unittest.TestCase):
         for config in ({"cost": 0.0001}, {"actual": free_jev_probe.ROUTER}, {"byok": True}):
             with self.subTest(config=config), self.assertRaises(free_jev_probe.ProbeError):
                 free_jev_probe.probe(KEY, FakeTransport(**config))
-
-
-if __name__ == "__main__":
-    unittest.main()

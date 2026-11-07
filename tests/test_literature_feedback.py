@@ -248,7 +248,3 @@ class LiteratureFeedbackTests(unittest.TestCase):
                 self.record()
         with self.assertRaisesRegex(ValueError, "unknown feedback"):
             self.record(self.event(gate_approved=True))
-
-
-if __name__ == "__main__":
-    unittest.main()

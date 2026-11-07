@@ -203,7 +203,3 @@ class LiveAcceptanceTests(unittest.TestCase):
             )
         self.assertEqual(report["status"], "blocked")
         self.assertIn("WSL2", report["error"])
-
-
-if __name__ == "__main__":
-    unittest.main()

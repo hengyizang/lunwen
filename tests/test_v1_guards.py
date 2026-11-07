@@ -36,4 +36,3 @@ class V1GuardTests(unittest.TestCase):
 def valid_jcr():
     now=datetime.now(timezone.utc).replace(microsecond=0)
     return {"schema_version":"1.0","database":"Clarivate Journal Citation Reports","verification_year":now.year,"impact_factor":5.0,"quartile":"Q1","category":"Engineering, Mechanical","indexing":"SCIE","source_url":"https://example.org/jcr","verified_by":"tester","verified_at":now.isoformat()}
-if __name__=="__main__":unittest.main()

@@ -208,7 +208,3 @@ class TrialControlsTests(unittest.TestCase):
                 bad[first]='wrong'
             with patch.dict(os.environ,bad,clear=True),self.assertRaises(trial.TrialError):
                 trial.receive_credentials(plan)
-
-
-if __name__=='__main__':
-    unittest.main()

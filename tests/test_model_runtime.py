@@ -177,7 +177,3 @@ class ModelRuntimeTests(unittest.TestCase):
             self.assertEqual(summary["output_tokens"], 50)
             self.assertEqual(summary["cost_cny"], 0.1)
             self.assertEqual(len(summary["by_provider_model_role"]), 1)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -268,7 +268,3 @@ class CloudCleanupTests(unittest.TestCase):
             archive.writestr("word/document.xml", b"x" * 200_000)
         with self.assertRaisesRegex(ValueError, "excessive-compression"):
             cleanup._docx(payload.getvalue())
-
-
-if __name__ == "__main__":
-    unittest.main()

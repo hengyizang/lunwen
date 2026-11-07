@@ -212,7 +212,3 @@ class ContainerReproductionTests(unittest.TestCase):
                     "resources": RESOURCES, "real_paid_model_calls": 0,
                     "scientific_validity_verified": False})
                 (destination / "replay-stdout.txt").write_text(replay.stdout, encoding="utf-8")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -10,17 +10,16 @@ import shutil
 import subprocess
 import tempfile
 from collections import Counter
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import schema_errors, write
+    from scripts.research_artifacts import schema_errors, write, utc_now as now
     from scripts.ref_verify_adapter import canonical_manuscript as select_manuscript
     from scripts.manuscript_language import extract_text
     from scripts.venue_compliance import manuscript_tree_sha256
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import schema_errors, write
+    from research_artifacts import schema_errors, write, utc_now as now
     from ref_verify_adapter import canonical_manuscript as select_manuscript
     from manuscript_language import extract_text  # type: ignore
     from venue_compliance import manuscript_tree_sha256  # type: ignore
@@ -62,10 +61,6 @@ def find_harper() -> str | None:
         if candidate.is_file():
             return str(candidate)
     return shutil.which("harper-cli")
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def canonical_manuscript(paper: Path) -> Path:

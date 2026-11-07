@@ -13,14 +13,14 @@ import csv
 import hashlib
 import json
 import re
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, write as atomic_json, regular_file
+    from scripts.research_artifacts import sha as sha256_file, write as atomic_json, regular_file, utc_now as now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, write as atomic_json, regular_file
+    from research_artifacts import sha as sha256_file, write as atomic_json, regular_file, utc_now as now
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,10 +30,6 @@ PAPER_RE = re.compile(r"^P[0-9]{2}$")
 
 class VenueCandidateError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def canonical_hash(value: Any) -> str:

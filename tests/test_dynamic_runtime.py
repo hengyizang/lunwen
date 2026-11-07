@@ -190,7 +190,3 @@ class DynamicRuntimeTests(unittest.TestCase):
         self.assertEqual(row["dynamic_candidate_id"], "baseline")
         self.assertEqual(row["dynamic_decision"]["mode"], "off")
         self.assertEqual(model_spend.read(self.project)["spent_cny"], 0.0005)
-
-
-if __name__ == "__main__":
-    unittest.main()

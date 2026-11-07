@@ -153,7 +153,3 @@ class ScientificScopeTests(unittest.TestCase):
         production = Path(scientific_scope.__file__).resolve().parents[1] / "projects/never-created-scope-test"
         with self.assertRaisesRegex(ValueError, "real repository project"):
             prepare_scope(production, {"paper_count": 1})
-
-
-if __name__ == "__main__":
-    unittest.main()

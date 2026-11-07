@@ -108,7 +108,3 @@ class ModelEvaluationAuthorizationTests(unittest.TestCase):
                 store=self.store, evaluation_trial_exception=True)
             self.assertEqual(ticket["scope"], scope)
 
-
-if __name__ == "__main__":
-    unittest.main()
-

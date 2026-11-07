@@ -103,7 +103,3 @@ class WritingPhaseTests(unittest.TestCase):
                 with patch.object(researchctl,"PROJECTS_ROOT",case.root):
                     errors=researchctl.gate_errors("demo","G5")
                 self.assertTrue(any("exploratory observations cannot enter G5" in error for error in errors))
-
-
-if __name__=="__main__":
-    unittest.main()

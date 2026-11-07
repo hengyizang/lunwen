@@ -18,8 +18,10 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import sha as sha256  # noqa: F401 - compatibility export
+except ImportError:
+    from research_artifacts import sha as sha256  # noqa: F401 - compatibility export
 
 
 def pinned_text_sha256(path: Path) -> str:

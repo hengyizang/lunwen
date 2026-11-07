@@ -310,7 +310,3 @@ class ManuscriptHygieneTests(unittest.TestCase):
                         self.assertNotIn("\u200b", " ".join(p.text for p in Document(built).paragraphs))
                         self.assertTrue((self.project / result["manuscript_hygiene"]["snapshot_path"]).is_file())
                         self.assertEqual(read(self.paper / "reviews/docx-build.json")["source"]["sha256"], sha(source))
-
-
-if __name__ == "__main__":
-    unittest.main()

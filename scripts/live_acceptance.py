@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
+    from scripts.research_artifacts import utc_now as now
     from scripts.literature_evidence import (
         PROVIDERS,
         LiteratureEvidenceError,
@@ -25,6 +26,7 @@ try:
         execute_search,
     )
 except ImportError:
+    from research_artifacts import utc_now as now
     from literature_evidence import (  # type: ignore
         PROVIDERS,
         LiteratureEvidenceError,
@@ -48,10 +50,6 @@ DEFAULT_DOI = "10.1108/jd-12-2013-0166"
 
 class AcceptanceError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def kernel_text() -> str:

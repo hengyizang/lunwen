@@ -4,8 +4,8 @@ This project adapts all 17 skills from
 `mikubaka88/CCFA-Skills` at commit
 `f157d7ed2777b655809471873b32b9632e784cfa`. The upstream MIT license is retained.
 The source inventory is `integrations/ccfa-skills.lock.json`; task/stage/producer
-routing is `integrations/ccfa-skills.routes.json`. Pinned upstream source remains
-under `third_party/ccfa-skills/`; native project entry points live under
+routing is `integrations/ccfa-skills.routes.json`. Installed pinned upstream source
+is cached under `third_party/ccfa-skills/`; native project entry points live under
 `skills/ccf-*/SKILL.md` and install into this checkout's `.agents/skills/`.
 
 All 17 skills remain available through the [route registry](../integrations/ccfa-skills.routes.json), which is the single definition of task/stage triggers, native producers and outcomes. The authoritative instructions are `skills/ccf-*/SKILL.md`; `.agents/skills/` contains generated discovery pointers, not another maintained copy.
@@ -16,7 +16,18 @@ The native controller retains state, existing model/role/effort assignments, cum
 
 ## Complete source and practical installation
 
-The single `resources` inventory stores every original path, Git blob and size; vendored text/code rows additionally retain their canonical LF hash. The runtime derives its legacy `files` view from those rows. No source identity is removed or duplicated in a second list.
+The single `resources` inventory stores every original path, Git blob and size; functional text/code rows additionally retain their canonical LF hash. The runtime derives its legacy `files` view from those rows. No source identity is removed or duplicated in a second list.
+
+Run `python -m scripts.ccfa_runtime bootstrap` after a fresh clone. The development
+bootstrap scripts and shared CI setup run it automatically. Git retains the MIT
+license and the existing normalized scaffold template; the other 291 functional
+files are installed dependencies, excluded from Git. Setup fetches only the exact
+293-file functional inventory at the pinned commit, verifies original Git blobs,
+sizes and canonical hashes before writing the original native LF form with one
+terminal newline, and refuses modified cached files.
+A verified cache supports subsequent offline runs. Initial setup needs Git and
+network access to GitHub; this dependency installation makes no model call and
+does not authorize research execution. Large ancillary assets remain separate.
 
 Native discovery entries are generated from `skills/` by both cloud installers. An exact old source copy can migrate; any local customization or symlink blocks replacement. Installation never writes a desktop/global skill profile. Preparing guidance makes no paid call and grants no research authority.
 

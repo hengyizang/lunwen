@@ -373,7 +373,3 @@ class ProductionReadinessTests(unittest.TestCase):
         self.assertFalse(value["configuration_ready"])
         self.assertNotIn("fixture-private-policy-content", json.dumps(value))
 
-
-if __name__ == "__main__":
-    unittest.main()
-

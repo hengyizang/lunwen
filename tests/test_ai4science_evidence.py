@@ -189,7 +189,3 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
             )
             self.assertEqual(result["status"], "succeeded")
         self.assertEqual(result["stdout_bytes"], ("adapter-smoke" + os.linesep).encode())
-
-
-if __name__ == "__main__":
-    unittest.main()

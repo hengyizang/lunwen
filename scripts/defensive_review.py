@@ -53,8 +53,10 @@ def load_rules() -> dict:
     return _configuration()
 
 
-def _hash_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import sha as _hash_file
+except ImportError:
+    from research_artifacts import sha as _hash_file
 
 
 def _mask(text: str) -> str:

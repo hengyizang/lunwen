@@ -287,7 +287,3 @@ class WritingTrialBudgetTests(unittest.TestCase):
             self.budget.settle(another,500)
         self.assertEqual(trial.model_spend.read(self.budget.root,required=True)["spent_cny"],500.5)
 
-
-if __name__ == "__main__":
-    unittest.main()
-

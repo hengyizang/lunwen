@@ -242,7 +242,3 @@ class AutomatedVisualReviewTests(unittest.TestCase):
         self.assertEqual(visual.run(self.project, "P01")["blockers"], [])
         self.assertEqual(review_packets.validate_gate_reviews(self.project, "P01"), [])
         self.assertTrue(review_packets.validate_gate_reviews(self.project, "P02"))
-
-
-if __name__ == "__main__":
-    unittest.main()

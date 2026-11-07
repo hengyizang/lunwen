@@ -173,7 +173,3 @@ class ReviewReceiptTests(unittest.TestCase):
             write(target, {"result": "synthetic review"})
             with self.assertRaises(ValueError):
                 review_receipts.cli_identity(target)
-
-
-if __name__ == "__main__":
-    unittest.main()

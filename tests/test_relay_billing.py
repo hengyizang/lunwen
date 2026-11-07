@@ -266,7 +266,3 @@ class RelayBillingTests(unittest.TestCase):
         for url in ("http://codekey.ai/v1/usage", "https://codekey.ai/v1/usage?key=secret", "https://other.example/v1/usage"):
             with self.assertRaises(billing.BillingReconciliationError):
                 billing._get_json(url)
-
-
-if __name__ == "__main__":
-    unittest.main()

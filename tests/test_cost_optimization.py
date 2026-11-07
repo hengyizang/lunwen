@@ -419,7 +419,3 @@ class RetrievalAndSearchReuseTests(unittest.TestCase):
             self.assertEqual(result["work_count"], 50)
             self.assertEqual(len(result["works"]), 50)
             self.assertEqual(result["works_omitted"], 0)
-
-
-if __name__ == "__main__":
-    unittest.main()

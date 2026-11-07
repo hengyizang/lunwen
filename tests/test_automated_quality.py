@@ -100,7 +100,3 @@ class AutomatedQualityTests(unittest.TestCase):
             self.assertFalse(value["human_confirmation"])
             self.assertEqual(value["confirmation_kind"], "automated")
             self.assertIn(relative, automated_quality.run(self.project)["existing"])
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -103,7 +103,7 @@ normalizes its JSON findings. The temporary text is removed after execution.
 
 Harper is advisory and intentionally not auto-installed: its release and
 platform-specific binary must be reviewed before installation. A missing Harper
-binary never disables the built-in audit or G5; the dashboard reports its status
+binary never disables the built-in audit or G5; the quality report records its status
 separately.
 
 ## Research-quality toolchain

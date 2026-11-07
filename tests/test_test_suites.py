@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-from scripts.run_tests import ROOT, load_suite, test_files
+from scripts.run_tests import COMPATIBILITY, ROOT, load_suite, test_files
 
 
 class TestSuiteTests(unittest.TestCase):
@@ -27,6 +27,20 @@ class TestSuiteTests(unittest.TestCase):
         self.assertFalse(fast & slow)
         self.assertEqual(fast | slow, all_tests)
         self.assertEqual(all_tests, set((ROOT / "tests").glob("test*.py")))
+
+    def test_compatibility_sample_is_complete_and_rejects_stale_entries(self):
+        self.assertEqual({p.name for p in test_files("compat")}, COMPATIBILITY)
+        self.assertLess(set(test_files("compat")), set(test_files("all")))
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "tests").mkdir()
+            (root / "config").mkdir()
+            for name in COMPATIBILITY:
+                (root / "tests" / name).touch()
+            (root / "config/test-suites.json").write_text(json.dumps({"test_cloud_job.py": "fixture"}))
+            (root / "tests/test_api_first.py").unlink()
+            with self.assertRaisesRegex(ValueError, "compatibility partition references missing tests"):
+                test_files("compat", root)
 
     def test_new_tests_default_to_fast_and_stale_classifications_fail(self):
         with tempfile.TemporaryDirectory() as temporary:

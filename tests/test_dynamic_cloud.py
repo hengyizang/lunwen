@@ -250,7 +250,3 @@ class DynamicRoutingManagementTests(unittest.TestCase):
         receipt = json.loads((self.runtime / "cloud-artifact/routing-profile-receipt.json").read_text())
         self.assertEqual(receipt["run_id"], "520")
         self.assertFalse(receipt["scientific_gate_approved"])
-
-
-if __name__ == "__main__":
-    unittest.main()

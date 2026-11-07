@@ -270,6 +270,3 @@ class ExperimentResourceTests(unittest.TestCase):
                 report=cloud_runtime.prepare(project)
             self.assertEqual(report["container_engines"]["podman"],podman)
             self.assertIn("exposes 1",report["requested_runs"][0]["readiness_errors"][0])
-
-
-if __name__=="__main__":unittest.main()

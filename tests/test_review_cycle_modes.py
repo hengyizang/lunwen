@@ -71,6 +71,3 @@ class ReviewCycleModeTests(unittest.TestCase):
             self.cycle()
         self.assertEqual(self.calls, ["initial"])
         self.assertEqual(attempt.read_bytes(), before)
-
-if __name__ == "__main__":
-    unittest.main()

@@ -235,7 +235,3 @@ class ResearchSearchTreeTests(unittest.TestCase):
                 self.assertIn("one-attempt-001", text)
                 self.assertEqual("AUTHOR_PREFERRED_VERDICT" in text, role == "writer")
                 self.assertEqual("declared_workflow_phase" in text, role == "writer")
-
-
-if __name__ == "__main__":
-    unittest.main()

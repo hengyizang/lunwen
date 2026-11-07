@@ -12,14 +12,13 @@ import argparse
 import json
 import re
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, write as write_artifact
+    from scripts.research_artifacts import sha as sha256_file, write as write_artifact, walk_files, utc_now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, write as write_artifact
+    from research_artifacts import sha as sha256_file, write as write_artifact, walk_files, utc_now
 
 
 SCHEMA_VERSION = "1.0"
@@ -40,10 +39,6 @@ SNAPSHOT_EXCLUDED_PARTS = {
 
 class ProvenanceError(RuntimeError):
     pass
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def _relative(project: Path, path: Path) -> str:
@@ -176,16 +171,11 @@ def artifact_snapshot(project: Path) -> dict[str, str]:
     snapshot: dict[str, str] = {}
     if not project.is_dir():
         return snapshot
-    for path in sorted(project.rglob("*")):
-        if path.is_symlink() or not path.is_file():
+    for path in sorted(walk_files(project, skip_roots=SNAPSHOT_EXCLUDED_ROOTS,
+                                  skip_parts=SNAPSHOT_EXCLUDED_PARTS, skip_hidden=True)):
+        if path.is_symlink():
             continue
         relative = path.relative_to(project)
-        if not relative.parts or relative.parts[0].lower() in SNAPSHOT_EXCLUDED_ROOTS:
-            continue
-        if any(part.startswith(".") for part in relative.parts):
-            continue
-        if any(part.lower() in SNAPSHOT_EXCLUDED_PARTS for part in relative.parts):
-            continue
         snapshot[relative.as_posix()] = sha256_file(path)
     return snapshot
 

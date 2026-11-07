@@ -347,7 +347,3 @@ class ResearchIterationTests(unittest.TestCase):
         self.assertEqual(archived["analysis_phase"], ["confirmatory"])
         lesson = next(row for row in result["similar_past_lessons"] if row["attempt_id"] == "two-attempt-001")
         self.assertEqual(lesson["earlier_attempt_id"], "one-attempt-001")
-
-
-if __name__ == "__main__":
-    unittest.main()

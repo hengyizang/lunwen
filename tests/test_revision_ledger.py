@@ -272,7 +272,3 @@ class RevisionLedgerTests(unittest.TestCase):
             manifest = revision_ledger.change_manifest(project, "P01")
             self.assertTrue(any(unit["kind"] == "docx-package-part" and unit["location"] == "word/media/new-resource.bin"
                                 for change in manifest["changes"] for unit in change["after"]))
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -8,11 +8,46 @@ import re
 import tempfile
 from pathlib import Path
 from functools import lru_cache
+from datetime import datetime, timezone
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def load_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def read_optional(path, default=None):
+    return load_json(path) if Path(path).is_file() else default
+
+
+def walk_files(root: Path, *, skip_parts=(), skip_roots=(), skip_hidden=False, prune=None):
+    """Walk regular files, pruning excluded directories before reading them.
+
+    Symlink files remain visible to each caller's existing policy; directory
+    symlinks are never followed. Exclusions apply to project-relative names.
+    """
+    def excluded(relative):
+        parts = Path(relative).parts
+        return ((skip_hidden and any(part.startswith(".") for part in parts))
+                or any(part.lower() in skip_parts for part in parts)
+                or (parts and parts[0].lower() in skip_roots))
+    for directory, directories, files in os.walk(root, followlinks=False):
+        parent = Path(directory)
+        directories[:] = [name for name in directories
+            if not excluded((relative := (parent / name).relative_to(root).as_posix()))
+            and not (prune and prune(relative))]
+        for name in files:
+            path = parent / name
+            if not excluded(path.relative_to(root).as_posix()) and path.is_file():
+                yield path
 
 
 def sha(path: Path) -> str:
     digest = hashlib.sha256()
-    with path.open("rb") as handle:
+    with Path(path).open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
@@ -41,7 +76,7 @@ def regular_file(project: Path, relative: str, error_type, *, invalid: str, miss
 
 
 def read(path: Path) -> dict:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = load_json(path)
     if not isinstance(value, dict):
         raise ValueError("artifact must be a JSON object")
     return value

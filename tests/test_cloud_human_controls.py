@@ -311,7 +311,3 @@ class CloudHumanControlTests(unittest.TestCase):
         self.assertFalse(result["scientific_completion_verified"])
         self.assertEqual(result["paid_provider_calls"], 0)
         self.assertFalse((self.root / "acceptance/projects/my-phd").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

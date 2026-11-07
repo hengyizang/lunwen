@@ -2,16 +2,16 @@
 """Build a genuine DOCX from approved English Markdown and checked metadata."""
 from __future__ import annotations
 import argparse,json,re,shutil,subprocess,tempfile
-from datetime import datetime,timezone
 from pathlib import Path
 from typing import Any
 try:
+    from scripts.research_artifacts import utc_now as now
     from scripts import output_provenance
     from scripts.publication_figures import PROJECTS_ROOT,safe_file,sha256_file,CJK_RE
 except ImportError:
+    from research_artifacts import utc_now as now
     import output_provenance  # type: ignore
     from publication_figures import PROJECTS_ROOT,safe_file,sha256_file,CJK_RE  # type: ignore
-def now()->str:return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 def _metadata(path:Path)->dict[str,Any]:
     value=json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value,dict) or value.get("schema_version")!="1.0":raise ValueError("metadata must be schema_version 1.0")

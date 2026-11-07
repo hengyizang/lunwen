@@ -263,7 +263,3 @@ class HumanizerReviewTests(unittest.TestCase):
         self.assertGreater(item["finding_count"], review.MAX_PER_RULE)
         self.assertTrue(item["findings_truncated"])
         self.assertEqual(item["reported_finding_count"], review.MAX_PER_RULE)
-
-
-if __name__ == "__main__":
-    unittest.main()

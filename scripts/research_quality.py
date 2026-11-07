@@ -25,9 +25,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, write as _atomic_json
+    from scripts.research_artifacts import sha as sha256_file, write as _atomic_json, utc_now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, write as _atomic_json
+    from research_artifacts import sha as sha256_file, write as _atomic_json, utc_now
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,10 +52,6 @@ from scripts.paper_execution import paper_scoped
 
 class ResearchQualityError(RuntimeError):
     """Raised for unsafe paths, invalid evidence or unavailable calculations."""
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def _load_json(path: Path) -> dict[str, Any]:

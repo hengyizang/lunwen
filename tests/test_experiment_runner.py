@@ -576,7 +576,3 @@ class ExperimentRunnerTests(unittest.TestCase):
             result["input_integrity"]["mutated_or_missing"][0]["reason"],
             "hash_changed",
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

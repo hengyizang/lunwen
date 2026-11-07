@@ -6,6 +6,11 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 /var/cache/fontconfig/
+/third_party/ccfa-skills/**
+!/third_party/ccfa-skills/LICENSE
+!/third_party/ccfa-skills/ccf-project-scaffolder/
+!/third_party/ccfa-skills/ccf-project-scaffolder/assets/
+!/third_party/ccfa-skills/ccf-project-scaffolder/assets/ccfa.yaml
 .DS_Store
 Thumbs.db
 .env

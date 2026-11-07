@@ -13,15 +13,14 @@ import math
 import os
 import time
 from contextlib import contextmanager
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as write_artifact
+    from scripts.research_artifacts import write as write_artifact, utc_now
     from scripts import ai_providers, billing_quotes, model_spend, model_routing, relay_billing, engineering_contract
 except ImportError:
-    from research_artifacts import write as write_artifact
+    from research_artifacts import write as write_artifact, utc_now
     import ai_providers  # type: ignore
     import billing_quotes  # type: ignore
     import model_spend  # type: ignore
@@ -36,10 +35,6 @@ DEFAULTS_PATH = ROOT / "config" / "defaults.json"
 
 class ModelBudgetError(RuntimeError):
     """A model call would exceed its recorded cost ceiling."""
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def _defaults() -> dict[str, Any]:

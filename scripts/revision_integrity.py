@@ -3,23 +3,21 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 import sys
 from collections import Counter
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as atomic_json, paper_audit_cli
+    from scripts.research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file
     from scripts.citation_audit import manuscript_digest, tex_source_paths
     from scripts.manuscript_language import extract_text
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.scientific_editing import docx_citations, context_changes, character_audit, scientific_text, formula_tokens
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import write as atomic_json, paper_audit_cli
+    from research_artifacts import write as atomic_json, paper_audit_cli, utc_now as now, sha as sha256_file
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from manuscript_language import extract_text  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
@@ -40,14 +38,6 @@ SIGNAL_RE = re.compile(
 
 class RevisionIntegrityError(RuntimeError):
     pass
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def multiset_delta(before: list[str], after: list[str]) -> dict[str, list[str]]:

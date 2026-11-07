@@ -346,7 +346,3 @@ class ClaimEvidenceTests(unittest.TestCase):
         (self.project / second["path"]).write_text("{}", encoding="utf-8")
         with self.assertRaises(ValueError):
             tasks.validate_saved_report(self.project, "citation_crosscheck", path)
-
-
-if __name__ == "__main__":
-    unittest.main()

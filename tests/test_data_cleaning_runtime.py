@@ -149,6 +149,3 @@ class StandaloneCleaningTests(unittest.TestCase):
 def io_string(value):
     import io
     return io.StringIO(value)
-
-
-if __name__ == "__main__": unittest.main()

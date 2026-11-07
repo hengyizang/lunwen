@@ -109,8 +109,10 @@ PLAN_FIELDS = {
 }
 
 
-def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+try:
+    from scripts.research_artifacts import utc_now, load_json
+except ImportError:
+    from research_artifacts import utc_now, load_json
 
 
 def project_root(project: str) -> Path:
@@ -118,10 +120,6 @@ def project_root(project: str) -> Path:
     if not path.is_relative_to(ROOT / "projects"):
         raise ValueError("Invalid project path")
     return path
-
-
-def load_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def stage_config(stage: str) -> dict[str, Any]:
@@ -311,8 +309,10 @@ def project_snapshot(
     requests = (instruction_paths(root) if exclude_reviews else set()) | hidden
     total = 0
     included = 0
-    for path in sorted(root.rglob("*")):
-        if path.is_symlink() or not path.is_file():
+    from scripts.research_artifacts import walk_files
+    skipped = SNAPSHOT_SKIPPED_PARTS | ({"reviews"} if exclude_reviews else set())
+    for path in sorted(walk_files(root, skip_parts=skipped, skip_hidden=True)):
+        if path.is_symlink():
             continue
         relative = path.relative_to(root)
         if scientific_writing and submission_only(relative.as_posix()):
@@ -320,13 +320,6 @@ def project_snapshot(
         if current_paper and not relevant(root,relative.as_posix(),current_paper):
             continue
         if relative.as_posix() in requests or operational_path(relative.as_posix(), exclude_reviews=exclude_reviews):
-            continue
-        lower_parts = tuple(part.lower() for part in relative.parts)
-        if any(part.startswith(".") for part in relative.parts):
-            continue
-        if any(part in SNAPSHOT_SKIPPED_PARTS for part in lower_parts):
-            continue
-        if exclude_reviews and "reviews" in lower_parts:
             continue
         if (
             current_paper

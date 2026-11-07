@@ -254,6 +254,3 @@ class DataContractTests(unittest.TestCase):
         target = self.project/"reports/data-contracts/fixture.json"
         altered = read(target); altered["scientific_validity_verified"] = True; write(target, altered)
         self.assertTrue(contracts.validate_saved_report(self.project, self.dataset))
-
-
-if __name__ == "__main__": unittest.main()

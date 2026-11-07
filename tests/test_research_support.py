@@ -230,7 +230,3 @@ class ResearchSupportTests(unittest.TestCase):
         support.refresh(self.project)
         self.primary.write_text("Changed source.\n")
         self.assertTrue(support.validate_saved_report(self.project))
-
-
-if __name__ == "__main__":
-    unittest.main()

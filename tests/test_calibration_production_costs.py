@@ -76,7 +76,3 @@ class ProductionCalibrationCostTests(unittest.TestCase):
         self.assertEqual(value["known_model_cost_cny"],0.12)
         self.assertFalse(value["model_cost_coverage_complete"])
         self.assertIsNone(value["model_cost_per_qualified_candidate_cny"])
-
-
-if __name__=="__main__":
-    unittest.main()

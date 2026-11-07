@@ -424,7 +424,3 @@ class NativeExplorationTests(unittest.TestCase):
             runner.execute(self.slug)
         self.assertEqual(all_compute_cost(self.project), .25)
         self.assertFalse((self.project / "results/P01/next.json").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

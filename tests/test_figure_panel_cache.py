@@ -130,7 +130,3 @@ class FigurePanelCacheTests(unittest.TestCase):
             path.write_text(json.dumps(spec))
             with self.assertRaisesRegex(figures.FigureSpecError, "reuse_panels must be boolean"):
                 figures.render(project, path)
-
-
-if __name__ == "__main__":
-    unittest.main()

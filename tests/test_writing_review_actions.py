@@ -215,7 +215,3 @@ class WritingReviewActionTests(unittest.TestCase):
         # invalidate freshness rather than make the old assessment current.
         with self.assertRaisesRegex(ValueError, "stale"):
             science.current(self.project, "internal_review", "writing-review")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -62,7 +62,3 @@ class ReviewPacketControlTests(unittest.TestCase):
         with self.assertRaises((ValueError,controls.HumanControlError)):
             controls.execute(allowed,"105")
         self.assertFalse((self.project / "state/review-packet-confirmations").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

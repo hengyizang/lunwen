@@ -1,0 +1,36 @@
+name: Prepare pinned research runtime
+description: Set up Python, restore immutable upstream skills and install declared dependencies.
+inputs:
+  python-version:
+    description: Python version used by this job.
+    default: '3.12'
+  packages:
+    description: JSON array of pip arguments; parsed as data without shell evaluation.
+    default: '[]'
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v7
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: pip
+    - uses: actions/cache@v4
+      with:
+        path: third_party/ccfa-skills
+        key: ccfa-${{ hashFiles('integrations/ccfa-skills.lock.json') }}
+    - name: Restore and verify the exact upstream resources
+      shell: bash
+      run: python -m scripts.ccfa_runtime bootstrap
+    - name: Install this job's declared Python dependencies
+      shell: bash
+      env:
+        DR_OS_SETUP_PACKAGES: ${{ inputs.packages }}
+      run: |
+        python - <<'PY'
+        import json, os, subprocess, sys
+        arguments = json.loads(os.environ['DR_OS_SETUP_PACKAGES'])
+        if not isinstance(arguments, list) or any(not isinstance(item, str) for item in arguments):
+            raise ValueError('packages must be a JSON array of strings')
+        if arguments:
+            subprocess.run([sys.executable, '-m', 'pip', 'install', '--disable-pip-version-check', *arguments], check=True)
+        PY

@@ -333,7 +333,3 @@ class InnovationScreeningTests(unittest.TestCase):
         scores.write_text("idea_id,information_gain,information_gain_low,information_gain_high,qualitative_review,uncertainties\nH0,2\nH1,3\nH2,4\n", encoding="utf-8")
         evaluation["matrix"]["scores_file"]["sha256"] = sha(scores)
         self.assertIn("truncated", "; ".join(self.errors()))
-
-
-if __name__ == "__main__":
-    unittest.main()

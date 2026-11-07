@@ -155,7 +155,3 @@ class ContributionReportingTests(unittest.TestCase):
         write(spec, self.spec)
         errors = manuscript_audit.validate_saved_report(paper)
         self.assertTrue(any("contribution" in error for error in errors))
-
-
-if __name__ == "__main__":
-    unittest.main()

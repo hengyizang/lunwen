@@ -54,6 +54,3 @@ class FigureProvenanceTests(unittest.TestCase):
             self.assertNotIn("language_checked_by",row)
             (project/"results/metrics.csv").write_text("changed\n",encoding="utf-8")
             with self.assertRaises(ValueError):register_rendered_figures(project,report)
-
-
-if __name__=="__main__":unittest.main()

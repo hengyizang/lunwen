@@ -55,7 +55,3 @@ class RealPaperAcceptanceBoundaries(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "license"):
                 acceptance.demonstrate(Path(temporary))
             resolve.assert_not_called()
-
-
-if __name__ == "__main__":
-    unittest.main()

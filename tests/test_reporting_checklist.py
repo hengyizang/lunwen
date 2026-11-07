@@ -41,7 +41,3 @@ class ReportingChecklistTests(unittest.TestCase):
             self.assertEqual(validate_saved_report(paper), [])
             manuscript.write_text("changed", encoding="utf-8")
             self.assertTrue(any("stale" in item for item in validate_saved_report(paper)))
-
-
-if __name__ == "__main__":
-    unittest.main()

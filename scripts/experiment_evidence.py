@@ -6,7 +6,6 @@ causality, representativeness, doctoral merit or journal acceptance.
 from __future__ import annotations
 
 import csv
-import hashlib
 import importlib.metadata
 import json
 import math
@@ -67,8 +66,10 @@ def path_in(project: Path, relative: str) -> Path:
     return path
 
 
-def sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import sha
+except ImportError:
+    from research_artifacts import sha
 
 
 def read(path: Path) -> dict:

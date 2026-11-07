@@ -53,7 +53,3 @@ class OpenFullTextTests(unittest.TestCase):
     def test_invalid_doi_is_rejected(self):
         with self.assertRaises(FullTextResolverError):
             normalize_doi("not-a-doi")
-
-
-if __name__ == "__main__":
-    unittest.main()

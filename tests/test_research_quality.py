@@ -676,7 +676,3 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertTrue(any("stale" in error for error in validate_reproduction_confirmation(confirmation, "P01", project)))
             clean["metric_comparisons"][0]["reproduction_value"] = 0.50
             self.assertTrue(any("exceed" in error for error in validate_clean_room_reproduction(clean, "P01", project, registry)))
-
-
-if __name__ == "__main__":
-    unittest.main()

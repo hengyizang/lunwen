@@ -52,7 +52,3 @@ class ManuscriptLexicalHintsTests(unittest.TestCase):
         self.assertEqual(result["errors"], [])
         self.assertTrue(result["pass"])
         self.assertFalse(any("lexical overclaim hint" in warning for warning in result["warnings"]))
-
-
-if __name__ == "__main__":
-    unittest.main()

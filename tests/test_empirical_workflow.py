@@ -125,7 +125,3 @@ class EconomicOwnerControlTests(unittest.TestCase):
         # No request transport or scientific gate was invoked by authorization.
         self.assertEqual(fixture.urls, [])
         self.assertFalse((fixture.project/"experiments/registry.jsonl").exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

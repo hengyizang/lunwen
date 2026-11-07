@@ -196,7 +196,3 @@ class ExactOwnerCeilingTests(unittest.TestCase):
         with self.assertRaises(model_spend.SpendControlError):
             self.amend()
         self.assertFalse((self.project / model_spend.FILE).exists())
-
-
-if __name__ == "__main__":
-    unittest.main()

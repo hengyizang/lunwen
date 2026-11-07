@@ -126,6 +126,3 @@ class TexSourcesTests(unittest.TestCase):
         result=subprocess.run([shutil.which("pdflatex"),"-no-shell-escape","-interaction=nonstopmode","-halt-on-error","main.tex"],cwd=isolated/"manuscript",capture_output=True,text=True,timeout=60)
         self.assertEqual(result.returncode,0,result.stdout[-3000:])
         self.assertTrue((isolated/"manuscript/main.pdf").is_file())
-
-
-if __name__=="__main__":unittest.main()

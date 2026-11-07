@@ -109,7 +109,3 @@ class RequestedModelEndpointTests(unittest.TestCase):
               patch.object(ai_providers, "production_endpoint") as endpoint):
             self.assertEqual(model_runtime._route_configuration("openai", "legacy-requested"), legacy)
         endpoint.assert_not_called()
-
-
-if __name__ == "__main__":
-    unittest.main()

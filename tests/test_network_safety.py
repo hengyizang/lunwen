@@ -101,7 +101,3 @@ class NetworkSafetyTests(unittest.TestCase):
         self.assertEqual(captured["method"], "POST")
         self.assertEqual(captured["data"], b'{"q": "bearing"}')
         self.assertEqual(captured["content_type"], "application/json")
-
-
-if __name__ == "__main__":
-    unittest.main()

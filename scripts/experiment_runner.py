@@ -17,14 +17,13 @@ import platform
 import signal
 import shutil
 import zipfile
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, path_in
+    from scripts.research_artifacts import sha as sha256_file, path_in, utc_now as now
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, path_in
+    from research_artifacts import sha as sha256_file, path_in, utc_now as now
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -177,10 +176,6 @@ def allowed_executable(value: str) -> bool:
     if name.lower().endswith(".exe"):
         name = name[:-4]
     return name in DEFAULT_EXECUTABLES or bool(re.fullmatch(r"python(?:3(?:\.\d+)?)?", name))
-
-
-def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def read_json(path: Path) -> dict[str, Any]:

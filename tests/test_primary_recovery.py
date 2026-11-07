@@ -504,7 +504,3 @@ class PrimaryRecoveryTests(unittest.TestCase):
             execute.assert_not_called()
         (child / "experiments/registry.jsonl").write_text('{"estimated_cost_usd": 0.1}\n', encoding="utf-8")
         self.assertAlmostEqual(supplemental.all_compute_cost(self.project), 0.5)
-
-
-if __name__ == "__main__":
-    unittest.main()

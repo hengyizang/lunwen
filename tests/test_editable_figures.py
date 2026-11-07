@@ -195,6 +195,3 @@ class EditableFigureTests(unittest.TestCase):
             # evidence from the native final-figure check.
             evidence=project/report["evidence"][0]["path"];evidence.write_text(evidence.read_text()+"Changed method.\n")
             self.assertTrue(any("editable export is stale" in item for item in validate_figure_provenance(project,paper)))
-
-
-if __name__=="__main__":unittest.main()

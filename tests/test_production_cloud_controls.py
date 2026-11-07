@@ -197,7 +197,3 @@ class ProductionSecretContainmentTests(unittest.TestCase):
         self.assertEqual(output.count("[REDACTED]"), 5)
         for name in PRODUCTION_KEYS:
             self.assertNotIn(env[name], output)
-
-
-if __name__ == "__main__":
-    unittest.main()

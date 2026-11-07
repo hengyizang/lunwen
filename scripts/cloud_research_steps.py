@@ -13,6 +13,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from scripts import cloud_checkpoint, dataset_fetch, experiment_runner, literature_evidence
+from scripts.research_operations import AUTOMATED_OPERATIONS, run_builder
 
 REPORT = "state/research-steps.json"
 AUTHORIZATIONS = "state/data-authorizations.json"
@@ -422,16 +423,9 @@ def after_write(project: Path, stage: str) -> dict:
             continue
         operation_sha = hashlib.sha256(json.dumps(operation, sort_keys=True).encode()).hexdigest()
         try:
-            if action == "supplemental_prepare" and stage == "writing-and-review":
-                from scripts.supplemental_experiments import prepare
-                prepare(project, operation["paper_id"])
-            elif action == "study_prepare" and stage == "experiment-design":
-                from scripts.study_routes import prepare_runtime
-                prepare_runtime(project, operation["paper_id"])
-            elif action == "data_cleaning_preview" and stage == "experiment-design":
-                from scripts.data_contracts import preview_cleaning
-                preview_cleaning(project, operation["dataset_id"])
-            elif action == "data_contract" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+            if run_builder(project, operation, stage):
+                continue
+            if action == "data_contract" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
                 from scripts.data_contracts import refresh
                 result = refresh(project, operation["dataset_id"])
                 if result["errors"]:
@@ -514,9 +508,6 @@ def after_write(project: Path, stage: str) -> dict:
                 from scripts.manuscript_docx import build
                 source, metadata = path_in(project, operation["source"]), path_in(project, operation["metadata"])
                 build(project, source, metadata, path_in(project, operation["output"]), prefer_pandoc=False)
-            elif action == "statistical_reporting" and stage == "writing-and-review":
-                from scripts.statistical_reporting import refresh
-                refresh(project, operation["paper_id"])
             elif action == "citation_audit" and stage == "writing-and-review":
                 from scripts.citation_audit import audit
                 from scripts.research_artifacts import record
@@ -535,9 +526,6 @@ def after_write(project: Path, stage: str) -> dict:
                 record(project, [output], "scripts/citation_audit.py")
                 if result["status"] != "pass":
                     raise ResearchStepError("citation audit has unresolved references")
-            elif action == "docx_revision" and stage == "writing-and-review":
-                from scripts.docx_revision import build
-                build(project, operation["paper_id"])
             elif action == "word_render" and stage == "writing-and-review":
                 from scripts.word_render import render
                 render(project, operation["paper_id"], operation.get("source"))
@@ -571,9 +559,6 @@ def after_write(project: Path, stage: str) -> dict:
                     "candidates": [{k: row[k] for k in ("path", "sha256", "start_line", "end_line")}
                                    for row in result["results"]],
                     "automatic_source_exclusion": False, "paid_calls": 0}
-            elif action == "calibration_analysis" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
-                from scripts.calibration_analysis import refresh
-                refresh(project, operation["packet_id"])
             elif action == "watermark_cleanup" and stage == "writing-and-review":
                 from scripts.watermark_cleanup import build, validate_saved_report
                 from scripts.manuscript_hygiene import applied_cleanup
@@ -590,55 +575,13 @@ def after_write(project: Path, stage: str) -> dict:
                     cache[cache_key] = receipt_relative
                 report.setdefault("watermark_cleanup", []).append({"receipt": receipt_relative,
                     "canonical_changed": False, "statistical_watermark_absence_verified": False})
-            elif action == "research_notebook" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
-                from scripts.research_notebook import refresh
-                refresh(project)
             elif action in {"ccfa_task", "ccfa_task_clear", "ccfa_science", "ccfa_humanization"}:
                 from scripts.ccfa_runtime import execute
                 report.setdefault("ccfa", []).append({"action": action, "result": execute(project, operation)})
-            elif action in {"scientific_judgment", "research_case", "research_toolkit", "research_iteration", "research_frontier", "research_search_tree",
-                            "figure_gallery_sync", "figure_gallery_search", "figure_story",
-                            "editable_figure_export", "editable_figure_verify",
-                            "literature_discover", "literature_register", "literature_resolve", "literature_figures",
-                            "literature_analyze", "literature_workbench", "literature_search",
-                            "literature_itinerary", "literature_compare", "literature_progress",
-                            "literature_retrieve", "literature_reading_index", "literature_coverage",
-                            "literature_matrix", "literature_benchmark",
-                            "literature_semantic", "literature_pdf", "literature_zotero", "literature_zotero_register", "literature_roles",
-                            "literature_comparison", "literature_paperqa",
-                            "data_row_prepare", "data_row_provenance", "literature_source_trace",
-                            "literature_screening_advice", "literature_screening_prepare", "literature_source_scope", "literature_search_strategy", "literature_synthesis", "diagram_mermaid",
-                            "literature_feedback", "literature_feedback_propose"} and stage != "intake":
+            elif action in AUTOMATED_OPERATIONS and stage != "intake":
                 from scripts.literaturectl import execute_operation
                 result = execute_operation(project, operation)
                 report.setdefault("literature_workbench", []).append({"action": action, "result": result})
-            elif action == "research_notebook_daily" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
-                from scripts.research_notebook import daily_brief
-                daily_brief(project)
-            elif action == "revision_ledger" and stage == "writing-and-review":
-                from scripts.revision_ledger import refresh
-                refresh(project, operation["paper_id"])
-            elif action == "research_support" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
-                from scripts.research_support import refresh
-                refresh(project)
-            elif action == "support_sources" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "writing-and-review"}:
-                from scripts.research_support import fetch_sources
-                fetch_sources(project)
-            elif action == "review_packets" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
-                from scripts.review_packets import refresh
-                refresh(project)
-            elif action == "method_tools" and stage in {"experiment-design", "experiment-execution"}:
-                from scripts.method_tools import refresh
-                refresh(project)
-            elif action == "journal_dossiers" and stage in {"paper-architecture", "writing-and-review"}:
-                from scripts.journal_dossier import refresh
-                refresh(project)
-            elif action == "journal_sources" and stage in {"paper-architecture", "writing-and-review"}:
-                from scripts.journal_dossier import fetch_sources
-                fetch_sources(project)
-            elif action == "compile_tex" and stage == "writing-and-review":
-                from scripts.cloud_runtime import compile_tex
-                compile_tex(project, operation["paper_id"])
             elif action == "citation_graph" and stage == "topic-intelligence":
                 ledger = literature_evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl")
                 if not any(r.get("mode") == "citation_graph" and r.get("query") == operation["doi"]

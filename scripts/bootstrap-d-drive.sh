@@ -40,6 +40,7 @@ env_file="$runtime_root/env.sh"
   printf 'export TOOLUNIVERSE_HOME=%q\n' "$TOOLUNIVERSE_HOME"
 } > "$env_file"
 chmod 600 "$env_file"
+.venv/bin/python -m scripts.ccfa_runtime bootstrap
 .venv/bin/python scripts/check_env.py --mode api --install-root "$required_root"
 .venv/bin/python -m unittest discover -s tests -q
 .venv/bin/python scripts/validate_repo.py

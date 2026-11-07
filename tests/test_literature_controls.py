@@ -354,7 +354,3 @@ class LiteratureControlTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "stale"):
                 control.analyze(self.project, "W1", execute=True)
             call.assert_not_called()
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -242,7 +242,3 @@ class EmpiricalDecisionCompositionTests(unittest.TestCase):
             self.assertEqual(rows["recent"]["decision"], "does_not_establish_claim")
             self.assertEqual(rows["noise"]["decision"], "exploratory_only")
             self.assertFalse(report["scientific_completion_verified"])
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -56,7 +56,3 @@ class FigureOperationTests(unittest.TestCase):
                 verify.assert_called_once_with(project, target)
             with self.assertRaises(ValueError):
                 literaturectl.execute_operation(project, {"action": "editable_figure_verify", "receipt": "../receipt.json"})
-
-
-if __name__ == "__main__":
-    unittest.main()

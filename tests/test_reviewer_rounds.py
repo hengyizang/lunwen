@@ -303,7 +303,3 @@ class ReviewerRoundTests(unittest.TestCase):
         directory = self.project / f"{rounds.PREFIX}/P01/R001"
         directory.mkdir(parents=True)
         self.assertIn("orphaned", " ".join(rounds.validate_saved_report(self.project, "P01")))
-
-
-if __name__ == "__main__":
-    unittest.main()

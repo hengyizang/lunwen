@@ -104,7 +104,3 @@ class EngineeringContractTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         task_router.run(Path(directory),"engineering-code-review","deepseek","Review code")
             post.assert_not_called()
-
-
-if __name__=="__main__":
-    unittest.main()

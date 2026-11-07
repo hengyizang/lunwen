@@ -90,7 +90,3 @@ class OperatingConstraintOwnershipTests(unittest.TestCase):
         with self.assertRaises(autopilot.AutopilotError):
             autopilot.ensure_protected_control_unchanged("my-phd", before)
         self.assertEqual(receipt.read_text(), '{"source_run_id":"123"}')
-
-
-if __name__ == "__main__":
-    unittest.main()

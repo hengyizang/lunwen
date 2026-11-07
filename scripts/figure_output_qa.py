@@ -26,8 +26,10 @@ MATH_SPACING = {",",";",":","!"," ","quad","qquad"}
 MATH_STRUCTURE = {"frac","dfrac","tfrac","overline","underline","hat","widehat","bar","vec","dot","ddot"}
 
 
-def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+try:
+    from scripts.research_artifacts import sha
+except ImportError:
+    from research_artifacts import sha
 
 
 def compact_text(value):

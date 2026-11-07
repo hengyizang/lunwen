@@ -473,7 +473,3 @@ class LiteratureEvidenceTests(unittest.TestCase):
             ledger = (project / "evidence" / "literature-api-ledger.jsonl").read_text()
         self.assertNotIn(secret, str(raised.exception))
         self.assertNotIn(secret, ledger)
-
-
-if __name__ == "__main__":
-    unittest.main()

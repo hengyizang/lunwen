@@ -303,7 +303,3 @@ class LiteraturePDFTests(unittest.TestCase):
                      {"pdf_page": 1, "bbox": [0, 0, 500, 10]}):
             with self.subTest(item=item), self.assertRaises(assets.LiteratureAssetError):
                 assets.extract(self.project, "data/raw/literature/source.pdf", figures=[item])
-
-
-if __name__ == "__main__":
-    unittest.main()

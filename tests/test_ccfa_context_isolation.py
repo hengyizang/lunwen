@@ -67,7 +67,3 @@ class CCFAContextIsolationTests(unittest.TestCase):
         for relative in ("reports/ccfa-science/lineage/P01.json", "reports/ccfa-science/novelty_watch/P01.json",
                          "reports/ccfa-science/exemplar/P01.json", "evidence/contrary.md", "experiments/registry.jsonl"):
             self.assertFalse(context_efficiency.operational_path(relative, exclude_reviews=True))
-
-
-if __name__ == "__main__":
-    unittest.main()

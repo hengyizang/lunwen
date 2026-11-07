@@ -192,6 +192,3 @@ class ReviewPanelTests(unittest.TestCase):
             "writing-and-review":{"question":"Inspect evidence", "items":[{"path":"evidence/answer.txt", "reason":"try", "stance":"neutral"}]}}})
         with self.assertRaisesRegex(ValueError, "hidden judgment"):
             evidence_context.build(self.project, "writing-and-review", excluded_paths={"evidence/answer.txt"})
-
-if __name__ == "__main__":
-    unittest.main()

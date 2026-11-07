@@ -75,7 +75,3 @@ class SupplementalRecordOwnershipTests(unittest.TestCase):
         with self.assertRaises(autopilot.AutopilotError):
             autopilot.ensure_protected_control_unchanged("demo", before)
         self.assertFalse(new.exists())
-
-
-if __name__ == "__main__":
-    unittest.main()
