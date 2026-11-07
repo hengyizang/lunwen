@@ -505,7 +505,7 @@ def after_write(project: Path, stage: str) -> dict:
                 manifest = read(manifest_path, {})
                 if (authorization.get("sha256") != cloud_checkpoint.sha(manifest_path)
                         or manifest.get("download", {}).get("sha256") != cloud_checkpoint.sha(source)):
-                    raise ResearchStepError("persisted cloud readers require an owner-reviewed redistributable full-text manifest")
+                    raise ResearchStepError("persisted cloud readers require the exact source-bound full-text manifest and checksum")
                 if not output.exists():
                     build(project, source, output, max_pages=operation.get("max_pages", 30), translate=False, pages=operation.get("pages"))
                 elif not reusable_reader(project, source, output, max_pages=operation.get("max_pages", 30), pages=operation.get("pages")):
