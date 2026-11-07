@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts import data_row_provenance as provenance
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import read, write
 import tests.test_data_contracts as data_contract_tests
 
 

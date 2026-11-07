@@ -62,7 +62,7 @@ def http_json(method: str, path: str, payload: dict | None, key: str) -> dict:
             raw = response.read(65537)
     except urllib.error.HTTPError as exc:
         raise ProbeError(f"OpenRouter returned HTTP {exc.code} for {method} {path.split('?')[0]}") from None
-    except (urllib.error.URLError, TimeoutError) as exc:
+    except (urllib.error.URLError, TimeoutError):
         raise ProbeError(f"OpenRouter transport failed for {method} {path.split('?')[0]}") from None
     if len(raw) > 65536:
         raise ProbeError("API response exceeds 64 KiB")

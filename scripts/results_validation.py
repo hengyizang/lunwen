@@ -57,7 +57,7 @@ def validate_registry(
     if state_path.is_file():
         import json
         try:
-            state = json.loads(state_path.read_text(encoding="utf-8"))
+            json.loads(state_path.read_text(encoding="utf-8"))
             from scripts.paper_execution import approval as paper_approval
             approval = paper_approval(project, "G3")
             approval_hash = approval.get("experiment_plan_sha256") if isinstance(approval, dict) else None

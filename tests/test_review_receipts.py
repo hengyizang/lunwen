@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import json
 import os
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, autopilot, review_receipts, scientific_scope
+from scripts import api_orchestrator, autopilot, review_receipts
 from scripts.research_artifacts import read, write, record, sha
 from tests.review_scope_fixtures import prepare_scope, seal_review
 

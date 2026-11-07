@@ -135,7 +135,7 @@ class SearchStrategyTests(WorkbenchFixture):
             strategy.build(self.project, self.spec)
 
     def test_plan_bound_trial_cannot_certify_a_changed_active_discovery_plan(self):
-        receipt = self.trial()
+        self.trial()
         plan = self.project / "program/literature-plan.json"
         write(plan, {"schema_version": "1.0", "doctoral_question": self.spec["doctoral_question"]})
         ledger = self.project / "evidence/literature-api-ledger.jsonl"

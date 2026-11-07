@@ -207,7 +207,7 @@ class ExperimentResourceTests(unittest.TestCase):
         self.assertFalse((project/"experiments/registry.jsonl").exists())
 
     def test_native_software_receipt_does_not_claim_container_limits_or_gpu_use(self):
-        project=self.native_fixture()
+        self.native_fixture()
         result=runner.execute("test-phd")[0]
         self.assertEqual(result["status"],"succeeded")
         allocation=result["resource_allocation"]

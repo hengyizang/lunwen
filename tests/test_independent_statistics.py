@@ -1,5 +1,4 @@
 """Known-value, adverse, non-paired and pseudoreplication checks for Welch analysis."""
-import copy
 import tempfile
 import unittest
 from pathlib import Path

@@ -325,7 +325,7 @@ class DynamicRoutingTests(unittest.TestCase):
 
     def test_switching_cooldown_and_failed_candidate_require_review(self):
         rows = self.calibration()
-        accepted = self.accept()
+        self.accept()
         at = datetime.now(timezone.utc).isoformat()
         self.ledger(rows + [{"run_id": "newer", "at": at, "stage": self.baseline["stage"], "role": self.baseline["role"],
                             "task_profile": self.profile, "dynamic_candidate_id": "baseline", "completion_status": "completed"}])

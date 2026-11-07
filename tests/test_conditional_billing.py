@@ -1,7 +1,6 @@
 """Synthetic cloud-CI checks; no model/tool transport or paid calls."""
 from __future__ import annotations
 
-import copy
 import json
 import os
 import tempfile

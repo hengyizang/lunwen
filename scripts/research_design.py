@@ -20,7 +20,6 @@ from scripts.research_artifacts import schema_errors
 
 PAPER_RE = re.compile(r"^P[0-9]{2}$")
 DATE_RE = re.compile(r"^20[0-9]{2}-[01][0-9]-[0-3][0-9]$")
-VENUE_QUARTILES = {"Q1", "Q2"}
 BASELINE_CLASSES = {"simple", "domain_standard", "strong_recent"}
 NOVELTY_TYPES = {
     "theoretical",
@@ -197,40 +196,6 @@ def _paper_dependencies(papers: list[dict], expected: set[str], errors: list[str
     for pid in graph:
         visit(pid)
     return graph
-
-
-def validate_venue_candidates(
-    value: Any,
-    field: str = "target_venues",
-    target_quartile: str = "Q1",
-) -> list[str]:
-    errors: list[str] = []
-    candidates = _list(value, field, errors, minimum=2)
-    try:
-        from scripts.venue_policy import meets_target, normalize_quartile
-    except ImportError:
-        from venue_policy import meets_target, normalize_quartile
-    target = normalize_quartile(target_quartile)
-    if target is None:
-        errors.append(f"{field} target quartile must be Q1 or Q2")
-        target = "Q1"
-    for index, item in enumerate(candidates):
-        prefix = f"{field}[{index}]"
-        venue = _object(item, prefix, errors)
-        if not venue:
-            continue
-        for key in ("name", "category", "scope_fit", "article_type"):
-            _text(venue.get(key), f"{prefix}.{key}", errors)
-        quartile = venue.get("quartile")
-        if quartile not in VENUE_QUARTILES or not meets_target(quartile, target):
-            errors.append(f"{prefix}.quartile must meet the current JCR {target} target")
-        if venue.get("indexing") not in {"SCI", "SCIE"}:
-            errors.append(f"{prefix}.indexing must be SCI or SCIE")
-        year = venue.get("jcr_year")
-        if not isinstance(year, int) or isinstance(year, bool) or year not in {date.today().year,date.today().year-1}:
-            errors.append(f"{prefix}.jcr_year must identify the current or immediately previous JCR edition")
-        _https(venue.get("source_url"), f"{prefix}.source_url", errors)
-    return errors
 
 
 def validate_thesis_theme(value: dict[str, Any], expected_theme_id: str) -> list[str]:

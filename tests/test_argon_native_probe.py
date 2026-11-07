@@ -1,7 +1,6 @@
 """Offline controls for the one new native base contract; no live transport."""
 from contextlib import ExitStack
 import copy
-from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 

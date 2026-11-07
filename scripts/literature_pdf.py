@@ -18,7 +18,7 @@ import tempfile
 from urllib.parse import quote
 
 from scripts import literature_reading as reading, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, read, record, sha, write, seal_manifest, validate_manifest
 
 REQUEST = "program/literature-pdf.json"
 OUTPUT = "reports/literature-pdf"

@@ -1,6 +1,5 @@
 """Tests for the cloud issue boundary and isolated project state."""
 import json
-import os
 import subprocess
 import tempfile
 import unittest

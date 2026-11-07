@@ -17,7 +17,7 @@ from urllib.parse import parse_qsl, urlsplit
 
 from scripts import data_contracts, dataset_fetch
 from scripts.network_safety import validate_https_url
-from scripts.research_artifacts import path_in, read, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, read, sha, write, seal_manifest, validate_manifest
 
 REQUEST = "program/data-row-provenance.json"
 OUTPUT = "reports/data-row-provenance"

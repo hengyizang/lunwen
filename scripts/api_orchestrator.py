@@ -35,7 +35,7 @@ except ImportError:
     import research_methods  # type: ignore
 
 ROOT = Path(__file__).resolve().parents[1]
-from scripts.research_phase import writing_task,requires_submission
+from scripts.research_phase import requires_submission
 MAX_ARTIFACTS = 80
 FORBIDDEN_PARTS = {
     ".git",
@@ -824,7 +824,6 @@ def remediation_required(audit: dict[str,Any],stage: str,writer_notes: list[str]
     return any(note.strip().lower().startswith("unresolved:") for note in (writer_notes or []))
 
 
-from scripts.research_cycle import research_decision as research_cycle_decision
 
 
 def safe_target(project: str, relative: str) -> Path:
@@ -1145,13 +1144,6 @@ def refresh_post_write_evidence(project: str, stage: str, run_id: str, phase: st
             "publication_controls": publication,
             "research_increments": increment_audit,
             "academic_style_audit": snapshot_editorial_pass(project, run_id, phase, summary)}
-
-
-def research_identity_prompt_contract() -> str:
-    from scripts.research_identity import prompt_contract
-    from scripts.study_routes import prompt_contract as study_prompt
-    from scripts.supplemental_experiments import prompt_contract as supplemental_prompt
-    return prompt_contract() + "\n" + study_prompt() + "\n" + supplemental_prompt()
 
 
 def publication_feedback(project: str, stage: str) -> str:
@@ -1644,7 +1636,7 @@ def run_cycle(
     from scripts.research_increments import freeze_plans, record_editing_attempt
     freeze_plans(project_root(project))
 
-    from scripts.research_notebook import cycle_prompt,cycle_review,cycle_assessment
+    from scripts.research_notebook import cycle_prompt
     decision_prompt="" if stage=="intake" else "\n\n"+cycle_prompt(run_id)
     writer_request = writer_prompt(project, stage, context, plan, evidence)+decision_prompt
     screening = None

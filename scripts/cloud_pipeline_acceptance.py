@@ -162,7 +162,7 @@ def consume(directory: Path) -> None:
     print(json.dumps({'word_build': word_report, 'word_page_count': word_manifest['page_count']}), flush=True)
     from scripts.cloud_runtime import compile_tex
     try:
-        tex_report = compile_tex(project,'P02')
+        compile_tex(project,'P02')
     finally:
         print(json.dumps({'tex_build': steps.read(project/'papers/P02/reviews/cloud-tex-build.json')}), flush=True)
     import fitz

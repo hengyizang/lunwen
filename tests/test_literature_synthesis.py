@@ -1,5 +1,4 @@
 """Located source synthesis contracts, not evidence-strength validation."""
-import copy
 from unittest.mock import patch
 
 from scripts import literature_matrix, literature_synthesis

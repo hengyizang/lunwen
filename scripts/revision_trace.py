@@ -12,16 +12,14 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as atomic_json, paper_audit_cli
+    from scripts.research_artifacts import paper_audit_cli
     from scripts.citation_audit import manuscript_digest, tex_source_paths
-    from scripts.manuscript_language import extract_text
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.research_artifacts import path_in
     from scripts.revision_render import validate_render_manifest
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import write as atomic_json, paper_audit_cli
+    from research_artifacts import paper_audit_cli
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
-    from manuscript_language import extract_text  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
     from research_artifacts import path_in  # type: ignore
     from revision_render import validate_render_manifest  # type: ignore

@@ -5,7 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.reporting_checklist import audit, atomic_json, validate_saved_report
+from scripts.reporting_checklist import audit, validate_saved_report
+from scripts.research_artifacts import write as atomic_json
 
 
 class ReportingChecklistTests(unittest.TestCase):

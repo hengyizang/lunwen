@@ -14,7 +14,7 @@ from contextlib import nullcontext
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import ai_providers, literaturectl as control, literature_workbench as workbench
+from scripts import ai_providers, literaturectl as control
 from scripts import model_runtime, output_provenance, paper_reader
 from scripts.research_artifacts import read, record, sha, write
 

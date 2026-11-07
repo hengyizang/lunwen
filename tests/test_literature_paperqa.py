@@ -1,12 +1,9 @@
 """Pinned upstream CPU SDK bridge; fixture vectors never prove research quality."""
 import copy
-import hashlib
 import importlib.metadata
 import json
 import os
-from pathlib import Path
 from types import SimpleNamespace
-import unittest
 from unittest.mock import patch
 
 from scripts import literature_paperqa as bridge, literature_semantic as semantic

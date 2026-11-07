@@ -24,12 +24,11 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 try:
-    from scripts import api_orchestrator, output_provenance, researchctl, research_methods
+    from scripts import api_orchestrator, output_provenance, researchctl
 except ImportError:  # Direct execution from scripts/.
     import api_orchestrator  # type: ignore[no-redef]
     import output_provenance  # type: ignore[no-redef]
     import researchctl  # type: ignore[no-redef]
-    import research_methods  # type: ignore[no-redef]
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -369,15 +368,6 @@ def invoke(
         if captured_outputs is not None:
             captured_outputs[path] = payload
     return result_record
-
-
-def copy_review(last_message: Path, destination: Path, fallback: Path) -> None:
-    if last_message.is_file() and last_message.stat().st_size:
-        content = redact(last_message.read_text(encoding="utf-8", errors="replace"))
-    else:
-        content = fallback.read_text(encoding="utf-8", errors="replace")
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(content.rstrip() + "\n", encoding="utf-8")
 
 
 def claude_result_text(stdout_path: Path) -> str:
@@ -795,7 +785,7 @@ def run_stage(
             route = model_routing.select(state["stage"], role)
             model_runtime.preflight_route(route["provider"], model=route["model"])
     token = run_token()
-    from scripts.research_notebook import cycle_prompt,cycle_review,cycle_assessment
+    from scripts.research_notebook import cycle_prompt
     decision_prompt="" if state["stage"]=="intake" else "\n\n"+cycle_prompt(token)
     run_dir = researchctl.project_dir(project) / "state" / "runs" / f"{token}-{state['stage']}"
     run_dir.mkdir(parents=True, exist_ok=False)

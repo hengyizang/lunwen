@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import empirical_runtime as runtime
-from scripts.research_artifacts import sha, write
+from scripts.research_artifacts import sha
 from tests import test_empirical_design as fixtures
 
 NUMERIC = importlib.util.find_spec("numpy") is not None and importlib.util.find_spec("scipy") is not None

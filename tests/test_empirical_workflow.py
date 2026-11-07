@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from scripts import empirical_workflow as workflow, data_contracts, data_cleaning_runtime
 from scripts import artifact_ownership, cloud_research_steps
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import sha, write
 from tests import test_data_contracts as data_fixtures
 from tests import test_economic_data as economic_fixtures
 

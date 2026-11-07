@@ -1,7 +1,6 @@
 """Synthetic software contracts; these fixtures establish no research result."""
 import copy
 import json
-from pathlib import Path
 import unittest
 
 from scripts import contribution_reporting as reporting, manuscript_audit

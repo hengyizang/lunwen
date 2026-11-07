@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from scripts import ai_providers, api_orchestrator as api, review_panel, model_runtime, research_cycle
+from scripts import ai_providers, review_panel, model_runtime, research_cycle
 from scripts.research_artifacts import read, write, sha
 
 

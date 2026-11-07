@@ -5,7 +5,6 @@ different positive evidence, not fabricated datasets, power or baseline fields.
 """
 from __future__ import annotations
 
-import csv
 import hashlib
 import json
 import math
@@ -339,7 +338,7 @@ def build_report(project, paper_id):
         registry = quality._registry(project)
         errors = results_validation.validate_registry(project, read(plan_path), registry)
         prereg = project / "papers" / paper_id / "preregistration.json"
-        state = read(project / "state/run.json")
+        read(project / "state/run.json")
         from scripts.paper_execution import approval as paper_approval
         approval = paper_approval(project,"G3",paper_id) or {}
         need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg), "study preregistration differs from the G3 protocol decision")

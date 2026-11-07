@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import empirical_design, empirical_reporting, empirical_runtime, empirical_workflow
+from scripts import empirical_design, empirical_runtime, empirical_workflow
 from scripts import experiment_evidence as evidence, experiment_evidence_acceptance as acceptance
 from scripts.research_artifacts import read, sha, write
 from tests import test_empirical_design as design_fixtures

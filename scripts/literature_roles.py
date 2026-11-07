@@ -1,5 +1,4 @@
 """Transparent discovery-role classification, without scientific exclusion."""
-from pathlib import Path
 import html
 
 from scripts import literature_intelligence as intelligence, literature_workbench as wb

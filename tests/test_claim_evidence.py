@@ -1,9 +1,7 @@
 """Synthetic contracts exercise source boundaries, never scientific judgments."""
 import copy
-import json
 import os
 import unittest
-from pathlib import Path
 from unittest.mock import patch
 
 from scripts import claim_evidence as claims, citation_audit, literature_source_tasks as tasks

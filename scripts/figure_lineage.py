@@ -79,7 +79,7 @@ def run_seal(project:Path,paper_id:str,identifier:str)->dict:
     root,run_id,scope=_scope(project,paper_id,identifier)
     plan_path=experiment_path(root, 'experiments/plan.json')
     plan=read(plan_path)
-    state=read(path_in(root,"state/run.json"))
+    read(path_in(root,"state/run.json"))
     from scripts.paper_execution import approval as paper_approval
     approval=paper_approval(root,"G3",paper_id) or {}
     plan_hash=sha(plan_path)

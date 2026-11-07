@@ -101,7 +101,7 @@ def read(project_root: Path, *, required: bool = False) -> dict[str, Any] | None
     ceiling = state.get("authorized_ceiling_cny")
     if type(ceiling) is not int or ceiling < 0:
         raise SpendControlError("authorized ceiling must be a non-negative integer")
-    spent = _amount(state.get("spent_cny"), "spent_cny")
+    _amount(state.get("spent_cny"), "spent_cny")
     papers = state.get("paper_spent_cny")
     reservations = state.get("reservations")
     events = state.get("authorization_events")

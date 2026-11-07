@@ -29,10 +29,10 @@ from typing import Any, Callable, Iterable
 
 try:
     from scripts.research_artifacts import sha as sha256_file
-    from scripts.network_safety import DEFAULT_JSON_LIMIT, fetch_bytes
+    from scripts.network_safety import fetch_bytes
 except ImportError:
     from research_artifacts import sha as sha256_file
-    from network_safety import DEFAULT_JSON_LIMIT, fetch_bytes  # type: ignore
+    from network_safety import fetch_bytes  # type: ignore
 
 
 ROOT = Path(__file__).resolve().parents[1]

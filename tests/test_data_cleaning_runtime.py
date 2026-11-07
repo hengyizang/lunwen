@@ -1,6 +1,4 @@
 """Standalone cloud-fixture execution and pre-G3-freeze preparation checks."""
-import copy
-import json
 import os
 from pathlib import Path
 import subprocess

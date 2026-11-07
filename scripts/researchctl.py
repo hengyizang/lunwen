@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Human-gated Doctoral Research OS state manager with publication-quality floors."""
 from __future__ import annotations
-import argparse,csv,hashlib,json,os,re,sys,tempfile
+import argparse,hashlib,json,os,re,sys
 from datetime import datetime,timezone
 from pathlib import Path
-from typing import Any,Iterable
+from typing import Iterable
 ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULTS_PATH=ROOT/"config/defaults.json"
 if __package__ in {None,""}:sys.path.insert(0,str(ROOT))
 STAGES=[{"name":"intake","gate":"G0"},{"name":"topic-intelligence","gate":"G1"},{"name":"paper-architecture","gate":"G2"},{"name":"experiment-design","gate":"G3"},{"name":"experiment-execution","gate":"G4"},{"name":"writing-and-review","gate":"G5"},{"name":"submission-ready","gate":None}]
 SLUG_RE=re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$"); PAPER_RE=re.compile(r"^P[0-9]{2}$")
 from scripts.paper_execution import artifact_path as experiment_path
+from scripts.research_artifacts import write as write_json
 
 class ResearchCtlError(RuntimeError): pass
 def now(): return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -17,10 +18,6 @@ def read_json(path):
     try:return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:raise ResearchCtlError(f"Missing file: {path}") from exc
     except json.JSONDecodeError as exc:raise ResearchCtlError(f"Invalid JSON in {path}: {exc}") from exc
-def write_json(path,value):
-    path.parent.mkdir(parents=True,exist_ok=True); payload=json.dumps(value,ensure_ascii=False,indent=2)+"\n"
-    with tempfile.NamedTemporaryFile("w",encoding="utf-8",dir=path.parent,delete=False) as h:h.write(payload); tmp=h.name
-    os.replace(tmp,path)
 def write_text(path,value): path.parent.mkdir(parents=True,exist_ok=True); path.write_text(value,encoding="utf-8")
 def validate_slug(slug):
     if not SLUG_RE.fullmatch(slug): raise ResearchCtlError("Project slug must be 2-63 lowercase letters, digits or hyphens, starting with a letter or digit.")

@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts import diagram_mermaid, figure_story
-from scripts.research_artifacts import read, sha, write
+from scripts.research_artifacts import write
 import tests.test_figure_story as fixtures
 
 

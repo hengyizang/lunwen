@@ -1,4 +1,4 @@
-name: Completeness repair regression
+name: Native TeX source-package acceptance
 on:
   pull_request:
   push:
@@ -20,27 +20,14 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Install offline scientific and manuscript validation dependencies
+      - name: Install core source-package validation dependencies
         timeout-minutes: 7
-        run: python -m pip install --disable-pip-version-check '.[reader,figures,research-quality]' PyYAML seaborn
+        run: python -m pip install --disable-pip-version-check .
       - name: Install TeX for the independent submission ZIP compilation
         timeout-minutes: 7
         run: |
           sudo sed -i -e 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' -e 's|mirror+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
           sudo apt-get update -qq -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
           sudo apt-get install -y --no-install-recommends -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 texlive-latex-base
-      - name: Verify source-bound reviews, thesis scope, recovery, literature and model guidance
-        run: >-
-          python -m unittest tests.test_review_receipts tests.test_scientific_scope
-          tests.test_primary_recovery tests.test_relay_guard tests.test_figure_lineage
-          tests.test_tex_sources tests.test_ccfa_reference_routing tests.test_ccfa_model_handoffs
-          tests.test_ccfa_science tests.test_research_quality -v
-      - name: Verify exact owner budget/date amendments and protected intake
-        run: >-
-          python -m unittest tests.test_model_spend tests.test_operating_constraints
-          tests.test_operating_constraint_ownership tests.test_cloud_job
-          tests.test_cloud_human_controls tests.test_cloud_continuation -v
-      - name: Check all Python modules and repository contracts
-        run: |
-          python -m compileall -q scripts tests
-          python scripts/validate_repo.py
+      - name: Compile the exact submission ZIP in an independent native TeX environment
+        run: python -m unittest tests.test_tex_sources -v

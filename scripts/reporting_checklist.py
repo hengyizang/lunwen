@@ -10,11 +10,11 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.research_artifacts import write as atomic_json, paper_audit_cli
+    from scripts.research_artifacts import paper_audit_cli
     from scripts.citation_audit import manuscript_digest
     from scripts.ref_verify_adapter import canonical_manuscript
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import write as atomic_json, paper_audit_cli
+    from research_artifacts import paper_audit_cli
     from citation_audit import manuscript_digest  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
 
