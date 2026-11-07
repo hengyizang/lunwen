@@ -8,12 +8,15 @@
       "implementation": "implemented",
       "acceptance": "ci-required",
       "evidence": [
-        ".github/workflows/validate.yml"
+        ".github/workflows/validate.yml",
+        "pyproject.toml",
+        ".github/workflows/cloud-research.yml",
+        ".github/workflows/research-continuation.yml"
       ],
       "tests": [
         "tests/test_cloud_job.py"
       ],
-      "remaining": "Run the bound tests on the exact merged commit; validate with actual project evidence before claiming completion."
+      "remaining": "The issue-driven and scheduled cloud controllers install declared core dependencies before any gate evaluation, including non-billable status/check actions. A fresh core-only virtual environment reproduced all 32 current G1 missing-evidence messages without the former missing-jsonschema error. Require the exact merged cloud status receipt; neither available validators nor a completed status job establishes scientific completion."
     },
     {
       "id": "R02",
