@@ -329,6 +329,13 @@ def review_binding(project: Path, paper_id: str) -> dict:
             "implementation": _implementation()}
 
 
+def integrity_binding(project: Path, paper_id: str) -> dict:
+    """Bind preserved cleanup history; refreshing a C scan cannot revoke G5."""
+    receipts = sorted((project / PREFIX / paper_id / "changes").glob("*/receipt.json"))
+    return {"receipts": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in receipts],
+            "implementation": _implementation()}
+
+
 def applied_cleanup(project: Path, paper_id: str, source: str, expected_sha256: str) -> str | None:
     """Resolve an older explicit request only against its exact auto-clean receipt."""
     target = cleaner._input(project, paper_id, source)

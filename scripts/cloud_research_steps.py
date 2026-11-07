@@ -551,11 +551,11 @@ def after_write(project: Path, stage: str) -> dict:
                 from scripts.word_render import render
                 render(project, operation["paper_id"], operation.get("source"))
             elif action == "research_increments" and stage != "intake":
-                from scripts.research_increments import initialize, refresh
+                from scripts.research_increments import initialize, refresh, scientific_audit
                 initialize(project)
                 result = refresh(project)
-                if result.get("errors"):
-                    raise ResearchStepError("research increments blocked: " + json.dumps(result["errors"])[:2000])
+                if scientific_audit(result)["errors"]:
+                    raise ResearchStepError("research increments blocked: " + json.dumps(scientific_audit(result)["errors"])[:2000])
             elif action == "increments_inventory" and stage == "writing-and-review":
                 from scripts.incremental_writing import inventory
                 from scripts.research_artifacts import record

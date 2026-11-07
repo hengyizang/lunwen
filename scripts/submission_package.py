@@ -356,12 +356,9 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
         if issues:raise ResearchCtlError("Final submission checks failed: "+"; ".join(issues))
     elif binding!=submission_check_binding(project,paper_id):
         raise ResearchCtlError("Final submission inputs changed after G5; rerun the submission check")
-    from scripts import manuscript_audit,manuscript_hygiene,figure_provenance,research_identity,scientific_scope,empirical_workflow,research_extensions,research_increments
-    scientific_errors=[]
+    from scripts import researchctl,research_identity,scientific_scope,empirical_workflow,research_extensions,research_increments
+    scientific_errors=researchctl.paper_scientific_errors(project,paper_id)
     for check in (
-        lambda:manuscript_audit.validate_saved_report(paper),
-        lambda:manuscript_hygiene.integrity_errors(project,paper_id),
-        lambda:figure_provenance.validate_figure_provenance(project,paper),
         lambda:research_identity.validate(project,paper_id,"G5"),
         lambda:scientific_scope.validate(project,"G5",paper_id),
         lambda:empirical_workflow.gate_errors(project,"G5",paper_id),

@@ -104,6 +104,13 @@ Checks have three levels, shared by `gate-check`, `ready`, `advance` and packagi
   make these lists empty. Actual loss of evidence, a false number or a removed
   negative finding remains A regardless of the tool that discovered it.
 
+C report refreshes, edit-ledger completeness and style/voice preferences do not
+revoke an unchanged scientific decision or invalidate its independent review.
+The shared fingerprints still bind actual manuscript/package content, scientific
+increment specifications and sources, protected reviews and preserved cleanup
+history. Packaging reruns the same paper-level A checks as native G5; final B
+preparation remains reusable only for its unchanged scientific/source snapshot.
+
 Internal scientific review can request a separate `Ixxx` follow-up through the
 same supplemental executor used for external `Rxxx` reviewer work. A protected
 actual independent finding supplies its trigger. The existing model cycle

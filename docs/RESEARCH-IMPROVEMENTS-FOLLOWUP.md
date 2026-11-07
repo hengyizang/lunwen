@@ -31,6 +31,12 @@ Write inputs only. Protected reports, source receipts, rendering manifests and c
 
 Freeze the canonical source using the existing revision-base controller. For targeted editing, `revision-ledger-manifest` lists actual before/after changes; optional `papers/Pxx/reviews/revision-ledger.json` entries explain the reason, editorial/scientific kind, protected facts and source-bound scientific justification. `revision_ledger` builds its protected report. Ledger completeness is a C observation, not a G5 or packaging prerequisite. The independent A revision-integrity comparison still checks actual numeric, formula, citation and adverse-result preservation; scientific changes retain their current protected justification. Historical genuine human authorizations remain preserved. Substantive doctoral-topic or paper-map changes still require the affected G1/G2 human decisions.
 
+Existing research-increment editing and voice preferences follow the same C
+boundary in cloud operations, progress summaries and source-review fingerprints.
+Their errors remain visible as observations. Actual scientific specifications,
+argument/lineage/dependency sources and result preservation still bind the
+current independent review and cannot be changed through optional bookkeeping.
+
 In `reviews/response-matrix.csv`, the preferred location cell is a JSON object of kind `source_lines`, `docx_paragraph`, `docx_table_cell` or `pdf_lines`, with an actual source `path`, `sha256` and explicit indexes. Use the location examples in the tests and the controller's returned manifest. A legacy section name only succeeds if it identifies one actual heading and excerpt. PDF positions refer to nonempty extracted text lines on the actual PDF page; they are not verified printed line numbers.
 
 `compile_tex` hashes the mounted manuscript/includes/figures/tables/supplement before and after the isolated render, records the implementation, cloud run and actual PDF hash, then generates protected `reviews/revision-render.json`. Source or PDF edits invalidate it. A Word paragraph is never presented as a rendered page. Actual Word-to-PDF conversion is now implemented by the cloud `word_render` operation; see [Experiment and evidence extensions](RESEARCH-EXTENSIONS.md) for exact receipts, scope and final visual review.

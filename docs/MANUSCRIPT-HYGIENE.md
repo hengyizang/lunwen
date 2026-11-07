@@ -26,6 +26,11 @@ python -m scripts.research_improvementctl manuscript-hygiene-scan --project PROJ
 
 The first applies eligible character cleanup and records a fresh audit. The second records a read-only audit. Neither supplies a human approval. Immutable originals are excluded from general model context and submission packages; a compact diagnostic summary and exact audit path remain available to writers and independent critics. Both orchestrators automatically perform the normal checks without an explicit queue request.
 
+The scientific fingerprint binds actual cleanup receipts and their preserved
+ancestry, rather than the latest C scan. Refreshing or removing a scan alone does
+not revoke G5. Deleting an original, changing a cleanup receipt or altering the
+scientific text still fails the shared A checks at G5 and packaging.
+
 ## What a pass establishes
 
 A pass means the assessed supported prose has no remaining removable character artifacts under the pinned conservative policy. It does not mean every invisible character was deleted, that text contains no statistical watermark, or that authorship/AI-detector percentages are established. Reports retain statistical_watermarks: not_assessed and watermark_absence_verified: false. Image pixels, C2PA, EXIF and generic media-watermark removal are outside this text workflow.

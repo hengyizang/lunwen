@@ -88,6 +88,11 @@ class SubmissionPackageTests(unittest.TestCase):
             self.assertFalse(any("within 120" in issue or "within 180" in issue for issue in errors),errors)
 
     def make_project(self, root: Path, ready: bool = True, *, mock_visual: bool = True, mock_submission: bool = True) -> Path:
+        # These ZIP fixtures contain no statistical study or real revision.
+        # Their native A checks have separate result/source preservation tests.
+        for name in ("statistical_reporting", "revision_integrity"):
+            check = patch("scripts." + name + ".validate_saved_report", return_value=[])
+            check.start(); self.addCleanup(check.stop)
         if mock_submission:
             # ZIP and A-integrity unit tests use an explicitly synthetic B result;
             # actual missing-tool/phase/binding checks are exercised separately.
@@ -253,6 +258,37 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertFalse(
                     manifest["output_policy"]["anthropic_final_outputs_allowed"]
                 )
+
+    def test_observation_refresh_keeps_current_g5_package_but_new_citation_needs_full_text(self):
+        from scripts.research_artifacts import read, write
+        from scripts import manuscript_hygiene as hygiene, review_receipts
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); project = self.make_project(root)
+            paper = project / "papers/P01"
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
+                    "scripts.submission_package.project_dir", return_value=project), patch(
+                    "scripts.manuscript_audit.validate_saved_report", return_value=[]):
+                before = researchctl.paper_artifact_hash("demo-study", "P01")
+                reviewed = review_receipts.material_snapshot(project, "writing-and-review", "P01")
+                write(paper / "style/academic-style-audit.json", {"status": "observed", "warnings": ["Optional wording hint"]})
+                write(paper / "reviews/revision-ledger.json", {})
+                with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+                    hygiene.refresh(project, "P01")
+                    from scripts import statistical_watermarks
+                    statistical_watermarks.refresh(project, "P01")
+                self.assertEqual(researchctl.paper_artifact_hash("demo-study", "P01"), before)
+                self.assertEqual(review_receipts.material_snapshot(project, "writing-and-review", "P01"), reviewed)
+                build_package("demo-study", "P01", root / "observations.zip")
+                manuscript = paper / "manuscript/main.tex"
+                manuscript.write_text(manuscript.read_text() + r"An unsupported source claim.\cite{x}", encoding="utf-8")
+                self.assertNotEqual(researchctl.paper_artifact_hash("demo-study", "P01"), before)
+                # Even an explicitly synthetic reseal cannot bypass the same A
+                # source-support check used by native G5.
+                state = read(project / "state/run.json")
+                state["approvals"][-1]["paper_artifact_sha256"] = researchctl.paper_artifact_hash("demo-study", "P01")
+                write(project / "state/run.json", state)
+                with self.assertRaisesRegex(researchctl.ResearchCtlError, "full-text.*covering cited keys: x"):
+                    build_package("demo-study", "P01", root / "unsupported.zip")
 
     def test_package_requires_current_manuscript_contribution_audit(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
