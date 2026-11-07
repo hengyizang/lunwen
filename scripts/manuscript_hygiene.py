@@ -348,6 +348,35 @@ def applied_cleanup(project: Path, paper_id: str, source: str, expected_sha256: 
     return None
 
 
+def integrity_errors(project: Path, paper_id: str) -> list[str]:
+    """Protect actual cleaned originals without requiring a clean style report."""
+    try:
+        latest = project / PREFIX / paper_id / "latest.json"
+        if latest.exists():
+            value = read(path_in(project, latest.relative_to(project).as_posix()))
+            if any(value.get(key) != expected for key, expected in LIMITS.items()):
+                raise ValueError("hygiene audit makes an unsupported scientific or authorship claim")
+        changes = sorted((project / PREFIX / paper_id / "changes").glob("*/receipt.json"))
+        if len(changes) > MAX_HISTORY:
+            raise ValueError("hygiene change history exceeds its bound")
+        for receipt in changes:
+            value = read(receipt)
+            _validate_change(project, receipt, value.get("implementation"))
+        for source in inventory(project, paper_id):
+            origin = output_provenance.current_origin(project, source)
+            if origin.get("provider") != PROVIDER:
+                continue
+            receipt = path_in(project, f"{PREFIX}/{paper_id}/changes/{origin.get('run_id')}/receipt.json")
+            value = read(receipt)
+            if (receipt not in changes or value["source"]["path"] != source.relative_to(project).as_posix()
+                    or value["cleaned_sha256"] != sha(source)
+                    or value["source"]["origin"]["family"] != origin.get("family")):
+                raise ValueError("cleaned source lacks its preserved original and exact ancestry")
+        return []
+    except (ValueError, OSError, KeyError, TypeError, AttributeError, RuntimeError, zipfile.BadZipFile) as exc:
+        return [str(exc)]
+
+
 def validate_saved_report(project: Path, paper_id: str) -> list[str]:
     try:
         report = path_in(project, f"{PREFIX}/{paper_id}/latest.json")

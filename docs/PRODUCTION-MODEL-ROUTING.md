@@ -24,8 +24,8 @@ G4/G5 work takes the critical Astra/Opus baseline; an explicit routine task
 profile preserves the routine Sol/Sonnet baseline. A candidate's presence in
 the registry does not establish quality or authorize testing it.
 
-The [2026-10-21 cloud comparison](MODEL-COMPARISON-RESULTS-20261021.md) records
-current task observations, gateway differences, cache/debit evidence and remaining
+The historical [2026-10-21 cloud comparison](MODEL-COMPARISON-RESULTS-20261021.md) records
+dated task observations, gateway differences, cache/debit evidence and remaining
 isolations. It preserves these baselines and does not automatically accept any
 alternate group, effort or context setting.
 
@@ -39,11 +39,11 @@ reasoning effort and exact endpoint pricing are versioned in
 | --- | --- | --- |
 | G1 topic selection, G2 scientific architecture, G3 experiment design; critical scientific tasks at any stage | CheapAI GPT Pro / GPT-6 Astra | high |
 | Intake, routine implementation, local writing, translation and bounded source Q&A | CheapAI GPT Pro / GPT-6.1 Sol | high |
-| Routine read-only planning and initial independent audit | CodeKey Kiro enterprise / Claude Sonnet 5.5 | high |
-| Core scientific planning/audits and every final independent audit | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
+| Routine read-only planning and ordinary independent critique | CodeKey Kiro enterprise / Claude Sonnet 5.5 | high |
+| Core scientific planning/critique, actual post-repair final critique and final panel domain view | CodeKey Kiro enterprise / Claude Opus 5.5 | high |
 | Source-bound metadata fields with exact quotes and locators | CheapAI GPT discount / GPT-5.6 Luna | medium |
-| Internal engineering diagnosis, routine code review, software test proposals and environment/replay troubleshooting | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
-| Internal inspection of supplied, hashed PDF/image attachments | CodeKey Gemini / `gemini-4-argon` | high |
+| Internal engineering diagnosis, code/test/replay support; final panel statistics view | CodeKey DeepSeek / DeepSeek-V4.1-Flash | high |
+| Internal inspection of supplied, hashed PDF/image attachments; final panel editorial view | CodeKey Gemini / `gemini-4-argon` | high |
 
 The approved native base ID remains `gemini-4-argon`, with high thinking;
 two historical 2026-10-19 receipts returned that exact ID. The separate
@@ -53,15 +53,23 @@ and a high generation attempt returned HTTP503. Catalog omission and a
 descriptor404 do not prove that base generation is unsupported. The current
 production catalog gate remains closed when the exact requested ID is absent:
 access is unconfirmed and no production call is sent. The separately authorized
-base diagnostic does not waive that guard or resolve historical billing holds.
+base diagnostic does not waive that identity guard or erase historical charges.
 Google catalog inspection uses `/v1beta/models` with native header authentication
 and normalizes only `models/`. A requested/reported identity does not attest
 upstream weights, effort passthrough or scientific quality.
 
-The five-role scientific cycle is unchanged: read-only plan, OpenAI writer,
-fresh initial independent audit, OpenAI remediation, fresh final Opus audit.
-Auxiliary models cannot approve evidence or human gates or become persistent
-scientific authors. A model's advertised or reported identity and requested
+The ordinary scientific cycle uses three calls: read-only plan, OpenAI writer
+and one fresh independent advisory critique. Actual actionable findings trigger
+OpenAI repair and a fresh recheck; a clean critique ends without another call.
+At final submission, three critics from different families, each different from
+the writer, receive mutually blind domain/editorial/statistics source views.
+Freeze their actual views and responses before synthesis; retain disagreements
+without voting or estimating acceptance. Reuse an unchanged bound panel, and
+review changed sources afresh. See the [workflow](../references/workflow.md).
+
+Neither an auxiliary response nor a panel verdict approves science or supplies
+the owner's G1/G2 topic decision. Persistent scientific authorship remains
+OpenAI. A model's advertised or reported identity and requested
 effort do not independently attest model weights or actual reasoning quality.
 The limited earlier relay acceptance is not doctoral scientific equivalence.
 Luna formatting and literature exclusion have not passed acceptance, so they
@@ -72,10 +80,17 @@ Explicit critical task kinds include `core-story`, `novelty`,
 `critical-experiment-design`, `complex-revision`, `key-algorithm`,
 `thesis-synthesis`, `scientific-interpretation` and `scientific-judgment`.
 An owner cloud `cycle` request can set `task_kind` to one of these names; it
-selects Astra/Opus for the existing five roles, without adding a second cycle.
+selects Astra/Opus for the applicable ordinary and repair roles, without adding
+a second cycle or replacing the final panel's distinct family routes.
 Routine routes must not be used to bypass this classification for critical
-conclusions or algorithms. There is no automatic paid retry, provider change or
-upgrade after transport, validation or debit reconciliation failure.
+conclusions or algorithms. A failed or ambiguous request is not automatically
+resent to another provider or upgraded; each actual attempt remains charged to
+the same cumulative total.
+
+G1/G2 topic choices and A source/result/protocol integrity checks remain binding.
+Final B venue/export/panel checks run for the submission snapshot and are reused
+while it is unchanged. Numeric quality, CFH/H/AD tables and editorial scores are
+C observations, not scientific approval thresholds or mandatory repair loops.
 
 ## Secrets and execution
 
@@ -125,26 +140,28 @@ rates with 0.1; Argon reserves at non-promotional prices with 0.3. Review curren
 channel prices before changing these contracts. The conservative reservation
 adds protocol/context bounds and a factor of seven; it is a hold, not a charge.
 
-Before a production POST, an existing approved project budget and independent
-read-only debit meter are required. The reservation is saved to the cloud state
-branch first. After one POST, CodeKey must show exactly one additional request
-and an explicit actual-cost delta; CheapAI must show exactly one new matching
-debit log. Only that attributable debit settles the hold. Unknown, concurrent,
-reset or unavailable meters stop subsequent work and retain the reservation.
-No token estimate, missing usage field or unchanged counter is treated as zero
-cost. A known debit above its hold is recorded and execution stops for review.
+Before a production POST, calculate an upper cost within the existing project
+total and save its reservation to the cloud state branch. Where read-only meter
+evidence is available, attribute CodeKey request/cost deltas or CheapAI matching
+debit logs to the exact request and record the verified charge. Unknown,
+concurrent, reset or unavailable meters cannot establish an actual charge or
+zero cost: retain the labeled conservative upper estimate. Bounded reservations
+consume the total without an extra billing gate; remaining funds stay usable.
+A verified charge above its estimate is recorded, and the current cumulative
+total is rechecked before more work. No configured total is raised automatically.
 
 Exact-response cache identity includes prompt/system, stage/role, model,
 reasoning effort, attachment hashes, route-policy hash, endpoint, billing
 identity, quote hash and declared tool limits. Cache hits are free replay, not
-independent review. Initial/final critics and endpoint probes always make fresh
-requests when explicitly authorized. Native provider caching is a separate
+independent review. Each actual ordinary critique, repair recheck, panel view and
+endpoint probe uses a fresh request under existing authority. Native provider caching is a separate
 provider billing feature and never fabricates another scientific review.
 
 ## Bounded cloud auxiliary jobs
 
-An owner `auxiliary` cloud job uses `allow_paid=true` and a project-relative
-`manifest` under `evidence/auxiliary-jobs/`. The manifest accepts only a kind,
+An owner `auxiliary` cloud job uses a project-relative `manifest` under
+`evidence/auxiliary-jobs/` and the existing cumulative budget. Legacy `allow_paid`
+is optional compatibility input, not a new spending approval. The manifest accepts only a kind,
 prompt file, optional output cap, a source contract for metadata extraction, or
 hashed file attachments for multimodal inspection. It cannot override provider,
 model, budget or command. Supported kinds are `metadata-extraction`,
@@ -211,10 +228,10 @@ Invalid responses are accounted for once and never cached, retried or applied.
 This makes DeepSeek useful for engineering support while preserving scientific
 authority. It does not establish equivalence to Sol/Astra on scientific tasks.
 Broader transfer of literature synthesis, statistical interpretation, research
-design or scientific writing requires a separately authorized, task-specific
-comparison on real project material, including missed defects, unsupported
-claims, correction effort and actual total cost. No new paid evaluation is
-started by adding these routes.
+design or scientific writing requires a task-specific comparison on real
+project material, including missed defects, unsupported claims, correction
+effort and actual total cost. Any actual comparison uses existing cloud controls
+and the cumulative project budget; adding these routes starts no new evaluation.
 
 ## Validation boundaries
 

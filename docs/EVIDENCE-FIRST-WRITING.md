@@ -112,7 +112,7 @@ projects that never created this optional record remain compatible.
 
 The existing planner remains read-only; the scientific writer independently
 authors persistent prose; the separate-family critic evaluates support and
-reasoning. Reuse initial/final reviews. Deterministic tools verify bindings and
+reasoning. Reuse the current independent critique and final blind panel. Deterministic tools verify bindings and
 prepare compact deficits; do not add one model call per paragraph or another
 whole-manuscript polishing loop. Recheck changed units and affected dependencies
 while preserving necessary whole-argument context and every scientific gate.

@@ -397,7 +397,9 @@ def main() -> int:
     if workflow_path.is_file():
         workflow = workflow_path.read_text(encoding="utf-8")
         for marker in (
-            "python -m unittest discover -s tests -v",
+            "python scripts/run_tests.py fast",
+            "python scripts/run_tests.py ${{ matrix.suite }}",
+            "suite: all", "suite: slow", "needs: fast-tests",
             "python -m compileall -q scripts tests",
             "python scripts/validate_repo.py",
             "scripts/live_acceptance.py literature",

@@ -45,22 +45,22 @@ def read(path: Path) -> dict:
     return value
 
 
-def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = None):
+def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = None, error_type=ValueError):
     def unique(pairs):
         result = dict(pairs)
         if len(result) != len(pairs):
-            raise ValueError(duplicate_error)
+            raise error_type(duplicate_error)
         return result
     def nonfinite(_):
-        raise ValueError(nonfinite_error)
+        raise error_type(nonfinite_error)
     return json.loads(value, object_pairs_hook=unique,
                       **({"parse_constant": nonfinite} if nonfinite_error is not None else {}))
 
 
-def write(path: Path, value: dict) -> None:
+def write(path: Path, value: dict, *, indent=2, sort_keys=False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
-        json.dump(value, handle, ensure_ascii=False, indent=2)
+        json.dump(value, handle, ensure_ascii=False, indent=indent, sort_keys=sort_keys)
         handle.write("\n")
         temporary = handle.name
     os.replace(temporary, path)

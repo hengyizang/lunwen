@@ -1,8 +1,7 @@
 # Research-quality hard gates (v2.3.0)
 
 These controls raise the evidence floor for a doctoral programme targeting
-the declared six-paper portfolio of at least three current JCR Q1 targets and
-every remainder at least Q2. They do not prove novelty, guarantee acceptance or
+the declared six-paper portfolio; existing Q1/Q2 ambitions remain planning observations. They do not prove novelty, guarantee acceptance or
 replace an advisor, statistician, domain expert, data steward or named human
 approver.
 
@@ -47,14 +46,17 @@ The matrix is rejected unless every novelty claim:
 - separates already-known components from the exact proposed difference;
 - states a mechanism or rationale, falsification test, result expected if the
   claim is false, boundary conditions and residual risk;
-- is backed by forward and backward citation chaining and at least two
-  consecutive search rounds without a materially closer work.
+- binds actual forward/backward chaining, receipt-bound retrieval dispositions
+  and the applicable bounded stopping rule with unresolved coverage limits.
 
-This is a saturation rule, not proof that no unknown prior work exists. Read the
-primary sources yourself before approving G1.
+Schema 1.1 does not demand invented zero-new-work rounds. Legacy 1.0 saturation
+retains its version-specific interpretation. Read the actual primary sources;
+search absence never proves novelty.
 
-PaperQA2 and ToolUniverse are reviewed, disabled-by-default upstream options.
-They can support local-corpus synthesis or topic-appropriate AI4Science work,
+PaperQA2 and ToolUniverse are optional upstream integrations. The cloud supports
+the controlled PaperQA2 retrieval path and one reviewed ToolUniverse public
+UniProt accession lookup; arbitrary autonomous or unmetered SDK tools stay
+disabled. They can support local-corpus synthesis or topic-appropriate AI4Science work,
 but never replace primary-source checks. Bind real local inputs and outputs
 with `scripts/ai4science_evidence.py`; these receipts remain advisory and
 require independent source and scientific assessment.
@@ -73,10 +75,9 @@ python3 scripts/venue_candidates.py build \
   --actor 'Your Name'
 ```
 
-Every paper needs at least two candidates. Each candidate is bound to its exact
-export row and must use a current or immediately prior JCR year, meet the
-paper-specific Q1/Q2 target, have IF > 1 and
-SCI/SCIE indexing. Scope fit, article type, official author guidelines, policy
+Candidate records retain exact lawful export rows when available. Current
+ranking is an observation, never an automatic Q1/Q2/IF clearance floor; absent
+ranking stays unknown. Source-bound scope, article type and audience drive fit. Scope fit, article type, official author guidelines, policy
 source, ranking and selection status remain explicit. The licensed export is
 not redistributed.
 
@@ -194,22 +195,14 @@ It must also predeclare the second-operator process, environment capture and
 numeric metric tolerances. This must happen at G3 because adding reproduction
 runs after G3 approval would alter the approved plan.
 
-After all six papers have valid data reports, named confirmations and power
-reports, click **全部检查后冻结预注册**.
-CLI equivalent:
-
-```bash
-python3 scripts/research_quality.py freeze \
-  --project my-phd --all --actor 'Your Name'
-
-python3 scripts/research_quality.py validate \
-  --project my-phd --stage g3
-```
-
-The freeze refuses to run after any experiment attempt exists. It hashes the
-dataset manifest, relevant data reports, paper contract, all designs, global
-plan, budget and power analysis. Changing any one requires an explicit revised
-protocol and a new human review before execution.
+For new independent execution, freeze only the active paper after its actual
+data/design/power and other applicable requirements pass. Canonical protocol,
+budget, ledger and dataset snapshot paths are `experiments/papers/Pxx/`.
+The controller creates the protected hash-bound preregistration; sealed/executed
+legacy batch protocols retain their original paths and scope. Historical manual
+freeze commands remain explicit optional interventions. Never rewrite an
+executed protocol to pass new checks; use the existing scoped revision or
+supplemental route and preserve prior outcome exposure.
 
 ## G4: baseline and clean-room reproduction
 

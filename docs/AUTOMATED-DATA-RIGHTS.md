@@ -15,7 +15,7 @@ the manifest, with the current metadata file hash, `personal_data: "none"`,
 `cloud_use_allowed: true`, `additional_restrictions: false`, and substantive
 `privacy_basis` and `terms_basis` strings. These are assessments, not provider
 facts. The manifest needs current OpenAI writer provenance and the existing
-G1 or G3 initial/final independent review must pass on the current inputs before
+The current G1 or G3 source-rights checks and independent critique must assess the actual inputs before
 the controller records automatic authorization. No additional model call is
 created by this adapter. The saved receipt identifies the original independent
 review and explicitly records that no human confirmation or scientific

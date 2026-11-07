@@ -3,11 +3,86 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import statistics
 from collections import defaultdict
 from pathlib import Path
 
 
 REPORT = "state/cost-audit.json"
+
+
+def _role(item: dict) -> str:
+    role = str(item.get("role", "")).casefold()
+    if "planner" in role or role == "semantic-plan":
+        return "planner"
+    if any(word in role for word in ("critic", "review", "panel")):
+        return "critic"
+    if any(word in role for word in ("writer", "author", "remediat")):
+        return "writer"
+    return "other"
+
+
+def _amount(value):
+    try:
+        return float(value) if type(value) in (int, float) and math.isfinite(value) and value >= 0 else None
+    except OverflowError:
+        return None
+
+
+def _recorded_cost(row):
+    # A failed controlled request writes a zero placeholder while its real
+    # reservation remains outstanding. It is not an observed free model call.
+    if row.get("zero_cost_not_confirmed") or str(row.get("cost_status", "")).startswith(("unknown", "accounted_upper")):
+        return None
+    return _amount(row.get("cost_cny"))
+
+
+def portfolio_forecast(entries: list[dict], paper_count: int = 6) -> dict:
+    """Observed-call scenarios, never a promise about papers, quality or elapsed days."""
+    if type(paper_count) is not int or paper_count < 1:
+        raise ValueError("paper_count must be a positive integer")
+    rows = [row for row in entries if not row.get("validation_status") and row.get("cache_hit") is not True]
+    samples, allocation = {}, {}
+    for role in ("planner", "writer", "critic", "other"):
+        selected = [row for row in rows if _role(row) == role]
+        costs = [_recorded_cost(row) for row in selected]
+        seconds = [_amount(row.get("duration_seconds")) for row in selected]
+        samples[role] = {"count": len(selected), "cost_cny": [x for x in costs if x is not None],
+                         "seconds": [x for x in seconds if x is not None]}
+        allocation[role] = {"attempts": len(selected),
+            "known_recorded_cost_cny": round(sum(x for x in costs if x is not None), 8),
+            "cost_unknown_attempts": costs.count(None),
+            "estimated_billing_attempts": sum(str(row.get("cost_status", "")).startswith(("unknown", "estimated", "accounted_upper")) for row in selected),
+            "known_duration_seconds": round(sum(x for x in seconds if x is not None), 3),
+            "duration_unknown_attempts": seconds.count(None)}
+    scenarios = []
+    for name, shared, per_paper in (("few_iterations", 1, 3), ("planning_example", 3, 6), ("many_iterations", 6, 12)):
+        cycles = shared + paper_count * per_paper
+        counts = {"planner": cycles + paper_count, "writer": cycles + paper_count,
+                  "critic": cycles + 3 * paper_count}
+        row = {"name": name, "shared_ordinary_cycles": shared, "ordinary_cycles_per_paper": per_paper,
+               "submission_panel_reviews_per_paper": 3, "calls_by_role": counts,
+               "model_calls": sum(counts.values()), "cost_cny": None,
+               "serial_model_seconds": None, "missing_samples": []}
+        for metric, sample in (("cost_cny", "cost_cny"), ("serial_model_seconds", "seconds")):
+            missing = [role for role in counts if not samples[role][sample]
+                       or len(samples[role][sample]) != samples[role]["count"]]
+            if missing:
+                row["missing_samples"].append({"metric": metric, "roles": missing})
+            else:
+                row[metric] = {name: round(sum(counts[role] * function(samples[role][sample]) for role in counts), 6)
+                               for name, function in (("observed_low", min), ("observed_median", statistics.median), ("observed_high", max))}
+        scenarios.append(row)
+    return {"paper_count": paper_count, "scenarios": scenarios, "observed_role_allocation": allocation,
+            "control_roles": ["planner", "critic"], "research_writing_roles": ["writer"],
+            "scientific_success_or_acceptance_predicted": False,
+            "assumptions": ["Illustrative iteration counts, not execution quotas or a validated six-paper forecast.",
+                "Each ordinary cycle has three calls; each paper adds one final planner/writer/three-reviewer submission cycle (five calls).",
+                "Extra repairs, repeat panels, source acquisition and experiments are additional.",
+                "Observed role prices may differ from future model routes; these are estimates, not billing quotes.",
+                "Model seconds are summed service time, not wall time, research duration or a completion deadline.",
+                "Compute USD and API CNY remain separate; no currency conversion or increased authority is assumed."]}
 
 
 def summarize(entries: list[dict]) -> dict:
@@ -55,6 +130,10 @@ def refresh(project: Path) -> dict:
     from scripts import model_runtime
     from scripts.research_artifacts import write
     report = summarize(model_runtime.ledger_entries(project))
+    from scripts.research_artifacts import read
+    state = read(project / "state/run.json") if (project / "state/run.json").is_file() else {}
+    paper_count = state.get("paper_count", 6)
+    report["portfolio_forecast"] = portfolio_forecast(model_runtime.ledger_entries(project), paper_count)
     report["budget"] = model_runtime.budget_status(project)
     # CLI/subscription usage is a separate accounting domain; don't report it
     # as free merely because an API usage ledger has no corresponding rows.

@@ -24,7 +24,7 @@ Write a venue-neutral semantic manuscript first:
 - report uncertainty, negative results, limitations and external-validity bounds;
 - use citations only after source-level verification;
 - do not alter methods after seeing results without disclosure;
-- generate data/code availability, ethics, funding, conflict, author contribution and AI-use statements from actual records; retain unresolved facts and external authorship/ethics obligations without inventing consent or confirmation.
+- prepare data/code availability, ethics, funding, conflict and author-contribution statements from actual records; preserve any existing AI-use statement and unresolved external obligations without inventing consent or adding an AI-policy gate.
 
 Follow [the evidence-led narrative guide](../../docs/EVIDENCE-LED-NARRATIVE.md).
 Prioritize the strongest supported contribution, exact advantage, decisive
@@ -43,7 +43,7 @@ Select the applicable reporting checklist from `references/reporting-guidelines.
 
 The checklist input needs `schema_version`, `study_design`, `guideline`, `guideline_version`, official HTTPS URL, named reviewer and timezone-aware review time. Each item has `item_id`, `status` (`present`, `not_applicable`, or `open`), `location`, `evidence_ids`, and `rationale`; any `open` item blocks G5.
 
-Run `scripts/citation_audit.py` and require zero unresolved references. Then use the `citations` skill and `scripts/ref_verify_adapter.py` for DOI-bound abstract-level topline/numeric claims; use full text for deeper claims. Keep independent initial/final scientific reviews for the current `state.active_paper`. The controller's current writing phase defaults to `scientific`: develop the supported result and argument before a full editorial or venue/package pass. After current scientific checks and both audits pass, the controller records `submission` in existing state for the next cycle; do not edit the frozen contract to change phase. Submission runs venue compliance, all contextual editorial criteria and final packaging checks; only that strict phase can pass G5.
+Run citation identity and source/claim/numeric checks against the current manuscript. Use lawful full passages for material claims; retain supports/contradicts/insufficient and actual missing evidence. The current writing phase starts scientific, with one fresh independent critique; actual findings alone justify repair and re-review. Final submission uses the three-family blind panel and B checks defined in [workflow.md](../../references/workflow.md); C editorial observations never require a complete scorecard or two simulated review rounds. The controller stores phase changes without editing the frozen contract.
 
 Keep title, abstract and conclusions within the evidence scope. LaTeX remains the preferred reproducible source when the venue supports it. If the venue requires Word, create English Markdown plus `schemas/docx-manuscript-metadata.schema.json`, record both with current non-Claude provenance, then run `scripts/manuscript_docx.py` to produce `papers/Pxx/manuscript/main.docx`. Use Pandoc/reference DOCX when available or the deterministic `python-docx` fallback. Before final G5, require current build/render receipts and an actual source-bound automated visual inspection of pagination, equations, citations, tables and figures. Historical genuine human inspections remain valid inputs; do not add a mandatory human stage approval. Never keep both `main.tex` and `main.docx` as competing canonical manuscripts.
 

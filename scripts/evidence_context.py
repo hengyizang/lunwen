@@ -28,7 +28,7 @@ def safe_text(project, relative, redact):
     return redact(content), sha(target)
 
 
-def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_000, task=None) -> dict:
+def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_000, task=None, excluded_paths=()) -> dict:
     plan = read(path_in(project, PLAN))
     if plan.get("schema_version") != "1.0":
         raise ValueError("unsupported context plan schema")
@@ -64,6 +64,8 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
     snippets: dict[tuple, dict] = {}
     for item in selections:
         relative = item["path"]
+        if relative in excluded_paths:
+            raise ValueError("context selection exposes a hidden judgment answer or operation request: " + relative)
         content, digest = safe_text(project, relative, redact)
         if item.get("expected_sha256", digest) != digest:
             raise ValueError("frozen context input changed: " + relative)

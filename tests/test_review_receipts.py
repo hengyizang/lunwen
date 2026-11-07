@@ -66,7 +66,7 @@ class ReviewReceiptTests(unittest.TestCase):
             record_model_writes(project, [target], family="openai", provider="writer", model="fixture", role="writer", run_id="fake")
             self.assertTrue(review_receipts.validate_gate(project, "G5", "P01"))
 
-    def test_gate_revalidates_all_editorial_dispositions_and_matching_phases(self):
+    def test_legacy_matching_reviews_do_not_require_empty_style_scorecards(self):
         with tempfile.TemporaryDirectory() as temp:
             project, state = self.fixture(Path(temp))
             state["writing_phases"]={"P01":"submission"}
@@ -79,7 +79,7 @@ class ReviewReceiptTests(unittest.TestCase):
             pointer = project / "state/review-receipts/G5-P01/latest.json"
             write(pointer, {"path": final.relative_to(project).as_posix(), "sha256": sha(final)})
             record(project, [final, pointer], review_receipts.MODULE)
-            self.assertTrue(any("CFH38" in error for error in review_receipts.validate_gate(project, "G5", "P01")))
+            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01"), [])
 
     def test_protocol_review_does_not_require_parent_novelty_assessment(self):
         for with_matrix in (False, True):

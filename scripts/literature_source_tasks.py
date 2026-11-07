@@ -14,6 +14,165 @@ from scripts.research_artifacts import path_in, record, sha, write, matches_orig
 
 OUTPUT = "reports/literature-source-tasks"
 OPERATIONS = {"source_trace", "screening_advice"}
+JUDGMENTS = {"claim_evidence": ("claim_evidence", "build"), "citation_crosscheck": ("citation_audit", "crosscheck"),
+    "novelty_adjudication": ("innovation_screening", "adjudication"),
+    "judgment_benchmark": ("literature_benchmark", "judgment_benchmark"), "research_memory": ("research_notebook", "failed_memory")}
+OPERATIONS |= set(JUDGMENTS)
+CONTROL = "program/research-control.json"
+RESPONSE_FIELDS = {"claim_evidence", "novelty_adjudication", "citation_extraction", "anchor_labels"}
+
+
+def validate_response_fields(value: dict) -> None:
+    """Keep optional scientific results in the existing protected response."""
+    for field in RESPONSE_FIELDS & value.keys():
+        rows = value[field]
+        if field == "citation_extraction":
+            if not isinstance(rows, dict) or set(rows) != {"source", "records"}:
+                raise ValueError("citation_extraction needs its source and records")
+            rows = rows["records"]
+        if not isinstance(rows, list) or len(rows) > 5000 or any(not isinstance(row, dict) for row in rows):
+            raise ValueError(field + " needs bounded structured scientific results")
+
+
+def _selections(project):
+    target = path_in(project, CONTROL, exists=False)
+    if not target.exists():
+        return []
+    value = wb._json(target.read_bytes())
+    selected = value.get("scientific_judgments", [])
+    if not isinstance(selected, list) or len(selected) > 20:
+        raise ValueError("select at most twenty existing scientific judgment tasks")
+    from scripts.review_receipts import STAGES
+    for row in selected:
+        _keys(row, {"operation", "request_file", "stages", "paper_id", "panel_views"}, "scientific judgment selection")
+        if row.get("operation") not in JUDGMENTS or not isinstance(row.get("request_file"), str) or not row["request_file"].startswith("program/"):
+            raise ValueError("scientific judgment selection needs its operation and program request")
+        stages = row.get("stages")
+        if not isinstance(stages, list) or not stages or any(stage not in STAGES.values() for stage in stages):
+            raise ValueError("scientific judgment selection needs explicit actual stages")
+        if "paper_id" in row and not re.fullmatch(r"P[0-9]{2}", str(row["paper_id"])):
+            raise ValueError("scientific judgment paper must be Pxx")
+        seats = row.get("panel_views", [])
+        if not isinstance(seats, list) or any(seat not in {"domain", "editorial", "statistics"} for seat in seats):
+            raise ValueError("select explicit existing panel views")
+    return selected
+
+
+def excluded_context_paths(project: Path) -> set[str]:
+    """Answer keys are bound for freshness but never delivered to reviewers."""
+    hidden = {CONTROL}
+    for row in _selections(project):
+        request = path_in(project, row["request_file"])
+        spec = wb._json(request.read_bytes())
+        hidden.add(row["request_file"])
+        sample = spec.get("sample_labels")
+        if isinstance(sample, str): hidden.add(sample)
+        elif isinstance(sample, dict): hidden.add(sample["path"])
+        for binding in spec.get("extractions", []) + spec.get("predictions", []):
+            hidden.add(binding["path"])
+        if row["operation"] == "judgment_benchmark":
+            binding = spec["anchor_set"]
+            hidden.add(binding["path"])
+            anchors = wb._json(path_in(project, binding["path"]).read_bytes())
+            for case in anchors.get("cases", []):
+                hidden.update(case[key]["path"] for key in ("review", "rights") if key in case)
+    return hidden
+
+
+def selected_context(project: Path, stage: str, paper_id: str | None = None, *, seat: str | None = None) -> dict:
+    """Add selected source tasks to an existing invocation; never call a model."""
+    packets, dependencies, seen = [], {}, set()
+    for row in _selections(project):
+        if stage not in row["stages"] or (paper_id is not None and row.get("paper_id") and row["paper_id"] != paper_id):
+            continue
+        if seat is not None and seat not in row.get("panel_views", []):
+            continue
+        operation = row["operation"]
+        if operation in seen:
+            raise ValueError("one task per judgment operation is allowed in an invocation")
+        seen.add(operation)
+        prepared = prepare_panel_task(project, operation, row["request_file"], paper_id=paper_id)
+        if paper_id is not None and prepared["packet"].get("paper_id") not in {None, paper_id}:
+            raise ValueError("selected scientific task belongs to another paper")
+        packets.append({"operation": operation, "request_file": row["request_file"], "packet": prepared["packet"]})
+        dependencies.update((source["path"], source["sha256"]) for source in prepared["sources"])
+    if packets: dependencies[CONTROL] = sha(path_in(project, CONTROL))
+    return {"tasks": packets, "sources": [{"path": path, "sha256": digest} for path, digest in sorted(dependencies.items())],
+        "hidden_paths": sorted(excluded_context_paths(project))}
+
+
+def integrity_errors(project: Path, paper_id: str) -> list[str]:
+    """Surface actual selected G5 contradictions; pending judgments grant no PASS."""
+    errors = []
+    try:
+        selected = _selections(project)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return ["scientific judgment selection: " + str(exc)]
+    for task in selected:
+        operation = task["operation"]
+        if (operation not in {"claim_evidence", "citation_crosscheck"} or "writing-and-review" not in task["stages"]
+                or task.get("paper_id", paper_id) != paper_id):
+            continue
+        try:
+            spec = wb._json(path_in(project, task["request_file"]).read_bytes())
+            if spec.get("paper_id", paper_id) != paper_id:
+                if "paper_id" in task:
+                    raise ValueError("selected request belongs to a different paper")
+                continue
+            report = build(project, operation, spec)
+            if operation == "claim_evidence":
+                for claim in report["claims"]:
+                    if any(row["outcome"] == "contradicts" for row in claim["judgments"]):
+                        errors.append("source-bound citation contradiction remains unresolved: " + claim["claim_id"])
+            elif report["differences"]:
+                errors.append("independent citation extraction has unresolved bibliographic differences: " + spec["id"])
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            errors.append("scientific judgment " + operation + ": " + str(exc))
+    return errors
+
+
+def _implementation(operation):
+    if operation not in JUDGMENTS:
+        return sha(Path(__file__))
+    return wb._digest({name: sha(Path(__file__).with_name(name + ".py"))
+        for name in ("literature_source_tasks", JUDGMENTS[operation][0])})
+
+
+def judgment_responses(project: Path, paper_id: str | None = None) -> list[dict]:
+    """Current protected stage observations plus an already-run final panel.
+
+    Absence is a preparation state. Existing but broken/stale records are errors;
+    they cannot be erased or silently replaced by an empty assessment.
+    """
+    from scripts import review_receipts
+    from scripts.research_artifacts import read
+    state_path = path_in(project, "state/run.json", exists=False)
+    state = read(state_path) if state_path.is_file() else {}
+    stage = state.get("stage")
+    if paper_id and stage in {None, "writing-and-review", "submission-ready"}:
+        from scripts import review_panel
+        directory = path_in(project, f"{review_panel.PREFIX}/{paper_id}", exists=False)
+        pointer = directory / "latest.json"
+        if pointer.exists() or pointer.is_symlink():
+            return review_panel.responses(project, paper_id)
+        if directory.exists() and any(directory.rglob("*.json")):
+            raise ValueError("scientific judgment panel history exists but its latest pointer is missing")
+    result = []
+    if stage in review_receipts.STAGES.values():
+        gate = next(g for g, name in review_receipts.STAGES.items() if name == stage)
+        from scripts.paper_execution import enabled, selected
+        paper = selected(project, paper_id) if enabled(project) and gate in {"G3", "G4", "G5"} else paper_id if gate == "G5" else None
+        directory = path_in(project, f"{review_receipts.PREFIX}/{review_receipts._key(gate, paper)}", exists=False)
+        pointer = directory / "observation-latest.json"
+        if pointer.exists() or pointer.is_symlink():
+            receipt = review_receipts.observation(project, stage, paper)["receipt"]
+            if receipt["materials"] != review_receipts.material_snapshot(project, stage, paper):
+                raise ValueError("scientific judgment observation is stale for its current task/source inputs")
+            result.append({"receipt": {**receipt, "response": receipt["audit"], "role": "independent-critic-observation"},
+                "response": read(path_in(project, receipt["audit"]["path"]))})
+        elif directory.exists() and any(directory.glob("*/observation.json")):
+            raise ValueError("scientific judgment observation history exists but its latest pointer is missing")
+    return result
 
 
 def _keys(value, allowed, label):
@@ -295,6 +454,10 @@ def screening_advice(project: Path, spec: dict) -> dict:
 def build(project: Path, operation: str, spec: dict) -> dict:
     if operation not in OPERATIONS:
         raise ValueError("unsupported source task operation")
+    if operation in JUDGMENTS:
+        from importlib import import_module
+        module, function = JUDGMENTS[operation]
+        return getattr(import_module("scripts." + module), function)(project, spec)
     return source_trace(project, spec) if operation == "source_trace" else screening_advice(project, spec)
 
 
@@ -357,7 +520,7 @@ def refresh(project: Path, operation: str, request_path: str) -> dict:
         if not before <= {c["paper_id"] for c in report["candidates"]}:
             raise ValueError("retain earlier source candidates with exclusion reasons instead of deleting them")
     report["request"] = {"path": request_path, "sha256": sha(source)}
-    report["implementation_sha256"] = sha(Path(__file__))
+    report["implementation_sha256"] = _implementation(operation)
     view = directory / "index.html"
     history = []
     if previous is not None and previous != report:
@@ -367,7 +530,7 @@ def refresh(project: Path, operation: str, request_path: str) -> dict:
     write(target, report)
     view.write_text(_html(report), encoding="utf-8")
     manifest = {"schema_version": "1.0", "operation": operation, "id": report["id"],
-        "request": report["request"], "implementation_sha256": sha(Path(__file__)),
+        "request": report["request"], "implementation_sha256": _implementation(operation),
         "outputs": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in (target, view)],
         "history": [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in sorted(directory.glob("history/*.json"))]}
     write(manifest_path, manifest)
@@ -382,8 +545,162 @@ def validate_saved_report(project: Path, operation: str, request_path: str) -> d
     _, target, manifest_path = _paths(project, operation, report["id"])
     previous = _existing(project, target, manifest_path)
     report["request"] = {"path": request_path, "sha256": sha(source)}
-    report["implementation_sha256"] = sha(Path(__file__))
+    report["implementation_sha256"] = _implementation(operation)
     manifest = wb._json(manifest_path.read_bytes())
-    if previous != report or manifest.get("request") != report["request"] or manifest.get("implementation_sha256") != sha(Path(__file__)):
+    if previous != report or manifest.get("request") != report["request"] or manifest.get("implementation_sha256") != _implementation(operation):
         raise ValueError("source task input or implementation changed; rebuild the report")
     return {"valid": True, "semantic_support_verified": False, "human_decision": False}
+
+
+def model_context(project: Path, operation: str, request_path: str, role: str) -> dict:
+    """Explicit current-task context; critics never receive prior judgments/keys."""
+    if role not in {"planner", "writer", "critic", "remediator"}:
+        raise ValueError("unsupported scientific judgment role")
+    validate_saved_report(project, operation, request_path)
+    spec = wb._json(wb._path(project, request_path).read_bytes())
+    if role == "critic" and operation in JUDGMENTS:
+        return prepare_panel_task(project, operation, request_path)["packet"]
+    _, target, _ = _paths(project, operation, spec["id"])
+    report = wb._json(target.read_bytes())
+    return report
+
+
+def citation_source(project: Path, spec: dict, *, paper_id: str | None = None, dependencies: dict | None = None) -> dict:
+    """Expose only a canonical paper source or a registered original/reader.
+
+    A path/hash declaration alone grants no authority to send arbitrary project
+    bytes to a critic. Hidden identities and hashes also survive file renames.
+    """
+    from scripts.research_artifacts import bound_source, read
+    from scripts.output_provenance import current_origin
+    if (not isinstance(spec, dict) or spec.get("schema_version") != "1.0"
+            or set(spec) - {"schema_version", "id", "source", "extractions", "paper_id"}):
+        raise ValueError("citation extraction requires the exact source request schema")
+    binding = bound_source(project, spec["source"])
+    relative, fingerprint = binding["path"], binding["sha256"]
+    target = wb._path(project, relative)
+    hidden = excluded_context_paths(project)
+    for key in ("extractions", "predictions"):
+        hidden.update(row["path"] for row in spec.get(key, []))
+    state = path_in(project, "state/run.json", exists=False)
+    expected = paper_id or spec.get("paper_id") or (read(state).get("active_paper") if state.is_file() else None)
+    if paper_id and spec.get("paper_id") not in {None, paper_id}:
+        raise ValueError("citation extraction belongs to another paper")
+    hidden_hashes = set()
+    for value in hidden:
+        hidden_file = path_in(project, value, exists=False)
+        if hidden_file.is_file(): hidden_hashes.add(sha(hidden_file))
+    registry = path_in(project, "state/output-provenance.json", exists=False)
+    if registry.is_file():
+        for name, origin in read(registry).get("files", {}).items():
+            if (name.startswith(("reviews/", "reports/", "state/", "program/"))
+                    or any(word in str(origin.get("role", "")).casefold() for word in ("critic", "review", "extract", "judgment"))):
+                hidden_hashes.add(origin.get("sha256"))
+    if relative in hidden or fingerprint in hidden_hashes:
+        raise ValueError("citation source is a hidden judgment, task/control record or renamed copy")
+    origin = current_origin(project, target)
+    if any(word in str(origin.get("role", "")).casefold() for word in ("critic", "review", "extract", "judgment")):
+        raise ValueError("prior judgment/extraction cannot impersonate an original citation source")
+    parts = Path(relative).parts
+    if len(parts) >= 4 and parts[0] == "papers" and re.fullmatch(r"P[0-9]{2}", parts[1]):
+        owner = parts[1]
+        if expected is not None and owner != expected:
+            raise ValueError("citation source must belong to the current panel paper")
+        allowed = {f"papers/{owner}/manuscript/references.bib"}
+        main = path_in(project, f"papers/{owner}/manuscript/main.tex", exists=False)
+        if main.is_file():
+            from scripts.citation_audit import tex_source_paths
+            allowed.update(path.relative_to(project).as_posix() for path in tex_source_paths(main))
+        if relative not in allowed:
+            raise ValueError("citation source must be the actual canonical manuscript, TeX dependency or bibliography")
+        from scripts.review_panel import _source
+        _source(project, owner, relative)
+        return binding
+    # Registered full text and its controlled native reader carry acquisition,
+    # rights, source-map and current-output checks; an arbitrary evidence/*.txt
+    # or model-authored summary does not become an original by renaming it.
+    from scripts.source_scope import _registered_basis
+    papers, _ = _library(project)
+    for paper in papers.values():
+        candidates = [paper.get("source"), paper.get("reader")]
+        if not any(isinstance(row, dict) and row.get("path") == relative and row.get("sha256") == fingerprint for row in candidates):
+            continue
+        primary, basis = _registered_basis(project, paper["id"])
+        if primary != paper.get("source"):
+            raise ValueError("citation original differs from its controlled registration")
+        if dependencies is not None:
+            dependencies[wb.CONFIG] = sha(path_in(project, wb.CONFIG))
+            for prefix in ("registration", "acquisition", "manifest"):
+                dependencies[basis[prefix + "_path"]] = basis[prefix + "_sha256"]
+            dependencies[primary["path"]] = primary["sha256"]
+        return binding
+    raise ValueError("citation extraction requires a registered original source or controlled reader")
+
+
+def prepare_panel_task(project: Path, operation: str, request_file: str, *, paper_id: str | None = None) -> dict:
+    """Pure current inputs for selected existing seats; never read panel replies.
+
+    Sources are fingerprint dependencies, not permission to expose their raw
+    contents: benchmark answer keys and previous judgments stay out of packet.
+    """
+    if operation not in JUDGMENTS or not isinstance(request_file, str) or not request_file.startswith("program/"):
+        raise ValueError("select one explicit scientific judgment task under program/")
+    source = wb._path(project, request_file)
+    if source.stat().st_size > 2_000_000:
+        raise ValueError("scientific judgment request exceeds 2 MB")
+    spec = wb._json(source.read_bytes())
+    extra_sources = {}
+    if operation == "claim_evidence":
+        from scripts.claim_evidence import prepare
+        packet = prepare(project, spec)
+    elif operation == "novelty_adjudication":
+        from scripts.innovation_screening import adjudication
+        packet = adjudication(project, spec, observed=[])
+        for pair in packet["pairs"]:
+            for key in ("judgments", "decision", "merge_concern_present", "disagreement"):
+                pair.pop(key, None)
+    elif operation == "citation_crosscheck":
+        from scripts.citation_audit import CROSSCHECK_ROLE_CONTRACT
+        binding = citation_source(project, spec, paper_id=paper_id, dependencies=extra_sources)
+        original = path_in(project, binding["path"])
+        if original.stat().st_size > 150_000:
+            raise ValueError("citation extraction source exceeds the prompt bound; select a smaller original source")
+        packet = {"operation": operation, "id": spec["id"], "source": binding,
+            "source_text": original.read_text(encoding="utf-8"), "role_contract": CROSSCHECK_ROLE_CONTRACT}
+    elif operation == "judgment_benchmark":
+        from scripts.literature_benchmark import judgment_benchmark
+        report = judgment_benchmark(project, {k: v for k, v in spec.items() if k != "predictions"}, observed=[])
+        packet = {"operation": operation, "id": spec["id"], "role_contract": report["role_contract"],
+            "blind_cases": [{k: v for k, v in row.items() if k != "partition"} for row in report["blind_cases"]]}
+    else:
+        from scripts.research_notebook import failed_memory
+        packet = failed_memory(project, spec)
+    dependencies = {request_file: sha(source), **extra_sources}
+    def collect(value):
+        if isinstance(value, dict):
+            if isinstance(value.get("path"), str) and "sha256" in value:
+                path = path_in(project, value["path"])
+                if sha(path) != value["sha256"]:
+                    raise ValueError("scientific judgment input changed: " + value["path"])
+                dependencies[value["path"]] = value["sha256"]
+            for prefix in ("registration", "acquisition", "manifest"):
+                if value.get(prefix + "_path"):
+                    collect({"path": value[prefix + "_path"], "sha256": value[prefix + "_sha256"]})
+            for item in value.values(): collect(item)
+        elif isinstance(value, list):
+            for item in value: collect(item)
+    collect({k: v for k, v in spec.items() if k != "sample_labels"}); collect(packet)
+    for key in ("anchor_set",):
+        if key in spec:collect(wb._json(path_in(project, spec[key]["path"]).read_bytes()))
+    if operation == "claim_evidence":
+        from scripts.ref_verify_adapter import canonical_manuscript
+        from scripts.citation_audit import tex_source_paths
+        manuscript = canonical_manuscript(path_in(project, "papers/" + spec["paper_id"], exists=False))
+        manuscripts = tex_source_paths(manuscript) if manuscript.suffix == ".tex" else {manuscript}
+        for path in [*manuscripts, manuscript.parent / "references.bib"]:
+            dependencies[path.relative_to(project).as_posix()] = sha(path)
+    if operation in {"claim_evidence", "novelty_adjudication"}:
+        for relative in ("program/literature-workbench.json", "program/originality-audit.json", "state/data-authorizations.json"):
+            target = path_in(project, relative, exists=False)
+            if target.is_file():dependencies[relative] = sha(target)
+    return {"packet": packet, "sources": [{"path": p, "sha256": s} for p, s in sorted(dependencies.items())]}

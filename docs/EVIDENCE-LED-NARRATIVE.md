@@ -102,8 +102,8 @@ Use existing records rather than adding a parallel narrative store:
 | research-increments arguments: purpose, claim_ids, inference_boundary, evidence and precedence | Central/supporting paragraph roles, evidence order and changed emphasis |
 | revision ledger and itemized decisions | What changed, why, source locations and retained outcomes |
 
-Use only schema-supported fields. Preserve historical plans; a changed argument
-plan needs the ordinary pre-write freeze for the next writing pass. Changes to
+Use only schema-supported fields. Preserve historical plans and the source-bound
+argument version used by each writing pass. Changes to
 scientific meaning, contracted scope or frozen inputs follow the existing
 revision/authorization route. Completed confirmatory protocols remain frozen.
 
@@ -124,6 +124,15 @@ bounded value. Keep an interpretation-critical qualifier beside its claim.
 Introduce no new result, universal superiority claim, experiment diary or
 catalogue of optional limitations.
 
-These instructions reuse the existing planner, writer, remediation and
-independent review paths. The original per-group editorial dispositions,
-evidence/statistical checks, two fresh reviews and human gates remain in force.
+These instructions use the ordinary three-call planner → writer → fresh
+independent advisory critic cycle. An actual actionable finding triggers repair
+and fresh review of the changed evidence. Final submission uses three mutually
+blind, different-family source views, frozen before synthesis without voting.
+An unchanged final B snapshot is reused; no review receipt or scientific PASS
+may be manufactured to complete a sequence.
+
+The owner retains G1/G2 topic decisions. A source/claim/numeric/protocol integrity
+checks protect evidence and registered outcomes. Numeric quality ratings,
+CFH/H/AD coverage and per-group editorial dispositions are C observations;
+they do not create another gate or a paid loop to clear a checklist. Actual
+evidence loss or a false claim remains A regardless of how it was discovered.

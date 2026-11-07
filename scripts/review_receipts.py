@@ -77,7 +77,8 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
     from scripts.paper_execution import enabled, selected, relevant
     if enabled(project) and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
         paper_id = selected(project, paper_id)
-    ignored = instruction_paths(project)
+    from scripts.literature_source_tasks import excluded_context_paths
+    ignored = instruction_paths(project) | set(excluded_context_paths(project))
     from scripts.research_phase import requires_submission,submission_only
     scientific_writing=stage=="writing-and-review" and not requires_submission(project,stage,paper_id)
     rows = []
@@ -110,6 +111,11 @@ def material_snapshot(project: Path, stage: str, paper_id: str | None = None) ->
         rows.append({"path": relative, "sha256": sha(target)})
         if len(rows) > 10000:
             raise ValueError("review material inventory exceeds its bound")
+    from scripts.literature_source_tasks import selected_context
+    selected = selected_context(project, stage, paper_id=paper_id)
+    bindings = {row["path"]: row for row in rows}
+    bindings.update({row["path"]: row for row in selected["sources"]})
+    rows = [bindings[key] for key in sorted(bindings)]
     from scripts.supplemental_experiments import proposal_pending
     purpose="supplemental_protocol" if stage=="writing-and-review" and proposal_pending(project,paper_id) else "stage"
     if purpose=="stage" and stage=="writing-and-review":
@@ -172,7 +178,7 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
                identity: dict, writer_family: str, materials: dict, notes: list[str] | None = None,
                cycle_required: bool = False) -> dict:
     _cloud()
-    if phase not in {"initial", "final"} or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", run_id):
+    if phase not in {"initial", "final", "observation"} or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", run_id):
         raise ValueError("safe actual critic run/phase required")
     gate = next((g for g, s in STAGES.items() if s == stage), None)
     state = read(project / "state/run.json")
@@ -217,16 +223,42 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
              "materials": materials, "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
              "identity": actual_identity, "writer_family": writer_family,
              "audit": {"path": relative, "sha256": sha(audit_path)}, "initial": initial,
-             "dispositions": notes if phase == "final" else None, "scientific_completion_verified": False}
+             "dispositions": notes if phase in {"final", "observation"} else None, "scientific_completion_verified": False}
+    if phase == "observation":
+        value["gate_authority"] = False
     if cycle_required:value["cycle_required"]=True
     write(target, value)
     paths = [target, audit_path]
-    if phase == "final":
-        latest = path_in(project, f"{PREFIX}/{key}/latest.json", exists=False)
+    if phase in {"final", "observation"}:
+        name = "observation-latest.json" if phase == "observation" else "latest.json"
+        latest = path_in(project, f"{PREFIX}/{key}/{name}", exists=False)
         write(latest, {"path": target.relative_to(project).as_posix(), "sha256": sha(target)})
         paths.append(latest)
     record(project, paths, MODULE)
     return {"path": target.relative_to(project).as_posix(), "sha256": sha(target)}
+
+
+def observation(project: Path, stage: str, paper_id: str | None = None) -> dict:
+    """Verify one actual advisory review; its verdict grants no stage authority."""
+    gate = next(g for g, name in STAGES.items() if name == stage)
+    from scripts.paper_execution import enabled, selected
+    paper = selected(project, paper_id) if enabled(project) and gate in {"G3", "G4", "G5"} else paper_id if gate == "G5" else None
+    latest = path_in(project, f"{PREFIX}/{_key(gate, paper)}/observation-latest.json")
+    _owned(project, latest)
+    pointer = read(latest)
+    target = path_in(project, pointer["path"])
+    _owned(project, target)
+    receipt = read(target)
+    if (sha(target) != pointer["sha256"] or receipt.get("phase") != "observation"
+            or receipt.get("stage") != stage or receipt.get("paper_id") != paper
+            or receipt.get("gate_authority") is not False):
+        raise ValueError("advisory observation identity or source binding changed")
+    _identity(receipt["identity"], receipt["writer_family"])
+    audit = path_in(project, receipt["audit"]["path"])
+    _owned(project, audit)
+    if sha(audit) != receipt["audit"]["sha256"]:
+        raise ValueError("advisory observation audit changed")
+    return {"receipt": receipt, "pointer": pointer}
 
 
 def validate_gate(project: Path, gate: str, paper_id: str | None = None, *, expected_purpose: str = "stage") -> list[str]:

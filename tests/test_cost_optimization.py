@@ -127,7 +127,7 @@ class LosslessContextTests(unittest.TestCase):
         self.assertNotIn("human-confirmed G0 weights", topic)
         for required in ("strong", "negative controls", "stopping rules", "power", "preregistration", "clean-room"):
             self.assertIn(required, design)
-        for required in ("every registered result locatable", "unfavorable", "AI-use disclosure", "strongest supported contribution", "post-hoc"):
+        for required in ("Preserve every registered result", "unfavorable", "existing disclosure", "strongest supported contribution", "post-hoc"):
             self.assertIn(required, writing)
         self.assertNotIn("At G5 write", topic)
         self.assertNotIn("At G1 also create", writing)

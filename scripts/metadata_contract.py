@@ -13,6 +13,11 @@ import math
 import re
 from typing import Any
 
+try:
+    from scripts.research_artifacts import strict_json
+except ImportError:
+    from research_artifacts import strict_json
+
 MAX_SOURCES = 20
 MAX_FIELDS = 20
 MAX_SOURCE_TEXT = 50_000
@@ -89,19 +94,6 @@ def build_prompt(prompt: str, contract: Any) -> str:
     )
 
 
-def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
-    result = {}
-    for key, value in pairs:
-        if key in result:
-            raise MetadataContractError("metadata response has duplicate JSON keys")
-        result[key] = value
-    return result
-
-
-def _reject_constant(value: str) -> None:
-    raise MetadataContractError("metadata response contains a non-finite number")
-
-
 def _literal_value_in_quote(value: str | int | float, quote: str) -> bool:
     text = value if isinstance(value, str) else json.dumps(value, allow_nan=False)
     # A numeric/string fragment cannot establish a larger word or quantity:
@@ -116,7 +108,8 @@ def validate_response(text: str, contract: Any) -> dict[str, Any]:
     if not isinstance(text, str) or not text.strip() or len(text) > 250_000:
         raise MetadataContractError("metadata response must be bounded nonempty JSON")
     try:
-        result = json.loads(text, object_pairs_hook=_unique_json_object, parse_constant=_reject_constant)
+        result = strict_json(text, duplicate_error="metadata response has duplicate JSON keys",
+                             nonfinite_error="metadata response contains a non-finite number", error_type=MetadataContractError)
     except (json.JSONDecodeError, UnicodeError, RecursionError) as exc:
         raise MetadataContractError("metadata response must be one strict JSON object") from exc
     result = _exact_keys(result, {"records"}, "metadata response")

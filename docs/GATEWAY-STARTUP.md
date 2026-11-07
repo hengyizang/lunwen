@@ -1,10 +1,12 @@
 # 中转站 API 云端启动
 
-当前正式方案是 **CheapAI＋CodeKey**，无需 UUAPI，见 [正式模型与启动配置](PRODUCTION-MODEL-ROUTING.md)。五组密钥使用专用 Actions Secrets，七个型号及推理档位由版本化路由控制。先运行 **Production relay readiness without generation** 核对目录和报价，再运行持续研究的 `check` 查看项目关口与原有预算。自动研究变量 `DR_OS_AUTOMATIC_RESEARCH_ENABLED` 默认 `false`；明确启动时设为 `true` 后使用 `start`，仍受原有预算与人工关口限制。
+当前正式方案是 **CheapAI＋CodeKey**，无需 UUAPI，见 [正式模型与启动配置](PRODUCTION-MODEL-ROUTING.md)。密钥使用专用 Actions Secrets，型号、来源视图及推理档位由版本化路由控制。先运行 **Production relay readiness without generation** 核对目录和报价，再运行持续研究的 `check` 查看项目状态与原有累计预算，然后按已配置的继续策略使用 `start`。不另设付费启动变量或逐次付款审批；真实 G1/G2 选题决定、证据完整性和累计额度继续生效。
 
 以下共享／独立 `UUAPI_` 配置仅介绍历史通用适配器；正式工作流不再读取这些变量、密钥或双模型配置。配置完整、模型目录可访问、真实任务表现合格和科研完成是不同检查，不可互相替代。
 
 本入口用于 OpenAI 负责写入、Claude 负责只读规划和独立审查的科研流程。运行环境由 GitHub Actions 安装，无需本地 Python、Docker、WSL2 或 CC Switch。已有项目继续读取 `cloud-state/my-phd`，不会重新初始化或重置预算。
+
+普通循环为规划、写作、一次新的独立建议性审查，共三次调用；实际问题才触发修复和重新检查。最终投稿准备使用三个不同家族、彼此互盲的来源视图，冻结真实回答后综合，保留分歧而不投票。最终 B 检查复用未改变的快照；数字评分、CFH/H/AD 和编辑建议属于 C 观察，不增加门槛或付费循环。详见[统一流程](../references/workflow.md)。
 
 ## 提供哪些配置
 
@@ -38,7 +40,7 @@ Claude 使用 Anthropic Messages 协议。OpenAI 的 Responses 请求使用 `max
 ## 检查与立即启动
 
 1. 在仓库 **Actions → Continuous owner-approved research → Run workflow** 中选择 `main`，模式选择 **check**。这是默认选项，不调用模型，不请求新预算，不改变科研审批。
-2. 查看运行摘要和产物中的 `gateway-startup.json`。它列出两个实际目标地址、协议、模型 ID、缺失配置、已用/预留/剩余额度，以及当前阶段是否允许继续。它不会展示密钥。
+2. 查看运行摘要和产物中的 `gateway-startup.json`。它列出当前路由配置中的目标地址、协议、模型 ID、缺失配置、已用/预留/剩余额度，以及当前阶段是否允许继续。历史 UUAPI 配置显示两条路线，正式配置按实际供应商列表显示；摘要不会展示密钥。
 3. 当 `configuration_ready` 和 `ready_to_continue` 都为 `true`，选择同一入口的 **start**。它立即排队执行当前阶段；具体启动时间由 GitHub runner 排队情况决定。后续健康循环自动衔接，无需本地保持在线。
 
 已有持续运行配置时，定时作业也会在配置齐全后继续工作；**check 本身不暂停定时流程**。`start` 使用当前项目总额度，不要求逐次付费确认或固定 300 元递增。填入密钥不会提高总额度，也不会代替 G1/G2 选题决定。
@@ -49,6 +51,6 @@ Claude 使用 Anthropic Messages 协议。OpenAI 的 Responses 请求使用 `max
 
 ## 验证边界
 
-CI 的 `Gateway startup and five-role cycle` 使用模拟 HTTP 响应运行实际适配器、五角色流程、预算模块、独立审查、写入来源记录和隔离 Git 远端预留。覆盖共享/独立中转站、Responses、两种 Chat token 字段；20 次请求全部为合成测试，不联系模型服务。收据包含产物哈希、代码提交和运行编号。
+CI 的历史任务名 `Gateway startup and five-role cycle` 对应条件修复场景：模拟的首次审查发现具体问题，随后执行真实代码中的修复与重新审查，共五次调用。它使用模拟 HTTP 响应运行实际适配器、预算模块、独立审查、写入来源记录和隔离 Git 远端预留，覆盖共享/独立中转站、Responses、两种 Chat token 字段。四个场景的 20 次请求全部为合成测试，不联系模型服务；收据包含产物哈希、代码提交和运行编号。这个数量不代表普通循环成本，也不是最终三家族面板的验收结果。
 
-这证明软件配置与控制流程的相应测试通过；不能证明真实中转站已接通，更不能代表六篇论文或任何科研阶段已完成。真实科研依赖当前项目证据和明确人工审核。
+这些结果只证明所测软件行为；不能证明真实中转站已接通，更不能代表六篇论文或任何科研阶段已完成。真实科研仍依赖实际来源、合法数据、执行结果与 G1/G2 本人选题决定，不能由测试收据或模型评分代替。

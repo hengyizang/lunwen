@@ -1,4 +1,4 @@
-"""Record continuation progress; the cumulative ceiling governs model spending."""
+"""Record actual activity and stop repeated work that has no new inputs."""
 from __future__ import annotations
 
 import hashlib
@@ -12,6 +12,7 @@ from scripts import researchctl
 
 FILE = "state/continuation-progress.json"
 MAX_CONTROL_CYCLES = 12
+MAX_STALLED_CYCLES = 2
 
 
 def read(path: Path, default=None):
@@ -27,6 +28,20 @@ def human_inputs(project: Path) -> str:
     # timestamps and audit wording do not establish new scientific evidence.
     paths = ["state/run.json", "state/data-authorizations.json", "state/human-inputs.json"]
     return digest({p: read(project / p) for p in paths})
+
+
+def work_inputs(project: Path) -> str:
+    """Bind concrete next-work inputs, excluding review prose and billing clocks."""
+    from scripts.research_artifacts import sha
+    from scripts.paper_execution import primary_registry_paths
+    paths = [project / "experiments/plan.json", project / "evidence/datasets.jsonl",
+             project / "program/literature-search-plan.json",
+             project / "program/literature-workbench.json"]
+    paths.extend((project / "experiments/papers").glob("P[0-9][0-9]/plan.json"))
+    paths.extend((project / "papers").glob("P[0-9][0-9]/preregistration.json"))
+    paths.extend(primary_registry_paths(project))
+    return digest({p.relative_to(project).as_posix(): sha(p)
+                   for p in sorted(set(paths)) if p.is_file() and not p.is_symlink()})
 
 
 def experiment_attempts(project: Path) -> list[dict]:
@@ -224,6 +239,7 @@ def snapshot(slug: str) -> dict:
             "experiment_attempts":attempts,
             "resource_snapshot": resource_snapshot(project),
             "receipts": sorted(set(receipts)), "human_inputs": human_inputs(project),
+            "work_inputs": work_inputs(project),
             "notebook_sha256": hashlib.sha256((project/"program/research-notebook.json").read_bytes()).hexdigest()
                 if (project/"program/research-notebook.json").is_file() else None}
 
@@ -253,11 +269,14 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
     old = read(project / FILE, {})
     if old.get("scope") != after["scope"] or old.get("human_inputs") != after["human_inputs"]:
         old = {}
+    elif old.get("work_inputs") is not None and old["work_inputs"] != before.get("work_inputs"):
+        old = {**old, "stalled_cycles": 0, "control_cycles": 0}
     report = read(project / "state/research-steps.json", {})
     paid = report.get("paid_model_cycle") is True
     reduced = set(after["errors"]) < set(before["errors"])
     evidence_added = bool(set(after["receipts"]) - set(before["receipts"]))
-    progressed = reduced or evidence_added
+    inputs_changed = before.get("work_inputs") is not None and before["work_inputs"] != after["work_inputs"]
+    progressed = reduced or evidence_added or inputs_changed
     from scripts.research_notebook import cycle_assessment
     prior_stage, prior_paper = before["scope"].split(":", 1)
     from scripts.model_runtime import ledger_entries
@@ -285,7 +304,7 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
         cycle_ids=[] if binding_errors else cycles)
     decision["resource_use"]["unknown"].extend(binding_errors)
     semantic = None
-    if decision["status"] in {"independently_reviewed", "historically_reviewed"} and decision["notebook"]["sha256"] != before.get("notebook_sha256"):
+    if decision["status"] in {"independently_observed", "independently_reviewed", "historically_reviewed"} and decision["notebook"]["sha256"] != before.get("notebook_sha256"):
         semantic = {"status": decision["status"] + "_decision", "cycle_id": decision["cycle_id"],
                     "assessment_scope": decision.get("assessment_scope", "current_scientific_inputs"),
                     "outcomes": [{"question_id": row["question_id"], "decision_id": row["id"], "outcome": row["outcome"],
@@ -295,7 +314,8 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
              "last_exit_code": exit_code, "model_cycles": old.get("model_cycles", 0) + int(paid),
              "control_cycles": 0 if progressed else old.get("control_cycles", 0) + int(not paid),
              "stalled_cycles": 0 if progressed else old.get("stalled_cycles", 0) + int(paid),
-             "control_progress": progressed, "semantic_progress": semantic,"scientific_progress_verified":False,
+             "control_progress": progressed, "new_work_inputs": inputs_changed,
+             "semantic_progress": semantic,"scientific_progress_verified":False,
              "research_decision": decision,
              "new_experiment_attempts":len({row["receipt_sha256"] for row in after["experiment_attempts"]}
                                            - {row["receipt_sha256"] for row in before.get("experiment_attempts",[])}),
@@ -317,6 +337,16 @@ def pause_reason(slug: str) -> dict | None:
         return {"reason": "external_input_required", "blockers": current_external}
     if value.get("control_cycles", 0) >= MAX_CONTROL_CYCLES:
         return {"reason": "control_retry_limit", "attempts": value["control_cycles"], "limit": MAX_CONTROL_CYCLES}
+    if value.get("stalled_cycles", 0) >= MAX_STALLED_CYCLES:
+        current = snapshot(slug)
+        changed = (bool(set(current["receipts"]) - set(value.get("receipts", [])))
+                   or set(current["errors"]) < set(value.get("errors", []))
+                   or (value.get("work_inputs") is not None
+                       and current["work_inputs"] != value["work_inputs"]))
+        if not changed:
+            return {"reason": "no_new_research_inputs", "attempts": value["stalled_cycles"],
+                    "limit": MAX_STALLED_CYCLES,
+                    "next_action": "Supply a new source, result or revised experiment/query plan; a clock wakeup or rephrased draft does not restart work."}
     return None
 
 

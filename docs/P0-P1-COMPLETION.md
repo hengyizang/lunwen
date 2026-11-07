@@ -10,7 +10,7 @@ Version 2.3 closes the requested implementation gaps without claiming that user-
 | D-drive-only setup | `install-d-drive.ps1`, `bootstrap-d-drive.sh`, path/caches/runtime checks and Docker location receipt | Run on the user's Windows/WSL2 machine; move existing WSL/Docker data if checks fail |
 | Public literature APIs | Contact-aware headers, provider-specific bounded retries, paced live acceptance and raw/hash receipts | Real network execution; provider outages and rate limits remain possible |
 | Docker isolation | Digest-pinned, no-network, read-only, dropped-capability probe | Real Docker daemon in WSL2; Linux CI does not prove WSL2 |
-| PaperQA2 / ToolUniverse / ref-verify | Pinned package install checks, executable adapters, input/output/hash/error receipts and contract tests | Authorized corpus/request, any needed credentials and explicit paid-call approval |
+| PaperQA2 / ToolUniverse / ref-verify | Pinned package checks and input/output/error receipts; controlled PaperQA2 retrieval and reviewed credential-free ToolUniverse UniProt lookup | Authorized corpus/request and source rights; model-bearing paths must use the existing cumulative-cost controls; arbitrary unmetered SDK tools remain blocked |
 | Chat-first Codex control | Project Skills plus zero-cost MCP `research_context`, `research_projects`, `research_route` and `research_status` | Enable/reload project MCP in the Codex client |
 
 ## P1 — research quality and output layers
@@ -38,4 +38,4 @@ Version 2.3 closes the requested implementation gaps without claiming that user-
 
 ## What “complete” means
 
-P0/P1 implementation is complete when repository validation and tests pass. It does **not** mean six papers already exist. The six-paper outcome remains `workflow-ready`: at least three papers must target current JCR Q1 and the rest current JCR Q1/Q2, but novelty, data, experiments, manuscripts, venue evidence and human approvals must be produced for the user's actual topic one gate at a time.
+P0/P1 implementation is complete when repository validation and tests pass. It does **not** mean six papers already exist. The six-paper outcome remains `workflow-ready`: existing Q1/Q2 ambitions are planning observations, while novelty, data, experiments, manuscripts, venue-fit evidence and actual G1/G2 topic decisions must be produced for the user's actual topic one gate at a time.

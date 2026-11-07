@@ -100,14 +100,16 @@ class ControlledQualityCycleTests(unittest.TestCase):
                                                                          first, last, notes, audit))
         return result, callbacks, initial_prereg[0]
 
-    def test_both_fresh_critics_receive_native_preregistration_after_method_refresh(self):
+    def test_one_fresh_critic_receives_native_preregistration_after_method_refresh(self):
         result, callbacks, original = self.cycle()
-        self.assertEqual(callbacks, ["initial", "final"])
+        self.assertEqual(callbacks, ["initial"])
         self.assertTrue(result["remediation_skipped"])
         self.assertEqual(sha(self.prereg), original)
         self.assertIn("papers/P01/preregistration.json", result["evidence"]["initial"]["automated_quality"]["created"])
-        self.assertIn("papers/P01/preregistration.json", result["evidence"]["final"]["automated_quality"]["existing"])
-        self.assertEqual(review_receipts.validate_gate(self.project, "G3"), [])
+        observed = review_receipts.observation(self.project, "experiment-design", "P01")["receipt"]
+        self.assertFalse(observed["gate_authority"])
+        self.assertIn({"path": "papers/P01/preregistration.json", "sha256": original}, observed["materials"]["files"])
+        self.assertNotIn("final", result["audits"])
         self.assertFalse(paper_execution.artifact_path(self.project, "experiments/registry.jsonl").exists())
 
     def test_unapproved_machine_preregistration_refreshes_after_actual_writer_remediation(self):

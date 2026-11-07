@@ -65,22 +65,39 @@ Scientific exploration uses the same G3/G4 state and executor. An explicit
 `plan.json.research_phase: exploratory` declares `exploration` with the unknown,
 discriminating test, continue/revise/stop conditions, claim limit and prior outcome
 exposure. It retains rights, source/input hashes, the frozen run plan, independent
-initial/final audits and the cumulative total; it need not invent a final power
+current independent critique and the cumulative total; it need not invent a final power
 analysis or complete confirmatory baseline suite. Checked G4 archives every actual
 attempt and returns that paper to G3. Confirmatory work uses a separate frozen
 protocol, new run/output identities and source-bound prior-exploration records.
 Exploratory outcomes cannot supply confirmatory claims or pass final G5.
 
 Writing starts in `scientific`: refine evidence, claims, comparisons and argument
-under source/claim integrity checks and fresh independent audits. The frozen paper
-contract may declare an initial preference; the controller records each paper's
-current phase in existing `state.writing_phases`. After scientific checks and
-both scientific audits pass, it advances automatically to `submission` for the
-next G5 cycle. That cycle runs the full editorial, format, venue, actual
-rendered-file inspection and package checks with fresh submission audits. Only
-the complete submission phase can pass G5. Writers do not edit frozen contracts
-to change phase. Pending supplemental protocols keep their bounded design
-review and cannot pass the parent paper.
+under source/claim integrity checks and the current independent critique. The
+frozen paper contract may declare an initial preference; existing
+`state.writing_phases` stores the current phase. Passing scientific checks and
+the reviewed decision lets the controller enter `submission`; writers do not
+edit frozen contracts to change phase. Final submission preparation adds the
+three-view panel and the B checks below. Scientific drafts and protocol-only
+supplemental verdicts cannot approve the parent G5.
+
+Checks have three levels, shared by `gate-check`, `ready`, `advance` and packaging:
+
+- **A — scientific integrity:** real sources and lawful data, complete registered
+  results, source/claim/citation/numeric consistency, frozen protocols, preserved
+  adverse findings, actual runner provenance and existing writer permissions.
+  Missing or false evidence blocks the affected work.
+- **B — submission preparation:** the actual selected venue, source-bound ranking
+  where known, article type, reporting requirements, imported template,
+  successful render/export and final panel. The machine approval binds these
+  sources and implementation hashes. Reuse the checked unchanged snapshot;
+  changed content, sources or implementation require recomputation. There is no
+  arbitrary 120/180-day expiry, ranking floor or journal AI-policy gate.
+- **C — observations:** numeric quality scores, editorial CFH/H/AD tables,
+  style/language/Unicode/watermark hints, figure-layout preferences, concern cards,
+  change-ledger completeness and per-stage audit administration. Expose their
+  warnings and uncertainty; do not create another gate or paid repair merely to
+  make these lists empty. Actual loss of evidence, a false number or a removed
+  negative finding remains A regardless of the tool that discovered it.
 
 Internal scientific review can request a separate `Ixxx` follow-up through the
 same supplemental executor used for external `Rxxx` reviewer work. A protected
@@ -95,18 +112,16 @@ For the current stage:
 1. Run `python3 scripts/researchctl.py status --project <slug> --json`, or use `python3 scripts/autopilot.py plan --project <slug>`.
 2. Read the matching stage contract in `references/stage-contracts.md`.
 3. Ask Claude for a non-publishable semantic plan; keep it in the protected run record.
-4. Ask Codex/OpenAI to write only the required artifacts in independent wording.
-   At submission-phase G5, run the deterministic academic-style audit after writing and again
-   after remediation; use it to improve authentic academic expression. Mandatory
-   automatic Unicode hygiene runs before builders and scans the resulting text
-   after each pass; preserved originals, protected spans, source ancestry and
-   remaining findings are covered by [the hygiene contract](../docs/MANUSCRIPT-HYGIENE.md).
-   A clean character scan cannot establish statistical-watermark absence. Optional
-   user-supplied detector feedback stays outside the scientific gate and never
-   removes disclosure. Run citation identity, DOI-bound abstract
-   claim, commitment-trace and revision-integrity checks against the final snapshot.
-5. Ask a model family different from the writer to audit the artifacts without revealing the preferred verdict. Save the schema-bound initial findings.
-6. Ask Codex/OpenAI to resolve actionable findings explicitly; do not silently discard adverse feedback. When the initial audit is clean and the writer already supplied the applicable dispositions, retain that record without another revision call. Always obtain the fresh independent final audit.
+4. Ask Codex/OpenAI to write only the current task's required artifacts. Run
+   deterministic source/claim/citation/numeric checks on that snapshot; retain
+   originals and scientific ancestry when applying optional editorial changes.
+5. Ask a different model family for one fresh independent critique without the
+   desired verdict or earlier opinions. This completes the ordinary three-call
+   cycle: planner → writer → critic.
+6. Repair only an actual actionable finding, retain the itemized response and
+   obtain a fresh review of the changed scientific sources. A clean critique
+   ends the cycle without a synthetic second round. Before final submission,
+   run the panel described below; retain real external comments independently.
 7. Run `gate-check`, then `ready`.
 8. At G1 present the doctoral topic dossier; at G2 present each paper topic for its own recorded decision. Stop only for those topic decisions. A changed topic or mapping invalidates the affected approval.
 9. Record actual topic decisions with `approve` (G2 also requires `--paper Pxx`). The serialized continuation runs `ready` and `advance` when their checks pass. G0/G3/G4/G5 receive explicit machine decision records. [Cloud topic controls](../docs/CLOUD-HUMAN-CONTROLS.md) authenticate human topic decisions; scheduled work never supplies a human identity or increases the spending ceiling.
@@ -120,7 +135,7 @@ method/claim decision, rationale, next action, actual `evidence_ids`, failure
 condition and stop rule. Outcomes include `pending`, `unchanged`, `changed`,
 `failed` and `stopped`. Pending/unchanged may lack evidence only with explicit
 `missing_evidence` and the next action; no invented breakthrough is required.
-The fresh final critic reviews the current notebook. G0 is exempt. Continuation
+The current independent critique reviews the notebook decision. G0 is exempt. Continuation
 shows the source/review-bound decision alongside control progress and actual
 attempts; fewer errors, new receipts or a recorded decision alone do not
 establish scientific validity or an improved paper.
@@ -143,24 +158,38 @@ establishes degree eligibility; human scientific and institutional review remain
 - A DOI or URL is not proof that a source supports a claim. Capture the supporting location and a short paraphrase.
 - Separate observed fact, source claim, model inference, forecast, and recommendation.
 - Re-check temporally unstable facts at the gate where they matter.
-- Treat at least three of six papers as current JCR Q1 SCI/SCIE targets and
-  every remaining paper as at least current JCR Q2 SCI/SCIE. Apply identical
-  scientific-quality gates to both groups.
-  A quartile is a category/year journal rank, not proof that an experiment meets
-  a scientific standard; apply `references/doctoral-q1-readiness.md` separately.
+- Keep existing Q1/Q2 ambitions as planning observations, never scientific or
+  packaging thresholds. Use actual audience/scope/article-type/desk-rejection
+  evidence for venue fit; ranking missing from lawful sources stays unknown.
+  A journal rank cannot establish novelty or scientific validity.
 
-## Actor-critic protocol
+## Independent critique and final panel
 
-Give the critic the artifact, evidence bundle, rubric, and constraints. Do not give it the desired answer. Require:
+Ordinary critics inspect the current scientific packet, evidence and constraints.
+Preserve fatal/major/minor findings, missing evidence, alternative explanations,
+statistical/leakage/reproducibility risks and specific resolution tests. Distinguish
+a demonstrated problem from a question or optional extension. The non-Claude
+writer records addressed, maintained or disagreed dispositions with evidence.
+An opinion or model consensus is not independent scientific validation.
 
-- fatal flaws;
-- major and minor findings;
-- missing evidence;
-- alternative explanations;
-- leakage/statistical/reproducibility risks;
-- a verdict: block, revise, or pass with conditions.
+At the final submission checkpoint, `papers/Pxx/reviews/panel-inputs.json` binds
+three different scientific views: domain sees Methods/Results/numeric tables;
+editorial sees title/abstract/Figure 1/headline claim; statistics sees the frozen
+protocol/numeric tables/figure values. The controller routes three critics from
+different model families, each different from the writer, and freezes each view
+and response before synthesis. They do not see other reviews or preferred
+verdicts. Preserve stable finding/claim/evidence IDs, uncertainty and disagreements;
+never vote, average verdicts or estimate acceptance odds. A source change requires
+fresh review; an unchanged frozen panel is reused. Actual current routes and
+charges remain governed by existing identity/budget controls.
 
-The non-Claude writer must respond item by item. A different model agreeing is supporting evidence, not validation by itself. The writer and critic must be different model families.
+Use full lawful primary passages for material cited claims and retain
+`supports`, `contradicts` or `insufficient` judgments with their exact anchors.
+The deterministic 15% sample requires real independent labels before agreement
+can be reported. The 0.85 agreement target and a 20–30-paper public-review anchor
+set are empirical validation work, not results supplied by these software tests.
+Source-bound citation-extraction differences and failed-idea memory retain
+unknowns and contrary evidence. See [the coverage matrix](../config/requirements-traceability.json).
 
 ## Completion boundary
 
@@ -174,9 +203,10 @@ checks, cloud budgets and automatic G5 controls apply again. A request for addit
 experiments is a scientific planning requirement, not execution permission; the
 original confirmatory plan must never be retrospectively re-frozen.
 
-The final paper receives no automatic AI-generated branding. Its truthful internal
-use record and actual upload locations are checked against the current official
-[journal disclosure policy](../docs/PUBLICATION-DISCLOSURE.md). Required statements
-remain. [Configured statistical watermark detection](../docs/STATISTICAL-WATERMARKS.md)
+The workflow adds no automatic AI-generated branding and does not require a
+journal AI-policy assessment as a gate. Existing truthful disclosure statements
+and their current locations remain protected against silent deletion; actual
+external author obligations remain outside the automated workflow.
+[Configured statistical watermark detection](../docs/STATISTICAL-WATERMARKS.md)
 is separate from character cleaning: an unknown scheme remains unknown, and a
 negative result for one configured detector never certifies universal absence.

@@ -63,8 +63,12 @@ the default is CNY 300. There is no per-paper cap, paid opt-in, fixed increment
 or separate billing approval. All attempts reserve and account their cost in
 the same ledger. Verified actual fees are used when available; otherwise a
 clearly labeled conservative upper estimate counts against the total. Pending
-bounded reservations leave the remaining total usable. PaperQA2 and ToolUniverse
-need a calculable external cost or upper bound that can enter that total.
+bounded reservations leave the remaining total usable. Model-bearing PaperQA2
+and ToolUniverse paths need a calculable external cost or upper bound that can
+enter that total. The reviewed ToolUniverse UniProt accession lookup is a
+credential-free public HTTPS request with zero model calls; its receipt records
+that limited cost basis and every attempt. Other SDK tools remain blocked until
+their actual charges or conservative upper bounds can be counted.
 See [the current cost policy](TOTAL-COST-POLICY.md).
 
 A failed scientific or execution check remains visible for repair. A pending

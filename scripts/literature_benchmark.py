@@ -186,3 +186,112 @@ def refresh(project: Path, request_file="program/literature-benchmark.json") -> 
     write(target, report)
     record(project, [target], "scripts/literature_benchmark.py")
     return {"report": OUTPUT, **report}
+
+
+def judgment_benchmark(project: Path, spec: dict, *, observed=None) -> dict:
+    """Measure retained predictions against attributed public-review anchors.
+
+    No anchor, rating or license is generated. Twenty to thirty distinct actual
+    papers form the requested calibration design; synthetic labels never count
+    towards that design and missing predictions leave accuracy unknown.
+    """
+    from scripts.research_artifacts import bound_source, read
+    from scripts.output_provenance import current_origin
+    if not isinstance(spec, dict) or set(spec) - {"schema_version", "id", "anchor_set", "predictions", "paper_id"} or spec.get("schema_version") != "1.0":
+        raise ValueError("unsupported judgment benchmark")
+    bound = bound_source(project, spec["anchor_set"])
+    anchor_file = path_in(project, bound["path"])
+    if anchor_file.stat().st_size > 2_000_000:
+        raise ValueError("anchor set exceeds 2 MB")
+    anchors = read(anchor_file)
+    if anchors.get("kind") not in {"public_review", "synthetic_fixture"}:
+        raise ValueError("attribute actual public reviews or explicitly synthetic fixtures")
+    labels, cases, partitions, paper_partitions = {}, [], {}, {}
+    incoming = anchors.get("cases")
+    if not isinstance(incoming, list) or not 1 <= len(incoming) <= 200:
+        raise ValueError("anchor set needs bounded source-located cases")
+    for row in incoming:
+        key = workbench._id(row.get("id"))
+        if key in labels or row.get("partition") not in {"calibration", "holdout"}:
+            raise ValueError("distinct anchor IDs and explicit partitions are required")
+        source = bound_source(project, row["source"])
+        target = path_in(project, source["path"])
+        quote = workbench._text(row.get("quote"), "public review quote")
+        if target.stat().st_size > 4_000_000 or quote not in target.read_text(encoding="utf-8"):
+            raise ValueError("anchor quote must occur in its exact original public review")
+        if row.get("label") not in {"supports", "contradicts", "insufficient", "distinct", "should_merge"}:
+            raise ValueError("unsupported actual anchor label")
+        doi = workbench._text(row.get("paper_doi"), "original paper DOI")
+        from scripts.citation_audit import normalize_doi
+        doi = normalize_doi(doi)
+        if not re.fullmatch(r"10\.\d{4,9}/\S+", doi, re.I):
+            raise ValueError("anchor paper needs a valid DOI identity; arbitrary labels cannot count as distinct papers")
+        partition = row["partition"]
+        for identity, mapping in ((source["sha256"], partitions), (doi, paper_partitions)):
+            if identity in mapping and mapping[identity] != partition:
+                raise ValueError("the same paper/review cannot leak across calibration and holdout")
+            mapping[identity] = partition
+        if anchors["kind"] == "public_review":
+            review = bound_source(project, row["review"])
+            review_file = path_in(project, review["path"])
+            review_quote = workbench._text(row.get("review_quote"), "original public review label basis")
+            if review_file.stat().st_size > 4_000_000 or review_quote not in review_file.read_text(encoding="utf-8"):
+                raise ValueError("review label needs a verbatim original public-review anchor")
+            for original in (target, review_file):
+                origin = current_origin(project, original)
+                if origin.get("status") != "tracked" or origin.get("provider") not in {"deterministic-control-plane", "human-attestation"}:
+                    raise ValueError("model-authored or untracked text cannot become a real review anchor")
+            if review["sha256"] in partitions and partitions[review["sha256"]] != partition:
+                raise ValueError("the same public review cannot leak across partitions")
+            partitions[review["sha256"]] = partition
+            rights = bound_source(project, row["rights"])
+            rights_file = path_in(project, rights["path"])
+            declaration = read(rights_file)
+            if (declaration.get("reuse_allowed") is not True or not str(declaration.get("license_url", "")).startswith("https://")
+                    or declaration.get("review_sha256") != review["sha256"] or declaration.get("paper_source_sha256") != source["sha256"]):
+                raise ValueError("actual public-review license evidence is required")
+            if not str(row.get("review_url", "")).startswith("https://"):
+                raise ValueError("real review anchors require their original public URL")
+        labels[key] = row["label"]
+        cases.append({"id": key, "paper_doi": doi, "partition": partition, "source": source,
+            "quote": quote, "question": workbench._text(row.get("question"), "blind evidence question")})
+    evaluations, bindings, retained = [], [], []
+    for binding in spec.get("predictions", []):
+        checked = bound_source(project, binding)
+        path = path_in(project, checked["path"])
+        origin = current_origin(project, path)
+        if origin.get("status") != "tracked" or origin.get("role") not in {"independent-critic", "independent-critic-initial", "independent-critic-final", "review-panel-response"}:
+            raise ValueError("benchmark predictions need retained actual independent-review provenance")
+        retained.append((checked, read(path), origin.get("model")))
+    if observed is None and spec.get("paper_id"):
+        from scripts.literature_source_tasks import judgment_responses
+        observed = judgment_responses(project, spec["paper_id"])
+    for row in observed or []:
+        if "anchor_labels" in row["response"]:
+            receipt = row["receipt"]
+            checked = bound_source(project, {**receipt["response"], "locator": "actual independent anchor response"})
+            if not any(prior[0]["path"] == checked["path"] for prior in retained):
+                retained.append((checked, row["response"], receipt["identity"]["requested_model"]))
+    for checked, payload, model in retained:
+        predictions = {}
+        for row in payload.get("anchor_labels", []):
+            if row.get("case_id") not in labels or row.get("case_id") in predictions or row.get("outcome") not in {"supports", "contradicts", "insufficient", "distinct", "should_merge"}:
+                raise ValueError("duplicate or out-of-scope benchmark prediction")
+            predictions[row["case_id"]] = row["outcome"]
+        bindings.append(checked)
+        results = {}
+        for partition in ("calibration", "holdout"):
+            ids = [r["id"] for r in cases if r["partition"] == partition]
+            complete = bool(ids) and all(key in predictions for key in ids)
+            results[partition] = {"cases": len(ids), "predictions": sum(key in predictions for key in ids),
+                "agreement": sum(predictions.get(key) == labels[key] for key in ids) / len(ids) if complete else None}
+        merge_ids = [key for key, label in labels.items() if label == "should_merge"]
+        evaluations.append({"prediction": checked, "model": model, "partitions": results,
+            "should_merge_detection": sum(predictions.get(k) == "should_merge" for k in merge_ids) / len(merge_ids)
+                if merge_ids and all(k in predictions for k in merge_ids) else None})
+    return {"schema_version": "1.0", "operation": "judgment_benchmark", "id": workbench._id(spec["id"]),
+        "anchor_set": bound, "annotation_kind": anchors["kind"], "blind_cases": cases, "prediction_sources": bindings,
+        "results": evaluations, "attributed_public_paper_count": len(paper_partitions) if anchors["kind"] == "public_review" else 0,
+        "requested_anchor_design_complete": anchors["kind"] == "public_review" and 20 <= len(paper_partitions) <= 30 and set(paper_partitions.values()) == {"calibration", "holdout"},
+        "calibration_status": "NOT_CALIBRATED", "model_call_made": False, "scientific_completion_verified": False,
+        "role_contract": "Use blind_cases only; never inspect anchor labels or the answer-key source. Return anchor_labels:[{case_id,outcome,rationale}]. Preserve insufficient and should_merge; agreement on attributed reviews is not scientific validity, a quality score calibration or an acceptance probability."}

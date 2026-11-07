@@ -1,4 +1,4 @@
-"""Disclosure policy/source/placement regressions, using synthetic policy fixtures."""
+"""Preserve actual disclosures while excluding journal-policy gates."""
 from __future__ import annotations
 
 import copy
@@ -61,7 +61,8 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.assertFalse(result["manuscript_label_added"])
         self.assertEqual(result["paid_calls"], 0)
         self.assertFalse(result["human_policy_interpretation_review_required"])
-        self.assertTrue(result["independent_policy_and_source_review_required"])
+        self.assertFalse(result["independent_policy_and_source_review_required"])
+        self.assertFalse(result["journal_ai_policy_evaluated"])
         self.assertTrue(result["external_author_responsibility_retained"])
 
     def test_not_required_keeps_internal_usage_without_manuscript_branding(self):
@@ -76,28 +77,29 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.assertEqual(read(self.paper / "disclosures.json")["ai_use"], self.inputs["ai_use"])
         self.assertNotIn("AI", self.manuscript.read_text())
 
-    def test_missing_or_unresolved_policy_cannot_be_waived_by_watermark_results(self):
+    def test_missing_unresolved_and_prohibitive_ai_policy_are_not_gates(self):
         original = copy.deepcopy(self.inputs)
-        for requirement in (None, "unknown", "conditional", "not_required_because_no_watermark"):
+        for requirement in (None, "unknown", "conditional", "prohibited", "not_required_because_no_watermark"):
             with self.subTest(requirement=requirement):
                 self.inputs = copy.deepcopy(original)
                 self.inputs["ai_policy"]["requirement"] = requirement
                 self.inputs["watermark_absence_verified"] = True
                 self.save()
-                self.assertEqual(self.audit()["status"], "blocked")
+                self.assertEqual(self.audit()["status"], "pass")
+                self.assertEqual(read(self.paper / "disclosures.json"), self.inputs)
         self.inputs.pop("ai_policy")
         self.save()
-        self.assertEqual(self.audit()["status"], "blocked")
+        self.assertEqual(self.audit()["status"], "pass")
 
-    def test_stale_future_and_timezone_free_policy_checks_block(self):
+    def test_policy_freshness_is_not_a_gate(self):
         current = datetime.now(timezone.utc)
         for checked in ((current - timedelta(days=31)).isoformat(), (current + timedelta(days=1)).isoformat(), "2026-01-01T00:00:00"):
             with self.subTest(checked=checked):
                 self.inputs["ai_policy"]["checked_at"] = checked
                 self.save()
-                self.assertEqual(self.audit()["status"], "blocked")
+                self.assertEqual(self.audit()["status"], "pass")
 
-    def test_wrong_venue_unofficial_url_and_credential_url_block(self):
+    def test_policy_urls_are_not_fetched_or_used_as_gates(self):
         original = copy.deepcopy(self.inputs)
         mutations = [("venue_id", "another-venue"), ("official_url", "https://unrelated.example/policy"),
             ("official_url", "http://publisher.example/policy"),
@@ -107,9 +109,10 @@ class PublicationDisclosureTests(unittest.TestCase):
                 self.inputs = copy.deepcopy(original)
                 self.inputs["ai_policy"][field] = value
                 self.save()
-                self.assertEqual(self.audit()["status"], "blocked")
+                with patch("urllib.request.urlopen", side_effect=AssertionError("no network request")):
+                    self.assertEqual(self.audit()["status"], "pass")
 
-    def test_policy_quote_hash_and_lines_are_real_and_current(self):
+    def test_old_policy_sources_are_preserved_without_becoming_mandatory(self):
         original = copy.deepcopy(self.inputs)
         mutations = [("sha256", "0" * 64), ("quote", "An assertion absent from the preserved policy text."),
             ("start_line", 3), ("start_line", True), ("path", "../external-policy.txt")]
@@ -118,11 +121,13 @@ class PublicationDisclosureTests(unittest.TestCase):
                 self.inputs = copy.deepcopy(original)
                 self.inputs["ai_policy"]["evidence"][field] = value
                 self.save()
-                self.assertEqual(self.audit()["status"], "blocked")
+                self.assertEqual(self.audit()["status"], "pass")
+        self.evidence.unlink()
+        self.assertEqual(self.audit()["status"], "pass")
 
-    def test_empty_template_and_false_nonuse_are_not_concrete_usage(self):
-        for value in (None, "", "not used", "No AI was used in preparation of this entire research manuscript.",
-                "During preparation we used [NAME OF TOOL] for [REASON].", {"tools": [], "human_oversight": "Checked."}):
+    def test_false_nonuse_and_fabricated_template_records_still_fail(self):
+        for value in ("not used", "No AI was used in preparation of this entire research manuscript.",
+                "During preparation we used [NAME OF TOOL] for [REASON]."):
             with self.subTest(value=value):
                 self.inputs["ai_use"] = value
                 self.save()
@@ -130,6 +135,30 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.inputs["ai_use"] = "The authors used Synthetic Tool for drafting and checked every scientific claim and citation."
         self.save()
         self.assertEqual(self.audit()["status"], "pass")
+
+    def test_missing_usage_and_no_human_oversight_do_not_require_invented_records(self):
+        self.inputs.pop("ai_policy")
+        self.inputs.pop("ai_use")
+        self.save()
+        self.assertEqual(self.audit()["status"], "pass")
+        for value in (None, "", "unknown", {}, {"tools": []},
+                {"tools": [{"name": "Synthetic tool"}], "human_oversight": None},
+                {"tools": [{"name": "Synthetic tool"}], "human_oversight": "none"}):
+            with self.subTest(value=value):
+                self.inputs["ai_use"] = value
+                self.save()
+                self.assertEqual(self.audit()["status"], "pass")
+                self.assertEqual(read(self.paper / "disclosures.json")["ai_use"], value)
+
+    def test_top_level_statement_needs_no_policy_and_legacy_cannot_be_hidden_by_null(self):
+        self.inputs["statement"] = self.inputs.pop("ai_policy")["statement"]
+        self.save()
+        self.assertEqual(self.audit()["status"], "pass")
+        self.inputs["ai_policy"] = {"statement": copy.deepcopy(self.inputs["statement"])}
+        self.inputs["ai_policy"]["statement"]["location"]["sha256"] = "0" * 64
+        self.inputs["statement"] = None
+        self.save()
+        self.assertEqual(self.audit()["status"], "blocked")
 
     def test_required_statement_cannot_point_to_comments_or_internal_reviews(self):
         review = self.paper / "reviews/policy-note.tex"
@@ -154,7 +183,7 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.assertEqual(self.audit()["status"], "blocked")
         del self.inputs["ai_policy"]["statement"]
         self.save()
-        self.assertEqual(self.audit()["status"], "blocked")
+        self.assertEqual(self.audit()["status"], "pass")
 
     def test_separate_upload_is_exact_current_upload_file(self):
         target = self.paper / "submission-materials/declaration.md"
@@ -195,10 +224,10 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.save()
         self.assertTrue(disclosure.validate_saved_report(self.project, "P01"))
 
-    def test_policy_required_placement_cannot_be_replaced_by_an_easier_upload(self):
+    def test_policy_required_placement_does_not_override_actual_existing_statement(self):
         self.inputs["ai_policy"]["required_placement"] = "separate_upload"
         self.save()
-        self.assertEqual(self.audit()["status"], "blocked")
+        self.assertEqual(self.audit()["status"], "pass")
 
     def test_refresh_is_cloud_only_feedback_and_binding_are_read_only(self):
         self.assertEqual(disclosure.prompt_feedback(self.project, "P01")["status"], "pass")

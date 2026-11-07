@@ -11,7 +11,6 @@ import hashlib
 import json
 import math
 import os
-import tempfile
 import time
 from contextlib import contextmanager
 from datetime import datetime, timezone
@@ -19,8 +18,10 @@ from pathlib import Path
 from typing import Any
 
 try:
+    from scripts.research_artifacts import write as write_artifact
     from scripts import ai_providers, billing_quotes, model_spend, model_routing, relay_billing, engineering_contract
 except ImportError:
+    from research_artifacts import write as write_artifact
     import ai_providers  # type: ignore
     import billing_quotes  # type: ignore
     import model_spend  # type: ignore
@@ -405,14 +406,7 @@ def authorized_calls(project_root: Path):
 
 
 def _write_cache(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", dir=path.parent, delete=False
-    ) as handle:
-        json.dump(value, handle, ensure_ascii=False, sort_keys=True)
-        handle.write("\n")
-        temporary = Path(handle.name)
-    os.replace(temporary, path)
+    write_artifact(path, value, indent=None, sort_keys=True)
 
 
 def _paper_for_stage(project_root: Path, stage: str) -> str | None:

@@ -150,7 +150,7 @@ deterministic G3 builders. It grants no execution authority.
 
 The normal continuation uses the existing model cycle and automatic checks:
 
-1. The existing writer and independent initial/final critics review the exact
+1. The existing writer and current independent critique review the exact
    proposed child design, actual data quality, remaining total and parent linkage.
    The recorded audit purpose is `supplemental_protocol`; it cannot pass parent
    G5. Successful current checks permit the controller to create honestly labeled

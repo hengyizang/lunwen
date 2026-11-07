@@ -8,10 +8,11 @@
     "schema_version",
     "status",
     "papers",
-    "pairwise_distinctness",
     "thesis_synthesis"
   ],
+  "allOf": [{"if": {"properties": {"independence_basis": {"const": "cumulative"}}, "required": ["independence_basis"]}, "then": {"properties": {"thesis_synthesis": {"required": ["cumulative_contributions"]}}}, "else": {"required": ["pairwise_distinctness"]}}],
   "properties": {
+    "independence_basis": {"enum": ["cumulative", "legacy_pairwise"], "description": "New portfolios use one cumulative evidence/contribution row per paper. Existing approved pairwise records remain readable."},
     "schema_version": {
       "const": "2.0"
     },
@@ -30,7 +31,6 @@
         "required": [
           "paper_id",
           "theme_id",
-          "target_jcr_quartile",
           "portfolio_role",
           "distinct_contribution",
           "unique_claim_ids",
@@ -49,9 +49,14 @@
             ]
           },
           "target_jcr_quartile": {
+            "description": "Optional planning observation; absence or unknown never supplies a scientific gate or venue floor. Preserve the user's existing target.",
             "enum": [
               "Q1",
-              "Q2"
+              "Q2",
+              "Q3",
+              "Q4",
+              "unknown",
+              null
             ]
           },
           "portfolio_role": {
@@ -163,6 +168,20 @@
         "argument_links"
       ],
       "properties": {
+        "cumulative_contributions": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "object", "additionalProperties": false,
+            "required": ["paper_id", "claim_ids", "knowledge_increment", "primary_evidence", "standalone_value", "merge_trigger"],
+            "properties": {
+              "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
+              "claim_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+              "knowledge_increment": {"type": "string", "minLength": 1},
+              "primary_evidence": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+              "standalone_value": {"type": "string", "minLength": 1},
+              "merge_trigger": {"type": "string", "minLength": 1}
+            }
+          }
+        },
         "core_thesis": {
           "type": "string",
           "minLength": 1

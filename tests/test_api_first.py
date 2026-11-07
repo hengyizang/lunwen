@@ -10,14 +10,14 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
-    def test_only_a_clean_review_with_complete_editorial_records_can_skip_remediation(self):
+    def test_actual_findings_alone_trigger_remediation(self):
         audit={"verdict":"pass-with-conditions","fatal_findings":[],"major_findings":[],"minor_findings":[],
                "missing_evidence":[],"remediation_steps":[],"uncertainty":["Known limits remain."]}
         self.assertFalse(api_orchestrator.remediation_required(audit,"topic-intelligence"))
-        self.assertTrue(api_orchestrator.remediation_required(audit,"writing-and-review"))
+        self.assertFalse(api_orchestrator.remediation_required(audit,"writing-and-review"))
         for field in ("fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps"):
             self.assertTrue(api_orchestrator.remediation_required({**audit,field:["Actual unresolved finding."]},"topic-intelligence"))
-        self.assertTrue(api_orchestrator.remediation_required({**audit,"verdict":"revise"},"topic-intelligence"))
+        self.assertFalse(api_orchestrator.remediation_required({**audit,"verdict":"revise"},"topic-intelligence"))
         for stage in ("topic-intelligence", "experiment-design", "scientific-writing"):
             self.assertFalse(api_orchestrator.remediation_required(audit, stage,
                 ["The scientific interpretation remains provisional."]))
@@ -498,7 +498,7 @@ class ApiFirstTests(unittest.TestCase):
     def test_cycle_persists_gate_audits_and_decision_log(self):
         self._assert_cycle_records()
 
-    def test_clean_initial_review_skips_remediator_but_retains_fresh_final_review(self):
+    def test_clean_initial_review_completes_three_call_cycle(self):
         self._assert_cycle_records(clean_initial=True)
 
     def test_clean_review_preserves_ordinary_uncertainty_notes_without_an_extra_model_call(self):
@@ -639,13 +639,17 @@ class ApiFirstTests(unittest.TestCase):
                 )
             self.assertEqual(
                 [item.kwargs["max_output_tokens"] for item in model_call.call_args_list],
-                [4000,12000,4000,4000] if clean_initial else [4000,12000,4000,12000,4000],
+                [4000,12000,4000] if clean_initial else [4000,12000,4000,12000,4000],
             )
             self.assertEqual(manifest["cost_controls"]["control_max_output_tokens"], 4000)
             reviews = list((root / "projects" / "demo" / "reviews" / "independent").glob("*.json"))
-            self.assertEqual(len(reviews), 2)
+            self.assertEqual(len(reviews), 1 if clean_initial else 2)
             self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))
-            self.assertTrue(any(path.name.endswith("-final.json") for path in reviews))
+            self.assertEqual(any(path.name.endswith("-final.json") for path in reviews), not clean_initial)
+            from scripts import review_receipts
+            observed = review_receipts.observation(root / "projects/demo", "topic-intelligence")["receipt"]
+            self.assertFalse(observed["gate_authority"])
+            self.assertFalse(observed["scientific_completion_verified"])
             log = (root / "projects" / "demo" / "reviews" / "decision-log.md").read_text(
                 encoding="utf-8"
             )
@@ -672,7 +676,7 @@ class ApiFirstTests(unittest.TestCase):
             )
             if with_decision:
                 self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"],"openai")
-                self.assertEqual(manifest["research_decision"]["status"],"independently_reviewed")
+                self.assertEqual(manifest["research_decision"]["status"],"independently_observed")
             else:
                 self.assertEqual(manifest["status"],"needs_work")
                 self.assertTrue(manifest["research_decision"].get("errors"))

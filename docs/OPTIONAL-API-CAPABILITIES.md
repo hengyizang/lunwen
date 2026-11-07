@@ -16,6 +16,7 @@ budget. Enabling a route never grants a new budget or a scientific gate approval
 | Paid conceptual image generation | Disabled, including legacy `--execute` | Current key/model catalogs provide no verified image-generation permission or metered image adapter; no automatic paid request is possible |
 | Result figures and method diagrams | Existing deterministic data renderers and `research_diagrams.py` | Generated images cannot serve as measured experimental evidence |
 | PaperQA2 SDK vector retrieval | Explicit literature_paperqa uses the pinned real SDK vector store with source-bound CPU vectors and the centrally metered reader-qa answer | Its autonomous agent/provider transports remain outside this controlled adapter; ToolUniverse operations that bypass the meter stay paused |
+| ToolUniverse public UniProt lookup | Pinned 1.5.1 concrete SDK class, reviewed implementation/configuration hashes, strict accession-only compact query, credential-free public HTTPS and attempt receipts | Only `UniProt_get_entry_by_accession` is enabled; its zero model/API cost basis does not cover arbitrary SDK tools or hosting/network costs; compact output remains advisory |
 
 ## Native source Q&A
 

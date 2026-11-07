@@ -40,6 +40,8 @@ def fixture(root: Path) -> Path:
     constraints.update({
         "status": "ready_for_review", "research_goal": "Test the software control boundary.",
         "researcher_background": "Synthetic acceptance fixture.", "available_skills": ["Python"],
+        "preferred_domains": ["Synthetic software-control research"],
+        "candidate_application_routes": ["Synthetic doctoral-programme fixture"],
         "time_horizon_years": 3, "weekly_hours": None, "human_review_mode": "on_request",
         "system_execution_hours_per_day": 24, "cash_budget_usd": None, "model_api_budget_cny": 300,
         "cloud_compute_budget_usd": 0, "local_compute": {"gpu": None, "ram_gb": None, "storage_gb": None},

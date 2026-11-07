@@ -11,6 +11,12 @@ optimality or scientific equivalence. The existing seven-model assignments are
 the approved baselines. Additional transports, groups, efforts and context bands
 in `config/model-candidates.json` are candidates, not accepted alternatives.
 
+Ordinary research uses three calls: a read-only planner, the persistent OpenAI
+writer and one fresh independent advisory critic. Actual actionable findings
+trigger repair and a fresh check of the changed sources. Final submission uses
+the three-family mutually blind panel in the [workflow](../references/workflow.md).
+Routing preserves these roles; it does not add reviews to fill a fixed call count.
+
 ## Declare the actual task
 
 `cycle` cloud requests and the `stage`/`cycle` API CLI accept `task_profile`:
@@ -41,7 +47,8 @@ critical `task_kind` declarations remain effective. A critical profile or a
 recognized critical task class selects the Astra/Opus scientific baseline.
 In dynamic mode, an unclassified G4/G5 cycle is conservatively treated as
 critical. Explicitly declared routine work can retain the original Sol/Sonnet
-baseline; the final independent critic retains its approved Opus role.
+baseline; an actual post-repair final critic retains its approved Opus role.
+The final submission panel uses its separate source-view routes.
 
 For the CLI, pass the object as `--task-profile '<JSON object>'`. Duplicate JSON
 properties, non-object profiles and unsupported fields are rejected. The cloud
@@ -53,7 +60,6 @@ owner issue uses the same object directly:
   "action": "cycle",
   "project": "my-phd",
   "actor": "Hengyi Zang",
-  "allow_paid": true,
   "stage": "experiment-execution",
   "task_profile": {
     "task_class": "routine-implementation",
@@ -64,7 +70,7 @@ owner issue uses the same object directly:
 ```
 
 This example is not a dispatch or new spending authorization. The authenticated
-owner issue boundary, existing cumulative allowance, reservations, human gates,
+owner issue boundary, existing cumulative allowance, reservations, G1/G2 topic decisions,
 cloud execution and frozen experimental inputs remain required.
 
 ## Automatic continuation
@@ -86,7 +92,7 @@ Continuation reads the optional fixed control file
 
 This is protected management state, not an artifact the scientific writer may
 create. Codex can set it through the non-billable authenticated owner cloud action
-`set_routing_profile`, supplying `stage`, `task_profile` and `allow_paid:false`.
+`set_routing_profile`, supplying `stage` and `task_profile`.
 The declared stage must equal the persisted current stage. First creation needs
 no prior hash; replacement requires `expected_profile_sha256` matching the exact
 existing file, preventing stale management requests from overwriting a newer
@@ -125,9 +131,11 @@ The controller rechecks hashes, evidence and scope rather than trusting a
 model-authored pass boolean. It records acceptance under protected
 `state/dynamic-routing-acceptances.json`. A missing or changed packet, candidate,
 baseline identity or human evidence blocks acceptance or later use.
+These are scoped evidence requirements for promoting an optional replacement
+route, not extra human approvals or scientific-score gates on ordinary research.
 
 Codex can inspect the pool using the non-billable owner cloud action
-`routing_status` with `allow_paid:false`. To admit an existing candidate, the
+`routing_status`. To admit an existing candidate, the
 non-billable action `accept_route` accepts exactly these selectors in addition to
 the common owner fields:
 
@@ -145,8 +153,9 @@ the common owner fields:
 The profile file contains the strict task-profile object. The controller invokes
 only the bounded routing management entry point. An acceptance cannot introduce
 an arbitrary model, change API credentials, run a shell, approve a scientific
-gate or grant paid trial calls. Creating new benchmark evidence still requires
-the existing separate authorization and cloud execution controls.
+gate or increase the budget. Actual benchmark calls use the existing cumulative
+total and cloud execution controls. Legacy `allow_paid` is accepted for
+compatibility; it neither grants nor denies work covered by that total.
 
 ## Choose at request time
 
@@ -169,11 +178,13 @@ costs; caches are not assumed portable across gateways or groups. The selector
 does not merely multiply a group's advertised coefficient by an assumed token
 count. The central runtime still quotes, reserves and reconciles each request.
 
-An outstanding reservation or unresolved charge stops new paid requests and
-route switching. A timeout or incomplete response may already have incurred a
-charge; it is not an instruction to send the same job to another gateway.
-Record the original outcome, reconcile its bill and inspect existing artifacts
-before any separately authorized retry. No automatic paid fallback is introduced.
+A bounded reservation or unresolved charge counts against the existing project
+total; work that fits the remaining total can continue. Preserve actual charges
+when available and label conservative upper estimates honestly. A timeout or
+incomplete response may already have incurred a charge, so inspect the original
+outcome and existing artifacts before retrying under the same total. Routing
+does not automatically resend ambiguous requests to another gateway or require
+a separate paid-retry approval.
 
 Before a production generation request, the runtime also reads the selected
 group's live model catalog. A missing model or unavailable catalog stops before
@@ -194,8 +205,10 @@ Each role's usage record contains its declared task profile, selection decision,
 candidate identity, exclusions and actual transport. A cycle manifest separates
 `production_route_baseline` from `actual_routes`, whose provider/model/effort and
 endpoint come from the returned model results. Declared and effective task kinds
-remain distinct. Initial and final scientific audits stay fresh and the existing
-five-role review sequence remains intact.
+remain distinct. Every critique actually requested is fresh. An ordinary cycle
+records one advisory critique; repair/recheck and the final three-view panel
+record their own real calls and source hashes. Never copy an initial receipt
+into a fictitious final review or treat a model verdict as scientific validation.
 
 `DR_OS_DYNAMIC_ROUTING=production` enables selection; it is the default. With no
 task-specific accepted alternatives the approved baseline is used. Set
@@ -203,6 +216,10 @@ task-specific accepted alternatives the approved baseline is used. Set
 conservative late-stage classification to the static production routes. Profile
 validation, requested output checks, central budget controls and all scientific
 gates still apply. Rollback does not approve a failed request or settle its bill.
+G1/G2 retain the owner's topic decisions. A checks protect real scientific
+integrity; final B preparation is reused for an unchanged submission snapshot.
+Numeric scores, CFH/H/AD coverage and editorial observations are C findings,
+not route-independent scientific gates or reasons for automatic paid repair.
 
 All engineering validation for this change runs on GitHub's cloud runners with
 simulated transports. Such tests verify control behavior; they do not certify
@@ -221,6 +238,10 @@ Declare the actual task class before execution. A new candidate cannot replace
 the baseline without the existing scoped acceptance, role and quality controls.
 
 ## Cloud comparison evidence, 2026-10-21
+
+Historical evidence: the dated cohorts below describe the calls made at that
+time. Their counts and review sequence do not set the current ordinary-cycle
+cost or supersede the workflow and total-cost policy.
 
 The [model and gateway report](MODEL-COMPARISON-RESULTS-20261021.md) records
 120 requests across the fixed model/group matrix, a separate clarified cohort,

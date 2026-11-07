@@ -19,7 +19,7 @@ PROTECTED = re.compile(
     r"\b(?:not|no|never|without|unless|only|except|excluding|excluded|"
     r"may|might|could|causal|causality|associated|correlation|significant|"
     r"nonsignificant|non-significant|independent|paired|unpaired|randomized|"
-    r"observational|exploratory|confirmatory|SD|SE|SEM|CI|"
+    r"observational|exploratory|confirmatory|negative|null|failed|failure|disclosure|AI|assistance|SD|SE|SEM|CI|"
     r"mm|cm|m|km|ms|s|mg|g|kg|ml|mL|mol|Hz|kHz|MPa|Pa)\b", re.I)
 FILLER = {"the", "a", "an", "and", "or", "of", "in", "on", "to", "for", "by",
           "with", "was", "were", "is", "are", "has", "have", "it", "this", "that"}

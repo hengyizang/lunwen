@@ -82,10 +82,10 @@ def writing_contract(project: Path, stage: str) -> str:
                 "Retain original hypotheses and outcomes; never demote unfavorable or contentious results. State material limitations once where they change interpretation. "
                 "Justify comparison scope before results and retain fixed evaluation criteria. Label post-hoc interpretations honestly; new tests still need normal approval. "
                 "Assess facts, references, statistical interpretation and argument; give dispositions only for actual findings. "
-                "Submission formatting, venue/package preparation and exhaustive CFH/H/AD tables are deferred. "
-                "When the current scientific checks and both independent reviews pass, the existing controller records entry into submission preparation. "
+                "Submission formatting and venue/package preparation are deferred; CFH/H/AD remain optional observations. "
+                "After current source-bound scientific checks and the recorded research decision, the existing controller records entry into submission preparation. Advisory opinions do not authorize that transition. "
                 "That transition cannot pass G5; the next G5 cycle must satisfy all final submission requirements. Never edit a frozen contract to switch phase.")
-    return "G5 SUBMISSION PREPARATION: apply the complete editorial, venue, rendering, disclosure and package checks. Final G5 clearance requires every scientific and submission check."
+    return "G5 SUBMISSION PREPARATION: complete the three-view blind panel and source-bound venue, rendering, existing-disclosure preservation and package checks once for the unchanged final snapshot. Editorial observations remain optional; opinions and scores do not prove scientific validity."
 
 
 def writing_task(project: Path, stage: str, configured: str) -> str:

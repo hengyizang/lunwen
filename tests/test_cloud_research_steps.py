@@ -39,7 +39,7 @@ class ControlledResearchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project=Path(directory)
             requests=[{'provider':'crossref','query':'q'+str(i),'query_family':'direct','limit':1} for i in range(9)]
-            steps.write(project/'program/literature-search-plan.json',{'searches':requests})
+            steps.write(project/'program/literature-search-plan.json',{'searches':requests, 'max_search_calls': 6})
             with patch.object(literature_evidence,'execute_search',side_effect=literature_evidence.LiteratureEvidenceError('fixture outage')) as fetch:
                 first=steps.literature_context(project,'unused');second=steps.literature_context(project,'unused')
             self.assertEqual(first['new_search_calls'],6);self.assertEqual(first['pending_searches'],3)
@@ -58,7 +58,7 @@ class ControlledResearchTests(unittest.TestCase):
 
     def direction_fixture(self,project):
         now=datetime.now(timezone.utc);today=now.date()
-        steps.write(project/'intake/constraints.json',{'ranking_weights':dict(zip(directions.FACTORS,directions.EXPECTED_WEIGHTS))})
+        steps.write(project/'intake/constraints.json',{'ranking_weights':dict(zip(directions.FACTORS,(.25,.25,.15,.075,.075,.10,.10)))})
         quote='Synthetic role with fully funded doctoral support. Gross annual salary CNY 300000. Career outlook and eligibility evidence for the fixture.'
         url='https://www.oecd.org/synthetic-fixture'
         def fetch(_url,**kwargs):return ('<p>'+quote+'</p>').encode(),url,200,'text/html'

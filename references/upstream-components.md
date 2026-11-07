@@ -18,18 +18,26 @@ Select domain skills only after G1. Examples that may become relevant are `openp
 
 ## Academic Research Skills
 
-This is a strong optional second implementation for deep research, drafting, revision and multi-perspective review. Its license is CC BY-NC 4.0, so the repository does not copy or silently install it. Confirm that the planned use is non-commercial and that attribution obligations are acceptable, then use Claude Code's plugin manager:
-
-```text
-/plugin marketplace add Imbad0202/academic-research-skills
-/plugin install academic-research-skills
-```
-
-Use it only as an evidence/semantic-planning worker behind the local contracts, not as a competing state machine. Do not export Claude-authored manuscript or chart artifacts into final project paths. The local G1–G5 rules, non-Claude writer, output provenance and independent model-family audit remain authoritative.
+Academic Research Skills and its Codex edition use CC BY-NC 4.0. Selected
+attributed framework/rubric/evidence-protocol files are already retained under
+`third_party/ars-review/` and `third_party/ars-codex/`, with the exact license and
+pinned source identities in `THIRD-PARTY-NOTICES.md` and the integration locks.
+Those selected adaptations retain their noncommercial license; the deterministic
+Python adapters are independently implemented. The complete upstream
+orchestrators/plugins are not installed and cannot become a competing state
+machine or bypass native writer/critic/rights/budget controls.
 
 The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e9370309c24b99977ad44091f`. Most orchestration overlaps the local state machine. The retained improvement is independently implemented revision-drift control: `scripts/revision_integrity.py` compares exact numeric, citation-key and claim-strength token multisets and requires exact source-bound revision-ledger entries and a current protected automated change record for every material change.
 
-The next review also identified a shared `paper-facts` ledger, construct-to-item/coding/analysis validity chain, paragraph argument map, contradiction/method comparability grid and reviewer-concern triage as useful missing concepts across Supervisor Skills, Academic Research Skills and related projects. They are independently implemented in `scripts/manuscript_audit.py`, `scripts/systematic_review.py` and `scripts/rebuttal_triage.py`. No third-party restricted Skill text, source code or figures are vendored; direct use or redistribution of an upstream remains subject to its own license.
+The next review also identified a shared `paper-facts` ledger, construct-to-item/coding/analysis validity chain, paragraph argument map, contradiction/method comparability grid and reviewer-concern triage as useful missing concepts across Supervisor Skills, Academic Research Skills and related projects. They are independently implemented in `scripts/manuscript_audit.py`, `scripts/systematic_review.py` and `scripts/rebuttal_triage.py`. These Python mechanisms are native implementations; the separately attributed selected reference adaptations above remain subject to their own CC BY-NC license. No broad upstream agent installation follows from this review.
+
+The 2026-11-05 compendium is integrated through native `review_panel.py`,
+`research_case.py`, `claim_evidence.py` and existing control interfaces, not by
+importing Markdown skills as Python or copying a complete external orchestrator.
+The later 9–22 ideas reuse narrow native records/producers where applicable;
+ARIS patent claims-drafting and what-if-oracle are not introduced. This round adds
+no third-party source or 701-skill vendor dump. Existing source/license notices,
+pinned hashes and stricter file-level rights continue to apply.
 
 ## ref-verify, paper-skill and journal recommender review
 

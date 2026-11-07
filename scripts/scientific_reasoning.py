@@ -61,7 +61,20 @@ def stage_prompt(stage, role, root=ROOT):
     if role not in value["roles"]:
         raise ValueError("unsupported scientific reasoning role")
     return ("Scientific reasoning contract (SHA-256 " + sha256(safe_path(root, POLICY)) + "):\n"
-            + value["common"] + "\n" + value["stages"][stage] + "\n" + value["roles"][role])
+            + value["common"] + "\n" + value["stages"][stage] + "\n" + value["roles"][role]
+            + "\n" + case_prompt(stage))
+
+
+def case_prompt(stage):
+    """Task-sized positive research guidance in the existing model calls."""
+    action = {
+        "topic-intelligence": "Use actual retrieved literature cohorts for recent publication growth, closest-work age and author-overlap counts; submission rates and actual group counts stay unknown. These measures guide reading and a reasoned crowding decision, not automatic topic rejection.",
+        "paper-architecture": "In each paper's research-case.json, write a falsifiable one-sentence headline claim, its counterclaim and three distinct readers/benefits. Use a cumulative contribution/evidence row per paper in paper-map.thesis_synthesis instead of fifteen pair forms; preserve standalone value, merge triggers and the common doctoral question.",
+        "experiment-design": "Before freezing G3, write the strongest rejection pre-mortem in research-case.json, link its fatal/major concerns to existing critical_tests, rival predictions and a discriminating pilot/continue-revise-stop decision. Plan the main result, strongest-baseline comparison and negative-boundary figures before Results prose. Missing outcomes remain planned.",
+        "experiment-execution": "Update the case from every actual result, including failed and negative outcomes. Reassess the headline and cumulative thesis argument within frozen scope. Figure plans become observed only through existing source-bound figure tools.",
+        "writing-and-review": "Use only the needed research-case sections: retained title/abstract variants with search keywords; source-bound related-work differences; venue scope/editor/article/desk-reject evidence; evidence-based cover letter and anticipated rebuttal. Prepare local preprint/retarget and minimal reproducibility materials using research_case; retain previous manuscript versions, unknown/unregistered PIDs and every adverse result. Never upload or submit.",
+    }.get(stage, "")
+    return action + (" Use scripts/research_case.py --project <path> --paper Pxx for a source-aware preparation packet; fill only the current scientific task, not all future fields." if action else "")
 
 
 def validate_hypothesis_value(project, idea):

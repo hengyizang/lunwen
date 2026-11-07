@@ -120,7 +120,7 @@ Read only current task prerequisites and make the smallest evidence-grounded edi
 data, rights, results, approvals or receipt hashes. Never alter state, raw data, provenance or independent reviews.
 Use the native runner only after its approved protocol checks; code/metadata completeness is not science.
 End with ONLY one JSON object containing dispositions (an array). Preserve ordinary author uncertainty;
-use fixed:, rejected: or unresolved: for actual findings. Submission retains all applicable CFH/H/AD records.
+use fixed:, rejected: or unresolved: for actual findings. Keep actual style observations contextual; never manufacture a completed scorecard.
 """
 
 
@@ -144,7 +144,7 @@ Preserve supported meaning, numbers, equations, citations, uncertainties, negati
 Do not copy planner/critic wording, regenerate unchanged chapters, conceal contrary evidence or weaken a gate.
 A pending scientific gap remains pending; do not manufacture a successful result to fill it.
 End with ONLY JSON containing dispositions: one fixed:, rejected: or unresolved: item with an evidence-based
-reason for each actionable finding. Both independent audits and every applicable phase check still run.
+reason for each actionable finding. A fresh independent review follows a material repair; retain unresolved scientific findings.
 """
 
 
@@ -931,6 +931,11 @@ def run_stage(
     if state["stage"] == "experiment-execution":
         from scripts.research_quality import refresh_runtime_evidence_catalog
         refresh_runtime_evidence_catalog(researchctl.project_dir(project))
+    if api_orchestrator.requires_submission(researchctl.project_dir(project), state["stage"]):
+        from scripts import model_routing, model_runtime
+        for role in model_routing.PANEL_MODELS:
+            route = model_routing.select(state["stage"], role)
+            model_runtime.preflight_route(route["provider"], model=route["model"])
     token = run_token()
     from scripts.research_notebook import cycle_prompt,cycle_review,cycle_assessment
     decision_prompt="" if state["stage"]=="intake" else "\n\n"+cycle_prompt(token)
@@ -1008,7 +1013,7 @@ def run_stage(
         )
         record_editing_attempt(researchctl.project_dir(project))
         from scripts import review_receipts
-        from scripts.research_cycle import review_cycle, after_reviews
+        from scripts.research_cycle import review_cycle, submission_cycle, after_reviews
         def refresh_review(phase):
             return (refresh_post_write_evidence(project, state["stage"], token, phase),
                     api_orchestrator.refresh_research_method_audits(project, state["stage"]))
@@ -1050,15 +1055,22 @@ def run_stage(
                 except (ValueError, OSError, AutopilotError):
                     return []
 
-            reviews = review_cycle(researchctl.project_dir(project), state["stage"], token,
-                writer_family="openai", prompt=lambda: critic_prompt(project, state, context),
-                invoke=call_critic, remediate=repair, refresh=refresh_review, writer_notes=initial_notes,
-                log=lambda first, last, notes, audit: api_orchestrator.append_decision_log(
-                    project, state["stage"], token, first, last, notes, audit))
+            if api_orchestrator.requires_submission(researchctl.project_dir(project), state["stage"]):
+                from scripts import model_runtime
+                with model_runtime.authorized_calls(researchctl.project_dir(project)):
+                    reviews = submission_cycle(researchctl.project_dir(project), token,
+                        writer_family="openai", refresh=refresh_review)
+                journal["submission_panel"] = reviews["panel"]
+            else:
+                reviews = review_cycle(researchctl.project_dir(project), state["stage"], token,
+                    writer_family="openai", prompt=lambda: critic_prompt(project, state, context),
+                    invoke=call_critic, remediate=repair, refresh=refresh_review, writer_notes=initial_notes,
+                    log=lambda first, last, notes, audit: api_orchestrator.append_decision_log(
+                        project, state["stage"], token, first, last, notes, audit))
             journal["research_decision"] = reviews["research_decision"]
             if reviews["remediation_skipped"]:
-                journal["remediation"] = {"status": "not_required", "model_call_made": False,
-                    "reason": "No actionable initial findings; writer notes retained."}
+                journal["remediation"] = {"status": "panel_observations_recorded" if reviews.get("panel") else "not_required", "model_call_made": False,
+                    "reason": "Frozen panel concerns require source-bound author responses; no scientific approval is implied." if reviews.get("panel") else "No actionable initial findings; writer notes retained."}
         else:
             evidence, methods = refresh_review("initial")
             reviews = {"evidence": {"initial": evidence}, "methods": {"initial": methods}}

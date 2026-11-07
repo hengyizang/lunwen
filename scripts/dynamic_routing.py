@@ -459,7 +459,9 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
             if candidate["max_input_bytes"] < input_bytes or candidate["max_output_tokens"] < required_output or not modalities <= set(candidate["modalities"]):
                 raise RoutingError("candidate limits cannot preserve the complete task")
             family = candidate["family"]
-            if family == "anthropic" and baseline_route.get("role") not in model_routing.READ_ONLY_ROLES | {"independent-critique"}:
+            if baseline_route.get("role") in model_routing.PANEL_MODELS and family != baseline_route.get("family"):
+                raise RoutingError("a panel seat must retain its designated distinct model family")
+            if family == "anthropic" and baseline_route.get("role") not in model_routing.READ_ONLY_ROLES | set(model_routing.PANEL_MODELS) | {"independent-critique"}:
                 raise RoutingError("Claude remains limited to read-only scientific planning and independent audits")
             if baseline_route.get("persistent_output") and family != "openai":
                 raise RoutingError("persistent scientific writer must remain OpenAI")

@@ -187,8 +187,80 @@
                 "pattern": "^[^\\s]+@sha256:[0-9a-f]{64}$"
               }
             }
+          },
+          "resources": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cpu": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "memory_gb": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "gpu": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "description": "Optional frozen container resource requests. Defaults are 2 CPUs, 4 GiB and no GPU; they grant no extra budget or hardware."
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "resources"
+              ]
+            },
+            "then": {
+              "properties": {
+                "isolation": {
+                  "properties": {
+                    "kind": {
+                      "const": "container"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "resources"
+              ],
+              "properties": {
+                "resources": {
+                  "required": [
+                    "gpu"
+                  ],
+                  "properties": {
+                    "gpu": {
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "isolation": {
+                  "properties": {
+                    "kind": {
+                      "const": "container"
+                    },
+                    "engine": {
+                      "const": "docker"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "research_phase": {

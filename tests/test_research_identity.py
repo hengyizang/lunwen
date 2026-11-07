@@ -58,6 +58,9 @@ class ResearchIdentityTests(unittest.TestCase):
         self.save()
 
     def final(self):
+        state=read(self.project/"state/run.json")
+        state.update(stage_index=5,stage="writing-and-review",gate="G5",writing_phases={"P01":"submission"})
+        write(self.project/"state/run.json",state)
         excerpt = "We conducted a " + self.identity["reporting_description"] + " using the explicitly specified protocol."
         manuscript = self.paper / "manuscript/main.tex"
         manuscript.parent.mkdir(parents=True, exist_ok=True)
@@ -121,6 +124,7 @@ class ResearchIdentityTests(unittest.TestCase):
         self.assertIn("Meta analysis must", " ".join(policy.validate(self.project, "P01", "G2")))
 
     def test_actual_review_category_is_rejected_not_relabelled(self):
+        self.final()
         for category in ["Review", "Systematic Review", "Survey", "Perspective"]:
             self.identity["venue_classifications"][0]["article_type"] = category
             contract = read(self.paper / "paper-contract.json")
@@ -130,19 +134,21 @@ class ResearchIdentityTests(unittest.TestCase):
             registry["papers"][0]["candidates"][0]["article_type"] = category
             write(self.project / "program/venue-candidates.json", registry)
             self.save()
-            self.assertIn("excludes", " ".join(policy.validate(self.project, "P01", "G2")))
+            self.assertIn("excludes", " ".join(policy.validate(self.project, "P01", "G5")))
 
     def test_renamed_category_missing_target_and_wrong_claims_block(self):
+        self.final()
         original = copy.deepcopy(self.identity)
         for change in [lambda: self.identity["venue_classifications"][0].update(article_type="Original Article"),
-                       lambda: self.identity["venue_classifications"].pop(),
+                       lambda: self.identity["venue_classifications"].pop(0),
                        lambda: self.identity.update(claim_ids=["OTHER"])]:
             self.identity = copy.deepcopy(original)
             change()
             self.save()
-            self.assertTrue(policy.validate(self.project, "P01", "G2"))
+            self.assertTrue(policy.validate(self.project, "P01", "G5"))
 
     def test_policy_requires_actual_current_official_source(self):
+        self.final()
         original = copy.deepcopy(self.identity)
         for change in [lambda row: row.update(official_url="https://unrelated.example/policy"),
                        lambda row: row.update(checked_at=(datetime.now(timezone.utc)-timedelta(days=31)).isoformat()),
@@ -153,7 +159,27 @@ class ResearchIdentityTests(unittest.TestCase):
             self.identity = copy.deepcopy(original)
             change(self.identity["venue_classifications"][0])
             self.save()
-            self.assertTrue(policy.validate(self.project, "P01", "G2"))
+            self.assertTrue(policy.validate(self.project, "P01", "G5"))
+
+    def test_venue_facts_can_wait_for_submission_without_rewriting_the_frozen_topic_contract(self):
+        self.identity["venue_classifications"]=[]
+        self.save()
+        contract=read(self.paper/"paper-contract.json")
+        contract["target_venues"]=[]
+        write(self.paper/"paper-contract.json",contract)
+        frozen=(self.paper/"paper-contract.json").read_bytes()
+        self.assertEqual(policy.validate(self.project,"P01","G2"),[])
+        self.assertEqual(policy.validate(self.project,"P01","G3"),[])
+        self.final()
+        self.assertTrue(policy.validate(self.project,"P01","G5"))
+        self.identity["venue_classifications"]=[{"venue_name":self.names[0],"article_type":"Research Article",
+            "official_url":"https://publisher.example/policy","checked_at":self.now,
+            "research_article_eligible":True,"design_eligible":True,
+            "rationale":"This selected synthetic venue permits the declared primary design; no real scientific eligibility is asserted.",
+            "evidence":{"path":"evidence/category.txt","sha256":sha(self.source),"start_line":1,"end_line":1,"quote":self.quote}}]
+        self.save()
+        self.assertEqual(policy.validate(self.project,"P01","G5"),[])
+        self.assertEqual((self.paper/"paper-contract.json").read_bytes(),frozen)
 
     def test_secondary_completion_without_real_attempt_is_blocked(self):
         self.secondary()

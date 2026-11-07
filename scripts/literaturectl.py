@@ -435,6 +435,16 @@ def execute_operation(project: Path, operation: dict, *, owner_authorization=Non
     if action == "literature_matrix":
         from scripts.literature_matrix import refresh
         return refresh(project, request_path=operation.get("request_file", "program/literature-extraction.json"))
+    if action == "scientific_judgment":
+        from scripts.literature_source_tasks import JUDGMENTS, refresh
+        if operation.get("task") not in JUDGMENTS:
+            raise ValueError("unknown scientific judgment task")
+        return refresh(project, operation["task"], operation["request_file"])
+    if action == "research_case":
+        from scripts import research_case
+        if "kind" in operation:
+            return research_case.export(project, operation["paper_id"], operation["kind"])
+        return research_case.build_packet(project, operation["paper_id"])
     if action == "literature_benchmark":
         from scripts.literature_benchmark import refresh
         return refresh(project, operation.get("request_file", "program/literature-benchmark.json"))

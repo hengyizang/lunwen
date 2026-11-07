@@ -18,7 +18,7 @@ continue_if, revise_if, stop_if and remaining_uncertainty. Compare the focal
 prediction with each of the two or more competing explanations. Rivals may
 share an outcome with one another. Different strings do not prove scientific
 identifiability; the actual design, assumptions and importance still need review.
-The original nearest-work, adjacent-field, search saturation, negative-result,
+The original nearest-work, adjacent-field, honest bounded stopping, negative-result,
 resource and human-G1 requirements remain.
 
 Old registers missing these fields must be completed from real material and
@@ -89,9 +89,10 @@ original story. Existing claim/argument records retain that evolution.
 
 The existing writer/remediation and fresh independent reviews examine importance,
 contribution, discriminating power, statistical suitability and conclusion strength.
-Use the existing categorical checklist and METHOD/STATISTICS/CONTRIBUTION views;
-record serious rejection reasons, evidence, resolutions and unresolved disagreements.
-Do not add paid reviewer agents for each perspective.
+Ordinary cycles use one current critique and repair only an actual actionable
+finding. Final submission uses domain/editorial/statistics critics with distinct
+source views, frozen independently before controller synthesis; no vote or
+acceptance probability. Record rejection reasons, evidence and disagreement.
 
 Abstract, introduction, discussion and conclusion must agree with the actual
 effects, uncertainty and tested populations. Nonsignificance is not equivalence;
@@ -103,7 +104,7 @@ Human expertise assesses scientific meaning; a checklist or model score cannot.
 
 config/scientific-reasoning.json supplies only the current stage/role text through
 research_methods.stage_context, already used by API and CLI planning, writing,
-remediation and both critics. The policy is validated and its hash appears in the
+problem-triggered remediation and the current critic/final panel. The policy is validated and its hash appears in the
 prompt. Changing it invalidates exact-request response caches. The critic receives
 rules, never the preferred verdict or previous review.
 

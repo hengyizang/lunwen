@@ -9,7 +9,9 @@ from pathlib import Path
 from urllib.parse import urlsplit
 from scripts.research_artifacts import path_in, read, bound_source, write, record, sha
 
-FIELDS = {"apc", "page_charges", "oa_policy", "waivers", "review_time", "submission_url", "ai_policy"}
+FIELDS = {"apc", "page_charges", "oa_policy", "waivers", "review_time", "submission_url"}
+FIT_FIELDS = ("scope", "editorial_interest", "article_type", "desk_reject_risks")
+FETCH_FIELDS = FIELDS | set(FIT_FIELDS)
 
 
 def fetch_sources(project: Path, fetcher=None) -> dict:
@@ -23,7 +25,9 @@ def fetch_sources(project: Path, fetcher=None) -> dict:
     requests = {}
     for row in dossier.get("journals", []):
         domains = set(row.get("official_domains", []))
-        for item in row.get("fields", {}).values():
+        for name, item in row.get("fields", {}).items():
+            if name not in FETCH_FIELDS:
+                continue  # Preserve legacy AI-policy notes without fetching or enforcing them.
             if item.get("url"):
                 url = canonical_url(item["url"])
                 if urlsplit(url).hostname not in domains:
@@ -96,8 +100,8 @@ def audit(project: Path, *, now: datetime | None = None) -> dict:
             if not official:
                 raise ValueError("journal official publisher domains are required")
             fields = row["fields"]
-            if not isinstance(fields, dict) or set(fields) != FIELDS:
-                raise ValueError("journal dossier must address every cost, OA, timing and policy field")
+            if not isinstance(fields, dict) or not FIELDS.issubset(fields):
+                raise ValueError("journal dossier must address every cost, OA, timing and submission field")
             normalized, unknown = {}, []
             for name in sorted(FIELDS):
                 item = fields[name]
@@ -114,9 +118,8 @@ def audit(project: Path, *, now: datetime | None = None) -> dict:
                 if url.scheme != "https" or url.hostname not in official or url.username or url.password:
                     raise ValueError("journal claims need an official HTTPS publisher source")
                 checked = datetime.fromisoformat(item["accessed_at"].replace("Z", "+00:00"))
-                expires = datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00"))
-                if checked.tzinfo is None or expires.tzinfo is None or checked > current + timedelta(minutes=5) or not checked < expires <= checked + timedelta(days=120) or current >= expires:
-                    raise ValueError("journal information is future-dated, expired or lacks a bounded refresh period")
+                if checked.tzinfo is None or checked > current + timedelta(minutes=5):
+                    raise ValueError("journal information needs its actual timezone-aware access date and cannot be future-dated")
                 if not item.get("quote") or item["quote"] not in path_in(project, source["path"]).read_text(encoding="utf-8"):
                     raise ValueError("journal value needs a matching quote in the preserved publisher source")
                 ledger = read(path_in(project, "evidence/journal-sources/index.json"))
@@ -143,7 +146,8 @@ def audit(project: Path, *, now: datetime | None = None) -> dict:
             errors.append(str(exc))
     return {"schema_version": "1.0", "status": "pass" if not errors else "fail", "journals": dossiers,
             "errors": errors, "input_sha256": sha(inputs), "registry_sha256": sha(registry),
-            "human_policy_review_required": True, "publisher_domain_authenticity_requires_human_review": True}
+            "human_policy_review_required": False, "publisher_domain_authenticity_requires_human_review": False,
+            "journal_ai_policy_evaluated": False, "fixed_source_age_limit_enforced": False}
 
 
 def refresh(project: Path) -> dict:
@@ -162,7 +166,7 @@ def validate_saved_report(project: Path, selected_venue_id: str | None = None) -
         saved = read(path_in(project, "program/journal-dossier-report.json"))
         errors = list(expected["errors"])
         if saved != expected:
-            errors.append("journal dossier is stale or differs from a fresh source/expiry check")
+            errors.append("journal dossier is stale or differs from a fresh source check")
         if selected_venue_id is not None and selected_venue_id not in {j["venue_id"] for j in expected["journals"]}:
             errors.append("selected venue lacks its dated journal dossier")
         return errors

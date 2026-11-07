@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import math
 from typing import Any
 
 
@@ -40,7 +41,7 @@ def _number(
     if not isinstance(value, (int, float)) or isinstance(value, bool):
         errors.append(f"{field} must be a number")
         return
-    if value < minimum or (maximum is not None and value > maximum):
+    if not math.isfinite(value) or value < minimum or (maximum is not None and value > maximum):
         upper = f" and <= {maximum:g}" if maximum is not None else ""
         errors.append(f"{field} must be >= {minimum:g}{upper}")
 
@@ -152,3 +153,31 @@ def validate_constraints(value: dict[str, Any]) -> list[str]:
     if value.get("human_review_required") is not True:
         errors.append("human_review_required must be true")
     return errors
+
+
+def guidance(value: dict[str, Any]) -> dict[str, Any]:
+    """Ask for missing owner context without supplying a domain or career plan."""
+    groups = (
+        ("research", ("research_goal", "preferred_domains"),
+         "What broad field and consequential problem would you like to investigate?"),
+        ("background", ("researcher_background", "available_skills"),
+         "What can you already do, and what methods would you need to learn?"),
+        ("resources", ("equipment", "data_constraint", "cloud_compute_budget_usd"),
+         "Which lawful data and compute resources are available without a laboratory?"),
+        ("time_and_cost", ("target_submission_ready_date", "model_api_budget_cny"),
+         "What timeline and cumulative spending totals should the project use?"),
+        ("preferences", ("candidate_application_routes", "ranking_weights"),
+         "Which doctoral routes matter to you, and how do you weigh the direction-selection criteria?"),
+    )
+    def missing(field):
+        item = value.get(field)
+        if field == "target_submission_ready_date" and value.get("time_horizon_years") is not None:
+            return False
+        if field == "model_api_budget_cny" and value.get("cash_budget_usd") is not None:
+            return False
+        return item is None or item == "" or item == [] or (isinstance(item, dict) and any(v is None for v in item.values()))
+    return {"questions": [{"group": name, "question": question,
+                           "missing_fields": [field for field in fields if missing(field)]}
+                          for name, fields, question in groups if any(missing(field) for field in fields)],
+            "domain_or_application_route_assumed": False,
+            "topic_decisions": "The owner chooses the doctoral topic at G1 and each paper topic at G2."}

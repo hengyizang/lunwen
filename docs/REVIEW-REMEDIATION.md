@@ -5,22 +5,22 @@
 
 ## 适用政策
 
-- 正式博士组合为六篇，同一博士问题下每篇有独立价值；至少三篇当前 JCR Q1，
-  其余最低 Q2，且 IF >1。失败、阴性结果或替换提案不自动减少篇数或降低期刊目标。
+- 正式组合为六篇，同一博士问题下每篇有独立价值；既有 ≥3 Q1、其余 Q2 和 IF 目标作为规划观测，
+  不阻断科研或打包。期刊匹配使用真实范围/文章类型/受众依据，分区未知如实保留，不擅改已有目标刊。
 - 人工只决定 G1 博士选题和 G2 每篇选题。其他阶段保留真实、可追溯的自动检查。
 - 费用计算和既有项目累计总额度继续适用；所有尝试均计入，不新增单篇上限、
   逐次付费确认、人工账务门禁或固定追加档位。[现行费用政策](TOTAL-COST-POLICY.md)。
-- Claude 保持只读规划与独立审查，OpenAI/Codex 写入持久科研材料；既有初审、
-  作者逐项处置、终审和来源记录继续使用，不另设三模型裁决流水线。
+- Claude 保持只读规划/批评，OpenAI/Codex 写入科研材料。普通三次调用，实际问题才修订复审；
+  最终投稿三家族互盲来源视图冻结后综合，不投票。A 阻断、B 绑定快照、C 警告见 workflow。
 
 ## 当前记录
 
 | 记录 | 变化与证据边界 |
 | --- | --- |
 | `program/novelty-claim-matrix.json` 1.1 | `prior_art_comparisons` 将本候选与各项最近工作逐项比较，绑定真实检索、文献登记及原文锚点；未知、重合和异议不能靠打分消除 |
-| 现有独立模型审查 | `novelty_assessment` 保存 `claim_id`、`inspected_work_ids`、`decision`、`rationale`、`remaining_uncertainty`，G1/G2/G5 复核当前矩阵及实际初审、终审 |
+| 现有独立模型审查 | `novelty_assessment` 保存 `claim_id`、`inspected_work_ids`、`decision`、`rationale`、`remaining_uncertainty`，G1/G2/G5 使用当前独立判断及最终互盲 panel，旧双审记录保留历史 |
 | `search_saturation` | `stopping_rule`、`retrieval_dispositions`、`search_rounds` 记录真实新增、筛选和停止原因；检索窗口不冒充完整语料，新 DOI 不直接等于重要近作 |
-| `program/quality-G*.json` 1.2 | 用 `assessments` 逐项说明 `satisfied`、`unresolved` 或 `failed`、理由及 `source_anchors`，不再凭 8/8.5 分的自评分通过正式门禁 |
+| `program/quality-G*.json` 1.2 | 用 `assessments` 逐项说明 `satisfied`、`unresolved` 或 `failed`、理由及 `source_anchors`，A 核心事实失败阻断；8/8.5 分、迁移及非核心观察为 C 警告，分数不证明质量 |
 | `topic-shortlist.selection_decision` | `chosen_candidate_id`、`strongest_rival_candidate_id`、`why_selected_over_rival`、`change_of_mind_evidence` 汇总裁决，复用已有候选比较 |
 | `selected_direction_cloud_feasibility.feasibility_evidence` | `data_access`、`research_rights`、`compute_cost` 保留可定位来源；`pilot` 区分 `not_run`、`unknown`、`executed`，执行声明必须有回执 |
 | 主、副课题及单篇契约 `negative_result_plan` | `informative_if_unsupported`、`precision_limitations`、`stop_rule`、`claim_boundary` 预先说明信息价值和边界，不承诺阴性结果一定可发表 |

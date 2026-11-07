@@ -1,4 +1,4 @@
-"""Integration checks for complete editorial coverage and controlled cleanup."""
+"""Integration checks for optional editorial observations and controlled cleanup."""
 from __future__ import annotations
 
 import hashlib
@@ -55,7 +55,7 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertTrue(any("humanizer_review" in error for error in errors))
 
     @patch("scripts.research_phase.writing_phase",return_value="submission")
-    def test_both_writer_paths_receive_full_skills_in_submission_phase(self, phase):
+    def test_both_writer_paths_receive_optional_observations_in_submission_phase(self, phase):
         api_prompt = api_orchestrator.writer_prompt("missing-project", "writing-and-review", "")
         api_remediation = api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}")
         state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
@@ -66,6 +66,9 @@ class EditorialIntegrationTests(unittest.TestCase):
         for value in (api_prompt, api_remediation, cli_prompt, cli_remediation, api_critic, cli_critic):
             for code in ("H01", "H26", "AD01", "AD08"):
                 self.assertIn(code, value)
+            self.assertIn("Empty or partial observation lists are valid", value)
+            self.assertNotIn("Apply every CFH", value)
+            self.assertNotIn("as the two editorial passes", value)
         for value in (api_prompt, api_remediation, cli_prompt, cli_remediation):
             self.assertIn("watermark_cleanup", value)
         for value in (api_critic, cli_critic):
@@ -73,10 +76,12 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertNotIn("In remediation notes", value)
         self.assertNotIn("H26", api_orchestrator.editorial_prompt_contract("topic-intelligence"))
 
-    def test_every_pattern_needs_its_own_substantive_disposition(self):
+    def test_optional_observation_records_validate_only_supplied_format(self):
         notes = complete_notes()
         api_orchestrator.validate_editorial_dispositions(notes, "writing-and-review")
-        for bad in (notes[:-1], notes[:-9], notes + [notes[0]], ["fixed: H01 done"] + notes[1:]):
+        for accepted in ([], notes[:-1], notes[:-9], ["fixed: H01 Methods 2: typo."]):
+            api_orchestrator.validate_editorial_dispositions(accepted, "writing-and-review")
+        for bad in (notes + [notes[0]], ["fixed: H99 Invented ID"], ["fixed: AD01"]):
             with self.subTest(notes=bad):
                 with self.assertRaises(ValueError):
                     api_orchestrator.validate_editorial_dispositions(bad, "writing-and-review")
@@ -102,10 +107,8 @@ class EditorialIntegrationTests(unittest.TestCase):
                     self.assertIn(instruction, prompt.lower())
                 self.assertNotIn("Lead the abstract and conclusion with the preregistered primary finding", prompt)
                 self.assertNotIn("secret-preferred-verdict", prompt)
-        # Choosing a focal story does not waive per-group dispositions or independent review.
-        api_orchestrator.validate_editorial_dispositions(complete_notes(), "writing-and-review")
-        with self.assertRaises(ValueError):
-            api_orchestrator.validate_editorial_dispositions(complete_notes()[:-1], "writing-and-review")
+        # Narrative quality and independent science review do not require style scorecards.
+        api_orchestrator.validate_editorial_dispositions([], "writing-and-review")
 
     def test_protected_signals_reach_api_and_cli_remediation_with_honest_bounds(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):

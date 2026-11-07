@@ -5,6 +5,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+/var/cache/fontconfig/
 .DS_Store
 Thumbs.db
 .env

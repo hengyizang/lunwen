@@ -3,6 +3,7 @@ name = "doctoral-research-os"
 version = "2.3.0"
 description = "API-first, human-gated Doctoral Research OS for topic selection, experiments, writing, review, venues and manual submission"
 requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.23,<5"]
 
 [project.optional-dependencies]
 figures = [

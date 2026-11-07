@@ -14,7 +14,7 @@ screening, follow docs/INNOVATION-SCREENING.md and the required
 innovation_screening section of schemas/research-hypotheses.schema.json.
 Keep explicit assumptions, all candidate-pair differences/shared failure risks,
 source gaps, data exposure, original rounds and candidate dispositions. Reuse
-existing initial/final independent critics and writer decisions; a completed
+current independent critique and final submission panel and writer decisions; a completed
 record or weighted ranking never establishes novelty or selects a topic.
 Pick a method suited to the obstacle; do not run every creative technique or
 add another paid reviewer loop. Multiple model samples are not expert consensus.

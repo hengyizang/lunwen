@@ -2,7 +2,7 @@
 """Human-gated Doctoral Research OS state manager with publication-quality floors."""
 from __future__ import annotations
 import argparse,csv,hashlib,json,os,re,sys,tempfile
-from datetime import datetime,timedelta,timezone
+from datetime import datetime,timezone
 from pathlib import Path
 from typing import Any,Iterable
 ROOT=Path(__file__).resolve().parents[1]; PROJECTS_ROOT=ROOT/"projects"; DEFAULTS_PATH=ROOT/"config/defaults.json"
@@ -52,13 +52,6 @@ def load_nonempty_json(path,errors):
     except json.JSONDecodeError as exc:errors.append(f"invalid JSON: {path} ({exc})");return None
     if not isinstance(value,dict):errors.append(f"expected JSON object: {path}");return None
     return value
-def require_recent_timestamp(value,field,label,errors,max_days):
-    raw=value.get(field) if isinstance(value,dict) else None
-    try:stamp=datetime.fromisoformat(str(raw).replace("Z","+00:00"))
-    except ValueError:errors.append(f"{label} {field} must be ISO-8601 with timezone");return
-    if stamp.tzinfo is None:errors.append(f"{label} {field} must include timezone");return
-    age=datetime.now(timezone.utc)-stamp.astimezone(timezone.utc)
-    if age < -timedelta(days=1) or age > timedelta(days=max_days):errors.append(f"{label} {field} must be within {max_days} days")
 def jsonl_objects(path,errors):
     if not nonempty(path):errors.append(f"missing or empty: {path}");return []
     out=[]
@@ -70,8 +63,11 @@ def jsonl_objects(path,errors):
         out.append(v)
     return out
 def audit_document_valid(path,audit,errors,final=False):
+    from scripts.literature_source_tasks import RESPONSE_FIELDS,validate_response_fields
     expected={"verdict","fatal_findings","major_findings","minor_findings","missing_evidence","remediation_steps","uncertainty"};valid=True
-    if not expected<=set(audit) or set(audit)-expected-{"novelty_assessment"}:errors.append(f"{path.name}: audit must contain the required fields and optional novelty_assessment only");valid=False
+    if not expected<=set(audit) or set(audit)-expected-{"novelty_assessment"}-RESPONSE_FIELDS:errors.append(f"{path.name}: audit contains missing required or unsupported fields");valid=False
+    try:validate_response_fields(audit)
+    except ValueError as exc:errors.append(f"{path.name}: {exc}");valid=False
     if audit.get("verdict") not in {"block","revise","pass-with-conditions"}:errors.append(f"{path.name}: invalid verdict");valid=False
     for field in expected-{"verdict"}:
         value=audit.get(field)
@@ -80,18 +76,23 @@ def audit_document_valid(path,audit,errors,final=False):
         blockers=any(audit.get(field) for field in ("fatal_findings","major_findings","missing_evidence","remediation_steps"))
         if audit.get("verdict")!="pass-with-conditions" or blockers:errors.append(f"{path.name}: final audit must pass with no fatal/major findings, missing evidence or remediation steps");valid=False
     return valid
-def independent_audit_errors(project,gate,errors,paper_id=None):
+def independent_audit_errors(project,gate,errors,paper_id=None,warnings=None):
     from scripts.paper_execution import enabled, selected
     if enabled(project) and gate in {"G3", "G4"}:paper_id=selected(project)
     from scripts.review_receipts import validate_gate
-    errors.extend(validate_gate(project,gate,paper_id))
-    if not nonempty(project/"reviews"/"decision-log.md"):errors.append("reviews/decision-log.md must disposition independent findings")
+    diagnostics=validate_gate(project,gate,paper_id)
+    if not nonempty(project/"reviews"/"decision-log.md"):diagnostics.append("reviews/decision-log.md must disposition independent findings")
+    if warnings is not None:warnings.extend("stage review observation: "+issue for issue in diagnostics)
 def quality_path(project,gate,paper_id=None):
     return {"G1":project/"program"/"quality-G1.json","G2":project/"papers"/str(paper_id)/"quality-G2.json","G3":experiment_path(project, 'experiments/quality-G3.json'),"G4":experiment_path(project, 'reports/quality-G4.json'),"G5":project/"papers"/str(paper_id)/"reviews"/"quality-G5.json"}[gate]
-def quality_errors(project,gate,errors,paper_id=None):
+def quality_errors(project,gate,errors,paper_id=None,warnings=None):
     try:from scripts.quality_gate import validate_file
     except ImportError as exc:errors.append(f"quality gate validator unavailable: {exc}");return
-    path=quality_path(project,gate,paper_id);errors.extend(f"{path}: {e}" for e in validate_file(path,gate,project=project,require_facts=True))
+    path=quality_path(project,gate,paper_id)
+    if not path.is_file():
+        if warnings is not None:warnings.append(f"{path}: no optional quality assessment recorded")
+        return
+    errors.extend(f"{path}: {e}" for e in validate_file(path,gate,project=project,require_facts=True,warnings=warnings))
 
 def summarize_gate_errors(errors):
     """Group repeated checks for presentation without changing gate authority.
@@ -117,7 +118,7 @@ def summarize_gate_errors(errors):
         ("claim_support", ("claim-evidence", "claim evidence", "critical test", "unsupported claim"),
          "主张与区分性证据尚未对应", "定位受影响的主张、竞争解释和实际结果，补证据或收窄结论。"),
         ("independent_review", ("independent review", "independent audit"),
-         "当前材料仍需独立审查", "针对当前科学问题完成独立初审、逐项决定和终审。"),
+         "当前材料仍需独立审查", "完成当前材料的独立审查；发现实质问题后修复并复查，投稿前完成三视角互盲审查。"),
         ("submission_preparation", ("submission preparation", "academic-style", "venue-compliance", "pre-submission criteria"),
          "投稿准备尚未完成", "科学写作完成后集中处理投稿格式、风格、期刊要求和打包。"),
     )
@@ -132,7 +133,51 @@ def summarize_gate_errors(errors):
             group["checks"].append(message)
     return list(groups.values())
 
-def gate_errors(slug,gate):
+def _observe(warnings, label, check):
+    if warnings is None:return
+    try:warnings.extend(label+": "+str(issue) for issue in check())
+    except (OSError,ValueError,RuntimeError,KeyError,TypeError,ImportError) as exc:warnings.append(label+": "+str(exc))
+
+
+def paper_scientific_errors(project, pid):
+    """A: factual evidence and preservation checks shared by both writing phases."""
+    from scripts import manuscript_audit,ref_verify_adapter,statistical_reporting,revision_integrity,figure_provenance,manuscript_hygiene,literature_source_tasks
+    paper=project/"papers"/pid;errors=[]
+    for label,check in (
+        ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
+        ("citation claims",lambda:ref_verify_adapter.validate_saved_report(paper)),
+        ("source evidence conflicts",lambda:literature_source_tasks.integrity_errors(project,pid)),
+        ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
+        ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False)),
+        ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper)),
+        ("preserved originals",lambda:manuscript_hygiene.integrity_errors(project,pid))):
+        try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
+        except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:errors.append(f"{pid} {label}: {exc}")
+    if not any(nonempty(paper/"manuscript"/name) for name in ("main.tex","main.docx")):
+        errors.append(f"{pid} requires a scientific manuscript")
+    return errors
+
+
+def paper_observations(project,pid,warnings):
+    """C: diagnostics never acquire data, call a model or grant scientific approval."""
+    if warnings is None:return
+    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,revision_trace,revision_ledger,docx_revision,rebuttal_triage
+    paper=project/"papers"/pid
+    for label,check in (
+        ("academic style",lambda:academic_style.validate_saved_audit(paper)),
+        ("manuscript hygiene",lambda:manuscript_hygiene.validate_saved_report(project,pid)),
+        ("language observation",lambda:manuscript_language.analyze_submission(paper).get("errors",[])),
+        ("watermark observation",lambda:statistical_watermarks.validate_saved_report(project,pid)),
+        ("pre-submission suggestions",lambda:pre_submission_review.validate_saved_report(paper)),
+        ("figure layout",lambda:figure_layout.validate_saved_figures(paper)),
+        ("revision trace",lambda:revision_trace.validate_saved_report(paper)),
+        ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
+        ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid)),
+        ("concern cards",lambda:rebuttal_triage.validate_saved_report(paper))):
+        _observe(warnings,f"{pid} {label}",check)
+
+
+def gate_errors(slug,gate,*,warnings=None):
     project=project_dir(slug);errors=[]
     from scripts.paper_execution import papers as selected_papers
     if gate is None:return errors
@@ -230,23 +275,25 @@ def gate_errors(slug,gate):
             from scripts.research_candidates import validate_saved_register
             errors.extend("specific-topic hypotheses: " + issue for issue in validate_saved_register(project))
         except ImportError as exc:errors.append(f"hypothesis validator unavailable: {exc}")
-        quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
+        quality_errors(project,gate,errors,warnings=warnings);independent_audit_errors(project,gate,errors,warnings=warnings);return errors
     if gate=="G2":
         paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors);state=read_json(state_path(slug));dirs=sorted((project/"papers").glob("P[0-9][0-9]"))
-        venue_registry=load_nonempty_json(project/"program"/"venue-candidates.json",errors);venue_names_by_paper={}
+        venue_observations=[]
+        venue_registry=load_nonempty_json(project/"program"/"venue-candidates.json",venue_observations);venue_names_by_paper={}
         if venue_registry:
             try:
                 from scripts.venue_candidates import validate_registry
-                errors.extend(f"program/venue-candidates.json: {x}" for x in validate_registry(project,venue_registry))
+                venue_observations.extend(f"program/venue-candidates.json: {x}" for x in validate_registry(project,venue_registry))
                 for item in venue_registry.get("papers",[]) if isinstance(venue_registry.get("papers"),list) else []:
                     if isinstance(item,dict) and item.get("paper_id"):
                         values=item.get("candidates",[]);values=values if isinstance(values,list) else []
                         venue_names_by_paper[str(item["paper_id"])]=set(str(candidate.get("name")) for candidate in values if isinstance(candidate,dict) and candidate.get("name"))
-            except ImportError as exc:errors.append(f"venue candidate validator unavailable: {exc}")
+            except ImportError as exc:venue_observations.append(f"venue candidate validator unavailable: {exc}")
         try:
             from scripts.journal_screening import validate_saved_report
-            errors.extend(f"program/journal-screening.json: {x}" for x in validate_saved_report(project))
-        except ImportError as exc:errors.append(f"journal screening validator unavailable: {exc}")
+            venue_observations.extend(f"program/journal-screening.json: {x}" for x in validate_saved_report(project))
+        except ImportError as exc:venue_observations.append(f"journal screening validator unavailable: {exc}")
+        if warnings is not None:warnings.extend(venue_observations)
         if len(dirs)!=state.get("paper_count"):errors.append(f"expected exactly {state.get('paper_count')} paper directories, found {len(dirs)}")
         originality=load_nonempty_json(project/"program"/"originality-audit.json",errors)
         prior_work_values=(originality or {}).get("closest_prior_work",[]);prior_work_values=prior_work_values if isinstance(prior_work_values,list) else []
@@ -273,10 +320,10 @@ def gate_errors(slug,gate):
                 errors.extend(f"{pd.name}/paper-contract.json: {x}" for x in validate_paper_contract(c,pd.name,study_route=route(project,pd.name)))
             if c:
                 contract_target=str(c.get("target_jcr_quartile") or "").upper()
-                if mapped_targets.get(pd.name)!=contract_target:errors.append(f"{pd.name} target JCR quartile must match program/paper-map.json")
+                if warnings is not None and mapped_targets.get(pd.name)!=contract_target:warnings.append(f"{pd.name} planning target JCR quartile differs from program/paper-map.json")
                 contract_venue_values=c.get("target_venues",[]);contract_venue_values=contract_venue_values if isinstance(contract_venue_values,list) else []
                 contract_venue_names=set(str(item.get("name")) for item in contract_venue_values if isinstance(item,dict) and item.get("name"))
-                if venue_names_by_paper.get(pd.name,set())!=contract_venue_names:errors.append(f"{pd.name} target venues must match program/venue-candidates.json")
+                if warnings is not None and venue_names_by_paper.get(pd.name,set())!=contract_venue_names:warnings.append(f"{pd.name} provisional target venues differ from program/venue-candidates.json")
                 boundary=c.get("originality_boundary") if isinstance(c.get("originality_boundary"),dict) else {};independence=c.get("independence") if isinstance(c.get("independence"),dict) else {}
                 referenced_values=boundary.get("closest_prior_work_ids",[]);referenced_values=referenced_values if isinstance(referenced_values,list) else []
                 referenced=set(str(item) for item in referenced_values);missing=sorted(referenced-prior_work_ids)
@@ -284,14 +331,14 @@ def gate_errors(slug,gate):
                 contract_claim_values=independence.get("unique_claim_ids",[]);contract_claim_values=contract_claim_values if isinstance(contract_claim_values,list) else []
                 contract_claims=set(str(item) for item in contract_claim_values)
                 if mapped_claims.get(pd.name,set())!=contract_claims:errors.append(f"{pd.name} unique claim IDs must match program/paper-map.json")
-                quality_errors(project,gate,errors,pd.name)
-        independent_audit_errors(project,gate,errors);return errors
+                quality_errors(project,gate,errors,pd.name,warnings=warnings)
+        independent_audit_errors(project,gate,errors,warnings=warnings);return errors
     if gate=="G3":
         from scripts.research_phase import exploratory, exposure_errors
         if exploratory(project):
             from scripts.research_quality import validate_g3_quality
             errors.extend(validate_g3_quality(project))
-            independent_audit_errors(project,gate,errors)
+            independent_audit_errors(project,gate,errors,warnings=warnings)
             return errors
         errors.extend(exposure_errors(project))
         from scripts.paper_execution import dataset_snapshot
@@ -391,13 +438,13 @@ def gate_errors(slug,gate):
             errors.extend(f"research quality: {x}" for x in validate_g3_quality(project))
         except ImportError as exc:errors.append(f"research-quality validator unavailable: {exc}")
         except ResearchQualityError as exc:errors.append(f"research-quality evidence is invalid: {exc}")
-        quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
+        quality_errors(project,gate,errors,warnings=warnings);independent_audit_errors(project,gate,errors,warnings=warnings);return errors
     if gate=="G4":
         from scripts.research_phase import exploratory
         if exploratory(project):
             from scripts.research_quality import validate_g4_quality
             errors.extend(validate_g4_quality(project))
-            independent_audit_errors(project,gate,errors)
+            independent_audit_errors(project,gate,errors,warnings=warnings)
             return errors
         registry=jsonl_objects(experiment_path(project, 'experiments/registry.jsonl'),errors)
         if not registry:errors.append("at least one experiment registry entry is required")
@@ -414,218 +461,37 @@ def gate_errors(slug,gate):
             errors.extend(f"research quality: {x}" for x in validate_g4_quality(project))
         except ImportError as exc:errors.append(f"research-quality validator unavailable: {exc}")
         except ResearchQualityError as exc:errors.append(f"research-quality evidence is invalid: {exc}")
-        quality_errors(project,gate,errors);independent_audit_errors(project,gate,errors);return errors
+        quality_errors(project,gate,errors,warnings=warnings);independent_audit_errors(project,gate,errors,warnings=warnings);return errors
     if gate=="G5":
         pid=active_paper_id(slug);paper=project/"papers"/pid
-        from scripts.research_phase import exploratory
+        from scripts.research_phase import exploratory,requires_submission,SUBMISSION_PENDING
         try:
             prereg=read_json(paper/"preregistration.json") if (paper/"preregistration.json").is_file() else {}
             if exploratory(project,pid) or prereg.get("research_phase")=="exploratory":
-                errors.append(f"{pid}: exploratory observations cannot enter G5; return to a reviewed confirmatory G3 protocol")
-                return errors
-        except (OSError,ValueError,KeyError,TypeError) as exc:
-            errors.append(f"{pid} research phase: {exc}")
-            return errors
-        from scripts.research_phase import requires_submission,SUBMISSION_PENDING
-        submission=requires_submission(project,paper_id=pid)
+                return errors+[f"{pid}: exploratory observations cannot enter G5; return to a reviewed confirmatory G3 protocol"]
+        except (OSError,ValueError,KeyError,TypeError) as exc:return errors+[f"{pid} research phase: {exc}"]
         from scripts.supplemental_experiments import internal_errors
-        errors.extend("internal follow-up: "+e for e in internal_errors(project,pid))
-        if submission:
-            from scripts.submission_package import validate_selected_venue
-            errors.extend(validate_selected_venue(project,pid))
+        errors.extend("internal follow-up: "+issue for issue in internal_errors(project,pid))
         from scripts import study_routes
-        if study_routes.route(project,pid)!="empirical":
-            errors.extend(study_routes.validation_errors(project,pid))
-            if submission:errors.extend(study_routes.export_errors(project,pid))
-        if not submission:
-            from scripts import manuscript_audit,ref_verify_adapter,statistical_reporting,revision_integrity,revision_ledger,figure_provenance
-            for label,check in (
-                ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
-                ("citation claims",lambda:ref_verify_adapter.validate_saved_report(paper)),
-                ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
-                ("revision integrity",lambda:revision_integrity.validate_saved_report(paper)),
-                ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
-                ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper))):
-                try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
-                except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:errors.append(f"{pid} {label}: {exc}")
-            manuscripts=[p for p in (paper/"manuscript/main.tex",paper/"manuscript/main.docx") if nonempty(p)]
-            if not manuscripts:errors.append(f"{pid} requires a scientific manuscript")
-            citation=load_nonempty_json(paper/"reviews/citation-audit.json",errors)
-            if citation:
-                from scripts.citation_audit import validate_provider_identities,manuscript_digest
-                bibliography=paper/"manuscript/references.bib"
-                if citation.get("status")!="pass":errors.append(f"{pid} citation audit must pass")
-                if not nonempty(bibliography) or citation.get("bibliography_sha256")!=file_sha256(bibliography):errors.append(f"{pid} citation audit is stale for references.bib")
-                else:errors.extend(f"{pid} citation identity evidence: {issue}" for issue in validate_provider_identities(bibliography,citation))
-                if manuscripts and citation.get("manuscript_sha256")!=manuscript_digest(manuscripts[0]):errors.append(f"{pid} citation audit is stale for the scientific manuscript")
-            independent_audit_errors(project,gate,errors,pid)
-            errors.append(SUBMISSION_PENDING)
-            return errors
-        paper_map=load_nonempty_json(project/"program"/"paper-map.json",errors) or {}
-        map_portfolio=paper_map.get("papers",[]) if isinstance(paper_map.get("papers"),list) else []
-        map_targets={str(item.get("paper_id")):str(item.get("target_jcr_quartile") or "").upper() for item in map_portfolio if isinstance(item,dict) and item.get("paper_id")}
-        portfolio=[]
-        for portfolio_paper in sorted((project/"papers").glob("P[0-9][0-9]")):
-            contract=load_nonempty_json(portfolio_paper/"paper-contract.json",errors)
-            if contract:
-                target=str(contract.get("target_jcr_quartile") or "").upper()
-                portfolio.append({"paper_id":portfolio_paper.name,"target_jcr_quartile":target})
-                if map_targets.get(portfolio_paper.name)!=target:errors.append(f"{portfolio_paper.name} target JCR quartile must match program/paper-map.json")
-        try:
-            from scripts.venue_policy import validate_portfolio
+        if study_routes.route(project,pid)!="empirical":errors.extend(study_routes.validation_errors(project,pid))
+        errors.extend(paper_scientific_errors(project,pid))
+        paper_observations(project,pid,warnings)
+        if requires_submission(project,paper_id=pid):
+            from scripts.submission_package import submission_checks,submission_check_binding
             state=read_json(state_path(slug))
-            errors.extend(f"venue portfolio: {x}" for x in validate_portfolio(portfolio,expected_count=state.get("paper_count")))
-            errors.extend(f"paper-map venue portfolio: {x}" for x in validate_portfolio(map_portfolio,expected_count=state.get("paper_count")))
-        except ImportError as exc:errors.append(f"venue portfolio validator unavailable: {exc}")
-        try:
-            from scripts.output_provenance import ProvenanceError,require_final_origins
-            final_roots=(paper/"manuscript",paper/"figures",paper/"tables",paper/"supplement",paper/"submission-materials")
-            final_files=[path for root in final_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and not path.is_symlink()]
-            if nonempty(paper/"disclosures.json"):final_files.append(paper/"disclosures.json")
-            require_final_origins(project,final_files)
-        except ImportError as exc:errors.append(f"output provenance validator unavailable: {exc}")
-        except ProvenanceError as exc:errors.append(str(exc))
-        manuscripts=[p for p in (paper/"manuscript"/"main.tex",paper/"manuscript"/"main.docx") if nonempty(p)]
-        if not manuscripts:errors.append(f"{pid} requires manuscript/main.tex or manuscript/main.docx")
-        else:
-            try:
-                from scripts.manuscript_language import analyze_submission
-                language=analyze_submission(paper)
-                errors.extend(f"{pid} English submission check: {x}" for x in language.get("errors",[]))
-            except (ImportError,ValueError) as exc:errors.append(f"{pid} English manuscript validator failed: {exc}")
-        try:
-            from scripts.academic_style import validate_saved_audit
-            errors.extend(f"{pid} academic style: {x}" for x in validate_saved_audit(paper))
-        except ImportError as exc:errors.append(f"{pid} academic style validator unavailable: {exc}")
-        try:
-            from scripts.manuscript_hygiene import validate_saved_report as validate_hygiene
-            errors.extend(f"{pid} automatic manuscript hygiene: {x}" for x in validate_hygiene(project,pid))
-        except ImportError as exc:errors.append(f"{pid} manuscript hygiene validator unavailable: {exc}")
-        from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
-        for label,module in (("real reviewer rounds",reviewer_rounds),("journal AI disclosure",publication_disclosure),("configured statistical watermarks",statistical_watermarks)):
-            errors.extend(f"{pid} {label}: {x}" for x in module.validate_saved_report(project,pid))
-        try:
-            from scripts.manuscript_audit import validate_saved_report as validate_paper_facts
-            errors.extend(f"{pid} paper-facts: {x}" for x in validate_paper_facts(paper))
-        except ImportError as exc:errors.append(f"{pid} paper-facts validator unavailable: {exc}")
-        try:
-            from scripts.pre_submission_review import validate_saved_report as validate_submission_review
-            errors.extend(f"{pid} pre-submission criteria: {x}" for x in validate_submission_review(paper))
-            from scripts.figure_layout import validate_saved_figures
-            errors.extend(f"{pid} rendered figure layout: {x}" for x in validate_saved_figures(paper))
-        except ImportError as exc:errors.append(f"{pid} installed research-method validator unavailable: {exc}")
-        try:
-            from scripts.rebuttal_triage import validate_saved_report as validate_concern_cards
-            errors.extend(f"{pid} concern cards: {x}" for x in validate_concern_cards(paper))
-        except ImportError as exc:errors.append(f"{pid} concern-card validator unavailable: {exc}")
-        try:
-            from scripts.manuscript_docx import validate_saved_report as validate_docx_build
-            errors.extend(f"{pid} DOCX build: {x}" for x in validate_docx_build(paper))
-        except ImportError as exc:errors.append(f"{pid} DOCX validator unavailable: {exc}")
-        try:
-            from scripts.ref_verify_adapter import validate_saved_report as validate_ref_verify
-            errors.extend(f"{pid} citation claim verification: {x}" for x in validate_ref_verify(paper))
-        except ImportError as exc:errors.append(f"{pid} ref-verify validator unavailable: {exc}")
-        try:
-            from scripts.revision_trace import validate_saved_report as validate_revision_trace
-            errors.extend(f"{pid} revision trace: {x}" for x in validate_revision_trace(paper))
-        except ImportError as exc:errors.append(f"{pid} revision trace validator unavailable: {exc}")
-        try:
-            from scripts.revision_integrity import validate_saved_report as validate_revision_integrity
-            errors.extend(f"{pid} revision integrity: {x}" for x in validate_revision_integrity(paper))
-        except ImportError as exc:errors.append(f"{pid} revision integrity validator unavailable: {exc}")
-        try:
-            from scripts.reporting_checklist import validate_saved_report as validate_reporting_checklist
-            errors.extend(f"{pid} reporting guideline: {x}" for x in validate_reporting_checklist(paper))
-        except ImportError as exc:errors.append(f"{pid} reporting checklist validator unavailable: {exc}")
-        try:
-            from scripts.statistical_reporting import validate_saved_report as validate_statistical_reporting
-            errors.extend(f"{pid} statistical reporting: {x}" for x in validate_statistical_reporting(project,pid))
-            from scripts.docx_revision import validate_saved_report as validate_word_revision
-            errors.extend(f"{pid} Word revisions: {x}" for x in validate_word_revision(project,pid))
-            from scripts.revision_ledger import validate_saved_report as validate_revision_ledger
-            errors.extend(f"{pid} edit ledger: {x}" for x in validate_revision_ledger(project,pid,require_when_changed=True))
-        except ImportError as exc:errors.append(f"{pid} statistical/Word validator unavailable: {exc}")
-        if (project/"program/research-support.json").exists():
-            from scripts.research_support import validate_saved_report as validate_support
-            errors.extend(f"research support: {x}" for x in validate_support(project))
-        if (project/"program/review-packets.json").exists():
-            from scripts.review_packets import validate_gate_reviews
-            errors.extend(f"review packets: {x}" for x in validate_gate_reviews(project,pid))
-        venue=load_nonempty_json(paper/"venue.json",errors)
-        try:
-            from scripts.journal_dossier import validate_saved_report as validate_dossier
-            errors.extend(f"{pid} journal dossier: {x}" for x in validate_dossier(project,venue.get("venue_id") if venue else None))
-        except ImportError as exc:errors.append(f"{pid} journal dossier validator unavailable: {exc}")
-        if venue and not venue.get("g5_reverified_at"):errors.append(f"{pid}/venue.json needs g5_reverified_at")
-        if venue and venue.get("g5_reverified_at"):require_recent_timestamp(venue,"g5_reverified_at",f"{pid}/venue.json",errors,120)
-        jcr=load_nonempty_json(paper/"jcr-verification.json",errors)
-        if jcr:
-            try:
-                from scripts.jcr_verify import JcrVerificationError,verify
-                from scripts.venue_policy import target_from_contract
-                contract=load_nonempty_json(paper/"paper-contract.json",errors) or {}
-                verify(jcr,target_from_contract(contract))
-            except ImportError as exc:errors.append(f"JCR Q1/Q2 validator unavailable: {exc}")
-            except JcrVerificationError as exc:errors.append(f"{pid} current JCR verification: {exc}")
-        response=paper/"reviews"/"response-matrix.csv"
-        if not nonempty(response):errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
-        else:
-            with response.open(newline="",encoding="utf-8") as response_handle:
-                if sum(1 for _ in csv.reader(response_handle))<2:errors.append(f"{pid} requires a non-empty reviews/response-matrix.csv")
-        for n in (1,2):
-            if not nonempty(paper/"reviews"/f"round-{n}.md"):errors.append(f"{pid} requires reviews/round-{n}.md")
-        citation=load_nonempty_json(paper/"reviews"/"citation-audit.json",errors)
-        if citation and citation.get("status")!="pass":errors.append(f"{pid} citation audit must pass")
-        if citation:
-            require_recent_timestamp(citation,"created_at",f"{pid} citation audit",errors,180)
-            bibliography=paper/"manuscript"/"references.bib"
-            manuscript=manuscripts[0] if manuscripts else None
-            if not nonempty(bibliography) or citation.get("bibliography_sha256")!=file_sha256(bibliography):errors.append(f"{pid} citation audit is stale for references.bib")
-            elif bibliography.is_file():
-                from scripts.citation_audit import validate_provider_identities
-                errors.extend(f"{pid} citation identity evidence: {issue}" for issue in validate_provider_identities(bibliography,citation))
-            if manuscript:
+            approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==pid),None)
+            sealed=(state.get("status")=="approved" and f"G5:{pid}" in state.get("approved_gates",[])
+                    and approval and approval.get("submission_checks_sha256")
+                    and approval.get("paper_artifact_sha256")==paper_artifact_hash(slug,pid))
+            if sealed:
                 try:
-                    from scripts.citation_audit import manuscript_digest
-                    current_manuscript_digest=manuscript_digest(manuscript)
-                except (ImportError,ValueError) as exc:errors.append(f"{pid} citation manuscript digest failed: {exc}");current_manuscript_digest=None
-                if citation.get("manuscript_sha256")!=current_manuscript_digest:errors.append(f"{pid} citation audit is stale for the manuscript source tree")
-                if manuscript.suffix.lower()==".tex":
-                    from scripts.automated_visual_review import verify as verify_visual_review
-                    errors.extend(f"{pid}: {issue}" for issue in verify_visual_review(project,pid,f"papers/{pid}/manuscript/main.tex"))
-                usage=citation.get("citation_usage") if isinstance(citation.get("citation_usage"),dict) else {}
-                if manuscript.suffix.lower()==".docx":
-                    if usage.get("status")!="checked_automatically" or usage.get("mapping_errors"):errors.append(f"{pid} DOCX in-text citation keys need a complete automatic bibliography mapping")
-                    try:
-                        from scripts.citation_audit import docx_citation_keys, parse_bibtex
-                        current_keys,mapping_errors=docx_citation_keys(manuscript)
-                        bib_keys={item["key"] for item in parse_bibtex(bibliography.read_text(encoding="utf-8"))}
-                        if mapping_errors or current_keys-bib_keys or sorted(current_keys)!=usage.get("cited_keys"):
-                            errors.append(f"{pid} DOCX citation mapping is incomplete or stale")
-                    except (OSError,ValueError,KeyError) as exc:errors.append(f"{pid} DOCX citation mapping failed: {exc}")
-        compliance=load_nonempty_json(paper/"reviews"/"venue-compliance.json",errors)
-        if compliance and compliance.get("status")!="pass":errors.append(f"{pid} venue compliance report must pass")
-        if compliance:
-            require_recent_timestamp(compliance,"created_at",f"{pid} venue compliance",errors,120)
-            if compliance.get("venue_sha256")!=file_sha256(paper/"venue.json"):errors.append(f"{pid} venue compliance report is stale for venue.json")
-            report_manuscript=compliance.get("manuscript") if isinstance(compliance.get("manuscript"),dict) else {}
-            if manuscripts:
-                try:
-                    from scripts.venue_compliance import manuscript_tree_sha256
-                    current_tree_hash=manuscript_tree_sha256(manuscripts[0])
-                except ImportError as exc:errors.append(f"{pid} venue manuscript digest failed: {exc}");current_tree_hash=None
-                if report_manuscript.get("source_tree_sha256")!=current_tree_hash:errors.append(f"{pid} venue compliance report is stale for the manuscript source tree")
-        try:
-            from scripts.figure_provenance import validate_figure_provenance
-            errors.extend(f"{pid} figure provenance: {x}" for x in validate_figure_provenance(project,paper))
-        except ImportError as exc:errors.append(f"figure provenance validator unavailable: {exc}")
-        disclosures=load_nonempty_json(paper/"disclosures.json",errors)
-        if disclosures and disclosures.get("status")!="ready_for_review":errors.append(f"{pid}/disclosures.json status must be ready_for_review")
-        if disclosures:
-            for f in ("author_contributions","conflicts","funding","ethics","ai_use"):
-                if f not in disclosures:errors.append(f"{pid}/disclosures.json needs {f}")
-        quality_errors(project,gate,errors,pid);independent_audit_errors(project,gate,errors,pid);return errors
+                    if approval["submission_checks_sha256"]!=submission_check_binding(project,pid):errors.append(f"{pid} final submission inputs changed after the G5 check")
+                except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:errors.append(f"{pid} final submission binding: {exc}")
+            else:errors.extend(submission_checks(project,pid,warnings=warnings))
+            quality_errors(project,gate,errors,pid,warnings=warnings)
+        else:errors.append(SUBMISSION_PENDING)
+        independent_audit_errors(project,gate,errors,pid,warnings=warnings)
+        return errors
     errors.append(f"unknown gate: {gate}");return errors
 def active_paper_id(slug):return validate_paper_id(str(read_json(state_path(slug)).get("active_paper")))
 def artifact_hash(slug,gate):
@@ -671,7 +537,7 @@ def initialize(args):
             raise ResearchCtlError("The supported doctoral workflow requires exactly six papers.")
         print("Non-six-paper initialization is a partial low-level fixture; the complete doctoral workflow supports six papers only.")
     for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","data/quality","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
-    write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","execution_mode":"cloud_only","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":["AI","robotics","mechanical engineering"],"candidate_application_routes":["France PhD or industrial doctorate","Spain PhD or industrial doctorate","Netherlands EngD","United Kingdom PhD","Japan PhD","Hong Kong PhD","PhD by publication where legally and institutionally available"],"time_horizon_years":None,"target_submission_ready_date":None,"weekly_hours":None,"cash_budget_usd":None,"model_api_budget_cny":None,"cloud_compute_budget_usd":None,"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","topic_quality_requirements":{"novelty_evidence_required":True,"doctoral_depth_required":True,"original_contribution_required":True,"current_papers_cloud_feasible_required":True},"ranking_weights":{"funded_position_supply":None,"job_market_and_salary":None,"future_growth_potential":None,"phd_position_competition":None,"job_market_competition":None,"background_fit":None,"application_route_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
+    write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","execution_mode":"cloud_only","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":[],"candidate_application_routes":[],"time_horizon_years":None,"target_submission_ready_date":None,"weekly_hours":None,"cash_budget_usd":None,"model_api_budget_cny":None,"cloud_compute_budget_usd":None,"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","topic_quality_requirements":{"novelty_evidence_required":True,"doctoral_depth_required":True,"original_contribution_required":True,"current_papers_cloud_feasible_required":True},"ranking_weights":{"funded_position_supply":None,"job_market_and_salary":None,"future_growth_potential":None,"phd_position_competition":None,"job_market_competition":None,"background_fit":None,"application_route_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
     write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"GitHub Actions Linux runner","orchestrator":"Codex control and API-first cloud orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
     from scripts.research_increments import initialize as initialize_increments
@@ -688,9 +554,9 @@ def initialize(args):
         "selected_direction_cloud_feasibility":{"current_papers_feasible":False,"no_future_lab_dependency":False,
             "authorized_data_plan":"","cloud_experiment_plan":"","current_paper_scope":"",
             "feasibility_evidence":{"data_access":[],"research_rights":[],"compute_cost":[],"pilot":{"status":"not_run","limitation":""}}}})
-    write_json(dest/"program"/"paper-map.json",{"schema_version":"1.0","status":"draft","papers":[],"pairwise_distinctness":[],
+    write_json(dest/"program"/"paper-map.json",{"schema_version":"1.0","status":"draft","independence_basis":"cumulative","papers":[],
         "thesis_synthesis":{"core_thesis":"","extension_thesis":"","cumulative_progression":"","integrated_contribution":"",
-            "dependency_logic":"","argument_links":[],"evidence_alignment":[]}})
+            "dependency_logic":"","argument_links":[],"evidence_alignment":[],"cumulative_contributions":[]}})
     write_json(dest/"program"/"novelty-claim-matrix.json",{"schema_version":"1.1","status":"draft","claims":[],
         "search_saturation":{"exact_query_rounds":0,"adjacent_field_rounds":0,"backward_chaining_complete":False,
             "forward_chaining_complete":False,"supporting_search_ids":[],"backward_chaining_search_ids":[],"forward_chaining_search_ids":[],
@@ -722,10 +588,15 @@ def initialize(args):
     if venue_id:set_venue_values(slug,"P01",venue_id)
     print(f"Initialized {dest}")
 def print_status(args):
-    state=load_state(args.project);errors=gate_errors(args.project,state["gate"]);out={**state,"gate_ready":not errors and state["gate"] is not None,"gate_errors":errors,"gate_error_groups":summarize_gate_errors(errors)}
+    state=load_state(args.project);warnings=[];errors=gate_errors(args.project,state["gate"],warnings=warnings);out={**state,"gate_ready":not errors and state["gate"] is not None,"gate_errors":errors,"gate_warnings":warnings,"gate_error_groups":summarize_gate_errors(errors)}
+    if state["gate"]=="G0":
+        from scripts.intake_validation import guidance
+        out["intake_guidance"]=guidance(read_json(project_dir(args.project)/"intake/constraints.json"))
     if args.json:print(json.dumps(out,ensure_ascii=False,indent=2));return
     print(f"Project: {state['project']}\nStage:   {state['stage']}\nGate:    {state['gate'] or '-'}\nStatus:  {state['status']}\nReady:   {'yes' if not errors else 'no'}")
     print_gate_error_groups(out["gate_error_groups"])
+    for warning in warnings:print("  warning: "+warning)
+    for item in out.get("intake_guidance",{}).get("questions",[]):print("  intake: "+item["question"])
 def print_gate_error_groups(groups):
     summary=f"{len(groups)} issue group(s), {sum(group['count'] for group in groups)} check messages"
     if groups:print(f"Checks: {summary}")
@@ -736,7 +607,8 @@ def print_gate_error_groups(groups):
             print(f"  - {group['title']} ({group['count']} check messages)\n    {group['next_action']}")
     return summary
 def check_gate(args):
-    state=load_state(args.project);gate=args.gate or state["gate"];errors=gate_errors(args.project,gate)
+    state=load_state(args.project);gate=args.gate or state["gate"];warnings=[];errors=gate_errors(args.project,gate,warnings=warnings)
+    for warning in warnings:print("warning: "+warning)
     if errors:
         summary=print_gate_error_groups(summarize_gate_errors(errors))
         raise ResearchCtlError(f"{gate} is not ready: {summary} remain; use status --project {args.project} --json for all original checks")
@@ -797,7 +669,11 @@ def _record_gate_decision(slug,gate,actor,note,current_hash,decision_type):
         approval["compute_budget_authority"]=compute_budget_authority(p,read_json(experiment_path(p, 'experiments/budget.json')),read_json(experiment_path(p, 'experiments/plan.json')))
     key=gate
     if scoped:approval["paper_id"]=state["active_paper"];key=f"{gate}:{state['active_paper']}"
-    if gate=="G5":approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(slug,state["active_paper"]);key=f"G5:{state['active_paper']}"
+    if gate=="G5":
+        from scripts.submission_package import submission_check_binding
+        approval["paper_id"]=state["active_paper"];approval["paper_artifact_sha256"]=paper_artifact_hash(slug,state["active_paper"])
+        approval["submission_checks_sha256"]=submission_check_binding(project_dir(slug),state["active_paper"])
+        key=f"G5:{state['active_paper']}"
     state["approvals"].append(approval)
     if key not in state["approved_gates"]:state["approved_gates"].append(key)
     if gate in {"G1","G2"}:
@@ -835,7 +711,7 @@ def set_venue_values(slug,paper_id,venue_id):
     target=project_dir(slug)/"papers"/paper_id
     if not target.is_dir():raise ResearchCtlError(f"Unknown paper: {paper_id}")
     m=read_json(source);m["selected_at"]=now();m["selection_status"]="trial" if m.get("trial_only") else "candidate";write_json(target/"venue.json",m)
-def set_venue(args):load_state(args.project);set_venue_values(args.project,args.paper,args.venue);print(f"Set {args.paper} venue to {args.venue}; current paper-specific JCR Q1/Q2 verification remains required.")
+def set_venue(args):load_state(args.project);set_venue_values(args.project,args.paper,args.venue);print(f"Set {args.paper} venue to {args.venue}; verify current source-bound scope, article type and submission requirements. JCR rank remains a planning observation.")
 def list_stages(_):print(json.dumps(STAGES,indent=2))
 def parser():
     root=argparse.ArgumentParser(description=__doc__);cmd=root.add_subparsers(dest="command",required=True)

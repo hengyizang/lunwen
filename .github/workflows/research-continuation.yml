@@ -29,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 65
     steps:
+      - name: Record the bounded cloud work deadline
+        shell: bash
+        run: echo "DR_OS_CLOUD_JOB_DEADLINE_EPOCH=$(( $(date +%s) + 3600 ))" >> "$GITHUB_ENV"
       - uses: actions/checkout@v7
         with:
           ref: main

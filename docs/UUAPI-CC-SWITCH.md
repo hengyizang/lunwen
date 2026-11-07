@@ -1,7 +1,12 @@
 # UUAPI + CC Switch first run
 
-For cloud-only research, use [Gateway startup](GATEWAY-STARTUP.md). The local
-CC Switch/WSL2 instructions below are a separate optional route.
+This is the optional legacy UUAPI/CC Switch adapter guide. Current production
+research uses [CheapAI + CodeKey](PRODUCTION-MODEL-ROUTING.md) through
+[Gateway startup](GATEWAY-STARTUP.md); production workflows do not load UUAPI
+credentials. The local CC Switch/WSL2 instructions below apply only to an
+explicitly selected compatible runtime and are not cloud setup prerequisites.
+The current [workflow](../references/workflow.md) and
+[total-cost policy](TOTAL-COST-POLICY.md) apply to both entry points.
 
 This integration keeps the Doctoral Research OS control plane and research files
 local. CC Switch manages optional Claude Code/Codex CLI configurations; the
@@ -80,22 +85,23 @@ python3 scripts/api_orchestrator.py balance
 The health output intentionally contains no API key. The balance request does
 not generate model output, but the gateway's current billing policy controls.
 
-## 4. Run two minimal live probes
+## 4. Run an optional live diagnostic when needed
 
-The next commands make small billable requests:
+After the project exists and has its existing cumulative allowance and exact
+route quote, an actual endpoint diagnosis can use this small billable request:
 
 ```bash
 python3 scripts/api_orchestrator.py health \
-  --provider uuapi-anthropic --live
-
-python3 scripts/api_orchestrator.py health \
-  --provider uuapi-openai --live
+  --project my-phd --provider uuapi-openai --live
 ```
 
+Use `uuapi-anthropic` when diagnosing that route. Neither probe is a mandatory
+paid startup step; both share the project's existing cost accounting.
 Stop if the reported model differs from the requested model, if either endpoint
 returns no text, or if the usage record is missing unexpectedly. Do not disable
-strict model checking merely to hide a mismatch; first use the exact model ID
-reported by the gateway.
+strict model checking to hide a mismatch or accept an unreviewed model merely
+because the gateway reports it. Verify the configured exact route and preserve
+the failed request's actual or conservatively estimated charge.
 
 ## 5. Initialize the first trial
 
@@ -107,21 +113,31 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
   --writer-provider uuapi-openai \
   --critic-provider uuapi-anthropic \
   --max-output-tokens 4000 \
-  --context 'AI + robotics/mechanical engineering; no laboratory; limited GPU; six papers with at least three JCR Q1 and every remainder at least JCR Q2; keep identical doctoral scientific gates; build a doctoral Theme A with a separately doctoral-level extension Theme B and six non-salami-sliced papers.'
+  --context 'Use the actual recorded intake constraints. Propose doctoral directions without choosing for the owner. Keep one cumulative doctoral question, core A and independently evidenced extension B, and six distinct papers. Preserve recorded venue ambitions as planning observations. Do not invent scientific evidence, career weights or application routes.'
 ```
 
-The cycle performs five calls: Claude semantic plan, Codex/OpenAI writer, Claude
-independent critic, Codex/OpenAI remediation and Claude final critic. It records the requested and gateway-reported model, protocol, endpoint,
-request ID and token usage in the run manifest. It does not approve or advance
-G0. At G1–G5 it additionally creates the matching initial/final JSON audits and
-decision log required by the deterministic gate.
+An ordinary cycle performs three calls: Claude semantic plan, Codex/OpenAI writer
+and one fresh independent advisory critic. Actual actionable findings trigger
+writer remediation and a fresh recheck; a clean critique creates no second
+review call or fictitious final receipt. The run manifest records the actual
+requested/reported model, protocol, endpoint, request ID and usage. The cycle
+does not itself approve or advance G0; stage transitions remain with the
+controller and record automated decisions as such.
 
-From G1 onward, allocate enough output tokens for the expanded doctoral and
-paper-specific Q1/Q2 portfolio
-contracts: closest-work originality evidence, all pairwise paper comparisons,
-and one or more complete experiment designs per paper with exact run coverage. At G5, Codex/OpenAI writes the
-English manuscript and the local language validator must pass; Claude remains
-read-only planning/audit material.
+At final submission, configure the three mutually blind source-view routes from
+different families, each different from the writer. The legacy two-model setup
+alone cannot supply that panel. Preserve each real response before synthesis,
+including uncertainty and disagreement; do not vote or infer acceptance odds.
+See the production routes above rather than inventing missing reviews.
+
+From G1 onward, provide enough context/output capacity for closest-work evidence,
+the six-paper cumulative question and pairwise independence comparisons. After
+the actual G1/G2 topic decisions, complete the active paper's G3–G5 before the
+next enters G3. Use its canonical frozen plan and exact run coverage, preserving
+legacy executed batch records. Existing Q1/Q2 ambitions remain planning
+observations rather than scientific or packaging thresholds. At G5, OpenAI
+writes the English manuscript; language/style diagnostics are C observations,
+while evidence integrity remains A.
 
 Before G3, install the local analytical power tool and use the dashboard's data
 quality, power and preregistration controls:
@@ -131,8 +147,9 @@ bash scripts/bootstrap-wsl.sh --with-research-quality-tools
 ```
 
 G1 now requires a claim-level novelty/saturation matrix. G3 requires a current
-local quality report for every selected dataset and a frozen, hash-bound
-preregistration for every paper. G4 requires successful registry-bound
+local quality report for the active paper's selected datasets and its frozen,
+hash-bound preregistration. The controller can verify lawful data rights and
+record automated confirmations without another human approval. G4 checks actual registry-bound
 domain/strong-baseline and clean-room reproduction. Full operation and the
 Monte Carlo alternative for ML metrics are in `docs/RESEARCH-QUALITY.md`.
 
@@ -140,8 +157,8 @@ Monte Carlo alternative for ML metrics are in `docs/RESEARCH-QUALITY.md`.
 and is ignored by Git. Claude cannot write scientific or submission artifacts;
 its schema-checked audits are stored only as internal control records. The
 Codex/OpenAI structured scientific artifacts remain normal project files. The
-control plane writes the decision log deterministically only after the final
-audit, so you can review and version both.
+control plane writes the decision log from the real critique and any actual
+repairs/rechecks; it never invents a missing second review.
 
 `state/output-provenance.json` records the current writer family and file hash.
 G5 and submission packaging reject Anthropic, untracked, or modified-after-record
@@ -157,23 +174,28 @@ python3 scripts/api_orchestrator.py balance
 ```
 
 Inspect `projects/my-phd/intake/`, the corresponding `api_runs/<run-id>/`, and
-the balance change. Only you may call `ready`, `approve`, and `advance` after
-reviewing the artifacts.
+the recorded costs. The owner chooses the doctoral topic at G1 and each paper
+topic at G2. Checked `ready`/`advance` transitions at G0/G3/G4/G5 use explicit
+automated decisions and do not require a human signature.
 
-If `gate-check` passes and you agree with every G0 value, the first manual gate
-sequence is:
+Once actual G0 constraints and checks are complete, the deterministic transition
+is:
 
 ```bash
 python3 scripts/researchctl.py ready --project my-phd \
-  --note 'G0 constraints manually reviewed'
-python3 scripts/researchctl.py approve --project my-phd --gate G0 \
-  --actor 'your-name' --note 'I confirm the recorded constraints'
+  --note 'G0 constraints and source checks completed'
 python3 scripts/researchctl.py advance --project my-phd
 ```
 
 Do not run these commands just to clear an error. If `gate-check` reports missing
 time, budget, equipment, ethics or scope values, edit and review
 `intake/constraints.json` first.
+
+A checks retain source/claim/numeric integrity, lawful data, frozen experiments
+and all negative/failed outcomes. Final B venue/export/panel checks bind the
+submission snapshot and are reused while unchanged. Numeric scores, CFH/H/AD
+coverage and editorial dispositions remain C observations, not compulsory
+scorecards or reasons for an otherwise unnecessary paid repair.
 
 ## Troubleshooting
 
@@ -182,7 +204,8 @@ time, budget, equipment, ethics or scope values, edit and review
   `UUAPI_ANTHROPIC_USER_AGENT` or `UUAPI_OPENAI_USER_AGENT`.
 - Wrong path: CC Switch uses the provider root; Python uses full endpoints
   internally. Set only `UUAPI_BASE_URL`, not `.../responses` or `.../messages`.
-- Model mismatch: replace the requested model with the exact dashboard/reported
-  ID. `UUAPI_STRICT_MODEL_ID=false` is an explicit, logged-risk escape hatch.
+- Model mismatch: inspect the exact configured and returned identities against
+  the reviewed route. Keep strict identity validation enabled; do not relabel
+  an unexpected response as an accepted model.
 - One provider fails: stop the cycle. Do not silently let Claude become the
   persistent writer or let the writer family audit itself.

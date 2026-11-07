@@ -88,25 +88,19 @@ class CliInvocationControlsTests(unittest.TestCase):
 
     def test_run_stage_completes_writer_and_remediation_with_real_control_checks(self):
         with fixture() as (_, project, _, state):
-            state["writing_phases"] = {"P01": "submission"}
+            state["writing_phases"] = {"P01": "scientific"}
             prepare_scope(project, state)
             original_approvals = list(state["approvals"])
             original_approved_gates = list(state["approved_gates"])
             names = []
             source_packet_modes = []
-            capture_limit = 32768
-            notes = [f"rejected: {code} Retained the supported statement after reviewing the current evidence."
-                     for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]]
-            from scripts.ccfa_humanization import review_checklist
-            notes.extend(f"rejected: {row['id']} Fixture contextual review of {row['key']}: {row['guidance']}"
-                         for row in review_checklist())
+            capture_limit = 4096
+            notes = ["fixed: The synthetic manuscript now identifies the registered comparator explicitly while preserving all fixture outcomes and its unresolved scientific limits."]
             remediation_message = json.dumps({"dispositions": notes})
             message_bytes = remediation_message.encode("utf-8")
-            # Complete mandatory coverage is larger than the previous fixture
-            # ceiling; request a sufficient bounded capture, not truncation bypass.
-            self.assertGreater(len(message_bytes), 4096)
             self.assertLessEqual(len(message_bytes), capture_limit)
-            self.assertEqual(len(notes), 72)
+            initial_audit = {**AUDIT, "verdict": "revise",
+                "major_findings": ["The synthetic methods omit the identity of the registered comparator."]}
 
             def launch(command, **kwargs):
                 if "-o" in command:
@@ -121,7 +115,7 @@ class CliInvocationControlsTests(unittest.TestCase):
                 else:
                     name = command[-1]
                     payload = json.dumps({
-                        "result": json.dumps(AUDIT) if name != "planner" else "Internal research plan.",
+                        "result": json.dumps(initial_audit if name == "critic" else AUDIT) if name != "planner" else "Internal research plan.",
                         "modelUsage": {"claude-synthetic-fixture": {"inputTokens": 10}},
                     }).encode()
                 names.append(name)
@@ -149,7 +143,9 @@ class CliInvocationControlsTests(unittest.TestCase):
                 api_orchestrator, "refresh_research_method_audits", return_value=None
             ), patch.object(autopilot.researchctl, "gate_errors", return_value=[]), patch.object(
                 autopilot.researchctl, "mark_ready", side_effect=checked_ready
-            ) as ready, patch.object(autopilot.researchctl, "advance") as advance, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1",
+            ) as ready, patch.object(autopilot.researchctl, "advance") as advance, patch(
+                "scripts.model_runtime.call", side_effect=AssertionError("This scientific-writing CLI fixture must not call an API panel")
+            ), patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1",
                     "ANTHROPIC_MODEL": "claude-synthetic-fixture"}):
                 journal = autopilot.run_stage("demo", "", "standard", 1, capture_limit, 3.5)
             self.assertEqual(names, ["planner", "writer", "critic", "remediation", "final-critic"])
@@ -161,13 +157,19 @@ class CliInvocationControlsTests(unittest.TestCase):
             self.assertEqual(current["approvals"], original_approvals)
             self.assertEqual(current["approved_gates"], original_approved_gates)
             self.assertEqual(current["gate"], "G5")
-            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01"), [])
+            self.assertEqual(review_receipts.validate_gate(project, "G5", "P01", expected_purpose="scientific_writing"), [])
+            observation = review_receipts.observation(project, "writing-and-review", "P01")["receipt"]
+            self.assertFalse(observation["gate_authority"])
+            self.assertFalse(observation["scientific_completion_verified"])
+            reviews = [json.loads(path.read_text()) for path in (project / "reviews/independent").glob("*.json")]
+            self.assertEqual(len(reviews), 2)
+            self.assertEqual(sum(bool(review["major_findings"]) for review in reviews), 1)
+            self.assertEqual(sum(review == AUDIT for review in reviews), 1)
             run = next(path.parent for path in (project / "state/runs").glob("*/writer.json"))
             for name in ("writer", "remediation"):
                 for filename in (f"{name}.stdout.txt", f"{name}.stderr.txt", f"{name}.json", f"codex-{name}-last-message.txt"):
                     self.assertTrue((run / filename).is_file(), filename)
-            self.assertIn("AD08", (project / "reviews/decision-log.md").read_text())
-            self.assertIn("CFH38", (project / "reviews/decision-log.md").read_text())
+            self.assertIn(notes[0], (project / "reviews/decision-log.md").read_text())
             self.assertEqual((run / "codex-remediation-last-message.txt").read_bytes(), message_bytes)
             self.assertEqual(json.loads((run / "codex-remediation-last-message.txt").read_text())["dispositions"], notes)
             self.assertNotIn("captured_outputs", json.dumps(journal))

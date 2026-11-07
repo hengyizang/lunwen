@@ -13,7 +13,7 @@ Create `program/journal-screening-input.json`. For every candidate record 0–5 
 
 The top level needs `reviewed_by`, timezone-aware `reviewed_at`, and a `papers` array. Each candidate needs `venue_id`, `strategy`, all seven score keys, `risk_flags`, and six evidence rows whose categories are `scope`, `article_type`, `audience`, `practicality`, `access`, and `reputation`; every evidence row needs an HTTPS `url`, `accessed_at`, and a concise `note`.
 
-Use at least one challenge, target and safety venue per paper. Every role must still meet the paper's Q1/Q2 contract; “safety” does not mean lowering the scientific or JCR floor. Run:
+Use at least one challenge, target and safety venue per paper. Use actual scope, article type, audience and desk-rejection evidence for fit. Existing Q1/Q2/IF targets are planning observations rather than gates; lawful ranking evidence remains exact and missing values stay unknown. Do not silently change an already selected target. Run:
 
 ```bash
 python3 scripts/journal_screening.py --project <project>

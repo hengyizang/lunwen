@@ -22,7 +22,6 @@ from scripts.cloud_checkpoint import sha
 ROOT = Path(__file__).resolve().parents[1]
 FACTORS = ("funded_position_supply", "job_market_and_salary", "future_growth_potential",
            "phd_position_competition", "job_market_competition", "background_fit", "application_route_fit")
-EXPECTED_WEIGHTS = (0.25, 0.25, 0.15, 0.075, 0.075, 0.10, 0.10)
 
 
 class DirectionEvidenceError(ValueError):
@@ -132,8 +131,11 @@ def number_supported(value, quote: str) -> bool:
 def rank(project: Path, assessment: dict, ledger: dict) -> dict:
     constraints = read(project / "intake/constraints.json", {})
     weights = constraints.get("ranking_weights", {})
-    if set(weights) != set(FACTORS) or any(not math.isclose(weights[k], v) for k, v in zip(FACTORS, EXPECTED_WEIGHTS)):
-        raise DirectionEvidenceError("ranking must use the owner's confirmed seven weights")
+    if (set(weights) != set(FACTORS)
+            or any(type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 1
+                   for value in weights.values())
+            or not math.isclose(sum(weights.values()), 1.0, abs_tol=1e-6)):
+        raise DirectionEvidenceError("ranking needs the owner's explicit non-negative weights summing to 1")
     start, end = date.fromisoformat(assessment["window_start"]), date.fromisoformat(assessment["window_end"])
     if not 0 < (end - start).days <= 90 or end > date.today() or (date.today() - end).days > 14:
         raise DirectionEvidenceError("use the same recent observation window of at most 90 days")

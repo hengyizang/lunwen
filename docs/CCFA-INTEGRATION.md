@@ -12,7 +12,7 @@ All 17 skills remain available through the [route registry](../integrations/ccfa
 
 Ordinary model cycles receive compact native science/task rules and exact source identities. Topic authors select Idea Optimizer and critics select Idea Reviewer; manuscript authors select Paper Writer and critics select Paper Reviewer. Humanization/Common baselines apply throughout. Complete pinned entries and references are loaded for explicit skill/full-reference requests or exact task-selected references; ordinary requests are not labeled as having consumed absent full text. The selected source path and hash remain inspectable without a paid call.
 
-The native controller retains state, existing model/role/effort assignments, cumulative costs, initial/final independent audits, source rights and experiment authority. Only G1 and each G2 topic require human decisions. Upstream examples cannot add a parallel runner/state, paid call, data permission or automatic submission. Scientific drafting defers exhaustive editorial tables; strict submission-phase G5 retains them.
+The native controller retains state, existing model/role/effort assignments, cumulative costs, the current independent critique and final blind panel, source rights and experiment authority. Only G1 and each G2 topic require human decisions. Upstream examples cannot add a parallel runner/state, paid call, data permission or automatic submission. Editorial tables remain available as C observations; submission performs source-bound B preparation and the final panel without making full editorial dispositions another gate.
 
 ## Complete source and practical installation
 
