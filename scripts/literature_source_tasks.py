@@ -104,17 +104,12 @@ def selected_context(project: Path, stage: str, paper_id: str | None = None, *, 
 def integrity_errors(project: Path, paper_id: str, *, require_support=False) -> list[str]:
     """Keep drafts provisional; final submission needs actual current source review."""
     errors = []
-    expected_citations, covered_citations = set(), set()
+    expected_citations, covered_citations, expected_usages, covered_usages = set(), set(), {}, set()
     if require_support:
         try:
-            from scripts import citation_audit
-            from scripts.ref_verify_adapter import canonical_manuscript
-            manuscript = canonical_manuscript(path_in(project, "papers/" + paper_id, exists=False))
-            if manuscript.suffix == ".tex":
-                expected_citations = citation_audit.tex_citation_keys(manuscript)
-            else:
-                expected_citations, mapping_errors = citation_audit.docx_citation_keys(manuscript)
-                errors.extend("full-text citation coverage: " + issue for issue in mapping_errors)
+            from scripts.claim_evidence import manuscript_usages
+            expected_usages = {row["usage_id"]: row for row in manuscript_usages(project, paper_id)}
+            expected_citations = {row["citation_key"] for row in expected_usages.values()}
         except (OSError, ValueError, RuntimeError) as exc:
             errors.append("full-text citation coverage cannot be checked: " + str(exc))
     try:
@@ -136,6 +131,7 @@ def integrity_errors(project: Path, paper_id: str, *, require_support=False) -> 
             if operation == "claim_evidence":
                 for claim in report["claims"]:
                     covered_citations.add(claim["citation_key"])
+                    covered_usages.update(row["usage_id"] for row in claim["manuscript_usages"])
                     if any(row["outcome"] == "contradicts" for row in claim["judgments"]):
                         errors.append("source-bound citation contradiction remains unresolved: " + claim["claim_id"])
                     elif require_support and (not claim["full_text_ready"] or not claim["judgments"] or claim["outcome"] != "supports"):
@@ -147,6 +143,10 @@ def integrity_errors(project: Path, paper_id: str, *, require_support=False) -> 
     if expected_citations - covered_citations:
         errors.append("final submission needs a current full-text claim_evidence task covering cited keys: "
             + ", ".join(sorted(expected_citations - covered_citations)))
+    for identifier in sorted(expected_usages.keys() - covered_usages):
+        row = expected_usages[identifier]
+        errors.append("final submission has an uncovered citation use: " + row["citation_key"] + " at "
+            + row["source"]["path"] + ":" + str(row["source"].get("line", row["source"].get("paragraph"))))
     return errors
 
 

@@ -144,6 +144,84 @@ class ClaimEvidenceTests(unittest.TestCase):
         self.assertEqual(domain["tasks"][0]["operation"], "claim_evidence")
         self.assertEqual(editorial["tasks"], [])
 
+    def test_every_distinct_use_of_the_same_reference_needs_its_own_source_judgment(self):
+        request = "program/claim-evidence.json"
+        write(self.project / request, self.spec)
+        write(self.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+            "request_file": request, "paper_id": "P01", "stages": ["writing-and-review"]}]})
+        with (self.paper / "main.tex").open("a", encoding="utf-8") as target:
+            target.write(r" A different independent assertion.\cite{known}")
+        packet = claims.prepare(self.project, self.spec)
+        self.assertEqual(len(packet["citation_usages"]), 2)
+        self.assertEqual(len(packet["uncovered_usages"]), 1)
+        with patch.object(tasks, "judgment_responses", return_value=[self.response("supports")]):
+            self.assertTrue(any("uncovered citation use: known" in issue
+                for issue in tasks.integrity_errors(self.project, "P01", require_support=True)))
+        self.spec["claims"].append({**self.spec["claims"][0], "claim_id": "C1", "claim": "A different independent assertion."})
+        write(self.project / request, self.spec)
+        response = self.response("supports")
+        response["response"]["claim_evidence"].append({**response["response"]["claim_evidence"][0], "claim_id": "C1"})
+        with patch.object(tasks, "judgment_responses", return_value=[response]):
+            self.assertEqual(tasks.integrity_errors(self.project, "P01", require_support=True), [])
+
+    def test_citation_elsewhere_cannot_support_an_unrelated_uncited_statement(self):
+        statement = self.spec["claims"][0]["claim"]
+        (self.paper / "main.tex").write_text(statement + "\n\n" + r"Another assertion.\cite{known}", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "same complete current manuscript citation scope"):
+            claims.prepare(self.project, self.spec)
+
+    def test_partial_clause_cannot_stand_in_for_the_complete_cited_assertion(self):
+        (self.paper / "main.tex").write_text(r"Recorded mechanism statement 0 and an unsupported second effect.\cite{known}", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "same complete current manuscript citation scope"):
+            claims.prepare(self.project, self.spec)
+
+    def test_unsupported_citation_syntax_cannot_be_mistaken_for_no_citations(self):
+        (self.paper / "main.tex").write_text(r"The source claim.\autocites{known}", encoding="utf-8")
+        with self.assertRaisesRegex(citation_audit.CitationAuditError, "explicit literal citation-key"):
+            claims.prepare(self.project, self.spec)
+
+    def test_tex_includes_and_prefix_citations_keep_exact_source_locations(self):
+        (self.paper / "main.tex").write_text(r"\begin{document}\input{results}\end{document}", encoding="utf-8")
+        (self.paper / "results.tex").write_text(r"\citet{known} Recorded mechanism statement 0." + "\n"
+            + r"% A fake citation.\cite{comment}" + "\n" + r"\begin{verbatim}\cite{code}\end{verbatim}", encoding="utf-8")
+        packet = claims.prepare(self.project, self.spec)
+        self.assertEqual(len(packet["citation_usages"]), 1)
+        self.assertEqual(packet["uncovered_usages"], [])
+        self.assertEqual(packet["citation_usages"][0]["source"]["path"], "papers/P01/manuscript/results.tex")
+        self.assertEqual(citation_audit.tex_citation_keys(self.paper / "main.tex"), {"known"})
+
+    def test_word_split_fields_keep_repeated_reference_uses_distinct(self):
+        import zipfile
+        (self.paper / "main.tex").unlink()
+        def paragraph(statement):
+            return ('<w:p><w:r><w:t>' + statement + '</w:t></w:r>'
+                '<w:r><w:fldChar w:fldCharType="begin"/></w:r>'
+                '<w:r><w:instrText>CITA</w:instrText></w:r><w:r><w:instrText>TION known</w:instrText></w:r>'
+                '<w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>[1]</w:t></w:r>'
+                '<w:r><w:fldChar w:fldCharType="end"/></w:r></w:p>')
+        xml = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+            + paragraph(self.spec["claims"][0]["claim"]) + paragraph("Another independent assertion.") + '</w:body></w:document>')
+        with zipfile.ZipFile(self.paper / "main.docx", "w") as archive:
+            archive.writestr("word/document.xml", xml)
+        packet = claims.prepare(self.project, self.spec)
+        self.assertEqual(len(packet["uncovered_usages"]), 1)
+        self.assertEqual([row["source"]["paragraph"] for row in packet["citation_usages"]], [1, 2])
+        self.assertEqual(citation_audit.docx_citation_keys(self.paper / "main.docx"), ({"known"}, []))
+
+    def test_incomplete_scope_cannot_manufacture_a_passing_human_agreement_score(self):
+        with (self.paper / "main.tex").open("a", encoding="utf-8") as target:
+            target.write(r" A separate unchecked assertion.\cite{known}")
+        packet = claims.prepare(self.project, self.spec)
+        labels = self.project / "evidence/annotations/incomplete-scope.json"
+        write(labels, {"claim_fingerprint": packet["claim_fingerprint"], "labels": [
+            {"claim_id": "C0", "outcome": "supports", "rationale": "Synthetic label for the single declared claim only."}]})
+        provenance.attest_human_files(self.project, [labels], actor="Fixture owner", note="Synthetic software fixture, not a real check")
+        report = claims.assess(self.project, packet, [self.response("supports")],
+            {"path": labels.relative_to(self.project).as_posix(), "sha256": sha(labels)})
+        self.assertIsNone(report["spot_check"]["agreement"])
+        self.assertIsNone(report["spot_check"]["target_met"])
+        self.assertFalse(report["spot_check"]["coverage_complete"])
+
     def test_original_https_source_without_doi_uses_the_same_rights_and_support_checks(self):
         url = "https://primary.example.org/open-book"
         self.fixture.paper["url"] = url

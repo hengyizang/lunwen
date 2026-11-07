@@ -280,7 +280,8 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertEqual(review_receipts.material_snapshot(project, "writing-and-review", "P01"), reviewed)
                 build_package("demo-study", "P01", root / "observations.zip")
                 manuscript = paper / "manuscript/main.tex"
-                manuscript.write_text(manuscript.read_text() + r"An unsupported source claim.\cite{x}", encoding="utf-8")
+                manuscript.write_text(manuscript.read_text().replace(r"\end{document}",
+                    r"An unsupported source claim.\cite{x}\end{document}"), encoding="utf-8")
                 self.assertNotEqual(researchctl.paper_artifact_hash("demo-study", "P01"), before)
                 # Even an explicitly synthetic reseal cannot bypass the same A
                 # source-support check used by native G5.

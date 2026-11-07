@@ -293,7 +293,7 @@ python3 scripts/citation_audit.py \
 ```
 
 无 DOI 的来源优先复用实际检索回执比对书目身份；缺证据时保持未核验。历史真实人工核验 JSON 仍可通过 `--manual-verifications` 传入，每条包含 `verified_by`、`verified_at`、`source_url` 和 `title`，不新增人工审核要求。
-DOCX 无法像 TeX 一样自动解析引用键，审阅者逐条核对正文引用与文末记录后还必须传入 `--docx-citations-verified-by 'your-name'`；否则 G5 保持关闭。
+DOCX 使用 `[@key]` 或 Word `CITATION` 字段自动映射引用键，并定位每处引用使用；字段显示为数字也保留其真实键。未映射的纯数字引用、未知 CSL 格式需要先提供显式键映射。旧 `--docx-citations-verified-by` 仅保留历史注记，不能替代映射或全文判断，也不新增阶段人工签字。
 
 从期刊官方页面下载模板 ZIP 后：
 

@@ -220,7 +220,8 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
         from scripts.statistical_reporting import REQUIRED
         value["statistical_reporting_fields"] = list(REQUIRED)
         value["full_text_citations"] = ("Before final G5, select a claim_evidence task for this paper in program/research-control.json. "
-            "Cover every cited key with an actual manuscript claim, registered DOI or original HTTPS URL, lawfully acquired original full text and located evidence. "
+            "Cover every distinct citation occurrence, including repeated keys supporting different assertions. Use the complete local claim_text from the controlled citation-audit citation_usage.occurrences inventory, not a partial clause or a paraphrase. "
+            "Bind the registered DOI or original HTTPS URL, lawfully acquired original full text and located evidence. "
             "The existing critic or final domain panel supplies current protected judgments; missing, contradictory or insufficient source support stays pending. "
             "Claim tasks default to the domain panel; explicit panel_views may select the suitable existing views. No extra paid review loop or fabricated PASS is authorized.")
     if value is not None:

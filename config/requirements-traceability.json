@@ -583,7 +583,7 @@
         "tests/test_claim_evidence.py",
         "tests/test_judgment_support.py"
       ],
-      "remaining": "Final submission checks current full-text claim judgments and coverage of every actual cited key; scientific drafts may keep pending judgments. Missing or insufficient support does not clear final G5, actual contradictions always remain unresolved. Registered DOI-less original HTTPS sources use the same acquisition, public-license, source-hash and evidence checks. Populate real manuscripts and distinct provenance-bound citation extractions; actual 15% human sample labels and semantic judgments are not supplied by tests.",
+      "remaining": "Every supported literal TeX/include or mapped Word citation occurrence now binds its complete local assertion and current source position. Distinct uses of a repeated key cannot share an unrelated judgment; partial clauses, unsupported citation commands and unsupported mappings remain blocked. The controlled citation-audit exposes the inventory. Incomplete coverage cannot produce a passing 15% agreement score, and the sample fingerprint includes the whole current citation inventory. Real original evidence, protected model judgments and independent human labels remain necessary; this software does not certify semantics or identify all uncited assertions.",
       "source_sections": [
         "compendium: claim evidence, citation extraction and sampling"
       ]
@@ -681,10 +681,49 @@
         "tests/test_cli_control_integrity.py",
         "tests/test_research_design.py"
       ],
-      "remaining": "Measured from f8a1492: production Python 76815 to 76059 lines (-756; 806 added, 1562 removed). Compared with earlier 3e9f56b, production remains +1668 lines because new research capabilities were added; no cumulative 40–50% code saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules.",
+      "remaining": "Measured from f8a1492: production Python 76815 to 76153 lines (-662; 973 added, 1635 removed). Compared with earlier 3e9f56b, production remains +1762 lines because research capabilities were added; no cumulative 40–50% saving is claimed. Shared schemas, author field navigation, API/CLI ownership and local linter execution remove real duplicate production logic. Documentation deletion and the public source manifest are excluded from this code saving. Historical CLI/workflow/documented/dynamic roots reach 217 of 218 original modules; the remaining file is scripts/__init__.py. The historical 65-dead-file claim is not established. G5 now has six paper-level A checks: full-text source support replaces separate abstract-only and selected-conflict checks. Shared global and final B checks still apply; a same-scope total of 5–7 validator modules is not established. Pinned sources/licenses remain unchanged. G5 and packaging now share the same paper-level A implementation; C file classification and scientific increment projections are shared with review snapshots instead of duplicated blocking rules.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
-      ]
+      ],
+      "module_dispositions": {
+        "scripts/submission_guard.py": {
+          "action": "removed",
+          "replacement": "scripts/submission_package.py",
+          "reason": "Duplicate unused packaging entry reintroduced retired Q1/Q2/IF release thresholds."
+        },
+        "scripts/venue_adapter.py": {
+          "action": "retained_active",
+          "reason": "Documented archive inspection/import and allowed native CLI operations."
+        },
+        "scripts/figure_lineage.py": {
+          "action": "retained_scientific_integrity",
+          "reason": "Executor-bound figure inputs and deterministic derived-data replay; used by provenance, story and empirical reporting."
+        },
+        "scripts/figure_panel_cache.py": {
+          "action": "retained_active",
+          "reason": "Existing rendered-figure reuse avoids repeated unchanged work."
+        },
+        "scripts/humanizer_review.py": {
+          "action": "retained_observation",
+          "reason": "Optional H findings; no compulsory style scorecard or release gate."
+        },
+        "scripts/defensive_review.py": {
+          "action": "retained_observation",
+          "reason": "Optional wording observations retain evidence-preservation boundaries."
+        },
+        "scripts/ccfa_humanization.py": {
+          "action": "retained_selected_guidance",
+          "reason": "Pinned native CCFA guidance stays available without exhaustive table gates."
+        },
+        "scripts/scientific_editing.py": {
+          "action": "retained_scientific_integrity",
+          "reason": "Shared protected-text, formula and citation extraction used by revision integrity."
+        },
+        "scripts/rebuttal_triage.py": {
+          "action": "retained_observation",
+          "reason": "Optional source-bound response preparation; genuine reviewer originals remain protected."
+        }
+      }
     },
     {
       "id": "R44",

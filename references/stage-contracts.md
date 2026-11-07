@@ -236,8 +236,12 @@ Required scientific evidence:
   preserve `supports`, `contradicts` and `insufficient` judgments and unresolved
   disagreements instead of converting a DOI/abstract match into semantic proof;
   before final G5, select `claim_evidence` for this paper in the existing
-  `program/research-control.json` and cover every cited key with actual manuscript
-  claims, lawful registered original text and located evidence. A source may use
+  `program/research-control.json` and cover every distinct citation occurrence
+  with its complete local assertion, lawful registered original text and located
+  evidence. Repeated keys supporting different assertions require separate
+  judgments. Use the controlled citation-audit `citation_usage.occurrences`
+  inventory; manuscript locations and coverage are derived from the current
+  TeX/include or Word source, never model-invented hashes. A source may use
   its DOI or, when no DOI exists, the exact registered original HTTPS URL.
   The current protected critic/domain-panel response records support; missing,
   contradictory or insufficient judgments cannot clear final submission.
