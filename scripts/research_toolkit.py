@@ -1,12 +1,11 @@
 """Task-selected research-tool guidance; no upstream runtime or provider calls."""
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 import re
 
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, json_digest as _digest
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = "integrations/research-automation-tools.json"
@@ -15,11 +14,6 @@ OUTPUT = "reports/research-toolkit"
 STAGES = {"intake", "topic-intelligence", "paper-architecture", "experiment-design",
           "experiment-execution", "writing-and-review"}
 MARKER = "RESEARCH_TOOLKIT_PACKET="
-
-
-def _digest(value: dict) -> str:
-    encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
 def _text(value, label, maximum=4000):

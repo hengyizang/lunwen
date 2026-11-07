@@ -8,7 +8,6 @@ from __future__ import annotations
 from collections import Counter
 import csv
 from datetime import date, datetime, timezone
-import hashlib
 import io
 import ipaddress
 import json
@@ -17,16 +16,12 @@ from urllib.parse import parse_qsl, urlsplit
 
 from scripts import data_contracts, dataset_fetch
 from scripts.network_safety import validate_https_url
-from scripts.research_artifacts import path_in, read, sha, write, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, read, sha, write, seal_manifest, validate_manifest, json_digest as _digest
 
 REQUEST = "program/data-row-provenance.json"
 OUTPUT = "reports/data-row-provenance"
 STATES = {"pending", "located", "disputed"}
 ISSUES = {"unexplained_missing", "not_published", "not_accessible", "not_applicable", "ambiguous", "conflict"}
-
-
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 def _keys(value, required, optional=()):

@@ -928,7 +928,7 @@ def create_data_quality_report(
 
 
 def validate_data_quality_report(
-    report: dict[str, Any], dataset_id: str, project: Path
+    report: dict[str, Any], dataset_id: str, project: Path, *, _manifests=None
 ) -> list[str]:
     errors: list[str] = []
     if report.get("schema_version") != "1.0":
@@ -940,7 +940,7 @@ def validate_data_quality_report(
     if report.get("status") != "pass" or report.get("blockers") != []:
         errors.append("data-quality report must pass with no blockers")
     try:
-        manifest = _manifest_map(project).get(dataset_id)
+        manifest = (_manifest_map(project) if _manifests is None else _manifests).get(dataset_id)
     except ResearchQualityError as exc:
         errors.append(str(exc))
         manifest = None
@@ -1583,7 +1583,7 @@ def create_preregistration(project: Path, paper_id: str, actor: str, *, automate
     contract = _load_json(project / "papers" / paper_id / "paper-contract.json")
     for dataset_id in contract.get("datasets", []) if isinstance(contract.get("datasets"), list) else []:
         report = _load_json(project / "data" / "quality" / f"{dataset_id}.json")
-        issues = validate_data_quality_report(report, str(dataset_id), project)
+        issues = validate_data_quality_report(report, str(dataset_id), project, _manifests=manifests)
         confirmation_path = project / "data" / "quality" / f"{dataset_id}-confirmation.json"
         if confirmation_path.is_file():
             issues.extend(
@@ -1868,6 +1868,28 @@ def _validate_evidence_files(
     return recorded
 
 
+def _validate_comparison_values(item, prefix, tolerances, errors, *, baseline):
+    fields = ("reference_value", "observed_value") if baseline else ("original_value", "reproduction_value")
+    for key in (*fields, "absolute_tolerance"):
+        value = item.get(key)
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            errors.append(f"{prefix}.{key} must be numeric")
+    if baseline and (item.get("comparable_protocol") is not True or item.get("within_tolerance") is not True):
+        errors.append(f"{prefix} must use a comparable protocol and reproduce within tolerance")
+    elif not baseline and item.get("within_tolerance") is not True:
+        errors.append(f"{prefix}.within_tolerance must be true")
+    left, right, tolerance = (item.get(key) for key in (*fields, "absolute_tolerance"))
+    if all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (left, right, tolerance)):
+        if tolerance < 0 or abs(float(left) - float(right)) > float(tolerance):
+            errors.append(f"{prefix} numeric values exceed the declared absolute tolerance")
+    metric = item.get("metric")
+    if isinstance(metric, str) and metric in tolerances and isinstance(tolerance, (int, float)):
+        if not math.isclose(float(tolerance), tolerances[metric], rel_tol=0.0, abs_tol=1e-12):
+            errors.append(f"{prefix}.absolute_tolerance differs from the G3 preregistration")
+    elif isinstance(metric, str):
+        errors.append(f"{prefix}.metric has no G3-predeclared tolerance")
+
+
 @paper_scoped
 def validate_baseline_reproduction(
     report: dict[str, Any], paper_id: str, project: Path, registry: list[dict[str, Any]]
@@ -1910,24 +1932,7 @@ def validate_baseline_reproduction(
                     errors.append(f"{prefix}.reference_source_url differs from the G3 source")
         if not str(entry.get("reference_source_url", "")).startswith("https://"):
             errors.append(f"{prefix}.reference_source_url must use HTTPS")
-        for key in ("reference_value", "observed_value", "absolute_tolerance"):
-            value = entry.get(key)
-            if not isinstance(value, (int, float)) or isinstance(value, bool):
-                errors.append(f"{prefix}.{key} must be numeric")
-        if entry.get("comparable_protocol") is not True or entry.get("within_tolerance") is not True:
-            errors.append(f"{prefix} must use a comparable protocol and reproduce within tolerance")
-        reference = entry.get("reference_value")
-        observed = entry.get("observed_value")
-        tolerance = entry.get("absolute_tolerance")
-        if all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (reference, observed, tolerance)):
-            if tolerance < 0 or abs(float(reference) - float(observed)) > float(tolerance):
-                errors.append(f"{prefix} numeric values exceed the declared absolute tolerance")
-        metric = entry.get("metric")
-        if isinstance(metric, str) and metric in tolerances and isinstance(tolerance, (int, float)):
-            if not math.isclose(float(tolerance), tolerances[metric], rel_tol=0.0, abs_tol=1e-12):
-                errors.append(f"{prefix}.absolute_tolerance differs from the G3 preregistration")
-        elif isinstance(metric, str):
-            errors.append(f"{prefix}.metric has no G3-predeclared tolerance")
+        _validate_comparison_values(entry, prefix, tolerances, errors, baseline=True)
         run_ids = _string_list(entry.get("run_ids"), f"{prefix}.run_ids", errors)
         missing = sorted(set(run_ids) - successful)
         if missing:
@@ -2074,24 +2079,7 @@ def validate_clean_room_reproduction(
             errors.append(f"{prefix} must be an object")
             continue
         _text(item.get("metric"), f"{prefix}.metric", errors)
-        for key in ("original_value", "reproduction_value", "absolute_tolerance"):
-            value = item.get(key)
-            if not isinstance(value, (int, float)) or isinstance(value, bool):
-                errors.append(f"{prefix}.{key} must be numeric")
-        if item.get("within_tolerance") is not True:
-            errors.append(f"{prefix}.within_tolerance must be true")
-        original_value = item.get("original_value")
-        reproduction_value = item.get("reproduction_value")
-        tolerance = item.get("absolute_tolerance")
-        if all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (original_value, reproduction_value, tolerance)):
-            if tolerance < 0 or abs(float(original_value) - float(reproduction_value)) > float(tolerance):
-                errors.append(f"{prefix} numeric values exceed the declared absolute tolerance")
-        metric = item.get("metric")
-        if isinstance(metric, str) and metric in tolerances and isinstance(tolerance, (int, float)):
-            if not math.isclose(float(tolerance), tolerances[metric], rel_tol=0.0, abs_tol=1e-12):
-                errors.append(f"{prefix}.absolute_tolerance differs from the G3 preregistration")
-        elif isinstance(metric, str):
-            errors.append(f"{prefix}.metric has no G3-predeclared tolerance")
+        _validate_comparison_values(item, prefix, tolerances, errors, baseline=False)
     comparison_metrics = {
         str(item.get("metric")) for item in comparisons if isinstance(item, dict) and item.get("metric")
     }
@@ -2259,16 +2247,25 @@ def refresh_runtime_evidence_catalog(project: Path) -> Path:
     return path
 
 
+def _report_errors(path, validator, *arguments, missing=None, prefix=None, caught=(ResearchQualityError,)):
+    """Load one report and retain the caller's existing error classification."""
+    if missing is not None and not path.is_file():
+        return [missing]
+    try:
+        issues = validator(_load_json(path), *arguments)
+        return [prefix + issue for issue in issues] if prefix else issues
+    except caught as exc:
+        return [str(exc)]
+
+
 def validate_g3_quality(project: Path, *, require_preregistration: bool = True) -> list[str]:
     from scripts.research_phase import exploratory, design_errors
     if exploratory(project):
         errors = design_errors(project)
         if require_preregistration:
             for paper in _paper_ids(project):
-                try:
-                    errors.extend(validate_preregistration(_load_json(project / "papers" / paper / "preregistration.json"), paper, project))
-                except (OSError, ValueError, ResearchQualityError) as exc:
-                    errors.append(str(exc))
+                errors.extend(_report_errors(project / "papers" / paper / "preregistration.json",
+                    validate_preregistration, paper, project, caught=(OSError, ValueError, ResearchQualityError)))
         return errors
     from scripts.experiment_evidence import validate_plan as validate_evidence_plan
     errors: list[str] = []
@@ -2283,62 +2280,27 @@ def validate_g3_quality(project: Path, *, require_preregistration: bool = True) 
         except ResearchQualityError as exc:
             errors.append(str(exc))
             continue
-        errors.extend(
-            f"data/quality/{dataset_id}.json: {issue}"
-            for issue in validate_data_quality_report(report, dataset_id, project)
-        )
-        confirmation_path = project / "data" / "quality" / f"{dataset_id}-confirmation.json"
-        if not confirmation_path.is_file():
-            errors.append(f"missing named confirmation: data/quality/{dataset_id}-confirmation.json")
-        else:
-            try:
-                confirmation = _load_json(confirmation_path)
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
-            else:
-                errors.extend(
-                    f"data/quality/{dataset_id}-confirmation.json: {issue}"
-                    for issue in validate_data_quality_confirmation(
-                        confirmation, dataset_id, project
-                    )
-                )
+        errors.extend(f"data/quality/{dataset_id}.json: {issue}" for issue in
+                      validate_data_quality_report(report, dataset_id, project, _manifests=manifests))
+        errors.extend(_report_errors(project / "data" / "quality" / f"{dataset_id}-confirmation.json",
+            validate_data_quality_confirmation, dataset_id, project,
+            missing=f"missing named confirmation: data/quality/{dataset_id}-confirmation.json",
+            prefix=f"data/quality/{dataset_id}-confirmation.json: "))
     for paper_id in _paper_ids(project):
         from scripts import study_routes
         if study_routes.route(project, paper_id) != "empirical":
             errors.extend(f"{paper_id} study route: {e}" for e in study_routes.plan_errors(project, paper_id))
             if require_preregistration:
-                try:
-                    errors.extend(validate_preregistration(_load_json(project / "papers" / paper_id / "preregistration.json"), paper_id, project))
-                except ResearchQualityError as exc:
-                    errors.append(str(exc))
+                errors.extend(_report_errors(project / "papers" / paper_id / "preregistration.json",
+                    validate_preregistration, paper_id, project))
             continue
         errors.extend(f"{paper_id}/experiment-evidence-plan.json: {e}" for e in validate_evidence_plan(project, paper_id))
-        power_path = project / "papers" / paper_id / "power-analysis.json"
-        prereg_path = project / "papers" / paper_id / "preregistration.json"
-        if not power_path.is_file():
-            errors.append(f"{paper_id} is missing power-analysis.json")
-        else:
-            try:
-                report = _load_json(power_path)
-                errors.extend(
-                    f"{paper_id}/power-analysis.json: {issue}"
-                    for issue in validate_power_report(report, paper_id, project)
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
-        if not require_preregistration:
-            continue
-        if not prereg_path.is_file():
-            errors.append(f"{paper_id} is missing preregistration.json")
-        else:
-            try:
-                report = _load_json(prereg_path)
-                errors.extend(
-                    f"{paper_id}/preregistration.json: {issue}"
-                    for issue in validate_preregistration(report, paper_id, project)
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
+        checks = [("power-analysis.json", validate_power_report)]
+        if require_preregistration:
+            checks.append(("preregistration.json", validate_preregistration))
+        for name, validator in checks:
+            errors.extend(_report_errors(project / "papers" / paper_id / name, validator, paper_id, project,
+                missing=f"{paper_id} is missing {name}", prefix=f"{paper_id}/{name}: "))
     return errors
 
 
@@ -2355,58 +2317,14 @@ def validate_g4_quality(project: Path, *, require_confirmation: bool = True) -> 
             errors.extend(study_routes.validation_errors(project, paper_id, confirmation=require_confirmation))
             continue
         errors.extend(f"{paper_id}/experiment-evidence.json: {e}" for e in validate_report(project, paper_id))
-        prereg_path = project / "papers" / paper_id / "preregistration.json"
-        if prereg_path.is_file():
-            try:
-                errors.extend(
-                    f"{paper_id}/preregistration.json: {issue}"
-                    for issue in validate_preregistration(_load_json(prereg_path), paper_id, project)
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
-        else:
-            errors.append(f"{paper_id} is missing preregistration.json")
-        baseline_path = project / "papers" / paper_id / "baseline-reproduction.json"
-        clean_path = project / "papers" / paper_id / "clean-room-reproduction.json"
-        if not baseline_path.is_file():
-            errors.append(f"{paper_id} is missing baseline-reproduction.json")
-        else:
-            try:
-                errors.extend(
-                    f"{paper_id}/baseline-reproduction.json: {issue}"
-                    for issue in validate_baseline_reproduction(
-                        _load_json(baseline_path), paper_id, project, registry
-                    )
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
-        if not clean_path.is_file():
-            errors.append(f"{paper_id} is missing clean-room-reproduction.json")
-        else:
-            try:
-                errors.extend(
-                    f"{paper_id}/clean-room-reproduction.json: {issue}"
-                    for issue in validate_clean_room_reproduction(
-                        _load_json(clean_path), paper_id, project, registry
-                    )
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
-        confirmation_path = project / "papers" / paper_id / "reproduction-confirmation.json"
-        if not require_confirmation:
-            continue
-        if not confirmation_path.is_file():
-            errors.append(f"{paper_id} is missing reproduction-confirmation.json")
-        else:
-            try:
-                errors.extend(
-                    f"{paper_id}/reproduction-confirmation.json: {issue}"
-                    for issue in validate_reproduction_confirmation(
-                        _load_json(confirmation_path), paper_id, project
-                    )
-                )
-            except ResearchQualityError as exc:
-                errors.append(str(exc))
+        checks = [("preregistration.json", validate_preregistration, ()),
+                  ("baseline-reproduction.json", validate_baseline_reproduction, (registry,)),
+                  ("clean-room-reproduction.json", validate_clean_room_reproduction, (registry,))]
+        if require_confirmation:
+            checks.append(("reproduction-confirmation.json", validate_reproduction_confirmation, ()))
+        for name, validator, arguments in checks:
+            errors.extend(_report_errors(project / "papers" / paper_id / name, validator, paper_id, project, *arguments,
+                missing=f"{paper_id} is missing {name}", prefix=f"{paper_id}/{name}: "))
     return errors
 
 

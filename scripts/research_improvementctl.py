@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.research_operations import BUILDERS, CLI_ALIASES, invoke_builder
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -41,11 +43,14 @@ def main() -> int:
             parser.error("project is absent or unsafe")
         if args.action in {"statistics", "word-revision", "revision-ledger", "revision-ledger-manifest", "editorial-audit", "watermark-cleanup", "word-render", "manuscript-hygiene", "manuscript-hygiene-scan", "reviewer-rounds", "publication-disclosure", "statistical-watermarks"} and not re.fullmatch(r"P[0-9]{2}", args.paper or ""):
             parser.error("paper must be P01, P02, etc.")
-        if args.action in {"reviewer-rounds", "publication-disclosure", "statistical-watermarks"}:
-            from scripts import reviewer_rounds, publication_disclosure, statistical_watermarks
-            module = {"reviewer-rounds": reviewer_rounds, "publication-disclosure": publication_disclosure,
-                      "statistical-watermarks": statistical_watermarks}[args.action]
-            result = module.refresh(project, args.paper)
+        if args.action == "calibration-analysis" and not args.packet:
+            parser.error("calibration-analysis requires --packet")
+        if args.action == "increments-freeze" and (not args.kind or not args.record_id):
+            parser.error("increments-freeze needs --kind and --record-id")
+        action = CLI_ALIASES.get(args.action, args.action.replace("-", "_"))
+        if action in BUILDERS:
+            result = invoke_builder(project, {**vars(args), "action": action,
+                "paper_id": args.paper, "packet_id": args.packet})
         elif args.action == "research-increments":
             from scripts.research_increments import initialize, refresh
             initialize(project)
@@ -53,11 +58,6 @@ def main() -> int:
         elif args.action == "increments-inventory":
             from scripts.incremental_writing import inventory
             result = inventory(project, args.paper)
-        elif args.action == "increments-freeze":
-            if not args.kind or not args.record_id:
-                parser.error("increments-freeze needs --kind and --record-id")
-            from scripts.research_increments import freeze
-            result = freeze(project, args.kind, args.record_id)
         elif args.action == "research-extensions":
             from scripts.research_extensions import refresh
             result = refresh(project)
@@ -65,14 +65,6 @@ def main() -> int:
             from scripts.research_artifacts import read
             from scripts.evidence_context import refresh
             result = refresh(project, read(project / "state/run.json")["stage"], task=args.task_id)
-        elif args.action == "calibration-analysis":
-            if not args.packet:
-                parser.error("calibration-analysis requires --packet")
-            from scripts.calibration_analysis import refresh
-            result = refresh(project, args.packet)
-        elif args.action == "word-render":
-            from scripts.word_render import render
-            result = render(project, args.paper, args.source)
         elif args.action == "editorial-audit":
             from scripts.academic_style import write_audit
             _, result = write_audit(project, args.paper)
@@ -90,39 +82,6 @@ def main() -> int:
             from scripts.watermark_cleanup import validate_saved_report
             errors = validate_saved_report(project, args.receipt)
             result = {"status": "fail" if errors else "pass", "errors": errors}
-        elif args.action == "notebook":
-            from scripts.research_notebook import refresh
-            result = refresh(project)
-        elif args.action == "daily-brief":
-            from scripts.research_notebook import daily_brief
-            result = daily_brief(project)
-        elif args.action == "revision-ledger":
-            from scripts.revision_ledger import refresh
-            result = refresh(project, args.paper)
-        elif args.action == "revision-ledger-manifest":
-            from scripts.revision_ledger import change_manifest
-            result = change_manifest(project, args.paper)
-        elif args.action == "research-support":
-            from scripts.research_support import refresh
-            result = refresh(project)
-        elif args.action == "support-sources":
-            from scripts.research_support import fetch_sources
-            result = fetch_sources(project)
-        elif args.action == "review-packets":
-            from scripts.review_packets import refresh
-            result = refresh(project)
-        elif args.action == "statistics":
-            from scripts.statistical_reporting import refresh
-            result = refresh(project, args.paper)
-        elif args.action == "word-revision":
-            from scripts.docx_revision import build
-            result = build(project, args.paper)
-        elif args.action == "journals":
-            from scripts.journal_dossier import refresh
-            result = refresh(project)
-        else:
-            from scripts.method_tools import refresh
-            result = refresh(project)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 1 if result.get("status") in {"fail", "blocked", "revise"} else 0
 

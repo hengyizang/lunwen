@@ -7,6 +7,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from docx import Document
 from docx.oxml import OxmlElement
@@ -14,7 +15,7 @@ from docx.oxml.ns import qn
 from lxml import etree as ET
 
 from scripts import docx_revision, revision_render, revision_trace
-from scripts.scientific_editing import docx_citations, formula_tokens
+from scripts.scientific_editing import docx_citations, formula_tokens, WordSource
 
 
 def field(paragraph):
@@ -52,6 +53,32 @@ def image(paragraph):
 
 
 class WordComplexRevisionTests(unittest.TestCase):
+    def test_citation_validation_is_lazy_and_word_sources_are_operation_local(self):
+        from scripts import scientific_editing, revision_ledger
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "main.docx"
+            document = Document()
+            paragraph = document.add_paragraph("The effect may improve.")
+            equation(paragraph)
+            nodes = field(paragraph)
+            paragraph._p.remove(nodes[-1])
+            document.save(path)
+            source = WordSource(path, complete=True)
+            self.assertTrue(formula_tokens(path, document=source))
+            original = scientific_editing.ET.tostring(source.root)
+            self.assertTrue(revision_ledger.source_snapshot(root, path, _documents={path.resolve(): source})["units"])
+            self.assertEqual(scientific_editing.ET.tostring(source.root), original)
+            with self.assertRaisesRegex(ValueError, "unterminated citation field"):
+                docx_citations(path, document=source)
+            paragraph._p.append(nodes[-1])
+            document.save(path)
+            with patch("scripts.scientific_editing._word_citations", wraps=scientific_editing._word_citations) as parsed:
+                current = WordSource(path)
+                self.assertEqual(docx_citations(path, document=current), docx_citations(path, document=current))
+                self.assertEqual(parsed.call_count, 1)
+            self.assertTrue(docx_citations(path))
+
     def round_trip(self, root, base, clean):
         old, new = docx_revision.package(base), docx_revision.package(clean)
         payload = docx_revision.track(old, new, "Doctoral Research OS", "2026-10-09T00:00:00Z")

@@ -306,6 +306,27 @@ class ResearchQualityTests(unittest.TestCase):
                 any("changed" in error for error in validate_data_quality_report(report, "d1", project))
             )
 
+    def test_batch_quality_reads_one_manifest_and_later_checks_reopen_current_source(self):
+        from scripts import research_quality as quality
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.make_project(Path(directory))
+            source = project / "data/datasets.jsonl"
+            manifest = json.loads(source.read_text().strip())
+            source.write_text(json.dumps(manifest) + "\n" + json.dumps({**manifest, "dataset_id": "d2"}) + "\n")
+            reports = {}
+            for dataset in ("d1", "d2"):
+                reports[dataset] = create_data_quality_report(project, dataset, "data/raw/dataset.csv", actor="Fixture")
+                (project / "data/quality" / (dataset + ".json")).write_text(json.dumps(reports[dataset]))
+                confirmation = create_data_quality_confirmation(project, dataset, "Fixture", automated=True)
+                (project / "data/quality" / (dataset + "-confirmation.json")).write_text(json.dumps(confirmation))
+            with patch.object(quality, "_manifest_map", wraps=quality._manifest_map) as inventory:
+                quality.validate_g3_quality(project, require_preregistration=False)
+            self.assertEqual(inventory.call_count, 1)
+            manifest["download"]["sha256"] = "0" * 64
+            source.write_text(json.dumps(manifest) + "\n")
+            self.assertTrue(any("current dataset manifest" in issue
+                                for issue in quality.validate_data_quality_report(reports["d1"], "d1", project)))
+
     def test_non_tabular_wav_is_content_scanned(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = self.make_project(Path(directory))

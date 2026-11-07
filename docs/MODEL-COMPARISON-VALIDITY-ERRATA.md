@@ -1,5 +1,7 @@
 # Model comparison: instrument validity and fixed clarification protocol
 
+The completed evaluation launchers and scorers are historical, available at the pinned links below; their original plans, outputs and billing records remain. This erratum does not enable generation or clear an unsettled charge.
+
 This document records an evaluator error in the initial synthetic comparison.
 The error belongs to the test instrument, not to a model that reasonably
 interpreted an ambiguous request. It does not establish a failure of research
@@ -7,7 +9,7 @@ reasoning, and correcting it does not establish scientific competence.
 
 ## Preserve the initial record
 
-The original instrument is `scripts/model_comparison_cases.py`. Its case text,
+The original instrument is [scripts/model_comparison_cases.py](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/model_comparison_cases.py). Its case text,
 configuration, request bindings, raw answers, requested and reported model IDs,
 settled charges, original scores and timestamps remain unchanged. Never replace
 an original answer, overwrite its score, or rerun a changed prompt under the
@@ -41,7 +43,7 @@ the same question as generalization to an untested environment.
 
 ## Fixed v2 screens
 
-The clarification instrument is `scripts/model_comparison_cases_v2.py`, with
+The clarification instrument is [scripts/model_comparison_cases_v2.py](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/model_comparison_cases_v2.py), with
 new IDs `evidence_conflict_v2` and `experiment_design_v2` and
 `instrument_version="2.0"`. The module reuses only the original system contract
 and strict JSON parser. Its prompts and field-specific scoring are separate.
@@ -60,7 +62,7 @@ participant IDs, predeclared seeds and equal per-trial compute cost close the
 distractor interpretations; they do not represent new real-world evidence.
 
 The complete fixed prompts, field names and criterion weights are in the v2
-module; exact gold closures are in `tests/test_model_comparison_cases_v2.py`.
+module; exact gold closures are in [tests/test_model_comparison_cases_v2.py](https://github.com/hengyizang/lunwen/blob/bda8abe/tests/test_model_comparison_cases_v2.py).
 They must be committed and their request/case bindings fixed before any v2
 generation. No model-specific wording, answer-dependent exceptions or new gold
 values may be introduced during the clarified cohort.

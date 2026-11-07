@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from scripts import evidence_retrieval, literature_review, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, verify_files
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCK = ROOT / "integrations/literature-semantic.lock.json"
@@ -401,9 +401,7 @@ def validate_saved_report(project, request_file="program/literature-semantic.jso
     prepared, _, _, _ = _spec(project, wb._json(source.read_bytes()))
     if prepared != report.get("source_binding"):
         raise ValueError("semantic source rights, original scope or source version changed")
-    for binding in (report["index"], report["dense_cache"]):
-        path = path_in(project, binding["path"])
-        if sha(path) != binding["sha256"] or not _current(project, path):
-            raise ValueError("semantic cache changed")
+    verify_files(project, [report["index"], report["dense_cache"]], origin={"family": "other", "model": MODULE},
+        changed_error="semantic cache changed")
     literature_review.retrieve(project, report["retrieval_request"])
     return report

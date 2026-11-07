@@ -1,14 +1,13 @@
 """Source-bound experiment feedback and bounded proposals; never execute or approve."""
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from datetime import datetime
 from pathlib import Path
 
 from scripts import primary_recovery
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, json_digest as _digest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "scripts/research_iteration.py"
@@ -18,11 +17,6 @@ CODE_SUFFIXES = {".py", ".r", ".jl", ".sh", ".cpp", ".c", ".rs"}
 
 
 from scripts.paper_execution import artifact_path as experiment_path, enabled, scope
-
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
-                                     ensure_ascii=False).encode("utf-8")).hexdigest()
-
 
 def _time(value):
     if not isinstance(value, str):

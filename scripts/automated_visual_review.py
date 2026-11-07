@@ -13,7 +13,7 @@ import uuid
 from pathlib import Path
 
 from scripts import ai_providers, model_routing, model_runtime, output_provenance
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, verify_files, json_digest as _digest
 
 MODULE = "scripts/automated_visual_review.py"
 CHECKS = {"legibility", "clipping", "layout", "english_labels"}
@@ -25,11 +25,6 @@ CHECK_DESCRIPTIONS = {
     "statistical_labels": "Inspect visible axes, units, legends and statistical notations for missing or conflicting labels; do not validate results or recompute statistics.",
     "Word_complex_content": "Inspect the rendered Word equations, tables, figures and pagination for visual damage.",
 }
-
-
-def _digest(value: object) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
-                                     separators=(",", ":")).encode("utf-8")).hexdigest()
 
 
 def _ref(project: Path, path: Path) -> dict:
@@ -73,9 +68,7 @@ def prepare(project: Path, paper_id: str, target: str, *, create: bool = False) 
                 or value.get("source_sha256") != sha(source)
                 or value.get("execution", {}).get("mode") != "cloud"):
             raise ValueError("canonical source needs a current successful cloud render")
-        for row in value.get("inputs", []) + value.get("outputs", []):
-            if sha(path_in(project, row["path"])) != row.get("sha256"):
-                raise ValueError("canonical render input/output changed")
+        verify_files(project, value.get("inputs", []) + value.get("outputs", []), changed_error="canonical render input/output changed")
         rendered = path_in(project, f"papers/{paper_id}/manuscript/main.pdf")
         if not any(row.get("path") == rendered.relative_to(project).as_posix()
                    and row.get("sha256") == sha(rendered) for row in value.get("outputs", [])):

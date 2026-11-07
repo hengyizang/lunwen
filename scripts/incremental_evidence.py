@@ -4,13 +4,12 @@ Mechanical correspondence is never semantic support, novelty or scientific compl
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from scripts.research_artifacts import path_in, read, sha
+from scripts.research_artifacts import path_in, read, sha, json_digest as digest
 from scripts.paper_execution import artifact_path, primary_registry_paths, paper_scoped
 
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}")
@@ -50,11 +49,6 @@ def strings(value, label, minimum=0):
     if len(set(value)) != len(value):
         raise ValueError(label + " contains duplicates")
     return value
-
-
-def digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
-                                     ensure_ascii=False).encode()).hexdigest()
 
 
 def binding(project, value):

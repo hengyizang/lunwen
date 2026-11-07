@@ -559,7 +559,7 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
             or parsed.username or parsed.password or parsed.query or parsed.fragment):
         raise ProviderError("production generation requires an exact configured HTTPS endpoint")
     from scripts.relay_guard import authorize_transport
-    authorize_transport(url, headers)
+    authorize_transport(url, headers, payload=payload)
     request = urllib.request.Request(url, data=json.dumps(payload, allow_nan=False).encode("utf-8"),
                                      headers={**headers, "Content-Type": "application/json",
                                               "User-Agent": "lunwen-production-research/1.0",

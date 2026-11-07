@@ -419,6 +419,24 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
     phase = "restore"
     execution_started = False
     persisted = False
+
+    def logged_command(command, **options):
+        code, output = run_command(command, **options)
+        logs.append(output)
+        return code
+
+    def receipt(name, result):
+        text = json.dumps(result, ensure_ascii=False, indent=2)
+        (ARTIFACT / name).write_text(text + "\n", encoding="utf-8")
+        logs.append(text)
+
+    def spending_boundary(purpose):
+        control = model_spend.read(ROOT / "projects" / slug, required=True)
+        if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
+            raise CloudJobError(purpose + " has reached the cumulative spending ceiling")
+        os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
+        os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
+
     try:
         if action in {"preflight", "init", "status", "routing_status", "accept_route", "set_routing_profile", "authorize_budget", "reconcile_budget", "authorize_data", "resume", "review_dossier", "literature", *cloud_human_controls.ACTIONS, *PAID}:
             worktree, branch = restore_state(slug)
@@ -432,9 +450,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
         if action == "preflight":
             output = cloud_continuation.startup_report(slug)
             output.update(repository=REPOSITORY, python=sys.version.split()[0], cloud_runtime=True)
-            (ARTIFACT / "gateway-startup.json").write_text(
-                json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            logs.append(json.dumps(output, ensure_ascii=False, indent=2))
+            receipt("gateway-startup.json", output)
             detail = (f"Configuration ready: **{output['configuration_ready']}** · "
                       f"Ready to continue: **{output['ready_to_continue']}** · Model calls: **0**.\n\n"
                       + output["next_action"] + "\n\n")
@@ -452,40 +468,30 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
             for provider in providers:
                 args += ["--provider", provider]
             for cmd in (args, ["scripts/live_acceptance.py", "container", "--engine", "docker", "--output", str(ARTIFACT / "container.json")]):
-                code, output = run_command(cmd, timeout=900)
-                logs.append(output)
-                if code:
+                if logged_command(cmd, timeout=900):
                     status = "failed"
         elif action == "free_jev_probe":
             if not os.environ.get("OPENROUTER_API_KEY"):
                 raise CloudJobError("a dedicated zero-credit OpenRouter key is required in the OPENROUTER_API_KEY repository secret")
-            code, output = run_command(["scripts/free_jev_probe.py", "--output", str(ARTIFACT / "free-jev-probe.json")], timeout=120)
-            logs.append(output)
-            if code:
+            if logged_command(["scripts/free_jev_probe.py", "--output", str(ARTIFACT / "free-jev-probe.json")], timeout=120):
                 status = "failed"
         elif action == "bocha_jev_probe":
             cmd = ["scripts/bocha_jev_probe.py", "--output", str(ARTIFACT / "bocha-jev-probe.json")]
             if job.get("live", False):
                 cmd += ["--live", "--free-policy-checked-on", job["free_policy_checked_on"]]
-            code, output = run_command(cmd, timeout=120)
-            logs.append(output)
-            if code:
+            if logged_command(cmd, timeout=120):
                 status = "failed"
         elif action == "init":
             if project_exists:
                 raise CloudJobError("project already exists; use status or cycle")
-            code, output = run_command(["scripts/researchctl.py", "init", "--project", slug, "--paper-count", str(job.get("paper_count", 6))])
-            logs.append(output)
-            if code:
+            if logged_command(["scripts/researchctl.py", "init", "--project", slug, "--paper-count", str(job.get("paper_count", 6))]):
                 status = "failed"
         else:
             if not project_exists:
                 raise CloudJobError("project does not exist; create it with init first")
             if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
                 result = cloud_human_controls.execute(job, run_id, owner_authorization=owner_authorization)
-                (ARTIFACT / "human-control-receipt.json").write_text(
-                    json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-                logs.append(json.dumps(result, ensure_ascii=False, indent=2))
+                receipt("human-control-receipt.json", result)
                 if action == "review_dossier":
                     detail = (f"Review SHA-256: `{result['review_sha256']}`. "
                               f"Blockers: {len(result['blockers'])}. No human decision was recorded.\n\n")
@@ -530,9 +536,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                 result = cloud_continuation.set_task_profile(ROOT / "projects" / slug, job["stage"],
                     job["task_profile"], actor=job["actor"], run_id=str(run_id),
                     expected_profile_sha256=job.get("expected_profile_sha256"))
-                (ARTIFACT / "routing-profile-receipt.json").write_text(
-                    json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-                logs.append(json.dumps(result, ensure_ascii=False, indent=2))
+                receipt("routing-profile-receipt.json", result)
                 detail = "Recorded the current-stage management profile; no model call, budget grant or scientific approval was performed.\n\n"
                 cmd = None
             elif action in {"routing_status", "accept_route"}:
@@ -599,12 +603,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
             elif action == "auxiliary":
                 if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
                     raise CloudJobError("bounded auxiliary jobs require the production routing profile")
-                project = ROOT / "projects" / slug
-                control = model_spend.read(project, required=True)
-                if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
-                    raise CloudJobError("auxiliary work has reached the cumulative spending ceiling")
-                os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
-                os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
+                spending_boundary("auxiliary work")
                 cmd = ["scripts/auxiliary_job.py", "--project", slug, "--manifest", job["manifest"],
                        "--output", "evidence/auxiliary/" + run_id + ".json", "--execute"]
             elif action == "paperqa":
@@ -624,11 +623,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                 question = project / "evidence" / "qa" / (run_id + "-question.txt")
                 question.parent.mkdir(parents=True, exist_ok=True)
                 question.write_text(job["question"], encoding="utf-8")
-                control = model_spend.read(project, required=True)
-                if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
-                    raise CloudJobError("source QA has reached the cumulative spending ceiling")
-                os.environ["DR_OS_REQUIRE_MODEL_AUTH"]="1"
-                os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"]="1"
+                spending_boundary("source QA")
                 cmd = ["scripts/paper_qa.py", "--project", slug, "--question-file", question.relative_to(project).as_posix(),
                        "--output", "evidence/qa/" + run_id + ".json", "--execute"]
                 for source in sources:
@@ -648,8 +643,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
             if cmd is not None:
                 phase = "execution"
                 execution_started = True
-                code, output = run_command(cmd)
-                logs.append(output)
+                code = logged_command(cmd)
                 if action in {"cycle", "continuation"} and progress_before is not None:
                     from scripts.cloud_progress import record
                     record(slug, progress_before, run_id, code)

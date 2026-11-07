@@ -15,7 +15,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 from scripts import literature_evidence as evidence, literature_workbench as wb
-from scripts.research_artifacts import path_in, record, sha, write, matches_origin, seal_manifest, validate_manifest
+from scripts.research_artifacts import path_in, record, sha, write, seal_manifest, validate_manifest
 
 OUTPUT = "reports/literature-zotero"
 KEY = re.compile(r"^[A-Z0-9]{8}$")
@@ -116,11 +116,7 @@ def _saved(project, directory):
     required = {(directory / name).relative_to(project).as_posix() for name in ("index.json", "index.html")}
     if not required <= expected:
         raise ValueError("Zotero output inventory changed")
-    manifest = validate_manifest(project, manifest_path, "scripts/literature_zotero.py", expected, files_key="files")
-    for binding in manifest.get("files", []):
-        path = path_in(project, binding["path"])
-        if not matches_origin(project, path):
-            raise ValueError("Zotero receipt/output changed")
+    validate_manifest(project, manifest_path, "scripts/literature_zotero.py", expected, files_key="files", output_origin={})
     return wb._json((directory / "index.json").read_bytes())
 
 

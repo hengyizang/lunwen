@@ -9,12 +9,14 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard,model_comparison as comparison,model_comparison_clarified as clarified
+from scripts import ai_providers,model_runtime,model_spend,relay_billing,relay_guard as guard
 from scripts.research_artifacts import write
 from tests.relay_guard_fixtures import MemoryStore
 
 PROVIDER="codekey-gemini"
 KEY_SETTING=ai_providers.PRODUCTION_PROVIDERS[PROVIDER]["key_setting"]
+COMPARISON="model-comparison-20261020"
+CLARIFIED="model-comparison-clarified-20261020"
 
 
 class RelayGuardTests(unittest.TestCase):
@@ -66,6 +68,24 @@ class RelayGuardTests(unittest.TestCase):
             with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
                 self.begin()
         self.assertEqual(next(iter(self.active()["legacy_holds"].values()))["provider"],other)
+
+    def test_closed_trial_authorization_never_bypasses_existing_holds(self):
+        holds={"44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9":{"reserved_ceiling_cny":.431508},
+            "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9":{"reserved_ceiling_cny":9.1521024}}
+        self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",{
+            "schema_version":"1.0","credential_sha256":guard.fingerprint(PROVIDER),"legacy_holds":holds,"active":None,"events":[]})
+        for trial,setting in (("writing-comparison-20261027","WRITING_COMPARISON_AUTHORIZATION"),
+                              (guard.EVALUATION_TRIAL,"MODEL_EVALUATION_AUTHORIZATION")):
+            authorization=trial+"-owner-paid-with-legacy-holds"
+            scope={"trial":trial,"authorization":authorization,"call_id":"synthetic-history|case",
+                "project_reservation_id":"a"*32,"legacy_budget_reservation_id":"2b9e5e82da8a4f0bb9bfb6520ba814d1"}
+            with self.subTest(trial=trial),patch.dict(os.environ,{setting:authorization,"GITHUB_ACTOR":"hengyizang",
+                    "GITHUB_REF":"refs/heads/codex/"+trial,"GITHUB_EVENT_NAME":"workflow_dispatch"}), \
+                    self.assertRaisesRegex(guard.RelayGuardError,"unresolved historical"):
+                guard.begin(PROVIDER,scope=scope,max_cost_cny=1,store=self.store)
+            self.assertEqual(self.active()["legacy_holds"],holds)
+            self.assertIsNone(self.active()["active"])
+            self.assertIsNone(guard._TICKET.get())
 
     def test_cas_lease_stops_concurrent_jobs_and_a_different_project(self):
         competing=Context()
@@ -350,19 +370,30 @@ class RelayGuardTests(unittest.TestCase):
         self.store.put(branch,"trial-state",name,{"entries":entries+[resumed]})
         self.assertTrue({e["call_id"] for e in prefix} <= {h["call_id"] for h in guard.source_holds(cheap,self.store)})
 
+    def pin_trial(self,trial,ledger,store=None):
+        store=self.store if store is None else store
+        branch,name=guard.TRIAL_SOURCES[trial]
+        original=store.put(branch,"trial-state",name,ledger)
+        pinned=patch.dict(guard.TRIAL_ORIGINALS,{trial:original})
+        pinned.start();self.addCleanup(pinned.stop)
+        return original
+
     def trial(self):
-        plan=json.loads((comparison.ROOT/"config/model-comparison-20261020.json").read_text(encoding="utf-8"))
-        route=next(r for r in plan["candidates"] if r["provider"]==PROVIDER)
-        case=route["screening_cases"][0];call_id=route["id"]+"|"+case
-        ticket=guard.begin(PROVIDER,scope={"trial":comparison.TRIAL,"call_id":call_id},max_cost_cny=1,store=self.store)
-        guard.bind_meter(ticket,route["model"],self.meter(),store=self.store);self.send()
-        ledger=comparison.new_ledger(plan)
-        entry={"provider":PROVIDER,"call_id":call_id,"candidate_id":route["id"],"model":route["model"],"effort":route["effort"],
-            "case_id":case,"case_sha256":comparison.digest(comparison.fixtures.case(case)),"run_id":"123",
+        """Frozen native ledger shape; never call an old generator or quote."""
+        call_id="synthetic-argon-high|synthetic-case"
+        ticket=guard.begin(PROVIDER,scope={"trial":COMPARISON,"call_id":call_id},max_cost_cny=1,store=self.store)
+        guard.bind_meter(ticket,"gemini-4-argon",self.meter(),store=self.store);self.send()
+        entry={"provider":PROVIDER,"call_id":call_id,"candidate_id":"synthetic-argon-high","model":"gemini-4-argon","effort":"high",
+            "case_id":"synthetic-case","case_sha256":"a"*64,"quote_sha256":"b"*64,"run_id":"123",
             "reserved_ceiling_cny":1,"meter_before":self.meter(),"billing_status":"settled","actual_cost_cny":0.125,
             "generation_status":"response_failed","debit_evidence":self.debit()["debit_evidence"]}
-        ledger["entries"].append(entry)
-        self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+        prefix={**entry,"call_id":"synthetic-prefix|case","text":"Retained original synthetic response"}
+        ledger={"schema_version":"1.0","trial_id":COMPARISON,"authorization_id":"synthetic-owner-authorized-scope",
+            "authorization":{"max_calls":2},"limit_cny":2,"plan_sha256":"c"*64,"status":"closed_with_holds",
+            "entries":[prefix,entry],"production_routing_changed":False,"scientific_completion":False,
+            "full_matrix_authorization":{"original_entries_count":1,"original_entries_sha256":guard._digest([prefix]),
+                "scope_contract":{"plan_sha256":"c"*64,"ceiling_cny":2,"max_calls":2,"paid_retries_authorized":False}}}
+        self.pin_trial(COMPARISON,ledger)
         return ticket,ledger,entry
 
     def test_exact_accounted_trial_settlement_releases_shared_ticket_without_budget_or_generation(self):
@@ -375,12 +406,14 @@ class RelayGuardTests(unittest.TestCase):
                 snapshot=guard.reconciliation_snapshot(project,source,"Synthetic Owner")
                 resolved=snapshot["resolved_proposal"]["resolved_trial"]
                 self.assertEqual(resolved["entry_sha256"],relay_billing._fingerprint(entry))
-                self.assertEqual(resolved["source_blob_sha"],self.store.read(comparison.STATE,"trial-state",comparison.FILE)[1])
+                branch,name=guard.TRIAL_SOURCES[COMPARISON]
+                self.assertEqual(resolved["source_blob_sha"],self.store.read(branch,"trial-state",name)[1])
+                self.assertEqual(resolved["original_trial_blob_sha"],guard.TRIAL_ORIGINALS[COMPARISON])
                 guard.reconcile(project,source,"Synthetic Owner","c"*64,"123","Synthetic exact comparison debit review")
                 post.assert_not_called();budget.assert_not_called()
             self.assertIsNone(self.active()["active"])
             self.assertEqual(self.active()["events"][-2]["status"],"owner_settled_trial")
-            self.assertEqual(self.store.read(comparison.STATE,"trial-state",comparison.FILE)[0],original)
+            self.assertEqual(self.store.read(branch,"trial-state",name)[0],original)
 
     def test_trial_owner_release_rejects_wrong_ticket_before_meter_and_independent_fee(self):
         ticket,ledger,entry=self.trial()
@@ -391,64 +424,236 @@ class RelayGuardTests(unittest.TestCase):
             with self.assertRaisesRegex(guard.RelayGuardError,"exact shared comparison ticket"):
                 guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
             proposal["ticket_id"]=ticket["id"];self.proposal(project,proposal)
-            entry["meter_before"]={**self.meter(),"requests":19}
-            self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+            state=self.active();state["active_meter"]["before"]["requests"]=19
+            self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",state)
             with self.assertRaisesRegex(guard.RelayGuardError,"exact shared ticket"):
                 guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
-            entry["meter_before"]=self.meter();self.store.put(comparison.STATE,"trial-state",comparison.FILE,ledger)
+            state["active_meter"]["before"]=self.meter()
+            self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",state)
             with patch.object(relay_billing,"settle",return_value=self.debit(0.2)):
                 with self.assertRaisesRegex(guard.RelayGuardError,"original accounted trial cost"):
                     guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
             self.assertEqual(self.active()["active"],ticket)
 
+    def test_frozen_trial_rejects_nonbilling_changes_and_rewriting_a_settled_charge(self):
+        ticket,ledger,_=self.trial();branch,name=guard.TRIAL_SOURCES[COMPARISON]
+        changes=[("authorization",lambda value:value["full_matrix_authorization"]["scope_contract"].update(max_calls=3)),
+            ("bool as number",lambda value:value.update(scientific_completion=0)),
+            ("integer as float",lambda value:value["entries"][-1].update(reserved_ceiling_cny=1.0)),
+            ("absent as null",lambda value:value["entries"][-1].update(request_id=None)),
+            ("deleted field",lambda value:value["entries"][-1].pop("effort")),
+            ("quote",lambda value:value["entries"][-1].update(quote_sha256="d"*64)),
+            ("old settled cost",lambda value:value["entries"][-1].update(actual_cost_cny=.2)),
+            ("other response",lambda value:value["entries"][0].update(text="Changed original response")),
+            ("reordered attempts",lambda value:value["entries"].reverse())]
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"owner-control-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial",
+                "credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"],"original_blob_sha":"0"*40})
+            with patch.object(relay_billing,"settle") as meter:
+                for label,change in changes:
+                    changed=copy.deepcopy(ledger);change(changed);self.store.put(branch,"trial-state",name,changed)
+                    with self.subTest(change=label),self.assertRaisesRegex(guard.RelayGuardError,"immutable original"):
+                        guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                    self.assertEqual(self.active()["active"],ticket)
+                meter.assert_not_called()
+
+    def test_original_reserved_trial_can_only_gain_an_independently_verified_settlement(self):
+        ticket,current,_=self.trial();branch,name=guard.TRIAL_SOURCES[COMPARISON]
+        original=copy.deepcopy(current);entry=original["entries"][-1]
+        entry["billing_status"]="reserved";entry.pop("actual_cost_cny");entry.pop("debit_evidence")
+        original_blob=self.pin_trial(COMPARISON,original)
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"owner-control-project"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial",
+                "credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            with patch.object(relay_billing,"settle") as meter:
+                with self.assertRaisesRegex(guard.RelayGuardError,"independent debit"):
+                    guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                meter.assert_not_called()
+            self.store.put(branch,"trial-state",name,current)
+            with patch.object(relay_billing,"settle",return_value=self.debit()):
+                proposal=guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)[0]
+            self.assertEqual(proposal["resolved_trial"]["original_trial_blob_sha"],original_blob)
+            self.assertNotEqual(proposal["resolved_trial"]["source_blob_sha"],original_blob)
+            self.assertEqual(self.active()["active"],ticket)
+
     def test_clarified_settlement_uses_immutable_original_parent_after_current_parent_changes(self):
-        class ArchiveStore(MemoryStore):
-            def __init__(self):
-                self.archives={};self.blob_reads=[];super().__init__()
-            def put(self,*args):
-                blob=super().put(*args);self.archives[blob]=copy.deepcopy(args[-1]);return blob
-            def read_blob(self,blob):
-                self.blob_reads.append(blob)
-                if blob not in self.archives:raise guard.RelayGuardError("original parent blob unavailable")
-                return copy.deepcopy(self.archives[blob])
-        store=ArchiveStore()
-        plan=json.loads((comparison.ROOT/"config/model-comparison-20261020.json").read_text(encoding="utf-8"))
-        with patch.object(model_runtime,"pricing",return_value={"quote_sha256":"b"*64}), \
-                patch.object(model_runtime,"reservation_bound",return_value=1.0):
-            parent=comparison.new_ledger(plan)
-            comparison.authorize_complete(plan,parent,"a"*40,"a"*40,comparison.FULL_AUTHORIZATION,lambda _:None)
-            parent["status"]="closed"
-            parent_blob=store.put(comparison.STATE,"trial-state",comparison.FILE,parent)
-            contract=clarified.scope(plan,parent,parent_blob)
-        route=next(r for r in contract["configurations"] if r["provider"]=="codekey-deepseek")
-        provider=route["provider"];case=clarified.CASE_IDS[0];call_id=route["id"]+"|"+case
+        store=MemoryStore();parent_branch,parent_name=guard.TRIAL_SOURCES[COMPARISON]
+        parent={"trial_id":COMPARISON,"status":"closed_with_holds","plan_sha256":"c"*64,
+            "entries":[{"call_id":"synthetic-held-prefix","billing_status":"reserved","reserved_ceiling_cny":.5}],
+            "full_matrix_authorization":{"scope_contract":{"max_calls":128,"ceiling_cny":241.09388247}}}
+        parent_blob=self.pin_trial(COMPARISON,parent,store)
+        provider="codekey-deepseek";call_id="synthetic-deepseek-high|synthetic-case"
         setting=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
         before={**self.meter(),"provider":provider}
         with patch.dict(os.environ,{setting:"synthetic-clarified-history-key"}):
-            ticket=guard.begin(provider,scope={"trial":clarified.TRIAL,"call_id":call_id},max_cost_cny=1,store=store)
-            guard.bind_meter(ticket,route["model"],before,store=store)
+            ticket=guard.begin(provider,scope={"trial":CLARIFIED,"call_id":call_id},max_cost_cny=1,store=store)
+            guard.bind_meter(ticket,"deepseek-v3.2",before,store=store)
             guard.authorize_transport("https://codekey.ai/v1/chat/completions",{"Authorization":"Bearer synthetic-clarified-history-key"})
-            ledger=clarified.new_ledger(contract,parent)
-            ledger["entries"].append({"provider":provider,"call_id":call_id,"candidate_id":route["id"],"model":route["model"],"effort":route["effort"],
-                "case_id":case,"case_sha256":clarified.digest(clarified.fixtures.case(case)),"run_id":"123",
-                "quote_sha256":contract["quote_sha256_by_candidate"][route["id"]],"reserved_ceiling_cny":1,
-                "meter_before":before,"billing_status":"settled","actual_cost_cny":0.125,"debit_evidence":self.debit()["debit_evidence"]})
-            store.put(comparison.STATE,"trial-state",clarified.FILE,ledger)
+            ledger={"trial_id":CLARIFIED,"status":"closed","scope":{"authorization_id":"synthetic-clarified-owner-scope",
+                "parent_blob_sha":parent_blob,"parent_ledger_sha256":guard._digest(parent),"parent_plan_sha256":parent["plan_sha256"],
+                "parent_attempts":1,"parent_outstanding_holds_cny":.5,"fixture_sha256":"a"*64,
+                "quote_sha256_by_candidate":{"synthetic-deepseek-high":"b"*64},"max_calls":16,"max_combined_calls":128},
+                "entries":[{"provider":provider,"call_id":call_id,"candidate_id":"synthetic-deepseek-high","model":"deepseek-v3.2","effort":"high",
+                    "case_id":"synthetic-case","case_sha256":"a"*64,"run_id":"123","quote_sha256":"b"*64,"reserved_ceiling_cny":1,
+                    "meter_before":before,"billing_status":"settled","actual_cost_cny":0.125,"debit_evidence":self.debit()["debit_evidence"]}]}
+            original_blob=self.pin_trial(CLARIFIED,ledger,store)
             current={**parent,"operator_reviews":[{"note":"Later legitimate independent billing reconciliation."}]}
-            current_blob=store.put(comparison.STATE,"trial-state",comparison.FILE,current)
+            current_blob=store.put(parent_branch,"trial-state",parent_name,current)
             self.assertNotEqual(parent_blob,current_blob)
             with tempfile.TemporaryDirectory() as temporary:
                 project=Path(temporary)/"owner-control-project"
                 source=self.proposal(project,{"provider":provider,"kind":"settled_trial","credential_sha256":guard.fingerprint(provider),"ticket_id":ticket["id"]})
-                with patch.object(relay_billing,"settle",return_value=self.debit()),patch.object(model_runtime,"pricing") as price:
+                with patch.object(relay_billing,"settle",return_value=self.debit()),patch.object(model_runtime,"pricing") as price, \
+                        patch.object(store,"read_blob",wraps=store.read_blob) as original_read:
                     proposal=guard.prepare_reconciliation(project,source,"Synthetic Owner",store=store)[0]
                     price.assert_not_called()
                 self.assertEqual(proposal["resolved_trial"]["original_parent_blob_sha"],parent_blob)
-                self.assertEqual(store.blob_reads,[parent_blob])
-                self.assertEqual(store.read(comparison.STATE,"trial-state",comparison.FILE)[1],current_blob)
-                store.archives.pop(parent_blob)
-                with self.assertRaisesRegex(guard.RelayGuardError,"original parent blob unavailable"):
+                self.assertEqual([call.args for call in original_read.call_args_list],[(original_blob,),(parent_blob,)])
+                self.assertEqual(store.read(parent_branch,"trial-state",parent_name)[1],current_blob)
+                branch,name=guard.TRIAL_SOURCES[CLARIFIED]
+                for field,value in (("parent_blob_sha","0"*40),("parent_ledger_sha256","0"*64),("parent_plan_sha256","0"*64)):
+                    malformed=copy.deepcopy(ledger);malformed["scope"][field]=value
+                    # Stub a malformed authenticated original as well: the
+                    # original-parent contract must still be internally exact.
+                    store.blobs[original_blob]=copy.deepcopy(malformed)
+                    store.put(branch,"trial-state",name,malformed)
+                    with self.subTest(field=field),self.assertRaisesRegex(guard.RelayGuardError,"original parent"):
+                        guard.prepare_reconciliation(project,source,"Synthetic Owner",store=store)
+                store.blobs[original_blob]=copy.deepcopy(ledger);store.put(branch,"trial-state",name,ledger)
+                store.blobs.pop(parent_blob)
+                with self.assertRaisesRegex(guard.RelayGuardError,"original historical blob unavailable"):
                     guard.prepare_reconciliation(project,source,"Synthetic Owner",store=store)
+
+    def evaluation_trial(self):
+        """Real retained format with synthetic requests, meters and immutable IO."""
+        import hashlib
+        plan=json.loads((guard.ROOT/"config/model-evaluation-20261029.json").read_text())
+        route=next(row for row in plan["routes"] if row["id"]=="argon-native-high")
+        case=next(row for row in plan["cases"] if row["id"]=="discriminating-experiment")
+        reservation="f705e87ba4514cb99c961768f59f4278"
+        request={"call_id":route["id"]+"|"+case["id"],"route_id":route["id"],"case_id":case["id"],
+            "case_sha256":guard._digest(case),"max_output_tokens":plan["max_output_tokens"],
+            "timeout":300,"reserved_ceiling_cny":.4321632}
+        entry={**{key:request[key] for key in ("call_id","route_id","case_id","case_sha256","reserved_ceiling_cny")},
+            "task_class":case["task_class"],"partition":case["partition"],"provider":route["provider"],
+            "requested_model":route["model"],"requested_effort":route["effort"],"project_reservation_id":reservation,
+            "meter_before":self.meter(),"billing_status":"reserved","generation_status":"failed","run_id":"123",
+            "code_sha":"a"*40,"diagnostic":"Synthetic failed response; its charge remains unknown.","duration_seconds":1.2}
+        earlier={**entry,"call_id":"earlier-synthetic-call","generation_status":"completed","text":"Retained synthetic prior response",
+            "billing_status":"settled","actual_cost_cny":.02}
+        original={"trial_id":guard.EVALUATION_TRIAL,"status":"stopped","entries":[earlier,entry],
+            "legacy_budget_reservations":{"gemini":"2b9e5e82da8a4f0bb9bfb6520ba814d1","deepseek":"b"*32},
+            "scope":{"authorization":plan["authorization"],"project":"my-phd","project_ceiling_cny":500,"max_calls":40,
+                "code_sha":"a"*40,"plan_sha256":guard._digest(plan),"routes":plan["routes"],"queue":[request],
+                "prices_sha256":hashlib.sha256((guard.ROOT/"config/model-evaluation-pricing-20261029.json").read_bytes()).hexdigest()}}
+        scope={"trial":guard.EVALUATION_TRIAL,"call_id":entry["call_id"],"authorization":plan["authorization"],
+            "project_reservation_id":reservation,"legacy_budget_reservation_id":original["legacy_budget_reservations"]["gemini"]}
+        ticket={"id":guard.EVALUATION_TICKET,"provider":PROVIDER,"credential_sha256":guard.fingerprint(PROVIDER),
+            "scope":scope,"run_id":"123","max_cost_cny":entry["reserved_ceiling_cny"]}
+        self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",{
+            "schema_version":"1.0","credential_sha256":guard.fingerprint(PROVIDER),"legacy_holds":{"retained-old-hold":{"provider":PROVIDER}},
+            "active":ticket,"active_meter":{"model":entry["requested_model"],"before":self.meter()},"events":[]})
+        current=copy.deepcopy(original)
+        current["entries"][-1].update(billing_status="settled",actual_cost_cny=.125,
+            debit_evidence=self.debit()["debit_evidence"],reconciled_at="2026-11-07T00:00:00Z")
+        branch,name=guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL]
+        self.store.put(branch,"trial-state",name,current)
+        budget={"reservations":{"unrelated-retained-hold":{}},"reconciliation_events":[{"receipt_id":reservation,"actual_cost_cny":.125}]}
+        return original,current,ticket,budget
+
+    def test_oct29_settlement_never_reopens_generation_or_discards_other_holds(self):
+        original,current,ticket,budget=self.evaluation_trial()
+        retained=copy.deepcopy(self.active()["legacy_holds"])
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"my-phd"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial",
+                "credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            with patch.object(self.store,"read_blob",return_value=original,create=True) as immutable, \
+                 patch.object(guard,"CloudStore",return_value=self.store), \
+                 patch.object(relay_billing,"settle",return_value=self.debit()), \
+                 patch.object(model_spend,"read",return_value=budget), \
+                 patch.object(model_spend,"write",side_effect=AssertionError("no budget writes")), \
+                 patch.object(ai_providers,"call_production",side_effect=AssertionError("no generation")):
+                before=copy.deepcopy(self.active())
+                snapshot=guard.reconciliation_snapshot(project,source,"Synthetic Owner",store=self.store)
+                self.assertEqual(snapshot["resolved_proposal"]["resolved_trial"]["original_trial_blob_sha"],guard.EVALUATION_ORIGINAL_BLOB)
+                self.assertEqual(self.active(),before)
+                guard.reconcile(project,source,"Synthetic Owner","c"*64,"123","Synthetic immutable debit-only review")
+                self.assertTrue(all(call.args==(guard.EVALUATION_ORIGINAL_BLOB,) for call in immutable.call_args_list))
+            self.assertIsNone(self.active()["active"])
+            self.assertEqual(self.active()["legacy_holds"],retained)
+            self.assertEqual(self.store.read(*guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL][:1],"trial-state","ledger.json")[0],current)
+            self.assertNotIn(guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL],guard.SOURCES)
+
+    def test_oct29_source_mutations_and_unknown_billing_never_release_the_active_ticket(self):
+        original,current,ticket,budget=self.evaluation_trial()
+        branch,name=guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL]
+        mutations=[("scope",lambda value:value["scope"].update(code_sha="b"*40)),
+            ("other response",lambda value:value["entries"][0].update(text="Changed original response")),
+            ("new target response",lambda value:value["entries"][-1].update(text="Invented accepted response")),
+            ("removed target data",lambda value:value["entries"][-1].pop("diagnostic")),
+            ("unknown bill",lambda value:value["entries"][-1].update(billing_status="reserved")),
+            ("excess charge",lambda value:value["entries"][-1].update(actual_cost_cny=2)),
+            ("extra metadata",lambda value:value.update(automatic_promotion=True)),
+            ("extra source call",lambda value:value["entries"].append(copy.deepcopy(value["entries"][0])))]
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"my-phd"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial",
+                "credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            with patch.object(self.store,"read_blob",return_value=original,create=True), \
+                 patch.object(model_spend,"read",return_value=budget),patch.object(relay_billing,"settle") as meter:
+                for label,mutate in mutations:
+                    with self.subTest(change=label):
+                        changed=copy.deepcopy(current);mutate(changed)
+                        self.store.put(branch,"trial-state",name,changed)
+                        with self.assertRaises(guard.RelayGuardError):
+                            guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+                        self.assertEqual(self.active()["active"],ticket)
+                meter.assert_not_called()
+
+    def test_oct29_requires_original_blob_plan_partition_ticket_and_independent_project_cost(self):
+        original,current,ticket,budget=self.evaluation_trial()
+        with tempfile.TemporaryDirectory() as temporary:
+            project=Path(temporary)/"my-phd"
+            source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_trial",
+                "credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})
+            def check():return guard.prepare_reconciliation(project,source,"Synthetic Owner",store=self.store)
+            with patch.object(self.store,"read_blob",return_value=original,create=True) as immutable, \
+                 patch.object(model_spend,"read",return_value=budget),patch.object(relay_billing,"settle",return_value=self.debit()) as meter:
+                immutable.side_effect=guard.RelayGuardError("immutable original unavailable")
+                with self.assertRaisesRegex(guard.RelayGuardError,"immutable original"):check()
+                immutable.side_effect=None
+                bad_original=copy.deepcopy(original);bad_original["scope"]["project"]="other-project"
+                immutable.return_value=bad_original
+                with self.assertRaisesRegex(guard.RelayGuardError,"immutable original"):check()
+                immutable.return_value=original
+                for change in ("ticket","before","model","reservation","case","partition"):
+                    state=copy.deepcopy(self.active())
+                    if change=="ticket":state["active"]["id"]="0"*32
+                    elif change=="before":state["active_meter"]["before"]["requests"]-=1
+                    elif change=="model":state["active_meter"]["model"]="different-model"
+                    elif change=="reservation":state["active"]["scope"]["project_reservation_id"]="0"*32
+                    else:
+                        bad=copy.deepcopy(original);bad["scope"]["queue"][0]["case_sha256"]="0"*64
+                        if change=="partition":bad["entries"][-1]["partition"]="unknown"
+                        immutable.return_value=bad
+                        self.store.put(*guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL][:1],"trial-state","ledger.json",{
+                            **bad,"entries":[bad["entries"][0],{**bad["entries"][-1],**{key:current["entries"][-1][key]
+                                for key in ("billing_status","actual_cost_cny","debit_evidence","reconciled_at")}}]})
+                    self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",state)
+                    with self.subTest(change=change),self.assertRaises(guard.RelayGuardError):check()
+                    immutable.return_value=original
+                    self.store.put(*guard.TRIAL_SOURCES[guard.EVALUATION_TRIAL][:1],"trial-state","ledger.json",current)
+                    state["active"]=copy.deepcopy(ticket);state["active_meter"]={"model":"gemini-4-argon","before":self.meter()}
+                    self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",state)
+                for changed_budget in ({**budget,"reservations":{ticket["scope"]["project_reservation_id"]:{}}},
+                                       {**budget,"reconciliation_events":[]}):
+                    with patch.object(model_spend,"read",return_value=changed_budget),self.assertRaises(guard.RelayGuardError):check()
+                meter.return_value=self.debit(.2)
+                with self.assertRaisesRegex(guard.RelayGuardError,"original accounted trial cost"):check()
+                self.assertEqual(self.active()["active"],ticket)
 
     def test_owner_active_reconciliation_needs_original_project_and_matching_budget_event(self):
         ticket=self.begin();self.bind(ticket);self.send()

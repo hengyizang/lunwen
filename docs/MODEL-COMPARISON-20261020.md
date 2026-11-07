@@ -1,5 +1,9 @@
 # Fixed-scope model comparison, 2026-10-20
 
+This document records a completed dated trial. Its paid [main launcher](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/model_comparison.py), [clarified follow-up](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/model_comparison_clarified.py) and dated workflow are retired. Current shared-credential controls retain exact historical ledger verification; original plans, responses and unsettled reservations remain.
+
+The completed [Luna supplement](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/luna_supplement.py) and one-call [Argon probe](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/argon_native_probe.py) launchers and their workflow entries are retired. Their fixed original ledgers remain: Luna is closed with reservations, and the Argon probe retains an unsettled charge. Retirement never releases those holds or certifies payment.
+
 This is a new owner-authorized allowance of at most CNY30, separate from the
 closed relay-acceptance-20261019 allowance and every research project budget.
 Execution is restricted to the authenticated owner dispatch in GitHub Actions.

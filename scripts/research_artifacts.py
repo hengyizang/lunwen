@@ -19,6 +19,23 @@ def load_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def json_bytes(value, *, allow_nan=True) -> bytes:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=allow_nan).encode("utf-8")
+
+
+def json_digest(value, *, allow_nan=True) -> str:
+    return hashlib.sha256(json_bytes(value, allow_nan=allow_nan)).hexdigest()
+
+
+def object_fields(value, allowed, label):
+    if not isinstance(value, dict) or set(value) - set(allowed):
+        raise ValueError(label + " has unsupported fields")
+
+
+def changed_fields(saved, current, fields):
+    return [key for key in fields if saved.get(key) != current.get(key)]
+
+
 def read_optional(path, default=None):
     return load_json(path) if Path(path).is_file() else default
 
@@ -131,6 +148,20 @@ def matches_origin(project: Path, path: Path, **expected) -> bool:
     return origin.get("status") == "tracked" and all(origin.get(key) == value for key, value in expected.items())
 
 
+def verify_files(project: Path, bindings, expected=None, *, origin=None,
+                 inventory_error="manifest output inventory changed", changed_error="manifest output changed"):
+    """Check a recorded inventory without changing the caller's authority rules."""
+    if (not isinstance(bindings, list)
+            or any(not isinstance(item, dict) or not isinstance(item.get("path"), str) for item in bindings)
+            or (expected is not None and (len(bindings) != len(expected)
+                or {item["path"] for item in bindings} != expected))):
+        raise ValueError(inventory_error)
+    for binding in bindings:
+        target = path_in(project, binding["path"])
+        if sha(target) != binding.get("sha256") or (origin is not None and not matches_origin(project, target, **origin)):
+            raise ValueError(changed_error)
+
+
 def seal_manifest(project: Path, paths: list[Path], manifest: Path, module: str,
                   metadata: dict, *, files_key="outputs", record_outputs=True) -> None:
     """Bind existing outputs; callers retain their report and execution policies."""
@@ -140,7 +171,7 @@ def seal_manifest(project: Path, paths: list[Path], manifest: Path, module: str,
 
 
 def validate_manifest(project: Path, manifest: Path, module: str, expected: set[str],
-                      *, files_key="outputs", metadata=None) -> dict:
+                      *, files_key="outputs", metadata=None, output_origin=None) -> dict:
     """Verify one builder's exact inventory, current implementation and inputs.
 
     This is the inverse of seal_manifest, not scientific approval. Source rights,
@@ -154,14 +185,7 @@ def validate_manifest(project: Path, manifest: Path, module: str, expected: set[
     for key, binding in (metadata or {}).items():
         if value.get(key) != binding:
             raise ValueError("manifest " + key + " changed")
-    outputs = value.get(files_key)
-    if (not isinstance(outputs, list) or len(outputs) != len(expected)
-            or any(not isinstance(item, dict) or not isinstance(item.get("path"), str) for item in outputs)
-            or {item["path"] for item in outputs} != expected):
-        raise ValueError("manifest output inventory changed")
-    for binding in outputs:
-        if sha(path_in(project, binding["path"])) != binding.get("sha256"):
-            raise ValueError("manifest output changed")
+    verify_files(project, value.get(files_key), expected, origin=output_origin)
     return value
 
 

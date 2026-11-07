@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 
 from scripts import literature_evidence as evidence, literature_intelligence as intelligence
 from scripts import literature_workbench as workbench
-from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin
+from scripts.research_artifacts import path_in, read, record, sha, write, matches_origin, json_digest as _digest, object_fields as _keys
 
 REQUEST = "program/literature-search-strategy.json"
 OUTPUT = "reports/literature-search-strategy"
@@ -24,15 +24,6 @@ MODULE = "scripts/literature_search_strategy.py"
 TIERS = ("broad", "medium", "strict")
 NATIVE = set(evidence.DEFAULT_SEARCH_PROVIDERS)
 PLATFORMS = NATIVE | {"wos", "cnki"}
-
-
-def _digest(value):
-    return hashlib.sha256(evidence.canonical_json_bytes(value)).hexdigest()
-
-
-def _keys(value, allowed, label):
-    if not isinstance(value, dict) or set(value) - set(allowed):
-        raise ValueError(label + " has unsupported fields")
 
 
 def _text(value, label, maximum=1000):

@@ -107,14 +107,28 @@ BUILDERS = {
     'journal_dossiers': (('paper-architecture', 'writing-and-review'), 'journal_dossier.refresh', ()),
     'journal_sources': (('paper-architecture', 'writing-and-review'), 'journal_dossier.fetch_sources', ()),
     'compile_tex': (('writing-and-review',), 'cloud_runtime.compile_tex', ('paper_id',)),
+    'word_render': (('writing-and-review',), 'word_render.render', ('paper_id', ('source', None))),
+    'increments_freeze': (None, 'research_increments.freeze', ('kind', 'record_id')),
+    'revision_ledger_manifest': ((), 'revision_ledger.change_manifest', ('paper_id',)),
+    **{action: ((), action + '.refresh', ('paper_id',))
+       for action in ('reviewer_rounds', 'publication_disclosure', 'statistical_watermarks')},
 }
+
+CLI_ALIASES = {'notebook': 'research_notebook', 'daily-brief': 'research_notebook_daily',
+               'statistics': 'statistical_reporting', 'word-revision': 'docx_revision',
+               'journals': 'journal_dossiers', 'method-contracts': 'method_tools'}
+
+
+def invoke_builder(project, operation):
+    _, target, fields = BUILDERS[operation['action']]
+    module, name = target.rsplit('.', 1)
+    arguments = (operation[field] if isinstance(field, str) else operation.get(*field) for field in fields)
+    return getattr(import_module('scripts.' + module), name)(project, *arguments)
 
 
 def run_builder(project, operation, stage):
     specification = BUILDERS.get(operation.get('action'))
-    if specification is None or stage not in specification[0]:
+    if specification is None or (stage == 'intake' if specification[0] is None else stage not in specification[0]):
         return False
-    _, target, fields = specification
-    module, name = target.rsplit('.', 1)
-    getattr(import_module('scripts.' + module), name)(project, *(operation[field] for field in fields))
+    invoke_builder(project, operation)
     return True

@@ -28,10 +28,10 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, utc_now
+    from scripts.research_artifacts import sha as sha256_file, utc_now, json_bytes as canonical_json_bytes
     from scripts.network_safety import fetch_bytes
 except ImportError:
-    from research_artifacts import sha as sha256_file, utc_now
+    from research_artifacts import sha as sha256_file, utc_now, json_bytes as canonical_json_bytes
     from network_safety import fetch_bytes  # type: ignore
 
 
@@ -88,12 +88,6 @@ class LiteratureEvidenceError(RuntimeError):
 
 def sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
-
-
-def canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")
 
 
 def project_path(slug: str) -> Path:

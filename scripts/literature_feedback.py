@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime, timezone
-import hashlib
 import os
 from pathlib import Path
 import re
@@ -17,7 +16,7 @@ import re
 from scripts import literature_evidence as evidence
 from scripts import literature_intelligence as intelligence
 from scripts.output_provenance import current_origin
-from scripts.research_artifacts import bound_source, path_in, read, record, sha, write
+from scripts.research_artifacts import bound_source, path_in, read, record, sha, write, json_digest as digest
 
 ROOT = "reports/literature-feedback"
 OUTCOMES = {
@@ -32,10 +31,6 @@ MODULE = "scripts/literature_feedback.py"
 
 
 from scripts.paper_execution import primary_registry_paths
-
-def digest(value) -> str:
-    return hashlib.sha256(evidence.canonical_json_bytes(value)).hexdigest()
-
 
 def _cloud():
     if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":

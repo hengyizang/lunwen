@@ -15,7 +15,7 @@ import time
 import uuid
 
 from scripts import literature_review, literature_workbench as wb, model_runtime, paper_qa
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, object_fields as _keys
 
 OUTPUT = "reports/literature-comparison"
 MODULE = "scripts/literature_comparison.py"
@@ -25,11 +25,6 @@ ROUTES = ("retrieval", "full_text")
 def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
         separators=(",", ":"), allow_nan=False).encode()).hexdigest()
-
-
-def _keys(value, allowed, label):
-    if not isinstance(value, dict) or set(value) - set(allowed):
-        raise ValueError(label + " has unsupported fields")
 
 
 def _block(source_id, block):

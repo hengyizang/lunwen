@@ -6,7 +6,6 @@ No model, network request, embedding service or new approval system is used.
 """
 from __future__ import annotations
 
-import hashlib
 import html
 import json
 import math
@@ -22,7 +21,7 @@ from urllib.parse import quote as urlquote
 import xml.etree.ElementTree as ET
 
 from scripts import literature_reasoning as reasoning, literature_workbench as wb
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, json_digest as _digest
 
 
 OUTPUT = "reports/literature-reading"
@@ -35,11 +34,6 @@ SECTION_NAMES = {
 }
 FIELD_DIMENSIONS = {"methods": ("methods", "protocols", "splits", "statistics"),
                     "results": ("findings",), "abstract": (), "appendix": ()}
-
-
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
-                                    separators=(",", ":")).encode()).hexdigest()
 
 
 def _paper(project, paper_id, output_dir):

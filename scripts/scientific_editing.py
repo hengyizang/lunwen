@@ -10,6 +10,7 @@ import re
 import unicodedata
 import zipfile
 from collections import Counter
+from functools import cached_property
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -25,6 +26,25 @@ FILLER = {"the", "a", "an", "and", "or", "of", "in", "on", "to", "for", "by",
           "with", "was", "were", "is", "are", "has", "have", "it", "this", "that"}
 SI_UNITS = {"mm", "cm", "m", "km", "ms", "s", "mg", "g", "kg", "ml", "mL", "mol", "Hz", "kHz", "MPa", "Pa", "M", "mM"}
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def word_package(path, *, members=None):
+    with zipfile.ZipFile(path) as archive:
+        if len(archive.namelist()) != len(set(archive.namelist())) or sum(i.file_size for i in archive.infolist()) > 50_000_000:
+            raise ValueError("duplicate or oversized OOXML package")
+        return {name: archive.read(name) for name in archive.namelist() if members is None or name in members}
+
+
+class WordSource:
+    """One read-only Word source within a single inspection; never a global cache."""
+    def __init__(self, path, *, complete=False):
+        self.parts = word_package(path, members=None if complete else {"word/document.xml", "word/_rels/document.xml.rels"})
+        self.root = ET.fromstring(self.parts["word/document.xml"])
+        self.text = " ".join(node.text or "" for node in self.root.iter() if node.tag.endswith("}t"))
+
+    @cached_property
+    def citations(self):
+        return _word_citations(self)
 
 
 def signatures(text: str) -> list[str]:
@@ -52,39 +72,42 @@ def context_changes(before: str, after: str) -> dict[str, list[str]]:
     return {"removed": sorted((left-right).elements()), "added": sorted((right-left).elements())}
 
 
-def docx_citations(path: Path) -> list[str]:
+def docx_citations(path: Path, *, document=None) -> list[str]:
     """Retain Word citation fields, citation hyperlinks and author/year anchors."""
+    return (document or WordSource(path)).citations
+
+
+def _word_citations(source):
     result = []
-    with zipfile.ZipFile(path) as archive:
-        document = ET.fromstring(archive.read("word/document.xml"))
-        fields = []
-        def capture(value):
-            if re.search(r"CITATION|ZOTERO|CSL_CITATION|EN\.CITE", value, re.I):
-                result.append(re.sub(r"\s+", " ", value).strip())
-        for node in document.iter():
-            if node.tag == W + "fldChar":
-                kind = node.get(W + "fldCharType")
-                if kind == "begin":
-                    fields.append([])
-                elif kind == "end" and fields:
-                    capture("".join(fields.pop()))
-            elif node.tag == W + "instrText":
-                if fields:
-                    fields[-1].append(node.text or "")
-                else:
-                    capture(node.text or "")
-            elif node.tag == W + "fldSimple":
-                capture(node.get(W + "instr", ""))
-        if fields:
-            raise ValueError("DOCX contains an unterminated citation field")
-        for name in archive.namelist():
-            if name == "word/_rels/document.xml.rels":
-                for node in ET.fromstring(archive.read(name)):
-                    target = node.get("Target", "")
-                    if re.search(r"doi\.org/|pubmed\.ncbi\.nlm\.nih\.gov/", target, re.I):
-                        result.append(target)
-        text = " ".join(node.text or "" for node in document.iter(W+"t"))
-        result.extend(re.findall(r"\([^()\n]*[A-Za-z][^()\n]*\b(?:19|20)\d{2}[a-z]?[^()\n]*\)", text))
+    document = source.root
+    fields = []
+    def capture(value):
+        if re.search(r"CITATION|ZOTERO|CSL_CITATION|EN\.CITE", value, re.I):
+            result.append(re.sub(r"\s+", " ", value).strip())
+    for node in document.iter():
+        if node.tag == W + "fldChar":
+            kind = node.get(W + "fldCharType")
+            if kind == "begin":
+                fields.append([])
+            elif kind == "end" and fields:
+                capture("".join(fields.pop()))
+        elif node.tag == W + "instrText":
+            if fields:
+                fields[-1].append(node.text or "")
+            else:
+                capture(node.text or "")
+        elif node.tag == W + "fldSimple":
+            capture(node.get(W + "instr", ""))
+    if fields:
+        raise ValueError("DOCX contains an unterminated citation field")
+    for name, payload in source.parts.items():
+        if name == "word/_rels/document.xml.rels":
+            for node in ET.fromstring(payload):
+                target = node.get("Target", "")
+                if re.search(r"doi\.org/|pubmed\.ncbi\.nlm\.nih\.gov/", target, re.I):
+                    result.append(target)
+    text = " ".join(node.text or "" for node in document.iter(W+"t"))
+    result.extend(re.findall(r"\([^()\n]*[A-Za-z][^()\n]*\b(?:19|20)\d{2}[a-z]?[^()\n]*\)", text))
     return result
 
 
@@ -95,7 +118,7 @@ def character_audit(text: str) -> list[dict]:
             for i, char in enumerate(text) if unicodedata.category(char) == "Cf"]
 
 
-def scientific_text(path: Path) -> str:
+def scientific_text(path: Path, *, document=None) -> str:
     """Language cleanup must not erase equations from scientific drift checks."""
     if path.suffix.lower() == ".tex":
         try:
@@ -104,6 +127,10 @@ def scientific_text(path: Path) -> str:
             from citation_audit import tex_source_paths
         return "\n".join(re.sub(r"(?m)(?<!\\)%.*$", "", p.read_text(encoding="utf-8"))
                          for p in sorted(tex_source_paths(path)))
+    if path.suffix.lower() == ".docx" and document is not None:
+        if len(document.parts["word/document.xml"]) > 10 * 1024 * 1024:
+            raise ValueError("DOCX document XML exceeds the 10 MiB language-audit limit")
+        return document.text
     try:
         from scripts.manuscript_language import extract_text
     except ImportError:
@@ -111,7 +138,7 @@ def scientific_text(path: Path) -> str:
     return extract_text(path)
 
 
-def formula_tokens(path: Path) -> list[str]:
+def formula_tokens(path: Path, *, document=None) -> list[str]:
     if path.suffix.lower() == ".tex":
         text = scientific_text(path)
         patterns = (r"(?<!\\)\$\$[\s\S]*?(?<!\\)\$\$", r"(?<![\\$])\$(?!\$)[\s\S]*?(?<![\\$])\$(?!\$)",
@@ -124,8 +151,7 @@ def formula_tokens(path: Path) -> list[str]:
             text = re.sub(pattern, " ", text)
         return values
     if path.suffix.lower() == ".docx":
-        with zipfile.ZipFile(path) as archive:
-            root = ET.fromstring(archive.read("word/document.xml"))
+        root = (document or WordSource(path)).root
         math = "{http://schemas.openxmlformats.org/officeDocument/2006/math}oMath"
         return [ET.tostring(node, encoding="unicode") for node in root.iter(math)]
     return []

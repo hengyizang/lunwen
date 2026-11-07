@@ -1,13 +1,11 @@
 """Receipt-bound experiment search views; no search agent, execution or selection."""
 from __future__ import annotations
 
-import hashlib
-import json
 from pathlib import Path
 import re
 
 from scripts import research_iteration as iteration
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, json_digest as _digest
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = "scripts/research_search_tree.py"
@@ -16,10 +14,6 @@ PHASES = {"investigation", "tuning", "main", "ablation"}
 
 
 from scripts.paper_execution import artifact_path as experiment_path
-
-def _digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
-
 
 def _id(value):
     if not isinstance(value, str) or not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}", value):

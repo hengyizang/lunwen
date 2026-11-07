@@ -1,5 +1,7 @@
 # Source-bound writing comparison, 2026-10-27
 
+This completed finite trial is historical. Its [launcher](https://github.com/hengyizang/lunwen/blob/bda8abe/scripts/writing_comparison.py) and dated workflow are retired from the active tree; the original plan, results and cloud ledger remain. Restore historical source with `git restore --source=bda8abe -- <path>` when needed; restoring code neither opens an allowance nor releases an outstanding hold.
+
 The owner authorized paid writing tests in chat, then explicitly approved this
 finite exception after reviewing the current free metadata report: preserve the
 two old Argon holds, occupy their entire CNY9.5836104 in the existing CNY500

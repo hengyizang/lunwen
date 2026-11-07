@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts import output_provenance
 from scripts.figure_provenance import record_figure,validate_figure_provenance,register_rendered_figures
@@ -19,7 +20,12 @@ class FigureProvenanceTests(unittest.TestCase):
             from tests.figure_lineage_fixtures import sealed_run
             sealed_run(project)
             record_figure(project,"P01","papers/P01/figures/result.png","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
-            self.assertEqual(validate_figure_provenance(project,paper),[])
+            (paper/"figures/result.svg").write_text("<svg/>",encoding="utf-8")
+            record_figure(project,"P01","papers/P01/figures/result.svg","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
+            from scripts.figure_lineage import lineage
+            with patch("scripts.figure_lineage.lineage",wraps=lineage) as checked:
+                self.assertEqual(validate_figure_provenance(project,paper),[])
+            self.assertEqual(checked.call_count,1)
             self.assertEqual(output_provenance.current_origin(project,paper/"figures"/"figure-provenance.json")["status"],"tracked")
             data.write_text("x,y\n1,3\n",encoding="utf-8")
             self.assertTrue(any("input hash is stale" in error for error in validate_figure_provenance(project,paper)))
