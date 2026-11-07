@@ -136,8 +136,14 @@ def runner_capabilities(engine: str = "docker") -> dict[str, Any]:
             if all(re.fullmatch(r"(?:GPU|MIG)-[A-Za-z0-9/-]+",item) for item in identifiers):gpu_count=len(set(identifiers))
     runtimes=daemon.get("Runtimes",{}) if isinstance(daemon,dict) else {}
     gpu_runtime_verified = engine == "docker" and runtime_verified and isinstance(runtimes,dict) and "nvidia" in runtimes
+    # Rootless Docker can report host capacity while discarding --cpus/--memory.
+    # Presence of a daemon or sufficient host RAM does not establish cgroup
+    # enforcement. Unknown support is never promoted to a verified limit.
+    resource_limits_verified = (runtime_verified and all(daemon.get(key) is True for key in
+                                ("MemoryLimit", "CpuCfsQuota", "CpuCfsPeriod"))) if engine == "docker" else None
     return {"cpu":cpu,"memory_gb":memory / 1024**3 if memory is not None else None,
             "gpu":gpu_count,"engine":engine,"container_runtime_verified":runtime_verified,
+            "container_resource_limits_verified":resource_limits_verified,
             "gpu_runtime_verified":gpu_runtime_verified,"observed_at":now(),
             "hardware_provisioned":False,"new_spending_authority":False}
 
@@ -152,6 +158,8 @@ def resource_errors(run: dict[str, Any], capabilities: dict[str, Any] | None = N
         errors.append("resource observation belongs to a different container engine; inspect the run's actual executor")
     if actual.get("container_runtime_verified") is not True:
         errors.append("container runtime capacity cannot be verified; restore the local Docker/Podman daemon before starting the frozen run")
+    if run["isolation"].get("engine") == "docker" and actual.get("container_resource_limits_verified") is not True:
+        errors.append("Docker CPU/memory limits are unsupported or unverified; use a daemon with memory and CPU CFS cgroups before starting the frozen run")
     for key in ("cpu", "memory_gb"):
         available=actual.get(key)
         if not positive_finite_number(available):

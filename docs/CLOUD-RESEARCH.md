@@ -115,8 +115,13 @@ applicable final seats (`domain`, `editorial`, `statistics`). Source bindings
 are checked again when consuming the protected response. Calibration answer
 keys and independent sample labels are excluded from reviewer context. This
 selection adds work to the existing call, not another automatic paid role.
-Reproduction requires an actually completed, portable recorded Python run;
-unknown PIDs, missing rights or incompatible environments are not invented.
+Reproduction requires an actually completed Python result-table run. Portable
+host runs retain the recorded interpreter; ordinary cloud Docker runs replay
+their actual digest-pinned image, inputs, seed and resource limits with network
+access disabled and inputs read-only. The container environment is identified
+by its image, not the controller's host Python. Separately mounted Meta/theory
+toolchains use their existing study-route exports. Unknown PIDs, missing rights
+or incompatible environments are not invented.
 
 For a shared gateway, configure GitHub repository secret `UUAPI_API_KEY` and repository
 variables `UUAPI_BASE_URL`, `UUAPI_ANTHROPIC_MODEL`, `UUAPI_OPENAI_MODEL` and

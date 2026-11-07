@@ -451,7 +451,7 @@ def export(project: Path, paper_id: str, kind: str):
 
 def _reproduction(project, paper_id, spec, report, copy, put):
     """Export an already executed replay unit, never a made-up run command."""
-    from scripts.primary_recovery import selected_attempt
+    from scripts.primary_recovery import selected_attempt, receipt
     plan_path = artifact_path(project, "experiments/plan.json", paper_id)
     registry_path = artifact_path(project, "experiments/registry.jsonl", paper_id)
     plan = read(plan_path)
@@ -466,6 +466,27 @@ def _reproduction(project, paper_id, spec, report, copy, put):
     attempt = selected_attempt(project, run["run_id"], registry, plan_sha256=sha(plan_path))
     if not attempt or attempt.get("status") != "succeeded":
         raise ValueError("reproduction command must have an actual successful executor attempt")
+    # The shared registry validator binds command, cwd, seed, inputs and outputs;
+    # bind that same record to the runner's original receipt before export.
+    receipt(project, attempt)
+    isolation, recorded = run.get("isolation", {}), attempt.get("executor_isolation", {})
+    container = isolation.get("kind") == "container"
+    if run.get("runtime") or recorded.get("reviewed_runtime"):
+        raise ValueError("minimal replay excludes separately mounted study toolchains; use study_routes.export_results for their complete result exports")
+    if recorded.get("kind") != isolation.get("kind") or isolation.get("kind") not in {"host", "container"}:
+        raise ValueError("portable replay needs matching recorded host or Docker isolation")
+    resources = None
+    if container:
+        from scripts.experiment_runner import requested_resources
+        resources = requested_resources(run)
+        image = isolation.get("image", "")
+        if (isolation.get("engine") != "docker" or not re.fullmatch(r"[^\s]+@sha256:[0-9a-f]{64}", image)
+                or any(recorded.get(key) != isolation.get(key) for key in ("engine", "image"))
+                or recorded.get("image_digest") != image.rsplit("@sha256:", 1)[-1]
+                or any(recorded.get(key) is not True for key in ("isolated_executor", "network_disabled", "read_only_root"))
+                or attempt.get("resource_allocation", {}).get("requested") != resources
+                or attempt.get("resource_allocation", {}).get("container_limits_configured") is not True):
+            raise ValueError("Docker replay needs the actual pinned image, isolation and frozen resource allocation")
     license_name = copy(spec.get("license", {}))
     environment = spec.get("environment", {})
     environment_path = _binding(project, environment)
@@ -473,16 +494,18 @@ def _reproduction(project, paper_id, spec, report, copy, put):
         raise ValueError("environment lock must be a frozen input of the actual replay run")
     python_version = attempt.get("runtime", {}).get("python")
     pins = [line.strip() for line in environment_path.read_text().splitlines() if line.strip() and not line.lstrip().startswith("#")]
-    if (not python_version or "python==" + python_version not in pins
+    python_pins = [pin for pin in pins if re.fullmatch(r"python==[0-9]+\.[0-9]+\.[0-9]+", pin)]
+    if (len(python_pins) > 1 or (not container and (len(python_pins) != 1 or not python_version or "python==" + python_version not in pins))
+            or any(pin.startswith("python==") and pin not in python_pins for pin in pins)
             or any(not re.fullmatch(r"[A-Za-z0-9_.-]+(?:\[[A-Za-z0-9_,.-]+\])?==[A-Za-z0-9_.+!-]+", pin) for pin in pins)):
-        raise ValueError("environment lock needs exact package pins and the recorded Python version")
-    if attempt.get("executor_isolation", {}).get("kind") != "host":
-        raise ValueError("portable Python replay needs recorded host execution; retain the original container recipe separately")
+        raise ValueError("environment lock needs exact supplied package pins; host replay needs its recorded Python version")
     environment_name = copy(environment)
     dependency_pins = [pin for pin in pins if not pin.startswith("python==")]
     put("requirements.txt", "\n".join(dependency_pins) + "\n")
     put("recorded-runtime.json", json.dumps({"run_id": run["run_id"], "attempt_id": attempt.get("attempt_id"),
-        "runtime": {k: attempt.get("runtime", {}).get(k) for k in ("python", "platform")},
+        "runtime": ({"engine": "docker", "image": isolation["image"], "image_digest": recorded["image_digest"]} if container
+                    else {k: attempt.get("runtime", {}).get(k) for k in ("python", "platform")}),
+        "environment_authority": "recorded_digest_pinned_image" if container else "recorded_host_interpreter",
         "environment_lock": environment, "dependency_installation_verified": False}, indent=2) + "\n")
     supplied = spec.get("files", [])
     paths = set()
@@ -524,18 +547,79 @@ def _reproduction(project, paper_id, spec, report, copy, put):
     if (Path(cwd) / argv[1]).as_posix() not in paths & frozen_paths:
         raise ValueError("recorded replay script must be one of the exported frozen inputs")
     output_dirs = sorted({str(Path(output).parent) for output in outputs})
-    put("reproduce.py", "import hashlib, importlib.metadata, pathlib, platform, subprocess, sys\n"
+    if container:
+        replay = {"image": isolation["image"], "argv": argv, "cwd": cwd, "seed": run["seed"],
+            "run_id": run["run_id"], "timeout_seconds": run["timeout_seconds"], "resources": resources,
+            "inputs": run["inputs"], "outputs": sorted(outputs), "result_table": result_binding}
+        put("replay-run.json", json.dumps(replay, indent=2) + "\n")
+        put("reproduce.py", _DOCKER_REPLAY)
+        instructions = ("Load the recorded image with `docker pull " + isolation["image"] + "` on a compatible POSIX Docker host. "
+            "Then run `python reproduce.py`. The replay uses --pull=never, the exact recorded image/argv/seed/resource limits, "
+            "no network, read-only inputs and only the registered output files as writable mounts. It checks every input and the result-table hash. "
+            "The table script must support those existing file mounts; replacing an output by renaming another file is not supported. "
+            "The frozen declaration in `" + environment_name + "` is retained; the image digest is the container environment identity. "
+            "An unknown Python version may remain omitted; historical installed dependencies were not independently verified. "
+            "No host Python version is presented as the container's interpreter. Separately mounted study toolchains are excluded.")
+    else:
+        put("reproduce.py", "import hashlib, importlib.metadata, os, pathlib, platform, subprocess, sys\n"
         + "root = pathlib.Path(__file__).resolve().parent / 'sources'\n"
         + "if platform.python_version() != " + repr(python_version) + ": raise SystemExit('Use the recorded Python version.')\n"
         + "for pin in " + repr(dependency_pins) + ":\n name, version = pin.split('==')\n"
         + " if importlib.metadata.version(name.split('[')[0]) != version: raise SystemExit('Install requirements.txt: ' + name)\n"
         + "for directory in " + repr(output_dirs) + ": (root / directory).mkdir(parents=True, exist_ok=True)\n"
-        + "subprocess.run([sys.executable, *" + repr(argv[1:]) + "], cwd=root / " + repr(cwd) + ", check=True)\n"
+        + "environment = {**os.environ, **" + repr({"RESEARCH_OS_RUN_ID": run["run_id"], "RESEARCH_OS_SEED": str(run["seed"]), "PYTHONHASHSEED": str(run["seed"])}) + "}\n"
+        + "subprocess.run([sys.executable, *" + repr(argv[1:]) + "], cwd=root / " + repr(cwd) + ", env=environment, timeout=" + repr(run["timeout_seconds"]) + ", check=True)\n"
         + "if hashlib.sha256((root / " + repr(table) + ").read_bytes()).hexdigest() != " + repr(result_binding["sha256"]) + ": raise SystemExit('Replay table differs from the recorded result.')\n")
-    put("README.md", "# Local reproduction package\n\nInstall the exact environment in `" + environment_name
-        + "`. Use its Python version and `python -m pip install -r requirements.txt`. The lock was a frozen run input; recorded-runtime.json retains the actual runner Python/platform. Historical installed dependency versions were not independently captured. Run `python reproduce.py` from this directory to verify the environment, rerun the recorded result-table unit and compare its exact output hash.\n\n"
+        instructions = ("Install the exact environment in `" + environment_name
+            + "`. Use its Python version and `python -m pip install -r requirements.txt`. The lock was a frozen run input; recorded-runtime.json retains the actual runner Python/platform. Historical installed dependency versions were not independently captured. Run `python reproduce.py` from this directory to verify the environment, rerun the recorded result-table unit and compare its exact output hash.")
+    put("README.md", "# Local reproduction package\n\n" + instructions + "\n\n"
         + "License: `" + license_name + "`. All registered comparisons are in results.csv; failures and inconclusive decisions remain visible in results.json.\n"
         + "This package was prepared locally, not uploaded. Replay success does not establish scientific validity.\n")
+
+
+_DOCKER_REPLAY = '''import hashlib, json, os, pathlib, subprocess, uuid
+folder = pathlib.Path(__file__).resolve().parent
+root = folder / 'sources'
+run = json.loads((folder / 'replay-run.json').read_text())
+if not hasattr(os, 'getuid'): raise SystemExit('Use a compatible POSIX Docker host.')
+def target(relative):
+    path = root / relative
+    if pathlib.Path(relative).is_absolute() or '..' in pathlib.Path(relative).parts or any(c in str(path) for c in (',', ':', '\\\\')):
+        raise SystemExit('Unsafe replay path.')
+    if any(item.is_symlink() for item in (path, *path.parents)) or not path.resolve().is_relative_to(root.resolve()):
+        raise SystemExit('Replay paths must stay inside the package without symlinks.')
+    return path
+for item in run['inputs']:
+    if hashlib.sha256(target(item['path']).read_bytes()).hexdigest() != item['sha256']:
+        raise SystemExit('Replay input differs from its frozen hash: ' + item['path'])
+resources = run['resources']
+memory = f"{resources['memory_gb']:g}g" if float(resources['memory_gb']).is_integer() else str(int(resources['memory_gb'] * 1024**3))
+container_name = 'lunwen-replay-' + uuid.uuid4().hex
+command = ['docker', 'run', '--rm', '--pull=never', '--name', container_name, '--user', f'{os.getuid()}:{os.getgid()}',
+    '--network=none', '--read-only', '--tmpfs', '/tmp:rw,nosuid,nodev,noexec,size=512m',
+    '--security-opt', 'no-new-privileges', '--cap-drop=ALL', '--pids-limit=256',
+    f"--cpus={resources['cpu']:g}", '--memory=' + memory,
+    '-v', str(root.resolve()) + ':/workspace:ro', '-w', '/workspace' + ('/' + run['cwd'] if run['cwd'] != '.' else '')]
+if resources['gpu']: command.extend(['--gpus', 'count=' + str(resources['gpu'])])
+for item in run['inputs']:
+    command.extend(['--mount', 'type=bind,src=' + str(target(item['path'])) + ',dst=/workspace/' + item['path'] + ',readonly'])
+for relative in run['outputs']:
+    path = target(relative)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(b'')
+    command.extend(['--mount', 'type=bind,src=' + str(path) + ',dst=/workspace/' + relative])
+for key, value in {'RESEARCH_OS_RUN_ID': run['run_id'], 'RESEARCH_OS_SEED': str(run['seed']), 'PYTHONHASHSEED': str(run['seed'])}.items():
+    command.extend(['-e', key + '=' + value])
+try:
+    subprocess.run(command + [run['image'], *run['argv']], check=True, timeout=run['timeout_seconds'])
+finally:
+    cleanup = subprocess.run(['docker', 'rm', '-f', container_name], stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=30)
+    if cleanup.returncode and 'No such container' not in cleanup.stderr:
+        raise SystemExit('Could not remove this replay container: ' + container_name + ': ' + cleanup.stderr)
+result = run['result_table']
+if hashlib.sha256(target(result['path']).read_bytes()).hexdigest() != result['sha256']:
+    raise SystemExit('Replay table differs from the recorded result.')
+'''
 
 
 def main():

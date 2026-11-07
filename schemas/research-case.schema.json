@@ -52,7 +52,7 @@
     }}},
     "reproduction": {"type": "object", "properties": {
       "replay_run_id": {"type": "string"}, "result_table": {"type": "string"},
-      "license": {"$ref": "#/$defs/binding"}, "environment": {"$ref": "#/$defs/binding", "description": "Frozen replay input with python==recorded.version and exact distribution==version pins; installed dependency versions are not independently verified."},
+      "license": {"$ref": "#/$defs/binding"}, "environment": {"$ref": "#/$defs/binding", "description": "Frozen replay environment declaration with exact supplied distribution==version pins. Host replay requires its exact recorded Python pin; Docker binds the actual digest-pinned image and may leave an unknown Python version omitted. Historical installed dependencies are not independently verified."},
       "files": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/binding"}, {"type": "object", "properties": {"license": {"type": "string"}, "rights_source": {"$ref": "#/$defs/anchor"}}}]}}
     }}
   },

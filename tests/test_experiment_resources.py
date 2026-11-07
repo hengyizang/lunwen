@@ -14,6 +14,7 @@ from tests import test_experiment_runner as runner_fixtures
 
 
 CAPACITY={"cpu":8,"memory_gb":16,"gpu":2,"engine":"docker","container_runtime_verified":True,
+          "container_resource_limits_verified":True,
           "gpu_runtime_verified":True,"hardware_provisioned":False,"new_spending_authority":False}
 
 
@@ -72,7 +73,8 @@ class ExperimentResourceTests(unittest.TestCase):
         self.assertTrue(runner.resource_errors(self.run_spec(),{**CAPACITY,"engine":"podman"}))
 
     def test_capability_inspection_uses_actual_daemon_and_device_responses_without_credentials(self):
-        daemon={"NCPU":4,"MemTotal":8*1024**3,"Runtimes":{"nvidia":{},"runc":{}}}
+        daemon={"NCPU":4,"MemTotal":8*1024**3,"Runtimes":{"nvidia":{},"runc":{}},
+                "MemoryLimit":True,"CpuCfsQuota":True,"CpuCfsPeriod":True}
         responses=[subprocess.CompletedProcess([],0,json.dumps(daemon),""),
                    subprocess.CompletedProcess([],0,"GPU-fixture-a\nGPU-fixture-b\n","")]
         original=Path.read_text
@@ -88,6 +90,7 @@ class ExperimentResourceTests(unittest.TestCase):
             actual=runner.runner_capabilities()
         self.assertEqual((actual["cpu"],actual["memory_gb"],actual["gpu"]),(4,8,2))
         self.assertTrue(actual["container_runtime_verified"] and actual["gpu_runtime_verified"])
+        self.assertTrue(actual["container_resource_limits_verified"])
         self.assertFalse(actual["hardware_provisioned"] or actual["new_spending_authority"])
         self.assertNotIn("GPU-fixture",json.dumps(actual))
         for call in inspect.call_args_list:
@@ -121,6 +124,7 @@ class ExperimentResourceTests(unittest.TestCase):
              patch.object(runner.subprocess,"run",return_value=subprocess.CompletedProcess([],0,json.dumps(daemon),"")):
             actual=runner.runner_capabilities("podman")
         self.assertTrue(actual["container_runtime_verified"])
+        self.assertIsNone(actual["container_resource_limits_verified"])
         self.assertEqual((actual["cpu"],actual["memory_gb"]),(0.5,2))
         self.assertFalse(actual["gpu_runtime_verified"])
         run=self.run_spec();run["isolation"]["engine"]="podman"
@@ -152,6 +156,30 @@ class ExperimentResourceTests(unittest.TestCase):
              patch("scripts.cloud_checkpoint.sync_experiment_reservation",side_effect=AssertionError("no cost reservation")):
             with self.assertRaisesRegex(runner.ExperimentError,"32 cpu"):
                 runner.execute("test-phd")
+        self.assertFalse((project/"experiments/registry.jsonl").exists())
+        self.assertFalse((project/"result.txt").exists())
+        self.assertEqual(before,{name:(project/name).read_bytes() for name in before})
+
+    def test_docker_capacity_without_cgroup_support_cannot_reserve_or_execute(self):
+        project=self.native_fixture();run=read(project/"experiments/plan.json")["runs"][0]
+        run.update(isolation=self.run_spec()["isolation"])
+        self.seal(project,run)
+        before={name:(project/name).read_bytes() for name in ("experiments/plan.json","experiments/budget.json","state/run.json")}
+        daemon={"NCPU":8,"MemTotal":16*1024**3,"MemoryLimit":True,"CpuCfsQuota":True,"CpuCfsPeriod":True}
+        for field in ("MemoryLimit","CpuCfsQuota","CpuCfsPeriod"):
+            for value in (False,None):
+                with self.subTest(field=field,value=value):
+                    observed={**daemon,field:value}
+                    with patch.object(runner.shutil,"which",side_effect=lambda name:"/usr/bin/docker" if name=="docker" else None), \
+                         patch.object(runner.subprocess,"run",return_value=subprocess.CompletedProcess([],0,json.dumps(observed),"")):
+                        capabilities=runner.runner_capabilities()
+                    self.assertTrue(capabilities["container_runtime_verified"])
+                    self.assertFalse(capabilities["container_resource_limits_verified"])
+                    with patch.object(runner,"runner_capabilities",return_value=capabilities), \
+                         patch.object(runner.subprocess,"Popen",side_effect=AssertionError("no launch")), \
+                         patch("scripts.cloud_checkpoint.sync_experiment_reservation",side_effect=AssertionError("no cost reservation")):
+                        with self.assertRaisesRegex(runner.ExperimentError,"CPU/memory limits"):
+                            runner.execute("test-phd")
         self.assertFalse((project/"experiments/registry.jsonl").exists())
         self.assertFalse((project/"result.txt").exists())
         self.assertEqual(before,{name:(project/name).read_bytes() for name in before})
@@ -234,7 +262,8 @@ class ExperimentResourceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             project=Path(directory);run=self.run_spec();run["isolation"]["engine"]="podman"
             write(project/"experiments/plan.json",{"runs":[run]})
-            podman={**CAPACITY,"engine":"podman","cpu":1,"gpu":None,"gpu_runtime_verified":False}
+            podman={**CAPACITY,"engine":"podman","cpu":1,"gpu":None,"gpu_runtime_verified":False,
+                    "container_resource_limits_verified":None}
             with patch("scripts.cloud_retry.run",return_value=subprocess.CompletedProcess([],0,"","")), \
                  patch.object(cloud_runtime.importlib.metadata,"version",return_value="software-fixture"), \
                  patch.object(cloud_runtime,"runner_capabilities",side_effect=lambda engine="docker":CAPACITY if engine=="docker" else podman):

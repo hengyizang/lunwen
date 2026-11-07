@@ -89,8 +89,11 @@ explicit `results/` output paths. Optional run `resources` declares positive
 `cpu` and `memory_gb` and an integer `gpu` count ≥0; omitted fields default to
 2 CPUs / 4 GB / 0 GPUs. These defaults are not hard research-scale ceilings.
 Before reserving compute cost, the runner checks actual CPU affinity, cgroup
-limits, daemon capacity and, for GPU requests, visible NVIDIA devices and the
-Docker NVIDIA runtime. Insufficient or unknown capacity produces an actionable
+limits, daemon capacity, actual Docker CPU/memory limit support and, for GPU
+requests, visible NVIDIA devices and the Docker NVIDIA runtime. A rootless
+daemon without cgroup limit support is refused before budget reservation;
+accepting Docker command-line flags does not verify enforcement. Insufficient
+or unknown capacity produces an actionable
 failure; no hardware is rented or silently substituted. The default GitHub
 Ubuntu runner does not supply a GPU.
 

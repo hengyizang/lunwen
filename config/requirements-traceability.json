@@ -619,6 +619,7 @@
       "tests": [
         "tests/test_research_design.py",
         "tests/test_research_case.py",
+        "tests/test_container_reproduction.py",
         "tests/test_compendium_entrypoints.py"
       ],
       "remaining": "Fill only the active research task from real evidence: headline/readers/counterclaim, pre-mortem/tests, crowding, figure-first, reproduction, cumulative synthesis, venue fit, panel, variants, cover letter, related work, preprint, numeric tables, falsifiability, rebuttal and retarget. Exports stay local; no upload or fabricated PID.",
@@ -676,7 +677,7 @@
       "tests": [
         "tests/test_test_suites.py"
       ],
-      "remaining": "Measured against 3e9f56b: production Python 74391 to 76723 lines (+2332; 3069 added, 737 removed); tests 43002 to 45438 (+2436); docs 19160 to 9743 (-9417); complete tracked/nonignored tree 239891 to 235721 (-4170). The deleted 9550-line historical model JSON is documentation, preserved at its immutable Git blob, not a production-code saving. CLI/workflow/documented/dynamic roots reach 217 of 218 original Python modules; the remaining file is scripts/__init__.py. Historical 65-dead-file and 40–50% savings estimates are not established. New capabilities increased production code and total bytes; no large code reduction is claimed. Pinned sources/licenses remain unchanged.",
+      "remaining": "Measured against 3e9f56b: production Python 74391 to 76815 lines (+2424; 3161 added, 737 removed); tests 43002 to 45774 (+2772); docs 19160 to 9748 (-9412); complete tracked/nonignored tree 239891 to 236165 (-3726). The deleted 9550-line historical model JSON is documentation, preserved at its immutable Git blob, not a production-code saving. CLI/workflow/documented/dynamic roots reach 217 of 218 original Python modules; the remaining file is scripts/__init__.py. Historical 65-dead-file and 40–50% savings estimates are not established. New capabilities increased production code and total bytes; no large code reduction is claimed. Pinned sources/licenses remain unchanged.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ]

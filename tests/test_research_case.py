@@ -5,12 +5,15 @@ import copy
 import csv
 from datetime import date, datetime
 import json
+import os
 from pathlib import Path
 import shutil
+import runpy
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts import research_case as case
 from scripts import experiment_evidence as evidence, experiment_evidence_acceptance as acceptance
@@ -50,7 +53,10 @@ class ResearchCaseTests(unittest.TestCase):
         acceptance.fixture(cls.base, current_protocol=True)
         environment = text(cls.base, "papers/P01/environment.lock", "python==" + ".".join(map(str, sys.version_info[:3])) + "\n")
         source = text(cls.base, "experiments/code/table-input.json", json.dumps(actual["comparisons"]))
-        code = text(cls.base, "experiments/code/table.py", "import csv,json,pathlib\nrows=json.loads(pathlib.Path('experiments/code/table-input.json').read_text())\n"
+        code = text(cls.base, "experiments/code/table.py", "import csv,json,os,pathlib\n"
+                    "assert os.environ['RESEARCH_OS_RUN_ID']=='table-replay'\n"
+                    "assert os.environ['RESEARCH_OS_SEED']==os.environ['PYTHONHASHSEED']=='0'\n"
+                    "rows=json.loads(pathlib.Path('experiments/code/table-input.json').read_text())\n"
                     "with open('results/replayed-table.csv','w',newline='') as f:\n"
                     " w=csv.DictWriter(f,fieldnames=['comparison_id','estimate','ci_low','ci_high','decision'],extrasaction='ignore');w.writeheader();w.writerows(rows)\n")
         plan_path = cls.base / "experiments/plan.json"
@@ -207,7 +213,8 @@ class ResearchCaseTests(unittest.TestCase):
         table = root / "sources/results/replayed-table.csv"
         expected = table.read_bytes()
         table.unlink()
-        subprocess.run([sys.executable, str(root / "reproduce.py")], cwd=root, check=True, capture_output=True)
+        subprocess.run([sys.executable, str(root / "reproduce.py")], cwd=root, check=True, capture_output=True,
+            env={**os.environ, "RESEARCH_OS_RUN_ID": "wrong-id", "RESEARCH_OS_SEED": "99", "PYTHONHASHSEED": "99"})
         self.assertEqual(table.read_bytes(), expected)
         self.assertEqual(len(list(csv.DictReader(io_text(root / "results.csv")))), len(self.report["comparisons"]))
         self.assertTrue((root / "README.md").is_file())
@@ -324,6 +331,88 @@ class ResearchCaseTests(unittest.TestCase):
         self.save()
         with self.assertRaisesRegex(ValueError, "binding"):
             case.export(self.project, "P01", "reproduction")
+
+    def test_reproduction_requires_the_original_executor_receipt_and_command(self):
+        self.reproduction()
+        registry_path = self.project / "experiments/registry.jsonl"
+        original = registry_path.read_text()
+        rows = [json.loads(line) for line in original.splitlines()]
+        item = next(row for row in rows if row["run_id"] == "table-replay")
+        receipt_path = self.project / "experiments/runs" / item["attempt_id"] / "run.json"
+        original_receipt = read(receipt_path)
+        for field, changed in (("argv", ["python3", "unexecuted.py"]), ("cwd", "experiments"),
+                               ("executor_isolation", {"kind": "container", "engine": "docker", "image": "unexecuted:latest"})):
+            with self.subTest(field=field):
+                item.clear()
+                item.update(copy.deepcopy(original_receipt))
+                write(receipt_path, original_receipt)
+                item[field] = changed
+                registry_path.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+                with self.assertRaisesRegex(ValueError, "unchanged executor receipt|differs from the approved"):
+                    case.export(self.project, "P01", "reproduction")
+                write(receipt_path, item)
+                with self.assertRaisesRegex(ValueError, "approved run|approved cwd|matching recorded"):
+                    case.export(self.project, "P01", "reproduction")
+                item.clear()
+                item.update(copy.deepcopy(original_receipt))
+                write(receipt_path, original_receipt)
+        registry_path.write_text(original)
+
+    def test_separately_mounted_runtime_cannot_be_exported_as_portable_python(self):
+        self.reproduction()
+        registry_path = self.project / "experiments/registry.jsonl"
+        rows = [json.loads(line) for line in registry_path.read_text().splitlines()]
+        item = next(row for row in rows if row["run_id"] == "table-replay")
+        item["executor_isolation"]["reviewed_runtime"] = {"profile": "meta_analysis"}
+        registry_path.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+        write(self.project / "experiments/runs" / item["attempt_id"] / "run.json", item)
+        with self.assertRaisesRegex(ValueError, "study_routes.export_results"):
+            case.export(self.project, "P01", "reproduction")
+
+    def test_host_replay_preserves_timeout_seed_and_frozen_inputs(self):
+        self.reproduction()
+        release = case.export(self.project, "P01", "reproduction")
+        root = self.project / release["path"]
+        hashes = {item["path"]: sha(root / "sources" / item["path"]) for item in self.spec["reproduction"]["files"]}
+        with patch("subprocess.run", side_effect=subprocess.TimeoutExpired(["python3"], 60)) as invoke:
+            with self.assertRaises(subprocess.TimeoutExpired):
+                runpy.run_path(str(root / "reproduce.py"), run_name="__main__")
+        self.assertEqual(invoke.call_args.kwargs["timeout"], 60)
+        environment = invoke.call_args.kwargs["env"]
+        self.assertEqual(environment["RESEARCH_OS_RUN_ID"], "table-replay")
+        self.assertEqual(environment["RESEARCH_OS_SEED"], "0")
+        self.assertEqual(environment["PYTHONHASHSEED"], "0")
+        self.assertEqual(hashes, {path: sha(root / "sources" / path) for path in hashes})
+
+    def test_docker_timeout_removes_only_its_own_container_and_keeps_inputs(self):
+        # Unit-test the transport lifecycle only; the separate Docker acceptance
+        # test establishes that real isolated execution and exported replay work.
+        root = self.project / "wrapper-fixture"
+        root.mkdir()
+        source = text(root, "sources/script.py", "Synthetic transport lifecycle fixture.\n")
+        source_hash = source["sha256"]
+        write(root / "replay-run.json", {"image": "synthetic@sha256:" + "a" * 64,
+            "argv": ["python3", "script.py"], "cwd": ".", "seed": 7, "run_id": "synthetic-replay",
+            "timeout_seconds": 2, "resources": {"cpu": 1, "memory_gb": 1, "gpu": 0},
+            "inputs": [{"path": "script.py", "sha256": source_hash}], "outputs": ["results/table.csv"],
+            "result_table": {"path": "results/table.csv", "sha256": "b" * 64}})
+        (root / "reproduce.py").write_text(case._DOCKER_REPLAY)
+        name = None
+        def transport(argv, **kwargs):
+            nonlocal name
+            if argv[1] == "run":
+                name = argv[argv.index("--name") + 1]
+                self.assertTrue(name.startswith("lunwen-replay-"))
+                self.assertEqual(kwargs["timeout"], 2)
+                raise subprocess.TimeoutExpired(argv, 2)
+            self.assertEqual(argv, ["docker", "rm", "-f", name])
+            self.assertEqual(kwargs["timeout"], 30)
+            return subprocess.CompletedProcess(argv, 0, stderr="")
+        with patch("subprocess.run", side_effect=transport) as invoke:
+            with self.assertRaises(subprocess.TimeoutExpired):
+                runpy.run_path(str(root / "reproduce.py"), run_name="__main__")
+        self.assertEqual(invoke.call_count, 2)
+        self.assertEqual(sha(root / "sources/script.py"), source_hash)
 
     def test_competition_is_receipt_bound_and_unknown_dates_are_not_zero_growth(self):
         works = [{"id": str(i), "doi": f"10.1234/work{i}", "title": f"Synthetic source {i}", "authors": ["Author " + str(i)],

@@ -203,6 +203,13 @@ jobs:
         run: python -m pip install --disable-pip-version-check '.[research-quality]'
       - name: Execute synthetic paired studies and failed pilot with the real Docker executor
         run: python -m scripts.experiment_evidence_acceptance --directory artifacts/experiment-evidence
+      - name: Reproduce a complete Docker result table outside its original project
+        env:
+          DR_OS_TEST_REAL_DOCKER: '1'
+          DR_OS_CONTAINER_REPRO_ARTIFACTS: artifacts/experiment-evidence/container-reproduction
+        run: |
+          python -c 'import jsonschema'
+          python -m unittest tests.test_container_reproduction -v
       - name: Preserve scoped statistical software evidence
         if: always()
         uses: actions/upload-artifact@v7
