@@ -1,0 +1,661 @@
+{
+  "schema_version": "batch2-primary-original-excerpts-1.0",
+  "prepared_at_utc": "2026-11-08T12:24:41.388Z",
+  "scope": {
+    "kind": "partial original-source excerpts",
+    "source_count": 15,
+    "included": 14,
+    "excluded": 1,
+    "complete_full_texts_supplied": false,
+    "independent_scientific_judgment": false,
+    "coverage_or_novelty_proof": false,
+    "prior_opinions_preferences_or_answers_included": false,
+    "description": "Short published-source passages with provenance and mechanical locators only. Each quotation supports its own words; the receiving native model is not receiving complete full texts through this packet."
+  },
+  "provenance": {
+    "packaged_by": "current Codex session",
+    "exact_requested_api_model_id": null,
+    "exact_reported_api_model_id": null,
+    "app_session_id": null,
+    "native_runtime_receipt": null,
+    "topic_approval": false,
+    "source_inventory_sha256": "e79f22307f12d76459d8c8957d913516d0ab70ae82fb9110a8260f52c3994ce2"
+  },
+  "counts": {
+    "max_words_each": 25,
+    "word_count_method": "Conservative whitespace tokens of exact extraction, including any non-English tokens; a preserved line-end hyphen may split one English word into two counted tokens.",
+    "total_quote_tokens": 212,
+    "new_network_requests": 0,
+    "new_model_api_calls": 0,
+    "project_gateway_calls": 0,
+    "app_session_cost_cny": null,
+    "scientific_experiments": 0,
+    "software_installed": 0,
+    "github_mutations": 0,
+    "formal_state_changed": false,
+    "old_reports_modified": false,
+    "prior_batch_public_commands_unchanged": 18,
+    "prior_deepening_public_commands_unchanged": 42,
+    "counter_scope": "This local packaging task; prior command counts carried forward, no additional public source read."
+  },
+  "validation_scope": "Literal and UTF-8 matching uses extraction of frozen PDF bytes and separate extraction of the stated PDF page. This checks text provenance, not scientific validity or every rendered glyph. C5 OCR is excluded. Original line breaks, ligatures and line-end hyphens remain unchanged.",
+  "entries": [
+    {
+      "source_id": "C1",
+      "title": "Focus-Then-Contact: Speeding Up Robotic Contact-Rich Task Learning with Affordance-Guided Real-World Residual Reinforcement Learning",
+      "formal_url": "https://proceedings.mlr.press/v306/qiao26f.html",
+      "pdf_download_url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/qiao26f/qiao26f.pdf",
+      "version": "PMLR v306, 2026 publisher PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "660f3f410492d4755766cdfa77ab80011cd44960a521c767279986264623beed",
+      "pdf_pages": 20,
+      "prior_extracted_file_sha256": "03da0d57986ec54855da02a3d1127ea5e85ecfc629d019cf1a437a84f08d5398",
+      "status": "included",
+      "excerpt_exact": "combined with a SAC-based residual policy πres and optional human intervention to enable efficient exploration.",
+      "word_count_whitespace": 15,
+      "locator": {
+        "pdf_page_one_based": 4,
+        "section_or_anchor": "Figure 1 caption",
+        "extraction_start_line_one_based": 406,
+        "extraction_end_line_one_based": 406,
+        "extraction_start_byte_zero_based_utf8": 16573,
+        "extraction_end_byte_exclusive_zero_based_utf8": 16685
+      },
+      "extraction": {
+        "file": "C1.raw.txt",
+        "sha256": "e7581da221e9302f24aa13883d9985851fbac573c5efcc77c503dacd5834a000",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "C1.page.txt",
+        "page_sha256": "6e057474bcfb3da66a203824d48d8cb8c0e675e40ebdd94e2bf0f3d20fd1f836",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "C2",
+      "title": "VT-Refine: Learning Bimanual Assembly with Visuo-Tactile Feedback via Simulation Fine-Tuning",
+      "formal_url": "https://proceedings.mlr.press/v305/huang25b.html",
+      "pdf_download_url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/huang25b/huang25b.pdf",
+      "version": "PMLR v305, 2025 publisher PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "01282e4134c365d9b0aca7549464e4dda548fa960ad431bb6b5d5fcb8529c92d",
+      "pdf_pages": 17,
+      "prior_extracted_file_sha256": "47da0ff1926bc6d255eb50502dbaf5a98d249aa6b074044d7f78935943ae5015",
+      "status": "included",
+      "excerpt_exact": "We begin by training a diffusion policy on a small set of demonstrations using\nsynchronized visual and tactile inputs.",
+      "word_count_whitespace": 19,
+      "locator": {
+        "pdf_page_one_based": 1,
+        "section_or_anchor": "Abstract",
+        "extraction_start_line_one_based": 26,
+        "extraction_end_line_one_based": 27,
+        "extraction_start_byte_zero_based_utf8": 846,
+        "extraction_end_byte_exclusive_zero_based_utf8": 964
+      },
+      "extraction": {
+        "file": "C2.raw.txt",
+        "sha256": "f1462dc65f4c9a8147dfb9ec3fe5d46aaaa644f9dc0d8ae2470a78692ecd4f3f",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "C2.page.txt",
+        "page_sha256": "ea223a1c89c9e842cde0bd8d680b63362a453f87778d8088c818ad3aa361dbb0",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "C3",
+      "title": "Force Policy: Learning Hybrid Force-Position Control Policy under Interaction Frame for Contact-Rich Manipulation",
+      "formal_url": "https://www.roboticsproceedings.org/rss22/p128.html",
+      "pdf_download_url": "https://www.roboticsproceedings.org/rss22/p128.pdf",
+      "version": "RSS 2026 conference PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "42d34fed819b5948b88d29f158e89f6ebb940deb0ea29a262abd370d8d806284",
+      "pdf_pages": 11,
+      "prior_extracted_file_sha256": "df4afb5c0d71bd262181d95949c7e5c044d2ac09c612b2d03508620fab9a8c6f",
+      "status": "included",
+      "excerpt_exact": "Inferring the\nideal interaction frame directly from these signals is ill-posed,",
+      "word_count_whitespace": 11,
+      "locator": {
+        "pdf_page_one_based": 4,
+        "section_or_anchor": "§IV-A, interaction-frame approximation paragraph",
+        "extraction_start_line_one_based": 434,
+        "extraction_end_line_one_based": 435,
+        "extraction_start_byte_zero_based_utf8": 20142,
+        "extraction_end_byte_exclusive_zero_based_utf8": 20221
+      },
+      "extraction": {
+        "file": "C3.raw.txt",
+        "sha256": "ff2f3f4e821d2bcb1ac3ca37048672fc19643d4d6f8e3360d8563faa14b7176f",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "C3.page.txt",
+        "page_sha256": "ff25ccdbf076759de06965fa9d5c9adce2b529a4905c71b32e6316a384969513",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "C4",
+      "title": "Efficient Sim-to-real Transfer of Contact-Rich Manipulation Skills with Online Admittance Residual Learning",
+      "formal_url": "https://proceedings.mlr.press/v229/zhang23e.html",
+      "pdf_download_url": "https://proceedings.mlr.press/v229/zhang23e/zhang23e.pdf",
+      "version": "PMLR v229, 2023 conference PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "0739459c0d9a80e63a35478e6911beadd452df1717b301c4306cd2524a2bf654",
+      "pdf_pages": 19,
+      "prior_extracted_file_sha256": "6afb38ebe3efee6c1699e7e945e9df3923aef620f96446540b91bfa9dba8d51f",
+      "status": "included",
+      "excerpt_exact": "we propose locally updating\nthe control parameters using the latest contact force measurements during online execution.",
+      "word_count_whitespace": 16,
+      "locator": {
+        "pdf_page_one_based": 4,
+        "section_or_anchor": "§3.2 Online Optimization-Based Admittance Learning, opening paragraph",
+        "extraction_start_line_one_based": 203,
+        "extraction_end_line_one_based": 204,
+        "extraction_start_byte_zero_based_utf8": 13387,
+        "extraction_end_byte_exclusive_zero_based_utf8": 13506
+      },
+      "extraction": {
+        "file": "C4.raw.txt",
+        "sha256": "69e56621c472c72529ae1300859d40191d657f19a3a61a54c9d8b9d8db07405b",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "C4.page.txt",
+        "page_sha256": "91d145d5c8b8520e289dd8d6d8e41ca24c717daf0d5d6992e512d0ab25092059",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "C5",
+      "title": "Robust Peg-in-Hole Assembly under Uncertainties via Compliant and Interactive Contact-Rich Manipulation",
+      "formal_url": "https://www.roboticsproceedings.org/rss21/p060.html",
+      "pdf_download_url": "https://www.roboticsproceedings.org/rss21/p060.pdf",
+      "version": "RSS 2025 image-only conference PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "5020fe8ff46adaf2fd10205cb2cd644562251b3a60f833cae8d19bf93e01eb85",
+      "pdf_pages": 16,
+      "prior_extracted_file_sha256": "4855c66dbb4088cda5b641943af6fadb39e7c4d65af0addf95cbb161760b9da0",
+      "status": "unknown_excluded",
+      "excerpt_exact": null,
+      "word_count_whitespace": null,
+      "locator": {
+        "pdf_page_one_based": null,
+        "section": null
+      },
+      "extraction": {
+        "file": "contact-robustpeg-ocr.txt",
+        "sha256": "4855c66dbb4088cda5b641943af6fadb39e7c4d65af0addf95cbb161760b9da0",
+        "method": "Earlier full-page OCR"
+      },
+      "validation": {
+        "status": "excluded",
+        "reason": "Image-only PDF. OCR character fidelity is unverified, so no verbatim original-source quotation is supplied.",
+        "frozen_pdf_and_ocr_hashes_match": true,
+        "verbatim_match": null
+      }
+    },
+    {
+      "source_id": "M1",
+      "title": "The trace of heat: on the predictive power of modeling transient diffusion",
+      "formal_url": "https://doi.org/10.1007/s40964-025-01147-9",
+      "pdf_download_url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=959720",
+      "version": "Progress in Additive Manufacturing 10 (2025) 4203–4215 final PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "d139acb7c99efd26242f72d4a9254dbc040b51a8f294eb91f0812312452bbd2b",
+      "pdf_pages": 13,
+      "prior_extracted_file_sha256": "9268d2b81ad8cdeea69b7ceeaa164e622a026712edafe4f9e9f7c0e22938bc2b",
+      "status": "included",
+      "excerpt_exact": "a large portion of the observed effects is actually captured by\nthe heat diffusion equation, including a common model of phase change.",
+      "word_count_whitespace": 22,
+      "locator": {
+        "pdf_page_one_based": 1,
+        "section_or_anchor": "Abstract",
+        "extraction_start_line_one_based": 22,
+        "extraction_end_line_one_based": 23,
+        "extraction_start_byte_zero_based_utf8": 1500,
+        "extraction_end_byte_exclusive_zero_based_utf8": 1634
+      },
+      "extraction": {
+        "file": "M1.raw.txt",
+        "sha256": "40410ebb598bcbb71b6a2bd89930c8c5f9d91bf7682f844501739b217292ceb1",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "M1.page.txt",
+        "page_sha256": "8a03c8fe171c23e89e4fe1ad76bfc0a5f5e0adec814f7107632a687244b45dc3",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "M2",
+      "title": "Physics guided heat source for quantitative prediction of IN718 laser additive manufacturing processes",
+      "formal_url": "https://doi.org/10.1038/s41524-024-01198-6",
+      "pdf_download_url": "https://www.nature.com/articles/s41524-024-01198-6.pdf",
+      "version": "npj Computational Materials (2024) article 37 final PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "831b5ae7a70661b560d6238556e9bf5cccd671762d47cea58648356a101e2fe6",
+      "pdf_pages": 14,
+      "prior_extracted_file_sha256": "c979a19d50e3231a14730931fabc66106d301ff500da4328778c03ad6bf23fd7",
+      "status": "included",
+      "excerpt_exact": "The equation deﬁnes the RHF by the preheating on point i by a\npreviously scanned point k",
+      "word_count_whitespace": 17,
+      "locator": {
+        "pdf_page_one_based": 11,
+        "section_or_anchor": "Methods, RHF definition explanation after Eq.(19)",
+        "extraction_start_line_one_based": 1337,
+        "extraction_end_line_one_based": 1338,
+        "extraction_start_byte_zero_based_utf8": 48861,
+        "extraction_end_byte_exclusive_zero_based_utf8": 48951
+      },
+      "extraction": {
+        "file": "M2.raw.txt",
+        "sha256": "edaa96ea81594c532d0a77a89eb224bc402c0dbc7650dcb05fb5cc2e419fc35c",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "M2.page.txt",
+        "page_sha256": "fd2e9bda6e5c72c02cd597608eb724fa6e7690af05f753c32f9a10735da604d5",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "M3",
+      "title": "Physics-Informed Surrogates for Temperature Prediction of Multi-Tracks in Laser Powder Bed Fusion",
+      "formal_url": "https://arxiv.org/abs/2502.01820v1",
+      "pdf_download_url": "https://arxiv.org/pdf/2502.01820v1",
+      "version": "arXiv:2502.01820v1 [cs.CE], 2025-02-03",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "8aba52ed948998c1f5a715038d45fc2666a3f3f7d065cac20a34821b303f9afa",
+      "pdf_pages": 22,
+      "prior_extracted_file_sha256": "e92a5318fb2407a9e9bc4e8b59417317170c4b37ebb4a37bb3d27495cc9b351f",
+      "status": "included",
+      "excerpt_exact": "All of the trainings in this study are performed on Nvidia A100 80GB GPU.",
+      "word_count_whitespace": 14,
+      "locator": {
+        "pdf_page_one_based": 11,
+        "section_or_anchor": "§3.2 Single-track scenarios, before Table 2",
+        "extraction_start_line_one_based": 637,
+        "extraction_end_line_one_based": 637,
+        "extraction_start_byte_zero_based_utf8": 30496,
+        "extraction_end_byte_exclusive_zero_based_utf8": 30569
+      },
+      "extraction": {
+        "file": "M3.raw.txt",
+        "sha256": "ea5535988fdd315cdeadedf953a0a7251c2221e25faf8e0fd35b998e44fd00d5",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "M3.page.txt",
+        "page_sha256": "e14753f0772eb7a4fb67a21011ca03c5a1f1c68c893202cfe0f267deb8d5d5a2",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "M4",
+      "title": "Enabling geometry and toolpath generalization for machine learning based thermal modeling in laser powder bed fusion",
+      "formal_url": "https://doi.org/10.1038/s44387-026-00088-0",
+      "pdf_download_url": "https://www.nature.com/articles/s44387-026-00088-0.pdf",
+      "version": "npj Artificial Intelligence, 2026 publisher PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "94adcb39248e0ed5cd67ecab57ea57cb57916e0f9f4623120cd1044f8c5214c9",
+      "pdf_pages": 12,
+      "prior_extracted_file_sha256": "180f494daeae3fcbfd24d4e8a44e7ad42c67bdd1c7ca9e0a72bf0fbc0964161c",
+      "status": "included",
+      "excerpt_exact": "This maximum temperature ﬁeld serves as the target output for the\nneural network training,",
+      "word_count_whitespace": 14,
+      "locator": {
+        "pdf_page_one_based": 3,
+        "section_or_anchor": "Thermal model description, paragraph after Eq.(8)",
+        "extraction_start_line_one_based": 339,
+        "extraction_end_line_one_based": 340,
+        "extraction_start_byte_zero_based_utf8": 16071,
+        "extraction_end_byte_exclusive_zero_based_utf8": 16163
+      },
+      "extraction": {
+        "file": "M4.raw.txt",
+        "sha256": "0fc35db8e0846b849233241a706cfd962b195b9e668f86206adcadc186ed0cc6",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "M4.page.txt",
+        "page_sha256": "53a2da3df8996f61f904c567bcf4f9b80ec07faf4403a8e256b957f6cb7d8e4f",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "M5",
+      "title": "Toward real-time feedback control for powder bed fusion additive manufacturing",
+      "formal_url": "https://doi.org/10.1016/j.addma.2025.105041",
+      "pdf_download_url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=959824",
+      "version": "Additive Manufacturing 114 (2025) 105041; final PDF online 2025-11-29",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "7cbd1fb2d24e3c5b7e9ca8db650f05fe5e21525f7c770a3559ac443d6e73f3c4",
+      "pdf_pages": 13,
+      "prior_extracted_file_sha256": "301260606fb027dc2413f22893fa4411bb67cd011b3048f86b8b99899a318131",
+      "status": "included",
+      "excerpt_exact": "Data will be made available on request.",
+      "word_count_whitespace": 7,
+      "locator": {
+        "pdf_page_one_based": 12,
+        "section_or_anchor": "Data availability",
+        "extraction_start_line_one_based": 859,
+        "extraction_end_line_one_based": 859,
+        "extraction_start_byte_zero_based_utf8": 54764,
+        "extraction_end_byte_exclusive_zero_based_utf8": 54803
+      },
+      "extraction": {
+        "file": "M5.raw.txt",
+        "sha256": "413f01825d5e4dadb4dbbca7ae0441917ebaeb6d87836be1403a25fde74fb6c6",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "M5.page.txt",
+        "page_sha256": "ee9d95796b182ae7d4d141b8a51833e17f88c8b28c256866ffed44c7c8d2d80a",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "A1",
+      "title": "Behavior Synthesis via Contact-Aware Fisher Information Maximization",
+      "formal_url": "https://arxiv.org/abs/2505.12214v2",
+      "pdf_download_url": "https://arxiv.org/pdf/2505.12214v2",
+      "version": "arXiv:2505.12214v2, observed 2025-09-05; RSS 2025 paper",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "e7fb71d0b4f6d2cad746e9c3319aa7d793dd553a6ec1b6c2b74ba3aa57a9b457",
+      "pdf_pages": 15,
+      "prior_extracted_file_sha256": "adec9b06d3361b92128ee0c5824623e57d6610ab7c4ad33c5025380f94f77c41",
+      "status": "included",
+      "excerpt_exact": "Our approach derives a contact-aware\nFisher information measure that characterizes information-rich\ncontact behaviors that improve parameter learning.",
+      "word_count_whitespace": 17,
+      "locator": {
+        "pdf_page_one_based": 1,
+        "section_or_anchor": "Abstract",
+        "extraction_start_line_one_based": 18,
+        "extraction_end_line_one_based": 20,
+        "extraction_start_byte_zero_based_utf8": 1144,
+        "extraction_end_byte_exclusive_zero_based_utf8": 1294
+      },
+      "extraction": {
+        "file": "A1.raw.txt",
+        "sha256": "618498c6ec38c29f85d9bfa64829e38df799ee98ddebc26fad0320dac4455372",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "A1.page.txt",
+        "page_sha256": "0158b213eb15ff84d27f56b74dc606e63d8d1c4c88bcbf6436cb70ba8ca31e1b",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "A2",
+      "title": "Particle-Based Conformal Prediction for Contact-Aware Uncertainty Calibration in Stratified Configuration Spaces",
+      "formal_url": "https://proceedings.mlr.press/v329/marques26a.html",
+      "pdf_download_url": "https://raw.githubusercontent.com/mlresearch/v329/main/assets/marques26a/marques26a.pdf",
+      "version": "PMLR v329, 2026, pp.813–843 publisher PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "ea04c46d60eb2559bb350b0bfa523cefbf84ca41c4f15da7ffc879b16f27cb19",
+      "pdf_pages": 31,
+      "prior_extracted_file_sha256": "1b2cb0153ab66349b5488feb6ba42ef6c444f940b5b6c0f55a42bec4971ad8e6",
+      "status": "included",
+      "excerpt_exact": "We implicitly assume the current state to be known exactly.",
+      "word_count_whitespace": 10,
+      "locator": {
+        "pdf_page_one_based": 5,
+        "section_or_anchor": "§3 Problem Formulation, immediately after Assumption 1",
+        "extraction_start_line_one_based": 189,
+        "extraction_end_line_one_based": 189,
+        "extraction_start_byte_zero_based_utf8": 14911,
+        "extraction_end_byte_exclusive_zero_based_utf8": 14970
+      },
+      "extraction": {
+        "file": "A2.raw.txt",
+        "sha256": "de8acc54141f581ed2851856e6d50a9b7cf844b890016af461885f24c4e04170",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "A2.page.txt",
+        "page_sha256": "98600740b1e90aeb1de85356407ebedd185a5c02458bf39326c12726e17c96c5",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "A3",
+      "title": "Quantifying Thermal Model Accuracy in PBF-LB/M using Statistical Similarity Tests Against Thermographic Measurements",
+      "formal_url": "https://doi.org/10.1007/s40192-025-00430-5",
+      "pdf_download_url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=960461",
+      "version": "Integrating Materials and Manufacturing Innovation; accepted 2025-10-21 publisher PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "9ad2bd8aabb587737dbbb508bf87da66573c0b6f594e0979e07810c4892d4923",
+      "pdf_pages": 22,
+      "prior_extracted_file_sha256": "10d97dfb5c2eb65170dfc7163538cf248707fad96796f4e5cce83d509b038b89",
+      "status": "included",
+      "excerpt_exact": "agreement between a thermal simulation and measurement in a steady-state\nscenario does not guarantee accuracy during transient phases.",
+      "word_count_whitespace": 18,
+      "locator": {
+        "pdf_page_one_based": 1,
+        "section_or_anchor": "Abstract",
+        "extraction_start_line_one_based": 20,
+        "extraction_end_line_one_based": 21,
+        "extraction_start_byte_zero_based_utf8": 1139,
+        "extraction_end_byte_exclusive_zero_based_utf8": 1273
+      },
+      "extraction": {
+        "file": "A3.raw.txt",
+        "sha256": "5228c8b1a5dc3b2427fbb19dba32f350561ade9561474bfa226c2ac4514cdb71",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "A3.page.txt",
+        "page_sha256": "ba8edade4e899661fde11c1e0ed530a8a392c05d90f18daba7b67c373e8a6cc7",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "A4",
+      "title": "The inverse heat placement problem in metal additive manufacturing: Why a rational approach is needed for powder bed fusion",
+      "formal_url": "https://doi.org/10.1016/j.jmatprotec.2024.118447",
+      "pdf_download_url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=957245",
+      "version": "Journal of Materials Processing Technology 329 (2024) 118447 final PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "cfce13dace7200a93043839d98154488307f1b847ec3a3ec7f0e0bdd31b2cbbd",
+      "pdf_pages": 9,
+      "prior_extracted_file_sha256": "7be0690b0e48c8899eb92dd8e20ca41ad1f782f2704fe9b10fedba61855a0d5b",
+      "status": "included",
+      "excerpt_exact": "The optimization is performed using the sequential\nquadratic programming (SQP) algorithm,",
+      "word_count_whitespace": 11,
+      "locator": {
+        "pdf_page_one_based": 3,
+        "section_or_anchor": "§2 Mathematical framework, final paragraph",
+        "extraction_start_line_one_based": 230,
+        "extraction_end_line_one_based": 231,
+        "extraction_start_byte_zero_based_utf8": 14561,
+        "extraction_end_byte_exclusive_zero_based_utf8": 14650
+      },
+      "extraction": {
+        "file": "A4.raw.txt",
+        "sha256": "372aa1080475a4040fd28451092ba950bebbef0ed75ec086bb9ca4b1f143a173",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "A4.page.txt",
+        "page_sha256": "3e372f2ea02bd4e367148a1e82c42c5aa23f7c8c34d2f1cfec8675f475d58db6",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    },
+    {
+      "source_id": "A5",
+      "title": "Active oversight and quality control in standard Bayesian optimization for autonomous experiments",
+      "formal_url": "https://doi.org/10.1038/s41524-024-01485-2",
+      "pdf_download_url": "https://www.nature.com/articles/s41524-024-01485-2.pdf",
+      "version": "npj Computational Materials (2025) 11:23 final PDF",
+      "access_date_utc": "2026-11-08",
+      "pdf_sha256": "329fcc1b3f928440138d7de70422c79c8f77b8d68d568a983f4b60773dad1391",
+      "pdf_pages": 9,
+      "prior_extracted_file_sha256": "4f9c1f738f223e728ae646f0220155e9f55915bfdc3c323084cb2c37a93b0c08",
+      "status": "included",
+      "excerpt_exact": "adding a secondary surrogate model to dynamically constrain the experimental space based on real-\ntime assessments of the raw experimental data.",
+      "word_count_whitespace": 21,
+      "locator": {
+        "pdf_page_one_based": 1,
+        "section_or_anchor": "Abstract",
+        "extraction_start_line_one_based": 12,
+        "extraction_end_line_one_based": 13,
+        "extraction_start_byte_zero_based_utf8": 624,
+        "extraction_end_byte_exclusive_zero_based_utf8": 768
+      },
+      "extraction": {
+        "file": "A5.raw.txt",
+        "sha256": "a26538659952482a579bde6c93d220b197fdc24bef3e4b5c274690ffac7ee0aa",
+        "method": "pdftotext -raw; Poppler25.03.0",
+        "page_file": "A5.page.txt",
+        "page_sha256": "03083423971baac29a5e36515a08eae54d16c60f4b114bad7e78690f7f4589e2",
+        "page_method": "pdftotext -raw -f PAGE -l PAGE"
+      },
+      "validation": {
+        "status": "passed",
+        "frozen_pdf_and_prior_extraction_hashes_match": true,
+        "literal_match": true,
+        "utf8_byte_slice_match": true,
+        "unique_occurrence": true,
+        "separately_extracted_pdf_page_match": true,
+        "word_limit_passed": true,
+        "linebreaks_and_glyphs_preserved": true,
+        "ocr_used": false,
+        "visual_glyph_audit_claimed": false
+      }
+    }
+  ]
+}
