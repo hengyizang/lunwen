@@ -56,6 +56,19 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
+    "997e20a794c042b8b2b43b7c67c1acc8": {
+      "at": "2026-11-08T11:18:10+00:00",
+      "max_cost_cny": 5.375944,
+      "paper_id": null,
+      "run_id": "20261108T111805548589Z",
+      "transport": {
+        "credential_sha256": "f0c6f21e5f28d2ef3faa61fba3acf20537f855684bde421ee299e185d60cdabe",
+        "endpoint": "https://codekey.ai/v1/responses",
+        "lease_id": "2c776ce6adab4ce9ac2f87722fa30997",
+        "model": "gpt-6-astra",
+        "provider": "codekey-codex-pro"
+      }
+    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
