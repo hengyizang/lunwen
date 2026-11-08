@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "doctoral_question": "Exploratory G1 scouting of distinct AI contributions to mechanical, robotic, manufacturing, mechatronic and autonomous physical systems; no doctoral topic is selected.",
+  "topic_keywords": [
+    "robot",
+    "robotic",
+    "assembly",
+    "actuator",
+    "manufacturing",
+    "thermal",
+    "scheduling",
+    "navigation",
+    "mechatronic",
+    "learning"
+  ],
+  "exclude_keywords": [],
+  "as_of": "2026-11-08",
+  "max_requests": 12,
+  "cache_max_age_days": 7,
+  "searches": [
+    {
+      "provider": "arxiv",
+      "query": "robotic contact assembly residual learning",
+      "query_family": "owner-batch2-contact-assembly",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "robotic contact assembly residual learning",
+      "query_family": "owner-batch2-contact-assembly",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "arxiv",
+      "query": "quadrotor actuator dynamics reinforcement learning",
+      "query_family": "owner-batch2-mechatronic-dynamics",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "quadrotor actuator dynamics reinforcement learning",
+      "query_family": "owner-batch2-mechatronic-dynamics",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "arxiv",
+      "query": "additive manufacturing thermal transfer learning",
+      "query_family": "owner-batch2-manufacturing-process",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "additive manufacturing thermal transfer learning",
+      "query_family": "owner-batch2-manufacturing-process",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "arxiv",
+      "query": "dynamic job shop learning",
+      "query_family": "owner-batch2-dynamic-scheduling",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "dynamic job shop learning",
+      "query_family": "owner-batch2-dynamic-scheduling",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "arxiv",
+      "query": "multi robot coordination communication learning",
+      "query_family": "owner-batch2-multi-robot",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "multi robot coordination communication learning",
+      "query_family": "owner-batch2-multi-robot",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "arxiv",
+      "query": "mobile robot navigation dynamics learning",
+      "query_family": "owner-batch2-mobile-navigation",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    },
+    {
+      "provider": "crossref",
+      "query": "mobile robot navigation dynamics learning",
+      "query_family": "owner-batch2-mobile-navigation",
+      "date_range": "all indexed years; inspect actual dates",
+      "filters": "unfiltered relevance discovery; not exhaustive or novelty evidence",
+      "limit": 3
+    }
+  ]
+}
