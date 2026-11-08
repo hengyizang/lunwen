@@ -1,10 +1,23 @@
 {
   "schema_version": "1.0",
-  "run_id": "36917764939",
-  "created_at": "2026-10-01T19:54:58.436889+00:00",
-  "artifact_name": "research-checkpoint-36917764939",
-  "archive_sha256": null,
+  "run_id": "42457860489",
+  "created_at": "2026-11-08T07:14:31.338427+00:00",
+  "artifact_name": "research-checkpoint-42457860489",
+  "archive_sha256": "21937d643c0d7a5cf739137034ffbcb0ae0b6e552c14bc4587bcae5db1fcb183",
   "retention_days": 90,
-  "files": [],
+  "files": [
+    {
+      "path": "state/model-route-decisions.jsonl",
+      "bytes": 21983,
+      "sha256": "ce512022ae5a8ac3cdd0eb8b3ad593054dc844fc18c4623dcd486825433ed1cc",
+      "storage": "artifact"
+    },
+    {
+      "path": "state/model-usage.jsonl",
+      "bytes": 22837,
+      "sha256": "d32ce0ec88bb9fc015a1ef6135a86b232741d50cc2124d4c2e64146e4a8cdada",
+      "storage": "artifact"
+    }
+  ],
   "raw_data_policy": "rehydrate_from_authorized_acquisition_receipts"
 }
