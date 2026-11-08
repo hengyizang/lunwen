@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "max_output_tokens": 12000,
+  "kind": "public-review-calibration",
+  "prompt_file": "evidence/auxiliary-jobs/20261108-public-review-scope.txt",
+  "calibration_seat": "domain",
+  "task_profile": {
+    "task_class": "public-review-calibration",
+    "science_risk": "critical",
+    "priority": "quality"
+  }
+}
