@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "manifests": {
+    "data/manifests/nist-mds2-3662-v1.0.1-measurements.json": {
+      "sha256": "7483d719d51962e15c64922b37cc43a76e8b5f01f522647ec0a409c9f66a3b13",
+      "actor": "deterministic_control_plane",
+      "source_run_id": "automated-source-binding",
+      "cloud_use_confirmed": true,
+      "confirmed_at": "2026-11-08T13:24:24.585456+00:00",
+      "license_review_performed": false,
+      "research_use_rights_verified": false,
+      "decision_kind": "automated",
+      "human_confirmation": false
+    }
+  }
+}
