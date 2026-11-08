@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/jy7sKH+jp4itYHTQgi7QEFZ+dnk</id>
+  <title>arXiv Query: search_query=all:mobile AND all:robot AND all:navigation AND all:dynamics AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:18Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:mobile+AND+(all:robot+AND+(all:navigation+AND+(all:dynamics+AND+all:learning)))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>202</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2409.11452v1</id>
+    <title>Learning a Terrain- and Robot-Aware Dynamics Model for Autonomous Mobile Robot Navigation</title>
+    <updated>2024-09-17T16:46:39Z</updated>
+    <link href="https://arxiv.org/abs/2409.11452v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2409.11452v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Mobile robots should be capable of planning cost-efficient paths for autonomous navigation. Typically, the terrain and robot properties are subject to variations. For instance, properties of the terrain such as friction may vary across different locations. Also, properties of the robot may change such as payloads or wear and tear, e.g., causing changing actuator gains or joint friction. Autonomous navigation approaches should thus be able to adapt to such variations. In this article, we propose a novel approach for learning a probabilistic, terrain- and robot-aware forward dynamics model (TRADYN) which can adapt to such variations and demonstrate its use for navigation. Our learning approach extends recent advances in meta-learning forward dynamics models based on Neural Processes for mobile robot navigation. We evaluate our method in simulation for 2D navigation of a robot with uni-cycle dynamics with varying properties on terrain with spatially varying friction coefficients. In our experiments, we demonstrate that TRADYN has lower prediction error over long time horizons than model ablations which do not adapt to robot or terrain variations. We also evaluate our model for navigation planning in a model-predictive control framework and under various sources of noise. We demonstrate that our approach yields improved performance in planning control-efficient paths by taking robot and terrain properties into account.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-09-17T16:46:39Z</published>
+    <arxiv:comment>Submitted to Robotics and Autonomous Systems. arXiv admin note: substantial text overlap with arXiv:2307.09206</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Jan Achterhold</name>
+    </author>
+    <author>
+      <name>Suresh Guttikonda</name>
+    </author>
+    <author>
+      <name>Jens U. Kreber</name>
+    </author>
+    <author>
+      <name>Haolong Li</name>
+    </author>
+    <author>
+      <name>Joerg Stueckler</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2206.08737v2</id>
+    <title>N$^2$M$^2$: Learning Navigation for Arbitrary Mobile Manipulation Motions in Unseen and Dynamic Environments</title>
+    <updated>2023-06-29T07:54:25Z</updated>
+    <link href="https://arxiv.org/abs/2206.08737v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2206.08737v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Despite its importance in both industrial and service robotics, mobile manipulation remains a significant challenge as it requires a seamless integration of end-effector trajectory generation with navigation skills as well as reasoning over long-horizons. Existing methods struggle to control the large configuration space, and to navigate dynamic and unknown environments. In previous work, we proposed to decompose mobile manipulation tasks into a simplified motion generator for the end-effector in task space and a trained reinforcement learning agent for the mobile base to account for kinematic feasibility of the motion. In this work, we introduce Neural Navigation for Mobile Manipulation (N$^2$M$^2$) which extends this decomposition to complex obstacle environments and enables it to tackle a broad range of tasks in real world settings. The resulting approach can perform unseen, long-horizon tasks in unexplored environments while instantly reacting to dynamic obstacles and environmental changes. At the same time, it provides a simple way to define new mobile manipulation tasks. We demonstrate the capabilities of our proposed approach in extensive simulation and real-world experiments on multiple kinematically diverse mobile manipulators. Code and videos are publicly available at http://mobile-rl.cs.uni-freiburg.de.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-06-17T12:52:41Z</published>
+    <arxiv:comment>Project website: http://mobile-rl.cs.uni-freiburg.de; Accepted at T-RO</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Daniel Honerkamp</name>
+    </author>
+    <author>
+      <name>Tim Welschehold</name>
+    </author>
+    <author>
+      <name>Abhinav Valada</name>
+    </author>
+    <arxiv:doi>10.1109/TRO.2023.3284346</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/TRO.2023.3284346" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.30468v1</id>
+    <title>Learning-Based Navigation for Indoor Mobile Robots</title>
+    <updated>2026-05-28T18:40:52Z</updated>
+    <link href="https://arxiv.org/abs/2605.30468v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.30468v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper presents a learning-based navigation framework for indoor mobile robots. The proposed method combines a supervised neural global planner, trained from cost-aware A* expert trajectories, with the proposed Learning-Based DWA local planner, which is formulated as discrete candidate selection over the Dynamic Window Approach (DWA) action lattice. For local planning, the policy is first trained by behavior cloning and then refined by Proximal Policy Optimization (PPO) under feasibility-aware masking. The framework is implemented and evaluated in both simulated and real-world indoor environments. Experimental results show that the proposed method generates feasible global routes and reliable local motion commands for safe goal-directed navigation in the presence of obstacles. These results demonstrate the effectiveness of integrating learning-based global planning with reinforcement-learning-refined local control for indoor mobile robot navigation. The source code will be released at https://ntdathp.github.io/rl_robot_web/.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-28T18:40:52Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Tri-Tin Nguyen</name>
+    </author>
+    <author>
+      <name>Tien-Dat Nguyen</name>
+    </author>
+    <author>
+      <name>Gia-Uy Le</name>
+    </author>
+    <author>
+      <name>Vinh Nguyen</name>
+    </author>
+    <author>
+      <name>Vinh-Hao Nguyen</name>
+    </author>
+  </entry>
+</feed>

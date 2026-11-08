@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/fH26VG8P4QepoNFj2bP3MS6P4l0</id>
+  <title>arXiv Query: search_query=all:multi AND all:robot AND all:coordination AND all:communication AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:14Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:multi+AND+(all:robot+AND+(all:coordination+AND+(all:communication+AND+all:learning)))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>118</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2401.13127v1</id>
+    <title>Generalization of Heterogeneous Multi-Robot Policies via Awareness and Communication of Capabilities</title>
+    <updated>2024-01-23T22:31:34Z</updated>
+    <link href="https://arxiv.org/abs/2401.13127v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2401.13127v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Recent advances in multi-agent reinforcement learning (MARL) are enabling impressive coordination in heterogeneous multi-robot teams. However, existing approaches often overlook the challenge of generalizing learned policies to teams of new compositions, sizes, and robots. While such generalization might not be important in teams of virtual agents that can retrain policies on-demand, it is pivotal in multi-robot systems that are deployed in the real-world and must readily adapt to inevitable changes. As such, multi-robot policies must remain robust to team changes -- an ability we call adaptive teaming. In this work, we investigate if awareness and communication of robot capabilities can provide such generalization by conducting detailed experiments involving an established multi-robot test bed. We demonstrate that shared decentralized policies, that enable robots to be both aware of and communicate their capabilities, can achieve adaptive teaming by implicitly capturing the fundamental relationship between collective capabilities and effective coordination. Videos of trained policies can be viewed at: https://sites.google.com/view/cap-comm</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-01-23T22:31:34Z</published>
+    <arxiv:comment>Presented at the 7th Conference on Robot Learning (CoRL 2023), Atlanta, USA</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Pierce Howell</name>
+    </author>
+    <author>
+      <name>Max Rudolph</name>
+    </author>
+    <author>
+      <name>Reza Torbati</name>
+    </author>
+    <author>
+      <name>Kevin Fu</name>
+    </author>
+    <author>
+      <name>Harish Ravichandar</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.33637v1</id>
+    <title>Hierarchical Multi-agent Reinforcement Learning for Warehouse Robot Coordination under Communication Loss</title>
+    <updated>2026-09-27T14:59:28Z</updated>
+    <link href="https://arxiv.org/abs/2609.33637v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.33637v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper, we propose a hierarchical multi-agent reinforcement learning framework for coordinating robot teams in warehouse environments under communication loss. We partition the robot team into groups, with centralized coordination within each group and distributed coordination across groups. Each group uses a recurrent predictor to estimate unavailable interaction information due to communication loss. A higher-level policy then generates a compact coordination reference that conditions the local control policy within each group. A predictive safety filter evaluates and modifies the proposed controls when they violate safety constraints. Simulation results show improved task completion under communication loss, reduced communication growth as the team size increases, and safe operation in the tested scenarios.</summary>
+    <category term="eess.SY" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-27T14:59:28Z</published>
+    <arxiv:comment>8 pages, 4 figures, conference</arxiv:comment>
+    <arxiv:primary_category term="eess.SY"/>
+    <author>
+      <name>Weihao Sun</name>
+    </author>
+    <author>
+      <name>Gehui Xu</name>
+    </author>
+    <author>
+      <name>Andreas A. Malikopoulos</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2008.02616v2</id>
+    <title>The Emergence of Adversarial Communication in Multi-Agent Reinforcement Learning</title>
+    <updated>2020-11-04T18:01:46Z</updated>
+    <link href="https://arxiv.org/abs/2008.02616v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2008.02616v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Many real-world problems require the coordination of multiple autonomous agents. Recent work has shown the promise of Graph Neural Networks (GNNs) to learn explicit communication strategies that enable complex multi-agent coordination. These works use models of cooperative multi-agent systems whereby agents strive to achieve a shared global goal. When considering agents with self-interested local objectives, the standard design choice is to model these as separate learning systems (albeit sharing the same environment). Such a design choice, however, precludes the existence of a single, differentiable communication channel, and consequently prohibits the learning of inter-agent communication strategies. In this work, we address this gap by presenting a learning model that accommodates individual non-shared rewards and a differentiable communication channel that is common among all agents. We focus on the case where agents have self-interested objectives, and develop a learning algorithm that elicits the emergence of adversarial communications. We perform experiments on multi-agent coverage and path planning problems, and employ a post-hoc interpretability technique to visualize the messages that agents communicate to each other. We show how a single self-interested agent is capable of learning highly manipulative communication strategies that allows it to significantly outperform a cooperative team of agents.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.MA" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-08-06T12:48:08Z</published>
+    <arxiv:comment>Accepted to Conference on Robot Learning (CoRL) 2020. Camera-ready version incorporating rebuttal</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Jan Blumenkamp</name>
+    </author>
+    <author>
+      <name>Amanda Prorok</name>
+    </author>
+  </entry>
+</feed>

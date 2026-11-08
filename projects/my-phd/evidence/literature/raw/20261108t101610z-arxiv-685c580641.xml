@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/1doM5w0ktSfvussKDEf86mpyNAE</id>
+  <title>arXiv Query: search_query=all:dynamic AND all:job AND all:shop AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:10Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:dynamic+AND+(all:job+AND+(all:shop+AND+all:learning))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>35</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2109.03323v1</id>
+    <title>Effective and interpretable dispatching rules for dynamic job shops via guided empirical learning</title>
+    <updated>2021-09-07T20:46:45Z</updated>
+    <link href="https://arxiv.org/abs/2109.03323v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2109.03323v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The emergence of Industry 4.0 is making production systems more flexible and also more dynamic. In these settings, schedules often need to be adapted in real-time by dispatching rules. Although substantial progress was made until the '90s, the performance of these rules is still rather limited. The machine learning literature is developing a variety of methods to improve them, but the resulting rules are difficult to interpret and do not generalise well for a wide range of settings. This paper is the first major attempt at combining machine learning with domain problem reasoning for scheduling. The idea consists of using the insights obtained with the latter to guide the empirical search of the former. Our hypothesis is that this guided empirical learning process should result in dispatching rules that are effective and interpretable and which generalise well to different instance classes. We test our approach in the classical dynamic job shop scheduling problem minimising tardiness, which is one of the most well-studied scheduling problems. Nonetheless, results suggest that our approach was able to find new state-of-the-art rules, which significantly outperform the existing literature in the vast majority of settings, from loose to tight due dates and from low utilisation conditions to congested shops. Overall, the average improvement is 19%. Moreover, the rules are compact, interpretable, and generalise well to extreme, unseen scenarios.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-09-07T20:46:45Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Cristiane Ferreira</name>
+    </author>
+    <author>
+      <name>Gonçalo Figueira</name>
+    </author>
+    <author>
+      <name>Pedro Amorim</name>
+    </author>
+    <arxiv:doi>10.1016/j.omega.2022.102643</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1016/j.omega.2022.102643" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2206.04423v2</id>
+    <title>Learning to generalize Dispatching rules on the Job Shop Scheduling</title>
+    <updated>2022-11-15T10:55:07Z</updated>
+    <link href="https://arxiv.org/abs/2206.04423v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2206.04423v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper introduces a Reinforcement Learning approach to better generalize heuristic dispatching rules on the Job-shop Scheduling Problem (JSP). Current models on the JSP do not focus on generalization, although, as we show in this work, this is key to learning better heuristics on the problem. A well-known technique to improve generalization is to learn on increasingly complex instances using Curriculum Learning (CL). However, as many works in the literature indicate, this technique might suffer from catastrophic forgetting when transferring the learned skills between different problem sizes. To address this issue, we introduce a novel Adversarial Curriculum Learning (ACL) strategy, which dynamically adjusts the difficulty level during the learning process to revisit the worst-performing instances. This work also presents a deep learning model to solve the JSP, which is equivariant w.r.t. the job definition and size-agnostic. Conducted experiments on Taillard's and Demirkol's instances show that the presented approach significantly improves the current state-of-the-art models on the JSP. It reduces the average optimality gap from 19.35\% to 10.46\% on Taillard's instances and from 38.43\% to 18.85\% on Demirkol's instances. Our implementation is available online.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-06-09T11:25:39Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Zangir Iklassov</name>
+    </author>
+    <author>
+      <name>Dmitrii Medvedev</name>
+    </author>
+    <author>
+      <name>Ruben Solozabal</name>
+    </author>
+    <author>
+      <name>Martin Takac</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.41158v1</id>
+    <title>Lifelong Learning of Scheduling Rules with Surrogate-assisted Genetic Programming for Dynamic Flexible Job Shop Scheduling</title>
+    <updated>2026-10-30T02:33:43Z</updated>
+    <link href="https://arxiv.org/abs/2610.41158v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.41158v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Genetic programming (GP) has been widely used to learn scheduling rules for dynamic flexible job shop scheduling (DFJSS). However, trained rules tend to only generalise to tasks of similar scales and distributions, and when task characteristics change, learned rules often suffer significant performance degradation. Moreover, fine-tuning pre-trained rules on new tasks often leads to catastrophic forgetting, where prior knowledge is lost. This motivates the need for GP methods that can adapt to new tasks while preserving past knowledge, leading to a lifelong learning paradigm. However, lifelong learning in GP for DFJSS remains largely under-explored. To address this gap, this paper proposes a surrogate-assisted GP method for lifelong learning to handle sequential heterogeneous DFJSS tasks with job or batch arrivals. The framework includes three key components: an adaptive two-stage training strategy to balance plasticity and stability, a task-similarity-based weighting mechanism to regulate knowledge reuse, and an improved surrogate model with distance constraints to enhance estimation accuracy. Experimental results show that the proposed method effectively mitigates catastrophic forgetting while maintaining strong adaptability, outperforming several compared methods and demonstrating the potential of lifelong GP in dynamic scheduling environments.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-30T02:33:43Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Luyao Zhu</name>
+    </author>
+    <author>
+      <name>Fangfang Zhang</name>
+    </author>
+    <author>
+      <name>Yi Mei</name>
+    </author>
+    <author>
+      <name>Ke Chen</name>
+    </author>
+    <author>
+      <name>Mengjie Zhang</name>
+    </author>
+  </entry>
+</feed>

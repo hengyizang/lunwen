@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/SJrzUH5/w+AWJcBG5aWnF76g1vk</id>
+  <title>arXiv Query: search_query=all:quadrotor AND all:actuator AND all:dynamics AND all:reinforcement AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:05Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:quadrotor+AND+(all:actuator+AND+(all:dynamics+AND+(all:reinforcement+AND+all:learning)))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>9</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2506.14039v1</id>
+    <title>Quadrotor Morpho-Transition: Learning vs Model-Based Control Strategies</title>
+    <updated>2025-06-16T22:23:28Z</updated>
+    <link href="https://arxiv.org/abs/2506.14039v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2506.14039v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Quadrotor Morpho-Transition, or the act of transitioning from air to ground through mid-air transformation, involves complex aerodynamic interactions and a need to operate near actuator saturation, complicating controller design. In recent work, morpho-transition has been studied from a model-based control perspective, but these approaches remain limited due to unmodeled dynamics and the requirement for planning through contacts. Here, we train an end-to-end Reinforcement Learning (RL) controller to learn a morpho-transition policy and demonstrate successful transfer to hardware. We find that the RL control policy achieves agile landing, but only transfers to hardware if motor dynamics and observation delays are taken into account. On the other hand, a baseline MPC controller transfers out-of-the-box without knowledge of the actuator dynamics and delays, at the cost of reduced recovery from disturbances in the event of unknown actuator failures. Our work opens the way for more robust control of agile in-flight quadrotor maneuvers that require mid-air transformation.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.SY" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-06-16T22:23:28Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Ioannis Mandralis</name>
+    </author>
+    <author>
+      <name>Richard M. Murray</name>
+    </author>
+    <author>
+      <name>Morteza Gharib</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2505.08223v1</id>
+    <title>Reinforcement Learning-based Fault-Tolerant Control for Quadrotor with Online Transformer Adaptation</title>
+    <updated>2025-05-13T04:50:29Z</updated>
+    <link href="https://arxiv.org/abs/2505.08223v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2505.08223v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Multirotors play a significant role in diverse field robotics applications but remain highly susceptible to actuator failures, leading to rapid instability and compromised mission reliability. While various fault-tolerant control (FTC) strategies using reinforcement learning (RL) have been widely explored, most previous approaches require prior knowledge of the multirotor model or struggle to adapt to new configurations. To address these limitations, we propose a novel hybrid RL-based FTC framework integrated with a transformer-based online adaptation module. Our framework leverages a transformer architecture to infer latent representations in real time, enabling adaptation to previously unseen system models without retraining. We evaluate our method in a PyBullet simulation under loss-of-effectiveness actuator faults, achieving a 95% success rate and a positional root mean square error (RMSE) of 0.129 m, outperforming existing adaptation methods with 86% success and an RMSE of 0.153 m. Further evaluations on quadrotors with varying configurations confirm the robustness of our framework across untrained dynamics. These results demonstrate the potential of our framework to enhance the adaptability and reliability of multirotors, enabling efficient fault management in dynamic and uncertain environments. Website is available at http://00dhkim.me/paper/rl-ftc</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-13T04:50:29Z</published>
+    <arxiv:comment>Accpted at the 2025 IEEE International Conference on Robotics &amp; Automation (ICRA) Workshop: Robots in the Wild</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Dohyun Kim</name>
+    </author>
+    <author>
+      <name>Jayden Dongwoo Lee</name>
+    </author>
+    <author>
+      <name>Hyochoong Bang</name>
+    </author>
+    <author>
+      <name>Jungho Bae</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2406.08815v2</id>
+    <title>Deep Reinforcement Learning-based Quadcopter Controller: A Practical Approach and Experiments</title>
+    <updated>2024-06-18T17:13:10Z</updated>
+    <link href="https://arxiv.org/abs/2406.08815v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2406.08815v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Quadcopters have been studied for decades thanks to their maneuverability and capability of operating in a variety of circumstances. However, quadcopters suffer from dynamical nonlinearity, actuator saturation, as well as sensor noise that make it challenging and time consuming to obtain accurate dynamic models and achieve satisfactory control performance. Fortunately, deep reinforcement learning came and has shown significant potential in system modelling and control of autonomous multirotor aerial vehicles, with recent advancements in deployment, performance enhancement, and generalization. In this paper, an end-to-end deep reinforcement learning-based controller for quadcopters is proposed that is secure for real-world implementation, data-efficient, and free of human gain adjustments. First, a novel actor-critic-based architecture is designed to map the robot states directly to the motor outputs. Then, a quadcopter dynamics-based simulator was devised to facilitate the training of the controller policy. Finally, the trained policy is deployed on a real Crazyflie nano quadrotor platform, without any additional fine-tuning process. Experimental results show that the quadcopter exhibits satisfactory performance as it tracks a given complicated trajectory, which demonstrates the effectiveness and feasibility of the proposed method and signifies its capability in filling the simulation-to-reality gap.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.SY" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-06-13T05:17:20Z</published>
+    <arxiv:comment>6 pages, 5 figures, 3 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Truong-Dong Do</name>
+    </author>
+    <author>
+      <name>Nguyen Xuan Mung</name>
+    </author>
+    <author>
+      <name>Sung Kyung Hong</name>
+    </author>
+  </entry>
+</feed>

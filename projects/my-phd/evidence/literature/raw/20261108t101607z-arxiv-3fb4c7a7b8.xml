@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/awyFCaIXhzEHH4FX3JXY/8D1qtw</id>
+  <title>arXiv Query: search_query=all:additive AND all:manufacturing AND all:thermal AND all:transfer AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:07Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:additive+AND+(all:manufacturing+AND+(all:thermal+AND+(all:transfer+AND+all:learning)))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>5</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2309.06838v2</id>
+    <title>Supervised Machine Learning and Physics based Machine Learning approach for prediction of peak temperature distribution in Additive Friction Stir Deposition of Aluminium Alloy</title>
+    <updated>2023-12-01T23:25:00Z</updated>
+    <link href="https://arxiv.org/abs/2309.06838v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2309.06838v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Additive friction stir deposition (AFSD) is a novel solid-state additive manufacturing technique that circumvents issues of porosity, cracking, and properties anisotropy that plague traditional powder bed fusion and directed energy deposition approaches. However, correlations between process parameters, thermal profiles, and resulting microstructure in AFSD remain poorly understood. This hinders process optimization for properties. This work employs a framework combining supervised machine learning (SML) and physics-informed neural networks (PINNs) to predict peak temperature distribution in AFSD from process parameters. Eight regression algorithms were implemented for SML modeling, while four PINNs leveraged governing equations for transport, wave propagation, heat transfer, and quantum mechanics. Across multiple statistical measures, ensemble techniques like gradient boosting proved superior for SML, with lowest MSE of 165.78. The integrated ML approach was also applied to classify deposition quality from process factors, with logistic regression delivering robust accuracy. By fusing data-driven learning and fundamental physics, this dual methodology provides comprehensive insights into tailoring microstructure through thermal management in AFSD. The work demonstrates the power of bridging statistical and physics-based modeling for elucidating AM process-property relationships.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.OC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-09-13T09:39:42Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Akshansh Mishra</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.18786v1</id>
+    <title>Thermal-Mechanical Physics Informed Deep Learning For Fast Prediction of Thermal Stress Evolution in Laser Metal Deposition</title>
+    <updated>2024-12-25T05:37:48Z</updated>
+    <link href="https://arxiv.org/abs/2412.18786v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.18786v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Understanding thermal stress evolution in metal additive manufacturing (AM) is crucial for producing high-quality components. Recent advancements in machine learning (ML) have shown great potential for modeling complex multiphysics problems in metal AM. While physics-based simulations face the challenge of high computational costs, conventional data-driven ML models require large, labeled training datasets to achieve accurate predictions. Unfortunately, generating large datasets for ML model training through time-consuming experiments or high-fidelity simulations is highly expensive in metal AM. To address these challenges, this study introduces a physics-informed neural network (PINN) framework that incorporates governing physical laws into deep neural networks (NNs) to predict temperature and thermal stress evolution during the laser metal deposition (LMD) process. The study also discusses the enhanced accuracy and efficiency of the PINN model when supplemented with small simulation data. Furthermore, it highlights the PINN transferability, enabling fast predictions with a set of new process parameters using a pre-trained PINN model as an online soft sensor, significantly reducing computation time compared to physics-based numerical models while maintaining accuracy.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-25T05:37:48Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>R. Sharma</name>
+    </author>
+    <author>
+      <name>Y. B. Guo</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2407.13838v1</id>
+    <title>Temperature Distribution Prediction in Laser Powder Bed Fusion using Transferable and Scalable Graph Neural Networks</title>
+    <updated>2024-07-18T18:14:47Z</updated>
+    <link href="https://arxiv.org/abs/2407.13838v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2407.13838v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This study presents novel predictive models using Graph Neural Networks (GNNs) for simulating thermal dynamics in Laser Powder Bed Fusion (L-PBF) processes. By developing and validating Single-Laser GNN (SL-GNN) and Multi-Laser GNN (ML-GNN) surrogates, the research introduces a scalable data-driven approach that learns fundamental physics from small-scale Finite Element Analysis (FEA) simulations and applies them to larger domains. Achieving a Mean Absolute Percentage Error (MAPE) of 3.77% with the baseline SL-GNN model, GNNs effectively learn from high-resolution simulations and generalize well across larger geometries. The proposed models capture the complexity of the heat transfer process in L-PBF while significantly reducing computational costs. For example, a thermomechanical simulation for a 2 mm x 2 mm domain typically requires about 4 hours, whereas the SL-GNN model can predict thermal distributions almost instantly. Calibrating models to larger domains enhances predictive performance, with significant drops in MAPE for 3 mm x 3 mm and 4 mm x 4 mm domains, highlighting the scalability and efficiency of this approach. Additionally, models show a decreasing trend in Root Mean Square Error (RMSE) when tuned to larger domains, suggesting potential for becoming geometry-agnostic. The interaction of multiple lasers complicates heat transfer, necessitating larger model architectures and advanced feature engineering. Using hyperparameters from Gaussian process-based Bayesian optimization, the best ML-GNN model demonstrates a 46.4% improvement in MAPE over the baseline ML-GNN model. In summary, this approach enables more efficient and flexible predictive modeling in L-PBF additive manufacturing.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-07-18T18:14:47Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Riddhiman Raut</name>
+    </author>
+    <author>
+      <name>Amit Kumar Ball</name>
+    </author>
+    <author>
+      <name>Amrita Basak</name>
+    </author>
+  </entry>
+</feed>

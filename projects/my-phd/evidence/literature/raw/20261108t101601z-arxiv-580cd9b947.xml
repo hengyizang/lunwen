@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/dyHZhQKKirjgGbP3BG27IQc42YA</id>
+  <title>arXiv Query: search_query=all:robotic AND all:contact AND all:assembly AND all:residual AND all:learning&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-11-08T10:16:01Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:robotic+AND+(all:contact+AND+(all:assembly+AND+(all:residual+AND+all:learning)))&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>14</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2310.10509v1</id>
+    <title>Efficient Sim-to-real Transfer of Contact-Rich Manipulation Skills with Online Admittance Residual Learning</title>
+    <updated>2023-10-16T15:28:10Z</updated>
+    <link href="https://arxiv.org/abs/2310.10509v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2310.10509v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Learning contact-rich manipulation skills is essential. Such skills require the robots to interact with the environment with feasible manipulation trajectories and suitable compliance control parameters to enable safe and stable contact. However, learning these skills is challenging due to data inefficiency in the real world and the sim-to-real gap in simulation. In this paper, we introduce a hybrid offline-online framework to learn robust manipulation skills. We employ model-free reinforcement learning for the offline phase to obtain the robot motion and compliance control parameters in simulation \RV{with domain randomization}. Subsequently, in the online phase, we learn the residual of the compliance control parameters to maximize robot performance-related criteria with force sensor measurements in real time. To demonstrate the effectiveness and robustness of our approach, we provide comparative results against existing methods for assembly, pivoting, and screwing tasks.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-10-16T15:28:10Z</published>
+    <arxiv:comment>Conference on Robot Learning (CoRL) 2023</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Xiang Zhang</name>
+    </author>
+    <author>
+      <name>Changhao Wang</name>
+    </author>
+    <author>
+      <name>Lingfeng Sun</name>
+    </author>
+    <author>
+      <name>Zheng Wu</name>
+    </author>
+    <author>
+      <name>Xinghao Zhu</name>
+    </author>
+    <author>
+      <name>Masayoshi Tomizuka</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.06949v1</id>
+    <title>Learning-Based Strategy for Composite Robot Assembly Skill Adaptation</title>
+    <updated>2026-04-08T11:13:00Z</updated>
+    <link href="https://arxiv.org/abs/2604.06949v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2604.06949v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Contact-rich robotic skills remain challenging for industrial robots due to tight geometric tolerances, frictional variability, and uncertain contact dynamics, particularly when using position-controlled manipulators. This paper presents a reusable and encapsulated skill-based strategy for peg-in-hole assembly, in which adaptation is achieved through Residual Reinforcement Learning (RRL). The assembly process is represented using composite skills with explicit pre-, post-, and invariant conditions, enabling modularity, reusability, and well-defined execution semantics across task variations. Safety and sample efficiency are promoted through RRL by restricting adaptation to residual refinements within each skill during contact-rich interactions, while the overall skill structure and execution flow remain invariant. The proposed approach is evaluated in MuJoCo simulation on a UR5e robot equipped with a Robotiq gripper and trained using SAC and JAX. Results demonstrate that the proposed formulation enables robust execution of assembly skills, highlighting its suitability for industrial automation.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-04-08T11:13:00Z</published>
+    <arxiv:comment>Accepted at RAAD 2026 (Springer). 6 pages, 4 figures</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Khalil Abuibaid</name>
+    </author>
+    <author>
+      <name>Aleksandr Sidorenko</name>
+    </author>
+    <author>
+      <name>Achim Wagner</name>
+    </author>
+    <author>
+      <name>Martin Ruskowski</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2607.16506v1</id>
+    <title>Foresight Residual RL for Long-Horizon Robot Manipulation with Vision-Language-Action Models</title>
+    <updated>2026-07-17T21:00:28Z</updated>
+    <link href="https://arxiv.org/abs/2607.16506v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2607.16506v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Vision-Language-Action (VLA) policies offer strong general-purpose manipulation priors, but often fail on tight-tolerance, contact-rich assembly due to long-horizon credit assignment and subtask coupling: a state that is geometrically successful for the current skill can be brittle for downstream skills. We show this failure mode in residual reinforcement learning (RL) over a frozen VLA base policy: constant sparse success rewards improve each subtask in isolation yet yield little or no gain when skills are chained, because terminal state quality is uncontrolled. We propose Foresight Residual RL, which optimizes handoff quality by augmenting each subtask's sparse success reward with an offline-estimated foresight value -- the probability of future subtask success conditioned on the terminal state of the current subtask. Concretely, we (i) train a visual foresight predictor from images of terminal states of the base policy, labeled using downstream rollout statistics, and (ii) train residual policies via backward foresight induction, using the predictor output as a reward multiplier. On a three-phase wrench-based nut-tightening assembly task in Isaac Gym (grasp, move-insert, rotate), our method achieves 85.6% full-task success, outperforming standard subtask residual RL (54.5%) and VLA baselines, while leaving per-subtask success unchanged. These results highlight that improving long-horizon performance requires shaping which successful states are produced at each sub-task, not only whether success occurs.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-07-17T21:00:28Z</published>
+    <arxiv:comment>Accepted at IROS2026. Project website: https://jaysparrow.github.io/foresight-residual-rl</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Yuhan Liu</name>
+    </author>
+    <author>
+      <name>Xinyu Zhang</name>
+    </author>
+    <author>
+      <name>Litao Liu</name>
+    </author>
+    <author>
+      <name>Abdeslam Boularias</name>
+    </author>
+  </entry>
+</feed>
