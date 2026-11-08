@@ -405,6 +405,13 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
     if type(baseline_cache_hit) is not bool:
         raise RoutingError("baseline cache availability must be verified by the runtime")
     profile = _profile_for_route(task_profile, baseline_route)
+    if baseline_route.get("validation_scope", {}).get("purpose") == "g1-transport-validation":
+        if len(prompt.encode()) + len((system or "").encode()) > baseline_route["validation_max_input_bytes"]:
+            raise RoutingError("G1 validation request exceeds its complete-source context; prepare an explicit full source plan, never truncate evidence")
+        import time
+        deadlines = [float(os.environ[key]) for key in ("DR_OS_CLOUD_JOB_DEADLINE_EPOCH", "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH") if key in os.environ]
+        if not deadlines or any(not math.isfinite(value) for value in deadlines) or min(deadlines) - time.time() < timeout + 180:
+            raise RoutingError("G1 validation cannot preserve a complete call and checkpoint in the existing cloud window")
     route = dict(baseline_route)
     route["max_output_tokens"] = min(max_output_tokens, baseline_route.get("max_output_tokens", max_output_tokens))
     route["timeout"] = min(timeout, profile.get("deadline_seconds", timeout))
@@ -455,6 +462,8 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
     for candidate in policy["candidates"]:
         name = candidate["candidate_id"]
         try:
+            if baseline_route.get("temporary_validation_only"):
+                raise RoutingError("bounded validation locks its exact planned production identity")
             required_output = max(route["max_output_tokens"], needed)
             if candidate["max_input_bytes"] < input_bytes or candidate["max_output_tokens"] < required_output or not modalities <= set(candidate["modalities"]):
                 raise RoutingError("candidate limits cannot preserve the complete task")

@@ -109,6 +109,73 @@ class ControlledResearchTests(unittest.TestCase):
                 self.assertEqual(opener.return_value.open.call_count,1)
             self.assertEqual(len(model_spend.read(project)['reservations']),1)
 
+    def test_optional_web_search_accounts_existing_holds_without_a_blanket_stop(self):
+        from scripts import web_research, model_spend
+        import io
+        import os
+        for hold, allowed in ((10, True), (299.95, False)):
+            with self.subTest(hold=hold), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory)
+                model_spend.write(project, model_spend.initial())
+                model_spend.grant(project, new_ceiling_cny=300, actor='Synthetic owner', run_id='fixture')
+                old = model_spend.reserve(project, max_cost_cny=hold, paper_id=None, paper_limit_cny=60, run_id='other-request')
+                with patch.dict(os.environ, {'TAVILY_API_KEY': 'synthetic-key', 'DR_OS_TAVILY_CREDIT_CNY': '0.1'}, clear=True), patch.object(
+                    web_research.urllib.request, 'build_opener'
+                ) as opener:
+                    opener.return_value.open.return_value = io.BytesIO(b'{"usage":{"credits":1},"results":[]}')
+                    if allowed:
+                        result = web_research.search('synthetic official-source leads', project_root=project)
+                        self.assertEqual(result['estimated_cost_cny'], .1)
+                        self.assertEqual(opener.return_value.open.call_count, 1)
+                        request = opener.return_value.open.call_args.args[0]
+                        self.assertEqual(request.full_url, 'https://api.tavily.com/search')
+                        self.assertEqual(request.get_method(), 'POST')
+                    else:
+                        with self.assertRaisesRegex(model_spend.SpendControlError, 'cumulative project ceiling'):
+                            web_research.search('synthetic official-source leads', project_root=project)
+                        opener.assert_not_called()
+                ledger = model_spend.read(project)
+                self.assertEqual(ledger['spent_cny'], .1 if allowed else 0)
+                self.assertEqual(set(ledger['reservations']), {old})
+                self.assertEqual(ledger['reservations'][old]['max_cost_cny'], hold)
+
+    def test_bounded_G1_trial_defers_paid_web_but_reads_cache_and_restores_ordinary_search(self):
+        from scripts import web_research, model_spend, model_routing
+        import io
+        import os
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            model_spend.write(project, model_spend.initial())
+            model_spend.grant(project, new_ceiling_cny=300, actor='Synthetic owner', run_id='fixture')
+            steps.write(project / 'state/run.json', {'stage': 'topic-intelligence', 'gate': 'G1',
+                'status': 'awaiting_work', 'approved_gates': ['G0']})
+            signature = hashlib.sha256(json.dumps(['cached synthetic lead', 10]).encode()).hexdigest()
+            target = project / 'evidence/web-search' / (signature + '.json')
+            raw = target.with_suffix('.raw.json')
+            raw.parent.mkdir(parents=True)
+            raw.write_bytes(b'{"fixture":true}')
+            cached = {'query': 'cached synthetic lead', 'generated_at': datetime.now(timezone.utc).isoformat(),
+                'raw_response_path': raw.relative_to(project).as_posix(), 'response_sha256': cp.sha(raw)}
+            steps.write(target, cached)
+            before = model_spend.read(project)
+            with patch.dict(os.environ, {'TAVILY_API_KEY': 'synthetic-key', 'DR_OS_TAVILY_CREDIT_CNY': '0.1',
+                'DR_OS_ROUTING_PROFILE': 'production', 'DR_OS_CLOUD_EXECUTOR': '1'}, clear=True), patch.object(
+                web_research.urllib.request, 'build_opener'
+            ) as opener:
+                opener.return_value.open.return_value = io.BytesIO(b'{"usage":{"credits":1},"results":[]}')
+                with model_routing.g1_transport_validation_route(project, 'a' * 64):
+                    self.assertEqual(web_research.search('cached synthetic lead', project_root=project), cached)
+                    with self.assertRaisesRegex(RuntimeError, 'paid web task deferred'):
+                        web_research.search('new synthetic lead', project_root=project)
+                    opener.assert_not_called()
+                    self.assertEqual(model_spend.read(project), before)
+                self.assertFalse(model_routing.g1_transport_validation_active())
+                self.assertEqual(os.environ['TAVILY_API_KEY'], 'synthetic-key')
+                opener.return_value.open.return_value = io.BytesIO(b'{"usage":{"credits":1},"results":[]}')
+                web_research.search('new synthetic lead', project_root=project)
+                self.assertEqual(opener.return_value.open.call_count, 1)
+                self.assertEqual(model_spend.read(project)['spent_cny'], .1)
+
     def test_jev_uses_only_receipt_metadata_and_keeps_ordinary_review_leads(self):
         from scripts import lead_triage,free_jev_probe
         import os

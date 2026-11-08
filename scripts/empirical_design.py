@@ -11,7 +11,7 @@ import math
 import re
 from pathlib import Path
 
-from scripts.research_artifacts import path_in, read, sha, write, record
+from scripts.research_artifacts import path_in, read, sha, save_report, report_errors
 
 METHODS = {"did_2x2", "iv_2sls", "sharp_rdd"}
 MODULE = "scripts/empirical_design.py"
@@ -259,8 +259,7 @@ def refresh(project: Path, paper_id: str) -> dict:
     report = audit(project, paper_id)
     if report["status"] != "not_configured":
         target = path_in(project, f"papers/{paper_id}/reviews/empirical-design.json", exists=False)
-        write(target, report)
-        record(project, [target], MODULE)
+        save_report(project, target, report, MODULE)
     return report
 
 
@@ -274,9 +273,7 @@ def validate_saved_report(project: Path, paper_id: str) -> list[str]:
         return ["current empirical design audit missing"]
     from scripts.output_provenance import current_origin
     origin = current_origin(project, target)
-    errors = list(current["errors"])
-    if origin.get("status") != "tracked" or origin.get("provider") != "deterministic-control-plane":
-        errors.append("empirical design audit provenance changed")
-    if read(target) != current:
-        errors.append("empirical design audit stale; refresh current source and specification checks")
-    return errors
+    provenance = ([] if origin.get("status") == "tracked" and origin.get("provider") == "deterministic-control-plane"
+                  else ["empirical design audit provenance changed"])
+    return report_errors(current, read(target), "empirical design audit stale; refresh current source and specification checks",
+                         extra=provenance)

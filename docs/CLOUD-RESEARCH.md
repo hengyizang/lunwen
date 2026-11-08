@@ -110,11 +110,15 @@ The existing `literature` action accepts these additional operation files:
 
 To supply a scientific judgment to an existing model invocation, select its
 `operation`, `request_file`, actual stage names and optional `paper_id` in
-`program/research-control.json.scientific_judgments`; `panel_views` selects the
-applicable final seats (`domain`, `editorial`, `statistics`). Source bindings
-are checked again when consuming the protected response. Calibration answer
-keys and independent sample labels are excluded from reviewer context. This
-selection adds work to the existing call, not another automatic paid role.
+`program/research-control.json.scientific_judgments`. Ordinary independent critics
+receive these selected tasks; the final panel receives only its canonical three
+source views. Legacy `panel_views` metadata cannot authorize extra material in a
+final seat. Source bindings are checked again when consuming a protected response,
+including reuse across preparation phases. Calibration answer keys and independent
+sample labels are excluded from reviewer context. This selection adds work to an
+existing call. When two independent citation extractions are needed, explicitly
+select the controlled `citation-crosscheck` auxiliary source job; it records its
+two actual calls and never becomes an automatic addition to ordinary cycles.
 Reproduction requires an actually completed Python result-table run. Portable
 host runs retain the recorded interpreter; ordinary cloud Docker runs replay
 their actual digest-pinned image, inputs, seed and resource limits with network

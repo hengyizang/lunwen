@@ -31,6 +31,11 @@ PROVIDERS = (
     "dataverse",
     "datagov",
 )
+SOURCE_REVIEW_NOTE = (
+    "Discovery metadata does not establish research fitness or permission. Verify the official "
+    "source, version, integrity, privacy, download URL and known access restrictions. "
+    "Licence/research-use verification is optional metadata, not a pre-use or human-approval gate."
+)
 
 
 class DiscoveryError(RuntimeError):
@@ -488,10 +493,7 @@ def discover_many(
             "The score measures metadata/query overlap only. It is not evidence of scientific "
             "fitness, data quality, license validity, novelty, or publication suitability."
         ),
-        "warning": (
-            "Discovery metadata is not a license decision. A human must verify the official "
-            "record, terms, privacy, provenance, version, download URL and research fitness."
-        ),
+        "warning": SOURCE_REVIEW_NOTE,
     }
 
 
@@ -528,10 +530,7 @@ def discover(
         "providers": sources,
         "candidate_count": len(candidates),
         "candidates": candidates,
-        "warning": (
-            "Discovery metadata is not a license decision. A human must verify the official "
-            "record, terms, privacy, provenance, version, download URL and research fitness."
-        ),
+        "warning": SOURCE_REVIEW_NOTE,
     }
 
 

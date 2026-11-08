@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Execute and hash-bind reviewed optional AI4Science tools.
+"""Execute and hash-bind reviewed AI4Science tools and native source Q&A.
 
 This adapter deliberately does not make an AI-generated answer authoritative.
-It executes PaperQA2 and ToolUniverse without a shell, records every attempt,
-and binds package versions plus exact local input/output files. Results remain
-advisory until a human checks them against primary sources.
+ToolUniverse uses one reviewed public-data worker; source Q&A reuses the central
+model runtime. The standalone PaperQA2 agent is never launched. The bounded
+PaperQA2 SDK bridge remains in literature_paperqa. Results remain advisory.
 """
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import signal
 import subprocess
 import sys
@@ -25,12 +24,11 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Iterable
 
-try:
-    from scripts.research_artifacts import sha as sha256_file, regular_file, utc_now as now
-    from scripts import tooluniverse_worker
-except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, regular_file, utc_now as now
-    import tooluniverse_worker
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.research_artifacts import sha as sha256_file, regular_file, utc_now as now
+from scripts import model_spend, paper_qa, tooluniverse_worker
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,12 +36,12 @@ PROJECTS_ROOT = ROOT / "projects"
 PACKAGES = {
     "tooluniverse": "tooluniverse",
     "paperqa2": "paper-qa",
+    "native-source-qa": "dr-os-native-source-qa",
     "kdense-scientific-agent-skills": "scientific-agent-skills",
 }
 ADAPTER_VERSION = "1.0"
 MAX_CAPTURE_BYTES = 8 * 1024 * 1024
 MAX_TIMEOUT_SECONDS = 24 * 60 * 60
-SETTING_RE = re.compile(r"^[A-Za-z0-9_.-]{1,100}$")
 BASE_ENV_NAMES = {
     "PATH",
     "LANG",
@@ -62,6 +60,7 @@ BASE_ENV_NAMES = {
     "https_proxy",
     "no_proxy",
 }
+# Historical receipt validation only; no provider keys enter worker environments.
 SECRET_ENV_NAMES = {
     "OPENAI_API_KEY",
     "ANTHROPIC_API_KEY",
@@ -127,12 +126,12 @@ def directory_records(project: Path, directory: Path) -> list[dict[str, Any]]:
             )
         if path.is_file() and (path.name == ".env" or path.name.startswith(".env.")):
             raise AI4ScienceEvidenceError(
-                "PaperQA2 corpus directories cannot contain environment credential files"
+                "source corpus directories cannot contain environment credential files"
             )
         if path.is_file():
             records.append(file_record(project, path))
     if not records:
-        raise AI4ScienceEvidenceError("the PaperQA2 corpus directory contains no files")
+        raise AI4ScienceEvidenceError("the source corpus directory contains no files")
     return records
 
 
@@ -140,6 +139,8 @@ def package_version(tool: str) -> tuple[str, str]:
     if tool not in PACKAGES:
         raise AI4ScienceEvidenceError("unsupported tool")
     package = PACKAGES[tool]
+    if tool == "native-source-qa":
+        return package, "sha256:" + sha256_file(Path(paper_qa.__file__))
     try:
         return package, metadata.version(package)
     except metadata.PackageNotFoundError as exc:
@@ -148,16 +149,13 @@ def package_version(tool: str) -> tuple[str, str]:
         ) from exc
 
 
-def safe_environment(project: Path, tool: str) -> tuple[dict[str, str], list[str]]:
+def safe_environment(project: Path) -> dict[str, str]:
     cache_root = project / ".cache" / "ai4science"
     home = cache_root / "home"
     home.mkdir(parents=True, exist_ok=True)
     environment = {
         name: value for name, value in os.environ.items() if name in BASE_ENV_NAMES
     }
-    present_secrets = sorted(name for name in SECRET_ENV_NAMES if os.environ.get(name)) if tool != "tooluniverse" else []
-    for name in present_secrets:
-        environment[name] = os.environ[name]
     environment.update(
         {
             "HOME": str(home),
@@ -166,11 +164,7 @@ def safe_environment(project: Path, tool: str) -> tuple[dict[str, str], list[str
             "PYTHONUNBUFFERED": "1",
         }
     )
-    if tool == "paperqa2":
-        pqa_home = cache_root / "paperqa"
-        pqa_home.mkdir(parents=True, exist_ok=True)
-        environment["PQA_HOME"] = str(pqa_home)
-    return environment, present_secrets
+    return environment
 
 
 def _read_capped(handle, max_bytes: int) -> tuple[bytes, bool, str]:
@@ -296,11 +290,9 @@ def _finish_execution(
     cwd: Path,
     timeout_seconds: int,
     environment: dict[str, str],
-    secret_names: list[str],
     result: dict[str, Any],
     receipt_id: str,
     output_name: str,
-    parse_json_output: bool,
     cost_accounting: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     run_dir = project / "evidence" / "ai4science" / receipt_id
@@ -321,25 +313,17 @@ def _finish_execution(
     output_record: dict[str, Any] | None = None
     if status == "succeeded":
         output_path = run_dir / output_name
-        if parse_json_output:
-            try:
-                parsed = json.loads(result["stdout_bytes"].decode("utf-8"))
-            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-                status = "failed"
-                error = f"ToolUniverse adapter did not return valid JSON: {exc}"
-            else:
-                output_path.write_text(
-                    json.dumps(parsed, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-                    encoding="utf-8",
-                )
-                output_record = file_record(project, output_path)
+        try:
+            parsed = json.loads(result["stdout_bytes"].decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            status = "failed"
+            error = f"ToolUniverse adapter did not return valid JSON: {exc}"
         else:
-            if not result["stdout_bytes"].strip():
-                status = "failed"
-                error = "PaperQA2 returned an empty answer"
-            else:
-                output_path.write_bytes(result["stdout_bytes"])
-                output_record = file_record(project, output_path)
+            output_path.write_text(
+                json.dumps(parsed, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            output_record = file_record(project, output_path)
     receipt = {
         "schema_version": "1.1",
         "receipt_id": receipt_id,
@@ -365,7 +349,7 @@ def _finish_execution(
             "exit_code": result["exit_code"],
             "error": error,
             "environment_names": sorted(environment),
-            "secret_environment_names": secret_names,
+            "secret_environment_names": [],
             "stdout": file_record(project, stdout_path),
             "stderr": file_record(project, stderr_path),
             "stdout_truncated": result["stdout_truncated"],
@@ -410,47 +394,36 @@ def execute_paperqa(
     timeout_seconds: int = 1800,
     executable: str | None = None,
 ) -> dict[str, Any]:
+    """Compatibility entry: explicit native Q&A, never an upstream pqa agent."""
     if not actor.strip() or not purpose.strip() or not question.strip():
         raise AI4ScienceEvidenceError("actor, purpose and question are required")
-    if not SETTING_RE.fullmatch(settings):
-        raise AI4ScienceEvidenceError("PaperQA2 settings name is invalid")
-    package, version = package_version("paperqa2")
-    corpus_path = safe_directory(project, corpus)
-    inputs = directory_records(project, corpus_path)
-    if executable is None:
-        sibling = Path(sys.executable).with_name("pqa")
-        executable = str(sibling) if sibling.is_file() else shutil.which("pqa")
-    if not executable:
+    if settings != "native" or executable is not None or timeout_seconds != 1800:
         raise AI4ScienceEvidenceError(
-            "paper-qa is installed but the pqa executable is unavailable"
+            "standalone pqa agents, settings and process timeouts cannot bypass the central runtime. "
+            "For native source Q&A on the configured cloud runner, use: "
+            "python -m scripts.ai4science_evidence paperqa --project PROJECT --corpus DIRECTORY "
+            "--settings native --question QUESTION --actor OWNER --purpose PURPOSE. "
+            "This is native lexical Q&A, not PaperQA2 agent execution. For the actual bounded "
+            "PaperQA2 SDK, use: python -m scripts.literaturectl request --project PROJECT "
+            "--request-file program/paperqa-operation.json; that operation must select "
+            "literature_paperqa and its current source-bound request (docs/LITERATURE-COMPLETION.md)."
         )
-    environment, secret_names = safe_environment(project, "paperqa2")
-    command = [executable, "-s", settings, "ask", question.strip()]
-    receipt_id = _receipt_id("paperqa2")
-    result = run_process(
-        command,
-        cwd=corpus_path,
-        environment=environment,
-        timeout_seconds=timeout_seconds,
-    )
-    return _finish_execution(
-        project=project,
-        tool="paperqa2",
-        package=package,
-        version=version,
-        actor=actor,
-        purpose=purpose,
-        inputs=inputs,
-        public_argv=["pqa", "-s", settings, "ask", question.strip()],
-        cwd=corpus_path,
-        timeout_seconds=timeout_seconds,
-        environment=environment,
-        secret_names=secret_names,
-        result=result,
-        receipt_id=receipt_id,
-        output_name="answer.txt",
-        parse_json_output=False,
-    )
+    if os.environ.get("DR_OS_ROUTING_PROFILE") != "production":
+        raise AI4ScienceEvidenceError("native source Q&A requires the existing production routing profile")
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        raise AI4ScienceEvidenceError("native source Q&A requires the existing owner-authorized cloud paperqa job")
+    try:
+        control = model_spend.read(project, required=True)
+        if control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
+            raise AI4ScienceEvidenceError("native source Q&A has reached the cumulative spending ceiling")
+        project = project.resolve()
+        inputs = directory_records(project, safe_directory(project, corpus))
+        output = "evidence/qa/" + _receipt_id("native-source-qa") + ".json"
+        result = paper_qa.answer(project, [item["path"] for item in inputs], question.strip(), output, execute=True)
+        receipt = record(project, "native-source-qa", output, [item["path"] for item in inputs], actor, purpose)
+    except (OSError, ValueError, RuntimeError) as exc:
+        raise AI4ScienceEvidenceError(str(exc)) from exc
+    return {**result, "not_paperqa2_sdk": True, "legacy_pqa_agent_called": False, "receipt": receipt}
 
 
 def public_tooluniverse_request(project: Path, request_file: str) -> tuple[Path, dict[str, Any]]:
@@ -477,7 +450,7 @@ def execute_tooluniverse(
     package, version = package_version("tooluniverse")
     if version != tooluniverse_worker.SDK_VERSION:
         raise AI4ScienceEvidenceError(f"reviewed ToolUniverse version {tooluniverse_worker.SDK_VERSION} is required")
-    environment, secret_names = safe_environment(project, "tooluniverse")
+    environment = safe_environment(project)
     worker = ROOT / "scripts" / "tooluniverse_worker.py"
     command = [sys.executable, str(worker), str(request_path)]
     execution_cwd = project / ".cache" / "ai4science" / "tooluniverse"
@@ -505,11 +478,9 @@ def execute_tooluniverse(
         cwd=execution_cwd,
         timeout_seconds=timeout_seconds,
         environment=environment,
-        secret_names=secret_names,
         result=result,
         receipt_id=receipt_id,
         output_name="result.json",
-        parse_json_output=True,
         cost_accounting=tooluniverse_worker.public_api_policy(request),
     )
 
@@ -674,10 +645,10 @@ def parser() -> argparse.ArgumentParser:
     paperqa.add_argument("--project", required=True)
     paperqa.add_argument("--corpus", required=True)
     paperqa.add_argument("--question", required=True)
-    paperqa.add_argument("--settings", default="fast")
+    paperqa.add_argument("--settings", default="fast", help="native selects central source Q&A; legacy pqa settings are rejected")
     paperqa.add_argument("--actor", required=True)
     paperqa.add_argument("--purpose", required=True)
-    paperqa.add_argument("--timeout", type=int, default=1800)
+    paperqa.add_argument("--timeout", type=int, default=1800, help="legacy process option; custom values require the controlled runtime instead")
     tooluniverse = sub.add_parser("tooluniverse")
     tooluniverse.add_argument("--project", required=True)
     tooluniverse.add_argument("--request", required=True)

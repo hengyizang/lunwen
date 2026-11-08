@@ -9,12 +9,12 @@ from typing import Any
 
 try:
     from scripts.research_candidates import anchor_errors, text_fields
-    from scripts.research_methods import safe_path, sha256
+    from scripts.research_methods import peer_review_method, safe_path, sha256
     from scripts.reporting_checklist import canonical_manuscript
     from scripts.citation_audit import manuscript_digest, tex_source_paths
 except ImportError:
     from research_candidates import anchor_errors, text_fields
-    from research_methods import safe_path, sha256
+    from research_methods import peer_review_method, safe_path, sha256
     from reporting_checklist import canonical_manuscript
     from citation_audit import manuscript_digest, tex_source_paths
 
@@ -31,6 +31,7 @@ def criteria_for(article_type: str) -> list[dict[str, Any]]:
 
 
 def audit(paper: Path) -> dict[str, Any]:
+    method = peer_review_method()
     project = paper.parent.parent
     spec = paper / "reviews/pre-submission-checklist.json"
     manuscript = canonical_manuscript(paper)
@@ -108,6 +109,8 @@ def audit(paper: Path) -> dict[str, Any]:
     if missing:
         errors.append("unassessed required criteria: " + ", ".join(missing))
     return {"schema_version": "1.0", "paper_id": paper.name,
+            "primary_method": {key: value for key, value in method.items() if key != "guidance"},
+            "criteria_role": "supplementary ARS question coverage; K-Dense peer-review guidance is primary",
             "spec_sha256": sha256(spec), "criteria_sha256": sha256(CRITERIA_PATH),
             "manuscript_sha256": manuscript_digest(manuscript),
             "dependencies": dict(sorted(dependencies.items())), "criteria_count": len(required),

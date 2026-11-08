@@ -291,6 +291,10 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
              "dispositions": notes if phase in {"final", "observation"} else None, "scientific_completion_verified": False}
     if phase == "observation":
         value["gate_authority"] = False
+    from scripts.literature_source_tasks import source_task_bindings
+    source_tasks = source_task_bindings(project, stage, paper_id, prompt)
+    if source_tasks:
+        value["source_task_bindings"] = source_tasks
     if cycle_required:value["cycle_required"]=True
     write(target, value)
     paths = [target, audit_path]

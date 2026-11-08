@@ -24,6 +24,8 @@ class CCFAContextIsolationTests(unittest.TestCase):
         self.text("reports/ccfa-tasks/old-task/packet.json", "OLD_PREFERRED_VERDICT_FULL_REFERENCE" * 200_000)
         self.text("reports/ccfa-tasks/active.json", {"task": "PREFERRED_VERDICT"})
         self.text("reports/ccfa-science/history/old.json", "OLD_CRITIC_FINDINGS" * 200_000)
+        self.text("evidence/auxiliary/calibration.json", "PUBLIC_REVIEW_ANSWER_KEY_AND_MODEL_JUDGMENTS")
+        self.text("evidence/auxiliary-jobs/calibration.json", "AUXILIARY_INVOCATION_INSTRUCTIONS")
         self.text("evidence/contrary.md", "MATERIAL_NEGATIVE_EVIDENCE")
         self.text("state/model-spend-control.json", {"authorized_ceiling_cny": 300})
         self.text("program/core-thesis.json", {"doctoral_question": "One doctoral question"})
@@ -32,6 +34,8 @@ class CCFAContextIsolationTests(unittest.TestCase):
                 snapshot = api.project_snapshot("demo", stage="topic-intelligence", exclude_reviews=exclude)
             self.assertNotIn("PREFERRED_VERDICT", snapshot)
             self.assertNotIn("OLD_CRITIC_FINDINGS", snapshot)
+            self.assertNotIn("PUBLIC_REVIEW_ANSWER_KEY_AND_MODEL_JUDGMENTS", snapshot)
+            self.assertNotIn("AUXILIARY_INVOCATION_INSTRUCTIONS", snapshot)
             self.assertIn("MATERIAL_NEGATIVE_EVIDENCE", snapshot)
             self.assertIn("authorized_ceiling_cny", snapshot)
             self.assertIn("One doctoral question", snapshot)
@@ -51,7 +55,8 @@ class CCFAContextIsolationTests(unittest.TestCase):
 
     def test_explicit_context_plan_cannot_restore_task_or_internal_review_history(self):
         for relative in ("reports/ccfa-tasks/id/current.json", "reports/ccfa-tasks/active.json",
-                         "reports/ccfa-science/history/old.json", "reports/ccfa-science/internal_review/P01.json"):
+                         "reports/ccfa-science/history/old.json", "reports/ccfa-science/internal_review/P01.json",
+                         "evidence/auxiliary/calibration.json", "evidence/auxiliary-jobs/calibration.json"):
             self.text(relative, "PREVIOUS_VERDICT")
             self.text(evidence_context.PLAN, {"schema_version": "1.0", "stages": {"topic-intelligence": {
                 "question": "Assess actual current evidence independently", "items": [

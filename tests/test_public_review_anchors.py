@@ -1,13 +1,17 @@
 """Public corpus contracts; synthetic transport fixtures do not measure judgment."""
 import copy
 import json
+import hashlib
+import os
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
 
 from scripts import public_review_anchors as corpus, literature_benchmark as benchmark
+from scripts import ai_providers, model_routing, model_runtime
 
 
 class PublicReviewAnchorTests(unittest.TestCase):
@@ -92,6 +96,96 @@ class PublicReviewAnchorTests(unittest.TestCase):
         self.assertIn('"quote":"x,{}"', result)
         with self.assertRaisesRegex(ValueError, "duplicate"):
             corpus.primary_json('{"body":[],"body":[]}')
+
+    def test_calibration_blinds_answers_and_keeps_full_primary_and_official_definitions(self):
+        case, _ = self.acquire()
+        case["case_sha256"] = "a" * 64
+        batch = corpus.calibration_batches(self.root / "project", [case])[0]
+        self.assertNotIn("ANSWER_KEY_TEXT", batch["prompt"])
+        self.assertNotIn('"partition"', batch["prompt"])
+        self.assertNotIn('"label"', batch["prompt"])
+        self.assertIn((self.root / "project" / case["source"]["path"]).read_text(), batch["prompt"])
+        self.assertIn(corpus.EVIDENCE_RUBRIC["convincing"], batch["prompt"])
+        self.assertEqual(batch["cases"], [{"case_id": case["id"], "case_sha256": "a" * 64}])
+
+    def test_calibration_rejects_missing_duplicate_wrong_hash_and_foreign_labels_but_allows_abstention(self):
+        cases = [{"case_id": "paper", "case_sha256": "a" * 64}]
+        row = {**cases[0], "outcome": None, "rationale": "The linked evidence is not available to assess this claim."}
+        self.assertEqual(corpus.calibration_predictions(json.dumps({"anchor_labels": [row]}), cases)[0]["outcome"], None)
+        for rows in ([], [row, row], [{**row, "case_sha256": "b" * 64}], [{**row, "outcome": "supports"}]):
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                corpus.calibration_predictions(json.dumps({"anchor_labels": rows}), cases)
+
+    def test_calibration_holdout_baseline_uses_training_only_and_missing_coverage_stays_unknown(self):
+        anchors = [{"id": "a", "partition": "calibration", "label": "solid"},
+                   {"id": "b", "partition": "holdout", "label": "convincing"}]
+        report = corpus.calibration_metrics(anchors, [{"case_id": "a", "outcome": "solid"}])
+        self.assertEqual(report["majority_class_from_calibration_only"], "solid")
+        self.assertIsNone(report["partitions"]["holdout"]["exact_agreement"])
+        self.assertEqual(report["partitions"]["holdout"]["majority_baseline_agreement"], 0)
+        report = corpus.calibration_metrics(anchors, [{"case_id": "b", "outcome": None}])
+        self.assertEqual(report["partitions"]["holdout"]["abstentions"], 1)
+        self.assertEqual(report["partitions"]["holdout"]["exact_agreement"], 0)
+
+    def test_calibration_costs_do_not_turn_missing_bills_or_unknown_holds_into_zero(self):
+        for row in ({}, {"cost_cny": None}, {"cost_cny": 0, "cost_status": "accounted_upper_bound", "reserved_cost_cny": .4}):
+            report = corpus.calibration_costs([{"run_id": "synthetic-attempt", "usage_receipts": [row]}])
+            self.assertIsNone(report["accounted_amount_cny"])
+            self.assertFalse(report["accounting_coverage_complete"])
+            self.assertFalse(report["provider_fee_fully_verified"])
+        report = corpus.calibration_costs([{"run_id": "synthetic-attempt", "usage_receipts": [
+            {"cost_cny": .4, "cost_status": "estimated_upper_bound"}]}])
+        self.assertEqual(report["accounted_amount_cny"], .4)
+        self.assertFalse(report["provider_fee_fully_verified"])
+
+    def test_paid_response_validation_failure_preserves_raw_answer_and_central_bill_without_retry(self):
+        destination = self.root / "budget-project/evidence/auxiliary/synthetic-attempt.json"
+        cases = []
+        def synthetic_collection(cache, frozen):
+            source_project = cache / "project"
+            rows = []
+            for identifier, partition in (("a", "calibration"), ("b", "holdout")):
+                source = source_project / f"evidence/{identifier}.json"
+                corpus.write(source, {"body": [{"text": "Synthetic scientific source only."}]})
+                review = source.with_suffix(".txt")
+                review.write_text("Synthetic external assessment key.")
+                binding = {"path": source.relative_to(source_project).as_posix(), "sha256": corpus.sha(source)}
+                row = {"id": identifier, "partition": partition, "label": "solid", "source": binding,
+                       "review": {"path": review.relative_to(source_project).as_posix()}}
+                rows.append(row); cases.append({**row, "case_sha256": identifier * 64})
+            corpus.write(source_project / "program/public-review-anchors.json", {"cases": rows})
+            corpus.write(source_project / "program/judgment-benchmark.json", {})
+            return {"public_papers": 2}
+        def synthetic_call(project, **request):
+            route = model_routing.select("auxiliary", "independent-critique")
+            ledger = project / "state/model-usage.jsonl"; ledger.parent.mkdir(parents=True, exist_ok=True)
+            row = {"run_id": request["run_id"], "requested_model": request["model"], "provider": request["provider"],
+                   "route_id": route["route_id"], "prompt_sha256": hashlib.sha256(request["prompt"].encode()).hexdigest(),
+                   "cost_cny": .4, "cost_status": "estimated_upper_bound"}
+            ledger.write_text(json.dumps(row) + "\n")
+            return ai_providers.ModelResult(provider=request["provider"], model=request["model"], reported_model=request["model"],
+                text='{"anchor_labels":[]}', usage={}, requested_effort="high", route_id=route["route_id"],
+                routing_policy_sha256=route["policy_sha256"])
+        env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1",
+               "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}
+        with patch.dict(os.environ, env), patch.object(corpus, "__file__", str(self.root / "scripts/public_review_anchors.py")), \
+             patch.object(corpus, "collect", side_effect=synthetic_collection), \
+             patch.object(corpus, "judgment_benchmark", side_effect=lambda *a, **k: {"blind_cases": cases}), \
+             patch.object(model_runtime, "preflight_route"), \
+             patch.object(model_runtime, "budget_status", return_value={"project_remaining": 500}), \
+             patch.object(model_runtime, "call", side_effect=synthetic_call) as execute:
+            with self.assertRaisesRegex(ValueError, "omitted"):
+                corpus.run_calibration(destination.parents[2], destination, "c" * 64, seat="domain", execute=True)
+        execute.assert_called_once()
+        report = json.loads(destination.read_text())
+        self.assertEqual(report["status"], "partial_failed_no_retry")
+        self.assertEqual(report["model_predictions"], 0)
+        self.assertEqual(report["accounting"]["accounted_amount_cny"], .4)
+        self.assertFalse(report["accounting"]["provider_fee_fully_verified"])
+        attempt = report["attempt_receipts"][0]
+        self.assertEqual(attempt["status"], "response_received")
+        response = self.root / ".runtime/cloud-artifact" / attempt["response_artifact"]
+        self.assertEqual(corpus.sha(response), attempt["response_sha256"])
 
     def test_retained_live_manifest_has_24_distinct_licensed_partitioned_papers(self):
         path = Path(__file__).resolve().parents[1] / "docs/acceptance/elife-public-anchors-2026-11-07.json"

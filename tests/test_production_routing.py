@@ -5,6 +5,7 @@ import json
 import os
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import patch
 
@@ -61,6 +62,60 @@ class ProductionPolicyTests(unittest.TestCase):
         route = model_routing.select("auxiliary", "multimodal-inspection")
         self.assertEqual((route["family"], route["model"]), ("google", "gemini-4-argon"))
         self.assertFalse(route["persistent_output"])
+
+    def test_calibration_scope_is_cloud_only_fresh_and_cannot_change_production_routes(self):
+        original = model_routing.select("auxiliary", "independent-critique")
+        with self.assertRaisesRegex(ValueError, "cloud executor"):
+            with model_routing.public_review_calibration_route("editorial", "a" * 64):
+                pass
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            for seat, family in (("domain", "anthropic"), ("editorial", "google"), ("statistics", "deepseek")):
+                with self.subTest(seat=seat), model_routing.public_review_calibration_route(seat, "a" * 64):
+                    route = model_routing.select("auxiliary", "independent-critique")
+                    self.assertEqual((route["family"], route["reasoning_effort"]), (family, "high"))
+                    self.assertTrue(route["fresh_required"])
+                    self.assertFalse(route["persistent_output"])
+                    self.assertEqual(route["task_kind"], "scientific-judgment")
+                    self.assertEqual(model_routing.select("topic-intelligence", "persistent-writer")["provider"], "cheapai-gpt-pro")
+                    with self.assertRaisesRegex(ValueError, "one exact"):
+                        with model_routing.public_review_calibration_route(seat, "b" * 64):
+                            pass
+        self.assertEqual(model_routing.select("auxiliary", "independent-critique"), original)
+
+    def test_g1_transport_scope_changes_only_same_astra_and_restores_threads_and_exceptions(self):
+        original = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            project = Path(directory)
+            state = project / "state/run.json"; state.parent.mkdir()
+            state.write_text(json.dumps({"stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work", "approved_gates": ["G0"]}))
+            with self.assertRaisesRegex(RuntimeError, "synthetic failure"):
+                with model_routing.g1_transport_validation_route(project, "a" * 64):
+                    selected = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+                    for role, route in selected.items():
+                        self.assertEqual(route["model"], original[role]["model"])
+                        self.assertEqual(route["reasoning_effort"], "high")
+                        self.assertEqual(route["validation_scope"]["production_route"], original[role])
+                        self.assertTrue(route["temporary_validation_only"])
+                    self.assertEqual(selected["persistent-writer"]["provider"], "codekey-codex-pro")
+                    self.assertEqual(selected["independent-critic-initial"]["provider"], original["independent-critic-initial"]["provider"])
+                    self.assertEqual(model_routing.select("writing-and-review", "persistent-writer")["provider"], "cheapai-gpt-pro")
+                    with ThreadPoolExecutor(max_workers=1) as pool:
+                        thread = pool.submit(model_routing.select, "topic-intelligence", "persistent-writer").result()
+                    self.assertEqual(thread["provider"], "cheapai-gpt-pro")
+                    with self.assertRaisesRegex(ValueError, "actual project"):
+                        model_routing.resolve_call("topic-intelligence", "persistent-writer", "openai", project_root=project / "other")
+                    self.assertEqual(model_routing.resolve_call("topic-intelligence", "persistent-writer", "openai", project_root=project)["provider"], "codekey-codex-pro")
+                    for extra in (("topic-intelligence", "persistent-writer"), ("auxiliary", "reader-qa")):
+                        with self.subTest(extra=extra), self.assertRaisesRegex(ValueError, "additional paid helpers or retries"):
+                            model_routing.resolve_call(*extra, "openai", project_root=project)
+                    raise RuntimeError("synthetic failure")
+            self.assertEqual(model_routing.cycle_routes("topic-intelligence", "scientific-judgment"), original)
+            for changes in ({"status": "awaiting_review"}, {"approved_gates": ["G0", "G1"]}, {"stage": "paper-architecture"}):
+                invalid = {"stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work", "approved_gates": ["G0"], **changes}
+                state.write_text(json.dumps(invalid))
+                with self.subTest(changes=changes), self.assertRaisesRegex(ValueError, "actual awaiting-work G1"):
+                    with model_routing.g1_transport_validation_route(project, "a" * 64):
+                        pass
 
     def test_unknown_stage_role_or_critical_task_fails_closed(self):
         for args in (("unknown-stage", "persistent-writer"), ("intake", "unknown-role"),
@@ -179,12 +234,13 @@ class ProductionAuxiliaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}, clear=True), \
                 patch("scripts.api_orchestrator.require_current_stage"), \
                 patch("scripts.api_orchestrator.project_root", return_value=Path(directory)), \
+                patch("scripts.scientific_scope.validate", return_value=[]), \
                 patch("scripts.cloud_research_steps.before_cycle", return_value={"control_only": False}), \
-                patch("scripts.api_orchestrator.prepare_discovery_evidence", return_value=("", {})), \
+                patch("scripts.api_orchestrator.prepare_discovery_evidence", return_value=(json.dumps({"literature": {"receipts": ["synthetic-search-receipt"]}}), {})), \
                 patch("scripts.api_orchestrator.model_runtime.preflight_route", side_effect=preflight), \
                 patch("scripts.api_orchestrator.model_runtime.call") as paid_call:
             with self.assertRaisesRegex(ValueError, "final critic quote is missing"):
-                api_orchestrator.run_cycle("fixture", "intake", "anthropic", "openai", "anthropic", "", "")
+                api_orchestrator.run_cycle("fixture", "topic-intelligence", "anthropic", "openai", "anthropic", "", "")
             paid_call.assert_not_called()
             self.assertIn(("codekey-kiro-enterprise", "claude-opus-5-5"), checked)
 

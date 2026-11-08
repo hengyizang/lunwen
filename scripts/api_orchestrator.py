@@ -210,7 +210,7 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
         "paper-architecture": "Use one cumulative thesis question and a six-paper map; preserve each paper's independent claims, primary evidence, merge trigger and negative_result_plan. Venue ranks are optional planning observations: unknown ranking stays unknown; no rank, JCR-year, IF or candidate-count floor is a scientific gate.",
         "experiment-design": "Bind comparison protocol 1.1 to G2 primary outcomes and condition_ids. Cover primary baselines, ablations, negative controls, robustness and every registered seed. Evidence arms depend_on earlier pilots with prespecified technical success assertions. Justify independent units, thresholds, multiplicity and power. Other statistical models require a frozen registered_result analysis run depending on every arm and exact source_hashes; never substitute paired t tests. Original and container clean-room attempts remain disjoint.",
         "experiment-execution": "experiment-evidence.json is computed by the controller. Claim comparison_ids and analysis_ids cover all assigned comparisons/runs including adverse and inconclusive evidence; supported requires all confirmatory thresholds, partially_supported needs a passing primary comparison and explicit limits. Exploratory evidence cannot establish confirmation. Use exact registry attempt IDs and reports/runtime-evidence-catalog.json hashes; never author computed reports or reproduction-confirmation.json.",
-        "writing-and-review": "Request the deterministic citation_audit and statistical_reporting cloud operations. Never author their receipts. statistical-reporting-map.json covers every actual comparison, including adverse/exploratory outcomes, with unique Methods/Results passages and caption bindings. Each location has field,path,quote,section,value,decimals,uncertainty; values equal actual evidence, decimals 0–12 and CI confidence may explicitly display_scale=100. Preserve unknown journal costs and timing; use controlled journal_sources then journal_dossiers only for submission. Optional docx_revision preserves actual revision and response trace evidence.",
+        "writing-and-review": "Request the deterministic citation_audit and statistical_reporting cloud operations. Never author their receipts. Back up complete outcomes, failures and registered comparisons under experiments/archive. statistical-reporting-map.json maps the scientifically selected manuscript comparisons to exact Methods/Results passages and captions; it need not reproduce the complete archive. Retain material contrary evidence affecting conclusions. Each location has field,path,quote,section,value,decimals,uncertainty; values equal actual evidence, decimals 0–12 and CI confidence may explicitly display_scale=100. Preserve unknown journal costs and timing; use controlled journal_sources then journal_dossiers only for submission. Optional docx_revision preserves actual revision and response trace evidence.",
     }
     value["scientific_instructions"] = instructions[stage]
     if stage == "topic-intelligence":
@@ -221,8 +221,9 @@ def research_quality_artifact_contract(stage: str, project: str | None = None) -
         value["full_text_citations"] = ("Before final G5, select a claim_evidence task for this paper in program/research-control.json. "
             "Cover every distinct citation occurrence, including repeated keys supporting different assertions. Use the complete local claim_text from the controlled citation-audit citation_usage.occurrences inventory, not a partial clause or a paraphrase. "
             "Bind the registered DOI or original HTTPS URL, lawfully acquired original full text and located evidence. "
-            "The existing critic or final domain panel supplies current protected judgments; missing, contradictory or insufficient source support stays pending. "
-            "Claim tasks default to the domain panel; explicit panel_views may select the suitable existing views. No extra paid review loop or fabricated PASS is authorized.")
+            "The existing ordinary independent critic supplies protected source-bound judgments; missing, contradictory or insufficient source support stays pending. "
+            "Retain current task bindings when entering final preparation. The final three-view panel receives only its canonical materials, never these extra task packets or previous judgments. "
+            "Use the explicit controlled citation-crosscheck source job when two independent extractions are needed; do not add a fixed paid review loop or fabricate PASS.")
     if value is not None:
         value["review_remediation_contract"] = review_contract
     if value:
@@ -476,7 +477,7 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
         "<paper_id>/latest.json; resolve remaining artifacts in source files and regenerate outputs. "
         "Protected quotations, math, citations, terms, uncertainty and source ancestry "
         "must survive. The explicit watermark_cleanup operation remains candidate-only. "
-        "A canonical edit still needs revision integrity and the complete ledger. Statistical "
+        "A canonical edit retains scientific revision integrity; ledger completeness is advisory. Statistical "
         "watermark absence is not verified. Preserve the scientific model assignment and internal provenance; public AI statements are optional and author-editable.",
         "Improve sentence rhythm and paragraph order only for a stated argument purpose. "
         "Choose context-appropriate wording while keeping each technical term consistent. "
@@ -608,7 +609,9 @@ Source-bound optional figure references, never scientific support:
 Form METHOD, STATISTICS and CONTRIBUTION perspectives on the actual claim, discriminating tests,
 fair baselines, independent units, uncertainty, closest work and argument. Identify sources and resolution tests.
 Keep these perspectives within one independent review; do not invent consensus or additional paid roles.
-Do not waive data rights, leakage, missing primary evidence, unsupported citations or a true scientific blocker.
+Preserve source/version, privacy, known access restrictions and leakage controls; licence/research-use verification
+is optional metadata, never a pre-use or human-approval gate. Missing primary evidence, unsupported citations
+and actual scientific blockers remain unresolved until evidence addresses them.
 At scientific writing block any missing primary outcome or interpretation-changing result and direction-dependent omission or demotion. Supplement placement needs a scientific role/relevance/adequacy rationale and a
 main-text cross-reference. State each material limitation once; do not require speculative defensive prose.
 Judge the current phase: exploration is not prospective confirmation; scientific writing is not submission.
@@ -642,11 +645,13 @@ Actual internal follow-up trigger, not execution authority:
 {json.dumps(trigger,ensure_ascii=False) if trigger else '(none)'}
 
 Resolve each actionable finding against its original evidence. Preserve facts, numbers, citations,
-uncertainty, negative results and disclosure. Do not weaken gates, demote unfavorable evidence,
+uncertainty and material contrary evidence. Keep complete outcomes in experiments/archive; manuscripts may
+select scientifically relevant evidence. Public AI statements are optional and author-editable; internal provenance remains protected.
+Do not weaken scientific checks, demote unfavorable evidence,
 rewrite unchanged chapters, fabricate a response or copy wording from the planner/critic.
 Return ONLY the existing artifact JSON schema (schema_version, stage, artifacts, notes).
 Notes give itemized fixed:, rejected: or unresolved: dispositions and scientific reasons;
-artifacts=[] is valid when no evidence-grounded edit is justified. Both independent reviews remain required.
+artifacts=[] is valid when no evidence-grounded edit is justified. A material repair receives a fresh independent review.
 """
 
 
@@ -1327,6 +1332,7 @@ def _short_external_text(value: Any, limit: int = 1000) -> str | None:
 
 def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
     """Load a bounded view of the newest saved broad-discovery report."""
+    from scripts.data_discovery import SOURCE_REVIEW_NOTE
 
     data_root = project_root(project) / "data"
     if not data_root.is_dir():
@@ -1414,7 +1420,8 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
                     for item in raw_summary.get("not_automatically_decided", [])[:10]
                     if (shortened := _short_external_text(item, 300))
                 ] if isinstance(raw_summary.get("not_automatically_decided"), list) else [],
-                "human_review_required": bool(raw_summary.get("human_review_required", True)),
+                "human_review_required": False,
+                "scientific_review_required": True,
             }
         return {
             "source_file": path.relative_to(project_root(project)).as_posix(),
@@ -1427,7 +1434,7 @@ def latest_dataset_discovery(project: str) -> dict[str, Any] | None:
             "candidate_count": report.get("candidate_count", len(candidates)),
             "included_candidate_count": len(candidates),
             "ranking_note": _short_external_text(report.get("ranking_note"), 1000),
-            "warning": _short_external_text(report.get("warning"), 1000),
+            "warning": SOURCE_REVIEW_NOTE,
             "automatic_screening_summary": summary,
             "candidates": candidates,
         }
@@ -1590,13 +1597,15 @@ def run_cycle(
             model_runtime.preflight_route(route["provider"], model=route["model"])
     # Discover a missing writer/critic configuration or quote before paying the
     # planner. This is readiness checking, not a whole-cycle cost guarantee.
+    from scripts.research_cycle import requires_critic
     if production_routes:
-        unique_routes = {(route["provider"], route["model"]) for route in production_routes.values()}
+        ready_roles = production_routes if requires_critic(stage) else ("semantic-planner", "persistent-writer")
+        unique_routes = {(production_routes[role]["provider"], production_routes[role]["model"]) for role in ready_roles}
         route_preflight = [model_runtime.preflight_route(provider, model=model)
                            for provider, model in sorted(unique_routes)]
     else:
-        route_preflight = [model_runtime.preflight_route(provider)
-                           for provider in dict.fromkeys((planner_provider, writer_provider, critic_provider))]
+        ready_providers = (planner_provider, writer_provider, critic_provider) if requires_critic(stage) else (planner_provider, writer_provider)
+        route_preflight = [model_runtime.preflight_route(provider) for provider in dict.fromkeys(ready_providers)]
 
     def route_arguments(role: str) -> dict[str, Any]:
         route = production_routes.get(role)
@@ -1664,7 +1673,7 @@ def run_cycle(
     save_run(project, run_id, "writer-bundle.json", bundle)
     record_editing_attempt(project_root(project))
     from scripts import review_receipts
-    from scripts.research_cycle import review_cycle, submission_cycle, after_reviews, decision_errors
+    from scripts.research_cycle import review_cycle, submission_cycle, after_reviews, decision_errors, skipped_remediation
     revised = None
     critics = {}
     prefix = review_prefix(project, stage)
@@ -1725,10 +1734,7 @@ def run_cycle(
     remediation_skipped = reviews["remediation_skipped"]
     research_decision = reviews["research_decision"]
     if remediation_skipped:
-        save_run(project, run_id, "remediation-decision.json", {
-            "status": "panel_observations_recorded" if reviews.get("panel") else "not_required",
-            "reason": "Read frozen panel concerns and retain source-bound author responses; scientific validity is not established." if reviews.get("panel") else "No actionable initial findings; writer notes retained.",
-            "model_call_made": False, "final_independent_review_required": False})
+        save_run(project, run_id, "remediation-decision.json", skipped_remediation(reviews))
     manifest = {
         "research_decision":reviews["research_decision"],
         "controlled_steps": controlled_steps,
@@ -1760,6 +1766,7 @@ def run_cycle(
             "anthropic_final_outputs_allowed": False,
         },
         "cost_controls": {
+            "review_mode": reviews["review_mode"],
             "writer_max_output_tokens": max_output_tokens,
             "control_max_output_tokens": control_max_output_tokens,
             "review_records_excluded_from_model_snapshots": True,
@@ -1776,7 +1783,7 @@ def run_cycle(
         "provider_audit": {
             "planner": result_audit(planner),
             "writer": result_audit(writer),
-            "critic_1": result_audit(review) if review else {"status": "not_called", "reason": "submission_panel"},
+            "critic_1": result_audit(review) if review else {"status": "not_called", "reason": "submission_panel" if reviews.get("panel") else reviews["review_mode"]},
             "remediation": result_audit(revised) if revised else {"status": "not_called", "reason": "no_actionable_findings"},
             "critic_final": result_audit(final) if final else {"status": "not_called", "reason": "no_repair_required"},
         },
@@ -1828,7 +1835,6 @@ def run_cycle(
     if reviews.get("panel"):
         manifest["actual_routes"].update(reviews["panel"].get("actual_routes", {}))
         manifest["usage"]["panel"] = reviews["panel"].get("usage", {})
-        manifest["cost_controls"]["review_mode"] = "three_blind_submission_views"
         if reviews["panel"].get("record_errors"):
             manifest.update(status="needs_work", next_action="Record evidence-bound responses to the frozen panel concerns; retain unresolved disagreements.")
     from scripts.cost_audit import refresh as refresh_cost_audit

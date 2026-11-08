@@ -259,9 +259,11 @@ class ApiFirstTests(unittest.TestCase):
                 saved["candidates"][0]["automatic_screening"]["status"],
                 "metadata_shortlist",
             )
-            self.assertTrue(
+            self.assertFalse(
                 saved["automatic_screening_summary"]["human_review_required"]
             )
+            self.assertTrue(saved["automatic_screening_summary"]["scientific_review_required"])
+            self.assertTrue(json.loads((root / "projects/demo" / saved["source_file"]).read_text())["automatic_screening_summary"]["human_review_required"])
             self.assertEqual(saved["candidates"][0]["title"], "Bearing benchmark")
             self.assertEqual(
                 saved["candidates"][0]["license_claim_unverified"], "CC-BY-4.0"

@@ -247,16 +247,18 @@ class ResearchMethodTests(unittest.TestCase):
             "notes": ["CNY 60 per-paper hard limits and later explicit owner tranche approval.",
                       "Human approval at every G0-G5 gate; Q1/Q2 and IF > 1.0 required."]})
         original, digest = intake.read_bytes(), methods.sha256(intake)
-        write_json(root / "config/stages.json", {"stages": {"topic-intelligence": {"gate": "G1"}}})
-        state = {"stage": "topic-intelligence", "gate": "G1"}
+        states = [{"stage": "intake", "gate": "G0"}, {"stage": "topic-intelligence", "gate": "G1"}]
+        write_json(root / "config/stages.json", {"stages": {state["stage"]: {"gate": state["gate"]} for state in states}})
         with patch.object(api_orchestrator, "ROOT", root), patch.object(autopilot, "ROOT", root):
-            snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True)
-            prompts = [api_orchestrator.planning_prompt("legacy", state["stage"], ""),
-                       api_orchestrator.writer_prompt("legacy", state["stage"], ""),
-                       api_orchestrator.critic_prompt("legacy", state["stage"], ""),
-                       autopilot.planner_prompt("legacy", state, {}, ""),
-                       autopilot.writer_prompt("legacy", state, {}, "", project / "plan.json"),
-                       autopilot.critic_prompt("legacy", state)]
+            prompts = []
+            for state in states:
+                snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True)
+                prompts.extend([api_orchestrator.planning_prompt("legacy", state["stage"], ""),
+                                api_orchestrator.writer_prompt("legacy", state["stage"], ""),
+                                api_orchestrator.critic_prompt("legacy", state["stage"], ""),
+                                autopilot.planner_prompt("legacy", state, {}, ""),
+                                autopilot.writer_prompt("legacy", state, {}, "", project / "plan.json"),
+                                autopilot.critic_prompt("legacy", state)])
         self.assertIn(digest, snapshot)
         self.assertIn("CNY 60 per-paper hard limits", snapshot)
         for prompt in prompts:
@@ -313,6 +315,50 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertEqual(methods.pinned_text_sha256(path), expected)
         path.write_bytes(b"one\r\nchanged\r\n")
         self.assertNotEqual(methods.pinned_text_sha256(path), expected)
+
+    def test_kdense_peer_review_is_primary_in_the_existing_native_critic(self):
+        method = methods.peer_review_method()
+        self.assertEqual(method["commit"], "65d6e786832e2c52832713117bbbf5096b56f77f")
+        self.assertEqual(method["sha256"], methods.pinned_text_sha256(methods.ROOT / method["path"]))
+        self.assertEqual(method["selected_sections"], [1, 2, 4, 5, 6, 8, 9])
+        write_json(self.project / "state/run.json", {"active_paper": "P01"})
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("No extra model pass")), \
+             patch.object(api_orchestrator, "project_root", return_value=self.project), \
+             patch.object(api_orchestrator, "project_snapshot", return_value="Original source view"), \
+             patch.object(api_orchestrator, "figure_reference_context", return_value=""):
+            prompt = methods.stage_context("writing-and-review", "critic", project=self.project)
+            for active_prompt in (api_orchestrator.critic_prompt("study", "writing-and-review", ""),
+                                  autopilot.critic_prompt("study", {"stage": "writing-and-review"})):
+                self.assertIn(method["guidance"], active_prompt)
+        self.assertIn("PRIMARY PEER-REVIEW METHOD: K-Dense", prompt)
+        self.assertIn(method["guidance"], prompt)
+        self.assertIn("Analysis–design alignment and assumptions", prompt)
+        self.assertIn("missing material remains unassessed", prompt)
+        self.assertNotIn("READY_FOR_LOCAL_REVIEW", prompt)
+        self.assertNotIn("python3 scripts/validate_review_intake.py", prompt)
+        self.assertIn("Public AI-use statements remain author-editable", prompt)
+        self.assertIn("without requiring every comparison in the manuscript", prompt)
+        _, _ = self.checklist()
+        report = review.audit(self.paper)
+        self.assertEqual(report["primary_method"]["sha256"], method["sha256"])
+        self.assertNotIn("guidance", report["primary_method"])
+        self.assertFalse(report["scientific_validation"])
+
+    def test_peer_review_views_are_bounded_and_changed_source_is_rejected(self):
+        methods_root = Path(self.temp.name) / "methods"
+        source = methods.peer_review_method()
+        target = methods_root / source["path"]
+        target.parent.mkdir(parents=True)
+        shutil.copyfile(methods.ROOT / source["path"], target)
+        write_json(methods_root / "integrations/vendored-research-methods.json",
+                   {"files": [{key: value for key, value in source.items()
+                               if key not in {"source_id", "selected_sections", "guidance"}}]})
+        subset = methods.peer_review_context(methods_root, sections=(4, 5))
+        self.assertIn("Map claims to evidence", subset)
+        self.assertNotIn("### 8. Review figures", subset)
+        target.write_text(target.read_text() + "Changed upstream source.\n")
+        with self.assertRaisesRegex(ValueError, "has changed"):
+            methods.peer_review_context(methods_root)
 
     def test_line_locator_cannot_be_invented_or_point_elsewhere(self):
         self.assertEqual(candidates.anchor_errors(self.project, self.evidence), [])

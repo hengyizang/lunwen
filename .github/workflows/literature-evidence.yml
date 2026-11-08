@@ -38,6 +38,7 @@ jobs:
         run: >-
           python -m scripts.public_review_anchors --cache artifacts/public-review-anchors
           --replay docs/acceptance/elife-public-anchors-2026-11-07.json
+          --plan-calibration
           --manifest artifacts/public-review-anchors-replay.json
       - name: Preserve acquisition and license proof with the review key
         if: always()

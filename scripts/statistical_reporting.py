@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from scripts.research_artifacts import path_in, read, write, sha, record, bound_source
+from scripts.research_artifacts import path_in, read, sha, bound_source, save_report, report_errors
 from scripts.manuscript_language import extract_text
 from scripts.scientific_editing import scientific_text
 
@@ -197,9 +197,7 @@ def audit(project: Path, paper_id: str) -> dict:
 def refresh(project: Path, paper_id: str) -> dict:
     value = audit(project, paper_id)
     output = project / "papers" / paper_id / "reviews/statistical-reporting.json"
-    write(output, value)
-    record(project, [output], "scripts/statistical_reporting.py")
-    return value
+    return save_report(project, output, value, "scripts/statistical_reporting.py")
 
 
 @paper_scoped
@@ -207,6 +205,6 @@ def validate_saved_report(project: Path, paper_id: str) -> list[str]:
     try:
         expected = audit(project, paper_id)
         saved = read(path_in(project, f"papers/{paper_id}/reviews/statistical-reporting.json"))
-        return expected["errors"] + ([] if expected == saved else ["statistical reporting is stale or differs from a rerun"])
+        return report_errors(expected, saved, "statistical reporting is stale or differs from a rerun")
     except (OSError, ValueError, KeyError, TypeError, ImportError) as exc:
         return [str(exc)]

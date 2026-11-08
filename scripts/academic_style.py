@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import tempfile
 from collections import Counter
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -246,17 +247,16 @@ def run_harper(text: str, *, executable: str | None = None, runner: Any = subpro
 
 def editorial_reviews(manuscript: Path, text: str) -> dict[str, Any]:
     """Cover every pinned editorial pattern; semantic judgement stays explicit."""
-    from scripts import humanizer_review, defensive_review, ccfa_humanization
+    from scripts import ccfa_humanization
 
     raw = None
     if manuscript.suffix.lower() == ".tex":
         from scripts.citation_audit import tex_source_paths
         raw = "\n\n".join(path.read_text(encoding="utf-8") for path in sorted(tex_source_paths(manuscript)))
-    return {
-        "humanizer_review": humanizer_review.audit_text(text, raw_text=raw),
-        "anti_defensive_review": defensive_review.audit_text(text, raw_text=raw),
-        "ccfa_humanization_review": ccfa_humanization.audit_text(text, raw_text=raw),
-    }
+    report = ccfa_humanization.audit_text(text, raw_text=raw)
+    return {"humanizer_review": deepcopy(report["humanizer_review"]),
+            "anti_defensive_review": deepcopy(report["anti_defensive_review"]),
+            "ccfa_humanization_review": report}
 
 
 def build_audit(paper: Path) -> dict[str, Any]:

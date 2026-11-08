@@ -125,8 +125,9 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/submission-review.md",
-      "sha256": "0262e9b27dae730a90ef2acd913e4f074df7c7105f25216a6952f793fd4ba81a",
+      "sha256": "97690db5b5d3305ba0fd1e6740ae48df2e886684bc9a1aeba8c7cbca0df31758",
       "source_ids": [
+        "kdense-topic-methods",
         "academic-research-skills",
         "ars-codex",
         "nature-skills",

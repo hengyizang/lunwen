@@ -88,6 +88,7 @@ def discovery_navigation_index(relative: str, text: str, source_sha256: str) -> 
 # Scientific sources, constraints, approvals and spending authority are retained.
 # Invocation transcripts must not leak old plans/verdicts into independent review.
 OPERATIONAL_PREFIXES = ("state/runs/", "state/citation-metadata/",
+                        "evidence/auxiliary/", "evidence/auxiliary-jobs/",
                         "state/review-receipts/", "state/scientific-scope/",
                         "reports/ccfa-tasks/", "reports/ccfa-science/history/", "reports/research-toolkit/",
                         "reports/research-iteration/", "reports/research-frontier/", "reports/research-search-tree/",

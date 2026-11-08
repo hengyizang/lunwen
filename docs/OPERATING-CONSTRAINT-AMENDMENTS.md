@@ -2,10 +2,11 @@
 
 An explicit owner request may replace the cumulative model API ceiling and
 submission-ready target date with exact values. For example, CNY300 to CNY500
-means a new total ceiling of CNY500, not another CNY500 allowance. The ordinary
-`authorize_budget` action still adds exactly CNY300 to the current authorized
-ceiling; after an exact amendment to CNY500, its next valid value is CNY800.
-The first tranche and all earlier authorization records remain historical facts.
+means a new total ceiling of CNY500, not another CNY500 allowance. Current operation
+enforces existing cumulative totals under [TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md),
+with no mandatory tranche, per-paper cap or additional billing approval.
+Earlier authorization records remain historical facts; only an explicit owner
+instruction can change a configured total.
 
 Use `amend_operating_constraints` only while the existing project is at G1,
 open for work, with G0 as its only approved gate and no experiment attempts.
@@ -13,7 +14,8 @@ It is a non-billable owner control, not a scientific approval or research start.
 It updates `intake/constraints.json`, records the precise owner amendment, keeps
 the original G0 approval, and rebinds the standing continuation policy to the
 amended intake and explicit narrow G0 amendment record. The six-paper doctoral
-scope, scientific gates, per-paper limits, failed attempts, provider holds and
+scope, scientific gates, cumulative total, failed attempts, source/version,
+privacy, known access controls and
 all recorded spending remain in force. Automatic research remains in its
 existing enabled/disabled state. A target date is a planning input, not proof
 that the research can finish by that date.

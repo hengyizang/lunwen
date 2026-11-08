@@ -9,6 +9,9 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
+from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -54,6 +57,57 @@ APPROVED_CRITICAL_TASKS = {
 }
 APPROVED_HEALTH_ROLES = {"endpoint-health", "model-signature", "model-instrumentation"}
 APPROVED_HEALTH_STAGES = {"health", "acceptance", "instrumentation"}
+_CALIBRATION_ROUTE = ContextVar("public_review_calibration_route", default=None)
+_G1_TRANSPORT_ROUTE = ContextVar("g1_transport_validation_route", default=None)
+
+
+def g1_transport_validation_active() -> bool:
+    """Paid-tool adapters may defer work outside this thread's bounded trial."""
+    return _G1_TRANSPORT_ROUTE.get() is not None
+
+
+@contextmanager
+def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None):
+    """A single native G1 cycle may use the same Astra identity on CodeKey."""
+    from scripts.research_artifacts import path_in, read
+    if (not production_enabled() or
+            (os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1")):
+        raise ValueError("G1 transport validation requires the production cloud executor")
+    if (not isinstance(manifest_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", manifest_sha256)
+            or _G1_TRANSPORT_ROUTE.get() is not None or _CALIBRATION_ROUTE.get() is not None):
+        raise ValueError("G1 transport validation requires one exact independent manifest scope")
+    state = read(path_in(project, "state/run.json"))
+    if (state.get("stage") != "topic-intelligence" or state.get("gate") != "G1"
+            or state.get("status") != "awaiting_work" or state.get("approved_gates") != ["G0"]):
+        raise ValueError("G1 transport validation requires actual awaiting-work G1 with only G0 approved")
+    token = _G1_TRANSPORT_ROUTE.set({"manifest_sha256": manifest_sha256, "project_root": project.resolve(),
+                                   "check_inputs": check_inputs, "attempted_roles": set()})
+    try:
+        yield
+    finally:
+        _G1_TRANSPORT_ROUTE.reset(token)
+
+
+@contextmanager
+def public_review_calibration_route(seat: str, scope_sha256: str):
+    """Scope a fresh, read-only benchmark call to an actual production critic.
+
+    This does not promote a transport candidate or change a persistent policy.
+    Only the fixed public-review experiment may select these three identities.
+    """
+    if (not production_enabled() or
+            (os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1")):
+        raise ValueError("public-review calibration requires the production cloud executor")
+    if (seat not in {"domain", "editorial", "statistics"} or
+            not isinstance(scope_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", scope_sha256)
+            or _CALIBRATION_ROUTE.get() is not None or _G1_TRANSPORT_ROUTE.get() is not None):
+        raise ValueError("calibration requires one exact public-source manifest and a distinct critic seat")
+    baseline = select("writing-and-review", "independent-critic-panel-" + seat)
+    token = _CALIBRATION_ROUTE.set({"seat": seat, "scope_sha256": scope_sha256, "baseline": baseline})
+    try:
+        yield
+    finally:
+        _CALIBRATION_ROUTE.reset(token)
 
 
 def _exact_names(value: Any, expected: set[str], label: str) -> None:
@@ -216,7 +270,7 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
     else:
         raise ValueError(f"no production model route for role: {original_role}")
     model = policy["models"][key]
-    return {
+    route = {
         **model,
         "route_id": f"{policy['policy_version']}:{stage}:{original_role}:{task_kind or 'default'}:{key}",
         "policy_version": policy["policy_version"], "policy_sha256": digest,
@@ -226,6 +280,31 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
         "automatic_paid_fallback": False,
         "fresh_required": role.startswith("independent-critic") or role in {"independent-critique", *policy["health_roles"]},
     }
+    calibration = _CALIBRATION_ROUTE.get()
+    if calibration is not None and stage == "auxiliary" and original_role == "independent-critique":
+        baseline = calibration["baseline"]
+        scope = {"purpose": "public-review-calibration", "calibration_scope_sha256": calibration["scope_sha256"],
+                 "seat": calibration["seat"], "production_panel_route": baseline}
+        digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        route.update({key: baseline[key] for key in ("provider", "model", "family", "reasoning_effort", "model_key")})
+        route.update(policy_sha256=digest, route_id="public-review-calibration:" + digest,
+                     task_kind="scientific-judgment", max_output_tokens=4000, fresh_required=True,
+                     persistent_output=False, temporary_validation_only=True, validation_scope=scope,
+                     quality_boundary="Read-only public-review evidence-strength calibration; no gate approval, manuscript writing or route promotion.")
+    g1 = _G1_TRANSPORT_ROUTE.get()
+    if g1 is not None and stage == "topic-intelligence" and original_role in CYCLE_ROLES:
+        if g1["check_inputs"] is not None:
+            g1["check_inputs"]()
+        scope = {"purpose": "g1-transport-validation", "manifest_sha256": g1["manifest_sha256"],
+                 "project": g1["project_root"].name, "production_route": dict(route)}
+        if role in WRITER_ROLES:
+            if (route["provider"], route["model"], route["reasoning_effort"]) != ("cheapai-gpt-pro", "gpt-6-astra", "high"):
+                raise ValueError("G1 validation may replace only the original same-model Astra transport")
+            route["provider"] = "codekey-codex-pro"
+        digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        route.update(policy_sha256=digest, route_id="g1-transport-validation:" + digest,
+                     temporary_validation_only=True, validation_scope=scope, validation_max_input_bytes=2_000_000)
+    return route
 
 
 def effective_task_kind(stage: str, role: str, task_kind: str | None = None,
@@ -257,7 +336,14 @@ def effective_task_kind(stage: str, role: str, task_kind: str | None = None,
 
 def resolve_call(stage: str, role: str, provider: str, model: str | None = None,
                  reasoning_effort: str | None = None, task_kind: str | None = None,
-                 task_profile: dict | None = None) -> dict[str, Any]:
+                 task_profile: dict | None = None, *, project_root: Path | None = None) -> dict[str, Any]:
+    g1 = _G1_TRANSPORT_ROUTE.get()
+    if g1 is not None:
+        if project_root is None or Path(project_root).resolve() != g1["project_root"]:
+            raise ValueError("G1 transport validation is bound to its actual project")
+        if stage != "topic-intelligence" or role not in CYCLE_ROLES or role in g1["attempted_roles"]:
+            raise ValueError("G1 transport validation permits its five native roles once; additional paid helpers or retries require a separate ordinary operation")
+        g1["attempted_roles"].add(role)
     if not production_enabled():
         return {"provider": provider, "model": model, "reasoning_effort": reasoning_effort}
     task_kind = effective_task_kind(stage, role, task_kind, task_profile)

@@ -29,7 +29,7 @@ bash scripts/bootstrap-d-drive.sh
 ## 2. 一次完成 WSL2 真实验收
 
 推荐的一键命令会依次验证 WSL2、锁定包版本、API 配置和 Docker daemon，然后
-真实运行公开文献接口、隔离容器、PaperQA2、ToolUniverse 和 ref-verify，并校验收据：
+真实运行公开文献接口、隔离容器、本地来源读取、ToolUniverse 和 ref-verify，并校验收据：
 
 ```bash
 bash scripts/run-wsl-acceptance.sh \
@@ -41,9 +41,9 @@ bash scripts/run-wsl-acceptance.sh \
   --actor 'Hengyi Zang'
 ```
 
-PaperQA2 可能触发一次真实的计费模型调用；脚本会在调用前明确提示。必须由研究者
-提供有权使用的本地语料和一个经过检查的 ToolUniverse 请求。任一环节失败都会
-以非零状态退出，不会把部分通过写成“完整通过”。
+WSL 脚本不调用模型，也不运行 PaperQA2 自主 agent；受控 SDK 验收与模型回答按
+第 3 节在现有云端完成。请提供选定的本地语料和一个经过检查的 ToolUniverse
+请求。任一环节失败都会以非零状态退出；本地通过不算云端或科学验收通过。
 
 只验收公开文献接口与容器时，可直接运行底层命令：
 
@@ -129,24 +129,40 @@ unset SERPAPI_API_KEY
 
 不传 `--provider` 时仍只运行原有七个核心检索来源，不会静默消耗 SerpApi 配额。
 
-## 3. PaperQA2 实际执行适配器
+## 3. 原生来源问答与受控 PaperQA2 SDK
 
-把研究者有权使用的本地论文放入项目内目录，然后运行：
+将选定来源保存为项目内的 UTF-8 `.md`、`.txt` 或可读 PDF。云端已有的
+`paperqa` owner job 调用原生来源问答；对应兼容命令为：
 
 ```bash
 .venv/bin/python scripts/ai4science_evidence.py paperqa \
   --project my-phd \
   --corpus literature/papers \
-  --settings fast \
+  --settings native \
   --question 'Which evidence contradicts the proposed mechanism?' \
   --actor 'Hengyi Zang' \
   --purpose 'Contradiction scan over the human-owned corpus.'
 ```
 
-适配器用 argv 直接启动官方 `pqa -s fast ask ...`，不经过 shell。`PQA_HOME`、
-HOME 和缓存被限制在项目 `.cache/ai4science/`；语料目录执行前后逐文件复核
-SHA-256。OpenAI、Anthropic 等 key 只从允许的环境变量传入，收据只记录变量
-名，不记录值。
+该命令仅在已有生产路由、云端执行环境和累计费用账本下运行，复用
+`paper_qa` → `model_runtime` 的来源哈希、金额预留、身份核验和调用记录。
+收据标记为 `native-source-qa`，明确不是 PaperQA2 SDK 或自主 agent。
+旧 `fast`／自定义 settings、可执行文件和进程超时不能等价映射，因此会
+直接拒绝并给出受控入口。不会启动 `pqa`，也不会给子进程传模型 provider key。
+
+真实 PaperQA2 SDK 的限定功能仍由 `literature_paperqa` 提供：使用当前来源绑定
+的 CPU 向量与 `NumpyVectorStore`，回答只走原模型运行时。按
+[LITERATURE-COMPLETION.md](LITERATURE-COMPLETION.md) 准备请求，在已有云端运行：
+
+```bash
+python -m scripts.literaturectl request --project my-phd \
+  --request-file program/paperqa-operation.json
+```
+
+该 operation 为 `{"action":"literature_paperqa","request_file":"program/literature-paperqa.json"}`。
+默认只检索；实际回答由已有授权周期执行 `execute:true`，不额外申请单次付费批准。
+它不启用上游自主 agent、模型／embedding 服务或爬虫。WSL 验收只检查固定依赖
+和真实本地来源读取，不伪造云端环境执行模型。
 
 ## 4. ToolUniverse 实际执行适配器
 

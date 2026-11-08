@@ -1,4 +1,4 @@
-"""One ordinary critique; actual findings alone trigger repair and re-review."""
+"""Administrative intake or one ordinary critique; actual findings alone trigger repair."""
 from scripts import review_receipts
 from scripts.research_artifacts import read
 from scripts.research_phase import disposition_stage
@@ -18,13 +18,32 @@ def decision_errors(decision):
         [*decision.get("errors", []), *decision.get("review_errors", [])])]
 
 
+def requires_critic(stage):
+    return stage != "intake"
+
+
+def skipped_remediation(reviews):
+    """Keep both adapters' no-call records honest about why review was skipped."""
+    status, reason = {
+        "administrative_intake": ("not_applicable", "Administrative intake uses planner and writer; no scientific critique or approval was performed."),
+        "scientific_review": ("not_required", "No actionable initial findings; writer notes retained."),
+        "three_blind_submission_views": ("panel_observations_recorded", "Read frozen panel concerns and retain source-bound author responses; scientific validity is not established."),
+    }[reviews["review_mode"]]
+    return {"status": status, "reason": reason, "model_call_made": False, "final_independent_review_required": False}
+
+
 def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remediate,
                  refresh, writer_notes, log):
-    """Planner/writer run in adapters; one fresh critique completes an ordinary round.
+    """Planner/writer run in adapters; intake needs no scientific critic.
 
     Adapters perform actual calls and protected writes. A material finding may justify repair and fresh re-review. Ordinary observations
     retain evidence and dissent but do not manufacture a second invocation or gate.
     """
+    result = {"audits": {}, "paths": {}, "evidence": {}, "methods": {}, "review_mode": "scientific_review"}
+    if not requires_critic(stage):
+        result["evidence"]["initial"], result["methods"]["initial"] = refresh("initial")
+        return {**result, "review_mode": "administrative_intake", "research_decision": research_decision(project, stage, run_id),
+                "decision_log": None, "dispositions": [], "remediation_skipped": True}
     from scripts.api_orchestrator import remediation_required, validate_remediation_notes
     paper = read(project / "state/run.json").get("active_paper") if stage == "writing-and-review" else None
     note_stage = disposition_stage(project, stage)
@@ -44,7 +63,6 @@ def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remed
         attempt.parent.mkdir(parents=True, exist_ok=False)
         write(attempt, {"run_id":run_id, "stage":stage, "status":"started", "scientific_completion_verified":False})
         record(project, [attempt], review_receipts.MODULE)
-    result = {"audits": {}, "paths": {}, "evidence": {}, "methods": {}}
     notes = []
     for phase in ("initial", "final"):
         result["evidence"][phase], result["methods"][phase] = refresh(phase)
@@ -95,7 +113,7 @@ def submission_cycle(project, run_id, *, writer_family, refresh):
     decision = research_decision(project, "writing-and-review", run_id)
     panel = review_panel.run(project, paper, run_id, writer_family=writer_family)
     final_evidence, final_methods = refresh("panel")
-    return {"panel": panel, "audits": {}, "paths": {}, "decision_log": None,
+    return {"panel": panel, "review_mode": "three_blind_submission_views", "audits": {}, "paths": {}, "decision_log": None,
         "evidence": {"initial": evidence, "final": final_evidence},
         "methods": {"initial": methods, "panel": final_methods}, "remediation_skipped": True,
         "decision_before_review": decision, "research_decision": {**decision,

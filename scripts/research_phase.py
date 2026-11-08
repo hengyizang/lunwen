@@ -93,8 +93,9 @@ def stage_rules(project: Path | None, stage: str, role: str = "writer", root: Pa
     from scripts import scientific_reasoning
     import hashlib
     selected_root=root or Path(__file__).resolve().parents[1]
-    if stage not in scientific_reasoning.STAGES:return "Use the current intake constraints; never invent an approval or research outcome."
     policy=scientific_reasoning.load_policy(selected_root)
+    if stage not in scientific_reasoning.STAGES:
+        return policy["common"] + "\nAdministrative G0 intake uses planner -> writer only. Collect current owner context without inventing an approval or research outcome."
     selected_role="writer" if role=="remediator" else role
     parts=[policy["common"],policy["roles"].get(selected_role,policy["roles"]["writer"])]
     pending=project is not None and stage=="writing-and-review" and disposition_stage(project,stage)=="experiment-design"

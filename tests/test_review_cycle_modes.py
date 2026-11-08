@@ -1,5 +1,6 @@
 """Actual observation and protocol receipts from synthetic read-only callbacks."""
 from contextlib import ExitStack
+import json
 import os
 from pathlib import Path
 import tempfile
@@ -9,6 +10,129 @@ from unittest.mock import patch
 from scripts import research_cycle, review_receipts
 from scripts.research_artifacts import read, write
 from tests.research_cycle_fixtures import pending_decision
+
+
+class AdapterCycleParityTests(unittest.TestCase):
+    """Exercise both real adapters; only transports and unrelated preparation are mocked."""
+
+    def run_adapter(self, adapter, stage, gate, *, repair=False):
+        from scripts import api_orchestrator as api, autopilot
+        from scripts.ai_providers import ModelResult
+        with ExitStack() as stack:
+            root = Path(stack.enter_context(tempfile.TemporaryDirectory()))
+            project = root / "projects/demo"
+            write(root / "config/stages.json", {"stages": {stage: {"gate": gate}}})
+            original = {"stage": stage, "gate": gate, "stage_index": 0 if gate == "G0" else 1,
+                        "status": "awaiting_work", "approved_gates": [], "approvals": [],
+                        "paper_statuses": {"P01": "active"}}
+            write(project / "state/run.json", original)
+            write(project / "intake/constraints.json", {"research_goal": "Synthetic adapter parity fixture"})
+            plan = {"schema_version": "1.0", "stage": stage, **{key: [] for key in (
+                "objectives", "artifact_specs", "evidence_requirements", "figure_specs", "risks", "open_questions")}}
+            bundle = {"schema_version": "1.0", "stage": stage, "artifacts": [], "notes": []}
+            clean = {"verdict": "pass-with-conditions", **{key: [] for key in (
+                "fatal_findings", "major_findings", "minor_findings", "missing_evidence", "remediation_steps")},
+                "uncertainty": ["Synthetic transport cannot validate scientific merit."]}
+            finding = {**clean, "verdict": "revise", "major_findings": ["Missing comparison"],
+                       "remediation_steps": ["Add the comparison"]} if repair else clean
+            roles = []
+            stack.enter_context(patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}, clear=True))
+            stack.enter_context(patch.object(api, "ROOT", root))
+            stack.enter_context(patch.object(autopilot.researchctl, "PROJECTS_ROOT", root / "projects"))
+            for target, value in {
+                "scripts.model_routing.production_enabled": False,
+                "scripts.scientific_scope.validate": [],
+                "scripts.cloud_research_steps.before_cycle": {"control_only": False, "blockers": []},
+                "scripts.model_runtime.budget_status": {},
+                "scripts.api_orchestrator.prepare_discovery_evidence": (
+                    json.dumps({"literature": {"receipts": [{"fixture_only": True}], "pending_searches": 0}}), None),
+                "scripts.api_orchestrator.prepare_revision_baseline": None,
+                "scripts.api_orchestrator.refresh_post_write_evidence": {"academic_style_audit": None, "controlled_steps": {}},
+                "scripts.api_orchestrator.refresh_research_method_audits": None,
+                "scripts.research_increments.freeze_plans": None,
+                "scripts.research_increments.record_editing_attempt": None,
+                "scripts.automated_quality.checked_run": None,
+                "scripts.literature_model_screening.cycle_input": None,
+                "scripts.cost_audit.refresh": {},
+                "scripts.researchctl.gate_errors": ["Synthetic evidence is incomplete"],
+            }.items():
+                stack.enter_context(patch(target, return_value=value))
+
+            if adapter == "api":
+                preflight = stack.enter_context(patch("scripts.model_runtime.preflight_route", return_value={}))
+                for name in ("planning_prompt", "writer_prompt", "critic_prompt", "remediation_prompt"):
+                    stack.enter_context(patch.object(api, name, return_value="Synthetic source-bound request"))
+
+                def call(_project, *, role, **kwargs):
+                    roles.append(role)
+                    payload = {"semantic-planner": plan, "persistent-writer": bundle,
+                        "independent-critic-initial": finding, "independent-critic-final": clean,
+                        "persistent-remediator": {**bundle, "notes": ["fixed: added comparison"]}}[role]
+                    provider = kwargs["provider"]
+                    model = "gpt-test" if provider == "uuapi-openai" else "claude-test"
+                    return ModelResult(provider, model, json.dumps(payload), {}, reported_model=model,
+                        completion_status="completed", request_id=role)
+                stack.enter_context(patch("scripts.model_runtime.call", side_effect=call))
+                result = api.run_cycle("demo", stage, "uuapi-anthropic", "uuapi-openai",
+                    "codekey-deepseek" if gate == "G0" else "uuapi-anthropic", "", "", automatic_data=False)
+                self.assertEqual([call.args[0] for call in preflight.call_args_list], ["uuapi-anthropic", "uuapi-openai"])
+                if gate == "G0":
+                    self.assertEqual(result["provider_audit"]["critic_1"], {"status": "not_called", "reason": "administrative_intake"})
+                mode = result["cost_controls"].get("review_mode")
+            else:
+                for name in ("planner_prompt", "writer_prompt", "critic_prompt", "remediation_prompt"):
+                    stack.enter_context(patch.object(autopilot, name, return_value="Synthetic source-bound request"))
+                for name, value in {"load_stage_config": {stage: {"gate": gate}}, "run_token": "actual-fixture",
+                    "claude_command": ["synthetic-claude"], "codex_writer_command": ["synthetic-codex"],
+                    "protected_control_snapshot": {}, "record_codex_changes": []}.items():
+                    stack.enter_context(patch.object(autopilot, name, return_value=value))
+
+                def invoke(name, command, run_dir, *args):
+                    role = {"planner": "semantic-planner", "critic": "independent-critic-initial",
+                            "final-critic": "independent-critic-final"}[name]
+                    roles.append(role)
+                    payload = plan if name == "planner" else finding if name == "critic" else clean
+                    write(run_dir / (name + ".stdout.txt"), {"model": "claude-test", "session_id": role, "result": json.dumps(payload)})
+                    return {"status": "succeeded", "name": name}
+
+                def writer(_project, protected, name, command, run_dir, message, *args):
+                    roles.append("persistent-writer" if name == "writer" else "persistent-remediator")
+                    write(message, {"dispositions": [] if name == "writer" else ["fixed: added comparison"]})
+                    return {"status": "succeeded", "name": name}
+                stack.enter_context(patch.object(autopilot, "invoke", side_effect=invoke))
+                stack.enter_context(patch.object(autopilot, "invoke_writer", side_effect=writer))
+                result = autopilot.run_stage("demo", "", "standard", 1, 1000, 0)
+                mode = result.get("review_mode")
+            self.assertEqual(read(project / "state/run.json"), original)
+            if gate == "G0":
+                self.assertFalse((project / review_receipts.PREFIX).exists())
+                self.assertEqual(result["research_decision"]["status"], "not_applicable")
+            else:
+                observation = review_receipts.observation(project, stage)["receipt"]
+                self.assertFalse(observation["gate_authority"])
+                self.assertFalse(observation["scientific_completion_verified"])
+            return roles, mode
+
+    def test_G0_adapters_use_only_planner_writer(self):
+        for adapter in ("api", "cli"):
+            with self.subTest(adapter=adapter):
+                roles, mode = self.run_adapter(adapter, "intake", "G0")
+                self.assertEqual(roles, ["semantic-planner", "persistent-writer"])
+                self.assertEqual(mode, "administrative_intake")
+
+    def test_G1_adapters_use_one_actual_source_bound_critic(self):
+        for adapter in ("api", "cli"):
+            with self.subTest(adapter=adapter):
+                roles, mode = self.run_adapter(adapter, "topic-intelligence", "G1")
+                self.assertEqual(roles, ["semantic-planner", "persistent-writer", "independent-critic-initial"])
+                self.assertEqual(mode, "scientific_review")
+
+    def test_G1_adapters_add_repair_and_fresh_review_only_for_actual_findings(self):
+        for adapter in ("api", "cli"):
+            with self.subTest(adapter=adapter):
+                roles, _mode = self.run_adapter(adapter, "topic-intelligence", "G1", repair=True)
+                self.assertEqual(roles, ["semantic-planner", "persistent-writer", "independent-critic-initial",
+                    "persistent-remediator", "independent-critic-final"])
 
 
 class ReviewCycleModeTests(unittest.TestCase):

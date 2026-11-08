@@ -16,6 +16,16 @@ except ImportError:
     import scientific_reasoning
 
 ROOT = Path(__file__).resolve().parents[1]
+PEER_REVIEW_PATH = "third_party/kdense/skills/peer-review/SKILL.md"
+PEER_REVIEW_SECTIONS = {
+    1: ("Establish scope and available evidence", ""),
+    2: ("Orient without deciding", ""),
+    4: ("Map claims to evidence", "\nRun:\n"),
+    5: ("Review methods and statistics", "\nUse `references/"),
+    6: ("Review reproducibility and transparency", ""),
+    8: ("Review figures, tables, and citations", "\nThis skill has no"),
+    9: ("Draft actionable comments", ""),
+}
 
 
 try:
@@ -84,6 +94,44 @@ def installation_errors(root: Path = ROOT) -> list[str]:
     return errors
 
 
+def peer_review_method(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(PEER_REVIEW_SECTIONS)) -> dict[str, Any]:
+    """Select intact scientific passages, never execute an upstream workflow."""
+    manifest = json.loads((root / "integrations/vendored-research-methods.json").read_text())
+    source = next((row for row in manifest["files"] if row["path"] == PEER_REVIEW_PATH), None)
+    if source is None:
+        raise ValueError("pinned K-Dense peer-review method is missing")
+    path = safe_path(root, PEER_REVIEW_PATH)
+    if not path.is_file() or pinned_text_sha256(path) != source["sha256"]:
+        raise ValueError("pinned K-Dense peer-review method has changed")
+    body = path.read_text(encoding="utf-8")
+    excerpts = []
+    for number in sections:
+        title, stop = PEER_REVIEW_SECTIONS[number]
+        heading = f"### {number}. {title}\n"
+        _, found, text = body.partition(heading)
+        if not found:
+            raise ValueError("pinned K-Dense peer-review section is missing: " + title)
+        text = text.split("\n### ", 1)[0]
+        if number == 9:
+            text = "Every major/minor comment should include:" + text.split("Every major/minor comment should include:", 1)[1]
+        if stop:
+            text = text.split(stop, 1)[0]
+        excerpts.append(heading + text.strip())
+    return {"source_id": "kdense-topic-methods", **source,
+            "selected_sections": list(sections), "guidance": "\n\n".join(excerpts)}
+
+
+def peer_review_context(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(PEER_REVIEW_SECTIONS)) -> str:
+    method = peer_review_method(root, sections=sections)
+    return ("PRIMARY PEER-REVIEW METHOD: K-Dense scientific excerpts; ARS questions are supplementary coverage.\n"
+            + json.dumps({key: value for key, value in method.items() if key != "guidance"}, ensure_ascii=False)
+            + "\nUse only the supplied source view; missing material remains unassessed. Apply current native owner policy; "
+            "upstream intake, licence/research-use and venue AI-policy gates are not adopted. "
+            "These questions add no paid pass, score threshold or C-class gate. Public AI-use statements remain author-editable; "
+            "complete outcomes stay in the separate experiment archive, without requiring every comparison in the manuscript.\n"
+            + method["guidance"])
+
+
 def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = "", project: Path | None = None) -> str:
     """Current-task core plus explicitly selected, intact source guidance."""
     issues = installation_errors(root)
@@ -94,6 +142,10 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
     selected = disposition_stage(project, stage) if project is not None else stage
     blocks = [ccfa_runtime.model_contract(selected, role, context, root=root, project=project),
               stage_rules(project, stage, role, root)]
+    if stage == "writing-and-review" and selected != "experiment-design" and (
+            role == "critic" or selected == "writing-and-review" or
+            any(token in context for token in ("peer-review", "submission-review", "pre-submission-checklist"))):
+        blocks.insert(0, peer_review_context(root))
     if project is not None and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
         from scripts.paper_execution import prompt_contract
         current_paths = prompt_contract(project)

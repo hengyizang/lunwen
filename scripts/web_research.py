@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from scripts import cloud_checkpoint, model_spend
+from scripts import cloud_checkpoint, model_spend, model_routing
 from scripts.cloud_research_steps import read, write
 from scripts.free_jev_probe import NoRedirect
 
@@ -26,15 +26,18 @@ def search(query: str, max_results: int = 10, *, project_root: Path | None = Non
     if (old and timedelta(0) <= datetime.now(timezone.utc)-datetime.fromisoformat(old['generated_at']) < timedelta(days=7)
             and cloud_checkpoint.sha(project_root/cloud_checkpoint.relative(old['raw_response_path']))==old['response_sha256']):
         return old
+    if model_routing.g1_transport_validation_active():
+        raise RuntimeError('bounded G1 uses public free discovery; paid web task deferred to ordinary operation')
     key=os.environ.get('TAVILY_API_KEY','')
     try: rate=float(os.environ.get('DR_OS_TAVILY_CREDIT_CNY','0'))
     except ValueError: rate=0
     if not key or not math.isfinite(rate) or rate <= 0:
         raise RuntimeError('Tavily needs its key and an explicit current CNY/credit rate; official-source URLs can be supplied instead')
     control=model_spend.read(project_root,required=True)
-    if control['reservations']:
-        raise RuntimeError('billing reconciliation is required before another external API call')
-    reservation=model_spend.reserve(project_root,max_cost_cny=rate,paper_id=None,paper_limit_cny=60,run_id='web-'+signature[:16])
+    run_id='web-'+signature[:16]
+    if any(item.get('run_id') == run_id for item in control['reservations'].values()):
+        raise RuntimeError('billing reconciliation is required before retrying this unsettled web query; other bounded calls may continue')
+    reservation=model_spend.reserve(project_root,max_cost_cny=rate,paper_id=None,paper_limit_cny=60,run_id=run_id)
     cloud_checkpoint.sync_billing(project_root)
     payload={'query':query,'max_results':max_results,'search_depth':'basic','auto_parameters':False,
              'include_answer':False,'include_usage':True,'include_raw_content':False}

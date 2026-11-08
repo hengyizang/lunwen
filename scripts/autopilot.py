@@ -863,67 +863,62 @@ def run_stage(
         )
         record_editing_attempt(researchctl.project_dir(project))
         from scripts import review_receipts
-        from scripts.research_cycle import review_cycle, submission_cycle, after_reviews, decision_errors
+        from scripts.research_cycle import review_cycle, submission_cycle, after_reviews, decision_errors, skipped_remediation
         def refresh_review(phase):
             return (refresh_post_write_evidence(project, state["stage"], token, phase),
                     api_orchestrator.refresh_research_method_audits(project, state["stage"]))
 
-        if state["gate"] != "G0":
-            review_prefix = state["gate"] + ("-" + state["active_paper"] if state["gate"] == "G5" else "")
-            def call_critic(phase, request):
-                name = "critic" if phase == "initial" else "final-critic"
-                critic = invoke(name, claude_command(request, mode, max_budget_usd,
-                    state["stage"], source_packet_only=True), run_dir, timeout, max_output)
-                journal["runs"].append(critic)
-                ensure_run_state_unchanged(project, state)
-                if critic["status"] != "succeeded":
-                    raise AutopilotError("Claude " + name + " step did not complete successfully")
-                path = researchctl.project_dir(project) / "reviews/independent" / f"{review_prefix}-{token}-{phase}.json"
-                stdout = run_dir / (name + ".stdout.txt")
-                return copy_claude_audit(stdout, path), path, review_receipts.cli_identity(stdout)
+        review_prefix = state["gate"] + ("-" + state["active_paper"] if state["gate"] == "G5" else "")
+        def call_critic(phase, request):
+            name = "critic" if phase == "initial" else "final-critic"
+            critic = invoke(name, claude_command(request, mode, max_budget_usd,
+                state["stage"], source_packet_only=True), run_dir, timeout, max_output)
+            journal["runs"].append(critic)
+            ensure_run_state_unchanged(project, state)
+            if critic["status"] != "succeeded":
+                raise AutopilotError("Claude " + name + " step did not complete successfully")
+            path = researchctl.project_dir(project) / "reviews/independent" / f"{review_prefix}-{token}-{phase}.json"
+            stdout = run_dir / (name + ".stdout.txt")
+            return copy_claude_audit(stdout, path), path, review_receipts.cli_identity(stdout)
 
-            def repair(audit, review, note_stage):
-                before = output_provenance.artifact_snapshot(researchctl.project_dir(project))
-                protected = protected_control_snapshot(project, [run_dir / "planner.stdout.txt"])
-                message = run_dir / "codex-remediation-last-message.txt"
-                remediation = invoke_writer(project, protected, "remediation", codex_writer_command(
-                    remediation_prompt(project, state, review, context)+decision_prompt, message),
-                    run_dir, message, timeout, max_output)
-                journal["runs"].append(remediation)
-                ensure_run_state_unchanged(project, state)
-                if remediation["status"] != "succeeded":
-                    raise AutopilotError("Codex remediation step did not complete successfully")
-                notes = remediation_dispositions(message, audit, note_stage)
-                changed = record_codex_changes(project, before, role="persistent-remediator", run_id=token,
-                                              claude_sources=[run_dir / "planner.stdout.txt", review])
-                journal["written"] = sorted(set(journal.get("written", [])) | set(changed))
-                return notes
+        def repair(audit, review, note_stage):
+            before = output_provenance.artifact_snapshot(researchctl.project_dir(project))
+            protected = protected_control_snapshot(project, [run_dir / "planner.stdout.txt"])
+            message = run_dir / "codex-remediation-last-message.txt"
+            remediation = invoke_writer(project, protected, "remediation", codex_writer_command(
+                remediation_prompt(project, state, review, context)+decision_prompt, message),
+                run_dir, message, timeout, max_output)
+            journal["runs"].append(remediation)
+            ensure_run_state_unchanged(project, state)
+            if remediation["status"] != "succeeded":
+                raise AutopilotError("Codex remediation step did not complete successfully")
+            notes = remediation_dispositions(message, audit, note_stage)
+            changed = record_codex_changes(project, before, role="persistent-remediator", run_id=token,
+                                          claude_sources=[run_dir / "planner.stdout.txt", review])
+            journal["written"] = sorted(set(journal.get("written", [])) | set(changed))
+            return notes
 
-            def initial_notes(audit, note_stage):
-                try:
-                    return remediation_dispositions(writer_last_message, audit, note_stage)
-                except (ValueError, OSError, AutopilotError):
-                    return []
+        def initial_notes(audit, note_stage):
+            try:
+                return remediation_dispositions(writer_last_message, audit, note_stage)
+            except (ValueError, OSError, AutopilotError):
+                return []
 
-            if api_orchestrator.requires_submission(researchctl.project_dir(project), state["stage"]):
-                from scripts import model_runtime
-                with model_runtime.authorized_calls(researchctl.project_dir(project)):
-                    reviews = submission_cycle(researchctl.project_dir(project), token,
-                        writer_family="openai", refresh=refresh_review)
-                journal["submission_panel"] = reviews["panel"]
-            else:
-                reviews = review_cycle(researchctl.project_dir(project), state["stage"], token,
-                    writer_family="openai", prompt=lambda: critic_prompt(project, state, context),
-                    invoke=call_critic, remediate=repair, refresh=refresh_review, writer_notes=initial_notes,
-                    log=lambda first, last, notes, audit: api_orchestrator.append_decision_log(
-                        project, state["stage"], token, first, last, notes, audit))
-            journal["research_decision"] = reviews["research_decision"]
-            if reviews["remediation_skipped"]:
-                journal["remediation"] = {"status": "panel_observations_recorded" if reviews.get("panel") else "not_required", "model_call_made": False,
-                    "reason": "Frozen panel concerns require source-bound author responses; no scientific approval is implied." if reviews.get("panel") else "No actionable initial findings; writer notes retained."}
+        if api_orchestrator.requires_submission(researchctl.project_dir(project), state["stage"]):
+            from scripts import model_runtime
+            with model_runtime.authorized_calls(researchctl.project_dir(project)):
+                reviews = submission_cycle(researchctl.project_dir(project), token,
+                    writer_family="openai", refresh=refresh_review)
+            journal["submission_panel"] = reviews["panel"]
         else:
-            evidence, methods = refresh_review("initial")
-            reviews = {"evidence": {"initial": evidence}, "methods": {"initial": methods}}
+            reviews = review_cycle(researchctl.project_dir(project), state["stage"], token,
+                writer_family="openai", prompt=lambda: critic_prompt(project, state, context),
+                invoke=call_critic, remediate=repair, refresh=refresh_review, writer_notes=initial_notes,
+                log=lambda first, last, notes, audit: api_orchestrator.append_decision_log(
+                    project, state["stage"], token, first, last, notes, audit))
+        journal["research_decision"], journal["review_mode"] = reviews["research_decision"], reviews["review_mode"]
+        if reviews["remediation_skipped"]:
+            journal["remediation"] = skipped_remediation(reviews)
         journal["academic_style_audit"] = {phase: value["academic_style_audit"] for phase, value in reviews["evidence"].items()}
         journal["controlled_editorial_operations"] = {phase: value["controlled_steps"] for phase, value in reviews["evidence"].items()}
         journal["research_method_audits"] = reviews["methods"]

@@ -35,7 +35,7 @@ python3 scripts/api_orchestrator.py cycle my-phd intake \
   --planner-provider anthropic \
   --writer-provider openai \
   --critic-provider anthropic \
-  --context 'PhD application goal; AI + robotics/mechanical engineering; no laboratory; limited GPU.'
+  --context 'Your research background, doctoral objective, constraints, available data and compute.'
 ```
 
 The writer/remediator output ceiling defaults to 12,000 tokens. Read-only
@@ -61,24 +61,31 @@ to eight dataset-query variants, search the eight reviewed public metadata
 providers, deduplicate results and
 build a deterministic metadata shortlist before the first paid model call. An
 optional `--discovery-query` gives the automatic builder a preferred focus but
-is no longer required. G3 prioritizes every paper contract. If all providers
+is no longer required. G3 prioritizes the active paper's contract and preserves recorded legacy batch scope. If all providers
 fail, the command stops before model charges. `--no-auto-data-discovery` exists for
-deliberate CLI-only diagnostics; the visual dashboard keeps automation enabled.
+deliberate diagnostics; the cloud controls keep automation enabled.
 
 The API mode writes Claude's semantic plan and all raw responses under `projects/my-phd/api_runs/<run-id>/`; this local audit/debug directory is ignored by Git and excluded from submission packages. It sends a bounded text snapshot of the current project, excluding raw/private data, prior API responses, build/cache directories, hidden files, obvious credential files and—during independent review—prior reviews. Only the non-Anthropic writer bundle can become a persistent artifact. Traversal, hidden files, credentials, `.env`, state/provenance files, independent audits and the decision log are protected. No model can call `approve`, `advance`, execute shell commands, or submit a manuscript.
 
-Ordinary `cycle` uses planner → writer → one source-bound independent critique.
+API and CLI share the same cycle rule: administrative G0 intake uses planner → writer
+(two calls); ordinary G1+ research uses planner → writer → one source-bound independent critique
+(three calls).
 Actual actionable findings alone trigger repair and fresh re-review. The current
 observation receipt binds the notebook decision and has no independent gate
 authority; legacy dual-review records remain readable history. At final submission
-the three-family mutually blind panel replaces the ordinary critic. A actual
+the three-family mutually blind panel replaces the ordinary critic. Actual
 source/claim/numeric failures block; C observations do not manufacture repairs.
 See [workflow.md](../references/workflow.md) for exact views and B snapshot reuse.
 
 G1 uses source-bound closest-work evidence and honest stopping limits. G2 uses
 cumulative contribution/evidence rows and paper contracts, preserving standalone
 value and one doctoral question instead of fifteen repeated pair forms. G3 binds
-the active paper's actual rights, design, frozen inputs and appropriate methods.
+the active paper's source/version, privacy, known access restrictions, design, frozen inputs and appropriate methods.
+Licence/research-use verification is optional metadata, not a pre-use gate or a human approval.
+Complete outcomes, failures and registered comparisons are backed up separately under
+`experiments/archive`; manuscripts select scientifically relevant evidence and retain material
+contrary evidence affecting their conclusions. Public AI-use statements are optional and author-editable;
+internal writer provenance remains protected. These three user choices apply to every phase.
 Venue ranking is truthful planning metadata; actual fit replaces rank floors.
 At G4 the registry and claim matrix are hash-linked to the approved plan and
 outputs; clean-room claims require an executor-issued, digest-pinned container
@@ -95,7 +102,7 @@ Human
   v
 Python control plane ---- state/gates/hashes/budgets/audits
   |             |
-  |             +---- local experiments after G3 approval
+  |             +---- controlled experiments after frozen, checked G3
   |
   +---- Claude API -------- read-only semantic planning / independent audit
   |
@@ -114,25 +121,30 @@ Claude Code and Codex CLI remain optional acceleration interfaces. The repositor
 
 Automatic: semantic planning, non-Claude structured artifact generation, evidence bookkeeping, public metadata discovery, data-download validation, approved experiment execution, citation checks, venue checks, manuscript/review artifacts, hash-bound G5 academic-style auditing, deterministic chart rendering workflows and manual submission packages.
 
-The G5 style audit runs after both Codex writing passes and is available manually
+The G5 style audit runs after existing writing/remediation passes and is available manually
 through `python3 scripts/academic_style.py audit --project <slug> --paper P01`.
 It evaluates writing quality without estimating an AI probability or attempting
 detector evasion. Codex must preserve scientific meaning, numbers, equations,
-citations, uncertainty and the applicable AI-use disclosure while resolving its
-findings. The report includes line-level findings from the reviewed academic
+citations, uncertainty and internal provenance while resolving concrete findings;
+public AI-use statements remain author-editable. Style findings are C observations,
+not scientific gates or compulsory extra editing passes. The report includes line-level findings from the reviewed academic
 subset of `avoid-ai-writing`, `vale-ai-tells` and `No AI Slop`. If local
 `proselint==0.16.0` or `harper-cli` is installed, it also contains advisory
 offline grammar diagnostics; absence or failure of either optional tool does not
-bypass or weaken the built-in deterministic gate.
+bypass scientific integrity or final rendering checks.
 
-Human required: final topic choice, doctoral architecture, data-license confirmation, experiment approval, interpretation of scientific evidence, authorship/ethics, current JCR verification, final PDF/DOCX inspection and every journal portal action.
+Human stage decisions: the G1 doctoral topic and each G2 paper topic. Other stages use
+recorded automatic checks, including frozen experiment inputs and cumulative budgets.
+Scientific interpretation and optional visual feedback need actual evidence; they do not
+create additional administrative approval gates. Authors handle external authorship and every journal portal action.
 
 The system intentionally cannot guarantee novelty, acceptance, publication, doctoral admission or employment outcomes. It is an auditable research workflow, not a substitute for scientific judgment.
 
-Every paid call also passes through the local CNY budget ledger and
-byte-identical request cache described in `RESEARCH-CAPABILITIES.md`. Cache hits
-do not remove planner/critic roles; they only avoid paying twice for the exact
-same audited request.
+Every paid call passes through the CNY ledger and existing cumulative project totals
+in [TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md). Verified charges or honest conservative upper
+estimates count against those totals; no extra billing approval or per-call cap is added.
+Byte-identical eligible planner/writer requests may reuse the cache. Independent scientific
+critiques always make a fresh call and retain their actual source-bound identity receipts.
 
 For the natural Codex-chat workflow and short commands to start, continue,
 inspect and package work, see [`CHAT-USAGE.md`](CHAT-USAGE.md).

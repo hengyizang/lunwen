@@ -14,6 +14,7 @@ import os
 from pathlib import Path, PureWindowsPath
 import re
 import sys
+import time
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -24,8 +25,8 @@ from scripts.publication_figures import PROJECTS_ROOT
 
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
-         "format-conversion", "screening-assist", *engineering_contract.TASKS}
-FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile"}
+         "format-conversion", "screening-assist", "public-review-calibration", "citation-crosscheck", "g1-transport-validation", *engineering_contract.TASKS}
+FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile", "calibration_seat", "source_task_file"}
 REQUIRED = {"schema_version", "kind", "prompt_file"}
 PRIVATE_PARTS = {"state", "api_runs", "private", "raw", "secrets", "credentials", "keys", "auth", "tokens"}
 PRIVATE_STEMS = {"api", "hosts", "credentials", "secrets", "keys", "tokens", "auth"}
@@ -105,6 +106,14 @@ def load(project: Path, manifest_relative: str) -> dict:
         raise ValueError("manifest kind is outside the bounded auxiliary roles")
     from scripts import dynamic_routing
     task_profile = dynamic_routing.validate_profile(manifest.get("task_profile"), stage="auxiliary", role=kind)
+    if kind in {"public-review-calibration", "citation-crosscheck", "g1-transport-validation"} and (task_profile["task_class"] != kind or task_profile["science_risk"] != "critical"):
+        raise ValueError(kind + " requires its explicit critical scientific task profile")
+    seat = manifest.get("calibration_seat")
+    if kind == "public-review-calibration":
+        if seat not in {"domain", "editorial", "statistics"}:
+            raise ValueError("public-review calibration requires one fixed calibration_seat")
+    elif "calibration_seat" in manifest:
+        raise ValueError("calibration_seat is allowed only for public-review-calibration")
     prompt_path = _path(project, manifest["prompt_file"], "prompt_file", limit=MAX_PROMPT_BYTES)
     try:
         prompt_bytes = _read(prompt_path, MAX_PROMPT_BYTES, "prompt_file")
@@ -116,8 +125,23 @@ def load(project: Path, manifest_relative: str) -> dict:
     tokens = manifest.get("max_output_tokens")
     if "max_output_tokens" in manifest and (type(tokens) is not int or not 1 <= tokens <= 32768):
         raise ValueError("max_output_tokens must be a positive bounded integer")
+    if kind == "public-review-calibration" and tokens not in {None, 4000}:
+        raise ValueError("the fixed public-review calibration uses 4000 output tokens per batch")
+    if kind in {"citation-crosscheck", "g1-transport-validation"} and tokens is not None:
+        raise ValueError(kind + " uses its native bounded output plan")
     inputs = [{"role":"manifest","path":manifest_relative,"sha256":_sha(manifest_bytes)},
               {"role":"prompt","path":manifest["prompt_file"],"sha256":_sha(prompt_bytes)}]
+    source_task_file = manifest.get("source_task_file")
+    if kind == "citation-crosscheck":
+        if not isinstance(source_task_file, str) or not source_task_file.startswith("program/") or not source_task_file.endswith(".json"):
+            raise ValueError("citation-crosscheck requires a program/*.json source_task_file")
+        task_path = _path(project, source_task_file, "source_task_file")
+        task_bytes = _read(task_path, MAX_JSON_BYTES, "source_task_file")
+        if not isinstance(_strict_json(task_bytes), dict):
+            raise ValueError("source_task_file must be a strict JSON task object")
+        inputs.append({"role": "source_task", "path": source_task_file, "sha256": _sha(task_bytes)})
+    elif "source_task_file" in manifest:
+        raise ValueError("source_task_file is allowed only for citation-crosscheck")
     contract = None
     if kind == "metadata-extraction" or kind in engineering_contract.TASKS:
         if "source_contract_file" not in manifest:
@@ -160,7 +184,7 @@ def load(project: Path, manifest_relative: str) -> dict:
         raise ValueError("attachments are allowed only for multimodal-inspection")
     return {"kind":kind,"prompt":prompt,"max_output_tokens":tokens,"source_contract":contract,"task_profile":task_profile,
             "attachments":attachments,"attachment_receipts":attachment_receipts,"inputs":inputs,
-            "manifest_sha256":_sha(manifest_bytes)}
+            "manifest_sha256":_sha(manifest_bytes), "calibration_seat":seat, "source_task_file":source_task_file}
 
 
 def _check_inputs(project: Path, inputs: list[dict]) -> None:
@@ -168,6 +192,82 @@ def _check_inputs(project: Path, inputs: list[dict]) -> None:
         path = _path(project,item["path"],item["role"],limit=MAX_ATTACHMENT_BYTES)
         if _sha(_read(path,MAX_ATTACHMENT_BYTES,item["role"])) != item["sha256"]:
             raise ValueError("an auxiliary request source changed; the diagnostic was not written")
+
+
+def run_g1_transport_validation(project, destination, request, *, execute=False):
+    """Run the existing G1 cycle once with the same-model writer transport."""
+    from scripts import api_orchestrator, model_runtime, billing_quotes
+    from scripts.public_review_anchors import calibration_costs
+    from scripts.research_artifacts import read, write
+    from scripts.literature_evidence import read_jsonl
+    before = read(project / "state/run.json")
+    production = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+    check_inputs = lambda: _check_inputs(project, request["inputs"])
+    with model_routing.g1_transport_validation_route(project, request["manifest_sha256"], check_inputs=check_inputs):
+        routes = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+        cost_plan = []
+        for role, route in routes.items():
+            tokens = 12000 if role in model_routing.WRITER_ROLES else 4000
+            quote = model_runtime.pricing(route["provider"], route["model"])
+            cost_plan.append({"role": role, "production_route": production[role], "planned_route": route,
+                "request_input_bytes_ceiling": route["validation_max_input_bytes"], "max_output_tokens": tokens,
+                "reserved_upper_bound_cny": model_runtime.reservation_bound(route["provider"],
+                    "x" * route["validation_max_input_bytes"], None, tokens, quote,
+                    billing_quotes.tool_limits(quote, None), controlled=True)})
+        report = {"schema_version": "1.0", "kind": "g1-transport-validation", "status": "dry_run_no_model_call",
+            "execution_requested": execute, "manifest_sha256": request["manifest_sha256"], "input_receipts": request["inputs"],
+            "calls_planned": 3, "maximum_calls": 5, "calls_attempted": 0, "budget_granted_cny": 0,
+            "maximum_reserved_upper_bound_cny": round(sum(row["reserved_upper_bound_cny"] for row in cost_plan), 8),
+            "model_plan": cost_plan, "attempt_receipts": [], "topic_approval_granted": False,
+            "scientific_completion_verified": False, "not_manuscript_or_evidence": True,
+            "discovery_policy": "At most twelve new literature search operations use native defaults. Dataset query/catalog operations keep their separate native defaults; all are metadata leads. Model calls are counted separately. Additional paid helpers are outside this bounded validation.",
+            "scope": "One native G1 candidate-development cycle; actual findings alone justify repair and fresh re-review. No topic selection, gate approval, advancement, automatic rescheduling or new budget."}
+        write(destination, report)
+        if not execute:
+            return report
+        if os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") != "1" or api_orchestrator.project_root(project.name).resolve() != project:
+            raise ValueError("G1 transport validation requires the existing owner cloud project and spending controller")
+        previous_rows = len(model_runtime.ledger_entries(project))
+        source_journals = ("evidence/literature-api-ledger.jsonl", "evidence/dataset-search-log.jsonl")
+        previous_sources = {relative: len(read_jsonl(project / relative)) for relative in source_journals}
+        started = time.monotonic()
+        try:
+            report["status"] = "in_progress"
+            report["budget_before"] = model_runtime.budget_status(project)
+            write(destination, report)
+            report["result"] = api_orchestrator.run_cycle(project.name, "topic-intelligence", "anthropic", "openai", "anthropic",
+                request["prompt"], "", max_output_tokens=12000, control_max_output_tokens=4000, automatic_data=True,
+                task_kind="scientific-judgment", task_profile=request["task_profile"])
+            check_inputs()
+            after = read(project / "state/run.json")
+            if any(before.get(field) != after.get(field) for field in ("stage", "gate", "approved_gates", "paper_count")):
+                raise ValueError("the G1 validation changed a protected scientific scope")
+            report["status"] = "native_cycle_returned_without_topic_approval"
+        except Exception as exc:
+            report.update(status="partial_failed_no_retry", failure_type=type(exc).__name__)
+            raise
+        finally:
+            rows = model_runtime.ledger_entries(project)[previous_rows:]
+            report["cache_hits"] = sum(row.get("cache_hit") is True for row in rows)
+            report["attempt_receipts"] = [{"run_id": row["run_id"], "role": row["role"], "usage_receipts": [row]}
+                                           for row in rows if row.get("cache_hit") is not True]
+            report["calls_attempted"] = len(report["attempt_receipts"])
+            report["accounting"] = calibration_costs(report["attempt_receipts"])
+            literature = read_jsonl(project / source_journals[0])[previous_sources[source_journals[0]]:]
+            datasets = read_jsonl(project / source_journals[1])[previous_sources[source_journals[1]]:]
+            report["discovery_operations"] = {"new_literature_receipts": len(literature),
+                "literature": [{key: row.get(key) for key in ("receipt_id", "provider", "mode", "status", "query", "requested_at", "completed_at")} for row in literature],
+                "dataset_catalog_operations": sum(len(row.get("providers", [])) for row in datasets),
+                "dataset_batches": datasets, "metadata_only": True,
+                "counts_are_query_provider_operations_not_underlying_http_retries": True,
+                "individual_dataset_operation_duration_seconds": None}
+            report["budget_after"] = model_runtime.budget_status(project)
+            if all(type(report.get(side, {}).get(key)) in {int, float} for side in ("budget_before", "budget_after") for key in ("spent", "reserved")):
+                report["cumulative_budget_consumption_change_cny"] = round(
+                    sum(report["budget_after"][key] - report["budget_before"][key] for key in ("spent", "reserved")), 8)
+            report["duration_seconds"] = round(time.monotonic() - started, 6)
+            write(destination, report)
+    return report
 
 
 def run(project: Path, manifest_relative: str, output_relative: str, *, execute=False) -> dict:
@@ -184,6 +284,30 @@ def run(project: Path, manifest_relative: str, output_relative: str, *, execute=
         raise ValueError("refusing to overwrite an existing auxiliary diagnostic")
     request = load(project,manifest_relative)
     kind = request["kind"]
+    if kind == "g1-transport-validation":
+        report = run_g1_transport_validation(project, destination, request, execute=execute)
+        return {"output": output_relative, "status": report["status"], "kind": kind, "execute": execute,
+                "calls_planned": report["calls_planned"], "calls_attempted": report["calls_attempted"],
+                "not_manuscript_or_evidence": True}
+    if kind == "citation-crosscheck":
+        from scripts.literature_source_tasks import run_citation_crosscheck
+        _check_inputs(project, request["inputs"])
+        report = run_citation_crosscheck(project, destination, request["manifest_sha256"],
+            request_file=request["source_task_file"], task_profile=request["task_profile"], execute=execute,
+            check_inputs=lambda: _check_inputs(project, request["inputs"]))
+        _check_inputs(project, request["inputs"])
+        return {"output": output_relative, "status": report["status"], "kind": kind, "execute": execute,
+                "calls_planned": report["calls_planned"], "calls_attempted": report["calls_attempted"],
+                "not_manuscript_or_evidence": True}
+    if kind == "public-review-calibration":
+        from scripts.public_review_anchors import run_calibration
+        _check_inputs(project, request["inputs"])
+        report = run_calibration(project, destination, request["manifest_sha256"], seat=request["calibration_seat"], execute=execute,
+                                 check_inputs=lambda: _check_inputs(project, request["inputs"]))
+        _check_inputs(project, request["inputs"])
+        return {"output": output_relative, "status": report["status"], "kind": kind, "execute": execute,
+                "calls_planned": report["calls_planned"], "calls_attempted": report["calls_attempted"],
+                "reserved_upper_bound_cny": report["reserved_upper_bound_cny"], "not_manuscript_or_evidence": True}
     # Provider is an internal family placeholder. The production policy chooses
     # the exact model/group; no manifest field can override that policy.
     provider = task_router.PROFILES[kind][0]
