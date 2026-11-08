@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import ai_providers, model_runtime, scientific_editing, statistical_reporting
+from scripts import ai_providers, model_runtime, revision_integrity, statistical_reporting
 from scripts import research_notebook, docx_revision, journal_dossier, method_tools, style_evaluation
 from scripts.research_artifacts import read, sha, write
 
@@ -74,7 +74,7 @@ class ScientificEditTests(unittest.TestCase):
 
     def test_controls_are_reported_without_being_removed(self):
         text = "Data\u200dvalue\u202e"
-        findings = scientific_editing.character_audit(text)
+        findings = revision_integrity.character_audit(text)
         self.assertEqual([r["codepoint"] for r in findings], ["U+200D", "U+202E"])
         self.assertEqual(text, "Data\u200dvalue\u202e")
 
@@ -96,11 +96,11 @@ class ScientificEditTests(unittest.TestCase):
     def test_split_word_citation_instructions_remain_protected(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "main.docx"
-            w = scientific_editing.W[1:-1]
+            w = revision_integrity.W[1:-1]
             xml = f'<w:document xmlns:w="{w}"><w:body><w:p><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText>CIT</w:instrText></w:r><w:r><w:instrText>ATION alpha2025</w:instrText></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:body></w:document>'
             with zipfile.ZipFile(path, "w") as archive:
                 archive.writestr("word/document.xml", xml)
-            self.assertIn("CITATION alpha2025", scientific_editing.docx_citations(path))
+            self.assertIn("CITATION alpha2025", revision_integrity.docx_citations(path))
 
 
 class StatisticalMappingTests(unittest.TestCase):
@@ -320,8 +320,8 @@ class WordRevisionTests(unittest.TestCase):
                 reread = Document(target)
                 self.assertEqual(reread.paragraphs[0].text, expected)
                 self.assertEqual(reread.tables[0].cell(0, 0).text, "Unchanged data")
-                self.assertIn("CITATION alpha2025", scientific_editing.docx_citations(target))
-                self.assertTrue(scientific_editing.formula_tokens(target))
+                self.assertIn("CITATION alpha2025", revision_integrity.docx_citations(target))
+                self.assertTrue(revision_integrity.formula_tokens(target))
 
     def parts(self, text, *, extra=""):
         w = docx_revision.W[1:-1]

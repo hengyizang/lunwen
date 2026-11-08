@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from xml.etree import ElementTree as ET
 
 from scripts.output_provenance import current_origin
 from scripts.publication_figures import FigureSpecError, render
@@ -12,6 +13,65 @@ from scripts import figure_layout
 
 
 class PublicationFigureTests(unittest.TestCase):
+    def panel_fixture(self, directory):
+        project = Path(directory)
+        folder = project / "papers/P01/figures"
+        folder.mkdir(parents=True);(project / "results").mkdir()
+        for name, values in (("left", "1,0.4\n2,0.7\n"), ("right", "1,0.3\n2,0.5\n")):
+            (project / f"results/{name}.csv").write_text("epoch,score\n" + values)
+        spec = {"schema_version": "1.0", "reuse_panels": True, "source_data_export": True,
+                "output_stem": "papers/P01/figures/panels", "style": "technical",
+                "formats": ["svg", "pdf", "png"], "dpi": 300,
+                "caption": "Synthetic fixture.", "alt_text": "Recorded fixture values.", "claim_ids": ["FIXTURE"],
+                "panels": [{"kind": "line", "data": f"results/{name}.csv", "x": "epoch", "y": "score",
+                            "xlabel": "Epoch", "ylabel": "Score", "title": name.title()} for name in ("left", "right")]}
+        path = folder / "panels.spec.json";path.write_text(json.dumps(spec))
+        from jsonschema import validate
+        validate(spec, json.loads((Path(__file__).resolve().parents[1] / "schemas/publication-figure-spec.schema.json").read_text()))
+        return project, path, spec
+
+    def test_retired_reuse_request_redraws_values_vectors_and_per_panel_source_exports(self):
+        import fitz
+        from scripts import publication_figures as figures
+        with tempfile.TemporaryDirectory() as directory:
+            project, path, _spec = self.panel_fixture(directory)
+            observed = [];original = figures._draw_panel
+            def draw(ax, panel, frame, np, pd, index):
+                original(ax, panel, frame, np, pd, index)
+                observed.append((ax.lines[0].get_ydata().tolist(), ax.get_xlabel(), ax.get_ylabel()))
+            with patch.object(figures, "_draw_panel", side_effect=draw) as drawer:
+                first = render(project, path);second = render(project, path)
+                self.assertEqual(drawer.call_count, 4)
+                self.assertEqual(observed, [([0.4, 0.7], "Epoch", "Score"), ([0.3, 0.5], "Epoch", "Score")] * 2)
+                (project / "results/left.csv").write_text("epoch,score\n1,0.4\n2,0.9\n")
+                changed = render(project, path)
+                self.assertEqual(drawer.call_count, 6)
+                self.assertEqual(observed[-2][0], [0.4, 0.9])
+            self.assertEqual(second["panel_cache"], {"enabled": False, "status": "retired", "mode": "full_redraw"})
+            self.assertFalse((project / "reports/figure-panel-cache").exists())
+            self.assertEqual(changed["quality"]["output_qa"]["status"], "pass")
+            self.assertEqual(figure_layout.validate_saved_figures(project / "papers/P01"), [])
+            for name, row in zip(("left", "right"), changed["source_data_exports"]):
+                self.assertEqual((project / row["path"]).read_bytes(), (project / f"results/{name}.csv").read_bytes())
+            svg = ET.parse(project / first["outputs"][0]["path"]).getroot()
+            self.assertFalse(any(node.tag.endswith("}image") for node in svg.iter()))
+            self.assertIn("Left", " ".join(node.text or "" for node in svg.iter() if node.tag.endswith("}text")))
+            with fitz.open(project / "papers/P01/figures/panels.pdf") as pdf:
+                self.assertIn("Right", pdf[0].get_text());self.assertTrue(pdf[0].get_drawings())
+
+    def test_legacy_cached_build_requires_rebuild_and_reuse_flag_stays_strict(self):
+        from scripts.output_provenance import record_model_writes
+        with tempfile.TemporaryDirectory() as directory:
+            project, path, spec = self.panel_fixture(directory)
+            report = render(project, path)
+            build = path.with_name("panels.figure-build.json")
+            report["panel_cache"] = {"enabled": True};build.write_text(json.dumps(report))
+            record_model_writes(project, [build], family="other", provider="deterministic-local-renderer", model="scripts/publication_figures.py", role="fixture", run_id="fixture")
+            self.assertTrue(any("panel cache is retired; rebuild" in issue for issue in figure_layout.validate_saved_figures(project / "papers/P01")))
+            spec["reuse_panels"] = "yes";path.write_text(json.dumps(spec))
+            with self.assertRaisesRegex(FigureSpecError, "reuse_panels must be boolean"):
+                render(project, path)
+
     def test_renders_vector_and_high_resolution_outputs_from_real_table(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "demo"

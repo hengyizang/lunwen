@@ -32,7 +32,7 @@ For permitted deterministic preparation, write a request under `program/`:
 }
 ```
 
-Execute `python -m scripts.figure_lineage --project projects/PROJECT --paper P01
+Execute `python -m scripts.figure_provenance derive --project PROJECT --paper P01
 --spec program/figure-data.json` on the authorized cloud runner. The transform
 supports explicit column projection, concatenation, grouped means and
 `json_rows` projection from a literal dotted `record_path`. JSON columns are
@@ -42,6 +42,15 @@ adverse-result selection or other transformations require an approved analysis
 run instead. A `reports/figure-data/` receipt retains source ancestry and output
 hashes. Every use replays the transform; a self-authored or re-signed receipt
 cannot replace deterministic provenance and matching recomputed bytes.
+
+The former standalone lineage module is retired. Seals, transformation replay,
+native render registration and G5 validation share `figure_provenance`.
+Old derivation receipts bound to the retired implementation fail closed; validation
+never rewrites their provenance or implementation hashes. Preserve their historical
+checkpoint, then rebuild the original request through the normal cloud
+`derive_figure_data` operation or the command above and re-register affected figures.
+This rechecks the existing approved executor outputs; it never executes an experiment
+or migrates a frozen protocol. Source changes remain failures, not migration inputs.
 
 This transform prepares plot inputs. It does not grant causal interpretation,
 repair sample dependence, create uncertainty estimates or establish a claim.

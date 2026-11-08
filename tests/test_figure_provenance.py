@@ -22,8 +22,8 @@ class FigureProvenanceTests(unittest.TestCase):
             record_figure(project,"P01","papers/P01/figures/result.png","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
             (paper/"figures/result.svg").write_text("<svg/>",encoding="utf-8")
             record_figure(project,"P01","papers/P01/figures/result.svg","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
-            from scripts.figure_lineage import lineage
-            with patch("scripts.figure_lineage.lineage",wraps=lineage) as checked:
+            from scripts.figure_provenance import lineage
+            with patch("scripts.figure_provenance.lineage",wraps=lineage) as checked:
                 self.assertEqual(validate_figure_provenance(project,paper),[])
             self.assertEqual(checked.call_count,1)
             self.assertEqual(output_provenance.current_origin(project,paper/"figures"/"figure-provenance.json")["status"],"tracked")
@@ -47,14 +47,18 @@ class FigureProvenanceTests(unittest.TestCase):
             sealed_run(project)
             renderer=project/"analysis/chart.py";renderer.write_text("# synthetic renderer\n",encoding="utf-8")
             figure=figures/"chart.png";figure.write_bytes(b"synthetic rendered pixels")
+            vector=figures/"chart.svg";vector.write_text("<svg/>")
             spec=figures/"chart.json";write(spec,{"synthetic":True,"claim_ids":["C1"]})
             output_provenance.record_model_writes(project,[renderer,spec],family="other",provider="fixture",model="fixture",role="fixture",run_id="fixture")
             ref=lambda path:{"path":path.relative_to(project).as_posix(),"sha256":sha(path)}
             receipt=figures/"chart.render-receipt.json"
-            write(receipt,{"status":"pass","execution":{"mode":"cloud"},"outputs":[ref(figure)]})
+            write(receipt,{"status":"pass","execution":{"mode":"cloud"},"outputs":[ref(figure),ref(vector)]})
             output_provenance.record_model_writes(project,[receipt],family="other",provider="publication-figure-renderer",model="scripts/publication_figures.py",role="render-receipt",run_id="fixture")
-            report={"render_receipt":ref(receipt),"renderer_wrapper":ref(renderer),"outputs":[ref(figure)],"spec":ref(spec),"data":[ref(project/"results/metrics.csv")]}
-            self.assertEqual(register_rendered_figures(project,report),["papers/P01/figures/chart.png"])
+            report={"render_receipt":ref(receipt),"renderer_wrapper":ref(renderer),"outputs":[ref(figure),ref(vector)],"spec":ref(spec),"data":[ref(project/"results/metrics.csv")]}
+            from scripts.figure_provenance import lineage
+            with patch("scripts.figure_provenance.lineage",wraps=lineage) as checked:
+                self.assertEqual(register_rendered_figures(project,report),["papers/P01/figures/chart.png","papers/P01/figures/chart.svg"])
+            self.assertEqual(checked.call_count,1)
             row=json.loads((figures/"figure-provenance.json").read_text())["figures"][0]
             self.assertEqual(row["review_kind"],"automated");self.assertEqual(row["source_run_ids"],["r1"])
             self.assertNotIn("language_checked_by",row)

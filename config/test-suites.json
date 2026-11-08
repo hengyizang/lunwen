@@ -1,6 +1,5 @@
 {
   "test_ccfa_model_handoffs.py": "Cross-role prompt and full pinned reference checks: 32.42 seconds at 3e9f56b.",
-  "test_figure_panel_cache.py": "Actual figure rendering and panel cache checks: 5.46 seconds.",
   "test_study_routes.py": "Meta-analysis and formal-study integration: 4.44 seconds.",
   "test_ccfa_runtime.py": "Complete pinned skill installation and source checks: 4.10 seconds.",
   "test_dynamic_routing.py": "Route selection and evidence-profile integration: 3.96 seconds.",

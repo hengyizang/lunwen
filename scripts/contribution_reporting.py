@@ -87,7 +87,7 @@ def contribution(project, paper_id, link, facts, comparisons):
         by_role[name] = {"fact_id": identity, "value": value, "source": sources[-1]}
     executions = detail["execution"]
     need(isinstance(executions, list) and 1 <= len(executions) <= 50, "contribution needs actual executed result bindings")
-    from scripts.figure_lineage import run_seal
+    from scripts.figure_provenance import run_seal
     seals, outputs, seen = [], set(), set()
     for execution in executions:
         need(isinstance(execution, dict) and set(execution) == {"run_id", "path", "sha256"}, "execution needs exact run/output binding")

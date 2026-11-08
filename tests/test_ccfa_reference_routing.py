@@ -14,6 +14,50 @@ from scripts import research_methods
 
 
 class CCFAReferenceRoutingTests(unittest.TestCase):
+    def test_optional_editorial_methods_are_compact_by_default_and_complete_when_selected(self):
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("no additional model call")):
+            compact = runtime.editorial_method_guidance()
+            full = runtime.editorial_method_guidance(full=True)
+            self.assertIn(compact, runtime.model_contract("writing-and-review", "critic"))
+            self.assertIn(full, runtime.model_contract("writing-and-review", "writer", skill="ccf-humanization"))
+        humanizer = runtime.read(runtime.ROOT / "config/humanizer-rules.json")
+        defensive = runtime.read(runtime.ROOT / "config/anti-defensive-rules.json")
+        for row in humanizer["rules"]:
+            self.assertIn(f"H{row['number']:02d} {row['title']}", compact)
+            self.assertIn(row["guidance"], full)
+            self.assertIn(row["exceptions"], full)
+        for row in defensive["groups"]:
+            self.assertIn(row["review_id"] + " " + row["title"], compact)
+            for guidance in row["semantic_checks"]:
+                self.assertIn(guidance, full)
+        for name in defensive["semantic_only_checks"]:
+            self.assertIn(name, full)
+        self.assertIn("not a completed full-method pass", compact)
+        self.assertLess(len(compact), len(full))
+        self.assertNotIn('"coverage_complete"', full)
+        self.assertNotIn('"issue_count"', full)
+
+    def test_changed_optional_editorial_sources_are_unavailable_without_blocking_scientific_contract(self):
+        import shutil
+        paths = [runtime.LOCK, "integrations/editorial-upstreams.lock.json", "config/humanizer-rules.json",
+                 "config/anti-defensive-rules.json", "third_party/humanizer/SKILL.md", "third_party/humanizer/LICENSE",
+                 "third_party/anti-defensive-writing/SKILL.md", "third_party/anti-defensive-writing/LICENSE"]
+        paths += [row["path"] for row in runtime.humanization_policy_receipt()["sources"]]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in paths:
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(runtime.ROOT / name, target)
+            source = root / "third_party/humanizer/SKILL.md"
+            source.write_text(source.read_text() + "\nUNTRUSTED_CHANGED_OPTIONAL_METHOD")
+            with patch("scripts.model_runtime.call", side_effect=AssertionError("no additional call")):
+                contract = runtime.humanization_contract("writing-and-review", "critic", root=root)
+            self.assertIn("Optional H/AD method sources are unavailable or changed", contract)
+            self.assertNotIn("UNTRUSTED_CHANGED_OPTIONAL_METHOD", contract)
+            self.assertIn("source/version", contract)
+            self.assertIn("numeric", contract.lower())
+
     def test_default_cycles_select_the_current_owner_and_independent_review_role(self):
         cases = [
             ("topic-intelligence", "writer", "ccf-idea-optimizer"),
@@ -55,13 +99,11 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                 self.assertIn(runtime.source(identifier + "/SKILL.md"), prompt)
                 for relative in runtime.reference_paths(identifier,full=True):
                     self.assertIn(runtime.source(relative), prompt)
-                from scripts.ccfa_humanization import prompt_sources
-                for item in prompt_sources("intake", full=identifier == "ccf-humanization"):
+                for item in runtime.humanization_prompt_sources("intake", full=identifier == "ccf-humanization"):
                     relative = item["path"].removeprefix(runtime.VENDOR + "/")
                     self.assertEqual(prompt.count(runtime.source(relative)), 1)
 
     def test_detailed_humanization_modes_follow_the_evidence_stage_without_truncating_sources(self):
-        from scripts import ccfa_humanization as human
         baseline = runtime.source("ccf-humanization/SKILL.md")
         prose = runtime.source("ccf-humanization/references/humanization-policy.md")
         experiment = runtime.source("ccf-humanization/references/experiment-discipline.md")
@@ -74,7 +116,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertNotIn("AVAILABLE OBSERVATION CATALOG", prompt)
             self.assertIn("Empty or partial observation lists are valid", prompt)
         explicit = runtime.model_contract("topic-intelligence", "writer", skill="ccf-humanization")
-        for item in human.prompt_sources("topic-intelligence", full=True):
+        for item in runtime.humanization_prompt_sources("topic-intelligence", full=True):
             self.assertIn((runtime.ROOT / item["path"]).read_text(encoding="utf-8"), explicit)
 
     def test_explicit_policy_reference_is_not_deduplicated_before_it_was_loaded(self):

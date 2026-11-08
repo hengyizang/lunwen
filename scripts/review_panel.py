@@ -227,7 +227,7 @@ def _canonical_scope(project, paper):
                 line += 1
         paragraphs = None
     else:
-        from scripts.scientific_editing import WordSource, W
+        from scripts.revision_integrity import WordSource, W
         document = WordSource(canonical, complete=True)
         relative = bind(canonical)
         styles = ET.fromstring(document.parts.get("word/styles.xml", b"<styles/>"))
@@ -368,7 +368,7 @@ def _canonical_scope(project, paper):
                 bind(target)
                 bind(registry)
                 if row.get("inputs") and row.get("figure_type") == "data_chart":
-                    from scripts.figure_lineage import lineage
+                    from scripts.figure_provenance import lineage
                     if row.get("source_lineage") != lineage(project, paper,
                             [item["path"] for item in row["inputs"]], row.get("source_run_ids", [])):
                         raise ValueError("panel figure values lack current executor-bound lineage")

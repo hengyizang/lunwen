@@ -564,6 +564,17 @@ class CCFARuntimeTests(unittest.TestCase):
                 with self.assertRaises(cloud_job.CloudJobError):
                     cloud_job.literature_operation(project, "program/ccfa-request.json")
 
+    def test_legacy_mechanical_humanization_operation_is_retired_without_calls_or_report_writes(self):
+        with tempfile.TemporaryDirectory() as directory, cloud(), \
+                patch("scripts.model_runtime.call", side_effect=AssertionError("retirement cannot infer")):
+            project = Path(directory)
+            result = runtime.execute(project, {"action": "ccfa_humanization", "paper_id": "P01"})
+            self.assertEqual(result["status"], "retired")
+            self.assertFalse(result["mechanical_review_performed"])
+            self.assertEqual(result["semantic_review_status"], "unknown")
+            self.assertEqual(result["model_calls"], 0)
+            self.assertEqual(list(project.iterdir()), [])
+
     def test_cloud_guard_precedes_install_prepare_and_resource(self):
         with patch.dict(os.environ, {}, clear=True):
             for action in (lambda: runtime.install(Path(".")), lambda: runtime.prepare(Path("."), {}),

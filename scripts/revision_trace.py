@@ -16,14 +16,14 @@ try:
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.research_artifacts import path_in
     from scripts.revision_render import validate_render_manifest
-    from scripts.scientific_editing import word_package, W
+    from scripts.revision_integrity import word_package, W
 except ImportError:  # Direct execution from scripts/.
     from research_artifacts import paper_audit_cli, utc_now as now, sha as sha256_file
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
     from research_artifacts import path_in
     from revision_render import validate_render_manifest  # type: ignore
-    from scientific_editing import word_package, W
+    from revision_integrity import word_package, W
 
 
 ROOT = Path(__file__).resolve().parents[1]

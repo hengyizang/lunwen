@@ -774,11 +774,12 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
         error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=exc.code,
                                                     complete=body is not None and len(body) <= 4 * 1024 * 1024)
         raise error from None
-    except (OSError, http.client.HTTPException, ValueError, RecursionError):
+    except (OSError, http.client.HTTPException, ValueError, RecursionError) as exc:
         error = ProviderError("API response unavailable; no automatic generation retry; reconcile billing")
         if body is not None:
             error.response_evidence = (_sse_failure_evidence(body, headers, status) if streaming else
                 _response_evidence(None, headers=headers, body=body, http_status=status))
+            error.response_evidence["http_evidence"]["response_error_type"] = type(exc).__name__
         raise error from None
     if not isinstance(value, dict) or value.get("error"):
         error = ProviderError("generation response was not a successful JSON object; reconcile billing")

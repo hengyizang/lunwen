@@ -4,7 +4,8 @@
   "title": "Deterministic publication figure specification",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "data", "output_stem", "style", "formats", "dpi", "caption", "alt_text", "claim_ids", "panels"],
+  "required": ["schema_version", "output_stem", "style", "formats", "dpi", "caption", "alt_text", "claim_ids", "panels"],
+  "anyOf": [{"required": ["data"]}, {"properties": {"panels": {"items": {"required": ["data"]}}}}],
   "properties": {
     "schema_version": {"const": "1.0"},
     "data": {"type": "string", "minLength": 1},
@@ -19,7 +20,7 @@
     "width": {"type": "number", "minimum": 3, "maximum": 18},
     "height": {"type": "number", "minimum": 2.5, "maximum": 24},
     "source_data_export": {"type": "boolean", "description": "Explicit opt-in; only export data cleared for redistribution."},
-    "reuse_panels": {"type": "boolean", "description": "Opt-in source-bound vector panel cache; final composed outputs still require full QA."},
+    "reuse_panels": {"type": "boolean", "description": "Legacy input accepted for compatibility; panel caching is retired and every invocation renders the full figure."},
     "panels": {
       "type": "array",
       "minItems": 1,

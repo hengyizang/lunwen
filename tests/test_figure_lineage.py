@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts import figure_lineage as lineage,figure_provenance,output_provenance
+from scripts import figure_provenance as lineage,figure_provenance,output_provenance
 from scripts.research_artifacts import read,write,record,sha
 from tests.figure_lineage_fixtures import sealed_run
 
@@ -63,6 +63,25 @@ class FigureLineageTests(unittest.TestCase):
         with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1"}):lineage.derive(self.project,"P01",output,transform,["r1"])
         self.assertIn("O1,2.5,1.2",(self.project/output).read_text())
         self.assertEqual(len(lineage.lineage(self.project,"P01",[output],["r1"])["runs"]),1)
+
+    def test_retired_or_stale_derivation_receipt_fails_until_normal_cloud_rebuild(self):
+        transform={"operation":"project","sources":["results/metrics.csv"],"columns":["value"],"group_by":[]}
+        output="papers/P01/figures/source-data/values.csv"
+        with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1"}):
+            receipt=lineage.derive(self.project,"P01",output,transform,["r1"])
+        path=lineage.receipt_path(self.project,output)
+        receipt["implementation_sha256"]="0"*64;write(path,receipt)
+        record(self.project,[path],"scripts/figure_lineage.py")
+        before=path.read_bytes()
+        with self.assertRaisesRegex(ValueError,"rebuild.*normal cloud executor"):
+            lineage.lineage(self.project,"P01",[output],["r1"])
+        self.assertEqual(path.read_bytes(),before)
+        record(self.project,[path],lineage.MODULE)
+        with self.assertRaisesRegex(ValueError,"stale.*rebuild"):
+            lineage.lineage(self.project,"P01",[output],["r1"])
+        with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1"}):
+            lineage.derive(self.project,"P01",output,transform,["r1"])
+        self.assertEqual(lineage.lineage(self.project,"P01",[output],["r1"])["inputs"][0]["kind"],"derived_csv")
 
     def supplemental(self,*,round_id="R001",parent_plan="experiments/plan.json"):
         namespace=f"experiments/supplemental/P01/{round_id}/s001"

@@ -93,11 +93,7 @@ def validate_saved_figures(paper: Path) -> list[str]:
             if build.get("renderer_sha256") != sha256(Path(__file__).with_name("publication_figures.py")):
                 errors.append(f"{build_path.name}: renderer changed; rebuild the figure")
             if build.get("panel_cache", {}).get("enabled"):
-                try:
-                    from scripts.figure_panel_cache import validate_build
-                except ImportError:
-                    from figure_panel_cache import validate_build
-                errors.extend(f"{build_path.name}: {error}" for error in validate_build(project, build))
+                errors.append(f"{build_path.name}: panel cache is retired; rebuild with the current full-figure renderer")
             for row in [build["spec"], *build["data"], *build["outputs"]]:
                 source = safe_path(project, row["path"])
                 if not source.is_file() or sha256(source) != row.get("sha256"):

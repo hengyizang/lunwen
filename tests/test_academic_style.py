@@ -176,13 +176,11 @@ class AcademicStyleTests(unittest.TestCase):
             manuscript = project / "papers" / "P01" / "manuscript" / "main.tex"
             manuscript.parent.mkdir(parents=True)
             manuscript.write_text(varied_manuscript(), encoding="utf-8")
-            from scripts import humanizer_review, defensive_review
-            with patch.object(humanizer_review, "audit_text", wraps=humanizer_review.audit_text) as humanizer, \
-                 patch.object(defensive_review, "audit_text", wraps=defensive_review.audit_text) as defensive:
-                _, report = write_audit(project, "P01")
-            self.assertEqual((humanizer.call_count, defensive.call_count), (1, 1))
+            _, report = write_audit(project, "P01")
+            self.assertEqual(report["analysis"]["editorial_methods"], {
+                "status": "retired", "mechanical_review_performed": False, "semantic_review_status": "unknown"})
             self.assertEqual(report["status"], "pass")
-            self.assertEqual(report["schema_version"], "1.2")
+            self.assertEqual(report["schema_version"], "1.3")
             self.assertEqual(
                 [item["name"] for item in report["external_linters"]],
                 ["proselint", "harper"],

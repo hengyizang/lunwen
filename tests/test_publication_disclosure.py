@@ -15,7 +15,7 @@ from scripts.research_artifacts import read, sha, write
 
 class OptionalDisclosureEditingTests(unittest.TestCase):
     def test_removing_optional_statement_does_not_change_scientific_signatures(self):
-        from scripts.scientific_editing import context_changes
+        from scripts.revision_integrity import context_changes
         before = "The effect was 2.0 units.\nAI assistance improved wording."
         after = "The effect was 2.0 units."
         self.assertEqual(context_changes(before, after), {"removed": [], "added": []})

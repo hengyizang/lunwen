@@ -10,7 +10,6 @@ import shutil
 import subprocess
 import tempfile
 from collections import Counter
-from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -245,20 +244,6 @@ def run_harper(text: str, *, executable: str | None = None, runner: Any = subpro
     return _run_linter(text, name="harper", executable=executable, runner=runner)
 
 
-def editorial_reviews(manuscript: Path, text: str) -> dict[str, Any]:
-    """Cover every pinned editorial pattern; semantic judgement stays explicit."""
-    from scripts import ccfa_humanization
-
-    raw = None
-    if manuscript.suffix.lower() == ".tex":
-        from scripts.citation_audit import tex_source_paths
-        raw = "\n\n".join(path.read_text(encoding="utf-8") for path in sorted(tex_source_paths(manuscript)))
-    report = ccfa_humanization.audit_text(text, raw_text=raw)
-    return {"humanizer_review": deepcopy(report["humanizer_review"]),
-            "anti_defensive_review": deepcopy(report["anti_defensive_review"]),
-            "ccfa_humanization_review": report}
-
-
 def build_audit(paper: Path) -> dict[str, Any]:
     errors: list[str] = []
     manuscript: Path | None = None
@@ -277,7 +262,6 @@ def build_audit(paper: Path) -> dict[str, Any]:
         ruleset = load_style_rules()
         reviewed_rule_sources = ruleset["sources"]
         analysis = analyze_text(text, ruleset=ruleset)
-        analysis.update(editorial_reviews(manuscript, text))
         errors.extend(str(item) for item in analysis.get("errors", []))
         for external in (run_proselint(text), run_harper(text)):
             external_linters.append(external)
@@ -292,8 +276,10 @@ def build_audit(paper: Path) -> dict[str, Any]:
                 )
     except (AcademicStyleError, OSError, ValueError) as exc:
         errors.append(str(exc))
+    analysis["editorial_methods"] = {"status": "retired", "mechanical_review_performed": False,
+                                    "semantic_review_status": "unknown"}
     return {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "created_at": now(),
         "status": "pass" if not errors else "revise",
         "purpose": "authentic_academic_style_and_readability",
@@ -375,13 +361,6 @@ def validate_saved_audit(paper: Path) -> list[str]:
         errors.append("academic style audit manuscript record is missing")
     elif manuscript_record.get("source_tree_sha256") != current_hash:
         errors.append("academic style audit is stale for the manuscript source tree")
-    try:
-        expected_reviews = editorial_reviews(manuscript, extract_text(manuscript))
-        for name, expected in expected_reviews.items():
-            if not isinstance(analysis, dict) or analysis.get(name) != expected:
-                errors.append(f"academic style audit {name} is missing, incomplete or stale")
-    except (OSError, ValueError, ImportError) as exc:
-        errors.append(f"complete editorial coverage could not be verified: {exc}")
     return errors
 
 

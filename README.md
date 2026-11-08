@@ -278,8 +278,8 @@ DOCX 使用 `[@key]` 或 Word `CITATION` 字段自动映射引用键，并定位
 从期刊官方页面下载模板 ZIP 后：
 
 ```bash
-python3 scripts/venue_adapter.py inspect ~/Downloads/ijssd-2e.zip
-python3 scripts/venue_adapter.py ingest \
+python3 scripts/venue_compliance.py inspect ~/Downloads/ijssd-2e.zip
+python3 scripts/venue_compliance.py ingest \
   ~/Downloads/ijssd-2e.zip projects/my-phd/papers/P01/venue-template
 python3 scripts/venue_compliance.py projects/my-phd/papers/P01
 python3 scripts/manuscript_language.py projects/my-phd/papers/P01/manuscript/main.tex

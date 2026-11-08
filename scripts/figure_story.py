@@ -199,7 +199,7 @@ def _results(project, request, inputs, claims):
         _need(not results, "Planned diagrams cannot import observed result authority")
         return []
     _need(results, "Observed diagram needs executor-sealed actual results")
-    from scripts.figure_lineage import run_seal
+    from scripts.figure_provenance import run_seal
     sealed = {}
     bindings = []
     for row in results:

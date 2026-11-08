@@ -5,7 +5,6 @@ import hashlib
 import json
 from pathlib import Path
 from scripts import ccfa_runtime as runtime
-from scripts.ccfa_humanization import policy_receipt
 from scripts.research_artifacts import write
 
 def acceptance(installed: Path, output: Path):
@@ -45,7 +44,7 @@ def acceptance(installed: Path, output: Path):
     report = {"schema_version": "1.0", "status": "pass", "upstream_commit": runtime.COMMIT,
         "skills": rows, "installed_skill_count": len(rows), "verified_original_files": checked,
         "vendored_functional_files": len(manifest["files"]), "native_installation": native,
-        "humanization": policy_receipt(), "model_calls": 0, "paid_calls": 0,
+        "humanization": runtime.humanization_policy_receipt(), "model_calls": 0, "paid_calls": 0,
         "scientific_completion_verified": False,
         "scope": "Installation, exact source bytes, complete guidance, native routing and separate unit/integration fixtures; no real-topic/model-quality claim."}
     write(output, report)

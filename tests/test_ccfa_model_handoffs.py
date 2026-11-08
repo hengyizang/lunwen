@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import api_orchestrator as api
-from scripts import ccfa_humanization as humanization
 from scripts import ccfa_runtime as runtime
 from scripts.research_artifacts import read, record, sha, write
 
@@ -51,7 +50,7 @@ class CCFAModelHandoffTests(unittest.TestCase):
     def assert_role_boundaries(self, name, prompt):
         self.assertIn("CCFA PROJECT ADAPTER", prompt)
         self.assertEqual(prompt.count("native core preflight"), 1)
-        for binding in humanization.policy_receipt()["sources"]:
+        for binding in runtime.humanization_policy_receipt()["sources"]:
             self.assertIn(binding["path"], prompt)
             self.assertIn(binding["sha256"], prompt)
         hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
@@ -90,7 +89,7 @@ class CCFAModelHandoffTests(unittest.TestCase):
                     self.assertEqual(prompt.count(runtime.source(identifier + "/SKILL.md")), 1)
                     for relative in references:
                         self.assertIn(runtime.source(relative), prompt)
-                    for binding in humanization.prompt_sources(self.state["stage"], full=True):
+                    for binding in runtime.humanization_prompt_sources(self.state["stage"], full=True):
                         relative = binding["path"].removeprefix(runtime.VENDOR + "/")
                         self.assertEqual(prompt.count(runtime.source(relative)), 1)
 

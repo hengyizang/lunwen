@@ -128,15 +128,14 @@
       "mechanisms": [
         "source-bound visual planning",
         "semantic and presentation critique",
-        "editable panel-level incremental rendering"
+        "editable full-figure rendering; incremental panel caching retired"
       ],
       "native_implementations": [
         "scripts/figure_story.py",
-        "scripts/publication_figures.py",
-        "scripts/figure_panel_cache.py"
+        "scripts/publication_figures.py"
       ],
       "verification": [
-        "tests/test_figure_panel_cache.py"
+        "tests/test_publication_figures.py"
       ],
       "semantic_judgment": "Existing independent review and human scientific judgment remain required."
     },
@@ -144,16 +143,16 @@
       "id": "aipoch-open-science",
       "mechanisms": [
         "figure-deck argument",
-        "panel reuse and final composed QA",
+        "full-figure rendering and final QA; panel reuse retired",
         "explicit reproduction scope"
       ],
       "native_implementations": [
         "scripts/figure_story.py",
-        "scripts/figure_panel_cache.py",
+        "scripts/publication_figures.py",
         "scripts/research_quality.py"
       ],
       "verification": [
-        "tests/test_figure_panel_cache.py"
+        "tests/test_publication_figures.py"
       ],
       "semantic_judgment": "Existing independent review and human scientific judgment remain required."
     },

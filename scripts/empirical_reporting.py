@@ -40,7 +40,7 @@ def _same(actual, expected):
 @paper_scoped
 def measured(project: Path, paper_id: str, specification_id: str) -> dict:
     from scripts import empirical_design, empirical_runtime
-    from scripts.figure_lineage import run_seal
+    from scripts.figure_provenance import run_seal
     design_check = empirical_design.audit(project, paper_id, require_frozen=True)
     _need(not design_check.get("errors"), "empirical design is blocked: " + "; ".join(design_check.get("errors", [])))
     card_path = path_in(project, f"papers/{paper_id}/empirical-design.json")
@@ -60,7 +60,7 @@ def measured(project: Path, paper_id: str, specification_id: str) -> dict:
 
 @paper_scoped
 def _diagnostics(project, paper_id, card):
-    from scripts.figure_lineage import run_seal
+    from scripts.figure_provenance import run_seal
     bindings = []
     for diagnostic in card["diagnostics"]:
         seal = run_seal(project, paper_id, diagnostic["run_id"])
