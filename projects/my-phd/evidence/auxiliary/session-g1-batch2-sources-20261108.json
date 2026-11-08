@@ -1,0 +1,934 @@
+{
+  "schema_version": "current-session-batch2-source-notes-1.0",
+  "prepared_on_utc": "2026-11-08",
+  "project": "my-phd",
+  "scope": "New six-candidate batch responding to explicit owner rejection of the previous three candidates.",
+  "provenance_statement": "current Codex session draft, exact API model identity unavailable, no native runtime receipt, no topic approval",
+  "author": {
+    "family_context": "OpenAI/Codex current session",
+    "exact_requested_api_model_id": null,
+    "exact_reported_api_model_id": null,
+    "native_runtime_receipt": null,
+    "independent_critic_performed": false
+  },
+  "authority": {
+    "topic_approval": false,
+    "paper_topic_approvals": [],
+    "project_state_changed": false,
+    "production_source_changed": false,
+    "github_mutations": 0,
+    "experiments_executed": false,
+    "software_installed": false,
+    "raw_datasets_downloaded": false,
+    "old_artifacts_preserved": [
+      "proposal.md",
+      "source-notes.json"
+    ],
+    "new_artifacts": [
+      "batch2-proposal.md",
+      "batch2-source-notes.json"
+    ]
+  },
+  "owner_steering": {
+    "original_language": "Chinese",
+    "instruction": "User rejected all previous three candidates and requested AI + mechanical engineering / robotics / manufacturing / mechatronics / autonomous systems.",
+    "rejected_previous_candidates": [
+      "Vehicle lifecycle economic cost robustness",
+      "RUL/maintenance prediction reliability",
+      "Longitudinal vehicle safety-certificate scope"
+    ],
+    "not_reused_as_new_titles": true,
+    "new_candidates_are_alternatives_not_six_papers": true
+  },
+  "cost_accounting": {
+    "project_gateway_calls": 0,
+    "app_session_cost_cny": null,
+    "existing_cumulative_project_ceiling_cny": 500,
+    "prior_actual_charges_cny": null,
+    "prior_reservations_preserved": true,
+    "remaining_model_api_balance_cny": null,
+    "new_budget_authority_created": false,
+    "per_paper_or_per_call_allocations_created": false,
+    "external_paid_compute_budget_usd": 0
+  },
+  "resource_boundary": {
+    "actual_runner_cpu_count": null,
+    "actual_runner_ram_gb": null,
+    "actual_runner_available_minutes": null,
+    "actual_runner_storage_gb": null,
+    "candidate_runtime_measurements": null,
+    "gpu_or_lab_or_hardware_assumed": false,
+    "workspace_hardware_used_to_infer_runner_capacity": false,
+    "coordinator_confirmation": "No measured GitHub runner CPU/RAM/time for these candidates; preserve unknown.",
+    "probe_scales": "Proposed planning bounds only, not experiments, measured feasibility, new financial limits or allocations."
+  },
+  "carried_forward_inputs": {
+    "source_manifest": "sources.json",
+    "source_manifest_sha256": "8f2c789f081b554cfe43e031e83e7e2ae49ae3cb0d73c9137d7f908a4c581112",
+    "run_id": "42467018030",
+    "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+    "original_constraints_sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+    "original_complete_read": "Complete intake and all normalized literature/data metadata were read in prior isolated-draft task; reuse is explicit rather than a fresh full-text claim.",
+    "hashes_previously_verified": true,
+    "prior_detailed_input_notes": "source-notes.json",
+    "dataset_registry_empty_at_checkpoint": true
+  },
+  "current_policy": {
+    "human_topic_decisions": "Actual G1 doctoral topic and G2 paper topics retained",
+    "roles": "Claude read-only production planner/auditor, OpenAI/Codex persistent author; current-session fallback is not a native receipt",
+    "data": "Source/version/integrity/privacy/leakage and known access restrictions retained; licence/research-use checks optional metadata, no new pre-use human gate",
+    "outcomes": "Complete failures/negative/registered comparisons in independent archive; material conclusions in papers/supplements",
+    "ai_statements": "Optional and author-editable publicly; internal provenance truthful",
+    "deadline": "Original 2026-10-26 deadline elapsed, no replacement date or six-paper promise"
+  },
+  "public_source_followup": {
+    "command_limit": 18,
+    "command_count": 18,
+    "search_queries": 8,
+    "web_open_commands": 9,
+    "readonly_github_fetch_commands": 1,
+    "web_tool_calls": 11,
+    "github_tool_calls": 1,
+    "other_model_calls": 0,
+    "paid_project_gateway_calls": 0,
+    "tavily_calls": 0,
+    "count_policy": "Every search query, web open or public GitHub read counts once, including failures. Cached response inspection does not issue a new network read.",
+    "stopping_rule": "Stopped at 18 commands; bounded discovery is not saturation or originality clearance.",
+    "raw_response_storage": "Current conversation tool outputs only; no native runtime/literature receipts or invented response hashes.",
+    "commands": [
+      {
+        "n": 1,
+        "kind": "search",
+        "query": "robot contact rich assembly residual reinforcement learning force control sim to real peg hole 2024 2025 2026",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "roboticsproceedings.org",
+          "openreview.net"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 2,
+        "kind": "search",
+        "query": "quadrotor adaptive trajectory tracking learning dynamics disturbance actuator residual 2024 2025 DATT Neural Fly",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "roboticsproceedings.org",
+          "science.org"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 3,
+        "kind": "search",
+        "query": "laser powder bed fusion melt pool thermal surrogate Gaussian process physics informed 2024 2025 2026 NIST AM Bench",
+        "domains": [
+          "arxiv.org",
+          "nist.gov",
+          "nature.com"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 4,
+        "kind": "search",
+        "query": "dynamic flexible job shop scheduling learning dispatch graph neural network 2024 2025 2026 breakdown",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "openreview.net"
+        ],
+        "note": "Initial combined response did not provide an adequate visible scheduling set; command 7 is retained as actual adaptive follow-up, not a claimed zero-result corpus.",
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 5,
+        "kind": "search",
+        "query": "lifelong multi agent path finding learned guidance nonholonomic warehouse robots 2024 2025 2026 LaCAM PIBT",
+        "domains": [
+          "arxiv.org",
+          "ojs.aaai.org",
+          "proceedings.mlr.press",
+          "mapf.info"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 6,
+        "kind": "search",
+        "query": "neural topology optimization stress constraints out of distribution boundary conditions 2024 2025 2026 SIMP",
+        "domains": [
+          "arxiv.org",
+          "nature.com",
+          "link.springer.com"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 7,
+        "kind": "search",
+        "query": "dynamic flexible job shop scheduling graph reinforcement learning breakdown 2025 2026",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "openreview.net"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 8,
+        "kind": "search",
+        "query": "quadrotor learning adaptive control residual dynamics trajectory tracking 2025 2026",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "roboticsproceedings.org"
+        ],
+        "access_date_utc": "2026-11-08",
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "Bounded visible results; no complete database/corpus count"
+      },
+      {
+        "n": 9,
+        "kind": "web_open",
+        "url": "https://robosuite.ai/docs/modules/environments.html",
+        "outcome": "success",
+        "scope": "Official environment docs returned lines 0-337; task/control/observation descriptions read.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 10,
+        "kind": "readonly_github_fetch",
+        "url": "https://github.com/utiasDSL/gym-pybullet-drones/blob/main/README.md",
+        "outcome": "failed",
+        "error": "HTTPError 400: GitHub returned file metadata without a file SHA (Response: None).",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 11,
+        "kind": "web_open",
+        "url": "https://www.nist.gov/ambench",
+        "outcome": "success",
+        "scope": "Official benchmark overview, data/challenge links and publication status; not individual measurement files.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 12,
+        "kind": "web_open",
+        "url": "https://job-shop-lib.readthedocs.io/en/stable/",
+        "outcome": "success",
+        "scope": "Version 1.7.2 documentation and example/solver entry points.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 13,
+        "kind": "web_open",
+        "url": "https://movingai.com/benchmarks/mapf/index.html",
+        "outcome": "success",
+        "scope": "Map/scenario listing and correction note, not file acquisition.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 14,
+        "kind": "web_open",
+        "url": "https://www.topopt.mek.dtu.dk/apps-and-software/topology-optimization-codes-written-in-python",
+        "outcome": "success",
+        "scope": "Official Python code entry/documented dependencies and baseline citation, not source download.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 15,
+        "kind": "web_open",
+        "url": "https://github.com/utiasDSL/gym-pybullet-drones/blob/main/README.md",
+        "redirected_url": "https://github.com/learnsyslab/gym-pybullet-drones/blob/main/README.md",
+        "outcome": "success",
+        "scope": "Public README via fallback after purpose-built connector failed; no repository clone.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 16,
+        "kind": "web_open",
+        "url": "https://proceedings.mlr.press/v306/qiao26f.html",
+        "outcome": "success",
+        "scope": "Actual abstract/title/venue page; no PDF.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 17,
+        "kind": "web_open",
+        "url": "https://www.nist.gov/publications/trace-heat-predictive-power-modeling-transient-diffusion",
+        "outcome": "success",
+        "scope": "Actual institution-hosted abstract and bibliographic page; no paper download.",
+        "access_date_utc": "2026-11-08"
+      },
+      {
+        "n": 18,
+        "kind": "web_open",
+        "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34503",
+        "outcome": "blocked",
+        "error": "Anti-bot Access Denied, error code 721f8919e3f51e7f; full page not read; indexed abstract remains the only article text read.",
+        "access_date_utc": "2026-11-08"
+      }
+    ]
+  },
+  "cited_sources": [
+    {
+      "id": "B2-S01",
+      "candidates": [
+        "B2-C1"
+      ],
+      "title": "Focus-Then-Contact: Speeding Up Robotic Contact-Rich Task Learning with Affordance-Guided Real-World Residual Reinforcement Learning",
+      "url": "https://proceedings.mlr.press/v306/qiao26f.html",
+      "year": 2026,
+      "read_level": "actual_abstract_page_read",
+      "actual_scope": "PMLR page lines 7-15, title/authors/venue and complete abstract; full paper not read",
+      "observed": "Residual RL, affordance-guided rewards and force-control feedback are already combined for contact-rich tasks.",
+      "unverified": [
+        "Full methods/ablation and hardware protocol",
+        "Code/compute requirements",
+        "Candidate difference and originality"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S02",
+      "candidates": [
+        "B2-C1"
+      ],
+      "title": "VT-Refine: Learning Bimanual Assembly with Visuo-Tactile Feedback via Simulation Fine-Tuning",
+      "url": "https://proceedings.mlr.press/v305/huang25b.html",
+      "year": 2025,
+      "read_level": "indexed_abstract_and_method_excerpt_only",
+      "actual_scope": "Search excerpt identifying demonstrations, tactile simulation and RL; no PDF",
+      "observed": "A current visuo-tactile bimanual-assembly learning neighbor exists.",
+      "unverified": [
+        "Full methods",
+        "Exact learning and sensing assumptions",
+        "Model/data accessibility and resource scale"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S03",
+      "candidates": [
+        "B2-C1"
+      ],
+      "title": "Force Policy: Learning Hybrid Force-Position Control Policy under Interaction Frame for Contact-Rich Manipulation",
+      "url": "https://www.roboticsproceedings.org/rss22/p128.html",
+      "year": 2026,
+      "read_level": "indexed_title_and_excerpt_only",
+      "actual_scope": "Search title and task/control/generalization excerpt; no full abstract page or paper opened",
+      "observed": "Hybrid force/position control and interaction frames are an occupied comparison area.",
+      "unverified": [
+        "Exact inputs and interaction-frame formulation",
+        "Full methods/claims/results",
+        "Code and comparator feasibility"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S04",
+      "candidates": [
+        "B2-C1"
+      ],
+      "title": "robosuite environments documentation",
+      "url": "https://robosuite.ai/docs/modules/environments.html",
+      "version_observed": "Documentation labeled 1.5; exact code commit unknown",
+      "read_level": "official_documentation_read",
+      "actual_scope": "Returned lines 84-337, especially 116-129 low-dimensional no-renderer mode, 179-190 observations/termination, 277-285 Nut Assembly, 315-323 Two Arm Peg-In-Hole",
+      "observed": "Concrete headless low-dimensional manipulation simulation and contact-assembly tasks are documented.",
+      "unverified": [
+        "Downloaded code/scene hashes",
+        "Actual runner installation/speed/RAM",
+        "MuJoCo/contact-solver version",
+        "Wrench-sensor instrumentation",
+        "Friction/clearance validity and physical transfer"
+      ],
+      "access": "Public documentation read; no installation or scene download",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S05",
+      "candidates": [
+        "B2-C2"
+      ],
+      "title": "Adaptive Outer-Loop Control of Quadrotors via Reinforcement Learning",
+      "url": "https://arxiv.org/abs/2605.16015",
+      "year": 2026,
+      "initial_submission_as_reported": "2026-05-15",
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result supplied abstract text about residual dynamics prediction, state/action history, calibration and thrust correction; no original full text",
+      "observed": "History-based residual adaptation and thrust correction already directly challenge a generic adaptive-drone claim.",
+      "unverified": [
+        "Full algorithm",
+        "Identifiability/active excitation treatment",
+        "Code/data and exact preprint version",
+        "Training resource requirements"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S06",
+      "candidates": [
+        "B2-C2"
+      ],
+      "title": "Learned Incremental Nonlinear Dynamic Inversion for Quadrotors with and without Slung Payloads",
+      "url": "https://proceedings.mlr.press/v331/cobo-briesewitz26a.html",
+      "year": 2026,
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result supplied complete displayed abstract concerning learned residual predictions and INDI; no paper PDF",
+      "observed": "Learning to approximate/augment INDI with payload cases is existing work.",
+      "unverified": [
+        "Full sensing assumptions",
+        "Exact residual/dynamics formulation",
+        "Hardware protocol and computational comparisons"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S07",
+      "candidates": [
+        "B2-C2"
+      ],
+      "title": "Proto-MPC: An encoder-prototype-decoder approach for quadrotor control in challenging winds",
+      "url": "https://proceedings.mlr.press/v242/gu24a.html",
+      "year": 2024,
+      "read_level": "indexed_abstract_and_method_excerpt_only",
+      "actual_scope": "Search excerpt on encoder/prototype/decoder residual adaptation and simulated side-wind tracking; no full original text",
+      "observed": "Adaptive residual models for quadrotor wind tracking are an established baseline family.",
+      "unverified": [
+        "Complete implementation",
+        "Disturbance and actuator-identification assumptions",
+        "Fair comparable CPU baseline"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S08",
+      "candidates": [
+        "B2-C2"
+      ],
+      "title": "gym-pybullet-drones public README",
+      "url": "https://github.com/learnsyslab/gym-pybullet-drones/blob/main/README.md",
+      "requested_url": "https://github.com/utiasDSL/gym-pybullet-drones/blob/main/README.md",
+      "version_observed": "Mutable main branch after redirect; exact commit not returned/verified",
+      "read_level": "public_repository_readme_read_via_web_fallback",
+      "actual_scope": "Returned lines 170-279: environment purpose, platform/build notes, control/RL examples and citation",
+      "observed": "PyBullet simulation with PID, velocity-PID and MRAC entry points is documented; later Python may need a PyBullet build.",
+      "unverified": [
+        "Immutable code/model hashes",
+        "Current runner build support/speed",
+        "Specific rotor-lag and payload extensions",
+        "Default observation fidelity"
+      ],
+      "failed_request": "Purpose-built GitHub fetch first failed: file metadata without a file SHA. Web fallback followed public redirect; no access control bypass.",
+      "access": "README read only; no clone/build/install",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S09",
+      "candidates": [
+        "B2-C3"
+      ],
+      "title": "Physics guided heat source for quantitative prediction of IN718 laser additive manufacturing processes",
+      "url": "https://www.nature.com/articles/s41524-024-01198-6",
+      "doi": "10.1038/s41524-024-01198-6",
+      "year": 2024,
+      "read_level": "indexed_abstract_and_method_excerpt_only",
+      "actual_scope": "Search passages describe AM-Bench 2022 thermal/melt-pool targets and heat-source parameterization.",
+      "observed": "Heat-source modeling is an important existing mechanistic baseline; an AI residual must be compared against it.",
+      "unverified": [
+        "Full paper/equations",
+        "Specific source parameterization and calibration evidence",
+        "Measurements/code versions and availability"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S10",
+      "candidates": [
+        "B2-C3"
+      ],
+      "title": "The trace of heat: on the predictive power of modeling transient diffusion",
+      "url": "https://www.nist.gov/publications/trace-heat-predictive-power-modeling-transient-diffusion",
+      "doi": "10.1007/s40964-025-01147-9",
+      "year": 2025,
+      "publication_date_as_reported": "2025-06-26",
+      "read_level": "actual_author_institution_abstract_read",
+      "actual_scope": "NIST page lines 115-153; complete displayed abstract at 125-128 and publication identity; paper itself not downloaded",
+      "observed": "The source reports that transient conduction with phase change captures rapid-turnaround thermal effects and examines modified scan pauses.",
+      "unverified": [
+        "Full derivation and validation",
+        "Measurement uncertainty and independent scans/builds",
+        "Reproduction and applicability outside stated conditions"
+      ],
+      "novelty_disposition": "Strong rival to an assertion that learned thermal memory is necessary",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S11",
+      "candidates": [
+        "B2-C3"
+      ],
+      "title": "Toward The Realtime Feedback Control for Powder Bed Fusion Additive Manufacturing",
+      "url": "https://www.nist.gov/publications/toward-realtime-feedback-control-powder-bed-fusion-additive-manufacturing",
+      "year": 2025,
+      "read_level": "indexed_institution_abstract_excerpt_only",
+      "actual_scope": "Search passages about in-line laser power feedback using melt-pool area; no paper/full page opened",
+      "observed": "Thermal-feedback scan control is already researched.",
+      "unverified": [
+        "Actual controller and sensor assumptions",
+        "Public data availability",
+        "Exact article details and full methods"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S12",
+      "candidates": [
+        "B2-C3"
+      ],
+      "title": "NIST Additive Manufacturing Benchmark Test Series",
+      "url": "https://www.nist.gov/ambench",
+      "version_observed": "Live page; individual measurement release/version unselected",
+      "read_level": "official_benchmark_page_read",
+      "actual_scope": "Returned lines 113-147, particularly public archive statement and status of benchmark rounds",
+      "observed": "Public permanent measurement archives and data/challenge links exist; some 2025 final data publications were still described as being completed.",
+      "unverified": [
+        "Exact alloy/specimen/scan publication",
+        "Raw or tabular download availability/size/hash",
+        "Independent build/scan counts",
+        "Uncertainty and preprocessing schema"
+      ],
+      "access": "No data download, no claim every 2025 product is already published",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S13",
+      "candidates": [
+        "B2-C4"
+      ],
+      "title": "DynaSchedBench: Calibrated Dynamic Scheduling Benchmarks and Observability Paradox in LLM-based Scheduling Agents",
+      "url": "https://proceedings.mlr.press/v306/cao26z.html",
+      "year": 2026,
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result supplied displayed abstract about calibrated dynamic flexible-job-shop instances, event/snapshot simulation and agent observation conditions.",
+      "observed": "Dynamic benchmark generation and observation advantages already have direct prior work.",
+      "unverified": [
+        "Full generator/evaluation protocol",
+        "Public code and exact release",
+        "Benchmark suitability/resource needs"
+      ],
+      "candidate_use": "Baseline/observability lead, not an instruction to use LLM agents",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S14",
+      "candidates": [
+        "B2-C4"
+      ],
+      "title": "RESCHED: Rethinking Flexible Job Shop Scheduling from a Transformer-based Architecture with Simplified States",
+      "url": "https://arxiv.org/abs/2603.07020",
+      "year": 2026,
+      "initial_submission_as_reported": "2026-03-07",
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result abstract concerning compact state representations, transformer policies and scheduling variants.",
+      "observed": "A simplified-state neural scheduling approach already exists.",
+      "unverified": [
+        "Full method and exact version",
+        "Dynamic-event extension, if any",
+        "Training cost and released checkpoints"
+      ],
+      "candidate_use": "Do not treat static scheduling evidence as proof of dynamic-trigger performance",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S15",
+      "candidates": [
+        "B2-C4"
+      ],
+      "title": "Policy-Based Reinforcement Learning with Action Masking for Dynamic Job Shop Scheduling under Uncertainty: Handling Random Arrivals and Machine Failures",
+      "url": "https://arxiv.org/abs/2601.09293",
+      "year": 2026,
+      "initial_submission_as_reported": "2026-01-14",
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search abstract describes timed Petri nets, masked policy optimization, arrivals and machine failures.",
+      "observed": "Masked RL under dynamic arrivals/failures is already a direct neighbor.",
+      "unverified": [
+        "Full protocol",
+        "Event observability and fair baselines",
+        "Code/resource requirements",
+        "Industrial external validity"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S16",
+      "candidates": [
+        "B2-C4"
+      ],
+      "title": "JobShopLib documentation",
+      "url": "https://job-shop-lib.readthedocs.io/en/stable/",
+      "version_observed": "1.7.2 on page read; package bytes not frozen",
+      "read_level": "official_project_documentation_read",
+      "actual_scope": "Returned lines 43-121: version, supported solvers, benchmarks, generator and CP-SAT example",
+      "observed": "Concrete seeded instance, dispatch, graph and CP-SAT entry points exist.",
+      "unverified": [
+        "Dynamic-event wrapper semantics",
+        "Flexible routing/changeovers",
+        "Package/install/runtime hashes and resource measurements",
+        "Any actual factory process distribution"
+      ],
+      "access": "Documentation only; no package installation",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S17",
+      "candidates": [
+        "B2-C5"
+      ],
+      "title": "Online Guidance Graph Optimization for Lifelong Multi-Agent Path Finding",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/33614",
+      "doi": "10.1609/aaai.v39i14.33614",
+      "year": 2025,
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result supplied displayed abstract and venue identity; adaptive guidance and changing task distribution.",
+      "observed": "Online traffic-aware guidance is already studied.",
+      "unverified": [
+        "Full method/code",
+        "Physical constraints/heterogeneity modeled",
+        "Training and inference cost"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S18",
+      "candidates": [
+        "B2-C5"
+      ],
+      "title": "Multi-Agent Motion Planning for Differential Drive Robots Through Stationary State Search",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34503",
+      "doi": "10.1609/aaai.v39i22.34503",
+      "year": 2025,
+      "read_level": "indexed_abstract_read; direct_open_blocked",
+      "actual_scope": "Search result supplied abstract describing differential-drive orientation/speed/acceleration and kinodynamically feasible planning; later direct open returned only access denied.",
+      "observed": "Kinodynamic realism and rotations are not new additions by themselves.",
+      "unverified": [
+        "Full MASS algorithm",
+        "Footprint/payload treatment",
+        "Code and fair reproduction"
+      ],
+      "access_failure": "Direct open returned anti-bot Access Denied, error code 721f8919e3f51e7f. No bypass attempted.",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S19",
+      "candidates": [
+        "B2-C5"
+      ],
+      "title": "Search-Aided Joint Agent-Environment Reinforcement Learning for Robust Lifelong Multi-Agent Path Finding with Rotations",
+      "url": "https://arxiv.org/abs/2608.05588",
+      "year": 2026,
+      "initial_submission_as_reported": "2026-08-06",
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search result abstract describing LMAPF-R2, rotations, Causal PIBT and learned guidance.",
+      "observed": "Search plus learned robust/rotation-aware lifelong coordination already has a very close neighbor.",
+      "unverified": [
+        "Full method and exact preprint version",
+        "Changing payload shape treatment",
+        "Public implementation and GPU/CPU requirements"
+      ],
+      "novelty_disposition": "Strong overlap; merely adding rotation or learned guidance cannot support novelty",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S20",
+      "candidates": [
+        "B2-C5"
+      ],
+      "title": "MovingAI MAPF benchmarks",
+      "url": "https://movingai.com/benchmarks/mapf/index.html",
+      "version_observed": "Live listing; map-file versions/hashes not yet acquired",
+      "read_level": "official_benchmark_listing_read",
+      "actual_scope": "Returned lines 0-211: downloadable maps/scenarios, map correction note and listed warehouse/small-map instances.",
+      "observed": "A public map/scenario starting point exists.",
+      "unverified": [
+        "Exact downloaded files",
+        "Physical distance/time scaling",
+        "Payload geometry/dynamics model",
+        "Any observed warehouse throughput"
+      ],
+      "access": "No map/scenario downloaded; grid data do not include measured robot dynamics",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S21",
+      "candidates": [
+        "B2-C6"
+      ],
+      "title": "Stress-constrained optimization of multiscale structures with parameterized microarchitectures using machine learning",
+      "url": "https://link.springer.com/article/10.1007/s00158-024-03821-y",
+      "doi": "10.1007/s00158-024-03821-y",
+      "year": 2024,
+      "read_level": "indexed_abstract_and_method_excerpt_only",
+      "actual_scope": "Search excerpt and opening abstract sentences on neural constitutive surrogates with stress-constrained multiscale optimization.",
+      "observed": "ML inside mechanically constrained structural design is established.",
+      "unverified": [
+        "Full constraints/model training",
+        "Mesh and stress validation",
+        "Code/data and exact candidate overlap"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S22",
+      "candidates": [
+        "B2-C6"
+      ],
+      "title": "Diffusion transformers with hybrid conditioning for structural optimization",
+      "url": "https://link.springer.com/article/10.1007/s00158-026-04429-0",
+      "doi": "10.1007/s00158-026-04429-0",
+      "year": 2026,
+      "read_level": "indexed_method_excerpts_only",
+      "actual_scope": "Search passages on SIMP-generated training cases, boundary/load conditioning and physical fields; not a complete abstract/full-method read.",
+      "observed": "Conditioned neural structural generation and varying boundary conditions already have recent work.",
+      "unverified": [
+        "Full training and final FE constraints",
+        "Total compute and generalization protocol",
+        "Any reproducible CPU comparison"
+      ],
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S23",
+      "candidates": [
+        "B2-C6"
+      ],
+      "title": "Scalable Stress-Constrained Topology Optimization: A Super-resolution and Simultaneous Approach Based on Machine Learning",
+      "url": "https://arxiv.org/abs/2610.28703",
+      "year": 2026,
+      "initial_submission_as_reported": "2026-10-20",
+      "read_level": "indexed_abstract_read",
+      "actual_scope": "Search abstract describing joint neural state/adjoint/design optimization and multi-GPU large-scale experiments.",
+      "observed": "A direct recent stress-constrained neural-optimization neighbor exists; its large cases exceed the assumed resource envelope.",
+      "unverified": [
+        "Full method and exact version",
+        "Small-scale comparison details",
+        "Code/data and actual resource costs"
+      ],
+      "candidate_use": "Do not claim to reproduce multi-GPU super-resolution under an unmeasured CPU envelope",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    },
+    {
+      "id": "B2-S24",
+      "candidates": [
+        "B2-C6"
+      ],
+      "title": "DTU TopOpt — Topology optimization codes written in Python",
+      "url": "https://www.topopt.mek.dtu.dk/apps-and-software/topology-optimization-codes-written-in-python",
+      "version_observed": "Page displays update 2026-10-27; code bytes/version unacquired",
+      "read_level": "official_code_entry_page_read",
+      "actual_scope": "Returned lines 67-86: educational Python entry, NumPy/SciPy/Matplotlib requirements, downloadable code and 88-line-method citation.",
+      "observed": "A transparent small classical mechanics/optimization entry exists.",
+      "baseline_paper_identity": "Andreassen et al., Efficient topology optimization in MATLAB using 88 lines of code, 2011; identified on official page, paper not read.",
+      "unverified": [
+        "Downloaded Python file/hash and dependencies",
+        "Stress-constrained extension",
+        "Mesh convergence and load convention",
+        "Actual runner resource use"
+      ],
+      "access": "No download or execution; compliance code not relabeled a validated stress solver",
+      "access_date_utc": "2026-11-08",
+      "complete_paper_read": false
+    }
+  ],
+  "candidates": [
+    {
+      "id": "B2-C1",
+      "chinese_title": "接触状态感知的机器人精密装配",
+      "physical_object": "Robot nut/peg or peg/hole contact assembly",
+      "ai_mechanism": "Observable contact-history state estimation and bounded compliance/action selection",
+      "focal_prediction": "History-aware mode decisions improve assembly without excess forces beyond tuned compliance/geometric search",
+      "sources": [
+        "B2-S01",
+        "B2-S02",
+        "B2-S03",
+        "B2-S04"
+      ],
+      "strongest_rival": "Tuned classical force/compliance control with geometric search",
+      "independent_unit": "Episode grouped by geometry/contact-parameter family",
+      "priority": "Recommended first investigation on physical fit, not topic approval",
+      "critical_gap": "Full nearest-work methods, contact solver/observation validity and actual runner probe",
+      "six_paper_independence": "Unproved; estimator/control/task-transfer slots may collapse"
+    },
+    {
+      "id": "B2-C2",
+      "chinese_title": "无人机执行器与扰动的主动辨识控制",
+      "physical_object": "Rotor command-to-thrust dynamics, aircraft motion and changing payload",
+      "ai_mechanism": "Physics-structured latent estimation plus information-seeking excitation and adaptive control",
+      "focal_prediction": "Admissible excitation resolves actuator/force ambiguity and improves control beyond aggregate disturbance estimation",
+      "sources": [
+        "B2-S05",
+        "B2-S06",
+        "B2-S07",
+        "B2-S08"
+      ],
+      "strongest_rival": "MRAC/INDI or strong disturbance observer and ordinary recursive identification with matched sensors",
+      "independent_unit": "Full flight grouped by vehicle and disturbance family",
+      "priority": "Retained alternative; dynamics/identifiability skill and model requirements",
+      "critical_gap": "Actuator/payload model validation and identifiability under available observations",
+      "six_paper_independence": "Unproved; parameter/disturbance substitutions do not create separate papers"
+    },
+    {
+      "id": "B2-C3",
+      "chinese_title": "激光增材制造热记忆的物理约束学习",
+      "physical_object": "Laser scan heat accumulation, melt-pool geometry and scan process inputs",
+      "ai_mechanism": "Heat-equation baseline with learned source/residual and informative scan-condition selection",
+      "focal_prediction": "Learned thermal-memory correction adds prediction or process-decision value beyond calibrated transient diffusion",
+      "sources": [
+        "B2-S09",
+        "B2-S10",
+        "B2-S11",
+        "B2-S12"
+      ],
+      "strongest_rival": "Calibrated transient diffusion with phase change/temperature dependence",
+      "independent_unit": "Build/specimen and scan-protocol block, tracks nested",
+      "priority": "Recommended first investigation on physical manufacturing fit and measured-data entry",
+      "critical_gap": "Exact public measurement release and independent scan/build units; the physics baseline may eliminate the AI mechanism",
+      "six_paper_independence": "Unproved; separate-alloy/feedback extension unsupported until actual public measurements located"
+    },
+    {
+      "id": "B2-C4",
+      "chinese_title": "扰动制造车间的学习式重调度",
+      "physical_object": "Machines, precedence-constrained operations, changeovers and disrupted production events",
+      "ai_mechanism": "Small graph/context model decides when/how to invoke rules or bounded optimization",
+      "focal_prediction": "Learned trigger improves lateness/churn under identical information and total decision compute",
+      "sources": [
+        "B2-S13",
+        "B2-S14",
+        "B2-S15",
+        "B2-S16"
+      ],
+      "strongest_rival": "Event-driven rules with tuned bounded CP-SAT/local optimization",
+      "independent_unit": "Whole production instance/event stream, blocked by routing/disturbance family",
+      "priority": "CPU-conservative backup, not a numerical rank",
+      "critical_gap": "Auditable causal event simulator and fair classical comparison; synthetic external validity",
+      "six_paper_independence": "Unproved; generator, size and failure-rate variations are not standalone contributions"
+    },
+    {
+      "id": "B2-C5",
+      "chinese_title": "载荷改变运动约束的多机器人协作",
+      "physical_object": "Repeated transport by loaded/unloaded differential-drive robots with changing swept footprints",
+      "ai_mechanism": "Payload-conditioned learned congestion/priority guidance coupled to explicit motion planning",
+      "focal_prediction": "Learning adds value beyond a correctly payload-aware kinodynamic/adaptive-search baseline",
+      "sources": [
+        "B2-S17",
+        "B2-S18",
+        "B2-S19",
+        "B2-S20"
+      ],
+      "strongest_rival": "Strong kinodynamically feasible lifelong search with adaptive guidance",
+      "independent_unit": "Whole map/task-stream/dynamics-family run; agents and timesteps dependent",
+      "priority": "Retained autonomy option with direct nearest-neighbor overlap",
+      "critical_gap": "Changing payload geometry must create a separate mechanism; fair CPU-comparable recent baselines",
+      "six_paper_independence": "Especially premature; rotation, robust guidance and hybrid search already strongly covered"
+    },
+    {
+      "id": "B2-C6",
+      "chinese_title": "有限元校正的AI机械结构设计",
+      "physical_object": "Planar load-bearing bracket/continuum, mechanical constraints and boundary/load transfer",
+      "ai_mechanism": "Compact learned warm starts/updates corrected and checked by independent FE optimization",
+      "focal_prediction": "Total speed benefit survives generation/training/correction costs and final refined-mesh constraints",
+      "sources": [
+        "B2-S21",
+        "B2-S22",
+        "B2-S23",
+        "B2-S24"
+      ],
+      "strongest_rival": "Tuned classical continuation/warm starts and nearest-neighbor/reused design",
+      "independent_unit": "Geometry/boundary/load problem family; mesh elements/iterations dependent",
+      "priority": "Retained transparent mechanics/FE option",
+      "critical_gap": "Stress-solver validity, mesh convergence, fair total compute and novelty beyond neural architecture substitution",
+      "six_paper_independence": "Unproved; OOD/solver and constraint extensions may be one method paper"
+    }
+  ],
+  "preference_assessment": {
+    "weights": {
+      "funded_position_supply": 0.25,
+      "job_market_and_salary": 0.25,
+      "future_growth_potential": 0.15,
+      "phd_position_competition": 0.075,
+      "job_market_competition": 0.075,
+      "background_fit": 0.1,
+      "application_route_fit": 0.1
+    },
+    "numeric_scores_assigned": false,
+    "weighted_winner_computed": false,
+    "priority_basis": "Explicit new AI/physical-engineering interests, reported mechanical/data-analysis background and traceable public entry points only",
+    "unknowns": [
+      "Eligible funded-position supply",
+      "Comparable employment/salary",
+      "Medium-term growth evidence",
+      "PhD/job competition denominators",
+      "Exact admission/credential/route eligibility",
+      "Measured cloud feasibility and six-paper depth"
+    ]
+  },
+  "stopping_and_limits": [
+    "No nineteenth public-source command used.",
+    "No complete paper/PDF/supplement package read; all reading levels distinguish indexed text, actual abstract and documentation.",
+    "No native writer/planner/critic receipt, exact session API identity, formal originality finding or topic decision supplied.",
+    "No public data or simulator is already version-frozen/fit-validated by discovery.",
+    "All six candidates contain a smallest falsification test, strongest rival, independent-unit/leakage handling, resource stop line and six-slot merging risk.",
+    "Six candidate directions must not be mixed into six unrelated thesis papers.",
+    "Laboratory, hardware and GPU extensions cannot substantiate the current cloud-only papers.",
+    "No claim about Q1/Q2 achievement, funded admission or employment; no replacement deadline invented."
+  ]
+}
