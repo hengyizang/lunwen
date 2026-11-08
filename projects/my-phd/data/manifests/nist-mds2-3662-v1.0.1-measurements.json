@@ -3,7 +3,7 @@
   "dataset_id": "nist-mds2-3662-v1.0.1-measurements",
   "title": "Dataset for Model Validation of Transient Melt Pool Dynamics in Laser Powder Bed Fusion of Nickel Super Alloy 625: Top Surface Melt Pool Width and Area Measurements from Beam on Plate Experiments — Measurements.xlsx",
   "provider": "National Institute of Standards and Technology (NIST)",
-  "source_url": "https://data.nist.gov/od/id/mds2-3662",
+  "source_url": "https://data.nist.gov/od/id/ark:/88434/mds2-3662/pdr:v/1.0.1",
   "doi": "10.18434/mds2-3662",
   "version": "1.0.1",
   "accessed_at": "2026-11-08",
@@ -16,36 +16,49 @@
     "notes": "Observed provider licence URL only. Rights verification is optional metadata; no human licence confirmation or new pre-use approval is asserted."
   },
   "download": {
-    "url": "https://data.nist.gov/od/ds/mds2-3662/Measurements.xlsx",
+    "url": "https://data.nist.gov/od/ds/mds2-3662/_v/1.0.1/Measurements.xlsx",
     "sha256": "9e21a77f0c526aa0a913a3f14e2bba7b36640b0fd319febcf8ebfdc9dd5d0edf",
     "expected_bytes": 376701,
     "filename": "Measurements.xlsx"
   },
   "provenance": {
-    "collection_method": "Unmodified provider distribution listed in NIST mds2-3662 metadata version1.0.1; preparation for existing owner cloud acquisition only.",
+    "collection_method": "Original provider distribution enumerated by official NIST version1.0.1 metadata, retrieved2026-11-08. Revised acquisition request only; payload not retrieved by this follow-up.",
     "transformations": [],
     "source_metadata": {
-      "url": "https://data.nist.gov/od/id/mds2-3662",
+      "url": "https://data.nist.gov/od/id/ark:/88434/mds2-3662/pdr:v/1.0.1",
       "observed_at": "2026-11-08",
-      "sha256": "25b11304480ddffbbb92775057b9b3cccb500a45dd8f4000f047cb8c67953f44",
+      "sha256": "75a9a0a750e78f684170a8c85fdc1842601598275f0635a520e5bce1ff08cba2",
       "component_id": "cmps/Measurements.xlsx",
       "access_level": "public",
       "version_landing_advertised": "https://data.nist.gov/od/id/ark:/88434/mds2-3662/pdr:v/1.0.1",
-      "version_landing_separately_fetched": false
+      "version_landing_separately_fetched": true,
+      "previous_unversioned_metadata_sha256": "25b11304480ddffbbb92775057b9b3cccb500a45dd8f4000f047cb8c67953f44"
     },
     "purpose": "Candidate data-feasibility inspection only; G1/G2 unapproved; no LPBF topic selection, fit, experiment or statistical analysis.",
     "privacy": "Provider describes a public material/process benchmark. Raw payload content has not been inspected; absence of personal/sensitive fields has not been certified.",
     "leakage": "Independent specimen/scan/track/operator relationships remain unknown. No training, test or calibration split is selected.",
-    "known_access": "Official metadata was retrieved. Earlier README requests at two official routes returned HTTP500. Neither target payload has been requested in this preparation task; respect any returned access restriction."
+    "known_access": "Run42484792258 failed opening the unversioned Measurements response with HTTP500; its second scan-strategy item was not reached. The official version metadata GET returned HTTP200 and explicitly advertised these versioned URLs. No versioned payload URL has been requested by this follow-up; preserve access restrictions and failures.",
+    "prior_attempt": {
+      "run_id": "42484792258",
+      "run_url": "https://github.com/hengyizang/lunwen/actions/runs/42484792258",
+      "state_commit": "6491f6ac58477575a17eb55c67610c679d4a5264",
+      "artifact_id": 13618628750,
+      "artifact_sha256": "c3b858f23d5565592cb7d82e6bbcfa90407d931b08ed22582eeaeb9ce97dabd3",
+      "prior_manifest_sha256": "7483d719d51962e15c64922b37cc43a76e8b5f01f522647ec0a409c9f66a3b13",
+      "prior_download_url": "https://data.nist.gov/od/ds/mds2-3662/Measurements.xlsx",
+      "status": "HTTP500 before payload acquisition",
+      "http_status": 500
+    }
   },
   "unit_of_analysis": "Unknown physical specimen/scan/track/operator mapping. This manifest identifies one acquisition file, not an independent statistical unit.",
   "split_strategy": "Unspecified at G1 feasibility stage. Do not randomly split records or count rows, tracks, files or repeated operator measurements as independent specimens.",
   "known_limitations": [
     "Only provider metadata is verified; these expected payload hashes/sizes are provider advertised, not independently verified raw acquisitions.",
-    "The versioned landing page is advertised in provider metadata but was not separately fetched. Download URLs may be mutable; hash/size mismatch must fail without substituting another version.",
+    "The official version1.0.1 metadata page was read, but its versioned payload distribution has not been requested or independently verified. Hash/size mismatch must fail without substitution.",
     "Raw workbook/ZIP schema, ID correspondence and independent specimen count remain unknown.",
     "Two file manifests refer to one physical benchmark and do not establish two independent samples.",
     "No 495271476-byte Image Data.zip is requested. Missing image context may limit later feasibility inspection.",
-    "No model fit, scientific experiment, statistical result, data-quality confirmation or topic decision is authorized by this file."
+    "No model fit, scientific experiment, statistical result, data-quality confirmation or topic decision is authorized by this file.",
+    "The prior unversioned Measurements acquisition failedHTTP500; Scan Strategy was not executed in that run. This URL correction is a proposed transport retry, not evidence that either payload is available."
   ]
 }
