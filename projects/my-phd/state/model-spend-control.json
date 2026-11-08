@@ -48,19 +48,6 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
-    "e2a0d4596aa74f818ac8687fa87c4899": {
-      "at": "2026-11-08T09:20:06+00:00",
-      "max_cost_cny": 2.0975472,
-      "paper_id": null,
-      "run_id": "public-review-42466625506-domain-1",
-      "transport": {
-        "credential_sha256": "4b5af83616d7fa44b5ada1a0806dc9426715e86c116aa1d1c61d0cba5dbd3e60",
-        "endpoint": "https://codekey.ai/v1/messages",
-        "lease_id": "36f39e07cd1c4adfbf2418ca1c2a925a",
-        "model": "claude-opus-5-5",
-        "provider": "codekey-kiro-enterprise"
-      }
-    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
@@ -261,9 +248,14 @@
       "actual_cost_cny": 0.3947136,
       "cost_basis": "verified_gateway_debit",
       "receipt_id": "e299720511484262937503ef0c556794"
+    },
+    {
+      "actual_cost_cny": 0.668094,
+      "cost_basis": "verified_gateway_debit",
+      "receipt_id": "e2a0d4596aa74f818ac8687fa87c4899"
     }
   ],
-  "spent_cny": 1.03146656,
+  "spent_cny": 1.69956056,
   "tranche_cny": 300,
   "unsent_events": [
     {
