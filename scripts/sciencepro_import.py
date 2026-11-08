@@ -105,10 +105,11 @@ def import_export(project: Path, source: Path, actor: str) -> tuple[Path, dict[s
         "required_follow_up": [
             "Verify DOI and bibliographic metadata through Crossref/OpenAlex.",
             "Verify every claim against the cited primary source and exact location.",
-            "Confirm license, privacy, research-use terms and dataset provenance.",
+            "Verify source/version, dataset provenance, privacy and known access restrictions; licence/research-use review is optional metadata, not a pre-use gate.",
             "Do not cite this receipt as a scientific source.",
         ],
-        "human_review_required": True,
+        "human_review_required": False,
+        "independent_scientific_review_required": True,
     }
     output = project / "evidence" / "sciencepro" / f"{receipt_id}.json"
     write(output, report)

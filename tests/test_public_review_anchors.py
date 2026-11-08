@@ -116,6 +116,20 @@ class PublicReviewAnchorTests(unittest.TestCase):
             with self.subTest(rows=rows), self.assertRaises(ValueError):
                 corpus.calibration_predictions(json.dumps({"anchor_labels": rows}), cases)
 
+    def test_explicit_output_capacity_binds_scope_plan_and_price_without_changing_default(self):
+        batch = {"prompt": "Complete source fixture", "cases": [{"case_id": "a", "case_sha256": "a" * 64}]}
+        with patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_CLOUD_EXECUTOR": "1"}):
+            default = corpus.calibration_plan([batch], "domain")[0]
+            with model_routing.public_review_calibration_route("domain", "a" * 64, max_output_tokens=12000):
+                route = model_routing.select("auxiliary", "independent-critique")
+                enlarged = corpus.calibration_plan([batch], "domain", route, max_output_tokens=12000)[0]
+                self.assertEqual(route["validation_scope"]["max_output_tokens"], 12000)
+                with self.assertRaisesRegex(ValueError, "cap differ"):
+                    corpus.calibration_plan([batch], "domain", route)
+            self.assertEqual(model_routing.select("writing-and-review", "independent-critic-panel-domain")["max_output_tokens"], 4000)
+        self.assertEqual((default["max_output_tokens"], enlarged["max_output_tokens"]), (4000, 12000))
+        self.assertAlmostEqual(enlarged["reserved_upper_bound_cny"] - default["reserved_upper_bound_cny"], .056)
+
     def test_calibration_holdout_baseline_uses_training_only_and_missing_coverage_stays_unknown(self):
         anchors = [{"id": "a", "partition": "calibration", "label": "solid"},
                    {"id": "b", "partition": "holdout", "label": "convincing"}]
@@ -158,6 +172,8 @@ class PublicReviewAnchorTests(unittest.TestCase):
             return {"public_papers": 2}
         def synthetic_call(project, **request):
             route = model_routing.select("auxiliary", "independent-critique")
+            self.assertEqual(request["max_output_tokens"], 12000)
+            self.assertEqual(route["max_output_tokens"], 12000)
             ledger = project / "state/model-usage.jsonl"; ledger.parent.mkdir(parents=True, exist_ok=True)
             row = {"run_id": request["run_id"], "requested_model": request["model"], "provider": request["provider"],
                    "route_id": route["route_id"], "prompt_sha256": hashlib.sha256(request["prompt"].encode()).hexdigest(),
@@ -165,7 +181,7 @@ class PublicReviewAnchorTests(unittest.TestCase):
             ledger.write_text(json.dumps(row) + "\n")
             return ai_providers.ModelResult(provider=request["provider"], model=request["model"], reported_model=request["model"],
                 text='{"anchor_labels":[]}', usage={}, requested_effort="high", route_id=route["route_id"],
-                routing_policy_sha256=route["policy_sha256"])
+                routing_policy_sha256=route["policy_sha256"], response_metadata={"metadata_only":True,"diagnostics":{"stop_reason":"end_turn"}})
         env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1",
                "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}
         with patch.dict(os.environ, env), patch.object(corpus, "__file__", str(self.root / "scripts/public_review_anchors.py")), \
@@ -175,17 +191,19 @@ class PublicReviewAnchorTests(unittest.TestCase):
              patch.object(model_runtime, "budget_status", return_value={"project_remaining": 500}), \
              patch.object(model_runtime, "call", side_effect=synthetic_call) as execute:
             with self.assertRaisesRegex(ValueError, "omitted"):
-                corpus.run_calibration(destination.parents[2], destination, "c" * 64, seat="domain", execute=True)
+                corpus.run_calibration(destination.parents[2], destination, "c" * 64, seat="domain", execute=True, max_output_tokens=12000)
         execute.assert_called_once()
         report = json.loads(destination.read_text())
         self.assertEqual(report["status"], "partial_failed_no_retry")
         self.assertEqual(report["model_predictions"], 0)
+        self.assertTrue(all(row["max_output_tokens"] == 12000 for row in report["model_plan"]))
         self.assertEqual(report["accounting"]["accounted_amount_cny"], .4)
         self.assertFalse(report["accounting"]["provider_fee_fully_verified"])
         attempt = report["attempt_receipts"][0]
         self.assertEqual(attempt["status"], "response_received")
         response = self.root / ".runtime/cloud-artifact" / attempt["response_artifact"]
         self.assertEqual(corpus.sha(response), attempt["response_sha256"])
+        self.assertEqual(json.loads(response.read_text())["provider_response_metadata"]["diagnostics"]["stop_reason"], "end_turn")
 
     def test_retained_live_manifest_has_24_distinct_licensed_partitioned_papers(self):
         path = Path(__file__).resolve().parents[1] / "docs/acceptance/elife-public-anchors-2026-11-07.json"

@@ -1,5 +1,6 @@
 """Synthetic contracts exercise source boundaries, never scientific judgments."""
 import copy
+import json
 import os
 import unittest
 from unittest.mock import patch
@@ -173,6 +174,66 @@ class ClaimEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "same complete current manuscript citation scope"):
             claims.prepare(self.project, self.spec)
 
+    def test_opposite_tex_or_word_formulas_cannot_share_one_support_judgment(self):
+        import zipfile
+        for kind in ("tex", "docx"):
+            with self.subTest(kind=kind):
+                if kind == "tex":
+                    path = self.paper / "main.tex"
+                    path.write_text(r"Recorded mechanism satisfies $x \leq y$.\cite{known}" + "\n"
+                        + r"Recorded mechanism satisfies $x \not\leq y$.\cite{known}")
+                else:
+                    (self.paper / "main.tex").unlink()
+                    path = self.paper / "main.docx"
+                    xml = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+                        'xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><w:body>'
+                        + ''.join('<w:p><w:r><w:t>Recorded mechanism satisfies </w:t></w:r><m:oMath><m:r><m:t>'
+                            + operator + '</m:t></m:r></m:oMath><w:r><w:t>. [@known]</w:t></w:r></w:p>'
+                            for operator in ('x ≤ y', 'x &gt; y')) + '</w:body></w:document>')
+                    with zipfile.ZipFile(path, "w") as archive: archive.writestr("word/document.xml", xml)
+                    self.spec["claims"][0]["claim"] = "Recorded mechanism satisfies."
+                    with self.assertRaisesRegex(ValueError, "same complete current manuscript citation scope"):
+                        claims.prepare(self.project, self.spec)
+                uses = claims.manuscript_usages(self.project, "P01")
+                self.spec["claims"] = [{**self.spec["claims"][0], "claim_id": "C0", "claim": uses[0]["claim_text"]}]
+                write(self.project / "program/claim-evidence.json", self.spec)
+                write(self.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+                    "request_file": "program/claim-evidence.json", "paper_id": "P01", "stages": ["writing-and-review"]}]})
+                self.assertEqual(len(claims.prepare(self.project, self.spec)["uncovered_usages"]), 1)
+                with patch.object(tasks, "judgment_responses", return_value=[self.response("supports")]):
+                    self.assertTrue(any("uncovered citation use" in error
+                        for error in tasks.integrity_errors(self.project, "P01", require_support=True)))
+                self.spec["claims"].append({**self.spec["claims"][0], "claim_id": "C1", "claim": uses[1]["claim_text"]})
+                write(self.project / "program/claim-evidence.json", self.spec)
+                response = self.response("supports")
+                response["response"]["claim_evidence"].append({**response["response"]["claim_evidence"][0], "claim_id": "C1"})
+                with patch.object(tasks, "judgment_responses", return_value=[response]):
+                    self.assertEqual(tasks.integrity_errors(self.project, "P01", require_support=True), [])
+
+    def test_body_support_does_not_clear_a_different_assertion_in_a_word_note(self):
+        import zipfile
+        (self.paper / "main.tex").unlink()
+        w = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+        for kind in ("footnote", "endnote"):
+            document = ('<w:document xmlns:w="' + w + '"><w:body><w:p><w:r><w:t>'
+                + self.spec["claims"][0]["claim"] + ' [@known]</w:t></w:r><w:r><w:'
+                + kind + 'Reference w:id="1"/></w:r></w:p></w:body></w:document>')
+            note = ('<w:' + kind + 's xmlns:w="' + w + '"><w:' + kind + ' w:id="1"><w:p><w:r><w:t>'
+                'A different unchecked note assertion. [@known]</w:t></w:r></w:p></w:' + kind + '></w:' + kind + 's>')
+            with zipfile.ZipFile(self.paper / "main.docx", "w") as archive:
+                archive.writestr("word/document.xml", document)
+                archive.writestr("word/" + kind + "s.xml", note)
+            write(self.project / "program/claim-evidence.json", self.spec)
+            write(self.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+                "request_file": "program/claim-evidence.json", "paper_id": "P01", "stages": ["writing-and-review"]}]})
+            packet = claims.prepare(self.project, self.spec)
+            self.assertEqual(len(packet["citation_usages"]), 2)
+            self.assertEqual(len(packet["uncovered_usages"]), 1)
+            self.assertEqual(packet["uncovered_usages"][0]["source"]["part"], "word/" + kind + "s.xml")
+            with patch.object(tasks, "judgment_responses", return_value=[self.response("supports")]):
+                self.assertTrue(any("uncovered citation use" in error
+                    for error in tasks.integrity_errors(self.project, "P01", require_support=True)))
+
     def test_unsupported_citation_syntax_cannot_be_mistaken_for_no_citations(self):
         (self.paper / "main.tex").write_text(r"The source claim.\autocites{known}", encoding="utf-8")
         with self.assertRaisesRegex(citation_audit.CitationAuditError, "explicit literal citation-key"):
@@ -253,7 +314,7 @@ class ClaimEvidenceTests(unittest.TestCase):
             "reported_model": "fixture", "completion_status": "completed", "cache_hit": False}
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             review_receipts.seal_phase(self.project, stage="writing-and-review", run_id="sample-cycle", phase="observation",
-                audit_path=audit_path, prompt="Synthetic source packet without answer labels", identity=identity,
+                audit_path=audit_path, prompt=json.dumps(tasks.selected_context(self.project, "writing-and-review", "P01"), ensure_ascii=False), identity=identity,
                 writer_family="openai", materials=review_receipts.material_snapshot(self.project, "writing-and-review", "P01"))
         before = claims.build(self.project, self.spec)
         self.assertIsNone(before["spot_check"]["agreement"])

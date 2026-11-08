@@ -1,4 +1,4 @@
-"""Sealed empirical estimates, complete tables and source-located manuscript checks.
+"""Archive complete sealed estimates; check only declared manuscript statistics.
 
 No fit is launched here. Deterministic recomputation checks the reviewed runtime
 against actual approved outputs; scientific identification remains human work.
@@ -85,18 +85,61 @@ def table_bytes(rows):
     return stream.getvalue().encode("utf-8")
 
 
+def _presented_specifications(project, paper_id, rows):
+    """Trace explicit statistics and existing fact/claim sources, not shared numbers."""
+    from scripts.ref_verify_adapter import canonical_manuscript
+    from scripts.citation_audit import citation_prose, tex_source_paths
+    from scripts.manuscript_language import extract_text
+    paper = project / "papers" / paper_id
+    if not any((paper / "manuscript" / name).is_file() for name in ("main.tex", "main.docx")):
+        return set(), []
+    canonical = canonical_manuscript(paper)
+    sources = tex_source_paths(canonical) if canonical.suffix == ".tex" else [canonical]
+    if canonical.suffix == ".tex":
+        from scripts.tex_sources import expand
+        content = citation_prose(expand(canonical).text, tex=True)
+    else:content = citation_prose(extract_text(canonical))
+    fields = r"(?:estimate|standard[_ ]error|ci[_ ](?:low|high)|confidence[_ ]level|p[_ ](?:value|adjusted)|n[_ ](?:observations|units)|phase)"
+    presented = {row["specification_id"] for row in rows if re.search(
+        r"(?<![\w.-])" + re.escape(row["specification_id"]) + r"(?![\w.-])\s+" + fields + r"\s*[:=]", content, re.I)}
+    facts_path = paper / "reviews/paper-facts.json"
+    if facts_path.is_file():
+        sources = [*sources, facts_path]
+        facts = read(facts_path)
+        def quote(value):
+            value = citation_prose(str(value or ""), tex=True)
+            return value if re.search(r"\b[A-Za-z]{2,}\b|[\u4e00-\u9fff]", value) else ""
+        claims = facts.get("claim_alignment", [])
+        result_quotes = [quote(claim.get("sections", {}).get("results")) for claim in claims]
+        used = {key for claim, current in zip(claims, result_quotes)
+            if current and result_quotes.count(current) == 1 and current in content for key in claim.get("evidence_ids", [])}
+        statements = {}
+        for fact in facts.get("facts", []):
+            current = quote(fact.get("statement"))
+            if current:statements.setdefault(current, set()).add(fact.get("source_path"))
+        paths = {fact.get("source_path") for fact in facts.get("facts", []) if fact.get("id") in used or (
+            quote(fact.get("statement")) in content and statements.get(quote(fact.get("statement"))) == {fact.get("source_path")})}
+        presented.update(row["specification_id"] for row in rows if row["source"]["path"] in paths)
+    return presented, [{"path": source.relative_to(project).as_posix(), "sha256": sha(source)} for source in sorted(sources)]
+
+
 @paper_scoped
 def _map_errors(project, paper_id, rows, *, require_mapping):
     mapping_path = project/f"papers/{paper_id}/empirical-reporting-map.json"
     if not mapping_path.is_file():
-        return (["empirical manuscript reporting map is required"] if require_mapping else []), []
+        return (["empirical manuscript reporting map is required"] if require_mapping else []), [], []
     mapping = read(mapping_path)
     _need(mapping.get("paper_id") == paper_id and mapping.get("schema_version") == "1.0", "invalid empirical reporting map identity")
     indexed = {r["specification_id"]: r for r in rows}
     entries = mapping.get("specifications", [])
-    _need(isinstance(entries, list) and len(entries) == len(indexed)
-          and {r.get("id") for r in entries} == set(indexed), "report every registered specification, including adverse/exploratory results")
-    errors, inputs = [], [{"path": mapping_path.relative_to(project).as_posix(), "sha256": sha(mapping_path)}]
+    _need(isinstance(entries, list) and all(isinstance(row, dict) for row in entries), "reported specifications must be objects")
+    identifiers = [row.get("id") for row in entries]
+    _need(all(isinstance(identifier, str) for identifier in identifiers) and len(identifiers) == len(set(identifiers))
+          and set(identifiers) <= set(indexed), "reported specifications must be unique and registered")
+    presented, sources = _presented_specifications(project, paper_id, rows)
+    errors = [identifier + ": a presented empirical statistic or source-bound claim is missing from the reporting map"
+              for identifier in sorted(presented - set(identifiers))]
+    inputs = [{"path": mapping_path.relative_to(project).as_posix(), "sha256": sha(mapping_path)}, *sources]
     for item in entries:
         actual = indexed[item["id"]]
         fields = set()
@@ -134,18 +177,34 @@ def _map_errors(project, paper_id, rows, *, require_mapping):
             inputs.append({"path": relative, "sha256": sha(target)})
         if set(FIELDS) | {"phase"} != fields:
             errors.append(item["id"] + ": map every estimate, uncertainty, p-value, sample count and analysis phase")
-    return errors, inputs
+    return errors, inputs, identifiers
+
+
+def _archive(project, paper_id, result, *, create=False):
+    """Keep every registered result and specification outside manuscript exports."""
+    from scripts.experiment_evidence import comparison_archive
+    full = {key: result[key] for key in ("schema_version", "paper_id", "design_sha256", "registered_specifications", "diagnostics", "rows")}
+    report = comparison_archive(project, paper_id, full, create=create)
+    table = path_in(project, str(Path(report["path"]).with_name("empirical-estimates-" + report["sha256"] + ".csv")), exists=False)
+    payload = table_bytes(result["rows"])
+    if create and not table.exists():
+        table.write_bytes(payload)
+        record(project, [table], MODULE)
+    _need(table.is_file() and table.read_bytes() == payload, "complete empirical table archive is missing or changed")
+    return {"report": report, "table": {"path": table.relative_to(project).as_posix(), "sha256": sha(table)}}
 
 
 @paper_scoped
 def audit(project: Path, paper_id: str, *, require_mapping=False):
     _need(re.fullmatch(r"P[0-9]{2}", paper_id), "explicit paper ID required")
     result = {"schema_version": "1.0", "paper_id": paper_id, "status": "blocked", "errors": [], "rows": [],
+              "reported_specification_ids": [], "full_manuscript_semantic_coverage_verified": False,
               "implementation_sha256": sha(Path(__file__)), "scientific_validity_verified": False,
               "scientific_completion_verified": False, "paid_calls": 0}
     try:
         card = read(path_in(project, f"papers/{paper_id}/empirical-design.json"))
         result["design_sha256"] = sha(project/f"papers/{paper_id}/empirical-design.json")
+        result["registered_specifications"] = card["specifications"]
         result["diagnostics"] = _diagnostics(project, paper_id, card)
         for spec in card["specifications"]:
             measured_result = measured(project, paper_id, spec["id"])
@@ -161,9 +220,10 @@ def audit(project: Path, paper_id: str, *, require_mapping=False):
             for rank, row in enumerate(family):
                 adjusted = min(1.0, max(adjusted, row["p_value"] * (len(family)-rank)))
                 row["p_adjusted"] = adjusted
-        mapping_errors, inputs = _map_errors(project, paper_id, result["rows"], require_mapping=require_mapping)
+        mapping_errors, inputs, identifiers = _map_errors(project, paper_id, result["rows"], require_mapping=require_mapping)
         result["errors"].extend(mapping_errors)
         result["reporting_inputs"] = inputs
+        result["reported_specification_ids"] = identifiers
         result["status"] = "blocked" if result["errors"] else "ready_for_scientific_review"
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, ImportError) as exc:
         result["errors"].append(str(exc))
@@ -174,11 +234,23 @@ def audit(project: Path, paper_id: str, *, require_mapping=False):
 def refresh(project, paper_id, *, require_mapping=False):
     result = audit(project, paper_id, require_mapping=require_mapping)
     outputs = []
+    if result["rows"] and len(result["rows"]) == len(result.get("registered_specifications", [])):
+        result["complete_results_archive"] = _archive(project, paper_id, result, create=True)
     if not result["errors"]:
         table = path_in(project, f"papers/{paper_id}/tables/empirical-estimates.csv", exists=False)
-        table.parent.mkdir(parents=True, exist_ok=True)
-        table.write_bytes(table_bytes(result["rows"]))
-        outputs.append(table)
+        selected = [row for row in result["rows"] if row["specification_id"] in result["reported_specification_ids"]]
+        payload = table_bytes(selected) if selected else None
+        if table.is_file() and table.read_bytes() != payload:
+            prior = path_in(project, f"experiments/archive/{paper_id}/empirical-estimates-{sha(table)}.csv", exists=False)
+            if not prior.exists():prior.write_bytes(table.read_bytes())
+            _need(prior.read_bytes() == table.read_bytes(), "prior empirical table archive changed")
+            outputs.append(prior)
+        if selected:
+            table.parent.mkdir(parents=True, exist_ok=True)
+            table.write_bytes(payload)
+            outputs.append(table)
+        elif table.is_file():
+            table.unlink()
     target = path_in(project, f"reports/empirical-reporting/{paper_id}.json", exists=False)
     write(target, result)
     record(project, [target, *outputs], MODULE)
@@ -189,10 +261,15 @@ def refresh(project, paper_id, *, require_mapping=False):
 def validate_saved_report(project, paper_id, *, require_mapping=False):
     expected = audit(project, paper_id, require_mapping=require_mapping)
     errors = list(expected["errors"])
+    if expected["rows"] and len(expected["rows"]) == len(expected.get("registered_specifications", [])):
+        try:expected["complete_results_archive"] = _archive(project, paper_id, expected)
+        except (OSError, ValueError):errors.append("complete empirical archive is missing or changed")
     target = project/f"reports/empirical-reporting/{paper_id}.json"
     if not target.is_file() or read(target) != expected:
         errors.append("empirical reporting is missing or stale")
     table = project/f"papers/{paper_id}/tables/empirical-estimates.csv"
-    if not errors and (not table.is_file() or table.read_bytes() != table_bytes(expected["rows"])):
+    selected = [row for row in expected["rows"] if row["specification_id"] in expected["reported_specification_ids"]]
+    if not errors and ((selected and (not table.is_file() or table.read_bytes() != table_bytes(selected)))
+                       or (not selected and table.exists())):
         errors.append("empirical result table differs from current sealed estimates")
     return errors

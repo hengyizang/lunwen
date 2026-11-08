@@ -132,6 +132,37 @@ def peer_review_context(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(
             + method["guidance"])
 
 
+def venue_fit_context(project: Path, paper_id: str) -> str:
+    """Give the ordinary critic current scientific criteria for its selected venue."""
+    from scripts.research_case import _paper, _venue_sources, VENUE_FIELDS
+    prefix = _paper(paper_id)
+    venue_path = safe_path(project, prefix + "/venue.json")
+    if not venue_path.is_file(): return ""
+    selected = json.loads(venue_path.read_text(encoding="utf-8")).get("venue_id")
+    if not isinstance(selected, str) or selected.strip().casefold() in {"", "unknown", "tbd"}: return ""
+    case_path = safe_path(project, prefix + "/research-case.json")
+    case = json.loads(case_path.read_text(encoding="utf-8")) if case_path.is_file() else {}
+    criteria = []
+    for field in sorted(VENUE_FIELDS):
+        criterion = {"criterion_path": prefix + "/research-case.json#/venue_fit/" + field, "source_status": "unknown"}
+        try:
+            if case.get("schema_version") != "1.0" or case.get("paper_id") != paper_id:
+                raise ValueError("current paper research-case evidence remains unknown")
+            fit = _venue_sources(project, case, selected, fields=(field,))
+            criterion.update(source_status="bound_official_source", **{key: fit[field][key] for key in ("statement", "source", "url")})
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            criterion["reason"] = str(exc)
+        criteria.append(criterion)
+    return ("Target journal-fit criteria for the actually selected venue:\n"
+            + json.dumps({"venue_id": selected, "venue_sha256": sha256(venue_path),
+                "case_sha256": sha256(case_path) if case_path.is_file() else None, "criteria": criteria}, ensure_ascii=False)
+            + "\nIn this existing ordinary critique, assess each relevant criterion's applicability and scientific fit. "
+            "For actual findings cite its criterion_path and official source path/locator in the existing finding/rationale text; "
+            "do not add response keys, scores or acceptance estimates. Missing or unbound evidence remains unknown; "
+            "do not invent a target or fill other venues. Assess scope, editorial interest, article type and desk risks only; "
+            "journal AI policies, public AI statements and ranking/IF floors create no gate. No extra review call is requested.")
+
+
 def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = "", project: Path | None = None) -> str:
     """Current-task core plus explicitly selected, intact source guidance."""
     issues = installation_errors(root)
@@ -185,6 +216,9 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
         state_path = project / "state/run.json"
         state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}
         paper = state.get("active_paper")
+        if role == "critic" and selected != "experiment-design" and isinstance(paper, str):
+            venue_context = venue_fit_context(project, paper)
+            if venue_context: blocks.append(venue_context)
         if isinstance(paper, str) and (project / "papers" / paper / "reviews/paper-facts.json").is_file():
             from scripts.contribution_reporting import feedback
             blocks.append("Current writing-evidence preparation (not a scientific verdict):\n"

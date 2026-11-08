@@ -771,7 +771,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "The 24 frozen real public eLife papers retain the 16/8 split. Actual owner cloud run 42457860489 on f93ebe4 attempted CodeKey Opus once and returned no usable text; valid model predictions remain zero. The new CNY 2.0415472 reservation remains unknown, with the original three holds and CNY 500 ceiling unchanged. Its original provider response was lost by the old parser and cannot be retroactively invented. A failed attempt is not calibration. Independent human claim labels, >=0.85 agreement, should-merge detection, numerical-score calibration and domain transfer remain unverified; preserve nulls and current source bindings.",
+      "remaining": "The 24 frozen real eLife papers retain the 16/8 split. Actual CodeKey Opus attempts #134 and #142 produced no valid complete labels: no text, then a genuinely truncated JSON response. Their verified fees are CNY 0.3913704 and CNY 0.3947136. Original missing provider bodies/stop reasons cannot be retroactively invented. Actual G1 #144 acquired literature/dataset metadata with zero model calls, six searches still pending and no topic dossier or approval. The original three holds and CNY 500 ceiling are unchanged. Independent human claim labels, >=0.85 agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified; preserve nulls and source bindings.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]

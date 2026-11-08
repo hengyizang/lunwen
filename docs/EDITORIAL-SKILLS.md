@@ -84,6 +84,6 @@ The separate [automatic hygiene contract](MANUSCRIPT-HYGIENE.md) applies to ever
 
 Meaning-preserving prose revision may reduce statistical watermark signals, but neither it nor character cleaning verifies watermark absence without the applicable detector/key. Receipts retain `not_assessed` for KGW and SynthID-Text.
 
-Image pixel regeneration, experimental-image alteration, C2PA/source stripping and media watermark removal are outside this manuscript-text integration. Required AI disclosure and internal traceability remain intact.
+Image pixel regeneration, experimental-image alteration, C2PA/source stripping and media watermark removal are outside this manuscript-text integration. Public AI-use statements remain author-editable; truthful internal traceability stays protected.
 
 Cloud regressions cover all 26 Humanizer items, legal scientific exceptions, anti-defensive source coverage, real character removal, scientific/code protection, genuine DOCX preservation, forged receipts, source changes, path limits, writer protections and operation reuse. These are engineering checks, not an “AI percentage”, scientific calibration or doctoral/Q1 acceptance guarantee.

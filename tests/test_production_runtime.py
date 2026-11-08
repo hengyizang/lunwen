@@ -12,6 +12,7 @@ import hashlib
 import json
 from pathlib import Path
 import tempfile
+import time
 import unittest
 import urllib.error
 from unittest.mock import patch
@@ -77,6 +78,37 @@ class ProductionRuntimeTests(unittest.TestCase):
     def counter(self, requests=10, cost=0.02):
         return {"provider": "codekey-deepseek", "kind": "codekey_total_actual_cost",
                 "requests": requests, "cost_cny": cost}
+
+    def test_explicit_validation_capacity_reaches_provider_and_restores_production_ceiling(self):
+        from scripts import model_routing
+        state = {"active_paper": "P01", "stage": "topic-intelligence", "gate": "G1",
+                 "status": "awaiting_work", "approved_gates": ["G0"]}
+        (self.project / "state/run.json").write_text(json.dumps(state))
+        payload = {"id": "fixture-capacity", "model": "claude-opus-5-5", "stop_reason": "end_turn",
+                   "content": [{"type": "text", "text": "fixture answer"}],
+                   "usage": {"input_tokens": 100, "output_tokens": 20}}
+        with patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}), \
+             patch.object(ai_providers, "_production_request", return_value=payload) as post, \
+             patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}), \
+             patch.object(relay_billing, "settle", return_value=self.debit()):
+            with model_routing.public_review_calibration_route("domain", "a" * 64, max_output_tokens=12000):
+                self.call(run_id="fixture-capacity-calibration", stage="auxiliary", role="independent-critique",
+                          provider="anthropic", max_output_tokens=12000, use_cache=False,
+                          task_profile={"task_class": "public-review-calibration", "science_risk": "critical", "priority": "quality"})
+                self.assertEqual(post.call_args.args[2]["max_tokens"], 12000)
+            with self.assertRaisesRegex(RuntimeError, "fixture failure"):
+                with model_routing.g1_transport_validation_route(self.project, "b" * 64, max_output_tokens=12000):
+                    self.call(run_id="fixture-capacity-g1", stage="topic-intelligence", role="semantic-planner",
+                              provider="anthropic", max_output_tokens=12000, use_cache=False,
+                              task_profile={"task_class": "g1-transport-validation", "science_risk": "critical", "priority": "quality"})
+                    self.assertEqual(post.call_args.args[2]["max_tokens"], 12000)
+                    self.assertEqual(model_routing.select("topic-intelligence", "persistent-writer")["max_output_tokens"], 12000)
+                    raise RuntimeError("fixture failure")
+            self.assertEqual(model_routing.select("auxiliary", "independent-critique")["max_output_tokens"], 4000)
+            self.assertEqual(model_routing.select("topic-intelligence", "semantic-planner")["max_output_tokens"], 4000)
+            self.assertEqual(model_routing.select("topic-intelligence", "persistent-writer")["provider"], "cheapai-gpt-pro")
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(json.loads((self.project / "state/run.json").read_text()), state)
 
     def test_seven_models_forward_exact_channel_model_and_effort(self):
         cases = [
@@ -352,6 +384,24 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.assertEqual(model_spend.read(self.project)["spent_cny"], .001)
         self.assertFalse((self.project / ".cache/model-responses").exists())
         post.assert_called_once()
+
+    def test_caller_json_failure_retains_protocol_stop_reason_and_hash_metadata_in_runtime_receipt(self):
+        response = {"model": "claude-opus-5-5", "id": "synthetic-valid-protocol", "stop_reason": "end_turn",
+            "content": [{"type": "thinking", "thinking": "PRIVATE_THOUGHT"},
+                        {"type": "text", "text": '{"anchor_labels":[{"rationale":"'}],
+            "usage": {"input_tokens": 100, "output_tokens": 30}}
+        with (patch.object(ai_providers, "_production_request", return_value=response),
+              patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+              patch.object(relay_billing, "settle", return_value=self.debit(.001))):
+            result = self.call(stage="auxiliary", role="independent-critique", provider="anthropic")
+        with self.assertRaises(json.JSONDecodeError):
+            json.loads(result.text)
+        metadata = model_runtime.ledger_entries(self.project)[0]["provider_response_metadata"]
+        self.assertEqual(metadata, result.response_metadata)
+        self.assertEqual(metadata["diagnostics"]["stop_reason"], "end_turn")
+        self.assertEqual(metadata["diagnostics"]["usage"]["output_tokens"], 30)
+        self.assertIsNone(metadata["http_evidence"]["raw_http_body_sha256"])
+        self.assertNotIn("PRIVATE_THOUGHT", json.dumps(metadata))
 
     def test_failed_scientific_response_stays_failed_after_verified_fee_and_failed_persistence(self):
         error = ai_providers.ProviderError("production response rejected")

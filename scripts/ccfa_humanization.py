@@ -10,11 +10,10 @@ import json
 import os
 import re
 import types
-from collections import Counter
 from pathlib import Path
 
 from scripts import defensive_review, humanizer_review
-from scripts.scientific_editing import NUMBER, context_changes
+from scripts.scientific_editing import NUMBER
 
 ROOT = Path(__file__).resolve().parents[1]
 COMMIT = "f157d7ed2777b655809471873b32b9632e784cfa"
@@ -144,20 +143,6 @@ def validate_dispositions(notes: list[str], stage: str | None = None, *, include
     return sorted(records, key=lambda row: row["id"])
 
 
-def validate_disposition_records(records: list[dict], stage: str | None = None) -> list[dict]:
-    """Structured adapter for the same optional observation format."""
-    if stage not in {None, "G5", "writing-and-review"}:
-        return []
-    if not isinstance(records, list) or len(records) > 1000 or any(not isinstance(row, dict) for row in records):
-        raise ValueError("CCFA humanization review records need bounded objects")
-    notes = []
-    for row in records:
-        if not all(isinstance(row.get(field), str) for field in ("id", "disposition", "reason")):
-            raise ValueError("CCFA humanization record needs id, disposition and contextual reason")
-        notes.append(f"{row['disposition']}: {row['id']} {row['reason']}")
-    return validate_dispositions(notes, stage)
-
-
 def prompt_sources(stage: str, root: Path = ROOT, *, full: bool = False) -> list[dict]:
     """Keep the baseline universal; select detailed modes for the actual work."""
     if not full:return []
@@ -238,31 +223,6 @@ def _protected(text: str) -> dict:
             "semantic_preservation_proven": False}
 
 
-def compare_edit(before: str, after: str) -> dict:
-    """Conservative evidence-drift candidates; never proof of equivalence."""
-    for value in (before, after):
-        if not isinstance(value, str) or len(value) > MAX_TEXT:
-            raise ValueError("bounded before/after text required")
-    left, right = _protected(before), _protected(after)
-    changes = {}
-    for field in ("numbers", "citations", "formulae", "material_sentences"):
-        removed = list((Counter(left[field]) - Counter(right[field])).elements())
-        added = list((Counter(right[field]) - Counter(left[field])).elements())
-        if removed or added:
-            changes[field] = {"removed": removed, "added": added}
-    immutable_left = Counter((span["kind"], span["sha256"]) for span in left["immutable_spans"])
-    immutable_right = Counter((span["kind"], span["sha256"]) for span in right["immutable_spans"])
-    if immutable_left != immutable_right:
-        changes["immutable_spans"] = {"removed": list((immutable_left - immutable_right).elements()),
-                                      "added": list((immutable_right - immutable_left).elements())}
-    context = context_changes(before, after)
-    if context["removed"] or context["added"]:
-        changes["scientific_context"] = context
-    return {"before_sha256": _sha(before), "after_sha256": _sha(after),
-            "protected_drift_candidates": changes, "requires_contextual_review": bool(changes),
-            "semantic_preservation_proven": False, "automatic_rewrite": False}
-
-
 def audit_text(text: str, raw_text: str | None = None, *, scope: str = "paper",
                format_policy: dict | None = None, root: Path = ROOT) -> dict:
     if not isinstance(text, str) or len(text) > MAX_TEXT:
@@ -292,70 +252,6 @@ def audit_text(text: str, raw_text: str | None = None, *, scope: str = "paper",
             "semantic_review_required": True, "scientific_validity_verified": False,
             "authorship_detection": False, "watermark_absence_claim": False,
             "model_calls": 0, "manuscript_modified": False}
-
-
-def experiment_review(methods: list[dict], smoke_checks: list[dict] | None = None) -> dict:
-    """Check supplied publication-use labels, never grant experiment approval.
-
-    This is an editorial consistency sidecar to existing approved protocol/run,
-    reproduction and statistics validators. Self-declared confirmation is not
-    proof that a method ran or a full configuration was independently verified.
-    """
-    if not isinstance(methods, list) or len(methods) > 200 or any(not isinstance(row, dict) for row in methods):
-        raise ValueError("bounded explicit method records required")
-    findings, scopes = [], []
-    for row in methods:
-        identifier, kind = row.get("id"), row.get("use")
-        if not isinstance(identifier, str) or not identifier or kind not in {
-                "reported_full_method", "planned", "cited", "ablation", "controlled_study", "smoke"}:
-            raise ValueError("method needs an ID and truthful use")
-        missing = []
-        if kind == "reported_full_method":
-            for field in ("implementation_source", "revision", "full_configuration", "dataset_split",
-                          "method_identity", "confirmation_source", "run_ids"):
-                if not row.get(field):
-                    missing.append(field)
-            if row.get("status") != "confirmed" or row.get("development_substitute") is True:
-                missing.append("actual_full_method_record")
-        elif kind == "ablation":
-            for field in ("full_reference", "changed_component", "ablation_label", "run_ids"):
-                if not row.get(field):
-                    missing.append(field)
-            if row.get("presented_as_main_method") is True:
-                missing.append("ablation_not_main_method")
-        elif kind == "controlled_study":
-            for field in ("specified_protocol", "controls", "run_ids", "scoped_interpretation"):
-                if not row.get(field):
-                    missing.append(field)
-            if row.get("development_substitute") is True:
-                missing.append("debug_run_cannot_be_relabelled")
-        elif kind == "smoke" and row.get("publication_evidence") is True:
-            missing.append("smoke_is_engineering_only")
-        if missing:
-            findings.append({"method_id": identifier, "use": kind, "missing_or_inconsistent": missing,
-                             "dependent_comparison_requires_resolution": True})
-        scopes.append({"method_id": identifier, "use": kind,
-                       "full_method_gate_applicable": kind == "reported_full_method"})
-    smoke_checks = [] if smoke_checks is None else smoke_checks
-    if not isinstance(smoke_checks, list) or len(smoke_checks) > 200 or any(not isinstance(row, dict) for row in smoke_checks):
-        raise ValueError("bounded smoke records required")
-    seen = set()
-    for check in smoke_checks:
-        path = check.get("critical_path")
-        unmet = [key for key in ("changed_path", "realistic_failure", "distinct_signal", "cheaper_than_validation",
-                                 "outcome_changes_next_action") if check.get(key) is not True]
-        if not isinstance(path, str) or not path:
-            unmet.append("critical_path")
-        elif path in seen:
-            unmet.append("duplicate_critical_path")
-        else:
-            seen.add(path)
-        if unmet:
-            findings.append({"smoke_id": check.get("id"), "unmet_retention_conditions": unmet,
-                             "action": "contextually_remove_or_explain_distinct_coverage"})
-    return {"findings": findings, "method_scopes": scopes, "scientific_validity_verified": False,
-            "existing_experiment_gates_required": True, "execution_authorized": False,
-            "smoke_is_scientific_evidence": False}
 
 
 def _cloud() -> None:

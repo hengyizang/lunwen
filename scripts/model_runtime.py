@@ -616,6 +616,7 @@ def call(
                 completion_status=cached.get("completion_status"),
                 requested_effort=reasoning_effort,
                 attachment_sha256=tuple(item["sha256"] for item in media_identity),
+                response_metadata=cached.get("provider_response_metadata"),
             )
         except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
             result = None  # type: ignore[assignment]
@@ -646,6 +647,7 @@ def call(
                     "billing_identity": identity["billing_identity"],
                     "billing_quote_sha256": identity["billing_quote_sha256"],
                     "declared_tool_limits": limits,
+                    "provider_response_metadata": result.response_metadata,
                 },
             )
             return result
@@ -756,6 +758,8 @@ def call(
         })
         raise
     request_metrics["duration_seconds"] = round(time.monotonic() - request_started, 6)
+    if isinstance(getattr(result, "response_metadata", None), dict):
+        request_metrics["provider_response_metadata"] = result.response_metadata
     result.route_id = route.get("route_id")
     result.dynamic_candidate_id = request_metrics["dynamic_candidate_id"]
     result.routing_policy_sha256 = route.get("policy_sha256")
@@ -867,6 +871,7 @@ def call(
                 "endpoint": result.endpoint,
                 "gateway": result.gateway,
                 "completion_status": result.completion_status,
+                "provider_response_metadata": result.response_metadata,
                 "created_at": utc_now(),
             },
         )

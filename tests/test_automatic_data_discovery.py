@@ -11,7 +11,7 @@ from scripts.automatic_data_discovery import (
     run_automatic_discovery,
 )
 from scripts.network_safety import NetworkSafetyError
-from scripts.research_artifacts import write
+from scripts.research_artifacts import schema_errors, write
 
 
 class AutomaticDataDiscoveryTests(unittest.TestCase):
@@ -165,6 +165,7 @@ class AutomaticDataDiscoveryTests(unittest.TestCase):
         self.assertTrue(report["automatic_screening_summary"]["scientific_review_required"])
         self.assertFalse(summary["human_review_required"])
         self.assertTrue(summary["scientific_review_required"])
+        self.assertEqual(schema_errors(report, "dataset-discovery.schema.json"), [])
 
     def test_all_source_failures_stop_before_model_cycle(self) -> None:
         def fetcher(_url: str, **_kwargs):

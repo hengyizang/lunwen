@@ -125,9 +125,9 @@ def load(project: Path, manifest_relative: str) -> dict:
     tokens = manifest.get("max_output_tokens")
     if "max_output_tokens" in manifest and (type(tokens) is not int or not 1 <= tokens <= 32768):
         raise ValueError("max_output_tokens must be a positive bounded integer")
-    if kind == "public-review-calibration" and tokens not in {None, 4000}:
-        raise ValueError("the fixed public-review calibration uses 4000 output tokens per batch")
-    if kind in {"citation-crosscheck", "g1-transport-validation"} and tokens is not None:
+    if kind in {"public-review-calibration", "g1-transport-validation"} and tokens is not None and tokens not in model_routing.VALIDATION_OUTPUT_CAPS:
+        raise ValueError("validation max_output_tokens must be 4000 or 12000")
+    if kind == "citation-crosscheck" and tokens is not None:
         raise ValueError(kind + " uses its native bounded output plan")
     inputs = [{"role":"manifest","path":manifest_relative,"sha256":_sha(manifest_bytes)},
               {"role":"prompt","path":manifest["prompt_file"],"sha256":_sha(prompt_bytes)}]
@@ -203,11 +203,12 @@ def run_g1_transport_validation(project, destination, request, *, execute=False)
     before = read(project / "state/run.json")
     production = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
     check_inputs = lambda: _check_inputs(project, request["inputs"])
-    with model_routing.g1_transport_validation_route(project, request["manifest_sha256"], check_inputs=check_inputs):
+    control_tokens = request["max_output_tokens"] or 4000
+    with model_routing.g1_transport_validation_route(project, request["manifest_sha256"], check_inputs=check_inputs, max_output_tokens=control_tokens):
         routes = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
         cost_plan = []
         for role, route in routes.items():
-            tokens = 12000 if role in model_routing.WRITER_ROLES else 4000
+            tokens = 12000 if role in model_routing.WRITER_ROLES else control_tokens
             quote = model_runtime.pricing(route["provider"], route["model"])
             cost_plan.append({"role": role, "production_route": production[role], "planned_route": route,
                 "request_input_bytes_ceiling": route["validation_max_input_bytes"], "max_output_tokens": tokens,
@@ -236,7 +237,7 @@ def run_g1_transport_validation(project, destination, request, *, execute=False)
             report["budget_before"] = model_runtime.budget_status(project)
             write(destination, report)
             report["result"] = api_orchestrator.run_cycle(project.name, "topic-intelligence", "anthropic", "openai", "anthropic",
-                request["prompt"], "", max_output_tokens=12000, control_max_output_tokens=4000, automatic_data=True,
+                request["prompt"], "", max_output_tokens=12000, control_max_output_tokens=control_tokens, automatic_data=True,
                 task_kind="scientific-judgment", task_profile=request["task_profile"])
             check_inputs()
             after = read(project / "state/run.json")
@@ -303,7 +304,8 @@ def run(project: Path, manifest_relative: str, output_relative: str, *, execute=
         from scripts.public_review_anchors import run_calibration
         _check_inputs(project, request["inputs"])
         report = run_calibration(project, destination, request["manifest_sha256"], seat=request["calibration_seat"], execute=execute,
-                                 check_inputs=lambda: _check_inputs(project, request["inputs"]))
+                                 check_inputs=lambda: _check_inputs(project, request["inputs"]),
+                                 max_output_tokens=request["max_output_tokens"] or 4000)
         _check_inputs(project, request["inputs"])
         return {"output": output_relative, "status": report["status"], "kind": kind, "execute": execute,
                 "calls_planned": report["calls_planned"], "calls_attempted": report["calls_attempted"],

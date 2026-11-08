@@ -360,6 +360,52 @@ class ResearchMethodTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "has changed"):
             methods.peer_review_context(methods_root)
 
+    def test_selected_venue_criteria_reach_both_ordinary_critics_without_entering_final_views(self):
+        from scripts import journal_dossier, review_panel
+        from tests.test_review_panel import ReviewPanelTests
+        case = ReviewPanelTests(); case.setUp(); self.addCleanup(case.doCleanups)
+        project = case.project
+        state = json.loads((project / "state/run.json").read_text())
+        state["writing_phases"]["P01"] = "scientific"
+        write_json(project / "state/run.json", state)
+        venue_file = project / "papers/P01/venue.json"
+        write_json(venue_file, {"venue_id": "synthetic-selected-journal"})
+        url = "https://publisher.example/scope"
+        quote = "OFFICIAL_SCOPE_ONLY_FOR_REVIEW synthetic scientific scope; no real venue claim."
+        write_json(project / "program/journal-dossiers.json", {"journals": [{"venue_id": "synthetic-selected-journal",
+            "official_domains": ["publisher.example"], "fields": {"scope": {"url": url}}}]})
+        ledger = journal_dossier.fetch_sources(project, fetcher=lambda current_url, **_: (
+            ("<p>" + quote + "</p>").encode(), current_url, 200, "text/html"))
+        receipt = ledger["sources"][url]
+        source = {"path": receipt["path"], "sha256": receipt["sha256"], "locator": "L1", "excerpt": quote}
+        write_json(project / "papers/P01/research-case.json", {"schema_version": "1.0", "paper_id": "P01",
+            "venue_fit": {"venue_id": "synthetic-selected-journal", "scope": {
+                "statement": "A synthetic publisher scope criterion, not an evaluation of paper quality.", "source": source, "url": url}}})
+        context = methods.venue_fit_context(project, "P01")
+        self.assertIn("bound_official_source", context)
+        self.assertIn("papers/P01/research-case.json#/venue_fit/scope", context)
+        self.assertIn(quote, context)
+        self.assertEqual(context.count('"source_status": "unknown"'), 3)  # Partial evidence is useful; no compulsory form.
+        self.assertIn("existing finding/rationale text", context)
+        with patch.object(api_orchestrator, "project_root", return_value=project), \
+             patch("scripts.model_runtime.call", side_effect=AssertionError("No additional reviewer call")):
+            for prompt in (api_orchestrator.critic_prompt("fixture", "writing-and-review", ""),
+                           autopilot.critic_prompt("fixture", state)):
+                self.assertIn(context, prompt)
+            final = review_panel.prepare(project, "P01")
+        self.assertNotIn(quote, final["views"]["editorial"]["text"])
+        self.assertNotIn(quote, json.dumps(final["views"]["editorial"], ensure_ascii=False))
+        self.assertNotIn("criterion_path", final["views"]["editorial"]["text"])
+        self.assertFalse(final["views"]["editorial"].get("selected_tasks"))
+        original = (project / source["path"]).read_bytes()
+        (project / source["path"]).write_bytes(original + b"\nchanged official source")
+        self.assertNotIn("bound_official_source", methods.venue_fit_context(project, "P01"))
+        (project / source["path"]).write_bytes(original)
+        write_json(venue_file, {"venue_id": "another-selected-journal"})
+        self.assertNotIn("bound_official_source", methods.venue_fit_context(project, "P01"))
+        venue_file.unlink()
+        self.assertEqual(methods.venue_fit_context(project, "P01"), "")
+
     def test_line_locator_cannot_be_invented_or_point_elsewhere(self):
         self.assertEqual(candidates.anchor_errors(self.project, self.evidence), [])
         wrong = {**self.evidence, "locator": "L2"}

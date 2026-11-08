@@ -18,9 +18,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, utc_now as now
+    from scripts.research_artifacts import sha as sha256_file, utc_now as now, path_in, read
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, utc_now as now
+    from research_artifacts import sha as sha256_file, utc_now as now, path_in, read
 
 try:
     from scripts.network_safety import NetworkSafetyError, fetch_json, validate_https_url
@@ -37,6 +37,7 @@ FIELD_RE = re.compile(r"(?s)^\s*([A-Za-z][A-Za-z0-9_-]*)\s*=\s*(.*?)\s*$")
 DOI_PREFIX_RE = re.compile(r"^(?:https?://(?:dx\.)?doi\.org/|doi:\s*)", re.IGNORECASE)
 CITE_RE = re.compile(r"\\(cite|citep|citet|parencite|textcite|autocite|citeauthor|citeyear|citeyearpar|footcite|footcitetext)\*?(?:\[[^]]*\])*\{([^}]*)\}")
 MARKER_RE = re.compile(r"\[[^\]]*?@[^\]]+\]")
+DOI_LINK_RE = re.compile(r"https?://(?:dx\.)?doi\.org/\S+", re.IGNORECASE)
 
 
 class CitationAuditError(RuntimeError):
@@ -82,7 +83,24 @@ def citation_prose(value: str, *, tex=False) -> str:
     """Normalize literal citation scopes for matching, never scientific inference."""
     if tex:
         value = CITE_RE.sub("", value)
-        value = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^]]*\])*", "", value).replace("{", "").replace("}", "")
+        # Only presentation wrappers may disappear. Unknown commands, math
+        # operators, negation, units and grouping are part of the claim identity.
+        formatting = re.compile(r"\\(?:emph|textbf|textit|textrm|textsf|texttt|textnormal|textup|textsl|textsc)\*?\s*\{")
+        position = 0
+        while match := formatting.search(value, position):
+            end, depth = match.end(), 1
+            while end < len(value) and depth:
+                if value[end] == "\\":
+                    end += 2
+                    continue
+                if value[end] == "{": depth += 1
+                elif value[end] == "}": depth -= 1
+                end += 1
+            if depth:
+                position = match.end()
+            else:
+                value = value[:match.start()] + value[match.end():end - 1] + value[end:]
+                position = match.start()
     else:
         value = MARKER_RE.sub("", value)
     return " ".join(value.split()).strip().rstrip(".!?;").strip()
@@ -125,54 +143,88 @@ def _citation_scopes(text, matches, source, *, tex=False):
 def _docx_usage_inventory(path):
     try:
         with zipfile.ZipFile(path) as archive:
-            member = archive.getinfo("word/document.xml")
-            if member.file_size > 10 * 1024 * 1024:
+            members = [archive.getinfo(name) for name in ("word/document.xml", "word/footnotes.xml", "word/endnotes.xml",
+                "word/_rels/document.xml.rels", "word/_rels/footnotes.xml.rels", "word/_rels/endnotes.xml.rels")
+                if name in archive.namelist()]
+            if not members or members[0].filename != "word/document.xml" or sum(item.file_size for item in members) > 10 * 1024 * 1024:
                 raise CitationAuditError("DOCX citation XML exceeds 10 MiB")
-            root = ET.fromstring(archive.read(member))
+            parts = {item.filename: ET.fromstring(archive.read(item)) for item in members}
     except (KeyError, zipfile.BadZipFile, ET.ParseError) as exc:
         raise CitationAuditError("DOCX citation source is not a readable document XML package") from exc
     w = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
-    result, errors, visible, paragraphs, stack = [], [], [], [], []
+    math = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
+    result, errors, visible, paragraphs = [], [], [], []
     digest = sha256_file(path)
+    notes = {(kind, node.get(w + "id")): node for kind in ("footnote", "endnote")
+        for node in parts.get("word/" + kind + "s.xml", ET.Element("empty")).iter(w + kind)}
+    pending, seen = [("word/document.xml", None, parts["word/document.xml"])], set()
     def marker(instruction):
         if "CSL_CITATION" in instruction:
             errors.append("unsupported CSL citation keys require an explicit bibliography mapping")
+        if re.search(r'\bHYPERLINK\s+"?https?://(?:dx\.)?doi\.org/', instruction, re.I):
+            errors.append("DOI literature hyperlinks require an explicit citation-key marker or CITATION field")
         keys = re.findall(r"\bCITATION\s+([A-Za-z0-9_:.+/-]+)", instruction)
         if keys:
             keys.extend(re.findall(r"\\m\s+([A-Za-z0-9_:.+/-]+)", instruction))
         return "[" + "; ".join("@" + key for key in keys) + "]" if keys else ""
-    for index, paragraph in enumerate(root.iter(w + "p"), 1):
-        pieces = []
-        paragraphs.append((index, pieces))
-        simple_results = {id(node) for field in paragraph.iter(w + "fldSimple")
-            if re.search(r"\bCITATION\s", field.get(w + "instr", "")) for node in field.iter(w + "t")}
-        for node in paragraph.iter():
-            if node.tag == w + "fldSimple":
-                pieces.append(marker(node.get(w + "instr", "")))
-            elif node.tag == w + "fldChar":
-                kind = node.get(w + "fldCharType")
-                if kind == "begin":
-                    stack.append([pieces, len(pieces), []]); pieces.append("")
-                elif kind == "end" and stack:
-                    field_pieces, position, instruction = stack.pop()
-                    field_pieces[position] = marker("".join(instruction))
-            elif node.tag == w + "instrText":
-                if stack: stack[-1][2].append(node.text or "")
-                else: pieces.append(marker(node.text or ""))
-            elif node.tag == w + "t":
-                field_result = id(node) in simple_results or any(re.search(r"\bCITATION\s", "".join(field[2])) for field in stack)
-                if not field_result:
-                    pieces.append(node.text or "")
-                    visible.append(node.text or "")
-            elif node.tag in {w + "tab", w + "br", w + "cr"}:
-                pieces.append(" ")
-    if stack:
-        errors.append("DOCX contains an unterminated citation field")
-    for index, pieces in paragraphs:
+    for part, note_id, root in pending:
+        stack = []
+        relationships = parts.get("word/_rels/" + Path(part).name + ".rels", ET.Element("empty"))
+        targets = {node.get("Id"): node.get("Target", "") for node in relationships}
+        for index, paragraph in enumerate(root.iter(w + "p"), 1):
+            pieces, math_children = [], set()
+            location = {"path": path.name, "sha256": digest, "part": part, "paragraph": index,
+                "coordinates": "word_paragraph_and_citation_order"}
+            if note_id is not None: location["note_id"] = note_id
+            paragraphs.append((location, pieces))
+            simple_results = {id(node) for field in paragraph.iter(w + "fldSimple")
+                if re.search(r"\bCITATION\s", field.get(w + "instr", "")) for node in field.iter(w + "t")}
+            for node in paragraph.iter():
+                if id(node) in math_children:
+                    continue
+                if node.tag in {math + "oMath", math + "oMathPara"}:
+                    formula = ET.canonicalize(ET.tostring(node, encoding="unicode"), rewrite_prefixes=True)
+                    pieces.append(" [OMML formula: " + formula + "] ")
+                    math_children.update(id(child) for child in node.iter())
+                elif node.tag in {w + "footnoteReference", w + "endnoteReference"}:
+                    kind, identifier = node.tag.removeprefix(w).removesuffix("Reference"), node.get(w + "id")
+                    key = kind, identifier
+                    if key not in notes:
+                        errors.append("DOCX references a missing " + kind + ": " + str(identifier))
+                    elif key not in seen:
+                        seen.add(key); pending.append(("word/" + kind + "s.xml", identifier, notes[key]))
+                elif node.tag == w + "fldSimple":
+                    pieces.append(marker(node.get(w + "instr", "")))
+                elif node.tag == w + "hyperlink":
+                    target = targets.get(node.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"), "")
+                    label = "".join(child.text or "" for child in node.iter(w + "t"))
+                    instructions = " ".join(child.text or "" for child in node.iter(w + "instrText"))
+                    instructions += " " + " ".join(child.get(w + "instr", "") for child in node.iter(w + "fldSimple"))
+                    if DOI_LINK_RE.match(target) and not MARKER_RE.search(label) and not re.search(r"\bCITATION\s", instructions):
+                        errors.append("DOI literature hyperlinks require an explicit citation-key marker or CITATION field")
+                elif node.tag == w + "fldChar":
+                    kind = node.get(w + "fldCharType")
+                    if kind == "begin":
+                        stack.append([pieces, len(pieces), []]); pieces.append("")
+                    elif kind == "end" and stack:
+                        field_pieces, position, instruction = stack.pop()
+                        field_pieces[position] = marker("".join(instruction))
+                elif node.tag == w + "instrText":
+                    if stack: stack[-1][2].append(node.text or "")
+                    else: pieces.append(marker(node.text or ""))
+                elif node.tag == w + "t":
+                    field_result = id(node) in simple_results or any(re.search(r"\bCITATION\s", "".join(field[2])) for field in stack)
+                    if not field_result:
+                        pieces.append(node.text or "")
+                        visible.append(node.text or "")
+                elif node.tag in {w + "tab", w + "br", w + "cr"}:
+                    pieces.append(" ")
+        if stack:
+            errors.append("DOCX contains an unterminated citation field in " + part)
+    for location, pieces in paragraphs:
         text = "".join(pieces)
         matches = [(m.start(), m.end(), re.findall(r"@([A-Za-z0-9_:.+/-]+)", m.group()), False) for m in MARKER_RE.finditer(text)]
-        result.extend(_citation_scopes(text, matches, lambda offset: {"path": path.name, "sha256": digest,
-            "paragraph": index, "coordinates": "word_paragraph_and_citation_order"}))
+        result.extend(_citation_scopes(text, matches, lambda offset: location))
     if not result:
         errors.append("DOCX has no explicit citation-key mapping; retain [@key] markers or Word CITATION fields")
     if re.search(r"\[\d+(?:\s*[,–-]\s*\d+)*\]", " ".join(visible)):
@@ -204,6 +256,12 @@ def citation_usages(path: Path) -> list[dict]:
         "citeyearpar", "footcite", "footcitetext", "nocite", "citestyle", "setcitestyle", "citereset"}
     if any(m[1] not in supported for m in re.finditer(r"\\([A-Za-z@]*cite[A-Za-z@]*)\b", body)):
         raise CitationAuditError("unsupported citation command needs an explicit literal citation-key source export")
+    for link in re.finditer(r"\\(href|url)\s*\{\s*https?://(?:dx\.)?doi\.org/[^{}]+\}", body, re.I):
+        # A key-bearing label is explicit; an author/year hyperlink alone can
+        # otherwise disappear beside already mapped citations in the same file.
+        label = re.match(r"\s*\{\s*(" + CITE_RE.pattern + r")\s*\}", body[link.end():]) if link[1].lower() == "href" else None
+        if not label:
+            raise CitationAuditError("DOI literature hyperlinks require an explicit citation-key command; replace the unkeyed link with \\cite{key}")
     matches = [(m.start(), m.end(), [key.strip() for key in m[2].split(",") if key.strip()],
         m[1] in {"citet", "textcite", "citeauthor"}) for m in CITE_RE.finditer(expanded.text, start, end if end >= 0 else len(expanded.text))]
     return _citation_scopes(expanded.text, matches, location, tex=True)
@@ -390,6 +448,94 @@ def _bibliography_project(bib_path: Path) -> Path | None:
     return None
 
 
+def _field_text(value: str) -> str:
+    import unicodedata
+    value = re.sub(r"\\[\'\"`^~=.uvHckbdtr]\s*\{?([A-Za-z])\}?", r"\1", value)
+    value = "".join(char for char in unicodedata.normalize("NFKD", value) if not unicodedata.combining(char))
+    return _identity_text(value.replace("&", " and "))
+
+
+def _crossref_authors(value: str, authors) -> bool | None:
+    """Match source family names and ordered given names/explicit initials only."""
+    if not isinstance(authors, list) or not authors or any(not isinstance(row, dict) for row in authors):
+        return None
+    names, start, depth = [], 0, 0
+    for match in re.finditer(r"[{}]|\s+and\s+", value, re.I):
+        if match[0] == "{": depth += 1
+        elif match[0] == "}": depth -= 1
+        elif depth == 0:
+            names.append(value[start:match.start()].strip()); start = match.end()
+    names.append(value[start:].strip())
+    if len(names) != len(authors):
+        return False
+    for name, author in zip(names, authors):
+        family = _field_text(str(author.get("family") or "")).split()
+        if not family:
+            literal = author.get("name")
+            if not isinstance(literal, str) or not literal.strip(): return None
+            if _field_text(name) != _field_text(literal): return False
+            continue
+        parts = name.split(",")
+        if len(parts) == 2:
+            last, given = _field_text(parts[0]).split(), parts[1]
+        elif len(parts) == 1:
+            tokens = _field_text(name).split()
+            last, given = tokens[-len(family):], " ".join(tokens[:-len(family)])
+        else:
+            return None  # Suffix/ambiguous forms need original-source review, not guessed names.
+        if last != family: return False
+        ours, theirs = _field_text(given).split(), _field_text(str(author.get("given") or "")).split()
+        if not ours or not theirs: return None
+        if len(ours) > len(theirs): return None
+        def compatible(tokens):
+            return all(a == b or len(a) == 1 and b.startswith(a) or len(b) == 1 and a.startswith(b)
+                       for a, b in zip(tokens, theirs))
+        if (not compatible(ours) and len(ours) == 1 and len(ours[0]) == len(theirs) > 1
+                and (given.strip().isupper() or re.match(r"\s*" + re.escape(ours[0].upper()) + r"\s", name))):
+            ours = list(ours[0])
+        if not compatible(ours):
+            return False
+    return True
+
+
+def _page_text(value) -> str:
+    value = re.sub(r"\s+", "", str(value).replace("{", "").replace("}", "")).casefold()
+    value = re.sub(r"[-‐‑‒–—−]+", "-", value)
+    match = re.fullmatch(r"(\d+)-(\d+)", value)
+    if match and len(match[2]) < len(match[1]):
+        start, end = int(match[1]), int(match[1][:-len(match[2])] + match[2])
+        if end < start: end += 10 ** len(match[2])
+        return f"{start}-{end}"
+    return str(int(value)) if value.isdigit() else value
+
+
+def _crossref_fields(fields: dict, record: dict) -> tuple[dict, list[str]]:
+    """Verify asserted fields; absent source metadata stays explicitly unknown."""
+    aliases = {"journal": ("container-title", "short-container-title"), "journaltitle": ("container-title", "short-container-title"),
+        "booktitle": ("container-title", "short-container-title"), "volume": ("volume",), "number": ("issue",),
+        "pages": ("page", "article-number"), "page": ("page", "article-number"),
+        **{name: ("article-number",) for name in ("eid", "article-number", "articleno", "article_number")}}
+    checks, errors = {}, []
+    for field in ("author", *aliases):
+        if not fields.get(field): continue
+        candidates = record.get("author") if field == "author" else []
+        if field == "author":
+            matched = _crossref_authors(fields[field], candidates)
+        else:
+            for key in aliases[field]:
+                value = record.get(key)
+                candidates.extend(value if isinstance(value, list) else [value] if value is not None else [])
+            types = (str,) if field in {"journal", "journaltitle", "booktitle"} else (str, int)
+            candidates = [value for value in candidates if type(value) in types and str(value).strip()]
+            normalize = _page_text if field not in {"journal", "journaltitle", "booktitle"} else _field_text
+            matched = any(normalize(fields[field]) == normalize(value) for value in candidates) if candidates else None
+        status = "unknown" if matched is None else "matches" if matched else "mismatch"
+        checks[field] = {"status": status, "declared": fields[field], "source": candidates}
+        if status != "matches":
+            errors.append(f"{field} mismatch with Crossref" if status == "mismatch" else f"Crossref {field} field accuracy is unknown")
+    return checks, errors
+
+
 def provider_identity(bib_path: Path, fields: dict[str, str], *, selection: dict | None = None) -> dict:
     """Recheck a no-DOI identity against executed official metadata, offline.
 
@@ -519,6 +665,24 @@ def validate_provider_identities(bib_path: Path, report: dict) -> list[str]:
         for finding in report.get("findings", []):
             if not isinstance(finding, dict):
                 raise CitationAuditError("citation findings must be records")
+            if finding.get("status") == "verified_crossref":
+                entry = entries.get(finding.get("citation_key"))
+                project = _bibliography_project(bib_path)
+                if entry is None or project is None:
+                    raise CitationAuditError("Crossref field verification needs its canonical bibliography")
+                doi = normalize_doi(entry["fields"].get("doi", ""))
+                url = "https://api.crossref.org/works/" + urllib.parse.quote(doi, safe="")
+                source = read(path_in(project, "state/citation-metadata/" + hashlib.sha256(url.encode()).hexdigest() + ".json"))
+                digest = hashlib.sha256(json.dumps(source["record"], sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+                metadata = finding.get("metadata_receipt", {})
+                if (source.get("doi") != doi or source.get("url") != url or source.get("record_sha256") != digest
+                        or metadata.get("source_url") != url or metadata.get("record_sha256") != digest
+                        or metadata.get("retrieved_at") != source.get("retrieved_at")):
+                    raise CitationAuditError("saved Crossref metadata source changed")
+                checks, issues = _crossref_fields(entry["fields"], source["record"])
+                if issues or finding.get("crossref", {}).get("field_verification") != checks:
+                    raise CitationAuditError("saved Crossref field verification is missing, stale or unresolved; refresh citation audit")
+                continue
             if finding.get("status") != "verified_provider_identity":
                 continue
             stored = finding.get("provider_identity")
@@ -592,10 +756,16 @@ def audit(
                         "url": record.get("URL"),
                         "title_similarity": round(similarity, 4),
                     }
+                    field_checks, field_issues = _crossref_fields(fields, record)
+                    result["crossref"].update(field_verification=field_checks,
+                        field_accuracy_verified=bool(field_checks) and not field_issues)
+                    result["issues"].extend(field_issues)
                     if similarity < 0.75:
                         result["issues"].append("title does not sufficiently match Crossref")
                     bib_year = fields.get("year")
                     crossref_year = record_year(record)
+                    if bib_year and crossref_year is None:
+                        result["issues"].append("Crossref year field accuracy is unknown")
                     if bib_year and bib_year.isdigit() and crossref_year and int(bib_year) != crossref_year:
                         result["issues"].append(
                             f"year mismatch: bibliography {bib_year}, Crossref {crossref_year}"
@@ -674,7 +844,36 @@ def audit(
     }
 
 
-CROSSCHECK_ROLE_CONTRACT = "Independently return citation_extraction:{source,records:[{citation_key,doi,title,year,authors}]}. Read only the bound original source; do not inspect another extractor, prior differences or prior verdicts. Unknown fields remain null."
+def _citation_population(path: Path) -> dict:
+    """Prove a literal BibTeX population, or keep coverage explicitly unknown."""
+    unknown = {"status": "coverage_unknown", "citation_keys": None}
+    if path.suffix.lower() != ".bib":
+        return {**unknown, "reason": "This source has no mechanically established bibliography population."}
+    from scripts.tex_sources import comments
+    text = comments(path.read_text(encoding="utf-8"))
+    entries = parse_bibtex(text)
+    if not entries or len(entries) > 5000 or any(not row["balanced"] for row in entries):
+        return {**unknown, "reason": "The complete literal BibTeX population could not be parsed."}
+    keys = [row["key"] for row in entries]
+    if len(set(keys)) != len(keys):
+        return {**unknown, "reason": "Duplicate BibTeX keys prevent a unique source population."}
+    cursor = 0
+    for match in ENTRY_RE.finditer(text):
+        if match.start() < cursor or text[cursor:match.start()].strip():
+            return {**unknown, "reason": "Unsupported BibTeX content prevents proof of the complete population."}
+        cursor, depth = match.end(), 1
+        while cursor < len(text) and depth:
+            if text[cursor] == "{": depth += 1
+            elif text[cursor] == "}": depth -= 1
+            cursor += 1
+        if depth:
+            return {**unknown, "reason": "An incomplete BibTeX entry prevents proof of the complete population."}
+    if text[cursor:].strip():
+        return {**unknown, "reason": "Unparsed BibTeX content prevents proof of the complete population."}
+    return {"status": "known", "citation_keys": sorted(keys), "basis": "complete_literal_bibtex"}
+
+
+CROSSCHECK_ROLE_CONTRACT = "Independently return citation_extraction:{source,records:[{citation_key,doi,title,year,authors}]}. Read only the bound original source; extract every bibliographic record, including its exact citation key. Do not inspect another extractor, prior differences or prior verdicts. Unknown fields remain null."
 
 
 def crosscheck(project: Path, spec: dict) -> dict:
@@ -690,6 +889,7 @@ def crosscheck(project: Path, spec: dict) -> dict:
         raise ValueError("citation crosscheck needs a source and two retained extractions")
     from scripts.literature_source_tasks import citation_source
     source = citation_source(project, spec)
+    population = _citation_population(path_in(project, source["path"]))
     incoming = spec.get("extractions")
     panel, controlled = {}, {}
     if incoming is None:
@@ -708,6 +908,8 @@ def crosscheck(project: Path, spec: dict) -> dict:
         if len(incoming) < 2:
             return {"schema_version": "1.0", "operation": "citation_crosscheck", "id": _id(spec["id"]),
                 "source": source, "extractions": incoming, "status": "awaiting_two_independent_extractions",
+                "source_population": population,
+                "coverage": {"status": "awaiting_two_independent_extractions", "extractions": []},
                 "differences": [], "unknown_fields": [], "blindness_verified": False, "semantic_support_verified": False,
                 "model_call_made": False, "scientific_completion_verified": False,
                 "role_contract": CROSSCHECK_ROLE_CONTRACT}
@@ -741,6 +943,14 @@ def crosscheck(project: Path, spec: dict) -> dict:
             by_key[key] = row
         extractions.append({"binding": bound, "extractor": method, "origin": origin, "records": by_key})
     left, right = (e["records"] for e in extractions)
+    coverage = {"status": "coverage_unknown", "extractions": []}
+    if population["status"] == "known":
+        expected = set(population["citation_keys"])
+        coverage["extractions"] = [{"extractor": row["extractor"],
+            "missing_citation_keys": sorted(expected - row["records"].keys()),
+            "unexpected_citation_keys": sorted(row["records"].keys() - expected)} for row in extractions]
+        coverage["status"] = "incomplete_extraction" if any(row["missing_citation_keys"] or row["unexpected_citation_keys"]
+            for row in coverage["extractions"]) else "complete"
     differences, unknown = [], []
     for key in sorted(left.keys() | right.keys()):
         if key not in left or key not in right:
@@ -757,7 +967,10 @@ def crosscheck(project: Path, spec: dict) -> dict:
                 differences.append({"citation_key": key, "field": field, "left": a, "right": b})
     return {"schema_version": "1.0", "operation": "citation_crosscheck", "id": _id(spec["id"]),
         "source": source, "extractions": extractions, "differences": differences, "unknown_fields": unknown,
-        "status": "differences_need_source_review" if differences else "incomplete_extraction" if unknown else "fields_agree",
+        "source_population": population, "coverage": coverage,
+        "status": "differences_need_source_review" if differences else "incomplete_extraction"
+            if unknown or coverage["status"] == "incomplete_extraction" else "coverage_unknown"
+            if coverage["status"] == "coverage_unknown" else "fields_agree",
         "blindness_verified": False, "bibliographic_truth_verified": False, "semantic_support_verified": False,
         "runtime_extractions_verified": bool(controlled), "source_isolation_verified": bool(controlled),
         "model_call_made": False, "scientific_completion_verified": False,

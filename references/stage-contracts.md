@@ -44,7 +44,7 @@ Required:
 - an explicit execution mode; for `cloud_only`, GitHub Actions is the runtime and local GPU/RAM/storage values may be null;
 - excluded domains and ethical/legal boundaries;
 - cloud-only feasibility as a pass/fail prerequisite for the six current papers: authorized data, experiments, and evidence must be obtainable and executable on the declared cloud runner without a physical laboratory or the researcher's machine;
-- direction ranking weights for funded PhD position supply, employment and salary, future growth, separately scored funded-PhD and job-market competition, background fit and application-route fit, using the actual user-supplied weights, never forced equal weights, applied only after feasibility and data-rights screening;
+- direction ranking weights for funded PhD position supply, employment and salary, future growth, separately scored funded-PhD and job-market competition, background fit and application-route fit, using the actual user-supplied weights, never forced equal weights, applied only after feasibility, source/version, privacy and known-access screening;
 - use `references/direction-ranking.md` to collect dated, route-specific primary evidence and score the seven factors without double-counting positions;
 - novelty evidence, doctoral depth and original contribution as mandatory topic and research-plan requirements that cannot be traded against direction scores.
 

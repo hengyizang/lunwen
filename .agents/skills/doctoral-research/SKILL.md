@@ -19,7 +19,7 @@ Interpret the request as one of:
 - `retarget <slug> <paper> <venue>`: verify official requirements and template adaptation;
 - `package <slug> <paper>`: build a deterministic ZIP for human inspection and manual upload;
 - `audit <slug>`: run a cross-stage integrity check.
-- `figures <slug> <paper>`: choose evidence-matched SCI data charts, research diagrams, or disclosed conceptual illustration;
+- `figures <slug> <paper>`: choose evidence-matched SCI data charts, research diagrams, or explicitly identified conceptual illustration;
 - `systematic-review <slug>`: run hash-bound screening and PRISMA-style accounting;
 - `paper-audit <slug> <paper>`: verify facts, measurement, alignment, paragraphs and terms;
 - `library-import <slug>`: index explicitly selected Zotero/Obsidian/PDF files;
@@ -59,7 +59,7 @@ When acting as the independent critic:
 5. Report blockers, major and minor findings, residual uncertainty and a verdict.
 6. Preserve findings under `projects/<slug>/reviews/independent/`.
 
-Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude. Measured figures remain deterministic; GPT Image may supply only explicitly labeled conceptual illustrations after actual visual inspection, rights checks and required disclosure.
+Before packaging, require current output-provenance hashes and reject any file whose current writer family is Anthropic/Claude. Measured figures remain deterministic; GPT Image may supply only explicitly labeled conceptual illustrations with actual source receipts, recorded visual observations and known access/reuse restrictions. Public AI-use statements remain optional and author-editable; truthful internal provenance stays protected.
 
 Never invent missing data, citations or results. Packaging is local-only: never request portal credentials, upload files or auto-submit.
 

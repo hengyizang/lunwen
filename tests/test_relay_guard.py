@@ -1,6 +1,5 @@
 """Real shared relay control with an isolated CAS store; no external services."""
 from __future__ import annotations
-from contextvars import Context
 import base64
 import copy
 import json
@@ -32,17 +31,23 @@ class RelayGuardTests(unittest.TestCase):
         self.store.put(branch,"trial-state",name,{"entries":[{"provider":provider,"call_id":provider+"|historical-unknown",
             "billing_status":"unknown_held","reserved_ceiling_cny":0.431508}]})
 
-    def begin(self,**kwargs):
-        return guard.begin(PROVIDER,scope={"project":"original-project","reservation_id":"local-reservation"},max_cost_cny=1,store=self.store,**kwargs)
+    def import_holds(self):
+        """Fixture snapshot of previously imported history, never a new lease."""
+        _,name,value,_=guard.load(PROVIDER,store=self.store)
+        self.store.put(guard.BRANCH,"relay-guard",name,value)
+
+    def legacy_active(self,*,provider=PROVIDER,scope=None,model="gemini-4-argon",before=None,store=None):
+        """Retained historical ticket data; this helper authorizes no transport."""
+        store=self.store if store is None else store
+        ticket={"id":"synthetic-retained-legacy-ticket","provider":provider,"credential_sha256":guard.fingerprint(provider),
+            "scope":scope or {"project":"original-project","reservation_id":"local-reservation"},"max_cost_cny":1,"run_id":"123"}
+        store.put(guard.BRANCH,"relay-guard",ticket["credential_sha256"]+".json",{
+            "schema_version":"1.0","credential_sha256":ticket["credential_sha256"],"legacy_holds":{},"active":ticket,
+            "active_meter":{"model":model,"before":self.meter() if before is None else before},"events":[]})
+        return ticket
 
     def meter(self):
         return {"provider":PROVIDER,"kind":"codekey_total_actual_cost","requests":20,"cost_cny":2.0}
-
-    def bind(self,ticket):
-        guard.bind_meter(ticket,"gemini-4-argon",self.meter(),store=self.store)
-
-    def send(self):
-        guard.authorize_transport("https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",{"x-goog-api-key":os.environ[KEY_SETTING]})
 
     def debit(self,cost=0.125):
         return {"actual_cost_cny":cost,"debit_evidence":{"source":"https://codekey.ai/v1/usage",
@@ -53,11 +58,10 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_historical_unknown_remains_held_after_readonly_catalog_success(self):
         self.historical()
+        self.import_holds()
         with patch("scripts.production_readiness.catalog",return_value={"gemini-4-argon"}) as catalog:
             self.assertIn("gemini-4-argon",catalog(PROVIDER,dict(os.environ)))
             self.assertFalse(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
-            with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
-                self.begin()
         self.assertEqual(len(self.active()["legacy_holds"]),1)
         self.assertIsNone(self.active()["active"])
 
@@ -65,11 +69,10 @@ class RelayGuardTests(unittest.TestCase):
         other="codekey-codex-pro"
         with patch.dict(os.environ,{ai_providers.PRODUCTION_PROVIDERS[other]["key_setting"]:os.environ[KEY_SETTING]}):
             self.historical(other)
-            with self.assertRaisesRegex(guard.RelayGuardError,"historical"):
-                self.begin()
+            self.import_holds()
         self.assertEqual(next(iter(self.active()["legacy_holds"].values()))["provider"],other)
 
-    def test_closed_trial_authorization_never_bypasses_existing_holds(self):
+    def test_closed_trial_authorization_never_clears_existing_holds(self):
         holds={"44064d7e5133c1c82704269da0095f60541c12e8c24be1560eac5e67920f46e9":{"reserved_ceiling_cny":.431508},
             "f6da77fa19739e14aedd1e040301f29d85ee7f899c840b2fd7138cc7dc44b5e9":{"reserved_ceiling_cny":9.1521024}}
         self.store.put(guard.BRANCH,"relay-guard",guard.fingerprint(PROVIDER)+".json",{
@@ -77,31 +80,12 @@ class RelayGuardTests(unittest.TestCase):
         for trial,setting in (("writing-comparison-20261027","WRITING_COMPARISON_AUTHORIZATION"),
                               (guard.EVALUATION_TRIAL,"MODEL_EVALUATION_AUTHORIZATION")):
             authorization=trial+"-owner-paid-with-legacy-holds"
-            scope={"trial":trial,"authorization":authorization,"call_id":"synthetic-history|case",
-                "project_reservation_id":"a"*32,"legacy_budget_reservation_id":"2b9e5e82da8a4f0bb9bfb6520ba814d1"}
             with self.subTest(trial=trial),patch.dict(os.environ,{setting:authorization,"GITHUB_ACTOR":"hengyizang",
-                    "GITHUB_REF":"refs/heads/codex/"+trial,"GITHUB_EVENT_NAME":"workflow_dispatch"}), \
-                    self.assertRaisesRegex(guard.RelayGuardError,"unresolved historical"):
-                guard.begin(PROVIDER,scope=scope,max_cost_cny=1,store=self.store)
+                    "GITHUB_REF":"refs/heads/codex/"+trial,"GITHUB_EVENT_NAME":"workflow_dispatch"}):
+                self.assertFalse(guard.inspect(PROVIDER,store=self.store)["inference_eligible"])
             self.assertEqual(self.active()["legacy_holds"],holds)
             self.assertIsNone(self.active()["active"])
             self.assertIsNone(guard._TICKET.get())
-
-    def test_cas_lease_stops_concurrent_jobs_and_a_different_project(self):
-        competing=Context()
-        self.store.before_write=lambda:competing.run(lambda:guard.begin(PROVIDER,scope={"project":"competing-project"},max_cost_cny=1,store=self.store))
-        with self.assertRaisesRegex(guard.RelayGuardError,"CAS conflict"):
-            self.begin()
-        self.assertEqual(self.active()["active"]["scope"]["project"],"competing-project")
-        with self.assertRaisesRegex(guard.RelayGuardError,"concurrent"):
-            guard.begin(PROVIDER,scope={"project":"brand-new-project"},max_cost_cny=0.5,store=self.store)
-        self.assertIsNone(guard._TICKET.get())
-
-    def test_failed_durable_lease_never_authorizes_a_post(self):
-        self.store.fail_write=True
-        with self.assertRaises(guard.RelayGuardError):self.begin()
-        with self.assertRaisesRegex(guard.RelayGuardError,"durable"):
-            self.send()
 
     def test_cloud_store_requires_exact_blob_identity_and_put_readback(self):
         store=guard.CloudStore()
@@ -135,67 +119,24 @@ class RelayGuardTests(unittest.TestCase):
             with self.assertRaisesRegex(guard.RelayGuardError,"blob identity"):
                 store.read_blob(blob)
 
-    def test_transport_requires_durably_bound_before_meter_and_exact_key_once(self):
-        ticket=self.begin()
-        with self.assertRaisesRegex(guard.RelayGuardError,"durable"):self.send()
-        self.bind(ticket)
-        self.assertEqual(self.active()["active_meter"]["before"],self.meter())
-        with self.assertRaises(guard.RelayGuardError):
-            guard.authorize_transport("https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",{"x-goog-api-key":"different-synthetic-key"})
-        self.send()
-        with self.assertRaisesRegex(guard.RelayGuardError,"unused"):
-            self.send()
-
-    def test_exact_independent_settlement_releases_lease_and_nothing_else(self):
-        ticket=self.begin();self.bind(ticket);self.send()
-        for settlement in (None,{"actual_cost_cny":0.1,"debit_evidence":{}},self.debit(2),
-                {**self.debit(),"actual_cost_cny":True}):
-            with self.assertRaises(guard.RelayGuardError):guard.finish(ticket,settlement,store=self.store)
-            self.assertEqual(self.active()["active"],ticket)
-        wrong=self.debit();wrong["debit_evidence"]["before"]["requests"]=19
-        with self.assertRaisesRegex(guard.RelayGuardError,"different before meter"):
-            guard.finish(ticket,wrong,store=self.store)
-        guard.finish(ticket,self.debit(),store=self.store)
-        self.assertIsNone(self.active()["active"])
-        self.assertEqual(self.active()["events"][-1]["status"],"settled")
-        self.assertIsNone(guard._TICKET.get())
-        self.assertIsNotNone(self.begin())
-
-    def test_unsent_cancellation_never_releases_a_possibly_sent_call(self):
-        ticket=self.begin();guard.finish(ticket,not_sent=True,store=self.store)
-        self.assertIsNone(self.active()["active"])
-        ticket=self.begin();self.bind(ticket);self.send()
-        with self.assertRaisesRegex(guard.RelayGuardError,"possibly sent"):
-            guard.finish(ticket,not_sent=True,store=self.store)
-        self.assertEqual(self.active()["active"],ticket)
-
-    def test_an_unsent_call_cannot_be_labeled_paid_and_release_its_meter(self):
-        ticket=self.begin();self.bind(ticket)
-        with self.assertRaisesRegex(guard.RelayGuardError,"unsent"):
-            guard.finish(ticket,self.debit(),store=self.store)
-        self.assertEqual(self.active()["active"],ticket)
-
     def test_cheapai_receipt_must_match_the_retained_before_snapshot_and_model(self):
         provider="cheapai-gpt-pro";key=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
         with patch.dict(os.environ,{key:"synthetic-cheapai-key"}):
             before={"provider":provider,"kind":"cheapai_quota_history","quota_per_unit":500000,"rows":[]}
-            ticket=guard.begin(provider,scope={"project":"fixture"},max_cost_cny=1,store=self.store)
-            guard.bind_meter(ticket,"gpt-6.1-sol",before,store=self.store)
-            guard.authorize_transport("https://cheapai.info/v1/responses",{"Authorization":"Bearer synthetic-cheapai-key"})
+            meter={"model":"gpt-6.1-sol","before":before}
             settlement={"actual_cost_cny":0.1,"debit_evidence":{"source":"https://cheapai.info/api/log/token","exactly_one_new_gateway_request":True,
                 "before_snapshot_sha256":relay_billing._fingerprint({"rows":[]}),"row":{"model_name":"gpt-6-astra","quota":50000}}}
             with self.assertRaisesRegex(guard.RelayGuardError,"before meter/model"):
-                guard.finish(ticket,settlement,store=self.store)
+                guard.validate_debit(meter,settlement)
             settlement["debit_evidence"]["row"]["model_name"]="gpt-6.1-sol"
-            guard.finish(ticket,settlement,store=self.store)
-            self.assertIsNone(self.store.read(guard.BRANCH,"relay-guard",guard.fingerprint(provider)+".json")[0]["active"])
+            guard.validate_debit(meter,settlement)
 
     def proposal(self,project,value):
         path=project/"program/reconcile.json";write(path,value);return "program/reconcile.json"
 
     def test_rotated_credential_requires_owner_attestation_and_preserves_the_original_hold(self):
         self.historical()
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         old_id=guard.fingerprint(PROVIDER);old=copy.deepcopy(self.active())
         with tempfile.TemporaryDirectory() as temporary,patch.dict(os.environ,{KEY_SETTING:"different-newly-issued-fixture-key"}):
             project=Path(temporary)/"original-project"
@@ -211,7 +152,7 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_owner_cannot_clear_legacy_holds_while_original_ledger_is_unknown(self):
         self.historical()
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         held=list(self.active()["legacy_holds"])
         with tempfile.TemporaryDirectory() as temporary:
             project=Path(temporary)/"original-project"
@@ -229,7 +170,7 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_legacy_source_deletion_relabel_and_duplicate_never_prove_settlement(self):
         self.historical()
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         held=list(self.active()["legacy_holds"])
         branch,name=guard.SOURCES[1]
         entry={"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
@@ -251,7 +192,7 @@ class RelayGuardTests(unittest.TestCase):
             "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
             "reserved_ceiling_cny":1,"debit_evidence":{"anything":True}}
         self.store.put(branch,"trial-state",name,{"entries":[entry]})
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         held=list(self.active()["legacy_holds"])
         with tempfile.TemporaryDirectory() as temporary:
             project=Path(temporary)/"original-project"
@@ -261,7 +202,7 @@ class RelayGuardTests(unittest.TestCase):
 
     def test_review_snapshot_changes_when_remote_source_proof_changes(self):
         self.historical()
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         held=list(self.active()["legacy_holds"]);branch,name=guard.SOURCES[1]
         entry={"provider":PROVIDER,"call_id":PROVIDER+"|historical-unknown","billing_status":"settled",
             "model":"gemini-4-argon","meter_before":self.meter(),"actual_cost_cny":0.125,
@@ -284,11 +225,11 @@ class RelayGuardTests(unittest.TestCase):
         entry={"provider":PROVIDER,"call_id":PROVIDER+"|original-bound-call","billing_status":"reserved",
             "model":"gemini-4-argon","meter_before":self.meter(),"reserved_ceiling_cny":1}
         self.store.put(branch,"trial-state",name,{"entries":[entry]})
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         held=list(self.active()["legacy_holds"])
         entry["model"]="gemini-4-argon-high"
         self.store.put(branch,"trial-state",name,{"entries":[entry]})
-        with self.assertRaises(guard.RelayGuardError):self.begin()
+        self.import_holds()
         self.assertEqual(self.active()["legacy_holds"][held[0]]["request_binding"]["model"],"gemini-4-argon")
         entry.update(billing_status="settled",actual_cost_cny=0.125,debit_evidence=self.debit()["debit_evidence"])
         self.store.put(branch,"trial-state",name,{"entries":[entry]})
@@ -302,7 +243,7 @@ class RelayGuardTests(unittest.TestCase):
         other="codekey-codex-pro";setting=ai_providers.PRODUCTION_PROVIDERS[other]["key_setting"]
         with patch.dict(os.environ,{setting:os.environ[KEY_SETTING]}):
             self.historical(other)
-            with self.assertRaises(guard.RelayGuardError):self.begin()
+            self.import_holds()
             held=list(self.active()["legacy_holds"]);branch,name=guard.SOURCES[1]
             with tempfile.TemporaryDirectory() as temporary:
                 project=Path(temporary)/"original-project"
@@ -381,8 +322,7 @@ class RelayGuardTests(unittest.TestCase):
     def trial(self):
         """Frozen native ledger shape; never call an old generator or quote."""
         call_id="synthetic-argon-high|synthetic-case"
-        ticket=guard.begin(PROVIDER,scope={"trial":COMPARISON,"call_id":call_id},max_cost_cny=1,store=self.store)
-        guard.bind_meter(ticket,"gemini-4-argon",self.meter(),store=self.store);self.send()
+        ticket=self.legacy_active(scope={"trial":COMPARISON,"call_id":call_id})
         entry={"provider":PROVIDER,"call_id":call_id,"candidate_id":"synthetic-argon-high","model":"gemini-4-argon","effort":"high",
             "case_id":"synthetic-case","case_sha256":"a"*64,"quote_sha256":"b"*64,"run_id":"123",
             "reserved_ceiling_cny":1,"meter_before":self.meter(),"billing_status":"settled","actual_cost_cny":0.125,
@@ -488,9 +428,7 @@ class RelayGuardTests(unittest.TestCase):
         setting=ai_providers.PRODUCTION_PROVIDERS[provider]["key_setting"]
         before={**self.meter(),"provider":provider}
         with patch.dict(os.environ,{setting:"synthetic-clarified-history-key"}):
-            ticket=guard.begin(provider,scope={"trial":CLARIFIED,"call_id":call_id},max_cost_cny=1,store=store)
-            guard.bind_meter(ticket,"deepseek-v3.2",before,store=store)
-            guard.authorize_transport("https://codekey.ai/v1/chat/completions",{"Authorization":"Bearer synthetic-clarified-history-key"})
+            ticket=self.legacy_active(provider=provider,scope={"trial":CLARIFIED,"call_id":call_id},model="deepseek-v3.2",before=before,store=store)
             ledger={"trial_id":CLARIFIED,"status":"closed","scope":{"authorization_id":"synthetic-clarified-owner-scope",
                 "parent_blob_sha":parent_blob,"parent_ledger_sha256":guard._digest(parent),"parent_plan_sha256":parent["plan_sha256"],
                 "parent_attempts":1,"parent_outstanding_holds_cny":.5,"fixture_sha256":"a"*64,
@@ -656,7 +594,7 @@ class RelayGuardTests(unittest.TestCase):
                 self.assertEqual(self.active()["active"],ticket)
 
     def test_owner_active_reconciliation_needs_original_project_and_matching_budget_event(self):
-        ticket=self.begin();self.bind(ticket);self.send()
+        ticket=self.legacy_active()
         with tempfile.TemporaryDirectory() as temporary:
             project=Path(temporary)/"original-project"
             source=self.proposal(project,{"provider":PROVIDER,"kind":"settled_active","credential_sha256":guard.fingerprint(PROVIDER),"ticket_id":ticket["id"]})

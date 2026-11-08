@@ -124,52 +124,6 @@ class CCFAHumanizationTests(unittest.TestCase):
                                   "The signal rises; the variance increases; the interval widens.")["checker"]["issues"]
         self.assertTrue(any(item["code"] == "semicolon_density" for item in english))
 
-    def test_protected_drift_detects_value_swap_citation_formula_disclosure_and_negative_removal(self):
-        before = (r"Method A achieved 10% and method B achieved 20% \cite{sourceA}. $x=3$. "
-                  "Negative results occurred in two datasets. AI-use disclosure: writing used a language model.")
-        after = (r"Method A achieved 20% and method B achieved 10% \cite{sourceB}. $x=4$. "
-                 "Writing is concise.")
-        changes = human.compare_edit(before, after)["protected_drift_candidates"]
-        for field in ("scientific_context", "citations", "formulae", "material_sentences"):
-            self.assertIn(field, changes)
-        # Equal numeric bags cannot hide which method obtained which value.
-        self.assertIn("scientific_context", changes)
-        self.assertFalse(human.compare_edit(before, before)["semantic_preservation_proven"])
-
-    def test_planning_and_cited_methods_do_not_need_executed_checkpoint(self):
-        result = human.experiment_review([{"id": "proposal", "use": "planned"}, {"id": "prior", "use": "cited"}])
-        self.assertEqual(result["findings"], [])
-        self.assertTrue(all(not row["full_method_gate_applicable"] for row in result["method_scopes"]))
-        self.assertFalse(result["execution_authorized"])
-
-    def test_relabelled_debug_run_cannot_pass_as_full_method_or_controlled_study(self):
-        result = human.experiment_review([
-            {"id": "debug", "use": "reported_full_method", "status": "confirmed", "development_substitute": True},
-            {"id": "renamed", "use": "controlled_study", "development_substitute": True},
-            {"id": "smoke", "use": "smoke", "publication_evidence": True},
-            {"id": "ablation", "use": "ablation", "full_reference": "full", "changed_component": "router",
-             "ablation_label": "without router", "run_ids": ["run-a"], "presented_as_main_method": True}])
-        self.assertEqual(len(result["findings"]), 4)
-        self.assertTrue(result["existing_experiment_gates_required"])
-
-    def test_legitimate_ablation_and_intended_minimal_study_preserved_without_scientific_pass(self):
-        result = human.experiment_review([
-            {"id": "ablation", "use": "ablation", "full_reference": "full", "changed_component": "router",
-             "ablation_label": "without router", "run_ids": ["run-a"]},
-            {"id": "minimal", "use": "controlled_study", "specified_protocol": "fixed capacity mechanism test",
-             "controls": ["matched budget"], "run_ids": ["run-b"], "scoped_interpretation": "this capacity only"}])
-        self.assertEqual(result["findings"], [])
-        self.assertFalse(result["scientific_validity_verified"])
-
-    def test_smoke_duplicate_requires_distinct_coverage_and_all_five_conditions(self):
-        check = {"id": "first", "critical_path": "reader-to-card", "changed_path": True,
-                 "realistic_failure": True, "distinct_signal": True, "cheaper_than_validation": True,
-                 "outcome_changes_next_action": True}
-        result = human.experiment_review([], [check, {**check, "id": "duplicate"}])
-        self.assertEqual(len(result["findings"]), 1)
-        self.assertIn("duplicate_critical_path", result["findings"][0]["unmet_retention_conditions"])
-        self.assertFalse(result["smoke_is_scientific_evidence"])
-
     def test_cloud_project_audit_hashes_all_tex_includes_and_rejects_stale_or_tampered_report(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             project = Path(directory)
@@ -229,15 +183,3 @@ class CCFAHumanizationTests(unittest.TestCase):
         self.assertEqual(len(records), 3)
         self.assertTrue(all(not row["semantic_review_verified"] for row in records))
         self.assertTrue(all(row["validation_scope"] == "supplied_observation_format_only" for row in records))
-
-    def test_structured_dispositions_use_same_native_contract_and_never_claim_semantic_clearance(self):
-        records = [{"id": row["id"], "disposition": "rejected",
-                    "reason": f"Fixture review of {row['key']}: {row['guidance']}"}
-                   for row in human.review_checklist()]
-        self.assertEqual(len(human.validate_disposition_records(records)), 38)
-        self.assertEqual(human.validate_disposition_records([]), [])
-        self.assertEqual(len(human.validate_disposition_records(records[:1])), 1)
-        with self.assertRaises(ValueError):
-            human.validate_disposition_records(records + [{"id": "CFH39", "disposition": "fixed", "reason": "Invented coverage cannot replace an actual current criterion."}])
-        with self.assertRaises(ValueError):
-            human.validate_disposition_records([{"id": "CFH01", "disposition": True, "reason": "A boolean cannot serve as a scientific decision."}])

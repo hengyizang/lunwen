@@ -6,10 +6,11 @@ results. Apply the following prerequisites before computing a score:
 1. Every current paper has a credible route to authorized, versioned data,
    independent primary evidence, reproducible experiments and an available
    cloud runner within the declared budget and deadline. No physical laboratory,
-   local GPU, future PhD admission or unlicensed dataset can be a prerequisite.
-2. Check relevant application-route eligibility, ethics, privacy, data rights,
+   local GPU, future PhD admission or access-control bypass can be a prerequisite.
+2. Check relevant application-route eligibility, ethics, privacy, source/version and known access restrictions,
    funding terms and the researcher's actual background. An ineligible funded
-   opening does not count as an opportunity for that route.
+   opening does not count as an opportunity for that route. Licence/research-use
+   review remains optional metadata, not a pre-use or direction-selection gate.
 3. For each specific topic after direction screening, require evidence of
    novelty, doctoral depth and original contribution. A direction score cannot
    waive these topic and paper gates.

@@ -261,7 +261,8 @@ class JudgmentSupportTests(unittest.TestCase):
             "reported_model": "fixture", "completion_status": "completed", "cache_hit": False}
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             return review_receipts.seal_phase(self.project, stage=stage, run_id="current", phase="observation",
-                audit_path=audit_path, prompt="Synthetic selected source task", identity=identity, writer_family="openai",
+                audit_path=audit_path, prompt=json.dumps(tasks.selected_context(self.project, stage), ensure_ascii=False),
+                identity=identity, writer_family="openai",
                 materials=review_receipts.material_snapshot(self.project, stage))
 
     def test_g1_and_g2_consume_current_source_bound_observation_without_final_panel(self):
@@ -363,9 +364,18 @@ class JudgmentSupportTests(unittest.TestCase):
         with self.assertRaises(ValueError): tasks.judgment_responses(project, "P01")
 
     def test_unbound_legacy_observation_does_not_acquire_a_reusable_task_binding(self):
+        from scripts import claim_evidence
         fixture, case, state, binding = self.claim_observation(bind_prompt=False)
         receipt = read(fixture.project / binding["path"])
         self.assertNotIn("source_task_bindings", receipt)
+        self.assertTrue(review_receipts.materials_match(receipt["materials"],
+            review_receipts.material_snapshot(fixture.project, "writing-and-review", "P01")))
+        responses = tasks.judgment_responses(fixture.project, "P01")
+        self.assertNotIn("claim_evidence", responses[0]["response"])
+        self.assertEqual(responses[0]["response"]["fatal_findings"], ["ORDINARY_OPINION_MUST_NOT_LEAK_TO_PANEL"])
+        self.assertEqual(claim_evidence.build(fixture.project, fixture.spec)["claims"][0]["outcome"], "insufficient")
+        self.assertTrue(any("unverified or insufficient" in error
+            for error in tasks.integrity_errors(fixture.project, "P01", require_support=True)))
         state["writing_phases"]["P01"] = "submission"
         write(fixture.project / "state/run.json", state)
         with self.assertRaisesRegex(ValueError, "no unchanged task binding"):
@@ -468,6 +478,75 @@ class JudgmentSupportTests(unittest.TestCase):
         ledger.write_text("".join(json.dumps(row) + "\n" for row in values))
         with self.assertRaisesRegex(ValueError, "runtime billing receipt"):
             citation_audit.crosscheck(case.project, spec)
+
+    def test_selected_crosscheck_requires_both_extractors_to_cover_the_source_population(self):
+        from scripts import citation_audit, model_runtime
+        case, source, spec, profile = self.citation_job()
+        bibliography = case.project / source["path"]
+        bibliography.write_text(bibliography.read_text() + '\n@article{omitted,doi={10.1000/second},title={Second source},year={2023},author={Another}}')
+        source["sha256"] = sha(bibliography)
+        write(case.project / "program/citation-task.json", spec)
+        report = citation_audit.crosscheck(case.project, spec)
+        self.assertEqual(report["source_population"]["citation_keys"], ["omitted", "work"])
+        self.assertEqual(report["status"], "awaiting_two_independent_extractions")
+        self.assertEqual(tasks.integrity_errors(case.project, "P01"), [])
+        self.assertTrue(any("awaiting_two_independent_extractions" in error
+            for error in tasks.integrity_errors(case.project, "P01", require_support=True)))
+        for mode in ("both_omit", "unexpected_key", "both_unknown", "complete"):
+            def response(project, **kwargs):
+                result = self.citation_response(source, project, **kwargs)
+                value = json.loads(result.text)
+                row = value["citation_extraction"]["records"][0]
+                row.update(doi="10.1000/source", authors=["Example"])
+                if mode != "both_omit":
+                    value["citation_extraction"]["records"].append({"citation_key": "omitted", "doi": "10.1000/second",
+                        "title": "Second source", "year": 2023, "authors": ["Another"]})
+                if mode == "unexpected_key":
+                    value["citation_extraction"]["records"].append({**row, "citation_key": "invented"})
+                if mode == "both_unknown":
+                    row.update(doi=None, title=None, year=None, authors=None)
+                result.text = json.dumps(value)
+                return result
+            with self.subTest(mode=mode), patch.object(model_runtime, "call", side_effect=response) as calls:
+                tasks.run_citation_crosscheck(case.project, case.project / ("evidence/auxiliary/" + mode + ".json"), "a" * 64,
+                    request_file="program/citation-task.json", task_profile=profile, execute=True)
+                self.assertEqual(calls.call_count, 2)
+            report = citation_audit.crosscheck(case.project, spec)
+            self.assertTrue(report["runtime_extractions_verified"])
+            errors = tasks.integrity_errors(case.project, "P01", require_support=True)
+            self.assertEqual(report["status"], "fields_agree" if mode == "complete" else "incomplete_extraction")
+            self.assertEqual(errors == [], mode == "complete", errors)
+            if mode == "both_omit":
+                self.assertTrue(all(row["missing_citation_keys"] == ["omitted"] for row in report["coverage"]["extractions"]))
+            if mode == "unexpected_key":
+                self.assertTrue(all(row["unexpected_citation_keys"] == ["invented"] for row in report["coverage"]["extractions"]))
+            if mode == "both_unknown": self.assertEqual(len(report["unknown_fields"]), 4)
+            self.assertEqual(tasks.integrity_errors(case.project, "P01"), [])
+
+    def test_unknown_source_population_never_becomes_complete_because_extractors_agree(self):
+        from scripts import citation_audit
+        case, source, spec, profile = self.citation_job()
+        for text in ('@article{work,title={Unclosed}', '@article{work,title={One}} @article(work,title={Unsupported})',
+                     '@article{work,title={One}} @article{work,title={Duplicate}}'):
+            target = case.project / source["path"]
+            target.write_text(text); source["sha256"] = sha(target)
+            write(case.project / "program/citation-task.json", spec)
+            extractions = []
+            for name in ("one", "two"):
+                path = case.project / ("evidence/extractions/" + name + ".json")
+                write(path, {"source": source, "extractor": name, "records": [{"citation_key": "work",
+                    "doi": "10.1000/source", "title": "One", "year": 2024, "authors": ["Example"]}]})
+                provenance.record_model_writes(case.project, [path], family="other", provider="fixture",
+                    model="independent-" + name, role="independent-extractor", run_id="synthetic-only")
+                extractions.append({"path": path.relative_to(case.project).as_posix(), "sha256": sha(path), "locator": "synthetic extraction"})
+            manual = {**spec, "extractions": extractions}
+            write(case.project / "program/citation-task.json", manual)
+            report = citation_audit.crosscheck(case.project, manual)
+            self.assertEqual(report["status"], "coverage_unknown")
+            self.assertIsNone(report["source_population"]["citation_keys"])
+            self.assertFalse(report["runtime_extractions_verified"])
+            self.assertEqual(tasks.integrity_errors(case.project, "P01"), [])
+            self.assertTrue(any("coverage_unknown" in error for error in tasks.integrity_errors(case.project, "P01", require_support=True)))
 
     def test_citation_job_dry_run_and_failure_preserve_attempts_without_retry(self):
         from scripts import model_runtime

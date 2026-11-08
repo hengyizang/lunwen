@@ -23,3 +23,5 @@ class ScienceProImportTests(unittest.TestCase):
             self.assertTrue((project / report["source"]["private_path"]).is_file())
             self.assertEqual(report["evidence_status"], "advisory_requires_independent_verification")
             self.assertEqual(report["extraction"]["doi_candidates"], ["10.1234/example"])
+            self.assertFalse(report["human_review_required"])
+            self.assertTrue(report["independent_scientific_review_required"])
