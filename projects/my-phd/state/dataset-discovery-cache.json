@@ -1,23 +1,23 @@
 {
-  "signature": "44f0414b7b95f966de08727b49abf7c8280fde3430686a6a77b60d04d98ce11e",
-  "at": "2026-11-01T08:04:36.701860+00:00",
+  "signature": "c63a67cfd4578d0bc6f841a2462ef32861858fc3d4d825c476374ab3d5f07995",
+  "at": "2026-11-08T08:24:26.973031+00:00",
   "summary": {
-    "report_path": "data/discovery-broad-auto-20261101T080436670556Z.json",
+    "report_path": "data/discovery-broad-auto-20261108T082426952293Z.json",
     "queries": [
-      "Develop six distinct independently defensible doctoral-level English around core thesis dataset",
+      "AI robotics mechanical engineering dataset",
       "AI dataset",
       "robotics dataset",
       "mechanical engineering dataset",
-      "Use or explicitly authorized rights licence provenance privacy leakage checks dataset",
-      "draft dataset",
-      "Continue owner-confirmed current stage toward six-paper requirements Read frozen intake dataset",
-      "Develop six distinct independently defensible doctoral-level English around core thesis public dataset"
+      "Develop evidence-bound exploratory G1 doctoral-topic candidates existing user background actual dataset",
+      "AI robotics mechanical engineering public dataset",
+      "AI robotics mechanical engineering benchmark dataset"
     ],
-    "provider_calls": 64,
-    "successful_provider_calls": 48,
-    "candidate_count": 500,
+    "provider_calls": 56,
+    "successful_provider_calls": 42,
+    "candidate_count": 409,
     "shortlist_count": 80,
-    "human_review_required": true
+    "human_review_required": false,
+    "scientific_review_required": true
   },
-  "report_sha256": "18c197ed434a31d96b88e41b11ad7b7fb59ddf22dad2c94a771b4499a728c428"
+  "report_sha256": "95036488b25b3f4f771268261daf37031a9aedb1f6a07e6c70a8077dee61d87a"
 }

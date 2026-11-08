@@ -1,1 +1,18 @@
-{}
+{
+  "b80cb22cfa716323cc9e74f120c27bec72a960e084794c60584f85aaecac7518": {
+    "at": "2026-11-08T08:26:41.268044+00:00",
+    "error": "Semantic Scholar search failed: Request failed for https://api.semanticscholar.org/graph/v1/paper/search?query=AI+robotics+mechanical+engineering+dataset&limit=15&fields=paperId%2Ctitle%2Cyear%2Cauthors%2CexternalIds%2Curl%2Cabstract%2Cvenue%2CpublicationDate%2CcitationCount%2CpublicationTypes: HTTP Error 429: "
+  },
+  "997731a77fff310703b7fcd3a72acfa71f6f3aea15e30a05d3646beec58d5875": {
+    "at": "2026-11-08T08:27:25.147973+00:00",
+    "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=AI+robotics+mechanical+engineering+dataset&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error timed out>"
+  },
+  "ffba4673b754a860cfbe6d15e542146f0ca8a77870a46f167f94468429f4a9c5": {
+    "at": "2026-11-08T08:29:41.042650+00:00",
+    "error": "Semantic Scholar search failed: Request failed for https://api.semanticscholar.org/graph/v1/paper/search?query=AI+robotics+mechanical+engineering+dataset+comparison+alternative+methods&limit=15&fields=paperId%2Ctitle%2Cyear%2Cauthors%2CexternalIds%2Curl%2Cabstract%2Cvenue%2CpublicationDate%2CcitationCount%2CpublicationTypes: HTTP Error 429: "
+  },
+  "4c6fd7f71755ee69d9204cb68abc3afb5dfdd83731506fbc0682406bedc90384": {
+    "at": "2026-11-08T08:30:24.056885+00:00",
+    "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=AI+robotics+mechanical+engineering+dataset+comparison+alternative+methods&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error timed out>"
+  }
+}

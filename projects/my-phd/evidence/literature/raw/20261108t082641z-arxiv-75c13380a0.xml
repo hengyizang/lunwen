@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/qIoZaBeMELttoHF/aJNHA9B0Gq4</id>
+  <title>arXiv Query: search_query=all:AI AND all:robotics AND all:mechanical AND all:engineering AND all:dataset&amp;id_list=&amp;start=0&amp;max_results=15</title>
+  <updated>2026-11-08T08:26:41Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:AI+AND+(all:robotics+AND+(all:mechanical+AND+(all:engineering+AND+all:dataset)))&amp;start=0&amp;max_results=15&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>15</opensearch:itemsPerPage>
+  <opensearch:totalResults>10</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2603.18130v1</id>
+    <title>Final Report for the Workshop on Robotics &amp; AI in Medicine</title>
+    <updated>2026-03-18T17:53:35Z</updated>
+    <link href="https://arxiv.org/abs/2603.18130v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.18130v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The CARE Workshop on Robotics and AI in Medicine, held on December 1, 2025 in Indianapolis, convened leading researchers, clinicians, industry innovators, and federal stakeholders to shape a national vision for advancing robotics and artificial intelligence in healthcare. The event highlighted the accelerating need for coordinated research efforts that bridge engineering innovation with real clinical priorities, emphasizing safety, reliability, and translational readiness with an emphasis on the use of robotics and AI to achieve this readiness goal.
+  Across keynotes, panels, and breakout sessions, participants underscored critical gaps in data availability, standardized evaluation methods, regulatory pathways, and workforce training that hinder the deployment of intelligent robotic systems in surgical, diagnostic, rehabilitative, and assistive contexts. Discussions emphasized the transformative potential of AI enabled robotics to improve precision, reduce provider burden, expand access to specialized care, and enhance patient outcomes particularly in undeserved regions and high risk procedural domains. Special attention was given to austere settings, disaster and relief and military settings.
+  The workshop demonstrated broad consensus on the urgency of establishing a national Center for AI and Robotic Excellence in medicine (CARE). Stakeholders identified priority research thrusts including human robot collaboration, trustworthy autonomy, simulation and digital twins, multi modal sensing, and ethical integration of generative AI into clinical workflows. Participants also articulated the need for high quality datasets, shared test beds, autonomous surgical systems, clinically grounded benchmarks, and sustained interdisciplinary training mechanisms.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-18T17:53:35Z</published>
+    <arxiv:comment>51 pages, 5 figures</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Juan P Wachs</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2507.21065v2</id>
+    <title>AI Pedagogy: Dialogic Social Learning for Artificial Agents</title>
+    <updated>2025-08-11T18:32:56Z</updated>
+    <link href="https://arxiv.org/abs/2507.21065v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2507.21065v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large Language Models (LLMs) have demonstrated remarkable capabilities in processing extensive offline datasets. However, they often face challenges in acquiring and integrating complex, knowledge online. Traditional AI training paradigms, predominantly based on supervised learning or reinforcement learning, mirror a 'Piagetian' model of independent exploration. These approaches typically rely on large datasets and sparse feedback signals, limiting the models' ability to learn efficiently from interactions. Drawing inspiration from Vygotsky's sociocultural theory, this study explores the potential of socially mediated learning paradigms to address these limitations.
+  We introduce a dynamic environment, termed the 'AI Social Gym', where an AI learner agent engages in dyadic pedagogical dialogues with knowledgeable AI teacher agents. These interactions emphasize external, structured dialogue as a core mechanism for knowledge acquisition, contrasting with methods that depend solely on internal inference or pattern recognition.
+  Our investigation focuses on how different pedagogical strategies impact the AI learning process in the context of ontology acquisition. Empirical results indicate that such dialogic approaches-particularly those involving mixed-direction interactions combining top-down explanations with learner-initiated questioning-significantly enhance the LLM's ability to acquire and apply new knowledge, outperforming both unidirectional instructional methods and direct access to structured knowledge, formats typically present in training datasets.
+  These findings suggest that integrating pedagogical and psychological insights into AI and robot training can substantially improve post-training knowledge acquisition and response quality. This approach offers a complementary pathway to existing strategies like prompt engineering</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-25T11:19:48Z</published>
+    <arxiv:comment>accepted at ICSR2025</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Sabrina Patania</name>
+    </author>
+    <author>
+      <name>Luca Annese</name>
+    </author>
+    <author>
+      <name>Cansu Koyuturk</name>
+    </author>
+    <author>
+      <name>Azzurra Ruggeri</name>
+    </author>
+    <author>
+      <name>Dimitri Ognibene</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2508.18460v1</id>
+    <title>Mimicking associative learning of rats via a neuromorphic robot in open field maze using spatial cell models</title>
+    <updated>2025-08-25T20:17:38Z</updated>
+    <link href="https://arxiv.org/abs/2508.18460v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2508.18460v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Data-driven Artificial Intelligence (AI) approaches have exhibited remarkable prowess across various cognitive tasks using extensive training data. However, the reliance on large datasets and neural networks presents challenges such as highpower consumption and limited adaptability, particularly in SWaP-constrained applications like planetary exploration. To address these issues, we propose enhancing the autonomous capabilities of intelligent robots by emulating the associative learning observed in animals. Associative learning enables animals to adapt to their environment by memorizing concurrent events. By replicating this mechanism, neuromorphic robots can navigate dynamic environments autonomously, learning from interactions to optimize performance. This paper explores the emulation of associative learning in rodents using neuromorphic robots within open-field maze environments, leveraging insights from spatial cells such as place and grid cells. By integrating these models, we aim to enable online associative learning for spatial tasks in real-time scenarios, bridging the gap between biological spatial cognition and robotics for advancements in autonomous systems.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.SY" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-08-25T20:17:38Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Tianze Liu</name>
+    </author>
+    <author>
+      <name>Md Abu Bakr Siddique</name>
+    </author>
+    <author>
+      <name>Hongyu An</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2507.23088v1</id>
+    <title>Beyond Rigid AI: Towards Natural Human-Machine Symbiosis for Interoperative Surgical Assistance</title>
+    <updated>2025-07-30T20:42:24Z</updated>
+    <link href="https://arxiv.org/abs/2507.23088v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2507.23088v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Emerging surgical data science and robotics solutions, especially those designed to provide assistance in situ, require natural human-machine interfaces to fully unlock their potential in providing adaptive and intuitive aid. Contemporary AI-driven solutions remain inherently rigid, offering limited flexibility and restricting natural human-machine interaction in dynamic surgical environments. These solutions rely heavily on extensive task-specific pre-training, fixed object categories, and explicit manual-prompting. This work introduces a novel Perception Agent that leverages speech-integrated prompt-engineered large language models (LLMs), segment anything model (SAM), and any-point tracking foundation models to enable a more natural human-machine interaction in real-time intraoperative surgical assistance. Incorporating a memory repository and two novel mechanisms for segmenting unseen elements, Perception Agent offers the flexibility to segment both known and unseen elements in the surgical scene through intuitive interaction. Incorporating the ability to memorize novel elements for use in future surgeries, this work takes a marked step towards human-machine symbiosis in surgical procedures. Through quantitative analysis on a public dataset, we show that the performance of our agent is on par with considerably more labor-intensive manual-prompting strategies. Qualitatively, we show the flexibility of our agent in segmenting novel elements (instruments, phantom grafts, and gauze) in a custom-curated dataset. By offering natural human-machine interaction and overcoming rigidity, our Perception Agent potentially brings AI-based real-time assistance in dynamic surgical environments closer to reality.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-07-30T20:42:24Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Lalithkumar Seenivasan</name>
+    </author>
+    <author>
+      <name>Jiru Xu</name>
+    </author>
+    <author>
+      <name>Roger D. Soberanis Mukul</name>
+    </author>
+    <author>
+      <name>Hao Ding</name>
+    </author>
+    <author>
+      <name>Grayson Byrd</name>
+    </author>
+    <author>
+      <name>Yu-Chun Ku</name>
+    </author>
+    <author>
+      <name>Jose L. Porras</name>
+    </author>
+    <author>
+      <name>Masaru Ishii</name>
+    </author>
+    <author>
+      <name>Mathias Unberath</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2512.03945v1</id>
+    <title>Classification of User Satisfaction in HRI with Social Signals in the Wild</title>
+    <updated>2025-12-03T16:39:08Z</updated>
+    <link href="https://arxiv.org/abs/2512.03945v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2512.03945v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Socially interactive agents (SIAs) are being used in various scenarios and are nearing productive deployment. Evaluating user satisfaction with SIAs' performance is a key factor in designing the interaction between the user and SIA. Currently, subjective user satisfaction is primarily assessed manually through questionnaires or indirectly via system metrics. This study examines the automatic classification of user satisfaction through analysis of social signals, aiming to enhance both manual and autonomous evaluation methods for SIAs. During a field trial at the Deutsches Museum Bonn, a Furhat Robotics head was employed as a service and information hub, collecting an "in-the-wild" dataset. This dataset comprises 46 single-user interactions, including questionnaire responses and video data. Our method focuses on automatically classifying user satisfaction based on time series classification. We use time series of social signal metrics derived from the body pose, time series of facial expressions, and physical distance. This study compares three feature engineering approaches on different machine learning models. The results confirm the method's effectiveness in reliably identifying interactions with low user satisfaction without the need for manually annotated datasets. This approach offers significant potential for enhancing SIA performance and user experience through automated feedback mechanisms.</summary>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-12-03T16:39:08Z</published>
+    <arxiv:comment>15 pages, 3 figures. This paper has been accepted for publication at ICSR+AI 2025</arxiv:comment>
+    <arxiv:primary_category term="cs.HC"/>
+    <author>
+      <name>Michael Schiffmann</name>
+    </author>
+    <author>
+      <name>Sabina Jeschke</name>
+    </author>
+    <author>
+      <name>Anja Richert</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2605.26349v1</id>
+    <title>Closing the Loop in Teleoperation: Episode-Level Data Quality Assessment and Feedback for High-Quality Demonstration Collection</title>
+    <updated>2026-05-25T21:52:08Z</updated>
+    <link href="https://arxiv.org/abs/2605.26349v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2605.26349v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Industrial automation is at a pivotal moment, as Physical AI is driving a transition from rigid, hand-engineered automation systems toward more flexible and adaptive systems. This shift has created a growing demand for large-scale, real-world robot demonstration data, making teleoperation an increasingly important mechanism for data collection. However, high-quality teleoperated demonstrations remain difficult to obtain in practice, as novice operators often produce episodes that are task-successful but suboptimal for downstream use due to inefficient motion, repeated corrections, or operation near robot joint limits. We present a Data Quality Assessment and Feedback (DQAF) framework that closes the loop in teleoperation by providing immediate post-episode feedback grounded in semantic task progress and robot telemetry. The framework extracts quality relevant signals such as sub-task progress, motion smoothness, stalls, kinematic limits and converts them into structured quality assessments and actionable natural-language feedback. Unlike binary success or failure feedback, the proposed system explains why an episode is suboptimal and highlights specific behaviors to correct in the next trial. We evaluate the framework through a diagnostic validation study and a pilot user study. In the validation study, the system is compared with a human reviewer during dataset curation, producing rejection reasons and actionable feedback for improvement. In the pilot study with three novice operators across two manipulation tasks, the operator who received the systems immediate, automated post-episode feedback improved faster than those who did not, producing higher-quality demonstrations sooner.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-05-25T21:52:08Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Gokul Narayanan</name>
+    </author>
+    <author>
+      <name>Yash Shahapurkar</name>
+    </author>
+    <author>
+      <name>Melih Erdogan</name>
+    </author>
+    <author>
+      <name>Brian Zhu</name>
+    </author>
+    <author>
+      <name>Eugen Solowjow</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2601.09740v1</id>
+    <title>Formal Safety Guarantees for Autonomous Vehicles using Barrier Certificates</title>
+    <updated>2026-01-08T19:44:13Z</updated>
+    <link href="https://arxiv.org/abs/2601.09740v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.09740v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Modern AI technologies enable autonomous vehicles to perceive complex scenes, predict human behavior, and make real-time driving decisions. However, these data-driven components often operate as black boxes, lacking interpretability and rigorous safety guarantees. Autonomous vehicles operate in dynamic, mixed-traffic environments where interactions with human-driven vehicles introduce uncertainty and safety challenges. This work develops a formally verified safety framework for Connected and Autonomous Vehicles (CAVs) that integrates Barrier Certificates (BCs) with interpretable traffic conflict metrics, specifically Time-to-Collision (TTC) as a spatio-temporal safety metric. Safety conditions are verified using Satisfiability Modulo Theories (SMT) solvers, and an adaptive control mechanism ensures vehicles comply with these constraints in real time. Evaluation on real-world highway datasets shows a significant reduction in unsafe interactions, with up to 40\% fewer events where TTC falls below a 3 seconds threshold, and complete elimination of conflicts in some lanes. This approach provides both interpretable and provable safety guarantees, demonstrating a practical and scalable strategy for safe autonomous driving.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.SE" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-08T19:44:13Z</published>
+    <arxiv:comment>Accepted to AAAI-26 Bridge Program B10: Making Embodied AI Reliable with Testing and Formal Verification</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Oumaima Barhoumi</name>
+    </author>
+    <author>
+      <name>Mohamed H Zaki</name>
+    </author>
+    <author>
+      <name>Sofiène Tahar</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2507.00051v1</id>
+    <title>Real-Time Guidewire Tip Tracking Using a Siamese Network for Image-Guided Endovascular Procedures</title>
+    <updated>2025-06-25T02:34:00Z</updated>
+    <link href="https://arxiv.org/abs/2507.00051v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2507.00051v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>An ever-growing incorporation of AI solutions into clinical practices enhances the efficiency and effectiveness of healthcare services. This paper focuses on guidewire tip tracking tasks during image-guided therapy for cardiovascular diseases, aiding physicians in improving diagnostic and therapeutic quality. A novel tracking framework based on a Siamese network with dual attention mechanisms combines self- and cross-attention strategies for robust guidewire tip tracking. This design handles visual ambiguities, tissue deformations, and imaging artifacts through enhanced spatial-temporal feature learning. Validation occurred on 3 randomly selected clinical digital subtraction angiography (DSA) sequences from a dataset of 15 sequences, covering multiple interventional scenarios. The results indicate a mean localization error of 0.421 $\pm$ 0.138 mm, with a maximum error of 1.736 mm, and a mean Intersection over Union (IoU) of 0.782. The framework maintains an average processing speed of 57.2 frames per second, meeting the temporal demands of endovascular imaging. Further validations with robotic platforms for automating diagnostics and therapies in clinical routines yielded tracking errors of 0.708 $\pm$ 0.695 mm and 0.148 $\pm$ 0.057 mm in two distinct experimental scenarios.</summary>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-06-25T02:34:00Z</published>
+    <arxiv:comment>This paper has been accepted by Advanced Intelligent Systems</arxiv:comment>
+    <arxiv:primary_category term="eess.IV"/>
+    <author>
+      <name>Tianliang Yao</name>
+    </author>
+    <author>
+      <name>Zhiqiang Pei</name>
+    </author>
+    <author>
+      <name>Yong Li</name>
+    </author>
+    <author>
+      <name>Yixuan Yuan</name>
+    </author>
+    <author>
+      <name>Peng Qi</name>
+    </author>
+    <arxiv:doi>10.1002/aisy.202500425</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1002/aisy.202500425" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2007.07630v1</id>
+    <title>Learning Multiplicative Interactions with Bayesian Neural Networks for Visual-Inertial Odometry</title>
+    <updated>2020-07-15T11:39:29Z</updated>
+    <link href="https://arxiv.org/abs/2007.07630v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2007.07630v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper presents an end-to-end multi-modal learning approach for monocular Visual-Inertial Odometry (VIO), which is specifically designed to exploit sensor complementarity in the light of sensor degradation scenarios. The proposed network makes use of a multi-head self-attention mechanism that learns multiplicative interactions between multiple streams of information. Another design feature of our approach is the incorporation of the model uncertainty using scalable Laplace Approximation. We evaluate the performance of the proposed approach by comparing it against the end-to-end state-of-the-art methods on the KITTI dataset and show that it achieves superior performance. Importantly, our work thereby provides an empirical evidence that learning multiplicative interactions can result in a powerful inductive bias for increased robustness to sensor failures.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-07-15T11:39:29Z</published>
+    <arxiv:comment>Published at Workshop on AI for Autonomous Driving (AIAD), the 37th International Conference on Machine Learning, Vienna, Austria, 2020</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Kashmira Shinde</name>
+    </author>
+    <author>
+      <name>Jongseok Lee</name>
+    </author>
+    <author>
+      <name>Matthias Humt</name>
+    </author>
+    <author>
+      <name>Aydin Sezgin</name>
+    </author>
+    <author>
+      <name>Rudolph Triebel</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2606.17241v1</id>
+    <title>Beyond Benchmarks: Continuous Edge Inference for Fine-Grained Roadside Perception</title>
+    <updated>2026-06-15T19:39:55Z</updated>
+    <link href="https://arxiv.org/abs/2606.17241v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2606.17241v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Continuous AI inference on resource-constrained edge hardware introduces deployment effects that are largely invisible to conventional benchmark evaluation, including temporal instability in streaming video, thermal throttling under sustained load, and workload-dependent performance variability. We present Edge-TSR, a deployment-oriented continuous edge inference system for sustained roadside perception on the NVIDIA Jetson Orin Nano. Edge-TSR integrates detection, tracking, fine-grained classification, and a lightweight track-aware temporal stabilization mechanism that improves streaming inference consistency with negligible computational overhead. Our central finding is that benchmark-centric evaluation systematically overstates deployed edge inference performance. Across three state-of-the-art baselines, we observe consistent 20-30% relative degradation when transitioning from static-image evaluation to real-world streaming deployment. Edge-TSR addresses this gap through temporal inference stabilization, recovering up to 10.16% classification accuracy over per-frame inference baselines while maintaining sustained real-time performance under continuous operation. We evaluate the complete system under diverse real-world deployment conditions, jointly characterizing inference quality, latency, throughput, and thermal behavior during long-duration operation. A 55-minute vehicular deployment over a 26 km route demonstrates sustained operation at 16.18 FPS within safe thermal limits on a single embedded device without cloud offload. Our findings show that deployment-aware evaluation and temporal inference stabilization are necessary components of continuously operating edge AI systems intended for real-world sensing deployments. We release a sample annotated streaming video evaluation dataset and full system implementation to support reproducible deployment-centric evaluation.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.SY" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-06-15T19:39:55Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Aditya Mishra</name>
+    </author>
+    <author>
+      <name>Haroon Lone</name>
+    </author>
+  </entry>
+</feed>
