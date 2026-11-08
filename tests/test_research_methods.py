@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import copy
 import contextlib
+import copy
 import io
 import json
 import shutil
@@ -11,11 +11,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, autopilot, figure_layout
+from scripts import api_orchestrator, figure_layout, source_scope
 from scripts import pre_submission_review as review
 from scripts import research_candidates as candidates
 from scripts import research_methods as methods
-from scripts import source_scope
 
 
 def write_json(path, value):
@@ -126,8 +125,8 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertFalse((self.project / "state/run.json").exists())
 
     def test_native_exploration_refresh_does_not_build_confirmatory_design_or_reporting(self):
-        from tests.test_research_exploration import NativeExplorationTests
         from scripts.research_artifacts import read, write
+        from tests.test_research_exploration import NativeExplorationTests
         fixture = NativeExplorationTests(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
         contract = fixture.project / "papers/P01/paper-contract.json"
         value = read(contract)
@@ -239,7 +238,7 @@ class ResearchMethodTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "5000"):
             scientific_reasoning.load_policy(root)
 
-    def test_legacy_intake_cannot_reintroduce_retired_gates_through_api_or_cli_context(self):
+    def test_legacy_intake_cannot_reintroduce_retired_gates_through_shared_api_context(self):
         root = Path(self.temp.name)
         project = root / "projects/legacy"
         intake = write_json(project / "intake/constraints.json", {
@@ -249,16 +248,14 @@ class ResearchMethodTests(unittest.TestCase):
         original, digest = intake.read_bytes(), methods.sha256(intake)
         states = [{"stage": "intake", "gate": "G0"}, {"stage": "topic-intelligence", "gate": "G1"}]
         write_json(root / "config/stages.json", {"stages": {state["stage"]: {"gate": state["gate"]} for state in states}})
-        with patch.object(api_orchestrator, "ROOT", root), patch.object(autopilot, "ROOT", root):
+        with patch.object(api_orchestrator, "ROOT", root):
             prompts = []
             for state in states:
                 snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True)
                 prompts.extend([api_orchestrator.planning_prompt("legacy", state["stage"], ""),
                                 api_orchestrator.writer_prompt("legacy", state["stage"], ""),
                                 api_orchestrator.critic_prompt("legacy", state["stage"], ""),
-                                autopilot.planner_prompt("legacy", state, {}, ""),
-                                autopilot.writer_prompt("legacy", state, {}, "", project / "plan.json"),
-                                autopilot.critic_prompt("legacy", state)])
+                                ])
         self.assertIn(digest, snapshot)
         self.assertIn("CNY 60 per-paper hard limits", snapshot)
         for prompt in prompts:
@@ -327,9 +324,8 @@ class ResearchMethodTests(unittest.TestCase):
              patch.object(api_orchestrator, "project_snapshot", return_value="Original source view"), \
              patch.object(api_orchestrator, "figure_reference_context", return_value=""):
             prompt = methods.stage_context("writing-and-review", "critic", project=self.project)
-            for active_prompt in (api_orchestrator.critic_prompt("study", "writing-and-review", ""),
-                                  autopilot.critic_prompt("study", {"stage": "writing-and-review"})):
-                self.assertIn(method["guidance"], active_prompt)
+            active_prompt = api_orchestrator.critic_prompt("study", "writing-and-review", "")
+            self.assertIn(method["guidance"], active_prompt)
         self.assertIn("PRIMARY PEER-REVIEW METHOD: K-Dense", prompt)
         self.assertIn(method["guidance"], prompt)
         self.assertIn("Analysis–design alignment and assumptions", prompt)
@@ -360,7 +356,7 @@ class ResearchMethodTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "has changed"):
             methods.peer_review_context(methods_root)
 
-    def test_selected_venue_criteria_reach_both_ordinary_critics_without_entering_final_views(self):
+    def test_selected_venue_criteria_reach_ordinary_critic_without_entering_final_views(self):
         from scripts import journal_dossier, review_panel
         from tests.test_review_panel import ReviewPanelTests
         case = ReviewPanelTests(); case.setUp(); self.addCleanup(case.doCleanups)
@@ -389,9 +385,8 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertIn("existing finding/rationale text", context)
         with patch.object(api_orchestrator, "project_root", return_value=project), \
              patch("scripts.model_runtime.call", side_effect=AssertionError("No additional reviewer call")):
-            for prompt in (api_orchestrator.critic_prompt("fixture", "writing-and-review", ""),
-                           autopilot.critic_prompt("fixture", state)):
-                self.assertIn(context, prompt)
+            prompt = api_orchestrator.critic_prompt("fixture", "writing-and-review", "")
+            self.assertIn(context, prompt)
             final = review_panel.prepare(project, "P01")
         self.assertNotIn(quote, final["views"]["editorial"]["text"])
         self.assertNotIn(quote, json.dumps(final["views"]["editorial"], ensure_ascii=False))
@@ -610,17 +605,6 @@ class ResearchMethodTests(unittest.TestCase):
             self.assertEqual(api_orchestrator.safe_target("study", "papers/P01/reviews/pre-submission-checklist.json"),
                              self.project / "papers/P01/reviews/pre-submission-checklist.json")
 
-    def test_cli_writer_cannot_create_a_protected_pass_or_scope(self):
-        with patch.object(autopilot.researchctl, "PROJECTS_ROOT", self.project.parent):
-            before = autopilot.protected_control_snapshot("study")
-            files = [self.project / "program/hypothesis-audit.json",
-                     self.project / "papers/P01/reviews/pre-submission-review.json",
-                     self.project / "evidence/source-scopes/forged.json"]
-            for file in files:
-                write_json(file, {"pass": True})
-            with self.assertRaises(autopilot.AutopilotError):
-                autopilot.ensure_protected_control_unchanged("study", before)
-            self.assertTrue(all(not file.exists() for file in files))
 
     def test_critic_excludes_preferred_user_verdict(self):
         with patch.object(api_orchestrator, "project_snapshot", return_value="Current evidence packet"):

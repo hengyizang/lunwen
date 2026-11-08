@@ -10,10 +10,12 @@ from __future__ import annotations
 import base64
 import binascii
 import hashlib
+import http.client
 import json
 import os
 import re
 import math
+import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -629,6 +631,81 @@ class _NoGenerationRedirect(urllib.request.HTTPRedirectHandler):
         raise ProviderError("generation redirect refused; reconcile billing before retry")
 
 
+def _responses_sse(body, headers, status, *, complete=True):
+    """Use the full response.completed object, never assembled text deltas.
+
+    Contract: https://developers.openai.com/api/reference/resources/responses/streaming-events
+    and openai/openai-python ResponseCompletedEvent (read 2026-11-08).
+    """
+    value, terminal, name, data, identity, stream_error = None, None, None, [], {}, False
+    authoritative = {"response.created", "response.in_progress", "response.completed", "response.failed", "response.incomplete"}
+    try:
+        for raw_line in body.removeprefix(b"\xef\xbb\xbf").replace(b"\r\n", b"\n").replace(b"\r", b"\n").split(b"\n"):
+            line = raw_line.decode("utf-8")
+            if not line:
+                if data:
+                    content = "\n".join(data)
+                    if content == "[DONE]" and name:
+                        raise ValueError("typed DONE is not a terminal response event")
+                    if content != "[DONE]":
+                        event = json.loads(content)
+                        kind = event.get("type") if isinstance(event, dict) else None
+                        if not isinstance(kind, str) or (name and name != kind) or terminal:
+                            raise ValueError("invalid or post-terminal SSE event")
+                        if kind in authoritative:
+                            if kind in {"response.completed", "response.failed", "response.incomplete"}:
+                                terminal = kind
+                            if not isinstance(event.get("response"), dict):
+                                raise ValueError("authoritative SSE event lacks its response")
+                            value = event["response"]
+                            if (value.get("object") != "response" or not isinstance(value.get("output"), list)
+                                    or type(event.get("sequence_number")) is not int or event["sequence_number"] < 0):
+                                raise ValueError("invalid authoritative SSE response shape")
+                            for key in ("model", "id"):
+                                actual = value.get(key)
+                                if (not isinstance(actual, str) or not re.fullmatch(r"[A-Za-z0-9._:/-]{1,160}", actual)
+                                        or key in identity and identity[key] != actual):
+                                    raise ValueError("SSE response identity changed or was malformed")
+                                identity[key] = actual
+                            if kind in {"response.created", "response.in_progress"}:
+                                if value.get("status") not in {"queued", "in_progress"}:
+                                    raise ValueError("invalid nonterminal SSE response status")
+                            elif value.get("status") != kind.removeprefix("response."):
+                                raise ValueError("invalid terminal response status")
+                        elif kind == "error":
+                            value, stream_error = event, True
+                            raise ValueError("SSE error event")
+                name, data = None, []
+            elif not line.startswith(":"):
+                field, _, content = line.partition(":")
+                content = content.removeprefix(" ")
+                if field == "event":
+                    name = content
+                elif field == "data":
+                    data.append(content)
+        if data or terminal != "response.completed" or not complete:
+            raise ValueError("SSE ended without a complete terminal response")
+    except (ValueError, TypeError, RecursionError):
+        error = ProviderError("Responses SSE was incomplete or invalid; no automatic generation retry; reconcile billing")
+        error.response_evidence = _response_evidence(value, headers=headers, body=body, http_status=status, complete=complete)
+        if stream_error:
+            code = _response_evidence({"id": value.get("code")}, headers=headers)["diagnostics"].get("id")
+            error.response_evidence["response"] = {"type": "error", "code": code}
+            error.response_evidence["diagnostics"]["error_code"] = code
+        error.response_evidence["http_evidence"].update(response_format="sse", sse_terminal_event=terminal)
+        initial = _response_evidence(identity, headers=headers)["diagnostics"]
+        error.response_evidence["http_evidence"]["sse_initial_identity"] = {key: initial[key] for key in ("model", "id") if key in initial}
+        raise error from None
+    return value
+
+
+def _sse_failure_evidence(body, headers, status):
+    try:
+        _responses_sse(body, headers, status, complete=False)
+    except ProviderError as error:
+        return error.response_evidence
+
+
 def _production_request(url: str, headers: dict[str, str], payload: dict[str, Any],
                         timeout: int) -> dict[str, Any]:
     if os.environ.get("GITHUB_ACTIONS") != "true":
@@ -637,25 +714,57 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
     if (parsed.scheme != "https" or parsed.netloc not in {"cheapai.info", "codekey.ai"}
             or parsed.username or parsed.password or parsed.query or parsed.fragment):
         raise ProviderError("production generation requires an exact configured HTTPS endpoint")
+    streaming = payload.get("stream") is True
+    if streaming:
+        from scripts.model_routing import g1_response_streaming_active
+        if url != "https://codekey.ai/v1/responses" or payload.get("model") != "gpt-6-astra" or not g1_response_streaming_active():
+            raise ProviderError("Responses streaming requires the scoped Astra G1 transport")
     from scripts.relay_guard import authorize_transport
     authorize_transport(url, headers, payload=payload)
     request = urllib.request.Request(url, data=json.dumps(payload, allow_nan=False).encode("utf-8"),
                                      headers={**headers, "Content-Type": "application/json",
                                               "User-Agent": "lunwen-production-research/1.0",
-                                              "Accept": "application/json"}, method="POST")
+                                              "Accept": "text/event-stream" if streaming else "application/json"}, method="POST")
     # One reservation permits one POST. No retries, protocol fallbacks or paid
     # warm-ups. A lost response remains an outstanding spend reservation.
     body = None
     status = None
+    deadline = time.monotonic() + timeout
     try:
         with urllib.request.build_opener(_NoGenerationRedirect()).open(request, timeout=timeout) as response:
             status = getattr(response, "status", None)
-            body = response.read(4 * 1024 * 1024 + 1)
+            if streaming:
+                body = bytearray()
+                while len(body) <= 4 * 1024 * 1024:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError("bounded stream deadline")
+                    socket = getattr(getattr(getattr(response, "fp", None), "raw", None), "_sock", None)
+                    if socket is not None:
+                        socket.settimeout(remaining)
+                    chunk = response.read1(min(65536, 4 * 1024 * 1024 + 1 - len(body)))
+                    if not chunk:
+                        remaining_length = getattr(response, "length", None)
+                        if remaining_length is not None and remaining_length > 0:
+                            raise http.client.IncompleteRead(b"", remaining_length)
+                        break
+                    body.extend(chunk)
+                body = bytes(body)
+            else:
+                body = response.read(4 * 1024 * 1024 + 1)
             if len(body) > 4 * 1024 * 1024:
                 error = ProviderError("generation response exceeded size limit; reconcile billing")
-                error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=status, complete=False)
+                error.response_evidence = (_sse_failure_evidence(body, headers, status) if streaming else
+                    _response_evidence(None, headers=headers, body=body, http_status=status, complete=False))
                 raise error
-            value = json.loads(body.decode("utf-8"))
+            if streaming:
+                if response.headers.get("Content-Type", "").split(";")[0].strip().lower() != "text/event-stream":
+                    error = ProviderError("Responses stream has the wrong content type; reconcile billing")
+                    error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=status)
+                    raise error
+                value = _responses_sse(body, headers, status)
+            else:
+                value = json.loads(body.decode("utf-8"))
     except urllib.error.HTTPError as exc:
         error = ProviderError(f"API HTTP {exc.code}; no automatic generation retry; reconcile billing")
         try:
@@ -665,10 +774,11 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
         error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=exc.code,
                                                     complete=body is not None and len(body) <= 4 * 1024 * 1024)
         raise error from None
-    except (urllib.error.URLError, TimeoutError, ValueError, RecursionError):
+    except (OSError, http.client.HTTPException, ValueError, RecursionError):
         error = ProviderError("API response unavailable; no automatic generation retry; reconcile billing")
         if body is not None:
-            error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=status)
+            error.response_evidence = (_sse_failure_evidence(body, headers, status) if streaming else
+                _response_evidence(None, headers=headers, body=body, http_status=status))
         raise error from None
     if not isinstance(value, dict) or value.get("error"):
         error = ProviderError("generation response was not a successful JSON object; reconcile billing")
@@ -678,6 +788,8 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
     captured.http_evidence = {"http_status": status if type(status) is int else None,
         "http_body_capture_complete": True, "captured_http_body_bytes": len(body),
         "raw_http_body_sha256": hashlib.sha256(body).hexdigest()}
+    if streaming:
+        captured.http_evidence.update(response_format="sse", sse_terminal_event="response.completed")
     return captured
 
 
@@ -858,9 +970,15 @@ def production_endpoint(provider: str, model: str | None = None) -> str:
 def call_production(provider: str, prompt: str, *, model: str | None = None,
                     system: str | None = None, max_output_tokens: int = 8000,
                     timeout: int = 180, reasoning_effort: str | None = None,
-                    attachments: Any = None) -> ModelResult:
+                    attachments: Any = None, stream: bool = False) -> ModelResult:
     spec = PRODUCTION_PROVIDERS[provider]
     model = spec["model"] if model is None else model
+    if type(stream) is not bool:
+        raise ProviderError("stream must be an explicit boolean")
+    if stream:
+        from scripts.model_routing import g1_response_streaming_active
+        if provider != "codekey-codex-pro" or model != "gpt-6-astra" or not g1_response_streaming_active():
+            raise ProviderError("Responses streaming is restricted to the explicit Astra G1 validation sample")
     if model not in spec["models"]:
         raise ProviderError("model is not explicitly allowed on the selected production route")
     if not isinstance(prompt, str) or not prompt or (system is not None and not isinstance(system, str)):
@@ -898,6 +1016,8 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
         messages.append({"role": "user", "content": user_parts})
         payload = {"model": model, "input": messages, "max_output_tokens": max_output_tokens,
                    "reasoning": {"effort": effort}, "store": False, "tools": [], "service_tier": "default"}
+        if stream:
+            payload["stream"] = True
     elif family == "anthropic":
         headers = {"x-api-key": key, "anthropic-version": "2023-06-01"}
         payload = {**_anthropic_payload(prompt, model, system, max_output_tokens),

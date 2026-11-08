@@ -2,6 +2,12 @@
 
 Doctoral Research OS can run without Claude Code or Codex CLI. The Python control plane calls Claude only for a non-publishable semantic plan and independent audits. OpenAI/Codex independently writes and remediates every persistent artifact. The control plane validates bundles atomically, rejects long verbatim spans copied from Claude control text, records writer-family hashes, and requires a current non-Anthropic origin for every final packaged file.
 
+`autopilot.py start/resume/plan` now delegates to this same API cycle and checked
+stage transitions. The old local Claude Code/Codex process backend is retired;
+it no longer provides subscription authentication, arbitrary workspace tools or
+process transcripts. `plan` is read-only and makes no requests. See
+[the compatibility commands](CHAT-USAGE.md#api-兼容命令入口) for retired options.
+
 ## Required environment
 
 ```bash
@@ -115,7 +121,7 @@ Python control plane ---- state/gates/hashes/budgets/audits
   +---- submission package - manual upload only
 ```
 
-Claude Code and Codex CLI remain optional acceleration interfaces. The repository's deterministic control plane is the source of truth.
+The deterministic control plane remains authoritative. Command compatibility does not restore the retired local Claude Code/Codex subprocess backend.
 
 ## What is and is not automatic
 
@@ -169,3 +175,19 @@ writer provenance, different-family criticism, source bindings, deadline and
 single-POST controls apply. Astra planning records use `semantic-plan` names.
 The sample cannot approve G1/G2, advance a gate, auto-reschedule, promote a route
 or substitute for the separate public-review calibration.
+
+The same explicit roster may set `response_streaming: true` for its CodeKey
+Astra Responses requests. Argon and default production requests keep their
+existing transport. The stream must end with a complete, identity-consistent
+`response.completed` object and complete HTTP framing. Deltas, `[DONE]`, a
+truncated body or an incomplete/error event cannot supply a successful result.
+The scope/cache identity records streaming; one reservation still permits one
+POST, with no automatic retry. Provider support and any improvement over a 524
+require a separate actual sample, not just software tests.
+
+For a failed temporary transport, an owner `preflight` request may name the
+allowlisted `billing_provider`, for example `codekey-codex-pro`. Its separate
+`billing-inspection.json` reads only that provider's debit counters and shared
+guard; default catalogs and routes remain unchanged. It generates no text,
+settles no charge and grants no budget. Keep an unknown reservation until
+independent evidence supports the existing explicit reconciliation operation.

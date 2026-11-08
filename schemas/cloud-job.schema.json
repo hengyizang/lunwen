@@ -281,6 +281,22 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 120
+    },
+    "billing_provider": {
+      "enum": [
+        "cheapai-ccmax",
+        "cheapai-gpt-discount",
+        "cheapai-gpt-pro",
+        "cheapai-kiro-discount",
+        "codekey-codex-discount",
+        "codekey-codex-pro",
+        "codekey-deepseek",
+        "codekey-gemini",
+        "codekey-gemini-chat",
+        "codekey-kimi",
+        "codekey-kiro-enterprise",
+        "codekey-kiro-standard"
+      ]
     }
   },
   "allOf": [
@@ -320,7 +336,6 @@
               "acceptance",
               "continuation",
               "free_jev_probe",
-              "preflight",
               "routing_status",
               "status"
             ]
@@ -768,6 +783,29 @@
             "question",
             "schema_version",
             "settings"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "preflight"
+            ]
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "enum": [
+            "action",
+            "actor",
+            "allow_paid",
+            "billing_provider",
+            "project",
+            "schema_version"
           ]
         }
       }

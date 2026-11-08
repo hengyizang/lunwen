@@ -15,6 +15,7 @@ import socket
 import subprocess
 import tempfile
 from pathlib import Path
+from tests import research_cycle_fixtures as cycle_fixtures
 from unittest.mock import patch
 
 from scripts import api_orchestrator, cloud_checkpoint, model_runtime, model_spend
@@ -49,58 +50,19 @@ class Response:
 
 def response_texts() -> list[str]:
     semantic_plan = json.dumps(
-        {
-            "schema_version": "1.0",
-            "stage": "topic-intelligence",
-            "objectives": ["compare candidates"],
-            "artifact_specs": [],
-            "evidence_requirements": [],
-            "figure_specs": [],
-            "risks": [],
-            "open_questions": [],
-        }
+        cycle_fixtures.semantic_plan('topic-intelligence', objectives=['compare candidates'])
     )
     writer_bundle = json.dumps(
-        {
-            "schema_version": "1.0",
-            "stage": "topic-intelligence",
-            "artifacts": [
-                {"path": "program/topic.md", "content": "draft"}
-            ],
-            "notes": [],
-        }
+        cycle_fixtures.artifact_bundle('topic-intelligence', artifacts=[{'path': 'program/topic.md', 'content': 'draft'}])
     )
     initial_audit = json.dumps(
-        {
-            "verdict": "revise",
-            "fatal_findings": [],
-            "major_findings": ["missing comparison"],
-            "minor_findings": [],
-            "missing_evidence": [],
-            "remediation_steps": ["add comparison"],
-            "uncertainty": [],
-        }
+        cycle_fixtures.independent_audit('revise', major_findings=['missing comparison'], remediation_steps=['add comparison'])
     )
     remediation = json.dumps(
-        {
-            "schema_version": "1.0",
-            "stage": "topic-intelligence",
-            "artifacts": [
-                {"path": "program/topic.md", "content": "revised"}
-            ],
-            "notes": ["fixed: added the requested comparison"],
-        }
+        cycle_fixtures.artifact_bundle('topic-intelligence', artifacts=[{'path': 'program/topic.md', 'content': 'revised'}], notes=['fixed: added the requested comparison'])
     )
     final_audit = json.dumps(
-        {
-            "verdict": "pass-with-conditions",
-            "fatal_findings": [],
-            "major_findings": [],
-            "minor_findings": ["human verification remains"],
-            "missing_evidence": [],
-            "remediation_steps": [],
-            "uncertainty": ["external facts remain provisional"],
-        }
+        cycle_fixtures.independent_audit('pass-with-conditions', minor_findings=['human verification remains'], uncertainty=['external facts remain provisional'])
     )
     return [semantic_plan, writer_bundle, initial_audit, remediation, final_audit]
 

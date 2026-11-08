@@ -584,6 +584,8 @@ def call(
         "dynamic_decision": decision,
         "attachments": media_identity,
     }
+    if route.get("response_streaming"):
+        request_metrics["response_streaming"] = True
     if decision is not None:
         _append(project_root / "state/model-route-decisions.jsonl", {
             "schema_version": "1.0", "at": utc_now(), "run_id": run_id,
@@ -679,6 +681,8 @@ def call(
     request_started = time.monotonic()
     try:
         inference_options = {"reasoning_effort": reasoning_effort} if reasoning_effort is not None else {}
+        if route.get("response_streaming"):
+            inference_options["stream"] = True
         if attachments:
             inference_options["attachments"] = attachments
         if production:

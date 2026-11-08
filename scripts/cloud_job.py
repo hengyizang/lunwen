@@ -17,8 +17,9 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 try:
-    from scripts import cloud_checkpoint, cloud_continuation, cloud_human_controls, model_runtime, model_spend, researchctl
+    from scripts import ai_providers, cloud_checkpoint, cloud_continuation, cloud_human_controls, model_runtime, model_spend, researchctl
 except ImportError:
+    import ai_providers  # type: ignore
     import researchctl  # type: ignore
     import cloud_checkpoint  # type: ignore
     import model_spend  # type: ignore
@@ -39,7 +40,7 @@ EXTRA = {
     "review_dossier": {"operation", "gate", "paper_id", "dataset_id", "receipt_id", "source", "scope", "packet_id", "kind", "record_id", "decision", "new_ceiling_cny", "target_submission_ready_date"},
     **{action: fields | cloud_human_controls.DECISIONS.get(action, set()) | {"expected_sha256", "note"}
        for action, fields in cloud_human_controls.SELECTORS.items()},
-    "preflight": set(), "acceptance": set(), "free_jev_probe": set(),
+    "preflight": {"billing_provider"}, "acceptance": set(), "free_jev_probe": set(),
     "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count"},
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
@@ -97,6 +98,8 @@ def validate_request(value: object) -> dict:
         raise CloudJobError("actor must name the human requester")
     if "allow_paid" in value and type(value["allow_paid"]) is not bool:
         raise CloudJobError("legacy allow_paid must be a boolean when supplied")
+    if "billing_provider" in value and (not isinstance(value["billing_provider"], str) or value["billing_provider"] not in ai_providers.PRODUCTION_PROVIDERS):
+        raise CloudJobError("billing_provider must name an allowlisted production provider")
     if action == "review_dossier" or action in cloud_human_controls.ACTIONS:
         try:
             operation = cloud_human_controls.validate_fields(value)
@@ -279,6 +282,7 @@ def job_schema() -> dict:
     schema = json.loads((ROOT / "schemas/cloud-job.schema.json").read_text(encoding="utf-8"))
     schema["required"] = sorted(COMMON - {"allow_paid"})
     schema["properties"]["action"]["enum"] = sorted(EXTRA)
+    schema["properties"]["billing_provider"] = {"enum": sorted(ai_providers.PRODUCTION_PROVIDERS)}
     schema["properties"]["operation"]["enum"] = sorted(cloud_human_controls.ACTIONS)
     fields_by_actions = {}
     for action, fields in sorted(EXTRA.items()):
@@ -451,6 +455,10 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
             output = cloud_continuation.startup_report(slug)
             output.update(repository=REPOSITORY, python=sys.version.split()[0], cloud_runtime=True)
             receipt("gateway-startup.json", output)
+            if "billing_provider" in job:
+                from scripts import production_readiness
+                receipt("billing-inspection.json", production_readiness.report(
+                    check_billing=True, billing_provider=job["billing_provider"]))
             detail = (f"Configuration ready: **{output['configuration_ready']}** · "
                       f"Ready to continue: **{output['ready_to_continue']}** · Model calls: **0**.\n\n"
                       + output["next_action"] + "\n\n")

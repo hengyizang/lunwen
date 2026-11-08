@@ -30,6 +30,7 @@ class CloudJobTests(unittest.TestCase):
         self.assertLessEqual(set.union(*cloud_job.EXTRA.values()), set(schema["properties"]))
         validator = Draft202012Validator(schema)
         for value in (
+            request("preflight", billing_provider="codekey-codex-pro"),
             request("literature", request_file="program/reading-operation.json"),
             request("auxiliary", manifest="evidence/auxiliary-jobs/check.json"),
             request("routing_status"),
@@ -50,11 +51,49 @@ class CloudJobTests(unittest.TestCase):
         validator = Draft202012Validator(cloud_job.job_schema())
         for value in (request("status", request_file="program/reading-operation.json"),
                       request("cycle", allow_paid="yes"), request("approve", gate="G1"),
+                      request("status", billing_provider="codekey-codex-pro"),
+                      request("cycle", billing_provider="codekey-codex-pro"),
+                      *(request("preflight", billing_provider=provider) for provider in ("unknown", "anthropic", None, [], True)),
                       request("review_dossier", operation="confirm_review_packet")):
             with self.subTest(value=value):
                 self.assertFalse(validator.is_valid(value))
                 with self.assertRaises(cloud_job.CloudJobError):
                     cloud_job.validate_request(value)
+
+    def test_preflight_optional_meter_receipt_leaves_startup_and_existing_budget_unchanged(self):
+        from scripts import production_readiness, relay_billing
+        from tests.test_production_cloud_jobs import ProductionCloudJobTests
+        startup = {"configuration_ready": False, "ready_to_continue": False,
+                   "next_action": "Inspect existing holds.", "configuration_errors": ["Existing route unavailable."]}
+        for provider in (None, "codekey-codex-pro"):
+            with self.subTest(provider=provider):
+                fixture = ProductionCloudJobTests()
+                fixture.setUp()
+                self.addCleanup(fixture.doCleanups)
+                control = fixture.project / "state/model-spend-control.json"
+                before = b'{"spent_cny":7,"reservations":{"existing-hold":{"max_cost_cny":20}}}\n'
+                control.write_bytes(before)
+                job = request("preflight", **({"billing_provider": provider} if provider else {}))
+                with (fixture.mocked_job() as mocks,
+                      patch.object(cloud_job.cloud_continuation, "startup_report", return_value=dict(startup)) as preflight,
+                      patch.object(production_readiness, "report", return_value={"billing_meters": {provider: {"metadata_access_verified": True}}}) as meter,
+                      patch.object(cloud_job.model_runtime, "call") as generate,
+                      patch.object(cloud_job.model_spend, "write") as write,
+                      patch.object(relay_billing, "settle") as settle):
+                    self.assertEqual(cloud_job.run_job(cloud_job.validate_request(job), "meter-fixture"), 0)
+                preflight.assert_called_once_with("my-phd")
+                artifact = fixture.runtime / "cloud-artifact"
+                saved = json.loads((artifact / "gateway-startup.json").read_text())
+                self.assertEqual({key: saved[key] for key in startup}, startup)
+                if provider:
+                    meter.assert_called_once_with(check_billing=True, billing_provider=provider)
+                    self.assertEqual(json.loads((artifact / "billing-inspection.json").read_text())["billing_meters"], {provider: {"metadata_access_verified": True}})
+                else:
+                    meter.assert_not_called()
+                    self.assertFalse((artifact / "billing-inspection.json").exists())
+                self.assertEqual(control.read_bytes(), before)
+                for operation in (generate, write, settle, mocks.grant, mocks.execute):
+                    operation.assert_not_called()
 
     def test_owner_single_object_and_optional_legacy_paid_flag(self):
         self.assertEqual(cloud_job.issue_request(issue(request()))["action"], "status")

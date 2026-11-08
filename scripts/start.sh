@@ -3,8 +3,9 @@ set -euo pipefail
 
 mode="api"
 if [[ "${1:-}" == "--cli" ]]; then
-  mode="cli"
+  mode="compatibility"
   shift
+  echo "--cli now uses the shared API cycle; the local Claude Code/Codex process backend is retired." >&2
 fi
 if [[ "$#" -lt 1 ]]; then
   echo "Usage: bash scripts/start.sh [--cli] <project-slug> [goal and constraints]" >&2
@@ -17,7 +18,7 @@ shift
 context="$*"
 cd "$repo_root"
 
-if [[ "$mode" == "cli" ]]; then
+if [[ "$mode" == "compatibility" ]]; then
   exec python3 scripts/autopilot.py start --project "$project_slug" --context "$context"
 fi
 

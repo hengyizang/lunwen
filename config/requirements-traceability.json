@@ -231,7 +231,7 @@
       "implementation": "implemented",
       "acceptance": "ci-required",
       "evidence": [
-        "scripts/rebuttal_triage.py",
+        "scripts/reviewer_rounds.py",
         "scripts/researchctl.py"
       ],
       "tests": [
@@ -742,8 +742,9 @@
           "reason": "Shared protected-text, formula and citation extraction used by revision integrity."
         },
         "scripts/rebuttal_triage.py": {
-          "action": "retained_observation",
-          "reason": "Optional source-bound response preparation; genuine reviewer originals remain protected."
+          "action": "removed",
+          "replacement": "scripts/reviewer_rounds.py",
+          "reason": "Concern cards retain their optional preparation and source-bound final response checks in the shared reviewer-round response writer; genuine originals remain protected."
         },
         "scripts/dashboard.py": {
           "action": "removed",
@@ -771,7 +772,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "The frozen 24 real eLife papers retain the 16/8 split. Actual CodeKey Opus #134/#142/#146 returned no text, truncated JSON and an explicit refusal, with no accepted complete labels; verified fees are CNY 0.3913704/0.3947136/0.668094. A separate current-session source-only eight-paper pilot agreed with three published categories (majority baseline two); its exact API identity and app fee are unavailable and it cannot promote a production model or replace human claim labels. Native G1 #144 completed free discovery; #148 completed the last six searches then hit HTTP524 at its first planner call, before writing. Its CNY 1.0616415 fee was independently reconciled by #150, leaving the original three holds and CNY 500 ceiling unchanged. Later drafts and temporary roster tests must retain their own identity/source receipts. Human >=0.85 claim agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified.",
+      "remaining": "The frozen 24 real eLife papers retain the 16/8 split. Actual CodeKey Opus #134/#142/#146 returned no text, truncated JSON and an explicit refusal, with no accepted complete labels; verified fees are CNY 0.3913704/0.3947136/0.668094. A separate current-session source-only eight-paper pilot agreed with three published categories (majority baseline two); its exact API identity and app fee are unavailable and it cannot promote a production model or replace human claim labels. Native G1 #144 completed free discovery; #148 completed the last six searches then hit HTTP524 at its first planner call, before writing. The explicitly selected Astra/Argon sample #153 completed 56 fresh dataset-catalog operations then hit HTTP524 at its first Astra planner request; writer and Argon were never called and no native scientific artifacts were produced. Its CNY 5.375944 reservation remains unknown and retained, with no automatic retry. Its CNY 1.0616415 fee was independently reconciled by #150, retaining the original three holds and CNY 500 ceiling; #153 adds its separately unknown reservation without extra authority. Later drafts and temporary roster tests must retain their own identity/source receipts. Human >=0.85 claim agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]

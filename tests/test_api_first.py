@@ -3,6 +3,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from tests import research_cycle_fixtures as cycle_fixtures
 from unittest.mock import patch
 
 from scripts import api_orchestrator
@@ -449,15 +450,7 @@ class ApiFirstTests(unittest.TestCase):
             self.assertNotIn("duplicated review", snapshot)
 
     def test_extract_audit_requires_exact_schema(self):
-        audit = {
-            "verdict": "revise",
-            "fatal_findings": [],
-            "major_findings": ["missing baseline"],
-            "minor_findings": [],
-            "missing_evidence": [],
-            "remediation_steps": ["add baseline"],
-            "uncertainty": [],
-        }
+        audit = cycle_fixtures.independent_audit('revise', major_findings=['missing baseline'], remediation_steps=['add baseline'])
         self.assertEqual(
             api_orchestrator.extract_audit_json(json.dumps(audit)), audit
         )
@@ -466,16 +459,7 @@ class ApiFirstTests(unittest.TestCase):
             api_orchestrator.extract_audit_json(json.dumps(audit))
 
     def test_extract_semantic_plan_requires_non_prose_structure(self):
-        plan = {
-            "schema_version": "1.0",
-            "stage": "intake",
-            "objectives": ["capture constraints"],
-            "artifact_specs": [],
-            "evidence_requirements": [],
-            "figure_specs": [],
-            "risks": [],
-            "open_questions": [],
-        }
+        plan = cycle_fixtures.semantic_plan('intake', objectives=['capture constraints'])
         self.assertEqual(api_orchestrator.extract_plan_json(json.dumps(plan)), plan)
 
     def test_long_claude_phrase_copy_is_rejected(self):
@@ -554,16 +538,7 @@ class ApiFirstTests(unittest.TestCase):
                 encoding="utf-8",
             )
             semantic_plan = json.dumps(
-                {
-                    "schema_version": "1.0",
-                    "stage": "topic-intelligence",
-                    "objectives": ["compare candidates"],
-                    "artifact_specs": [],
-                    "evidence_requirements": [],
-                    "figure_specs": [],
-                    "risks": [],
-                    "open_questions": [],
-                }
+                cycle_fixtures.semantic_plan('topic-intelligence', objectives=['compare candidates'])
             )
             writer_bundle = json.dumps(
                 {
@@ -576,36 +551,13 @@ class ApiFirstTests(unittest.TestCase):
                 }
             )
             initial_audit = json.dumps(
-                {
-                    "verdict": "revise",
-                    "fatal_findings": [],
-                    "major_findings": ["missing comparison"],
-                    "minor_findings": [],
-                    "missing_evidence": [],
-                    "remediation_steps": ["add comparison"],
-                    "uncertainty": [],
-                }
+                cycle_fixtures.independent_audit('revise', major_findings=['missing comparison'], remediation_steps=['add comparison'])
             )
             remediation = json.dumps(
-                {
-                    "schema_version": "1.0",
-                    "stage": "topic-intelligence",
-                    "artifacts": [
-                        {"path": "program/topic.md", "content": "revised"}
-                    ],
-                    "notes": ["fixed: added the requested comparison"],
-                }
+                cycle_fixtures.artifact_bundle('topic-intelligence', artifacts=[{'path': 'program/topic.md', 'content': 'revised'}], notes=['fixed: added the requested comparison'])
             )
             final_audit = json.dumps(
-                {
-                    "verdict": "pass-with-conditions",
-                    "fatal_findings": [],
-                    "major_findings": [],
-                    "minor_findings": ["human verification remains"],
-                    "missing_evidence": [],
-                    "remediation_steps": [],
-                    "uncertainty": ["external facts remain provisional"],
-                }
+                cycle_fixtures.independent_audit('pass-with-conditions', minor_findings=['human verification remains'], uncertainty=['external facts remain provisional'])
             )
             if clean_initial:
                 initial_audit=json.dumps({"verdict":"pass-with-conditions","fatal_findings":[],

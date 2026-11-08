@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import io
 import hashlib
+import http.client
 import json
 import os
 import unittest
@@ -279,6 +280,150 @@ class ProductionProviderTests(unittest.TestCase):
             self.assertNotIn("Python", headers["user-agent"])
             self.assertNotIn("fixture-only", headers["user-agent"])
             self.assertNotIn("fixture-only", request.full_url)
+
+    def test_scoped_responses_stream_uses_only_complete_terminal_object_and_retains_wire_hash(self):
+        full = {"object": "response", "id": "stream-fixture", "model": "gpt-6-astra", "status": "completed",
+                "output": [{"type": "reasoning", "summary": [{"text": "PRIVATE_THOUGHT"}]},
+                           {"type": "message", "status": "completed", "content": [{"type": "output_text", "text": "final terminal answer"}]}],
+                "usage": {"input_tokens": 100, "output_tokens": 20}}
+        event = {"type": "response.completed", "sequence_number": 2, "response": full}
+        early={"object":"response","id":full["id"],"model":full["model"],"status":"in_progress","output":[],"usage":None}
+        created={"type":"response.created","sequence_number":0,"response":early}
+        progress={"type":"response.in_progress","sequence_number":1,"response":early}
+        wire = ('data: '+json.dumps(created)+'\r\n\r\ndata: '+json.dumps(progress)+'\r\n\r\n'
+                + ': heartbeat\r\n\r\ndata: {"type":"response.output_text.delta","delta":"DELTA_MUST_NOT_BECOME_ANSWER"}\r\n\r\n'
+                + 'event: response.completed\r\ndata: ' + json.dumps(event) + '\r\n\r\ndata: [DONE]\r\n\r\n').encode()
+        opener = Mock(); opener.open.return_value = nullcontext(SimpleNamespace(status=200,
+            headers={"Content-Type": "text/event-stream; charset=utf-8"}, read1=io.BytesIO(wire).read1))
+        with patch.dict(os.environ, self.env(), clear=True), patch("scripts.model_routing.g1_response_streaming_active", return_value=True), \
+             patch.object(providers.urllib.request, "build_opener", return_value=opener):
+            result = providers.call("codekey-codex-pro", "complete source fixture", model="gpt-6-astra", stream=True,
+                                    reasoning_effort="high", max_output_tokens=12000)
+        self.assertEqual(result.text, "final terminal answer")
+        metadata = result.response_metadata
+        self.assertEqual(metadata["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(wire).hexdigest())
+        self.assertEqual(metadata["http_evidence"]["sse_terminal_event"], "response.completed")
+        self.assertEqual(metadata["canonical_json_sha256"], hashlib.sha256(json.dumps(full, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest())
+        self.assertNotIn("PRIVATE_THOUGHT", json.dumps(metadata))
+        self.assertNotIn("DELTA_MUST_NOT", json.dumps(metadata))
+        request = opener.open.call_args.args[0]; payload = json.loads(request.data)
+        self.assertEqual((payload["stream"], payload["reasoning"], payload["max_output_tokens"]), (True, {"effort": "high"}, 12000))
+        self.assertEqual(dict((k.lower(), v) for k,v in request.header_items())["accept"], "text/event-stream")
+        opener.open.assert_called_once()
+
+    def test_stream_deltas_done_eof_failure_and_mismatched_terminal_never_succeed(self):
+        response = {"object": "response", "id": "stream-fixture", "model": "gpt-6-astra", "status": "completed",
+                    "output": [{"type": "message", "content": [{"type": "output_text", "text": "answer"}]}],
+                    "usage": {"input_tokens": 1, "output_tokens": 2}}
+        def frame(kind="response.completed", **overrides):
+            return ('event: '+kind+'\ndata: '+json.dumps({"type":kind,"sequence_number":1,"response":{**response,**overrides}})+'\n\n').encode()
+        cases = [b'data: [DONE]\n\n', b'data: {"type":"response.output_text.delta","delta":"PRIVATE_THOUGHT"}\n\ndata: [DONE]\n\n',
+                 frame()[:-2], frame("response.failed", status="failed"), frame("response.incomplete", status="incomplete"),
+                 frame(model="wrong-model"), frame(status="incomplete"), frame()+frame(),
+                 frame(usage=None), frame(usage={"input_tokens": 1}), frame(output=[]),
+                 b'data: {broken JSON}\n\n', b'event: response.failed\ndata: {"type":"response.completed"}\n\n',
+                 b'data: {"type":"error","code":"server_error","message":"PRIVATE_THOUGHT"}\n\n',
+                 b'data: '+json.dumps({"type":"response.created","response":response}).encode()+b'\n\ndata: {"type":"response.completed","sequence_number":1}\n\n']
+        for kind,key,value in (("response.created","model","different-model"),("response.created","id","different-id"),
+                               ("response.in_progress","model","different-model"),("response.in_progress","id","different-id")):
+            early={**response,"status":"in_progress","output":[],"usage":None,key:value}
+            cases.append(('data: '+json.dumps({"type":kind,"sequence_number":0,"response":early})+'\n\n').encode()+frame())
+        cases.append(frame()+b'event: response.failed\ndata: [DONE]\n\n')
+        for wire in cases:
+            with self.subTest(wire=wire[:45]):
+                opener = Mock(); opener.open.return_value = nullcontext(SimpleNamespace(status=200,
+                    headers={"Content-Type":"text/event-stream"}, read1=io.BytesIO(wire).read1))
+                with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
+                     patch.object(providers.urllib.request,"build_opener",return_value=opener):
+                    with self.assertRaises(providers.ProviderError) as caught:
+                        providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True)
+                evidence=caught.exception.response_evidence
+                self.assertEqual(evidence["http_evidence"]["raw_http_body_sha256"],hashlib.sha256(wire).hexdigest())
+                self.assertNotIn("PRIVATE_THOUGHT",json.dumps(evidence))
+                if b'"type":"error"' in wire:
+                    self.assertEqual(evidence["diagnostics"]["error_code"],"server_error")
+                    self.assertIsNotNone(evidence["canonical_json_sha256"])
+                    self.assertEqual(evidence["response"],{"type":"error","code":"server_error"})
+                opener.open.assert_called_once()
+        wire=json.dumps(response).encode();opener=Mock()
+        opener.open.return_value=nullcontext(SimpleNamespace(status=200,headers={"Content-Type":"application/json"},read1=io.BytesIO(wire).read1))
+        with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
+             patch.object(providers.urllib.request,"build_opener",return_value=opener):
+            with self.assertRaisesRegex(providers.ProviderError,"wrong content type") as caught:
+                providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True)
+        self.assertEqual(caught.exception.response_evidence["http_evidence"]["raw_http_body_sha256"],hashlib.sha256(wire).hexdigest())
+        opener.open.assert_called_once()
+        with patch.dict(os.environ,self.env(),clear=True),patch.object(providers.urllib.request,"build_opener") as opener:
+            with self.assertRaisesRegex(providers.ProviderError,"explicit Astra G1"):
+                providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True)
+            opener.assert_not_called()
+
+    def test_stream_read_failure_and_oversize_preserve_only_captured_prefix(self):
+        prefix=b'data: {"type":"response.reasoning_text.delta","delta":"PRIVATE_THOUGHT"}\n\n'
+        response={"object":"response","id":"stream","model":"gpt-6-astra","status":"completed","output":[],"usage":{"input_tokens":1,"output_tokens":2}}
+        terminal=('data: '+json.dumps({"type":"response.completed","sequence_number":0,"response":response})+'\n\n').encode()
+        cases=[(Mock(side_effect=[prefix,TimeoutError("lost stream")]),prefix,None),
+               (io.BytesIO(b":"+b"x"*(4*1024*1024+8)).read1,b":"+b"x"*(4*1024*1024),None),
+               (Mock(side_effect=[terminal,TimeoutError("lost stream after terminal")]),terminal,"gpt-6-astra")]
+        for source,expected,model in cases:
+            opener=Mock();opener.open.return_value=nullcontext(SimpleNamespace(status=200,headers={"Content-Type":"text/event-stream"},read1=source))
+            with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
+                 patch.object(providers.urllib.request,"build_opener",return_value=opener):
+                with self.assertRaises(providers.ProviderError) as caught:
+                    providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True)
+            evidence=caught.exception.response_evidence;http=evidence["http_evidence"]
+            self.assertFalse(http["http_body_capture_complete"])
+            self.assertIsNone(http["raw_http_body_sha256"])
+            self.assertEqual(http["captured_http_body_prefix_sha256"],hashlib.sha256(expected).hexdigest())
+            self.assertNotIn("PRIVATE_THOUGHT",json.dumps(evidence))
+            self.assertEqual(evidence["diagnostics"].get("model"),model)
+            opener.open.assert_called_once()
+        source=Mock(return_value=prefix);opener=Mock()
+        opener.open.return_value=nullcontext(SimpleNamespace(status=200,headers={"Content-Type":"text/event-stream"},read1=source))
+        with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
+             patch.object(providers.urllib.request,"build_opener",return_value=opener), \
+             patch.object(providers.time,"monotonic",side_effect=[0,0,31]):
+            with self.assertRaises(providers.ProviderError):
+                providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True,timeout=30)
+        source.assert_called_once()
+        opener.open.assert_called_once()
+
+    def test_real_http_stream_rejects_premature_eof_and_invalid_authoritative_start(self):
+        full={"object":"response","id":"framing-fixture","model":"gpt-6-astra","status":"completed",
+              "output":[{"type":"message","status":"completed","content":[{"type":"output_text","text":"answer"}]}],
+              "usage":{"input_tokens":1,"output_tokens":2}}
+        terminal=('data: '+json.dumps({"type":"response.completed","sequence_number":1,"response":full})+'\n\n').encode()
+        cases=[("complete",b"",0,True),("truncated-content-length",b"",97,False)]
+        for kind in ("response.created","response.in_progress"):
+            for overrides in ({"status":"failed"},{"object":"wrong"},{"model":None},{"id":"bad id"},{"output":None}):
+                early={**full,"status":"in_progress","output":[],"usage":None,**overrides}
+                frame=('data: '+json.dumps({"type":kind,"sequence_number":0,"response":early})+'\n\n').encode()
+                cases.append((kind+str(overrides),frame,0,False))
+        for status in ("queued","in_progress"):
+            early={**full,"status":status,"output":[],"usage":None}
+            frame=('data: '+json.dumps({"type":"response.created","sequence_number":0,"response":early})+'\n\n').encode()
+            cases.append((status+"-empty-valid-start",frame,0,True))
+        for name,prefix,missing,accepted in cases:
+            with self.subTest(name=name):
+                wire=prefix+terminal
+                raw=(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nContent-Length: "+str(len(wire)+missing).encode()+b"\r\n\r\n"+wire)
+                response=http.client.HTTPResponse(SimpleNamespace(makefile=lambda *args,**kwargs:io.BytesIO(raw)))
+                response.begin()
+                opener=Mock();opener.open.return_value=response
+                with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
+                     patch.object(providers.urllib.request,"build_opener",return_value=opener):
+                    if accepted:
+                        self.assertEqual(providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True).text,"answer")
+                    else:
+                        with self.assertRaises(providers.ProviderError) as caught:
+                            providers.call("codekey-codex-pro","fixture",model="gpt-6-astra",stream=True)
+                        capture=caught.exception.response_evidence["http_evidence"]
+                        self.assertEqual(capture["http_body_capture_complete"],not missing)
+                        if missing:
+                            self.assertIsNone(capture["raw_http_body_sha256"])
+                            self.assertEqual(capture["captured_http_body_prefix_sha256"],hashlib.sha256(wire).hexdigest())
+                            self.assertEqual(response.length,97)
+                opener.open.assert_called_once()
 
     def test_empty_thinking_response_retains_redacted_wire_provenance_without_returning_success(self):
         env = self.env(); secret = env["DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY"]

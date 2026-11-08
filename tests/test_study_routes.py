@@ -9,10 +9,21 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import artifact_ownership, cloud_checkpoint, cloud_job, experiment_runner as runner
-from scripts import meta_analysis_runtime as meta, research_quality as quality, study_route_acceptance as fixtures, study_routes
-from scripts import supplemental_experiments as supplemental, researchctl, cloud_human_controls, reviewer_rounds
-from scripts.research_artifacts import read, sha, write, record
+from scripts import (
+    artifact_ownership,
+    cloud_checkpoint,
+    cloud_human_controls,
+    cloud_job,
+    researchctl,
+    reviewer_rounds,
+    study_routes,
+)
+from scripts import experiment_runner as runner
+from scripts import meta_analysis_runtime as meta
+from scripts import research_quality as quality
+from scripts import study_route_acceptance as fixtures
+from scripts import supplemental_experiments as supplemental
+from scripts.research_artifacts import read, record, sha, write
 
 
 class StudyRouteTests(unittest.TestCase):
@@ -413,15 +424,23 @@ class SupplementalGuardTests(unittest.TestCase):
         self.assertEqual(approved["status"],"protocol_sealed",approved)
 
     def test_cli_schedules_one_approved_child_attempt_before_any_model_invocation(self):
-        from scripts import autopilot, cloud_research_steps
+        from scripts import (
+            api_orchestrator,
+            autopilot,
+            cloud_research_steps,
+            model_runtime,
+            model_spend,
+        )
         child,_,identity=self.internal_candidate()
         self.protocol_review(identity)
         self.assertEqual(supplemental.automatic_approval(self.parent,"P01","software-test")["status"],"protocol_sealed")
+        write(self.parent/model_spend.FILE,model_spend.initial())
         with patch.object(researchctl,"PROJECTS_ROOT",self.parent.parent), \
+                patch.object(api_orchestrator,"project_root",return_value=self.parent), \
                 patch.object(cloud_research_steps,"acquire_data",return_value={"blockers":[]}), \
                 patch.object(runner,"execute",return_value=[{"status":"succeeded","attempt_id":"mock-native-attempt"}]) as execute, \
-                patch.object(autopilot,"invoke",side_effect=AssertionError("no model call during native execution")):
-            result=autopilot.run_stage("demo","","standard",1,100,0)
+                patch.object(model_runtime,"call",side_effect=AssertionError("no model call during native execution")):
+            result=autopilot.run_stage("demo")
         self.assertFalse(result["paid_model_cycle"])
         self.assertEqual(result["runs"],[])
         self.assertEqual(result["controlled_steps"]["supplemental"]["status"],"executed")

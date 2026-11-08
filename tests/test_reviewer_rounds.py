@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import output_provenance, rebuttal_triage, researchctl, reviewer_rounds as rounds
+from scripts import output_provenance, researchctl, reviewer_rounds as rounds
 from scripts.research_artifacts import read, sha, write
 
 
@@ -85,7 +85,7 @@ class ReviewerRoundTests(unittest.TestCase):
         cards = {"venue_word_limit": 500, "editor_summary": "The fixed split is now explicit.", "cards": [card]}
         write(self.paper / "reviews/concern-cards.json", cards)
         original = read(self.paper / "reviews/original-comments.json")
-        coverage = rebuttal_triage.triage(original, cards)
+        coverage = rounds.triage(original, cards)
         for key, filename in (("full_text", "internal-full.md"), ("short_text", "submitted-short.md"), ("editor_summary", "editor-summary.md")):
             self.put("papers/P01/reviews/concern-response/" + filename, coverage.pop(key))
         coverage.update(original_sha256=sha(self.paper / "reviews/original-comments.json"), cards_sha256=sha(self.paper / "reviews/concern-cards.json"))
@@ -249,10 +249,13 @@ class ReviewerRoundTests(unittest.TestCase):
     def test_refresh_builds_real_coverage_trace_and_integrity_without_model_calls(self):
         self.start()
         self.response()
-        (self.paper / "reviews/concern-response/coverage.json").unlink()
+        responses = self.paper / "reviews/concern-response"
+        original_bytes = {path.name: path.read_bytes() for path in responses.iterdir()}
+        (responses / "coverage.json").unlink()
         with patch("scripts.model_runtime.call", side_effect=AssertionError("no model calls")):
             report = rounds.refresh(self.project, "P01")
         self.assertEqual(report["status"], "pass", report["errors"])
+        self.assertEqual(original_bytes, {path.name: path.read_bytes() for path in responses.iterdir()})
         self.assertEqual(read(self.paper / "reviews/revision-trace.json")["status"], "pass")
         self.assertEqual(read(self.paper / "reviews/revision-integrity.json")["status"], "pass")
         self.assertEqual(rounds.validate_saved_report(self.project, "P01"), [])

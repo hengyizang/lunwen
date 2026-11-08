@@ -340,7 +340,7 @@ def main() -> int:
         errors.append(f"scripts/start.sh: {exc}")
     else:
         if "scripts/autopilot.py start" not in start_script:
-            errors.append("scripts/start.sh must invoke the bounded autopilot")
+            errors.append("scripts/start.sh must retain the shared API compatibility entry")
     package_script = ROOT / "scripts" / "submission_package.py"
     if not package_script.is_file():
         errors.append("scripts/submission_package.py is required")
