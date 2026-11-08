@@ -1,0 +1,128 @@
+{
+  "kind": "current_session_source_only_blind_pilot",
+  "cases": 8,
+  "complete_coverage": true,
+  "agreed": 3,
+  "abstentions": 0,
+  "exact_agreement": 0.375,
+  "training_majority_baseline_agreement": 0.25,
+  "reported_api_model": null,
+  "native_runtime_attestation": false,
+  "app_session_cost_cny": null,
+  "project_gateway_calls": 0,
+  "linked_media_assessed": false,
+  "scientific_gate_or_model_promotion": false,
+  "judgments": [
+    {
+      "case_id": "case-01",
+      "source_sha256": "a0deb9583e6c2d7e10dd388a7cccbd4738a2473bed609d7a633fed0dc6e704d7",
+      "outcome": "convincing",
+      "rationale": "Two preregistered samples show resource allocation adapting to separately manipulated controllability and elasticity. Comparisons with alternative learning models, model and parameter recovery, and replicated behavioral predictions support structured elasticity inference. Permutation-tested associations with self-reported psychopathology replicate, but modest canonical correlations in nonclinical samples do not establish clinical utility or causality. Extensive explicit training and a constrained task also limit generalization to spontaneous real-world inference. Overall, validated methods adequately support the central behavioral and associative conclusions.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-105507",
+      "published_category": "incomplete+solid",
+      "agrees": false
+    },
+    {
+      "case_id": "case-02",
+      "source_sha256": "ee9421fab9bcf2d6e21aa105dfa9e986d68051f50627b950c43080fbf54ac66d",
+      "outcome": "solid",
+      "rationale": "Efficient arrayed delivery, replicated closure phenotypes, and single-cell confirmation of target depletion support the screening platform and roles for ZIC2, SOX11, and ZNF521 in this organoid model. Evidence for a coordinated opposing regulatory program is less secure: differential expression uses nominal cell-level tests without stated multiple-testing correction or replicate-aware inference, and direct regulation is not established. A single genetic background and absence of rescue or independent guide-pair validation limit specificity and generalization.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-108224",
+      "published_category": "exceptional",
+      "agrees": false
+    },
+    {
+      "case_id": "case-03",
+      "source_sha256": "2543e7b44380ba06175c6e60494f6c6c7391dd2a238e03c2dd4b24ebfc8e82f3",
+      "outcome": "solid",
+      "rationale": "Knockout epistasis, resistance assays, muropeptide profiling, functional tagged-protein tracking, and purified-enzyme assays broadly support distinct LtgA/LtgB roles and regulated wall breakdown. Reduced mobility, however, is an indirect proxy for substrate binding and does not directly establish catalytic competition. Unassigned chromatographic material and purification losses limit claims of complete PG removal, while MurA overexpression does not directly quantify PG synthesis. These limitations reduce mechanistic certainty without negating the principal sporulation phenotypes. Linked figures and media were not assessed.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-108250",
+      "published_category": "solid",
+      "agrees": true
+    },
+    {
+      "case_id": "case-04",
+      "source_sha256": "208d4d391fe546e618f69880eb80f24d44deefd9ecfdbf31092cc9a9ef9f827c",
+      "outcome": "convincing",
+      "rationale": "Convergent degrader validation, proteasome and competition controls, TNKS double-knockout reconstitution with catalytic mutants, endogenous AXIN tagging, pathway readouts, and CRC spheroid/organoid assays support a catalysis-independent TNKS function and superior cellular suppression by degradation. GSPT off-target controls strengthen attribution. FRAP measures molecular exchange rather than beta-catenin destruction, so puncta rigidification as the causal mechanism is less directly established. One organoid line and absent in vivo efficacy limit therapeutic generalization; proteomics has only two biological replicates. Linked figures and media were not assessed.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-109052",
+      "published_category": "convincing",
+      "agrees": true
+    },
+    {
+      "case_id": "case-05",
+      "source_sha256": "e36417447e25fda796de07350586d852b0eac0ad42c818a274100ad39c4a7b8a",
+      "outcome": "incomplete",
+      "rationale": "The 115-species resource and curated-repertoire checks support sequence/structure comparisons; phylogenetic models and equal-OR sampling address some sampling bias. However, docking calibration and community validation reuse available response datasets without a reported independent holdout. The central Orco ligand-entry barrier interpretation relies on short, single-ligand simulations and one EL2-swap assay, without reported controls for receptor surface expression or assembly. Descriptive patterns are therefore supported more strongly than the proposed barrier mechanism and links to biological tuning. Linked figures, video, and source datasets were unavailable for assessment.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-110877",
+      "published_category": "solid",
+      "agrees": false
+    },
+    {
+      "case_id": "case-06",
+      "source_sha256": "214598e3af75b217c1850810bea147dcce0d079a686c849ffac4c703ed2eb040",
+      "outcome": "convincing",
+      "rationale": "Concordant depletion/rescue, pulse-chase, fractionation, antibody inhibition, and purified-component reconstitution support MPIase dependence of bacterial TAT transport. Twin-arginine mutants, component omissions, and protonophore inhibition provide relevant specificity and energy controls across two substrates. These established biochemical approaches support the main claim. Co-purification and membrane localization provide weaker support for direct binding and the proposed sequential signal-receptor mechanism; these remain provisional. Replicate reporting and detergent controls for protease protection are not evident in the supplied text. Linked images and supplementary data were not assessed.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-112170",
+      "published_category": "solid",
+      "agrees": false
+    },
+    {
+      "case_id": "case-07",
+      "source_sha256": "a6bf80853bf6a9b42efc1310407ea562739d5d67e0b8462a4972ccc1455502c1",
+      "outcome": "convincing",
+      "rationale": "Explicit fitness definitions, resource-competition simulations parameterized from 9,195 yeast growth curves, and LTEE reanalysis support the claim that encoding, time scale, and reference choice alter fitness estimates and rankings. Published bulk-versus-pairwise benchmarks provide partial empirical corroboration, with the nonsupporting yeast benchmark disclosed. General experimental recommendations remain conditional on the simplified growth model; inferred yield variation was not distinguishable from wild-type measurement variability. These are appropriate established methods supporting the central framework, although linked figures and appendices were unavailable for assessment.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-102635",
+      "published_category": "convincing",
+      "agrees": true
+    },
+    {
+      "case_id": "case-08",
+      "source_sha256": "429781decb697e3d70e14e7a05ff6725707f8b2e0f8478b167367d10567d5a53",
+      "outcome": "incomplete",
+      "rationale": "Photometry, core-temperature logging, thermography, and light-only-controlled stimulation support associations with warming and sufficiency to raise temperature during low-temperature rest. However, the reported histological example showed only 24–51% of GCaMP-positive cells were OT-immunoreactive; lactation-like population bursts cannot establish cellular specificity. Behavioral stimulation effects were nonsignificant in the principal comparison, and state dependence relied on post hoc splitting without a reported between-state interaction. These limitations leave oxytocin-neuron-specific coordination of thermogenesis and arousal only partly established. Linked images and supplementary results were unavailable.",
+      "complete_primary_text_read": true,
+      "original_id": "elife-108212",
+      "published_category": "solid",
+      "agrees": false
+    }
+  ],
+  "sealed_outputs": [
+    {
+      "file": ".runtime/current-session-blind-pilot/judgments-a.json",
+      "sha256": "966133aec99da4575dc3be8e974f760bf83fd389d9b11509d2ccf77de7c6e9b4"
+    },
+    {
+      "file": ".runtime/current-session-blind-pilot/judgments-b.json",
+      "sha256": "2fc6b9779d9c327219ec41f260358931fc96d1556506c4224c7be5c36822912b"
+    },
+    {
+      "file": ".runtime/current-session-blind-pilot/judgments-c.json",
+      "sha256": "0924fb9cfddec62e4b3e14604939d1df3fb048e009d587d797f2db3349a1d113"
+    },
+    {
+      "file": ".runtime/current-session-blind-pilot/judgments-d.json",
+      "sha256": "7b267d4136df6f82dd58d08ec178229cbe1ca95355b65a8b95329c8649e0a2aa"
+    }
+  ],
+  "agreement_wilson_95_interval": [
+    0.13684428582359742,
+    0.6942576053973727
+  ],
+  "reliable_superiority_over_majority_established": false,
+  "study_limitations": [
+    "Eight life-science papers; not a domain-transfer or doctoral-paper test.",
+    "Source-only text; linked figures and attachments were not visually assessed.",
+    "Four current-session subagents used the same model family; this is not a three-family panel.",
+    "Exact reported API model and per-project app-session fees were unavailable.",
+    "Published categories are a reference assessment, not scientific truth or an acceptance label.",
+    "No model or routing promotion and no scientific gate approval."
+  ]
+}
