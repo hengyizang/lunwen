@@ -59,6 +59,7 @@ APPROVED_HEALTH_ROLES = {"endpoint-health", "model-signature", "model-instrument
 APPROVED_HEALTH_STAGES = {"health", "acceptance", "instrumentation"}
 _CALIBRATION_ROUTE = ContextVar("public_review_calibration_route", default=None)
 _G1_TRANSPORT_ROUTE = ContextVar("g1_transport_validation_route", default=None)
+VALIDATION_OUTPUT_CAPS = {4000, 12000}
 
 
 def g1_transport_validation_active() -> bool:
@@ -67,7 +68,7 @@ def g1_transport_validation_active() -> bool:
 
 
 @contextmanager
-def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None):
+def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None, max_output_tokens=4000):
     """A single native G1 cycle may use the same Astra identity on CodeKey."""
     from scripts.research_artifacts import path_in, read
     if (not production_enabled() or
@@ -76,12 +77,14 @@ def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_
     if (not isinstance(manifest_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", manifest_sha256)
             or _G1_TRANSPORT_ROUTE.get() is not None or _CALIBRATION_ROUTE.get() is not None):
         raise ValueError("G1 transport validation requires one exact independent manifest scope")
+    if type(max_output_tokens) is not int or max_output_tokens not in VALIDATION_OUTPUT_CAPS:
+        raise ValueError("validation output tokens must be explicitly 4000 or 12000")
     state = read(path_in(project, "state/run.json"))
     if (state.get("stage") != "topic-intelligence" or state.get("gate") != "G1"
             or state.get("status") != "awaiting_work" or state.get("approved_gates") != ["G0"]):
         raise ValueError("G1 transport validation requires actual awaiting-work G1 with only G0 approved")
     token = _G1_TRANSPORT_ROUTE.set({"manifest_sha256": manifest_sha256, "project_root": project.resolve(),
-                                   "check_inputs": check_inputs, "attempted_roles": set()})
+                                   "check_inputs": check_inputs, "attempted_roles": set(), "max_output_tokens": max_output_tokens})
     try:
         yield
     finally:
@@ -89,7 +92,7 @@ def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_
 
 
 @contextmanager
-def public_review_calibration_route(seat: str, scope_sha256: str):
+def public_review_calibration_route(seat: str, scope_sha256: str, *, max_output_tokens=4000):
     """Scope a fresh, read-only benchmark call to an actual production critic.
 
     This does not promote a transport candidate or change a persistent policy.
@@ -102,8 +105,10 @@ def public_review_calibration_route(seat: str, scope_sha256: str):
             not isinstance(scope_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", scope_sha256)
             or _CALIBRATION_ROUTE.get() is not None or _G1_TRANSPORT_ROUTE.get() is not None):
         raise ValueError("calibration requires one exact public-source manifest and a distinct critic seat")
+    if type(max_output_tokens) is not int or max_output_tokens not in VALIDATION_OUTPUT_CAPS:
+        raise ValueError("validation output tokens must be explicitly 4000 or 12000")
     baseline = select("writing-and-review", "independent-critic-panel-" + seat)
-    token = _CALIBRATION_ROUTE.set({"seat": seat, "scope_sha256": scope_sha256, "baseline": baseline})
+    token = _CALIBRATION_ROUTE.set({"seat": seat, "scope_sha256": scope_sha256, "baseline": baseline, "max_output_tokens": max_output_tokens})
     try:
         yield
     finally:
@@ -284,11 +289,11 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
     if calibration is not None and stage == "auxiliary" and original_role == "independent-critique":
         baseline = calibration["baseline"]
         scope = {"purpose": "public-review-calibration", "calibration_scope_sha256": calibration["scope_sha256"],
-                 "seat": calibration["seat"], "production_panel_route": baseline}
+                 "seat": calibration["seat"], "production_panel_route": baseline, "max_output_tokens": calibration["max_output_tokens"]}
         digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         route.update({key: baseline[key] for key in ("provider", "model", "family", "reasoning_effort", "model_key")})
         route.update(policy_sha256=digest, route_id="public-review-calibration:" + digest,
-                     task_kind="scientific-judgment", max_output_tokens=4000, fresh_required=True,
+                     task_kind="scientific-judgment", max_output_tokens=calibration["max_output_tokens"], fresh_required=True,
                      persistent_output=False, temporary_validation_only=True, validation_scope=scope,
                      quality_boundary="Read-only public-review evidence-strength calibration; no gate approval, manuscript writing or route promotion.")
     g1 = _G1_TRANSPORT_ROUTE.get()
@@ -296,11 +301,13 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
         if g1["check_inputs"] is not None:
             g1["check_inputs"]()
         scope = {"purpose": "g1-transport-validation", "manifest_sha256": g1["manifest_sha256"],
-                 "project": g1["project_root"].name, "production_route": dict(route)}
+                 "project": g1["project_root"].name, "production_route": dict(route), "control_max_output_tokens": g1["max_output_tokens"]}
         if role in WRITER_ROLES:
             if (route["provider"], route["model"], route["reasoning_effort"]) != ("cheapai-gpt-pro", "gpt-6-astra", "high"):
                 raise ValueError("G1 validation may replace only the original same-model Astra transport")
             route["provider"] = "codekey-codex-pro"
+        else:
+            route["max_output_tokens"] = g1["max_output_tokens"]
         digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         route.update(policy_sha256=digest, route_id="g1-transport-validation:" + digest,
                      temporary_validation_only=True, validation_scope=scope, validation_max_input_bytes=2_000_000)

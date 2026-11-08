@@ -210,6 +210,7 @@ class ModelResult:
     route_id: str | None = None
     dynamic_candidate_id: str | None = None
     routing_policy_sha256: str | None = None
+    response_metadata: dict[str, Any] | None = None
 
 
 def completion_status(data: dict[str, Any], protocol: str) -> str:
@@ -942,12 +943,17 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
             status = completion_status(data, protocol)
         if status != "completed":
             raise ProviderError("production model response did not complete; reconcile billing")
-        return ModelResult(provider, model, text, _production_usage(data, family, spec["protocol"]),
+        result = ModelResult(provider, model, text, _production_usage(data, family, spec["protocol"]),
                            data.get("responseId") if native_google else data.get("id"),
                            reported, spec["protocol"], endpoint,
                            "cheapai" if provider.startswith("cheapai-") else "codekey",
                            completion_status=status, requested_effort=effort,
                            attachment_sha256=tuple(item["sha256"] for item in media))
+        evidence = _response_evidence(data, headers=headers)
+        result.response_metadata = {key: evidence[key] for key in (
+            "diagnostics", "canonical_json_sha256", "canonical_json_hash_available", "http_evidence")}
+        result.response_metadata.update(metadata_only=True, original_response_body_retained=False)
+        return result
     except (ProviderError, TypeError, ValueError, KeyError, IndexError) as exc:
         error = exc if isinstance(exc, ProviderError) else ProviderError("malformed production model response; reconcile billing")
         if data is not None:

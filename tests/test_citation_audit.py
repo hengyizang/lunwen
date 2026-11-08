@@ -6,10 +6,173 @@ import zipfile
 import json
 from pathlib import Path
 
-from scripts.citation_audit import audit, parse_bibtex, docx_citation_keys, validate_provider_identities
+from scripts.citation_audit import (audit, parse_bibtex, docx_citation_keys, validate_provider_identities,
+    citation_prose, citation_usages, CitationAuditError)
 
 
 class CitationAuditTests(unittest.TestCase):
+    def crossref_fields_fixture(self):
+        fields = {"title": "Controlled source title", "year": "2024", "doi": "10.1000/fixture",
+            "author": "Lovelace, Ada Augusta and Hopper, Grace", "journal": "Journal of Structural Research",
+            "volume": "12", "number": "3", "pages": "123--130"}
+        source = {"DOI": "10.1000/fixture", "title": [fields["title"]], "published": {"date-parts": [[2024]]},
+            "author": [{"given": "Ada Augusta", "family": "Lovelace"}, {"given": "Grace", "family": "Hopper"}],
+            "container-title": [fields["journal"]], "short-container-title": ["J. Struct. Res."],
+            "volume": "12", "issue": "3", "page": "123-130", "type": "journal-article"}
+        return fields, source
+
+    def write_crossref_bib(self, path, fields):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("@article{work," + ",".join(key + "={" + value + "}" for key, value in fields.items()) + "}", encoding="utf-8")
+
+    def test_crossref_declared_field_mismatches_and_missing_source_values_cannot_pass(self):
+        fields, source = self.crossref_fields_fixture()
+        with tempfile.TemporaryDirectory() as directory:
+            bibliography = Path(directory) / "references.bib"
+            for field, value in (("author", "Completely Wrong Author"),
+                    ("author", "Hopper, Grace and Lovelace, Ada Augusta"), ("author", "Lovelace, Ada Augusta"),
+                    ("author", "Lovelace, Alice and Hopper, Grace"), ("journal", "Unrelated Venue"),
+                    ("volume", "999"), ("number", "99"), ("pages", "900--999")):
+                with self.subTest(field=field, value=value):
+                    self.write_crossref_bib(bibliography, {**fields, field: value})
+                    result = audit(bibliography, fetcher=lambda _: {"message": source})
+                    self.assertEqual(result["status"], "fail")
+                    self.assertEqual(result["findings"][0]["crossref"]["field_verification"][field]["status"], "mismatch")
+            self.write_crossref_bib(bibliography, fields)
+            for field, keys in (("author", ("author",)), ("journal", ("container-title", "short-container-title")),
+                                ("volume", ("volume",)), ("number", ("issue",)), ("pages", ("page", "article-number"))):
+                with self.subTest(missing_source_field=field):
+                    result = audit(bibliography, fetcher=lambda _, missing=keys: {"message": {key: value for key, value in source.items() if key not in missing}})
+                    self.assertEqual(result["status"], "fail")
+                    self.assertEqual(result["findings"][0]["crossref"]["field_verification"][field]["status"], "unknown")
+                    self.assertFalse(result["findings"][0]["crossref"]["field_accuracy_verified"])
+            result = audit(bibliography, fetcher=lambda _: {"message": {key: value for key, value in source.items() if key != "published"}})
+            self.assertEqual(result["status"], "fail")
+            self.assertIn("Crossref year field accuracy is unknown", result["findings"][0]["issues"])
+
+    def test_crossref_standard_names_initials_official_short_venue_and_pages_are_equivalent(self):
+        fields, source = self.crossref_fields_fixture()
+        with tempfile.TemporaryDirectory() as directory:
+            bibliography = Path(directory) / "references.bib"
+            for authors in (fields["author"], "Ada Augusta Lovelace and Grace Hopper",
+                            "Lovelace, A. A. and Hopper, G.", "A. Lovelace and G. Hopper", "Lovelace, AA and Hopper, G.",
+                            "AA Lovelace and G. Hopper"):
+                with self.subTest(authors=authors):
+                    self.write_crossref_bib(bibliography, {**fields, "author": authors, "journal": "J Struct Res", "pages": "123–30"})
+                    result = audit(bibliography, fetcher=lambda _: {"message": source})
+                    self.assertEqual(result["status"], "pass", result["findings"])
+                    self.assertTrue(result["findings"][0]["crossref"]["field_accuracy_verified"])
+            self.write_crossref_bib(bibliography, {**fields, "pages": "e12345", "eid": "e12345"})
+            article = {key: value for key, value in source.items() if key != "page"}
+            result = audit(bibliography, fetcher=lambda _: {"message": {**article, "article-number": "e12345"}})
+            self.assertEqual(result["status"], "pass", result["findings"])
+            self.write_crossref_bib(bibliography, {**fields, "eid": "123--130"})
+            result = audit(bibliography, fetcher=lambda _: {"message": {**source, "article-number": "e12345"}})
+            self.assertEqual(result["status"], "fail")
+            self.assertEqual(result["findings"][0]["crossref"]["field_verification"]["eid"]["status"], "mismatch")
+
+    def test_final_crossref_identity_replays_current_cached_fields_and_rejects_legacy_or_changed_sources(self):
+        fields, source = self.crossref_fields_fixture()
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            bibliography = project / "papers/P01/manuscript/references.bib"
+            self.write_crossref_bib(bibliography, fields)
+            cache = project / "state/citation-metadata"
+            result = audit(bibliography, fetcher=lambda _: {"message": source}, cache_directory=cache)
+            self.assertEqual(validate_provider_identities(bibliography, result), [])
+            cached = next(cache.glob("*.json")); original = cached.read_bytes()
+            payload = json.loads(cached.read_text()); payload["record"]["volume"] = "999"
+            cached.write_text(json.dumps(payload))
+            self.assertIn("metadata source changed", ";".join(validate_provider_identities(bibliography, result)))
+            cached.write_bytes(original)
+            result["findings"][0]["crossref"].pop("field_verification")
+            self.assertIn("missing, stale or unresolved", ";".join(validate_provider_identities(bibliography, result)))
+
+    def test_tex_scope_keeps_scientific_commands_negation_units_and_grouping(self):
+        positive = r"Recorded mechanism satisfies $x \leq y$.\cite{known}"
+        negative = r"Recorded mechanism satisfies $x \not\leq y$.\cite{known}"
+        self.assertNotEqual(citation_prose(positive, tex=True), citation_prose(negative, tex=True))
+        self.assertIn(r"\not\leq", citation_prose(negative, tex=True))
+        self.assertNotEqual(citation_prose(r"$x^{ab}$", tex=True), citation_prose(r"$x^a b$", tex=True))
+        self.assertIn(r"\SI{1}{\milli\second}", citation_prose(r"Time is \SI{1}{\milli\second}.", tex=True))
+        self.assertEqual(citation_prose(r"\textbf{Recorded \emph{mechanism}}.\cite{known}", tex=True), "Recorded mechanism")
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "main.tex"
+            path.write_text(positive + "\n" + negative, encoding="utf-8")
+            usages = citation_usages(path)
+            self.assertEqual(len({row["claim_text"] for row in usages}), 2)
+            self.assertEqual(path.read_text(), positive + "\n" + negative)
+
+    def test_docx_math_identity_keeps_operators_and_fraction_structure(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "main.docx"
+            def paragraph(formula):
+                return '<w:p><w:r><w:t>Recorded mechanism satisfies </w:t></w:r>' + formula + '<w:r><w:t>. [@known]</w:t></w:r></w:p>'
+            formula = lambda text: '<m:oMath><m:r><m:t>' + text + '</m:t></m:r></m:oMath>'
+            numerator = '<m:oMath><m:f><m:num><m:r><m:t>x</m:t></m:r></m:num><m:den><m:r><m:t>yz</m:t></m:r></m:den></m:f></m:oMath>'
+            denominator = '<m:oMath><m:f><m:num><m:r><m:t>xy</m:t></m:r></m:num><m:den><m:r><m:t>z</m:t></m:r></m:den></m:f></m:oMath>'
+            xml = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+                'xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><w:body>'
+                + ''.join(paragraph(item) for item in (formula('x ≤ y'), formula('x &gt; y'), numerator, denominator))
+                + '</w:body></w:document>')
+            with zipfile.ZipFile(path, "w") as archive: archive.writestr("word/document.xml", xml)
+            usages = citation_usages(path)
+            self.assertEqual(len(usages), 4)
+            self.assertEqual(len({row["claim_text"] for row in usages}), 4)
+            self.assertTrue(all("OMML formula:" in row["claim_text"] for row in usages))
+            self.assertTrue(all(row["source"]["part"] == "word/document.xml" for row in usages))
+
+    def test_docx_actual_note_closure_has_separate_citation_scopes_and_locations(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "main.docx"
+            w = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+            document = ('<w:document xmlns:w="' + w + '"><w:body><w:p><w:r><w:t>Body assertion. [@known]</w:t></w:r>'
+                '<w:r><w:footnoteReference w:id="1"/><w:endnoteReference w:id="2"/></w:r></w:p></w:body></w:document>')
+            footnotes = ('<w:footnotes xmlns:w="' + w + '"><w:footnote w:id="1"><w:p><w:r><w:t>Footnote assertion. [@known]</w:t></w:r></w:p>'
+                '<w:p><w:r><w:endnoteReference w:id="3"/></w:r></w:p></w:footnote>'
+                '<w:footnote w:id="9"><w:p><w:r><w:t>Unreferenced note. [@unseen]</w:t></w:r></w:p></w:footnote></w:footnotes>')
+            endnotes = ('<w:endnotes xmlns:w="' + w + '">' + ''.join('<w:endnote w:id="' + key + '"><w:p><w:r><w:t>'
+                + name + ' assertion. [@known]</w:t></w:r></w:p></w:endnote>' for key, name in (('2', 'Endnote'), ('3', 'Nested endnote')))
+                + '</w:endnotes>')
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("word/document.xml", document)
+                archive.writestr("word/footnotes.xml", footnotes)
+                archive.writestr("word/endnotes.xml", endnotes)
+            usages = citation_usages(path)
+            self.assertEqual(len(usages), 4)
+            self.assertEqual(len({row["claim_text"] for row in usages}), 4)
+            self.assertEqual({row["source"].get("note_id") for row in usages}, {None, "1", "2", "3"})
+            self.assertEqual(docx_citation_keys(path), ({"known"}, []))
+            with zipfile.ZipFile(path, "w") as archive: archive.writestr("word/document.xml", document)
+            with self.assertRaisesRegex(CitationAuditError, "missing footnote"):
+                citation_usages(path)
+
+    def test_explicit_doi_hyperlinks_cannot_hide_unmapped_citation_uses(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "main.tex"
+            for command in (r"\href{https://doi.org/10.1000/source}{Example (2024)}", r"\url{https://doi.org/10.1000/source}"):
+                path.write_text(r"Mapped assertion.\cite{known}" + "\nAnother assertion. " + command)
+                with self.assertRaisesRegex(CitationAuditError, "DOI literature hyperlinks"):
+                    citation_usages(path)
+            path.write_text(r"Mapped assertion.\href{https://doi.org/10.1000/source}{\cite{known}}"
+                + "\n" + r"A project website.\href{https://example.org}{Project}")
+            self.assertEqual(len(citation_usages(path)), 1)
+            docx = path.with_suffix(".docx")
+            document = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+                'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>'
+                '<w:p><w:r><w:t>Mapped assertion. [@known]</w:t></w:r></w:p><w:p><w:r><w:t>Another assertion. </w:t></w:r>'
+                '<w:hyperlink r:id="citation"><w:r><w:t>{label}</w:t></w:r></w:hyperlink></w:p></w:body></w:document>')
+            for label, target, expected_count in (("Example (2024)", "https://doi.org/10.1000/source", None),
+                    ("[@known]", "https://doi.org/10.1000/source", 2), ("Project", "https://example.org", 1)):
+                with zipfile.ZipFile(docx, "w") as archive:
+                    archive.writestr("word/document.xml", document.format(label=label))
+                    archive.writestr("word/_rels/document.xml.rels", '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                        '<Relationship Id="citation" Target="' + target + '" TargetMode="External"/></Relationships>')
+                if expected_count is None:
+                    with self.assertRaisesRegex(CitationAuditError, "DOI literature hyperlinks"): citation_usages(docx)
+                else:
+                    self.assertEqual(len(citation_usages(docx)), expected_count)
+
     def test_docx_explicit_keys_need_no_human_confirmation(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)

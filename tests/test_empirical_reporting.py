@@ -81,8 +81,10 @@ class EmpiricalReportingTests(unittest.TestCase):
         self.assertEqual(result["errors"], [], result)
         return result["rows"]
 
-    def prepare_map(self):
+    def prepare_map(self, identifiers=None):
         rows = self.rows()
+        if identifiers is not None:
+            rows = [row for row in rows if row["specification_id"] in identifiers]
         lines, entries = [], []
         for row in rows:
             locations = []
@@ -90,10 +92,10 @@ class EmpiricalReportingTests(unittest.TestCase):
                 literal = display_value(row[field], 6)
                 quote = row["specification_id"] + " " + field + " = " + literal
                 lines.append(quote)
-                locations.append({"field": field, "path": "papers/P01/manuscript/main.md", "locator": "L"+str(len(lines)),
+                locations.append({"field": field, "path": "papers/P01/manuscript/main.tex", "locator": "L"+str(len(lines)),
                     "quote": quote, "decimals": 6})
             entries.append({"id": row["specification_id"], "locations": locations})
-        manuscript = self.paper/"manuscript/main.md"; manuscript.parent.mkdir(parents=True, exist_ok=True)
+        manuscript = self.paper/"manuscript/main.tex"; manuscript.parent.mkdir(parents=True, exist_ok=True)
         manuscript.write_text("\n".join(lines)+"\n", encoding="utf-8")
         for item in entries:
             for location in item["locations"]: location["sha256"] = sha(manuscript)
@@ -158,7 +160,8 @@ class EmpiricalReportingTests(unittest.TestCase):
 
     def test_table_is_deterministic_and_changed_estimate_is_rejected(self):
         first = reporting.refresh(self.project, "P01")
-        table = self.paper/"tables/empirical-estimates.csv"; payload = table.read_bytes()
+        table = self.project/first["complete_results_archive"]["table"]["path"]; payload = table.read_bytes()
+        self.assertFalse((self.paper/"tables/empirical-estimates.csv").exists())
         second = reporting.refresh(self.project, "P01")
         self.assertEqual(first, second)
         self.assertEqual(payload, table.read_bytes())
@@ -167,7 +170,7 @@ class EmpiricalReportingTests(unittest.TestCase):
         self.assertEqual(len(values), 4)
         self.assertEqual(values[-1]["phase"], "exploratory")
         table.write_text(table.read_text().replace("-0.8", "0.8"), encoding="utf-8")
-        self.assertTrue(any("table differs" in x for x in reporting.validate_saved_report(self.project, "P01")))
+        self.assertTrue(any("archive" in x for x in reporting.validate_saved_report(self.project, "P01")))
 
     def test_complete_source_located_map_can_be_validated(self):
         self.prepare_map()
@@ -198,18 +201,116 @@ class EmpiricalReportingTests(unittest.TestCase):
         write(self.paper/"empirical-reporting-map.json", mapping)
         self.assertEqual(reporting.audit(self.project, "P01", require_mapping=True)["errors"], [])
 
-    def test_map_cannot_omit_exploratory_or_unfavorable_specifications(self):
+    def test_unreported_specs_stay_in_complete_archive_and_only_selected_rows_enter_paper(self):
+        self.prepare_map({"main", "sensitivity"})
+        result = reporting.refresh(self.project, "P01", require_mapping=True)
+        self.assertEqual(result["errors"], [], result)
+        self.assertEqual(reporting.validate_saved_report(self.project, "P01", require_mapping=True), [])
+        archive = result["complete_results_archive"]
+        full = read(self.project/archive["report"]["path"])
+        self.assertEqual({row["specification_id"] for row in full["rows"]}, {s["id"] for s in self.specs})
+        self.assertEqual(full["registered_specifications"], self.specs)
+        archived_csv = list(csv.DictReader((self.project/archive["table"]["path"]).read_text().splitlines()))
+        self.assertEqual(len(archived_csv), 4)
+        manuscript_rows = list(csv.DictReader((self.paper/"tables/empirical-estimates.csv").read_text().splitlines()))
+        self.assertEqual({row["specification_id"] for row in manuscript_rows}, {"main", "sensitivity"})
+        self.assertEqual(next(row for row in manuscript_rows if row["specification_id"] == "main")["p_adjusted"], "0.03")
+        self.assertFalse(result["full_manuscript_semantic_coverage_verified"])
+
+    def test_old_generated_paper_table_is_backed_up_when_no_rows_are_selected(self):
+        self.prepare_map()
+        reporting.refresh(self.project, "P01", require_mapping=True)
+        table = self.paper/"tables/empirical-estimates.csv"
+        original, digest = table.read_bytes(), sha(table)
+        (self.paper/"empirical-reporting-map.json").unlink()
+        result = reporting.refresh(self.project, "P01")
+        self.assertEqual(result["errors"], [])
+        self.assertFalse(table.exists())
+        self.assertEqual((self.project/f"experiments/archive/P01/empirical-estimates-{digest}.csv").read_bytes(), original)
+        self.assertEqual(reporting.validate_saved_report(self.project, "P01"), [])
+
+    def test_old_full_table_is_backed_up_before_replacement_with_a_nonempty_subset(self):
+        self.prepare_map()
+        reporting.refresh(self.project, "P01", require_mapping=True)
+        table = self.paper/"tables/empirical-estimates.csv"
+        original, digest = table.read_bytes(), sha(table)
+        self.prepare_map({"main"})
+        result = reporting.refresh(self.project, "P01", require_mapping=True)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual((self.project/f"experiments/archive/P01/empirical-estimates-{digest}.csv").read_bytes(), original)
+        self.assertEqual({row["specification_id"] for row in csv.DictReader(table.read_text().splitlines())}, {"main"})
+        archives = set((self.project/"experiments/archive/P01").iterdir())
+        reporting.refresh(self.project, "P01", require_mapping=True)
+        self.assertEqual(set((self.project/"experiments/archive/P01").iterdir()), archives)
+        self.assertEqual(reporting.validate_saved_report(self.project, "P01", require_mapping=True), [])
+
+    def test_selected_subset_does_not_allow_numeric_or_frozen_claim_drift(self):
+        mapping, manuscript = self.prepare_map({"main"})
+        self.assertEqual(reporting.refresh(self.project, "P01", require_mapping=True)["errors"], [])
+        original = manuscript.read_text()
+        manuscript.write_text(original.replace("main estimate = -0.4", "main estimate = -0.3"))
+        changed = copy.deepcopy(mapping)
+        for location in changed["specifications"][0]["locations"]:
+            location["sha256"] = sha(manuscript)
+        changed["specifications"][0]["locations"][0]["quote"] = "main estimate = -0.3"
+        write(self.paper/"empirical-reporting-map.json", changed)
+        self.assertTrue(any("reported number differs" in issue for issue in reporting.audit(self.project, "P01", require_mapping=True)["errors"]))
+        manuscript.write_text(original)
+        write(self.paper/"empirical-reporting-map.json", mapping)
+        changed_card = copy.deepcopy(self.card)
+        changed_card["specifications"][0]["claim_ids"] = ["changed-frozen-claim"]
+        write(self.paper/"empirical-design.json", changed_card)
+        self.assertTrue(reporting.audit(self.project, "P01", require_mapping=True)["errors"])
+
+    def test_removing_a_map_entry_cannot_hide_statistics_still_presented_in_the_manuscript(self):
         mapping, _ = self.prepare_map()
-        for identifier in ("exploratory", "adverse"):
-            changed = copy.deepcopy(mapping)
-            changed["specifications"] = [item for item in changed["specifications"] if item["id"] != identifier]
-            write(self.paper/"empirical-reporting-map.json", changed)
-            self.assertTrue(reporting.audit(self.project, "P01", require_mapping=True)["errors"])
+        mapping["specifications"] = [row for row in mapping["specifications"] if row["id"] != "adverse"]
+        write(self.paper/"empirical-reporting-map.json", mapping)
+        errors = reporting.audit(self.project, "P01", require_mapping=True)["errors"]
+        self.assertTrue(any("adverse" in issue and "missing from the reporting map" in issue for issue in errors))
+
+    def test_presented_claim_uses_existing_fact_source_binding_even_without_visible_specification_id(self):
+        mapping, manuscript = self.prepare_map({"main"})
+        statement = "The additional model produced an estimate of -0.8."
+        manuscript.write_text(manuscript.read_text() + "\n" + statement)
+        for item in mapping["specifications"]:
+            for location in item["locations"]:location["sha256"] = sha(manuscript)
+        write(self.paper/"empirical-reporting-map.json", mapping)
+        write(self.paper/"reviews/paper-facts.json", {"facts": [{"id": "adverse-fact", "statement": statement,
+            "source_path": self.specs[1]["output"], "source_sha256": sha(self.project/self.specs[1]["output"])}],
+            "claim_alignment": [{"claim_id": "C1", "evidence_ids": ["adverse-fact"], "sections": {"results": statement}}]})
+        errors = reporting.audit(self.project, "P01", require_mapping=True)["errors"]
+        self.assertTrue(any("adverse" in issue and "source-bound claim" in issue for issue in errors))
+
+    def test_shared_counts_or_generic_fact_text_do_not_force_all_registered_specs_into_the_paper(self):
+        for statement in ("n = 20", "The analysis used 20 units."):
+            with self.subTest(statement=statement):
+                (self.paper/"reviews/paper-facts.json").unlink(missing_ok=True)
+                mapping, manuscript = self.prepare_map({"main"})
+                manuscript.write_text(manuscript.read_text() + "\nShared study title\n" + statement)
+                for item in mapping["specifications"]:
+                    for location in item["locations"]:location["sha256"] = sha(manuscript)
+                write(self.paper/"empirical-reporting-map.json", mapping)
+                write(self.paper/"reviews/paper-facts.json", {
+                    "facts": [{"id": spec["id"], "statement": statement, "source_path": spec["output"]} for spec in self.specs],
+                    "claim_alignment": [{"evidence_ids": [spec["id"]], "sections": {"title": "Shared study title", "results": statement}} for spec in self.specs]})
+                result = reporting.audit(self.project, "P01", require_mapping=True)
+                self.assertEqual(result["errors"], [], result)
+                self.assertEqual(result["reported_specification_ids"], ["main"])
+
+    def test_complete_archive_includes_unreported_rows_and_cannot_be_changed(self):
+        self.prepare_map({"main"})
+        result = reporting.refresh(self.project, "P01", require_mapping=True)
+        path = self.project/result["complete_results_archive"]["report"]["path"]
+        changed = read(path)
+        changed["rows"] = [row for row in changed["rows"] if row["specification_id"] != "adverse"]
+        write(path, changed)
+        self.assertTrue(any("archive" in issue for issue in reporting.validate_saved_report(self.project, "P01", require_mapping=True)))
 
     def test_map_wrong_literal_wrong_paper_or_stale_source_is_blocked(self):
         mapping, manuscript = self.prepare_map()
         original = manuscript.read_text()
-        for mutate in (lambda value: value["specifications"][0]["locations"][0].update(path="papers/P02/manuscript/main.md"),
+        for mutate in (lambda value: value["specifications"][0]["locations"][0].update(path="papers/P02/manuscript/main.tex"),
                        lambda value: value.update(paper_id="P02"),
                        lambda value: value["specifications"][0]["locations"][0].update(sha256="0"*64)):
             changed = copy.deepcopy(mapping); mutate(changed)

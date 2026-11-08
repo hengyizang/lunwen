@@ -142,8 +142,12 @@ def integrity_errors(project: Path, paper_id: str, *, require_support=False) -> 
                         errors.append("source-bound citation contradiction remains unresolved: " + claim["claim_id"])
                     elif require_support and (not claim["full_text_ready"] or not claim["judgments"] or claim["outcome"] != "supports"):
                         errors.append("full-text citation support remains unverified or insufficient: " + claim["claim_id"])
-            elif report["differences"]:
-                errors.append("independent citation extraction has unresolved bibliographic differences: " + spec["id"])
+            else:
+                if report["differences"]:
+                    errors.append("independent citation extraction has unresolved bibliographic differences: " + spec["id"])
+                if require_support and report["status"] != "fields_agree":
+                    errors.append("selected citation crosscheck remains unverified or incomplete: " + spec["id"]
+                        + " (" + report["status"] + ")")
         except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
             errors.append("scientific judgment " + operation + ": " + str(exc))
     if expected_citations - covered_citations:
@@ -180,7 +184,7 @@ def source_task_bindings(project, stage, paper_id, prompt):
     return bindings
 
 
-def _scoped_source_response(project, receipt, stage, paper_id, response):
+def _scoped_source_response(project, receipt, stage, paper_id, response, *, require_match=True):
     from scripts.research_artifacts import json_digest
     bindings = receipt.get("source_task_bindings", [])
     selected = {(row["operation"], row["request_file"]) for row in _selections(project)
@@ -196,7 +200,7 @@ def _scoped_source_response(project, receipt, stage, paper_id, response):
             raise ValueError("scientific judgment source task is stale for its current packet or original sources")
         verify_files(project, binding["sources"])
         fields.update(TASK_RESPONSE_FIELDS[operation]); matched.append(binding)
-    if not matched:
+    if not matched and require_match:
         raise ValueError("scientific judgment observation is stale; no unchanged task binding was actually sealed")
     return {field: response[field] for field in fields if field in response}, matched
 
@@ -232,10 +236,14 @@ def judgment_responses(project: Path, paper_id: str | None = None) -> list[dict]
         if pointer.exists() or pointer.is_symlink():
             receipt = review_receipts.observation(project, stage, paper)["receipt"]
             response = read(path_in(project, receipt["audit"]["path"]))
-            scope = []
-            if not review_receipts.materials_match(receipt["materials"], review_receipts.material_snapshot(
-                    project, stage, paper, _version=receipt["materials"].get("schema_version", "1.0"))):
-                response, scope = _scoped_source_response(project, receipt, stage, paper, response)
+            current = review_receipts.materials_match(receipt["materials"], review_receipts.material_snapshot(
+                project, stage, paper, _version=receipt["materials"].get("schema_version", "1.0")))
+            source_response, scope = _scoped_source_response(project, receipt, stage, paper, response, require_match=not current)
+            # A fresh general observation is not proof that a selected source
+            # packet was sent. Legacy opinions remain readable, but source-task
+            # fields always need their exact prompt and original-source seal.
+            task_fields = set().union(*TASK_RESPONSE_FIELDS.values())
+            response = ({key: value for key, value in response.items() if key not in task_fields} if current else {}) | source_response
             result.append({"receipt": {**receipt, "response": receipt["audit"], "role": "independent-critic-observation",
                 "gate_authority": False, "reused_source_task_bindings": scope}, "response": response})
         elif directory.exists() and any(directory.glob("*/observation.json")):

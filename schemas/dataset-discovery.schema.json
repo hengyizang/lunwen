@@ -35,10 +35,11 @@
           "provider_id": {"type": "string"},
           "title": {"type": "string"},
           "landing_url": {"type": "string", "pattern": "^https://"},
-          "license_status": {"const": "unverified_requires_human_review"},
+          "license_status": {"enum": ["unverified_requires_source_evidence", "unverified_requires_human_review"], "description": "Unverified optional metadata; the human-review value is retained for historical reports, not a data-use gate."},
           "fitness_status": {
             "enum": [
               "candidate_only",
+              "candidate_only_requires_source_bound_scientific_review",
               "candidate_only_requires_scientific_and_human_review"
             ]
           },
@@ -86,7 +87,8 @@
         "shortlisted_candidate_ids": {"type": "array", "items": {"type": "string"}},
         "criteria": {"type": "array", "items": {"type": "string"}},
         "not_automatically_decided": {"type": "array", "items": {"type": "string"}},
-        "human_review_required": {"const": true}
+        "human_review_required": {"type": "boolean", "description": "Current metadata screening does not require human data-use approval; historical report flags remain readable."},
+        "scientific_review_required": {"const": true}
       }
     },
     "warning": {"type": "string"}

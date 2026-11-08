@@ -302,7 +302,7 @@ def _table(rows):
     return handle.getvalue().encode()
 
 
-def _venue_sources(project, case, venue_id):
+def _venue_sources(project, case, venue_id, *, fields=VENUE_FIELDS):
     """Fit is separate from ranking and never guesses publisher policy."""
     fit = case.get("venue_fit", {})
     if not _nonempty(venue_id) or fit.get("venue_id") != venue_id:
@@ -313,7 +313,9 @@ def _venue_sources(project, case, venue_id):
     official = next((set(r.get("official_domains", [])) for r in dossiers if r.get("venue_id") == venue_id), set())
     if not official:
         raise ValueError("target venue official source domains remain unknown")
-    for field in VENUE_FIELDS:
+    if not fields or not set(fields) <= set(VENUE_FIELDS):
+        raise ValueError("select only existing scientific venue-fit fields")
+    for field in fields:
         item = fit.get(field, {})
         source = item.get("source", {})
         path = _binding(project, source, located=True)

@@ -31,26 +31,152 @@
       "provider_response_retained": false,
       "stop_reason": null,
       "thinking_only_explanation_verified": false,
-      "fee_verified": false,
-      "actual_fee_cny": null,
-      "unknown_reservation_cny": 2.0415472,
+      "fee_verified": true,
+      "actual_fee_cny": 0.3913704,
+      "unknown_reservation_cny": 0,
       "reservation_id": "e104810891d64d7b9f2964ce1c9ca0d2",
-      "automatic_retry_performed": false
+      "automatic_retry_performed": false,
+      "fee_reconciliation": {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/141",
+        "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42461681380",
+        "independent_meter_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42461197332",
+        "independent_meter_artifact_id": 13609815911,
+        "meter_before": {
+          "requests": 0,
+          "cost_cny": 0
+        },
+        "meter_after": {
+          "requests": 1,
+          "cost_cny": 0.3913704
+        },
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY 1; not market FX",
+        "settled_to_existing_project_budget": true,
+        "scientific_success_implied": false
+      }
+    },
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/142",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42462368175",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42462368175.json",
+      "cloud_report_blob_sha": "c810eee2b37fd1213a3e198a7f303e1eff394dd5",
+      "source_commit": "2e47e187deb6b12fa742ed57342f2eae458ab02c",
+      "seat": "domain",
+      "provider": "codekey-kiro-enterprise",
+      "requested_model": "claude-opus-5-5",
+      "requested_effort": "high",
+      "calls_attempted": 1,
+      "valid_predictions": 0,
+      "status": "partial_failed_no_retry",
+      "failure_type": "JSONDecodeError",
+      "response_artifact": "public-review-calibration-42462368175/responses/public-review-42462368175-domain-1.json",
+      "response_sha256": "790272a92147982fba16196087a48bef05f0d411070f178a5c6fb77b36f5bef0",
+      "response_received": true,
+      "fee_verified": true,
+      "actual_fee_cny": 0.3947136,
+      "cost_status": "settled_gateway_debit",
+      "new_unknown_reservation_cny": 0,
+      "automatic_retry_performed": false,
+      "reported_model_retained": "claude-opus-5-5",
+      "usage_input_tokens": 327188,
+      "usage_output_tokens": 348,
+      "parse_error": "Unterminated string; second case rationale has only its opening quote",
+      "response_text_characters": 931,
+      "stop_reason_retained": false,
+      "thinking_or_output_cap_explanation_verified": false
     }
   ],
   "budget": {
     "authorized_ceiling_cny": 500,
     "spent_before_cny": 0.24538256,
-    "spent_after_cny": 0.24538256,
+    "spent_after_cny": 1.03146656,
     "initial_control_blob_sha": "0f72612e3d7f3ac4abf775ab15af0356718fd115",
-    "observed_control_blob_sha": "27e0d6df8e252e5796f4dd43b85e2bea9312a7df",
+    "observed_control_blob_sha": "6414d9f64b2a2963f1318f4d435b5f5d9de86fe2",
     "original_three_reservations_unchanged": true,
-    "new_spending_authority_granted": false
+    "new_spending_authority_granted": false,
+    "existing_unknown_holds_cny": 10.0783494
   },
   "scientific_completion_verified": false,
   "numeric_score_calibration_verified": false,
   "three_view_panel_effectiveness_verified": false,
   "human_claim_sample_agreement": null,
   "should_merge_detection": null,
-  "all_156_requirements_fulfilled": false
+  "all_156_requirements_fulfilled": false,
+  "production_readiness": {
+    "source_commit": "2e47e187deb6b12fa742ed57342f2eae458ab02c",
+    "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42461197332",
+    "artifact_id": 13609815911,
+    "model_generation_calls": 0,
+    "cheapai_gpt_pro_and_discount": "HTTP 401; deferred by owner",
+    "deepseek_requested_model": "deepseek-v4.1-flash",
+    "deepseek_advertised_models": [
+      "deepseek-v4-pro"
+    ],
+    "deepseek_requested_model_available": false,
+    "different_model_ids_treated_as_aliases": false,
+    "opus_and_argon_catalog_authentication_observed": true,
+    "catalog_proves_actual_model_quality": false,
+    "configuration_preflight_is_live_readiness": false
+  },
+  "g1_native_validation_attempts": [
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/144",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42462764484",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42462764484.json",
+      "cloud_report_blob_sha": "5304d7ab3b2aed6e8a089db006cf2128c200b0a0",
+      "source_commit": "2e47e187deb6b12fa742ed57342f2eae458ab02c",
+      "status": "native_cycle_returned_without_topic_approval",
+      "control_only": true,
+      "model_calls": 0,
+      "model_fee_cny": 0,
+      "actual_duration_seconds": 365.054866,
+      "new_literature_operations": 12,
+      "dataset_catalog_operations": 56,
+      "successful_literature_receipts": 8,
+      "metadata_records": 69,
+      "provider_errors": [
+        {
+          "provider": "semantic-scholar",
+          "query_family": "direct"
+        },
+        {
+          "provider": "hal",
+          "query_family": "direct"
+        },
+        {
+          "provider": "semantic-scholar",
+          "query_family": "method_alternatives"
+        },
+        {
+          "provider": "hal",
+          "query_family": "method_alternatives"
+        }
+      ],
+      "pending_literature_operations": 6,
+      "topic_approval_granted": false,
+      "g1_candidate_dossier_generated": false,
+      "scientific_completion_verified": false
+    }
+  ],
+  "software_verification": {
+    "tests_run": 2489,
+    "skipped": 14,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds_including_discovery": 132.744,
+    "production_snapshot_sha256": "7eec79d1e4c18ea26a59fb41abc3b3403583833329836055c6d774f9532b0128",
+    "independent_adversarial_recheck_passed": true,
+    "verifies_scientific_completion": false
+  },
+  "next_explicit_capacity_comparison": {
+    "executed": false,
+    "default_output_tokens": 4000,
+    "explicit_output_tokens": 12000,
+    "model_or_high_effort_changed": false,
+    "domain_maximum_calls": 8,
+    "domain_conservative_upper_cny": 13.7280108,
+    "g1_maximum_calls": 5,
+    "g1_conservative_upper_cny": 49.4364244,
+    "same_original_cumulative_budget": true,
+    "cause_of_previous_truncation_proven": false
+  }
 }

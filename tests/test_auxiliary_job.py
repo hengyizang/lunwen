@@ -71,6 +71,16 @@ class AuxiliaryJobTests(unittest.TestCase):
         ordinary.assert_not_called()
         self.assertEqual(calibration.call_args.kwargs["seat"], "domain")
         self.assertFalse(calibration.call_args.kwargs["execute"])
+        self.assertEqual(calibration.call_args.kwargs["max_output_tokens"], 4000)
+        manifest = self.manifest(kind="public-review-calibration", task_profile=profile, calibration_seat="domain", max_output_tokens=12000)
+        with patch("scripts.public_review_anchors.run_calibration", return_value={"status": "dry_run_no_model_call", "calls_planned": 8,
+                    "calls_attempted": 0, "reserved_upper_bound_cny": 14}) as calibration:
+            auxiliary_job.run(self.project, manifest, "evidence/auxiliary/calibration-12000.json")
+        self.assertEqual(calibration.call_args.kwargs["max_output_tokens"], 12000)
+        for kind in ("public-review-calibration", "g1-transport-validation"):
+            for tokens in (3999, 8000, True):
+                with self.subTest(kind=kind, tokens=tokens), self.assertRaises(ValueError):
+                    auxiliary_job.load(self.project, self.manifest(kind=kind, task_profile={**profile, "task_class": kind}, max_output_tokens=tokens))
 
     def test_citation_crosscheck_binds_only_its_explicit_scientific_source_task(self):
         profile = {"task_class": "citation-crosscheck", "science_risk": "critical", "priority": "quality"}
@@ -128,6 +138,13 @@ class AuxiliaryJobTests(unittest.TestCase):
         self.assertEqual(report["maximum_calls"], 5)
         self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 49.2684244)
         self.assertFalse(report["accounting"]["provider_fee_fully_verified"])
+        manifest = self.manifest(kind="g1-transport-validation", task_profile=profile, max_output_tokens=12000)
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+             patch.object(auxiliary_job.model_routing, "load_policy", return_value=policy):
+            result = auxiliary_job.run(self.project, manifest, "evidence/auxiliary/g1-12000.json")
+        report = json.loads((self.project / result["output"]).read_text())
+        self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 49.4364244)
+        self.assertTrue(all(row["max_output_tokens"] == 12000 for row in report["model_plan"]))
 
     def test_manifest_rejects_unknown_fields_roles_duplicate_json_and_legacy(self):
         for field in ("provider","model","reasoning_effort","allow_paid","budget_cny"):

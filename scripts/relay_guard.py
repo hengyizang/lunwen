@@ -13,7 +13,6 @@ from pathlib import Path
 import re
 import subprocess
 from urllib.parse import quote
-import uuid
 
 from scripts.research_artifacts import json_digest
 
@@ -322,22 +321,6 @@ def inspect(provider, *, store=None):
             "catalog_access_does_not_release_holds": True}
 
 
-def begin(provider, *, scope, max_cost_cny, store=None):
-    if type(max_cost_cny) not in (int, float) or not math.isfinite(max_cost_cny) or max_cost_cny <= 0:
-        raise RelayGuardError("shared relay reservation needs a positive bounded amount")
-    store, name, value, expected = load(provider, store=store)
-    if value["legacy_holds"] or value["active"]:
-        # Import historical unknown holds durably, even though no new POST is allowed.
-        store.write(name, value, expected)
-        raise RelayGuardError("credential has an unresolved historical or concurrent charge; no new paid call")
-    ticket = {"id": uuid.uuid4().hex, "provider": provider, "credential_sha256": value["credential_sha256"],
-              "scope": scope, "max_cost_cny": max_cost_cny, "run_id": os.environ.get("GITHUB_RUN_ID")}
-    value["active"] = ticket
-    store.write(name, value, expected)
-    _TICKET.set({**ticket, "sent": False})
-    return ticket
-
-
 @contextmanager
 def project_transport(project, receipt_id, provider, model, *, max_cost_cny, paper_id, run_id):
     """One operation-local POST on an already authorized cumulative reservation."""
@@ -373,43 +356,6 @@ def authorize_transport(url, headers, *, payload=None):
             or ("model" in payload if ticket["native_google"] else payload.get("model") != ticket["model"])):
         raise RelayGuardError("production POST differs from its exact selected endpoint/model")
     ticket["sent"] = True
-
-
-def bind_meter(ticket, provider_model, before, *, store=None):
-    store, name, value, expected = load(ticket["provider"], store=store, import_legacy=False)
-    if value["active"] != ticket or not before:
-        raise RelayGuardError("cannot bind meter to a different shared reservation")
-    value["active_meter"] = {"model": provider_model, "before": before}
-    store.write(name, value, expected)
-    live = _TICKET.get()
-    if not live or live["id"] != ticket["id"]:
-        raise RelayGuardError("local ticket changed before meter binding")
-    live["meter_bound"] = True
-
-
-def finish(ticket, settlement=None, *, not_sent=False, store=None):
-    store, name, value, expected = load(ticket["provider"], store=store, import_legacy=False)
-    if value["active"] != ticket:
-        raise RelayGuardError("shared relay active reservation changed")
-    live = _TICKET.get()
-    if not_sent:
-        if not live or live["id"] != ticket["id"] or live["sent"]:
-            raise RelayGuardError("cannot cancel a possibly sent production request")
-        event = {"ticket": ticket, "status": "not_sent"}
-    else:
-        if not live or live["id"] != ticket["id"] or not live["sent"]:
-            raise RelayGuardError("cannot settle an unsent or different shared request")
-        amount = settlement.get("actual_cost_cny") if isinstance(settlement, dict) else None
-        if (type(amount) not in (int, float) or not math.isfinite(amount) or amount < 0
-                or amount > ticket["max_cost_cny"] or not settlement.get("debit_evidence")):
-            raise RelayGuardError("unknown or excessive debit retains the shared reservation")
-        validate_debit(value.get("active_meter"), settlement)
-        event = {"ticket": ticket, "status": "settled", "settlement": settlement}
-    value["events"].append(event)
-    value["active"] = None
-    value.pop("active_meter", None)
-    store.write(name, value, expected)
-    _TICKET.set(None)
 
 
 def validate_debit(meter, settlement):

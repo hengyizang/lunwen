@@ -103,17 +103,27 @@ The reporting builder checks actual approved executor seals and recomputes every
 estimate from the current frozen CSV. Diagnostic outputs need their registered
 ID, computed passed boolean and nonempty details; failed/missing diagnostics
 block readiness. This does not establish their scientific adequacy.
-All specifications go to papers/Pxx/tables/empirical-estimates.csv. Holm p-value
-adjustments are separate by family and analysis phase; no best-p selection occurs.
+All registered specifications, computed estimates and complete result tables are
+backed up under `experiments/archive/Pxx/`. The frozen `report_all_preregistered`
+policy retains these complete results; it does not require every row in a paper.
+Only explicitly mapped manuscript specifications are exported to
+`papers/Pxx/tables/empirical-estimates.csv`. With no selected rows, that paper
+table is not created; an older generated table is backed up before removal.
+Holm adjustments still use the full registered family and analysis phase;
+manuscript selection never recomputes a more favorable adjusted p-value.
 
 At G5 create empirical-reporting-map.json with schema_version:1.0, paper_id and
-specifications:[{id,locations:[{field,path,sha256,locator,quote,decimals}]}]. Map
-every estimate, SE, interval bounds/confidence, raw/adjusted p, observation/unit
+specifications:[{id,locations:[{field,path,sha256,locator,quote,decimals}]}] for the
+scientifically selected presentation subset. For each selected specification, map
+its estimate, SE, interval bounds/confidence, raw/adjusted p, observation/unit
 counts and phase to exact current source lines. Use L1 or L1-L3 and 0..12 decimals.
 A positive p-value cannot be rounded to zero. A numeric location
 can use notation:scientific with bounded decimals for an exact nonzero tiny value;
-fixed decimal presentation remains the default. Every adverse/exploratory specification
-remains locatable in the manuscript or supplement under the existing narrative rules.
+fixed decimal presentation remains the default. Complete adverse/exploratory
+results remain in the separate archive. Preserve material evidence affecting the
+actual conclusion in the manuscript or supplements; selection follows scientific
+relevance without misrepresenting the underlying evidence. Mapping alone does not
+verify full manuscript semantics or scientific validity.
 
 Runtime JSON includes records:[{estimate,ci_low,ci_high,...}]. Existing
 derive_figure_data with operation:json_rows, record_path:records, selected columns

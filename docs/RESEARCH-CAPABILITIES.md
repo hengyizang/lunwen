@@ -66,8 +66,9 @@ python3 scripts/open_fulltext.py \
 ```
 
 The output is saved under `evidence/fulltext/`. All returned locations are
-candidates only: `license_verified=false` and `download_authorized=false` until
-the exact copy, license and terms are reviewed. The resolver never bypasses a
+candidates only: `license_verified=false` and `download_authorized=false` record
+that the resolver does not verify permissions or grant access. Licence/research-use
+verification is optional metadata, not a pre-use approval gate. The resolver never bypasses a
 publisher login or assumes that library access permits redistribution to a
 model API.
 
@@ -87,7 +88,8 @@ python3 scripts/sciencepro_import.py \
 The original is copied to `data/private/sciencepro/`, which Git ignores. The
 small receipt under `evidence/sciencepro/` records the SHA-256 and extracted DOI
 or HTTPS candidates. SciencePro results remain advisory until primary-source,
-license and data-provenance checks pass. Do not reuse cookies, reverse engineer
+claim-support and source/version/provenance checks pass. Licence/research-use review
+is optional; preserve privacy and known access restrictions. Do not reuse cookies, reverse engineer
 hidden endpoints or automate access that the platform blocks.
 
 ## Publication-grade Python figures

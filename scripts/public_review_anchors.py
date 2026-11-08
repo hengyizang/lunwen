@@ -140,11 +140,15 @@ def calibration_costs(attempts):
         "provider_fee_fully_verified": bool(attempts) and len(verified) == len(attempts), "unknown_attempts": unknown}
 
 
-def calibration_plan(batches, seat, route=None):
+def calibration_plan(batches, seat, route=None, *, max_output_tokens=CALIBRATION_OUTPUT_TOKENS):
     """Pure byte/price plan; no keys, inference, spending or model promotion."""
     from scripts import model_routing, model_runtime, billing_quotes
     if seat not in CALIBRATION_SEATS:
         raise ValueError("calibration needs an actual production panel seat")
+    if type(max_output_tokens) is not int or max_output_tokens not in model_routing.VALIDATION_OUTPUT_CAPS:
+        raise ValueError("validation output tokens must be explicitly 4000 or 12000")
+    if route is not None and route["max_output_tokens"] != max_output_tokens:
+        raise ValueError("calibration quote and temporary route output cap differ")
     route = route or model_routing.select("writing-and-review", "independent-critic-panel-" + seat)
     quote = model_runtime.pricing(route["provider"], route["model"])
     limits = billing_quotes.tool_limits(quote, None)
@@ -154,23 +158,24 @@ def calibration_plan(batches, seat, route=None):
         **{key: route[key] for key in ("provider", "model", "family", "reasoning_effort", "route_id")},
         "routing_policy_sha256": route["policy_sha256"],
         "production_panel_route": route.get("validation_scope", {}).get("production_panel_route", route),
-        "max_output_tokens": CALIBRATION_OUTPUT_TOKENS, "timeout_seconds": CALIBRATION_TIMEOUT,
+        "max_output_tokens": max_output_tokens, "timeout_seconds": CALIBRATION_TIMEOUT,
         "reserved_upper_bound_cny": model_runtime.reservation_bound(route["provider"], batch["prompt"], None,
-            CALIBRATION_OUTPUT_TOKENS, quote, limits, controlled=True)} for index, batch in enumerate(batches)]
+            max_output_tokens, quote, limits, controlled=True)} for index, batch in enumerate(batches)]
 
 
-def calibration_preview(corpus):
+def calibration_preview(corpus, *, max_output_tokens=CALIBRATION_OUTPUT_TOKENS):
     spec = read(corpus / "program/judgment-benchmark.json")
     cases = judgment_benchmark(corpus, spec, observed=[])["blind_cases"]
     batches = calibration_batches(corpus, cases)
-    plans = [item for seat in CALIBRATION_SEATS for item in calibration_plan(batches, seat)]
+    plans = [item for seat in CALIBRATION_SEATS for item in calibration_plan(batches, seat, max_output_tokens=max_output_tokens)]
     return {"kind": "free_unexecuted_calibration_plan", "model_calls": 0, "calls_planned": len(plans),
         "reserved_upper_bound_cny": round(sum(row["reserved_upper_bound_cny"] for row in plans), 8),
         "model_plan": plans, "evidence_strength_rubric": {"source": RUBRIC_SOURCE, "definitions": EVIDENCE_RUBRIC},
         "label_baseline_not_sent_to_models": calibration_metrics(read(corpus / "program/public-review-anchors.json")["cases"], [])}
 
 
-def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, seat: str, execute=False, check_inputs=None):
+def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, seat: str, execute=False, check_inputs=None,
+                    max_output_tokens=CALIBRATION_OUTPUT_TOKENS):
     """One fixed corpus and one selected production critic; no retry loop."""
     from scripts import model_routing, model_runtime
     from scripts.research_artifacts import json_digest
@@ -178,6 +183,8 @@ def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, s
         raise ValueError("real public-review calibration runs only through the cloud executor")
     if seat not in CALIBRATION_SEATS or type(execute) is not bool:
         raise ValueError("calibration requires one fixed production critic seat and an explicit execution boolean")
+    if type(max_output_tokens) is not int or max_output_tokens not in model_routing.VALIDATION_OUTPUT_CAPS:
+        raise ValueError("validation output tokens must be explicitly 4000 or 12000")
     if execute and os.environ.get("DR_OS_REQUIRE_REMOTE_RESERVATION") != "1":
         raise ValueError("paid calibration requires the existing owner cloud spending controller")
     root = Path(__file__).resolve().parents[1]
@@ -200,10 +207,11 @@ def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, s
     batches = calibration_batches(corpus, cases)
     source_manifest_sha256 = sha(FROZEN)
     scope_sha256 = json_digest({"request_manifest_sha256": manifest_sha256, "source_manifest_sha256": source_manifest_sha256,
+                               "max_output_tokens": max_output_tokens,
                                "batches": [hashlib.sha256(b["prompt"].encode()).hexdigest() for b in batches]})
-    with model_routing.public_review_calibration_route(seat, scope_sha256):
+    with model_routing.public_review_calibration_route(seat, scope_sha256, max_output_tokens=max_output_tokens):
         route = model_routing.select("auxiliary", "independent-critique")
-    plan = calibration_plan(batches, seat, route)
+    plan = calibration_plan(batches, seat, route, max_output_tokens=max_output_tokens)
     for index, batch in enumerate(batches):
         target = cache / "blind-prompts" / f"batch-{index + 1:02d}.txt"
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -247,10 +255,10 @@ def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, s
             write(destination, report)  # Exact identity/input plan precedes any POST.
             response = None
             try:
-                with model_routing.public_review_calibration_route(item["seat"], scope_sha256):
+                with model_routing.public_review_calibration_route(item["seat"], scope_sha256, max_output_tokens=max_output_tokens):
                     response = model_runtime.call(project, run_id=run_id, stage="auxiliary", role="independent-critique",
                         provider=item["provider"], model=item["model"], reasoning_effort="high", prompt=batch["prompt"],
-                        max_output_tokens=CALIBRATION_OUTPUT_TOKENS, timeout=CALIBRATION_TIMEOUT, use_cache=False,
+                        max_output_tokens=max_output_tokens, timeout=CALIBRATION_TIMEOUT, use_cache=False,
                         task_profile={"task_class": "public-review-calibration", "science_risk": "critical", "priority": "quality"})
             finally:
                 attempt["usage_receipts"] = [row for row in model_runtime.ledger_entries(project) if row.get("run_id") == run_id]
@@ -259,7 +267,8 @@ def run_calibration(project: Path, destination: Path, manifest_sha256: str, *, s
             raw_response = cache / "responses" / (run_id + ".json")
             write(raw_response, {"text": response.text, "usage": response.usage, "request_id": response.request_id,
                 "requested_model": item["model"], "reported_model": response.reported_model,
-                "provider": response.provider, "route_id": response.route_id})
+                "provider": response.provider, "route_id": response.route_id,
+                "provider_response_metadata": response.response_metadata})
             attempt["response_sha256"] = sha(raw_response)
             attempt["response_artifact"] = str(raw_response.relative_to(root / ".runtime/cloud-artifact"))
             write(destination, report)  # Retain bill and raw response even if validation fails.

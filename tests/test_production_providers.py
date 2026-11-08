@@ -358,6 +358,24 @@ class ProductionProviderTests(unittest.TestCase):
         self.assertEqual(caught.exception.response_evidence["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
         self.assertIsNone(caught.exception.response_evidence["canonical_json_sha256"])
 
+    def test_protocol_success_with_truncated_caller_json_keeps_only_safe_response_metadata(self):
+        response = self.response("anthropic", "claude-opus-5-5")
+        response["content"][1]["text"] = '{"anchor_labels":[{"rationale":"'
+        body = json.dumps(response, indent=4).encode()
+        opener = Mock(); opener.open.return_value = nullcontext(SimpleNamespace(status=200, read=lambda limit: body[:limit]))
+        with patch.dict(os.environ, self.env(), clear=True), patch.object(providers.urllib.request, "build_opener", return_value=opener):
+            result = providers.call("codekey-kiro-enterprise", "synthetic request", model="claude-opus-5-5")
+        with self.assertRaises(json.JSONDecodeError):
+            json.loads(result.text)
+        metadata = result.response_metadata
+        self.assertEqual(metadata["diagnostics"]["stop_reason"], "end_turn")
+        self.assertEqual(metadata["diagnostics"]["content_block_types"], ["thinking", "text"])
+        self.assertEqual(metadata["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
+        self.assertTrue(metadata["metadata_only"])
+        self.assertFalse(metadata["original_response_body_retained"])
+        self.assertNotIn("response", metadata)
+        self.assertNotIn("private thought", json.dumps(metadata))
+
     def test_redirect_handler_refuses_credential_forwarding_and_post_replay(self):
         handler = providers._NoGenerationRedirect()
         for target in ("https://other.example/steal", "https://cheapai.info/another"):

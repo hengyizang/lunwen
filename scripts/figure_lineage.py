@@ -103,16 +103,8 @@ def run_seal(project:Path,paper_id:str,identifier:str)->dict:
             need(target.is_file() and sha(target)==row["sha256"],"Plot source frozen input changed: "+row["path"])
     registry_path=experiment_path(root, 'experiments/registry.jsonl')
     records=[json.loads(line) for line in registry_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    try:
-        from scripts.primary_recovery import selected_attempt
-    except ImportError:
-        selected_attempt=None
-    if selected_attempt:
-        receipt=selected_attempt(root,run_id,records,plan_sha256=plan_hash)
-    else:
-        matches=[r for r in records if r.get("run_id")==run_id]
-        need(len(matches)==1,"Plot source requires exactly one successful executor attempt or owner-approved recovery")
-        receipt=matches[0]
+    from scripts.primary_recovery import selected_attempt
+    receipt=selected_attempt(root,run_id,records,plan_sha256=plan_hash)
     need(receipt.get("status")=="succeeded" and receipt.get("exit_code")==0 and receipt.get("timed_out") is False
          and receipt.get("paper_id")==paper_id and receipt.get("approved_plan_sha256")==plan_hash,"Plot source attempt did not succeed for the current approved paper/plan")
     for key,default in (("argv",None),("seed",None),("cwd","."),("timeout_seconds",None)):

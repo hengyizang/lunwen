@@ -49,10 +49,9 @@ nonempty reasons. Empty and partial lists are valid. Related observations may
 share an actual explanation; the parser checks format and never certifies that
 the reason is scientifically sound. Unresolved records remain visible C
 observations. Exhaustive CFH/H/AD tables are not required for G5 or packaging.
-`validate_disposition_records()` supports structured `id`, `disposition` and
-`reason` fields without changing the native bundle schema. Neither adapter
-claims to verify the truth of a reason or to replace source-bound semantic
-review.
+Native author bundles use the existing `notes` strings and
+`validate_dispositions()`; no parallel structured disposition form is required.
+The parser does not verify reasons or replace source-bound semantic review.
 
 ## Deterministic Checks and Protected Information
 
@@ -80,26 +79,28 @@ words of predominantly English paragraphs. Chinese character counts do not
 become English word counts. Local paragraphs with three or more semicolons and
 three or more contrasts remain contextual signals for both languages.
 
-`compare_edit()` flags possible changes to numeric associations, citations,
-formulae, quotations, code, disclosed assistance, negative findings and related
-scientific context. Equal numeric token counts cannot conceal swapping which
-method obtained which value. These conservative signatures can require review;
-they cannot prove that unchanged signatures mean unchanged scientific meaning.
-They never authorize random synonym spinning, withholding material adverse
-results, deleting required AI-use statements or claiming detector/watermark
-evasion.
+Use `scripts/revision_integrity.py --project <slug> --paper <Pxx>` for the actual
+canonical manuscript and preserved revision baseline. It checks numeric
+associations, citations, formulae and scientific context; unchanged signatures
+do not prove scientific equivalence. Source-bound edit locations remain
+available through the revision ledger. Public AI-use statements remain optional
+and author-editable; truthful internal provenance remains separate.
 
 ## Experiments
 
-`experiment_review()` checks supplied internal method-use records. Reported full
-comparisons need full recorded identity/configuration and actual run bindings;
-planned and cited methods do not require an executed checkpoint. Properly
-labeled ablations preserve their full reference and changed component. An
-intended minimal, fixed-budget or synthetic study retains its actual protocol
-and interpretation; a debug substitute cannot become scientific evidence simply
-through a new label. The existing execution, protocol, reproduction and
-statistics validators remain the authority, regardless of self-declared
-`confirmed` metadata.
+Use the existing paper experiment design and `experiment-evidence-plan.json`
+for actual comparison roles, configurations, splits, baselines and ablations.
+`scripts/experiment_evidence.py` validates the plan and executor-bound evidence;
+`scripts/experiment_runner.py` executes the approved inputs. Planning and cited
+methods do not fabricate executed results. A debug or smoke run cannot become
+scientific evidence through a new label or a self-declared `confirmed` field.
+
+The unused Python helpers `compare_edit()`, `experiment_review()` and
+`validate_disposition_records()` are retired. They had no workflow consumers;
+their free-text signatures and self-declared method notes were separate from
+these native scientific controls. Their old return formats are not replacement
+contracts for the native authorities above. The 38-item guidance, full pinned
+sources, Humanizer/anti-defensive observations and normal note parser remain.
 
 A retained smoke check needs a changed critical path, realistic failure,
 distinct signal, lower cost than substantive validation and an outcome that

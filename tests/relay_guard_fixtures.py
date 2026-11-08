@@ -40,11 +40,4 @@ class MemoryStore:
 
 def install_fake_guard(stack):
     """Only use in suites already mocking model/meter transport."""
-    counter=[0]
-    def begin(provider,*,scope,max_cost_cny,**kwargs):
-        counter[0]+=1
-        return {"id":"synthetic-shared-"+str(counter[0]),"provider":provider,"scope":scope,"max_cost_cny":max_cost_cny}
-    return {"begin":stack.enter_context(patch.object(relay_guard,"begin",side_effect=begin)),
-            "bind_meter":stack.enter_context(patch.object(relay_guard,"bind_meter",return_value=None)),
-            "finish":stack.enter_context(patch.object(relay_guard,"finish",return_value=None)),
-            "authorize_transport":stack.enter_context(patch.object(relay_guard,"authorize_transport",return_value=None))}
+    return {"authorize_transport":stack.enter_context(patch.object(relay_guard,"authorize_transport",return_value=None))}
