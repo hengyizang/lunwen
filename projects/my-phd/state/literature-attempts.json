@@ -14,5 +14,9 @@
   "4c6fd7f71755ee69d9204cb68abc3afb5dfdd83731506fbc0682406bedc90384": {
     "at": "2026-11-08T08:30:24.056885+00:00",
     "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=AI+robotics+mechanical+engineering+dataset+comparison+alternative+methods&rows=15&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error timed out>"
+  },
+  "989fd7689183ea699378890b098379e7d643cb246ab66d360770cf0044d37143": {
+    "at": "2026-11-08T09:26:36.222176+00:00",
+    "error": "Semantic Scholar search failed: Request failed for https://api.semanticscholar.org/graph/v1/paper/search?query=AI+robotics+mechanical+engineering+dataset+limitations+failure+robustness&limit=15&fields=paperId%2Ctitle%2Cyear%2Cauthors%2CexternalIds%2Curl%2Cabstract%2Cvenue%2CpublicationDate%2CcitationCount%2CpublicationTypes: HTTP Error 429: "
   }
 }
