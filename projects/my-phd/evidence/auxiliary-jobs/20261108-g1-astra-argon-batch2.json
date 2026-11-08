@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "kind": "g1-transport-validation",
+  "prompt_file": "evidence/auxiliary-jobs/20261108-g1-astra-argon-batch2.txt",
+  "max_output_tokens": 12000,
+  "validation_roster": "astra-argon",
+  "task_profile": {
+    "task_class": "g1-transport-validation",
+    "science_risk": "critical",
+    "priority": "quality"
+  }
+}
