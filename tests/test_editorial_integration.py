@@ -12,9 +12,7 @@ from unittest.mock import patch
 from scripts import (
     academic_style,
     api_orchestrator,
-    ccfa_humanization,
     cloud_research_steps,
-    defensive_review,
     output_provenance,
     research_improvementctl,
 )
@@ -28,16 +26,8 @@ def manuscript_text() -> str:
     )
 
 
-def complete_notes() -> list[str]:
-    return [
-        f"rejected: {code} Retained the scientifically necessary wording after contextual evidence review."
-        for code in [*(f"H{i:02d}" for i in range(1, 27)), *(f"AD{i:02d}" for i in range(1, 9))]
-    ] + [f"rejected: {row['id']} Fixture contextual review of {row['key']}: {row['guidance']}"
-         for row in ccfa_humanization.review_checklist()]
-
-
 class EditorialIntegrationTests(unittest.TestCase):
-    def test_current_audit_contains_complete_recomputable_reviews(self):
+    def test_current_audit_reports_retired_mechanics_without_fabricating_semantic_review(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             manuscript = project / "papers/P01/manuscript/main.tex"
@@ -47,19 +37,13 @@ class EditorialIntegrationTests(unittest.TestCase):
                 academic_style, "find_harper", return_value=None
             ):
                 _, report = academic_style.write_audit(project, "P01")
-            humanizer = report["analysis"]["humanizer_review"]
-            defensive = report["analysis"]["anti_defensive_review"]
-            self.assertEqual([row["number"] for row in humanizer["coverage"]], list(range(1, 27)))
-            self.assertEqual([row["review_id"] for row in defensive["coverage"]], [f"AD{i:02d}" for i in range(1, 9)])
-            self.assertTrue(humanizer["coverage_complete"])
-            self.assertFalse(report["detector_score_used"])
-            # A forged, incomplete nested coverage cannot hide behind a passing status.
-            report["analysis"]["humanizer_review"]["coverage"].pop()
-            report["status"] = "pass"
-            report["errors"] = []
+            self.assertEqual(report["analysis"]["editorial_methods"], {
+                "status": "retired", "mechanical_review_performed": False, "semantic_review_status": "unknown"})
+            self.assertNotIn("humanizer_review", report["analysis"])
+            self.assertNotIn("anti_defensive_review", report["analysis"])
+            report["analysis"]["editorial_methods"]["mechanical_review_performed"] = True
             academic_style.report_path(manuscript.parent.parent).write_text(json.dumps(report), encoding="utf-8")
-            errors = academic_style.validate_saved_audit(manuscript.parent.parent)
-            self.assertTrue(any("humanizer_review" in error for error in errors))
+            self.assertTrue(academic_style.validate_saved_audit(manuscript.parent.parent))
 
     @patch("scripts.research_phase.writing_phase",return_value="submission")
     def test_shared_writer_roles_receive_optional_observations_in_submission_phase(self, phase):
@@ -75,20 +59,12 @@ class EditorialIntegrationTests(unittest.TestCase):
         for value in (api_prompt, api_remediation,  ):
             self.assertIn("watermark_cleanup", value)
         for value in (api_critic, ):
-            self.assertIn("read-only independent review", value)
+            self.assertIn("read-only independent adversarial scientific reviewer", value)
             self.assertNotIn("In remediation notes", value)
+            self.assertIn("Use actual scientific sources and relevant observations in a read-only independent review.", value)
+        self.assertNotIn("Inspect protected_signals", api_prompt)
         self.assertNotIn("H26", api_orchestrator.editorial_prompt_contract("topic-intelligence"))
 
-    def test_optional_observation_records_validate_only_supplied_format(self):
-        notes = complete_notes()
-        api_orchestrator.validate_editorial_dispositions(notes, "writing-and-review")
-        for accepted in ([], notes[:-1], notes[:-9], ["fixed: H01 Methods 2: typo."]):
-            api_orchestrator.validate_editorial_dispositions(accepted, "writing-and-review")
-        for bad in (notes + [notes[0]], ["fixed: H99 Invented ID"], ["fixed: AD01"]):
-            with self.subTest(notes=bad):
-                with self.assertRaises(ValueError):
-                    api_orchestrator.validate_editorial_dispositions(bad, "writing-and-review")
-        api_orchestrator.validate_editorial_dispositions([], "topic-intelligence")
 
     def test_evidence_led_narrative_reaches_all_existing_g5_roles(self):
         prompts = [
@@ -107,72 +83,19 @@ class EditorialIntegrationTests(unittest.TestCase):
                 self.assertNotIn("Lead the abstract and conclusion with the preregistered primary finding", prompt)
                 self.assertNotIn("secret-preferred-verdict", prompt)
         # Narrative quality and independent science review do not require style scorecards.
-        api_orchestrator.validate_editorial_dispositions([], "writing-and-review")
 
-    def test_protected_signals_reach_shared_api_remediation_with_honest_bounds(self):
-        with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
-            project = Path(directory) / "projects/demo"
-            state_path = project / "state/run.json"
-            state_path.parent.mkdir(parents=True)
-            state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01", "writing_phases":{"P01":"submission"}}
-            state_path.write_text(json.dumps(state), encoding="utf-8")
-            protected = defensive_review.audit_text("\n\n".join(
-                "We do not claim causal identification from this observational analysis." for _ in range(16)
-            ))
-            # Feedback excerpts remain bounded even for an unusually long recorded span.
-            protected["protected_signals"][0]["match"] = "m" * 5000
-            protected["protected_signals"][0]["context"] = "c" * 5000
-            audit_path = project / "papers/P01/style/academic-style-audit.json"
-            audit_path.parent.mkdir(parents=True)
-            audit_path.write_text(json.dumps({
-                "manuscript": {"path": "manuscript/main.tex", "source_tree_sha256": "a" * 64},
-                "analysis": {"humanizer_review": {}, "anti_defensive_review": protected},
-            }), encoding="utf-8")
-            feedback = json.loads(api_orchestrator.editorial_feedback("demo", "writing-and-review"))
-            actual = feedback["reviews"]["anti_defensive_review"]
-            self.assertEqual(feedback["audit_path"], "papers/P01/style/academic-style-audit.json")
-            self.assertFalse(actual["findings"])
-            self.assertTrue(actual["semantic_review_required"])
-            self.assertFalse(actual["protected_context_is_semantic_approval"])
-            self.assertEqual(len(actual["protected_signals"]), 12)
-            self.assertEqual(actual["remaining_protected_signals"], len(protected["protected_signals"]) - 12)
-            self.assertTrue(all(len(row["context"]) <= 320 for row in actual["protected_signals"]))
-            self.assertTrue(all(len(row["match"]) <= 160 for row in actual["protected_signals"]))
-            self.assertTrue(actual["protected_signals"][0]["match_truncated"])
-            self.assertTrue(actual["protected_signals"][0]["context_truncated"])
-            self.assertIn("start", actual["protected_signals"][0])
-            self.assertEqual(actual["implementation_sha256"], protected["implementation_sha256"])
-            api_prompt = api_orchestrator.remediation_prompt("demo", "writing-and-review", "", "{}")
-            prompt = api_prompt
-            self.assertIn("protected_signals", prompt)
-            self.assertIn("causal identification", prompt)
-            self.assertIn("Truncated examples are not resolved", prompt)
-
-    def test_saved_anti_defensive_review_cannot_forge_checker_binding(self):
-        with tempfile.TemporaryDirectory() as directory:
-            project = Path(directory)
-            manuscript = project / "papers/P01/manuscript/main.tex"
-            manuscript.parent.mkdir(parents=True)
-            manuscript.write_text(manuscript_text(), encoding="utf-8")
-            with patch.object(academic_style, "find_proselint", return_value=None), patch.object(
-                academic_style, "find_harper", return_value=None
-            ):
-                _, report = academic_style.write_audit(project, "P01")
-            report["analysis"]["anti_defensive_review"]["implementation_sha256"] = "0" * 64
-            academic_style.report_path(manuscript.parent.parent).write_text(json.dumps(report), encoding="utf-8")
-            self.assertTrue(any("anti_defensive_review" in row for row in academic_style.validate_saved_audit(manuscript.parent.parent)))
-
-    def test_malformed_protected_signals_do_not_claim_editorial_success(self):
+    def test_retired_legacy_reports_never_supply_a_claimed_mechanical_or_semantic_pass(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
             project = Path(directory) / "projects/demo"
             (project / "state").mkdir(parents=True)
-            (project / "state/run.json").write_text('{"active_paper":"P01","writing_phases":{"P01":"submission"}}', encoding="utf-8")
-            audit_path = project / "papers/P01/style/academic-style-audit.json"
-            audit_path.parent.mkdir(parents=True)
-            audit_path.write_text(json.dumps({"analysis": {
-                "anti_defensive_review": {"protected_signals": ["invalid signal"]}
-            }}), encoding="utf-8")
-            self.assertIn("unavailable", api_orchestrator.editorial_feedback("demo", "writing-and-review"))
+            (project / "state/run.json").write_text('{"active_paper":"P01","writing_phases":{"P01":"submission"}}')
+            report = project / "papers/P01/style/academic-style-audit.json"
+            report.parent.mkdir(parents=True)
+            report.write_text(json.dumps({"analysis": {"anti_defensive_review": {"status": "pass"}}}))
+            result = json.loads(api_orchestrator.editorial_feedback("demo", "writing-and-review"))
+            self.assertEqual(result["editorial_methods"]["status"], "unavailable")
+            self.assertEqual(result["editorial_methods"]["semantic_review_status"], "unknown")
+            self.assertEqual(result["reviews"], {})
 
     def test_api_writer_cannot_forge_cleanup_candidates_or_receipts(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):

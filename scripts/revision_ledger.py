@@ -21,7 +21,7 @@ from xml.etree import ElementTree as ET
 from scripts.citation_audit import manuscript_digest, tex_source_paths
 from scripts.ref_verify_adapter import canonical_manuscript
 from scripts.research_artifacts import path_in, read, sha, json_bytes, json_digest, save_report, report_errors
-from scripts.scientific_editing import NUMBER, PROTECTED, SI_UNITS, signatures, WordSource
+from scripts.revision_integrity import NUMBER, PROTECTED, SI_UNITS, signatures, WordSource
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"

@@ -423,7 +423,7 @@ class ReviewPanelTests(unittest.TestCase):
 
     def test_word_headings_tables_and_first_figure_preserve_legitimate_panel_route(self):
         canonical, spec = self.word_inputs()
-        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}):
+        with patch("scripts.figure_provenance.lineage", return_value={"fixture_only":True}):
             packet = review_panel.prepare(self.project, "P01")
             source = next(row for row in packet["views"]["domain"]["sources"] if row["kind"] == "methods")
             self.assertTrue(review_panel._pointer_in_view(source["path"] + ":P8-P8", [source]))
@@ -455,7 +455,7 @@ class ReviewPanelTests(unittest.TestCase):
         formula.append(fraction); paragraph._p.append(formula); document.save(canonical)
         row = next(row for row in spec["views"]["domain"] if row["kind"] == "methods")
         row["sha256"] = sha(canonical); write(self.project / review_panel.request_path("P01"),spec)
-        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}):
+        with patch("scripts.figure_provenance.lineage", return_value={"fixture_only":True}):
             text = review_panel.prepare(self.project,"P01")["views"]["domain"]["text"]
             self.assertIn("OMML formula:", text); self.assertIn(":num>", text); self.assertIn(":den>", text)
             paragraph._p.append(OxmlElement("w:object")); document.save(canonical)
@@ -466,7 +466,7 @@ class ReviewPanelTests(unittest.TestCase):
 
     def test_word_layout_table_cannot_smuggle_document_sections_as_numeric_table(self):
         from docx import Document
-        from scripts.scientific_editing import WordSource, W
+        from scripts.revision_integrity import WordSource, W
         canonical, spec = self.word_inputs()
         document = Document(canonical)
         layout = document.add_table(rows=2, cols=2)
@@ -489,7 +489,7 @@ class ReviewPanelTests(unittest.TestCase):
                 if row["path"] == canonical.relative_to(self.project).as_posix(): row["sha256"] = sha(canonical)
                 if row["kind"] == "methods": row.update(start_paragraph=methods,end_paragraph=methods)
         write(self.project / review_panel.request_path("P01"), spec)
-        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}), \
+        with patch("scripts.figure_provenance.lineage", return_value={"fixture_only":True}), \
                 patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError,"numeric_table selection is outside"):
             review_panel.run(self.project, "P01", "word-layout-as-data")
         calls.assert_not_called()

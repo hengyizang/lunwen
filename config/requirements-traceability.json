@@ -714,32 +714,39 @@
           "reason": "Duplicate unused packaging entry reintroduced retired Q1/Q2/IF release thresholds."
         },
         "scripts/venue_adapter.py": {
-          "action": "retained_active",
-          "reason": "Documented archive inspection/import and allowed native CLI operations."
+          "action": "removed",
+          "replacement": "scripts/venue_compliance.py",
+          "reason": "Safety-bounded ZIP inspection/ingestion now shares final venue preparation; no template or export protection was removed."
         },
         "scripts/figure_lineage.py": {
-          "action": "retained_scientific_integrity",
-          "reason": "Executor-bound figure inputs and deterministic derived-data replay; used by provenance, story and empirical reporting."
+          "action": "removed",
+          "replacement": "scripts/figure_provenance.py",
+          "reason": "Exact executor seals and deterministic derived-data replay share figure provenance; old implementation-bound receipts require normal cloud rebuild."
         },
         "scripts/figure_panel_cache.py": {
-          "action": "retained_active",
-          "reason": "Existing rendered-figure reuse avoids repeated unchanged work."
+          "action": "removed",
+          "replacement": "scripts/publication_figures.py",
+          "reason": "Panel caching is retired; ordinary full rendering retains source data, numerical content and final QA. Cache reuse is no longer claimed."
         },
         "scripts/humanizer_review.py": {
-          "action": "retained_observation",
-          "reason": "Optional H findings; no compulsory style scorecard or release gate."
+          "action": "removed",
+          "replacement": "scripts/ccfa_runtime.py",
+          "reason": "Independent mechanical C scans and coverage reports are retired. Pinned optional method guidance remains in the existing writer/review call; semantic status stays unknown."
         },
         "scripts/defensive_review.py": {
-          "action": "retained_observation",
-          "reason": "Optional wording observations retain evidence-preservation boundaries."
+          "action": "removed",
+          "replacement": "scripts/ccfa_runtime.py",
+          "reason": "Independent mechanical C scans and coverage reports are retired. Pinned optional method guidance remains in the existing writer/review call; semantic status stays unknown."
         },
         "scripts/ccfa_humanization.py": {
-          "action": "retained_selected_guidance",
-          "reason": "Pinned native CCFA guidance stays available without exhaustive table gates."
+          "action": "removed",
+          "replacement": "scripts/ccfa_runtime.py",
+          "reason": "Independent C checker/report and per-ID scorecard parser are retired; source-bound guidance remains in the same native roles with no extra calls."
         },
         "scripts/scientific_editing.py": {
-          "action": "retained_scientific_integrity",
-          "reason": "Shared protected-text, formula and citation extraction used by revision integrity."
+          "action": "removed",
+          "replacement": "scripts/revision_integrity.py",
+          "reason": "Shared Word, formula, citation, number/unit and contextual-drift extraction is consolidated into the existing scientific-integrity authority."
         },
         "scripts/rebuttal_triage.py": {
           "action": "removed",
@@ -772,7 +779,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "The frozen 24 real eLife papers retain the 16/8 split. Actual CodeKey Opus #134/#142/#146 returned no text, truncated JSON and an explicit refusal, with no accepted complete labels; verified fees are CNY 0.3913704/0.3947136/0.668094. A separate current-session source-only eight-paper pilot agreed with three published categories (majority baseline two); its exact API identity and app fee are unavailable and it cannot promote a production model or replace human claim labels. Native G1 #144 completed free discovery; #148 completed the last six searches then hit HTTP524 at its first planner call, before writing. The explicitly selected Astra/Argon sample #153 completed 56 fresh dataset-catalog operations then hit HTTP524 at its first Astra planner request; writer and Argon were never called and no native scientific artifacts were produced. Its CNY 5.375944 reservation remains unknown and retained, with no automatic retry. Its CNY 1.0616415 fee was independently reconciled by #150, retaining the original three holds and CNY 500 ceiling; #153 adds its separately unknown reservation without extra authority. Later drafts and temporary roster tests must retain their own identity/source receipts. Human >=0.85 claim agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified.",
+      "remaining": "The frozen 24 real eLife papers retain the 16/8 split. Actual CodeKey Opus #134/#142/#146 returned no text, truncated JSON and an explicit refusal, with no accepted complete labels; verified fees are CNY 0.3913704/0.3947136/0.668094. A separate current-session source-only eight-paper pilot agreed with three published categories (majority baseline two); its exact API identity and app fee are unavailable and it cannot promote a production model or replace human claim labels. Native G1 #144 completed free discovery; #148 completed the last six searches then hit HTTP524 at its first planner call, before writing. The explicit Astra/Argon G1 sample #153 hit HTTP524 at its first planner; #159 used the same high-effort model via SSE but failed reading before a complete terminal Response. Neither reached the writer/critic or produced native scientific artifacts. The underlying read exception type for #159 remains unknown; later code only preserves future exception class names. Native Argon editorial #163 also hit HTTP524 before any predictions. Separately verified fees for #148/#153/#159/#163 are CNY 1.0616415/0.440235/0.4683/0.21923298; the original failed reports remain preserved. All new attempt reservations were reconciled, leaving spent CNY 3.88897004, exactly the original three holds totalling CNY 10.0783494, and the unchanged CNY 500 ceiling. No further paid generation is planned. The owner now prioritizes robotics/autonomous control; this is not G1 approval. Later drafts and temporary roster tests must retain their own identity/source receipts. Human >=0.85 claim agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]
@@ -829,15 +836,15 @@
     "source_checklist_sha256": "a2e2046e6a12fe540601dc6b6b97f3f461a92bd10c36cabc92fdec8e384cf1d1",
     "status_counts": {
       "research-evidence-missing": 60,
-      "software-verified": 55,
-      "partially-implemented": 9,
+      "software-verified": 56,
+      "partially-implemented": 8,
       "historical-source-missing": 10,
       "not-achieved": 5,
       "optional-alternative": 17
     },
     "all_156_requirements_fulfilled": false,
     "interpretation": "Software-scoped verification, actual research evidence, numerical targets, incomplete architecture and missing historical sources remain distinct. A completed measurement is not an achieved numerical target. Existing user policy is unchanged.",
-    "fully_satisfied_count": 51,
+    "fully_satisfied_count": 53,
     "last_reviewed_at": "2026-11-08"
   }
 }

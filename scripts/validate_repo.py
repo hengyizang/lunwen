@@ -277,11 +277,11 @@ def validate_editorial_integration(errors: list[str]) -> None:
     if isinstance(humanizer, dict):
         rows = humanizer.get("rules", [])
         if [row.get("number") for row in rows] != list(range(1, 27)) or len({row.get("id") for row in rows}) != 26:
-            errors.append("Humanizer coverage must retain all 26 current patterns exactly once")
+            errors.append("Humanizer guidance must retain all 26 optional methods exactly once")
     if isinstance(defensive, dict):
         groups = defensive.get("groups", [])
         if [row.get("review_id") for row in groups] != [f"AD{i:02d}" for i in range(1, 9)]:
-            errors.append("Anti-defensive review must retain AD01 through AD08")
+            errors.append("Anti-defensive guidance must retain AD01 through AD08")
         if len(defensive.get("checklist", [])) != 10 or len(defensive.get("rewrite_procedure", [])) != 5 or len(defensive.get("function_classes", [])) != 6:
             errors.append("Anti-defensive source checklist, procedure or function coverage is incomplete")
 

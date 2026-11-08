@@ -244,7 +244,7 @@ class ProductionRuntimeTests(unittest.TestCase):
               "output":[{"type":"message","status":"completed","content":[{"type":"output_text","text":"complete answer"}]}],
               "usage":{"input_tokens":100,"output_tokens":20}}
         terminal=('data: '+json.dumps({"type":"response.completed","sequence_number":1,"response":full})+'\n\n').encode()
-        cases=[("complete",b"",0,True),("truncated-length",b"",97,False)]
+        cases=[("complete",b"",0,True),("truncated-length",b"",97,False),("read-timeout",b"",97,False)]
         for kind in ("response.created","response.in_progress"):
             early={**full,"status":"failed","output":[],"usage":None}
             prefix=('data: '+json.dumps({"type":kind,"sequence_number":0,"response":early})+'\n\n').encode()
@@ -260,6 +260,8 @@ class ProductionRuntimeTests(unittest.TestCase):
                 raw=(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nContent-Length: "+str(len(wire)+missing).encode()+b"\r\n\r\n"+wire)
                 response=http.client.HTTPResponse(SimpleNamespace(makefile=lambda *args,**kwargs:io.BytesIO(raw)))
                 response.begin()
+                if name=="read-timeout":
+                    response.fp.read1=unittest.mock.Mock(side_effect=[wire,TimeoutError("PRIVATE_READ_ERROR fixture-no-real-key")])
                 opener=unittest.mock.Mock();opener.open.return_value=response
                 with patch.dict("os.environ",{"DR_OS_CLOUD_EXECUTOR":"1","DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH":str(time.time()+3600)}), \
                      patch.object(ai_providers.urllib.request,"build_opener",return_value=opener), \
@@ -280,13 +282,18 @@ class ProductionRuntimeTests(unittest.TestCase):
                 self.assertEqual(len(model_spend.read(project)["reservations"]),int(not accepted))
                 if not accepted:
                     self.assertIsNone(rows[0]["cost_cny"])
+                    self.assertEqual(rows[0]["transport_error_type"],"ProviderError")
                     self.assertFalse(rows[0]["model_response_accepted"])
                     capture=rows[0]["provider_error_response"]["http_evidence"]
                     self.assertEqual(capture["http_body_capture_complete"],not missing)
                     if missing:
+                        self.assertEqual(capture["response_error_type"],"TimeoutError" if name=="read-timeout" else "IncompleteRead")
                         self.assertIsNone(capture["raw_http_body_sha256"])
                         self.assertEqual(capture["captured_http_body_prefix_sha256"],hashlib.sha256(wire).hexdigest())
                         self.assertEqual(response.length,97)
+                    for private in ("PRIVATE_READ_ERROR","fixture-no-real-key"):
+                        self.assertNotIn(private,json.dumps(rows))
+                        self.assertNotIn(private,(project/rows[0]["provider_error_response"]["path"]).read_text())
                 self.assertEqual(opener.open.call_count,1)
                 self.assertEqual((project/"state/run.json").read_bytes(),state_bytes)
                 self.assertFalse(model_routing.g1_response_streaming_active())

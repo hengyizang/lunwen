@@ -474,7 +474,7 @@ def after_write(project: Path, stage: str) -> dict:
                 write(output, result)
                 cache[str(output.relative_to(project))] = operation_sha
             elif action == "derive_figure_data" and stage == "writing-and-review":
-                from scripts.figure_lineage import derive
+                from scripts.figure_provenance import derive
                 request = read(path_in(project, operation["spec"]))
                 if set(request) != {"output", "transform", "source_run_ids"}:
                     raise ResearchStepError("figure-data spec needs output, transform and source_run_ids")

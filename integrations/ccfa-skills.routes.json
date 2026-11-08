@@ -43,10 +43,10 @@
         "防御性"
       ],
       "native_tools": [
-        "scripts/ccfa_humanization.py",
+        "scripts/ccfa_runtime.py",
         "scripts/academic_style.py"
       ],
-      "outcome": "complete scientific humanization policy and advisory line findings"
+      "outcome": "source-bound optional editorial method guidance; mechanical reports retired and semantic review unclaimed"
     },
     {
       "id": "ccf-pipeline-orchestrator",
@@ -259,7 +259,7 @@
       ],
       "native_tools": [
         "scripts/publication_figures.py",
-        "scripts/venue_adapter.py"
+        "scripts/venue_compliance.py"
       ],
       "outcome": "recorded-data charts and editable scientific topology QA"
     },

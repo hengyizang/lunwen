@@ -69,7 +69,7 @@ def _observed_figure(project, paper_id, figure):
     elif relative.startswith(f"papers/{paper_id}/figures/") and relative.endswith(".figure-build.json"):
         from scripts.output_provenance import current_origin
         from scripts.figure_provenance import rendered_sources
-        from scripts.figure_lineage import lineage
+        from scripts.figure_provenance import lineage
         report = read(source)
         origin = current_origin(project, source)
         if origin.get("status") != "tracked" or origin.get("model") != "scripts/publication_figures.py":

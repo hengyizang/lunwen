@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import io
 import sys
 import tempfile
 import unittest
@@ -8,8 +9,8 @@ import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.venue_adapter import sha256_file
-from scripts.venue_compliance import compliance_report
+from scripts.research_artifacts import sha as sha256_file
+from scripts.venue_compliance import compliance_report, main
 
 
 class VenueComplianceTests(unittest.TestCase):
@@ -49,6 +50,13 @@ class VenueComplianceTests(unittest.TestCase):
         self.assertEqual(report["compile"]["status"], "not_requested")
         self.assertTrue(report["compile"]["required"])
         self.assertTrue(report["gaps"])
+
+    def test_original_paper_directory_cli_still_records_nonpassing_skipped_compile(self):
+        with patch.object(sys, "argv", ["venue_compliance.py", str(self.paper), "--no-compile"]), patch("sys.stdout", new_callable=io.StringIO) as output:
+            self.assertEqual(main(), 1)
+        report = json.loads(output.getvalue())
+        self.assertEqual(report["compile"]["status"], "not_requested")
+        self.assertEqual(json.loads((self.paper / "reviews/venue-compliance.json").read_text()), report)
 
     def test_success_requires_executed_build_and_hashes_its_actual_output(self):
         # This native subprocess is an inert compiler boundary fixture, not an

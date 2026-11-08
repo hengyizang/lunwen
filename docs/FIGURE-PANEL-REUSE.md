@@ -1,93 +1,57 @@
-# Incremental vector publication panels
+# Retired panel cache; complete publication rendering
 
-An existing publication figure can opt in with `"reuse_panels": true` in its
-`*.spec.json`. The existing cloud `render_figure` operation reads that spec;
-there is no new model cycle, paid API, upstream notebook or rendering service.
-The publication renderer also accepts `--reuse-panels`. Specs without this flag
-retain the existing full-figure constrained-layout renderer.
+Panel caching and independent vector-panel composition are retired. The native
+`publication_figures` renderer uses its existing complete constrained-layout path
+on every invocation. Legacy `reuse_panels` booleans and `--reuse-panels` remain
+accepted inputs, but do not reuse panels or create cache receipts. New build and
+render receipts contain no `panel_cache` claims.
 
-The opt-in renderer draws each changed panel as an independent Matplotlib
-SVG/PDF, then composes the vector files into the exact figure width/height.
-SVG text and shapes remain editable. PDF text, fonts and paths remain vector
-objects. The optional high-resolution PNG comes from the composed PDF at the
-declared DPI. Native image artists, such as a heatmap, retain their original
-representation; a line plot is never replaced by a whole-panel image.
+Old cached builds fail final validation with a rebuild instruction. Keep historical
+cache/checkpoint files; render the original specification with the current renderer,
+then re-register the changed final outputs through the existing cloud workflow.
+Validation never relabels an old cache as a current full render. Frozen experimental
+protocols and raw experiment records remain unchanged.
 
-Independent cells use fixed, equal physical gutters. Their layout can differ
-from the ordinary constrained-layout figure. Dense legends, long labels,
-colorbars or aspect-constrained panels can require a revised specification or
-the ordinary renderer. The renderer does not waive a failed alignment,
-collision or text check to make reuse succeed. Inspect the actual final-size
-outputs before approval.
+Complete drawing retains actual data hashes, all existing chart recipes, editable
+SVG/PDF, optional high-DPI PNG, per-panel source-data export, expected labels,
+alignment/collision/output QA, cloud render receipts and output provenance.
+Executor-output lineage, independent scientific review and final B export checks
+remain authoritative. Replotting recorded data never establishes experiment
+reproduction; the existing baseline/clean-room execution and comparison controls
+remain required for that separate claim.
 
-## What is reused
+The retired cache used fixed independent axes and exact-size PDF composition.
+Complete drawing uses constrained layout and a tight output bounding box; page
+size, gutters and geometry can differ. Inspect final-size outputs after rebuilding.
+Cached SVG parsing and cache dependency fingerprints are removed with their input
+path; ordinary source/output/renderer/QA seals still apply.
 
-Executor-owned `reports/figure-panel-cache/<key>/` contains only ordinary
-`panel.svg`, `panel.pdf` and `panel.json` files. Checkpoint transfer preserves
-these files and the existing output-provenance registry. There is no pickle,
-executable deserialization or second provenance database.
+## Local software comparison, 2026-11-08
 
-Each key binds the exact data path/bytes/table shape, complete panel spec,
-style, cell dimensions, axes geometry, panel letter, DPI, palette, markers,
-line styles, Matplotlib defaults, resolved font bytes and renderer/recipe/QA
-source hashes. Installed Matplotlib, NumPy, pandas and PyMuPDF identity includes
-actual installed file hashes and versions, including their active runtime
-dependency closure (for example Pillow, fontTools and contourpy). That full package scan occurs once
-per executor process, under the explicit assumption that installed packages
-are immutable during that process. A new cloud process scans them again.
-Project source, fonts, style, specification and input data are rechecked for
-each render.
+Compared the `2dfbf97` renderer and this retirement using two line panels, each
+with series A/B at x=1,2,3 and y=[0.4,0.7,0.6]/[0.3,0.5,0.8]. Both panels used
+separate CSV inputs, `technical` style, 7.2 by 3.8 inches and 300 DPI. Actual drawer
+observations matched all four series, x/y values, axis labels and panel titles.
+Every exported source CSV matched its recorded input bytes. The new SVG/PDF/PNG
+were byte-identical to the former ordinary full-render outputs in this fixture.
+They were not byte/pixel-identical to the retired composition: cached PDF size
+was 182.88 by 96.52 mm; full output was 186.18 by 98.98 mm. Actual output QA and
+alignment checks passed, and both PNGs were visually inspected.
 
-An exact hit skips `_draw_panel` entirely. Changing one panel's separate data
-file or title redraws that panel. A shared table change invalidates every panel
-bound to those bytes, even if the edited column was unused by one panel.
-Changing a shared style or renderer dependency invalidates all dependent
-panels. Editing only a caption or the final publication-width QA target does
-not require drawing unchanged panels; the full spec and new QA remain bound
-to the new build. Changing the grid may reuse panels only when their actual
-cell dimensions and letters remain identical; final composition is always new.
+| Mode | CPU seconds, repeated renders 2 / 3 | Panels drawn each time |
+| --- | --- | --- |
+| Former cache hit | 0.2268 / 0.2251 | 0 |
+| Former full renderer | 0.8718 / 0.8912 | 2 |
+| Current full renderer | 0.8648 / 0.8712 | 2 |
 
-Cache receipts have current deterministic executor provenance and bind both
-vector files and measured labels/geometry. Missing, unsafe, changed or
-incomplete entries fail explicitly. Re-signing an edited cache receipt by
-changing its JSON hash fields does not create executor provenance. Preserve
-such failed entries for diagnosis; clear only the affected cache entry through
-an authorized executor maintenance action before rebuilding it.
+Times use `time.process_time()` in the same CPU runtime, with three sequential
+renders per mode. Baseline modes shared a process; the current mode used a new
+process. First-render CPU was 1.7703 seconds for cache fill and 1.4368 seconds for
+the current full path, including process-local initialization. This small fixture
+shows the real loss of the cache-hit speedup, not a general performance guarantee.
+No model calls or scientific experiments were used.
 
-## Checks and receipts
-
-Every composition runs the existing editable-label/math checks, physical-size
-checks, grayscale and color-vision previews, panel-alignment audit and
-final-PDF collision audit. Cached measured label expectations and axes geometry
-are translated into their exact final cell positions. A cache hit never reuses
-a prior final-figure QA verdict. Final G5 validation rechecks cache receipt and
-vector bytes plus current renderer, style, font and installed runtime identity.
-
-The ordinary `.figure-build.json` and `.render-receipt.json` include panel keys,
-cache receipt hashes, drawn/reused counts and exact source bindings. Existing
-spec/data/output seals, source-run lineage, English-label review, figure
-registration, independent scientific review and G0–G5 approvals still apply.
-
-The reported execution scope is explicitly `downstream_rendering`, with
-`experiment_reproduction_assessed: false`. Replotting recorded outputs or
-reusing a vector panel does not reproduce their experiment. Existing native
-reproduction controls remain authoritative:
-
-| Requirement | Existing native control |
-| --- | --- |
-| Full immutable inputs/helpers and actual execution receipts | `experiment_runner.py` checks approved frozen protocol hashes, full declared input files and successful dependency receipts. |
-| Pinned isolated environment and captured runtime | `study_environment.py` and `research_quality.validate_clean_room_reproduction` retain locked runtime, image digest, disabled network, read-only root, disjoint isolation instances and exact source commit. |
-| Actual scientific output comparison | `research_quality.validate_baseline_reproduction` and `validate_clean_room_reproduction` check exact successful attempts, complete current output sets and G3-predeclared metric tolerances. |
-| Scope and independent scientific judgment | G3-declared original/clean-room run sets and `create_reproduction_confirmation` bind protected automated checks to both current reports; independent audits assess scientific meaning. Downstream rendering grants none of these judgments. |
-
-The upstream AIPOCH notebook barriers for truncated source, partial helper
-capture or partial environment locks are not imported as new local notebook
-states. Native full-file hashes and runtime/executor checks already block
-missing or changed declared evidence. A hash cannot establish that a scientist
-declared every necessary helper or that a numerical comparison is scientifically
-adequate; those remain explicit scientific-review responsibilities.
-
-`tests/test_figure_panel_cache.py` is a synthetic cloud CPU regression: actual
-two-panel drawing, an unchanged redraw skip, one-panel data/spec edits, shared
-style and renderer invalidation, retained editable SVG/PDF, existing QA and
-tamper rejection. It is software acceptance evidence only.
+`tests.test_publication_figures` covers repeated redraws, actual values and vector
+outputs, per-panel source exports without top-level data, strict legacy booleans,
+and rejection of old cache builds. `tests.test_figure_accessibility` and
+`tests.test_figure_provenance` retain final output and scientific source checks.

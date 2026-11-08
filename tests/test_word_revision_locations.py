@@ -15,7 +15,7 @@ from docx.oxml.ns import qn
 from lxml import etree as ET
 
 from scripts import docx_revision, revision_render, revision_trace
-from scripts.scientific_editing import docx_citations, formula_tokens, WordSource
+from scripts.revision_integrity import docx_citations, formula_tokens, WordSource
 
 
 def field(paragraph):
@@ -54,7 +54,7 @@ def image(paragraph):
 
 class WordComplexRevisionTests(unittest.TestCase):
     def test_citation_validation_is_lazy_and_word_sources_are_operation_local(self):
-        from scripts import scientific_editing, revision_ledger
+        from scripts import revision_integrity, revision_ledger
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             path = root / "main.docx"
@@ -66,14 +66,14 @@ class WordComplexRevisionTests(unittest.TestCase):
             document.save(path)
             source = WordSource(path, complete=True)
             self.assertTrue(formula_tokens(path, document=source))
-            original = scientific_editing.ET.tostring(source.root)
+            original = revision_integrity.ET.tostring(source.root)
             self.assertTrue(revision_ledger.source_snapshot(root, path, _documents={path.resolve(): source})["units"])
-            self.assertEqual(scientific_editing.ET.tostring(source.root), original)
+            self.assertEqual(revision_integrity.ET.tostring(source.root), original)
             with self.assertRaisesRegex(ValueError, "unterminated citation field"):
                 docx_citations(path, document=source)
             paragraph._p.append(nodes[-1])
             document.save(path)
-            with patch("scripts.scientific_editing._word_citations", wraps=scientific_editing._word_citations) as parsed:
+            with patch("scripts.revision_integrity._word_citations", wraps=revision_integrity._word_citations) as parsed:
                 current = WordSource(path)
                 self.assertEqual(docx_citations(path, document=current), docx_citations(path, document=current))
                 self.assertEqual(parsed.call_count, 1)

@@ -9,10 +9,12 @@ import json
 import os
 import re
 import shutil
+import stat
 import subprocess
 import sys
+import tempfile
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 try:
@@ -27,6 +29,32 @@ except ImportError:
     import output_provenance  # type: ignore
 
 
+MAX_MEMBERS = 5000
+MAX_UNCOMPRESSED_BYTES = 200 * 1024 * 1024
+ALLOWED_SUFFIXES = {
+    ".bib",
+    ".bst",
+    ".cfg",
+    ".cls",
+    ".def",
+    ".doc",
+    ".docx",
+    ".dtx",
+    ".eps",
+    ".gif",
+    ".ins",
+    ".jpeg",
+    ".jpg",
+    ".pdf",
+    ".png",
+    ".rtf",
+    ".sty",
+    ".tex",
+    ".txt",
+}
+
+
+
 MAX_LOG_CHARS = 200_000
 PLACEHOLDER_RE = re.compile(
     r"(?i)(?:\bTODO\b|\bFIXME\b|\bTBD\b|\[CITATION(?: NEEDED)?\]|\?\?+|XX_PLACEHOLDER_XX)"
@@ -35,6 +63,121 @@ PLACEHOLDER_RE = re.compile(
 
 class ComplianceError(RuntimeError):
     pass
+
+
+def normalize_member(name: str) -> PurePosixPath:
+    normalized = name.replace("\\", "/")
+    path = PurePosixPath(normalized)
+    if (
+        not normalized
+        or normalized.startswith("/")
+        or path.is_absolute()
+        or ".." in path.parts
+        or any(":" in part for part in path.parts)
+    ):
+        raise ComplianceError(f"Unsafe archive path: {name!r}")
+    return path
+
+
+def inspect_archive(path: Path) -> dict[str, Any]:
+    if path.suffix.lower() != ".zip":
+        raise ComplianceError("Only ZIP template archives are supported")
+    if not path.is_file():
+        raise ComplianceError(f"Archive not found: {path}")
+
+    members: list[dict[str, Any]] = []
+    total = 0
+    with zipfile.ZipFile(path) as archive:
+        infos = archive.infolist()
+        if len(infos) > MAX_MEMBERS:
+            raise ComplianceError("Archive contains too many members")
+        for info in infos:
+            member_path = normalize_member(info.filename)
+            if info.flag_bits & 0x1:
+                raise ComplianceError(f"Encrypted archive member is not allowed: {info.filename}")
+            unix_mode = info.external_attr >> 16
+            if stat.S_ISLNK(unix_mode):
+                raise ComplianceError(f"Symlink archive member is not allowed: {info.filename}")
+            if info.is_dir():
+                continue
+            suffix = member_path.suffix.lower()
+            if suffix not in ALLOWED_SUFFIXES:
+                raise ComplianceError(
+                    f"Unexpected template file type {suffix or '<none>'}: {info.filename}"
+                )
+            total += info.file_size
+            if total > MAX_UNCOMPRESSED_BYTES:
+                raise ComplianceError("Archive is too large after decompression")
+            members.append(
+                {
+                    "path": member_path.as_posix(),
+                    "bytes": info.file_size,
+                    "compressed_bytes": info.compress_size,
+                }
+            )
+    return {
+        "archive": str(path),
+        "archive_sha256": sha256_file(path),
+        "member_count": len(members),
+        "uncompressed_bytes": total,
+        "members": members,
+        "detected": {
+            "classes": sorted(m["path"] for m in members if m["path"].endswith(".cls")),
+            "latex_samples": sorted(
+                m["path"] for m in members if m["path"].endswith(".tex")
+            ),
+            "word_files": sorted(
+                m["path"]
+                for m in members
+                if m["path"].endswith((".doc", ".docx"))
+            ),
+            "bibliography_styles": sorted(
+                m["path"] for m in members if m["path"].endswith(".bst")
+            ),
+        },
+    }
+
+
+def ingest_archive(archive_path: Path, destination: Path) -> dict[str, Any]:
+    inventory = inspect_archive(archive_path)
+    if destination.exists():
+        raise ComplianceError(f"Destination already exists: {destination}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(
+        tempfile.mkdtemp(prefix=f".{destination.name}-", dir=destination.parent)
+    )
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            for info in archive.infolist():
+                member_path = normalize_member(info.filename)
+                if info.is_dir():
+                    (temporary / Path(*member_path.parts)).mkdir(
+                        parents=True, exist_ok=True
+                    )
+                    continue
+                target = temporary / Path(*member_path.parts)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                with archive.open(info) as source, target.open("wb") as output:
+                    shutil.copyfileobj(source, output, length=1024 * 1024)
+
+        file_hashes = {}
+        for path in sorted(temporary.rglob("*")):
+            if path.is_file():
+                file_hashes[path.relative_to(temporary).as_posix()] = sha256_file(path)
+        inventory["extracted_file_sha256"] = file_hashes
+        inventory["ingest_note"] = (
+            "Publisher template retained locally; verify its terms and current version at G5."
+        )
+        (temporary / "template-inventory.json").write_text(
+            json.dumps(inventory, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        os.replace(temporary, destination)
+        return inventory
+    except Exception:
+        shutil.rmtree(temporary, ignore_errors=True)
+        raise
+
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -249,19 +392,30 @@ def compliance_report(paper_dir: Path, timeout: int = 180, no_compile: bool = Fa
         "human_checks_remaining": [
             "Inspect the final PDF or DOCX visually.",
             "Re-check current official venue policies and portal fields.",
-            "Confirm authorship, ethics, conflicts, funding and AI-use disclosures."
+            "Confirm authorship, ethics, conflicts and funding; AI-use text remains author-editable."
         ],
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("paper_dir", type=Path)
-    parser.add_argument("--output", type=Path)
-    parser.add_argument("--timeout", type=int, default=180)
-    parser.add_argument("--no-compile", action="store_true")
-    args = parser.parse_args()
+    sub = parser.add_subparsers(dest="command", required=True)
+    inspect_cmd = sub.add_parser("inspect");inspect_cmd.add_argument("archive", type=Path)
+    ingest_cmd = sub.add_parser("ingest");ingest_cmd.add_argument("archive", type=Path);ingest_cmd.add_argument("destination", type=Path)
+    check = sub.add_parser("check")
+    check.add_argument("paper_dir", type=Path)
+    check.add_argument("--output", type=Path)
+    check.add_argument("--timeout", type=int, default=180)
+    check.add_argument("--no-compile", action="store_true")
+    argv = sys.argv[1:]
+    if argv and argv[0] not in {"inspect", "ingest", "check", "-h", "--help"}:
+        argv = ["check", *argv]  # Preserve venue_compliance.py PAPER_DIR.
+    args = parser.parse_args(argv)
     try:
+        if args.command in {"inspect", "ingest"}:
+            result = inspect_archive(args.archive) if args.command == "inspect" else ingest_archive(args.archive, args.destination)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0
         if args.timeout <= 0:
             raise ComplianceError("--timeout must be positive")
         report = compliance_report(args.paper_dir, args.timeout, args.no_compile)
@@ -277,7 +431,7 @@ def main() -> int:
             output_provenance.record_model_writes(project,[pdf],family="other",provider="latexmk-local",model="latexmk",role="compiled-manuscript",run_id="venue-"+now().replace(":","-"))
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["status"] == "pass" else 1
-    except (ComplianceError, OSError) as exc:
+    except (ComplianceError, OSError, zipfile.BadZipFile) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 

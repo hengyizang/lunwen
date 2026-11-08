@@ -39,10 +39,10 @@ jobs:
           python -m scripts.ccfa_acceptance
           --installed "$RUNNER_TEMP/ccfa-original"
           --output artifacts/ccfa/acceptance.json
-      - name: Exercise source-bound native integrations and complete humanization
+      - name: Exercise source-bound native integrations and source-bound editorial guidance
         run: >-
           python -m unittest tests.test_ccfa_runtime tests.test_ccfa_science
-          tests.test_ccfa_humanization tests.test_editorial_integration
+          tests.test_ccfa_reference_routing tests.test_editorial_integration
           tests.test_ccfa_context_isolation tests.test_ccfa_model_handoffs tests.test_cli_invocation_controls -v
       - name: Run original reviewed deterministic helpers on isolated fixtures
         run: |

@@ -29,7 +29,7 @@
       "repository": "https://github.com/Kiterlin/anti-defensive-writing",
       "commit": "f516147d017a3fe43ae99192cb89d8261b0c8679",
       "license": "MIT",
-      "use": "Full source-mapped academic defensive review in scripts/defensive_review.py plus the existing advisory patterns; necessary precision and all registered results are preserved."
+      "use": "Pinned anti-defensive methods inform existing source-bound model review through scripts/ccfa_runtime.py. The independent mechanical report is retired; necessary precision and material evidence remain protected."
     },
     {
       "id": "humanizer",
@@ -37,7 +37,7 @@
       "commit": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
       "upstream_version": "3.1.0",
       "license": "MIT",
-      "use": "All 26 numbered patterns are mapped in config/humanizer-rules.json and scripts/humanizer_review.py; context-sensitive and weak-alone patterns remain explicit review items, not authorship probabilities."
+      "use": "The 26 optional methods and legitimate-use exceptions remain in config/humanizer-rules.json for existing source-bound model review. The independent mechanical scan is retired; no authorship probability or completed semantic review is claimed."
     }
   ],
   "rules": [

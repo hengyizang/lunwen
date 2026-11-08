@@ -509,7 +509,7 @@ def _render_full(project, spec, plt, np, pd, panels, columns, rows, width, heigh
         if spec.get("source_data_export", False):
             # Explicit opt-in: copying a raw table can disclose restricted data.
             for index, panel in enumerate(panels):
-                source = safe_file(project, panel.get("data", spec["data"]), "source data")
+                source = safe_file(project, panel.get("data", spec.get("data")), "source data")
                 target = output_stem.with_name(f"{output_stem.name}-panel-{index+1}-source{source.suffix}")
                 shutil.copyfile(source, target)
                 source_records.append({"path": target.relative_to(project).as_posix(), "sha256": sha256_file(target)})
@@ -600,18 +600,8 @@ def render(project: Path, spec_path: Path, *, reuse_panels: bool | None = None) 
     selected_reuse = spec.get("reuse_panels", False) if reuse_panels is None else reuse_panels
     if not isinstance(selected_reuse, bool):
         raise FigureSpecError("reuse_panels must be boolean")
-    if selected_reuse:
-        try:
-            from scripts import figure_panel_cache
-        except ImportError:
-            import figure_panel_cache
-        try:
-            materials = figure_panel_cache.render_panels(
-                project, spec, plt, np, pd, columns=columns, rows=rows, width=width, height=height)
-        except figure_panel_cache.PanelCacheError as exc:
-            raise FigureSpecError(str(exc)) from exc
-    else:
-        materials = _render_full(project, spec, plt, np, pd, panels, columns, rows, width, height)
+    # Legacy reuse requests redraw normally; cached vector composition is retired.
+    materials = _render_full(project, spec, plt, np, pd, panels, columns, rows, width, height)
     output_stem, data_records = materials["output_stem"], materials["data_records"]
     source_records, outputs = materials["source_records"], materials["outputs"]
     expected_labels, output_qa = materials["expected_labels"], materials["output_qa"]
@@ -627,7 +617,7 @@ def render(project: Path, spec_path: Path, *, reuse_panels: bool | None = None) 
         "if (parent / 'scripts' / 'publication_figures.py').is_file())\n"
         "subprocess.run([sys.executable, str(repo / 'scripts' / 'publication_figures.py'), "
         f"'render', '--project', {project.name!r}, '--spec', {spec_path.relative_to(project).as_posix()!r}"
-        + (", '--reuse-panels'" if selected_reuse else "") + "], check=True)\n",
+        + "], check=True)\n",
         encoding="utf-8",
     )
     try:
@@ -660,8 +650,8 @@ def render(project: Path, spec_path: Path, *, reuse_panels: bool | None = None) 
             "expected_labels": expected_labels,
         },
     }
-    if "panel_cache" in materials:
-        report["panel_cache"] = materials["panel_cache"]
+    if selected_reuse:
+        report["panel_cache"] = {"enabled": False, "status": "retired", "mode": "full_redraw"}
     report_path = output_stem.with_suffix(".figure-build.json")
     qa_report_path = output_stem.with_suffix(".output-qa.json")
     qa_report_path.write_text(json.dumps(output_qa, indent=2) + "\n", encoding="utf-8")
@@ -677,8 +667,6 @@ def render(project: Path, spec_path: Path, *, reuse_panels: bool | None = None) 
         "renderer": {"name": "publication_figures", "implementation_sha256": sha256_file(Path(__file__))},
         "execution": {"mode": "cloud" if cloud_mode else "local", "receipt_id": receipt_id},
         "visual_review_required": True, "output_qa_status": output_qa["status"]}
-    if "panel_cache" in report:
-        render_receipt["panel_cache"] = report["panel_cache"]
     render_receipt_path.write_text(json.dumps(render_receipt, indent=2) + "\n", encoding="utf-8")
     report["render_receipt"] = {"path": render_receipt_path.relative_to(project).as_posix(), "sha256": sha256_file(render_receipt_path)}
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=report_path.parent, delete=False) as handle:
@@ -713,7 +701,7 @@ def main() -> int:
     command.add_argument("--project", required=True)
     command.add_argument("--spec", required=True)
     command.add_argument("--record", action="store_true")
-    command.add_argument("--reuse-panels", action="store_true")
+    command.add_argument("--reuse-panels", action="store_true", help="Retired optimization; renders the full figure")
     command.add_argument("--run", action="append", default=[])
     command.add_argument("--language-checked-by")
     args = parser.parse_args()

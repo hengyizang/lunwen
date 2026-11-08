@@ -20,10 +20,10 @@ from lxml import etree as ET
 
 try:
     from scripts.research_artifacts import sha, read, write, record, path_in, verify_files
-    from scripts.scientific_editing import word_package as package
+    from scripts.revision_integrity import word_package as package
 except ImportError:
     from research_artifacts import sha, read, write, record, path_in, verify_files  # type: ignore
-    from scientific_editing import word_package as package
+    from revision_integrity import word_package as package
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"

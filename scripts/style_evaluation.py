@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from scripts.scientific_editing import context_changes
+from scripts.revision_integrity import context_changes
 
 
 def evaluate(cases: list[dict]) -> dict:

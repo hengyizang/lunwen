@@ -6,7 +6,7 @@ from pathlib import Path
 
 from scripts.research_artifacts import path_in, read, sha, bound_source, save_report, report_errors
 from scripts.manuscript_language import extract_text
-from scripts.scientific_editing import scientific_text
+from scripts.revision_integrity import scientific_text
 
 REQUIRED = ("method", "analysis_unit", "independent_units", "estimate", "ci_low", "ci_high",
             "ci_confidence", "p_value", "p_adjusted", "seeds", "aggregation", "family", "family_size",

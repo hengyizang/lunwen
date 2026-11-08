@@ -455,9 +455,8 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
         from scripts.research_phase import requires_submission, writing_contract
         if not requires_submission(project_root(project),stage):
             return writing_contract(project_root(project),stage)
-    from scripts import ccfa_humanization
     if role == "critic":
-        return "\n\n".join((ccfa_humanization.disposition_contract(),
+        return (
             "Use actual scientific sources and relevant observations in a read-only independent review. Do not draft "
             "replacement prose, edit artifacts, or adopt the writer's dispositions as evidence. "
             "Check the manuscript against scientific sources and legitimate-use exceptions. "
@@ -465,11 +464,11 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
             "output fields or paid calls. Do not estimate AI authorship or claim statistical "
             "watermark absence. Inspect the fresh protected manuscript-hygiene audit and "
             "the preserved change receipts, without treating a character scan as authorship evidence. "
-            "Preserve necessary scientific uncertainty and truthful internal provenance; public AI statements remain optional and author-editable."))
+            "Preserve necessary scientific uncertainty and truthful internal provenance; public AI statements remain optional and author-editable."
+        )
     if role != "writer":
         raise ValueError("editorial role must be writer or critic")
     return "\n\n".join((
-        ccfa_humanization.disposition_contract(),
         "Automatic manuscript hygiene runs before deterministic builders and scans again after "
         "each existing writing/remediation pass. It invokes pinned watermarks-remover, preserves "
         "original bytes/change receipts, and removes supported character artifacts only from "
@@ -485,10 +484,8 @@ def editorial_prompt_contract(stage: str, *, role: str = "writer", project: str 
         "a detector outcome. Preserve hypothesis-to-method-to-result links, numbers, citations, "
         "causal direction and warranted uncertainty; record substantive edits in the ledger.",
         "Use the existing writing pass; actual actionable findings alone justify remediation and another review. "
-        "Read relevant current protected audit findings as observations, without mandatory per-pattern notes. "
-        "Inspect protected_signals as well as findings: protected facts stay, while surrounding "
-        "framing may warrant a targeted revision. Truncated examples are not resolved findings; "
-        "use the complete current audit and manuscript to judge an actual concern.",
+        "Use actual scientific sources and manuscript passages to judge an actual concern. "
+        "Retired H/AD/CFH scorecards supply no completed review or mandatory per-pattern notes.",
     ))
 
 
@@ -501,39 +498,15 @@ def editorial_feedback(project: str, stage: str) -> str:
         if not re.fullmatch(r"P[0-9]{2}", str(paper_id)):
             return "Current editorial audit is unavailable; do not claim it passed."
         report = load_json(project_root(project) / "papers" / paper_id / "style/academic-style-audit.json")
+        if not isinstance(report, dict) or not isinstance(report.get("analysis", {}), dict):
+            raise ValueError("editorial report is unavailable")
         analysis = report.get("analysis", {})
         compact = {"audit_path": f"papers/{paper_id}/style/academic-style-audit.json",
                    "manuscript": report.get("manuscript"), "errors": report.get("errors", []), "reviews": {},
                    "manuscript_hygiene": hygiene_feedback(project, stage)}
-        for name in ("humanizer_review", "anti_defensive_review"):
-            value = analysis.get(name, {})
-            if not isinstance(value, dict):
-                raise ValueError("editorial review must be an object")
-            compact["reviews"][name] = {"coverage": value.get("coverage"),
-                "findings": value.get("findings", [])[:60],
-                "remaining_findings": max(0, len(value.get("findings", [])) - 60)}
-            if name == "anti_defensive_review":
-                signals = value.get("protected_signals", [])
-                if not isinstance(signals, list) or any(not isinstance(row, dict) for row in signals):
-                    raise ValueError("protected editorial signals must be objects")
-                fields = ("id", "rule_id", "group", "start", "end", "line", "column", "raw_location",
-                          "section", "protected_context", "disposition", "automatic_edit_allowed",
-                          "protected_content_must_be_preserved")
-                compact["reviews"][name].update({
-                    "semantic_review_required": value.get("semantic_review_required", True),
-                    "protected_context_is_semantic_approval": False,
-                    "protected_signals": [
-                        {**{key: row.get(key) for key in fields},
-                         "match": str(row.get("match", ""))[:160],
-                         "match_truncated": len(str(row.get("match", ""))) > 160,
-                         "context": str(row.get("context", ""))[:320],
-                         "context_truncated": len(str(row.get("context", ""))) > 320}
-                        for row in signals[:12]
-                    ],
-                    "remaining_protected_signals": max(0, len(signals) - 12),
-                    "rules_sha256": value.get("rules_sha256"),
-                    "implementation_sha256": value.get("implementation_sha256"),
-                })
+        retired = {"status": "retired", "mechanical_review_performed": False, "semantic_review_status": "unknown"}
+        compact["editorial_methods"] = retired if analysis.get("editorial_methods") == retired else {
+            **retired, "status": "unavailable"}
         return json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
     except (OSError, ValueError):
         return "Current editorial audit is unavailable; do not claim it passed."
@@ -580,7 +553,7 @@ Discovery leads, not verified scientific evidence:
 Return ONLY JSON with schema_version='1.0', stage, artifacts=[{{path,content}}], notes=[strings].
 Paths are relative to projects/{project}. Return only justified changed artifacts, including an honest
 pending research decision when evidence is missing. Notes may record uncertainty and rejected alternatives;
-submission requires its applicable editorial dispositions. Never write protected state, executor reports,
+H/AD/CFH scorecards and exhaustive editorial dispositions are not required. Never write protected state, executor reports,
 provenance, raw data or independent reviews. Never approve, submit, increase budget or invent sources/results.
 """
 
@@ -626,7 +599,11 @@ novelty_assessment and explicitly selected scientific-task response fields are t
 Selected fields are claim_evidence, novelty_adjudication, citation_extraction and anchor_labels; include only requested tasks.
 For a pending supplemental protocol, assess that protocol's exact evidence and scope;
 the audit cannot approve parent manuscript novelty or final G5.
-Empty findings are valid. Never draft replacement prose, reuse a preferred verdict,
+Empty findings are valid. Put optional wording/layout observations in uncertainty, never in scientific finding or
+remediation fields solely because a style pattern was flagged. Retired H/AD/CFH scans, missing scorecards and
+editorial preferences cannot require another paid repair/review. Actual source, numeric, formula, claim and
+applicable final-submission failures remain scientific/venue findings requiring their real evidence.
+Never draft replacement prose, reuse a preferred verdict,
 claim scientific validity from a score or invent a PASS. Do not wrap JSON in Markdown.
 """
 
@@ -774,14 +751,6 @@ def reject_long_source_copy(source: Any, target: Any, label: str) -> None:
             raise ValueError(
                 f"Persistent output contains a long verbatim CJK span from {label}"
             )
-
-
-def validate_editorial_dispositions(notes: list[str], stage: str | None) -> None:
-    """Validate supplied observation syntax, without requiring style coverage."""
-    if stage != "writing-and-review":
-        return
-    from scripts.ccfa_humanization import validate_dispositions
-    validate_dispositions(notes, stage, include_editorial=True)
 
 
 def validate_remediation_notes(

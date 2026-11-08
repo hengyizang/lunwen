@@ -362,10 +362,10 @@ class ProductionProviderTests(unittest.TestCase):
         prefix=b'data: {"type":"response.reasoning_text.delta","delta":"PRIVATE_THOUGHT"}\n\n'
         response={"object":"response","id":"stream","model":"gpt-6-astra","status":"completed","output":[],"usage":{"input_tokens":1,"output_tokens":2}}
         terminal=('data: '+json.dumps({"type":"response.completed","sequence_number":0,"response":response})+'\n\n').encode()
-        cases=[(Mock(side_effect=[prefix,TimeoutError("lost stream")]),prefix,None),
-               (io.BytesIO(b":"+b"x"*(4*1024*1024+8)).read1,b":"+b"x"*(4*1024*1024),None),
-               (Mock(side_effect=[terminal,TimeoutError("lost stream after terminal")]),terminal,"gpt-6-astra")]
-        for source,expected,model in cases:
+        cases=[(Mock(side_effect=[prefix,TimeoutError("PRIVATE_READ_ERROR fixture-only-codekey-codex-pro")]),prefix,None,"TimeoutError"),
+               (io.BytesIO(b":"+b"x"*(4*1024*1024+8)).read1,b":"+b"x"*(4*1024*1024),None,None),
+               (Mock(side_effect=[terminal,TimeoutError("PRIVATE_READ_ERROR after terminal")]),terminal,"gpt-6-astra","TimeoutError")]
+        for source,expected,model,error_type in cases:
             opener=Mock();opener.open.return_value=nullcontext(SimpleNamespace(status=200,headers={"Content-Type":"text/event-stream"},read1=source))
             with patch.dict(os.environ,self.env(),clear=True),patch("scripts.model_routing.g1_response_streaming_active",return_value=True), \
                  patch.object(providers.urllib.request,"build_opener",return_value=opener):
@@ -375,7 +375,10 @@ class ProductionProviderTests(unittest.TestCase):
             self.assertFalse(http["http_body_capture_complete"])
             self.assertIsNone(http["raw_http_body_sha256"])
             self.assertEqual(http["captured_http_body_prefix_sha256"],hashlib.sha256(expected).hexdigest())
+            self.assertEqual(http.get("response_error_type"),error_type)
             self.assertNotIn("PRIVATE_THOUGHT",json.dumps(evidence))
+            self.assertNotIn("PRIVATE_READ_ERROR",json.dumps(evidence))
+            self.assertNotIn("fixture-only-codekey-codex-pro",json.dumps(evidence))
             self.assertEqual(evidence["diagnostics"].get("model"),model)
             opener.open.assert_called_once()
         source=Mock(return_value=prefix);opener=Mock()
@@ -420,6 +423,7 @@ class ProductionProviderTests(unittest.TestCase):
                         capture=caught.exception.response_evidence["http_evidence"]
                         self.assertEqual(capture["http_body_capture_complete"],not missing)
                         if missing:
+                            self.assertEqual(capture["response_error_type"],"IncompleteRead")
                             self.assertIsNone(capture["raw_http_body_sha256"])
                             self.assertEqual(capture["captured_http_body_prefix_sha256"],hashlib.sha256(wire).hexdigest())
                             self.assertEqual(response.length,97)

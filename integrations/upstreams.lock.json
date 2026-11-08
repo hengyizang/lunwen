@@ -443,7 +443,7 @@
       "license": "MIT",
       "license_source_url": "https://github.com/Kiterlin/anti-defensive-writing/blob/f516147d017a3fe43ae99192cb89d8261b0c8679/LICENSE",
       "enabled_by_default": false,
-      "installation": "Pinned SKILL and MIT license in third_party/anti-defensive-writing; full source-mapped review via scripts/defensive_review.py",
+      "installation": "Pinned SKILL and MIT license in third_party/anti-defensive-writing; source-bound method guidance within existing model reviews via scripts/ccfa_runtime.py; independent mechanical report retired",
       "selected_skills": [],
       "selection_note": "User-authorized full integration: checklist, rewriting procedure, sentence functions, expanded paper rules and technical-plan/SOP precision. Necessary precision, disclosures and all registered results remain protected."
     },

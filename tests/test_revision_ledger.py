@@ -276,8 +276,8 @@ class RevisionLedgerTests(unittest.TestCase):
             self.authorize(paper)
             self.assertEqual(revision_ledger.audit(project, "P01")["status"], "pass")
             revision_ledger.refresh(project, "P01")
-            from scripts.scientific_editing import word_package
-            with patch("scripts.scientific_editing.word_package", wraps=word_package) as opened:
+            from scripts.revision_integrity import word_package
+            with patch("scripts.revision_integrity.word_package", wraps=word_package) as opened:
                 self.assertEqual(integrity_audit(paper)["status"], "pass")
             self.assertEqual(opened.call_count, 2)
             # External/resource changes are captured even when paragraph text is unchanged.

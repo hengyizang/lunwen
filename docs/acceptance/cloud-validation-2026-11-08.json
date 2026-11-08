@@ -130,20 +130,107 @@
       "new_unknown_reservation_cny": 0,
       "automatic_retry_performed": false,
       "same_prompt_hashes_as_4000_run": true
+    },
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/163",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42482667644",
+      "source_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42482667644.json",
+      "cloud_report_blob_sha": "212c607f52aecec630188c8130a79fb80b1238d5",
+      "manifest_sha256": "4b0ce8e5777f47e2f1aecb77127983fe2dcba123f7897c8058d8e1c9e49b7191",
+      "status": "partial_failed_no_retry",
+      "calls_attempted": 1,
+      "role": "independent-critique",
+      "provider": "codekey-gemini",
+      "requested_model": "gemini-4-argon",
+      "reported_model": null,
+      "requested_effort": "high",
+      "reasoning_effort_attestation": "requested_not_independently_attested",
+      "max_output_tokens": 12000,
+      "prompt_input_bytes": 718123,
+      "prompt_sha256": "b70ef4ffcd6b20d8c62ed93c8f750599c2b75ffde81207e6e9a4f26cc74f0a5c",
+      "duration_seconds": 129.432347,
+      "http_evidence": {
+        "captured_http_body_bytes": 915,
+        "captured_http_body_prefix_sha256": null,
+        "http_body_capture_complete": true,
+        "http_status": 524,
+        "raw_http_body_sha256": "66107383ca78c2202ab18ca5f9a2274a757ca438db8a44d550cceeaf740c2104"
+      },
+      "safe_diagnostic_path": "api_runs/provider-errors/c2c90e5e35b84ef1b15286bbedd66314.json",
+      "safe_diagnostic_sha256": "5517eb3db3a4f4275f18ddb2ae38f32be17f86b53ca28398dee3e813dbebb75f",
+      "fee_unknown_at_original_report": true,
+      "original_reservation_id": "d10074e3de0c46cf97767303c65b87b8",
+      "original_reservation_cny": 0.9349488,
+      "current_unknown_reservation_cny": 0,
+      "automatic_retry_performed": false,
+      "scientific_completion_verified": false,
+      "model_output_accepted_for_science": false,
+      "project_state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6",
+      "actual_fee_cny": 0.21923298,
+      "fee_verified_later": true,
+      "accounting_coverage_complete": true,
+      "fee_reconciliation": {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/167",
+        "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42484383574",
+        "probe_issue_url": "https://github.com/hengyizang/lunwen/issues/165",
+        "independent_meter_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42483606966",
+        "independent_meter_artifact_id": 13618831120,
+        "artifact_sha256": "6159114c5e5ff70d715bd17151383a3644655cb0d769bb66635e2c41be488f26",
+        "billing_receipt_sha256": "4bb315c191433a2b4ae2c22462806e29b5775c43c0bd672b0641a38f44ac9fbb",
+        "meter_before": {
+          "requests": 0,
+          "cost_cny": 0
+        },
+        "meter_after": {
+          "requests": 1,
+          "cost_cny": 0.21923298
+        },
+        "exactly_one_new_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+        "settled_to_existing_project_budget": true,
+        "scientific_success_implied": false
+      },
+      "official_artifact_sha256": "765a988acc41e117bb7e665626d2e253c52f023799057b996ce989b8bafe3ae4",
+      "official_artifact_id": 13617992573,
+      "seat": "editorial",
+      "valid_predictions": 0,
+      "calibration_status": "NOT_CALIBRATED",
+      "cloud_report_file_sha256": "24a2a5bd245c5456cd2c20020b1b004c341e3cccdc163f71cc55db71e8ca032a",
+      "all_24_frozen_identity_and_partition_checks": true,
+      "all_24_no_distinctive_public_assessment_sentence": true,
+      "all_eight_planned_prompt_hashes_equal_actual_146": true,
+      "all_cases_once_across_eight_planned_prompts": true,
+      "human_claim_sample_agreement": null,
+      "three_family_comparison_complete": false,
+      "failure": "Native Google generateContent HTTP524 on the first batch; no reported model, accepted text or predictions."
     }
   ],
   "budget": {
     "authorized_ceiling_cny": 500,
     "spent_before_cny": 0.24538256,
-    "spent_after_cny": 2.76120206,
+    "spent_after_cny": 3.88897004,
     "initial_control_blob_sha": "0f72612e3d7f3ac4abf775ab15af0356718fd115",
-    "observed_control_blob_sha": "2ec9733974e2f65a62e8d2689e4626683f021cfb",
+    "observed_control_blob_sha": "8353f640bf9cfb5ee73e63014e9f7b55b3c76463",
     "original_three_reservations_unchanged": true,
     "new_spending_authority_granted": false,
     "existing_unknown_holds_cny": 10.0783494,
-    "new_unreconciled_153_hold_cny": 5.375944,
-    "total_reserved_cny": 15.4542934,
-    "remaining_after_spent_and_reservations_cny": 481.78450454
+    "new_unreconciled_153_hold_cny": 0,
+    "total_reserved_cny": 10.0783494,
+    "remaining_after_spent_and_reservations_cny": 486.03268056,
+    "new_unreconciled_159_hold_cny": 0,
+    "new_unreconciled_163_hold_cny": 0,
+    "retained_reservation_ids": [
+      "2b9e5e82da8a4f0bb9bfb6520ba814d1",
+      "97bdea2e1dd64aaaaa68dfa390e9ec76",
+      "f705e87ba4514cb99c961768f59f4278"
+    ],
+    "all_new_failed_attempts_settled": true,
+    "historical_unknown_reports_preserved": true,
+    "independent_local_meter_artifact_and_original_reservation_object_recheck_passed": true,
+    "attempts_since_initial_spent_cny": 3.64358748,
+    "default_seven_model_routes_efforts_and_policy_unchanged": true,
+    "original_three_owner_policy_overrides_unchanged": true
   },
   "scientific_completion_verified": false,
   "numeric_score_calibration_verified": false,
@@ -282,11 +369,11 @@
       "critic_saw_current_artifacts_in_real_call": null,
       "new_literature_operations": 0,
       "dataset_catalog_operations": 56,
-      "actual_fee_cny": null,
-      "fee_verified": false,
+      "actual_fee_cny": 0.440235,
+      "fee_verified": true,
       "new_unknown_reservation_id": "997e20a794c042b8b2b43b7c67c1acc8",
-      "new_unknown_reserved_cny": 5.375944,
-      "accounting_coverage_complete": false,
+      "new_unknown_reserved_cny": 0,
+      "accounting_coverage_complete": true,
       "topic_approval_granted": false,
       "scientific_completion_verified": false,
       "no_automatic_retry": true,
@@ -299,21 +386,128 @@
       "new_dataset_candidate_records": 396,
       "new_dataset_leads": 80,
       "metadata_is_not_research_data": true,
-      "project_state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6"
+      "project_state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6",
+      "fee_verified_later": true,
+      "fee_reconciliation": {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/158",
+        "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42481016023",
+        "probe_issue_url": "https://github.com/hengyizang/lunwen/issues/156",
+        "independent_meter_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42480691170/attempts/1",
+        "independent_meter_artifact_id": 13617371064,
+        "artifact_sha256": "427666366c0fe61ee14ee50db9617135ed543d257304e3696b0afdea2101ad14",
+        "billing_receipt_sha256": "4ddadc7364693254b7939768cecaaa64be61e8c1d31d2af8123eecc2bcd0febc",
+        "meter_before": {
+          "requests": 3,
+          "cost_cny": 0.029273565
+        },
+        "meter_after": {
+          "requests": 4,
+          "cost_cny": 0.469508565
+        },
+        "exactly_one_new_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+        "settled_to_existing_project_budget": true,
+        "scientific_success_implied": false
+      },
+      "fee_unknown_at_original_report": true,
+      "original_unknown_reserved_cny": 5.375944
+    },
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/159",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42481152072",
+      "source_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42481152072.json",
+      "cloud_report_blob_sha": "fa47449d9f749d9873163f708ebb2131955bba41",
+      "manifest_sha256": "8c7d302cec7241ea68f1ca59f4a1ffc425f254aebabfe0ab19d6da650b51f15d",
+      "status": "partial_failed_no_retry",
+      "calls_attempted": 1,
+      "role": "semantic-planner",
+      "provider": "codekey-codex-pro",
+      "requested_model": "gpt-6-astra",
+      "reported_model": null,
+      "requested_effort": "high",
+      "reasoning_effort_attestation": "requested_not_independently_attested",
+      "max_output_tokens": 12000,
+      "prompt_input_bytes": 680710,
+      "prompt_sha256": "48f971b7f7bd14001d5baf5af0851ee9f81b9c0e38498d0aad01ffbd05b8a2c8",
+      "duration_seconds": 184.717375,
+      "http_evidence": {
+        "captured_http_body_bytes": 2993420,
+        "captured_http_body_prefix_sha256": "713ad0e590fcf8e53ded693faf02884b947a9a4be7c79b26fd4c11803943cfb9",
+        "http_body_capture_complete": false,
+        "http_status": 200,
+        "raw_http_body_sha256": null,
+        "response_format": "sse",
+        "sse_initial_identity": {
+          "model": "gpt-6-astra"
+        },
+        "sse_terminal_event": null
+      },
+      "safe_diagnostic_path": "api_runs/provider-errors/468e11b954a64955b74cd4dbb6b14f51.json",
+      "safe_diagnostic_sha256": "39e8412d4793756c555e71fffb8e6bee68ec99ca9290ce1442434a645b9e404b",
+      "fee_unknown_at_original_report": true,
+      "original_reservation_id": "2a0514301e46499aada03b594a311236",
+      "original_reservation_cny": 5.633688,
+      "current_unknown_reservation_cny": 0,
+      "automatic_retry_performed": false,
+      "scientific_completion_verified": false,
+      "model_output_accepted_for_science": false,
+      "project_state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6",
+      "actual_fee_cny": 0.4683,
+      "fee_verified_later": true,
+      "accounting_coverage_complete": true,
+      "fee_reconciliation": {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/162",
+        "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42482530665",
+        "probe_issue_url": "https://github.com/hengyizang/lunwen/issues/156",
+        "independent_meter_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42480691170/attempts/2",
+        "independent_meter_artifact_id": 13617294936,
+        "artifact_sha256": "473d8d34ae5639afa25ac62f834c350d7ee0b78f007ae4d98bf201abd35d12d1",
+        "billing_receipt_sha256": "ed86c18d93ff1cd16ca3ca2ef508bda464090b57a835df30acaf68f2eb9d5b37",
+        "meter_before": {
+          "requests": 4,
+          "cost_cny": 0.469508565
+        },
+        "meter_after": {
+          "requests": 5,
+          "cost_cny": 0.937808565
+        },
+        "exactly_one_new_request": true,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+        "settled_to_existing_project_budget": true,
+        "scientific_success_implied": false
+      },
+      "official_artifact_sha256": "ee8764b58c3db1d1c1b3cb33a41677471cc4e60d21a30aa0fd55d6b0d930c48c",
+      "official_artifact_id": 13617119554,
+      "response_streaming": true,
+      "writer_called": false,
+      "critic_called": false,
+      "new_scientific_artifacts_created": false,
+      "topic_approval_granted": false,
+      "current_source_items": 18,
+      "all_current_source_hashes_match": true,
+      "new_literature_operations": 0,
+      "new_dataset_operations": 0,
+      "complete_final_response_received": false,
+      "prefix_identity_is_not_reported_final_identity": true,
+      "underlying_response_read_exception_type": null,
+      "timeout_cause_proven": false,
+      "failure": "HTTP200 SSE body read failed before a complete terminal Response; retained prefix and queued identity are not accepted output."
     }
   ],
   "software_verification": {
-    "tests_run": 2492,
+    "tests_run": 2451,
     "skipped": 14,
     "failures": 0,
     "errors": 0,
-    "duration_seconds": 119.427,
+    "duration_seconds": 123.402,
     "failure_names": [],
     "error_names": [],
-    "production_snapshot_sha256": "0dfbed70ce3e13d99cb80adba261d246a1ad7ef9bf4b5bb3a053aea966f443d3",
+    "production_snapshot_sha256": "6e629fd14412f4fff20ba8d82c3ff9139d896be9b57493c8c9e973cbf86f36a2",
+    "tested_production_parent": "a9f2d06892392612a1f0472986032f5eb24d0aad",
     "independent_adversarial_recheck_passed": true,
     "verifies_scientific_completion": false,
-    "publication_status": "combined followup awaiting exact-commit CI and merge"
+    "publication_status": "Current named-retirement production snapshot passed local full/static checks; exact follow-up publication CI and merge remain pending."
   },
   "next_explicit_capacity_comparison": {
     "executed": true,
@@ -328,7 +522,7 @@
     "cause_of_previous_truncation_proven": false,
     "domain_attempt_status": "refusal_no_accepted_model_text",
     "domain_run_id": "42466625506",
-    "g1_attempt_status": "requested_not_yet_observed",
+    "g1_attempt_status": "first_planner_HTTP524_no_writer_or_critic",
     "g1_issue_url": "https://github.com/hengyizang/lunwen/issues/148"
   },
   "current_session_blind_pilot": {
@@ -485,7 +679,14 @@
       "load-constrained multi-robot coordination",
       "FEM-corrected AI structural design"
     ],
-    "proposal_is_not_independent_scientific_validation": true
+    "proposal_is_not_independent_scientific_validation": true,
+    "latest_owner_preference": "偏机器人与自主控制",
+    "priority_for_further_source_checks": [
+      "robotic precision assembly",
+      "quadrotor identification/control",
+      "multi-robot coordination"
+    ],
+    "preference_is_formal_G1_approval": false
   },
   "next_native_G1_roster_validation": {
     "executed": true,
@@ -508,7 +709,7 @@
     "actual_calls": 1,
     "writer_called": false,
     "critic_called": false,
-    "actual_fee_cny": null
+    "actual_fee_cny": 0.440235
   },
   "batch2_public_discovery": {
     "issue_url": "https://github.com/hengyizang/lunwen/issues/151",
@@ -574,7 +775,8 @@
     "tree_sha": "873220e18014f10d59952ff23bfc5dbf453e2137",
     "PR_workflows": 9,
     "check_success": 23,
-    "check_skipped": 3
+    "check_skipped": 3,
+    "publication_status": "Exact reviewed tree merged; required PR checks completed. Historical per-PR validation scope."
   },
   "merged_PR152_verification": {
     "tests_run": 2496,
@@ -585,7 +787,7 @@
     "production_snapshot_sha256": "8517e48cc86b0cc755c32dba15a5b4ad93af797e8d9275fd994cb1b74db4f4f8",
     "independent_adversarial_recheck_passed": true,
     "verifies_scientific_completion": false,
-    "publication_status": "followup awaiting exact-commit CI and merge",
+    "publication_status": "Exact reviewed tree merged; required PR checks completed. Historical per-PR validation scope.",
     "source_commit": "27d2d7a942c0adb6b4cda97cb7af8a68d41ca64f",
     "tree_sha": "e1d23627b053383ed9d9da5a80ebbbb41e0700a1",
     "PR_workflows": 3,
@@ -597,7 +799,6 @@
   "structural_reduction": {
     "base_commit": "27d2d7a942c0adb6b4cda97cb7af8a68d41ca64f",
     "before_production_python_lines": 72472,
-    "current_production_python_lines": 71752,
     "net_all_changes_production_python_removed_lines": 720,
     "local_backend_removed_net_lines": 747,
     "duplicate_acceptance_and_binding_helpers_removed_net_lines": 117,
@@ -606,12 +807,14 @@
     "tests_and_document_changes_counted_as_production_removal": false,
     "old_autopilot_lines": 1018,
     "new_autopilot_lines": 271,
-    "current_capability_boundary": "Current metered API cloud research retained; local subscription login, arbitrary workspace shell and subprocess logs retired; old process options explicitly rejected.",
     "attachment_baseline_production_python_lines": 71743,
-    "attachment_net_production_change_lines": 9,
     "forty_percent_target_reached": false,
     "five_thousand_net_target_reached": false,
-    "moves_or_minification_counted_as_production_removal": false
+    "moves_or_minification_counted_as_production_removal": false,
+    "scope": "Historical PR155 phase, exactly as measured against PR152; current totals are in named_module_retirement below.",
+    "phase_final_production_python_lines": 71752,
+    "phase_final_capability_boundary": "Current metered API cloud research retained; local subscription login, arbitrary workspace shell and subprocess logs retired; old process options explicitly rejected.",
+    "phase_attachment_net_production_change_lines": 9
   },
   "post_153_default_readiness": {
     "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42475066492",
@@ -635,7 +838,7 @@
     "production_snapshot_sha256": "f82d290243da9b4abc25964ced0ef761b48b61de84a805ba2deca1b0cf2c246a",
     "independent_adversarial_recheck_passed": true,
     "verifies_scientific_completion": false,
-    "publication_status": "structure followup awaiting exact-commit CI and merge"
+    "publication_status": "historical pre-streaming structure test snapshot; superseded by merged PR155 verification"
   },
   "scoped_billing_inspection": {
     "implemented": true,
@@ -644,15 +847,35 @@
     "target": "codekey-codex-pro",
     "artifact": "billing-inspection.json",
     "default_extra_requests": 0,
-    "actual_inspection_executed": false,
+    "actual_inspection_executed": true,
     "model_generation_calls": 0,
-    "settles_or_grants_budget": false
+    "settles_or_grants_budget": false,
+    "native_probes": [
+      {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/156",
+        "run_url": "https://github.com/hengyizang/lunwen/actions/runs/42480691170",
+        "attempts": [
+          1,
+          2
+        ],
+        "provider": "codekey-codex-pro"
+      },
+      {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/165",
+        "run_url": "https://github.com/hengyizang/lunwen/actions/runs/42483606966",
+        "attempts": [
+          1
+        ],
+        "provider": "codekey-gemini"
+      }
+    ],
+    "billing_receipts_do_not_authorize_generation": true
   },
   "explicit_responses_streaming": {
     "implemented": true,
     "manifest_field": "response_streaming: true",
     "scope": "explicit astra-argon G1 CodeKey Astra only; Argon/default unchanged",
-    "actual_generation_executed": false,
+    "actual_generation_executed": true,
     "single_POST_and_no_retry": true,
     "terminal_full_Response_required": true,
     "initial_and_terminal_identity_and_status_checked": true,
@@ -670,7 +893,12 @@
       "terminal_type_source": "https://raw.githubusercontent.com/openai/openai-python/ea17fda01d7067a6d829effa437952a09f2bb3a3/src/openai/types/responses/response_completed_event.py",
       "source_sha256": "d35154da22ac36358614a246154288c88ad841891f3a32d1c01c2d30e15a6c90"
     },
-    "resolves_524_verified": false
+    "resolves_524_verified": false,
+    "issue_url": "https://github.com/hengyizang/lunwen/issues/159",
+    "actual_outcome": "incomplete_terminal_response_read_failure",
+    "complete_final_response_received": false,
+    "reported_final_identity_verified": false,
+    "future_read_exception_diagnostic": "Only exception class names are retained by the follow-up code; the missing underlying exception type for #159 is not backfilled."
   },
   "batch2_primary_source_deepening": {
     "report_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-20261108.md",
@@ -694,6 +922,234 @@
       "CPU feasibility, the raw NIST files and physically independent sample grouping remain unverified."
     ],
     "original_broad_questions_retain_novelty_claim": false,
-    "six_paper_feasibility_verified": false
+    "six_paper_feasibility_verified": false,
+    "scope_note": "Historical first pair of candidates; exact report/source commits above remain immutable. Later robotics preference and updated versions are recorded in robotics_initial_screen."
+  },
+  "automatic_new_generation_attempts_planned": false,
+  "native_research_completion": {
+    "stage": "topic-intelligence",
+    "gate": "G1",
+    "approved_gates": [
+      "G0"
+    ],
+    "completed_real_papers": 0,
+    "actual_native_scientific_artifacts_from_failed_trials": 0,
+    "native_public_review_predictions": 0,
+    "calibration_status": "NOT_CALIBRATED",
+    "remaining_dependencies": [
+      "A concrete owner-approved G1 topic and subsequent G2 decisions",
+      "A working native writer and independent critic",
+      "Actual experiments, long manuscript, human claim labels and scientific validation"
+    ]
+  },
+  "candidate_data_access_validation": {
+    "topic": "Unselected NIST LPBF candidate; owner subsequently prioritized robotics/autonomous control",
+    "model_calls": 0,
+    "model_fees_cny": 0,
+    "scientific_experiments": 0,
+    "verified_raw_payloads": 0,
+    "formal_G1_or_G2_approval": false,
+    "payload_hashes_or_sizes_changed_to_force_success": false,
+    "attempts": [
+      {
+        "issue": 168,
+        "run_id": 42484792258,
+        "source_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+        "status": "failed_at_HTTP_open",
+        "http_status": 500,
+        "first_file": "Measurements.xlsx",
+        "second_file_attempted": false,
+        "phase": "restore",
+        "execution_started": false,
+        "artifact_id": 13618628750,
+        "artifact_sha256": "c3b858f23d5565592cb7d82e6bbcfa90407d931b08ed22582eeaeb9ce97dabd3",
+        "failure_json_sha256": "c0a00f73f7ce456aecc9df348ae2892f895c2d6b27c725f50831b1731e7e6375"
+      },
+      {
+        "issue": 170,
+        "run_id": 42486405973,
+        "status": "rejected_before_execution",
+        "failure": "Coordinator added explanatory prose outside the required single JSON envelope",
+        "data_requests": 0,
+        "model_requests": 0,
+        "original_invalid_issue_preserved": true
+      },
+      {
+        "issue": 172,
+        "run_id": 42486624175,
+        "source_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+        "status": "failed_at_HTTP_open",
+        "http_status": 500,
+        "first_file": "Measurements.xlsx",
+        "second_file_attempted": false,
+        "phase": "restore",
+        "execution_started": false,
+        "versioned_URL_explicitly_advertised_by_official_metadata": true,
+        "artifact_id": 13619412703,
+        "artifact_sha256": "b85d8bf01925e5cb0ee2cff14471649434778eaa3d056db88ed764ef1ce54077",
+        "failure_json_sha256": "619b5d215afa3e4aca103f91ff37a04f11e56b52b11507f6165c5e23f23c0e29"
+      }
+    ],
+    "official_version_metadata": {
+      "url": "https://data.nist.gov/od/id/ark:/88434/mds2-3662/pdr:v/1.0.1",
+      "http_status": 200,
+      "sha256": "75a9a0a750e78f684170a8c85fdc1842601598275f0635a520e5bce1ff08cba2"
+    },
+    "failed_candidate_manifests_archived_exactly": [
+      {
+        "path": "projects/my-phd/data/manifests/archive/nist-mds2-3662-v1.0.1-measurements.json",
+        "git_blob_sha": "0ceec01873d094c414f511391b544a06cf6b3b75",
+        "file_sha256": "9dc4f40cc93eb72c443269fed1b3c4a8d2296242463395b9a1de02f23ce2a207"
+      },
+      {
+        "path": "projects/my-phd/data/manifests/archive/nist-mds2-3662-v1.0.1-scan-strategy.json",
+        "git_blob_sha": "e3a55a07ea71bba65cbe55296cfd6794b9ed24c1",
+        "file_sha256": "071125c30c4e1e2fbbf0ac15a3c3a33cada69eb16e0e4753c7a1f3d00fe4979b"
+      }
+    ],
+    "archive_scope": "Only unselected candidate manifests moved out of the active glob; prior bindings, failures, source versions and hashes preserved. No selected or frozen experiment data retired.",
+    "post_archive_status": {
+      "issue": 173,
+      "run_id": 42486945387,
+      "status": "completed",
+      "changed_project_files": 0,
+      "remaining_G1_blockers": 32,
+      "active_raw_downloads": 0,
+      "artifact_id": 13620325409,
+      "artifact_sha256": "b003e687250aa5f35e414add723e2ef41952ce6a3db72e2f4fd7bdbf31d12501",
+      "state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6",
+      "budget_blob_unchanged": "8353f640bf9cfb5ee73e63014e9f7b55b3c76463",
+      "source_availability_or_scientific_completion_implied": false
+    }
+  },
+  "merged_PR155_verification": {
+    "tests_run": 2492,
+    "skipped": 14,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds": 119.427,
+    "failure_names": [],
+    "error_names": [],
+    "production_snapshot_sha256": "0dfbed70ce3e13d99cb80adba261d246a1ad7ef9bf4b5bb3a053aea966f443d3",
+    "independent_adversarial_recheck_passed": true,
+    "verifies_scientific_completion": false,
+    "publication_status": "exact reviewed tree merged; all required PR checks completed",
+    "source_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+    "reviewed_PR_head": "e540bf928cd61c9fd33231314b85d6e07f261de3",
+    "tree_sha": "54f4151b6d09bfae2c78f0afa1b5ff6183d68fc0",
+    "pull_request_url": "https://github.com/hengyizang/lunwen/pull/155",
+    "PR_workflows": 8,
+    "check_success": 22,
+    "check_skipped": 3
+  },
+  "named_module_retirement": {
+    "base_commit": "2dfbf972c0754511d8f070a45b5da9e3f21e2555",
+    "retirement_commit": "217b902818e57491271f1f4eb8029e43c19be83c",
+    "combined_production_commit": "a9f2d06892392612a1f0472986032f5eb24d0aad",
+    "named_old_files": [
+      "venue_adapter",
+      "submission_guard",
+      "figure_panel_cache",
+      "figure_lineage",
+      "humanizer_review",
+      "defensive_review",
+      "ccfa_humanization",
+      "scientific_editing",
+      "rebuttal_triage"
+    ],
+    "all_nine_old_modules_physically_retired": true,
+    "alias_module_files_retained": false,
+    "seven_module_retirement_net_production_lines_removed": 1378,
+    "future_safe_read_error_class_diagnostic_added_lines": 1,
+    "combined_net_production_lines_removed_against_PR155": 1377,
+    "current_production_python_lines": 70375,
+    "current_production_python_files": 202,
+    "attachment_baseline_production_python_lines": 71743,
+    "net_production_lines_removed_against_attachment": 1368,
+    "tests_or_docs_counted_as_production_savings": false,
+    "four_retired_dedicated_test_files_cases": 48,
+    "total_regression_case_net_change": -41,
+    "capability_boundary": {
+      "H_AD_CFH_standalone_mechanical_scorecards_reports_parsers": "retired; no equivalent detector or semantic pass claimed",
+      "pinned_method_guidance": "compact/full source-bound methods enter the existing writer and critic; no additional paid calls",
+      "Word_numbers_formulas_citations_originals": "canonical revision_integrity",
+      "scientific_figure_executor_results_CSV_seals_replay": "canonical figure_provenance",
+      "venue_safe_ZIP_import": "canonical venue_compliance",
+      "figure_panel_cache_optimization": "retired; existing full renderer used",
+      "old_cache_and_lineage_receipts": "reject with normal rebuild; expected SHA is not rewritten"
+    },
+    "actual_small_figure_comparison": {
+      "same_numeric_series": 4,
+      "source_CSV_bytes_equal": true,
+      "new_SVG_PDF_PNG_equal_old_ordinary_full_renderer_bytes": true,
+      "old_cache_composite_pixels_or_geometry_equal": false,
+      "old_cache_page_mm": [
+        182.88,
+        96.52
+      ],
+      "full_page_mm": [
+        186.18,
+        98.98
+      ],
+      "approximate_warm_CPU_seconds_old_cache": 0.225,
+      "approximate_warm_CPU_seconds_full": 0.87,
+      "paid_model_calls": 0,
+      "scientific_experiments": 0,
+      "general_performance_guarantee": false
+    },
+    "forty_to_fifty_percent_target_reached": false,
+    "five_thousand_net_target_reached": false,
+    "independent_recheck": {
+      "source_commit": "a9f2d06892392612a1f0472986032f5eb24d0aad",
+      "targeted_tests_passed": 45,
+      "old_base_implementation_lineage_receipt_rejected_unchanged": true,
+      "normal_cloud_derive_rebuilt_with_unchanged_G3_result_and_CSV_hashes": true,
+      "retained_methods_and_three_owner_policy_overrides_in_actual_three_role_prompts": true,
+      "actual_full_renderer_outputs_equal_old_full_path": true,
+      "legacy_cache_receipt_rejected_then_normal_full_rebuild_passed": true,
+      "safe_ZIP_normal_bad_paths_symlink_and_direct_CLI_checked": true,
+      "new_A_or_B_gap_found": false,
+      "paid_calls": 0,
+      "scientific_experiments": 0,
+      "current_production_bytes": 4105292,
+      "attachment_production_bytes": 4068342,
+      "production_bytes_net_change": 36950,
+      "limits": "Targeted software adversarial checks are not proof of real-paper quality, all possible ZIP inputs, pixel equivalence with the retired cache or complete scientific effectiveness."
+    }
+  },
+  "robotics_initial_screen": {
+    "owner_preference": "偏机器人与自主控制",
+    "formal_G1_or_G2_approval": false,
+    "report_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-20261108.md",
+    "report_commit": "4e67c1db9f9ff07d8a183e022000e30368d8b767",
+    "report_sha256": "187e5e1cad69261c26392721b2e07aebb049f55483d08977491af18a8f31e020",
+    "sources_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-sources-20261108.json",
+    "sources_commit": "566adf69598d1bc2967fbca827b7f2b67dee2206",
+    "sources_sha256": "1a69f31b52527a7f47efde10246dc2933ebf99812b323ebcd895695326d40b43",
+    "conditional_questions": [
+      "When should force-sensor self-calibration freeze rather than erase genuine assembly contact?",
+      "When should a saturated quadrotor modify the reference rather than continue adapting its controller?",
+      "When should a robot abstain from neighbor-state prediction under unreliable message timestamps?"
+    ],
+    "incremental_read_scope": {
+      "complete_technical_reports": 1,
+      "partially_read_scientific_bodies": 3,
+      "other_abstract_leads": "not counted as full reading",
+      "image_only_RSS_PDF": "excluded from scientific reading"
+    },
+    "strong_prior_work_explicitly_retained": [
+      "continuous Kalman force-bias/drift estimation",
+      "matched quadrotor objective, tuning and reference access with motor saturation/lag",
+      "learned multi-robot yielding/deadlock constraints",
+      "age-of-information prediction and asymmetric time-varying delays"
+    ],
+    "actual_project_gateway_calls": 0,
+    "model_api_identity_attested": false,
+    "app_session_cost_cny": null,
+    "simulator_or_hardware_experiments": 0,
+    "actual_CPU_RAM_or_training_time_verified": false,
+    "novelty_or_six_paper_independence_verified": false,
+    "formal_independent_scientific_validation": false,
+    "all_original_seven_preference_weights_unchanged": true
   }
 }
