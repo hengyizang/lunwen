@@ -1,0 +1,786 @@
+{
+  "schema_version": "current-session-source-notes-1.0",
+  "artifact_kind": "isolated_reviewable_G1_candidate_draft",
+  "prepared_on_utc": "2026-11-08",
+  "project": "my-phd",
+  "provenance_statement": "current Codex session draft, exact API model identity unavailable, no native runtime receipt, no topic approval",
+  "author": {
+    "family_context": "OpenAI/Codex current session",
+    "exact_requested_api_model_id": null,
+    "exact_reported_api_model_id": null,
+    "native_runtime_receipt": null,
+    "independent_critic_performed": false,
+    "native_planner_writer_critic_cycle_performed": false
+  },
+  "authority": {
+    "production_state_as_reported_by_coordinator": "G1 awaiting_work; only G0 approved",
+    "production_state_independently_read_by_this_task": false,
+    "topic_approval": false,
+    "paper_topic_approvals": [],
+    "production_project_records_changed": false,
+    "experiments_executed": false,
+    "github_mutations": 0,
+    "allowed_new_files": [
+      "proposal.md",
+      "source-notes.json"
+    ]
+  },
+  "cost_accounting": {
+    "project_gateway_calls": 0,
+    "app_session_cost_cny": null,
+    "prior_gateway_charges_cny": null,
+    "prior_unknown_reservations_preserved": true,
+    "existing_cumulative_model_api_ceiling_cny": 500,
+    "remaining_model_api_balance_cny": null,
+    "new_budget_authority_created": false,
+    "per_paper_or_per_call_allowances_created": false,
+    "external_paid_compute_envelope_usd": 0,
+    "resource_probes_in_proposal": "Proposed measurement guardrails only; no experiment run or extra financial cap/allocation is established."
+  },
+  "source_checkpoint": {
+    "source_kind": "actual_owner_cloud_checkpoint",
+    "run_id": "42467018030",
+    "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+    "manifest_file": "sources.json",
+    "manifest_sha256": "8f2c789f081b554cfe43e031e83e7e2ae49ae3cb0d73c9137d7f908a4c581112",
+    "all_manifest_file_hashes_verified_against_local_copies": true
+  },
+  "local_inputs": [
+    {
+      "original_project_path": "projects/my-phd/intake/constraints.json",
+      "copy_file": "intake__constraints.json",
+      "sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+      "bytes": 7340,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete original intake, including notes later superseded by explicit owner instructions",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/data/datasets.jsonl",
+      "copy_file": "data__datasets.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Entire file; empty, zero bytes and zero dataset entries",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082426z-crossref-3ad00f7944.json",
+      "copy_file": "evidence__literature__normalized__20261108t082426z-crossref-3ad00f7944.json",
+      "sha256": "6e697db1f70e081cae1662d4e799740a4a94cf1f26a6f4891df4db9261b27a6e",
+      "bytes": 16369,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082641z-arxiv-75c13380a0.json",
+      "copy_file": "evidence__literature__normalized__20261108t082641z-arxiv-75c13380a0.json",
+      "sha256": "2fa21e00a6a55be71bf69a5fbac4bc3076cf85c55b90065a18d8b01d5624d2af",
+      "bytes": 20645,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082641z-europe-pmc-b1bf19d06a.json",
+      "copy_file": "evidence__literature__normalized__20261108t082641z-europe-pmc-b1bf19d06a.json",
+      "sha256": "b7873fb99982d909349552fb24dca4ae74bf8bab543c676dcb4d1357301a5b4c",
+      "bytes": 9038,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082643z-dblp-69a8a57e8d.json",
+      "copy_file": "evidence__literature__normalized__20261108t082643z-dblp-69a8a57e8d.json",
+      "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+      "bytes": 3882,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082725z-crossref-a693871055.json",
+      "copy_file": "evidence__literature__normalized__20261108t082725z-crossref-a693871055.json",
+      "sha256": "592a3aba1e7f9876614c093173e89a7231d9e359181a48ee85d90ee2afa00e99",
+      "bytes": 15395,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082941z-arxiv-a54a4827eb.json",
+      "copy_file": "evidence__literature__normalized__20261108t082941z-arxiv-a54a4827eb.json",
+      "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+      "bytes": 704,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082941z-europe-pmc-1830c3fc7d.json",
+      "copy_file": "evidence__literature__normalized__20261108t082941z-europe-pmc-1830c3fc7d.json",
+      "sha256": "0acff6e71d0ddd9fe5c7dbd176d245acfddd6caad0503eb52d655854a6960169",
+      "bytes": 8825,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t082942z-dblp-b8fd00c15d.json",
+      "copy_file": "evidence__literature__normalized__20261108t082942z-dblp-b8fd00c15d.json",
+      "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+      "bytes": 3882,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t092422z-crossref-3df34635a3.json",
+      "copy_file": "evidence__literature__normalized__20261108t092422z-crossref-3df34635a3.json",
+      "sha256": "ad2981b5a0b8071a8e84b426583a9f4cedb6c8f0142bd15f14585c2133684667",
+      "bytes": 15974,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t092636z-arxiv-13a277a434.json",
+      "copy_file": "evidence__literature__normalized__20261108t092636z-arxiv-13a277a434.json",
+      "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+      "bytes": 704,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t092636z-europe-pmc-fade3fd0a8.json",
+      "copy_file": "evidence__literature__normalized__20261108t092636z-europe-pmc-fade3fd0a8.json",
+      "sha256": "50a2ba0324346640dedf044620300b5ece3c3daf75c216306b634312bcbd17f2",
+      "bytes": 8692,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t092644z-dblp-ee7deca3cb.json",
+      "copy_file": "evidence__literature__normalized__20261108t092644z-dblp-ee7deca3cb.json",
+      "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+      "bytes": 3882,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    },
+    {
+      "original_project_path": "projects/my-phd/evidence/literature/normalized/20261108t092655z-hal-b7b436c13f.json",
+      "copy_file": "evidence__literature__normalized__20261108t092655z-hal-b7b436c13f.json",
+      "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+      "bytes": 558,
+      "read_date_utc": "2026-11-08",
+      "read_scope": "Complete normalized discovery JSON, including all works, abstract fields and filter audit; no referenced full paper thereby read",
+      "local_sha256_matches_manifest": true
+    }
+  ],
+  "local_packet_observations": {
+    "normalized_files": 13,
+    "total_records": 118,
+    "unique_record_ids": 88,
+    "records_with_non_null_abstract": 26,
+    "unique_record_ids_with_non_null_abstract": 24,
+    "dataset_register_entries": 0,
+    "three_dblp_files_identical": true,
+    "two_empty_arxiv_files_identical": true,
+    "hal_result_empty": true,
+    "not_a_systematic_review": true,
+    "not_search_saturation": true,
+    "no_relevance_or_quality_count_inferred": true,
+    "provider_filters": "bounded_result_window_not_complete_corpus; provider_filter_compliance_verified=false; unfiltered_declared_only"
+  },
+  "local_rule_sources": [
+    {
+      "path": "/workspace/lunwen/AGENTS.md",
+      "sha256": "106409f49b0b629b55a9a4d0701f5a33ce68a86cfec6e4fe65e5df6e89237b45",
+      "read_scope": "Complete",
+      "access_date": "2026-11-08"
+    },
+    {
+      "path": "/workspace/lunwen/references/workflow.md",
+      "sha256": "9add7f28e17fc5f853f3a6d1b089d93fe52d4b60d885cf866e1f4aaf22e1e688",
+      "read_scope": "Complete",
+      "access_date": "2026-11-08"
+    },
+    {
+      "path": "/workspace/lunwen/references/stage-contracts.md",
+      "sha256": "bc1b836557a2b64bab938b11fbbc1ef751f88bbd74cec5c7d248505547ba1978",
+      "read_scope": "Lines 1-101: governing policy, G0 and G1; headings/search matches from later portions are not a full read",
+      "access_date": "2026-11-08"
+    },
+    {
+      "path": "/workspace/lunwen/references/direction-ranking.md",
+      "sha256": "39b7779c6fe4a90f5079f66bbbfd7f0d70f4ed184b591cfb2d78fd251b585903",
+      "read_scope": "Complete",
+      "access_date": "2026-11-08"
+    }
+  ],
+  "owner_instruction_precedence": [
+    {
+      "subject": "data",
+      "current_instruction": "Licence/research-use verification optional; no pre-use human approval is added. Preserve source/version/integrity/privacy/leakage controls and known access restrictions.",
+      "supersedes": "Older intake licence/rights wording insofar as it imposes a mandatory use-approval gate."
+    },
+    {
+      "subject": "complete_outcomes",
+      "current_instruction": "Complete negative, failed and registered comparisons in independent experiments/archive; manuscript/supplement selection follows scientific relevance and retains interpretation-changing evidence."
+    },
+    {
+      "subject": "AI_statements",
+      "current_instruction": "Public AI-use statements optional and author-editable; internal provenance truthful."
+    },
+    {
+      "subject": "finance",
+      "current_instruction": "Original cumulative CNY 500 only, all attempts counted; unknown prior charges/reservations retained, no revived per-paper caps or new allocations."
+    },
+    {
+      "subject": "stages_and_roles",
+      "current_instruction": "Actual doctoral G1 and paper G2 topic decisions retained; production Claude read-only, OpenAI persistent author, actual identity/independent-review/runner controls retained."
+    }
+  ],
+  "public_web_followup": {
+    "tool": "mcp__codex_apps__search_service_web_run",
+    "access_date_utc": "2026-11-08",
+    "tool_call_count": 3,
+    "command_count": 12,
+    "counting_policy": "Count each search query or open as one command, including failed opens.",
+    "gateway_search_calls": 0,
+    "tavily_calls": 0,
+    "paid_model_or_research_gateway_calls": 0,
+    "raw_dataset_downloads": 0,
+    "stopping_rule": "Stop after 12 commands. This bounded stopping rule does not establish novelty, search saturation or completeness.",
+    "response_storage": "Current conversation tool responses only; no native literature receipts or raw-response hashes manufactured.",
+    "commands": [
+      {
+        "n": 1,
+        "kind": "search",
+        "query": "remaining useful life prognostics conformal prediction operating conditions shift calibration 2025 2026 C-MAPSS original paper",
+        "domains": [
+          "arxiv.org",
+          "proceedings.mlr.press",
+          "nature.com"
+        ],
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "bounded visible results; no complete-corpus count"
+      },
+      {
+        "n": 2,
+        "kind": "search",
+        "query": "electric vehicle total cost ownership uncertainty robust decision 2024 2025 NREL T3CO original research",
+        "domains": [
+          "nrel.gov",
+          "docs.nrel.gov",
+          "nature.com",
+          "sciencedirect.com"
+        ],
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "bounded visible results; no complete-corpus count"
+      },
+      {
+        "n": 3,
+        "kind": "open",
+        "url": "https://arxiv.org/abs/2601.09740v1",
+        "outcome": "success",
+        "actual_range": "Abstract/title/version metadata, especially lines 8-27"
+      },
+      {
+        "n": 4,
+        "kind": "open",
+        "url": "https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/",
+        "outcome": "success",
+        "actual_range": "Returned HTML lines 0-318; substantive repository/data descriptions at lines 280-318"
+      },
+      {
+        "n": 5,
+        "kind": "open",
+        "url": "https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajectories/8ect-6jqj",
+        "outcome": "failure",
+        "error": "URL not accessible via tool; no page/data read"
+      },
+      {
+        "n": 6,
+        "kind": "open",
+        "url": "https://nrel.github.io/T3CO/",
+        "outcome": "failure",
+        "error": "404; no documentation read"
+      },
+      {
+        "n": 7,
+        "kind": "open",
+        "url": "https://arxiv.org/abs/2607.08273",
+        "outcome": "success",
+        "actual_range": "Actual abstract/title/version metadata, especially lines 8-28"
+      },
+      {
+        "n": 8,
+        "kind": "open",
+        "url": "https://www.nature.com/articles/s41467-024-49157-5",
+        "outcome": "failure",
+        "error": "Publisher identity-provider redirect inaccessible; search excerpts only available"
+      },
+      {
+        "n": 9,
+        "kind": "search",
+        "query": "NGSIM vehicle trajectories public dataset I-80 US-101 download FHWA dataset official",
+        "domains": [
+          "data.transportation.gov",
+          "highways.dot.gov",
+          "catalog.data.gov"
+        ],
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "official indexed discovery/metadata excerpts only; no raw files"
+      },
+      {
+        "n": 10,
+        "kind": "search",
+        "query": "T3CO Transportation Technology Total Cost Ownership official GitHub NREL documentation data inputs",
+        "domains": [
+          "github.com",
+          "nrel.gov",
+          "nlr.gov"
+        ],
+        "date_filter": null,
+        "returned_count_for_this_query": null,
+        "coverage": "official laboratory/repository indexed excerpts only"
+      },
+      {
+        "n": 11,
+        "kind": "open",
+        "url": "https://arxiv.org/html/2601.09740v1",
+        "outcome": "success",
+        "actual_range": "Returned lines 0-50, including abstract/introduction and case-study heading; methods, proof and case-study body not read"
+      },
+      {
+        "n": 12,
+        "kind": "open",
+        "url": "https://afdc.energy.gov/calc/",
+        "outcome": "success",
+        "actual_range": "Returned lines 0-258; substantive calculator inputs and caveat at lines 57-230; no calculation submitted"
+      }
+    ]
+  },
+  "cited_sources": [
+    {
+      "id": "S01",
+      "candidate_ids": [
+        "C1"
+      ],
+      "title": "Comparing costs and climate impacts of various electric vehicle charging systems across the United States",
+      "url": "https://www.nature.com/articles/s41467-024-49157-5",
+      "doi": "10.1038/s41467-024-49157-5",
+      "year_as_reported": 2024,
+      "access_date": "2026-11-08",
+      "read_level": "search_excerpt_only; direct open failed",
+      "actual_scope": "Indexed passages about TCO/emissions accounting and optimistic/baseline/conservative scenarios.",
+      "support": "Scenario-based TCO uncertainty analysis already exists.",
+      "not_verified": [
+        "Full methods and uncertainty dependence structure",
+        "Supplementary equations/code/data",
+        "Input versions and result reproducibility"
+      ],
+      "novelty_disposition": "close prior-work lead; no novelty judgment"
+    },
+    {
+      "id": "S02",
+      "candidate_ids": [
+        "C1"
+      ],
+      "title": "Data-driven analysis of strategic–operational interfaces in freight electrification under deep uncertainty",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1361920924004814",
+      "doi": "10.1016/j.trd.2024.104524",
+      "year_as_reported": 2025,
+      "access_date": "2026-11-08",
+      "read_level": "indexed_abstract_excerpt_only",
+      "actual_scope": "Search text describes fleet-operation representation, TCO, uncertainty and robust partial electrification.",
+      "support": "Deep-uncertainty fleet-electrification decision analysis is prior work.",
+      "not_verified": [
+        "Full original article",
+        "Decision-robustness criterion",
+        "How uncertainty dependence and information vintages are treated",
+        "Public data availability"
+      ],
+      "novelty_disposition": "direct novelty risk to a generic robust-TCO proposal"
+    },
+    {
+      "id": "S03",
+      "candidate_ids": [
+        "C1"
+      ],
+      "title": "Correcting market failure for no-regret electric road investments under uncertainty",
+      "url": "https://www.nature.com/articles/s41467-025-62679-w",
+      "doi": "10.1038/s41467-025-62679-w",
+      "year_as_reported": 2025,
+      "access_date": "2026-11-08",
+      "read_level": "search_excerpt_only",
+      "actual_scope": "Title and indexed passages concerning electric-road costs and model assumptions.",
+      "support": "A relevant adjacent investment-under-uncertainty comparison exists.",
+      "not_verified": [
+        "Full methods",
+        "Theoretical overlap",
+        "Data, code and uncertainty details"
+      ],
+      "novelty_disposition": "adjacent lead, not a fully assessed closest work"
+    },
+    {
+      "id": "S04",
+      "candidate_ids": [
+        "C1"
+      ],
+      "title": "DOE AFDC Vehicle Cost Calculator",
+      "url": "https://afdc.energy.gov/calc/",
+      "access_date": "2026-11-08",
+      "version": "Mutable live page; immutable underlying input snapshot unavailable",
+      "read_level": "official_tool_page_read",
+      "actual_scope": "HTML lines 57-230: TCO/emissions purpose, custom vehicle and use fields, prices, electricity use and caveat.",
+      "support": "Public transparent-calculator baseline; vehicle price/specification data may change and are not all verified by the hosting organizations.",
+      "not_verified": [
+        "Underlying numerical dataset",
+        "Historical snapshots",
+        "API/data-export availability",
+        "No tool results calculated",
+        "Real lifecycle outcomes"
+      ],
+      "access_status": "Public page read; no raw dataset acquired",
+      "licence_or_research_use": "Not verified; optional metadata, not an invented approval gate"
+    },
+    {
+      "id": "S05",
+      "candidate_ids": [
+        "C1"
+      ],
+      "title": "T3CO official current laboratory page and repository",
+      "urls": [
+        "https://www.nlr.gov/transportation/t3co",
+        "https://github.com/NatLabRockies/T3CO",
+        "https://github.com/NatLabRockies/T3CO/blob/main/docs/quick_start.md",
+        "https://github.com/NatLabRockies/T3CO/blob/main/docs/T3CO_Overview.md"
+      ],
+      "access_date": "2026-11-08",
+      "version": "main/live, exact commit unknown",
+      "read_level": "official_indexed_excerpts_only",
+      "actual_scope": "Excerpts identify commercial-vehicle TCO software, demo inputs and auxiliary input-file names.",
+      "support": "A public existing model and input leads make a small CPU design plausible; a new calculator alone would not be an original contribution.",
+      "not_verified": [
+        "Current immutable commit",
+        "Full documentation and examples",
+        "Bundled input provenance/vintages",
+        "Actual installation/runtime/resource requirements",
+        "No cloning or execution"
+      ],
+      "failed_previous_url": "https://nrel.github.io/T3CO/",
+      "access_status": "Current public leads found after old URL returned 404; no data acquired",
+      "licence_or_research_use": "Not verified; optional metadata"
+    },
+    {
+      "id": "S06",
+      "candidate_ids": [
+        "C2"
+      ],
+      "title": "Empirical Calibration and Conditional-Reliability Diagnostics for Bearing RUL Prediction under Operating-Regime Shift",
+      "authors": [
+        "Shaoliang Yang",
+        "Jun Wang",
+        "Yunsheng Wang"
+      ],
+      "url": "https://arxiv.org/abs/2607.08273v1",
+      "arxiv_id": "2607.08273v1",
+      "initial_submission_as_reported": "2026-07-09",
+      "access_date": "2026-11-08",
+      "read_level": "actual_abstract_and_metadata_read",
+      "actual_scope": "Abstract lines 16-19 and version metadata; reports held-out regimes, calibration, conditional undercoverage and raw-channel-loss diagnostics on a processed 10-bearing subset.",
+      "support": "Operating-regime reliability and conditional RUL diagnostics are already directly studied.",
+      "not_verified": [
+        "36-page full text",
+        "Dataset lineage/eligibility",
+        "All splitting/preprocessing decisions",
+        "Released code",
+        "Reproduction and publication status beyond preprint metadata"
+      ],
+      "novelty_disposition": "Strong direct overlap; generic RUL-calibration-under-shift novelty rejected as unsupported"
+    },
+    {
+      "id": "S07",
+      "candidate_ids": [
+        "C2"
+      ],
+      "title": "Conformal Prediction Intervals for Remaining Useful Lifetime Estimation",
+      "url": "https://arxiv.org/abs/2212.14612",
+      "version": "Unversioned result; exact version not checked",
+      "access_date": "2026-11-08",
+      "read_level": "indexed_abstract_excerpt_only",
+      "actual_scope": "Search excerpt identifies conformalization of CNN/gradient-boosting RUL predictors and C-MAPSS evaluation.",
+      "support": "Applying conformal intervals to C-MAPSS is existing work.",
+      "not_verified": [
+        "Full paper",
+        "Exact version",
+        "Validity assumptions, dependence handling and evaluation design"
+      ],
+      "novelty_disposition": "older direct methodological lead"
+    },
+    {
+      "id": "S08",
+      "candidate_ids": [
+        "C2"
+      ],
+      "title": "Conformal Repair on a Budget: An Empirical Protocol for Retraining Decisions",
+      "url": "https://proceedings.mlr.press/v329/lofstrom26b.html",
+      "year_as_reported": 2026,
+      "access_date": "2026-11-08",
+      "read_level": "indexed_abstract_excerpt_only",
+      "actual_scope": "Search text compares residual/conformal recalibration, bias updating and refitting in a controlled linear setting.",
+      "support": "Choosing repair versus refitting is already a studied question.",
+      "not_verified": [
+        "Full paper and proofs",
+        "Exact dependence/observation assumptions",
+        "Overlap with the proposed asset-level delayed-feedback setting"
+      ],
+      "novelty_disposition": "direct challenge to a generic repair-selector contribution"
+    },
+    {
+      "id": "S09",
+      "candidate_ids": [
+        "C2"
+      ],
+      "title": "NASA Prognostics Center of Excellence Data Set Repository",
+      "url": "https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/",
+      "access_date": "2026-11-08",
+      "version": "Live repository page; original archives unacquired",
+      "read_level": "official_repository_description_read",
+      "actual_scope": "Lines 280-318: repository, acknowledgement/risk wording, milling, IMS bearing, battery and C-MAPSS descriptions.",
+      "support": "NASA provides public prognostics source links; C-MAPSS is simulated degradation under condition/fault-mode combinations.",
+      "dataset_leads": [
+        {
+          "name": "Turbofan engine degradation simulation (C-MAPSS)",
+          "download_link_on_page": "https://phm-datasets.s3.amazonaws.com/NASA/6.+Turbofan+Engine+Degradation+Simulation+Data+Set.zip"
+        },
+        {
+          "name": "IMS bearing",
+          "download_link_on_page": "https://phm-datasets.s3.amazonaws.com/NASA/4.+Bearings.zip"
+        },
+        {
+          "name": "Milling",
+          "download_link_on_page": "https://phm-datasets.s3.amazonaws.com/NASA/3.+Milling.zip"
+        }
+      ],
+      "not_verified": [
+        "Archive bytes/availability/hashes",
+        "Original README and versions",
+        "Asset counts and sampling schema",
+        "Privacy/fitness/leakage screening",
+        "Any claim of real-fleet effectiveness"
+      ],
+      "access_status": "Official page read; no download attempted",
+      "known_source_terms_observed": "Page requests repository/donor acknowledgement and disclaims liability; no access control was bypassed.",
+      "licence_or_research_use": "Not separately verified; optional metadata"
+    },
+    {
+      "id": "S10",
+      "candidate_ids": [
+        "C3"
+      ],
+      "title": "Formal Safety Guarantees for Autonomous Vehicles using Barrier Certificates",
+      "authors": [
+        "Oumaima Barhoumi",
+        "Mohamed H Zaki",
+        "Sofiène Tahar"
+      ],
+      "url": "https://arxiv.org/abs/2601.09740v1",
+      "full_text_url": "https://arxiv.org/html/2601.09740v1",
+      "arxiv_id": "2601.09740v1",
+      "initial_submission_as_reported": "2026-01-08",
+      "access_date": "2026-11-08",
+      "read_level": "actual_abstract_plus_full_text_introduction_excerpt",
+      "actual_scope": "Abstract page lines 8-27 and HTML lines 25-50; TTC, barriers and SMT in stated approach; case-study heading identifies highD.",
+      "support": "A current directly relevant TTC/barrier/SMT paper exists.",
+      "not_verified": [
+        "Complete methodology, proof and validation",
+        "Case-study body",
+        "Whether replay or intervention assumptions create any defect",
+        "Code/data and publication status beyond author's metadata"
+      ],
+      "novelty_disposition": "closest-work lead; no allegation of an invalid proof or evaluation",
+      "observed_article_terms": "HTML displays CC BY-NC-ND 4.0; no article adaptation made"
+    },
+    {
+      "id": "S11",
+      "candidate_ids": [
+        "C3"
+      ],
+      "title": "When Environments Shift: Safe Planning with Generative Priors and Robust Conformal Prediction",
+      "url": "https://proceedings.mlr.press/v331/rahaman26a.html",
+      "year_as_reported": 2026,
+      "access_date": "2026-11-08",
+      "read_level": "indexed_metadata_and_abstract_excerpt_only",
+      "actual_scope": "Title, venue metadata and brief abstract excerpt concerning changing autonomous-system environments.",
+      "support": "Robust safe planning under environment shift has current prior work.",
+      "not_verified": [
+        "Methods and assumptions",
+        "Guarantees, data and code",
+        "Exact relation to longitudinal sampled/delayed sensing"
+      ],
+      "novelty_disposition": "adjacent current lead; not enough to establish a candidate difference"
+    },
+    {
+      "id": "S12",
+      "candidate_ids": [
+        "C3"
+      ],
+      "title": "Learning Multiplicative Interactions with Bayesian Neural Networks for Visual-Inertial Odometry",
+      "url": "http://arxiv.org/abs/2007.07630v1",
+      "arxiv_id": "2007.07630v1",
+      "publication_date_as_in_copied_metadata": "2020-07-15T11:39:29Z",
+      "access_date": "2026-11-08",
+      "read_level": "copied_normalized_abstract_only",
+      "local_file": "evidence__literature__normalized__20261108t082641z-arxiv-75c13380a0.json",
+      "actual_scope": "Complete abstract within actual run metadata, not original full text.",
+      "support": "Adjacent sensor-degradation/uncertainty research lead.",
+      "not_verified": [
+        "Full original article",
+        "Exact assumptions",
+        "Direct relevance to longitudinal barrier claims"
+      ],
+      "novelty_disposition": "adjacent field lead; not counted as a close formal-control comparator"
+    },
+    {
+      "id": "S13",
+      "candidate_ids": [
+        "C3"
+      ],
+      "title": "NGSIM Vehicle Trajectories and Supporting Data — official discovery metadata",
+      "urls": [
+        "https://catalog.data.gov/dataset/next-generation-simulation-ngsim-vehicle-trajectories-and-supporting-data",
+        "https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajector/8ect-6jqj/data"
+      ],
+      "access_date": "2026-11-08",
+      "version": "Catalog/portal identifiers found; exact downloadable dataset version unknown",
+      "read_level": "official_indexed_metadata_excerpts_only",
+      "actual_scope": "Search text lists US-101, I-80, Lankershim and Peachtree collection environments and export/download routes.",
+      "support": "Public trajectory-data lead for state initialization/diagnostics, not controlled outcomes.",
+      "not_verified": [
+        "Raw file access/bytes/hashes",
+        "Full data dictionary",
+        "Coordinates/units/timing/cleaning lineage",
+        "Selection and privacy assessment",
+        "Any controlled counterfactual trajectory"
+      ],
+      "failed_previous_url": "https://data.transportation.gov/Automobiles/Next-Generation-Simulation-NGSIM-Vehicle-Trajectories/8ect-6jqj",
+      "access_status": "Direct open failed; official indexed metadata found; no raw data downloaded",
+      "licence_or_research_use": "Not separately verified; optional metadata",
+      "restrictions": "No access restriction or permission invented; raw files and current access conditions remain unverified."
+    },
+    {
+      "id": "S14",
+      "candidate_ids": [
+        "C3"
+      ],
+      "title": "Third Generation Simulation Data (TGSIM) — official catalog lead",
+      "url": "https://catalog.data.gov/dataset/third-generation-simulation-data-tgsim",
+      "access_date": "2026-11-08",
+      "version": "Search excerpt reports dataset last updated 2026-03-10; this is not verified raw-data release identity",
+      "read_level": "official_indexed_metadata_excerpt_only",
+      "actual_scope": "Catalog excerpt describes public trajectory/supporting data and gives a public access-level field.",
+      "support": "Possible separate-site evidence lead only.",
+      "not_verified": [
+        "Full catalog",
+        "Raw files/schema",
+        "Subset suitability",
+        "Input size and preprocessing",
+        "Any present approval or fitness determination"
+      ],
+      "novelty_disposition": "unverified extension data lead, not evidence of six-paper independence"
+    }
+  ],
+  "candidate_dispositions": [
+    {
+      "id": "C1",
+      "title": "Defensible vehicle-electrification decisions under evolving cost evidence",
+      "chinese_title": "变化成本证据下的电动车全生命周期决策稳健性",
+      "disposition": "Provisional first evidence-collection choice, not topic selection",
+      "supporting_source_ids": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05"
+      ],
+      "supporting_owner_background": "Reported vehicle life-cycle-cost software and BI experience",
+      "candidate_difference_unverified": "source-vintage-bound joint uncertainty decision certificates plus explicit insufficient-evidence decisions",
+      "primary_gap": "No immutable historical input vintages or full closest-work comparison; original contribution and independent B data unproved"
+    },
+    {
+      "id": "C2",
+      "title": "Dependable maintenance decisions with delayed prognostic feedback",
+      "chinese_title": "延迟反馈与工况变化下的机械寿命预测决策可靠性",
+      "disposition": "Alternative if vehicle data/novelty test fails",
+      "supporting_source_ids": [
+        "S06",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "rejected_broad_framing": "Generic calibrated RUL under operating-regime shift is too close to S06 and S07",
+      "candidate_difference_unverified": "asset-level dependence, delayed/selected labels and recommendation/refit/withhold decisions considered together",
+      "primary_gap": "S06/S08 full methods overlap and absent real maintenance/censoring evidence for extension"
+    },
+    {
+      "id": "C3",
+      "title": "Assumption-sensitive safety certificates for longitudinal autonomy",
+      "chinese_title": "观测误差与模型失配下的自动驾驶安全证书边界",
+      "disposition": "Retained alternative with largest present formal-methods gap",
+      "supporting_source_ids": [
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S14"
+      ],
+      "candidate_difference_unverified": "non-vacuous sampled/delayed observation assurance boundary with intervention-consistent counterexamples",
+      "primary_gap": "Unfinished robust-control closest-work search, unread proofs and unverified trajectory files"
+    }
+  ],
+  "preference_assessment": {
+    "weights": {
+      "funded_position_supply": 0.25,
+      "job_market_and_salary": 0.25,
+      "future_growth_potential": 0.15,
+      "phd_position_competition": 0.075,
+      "job_market_competition": 0.075,
+      "background_fit": 0.1,
+      "application_route_fit": 0.1
+    },
+    "numerical_scores_assigned": false,
+    "weighted_winner_computed": false,
+    "unknowns": [
+      "Dated eligible funded-position supply",
+      "Comparable salary and employment data",
+      "Medium-term demand/growth evidence",
+      "Applicant/place competition",
+      "Job-competition denominators",
+      "Exact qualification recognition",
+      "Route eligibility and supervision fit"
+    ],
+    "provisional_order_basis": "Reported background adjacency and plausible small CPU designs only. Do not renormalize absent weighted factors."
+  },
+  "limitations_and_next_evidence": [
+    "Original 2026-10-26 deadline and 2026-10-25 checkpoint elapsed; no replacement date inferred.",
+    "No full article was completely read in this draft; a full-text introduction excerpt is not full-method verification.",
+    "No candidate has a completed source-bound originality audit, native novelty matrix or independent different-family critique.",
+    "No raw dataset was acquired, version-frozen or validated, and no CPU resource or scientific pilot was run.",
+    "Six conditional contribution slots per candidate are not six approved, independent, publishable or Q1-feasible papers.",
+    "Extension B independence/doctoral depth is unresolved; merging risks and shared evidence/model dependencies are explicit.",
+    "No funded-opening, salary, competition or degree-eligibility counts were fabricated.",
+    "No false precision for novelty, feasibility, cost, admissions or publication chances.",
+    "Production G1/G2 human topic decisions, cumulative charges, provenance controls and existing experiment authority remain unchanged."
+  ]
+}
