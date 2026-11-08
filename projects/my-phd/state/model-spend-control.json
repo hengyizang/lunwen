@@ -19,7 +19,16 @@
   "authorized_ceiling_cny": 500,
   "currency": "CNY",
   "paper_spent_cny": {},
-  "reconciliation_events": [],
+  "reconciliation_events": [
+    {
+      "actor": "Hengyi Zang",
+      "actual_cost_cny": 0.3913704,
+      "at": "2026-11-08T08:09:22+00:00",
+      "evidence_note": "CodeKey Opus #134 meter 0 requests/0 CNY -> readiness 42461197332 artifact 13609815911: 1/0.3913704. Exactly one new request; original wallet-unit=CNY1 rule. Keep original three holds; scientific result remains failed.",
+      "receipt_id": "e104810891d64d7b9f2964ce1c9ca0d2",
+      "run_id": "42461681380"
+    }
+  ],
   "reservations": {
     "2b9e5e82da8a4f0bb9bfb6520ba814d1": {
       "at": "2026-10-27T15:35:07+00:00",
@@ -38,19 +47,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "e104810891d64d7b9f2964ce1c9ca0d2": {
-      "at": "2026-11-08T07:14:10+00:00",
-      "max_cost_cny": 2.0415472,
-      "paper_id": null,
-      "run_id": "public-review-42457860489-domain-1",
-      "transport": {
-        "credential_sha256": "4b5af83616d7fa44b5ada1a0806dc9426715e86c116aa1d1c61d0cba5dbd3e60",
-        "endpoint": "https://codekey.ai/v1/messages",
-        "lease_id": "4a37b90bf20b4b98bf726d2b3328b2b6",
-        "model": "claude-opus-5-5",
-        "provider": "codekey-kiro-enterprise"
-      }
     },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
@@ -249,7 +245,7 @@
       "receipt_id": "f05afe4c433c43609e5555da9c8e6630"
     }
   ],
-  "spent_cny": 0.24538256,
+  "spent_cny": 0.63675296,
   "tranche_cny": 300,
   "unsent_events": [
     {
