@@ -83,14 +83,61 @@
       "response_text_characters": 931,
       "stop_reason_retained": false,
       "thinking_or_output_cap_explanation_verified": false
+    },
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/146",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42466625506",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42466625506.json",
+      "cloud_report_blob_sha": "cb6c568dd965597bf2bceaef3ea216b4caf29075",
+      "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+      "seat": "domain",
+      "provider": "codekey-kiro-enterprise",
+      "requested_model": "claude-opus-5-5",
+      "requested_effort": "high",
+      "reported_model_retained": "claude-opus-5-5",
+      "max_output_tokens": 12000,
+      "calls_attempted": 1,
+      "valid_predictions": 0,
+      "status": "partial_failed_no_retry",
+      "failure_type": "ProviderError",
+      "http_status": 200,
+      "stop_reason": "refusal",
+      "content_block_types": [
+        "thinking"
+      ],
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 434176
+        },
+        "cache_creation_input_tokens": 434176,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 10020,
+        "output_tokens": 801
+      },
+      "model_response_accepted": false,
+      "raw_http_body_sha256": "d0923f146f369e690996985489f67cd7deb64a616488b185165fc0f323719ba7",
+      "canonical_json_sha256": "b3e39ce7bb1297ba4e9b96750d7e128a52a08867f1a57360fbe8f1fd3ff43df7",
+      "redacted_error_path": "api_runs/provider-errors/da1a3ff2c57c4bfb96699adb8d2b8a25.json",
+      "redacted_error_sha256": "f897fdbdfdb3905e7ccb0abfea32761b69342ac3d384e19ebcbeecf86a919e69",
+      "checkpoint_artifact_id": 13611503304,
+      "original_provider_body_publicly_retained": false,
+      "thinking_or_output_cap_explanation_verified": false,
+      "fee_verified": true,
+      "actual_fee_cny": 0.668094,
+      "cost_status": "settled_gateway_debit",
+      "reservation_settlement_persisted": true,
+      "new_unknown_reservation_cny": 0,
+      "automatic_retry_performed": false,
+      "same_prompt_hashes_as_4000_run": true
     }
   ],
   "budget": {
     "authorized_ceiling_cny": 500,
     "spent_before_cny": 0.24538256,
-    "spent_after_cny": 1.03146656,
+    "spent_after_cny": 2.76120206,
     "initial_control_blob_sha": "0f72612e3d7f3ac4abf775ab15af0356718fd115",
-    "observed_control_blob_sha": "6414d9f64b2a2963f1318f4d435b5f5d9de86fe2",
+    "observed_control_blob_sha": "d711a6ddddbea59600d42c7981759bfb4fd22861",
     "original_three_reservations_unchanged": true,
     "new_spending_authority_granted": false,
     "existing_unknown_holds_cny": 10.0783494
@@ -155,20 +202,66 @@
       "topic_approval_granted": false,
       "g1_candidate_dossier_generated": false,
       "scientific_completion_verified": false
+    },
+    {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/148",
+      "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42467018030",
+      "cloud_report_path": "projects/my-phd/evidence/auxiliary/42467018030.json",
+      "cloud_report_blob_sha": "349dc973367dfaa5f30d258d9183aa7084a36037",
+      "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+      "status": "partial_failed_no_retry",
+      "model_calls": 1,
+      "role": "semantic-planner",
+      "provider": "codekey-kiro-enterprise",
+      "requested_model": "claude-opus-5-5",
+      "reported_model": null,
+      "requested_effort": "high",
+      "max_output_tokens": 12000,
+      "prompt_input_bytes": 719980,
+      "input_boundary_passed": true,
+      "http_status": 524,
+      "error": "HTTP 524",
+      "writer_executed": false,
+      "critic_executed": false,
+      "g1_candidate_dossier_generated": false,
+      "topic_approval_granted": false,
+      "new_literature_operations": 6,
+      "dataset_catalog_operations": 0,
+      "fee_unknown_at_original_report": true,
+      "original_reservation_cny": 2.1027468,
+      "reservation_id": "f9f6fa4151294350b32201df6c22503e",
+      "fee_verified_later": true,
+      "actual_fee_cny": 1.0616415,
+      "fee_reconciliation": {
+        "issue_url": "https://github.com/hengyizang/lunwen/issues/150",
+        "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42468488667",
+        "free_readiness_run": "https://github.com/hengyizang/lunwen/actions/runs/42466553622/attempts/2",
+        "artifact_id": 13612307788,
+        "readiness_json_sha256": "ff68a619e20091658a9967e3c1f04da3a5cd2c2a6ad014b1e4e07be35d9c6724",
+        "requests_before": 3,
+        "cost_before_cny": 1.454178,
+        "requests_after": 4,
+        "cost_after_cny": 2.5158195,
+        "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+        "settlement_persisted": true
+      },
+      "scientific_completion_verified": false,
+      "automatic_retry_performed": false
     }
   ],
   "software_verification": {
-    "tests_run": 2489,
+    "tests_run": 2496,
     "skipped": 14,
     "failures": 0,
     "errors": 0,
-    "duration_seconds_including_discovery": 132.744,
-    "production_snapshot_sha256": "7eec79d1e4c18ea26a59fb41abc3b3403583833329836055c6d774f9532b0128",
+    "duration_seconds_including_discovery": 133.228,
+    "production_snapshot_sha256": "8517e48cc86b0cc755c32dba15a5b4ad93af797e8d9275fd994cb1b74db4f4f8",
     "independent_adversarial_recheck_passed": true,
-    "verifies_scientific_completion": false
+    "verifies_scientific_completion": false,
+    "publication_status": "followup awaiting exact-commit CI and merge"
   },
   "next_explicit_capacity_comparison": {
-    "executed": false,
+    "executed": true,
     "default_output_tokens": 4000,
     "explicit_output_tokens": 12000,
     "model_or_high_effort_changed": false,
@@ -177,6 +270,248 @@
     "g1_maximum_calls": 5,
     "g1_conservative_upper_cny": 49.4364244,
     "same_original_cumulative_budget": true,
-    "cause_of_previous_truncation_proven": false
+    "cause_of_previous_truncation_proven": false,
+    "domain_attempt_status": "refusal_no_accepted_model_text",
+    "domain_run_id": "42466625506",
+    "g1_attempt_status": "requested_not_yet_observed",
+    "g1_issue_url": "https://github.com/hengyizang/lunwen/issues/148"
+  },
+  "current_session_blind_pilot": {
+    "kind": "current_session_source_only_blind_pilot",
+    "cases": 8,
+    "complete_coverage": true,
+    "agreed": 3,
+    "abstentions": 0,
+    "exact_agreement": 0.375,
+    "training_majority_baseline_agreement": 0.25,
+    "reported_api_model": null,
+    "native_runtime_attestation": false,
+    "app_session_cost_cny": null,
+    "project_gateway_calls": 0,
+    "linked_media_assessed": false,
+    "scientific_gate_or_model_promotion": false,
+    "judgments": [
+      {
+        "case_id": "case-01",
+        "source_sha256": "a0deb9583e6c2d7e10dd388a7cccbd4738a2473bed609d7a633fed0dc6e704d7",
+        "outcome": "convincing",
+        "rationale": "Two preregistered samples show resource allocation adapting to separately manipulated controllability and elasticity. Comparisons with alternative learning models, model and parameter recovery, and replicated behavioral predictions support structured elasticity inference. Permutation-tested associations with self-reported psychopathology replicate, but modest canonical correlations in nonclinical samples do not establish clinical utility or causality. Extensive explicit training and a constrained task also limit generalization to spontaneous real-world inference. Overall, validated methods adequately support the central behavioral and associative conclusions.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-105507",
+        "published_category": "incomplete+solid",
+        "agrees": false
+      },
+      {
+        "case_id": "case-02",
+        "source_sha256": "ee9421fab9bcf2d6e21aa105dfa9e986d68051f50627b950c43080fbf54ac66d",
+        "outcome": "solid",
+        "rationale": "Efficient arrayed delivery, replicated closure phenotypes, and single-cell confirmation of target depletion support the screening platform and roles for ZIC2, SOX11, and ZNF521 in this organoid model. Evidence for a coordinated opposing regulatory program is less secure: differential expression uses nominal cell-level tests without stated multiple-testing correction or replicate-aware inference, and direct regulation is not established. A single genetic background and absence of rescue or independent guide-pair validation limit specificity and generalization.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-108224",
+        "published_category": "exceptional",
+        "agrees": false
+      },
+      {
+        "case_id": "case-03",
+        "source_sha256": "2543e7b44380ba06175c6e60494f6c6c7391dd2a238e03c2dd4b24ebfc8e82f3",
+        "outcome": "solid",
+        "rationale": "Knockout epistasis, resistance assays, muropeptide profiling, functional tagged-protein tracking, and purified-enzyme assays broadly support distinct LtgA/LtgB roles and regulated wall breakdown. Reduced mobility, however, is an indirect proxy for substrate binding and does not directly establish catalytic competition. Unassigned chromatographic material and purification losses limit claims of complete PG removal, while MurA overexpression does not directly quantify PG synthesis. These limitations reduce mechanistic certainty without negating the principal sporulation phenotypes. Linked figures and media were not assessed.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-108250",
+        "published_category": "solid",
+        "agrees": true
+      },
+      {
+        "case_id": "case-04",
+        "source_sha256": "208d4d391fe546e618f69880eb80f24d44deefd9ecfdbf31092cc9a9ef9f827c",
+        "outcome": "convincing",
+        "rationale": "Convergent degrader validation, proteasome and competition controls, TNKS double-knockout reconstitution with catalytic mutants, endogenous AXIN tagging, pathway readouts, and CRC spheroid/organoid assays support a catalysis-independent TNKS function and superior cellular suppression by degradation. GSPT off-target controls strengthen attribution. FRAP measures molecular exchange rather than beta-catenin destruction, so puncta rigidification as the causal mechanism is less directly established. One organoid line and absent in vivo efficacy limit therapeutic generalization; proteomics has only two biological replicates. Linked figures and media were not assessed.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-109052",
+        "published_category": "convincing",
+        "agrees": true
+      },
+      {
+        "case_id": "case-05",
+        "source_sha256": "e36417447e25fda796de07350586d852b0eac0ad42c818a274100ad39c4a7b8a",
+        "outcome": "incomplete",
+        "rationale": "The 115-species resource and curated-repertoire checks support sequence/structure comparisons; phylogenetic models and equal-OR sampling address some sampling bias. However, docking calibration and community validation reuse available response datasets without a reported independent holdout. The central Orco ligand-entry barrier interpretation relies on short, single-ligand simulations and one EL2-swap assay, without reported controls for receptor surface expression or assembly. Descriptive patterns are therefore supported more strongly than the proposed barrier mechanism and links to biological tuning. Linked figures, video, and source datasets were unavailable for assessment.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-110877",
+        "published_category": "solid",
+        "agrees": false
+      },
+      {
+        "case_id": "case-06",
+        "source_sha256": "214598e3af75b217c1850810bea147dcce0d079a686c849ffac4c703ed2eb040",
+        "outcome": "convincing",
+        "rationale": "Concordant depletion/rescue, pulse-chase, fractionation, antibody inhibition, and purified-component reconstitution support MPIase dependence of bacterial TAT transport. Twin-arginine mutants, component omissions, and protonophore inhibition provide relevant specificity and energy controls across two substrates. These established biochemical approaches support the main claim. Co-purification and membrane localization provide weaker support for direct binding and the proposed sequential signal-receptor mechanism; these remain provisional. Replicate reporting and detergent controls for protease protection are not evident in the supplied text. Linked images and supplementary data were not assessed.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-112170",
+        "published_category": "solid",
+        "agrees": false
+      },
+      {
+        "case_id": "case-07",
+        "source_sha256": "a6bf80853bf6a9b42efc1310407ea562739d5d67e0b8462a4972ccc1455502c1",
+        "outcome": "convincing",
+        "rationale": "Explicit fitness definitions, resource-competition simulations parameterized from 9,195 yeast growth curves, and LTEE reanalysis support the claim that encoding, time scale, and reference choice alter fitness estimates and rankings. Published bulk-versus-pairwise benchmarks provide partial empirical corroboration, with the nonsupporting yeast benchmark disclosed. General experimental recommendations remain conditional on the simplified growth model; inferred yield variation was not distinguishable from wild-type measurement variability. These are appropriate established methods supporting the central framework, although linked figures and appendices were unavailable for assessment.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-102635",
+        "published_category": "convincing",
+        "agrees": true
+      },
+      {
+        "case_id": "case-08",
+        "source_sha256": "429781decb697e3d70e14e7a05ff6725707f8b2e0f8478b167367d10567d5a53",
+        "outcome": "incomplete",
+        "rationale": "Photometry, core-temperature logging, thermography, and light-only-controlled stimulation support associations with warming and sufficiency to raise temperature during low-temperature rest. However, the reported histological example showed only 24–51% of GCaMP-positive cells were OT-immunoreactive; lactation-like population bursts cannot establish cellular specificity. Behavioral stimulation effects were nonsignificant in the principal comparison, and state dependence relied on post hoc splitting without a reported between-state interaction. These limitations leave oxytocin-neuron-specific coordination of thermogenesis and arousal only partly established. Linked images and supplementary results were unavailable.",
+        "complete_primary_text_read": true,
+        "original_id": "elife-108212",
+        "published_category": "solid",
+        "agrees": false
+      }
+    ],
+    "sealed_outputs": [
+      {
+        "file": "judgments-a.json",
+        "sha256": "966133aec99da4575dc3be8e974f760bf83fd389d9b11509d2ccf77de7c6e9b4"
+      },
+      {
+        "file": "judgments-b.json",
+        "sha256": "2fc6b9779d9c327219ec41f260358931fc96d1556506c4224c7be5c36822912b"
+      },
+      {
+        "file": "judgments-c.json",
+        "sha256": "0924fb9cfddec62e4b3e14604939d1df3fb048e009d587d797f2db3349a1d113"
+      },
+      {
+        "file": "judgments-d.json",
+        "sha256": "7b267d4136df6f82dd58d08ec178229cbe1ca95355b65a8b95329c8649e0a2aa"
+      }
+    ],
+    "agreement_wilson_95_interval": [
+      0.13684428582359742,
+      0.6942576053973727
+    ],
+    "reliable_superiority_over_majority_established": false,
+    "study_limitations": [
+      "Eight life-science papers; not a domain-transfer or doctoral-paper test.",
+      "Source-only text; linked figures and attachments were not visually assessed.",
+      "Four current-session subagents used the same model family; this is not a three-family panel.",
+      "Exact reported API model and per-project app-session fees were unavailable.",
+      "Published categories are a reference assessment, not scientific truth or an acceptance label.",
+      "No model or routing promotion and no scientific gate approval."
+    ]
+  },
+  "owner_direction_steering": {
+    "recorded_on": "2026-11-08",
+    "first_three_candidates_rejected": true,
+    "requested_scope": [
+      "AI + mechanical engineering",
+      "AI + robotics",
+      "AI + manufacturing",
+      "AI + mechatronics",
+      "AI + autonomous systems"
+    ],
+    "formal_G1_approval_given": false,
+    "old_drafts_preserved": true,
+    "batch2_preparation_underway": false,
+    "batch2_proposal_saved": true,
+    "batch2_proposal_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-20261108.md",
+    "batch2_proposal_commit": "a306db92166344d34666509b203973acc3d331d1",
+    "batch2_source_leads_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-sources-20261108.json",
+    "batch2_source_leads_commit": "59f1f13a97be1da1054025cb0e63557fce1f5098",
+    "batch2_candidates": [
+      "contact-state-aware robotic precision assembly",
+      "quadrotor actuator/disturbance identification and control",
+      "physics-constrained thermal-memory learning in additive manufacturing",
+      "learning-based manufacturing rescheduling",
+      "load-constrained multi-robot coordination",
+      "FEM-corrected AI structural design"
+    ],
+    "proposal_is_not_independent_scientific_validation": true
+  },
+  "next_native_G1_roster_validation": {
+    "executed": false,
+    "kind": "g1-transport-validation",
+    "validation_roster": "astra-argon",
+    "planner": "codekey-codex-pro / gpt-6-astra / high / read-only",
+    "writer": "codekey-codex-pro / gpt-6-astra / high",
+    "critic": "codekey-gemini / gemini-4-argon / high / fresh/source-only",
+    "max_output_tokens": 12000,
+    "ordinary_calls": 3,
+    "maximum_calls": 5,
+    "ordinary_conservative_upper_cny": 34.8492172,
+    "maximum_conservative_upper_cny": 53.5104264,
+    "default_production_routes_changed": false,
+    "new_spending_authority": false,
+    "topic_approval_granted": false
+  },
+  "batch2_public_discovery": {
+    "issue_url": "https://github.com/hengyizang/lunwen/issues/151",
+    "workflow_run_url": "https://github.com/hengyizang/lunwen/actions/runs/42470663724",
+    "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+    "public_queries": 12,
+    "successful_source_operations": 12,
+    "arxiv_operations": 6,
+    "crossref_operations": 6,
+    "candidate_metadata_records": 36,
+    "generation_calls": 0,
+    "model_fee_cny": 0,
+    "raw_and_normalized_receipt_hashes_verified": true,
+    "last_query_scope": "mobile-robot navigation; adjacent lead, not a direct FEM search",
+    "full_text_reading_verified": false,
+    "novelty_verified": false,
+    "formal_G1_approval": false
+  },
+  "current_G1_context_recheck": {
+    "actual_input": "unchanged #151 project snapshot and the explicitly prepared context plan",
+    "issue": "A pre-write explicit plan omitted four newly created scientific artifact bodies from the critic input, while hashes and filenames alone were visible. The hypothesis register was already mandatory.",
+    "fix": "Existing G1 scientific artifacts are dynamically supplied in full at their current SHA on every context build, including after writing; an earlier partial selection cannot hide new content.",
+    "current_artifacts": [
+      "program/topic-shortlist.json",
+      "program/originality-audit.json",
+      "program/novelty-claim-matrix.json",
+      "program/hypothesis-register.json",
+      "program/research-notebook.json"
+    ],
+    "independent_native_source_replay_passed": true,
+    "source_hash_append_hidden_counterevidence_and_capacity_cases_passed": true,
+    "missing_artifacts_create_new_forms_or_block_exploration": false,
+    "unchanged_limits": {
+      "ordinary_snapshot_file_bytes": 100000,
+      "explicit_source_file_bytes": 4000000,
+      "explicit_packet_bytes": 600000,
+      "G1_validation_request_bytes": 2000000
+    },
+    "model_calls": 0,
+    "scientific_effectiveness_verified": false
+  },
+  "auxiliary_checkpoint_recovery_recheck": {
+    "diagnostic": "auxiliary_checkpoint_preserved_no_automatic_retry",
+    "ordinary_recovery_eligibility_comparisons": 20000,
+    "ordinary_recovery_decisions_changed": 0,
+    "actual_auxiliary_run_replays": [
+      42457860489,
+      42462368175
+    ],
+    "automatic_resume_or_model_calls": 0,
+    "budget_and_project_state_changed": false
+  },
+  "merged_PR145_verification": {
+    "tests_run": 2489,
+    "skipped": 14,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds_including_discovery": 132.744,
+    "production_snapshot_sha256": "7eec79d1e4c18ea26a59fb41abc3b3403583833329836055c6d774f9532b0128",
+    "independent_adversarial_recheck_passed": true,
+    "verifies_scientific_completion": false,
+    "source_commit": "aab0714afed858876b61b6ec593d8d6315a11442",
+    "tree_sha": "873220e18014f10d59952ff23bfc5dbf453e2137",
+    "PR_workflows": 9,
+    "check_success": 23,
+    "check_skipped": 3
   }
 }

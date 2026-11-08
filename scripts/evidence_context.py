@@ -58,8 +58,13 @@ def build(project: Path, stage: str, *, redact=lambda text: text, max_bytes=600_
                  "program/extension-thesis.json", "program/hypothesis-register.json",
                  "reports/research-increments/context-summary.json") if (project / name).is_file()]
     mandatory.extend(p.relative_to(project).as_posix() for p in sorted(project.glob("papers/P[0-9][0-9]/paper-contract.json")))
-    selections = [{"path": name, "reason": "mandatory research constraints", "stance": "constraint"}
-                  for name in mandatory] + items
+    required = read(Path(__file__).resolve().parents[1] / "config/stages.json")["stages"].get(stage, {}).get("required_artifacts", [])
+    mandatory.extend(name for name in required if (project / name).is_file())
+    # Recompute whole current artifacts after writing; an earlier partial
+    # selection must not hide a new claim or an appended scientific limitation.
+    selections = [{"path": name, "reason": "current stage scientific artifact" if name in required else "mandatory research constraints",
+                   "stance": "neutral" if name in required else "constraint"}
+                  for name in dict.fromkeys(mandatory)] + items
     blocks, bindings, covered, total = [], [], set(), 0
     snippets: dict[tuple, dict] = {}
     for item in selections:

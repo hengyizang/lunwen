@@ -105,7 +105,7 @@ class LosslessContextTests(unittest.TestCase):
             self.assertIn('"stance":"supports"', packet["context"])
             self.assertIn('"stance":"contradicts"', packet["context"])
             self.assertEqual(packet["duplicate_snippets_avoided"], 1)
-            self.assertEqual(len(packet["bindings"]), 2)
+            self.assertEqual(len([row for row in packet["bindings"] if row["path"] == "evidence/source.md"]), 2)
             items[1]["end_line"] = 1
             write(project / "evidence/source.md", text + "More relevant negative evidence.\n")
             with self.assertRaises(ValueError):

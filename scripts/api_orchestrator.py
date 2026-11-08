@@ -1312,7 +1312,10 @@ def validate_roles(
     planner_family = ai_providers.provider_family(planner_provider)
     writer_family = ai_providers.provider_family(writer_provider)
     critic_family = ai_providers.provider_family(critic_provider)
-    if planner_family != "anthropic":
+    g1_sample = (model_routing.g1_transport_validation_roster() == "astra-argon"
+                 and (planner_provider, writer_provider, critic_provider) ==
+                 ("codekey-codex-pro", "codekey-codex-pro", "codekey-gemini"))
+    if planner_family != "anthropic" and not g1_sample:
         raise ValueError("The semantic planner must be a Claude/Anthropic provider")
     if writer_family != "openai":
         raise ValueError(
@@ -1626,13 +1629,14 @@ def run_cycle(
         prompt=planning_prompt(project, stage, context, evidence),
         max_output_tokens=control_max_output_tokens,
     )
-    save_run(project, run_id, "claude-plan-response.txt", planner.text)
+    plan_name = "claude-plan" if ai_providers.provider_family(planner.provider) == "anthropic" else "semantic-plan"
+    save_run(project, run_id, plan_name + "-response.txt", planner.text)
     plan = extract_plan_json(planner.text)
     if plan["stage"] != stage:
         raise ValueError(
             f"Semantic plan stage mismatch: expected {stage!r}, got {plan['stage']!r}"
         )
-    save_run(project, run_id, "claude-plan.json", plan)
+    save_run(project, run_id, plan_name + ".json", plan)
 
     revision_baseline = prepare_revision_baseline(project, stage)
     from scripts.research_increments import freeze_plans, record_editing_attempt
@@ -1664,7 +1668,7 @@ def run_cycle(
     bundle = extract_json(writer.text)
     if screening:
         literature_model_screening.accept_cycle_result(project_root(project), screening, writer_request, writer, run_id, bundle)
-    reject_long_source_copy(plan, bundle, "Claude semantic plan")
+    reject_long_source_copy(plan, bundle, "Read-only semantic plan")
     initial_written = apply_bundle(project, bundle, stage)
     record_writer_provenance(
         project, initial_written, writer, "persistent-writer", run_id
@@ -1706,7 +1710,7 @@ def run_cycle(
             max_output_tokens=max_output_tokens)
         save_run(project, run_id, "remediation-response.txt", revised.text)
         revised_bundle = extract_json(revised.text)
-        reject_long_source_copy({"plan": plan, "audit": audit}, revised_bundle, "Claude plan or audit")
+        reject_long_source_copy({"plan": plan, "audit": audit}, revised_bundle, "Read-only plan or audit")
         notes = validate_remediation_notes({**revised_bundle, "stage": note_stage}, audit)
         revised_written = apply_bundle(project, revised_bundle, stage)
         record_writer_provenance(project, revised_written, revised, "persistent-remediator", run_id)

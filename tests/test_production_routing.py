@@ -123,6 +123,53 @@ class ProductionPolicyTests(unittest.TestCase):
             with self.subTest(args=args), self.assertRaises(ValueError):
                 model_routing.select(*args)
 
+    def test_explicit_g1_roster_keeps_critical_identities_scoped_and_source_bound(self):
+        providers = ("codekey-codex-pro", "codekey-codex-pro", "codekey-gemini")
+        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
+            api_orchestrator.validate_roles(*providers)
+        original = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
+            project = Path(directory)
+            state = project / "state/run.json"; state.parent.mkdir()
+            state.write_text(json.dumps({"stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work", "approved_gates": ["G0"]}))
+            source = project / "manifest.json"; source.write_text("frozen sample scope")
+            def unchanged():
+                if source.read_text() != "frozen sample scope":
+                    raise ValueError("source changed before provider")
+            with self.assertRaisesRegex(RuntimeError, "sample failure"):
+                with model_routing.g1_transport_validation_route(project, "b" * 64, check_inputs=unchanged,
+                        max_output_tokens=12000, validation_roster="astra-argon"):
+                    api_orchestrator.validate_roles(*providers)
+                    selected = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
+                    for role, route in selected.items():
+                        critic = role.startswith("independent-critic")
+                        self.assertEqual((route["provider"], route["model"], route["family"]),
+                            ("codekey-gemini", "gemini-4-argon", "google") if critic else ("codekey-codex-pro", "gpt-6-astra", "openai"))
+                        self.assertEqual(route["reasoning_effort"], "high")
+                        self.assertEqual(route["task_kind"], "scientific-judgment")
+                        self.assertEqual(route["validation_scope"]["production_route"], original[role])
+                        self.assertEqual(route["validation_scope"]["validation_roster"], "astra-argon")
+                        self.assertEqual(route["persistent_output"], role in model_routing.WRITER_ROLES)
+                        self.assertEqual(route["fresh_required"], critic)
+                    with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
+                        api_orchestrator.validate_roles("openai", "codekey-codex-pro", "codekey-gemini")
+                    with ThreadPoolExecutor(max_workers=1) as pool:
+                        self.assertIsNone(pool.submit(model_routing.g1_transport_validation_roster).result())
+                        self.assertEqual(pool.submit(model_routing.cycle_routes, "topic-intelligence", "scientific-judgment").result(), original)
+                        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
+                            pool.submit(api_orchestrator.validate_roles, *providers).result()
+                    model_routing.resolve_call("topic-intelligence", "semantic-planner", "openai", project_root=project)
+                    with self.assertRaisesRegex(ValueError, "additional paid helpers"):
+                        model_routing.resolve_call("topic-intelligence", "semantic-planner", "openai", project_root=project)
+                    source.write_text("changed source")
+                    with self.assertRaisesRegex(ValueError, "source changed"):
+                        model_routing.resolve_call("topic-intelligence", "independent-critic-initial", "google", project_root=project)
+                    raise RuntimeError("sample failure")
+        self.assertIsNone(model_routing.g1_transport_validation_roster())
+        self.assertEqual(model_routing.cycle_routes("topic-intelligence", "scientific-judgment"), original)
+        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
+            api_orchestrator.validate_roles(*providers)
+
     def test_explicit_model_or_effort_cannot_mislabel_the_route(self):
         with self.assertRaisesRegex(ValueError, "model conflicts"):
             model_routing.resolve_call("experiment-design", "persistent-writer", "openai", model="gpt-5.6-luna")

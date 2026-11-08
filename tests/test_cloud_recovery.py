@@ -68,9 +68,45 @@ class RecoveryTests(unittest.TestCase):
     def test_report_must_match_exact_attempt_commit_and_checkpoint(self):
         self.assertTrue(recovery.safe_report(report(), source_run(), MAIN))
         for change in ({"run_id": "999"}, {"run_attempt": "2"}, {"source_sha": HEAD},
-                       {"checkpoint_persisted": False}, {"action": "acceptance"}, {"project": "other"}):
+                       {"checkpoint_persisted": False}, {"action": "acceptance"}, {"action": "auxiliary"}, {"project": "other"}):
             with self.subTest(change=change):
                 self.assertFalse(recovery.safe_report(report(**change), source_run(), MAIN))
+
+    def test_auxiliary_checkpoint_diagnosis_does_not_authorize_recovery(self):
+        missing = "missing_or_stale_safe_checkpoint"
+        cases = [({}, recovery.AUXILIARY_CHECKPOINT_PRESERVED),
+                 ({"phase":"execution", "execution_started":True}, recovery.AUXILIARY_CHECKPOINT_PRESERVED),
+                 ({"checkpoint_persisted":False}, missing), ({"run_id":"other"}, missing),
+                 ({"run_attempt":"2"}, missing), ({"source_sha":HEAD}, missing),
+                 ({"project":"other"}, missing), ({"schema_version":"2.0"}, missing)]
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.project(directory)
+            original = (project / cloud_continuation.STATUS).read_bytes()
+            budget = (project / "state/model-spend-control.json").read_bytes()
+            for changes, reason in cases:
+                state = {"events": []}
+                failed = report(**{"action":"auxiliary", **changes})
+                with self.subTest(changes=changes), patch.object(recovery, "failure_report", return_value=failed), \
+                        patch.object(recovery, "authority", return_value=None), patch.object(recovery, "alert") as alert, \
+                        patch.object(recovery, "resume") as resume, patch.object(recovery, "propose") as propose:
+                    self.assertFalse(recovery.handle_failure(source_run(), project, state, policy(), MAIN))
+                self.assertEqual(alert.call_args.args[2], reason)
+                self.assertEqual(alert.call_args.kwargs, {"action":"auxiliary"})
+                resume.assert_not_called(); propose.assert_not_called()
+                self.assertEqual(state["events"], [])
+                self.assertEqual((project / cloud_continuation.STATUS).read_bytes(), original)
+                self.assertEqual((project / "state/model-spend-control.json").read_bytes(), budget)
+
+    def test_auxiliary_alert_does_not_direct_a_budget_or_checkpoint_fault_to_generic_resume(self):
+        for reason in (recovery.AUXILIARY_CHECKPOINT_PRESERVED, "budget_boundary", "missing_or_stale_safe_checkpoint"):
+            state = {"events": []}
+            with self.subTest(reason=reason), patch.object(recovery, "api", side_effect=[[], {"number":100}]) as api:
+                recovery.alert(state, "incident", reason, 123456, action="auxiliary")
+            body = api.call_args.kwargs["body"]["body"]
+            self.assertIn("原辅助任务入口", body)
+            self.assertNotIn("通过原有 owner resume 控制恢复", body)
+            self.assertNotIn("失败证据与检查点保留", body)
+            self.assertEqual(state["events"], [])
 
     def test_only_nonbillable_setup_transients_resume(self):
         self.assertEqual(recovery.classify(report()), "environment_retry")

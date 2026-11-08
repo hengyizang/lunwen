@@ -136,6 +136,42 @@ class ProductionRuntimeTests(unittest.TestCase):
                     self.assertEqual(post.call_args.kwargs["reasoning_effort"], effort)
         self.assertEqual(post.call_count, 7)
 
+    def test_g1_sample_roster_sends_exact_astra_and_native_argon_without_extra_roles(self):
+        from scripts import model_routing
+        state = {"active_paper": "P01", "stage": "topic-intelligence", "gate": "G1",
+                 "status": "awaiting_work", "approved_gates": ["G0"]}
+        (self.project / "state/run.json").write_text(json.dumps(state))
+        def response(url, headers, payload, timeout):
+            if url.endswith("/v1/responses"):
+                self.assertEqual((payload["model"], payload["reasoning"], payload["max_output_tokens"]),
+                                 ("gpt-6-astra", {"effort": "high"}, 12000))
+                return {"id": "fixture-astra", "model": "gpt-6-astra", "status": "completed", "output_text": "fixture answer",
+                        "usage": {"input_tokens": 100, "output_tokens": 20}}
+            self.assertEqual(url, "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent")
+            self.assertEqual(payload["generationConfig"], {"maxOutputTokens": 12000, "thinkingConfig": {"thinkingLevel": "HIGH"}})
+            return {"responseId": "fixture-argon", "modelVersion": "gemini-4-argon",
+                    "candidates": [{"finishReason": "STOP", "content": {"parts": [{"text": "fixture audit"}]}}],
+                    "usageMetadata": {"promptTokenCount": 100, "candidatesTokenCount": 20, "totalTokenCount": 120}}
+        with patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}), \
+             patch.object(ai_providers, "_production_request", side_effect=response) as post, \
+             patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}), \
+             patch.object(relay_billing, "settle", return_value=self.debit()), \
+             model_routing.g1_transport_validation_route(self.project, "c" * 64, max_output_tokens=12000, validation_roster="astra-argon"):
+            for role in model_routing.CYCLE_ROLES:
+                result = self.call(run_id="fixture-roster", stage="topic-intelligence", role=role,
+                    max_output_tokens=12000, use_cache=False,
+                    task_profile={"task_class": "g1-transport-validation", "science_risk": "critical", "priority": "quality"})
+                self.assertEqual(result.reported_model, "gemini-4-argon" if role.startswith("independent-critic") else "gpt-6-astra")
+            with self.assertRaisesRegex(ValueError, "additional paid helpers"):
+                self.call(run_id="fixture-roster-extra", stage="auxiliary", role="reader-qa")
+        self.assertEqual(post.call_count, 5)
+        rows = model_runtime.ledger_entries(self.project)
+        self.assertEqual([row["role"] for row in rows], list(model_routing.CYCLE_ROLES))
+        self.assertTrue(all(row["task_profile"]["science_risk"] == "critical" for row in rows))
+        self.assertTrue(all(row["requested_model"] == row["model"] for row in rows))
+        self.assertEqual(model_spend.read(self.project)["reservations"], {})
+        self.assertEqual(json.loads((self.project / "state/run.json").read_text()), state)
+
     def test_post_only_follows_persisted_owner_authority_and_synced_reservation(self):
         events = []
         def transport(provider, prompt, **kwargs):

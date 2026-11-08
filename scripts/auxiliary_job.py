@@ -26,7 +26,7 @@ from scripts.publication_figures import PROJECTS_ROOT
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
          "format-conversion", "screening-assist", "public-review-calibration", "citation-crosscheck", "g1-transport-validation", *engineering_contract.TASKS}
-FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile", "calibration_seat", "source_task_file"}
+FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile", "calibration_seat", "source_task_file", "validation_roster"}
 REQUIRED = {"schema_version", "kind", "prompt_file"}
 PRIVATE_PARTS = {"state", "api_runs", "private", "raw", "secrets", "credentials", "keys", "auth", "tokens"}
 PRIVATE_STEMS = {"api", "hosts", "credentials", "secrets", "keys", "tokens", "auth"}
@@ -114,6 +114,9 @@ def load(project: Path, manifest_relative: str) -> dict:
             raise ValueError("public-review calibration requires one fixed calibration_seat")
     elif "calibration_seat" in manifest:
         raise ValueError("calibration_seat is allowed only for public-review-calibration")
+    roster = manifest.get("validation_roster")
+    if "validation_roster" in manifest and (kind != "g1-transport-validation" or roster != "astra-argon"):
+        raise ValueError("validation_roster is allowed only as astra-argon for the explicit G1 sample")
     prompt_path = _path(project, manifest["prompt_file"], "prompt_file", limit=MAX_PROMPT_BYTES)
     try:
         prompt_bytes = _read(prompt_path, MAX_PROMPT_BYTES, "prompt_file")
@@ -184,7 +187,8 @@ def load(project: Path, manifest_relative: str) -> dict:
         raise ValueError("attachments are allowed only for multimodal-inspection")
     return {"kind":kind,"prompt":prompt,"max_output_tokens":tokens,"source_contract":contract,"task_profile":task_profile,
             "attachments":attachments,"attachment_receipts":attachment_receipts,"inputs":inputs,
-            "manifest_sha256":_sha(manifest_bytes), "calibration_seat":seat, "source_task_file":source_task_file}
+            "manifest_sha256":_sha(manifest_bytes), "calibration_seat":seat, "source_task_file":source_task_file,
+            "validation_roster":roster}
 
 
 def _check_inputs(project: Path, inputs: list[dict]) -> None:
@@ -195,7 +199,7 @@ def _check_inputs(project: Path, inputs: list[dict]) -> None:
 
 
 def run_g1_transport_validation(project, destination, request, *, execute=False):
-    """Run the existing G1 cycle once with the same-model writer transport."""
+    """Run one existing G1 cycle with its explicitly scoped temporary roster."""
     from scripts import api_orchestrator, model_runtime, billing_quotes
     from scripts.public_review_anchors import calibration_costs
     from scripts.research_artifacts import read, write
@@ -204,7 +208,8 @@ def run_g1_transport_validation(project, destination, request, *, execute=False)
     production = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
     check_inputs = lambda: _check_inputs(project, request["inputs"])
     control_tokens = request["max_output_tokens"] or 4000
-    with model_routing.g1_transport_validation_route(project, request["manifest_sha256"], check_inputs=check_inputs, max_output_tokens=control_tokens):
+    with model_routing.g1_transport_validation_route(project, request["manifest_sha256"], check_inputs=check_inputs,
+            max_output_tokens=control_tokens, validation_roster=request["validation_roster"]):
         routes = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
         cost_plan = []
         for role, route in routes.items():

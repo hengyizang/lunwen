@@ -145,6 +145,19 @@ class AuxiliaryJobTests(unittest.TestCase):
         report = json.loads((self.project / result["output"]).read_text())
         self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 49.4364244)
         self.assertTrue(all(row["max_output_tokens"] == 12000 for row in report["model_plan"]))
+        manifest = self.manifest(kind="g1-transport-validation", task_profile=profile, max_output_tokens=12000, validation_roster="astra-argon")
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+             patch.object(auxiliary_job.model_routing, "load_policy", return_value=policy):
+            result = auxiliary_job.run(self.project, manifest, "evidence/auxiliary/g1-astra-argon.json")
+        report = json.loads((self.project / result["output"]).read_text())
+        self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 53.5104264)
+        ordinary = [row for row in report["model_plan"] if row["role"] in ("semantic-planner", "persistent-writer", "independent-critic-initial")]
+        self.assertAlmostEqual(sum(row["reserved_upper_bound_cny"] for row in ordinary), 34.8492172)
+        self.assertEqual([row["planned_route"]["model"] for row in report["model_plan"]],
+                         ["gpt-6-astra", "gpt-6-astra", "gemini-4-argon", "gpt-6-astra", "gemini-4-argon"])
+        for fields in ({"validation_roster": "astra-argon"}, {"kind": "g1-transport-validation", "task_profile": profile, "validation_roster": "other"}):
+            with self.subTest(fields=fields), self.assertRaisesRegex(ValueError, "validation_roster"):
+                auxiliary_job.load(self.project, self.manifest(**fields))
 
     def test_manifest_rejects_unknown_fields_roles_duplicate_json_and_legacy(self):
         for field in ("provider","model","reasoning_effort","allow_paid","budget_cny"):

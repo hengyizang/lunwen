@@ -67,9 +67,15 @@ def g1_transport_validation_active() -> bool:
     return _G1_TRANSPORT_ROUTE.get() is not None
 
 
+def g1_transport_validation_roster() -> str | None:
+    scope = _G1_TRANSPORT_ROUTE.get()
+    return scope.get("validation_roster") if scope else None
+
+
 @contextmanager
-def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None, max_output_tokens=4000):
-    """A single native G1 cycle may use the same Astra identity on CodeKey."""
+def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None, max_output_tokens=4000,
+                                  validation_roster=None):
+    """One explicitly scoped native G1 sample; never promote a production route."""
     from scripts.research_artifacts import path_in, read
     if (not production_enabled() or
             (os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1")):
@@ -79,12 +85,15 @@ def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_
         raise ValueError("G1 transport validation requires one exact independent manifest scope")
     if type(max_output_tokens) is not int or max_output_tokens not in VALIDATION_OUTPUT_CAPS:
         raise ValueError("validation output tokens must be explicitly 4000 or 12000")
+    if validation_roster not in (None, "astra-argon"):
+        raise ValueError("G1 validation roster must be the explicit astra-argon sample or absent")
     state = read(path_in(project, "state/run.json"))
     if (state.get("stage") != "topic-intelligence" or state.get("gate") != "G1"
             or state.get("status") != "awaiting_work" or state.get("approved_gates") != ["G0"]):
         raise ValueError("G1 transport validation requires actual awaiting-work G1 with only G0 approved")
     token = _G1_TRANSPORT_ROUTE.set({"manifest_sha256": manifest_sha256, "project_root": project.resolve(),
-                                   "check_inputs": check_inputs, "attempted_roles": set(), "max_output_tokens": max_output_tokens})
+                                   "check_inputs": check_inputs, "attempted_roles": set(), "max_output_tokens": max_output_tokens,
+                                   "validation_roster": validation_roster})
     try:
         yield
     finally:
@@ -302,11 +311,18 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
             g1["check_inputs"]()
         scope = {"purpose": "g1-transport-validation", "manifest_sha256": g1["manifest_sha256"],
                  "project": g1["project_root"].name, "production_route": dict(route), "control_max_output_tokens": g1["max_output_tokens"]}
-        if role in WRITER_ROLES:
+        if g1["validation_roster"] == "astra-argon":
+            scope["validation_roster"] = g1["validation_roster"]
+            selected = "astra" if role in WRITER_ROLES or role == "semantic-planner" else "argon"
+            route.update({name: policy["models"][selected][name] for name in ("provider", "model", "family", "reasoning_effort")})
+            route["model_key"] = selected
+            if selected == "astra":
+                route["provider"] = "codekey-codex-pro"
+        elif role in WRITER_ROLES:
             if (route["provider"], route["model"], route["reasoning_effort"]) != ("cheapai-gpt-pro", "gpt-6-astra", "high"):
                 raise ValueError("G1 validation may replace only the original same-model Astra transport")
             route["provider"] = "codekey-codex-pro"
-        else:
+        if role not in WRITER_ROLES:
             route["max_output_tokens"] = g1["max_output_tokens"]
         digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         route.update(policy_sha256=digest, route_id="g1-transport-validation:" + digest,
