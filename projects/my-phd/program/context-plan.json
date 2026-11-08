@@ -117,8 +117,8 @@
         {
           "path": "evidence/literature/primary/batch2-source-excerpts-20261108.json",
           "expected_sha256": "f53688a6776b1ce7e9d1b5103a51cfcc6ffbd18e1efa439dcd77666abe3662a4",
-          "stance": "neutral",
-          "reason": "Partial literal original-paper passages and mechanical provenance only; no prior model opinion, ranking, preferred conclusion or full-text-coverage assertion."
+          "stance": "mixed",
+          "reason": "Partial original-paper methods and limitations retained together as potential supporting and competing evidence; mechanical provenance only, no prior model opinion, preferred conclusion or full-text-coverage assertion."
         }
       ],
       "dependencies": [
