@@ -39,6 +39,19 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
+    "e104810891d64d7b9f2964ce1c9ca0d2": {
+      "at": "2026-11-08T07:14:10+00:00",
+      "max_cost_cny": 2.0415472,
+      "paper_id": null,
+      "run_id": "public-review-42457860489-domain-1",
+      "transport": {
+        "credential_sha256": "4b5af83616d7fa44b5ada1a0806dc9426715e86c116aa1d1c61d0cba5dbd3e60",
+        "endpoint": "https://codekey.ai/v1/messages",
+        "lease_id": "4a37b90bf20b4b98bf726d2b3328b2b6",
+        "model": "claude-opus-5-5",
+        "provider": "codekey-kiro-enterprise"
+      }
+    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
