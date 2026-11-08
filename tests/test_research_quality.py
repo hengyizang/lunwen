@@ -305,6 +305,12 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertTrue(
                 any("changed" in error for error in validate_data_quality_report(report, "d1", project))
             )
+            for alias, target in (("data/raw/alias.csv", "data/raw/dataset.csv"), ("data/raw-parent", "data/raw")):
+                directory = (project / target).is_dir()
+                (project / alias).symlink_to(project / target, target_is_directory=directory)
+                with self.assertRaisesRegex(ResearchQualityError, "does not accept symlinks"):
+                    create_data_quality_report(project, "d1", alias + "/dataset.csv" if directory else alias,
+                                               actor="Researcher")
 
     def test_batch_quality_reads_one_manifest_and_later_checks_reopen_current_source(self):
         from scripts import research_quality as quality
@@ -388,13 +394,20 @@ class ResearchQualityTests(unittest.TestCase):
             }
             with (project / "data" / "datasets.jsonl").open("a", encoding="utf-8") as handle:
                 handle.write(json.dumps(manifest) + "\n")
-            report = create_data_quality_report(
-                project, "mixed", "data/raw/mixed", actor="Researcher", derived=True
-            )
+            from scripts import research_quality as quality
+            with patch.object(quality, "sha256_file", wraps=quality.sha256_file) as digest:
+                report = create_data_quality_report(
+                    project, "mixed", "data/raw/mixed", actor="Researcher", derived=True
+                )
+            self.assertCountEqual([call.args[0] for call in digest.call_args_list],
+                                  [audio, mixed / "labels.csv"])
 
             self.assertEqual(report["status"], "pass")
             kinds = {item["kind"] for item in report["non_tabular_profile"]["profiles"]}
             self.assertEqual(kinds, {"tabular_files", "wav_audio"})
+            (mixed / "labels.csv").write_text("file,label\nsignal.wav,changed\n", encoding="utf-8")
+            self.assertTrue(any("hash changed" in error
+                                for error in validate_data_quality_report(report, "mixed", project)))
 
     def test_preregistration_detects_post_freeze_change(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

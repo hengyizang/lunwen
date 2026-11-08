@@ -243,10 +243,13 @@ Required scientific evidence:
   inventory; manuscript locations and coverage are derived from the current
   TeX/include or Word source, never model-invented hashes. A source may use
   its DOI or, when no DOI exists, the exact registered original HTTPS URL.
-  The current protected critic/domain-panel response records support; missing,
+  The current protected ordinary critic response records support; missing,
   contradictory or insufficient judgments cannot clear final submission.
-  The domain panel receives claim tasks by default; explicit `panel_views`
-  selects suitable existing views. Reuse these reviews without an extra paid loop;
+  Preserve the actual task/source bindings across final preparation when those
+  inputs are unchanged. The final panel receives only its canonical source views,
+  without extra task packets or prior critic responses. Two independent citation
+  extractions use the explicitly selected controlled source job; ordinary cycles
+  do not automatically add extraction calls or another paid review loop;
 - current source-bound paper facts and claim/inference limits. Numeric/citation/
   conclusion-strength edits must agree with actual evidence; preserve originals,
   interpretation-changing negative/null findings; archive complete runs separately;

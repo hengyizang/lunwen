@@ -1,5 +1,7 @@
 # Doctoral Research OS v1.4 — Quality Policy
 
+> Historical v1.4 policy, retained for provenance. Current operation follows [workflow](../references/workflow.md), [total-cost policy](TOTAL-COST-POLICY.md) and [publication rules](PUBLICATION-DISCLOSURE.md). Only G1/G2 topic choices need human stage decisions; fixed scores, venue-rank floors, mandatory pre-use licence/research-use checks and AI-statement preservation are superseded. Complete outcomes are archived separately; manuscripts select scientifically relevant evidence. This document adds no current gate.
+
 The OS is deliberately stricter than a generic paper-writing agent. A project cannot advance from G1 through G5 unless the current gate has a machine-validated quality report.
 
 ## Hard floors

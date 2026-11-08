@@ -56,6 +56,79 @@ class AuxiliaryJobTests(unittest.TestCase):
             "task_profile":{"task_class":"unspecified","science_risk":"auxiliary","priority":"quality"}})
         self.assertEqual(result["status"],"internal_candidate_requires_review")
 
+    def test_calibration_seat_cannot_override_other_helpers_and_requires_a_critical_profile(self):
+        with self.assertRaisesRegex(ValueError, "allowed only"):
+            auxiliary_job.load(self.project, self.manifest(calibration_seat="statistics"))
+        with self.assertRaisesRegex(ValueError, "critical scientific"):
+            auxiliary_job.load(self.project, self.manifest(kind="public-review-calibration", calibration_seat="domain"))
+        profile = {"task_class": "public-review-calibration", "science_risk": "critical", "priority": "quality"}
+        with self.assertRaisesRegex(ValueError, "one fixed"):
+            auxiliary_job.load(self.project, self.manifest(kind="public-review-calibration", task_profile=profile, calibration_seat="all"))
+        manifest = self.manifest(kind="public-review-calibration", task_profile=profile, calibration_seat="domain", max_output_tokens=4000)
+        with patch("scripts.public_review_anchors.run_calibration", return_value={"status": "dry_run_no_model_call", "calls_planned": 8,
+                    "calls_attempted": 0, "reserved_upper_bound_cny": 13}) as calibration, patch.object(auxiliary_job.task_router, "run") as ordinary:
+            auxiliary_job.run(self.project, manifest, "evidence/auxiliary/calibration.json")
+        ordinary.assert_not_called()
+        self.assertEqual(calibration.call_args.kwargs["seat"], "domain")
+        self.assertFalse(calibration.call_args.kwargs["execute"])
+
+    def test_citation_crosscheck_binds_only_its_explicit_scientific_source_task(self):
+        profile = {"task_class": "citation-crosscheck", "science_risk": "critical", "priority": "quality"}
+        task = self.project / "program/citation-task.json"
+        task.parent.mkdir(parents=True)
+        task.write_text('{"schema_version":"1.0","id":"synthetic-citation-task"}')
+        with self.assertRaisesRegex(ValueError, "allowed only"):
+            auxiliary_job.load(self.project, self.manifest(source_task_file="program/citation-task.json"))
+        with self.assertRaisesRegex(ValueError, "program/.*json"):
+            auxiliary_job.load(self.project, self.manifest(kind="citation-crosscheck", task_profile=profile,
+                                                         source_task_file="evidence/citation-task.json"))
+        manifest = self.manifest(kind="citation-crosscheck", task_profile=profile, source_task_file="program/citation-task.json")
+        request = auxiliary_job.load(self.project, manifest)
+        self.assertEqual(request["inputs"][-1]["sha256"], hashlib.sha256(task.read_bytes()).hexdigest())
+        with patch("scripts.literature_source_tasks.run_citation_crosscheck", create=True,
+                   return_value={"status": "dry_run_no_model_call", "calls_planned": 2, "calls_attempted": 0}) as bridge:
+            result = auxiliary_job.run(self.project, manifest, "evidence/auxiliary/citations.json")
+        self.assertEqual(result["calls_planned"], 2)
+        self.assertEqual(bridge.call_args.kwargs["request_file"], "program/citation-task.json")
+        self.assertFalse(bridge.call_args.kwargs["execute"])
+        self.assertNotIn("prompt", bridge.call_args.kwargs)
+
+    def test_g1_validation_delegates_one_native_cycle_and_preserves_approvals_and_receipts(self):
+        from scripts import api_orchestrator, model_runtime
+        profile = {"task_class": "g1-transport-validation", "science_risk": "critical", "priority": "quality"}
+        state = self.project / "state/run.json"; state.parent.mkdir()
+        scope = {"stage": "topic-intelligence", "gate": "G1", "status": "awaiting_work", "approved_gates": ["G0"], "paper_count": 6}
+        state.write_text(json.dumps(scope))
+        policy_bytes = auxiliary_job.model_routing.DEFAULT_POLICY.read_bytes()
+        policy = (json.loads(policy_bytes), hashlib.sha256(policy_bytes).hexdigest())
+        manifest = self.manifest(kind="g1-transport-validation", task_profile=profile)
+        def native_cycle(*args, **kwargs):
+            route = auxiliary_job.model_routing.select("topic-intelligence", "persistent-writer", "scientific-judgment")
+            self.assertEqual((route["provider"], route["model"], route["reasoning_effort"]), ("codekey-codex-pro", "gpt-6-astra", "high"))
+            self.assertTrue(kwargs["automatic_data"])
+            with self.assertRaisesRegex(ValueError, "additional paid helpers"):
+                auxiliary_job.model_routing.resolve_call("auxiliary", "evidence-synthesis", "openai", project_root=self.project)
+            row = {"run_id": "synthetic-g1", "role": "persistent-writer", "routing_policy_sha256": route["policy_sha256"],
+                   "cost_cny": .4, "cost_status": "estimated_upper_bound"}
+            (self.project / "state/model-usage.jsonl").write_text(json.dumps(row) + "\n")
+            return {"run_id": "synthetic-g1", "stage": "topic-intelligence", "gate_authority": False}
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1"}), \
+             patch.object(auxiliary_job.model_routing, "load_policy", return_value=policy), \
+             patch.object(api_orchestrator, "project_root", return_value=self.project), \
+             patch.object(api_orchestrator, "run_cycle", side_effect=native_cycle) as native, \
+             patch.object(model_runtime, "budget_status", return_value={"project_remaining": 500}):
+            result = auxiliary_job.run(self.project, manifest, "evidence/auxiliary/g1.json", execute=True)
+            self.assertEqual(auxiliary_job.model_routing.select("topic-intelligence", "persistent-writer")["provider"], "cheapai-gpt-pro")
+        native.assert_called_once()
+        self.assertEqual(native.call_args.args[1], "topic-intelligence")
+        self.assertEqual(json.loads(state.read_text()), scope)
+        report = json.loads((self.project / result["output"]).read_text())
+        self.assertFalse(report["topic_approval_granted"])
+        self.assertEqual(report["calls_attempted"], 1)
+        self.assertEqual(report["maximum_calls"], 5)
+        self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 49.2684244)
+        self.assertFalse(report["accounting"]["provider_fee_fully_verified"])
+
     def test_manifest_rejects_unknown_fields_roles_duplicate_json_and_legacy(self):
         for field in ("provider","model","reasoning_effort","allow_paid","budget_cny"):
             with self.subTest(field=field):

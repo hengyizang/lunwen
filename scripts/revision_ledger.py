@@ -20,7 +20,7 @@ from xml.etree import ElementTree as ET
 
 from scripts.citation_audit import manuscript_digest, tex_source_paths
 from scripts.ref_verify_adapter import canonical_manuscript
-from scripts.research_artifacts import path_in, read, record, sha, write, json_bytes, json_digest
+from scripts.research_artifacts import path_in, read, sha, json_bytes, json_digest, save_report, report_errors
 from scripts.scientific_editing import NUMBER, PROTECTED, SI_UNITS, signatures, WordSource
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
@@ -364,9 +364,7 @@ def audit(project: Path, paper_id: str, *, _documents=None) -> dict:
 def refresh(project: Path, paper_id: str) -> dict:
     result = audit(project, paper_id)
     output = _paper(project, paper_id) / "reviews/revision-ledger-report.json"
-    write(output, result)
-    record(project, [output], "scripts/revision_ledger.py")
-    return result
+    return save_report(project, output, result, "scripts/revision_ledger.py")
 
 
 def validate_saved_report(project: Path, paper_id: str, *, require_when_changed: bool = False, _documents=None) -> list[str]:
@@ -380,11 +378,7 @@ def validate_saved_report(project: Path, paper_id: str, *, require_when_changed:
     try:
         saved = read(path_in(project, output.relative_to(project).as_posix()))
         current = audit(project, paper_id, _documents=_documents)
-        errors = list(current["errors"])
-        if saved.get("schema_version") != "1.0" or saved.get("status") != "pass":
-            errors.append("revision ledger report must pass")
-        if {key: value for key, value in saved.items() if key != "created_at"} != {key: value for key, value in current.items() if key != "created_at"}:
-            errors.append("revision ledger report differs from a clean rerun")
-        return errors
+        status = [] if saved.get("schema_version") == "1.0" and saved.get("status") == "pass" else ["revision ledger report must pass"]
+        return report_errors(current, saved, "revision ledger report differs from a clean rerun", ignore=("created_at",), extra=status)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, zipfile.BadZipFile, ET.ParseError) as exc:
         return [f"cannot validate revision ledger: {exc}"]

@@ -10,7 +10,7 @@ from pathlib import Path
 
 from scripts import output_provenance
 from scripts.ref_verify_adapter import canonical_manuscript
-from scripts.research_artifacts import path_in, read, sha, write
+from scripts.research_artifacts import path_in, read, sha, write, report_errors
 from scripts.revision_trace import normalized, verify_location
 
 PREFIX = "reports/publication-disclosure"
@@ -185,10 +185,8 @@ def validate_saved_report(project: Path, pid: str) -> list[str]:
         if saved.get("execution", {}).get("mode") != "cloud" or not saved["execution"].get("receipt_id"):
             raise ValueError("publication disclosure audit lacks cloud execution identity")
         current = audit(project, pid)
-        errors = current["errors"][:]
-        if any(saved.get(key) != value for key, value in current.items()):
-            errors.append("publication disclosure audit is stale or differs from current source verification")
-        return errors
+        return report_errors(current, {key: saved.get(key) for key in current},
+                             "publication disclosure audit is stale or differs from current source verification")
     except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
         return [str(exc)]
 

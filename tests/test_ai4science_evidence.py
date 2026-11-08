@@ -6,9 +6,13 @@ import hashlib
 import json
 import os
 import sys
+import contextlib
+import io
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
+from scripts import ai4science_evidence as adapter, ai_providers, model_runtime, model_spend, relay_billing
 from scripts.ai4science_evidence import (
     AI4ScienceEvidenceError,
     execute_paperqa,
@@ -61,32 +65,88 @@ class AI4ScienceEvidenceTests(unittest.TestCase):
             output.write_text("changed", encoding="utf-8")
             self.assertTrue(any("stale" in item for item in validate(project, [receipt])))
 
-    def test_paperqa_adapter_executes_and_never_records_secret_values(self) -> None:
+    def test_public_paperqa_cli_rejects_legacy_settings_and_missing_or_empty_budget_before_transport(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory) / "demo"
             corpus = project / "papers"
             corpus.mkdir(parents=True)
-            (corpus / "paper.pdf").write_bytes(b"real local corpus bytes")
-            with (
-                patch("scripts.ai4science_evidence.metadata.version", return_value="2026.08.12"),
-                patch("scripts.ai4science_evidence.run_process", return_value=self.completed(b"Grounded answer [1]\n")) as invoke,
-                patch.dict(os.environ, {"OPENAI_API_KEY": "do-not-record-this-value"}),
-            ):
-                receipt = execute_paperqa(
-                    project,
-                    "papers",
-                    "What evidence contradicts the proposed mechanism?",
-                    "Researcher",
-                    "Contradiction scan over a human-owned corpus.",
-                    executable="/opt/venv/bin/pqa",
-                )
-            self.assertEqual(receipt["schema_version"], "1.1")
-            self.assertEqual(receipt["status"], "succeeded")
-            self.assertEqual(receipt["execution"]["argv"][0], "pqa")
-            self.assertIn("OPENAI_API_KEY", receipt["execution"]["secret_environment_names"])
-            self.assertNotIn("do-not-record-this-value", json.dumps(receipt))
-            self.assertEqual(validate(project, [receipt]), [])
-            self.assertEqual(invoke.call_args.kwargs["cwd"], corpus)
+            (corpus / "paper.md").write_text("The pilot measured 24 adults.\n", encoding="utf-8")
+            argv = ["paperqa", "--project", "demo", "--corpus", "papers", "--question", "How many adults?",
+                    "--actor", "Fixture Owner", "--purpose", "Synthetic boundary check"]
+            with patch.object(adapter, "PROJECTS_ROOT", Path(directory)), \
+                    patch.dict(os.environ, {"OPENAI_API_KEY": "raw-provider-key", "DR_OS_ROUTING_PROFILE": "production", "GITHUB_ACTIONS": "true"}, clear=True), \
+                    patch.object(adapter, "run_process") as process, patch.object(ai_providers.urllib.request, "build_opener") as post:
+                for settings, expected in (([], "standalone pqa"), (["--settings", "native"], "authorization state is missing")):
+                    with self.subTest(settings=settings), contextlib.redirect_stderr(io.StringIO()) as error:
+                        self.assertEqual(adapter.main(argv + settings), 2)
+                        self.assertIn(expected, error.getvalue())
+                model_spend.write(project, model_spend.initial())
+                with contextlib.redirect_stderr(io.StringIO()) as error:
+                    self.assertEqual(adapter.main(argv + ["--settings", "native"]), 2)
+                    self.assertIn("cumulative spending ceiling", error.getvalue())
+                process.assert_not_called()
+                post.assert_not_called()
+            self.assertFalse((project / "evidence").exists())
+
+    def test_native_compatibility_uses_real_runtime_reservation_identity_and_source_receipt(self) -> None:
+        for reported_model in ("gpt-6.1-sol", "wrong-model"):
+            with self.subTest(reported_model=reported_model), tempfile.TemporaryDirectory() as directory:
+                project = Path(directory) / "demo"
+                source = project / "papers" / "paper.md"
+                source.parent.mkdir(parents=True)
+                source.write_text("The pilot measured 24 adults.\n", encoding="utf-8")
+                model_spend.write(project, model_spend.initial())
+                model_spend.grant(project, new_ceiling_cny=300, actor="Fixture Owner", run_id="fixture")
+                answer = {"answer": "The pilot measured 24 adults.", "abstain": False,
+                    "statements": [{"text": "The pilot measured 24 adults.", "citation_indices": [0]}],
+                    "citations": [{"source_id": "SRC001", "locator": "text, lines 1-1", "quote": "The pilot measured 24 adults."}]}
+                body = {"id": "synthetic-request", "model": reported_model, "status": "completed",
+                    "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(answer)}]}],
+                    "usage": {"input_tokens": 100, "output_tokens": 30}}
+                def response(request, *, timeout):
+                    self.assertGreaterEqual(sync.call_count, 1)
+                    reservations = list(model_spend.read(project)["reservations"].values())
+                    self.assertEqual(len(reservations), 1)
+                    self.assertEqual(reservations[0]["transport"]["model"], "gpt-6.1-sol")
+                    self.assertEqual(request.get_header("Authorization"), "Bearer synthetic-controlled-route-key")
+                    return contextlib.nullcontext(SimpleNamespace(read=lambda limit: json.dumps(body).encode()))
+                with patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production", "GITHUB_ACTIONS": "true",
+                        "DR_OS_CHEAPAI_GPT_PRO_KEY": "synthetic-controlled-route-key", "OPENAI_API_KEY": "raw-provider-key"}, clear=True), \
+                        patch("scripts.cloud_checkpoint.sync_billing") as sync, \
+                        patch.object(relay_billing, "read_meter", side_effect=relay_billing.BillingReconciliationError("fixture meter unavailable")), \
+                        patch.object(ai_providers.urllib.request, "build_opener", return_value=SimpleNamespace(open=response)) as post, \
+                        patch.object(adapter, "run_process") as process:
+                    if reported_model == "wrong-model":
+                        with self.assertRaisesRegex(AI4ScienceEvidenceError, "model ID missing or mismatched"):
+                            execute_paperqa(project, "papers", "How many adults were measured?", "Fixture Owner", "Synthetic reading", settings="native")
+                        self.assertEqual(len(model_spend.read(project)["reservations"]), 1)
+                    else:
+                        result = execute_paperqa(project, "papers", "How many adults were measured?", "Fixture Owner", "Synthetic reading", settings="native")
+                        self.assertTrue(result["not_paperqa2_sdk"])
+                        self.assertFalse(result["legacy_pqa_agent_called"])
+                        self.assertEqual(result["receipt"]["tool"], "native-source-qa")
+                        self.assertEqual(validate(project, [result["receipt"]]), [])
+                        self.assertNotIn("raw-provider-key", json.dumps(result))
+                        self.assertNotIn("synthetic-controlled-route-key", json.dumps(result))
+                        report = json.loads((project / result["output"]).read_text())
+                        self.assertTrue(report["not_paperqa2_sdk"])
+                        self.assertEqual(report["model_receipt"]["reported_model"], "gpt-6.1-sol")
+                        self.assertGreater(model_spend.read(project)["spent_cny"], 0)
+                        self.assertEqual(model_spend.read(project)["reservations"], {})
+                    post.assert_called_once()
+                    self.assertGreaterEqual(sync.call_count, 1)
+                    process.assert_not_called()
+                self.assertEqual(len(model_runtime.ledger_entries(project)), 1)
+
+    def test_custom_paperqa_agent_and_timeout_cannot_be_silently_reinterpreted(self) -> None:
+        with tempfile.TemporaryDirectory() as directory, patch.object(adapter, "run_process") as process, \
+                patch.object(adapter.paper_qa, "answer") as native:
+            for options in ({"settings": "custom"}, {"settings": "native", "executable": "/fixture/pqa"},
+                            {"settings": "native", "timeout_seconds": 60}):
+                with self.subTest(options=options), self.assertRaisesRegex(AI4ScienceEvidenceError, "literaturectl request"):
+                    execute_paperqa(Path(directory), "papers", "Question?", "Fixture Owner", "Synthetic boundary", **options)
+            process.assert_not_called()
+            native.assert_not_called()
 
     def test_tooluniverse_adapter_uses_exact_request_file_and_json_output(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

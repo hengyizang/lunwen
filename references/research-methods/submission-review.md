@@ -1,6 +1,20 @@
 # Evidence-anchored submission questions
 
-Method sources: academic-research-skills, ars-codex, nature-skills, paperspine.
+Primary review method: K-Dense peer-review scientific workflow, unchanged source
+at third_party/kdense/skills/peer-review/SKILL.md, pinned in
+integrations/vendored-research-methods.json. The existing native writing critic
+receives its scope, neutral claim map, claim/evidence, methods/statistics,
+reproducibility, figure/table and actionable-comment passages directly through
+research_methods.stage_context; final submission preparation also supplies them
+to the existing writer/planner. Missing view material remains unassessed.
+Only these scientific passages are selected. Upstream intake, licence/research-use
+and venue AI-policy gates are superseded by the current owner policy; no upstream
+script, extra paid pass, numerical acceptance threshold or new C gate is added.
+Public AI-use statements remain author-editable. Complete registered outcomes
+stay in the separate experiment archive; the manuscript need not reproduce all
+comparisons. Native reports bind the primary method's commit, hash and passages.
+
+Supplementary method sources: academic-research-skills, ars-codex, nature-skills, paperspine.
 Based on Academic Research Skills by Cheng-I Wu,
 https://github.com/Imbad0202/academic-research-skills .
 The retained ARS framework and rubric use CC BY-NC 4.0; see integrations/licenses.

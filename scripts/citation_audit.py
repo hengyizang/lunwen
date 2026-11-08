@@ -691,17 +691,20 @@ def crosscheck(project: Path, spec: dict) -> dict:
     from scripts.literature_source_tasks import citation_source
     source = citation_source(project, spec)
     incoming = spec.get("extractions")
-    panel = {}
+    panel, controlled = {}, {}
     if incoming is None:
-        from scripts.literature_source_tasks import judgment_responses
-        incoming = []
-        for row in judgment_responses(project, spec.get("paper_id")):
-            extracted = row["response"].get("citation_extraction")
-            if extracted is not None:
-                receipt = row["receipt"]
-                binding = {**receipt["response"], "locator": "original independent citation extraction"}
-                incoming.append(binding)
-                panel[binding["path"]] = {**extracted, "extractor": receipt["role"] + ":" + receipt["identity"]["requested_model"]}
+        from scripts.literature_source_tasks import citation_extractions, judgment_responses
+        frozen = citation_extractions(project, spec)
+        incoming = [row["binding"] for row in frozen]
+        controlled = {row["binding"]["path"]: row for row in frozen}
+        if not frozen:
+            for row in judgment_responses(project, spec.get("paper_id")):
+                extracted = row["response"].get("citation_extraction")
+                if extracted is not None:
+                    receipt = row["receipt"]
+                    binding = {**receipt["response"], "locator": "original independent citation extraction"}
+                    incoming.append(binding)
+                    panel[binding["path"]] = {**extracted, "extractor": receipt["role"] + ":" + receipt["identity"]["requested_model"]}
         if len(incoming) < 2:
             return {"schema_version": "1.0", "operation": "citation_crosscheck", "id": _id(spec["id"]),
                 "source": source, "extractions": incoming, "status": "awaiting_two_independent_extractions",
@@ -717,6 +720,8 @@ def crosscheck(project: Path, spec: dict) -> dict:
         origin = current_origin(project, target)
         if origin.get("status") != "tracked" or bound["path"] in paths or target.stat().st_size > 2_000_000:
             raise ValueError("extraction must be a distinct current provenance-bound artifact")
+        if any(word in str(origin.get("role", "")).casefold() for word in ("writer", "author")):
+            raise ValueError("a writer cannot declare itself an independent citation extractor")
         paths.add(bound["path"])
         payload = panel.get(bound["path"]) or read(target)
         method = _text(payload.get("extractor"), "actual extractor identity")
@@ -754,6 +759,7 @@ def crosscheck(project: Path, spec: dict) -> dict:
         "source": source, "extractions": extractions, "differences": differences, "unknown_fields": unknown,
         "status": "differences_need_source_review" if differences else "incomplete_extraction" if unknown else "fields_agree",
         "blindness_verified": False, "bibliographic_truth_verified": False, "semantic_support_verified": False,
+        "runtime_extractions_verified": bool(controlled), "source_isolation_verified": bool(controlled),
         "model_call_made": False, "scientific_completion_verified": False,
         "role_contract": CROSSCHECK_ROLE_CONTRACT}
 

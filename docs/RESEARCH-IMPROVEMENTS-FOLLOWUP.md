@@ -9,15 +9,17 @@ This extends [the initial improvements](RESEARCH-IMPROVEMENTS.md). All research,
 | Scientific editing | Exact sentence/paragraph/package before-after ledger, reasons, protected facts, claim IDs and source quotes | Whether the revised claim is scientifically supported |
 | Conditional prices | Exact route plus plan/group/mode, context brackets, cache rates and tool usage receipts | Current gateway quotation and actual bills; no guessed discount |
 | Research notebook | Dated append-only changes and Asia/Shanghai daily briefs | Scientific interpretation of gaps, conflicts and decisions |
-| Statistics | Every comparison mapped to manuscript/caption; explicit estimand, sample flow, missingness and repetitions | Actual topic-specific analysis choice and preregistered experimental results |
+| Statistics | Selected manuscript comparisons mapped to passages/captions; complete outcomes, failures and registered comparisons backed up separately in `experiments/archive`; explicit estimand, sample flow, missingness and repetitions | Actual topic-specific analysis choice and preregistered results; material contrary evidence affecting conclusions remains presented |
 | Word and response letter | Genuine OOXML insertions/deletions; source, paragraph, cell and rendered PDF locations | Final visual inspection; explicitly unsupported Word edits require review |
 | Figures | Actual SVG/PDF glyph/font/size checks and separate grayscale/color-vision QA copies | Mathematical semantics, final layout and accessible distinctions in the real figures |
 | Clarification and primary methods | Structured question/estimand/boundaries, source-scope checks, primary design dissection and bounded worked arithmetic | Owner answers, scientific transferability and actual method pilots after G3 |
-| FAIR and availability | Registered datasets, version/license/access metadata and actual retrieval receipts | Permission to share, real deposit, restricted access arrangements and data contents |
+| FAIR and availability | Registered datasets, source/version/access metadata, optional licence/research-use metadata and actual retrieval receipts | Real deposit, known access restrictions, privacy and actual data contents; licence/research-use verification is not a pre-use gate |
 | Calibration and visual review | Blinded materials, frozen rubric, protected source key and hash-bound human rating receipts | Independent qualified raters and final review; automatic status stays NOT_CALIBRATED |
 | Journal choice | Existing actual publisher retrieval, costs/policies and unchanged final-source binding | Topic-specific current venue fit; unknown JCR ranking remains a planning observation |
 
 Optional multimedia/Jev/Chinese-style frameworks remain deferred until a real requirement and measurable benefit exist. Provenance is retained; detector scores and watermark removal do not establish research quality.
+Public AI-use statements remain optional and author-editable. Only G1/G2 topic choices require
+human stage decisions; these follow-up controls add no manual data-use, experiment or billing approval.
 
 ## Controlled cloud builders
 
@@ -73,7 +75,7 @@ For providers with distinct write lifetimes, add both `cache_write_5m_per_millio
 
 `DR_OS_MODEL_BILLING_IDENTITY_JSON` supplies the exact per-provider plan/group/mode. It never becomes a model effort or inference parameter. A declared `tool_fees` entry uses `billing:flat_per_call|per_unit`, `unit`, `price_cny`; `DR_OS_MODEL_TOOL_LIMITS_JSON` supplies bounded per-provider maximum units, including explicit zero when disabled. A price declaration does not enable tools.
 
-Tool settlement needs typed complete `usage.tool_usage` with schema `1.0`, actual provider/gateway `receipt_id`, matching `request_id` and integer-unit items. Missing or inconsistent receipts keep the reservation and block further paid requests pending explicit reconciliation. Worst-case reservations cover the expensive context tier, cache-write premiums, output ceiling and declared tool limits. No paid call is made merely to test this code.
+Tool settlement needs typed complete `usage.tool_usage` with schema `1.0`, actual provider/gateway `receipt_id`, matching `request_id` and integer-unit items. Missing or inconsistent receipts retain the honestly labeled conservative reservation against existing cumulative totals; they do not create a blanket payment stop or an extra manual reconciliation approval. Worst-case reservations cover the expensive context tier, cache-write premiums, output ceiling and declared tool limits. Unknown charges remain unknown. See [TOTAL-COST-POLICY.md](TOTAL-COST-POLICY.md). No paid call is made merely to test this code.
 
 ## Human review packets
 
@@ -85,4 +87,4 @@ Use the owner-only non-billable `review_dossier` operation `confirm_review_packe
 
 Question, method and FAIR input examples are in [Research support examples](RESEARCH-SUPPORT-EXAMPLES.md). FAIR allows controlled access when appropriate; metadata retrievability alone proves neither file contents nor deposit ownership. See [FAIR principles](https://www.gofair.foundation/fair-principles).
 
-Color-vision simulations are approximate QA views of the rendered output, based on [Machado et al. 2009](https://doi.org/10.1109/TVCG.2009.113) and the numerical data in [colorspacious upstream](https://github.com/njsmith/colorspacious/blob/master/colorspacious/cvd.py). Original scientific output bytes and values are retained. Human mathematical, accessibility and final-size review remains required.
+Color-vision simulations are approximate QA views of the rendered output, based on [Machado et al. 2009](https://doi.org/10.1109/TVCG.2009.113) and the numerical data in [colorspacious upstream](https://github.com/njsmith/colorspacious/blob/master/colorspacious/cvd.py). Original scientific output bytes and values are retained. Mathematical semantics, accessibility and final-size feedback remain evidence-based observations; actual compilation/rendering and scientific integrity checks still apply without adding a human stage gate.

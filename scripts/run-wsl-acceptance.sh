@@ -11,13 +11,12 @@ tool_request=""
 ref_claims=""
 actor=""
 question="Which evidence contradicts the proposed mechanism?"
-settings="fast"
 output="artifacts/acceptance/wsl2-full.json"
 
 usage() {
   printf '%s\n' \
     "Usage: bash scripts/run-wsl-acceptance.sh --project <slug> --paper <Pxx> --corpus <project-relative-dir> \\" \
-    "  --tool-request <project-relative-json> --ref-claims <paper-relative-jsonl> --actor <name> [--question <text>] [--settings <name>] [--output <path>]"
+    "  --tool-request <project-relative-json> --ref-claims <paper-relative-jsonl> --actor <name> [--question <text>] [--output <path>]"
 }
 
 while [[ "$#" -gt 0 ]]; do
@@ -29,7 +28,7 @@ while [[ "$#" -gt 0 ]]; do
     --ref-claims) ref_claims="${2:-}"; shift 2 ;;
     --actor) actor="${2:-}"; shift 2 ;;
     --question) question="${2:-}"; shift 2 ;;
-    --settings) settings="${2:-}"; shift 2 ;;
+    --settings) printf '%s\n' 'Standalone pqa settings are no longer executed; use the controlled cloud PaperQA2 bridge in docs/LITERATURE-COMPLETION.md.' >&2; exit 2 ;;
     --output) output="${2:-}"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     *) usage >&2; exit 2 ;;
@@ -73,14 +72,17 @@ PY
 mkdir -p "$(dirname "$output")"
 "$python_bin" scripts/live_acceptance.py wsl --output "$output"
 
-printf '%s\n' "PaperQA2 can make a billable model call; the configured provider controls its charge."
-"$python_bin" scripts/ai4science_evidence.py paperqa \
-  --project "$project" \
-  --corpus "$corpus" \
-  --settings "$settings" \
-  --question "$question" \
-  --actor "$actor" \
-  --purpose "Real WSL2 acceptance over a human-authorized local corpus."
+"$python_bin" - "$project" "$corpus" "$question" <<'PY'
+import json
+import sys
+from scripts.ai4science_evidence import project_path, safe_directory, directory_records
+from scripts.paper_qa import retrieve
+project = project_path(sys.argv[1])
+sources = directory_records(project, safe_directory(project, sys.argv[2]))
+print(json.dumps({"kind": "native_source_reading_smoke", "not_paperqa2_sdk": True,
+    "model_call_made": False, "retrieval": retrieve(project, [row["path"] for row in sources], sys.argv[3])}, indent=2))
+PY
+printf '%s\n' 'Model answers and the actual bounded PaperQA2 SDK run through the existing cloud controls; see docs/LITERATURE-COMPLETION.md.'
 
 "$python_bin" scripts/ai4science_evidence.py tooluniverse \
   --project "$project" \

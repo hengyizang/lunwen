@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-11-07",
+  "updated_at": "2026-11-08",
   "requirements": [
     {
       "id": "R01",
@@ -65,7 +65,7 @@
         "tests/test_ai4science_evidence.py",
         "tests/test_tooluniverse_worker.py"
       ],
-      "remaining": "The pinned native PaperQA2 vector-store bridge and centrally metered reader answer are implemented. ToolUniverse 1.5.1 now exposes the reviewed credential-free UniProt_get_entry_by_accession SDK tool through the cloud dispatcher. Actual public HTTPS acceptance succeeded with zero model calls; the preceding failed attempt remains recorded. Arbitrary SDK tools and external agents remain outside this tested scope and require their own cost/permission adapters; this receipt proves no scientific result.",
+      "remaining": "The pinned native PaperQA2 vector-store bridge and centrally metered reader answer are implemented. ToolUniverse 1.5.1 now exposes the reviewed credential-free UniProt_get_entry_by_accession SDK tool through the cloud dispatcher. Actual public HTTPS acceptance succeeded with zero model calls; the preceding failed attempt remains recorded. Arbitrary SDK tools and external agents remain outside this tested scope and require their own cost/permission adapters; this receipt proves no scientific result. The obsolete standalone pqa process route is now rejected; --settings native uses the existing central runtime and explicitly identifies itself as not_paperqa2_sdk. No provider key is forwarded to the reviewed public-data worker.",
       "verification": {
         "path": "docs/acceptance/tooluniverse-public-sdk-2026-11-07.json",
         "sha256": "e4b44b9dca0db329288fbcb3877ee14222dd939ece6e6bb398aa0ace29eb87a7"
@@ -586,7 +586,7 @@
         "tests/test_claim_evidence.py",
         "tests/test_judgment_support.py"
       ],
-      "remaining": "Every supported literal TeX/include or mapped Word citation occurrence now binds its complete local assertion and current source position. Distinct uses of a repeated key cannot share an unrelated judgment; partial clauses, unsupported citation commands and unsupported mappings remain blocked. The controlled citation-audit exposes the inventory. Incomplete coverage cannot produce a passing 15% agreement score, and the sample fingerprint includes the whole current citation inventory. Real original evidence, protected model judgments and independent human labels remain necessary; this software does not certify semantics or identify all uncited assertions. The deterministic 15% scientific-claim sample is stable under claim aliases, request order and equivalent whitespace; genuine changed scientific uses still invalidate current judgments and human labels.",
+      "remaining": "Every supported literal TeX/include or mapped Word citation occurrence now binds its complete local assertion and current source position. Distinct uses of a repeated key cannot share an unrelated judgment; partial clauses, unsupported citation commands and unsupported mappings remain blocked. The controlled citation-audit exposes the inventory. Incomplete coverage cannot produce a passing 15% agreement score, and the sample fingerprint includes the whole current citation inventory. Real original evidence, protected model judgments and independent human labels remain necessary; this software does not certify semantics or identify all uncited assertions. The deterministic 15% scientific-claim sample is stable under claim aliases, request order and equivalent whitespace; genuine changed scientific uses still invalidate current judgments and human labels. Source-task-only observations bind the actual prompt packet and original sources; unchanged inputs may survive submission preparation without inheriting an ordinary verdict or relaxing full gate freshness. Final panel views do not carry extra task packets or prior opinions.",
       "source_sections": [
         "compendium: claim evidence, citation extraction and sampling"
       ]
@@ -762,7 +762,8 @@
         "scripts/literature_benchmark.py",
         "scripts/public_review_anchors.py",
         "docs/acceptance/elife-public-anchors-2026-11-07.json",
-        ".github/workflows/literature-evidence.yml"
+        ".github/workflows/literature-evidence.yml",
+        "scripts/auxiliary_job.py"
       ],
       "tests": [
         "tests/test_claim_evidence.py",
@@ -826,13 +827,15 @@
     "source_checklist_sha256": "a2e2046e6a12fe540601dc6b6b97f3f461a92bd10c36cabc92fdec8e384cf1d1",
     "status_counts": {
       "research-evidence-missing": 60,
-      "software-verified": 58,
+      "software-verified": 55,
+      "partially-implemented": 9,
       "historical-source-missing": 10,
       "not-achieved": 5,
-      "partially-implemented": 5,
-      "optional-alternative": 18
+      "optional-alternative": 17
     },
     "all_156_requirements_fulfilled": false,
-    "interpretation": "Software-scoped verification, actual research evidence, numerical targets, incomplete architecture and missing historical sources remain distinct. A completed measurement is not an achieved numerical target. Existing user policy is unchanged."
+    "interpretation": "Software-scoped verification, actual research evidence, numerical targets, incomplete architecture and missing historical sources remain distinct. A completed measurement is not an achieved numerical target. Existing user policy is unchanged.",
+    "fully_satisfied_count": 51,
+    "last_reviewed_at": "2026-11-08"
   }
 }

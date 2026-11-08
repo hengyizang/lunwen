@@ -455,7 +455,8 @@ def call(
 ) -> ai_providers.ModelResult:
     """Call a provider with exact-request caching and hard CNY ceilings."""
 
-    route = model_routing.resolve_call(stage, role, provider, model, reasoning_effort, task_kind, task_profile)
+    route = model_routing.resolve_call(stage, role, provider, model, reasoning_effort, task_kind, task_profile,
+                                       project_root=project_root)
     provider, model, reasoning_effort = route["provider"], route["model"], route["reasoning_effort"]
     production = provider in ai_providers.PRODUCTION_PROVIDERS
     requested_output_limit = max_output_tokens

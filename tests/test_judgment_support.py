@@ -1,5 +1,6 @@
 """Mechanical scientific-judgment support; every example is synthetic."""
 import json
+import hashlib
 import os
 import tempfile
 import unittest
@@ -292,6 +293,85 @@ class JudgmentSupportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "pointer is missing"):
             tasks.judgment_responses(self.project, "P01")
 
+    def claim_observation(self, *, bind_prompt=True):
+        from tests.test_claim_evidence import ClaimEvidenceTests
+        from tests.test_review_panel import ReviewPanelTests, panel_inputs
+        from scripts import api_orchestrator as api
+        fixture = ClaimEvidenceTests(); fixture.setUp(); self.addCleanup(fixture.doCleanups)
+        case = ReviewPanelTests(); case.setUp(); self.addCleanup(case.doCleanups)
+        case.project = fixture.project
+        main = fixture.paper / "main.tex"
+        main.write_text("\\documentclass{article}\n\\begin{document}\n" + main.read_text() + "\n\\end{document}\n")
+        panel_inputs(fixture.project)
+        state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01", "paper_count": 6,
+                 "writing_phases": {"P01": "scientific"}}
+        write(fixture.project / "state/run.json", state)
+        request = "program/claim-task.json"
+        write(fixture.project / request, fixture.spec)
+        write(fixture.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "claim_evidence",
+            "request_file": request, "paper_id": "P01", "stages": ["writing-and-review"]}]})
+        audit = {"verdict": "revise", **{key: [] for key in review_receipts.FIELDS - {"verdict"}},
+                 **fixture.response("supports")["response"]}
+        audit["fatal_findings"] = ["ORDINARY_OPINION_MUST_NOT_LEAK_TO_PANEL"]
+        path = fixture.project / "reviews/independent/source-observation.json"
+        write(path, audit)
+        with patch.object(api, "project_root", return_value=fixture.project):
+            prompt = api.critic_prompt("fixture", "writing-and-review", "") if bind_prompt else "Legacy unbound prompt"
+        identity = {"provider": "synthetic-critic", "family": "anthropic", "requested_model": "fixture",
+            "reported_model": "fixture", "completion_status": "completed", "cache_hit": False}
+        binding = review_receipts.seal_phase(fixture.project, stage="writing-and-review", run_id="source-reading", phase="observation",
+            audit_path=path, prompt=prompt, identity=identity, writer_family="openai",
+            materials=review_receipts.material_snapshot(fixture.project, "writing-and-review", "P01"))
+        return fixture, case, state, binding
+
+    def test_task_bound_claim_judgment_survives_submission_phase_and_final_panel_without_leaking_opinions(self):
+        from scripts import claim_evidence, review_panel, model_runtime
+        fixture, case, state, binding = self.claim_observation()
+        project = fixture.project
+        receipt = read(project / binding["path"])
+        self.assertEqual(len(receipt["source_task_bindings"]), 1)
+        self.assertEqual(claim_evidence.build(project, fixture.spec)["claims"][0]["outcome"], "supports")
+        state["writing_phases"]["P01"] = "submission"
+        write(project / "state/run.json", state)
+        write(project / "papers/P01/venue.json", {"venue_id": "synthetic-B-preparation-only"})
+        self.assertFalse(review_receipts.materials_match(receipt["materials"],
+            review_receipts.material_snapshot(project, "writing-and-review", "P01")))
+        responses = tasks.judgment_responses(project, "P01")
+        self.assertEqual(set(responses[0]["response"]), {"claim_evidence"})
+        self.assertFalse(responses[0]["receipt"]["gate_authority"])
+        self.assertTrue(responses[0]["receipt"]["reused_source_task_bindings"])
+        with patch.object(model_runtime, "call", side_effect=case.response) as calls:
+            review_panel.run(project, "P01", "final-isolated-views")
+        self.assertEqual(calls.call_count, 3)
+        for call in calls.call_args_list:
+            self.assertNotIn("ORDINARY_OPINION_MUST_NOT_LEAK_TO_PANEL", call.kwargs["prompt"])
+            self.assertNotIn("The original PDF reports a controlled method.", call.kwargs["prompt"])
+            self.assertNotIn('"claim_evidence"', call.kwargs["prompt"])
+        self.assertEqual(len(tasks.judgment_responses(project, "P01")), 4)
+        self.assertEqual(claim_evidence.build(project, fixture.spec)["claims"][0]["outcome"], "supports")
+        self.assertTrue(review_receipts.validate_gate(project, "G5", "P01"))  # Source-only reuse grants no gate.
+        state["stage"] = "submission-ready"
+        write(project / "state/run.json", state)
+        self.assertEqual(claim_evidence.build(project, fixture.spec)["claims"][0]["outcome"], "supports")
+        original = fixture.reader.read_bytes(); fixture.reader.write_bytes(original + b"\nChanged source.\n")
+        with self.assertRaises(ValueError): claim_evidence.build(project, fixture.spec)
+        fixture.reader.write_bytes(original)
+        self.assertEqual(claim_evidence.build(project, fixture.spec)["claims"][0]["outcome"], "supports")
+        changed = read(project / "program/claim-task.json")
+        changed["claims"][0]["claim"] += " changed scientific packet"
+        write(project / "program/claim-task.json", changed)
+        with self.assertRaises(ValueError): tasks.judgment_responses(project, "P01")
+
+    def test_unbound_legacy_observation_does_not_acquire_a_reusable_task_binding(self):
+        fixture, case, state, binding = self.claim_observation(bind_prompt=False)
+        receipt = read(fixture.project / binding["path"])
+        self.assertNotIn("source_task_bindings", receipt)
+        state["writing_phases"]["P01"] = "submission"
+        write(fixture.project / "state/run.json", state)
+        with self.assertRaisesRegex(ValueError, "no unchanged task binding"):
+            tasks.judgment_responses(fixture.project, "P01")
+        self.assertNotIn("source_task_bindings", read(fixture.project / binding["path"]))
+
     def test_blind_tasks_hide_answer_key_everywhere_and_do_not_add_model_invocations(self):
         spec = self.anchors(public=True)
         write(self.project / "program/benchmark-task.json", spec)
@@ -317,10 +397,10 @@ class JudgmentSupportTests(unittest.TestCase):
         self.assertFalse(result["current_stage_authorized"])
         self.assertIn("not_notebook_decision_validation", result["assessment_scope"])
 
-    def test_two_existing_panel_seats_extract_blindly_and_real_difference_reaches_integrity_check(self):
+    def citation_job(self):
         from tests.test_review_panel import ReviewPanelTests
-        from scripts import citation_audit, model_runtime, review_panel
         case = ReviewPanelTests(); case.setUp(); self.addCleanup(case.doCleanups)
+        case.stack.enter_context(patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1"}))
         target = case.project / "papers/P01/manuscript/references.bib"
         target.write_text("@article{work,doi={10.1000/source},title={Actual source title},year={2024},author={Example}}", encoding="utf-8")
         source = {"path": target.relative_to(case.project).as_posix(), "sha256": sha(target), "locator": "complete bibliography"}
@@ -329,25 +409,120 @@ class JudgmentSupportTests(unittest.TestCase):
         write(case.project / tasks.CONTROL, {"scientific_judgments": [{"operation": "citation_crosscheck",
             "request_file": "program/citation-task.json", "paper_id": "P01", "stages": ["writing-and-review"],
             "panel_views": ["domain", "statistics"]}]})
-        def response(project, **kwargs):
-            result = case.response(project, **kwargs)
-            value = json.loads(result.text)
-            if value["view"] in {"domain", "statistics"}:
-                self.assertIn("Actual source title", kwargs["prompt"])
-                self.assertNotIn("invented-comparator", kwargs["prompt"])
-                value["citation_extraction"] = {"source": source, "records": [{"citation_key": "work",
-                    "doi": "10.1000/source" if value["view"] == "domain" else "10.1000/invented-comparator",
-                    "title": "Actual source title", "year": 2024, "authors": ["Example"]}]}
-            result.text = json.dumps(value)
-            return result
-        with patch.object(model_runtime, "call", side_effect=response) as calls:
-            review_panel.run(case.project, "P01", "dual-extraction")
-        self.assertEqual(calls.call_count, 3)  # Existing panel only; no extraction-only calls.
+        profile = {"task_class": "citation-crosscheck", "science_risk": "critical", "priority": "quality"}
+        return case, source, spec, profile
+
+    def citation_response(self, source, project, **kwargs):
+        from scripts import ai_providers, model_runtime
+        self.assertIn("Actual source title", kwargs["prompt"])
+        self.assertNotIn("invented-comparator", kwargs["prompt"])
+        self.assertNotIn("EXTRACTOR_ONE_ONLY_MARKER", kwargs["prompt"])
+        self.assertFalse(kwargs["use_cache"])
+        self.assertEqual(kwargs["task_profile"]["science_risk"], "critical")
+        inflight = [read(path) for path in (project / "evidence/auxiliary").glob("*.json")]
+        self.assertTrue(any(report["status"] == "in_progress" and any(
+            attempt["run_id"] == kwargs["run_id"] and attempt["source"] == source
+            and attempt["prompt_sha256"] == hashlib.sha256(kwargs["prompt"].encode()).hexdigest()
+            for attempt in report["attempts"]) for report in inflight))
+        first = kwargs["role"] == "scientific-judgment"
+        value = {"citation_extraction": {"source": source, "records": [{"citation_key": "work",
+            "doi": "10.1000/source" if first else "10.1000/invented-comparator",
+            "title": "Actual source title", "year": 2024,
+            "authors": ["EXTRACTOR_ONE_ONLY_MARKER"] if first else ["Example"]}]}}
+        request_id = "synthetic-" + kwargs["role"]
+        model_runtime._append(model_runtime._ledger(project), {"fixture": True, "run_id": kwargs["run_id"],
+            "stage": "auxiliary", "role": kwargs["role"], "provider": kwargs["provider"],
+            "requested_model": kwargs["model"], "model": kwargs["model"], "request_id": request_id,
+            "prompt_sha256": hashlib.sha256(kwargs["prompt"].encode()).hexdigest(), "cache_hit": False,
+            "cache_policy": "fresh_required_or_explicit", "completion_status": "completed",
+            "task_profile": kwargs["task_profile"], "cost_cny": 0, "cost_status": "synthetic_unit_fixture_not_actual_charge"})
+        return ai_providers.ModelResult(kwargs["provider"], kwargs["model"], json.dumps(value), {"input_tokens": 2},
+            request_id=request_id, reported_model=kwargs["model"], completion_status="completed", cache_hit=False)
+
+    def test_explicit_auxiliary_roles_extract_blindly_and_real_difference_reaches_integrity_check(self):
+        from scripts import citation_audit, model_runtime
+        case, source, spec, profile = self.citation_job()
+        destination = case.project / "evidence/auxiliary/dual-extraction.json"
+        with patch.object(model_runtime, "call", side_effect=lambda p, **k: self.citation_response(source, p, **k)) as calls:
+            execution = tasks.run_citation_crosscheck(case.project, destination, "a" * 64,
+                request_file="program/citation-task.json", task_profile=profile, execute=True)
+        self.assertEqual(calls.call_count, 2)  # Explicit source job only; ordinary cycles and final panel do not call it.
+        self.assertEqual([call.kwargs["role"] for call in calls.call_args_list], list(tasks.CITATION_ROLES))
+        self.assertEqual(calls.call_args_list[0].kwargs["prompt"], calls.call_args_list[1].kwargs["prompt"])
+        self.assertEqual(execution["calls_attempted"], 2)
+        self.assertEqual(execution["status"], "complete")
         report = citation_audit.crosscheck(case.project, spec)
         self.assertEqual(report["status"], "differences_need_source_review")
         self.assertEqual(report["differences"][0]["field"], "doi")
         self.assertTrue(any("bibliographic differences" in error for error in tasks.integrity_errors(case.project, "P01")))
         self.assertFalse(report["semantic_support_verified"])
+        self.assertTrue(report["runtime_extractions_verified"])
+        self.assertEqual(len(tasks.citation_extractions(case.project, spec)), 2)
+        for row in tasks.citation_extractions(case.project, spec):
+            self.assertEqual(row["receipt"]["usage_receipt"]["cost_cny"], 0)
+            self.assertEqual(provenance.current_origin(case.project, case.project / row["binding"]["path"])["model"], tasks.CITATION_MODULE)
+        # A genuine later ledger change cannot borrow the protected extraction.
+        ledger = model_runtime._ledger(case.project)
+        values = [json.loads(line) for line in ledger.read_text().splitlines()]
+        values[0]["cache_hit"] = True
+        ledger.write_text("".join(json.dumps(row) + "\n" for row in values))
+        with self.assertRaisesRegex(ValueError, "runtime billing receipt"):
+            citation_audit.crosscheck(case.project, spec)
+
+    def test_citation_job_dry_run_and_failure_preserve_attempts_without_retry(self):
+        from scripts import model_runtime
+        case, source, spec, profile = self.citation_job()
+        with patch.object(model_runtime, "call") as calls:
+            result = tasks.run_citation_crosscheck(case.project, case.project / "evidence/auxiliary/preview.json", "a" * 64,
+                request_file="program/citation-task.json", task_profile=profile)
+        calls.assert_not_called(); self.assertEqual(result["calls_attempted"], 0)
+        def failing(project, **kwargs):
+            result = self.citation_response(source, project, **kwargs)
+            if kwargs["role"] == "independent-critique": result.reported_model = "mismatched-model"
+            return result
+        destination = case.project / "evidence/auxiliary/failed.json"
+        with patch.object(model_runtime, "call", side_effect=failing) as calls:
+            with self.assertRaisesRegex(ValueError, "identity changed"):
+                tasks.run_citation_crosscheck(case.project, destination, "a" * 64,
+                    request_file="program/citation-task.json", task_profile=profile, execute=True)
+        self.assertEqual(calls.call_count, 2)
+        saved = read(destination)
+        self.assertEqual(saved["status"], "partial_failed_no_retry")
+        self.assertEqual(len(saved["attempts"]), 2)
+        self.assertTrue(all(attempt["raw_response"] and attempt["usage_receipts"] for attempt in saved["attempts"]))
+        self.assertEqual(len(saved["extractions"]), 1)
+        with self.assertRaisesRegex(ValueError, "latest pointer is missing"):
+            tasks.citation_extractions(case.project, spec)
+        with patch.object(model_runtime, "call") as calls:
+            with self.assertRaisesRegex(ValueError, "new auxiliary diagnostic"):
+                tasks.run_citation_crosscheck(case.project, destination, "a" * 64,
+                    request_file="program/citation-task.json", task_profile=profile, execute=True)
+        calls.assert_not_called()
+
+    def test_changed_source_stops_before_a_second_citation_call_and_writer_cannot_be_extractor(self):
+        from scripts import model_runtime, citation_audit
+        case, source, spec, profile = self.citation_job()
+        def mutate(project, **kwargs):
+            result = self.citation_response(source, project, **kwargs)
+            (project / source["path"]).write_text("Changed after a real response.")
+            return result
+        destination = case.project / "evidence/auxiliary/source-changed.json"
+        with patch.object(model_runtime, "call", side_effect=mutate) as calls:
+            with self.assertRaisesRegex(ValueError, "output changed"):
+                tasks.run_citation_crosscheck(case.project, destination, "a" * 64,
+                    request_file="program/citation-task.json", task_profile=profile, execute=True)
+        self.assertEqual(calls.call_count, 1)
+        self.assertTrue(read(destination)["attempts"][0]["raw_response"])
+        for name in ("one", "two"):
+            target = self.project / f"evidence/extractions/{name}.json"
+            write(target, {"source": source, "extractor": "independent " + name, "records": []})
+            provenance.record_model_writes(self.project, [target], family="openai", provider="fixture", model="writer", role="writer", run_id="fixture")
+        # The source itself must still be valid before the writer-origin test.
+        source = self.text("papers/P01/manuscript/references.bib", "@article{x,title={Original}}")
+        with self.assertRaisesRegex(ValueError, "writer cannot"):
+            citation_audit.crosscheck(self.project, {"schema_version": "1.0", "id": "forged", "source": source,
+                "extractions": [{"path": f"evidence/extractions/{name}.json", "sha256": sha(self.project / f"evidence/extractions/{name}.json"),
+                                 "locator": "synthetic writer attempt"} for name in ("one", "two")]})
 
     def test_citation_task_cannot_deliver_prior_judgments_private_or_unregistered_sources(self):
         from scripts import citation_audit

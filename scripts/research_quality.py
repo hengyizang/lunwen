@@ -490,8 +490,28 @@ def _split_from_path(relative: Path) -> str | None:
     return None
 
 
+def _tabular_profile(path: Path, fields: list[str], rows: list[dict[str, str]], complete: bool):
+    keys = [_row_key(row, fields) for row in rows]
+    return {
+        "format": path.suffix.lower().lstrip("."),
+        "complete_scan": complete,
+        "row_count": len(rows),
+        "column_count": len(fields),
+        "columns": fields,
+        "missing_count_by_column": {
+            field: sum(1 for row in rows if not row.get(field, "").strip()) for field in fields
+        },
+        "exact_duplicate_rows": len(keys) - len(set(keys)),
+        "constant_columns": [field for field in fields if rows and len({row.get(field, "") for row in rows}) <= 1],
+    }, keys
+
+
+def _cross_split_overlap(groups):
+    return {key for key, count in Counter(key for group in groups.values() for key in group).items() if count > 1}
+
+
 def _profile_non_tabular(
-    source: Path, files: list[Path], maximum_rows: int
+    source: Path, files: list[Path], maximum_rows: int, *, file_hashes=None
 ) -> tuple[dict[str, Any], list[str], list[str]]:
     """Inspect common AI/AI4Science formats with reviewed local libraries.
 
@@ -507,7 +527,8 @@ def _profile_non_tabular(
     details: list[dict[str, Any]] = []
     hashes: dict[str, list[Path]] = {}
     for path in files:
-        hashes.setdefault(sha256_file(path), []).append(path)
+        digest = file_hashes[path] if file_hashes is not None else sha256_file(path)
+        hashes.setdefault(digest, []).append(path)
     duplicate_groups = [values for values in hashes.values() if len(values) > 1]
     if duplicate_groups:
         warnings.append(f"{sum(len(group) - 1 for group in duplicate_groups)} duplicate file(s) share exact content hashes")
@@ -523,11 +544,7 @@ def _profile_non_tabular(
             split = _split_from_path(relative)
             if split:
                 split_hashes.setdefault(split, set()).add(digest)
-    cross_split: set[str] = set()
-    names = sorted(split_hashes)
-    for left_index, left in enumerate(names):
-        for right in names[left_index + 1:]:
-            cross_split.update(split_hashes[left] & split_hashes[right])
+    cross_split = _cross_split_overlap(split_hashes)
     if cross_split:
         blockers.append("identical files occur in multiple path-inferred data splits")
 
@@ -556,40 +573,16 @@ def _profile_non_tabular(
                 blockers.append(f"tabular file has no rows: {relative.as_posix()}")
             if not complete:
                 blockers.append("row limit reached across the multi-file dataset; a complete scan is required")
-            row_keys = [_row_key(row, fields) for row in rows]
-            duplicates = len(row_keys) - len(set(row_keys))
-            missing = {
-                field: sum(1 for row in rows if not row.get(field, "").strip())
-                for field in fields
-            }
-            constant = [
-                field for field in fields
-                if rows and len({row.get(field, "") for row in rows}) <= 1
-            ]
-            if rows and duplicates / len(rows) > 0.20:
+            profile, row_keys = _tabular_profile(path, fields, rows, complete)
+            if rows and profile["exact_duplicate_rows"] / len(rows) > 0.20:
                 warnings.append(
                     f"more than 20% of rows are exact duplicates in {relative.as_posix()}"
                 )
             split = _split_from_path(relative)
             if split:
                 split_rows.setdefault(split, set()).update(row_keys)
-            tables.append(
-                {
-                    "path": relative.as_posix(),
-                    "format": path.suffix.lower().lstrip("."),
-                    "complete_scan": complete,
-                    "row_count": len(rows),
-                    "column_count": len(fields),
-                    "columns": fields,
-                    "missing_count_by_column": missing,
-                    "exact_duplicate_rows": duplicates,
-                    "constant_columns": constant,
-                }
-            )
-        split_names = sorted(split_rows)
-        for left_index, left in enumerate(split_names):
-            for right in split_names[left_index + 1:]:
-                cross_split_rows.update(split_rows[left] & split_rows[right])
+            tables.append({"path": relative.as_posix(), **profile})
+        cross_split_rows = _cross_split_overlap(split_rows)
         if cross_split_rows:
             blockers.append("identical tabular observations occur in multiple path-inferred data splits")
         details.append(
@@ -775,7 +768,8 @@ def create_data_quality_report(
     if not actor.strip():
         raise ResearchQualityError("actor is required to record who initiated the local audit")
     source = _safe_path(project, relative_path)
-    if source.is_symlink():
+    unresolved = project / relative_path
+    if any(path.is_symlink() for path in (unresolved, *unresolved.parents)):
         raise ResearchQualityError("dataset audit does not accept symlinks")
     symlinks = [path for path in source.rglob("*") if path.is_symlink()] if source.is_dir() else []
     if symlinks:
@@ -809,18 +803,10 @@ def create_data_quality_report(
             blockers.append("tabular data has no rows")
         if not complete:
             blockers.append("row limit reached; a complete scan is required")
-        row_keys = [_row_key(row, fields) for row in rows]
-        duplicates = len(row_keys) - len(set(row_keys))
-        missing = {
-            field: sum(1 for row in rows if not row.get(field, "").strip())
-            for field in fields
-        }
-        constant = [
-            field for field in fields
-            if rows and len({row.get(field, "") for row in rows}) <= 1
-        ]
-        if rows and duplicates / len(rows) > 0.20:
+        profile, _ = _tabular_profile(source, fields, rows, complete)
+        if rows and profile["exact_duplicate_rows"] / len(rows) > 0.20:
             warnings.append("more than 20% of rows are exact duplicates")
+        constant = profile["constant_columns"]
         if constant:
             warnings.append("constant columns require review: " + ", ".join(constant))
         labels: dict[str, int] | None = None
@@ -843,11 +829,8 @@ def create_data_quality_report(
                     by_split.setdefault(row.get(split_column, ""), set()).add(
                         _row_key(row, identity_fields)
                     )
-                overlap: set[str] = set()
                 names = sorted(by_split)
-                for left_index, left in enumerate(names):
-                    for right in names[left_index + 1:]:
-                        overlap.update(by_split[left] & by_split[right])
+                overlap = _cross_split_overlap(by_split)
                 split_overlap = {"split_values": names, "exact_row_overlap_count": len(overlap)}
                 if overlap:
                     blockers.append("identical observations occur in multiple splits")
@@ -870,14 +853,7 @@ def create_data_quality_report(
                 if leaking:
                     blockers.append("group identifiers occur in multiple splits")
         table = {
-            "format": source.suffix.lower().lstrip("."),
-            "complete_scan": complete,
-            "row_count": len(rows),
-            "column_count": len(fields),
-            "columns": fields,
-            "missing_count_by_column": missing,
-            "exact_duplicate_rows": duplicates,
-            "constant_columns": constant,
+            **profile,
             "label_column": label_column,
             "label_distribution": labels,
             "split_column": split_column,
@@ -886,7 +862,8 @@ def create_data_quality_report(
         }
     else:
         non_tabular, format_blockers, format_warnings = _profile_non_tabular(
-            source, files, maximum_rows
+            source, files, maximum_rows,
+            file_hashes={path: item["sha256"] for path, item in zip(files, inventory)},
         )
         blockers.extend(format_blockers)
         warnings.extend(format_warnings)

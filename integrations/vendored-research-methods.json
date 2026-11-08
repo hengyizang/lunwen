@@ -3,6 +3,13 @@
   "reviewed_at": "2026-10-29",
   "files": [
     {
+      "path": "third_party/kdense/skills/peer-review/SKILL.md",
+      "source_repository": "K-Dense-AI/scientific-agent-skills",
+      "source_path": "skills/peer-review/SKILL.md",
+      "commit": "65d6e786832e2c52832713117bbbf5096b56f77f",
+      "sha256": "3422beafc240aa7d2703e71fe16e3400269a5ea17045d8b390a30efe58c3de67"
+    },
+    {
       "path": "third_party/kdense/skills/hypothesis-generation/SKILL.md",
       "source_repository": "K-Dense-AI/scientific-agent-skills",
       "source_path": "skills/hypothesis-generation/SKILL.md",

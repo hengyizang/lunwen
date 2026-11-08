@@ -629,13 +629,15 @@
       "enabled_by_default": false,
       "local_adaptations_enabled": true,
       "selected_components": [
-        "hypothesis-generation"
+        "hypothesis-generation",
+        "peer-review: selected scientific workflow passages"
       ],
       "installation": "Selected pinned files vendored in the formal repository; native cloud adaptations enabled by config/research-methods.json; full upstream runtime not installed",
       "selected_skills": [
-        "hypothesis-generation"
+        "hypothesis-generation",
+        "peer-review"
       ],
-      "selection_note": "Owner authorized selected useful additions on 2026-09-30. Preserve model roles, G0-G5 authority and CNY 300 cumulative API tranches. No paid service is enabled by installation."
+      "selection_note": "Owner authorized selected useful additions on 2026-09-30 and priority reuse of peer-review on 2026-11-08. Only peer-review/SKILL.md scientific workflow excerpts are adopted; its intake, licence/research-use and venue AI-policy gates are superseded by current owner policy. Preserve native model roles, G0-G5 authority, source/version/privacy and cumulative budget controls. No new paid service or review cycle is enabled by installation."
     },
     {
       "id": "nature-skills",

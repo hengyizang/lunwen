@@ -281,10 +281,9 @@ def refresh(project: Path, paper_id: str) -> dict[str, Any]:
         return {"status": "input_missing", "required": str(spec.relative_to(project)), "pass": False}
     report = audit(project, canonical_manuscript(paper), spec)
     report["pass"] = report["pass"] and report["contribution_reporting"]["status"] == "ready_for_scientific_review"
-    from scripts.research_artifacts import write, record
+    from scripts.research_artifacts import save_report
     target = paper / "reviews/manuscript-audit.json"
-    write(target, report)
-    record(project, [target], "scripts/manuscript_audit.py")
+    save_report(project, target, report, "scripts/manuscript_audit.py")
     return {"path": target.relative_to(project).as_posix(), "sha256": sha256_file(target),
             "pass": report["pass"], "status": report["contribution_reporting"]["status"],
             "errors": report["errors"] + report["contribution_reporting"]["errors"]}

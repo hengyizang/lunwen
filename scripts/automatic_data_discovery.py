@@ -12,9 +12,11 @@ from typing import Any, Callable, Iterable
 try:
     from scripts import data_discovery
     from scripts.network_safety import fetch_json
+    from scripts.paper_execution import papers
 except ModuleNotFoundError:  # Direct execution from scripts/.
     import data_discovery  # type: ignore[no-redef]
     from network_safety import fetch_json  # type: ignore[no-redef]
+    from paper_execution import papers  # type: ignore[no-redef]
 
 
 AUTO_STAGES = {"topic-intelligence", "experiment-design"}
@@ -70,13 +72,21 @@ def _keyword_phrase(value: str, maximum_words: int = 10) -> str:
     return compact[:MAX_QUERY_LENGTH] if len(compact) >= 4 else ""
 
 
+def _goal_scope(value: Any) -> list[str]:
+    """Delivery/ranking instructions are not a scientific search scope."""
+    delivery = (r"\b(?:publish|write|produce|develop|complete|deliver|prepare|submit|target|apply)\b"
+                r"(?:(?!\b(?:of|for|to|with|about|on|in|using|by)\b)[^.!?;]){0,240}"
+                r"\b(?:papers?|manuscripts?|thes[ie]s|dissertations?|journals?|packages?|requirements?|submission|Q[1-4])\b"
+                r"|\bjournal acceptance is not promised\b|(?:发表|撰写|产出|投稿|完成).{0,50}(?:论文|博士|期刊)")
+    return [sentence.strip() for text in _strings(value)
+            for sentence in re.split(r"[.!?。！？](?:\s+|$)|[;；\n]", text)
+            if sentence.strip() and not re.search(delivery, sentence, re.I)]
+
+
 def _project_material(project_root: Path, stage: str) -> list[str]:
     material: list[str] = []
     paper_material: list[str] = []
     intake = _load_json(project_root / "intake" / "constraints.json")
-    if isinstance(intake, dict):
-        for field in ("research_goal", "preferred_domains", "data_constraint"):
-            material.extend(_strings(intake.get(field)))
 
     for relative in (
         "program/core-thesis.json",
@@ -84,11 +94,22 @@ def _project_material(project_root: Path, stage: str) -> list[str]:
         "program/topic-shortlist.json",
     ):
         value = _load_json(project_root / relative)
-        if value is not None:
-            material.extend(_strings(value)[:12])
+        if isinstance(value, dict):
+            rows = value.get("candidates", []) if relative.endswith("topic-shortlist.json") else [value]
+            for row in rows:
+                if isinstance(row, dict):
+                    for field in ("doctoral_question", "research_question", "problem", "direction", "title", "name"):
+                        material.extend(_strings(row.get(field)))
+
+    if isinstance(intake, dict):
+        material.extend(_goal_scope(intake.get("research_goal")))
+        domains = _strings(intake.get("preferred_domains"))
+        if domains:
+            material.extend([" ".join(domains), *domains])
 
     if stage == "experiment-design":
-        for path in sorted((project_root / "papers").glob("P[0-9][0-9]/paper-contract.json")):
+        for paper in papers(project_root, "G3"):
+            path = project_root / "papers" / paper / "paper-contract.json"
             contract = _load_json(path)
             if not isinstance(contract, dict):
                 continue
@@ -152,12 +173,7 @@ def derive_queries(
         add(f"{base_without_suffix} benchmark dataset", add_dataset_suffix=False)
 
     if not queries:
-        fallback = (
-            "industrial artificial intelligence robotics predictive maintenance public dataset"
-            if stage == "topic-intelligence"
-            else "industrial machine learning multivariate sensor benchmark dataset"
-        )
-        add(fallback, add_dataset_suffix=False)
+        raise AutomaticDataDiscoveryError("Dataset discovery needs research input: provide an actual field, question, current scope or explicit query.")
     return queries
 
 
@@ -206,14 +222,15 @@ def apply_automatic_screening(
             "version metadata presence",
         ],
         "not_automatically_decided": [
-            "license permission",
+            "optional licence/research-use metadata",
             "privacy and ethics",
             "scientific fitness",
             "sample adequacy and bias",
             "leakage risk",
             "final dataset adoption",
         ],
-        "human_review_required": True,
+        "human_review_required": False,
+        "scientific_review_required": True,
     }
     return report
 
@@ -274,5 +291,6 @@ def run_automatic_discovery(
         "successful_provider_calls": successful_calls,
         "candidate_count": report["candidate_count"],
         "shortlist_count": summary["shortlist_count"],
-        "human_review_required": True,
+        "human_review_required": summary["human_review_required"],
+        "scientific_review_required": summary["scientific_review_required"],
     }

@@ -142,6 +142,22 @@ def record(project: Path, paths: list[Path], module: str) -> None:
                         model=module, role="artifact-builder", run_id="quality-refresh")
 
 
+def save_report(project: Path, output: Path, report: dict, module: str) -> dict:
+    """Save one freshly computed report with its unchanged native provenance."""
+    write(output, report)
+    record(project, [output], module)
+    return report
+
+
+def report_errors(current: dict, saved: dict, stale: str, *, ignore=(), extra=()) -> list[str]:
+    """Compare full reports, preserving absent keys and caller-specific findings."""
+    errors = [*current["errors"], *extra]
+    if ({key: value for key, value in current.items() if key not in ignore}
+            != {key: value for key, value in saved.items() if key not in ignore}):
+        errors.append(stale)
+    return errors
+
+
 def matches_origin(project: Path, path: Path, **expected) -> bool:
     from scripts.output_provenance import current_origin
     origin = current_origin(project, path)

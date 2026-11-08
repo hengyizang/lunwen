@@ -9,7 +9,7 @@ if __package__ in {None,""}:sys.path.insert(0,str(ROOT))
 STAGES=[{"name":"intake","gate":"G0"},{"name":"topic-intelligence","gate":"G1"},{"name":"paper-architecture","gate":"G2"},{"name":"experiment-design","gate":"G3"},{"name":"experiment-execution","gate":"G4"},{"name":"writing-and-review","gate":"G5"},{"name":"submission-ready","gate":None}]
 SLUG_RE=re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$"); PAPER_RE=re.compile(r"^P[0-9]{2}$")
 from scripts.paper_execution import artifact_path as experiment_path
-from scripts.research_artifacts import write as write_json, utc_now as now
+from scripts.research_artifacts import write as write_json, utc_now as now, sha as file_sha256, walk_files
 
 class ResearchCtlError(RuntimeError): pass
 def read_json(path):
@@ -36,11 +36,6 @@ def load_state(slug):
     return state
 def save_state(slug,state): state["updated_at"]=now(); write_json(state_path(slug),state)
 def nonempty(path): return path.is_file() and path.stat().st_size>0
-def file_sha256(path):
-    d=hashlib.sha256()
-    with path.open("rb") as h:
-        for chunk in iter(lambda:h.read(1024*1024),b""):d.update(chunk)
-    return d.hexdigest()
 def load_nonempty_json(path,errors):
     if not nonempty(path):errors.append(f"missing or empty: {path}");return None
     try:value=json.loads(path.read_text(encoding="utf-8"))
@@ -489,7 +484,8 @@ def active_paper_id(slug):return validate_paper_id(str(read_json(state_path(slug
 def artifact_hash(slug,gate):
     project=project_dir(slug);d=hashlib.sha256()
     from scripts.paper_execution import relevant
-    for path in sorted(project.rglob("*")):
+    for path in sorted(walk_files(project, prune=lambda relative: relative in {"state", "experiments/runs"}
+                                 or bool({"raw", "venue-template", "build"} & set(Path(relative).parts)))):
         rel=path.relative_to(project)
         if not path.is_file() or rel.parts[0]=="state" or "raw" in rel.parts or "venue-template" in rel.parts or "build" in rel.parts or rel.parts[:2]==("experiments","runs"):continue
         if gate in {"G3","G4","G5"} and not relevant(project,rel.as_posix()):continue
@@ -498,7 +494,7 @@ def artifact_hash(slug,gate):
 def paper_artifact_hash(slug,paper_id):
     from scripts.artifact_ownership import paper_observation_path
     paper=project_dir(slug)/"papers"/validate_paper_id(paper_id);d=hashlib.sha256()
-    for path in sorted(paper.rglob("*")):
+    for path in sorted(walk_files(paper, prune=lambda relative: bool({"build", "submission", "venue-template"} & set(Path(relative).parts)))):
         if not path.is_file() or path.is_symlink():continue
         rel=path.relative_to(paper)
         if any(part in {"build","submission","venue-template"} for part in rel.parts):continue

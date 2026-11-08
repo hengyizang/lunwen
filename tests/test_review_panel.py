@@ -1,5 +1,8 @@
 """Actual controller paths with mocked transports; no scientific acceptance or spend."""
 from contextlib import ExitStack
+from functools import lru_cache
+import csv
+import io
 import json
 import os
 from pathlib import Path
@@ -8,10 +11,47 @@ import unittest
 from unittest.mock import patch
 
 from scripts import ai_providers, review_panel, model_runtime, research_cycle
-from scripts.research_artifacts import read, write, sha
+from scripts.research_artifacts import read, write, sha, record
+
+
+@lru_cache(maxsize=1)
+def panel_protocol_fixture():
+    from scripts.experiment_evidence_acceptance import fixture
+    with tempfile.TemporaryDirectory() as directory:
+        return fixture(Path(directory) / "synthetic-protocol")
 
 
 def panel_inputs(project):
+    manuscript = project / "papers/P01/manuscript"
+    manuscript.mkdir(parents=True, exist_ok=True)
+    main = manuscript / "main.tex"
+    title = "\\usepackage{graphicx,pgfplotstable}\n\\title{SYNTHETIC title source, no actual experiment.}\n"
+    abstract = ("\\maketitle\n\\begin{abstract}\nSYNTHETIC abstract source, no actual experiment.\n"
+        "\\detokenize{SYNTHETIC headline_claim source, no actual experiment.}\n\\end{abstract}\n")
+    sections = ("\\section{Methods}\nSYNTHETIC methods source, no actual experiment.\n"
+        "\\section{Results}\nSYNTHETIC results source, no actual experiment.\n"
+        "\\begin{table}\n\\begin{tabular}{lr}\n\\detokenize{SYNTHETIC numeric_table source, no actual experiment.} & 0 \\\\\n"
+        "\\end{tabular}\n\\end{table}\n\\begin{figure}\n"
+        "\\pgfplotstabletypeset[col sep=comma,string type]{../tables/figure-values.csv}\n"
+        "\\caption{\\detokenize{SYNTHETIC figure_one source, no actual experiment.}}\n\\end{figure}\n"
+        "\\section{Discussion}\nNo scientific inference can be made from this software fixture.\n"
+        "\\section{Conclusion}\nNo research has been performed.\n")
+    if main.exists():
+        main.write_text(main.read_text().replace(r"\begin{document}", title + "\\begin{document}\n" + abstract, 1)
+                        .replace(r"\end{document}", sections + r"\end{document}"), encoding="utf-8")
+    else:
+        main.write_text("\\documentclass{article}\n" + title + "\\begin{document}\n" + abstract + "\\section{Introduction}\n"
+                        "A synthetic source-isolation software test.\n" + sections + "\\end{document}\n", encoding="utf-8")
+    values = project / "papers/P01/tables/figure-values.csv"
+    values.parent.mkdir(parents=True, exist_ok=True)
+    values.write_text("label,value\nSYNTHETIC figure-values source no actual experiment,0\n", encoding="utf-8")
+    plan = project / "papers/P01/experiment-evidence-plan.json"
+    write(plan, panel_protocol_fixture())
+    protocol = project / "papers/P01/preregistration.json"
+    write(protocol, {"schema_version":"1.0", "paper_id":"P01", "status":"frozen", "frozen_at":"2026-01-01T00:00:00Z",
+        "frozen_by":"Synthetic fixture", "generated_by":"deterministic_local_control_plane", "confirmatory_lock":True,
+        "files":[{"path":plan.relative_to(project).as_posix(), "sha256":sha(plan)}],
+        "deviation_policy":"Synthetic protocol fixture only; no actual experiment.", "human_confirmation":True})
     rows = {}
     for seat, kinds in review_panel.VIEWS.items():
         rows[seat] = []
@@ -19,8 +59,14 @@ def panel_inputs(project):
             target = project / f"papers/P01/manuscript/{kind}.txt"
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(f"SYNTHETIC {kind} source, no actual experiment.\n", encoding="utf-8")
+            if kind == "numeric_table":
+                target.write_text("\\detokenize{SYNTHETIC numeric_table source, no actual experiment.} & 0 \\\\\n", encoding="utf-8")
+            elif kind == "protocol": target = protocol
+            elif kind == "figure_values": target = values
             rows[seat].append({"kind": kind, "path": target.relative_to(project).as_posix(),
-                "sha256": sha(target), "start_line": 1, "end_line": 1})
+                "sha256": sha(target), "start_line": 1, "end_line": len(target.read_text().splitlines())})
+    rows["statistics"].append({"kind":"protocol", "path":plan.relative_to(project).as_posix(), "sha256":sha(plan),
+                                "start_line":1,"end_line":len(plan.read_text().splitlines())})
     write(project / review_panel.request_path("P01"), {"paper_id": "P01", "views": rows})
 
 
@@ -98,7 +144,7 @@ class ReviewPanelTests(unittest.TestCase):
                 row["path"] = source.relative_to(self.project).as_posix()
                 row["sha256"] = sha(source)
         write(self.project / review_panel.request_path("P01"), spec)
-        with patch.object(model_runtime, "call") as call, self.assertRaisesRegex(ValueError, "identical material contents"):
+        with patch.object(model_runtime, "call") as call, self.assertRaisesRegex(ValueError, "outside its actual canonical"):
             review_panel.run(self.project, "P01", "copied-views")
         call.assert_not_called()
 
@@ -108,6 +154,307 @@ class ReviewPanelTests(unittest.TestCase):
         statistics = next(row for row in packet["views"]["statistics"]["sources"] if row.get("kind") == "numeric_table")
         self.assertEqual(domain, statistics)
         self.assertNotEqual(packet["views"]["domain"]["sha256"], packet["views"]["statistics"]["sha256"])
+
+    def test_full_manuscript_appended_to_otherwise_distinct_views_stops_before_transport(self):
+        main = self.project / "papers/P01/manuscript/main.tex"
+        text = main.read_text()
+        for section in ("Introduction", "Methods", "Results", "Discussion", "Conclusion"):
+            self.assertIn("\\section{" + section + "}", text)
+        original = read(self.project / review_panel.request_path("P01"))
+        kinds = {"domain":"methods", "editorial":"abstract", "statistics":"protocol"}
+        for seats in (("domain",),("editorial",),("statistics",),tuple(review_panel.VIEWS)):
+            spec = json.loads(json.dumps(original))
+            for seat in seats:
+                spec["views"][seat].append({"kind":kinds[seat], "path":main.relative_to(self.project).as_posix(),
+                    "sha256":sha(main), "start_line":1, "end_line":len(text.splitlines())})
+            write(self.project / review_panel.request_path("P01"), spec)
+            with self.subTest(seats=seats), patch.object(model_runtime, "call") as call, \
+                    self.assertRaisesRegex(ValueError, "actual canonical|canonical registered JSON"):
+                review_panel.run(self.project, "P01", "full-manuscript-in-each-view")
+            call.assert_not_called()
+
+    def test_real_wrong_kind_and_cross_section_ranges_cannot_be_relabeled(self):
+        main = self.project / "papers/P01/manuscript/main.tex"
+        lines = main.read_text().splitlines()
+        methods = next(i for i, line in enumerate(lines, 1) if line.startswith("SYNTHETIC methods"))
+        results = next(i for i, line in enumerate(lines, 1) if line.startswith("SYNTHETIC results"))
+        original = read(self.project / review_panel.request_path("P01"))
+        for kind, first, last in (("abstract", methods, methods), ("methods", methods, results)):
+            with self.subTest(kind=kind, first=first, last=last):
+                spec = json.loads(json.dumps(original))
+                seat = "editorial" if kind == "abstract" else "domain"
+                row = next(row for row in spec["views"][seat] if row["kind"] == kind)
+                row.update(path=main.relative_to(self.project).as_posix(), sha256=sha(main), start_line=first, end_line=last)
+                write(self.project / review_panel.request_path("P01"), spec)
+                with patch.object(model_runtime, "call") as call, self.assertRaisesRegex(ValueError, "actual canonical"):
+                    review_panel.run(self.project, "P01", "wrong-kind")
+                call.assert_not_called()
+
+    def test_abstract_wrapper_and_nested_heading_markup_cannot_hide_whole_sections(self):
+        main = self.project / "papers/P01/manuscript/main.tex"
+        original = main.read_text()
+        main.write_text(original.replace(r"\begin{abstract}", "").replace(r"\end{abstract}", "")
+                        .replace(r"\begin{document}", "\\begin{document}\n\\begin{abstract}")
+                        .replace(r"\end{document}", "\\end{abstract}\n\\end{document}"))
+        with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"abstract crosses"):
+            review_panel.run(self.project,"P01","wrapped-body")
+        calls.assert_not_called()
+        main.write_text(original.replace(r"\section{Results}", r"\section{\textbf{Results}}"))
+        spec = read(self.project / review_panel.request_path("P01"))
+        row = next(row for row in spec["views"]["domain"] if row["kind"] == "methods")
+        lines = main.read_text().splitlines()
+        start = next(i for i,line in enumerate(lines,1) if line.startswith("SYNTHETIC methods"))
+        end = next(i for i,line in enumerate(lines,1) if line.startswith("SYNTHETIC results"))
+        row.update(path=main.relative_to(self.project).as_posix(),sha256=sha(main),start_line=start,end_line=end)
+        write(self.project / review_panel.request_path("P01"),spec)
+        with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"actual canonical"):
+            review_panel.run(self.project,"P01","nested-heading")
+        calls.assert_not_called()
+
+    def test_included_methods_keep_original_locations_and_source_changes_invalidate_panel(self):
+        self.run_panel()
+        main = self.project / "papers/P01/manuscript/main.tex"
+        main.write_text(main.read_text().replace("A synthetic source-isolation software test.", "Changed introduction only."))
+        with self.assertRaisesRegex(ValueError, "old judgments are historical"):
+            review_panel.responses(self.project, "P01")
+        included = main.with_name("design.tex")
+        included.write_text("SYNTHETIC methods source, no actual experiment.\n")
+        main.write_text(main.read_text().replace(included.read_text().strip(), r"\input{design}"))
+        spec = read(self.project / review_panel.request_path("P01"))
+        row = next(row for row in spec["views"]["domain"] if row["kind"] == "methods")
+        row.update(path=included.relative_to(self.project).as_posix(), sha256=sha(included))
+        write(self.project / review_panel.request_path("P01"), spec)
+        packet = review_panel.prepare(self.project, "P01")
+        binding = next(row for row in packet["views"]["domain"]["sources"] if row["kind"] == "methods")
+        self.assertEqual(binding["path"], included.relative_to(self.project).as_posix())
+        self.assertIn({"path":main.relative_to(self.project).as_posix(),"sha256":sha(main)}, binding["canonical_sources"])
+        self.assertTrue(review_panel._pointer_in_view(binding["path"] + ":L1-L1", packet["views"]["domain"]["sources"]))
+
+    def test_arbitrary_json_cannot_impersonate_protocol_or_figure_values(self):
+        spec = read(self.project / review_panel.request_path("P01"))
+        source = self.project / "papers/P01/tables/manuscript.json"
+        write(source, {"title":"Whole manuscript", "methods":"Unscoped content", "results":"Unscoped results"})
+        for kind in ("protocol", "figure_values"):
+            with self.subTest(kind=kind):
+                trial = json.loads(json.dumps(spec))
+                row = next(row for row in trial["views"]["statistics"] if row["kind"] == kind)
+                row.update(path=source.relative_to(self.project).as_posix(), sha256=sha(source), start_line=1,
+                           end_line=len(source.read_text().splitlines()))
+                write(self.project / review_panel.request_path("P01"), trial)
+                with patch.object(model_runtime, "call") as call, self.assertRaises(ValueError):
+                    review_panel.run(self.project, "P01", "arbitrary-json")
+                call.assert_not_called()
+
+    def test_protocol_cannot_hide_registered_comparisons_behind_a_partial_freeze_receipt(self):
+        original = read(self.project / review_panel.request_path("P01"))
+        trial = json.loads(json.dumps(original))
+        next(row for row in trial["views"]["statistics"] if row["path"].endswith("preregistration.json"))["end_line"] = 1
+        write(self.project / review_panel.request_path("P01"),trial)
+        with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"complete canonical"):
+            review_panel.run(self.project,"P01","empty-protocol")
+        calls.assert_not_called()
+        trial["views"]["statistics"] = [row for row in original["views"]["statistics"] if not row["path"].endswith("experiment-evidence-plan.json")]
+        write(self.project / review_panel.request_path("P01"),trial)
+        with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"both the complete frozen"):
+            review_panel.run(self.project,"P01","freeze-receipt-only")
+        calls.assert_not_called()
+        write(self.project / review_panel.request_path("P01"),original)
+        packet = review_panel.prepare(self.project,"P01")
+        self.assertIn('"comparisons"', packet["views"]["statistics"]["text"])
+        self.assertIn('"stop_if"', packet["views"]["statistics"]["text"])
+
+    def test_first_figure_attachment_is_bound_to_actual_canonical_reference(self):
+        from PIL import Image
+        first = self.project / "papers/P01/figures/first.png"
+        first.parent.mkdir(parents=True)
+        Image.new("RGB", (2, 2), "white").save(first)
+        second = first.with_name("second.png")
+        Image.new("RGB", (2, 2), "black").save(second)
+        main = self.project / "papers/P01/manuscript/main.tex"
+        main.write_text(main.read_text().replace(r"\begin{figure}", "\\begin{figure}\n\\includegraphics{../figures/first.png}", 1)
+            .replace(r"\end{document}", "\\begin{figure}\n\\includegraphics{../figures/second.png}\n\\caption{Second figure}\n\\end{figure}\n\\end{document}"))
+        spec = read(self.project / review_panel.request_path("P01"))
+        row = next(row for row in spec["views"]["editorial"] if row["kind"] == "figure_one")
+        row.clear(); row.update(kind="figure_one", path=first.relative_to(self.project).as_posix(), sha256=sha(first))
+        write(self.project / review_panel.request_path("P01"), spec)
+        self.assertEqual(len(review_panel.prepare(self.project, "P01")["views"]["editorial"]["attachments"]), 1)
+        row.update(path=second.relative_to(self.project).as_posix(), sha256=sha(second))
+        write(self.project / review_panel.request_path("P01"), spec)
+        with patch.object(model_runtime, "call") as call, self.assertRaisesRegex(ValueError, "canonical first figure"):
+            review_panel.run(self.project, "P01", "wrong-figure")
+        call.assert_not_called()
+
+    def word_inputs(self):
+        from docx import Document
+        from PIL import Image
+        main = self.project / "papers/P01/manuscript/main.tex"
+        main.unlink()
+        document = Document()
+        document.add_paragraph("SYNTHETIC title source, no actual experiment.", style="Title")
+        document.add_heading("Abstract", level=1)
+        document.add_paragraph("SYNTHETIC abstract source, no actual experiment.")
+        document.add_paragraph("SYNTHETIC headline_claim source, no actual experiment.")
+        document.add_heading("Introduction", level=1)
+        document.add_paragraph("A software fixture, not a scientific manuscript.")
+        document.add_heading("Methods", level=1)
+        document.add_paragraph("SYNTHETIC methods source, no actual experiment.")
+        document.add_heading("Results", level=1)
+        document.add_paragraph("SYNTHETIC results source, no actual experiment.")
+        table = document.add_table(rows=2, cols=2)
+        table.cell(0,0).text = "label"; table.cell(0,1).text = "value"
+        table.cell(1,0).text = "SYNTHETIC numeric_table source, no actual experiment."; table.cell(1,1).text = "0"
+        figure = self.project / "papers/P01/figures/first.png"
+        figure.parent.mkdir(parents=True)
+        Image.new("RGB", (2,2), "white").save(figure)
+        document.add_picture(str(figure))
+        document.add_paragraph("Figure 1. SYNTHETIC figure_one source, no actual experiment.", style="Caption")
+        document.add_heading("Discussion", level=1); document.add_paragraph("No scientific conclusion.")
+        canonical = main.with_suffix(".docx"); document.save(canonical)
+        output = io.StringIO(); csv.writer(output, lineterminator="\n").writerows([
+            ["label","value"],["SYNTHETIC numeric_table source, no actual experiment.","0"]])
+        numeric = self.project / "papers/P01/tables/word-table.csv"; numeric.write_text(output.getvalue())
+        values = self.project / "papers/P01/tables/figure-values.csv"
+        write(figure.parent / "figure-provenance.json", {"schema_version":"1.0", "figures":[{
+            "figure_path":figure.relative_to(self.project).as_posix(),"figure_type":"data_chart", "output_sha256":sha(figure),
+            "inputs":[{"path":values.relative_to(self.project).as_posix(), "sha256":sha(values)}],
+            "source_run_ids":["explicit-software-fixture"],"source_lineage":{"fixture_only":True}}]})
+        spec = read(self.project / review_panel.request_path("P01"))
+        for rows in spec["views"].values():
+            for row in rows:
+                if row["kind"] == "numeric_table":
+                    row.update(path=numeric.relative_to(self.project).as_posix(), sha256=sha(numeric), end_line=2)
+        row = next(row for row in spec["views"]["domain"] if row["kind"] == "methods")
+        row.clear(); row.update(kind="methods", path=canonical.relative_to(self.project).as_posix(), sha256=sha(canonical),
+                                start_paragraph=8, end_paragraph=8)
+        write(self.project / review_panel.request_path("P01"), spec)
+        return canonical, spec
+
+    def test_word_headings_tables_and_first_figure_preserve_legitimate_panel_route(self):
+        canonical, spec = self.word_inputs()
+        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}):
+            packet = review_panel.prepare(self.project, "P01")
+            source = next(row for row in packet["views"]["domain"]["sources"] if row["kind"] == "methods")
+            self.assertTrue(review_panel._pointer_in_view(source["path"] + ":P8-P8", [source]))
+            self.assertFalse(review_panel._pointer_in_view(source["path"] + ":L8-L8", [source]))
+            def response(project, **kwargs):
+                result = self.response(project, **kwargs)
+                result.text = result.text.replace("papers/P01/manuscript/methods.txt:L1-L1", source["path"] + ":P8-P8")
+                return result
+            with patch.object(model_runtime, "call", side_effect=response) as calls:
+                result = review_panel.run(self.project, "P01", "word-scoped-fixture")
+            self.assertEqual(result["paid_calls"], 3); self.assertEqual(calls.call_count, 3)
+            row = next(row for row in spec["views"]["editorial"] if row["kind"] == "abstract")
+            row.clear(); row.update(kind="abstract", path=source["path"], sha256=sha(canonical), start_paragraph=1, end_paragraph=18)
+            write(self.project / review_panel.request_path("P01"), spec)
+            with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "actual canonical"):
+                review_panel.run(self.project, "P01", "whole-word-file")
+            calls.assert_not_called()
+
+    def test_word_formula_structure_is_preserved_and_opaque_objects_are_explicit(self):
+        from docx import Document
+        from docx.oxml import OxmlElement
+        canonical, spec = self.word_inputs()
+        document = Document(canonical)
+        paragraph = next(p for p in document.paragraphs if p.text.startswith("SYNTHETIC methods"))
+        formula = OxmlElement("m:oMath"); fraction = OxmlElement("m:f")
+        for tag, value in (("m:num", "1"), ("m:den", "2")):
+            part = OxmlElement(tag); run = OxmlElement("m:r"); number = OxmlElement("m:t")
+            number.text = value; run.append(number); part.append(run); fraction.append(part)
+        formula.append(fraction); paragraph._p.append(formula); document.save(canonical)
+        row = next(row for row in spec["views"]["domain"] if row["kind"] == "methods")
+        row["sha256"] = sha(canonical); write(self.project / review_panel.request_path("P01"),spec)
+        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}):
+            text = review_panel.prepare(self.project,"P01")["views"]["domain"]["text"]
+            self.assertIn("OMML formula:", text); self.assertIn(":num>", text); self.assertIn(":den>", text)
+            paragraph._p.append(OxmlElement("w:object")); document.save(canonical)
+            row["sha256"] = sha(canonical); write(self.project / review_panel.request_path("P01"),spec)
+            with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"unrendered embedded object"):
+                review_panel.run(self.project,"P01","opaque-word-object")
+            calls.assert_not_called()
+
+    def test_word_layout_table_cannot_smuggle_document_sections_as_numeric_table(self):
+        from docx import Document
+        from scripts.scientific_editing import WordSource, W
+        canonical, spec = self.word_inputs()
+        document = Document(canonical)
+        layout = document.add_table(rows=2, cols=2)
+        layout.cell(0,0).text = "Title and abstract"; layout.cell(0,1).text = "0"
+        layout.cell(1,0).text = "0"; layout.cell(1,1).text = "0"
+        for node in list(document.element.body):
+            if node.tag.endswith("}p"):
+                layout.cell(0,0)._tc.append(node)
+        document.save(canonical)
+        paragraphs = ["".join(node.text or "" for node in p.iter() if node.tag.endswith("}t"))
+                      for p in WordSource(canonical).root.iter(W + "p")]
+        methods = next(i for i,value in enumerate(paragraphs,1) if value.startswith("SYNTHETIC methods"))
+        # A valid table remains elsewhere; the layout table must not acquire
+        # numeric authority merely because its cells surround the manuscript.
+        spec["views"]["domain"] = [row for row in spec["views"]["domain"] if row["kind"] != "numeric_table"]
+        spec["views"]["domain"].append({"kind":"numeric_table", "path":canonical.relative_to(self.project).as_posix(),
+            "sha256":sha(canonical),"start_paragraph":5,"end_paragraph":len(paragraphs)})
+        for rows in spec["views"].values():
+            for row in rows:
+                if row["path"] == canonical.relative_to(self.project).as_posix(): row["sha256"] = sha(canonical)
+                if row["kind"] == "methods": row.update(start_paragraph=methods,end_paragraph=methods)
+        write(self.project / review_panel.request_path("P01"), spec)
+        with patch("scripts.figure_lineage.lineage", return_value={"fixture_only":True}), \
+                patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError,"numeric_table selection is outside"):
+            review_panel.run(self.project, "P01", "word-layout-as-data")
+        calls.assert_not_called()
+
+    def test_side_task_payloads_cannot_restore_full_manuscript_after_source_validation(self):
+        from scripts import literature_source_tasks as tasks
+        main = self.project / "papers/P01/manuscript/main.tex"
+        full = main.read_text()
+        source = {"path":main.relative_to(self.project).as_posix(), "sha256":sha(main), "locator":"complete canonical paper"}
+        write(self.project / "program/citation-task.json", {"schema_version":"1.0", "id":"full-source", "paper_id":"P01", "source":source})
+        write(self.project / "program/claim-task.json", {"paper_id":"P01", "claim":full, "context":full,
+              "prior_verdict":"PRIVATE_PRIOR_CLAIM_OPINION"})
+        write(self.project / tasks.CONTROL, {"scientific_judgments":[
+            {"operation":operation,"request_file":request,"paper_id":"P01","stages":["writing-and-review"],"panel_views":list(review_panel.VIEWS)}
+            for operation,request in (("citation_crosscheck","program/citation-task.json"),("claim_evidence","program/claim-task.json"))]})
+        # This really is a source-capable task, not a mocked payload. Ordinary
+        # configuration remains usable; the final panel never prepares it.
+        prepared = tasks.prepare_panel_task(self.project,"citation_crosscheck","program/citation-task.json",paper_id="P01")
+        self.assertEqual(prepared["packet"]["source_text"], full)
+        with patch.object(tasks,"selected_context",side_effect=AssertionError("final panel must not prepare ordinary tasks")), \
+                patch.object(model_runtime,"call",side_effect=self.response) as calls:
+            result = review_panel.run(self.project,"P01","side-tasks-stay-ordinary")
+            reused = review_panel.run(self.project,"P01","ordinary-config-kept")
+        self.assertEqual(calls.call_count,3); self.assertEqual(reused["paid_calls"],0)
+        self.assertEqual(result["source_task_execution"],"not_performed_by_final_panel")
+        for call in calls.call_args_list:
+            self.assertNotIn(full,call.kwargs["prompt"])
+            self.assertNotIn("PRIVATE_PRIOR_CLAIM_OPINION",call.kwargs["prompt"])
+            self.assertNotIn("SELECTED TASKS",call.kwargs["prompt"])
+        for field in ("claim_evidence","citation_extraction","anchor_labels"):
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError,"its own view"):
+                review_panel._response({"view":"domain","findings":[],"uncertainty":[],field:[]},"domain")
+
+    def test_legacy_task_fields_remain_archived_but_do_not_become_current_panel_judgments(self):
+        result, _ = self.run_panel("legacy")
+        manifest_path = self.project / result["manifest"]["path"]
+        manifest = read(manifest_path); manifest.pop("source_task_execution")
+        for binding in manifest["receipts"].values():
+            receipt_path = self.project / binding["path"]; receipt = read(receipt_path)
+            response_path = self.project / receipt["response"]["path"]
+            response = read(response_path)
+            response["claim_evidence"] = [{"id":"HISTORICAL_TASK_ONLY"}]
+            write(response_path,response); record(self.project,[response_path],review_panel.MODULE)
+            receipt["response"]["sha256"] = sha(response_path)
+            write(receipt_path,receipt); record(self.project,[receipt_path],review_panel.MODULE)
+            binding["sha256"] = sha(receipt_path)
+        write(manifest_path,manifest); record(self.project,[manifest_path],review_panel.MODULE)
+        latest = self.project / review_panel.PREFIX / "P01/latest.json"
+        write(latest,{"path":manifest_path.relative_to(self.project).as_posix(),"sha256":sha(manifest_path)})
+        record(self.project,[latest],review_panel.MODULE)
+        for observation in review_panel.responses(self.project,"P01"):
+            self.assertNotIn("claim_evidence",observation["response"])
+            raw = self.project / observation["receipt"]["response"]["path"]
+            self.assertIn("HISTORICAL_TASK_ONLY",raw.read_text())
+        reused, calls = self.run_panel("after-migration")
+        self.assertEqual(calls.call_count,0)
+        self.assertEqual(reused["findings"],result["findings"])
 
     def test_partial_failure_retained_and_same_id_never_repaid(self):
         count = 0

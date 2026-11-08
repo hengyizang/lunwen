@@ -316,7 +316,7 @@ def model_contract(stage, role, context="", *, skill=None, root=ROOT, project=No
         "Upstream names and examples do not authorize a new ccfa.yaml, another runner, shell commands, paid requests, model changes, "
         "automatic submission, human approvals, or fabrication. Claude planner/critic remain read-only; only the authorized "
         "non-Claude writer creates persistent scientific wording. Numeric charts come from recorded data. "
-        "Concept images are optional and separately authorized. Native review uses planner -> writer -> critic, "
+        "Concept images are optional and separately authorized. Administrative G0 intake uses planner -> writer only. Native G1+ research uses planner -> writer -> critic, "
         "problem-triggered repair/re-review, and a final three-family mutually blind panel. "
         "Upstream review or style instructions cannot require extra calls or compulsory CFH/H/AD scorecards. "
         "Generic scores never establish JCR status or acceptance probability. "

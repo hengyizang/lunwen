@@ -7,7 +7,7 @@ import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
-from scripts.research_artifacts import path_in, read, bound_source, write, record, sha
+from scripts.research_artifacts import path_in, read, bound_source, write, record, sha, save_report, report_errors
 
 FIELDS = {"apc", "page_charges", "oa_policy", "waivers", "review_time", "submission_url"}
 FIT_FIELDS = ("scope", "editorial_interest", "article_type", "desk_reject_risks")
@@ -151,11 +151,8 @@ def audit(project: Path, *, now: datetime | None = None) -> dict:
 
 
 def refresh(project: Path) -> dict:
-    value = audit(project)
-    output = project / "program/journal-dossier-report.json"
-    write(output, value)
-    record(project, [output], "scripts/journal_dossier.py")
-    return value
+    return save_report(project, project / "program/journal-dossier-report.json",
+                       audit(project), "scripts/journal_dossier.py")
 
 
 def validate_saved_report(project: Path, selected_venue_id: str | None = None) -> list[str]:
@@ -164,9 +161,7 @@ def validate_saved_report(project: Path, selected_venue_id: str | None = None) -
     try:
         expected = audit(project)
         saved = read(path_in(project, "program/journal-dossier-report.json"))
-        errors = list(expected["errors"])
-        if saved != expected:
-            errors.append("journal dossier is stale or differs from a fresh source check")
+        errors = report_errors(expected, saved, "journal dossier is stale or differs from a fresh source check")
         if selected_venue_id is not None and selected_venue_id not in {j["venue_id"] for j in expected["journals"]}:
             errors.append("selected venue lacks its dated journal dossier")
         return errors

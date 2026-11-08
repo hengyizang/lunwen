@@ -16,7 +16,7 @@ from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 from urllib.parse import parse_qsl, urlsplit, urlunsplit
 
-from scripts.research_artifacts import path_in, read, record, sha, write
+from scripts.research_artifacts import path_in, read, record, sha, write, save_report, report_errors
 from scripts.network_safety import fetch_bytes, validate_https_url
 
 INPUT = "program/research-support.json"
@@ -610,10 +610,7 @@ def audit(project: Path, *, now: datetime | None = None) -> dict:
 
 def refresh(project: Path) -> dict:
     result = audit(project)
-    output = path_in(project, OUTPUT, exists=False)
-    write(output, result)
-    record(project, [output], "scripts/research_support.py")
-    return result
+    return save_report(project, path_in(project, OUTPUT, exists=False), result, "scripts/research_support.py")
 
 
 def validate_saved_report(project: Path) -> list[str]:
@@ -621,9 +618,6 @@ def validate_saved_report(project: Path) -> list[str]:
         return []
     try:
         current, saved = audit(project), read(path_in(project, OUTPUT))
-        errors = list(current["errors"])
-        if current != saved:
-            errors.append("research-support report is stale or differs from a clean source-bound rerun")
-        return errors
+        return report_errors(current, saved, "research-support report is stale or differs from a clean source-bound rerun")
     except (OSError, ValueError, TypeError, KeyError, RuntimeError) as exc:
         return ["cannot validate research support: " + str(exc)]

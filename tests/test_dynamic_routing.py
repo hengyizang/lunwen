@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import tempfile
+import time
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
@@ -104,6 +105,29 @@ class DynamicRoutingTests(unittest.TestCase):
         result = self.select()
         self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
         self.assertEqual(result["route"]["policy_sha256"], self.baseline["policy_sha256"])
+
+    def test_public_review_calibration_cannot_switch_even_an_accepted_transport(self):
+        self.calibration()
+        self.accept()
+        self.baseline["temporary_validation_only"] = True
+        with patch.object(routing, "_available"), patch.object(routing, "_budget_feasible"):
+            result = self.select()
+        self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
+        self.assertEqual(routing._id(result["route"]), routing._id(self.baseline))
+        self.assertTrue(all("locks its exact planned" in row["reason"] for row in result["decision"]["excluded"]))
+
+    def test_g1_transport_context_guards_do_not_apply_to_ordinary_tasks(self):
+        self.baseline.update(temporary_validation_only=True, validation_max_input_bytes=4,
+                             validation_scope={"purpose": "g1-transport-validation"})
+        with patch.dict(os.environ, {"DR_OS_DYNAMIC_ROUTING": "off", "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}):
+            with self.assertRaisesRegex(routing.RoutingError, "full source plan"):
+                self.select()
+            self.baseline["validation_max_input_bytes"] = 2_000_000
+            with patch.dict(os.environ, {"DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 100)}):
+                with self.assertRaisesRegex(routing.RoutingError, "complete call and checkpoint"):
+                    self.select()
+                self.baseline.pop("validation_scope")
+                self.assertEqual(self.select()["route"]["provider"], self.baseline["provider"])
 
     def test_terra_routine_writer_stays_baseline_until_scoped_quality_and_billing_acceptance(self):
         self.baseline = model_routing.select("intake", "persistent-writer")
