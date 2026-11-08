@@ -1751,19 +1751,440 @@
     }
   ],
   "decision": {
-    "priority_pair_for_verification_only": [
-      1,
-      3
-    ],
+    "priority_pair_for_verification_only": null,
     "formal_topic_selected": false,
     "weighted_ranking_computed": false,
     "other_four_not_equally_deepened": true,
     "next_experiments_after_actual_g1_choice_and_protocol": true,
-    "no_six_paper_q1_or_new_deadline_promise": true
+    "no_six_paper_q1_or_new_deadline_promise": true,
+    "previous_priority_pair_for_verification_only": [
+      1,
+      3
+    ],
+    "latest_owner_preference": "robotics and autonomous control",
+    "current_verification_families": [
+      1,
+      2,
+      5
+    ]
   },
   "storage": {
     "raw_download_directory": "/tmp/lunwen-batch2-deepening",
     "raw_documents_durably_archived": false,
     "persisted_artifacts": "Paraphrases, exact source fingerprints/read scopes/access metadata only; no publication copies or private HTTP headers/cookies."
+  },
+  "robotics_autonomy_initial_screen": {
+    "prepared_at_utc": "2026-11-08T14:01:38.141Z",
+    "owner_steering": "Prefer robotics and autonomous control; investigate batch2 families1,2,5. No formal topic selected.",
+    "provenance_statement": "current Codex session draft, exact API model identity unavailable, no native runtime receipt, no topic approval.",
+    "base_local_versions_before_append": {
+      "report_sha256": "aa5d850b104fce573db1e9b6c50367a496351fd66ae12ef9ccae9a966ce60c0c",
+      "source_notes_sha256": "e79f22307f12d76459d8c8957d913516d0ab70ae82fb9110a8260f52c3994ce2"
+    },
+    "current_report_sha256": "187e5e1cad69261c26392721b2e07aebb049f55483d08977491af18a8f31e020",
+    "source_reading_counts": {
+      "added_pdfs_downloaded": 5,
+      "full_native_technical_report_read": 1,
+      "partial_native_scientific_bodies_read": 3,
+      "image_only_pdf_not_scientifically_read": 1,
+      "readme_files_read": 4,
+      "indexed_abstract_leads": 7
+    },
+    "sources": [
+      {
+        "id": "RS-CAL",
+        "title": "Automated Continuous Force-Torque Sensor Bias Estimation",
+        "url": "https://arxiv.org/abs/2403.01068v1",
+        "pdf_url": "https://arxiv.org/pdf/2403.01068v1",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 7,
+        "raw_pdf_bytes": 431629,
+        "raw_pdf_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+        "extracted_text_sha256": "4a2c1bc1f81db1506840871ef8037472d8fcdd4f5f70f9182d670d04ac19ac7d",
+        "read_level": "full native scientific extraction read",
+        "actual_read_scope": "Entire extracted text, lines1–438, §§1–3 and references. Technical report, not an empirical performance study. Formulas read but not independently verified. PDF self-labels revision1.2 March5 versus arXiv v1 March2; bytes frozen, date discrepancy unresolved.",
+        "full_main_read": true,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R1-bias.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R1-bias.txt",
+        "raw_documents_durably_archived": false
+      },
+      {
+        "id": "RS-FAIR",
+        "title": "Leveling the Playing Field: Carefully Comparing Classical and Learned Controllers for Quadrotor Trajectory Tracking",
+        "url": "https://arxiv.org/abs/2506.17832v1",
+        "pdf_url": "https://arxiv.org/pdf/2506.17832v1",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 14,
+        "raw_pdf_bytes": 1504823,
+        "raw_pdf_sha256": "9ed12d35817108af2223c685522639cb5d812b999a77a1d17304a457566c0ecd",
+        "extracted_text_sha256": "52392096012a16203032cd3aa2817a1aa1e32dbf31457c28f074792ee1e51e4d",
+        "read_level": "selected native scientific sections read",
+        "actual_read_scope": "Extracted lines1–355 and570–638: §§I–IV, V-A, realistic dynamics V-F, discussion/conclusion VI–VII. Intermediate result sections and appendices not fully read; no table-value audit or reproduction.",
+        "full_main_read": false,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R2-leveling-arxiv.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R2-leveling-arxiv.txt",
+        "raw_documents_durably_archived": false
+      },
+      {
+        "id": "RS-FAIR-RSS",
+        "title": "Leveling the Playing Field — RSS image-only copy",
+        "url": "https://www.roboticsproceedings.org/rss21/p116.html",
+        "pdf_url": "https://www.roboticsproceedings.org/rss21/p116.pdf",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 13,
+        "raw_pdf_bytes": 4178382,
+        "raw_pdf_sha256": "7e9f091c88ae7ccbb5d23729932be4727d5db3f252d406108f4cf22f4fa7cd66",
+        "extracted_text_sha256": "859aa658314fcc519a9b7aa9096bc94316446ca5d26eb9f1a5e9369030b02c86",
+        "read_level": "image-only PDF, scientifically unread",
+        "actual_read_scope": "Download succeeded but native extraction empty. No OCR performed. Scientific claims use RS-FAIR arXiv text, not this conference PDF.",
+        "full_main_read": false,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R2-leveling.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R2-leveling.txt",
+        "raw_documents_durably_archived": false
+      },
+      {
+        "id": "RS-RECODE",
+        "title": "ReCoDe: Reinforcement Learning-based Dynamic Constraint Design for Multi-Agent Coordination",
+        "url": "https://proceedings.mlr.press/v305/amir25a.html",
+        "pdf_url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/amir25a/amir25a.pdf",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 17,
+        "raw_pdf_bytes": 6938650,
+        "raw_pdf_sha256": "4985fe9ee3b319900687087a125b3a5e2394e17a30c0bef209dc89a51ba5aee0",
+        "extracted_text_sha256": "4743d6879a8dc3d4f47c01bba3bf74a754d1dc43912ca24c9ba50a9110346d93",
+        "read_level": "selected native scientific sections read",
+        "actual_read_scope": "Abstract/introduction and §2 method; evaluation excerpts including local communication, 7.2M training steps, real-robot discussion; §6 limitations, AppendixB implementation. A truncated proposition passage was not treated as a complete proof reading. Other appendices/proofs not read.",
+        "full_main_read": false,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R5-recode.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R5-recode.txt",
+        "raw_documents_durably_archived": false
+      },
+      {
+        "id": "RS-DELAY",
+        "title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+        "url": "https://arxiv.org/abs/2402.09382v4",
+        "pdf_url": "https://arxiv.org/pdf/2402.09382v4",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 14,
+        "raw_pdf_bytes": 1377650,
+        "raw_pdf_sha256": "5a0328bb97f36c70873ce8986fa4d8944cc6f250f63c09c0fbef23ffeca733c0",
+        "extracted_text_sha256": "99eb989ac09541983bc5b0a35f76d2df7994489f3ed3a97ce4de6f829eae87e0",
+        "read_level": "selected native scientific sections read",
+        "actual_read_scope": "Actual abstract page plus PDF excerpts: §III setup lines245–303, §V predictor/heuristic lines506–585, §VI setup/training614–681, scalability/§VII limitations807–915 and code footnote585–613. Complete formal theory, all results and appendices not read; no verification of learned certificate.",
+        "full_main_read": false,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R5-delay.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R5-delay.txt",
+        "raw_documents_durably_archived": false
+      }
+    ],
+    "abstract_only_leads": [
+      {
+        "id": "RS-FASTPAYLOAD",
+        "title": "Fast Payload Calibration for Sensorless Contact Estimation Using Model Pre-training",
+        "url": "https://arxiv.org/abs/2409.03369",
+        "year": "2024",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-RME",
+        "title": "Rapid Mismatch Estimation via Neural Network Informed Variational Inference",
+        "url": "https://proceedings.mlr.press/v305/jaszczuk25a.html",
+        "year": "2025",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-DATT",
+        "title": "DATT: Deep Adaptive Trajectory Tracking for Quadrotor Control",
+        "url": "https://proceedings.mlr.press/v229/huang23a.html",
+        "year": "2023",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-EVENTBO",
+        "title": "Event-triggered safe Bayesian optimization on quadcopters",
+        "url": "https://proceedings.mlr.press/v242/holzapfel24a.html",
+        "year": "2024",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-RMADER",
+        "title": "Robust MADER: Decentralized Multiagent Trajectory Planner Robust to Communication Delay in Dynamic Environments",
+        "url": "https://arxiv.org/abs/2303.06222",
+        "year": "2023",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-MERRY",
+        "title": "Merry-Go-Round: Safe Control of Decentralized Multi-Robot Systems with Deadlock Prevention",
+        "url": "https://arxiv.org/abs/2503.05848",
+        "year": "2025",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      },
+      {
+        "id": "RS-AGILE",
+        "title": "Learning Agile Quadrotor Flight in the Real World",
+        "url": "https://www.roboticsproceedings.org/rss22/p135.html",
+        "year": "2026",
+        "access_date_utc": "2026-11-08",
+        "read_level": "indexed abstract/excerpt only",
+        "raw_http_bytes_sha256": null,
+        "full_text_read": false,
+        "scope_note": "Located prior-art lead; no completed method/assumption comparison or whole-paper conclusions inferred."
+      }
+    ],
+    "software_resources": [
+      {
+        "id": "RR-GYM",
+        "url": "https://github.com/learnsyslab/gym-pybullet-drones/blob/main/README.md",
+        "access_date_utc": "2026-11-08",
+        "git_blob_sha": "0e98c0b116fcae9162fb7c0c31d7ac6dc2a927bf",
+        "utf8_content_sha256": "bc7558073a7be0d69dc0ba9262caa9232d16a29927dde28cdc70d4e55e937c4e",
+        "utf8_bytes": 7146,
+        "returned_text_matches_git_blob": true,
+        "read_scope": "Entire returned README text, including installation/resource notes; no install/compile/train/test execution.",
+        "whole_repository_commit_frozen": false,
+        "transitive_dependency_lock_verified": false,
+        "current_runner_cpu_ram_time_measured": false
+      },
+      {
+        "id": "RR-RVO2",
+        "url": "https://github.com/snape/RVO2/blob/main/README.md",
+        "access_date_utc": "2026-11-08",
+        "git_blob_sha": "42812833354c5740c3b8381e0e1140ea216ecff3",
+        "utf8_content_sha256": "96786bc5d8af46edee0fa80cd7d2bc1d7d73ab3e6a2076bcaaa174b898719f37",
+        "utf8_bytes": 4474,
+        "returned_text_matches_git_blob": true,
+        "read_scope": "Entire returned README text, including installation/resource notes; no install/compile/train/test execution.",
+        "whole_repository_commit_frozen": false,
+        "transitive_dependency_lock_verified": false,
+        "current_runner_cpu_ram_time_measured": false
+      },
+      {
+        "id": "RR-MACBF",
+        "url": "https://github.com/lucaballotta/macbf-gnn/blob/master/README.md",
+        "access_date_utc": "2026-11-08",
+        "git_blob_sha": "cc829020df744036a5c70d50aecf15cb2a0e13fa",
+        "utf8_content_sha256": "33d77229e8881a27fa2badf4e81cda4f933e3e873e87c70c0d1a0af86dd3540b",
+        "utf8_bytes": 1098,
+        "returned_text_matches_git_blob": true,
+        "read_scope": "Entire returned README text, including installation/resource notes; no install/compile/train/test execution.",
+        "whole_repository_commit_frozen": false,
+        "transitive_dependency_lock_verified": false,
+        "current_runner_cpu_ram_time_measured": false
+      },
+      {
+        "id": "RR-LEVELING-CODE",
+        "url": "https://github.com/PratikKunapuli/rl-vs-gc/blob/main/README.md",
+        "access_date_utc": "2026-11-08",
+        "git_blob_sha": "90c33bb07663797843eb7a0a498ee1f8ba64479f",
+        "utf8_content_sha256": "a29de70636f900aabaf3863a36fa6d223caf7cb55ec5775a2ac0a481c6f8a3b5",
+        "utf8_bytes": 3127,
+        "returned_text_matches_git_blob": true,
+        "read_scope": "Entire returned README text, including installation/resource notes; no install/compile/train/test execution.",
+        "whole_repository_commit_frozen": false,
+        "transitive_dependency_lock_verified": false,
+        "current_runner_cpu_ram_time_measured": false
+      }
+    ],
+    "prior_resource_refs": [
+      "I3",
+      "I4",
+      "I5"
+    ],
+    "public_reads": {
+      "logical_command_count": 22,
+      "search_queries": [
+        {
+          "query": "robot peg hole assembly force torque sensor bias drift calibration online learning 2024 2025 2026",
+          "access_date_utc": "2026-11-08"
+        },
+        {
+          "query": "quadrotor learned fault detection recovery actuator saturation delayed observations 2024 2025 2026",
+          "access_date_utc": "2026-11-08"
+        },
+        {
+          "query": "multi robot decentralized collision avoidance asynchronous communication delay deadlock learned Robust MADER 2024 2025 2026",
+          "access_date_utc": "2026-11-08"
+        },
+        {
+          "query": "robot force torque sensor bias estimation online calibration contact payload unknown 2024 2025 2026 arxiv",
+          "access_date_utc": "2026-11-08"
+        },
+        {
+          "query": "quadrotor reference governor learning control actuator saturation anti windup 2024 2025 2026",
+          "access_date_utc": "2026-11-08"
+        },
+        {
+          "query": "ReCoDe reinforcement learning dynamic constraint design multi agent coordination github code",
+          "access_date_utc": "2026-11-08"
+        }
+      ],
+      "web_open_or_click_commands": 7,
+      "pdf_get_commands": 5,
+      "github_readme_fetch_commands": 4,
+      "web_tool_calls": 5,
+      "search_stop": "Coordinator requested freezing the initial screen without further expansion.",
+      "transport_failures": [],
+      "reading_limitations": [
+        {
+          "source": "RS-FAIR-RSS",
+          "outcome": "HTTP200 image-only PDF; no scientific text extracted, no OCR, not counted as read"
+        }
+      ],
+      "rejected_search_hits": [
+        {
+          "query": "ReCoDe reinforcement learning dynamic constraint design multi agent coordination github code",
+          "url": "https://github.com/zjunlp/ReCode",
+          "reason": "Code knowledge editing project, not the robotics ReCoDe paper; no scientific use."
+        },
+        {
+          "query": "ReCoDe reinforcement learning dynamic constraint design multi agent coordination github code",
+          "url": "https://github.com/FoundationAgents/ReCode",
+          "reason": "LLM agent code-generation project, not the robotics ReCoDe paper; no scientific use."
+        }
+      ]
+    },
+    "questions": [
+      {
+        "family": 1,
+        "question": "When should assembly control freeze a force-sensor calibration update so that genuine contact is not absorbed as bias?",
+        "changed_decision": "Trust/freeze calibration or perform a bounded retreat/reorientation; not generic contact-mode prediction.",
+        "strong_prior_refs": [
+          "RS-CAL",
+          "RS-FASTPAYLOAD",
+          "RS-RME",
+          "C3",
+          "C4"
+        ],
+        "learning_mechanism": "Small history-conditioned update-validity gate / uncertainty estimator",
+        "strongest_rival": "Known-payload Kalman estimator with contact-threshold gating and matched bounded motion",
+        "falsifier": "Learning gain disappears under matched classical gating, or bias/contact remain observationally indistinguishable without additional information.",
+        "resource_entry": "Previously frozen robosuite state/wrench interface; observation-bias/contact wrapper is a proposed reviewed extension, not validated real sensor physics.",
+        "independent_unit": "Assembly episode grouped by payload/contact/bias family",
+        "real_hardware_or_measured_drift_data_verified": false,
+        "novelty_established": false,
+        "six_paper_independence_established": false
+      },
+      {
+        "family": 2,
+        "question": "When actuator limits are reached, does a flight controller need reference modification rather than further parameter adaptation?",
+        "changed_decision": "Continue adaptation or invoke reference governor/retiming; not separate wind from rotor lag.",
+        "strong_prior_refs": [
+          "RS-FAIR",
+          "RS-DATT",
+          "RS-EVENTBO",
+          "RS-AGILE"
+        ],
+        "learning_mechanism": "Low-dimensional history-based feasibility/intervention diagnostic",
+        "strongest_rival": "Matched geometric/INDI control with anti-windup and model-based reference governor or constrained MPC",
+        "falsifier": "A deterministic feasibility rule matches recovery/tracking; apparent gain uses unequal reference preview/tuning or a trajectory even oracle parameters cannot track.",
+        "resource_entry": "Official gym-pybullet-drones examples; required motor/actuator model not assumed complete. RS-FAIR implementation uses IsaacSim/IsaacLab, not demonstrated CPU reproduction.",
+        "independent_unit": "Complete flight grouped by vehicle-parameter/reference family",
+        "real_flight_or_gpu_assumed": false,
+        "novelty_established": false,
+        "six_paper_independence_established": false
+      },
+      {
+        "family": 5,
+        "question": "When sender timestamps are uncertain, when should a mobile robot stop trusting a stale peer-state prediction?",
+        "changed_decision": "Use prediction, reachable-set fallback, waiting or request fresher message; not load-conditioned traffic guidance.",
+        "strong_prior_refs": [
+          "RS-RECODE",
+          "RS-DELAY",
+          "RS-RMADER",
+          "RS-MERRY"
+        ],
+        "learning_mechanism": "Small age/state-uncertainty or trust/abstention estimator",
+        "strongest_rival": "Interval clock correction plus physical reachable-set/priority control",
+        "falsifier": "Timestamp perturbations do not change outcomes under honest local sensing, or interval prediction/waiting removes the effect without learning.",
+        "resource_entry": "RVO2 C++ CPU-oriented baseline and MACBF-GNN public entry points; clock/acceleration wrapper not stock validated scenario.",
+        "independent_unit": "Joint robot scenario/network trace, not each interacting robot",
+        "clock_uncertain_control_nearest_neighbor_review_complete": false,
+        "novelty_established": false,
+        "six_paper_independence_established": false
+      }
+    ],
+    "excluded_generic_claims": [
+      "Continuously estimate wrist-sensor bias/drift",
+      "Learn contact compliance/history using a new network",
+      "Automatically tune quadrotor gains or handle generic saturation/infeasible tracking",
+      "Learn yielding/deadlock constraints",
+      "Predict neighbor states using known age of information, asymmetric delay or acceleration-limited dynamics"
+    ],
+    "resource_boundary": {
+      "actual_github_runner_measurements": null,
+      "paid_compute_budget_usd": 0,
+      "robot_drone_fleet_or_gpu_assumed": false,
+      "installations": 0,
+      "simulations": 0,
+      "model_fits": 0,
+      "scientific_experiments": 0,
+      "raw_experimental_dataset_acquisitions": 0,
+      "source_reading_not_execution": true
+    },
+    "authority": {
+      "formal_g1_topic_selected": false,
+      "g2_topics_approved": false,
+      "independent_critic_performed": false,
+      "github_mutations": 0,
+      "production_code_or_formal_project_changes": 0,
+      "project_gateway_calls": 0,
+      "other_model_api_calls": 0,
+      "app_session_cost_cny": null,
+      "exact_api_model_identity": null,
+      "native_model_runtime_receipt": null,
+      "three_owner_policy_overrides_unchanged": true
+    },
+    "publication_or_timing_promises": false,
+    "nist_followup": {
+      "run168_evidence": "batch2-nist168-followup-evidence.json",
+      "corrected_attempt_run": "42486624175",
+      "corrected_attempt_issue": 172,
+      "official_zip_sha256": "b85d8bf01925e5cb0ee2cff14471649434778eaa3d056db88ed764ef1ce54077",
+      "failure_json_sha256": "619b5d215afa3e4aca103f91ff37a04f11e56b52b11507f6165c5e23f23c0e29",
+      "locally_read_scope": "Official ZIP digest and failure.json only; no raw dataset member read",
+      "corrected_attempt_exception": "urllib.error.HTTPError: HTTP Error500: Internal Server Error",
+      "second_payload_reached": false,
+      "coordinator_reported_manifest_archive_path": "data/manifests/archive",
+      "coordinator_reported_followup_status": {
+        "issue": 173,
+        "run_id": "42486945387",
+        "status": "completed",
+        "changed_files": 0,
+        "g1_blockers": 32,
+        "budget_state_blobs_unchanged": true,
+        "independently_retrieved_by_this_agent": false
+      },
+      "further_nist_retries_planned": false
+    }
   }
 }
