@@ -1,0 +1,4 @@
+{
+  "action": "literature_discover",
+  "plan": "program/batch2-ai-physical-discovery-plan.json"
+}
