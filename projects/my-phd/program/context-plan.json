@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "stages": {
+    "topic-intelligence": {
+      "question": "Develop exploratory AI contributions for the owner's latest physical-system directions: contact assembly; quadrotor identification; additive-manufacturing thermal processes; scheduling; multi-robot motion constraints; and FEM/AI structural design. No doctoral topic or paper is selected or approved. The prior rejected three-topic proposal is historical and is not supplied. All 36 canonical metadata records and every byte of topic-leads.json are retained below; the identical history report is bound as a dependency and is not sent twice. These records are metadata and abstracts, never proof of full-text reading, novelty, scientific support or saturation. Metadata-derived rankings and provisional lead questions are heuristics, not scientific verdicts. The sixth actual scout query concerns mobile-robot navigation, not FEM; retain it as an adjacent direction and mark direct FEM retrieval as missing. Do not manufacture missing full text, sources, comparisons, results or approvals. Other omitted files are listed explicitly and are not judged irrelevant; request their complete source before relying on them. The current-session batch2 proposal is an untrusted proposal/lead at evidence/auxiliary/session-g1-batch2-20261108.md; it is not an independent scientific judgment and is not represented as read in this packet. Reference-only current-session Git blob identities: proposal 3e3479c1ece95178e675d4ba69bafd662e8dc8b0; source-lead JSON evidence/auxiliary/session-g1-batch2-sources-20261108.json 10062c3c5b420041a3719ab53e8d8ca1c8d13bc4. Neither operational document body is supplied here or treated as independent scientific evidence.",
+      "items": [
+        {
+          "path": "program/batch2-ai-physical-discovery-plan.json",
+          "expected_sha256": "1e55d79cc88a56a36562d0c2a7a5c0c9c62bdf2271ee5276a8c9437b9ecda026",
+          "stance": "constraint",
+          "reason": "Actual six query families and bounded metadata-discovery scope; not a selected doctoral topic."
+        },
+        {
+          "path": "program/topic-leads.json",
+          "expected_sha256": "433d2c2f54d7af360fdf74b987a574c061def11403b79839a3b24e895c9b95e3",
+          "start_line": 1,
+          "end_line": 1903,
+          "stance": "neutral",
+          "reason": "Complete consecutive range of the unchanged discovery receipt; all metadata, heuristic rankings, uncertainties and provisional leads retained. This is not full-text reading or verified novelty."
+        },
+        {
+          "path": "program/topic-leads.json",
+          "expected_sha256": "433d2c2f54d7af360fdf74b987a574c061def11403b79839a3b24e895c9b95e3",
+          "start_line": 1904,
+          "end_line": 3704,
+          "stance": "neutral",
+          "reason": "Complete consecutive range of the unchanged discovery receipt; all metadata, heuristic rankings, uncertainties and provisional leads retained. This is not full-text reading or verified novelty."
+        },
+        {
+          "path": "program/topic-leads.json",
+          "expected_sha256": "433d2c2f54d7af360fdf74b987a574c061def11403b79839a3b24e895c9b95e3",
+          "start_line": 3705,
+          "end_line": 5618,
+          "stance": "neutral",
+          "reason": "Complete consecutive range of the unchanged discovery receipt; all metadata, heuristic rankings, uncertainties and provisional leads retained. This is not full-text reading or verified novelty."
+        },
+        {
+          "path": "program/topic-leads.json",
+          "expected_sha256": "433d2c2f54d7af360fdf74b987a574c061def11403b79839a3b24e895c9b95e3",
+          "start_line": 5619,
+          "end_line": 5823,
+          "stance": "neutral",
+          "reason": "Complete consecutive range of the unchanged discovery receipt; all metadata, heuristic rankings, uncertainties and provisional leads retained. This is not full-text reading or verified novelty."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101601z-arxiv-580cd9b947.json",
+          "expected_sha256": "d8f2a76fb30381a639c0841cd35df7f58339cbf8f9bf87f38f4486376d925f74",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101602z-crossref-aa43de26ee.json",
+          "expected_sha256": "97f12142b7ff7701dab100ec0278b509191ac167713897a8a1df5bf4d671c764",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101604z-arxiv-171c1c878b.json",
+          "expected_sha256": "f3b2ed457524e70666c83d92802ca038191f0b2dfd1b27690b37ce9ad8d7a791",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101605z-crossref-ed5828dd6a.json",
+          "expected_sha256": "e648d4c26bc9114fccc02be00e0ea1a0cd10b6cca5cdbbdc51cda51223e2a88c",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101607z-arxiv-3fb4c7a7b8.json",
+          "expected_sha256": "467378e73e7f2df8b7e86c970174714ffe2b6c8ba745b0081a92418b36770b94",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101607z-crossref-e535abdcb3.json",
+          "expected_sha256": "a1096baa052071e4860527b769a3f9734e0b93049032a0c914c7c64ba2f8bc2a",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101610z-arxiv-685c580641.json",
+          "expected_sha256": "8874f5993660208313c5cc3e5e4e7e3a123550c9fc61ffbeea72bee03f14e56a",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101611z-crossref-522ca81e1a.json",
+          "expected_sha256": "33a9ebb5c34d958a3e262b293596d0bf7e8356843072f50ab07118374dcb2c45",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101614z-arxiv-73ac34f1a2.json",
+          "expected_sha256": "12ccdc00608e599d71434caa6d04e97f8f431b954727d13261c91efbee987885",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101614z-crossref-38f9da1cbe.json",
+          "expected_sha256": "766c8d19817c31e9746dda7fc1a489db969c04e92f9256217ad657c72d589255",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101617z-arxiv-ff95f87255.json",
+          "expected_sha256": "8a55990ab4ba24adb4a78b06a3fe1765b8a00d39db09657011e02307e3222d8f",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        },
+        {
+          "path": "evidence/literature/normalized/20261108t101618z-crossref-f4ed1f2dee.json",
+          "expected_sha256": "25c819b84b220b795c8db4372d741c6596508f0a6397e20e80f41570b803271f",
+          "stance": "neutral",
+          "reason": "Complete canonical normalized response: all three metadata records, abstracts when present, missing fields and actual filter audit; metadata only, not full paper text or claim support."
+        }
+      ],
+      "dependencies": [
+        {
+          "path": "reports/literature-intelligence/2026-11-08-312245ec41253c5b9543490a8fe941e2c59d41c0f13a697dafe6937f052f1a33.json"
+        }
+      ]
+    }
+  }
+}
