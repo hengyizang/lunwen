@@ -13,11 +13,12 @@ import hashlib
 import json
 import os
 import re
+import math
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from typing import Any, Mapping
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import quote, urlsplit, urlunsplit
 
 
 PROVIDERS = (
@@ -110,6 +111,83 @@ UUAPI_OPENAI_UA = "codex_cli_rs/0.77.0 (external, cli)"
 
 class ProviderError(RuntimeError):
     """A provider configuration, transport or response failure."""
+
+
+class _ProductionPayload(dict):
+    """Decoded JSON plus provenance of the HTTP bytes actually read."""
+
+
+def _response_evidence(data, *, headers=None, body=None, http_status=None, complete=True):
+    """Private, redacted failure material; never include it in exception text."""
+    from scripts.cloud_retry import redact
+    if data is None and body is not None and complete:
+        try:
+            data = json.loads(body.decode("utf-8"))
+        except (ValueError, UnicodeError, RecursionError):
+            pass
+    secrets = [value.removeprefix("Bearer ") for name, value in (headers or {}).items()
+               if name.casefold() in {"authorization", "x-api-key", "x-goog-api-key"} and value]
+    sensitive = {"authorization", "apikey", "accesstoken", "refreshtoken", "secret", "password", "token",
+                 "credential", "accountid", "userid", "organizationid", "email", "thinking", "reasoningcontent", "signature"}
+
+    def clean(value):
+        if isinstance(value, dict):
+            private_reasoning = {"text"} if value.get("thought") is True else {"summary", "content", "text"} if value.get("type") == "reasoning" else set()
+            return {clean(str(key)): "[REDACTED]" if re.sub(r"[^a-z]", "", str(key).casefold()) in sensitive or key in private_reasoning else clean(item)
+                    for key, item in value.items()}
+        if isinstance(value, list):
+            return [clean(item) for item in value]
+        if isinstance(value, str):
+            for secret in secrets:
+                value = value.replace(secret, "[REDACTED]").replace(quote(secret, safe=""), "[REDACTED]")
+            return redact(value)
+        if isinstance(value, float) and not math.isfinite(value):
+            return "[NONFINITE]"
+        return value
+
+    try:
+        canonical = json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode() if data is not None else None
+    except (ValueError, TypeError, RecursionError):
+        canonical = None
+    metadata = dict(getattr(data, "http_evidence", {}))
+    if body is not None:
+        metadata = {"http_status": http_status if type(http_status) is int else None,
+            "http_body_capture_complete": complete, "captured_http_body_bytes": len(body),
+            "raw_http_body_sha256": hashlib.sha256(body).hexdigest() if complete else None,
+            "captured_http_body_prefix_sha256": hashlib.sha256(body).hexdigest() if not complete else None}
+    try:
+        sanitized = clean(data) if isinstance(data, dict) else {"response_body_not_stored": "unparsed or non-object body omitted; capture metadata and hashes retained"}
+    except RecursionError:
+        sanitized = {"response_not_stored": "nested response exceeded safe diagnostic traversal"}
+    source = sanitized if isinstance(sanitized, dict) else {}
+    def label(value):
+        return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9._:/-]{1,160}", value) else None
+    def counts(value):
+        fields = {"input_tokens", "output_tokens", "total_tokens", "prompt_tokens", "completion_tokens", "cached_tokens", "reasoning_tokens",
+                  "cache_read_input_tokens", "cache_creation_input_tokens", "prompt_cache_hit_tokens", "prompt_cache_miss_tokens",
+                  "promptTokenCount", "candidatesTokenCount", "thoughtsTokenCount", "totalTokenCount", "cachedContentTokenCount",
+                  "ephemeral_5m_input_tokens", "ephemeral_1h_input_tokens"}
+        containers = {"input_tokens_details", "output_tokens_details", "prompt_tokens_details", "completion_tokens_details", "cache_creation"}
+        if not isinstance(value, dict):
+            return None
+        return {key: item if key in fields else counts(item) for key, item in value.items()
+                if key in fields and type(item) is int and item >= 0 or key in containers and isinstance(item, dict)}
+    diagnostics = {key: label(source.get(key)) for key in ("model", "modelVersion", "id", "responseId", "stop_reason", "status") if key in source}
+    diagnostics.update({key: counts(source[key]) for key in ("usage", "usageMetadata") if key in source})
+    parts = [part for key in ("content", "output") for part in (source.get(key) if isinstance(source.get(key), list) else []) if isinstance(part, dict)]
+    for candidate in source.get("candidates", []) if isinstance(source.get("candidates"), list) else []:
+        content = candidate.get("content") if isinstance(candidate, dict) else None
+        if isinstance(content, dict) and isinstance(content.get("parts"), list):
+            parts.extend({"type": "thinking" if part.get("thought") is True else "text" if "text" in part else "other"}
+                         for part in content["parts"] if isinstance(part, dict))
+    diagnostics["content_block_types"] = [label(part.get("type")) for part in parts]
+    diagnostics["finish_reasons"] = [label(row.get("finish_reason", row.get("finishReason")))
+        for key in ("choices", "candidates") for row in (source.get(key) if isinstance(source.get(key), list) else []) if isinstance(row, dict)]
+    return {"schema_version": "1.0", "response": sanitized, "diagnostics": diagnostics,
+            "canonical_json_sha256": hashlib.sha256(canonical).hexdigest() if canonical is not None else None,
+            "canonical_json_hash_available": canonical is not None, "http_evidence": metadata or {
+                "raw_http_body_sha256": None, "http_body_capture_complete": None},
+            "stored_body_is_redacted": True, "not_scientific_evidence": True}
 
 
 @dataclass
@@ -566,20 +644,40 @@ def _production_request(url: str, headers: dict[str, str], payload: dict[str, An
                                               "Accept": "application/json"}, method="POST")
     # One reservation permits one POST. No retries, protocol fallbacks or paid
     # warm-ups. A lost response remains an outstanding spend reservation.
+    body = None
+    status = None
     try:
         with urllib.request.build_opener(_NoGenerationRedirect()).open(request, timeout=timeout) as response:
+            status = getattr(response, "status", None)
             body = response.read(4 * 1024 * 1024 + 1)
             if len(body) > 4 * 1024 * 1024:
-                raise ProviderError("generation response exceeded size limit; reconcile billing")
+                error = ProviderError("generation response exceeded size limit; reconcile billing")
+                error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=status, complete=False)
+                raise error
             value = json.loads(body.decode("utf-8"))
     except urllib.error.HTTPError as exc:
-        # Do not expose gateway bodies, credential-bearing request objects or headers.
-        raise ProviderError(f"API HTTP {exc.code}; no automatic generation retry; reconcile billing") from None
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, UnicodeDecodeError):
-        raise ProviderError("API response unavailable; no automatic generation retry; reconcile billing") from None
+        error = ProviderError(f"API HTTP {exc.code}; no automatic generation retry; reconcile billing")
+        try:
+            body = exc.read(4 * 1024 * 1024 + 1)
+        except (OSError, AttributeError):
+            body = None
+        error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=exc.code,
+                                                    complete=body is not None and len(body) <= 4 * 1024 * 1024)
+        raise error from None
+    except (urllib.error.URLError, TimeoutError, ValueError, RecursionError):
+        error = ProviderError("API response unavailable; no automatic generation retry; reconcile billing")
+        if body is not None:
+            error.response_evidence = _response_evidence(None, headers=headers, body=body, http_status=status)
+        raise error from None
     if not isinstance(value, dict) or value.get("error"):
-        raise ProviderError("generation response was not a successful JSON object; reconcile billing")
-    return value
+        error = ProviderError("generation response was not a successful JSON object; reconcile billing")
+        error.response_evidence = _response_evidence(value, headers=headers, body=body, http_status=status)
+        raise error
+    captured = _ProductionPayload(value)
+    captured.http_evidence = {"http_status": status if type(status) is int else None,
+        "http_body_capture_complete": True, "captured_http_body_bytes": len(body),
+        "raw_http_body_sha256": hashlib.sha256(body).hexdigest()}
+    return captured
 
 
 def _production_identity(requested: str, reported: Any) -> str:
@@ -824,32 +922,40 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
             payload["systemInstruction"] = {"parts": [{"text": system}]}
     else:
         raise ProviderError("unsupported production transport protocol")
-    data = _production_request(endpoint, headers, payload, timeout)
-    reported = _production_identity(model, data.get("modelVersion") if native_google else data.get("model"))
-    if native_google:
-        text, status = _google_text(data)
-    else:
-        protocol = "openai_chat_completions" if chat_protocol else spec["protocol"]
-        if chat_protocol:
-            choices = data.get("choices")
-            if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
-                raise ProviderError("chat response requires one choice; reconcile billing")
-            message = choices[0].get("message")
-            if not isinstance(message, dict) or message.get("tool_calls") or message.get("function_call"):
-                raise ProviderError("unexpected chat tool response; reconcile billing")
-        text = (_anthropic_text(data) if family == "anthropic" else
-                _chat_completions_text(data) if chat_protocol else _openai_text(data))
-        status = completion_status(data, protocol)
-    # Production never accepts unknown or partial termination, even when the
-    # deprecated compatibility strictness switch was disabled historically.
-    if status != "completed":
-        raise ProviderError(f"production model response did not complete ({status}); reconcile billing")
-    return ModelResult(provider, model, text, _production_usage(data, family, spec["protocol"]),
-                       data.get("responseId") if native_google else data.get("id"),
-                       reported, spec["protocol"], endpoint,
-                       "cheapai" if provider.startswith("cheapai-") else "codekey",
-                       completion_status=status, requested_effort=effort,
-                       attachment_sha256=tuple(item["sha256"] for item in media))
+    data = None
+    try:
+        data = _production_request(endpoint, headers, payload, timeout)
+        reported = _production_identity(model, data.get("modelVersion") if native_google else data.get("model"))
+        if native_google:
+            text, status = _google_text(data)
+        else:
+            protocol = "openai_chat_completions" if chat_protocol else spec["protocol"]
+            if chat_protocol:
+                choices = data.get("choices")
+                if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
+                    raise ProviderError("chat response requires one choice; reconcile billing")
+                message = choices[0].get("message")
+                if not isinstance(message, dict) or message.get("tool_calls") or message.get("function_call"):
+                    raise ProviderError("unexpected chat tool response; reconcile billing")
+            text = (_anthropic_text(data) if family == "anthropic" else
+                    _chat_completions_text(data) if chat_protocol else _openai_text(data))
+            status = completion_status(data, protocol)
+        if status != "completed":
+            raise ProviderError("production model response did not complete; reconcile billing")
+        return ModelResult(provider, model, text, _production_usage(data, family, spec["protocol"]),
+                           data.get("responseId") if native_google else data.get("id"),
+                           reported, spec["protocol"], endpoint,
+                           "cheapai" if provider.startswith("cheapai-") else "codekey",
+                           completion_status=status, requested_effort=effort,
+                           attachment_sha256=tuple(item["sha256"] for item in media))
+    except (ProviderError, TypeError, ValueError, KeyError, IndexError) as exc:
+        error = exc if isinstance(exc, ProviderError) else ProviderError("malformed production model response; reconcile billing")
+        if data is not None:
+            error.response_evidence = _response_evidence(data, headers=headers)
+            if hasattr(error, "reported_model"):
+                diagnostic = error.response_evidence["diagnostics"]
+                error.reported_model = diagnostic.get("modelVersion") if native_google else diagnostic.get("model")
+        raise error from None
 
 
 def configuration(provider: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:

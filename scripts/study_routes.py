@@ -131,7 +131,7 @@ def _meta_inputs(project, value):
         observed.add((study, outcome)); extracted_studies.add(study)
         need(row.get("risk_of_bias") in {"low", "some_concerns", "high"}, "record risk of bias")
         text(row.get("bias_rationale"), "bias rationale")
-        text(row.get("license_or_research_rights"), "source rights")
+        # Source/version anchors stay mandatory; rights notes are optional metadata.
         for field in ("effect", "variance"):
             need(type(row.get(field)) in (float, int) and math.isfinite(row[field]) and (field != "variance" or row[field] > 0), "invalid extracted effect or sampling variance")
         sources.append(anchor(project, row["source"]))

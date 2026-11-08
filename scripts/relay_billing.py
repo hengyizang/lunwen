@@ -181,8 +181,10 @@ def _new_cheapai_rows(before: list[dict], after: list[dict]) -> list[dict]:
 def settle(provider: str, model: str, before: dict[str, Any]) -> dict[str, Any]:
     """Match exactly one post-call debit, with at most three free lag polls.
 
-    Call only after a complete, identity-checked generation receipt. A failure
-    never supplies permission to replay the generation or release a hold.
+    Use the attempted request's bound pre-call meter. Failed or incomplete
+    responses may still have an independently verified debit; settling it does
+    not accept the model identity, content or scientific validity. An ambiguous
+    debit retains the hold and never authorizes a generation replay.
     """
     spec = _spec(provider)
     if model not in spec["models"] or not isinstance(before, dict) or before.get("provider") != provider:
