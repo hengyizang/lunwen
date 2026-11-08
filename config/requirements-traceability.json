@@ -763,14 +763,15 @@
         "scripts/public_review_anchors.py",
         "docs/acceptance/elife-public-anchors-2026-11-07.json",
         ".github/workflows/literature-evidence.yml",
-        "scripts/auxiliary_job.py"
+        "scripts/auxiliary_job.py",
+        "docs/acceptance/cloud-validation-2026-11-08.json"
       ],
       "tests": [
         "tests/test_claim_evidence.py",
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "24 real CC BY 4.0 eLife assessment papers are source-bound and replayable (16 calibration, 8 holdout), with each assessment DOI/license checked independently in Crossref. Official evidence-strength categories remain distinct from claim-support/novelty labels. No independent predictions, current human 15% claim sample or field-specific calibration has been executed: agreement and should-merge detection remain null, status NOT_CALIBRATED. Life-science assessments cannot establish transfer to the eventual doctoral topic, numerical 8/8.5 calibration or acceptance probability. Benchmarks now separate no_predictions/partial/complete file-comparison execution from scientific or numeric-score calibration, bind every response to the actual blind case SHA, and distinguish protected-runtime observations from explicitly supplied unverified prediction files. Current real predictions remain zero.",
+      "remaining": "The 24 frozen real public eLife papers retain the 16/8 split. Actual owner cloud run 42457860489 on f93ebe4 attempted CodeKey Opus once and returned no usable text; valid model predictions remain zero. The new CNY 2.0415472 reservation remains unknown, with the original three holds and CNY 500 ceiling unchanged. Its original provider response was lost by the old parser and cannot be retroactively invented. A failed attempt is not calibration. Independent human claim labels, >=0.85 agreement, should-merge detection, numerical-score calibration and domain transfer remain unverified; preserve nulls and current source bindings.",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]

@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import base64
+import io
 import hashlib
 import json
 import os
 import unittest
 import urllib.error
+from contextlib import nullcontext
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from scripts import ai_providers as providers
@@ -276,6 +279,84 @@ class ProductionProviderTests(unittest.TestCase):
             self.assertNotIn("Python", headers["user-agent"])
             self.assertNotIn("fixture-only", headers["user-agent"])
             self.assertNotIn("fixture-only", request.full_url)
+
+    def test_empty_thinking_response_retains_redacted_wire_provenance_without_returning_success(self):
+        env = self.env(); secret = env["DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY"]
+        response = {"id": "response-fixture", "model": "claude-opus-5-5", "stop_reason": "max_tokens",
+            "content": [{"type": "thinking", "thinking": "PRIVATE_THOUGHT " + secret, "signature": "PRIVATE_SIGNATURE"}],
+            "usage": {"input_tokens": 100, "output_tokens": 4000, "debug": "PRIVATE_USAGE_DEBUG"}, "authorization": "Bearer " + secret}
+        body = json.dumps(response, indent=4).encode()
+        opener = Mock(); opener.open.return_value = nullcontext(SimpleNamespace(status=200, read=lambda limit: body[:limit]))
+        with patch.dict(os.environ, env, clear=True), patch.object(providers.urllib.request, "build_opener", return_value=opener):
+            with self.assertRaisesRegex(providers.ProviderError, "contained no text") as caught:
+                providers.call("codekey-kiro-enterprise", "synthetic request", model="claude-opus-5-5")
+        evidence = caught.exception.response_evidence
+        self.assertEqual(evidence["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
+        self.assertNotEqual(evidence["canonical_json_sha256"], evidence["http_evidence"]["raw_http_body_sha256"])
+        self.assertEqual(evidence["diagnostics"]["content_block_types"], ["thinking"])
+        self.assertEqual(evidence["diagnostics"]["stop_reason"], "max_tokens")
+        self.assertEqual(evidence["diagnostics"]["usage"]["output_tokens"], 4000)
+        self.assertNotIn("PRIVATE_USAGE_DEBUG", json.dumps(evidence["diagnostics"]))
+        for private in (secret, "PRIVATE_THOUGHT", "PRIVATE_SIGNATURE"):
+            self.assertNotIn(private, json.dumps(evidence))
+            self.assertNotIn(private, str(caught.exception))
+        opener.open.assert_called_once()
+
+    def test_failed_mocked_json_never_claims_wire_bytes_and_preserves_rejected_identity(self):
+        for model, status in (("wrong-model", "completed"), ("gpt-6.1-sol", "incomplete")):
+            response = {"model": model, "id": "fixture", "status": status, "output_text": "partial text",
+                        "usage": {"input_tokens": 2, "output_tokens": 3}}
+            with patch.dict(os.environ, self.env(), clear=True), patch.object(providers, "_production_request", return_value=response):
+                with self.assertRaises(providers.ProviderError) as caught:
+                    providers.call("cheapai-gpt-pro", "synthetic request")
+            evidence = caught.exception.response_evidence
+            self.assertIsNone(evidence["http_evidence"]["raw_http_body_sha256"])
+            self.assertTrue(evidence["canonical_json_hash_available"])
+            self.assertEqual(evidence["diagnostics"]["model"], model)
+
+    def test_non_json_http_error_retains_exact_read_hash_without_echoing_credentials(self):
+        env = self.env(); secret = env["DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY"]
+        body = ("unparsed vendor error " + secret).encode()
+        opener = Mock(); opener.open.side_effect = urllib.error.HTTPError(
+            "https://codekey.ai/v1/messages", 502, "gateway error", {}, io.BytesIO(body))
+        with patch.dict(os.environ, env, clear=True), patch.object(providers.urllib.request, "build_opener", return_value=opener):
+            with self.assertRaises(providers.ProviderError) as caught:
+                providers.call("codekey-kiro-enterprise", "synthetic request")
+        evidence = caught.exception.response_evidence
+        self.assertEqual(evidence["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
+        self.assertIsNone(evidence["canonical_json_sha256"])
+        self.assertNotIn(secret, json.dumps(evidence))
+        self.assertNotIn("unparsed vendor", str(caught.exception))
+        opener.open.assert_called_once()
+
+    def test_error_body_capture_redacts_json_thoughts_and_never_stores_opaque_or_truncated_text(self):
+        for body in (b'{"content":[{"type":"thinking","thinking":"PRIVATE_HTTP_THOUGHT"}],"error":"backend failure"}',
+                     b'PRIVATE_HTTP_THOUGHT invalid-json'):
+            evidence = providers._response_evidence(None, body=body, http_status=500)
+            self.assertNotIn("PRIVATE_HTTP_THOUGHT", json.dumps(evidence))
+            self.assertEqual(evidence["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
+        prefix = b'PRIVATE_HTTP_THOUGHT truncated'
+        evidence = providers._response_evidence(None, body=prefix, http_status=200, complete=False)
+        self.assertIsNone(evidence["http_evidence"]["raw_http_body_sha256"])
+        self.assertEqual(evidence["http_evidence"]["captured_http_body_prefix_sha256"], hashlib.sha256(prefix).hexdigest())
+        self.assertNotIn("PRIVATE_HTTP_THOUGHT", json.dumps(evidence))
+
+    def test_reported_model_exception_attribute_cannot_echo_selected_key(self):
+        env = self.env(); secret = env["DR_OS_CHEAPAI_GPT_PRO_KEY"]
+        with patch.dict(os.environ, env, clear=True), patch.object(providers, "_production_request", return_value={"model":secret}):
+            with self.assertRaises(providers.ProviderError) as caught:
+                providers.call("cheapai-gpt-pro", "synthetic request")
+        self.assertIsNone(caught.exception.reported_model)
+        self.assertNotIn(secret, json.dumps(caught.exception.response_evidence))
+
+    def test_read_body_hash_survives_non_decode_json_parser_errors(self):
+        body = b'{"value":' + b'9' * 5000 + b'}'
+        opener = Mock(); opener.open.return_value = nullcontext(SimpleNamespace(status=200, read=lambda limit: body[:limit]))
+        with patch.dict(os.environ, self.env(), clear=True), patch.object(providers.urllib.request, "build_opener", return_value=opener):
+            with self.assertRaises(providers.ProviderError) as caught:
+                providers.call("codekey-kiro-enterprise", "synthetic request")
+        self.assertEqual(caught.exception.response_evidence["http_evidence"]["raw_http_body_sha256"], hashlib.sha256(body).hexdigest())
+        self.assertIsNone(caught.exception.response_evidence["canonical_json_sha256"])
 
     def test_redirect_handler_refuses_credential_forwarding_and_post_replay(self):
         handler = providers._NoGenerationRedirect()

@@ -111,6 +111,7 @@ class StudyRouteTests(unittest.TestCase):
 
     def test_meta_preregistration_has_real_sources_without_empirical_power(self):
         self.fixture()
+        self.change("evidence/extraction.json", lambda value: [row.pop("license_or_research_rights") for row in value["records"]])
         self.assertEqual(study_routes.plan_errors(self.project, "P01"), [])
         self.assertEqual(quality.validate_g3_quality(self.project, require_preregistration=False), [])
         frozen = quality.create_preregistration(self.project, "P01", "Synthetic reviewer")

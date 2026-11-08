@@ -7,10 +7,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 from pathlib import Path
 import urllib.error
 import urllib.request
+from urllib.parse import quote as url_quote
 
 from scripts import ai_providers, billing_quotes, model_routing, relay_billing
 
@@ -67,6 +69,11 @@ def catalog(provider: str, environment: dict) -> set[str]:
 
 def report(environment=None, *, check_models=False, check_billing=False) -> dict:
     env = os.environ if environment is None else environment
+    def safe_text(value):
+        for name, secret in env.items():
+            if secret and any(marker in name.upper() for marker in ("KEY", "TOKEN", "SECRET", "PASSWORD", "EMAIL")):
+                value = value.replace(secret, "[REDACTED]").replace(url_quote(secret, safe=""), "[REDACTED]")
+        return value
     errors, rows = [], []
     dynamic = {"mode":env.get("DR_OS_DYNAMIC_ROUTING", "production"),
                "candidate_count":0,"candidate_routes_accepted_by_this_check":False}
@@ -108,7 +115,16 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
         for provider in sorted({row["provider"] for row in rows}):
             try:
                 snapshot = relay_billing.read_meter(provider, environment=env)
-                meters[provider] = {"metadata_access_verified":True,"kind":snapshot["kind"]}
+                safe = {"provider": provider, "kind": safe_text(snapshot["kind"])}
+                for name in ("cost_cny", "requests", "quota_per_unit"):
+                    value = snapshot.get(name)
+                    if type(value) in {int, float} and math.isfinite(value) and value >= 0:
+                        safe[name] = value
+                if isinstance(snapshot.get("currency_rule"), str):
+                    safe["currency_rule"] = safe_text(snapshot["currency_rule"])
+                if isinstance(snapshot.get("rows"), list):
+                    safe["row_count"] = len(snapshot["rows"])
+                meters[provider] = {"metadata_access_verified":True, "kind":safe["kind"], "snapshot":safe}
             except relay_billing.BillingReconciliationError:
                 meters[provider] = {"metadata_access_verified":False}
                 errors.append("billing meter inspection failed: " + provider)
@@ -118,7 +134,8 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
             try:
                 supplied = catalog(provider, env)
                 missing = sorted(expected - supplied)
-                inventory[provider] = {"metadata_access_verified":True,"required_models_missing":missing}
+                inventory[provider] = {"metadata_access_verified":True,"required_models_missing":missing,
+                                       "advertised_models": [safe_text(value) for value in sorted(supplied)]}
                 if missing:
                     errors.append("required model not advertised: " + provider + " / " + ",".join(missing))
             except ValueError as exc:

@@ -8,6 +8,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import urllib.error
+from urllib.parse import quote
 from unittest.mock import Mock, patch
 
 from scripts import ai_providers, catalog_diagnostic, model_routing, model_spend, production_readiness as readiness
@@ -121,22 +122,45 @@ class ProductionReadinessTests(unittest.TestCase):
             self.assertNotIn("private-non-json", json.dumps(value))
             opener.open.assert_called_once()
 
-    def test_billing_readiness_uses_explicit_keys_without_recording_wallet_values(self):
+    def test_billing_readiness_keeps_safe_charge_counters_without_private_account_fields(self):
         env = self.environment()
         def meter(provider, environment):
             self.assertIs(environment, env)
-            return {"provider":provider,"kind":"fixture-read-only-meter","cost_cny":123.456,
-                    "private":"never-persist-wallet-detail"}
+            return {"provider":provider,"kind":"codekey_total_actual_cost","cost_cny":123.456,"requests":7,
+                    "currency_rule":"fixture-quoted-CNY", "token_id":"never-persist-token-id",
+                    "authorization":"never-persist-auth", "private":"never-persist-wallet-detail"}
         with patch.object(readiness.relay_billing,"read_meter",side_effect=meter) as get, \
              patch.object(ai_providers,"call") as generate, patch.object(model_spend,"grant") as grant:
             value = readiness.report(env,check_billing=True)
         self.assertTrue(value["configuration_ready"])
         self.assertEqual(get.call_count,5)
         self.assertEqual(len(value["billing_meters"]),5)
-        self.assertNotIn("123.456",json.dumps(value))
+        for provider, meter in value["billing_meters"].items():
+            self.assertEqual(meter["snapshot"], {"provider":provider,"kind":"codekey_total_actual_cost",
+                "cost_cny":123.456,"requests":7,"currency_rule":"fixture-quoted-CNY"})
         self.assertNotIn("never-persist-wallet-detail",json.dumps(value))
+        self.assertNotIn("never-persist-token-id",json.dumps(value))
+        self.assertNotIn("never-persist-auth",json.dumps(value))
         generate.assert_not_called()
         grant.assert_not_called()
+
+    def test_catalog_report_retains_exact_advertised_models_without_substitution_or_secret_echo(self):
+        env = self.environment()
+        env["DR_OS_CODEKEY_DEEPSEEK_KEY"] = "fixture/private+catalog-key"
+        def inventory(provider, environment):
+            supplied = self.advertised(provider, environment)
+            if provider == "codekey-deepseek":
+                supplied = {"deepseek-v4.1", env["DR_OS_CODEKEY_DEEPSEEK_KEY"], quote(env["DR_OS_CODEKEY_DEEPSEEK_KEY"], safe="")}
+            return supplied
+        with patch.object(readiness, "catalog", side_effect=inventory), patch.object(ai_providers, "call") as generate:
+            value = readiness.report(env, check_models=True)
+        self.assertFalse(value["configuration_ready"])
+        entry = value["model_inventory"]["codekey-deepseek"]
+        self.assertEqual(entry["required_models_missing"], ["deepseek-v4.1-flash"])
+        self.assertEqual(set(entry["advertised_models"]), {"deepseek-v4.1", "[REDACTED]"})
+        self.assertNotIn(env["DR_OS_CODEKEY_DEEPSEEK_KEY"], json.dumps(value))
+        self.assertNotIn(quote(env["DR_OS_CODEKEY_DEEPSEEK_KEY"], safe=""), json.dumps(value))
+        generate.assert_not_called()
 
     def test_billing_metadata_failure_is_not_zero_cost_or_ready_and_has_no_retry(self):
         with patch.object(readiness.relay_billing,"read_meter",side_effect=

@@ -6,7 +6,8 @@ network calls, real spending approvals or live model requests are used.
 from __future__ import annotations
 
 import base64
-from contextlib import ExitStack
+from contextlib import ExitStack, redirect_stdout
+import io
 import hashlib
 import json
 from pathlib import Path
@@ -300,6 +301,75 @@ class ProductionRuntimeTests(unittest.TestCase):
         next_post.assert_called_once()
         self.assertEqual(model_spend.reserved(model_spend.read(self.project)), held)
         self.assertGreater(model_spend.read(self.project)["spent_cny"], 0)
+
+    def test_rejected_response_keeps_private_diagnostics_and_unknown_cost_unless_independently_verified(self):
+        from scripts import api_orchestrator
+        response = {"model": "claude-opus-5-5", "id": "synthetic-failed-response", "stop_reason": "max_tokens",
+            "content": [{"type": "thinking", "thinking": "PRIVATE_THOUGHT fixture-no-real-key"}],
+            "usage": {"input_tokens": 100, "output_tokens": 4000,
+                      "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}}
+        output = io.StringIO()
+        with (patch.object(ai_providers, "_production_request", return_value=response),
+              patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+              patch.object(relay_billing, "settle", side_effect=relay_billing.BillingReconciliationError("ambiguous debit")),
+              redirect_stdout(output)):
+            with self.assertRaisesRegex(ai_providers.ProviderError, "contained no text"):
+                self.call(stage="auxiliary", role="independent-critique", provider="anthropic")
+        receipt = model_runtime.ledger_entries(self.project)[0]
+        self.assertIsNone(receipt["cost_cny"])
+        self.assertEqual(receipt["cost_status"], "accounted_upper_bound")
+        self.assertGreater(model_spend.reserved(model_spend.read(self.project)), 0)
+        self.assertGreater(receipt["provider_usage_diagnostic"]["quoted_cost_estimate_cny"], 0)
+        self.assertFalse(receipt["model_response_accepted"])
+        self.assertFalse(receipt["reservation_settlement_persisted"])
+        binding = receipt["provider_error_response"]; path = self.project / binding["path"]
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"])
+        self.assertNotIn("PRIVATE_THOUGHT", path.read_text())
+        self.assertNotIn("fixture-no-real-key", path.read_text())
+        self.assertEqual(output.getvalue(), "")
+        with patch.object(api_orchestrator, "project_root", return_value=self.project):
+            snapshot = api_orchestrator.project_snapshot("fixture-project", stage="topic-intelligence", exclude_reviews=True)
+        self.assertNotIn("provider-errors", snapshot)
+        self.assertNotIn("PRIVATE_THOUGHT", snapshot)
+        from scripts import evidence_context
+        with self.assertRaisesRegex(ValueError, "private"):
+            evidence_context.safe_text(self.project, binding["path"], lambda value: value)
+
+    def test_independently_verified_fee_can_settle_a_rejected_response_without_scientific_success(self):
+        error = ai_providers.ProviderError("production response rejected")
+        error.response_evidence = ai_providers._response_evidence({"model": "gpt-6.1-sol", "status": "incomplete",
+            "usage": {"input_tokens": 1, "output_tokens": 2}})
+        with (patch.object(ai_providers, "call", side_effect=error) as post,
+              patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+              patch.object(relay_billing, "settle", return_value=self.debit(.001))):
+            with self.assertRaises(ai_providers.ProviderError):
+                self.call()
+        receipt = model_runtime.ledger_entries(self.project)[0]
+        self.assertEqual(receipt["cost_status"], "settled_gateway_debit")
+        self.assertFalse(receipt["model_response_accepted"])
+        self.assertTrue(receipt["reservation_settlement_persisted"])
+        self.assertEqual(model_spend.read(self.project)["reservations"], {})
+        self.assertEqual(model_spend.read(self.project)["spent_cny"], .001)
+        self.assertFalse((self.project / ".cache/model-responses").exists())
+        post.assert_called_once()
+
+    def test_failed_scientific_response_stays_failed_after_verified_fee_and_failed_persistence(self):
+        error = ai_providers.ProviderError("production response rejected")
+        error.response_evidence = ai_providers._response_evidence({"model": "gpt-6.1-sol", "id": "synthetic-response",
+            "status": "incomplete", "usage": {"input_tokens": 1, "output_tokens": 2}})
+        with (patch.object(ai_providers, "call", side_effect=error),
+              patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+              patch.object(relay_billing, "settle", return_value=self.debit(.001)),
+              patch.object(model_spend, "settle", side_effect=model_spend.SpendControlError("synthetic write failure"))):
+            with self.assertRaises(ai_providers.ProviderError):
+                self.call()
+        receipt = model_runtime.ledger_entries(self.project)[0]
+        self.assertEqual(receipt["cost_status"], "verified_gateway_debit_pending_persistence")
+        self.assertEqual(receipt["cost_cny"], .001)
+        self.assertTrue(receipt["independent_gateway_debit_verified"])
+        self.assertFalse(receipt["reservation_settlement_persisted"])
+        self.assertFalse(receipt["model_response_accepted"])
+        self.assertGreater(model_spend.reserved(model_spend.read(self.project)), 0)
 
     def test_unresolved_reservation_only_blocks_when_remaining_total_is_insufficient(self):
         model_spend.reserve(self.project, max_cost_cny=299.999999, paper_id=None,

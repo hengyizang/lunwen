@@ -12,6 +12,7 @@ import json
 import math
 import os
 import time
+import uuid
 from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from typing import Any
@@ -322,6 +323,18 @@ def _append(path: Path, value: dict[str, Any]) -> None:
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n")
         handle.flush()
+
+
+def _provider_error_artifact(project_root: Path, evidence: dict) -> dict:
+    """Private response diagnostics stay out of Git and scientific snapshots."""
+    from scripts.research_artifacts import path_in
+    relative = "api_runs/provider-errors/" + uuid.uuid4().hex + ".json"
+    path = path_in(project_root, relative, exists=False)
+    write_artifact(path, evidence)
+    return {"path": relative, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "stored_body_is_redacted": True, "diagnostics": evidence.get("diagnostics", {}),
+            "canonical_json_sha256": evidence.get("canonical_json_sha256"),
+            "http_evidence": evidence.get("http_evidence", {}), "model_response_accepted": False}
 
 
 def _cache_key(
@@ -685,20 +698,61 @@ def call(
                 timeout=timeout, model=model, **inference_options,
             )
     except Exception as exc:
+        response_evidence = getattr(exc, "response_evidence", None)
+        failure_details = {}
+        settled_failure = None
+        failure_settlement_persisted = False
+        if isinstance(response_evidence, dict):
+            try:
+                failure_details["provider_error_response"] = _provider_error_artifact(project_root, response_evidence)
+            except (OSError, ValueError, TypeError, RecursionError) as capture_error:
+                failure_details["response_capture_error_type"] = type(capture_error).__name__
+            try:
+                usage = ai_providers._production_usage(response_evidence["response"],
+                    ai_providers.provider_family(provider), configuration.get("protocol"))
+                inputs, outputs = usage_counts(usage)
+                estimate, unknown, _ = billed_cost(provider, usage, effective_model, inputs, outputs,
+                    quote=quote, declared_tool_limits=limits)
+                failure_details["provider_usage_diagnostic"] = {"input_tokens": inputs, "output_tokens": outputs,
+                    "quoted_cost_estimate_cny": None if unknown else estimate,
+                    "usage_cost_estimate_complete": not unknown, "not_independent_gateway_debit": True}
+            except (ai_providers.ProviderError, ModelBudgetError, KeyError, TypeError, ValueError):
+                failure_details["provider_usage_diagnostic"] = {"quoted_cost_estimate_cny": None,
+                    "usage_cost_estimate_complete": False, "not_independent_gateway_debit": True}
+            if production and meter_before is not None:
+                try:
+                    # The debit, not HTTP 200 or unvalidated token usage, is
+                    # evidence of cost. The model response remains rejected.
+                    settled_failure = relay_billing.settle(provider, effective_model, meter_before)
+                    failure_details["billing"] = {"independent_gateway_debit": settled_failure,
+                                                  "cost_basis": "verified_gateway_debit"}
+                    if reservation_id:
+                        model_spend.settle(project_root, reservation_id,
+                            actual_cost_cny=settled_failure["actual_cost_cny"], cost_basis="verified_gateway_debit")
+                        from scripts.cloud_checkpoint import sync_billing
+                        sync_billing(project_root)
+                    failure_settlement_persisted = True
+                except (RuntimeError, OSError, ValueError) as billing_error:
+                    failure_details["failure_billing_error_type"] = type(billing_error).__name__
         _append(_ledger(project_root), {
             **request_metrics, "schema_version": "2.0", "at": utc_now(), "run_id": run_id,
             "stage": stage, "paper_id": paper_id, "role": role, "provider": provider,
             "model": effective_model, "cache_hit": False, "cache_key": key,
-            "cost_cny": 0.0 if controlled else reserved_cost, "cost_status": "accounted_upper_bound",
+            "cost_cny": settled_failure["actual_cost_cny"] if settled_failure else None if controlled else reserved_cost,
+            "cost_status": ("settled_gateway_debit" if failure_settlement_persisted else
+                            "verified_gateway_debit_pending_persistence" if settled_failure else "accounted_upper_bound"),
             "reservation_id": reservation_id, "reserved_cost_cny": reserved_cost,
             "billing_identity": identity["billing_identity"],
             "billing_quote_sha256": identity["billing_quote_sha256"],
             "endpoint": configuration.get("endpoint"), "protocol": configuration.get("protocol"),
             "declared_tool_limits": limits,
             "transport_error_type": type(exc).__name__,
-            "zero_cost_not_confirmed": True,
+            "zero_cost_not_confirmed": settled_failure is None,
+            "reservation_settlement_persisted": failure_settlement_persisted,
+            "independent_gateway_debit_verified": settled_failure is not None,
             "gateway_meter_before": meter_before,
             "duration_seconds": round(time.monotonic() - request_started, 6),
+            "model_response_accepted": False, **failure_details,
         })
         raise
     request_metrics["duration_seconds"] = round(time.monotonic() - request_started, 6)

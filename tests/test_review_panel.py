@@ -5,6 +5,7 @@ import csv
 import io
 import json
 import os
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -96,6 +97,97 @@ class ReviewPanelTests(unittest.TestCase):
         with patch.object(model_runtime, "call", side_effect=self.response) as calls:
             result = review_panel.run(self.project, "P01", run)
         return result, calls
+
+    def study_inputs(self, kind, *, figure=False):
+        """Native study validation/freeze, without claiming a real executed study."""
+        from scripts import study_route_acceptance as study, research_quality
+        for name in ("preregistration.json", "experiment-evidence-plan.json"):
+            (self.project / "papers/P01" / name).unlink()
+        protocol = study.make_study(self.project, kind)
+        study.freeze(self.project)
+        registration = self.project / "papers/P01/preregistration.json"
+        self.assertEqual(research_quality.validate_preregistration(read(registration), "P01", self.project), [])
+        state = read(self.project / "state/run.json")
+        state.update(stage_index=5, stage="writing-and-review", gate="G5", writing_phases={"P01":"submission"})
+        write(self.project / "state/run.json", state)
+        spec = read(self.project / review_panel.request_path("P01"))
+        spec["views"]["statistics"] = [row for row in spec["views"]["statistics"] if row["kind"] != "protocol"]
+        for path in (registration, self.project / "papers/P01/study-protocol.json"):
+            spec["views"]["statistics"].append({"kind":"protocol", "path":path.relative_to(self.project).as_posix(),
+                "sha256":sha(path), "start_line":1, "end_line":len(path.read_text().splitlines())})
+        if kind == "theory":
+            spec["views"]["domain"] = [row for row in spec["views"]["domain"] if row["kind"] != "numeric_table"]
+            spec["views"]["statistics"] = [row for row in spec["views"]["statistics"] if row["kind"] == "protocol"]
+            for name in sorted({row["source"] for row in protocol["theorems"]}):
+                path = self.project / name
+                spec["views"]["statistics"].append({"kind":"formal_proof", "path":name, "sha256":sha(path),
+                    "start_line":1, "end_line":len(path.read_text().splitlines())})
+            main = self.project / "papers/P01/manuscript/main.tex"
+            main.write_text(re.sub(r"\\begin\{(table" + ("" if figure else "|figure") + r")\}.*?\\end\{\1\}", "", main.read_text(), flags=re.S))
+            if figure:
+                main.write_text(main.read_text().replace(
+                    r"\pgfplotstabletypeset[col sep=comma,string type]{../tables/figure-values.csv}",
+                    r"\fbox{Synthetic formal implication diagram; no measured data.}"))
+            if not figure:
+                spec["views"]["editorial"] = [row for row in spec["views"]["editorial"] if row["kind"] != "figure_one"]
+        write(self.project / review_panel.request_path("P01"), spec)
+        return protocol
+
+    def test_meta_panel_uses_native_frozen_study_protocol_without_empirical_plan(self):
+        self.study_inputs("meta_analysis")
+        self.assertFalse((self.project / "papers/P01/experiment-evidence-plan.json").exists())
+        packet = review_panel.prepare(self.project, "P01")
+        self.assertIn('"outcomes"', packet["views"]["statistics"]["text"])
+        result, calls = self.run_panel()
+        self.assertEqual(calls.call_count, 3)
+        self.assertEqual(result["paid_calls"], 3)
+        self.assertFalse(result["scientific_completion_verified"])
+        state = read(self.project / "state/run.json")
+        state["approvals"][-1]["frozen_protocol_sha256"]["papers/P01/preregistration.json"] = "0" * 64
+        write(self.project / "state/run.json", state)
+        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "G3 protocol decision"):
+            review_panel.run(self.project, "P01", "replaced-study-freeze")
+        calls.assert_not_called()
+
+    def test_theory_panel_reads_complete_proofs_without_inventing_numeric_data_or_figure(self):
+        self.study_inputs("theory")
+        packet = review_panel.prepare(self.project, "P01")
+        self.assertEqual({row["kind"] for row in packet["views"]["statistics"]["sources"]}, {"protocol", "formal_proof"})
+        self.assertIn("add_zero_main", packet["views"]["statistics"]["text"])
+        self.assertIn('"assumptions"', packet["views"]["statistics"]["text"])
+        self.assertNotIn("figure_one", {row["kind"] for row in packet["views"]["editorial"]["sources"]})
+        result, calls = self.run_panel()
+        self.assertEqual(calls.call_count, 3)
+        prompt = next(call.kwargs["prompt"] for call in calls.call_args_list if call.kwargs["role"].endswith("statistics"))
+        self.assertIn("logical validity", prompt)
+        self.assertNotIn("SYNTHETIC methods source", prompt)
+        self.assertFalse(result["scientific_completion_verified"])
+
+    def test_theory_retains_actual_first_figure_and_rejects_partial_or_changed_proof(self):
+        self.study_inputs("theory", figure=True)
+        request = self.project / review_panel.request_path("P01")
+        spec = read(request)
+        self.assertIn("figure_one", {row["kind"] for row in review_panel.prepare(self.project, "P01")["views"]["editorial"]["sources"]})
+        next(row for row in spec["views"]["statistics"] if row["kind"] == "formal_proof")["end_line"] = 1
+        write(request, spec)
+        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "complete source"):
+            review_panel.run(self.project, "P01", "partial-proof")
+        calls.assert_not_called()
+        source = self.project / "analysis/proof.lean"
+        source.write_text(source.read_text() + "\n-- Changed after freeze.\n")
+        with patch.object(model_runtime, "call") as calls, self.assertRaises(ValueError):
+            review_panel.run(self.project, "P01", "changed-proof")
+        calls.assert_not_called()
+
+    def test_empirical_request_cannot_declare_theory_to_waive_required_scientific_material(self):
+        request = self.project / review_panel.request_path("P01")
+        spec = read(request)
+        spec["study_route"] = "theory"
+        spec["views"]["domain"] = [row for row in spec["views"]["domain"] if row["kind"] != "numeric_table"]
+        write(request, spec)
+        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "missing view-specific"):
+            review_panel.run(self.project, "P01", "false-theory-waiver")
+        calls.assert_not_called()
 
     def test_three_blind_distinct_families_freeze_before_synthesis_and_reuse_unchanged(self):
         result, calls = self.run_panel()
