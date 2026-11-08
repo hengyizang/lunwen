@@ -51,6 +51,14 @@
       "evidence_note": "CodeKey Codex #159 SSE read failed: #156 attempt1 meter 4/0.469508565 -> attempt2 run42480691170 artifact13617294936 meter5/0.937808565. One new request; delta0.4683 CNY, same wallet-unit rule. Preserve original three holds.",
       "receipt_id": "2a0514301e46499aada03b594a311236",
       "run_id": "42482530665"
+    },
+    {
+      "actor": "Hengyi Zang",
+      "actual_cost_cny": 0.21923298,
+      "at": "2026-11-08T13:19:31+00:00",
+      "evidence_note": "Argon #163 HTTP524: before meter 0 requests/0 CNY -> #165 run42483606966 artifact13618831120 meter1/0.21923298. Exactly one new request; same wallet-unit=CNY1 rule. Settle only this attempt and preserve original three holds.",
+      "receipt_id": "d10074e3de0c46cf97767303c65b87b8",
+      "run_id": "42484383574"
     }
   ],
   "reservations": {
@@ -71,19 +79,6 @@
       "paper_id": null,
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
-    },
-    "d10074e3de0c46cf97767303c65b87b8": {
-      "at": "2026-11-08T12:59:22+00:00",
-      "max_cost_cny": 0.9349488,
-      "paper_id": null,
-      "run_id": "public-review-42482667644-editorial-1",
-      "transport": {
-        "credential_sha256": "6bd4251b63f620353fb11c81fcc9316c3c69212d5583eb0ef0f61f42493bad79",
-        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
-        "lease_id": "ca91fd5acdfd4beb9e4c8041f7029a79",
-        "model": "gemini-4-argon",
-        "provider": "codekey-gemini"
-      }
     },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
@@ -292,7 +287,7 @@
       "receipt_id": "e2a0d4596aa74f818ac8687fa87c4899"
     }
   ],
-  "spent_cny": 3.66973706,
+  "spent_cny": 3.88897004,
   "tranche_cny": 300,
   "unsent_events": [
     {
