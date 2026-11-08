@@ -72,6 +72,19 @@
       "run_id": "40905696013",
       "writing_trial": "model-evaluation-20261029"
     },
+    "d10074e3de0c46cf97767303c65b87b8": {
+      "at": "2026-11-08T12:59:22+00:00",
+      "max_cost_cny": 0.9349488,
+      "paper_id": null,
+      "run_id": "public-review-42482667644-editorial-1",
+      "transport": {
+        "credential_sha256": "6bd4251b63f620353fb11c81fcc9316c3c69212d5583eb0ef0f61f42493bad79",
+        "endpoint": "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent",
+        "lease_id": "ca91fd5acdfd4beb9e4c8041f7029a79",
+        "model": "gemini-4-argon",
+        "provider": "codekey-gemini"
+      }
+    },
     "f705e87ba4514cb99c961768f59f4278": {
       "at": "2026-10-29T16:09:43+00:00",
       "call_id": "argon-native-high|discriminating-experiment",
