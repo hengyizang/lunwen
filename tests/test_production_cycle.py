@@ -6,15 +6,16 @@ the fixture is not a completed study and creates no real spending authority.
 """
 from __future__ import annotations
 
-from contextlib import ExitStack
+from contextlib import ExitStack, nullcontext
 import json
 import re
 from pathlib import Path
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
-from scripts import ai_providers, api_orchestrator, model_runtime, model_spend, relay_billing
+from scripts import ai_providers, api_orchestrator, model_routing, model_runtime, model_spend, relay_billing
 
 
 class ProductionCycleTests(unittest.TestCase):
@@ -46,7 +47,8 @@ class ProductionCycleTests(unittest.TestCase):
             json.dumps({"literature": {"receipts": [{"fixture_only": True}], "pending_searches": 0}}), None)))
         self.stack.enter_context(patch.object(api_orchestrator, "planning_prompt", return_value="Fixture planning task"))
         self.stack.enter_context(patch.object(api_orchestrator, "writer_prompt", return_value="Fixture writing task"))
-        self.stack.enter_context(patch.object(api_orchestrator, "critic_prompt", return_value="Fixture scientific audit"))
+        self.real_critic_prompt = api_orchestrator.critic_prompt
+        self.critic_prompt = self.stack.enter_context(patch.object(api_orchestrator, "critic_prompt", return_value="Fixture scientific audit"))
         self.stack.enter_context(patch.object(api_orchestrator, "remediation_prompt", return_value="Fixture remediation task"))
         self.stack.enter_context(patch.object(api_orchestrator, "refresh_post_write_evidence", return_value={
             "controlled_steps": {"fixture_only": True}, "academic_style_audit": None}))
@@ -90,10 +92,12 @@ class ProductionCycleTests(unittest.TestCase):
             f"fixture-request-{self.index}", model, spec["protocol"], spec["root"] + spec["path"].format(model=model),
             "fixture-only-gateway", completion_status="completed", requested_effort=kwargs["reasoning_effort"])
 
-    def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True):
+    def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True, validation_roster=None):
         self.stage = stage
         gate = "G1" if stage == "topic-intelligence" else "G4"
         state = {"stage": stage, "gate": gate, "status": "awaiting_work", "paper_count": 1, "active_paper": "P01"}
+        if validation_roster:
+            state["approved_gates"] = ["G0"]
         (self.project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         (self.project / "intake").mkdir(exist_ok=True)
         (self.project / "intake/constraints.json").write_text(json.dumps({"research_goal":"Synthetic route fixture; no research was conducted."}), encoding="utf-8")
@@ -102,9 +106,39 @@ class ProductionCycleTests(unittest.TestCase):
             prepare_scope(self.project, state)
         if task_profile is None and routine:
             task_profile = {"task_class": "routine-implementation", "science_risk": "routine"}
-        return api_orchestrator.run_cycle("demo", stage, "anthropic", "openai", "anthropic", "", "",
-            max_output_tokens=300, control_max_output_tokens=100, automatic_data=False, task_kind=task_kind,
-            task_profile=task_profile)
+        with (model_routing.g1_transport_validation_route(self.project, "d" * 64, validation_roster=validation_roster)
+              if validation_roster else nullcontext()):
+            return api_orchestrator.run_cycle("demo", stage, "anthropic", "openai", "anthropic", "", "",
+                max_output_tokens=300, control_max_output_tokens=100, automatic_data=False, task_kind=task_kind,
+                task_profile=task_profile)
+
+    def test_explicit_g1_sample_preserves_fresh_source_only_review_and_real_authorship(self):
+        internal = self.project / "api_runs/old/claude-plan.txt"; internal.parent.mkdir(parents=True)
+        internal.write_text("HIDDEN_PLAN_OPINION")
+        old_review = self.project / "reviews/old.json"; old_review.parent.mkdir()
+        old_review.write_text('{"verdict":"HIDDEN_PREFERRED_VERDICT"}')
+        self.critic_prompt.side_effect = self.real_critic_prompt
+        with patch.dict("os.environ", {"DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}), \
+             patch.object(ai_providers, "call", side_effect=self.transport) as post, \
+             patch.object(model_runtime, "call", wraps=model_runtime.call) as runtime:
+            manifest = self.run_cycle(stage="topic-intelligence", validation_roster="astra-argon", routine=False,
+                task_profile={"task_class": "g1-transport-validation", "science_risk": "critical", "priority": "quality"})
+        self.assertEqual([call.kwargs["model"] for call in post.call_args_list],
+                         ["gpt-6-astra", "gpt-6-astra", "gemini-4-argon", "gpt-6-astra", "gemini-4-argon"])
+        for index in (2, 4):
+            self.assertFalse(runtime.call_args_list[index].kwargs["use_cache"])
+            prompt = post.call_args_list[index].args[1]
+            self.assertIn("Fixture draft" if index == 2 else "Revised fixture", prompt)
+            self.assertNotIn("HIDDEN_PLAN_OPINION", prompt)
+            self.assertNotIn("HIDDEN_PREFERRED_VERDICT", prompt)
+        run = self.project / "api_runs" / manifest["run_id"]
+        self.assertTrue((run / "semantic-plan.json").is_file())
+        self.assertFalse((run / "claude-plan.json").exists())
+        provenance = json.loads((self.project / "state/output-provenance.json").read_text())
+        self.assertEqual(provenance["files"]["program/fixture.md"]["model"], "gpt-6-astra")
+        self.assertEqual(manifest["provider_audit"]["critic_final"]["reported_model"], "gemini-4-argon")
+        self.assertEqual(json.loads((self.project / "state/run.json").read_text())["approved_gates"], ["G0"])
+        self.assertEqual(model_routing.select("topic-intelligence", "semantic-planner")["model"], "claude-opus-5-5")
 
     def test_real_five_role_cycle_forwards_models_effort_and_fresh_independent_reviews(self):
         with (patch.object(ai_providers, "call", side_effect=self.transport) as post,

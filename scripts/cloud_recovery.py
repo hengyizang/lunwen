@@ -157,13 +157,26 @@ def authority(project: Path) -> str | None:
     return pause["reason"] if pause else None
 
 
-def safe_report(report: dict, run: dict, main: str) -> bool:
-    return (report.get("schema_version") == "1.0" and report.get("status") == "failed"
+AUXILIARY_CHECKPOINT_PRESERVED = "auxiliary_checkpoint_preserved_no_automatic_retry"
+
+
+def report_blocker(report: dict, run: dict, main: str) -> str | None:
+    """Separate retained evidence from eligibility for automatic recovery."""
+    if not (report.get("schema_version") == "1.0" and report.get("status") == "failed"
             and report.get("run_id") == str(run["id"])
             and report.get("run_attempt") == str(run.get("run_attempt", 1))
             and report.get("source_sha") == main == run["head_sha"]
-            and report.get("project") == "my-phd" and report.get("action") in {"cycle", "continuation"}
-            and report.get("checkpoint_persisted") is True)
+            and report.get("project") == "my-phd" and report.get("checkpoint_persisted") is True):
+        return "missing_or_stale_safe_checkpoint"
+    if report.get("action") == "auxiliary":
+        return AUXILIARY_CHECKPOINT_PRESERVED
+    if report.get("action") not in {"cycle", "continuation"}:
+        return "unsupported_automatic_recovery_action"
+    return None
+
+
+def safe_report(report: dict, run: dict, main: str) -> bool:
+    return report_blocker(report, run, main) is None
 
 
 def classify(report: dict) -> str:
@@ -191,7 +204,7 @@ def incident_fingerprint(report: dict) -> str:
     return digest([report.get("source_sha"), report.get("phase"), classify(report), diagnostic])
 
 
-def alert(state: dict, fingerprint: str, reason: str, run_id: int) -> None:
+def alert(state: dict, fingerprint: str, reason: str, run_id: int, *, action: str | None = None) -> None:
     if fingerprint in state.setdefault("alerts", {}):
         return
     marker = "<!-- cloud-recovery:" + fingerprint + " -->"
@@ -201,11 +214,14 @@ def alert(state: dict, fingerprint: str, reason: str, run_id: int) -> None:
     if existing:
         state["alerts"][fingerprint] = existing["number"]
         return
+    guidance = ("辅助任务不会自动付费重试；如需继续，使用原辅助任务入口。普通 owner resume 不会重发该辅助任务。"
+                if action == "auxiliary" or reason == AUXILIARY_CHECKPOINT_PRESERVED else
+                "请修复或完成对账后，通过原有 owner resume 控制恢复。")
     issue = api("issues", method="POST", body={"title": "[cloud-recovery] 需要检查：" + reason[:80],
-        "body": marker + "\n\n自动恢复已停止：`" + redact(reason)[:1200] + "`。失败证据与检查点保留。"
+        "body": marker + "\n\n自动恢复已停止：`" + redact(reason)[:1200] + "`。失败证据已保留；检查点状态见诊断。"
                 "没有增加预算、重发模型请求、重跑正式实验或批准科学关卡。\n\n"
                 f"[失败运行](https://github.com/{REPO}/actions/runs/{run_id})\n\n"
-                "请修复或完成对账后，通过原有 owner resume 控制恢复。"})
+                + guidance})
     state["alerts"][fingerprint] = issue["number"]
 
 
@@ -342,13 +358,14 @@ def handle_failure(run: dict, project: Path, state: dict, policy: dict, main: st
     if state.get("pending"):
         return False
     reason = authority(project)
-    if not safe_report(report, run, main):
-        reason = reason or "missing_or_stale_safe_checkpoint"
+    report_reason = report_blocker(report, run, main)
+    if report_reason:
+        reason = reason or report_reason
     kind = classify(report)
     if not bounded(state, fingerprint, policy):
         reason = reason or "automatic_repair_attempt_limit"
     if reason or kind == "inspection_required":
-        alert(state, fingerprint, reason or kind, run["id"])
+        alert(state, fingerprint, reason or kind, run["id"], action=report.get("action"))
         return False
     if kind == "environment_retry":
         resume(project, state, report, fingerprint, {"kind": kind, "model_calls": 0})

@@ -148,3 +148,24 @@ critiques always make a fresh call and retain their actual source-bound identity
 
 For the natural Codex-chat workflow and short commands to start, continue,
 inspect and package work, see [`CHAT-USAGE.md`](CHAT-USAGE.md).
+
+
+## Explicit temporary G1 validation roster
+
+An owner auxiliary manifest with `kind: g1-transport-validation` may explicitly
+set `validation_roster: astra-argon`. This single G1 sample uses the existing
+CodeKey Astra/high for read-only planning and persistent writing, and the existing
+native Argon/high for fresh, source-only independent criticism. Omitting this
+option retains the original Opus planner/critics and temporary same-model writer
+transport. Only the exact recorded project, manifest, role and source snapshot
+are eligible; ordinary production role checks and routes resume on exit.
+
+The native three-call cycle adds repair/review only for actual findings, up to
+five distinct role calls. Explicit 12000 output tokens give a conservative
+53.5104264 CNY upper estimate at the full 2 MB input bound; every actual request
+is quoted and accounted through the original cumulative project allowance.
+This estimate supplies no new allowance or per-paper cap. Model IDs, high effort,
+writer provenance, different-family criticism, source bindings, deadline and
+single-POST controls apply. Astra planning records use `semantic-plan` names.
+The sample cannot approve G1/G2, advance a gate, auto-reschedule, promote a route
+or substitute for the separate public-review calibration.

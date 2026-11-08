@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from scripts import research_extensions as extensions, evidence_context, calibration_analysis
 from scripts import review_packets, artifact_ownership, api_orchestrator, word_render
+from scripts import model_runtime
 from scripts.research_artifacts import sha, write
 
 
@@ -139,6 +140,58 @@ class ExtensionTests(ExtensionFixture):
         original = result["fingerprint"]
         (self.project / source["path"]).write_text("New counterevidence")
         self.assertNotEqual(original, evidence_context.build(self.project, "topic-intelligence")["fingerprint"])
+
+    def test_g1_context_reads_new_current_scientific_artifacts_before_independent_review(self):
+        self.context()
+        required = api_orchestrator.stage_config("topic-intelligence")["required_artifacts"]
+        self.source("api_runs/old/plan.txt", "OLD_PLANNER_OPINION")
+        self.source("reviews/old.json", '{"verdict":"OLD_PREFERRED_VERDICT"}')
+        state_bytes = (self.project / "state/run.json").read_bytes()
+        with patch.object(api_orchestrator, "project_root", return_value=self.project), \
+             patch.object(model_runtime, "call", side_effect=AssertionError("source replay must not call a provider")) as calls:
+            before = api_orchestrator.critic_prompt(self.project.name, "topic-intelligence", "")
+            self.assertFalse(any((self.project / path).exists() for path in required))
+            for index, path in enumerate(required):
+                self.source(path, json.dumps({"questions": [], "fixture_current_scientific_body": f"NEW_REQUIRED_SCIENCE_{index}"}) + "\n")
+            after = api_orchestrator.critic_prompt(self.project.name, "topic-intelligence", "")
+            packet = evidence_context.build(self.project, "topic-intelligence")
+            for index, path in enumerate(required):
+                self.assertNotIn(f"NEW_REQUIRED_SCIENCE_{index}", before)
+                self.assertIn(f"NEW_REQUIRED_SCIENCE_{index}", after)
+                self.assertTrue(any(row["path"] == path and row["sha256"] == sha(self.project / path)
+                                    and row["complete_source"] for row in packet["bindings"]))
+            self.assertNotIn("OLD_PLANNER_OPINION", after)
+            self.assertNotIn("OLD_PREFERRED_VERDICT", after)
+            self.assertEqual((self.project / "state/run.json").read_bytes(), state_bytes)
+            calls.assert_not_called()
+
+    def test_old_partial_cannot_hide_appended_g1_science_or_override_source_guards(self):
+        plan, _ = self.context()
+        path = "program/novelty-claim-matrix.json"
+        self.source(path, '{"fixture_claim":"initial"}\n')
+        old_digest = sha(self.project / path)
+        item = {"path": path, "start_line": 1, "end_line": 1, "stance": "neutral", "reason": "Old selected first line"}
+        plan["stages"]["topic-intelligence"]["items"].append(item)
+        write(self.project / evidence_context.PLAN, plan)
+        self.source(path, '{"fixture_claim":"initial",\n "fixture_limitation":"NEW_APPENDED_COUNTEREVIDENCE"}\n')
+        digest = sha(self.project / path)
+        with patch.object(model_runtime, "call", side_effect=AssertionError("guard must run before a provider")) as calls:
+            packet = evidence_context.build(self.project, "topic-intelligence")
+            self.assertIn("NEW_APPENDED_COUNTEREVIDENCE", packet["context"])
+            self.assertTrue(any(row["path"] == path and row["complete_source"] and row["sha256"] == digest for row in packet["bindings"]))
+            with self.assertRaisesRegex(ValueError, "hidden judgment"):
+                evidence_context.build(self.project, "topic-intelligence", excluded_paths=[path])
+            item["expected_sha256"] = old_digest
+            write(self.project / evidence_context.PLAN, plan)
+            with self.assertRaisesRegex(ValueError, "frozen context input changed"):
+                evidence_context.build(self.project, "topic-intelligence")
+            self.assertEqual(sha(self.project / path), digest)
+            item.pop("expected_sha256")
+            write(self.project / evidence_context.PLAN, plan)
+            self.source("program/originality-audit.json", json.dumps({"fixture_body": "x" * 600_001}))
+            with self.assertRaisesRegex(ValueError, "required context exceeds the budget"):
+                evidence_context.build(self.project, "topic-intelligence")
+            calls.assert_not_called()
 
     def test_context_refuses_silent_truncation_stale_sources_and_private_files(self):
         value, source = self.context()
