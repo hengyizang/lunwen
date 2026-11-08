@@ -41,7 +41,7 @@ Codex Cloud 的可复用开发环境使用 [`docs/CODEX-CLOUD.md`](docs/CODEX-CL
 
 P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [`docs/P0-P1-COMPLETION.md`](docs/P0-P1-COMPLETION.md)，机器可读追踪表见 `config/requirements-traceability.json`。
 
-面向个人研究者的、可审计且有人类闸门的博士研究流水线。Claude/OpenAI API 是可选的模型层，Claude Code/Codex CLI 是可选的本地 Agent Runtime，本地 Python 控制层负责状态、许可、预算、哈希、实验登记、引用与期刊合规检查。
+面向个人研究者的、可审计且保留真实选题决定的博士研究流水线。Claude/OpenAI API 提供模型层，GitHub Actions 执行云端科研，Python 控制层负责状态、来源、预算、哈希、实验登记、引用与投稿准备。
 
 “一键”指：创建或恢复项目，运行当前阶段的 只读规划 → Codex写入 → 一次独立批评流程；实际问题触发修订/复审，最终投稿使用三家族互盲 panel，通过检查后自动推进；G1 博士选题、G2 逐篇论文选题等待真实人工决定。实际来源、版本、累计费用或实验事实缺证据时保持待解决，不凭空补齐，也不自动投稿；许可／研究用途是可选元数据。既有逐任务模型、路由和推理档位保持原样。
 
@@ -76,7 +76,7 @@ P0/P1 的已实现项、实机验收项和仍需实际科研执行的边界见 [
                 venue compliance / submission ZIP
 ```
 
-Claude Code 和 Codex CLI 保留为可选高级接口；系统的科研状态和安全边界不依赖某一个 CLI。
+Codex 聊天可管理项目；科研执行统一调用 API 周期，旧 Claude Code/Codex 本地订阅进程后端已退休。
 
 ## 安装
 
@@ -160,7 +160,7 @@ python3 scripts/researchctl.py status --project my-phd --json
 python3 scripts/researchctl.py gate-check --project my-phd
 ```
 
-独立配置的 API-first 兼容入口见 [API-FIRST.md](docs/API-FIRST.md)；`scripts/start.sh` 当前兼容默认仍使用 UUAPI，不是正式 CheapAI＋CodeKey 云端入口。只有明确选择本地 CLI 时才用 `scripts/start.sh --cli` 或 `autopilot.py`，命令和限制见 [CHAT-USAGE.md](docs/CHAT-USAGE.md)。这些入口共用同一状态、权利、累计预算、实验执行器和独立审查，不会提供额外额度或代填 G1/G2 选题决定。
+独立配置的 API-first 兼容入口见 [API-FIRST.md](docs/API-FIRST.md)；`scripts/start.sh` 当前兼容默认仍使用 UUAPI，不是正式 CheapAI＋CodeKey 云端入口。`autopilot.py start/resume/plan` 和历史 `scripts/start.sh --cli` 别名现在也调用同一 API 周期，旧 Claude Code/Codex 本地订阅进程与任意 shell 后端已退休，命令和迁移限制见 [CHAT-USAGE.md](docs/CHAT-USAGE.md)。这些入口共用同一状态、来源、累计预算、实验执行器和独立审查，不会提供额外额度或代填 G1/G2 选题决定。
 
 ## 阶段决定
 

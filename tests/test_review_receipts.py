@@ -6,8 +6,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, autopilot, review_receipts
-from scripts.research_artifacts import read, write, record, sha
+from scripts import api_orchestrator, review_receipts
+from scripts.research_artifacts import read, record, sha, write
 from tests.review_scope_fixtures import prepare_scope, seal_review
 
 
@@ -186,7 +186,7 @@ class ReviewReceiptTests(unittest.TestCase):
                 review_receipts.seal_phase(project, stage="writing-and-review", run_id="bad", phase="initial", audit_path=audit,
                     prompt="Synthetic prompt", identity=identity, writer_family="openai", materials=materials)
 
-    def test_complete_api_and_cli_critic_prompts_exclude_raw_requests_preserve_source(self):
+    def test_complete_shared_api_critic_prompts_exclude_raw_requests_preserve_source(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             project, state = self.fixture(root)
@@ -196,19 +196,15 @@ class ReviewReceiptTests(unittest.TestCase):
             write(project / "program/custom-review-invocation.json", {"skill": "ccf-paper-reviewer", "task": marker})
             write(project / "state/research-steps.json", {"ccfa": [{"result": {"request": {"task": marker}}}]})
             with patch.object(api_orchestrator, "project_root", return_value=project):
-                for prompt in (api_orchestrator.critic_prompt(project.name, "writing-and-review", ""), autopilot.critic_prompt(project.name, state)):
-                    self.assertNotIn(marker, prompt)
-                    self.assertIn("Located synthetic source evidence", prompt)
+                prompt = api_orchestrator.critic_prompt(project.name, "writing-and-review", "")
+                self.assertNotIn(marker, prompt)
+                self.assertIn("Located synthetic source evidence", prompt)
                 write(project / "program/context-plan.json", {"schema_version": "1.0", "stages": {"writing-and-review": {
                     "question": "Synthetic independent review", "items": [{"path": "program/custom-review-invocation.json", "reason": "Attempted raw request bypass", "stance": "neutral"}]}}})
                 with self.assertRaisesRegex(ValueError, "prior review, or unsupported"):
                     api_orchestrator.critic_prompt(project.name, "writing-and-review", "")
 
-    def test_cli_critic_has_no_tools_and_requires_reported_model_metadata(self):
-        with patch("scripts.autopilot.shutil.which", return_value="/synthetic/claude"):
-            command = autopilot.claude_command("Synthetic complete packet", "standard", 1, source_packet_only=True)
-            self.assertEqual(command[command.index("--tools") + 1], "")
-            self.assertNotIn("--allowedTools", command)
+    def test_historical_cli_receipts_require_reported_model_metadata(self):
         with tempfile.TemporaryDirectory() as temp:
             target = Path(temp) / "stdout.json"
             write(target, {"result": "synthetic review", "modelUsage": {"claude-fixture": {"inputTokens": 10}}})

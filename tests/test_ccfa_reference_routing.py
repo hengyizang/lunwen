@@ -2,13 +2,15 @@
 import hashlib
 import json
 import os
-from pathlib import Path
 import re
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator as api, autopilot, ccfa_runtime as runtime, research_methods
+from scripts import api_orchestrator as api
+from scripts import ccfa_runtime as runtime
+from scripts import research_methods
 
 
 class CCFAReferenceRoutingTests(unittest.TestCase):
@@ -117,7 +119,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                 hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
                 self.assertEqual(len(hashes), len(set(hashes)))
 
-    def test_ordinary_api_and_cli_prompts_receive_core_and_load_exact_full_sources_on_demand(self):
+    def test_ordinary_shared_api_prompts_receive_core_and_load_exact_full_sources_on_demand(self):
         with tempfile.TemporaryDirectory() as directory, patch("scripts.model_runtime.call", side_effect=AssertionError("No paid call permitted")):
             project = Path(directory)
             (project / "state").mkdir()
@@ -129,10 +131,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                     api.writer_prompt("fixture", state["stage"], ""),
                     api.critic_prompt("fixture", state["stage"], ""),
                     api.remediation_prompt("fixture", state["stage"], "", "{}"),
-                    autopilot.planner_prompt("fixture", state, config, ""),
-                    autopilot.writer_prompt("fixture", state, config, "", autopilot.ROOT / "plan.md"),
-                    autopilot.critic_prompt("fixture", state),
-                    autopilot.remediation_prompt("fixture", state, autopilot.ROOT / "review.json")]
+                    ]
             for prompt in prompts:
                 for relative in ("ccf-experiment-designer/references/evidence-design.md",
                                  "ccf-experiment-designer/references/result-templates.md",
@@ -180,20 +179,16 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertEqual(prompt.count(runtime.source(relative)), 1)
             self.assertNotIn("BEGIN PINNED CCFA ccf-paper-writer/SKILL.md", prompt)
 
-    def test_scientific_contract_occurs_once_in_every_api_and_cli_prompt(self):
+    def test_scientific_contract_occurs_once_in_every_shared_api_prompt(self):
         with tempfile.TemporaryDirectory() as directory:
             project=Path(directory)
             state={"stage":"writing-and-review","gate":"G5","active_paper":"P01","paper_count":1}
             (project/"state").mkdir()
             (project/"state/run.json").write_text(json.dumps(state))
-            config={"contract":"G5","gate":"G5","author_task":"Current scientific writing"}
             with patch.object(api,"project_root",return_value=project),patch.object(api,"active_paper",return_value="P01"):
                 prompts=[api.planning_prompt("fixture",state["stage"],""),api.writer_prompt("fixture",state["stage"],""),
                     api.critic_prompt("fixture",state["stage"],""),api.remediation_prompt("fixture",state["stage"],"","{}"),
-                    autopilot.planner_prompt("fixture",state,config,""),
-                    autopilot.writer_prompt("fixture",state,config,"",autopilot.ROOT/"plan.md"),
-                    autopilot.critic_prompt("fixture",state),
-                    autopilot.remediation_prompt("fixture",state,autopilot.ROOT/"review.json")]
+                    ]
             for prompt in prompts:
                 self.assertEqual(prompt.count("G5 SCIENTIFIC WRITING:"),1)
                 self.assertNotIn("At G5 read the protected academic-style audit",prompt)

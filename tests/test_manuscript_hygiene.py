@@ -12,8 +12,14 @@ from unittest.mock import patch
 
 from docx import Document
 
-from scripts import api_orchestrator, autopilot, artifact_ownership, cloud_research_steps
-from scripts import manuscript_hygiene as hygiene, output_provenance, researchctl
+from scripts import (
+    api_orchestrator,
+    artifact_ownership,
+    cloud_research_steps,
+    output_provenance,
+    researchctl,
+)
+from scripts import manuscript_hygiene as hygiene
 from scripts.research_artifacts import read, sha, write
 
 
@@ -174,8 +180,9 @@ class ManuscriptHygieneTests(unittest.TestCase):
         self.assertTrue(hygiene.validate_saved_report(self.project, "P01"))
 
     def test_image_only_figure_pdf_is_preserved_with_explicit_media_scope(self):
-        import fitz
         import io
+
+        import fitz
         from PIL import Image
         self.source(text="Clean ordinary prose.")
         image = io.BytesIO()
@@ -267,12 +274,6 @@ class ManuscriptHygieneTests(unittest.TestCase):
                 api_orchestrator.safe_target("demo", report["changes"][0])
             snapshot = api_orchestrator.project_snapshot("demo")
             self.assertNotIn("original.tex", snapshot)
-        with patch.object(researchctl, "PROJECTS_ROOT", self.project.parent):
-            before = autopilot.protected_control_snapshot("demo")
-            latest = self.project / hygiene.PREFIX / "P01/latest.json"
-            latest.write_text("forged", encoding="utf-8")
-            with self.assertRaises(autopilot.AutopilotError):
-                autopilot.ensure_protected_control_unchanged("demo", before)
         self.assertEqual(hygiene.validate_saved_report(self.project, "P01"), [])
         self.assertTrue(source.exists())
 
@@ -284,29 +285,29 @@ class ManuscriptHygieneTests(unittest.TestCase):
             after = researchctl.paper_artifact_hash("demo", "P01")
         self.assertNotEqual(before, after)
 
-    def test_both_controllers_clean_before_word_build_and_scan_both_existing_passes(self):
-        for controller in (api_orchestrator, autopilot):
-            with self.subTest(controller=controller.__name__):
-                source = self.source("manuscript/draft.md", text="# Results\n\nOrdinary\u200b prose reports uncertainty.")
-                metadata = self.source("manuscript/metadata.json", json.dumps({"schema_version": "1.0", "title": "Registered comparison",
-                    "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Fixture Author"}],
-                    "keywords": ["cohort", "comparison", "uncertainty"]}))
-                write(self.project / "state/run.json", {"active_paper": "P01", "writing_phases":{"P01":"submission"}})
-                write(self.project / "program/cloud-operations.json", {"operations": [{"stage": "writing-and-review", "action": "docx",
-                    "source": source.relative_to(self.project).as_posix(), "metadata": metadata.relative_to(self.project).as_posix(),
-                    "output": "papers/P01/manuscript/main.docx"}]})
-                with patch.object(api_orchestrator, "ROOT", Path(self.temporary.name)), patch.object(
-                    api_orchestrator, "refresh_academic_style_audit", return_value=None), patch(
-                    "scripts.model_runtime.call", side_effect=AssertionError("no extra model calls")):
-                    for phase in ("initial", "final"):
-                        if phase == "final":
-                            source = self.source("manuscript/draft.md", text="# Results\n\nRevised\u200b prose retains uncertainty.")
-                        result = controller.refresh_post_write_evidence("demo", "writing-and-review", controller.__name__, phase)
-                        self.assertEqual(result["controlled_steps"]["operation_errors"], [])
-                        self.assertEqual(result["manuscript_hygiene"]["status"], "pass")
-                        self.assertEqual(hygiene.validate_saved_report(self.project, "P01"), [])
-                        self.assertNotIn("\u200b", source.read_text(encoding="utf-8"))
-                        built = self.paper / "manuscript/main.docx"
-                        self.assertNotIn("\u200b", " ".join(p.text for p in Document(built).paragraphs))
-                        self.assertTrue((self.project / result["manuscript_hygiene"]["snapshot_path"]).is_file())
-                        self.assertEqual(read(self.paper / "reviews/docx-build.json")["source"]["sha256"], sha(source))
+    def test_shared_controller_clean_before_word_build_and_scan_both_existing_passes(self):
+        controller = api_orchestrator
+        with self.subTest(controller=controller.__name__):
+            source = self.source("manuscript/draft.md", text="# Results\n\nOrdinary\u200b prose reports uncertainty.")
+            metadata = self.source("manuscript/metadata.json", json.dumps({"schema_version": "1.0", "title": "Registered comparison",
+                "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Fixture Author"}],
+                "keywords": ["cohort", "comparison", "uncertainty"]}))
+            write(self.project / "state/run.json", {"active_paper": "P01", "writing_phases":{"P01":"submission"}})
+            write(self.project / "program/cloud-operations.json", {"operations": [{"stage": "writing-and-review", "action": "docx",
+                "source": source.relative_to(self.project).as_posix(), "metadata": metadata.relative_to(self.project).as_posix(),
+                "output": "papers/P01/manuscript/main.docx"}]})
+            with patch.object(api_orchestrator, "ROOT", Path(self.temporary.name)), patch.object(
+                api_orchestrator, "refresh_academic_style_audit", return_value=None), patch(
+                "scripts.model_runtime.call", side_effect=AssertionError("no extra model calls")):
+                for phase in ("initial", "final"):
+                    if phase == "final":
+                        source = self.source("manuscript/draft.md", text="# Results\n\nRevised\u200b prose retains uncertainty.")
+                    result = controller.refresh_post_write_evidence("demo", "writing-and-review", controller.__name__, phase)
+                    self.assertEqual(result["controlled_steps"]["operation_errors"], [])
+                    self.assertEqual(result["manuscript_hygiene"]["status"], "pass")
+                    self.assertEqual(hygiene.validate_saved_report(self.project, "P01"), [])
+                    self.assertNotIn("\u200b", source.read_text(encoding="utf-8"))
+                    built = self.paper / "manuscript/main.docx"
+                    self.assertNotIn("\u200b", " ".join(p.text for p in Document(built).paragraphs))
+                    self.assertTrue((self.project / result["manuscript_hygiene"]["snapshot_path"]).is_file())
+                    self.assertEqual(read(self.paper / "reviews/docx-build.json")["source"]["sha256"], sha(source))

@@ -151,7 +151,7 @@ def paper_scientific_errors(project, pid):
 def paper_observations(project,pid,warnings):
     """C: diagnostics never acquire data, call a model or grant scientific approval."""
     if warnings is None:return
-    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,rebuttal_triage
+    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,reviewer_rounds
     paper=project/"papers"/pid
     for label,check in (
         ("academic style",lambda:academic_style.validate_saved_audit(paper)),
@@ -166,7 +166,7 @@ def paper_observations(project,pid,warnings):
         ("revision trace",lambda:revision_trace.validate_saved_report(paper)),
         ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
         ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid)),
-        ("concern cards",lambda:rebuttal_triage.validate_saved_report(paper))):
+        ("concern cards",lambda:reviewer_rounds.validate_concern_response(paper))):
         _observe(warnings,f"{pid} {label}",check)
 
 

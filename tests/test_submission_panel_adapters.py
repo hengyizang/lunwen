@@ -8,12 +8,13 @@ import re
 import unittest
 from unittest.mock import patch
 
-from scripts import ai_providers, api_orchestrator as api, autopilot, model_runtime, model_spend, review_panel
+from scripts import ai_providers, autopilot, model_runtime, model_spend, review_panel
+from scripts import api_orchestrator as api
 from scripts.research_artifacts import write
 from tests import test_production_cycle as production_fixture
 from tests.research_cycle_fixtures import pending_decision
-from tests.test_review_panel import panel_inputs
 from tests.review_scope_fixtures import prepare_scope
+from tests.test_review_panel import panel_inputs
 
 
 class SubmissionPanelAdapterTests(unittest.TestCase):
@@ -30,7 +31,6 @@ class SubmissionPanelAdapterTests(unittest.TestCase):
             "paper_statuses": {"P01": "active"}, "writing_phases": {"P01": "submission"}}
         prepare_scope(self.project, self.state)
         panel_inputs(self.project)
-        self.stack.enter_context(patch.object(autopilot, "ROOT", self.fixture.root))
         self.stack.enter_context(patch.object(autopilot.researchctl, "PROJECTS_ROOT", self.fixture.root / "projects"))
         self.count = 0
 
@@ -94,38 +94,14 @@ class SubmissionPanelAdapterTests(unittest.TestCase):
         self.assert_panel(calls, result["independent_audit"]["panel"])
         self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], 0.005)
 
-    def test_cli_final_submission_runs_two_cli_steps_and_three_api_panel_receipts(self):
-        token, invoked = "submission-adapter-fixture", []
-        self.stack.enter_context(patch.object(autopilot, "run_token", return_value=token))
-        self.stack.enter_context(patch.object(autopilot, "load_stage_config", return_value={self.stage: {"gate": "G5"}}))
-        self.stack.enter_context(patch.object(autopilot, "planner_prompt", return_value="Synthetic read-only planner packet"))
-        self.stack.enter_context(patch.object(autopilot, "writer_prompt", return_value="Synthetic source-bound writer packet"))
-        self.stack.enter_context(patch.object(autopilot, "refresh_post_write_evidence", return_value={"academic_style_audit": {}, "controlled_steps": {}}))
-        self.stack.enter_context(patch("scripts.autopilot.shutil.which", side_effect=lambda name: "/synthetic/" + name))
-
-        def invoke(name, command, run_dir, timeout, max_output, **kwargs):
-            invoked.append(name)
-            self.assertEqual(name, "planner", "Final submission must not also run an ordinary CLI critic")
-            write(run_dir / (name + ".stdout.txt"), {"result": "Synthetic read-only plan.",
-                "model": "claude-opus-5-5", "session_id": "synthetic-planner"})
-            return {"name": name, "status": "succeeded", "exit_code": 0}
-
-        def writer(slug, protected, name, command, run_dir, last_message, timeout, max_output):
-            invoked.append(name)
-            self.assertEqual(name, "writer")
-            pending_decision(self.project, self.stage, token, "P01")
-            target = self.project / "papers/P01/manuscript/writer-note.txt"
-            target.write_text("Synthetic manuscript preparation only.\n")
-            write(last_message, {"dispositions": []})
-            return {"name": name, "status": "succeeded", "exit_code": 0}
-
-        with patch.object(autopilot, "invoke", side_effect=invoke), patch.object(autopilot, "invoke_writer", side_effect=writer), \
-                patch.object(ai_providers, "call", side_effect=self.response) as transport, \
+    def test_compatibility_final_submission_uses_metered_API_authors_and_three_panel_receipts(self):
+        with patch.object(ai_providers, "call", side_effect=self.response) as transport, \
                 patch.object(model_runtime, "call", wraps=model_runtime.call) as calls:
-            result = autopilot.run_stage("demo", "", "standard", 1, 10000, 0)
-        self.assertEqual(invoked, ["planner", "writer"])
-        self.assertEqual(transport.call_count, 3)
+            result = autopilot.run_stage("demo", max_output_tokens=300, control_max_output_tokens=100)
+        self.assertEqual(transport.call_count, 5)
         self.assertEqual(result["status"], "needs_work")
-        self.assertEqual([run["name"] for run in result["runs"]], invoked)
-        self.assert_panel(calls, result["submission_panel"])
-        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], 0.003)
+        self.assertEqual(result["backend"], "api")
+        self.assertEqual([call.kwargs["role"] for call in calls.call_args_list[:2]], ["semantic-planner", "persistent-writer"])
+        self.assert_panel(calls, result["independent_audit"]["panel"])
+        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], 0.005)
+        self.assertFalse((self.project / "state/autopilot.json").exists())

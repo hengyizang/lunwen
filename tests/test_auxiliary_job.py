@@ -158,6 +158,18 @@ class AuxiliaryJobTests(unittest.TestCase):
         for fields in ({"validation_roster": "astra-argon"}, {"kind": "g1-transport-validation", "task_profile": profile, "validation_roster": "other"}):
             with self.subTest(fields=fields), self.assertRaisesRegex(ValueError, "validation_roster"):
                 auxiliary_job.load(self.project, self.manifest(**fields))
+        manifest = self.manifest(kind="g1-transport-validation", task_profile=profile, max_output_tokens=12000,
+                                 validation_roster="astra-argon", response_streaming=True)
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
+             patch.object(auxiliary_job.model_routing, "load_policy", return_value=policy):
+            result = auxiliary_job.run(self.project, manifest, "evidence/auxiliary/g1-astra-stream.json")
+        report = json.loads((self.project / result["output"]).read_text())
+        self.assertAlmostEqual(report["maximum_reserved_upper_bound_cny"], 53.5104264)
+        self.assertEqual([row["planned_route"].get("response_streaming", False) for row in report["model_plan"]], [True, True, False, True, False])
+        for fields in ({"response_streaming": True}, {"kind": "g1-transport-validation", "task_profile": profile, "response_streaming": True},
+                       {"kind": "g1-transport-validation", "task_profile": profile, "validation_roster": "astra-argon", "response_streaming": "true"}):
+            with self.subTest(fields=fields), self.assertRaisesRegex(ValueError, "response_streaming"):
+                auxiliary_job.load(self.project, self.manifest(**fields))
 
     def test_manifest_rejects_unknown_fields_roles_duplicate_json_and_legacy(self):
         for field in ("provider","model","reasoning_effort","allow_paid","budget_cny"):

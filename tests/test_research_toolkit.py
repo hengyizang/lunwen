@@ -1,12 +1,19 @@
 """Selected guidance must remain current, nonexecuting and independent."""
 import json
 import os
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator, artifact_ownership, autopilot, cloud_job, literaturectl, research_methods, research_toolkit as toolkit
+from scripts import (
+    api_orchestrator,
+    artifact_ownership,
+    cloud_job,
+    literaturectl,
+    research_methods,
+)
+from scripts import research_toolkit as toolkit
 from scripts.research_artifacts import read, record, sha, write
 
 
@@ -201,17 +208,6 @@ class ResearchToolkitTests(unittest.TestCase):
         self.assertNotIn("FILE " + self.relative, snapshot)
         self.assertIn("Original source; experiment not yet run.", snapshot)
 
-    def test_cli_review_and_remediation_keep_explicit_tool_selection(self):
-        marker = self.marker(self.prepare())
-        state = {"stage": "experiment-design", "gate": "G3"}
-        with patch.object(api_orchestrator, "critic_prompt", return_value="Independent review") as critic:
-            autopilot.critic_prompt("study", state, marker)
-        critic.assert_called_once_with("study", "experiment-design", marker)
-        with patch.object(research_methods, "stage_context", return_value="Selected method") as methods, \
-             patch.object(api_orchestrator, "project_root", return_value=self.project):
-            prompt = autopilot.remediation_prompt("study", state, autopilot.ROOT / "review.json", marker)
-        self.assertIn("Selected method", prompt)
-        methods.assert_called_once_with("experiment-design", "remediator", context=marker, project=self.project)
 
     def test_api_remediation_keeps_the_remediator_tool_role(self):
         marker = self.marker(self.prepare())

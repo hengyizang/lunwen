@@ -67,12 +67,17 @@ class LosslessContextTests(unittest.TestCase):
             write(project / "intake/constraints.json", {"cloud_only": True, "compute_ceiling": 0})
             write(project / "state/model-spend-control.json", {"authorized_ceiling_cny": 300})
             write(project / "evidence/contrary.md", "REGISTERED_NEGATIVE_RESULT")
+            result = {"negative_result": "The null result contradicts the mechanism.", "interval": [-0.02, 0.01], "registered_seeds": [1, 2, 3]}
+            source = project / "evidence/result.json"
+            write(source, result)
             write(project / "papers/P01/manuscript/main.tex", "Current manuscript")
             write(project / "papers/P02/paper-contract.json", {"claim": "independent"})
             with patch.object(api, "ROOT", root):
                 text = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=True)
             for required in ("REGISTERED_NEGATIVE_RESULT", "Current manuscript", "authorized_ceiling_cny", "compute_ceiling", "independent"):
                 self.assertIn(required, text)
+            marker = f"--- FILE evidence/result.json sha256={hashlib.sha256(source.read_bytes()).hexdigest()} representation=json-whitespace-compacted ---\n"
+            self.assertEqual(json.loads(text.split(marker, 1)[1].split("\n--- END FILE ---", 1)[0]), result)
             self.assertNotIn("OLD_PREFERRED_VERDICT", text)
             self.assertNotIn("BILLING_TRACE_ONLY", text)
             self.assertNotIn("OPERATIONAL_ROUTING_ONLY", text)
@@ -171,9 +176,11 @@ class CostRuntimeTests(unittest.TestCase):
             with self.subTest(role=role), tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True), \
                     patch.object(model_runtime.ai_providers, "configuration", side_effect=configuration), \
                     patch.object(model_runtime.ai_providers, "call", side_effect=response) as transport:
+                self.assertFalse(self.invoke(Path(directory)).cache_hit)
+                self.assertTrue(self.invoke(Path(directory)).cache_hit)
                 self.assertFalse(self.invoke(Path(directory), role=role).cache_hit)
                 self.assertFalse(self.invoke(Path(directory), role=role).cache_hit)
-                self.assertEqual(transport.call_count, 2)
+                self.assertEqual(transport.call_count, 3)
 
     def test_a_missing_later_route_stops_before_any_paid_role(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_REQUIRE_MODEL_AUTH": "1",

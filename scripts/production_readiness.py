@@ -67,7 +67,9 @@ def catalog(provider: str, environment: dict) -> set[str]:
         raise ValueError("catalog unavailable or malformed") from None
 
 
-def report(environment=None, *, check_models=False, check_billing=False) -> dict:
+def report(environment=None, *, check_models=False, check_billing=False, billing_provider=None) -> dict:
+    if billing_provider is not None and (not isinstance(billing_provider, str) or billing_provider not in ai_providers.PRODUCTION_PROVIDERS):
+        raise ValueError("billing_provider must name an allowlisted production provider")
     env = os.environ if environment is None else environment
     def safe_text(value):
         for name, secret in env.items():
@@ -111,8 +113,9 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
     inventory = {}
     meters = {}
     valid_configuration = not errors
+    billing_providers = {billing_provider} if billing_provider is not None else {row["provider"] for row in rows}
     if check_billing and valid_configuration:
-        for provider in sorted({row["provider"] for row in rows}):
+        for provider in sorted(billing_providers):
             try:
                 snapshot = relay_billing.read_meter(provider, environment=env)
                 safe = {"provider": provider, "kind": safe_text(snapshot["kind"])}
@@ -144,7 +147,7 @@ def report(environment=None, *, check_models=False, check_billing=False) -> dict
     shared = {}
     if check_billing and valid_configuration:
         from scripts import relay_guard
-        for provider in sorted({row["provider"] for row in rows}):
+        for provider in sorted(billing_providers):
             try:
                 shared[provider] = relay_guard.inspect(provider)
             except (OSError, ValueError, KeyError):
@@ -165,9 +168,10 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-models", action="store_true", help="read-only authenticated catalogs; never inference")
     parser.add_argument("--check-billing", action="store_true", help="read-only debit counters; never inference or settlement")
+    parser.add_argument("--billing-provider", choices=sorted(ai_providers.PRODUCTION_PROVIDERS), help="limit --check-billing and shared inspection to one provider; catalogs stay unchanged")
     parser.add_argument("--output",type=Path)
     args=parser.parse_args()
-    value=report(check_models=args.check_models,check_billing=args.check_billing)
+    value=report(check_models=args.check_models,check_billing=args.check_billing,billing_provider=args.billing_provider)
     text=json.dumps(value,ensure_ascii=False,indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True,exist_ok=True)

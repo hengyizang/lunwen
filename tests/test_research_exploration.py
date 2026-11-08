@@ -7,10 +7,19 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from scripts import automated_quality, experiment_evidence, experiment_runner as runner
-from scripts import paper_execution, research_phase, research_quality, researchctl, review_receipts
-from scripts import api_orchestrator, autopilot
-from scripts import cloud_research_steps as steps, results_validation
+from scripts import (
+    api_orchestrator,
+    automated_quality,
+    experiment_evidence,
+    paper_execution,
+    research_phase,
+    research_quality,
+    researchctl,
+    results_validation,
+    review_receipts,
+)
+from scripts import cloud_research_steps as steps
+from scripts import experiment_runner as runner
 from scripts.acceptance_scope import prepare_scope
 from scripts.research_artifacts import read, sha, write
 from scripts.supplemental_experiments import all_compute_cost
@@ -339,7 +348,7 @@ class NativeExplorationTests(unittest.TestCase):
         write(self.plan_path, self.plan)
         self.assertTrue(any("licensed dataset manifest" in error for error in research_phase.design_errors(self.project)))
 
-    def test_cli_design_writer_uses_the_same_native_operations_and_dataset_snapshot_as_api(self):
+    def test_shared_design_writer_uses_the_same_native_operations_and_dataset_snapshot_as_api(self):
         from tests.test_dataset_fetch import valid_manifest
         raw = self.project / "data/raw/fixture.csv"
         raw.parent.mkdir(parents=True, exist_ok=True)
@@ -357,16 +366,14 @@ class NativeExplorationTests(unittest.TestCase):
             "path": "data/raw/fixture.csv"}]})
         snapshot = paper_execution.dataset_snapshot(self.project)
         report = self.project / "data/quality/fixture.json"
-        for controller in (autopilot, api_orchestrator):
-            with self.subTest(controller=controller.__name__):
-                snapshot.unlink(missing_ok=True)
-                report.unlink(missing_ok=True)
-                result = controller.refresh_post_write_evidence(self.slug, "experiment-design", "software-cli-design", "initial")
-                self.assertIsNotNone(result["controlled_steps"])
-                self.assertTrue(snapshot.is_file())
-                self.assertTrue(report.is_file(), result["controlled_steps"])
-                self.assertEqual(result["controlled_steps"]["operation_errors"], [])
-                self.assertEqual(read(self.project / "state/run.json")["gate"], "G3")
+        snapshot.unlink(missing_ok=True)
+        report.unlink(missing_ok=True)
+        result = api_orchestrator.refresh_post_write_evidence(self.slug, "experiment-design", "software-cli-design", "initial")
+        self.assertIsNotNone(result["controlled_steps"])
+        self.assertTrue(snapshot.is_file())
+        self.assertTrue(report.is_file(), result["controlled_steps"])
+        self.assertEqual(result["controlled_steps"]["operation_errors"], [])
+        self.assertEqual(read(self.project / "state/run.json")["gate"], "G3")
         self.assertFalse(paper_execution.artifact_path(self.project, "experiments/registry.jsonl").exists())
 
     def test_invalid_phase_is_a_repairable_gate_error_and_never_selects_a_valid_phase(self):

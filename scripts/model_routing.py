@@ -72,9 +72,14 @@ def g1_transport_validation_roster() -> str | None:
     return scope.get("validation_roster") if scope else None
 
 
+def g1_response_streaming_active() -> bool:
+    scope = _G1_TRANSPORT_ROUTE.get()
+    return bool(scope and scope.get("response_streaming"))
+
+
 @contextmanager
 def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_inputs=None, max_output_tokens=4000,
-                                  validation_roster=None):
+                                  validation_roster=None, response_streaming=False):
     """One explicitly scoped native G1 sample; never promote a production route."""
     from scripts.research_artifacts import path_in, read
     if (not production_enabled() or
@@ -87,13 +92,15 @@ def g1_transport_validation_route(project: Path, manifest_sha256: str, *, check_
         raise ValueError("validation output tokens must be explicitly 4000 or 12000")
     if validation_roster not in (None, "astra-argon"):
         raise ValueError("G1 validation roster must be the explicit astra-argon sample or absent")
+    if type(response_streaming) is not bool or response_streaming and validation_roster != "astra-argon":
+        raise ValueError("Responses streaming requires the explicit astra-argon G1 sample")
     state = read(path_in(project, "state/run.json"))
     if (state.get("stage") != "topic-intelligence" or state.get("gate") != "G1"
             or state.get("status") != "awaiting_work" or state.get("approved_gates") != ["G0"]):
         raise ValueError("G1 transport validation requires actual awaiting-work G1 with only G0 approved")
     token = _G1_TRANSPORT_ROUTE.set({"manifest_sha256": manifest_sha256, "project_root": project.resolve(),
                                    "check_inputs": check_inputs, "attempted_roles": set(), "max_output_tokens": max_output_tokens,
-                                   "validation_roster": validation_roster})
+                                   "validation_roster": validation_roster, "response_streaming": response_streaming})
     try:
         yield
     finally:
@@ -324,6 +331,10 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
             route["provider"] = "codekey-codex-pro"
         if role not in WRITER_ROLES:
             route["max_output_tokens"] = g1["max_output_tokens"]
+        if g1["response_streaming"]:
+            scope["response_streaming"] = True
+            if route["provider"] == "codekey-codex-pro":
+                route["response_streaming"] = True
         digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         route.update(policy_sha256=digest, route_id="g1-transport-validation:" + digest,
                      temporary_validation_only=True, validation_scope=scope, validation_max_input_bytes=2_000_000)

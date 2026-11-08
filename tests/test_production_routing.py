@@ -138,7 +138,7 @@ class ProductionPolicyTests(unittest.TestCase):
                     raise ValueError("source changed before provider")
             with self.assertRaisesRegex(RuntimeError, "sample failure"):
                 with model_routing.g1_transport_validation_route(project, "b" * 64, check_inputs=unchanged,
-                        max_output_tokens=12000, validation_roster="astra-argon"):
+                        max_output_tokens=12000, validation_roster="astra-argon", response_streaming=True):
                     api_orchestrator.validate_roles(*providers)
                     selected = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
                     for role, route in selected.items():
@@ -151,10 +151,13 @@ class ProductionPolicyTests(unittest.TestCase):
                         self.assertEqual(route["validation_scope"]["validation_roster"], "astra-argon")
                         self.assertEqual(route["persistent_output"], role in model_routing.WRITER_ROLES)
                         self.assertEqual(route["fresh_required"], critic)
+                        self.assertEqual(route.get("response_streaming", False), not critic)
+                        self.assertTrue(route["validation_scope"]["response_streaming"])
                     with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
                         api_orchestrator.validate_roles("openai", "codekey-codex-pro", "codekey-gemini")
                     with ThreadPoolExecutor(max_workers=1) as pool:
                         self.assertIsNone(pool.submit(model_routing.g1_transport_validation_roster).result())
+                        self.assertFalse(pool.submit(model_routing.g1_response_streaming_active).result())
                         self.assertEqual(pool.submit(model_routing.cycle_routes, "topic-intelligence", "scientific-judgment").result(), original)
                         with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
                             pool.submit(api_orchestrator.validate_roles, *providers).result()
@@ -166,6 +169,7 @@ class ProductionPolicyTests(unittest.TestCase):
                         model_routing.resolve_call("topic-intelligence", "independent-critic-initial", "google", project_root=project)
                     raise RuntimeError("sample failure")
         self.assertIsNone(model_routing.g1_transport_validation_roster())
+        self.assertFalse(model_routing.g1_response_streaming_active())
         self.assertEqual(model_routing.cycle_routes("topic-intelligence", "scientific-judgment"), original)
         with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
             api_orchestrator.validate_roles(*providers)

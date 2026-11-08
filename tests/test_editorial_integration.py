@@ -9,8 +9,15 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import academic_style, api_orchestrator, autopilot, cloud_research_steps, defensive_review, output_provenance, research_improvementctl
-from scripts import ccfa_humanization
+from scripts import (
+    academic_style,
+    api_orchestrator,
+    ccfa_humanization,
+    cloud_research_steps,
+    defensive_review,
+    output_provenance,
+    research_improvementctl,
+)
 
 
 def manuscript_text() -> str:
@@ -55,23 +62,19 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertTrue(any("humanizer_review" in error for error in errors))
 
     @patch("scripts.research_phase.writing_phase",return_value="submission")
-    def test_both_writer_paths_receive_optional_observations_in_submission_phase(self, phase):
+    def test_shared_writer_roles_receive_optional_observations_in_submission_phase(self, phase):
         api_prompt = api_orchestrator.writer_prompt("missing-project", "writing-and-review", "")
         api_remediation = api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}")
-        state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
-        cli_prompt = autopilot.writer_prompt("demo", state, {"contract": "Writing and review"}, "", autopilot.ROOT / "plan.json")
-        cli_remediation = autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json")
         api_critic = api_orchestrator.critic_prompt("missing-project", "writing-and-review", "")
-        cli_critic = autopilot.critic_prompt("demo", state)
-        for value in (api_prompt, api_remediation, cli_prompt, cli_remediation, api_critic, cli_critic):
+        for value in (api_prompt, api_remediation,   api_critic, ):
             for code in ("H01", "H26", "AD01", "AD08"):
                 self.assertIn(code, value)
             self.assertIn("Empty or partial observation lists are valid", value)
             self.assertNotIn("Apply every CFH", value)
             self.assertNotIn("as the two editorial passes", value)
-        for value in (api_prompt, api_remediation, cli_prompt, cli_remediation):
+        for value in (api_prompt, api_remediation,  ):
             self.assertIn("watermark_cleanup", value)
-        for value in (api_critic, cli_critic):
+        for value in (api_critic, ):
             self.assertIn("read-only independent review", value)
             self.assertNotIn("In remediation notes", value)
         self.assertNotIn("H26", api_orchestrator.editorial_prompt_contract("topic-intelligence"))
@@ -88,14 +91,10 @@ class EditorialIntegrationTests(unittest.TestCase):
         api_orchestrator.validate_editorial_dispositions([], "topic-intelligence")
 
     def test_evidence_led_narrative_reaches_all_existing_g5_roles(self):
-        state = {"stage": "writing-and-review", "gate": "G5", "active_paper": "P01"}
         prompts = [
             api_orchestrator.writer_prompt("missing-project", "writing-and-review", ""),
             api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}"),
             api_orchestrator.critic_prompt("missing-project", "writing-and-review", "secret-preferred-verdict"),
-            autopilot.writer_prompt("demo", state, {"contract": "Writing and review"}, "", autopilot.ROOT / "plan.json"),
-            autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json"),
-            autopilot.critic_prompt("demo", state),
         ]
         for prompt in prompts:
             with self.subTest(role=prompt[:80]):
@@ -110,7 +109,7 @@ class EditorialIntegrationTests(unittest.TestCase):
         # Narrative quality and independent science review do not require style scorecards.
         api_orchestrator.validate_editorial_dispositions([], "writing-and-review")
 
-    def test_protected_signals_reach_api_and_cli_remediation_with_honest_bounds(self):
+    def test_protected_signals_reach_shared_api_remediation_with_honest_bounds(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
             project = Path(directory) / "projects/demo"
             state_path = project / "state/run.json"
@@ -144,11 +143,10 @@ class EditorialIntegrationTests(unittest.TestCase):
             self.assertIn("start", actual["protected_signals"][0])
             self.assertEqual(actual["implementation_sha256"], protected["implementation_sha256"])
             api_prompt = api_orchestrator.remediation_prompt("demo", "writing-and-review", "", "{}")
-            cli_prompt = autopilot.remediation_prompt("demo", state, autopilot.ROOT / "review.json")
-            for prompt in (api_prompt, cli_prompt):
-                self.assertIn("protected_signals", prompt)
-                self.assertIn("causal identification", prompt)
-                self.assertIn("Truncated examples are not resolved", prompt)
+            prompt = api_prompt
+            self.assertIn("protected_signals", prompt)
+            self.assertIn("causal identification", prompt)
+            self.assertIn("Truncated examples are not resolved", prompt)
 
     def test_saved_anti_defensive_review_cannot_forge_checker_binding(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -185,21 +183,6 @@ class EditorialIntegrationTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         api_orchestrator.safe_target("demo", value)
 
-    def test_cli_writer_cleanup_tampering_is_restored_and_new_forgery_removed(self):
-        with tempfile.TemporaryDirectory() as directory, patch.object(autopilot.researchctl, "PROJECTS_ROOT", Path(directory)):
-            project = Path(directory) / "demo"
-            target = project / "reports/watermark-cleanup/a/receipt.json"
-            target.parent.mkdir(parents=True)
-            target.write_text("original", encoding="utf-8")
-            before = autopilot.protected_control_snapshot("demo")
-            target.write_text("forged", encoding="utf-8")
-            forged = project / "reports/watermark-cleanup/b/candidate.tex"
-            forged.parent.mkdir(parents=True)
-            forged.write_text("fake", encoding="utf-8")
-            with self.assertRaises(autopilot.AutopilotError):
-                autopilot.ensure_protected_control_unchanged("demo", before)
-            self.assertEqual(target.read_text(encoding="utf-8"), "original")
-            self.assertFalse(forged.exists())
 
     def test_api_bundle_cannot_reach_cleanup_records_through_symlink_aliases(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):
@@ -264,7 +247,7 @@ class EditorialIntegrationTests(unittest.TestCase):
             ):
                 self.assertEqual(research_improvementctl.main(), 1)
 
-    def test_cli_controller_executes_declared_editorial_operation(self):
+    def test_shared_controller_executes_declared_editorial_operation(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}, clear=False), patch.object(
             api_orchestrator, "ROOT", Path(directory)
         ):
@@ -281,49 +264,49 @@ class EditorialIntegrationTests(unittest.TestCase):
                 "expected_sha256": hashlib.sha256(source.read_bytes()).hexdigest()
             }]}), encoding="utf-8")
             with patch.object(api_orchestrator, "refresh_academic_style_audit", return_value=None):
-                result = autopilot.refresh_post_write_evidence("demo", "writing-and-review", "run", "initial")
+                result = api_orchestrator.refresh_post_write_evidence("demo", "writing-and-review", "run", "initial")
             self.assertEqual(result["controlled_steps"]["operation_errors"], [])
             self.assertEqual(len(list((project / "reports/watermark-cleanup").glob("*/candidate.txt"))), 1)
-            other_stage = autopilot.refresh_post_write_evidence("demo", "topic-intelligence", "run", "initial")["controlled_steps"]
+            other_stage = api_orchestrator.refresh_post_write_evidence("demo", "topic-intelligence", "run", "initial")["controlled_steps"]
             self.assertEqual(other_stage["stage"], "topic-intelligence")
             self.assertEqual(other_stage["operation_errors"], [])
             self.assertEqual(len(list((project / "reports/watermark-cleanup").glob("*/candidate.txt"))), 1)
 
-    def test_both_controllers_audit_the_built_word_manuscript_after_each_pass(self):
-        for controller in (api_orchestrator, autopilot):
-            with self.subTest(controller=controller.__name__), tempfile.TemporaryDirectory() as directory, patch.dict(
-                os.environ, {"GITHUB_ACTIONS": "true"}, clear=False
-            ), patch.object(api_orchestrator, "ROOT", Path(directory)), patch.object(
-                academic_style, "find_proselint", return_value=None
-            ), patch.object(academic_style, "find_harper", return_value=None):
-                project = Path(directory) / "projects/demo"
-                paper = project / "papers/P01"
-                source = paper / "manuscript/draft.md"
-                source.parent.mkdir(parents=True)
-                source.write_text(manuscript_text(), encoding="utf-8")
-                metadata = paper / "manuscript/metadata.json"
-                metadata.write_text(json.dumps({"schema_version": "1.0", "title": "Registered comparison",
-                    "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Test Author"}],
-                    "keywords": ["cohort", "comparison", "uncertainty"]}), encoding="utf-8")
-                (project / "state").mkdir()
-                (project / "state/run.json").write_text(json.dumps({"active_paper": "P01", "writing_phases":{"P01":"submission"}}), encoding="utf-8")
-                (project / "program").mkdir()
-                (project / "program/cloud-operations.json").write_text(json.dumps({"operations": [{
-                    "stage": "writing-and-review", "action": "docx", "source": source.relative_to(project).as_posix(),
-                    "metadata": metadata.relative_to(project).as_posix(), "output": "papers/P01/manuscript/main.docx"
-                }]}), encoding="utf-8")
-                snapshots = []
-                for phase in ("initial", "final"):
-                    if phase == "final":
-                        source.write_text(source.read_text(encoding="utf-8") + "\n\nThe revised analysis retained all registered outcomes.", encoding="utf-8")
-                    output_provenance.record_model_writes(project, [source, metadata], family="openai", provider="test",
-                        model="fixture", role="writer", run_id=phase)
-                    result = controller.refresh_post_write_evidence("demo", "writing-and-review", "run", phase)
-                    self.assertEqual(result["controlled_steps"]["operation_errors"], [])
-                    self.assertTrue((source.parent / "main.docx").is_file())
-                    errors = academic_style.validate_saved_audit(paper)
-                    self.assertFalse(any("stale" in error or "does not match" in error or "coverage" in error for error in errors), errors)
-                    snapshots.append(project / result["academic_style_audit"]["snapshot_path"])
-                initial = json.loads(snapshots[0].read_text(encoding="utf-8"))
-                final = json.loads(snapshots[1].read_text(encoding="utf-8"))
-                self.assertNotEqual(initial["manuscript"]["source_tree_sha256"], final["manuscript"]["source_tree_sha256"])
+    def test_shared_controller_audit_the_built_word_manuscript_after_each_pass(self):
+        controller = api_orchestrator
+        with self.subTest(controller=controller.__name__), tempfile.TemporaryDirectory() as directory, patch.dict(
+            os.environ, {"GITHUB_ACTIONS": "true"}, clear=False
+        ), patch.object(api_orchestrator, "ROOT", Path(directory)), patch.object(
+            academic_style, "find_proselint", return_value=None
+        ), patch.object(academic_style, "find_harper", return_value=None):
+            project = Path(directory) / "projects/demo"
+            paper = project / "papers/P01"
+            source = paper / "manuscript/draft.md"
+            source.parent.mkdir(parents=True)
+            source.write_text(manuscript_text(), encoding="utf-8")
+            metadata = paper / "manuscript/metadata.json"
+            metadata.write_text(json.dumps({"schema_version": "1.0", "title": "Registered comparison",
+                "abstract": "We report the prespecified cohort comparison.", "authors": [{"name": "Test Author"}],
+                "keywords": ["cohort", "comparison", "uncertainty"]}), encoding="utf-8")
+            (project / "state").mkdir()
+            (project / "state/run.json").write_text(json.dumps({"active_paper": "P01", "writing_phases":{"P01":"submission"}}), encoding="utf-8")
+            (project / "program").mkdir()
+            (project / "program/cloud-operations.json").write_text(json.dumps({"operations": [{
+                "stage": "writing-and-review", "action": "docx", "source": source.relative_to(project).as_posix(),
+                "metadata": metadata.relative_to(project).as_posix(), "output": "papers/P01/manuscript/main.docx"
+            }]}), encoding="utf-8")
+            snapshots = []
+            for phase in ("initial", "final"):
+                if phase == "final":
+                    source.write_text(source.read_text(encoding="utf-8") + "\n\nThe revised analysis retained all registered outcomes.", encoding="utf-8")
+                output_provenance.record_model_writes(project, [source, metadata], family="openai", provider="test",
+                    model="fixture", role="writer", run_id=phase)
+                result = controller.refresh_post_write_evidence("demo", "writing-and-review", "run", phase)
+                self.assertEqual(result["controlled_steps"]["operation_errors"], [])
+                self.assertTrue((source.parent / "main.docx").is_file())
+                errors = academic_style.validate_saved_audit(paper)
+                self.assertFalse(any("stale" in error or "does not match" in error or "coverage" in error for error in errors), errors)
+                snapshots.append(project / result["academic_style_audit"]["snapshot_path"])
+            initial = json.loads(snapshots[0].read_text(encoding="utf-8"))
+            final = json.loads(snapshots[1].read_text(encoding="utf-8"))
+            self.assertNotEqual(initial["manuscript"]["source_tree_sha256"], final["manuscript"]["source_tree_sha256"])

@@ -1,10 +1,11 @@
 """Authoring boundaries apply inside follow-up studies before protocol sealing."""
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
-from scripts import api_orchestrator as api, artifact_ownership, autopilot, researchctl
+from scripts import api_orchestrator as api
+from scripts import artifact_ownership, researchctl
 from scripts.research_artifacts import write
 
 
@@ -53,25 +54,3 @@ class SupplementalRecordOwnershipTests(unittest.TestCase):
                 relative = self.relative(name)
                 self.assertFalse(artifact_ownership.executor_owned(self.project, relative))
                 self.assertEqual(api.safe_target("demo", relative), self.project / relative)
-
-    def test_cli_restores_existing_nested_records_and_removes_new_forged_records(self):
-        originals = {}
-        for name in self.protected:
-            relative = self.relative(name)
-            path = self.project / relative
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"Synthetic protected controller output.\n")
-            originals[relative] = path.read_bytes()
-        before = autopilot.protected_control_snapshot("demo")
-        for relative, content in originals.items():
-            self.assertEqual(before[relative], content)
-            (self.project / relative).write_bytes(b"Forged author output.\n")
-        with self.assertRaises(autopilot.AutopilotError):
-            autopilot.ensure_protected_control_unchanged("demo", before)
-        for relative, content in originals.items():
-            self.assertEqual((self.project / relative).read_bytes(), content)
-        new = self.project / self.prefix / "papers/P02/reviews/revision-base/new.tex"
-        new.write_bytes(b"Forged new controller output.\n")
-        with self.assertRaises(autopilot.AutopilotError):
-            autopilot.ensure_protected_control_unchanged("demo", before)
-        self.assertFalse(new.exists())

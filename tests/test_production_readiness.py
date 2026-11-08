@@ -11,7 +11,7 @@ import urllib.error
 from urllib.parse import quote
 from unittest.mock import Mock, patch
 
-from scripts import ai_providers, catalog_diagnostic, model_routing, model_spend, production_readiness as readiness
+from scripts import ai_providers, catalog_diagnostic, model_routing, model_spend, production_readiness as readiness, relay_guard
 
 
 class FakeResponse:
@@ -130,11 +130,14 @@ class ProductionReadinessTests(unittest.TestCase):
                     "currency_rule":"fixture-quoted-CNY", "token_id":"never-persist-token-id",
                     "authorization":"never-persist-auth", "private":"never-persist-wallet-detail"}
         with patch.object(readiness.relay_billing,"read_meter",side_effect=meter) as get, \
-             patch.object(ai_providers,"call") as generate, patch.object(model_spend,"grant") as grant:
+             patch.object(ai_providers,"call") as generate, patch.object(model_spend,"grant") as grant, \
+             patch.object(relay_guard, "inspect", return_value={"inference_eligible": False}) as shared:
             value = readiness.report(env,check_billing=True)
         self.assertTrue(value["configuration_ready"])
         self.assertEqual(get.call_count,5)
         self.assertEqual(len(value["billing_meters"]),5)
+        self.assertEqual({call.args[0] for call in shared.call_args_list}, set(value["billing_meters"]))
+        self.assertEqual(shared.call_count, 5)
         for provider, meter in value["billing_meters"].items():
             self.assertEqual(meter["snapshot"], {"provider":provider,"kind":"codekey_total_actual_cost",
                 "cost_cny":123.456,"requests":7,"currency_rule":"fixture-quoted-CNY"})
@@ -143,6 +146,43 @@ class ProductionReadinessTests(unittest.TestCase):
         self.assertNotIn("never-persist-auth",json.dumps(value))
         generate.assert_not_called()
         grant.assert_not_called()
+
+    def test_explicit_optional_meter_reads_one_free_GET_without_changing_catalogs_or_budget(self):
+        opener = Mock()
+        opener.open.return_value = FakeResponse({"usage": {"total": {"requests": 8, "actual_cost": 12.5}}, "token_id": "private-account"})
+        env = self.environment()
+        with (patch.object(readiness.urllib.request, "build_opener", return_value=opener),
+              patch.object(readiness, "catalog", side_effect=self.advertised) as catalog,
+              patch.object(relay_guard, "inspect", return_value={"inference_eligible": False}) as shared,
+              patch.object(ai_providers, "call") as generate,
+              patch.object(model_spend, "write") as write,
+              patch.object(readiness.relay_billing, "settle") as settle):
+            value = readiness.report(env, check_billing=True, check_models=True, billing_provider="codekey-codex-pro")
+        opener.open.assert_called_once()
+        request = opener.open.call_args.args[0]
+        self.assertEqual((request.get_method(), request.full_url, request.data), ("GET", "https://codekey.ai/v1/usage", None))
+        self.assertEqual(request.get_header("Authorization"), "Bearer " + env["DR_OS_CODEKEY_CODEX_PRO_KEY"])
+        self.assertEqual(set(value["billing_meters"]), {"codekey-codex-pro"})
+        self.assertEqual(value["billing_meters"]["codekey-codex-pro"]["snapshot"]["cost_cny"], 12.5)
+        self.assertEqual({call.args[0] for call in catalog.call_args_list}, {row["provider"] for row in value["model_routes"]})
+        self.assertEqual(catalog.call_count, 5)
+        self.assertEqual(len(value["model_routes"]), 7)
+        shared.assert_called_once_with("codekey-codex-pro")
+        self.assertNotIn("private-account", json.dumps(value))
+        self.assertNotIn(env["DR_OS_CODEKEY_CODEX_PRO_KEY"], json.dumps(value))
+        for operation in (generate, write, settle):
+            operation.assert_not_called()
+
+    def test_invalid_meter_scope_is_rejected_before_any_metadata_transport(self):
+        with (patch.object(readiness.urllib.request, "build_opener") as opener,
+              patch.object(readiness, "catalog") as catalog,
+              patch.object(readiness.relay_billing, "read_meter") as meter,
+              patch.object(relay_guard, "inspect") as shared):
+            for provider in ("", "anthropic", "unapproved-provider", "https://codekey.ai", True, [], {}):
+                with self.subTest(provider=provider), self.assertRaises(ValueError):
+                    readiness.report(self.environment(), check_billing=True, check_models=True, billing_provider=provider)
+        for operation in (opener, catalog, meter, shared):
+            operation.assert_not_called()
 
     def test_catalog_report_retains_exact_advertised_models_without_substitution_or_secret_echo(self):
         env = self.environment()
@@ -198,6 +238,8 @@ class ProductionReadinessTests(unittest.TestCase):
 
     def test_offline_report_describes_five_credentials_and_seven_quoted_routes(self):
         with (patch.object(readiness, "catalog") as inventory,
+                patch.object(readiness.relay_billing, "read_meter") as meter,
+                patch.object(relay_guard, "inspect") as shared,
                 patch.object(ai_providers, "call") as generate,
                 patch.object(model_spend, "grant") as grant,
                 patch.object(model_spend, "reserve") as reserve):
@@ -214,7 +256,7 @@ class ProductionReadinessTests(unittest.TestCase):
         self.assertIs(value["new_spending_authority"], False)
         self.assertIs(value["scientific_completion"], False)
         self.assertIs(value["inference_access_and_effort_passthrough_verified"], False)
-        for transport in (inventory, generate, grant, reserve):
+        for transport in (inventory, meter, shared, generate, grant, reserve):
             transport.assert_not_called()
 
     def test_missing_production_key_stops_catalog_inspection(self):

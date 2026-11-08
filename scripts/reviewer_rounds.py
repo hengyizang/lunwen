@@ -1,6 +1,7 @@
 """Immutable external reviewer rounds; no model, experiment or submission calls."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -8,6 +9,7 @@ import re
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 from scripts import output_provenance
 from scripts.research_artifacts import path_in, read, record, sha, write
@@ -19,6 +21,86 @@ TEXT_TYPES = {".txt", ".md", ".json", ".jsonl", ".csv", ".tex", ".log"}
 LIMITS = {"paid_calls": 0, "experiments_executed": 0, "automatic_submission": False,
           "scientific_completion_verified": False, "human_scientific_review_required": True,
           "reviewer_instructions_grant_authority": False}
+
+
+STANCES={"accept","clarify","partial","disagree"}
+IMPACT=("fatal","major","minor","editorial")
+
+
+def triage(original: dict[str,Any], plan: dict[str,Any]) -> dict[str,Any]:
+    comments=original.get("comments",[]);cards=plan.get("cards",[])
+    if not isinstance(comments,list) or not isinstance(cards,list):raise ValueError("comments and cards must be arrays")
+    ids=[str(c.get("comment_id","")) for c in comments]
+    if not ids or len(set(ids))!=len(ids) or any(not item for item in ids):raise ValueError("unique original comment IDs required")
+    card_ids=[str(c.get("comment_id","")) for c in cards]
+    if len(card_ids)!=len(set(card_ids)) or set(card_ids)!=set(ids):
+        raise ValueError("every original reviewer comment needs exactly one concern card")
+    errors=[];ordered=sorted(cards,key=lambda c:(list(IMPACT).index(c.get("impact")) if c.get("impact") in IMPACT else 9,c.get("comment_id","")))
+    for card in cards:
+        cid=card.get("comment_id")
+        if card.get("stance") not in STANCES or card.get("impact") not in IMPACT:errors.append(f"{cid}: invalid stance or impact")
+        for field in ("underlying_concern","action","evidence_status","full_response","short_response","manuscript_location","effort"):
+            if not str(card.get(field,"")).strip():errors.append(f"{cid}: {field} required")
+        if card.get("stance")=="disagree" and not str(card.get("disagreement_evidence","")).strip():
+            errors.append(f"{cid}: disagreement requires a defensible evidence citation")
+    if errors:raise ValueError("; ".join(errors))
+    budget=plan.get("venue_word_limit")
+    if not isinstance(budget,int) or budget<100:raise ValueError("venue_word_limit must be at least 100")
+    originals={c["comment_id"]:c for c in comments}
+    header=str(plan.get("editor_summary","")).strip()
+    if not header:raise ValueError("editor/Area Chair summary is required")
+    extended=["# Internal full response", "", header, ""]
+    short=["# Response to reviewers", "", header, ""]
+    for card in ordered:
+        item=originals[card["comment_id"]]
+        reviewer=str(item.get("reviewer_id", "reviewer"))
+        line=f"## {reviewer}, {card['comment_id']}"
+        extended += [line,"",f"> {item.get('comment','')}","",card["full_response"],""]
+        short += [line,"",card["short_response"],""]
+    short_text="\n".join(short);count=len(re.findall(r"\b[\w'-]+\b",short_text))
+    return {"schema_version":"1.0","comment_count":len(cards),"venue_word_limit":budget,
+            "submitted_words":count,"within_limit":count<=budget,"full_text":"\n".join(extended),
+            "short_text":short_text,"editor_summary":"# Editor / Area Chair summary\n\n"+header+"\n","priority_order":[c["comment_id"] for c in ordered],
+            "human_review_required":True,"note":"Evidence status is author supplied; revision-trace verifies commitments separately."}
+
+def validate_concern_response(paper:Path)->list[str]:
+    review=paper/"reviews";original=review/"original-comments.json";cards=review/"concern-cards.json";output=review/"concern-response";coverage=output/"coverage.json"
+    required=(original,cards,coverage,output/"internal-full.md",output/"submitted-short.md",output/"editor-summary.md");missing=[p.relative_to(paper).as_posix() for p in required if not p.is_file() or p.is_symlink()]
+    if missing:return ["missing mandatory concern-card artifacts: "+", ".join(missing)]
+    try:
+        expected=triage(json.loads(original.read_text()),json.loads(cards.read_text()));full=expected.pop("full_text");short=expected.pop("short_text");summary=expected.pop("editor_summary");saved=json.loads(coverage.read_text())
+    except (OSError,ValueError,json.JSONDecodeError) as exc:return [f"cannot validate concern cards: {exc}"]
+    errors=[]
+    if (output/"internal-full.md").read_text()!=full:errors.append("stale concern-response/internal-full.md")
+    if (output/"submitted-short.md").read_text()!=short:errors.append("stale concern-response/submitted-short.md")
+    if (output/"editor-summary.md").read_text()!=summary:errors.append("stale concern-response/editor-summary.md")
+    for key,value in expected.items():
+        if saved.get(key)!=value:errors.append(f"stale concern response field: {key}")
+    if saved.get("original_sha256")!=sha(original):errors.append("stale original reviewer comments hash")
+    if saved.get("cards_sha256")!=sha(cards):errors.append("stale concern cards hash")
+    if not expected["within_limit"]:errors.append("submitted reviewer response exceeds venue word limit")
+    return errors
+
+
+def write_concern_response(project, output, report, original, cards, *, controller=False):
+    """Write the same response package for optional CLI and protected refresh."""
+    outputs = []
+    for key, name in (("full_text", "internal-full.md"), ("short_text", "submitted-short.md"),
+                      ("editor_summary", "editor-summary.md"), (None, "coverage.json")):
+        if key is None:
+            report.update(original_sha256=sha(original), cards_sha256=sha(cards))
+        target = output / name
+        if controller:
+            target = path_in(project, target.relative_to(project).as_posix(), exists=False)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if key is not None:
+            target.write_text(report.pop(key), encoding="utf-8")
+        elif controller:
+            write(target, report)
+        else:
+            target.write_text(json.dumps(report, indent=2)+"\n", encoding="utf-8")
+        outputs.append(target)
+    return outputs
 
 
 def digest(value):
@@ -340,8 +422,7 @@ def audit(project: Path, paper_id: str):
             raise ValueError("response matrix must cover exactly the real external comment IDs")
         trace = trace_audit(paper)
         errors.extend(trace["errors"])
-        from scripts.rebuttal_triage import validate_saved_report as validate_triage
-        errors.extend(validate_triage(paper))
+        errors.extend(validate_concern_response(paper))
         response_files = [response_path, letter, matrix, paper / "reviews/concern-cards.json"]
         output_provenance.require_final_origins(project, response_files)
         bindings.extend(_file(project, path.relative_to(project).as_posix()) for path in response_files)
@@ -371,22 +452,11 @@ def refresh(project: Path, paper_id: str):
     if index["rounds"]:
         paper = _paper(project, paper_id)
         try:
-            from scripts.rebuttal_triage import triage
             cards = path_in(project, f"papers/{paper_id}/reviews/concern-cards.json")
             output_provenance.require_final_origins(project, [cards])
             original = path_in(project, f"papers/{paper_id}/reviews/original-comments.json")
             coverage = triage(read(original), read(cards))
-            outputs = []
-            for key, name in (("full_text", "internal-full.md"), ("short_text", "submitted-short.md"),
-                              ("editor_summary", "editor-summary.md")):
-                target = path_in(project, f"papers/{paper_id}/reviews/concern-response/{name}", exists=False)
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(coverage.pop(key), encoding="utf-8")
-                outputs.append(target)
-            coverage.update(original_sha256=sha(original), cards_sha256=sha(cards))
-            target = path_in(project, f"papers/{paper_id}/reviews/concern-response/coverage.json", exists=False)
-            write(target, coverage)
-            outputs.append(target)
+            outputs = write_concern_response(project, paper / "reviews/concern-response", coverage, original, cards, controller=True)
             from scripts.revision_trace import audit as trace_audit
             from scripts.revision_integrity import audit as integrity_audit
             for name, builder in (("revision-trace.json", trace_audit), ("revision-integrity.json", integrity_audit)):
@@ -454,3 +524,22 @@ def prompt_feedback(project: Path, paper_id: str):
                 **LIMITS}
     except (OSError, ValueError, KeyError, TypeError) as exc:
         return {"status": "blocked", "errors": [str(exc)], **LIMITS}
+
+
+def main(argv=None)->int:
+    from scripts.publication_figures import PROJECTS_ROOT, safe_file
+    p=argparse.ArgumentParser(description=__doc__)
+    for field in ("project","paper","original","cards","output-dir"):
+        p.add_argument("--"+field,required=True)
+    args=p.parse_args(argv);project=PROJECTS_ROOT/args.project
+    base=f"papers/{args.paper}/reviews/"
+    for name in (args.original,args.cards,args.output_dir):
+        if not name.startswith(base):p.error("all inputs and outputs must be within the selected paper reviews folder")
+    original=safe_file(project,args.original,"original");cards=safe_file(project,args.cards,"cards")
+    report=triage(json.loads(original.read_text(encoding="utf-8")),json.loads(cards.read_text(encoding="utf-8")))
+    output=safe_file(project,args.output_dir,"output-dir");output.mkdir(parents=True,exist_ok=True)
+    write_concern_response(project, output, report, original, cards)
+    print(json.dumps(report,indent=2));return 0 if report["within_limit"] else 2
+
+
+if __name__=="__main__":raise SystemExit(main())

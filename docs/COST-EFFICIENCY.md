@@ -158,19 +158,20 @@ the research, and no blanket savings percentage is claimed.
 
 ## Validation boundary
 
-The existing gateway CI job also runs `scripts.cost_quality_acceptance` on a
-cloud runner, with a mock transport and no provider credentials. Its receipt
-checks lossless source content/hashes, preserved contrary evidence, excluded
-historical verdicts, an exact writer response reuse and two deliberately invoked
-fresh assessments. That cache-freshness fixture does not require two critics in
-an ordinary cycle. The separate gateway acceptance exercises a conditional
+The gateway CI job uses `scripts.cloud_recovery_acceptance --suite cost-quality`
+to run the existing lossless-context and cost-runtime suites with mock transports
+and no provider credentials. The separate `cost_quality_acceptance` entrypoint
+and its duplicate toy experiment are retired. The shared receipt preserves the
+artifact location and reports actual test results; skipped assertions fail it.
+The separate gateway acceptance still exercises a conditional
 five-call repair case: its initial critic reports an actionable defect, then the
 writer repairs it and a fresh critic rechecks it. This is not the baseline
 three-call cost or a substitute for the final three-family panel. Unit coverage
 adds stale/changed caches, overflowing context,
 metadata/reader invalidation, changed search limits and duplicate diagnostics.
 
-The receipt's byte counts and call counts are synthetic engineering evidence.
+The retired toy receipt's byte/call counts remain historical synthetic evidence;
+the current suite receipt does not repeat them as newly measured metrics.
 They are not observed project savings, validated model equivalence, successful
 formal experiments or evidence that a paper meets a journal's scientific bar.
 Real topic-based quality and total-cost comparisons remain necessary before

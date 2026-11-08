@@ -1,12 +1,15 @@
 """All 17 pinned skills remain explicitly reachable through API/CLI roles."""
 import re
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
-from scripts import api_orchestrator as api, autopilot, ccfa_runtime as runtime
+
+from scripts import api_orchestrator as api
 from scripts import ccfa_humanization as humanization
+from scripts import ccfa_runtime as runtime
 from scripts.research_artifacts import read, record, sha, write
+
 
 class CCFAModelHandoffTests(unittest.TestCase):
     def setUp(self):
@@ -34,10 +37,6 @@ class CCFAModelHandoffTests(unittest.TestCase):
             "api writer": lambda: api.writer_prompt("fixture", stage, ""),
             "api critic": lambda: api.critic_prompt("fixture", stage, ""),
             "api remediation": lambda: api.remediation_prompt("fixture", stage, "", "{}"),
-            "cli planner": lambda: autopilot.planner_prompt("fixture", self.state, self.config, ""),
-            "cli writer": lambda: autopilot.writer_prompt("fixture", self.state, self.config, "", autopilot.ROOT / "plan.md"),
-            "cli critic": lambda: autopilot.critic_prompt("fixture", self.state),
-            "cli remediation": lambda: autopilot.remediation_prompt("fixture", self.state, autopilot.ROOT / "review.json"),
         }
 
     def prepare(self, identifier, *, full=False):

@@ -17,7 +17,7 @@ from scripts.manuscript_audit import audit
 from scripts.paper_reader import build as build_reader
 from scripts.paper_to_ppt import build as build_deck
 from scripts.publication_figures import _imports, render, sha256_file
-from scripts.rebuttal_triage import triage
+from scripts.reviewer_rounds import triage
 from scripts.research_diagrams import render as render_diagram
 from scripts.skill_catalog import apply_operation, plan_operation, scan
 from scripts.systematic_review import assess, export, seed

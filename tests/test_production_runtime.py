@@ -9,6 +9,7 @@ import base64
 from contextlib import ExitStack, redirect_stdout
 import io
 import hashlib
+import http.client
 import json
 from pathlib import Path
 import tempfile
@@ -143,11 +144,13 @@ class ProductionRuntimeTests(unittest.TestCase):
         (self.project / "state/run.json").write_text(json.dumps(state))
         def response(url, headers, payload, timeout):
             if url.endswith("/v1/responses"):
+                self.assertIs(payload.get("stream"), True)
                 self.assertEqual((payload["model"], payload["reasoning"], payload["max_output_tokens"]),
                                  ("gpt-6-astra", {"effort": "high"}, 12000))
                 return {"id": "fixture-astra", "model": "gpt-6-astra", "status": "completed", "output_text": "fixture answer",
                         "usage": {"input_tokens": 100, "output_tokens": 20}}
             self.assertEqual(url, "https://codekey.ai/v1beta/models/gemini-4-argon:generateContent")
+            self.assertNotIn("stream", payload)
             self.assertEqual(payload["generationConfig"], {"maxOutputTokens": 12000, "thinkingConfig": {"thinkingLevel": "HIGH"}})
             return {"responseId": "fixture-argon", "modelVersion": "gemini-4-argon",
                     "candidates": [{"finishReason": "STOP", "content": {"parts": [{"text": "fixture audit"}]}}],
@@ -156,7 +159,7 @@ class ProductionRuntimeTests(unittest.TestCase):
              patch.object(ai_providers, "_production_request", side_effect=response) as post, \
              patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}), \
              patch.object(relay_billing, "settle", return_value=self.debit()), \
-             model_routing.g1_transport_validation_route(self.project, "c" * 64, max_output_tokens=12000, validation_roster="astra-argon"):
+             model_routing.g1_transport_validation_route(self.project, "c" * 64, max_output_tokens=12000, validation_roster="astra-argon", response_streaming=True):
             for role in model_routing.CYCLE_ROLES:
                 result = self.call(run_id="fixture-roster", stage="topic-intelligence", role=role,
                     max_output_tokens=12000, use_cache=False,
@@ -171,6 +174,51 @@ class ProductionRuntimeTests(unittest.TestCase):
         self.assertTrue(all(row["requested_model"] == row["model"] for row in rows))
         self.assertEqual(model_spend.read(self.project)["reservations"], {})
         self.assertEqual(json.loads((self.project / "state/run.json").read_text()), state)
+
+    def test_streamed_g1_runtime_separates_cache_intent_and_keeps_failed_attempt_unknown(self):
+        from contextlib import nullcontext
+        from types import SimpleNamespace
+        from scripts import model_routing
+        state = {"active_paper":"P01","stage":"topic-intelligence","gate":"G1","status":"awaiting_work","approved_gates":["G0"]}
+        (self.project / "state/run.json").write_text(json.dumps(state))
+        response = {"object":"response","id":"fixture-stream","model":"gpt-6-astra","status":"completed",
+                    "output":[{"type":"message","status":"completed","content":[{"type":"output_text","text":"fixture streamed answer"}]}],
+                    "usage":{"input_tokens":100,"output_tokens":20}}
+        success = ('data: '+json.dumps({"type":"response.completed","sequence_number":0,"response":response})+'\n\n').encode()
+        failed = b'data: {"type":"response.output_text.delta","delta":"PRIVATE_DELTA_MUST_NOT_PERSIST"}\n\ndata: [DONE]\n\n'
+        opener = unittest.mock.Mock()
+        opener.open.side_effect = [nullcontext(SimpleNamespace(status=200,headers={"Content-Type":"text/event-stream"},read1=io.BytesIO(body).read1))
+                                  for body in (success,failed)]
+        with patch.dict("os.environ",{"DR_OS_CLOUD_EXECUTOR":"1","DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH":str(time.time()+3600)}), \
+             patch.object(ai_providers.urllib.request,"build_opener",return_value=opener), \
+             patch.object(relay_billing,"read_meter",return_value={"fixture":"before"}), \
+             patch.object(relay_billing,"settle",side_effect=[self.debit(),relay_billing.BillingReconciliationError("fixture unknown debit")]):
+            with model_routing.g1_transport_validation_route(self.project,"e"*64,max_output_tokens=12000,validation_roster="astra-argon"):
+                normal=model_routing.select("topic-intelligence","semantic-planner","scientific-judgment")
+            with model_routing.g1_transport_validation_route(self.project,"e"*64,max_output_tokens=12000,validation_roster="astra-argon",response_streaming=True):
+                streamed=model_routing.select("topic-intelligence","semantic-planner","scientific-judgment")
+                self.assertNotEqual(normal["policy_sha256"],streamed["policy_sha256"])
+                options={"run_id":"fixture-stream-native","stage":"topic-intelligence","max_output_tokens":12000,"prompt":"complete fixture science",
+                         "task_profile":{"task_class":"g1-transport-validation","science_risk":"critical","priority":"quality"}}
+                result=self.call(**options,role="semantic-planner")
+                quote=model_runtime.pricing("codekey-codex-pro","gpt-6-astra")
+                nonstream_key,_=model_runtime._cache_key("codekey-codex-pro",options["prompt"],None,12000,"gpt-6-astra",quote,
+                    model_runtime.billing_quotes.tool_limits(quote,None),stage="topic-intelligence",role="semantic-planner",reasoning_effort="high",routing_policy_sha256=normal["policy_sha256"])
+                self.assertNotEqual(result.cache_key,nonstream_key)
+                with self.assertRaises(ai_providers.ProviderError):
+                    self.call(**options,role="persistent-writer")
+        rows=model_runtime.ledger_entries(self.project)
+        self.assertTrue(all(row["response_streaming"] for row in rows))
+        self.assertIsNone(rows[-1]["cost_cny"])
+        self.assertEqual(rows[-1]["provider_error_response"]["http_evidence"]["raw_http_body_sha256"],hashlib.sha256(failed).hexdigest())
+        artifact=(self.project/rows[-1]["provider_error_response"]["path"]).read_text()
+        self.assertNotIn("PRIVATE_DELTA_MUST_NOT_PERSIST",artifact)
+        self.assertEqual(len(model_spend.read(self.project)["reservations"]),1)
+        self.assertEqual(len(list((self.project/".cache/model-responses").glob("*.json"))),1)
+        self.assertEqual(opener.open.call_count,2)
+        self.assertTrue(all(json.loads(call.args[0].data)["stream"] is True for call in opener.open.call_args_list))
+        self.assertFalse(model_routing.g1_response_streaming_active())
+        self.assertEqual(json.loads((self.project/"state/run.json").read_text()),state)
 
     def test_post_only_follows_persisted_owner_authority_and_synced_reservation(self):
         events = []
@@ -187,6 +235,62 @@ class ProductionRuntimeTests(unittest.TestCase):
                 patch("scripts.cloud_checkpoint.sync_billing", side_effect=lambda project: events.append("synced"))):
             self.call()
         self.assertEqual(model_spend.read(self.project)["spent_cny"], 0.001)
+
+    def test_real_http_sse_framing_and_bad_start_keep_unknown_hold_without_cache(self):
+        from types import SimpleNamespace
+        from scripts import model_routing
+        state={"stage":"topic-intelligence","gate":"G1","status":"awaiting_work","approved_gates":["G0"],"active_paper":"P01"}
+        full={"object":"response","id":"runtime-framing","model":"gpt-6-astra","status":"completed",
+              "output":[{"type":"message","status":"completed","content":[{"type":"output_text","text":"complete answer"}]}],
+              "usage":{"input_tokens":100,"output_tokens":20}}
+        terminal=('data: '+json.dumps({"type":"response.completed","sequence_number":1,"response":full})+'\n\n').encode()
+        cases=[("complete",b"",0,True),("truncated-length",b"",97,False)]
+        for kind in ("response.created","response.in_progress"):
+            early={**full,"status":"failed","output":[],"usage":None}
+            prefix=('data: '+json.dumps({"type":kind,"sequence_number":0,"response":early})+'\n\n').encode()
+            cases.append((kind+"-failed",prefix,0,False))
+        for name,prefix,missing,accepted in cases:
+            with self.subTest(name=name),tempfile.TemporaryDirectory() as directory:
+                project=Path(directory);(project/"state").mkdir()
+                (project/"state/run.json").write_text(json.dumps(state))
+                state_bytes=(project/"state/run.json").read_bytes()
+                model_spend.write(project,model_spend.initial())
+                model_spend.grant(project,new_ceiling_cny=300,actor="Fake Owner",run_id="fixture-owner-not-real")
+                wire=prefix+terminal
+                raw=(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nContent-Length: "+str(len(wire)+missing).encode()+b"\r\n\r\n"+wire)
+                response=http.client.HTTPResponse(SimpleNamespace(makefile=lambda *args,**kwargs:io.BytesIO(raw)))
+                response.begin()
+                opener=unittest.mock.Mock();opener.open.return_value=response
+                with patch.dict("os.environ",{"DR_OS_CLOUD_EXECUTOR":"1","DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH":str(time.time()+3600)}), \
+                     patch.object(ai_providers.urllib.request,"build_opener",return_value=opener), \
+                     patch.object(relay_billing,"read_meter",return_value={"fixture":"before"}), \
+                     patch.object(relay_billing,"settle",side_effect=relay_billing.BillingReconciliationError("fixture unknown debit")), \
+                     model_routing.g1_transport_validation_route(project,"f"*64,max_output_tokens=12000,validation_roster="astra-argon",response_streaming=True):
+                    options={"run_id":"fixture-http-"+name,"stage":"topic-intelligence","role":"semantic-planner","provider":"openai",
+                             "prompt":"complete scientific fixture","max_output_tokens":12000,
+                             "task_profile":{"task_class":"g1-transport-validation","science_risk":"critical","priority":"quality"}}
+                    if accepted:
+                        self.assertEqual(model_runtime.call(project,**options).text,"complete answer")
+                    else:
+                        with self.assertRaises(ai_providers.ProviderError):
+                            model_runtime.call(project,**options)
+                rows=model_runtime.ledger_entries(project)
+                self.assertEqual(len(rows),1)
+                self.assertEqual(len(list((project/".cache/model-responses").glob("*.json"))),int(accepted))
+                self.assertEqual(len(model_spend.read(project)["reservations"]),int(not accepted))
+                if not accepted:
+                    self.assertIsNone(rows[0]["cost_cny"])
+                    self.assertFalse(rows[0]["model_response_accepted"])
+                    capture=rows[0]["provider_error_response"]["http_evidence"]
+                    self.assertEqual(capture["http_body_capture_complete"],not missing)
+                    if missing:
+                        self.assertIsNone(capture["raw_http_body_sha256"])
+                        self.assertEqual(capture["captured_http_body_prefix_sha256"],hashlib.sha256(wire).hexdigest())
+                        self.assertEqual(response.length,97)
+                self.assertEqual(opener.open.call_count,1)
+                self.assertEqual((project/"state/run.json").read_bytes(),state_bytes)
+                self.assertFalse(model_routing.g1_response_streaming_active())
+                self.assertIsNone(relay_guard._TICKET.get())
 
     def test_real_provider_transport_uses_the_persisted_project_reservation(self):
         response={"model":"gpt-6.1-sol","id":"synthetic-transport-response","status":"completed",

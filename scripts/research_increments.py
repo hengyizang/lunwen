@@ -55,6 +55,17 @@ def scientific_spec(spec):
         "required_at_submission": [key for key in spec["required_at_submission"] if key not in OBSERVATIONS]}
 
 
+def _collect_binding_paths(value, paths):
+    if isinstance(value, dict):
+        if isinstance(value.get("path"), str) and "sha256" in value:
+            paths.add(value["path"])
+        for item in value.values():
+            _collect_binding_paths(item, paths)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_binding_paths(item, paths)
+
+
 def context_dependencies(project, *, scientific_only=False):
     """Invalidate narrow packets when any declared increment source changes."""
     if not (project / PLAN).is_file():
@@ -64,16 +75,7 @@ def context_dependencies(project, *, scientific_only=False):
         spec = scientific_spec(spec)
     paths = set() if scientific_only else {PLAN}
 
-    def collect(value):
-        if isinstance(value, dict):
-            if isinstance(value.get("path"), str) and "sha256" in value:
-                paths.add(value["path"])
-            for item in value.values():
-                collect(item)
-        elif isinstance(value, list):
-            for item in value:
-                collect(item)
-    collect(spec)
+    _collect_binding_paths(spec, paths)
     for group in ("arguments", "lineage"):
         for item in spec[group]:
             from scripts.incremental_writing import paper_path
@@ -122,19 +124,10 @@ def paper_review_binding(project, paper_id):
     work_ids = {key for row in selected["gaps"] for key in row.get("closest_work_ids", [])}
     paths = set()
 
-    def collect(value):
-        if isinstance(value, dict):
-            if isinstance(value.get("path"), str) and "sha256" in value:
-                paths.add(value["path"])
-            for item in value.values():
-                collect(item)
-        elif isinstance(value, list):
-            for item in value:
-                collect(item)
-    collect(selected)
+    _collect_binding_paths(selected, paths)
     selected["ingestion"] = [row for row in spec["ingestion"] if row["work_id"] in work_ids
                             or row.get("attachment", {}).get("path") in paths]
-    collect(selected["ingestion"])
+    _collect_binding_paths(selected["ingestion"], paths)
     sources = []
     for relative in sorted(paths):
         source = path_in(project, relative, exists=False)
