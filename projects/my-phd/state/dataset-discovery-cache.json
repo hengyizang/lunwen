@@ -1,23 +1,23 @@
 {
-  "signature": "c63a67cfd4578d0bc6f841a2462ef32861858fc3d4d825c476374ab3d5f07995",
-  "at": "2026-11-08T08:24:26.973031+00:00",
+  "signature": "9c422b16c96319b5020cc8f5ebf15c12d381d4b5099038d8c90b4bdca7e614a0",
+  "at": "2026-11-08T11:18:10.304691+00:00",
   "summary": {
-    "report_path": "data/discovery-broad-auto-20261108T082426952293Z.json",
+    "report_path": "data/discovery-broad-auto-20261108T111810282362Z.json",
     "queries": [
       "AI robotics mechanical engineering dataset",
       "AI dataset",
       "robotics dataset",
       "mechanical engineering dataset",
-      "Develop evidence-bound exploratory G1 doctoral-topic candidates existing user background actual dataset",
+      "AI mechanical robotics manufacturing mechatronics autonomous systems learning control design dataset",
       "AI robotics mechanical engineering public dataset",
       "AI robotics mechanical engineering benchmark dataset"
     ],
     "provider_calls": 56,
     "successful_provider_calls": 42,
-    "candidate_count": 409,
+    "candidate_count": 396,
     "shortlist_count": 80,
     "human_review_required": false,
     "scientific_review_required": true
   },
-  "report_sha256": "95036488b25b3f4f771268261daf37031a9aedb1f6a07e6c70a8077dee61d87a"
+  "report_sha256": "8d7971b8358bf3ed4d262ace4c34ef478fc2e76638eb1f8a4284fd5310d73b29"
 }
