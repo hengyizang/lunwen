@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "kind": "public-review-calibration",
+  "prompt_file": "evidence/auxiliary-jobs/20261109-public-review-domain-full-3-case-scope.txt",
+  "calibration_seat": "domain",
+  "max_output_tokens": 12000,
+  "calibration_batch_cases": 3,
+  "task_profile": {
+    "task_class": "public-review-calibration",
+    "science_risk": "critical",
+    "priority": "quality"
+  }
+}
