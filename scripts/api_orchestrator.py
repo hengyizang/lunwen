@@ -110,9 +110,9 @@ PLAN_FIELDS = {
 
 
 try:
-    from scripts.research_artifacts import utc_now, load_json
+    from scripts.research_artifacts import utc_now, load_json, strict_json
 except ImportError:
-    from research_artifacts import utc_now, load_json
+    from research_artifacts import utc_now, load_json, strict_json
 
 
 def project_root(project: str) -> Path:
@@ -633,16 +633,11 @@ artifacts=[] is valid when no evidence-grounded edit is justified. A material re
 
 
 def _json_object(text: str, label: str) -> dict[str, Any]:
-    text = text.strip()
-    if text.startswith("```"):
-        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.S).strip()
     try:
-        value = json.loads(text)
-    except json.JSONDecodeError as exc:
-        start, end = text.find("{"), text.rfind("}")
-        if start < 0 or end <= start:
-            raise ValueError(f"{label} did not return a JSON object") from exc
-        value = json.loads(text[start:end + 1])
+        value = strict_json(text, duplicate_error=f"{label} returned duplicate JSON fields",
+                            nonfinite_error=f"{label} returned a nonfinite number", allow_fence=True)
+    except (json.JSONDecodeError, TypeError) as exc:
+        raise ValueError(f"{label} did not return one complete JSON object") from exc
     if not isinstance(value, dict):
         raise ValueError(f"{label} did not return a JSON object")
     return value
@@ -908,9 +903,7 @@ def save_run(project: str, run_id: str, name: str, payload: Any) -> Path:
     return path
 
 
-def write_json_atomic(path: Path, payload: Any) -> None:
-    from scripts.research_artifacts import write
-    write(path, payload)
+from scripts.research_artifacts import write as write_json_atomic
 
 
 def review_prefix(project: str, stage: str) -> str | None:
@@ -1172,10 +1165,6 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return {"status": "blocked", "errors": [str(exc)]}
     elif stage == "writing-and-review":
-        try:
-            from scripts.pre_submission_review import audit
-        except ImportError:
-            from pre_submission_review import audit
         paper_id = active_paper(project)
         if not paper_id:
             return {"status": "input_missing", "required": "active paper"}
@@ -1195,14 +1184,10 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
         except ImportError:
             from figure_layout import refresh_native_figures
         figures = refresh_native_figures(paper)
-        path = paper / "reviews/pre-submission-review.json"
-        if not (paper / "reviews/pre-submission-checklist.json").is_file():
-            return {"status": "input_missing", "required": "reviews/pre-submission-checklist.json",
-                    "figure_layout": figures, "paper_facts": facts}
-        try:
-            report = audit(paper)
-        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
-            return {"status": "blocked", "errors": [str(exc)], "figure_layout": figures, "paper_facts": facts}
+        return {"writing_phase": "submission", "mechanical_review": "retired", "semantic_review": "unknown",
+                "figure_layout": figures, "paper_facts": facts, "empirical_workflow": empirical,
+                "pass": facts.get("pass", False) and not empirical["errors"],
+                "errors": [*facts.get("errors", []), *empirical["errors"]]}
     else:
         return None
     write_json_atomic(path, report)
@@ -1214,13 +1199,6 @@ def refresh_research_method_audits(project: str, stage: str) -> dict[str, Any] |
               "pass": report["pass"], "errors": report["errors"]}
     if stage == "topic-intelligence":
         result.update(status=report["status"], for_gate=False, scientific_validation=False)
-    if stage == "writing-and-review":
-        result["figure_layout"] = figures
-        result["paper_facts"] = facts
-        result["empirical_workflow"] = empirical
-        result["pass"] = result["pass"] and not empirical["errors"]
-        result["pass"] = result["pass"] and facts["pass"]
-        result["pass"] = result["pass"] and figures["pass"]
     return result
 
 
@@ -1496,6 +1474,10 @@ def discover_context(project: str, stage: str, query: str) -> str:
     return json.dumps(evidence, ensure_ascii=False)
 
 
+from scripts.cloud_progress import track_cycle
+
+
+@track_cycle(project_root)
 def run_cycle(
     project: str,
     stage: str,
@@ -1579,25 +1561,19 @@ def run_cycle(
         ready_providers = (planner_provider, writer_provider, critic_provider) if requires_critic(stage) else (planner_provider, writer_provider)
         route_preflight = [model_runtime.preflight_route(provider) for provider in dict.fromkeys(ready_providers)]
 
-    def route_arguments(role: str) -> dict[str, Any]:
+    def invoke_role(role, provider, request, output_limit):
         route = production_routes.get(role)
-        if route is None:
-            return {}
-        return {"model": route["model"], "reasoning_effort": route["reasoning_effort"],
-                "task_profile": task_profile,
-                **({"task_kind": task_kind} if task_kind is not None else {})}
+        arguments = {"model": route["model"], "reasoning_effort": route["reasoning_effort"],
+                     "task_profile": task_profile,
+                     **({"task_kind": task_kind} if task_kind is not None else {})} if route else {}
+        return model_runtime.call(project_root(project), run_id=run_id, stage=stage, role=role,
+            provider=route["provider"] if route else provider, prompt=request, max_output_tokens=output_limit,
+            use_cache=not role.startswith("independent-critic"), **arguments)
+
     controlled_steps["paid_model_cycle"] = True
     write_step_report(project_root(project) / REPORT, controlled_steps)
-    planner = model_runtime.call(
-        project_root(project),
-        run_id=run_id,
-        stage=stage,
-        role="semantic-planner",
-        provider=planner_provider,
-        **route_arguments("semantic-planner"),
-        prompt=planning_prompt(project, stage, context, evidence),
-        max_output_tokens=control_max_output_tokens,
-    )
+    planner = invoke_role("semantic-planner", planner_provider,
+                          planning_prompt(project, stage, context, evidence), control_max_output_tokens)
     plan_name = "claude-plan" if ai_providers.provider_family(planner.provider) == "anthropic" else "semantic-plan"
     save_run(project, run_id, plan_name + "-response.txt", planner.text)
     plan = extract_plan_json(planner.text)
@@ -1623,16 +1599,7 @@ def run_cycle(
             writer_request += ("\n\nRequired discovery screening in this same response. Add artifact "
                 + screening["artifact_path"] + " whose JSON content has exactly the requested decisions. "
                 "Do not claim human screening. Preserve uncertain records.\n" + screening["packet_prompt"])
-    writer = model_runtime.call(
-        project_root(project),
-        run_id=run_id,
-        stage=stage,
-        role="persistent-writer",
-        provider=writer_provider,
-        **route_arguments("persistent-writer"),
-        prompt=writer_request,
-        max_output_tokens=max_output_tokens,
-    )
+    writer = invoke_role("persistent-writer", writer_provider, writer_request, max_output_tokens)
     save_run(project, run_id, "writer-response.txt", writer.text)
     bundle = extract_json(writer.text)
     if screening:
@@ -1660,9 +1627,7 @@ def run_cycle(
 
     def call_critic(phase, request):
         role = "independent-critic-" + phase
-        result = model_runtime.call(project_root(project), run_id=run_id, stage=stage, role=role,
-            use_cache=False, provider=production_routes[role]["provider"] if production_routes else critic_provider,
-            **route_arguments(role), prompt=request, max_output_tokens=control_max_output_tokens)
+        result = invoke_role(role, critic_provider, request, control_max_output_tokens)
         critics[phase] = result
         name = "critic-1" if phase == "initial" else "critic-final"
         save_run(project, run_id, name + ".txt", result.text)
@@ -1673,10 +1638,9 @@ def run_cycle(
 
     def repair(audit, _path, note_stage):
         nonlocal revised
-        revised = model_runtime.call(project_root(project), run_id=run_id, stage=stage,
-            role="persistent-remediator", provider=writer_provider, **route_arguments("persistent-remediator"),
-            prompt=remediation_prompt(project, stage, context, json.dumps(audit, ensure_ascii=False, indent=2))+decision_prompt,
-            max_output_tokens=max_output_tokens)
+        revised = invoke_role("persistent-remediator", writer_provider,
+            remediation_prompt(project, stage, context, json.dumps(audit, ensure_ascii=False, indent=2))+decision_prompt,
+            max_output_tokens)
         save_run(project, run_id, "remediation-response.txt", revised.text)
         revised_bundle = extract_json(revised.text)
         reject_long_source_copy({"plan": plan, "audit": audit}, revised_bundle, "Read-only plan or audit")

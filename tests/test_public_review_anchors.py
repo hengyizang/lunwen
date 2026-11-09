@@ -15,6 +15,18 @@ from scripts import ai_providers, model_routing, model_runtime
 
 
 class PublicReviewAnchorTests(unittest.TestCase):
+    def test_complete_fenced_response_preserves_exact_labels_and_rejects_ambiguous_output(self):
+        cases = [{"case_id": "paper", "case_sha256": "a" * 64}]
+        row = {**cases[0], "outcome": "incomplete", "rationale": "The located comparison is incomplete."}
+        text = json.dumps({"anchor_labels": [row]})
+        for fenced in (text, "```json\n" + text + "\n```", "\n```\r\n" + text + "\r\n```\n"):
+            self.assertEqual(corpus.calibration_predictions(fenced, cases), [row])
+        for bad in ("Unverified judgment.\n" + text, "```json\n" + text,
+                    "```json\n" + text + "\n```\n" + text,
+                    '```json\n{"anchor_labels":[],"anchor_labels":[]}\n```'):
+            with self.subTest(text=bad), self.assertRaises(ValueError):
+                corpus.calibration_predictions(bad, cases)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

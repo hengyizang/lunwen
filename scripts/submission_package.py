@@ -143,8 +143,8 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
     return errors
 
 
-def submission_check_binding(project: Path, paper_id: str) -> str:
-    """Bind final B inputs to the existing G5 decision without another state file."""
+def _submission_inputs(project: Path, paper_id: str) -> dict:
+    """Capture the actual final B inputs used by both binding and packaging."""
     from scripts.research_artifacts import path_in
     paper=project/"papers"/paper_id
     paths=set()
@@ -193,12 +193,26 @@ def submission_check_binding(project: Path, paper_id: str) -> str:
         paths.add(latest)
         sources(load_object(latest))
         for row in review_panel.responses(project,paper_id):sources(row["receipt"])
-    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py","citation_audit.py","manuscript_docx.py","revision_render.py","cloud_runtime.py","word_render.py","reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py")
+    module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py",
+        "citation_audit.py","manuscript_docx.py","revision_render.py","cloud_runtime.py","word_render.py",
+        "reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py",
+        "researchctl.py","manuscript_audit.py","literature_source_tasks.py","statistical_reporting.py",
+        "revision_integrity.py","figure_provenance.py","manuscript_hygiene.py","research_identity.py",
+        "scientific_scope.py","empirical_workflow.py","research_extensions.py","research_increments.py")
     payload={"schema_version":"1.0","paper_id":paper_id,"journal_dossiers":selected,"journal_receipts":receipts,
         "files":{path.relative_to(project).as_posix():file_sha256(path) for path in sorted(paths)},
         "validators":{name:file_sha256(Path(__file__).parent/name) if (Path(__file__).parent/name).is_file() else None for name in module_names},
         "provenance":provenance_report(project,select_files(paper))}
-    return sha256_bytes(json.dumps(payload,sort_keys=True,separators=(",",":")).encode())
+    return payload
+
+
+def _submission_binding(inputs: dict) -> str:
+    return sha256_bytes(json.dumps(inputs,sort_keys=True,separators=(",",":")).encode())
+
+
+def submission_check_binding(project: Path, paper_id: str) -> str:
+    """Bind final B inputs to the existing G5 decision without another state file."""
+    return _submission_binding(_submission_inputs(project,paper_id))
 
 def safe_file(path: Path, paper: Path) -> None:
     if any(item.is_symlink() for item in (path,*path.parents)):
@@ -352,12 +366,14 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
     if not approval or approval.get("paper_artifact_sha256")!=paper_artifact_hash(slug,paper_id):
         raise ResearchCtlError("Paper changed after the G5 decision or lacks its current per-paper hash; re-run G5 checks")
     binding=approval.get("submission_checks_sha256")
+    snapshot=_submission_inputs(project,paper_id)
+    checked_binding=_submission_binding(snapshot)
     if binding is None:
         # Old G5 records did not carry B input bindings. Inspect once rather
         # than inventing a completed check or rewriting their research history.
         issues=submission_checks(project,paper_id)
         if issues:raise ResearchCtlError("Final submission checks failed: "+"; ".join(issues))
-    elif binding!=submission_check_binding(project,paper_id):
+    elif binding!=checked_binding:
         raise ResearchCtlError("Final submission inputs changed after G5; rerun the submission check")
     from scripts import researchctl,research_identity,scientific_scope,empirical_workflow,research_extensions,research_increments
     scientific_errors=researchctl.paper_scientific_errors(project,paper_id)
@@ -374,10 +390,15 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
         require_final_origins(project, files)
     except ProvenanceError as exc:
         raise ResearchCtlError(str(exc)) from exc
-    origins = provenance_report(project, files)
+    origins = snapshot["provenance"]
     entries: dict[str, bytes] = {
         path.relative_to(paper).as_posix(): path.read_bytes() for path in files
     }
+    expected = {Path(item["path"]).relative_to(paper.relative_to(project)).as_posix(): snapshot["files"].get(item["path"])
+                for item in origins}
+    if (set(entries) != set(expected) or any(sha256_bytes(payload) != expected[name] for name,payload in entries.items())
+            or any(item.get("sha256") != snapshot["files"].get(item["path"]) for item in origins)):
+        raise ResearchCtlError("Submission payload differs from the checked input snapshot")
     entries["MANUAL-CHECKLIST.md"] = checklist(slug, paper_id)
     manifest = {
         "schema_version": "1.0",
@@ -411,6 +432,23 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.external_attr = 0o100644 << 16
                 archive.writestr(info, payload, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+        try:
+            with zipfile.ZipFile(temporary) as archive:
+                names = archive.namelist()
+                if len(names) != len(entries) or set(names) != set(entries):
+                    raise ResearchCtlError("Written submission ZIP has a changed or duplicate member inventory")
+                for name, payload in entries.items():
+                    if archive.getinfo(name).file_size != len(payload):
+                        raise ResearchCtlError("Written submission ZIP member size differs from the checked payload: " + name)
+                    with archive.open(name) as member:
+                        written = member.read(len(payload) + 1)
+                    if len(written) != len(payload) or sha256_bytes(written) != sha256_bytes(payload):
+                        raise ResearchCtlError("Written submission ZIP differs from the checked payload: " + name)
+        except zipfile.BadZipFile as exc:
+            raise ResearchCtlError("Written submission ZIP failed CRC or container validation") from exc
+        if (approval["paper_artifact_sha256"]!=paper_artifact_hash(slug,paper_id)
+                or checked_binding!=submission_check_binding(project,paper_id)):
+            raise ResearchCtlError("Submission inputs changed during packaging; rerun the G5 check")
         os.replace(temporary, destination)
     finally:
         temporary.unlink(missing_ok=True)

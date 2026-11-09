@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 from datetime import datetime
@@ -38,11 +37,6 @@ class JournalScreeningError(RuntimeError):
     pass
 
 
-def canonical_hash(value: Any) -> str:
-    encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
-
-
 def safe_file(project: Path, relative: str) -> Path:
     return regular_file(project, relative, JournalScreeningError,
                         invalid="input path must be project-relative", missing="not a regular project file")
@@ -61,12 +55,13 @@ def load_object(path: Path, label: str) -> dict[str, Any]:
 def build(project: Path, input_path: Path, registry_path: Path) -> dict[str, Any]:
     spec = load_object(input_path, "screening input")
     registry = load_object(registry_path, "venue registry")
-    reviewed_by = str(spec.get("reviewed_by", "")).strip()
-    reviewed_at = str(spec.get("reviewed_at", "")).strip()
-    if not reviewed_by or not reviewed_at:
-        raise JournalScreeningError("screening input needs reviewed_by and reviewed_at")
+    recorded_by = spec.get("recorded_by", spec.get("reviewed_by", ""))
+    recorded_at = spec.get("recorded_at", spec.get("reviewed_at", ""))
+    if any(not isinstance(value, str) or not value.strip() for value in (recorded_by, recorded_at)):
+        raise JournalScreeningError("screening input needs recorded_by and recorded_at")
+    recorded_by, recorded_at = recorded_by.strip(), recorded_at.strip()
     try:
-        review_time = datetime.fromisoformat(reviewed_at.replace("Z", "+00:00"))
+        review_time = datetime.fromisoformat(recorded_at.replace("Z", "+00:00"))
     except ValueError as exc:
         raise JournalScreeningError("reviewed_at must be an ISO-8601 timestamp") from exc
     if review_time.tzinfo is None:
@@ -189,9 +184,11 @@ def build(project: Path, input_path: Path, registry_path: Path) -> dict[str, Any
         "method": {"score_scale": "0-5", "weights": WEIGHTS, "strategies": sorted(STRATEGIES)},
         "input": {"path": input_path.relative_to(project).as_posix(), "sha256": sha256_file(input_path)},
         "registry": {"path": registry_path.relative_to(project).as_posix(), "sha256": sha256_file(registry_path)},
-        "human_review": {"reviewed_by": reviewed_by, "reviewed_at": reviewed_at},
+        "assessment": {"recorded_by": recorded_by, "recorded_at": recorded_at,
+                       "human_review_verified": False},
         "papers": papers,
-        "human_review_required": True,
+        "human_review_required": False,
+        "scientific_validation": False,
     }
 
 
@@ -209,9 +206,21 @@ def validate_saved_report(project: Path) -> list[str]:
     except JournalScreeningError as exc:
         return [str(exc)]
     errors: list[str] = []
-    if saved.get("schema_version") != "1.0" or saved.get("human_review_required") is not True:
-        errors.append("journal screening must be schema_version 1.0 and require human review")
-    for key in ("input", "registry", "human_review", "method", "papers"):
+    if saved.get("schema_version") != "1.0" or type(saved.get("human_review_required")) is not bool:
+        errors.append("journal screening must be schema_version 1.0 with an honest review-policy flag")
+    if saved.get("scientific_validation", False) is not False:
+        errors.append("journal scoring cannot certify scientific validity")
+    assessment = current["assessment"]
+    if "assessment" in saved:
+        assessment_matches = saved["assessment"] == assessment
+    else:
+        # A legacy label is preserved as an old recorder claim, never upgraded
+        # to a verified human review or a new human confirmation requirement.
+        assessment_matches = saved.get("human_review") == {
+            "reviewed_by": assessment["recorded_by"], "reviewed_at": assessment["recorded_at"]}
+    if not assessment_matches:
+        errors.append("journal screening is stale or altered for assessment")
+    for key in ("input", "registry", "method", "papers"):
         if saved.get(key) != current.get(key):
             errors.append(f"journal screening is stale or altered for {key}")
     return errors

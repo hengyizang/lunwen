@@ -67,7 +67,6 @@ class ResearchIdentityTests(unittest.TestCase):
         manuscript.write_text("\\documentclass{article}\n\\begin{document}\n" + excerpt + "\n\\end{document}\n", encoding="utf-8")
         self.identity["reporting_statement"] = {"excerpt": excerpt, "location": {"kind": "source_lines", "path": "manuscript/main.tex",
             "sha256": sha(manuscript), "start_line": 3, "end_line": 3}}
-        write(self.paper / "reviews/pre-submission-checklist.json", {"article_type": "review" if self.identity["research_kind"] == "secondary_quantitative" else "computational"})
         self.save()
 
     def receipt(self):
@@ -205,12 +204,20 @@ class ResearchIdentityTests(unittest.TestCase):
             (self.project / "experiments/registry.jsonl").write_text(json.dumps(changed)+"\n", encoding="utf-8")
             self.assertTrue(policy.validate(self.project, "P01", "G4"))
 
-    def test_secondary_cannot_waive_its_review_scientific_checklist(self):
+    def test_retired_mechanical_checklist_cannot_decide_scientific_identity(self):
         self.secondary()
         self.receipt()
         self.final()
-        write(self.paper / "reviews/pre-submission-checklist.json", {"article_type": "empirical"})
-        self.assertIn("checklist must match", " ".join(policy.validate(self.project, "P01", "G5")))
+        path = self.paper / "reviews/pre-submission-checklist.json"
+        self.assertFalse(path.exists())
+        self.assertEqual(policy.validate(self.project, "P01", "G5"), [])
+        write(path, {"article_type": "empirical", "pass": True})
+        self.assertEqual(policy.validate(self.project, "P01", "G5"), [])
+        path.write_text("Malformed historical mechanical form.")
+        self.assertEqual(policy.validate(self.project, "P01", "G5"), [])
+        manuscript = self.paper / "manuscript/main.tex"
+        manuscript.write_text("Changed actual study description.\n")
+        self.assertTrue(policy.validate(self.project, "P01", "G5"))
 
     def test_final_manuscript_must_really_declare_its_design(self):
         self.final()

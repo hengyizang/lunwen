@@ -199,9 +199,12 @@ Clarity/language uses minimal edits; structure uses local edits; scientific
 correction uses substantive edits and requires bound evidence. Repeated optional
 style work with the same issue/evidence fingerprint receives a stop recommendation
 at the next writer boundary. Reviewer corrections and scientific blockers remain
-mandatory. H01–H26, AD01–AD08, revision integrity, numbers, citations, terms,
-uncertainty and disclosure remain protected. No detector-score target, authorship
-claim or fixed extra paid pass is introduced.
+mandatory. Revision integrity, numbers, citations, technical meaning, warranted
+uncertainty and truthful internal provenance remain protected. H01–H26 and
+AD01–AD08 supply optional method guidance in the same calls; their separate
+mechanical scans and scorecards are retired and cannot supply a current pass.
+Public AI-use statements remain optional and author-editable. No detector-score
+target, authorship claim or fixed extra paid pass is introduced.
 
 ## H. Context reuse and concise handoffs
 

@@ -97,7 +97,7 @@
       ],
       "native_tools": [
         "scripts/research_candidates.py",
-        "scripts/pre_submission_review.py"
+        "scripts/research_methods.py"
       ],
       "outcome": "concept/evidence/readiness separated; existing G1 source requirements"
     },
@@ -203,7 +203,7 @@
       ],
       "native_tools": [
         "scripts/ccfa_science.py",
-        "scripts/pre_submission_review.py",
+        "scripts/research_methods.py",
         "scripts/api_orchestrator.py"
       ],
       "outcome": "independent scientific review and categorical cross-version findings"

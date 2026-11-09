@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-11-08",
+  "updated_at": "2026-11-09",
   "requirements": [
     {
       "id": "R01",
@@ -547,7 +547,7 @@
         "tests/test_gate_check_levels.py",
         "tests/test_submission_package.py"
       ],
-      "remaining": "Current A/B/C enforcement includes final G5, manual packaging, protected review material snapshots, cloud operations and research-increment handoffs. C-only scans, optional ledgers and voice/edit preferences do not invalidate unchanged science or force another paid pass. Actual manuscript/source changes, missing full-text support, scientific revision drift and lost cleanup originals still block. Run actual project evidence and final renders; software acceptance alone does not establish scientific quality.",
+      "remaining": "Current A/B/C enforcement includes final G5, manual packaging, protected review material snapshots, cloud operations and research-increment handoffs. C-only scans, optional ledgers and voice/edit preferences do not invalidate unchanged science or force another paid pass. Actual manuscript/source changes, missing full-text support, scientific revision drift and lost cleanup originals still block. Run actual project evidence and final renders; software acceptance alone does not establish scientific quality. Nov9: standalone pre-submission C checklist and its identity dependency are retired; venue assessments record actual actor metadata without invented human review. Actual ZIP members are verified before the final source seal and atomic publication.",
       "source_sections": [
         "compendium: A/B/C reclassification and removed compliance friction"
       ]
@@ -625,7 +625,7 @@
         "tests/test_container_reproduction.py",
         "tests/test_compendium_entrypoints.py"
       ],
-      "remaining": "Fill only the active research task from real evidence: headline/readers/counterclaim, pre-mortem/tests, crowding, figure-first, reproduction, cumulative synthesis, venue fit, panel, variants, cover letter, related work, preprint, numeric tables, falsifiability, rebuttal and retarget. Exports stay local; no upload or fabricated PID.",
+      "remaining": "Fill only the active research task from real evidence: headline/readers/counterclaim, pre-mortem/tests, crowding, figure-first, reproduction, cumulative synthesis, venue fit, panel, variants, cover letter, related work, preprint, numeric tables, falsifiability, rebuttal and retarget. Exports stay local; no upload or fabricated PID. Nov9: preparation loads only the current selected sections and labels full-case/scientific validity unverified. Synthetic scope reductions do not establish actual user-time savings.",
       "source_sections": [
         "compendium: accepted positive capabilities 1–7 and final panel 8; preparation 9–16"
       ]
@@ -644,7 +644,7 @@
         "tests/test_cloud_continuation.py",
         "tests/test_cloud_research_steps.py"
       ],
-      "remaining": "Use actual user background/constraints/resources and real evidence changes; no new budget-approval layer or fabricated inputs. Resume depends on actual new input/checked state.",
+      "remaining": "API、兼容CLI与cloud共用真实attempt停滞跟踪，失败/取消进入finally且不重复计数；只有同reservation/run的原生generation_sent:false证明才不计付费，未知费用和原三笔hold保留。新hypothesis、有限检索队列顺序和嵌套科学时间属于真实变化。真实旧v1/v2 checkpoint的机械history不解暂停；首次合法控制只建grants_retry:false兼容baseline、0请求，之后新输入可恢复。首次baseline前已发生的新输入不能由旧opaque hash追溯证明；实际长期科研仍未完成。",
       "source_sections": [
         "compendium: real vertical slice, stalls and direction weights"
       ]
@@ -703,7 +703,7 @@
         "tests/test_cloud_checkpoint.py",
         "tests/test_ccfa_runtime.py"
       ],
-      "remaining": "Measured category-level changes against both the merged bda8abe phase and attachment Git 7765bd5 are recorded in docs/CODEBASE-AUDIT-2026-11-07.md. Completed one-off model generators and their dedicated workflows/tests are retired; immutable original plans, results, ledgers, unresolved charges and owner-only reconciliation remain. Exact historical Git records replace regeneration of old comparisons and current-quote recomputation. The actual runtime/provider/guard path now consumes one persisted, synced project reservation before a single exact-endpoint/model POST; missing legacy tickets no longer block every production request. Shared manifest, canonical JSON, operation dispatch and operation-local source inspection replace actual repeated work. The 156-item owner checklist keeps numerical targets, incomplete architecture, real research evidence and missing historical materials separate; a measurement or software test does not establish scientific completion. The 40–50% native reduction and about 30% source-tree reduction remain unachieved. All 214 original modules have current dispositions, without claiming recovery of the missing old 65-row CSV. Models, routes, reasoning levels, cumulative budgets, human G1/G2 decisions, actual project records and the three current owner policy amendments are unchanged.",
+      "remaining": "Measured category-level changes against both the merged bda8abe phase and attachment Git 7765bd5 are recorded in docs/CODEBASE-AUDIT-2026-11-07.md. Completed one-off model generators and their dedicated workflows/tests are retired; immutable original plans, results, ledgers, unresolved charges and owner-only reconciliation remain. Exact historical Git records replace regeneration of old comparisons and current-quote recomputation. The actual runtime/provider/guard path now consumes one persisted, synced project reservation before a single exact-endpoint/model POST; missing legacy tickets no longer block every production request. Shared manifest, canonical JSON, operation dispatch and operation-local source inspection replace actual repeated work. The 156-item owner checklist keeps numerical targets, incomplete architecture, real research evidence and missing historical materials separate; a measurement or software test does not establish scientific completion. The 40–50% native reduction and about 30% source-tree reduction remain unachieved. All 214 original modules have current dispositions, without claiming recovery of the missing old 65-row CSV. Models, routes, reasoning levels, cumulative budgets, human G1/G2 decisions, actual project records and the three current owner policy amendments are unchanged. Nov9: operation-local Word bytes/hash/facts and power-report semantic replay are shared; the standalone pre-submission C module/schema is retired. See the measured phase and attachment totals, including necessary fix growth; the numerical reduction targets remain unachieved.",
       "source_sections": [
         "compendium: code/test density, unused-module claims and repeated test cost"
       ],
@@ -757,6 +757,11 @@
           "action": "removed",
           "replacement": "docs/CLOUD-RESEARCH.md",
           "reason": "Parallel local HTTP/UI control plane retired for the cloud-only project; existing owner cloud controls and native CLI retained."
+        },
+        "scripts/pre_submission_review.py": {
+          "action": "removed",
+          "replacement": "scripts/research_methods.py:peer_review_context; config/pre-submission-criteria.json",
+          "reason": "Retired mechanical C table/schema, not an equivalent detector pass. Source-bound selected method guidance stays within the existing critic."
         }
       }
     },
@@ -779,7 +784,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "The frozen 24 real eLife papers retain the 16/8 split. Actual CodeKey Opus #134/#142/#146 returned no text, truncated JSON and an explicit refusal, with no accepted complete labels; verified fees are CNY 0.3913704/0.3947136/0.668094. A separate current-session source-only eight-paper pilot agreed with three published categories (majority baseline two); its exact API identity and app fee are unavailable and it cannot promote a production model or replace human claim labels. Native G1 #144 completed free discovery; #148 completed the last six searches then hit HTTP524 at its first planner call, before writing. The explicit Astra/Argon G1 sample #153 hit HTTP524 at its first planner; #159 used the same high-effort model via SSE but failed reading before a complete terminal Response. Neither reached the writer/critic or produced native scientific artifacts. The underlying read exception type for #159 remains unknown; later code only preserves future exception class names. Native Argon editorial #163 also hit HTTP524 before any predictions. Separately verified fees for #148/#153/#159/#163 are CNY 1.0616415/0.440235/0.4683/0.21923298; the original failed reports remain preserved. All new attempt reservations were reconciled, leaving spent CNY 3.88897004, exactly the original three holds totalling CNY 10.0783494, and the unchanged CNY 500 ceiling. No further paid generation is planned. The owner now prioritizes robotics/autonomous control; this is not G1 approval. Later drafts and temporary roster tests must retain their own identity/source receipts. Human >=0.85 claim agreement, should-merge detection, numerical-score calibration, domain transfer and an actual doctoral paper remain unverified.",
+      "remaining": "冻结24篇16/8人口保持；#177只调用首篇Opus/high一次，HTTP200完整最终正文却因外层JSON fence被旧parser拒绝，原生回执仍失败/0预测。新parser离线重验同一不可变正文得1条incomplete，公开标签solid，观测一致0/1；完整训练/留出一致率null，NOT_CALIBRATED。仅接受完整单一JSON/fence，拒重复键、NaN与1e999、前后prose/第二对象；未改标签/原响应/原失败报告，修复格式新增调用和费用0。真实人工15%及>=.85、合并反例和数值评分校准仍无验收。 #177实际费用0.04443876元，累计3.9334088元，原三笔hold与500元总额保持；CheapAI暂不处理，默认模型/effort不变。机器人优先偏好不等于G1/G2决定，真实论文与人工标签仍缺。",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]
@@ -845,6 +850,6 @@
     "all_156_requirements_fulfilled": false,
     "interpretation": "Software-scoped verification, actual research evidence, numerical targets, incomplete architecture and missing historical sources remain distinct. A completed measurement is not an achieved numerical target. Existing user policy is unchanged.",
     "fully_satisfied_count": 53,
-    "last_reviewed_at": "2026-11-08"
+    "last_reviewed_at": "2026-11-09"
   }
 }

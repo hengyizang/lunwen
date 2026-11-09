@@ -491,6 +491,9 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertFalse(report["human_review_required"])
             self.assertEqual(validate_power_report(report, "P01", project), [])
             self.assertEqual(validate_power_report({**report, "human_review_required": True}, "P01", project), [])
+            for effect in (float("nan"), float("inf"), float("-inf"), True):
+                with self.subTest(effect=effect):
+                    self.assertTrue(validate_power_report({**report, "effect_size": effect}, "P01", project))
 
     def test_simulation_power_cross_checks_executable_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -547,6 +550,16 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertEqual(len(report["rerun_receipts"]), 2)
             self.assertEqual(validate_power_report(report, "P01", project), [])
             self.assertFalse(report["human_review_required"])
+            other_script = script.with_name("unrelated.py")
+            other_script.write_text("pass\n", encoding="utf-8")
+            for replacement in (
+                {"effect_size": 0.4}, {"alpha": 0.1}, {"random_seeds": [999]},
+                {"simulation_count": 2000, "rejection_count": 1600},
+                {"achieved_power": 0.9, "rejection_count": 900},
+                {"simulation_script_path": other_script.relative_to(project).as_posix()},
+            ):
+                with self.subTest(replacement=replacement):
+                    self.assertTrue(validate_power_report({**report, **replacement}, "P01", project))
             tampered_report = copy.deepcopy(report)
             tampered_report["rerun_receipts"][0]["output_sha256"] = "f" * 64
             self.assertTrue(

@@ -337,12 +337,287 @@ class ContinuationTests(unittest.TestCase):
             self.assertEqual(command.call_args.args[0], ["gh", "api", "--method", "PUT",
                                                         f"repos/{cloud_job.REPOSITORY}/actions/workflows/research-continuation.yml/disable"])
 
+    def model_attempt(self, run_id, *, failed=False):
+        # Synthetic transport ledger, not scientific evidence or a real charge.
+        with (self.project / "state/model-usage.jsonl").open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps({"run_id": run_id, "role": "semantic-planner", "cache_hit": False,
+                "transport_error_type": "ProviderError" if failed else None,
+                "cost_status": "accounted_upper_bound", "cost_cny": None}) + "\n")
+
+    def test_actual_planner_failures_count_once_and_all_cycle_entries_stop(self):
+        from scripts import api_orchestrator, ai_providers, autopilot, cloud_progress
+        stages = json.loads((api_orchestrator.ROOT / "config/stages.json").read_text())
+        researchctl.write_json(self.root / "config/stages.json", stages)
+        with patch.dict(os.environ, {**self.env, "DR_OS_REQUIRE_MODEL_AUTH": "1",
+                "DR_OS_REQUIRE_REMOTE_RESERVATION": "0"}, clear=True), \
+                patch.object(api_orchestrator, "ROOT", self.root), \
+                patch.object(api_orchestrator, "discover_context", return_value=json.dumps({
+                    "literature": {"receipts": [{"synthetic_fixture_only": True}], "pending_searches": 0}})), \
+                patch.object(ai_providers, "call", side_effect=[ai_providers.ProviderError("Synthetic transport failure"),
+                    KeyboardInterrupt("Synthetic canceled transport")]) as transport:
+            for index in range(2):
+                outer = cloud_progress.snapshot('my-phd')
+                with self.assertRaises((ai_providers.ProviderError, KeyboardInterrupt)):
+                    api_orchestrator.run_cycle('my-phd', 'topic-intelligence', 'uuapi-anthropic',
+                        'uuapi-openai', 'uuapi-anthropic', '', '', automatic_data=False)
+                report = cloud_progress.record('my-phd', outer, 'cloud-job-' + str(index), 1)
+                self.assertEqual(report['stalled_cycles'], index + 1)
+                self.assertEqual(report['model_cycles'], index + 1)
+                self.assertEqual(report['research_decision']['status'], 'pending')
+            held = (self.project / model_spend.FILE).read_bytes()
+            for entry in (lambda: api_orchestrator.run_cycle('my-phd', 'topic-intelligence',
+                            'uuapi-anthropic', 'uuapi-openai', 'uuapi-anthropic', '', '', automatic_data=False),
+                          lambda: autopilot.run_stage('my-phd'),
+                          lambda: cloud_job.cycle_command({'action': 'cycle'}, 'my-phd')):
+                with self.assertRaisesRegex((ValueError, cloud_job.CloudJobError), 'no_new_research_inputs'):
+                    entry()
+            self.assertEqual(transport.call_count, 2)
+            self.assertEqual((self.project / model_spend.FILE).read_bytes(), held)
+            self.assertEqual(len(model_spend.read(self.project)['reservations']), 2)
+            self.assertEqual(self.decision()['reason'], 'no_new_research_inputs')
+            self.assertFalse((self.project / 'program/research-notebook.json').exists())
+
+    def test_interrupted_cycle_is_recovered_before_another_request_and_report_flags_do_not_count(self):
+        from scripts import cloud_progress
+        before = cloud_progress.snapshot('my-phd')
+        researchctl.write_json(self.project / 'state/research-steps.json', {'paid_model_cycle': True})
+        report = cloud_progress.record('my-phd', before, 'no-transport', 1)
+        self.assertEqual(report['model_cycles'], 0)
+        for index in range(2):
+            before = cloud_progress.snapshot('my-phd')
+            prior = cloud_progress.read(self.project / cloud_progress.FILE)
+            researchctl.write_json(self.project / cloud_progress.FILE, {**prior, 'pending_cycle': before})
+            self.model_attempt('interrupted-' + str(index), failed=True)
+            # Recover the same durable marker the API reads after a killed process.
+            if index == 0:
+                cloud_progress.record(self.project, before, 'interrupted-api-cycle', 1)
+        @cloud_progress.track_cycle(lambda slug: self.project)
+        def transport(slug):
+            self.fail('A clock retry must not enter another model request')
+        with self.assertRaisesRegex(ValueError, 'no_new_research_inputs'):
+            transport('my-phd')
+        self.assertEqual(cloud_progress.read(self.project / cloud_progress.FILE)['stalled_cycles'], 2)
+
+    def test_bookkeeping_format_and_fewer_errors_cannot_reset_paid_stall(self):
+        from scripts import cloud_progress
+        plan = self.project / 'program/literature-search-plan.json'
+        dataset = self.project / 'evidence/datasets.jsonl'
+        original = {'generated_at': 'old', 'queries': ['mechanism A', 'counter evidence'],
+                    'hypothesis': 'The actual first mechanism predicts higher error.'}
+        researchctl.write_json(plan, original)
+        dataset.write_text('{"id":"fixture","source":"primary"}\n', encoding='utf-8')
+        for index in range(2):
+            with patch.object(researchctl, 'gate_errors', return_value=['A', 'B']):
+                before = cloud_progress.snapshot('my-phd')
+            self.model_attempt('unchanged-' + str(index), failed=True)
+            with patch.object(researchctl, 'gate_errors', return_value=['A']):
+                report = cloud_progress.record('my-phd', before, str(index), 1)
+                self.assertTrue(report['control_progress'])
+                self.assertEqual(report['stalled_cycles'], index + 1)
+        researchctl.write_json(plan, {**original, 'generated_at': 'new'})
+        dataset.write_text('\n{ "source": "primary", "id": "fixture" }\n\n', encoding='utf-8')
+        state = researchctl.load_state('my-phd')
+        state.setdefault('history', []).append({'event': 'mechanical_check', 'at': 'later'})
+        researchctl.save_state('my-phd', state)
+        researchctl.write_json(self.project / 'reports/c-audit.json', {'generated_at': 'later', 'pass': True})
+        with patch.object(researchctl, 'gate_errors', return_value=[]):
+            self.assertEqual(cloud_progress.pause_reason('my-phd')['reason'], 'no_new_research_inputs')
+        researchctl.write_json(plan, {**original, 'hypothesis': 'A different mechanism predicts lower error.'})
+        self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+
+    def test_failed_attempt_ids_and_billing_changes_remain_activity_until_actual_new_results(self):
+        from scripts import cloud_progress
+        from scripts.research_artifacts import sha
+        rows = []
+        for index in range(2):
+            before = cloud_progress.snapshot('my-phd')
+            self.model_attempt('failed-science-' + str(index), failed=True)
+            row = {'attempt_id': 'synthetic-failure-' + str(index), 'paper_id': 'P01',
+                   'status': 'failed', 'estimated_cost_usd': 0.2, 'outputs': []}
+            rows.append(row)
+            researchctl.write_json(self.project / f"experiments/runs/{row['attempt_id']}/run.json", row)
+            (self.project / 'experiments/registry.jsonl').write_text(
+                ''.join(json.dumps(item) + '\n' for item in rows), encoding='utf-8')
+            report = cloud_progress.record('my-phd', before, str(index), 1)
+            self.assertEqual(report['stalled_cycles'], index + 1)
+            self.assertEqual(report['new_experiment_attempts'], 1)
+            self.assertFalse(report['scientific_progress_verified'])
+        rows[-1].update(reported_cost_usd=0.3, runtime_seconds=10, completed_at='later')
+        researchctl.write_json(self.project / f"experiments/runs/{rows[-1]['attempt_id']}/run.json", rows[-1])
+        (self.project / 'experiments/registry.jsonl').write_text(
+            ''.join(json.dumps(item) + '\n' for item in rows), encoding='utf-8')
+        self.assertEqual(cloud_progress.pause_reason('my-phd')['reason'], 'no_new_research_inputs')
+        source = self.project / 'results/actual-negative.json'
+        researchctl.write_json(source, {'synthetic_fixture_only': True, 'effect': -0.2})
+        result = {'attempt_id': 'synthetic-negative-result', 'paper_id': 'P01', 'status': 'succeeded',
+                  'estimated_cost_usd': 0.2, 'outputs': [{'path': 'results/actual-negative.json', 'sha256': sha(source)}]}
+        researchctl.write_json(self.project / f"experiments/runs/{result['attempt_id']}/run.json", result)
+        with (self.project / 'experiments/registry.jsonl').open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps(result) + '\n')
+        self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+        before = cloud_progress.snapshot('my-phd')
+        self.model_attempt('inspect-new-negative')
+        report = cloud_progress.record('my-phd', before, 'new-evidence', 0)
+        self.assertEqual(report['stalled_cycles'], 1)
+        self.assertFalse(report['scientific_progress_verified'])
+
+    def test_new_source_content_resumes_but_the_same_search_serialization_does_not(self):
+        from scripts import cloud_progress
+        from scripts.research_artifacts import sha
+        result = self.project / 'evidence/search/normalized.json'
+        researchctl.write_json(result, {'works': [{'id': 'source-A', 'title': 'Counterevidence'}]})
+        ledger = self.project / 'evidence/literature-api-ledger.jsonl'
+        receipt = {'status': 'success', 'normalized_results_path': 'evidence/search/normalized.json',
+                   'normalized_results_sha256': sha(result), 'response_sha256': 'a' * 64}
+        ledger.write_text(json.dumps(receipt) + '\n', encoding='utf-8')
+        for index in range(2):
+            before = cloud_progress.snapshot('my-phd')
+            self.model_attempt('same-source-' + str(index))
+            cloud_progress.record('my-phd', before, str(index), 0)
+        result.write_text('{"works": [{"title": "Counterevidence", "id": "source-A"}]}\n\n', encoding='utf-8')
+        receipt.update(normalized_results_sha256=sha(result), response_sha256='b' * 64)
+        ledger.write_text(json.dumps(receipt) + '\n', encoding='utf-8')
+        self.assertEqual(cloud_progress.pause_reason('my-phd')['reason'], 'no_new_research_inputs')
+        researchctl.write_json(result, {'works': [{'id': 'source-A', 'title': 'Counterevidence'},
+                                                {'id': 'source-B', 'title': 'New primary evidence'}]})
+        receipt['normalized_results_sha256'] = sha(result)
+        ledger.write_text(json.dumps(receipt) + '\n', encoding='utf-8')
+        self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+
+    def test_repeated_source_screening_receipts_do_not_manufacture_new_inputs(self):
+        from scripts import cloud_progress, literature_evidence, literature_model_screening as screening, ai_providers
+        from tests.test_literature_model_screening import ModelScreeningTests
+        with tempfile.TemporaryDirectory() as directory:
+            project = ModelScreeningTests().fixture(directory)
+            researchctl.write_json(project / 'state/run.json', {'stage': 'topic-intelligence', 'active_paper': 'P01'})
+            previous = None
+            for index in range(2):
+                if index:
+                    receipt = literature_evidence.read_jsonl(project / 'evidence/literature-api-ledger.jsonl')[0]
+                    receipt['receipt_id'] = 'search2'
+                    literature_evidence.append_jsonl(project / 'evidence/literature-api-ledger.jsonl', receipt)
+                    literature_evidence.append_jsonl(project / 'evidence/search-log.jsonl', {'evidence_receipt_id': 'search2'})
+                selected = screening.cycle_input(project, 'Which source distinguishes the mechanism?')
+                prompt = selected['packet_prompt']
+                content = json.dumps({'decisions': [{'id': key, 'decision': 'include',
+                    'reason': 'Related source; wording version ' + str(index)} for key in ('a', 'b')]})
+                bundle = {'artifacts': [{'path': selected['artifact_path'], 'content': content}]}
+                result = ai_providers.ModelResult(provider='openai', model='synthetic-writer', reported_model='synthetic-writer',
+                    text=json.dumps(bundle), usage={}, request_id='fixture-' + str(index), completion_status='completed')
+                run = 'fixture-screening-' + str(index)
+                literature_evidence.append_jsonl(project / 'state/model-usage.jsonl', {'run_id': run,
+                    'prompt_sha256': screening._digest(prompt), 'request_id': result.request_id,
+                    'model': result.model, 'completion_status': 'completed'})
+                screening.accept_cycle_result(project, selected, prompt, result, run, bundle)
+                current = cloud_progress.snapshot(project)['receipts']
+                if previous is not None:
+                    self.assertEqual(current, previous)
+                previous = current
+
+    def legacy_pause(self):
+        from scripts import cloud_progress
+        checkpoint = {**cloud_progress.snapshot('my-phd'),
+                      'model_cycles': 2, 'stalled_cycles': 2, 'control_cycles': 0}
+        checkpoint.pop('input_fingerprint_version')
+        checkpoint['human_inputs'] = cloud_progress.digest({p: cloud_progress.read(self.project / p) for p in (
+            'state/run.json', 'state/data-authorizations.json', 'state/human-inputs.json')})
+        checkpoint['work_inputs'] = 'f' * 64  # Opaque earlier algorithm, not a comparable v3 digest.
+        researchctl.write_json(self.project / cloud_progress.FILE, checkpoint)
+        return checkpoint
+
+    def test_fingerprint_upgrade_preserves_existing_pause_without_mutating_it(self):
+        from scripts import cloud_progress
+        checkpoint = self.legacy_pause()
+        before = (self.project / cloud_progress.FILE).read_bytes()
+        state = researchctl.load_state('my-phd')
+        state.setdefault('history', []).append({'event': 'mechanical_check', 'at': 'later'})
+        researchctl.save_state('my-phd', state)
+        held = (self.project / model_spend.FILE).read_bytes()
+        files = {p: p.read_bytes() for p in self.project.rglob('*') if p.is_file()}
+        self.assertEqual(cloud_progress.pause_reason('my-phd')['reason'], 'no_new_research_inputs')
+        self.assertEqual({p: p.read_bytes() for p in self.project.rglob('*') if p.is_file()}, files)
+        @cloud_progress.track_cycle(lambda slug: self.project)
+        def transport(slug):
+            self.fail('Migration must not grant a retry or POST')
+        for _ in range(2):
+            with self.assertRaisesRegex(ValueError, 'no_new_research_inputs'):
+                transport('my-phd')
+        events = [json.loads(line) for line in (self.project / cloud_progress.RESUMES).read_text().splitlines()]
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['previous_progress'], checkpoint)
+        self.assertFalse(events[0]['grants_retry'])
+        self.assertEqual((self.project / cloud_progress.FILE).read_bytes(), before)
+        self.assertEqual((self.project / model_spend.FILE).read_bytes(), held)
+        researchctl.write_json(self.project / 'program/hypothesis-register.json',
+                               {'hypotheses': [{'id': 'H1', 'hypothesis': 'A newly specified competing mechanism.'}]})
+        self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+
+    def test_cloud_paused_job_binds_legacy_baseline_once_after_existing_authority_checks(self):
+        from scripts import cloud_progress
+        self.legacy_pause()
+        for index in range(3):
+            model_spend.reserve(self.project, max_cost_cny=1, paper_id=None, paper_limit_cny=0, run_id='old-hold-' + str(index))
+        checkpoint = (self.project / cloud_progress.FILE).read_bytes()
+        held = (self.project / model_spend.FILE).read_bytes()
+        runtime = self.root / '.runtime'
+        request = cloud_job.validate_request({'schema_version': '1.0', 'action': 'continuation',
+                                             'project': 'my-phd', 'actor': 'Owner'})
+        with patch.dict(os.environ, self.env, clear=True), patch.object(cloud_job, 'ROOT', self.root), \
+                patch.object(cloud_job, 'RUNTIME', runtime), patch.object(cloud_job, 'ARTIFACT', runtime / 'cloud-artifact'), \
+                patch.object(cloud_job, 'restore_state', return_value=(self.root / 'dummy-worktree', 'cloud-state/my-phd')), \
+                patch.object(cloud_job, 'persist_state', return_value=[]), patch.object(cloud_job, 'git'), \
+                patch.object(cloud_job, 'run_command') as transport:
+            wrong_actor = {**request, 'actor': 'AnotherOwner'}
+            self.assertEqual(cloud_job.run_job(wrong_actor, '123450'), 0, (runtime / 'cloud-artifact/redacted-log.txt').read_text())
+            self.assertFalse((self.project / cloud_progress.RESUMES).exists())
+            for run in ('123451', '123452'):
+                self.assertEqual(cloud_job.run_job(request, run), 0, (runtime / 'cloud-artifact/redacted-log.txt').read_text())
+            transport.assert_not_called()
+        self.assertEqual(len((self.project / cloud_progress.RESUMES).read_text().splitlines()), 1)
+        self.assertEqual((self.project / cloud_progress.FILE).read_bytes(), checkpoint)
+        self.assertEqual((self.project / model_spend.FILE).read_bytes(), held)
+        self.assertEqual(self.decision()['reason'], 'no_new_research_inputs')
+
+    def test_hypothesis_and_ordered_search_changes_are_real_inputs_but_nested_times_are_preserved(self):
+        from scripts import cloud_progress, cloud_research_steps as steps, literature_evidence
+        hypothesis = self.project / 'program/hypothesis-register.json'
+        researchctl.write_json(hypothesis, {'hypotheses': [{'id': 'H1', 'hypothesis': 'Mechanism A'}]})
+        plan = self.project / 'program/literature-search-plan.json'
+        searches = [{'provider': 'crossref', 'query': query, 'query_family': 'direct', 'limit': 1}
+                    for query in ('mechanism A', 'mechanism B')]
+        researchctl.write_json(plan, {'searches': searches, 'max_search_calls': 1})
+        checkpoint = {**cloud_progress.snapshot('my-phd'), 'stalled_cycles': 2}
+        researchctl.write_json(self.project / cloud_progress.FILE, checkpoint)
+        self.assertEqual(cloud_progress.pause_reason('my-phd')['reason'], 'no_new_research_inputs')
+        researchctl.write_json(hypothesis, {'hypotheses': [{'id': 'H1', 'hypothesis': 'Mechanism B'}]})
+        self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+        checkpoint = {**cloud_progress.snapshot('my-phd'), 'stalled_cycles': 2}
+        researchctl.write_json(self.project / cloud_progress.FILE, checkpoint)
+        def search(project, provider, query, **kwargs):
+            return {'receipt_id': 'synthetic-' + query[-1], 'provider': provider, 'normalized_results_path': 'evidence/empty-fixture.json'}
+        researchctl.write_json(self.project / 'evidence/empty-fixture.json', {'works': []})
+        with patch.object(literature_evidence, 'execute_search', side_effect=search) as execute:
+            first = steps.literature_context(self.project, 'unused')
+            researchctl.write_json(plan, {'searches': list(reversed(searches)), 'max_search_calls': 1})
+            self.assertIsNone(cloud_progress.pause_reason('my-phd'))
+            second = steps.literature_context(self.project, 'unused')
+        self.assertEqual([call.args[2] for call in execute.call_args_list], ['mechanism A', 'mechanism B'])
+        self.assertEqual([first['new_search_calls'], second['new_search_calls']], [1, 1])
+        scientific_times = {'data': [{'force': 1, 'updated_at': '2026-01-01', 'generated_at': '2026-01-01'}]}
+        changed_times = {'data': [{'force': 1, 'updated_at': '2026-01-02', 'generated_at': '2026-01-02'}]}
+        self.assertNotEqual(cloud_progress.research_input(scientific_times), cloud_progress.research_input(changed_times))
+        researchctl.write_json(plan, {**scientific_times, 'searches': searches})
+        before = cloud_progress.work_inputs(self.project)
+        researchctl.write_json(plan, {**changed_times, 'searches': searches})
+        self.assertNotEqual(before, cloud_progress.work_inputs(self.project))
+
     def test_stalled_rephrasing_stops_without_changing_spending_authority(self):
         from scripts import cloud_progress
         researchctl.write_json(self.project/'state/research-steps.json',{'paid_model_cycle':True,'blockers':[]})
         with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
             for index in range(2):
                 before=cloud_progress.snapshot('my-phd')
+                self.model_attempt(str(index))
                 (self.project/'program/topic.md').write_text('Rephrased draft '+str(index))
                 cloud_progress.record('my-phd',before,str(index),0)
             self.assertFalse(self.decision()['should_run'])
@@ -365,6 +640,7 @@ class ContinuationTests(unittest.TestCase):
         with patch.object(researchctl, 'gate_errors', return_value=['Missing controlled evidence']):
             for index in range(cloud_progress.MAX_STALLED_CYCLES):
                 before = cloud_progress.snapshot('my-phd')
+                self.model_attempt(str(index))
                 cloud_progress.record('my-phd', before, str(index), 0)
             self.assertFalse(self.decision()['should_run'])
             (self.project / 'program/topic.md').write_text('A different description of the same idea')
@@ -375,6 +651,7 @@ class ContinuationTests(unittest.TestCase):
                                    {'queries': ['new discriminating source query']})
             self.assertTrue(self.decision()['should_run'])
             before = cloud_progress.snapshot('my-phd')
+            self.model_attempt('new-input')
             report = cloud_progress.record('my-phd', before, 'new-input', 0)
             self.assertEqual(report['stalled_cycles'], 1)
             self.assertTrue(self.decision()['should_run'])
@@ -397,6 +674,7 @@ class ContinuationTests(unittest.TestCase):
         with patch.object(researchctl,'gate_errors',return_value=['Missing controlled evidence']):
             for index in range(2):
                 before=cloud_progress.snapshot('my-phd')
+                self.model_attempt('input-'+str(index))
                 researchctl.write_json(self.project/'program/literature-search-plan.json',
                                        {'queries':['new discriminating query '+str(index)]})
                 report=cloud_progress.record('my-phd',before,'input-'+str(index),0)

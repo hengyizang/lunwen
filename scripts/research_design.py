@@ -62,7 +62,6 @@ def _string_list(
     value: Any,
     field: str,
     errors: list[str],
-    *,
     minimum: int = 1,
 ) -> list[str]:
     items = _list(value, field, errors, minimum=minimum)

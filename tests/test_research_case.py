@@ -123,6 +123,48 @@ class ResearchCaseTests(unittest.TestCase):
         self.assertEqual(archives[0].stat().st_mtime_ns, before)
         self.assertFalse((self.project / "papers/P01/manuscript").exists())
 
+    def test_selected_preparation_checks_only_its_current_sources_and_obligations(self):
+        self.spec["contribution"] = {
+            "headline_claim": "A conditional mechanism in this software fixture.",
+            "counterclaim": "A physical baseline explains this fixture equally well.",
+            "claim_ids": ["C1"], "test_ids": [self.protocol["critical_tests"][0]["test_id"]],
+            "reader_benefits": [{"reader": role, "benefit": "Know the stated boundary."}
+                                for role in ("Researcher", "Operator", "Reviewer")],
+        }
+        self.save()
+        packet = case.build_packet(self.project, "P01", sections=["contribution"])
+        self.assertEqual(packet["missing_evidence"], [])
+        self.assertEqual(packet["status"], "ready_for_review")
+        self.assertFalse(packet["preparation_scope"]["full_case_preparation_verified"])
+        self.assertEqual(packet["preparation_scope"]["sections"], ["contribution"])
+        self.assertEqual({row["path"] for row in packet["sources"]}, {
+            "papers/P01/paper-contract.json", "papers/P01/research-case.json",
+            "papers/P01/experiment-evidence-plan.json",
+        })
+        self.assertEqual(case.build_packet(self.project, "P01")["status"], "preparation")
+        self.assertTrue(case.build_packet(self.project, "P01", sections=["venue_fit"])["missing_evidence"])
+        self.spec["positioning"] = [{"work_id": "W1", "shared": "Known feature", "difference": "Unknown",
+                                    "prediction": "Test required", "source": {
+                                        "path": "../escape", "sha256": "f" * 64,
+                                        "locator": "L1", "excerpt": "An unverified source."}}]
+        self.save()
+        self.assertEqual(case.build_packet(self.project, "P01", sections=["contribution"])["missing_evidence"], [])
+        self.assertTrue(any("project-relative" in issue for issue in
+                            case.build_packet(self.project, "P01")["missing_evidence"]))
+
+    def test_selected_scope_keeps_missing_and_forged_requested_evidence_visible(self):
+        self.assertTrue(case.build_packet(self.project, "P01", sections=["competition"])["missing_evidence"])
+        self.spec["figure_first"] = [{"role": "main_result", "phase": "observed", "claim_ids": ["C1"],
+            "comparison_ids": ["weak"], "source": {"path": "../escape", "sha256": "f" * 64,
+                                                   "locator": "L1", "excerpt": "An unverified source."}}]
+        self.save()
+        packet = case.build_packet(self.project, "P01", sections=["figure_first"])
+        self.assertEqual(packet["status"], "preparation")
+        self.assertTrue(any("project-relative" in issue for issue in packet["missing_evidence"]))
+        for sections in (["future_unknown_section"], [None], "contribution"):
+            with self.subTest(sections=sections), self.assertRaises(ValueError):
+                case.build_packet(self.project, "P01", sections=sections)
+
     def test_paper_identity_and_symlink_sources_cannot_cross_scope(self):
         self.spec["paper_id"] = "P02"
         self.save()

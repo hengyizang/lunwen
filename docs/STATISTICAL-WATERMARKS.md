@@ -2,9 +2,10 @@
 
 Unicode hygiene runs before and after writing. It removes supported character
 carriers; it cannot establish whether token choices contain a statistical
-watermark. This separate adapter runs after each existing G5 writer/remediator
-pass and is recomputed at G5 approval and packaging. No extra model call, paid
-detector, GPU, model switch or repeated rewrite loop is introduced.
+watermark. This separate adapter runs after the existing G5 submission-phase
+writer/remediator pass and can be rechecked through the existing C observations.
+It never supplies an A/B clearance or a scientific/package gate. No extra model
+call, paid detector, GPU, model switch or repeated rewrite loop is introduced.
 
 Without an applicable configuration the result is `unknown`. Unknown is visible
 coverage, never an absence certificate. The supported optional detector is the
@@ -40,7 +41,8 @@ cache, its hashes and applicability evidence before enabling a profile. No secre
 repository variable or scientific configuration is auto-created by this change.
 Local/other reviewed cloud runtimes may use a different `DR_OS_WATERMARK_KEY_*`
 name if explicitly forwarded there. Enabling the runtime without a profile still
-returns `unknown`; a configured profile with missing runtime/key blocks release.
+returns `unknown`. A configured profile with a missing runtime/key produces an
+unresolved detector observation; it does not block scientific G5 or packaging.
 
 The author cannot change the profile. The complete text is assessed without
 truncation, within 8192 tokens and 45 CPU seconds. Cached files must match their
@@ -49,11 +51,15 @@ are refused. The subprocess uses offline mode and has no GPU visibility. Keys
 and third-party exception messages are excluded from results and model context.
 
 Configured positive results, insufficient independent tokens, missing keys,
-missing dependencies and invalid caches block release. Supported safe character
-cleanup remains automatic. A statistical positive is sent to the existing
-evidence-preserving writer/remediator for a justified revision and a new scan;
-the system cannot claim deterministic statistical removal or add paid retries.
-Preserved originals, numeric/citation integrity and required disclosures remain.
+missing dependencies and invalid caches remain C observations. The report may
+list detector errors without establishing scientific invalidity or a release
+blocker. Supported safe character cleanup remains automatic. Actual manuscript
+numbers, citations, evidence and preserved originals retain their separate A
+checks. A detector signal may inform an optional, justified edit within the
+existing evidence-preserving writer pass; it must not force another paid
+revision/scan loop, a model change or deterministic statistical removal claim.
+Public AI-use statements remain optional and author-editable; internal
+assistance/provenance records stay truthful.
 `not_detected` means only that this detector, key, configuration, threshold and
 extracted text did not produce a positive result. It does not prove absence,
 human authorship or equivalence of scientific meaning.
@@ -65,8 +71,10 @@ a vendor's private watermark. Default/demo keys cannot substitute for that proof
 See the [official detector documentation](https://huggingface.co/docs/transformers/v4.57.1/en/internal/generation_utils#transformers.WatermarkDetector)
 and [official SynthID Text implementation](https://github.com/google-deepmind/synthid-text).
 
-Protected assessments live under `reports/statistical-watermarks/P01/`. Current
-source/provenance/config/cache/implementation hashes enter the recorded automated G5 decision.
+Protected assessments live under `reports/statistical-watermarks/P01/`. Their
+source/provenance/config/cache/implementation hashes identify the assessed
+snapshot and let the detector report detect stale inputs. They do not turn C
+observations into scientific approval or revoke an unchanged scientific decision.
 The separate cloud CPU regression creates a tiny tokenizer and known marked and
 unmarked token sequences using the actual library, without weights or provider
 calls. These are engineering fixtures, not calibration on a research manuscript

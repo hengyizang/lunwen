@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "observed_on": "2026-11-08",
+  "observed_on": "2026-11-09",
   "status": "partial_failed_not_calibrated",
   "source_commit": "f93ebe4fc159c052444cea87582bcef4f85b0a0e",
   "pull_request_url": "https://github.com/hengyizang/lunwen/pull/133",
@@ -209,15 +209,15 @@
   "budget": {
     "authorized_ceiling_cny": 500,
     "spent_before_cny": 0.24538256,
-    "spent_after_cny": 3.88897004,
+    "spent_after_cny": 3.9334088,
     "initial_control_blob_sha": "0f72612e3d7f3ac4abf775ab15af0356718fd115",
-    "observed_control_blob_sha": "8353f640bf9cfb5ee73e63014e9f7b55b3c76463",
+    "observed_control_blob_sha": "4bccc33d97502e556838d9b2345cb29c6517d84c",
     "original_three_reservations_unchanged": true,
     "new_spending_authority_granted": false,
     "existing_unknown_holds_cny": 10.0783494,
     "new_unreconciled_153_hold_cny": 0,
     "total_reserved_cny": 10.0783494,
-    "remaining_after_spent_and_reservations_cny": 486.03268056,
+    "remaining_after_spent_and_reservations_cny": 485.9882418,
     "new_unreconciled_159_hold_cny": 0,
     "new_unreconciled_163_hold_cny": 0,
     "retained_reservation_ids": [
@@ -228,9 +228,10 @@
     "all_new_failed_attempts_settled": true,
     "historical_unknown_reports_preserved": true,
     "independent_local_meter_artifact_and_original_reservation_object_recheck_passed": true,
-    "attempts_since_initial_spent_cny": 3.64358748,
+    "attempts_since_initial_spent_cny": 3.68802624,
     "default_seven_model_routes_efforts_and_policy_unchanged": true,
-    "original_three_owner_policy_overrides_unchanged": true
+    "original_three_owner_policy_overrides_unchanged": true,
+    "original_three_full_reservation_objects_rechecked_unchanged": true
   },
   "scientific_completion_verified": false,
   "numeric_score_calibration_verified": false,
@@ -496,18 +497,17 @@
     }
   ],
   "software_verification": {
-    "tests_run": 2451,
+    "tests_run": 2478,
     "skipped": 14,
     "failures": 0,
     "errors": 0,
-    "duration_seconds": 123.402,
+    "duration_seconds": 125.829,
     "failure_names": [],
     "error_names": [],
-    "production_snapshot_sha256": "6e629fd14412f4fff20ba8d82c3ff9139d896be9b57493c8c9e973cbf86f36a2",
-    "tested_production_parent": "a9f2d06892392612a1f0472986032f5eb24d0aad",
-    "independent_adversarial_recheck_passed": true,
+    "production_snapshot_sha256": "1ecc27cbf918c0990913a308622a512640fdf07505f9ab19f5465c7c4fd3ff11",
+    "tested_production_parent": "051dbe19cc6135fef97d26b07998f91a10eddf68",
     "verifies_scientific_completion": false,
-    "publication_status": "Current named-retirement production snapshot passed local full/static checks; exact follow-up publication CI and merge remain pending."
+    "publication_status": "Local combined full/static checks passed after repairing three prompt-length failures; exact publication CI/merge tracked by the delivery PR."
   },
   "next_explicit_capacity_comparison": {
     "executed": true,
@@ -940,7 +940,8 @@
       "A concrete owner-approved G1 topic and subsequent G2 decisions",
       "A working native writer and independent critic",
       "Actual experiments, long manuscript, human claim labels and scientific validation"
-    ]
+    ],
+    "derived_offline_public_review_predictions": 1
   },
   "candidate_data_access_validation": {
     "topic": "Unselected NIST LPBF candidate; owner subsequently prioritized robotics/autonomous control",
@@ -1151,5 +1152,175 @@
     "novelty_or_six_paper_independence_verified": false,
     "formal_independent_scientific_validation": false,
     "all_original_seven_preference_weights_unchanged": true
+  },
+  "completion_20261109": {
+    "scope": "Source/power/Word/packaging/cycle software fixes and bounded source-reading/model validation, not actual doctoral completion.",
+    "production_source_commit": "051dbe19cc6135fef97d26b07998f91a10eddf68",
+    "production_python": {
+      "files": 201,
+      "physical_lines": 70416,
+      "bytes": 4116282
+    },
+    "attachment_baseline_lines": 71743,
+    "net_production_lines_removed_against_attachment": 1327,
+    "turn_baseline_commit": "58ac45517b247258e2d96568826fbad5311218e1",
+    "turn_net_production_line_change": 41,
+    "tests_docs_moves_minification_counted_as_production_savings": false,
+    "same_policy_model_files_and_original_three_full_holds_rechecked": true,
+    "first_combined_full_regression": {
+      "tests_run": 2478,
+      "skipped": 14,
+      "failures": 3,
+      "errors": 0,
+      "cause": "Complete ARS criteria unconditionally inflated default compact prompts; original 25000-character limits retained."
+    },
+    "full_regression_after_fix": {
+      "tests_run": 2478,
+      "skipped": 14,
+      "failures": 0,
+      "errors": 0,
+      "duration_seconds": 125.829,
+      "failure_names": [],
+      "error_names": []
+    },
+    "old_checkpoint_scope": "Git 58ac v1 and Git 5d89663 v2 checkpoints tested; first authorized baseline grants no retry and retains original checkpoint/holds. Prior changes before an opaque checkpoint baseline cannot be retrospectively proven.",
+    "word_actual_fixture": {
+      "build_zip_reads_before_after": [
+        5,
+        2
+      ],
+      "record_zip_reads_before_after": [
+        6,
+        2
+      ],
+      "build_source_file_opens_before_after": [
+        16,
+        13
+      ],
+      "record_source_file_opens_before_after": [
+        16,
+        12
+      ],
+      "all_hashes_reduced_to_two": false,
+      "read_bytes_and_semantics_bound": true,
+      "zip_inventory_size_CRC_SHA_before_final_source_seal": true,
+      "same_UID_changes_after_return_prevented": false
+    },
+    "progressive_case_fixture": {
+      "G1_missing_before_after": [
+        7,
+        1
+      ],
+      "G2_missing_before_after": [
+        7,
+        0
+      ],
+      "G1_packet_bytes_before_after": [
+        1505,
+        674
+      ],
+      "G2_packet_bytes_before_after": [
+        2048,
+        1548
+      ],
+      "real_my_phd_has_case_file": false,
+      "real_my_phd_case_injection_before_after": [
+        0,
+        0
+      ],
+      "actual_user_time_reduction_verified": false
+    },
+    "schema_counts": {
+      "schemas": 68,
+      "recursive_list_required_fields": 2187,
+      "declarations_are_actual_user_form_size": false
+    },
+    "module_dispositions": {
+      "baseline_modules": 214,
+      "removed": 23,
+      "missing_original_65_row_list_recovered": false
+    },
+    "G5_scope": {
+      "per_paper_A": 6,
+      "C": 11,
+      "whole_G5_only_five_to_seven": false,
+      "global_and_final_B_duties_retained": true
+    },
+    "merged_batching_PR": {
+      "url": "https://github.com/hengyizang/lunwen/pull/176",
+      "head": "9d7a521cea64e5505f8ee79f3391e9c7e242fb17",
+      "merge": "3ac577b02ae0bc35878bdc00f0f80fb67d7c69d7",
+      "tree": "8f45449d450785d33acb208f7e10986a5e5be953",
+      "workflows": 4,
+      "successful_checks": 17,
+      "conditional_skips": 3,
+      "initial_source_404_preserved": true,
+      "failed_free_source_job_rerun_passed": true,
+      "default_eight_prompts_unchanged": true,
+      "complete_24_case_16_8_population_preserved": true
+    },
+    "native_single_case_trial": {
+      "issue_url": "https://github.com/hengyizang/lunwen/issues/177",
+      "run_url": "https://github.com/hengyizang/lunwen/actions/runs/42609913210",
+      "source_commit": "3ac577b02ae0bc35878bdc00f0f80fb67d7c69d7",
+      "manifest_sha256": "8f3f5a8468f73f6305905029d56a3d18b34d3d04f7a093b4391b589c14bec6b6",
+      "original_report_blob_sha": "2cf41b2c4072abeebca5f1f58fe41f0ac7055430",
+      "original_report_status": "partial_failed_no_retry",
+      "original_native_predictions": 0,
+      "original_report_unchanged": true,
+      "requested_and_reported_model": "claude-opus-5-5",
+      "requested_effort": "high",
+      "effort_independently_attested": false,
+      "max_output_tokens": 12000,
+      "calls_attempted": 1,
+      "HTTP_status": 200,
+      "wire_bytes": 10128,
+      "source_scientific_text_bytes": 73575,
+      "prompt_bytes": 75225,
+      "prompt_sha256": "ccdd64adad0e84068d729eb5ee9ae4d709cc09bb0f1282563710c43b74c4885a",
+      "case_id": "elife-110315",
+      "case_sha256": "3aeffa3bad80becfc837631f44aa6ae2f968aa16022b471659350edb1dae4592",
+      "response_artifact_id": 13670335769,
+      "artifact_sha256": "5a81877d400a792864f278cda7e8d2ee88d0baf60cebae943d34df020f4c2ea4",
+      "retained_ModelResult_sha256": "109597b57a0bb7cb8237bcd3b46339f14586770d103e06eacee58352018fe720",
+      "derived_offline_predictions": 1,
+      "derived_prediction": "incomplete",
+      "public_label": "solid",
+      "partition": "calibration",
+      "observed_subset_agreement": 0.0,
+      "full_training_agreement": null,
+      "full_holdout_agreement": null,
+      "calibration_status": "NOT_CALIBRATED",
+      "offline_revalidation_is_native_rerun": false,
+      "parser_fix_extra_model_calls": 0,
+      "parser_fix_extra_fee_cny": 0,
+      "independently_verified_original_fee_cny": 0.04443876,
+      "figures_and_linked_media_visually_assessed": false,
+      "human_claim_agreement": null,
+      "scientific_completion_verified": false
+    },
+    "robotics_source_followup": {
+      "report_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-20261108.md",
+      "report_commit": "680f8a0e38bc5067277f13e699963bf49ab1be25",
+      "report_blob_sha": "f4085aa4ac825c40f127598ce97fb9c25c8f82f4",
+      "sources_path": "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-sources-20261108.json",
+      "sources_commit": "0b990af948db3fb4d473655207fafeb779998d74",
+      "sources_blob_sha": "793377ca6fb8e040793c61fcd8650e6a4faac806",
+      "nearest_papers": 8,
+      "native_complete_papers_or_reports": 5,
+      "OCR_only": 1,
+      "abstract_only": 2,
+      "adjacent_literature_scopes": 3,
+      "generic_novelty_assertions_withdrawn": true,
+      "conditional_R1_trial_prepared": true,
+      "author_RME_repo_commit": "a2fe683ccc7a921692949445f867a73938933d89",
+      "author_checkpoint_downloaded_or_executed": false,
+      "actual_scientific_experiments": 0,
+      "six_independent_papers_verified": false,
+      "formal_G1_or_G2_approval": false
+    },
+    "project_state_blob_unchanged": "0048390f14864d6aec68c34f20144bc66e9776f6",
+    "scientific_completion_verified": false,
+    "all_156_requirements_fulfilled": false
   }
 }

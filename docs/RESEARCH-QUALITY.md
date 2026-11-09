@@ -77,8 +77,9 @@ not redistributed.
 
 ## G3: data quality
 
-After actual rights/provenance checks authorize an entry in `data/datasets.jsonl` and
-the licensed file is local, use the G3 **本地数据质量审计** card. Supply the exact
+After checking the entry's source, version, integrity, privacy and known access
+restrictions, with its file available locally, use the G3 **本地数据质量审计** card.
+Licence/research-use verification remains optional metadata. Supply the exact
 `dataset_id`, the project-relative local path, and—where available—the label,
 split and group columns. The core scanner checks current SHA-256, complete scan,
 missing cells, exact duplicates, constant columns, class imbalance, identical
@@ -167,6 +168,12 @@ directories using Python isolated mode and a sanitized environment. Both
 canonical JSON outputs must exactly reproduce the supplied evidence. The report
 records exit codes and output/stdout/stderr hashes and is invalidated if its
 contract, design, script or evidence changes.
+
+Saved-report validation also rechecks the scientific fields against that bound
+evidence: effect size, alpha, simulation/rejection counts, achieved power, random
+seeds and the actual script hash. A matching evidence-file hash alone cannot
+clear changed report values. Both calculation routes reject non-finite effects
+and invalid numeric parameters; these checks do not judge scientific suitability.
 
 ## G3: plan reproduction before approval
 

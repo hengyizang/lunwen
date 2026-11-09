@@ -25,6 +25,13 @@ from scripts.journal_dossier import FIT_FIELDS as VENUE_FIELDS
 
 FIGURE_ROLES = {"main_result", "strongest_baseline", "negative_boundary"}
 KINDS = {"case", "preprint", "rebuttal", "retarget", "reproduction"}
+SECTION_INPUTS = {
+    "contribution": {"contract", "protocol"}, "pre_mortem": {"protocol"},
+    "critical_tests": {"protocol"}, "competition": set(), "figure_first": {"contract", "protocol"},
+    "claim_rows": {"claims"}, "thesis_synthesis": {"mapping"}, "cumulative_results": {"mapping"},
+    "variants": {"contract"}, "positioning": set(), "venue_fit": set(), "cover_letter": set(),
+    "rebuttal": set(),
+}
 
 
 def _paper(paper_id):
@@ -149,35 +156,36 @@ def competition(project, spec, *, today=None):
             "decision": spec.get("decision", "unknown"), "decision_reason": spec.get("decision_reason", "unknown")}
 
 
-def _case_findings(project, case, contract, protocol):
+def _case_findings(project, case, contract, protocol, sections=None):
     """Identify useful work, not a second administrative pass/fail checklist."""
     missing = []
     claims = set(contract.get("independence", {}).get("unique_claim_ids", []))
     tests = {t["test_id"] for t in protocol.get("critical_tests", [])}
     contribution = case.get("contribution", {})
-    for name in ("headline_claim", "counterclaim"):
-        if not _nonempty(contribution.get(name)):
-            missing.append("contribution." + name)
-    if _nonempty(contribution.get("headline_claim")) and str(contribution.get("counterclaim", "")).strip().casefold() == contribution["headline_claim"].strip().casefold():
-        missing.append("counterclaim must state a distinguishable alternative to the headline")
-    if not _ids(contribution.get("claim_ids"), claims):
-        missing.append("contribution.claim_ids must use this paper's contracted claims")
-    if not _ids(contribution.get("test_ids"), tests):
-        missing.append("contribution.test_ids must name actual discriminating tests")
-    readers = contribution.get("reader_benefits", [])
-    if (len(readers) != 3 or any(not isinstance(r, dict) or not _nonempty(r.get("reader"))
-                               or not _nonempty(r.get("benefit")) for r in readers)
-            or len({" ".join(r["reader"].split()).casefold() for r in readers if isinstance(r, dict)}) != 3):
-        missing.append("contribution.reader_benefits needs three distinct readers and their benefit")
-    premortem = case.get("pre_mortem", [])
-    if not premortem:
+    if sections is None or "contribution" in sections:
+        for name in ("headline_claim", "counterclaim"):
+            if not _nonempty(contribution.get(name)):
+                missing.append("contribution." + name)
+        if _nonempty(contribution.get("headline_claim")) and str(contribution.get("counterclaim", "")).strip().casefold() == contribution["headline_claim"].strip().casefold():
+            missing.append("counterclaim must state a distinguishable alternative to the headline")
+        if not _ids(contribution.get("claim_ids"), claims):
+            missing.append("contribution.claim_ids must use this paper's contracted claims")
+        if not _ids(contribution.get("test_ids"), tests):
+            missing.append("contribution.test_ids must name actual discriminating tests")
+        readers = contribution.get("reader_benefits", [])
+        if (len(readers) != 3 or any(not isinstance(r, dict) or not _nonempty(r.get("reader"))
+                                   or not _nonempty(r.get("benefit")) for r in readers)
+                or len({" ".join(r["reader"].split()).casefold() for r in readers if isinstance(r, dict)}) != 3):
+            missing.append("contribution.reader_benefits needs three distinct readers and their benefit")
+    premortem = case.get("pre_mortem", []) if sections is None or "pre_mortem" in sections else []
+    if not premortem and (sections is None or "pre_mortem" in sections):
         missing.append("pre_mortem: strongest rejection argument before G3 freezing")
     for row in premortem:
         if not all(_nonempty(row.get(k)) for k in ("id", "rejection_reason", "response", "decision")) or not _ids(row.get("test_ids"), tests):
             missing.append("pre_mortem needs a rejection reason and response linked to existing test IDs")
-    figures = case.get("figure_first", [])
+    figures = case.get("figure_first", []) if sections is None or "figure_first" in sections else []
     comparisons = {c["comparison_id"]: c for c in protocol.get("comparisons", [])}
-    if {f.get("role") for f in figures} != FIGURE_ROLES:
+    if (sections is None or "figure_first" in sections) and {f.get("role") for f in figures} != FIGURE_ROLES:
         missing.append("figure_first needs main_result, strongest_baseline and negative_boundary plans")
     for figure in figures:
         if not _ids(figure.get("claim_ids"), claims) or not _ids(figure.get("comparison_ids"), set(comparisons)):
@@ -191,18 +199,18 @@ def _case_findings(project, case, contract, protocol):
                 _observed_figure(project, case["paper_id"], figure)
             except (ValueError, OSError, KeyError, TypeError) as exc:
                 missing.append("observed figure: " + str(exc))
-    variants = case.get("variants", [])
+    variants = case.get("variants", []) if sections is None or "variants" in sections else []
     identifiers = [row.get("id") for row in variants]
-    if len(set(identifiers)) != len(identifiers) or case.get("selected_variant") not in identifiers:
+    if (sections is None or "variants" in sections) and (len(set(identifiers)) != len(identifiers) or case.get("selected_variant") not in identifiers):
         missing.append("select a unique retained title/abstract variant")
     for row in variants:
         if not all(_nonempty(row.get(k)) for k in ("id", "title", "abstract", "reason")) or not row.get("keywords") or not _ids(row.get("claim_ids"), claims):
             missing.append("each title/abstract variant needs keywords, reason and contracted claim IDs")
-    for row in case.get("positioning", []):
+    for row in case.get("positioning", []) if sections is None or "positioning" in sections else []:
         if not all(_nonempty(row.get(k)) for k in ("work_id", "shared", "difference", "prediction")) or not row.get("source"):
             missing.append("related-work positioning needs located shared elements, differences and discriminating predictions")
     venue = case.get("venue_fit", {})
-    for field in VENUE_FIELDS:
+    for field in VENUE_FIELDS if sections is None or "venue_fit" in sections else ():
         item = venue.get(field, {})
         if not _nonempty(item.get("statement")) or not item.get("source"):
             missing.append("venue_fit." + field + " remains unknown without current official evidence")
@@ -220,13 +228,17 @@ def _case_findings(project, case, contract, protocol):
         elif isinstance(value, list):
             for item in value:
                 anchors(item)
-    anchors(case)
+    anchors(case if sections is None else {key: value for key, value in case.items() if key in sections})
     return list(dict.fromkeys(missing))
 
 
 @paper_scoped
 def build_packet(project: Path, paper_id: str, *, today=None, sections=None):
     prefix = _paper(paper_id)
+    if sections is not None and (not isinstance(sections, list)
+            or not all(isinstance(section, str) and section in SECTION_INPUTS for section in sections)):
+        raise ValueError("packet sections must name existing scientific sections")
+    needed = set().union(*(SECTION_INPUTS[section] for section in sections)) if sections is not None else {"contract", "protocol", "mapping", "claims"}
     sources, absent = [], []
     def load(relative):
         target = path_in(project, relative, exists=False)
@@ -235,26 +247,30 @@ def build_packet(project: Path, paper_id: str, *, today=None, sections=None):
             return {}
         sources.append({"path": relative, "sha256": sha(target)})
         return read(target)
-    contract = load(prefix + "/paper-contract.json")
+    contract = load(prefix + "/paper-contract.json") if "contract" in needed else {}
     case = load(prefix + "/research-case.json")
     if case and (case.get("schema_version") != "1.0" or case.get("paper_id") != paper_id):
         raise ValueError("research case identity differs from the selected paper")
     if case:
         import jsonschema
         try:
-            jsonschema.validate(case, read(Path(__file__).resolve().parents[1] / "schemas/research-case.schema.json"))
+            selected_case = case if sections is None else {
+                key: value for key, value in case.items()
+                if key in set(sections) | {"schema_version", "paper_id"} | ({"selected_variant"} if "variants" in sections else set())
+            }
+            jsonschema.validate(selected_case, read(Path(__file__).resolve().parents[1] / "schemas/research-case.schema.json"))
         except jsonschema.ValidationError as exc:
             raise ValueError("invalid progressive research case: " + exc.message) from exc
-    protocol = load(prefix + "/experiment-evidence-plan.json")
-    mapping = load("program/paper-map.json")
+    protocol = load(prefix + "/experiment-evidence-plan.json") if "protocol" in needed else {}
+    mapping = load("program/paper-map.json") if "mapping" in needed else {}
     matrix = artifact_path(project, "claims/claim-evidence.csv", paper_id)
     claims = []
-    if matrix.is_file():
+    if "claims" in needed and matrix.is_file():
         sources.append({"path": matrix.relative_to(project).as_posix(), "sha256": sha(matrix)})
         claims = [row for row in csv.DictReader(io.StringIO(matrix.read_text())) if row.get("paper_id") == paper_id]
-    findings = absent + _case_findings(project, case, contract, protocol)
+    findings = absent + _case_findings(project, case, contract, protocol, sections)
     crowding = {"status": "unknown", "reason": "No compared retrieved cohort supplied."}
-    if case.get("competition"):
+    if case.get("competition") and (sections is None or "competition" in sections):
         try:
             crowding = competition(project, case["competition"], today=today)
         except (ValueError, OSError, KeyError, TypeError) as exc:
@@ -262,7 +278,7 @@ def build_packet(project: Path, paper_id: str, *, today=None, sections=None):
     # A table with every paper, including papers not executed yet, is a useful
     # synthesis input. It never turns a proposed common mechanism into a result.
     cumulative = []
-    for paper in mapping.get("papers", []):
+    for paper in mapping.get("papers", []) if sections is None or "cumulative_results" in sections else []:
         pid = paper["paper_id"]
         source = artifact_path(project, "claims/claim-evidence.csv", pid)
         rows = [r for r in csv.DictReader(io.StringIO(source.read_text())) if r.get("paper_id") == pid] if source.is_file() else []
@@ -284,10 +300,14 @@ def build_packet(project: Path, paper_id: str, *, today=None, sections=None):
             "limits": {"scientific_validity_verified": False, "acceptance_probability": None,
                        "paid_model_calls": 0, "execution_authorized": False, "external_publication": False}}
     if sections is not None:
-        allowed = set(result) - {"case", "schema_version", "paper_id", "status", "sources", "missing_evidence", "limits"}
-        if not isinstance(sections, list) or not all(isinstance(s, str) and s in allowed for s in sections):
-            raise ValueError("packet sections must name existing scientific sections")
-        result = {k: v for k, v in result.items() if k in set(sections) | {"schema_version", "paper_id", "status", "sources", "missing_evidence", "limits"}}
+        for section in sections:
+            if not result[section] or (section == "competition" and result[section].get("status") == "unknown"):
+                findings.append(section + " remains unknown in the selected preparation scope")
+        result["missing_evidence"] = list(dict.fromkeys(findings))
+        result["status"] = "preparation" if findings else "ready_for_review"
+        result = {key: value for key, value in result.items()
+                  if key in set(sections) | {"schema_version", "paper_id", "status", "sources", "missing_evidence", "limits"}}
+        result["preparation_scope"] = {"sections": list(dict.fromkeys(sections)), "full_case_preparation_verified": False}
     return result
 
 

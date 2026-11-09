@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import copy
 import csv
+import hashlib
+import io
 import json
-import shutil
 import zipfile
 from collections import Counter
 from difflib import SequenceMatcher
@@ -324,7 +325,7 @@ def track(base: dict[str, bytes], clean: dict[str, bytes], author: str, date: st
 
 
 def build(project: Path, paper_id: str) -> dict:
-    from scripts.revision_integrity import audit as integrity_audit
+    from scripts.revision_integrity import audit as integrity_audit, verify_word_sources
     from scripts.revision_trace import validate_saved_report as trace_errors
     if not __import__("re").fullmatch(r"P[0-9]{2}", paper_id):
         raise ValueError("invalid paper ID")
@@ -332,28 +333,35 @@ def build(project: Path, paper_id: str) -> dict:
     current = path_in(project, f"papers/{paper_id}/manuscript/main.docx")
     baseline = path_in(project, f"papers/{paper_id}/reviews/revision-base/main.docx")
     matrix = path_in(project, f"papers/{paper_id}/reviews/response-matrix.csv")
-    errors = integrity_audit(paper)["errors"] + trace_errors(paper)
+    matrix_payload = matrix.read_bytes()
+    inputs = [{"path": p.relative_to(project).as_posix(), "sha256": sha(p)} for p in (baseline, current)]
+    inputs.append({"path": matrix.relative_to(project).as_posix(), "sha256": hashlib.sha256(matrix_payload).hexdigest()})
+    documents = {}
+    errors = integrity_audit(paper, _documents=documents)["errors"] + trace_errors(paper, _documents=documents, _matrix_payload=matrix_payload)
     if errors:
         raise ValueError("revision controls must pass before building the Word package: " + "; ".join(errors))
     date = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-    baseline_parts, clean_parts = package(baseline), package(current)
+    baseline_parts, clean_parts = (documents[path.resolve()].parts for path in (baseline, current))
     tracked_xml = track(baseline_parts, clean_parts, "Doctoral Research OS", date)
+    verify_files(project, inputs, changed_error="Word inputs changed during revision packaging")
+    verify_word_sources(documents)
     output = paper / "submission-materials/revision"
     output.mkdir(parents=True, exist_ok=True)
     clean, tracked = output / "clean.docx", output / "tracked.docx"
-    shutil.copyfile(current, clean)
+    clean.write_bytes(documents[current.resolve()].payload)
     with zipfile.ZipFile(tracked, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for name, payload in sorted(clean_parts.items()):
             archive.writestr(name, tracked_xml if name == DOCUMENT else payload)
     response_copy = output / "response-matrix.csv"
-    shutil.copyfile(matrix, response_copy)
+    response_copy.write_bytes(matrix_payload)
     notes = output / "changes.md"
-    with matrix.open(newline="", encoding="utf-8") as handle:
+    with io.StringIO(matrix_payload.decode("utf-8"), newline="") as handle:
         responses = list(csv.DictReader(handle))
     notes.write_text("# Revision package\n\nReal OOXML insertions and deletions. Accept = clean; reject = baseline.\n"
                      "Visual inspection in Word remains required. Response dispositions are preserved below.\n\n"
                      + "\n".join("- " + json.dumps(row, ensure_ascii=False, sort_keys=True) for row in responses) + "\n", encoding="utf-8")
-    inputs = [{"path": str(p.relative_to(project).as_posix()), "sha256": sha(p)} for p in (baseline, current, matrix)]
+    verify_files(project, inputs, changed_error="Word inputs changed during revision packaging")
+    verify_word_sources(documents)
     outputs = [{"path": str(p.relative_to(project).as_posix()), "sha256": sha(p)} for p in (clean, tracked, response_copy, notes)]
     result = {"schema_version": "1.0", "status": "pass", "inputs": inputs, "outputs": outputs,
               "created_at": date, "revision_author": "Doctoral Research OS", "accept_equals_clean": True,
@@ -365,7 +373,7 @@ def build(project: Path, paper_id: str) -> dict:
     return result
 
 
-def validate_saved_report(project: Path, paper_id: str) -> list[str]:
+def validate_saved_report(project: Path, paper_id: str, *, _documents=None) -> list[str]:
     paper = project / "papers" / paper_id
     report = paper / "reviews/docx-revision.json"
     if not report.is_file():
@@ -375,8 +383,9 @@ def validate_saved_report(project: Path, paper_id: str) -> list[str]:
         if saved.get("status") != "pass" or saved.get("schema_version") != "1.0":
             raise ValueError("Word revision manifest must pass")
         verify_files(project, saved["inputs"] + saved["outputs"], changed_error="Word revision, clean manuscript or response matrix changed after packaging")
-        base, clean = (package(path_in(project, saved["inputs"][i]["path"])) for i in (0, 1))
-        tracked = package(path_in(project, saved["outputs"][1]["path"]))
+        from scripts.revision_integrity import word_source
+        base, clean = (word_source(path_in(project, saved["inputs"][i]["path"]), _documents, complete=True).parts for i in (0, 1))
+        tracked = word_source(path_in(project, saved["outputs"][1]["path"]), _documents, complete=True).parts
         if set(clean) != set(tracked) or any(clean[k] != tracked[k] for k in clean if k != DOCUMENT):
             raise ValueError("tracked Word resources differ from the clean manuscript")
         root = document_xml(tracked[DOCUMENT])

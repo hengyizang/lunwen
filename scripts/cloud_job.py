@@ -581,8 +581,16 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                 detail = "Recorded the inspected repair; the next job rechecks budget, configuration and all gates.\n\n"
                 cmd = None
             elif action in {"cycle", "continuation"}:
+                validate_request(job)
+                from scripts.cloud_progress import saved_progress
+                if action == "cycle":
+                    saved_progress(ROOT / "projects" / slug, record_baseline=True)
                 if action == "continuation":
                     continuation_decision = cloud_continuation.evaluate(slug)
+                    if continuation_decision.get("actor") == job["actor"]:
+                        progress = saved_progress(ROOT / "projects" / slug, record_baseline=True)
+                        if progress.get("input_comparison"):
+                            continuation_decision = cloud_continuation.evaluate(slug)
                     quality_waits = {"current_stage_work_allowed", "external_input_required", "cumulative_budget_boundary",
                                      "configuration_pending"}
                     if (continuation_decision.get("reason") in quality_waits and continuation_decision.get("actor") == job["actor"]

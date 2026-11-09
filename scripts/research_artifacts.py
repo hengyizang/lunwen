@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import tempfile
@@ -99,7 +100,12 @@ def read(path: Path) -> dict:
     return value
 
 
-def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = None, error_type=ValueError):
+def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = None, error_type=ValueError,
+                allow_fence=False):
+    if allow_fence and isinstance(value, str):
+        fenced = re.fullmatch(r"\s*```(?:json)?[ \t]*\r?\n(.*)\r?\n```\s*", value, flags=re.S)
+        if fenced:
+            value = fenced[1]
     def unique(pairs):
         result = dict(pairs)
         if len(result) != len(pairs):
@@ -107,8 +113,13 @@ def strict_json(value, *, duplicate_error: str, nonfinite_error: str | None = No
         return result
     def nonfinite(_):
         raise error_type(nonfinite_error)
+    def finite_float(token):
+        number = float(token)
+        if not math.isfinite(number):
+            raise error_type(nonfinite_error)
+        return number
     return json.loads(value, object_pairs_hook=unique,
-                      **({"parse_constant": nonfinite} if nonfinite_error is not None else {}))
+                      **({"parse_constant": nonfinite, "parse_float": finite_float} if nonfinite_error is not None else {}))
 
 
 def json_field_spans(text: str) -> dict[str, tuple[int, int]]:
