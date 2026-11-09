@@ -384,7 +384,7 @@
     },
     {
       "id": "R27",
-      "requirement": "CNY 300 cumulative boundaries, one POST per reservation and durable pre-call budget checkpoint",
+      "requirement": "Configured cumulative project total, one POST per reservation and durable pre-call budget checkpoint",
       "implementation": "implemented",
       "acceptance": "credentials-required",
       "evidence": [
@@ -393,7 +393,7 @@
       "tests": [
         "tests/test_cloud_readiness_boundaries.py"
       ],
-      "remaining": "Actual gateway acceptance is blocked on configured credentials/rates; ambiguous charges require reconciliation rather than retry."
+      "remaining": "Keep the actual configured cumulative project total: current my-phd is CNY500 by the recorded owner amendment, not the older CNY300 intake. No per-paper/per-call approval, new tranche, silent increase or discarded unknown hold; a reservation is a conservative accounting upper bound. Exact transport/billing receipts retain every attempt."
     },
     {
       "id": "R28",
@@ -784,7 +784,7 @@
         "tests/test_judgment_support.py",
         "tests/test_public_review_anchors.py"
       ],
-      "remaining": "冻结24篇16/8人口保持；#177只调用首篇Opus/high一次，HTTP200完整最终正文却因外层JSON fence被旧parser拒绝，原生回执仍失败/0预测。新parser离线重验同一不可变正文得1条incomplete，公开标签solid，观测一致0/1；完整训练/留出一致率null，NOT_CALIBRATED。仅接受完整单一JSON/fence，拒重复键、NaN与1e999、前后prose/第二对象；未改标签/原响应/原失败报告，修复格式新增调用和费用0。真实人工15%及>=.85、合并反例和数值评分校准仍无验收。 #177实际费用0.04443876元，累计3.9334088元，原三笔hold与500元总额保持；CheapAI暂不处理，默认模型/effort不变。机器人优先偏好不等于G1/G2决定，真实论文与人工标签仍缺。",
+      "remaining": "冻结24篇、16/8及默认模型/effort不变。#177原生0预测，保存的完整fence正文离线得1条incomplete而公开标签solid（0/1）；原失败不改。#181完整语料计划原生9次、保守上界13.8189996元，实际首批一次HTTP200/5089B完整响应、stop_reason=refusal，仅thinking类型无最终正文，0预测，余8次未发，不自动重试。实际独立核费0.07318494元，累计4.00659374元，原三笔hold完整对象10.0783494元与500元总额保持。不是输出耗尽或fence解析失败；不读取thinking推测原因，完整训练/留出指标null、NOT_CALIBRATED。真实人工15%/≥.85、三家族/数值评分及领域效果仍未完成。",
       "source_sections": [
         "compendium: real semantic calibration and reviewed-paper anchors"
       ]
