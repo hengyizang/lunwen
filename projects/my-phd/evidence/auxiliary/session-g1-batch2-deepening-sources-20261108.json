@@ -2186,5 +2186,773 @@
       },
       "further_nist_retries_planned": false
     }
+  },
+  "robotics_followup_20261109": {
+    "schema_version": "robotics-source-followup-draft-1.0",
+    "prepared_at_utc": "2026-11-09T11:14:56.092115+00:00",
+    "scope": "Append to existing batch2 deepening candidate/source records, not a new production report system or native scientific-review receipt.",
+    "base_report_sha256": "187e5e1cad69261c26392721b2e07aebb049f55483d08977491af18a8f31e020",
+    "base_source_notes_sha256": "1a69f31b52527a7f47efde10246dc2933ebf99812b323ebcd895695326d40b43",
+    "append_report_file": ".runtime/nov9-robotics-case/report-update.md",
+    "append_report_sha256": "e8c9850d61d4d695b3d4f5f5c085bae1fed44a1c68ea263b6d4d9dd9cd6b5b66",
+    "provenance": {
+      "persistent_author_family": "openai",
+      "current_session_exact_API_model": null,
+      "native_model_runtime_receipt": null,
+      "app_session_cost_cny": null,
+      "independent_scientific_judgment": false,
+      "human_topic_decision": false
+    },
+    "owner_constraints": {
+      "cloud_intake_git_blob": "0f69871603adcabb6513b7546a9eab794fc75875",
+      "ranking_weights": {
+        "funded_position_supply": 0.25,
+        "job_market_and_salary": 0.25,
+        "future_growth_potential": 0.15,
+        "phd_position_competition": 0.075,
+        "job_market_competition": 0.075,
+        "background_fit": 0.1,
+        "application_route_fit": 0.1
+      },
+      "ranking_weights_changed": false,
+      "execution_mode": "cloud_only",
+      "cloud_compute_budget_usd": 0,
+      "model_api_budget_cny": 500,
+      "research_lab_or_owned_GPU_assumed": false,
+      "historical_intake_permission_gate_text_treated_as_current": false,
+      "current_three_owner_policy_changes_preserved": true,
+      "funding_salary_competition_or_admission_eligibility_scores_invented": false
+    },
+    "reading_counts": {
+      "new_complete_native_scientific_papers": 2,
+      "prior_complete_technical_reports_re_read": 1,
+      "closest_matrix_entries": 8,
+      "closest_native_main_bodies_or_technical_reports_across_retained_and_current_reading": 5,
+      "closest_OCR_based_entries_with_unverified_math": 1,
+      "closest_abstract_only_entries": 2,
+      "adjacent_literatures": 3,
+      "adjacent_new_abstract_only_entries": 1,
+      "new_code_or_readme_files_fully_read": 3,
+      "independent_proofs_or_empirical_reproductions": 0
+    },
+    "sources": [
+      {
+        "id": "R1-payload",
+        "url": "https://arxiv.org/pdf/2409.03369v1",
+        "final_url": "https://arxiv.org/pdf/2409.03369v1",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "observed_at_utc": "2026-11-09T10:57:51.864674+00:00",
+        "pdf_bytes": 2731944,
+        "pdf_sha256": "e0e6f732d24d8a1a5a527ac8cff4f05aa1a4a86f5c2018bf8f7c148910cb2740",
+        "text_bytes": 93400,
+        "text_sha256": "4a68e8362adcbe63de1f9c65087f90dcca4d3521a7f54b2c946ce20fabee3327",
+        "text_lines": 877,
+        "pdfinfo": {
+          "Title": "",
+          "Subject": "",
+          "Keywords": "",
+          "Author": "",
+          "Creator": "LaTeX with hyperref",
+          "Producer": "pdfTeX-1.40.25",
+          "CreationDate": "Fri Sep  6 00:30:50 2024 UTC",
+          "ModDate": "Fri Sep  6 00:30:50 2024 UTC",
+          "Custom Metadata": "yes",
+          "Metadata Stream": "no",
+          "Tagged": "no",
+          "UserProperties": "no",
+          "Suspects": "no",
+          "Form": "none",
+          "JavaScript": "no",
+          "Pages": "8",
+          "Encrypted": "no",
+          "Page size": "612 x 792 pts (letter)",
+          "Page rot": "0",
+          "File size": "2731944 bytes",
+          "Optimized": "no",
+          "PDF version": "1.5"
+        },
+        "pdf_local": ".runtime/nov9-robotics-case/R1-payload.pdf",
+        "text_local": ".runtime/nov9-robotics-case/R1-payload.txt",
+        "title": "Fast Payload Calibration for Sensorless Contact Estimation Using Model Pre-training",
+        "canonical_url": "https://arxiv.org/abs/2409.03369v1",
+        "read_level": "complete native scientific main body",
+        "actual_read_scope": "All eight pages, native extraction lines1–877, §§I–VII and references, including methods, training-data requirements, applications and limits. Tables and formulas read but not independently validated; video not inspected.",
+        "source_claim_limit": "Short online calibration follows extensive offline robot data/model learning; it is not evidence of an equally cheap full reproduction.",
+        "independent_scientific_validation": false,
+        "scientific_reproduction_executed": false,
+        "durable_external_archive_claimed": false
+      },
+      {
+        "id": "R1-rme",
+        "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/jaszczuk25a/jaszczuk25a.pdf",
+        "final_url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/jaszczuk25a/jaszczuk25a.pdf",
+        "http_status": 200,
+        "content_type": "application/octet-stream",
+        "observed_at_utc": "2026-11-09T10:57:56.503696+00:00",
+        "pdf_bytes": 44040179,
+        "pdf_sha256": "c749929493bd20875ba1f47c2889efdd24c3393a5c4d7d7537423de7576b57ca",
+        "text_bytes": 80687,
+        "text_sha256": "db3087ff1368bcfc61d53785f9477e124cadc7c4b786525f3e2583b36ad1cd78",
+        "text_lines": 1127,
+        "pdfinfo": {
+          "Title": "",
+          "Subject": "Proceedings of the 9th Conference on Robot Learning (CoRL 2025)",
+          "Keywords": "Passive Impedance Control, Learning Residual Inverse Dynamics, Model Mismatch Estimation",
+          "Author": "Anonymous Submission",
+          "Creator": "LaTeX with hyperref",
+          "Producer": "pdfTeX-1.40.26",
+          "CreationDate": "Thu Aug 28 03:42:07 2025 UTC",
+          "ModDate": "Thu Aug 28 03:42:07 2025 UTC",
+          "Custom Metadata": "yes",
+          "Metadata Stream": "no",
+          "Tagged": "no",
+          "UserProperties": "no",
+          "Suspects": "no",
+          "Form": "none",
+          "JavaScript": "no",
+          "Pages": "22",
+          "Encrypted": "no",
+          "Page size": "612 x 792 pts (letter)",
+          "Page rot": "0",
+          "File size": "44040179 bytes",
+          "Optimized": "yes",
+          "PDF version": "1.5"
+        },
+        "pdf_local": ".runtime/nov9-robotics-case/R1-rme.pdf",
+        "text_local": ".runtime/nov9-robotics-case/R1-rme.txt",
+        "title": "Rapid Mismatch Estimation via Neural Network Informed Variational Inference",
+        "canonical_url": "https://proceedings.mlr.press/v305/jaszczuk25a.html",
+        "read_level": "complete native scientific main and appendices read",
+        "actual_read_scope": "All22 pages through native extraction lines1–1127. Main §§1–7, AppendixA activation, B compensation, C–G evaluation/training and H proof read; no independent algebra/proof/table/pixel or empirical verification.",
+        "source_claim_limit": "Already includes a mismatch-activation gate; selected interactions remain ambiguous according to its own limitations. Author CPU timing is not current-runner timing.",
+        "independent_scientific_validation": false,
+        "scientific_reproduction_executed": false,
+        "durable_external_archive_claimed": false
+      },
+      {
+        "id": "RS-CAL",
+        "title": "Automated Continuous Force-Torque Sensor Bias Estimation",
+        "url": "https://arxiv.org/abs/2403.01068v1",
+        "pdf_url": "https://arxiv.org/pdf/2403.01068v1",
+        "access_date_utc": "2026-11-08",
+        "pdf_pages": 7,
+        "raw_pdf_bytes": 431629,
+        "raw_pdf_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+        "extracted_text_sha256": "4a2c1bc1f81db1506840871ef8037472d8fcdd4f5f70f9182d670d04ac19ac7d",
+        "read_level": "entire prior native technical report re-read",
+        "actual_read_scope": "All seven pages re-read as extraction lines1–220 and221–438, especially known-inertial-parameter assumption and bias measurement model Eqs31–55. Not an empirical study or independent proof verification.",
+        "full_main_read": true,
+        "independent_proof_or_empirical_verification": false,
+        "local_pdf": "/tmp/lunwen-robot-initial-screen/R1-bias.pdf",
+        "local_extraction": "/tmp/lunwen-robot-initial-screen/R1-bias.txt",
+        "raw_documents_durably_archived": false
+      },
+      {
+        "id": "C3",
+        "stem": "contact-forcepolicy",
+        "title": "Force Policy: Learning Hybrid Force-Position Control Policy under Interaction Frame for Contact-Rich Manipulation",
+        "url": "https://www.roboticsproceedings.org/rss22/p128.pdf",
+        "canonical_url": "https://www.roboticsproceedings.org/rss22/p128.html",
+        "version": "RSS 2026 conference PDF",
+        "role": "core_contact",
+        "access_date_utc": "2026-11-08",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "response_date": "Sun, 08 Nov 2026 11:39:37 GMT",
+        "last_modified": "Wed, 26 Aug 2026 21:13:27 GMT",
+        "etag": "\"2b4122a-386e50-659f9b0bedcaa\"",
+        "raw_file": "/tmp/lunwen-batch2-deepening/contact-forcepolicy.pdf",
+        "raw_bytes": 3698256,
+        "raw_sha256": "42d34fed819b5948b88d29f158e89f6ebb940deb0ea29a262abd370d8d806284",
+        "pdf_pages": 11,
+        "read_level": "native scientific main",
+        "actual_read_scope": "Main §§I–VI through limitations, extracted approximately lines 1–690, especially IV-A and V-A. Dense tables and separate supplements not audited.",
+        "extracted_file": "/tmp/lunwen-batch2-deepening/contact-forcepolicy.txt",
+        "extracted_sha256": "df4afb5c0d71bd262181d95949c7e5c044d2ac09c612b2d03508620fab9a8c6f",
+        "scientific_body_counted": true,
+        "method_conclusion_limitations_location": "Corresponding C3 paragraph/row in batch2-deepening-report.md and actual_read_scope; no reproduction.",
+        "raw_durable_archive_claimed": false,
+        "carried_forward_prior_reader": true,
+        "new_full_reading_claimed": false,
+        "current_local_source_hashes_rechecked": true
+      },
+      {
+        "id": "C4",
+        "stem": "contact-admittance",
+        "title": "Efficient Sim-to-real Transfer of Contact-Rich Manipulation Skills with Online Admittance Residual Learning",
+        "url": "https://proceedings.mlr.press/v229/zhang23e/zhang23e.pdf",
+        "canonical_url": "https://proceedings.mlr.press/v229/zhang23e.html",
+        "version": "PMLR v229, 2023 conference PDF",
+        "role": "core_contact",
+        "access_date_utc": "2026-11-08",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "response_date": "Sun, 08 Nov 2026 11:39:33 GMT",
+        "last_modified": "Sun, 04 Oct 2026 21:14:15 GMT",
+        "etag": "\"6ac2c1a7-2feaea\"",
+        "raw_file": "/tmp/lunwen-batch2-deepening/contact-admittance.pdf",
+        "raw_bytes": 3140330,
+        "raw_sha256": "0739459c0d9a80e63a35478e6911beadd452df1717b301c4306cd2524a2bf654",
+        "pdf_pages": 19,
+        "read_level": "native scientific main and scientific appendices",
+        "actual_read_scope": "Main lines 1–442 (PDF pp.1–8) and scientific appendices 631–930 (pp.13–19) read; references excluded; method, retuned rival and §5 limits read.",
+        "extracted_file": "/tmp/lunwen-batch2-deepening/contact-admittance.txt",
+        "extracted_sha256": "6afb38ebe3efee6c1699e7e945e9df3923aef620f96446540b91bfa9dba8d51f",
+        "scientific_body_counted": true,
+        "method_conclusion_limitations_location": "Corresponding C4 paragraph/row in batch2-deepening-report.md and actual_read_scope; no reproduction.",
+        "raw_durable_archive_claimed": false,
+        "carried_forward_prior_reader": true,
+        "new_full_reading_claimed": false,
+        "current_local_source_hashes_rechecked": true
+      },
+      {
+        "id": "C5",
+        "stem": "contact-robustpeg",
+        "title": "Robust Peg-in-Hole Assembly under Uncertainties via Compliant and Interactive Contact-Rich Manipulation",
+        "url": "https://www.roboticsproceedings.org/rss21/p060.pdf",
+        "canonical_url": "https://www.roboticsproceedings.org/rss21/p060.html",
+        "version": "RSS 2025 image-only conference PDF",
+        "role": "core_contact",
+        "access_date_utc": "2026-11-08",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "response_date": "Sun, 08 Nov 2026 11:42:03 GMT",
+        "last_modified": "Thu, 11 Sep 2025 03:56:31 GMT",
+        "etag": "\"2b405cf-79d1e2-63e7e85c0ebcc\"",
+        "raw_file": "/tmp/lunwen-batch2-deepening/contact-robustpeg.pdf",
+        "raw_bytes": 7983586,
+        "raw_sha256": "5020fe8ff46adaf2fd10205cb2cd644562251b3a60f833cae8d19bf93e01eb85",
+        "pdf_pages": 16,
+        "read_level": "all-page OCR scientific body plus selected visual checks",
+        "actual_read_scope": "All 16 pages rendered and OCRed; scientific main through §VII and appendices A–D read. Visually checked pp.5,10,13,16. Reference list not counted. OCR equations/proofs/numeric tables NOT independently verified.",
+        "extracted_file": "/tmp/lunwen-batch2-deepening/contact-robustpeg-ocr.txt",
+        "extracted_sha256": "4855c66dbb4088cda5b641943af6fadb39e7c4d65af0addf95cbb161760b9da0",
+        "scientific_body_counted": true,
+        "method_conclusion_limitations_location": "Corresponding C5 paragraph/row in batch2-deepening-report.md and actual_read_scope; no reproduction.",
+        "raw_durable_archive_claimed": false,
+        "carried_forward_prior_reader": true,
+        "new_full_reading_claimed": false,
+        "current_local_source_hashes_rechecked": true
+      },
+      {
+        "id": "A1",
+        "stem": "adj-contact-fisher-arxiv",
+        "title": "Behavior Synthesis via Contact-Aware Fisher Information Maximization",
+        "url": "https://arxiv.org/pdf/2505.12214v2",
+        "canonical_url": "https://arxiv.org/abs/2505.12214v2",
+        "version": "arXiv:2505.12214v2, observed 2025-09-05; RSS 2025 paper",
+        "role": "adjacent_contact_active_identification",
+        "access_date_utc": "2026-11-08",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "response_date": "Sun, 08 Nov 2026 11:45:13 GMT",
+        "last_modified": "Thu, 16 Apr 2026 01:02:55 GMT",
+        "etag": "\"sha256:59c07dcac38942c9745b60234a6e593cb1574ad5d73905cd8d968f6f5a38f0c2\"",
+        "raw_file": "/tmp/lunwen-batch2-deepening/adj-contact-fisher-arxiv.pdf",
+        "raw_bytes": 6008585,
+        "raw_sha256": "e7fb71d0b4f6d2cad746e9c3319aa7d793dd553a6ec1b6c2b74ba3aa57a9b457",
+        "pdf_pages": 15,
+        "read_level": "native scientific main and scientific appendices",
+        "actual_read_scope": "Scientific main extracted lines 1–575 and scientific appendices 670–770 read; references skipped. Assumptions, identifiability limits and experiments read, guarantees not independently proved.",
+        "extracted_file": "/tmp/lunwen-batch2-deepening/adj-contact-fisher-arxiv.txt",
+        "extracted_sha256": "adec9b06d3361b92128ee0c5824623e57d6610ab7c4ad33c5025380f94f77c41",
+        "scientific_body_counted": true,
+        "method_conclusion_limitations_location": "Corresponding A1 paragraph/row in batch2-deepening-report.md and actual_read_scope; no reproduction.",
+        "raw_durable_archive_claimed": false,
+        "carried_forward_prior_reader": true,
+        "new_full_reading_claimed": false,
+        "current_local_source_hashes_rechecked": true
+      },
+      {
+        "id": "A2",
+        "stem": "adj-contact-calibration",
+        "title": "Particle-Based Conformal Prediction for Contact-Aware Uncertainty Calibration in Stratified Configuration Spaces",
+        "url": "https://raw.githubusercontent.com/mlresearch/v329/main/assets/marques26a/marques26a.pdf",
+        "canonical_url": "https://proceedings.mlr.press/v329/marques26a.html",
+        "version": "PMLR v329, 2026, pp.813–843 publisher PDF",
+        "role": "adjacent_contact_uncertainty",
+        "access_date_utc": "2026-11-08",
+        "http_status": 200,
+        "content_type": "application/octet-stream",
+        "response_date": "Sun, 08 Nov 2026 11:42:04 GMT",
+        "last_modified": null,
+        "etag": "\"51a86c20f1217f2e1568f42683c14ba39258aa1c21add662634621bc40a48028\"",
+        "raw_file": "/tmp/lunwen-batch2-deepening/adj-contact-calibration.pdf",
+        "raw_bytes": 2064763,
+        "raw_sha256": "ea04c46d60eb2559bb350b0bfa523cefbf84ca41c4f15da7ffc879b16f27cb19",
+        "pdf_pages": 31,
+        "read_level": "native scientific main; appendices unread",
+        "actual_read_scope": "Main §§1–7, extracted lines 1–1152, PDF pp.1–20, read including assumptions, methods, both tasks, §5.2 and §6.3. References and appendices A/B pp.24–31 unread; proofs not independently verified.",
+        "extracted_file": "/tmp/lunwen-batch2-deepening/adj-contact-calibration.txt",
+        "extracted_sha256": "1b2cb0153ab66349b5488feb6ba42ef6c444f940b5b6c0f55a42bec4971ad8e6",
+        "scientific_body_counted": true,
+        "method_conclusion_limitations_location": "Corresponding A2 paragraph/row in batch2-deepening-report.md and actual_read_scope; no reproduction.",
+        "raw_durable_archive_claimed": false,
+        "carried_forward_prior_reader": true,
+        "new_full_reading_claimed": false,
+        "current_local_source_hashes_rechecked": true
+      },
+      {
+        "id": "R1-SDI",
+        "doi": "10.1016/j.neucom.2024.129292",
+        "url": "https://api.crossref.org/works/10.1016/j.neucom.2024.129292",
+        "http_status": 200,
+        "sha256": "7d478be9129ff32ba6b07208be595675f4cf1e5cc55ca1f4b2b668f618cd0ec7",
+        "title": [
+          "SDI: A sparse drift identification approach for force/torque sensor calibration in industrial robots"
+        ],
+        "container_title": [
+          "Neurocomputing"
+        ],
+        "issued": {
+          "date-parts": [
+            [
+              2025,
+              3
+            ]
+          ]
+        },
+        "published_online": null,
+        "published_print": {
+          "date-parts": [
+            [
+              2025,
+              3
+            ]
+          ]
+        },
+        "volume": "620",
+        "issue": null,
+        "page": "129292",
+        "article_number": "129292",
+        "authors": [
+          {
+            "given": "Xuechun",
+            "family": "Qiao"
+          },
+          {
+            "given": "Chenxuan",
+            "family": "Xu"
+          },
+          {
+            "given": "Yasen",
+            "family": "Wang"
+          },
+          {
+            "given": "Guijun",
+            "family": "Ma"
+          }
+        ],
+        "canonical_url": "https://doi.org/10.1016/j.neucom.2024.129292",
+        "read_level": "official indexed abstract plus Crossref identity metadata",
+        "full_scientific_body_read": false,
+        "publisher_content_body_downloaded": false,
+        "not_abstract_claim_support": "The source is a direct competitor lead, not completed full-text evidence for the proposed gap."
+      },
+      {
+        "id": "R1-gravity",
+        "doi": "10.1109/JSEN.2021.3056943",
+        "url": "https://api.crossref.org/works/10.1109/JSEN.2021.3056943",
+        "http_status": 200,
+        "sha256": "7b04fad55643d40a5f264106087cfae2e95d119ac7fb9101bf8eb69daf50bbfe",
+        "title": [
+          "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor"
+        ],
+        "container_title": [
+          "IEEE Sensors Journal"
+        ],
+        "issued": {
+          "date-parts": [
+            [
+              2022,
+              9,
+              15
+            ]
+          ]
+        },
+        "published_online": null,
+        "published_print": {
+          "date-parts": [
+            [
+              2022,
+              9,
+              15
+            ]
+          ]
+        },
+        "volume": "22",
+        "issue": "18",
+        "page": "17625-17634",
+        "article_number": null,
+        "authors": [
+          {
+            "given": "Yongqiang",
+            "family": "Yu"
+          },
+          {
+            "given": "Ran",
+            "family": "Shi"
+          },
+          {
+            "given": "Yunjiang",
+            "family": "Lou"
+          }
+        ],
+        "canonical_url": "https://doi.org/10.1109/JSEN.2021.3056943",
+        "read_level": "official indexed abstract plus Crossref identity metadata",
+        "full_scientific_body_read": false,
+        "publisher_content_body_downloaded": false,
+        "not_abstract_claim_support": "The source is a direct competitor lead, not completed full-text evidence for the proposed gap."
+      },
+      {
+        "id": "R5-async-clock",
+        "title": "Decentralized Multi-Robot Formation Control with Communication Delay and Asynchronous Clock",
+        "doi": "10.1007/s10846-017-0557-y",
+        "canonical_url": "https://link.springer.com/article/10.1007/s10846-017-0557-y",
+        "institutional_record": "https://researchportal.vub.be/en/publications/decentralized-multi-robot-formation-control-with-communication-de/",
+        "online_publisher_date": "2017-04-24",
+        "issue_year": 2018,
+        "volume": "89",
+        "pages": "465–484",
+        "read_level": "official publisher and institutional abstracts",
+        "actual_read_scope": "Publisher abstract lines36–40 and institutional abstract; subscription full text not read. Do not generalize the abstract to all safety/performance guarantees.",
+        "full_scientific_body_read": false,
+        "scope_fact": "The official abstract explicitly studies bounded time-varying delays with asynchronous clocks and the resulting unmeasurable delay."
+      },
+      {
+        "id": "A3-selective-prediction",
+        "title": "SelectiveNet: A Deep Neural Network with an Integrated Reject Option",
+        "canonical_url": "https://proceedings.mlr.press/v97/geifman19a.html",
+        "year": 2019,
+        "read_level": "publisher abstract only",
+        "full_scientific_body_read": false,
+        "scope_fact": "Learning prediction and abstention jointly is established; its risk/coverage result cannot simply be transferred to robotic safety."
+      }
+    ],
+    "rme_pinned_code": {
+      "commit": "a2fe683ccc7a921692949445f867a73938933d89",
+      "observed_at_utc": "2026-11-09T11:01:47.264860+00:00",
+      "files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/mateusz-jaszczuk/RapidMismatchEstimation/a2fe683ccc7a921692949445f867a73938933d89/README.md",
+          "http_status": 200,
+          "git_blob_sha": "477b208e515fc51981f5c626c087744bf0301ee5",
+          "sha256": "246421a418f0b6329adc69c4d39d75e184c978a00652337378e0373b6a5eb015",
+          "bytes": 2209,
+          "local_file": ".runtime/nov9-robotics-case/RME-README.md"
+        },
+        {
+          "path": "activation_condition.py",
+          "url": "https://raw.githubusercontent.com/mateusz-jaszczuk/RapidMismatchEstimation/a2fe683ccc7a921692949445f867a73938933d89/activation_condition.py",
+          "http_status": 200,
+          "git_blob_sha": "b64d5a2b058990ec405056f91a20ffbfbe69cb26",
+          "sha256": "409554f3817656fee06c31317c3e7589edad3544e441070cfccc92b997925bed",
+          "bytes": 1062,
+          "local_file": ".runtime/nov9-robotics-case/RME-activation_condition.py"
+        },
+        {
+          "path": "RapidMismatchEstimation.py",
+          "url": "https://raw.githubusercontent.com/mateusz-jaszczuk/RapidMismatchEstimation/a2fe683ccc7a921692949445f867a73938933d89/RapidMismatchEstimation.py",
+          "http_status": 200,
+          "git_blob_sha": "61109297ae2fab0abea335a79913ace406abd62d",
+          "sha256": "06cbd65774f7ff73d80c99fc54d9ef5f985073893d1a30b1bd6f07c0e46c6c4d",
+          "bytes": 13334,
+          "local_file": ".runtime/nov9-robotics-case/RME-RapidMismatchEstimation.py"
+        }
+      ],
+      "installed_or_executed": false
+    },
+    "carried_source_byte_checks": [
+      {
+        "id": "C3",
+        "pdf_available_now": true,
+        "text_available_now": true,
+        "current_raw_sha256": "42d34fed819b5948b88d29f158e89f6ebb940deb0ea29a262abd370d8d806284",
+        "current_text_sha256": "df4afb5c0d71bd262181d95949c7e5c044d2ac09c612b2d03508620fab9a8c6f",
+        "prior_reader_scope": "Main §§I–VI through limitations, extracted approximately lines 1–690, especially IV-A and V-A. Dense tables and separate supplements not audited."
+      },
+      {
+        "id": "C4",
+        "pdf_available_now": true,
+        "text_available_now": true,
+        "current_raw_sha256": "0739459c0d9a80e63a35478e6911beadd452df1717b301c4306cd2524a2bf654",
+        "current_text_sha256": "6afb38ebe3efee6c1699e7e945e9df3923aef620f96446540b91bfa9dba8d51f",
+        "prior_reader_scope": "Main lines 1–442 (PDF pp.1–8) and scientific appendices 631–930 (pp.13–19) read; references excluded; method, retuned rival and §5 limits read."
+      },
+      {
+        "id": "C5",
+        "pdf_available_now": true,
+        "text_available_now": true,
+        "current_raw_sha256": "5020fe8ff46adaf2fd10205cb2cd644562251b3a60f833cae8d19bf93e01eb85",
+        "current_text_sha256": "4855c66dbb4088cda5b641943af6fadb39e7c4d65af0addf95cbb161760b9da0",
+        "prior_reader_scope": "All 16 pages rendered and OCRed; scientific main through §VII and appendices A–D read. Visually checked pp.5,10,13,16. Reference list not counted. OCR equations/proofs/numeric tables NOT independently verified."
+      },
+      {
+        "id": "A1",
+        "pdf_available_now": true,
+        "text_available_now": true,
+        "current_raw_sha256": "e7fb71d0b4f6d2cad746e9c3319aa7d793dd553a6ec1b6c2b74ba3aa57a9b457",
+        "current_text_sha256": "adec9b06d3361b92128ee0c5824623e57d6610ab7c4ad33c5025380f94f77c41",
+        "prior_reader_scope": "Scientific main extracted lines 1–575 and scientific appendices 670–770 read; references skipped. Assumptions, identifiability limits and experiments read, guarantees not independently proved."
+      },
+      {
+        "id": "A2",
+        "pdf_available_now": true,
+        "text_available_now": true,
+        "current_raw_sha256": "ea04c46d60eb2559bb350b0bfa523cefbf84ca41c4f15da7ffc879b16f27cb19",
+        "current_text_sha256": "1b2cb0153ab66349b5488feb6ba42ef6c444f940b5b6c0f55a42bec4971ad8e6",
+        "prior_reader_scope": "Main §§1–7, extracted lines 1–1152, PDF pp.1–20, read including assumptions, methods, both tasks, §5.2 and §6.3. References and appendices A/B pp.24–31 unread; proofs not independently verified."
+      },
+      {
+        "id": "RS-CAL",
+        "current_raw_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+        "current_text_sha256": "4a2c1bc1f81db1506840871ef8037472d8fcdd4f5f70f9182d670d04ac19ac7d",
+        "this_reader_scope": "Entire 7-page native extraction re-read in two ranges 1–220 and221–438; derivations read, not independently proved."
+      }
+    ],
+    "development_dependency_observation": {
+      "observed_at_utc": "2026-11-09T11:13:38.719628+00:00",
+      "scope": "Current Codex development environment only; not a GitHub research executor or measured scientific runtime",
+      "packages": {
+        "numpy": {
+          "installed_version": "2.5.4",
+          "module_available": true
+        },
+        "scipy": {
+          "installed_version": "1.18.1",
+          "module_available": true
+        },
+        "torch": {
+          "installed_version": null,
+          "module_available": false
+        },
+        "jax": {
+          "installed_version": null,
+          "module_available": false
+        },
+        "jaxlib": {
+          "installed_version": null,
+          "module_available": false
+        },
+        "optax": {
+          "installed_version": null,
+          "module_available": false
+        },
+        "robosuite": {
+          "installed_version": null,
+          "module_available": false
+        },
+        "mujoco": {
+          "installed_version": null,
+          "module_available": false
+        }
+      },
+      "modules_imported_or_executed": false,
+      "installation_performed": false
+    },
+    "reading_limitations": [
+      "SDI full text not obtained; publisher direct open failed403. Official indexed abstract and identity were read.",
+      "IEEE gravity-calibration work remains an abstract lead. Crossref issue date2022-09-15 is verified; DOI-year text alone does not establish publication date.",
+      "R5 asynchronous-clock article is an official abstract comparison, not a full-text algorithm audit.",
+      "Inherited C5 OCR formulas/tables remain unverified; inherited A2 appendices remain unread.",
+      "Source text reading does not verify experimental validity or establish an incremental contribution."
+    ],
+    "candidate_dispositions": [
+      {
+        "candidate": "R1 generic update-gating novelty",
+        "recommendation": "withdraw_generic_novelty_claim",
+        "basis": [
+          "RME already has interaction/load mismatch gating",
+          "SDI already addresses drift with contact-force experiments"
+        ],
+        "formal_G1_decision": false
+      },
+      {
+        "candidate": "R1 same-information calibration-corruption feasibility pilot",
+        "recommendation": "conditional_exploratory_preparation",
+        "scientific_novelty_verified": false,
+        "six_paper_feasibility_verified": false
+      },
+      {
+        "candidate": "R5 generic asynchronous-clock novelty",
+        "recommendation": "withdraw_generic_novelty_claim_and_defer_expansion",
+        "basis": [
+          "Official2017/2018 article explicitly treats unmeasurable delay due to asynchronous clocks"
+        ],
+        "exact_new_trust_policy_already_solved_claimed": false,
+        "formal_G1_decision": false
+      }
+    ],
+    "pilot_preparation": {
+      "status": "in_progress_not_authorized_for_execution",
+      "study_kind": "prospective exploratory comparison, no outcomes observed",
+      "focal_question": "Under matched observations/actions, do sustained interactions corrupt wrist-bias updates, and do simple physical gates already resolve the decision?",
+      "fixed_scope": "One nominal pregrasped rigid tool/fixture; known inertial parameters first, separately declared uncertainty later",
+      "information_strata": {
+        "O0": [
+          "timestamped joint position/velocity",
+          "commanded pose/motion",
+          "wrist wrench"
+        ],
+        "O1_addition": [
+          "declared realistically noisy proprioceptive torque residual, if the platform truly exposes it"
+        ]
+      },
+      "evaluation_only_truth": [
+        "true bias",
+        "contact labels/forces",
+        "hidden payload parameters"
+      ],
+      "independent_unit": "whole physical episode/scenario; no cross-split overlapping windows",
+      "comparators": [
+        "same estimator always-update",
+        "same estimator frozen during contact",
+        "tuned residual/change-detection gate",
+        "model-consistency or interval gate",
+        "clearly labeled adapted RME activation pattern, not an estimator reproduction",
+        "SDI when its full assumptions are actually available"
+      ],
+      "cases": [
+        "bias change",
+        "sustained weak contact",
+        "transient impulse",
+        "simultaneous change and contact"
+      ],
+      "outcomes_to_freeze": [
+        "bias error",
+        "false calibration updates",
+        "true-change adaptation delay/misses",
+        "tracking/completion",
+        "physical interaction force limits",
+        "abstention and allowed-probe costs"
+      ],
+      "effect_size": null,
+      "independent_episode_count": null,
+      "test_thresholds": null,
+      "runner_time_ceiling": null,
+      "kill_rules": [
+        "Classical same-information/action baseline matches the learned tradeoff",
+        "Apparent advantage uses hidden truth, unequal data or extra probes/preview",
+        "Only fixing released-code/paper differences explains the advantage",
+        "An exact nearest-work mechanism covers the intended claim",
+        "Available observations/actions cannot disambiguate the proposed physical causes",
+        "Required physical sensor-drift/contact data or runner resources are unavailable"
+      ],
+      "minimum_publishable_condition": "A nontrivial source-checked incremental scientific result after strong matched physical baselines; not a source-code fix, guessed gap or isolated simulation success",
+      "merge_condition": "Estimator, activation gate, calibration boundary and its assembly demonstration may be one scientific contribution; do not split them into several independent papers",
+      "G1_G2_approved": false,
+      "G3_plan_frozen": false,
+      "experiment_runner_called": false,
+      "simulation_or_fit_or_training_calls": 0,
+      "backup_rule": "Archive complete outcomes/failed attempts/registered comparisons outside the paper; keep interpretation-changing evidence available without reproducing all logs"
+    },
+    "native_G1_snapshot": {
+      "run_id": 42488832898,
+      "source_main_commit": "58ac45517b247258e2d96568826fbad5311218e1",
+      "artifact_id": 13620865693,
+      "artifact_sha256": "3c14864ad8b21602472b524ca50ee74d5949c81e8c0656acc5a9062b1b5a1edb",
+      "redacted_log_sha256": "570eb986c554de696d959b813ff6cc2a13d7d4baa59b22d076120190487409f1",
+      "gate": "G1",
+      "status": "awaiting_work",
+      "approved_gates": [
+        "G0"
+      ],
+      "gate_ready": false,
+      "gate_errors": [
+        "missing or empty: /home/runner/work/lunwen/lunwen/projects/my-phd/program/novelty-claim-matrix.json",
+        "missing or empty: /home/runner/work/lunwen/lunwen/projects/my-phd/program/originality-audit.json",
+        "direction ranking needs retrieved primary sources and a deterministic score report",
+        "missing or empty: /home/runner/work/lunwen/lunwen/projects/my-phd/program/topic-shortlist.json",
+        "program/theme-independence: core: negative_result_plan: must be provided",
+        "program/theme-independence: core: status: must be one of ready_for_review, approved",
+        "program/theme-independence: core: title: must be a non-empty string",
+        "program/theme-independence: core: doctoral_question: must be a non-empty string",
+        "program/theme-independence: core: distinct_contribution: must be a non-empty string",
+        "program/theme-independence: core: novelty_claim_ids: must contain at least 2 item(s)",
+        "program/theme-independence: core: planned_paper_ids: must contain at least 1 item(s)",
+        "program/theme-independence: core: falsification_conditions: must contain at least 2 item(s)",
+        "program/theme-independence: extension: negative_result_plan: must be provided",
+        "program/theme-independence: extension: status: must be one of ready_for_review, approved",
+        "program/theme-independence: extension: title: must be a non-empty string",
+        "program/theme-independence: extension: doctoral_question: must be a non-empty string",
+        "program/theme-independence: extension: distinct_contribution: must be a non-empty string",
+        "program/theme-independence: extension: mechanism_or_rationale: must be a non-empty string",
+        "program/theme-independence: extension: novelty_claim_ids: must contain at least 2 item(s)",
+        "program/theme-independence: extension: planned_paper_ids: must contain at least 1 item(s)",
+        "program/theme-independence: extension: independent_evidence_plan: must contain at least 2 item(s)",
+        "program/theme-independence: extension: falsification_conditions: must contain at least 2 item(s)",
+        "program/theme-independence: extension: boundary_conditions: must contain at least 1 item(s)",
+        "program/theme-independence: extension: relationship_to_core.independent_question: must be True",
+        "program/theme-independence: extension: relationship_to_core.independent_claims: must be True",
+        "program/theme-independence: extension: relationship_to_core.independent_primary_evidence: must be True",
+        "program/theme-independence: extension: relationship_to_core.survives_core_failure: must be True",
+        "program/theme-independence: extension: relationship_to_core.non_dependency_rationale: must be a non-empty string",
+        "program/theme-independence: extension: fallback_if_unsupported: must be a non-empty string",
+        "missing or empty: /home/runner/work/lunwen/lunwen/projects/my-phd/program/originality-audit.json",
+        "program/topic-decision.md is required",
+        "specific-topic hypotheses: hypothesis register and deterministic hypothesis audit are required"
+      ],
+      "gate_warnings": [
+        "/home/runner/work/lunwen/lunwen/projects/my-phd/program/quality-G1.json: no optional quality assessment recorded",
+        "stage review observation: source-bound independent review: artifact is missing: state/review-receipts/G1/latest.json",
+        "stage review observation: reviews/decision-log.md must disposition independent findings"
+      ],
+      "error_count": 32,
+      "unique_error_count": 31,
+      "quality_or_independent_review_omissions_are_warnings_in_this_snapshot": true,
+      "retrieval_only_no_new_job": true,
+      "intake_file_sha256": "301cd5ee3bf4cc0f693e95e41c9ccf72237b31d9815633a2ed17308f49630f5d",
+      "intake_git_blob_sha": "0f69871603adcabb6513b7546a9eab794fc75875",
+      "state_file_sha256": "77d047954c18e6cf08e547015b586b3c1eae7a5d8ae7089e78b816f2c4c62be5",
+      "state_git_blob_sha": "0048390f14864d6aec68c34f20144bc66e9776f6"
+    },
+    "public_read_counts": {
+      "search_commands": 17,
+      "explicit_open_commands": 14,
+      "web_tool_calls": 8,
+      "direct_primary_PDF_logical_GETs": 2,
+      "direct_GitHub_metadata_or_text_logical_GETs": 5,
+      "Crossref_identity_logical_GETs": 2,
+      "GitHub_connector_cloud_state_reads": 2,
+      "GitHub_connector_artifact_metadata_download_calls": 2,
+      "signed_artifact_transport_GETs": 1,
+      "raw_scientific_dataset_requests": 0,
+      "project_model_gateway_calls": 0,
+      "scientific_experiments": 0,
+      "remote_mutations": 0,
+      "wire_HTTP_requests_including_internal_tool_fetches": null
+    },
+    "evidence_files": {
+      "complete-discovery-snapshot.json": {
+        "sha256": "4f0495c946ccfd37574b725f934811b030b727a712ccdebd3cdab03028d1a5b3",
+        "bytes": 249723
+      },
+      "source-downloads.json": {
+        "sha256": "a557169609f969d7bda5027e61b24fcf6e6567a29296b0ac40a0b86bfc29a21d",
+        "bytes": 2896
+      },
+      "crossref-identities.json": {
+        "sha256": "b89f5fb2fbeb2234898f225a2fcddaead4d8db50a374dd91011f5c12a7fd9a88",
+        "bytes": 2082
+      },
+      "native-G1-blockers.json": {
+        "sha256": "2b16089eb5fc2fc37ba70caee1109d591721dd70e973dbfad2be5332d4f3a830",
+        "bytes": 4328
+      },
+      "RME-source-records.json": {
+        "sha256": "e5c9b8f5270852f56b479e27e9ba5668069f6d1971146dbcf95d9ee5341746df",
+        "bytes": 1590
+      },
+      "carried-source-byte-checks.json": {
+        "sha256": "2fa4679464e4c6269484cb4cbea330c912605e713a96a1a17ecef8d67324e9e2",
+        "bytes": 2893
+      },
+      "local-dependency-inventory.json": {
+        "sha256": "7570c8cda007e1e52a5adb608a8b02052a70ba36cdd983ecbe3ce5c497d60353",
+        "bytes": 981
+      }
+    }
   }
 }
