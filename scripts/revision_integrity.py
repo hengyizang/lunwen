@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import io
 import re
 import sys
 import unicodedata
@@ -52,8 +54,8 @@ SI_UNITS = {"mm", "cm", "m", "km", "ms", "s", "mg", "g", "kg", "ml", "mL", "mol"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
 
-def word_package(path, *, members=None):
-    with zipfile.ZipFile(path) as archive:
+def word_package(path, *, members=None, _payload=None):
+    with zipfile.ZipFile(path if _payload is None else io.BytesIO(_payload)) as archive:
         if len(archive.namelist()) != len(set(archive.namelist())) or sum(i.file_size for i in archive.infolist()) > 50_000_000:
             raise ValueError("duplicate or oversized OOXML package")
         return {name: archive.read(name) for name in archive.namelist() if members is None or name in members}
@@ -62,13 +64,37 @@ def word_package(path, *, members=None):
 class WordSource:
     """One read-only Word source within a single inspection; never a global cache."""
     def __init__(self, path, *, complete=False):
-        self.parts = word_package(path, members=None if complete else {"word/document.xml", "word/_rels/document.xml.rels"})
+        self.path = Path(path).resolve()
+        with self.path.open("rb") as handle:
+            payload = handle.read(64 * 1024 * 1024 + 1)
+        if len(payload) > 64 * 1024 * 1024:
+            raise ValueError("OOXML source exceeds the 64 MiB compressed-package limit")
+        self.payload = payload
+        self.sha256 = hashlib.sha256(payload).hexdigest()
+        self.parts = word_package(path, members=None if complete else {"word/document.xml", "word/_rels/document.xml.rels"}, _payload=payload)
         self.root = ET.fromstring(self.parts["word/document.xml"])
         self.text = " ".join(node.text or "" for node in self.root.iter() if node.tag.endswith("}t"))
 
     @cached_property
     def citations(self):
         return _word_citations(self)
+
+
+def word_source(path, documents=None, *, complete=False):
+    """Reuse one complete package only within the caller's current operation."""
+    if documents is None:
+        return WordSource(path, complete=complete)
+    key = path.resolve()
+    if key not in documents:
+        documents[key] = WordSource(path, complete=True)
+    return documents[key]
+
+
+def verify_word_sources(documents):
+    """Reject mutation of an operation's sources before publishing its result."""
+    for path, source in documents.items():
+        if path.is_symlink() or path.resolve() != source.path or source.sha256 != sha256_file(path):
+            raise ValueError("Word source changed during the current inspection")
 
 
 def signatures(text: str) -> list[str]:
@@ -205,13 +231,11 @@ def _facts(path: Path, *, documents=None):
     document = None
     if path.suffix.lower() == ".docx":
         try:
-            document = WordSource(path, complete=documents is not None)
+            document = word_source(path, documents)
         except (OSError, KeyError, zipfile.BadZipFile) as exc:
             raise ValueError(f"cannot read DOCX manuscript: {exc}") from exc
         except ParseError as exc:
             raise ValueError(f"invalid DOCX document XML: {exc}") from exc
-        if documents is not None:
-            documents[path.resolve()] = document
     text = scientific_text(path, document=document)
     return {
         "numeric": NUMBER_RE.findall(text),
@@ -256,7 +280,7 @@ def revision_authorization(paper: Path):
     return value, binding
 
 
-def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
+def audit(paper: Path, *, include_ledger: bool = True, _documents=None) -> dict[str, Any]:
     current = canonical_manuscript(paper)
     preferred = paper / "reviews" / "revision-base" / current.name
     legacy = paper / "reviews" / f"revision-base{current.suffix.lower()}"
@@ -265,9 +289,10 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
         raise RevisionIntegrityError(f"reviews/revision-base/{current.name} is required")
     authorization, auth_binding = revision_authorization(paper)
     use_ledger = include_ledger and any((paper / "reviews" / name).exists() for name in ("revision-ledger.json", "revision-ledger-report.json"))
-    documents = {} if use_ledger else None
+    documents = _documents if _documents is not None else ({} if use_ledger or current.suffix.lower() == ".docx" else None)
     (before, base_text), (after, current_text) = _facts(base, documents=documents), _facts(current, documents=documents)
-    digests = {path: manuscript_digest(path) for path in (base, current)}
+    digests = {path: documents[path.resolve()].sha256 if documents is not None and path.suffix.lower() == ".docx"
+               else manuscript_digest(path) for path in (base, current)}
     changes = {
         key + "_changes": multiset_delta(before[key], after[key])
         for key in ("numeric", "citation", "claim_language", "formula")
@@ -311,6 +336,8 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
             ledger_binding = {"path": ledger_path.relative_to(paper).as_posix(), "sha256": sha256_file(ledger_path)} if ledger_path.is_file() else None
         except (OSError, ValueError, RuntimeError) as exc:
             errors.append(f"revision ledger: {exc}")
+    if documents is not None and _documents is None:
+        verify_word_sources(documents)
     return {
         "schema_version": "1.0",
         "created_at": now(),
@@ -331,16 +358,21 @@ def audit(paper: Path, *, include_ledger: bool = True) -> dict[str, Any]:
 def record_automated_changes(paper: Path) -> dict:
     """Record exact justified deltas; existing independent critics decide validity."""
     from scripts import revision_ledger
-    from scripts.research_artifacts import record
+    from scripts.research_artifacts import record, verify_files
     project = paper.parent.parent
-    ledger_errors = revision_ledger.validate_saved_report(project, paper.name)
-    if ledger_errors:
-        raise RevisionIntegrityError("source-bound revision ledger required: " + "; ".join(ledger_errors))
     current = canonical_manuscript(paper)
     base = paper / "reviews/revision-base" / current.name
     if not base.is_file():
         raise RevisionIntegrityError("canonical revision baseline is required")
-    facts = audit(paper, include_ledger=False)
+    inputs = [{"path": path.relative_to(project).as_posix(), "sha256": sha256_file(path)}
+              for path in (base, current, paper / "reviews/revision-ledger.json")]
+    documents = {}
+    ledger_errors = revision_ledger.validate_saved_report(project, paper.name, _documents=documents)
+    if ledger_errors:
+        raise RevisionIntegrityError("source-bound revision ledger required: " + "; ".join(ledger_errors))
+    facts = audit(paper, include_ledger=False, _documents=documents)
+    verify_files(project, inputs, changed_error="revision sources changed during change-record preparation")
+    verify_word_sources(documents)
     reason = "Exact changes and source-bound author reasons are recorded in the current revision ledger; independent scientific audits remain required."
     value = {"schema_version": "1.1", "decision_kind": "automated_change_record", "recorded_at": now(),
              "base_sha256": facts["base"]["sha256"], "current_sha256": facts["current"]["sha256"],
@@ -359,17 +391,19 @@ def record_automated_changes(paper: Path) -> dict:
             return old
     atomic_json(destination, value)
     record(project, [destination], "scripts/revision_integrity.py")
-    revision_ledger.refresh(project, paper.name)
+    revision_ledger.refresh(project, paper.name, _documents=documents)
+    verify_files(project, inputs, changed_error="revision sources changed during change-record preparation")
+    verify_word_sources(documents)
     return value
 
 
-def validate_saved_report(paper: Path, *, include_ledger: bool = True) -> list[str]:
+def validate_saved_report(paper: Path, *, include_ledger: bool = True, _documents=None) -> list[str]:
     path = paper / "reviews" / "revision-integrity.json"
     if not path.is_file():
         return ["reviews/revision-integrity.json is required"]
     try:
         saved = json.loads(path.read_text(encoding="utf-8"))
-        current = audit(paper, include_ledger=include_ledger)
+        current = audit(paper, include_ledger=include_ledger, _documents=_documents)
     except (OSError, json.JSONDecodeError, RevisionIntegrityError, ValueError) as exc:
         return [f"cannot validate revision integrity: {exc}"]
     errors: list[str] = []

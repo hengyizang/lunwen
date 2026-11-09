@@ -25,9 +25,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from scripts.research_artifacts import sha as sha256_file, write as _atomic_json, utc_now
+    from scripts.research_artifacts import sha as sha256_file, write as _atomic_json, utc_now, json_digest
 except ImportError:  # Direct execution from scripts/.
-    from research_artifacts import sha as sha256_file, write as _atomic_json, utc_now
+    from research_artifacts import sha as sha256_file, write as _atomic_json, utc_now, json_digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -86,26 +86,14 @@ def _safe_path(project: Path, value: str, *, must_exist: bool = True) -> Path:
     return target
 
 
-def _text(value: Any, field: str, errors: list[str]) -> str | None:
-    if not isinstance(value, str) or not value.strip():
-        errors.append(f"{field} must be a non-empty string")
-        return None
-    return value.strip()
+from scripts.research_design import _text, _string_list
 
 
-def _string_list(
-    value: Any, field: str, errors: list[str], minimum: int = 1
-) -> list[str]:
-    if not isinstance(value, list) or len(value) < minimum:
-        errors.append(f"{field} must contain at least {minimum} item(s)")
-        return []
-    if any(not isinstance(item, str) or not item.strip() for item in value):
-        errors.append(f"{field} must contain only non-empty strings")
-        return []
-    result = [item.strip() for item in value]
-    if len(set(result)) != len(result):
-        errors.append(f"{field} must not contain duplicates")
-    return result
+def _finite(value):
+    try:
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    except OverflowError:
+        return False
 
 
 def _paper_ids(project: Path) -> list[str]:
@@ -1051,6 +1039,21 @@ def _design_paths(project: Path, paper_id: str) -> list[Path]:
     return sorted((project / "papers" / paper_id / "experiments").glob("*.json"))
 
 
+def _power_report(project, paper_id, engine, effect, basis, alpha, power, *, sources=(), **calculation):
+    contract = project / "papers" / paper_id / "paper-contract.json"
+    designs = _design_paths(project, paper_id)
+    if not contract.is_file() or not designs:
+        raise ResearchQualityError("paper contract and at least one experiment design are required")
+    return {
+        "schema_version": "1.0", "paper_id": paper_id, "created_at": utc_now(),
+        "generated_by": engine, "effect_size": effect, "effect_size_basis": basis.strip(),
+        "alpha": alpha, "target_power": power, **calculation,
+        "bound_files": [{"path": path.relative_to(project).as_posix(), "sha256": sha256_file(path)}
+                        for path in (contract, *designs, *sources)],
+        "status": "ready_for_review", "human_review_required": False,
+    }
+
+
 @paper_scoped
 def create_power_report(
     project: Path,
@@ -1065,13 +1068,13 @@ def create_power_report(
 ) -> dict[str, Any]:
     if not PAPER_RE.fullmatch(paper_id) or not (project / "papers" / paper_id).is_dir():
         raise ResearchQualityError("paper must be an existing ID such as P01")
-    if not 0 < effect_size:
+    if not _finite(effect_size) or effect_size <= 0:
         raise ResearchQualityError("effect size must be positive")
-    if not 0 < alpha < 1 or not 0 < target_power < 1 or ratio <= 0:
+    if not all(_finite(value) for value in (alpha, target_power, ratio)) or not 0 < alpha < 1 or not 0 < target_power < 1 or ratio <= 0:
         raise ResearchQualityError("alpha, target power and ratio are outside valid ranges")
     if not effect_size_basis.strip():
         raise ResearchQualityError("effect-size-basis is required")
-    if groups < 2:
+    if type(groups) is not int or groups < 2:
         raise ResearchQualityError("groups must be at least two")
     try:
         import statsmodels  # type: ignore
@@ -1109,37 +1112,42 @@ def create_power_report(
         raise ResearchQualityError(
             "method must be ttest_ind, ttest_paired, ttest_one_sample, anova or proportion_ind"
         )
-    contract = project / "papers" / paper_id / "paper-contract.json"
-    designs = _design_paths(project, paper_id)
-    if not contract.is_file() or not designs:
-        raise ResearchQualityError("paper contract and at least one experiment design are required")
-    bindings = [contract, *designs]
-    return {
-        "schema_version": "1.0",
-        "paper_id": paper_id,
-        "created_at": utc_now(),
-        "generated_by": "statsmodels",
-        "engine_version": statsmodels.__version__,
-        "method": method,
-        "effect_size": effect_size,
-        "effect_size_basis": effect_size_basis.strip(),
-        "alpha": alpha,
-        "target_power": target_power,
-        "allocation_ratio": ratio,
-        "group_count": groups if method == "anova" else None,
-        "required_sample_size": sample,
-        "assumptions": [
+    return _power_report(
+        project, paper_id, "statsmodels", effect_size, effect_size_basis, alpha, target_power,
+        engine_version=statsmodels.__version__, method=method, allocation_ratio=ratio,
+        group_count=groups if method == "anova" else None, required_sample_size=sample,
+        assumptions=[
             "The standardized effect size is defined before confirmatory execution.",
             "Independence and distributional assumptions must be checked against the study design.",
             "Attrition, grouping and multiplicity require separate inflation where applicable.",
         ],
-        "bound_files": [
-            {"path": path.relative_to(project).as_posix(), "sha256": sha256_file(path)}
-            for path in bindings
-        ],
-        "status": "ready_for_review",
-        "human_review_required": False,
-    }
+    )
+
+
+def _simulation_evidence_errors(value, count, power, effect, alpha, script_digest):
+    """One scientific comparison for both construction and saved-report replay."""
+    errors = []
+    if value.get("schema_version") != "1.0":
+        errors.append("schema_version must be 1.0")
+    if value.get("simulation_count") != count:
+        errors.append("simulation_count differs from the command")
+    rejections = value.get("rejection_count")
+    if type(rejections) is not int or not 0 <= rejections <= count:
+        errors.append("rejection_count must be an integer within simulation_count")
+    elif not math.isclose(rejections / count, power, rel_tol=0.0, abs_tol=1e-12):
+        errors.append("achieved_power must equal rejection_count / simulation_count")
+    for field, expected in (("achieved_power", power), ("effect_size", effect), ("alpha", alpha)):
+        actual = value.get(field)
+        if not _finite(actual) or not math.isclose(float(actual), expected, rel_tol=0.0, abs_tol=1e-12):
+            errors.append(field + " differs from the command")
+    seeds = value.get("random_seeds")
+    if not isinstance(seeds, list) or not seeds or any(type(seed) is not int for seed in seeds):
+        errors.append("random_seeds must be a non-empty integer array")
+    for field in ("decision_rule", "data_generating_process"):
+        _text(value.get(field), field, errors)
+    if value.get("generated_by_script_sha256") != script_digest:
+        errors.append("generated_by_script_sha256 does not match the simulation script")
+    return errors
 
 
 @paper_scoped
@@ -1158,11 +1166,11 @@ def create_simulation_power_report(
 ) -> dict[str, Any]:
     if not PAPER_RE.fullmatch(paper_id) or not (project / "papers" / paper_id).is_dir():
         raise ResearchQualityError("paper must be an existing ID such as P01")
-    if simulation_count < 1000:
+    if type(simulation_count) is not int or simulation_count < 1000:
         raise ResearchQualityError("simulation-count must be at least 1000")
-    if not 0 < effect_size or not 0 < alpha < 1 or not 0 < target_power < 1:
+    if not all(_finite(value) for value in (effect_size, alpha, target_power)) or not 0 < effect_size or not 0 < alpha < 1 or not 0 < target_power < 1:
         raise ResearchQualityError("effect size, alpha and target power are outside valid ranges")
-    if not 0 <= achieved_power <= 1 or achieved_power < target_power:
+    if not _finite(achieved_power) or not 0 <= achieved_power <= 1 or achieved_power < target_power:
         raise ResearchQualityError("achieved power must be in [0,1] and meet target power")
     if not method_note.strip():
         raise ResearchQualityError("method-note is required")
@@ -1176,7 +1184,6 @@ def create_simulation_power_report(
         raise ResearchQualityError("simulation script must be a Python .py file")
     evidence_value = _load_json(evidence)
     reruns: list[dict[str, Any]] = []
-    rerun_values: list[dict[str, Any]] = []
     for rerun_index in range(2):
         with tempfile.TemporaryDirectory(prefix="research-os-power-") as directory:
             clean_dir = Path(directory)
@@ -1227,129 +1234,48 @@ def create_simulation_power_report(
                 raise ResearchQualityError(f"power simulation rerun output is invalid JSON: {exc}") from exc
             if not isinstance(rerun_value, dict):
                 raise ResearchQualityError("power simulation rerun output must be a JSON object")
-            output_bytes = json.dumps(
-                rerun_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-            ).encode("utf-8")
-            rerun_values.append(rerun_value)
             reruns.append(
                 {
                     "rerun": rerun_index + 1,
                     "exit_code": completed.returncode,
-                    "output_sha256": hashlib.sha256(output_bytes).hexdigest(),
+                    "output_sha256": json_digest(rerun_value),
                     "stdout_sha256": hashlib.sha256(completed.stdout).hexdigest(),
                     "stderr_sha256": hashlib.sha256(completed.stderr).hexdigest(),
                     "clean_working_directory": True,
                     "sanitized_environment": True,
                 }
             )
-    canonical_evidence = json.dumps(
-        evidence_value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    )
-    canonical_reruns = [
-        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        for value in rerun_values
-    ]
-    if any(value != canonical_evidence for value in canonical_reruns):
+    canonical_digest = json_digest(evidence_value)
+    if any(receipt["output_sha256"] != canonical_digest for receipt in reruns):
         raise ResearchQualityError(
             "power simulation reruns do not exactly reproduce the bound evidence"
         )
-    evidence_errors: list[str] = []
-    if evidence_value.get("schema_version") != "1.0":
-        evidence_errors.append("schema_version must be 1.0")
-    if evidence_value.get("simulation_count") != simulation_count:
-        evidence_errors.append("simulation_count differs from the command")
-    rejection_count = evidence_value.get("rejection_count")
-    if (
-        not isinstance(rejection_count, int)
-        or isinstance(rejection_count, bool)
-        or not 0 <= rejection_count <= simulation_count
-    ):
-        evidence_errors.append("rejection_count must be an integer within simulation_count")
-    evidence_power = evidence_value.get("achieved_power")
-    if (
-        not isinstance(evidence_power, (int, float))
-        or isinstance(evidence_power, bool)
-        or not math.isclose(float(evidence_power), achieved_power, rel_tol=0.0, abs_tol=1e-12)
-    ):
-        evidence_errors.append("achieved_power differs from the command")
-    if isinstance(rejection_count, int) and not isinstance(rejection_count, bool):
-        computed_power = rejection_count / simulation_count
-        if not math.isclose(computed_power, achieved_power, rel_tol=0.0, abs_tol=1e-12):
-            evidence_errors.append("achieved_power must equal rejection_count / simulation_count")
-    evidence_effect = evidence_value.get("effect_size")
-    if (
-        not isinstance(evidence_effect, (int, float))
-        or isinstance(evidence_effect, bool)
-        or not math.isclose(float(evidence_effect), effect_size, rel_tol=0.0, abs_tol=1e-12)
-    ):
-        evidence_errors.append("effect_size differs from the command")
-    evidence_alpha = evidence_value.get("alpha")
-    if (
-        not isinstance(evidence_alpha, (int, float))
-        or isinstance(evidence_alpha, bool)
-        or not math.isclose(float(evidence_alpha), alpha, rel_tol=0.0, abs_tol=1e-12)
-    ):
-        evidence_errors.append("alpha differs from the command")
-    seeds = evidence_value.get("random_seeds")
-    if (
-        not isinstance(seeds, list)
-        or not seeds
-        or any(not isinstance(seed, int) or isinstance(seed, bool) for seed in seeds)
-    ):
-        evidence_errors.append("random_seeds must be a non-empty integer array")
-    for field in ("decision_rule", "data_generating_process"):
-        _text(evidence_value.get(field), field, evidence_errors)
-    script_digest = sha256_file(script)
-    if evidence_value.get("generated_by_script_sha256") != script_digest:
-        evidence_errors.append("generated_by_script_sha256 does not match the simulation script")
+    evidence_errors = _simulation_evidence_errors(
+        evidence_value, simulation_count, achieved_power, effect_size, alpha, sha256_file(script)
+    )
     if evidence_errors:
         raise ResearchQualityError(
             "simulation evidence is invalid: " + "; ".join(evidence_errors)
         )
-    contract = project / "papers" / paper_id / "paper-contract.json"
-    designs = _design_paths(project, paper_id)
-    if not contract.is_file() or not designs:
-        raise ResearchQualityError("paper contract and at least one experiment design are required")
-    bindings = [contract, *designs, script, evidence]
-    return {
-        "schema_version": "1.0",
-        "paper_id": paper_id,
-        "created_at": utc_now(),
-        "generated_by": "simulation_rerun",
-        "method": "monte_carlo_simulation",
-        "effect_size": effect_size,
-        "effect_size_basis": effect_size_basis.strip(),
-        "alpha": alpha,
-        "target_power": target_power,
-        "simulation_count": simulation_count,
-        "rejection_count": rejection_count,
-        "achieved_power": achieved_power,
-        "simulation_method": method_note.strip(),
-        "random_seeds": seeds,
-        "simulation_script_path": script.relative_to(project).as_posix(),
-        "simulation_evidence_path": evidence.relative_to(project).as_posix(),
-        "simulation_evidence_canonical_sha256": hashlib.sha256(
-            canonical_evidence.encode("utf-8")
-        ).hexdigest(),
-        "rerun_receipts": reruns,
-        "rerun_protocol": {
+    rejection_count = evidence_value["rejection_count"]
+    return _power_report(
+        project, paper_id, "simulation_rerun", effect_size, effect_size_basis, alpha, target_power,
+        sources=(script, evidence), method="monte_carlo_simulation", simulation_count=simulation_count,
+        rejection_count=rejection_count, achieved_power=achieved_power, simulation_method=method_note.strip(),
+        random_seeds=evidence_value["random_seeds"], simulation_script_path=script.relative_to(project).as_posix(),
+        simulation_evidence_path=evidence.relative_to(project).as_posix(),
+        simulation_evidence_canonical_sha256=canonical_digest,
+        rerun_receipts=reruns,
+        rerun_protocol={
             "interpreter": "python-isolated-mode",
             "output_environment_variable": "RESEARCH_OS_POWER_OUTPUT",
             "parameter_environment_variables": [
-                "RESEARCH_OS_SIMULATION_COUNT",
-                "RESEARCH_OS_EFFECT_SIZE",
-                "RESEARCH_OS_ALPHA",
-                "RESEARCH_OS_RANDOM_SEEDS",
+                "RESEARCH_OS_SIMULATION_COUNT", "RESEARCH_OS_EFFECT_SIZE",
+                "RESEARCH_OS_ALPHA", "RESEARCH_OS_RANDOM_SEEDS",
             ],
             "exact_reproduction_count": 2,
         },
-        "bound_files": [
-            {"path": path.relative_to(project).as_posix(), "sha256": sha256_file(path)}
-            for path in bindings
-        ],
-        "status": "ready_for_review",
-        "human_review_required": False,
-    }
+    )
 
 
 @paper_scoped
@@ -1382,13 +1308,14 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
             errors.append("simulation_count must be at least 1000")
         achieved = report.get("achieved_power")
         target = report.get("target_power")
-        if not isinstance(achieved, (int, float)) or not isinstance(target, (int, float)) or achieved < target:
+        if not _finite(achieved) or not _finite(target) or not 0 <= achieved <= 1 or achieved < target:
             errors.append("achieved_power must meet target_power")
         rejections = report.get("rejection_count")
         if (
             not isinstance(rejections, int)
             or isinstance(rejections, bool)
             or not isinstance(simulations, int)
+            or simulations <= 0
             or not 0 <= rejections <= simulations
         ):
             errors.append("rejection_count must be an integer within simulation_count")
@@ -1406,6 +1333,7 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
         _text(report.get("simulation_method"), "simulation_method", errors)
         receipts = report.get("rerun_receipts")
         canonical_digest: str | None = None
+        evidence_value, script_path = None, None
         evidence_path_value = report.get("simulation_evidence_path")
         if not isinstance(evidence_path_value, str):
             errors.append("simulation_evidence_path is required")
@@ -1413,13 +1341,7 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
             try:
                 evidence_path = _safe_path(project, evidence_path_value)
                 evidence_value = _load_json(evidence_path)
-                canonical_payload = json.dumps(
-                    evidence_value,
-                    ensure_ascii=False,
-                    sort_keys=True,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-                canonical_digest = hashlib.sha256(canonical_payload).hexdigest()
+                canonical_digest = json_digest(evidence_value)
                 if report.get("simulation_evidence_canonical_sha256") != canonical_digest:
                     errors.append("simulation_evidence_canonical_sha256 is stale")
             except ResearchQualityError as exc:
@@ -1434,6 +1356,15 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
                     errors.append("simulation_script_path must identify a Python file")
             except ResearchQualityError as exc:
                 errors.append(f"simulation_script_path: {exc}")
+        if (evidence_value is not None and script_path is not None and script_path.is_file()
+                and type(simulations) is int and simulations > 0
+                and all(_finite(value) for value in (achieved, report.get("effect_size"), report.get("alpha")))):
+            errors.extend("simulation evidence: " + issue for issue in _simulation_evidence_errors(
+                evidence_value, simulations, achieved, report["effect_size"], report["alpha"], sha256_file(script_path)
+            ))
+            for field in ("rejection_count", "random_seeds"):
+                if report.get(field) != evidence_value.get(field):
+                    errors.append(field + " differs from the bound simulation evidence")
         if not isinstance(receipts, list) or len(receipts) != 2:
             errors.append("rerun_receipts must contain exactly two controlled reruns")
         else:
@@ -1463,11 +1394,11 @@ def validate_power_report(report: dict[str, Any], paper_id: str, project: Path) 
     effect = report.get("effect_size")
     alpha = report.get("alpha")
     target_power = report.get("target_power")
-    if not isinstance(effect, (int, float)) or isinstance(effect, bool) or effect <= 0:
+    if not _finite(effect) or effect <= 0:
         errors.append("effect_size must be a positive number")
-    if not isinstance(alpha, (int, float)) or isinstance(alpha, bool) or not 0 < alpha < 1:
+    if not _finite(alpha) or not 0 < alpha < 1:
         errors.append("alpha must be between zero and one")
-    if not isinstance(target_power, (int, float)) or isinstance(target_power, bool) or not 0 < target_power < 1:
+    if not _finite(target_power) or not 0 < target_power < 1:
         errors.append("target_power must be between zero and one")
     if engine == "statsmodels" and isinstance(report.get("required_sample_size"), dict):
         if any(
@@ -2171,8 +2102,7 @@ def registry_environment_digest(
         key = json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
         unique[key] = record
     records = [unique[key] for key in sorted(unique)]
-    payload = json.dumps(records, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return json_digest(records)
 
 
 def refresh_runtime_evidence_catalog(project: Path) -> Path:
@@ -2358,69 +2288,55 @@ def quality_summary(project: Path) -> dict[str, Any]:
     }
 
 
-def _cmd_data_audit(args: argparse.Namespace) -> None:
+_REPORT_ACTIONS = {
+    "data-audit": (
+        "create_data_quality_report", "data/quality/{dataset_id}.json", ("dataset_id", "path"),
+        {"actor": "actor", "label_column": "label_column", "split_column": "split_column",
+         "group_column": "group_column", "derived": "derived", "maximum_rows": "max_rows"},
+        ("status", "blockers", "warnings"),
+    ),
+    "confirm-data-quality": (
+        "create_data_quality_confirmation", "data/quality/{dataset_id}-confirmation.json",
+        ("dataset_id", "actor"), {}, None,
+    ),
+    "power": (
+        "create_power_report", "papers/{paper}/power-analysis.json",
+        ("paper", "method", "effect_size", "alpha", "power", "ratio", "effect_size_basis", "groups"),
+        {}, ("required_sample_size",),
+    ),
+    "simulation-power": (
+        "create_simulation_power_report", "papers/{paper}/power-analysis.json",
+        ("paper", "effect_size", "alpha", "power", "simulation_count", "achieved_power",
+         "script", "evidence", "method_note", "effect_size_basis"),
+        {}, ("simulation_count", "achieved_power"),
+    ),
+    "confirm-reproduction": (
+        "create_reproduction_confirmation", "papers/{paper}/reproduction-confirmation.json",
+        ("paper", "actor"), {}, None,
+    ),
+}
+
+
+def _cmd_report(args: argparse.Namespace) -> None:
+    """One CLI create/write/result lifecycle; scientific builders remain canonical."""
     project = _project(args.project)
-    if not DATASET_RE.fullmatch(args.dataset_id):
+    if hasattr(args, "dataset_id") and not DATASET_RE.fullmatch(args.dataset_id):
         raise ResearchQualityError("dataset-id contains unsafe characters")
-    report = create_data_quality_report(
-        project,
-        args.dataset_id,
-        args.path,
-        actor=args.actor,
-        label_column=args.label_column,
-        split_column=args.split_column,
-        group_column=args.group_column,
-        derived=args.derived,
-        maximum_rows=args.max_rows,
+    if args.command == "confirm-reproduction" and (
+        not PAPER_RE.fullmatch(args.paper) or not (project / "papers" / args.paper).is_dir()
+    ):
+        raise ResearchQualityError("paper must be an existing ID such as P01")
+    builder, template, positional, keywords, fields = _REPORT_ACTIONS[args.command]
+    report = globals()[builder](
+        project, *(getattr(args, name) for name in positional),
+        **{target: getattr(args, source) for target, source in keywords.items()},
     )
-    output = project / "data" / "quality" / f"{args.dataset_id}.json"
-    _atomic_json(output, report)
-    print(json.dumps({"report": output.relative_to(project).as_posix(), "status": report["status"], "blockers": report["blockers"], "warnings": report["warnings"]}, ensure_ascii=False, indent=2))
-    if report["status"] != "pass":
+    relative = template.format(**vars(args))
+    _atomic_json(project / relative, report)
+    result = {"report": relative, **{field: report[field] for field in fields}} if fields else relative
+    print(json.dumps(result, ensure_ascii=args.command != "data-audit", indent=2) if fields else result)
+    if args.command == "data-audit" and report["status"] != "pass":
         raise ResearchQualityError("data-quality audit recorded blockers")
-
-
-def _cmd_confirm_data_quality(args: argparse.Namespace) -> None:
-    project = _project(args.project)
-    if not DATASET_RE.fullmatch(args.dataset_id):
-        raise ResearchQualityError("dataset-id contains unsafe characters")
-    confirmation = create_data_quality_confirmation(
-        project, args.dataset_id, args.actor
-    )
-    output = project / "data" / "quality" / f"{args.dataset_id}-confirmation.json"
-    _atomic_json(output, confirmation)
-    print(output.relative_to(project).as_posix())
-
-
-def _cmd_power(args: argparse.Namespace) -> None:
-    project = _project(args.project)
-    report = create_power_report(
-        project, args.paper, args.method, args.effect_size, args.alpha, args.power,
-        args.ratio, args.effect_size_basis, args.groups
-    )
-    output = project / "papers" / args.paper / "power-analysis.json"
-    _atomic_json(output, report)
-    print(json.dumps({"report": output.relative_to(project).as_posix(), "required_sample_size": report["required_sample_size"]}, indent=2))
-
-
-def _cmd_simulation_power(args: argparse.Namespace) -> None:
-    project = _project(args.project)
-    report = create_simulation_power_report(
-        project,
-        args.paper,
-        args.effect_size,
-        args.alpha,
-        args.power,
-        args.simulation_count,
-        args.achieved_power,
-        args.script,
-        args.evidence,
-        args.method_note,
-        args.effect_size_basis,
-    )
-    output = project / "papers" / args.paper / "power-analysis.json"
-    _atomic_json(output, report)
-    print(json.dumps({"report": output.relative_to(project).as_posix(), "simulation_count": report["simulation_count"], "achieved_power": report["achieved_power"]}, indent=2))
 
 
 def _cmd_freeze(args: argparse.Namespace) -> None:
@@ -2473,16 +2389,6 @@ def _cmd_runtime_catalog(args: argparse.Namespace) -> None:
     print(path.relative_to(project).as_posix())
 
 
-def _cmd_confirm_reproduction(args: argparse.Namespace) -> None:
-    project = _project(args.project)
-    if not PAPER_RE.fullmatch(args.paper) or not (project / "papers" / args.paper).is_dir():
-        raise ResearchQualityError("paper must be an existing ID such as P01")
-    report = create_reproduction_confirmation(project, args.paper, args.actor)
-    path = project / "papers" / args.paper / "reproduction-confirmation.json"
-    _atomic_json(path, report)
-    print(path.relative_to(project).as_posix())
-
-
 def _cmd_novelty(args: argparse.Namespace) -> None:
     project=_project(args.project)
     from scripts.literature_evidence import read_jsonl
@@ -2511,7 +2417,7 @@ def parser() -> argparse.ArgumentParser:
     audit.add_argument("--group-column")
     audit.add_argument("--derived", action="store_true")
     audit.add_argument("--max-rows", type=int, default=1_000_000)
-    audit.set_defaults(func=_cmd_data_audit)
+    audit.set_defaults(func=_cmd_report)
 
     confirm_data = sub.add_parser(
         "confirm-data-quality",
@@ -2520,7 +2426,7 @@ def parser() -> argparse.ArgumentParser:
     confirm_data.add_argument("--project", required=True)
     confirm_data.add_argument("--dataset-id", required=True)
     confirm_data.add_argument("--actor", required=True)
-    confirm_data.set_defaults(func=_cmd_confirm_data_quality)
+    confirm_data.set_defaults(func=_cmd_report)
 
     power = sub.add_parser("power", help="Calculate and bind a statsmodels power report")
     power.add_argument("--project", required=True)
@@ -2532,7 +2438,7 @@ def parser() -> argparse.ArgumentParser:
     power.add_argument("--ratio", type=float, default=1.0)
     power.add_argument("--groups", type=int, default=2)
     power.add_argument("--effect-size-basis", required=True)
-    power.set_defaults(func=_cmd_power)
+    power.set_defaults(func=_cmd_report)
 
     simulation = sub.add_parser("simulation-power", help="Bind a Monte Carlo power analysis to real local evidence")
     simulation.add_argument("--project", required=True)
@@ -2546,7 +2452,7 @@ def parser() -> argparse.ArgumentParser:
     simulation.add_argument("--evidence", required=True)
     simulation.add_argument("--method-note", required=True)
     simulation.add_argument("--effect-size-basis", required=True)
-    simulation.set_defaults(func=_cmd_simulation_power)
+    simulation.set_defaults(func=_cmd_report)
 
     freeze = sub.add_parser("freeze", help="Freeze hash-bound G3 preregistrations")
     freeze.add_argument("--project", required=True)
@@ -2571,7 +2477,7 @@ def parser() -> argparse.ArgumentParser:
     confirm.add_argument("--project", required=True)
     confirm.add_argument("--paper", required=True)
     confirm.add_argument("--actor", required=True)
-    confirm.set_defaults(func=_cmd_confirm_reproduction)
+    confirm.set_defaults(func=_cmd_report)
     return root
 
 

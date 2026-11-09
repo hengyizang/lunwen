@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import json
 import re
 from pathlib import Path
@@ -16,14 +17,14 @@ try:
     from scripts.ref_verify_adapter import canonical_manuscript
     from scripts.research_artifacts import path_in
     from scripts.revision_render import validate_render_manifest
-    from scripts.revision_integrity import word_package, W
+    from scripts.revision_integrity import word_source, verify_word_sources, W
 except ImportError:  # Direct execution from scripts/.
     from research_artifacts import paper_audit_cli, utc_now as now, sha as sha256_file
     from citation_audit import manuscript_digest, tex_source_paths  # type: ignore
     from ref_verify_adapter import canonical_manuscript  # type: ignore
     from research_artifacts import path_in
     from revision_render import validate_render_manifest  # type: ignore
-    from revision_integrity import word_package, W
+    from revision_integrity import word_source, verify_word_sources, W
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,9 +48,10 @@ def normalized(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
-def load_matrix(path: Path) -> list[dict[str, str]]:
+def load_matrix(path: Path, *, _payload=None) -> list[dict[str, str]]:
     try:
-        with path.open(newline="", encoding="utf-8-sig") as handle:
+        with (path.open(newline="", encoding="utf-8-sig") if _payload is None
+              else io.StringIO(_payload.decode("utf-8-sig"), newline="")) as handle:
             reader = csv.DictReader(handle)
             if not reader.fieldnames or not REQUIRED_COLUMNS.issubset(reader.fieldnames):
                 missing = sorted(REQUIRED_COLUMNS - set(reader.fieldnames or []))
@@ -85,9 +87,9 @@ def source_text(value: str) -> str:
     return normalized(value.replace(r"\%", "%").replace(r"\&", "&").replace(r"\_", "_"))
 
 
-def docx_blocks(manuscript: Path) -> tuple[list, list]:
+def docx_blocks(manuscript: Path, *, _documents=None) -> tuple[list, list]:
     from docx.oxml import parse_xml
-    root = parse_xml(word_package(manuscript)["word/document.xml"])
+    root = parse_xml(word_source(manuscript, _documents, complete=True).parts["word/document.xml"])
     body = root.find(W + "body")
     if body is None:
         raise RevisionTraceError("DOCX body is missing")
@@ -112,6 +114,15 @@ def positive_index(value: Any, name: str) -> int:
     return value
 
 
+def _checked_word_location(manuscript, inspect):
+    documents = {}
+    result = inspect(docx_blocks(manuscript, _documents=documents))
+    if result.get("kind") != "pdf_lines" and result.get("sha256") != documents[manuscript.resolve()].sha256:
+        raise RevisionTraceError("source location hash does not identify the captured Word package")
+    verify_word_sources(documents)
+    return result
+
+
 def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str, *, blocks=None) -> dict:
     """Verify a current, source-bound position rather than a nonempty label.
 
@@ -120,6 +131,8 @@ def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str, *, 
     requested text identify exactly one actual section of the canonical source.
     PDF lines are extracted reading-order lines, not asserted Word pagination.
     """
+    if manuscript.suffix.lower() == ".docx" and blocks is None:
+        return _checked_word_location(manuscript, lambda current: verify_location(paper, manuscript, value, excerpt, blocks=current))
     if not value.strip() or not excerpt:
         raise RevisionTraceError("fulfilled/partial commitment needs a verified location and revised_text")
     try:
@@ -203,6 +216,8 @@ def verify_location(paper: Path, manuscript: Path, value: str, excerpt: str, *, 
 
 
 def legacy_section(paper: Path, manuscript: Path, label: str, excerpt: str, *, blocks=None) -> dict:
+    if manuscript.suffix.lower() == ".docx" and blocks is None:
+        return _checked_word_location(manuscript, lambda current: legacy_section(paper, manuscript, label, excerpt, blocks=current))
     label = normalized(re.sub(r"^(?:section|sec\.)\s+", "", label, flags=re.I)).casefold()
     matches = []
     if manuscript.suffix.lower() == ".tex":
@@ -241,7 +256,7 @@ def legacy_section(paper: Path, manuscript: Path, label: str, excerpt: str, *, b
     return {**matches[0], "verified": True}
 
 
-def audit(paper: Path) -> dict[str, Any]:
+def audit(paper: Path, *, _documents=None, _matrix_payload=None) -> dict[str, Any]:
     paper = paper.resolve()
     matrix = paper / "reviews" / "response-matrix.csv"
     if not matrix.is_file() or matrix.is_symlink():
@@ -249,11 +264,13 @@ def audit(paper: Path) -> dict[str, Any]:
     manuscript = canonical_manuscript(paper)
     blocks = None
     if manuscript.suffix.lower() == ".docx":
-        paragraphs, tables = blocks = docx_blocks(manuscript)
+        documents = {} if _documents is None else _documents
+        paragraphs, tables = blocks = docx_blocks(manuscript, _documents=documents)
         body = normalized(" ".join(word_text(item) for item in paragraphs + tables))
     else:
         body = normalized(" ".join(source_text(p.read_text(encoding="utf-8")) for p in sorted(source_paths(manuscript))))
-    rows = load_matrix(matrix)
+    matrix_payload = matrix.read_bytes() if _matrix_payload is None else _matrix_payload
+    rows = load_matrix(matrix, _payload=matrix_payload)
     findings: list[str] = []
     checks: list[dict[str, Any]] = []
     for row in rows:
@@ -294,17 +311,19 @@ def audit(paper: Path) -> dict[str, Any]:
                 "verified_location": verified,
             }
         )
+    if manuscript.suffix.lower() == ".docx" and _documents is None:
+        verify_word_sources(documents)
     return {
         "schema_version": "1.0",
         "created_at": now(),
         "status": "pass" if not findings else "fail",
         "manuscript": {
             "path": manuscript.relative_to(paper).as_posix(),
-            "sha256": manuscript_digest(manuscript),
+            "sha256": documents[manuscript.resolve()].sha256 if manuscript.suffix.lower() == ".docx" else manuscript_digest(manuscript),
         },
         "response_matrix": {
             "path": matrix.relative_to(paper).as_posix(),
-            "sha256": sha256_file(matrix),
+            "sha256": hashlib.sha256(matrix_payload).hexdigest(),
             "commitment_count": len(rows),
         },
         "checks": checks,
@@ -312,13 +331,13 @@ def audit(paper: Path) -> dict[str, Any]:
     }
 
 
-def validate_saved_report(paper: Path) -> list[str]:
+def validate_saved_report(paper: Path, *, _documents=None, _matrix_payload=None) -> list[str]:
     path = paper / "reviews" / "revision-trace.json"
     if not path.is_file():
         return ["reviews/revision-trace.json is required"]
     try:
         saved = json.loads(path.read_text(encoding="utf-8"))
-        current = audit(paper)
+        current = audit(paper, _documents=_documents, _matrix_payload=_matrix_payload)
     except (OSError, json.JSONDecodeError, RevisionTraceError, ValueError) as exc:
         return [f"cannot validate revision trace: {exc}"]
     errors: list[str] = []

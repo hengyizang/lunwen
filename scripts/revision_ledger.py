@@ -21,7 +21,7 @@ from xml.etree import ElementTree as ET
 from scripts.citation_audit import manuscript_digest, tex_source_paths
 from scripts.ref_verify_adapter import canonical_manuscript
 from scripts.research_artifacts import path_in, read, sha, json_bytes, json_digest, save_report, report_errors
-from scripts.revision_integrity import NUMBER, PROTECTED, SI_UNITS, signatures, WordSource
+from scripts.revision_integrity import NUMBER, PROTECTED, SI_UNITS, signatures, word_source
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
@@ -142,9 +142,9 @@ def source_snapshot(project: Path, canonical: Path, *, _documents=None) -> dict:
                 units.append(_unit(project, source, "tex-source-sentence", f"characters:{start}:{end}", span, span, index,
                                    source_sha256=source_sha256))
     elif canonical.suffix == ".docx":
-        source_sha256 = sha(canonical)
+        document = word_source(canonical, _documents, complete=True)
+        source_sha256 = document.sha256
         sources.append({"path": canonical.relative_to(project).as_posix(), "sha256": source_sha256})
-        document = (_documents or {}).get(canonical.resolve()) or WordSource(canonical, complete=True)
         parts, root = document.parts, copy.deepcopy(document.root)
         if any(node.tag in {W + "ins", W + "del", W + "moveFrom", W + "moveTo"} for node in root.iter()):
             raise ValueError("resolve existing Word revisions before ledger comparison")
@@ -181,7 +181,7 @@ def source_snapshot(project: Path, canonical: Path, *, _documents=None) -> dict:
             units.append(unit)
     else:
         raise ValueError("canonical manuscript must be TeX or Word")
-    return {"path": canonical.relative_to(project).as_posix(), "sha256": manuscript_digest(canonical),
+    return {"path": canonical.relative_to(project).as_posix(), "sha256": source_sha256 if canonical.suffix == ".docx" else manuscript_digest(canonical),
             "sources": sources, "units": units}
 
 
@@ -361,8 +361,8 @@ def audit(project: Path, paper_id: str, *, _documents=None) -> dict:
             "alignment": "exact equal units; positional pairing of changed units; no semantic correspondence claim"}
 
 
-def refresh(project: Path, paper_id: str) -> dict:
-    result = audit(project, paper_id)
+def refresh(project: Path, paper_id: str, *, _documents=None) -> dict:
+    result = audit(project, paper_id, _documents=_documents)
     output = _paper(project, paper_id) / "reviews/revision-ledger-report.json"
     return save_report(project, output, result, "scripts/revision_ledger.py")
 

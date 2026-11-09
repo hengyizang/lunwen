@@ -34,6 +34,13 @@ Keep standalone value, reuse disclosure, six-paper independence, cloud feasibili
 and current venue/article-type evidence. New evidence, a meaningful boundary or
 theory can be a contribution; a new algorithm is not imposed on every study.
 
+Existing stage prompts prepare only their selected research-case sections and
+current sources. G1 competition does not demand later venue, title or figure
+preparation; G2 contribution/thesis views retain their own missing evidence.
+`preparation_scope` names the sections and explicitly leaves full-case preparation
+unverified. A selected packet's `ready_for_review` never grants scientific or
+stage approval. Full packets and release exports retain the complete checks.
+
 ## Key tests tied to real comparisons (empirical G3)
 
 papers/Pxx/experiment-evidence-plan.json now requires critical_tests. Every row has:

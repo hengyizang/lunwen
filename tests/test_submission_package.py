@@ -5,6 +5,7 @@ import json
 import os
 import tempfile
 import unittest
+import warnings
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,6 +16,215 @@ from scripts.submission_package import build_package
 
 
 class SubmissionPackageTests(unittest.TestCase):
+    def test_source_seal_follows_zip_reads_and_wrong_sizes_are_rejected_before_decompression(self):
+        from scripts import submission_package as packaging
+        actual_close, actual_read = zipfile.ZipFile.close, zipfile.ZipExtFile.read
+        for mutation in ("source_after_read", "size"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                project = self.make_project(root)
+                source = project / "papers/P01/manuscript/main.tex"
+                armed, fired = False, False
+                main_reads = []
+
+                def closed(archive):
+                    nonlocal armed, fired
+                    target = (not armed and archive.mode == "w" and archive.fp is not None
+                              and Path(archive.filename).parent == root)
+                    result = actual_close(archive)
+                    if target:
+                        # Arm before rewriting to keep nested close calls inert.
+                        armed = True
+                        if mutation == "size":
+                            path = Path(archive.filename)
+                            with zipfile.ZipFile(path) as saved:
+                                members = [(info, saved.read(info)) for info in saved.infolist()]
+                            with zipfile.ZipFile(path, "w") as changed:
+                                for info, payload in members:
+                                    changed.writestr(info, b"X" * 65536 if info.filename == "manuscript/main.tex" else payload)
+                            fired = True
+                    return result
+
+                def read(member, size=-1):
+                    nonlocal fired
+                    value = actual_read(member, size)
+                    if armed and member.name == "manuscript/main.tex" and (mutation != "size" or fired):
+                        main_reads.append({"requested": size, "actual": len(value)})
+                        if mutation == "source_after_read" and not fired:
+                            fired = True
+                            source.write_text(source.read_text() + "\nUnreviewed numeric effect: 999.\n")
+                    return value
+
+                with patch.object(researchctl, "PROJECTS_ROOT", root), patch.object(packaging, "project_dir", lambda slug: root / slug), \
+                        patch("scripts.manuscript_audit.validate_saved_report", return_value=[]):
+                    destination = build_package("demo-study", "P01", root / "previous.zip")
+                    with zipfile.ZipFile(destination, "a") as previous:
+                        previous.comment = b"Preserve this valid old package on failure."
+                    old_zip, old_names = destination.read_bytes(), set(root.iterdir())
+                    original_size = source.stat().st_size
+                    with patch.object(zipfile.ZipFile, "close", closed), patch.object(zipfile.ZipExtFile, "read", read):
+                        message = "inputs changed during packaging" if mutation == "source_after_read" else "member size differs"
+                        with self.assertRaisesRegex(researchctl.ResearchCtlError, message):
+                            build_package("demo-study", "P01", destination)
+                    self.assertTrue(fired)
+                    self.assertEqual(destination.read_bytes(), old_zip)
+                    self.assertEqual(set(root.iterdir()), old_names)
+                    if mutation == "size":
+                        self.assertEqual(main_reads, [])
+                    else:
+                        self.assertEqual(main_reads, [{"requested": original_size + 1, "actual": original_size}])
+
+    def test_closed_zip_payload_inventory_and_crc_are_rechecked_before_replacement(self):
+        from scripts import submission_package as packaging
+        actual_close = zipfile.ZipFile.close
+        for mutation in ("payload", "missing", "duplicate", "crc"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.make_project(root)
+                fired = False
+
+                def closed(archive):
+                    nonlocal fired
+                    target = (not fired and archive.mode == "w" and archive.fp is not None
+                              and Path(archive.filename).parent == root)
+                    result = actual_close(archive)
+                    if target:
+                        fired = True
+                        path = Path(archive.filename)
+                        if mutation == "crc":
+                            with zipfile.ZipFile(path) as saved:
+                                offset = saved.start_dir
+                            raw = bytearray(path.read_bytes())
+                            while raw[offset:offset + 4] == b"PK\x01\x02":
+                                name_size, extra_size, comment_size = (
+                                    int.from_bytes(raw[offset + start:offset + start + 2], "little") for start in (28, 30, 32))
+                                if raw[offset + 46:offset + 46 + name_size] == b"manuscript/main.tex":
+                                    raw[offset + 16] ^= 1
+                                    path.write_bytes(raw)
+                                    break
+                                offset += 46 + name_size + extra_size + comment_size
+                            else:
+                                self.fail("CRC fixture did not find its actual member")
+                        else:
+                            with zipfile.ZipFile(path) as saved:
+                                members = [(info, saved.read(info)) for info in saved.infolist()]
+                            with zipfile.ZipFile(path, "w") as changed:
+                                for info, payload in members:
+                                    if info.filename == "manuscript/main.tex":
+                                        if mutation == "missing":
+                                            continue
+                                        if mutation == "payload":
+                                            payload += b"\nUnreviewed numeric effect: 999.\n"
+                                    changed.writestr(info, payload)
+                                if mutation == "duplicate":
+                                    with warnings.catch_warnings():
+                                        warnings.simplefilter("ignore", UserWarning)
+                                        changed.writestr("manuscript/main.tex", b"Unreviewed duplicate.")
+                    return result
+
+                with patch.object(researchctl, "PROJECTS_ROOT", root), patch.object(packaging, "project_dir", lambda slug: root / slug), \
+                        patch("scripts.manuscript_audit.validate_saved_report", return_value=[]):
+                    destination = build_package("demo-study", "P01", root / "previous.zip")
+                    old_zip, old_names = destination.read_bytes(), set(root.iterdir())
+                    with patch.object(zipfile.ZipFile, "close", closed):
+                        with self.assertRaisesRegex(researchctl.ResearchCtlError, "Written submission ZIP"):
+                            build_package("demo-study", "P01", destination)
+                    self.assertTrue(fired)
+                    self.assertEqual(destination.read_bytes(), old_zip)
+                    self.assertEqual(set(root.iterdir()), old_names)
+
+    def test_payload_bytes_remain_bound_when_source_is_replaced_and_restored(self):
+        from scripts import submission_package as packaging
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = self.make_project(root)
+            source = project / "papers/P01/manuscript/main.tex"
+            original = source.read_bytes()
+            armed = False
+            actual_read, actual_guard = Path.read_bytes, packaging.require_final_origins
+
+            def guard(*args):
+                nonlocal armed
+                actual_guard(*args)
+                armed = True
+
+            def read(path):
+                nonlocal armed
+                if path == source and armed:
+                    armed = False
+                    source.write_bytes(original + b"\nUnreviewed numeric effect: 999.\n")
+                    try:
+                        return actual_read(path)
+                    finally:
+                        source.write_bytes(original)
+                return actual_read(path)
+
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch.object(packaging, "project_dir", lambda slug: root / slug), \
+                    patch("scripts.manuscript_audit.validate_saved_report", return_value=[]):
+                destination = build_package("demo-study", "P01", root / "previous.zip")
+                old_zip, old_names = destination.read_bytes(), set(root.iterdir())
+                with patch.object(packaging, "require_final_origins", side_effect=guard), patch.object(Path, "read_bytes", read):
+                    with self.assertRaisesRegex(researchctl.ResearchCtlError, "payload differs from the checked"):
+                        build_package("demo-study", "P01", destination)
+                self.assertEqual(source.read_bytes(), original)
+                self.assertEqual(destination.read_bytes(), old_zip)
+                self.assertEqual(set(root.iterdir()), old_names)
+
+    def test_late_source_external_identity_or_implementation_changes_never_replace_zip(self):
+        from scripts import submission_package as packaging
+        from scripts.research_artifacts import read, write, sha
+        actual_write = zipfile.ZipFile.writestr
+        for mutation in ("source", "external", "identity", "implementation", "scientific_implementation", "interrupt"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                project = self.make_project(root)
+                source = project / "papers/P01/manuscript/main.tex"
+                external = project / "evidence/journal-scope.txt"
+                external.write_text("Synthetic official scope, not scientific evidence.", encoding="utf-8")
+                venue = read(project / "papers/P01/venue.json")
+                write(project / "program/journal-dossiers.json", {"journals": [{"venue_id": venue["venue_id"], "fields": {
+                    "apc": {"status": "unknown", "source": {"path": "evidence/journal-scope.txt", "sha256": sha(external)}}}}]})
+                if mutation == "scientific_implementation":
+                    from scripts import revision_integrity
+                    implementation = Path(revision_integrity.__file__)
+                else:
+                    implementation = Path(packaging.__file__)
+                implementation_bytes = implementation.read_bytes()
+                fired = False
+
+                def mutate(archive, *args, **kwargs):
+                    nonlocal fired
+                    result = actual_write(archive, *args, **kwargs)
+                    if not fired:
+                        fired = True
+                        if mutation == "source":
+                            source.write_text(source.read_text() + "\nUnreviewed numeric effect: 999.\n")
+                        elif mutation == "external":
+                            external.write_text("Changed external source bytes.")
+                        elif mutation == "identity":
+                            output_provenance.record_model_writes(project, [source], family="anthropic",
+                                provider="fixture", model="fixture", role="writer", run_id="changed")
+                        elif mutation.endswith("implementation"):
+                            implementation.write_bytes(implementation_bytes + b"\n# Changed implementation fixture.\n")
+                        else:
+                            raise KeyboardInterrupt("interrupted ZIP software fixture")
+                    return result
+
+                try:
+                    with patch.object(researchctl, "PROJECTS_ROOT", root), patch.object(packaging, "project_dir", lambda slug: root / slug), \
+                            patch("scripts.manuscript_audit.validate_saved_report", return_value=[]):
+                        destination = build_package("demo-study", "P01", root / "previous.zip")
+                        old_zip, old_names = destination.read_bytes(), set(root.iterdir())
+                        with patch.object(zipfile.ZipFile, "writestr", mutate):
+                            expected = KeyboardInterrupt if mutation == "interrupt" else researchctl.ResearchCtlError
+                            with self.assertRaises(expected):
+                                build_package("demo-study", "P01", destination)
+                        self.assertTrue(fired)
+                        self.assertEqual(destination.read_bytes(), old_zip)
+                        self.assertEqual(set(root.iterdir()), old_names)
+                finally:
+                    implementation.write_bytes(implementation_bytes)
+
     def test_final_binding_includes_protected_panel_outside_the_paper_tree(self):
         from scripts import submission_package as packaging, review_panel, model_runtime, ai_providers
         from tests.test_review_panel import panel_inputs

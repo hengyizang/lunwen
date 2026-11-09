@@ -6,7 +6,7 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from scripts.venue_candidates import build_registry, validate_registry
+from scripts.venue_candidates import VenueCandidateError, build_registry, validate_registry
 
 
 class VenueCandidateTests(unittest.TestCase):
@@ -44,6 +44,18 @@ class VenueCandidateTests(unittest.TestCase):
                 "https://jcr.clarivate.com/",
             )
             self.assertEqual(validate_registry(project, registry), [])
+            self.assertFalse(registry["human_review_required"])
+            self.assertFalse(registry["human_review_verified"])
+            self.assertFalse(registry["scientific_validation"])
+            legacy = {key: value for key, value in registry.items()
+                      if key not in {"human_review_verified", "scientific_validation"}}
+            legacy["human_review_required"] = True
+            before = json.dumps(legacy)
+            self.assertEqual(validate_registry(project, legacy), [])
+            self.assertEqual(json.dumps(legacy), before)
+            registry["human_review_verified"] = True
+            self.assertTrue(validate_registry(project, registry))
+            registry["human_review_verified"] = False
             self.assertEqual(registry["papers"][0]["candidates"][0]["rank"], 1)
             self.assertEqual(registry["papers"][0]["selected_venue_id"], "journal-a")
             (project / "papers" / "P01" / "paper-contract.json").write_text(
@@ -60,3 +72,9 @@ class VenueCandidateTests(unittest.TestCase):
             registry["papers"][0]["candidates"][0]["fit_score"] = 92.0
             export.write_text(export.read_text(encoding="utf-8").replace("3.2", "3.3"), encoding="utf-8")
             self.assertTrue(any("hash changed" in item for item in validate_registry(project, registry)))
+            source = export.read_text()
+            for invalid in ("nan", "inf", "-inf"):
+                with self.subTest(nonfinite_impact=invalid), self.assertRaises(VenueCandidateError):
+                    export.write_text(source.replace("3.3", invalid))
+                    build_registry(project, "private/candidate-spec.json", "private/jcr.csv",
+                                   "Researcher", "https://jcr.clarivate.com/")

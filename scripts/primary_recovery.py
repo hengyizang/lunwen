@@ -23,18 +23,13 @@ class RecoveryError(ValueError):
 
 
 try:
-    from scripts.research_artifacts import load_json as read, sha
+    from scripts.research_artifacts import load_json as read, sha, write
 except ImportError:
-    from research_artifacts import load_json as read, sha
+    from research_artifacts import load_json as read, sha, write
 
 
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-
-
-def write(path, value):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def path_in(project, relative):
@@ -438,18 +433,35 @@ def automatic_retirement(project, *, run_id):
                 or any(proposal.get(key) != context[key] for key in (
                     "plan_sha256", "budget_sha256", "version", "failed_attempt_ids", "diagnostic_evidence"))):
             raise RecoveryError("retirement proposal must bind every current failure and explicitly retain observed exploratory results")
-        errors = review_receipts.validate_gate(project, "G4")
+        from scripts.paper_execution import enabled, selected
+        stage = "experiment-execution"
+        paper = selected(project) if enabled(project) else None
+        key = review_receipts._key("G4", paper)
+        if (project / review_receipts.PREFIX / key / "observation-latest.json").is_file():
+            actual = review_receipts.observation(project, stage, paper)
+            final = actual["receipt"]
+            if not review_receipts.materials_match(final["materials"],
+                    review_receipts.material_snapshot(project, stage, paper,
+                        _version=final["materials"].get("schema_version", "1.0"))):
+                raise RecoveryError("retirement observation is stale for current scientific inputs")
+            from scripts.research_cycle import research_decision, decision_errors
+            errors = decision_errors(research_decision(project, stage, run_id, reviewed=True))
+            audit_path = path_in(project, final["audit"]["path"])
+            from scripts.researchctl import audit_document_valid
+            audit_document_valid(audit_path, read(audit_path), errors, final=True)
+            if any(note.strip().lower().startswith("unresolved:") for note in final["dispositions"]):
+                errors.append("retirement still has unresolved author dispositions")
+            review = [actual["pointer"], final["audit"]]
+        else:
+            errors = review_receipts.validate_gate(project, "G4", paper)
+            pointer = read(project / review_receipts.PREFIX / key / "latest.json") if not errors else {}
+            final = read(path_in(project, pointer["path"])) if pointer else {}
+            initial = read(path_in(project, final["initial"]["path"])) if final else {}
+            review = [final["initial"], initial["audit"], pointer, final["audit"]] if final else []
         if errors:
             raise RecoveryError("; ".join(errors))
-        pointer = read(project / "state/review-receipts/G4/latest.json")
-        final_path = path_in(project, pointer["path"])
-        final = read(final_path)
         if final.get("run_id") != run_id:
             raise RecoveryError("automatic retirement requires this exact writer/critic cycle")
-        initial_path = path_in(project, final["initial"]["path"])
-        review = [{"path": target.relative_to(project).as_posix(), "sha256": sha(target)} for target in (
-            initial_path, path_in(project, read(initial_path)["audit"]["path"]), final_path,
-            path_in(project, final["audit"]["path"]))]
         prepared = prepare(project, AUTOMATIC_PROPOSAL, "deterministic_control_plane", "retire_primary_plan")
         authority = {"actor": "deterministic_control_plane", "decision_kind": "automated", "human_confirmation": False,
                      "source_run_id": str(run_id), "source": AUTOMATIC_PROPOSAL, "source_sha256": sha(source),
@@ -647,7 +659,7 @@ def histories(project):
             if (value.get("actor") != "deterministic_control_plane" or value.get("human_confirmation") is not False
                     or value.get("proposal", {}).get("observed_prior_results") is not True
                     or value.get("proposal", {}).get("new_analysis_phase") != "exploratory"
-                    or not isinstance(value.get("review_evidence"), list) or len(value["review_evidence"]) != 4):
+                    or not isinstance(value.get("review_evidence"), list) or len(value["review_evidence"]) not in {2, 4}):
                 raise RecoveryError("automatic retired protocol lost its honest decision or analysis phase")
             for item in value.get("review_evidence", []):
                 target = path_in(project, item["path"])

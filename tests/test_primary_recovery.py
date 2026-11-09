@@ -281,6 +281,44 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.assertEqual(capped["status"], "blocked")
         self.assertIn("hard limit", capped["blocker"])
 
+    def test_clean_native_cycle_can_retire_only_its_current_reviewed_failure(self):
+        from scripts import research_cycle, review_receipts
+        from scripts.research_artifacts import write
+        from tests.research_cycle_fixtures import pending_decision, independent_audit
+        self.free_failed_protocol()
+        self.machine_retirement_proposal()
+        stage, cycle = "experiment-execution", "machine-diagnosis"
+        pending_decision(self.project, stage, cycle, "P01")
+        invocations = []
+        def invoke(phase, request):
+            invocations.append(phase)
+            path = self.project / "reviews/independent/native-clean.json"
+            audit = independent_audit()
+            write(path, audit)
+            return audit, path, {"provider": "synthetic-fixture", "family": "anthropic",
+                "requested_model": "synthetic-critic", "reported_model": "synthetic-critic",
+                "completion_status": "completed", "cache_hit": False}
+        reviewed = research_cycle.review_cycle(self.project, stage, cycle, writer_family="openai",
+            prompt=lambda: "Inspect the current failure and its preserved sources; software fixture only.",
+            invoke=invoke, remediate=lambda *args: self.fail("Clean review needs no repair"),
+            refresh=lambda phase: ({}, {}), writer_notes=[], log=lambda *args: None)
+        self.assertEqual(invocations, ["initial"])
+        self.assertEqual(reviewed["research_decision"]["status"], "independently_observed")
+        self.assertFalse(recovery.automatic_retirement(self.project, run_id="wrong-cycle")["retired"])
+        extra = self.project / "program/changed-scientific-input.json"
+        write(extra, {"hypothesis": "Unreviewed replacement mechanism"})
+        self.assertIn("stale", recovery.automatic_retirement(self.project, run_id=cycle)["blocker"])
+        extra.unlink()
+        result = recovery.automatic_retirement(self.project, run_id=cycle)
+        self.assertTrue(result["retired"], result)
+        history = recovery.histories(self.project)[0]
+        self.assertEqual(len(history["review_evidence"]), 2)
+        self.assertEqual(self.read("state/run.json")["gate"], "G3")
+        self.assertFalse(history["human_confirmation"])
+        receipt = self.read(history["review_evidence"][0]["path"])
+        self.assertFalse(receipt["gate_authority"])
+        self.assertFalse(receipt["scientific_completion_verified"])
+
     def test_paid_failure_is_accounted_without_extra_approval_but_running_lease_blocks_duplicate_work(self):
         failed = self.execute()
         self.assertEqual(failed["status"], "failed")

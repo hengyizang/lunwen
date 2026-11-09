@@ -12,7 +12,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts import api_orchestrator, figure_layout, source_scope
-from scripts import pre_submission_review as review
 from scripts import research_candidates as candidates
 from scripts import research_methods as methods
 
@@ -265,24 +264,6 @@ class ResearchMethodTests(unittest.TestCase):
             self.assertIn("never scientific or packaging floors", prompt)
         self.assertEqual(intake.read_bytes(), original)
 
-    def checklist(self):
-        self.paper = self.project / "papers/P01"
-        manuscript = self.paper / "manuscript/main.tex"
-        manuscript.parent.mkdir(parents=True)
-        manuscript.write_text("The association does not establish causality.\n", encoding="utf-8")
-        ms_anchor = anchor(self.project, "papers/P01/manuscript/main.tex",
-                           "The association does not establish causality.")
-        value = {"schema_version": "1.0", "article_type": "computational",
-                 "calibration_status": "NOT_CALIBRATED", "checks": [
-                     {"criterion_id": row["id"], "criterion_source": "ARS and computational extension",
-                      "judgement": "MEETS", "rationale": "Synthetic validator fixture only.",
-                      "uncertainty": "This fixture is not a scientific judgement.",
-                      "decision_bearing": True, "resolution_test": "Inspect the underlying primary evidence.",
-                      "manuscript_anchors": [copy.deepcopy(ms_anchor)],
-                      "evidence_anchors": [copy.deepcopy(self.evidence)]}
-                     for row in review.criteria_for("computational")]}
-        path = write_json(self.paper / "reviews/pre-submission-checklist.json", value)
-        return value, path
 
     def test_hash_pinned_installation_detects_modified_reference(self):
         self.assertEqual(methods.installation_errors(), [])
@@ -334,11 +315,23 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertNotIn("python3 scripts/validate_review_intake.py", prompt)
         self.assertIn("Public AI-use statements remain author-editable", prompt)
         self.assertIn("without requiring every comparison in the manuscript", prompt)
-        _, _ = self.checklist()
-        report = review.audit(self.paper)
-        self.assertEqual(report["primary_method"]["sha256"], method["sha256"])
-        self.assertNotIn("guidance", report["primary_method"])
-        self.assertFalse(report["scientific_validation"])
+        questions = methods.ROOT / "config/pre-submission-criteria.json"
+        self.assertIn(methods.pinned_text_sha256(questions), active_prompt)
+        bank = json.loads(questions.read_text())
+        for row in bank["universal"]:
+            self.assertIn(row["question"], active_prompt)
+        for row in bank["article_types"]["computational"]:
+            self.assertNotIn(row["question"], active_prompt)
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("No extra model pass")), \
+             patch.object(api_orchestrator, "project_root", return_value=self.project), \
+             patch.object(api_orchestrator, "project_snapshot", return_value="Original source view"), \
+             patch.object(api_orchestrator, "figure_reference_context", return_value=""):
+            for selection in ("submission-review", "config/pre-submission-criteria.json", "full-method-review"):
+                explicit = api_orchestrator.critic_prompt("study", "writing-and-review", selection)
+                self.assertEqual(explicit.count(questions.read_text()), 1)
+        self.assertIn("standalone categorical checklist scanner/report is retired", active_prompt)
+        self.assertIn("Semantic review remains unknown", active_prompt)
+        self.assertFalse((self.project / "papers/P01/reviews/pre-submission-review.json").exists())
 
     def test_peer_review_views_are_bounded_and_changed_source_is_rejected(self):
         methods_root = Path(self.temp.name) / "methods"
@@ -349,6 +342,9 @@ class ResearchMethodTests(unittest.TestCase):
         write_json(methods_root / "integrations/vendored-research-methods.json",
                    {"files": [{key: value for key, value in source.items()
                                if key not in {"source_id", "selected_sections", "guidance"}}]})
+        copied_questions = methods_root / "config/pre-submission-criteria.json"
+        copied_questions.parent.mkdir(parents=True)
+        shutil.copyfile(methods.ROOT / "config/pre-submission-criteria.json", copied_questions)
         subset = methods.peer_review_context(methods_root, sections=(4, 5))
         self.assertIn("Map claims to evidence", subset)
         self.assertNotIn("### 8. Review figures", subset)
@@ -502,7 +498,10 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertFalse(candidates.audit_card(self.project, path)["pass"])
 
     def test_g5_refresh_blocks_missing_paper_facts_and_preserves_no_approval(self):
-        _, _ = self.checklist()
+        self.paper = self.project / "papers/P01"
+        manuscript = self.paper / "manuscript/main.tex"
+        manuscript.parent.mkdir(parents=True)
+        manuscript.write_text("The association does not establish causality.\n")
         with patch.object(api_orchestrator, "project_root", return_value=self.project), \
              patch.object(api_orchestrator, "active_paper", return_value="P01"):
             result = api_orchestrator.refresh_research_method_audits("study", "writing-and-review")
@@ -513,88 +512,8 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertFalse((self.paper/"reviews/pre-submission-review.json").exists())
         self.assertFalse((self.project / "state/run.json").exists())
 
-    def test_review_all_criteria_and_hashes_are_replayed(self):
-        _, _ = self.checklist()
-        result = review.audit(self.paper)
-        self.assertTrue(result["pass"])
-        self.assertEqual(result["criteria_count"], 14)
-        self.assertFalse(result["scientific_validation"])
-        path = write_json(self.paper / "reviews/pre-submission-review.json", result)
-        self.assertEqual(review.validate_saved_report(self.paper), [])
-        value = json.loads(path.read_text())
-        value["criteria_count"] = 0
-        write_json(path, value)
-        self.assertTrue(review.validate_saved_report(self.paper))
 
-    def test_review_missing_or_unresolved_criteria_cannot_pass(self):
-        value, path = self.checklist()
-        value["checks"].pop()
-        value["checks"][0]["judgement"] = "PARTLY_MEETS"
-        value["checks"][0]["decision_bearing"] = False
-        write_json(path, value)
-        result = review.audit(self.paper)
-        self.assertFalse(result["pass"])
-        self.assertIn("originality", result["unresolved_criteria"])
-        self.assertTrue(any("unassessed required" in e for e in result["errors"]))
 
-    def test_numeric_scoring_and_skipped_universal_criteria_are_rejected(self):
-        value, path = self.checklist()
-        value["overall_score"] = 9.8
-        value["checks"][0].update(judgement="NOT_APPLICABLE", non_applicability_reason="Author preference.")
-        write_json(path, value)
-        errors = review.audit(self.paper)["errors"]
-        self.assertTrue(any("acceptance probability" in e for e in errors))
-        self.assertTrue(any("cannot be skipped" in e for e in errors))
-
-    def test_review_rejects_unused_draft_and_wrong_line(self):
-        value, path = self.checklist()
-        unused = self.paper / "manuscript/unused.tex"
-        unused.write_text("The association does not establish causality.\n", encoding="utf-8")
-        value["checks"][0]["manuscript_anchors"] = [anchor(
-            self.project, "papers/P01/manuscript/unused.tex", "The association does not establish causality.")]
-        value["checks"][1]["evidence_anchors"][0]["locator"] = "L2"
-        write_json(path, value)
-        errors = review.audit(self.paper)["errors"]
-        self.assertTrue(any("canonical manuscript" in e for e in errors))
-        self.assertTrue(any("unconfirmed_anchor" in e for e in errors))
-
-    def test_tex_include_and_docx_paragraph_anchors_are_supported(self):
-        value, path = self.checklist()
-        child = self.paper / "manuscript/results.tex"
-        child.write_text("Included results remain bounded.\n", encoding="utf-8")
-        (self.paper / "manuscript/main.tex").write_text("\\input{results}\n")
-        for check in value["checks"]:
-            check["manuscript_anchors"] = [anchor(self.project, "papers/P01/manuscript/results.tex",
-                                                 "Included results remain bounded.")]
-        write_json(path, value)
-        self.assertTrue(review.audit(self.paper)["pass"])
-        from docx import Document
-        (self.paper / "manuscript/main.tex").unlink()
-        doc = Document()
-        doc.add_paragraph("The association does not establish causality.")
-        doc.save(self.paper / "manuscript/main.docx")
-        for check in value["checks"]:
-            check["manuscript_anchors"] = [anchor(self.project, "papers/P01/manuscript/main.docx",
-                "The association does not establish causality.", "paragraph 1")]
-        write_json(path, value)
-        self.assertTrue(review.audit(self.paper)["pass"])
-
-    def test_changed_manuscript_or_dependency_requires_new_review(self):
-        _, _ = self.checklist()
-        write_json(self.paper / "reviews/pre-submission-review.json", review.audit(self.paper))
-        manuscript = self.paper / "manuscript/main.tex"
-        manuscript.write_text(manuscript.read_text() + "New unsupported claim.\n")
-        self.assertTrue(any("stale" in e for e in review.validate_saved_report(self.paper)))
-        self.source.write_text(self.source.read_text() + "Changed evidence.\n")
-        self.assertTrue(any("stale source" in e for e in review.validate_saved_report(self.paper)))
-
-    def test_malformed_judgement_is_unresolved(self):
-        value, path = self.checklist()
-        value["checks"][0]["judgement"] = {}
-        write_json(path, value)
-        result = review.audit(self.paper)
-        self.assertFalse(result["pass"])
-        self.assertIn("originality", result["unresolved_criteria"])
 
     def test_api_author_cannot_forge_audits_or_human_scope(self):
         with patch.object(api_orchestrator, "project_root", return_value=self.project):

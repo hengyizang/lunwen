@@ -17,7 +17,7 @@ This increment applies the worthwhile gaps identified in the 19-article assessme
 | Journal economics and policies | Dated official-source APC, tax, OA choice, waivers, page charges, review-time definitions, portal and AI policies | Official evidence and authorized JCR information must be supplied/rechecked; no acceptance probability or guaranteed decision date |
 | Editing/review evaluation | Engineering counterexamples including legitimate scientific qualifiers; offline evaluator | NOT_CALIBRATED; add field-specific blinded human evaluations before any model/effort downgrade |
 
-Original files and scientific provenance are preserved. The later user-authorized [editorial integration](EDITORIAL-SKILLS.md) adds all Humanizer patterns, the full anti-defensive academic review and actual Unicode watermark-carrier cleanup in derived text copies. No detector score, cleanup, image regeneration or style preference can authorize changes to science. Optional Jev sorting, multimedia interpretation, screenshot-to-PPT and Chinese style tooling are deferred until an actual task and measured net benefit justify them; they are not missing prerequisites for English scientific manuscripts.
+Original files and scientific provenance are preserved. The later user-authorized [editorial integration](EDITORIAL-SKILLS.md) supplies pinned Humanizer and anti-defensive method guidance within existing writer/critic calls: compact by default, full when explicitly selected. Separate H/AD/CFH mechanical scans and scorecards are retired; the remaining style report records their semantic status as unknown. Unicode watermark-carrier cleanup still produces source-bound copies and preserves originals. No detector score, cleanup, image regeneration or style preference can authorize changes to science. Optional Jev sorting, multimedia interpretation, screenshot-to-PPT and Chinese style tooling are deferred until an actual task and measured net benefit justify them; they are not missing prerequisites for English scientific manuscripts.
 
 ## Cloud entry points
 
@@ -114,6 +114,45 @@ Each executor validation output contains `method_tool_id`, `validation_kind`, `p
 Inputs are the canonical `manuscript/main.docx`, `reviews/revision-base/main.docx`, a current passing revision-integrity report/authorization, and a passing response trace for `reviews/response-matrix.csv`.
 
 Outputs under `submission-materials/revision/`: `clean.docx`, `tracked.docx`, `response-matrix.csv`, `changes.md`; receipt: `reviews/docx-revision.json`. The creator is accurately recorded as Doctoral Research OS. Accepting tracked revisions reconstructs the clean document; rejecting reconstructs the baseline. Non-document package resources must match, preserving unchanged references, styles, images and equations. Changed complex content is refused, rather than converted to plain text. G5 exposes optional revision-package/response-trace diagnostics as C observations; actual scientific revision integrity remains A. Final B checks still require the canonical Word document's genuine provenance and successful rendering/export. A passing XML check does not replace inspecting the final Word/PDF.
+
+Word integrity, the change ledger, response locations and tracked-package creation
+share complete source packages within one operation. The parser and its SHA use
+the same captured OOXML bytes; replacing and restoring a path cannot label one
+package with another package's hash. Compressed packages are bounded to 64 MiB;
+duplicate entries, the existing 50,000,000-byte decompressed limit, CRC and XML
+checks remain. Each new operation reads fresh sources. Changes detected before
+publication reject the result. The clean Word file and response copy come from
+the checked captured bytes.
+
+In one unchanged software fixture, tracked-package creation opened Word ZIPs
+5 → 2 times and source files 16 → 13 times; file-SHA helper calls increased 10 → 11
+because of end checks. Automatic change recording opened ZIPs 6 → 2 times and
+source files 16 → 12 times, with 10 → 10 file-SHA helper calls. The two captured
+Word packages also hash their in-memory bytes. Input bindings,
+clean Word/response/note bytes, tracked OOXML parts and the change-ledger records
+matched; tracked ZIP container timestamps can differ. These are
+software-read measurements, not scientific experiments or general speed claims.
+
+Manual ZIP creation binds every selected payload and filename to the actual
+checked B-input snapshot. Its generated checklist/manifest remain controlled
+derivatives. Replacing a source with different bytes and restoring it before the
+last check does not permit those different bytes into the ZIP. Final paper,
+external-source, validator and provenance bindings are rechecked before atomic
+replacement; errors and interruption discard the temporary ZIP and preserve an
+existing destination. This never submits a manuscript or bypasses a new call's
+scientific checks.
+
+Before replacement, the closed temporary ZIP is reopened and every actual member
+is read for CRC and checked-byte SHA verification, including the generated
+checklist and manifest. Names must match exactly without duplicates. Declared
+member sizes must match their checked payload sizes before decompression; reads
+are bounded to that size plus one byte. The existing final source/implementation/
+identity/external seal runs after these reads, immediately before replacement.
+This adds
+one archive read/decompression and member hashing pass; it does not reduce
+verification work. These checks bind the archive at verification time, not against
+later writes by another process with the same file permissions. Delivery hashes
+and the package manifest still need checking when transferring or using a package.
 
 Specification references: [Microsoft inserted runs](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.insertedrun?view=openxml-3.0.1), [deleted runs](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.wordprocessing.deletedrun?view=openxml-3.0.1).
 

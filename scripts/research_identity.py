@@ -212,10 +212,6 @@ def validate(project: Path, paper_id: str, gate: str) -> list[str]:
                 raise ValueError("the final manuscript must state its actual study design, including Meta analysis when used")
             paper = project / "papers" / paper_id
             verify_location(paper, canonical_manuscript(paper), json.dumps(statement.get("location")), statement["excerpt"])
-            checklist = read(path_in(project, f"papers/{paper_id}/reviews/pre-submission-checklist.json"))
-            expected = "review" if kind == "secondary_quantitative" else "computational" if design == "software" else design
-            if checklist.get("article_type") != expected:
-                raise ValueError("scientific checklist must match the actual research design; a research journal category cannot waive synthesis checks")
         return []
     except (OSError, ValueError, KeyError, TypeError, AttributeError, ImportError, RuntimeError) as exc:
         return [f"{paper_id} original-research policy: {exc}"]

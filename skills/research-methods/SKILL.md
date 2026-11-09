@@ -20,7 +20,8 @@ references/research-methods/evidence-arguments.md. Reuse the established fact,
 claim, experiment and revision ledgers.
 
 At writing-and-review, read references/research-methods/submission-review.md.
-Write the criterion-bound checklist and run scripts/pre_submission_review.py.
+Apply the source-bound ARS/K-Dense questions within the existing independent
+review. The separate categorical checklist scanner and report are retired.
 Keep reviewers independent and all persistent scientific wording non-Claude.
 Enforce the existing cumulative project totals without tranches or per-call or
 per-paper caps. Only G1 doctoral-topic and G2 paper-topic decisions are human;

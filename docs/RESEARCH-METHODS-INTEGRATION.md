@@ -8,9 +8,9 @@
 | academic-research-skills-codex | 证据行的访问范围、缺失状态与逐阶段验证方法 | API/CLI 分阶段方法提示；证据与论证模块 | 映射到现有 `paper-facts`、claim-evidence、实验和返修台账，不另建结果权威 |
 | nature-skills | 先精读论文再提出六项可检验选题要求；先确定论证边界；面板对齐与 PDF 文字/线条碰撞检查 | 可审计论文卡片、PDF 页面来源映射、原生图表渲染器与 G5 图件复查 | 继续使用现有 DOI、引用、数值、Word/PPT、返修与基于实际渲染的自动视觉检查机制 |
 | PaperSpine | 全文证据台账、支撑具体主张的引用库、写作理由矩阵 | 现有事实/主张/测量/段落论证台账的明确映射；规划、写作和审查提示 | 不导入其独立桌面工作台，也不复制一套并行数据库 |
-| academic-research-skills 原版 | 七个通用 reviewer 维度、按文章类型扩展的检查、证据锚定的分类判断、保留未解决问题与审稿分歧 | `config/pre-submission-criteria.json`、投稿前清单、独立批评提示与可见观察 | 作为 C 观察保留；不替代当前独立批评、最终互盲 panel、数值/引用/主张强度保护或 G1/G2 人工选题决定及其他阶段的自动检查 |
+| academic-research-skills 原版 | 七个通用 reviewer 维度、按文章类型扩展的检查、证据锚定的分类判断、保留未解决问题与审稿分歧 | `config/pre-submission-criteria.json`、既有独立批评中的来源绑定问题，不再另填机械清单 | 作为 C 观察保留；不替代当前独立批评、最终互盲 panel、数值/引用/主张强度保护或 G1/G2 人工选题决定及其他阶段的自动检查 |
 
-通用投稿问题覆盖原创性、方法严谨性、证据充分性、论证连贯性、写作质量、文献整合、意义与影响。实证、计算、理论、综述、案例和政策文章各有附加问题；计算研究额外检查计算预算公平性与数据泄漏。每项记录论文位置、证据位置、理由、不确定性、是否影响决定，以及消除疑问所需的检验。`PARTLY_MEETS`、`DOES_NOT_MEET`、`NOT_ASSESSED` 都阻止 G5；不能以别处的优点抵消。该清单不生成总分、排名或录用概率。
+通用投稿问题覆盖原创性、方法严谨性、证据充分性、论证连贯性、写作质量、文献整合、意义与影响。实证、计算、理论、综述、案例和政策文章各有附加问题；计算研究额外检查计算预算公平性与数据泄漏。实际发现仍记录论文／证据位置、理由、不确定性、决定影响和必要检验。独立逐维分类表与机械报告已退休；缺表或未知观察不阻断G5，真实科学问题仍按A处理。原始历史记录保留且不作当前清关。没有新增付费调用、总分、排名或录用概率。
 
 ## 云端调用与输入
 
@@ -33,7 +33,6 @@ python3 scripts/research_candidates.py hypotheses --project my-phd \
 python3 scripts/research_candidates.py paper-card --project my-phd \
   --spec evidence/paper-cards/paper-001.json --output evidence/paper-cards/paper-001.audit.json
 
-python3 scripts/pre_submission_review.py --project my-phd --paper P01
 ```
 
 G1 必需输入遵循 `schemas/research-hypotheses.schema.json`：至少三个具体假设，每个包含已定位的来源、精确差异、预测、证伪结果、两个竞争解释及区分检验、失败原因和云端/预算/期限计划。`argument_plan` 先声明允许和禁止的主张、拟需证据与停止条件。估计预算不授权消费。
@@ -47,11 +46,11 @@ python3 scripts/source_scope.py --project my-phd --source evidence/sources/paper
 
 自动记录仅证明获准获取的登记来源与所提供文件绑定；人工兼容记录须来自真正确认过材料范围的人。两者都不证明读完全文或科学主张正确。作者模型不能写入 `evidence/source-scopes/`。在卡片中填入 `primary_source` 和 `scope_record` 的路径及当前哈希。PDF reader 的页面映射仅说明提取覆盖，不能自行提升来源范围。
 
-G5 输入遵循 `schemas/pre-submission-checklist.schema.json`。锚点包括项目相对路径、SHA-256、定位与最多 25 词的原文片段。文本定位使用 `L1` 或 `L1-L3`；PDF 使用真实 `pdf_page`；DOCX 使用 `paragraph 1`。未纳入正式 TeX include 树的草稿不能当作正式稿证据。清单依赖变化后必须重审，不能修改报告的 PASS 字段来过关。
+旧的 `pre-submission-checklist` schema 与独立机械扫描模块已退休，原版本仍可由 Git 追溯，历史项目文件保留。当前真实科学身份、稿件数字／引用／主张、来源与实验封印继续使用各自规范；不再以旧分类表的 article_type 或 PASS 字段清关。
 
-API/CLI 控制面在初次写作和修改后重新生成 G1/G5 审计。科研关卡再次重算当前结果；确定性报告由控制面写入，作者不能伪造。独立 API 批评不接收作者自由文本中的期望结论或此前审查意见，约束来自已记录的 intake、论文契约和期刊信息。
+API/CLI 控制面保留G1假设审计与写作阶段的真实事实／实证检查，独立批评使用同一来源方法。确定性报告由控制面写入，作者不能伪造。独立 API 批评不接收作者自由文本中的期望结论或此前审查意见，约束来自已记录的 intake、论文契约和期刊信息。
 
-原生图表在输出时生成面板几何和最终 PDF 碰撞审计，并在 G5 重算。只要求 SVG/PNG 时，会另外生成审计用 PDF，存于 reviews，供质量检查；它不作为所声明的最终图件输出。新检查也修复了旧渲染器透明图例被网格线穿过的问题。缺失依赖、过期文件或机械失败均阻断；几何通过仍需基于实际渲染文件、绑定当前来源的自动视觉检查。
+原生图表在输出时生成面板几何和最终 PDF 碰撞审计，并在 G5 重算。只要求 SVG/PNG 时，会另外生成审计用 PDF，存于 reviews，供质量检查；它不作为所声明的最终图件输出。缺失的必需最终渲染、科学来源或结果仍阻断；单独布局／几何观察不阻断科学决定，也不等于真实视觉检查。
 
 ## 保留的科研与费用边界
 

@@ -202,6 +202,47 @@ class ResearchCycleDecisionTests(unittest.TestCase):
         reconciled = cloud_progress.decision_resources(self.project, report["research_decision"], before, report)["models"]
         self.assertEqual(reconciled["cost_totals_cny"], {"verified_charge": 6, "estimated_or_calculated": 1, "pending_reservation": 2})
 
+    def test_confirmed_unsent_generation_is_zero_without_releasing_other_unknown_holds(self):
+        from scripts import model_spend
+        model_spend.write(self.project, model_spend.initial())
+        model_spend.grant(self.project, new_ceiling_cny=300, actor='Synthetic fixture owner', run_id='fixture-grant')
+        for index in range(3):
+            model_spend.reserve(self.project, max_cost_cny=2, paper_id='P01', paper_limit_cny=300,
+                                run_id='older-unknown-' + str(index))
+        old_holds = model_spend.read(self.project)['reservations']
+        ledger = self.project / 'state/model-usage.jsonl'
+        for index in range(2):
+            before = cloud_progress.snapshot(self.project)
+            cycle = 'not-sent-' + str(index)
+            reservation = model_spend.reserve(self.project, max_cost_cny=1, paper_id='P01', paper_limit_cny=300, run_id=cycle)
+            model_spend.cancel_unsent(self.project, reservation, reason='Synthetic pre-transport claim failed; no generation request was sent.')
+            with ledger.open('a', encoding='utf-8') as stream:
+                stream.write(json.dumps({'run_id': cycle, 'reservation_id': reservation, 'cache_hit': False,
+                    'cost_cny': None, 'reserved_cost_cny': 1, 'cost_status': 'accounted_upper_bound',
+                    'transport_error_type': 'SpendControlError', 'zero_cost_not_confirmed': True}) + '\n')
+            raw_ledger = ledger.read_bytes()
+            report = cloud_progress.record(self.project, before, cycle, 1)
+            self.assertEqual(report['model_cycles'], 0)
+            self.assertEqual(report['stalled_cycles'], 0)
+            model = report['research_decision']['resource_use']['models']
+            self.assertEqual(model['cost_totals_cny']['pending_reservation'], 0)
+            self.assertEqual(model['attempts'][0]['cost_kind'], 'confirmed_not_sent')
+            self.assertEqual(model['attempts'][0]['cost_cny'], 0)
+            self.assertEqual(ledger.read_bytes(), raw_ledger)
+            self.assertEqual(model_spend.read(self.project)['reservations'], old_holds)
+        self.assertIsNone(cloud_progress.pause_reason(self.project))
+        # A raw usage flag is not native cancellation evidence; its existing hold remains charged.
+        before = cloud_progress.snapshot(self.project)
+        unknown = model_spend.reserve(self.project, max_cost_cny=1, paper_id='P01', paper_limit_cny=300, run_id='unknown')
+        with ledger.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps({'run_id': 'unknown', 'reservation_id': unknown, 'cache_hit': False,
+                'generation_sent': False, 'cost_status': 'accounted_upper_bound', 'reserved_cost_cny': 1}) + '\n')
+        report = cloud_progress.record(self.project, before, 'unknown', 1)
+        self.assertEqual(report['stalled_cycles'], 1)
+        self.assertEqual(report['research_decision']['resource_use']['models']['cost_totals_cny']['pending_reservation'], 1)
+        for key, value in old_holds.items():
+            self.assertEqual(model_spend.read(self.project)['reservations'][key], value)
+
     def test_decision_resources_separate_new_attempts_from_cited_prior_evidence_and_currencies(self):
         def receipt(name, cost, duration, status, actual=None):
             output = self.project / ("results/" + name + ".txt")

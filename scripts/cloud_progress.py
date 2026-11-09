@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import re
+from functools import wraps
 from datetime import datetime
 from pathlib import Path
 
@@ -13,6 +14,9 @@ from scripts import researchctl
 FILE = "state/continuation-progress.json"
 MAX_CONTROL_CYCLES = 12
 MAX_STALLED_CYCLES = 2
+FINGERPRINT_VERSION = 3
+INPUT_KEYS = ("human_inputs", "work_inputs", "receipts")
+RESUMES = "state/continuation-resumes.jsonl"
 
 
 try:
@@ -25,30 +29,44 @@ def digest(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
+def research_input(value, relative=""):
+    """Remove only the named config's top-level administrative clock fields.
+
+    Scientific timestamps, strings and execution queues retain their exact
+    values and ordering; JSON serialization itself is normalized by digest().
+    """
+    if isinstance(value, dict) and relative in {
+            "program/literature-search-plan.json", "program/literature-workbench.json"}:
+        return {key: item for key, item in value.items()
+                if key not in {"generated_at", "updated_at", "refreshed_at", "last_checked_at"}}
+    return value
+
+
 def human_inputs(project: Path) -> str:
-    # Only owner/control-plane files reset a paused control attempt. Draft
-    # timestamps and audit wording do not establish new scientific evidence.
-    paths = ["state/run.json", "state/data-authorizations.json", "state/human-inputs.json"]
-    return digest({p: read(project / p) for p in paths})
+    # Stage/history timestamps and machine status updates are not owner decisions.
+    state = read(project / "state/run.json", {})
+    return digest(research_input({"topic_decisions": [row for row in state.get("approvals", [])
+        if row.get("gate") in {"G1", "G2"}], **{p: read(project / p) for p in (
+            "state/data-authorizations.json", "state/human-inputs.json")}}))
 
 
 def work_inputs(project: Path) -> str:
-    """Bind concrete next-work inputs, excluding review prose and billing clocks."""
+    """Bind next-work inputs, excluding attempt IDs, review prose and billing clocks."""
     from scripts.research_artifacts import sha
-    from scripts.paper_execution import primary_registry_paths
     paths = [project / "experiments/plan.json", project / "evidence/datasets.jsonl",
-             project / "program/literature-search-plan.json",
-             project / "program/literature-workbench.json"]
+             project / "program/literature-search-plan.json", project / "program/literature-workbench.json"]
+    paths.append(project / "program/hypothesis-register.json")
     paths.extend((project / "experiments/papers").glob("P[0-9][0-9]/plan.json"))
     paths.extend((project / "papers").glob("P[0-9][0-9]/preregistration.json"))
-    paths.extend(primary_registry_paths(project))
 
     def fingerprint(path):
-        if path.suffix == ".json":
-            try:
-                return digest(read(path))
-            except (ValueError, UnicodeDecodeError):
-                pass  # Retain unreadable/invalid input identity for diagnosis.
+        try:
+            if path.suffix == ".json":
+                return digest(research_input(read(path), path.relative_to(project).as_posix()))
+            if path.suffix == ".jsonl":
+                return digest([json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()])
+        except (ValueError, UnicodeDecodeError):
+            pass  # Invalid inputs remain distinguishable for diagnosis.
         return sha(path)
 
     return digest({p.relative_to(project).as_posix(): fingerprint(p)
@@ -101,6 +119,28 @@ def _amount(value):
     return float(value) if type(value) in (int, float) and math.isfinite(value) and value >= 0 else None
 
 
+def unsent_requests(control):
+    """Only native cancellation events can prove a generation was never sent."""
+    events = control.get("unsent_events", [])
+    excluded = set(control.get("reservations", {})) | {
+        row.get("receipt_id") for row in [*control.get("settlement_events", []), *control.get("reconciliation_events", [])]}
+    result, seen = {}, set()
+    for event in events:
+        if not isinstance(event, dict):
+            continue
+        receipt, reservation = event.get("receipt_id"), event.get("reservation", {})
+        if not isinstance(receipt, str) or not isinstance(reservation, dict):
+            continue
+        if receipt in seen:  # Ambiguous cancellation histories never prove zero cost.
+            excluded.add(receipt)
+        seen.add(receipt)
+        if (event.get("generation_sent") is False and isinstance(reservation.get("run_id"), str)
+                and reservation["run_id"].strip() and isinstance(event.get("reason"), str) and event["reason"].strip()
+                and _amount(reservation.get("max_cost_cny")) is not None):
+            result[receipt] = reservation["run_id"]
+    return {(receipt, run) for receipt, run in result.items() if receipt not in excluded}
+
+
 def decision_resources(project: Path, decision: dict, before: dict, after: dict, *, cycle_ids=None) -> dict:
     """Join actual cycle/attempt receipts; unknown billing is never reported as free."""
     from scripts import model_runtime, model_spend
@@ -121,6 +161,7 @@ def decision_resources(project: Path, decision: dict, before: dict, after: dict,
         spend = {}
         result["unknown"].append("Model accounting state is unavailable: " + str(exc))
     settled = {row["receipt_id"]: row for row in [*spend.get("settlement_events", []), *spend.get("reconciliation_events", [])]}
+    unsent = unsent_requests(spend)
     for row in rows:
         reservation = row.get("reservation_id")
         event = settled.get(reservation, {})
@@ -128,7 +169,10 @@ def decision_resources(project: Path, decision: dict, before: dict, after: dict,
         basis = row.get("billing", {}).get("cost_basis") or row.get("cost_status", "unknown")
         amount = _amount(row.get("cost_cny"))
         kind = "unknown"
-        if pending:
+        not_sent = (reservation, row.get("run_id")) in unsent
+        if not_sent:
+            amount, kind, basis = 0.0, "confirmed_not_sent", "controller_confirmed_generation_not_sent"
+        elif pending:
             amount, kind = _amount(pending["max_cost_cny"]), "pending_reservation"
         elif _amount(event.get("actual_cost_cny")) is not None:
             amount, kind, basis = _amount(event["actual_cost_cny"]), "verified_charge", event.get("cost_basis", "owner_reconciled")
@@ -144,7 +188,7 @@ def decision_resources(project: Path, decision: dict, before: dict, after: dict,
             amount = _amount(row.get("reserved_cost_cny"))
             kind = "pending_reservation" if amount is not None else "unknown"
         result["models"]["attempts"].append({"cycle_id": row.get("run_id"), "role": row.get("role"), "reservation_id": reservation,
-            "status": "failed" if row.get("transport_error_type") else row.get("completion_status", "recorded"),
+            "status": "not_sent" if not_sent else "failed" if row.get("transport_error_type") else row.get("completion_status", "recorded"),
             "duration_seconds": _amount(row.get("duration_seconds")), "cost_cny": amount,
             "cost_kind": kind, "cost_basis": basis, "ledger_record_sha256": digest(row)})
     recorded_reservations = {row.get("reservation_id") for row in rows}
@@ -224,28 +268,40 @@ def resource_snapshot(project: Path) -> dict:
             "cli": {"run_id": journal.get("run_id"), "stage": journal.get("stage"), "sha256": digest(journal)}}
 
 
-def snapshot(slug: str) -> dict:
-    project = researchctl.project_dir(slug)
-    state = researchctl.load_state(slug)
-    errors = researchctl.gate_errors(slug, state["gate"]) if state["gate"] else []
+def snapshot(slug: str | Path) -> dict:
+    # Explicit project paths also serve the API adapter; gate diagnostics belong
+    # to the cloud controller and never determine whether science progressed.
+    project = slug if isinstance(slug, Path) else researchctl.project_dir(slug)
+    state = read(project / "state/run.json")
+    errors = researchctl.gate_errors(slug, state["gate"]) if isinstance(slug, str) and state.get("gate") else []
     errors = sorted(set(re.sub(r"\d{8}T\d+Z", "<run>", str(e).replace(str(project), "<project>")) for e in errors))
     # Executed activity is distinct from a scientific conclusion. Keep failed
     # attempts too; arbitrary manuscript bytes never establish research progress.
     receipts = []
     attempts = experiment_attempts(project)
-    receipts.extend(row["receipt_sha256"] for row in attempts)
-    paths=[project/"evidence/literature-api-ledger.jsonl"]
-    for path in paths:
-        for line in path.read_text(encoding="utf-8").splitlines() if path.is_file() else []:
-            item = json.loads(line)
-            if item.get("status") in {"success", "succeeded"}:
-                receipts.append(item.get("response_sha256") or digest(item.get("outputs", [])))
+    for row in attempts:
+        receipt = read(project / row["receipt_path"])
+        # No-start, failed transport and new attempt IDs remain activity; only
+        # actual registered outputs supply new material for scientific work.
+        receipts.extend(digest(output) for output in receipt.get("outputs", []))
     from scripts import literature_evidence, literature_model_screening
+    sources = {}
+    for item in literature_evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl"):
+        if item.get("status") not in {"success", "succeeded"}:
+            continue
+        from scripts.research_artifacts import path_in, sha
+        target = path_in(project, item["normalized_results_path"])
+        if sha(target) != item["normalized_results_sha256"]:
+            raise ValueError("literature result changed after its receipt")
+        sources[item.get("receipt_id")] = digest(research_input(read(target)))
+        receipts.append(sources[item.get("receipt_id")])
     for item in literature_evidence.read_jsonl(project / "evidence/search-log.jsonl"):
         if str(item.get("screened_by", "")).startswith("model:") and not literature_model_screening.verify(project, item):
-            receipts.append(digest({"receipt": item["evidence_receipt_id"], "screened_by": item["screened_by"],
-                                    "included": item["included_work_ids"], "excluded": item["exclusion_reasons"]}))
-    return {"scope": f"{state['stage']}:{state['active_paper']}", "errors": errors,
+            selected = {"source": sources[item["evidence_receipt_id"]],
+                        "included": sorted(item["included_work_ids"])}
+            receipts.append(digest(selected))
+    return {"input_fingerprint_version": FINGERPRINT_VERSION,
+            "scope": f"{state['stage']}:{state.get('active_paper')}", "errors": errors,
             "gate_error_groups": researchctl.summarize_gate_errors(errors),
             "experiment_attempts":attempts,
             "resource_snapshot": resource_snapshot(project),
@@ -253,6 +309,34 @@ def snapshot(slug: str) -> dict:
             "work_inputs": work_inputs(project),
             "notebook_sha256": hashlib.sha256((project/"program/research-notebook.json").read_bytes()).hexdigest()
                 if (project/"program/research-notebook.json").is_file() else None}
+
+
+def saved_progress(project, *, record_baseline=False):
+    """Opaque earlier fingerprints cannot establish a new input or approval.
+
+    Queries stay read-only. The next existing cycle/control mutation may bind a
+    baseline in the resume history, preserving the original checkpoint and pause.
+    Subsequent changes can then be compared without guessing historical inputs.
+    """
+    value = read(project / FILE, {})
+    if not value.get("scope") or value.get("input_fingerprint_version") == FINGERPRINT_VERSION:
+        return value
+    from scripts.research_artifacts import sha
+    source_hash = sha(project / FILE)
+    history = project / RESUMES
+    events = [json.loads(line) for line in history.read_text(encoding="utf-8").splitlines() if line.strip()] if history.is_file() else []
+    bound = next((event for event in events if event.get("event") == "fingerprint_baseline"
+                  and event.get("checkpoint_sha256") == source_hash
+                  and event.get("input_fingerprint_version") == FINGERPRINT_VERSION), None)
+    current = snapshot(project) if not bound else bound["baseline"]
+    baseline = {key: current[key] for key in INPUT_KEYS}
+    if record_baseline and not bound:
+        with history.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps({"event": "fingerprint_baseline", "checkpoint_sha256": source_hash,
+                "input_fingerprint_version": FINGERPRINT_VERSION, "baseline": baseline,
+                "previous_progress": value, "grants_retry": False}, ensure_ascii=False) + "\n")
+    return {**value, **baseline, "input_comparison": "bound_compatibility_baseline" if bound or record_baseline
+            else "legacy_fingerprints_incomparable_until_control_baseline"}
 
 
 def external_blockers(project: Path, errors: list[str]) -> list[dict]:
@@ -274,20 +358,21 @@ def external_blockers(project: Path, errors: list[str]) -> list[dict]:
     return blockers
 
 
-def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
-    project = researchctl.project_dir(slug)
+def record(slug: str | Path, before: dict, run_id: str | None, exit_code: int) -> dict:
+    project = slug if isinstance(slug, Path) else researchctl.project_dir(slug)
     after = snapshot(slug)
-    old = read(project / FILE, {})
+    previous = old = saved_progress(project, record_baseline=True)
+    if before.get("input_fingerprint_version") != FINGERPRINT_VERSION:
+        before = {**before, **{key: previous.get(key, after[key]) for key in INPUT_KEYS}}
     if old.get("scope") != after["scope"] or old.get("human_inputs") != after["human_inputs"]:
         old = {}
-    elif old.get("work_inputs") is not None and old["work_inputs"] != before.get("work_inputs"):
+    elif ((old.get("work_inputs") is not None and old["work_inputs"] != before.get("work_inputs"))
+          or set(before.get("receipts", [])) - set(old.get("receipts", []))):
         old = {**old, "stalled_cycles": 0, "control_cycles": 0}
-    report = read(project / "state/research-steps.json", {})
-    paid = report.get("paid_model_cycle") is True
     reduced = set(after["errors"]) < set(before["errors"])
     evidence_added = bool(set(after["receipts"]) - set(before["receipts"]))
     inputs_changed = before.get("work_inputs") is not None and before["work_inputs"] != after["work_inputs"]
-    progressed = reduced or evidence_added or inputs_changed
+    progressed = evidence_added or inputs_changed
     from scripts.research_notebook import cycle_assessment
     prior_stage, prior_paper = before["scope"].split(":", 1)
     from scripts.model_runtime import ledger_entries
@@ -305,6 +390,20 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
         if cli != baseline["cli"] and isinstance(cli.get("run_id"), str) and cli["run_id"].endswith(suffix):
             cycles.add(cli["run_id"][:-len(suffix)])
     cycles = {value for value in cycles if isinstance(value, str) and value}
+    accounted = previous.get("resource_snapshot") or baseline
+    count = accounted.get("usage_count", 0)
+    from scripts import model_spend
+    unsent = unsent_requests(model_spend.read(project) or {})
+    paid_cycles = {row.get("run_id") for row in rows[count:]
+                   if not row.get("validation_status") and row.get("cache_hit") is not True
+                   and (row.get("reservation_id"), row.get("run_id")) not in unsent}
+    paid_cycles.update(value for key, value in current["reservations"].items()
+                       if key not in accounted.get("reservations", {}))
+    paid_cycles.discard(None)
+    paid = len(paid_cycles)
+    # API and cloud checkpoint observe the same ledger; never charge its cycle
+    # twice. A failed call counts even when no writer/manifest was produced.
+    already_recorded = baseline != current and previous.get("resource_snapshot") == current
     bound_cycle = next(iter(cycles)) if len(cycles) == 1 else None
     decision = cycle_assessment(project, prior_stage, bound_cycle, paper_id=prior_paper)
     if binding_errors or (cycles and decision.get("cycle_id") not in cycles) or (exit_code and not cycles):
@@ -321,11 +420,11 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
                     "outcomes": [{"question_id": row["question_id"], "decision_id": row["id"], "outcome": row["outcome"],
                         "decision": row["decision"], "sources": row["sources"]} for row in decision["decisions"]],
                     "independent_review": decision["independent_review"], "scientific_gain_verified": False}
-    value = {"schema_version": "1.0", **after, "source_run_id": str(run_id),
-             "last_exit_code": exit_code, "model_cycles": old.get("model_cycles", 0) + int(paid),
-             "control_cycles": 0 if progressed else old.get("control_cycles", 0) + int(not paid),
-             "stalled_cycles": 0 if progressed else old.get("stalled_cycles", 0) + int(paid),
-             "control_progress": progressed, "new_work_inputs": inputs_changed,
+    value = {"schema_version": "1.0", **after, "source_run_id": str(run_id) if run_id is not None else bound_cycle,
+             "last_exit_code": exit_code, "model_cycles": old.get("model_cycles", 0) + paid,
+             "control_cycles": 0 if progressed else old.get("control_cycles", 0) + int(not paid and not already_recorded),
+             "stalled_cycles": 0 if progressed else old.get("stalled_cycles", 0) + paid,
+             "control_progress": progressed or reduced, "new_work_inputs": inputs_changed,
              "semantic_progress": semantic,"scientific_progress_verified":False,
              "research_decision": decision,
              "new_experiment_attempts":len({row["receipt_sha256"] for row in after["experiment_attempts"]}
@@ -335,30 +434,58 @@ def record(slug: str, before: dict, run_id: str, exit_code: int) -> dict:
     return value
 
 
-def pause_reason(slug: str) -> dict | None:
-    project = researchctl.project_dir(slug)
-    value = read(project / FILE, {})
-    state = researchctl.load_state(slug)
-    if (value.get("scope") != f"{state['stage']}:{state['active_paper']}"
+def pause_reason(slug: str | Path) -> dict | None:
+    project = slug if isinstance(slug, Path) else researchctl.project_dir(slug)
+    value = saved_progress(project)
+    state = read(project / "state/run.json")
+    if (value.get("scope") != f"{state['stage']}:{state.get('active_paper')}"
             or value.get("human_inputs") != human_inputs(project)):
         return None
-    current_errors = researchctl.gate_errors(slug, state["gate"]) if state.get("gate") else []
+    current_errors = researchctl.gate_errors(slug, state["gate"]) if isinstance(slug, str) and state.get("gate") else []
     current_external = external_blockers(project, current_errors)
     if current_external:
         return {"reason": "external_input_required", "blockers": current_external}
-    if value.get("control_cycles", 0) >= MAX_CONTROL_CYCLES:
-        return {"reason": "control_retry_limit", "attempts": value["control_cycles"], "limit": MAX_CONTROL_CYCLES}
-    if value.get("stalled_cycles", 0) >= MAX_STALLED_CYCLES:
+    if (value.get("control_cycles", 0) >= MAX_CONTROL_CYCLES
+            or value.get("stalled_cycles", 0) >= MAX_STALLED_CYCLES):
         current = snapshot(slug)
         changed = (bool(set(current["receipts"]) - set(value.get("receipts", [])))
-                   or set(current["errors"]) < set(value.get("errors", []))
-                   or (value.get("work_inputs") is not None
-                       and current["work_inputs"] != value["work_inputs"]))
+                   or (value.get("work_inputs") is not None and current["work_inputs"] != value["work_inputs"]))
         if not changed:
+            if value.get("control_cycles", 0) >= MAX_CONTROL_CYCLES:
+                return {"reason": "control_retry_limit", "attempts": value["control_cycles"], "limit": MAX_CONTROL_CYCLES}
             return {"reason": "no_new_research_inputs", "attempts": value["stalled_cycles"],
+                    **({"input_comparison": value["input_comparison"]} if "input_comparison" in value else {}),
                     "limit": MAX_STALLED_CYCLES,
                     "next_action": "Supply a new source, result or revised experiment/query plan; a clock wakeup or rephrased draft does not restart work."}
     return None
+
+
+def track_cycle(resolve_project):
+    """Track the sole API execution chain, including exceptions before its writer."""
+    def decorate(function):
+        @wraps(function)
+        def tracked(slug, *args, **kwargs):
+            project = resolve_project(slug)
+            if not (project / "state/run.json").is_file():
+                return function(slug, *args, **kwargs)  # Preserve native initialization errors.
+            pending = read(project / FILE, {}).get("pending_cycle")
+            if pending:
+                record(project, pending, None, 1)
+            saved_progress(project, record_baseline=True)
+            pause = pause_reason(project)
+            if pause:
+                raise ValueError("Research continuation paused: " + pause["reason"])
+            before = snapshot(project)
+            researchctl.write_json(project / FILE, {**read(project / FILE, {}), "pending_cycle": before})
+            exit_code = 1
+            try:
+                result = function(slug, *args, **kwargs)
+                exit_code = 0
+                return result
+            finally:
+                record(project, before, None, exit_code)
+        return tracked
+    return decorate
 
 
 def resume(slug: str, expected_sha256: str, actor: str, note: str, run_id: str) -> None:
@@ -369,7 +496,7 @@ def resume(slug: str, expected_sha256: str, actor: str, note: str, run_id: str) 
     if (not status.is_file() or hashlib.sha256(status.read_bytes()).hexdigest() != expected_sha256
             or not actor.strip() or not 10 <= len(note.strip()) <= 500):
         raise ValueError("resume requires the exact reviewed status hash, actor and repair note")
-    history = project / "state/continuation-resumes.jsonl"
+    history = project / RESUMES
     event = {"actor": actor, "note": note, "run_id": str(run_id), "status_sha256": expected_sha256,
              "previous_status": read(status), "previous_progress": read(project / FILE)}
     with history.open("a", encoding="utf-8") as stream:

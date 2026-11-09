@@ -12,7 +12,7 @@ and venue AI-policy gates are superseded by the current owner policy; no upstrea
 script, extra paid pass, numerical acceptance threshold or new C gate is added.
 Public AI-use statements remain author-editable. Complete registered outcomes
 stay in the separate experiment archive; the manuscript need not reproduce all
-comparisons. Native reports bind the primary method's commit, hash and passages.
+comparisons. Existing review prompts bind the primary method's commit, hash and passages.
 
 Supplementary method sources: academic-research-skills, ars-codex, nature-skills, paperspine.
 Based on Academic Research Skills by Cheng-I Wu,
@@ -26,29 +26,23 @@ significance. Add the criteria for empirical/computational, theoretical,
 review/meta-analysis, case-study or policy work. Use the target venue's current
 official criteria and reporting standards where their scope applies.
 
-The writer independently writes reviews/pre-submission-checklist.json with
-schema_version=1.0, article_type, calibration_status=NOT_CALIBRATED and checks[].
-Every check contains criterion_id, criterion_source, judgement, rationale,
-uncertainty, decision_bearing, resolution_test, manuscript_anchors[] and
-evidence_anchors[]. Anchors use path, sha256, locator and an exact bounded
-excerpt; PDF anchors also need pdf_page. Text locators must be L1 or L1-L3;
-DOCX locators use paragraph 1. Manuscript anchors must belong to the canonical
-TeX include tree or DOCX document, not an unused draft in the
-active paper's manuscript tree.
+The seven universal questions and exact question-bank hash enter the compact
+native review prompt alongside the K-Dense excerpts. Select `submission-review`,
+`config/pre-submission-criteria.json` or `full-method-review` to load the complete
+article-type question bank. Its unrequested body is not copied into every call.
+Apply the universal questions and the relevant
+article-type questions to the supplied sources; missing material stays
+unassessed. Record actual findings in the existing independent review with claim,
+manuscript and evidence locations, uncertainty and a proportionate resolution
+test. No complete dimension-by-dimension form or finding quota is required.
 
-Judgements are EXCEEDS, MEETS, PARTLY_MEETS, DOES_NOT_MEET or NOT_ASSESSED.
-A genuinely inapplicable article-specific criterion may use NOT_APPLICABLE
-with non_applicability_reason. Universal dimensions cannot be skipped.
-Keep evidence gaps visible. A strength elsewhere cannot cancel a blocking
-methodological or evidence failure. No points, weights, totals, rankings or
-acceptance probabilities belong to this checklist. These criteria are not
-empirically calibrated.
-
-The control plane runs scripts/pre_submission_review.py and creates
-reviews/pre-submission-review.json. It checks coverage, anchors and current
-hashes and exposes unresolved criteria as C observations; actual source/claim/numeric failures remain A. This mechanical pass is not independent
-scientific validation; keep the existing independent model-family reviews and
-the recorded automated submission-phase G5 decision.
+The standalone categorical checklist scanner and its report are retired.
+Do not generate reviews/pre-submission-checklist.json or
+reviews/pre-submission-review.json. Preserve historical originals, but they
+provide no current coverage, semantic judgement or clearance. These questions
+remain NOT_CALIBRATED and cannot supply points, totals, acceptance probabilities
+or an extra paid pass. A real methodological, source/claim or numeric failure
+retains its A status; a missing optional mechanical form creates no blocker.
 
 Ordinary cycles use one current independent critique; actual actionable findings
 alone justify repair and fresh re-review. At final submission use the existing

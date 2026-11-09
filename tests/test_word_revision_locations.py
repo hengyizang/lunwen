@@ -53,6 +53,95 @@ def image(paragraph):
 
 
 class WordComplexRevisionTests(unittest.TestCase):
+    def test_captured_word_bytes_cannot_be_replaced_between_hashing_and_parsing(self):
+        from contextlib import contextmanager
+        from scripts import revision_integrity
+        from scripts.research_artifacts import sha
+        with tempfile.TemporaryDirectory() as directory:
+            source, replacement = Path(directory) / "main.docx", Path(directory) / "other.docx"
+            document = Document()
+            document.add_paragraph("Original result: 10.")
+            document.save(source)
+            document.paragraphs[0].text = "Unreviewed result: 999."
+            document.save(replacement)
+            original, substituted = source.read_bytes(), replacement.read_bytes()
+            original_hash = sha(source)
+            parse = revision_integrity.word_package
+
+            def swap(path, **kwargs):
+                source.write_bytes(substituted)
+                try:
+                    return parse(path, **kwargs)
+                finally:
+                    source.write_bytes(original)
+
+            with patch.object(revision_integrity, "word_package", side_effect=swap):
+                captured = WordSource(source, complete=True)
+            self.assertEqual(captured.sha256, original_hash)
+            self.assertIn("Original result: 10.", captured.text)
+            self.assertNotIn("999", captured.text)
+            revision_integrity.verify_word_sources({source.resolve(): captured})
+            actual_open = Path.open
+
+            @contextmanager
+            def replaced_read(path, *args, **kwargs):
+                source.write_bytes(substituted)
+                try:
+                    with actual_open(path, *args, **kwargs) as handle:
+                        yield handle
+                finally:
+                    source.write_bytes(original)
+
+            def opened(path, mode="r", *args, **kwargs):
+                if path == source and mode == "rb":
+                    return replaced_read(path, mode, *args, **kwargs)
+                return actual_open(path, mode, *args, **kwargs)
+
+            with patch.object(Path, "open", opened):
+                replaced = WordSource(source, complete=True)
+            self.assertIn("999", replaced.text)
+            with self.assertRaisesRegex(ValueError, "Word source changed"):
+                revision_integrity.verify_word_sources({source.resolve(): replaced})
+
+    def test_word_package_build_reads_each_source_once_and_rejects_late_mutation(self):
+        from scripts import revision_integrity
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            paper = project / "papers/P01"
+            baseline, current = paper / "reviews/revision-base/main.docx", paper / "manuscript/main.docx"
+            for path in (baseline, current):
+                path.parent.mkdir(parents=True)
+            document = Document()
+            document.add_paragraph("Observation retained.")
+            document.save(current)
+            baseline.write_bytes(current.read_bytes())
+            matrix = paper / "reviews/response-matrix.csv"
+            location = {"kind": "docx_paragraph", "path": "manuscript/main.docx", "sha256": revision_trace.sha256_file(current), "paragraph": 1}
+            with matrix.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(handle, fieldnames=sorted(revision_trace.REQUIRED_COLUMNS))
+                writer.writeheader()
+                writer.writerow({"comment_id": "C1", "commitment_id": "R1", "fulfillment_status": "fulfilled",
+                    "location": json.dumps(location), "revised_text": "Observation retained.", "unfulfilled_rationale": ""})
+            trace = revision_trace.audit(paper)
+            self.assertEqual(trace["status"], "pass")
+            (paper / "reviews/revision-trace.json").write_text(json.dumps(trace))
+            for _ in range(2):
+                with patch("scripts.revision_integrity.word_package", wraps=revision_integrity.word_package) as opened:
+                    self.assertEqual(docx_revision.build(project, "P01")["status"], "pass")
+                self.assertEqual(opened.call_count, 2)
+            previous = (paper / "reviews/docx-revision.json").read_bytes()
+            track = docx_revision.track
+
+            def mutate(*args):
+                result = track(*args)
+                current.write_bytes(current.read_bytes() + b"changed after validated extraction")
+                return result
+
+            with patch.object(docx_revision, "track", side_effect=mutate):
+                with self.assertRaisesRegex(ValueError, "Word inputs changed"):
+                    docx_revision.build(project, "P01")
+            self.assertEqual((paper / "reviews/docx-revision.json").read_bytes(), previous)
+
     def test_citation_validation_is_lazy_and_word_sources_are_operation_local(self):
         from scripts import revision_integrity, revision_ledger
         with tempfile.TemporaryDirectory() as directory:

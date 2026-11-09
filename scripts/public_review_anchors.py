@@ -83,7 +83,7 @@ def calibration_batches(project, cases, *, max_cases=8):
 
 def calibration_predictions(text, cases):
     from scripts.research_artifacts import strict_json
-    response = strict_json(text, duplicate_error="calibration response contains duplicate JSON fields")
+    response = strict_json(text, duplicate_error="calibration response contains duplicate JSON fields", allow_fence=True)
     if not isinstance(response, dict) or set(response) != {"anchor_labels"} or not isinstance(response["anchor_labels"], list):
         raise ValueError("calibration response needs only anchor_labels")
     expected = {row["case_id"]: row["case_sha256"] for row in cases}

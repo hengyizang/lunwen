@@ -11,6 +11,20 @@ from scripts.ai_providers import ModelResult, ProviderError
 
 
 class ApiFirstTests(unittest.TestCase):
+    def test_scientific_reply_requires_one_unambiguous_json_object(self):
+        from scripts.research_artifacts import strict_json
+        text = '{"finding":"uncertain","value":1.25}'
+        for reply in (text, "```json\n" + text + "\n```", "```\n" + text + "\n```"):
+            self.assertEqual(api_orchestrator._json_object(reply, "Scientific reply"), json.loads(text))
+        for bad in ('{"finding":"uncertain","finding":"supported"}', '{"value":NaN}',
+                    '{"value":1e999}', '{"nested":{"value":-1e999}}',
+                    "Support is unverified. " + text, text + " Unsupported conclusion.",
+                    "```json\n" + text, "```json\n" + text + "\n```\n" + text):
+            with self.subTest(reply=bad), self.assertRaises(ValueError):
+                api_orchestrator._json_object(bad, "Scientific reply")
+        with self.assertRaises(ValueError):
+            strict_json("```json\n" + text + "\n```", duplicate_error="duplicate")
+
     def test_actual_findings_alone_trigger_remediation(self):
         audit={"verdict":"pass-with-conditions","fatal_findings":[],"major_findings":[],"minor_findings":[],
                "missing_evidence":[],"remediation_steps":[],"uncertainty":["Known limits remain."]}

@@ -64,6 +64,30 @@ class JournalScreeningTests(unittest.TestCase):
                 json.dumps(report), encoding="utf-8"
             )
             self.assertEqual(validate_saved_report(project), [])
+            self.assertFalse(report["human_review_required"])
+            self.assertFalse(report["scientific_validation"])
+            self.assertFalse(report["assessment"]["human_review_verified"])
+            self.assertNotIn("human_review", report)
+            target = project / "program/journal-screening.json"
+            legacy = {key: value for key, value in report.items()
+                      if key not in {"assessment", "scientific_validation"}}
+            legacy.update(human_review_required=True, human_review={
+                "reviewed_by": spec["reviewed_by"], "reviewed_at": spec["reviewed_at"]})
+            target.write_text(json.dumps(legacy))
+            original = target.read_bytes()
+            self.assertEqual(validate_saved_report(project), [])
+            self.assertEqual(target.read_bytes(), original)
+            spec["recorded_by"] = spec.pop("reviewed_by")
+            spec["recorded_at"] = spec.pop("reviewed_at")
+            input_path.write_text(json.dumps(spec))
+            report = build(project, input_path, registry_path)
+            target.write_text(json.dumps(report))
+            self.assertEqual(validate_saved_report(project), [])
+            report["assessment"]["human_review_verified"] = True
+            target.write_text(json.dumps(report))
+            self.assertTrue(validate_saved_report(project))
+            report["assessment"]["human_review_verified"] = False
+            target.write_text(json.dumps(report))
             registry["papers"][0]["candidates"][0]["name"] = "Changed"
             registry_path.write_text(json.dumps(registry), encoding="utf-8")
             self.assertTrue(validate_saved_report(project))

@@ -121,15 +121,28 @@ def peer_review_method(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(P
             "selected_sections": list(sections), "guidance": "\n\n".join(excerpts)}
 
 
-def peer_review_context(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(PEER_REVIEW_SECTIONS)) -> str:
+def peer_review_context(root: Path = ROOT, *, sections: tuple[int, ...] = tuple(PEER_REVIEW_SECTIONS), full=False) -> str:
     method = peer_review_method(root, sections=sections)
+    questions = safe_path(root, "config/pre-submission-criteria.json")
+    question_text = questions.read_text(encoding="utf-8")
+    if not full:
+        question_text = "\n".join(row["id"] + ": " + row["question"] for row in json.loads(question_text)["universal"])
+        question_text += "\nArticle-type questions not loaded; select config/pre-submission-criteria.json or submission-review for the complete source."
     return ("PRIMARY PEER-REVIEW METHOD: K-Dense scientific excerpts; ARS questions are supplementary coverage.\n"
             + json.dumps({key: value for key, value in method.items() if key != "guidance"}, ensure_ascii=False)
             + "\nUse only the supplied source view; missing material remains unassessed. Apply current native owner policy; "
             "upstream intake, licence/research-use and venue AI-policy gates are not adopted. "
             "These questions add no paid pass, score threshold or C-class gate. Public AI-use statements remain author-editable; "
             "complete outcomes stay in the separate experiment archive, without requiring every comparison in the manuscript.\n"
-            + method["guidance"])
+            + method["guidance"]
+            + "\n\nSUPPLEMENTARY ARS QUESTIONS (SHA-256 " + pinned_text_sha256(questions) + "):\n"
+            + question_text
+            + "\nApply universal and only the actual article-type questions within this existing review. "
+            "Missing material remains unassessed; do not infer the article type or a favorable judgement. "
+            "The standalone categorical checklist scanner/report is retired. Do not create "
+            "pre-submission-checklist.json or pre-submission-review.json, a coverage table or a separate paid pass. "
+            "Semantic review remains unknown until actual source-bound findings are recorded in the existing "
+            "independent review; retired mechanical reports provide no current clearance.")
 
 
 def venue_fit_context(project: Path, paper_id: str) -> str:
@@ -176,7 +189,8 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
     if stage == "writing-and-review" and selected != "experiment-design" and (
             role == "critic" or selected == "writing-and-review" or
             any(token in context for token in ("peer-review", "submission-review", "pre-submission-checklist"))):
-        blocks.insert(0, peer_review_context(root))
+        blocks.insert(0, peer_review_context(root, full=any(token in context for token in (
+            "submission-review", "config/pre-submission-criteria.json", "full-method-review"))))
     if project is not None and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
         from scripts.paper_execution import prompt_contract
         current_paths = prompt_contract(project)
