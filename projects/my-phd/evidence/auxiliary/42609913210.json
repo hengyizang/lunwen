@@ -1,0 +1,1022 @@
+{
+  "schema_version": "1.0",
+  "kind": "public-review-calibration",
+  "status": "partial_failed_no_retry",
+  "execution_requested": true,
+  "calibration_seat": "domain",
+  "three_family_comparison_complete": false,
+  "manifest_sha256": "8f3f5a8468f73f6305905029d56a3d18b34d3d04f7a093b4391b589c14bec6b6",
+  "source_manifest_sha256": "2549151f4a6e073eb79cabf13a647e5d0be9846db60cdb771b92058900ab7444",
+  "scope_sha256": "03fa38070eca2e86203391d760fd9884cfdd843bfcade9af58344a5c5ccc3720",
+  "public_papers": 24,
+  "blind_source_audit_passed": true,
+  "calls_planned": 1,
+  "batch_cases": 1,
+  "selected_batch_index": 1,
+  "canonical_batch_count": 24,
+  "corpus_case_count": 24,
+  "corpus_coverage_complete": false,
+  "evidence_strength_rubric": {
+    "source": {
+      "url": "https://elifesciences.org/about/elife-assessments",
+      "observed_date": "2026-11-08",
+      "response_sha256": "cf7ffe54997f5c005e28a405c16c49c7a585794984a278dee0f846933f9ff899"
+    },
+    "definitions": {
+      "exceptional": "exemplary use of existing approaches that establish new standards for a field",
+      "compelling": "evidence that features methods, data and analyses more rigorous than the current state-of-the-art",
+      "convincing": "appropriate and validated methodology in line with current state-of-the-art",
+      "solid": "methods, data and analyses broadly support the claims with only minor weaknesses",
+      "incomplete": "main claims are only partially supported",
+      "inadequate": "methods, data and analyses do not support the primary claims"
+    }
+  },
+  "calls_attempted": 1,
+  "model_predictions": 0,
+  "budget_granted_cny": 0,
+  "reserved_upper_bound_cny": 0.2974328,
+  "model_plan": [
+    {
+      "seat": "domain",
+      "batch": 1,
+      "cases": [
+        {
+          "case_id": "elife-110315",
+          "case_sha256": "3aeffa3bad80becfc837631f44aa6ae2f968aa16022b471659350edb1dae4592"
+        }
+      ],
+      "prompt_sha256": "ccdd64adad0e84068d729eb5ee9ae4d709cc09bb0f1282563710c43b74c4885a",
+      "prompt_input_bytes": 75225,
+      "provider": "codekey-kiro-enterprise",
+      "model": "claude-opus-5-5",
+      "family": "anthropic",
+      "reasoning_effort": "high",
+      "route_id": "public-review-calibration:2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+      "routing_policy_sha256": "2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+      "production_panel_route": {
+        "provider": "codekey-kiro-enterprise",
+        "model": "claude-opus-5-5",
+        "family": "anthropic",
+        "reasoning_effort": "high",
+        "max_output_tokens": 4000,
+        "route_id": "2026-10-20.1:writing-and-review:independent-critic-panel-domain:scientific-judgment:opus",
+        "policy_version": "2026-10-20.1",
+        "policy_sha256": "7e434a86400af5095bab8d7fc78172a25d7afa9d36b18dadeb83be0cdf253e7d",
+        "stage": "writing-and-review",
+        "role": "independent-critic-panel-domain",
+        "task_kind": "scientific-judgment",
+        "model_key": "opus",
+        "persistent_output": false,
+        "quality_boundary": "Read-only mutually blinded source-view criticism; no voting, acceptance estimate or persistent scientific writing.",
+        "automatic_paid_fallback": false,
+        "fresh_required": true
+      },
+      "max_output_tokens": 12000,
+      "timeout_seconds": 300,
+      "reserved_upper_bound_cny": 0.2974328
+    }
+  ],
+  "results": {},
+  "attempt_receipts": [
+    {
+      "run_id": "public-review-42609913210-domain-1",
+      "status": "response_received",
+      "plan": {
+        "seat": "domain",
+        "batch": 1,
+        "cases": [
+          {
+            "case_id": "elife-110315",
+            "case_sha256": "3aeffa3bad80becfc837631f44aa6ae2f968aa16022b471659350edb1dae4592"
+          }
+        ],
+        "prompt_sha256": "ccdd64adad0e84068d729eb5ee9ae4d709cc09bb0f1282563710c43b74c4885a",
+        "prompt_input_bytes": 75225,
+        "provider": "codekey-kiro-enterprise",
+        "model": "claude-opus-5-5",
+        "family": "anthropic",
+        "reasoning_effort": "high",
+        "route_id": "public-review-calibration:2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+        "routing_policy_sha256": "2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+        "production_panel_route": {
+          "provider": "codekey-kiro-enterprise",
+          "model": "claude-opus-5-5",
+          "family": "anthropic",
+          "reasoning_effort": "high",
+          "max_output_tokens": 4000,
+          "route_id": "2026-10-20.1:writing-and-review:independent-critic-panel-domain:scientific-judgment:opus",
+          "policy_version": "2026-10-20.1",
+          "policy_sha256": "7e434a86400af5095bab8d7fc78172a25d7afa9d36b18dadeb83be0cdf253e7d",
+          "stage": "writing-and-review",
+          "role": "independent-critic-panel-domain",
+          "task_kind": "scientific-judgment",
+          "model_key": "opus",
+          "persistent_output": false,
+          "quality_boundary": "Read-only mutually blinded source-view criticism; no voting, acceptance estimate or persistent scientific writing.",
+          "automatic_paid_fallback": false,
+          "fresh_required": true
+        },
+        "max_output_tokens": 12000,
+        "timeout_seconds": 300,
+        "reserved_upper_bound_cny": 0.2974328
+      },
+      "usage_receipts": [
+        {
+          "at": "2026-11-09T11:34:58+00:00",
+          "attachments": [],
+          "billing": {
+            "billing_identity": {
+              "group": "codekey-kiro-enterprise",
+              "mode": "standard",
+              "plan": "production"
+            },
+            "cache_read_tokens": 26876,
+            "cache_write_1h_tokens": 0,
+            "cache_write_5m_tokens": 5310,
+            "cache_write_tokens": 5310,
+            "cache_write_unclassified_tokens": 0,
+            "context_tier": null,
+            "cost_basis": "verified_gateway_debit",
+            "full_request_input_tokens": 54157,
+            "independent_gateway_debit": {
+              "actual_cost_cny": 0.04443876,
+              "debit_evidence": {
+                "after": {
+                  "cost_cny": 2.56025826,
+                  "requests": 5
+                },
+                "before": {
+                  "cost_cny": 2.5158195,
+                  "requests": 4
+                },
+                "currency_rule": "owner-approved numeric USD wallet unit equals CNY1; not market FX",
+                "exactly_one_new_gateway_request": true,
+                "source": "https://codekey.ai/v1/usage"
+              }
+            },
+            "modeled_cost_cny": 0.05184522,
+            "ordinary_input_tokens": 21971,
+            "output_tokens_including_reasoning": 1416,
+            "quote_sha256": "704506e417d6f8328a986b97ea3480ca86ad7072d810e699b0be62a7b4c2718a",
+            "rates": {
+              "billing_identity": {
+                "group": "codekey-kiro-enterprise",
+                "mode": "standard",
+                "plan": "production"
+              },
+              "cache_read_per_million": 0.06999999999999999,
+              "cache_write_1h_per_million": 2.8,
+              "cache_write_5m_per_million": 1.75,
+              "cache_write_per_million": 1.75,
+              "currency": "CNY",
+              "endpoint": "https://codekey.ai/v1/messages",
+              "input_per_million": 1.4,
+              "model": "claude-opus-5-5",
+              "output_per_million": 7.0,
+              "price_version": "official-2026-10-19-owner-numeric-CNY-x035",
+              "provider": "codekey-kiro-enterprise",
+              "quote_schema": "2.0",
+              "quote_sha256": "704506e417d6f8328a986b97ea3480ca86ad7072d810e699b0be62a7b4c2718a",
+              "tool_fees": {}
+            },
+            "token_cost_cny": 0.05184522,
+            "tool_cost_cny": 0.0,
+            "tool_receipts": [],
+            "uncached_input_tokens": 27281,
+            "unknown_cache_price": false
+          },
+          "billing_identity": {
+            "group": "codekey-kiro-enterprise",
+            "mode": "standard",
+            "plan": "production"
+          },
+          "billing_quote_sha256": "704506e417d6f8328a986b97ea3480ca86ad7072d810e699b0be62a7b4c2718a",
+          "cache_hit": false,
+          "cache_key": "f1a8e2e95e3f45050d049eb343e43bfeca8b63e1f2c52c642ec7a46d4c46e0e4",
+          "cache_policy": "fresh_required_or_explicit",
+          "completion_status": "completed",
+          "cost_cny": 0.04443876,
+          "cost_status": "settled_gateway_debit",
+          "declared_tool_limits": {},
+          "duration_seconds": 31.754765,
+          "dynamic_candidate_id": "baseline",
+          "dynamic_decision": {
+            "cache_transfer_assumed": false,
+            "cooldown_seconds": 600,
+            "excluded": [
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6.1-sol--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-6-astra--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-pro--gpt-5.6-luna--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6.1-sol--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-6-astra--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-gpt-discount--gpt-5.6-luna--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-sol--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6-astra--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-5.6-luna--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6.1-sol--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-6-astra--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-discount--gpt-5.6-luna--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-kiro-discount--claude-sonnet-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-kiro-discount--claude-sonnet-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-kiro-discount--claude-opus-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-kiro-discount--claude-opus-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-ccmax--claude-sonnet-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-ccmax--claude-sonnet-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-ccmax--claude-opus-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "cheapai-ccmax--claude-opus-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-enterprise--claude-sonnet-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-enterprise--claude-sonnet-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-enterprise--claude-opus-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-enterprise--claude-opus-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-standard--claude-sonnet-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-standard--claude-sonnet-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-standard--claude-opus-5-5--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kiro-standard--claude-opus-5-5--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-deepseek--deepseek-v4.1-flash--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-deepseek--deepseek-v4.1-flash--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon-high--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon-high--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--low--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--low--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--medium--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini--gemini-4-argon--high--long",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-terra--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-codex-pro--gpt-6.1-terra--medium--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-kimi--kimi-k3.1-pro--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              },
+              {
+                "candidate_id": "codekey-gemini-chat--gemini-4-argon--high--standard",
+                "reason": "bounded validation locks its exact planned production identity"
+              }
+            ],
+            "history_sha256": "c8d3537e9c0ba343040569530cc3b1e6c309ecd2c73939fc5983cadfdfcd73ef",
+            "input_bytes": 75225,
+            "management_review": {
+              "authorizes_paid_request": false,
+              "billing_blocks_new_paid_work": false,
+              "checked_at": "2026-11-09T11:34:24.225453+00:00",
+              "kind": "route_review",
+              "paid_calls": 0,
+              "role": "independent-critique",
+              "route_states": [
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": null,
+                  "model": "gpt-5.6-luna",
+                  "provider": "cheapai-gpt-discount",
+                  "reasoning_effort": "medium",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 0,
+                  "recent_unique_attempts": 0,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": null,
+                  "model": "gpt-6-astra",
+                  "provider": "cheapai-gpt-pro",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 0,
+                  "recent_unique_attempts": 0,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": null,
+                  "model": "gpt-6.1-sol",
+                  "provider": "cheapai-gpt-pro",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 0,
+                  "recent_unique_attempts": 0,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": "2026-11-08T12:41:29+00:00",
+                  "model": "gpt-6-astra",
+                  "provider": "codekey-codex-pro",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 2,
+                  "recent_unique_attempts": 2,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": null,
+                  "model": "deepseek-v4.1-flash",
+                  "provider": "codekey-deepseek",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 0,
+                  "recent_unique_attempts": 0,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": "2026-11-08T13:01:33+00:00",
+                  "model": "gemini-4-argon",
+                  "provider": "codekey-gemini",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 1,
+                  "recent_unique_attempts": 1,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": "2026-11-08T09:29:07+00:00",
+                  "model": "claude-opus-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 1,
+                  "recent_failed_attempts": 3,
+                  "recent_unique_attempts": 4,
+                  "scientific_quality_verified": false
+                },
+                {
+                  "catalog_authenticates_upstream_weights": false,
+                  "catalog_available": null,
+                  "last_explicit_probe_status": "unknown",
+                  "last_request_at": null,
+                  "model": "claude-sonnet-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "reasoning_effort": "high",
+                  "recent_completed_attempts": 0,
+                  "recent_failed_attempts": 0,
+                  "recent_unique_attempts": 0,
+                  "scientific_quality_verified": false
+                }
+              ],
+              "schema_version": "1.0",
+              "scientific_equivalence_verified": false,
+              "selection_policy": {
+                "after_possible_billing": "Preserve the attempt, reconcile its charge, then request a separately bounded retry; never automatic fallback POST.",
+                "before_generation": "Use existing selector and only current task-accepted compatible routes; preserve quality, family, effort and complete inputs.",
+                "new_models": "Terra, Kimi and new gateway/model versions remain scoped candidates until their actual task evidence is accepted.",
+                "normal_review": "Read existing receipts and free catalog/quote observations; no extra model judge or recurring paid probe."
+              },
+              "source_bindings": [
+                {
+                  "path": "config/task-model-policy.json",
+                  "sha256": "1b462ef4a8c3e7822cae538249e1765d30e523d2954d5aafb513065a6edd6c68"
+                },
+                {
+                  "path": "state/model-usage.jsonl",
+                  "sha256": "a43805fa24a25836bd68c2e5da8383854bd1bfba2861bd9d1d9c0af6ba34ee6b"
+                },
+                {
+                  "path": "state/model-route-decisions.jsonl",
+                  "sha256": "48214be61437f62b2d2badfb6e4973942d90298e5ec582306971074fc4191868"
+                },
+                {
+                  "path": "state/model-spend-control.json",
+                  "sha256": "6d1f88fd2425fa9e54ef666d339596cc2241b8c870c6324845de6b1c6046ecf6"
+                },
+                {
+                  "path": "config/model-routing.json",
+                  "sha256": "7e434a86400af5095bab8d7fc78172a25d7afa9d36b18dadeb83be0cdf253e7d"
+                }
+              ],
+              "stage": "auxiliary",
+              "state_changed": false,
+              "status": "incident_review",
+              "task": {
+                "definition": null,
+                "effective_task_profile": {
+                  "priority": "quality",
+                  "science_risk": "critical",
+                  "task_class": "public-review-calibration"
+                },
+                "risk_floor_applied": false,
+                "stage_matches": true,
+                "task_known": false
+              },
+              "triggers": [
+                {
+                  "code": "task_classification_required",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "critical_quality_floor",
+                  "severity": "information"
+                },
+                {
+                  "code": "cost_estimates_pending",
+                  "pending_reservation_count": 3,
+                  "severity": "info",
+                  "unresolved_request_count": 0
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "gpt-5.6-luna",
+                  "provider": "cheapai-gpt-discount",
+                  "reasoning_effort": "medium",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "gpt-6-astra",
+                  "provider": "cheapai-gpt-pro",
+                  "reasoning_effort": "high",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "gpt-6.1-sol",
+                  "provider": "cheapai-gpt-pro",
+                  "reasoning_effort": "high",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "recent_request_failure",
+                  "failed_attempts": 2,
+                  "model": "gpt-6-astra",
+                  "provider": "codekey-codex-pro",
+                  "severity": "incident"
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "deepseek-v4.1-flash",
+                  "provider": "codekey-deepseek",
+                  "reasoning_effort": "high",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "recent_request_failure",
+                  "failed_attempts": 1,
+                  "model": "gemini-4-argon",
+                  "provider": "codekey-gemini",
+                  "severity": "incident"
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "claude-opus-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "reasoning_effort": "high",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "recent_request_failure",
+                  "failed_attempts": 3,
+                  "model": "claude-opus-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "severity": "incident"
+                },
+                {
+                  "code": "latency_regression_review",
+                  "model": "claude-opus-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "severity": "review_due"
+                },
+                {
+                  "code": "normal_operational_review_due",
+                  "model": "claude-sonnet-5-5",
+                  "provider": "codekey-kiro-enterprise",
+                  "reasoning_effort": "high",
+                  "severity": "review_due"
+                }
+              ]
+            },
+            "mode": "production",
+            "not_scientific_equivalence": true,
+            "policy_sha256": "938f051674da84ba20946b798422073e3a437192dc2393041405566372f6e05d",
+            "reason": "approved baseline; no unverified route is tried",
+            "selected_candidate_id": "baseline",
+            "selected_policy_sha256": "2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+            "task_profile": {
+              "priority": "quality",
+              "science_risk": "critical",
+              "task_class": "public-review-calibration"
+            }
+          },
+          "endpoint": "https://codekey.ai/v1/messages",
+          "gateway": "codekey",
+          "input_tokens": 21971,
+          "max_output_tokens": 12000,
+          "model": "claude-opus-5-5",
+          "output_tokens": 1416,
+          "paper_id": null,
+          "prompt_input_bytes": 75225,
+          "prompt_sha256": "ccdd64adad0e84068d729eb5ee9ae4d709cc09bb0f1282563710c43b74c4885a",
+          "protocol": "anthropic_messages",
+          "provider": "codekey-kiro-enterprise",
+          "provider_response_metadata": {
+            "canonical_json_hash_available": true,
+            "canonical_json_sha256": "a93829d13389a8882e1c91a3f396dd75f555ec91981942d898cdefb26e9785bb",
+            "diagnostics": {
+              "content_block_types": [
+                "thinking",
+                "text"
+              ],
+              "finish_reasons": [],
+              "id": "msg_3cfb1cb44ba645c3ba0949751e26ae52",
+              "model": "claude-opus-5-5",
+              "stop_reason": "end_turn",
+              "usage": {
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 5310
+                },
+                "cache_creation_input_tokens": 5310,
+                "cache_read_input_tokens": 26876,
+                "input_tokens": 21971,
+                "output_tokens": 1416
+              }
+            },
+            "http_evidence": {
+              "captured_http_body_bytes": 10128,
+              "http_body_capture_complete": true,
+              "http_status": 200,
+              "raw_http_body_sha256": "b23844413471e581ad788db59c65c7ff62d799b138c4de33da06079dd1cf099b"
+            },
+            "metadata_only": true,
+            "original_response_body_retained": false
+          },
+          "reasoning_effort_attestation": "requested_not_independently_attested",
+          "request_id": "msg_3cfb1cb44ba645c3ba0949751e26ae52",
+          "requested_model": "claude-opus-5-5",
+          "requested_reasoning_effort": "high",
+          "reservation_id": "2e761eeb21074dcf9dfa06cfdbbc38bb",
+          "role": "independent-critique",
+          "route_id": "public-review-calibration:2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+          "routing_policy_sha256": "2a65ad3b9aeee9fa857c0a7b948c31fb273689a9b61d3f13f86a87a5ed23dfe4",
+          "run_id": "public-review-42609913210-domain-1",
+          "schema_version": "1.0",
+          "stage": "auxiliary",
+          "system_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "task_profile": {
+            "priority": "quality",
+            "science_risk": "critical",
+            "task_class": "public-review-calibration"
+          },
+          "timeout_seconds": 300,
+          "usage_estimated": false
+        }
+      ],
+      "response_sha256": "109597b57a0bb7cb8237bcd3b46339f14586770d103e06eacee58352018fe720",
+      "response_artifact": "public-review-calibration-42609913210/responses/public-review-42609913210-domain-1.json"
+    }
+  ],
+  "calibration_status": "NOT_CALIBRATED",
+  "numeric_score_calibration_verified": false,
+  "scientific_completion_verified": false,
+  "three_view_panel_effectiveness_verified": false,
+  "human_claim_sample_agreement": null,
+  "should_merge_detection": null,
+  "scope": "Published life-science evidence categories assessed from complete primary API text; linked media not visually assessed. Full-primary judgments do not validate the three-view workflow, numeric scores, other domains, independence or acceptance probability.",
+  "label_baseline": {
+    "majority_class_from_calibration_only": "convincing",
+    "partitions": {
+      "calibration": {
+        "cases": 16,
+        "predictions": 0,
+        "label_distribution": {
+          "compelling": 3,
+          "convincing": 6,
+          "incomplete": 1,
+          "solid": 6
+        },
+        "exact_agreement": null,
+        "observed_subset_exact_agreement": null,
+        "abstentions": 0,
+        "majority_baseline_agreement": 0.375
+      },
+      "holdout": {
+        "cases": 8,
+        "predictions": 0,
+        "label_distribution": {
+          "convincing": 2,
+          "exceptional": 1,
+          "incomplete+solid": 1,
+          "solid": 4
+        },
+        "exact_agreement": null,
+        "observed_subset_exact_agreement": null,
+        "abstentions": 0,
+        "majority_baseline_agreement": 0.25
+      }
+    }
+  },
+  "not_manuscript_or_evidence": true,
+  "automatic_acceptance": false,
+  "model_output_accepted_for_science": false,
+  "budget_before": {
+    "currency": "CNY",
+    "spent": 3.88897004,
+    "reserved": 10.0783494,
+    "project_hard_limit": 500.0,
+    "project_remaining": 486.03268056,
+    "paper_id": null,
+    "paper_spent": null,
+    "paper_warning_limit": null,
+    "paper_warning_reached": null,
+    "paper_hard_limit": null,
+    "paper_remaining": null,
+    "limit_scope": "project_total_only"
+  },
+  "failure_type": "JSONDecodeError",
+  "duration_seconds": 34.371896,
+  "accounting": {
+    "accounted_amount_cny": 0.04443876,
+    "accounting_coverage_complete": true,
+    "verified_gateway_debit_cny": 0.04443876,
+    "calculated_or_conservative_estimate_cny": 0,
+    "provider_fee_fully_verified": true,
+    "unknown_attempts": []
+  },
+  "budget_after": {
+    "currency": "CNY",
+    "spent": 3.9334088,
+    "reserved": 10.0783494,
+    "project_hard_limit": 500.0,
+    "project_remaining": 485.9882418,
+    "paper_id": null,
+    "paper_spent": null,
+    "paper_warning_limit": null,
+    "paper_warning_reached": null,
+    "paper_hard_limit": null,
+    "paper_remaining": null,
+    "limit_scope": "project_total_only"
+  }
+}

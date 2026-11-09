@@ -1,21 +1,21 @@
 {
   "schema_version": "1.0",
-  "run_id": "42482667644",
-  "created_at": "2026-11-08T13:01:33.525543+00:00",
-  "artifact_name": "research-checkpoint-42482667644",
-  "archive_sha256": "49f7a8c24d3e5ed8c77507bcdfe80a51432248b0ea54f308a621ff0c01987e5d",
+  "run_id": "42609913210",
+  "created_at": "2026-11-09T11:34:58.706651+00:00",
+  "artifact_name": "research-checkpoint-42609913210",
+  "archive_sha256": "0ac2b258cc8b3416c47ed0809ea95f84bd8dd048847d0ed964d0b8d6603522ce",
   "retention_days": 90,
   "files": [
     {
       "path": "state/model-route-decisions.jsonl",
-      "bytes": 156761,
-      "sha256": "48214be61437f62b2d2badfb6e4973942d90298e5ec582306971074fc4191868",
+      "bytes": 179819,
+      "sha256": "baf6456b120272706f73a88668dd2514ec1fb3956714c48f082a9070264fa6ef",
       "storage": "artifact"
     },
     {
       "path": "state/model-usage.jsonl",
-      "bytes": 170035,
-      "sha256": "a43805fa24a25836bd68c2e5da8383854bd1bfba2861bd9d1d9c0af6ba34ee6b",
+      "bytes": 196315,
+      "sha256": "868a646098af6e5378a0f3bccddb032260e1c9bd018b430b8826970f267350bc",
       "storage": "artifact"
     },
     {
