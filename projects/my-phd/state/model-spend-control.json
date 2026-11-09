@@ -71,19 +71,6 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
-    "2e761eeb21074dcf9dfa06cfdbbc38bb": {
-      "at": "2026-11-09T11:34:24+00:00",
-      "max_cost_cny": 0.2974328,
-      "paper_id": null,
-      "run_id": "public-review-42609913210-domain-1",
-      "transport": {
-        "credential_sha256": "4b5af83616d7fa44b5ada1a0806dc9426715e86c116aa1d1c61d0cba5dbd3e60",
-        "endpoint": "https://codekey.ai/v1/messages",
-        "lease_id": "4cbed9fa6e29425c84e51d7b5708cf61",
-        "model": "claude-opus-5-5",
-        "provider": "codekey-kiro-enterprise"
-      }
-    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
@@ -298,9 +285,14 @@
       "actual_cost_cny": 0.668094,
       "cost_basis": "verified_gateway_debit",
       "receipt_id": "e2a0d4596aa74f818ac8687fa87c4899"
+    },
+    {
+      "actual_cost_cny": 0.04443876,
+      "cost_basis": "verified_gateway_debit",
+      "receipt_id": "2e761eeb21074dcf9dfa06cfdbbc38bb"
     }
   ],
-  "spent_cny": 3.88897004,
+  "spent_cny": 3.9334088,
   "tranche_cny": 300,
   "unsent_events": [
     {
