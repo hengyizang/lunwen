@@ -71,6 +71,19 @@
       "run_id": "40532368313",
       "writing_trial": "writing-comparison-20261027"
     },
+    "793b9e0ff952453388623793671471d0": {
+      "at": "2026-11-09T12:55:57+00:00",
+      "max_cost_cny": 1.2875968,
+      "paper_id": null,
+      "run_id": "public-review-42620865105-domain-1",
+      "transport": {
+        "credential_sha256": "4b5af83616d7fa44b5ada1a0806dc9426715e86c116aa1d1c61d0cba5dbd3e60",
+        "endpoint": "https://codekey.ai/v1/messages",
+        "lease_id": "5a7a3c60a3d947f687edeaf2b672e6cc",
+        "model": "claude-opus-5-5",
+        "provider": "codekey-kiro-enterprise"
+      }
+    },
     "97bdea2e1dd64aaaaa68dfa390e9ec76": {
       "at": "2026-10-29T15:51:23+00:00",
       "call_id": null,
