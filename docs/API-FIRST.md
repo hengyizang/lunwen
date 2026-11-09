@@ -191,3 +191,28 @@ allowlisted `billing_provider`, for example `codekey-codex-pro`. Its separate
 guard; default catalogs and routes remain unchanged. It generates no text,
 settles no charge and grants no budget. Keep an unknown reservation until
 independent evidence supports the existing explicit reconciliation operation.
+
+## Bounded public-review calibration batches
+
+An explicit `public-review-calibration` auxiliary manifest may set
+`calibration_batch_cases` to an integer from 1 to 8 and optionally
+`calibration_batch_index` to one actual, one-based batch in the canonical frozen
+queue. For example, cases `1` and index `1` plan one complete-paper request.
+The index must exist after the full corpus is verified. Omitting both options
+keeps the existing maximum of eight cases and 750 KB per batch and complete
+queue execution.
+
+Smaller batches retain every original scientific API field, the same official
+rubric, source hashes and blind case identities. They do not truncate a paper,
+change the 24-paper population or its 16/8 split, send answer labels, lower the
+reasoning effort, change models or bypass central billing. The report records
+the full canonical batch/case counts and the actual selected plan. A successful
+single-batch probe returns `bounded_batch_complete` and remains
+`NOT_CALIBRATED` until all corpus cases have current predictions; missing
+partition coverage keeps full-partition agreement unknown.
+Descriptive `observed_subset_exact_agreement` covers only received predictions,
+including abstentions as nonmatches; it cannot replace the full-partition result.
+Raw outputs,
+identity checks, failed-attempt fees, deadline checks and no-retry behavior
+remain the same. One batch cannot establish model quality or validate the
+three-view panel, numerical scores, human claim agreement or doctoral science.

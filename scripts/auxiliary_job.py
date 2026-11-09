@@ -26,7 +26,7 @@ from scripts.publication_figures import PROJECTS_ROOT
 
 KINDS = {"metadata-extraction", "engineering-diagnosis", "multimodal-inspection",
          "format-conversion", "screening-assist", "public-review-calibration", "citation-crosscheck", "g1-transport-validation", *engineering_contract.TASKS}
-FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile", "calibration_seat", "source_task_file", "validation_roster", "response_streaming"}
+FIELDS = {"schema_version", "kind", "prompt_file", "source_contract_file", "attachments", "max_output_tokens", "task_profile", "calibration_seat", "calibration_batch_cases", "calibration_batch_index", "source_task_file", "validation_roster", "response_streaming"}
 REQUIRED = {"schema_version", "kind", "prompt_file"}
 PRIVATE_PARTS = {"state", "api_runs", "private", "raw", "secrets", "credentials", "keys", "auth", "tokens"}
 PRIVATE_STEMS = {"api", "hosts", "credentials", "secrets", "keys", "tokens", "auth"}
@@ -114,6 +114,10 @@ def load(project: Path, manifest_relative: str) -> dict:
             raise ValueError("public-review calibration requires one fixed calibration_seat")
     elif "calibration_seat" in manifest:
         raise ValueError("calibration_seat is allowed only for public-review-calibration")
+    for field, maximum in (("calibration_batch_cases", 8), ("calibration_batch_index", 24)):
+        if field in manifest and (kind != "public-review-calibration" or type(manifest[field]) is not int
+                                  or not 1 <= manifest[field] <= maximum):
+            raise ValueError(field + " is allowed only as a bounded integer for public-review-calibration")
     roster = manifest.get("validation_roster")
     if "validation_roster" in manifest and (kind != "g1-transport-validation" or roster != "astra-argon"):
         raise ValueError("validation_roster is allowed only as astra-argon for the explicit G1 sample")
@@ -191,6 +195,8 @@ def load(project: Path, manifest_relative: str) -> dict:
     return {"kind":kind,"prompt":prompt,"max_output_tokens":tokens,"source_contract":contract,"task_profile":task_profile,
             "attachments":attachments,"attachment_receipts":attachment_receipts,"inputs":inputs,
             "manifest_sha256":_sha(manifest_bytes), "calibration_seat":seat, "source_task_file":source_task_file,
+            "calibration_batch_cases": manifest.get("calibration_batch_cases", 8),
+            "calibration_batch_index": manifest.get("calibration_batch_index"),
             "validation_roster":roster, "response_streaming":streaming}
 
 
@@ -313,7 +319,8 @@ def run(project: Path, manifest_relative: str, output_relative: str, *, execute=
         _check_inputs(project, request["inputs"])
         report = run_calibration(project, destination, request["manifest_sha256"], seat=request["calibration_seat"], execute=execute,
                                  check_inputs=lambda: _check_inputs(project, request["inputs"]),
-                                 max_output_tokens=request["max_output_tokens"] or 4000)
+                                 max_output_tokens=request["max_output_tokens"] or 4000,
+                                 batch_cases=request["calibration_batch_cases"], batch_index=request["calibration_batch_index"])
         _check_inputs(project, request["inputs"])
         return {"output": output_relative, "status": report["status"], "kind": kind, "execute": execute,
                 "calls_planned": report["calls_planned"], "calls_attempted": report["calls_attempted"],
