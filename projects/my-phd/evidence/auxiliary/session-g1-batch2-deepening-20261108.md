@@ -1,4 +1,7 @@
-# Evidence deepening for batch 2 candidates 1 and 3
+# Robotics and autonomous-control candidate evidence
+
+**2026-11-09 最新结论：** 新读原文已直接覆盖泛化的校准更新门控与异步时钟问题，相关创新断言撤回。当前只保留一个有强物理对照、可被否定的装配校准可行性试点草案；还未批准选题、执行实验或证明六篇独立性。文末 follow-up 记录最新八近邻／三邻域对照；此前各轮材料按历史范围保留。
+
 
 **Provenance:** current Codex session draft, exact API model identity unavailable, no native runtime receipt, no topic approval.
 
@@ -200,3 +203,77 @@ RS-DELAY, [Safe Distributed Control … with Communication Delays](https://arxiv
 This initial screen added six bounded searches, seven page/click reads, five public-PDF downloads and four read-only source-file reads. No installation, simulation, fit, raw dataset acquisition, hardware experiment or paid project model call occurred. Only RS-CAL was fully read in this added set; the other scientific bodies were read in the stated sections, and indexed abstract leads remain leads. The accompanying notes preserve exact read scopes, fingerprints, image-only exclusion and irrelevant ReCode search hits. The proposals are not independently validated scientific judgments. Actual runner resources and six-paper independence remain unknown.
 
 NIST work stops here under the robotics preference. The source-bound versioned URL correction was subsequently attempted by the root coordinator in **#172 / run42486624175** and again failed with HTTP500 while opening Measurements; Scan Strategy was not reached. I verified the provided local official ZIP SHA `b85d8bf01925e5cb0ee2cff14471649434778eaa3d056db88ed764ef1ce54077` and read only its `failure.json`, SHA `619b5d215afa3e4aca103f91ff37a04f11e56b52b11507f6165c5e23f23c0e29`. No successful raw availability is established. The coordinator reports preserving these unselected candidate manifests under `data/manifests/archive`, retaining their bytes, bindings and failure history; that is not withdrawal of selected experimental data. The coordinator also reports **#173 / run42486945387** completed with zero changed files, unchanged budget/state blobs and 32 G1 blockers. That last status receipt was not independently retrieved by this agent. #170 was rejected at the issue-envelope boundary according to the coordinator and is not counted as a payload attempt. The separate #168 report and immutable correction proposals remain historical evidence.
+
+
+## Follow-up: calibration updates under persistent contact
+
+This section updates the existing robotics candidate draft. It does not select the doctoral topic or authorize an experiment. The actual project remains G1 `awaiting_work`, with G0 alone approved. The owner prefers robotics/autonomous control; the original seven weights and zero external paid-compute envelope are retained.
+
+**中文结论。** 不应再把“决定何时更新动力学校准”或“接触中补偿漂移”称为尚无人研究：RME已有扰动/载荷变化门控，SDI已有接触情景下的漂移辨识。也不应把“异步时钟使消息延迟不可测”称为新问题，2017年上线的形成控制论文已直接处理。建议只保留一个更小的、可被否定的R1可行性试点：在相同可用信息下，检查持续接触是否污染偏置更新，以及简单物理门控是否已能解决。它还不是一个已证实创新、可支撑六篇的博士题目。
+
+### The source findings change the candidate
+
+[Rapid Mismatch Estimation](https://proceedings.mlr.press/v305/jaszczuk25a.html) already activates estimation using torque-history and directional/stabilization checks. Its §7 acknowledges interactions that this gate cannot distinguish. A proposed new gate must therefore confront a paper-faithful version of the existing mechanism, rather than an always-update straw baseline. The paper also provides a CPU implementation and a learned prior; neither adaptive gating nor putting a neural model before inference is new by itself.
+
+[Fast Payload Calibration](https://arxiv.org/abs/2409.03369v1) already learns payload-dependent compensation offline and fixes its selected model/indicator between calibrations. Its reported preparation includes substantial real-robot data, so its short online calibration time must not be interpreted as a cheap end-to-end reproduction. [SDI](https://doi.org/10.1016/j.neucom.2024.129292) explicitly advertises drift identification in loaded and contact-force scenarios. Only its official abstract was available here; its full treatment is a decisive unresolved comparison, not evidence of a missing capability.
+
+The narrower candidate is now: **when does the permitted observation history justify a calibration update, and when should the robot preserve the current estimate or request a bounded, informative motion?** This is a proposed test question. Evidence of a genuine incremental contribution is still absent.
+
+### Eight closest-work comparisons and reading limits
+
+| Work | Shared capability that cannot be claimed as new | Required difference or unresolved comparison | Reading evidence |
+|---|---|---|---|
+| Automated Continuous Force-Torque Sensor Bias Estimation, arXiv:2403.01068v1 | Continuous bias/drift filtering from known gripper inertial parameters and robot kinematics | Whether unmodeled contact corrupts an update; uncertain gripper parameters are a separate nuisance | Entire seven-page native technical report re-read; not a performance-validation study |
+| Fast Payload Calibration, arXiv:2409.03369v1 | Short online payload calibration backed by offline dynamics learning | Bias adaptation is not the same estimand as payload calibration; match information and data exposure | Entire eight-page native main body read; equations and numerical tables not independently validated |
+| RME, CoRL 2025/PMLR305 | Residual-based activation and learned-prior probabilistic mismatch estimation | Persistent interactions and the actual discrimination limit; do not call an adapted gate a reproduction of the full estimator | Main §§1–7 and appendices read, with paper/source differences checked; no numerical reproduction or independent proof verification |
+| SDI, Neurocomputing620:129292 | Learned/identified sensor drift, including contact-force experiments | Its exact contact assumptions, activation logic and data must be read before a novelty decision | Official publisher abstract/search excerpt only; direct publisher full-page request returned403 |
+| Bias Estimation and Gravity Compensation, DOI10.1109/JSEN.2021.3056943 | Joint sensor/bias/gravity calibration | The precise online/contact assumptions remain to be checked | Official IEEE abstract lead only; Crossref verifies the issue date2022-09-15, volume22(18), pages17625–17634; the DOI’s2021 string is not itself a verified publication date |
+| Force Policy, RSS2026 | History-dependent hybrid force/position interaction control | Distinguish calibration corruption from already addressed contact-history control | Prior frozen native main-body reading C3; raw/text fingerprints rechecked, not newly re-read here |
+| Online Admittance Residual Learning, PMLR229/zhang23e | Physics plus online learned contact compensation | A stronger adaptive physical rival is needed than fixed gains | Prior frozen main/appendix reading C4; fingerprints rechecked |
+| Robust Peg-in-Hole Assembly, RSS2025/p060 | Interactive compliant insertion under uncertainty | Compare the same allowed actions and model-estimation access | Prior C5 OCR and selected visual checks; equations/proofs/tables still unverified |
+
+This matrix contains five native main bodies/technical reports read across the current and retained prior work, one OCR-based work and two abstract-only comparisons. It is not eight independently validated full papers. The two newly obtained PDFs are frozen locally by SHA256; retained source bytes also match the earlier fingerprints. Discovery-tool excerpts and direct HTTP acquisition are recorded separately.
+
+### Three adjacent literatures
+
+1. **Active system identification:** [contact-aware Fisher-information behavior synthesis](https://arxiv.org/abs/2505.12214v2) already chooses informative contact motions. Any retreat/rotation must be available to the classical comparator, and information gain alone is not a contribution. The prior main/appendix reading and exact source hash are retained.
+2. **Statistical uncertainty calibration:** [contact-aware conformal prediction](https://proceedings.mlr.press/v329/marques26a.html) provides a nearby calibration framework. Its exchangeability, known-stratum and one-step boundaries cannot be inherited for biased, adaptive closed-loop histories. Prior main reading is retained; appendices remain unread.
+3. **Selective prediction/abstention:** [SelectiveNet](https://proceedings.mlr.press/v97/geifman19a.html) already learns prediction and rejection jointly. Only its publisher abstract was read here. A reject option is not intrinsically new, and classification risk/coverage does not prove robotic safety.
+
+### A minimal discriminating pilot, proposed only
+
+**Scope.** Begin with wrist-force bias updates for one nominal, pregrasped rigid-tool/fixture setup. Keep payload/gripper parameters known in the first stratum; change them only in a separately declared nuisance stratum. Do not mix wrist-sensor bias, robot-model mismatch and external interaction into one supposedly identifiable label.
+
+**Information strata.** O0 contains timestamped joint position/velocity, commanded pose/motion and wrist wrench. O1 additionally contains a declared, realistically noisy proprioceptive torque residual when the platform actually supplies it. Every comparator uses the same stratum and action set. Simulator contact labels, true bias and payload parameters are evaluation-only. A whole physical episode/scenario is the replicate; its overlapping time windows cannot cross train/test splits.
+
+**An analytic negative control.** For an observation residual of the form `r(t)=b(t)+w_contact(t)+noise`, a fixed-pose wrist-residual history alone cannot distinguish `(b=delta,w_contact=0)` from `(b=0,w_contact=delta)` when both physical situations are admissible. This is an algebraic counterexample, not a new identifiability theorem or executed experiment. It does not prove indistinguishability after adding joint-torque information or an informative motion. The actual observation map must be checked anew for O1 and each allowed probe.
+
+**Comparators.** Use the same bias estimator with always-update, freeze-during-contact, tuned residual/change-detection gating, and a model-consistency/interval gate. Include a clearly labeled adaptation of the published RME activation pattern where applicable. Full RME estimates payload parameters, not wrist-sensor bias, so it must not silently replace that estimand or be advertised as reproduced. SDI is a required direct competitor once its full assumptions are available. A small learned gate is justified only after the physical rivals leave an actual decision gap; no quality-judging model is trained.
+
+**Contrasting cases.** Separate a genuine bias change, sustained weak contact, a transient impulse, and a simultaneous change/contact. Match initial states, observation availability, nuisance settings and permitted probes. Closed-loop trajectories can diverge because controllers act differently; use the same exogenous environment/seed, not a false claim of identical resulting forces. Keep calibration quality, contact response and adaptation delay as distinct outcomes.
+
+**Recorded endpoints.** Before execution, define the estimator's bias error, false update during sustained contact, delay/missed adaptation after a genuine bias change, tracking/completion, interaction-force limits and abstention/probe cost. Report the paired tradeoff rather than choosing a favorable scalar. All registered comparisons and failures are archived separately; material interpretation-changing evidence remains available in the paper/supplements without reproducing all logs.
+
+**Continue/revise/stop.** Continue only if the same-information physical baselines leave a reproducible practically meaningful gap on held-out whole scenarios. Revise if adding an available physical measurement removes ambiguity. Reject a learning claim if a tuned classical gate matches its tradeoff, if wins arise from hidden simulator truth, extra data/preview/probes, or from fixing a published software bug. Stop the innovation claim if SDI or another nearest work already implements the exact setting. A task that requires unavailable real drift/contact measurements cannot support a physical-transfer claim. Current target effect size, threshold, independent episode count and compute ceiling remain undecided, not fabricated after seeing outcomes.
+
+**Execution route.** The previously frozen robosuitev1.5.2 source exposes force/torque observations and a rigid assembly environment. Bias/contact interventions and any proprioceptive residual interface would be reviewed extensions. The new author RME code supplies an additional CPU-oriented baseline entry, not a ready verified reproduction. No simulation, training, fit or robot experiment was run. Installation/runner memory/time remain unmeasured. Execution can start only through the project runner after the actual topic decisions and reviewed G3 exploratory protocol are present; the zero external paid-compute envelope is unchanged.
+
+### Source-code issues are not scientific novelty
+
+The author RME repository was frozen at commit`a2fe683ccc7a921692949445f867a73938933d89`. Its tree advertises a small checkpoint; checkpoint bytes were not downloaded or executed. README, activation function and main source were read and Git-blob hashes verified. Published activation code repeats the x-direction principal-force comparison and omits absolute values in its lateral-force test, differing from the paper. It also relies on caller-provided NumPy, hard-coded author filesystem paths and an unpinned dependency stack. These are reproducibility/implementation issues. Distinguish released-code, paper-faithful and independently adapted baselines; repairing them does not establish a new research contribution. No upstream implementation was copied into production.
+
+### R5: withdraw the generic timestamp novelty claim
+
+[Peng etal., DOI10.1007/s10846-017-0557-y](https://link.springer.com/article/10.1007/s10846-017-0557-y), online2017/volume2018, already addresses bounded time-varying delay with asynchronous clocks, including the resulting unmeasurability of delay and use of message-order information. Its publisher abstract and institutional record were read; the subscription full text was not. This is sufficient to withdraw a generic “unreliable timestamps are an unstudied coordination issue” claim. It is not sufficient to conclude that every possible trust/abstention controller is solved. The exact observation/action and safety comparisons would require its full method and the other delay-aware rivals. R5 is not selected for training or expanded into multiple papers here.
+
+### What this actually resolves and what still blocks G1
+
+Completed: the two missing direct papers were obtained and read; a more direct drift-under-contact competitor was identified; the adjacent-clock omission was corrected; concrete strong rivals, falsifiers, information limits and a CPU-oriented entry were supplied. The source-based recommendation is one bounded feasibility pilot, not three unrelated themes or a six-paper split.
+
+Still required for a decision-ready G1: resolve the SDI and other abstract-only nearest-work comparisons; establish an incremental contribution after the simplest physical rival; verify runner resource feasibility without assuming the author's timing transfers; document public data/model interfaces; form an honestly independent six-paper contribution map; collect dated application-route/funding/job/competition evidence before weighted scoring; obtain the actual independent scientific assessment and owner topic decision. The expired submission-ready date in the immutable G0 is not silently extended or treated as met. No funded-position/salary facts or admission eligibility were invented.
+
+Current-session exact API identity and app cost remain unavailable; native runtime attestation, native independent review, topic approvals, experiments and scientific performance results are all absent. The old and new source scopes and failed access are preserved rather than marked complete by document or schema checks.
+
+### Exact native G1 status snapshot
+
+The latest inspected native status artifact (#175/run42488832898, source58ac455) contains32 error entries but31 distinct strings: the missing originality audit appears twice. The real omissions are the novelty matrix, originality audit, topic shortlist, primary-source direction ranking and score report, topic-decision text, hypothesis register/audit, and substantive core/extension thesis fields. Its quality assessment, independent-review receipt and review-decision-log omissions are warnings in that snapshot. No research-case file exists in its tracked P01 records. Source investigation does not silently create those scientific assertions or mark the gate ready. The complete exact list, artifact hash and current-state comparison are retained in the companion source notes.
