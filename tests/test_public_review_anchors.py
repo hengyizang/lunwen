@@ -38,6 +38,40 @@ class PublicReviewAnchorTests(unittest.TestCase):
         with patch.object(corpus, "_fetch", side_effect=self.fetch):
             return corpus._acquire(self.root / "project", candidate or self.candidate, self.root / "originals")
 
+    def calibration_collection(self, cache, frozen):
+        source_project = cache / "project"
+        rows, self.calibration_cases = [], []
+        for identifier, partition in (("a", "calibration"), ("b", "holdout")):
+            source = source_project / f"evidence/{identifier}.json"
+            corpus.write(source, {"body": [{"text": "Synthetic scientific source only."}]})
+            review = source.with_suffix(".txt")
+            review.write_text("Synthetic external assessment key.")
+            binding = {"path": source.relative_to(source_project).as_posix(), "sha256": corpus.sha(source)}
+            row = {"id": identifier, "partition": partition, "label": "solid", "source": binding,
+                   "review": {"path": review.relative_to(source_project).as_posix()}}
+            rows.append(row)
+            self.calibration_cases.append({**row, "case_sha256": identifier * 64})
+        corpus.write(source_project / "program/public-review-anchors.json", {"cases": rows})
+        corpus.write(source_project / "program/judgment-benchmark.json", {})
+        return {"public_papers": 2}
+
+    def calibration_call(self, project, **request):
+        route = model_routing.select("auxiliary", "independent-critique")
+        self.assertEqual(request["max_output_tokens"], 12000)
+        self.assertEqual(route["max_output_tokens"], 12000)
+        ledger = project / "state/model-usage.jsonl"
+        ledger.parent.mkdir(parents=True, exist_ok=True)
+        row = {"run_id": request["run_id"], "requested_model": request["model"], "provider": request["provider"],
+               "route_id": route["route_id"], "prompt_sha256": hashlib.sha256(request["prompt"].encode()).hexdigest(),
+               "cost_cny": .4, "cost_status": "estimated_upper_bound"}
+        with ledger.open("a") as stream:
+            stream.write(json.dumps(row) + "\n")
+        labels = [{**json.loads(line[5:]), "outcome": "solid", "rationale": "Synthetic transport fixture."}
+                  for line in request["prompt"].splitlines() if line.startswith("CASE ")] if self.valid_calibration_response else []
+        return ai_providers.ModelResult(provider=request["provider"], model=request["model"], reported_model=request["model"],
+            text=json.dumps({"anchor_labels": labels}), usage={}, requested_effort="high", route_id=route["route_id"],
+            routing_policy_sha256=route["policy_sha256"], response_metadata={"metadata_only": True,"diagnostics": {"stop_reason": "end_turn"}})
+
     def test_review_license_is_verified_before_acquiring_article_body(self):
         self.rights["license"] = []
         with self.assertRaisesRegex(ValueError, "license"):
@@ -108,6 +142,37 @@ class PublicReviewAnchorTests(unittest.TestCase):
         self.assertIn(corpus.EVIDENCE_RUBRIC["convincing"], batch["prompt"])
         self.assertEqual(batch["cases"], [{"case_id": case["id"], "case_sha256": "a" * 64}])
 
+    def test_small_batches_keep_complete_sources_and_the_same_case_population(self):
+        case, _ = self.acquire()
+        case["case_sha256"] = "a" * 64
+        second = copy.deepcopy(case)
+        second.update(id="second-case", case_sha256="b" * 64)
+        ordinary = corpus.calibration_batches(self.root / "project", [case, second])
+        small = corpus.calibration_batches(self.root / "project", [case, second], max_cases=1)
+        self.assertEqual(len(ordinary), 1)
+        self.assertEqual(len(small), 2)
+        self.assertEqual([c for batch in ordinary for c in batch["cases"]], [c for batch in small for c in batch["cases"]])
+        for batch in small:
+            self.assertIn((self.root / "project" / case["source"]["path"]).read_text(), batch["prompt"])
+            self.assertNotIn("ANSWER_KEY_TEXT", batch["prompt"])
+            self.assertEqual(len(batch["cases"]), 1)
+        for maximum in (0, 9, True, 1.0, "1", None):
+            with self.subTest(maximum=maximum), self.assertRaisesRegex(ValueError, "batch cases"):
+                corpus.calibration_batches(self.root / "project", [case], max_cases=maximum)
+
+    def test_selected_batch_keeps_its_canonical_index_identity_and_quote(self):
+        batches = [{"prompt": "First full source fixture", "cases": [{"case_id": "a", "case_sha256": "a" * 64}]},
+                   {"prompt": "Second full source fixture", "cases": [{"case_id": "b", "case_sha256": "b" * 64}]}]
+        with patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}), patch.object(model_runtime, "call") as call:
+            complete = corpus.calibration_plan(batches, "domain", max_output_tokens=12000)
+            selected = corpus.calibration_plan(batches, "domain", max_output_tokens=12000, batch_index=2)
+            self.assertEqual(selected, [complete[1]])
+            self.assertEqual(selected[0]["batch"], 2)
+            for index in (0, 3, True, 1.0, "1"):
+                with self.subTest(index=index), self.assertRaisesRegex(ValueError, "actual canonical batch"):
+                    corpus.calibration_plan(batches, "domain", batch_index=index)
+        call.assert_not_called()
+
     def test_calibration_rejects_missing_duplicate_wrong_hash_and_foreign_labels_but_allows_abstention(self):
         cases = [{"case_id": "paper", "case_sha256": "a" * 64}]
         row = {**cases[0], "outcome": None, "rationale": "The linked evidence is not available to assess this claim."}
@@ -140,6 +205,11 @@ class PublicReviewAnchorTests(unittest.TestCase):
         report = corpus.calibration_metrics(anchors, [{"case_id": "b", "outcome": None}])
         self.assertEqual(report["partitions"]["holdout"]["abstentions"], 1)
         self.assertEqual(report["partitions"]["holdout"]["exact_agreement"], 0)
+        anchors.append({"id": "c", "partition": "calibration", "label": "convincing"})
+        report = corpus.calibration_metrics(anchors, [{"case_id": "a", "outcome": "solid"}])
+        self.assertIsNone(report["partitions"]["calibration"]["exact_agreement"])
+        self.assertEqual(report["partitions"]["calibration"]["observed_subset_exact_agreement"], 1)
+        self.assertIsNone(report["partitions"]["holdout"]["observed_subset_exact_agreement"])
 
     def test_calibration_costs_do_not_turn_missing_bills_or_unknown_holds_into_zero(self):
         for row in ({}, {"cost_cny": None}, {"cost_cny": 0, "cost_status": "accounted_upper_bound", "reserved_cost_cny": .4}):
@@ -154,42 +224,15 @@ class PublicReviewAnchorTests(unittest.TestCase):
 
     def test_paid_response_validation_failure_preserves_raw_answer_and_central_bill_without_retry(self):
         destination = self.root / "budget-project/evidence/auxiliary/synthetic-attempt.json"
-        cases = []
-        def synthetic_collection(cache, frozen):
-            source_project = cache / "project"
-            rows = []
-            for identifier, partition in (("a", "calibration"), ("b", "holdout")):
-                source = source_project / f"evidence/{identifier}.json"
-                corpus.write(source, {"body": [{"text": "Synthetic scientific source only."}]})
-                review = source.with_suffix(".txt")
-                review.write_text("Synthetic external assessment key.")
-                binding = {"path": source.relative_to(source_project).as_posix(), "sha256": corpus.sha(source)}
-                row = {"id": identifier, "partition": partition, "label": "solid", "source": binding,
-                       "review": {"path": review.relative_to(source_project).as_posix()}}
-                rows.append(row); cases.append({**row, "case_sha256": identifier * 64})
-            corpus.write(source_project / "program/public-review-anchors.json", {"cases": rows})
-            corpus.write(source_project / "program/judgment-benchmark.json", {})
-            return {"public_papers": 2}
-        def synthetic_call(project, **request):
-            route = model_routing.select("auxiliary", "independent-critique")
-            self.assertEqual(request["max_output_tokens"], 12000)
-            self.assertEqual(route["max_output_tokens"], 12000)
-            ledger = project / "state/model-usage.jsonl"; ledger.parent.mkdir(parents=True, exist_ok=True)
-            row = {"run_id": request["run_id"], "requested_model": request["model"], "provider": request["provider"],
-                   "route_id": route["route_id"], "prompt_sha256": hashlib.sha256(request["prompt"].encode()).hexdigest(),
-                   "cost_cny": .4, "cost_status": "estimated_upper_bound"}
-            ledger.write_text(json.dumps(row) + "\n")
-            return ai_providers.ModelResult(provider=request["provider"], model=request["model"], reported_model=request["model"],
-                text='{"anchor_labels":[]}', usage={}, requested_effort="high", route_id=route["route_id"],
-                routing_policy_sha256=route["policy_sha256"], response_metadata={"metadata_only":True,"diagnostics":{"stop_reason":"end_turn"}})
+        self.valid_calibration_response = False
         env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1",
                "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}
         with patch.dict(os.environ, env), patch.object(corpus, "__file__", str(self.root / "scripts/public_review_anchors.py")), \
-             patch.object(corpus, "collect", side_effect=synthetic_collection), \
-             patch.object(corpus, "judgment_benchmark", side_effect=lambda *a, **k: {"blind_cases": cases}), \
+             patch.object(corpus, "collect", side_effect=self.calibration_collection), \
+             patch.object(corpus, "judgment_benchmark", side_effect=lambda *a, **k: {"blind_cases": self.calibration_cases}), \
              patch.object(model_runtime, "preflight_route"), \
              patch.object(model_runtime, "budget_status", return_value={"project_remaining": 500}), \
-             patch.object(model_runtime, "call", side_effect=synthetic_call) as execute:
+             patch.object(model_runtime, "call", side_effect=self.calibration_call) as execute:
             with self.assertRaisesRegex(ValueError, "omitted"):
                 corpus.run_calibration(destination.parents[2], destination, "c" * 64, seat="domain", execute=True, max_output_tokens=12000)
         execute.assert_called_once()
@@ -214,3 +257,36 @@ class PublicReviewAnchorTests(unittest.TestCase):
         self.assertEqual(report["calibration_status"], "NOT_CALIBRATED")
         self.assertIsNone(report["human_claim_sample_agreement"])
         self.assertEqual(report["model_predictions"], 0)
+
+    def test_single_batch_success_preserves_full_population_and_stays_uncalibrated(self):
+        self.valid_calibration_response = True
+        env = {"DR_OS_ROUTING_PROFILE": "production", "DR_OS_CLOUD_EXECUTOR": "1", "DR_OS_REQUIRE_REMOTE_RESERVATION": "1",
+               "DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}
+        scopes = []
+        for selected_index, expected_calls in ((2, 1), (None, 2)):
+            destination = self.root / "budget-project/evidence/auxiliary" / f"synthetic-success-{selected_index}.json"
+            with patch.dict(os.environ, env), patch.object(corpus, "__file__", str(self.root / "scripts/public_review_anchors.py")), \
+                 patch.object(corpus, "collect", side_effect=self.calibration_collection), \
+                 patch.object(corpus, "judgment_benchmark", side_effect=lambda *a, **k: {"blind_cases": self.calibration_cases}), \
+                 patch.object(model_runtime, "preflight_route"), \
+                 patch.object(model_runtime, "budget_status", return_value={"project_remaining": 500}), \
+                 patch.object(model_runtime, "call", side_effect=self.calibration_call) as execute:
+                report = corpus.run_calibration(destination.parents[2], destination, "c" * 64, seat="domain", execute=True,
+                    max_output_tokens=12000, batch_cases=1, batch_index=selected_index)
+            self.assertEqual(execute.call_count, expected_calls)
+            self.assertEqual(report["calls_attempted"], expected_calls)
+            self.assertEqual(report["model_predictions"], expected_calls)
+            self.assertEqual(report["corpus_case_count"], 2)
+            self.assertEqual(report["canonical_batch_count"], 2)
+            self.assertEqual(report["corpus_coverage_complete"], selected_index is None)
+            self.assertFalse(report["numeric_score_calibration_verified"])
+            self.assertFalse(report["scientific_completion_verified"])
+            self.assertEqual(report["calibration_status"], "EMPIRICAL_COMPARISON_COMPLETE" if selected_index is None else "NOT_CALIBRATED")
+            result = report["results"]["domain"]
+            if selected_index is not None:
+                self.assertEqual(report["status"], "bounded_batch_complete")
+                self.assertEqual([row["case_id"] for row in result["predictions"]], ["b"])
+                self.assertIsNone(result["metrics"]["partitions"]["calibration"]["exact_agreement"])
+                self.assertEqual(report["model_plan"][0]["batch"], 2)
+            scopes.append(report["scope_sha256"])
+        self.assertNotEqual(*scopes)

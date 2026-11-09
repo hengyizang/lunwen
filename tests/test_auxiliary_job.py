@@ -82,6 +82,23 @@ class AuxiliaryJobTests(unittest.TestCase):
                 with self.subTest(kind=kind, tokens=tokens), self.assertRaises(ValueError):
                     auxiliary_job.load(self.project, self.manifest(kind=kind, task_profile={**profile, "task_class": kind}, max_output_tokens=tokens))
 
+    def test_calibration_batch_controls_are_explicit_strict_and_forwarded_only_to_calibration(self):
+        profile = {"task_class": "public-review-calibration", "science_risk": "critical", "priority": "quality"}
+        for field, maximum in (("calibration_batch_cases", 8), ("calibration_batch_index", 24)):
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "allowed only"):
+                auxiliary_job.load(self.project, self.manifest(**{field: 1}))
+            for value in (0, maximum + 1, True, 1.0, "1", None):
+                with self.subTest(field=field, value=value), self.assertRaisesRegex(ValueError, "bounded integer"):
+                    auxiliary_job.load(self.project, self.manifest(kind="public-review-calibration", calibration_seat="domain",
+                        task_profile=profile, **{field: value}))
+        manifest = self.manifest(kind="public-review-calibration", calibration_seat="domain", task_profile=profile,
+                                 calibration_batch_cases=1, calibration_batch_index=2)
+        with patch("scripts.public_review_anchors.run_calibration", return_value={"status": "dry_run_no_model_call", "calls_planned": 1,
+                "calls_attempted": 0, "reserved_upper_bound_cny": .3}) as calibration:
+            auxiliary_job.run(self.project, manifest, "evidence/auxiliary/single.json")
+        self.assertEqual(calibration.call_args.kwargs["batch_cases"], 1)
+        self.assertEqual(calibration.call_args.kwargs["batch_index"], 2)
+
     def test_citation_crosscheck_binds_only_its_explicit_scientific_source_task(self):
         profile = {"task_class": "citation-crosscheck", "science_risk": "critical", "priority": "quality"}
         task = self.project / "program/citation-task.json"
