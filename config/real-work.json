@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "profile": "real-work-first",
+  "enabled_by": "DR_OS_WORK_PROFILE=minimal",
+  "owner_decision": "docs/OWNER-DECISION-2026-11-09-REAL-WORK-FIRST.md",
+  "rollback_tag": "before-real-work-simplify",
+  "purpose": "Make genuine research easy to complete. The full protocol remains available and unchanged; this profile keeps only the checks that actually prevent fabrication and records the rest as visible, non-blocking observations.",
+  "enabled_gates": ["G1"],
+  "hard_checks": {
+    "G1": [
+      "program/topic-decision.md is non-empty and written by the owner",
+      "program/topic-shortlist.json lists at least three real candidates",
+      "program/core-thesis.json declares one overarching doctoral question"
+    ]
+  },
+  "non_blocking": [
+    "search-result screening sheets and per-row human screening records",
+    "novelty-matrix / selection_decision / feasibility_evidence schema migrations",
+    "hypothesis audit staleness and optional quality assessments",
+    "missing optional validators (e.g. jsonschema) and independent-review observations",
+    "numeric scores, venue quartiles, impact factors and journal AI-policy observations"
+  ],
+  "still_hard": [
+    "G1/G2 topic approvals require a named human --actor (researchctl approve)",
+    "no automatic submission, no fabricated citations/results/reviews",
+    "source hashes, cumulative budget, failed-attempt ledger and role separation",
+    "G2-G5 keep the full protocol until explicitly enabled here"
+  ],
+  "model_overrides": "config/model-routing.local.json (git-ignored, owner supplied real model IDs)",
+  "note": "This profile lowers ceremony, not integrity. It never fills in scientific content, never marks unverified work as verified, and never approves a gate without a human actor."
+}

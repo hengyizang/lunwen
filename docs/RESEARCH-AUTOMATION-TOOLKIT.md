@@ -1,5 +1,11 @@
 # 科研工具的 Codex 接入
 
+> **2026-11-09 owner decision:** 本文描述的「不部署上游独立运行时／仅加载适配技能」限制已对新接入解除，见
+> [`docs/THIRD-PARTY-RUNTIME-POLICY.md`](THIRD-PARTY-RUNTIME-POLICY.md) 与
+> [`docs/OWNER-DECISION-2026-11-09.md`](OWNER-DECISION-2026-11-09.md)。
+> 下文表格仍然准确记录每个上游独立运行所需的额外环境；这些环境现在可以自行提供并实际运行。
+> 本文及 `integrations/research-automation-tools.json` 保留原有 11 项的历史审查状态，不回溯改写。
+
 接入包含十个原有工具和 The AI Scientist V1/V2 的合并适配入口，共十一个可发现、可按任务调用的 **Codex 适配技能**、固定上游版本的完整源码，以及将选定技能送入现有模型环节的云端任务包。适配技能有实际的研究操作步骤；上游桌面程序、服务器、模型权重、GPU 服务和付费接口均未启动。
 
 ## 按实际任务选用

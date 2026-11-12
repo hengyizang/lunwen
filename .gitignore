@@ -22,6 +22,9 @@ Thumbs.db
 *.key
 secrets/
 
+# Owner-supplied real model IDs (local only, never committed)
+config/model-routing.local.json
+
 # Raw/licensed data and caches
 projects/**/data/raw/
 projects/**/data/processed/

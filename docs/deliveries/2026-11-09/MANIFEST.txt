@@ -1,0 +1,34 @@
+# MANIFEST — lunwen 交付包 2026-11-09
+# path<TAB>bytes<TAB>sha256(前16位)
+
+README.md	4883	38d3600b9f1a419c
+01-upload-to-github/lunwen-real-work-first.patch	51753	7f9b1531e1667b4c
+01-upload-to-github/APPLY.md	5019	c6c1c99e4faa86fe
+01-upload-to-github/repo-files/.gitignore	2245	48db86e1b0806fe4
+01-upload-to-github/repo-files/config/stages.json	14585	87c10abf7c54bf95
+01-upload-to-github/repo-files/config/real-work.json	1796	7d2e90c0f85386b4
+01-upload-to-github/repo-files/scripts/model_routing.py	25820	6b5fb4f6365875cb
+01-upload-to-github/repo-files/scripts/researchctl.py	66465	6c2596e398ab324a
+01-upload-to-github/repo-files/scripts/real_work.py	23755	50c0b7231f4b5a03
+01-upload-to-github/repo-files/docs/REAL-WORK-QUICKSTART.md	5699	b2af9d2c0f77a1d5
+01-upload-to-github/repo-files/docs/OWNER-DECISION-2026-11-09-REAL-WORK-FIRST.md	3751	2f6b5c31a7f52bec
+01-upload-to-github/repo-files/tests/test_real_work.py	7536	29df36a6a7be73c2
+02-opinion-record/lunwen-全部看法与改动记录.md	25802	30a5e4a3837cde62
+03-analysis-reports/00-项目能力精读总报告.md	20295	bff7e9b09a603a81
+03-analysis-reports/01-防幻觉过度性评估.md	9722	dd167b01956649b3
+03-analysis-reports/02-真实工作优先改造报告.md	8179	70d7e902608d4096
+03-analysis-reports/03-继续工作小结.md	7781	b7163e95482a5b87
+03-analysis-reports/detailed/scripts-G01.md	83365	58f75e14a758c3e3
+03-analysis-reports/detailed/scripts-G02.md	96229	d5d7ce22e62d58cf
+03-analysis-reports/detailed/scripts-G03.md	107114	fb8c5b2b80169ce5
+03-analysis-reports/detailed/scripts-G04.md	92120	430142f1028cb862
+03-analysis-reports/detailed/scripts-G05.md	110763	1fee53635b0eed2f
+03-analysis-reports/detailed/scripts-G06.md	65851	4c1cb5d696665aee
+03-analysis-reports/detailed/scripts-G07.md	93073	8e1fe1ddd26a14be
+03-analysis-reports/detailed/scripts-G08.md	141201	03f76f93f79653f3
+03-analysis-reports/detailed/tests-G01.md	326238	65af8b7764cf10d2
+03-analysis-reports/detailed/tests-G02.md	240871	01b51ca079d155fb
+03-analysis-reports/detailed/contracts-and-state.md	61602	5e467e23b0fba592
+03-analysis-reports/detailed/third-party.md	55580	44de723620f5dd58
+
+合计 29 个文件 + MANIFEST.txt

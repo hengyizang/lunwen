@@ -4,6 +4,13 @@
 Codex Cloud 负责代码工作；项目既有 GitHub Actions 继续负责受控科研运行、状态
 恢复和实验。安装依赖不会启动研究，也不会授予实验执行权限。
 
+> 2026-11-09 补充：本页描述的是本仓库的 Codex Cloud **环境准备脚本**与原有
+> 容器模型，不代表全部云端形态。OpenAI 另有 **dots 常驻云电脑**（自带桌面、
+> 浏览器、可 24/7 后台运行）以及 DevDay 2026 的**可复用 Codex 云环境**；
+> 它们改变了「长驻服务 / GUI 类上游」的可行性判断。能力边界、治理风险与
+> 按需求分派见 [`docs/THIRD-PARTY-ADAPTATION.md`](THIRD-PARTY-ADAPTATION.md) §5.1。
+> 本页原有安装与验收记录不回溯改写。
+
 ## 保存并发布环境
 
 在 Codex 的 **Settings → Codex Cloud → Environments** 中编辑 `lunwen` 环境，
