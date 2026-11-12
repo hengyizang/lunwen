@@ -14,6 +14,16 @@
       "G2"
     ],
     "acceptance_guarantee": false,
+    "blocking": false,
+    "observation_only": {
+      "minimum_dimension_score": true,
+      "minimum_overall_score": true,
+      "novelty_evidence_minimum": true,
+      "minimum_publication_level": true,
+      "preferred_publication_level": true,
+      "impact_factor_floor": true
+    },
+    "real_work_profile": "With DR_OS_WORK_PROFILE=minimal, G1 keeps only the owner's written decision, three real candidates and one doctoral question as blocking checks; all other checks remain visible observations. See config/real-work.json.",
     "note": "Human topic decisions apply only to G1 and each G2 paper. A scientific-integrity failures block; B source-bound submission checks run once per unchanged snapshot; C numerical/editorial/administrative observations never add gates. Existing score and Q1/Q2/IF values are legacy planning observations, not clearance thresholds. Venue fit uses actual scope/article-type/audience evidence; unknown ranking stays unknown. No software guarantees scientific validity, acceptance or admission.",
     "check_levels": {
       "A": "Scientific integrity, rights, actual experiments, frozen inputs and existing writer permissions.",

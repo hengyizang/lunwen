@@ -22,6 +22,8 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICY = ROOT / "config" / "model-routing.json"
+# Owner-supplied real transport model IDs. Git-ignored; never invent model names here.
+LOCAL_MODEL_OVERRIDES = ROOT / "config" / "model-routing.local.json"
 CYCLE_ROLES = (
     "semantic-planner", "persistent-writer", "independent-critic-initial",
     "persistent-remediator", "independent-critic-final",
@@ -137,12 +139,51 @@ def _exact_names(value: Any, expected: set[str], label: str) -> None:
         raise ValueError(f"production {label} must match the exact approved task boundary")
 
 
+def _apply_local_model_overrides(policy: dict[str, Any]) -> dict[str, Any]:
+    """Let the owner point the fixed roster at real, currently available models.
+
+    The repository default stays byte-for-byte unchanged (and all existing
+    tests keep passing). Only an explicit, git-ignored local file changes the
+    model identity; no model name is ever guessed by this code.
+    """
+    if not LOCAL_MODEL_OVERRIDES.is_file() or not isinstance(policy, dict):
+        return policy
+    try:
+        override = json.loads(LOCAL_MODEL_OVERRIDES.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return policy
+    models = policy.get("models")
+    rows = override.get("models") if isinstance(override, dict) else None
+    if not isinstance(models, dict) or not isinstance(rows, dict):
+        return policy
+    for name, row in rows.items():
+        current = models.get(name)
+        if not isinstance(current, dict) or not isinstance(row, dict):
+            continue
+        real_model = row.get("model")
+        if not isinstance(real_model, str) or not real_model.strip():
+            continue
+        provider = row.get("provider") or current.get("provider")
+        family = row.get("family") or current.get("family")
+        if isinstance(provider, str):
+            current["provider"] = provider
+        if isinstance(family, str):
+            current["family"] = family
+        current["model"] = real_model
+        APPROVED_MODELS[name] = (current["provider"], real_model, current["family"])
+        spec = ai_providers.PRODUCTION_PROVIDERS.get(current["provider"])
+        if spec and real_model not in spec["models"]:
+            spec["models"] = tuple(spec["models"]) + (real_model,)
+    return policy
+
+
 def production_enabled() -> bool:
     """Legacy consumers stay unchanged until the production profile is explicit."""
     value = os.environ.get("DR_OS_ROUTING_PROFILE", "")
     if value not in {"", "legacy", "production"}:
         raise ValueError("DR_OS_ROUTING_PROFILE must be production or legacy")
-    return value == "production" or bool(os.environ.get("DR_OS_ROUTING_CONFIG"))
+    return (value == "production" or bool(os.environ.get("DR_OS_ROUTING_CONFIG"))
+            or LOCAL_MODEL_OVERRIDES.is_file())
 
 
 def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str, Any], str]:
@@ -155,6 +196,7 @@ def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str,
         policy = json.loads(raw)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError("production routing policy is invalid JSON") from exc
+    policy = _apply_local_model_overrides(policy)
     if (not isinstance(policy, dict) or policy.get("schema_version") != "1.0"
             or policy.get("profile") != "production"):
         raise ValueError("unsupported production routing policy")

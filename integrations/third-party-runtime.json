@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "owner_decision": {
+    "id": "owner-2026-11-09-third-party-runtime",
+    "date": "2026-11-09",
+    "actor": "repository owner",
+    "status": "active",
+    "record": "docs/OWNER-DECISION-2026-11-09.md"
+  },
+  "policy": "docs/THIRD-PARTY-RUNTIME-POLICY.md",
+  "tooling": "scripts/third_party_runtime.py",
+  "risk_tiers": {
+    "local-readonly": "No network, no credentials, no spend. Record source identity only.",
+    "network-no-credentials": "Public endpoints, no keys or payment. Record contacted endpoints; do not upload raw data or credentials.",
+    "credentials-or-paid": "Requires keys, a paid provider, or GPU service. Keep keys out of files, URLs, argv and logs; HTTPS only; record model identity; every attempt counts against the cumulative total."
+  },
+  "guardrails": {
+    "writes_stage_state": false,
+    "approves_gates": false,
+    "runs_registered_experiments": false,
+    "persistent_scientific_writer": false,
+    "receives_repository_secrets": false,
+    "uploads_raw_research_data": false,
+    "auto_submits_manuscripts": false,
+    "output_status": "advisory until hash-bound, independently verified and linked to evidence"
+  },
+  "notes": "deployment_authorized is a permission; standalone_runtime_deployed is an observed fact. Never infer one from the other. Historical reviewed snapshots in upstreams.lock.json and research-automation-tools.json are deliberately unchanged.",
+  "tools": []
+}

@@ -26,6 +26,7 @@ This repository is a research workflow, not a publication generator.
 22. Keep all six papers within one overarching doctoral question and cumulative knowledge contribution. Core theme A and independently evidenced extension B must serve that same doctoral topic. Each paper needs standalone value and an explicit contribution to the approved thesis synthesis. Evidence-led reframing stays within that scope; a substantive change to the doctoral question or paper-to-thesis mapping needs human review of the affected G1/G2 records before dependent work continues. Never silently turn the portfolio into unrelated topics or waive paper independence.
 23. Manage dynamic routes through the structured task profiles and cloud controls in `docs/DYNAMIC-MODEL-ROUTING.md`. Classify work before execution; never label a core scientific task routine to obtain a cheaper route. Transport/group/effort/context candidates require task-specific evidence before scientific promotion. Preserve selected-route receipts and independent audits. The current payment policy in `docs/TOTAL-COST-POLICY.md` overrides older payment restrictions: calculate and record costs and enforce existing cumulative project totals only. Do not add per-paper/per-request sublimits, paid opt-ins, tranche steps, manual billing approvals or blanket stops on bounded reservations. Use verified charges when available and honestly labeled conservative upper estimates otherwise. Every attempt counts; never increase the configured total automatically.
 24. Keep the six-paper G2 architecture and individual human topic decisions. After checked G2 decisions, new unexecuted portfolios complete the active paper's G3–G5 before the next paper enters G3. Use the canonical per-paper plan, ledger, dataset snapshot and claim paths; preserve other papers' sealed inputs and results. Never silently migrate an already frozen or executed legacy batch protocol. All primary and supplemental attempts share the original cumulative totals.
+25. Owner decisions of 2026-11-09 (`docs/OWNER-DECISION-2026-11-09.md`, `docs/OWNER-DECISION-2026-11-09-EFFECT-FIRST.md`, `docs/OWNER-DECISION-2026-11-09-MAXIMUM-FLEXIBILITY.md`) are the current policy: **effect first, maximum flexibility**. Rules 1-24 are unchanged. Any GitHub project, skill or runtime may be called in any environment, order or duration, with or without registration, a decision point, an adapter, a comparison, an adoption record or a receipt; `scripts/third_party_runtime.py free` needs no registry entry. A dot may act as a research collaborator, not only a tool host. `docs/THIRD-PARTY-RUNTIME-POLICY.md`, `docs/THIRD-PARTY-ADAPTATION.md`, `docs/TOOL-CAPABILITY-MAP.md`, `docs/DOTS-EFFECT-FIRST.md` and all runtime commands are optional tools, never prerequisites. Owner-authorised tool output may enter the candidate-evidence queue when hash-bound and source-verified before any claim link. `integrations/upstreams.lock.json` and `integrations/research-automation-tools.json` remain historical snapshots - authorisation is not deployment. The section 3 authority boundaries in `docs/THIRD-PARTY-RUNTIME-POLICY.md` still apply: no stage-state writes, gate approvals, experiments outside `scripts/experiment_runner.py`, forged provenance, manuscript authorship, secret or raw-data exposure, model-family or budget changes, or auto-submission. Do not break a cloud sandbox (no root, Docker daemon, WSL, kernel or privileged driver in an unprivileged Linux dot VM). Removing a retained rule requires a separate dated owner decision naming it.
 
 ## Codex Cloud development environment
 
@@ -42,16 +43,21 @@ experiment runner; do not copy secrets or reset project records during setup.
 Run repository checks after code or schema changes:
 
 For task-selected methods from the research automation tools, read
-`docs/RESEARCH-AUTOMATION-TOOLKIT.md`. Use `research_toolkit` in the existing cloud
+`docs/RESEARCH-AUTOMATION-TOOLKIT.md`. `docs/TOOL-CAPABILITY-MAP.md` is an optional
+reference for decision-point mapping, `compare`, and `adopt`; under rule 25 none of
+it is a prerequisite. Use `research_toolkit` in the existing cloud
 literature control and pass only the selected immutable packet to existing model
-roles. Adapted Codex skills are not deployed upstream services. Preserve central
+roles. Upstream runtimes may also be deployed under the owner-authorized
+`docs/THIRD-PARTY-RUNTIME-POLICY.md`; adapted Codex skills are one available
+entry, not the only one. Preserve central
 budget/identity controls, independent review, all attempts and approved G3 execution.
 
 For The AI Scientist V1/V2 methods, read `docs/AI-SCIENTIST-INTEGRATION.md`.
 Use receipt-bound `research_search_tree` only as a declared branch view within
 existing controls. It cannot prove a repair, select favorable results, reclassify
-frozen analysis phases or authorize execution. Raw upstream launchers remain
-disabled; preserve the pinned custom source license and required disclosures.
+frozen analysis phases or authorize execution. Raw upstream launchers may run in
+the authorized runtime tier (`docs/THIRD-PARTY-RUNTIME-POLICY.md`); preserve the
+pinned custom source license and required disclosures, and keep their outputs advisory.
 
 For actual CPU semantic retrieval/reranking, bounded PaperQA2 SDK vector-store
 use, complete-text reading comparisons, cloud Zotero reads, discovery categories
