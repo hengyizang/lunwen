@@ -6,6 +6,7 @@ import sys
 import tempfile
 import types
 import unittest
+import zipfile
 from pathlib import Path
 from contextlib import redirect_stderr, redirect_stdout
 from unittest.mock import patch
@@ -346,6 +347,42 @@ class ResearchCtlTests(unittest.TestCase):
         errors = researchctl.gate_errors("test-phd", "G5",warnings=warnings)
         self.assertFalse(any("academic style audit" in error for error in errors))
         self.assertTrue(any("academic style audit" in warning for warning in warnings))
+
+    def test_g5_shares_word_sources_and_rechecks_after_observations(self) -> None:
+        from scripts import revision_integrity
+        project = self.init_project()
+        state = researchctl.load_state("test-phd")
+        state.update(stage_index=5, stage="writing-and-review", gate="G5", active_paper="P01",
+                     writing_phases={"P01": "scientific"})
+        researchctl.save_state("test-phd", state)
+        source = project / "papers/P01/reviews/inspection-fixture.docx"
+        source.parent.mkdir(parents=True, exist_ok=True)
+
+        def write_word(value):
+            with zipfile.ZipFile(source, "w") as archive:
+                archive.writestr("word/document.xml",
+                    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+                    f'<w:body><w:p><w:r><w:t>Fixture value {value}</w:t></w:r></w:p></w:body></w:document>')
+
+        for changed in (False, True):
+            with self.subTest(changed=changed):
+                write_word(1)
+                captured = []
+
+                def scientific(project, paper_id, *, _documents):
+                    revision_integrity.word_source(source, _documents)
+                    captured.append(_documents)
+                    return []
+
+                def observations(project, paper_id, warnings, *, _documents):
+                    self.assertIs(_documents, captured[0])
+                    if changed:
+                        write_word(2)
+
+                with patch.object(researchctl, "paper_scientific_errors", side_effect=scientific), \
+                     patch.object(researchctl, "paper_observations", side_effect=observations):
+                    errors = researchctl.gate_errors("test-phd", "G5", warnings=[])
+                self.assertEqual(any("Word source changed" in error for error in errors), changed)
 
     def test_g5_does_not_use_planning_quartiles_as_scientific_thresholds(self) -> None:
         project = self.init_project(paper_count=6)

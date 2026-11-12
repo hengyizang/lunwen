@@ -139,43 +139,35 @@ def _exact_names(value: Any, expected: set[str], label: str) -> None:
         raise ValueError(f"production {label} must match the exact approved task boundary")
 
 
-def _apply_local_model_overrides(policy: dict[str, Any]) -> dict[str, Any]:
-    """Let the owner point the fixed roster at real, currently available models.
-
-    The repository default stays byte-for-byte unchanged (and all existing
-    tests keep passing). Only an explicit, git-ignored local file changes the
-    model identity; no model name is ever guessed by this code.
-    """
-    if not LOCAL_MODEL_OVERRIDES.is_file() or not isinstance(policy, dict):
-        return policy
+def local_model_overrides() -> dict[str, tuple[str, str, str]]:
+    """Read explicit local identities without changing process-wide defaults."""
     try:
-        override = json.loads(LOCAL_MODEL_OVERRIDES.read_text(encoding="utf-8"))
+        override = json.loads(LOCAL_MODEL_OVERRIDES.read_text(encoding="utf-8-sig"))
     except (OSError, ValueError):
-        return policy
-    models = policy.get("models")
+        return {}
     rows = override.get("models") if isinstance(override, dict) else None
-    if not isinstance(models, dict) or not isinstance(rows, dict):
-        return policy
+    if not isinstance(rows, dict):
+        return {}
+    identities = {}
     for name, row in rows.items():
-        current = models.get(name)
-        if not isinstance(current, dict) or not isinstance(row, dict):
+        default = APPROVED_MODELS.get(name)
+        if (default is None or not isinstance(row, dict) or
+                not isinstance(row.get("model"), str) or not row["model"].strip()):
             continue
-        real_model = row.get("model")
-        if not isinstance(real_model, str) or not real_model.strip():
-            continue
-        provider = row.get("provider") or current.get("provider")
-        family = row.get("family") or current.get("family")
-        if isinstance(provider, str):
-            current["provider"] = provider
-        if isinstance(family, str):
-            current["family"] = family
-        current["model"] = real_model
-        APPROVED_MODELS[name] = (current["provider"], real_model, current["family"])
-        spec = ai_providers.PRODUCTION_PROVIDERS.get(current["provider"])
-        if spec and real_model not in spec["models"]:
-            spec["models"] = tuple(spec["models"]) + (real_model,)
-    return policy
+        provider, family = row.get("provider") or default[0], row.get("family") or default[2]
+        if isinstance(provider, str) and isinstance(family, str):
+            identities[name] = (provider, row["model"], family)
+    return identities
 
+
+def _apply_local_model_overrides(policy: dict[str, Any], overrides=None) -> dict[str, Any]:
+    """Keep the uploaded opt-in feature local to this policy load."""
+    models = policy.get("models") if isinstance(policy, dict) else None
+    if isinstance(models, dict):
+        for name, identity in (local_model_overrides() if overrides is None else overrides).items():
+            if isinstance(models.get(name), dict):
+                models[name].update(zip(("provider", "model", "family"), identity))
+    return policy
 
 def production_enabled() -> bool:
     """Legacy consumers stay unchanged until the production profile is explicit."""
@@ -196,7 +188,9 @@ def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str,
         policy = json.loads(raw)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError("production routing policy is invalid JSON") from exc
-    policy = _apply_local_model_overrides(policy)
+    overrides = local_model_overrides()
+    policy = _apply_local_model_overrides(policy, overrides)
+    approved_models = {**APPROVED_MODELS, **overrides}
     if (not isinstance(policy, dict) or policy.get("schema_version") != "1.0"
             or policy.get("profile") != "production"):
         raise ValueError("unsupported production routing policy")
@@ -212,9 +206,9 @@ def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str,
         provider = ai_providers.PRODUCTION_PROVIDERS.get(row["provider"])
         if not provider or provider["family"] != row.get("family"):
             raise ValueError("model route family differs from its actual provider family")
-        if row["model"] not in provider["models"]:
+        if row["model"] not in provider["models"] and overrides.get(name) != (row["provider"], row["model"], row["family"]):
             raise ValueError("model route is outside its actual transport allowlist")
-        if (row["provider"], row["model"], row.get("family")) != APPROVED_MODELS[name]:
+        if (row["provider"], row["model"], row.get("family")) != approved_models[name]:
             raise ValueError("model route differs from the exact approved model identity")
         if name == "luna" and row["reasoning_effort"] != "medium":
             raise ValueError("Luna is accepted only at the tested medium effort")
@@ -264,7 +258,11 @@ def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str,
     _exact_names(policy.get("health_roles"), APPROVED_HEALTH_ROLES, "health roles")
     _exact_names(policy.get("health_stages"), APPROVED_HEALTH_STAGES, "health stages")
     _exact_names(policy.get("auxiliary_stages"), APPROVED_STAGES | {"auxiliary"}, "auxiliary stages")
-    return policy, hashlib.sha256(raw).hexdigest()
+    digest = hashlib.sha256(raw).hexdigest()
+    if overrides:
+        digest = hashlib.sha256(json.dumps({"policy_sha256": digest, "model_overrides": overrides},
+                                          sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    return policy, digest
 
 
 def select(stage: str, role: str, task_kind: str | None = None, *,

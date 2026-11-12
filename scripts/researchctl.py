@@ -129,7 +129,7 @@ def _observe(warnings, label, check):
     except (OSError,ValueError,RuntimeError,KeyError,TypeError,ImportError) as exc:warnings.append(label+": "+str(exc))
 
 
-def paper_scientific_errors(project, pid):
+def paper_scientific_errors(project, pid, *, _documents=None):
     """A: factual evidence and preservation checks shared by both writing phases."""
     from scripts import manuscript_audit,statistical_reporting,revision_integrity,figure_provenance,manuscript_hygiene,literature_source_tasks
     from scripts.research_phase import requires_submission
@@ -138,7 +138,7 @@ def paper_scientific_errors(project, pid):
         ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
         ("full-text citation support",lambda:literature_source_tasks.integrity_errors(project,pid,require_support=requires_submission(project,paper_id=pid))),
         ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
-        ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False)),
+        ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False,_documents=_documents)),
         ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper,include_visual=False)),
         ("preserved originals",lambda:manuscript_hygiene.integrity_errors(project,pid))):
         try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
@@ -148,24 +148,23 @@ def paper_scientific_errors(project, pid):
     return errors
 
 
-def paper_observations(project,pid,warnings):
+def paper_observations(project,pid,warnings,*,_documents=None):
     """C: diagnostics never acquire data, call a model or grant scientific approval."""
     if warnings is None:return
-    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,pre_submission_review,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,reviewer_rounds
+    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,reviewer_rounds
     paper=project/"papers"/pid
     for label,check in (
         ("academic style",lambda:academic_style.validate_saved_audit(paper)),
         ("manuscript hygiene",lambda:manuscript_hygiene.validate_saved_report(project,pid)),
         ("language observation",lambda:manuscript_language.analyze_submission(paper).get("errors",[])),
         ("watermark observation",lambda:statistical_watermarks.validate_saved_report(project,pid)),
-        ("pre-submission suggestions",lambda:pre_submission_review.validate_saved_report(paper)),
         ("figure layout",lambda:figure_layout.validate_saved_figures(paper)),
         ("figure appearance",lambda:figure_provenance.visual_observations(project,paper)),
         ("manuscript appearance",lambda:manuscript_docx.visual_observations(paper) if (paper/"manuscript/main.docx").is_file()
             else automated_visual_review.verify(project,pid,f"papers/{pid}/manuscript/main.tex") if (paper/"manuscript/main.tex").is_file() else []),
-        ("revision trace",lambda:revision_trace.validate_saved_report(paper)),
-        ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True)),
-        ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid)),
+        ("revision trace",lambda:revision_trace.validate_saved_report(paper,_documents=_documents)),
+        ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True,_documents=_documents)),
+        ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid,_documents=_documents)),
         ("concern cards",lambda:reviewer_rounds.validate_concern_response(paper))):
         _observe(warnings,f"{pid} {label}",check)
 
@@ -497,8 +496,9 @@ def _full_gate_errors(slug,gate,*,warnings=None):
         errors.extend("internal follow-up: "+issue for issue in internal_errors(project,pid))
         from scripts import study_routes
         if study_routes.route(project,pid)!="empirical":errors.extend(study_routes.validation_errors(project,pid))
-        errors.extend(paper_scientific_errors(project,pid))
-        paper_observations(project,pid,warnings)
+        documents={}
+        errors.extend(paper_scientific_errors(project,pid,_documents=documents))
+        paper_observations(project,pid,warnings,_documents=documents)
         if requires_submission(project,paper_id=pid):
             from scripts.submission_package import submission_checks,submission_check_binding
             approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==pid),None)
@@ -513,6 +513,10 @@ def _full_gate_errors(slug,gate,*,warnings=None):
             quality_errors(project,gate,errors,pid,warnings=warnings)
         else:errors.append(SUBMISSION_PENDING)
         independent_audit_errors(project,gate,errors,pid,warnings=warnings)
+        try:
+            from scripts.revision_integrity import verify_word_sources
+            verify_word_sources(documents)
+        except (OSError,ValueError) as exc:errors.append(f"{pid} Word inspection: {exc}")
         return errors
     errors.append(f"unknown gate: {gate}");return errors
 def active_paper_id(slug):return validate_paper_id(str(read_json(state_path(slug)).get("active_paper")))

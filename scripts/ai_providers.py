@@ -938,6 +938,17 @@ def validate_attachments(attachments: Any) -> list[dict[str, Any]]:
     return _validated_attachments(attachments)
 
 
+def production_models(provider: str) -> tuple[str, ...]:
+    """Include explicit owner-local IDs without mutating native allowlists."""
+    spec = PRODUCTION_PROVIDERS.get(provider)
+    if spec is None:
+        return ()
+    from scripts.model_routing import local_model_overrides
+    local = (model for route, model, family in local_model_overrides().values()
+             if route == provider and family == spec["family"])
+    return tuple(dict.fromkeys((*spec["models"], *local)))
+
+
 def production_supported_efforts(provider: str, model: str) -> tuple[str, ...]:
     """Describe implemented native payloads, not relay quality or acceptance.
 
@@ -946,7 +957,7 @@ def production_supported_efforts(provider: str, model: str) -> tuple[str, ...]:
     that a relay actually honors the requested effort.
     """
     spec = PRODUCTION_PROVIDERS.get(provider)
-    if spec is None or model not in spec["models"]:
+    if spec is None or model not in production_models(provider):
         raise ProviderError("model is not explicitly allowed on the selected production route")
     if spec["family"] == "openai" or (spec["family"] == "google" and model == "gemini-4-argon"):
         return ("low", "medium", "high")
@@ -963,7 +974,7 @@ def production_endpoint(provider: str, model: str | None = None) -> str:
     if spec is None:
         raise ProviderError("provider is not a configured production route")
     selected = spec["model"] if model is None else model
-    if not isinstance(selected, str) or selected not in spec["models"]:
+    if not isinstance(selected, str) or selected not in production_models(provider):
         raise ProviderError("model is not explicitly allowed on the selected production route")
     return spec["root"] + spec["path"].format(model=selected)
 
@@ -980,7 +991,7 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
         from scripts.model_routing import g1_response_streaming_active
         if provider != "codekey-codex-pro" or model != "gpt-6-astra" or not g1_response_streaming_active():
             raise ProviderError("Responses streaming is restricted to the explicit Astra G1 validation sample")
-    if model not in spec["models"]:
+    if model not in production_models(provider):
         raise ProviderError("model is not explicitly allowed on the selected production route")
     if not isinstance(prompt, str) or not prompt or (system is not None and not isinstance(system, str)):
         raise ProviderError("generation prompt and optional system must be text")
@@ -1098,7 +1109,7 @@ def configuration(provider: str, environment: Mapping[str, str] | None = None) -
                 "endpoint": production_endpoint(provider),
                 "key_setting": spec["key_setting"], "strict_model_id": True,
                 "billing_identity": {"plan": "production", "group": provider, "mode": "standard"},
-                "allowed_models": list(spec["models"]),
+                "allowed_models": list(production_models(provider)),
                 "allowed_reasoning_efforts": list(production_supported_efforts(provider, spec["model"])),
                 "configuration_error": None if valid else f"{spec['key_setting']} is not configured as a valid key"}
     if provider == "openai":
