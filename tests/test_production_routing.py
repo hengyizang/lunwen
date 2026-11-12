@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import os
 import tempfile
 import unittest
@@ -17,6 +18,59 @@ class ProductionPolicyTests(unittest.TestCase):
         self.environment = patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}, clear=True)
         self.environment.start()
         self.addCleanup(self.environment.stop)
+
+    def test_local_model_override_restores_defaults_and_keeps_transport_ids_scoped(self):
+        baseline, baseline_hash = model_routing.load_policy()
+        approved = dict(model_routing.APPROVED_MODELS)
+        providers = copy.deepcopy(ai_providers.PRODUCTION_PROVIDERS)
+        model = "fixture-local-astra"
+        with tempfile.TemporaryDirectory() as directory:
+            local = Path(directory) / "models.json"
+            local.write_text(json.dumps({"models": {"astra": {
+                "provider": "codekey-codex-pro", "model": model, "family": "openai"}}}))
+            with patch.object(model_routing, "LOCAL_MODEL_OVERRIDES", local):
+                route = model_routing.select("topic-intelligence", "persistent-writer")
+                self.assertEqual((route["provider"], route["model"]), ("codekey-codex-pro", model))
+                self.assertEqual(ai_providers.production_endpoint(route["provider"], model),
+                                 "https://codekey.ai/v1/responses")
+                self.assertIn(model, ai_providers.configuration(route["provider"])["allowed_models"])
+                self.assertIn("high", ai_providers.production_supported_efforts(route["provider"], model))
+                self.assertEqual(model_routing.APPROVED_MODELS, approved)
+                self.assertEqual(ai_providers.PRODUCTION_PROVIDERS, providers)
+                local.unlink()
+                self.assertEqual(model_routing.load_policy(), (baseline, baseline_hash))
+                with self.assertRaises(ai_providers.ProviderError):
+                    ai_providers.production_endpoint("codekey-codex-pro", model)
+
+    def test_local_model_override_hash_tracks_effective_identity(self):
+        _, baseline_hash = model_routing.load_policy()
+        with tempfile.TemporaryDirectory() as directory:
+            local = Path(directory) / "models.json"
+            with patch.object(model_routing, "LOCAL_MODEL_OVERRIDES", local):
+                value = {"models": {"astra": {"model": "fixture-local-a"}}}
+                local.write_text(json.dumps(value))
+                _, first = model_routing.load_policy()
+                self.assertNotEqual(first, baseline_hash)
+                local.write_text(json.dumps(value, indent=4))
+                self.assertEqual(model_routing.load_policy()[1], first)
+                value["models"]["astra"]["model"] = "fixture-local-b"
+                local.write_text(json.dumps(value))
+                self.assertNotEqual(model_routing.load_policy()[1], first)
+                self.assertNotIn("fixture-local-a", ai_providers.production_models("cheapai-gpt-pro"))
+
+    def test_invalid_local_model_override_does_not_poison_defaults(self):
+        baseline = model_routing.load_policy()
+        providers = copy.deepcopy(ai_providers.PRODUCTION_PROVIDERS)
+        with tempfile.TemporaryDirectory() as directory:
+            local = Path(directory) / "models.json"
+            local.write_text(json.dumps({"models": {"astra": {
+                "model": "fixture-invalid-family", "family": "anthropic"}}}))
+            with patch.object(model_routing, "LOCAL_MODEL_OVERRIDES", local):
+                with self.assertRaisesRegex(ValueError, "family"):
+                    model_routing.load_policy()
+                self.assertEqual(ai_providers.PRODUCTION_PROVIDERS, providers)
+                local.unlink()
+                self.assertEqual(model_routing.load_policy(), baseline)
 
     def test_all_six_stages_have_exactly_five_separated_roles(self):
         policy, digest = model_routing.load_policy()

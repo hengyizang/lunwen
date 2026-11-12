@@ -6490,7 +6490,7 @@
       "path": "ccf-project-scaffolder/assets/ccfa.yaml",
       "git_blob_sha": "82a04f30b0a5a9b97f7638ba1a9609803002abc9",
       "size": 597,
-      "canonical_lf_sha256": "9cfab57516929b9bc2456d0f43dcae557dece295e833607c35d104ba14a50b8f"
+      "canonical_lf_sha256": "e7a6b44df46daa03069eed6b07401602bb30e30dccfb1a4ce954c0ec62ba9920"
     },
     {
       "path": "ccf-rebuttal-writer/SKILL.md",
