@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-idxscu-replication-data-for-old",
+  "dataset_name": "Replication Data for: Older Adults' Acceptance of a Robot for Partner Dance-based Exercise",
+  "doi": "10.7910/dvn/idxscu",
+  "landing_url": "https://doi.org/10.7910/DVN/IDXSCU",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/IDXSCU",
+  "access_date": "2026-11-21",
+  "round_number": 3,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Statistical_results.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3041107",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IDXSCU/15daa610e5d-91090c18f59f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Statistical_results.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074521Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ca2c2fe8850349df243bc61dd64cb65a89c3bd6c15d8223e719b8e16a32c9fd3",
+      "http_status": 200,
+      "bytes": 1130,
+      "publisher_checksum": "dataverse_original_md5:1dbf84bbbf9320db0d916bf24b7bdc4f",
+      "verified_md5": "ba3f4747209e597951c2dbf3760db449",
+      "verified_sha256": "c473e00f767255c076c5fb61fd5db7bf25c516f837d208309508abbd16bdc0c1"
+    },
+    {
+      "file": "Questionnaire_responses.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3041113",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IDXSCU/15daa61093e-a767553a951a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Questionnaire_responses.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074523Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d531717e294d046bbdbd3fb2508e4f20a68d66ea25990a861aab17ecb5706fc6",
+      "http_status": 200,
+      "bytes": 2015,
+      "publisher_checksum": "dataverse_original_md5:7f34eed4f86e10f8b7bdac7f92354fe5",
+      "verified_md5": "8d2c07b2d3b052d0be537229d42185e8",
+      "verified_sha256": "fcf80bfe0498fe21799a09d28ada2b837127d7b5db02450bef27b136f53ca5c5"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-idxscu-replication-data-for-old",
+  "raw_total_bytes": 3145,
+  "raw_total_rows": 26,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-idxscu-replication-data-for-old-cleaned.csv",
+  "cleaned_csv_sha256": "1b86e225cf4649e3c1f428bfa75d4678bafa4aaa09598d77d9486bb05e406a48",
+  "cleaned_rows": 27,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Statistical_results.tab": {
+      "Wilcoxonsigned-ranktest(testscore=4)": 0,
+      "Mean": 0,
+      "StdErrorofMean": 0,
+      "StdDev": 0,
+      "Median": 0,
+      "1stquartile": 0,
+      "3rdquartile": 0,
+      "Z": 0,
+      "p": 0
+    },
+    "Questionnaire_responses.tab": {
+      "SubjectID": 0,
+      "1walkaroundhouse": 0,
+      "2walkupdownstairs": 0,
+      "3bendoverpickupslipper": 0,
+      "4reachcanshelfeyelevel": 0,
+      "5standtiptoesreachabovehead": 0,
+      "6standchairreach": 0,
+      "7sweepfloor": 0,
+      "8walkoutsidehousecar": 0,
+      "9getintooutcar": 0,
+      "10walkparkinglotmall": 0,
+      "11walkupdownramp": 0,
+      "12walkcrowdedmall": 0,
+      "13bumpedwalkmall": 0,
+      "14steponoffescalatorholdingrailing": 0,
+      "15steponoffescalatorholdingparcels": 0,
+      "16walkoutsideicysidewalks": 0,
+      "Average": 0
+    }
+  },
+  "time_monotonicity": {
+    "Questionnaire_responses.tab": {
+      "column": "8walkoutsidehousecar",
+      "numeric_samples": 16,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": false,
+      "min_step": 0.0,
+      "median_step": 0.0,
+      "max_step": 0.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

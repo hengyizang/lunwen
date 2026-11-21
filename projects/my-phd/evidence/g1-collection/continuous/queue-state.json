@@ -1,12 +1,15 @@
 {
   "schema_version": "1.0",
-  "round_number": 2,
-  "total_new_literature": 88,
-  "total_new_datasets": 93,
-  "total_new_reading_queue": 71,
+  "round_number": 3,
+  "total_new_literature": 182,
+  "total_new_datasets": 200,
+  "total_new_reading_queue": 150,
   "cleaned_datasets": [
     "figshare:31990188",
-    "figshare:32221713"
+    "figshare:32221713",
+    "dataverse:10.7910/dvn/cc355j",
+    "dataverse:10.7910/dvn/idxscu",
+    "dataverse:10.7910/dvn/r0ozel"
   ],
   "cleaned_datasets_meta": [
     {
@@ -36,10 +39,54 @@
       "cleaned_rows": 42,
       "raw_total_rows": 316,
       "verified_sha256": "bf8eb4a184c2fedf2e24288b3b38f0a2d551aa254cd7d01671a38e8b4314b7b4"
+    },
+    {
+      "slug": "dataverse-cc355j-experiment-dataset-for-t",
+      "key": "dataverse:10.7910/dvn/cc355j",
+      "dataset_name": "Experiment dataset for the journal - \"A Robot for Overground Physical Human-Robot Interaction Experiments\"",
+      "doi": "10.7910/dvn/cc355j",
+      "landing_url": "https://doi.org/10.7910/DVN/CC355J",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-cc355j-experiment-dataset-for-t-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_cc355j_experiment_dataset_for_t.py",
+      "cleaned_rows": 44,
+      "raw_total_rows": 66389,
+      "verified_sha256": "416df3a23bd642c23cef57e45e39d5a087863afbb6f770af5630dccc0aa90ba6"
+    },
+    {
+      "slug": "dataverse-idxscu-replication-data-for-old",
+      "key": "dataverse:10.7910/dvn/idxscu",
+      "dataset_name": "Replication Data for: Older Adults' Acceptance of a Robot for Partner Dance-based Exercise",
+      "doi": "10.7910/dvn/idxscu",
+      "landing_url": "https://doi.org/10.7910/DVN/IDXSCU",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-idxscu-replication-data-for-old-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-idxscu-replication-data-for-old-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_idxscu_replication_data_for_old.py",
+      "cleaned_rows": 27,
+      "raw_total_rows": 26,
+      "verified_sha256": "c473e00f767255c076c5fb61fd5db7bf25c516f837d208309508abbd16bdc0c1"
+    },
+    {
+      "slug": "dataverse-r0ozel-when-travel-meets-robots",
+      "key": "dataverse:10.7910/dvn/r0ozel",
+      "dataset_name": "When travel meets robots: The role of embedding trust",
+      "doi": "10.7910/dvn/r0ozel",
+      "landing_url": "https://doi.org/10.7910/DVN/R0OZEL",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-r0ozel-when-travel-meets-robots-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-r0ozel-when-travel-meets-robots-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_r0ozel_when_travel_meets_robots.py",
+      "cleaned_rows": 402,
+      "raw_total_rows": 402,
+      "verified_sha256": "5dfc576eab09b8b3ce8f3767f61aeb6a1199f471f3b45f87895672d0d9fd4e62"
     }
   ],
   "snowballed_dois": [
-    "10.1016/j.measurement.2023.112827"
+    "10.1016/j.measurement.2023.112827",
+    "10.1016/j.measurement.2024.115140",
+    "10.1016/j.measurement.2024.115365"
   ],
   "rounds_history": [
     {
@@ -59,8 +106,39 @@
       "net_new_datasets": 85,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 3,
+      "completed_at": "2026-11-21T07:44:04Z",
+      "batch_label": "Broad Engineering R3: R2_Aerial_Actuator / R5_MultiRobot_Comm",
+      "net_new_literature": 94,
+      "net_new_datasets": 107,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T07:37:17Z",
-  "noise_pruned_v1": true
+  "updated_at": "2026-11-21T07:44:04Z",
+  "noise_pruned_v1": true,
+  "domain_counts_literature": {
+    "R1": 34,
+    "Adjacent": 23,
+    "R2": 37,
+    "R5": 5,
+    "R2_Aerial_Actuator": 63,
+    "Mechanical_Physics_AI": 7,
+    "Mechatronics_PHM_Control": 22,
+    "Robotics_Embodied": 42,
+    "R5_MultiRobot_Comm": 12,
+    "R1_Force_Contact": 1,
+    "Smart_Manufacturing": 2
+  },
+  "domain_counts_datasets": {
+    "R1_force_truth": 83,
+    "R5_packet_timing_aoi": 69,
+    "R2_actuator_saturation": 16,
+    "Mechanical_Physics_AI": 95,
+    "Mechatronics_PHM_Control": 29,
+    "Smart_Manufacturing": 23,
+    "Robotics_Embodied": 3
+  }
 }

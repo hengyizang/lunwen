@@ -1,0 +1,343 @@
+{
+  "schema_version": "1.0",
+  "round": 3,
+  "completed_at": "2026-11-21T07:44:04Z",
+  "batch_label": "Broad Engineering R3: R2_Aerial_Actuator / R5_MultiRobot_Comm",
+  "base_head_sha": "ae224827c64744270797c30b9b6ba056c05a5030",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 111,
+    "duplicates_skipped": 17,
+    "net_new": 94,
+    "new_reading_queue": 79,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t074404z-arxiv-789785554f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Areference+AND+all%3Agovernor+AND+all%3Aquadrotor+AND+all%3Aconstrained+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "002958adece0d254e4a608825e55c3dee01a9777157af50ea9cef41ac2b6a860",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t074405z-openalex-dee1e640e0",
+        "request_url": "https://api.openalex.org/works?search=reference+governor+quadrotor+constrained+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "48d2314acd3073eb66cf88506017467d78f570f85da23f65188eed775a492211",
+        "normalized_results_sha256": "13db0014e53311764de2517497e3550ea90d13d55c90d80d8f27b13f932bcacf"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t074407z-europe-pmc-f9c4da60a6",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=reference+governor+quadrotor+constrained+control&pageSize=12&format=json",
+        "result_count": 4,
+        "response_sha256": "c8e68bd02a034c567061f14552b0c0b05a306758ec34745822f42c9a9688699b",
+        "normalized_results_sha256": "b0a0155b7bc0cbcdb8759f0e282d300395deb13092aeaca6c1272649c9c02b78"
+      },
+      {
+        "provider": "arxiv",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t074408z-arxiv-ea10c19f8a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Anonlinear+AND+all%3AMPC+AND+all%3Aquadrotor+AND+all%3Athrust+AND+all%3Aconstraint&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "590fff4c58683000edbf0941a4bab7b1b84ad5fdeff5071cb58fbd8832c27adb",
+        "normalized_results_sha256": "9ef499b945901dbb6ddc576c3b487749bf5f7bc68a91adf2d7202aa5ccf4bdc6"
+      },
+      {
+        "provider": "openalex",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t074409z-openalex-965afb2d68",
+        "request_url": "https://api.openalex.org/works?search=nonlinear+MPC+quadrotor+thrust+constraint&per-page=12",
+        "result_count": 12,
+        "response_sha256": "cd72bfba89c59984a9bf40d756ba2f7c7327a41dd0db87448d63ad579d606ca7",
+        "normalized_results_sha256": "87062d466bcea8bd1943003d5363054d0044f55b146c73b6ffacabb59e48857d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t074410z-europe-pmc-3d36cc4d48",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=nonlinear+MPC+quadrotor+thrust+constraint&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "ec886a0b7a7936a9cab174914ed885d0248884caed94a91d72e1395255fde22b",
+        "normalized_results_sha256": "cb87c6f7395e8b7f6603ede9c6355bbd8e4890d81a4aeebb4f10769f00361f5c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t074412z-arxiv-709d26b691",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aaerial+AND+all%3Amanipulator+AND+all%3Adisturbance+AND+all%3Aobserver+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "8a5be34919743172dd9ea11a391a8a85c139732900ac2b4631bc7ee16c91e6a8",
+        "normalized_results_sha256": "a3235090aa2ff9266486d5b0785b69271ced5ae7d24d8e15133421f1ffbb1bbe"
+      },
+      {
+        "provider": "openalex",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t074414z-openalex-51014ff222",
+        "request_url": "https://api.openalex.org/works?search=aerial+manipulator+disturbance+observer+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "85e692f4defa2fb21c002854712977a9cbfd588e88b0fb3d46e17cb1371e40bd",
+        "normalized_results_sha256": "a936257c8758399e6a0b2fa95f371eb79a4541f703541aaa26478d1e816c5108"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t074415z-europe-pmc-a3495753d5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=aerial+manipulator+disturbance+observer+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "aa907439f8125c51cbcdc8c8ad7e3f561d4815d87ab523c3770a7b8ab17a7d28",
+        "normalized_results_sha256": "8fc6ea7a26533f32905120f52a1f5de785e1707c04d1570207b808ab3e6accac"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t074428z-arxiv-0748650836",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amulti-robot+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Atimestamp&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "e4315364532270787ecd6293cccb2f5f5d6722201fdc48e8707b15d689952659",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t074428z-openalex-599887f68a",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+cooperative+localization+timestamp&per-page=12",
+        "result_count": 12,
+        "response_sha256": "94545c7559fadbeae623200cda7c38df8e9dcb19370a2bca3a76e829ee68f8e2",
+        "normalized_results_sha256": "b75b9feae34180d018ba0236d3d941f483b003fbeece2947293e2005dea71bd7"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t074429z-europe-pmc-5498b15ea3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multi-robot+cooperative+localization+timestamp&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "89c5dec062e3abb77a98f4c9ddcd8a1249287397d61ac67a3e4a20ce0d18701c",
+        "normalized_results_sha256": "cfb9ec02dfea90d43a0c7a676b56ecbe61fb1538289bc4ddb9e4ec8d35f9c875"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.measurement.2024.115365",
+        "receipt_id": "20261121t074431z-opencitations-e278b656a6",
+        "result_count": 3,
+        "response_sha256": "cbb472d5c5a42fb25ba8807d1e761f9d5028688bc89db007da16517790ddb259"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.measurement.2024.115140",
+        "receipt_id": "20261121t074432z-opencitations-28b6ab783a",
+        "result_count": 7,
+        "response_sha256": "2d26788295146abab00fba02ae511e18d583a9a715f4d736c493c0a6a35e6a23"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 246,
+    "off_topic_filtered": 116,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 23,
+    "net_new": 107,
+    "provider_statuses": [
+      {
+        "query": "melt pool",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "finite element",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "finite element",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "topology optimization",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "structural vibration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 10,
+    "cleaned": [
+      {
+        "slug": "dataverse-cc355j-experiment-dataset-for-t",
+        "key": "dataverse:10.7910/dvn/cc355j",
+        "dataset_name": "Experiment dataset for the journal - \"A Robot for Overground Physical Human-Robot Interaction Experiments\"",
+        "doi": "10.7910/dvn/cc355j",
+        "landing_url": "https://doi.org/10.7910/DVN/CC355J",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-cc355j-experiment-dataset-for-t-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_cc355j_experiment_dataset_for_t.py",
+        "cleaned_rows": 44,
+        "raw_total_rows": 66389,
+        "verified_sha256": "416df3a23bd642c23cef57e45e39d5a087863afbb6f770af5630dccc0aa90ba6"
+      },
+      {
+        "slug": "dataverse-idxscu-replication-data-for-old",
+        "key": "dataverse:10.7910/dvn/idxscu",
+        "dataset_name": "Replication Data for: Older Adults' Acceptance of a Robot for Partner Dance-based Exercise",
+        "doi": "10.7910/dvn/idxscu",
+        "landing_url": "https://doi.org/10.7910/DVN/IDXSCU",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-idxscu-replication-data-for-old-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-idxscu-replication-data-for-old-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_idxscu_replication_data_for_old.py",
+        "cleaned_rows": 27,
+        "raw_total_rows": 26,
+        "verified_sha256": "c473e00f767255c076c5fb61fd5db7bf25c516f837d208309508abbd16bdc0c1"
+      },
+      {
+        "slug": "dataverse-r0ozel-when-travel-meets-robots",
+        "key": "dataverse:10.7910/dvn/r0ozel",
+        "dataset_name": "When travel meets robots: The role of embedding trust",
+        "doi": "10.7910/dvn/r0ozel",
+        "landing_url": "https://doi.org/10.7910/DVN/R0OZEL",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-r0ozel-when-travel-meets-robots-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-r0ozel-when-travel-meets-robots-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_r0ozel_when_travel_meets_robots.py",
+        "cleaned_rows": 402,
+        "raw_total_rows": 402,
+        "verified_sha256": "5dfc576eab09b8b3ce8f3767f61aeb6a1199f471f3b45f87895672d0d9fd4e62"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-cc355j-experiment-dataset-for-t",
+  "dataset_name": "Experiment dataset for the journal - \"A Robot for Overground Physical Human-Robot Interaction Experiments\"",
+  "doi": "10.7910/dvn/cc355j",
+  "landing_url": "https://doi.org/10.7910/DVN/CC355J",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/CC355J",
+  "access_date": "2026-11-21",
+  "round_number": 3,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "block_04_case_07.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4977207",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CC355J/17b42d78a0c-255a7156adb2?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27block_04_case_07.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074440Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ba2883ee831b1e8e391bd2f35c9d1cc48f124becb9ff9208bbb7423c7fdf35ce",
+      "http_status": 200,
+      "bytes": 1532329,
+      "publisher_checksum": "dataverse_original_md5:79b69208171884d986040cfa15ca7b4b",
+      "verified_md5": "8e76b414d2eaaaa8e86245f8997606bb",
+      "verified_sha256": "416df3a23bd642c23cef57e45e39d5a087863afbb6f770af5630dccc0aa90ba6"
+    },
+    {
+      "file": "block_03_case_08.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4977196",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CC355J/17b42d78855-9706ec782783?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27block_03_case_08.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074443Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=4d7f50e2c0a97061519c13bd5b57150881ec0a5117b6ad0d812e3d79b87960af",
+      "http_status": 200,
+      "bytes": 1556198,
+      "publisher_checksum": "dataverse_original_md5:325932b20bc9b60d97a5228496f00015",
+      "verified_md5": "bf0bcf4d489992cadffd41933b91af7e",
+      "verified_sha256": "e696d2e5ca94d722ea8637fcc9be3d840f4a19596acc9be2a46ae9769bb04bd4"
+    },
+    {
+      "file": "block_02_case_07.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4977158",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CC355J/17b42d7863b-b82c097f0613?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27block_02_case_07.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074446Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=60a10f1e7c033daa53b69f2b8acc7feb182767e4feed477f65aee1236021ceb3",
+      "http_status": 200,
+      "bytes": 1575970,
+      "publisher_checksum": "dataverse_original_md5:313c630cce364b08ebb824236c4506ac",
+      "verified_md5": "9abc278e78af4ead181b224c8ecf67ca",
+      "verified_sha256": "2f7ff9df5eca2c64f427d1003217808aa854e455f9e90dfad599bd57256f6a65"
+    },
+    {
+      "file": "block_04_case_09.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4977317",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CC355J/17b42d78a67-9f1392929b58?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27block_04_case_09.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T074449Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=202ad11a5fb18ffa810f6ee9f2c8d2e3ee5db10905d4569c3b1eb803bbee802e",
+      "http_status": 200,
+      "bytes": 1603941,
+      "publisher_checksum": "dataverse_original_md5:ecac90aed3650aa7f6d3f8bc5d05b279",
+      "verified_md5": "41e53ce5cef4bb28a3c8f0c27bfe7d52",
+      "verified_sha256": "8eb489c5485c32493843a7216d2b9521dd960082182fdfa28bdadb62db9b76a6"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-cc355j-experiment-dataset-for-t",
+  "raw_total_bytes": 6268438,
+  "raw_total_rows": 66389,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv",
+  "cleaned_csv_sha256": "fbaacfe622355bcf93b6e8300fcf6bcc009eae9ca226b8ac77145b1218d9ebea",
+  "cleaned_rows": 44,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "block_04_case_07.tab": {
+      "Time(mSec)": 0,
+      "Fx(N)": 0,
+      "Fy(N)": 0,
+      "Fz(N)": 0,
+      "Tx(Nm)": 0,
+      "Ty(Nm)": 0,
+      "Tz(Nm)": 0,
+      "Th1(rad)": 0,
+      "Th2(rad)": 0,
+      "Beta(rad)": 0,
+      "Cases": 0
+    },
+    "block_03_case_08.tab": {
+      "Time(mSec)": 0,
+      "Fx(N)": 0,
+      "Fy(N)": 0,
+      "Fz(N)": 0,
+      "Tx(Nm)": 0,
+      "Ty(Nm)": 0,
+      "Tz(Nm)": 0,
+      "Th1(rad)": 0,
+      "Th2(rad)": 0,
+      "Beta(rad)": 0,
+      "Cases": 0
+    },
+    "block_02_case_07.tab": {
+      "Time(mSec)": 0,
+      "Fx(N)": 0,
+      "Fy(N)": 0,
+      "Fz(N)": 0,
+      "Tx(Nm)": 0,
+      "Ty(Nm)": 0,
+      "Tz(Nm)": 0,
+      "Th1(rad)": 0,
+      "Th2(rad)": 0,
+      "Beta(rad)": 0,
+      "Cases": 0
+    },
+    "block_04_case_09.tab": {
+      "Time(mSec)": 0,
+      "Fx(N)": 0,
+      "Fy(N)": 0,
+      "Fz(N)": 0,
+      "Tx(Nm)": 0,
+      "Ty(Nm)": 0,
+      "Tz(Nm)": 0,
+      "Th1(rad)": 0,
+      "Th2(rad)": 0,
+      "Beta(rad)": 0,
+      "Cases": 0
+    }
+  },
+  "time_monotonicity": {
+    "block_04_case_07.tab": {
+      "column": "Time(mSec)",
+      "numeric_samples": 16340,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 1.0,
+      "median_step": 1.0,
+      "max_step": 6.0
+    },
+    "block_03_case_08.tab": {
+      "column": "Time(mSec)",
+      "numeric_samples": 16386,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 1.0,
+      "median_step": 1.0,
+      "max_step": 6.0
+    },
+    "block_02_case_07.tab": {
+      "column": "Time(mSec)",
+      "numeric_samples": 16683,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 1.0,
+      "median_step": 1.0,
+      "max_step": 7.0
+    },
+    "block_04_case_09.tab": {
+      "column": "Time(mSec)",
+      "numeric_samples": 16980,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 1.0,
+      "median_step": 1.0,
+      "max_step": 7.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
