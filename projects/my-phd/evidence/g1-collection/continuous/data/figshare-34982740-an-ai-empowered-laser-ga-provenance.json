@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34982740-an-ai-empowered-laser-ga",
+  "dataset_name": "An AI-empowered laser-galvanometer contouring system for 3D anomaly in-situ monitoring and risk-informed decision-making in laser powder bed fusion",
+  "doi": "10.6084/m9.figshare.34982740.v2",
+  "landing_url": "https://figshare.com/articles/dataset/An_AI-empowered_laser-galvanometer_contouring_system_for_3D_anomaly_in-situ_monitoring_and_risk-informed_decision-making_in_laser_powder_bed_fusion/34982740",
+  "source_api_url": "https://api.figshare.com/v2/articles/34982740",
+  "access_date": "2026-11-21",
+  "round_number": 44,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "requirements.txt",
+      "download_url": "https://ndownloader.figshare.com/files/71471611",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71471611/requirements.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T120810Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22requirements.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=4d0b432ec54dc921067025f821f88d2a2890f1269e565c96b4060a90fe8a314e",
+      "http_status": 200,
+      "bytes": 453,
+      "publisher_checksum": "md5:d46275e41c977419b296cdabc43ecd45",
+      "verified_md5": "d46275e41c977419b296cdabc43ecd45",
+      "verified_sha256": "52c1d4956973c2acdfb22aa04c5447d9ef8415330d467eb44ac5afe6ce6631bd"
+    },
+    {
+      "file": "config.json",
+      "download_url": "https://ndownloader.figshare.com/files/71471656",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71471656/config.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T120812Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22config.json%22&response-content-type=application%2Fjson&X-Amz-Signature=f6151e2995e5aab8af966965539894207ec98c75fb827a43733ddce33d318714",
+      "http_status": 200,
+      "bytes": 589,
+      "publisher_checksum": "md5:dca57bb70b003a5e08285a2792fd23bb",
+      "verified_md5": "dca57bb70b003a5e08285a2792fd23bb",
+      "verified_sha256": "debd6743f618ed68fbb602d7c5892cfbf7a7ae4eab5016c9a1e275792620af68"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34982740-an-ai-empowered-laser-ga",
+  "raw_total_bytes": 1042,
+  "raw_total_rows": 17,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34982740-an-ai-empowered-laser-ga-cleaned.csv",
+  "cleaned_csv_sha256": "6766671484e6346ec374e30229113e52bad387a89fb7e3f40ab8e1e713566bf8",
+  "cleaned_rows": 17,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "requirements.txt": {
+      "# Tested local environment: Python 3.9.25": 0,
+      "torch 2.8.0+cu128.": 17
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

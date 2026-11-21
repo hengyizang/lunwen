@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 43,
-  "total_new_literature": 4584,
+  "round_number": 44,
+  "total_new_literature": 4605,
   "total_new_datasets": 1914,
-  "total_new_reading_queue": 3966,
+  "total_new_reading_queue": 3987,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -98,7 +98,8 @@
     "figshare:32362119",
     "figshare:32362125",
     "figshare:32362128",
-    "dataverse:10.7910/dvn/d0zgsm"
+    "dataverse:10.7910/dvn/d0zgsm",
+    "figshare:34982740"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1416,6 +1417,20 @@
       "cleaned_rows": 569,
       "raw_total_rows": 569,
       "verified_sha256": "ee045c0e8a7dc648deb42d6fb28aa8c98587b92aa682a576c8a45944ac98b459"
+    },
+    {
+      "slug": "figshare-34982740-an-ai-empowered-laser-ga",
+      "key": "figshare:34982740",
+      "dataset_name": "An AI-empowered laser-galvanometer contouring system for 3D anomaly in-situ monitoring and risk-informed decision-making in laser powder bed fusion",
+      "doi": "10.6084/m9.figshare.34982740.v2",
+      "landing_url": "https://figshare.com/articles/dataset/An_AI-empowered_laser-galvanometer_contouring_system_for_3D_anomaly_in-situ_monitoring_and_risk-informed_decision-making_in_laser_powder_bed_fusion/34982740",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34982740-an-ai-empowered-laser-ga-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-34982740-an-ai-empowered-laser-ga-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34982740_an_ai_empowered_laser_ga.py",
+      "cleaned_rows": 17,
+      "raw_total_rows": 17,
+      "verified_sha256": "52c1d4956973c2acdfb22aa04c5447d9ef8415330d467eb44ac5afe6ce6631bd"
     }
   ],
   "snowballed_dois": [
@@ -1890,9 +1905,18 @@
       "net_new_datasets": 24,
       "cleaned_count": 1,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 44,
+      "completed_at": "2026-11-21T11:59:23Z",
+      "batch_label": "Broad Engineering R44: Smart_Manufacturing",
+      "net_new_literature": 21,
+      "net_new_datasets": 0,
+      "cleaned_count": 1,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T11:12:53Z",
+  "updated_at": "2026-11-21T11:59:23Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -1900,12 +1924,12 @@
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 402,
-    "Mechanical_Physics_AI": 1449,
+    "Mechanical_Physics_AI": 1451,
     "Mechatronics_PHM_Control": 1251,
     "Robotics_Embodied": 1380,
     "R5_MultiRobot_Comm": 253,
     "R1_Force_Contact": 148,
-    "Smart_Manufacturing": 603,
+    "Smart_Manufacturing": 622,
     "Smart_Factory_DigitalTwin": 220
   },
   "domain_counts_datasets": {
@@ -2026,6 +2050,7 @@
     "dataverse:10.7910/dvn/yu0dps",
     "dataverse:10.7910/dvn/zcziyu",
     "dataverse:10.7910/dvn/zfjcet",
+    "figshare:11678598",
     "figshare:11833950",
     "figshare:11848191",
     "figshare:11881506",
@@ -2035,6 +2060,7 @@
     "figshare:1244582",
     "figshare:13258436",
     "figshare:13684228",
+    "figshare:14305788",
     "figshare:14306015",
     "figshare:14665164",
     "figshare:14691441",
@@ -2050,8 +2076,10 @@
     "figshare:24784551",
     "figshare:24956052",
     "figshare:25101770",
+    "figshare:25410961",
     "figshare:25808764",
     "figshare:25928659",
+    "figshare:25975414",
     "figshare:26084221",
     "figshare:26391808",
     "figshare:26466709",
@@ -2102,6 +2130,7 @@
     "figshare:31166614",
     "figshare:31640857",
     "figshare:31746343",
+    "figshare:31757854",
     "figshare:31801795",
     "figshare:31830517",
     "figshare:31834864",
@@ -2157,12 +2186,14 @@
     "figshare:33203484",
     "figshare:33203496",
     "figshare:33210805",
+    "figshare:33261495",
     "figshare:33314714",
     "figshare:33331345",
     "figshare:33335799",
     "figshare:33344376",
     "figshare:33350900",
     "figshare:33364686",
+    "figshare:33402355",
     "figshare:33427573",
     "figshare:33435001",
     "figshare:33435004",
@@ -2175,6 +2206,7 @@
     "figshare:33627320",
     "figshare:33718957",
     "figshare:33719557",
+    "figshare:33801370",
     "figshare:33848502",
     "figshare:33869221",
     "figshare:33937138",
@@ -2187,12 +2219,15 @@
     "figshare:34024665",
     "figshare:34033155",
     "figshare:34071527",
+    "figshare:34078338",
+    "figshare:34078812",
     "figshare:34160049",
     "figshare:34182890",
     "figshare:34182896",
     "figshare:34182899",
     "figshare:34215494",
     "figshare:34324464",
+    "figshare:34359726",
     "figshare:34410862",
     "figshare:34476954",
     "figshare:34518735",
@@ -2224,6 +2259,7 @@
     "figshare:34891273",
     "figshare:34896477",
     "figshare:34896492",
+    "figshare:34919178",
     "figshare:34921179",
     "figshare:34921191",
     "figshare:34921197",
@@ -2272,6 +2308,7 @@
     "figshare:35078405",
     "figshare:7957358",
     "figshare:7970123",
-    "figshare:7998494"
+    "figshare:7998494",
+    "figshare:9200756"
   ]
 }

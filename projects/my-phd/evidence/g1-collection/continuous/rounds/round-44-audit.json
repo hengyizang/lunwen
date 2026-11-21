@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 44,
+  "completed_at": "2026-11-21T11:59:23Z",
+  "batch_label": "Broad Engineering R44: Smart_Manufacturing",
+  "base_head_sha": "d6c6e456a512dc79c3b63d563734ecf7ec88ef46",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 24,
+    "duplicates_skipped": 3,
+    "net_new": 21,
+    "new_reading_queue": 21,
+    "receipts": [
+      {
+        "provider": "crossref",
+        "query": "sheet metal forming neural",
+        "receipt_id": "20261121t115924z-crossref-44e3234068",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=sheet+metal+forming+neural&rows=12",
+        "result_count": 12,
+        "response_sha256": "b6ae83cb19f722daafc8444ae14d9be1fa53eed71fe58a906e028d37f29d1efe",
+        "normalized_results_sha256": "07dc52f0166eefe421a1763cd36cb1e3c7f89fa0e95583031c0084868af26ba4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "sheet metal forming neural",
+        "receipt_id": "20261121t115925z-europe-pmc-79d83cf349",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=sheet+metal+forming+neural&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "5759ee747d7e32ad75b9e532db269f9a4438bdba9e34757132e31b4965321372",
+        "normalized_results_sha256": "457e44774de9e1505e3c9cf23443c2a744ad9bd2ab3aaaf8f2e3bef17418c6f0"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "openalex",
+        "query": "sheet metal forming neural",
+        "error": "OpenAlex search failed: Source Retry-After exceeds the bounded retry window; no early retry was sent"
+      },
+      {
+        "provider": "hal",
+        "query": "sheet metal forming neural",
+        "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=sheet+metal+forming+neural&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "openalex",
+        "query": "die casting defect prediction",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=die+casting+defect+prediction&per-page=12: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "crossref",
+        "query": "die casting defect prediction",
+        "error": "Crossref search failed: Request failed for https://api.crossref.org/works?query.bibliographic=die+casting+defect+prediction&rows=12: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "die casting defect prediction",
+        "error": "Europe PMC search failed: Request failed for https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=die+casting+defect+prediction&pageSize=12&format=json: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "hal",
+        "query": "die casting defect prediction",
+        "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=die+casting+defect+prediction&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "openalex",
+        "query": "selective laser sintering porosity",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=selective+laser+sintering+porosity&per-page=12: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "crossref",
+        "query": "selective laser sintering porosity",
+        "error": "Crossref search failed: Request failed for https://api.crossref.org/works?query.bibliographic=selective+laser+sintering+porosity&rows=12: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "selective laser sintering porosity",
+        "error": "Europe PMC search failed: Request failed for https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=selective+laser+sintering+porosity&pageSize=12&format=json: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "hal",
+        "query": "selective laser sintering porosity",
+        "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=selective+laser+sintering+porosity&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "openalex",
+        "query": "binder jetting shrinkage prediction",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=binder+jetting+shrinkage+prediction&per-page=12: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "crossref",
+        "query": "binder jetting shrinkage prediction",
+        "error": "Crossref search failed: Request failed for https://api.crossref.org/works?query.bibliographic=binder+jetting+shrinkage+prediction&rows=12: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "binder jetting shrinkage prediction",
+        "error": "Europe PMC search failed: Request failed for https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=binder+jetting+shrinkage+prediction&pageSize=12&format=json: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "hal",
+        "query": "binder jetting shrinkage prediction",
+        "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=binder+jetting+shrinkage+prediction&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.seppur.2017.08.003",
+        "error": "OpenCitations expansion failed: Request failed for https://api.opencitations.net/index/v2/citations/doi:10.1016/j.seppur.2017.08.003: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ces.2018.01.020",
+        "error": "OpenCitations expansion failed: Request failed for https://api.opencitations.net/index/v2/citations/doi:10.1016/j.ces.2018.01.020: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 0,
+    "off_topic_filtered": 0,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 0,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "continuum robot sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "continuum robot sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=continuum+robot+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "continuum robot sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=continuum+robot+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "continuum robot sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=continuum+robot+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "continuum robot sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=continuum+robot+sensor&per_page=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "legged robot sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "legged robot sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=legged+robot+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "legged robot sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=legged+robot+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "legged robot sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=legged+robot+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "legged robot sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=legged+robot+sensor&per_page=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "humanoid locomotion sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "humanoid locomotion sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=humanoid+locomotion+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "humanoid locomotion sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=humanoid+locomotion+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "humanoid locomotion sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=humanoid+locomotion+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "humanoid locomotion sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=humanoid+locomotion+sensor&per_page=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "robotic grasping sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "robotic grasping sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=robotic+grasping+sensor&limit=15&full=true: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "robotic grasping sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=robotic+grasping+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "robotic grasping sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=robotic+grasping+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "robotic grasping sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=robotic+grasping+sensor&per_page=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-34982740-an-ai-empowered-laser-ga",
+        "key": "figshare:34982740",
+        "dataset_name": "An AI-empowered laser-galvanometer contouring system for 3D anomaly in-situ monitoring and risk-informed decision-making in laser powder bed fusion",
+        "doi": "10.6084/m9.figshare.34982740.v2",
+        "landing_url": "https://figshare.com/articles/dataset/An_AI-empowered_laser-galvanometer_contouring_system_for_3D_anomaly_in-situ_monitoring_and_risk-informed_decision-making_in_laser_powder_bed_fusion/34982740",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34982740-an-ai-empowered-laser-ga-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34982740-an-ai-empowered-laser-ga-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34982740_an_ai_empowered_laser_ga.py",
+        "cleaned_rows": 17,
+        "raw_total_rows": 17,
+        "verified_sha256": "52c1d4956973c2acdfb22aa04c5447d9ef8415330d467eb44ac5afe6ce6631bd"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data Sheet 5_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.zip",
+        "url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_5_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_zip/32362131",
+        "error": "Request failed for https://api.figshare.com/v2/articles/32362131: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34450590: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Data for Real-Time Robotic Predictive Maintenance: Statistical Characterization and Embedded Decision Tree Hyperplanes",
+        "url": "https://figshare.com/articles/dataset/_b_Data_for_Real-Time_Robotic_Predictive_Maintenance_Statistical_Characterization_and_Embedded_Decision_Tree_Hyperplanes_b_/32816327",
+        "error": "Request failed for https://api.figshare.com/v2/articles/32816327: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Fault types of SKF6205 bearings.",
+        "url": "https://plos.figshare.com/articles/dataset/_p_Fault_types_of_SKF6205_bearings_p_/34860816",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34860816: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Language matters: a terminological audit of Australian structural design standards for code calibration",
+        "url": "https://tandf.figshare.com/articles/dataset/Language_matters_a_terminological_audit_of_Australian_structural_design_standards_for_code_calibration/34921883",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34921883: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Waste-fume spectroscopy: A new method for real-time monitoring of molten pool metallurgical behavior in additive manufacturing",
+        "url": "https://figshare.com/articles/dataset/_b_Waste-fume_spectroscopy_A_new_method_for_real-time_monitoring_of_molten_pool_metallurgical_behavior_in_additive_manufacturing_b_/35004475",
+        "error": "Request failed for https://api.figshare.com/v2/articles/35004475: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
