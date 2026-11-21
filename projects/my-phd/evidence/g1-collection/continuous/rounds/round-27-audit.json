@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0",
+  "round": 27,
+  "completed_at": "2026-11-21T09:39:08Z",
+  "batch_label": "Broad Engineering R27: Mechatronics_PHM_Control",
+  "base_head_sha": "a1037490397ba894ee4a2a41635dc6ea083f3392",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 130,
+    "duplicates_skipped": 7,
+    "net_new": 123,
+    "new_reading_queue": 112,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "induction motor fault diagnosis",
+        "receipt_id": "20261121t093908z-arxiv-e168702e07",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Ainduction+AND+all%3Amotor+AND+all%3Afault+AND+all%3Adiagnosis&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "e58a6a10f69fafa01df088032a640607d31d185f7ffd6171ee0a30abad9346cb",
+        "normalized_results_sha256": "89673d709bdc759ad422ba750f4cac414fd250a3107f2e43bd32b114b6045ddf"
+      },
+      {
+        "provider": "openalex",
+        "query": "induction motor fault diagnosis",
+        "receipt_id": "20261121t093909z-openalex-bb3bd5b5de",
+        "request_url": "https://api.openalex.org/works?search=induction+motor+fault+diagnosis&per-page=12",
+        "result_count": 12,
+        "response_sha256": "0aaa40455551ac544722d8663c5b64909a0a7c7bcfd23e7220ba3f569291c2ad",
+        "normalized_results_sha256": "397d998f5f92b11b516a1f4c4d22b6f9d0606a4b2435f14218e547a4106b6113"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "induction motor fault diagnosis",
+        "receipt_id": "20261121t093910z-europe-pmc-f55865c6d8",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=induction+motor+fault+diagnosis&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "c310541a7d779315677cc81d47abcfa6fc62a4274670422798962fdd956c0b30",
+        "normalized_results_sha256": "6e047038e44332cd984969d2698c9ad0253ecba20f6e8048bfe76f23390a4036"
+      },
+      {
+        "provider": "arxiv",
+        "query": "ball screw preload degradation",
+        "receipt_id": "20261121t093926z-arxiv-1a45620668",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aball+AND+all%3Ascrew+AND+all%3Apreload+AND+all%3Adegradation&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "201ed75cf0a24584eb59d366bcd6f9cfe4664273d508087e8c35c0a32e52a14e",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "ball screw preload degradation",
+        "receipt_id": "20261121t093927z-openalex-b5f1ac4d8e",
+        "request_url": "https://api.openalex.org/works?search=ball+screw+preload+degradation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "00a754ac80e80b2d9f14868c7ea50c88d4906d989a0e797599103779c15a64eb",
+        "normalized_results_sha256": "ca5c4049617c0914d826657188c129430eea7f6b1606f7d505cee96e32c5d2cd"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "ball screw preload degradation",
+        "receipt_id": "20261121t093929z-europe-pmc-09688a2dbe",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=ball+screw+preload+degradation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1215e5ac57355247433a8d55d92f055206bf89b9a2f1d808810e3e3cd7ef83bf",
+        "normalized_results_sha256": "deab35e0dd056b1b6c3a48c356088102b04d70864c974aa188172a0c2d96ffb7"
+      },
+      {
+        "provider": "arxiv",
+        "query": "pneumatic servo valve control",
+        "receipt_id": "20261121t093931z-arxiv-38aa0acee9",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apneumatic+AND+all%3Aservo+AND+all%3Avalve+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "713852699168771d9ab7019c7cb75e977bd3474e6dc0d361768a0cff6c23d26b",
+        "normalized_results_sha256": "0e0fe0f27cfc6e45e49704e496ab472c6d150132c6b16b9187c4711c1ed6db97"
+      },
+      {
+        "provider": "openalex",
+        "query": "pneumatic servo valve control",
+        "receipt_id": "20261121t093932z-openalex-0825bf1977",
+        "request_url": "https://api.openalex.org/works?search=pneumatic+servo+valve+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "5c28bb004978bbaa79ed10ac53970763332de599a4c060c12396cddb0a8b7e1a",
+        "normalized_results_sha256": "0122a259be9e7865ef19970ed13187cf08713f3cac4bb3b2214ff23e8b922445"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "pneumatic servo valve control",
+        "receipt_id": "20261121t093933z-europe-pmc-addc113c87",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=pneumatic+servo+valve+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "7e1c9feb103542d05ffd49b3bc3166233419c569467b021f57d7e7466e0741bd",
+        "normalized_results_sha256": "c534fc2b03172bbe94b41e876fb4287e95f0eb46fcc3877bf65fa21414e1eee7"
+      },
+      {
+        "provider": "arxiv",
+        "query": "battery state health manufacturing",
+        "receipt_id": "20261121t093935z-arxiv-28c7d22f3e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Abattery+AND+all%3Astate+AND+all%3Ahealth+AND+all%3Amanufacturing&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "82308fa415868ed5a24aecd8db8933d810979fd47c1a868bd7daa2a162af3b0e",
+        "normalized_results_sha256": "3bee1b58e0798205ae89c91ce5aa25f1e79c7131aa8aeb33ec90d878badaa028"
+      },
+      {
+        "provider": "openalex",
+        "query": "battery state health manufacturing",
+        "receipt_id": "20261121t093936z-openalex-3850222798",
+        "request_url": "https://api.openalex.org/works?search=battery+state+health+manufacturing&per-page=12",
+        "result_count": 12,
+        "response_sha256": "cee6b64ac1a40341c86bdec164d23a4eb490b60f531f6d4c2ae754c20e0b42fa",
+        "normalized_results_sha256": "7e0bc00736017ba515fde85e9fd952eb0f8c966361c132ba7ed6193eeffa7917"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "battery state health manufacturing",
+        "receipt_id": "20261121t093937z-europe-pmc-741ebb5817",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=battery+state+health+manufacturing&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a0ea5e73309300f9eea8d22d4d5fed6a707f29587b627d0a5572723d05c70591",
+        "normalized_results_sha256": "a63ddcf70e845cd63d85139190a93cc532ca935ff2d0a4117d81584cac8021c9"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ortho.2024.100924",
+        "receipt_id": "20261121t093939z-opencitations-a2dddb18d9",
+        "result_count": 5,
+        "response_sha256": "8a55e8f12872150cb564846a8159ed0d2d19fc505a5638ab93faaf9619dd98e1"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ajodo.2025.04.019",
+        "receipt_id": "20261121t093941z-opencitations-b818338598",
+        "result_count": 3,
+        "response_sha256": "9d208960c6a7bee63875a6d6e5c221092f8bb8d0b60d4e361c987948b9ccd0bc"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 200,
+    "off_topic_filtered": 105,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 35,
+    "net_new": 60,
+    "provider_statuses": [
+      {
+        "query": "warehouse agv",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 11
+      },
+      {
+        "query": "warehouse agv",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "warehouse agv",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "warehouse agv",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "warehouse agv",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "mobile manipulator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "mobile manipulator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "mobile manipulator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "mobile manipulator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "mobile manipulator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "parallel robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "parallel robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "parallel robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "parallel robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "parallel robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "delta robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "delta robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "delta robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "delta robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "delta robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 11,
+    "cleaned": [
+      {
+        "slug": "dataverse-xeaypq-slide-block-to-target",
+        "key": "dataverse:10.7910/dvn/xeaypq",
+        "dataset_name": "slide_block_to_target",
+        "doi": "10.7910/dvn/xeaypq",
+        "landing_url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-xeaypq-slide-block-to-target-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-xeaypq-slide-block-to-target-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_xeaypq_slide_block_to_target.py",
+        "cleaned_rows": 2,
+        "raw_total_rows": 400,
+        "verified_sha256": "7d93310b0f77fabea4ce9fc9a4d33fc7cd679e0054a8b10834f44fa29f4d7c22"
+      },
+      {
+        "slug": "dataverse-0iwofy-replication-data-for-dig",
+        "key": "dataverse:10.7910/dvn/0iwofy",
+        "dataset_name": "Replication Data for Digital annexation: How geodata, training corpora, academic metadata, and chatbot search normalize Russia’s Crimea framing",
+        "doi": "10.7910/dvn/0iwofy",
+        "landing_url": "https://doi.org/10.7910/DVN/0IWOFY",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-0iwofy-replication-data-for-dig-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-0iwofy-replication-data-for-dig-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_0iwofy_replication_data_for_dig.py",
+        "cleaned_rows": 31,
+        "raw_total_rows": 45627,
+        "verified_sha256": "82250b70387637706c89cddde5b075d29e0f78dcb3c40d26c4ee0c63a9145a79"
+      },
+      {
+        "slug": "dataverse-kb7auc-replication-data-for-a-w",
+        "key": "dataverse:10.7910/dvn/kb7auc",
+        "dataset_name": "Replication Data for: A Wearable Wireless Sensor Network for Human Activity Detection",
+        "doi": "10.7910/dvn/kb7auc",
+        "landing_url": "https://doi.org/10.7910/DVN/KB7AUC",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-kb7auc-replication-data-for-a-w-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-kb7auc-replication-data-for-a-w-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_kb7auc_replication_data_for_a_w.py",
+        "cleaned_rows": 64,
+        "raw_total_rows": 59183,
+        "verified_sha256": "f6438da5d84b5fc58dbdf4a202d36626886b6de7c7d202f9b721342fa3e212e1"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

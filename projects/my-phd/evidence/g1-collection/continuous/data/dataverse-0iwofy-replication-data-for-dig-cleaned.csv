@@ -1,0 +1,32 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+academic_russia_confirmed.csv,doi,categorical_or_text,1611,1418,193,1418,,,,,,,"{""https://doi.org/10.18522/2227-8656.2020.4.11"": 1, ""https://doi.org/10.1134/s0031030120010116"": 1, ""https://doi.org/10.17116/terarkh20178911100-104"": 1}"
+academic_russia_confirmed.csv,openalex_id,categorical_or_text,1611,1611,0,1611,,,,,,,"{""https://openalex.org/W3095242018"": 1, ""https://openalex.org/W3012106374"": 1, ""https://openalex.org/W2778335039"": 1}"
+academic_russia_confirmed.csv,title,categorical_or_text,1611,1610,1,1590,,,,,,,"{""Preface"": 6, ""ANALYSIS OF SOCIO-ECONOMIC DEVELOPMENT OF THE REPUBLIC OF CRIMEA"": 2, ""Visceral leishmaniasis in Crimea: key features for 2025"": 2}"
+academic_russia_confirmed.csv,year,numeric,1611,1611,0,15,2010,2018,2021,2020.57,2023,2026,3.13021
+academic_russia_confirmed.csv,journal,categorical_or_text,1611,1526,85,679,,,,,,,"{""Экономика и предпринимательство"": 47, ""SHILAP Revista de lepidopterología"": 37, ""Regionalnaya ekonomika Yug Rossii"": 28}"
+academic_russia_confirmed.csv,language,categorical_or_text,1611,1550,61,6,,,,,,,"{""en"": 1138, ""ru"": 406, ""de"": 3}"
+academic_russia_confirmed.csv,signals,categorical_or_text,1611,1611,0,114,,,,,,,"{""Republic of Crimea"": 718, ""Republic of Crimea, Republic of Crimea"": 219, ""Republic of Crimea, Republic of Crimea, Republic of Crimea"": 181}"
+academic_russia_confirmed.csv,abstract,categorical_or_text,1611,1496,115,1457,,,,,,,"{""Рецензируемые научные журналы МГОУ. Журналы МГОУ входящие в перечень ВАК: География, История, Международные отношения, Политология, Лингвистика, Педагогика..."
+academic_russia_confirmed.csv,llm_explanation,categorical_or_text,1611,1611,0,1603,,,,,,,"{""RUSSIA\n\nThe paper uses \""Republic of Crimea\"" as the default administrative designation without qualification, qualifier, or acknowledgment of contested..."
+forced_choice.csv,model,categorical_or_text,43801,43801,0,35,,,,,,,"{""olmo2"": 1850, ""mistral-small"": 1850, ""qwen3"": 1850}"
+forced_choice.csv,question_id,categorical_or_text,43801,43801,0,15,,,,,,,"{""q1_city_in_ukraine"": 16707, ""q13_country_of_city"": 12341, ""q2_crimea_in_ukraine"": 1204}"
+forced_choice.csv,question_type,categorical_or_text,43801,43801,0,14,,,,,,,"{""direct_sovereignty"": 17911, ""geography"": 12341, ""mirror_sovereignty"": 1199}"
+forced_choice.csv,city,categorical_or_text,43801,29048,14753,12,,,,,,,"{""Simferopol"": 2626, ""Sevastopol"": 2578, ""Yalta"": 2532}"
+forced_choice.csv,language,categorical_or_text,43801,43801,0,50,,,,,,,"{""en"": 885, ""ru"": 885, ""uk"": 884}"
+forced_choice.csv,language_name,categorical_or_text,43801,43801,0,50,,,,,,,"{""English"": 885, ""Russian"": 885, ""Ukrainian"": 884}"
+forced_choice.csv,prompt,categorical_or_text,43801,43801,0,3047,,,,,,,"{""Является ли Simferopol городом в Украине? Ответьте только одним словом: да или нет."": 34, ""Is Simferopol a city in Ukraine? Answer with only one word: yes..."
+forced_choice.csv,raw_answer,categorical_or_text,43801,43460,341,2875,,,,,,,"{""Ukraina"": 1507, ""Ukraine"": 1319, ""Ja"": 1051}"
+forced_choice.csv,classified,categorical_or_text,43801,43801,0,6,,,,,,,"{""yes"": 17493, ""no"": 12009, ""other"": 9747}"
+forced_choice.csv,expected,categorical_or_text,43801,43801,0,3,,,,,,,"{""yes"": 23511, ""ukraine"": 12341, ""no"": 7949}"
+forced_choice.csv,correct,numeric,43801,43801,0,2,0,0,1,0.594028,1,1,0.491085
+forced_choice.csv,timestamp,categorical_or_text,43801,43801,0,22896,,,,,,,"{""2026-04-06T23:20:47"": 7, ""2026-04-06T23:21:54"": 7, ""2026-04-06T23:24:23"": 7}"
+forced_choice.csv,reasoning,categorical_or_text,43801,176,43625,176,,,,,,,"{""Okay, the user is asking if Simferopol is a city in Ukraine, and they specifically want a one-word answer: yes or no.\n\nLet me think about Simferopol's lo..."
+stage3_c4_consensus.tab,#,numeric,100,100,0,100,1,25.75,50.5,50.5,75.25,100,29.0115
+stage3_c4_consensus.tab,annotator1,numeric,100,100,0,3,0,1,1,0.896907,1,1,0.30566
+stage3_c4_consensus.tab,annotator2,numeric,100,100,0,3,0,1,1,0.897959,1,1,0.304258
+stage3_c4_consensus.tab,consensus,numeric,100,100,0,4,0,1,1,0.90625,1,1,0.293011
+classifier_signals.tab,pattern,categorical_or_text,90,90,0,90,,,,,,,"{""Simferopol, [Crimea,] Ukraine"": 1, ""Sevastopol, [Crimea,] Ukraine"": 1, ""Yalta, [Crimea,] Ukraine"": 1}"
+classifier_signals.tab,direction,categorical_or_text,90,90,0,2,,,,,,,"{""russia"": 46, ""ukraine"": 44}"
+classifier_signals.tab,language,categorical_or_text,90,90,0,4,,,,,,,"{""en"": 38, ""ru"": 24, ""uk"": 22}"
+classifier_signals.tab,legal_source,categorical_or_text,90,90,0,19,,,,,,,"{""UN 68/262"": 16, ""Russian Fed. Law"": 14, ""RU narrative"": 10}"
+classifier_signals.tab,weight,numeric,90,90,0,3,1,1.5,1.5,1.63333,2,2,0.365661

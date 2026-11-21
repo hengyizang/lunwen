@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-0iwofy-replication-data-for-dig",
+  "dataset_name": "Replication Data for Digital annexation: How geodata, training corpora, academic metadata, and chatbot search normalize Russia’s Crimea framing",
+  "doi": "10.7910/dvn/0iwofy",
+  "landing_url": "https://doi.org/10.7910/DVN/0IWOFY",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/0IWOFY",
+  "access_date": "2026-11-21",
+  "round_number": 27,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "academic_russia_confirmed.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13918255",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/0IWOFY/19e528046ee-c40f4d104619?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27academic_russia_confirmed.csv&response-content-type=text%2Fcomma-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T094001Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=43fda039a99d589525debcc7fa76829bd1452365269049bf90407b9baa6b8416",
+      "http_status": 200,
+      "bytes": 1279360,
+      "publisher_checksum": "md5:a8e650377df770f605601693977d8a8f",
+      "verified_md5": "a8e650377df770f605601693977d8a8f",
+      "verified_sha256": "82250b70387637706c89cddde5b075d29e0f78dcb3c40d26c4ee0c63a9145a79"
+    },
+    {
+      "file": "forced_choice.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13918252",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/0IWOFY/19e52805696-875a618a13b9?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27forced_choice.csv&response-content-type=text%2Fcomma-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T094004Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=fa2316d667c38c6877e884ce5e59a03f7f2c2800af58db6cb51aae2dd7318fae",
+      "http_status": 200,
+      "bytes": 10052602,
+      "publisher_checksum": "md5:8128ac34eec51153e6798324fefc201c",
+      "verified_md5": "8128ac34eec51153e6798324fefc201c",
+      "verified_sha256": "9b2d3dca2d297eab738248a26ccc50c8896ef92317d7de8ba41baaefa404f2ed"
+    },
+    {
+      "file": "stage3_c4_consensus.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13918256",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/0IWOFY/19e528051ed-70db886cf949?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27stage3_c4_consensus.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T094008Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=9ff6373f0bf04f152992109c97a5a2212a1262d9ba7cf722152a83c363e51790",
+      "http_status": 200,
+      "bytes": 1533,
+      "publisher_checksum": "dataverse_original_md5:5cdb9ca2db465e586620c6e21660795b",
+      "verified_md5": "cbe85caca89a2a8147950db74378d466",
+      "verified_sha256": "5dd28d4a795c453b74d348f8bef30b0bc65e46585b8ea35d5129041d59dc0bba"
+    },
+    {
+      "file": "classifier_signals.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13918272",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/0IWOFY/19e528052c6-2ce636446d56?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27classifier_signals.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T094010Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6dff743158ad0711d8574c4d053e344288894968967342500873f01d6e296755",
+      "http_status": 200,
+      "bytes": 6403,
+      "publisher_checksum": "dataverse_original_md5:55086002ddfc92e47370089705117249",
+      "verified_md5": "04a0d2508083601ebd5b9d7e91d43a52",
+      "verified_sha256": "5107af37eaec3e28f14e906a0d0658518a9ffb54073fae992c1f1192efaedc1a"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-0iwofy-replication-data-for-dig",
+  "raw_total_bytes": 11339898,
+  "raw_total_rows": 45627,
+  "duplicate_rows_removed": 25,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-0iwofy-replication-data-for-dig-cleaned.csv",
+  "cleaned_csv_sha256": "7a9e2475915d34e2bbf0c2df82bf7175926cb1030268160ce4b8fdf3c938023d",
+  "cleaned_rows": 31,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "academic_russia_confirmed.csv": {
+      "doi": 193,
+      "openalex_id": 0,
+      "title": 1,
+      "year": 0,
+      "journal": 85,
+      "language": 61,
+      "signals": 0,
+      "abstract": 115,
+      "llm_explanation": 0
+    },
+    "forced_choice.csv": {
+      "model": 0,
+      "question_id": 0,
+      "question_type": 0,
+      "city": 14753,
+      "language": 0,
+      "language_name": 0,
+      "prompt": 0,
+      "raw_answer": 341,
+      "classified": 0,
+      "expected": 0,
+      "correct": 0,
+      "timestamp": 0,
+      "reasoning": 43625
+    },
+    "stage3_c4_consensus.tab": {
+      "#": 0,
+      "annotator1": 0,
+      "annotator2": 0,
+      "consensus": 0
+    },
+    "classifier_signals.tab": {
+      "pattern": 0,
+      "direction": 0,
+      "language": 0,
+      "legal_source": 0,
+      "weight": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
