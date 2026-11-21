@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-sgjlza-diodem-a-diverse-inertia",
+  "dataset_name": "DIODEM -- A Diverse Inertial and Optical Dataset of kinEmatic chain Motion",
+  "doi": "10.7910/dvn/sgjlza",
+  "landing_url": "https://doi.org/10.7910/DVN/SGJLZA",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/SGJLZA",
+  "access_date": "2026-11-21",
+  "round_number": 17,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "exp01_motion08_imu_nonrigid.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10198241",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SGJLZA/18f712c1c65-9d2cb4ba237d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp01_motion08_imu_nonrigid.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T085100Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=896c0164cecfd4da3e7e5fed421789f8a9860fe734595054504926a90d634af4",
+      "http_status": 200,
+      "bytes": 34365,
+      "publisher_checksum": "md5:dac44e6b79080f46cf31c1c2e7c43473",
+      "verified_md5": "dac44e6b79080f46cf31c1c2e7c43473",
+      "verified_sha256": "55f52591a1d071e1978bd3535a19a4edd4d84ec81078b35dd053142803eed2cb"
+    },
+    {
+      "file": "exp04_motion06_imu_nonrigid.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10198449",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SGJLZA/18f712c274d-2e168c1f457f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp04_motion06_imu_nonrigid.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T085101Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=84b5799a569a34d5c76fd826f3170ad01e3a3a8ea99aaacd27348afb6552fc6a",
+      "http_status": 200,
+      "bytes": 38269,
+      "publisher_checksum": "md5:f9d8d97bc1a4d3e0fb0455fed12c1e8f",
+      "verified_md5": "f9d8d97bc1a4d3e0fb0455fed12c1e8f",
+      "verified_sha256": "1784f4f7c0097c21ac47b6a7951410d45e86e79643366f5926f6f9a5bfc94ce1"
+    },
+    {
+      "file": "exp03_motion03_imu_nonrigid.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10198369",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SGJLZA/18f712c239c-7be346afe277?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp03_motion03_imu_nonrigid.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T085103Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=82baa977be75f18d319d60860b8716fde2b96c2583fb730454ecfc8b20a2bd0e",
+      "http_status": 200,
+      "bytes": 38316,
+      "publisher_checksum": "md5:a0d0359928d90b811f7c5f40efbde64f",
+      "verified_md5": "a0d0359928d90b811f7c5f40efbde64f",
+      "verified_sha256": "55df593d960c7d2507f8e45d474d78c3d0d8446704fc924f94a517a0043f427c"
+    },
+    {
+      "file": "exp04_motion02_imu_nonrigid.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10198181",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SGJLZA/18f712c254d-ab04a5da89a2?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp04_motion02_imu_nonrigid.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T085105Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=e5b4a11cf548dbef5f092239470eac006287ee69007e374a44f747509d6ae0ed",
+      "http_status": 200,
+      "bytes": 38378,
+      "publisher_checksum": "md5:2c8db49262f4a6a6041698ba6ea3f74d",
+      "verified_md5": "2c8db49262f4a6a6041698ba6ea3f74d",
+      "verified_sha256": "d9c5e5becb57766ff1e93707f2336e0f8a3136589d36728428471094f13bb5ed"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-sgjlza-diodem-a-diverse-inertia",
+  "raw_total_bytes": 149328,
+  "raw_total_rows": 358,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-sgjlza-diodem-a-diverse-inertia-cleaned.csv",
+  "cleaned_csv_sha256": "f4210b80eedbcbcb8dc932df849f1715f329fdba26cb98f904f8d0cba0acf440",
+  "cleaned_rows": 358,
+  "cleaned_cols": 5,
+  "null_counts_by_file": {
+    "exp01_motion08_imu_nonrigid.csv": {
+      "#": 0,
+      "sampling": 81,
+      "frequency:": 81,
+      "40": 81
+    },
+    "exp04_motion06_imu_nonrigid.csv": {
+      "#": 0,
+      "sampling": 91,
+      "frequency:": 91,
+      "40": 91
+    },
+    "exp03_motion03_imu_nonrigid.csv": {
+      "#": 0,
+      "sampling": 91,
+      "frequency:": 91,
+      "40": 91
+    },
+    "exp04_motion02_imu_nonrigid.csv": {
+      "#": 0,
+      "sampling": 91,
+      "frequency:": 91,
+      "40": 91
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

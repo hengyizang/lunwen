@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-j6ktrs-the-role-of-awareness-on",
+  "dataset_name": "The role of awareness on motor-sensory temporal recalibration",
+  "doi": "10.7910/dvn/j6ktrs",
+  "landing_url": "https://doi.org/10.7910/DVN/J6KTRS",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/J6KTRS",
+  "access_date": "2026-11-21",
+  "round_number": 17,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Bubna_Frontiers_2021_Temporal Recalibration_Data.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5708892",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/J6KTRS/17e2c690f4f-0251691c81e7?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Bubna_Frontiers_2021_Temporal%2520Recalibration_Data.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T085044Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d5fa067d05cc2de1e2ab56047c1057486c287dc095e3b5c7aa2f601b6af7d06c",
+      "http_status": 200,
+      "bytes": 620,
+      "publisher_checksum": "dataverse_original_md5:baec14fd3dfb6e41fd845e54eb8465bb",
+      "verified_md5": "7dbf550656cbbc0fb63052ba5adb48fe",
+      "verified_sha256": "f6308de1e39de66cca242b39ad37667b457f2b966a3e6070b108f31ab560c036"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-j6ktrs-the-role-of-awareness-on",
+  "raw_total_bytes": 620,
+  "raw_total_rows": 14,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-j6ktrs-the-role-of-awareness-on-cleaned.csv",
+  "cleaned_csv_sha256": "cd4f8077772e886d9e249372043b802a629c09ca159aef400d7177082751e260",
+  "cleaned_rows": 14,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "Bubna_Frontiers_2021_Temporal Recalibration_Data.tab": {
+      "DatapagesincludeindividualparticipantvaluesseparatedbyGroup,Task,andLagforbothPSSandTWIvalues": 6,
+      "B": 6
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

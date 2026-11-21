@@ -1,0 +1,404 @@
+{
+  "schema_version": "1.0",
+  "round": 17,
+  "completed_at": "2026-11-21T08:49:03Z",
+  "batch_label": "Broad Engineering R17: Robotics_Embodied (2026)",
+  "base_head_sha": "28607340857e020c1ef3407ea85f0741b5bba3ff",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 143,
+    "duplicates_skipped": 95,
+    "net_new": 48,
+    "new_reading_queue": 48,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t084903z-openalex-904cf1cef7",
+        "request_url": "https://api.openalex.org/works?search=vision-language-action+robotic+manipulation+policy&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "cae6ddca02bd8928b8982ce7da6074ef2ff0228864774025f657738429828a38",
+        "normalized_results_sha256": "d101aa24d5e3cf9108f44c8939c631250d7178c892999bc1b81500fdb7cfd93e"
+      },
+      {
+        "provider": "crossref",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t084905z-crossref-d14cab283a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=vision-language-action+robotic+manipulation+policy&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "3802d38110b19dec533deb906596a042e29088d9095175036f915e23ff04732d",
+        "normalized_results_sha256": "d234f849bd2317f61882a28daf4a0c4f48a0dfb9bb373b520020840f07d0aa37"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t084906z-europe-pmc-0b5434eebe",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=vision-language-action+robotic+manipulation+policy&pageSize=12&format=json",
+        "result_count": 10,
+        "response_sha256": "1814758298d5d03833192fd2276d43053e1e9ce5acc377dfe64b7437f4407c32",
+        "normalized_results_sha256": "594ecd7020c9071bb2f8d83d8d25a1daecb52fef4192188ec147e08705739a34"
+      },
+      {
+        "provider": "hal",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t084908z-hal-6f71e81445",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=vision-language-action+robotic+manipulation+policy&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "be420d02de8e148e7485137ca76b03b224590f49b874f273005a6946ed0e4fb6",
+        "normalized_results_sha256": "b2cadf356b43a299ab8fe3609c82d8b5ac7aa17d569dcb740abb1ea5d1841572"
+      },
+      {
+        "provider": "openalex",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t084909z-openalex-05e0ee119a",
+        "request_url": "https://api.openalex.org/works?search=soft+continuum+robot+kinematic+modeling&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "85c952c0dcd7b26b3f883deef26d0d2173516c8b829099e4bae2ea70cd3d10c4",
+        "normalized_results_sha256": "70c4da59a3c5fb678369ed9f1d272aa9f9c730bbb0d1abeb46256a8a23d93f2a"
+      },
+      {
+        "provider": "crossref",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t084911z-crossref-ab8048b4d2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=soft+continuum+robot+kinematic+modeling&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "7365c5e37dc532bd480602c766c41247745368fe3604cc522325ef7c7ecffceb",
+        "normalized_results_sha256": "4c4d52b5097cc3ae30a19d7871d5b4f9a9cb38ccbd3b3ba25c56b6604cd605cf"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t084912z-europe-pmc-5987dbccbf",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=soft+continuum+robot+kinematic+modeling&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "c7ab05ce91a11c78e7e91aed347470eb054259f55e3b46ac1317c58f685b52ec",
+        "normalized_results_sha256": "336ddc09542573d2ab425289da62fe424cf54fe391d40cd99b923d18264cca20"
+      },
+      {
+        "provider": "hal",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t084917z-hal-8a8ee2439c",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=soft+continuum+robot+kinematic+modeling&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "9cd17aee2472a804598d190c62213d25cb4290102461cf245ea9a13d59f3fcd8",
+        "normalized_results_sha256": "5ac7dca6f369d7a72f44a949313adc4f5012242182ee9aca00e228b4af5a0c12"
+      },
+      {
+        "provider": "openalex",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t084918z-openalex-7de59993b6",
+        "request_url": "https://api.openalex.org/works?search=bimanual+robotic+manipulation+imitation+learning&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "6e414a94138300d9092e5e5bc62a11d5cb71c852272d562a69d05abaebaa1b50",
+        "normalized_results_sha256": "c35f9d77863a0faac18b98e20e8e6b1957daefcab22f2fe667153bdadcf61de2"
+      },
+      {
+        "provider": "crossref",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t084920z-crossref-27a3ffbf19",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=bimanual+robotic+manipulation+imitation+learning&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "e28f982e0effe94de9509b4a469abed5c111b188732b9794f5f0a2d67cd0e7ee",
+        "normalized_results_sha256": "e4197cfd5f5c87df65498ef6525006ac0e082396cbfd7566b011670793015c72"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t084921z-europe-pmc-e882a4f965",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=bimanual+robotic+manipulation+imitation+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "f32e8bdde529752be01ea1101d5f9e2a5b4fb039bfde085b69f58f6268ffc3b5",
+        "normalized_results_sha256": "bf4e176d88dcd258c949004b92028c56225911239430bbfd429d35e18dca2501"
+      },
+      {
+        "provider": "hal",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t084930z-hal-4d6101dafd",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=bimanual+robotic+manipulation+imitation+learning&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "97cf76e8d5f769937ee2a105da37ea3356af6d2889274d0e38f9cfb4259104cc",
+        "normalized_results_sha256": "ae63e230cc8e0344a978e6e1223d521aea5d653b43004b37ee3ea607e0f9ebd5"
+      },
+      {
+        "provider": "openalex",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t084931z-openalex-e3c210a5a4",
+        "request_url": "https://api.openalex.org/works?search=mobile+robot+SLAM+dynamic+environment&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "a85f63bf6eb22b016303623efa2572ef820076c2be4912b0a6bd9f3459694221",
+        "normalized_results_sha256": "aa84340d60e15aa1a1ede27af36b44f60a755ad139089abd51efb4985786abf7"
+      },
+      {
+        "provider": "crossref",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t084932z-crossref-03447f36cd",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=mobile+robot+SLAM+dynamic+environment&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "3739db8875d9dd2bd72585a3ea24f32919955d46376a217925f7ff1824c04431",
+        "normalized_results_sha256": "ffd80543757c634451ba2046dbba70be26bb93fe32ef11027e8b631ba9d70891"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t084934z-europe-pmc-866db5c8f2",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=mobile+robot+SLAM+dynamic+environment&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "0a9d9e5d21bd68d6c8941915af56251dee57cc62be3998b8b19c3eb8ae3a2656",
+        "normalized_results_sha256": "5e263ad5fdf1c04c3ec003efdf2b808337e1299b8dc1a63b8dbf0c55dec8667a"
+      },
+      {
+        "provider": "hal",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t084943z-hal-1692e63fd6",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=mobile+robot+SLAM+dynamic+environment&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "85a12d5414da9c692c990edde96fe52995515d899a1262314e8b44aaeeb8534c",
+        "normalized_results_sha256": "f96d74e1c94c4f00d5d7c33fb0aae25c83e8961597488e55966578021d88a102"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.48550/arxiv.2610.25628",
+        "receipt_id": "20261121t084944z-opencitations-93e6c89e32",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.48550/arxiv.2609.35709",
+        "receipt_id": "20261121t084946z-opencitations-e9504ad7c0",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 210,
+    "off_topic_filtered": 148,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 62,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "human-robot collaboration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "surface defect",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "welding inspection",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 15,
+    "cleaned": [
+      {
+        "slug": "dataverse-j6ktrs-the-role-of-awareness-on",
+        "key": "dataverse:10.7910/dvn/j6ktrs",
+        "dataset_name": "The role of awareness on motor-sensory temporal recalibration",
+        "doi": "10.7910/dvn/j6ktrs",
+        "landing_url": "https://doi.org/10.7910/DVN/J6KTRS",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-j6ktrs-the-role-of-awareness-on-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-j6ktrs-the-role-of-awareness-on-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_j6ktrs_the_role_of_awareness_on.py",
+        "cleaned_rows": 14,
+        "raw_total_rows": 14,
+        "verified_sha256": "f6308de1e39de66cca242b39ad37667b457f2b966a3e6070b108f31ab560c036"
+      },
+      {
+        "slug": "dataverse-qhfhyc-a-multi-sensory-inertial",
+        "key": "dataverse:10.7910/dvn/qhfhyc",
+        "dataset_name": "A Multi-Sensory Inertial Measurement Unit Dataset for Fetal Condition Monitoring",
+        "doi": "10.7910/dvn/qhfhyc",
+        "landing_url": "https://doi.org/10.7910/DVN/QHFHYC",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qhfhyc-a-multi-sensory-inertial-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qhfhyc-a-multi-sensory-inertial-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qhfhyc_a_multi_sensory_inertial.py",
+        "cleaned_rows": 72,
+        "raw_total_rows": 614,
+        "verified_sha256": "42a77bddfa85a976e83617bdbb02f37a80e71d822e713f18b99e9050482acd4d"
+      },
+      {
+        "slug": "dataverse-sgjlza-diodem-a-diverse-inertia",
+        "key": "dataverse:10.7910/dvn/sgjlza",
+        "dataset_name": "DIODEM -- A Diverse Inertial and Optical Dataset of kinEmatic chain Motion",
+        "doi": "10.7910/dvn/sgjlza",
+        "landing_url": "https://doi.org/10.7910/DVN/SGJLZA",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-sgjlza-diodem-a-diverse-inertia-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-sgjlza-diodem-a-diverse-inertia-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_sgjlza_diodem_a_diverse_inertia.py",
+        "cleaned_rows": 358,
+        "raw_total_rows": 358,
+        "verified_sha256": "55f52591a1d071e1978bd3535a19a4edd4d84ec81078b35dd053142803eed2cb"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "url": "https://doi.org/10.7910/DVN/M6JXED",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+        "url": "https://doi.org/10.7910/DVN/CKMBCG",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

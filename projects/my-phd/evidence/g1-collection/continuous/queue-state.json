@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 16,
-  "total_new_literature": 1475,
+  "round_number": 17,
+  "total_new_literature": 1523,
   "total_new_datasets": 872,
-  "total_new_reading_queue": 1345,
+  "total_new_reading_queue": 1393,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -31,7 +31,10 @@
     "dataverse:10.7910/dvn/kkejzf",
     "figshare:35081113",
     "figshare:31558270",
-    "figshare:34748238"
+    "figshare:34748238",
+    "dataverse:10.7910/dvn/j6ktrs",
+    "dataverse:10.7910/dvn/qhfhyc",
+    "dataverse:10.7910/dvn/sgjlza"
   ],
   "cleaned_datasets_meta": [
     {
@@ -411,6 +414,48 @@
       "cleaned_rows": 61,
       "raw_total_rows": 2130,
       "verified_sha256": "5a3d5977d938423772335ee6b3f19f6e9e0ade2efe535b1c1d6df0fb0be9d04d"
+    },
+    {
+      "slug": "dataverse-j6ktrs-the-role-of-awareness-on",
+      "key": "dataverse:10.7910/dvn/j6ktrs",
+      "dataset_name": "The role of awareness on motor-sensory temporal recalibration",
+      "doi": "10.7910/dvn/j6ktrs",
+      "landing_url": "https://doi.org/10.7910/DVN/J6KTRS",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-j6ktrs-the-role-of-awareness-on-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-j6ktrs-the-role-of-awareness-on-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_j6ktrs_the_role_of_awareness_on.py",
+      "cleaned_rows": 14,
+      "raw_total_rows": 14,
+      "verified_sha256": "f6308de1e39de66cca242b39ad37667b457f2b966a3e6070b108f31ab560c036"
+    },
+    {
+      "slug": "dataverse-qhfhyc-a-multi-sensory-inertial",
+      "key": "dataverse:10.7910/dvn/qhfhyc",
+      "dataset_name": "A Multi-Sensory Inertial Measurement Unit Dataset for Fetal Condition Monitoring",
+      "doi": "10.7910/dvn/qhfhyc",
+      "landing_url": "https://doi.org/10.7910/DVN/QHFHYC",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qhfhyc-a-multi-sensory-inertial-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qhfhyc-a-multi-sensory-inertial-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qhfhyc_a_multi_sensory_inertial.py",
+      "cleaned_rows": 72,
+      "raw_total_rows": 614,
+      "verified_sha256": "42a77bddfa85a976e83617bdbb02f37a80e71d822e713f18b99e9050482acd4d"
+    },
+    {
+      "slug": "dataverse-sgjlza-diodem-a-diverse-inertia",
+      "key": "dataverse:10.7910/dvn/sgjlza",
+      "dataset_name": "DIODEM -- A Diverse Inertial and Optical Dataset of kinEmatic chain Motion",
+      "doi": "10.7910/dvn/sgjlza",
+      "landing_url": "https://doi.org/10.7910/DVN/SGJLZA",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-sgjlza-diodem-a-diverse-inertia-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-sgjlza-diodem-a-diverse-inertia-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_sgjlza_diodem_a_diverse_inertia.py",
+      "cleaned_rows": 358,
+      "raw_total_rows": 358,
+      "verified_sha256": "55f52591a1d071e1978bd3535a19a4edd4d84ec81078b35dd053142803eed2cb"
     }
   ],
   "snowballed_dois": [
@@ -442,6 +487,8 @@
     "10.3390/s26030881",
     "10.3390/s26041129",
     "10.3390/sym15091776",
+    "10.48550/arxiv.2609.35709",
+    "10.48550/arxiv.2610.25628",
     "10.5194/ms-15-531-2024"
   ],
   "rounds_history": [
@@ -588,22 +635,31 @@
       "net_new_datasets": 0,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 17,
+      "completed_at": "2026-11-21T08:49:03Z",
+      "batch_label": "Broad Engineering R17: Robotics_Embodied (2026)",
+      "net_new_literature": 48,
+      "net_new_datasets": 0,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:44:12Z",
+  "updated_at": "2026-11-21T08:49:03Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
     "Adjacent": 54,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 169,
-    "Mechanical_Physics_AI": 419,
-    "Mechatronics_PHM_Control": 371,
-    "Robotics_Embodied": 480,
+    "R2_Aerial_Actuator": 170,
+    "Mechanical_Physics_AI": 425,
+    "Mechatronics_PHM_Control": 387,
+    "Robotics_Embodied": 528,
     "R5_MultiRobot_Comm": 147,
-    "R1_Force_Contact": 67,
-    "Smart_Manufacturing": 197,
+    "R1_Force_Contact": 68,
+    "Smart_Manufacturing": 198,
     "Smart_Factory_DigitalTwin": 140
   },
   "domain_counts_datasets": {
@@ -633,6 +689,8 @@
     "dataverse:10.7910/dvn/hne12j",
     "dataverse:10.7910/dvn/hxc8hk",
     "dataverse:10.7910/dvn/iaxsrd",
+    "dataverse:10.7910/dvn/jtysfc",
+    "dataverse:10.7910/dvn/kmdino",
     "dataverse:10.7910/dvn/knkwmj",
     "dataverse:10.7910/dvn/lmkimt",
     "dataverse:10.7910/dvn/md7xaq",

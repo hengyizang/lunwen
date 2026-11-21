@@ -7,25 +7,25 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：16
-- **最近更新时间 (UTC)**：2026-11-21T08:44:12Z
-- **累计净新增文献** (`literature-new.csv`)：1475 条（已与基线 15,910 条去重）
+- **已完成轮次**：17
+- **最近更新时间 (UTC)**：2026-11-21T08:49:03Z
+- **累计净新增文献** (`literature-new.csv`)：1523 条（已与基线 15,910 条去重）
 - **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1345 条
-- **累计已完成确定性清洗数据集**：27 个
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1393 条
+- **累计已完成确定性清洗数据集**：30 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 67 | 47 |
-| `R2_Aerial_Actuator` | 169 | 37 |
+| `R1_Force_Contact` | 68 | 47 |
+| `R2_Aerial_Actuator` | 170 | 37 |
 | `R5_MultiRobot_Comm` | 147 | 32 |
-| `Robotics_Embodied` | 480 | 266 |
-| `Mechanical_Physics_AI` | 419 | 370 |
-| `Mechatronics_PHM_Control` | 371 | 274 |
-| `Smart_Manufacturing` | 197 | 198 |
+| `Robotics_Embodied` | 528 | 266 |
+| `Mechanical_Physics_AI` | 425 | 370 |
+| `Mechatronics_PHM_Control` | 387 | 274 |
+| `Smart_Manufacturing` | 198 | 198 |
 | `Smart_Factory_DigitalTwin` | 140 | 62 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 54 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-cc355j-experiment-dataset-for-t` | Experiment dataset for the journal - "A Robot for Overground Physic... | 10.7910/dvn/cc355j | `summary_table` | 44 | `416df3a23bd6` | [CSV](data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv) · [JSON](data/dataverse-cc355j-experiment-dataset-for-t-provenance.json) · [PY](data/derive_dataverse_cc355j_experiment_dataset_for_t.py) |
-| `dataverse-idxscu-replication-data-for-old` | Replication Data for: Older Adults' Acceptance of a Robot for Partn... | 10.7910/dvn/idxscu | `summary_table` | 27 | `c473e00f7672` | [CSV](data/dataverse-idxscu-replication-data-for-old-cleaned.csv) · [JSON](data/dataverse-idxscu-replication-data-for-old-provenance.json) · [PY](data/derive_dataverse_idxscu_replication_data_for_old.py) |
-| `dataverse-r0ozel-when-travel-meets-robots` | When travel meets robots: The role of embedding trust | 10.7910/dvn/r0ozel | `cleaned_rows` | 402 | `5dfc576eab09` | [CSV](data/dataverse-r0ozel-when-travel-meets-robots-cleaned.csv) · [JSON](data/dataverse-r0ozel-when-travel-meets-robots-provenance.json) · [PY](data/derive_dataverse_r0ozel_when_travel_meets_robots.py) |
 | `figshare-32308911-paper-information-fault` | Paper information: Fault Severity Classification in Gearboxes Using... | 10.6084/m9.figshare.32308911.v2 | `cleaned_rows` | 83 | `08e6e869500f` | [CSV](data/figshare-32308911-paper-information-fault-cleaned.csv) · [JSON](data/figshare-32308911-paper-information-fault-provenance.json) · [PY](data/derive_figshare_32308911_paper_information_fault.py) |
 | `figshare-32141986-brac-act-supporting-data` | BRAC-ACT Supporting Data and Scripts for Long-Horizon Traditional T... | 10.6084/m9.figshare.32141986.v1 | `summary_table` | 14 | `acedb8161340` | [CSV](data/figshare-32141986-brac-act-supporting-data-cleaned.csv) · [JSON](data/figshare-32141986-brac-act-supporting-data-provenance.json) · [PY](data/derive_figshare_32141986_brac_act_supporting_data.py) |
 | `dataverse-c4ydif-results-of-the-graph-and` | Results of the graph and heuristic based topology optimization for... | 10.7910/dvn/c4ydif | `cleaned_rows` | 179 | `3d87bd2f2e3f` | [CSV](data/dataverse-c4ydif-results-of-the-graph-and-cleaned.csv) · [JSON](data/dataverse-c4ydif-results-of-the-graph-and-provenance.json) · [PY](data/derive_dataverse_c4ydif_results_of_the_graph_and.py) |
@@ -71,6 +68,9 @@
 | `figshare-35081113-hrc-architecture-3-1-raw` | HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publi... | 10.6084/m9.figshare.35081113 | `summary_table` | 34 | `4a56e090f3e5` | [CSV](data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv) · [JSON](data/figshare-35081113-hrc-architecture-3-1-raw-provenance.json) · [PY](data/derive_figshare_35081113_hrc_architecture_3_1_raw.py) |
 | `figshare-31558270-laser-powder-bed-fusion` | Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-... | 10.6084/m9.figshare.31558270.v2 | `summary_table` | 22 | `c6feed0cde5b` | [CSV](data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv) · [JSON](data/figshare-31558270-laser-powder-bed-fusion-provenance.json) · [PY](data/derive_figshare_31558270_laser_powder_bed_fusion.py) |
 | `figshare-34748238-temporal-information-con` | Temporal Information Continuity in Industrial Supervisory Robotics:... | 10.6084/m9.figshare.34748238.v1 | `summary_table` | 61 | `5a3d5977d938` | [CSV](data/figshare-34748238-temporal-information-con-cleaned.csv) · [JSON](data/figshare-34748238-temporal-information-con-provenance.json) · [PY](data/derive_figshare_34748238_temporal_information_con.py) |
+| `dataverse-j6ktrs-the-role-of-awareness-on` | The role of awareness on motor-sensory temporal recalibration | 10.7910/dvn/j6ktrs | `cleaned_rows` | 14 | `f6308de1e39d` | [CSV](data/dataverse-j6ktrs-the-role-of-awareness-on-cleaned.csv) · [JSON](data/dataverse-j6ktrs-the-role-of-awareness-on-provenance.json) · [PY](data/derive_dataverse_j6ktrs_the_role_of_awareness_on.py) |
+| `dataverse-qhfhyc-a-multi-sensory-inertial` | A Multi-Sensory Inertial Measurement Unit Dataset for Fetal Conditi... | 10.7910/dvn/qhfhyc | `summary_table` | 72 | `42a77bddfa85` | [CSV](data/dataverse-qhfhyc-a-multi-sensory-inertial-cleaned.csv) · [JSON](data/dataverse-qhfhyc-a-multi-sensory-inertial-provenance.json) · [PY](data/derive_dataverse_qhfhyc_a_multi_sensory_inertial.py) |
+| `dataverse-sgjlza-diodem-a-diverse-inertia` | DIODEM -- A Diverse Inertial and Optical Dataset of kinEmatic chain... | 10.7910/dvn/sgjlza | `cleaned_rows` | 358 | `55f52591a1d0` | [CSV](data/dataverse-sgjlza-diodem-a-diverse-inertia-cleaned.csv) · [JSON](data/dataverse-sgjlza-diodem-a-diverse-inertia-provenance.json) · [PY](data/derive_dataverse_sgjlza_diodem_a_diverse_inertia.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -92,3 +92,4 @@
 | 14 | 2026-11-21T08:34:04Z | Broad Engineering R14: R2_Aerial_Actuator (2026) | +85 | +0 | +3 | [round-14-audit.json](rounds/round-14-audit.json) |
 | 15 | 2026-11-21T08:39:11Z | Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026) | +52 | +0 | +2 | [round-15-audit.json](rounds/round-15-audit.json) |
 | 16 | 2026-11-21T08:44:12Z | Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026) | +70 | +0 | +3 | [round-16-audit.json](rounds/round-16-audit.json) |
+| 17 | 2026-11-21T08:49:03Z | Broad Engineering R17: Robotics_Embodied (2026) | +48 | +0 | +3 | [round-17-audit.json](rounds/round-17-audit.json) |
