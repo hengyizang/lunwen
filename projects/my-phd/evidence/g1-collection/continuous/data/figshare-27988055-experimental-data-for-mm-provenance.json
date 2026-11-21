@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-27988055-experimental-data-for-mm",
+  "dataset_name": "Experimental Data for MMAM Gripper",
+  "doi": "10.6084/m9.figshare.27988055.v4",
+  "landing_url": "https://figshare.com/articles/dataset/Experimental_Data_for_MMAM_Gripper/27988055",
+  "source_api_url": "https://api.figshare.com/v2/articles/27988055",
+  "access_date": "2026-11-21",
+  "round_number": 38,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Revised Data.zip",
+      "download_url": "https://ndownloader.figshare.com/files/51047600",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/51047600/RevisedData.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T103451Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Revised%2520Data.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=c6e6f12e2a91595180705bba22073a5e57aaaa8c4c92ee0bcc3adb83f1fd47a8",
+      "http_status": 200,
+      "bytes": 3788854,
+      "publisher_checksum": "md5:77904279e736b86623e91727cbcba126",
+      "verified_md5": "77904279e736b86623e91727cbcba126",
+      "verified_sha256": "e3012d302b207dffd0877b091080746f82f6eb7aae27fed3e348af18ac9d0a46"
+    },
+    {
+      "file": "Raw Data.zip",
+      "download_url": "https://ndownloader.figshare.com/files/51047594",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/51047594/RawData.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T103453Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Raw%2520Data.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=6f1a846988ecf51c79d4272ed48ea53a5a4d1fa18bb57bb228844d12bcf1e76c",
+      "http_status": 200,
+      "bytes": 10007223,
+      "publisher_checksum": "md5:02622f730c40366adee360e6d62a23a2",
+      "verified_md5": "02622f730c40366adee360e6d62a23a2",
+      "verified_sha256": "80918cb7dec597e24c5c971af250c02624e3a465c57430c561ff6954f8401c88"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-27988055-experimental-data-for-mm",
+  "raw_total_bytes": 13796077,
+  "raw_total_rows": 91902,
+  "duplicate_rows_removed": 90179,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-27988055-experimental-data-for-mm-cleaned.csv",
+  "cleaned_csv_sha256": "7c11f608bbb7761fbc0876e33e6eeaa0be9410aa522890b4ba8b5ea1a2cc4aff",
+  "cleaned_rows": 10,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Raw Data.zip::only0.csv": {
+      "MAX FORCE = 0": 0,
+      "0.012": 6
+    },
+    "Raw Data.zip::only1.csv": {
+      "MAX FORCE = 0": 0,
+      "0.000": 6
+    },
+    "Raw Data.zip::only2.csv": {
+      "MAX FORCE = 0": 0,
+      "0.000": 6
+    },
+    "Raw Data.zip::only3.csv": {
+      "MAX FORCE = 0": 0,
+      "0.000": 6
+    },
+    "Raw Data.zip::Thin0.csv": {
+      "MAX FORCE = 0": 0,
+      "0.000": 6
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

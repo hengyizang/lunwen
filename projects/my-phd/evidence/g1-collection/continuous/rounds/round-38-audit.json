@@ -1,0 +1,339 @@
+{
+  "schema_version": "1.0",
+  "round": 38,
+  "completed_at": "2026-11-21T10:34:04Z",
+  "batch_label": "Broad Engineering R38: Robotics_Embodied",
+  "base_head_sha": "76adf5ab6f69166101748b7621b0559a701e9975",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 171,
+    "duplicates_skipped": 26,
+    "net_new": 145,
+    "new_reading_queue": 129,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "soft pneumatic actuator modeling",
+        "receipt_id": "20261121t103404z-openalex-8322977772",
+        "request_url": "https://api.openalex.org/works?search=soft+pneumatic+actuator+modeling&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2473578cfbbdb06ef9b385dedfabc458664e4c489740c22a53a5532779c83646",
+        "normalized_results_sha256": "225c00db965a6ce12c040cfa585f5c20d838306e9b3a9eaef99e2634da5b8bb5"
+      },
+      {
+        "provider": "crossref",
+        "query": "soft pneumatic actuator modeling",
+        "receipt_id": "20261121t103406z-crossref-dd7bb19cda",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=soft+pneumatic+actuator+modeling&rows=12",
+        "result_count": 12,
+        "response_sha256": "a0653220fe34057bbe4cedc36eda07bb9812b701a5c2ff243e3de3f75cfc3e86",
+        "normalized_results_sha256": "1138087abca0bd0b1fc1c02e629e86ac2ec0189025ff05203bfbcdbc36bdc6ff"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "soft pneumatic actuator modeling",
+        "receipt_id": "20261121t103407z-europe-pmc-3684557c0a",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=soft+pneumatic+actuator+modeling&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "0ff5ea4f456d5911d977aecb5f39c5e62a757d7b66ec0dc28899d02f0f0f5c61",
+        "normalized_results_sha256": "6e7371d63e40ddc25868b9bb2ccd2a8ef3aaf98923886d19ccedec08c6e17ccd"
+      },
+      {
+        "provider": "hal",
+        "query": "soft pneumatic actuator modeling",
+        "receipt_id": "20261121t103409z-hal-b053bf3065",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=soft+pneumatic+actuator+modeling&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 5,
+        "response_sha256": "4b4560266ae56879b07dc3c7b11747c78db78fbe3f07284239f12f2888a81e7d",
+        "normalized_results_sha256": "f9170bed82353f5c6885a4d002653eadc286a66d9deb8b279bdf3805213d9c3b"
+      },
+      {
+        "provider": "openalex",
+        "query": "continuum manipulator tendon control",
+        "receipt_id": "20261121t103411z-openalex-42198dc479",
+        "request_url": "https://api.openalex.org/works?search=continuum+manipulator+tendon+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "c6559e6d1a99baf0818d1ae7acaa30144b7c1d833ddca522bdcde68b2f0a0d77",
+        "normalized_results_sha256": "b7579bbed74770cb840ecbc83aa092f377f1698200f26fd81ff62c6b402caecc"
+      },
+      {
+        "provider": "crossref",
+        "query": "continuum manipulator tendon control",
+        "receipt_id": "20261121t103412z-crossref-0c4f65d4d2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=continuum+manipulator+tendon+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "fe4bda8c6a8a113641b459e07e2b89941af5b2eb6fb659fffa6f45ed45ba548f",
+        "normalized_results_sha256": "ec80974df8eb62e21b011ad98b93e7faca2910f93f52cc09b426c53ebf4c69e4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "continuum manipulator tendon control",
+        "receipt_id": "20261121t103414z-europe-pmc-11eed2bb3f",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=continuum+manipulator+tendon+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "acaa8052e5d87e9adf602a82bf0a301169a0ee88fc7d88365b63caae9982e832",
+        "normalized_results_sha256": "083b51730189a2c77b2030c2140a011c1b51d90f818160fe4498f476185f6392"
+      },
+      {
+        "provider": "hal",
+        "query": "continuum manipulator tendon control",
+        "receipt_id": "20261121t103415z-hal-9e478eeaef",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=continuum+manipulator+tendon+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "28048a1774a5399f37e6564f09e32c1c46b6a94e0be934cf7ad737408d59f99b",
+        "normalized_results_sha256": "fcae7229fe158f8738ed8ff6ab96ec0c164251d64f3089c8dcd43011cf34aa7c"
+      },
+      {
+        "provider": "openalex",
+        "query": "rehabilitation robot impedance control",
+        "receipt_id": "20261121t103417z-openalex-5dca7f98b0",
+        "request_url": "https://api.openalex.org/works?search=rehabilitation+robot+impedance+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "0b25d84302213e13286386afaa13d048bc4ea9b03fa343f467f3265bd794a731",
+        "normalized_results_sha256": "f9e1a450ba9de399be485bdc25b9e455f20721d72c77d1e99f2a1678a41cfdb4"
+      },
+      {
+        "provider": "crossref",
+        "query": "rehabilitation robot impedance control",
+        "receipt_id": "20261121t103419z-crossref-035937906b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=rehabilitation+robot+impedance+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "cbac531778170d1211b15ff3087221d3b48f617214e099e8263b3973156432a9",
+        "normalized_results_sha256": "a6fa6c099d57097721a72390db620f03c7ce32bba4e0092bb9afbe58b4f5d42b"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "rehabilitation robot impedance control",
+        "receipt_id": "20261121t103420z-europe-pmc-b834f38a15",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=rehabilitation+robot+impedance+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "15319bf8c9e8f71b1d0156b7192a43cabba689f019543309e14034cd2c6ea406",
+        "normalized_results_sha256": "fe99ec12391128deb850082e03fd73973f2057f1ebd3b988c0220b72925b10c2"
+      },
+      {
+        "provider": "hal",
+        "query": "rehabilitation robot impedance control",
+        "receipt_id": "20261121t103422z-hal-99e4ca74ee",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=rehabilitation+robot+impedance+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 6,
+        "response_sha256": "8d0f6beb2293f790dd5b8bff21343fb6d7befd68c7119fa33048da55ca76f82b",
+        "normalized_results_sha256": "c9361c34844825c73838776fbf7ee0bd70d46c060dabec9b981571c9f2b60e2d"
+      },
+      {
+        "provider": "openalex",
+        "query": "autonomous mobile robot navigation",
+        "receipt_id": "20261121t103424z-openalex-0eaeba2671",
+        "request_url": "https://api.openalex.org/works?search=autonomous+mobile+robot+navigation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2a889b76566ce09100497810591c6bf8a49698b1131990c69ec6845179b857a1",
+        "normalized_results_sha256": "ee0d5b9f04d7473e64d9461d0533bc1520d59b7b19db24d3d7c6f98a139cf6bb"
+      },
+      {
+        "provider": "crossref",
+        "query": "autonomous mobile robot navigation",
+        "receipt_id": "20261121t103426z-crossref-ba58854781",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=autonomous+mobile+robot+navigation&rows=12",
+        "result_count": 12,
+        "response_sha256": "14fde015f22358f3d69a850a8c428c3e9aeddfe2e481b017da394c4453ccaa90",
+        "normalized_results_sha256": "a002364209b56f6014e78e3fea0240c3f7d64204278a147ab04cc605c1f15bda"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "autonomous mobile robot navigation",
+        "receipt_id": "20261121t103427z-europe-pmc-b50e6cce76",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=autonomous+mobile+robot+navigation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "5eb3d49511b3dd5cc374c18fb0841366b0c06a9a49c5185e2f3f988e1b53dae1",
+        "normalized_results_sha256": "2957d72fc23e24fba690554f2ac277f46f80ee7b3c54c04ad0e57468f50cf006"
+      },
+      {
+        "provider": "hal",
+        "query": "autonomous mobile robot navigation",
+        "receipt_id": "20261121t103429z-hal-a82fde238e",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=autonomous+mobile+robot+navigation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "debf0842a730ac982f535e2f28d22e10e21196a5c0803a8840b79e64a2bbe809",
+        "normalized_results_sha256": "b0c10409c07cb1881404781ef4d7075d5dfe5a2e0dd68adc5c0dc2e77787b3e6"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/app14125152",
+        "receipt_id": "20261121t103431z-opencitations-5535f6dbcb",
+        "result_count": 3,
+        "response_sha256": "112d894b6e88266c4b641e06a559d450d0686eb0067e21a232a49ee97e6d038f"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/978-3-031-84263-4_17",
+        "receipt_id": "20261121t103433z-opencitations-385df4aa20",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 198,
+    "off_topic_filtered": 112,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 34,
+    "net_new": 52,
+    "provider_statuses": [
+      {
+        "query": "joint torque",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "joint torque",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "joint torque",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "joint torque",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "joint torque",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "collision avoidance",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "collision avoidance",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "collision avoidance",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "collision avoidance",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "collision avoidance",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-agent pathfinding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-agent pathfinding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-agent pathfinding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-agent pathfinding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "multi-agent pathfinding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "inertial navigation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "inertial navigation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "inertial navigation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "inertial navigation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "inertial navigation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 3
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-34013343-code-and-data-for-a-unif",
+        "key": "figshare:34013343",
+        "dataset_name": "Code and data for \"A Unified Receding-Horizon Controller for Safe Multi-Robot Search and Rescue, Pursuit, and Perimeter Defense\"",
+        "doi": "10.6084/m9.figshare.34013343.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Code_and_data_for_A_Unified_Receding-Horizon_Controller_for_Safe_Multi-Robot_Search_and_Rescue_Pursuit_and_Perimeter_Defense_/34013343",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34013343-code-and-data-for-a-unif-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34013343-code-and-data-for-a-unif-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34013343_code_and_data_for_a_unif.py",
+        "cleaned_rows": 100,
+        "raw_total_rows": 5400,
+        "verified_sha256": "b2dc655e5a348c01ef709f052bfff0cb7b5fd88119d19b2e76ea1c30c1a1a1cb"
+      },
+      {
+        "slug": "figshare-27988055-experimental-data-for-mm",
+        "key": "figshare:27988055",
+        "dataset_name": "Experimental Data for MMAM Gripper",
+        "doi": "10.6084/m9.figshare.27988055.v4",
+        "landing_url": "https://figshare.com/articles/dataset/Experimental_Data_for_MMAM_Gripper/27988055",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-27988055-experimental-data-for-mm-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-27988055-experimental-data-for-mm-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_27988055_experimental_data_for_mm.py",
+        "cleaned_rows": 10,
+        "raw_total_rows": 91902,
+        "verified_sha256": "e3012d302b207dffd0877b091080746f82f6eb7aae27fed3e348af18ac9d0a46"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

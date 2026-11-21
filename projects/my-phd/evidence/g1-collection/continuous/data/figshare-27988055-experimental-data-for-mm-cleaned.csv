@@ -1,0 +1,11 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Raw Data.zip::only0.csv,MAX FORCE = 0,numeric,226,226,0,32,-19,-13.75,0,-5.52804,0,0,7.08478
+Raw Data.zip::only0.csv,0.012,numeric,226,220,6,216,-9.668,-7.154,-4.64,-4.67561,-2.184,0.012,2.87313
+Raw Data.zip::only1.csv,MAX FORCE = 0,numeric,425,425,0,62,-49,-34,-2,-14.3753,-1,0,17.012
+Raw Data.zip::only1.csv,0.000,numeric,425,419,6,415,-17.74,-12.837,-8.732,-8.62793,-4.198,0,5.12374
+Raw Data.zip::only2.csv,MAX FORCE = 0,numeric,326,326,0,73,-62,-37.75,-12.5,-19.8567,0,0,21.0234
+Raw Data.zip::only2.csv,0.000,numeric,326,320,6,316,-13.784,-10.05,-6.308,-6.50712,-2.854,0,4.08873
+Raw Data.zip::only3.csv,MAX FORCE = 0,numeric,383,383,0,61,-48,-40,-4,-17.407,0,0,19.3175
+Raw Data.zip::only3.csv,0.000,numeric,383,377,6,373,-16.404,-12.009,-7.624,-7.93676,-4.047,0,4.74259
+Raw Data.zip::Thin0.csv,MAX FORCE = 0,numeric,363,363,0,108,-143,-36.5,0,-26.0057,0,0,44.6879
+Raw Data.zip::Thin0.csv,0.000,numeric,363,357,6,353,-14.64,-10.6,-7.152,-7.11925,-3.55,0,4.22855

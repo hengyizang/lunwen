@@ -1,0 +1,101 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+rh_multirobot_code_data.zip::ablate.csv,mode,categorical_or_text,720,720,0,1,,,,,,,"{""ablate"": 720}"
+rh_multirobot_code_data.zip::ablate.csv,ex,numeric,720,720,0,6,311,312,321.5,321.5,331,332,8.18595
+rh_multirobot_code_data.zip::ablate.csv,scenario,categorical_or_text,720,720,0,1,,,,,,,"{""sar"": 720}"
+rh_multirobot_code_data.zip::ablate.csv,budget,numeric,720,720,0,2,700,700,1850,1850,3000,3000,1150.8
+rh_multirobot_code_data.zip::ablate.csv,controller,categorical_or_text,720,720,0,4,,,,,,,"{""pso"": 180, ""de"": 180, ""gwo"": 180}"
+rh_multirobot_code_data.zip::ablate.csv,rep,numeric,720,720,0,30,1,8,15.5,15.5,23,30,8.66146
+rh_multirobot_code_data.zip::ablate.csv,seedBase,numeric,720,720,0,1,3,3,3,3,3,3,0
+rh_multirobot_code_data.zip::ablate.csv,seed,numeric,720,720,0,30,301025,308088,315656,315656,323223,330286,8739.41
+rh_multirobot_code_data.zip::ablate.csv,note,categorical_or_text,720,720,0,6,,,,,,,"{""SAR ablation base | MaxFEs=700"": 120, ""SAR ablation base | MaxFEs=3000"": 120, ""SAR ablation noEn | MaxFEs=700"": 120}"
+rh_multirobot_code_data.zip::ablate.csv,cov.MaxFEs,numeric,720,720,0,2,700,700,1850,1850,3000,3000,1150.8
+rh_multirobot_code_data.zip::ablate.csv,success,numeric,720,720,0,2,0,1,1,0.966667,1,1,0.17963
+rh_multirobot_code_data.zip::ablate.csv,time_sec,numeric,720,720,0,269,21.24,31.2,37.86,40.623,43.08,102,15.4301
+rh_multirobot_code_data.zip::ablate.csv,obs_coll,numeric,720,720,0,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::ablate.csv,rr_coll,numeric,720,720,0,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::ablate.csv,minSDF,numeric,720,720,0,720,0.330985,0.51136,0.531762,0.525422,0.54307,0.58856,0.0263924
+rh_multirobot_code_data.zip::ablate.csv,path_len,numeric,720,720,0,720,144.513,217.384,233.686,233.059,250.953,307.293,26.3377
+rh_multirobot_code_data.zip::ablate.csv,max_speed,numeric,720,720,0,109,0,2,2,1.91359,2,2,0.354346
+rh_multirobot_code_data.zip::ablate.csv,defended,categorical_or_text,720,0,720,0,,,,,,,{}
+rh_multirobot_code_data.zip::ablate.csv,min_zone_gap,categorical_or_text,720,0,720,0,,,,,,,{}
+rh_multirobot_code_data.zip::ablate.csv,rescue_rate,numeric,720,720,0,4,0.5,1,1,0.989583,1,1,0.0628323
+rh_multirobot_code_data.zip::ablate.csv,coverage,numeric,720,720,0,187,70.6037,92.372,93.6352,93.537,95.4068,99.6719,3.60038
+rh_multirobot_code_data.zip::ablate.csv,enc_gap_deg,categorical_or_text,720,0,720,0,,,,,,,{}
+rh_multirobot_code_data.zip::ablate.csv,claim_interval,numeric,720,720,0,708,0.293677,0.408312,0.482997,0.545225,0.61116,1.92226,0.237915
+rh_multirobot_code_data.zip::ablate.csv,plan_churn,numeric,720,720,0,720,0.149349,0.663208,1.10971,1.15146,1.57283,2.23488,0.561675
+rh_multirobot_code_data.zip::ablate.csv,cov.w_energy_override,numeric,720,240,480,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::ablate.csv,cov.w_smooth_override,numeric,720,240,480,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::budget.csv,mode,categorical_or_text,1800,1800,0,1,,,,,,,"{""budget"": 1800}"
+rh_multirobot_code_data.zip::budget.csv,ex,numeric,1800,1800,0,15,101,104,203,203,302,305,81.6846
+rh_multirobot_code_data.zip::budget.csv,scenario,categorical_or_text,1800,1800,0,3,,,,,,,"{""evasion"": 600, ""defense"": 600, ""sar"": 600}"
+rh_multirobot_code_data.zip::budget.csv,budget,numeric,1800,1800,0,5,100,200,300,360,500,700,215.466
+rh_multirobot_code_data.zip::budget.csv,controller,categorical_or_text,1800,1800,0,4,,,,,,,"{""samsoma"": 450, ""pso"": 450, ""de"": 450}"
+rh_multirobot_code_data.zip::budget.csv,rep,numeric,1800,1800,0,30,1,8,15.5,15.5,23,30,8.65785
+rh_multirobot_code_data.zip::budget.csv,seedBase,numeric,1800,1800,0,3,1,1,2,2,3,3,0.816723
+rh_multirobot_code_data.zip::budget.csv,seed,numeric,1800,1800,0,90,101019,123217,215652,215652,308088,330286,82140.6
+rh_multirobot_code_data.zip::budget.csv,note,categorical_or_text,1800,1800,0,15,,,,,,,"{""A: bao vay evader E-C thong minh | MaxFEs=100"": 120, ""A: bao vay evader E-C thong minh | MaxFEs=200"": 120, ""A: bao vay evader E-C thong minh | MaxFEs=300"":..."
+rh_multirobot_code_data.zip::budget.csv,cov.MaxFEs,numeric,1800,1800,0,5,100,200,300,360,500,700,215.466
+rh_multirobot_code_data.zip::budget.csv,success,numeric,1800,1800,0,2,0,1,1,0.987778,1,1,0.109907
+rh_multirobot_code_data.zip::budget.csv,time_sec,numeric,1800,1800,0,369,9.24,12.48,38.88,36.3352,53.31,102,20.6035
+rh_multirobot_code_data.zip::budget.csv,obs_coll,numeric,1800,1800,0,2,0,0,0,0.00222222,0,4,0.0942809
+rh_multirobot_code_data.zip::budget.csv,rr_coll,numeric,1800,1800,0,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::budget.csv,minSDF,numeric,1800,1800,0,1800,-0.09069,0.495527,0.537361,1.61493,3.64623,4.46405,1.58538
+rh_multirobot_code_data.zip::budget.csv,path_len,numeric,1800,1800,0,1800,44.9033,94.7945,138.861,151.048,205.95,320.19,62.1178
+rh_multirobot_code_data.zip::budget.csv,max_speed,numeric,1800,1800,0,797,0,1.57812,2,1.75379,2,2,0.409134
+rh_multirobot_code_data.zip::budget.csv,defended,numeric,1800,600,1200,2,0,1,1,0.988333,1,1,0.10747
+rh_multirobot_code_data.zip::budget.csv,min_zone_gap,numeric,1800,600,1200,600,-0.111921,0.758022,0.803661,0.967912,0.861746,3.88326,0.485414
+rh_multirobot_code_data.zip::budget.csv,rescue_rate,numeric,1800,600,1200,4,0.5,1,1,0.993056,1,1,0.0481326
+rh_multirobot_code_data.zip::budget.csv,coverage,numeric,1800,600,1200,174,72.4409,91.9127,93.5039,93.5007,95.292,99.8031,3.1975
+rh_multirobot_code_data.zip::budget.csv,enc_gap_deg,numeric,1800,586,1214,586,99.2893,157.032,159.254,168.744,179.312,267.294,27.5038
+rh_multirobot_code_data.zip::budget_hi.csv,mode,categorical_or_text,810,810,0,1,,,,,,,"{""budget_hi"": 810}"
+rh_multirobot_code_data.zip::budget_hi.csv,ex,numeric,810,810,0,9,111,113,211,212.333,312,314,94.3462
+rh_multirobot_code_data.zip::budget_hi.csv,scenario,categorical_or_text,810,810,0,3,,,,,,,"{""evasion"": 360, ""sar"": 360, ""defense"": 90}"
+rh_multirobot_code_data.zip::budget_hi.csv,budget,numeric,810,810,0,4,1000,1000,1500,1777.78,2000,3000,749.948
+rh_multirobot_code_data.zip::budget_hi.csv,controller,categorical_or_text,810,810,0,3,,,,,,,"{""pso"": 270, ""de"": 270, ""gwo"": 270}"
+rh_multirobot_code_data.zip::budget_hi.csv,rep,numeric,810,810,0,30,1,8,15.5,15.5,23,30,8.66079
+rh_multirobot_code_data.zip::budget_hi.csv,seedBase,numeric,810,810,0,3,1,1,2,2,3,3,0.943392
+rh_multirobot_code_data.zip::budget_hi.csv,seed,numeric,810,810,0,90,101019,117163,215652,215652,314142,330286,94745.8
+rh_multirobot_code_data.zip::budget_hi.csv,note,categorical_or_text,810,810,0,9,,,,,,,"{""A: bao vay evader E-C thong minh | MaxFEs=1000"": 90, ""A: bao vay evader E-C thong minh | MaxFEs=1500"": 90, ""A: bao vay evader E-C thong minh | MaxFEs=2000""..."
+rh_multirobot_code_data.zip::budget_hi.csv,cov.MaxFEs,numeric,810,810,0,4,1000,1000,1500,1777.78,2000,3000,749.948
+rh_multirobot_code_data.zip::budget_hi.csv,success,numeric,810,740,70,2,0,1,1,0.963514,1,1,0.187624
+rh_multirobot_code_data.zip::budget_hi.csv,time_sec,numeric,810,740,70,234,9.48,10.56,24.54,29.1949,39.87,102,22.5491
+rh_multirobot_code_data.zip::budget_hi.csv,obs_coll,numeric,810,740,70,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::budget_hi.csv,rr_coll,numeric,810,740,70,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::budget_hi.csv,minSDF,numeric,810,740,70,740,0.394301,0.482085,0.508291,0.592,0.538764,4.236,0.512282
+rh_multirobot_code_data.zip::budget_hi.csv,path_len,numeric,810,740,70,740,68.4594,87.583,160.824,159.394,229.312,307.338,70.1828
+rh_multirobot_code_data.zip::budget_hi.csv,max_speed,numeric,810,740,70,144,0,2,2,1.90109,2,2,0.37436
+rh_multirobot_code_data.zip::budget_hi.csv,defended,numeric,810,20,790,1,1,1,1,1,1,1,0
+rh_multirobot_code_data.zip::budget_hi.csv,min_zone_gap,numeric,810,20,790,20,0.726209,0.823055,1.98234,1.5924,2.16596,2.19322,0.665876
+rh_multirobot_code_data.zip::budget_hi.csv,rescue_rate,numeric,810,360,450,4,0.5,1,1,0.975463,1,1,0.0968385
+rh_multirobot_code_data.zip::budget_hi.csv,coverage,numeric,810,360,450,162,69.685,91.0761,93.2415,92.3243,94.2421,100,4.73323
+rh_multirobot_code_data.zip::budget_hi.csv,enc_gap_deg,numeric,810,353,457,353,120.997,157.698,158.237,168.784,178.694,249.128,26.4489
+rh_multirobot_code_data.zip::budget_raw.csv,scenario,categorical_or_text,1800,1800,0,3,,,,,,,"{""evasion"": 600, ""defense"": 600, ""sar"": 600}"
+rh_multirobot_code_data.zip::budget_raw.csv,budget,numeric,1800,1800,0,5,100,200,300,360,500,700,215.466
+rh_multirobot_code_data.zip::budget_raw.csv,controller,categorical_or_text,1800,1800,0,4,,,,,,,"{""samsoma"": 450, ""pso"": 450, ""de"": 450}"
+rh_multirobot_code_data.zip::budget_raw.csv,seed_idx,numeric,1800,1800,0,30,1,8,15.5,15.5,23,30,8.65785
+rh_multirobot_code_data.zip::budget_raw.csv,time_sec,numeric,1800,1800,0,369,9.24,12.48,38.88,36.3352,53.31,102,20.6035
+rh_multirobot_code_data.zip::budget_raw.csv,minSDF,numeric,1800,1800,0,1787,-0.09069,0.495527,0.537361,1.61493,3.64623,4.46405,1.58538
+rh_multirobot_code_data.zip::churn.csv,mode,categorical_or_text,270,270,0,1,,,,,,,"{""churn"": 270}"
+rh_multirobot_code_data.zip::churn.csv,ex,numeric,270,270,0,1,399,399,399,399,399,399,0
+rh_multirobot_code_data.zip::churn.csv,scenario,categorical_or_text,270,270,0,1,,,,,,,"{""sar"": 270}"
+rh_multirobot_code_data.zip::churn.csv,budget,numeric,270,270,0,1,700,700,700,700,700,700,0
+rh_multirobot_code_data.zip::churn.csv,controller,categorical_or_text,270,270,0,9,,,,,,,"{""samsoma"": 30, ""pso"": 30, ""de"": 30}"
+rh_multirobot_code_data.zip::churn.csv,rep,numeric,270,270,0,30,1,8,15.5,15.5,23,30,8.67151
+rh_multirobot_code_data.zip::churn.csv,seedBase,numeric,270,270,0,1,3,3,3,3,3,3,0
+rh_multirobot_code_data.zip::churn.csv,seed,numeric,270,270,0,30,301025,308088,315656,315656,323223,330286,8749.56
+rh_multirobot_code_data.zip::churn.csv,note,categorical_or_text,270,270,0,1,,,,,,,"{""SAR | plan-churn panel, MaxFEs=700"": 270}"
+rh_multirobot_code_data.zip::churn.csv,cov.MaxFEs,numeric,270,270,0,1,700,700,700,700,700,700,0
+rh_multirobot_code_data.zip::churn.csv,success,numeric,270,270,0,2,0,1,1,0.925926,1,1,0.262378
+rh_multirobot_code_data.zip::churn.csv,time_sec,numeric,270,270,0,168,21.96,34.92,40.38,46.7364,57.42,102,19.7122
+rh_multirobot_code_data.zip::churn.csv,obs_coll,numeric,270,270,0,1,0,0,0,0,0,0,0
+rh_multirobot_code_data.zip::churn.csv,rr_coll,numeric,270,270,0,2,0,0,0,0.0185185,0,5,0.30429
+rh_multirobot_code_data.zip::churn.csv,minSDF,numeric,270,270,0,270,0.413363,0.512073,0.536412,0.530111,0.543983,0.587677,0.0202768
+rh_multirobot_code_data.zip::churn.csv,path_len,numeric,270,270,0,270,143.433,198.879,222.359,220.219,242.297,305.477,29.561
+rh_multirobot_code_data.zip::churn.csv,max_speed,numeric,270,270,0,103,0,1.92048,2,1.83023,2,2,0.50631
+rh_multirobot_code_data.zip::churn.csv,defended,categorical_or_text,270,0,270,0,,,,,,,{}
+rh_multirobot_code_data.zip::churn.csv,min_zone_gap,categorical_or_text,270,0,270,0,,,,,,,{}
+rh_multirobot_code_data.zip::churn.csv,rescue_rate,numeric,270,270,0,4,0.5,1,1,0.97716,1,1,0.0908503
+rh_multirobot_code_data.zip::churn.csv,coverage,numeric,270,270,0,135,69.0289,90.4856,92.9462,91.9678,94.2257,99.3438,4.81057
+rh_multirobot_code_data.zip::churn.csv,enc_gap_deg,categorical_or_text,270,0,270,0,,,,,,,{}
+rh_multirobot_code_data.zip::churn.csv,claim_interval,numeric,270,270,0,266,0.301657,0.436836,0.579948,0.642249,0.72697,1.95172,0.325097
+rh_multirobot_code_data.zip::churn.csv,plan_churn,numeric,270,270,0,270,0.154451,0.444519,0.673769,0.706154,0.97634,1.41821,0.314974

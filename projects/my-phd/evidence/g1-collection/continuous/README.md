@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：37
-- **最近更新时间 (UTC)**：2026-11-21T10:29:02Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：3854 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1740 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：3333 条
-- **累计已完成确定性清洗数据集**：80 个
+- **已完成轮次**：38
+- **最近更新时间 (UTC)**：2026-11-21T10:34:04Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：3999 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1792 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：3462 条
+- **累计已完成确定性清洗数据集**：82 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,15 +20,15 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 143 | 76 |
-| `R2_Aerial_Actuator` | 390 | 96 |
-| `R5_MultiRobot_Comm` | 246 | 77 |
-| `Robotics_Embodied` | 1136 | 506 |
-| `Mechanical_Physics_AI` | 1292 | 765 |
-| `Mechatronics_PHM_Control` | 858 | 565 |
-| `Smart_Manufacturing` | 527 | 336 |
-| `Smart_Factory_DigitalTwin` | 201 | 72 |
+| `R2_Aerial_Actuator` | 391 | 101 |
+| `R5_MultiRobot_Comm` | 248 | 80 |
+| `Robotics_Embodied` | 1254 | 539 |
+| `Mechanical_Physics_AI` | 1308 | 775 |
+| `Mechatronics_PHM_Control` | 911 | 581 |
+| `Smart_Manufacturing` | 528 | 336 |
+| `Smart_Factory_DigitalTwin` | 202 | 72 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 325 | 0 |
+| `Adjacent` | 328 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,8 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-0iwofy-replication-data-for-dig` | Replication Data for Digital annexation: How geodata, training corp... | 10.7910/dvn/0iwofy | `summary_table` | 31 | `82250b703876` | [CSV](data/dataverse-0iwofy-replication-data-for-dig-cleaned.csv) · [JSON](data/dataverse-0iwofy-replication-data-for-dig-provenance.json) · [PY](data/derive_dataverse_0iwofy_replication_data_for_dig.py) |
-| `dataverse-kb7auc-replication-data-for-a-w` | Replication Data for: A Wearable Wireless Sensor Network for Human... | 10.7910/dvn/kb7auc | `summary_table` | 64 | `f6438da5d84b` | [CSV](data/dataverse-kb7auc-replication-data-for-a-w-cleaned.csv) · [JSON](data/dataverse-kb7auc-replication-data-for-a-w-provenance.json) · [PY](data/derive_dataverse_kb7auc_replication_data_for_a_w.py) |
 | `dataverse-xtpysv-light-detection-and-rang` | Light detection and ranging (lidar) point clouds collected from unm... | 10.7910/dvn/xtpysv | `summary_table` | 39 | `0be07b5056c7` | [CSV](data/dataverse-xtpysv-light-detection-and-rang-cleaned.csv) · [JSON](data/dataverse-xtpysv-light-detection-and-rang-provenance.json) · [PY](data/derive_dataverse_xtpysv_light_detection_and_rang.py) |
 | `dataverse-4zoizl-replication-data-for-win` | Replication Data for: Wing wear reduces bumblebee flight performanc... | 10.7910/dvn/4zoizl | `summary_table` | 16 | `3ece0c7ef9f4` | [CSV](data/dataverse-4zoizl-replication-data-for-win-cleaned.csv) · [JSON](data/dataverse-4zoizl-replication-data-for-win-provenance.json) · [PY](data/derive_dataverse_4zoizl_replication_data_for_win.py) |
 | `dataverse-7iajwu-the-multi-sensor-based-m` | The multi sensor-based machining signal fusion to compare the relat... | 10.7910/dvn/7iajwu | `cleaned_rows` | 48 | `6e2423c31e67` | [CSV](data/dataverse-7iajwu-the-multi-sensor-based-m-cleaned.csv) · [JSON](data/dataverse-7iajwu-the-multi-sensor-based-m-provenance.json) · [PY](data/derive_dataverse_7iajwu_the_multi_sensor_based_m.py) |
@@ -71,12 +69,13 @@
 | `dataverse-0wb6z1-the-replication-material` | The replication materials for the paper titled "Industrial Robots,... | 10.7910/dvn/0wb6z1 | `summary_table` | 30 | `24a008db25af` | [CSV](data/dataverse-0wb6z1-the-replication-material-cleaned.csv) · [JSON](data/dataverse-0wb6z1-the-replication-material-provenance.json) · [PY](data/derive_dataverse_0wb6z1_the_replication_material.py) |
 | `dataverse-lznnl1-characteristics-of-the-s` | Characteristics of the Specific Fuel Consumption for Jet Engines | 10.7910/dvn/lznnl1 | `cleaned_rows` | 386 | `a6a3c87d20b1` | [CSV](data/dataverse-lznnl1-characteristics-of-the-s-cleaned.csv) · [JSON](data/dataverse-lznnl1-characteristics-of-the-s-provenance.json) · [PY](data/derive_dataverse_lznnl1_characteristics_of_the_s.py) |
 | `dataverse-brzhhg-comparison-of-urethral-s` | Comparison of urethral sling surgery and vaginal non-ablative erbiu... | 10.7910/dvn/brzhhg | `cleaned_rows` | 334 | `70ce2b39da49` | [CSV](data/dataverse-brzhhg-comparison-of-urethral-s-cleaned.csv) · [JSON](data/dataverse-brzhhg-comparison-of-urethral-s-provenance.json) · [PY](data/derive_dataverse_brzhhg_comparison_of_urethral_s.py) |
+| `figshare-34013343-code-and-data-for-a-unif` | Code and data for "A Unified Receding-Horizon Controller for Safe M... | 10.6084/m9.figshare.34013343.v2 | `summary_table` | 100 | `b2dc655e5a34` | [CSV](data/figshare-34013343-code-and-data-for-a-unif-cleaned.csv) · [JSON](data/figshare-34013343-code-and-data-for-a-unif-provenance.json) · [PY](data/derive_figshare_34013343_code_and_data_for_a_unif.py) |
+| `figshare-27988055-experimental-data-for-mm` | Experimental Data for MMAM Gripper | 10.6084/m9.figshare.27988055.v4 | `summary_table` | 10 | `e3012d302b20` | [CSV](data/figshare-27988055-experimental-data-for-mm-cleaned.csv) · [JSON](data/figshare-27988055-experimental-data-for-mm-provenance.json) · [PY](data/derive_figshare_27988055_experimental_data_for_mm.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 13 | 2026-11-21T08:29:10Z | Broad Engineering R13: R1_Force_Contact (2026) | +59 | +46 | +3 | [round-13-audit.json](rounds/round-13-audit.json) |
 | 14 | 2026-11-21T08:34:04Z | Broad Engineering R14: R2_Aerial_Actuator (2026) | +85 | +0 | +3 | [round-14-audit.json](rounds/round-14-audit.json) |
 | 15 | 2026-11-21T08:39:11Z | Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026) | +52 | +0 | +2 | [round-15-audit.json](rounds/round-15-audit.json) |
 | 16 | 2026-11-21T08:44:12Z | Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026) | +70 | +0 | +3 | [round-16-audit.json](rounds/round-16-audit.json) |
@@ -101,3 +100,4 @@
 | 35 | 2026-11-21T10:19:03Z | Broad Engineering R35: Mechanical_Physics_AI | +141 | +43 | +3 | [round-35-audit.json](rounds/round-35-audit.json) |
 | 36 | 2026-11-21T10:24:02Z | Broad Engineering R36: Mechanical_Physics_AI | +127 | +38 | +0 | [round-36-audit.json](rounds/round-36-audit.json) |
 | 37 | 2026-11-21T10:29:02Z | Broad Engineering R37: Robotics_Embodied | +75 | +30 | +2 | [round-37-audit.json](rounds/round-37-audit.json) |
+| 38 | 2026-11-21T10:34:04Z | Broad Engineering R38: Robotics_Embodied | +145 | +52 | +2 | [round-38-audit.json](rounds/round-38-audit.json) |
