@@ -6,14 +6,14 @@
   "landing_url": "https://figshare.com/articles/dataset/Processed_data_supporting_Complex_Damage_Identification_of_Jacket_Platforms_Using_Sensor-Scale_Collaborative_Attention_and_Multiscale_Feature_Learning_/35055502",
   "source_api_url": "https://api.figshare.com/v2/articles/35055502",
   "access_date": "2026-11-21",
-  "round_number": 4,
+  "round_number": 6,
   "observed_license_metadata": "CC BY 4.0",
   "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
   "downloaded_files": [
     {
       "file": "Data.zip",
       "download_url": "https://ndownloader.figshare.com/files/71622187",
-      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71622187/Data.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T074645Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Data.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=46b84153731502113b2998321a1160ea5bc993eaef4b5a5b1a0d059c00cbf6ae",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71622187/Data.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T075511Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Data.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=ed3e7851f00d4a333fd49bbd9a0588485d192e9dc33b79707679f52127c61f71",
       "http_status": 200,
       "bytes": 199306,
       "publisher_checksum": "md5:75b7db5386950f56c1a1a6c1f94db611",

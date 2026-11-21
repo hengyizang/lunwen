@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-33578671-source-data-for-tecobot",
+  "dataset_name": "Source data for TeCoBot, A Tensegrity-based modular Continuum robot",
+  "doi": "10.6084/m9.figshare.33578671.v2",
+  "landing_url": "https://figshare.com/articles/dataset/Source_data_for_TeCoBot_A_Tensegrity-based_modular_Continuum_robot/33578671/2",
+  "source_api_url": "https://api.figshare.com/v2/articles/33578671",
+  "access_date": "2026-11-21",
+  "round_number": 6,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Fig_3b.csv",
+      "download_url": "https://ndownloader.figshare.com/files/68425258",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/68425258/Fig_3b.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T075517Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig_3b.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=3248bf9771dfe4c696013b191e361e157fe2d290299ff1b6d8964094066a21e4",
+      "http_status": 200,
+      "bytes": 73,
+      "publisher_checksum": "md5:802ceb6bfd76c0b3a071ac1aa64f76dc",
+      "verified_md5": "802ceb6bfd76c0b3a071ac1aa64f76dc",
+      "verified_sha256": "db4cd6087b1a71584235c5e0e04601c3749bbd453f30add0c0d0858539152c8d"
+    },
+    {
+      "file": "Fig_3e.csv",
+      "download_url": "https://ndownloader.figshare.com/files/68425249",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/68425249/Fig_3e.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T075519Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig_3e.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=0ab85e89e605a57cd57a3bbcdfb8b5e1d7ea9764a4bd34773a963150cb059b16",
+      "http_status": 200,
+      "bytes": 74,
+      "publisher_checksum": "md5:743440615303ce84a7d8670636036ea9",
+      "verified_md5": "743440615303ce84a7d8670636036ea9",
+      "verified_sha256": "a8d5bbbd4de0c6c36924d09c85e47444291496fbaf86c545482b3f63dca3c31d"
+    },
+    {
+      "file": "Fig_3j_cable_displacement.csv",
+      "download_url": "https://ndownloader.figshare.com/files/68425231",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/68425231/Fig_3j_cable_displacement.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T075520Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig_3j_cable_displacement.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=b172e8d3651641e6f6aaab501c66dc6fe2bc422a67a13fe2c47fe306b2ee6c4c",
+      "http_status": 200,
+      "bytes": 114,
+      "publisher_checksum": "md5:3c05c51585fe1bbde00b89ff80b0244b",
+      "verified_md5": "3c05c51585fe1bbde00b89ff80b0244b",
+      "verified_sha256": "270a787ae04b9a76f1c9c1e1c037ff81934007888a8c6a0165a169e91dd384a0"
+    },
+    {
+      "file": "Fig_1b_table_S1_S2.csv",
+      "download_url": "https://ndownloader.figshare.com/files/68713351",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/68713351/Fig_1b_table_S1_S2.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T075522Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig_1b_table_S1_S2.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=c365bcdfb9e6fc7d5cf25b853fd73fa254bd0936d3371cd2da36f821a297473e",
+      "http_status": 200,
+      "bytes": 226,
+      "publisher_checksum": "md5:8d365e9861c85d9094c7bf97cf585c87",
+      "verified_md5": "8d365e9861c85d9094c7bf97cf585c87",
+      "verified_sha256": "0368999c8d2c1ae73f65332a4e301300ed258d477015cd91bb1cdbed3663e620"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-33578671-source-data-for-tecobot",
+  "raw_total_bytes": 487,
+  "raw_total_rows": 23,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-33578671-source-data-for-tecobot-cleaned.csv",
+  "cleaned_csv_sha256": "3bb69b59914d3ffd1645fce19d5910c43008bbf4d2593bb343bf7f9f13ddb545",
+  "cleaned_rows": 11,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Fig_3b.csv": {
+      "n_modules": 0,
+      "max_tested_displacement_mm": 0
+    },
+    "Fig_3e.csv": {
+      "n_modules": 0,
+      "max_tested_angle_deg": 0
+    },
+    "Fig_3j_cable_displacement.csv": {
+      "pose": 0,
+      "cable1_displacement_mm": 0,
+      "cable2_displacement_mm": 0,
+      "cable3_displacement_mm": 0
+    },
+    "Fig_1b_table_S1_S2.csv": {
+      "robot": 0,
+      "locomotion_score": 0,
+      "manipulation_score": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

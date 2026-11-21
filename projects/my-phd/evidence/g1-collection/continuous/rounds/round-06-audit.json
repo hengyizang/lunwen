@@ -1,0 +1,303 @@
+{
+  "schema_version": "1.0",
+  "round": 6,
+  "completed_at": "2026-11-21T07:54:02Z",
+  "batch_label": "Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI",
+  "base_head_sha": "58de9ce2f1ddfab93aedb653687ed911e563b469",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 147,
+    "duplicates_skipped": 36,
+    "net_new": 111,
+    "new_reading_queue": 99,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t075402z-arxiv-93cd19a8f5",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Abimanual+AND+all%3Arobotic+AND+all%3Amanipulation+AND+all%3Aimitation+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "484971d5efd41e4a1429272a8b5c1719ee37bbd76132cd51312a2048792c371c",
+        "normalized_results_sha256": "311c0f09570737e36d69f27921f7f2ec1ec1f2ae3a6a0457810f13e3ea50d296"
+      },
+      {
+        "provider": "openalex",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t075403z-openalex-89cd8773b1",
+        "request_url": "https://api.openalex.org/works?search=bimanual+robotic+manipulation+imitation+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2cfc613c3553d5bf48266f81e025e5714db166579240f1bc2e8fe5fa1b0c4df7",
+        "normalized_results_sha256": "1ab142c0e2eb4fd94a65b44ebeaa2452d71f479d0d939328a08c9c2aad389b29"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "bimanual robotic manipulation imitation learning",
+        "receipt_id": "20261121t075405z-europe-pmc-5b35675f97",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=bimanual+robotic+manipulation+imitation+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "c6532774683cda4926d42a40594ab7988fb9b3e9420fceee1208009d8c8f6a0b",
+        "normalized_results_sha256": "ce95c2e115d0b873c50d818413f4dd32e724810d9cad23066080390be3bcf898"
+      },
+      {
+        "provider": "arxiv",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t075414z-arxiv-88edebb8e3",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amobile+AND+all%3Arobot+AND+all%3ASLAM+AND+all%3Adynamic+AND+all%3Aenvironment&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "67354c57476d6b5b8766edf0e9e003a31372f492ddf0d23103985bb3fc9dd542",
+        "normalized_results_sha256": "cb0f64651c140ec3912483690f3070de82366eda9c1038f7f0b8f95f30914a00"
+      },
+      {
+        "provider": "openalex",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t075416z-openalex-5868844e9a",
+        "request_url": "https://api.openalex.org/works?search=mobile+robot+SLAM+dynamic+environment&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4b2d46d59c42057889ea04190d58144dd8c3d7ef355e2ec8b4825a04a086091d",
+        "normalized_results_sha256": "5e7ff4878a716bda658a12fe16fdf3b6b79854320992696c17aa6c139c9759c6"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "mobile robot SLAM dynamic environment",
+        "receipt_id": "20261121t075418z-europe-pmc-33d4400b42",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=mobile+robot+SLAM+dynamic+environment&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a4d289c308f4e9900d8d1465ac52915a754148d0cb3ad9bb64d765c428678ed1",
+        "normalized_results_sha256": "5b15a8d2dfa9bba147cea2bd111ac3011ee91f69aff94d501d2c8cbf7f75cf77"
+      },
+      {
+        "provider": "arxiv",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t075420z-arxiv-d221771bef",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aphysics-informed+AND+all%3Aneural+AND+all%3Anetwork+AND+all%3Asolid+AND+all%3Amechanics&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "7448d56e732f291dee3b4193aa846c90b1aade6d61e85aa5ce370993c61663fe",
+        "normalized_results_sha256": "a795aefc3d83f25fe3a1146dc2a5fd212e2a9515fb58a707b9af4d05cb2eb088"
+      },
+      {
+        "provider": "openalex",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t075421z-openalex-e3edb86472",
+        "request_url": "https://api.openalex.org/works?search=physics-informed+neural+network+solid+mechanics&per-page=12",
+        "result_count": 12,
+        "response_sha256": "994749d4b380fd4b98e1bb906d3a3b567839e6a6848b5375701fa6609901d9b4",
+        "normalized_results_sha256": "1ef1a37172124b35b077a6463c66880a9db0cd9a7f425103da5154fa1ddb8ad1"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t075423z-europe-pmc-16ad8b5157",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=physics-informed+neural+network+solid+mechanics&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "66ffa28fd4d5690399b5f9b4a0d7f9320d3cf4e9e5516a0da98fdd1ad7b049da",
+        "normalized_results_sha256": "f85169896ddf757097f810948332405ce637ffbf5ef8edb06588af2355ff37df"
+      },
+      {
+        "provider": "arxiv",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t075432z-arxiv-e8317a295e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aneural+AND+all%3Aoperator+AND+all%3Afinite+AND+all%3Aelement+AND+all%3Asurrogate&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "f016f9fa4074c61ec068e898b5c1ca4579c51e95a47983d79711016cd7abc2a3",
+        "normalized_results_sha256": "612c764d701fb4769b1aa38464b655465e0f12ae98b990e2d46ad7ec7b78b06e"
+      },
+      {
+        "provider": "openalex",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t075435z-openalex-a237b215cb",
+        "request_url": "https://api.openalex.org/works?search=neural+operator+finite+element+surrogate&per-page=12",
+        "result_count": 12,
+        "response_sha256": "83d2e2733365233cdf78bbb335f18b9f242c6c7bea78d3b3fae308bddd8f476f",
+        "normalized_results_sha256": "49bbb01c03321d9ee8eeadd1b6484f159e9bdf9c66903db14371d210c7de26ba"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t075437z-europe-pmc-057fa462e5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=neural+operator+finite+element+surrogate&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "b6a0752ea80432bd478cf64e394c71f257ea1ee337dfb741fc49b9a2382486d9",
+        "normalized_results_sha256": "45d635b3601c85d829343473aa077c251e8a61f26dad157a6f02d358c6586a12"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ijmecsci.2026.111174",
+        "receipt_id": "20261121t075438z-opencitations-bd1d1b11c2",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/robosoft60065.2024.10521997",
+        "receipt_id": "20261121t075440z-opencitations-e20f8c7e9d",
+        "result_count": 3,
+        "response_sha256": "3829a9853b7700a72d1827f0363d87a2f8adf60eed63f243ebafb52038be8509"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 238,
+    "off_topic_filtered": 148,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 23,
+    "net_new": 67,
+    "provider_statuses": [
+      {
+        "query": "job shop scheduling",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "digital twin",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "surface defect",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-35055502-processed-data-supportin",
+        "key": "figshare:35055502",
+        "dataset_name": "Processed data supporting “Complex Damage Identification of Jacket Platforms Using Sensor-Scale Collaborative Attention and Multiscale Feature Learning”",
+        "doi": "10.6084/m9.figshare.35055502.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Processed_data_supporting_Complex_Damage_Identification_of_Jacket_Platforms_Using_Sensor-Scale_Collaborative_Attention_and_Multiscale_Feature_Learning_/35055502",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35055502-processed-data-supportin-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-35055502-processed-data-supportin-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35055502_processed_data_supportin.py",
+        "cleaned_rows": 37,
+        "raw_total_rows": 32,
+        "verified_sha256": "d46a127a1fb707fcf554c1e98743826a4fc3e49a0a98f0d447cccd113802675e"
+      },
+      {
+        "slug": "figshare-33578671-source-data-for-tecobot",
+        "key": "figshare:33578671",
+        "dataset_name": "Source data for TeCoBot, A Tensegrity-based modular Continuum robot",
+        "doi": "10.6084/m9.figshare.33578671.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Source_data_for_TeCoBot_A_Tensegrity-based_modular_Continuum_robot/33578671/2",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-33578671-source-data-for-tecobot-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-33578671-source-data-for-tecobot-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_33578671_source_data_for_tecobot.py",
+        "cleaned_rows": 11,
+        "raw_total_rows": 23,
+        "verified_sha256": "db4cd6087b1a71584235c5e0e04601c3749bbd453f30add0c0d0858539152c8d"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

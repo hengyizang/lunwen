@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 5,
-  "total_new_literature": 393,
-  "total_new_datasets": 404,
-  "total_new_reading_queue": 337,
+  "round_number": 6,
+  "total_new_literature": 504,
+  "total_new_datasets": 471,
+  "total_new_reading_queue": 436,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -14,7 +14,9 @@
     "figshare:32141986",
     "dataverse:10.7910/dvn/c4ydif",
     "dataverse:10.7910/dvn/ifhd40",
-    "dataverse:10.7910/dvn/ud54yb"
+    "dataverse:10.7910/dvn/ud54yb",
+    "figshare:35055502",
+    "figshare:33578671"
   ],
   "cleaned_datasets_meta": [
     {
@@ -156,15 +158,45 @@
       "cleaned_rows": 84,
       "raw_total_rows": 4002,
       "verified_sha256": "a86c89f001742fa2d5b291cd82bf226693a90172fd4a15a4a77f4d9500c7ae25"
+    },
+    {
+      "slug": "figshare-35055502-processed-data-supportin",
+      "key": "figshare:35055502",
+      "dataset_name": "Processed data supporting “Complex Damage Identification of Jacket Platforms Using Sensor-Scale Collaborative Attention and Multiscale Feature Learning”",
+      "doi": "10.6084/m9.figshare.35055502.v1",
+      "landing_url": "https://figshare.com/articles/dataset/Processed_data_supporting_Complex_Damage_Identification_of_Jacket_Platforms_Using_Sensor-Scale_Collaborative_Attention_and_Multiscale_Feature_Learning_/35055502",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35055502-processed-data-supportin-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-35055502-processed-data-supportin-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35055502_processed_data_supportin.py",
+      "cleaned_rows": 37,
+      "raw_total_rows": 32,
+      "verified_sha256": "d46a127a1fb707fcf554c1e98743826a4fc3e49a0a98f0d447cccd113802675e"
+    },
+    {
+      "slug": "figshare-33578671-source-data-for-tecobot",
+      "key": "figshare:33578671",
+      "dataset_name": "Source data for TeCoBot, A Tensegrity-based modular Continuum robot",
+      "doi": "10.6084/m9.figshare.33578671.v2",
+      "landing_url": "https://figshare.com/articles/dataset/Source_data_for_TeCoBot_A_Tensegrity-based_modular_Continuum_robot/33578671/2",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-33578671-source-data-for-tecobot-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-33578671-source-data-for-tecobot-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_33578671_source_data_for_tecobot.py",
+      "cleaned_rows": 11,
+      "raw_total_rows": 23,
+      "verified_sha256": "db4cd6087b1a71584235c5e0e04601c3749bbd453f30add0c0d0858539152c8d"
     }
   ],
   "snowballed_dois": [
     "10.1016/j.enganabound.2025.106487",
     "10.1016/j.ijmecsci.2025.111073",
+    "10.1016/j.ijmecsci.2026.111174",
     "10.1016/j.measurement.2023.112827",
     "10.1016/j.measurement.2024.115140",
     "10.1016/j.measurement.2024.115365",
     "10.1016/j.tws.2024.112745",
+    "10.1109/robosoft60065.2024.10521997",
     "10.3390/s24165441"
   ],
   "rounds_history": [
@@ -212,35 +244,44 @@
       "net_new_datasets": 112,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 6,
+      "completed_at": "2026-11-21T07:54:02Z",
+      "batch_label": "Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI",
+      "net_new_literature": 111,
+      "net_new_datasets": 67,
+      "cleaned_count": 2,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T07:49:14Z",
+  "updated_at": "2026-11-21T07:54:02Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 29,
+    "Adjacent": 32,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 72,
-    "Mechanical_Physics_AI": 22,
-    "Mechatronics_PHM_Control": 52,
-    "Robotics_Embodied": 200,
-    "R5_MultiRobot_Comm": 84,
+    "Mechanical_Physics_AI": 95,
+    "Mechatronics_PHM_Control": 76,
+    "Robotics_Embodied": 244,
+    "R5_MultiRobot_Comm": 85,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 6,
-    "Smart_Factory_DigitalTwin": 2
+    "Smart_Manufacturing": 7,
+    "Smart_Factory_DigitalTwin": 4
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 149,
-    "Mechatronics_PHM_Control": 125,
-    "Smart_Manufacturing": 23,
-    "Robotics_Embodied": 133,
+    "Mechanical_Physics_AI": 166,
+    "Mechatronics_PHM_Control": 141,
+    "Smart_Manufacturing": 36,
+    "Robotics_Embodied": 156,
     "R5_MultiRobot_Comm": 3,
-    "Smart_Factory_DigitalTwin": 3,
-    "R2_Aerial_Actuator": 5,
-    "R1_Force_Contact": 5
+    "Smart_Factory_DigitalTwin": 59,
+    "R2_Aerial_Actuator": 9,
+    "R1_Force_Contact": 6
   }
 }

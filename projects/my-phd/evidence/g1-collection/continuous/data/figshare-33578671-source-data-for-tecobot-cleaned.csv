@@ -1,0 +1,12 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Fig_3b.csv,n_modules,numeric,4,4,0,4,1,1.75,2.5,2.5,3.25,4,1.29099
+Fig_3b.csv,max_tested_displacement_mm,numeric,4,4,0,4,59,104.75,153.45,156.475,205.175,260,86.5542
+Fig_3e.csv,n_modules,numeric,4,4,0,4,1,1.75,2.5,2.5,3.25,4,1.29099
+Fig_3e.csv,max_tested_angle_deg,numeric,4,4,0,4,62.392,102.722,147.913,144.809,190,221.019,69.8464
+Fig_3j_cable_displacement.csv,pose,numeric,4,4,0,4,1,1.75,2.5,2.5,3.25,4,1.29099
+Fig_3j_cable_displacement.csv,cable1_displacement_mm,numeric,4,4,0,3,0,0,16.5,24.75,41.25,66,31.5951
+Fig_3j_cable_displacement.csv,cable2_displacement_mm,numeric,4,4,0,3,0,24.75,33,33,41.25,66,26.9444
+Fig_3j_cable_displacement.csv,cable3_displacement_mm,numeric,4,4,0,3,0,24.75,33,33,41.25,66,26.9444
+Fig_1b_table_S1_S2.csv,robot,categorical_or_text,11,11,0,11,,,,,,,"{""This work"": 1, ""Cai et al."": 1, ""Tensegrity Blocks"": 1}"
+Fig_1b_table_S1_S2.csv,locomotion_score,numeric,11,11,0,6,0,3.5,5,4.81818,6,8,2.35874
+Fig_1b_table_S1_S2.csv,manipulation_score,numeric,11,11,0,7,0,0.5,3,3.27273,6,8,3.00303
