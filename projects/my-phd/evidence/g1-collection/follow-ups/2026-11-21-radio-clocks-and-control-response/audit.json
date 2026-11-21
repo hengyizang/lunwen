@@ -1,0 +1,239 @@
+{
+  "accessed_utc_date": "2026-11-21",
+  "branch_parent": "aa269f9b8943662524791ef24471ca07213cffbf",
+  "gate_state": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "dataset_families": 10,
+  "new_dataset_families": 8,
+  "upgraded_dataset_families": 2,
+  "historical_dataset_text_files_and_early_index": 620,
+  "dataset_screening": {
+    "miluv/miluv": {
+      "keys": [
+        "www.decar.ca/miluv",
+        "decargroup/miluv",
+        "10.25452/figshare.plus.28386041",
+        "MILUV: A Multi-UAV Indoor Localization dataset with UWB and Vision"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-miluv-experiment-groups.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+      ]
+    },
+    "swarm/wsr": {
+      "keys": [
+        "Harvard-REACT/WSR-Toolbox-Dataset",
+        "7c8cb67c8dff9553e39f65552c0de4bf427ba42c",
+        "WSR-Toolbox-Dataset"
+      ],
+      "prior_files": []
+    },
+    "mote/multicast": {
+      "keys": [
+        "10.17632/r6skswb8s4",
+        "Packet Reception Data for Single-hop Wireless Multicasting"
+      ],
+      "prior_files": []
+    },
+    "uwbclock/uwb-clock": {
+      "keys": [
+        "10.5281/zenodo.20051894",
+        "10.5281/zenodo.20051893",
+        "Accurate Synchronization-Free UWB-TDoA Indoor Localization with Unlimited Tag Support"
+      ],
+      "prior_files": []
+    },
+    "sync/mobile-sync": {
+      "keys": [
+        "10.5281/zenodo.14230741",
+        "10.5281/zenodo.14230740",
+        "Clock Synchronization Accuracy over Mobile Networks"
+      ],
+      "prior_files": []
+    },
+    "sync/wan-sync": {
+      "keys": [
+        "10.5281/zenodo.16794348",
+        "10.5281/zenodo.14231422",
+        "Data for PTP Over Wide Area Networks With Offset Measurement Outlier Filtering"
+      ],
+      "prior_files": []
+    },
+    "plc/ncsbench": {
+      "keys": [
+        "tum-lkn/NCSbench",
+        "d7e3261d2847ab663c1f0a732c7611e046ce614d",
+        "NCSbench: Reproducible Benchmarking Platform for Networked Control Systems"
+      ],
+      "prior_files": []
+    },
+    "malaga/malaga": {
+      "keys": [
+        "10.5281/zenodo.14967644",
+        "zenodo.org/records/14967644",
+        "Roundtrip times in networked telerobots for sensory data transmissions"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+      ]
+    },
+    "actuation/hand-imu": {
+      "keys": [
+        "rhoyn/teleop-hands-latency-analysis",
+        "6f886f6202a147b6a64f70e66f7feec7681b0346",
+        "teleop-hands-latency-analysis"
+      ],
+      "prior_files": []
+    },
+    "ttw/ttnet": {
+      "keys": [
+        "10.5281/zenodo.3753974",
+        "10.5281/zenodo.3530721",
+        "TTnet - Model validation data",
+        "romain-jacob/TTW-Artifacts"
+      ],
+      "prior_files": []
+    }
+  },
+  "literature_count": 56,
+  "new_literature": 56,
+  "paper_evidence": {
+    "new bibliography record / full text": 33,
+    "new bibliography record / author abstract": 23
+  },
+  "edges_by_basis": {
+    "Crossref deposited reference DOI + OpenAlex referenced_works": 89,
+    "OpenAlex referenced_works + Full text, references [7]": 1,
+    "OpenAlex referenced_works + Full text, references [6]": 2,
+    "OpenAlex referenced_works + Full text, references [10]": 1,
+    "OpenAlex referenced_works + Full text, references [23] in article P-V": 1,
+    "OpenAlex referenced_works + Full text, references [17] in article P-V": 1,
+    "Crossref deposited reference title/version + OpenAlex referenced_works": 17,
+    "OpenAlex referenced_works + Full text, references [31], Maróti et al.": 1,
+    "OpenAlex referenced_works + Full text, references [13]": 1,
+    "OpenAlex referenced_works + Full text, references [19]": 1,
+    "Full text, references [14]": 1,
+    "OpenAlex referenced_works + Full text, references [25]": 1,
+    "Crossref deposited reference title/version": 2,
+    "OpenAlex referenced_works + Main ECRTS full text, numbered references": 6,
+    "OpenAlex referenced_works + Full text, references [50], arXiv:2001.08557": 1,
+    "Artifact full text, Related Article": 1,
+    "Crossref deposited reference DOI + OpenAlex referenced_works + Full text, references Zoppi et al. (2019), then submitted to IEEE CCNC; subsequent version cited here": 1
+  },
+  "reproduced_tables": {
+    "actuation/hand-imu-stacks.csv": {
+      "rows": 3,
+      "sha256": "252f3ac396171237d53f7234f1f9c54b0e20aeec356d4cb4f76b3114030a44fe"
+    },
+    "actuation/hand-imu-takes.csv": {
+      "rows": 21,
+      "sha256": "844ee2d9869b4984a7af998ae289050860afbc901e41626b6ed2d55adb9d1978"
+    },
+    "actuation/vargas-ros-figure.csv": {
+      "rows": 22,
+      "sha256": "71bc97c32a092c9c7766b3876719ba8090830f5423dce2258c243bec18bf9c12"
+    },
+    "malaga/malaga-rtt-by-experiment.csv": {
+      "rows": 36,
+      "sha256": "a24de748295ef2d0c35e97d135a0589a522df51c71d127f51c5fa131636b203d"
+    },
+    "miluv/miluv-directed-links.csv": {
+      "rows": 924,
+      "sha256": "fbc55bf80eeaadf92a64f3f443f6607a1d6b4939c349137ca4612d595678365f"
+    },
+    "miluv/miluv-experiments.csv": {
+      "rows": 16,
+      "sha256": "2abd924da1eecad6e61f93a3f8852ef38c11535d6a3ebde216058de57c98347e"
+    },
+    "miluv/miluv-passive-timing.csv": {
+      "rows": 48,
+      "sha256": "a9fc3778e6455a91420cbf1c84e79a36ed3474667518cd5dc8792ba9df21da2e"
+    },
+    "mote/multicast-broadcasts.csv": {
+      "rows": 6,
+      "sha256": "78e84fde55373ae853dc5f53186da8f6e2303fdb05734315e606052ed78cc86d"
+    },
+    "mote/multicast-receivers.csv": {
+      "rows": 90,
+      "sha256": "b2c2fee23eb84e4924f2dc2021e4a6078b6b4a75f6dd070c35f6994be7fd0959"
+    },
+    "plc/ncsbench-command-mismatches.csv": {
+      "rows": 4,
+      "sha256": "df00d471f1e9194471e39e0e6d0b63865cc09c1d82660ce1e6de756c69e998b4"
+    },
+    "plc/ncsbench-coverage.csv": {
+      "rows": 1,
+      "sha256": "0b21f963be766fa303852140495fc30f60c4c6f58de7378f3b5023129e7ae7a4"
+    },
+    "plc/ncsbench-source-files.csv": {
+      "rows": 16,
+      "sha256": "6c8216658987d106b9504ab6530b699ea894e6fc59658ae986d6f581a2a490f6"
+    },
+    "plc/ncsbench-timing.csv": {
+      "rows": 12,
+      "sha256": "20a6c0c6888af31557bb4943f36b63593962af71eec139c6262dc07d733fd396"
+    },
+    "swarm/wsr-captures.csv": {
+      "rows": 882,
+      "sha256": "1c51006f4d39e790027d51e2e85e8aaafa74090b98113df893dd8e0fd9cf5e23"
+    },
+    "swarm/wsr-directional-exchanges.csv": {
+      "rows": 686,
+      "sha256": "a4b2ff1ca551260911206a2bb29fafeaf51d520cc908efa196f8203f3e5f92df"
+    },
+    "sync/mobile-captures.csv": {
+      "rows": 2,
+      "sha256": "0de4264caf5003de575b7b9bc6099b26aef97868c6654a189f97299a5b124c2d"
+    },
+    "sync/mobile-pps.csv": {
+      "rows": 4,
+      "sha256": "3e88329e87d8c05d701e8e538be976933f95fe9c318754863a533fa950d8e542"
+    },
+    "sync/mobile-ptpd.csv": {
+      "rows": 8,
+      "sha256": "410ebe5827b1d3c09c462401d54b1d35b3d8611e051851f16dea3f5511f54eb7"
+    },
+    "sync/wan-clock-offsets.csv": {
+      "rows": 8,
+      "sha256": "249c701cf3e8ddcb799372cb90cca003b996889874a6058e18ed98f62bf8d199"
+    },
+    "sync/wan-directional-delays.csv": {
+      "rows": 6,
+      "sha256": "588d9a5c4191a5225e9af0761db82342c56ed5a06abff468bd6c142d2d1e2f5d"
+    },
+    "sync/wan-live-streams.csv": {
+      "rows": 47,
+      "sha256": "b72a83cd7956f7d6ee1067ddbfe337c8ad1bd5f12b6a29fe99fbacacd65e4304"
+    },
+    "ttw/ttnet-conditions.csv": {
+      "rows": 27,
+      "sha256": "4bba7dcc08aeeef062bcafa4fbab42963f3bcbc99d0376a7982ef4bab39f68d8"
+    },
+    "ttw/ttnet-coverage.csv": {
+      "rows": 3,
+      "sha256": "9ebf549f7bc5a12ba2b3ae1ca66f2e6c8f293717cda0d2dafb4b82b10fa9cac7"
+    },
+    "ttw/ttnet-gpio-sample.csv": {
+      "rows": 4,
+      "sha256": "6f94be4e80c16bc75cbf9ff916e788b46ad9732eb81928fc74bdf538de393114"
+    },
+    "ttw/ttnet-runs.csv": {
+      "rows": 1552,
+      "sha256": "8b5021c40abce0535376d78220a3975b44d057e711805db775aba80da184b208"
+    },
+    "uwbclock/uwb-clock-files.csv": {
+      "rows": 7,
+      "sha256": "ee2d9f7f9af4a049005646c508547ab5ad9a07523e6bc78f45e96d3664f76a2c"
+    },
+    "uwbclock/uwb-common-event-intervals.csv": {
+      "rows": 63,
+      "sha256": "1754341581f9589b4365b3f85e80fad90f8f57450f3fe427c8fabe66acf12e3c"
+    }
+  },
+  "scope_note": "The Vargas thesis figure is a publication-derived table only. A dataset family is counted once even if multiple files and measurement streams were processed. DOI versions, author/title and per-source duplicate rules are documented in source records; see lit/search.json for per-paper history matching and edge provenance."
+}

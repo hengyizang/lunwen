@@ -1,0 +1,4 @@
+stack,takes,rows,robot_gyro_rail_rows,leader_gyro_rail_rows,all_min_take_lag_ms,all_median_take_lag_ms,all_max_take_lag_ms,no_rail_pairs_min_take_lag_ms,no_rail_pairs_median_take_lag_ms,no_rail_pairs_max_take_lag_ms
+rhoyn,9,52253,17652,14367,17.0,20.0,21.0,18.0,19.0,70.0
+xrobotoolkitpicovr+genesisextremcontrol,6,78901,6506,6383,36.0,45.0,53.0,42.0,50.0,57.0
+xrobotoolkitpicovr+nvidiagrootlowlatencyweights,6,104898,5666,6437,81.0,94.0,100.0,83.0,97.5,105.0

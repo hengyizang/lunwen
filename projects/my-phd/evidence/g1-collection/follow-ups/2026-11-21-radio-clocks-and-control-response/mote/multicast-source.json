@@ -1,0 +1,80 @@
+{
+  "title": "Packet Reception Data for Single-hop Wireless Multicasting",
+  "doi": "10.17632/r6skswb8s4.2",
+  "concept_doi": "10.17632/r6skswb8s4",
+  "version": "2",
+  "authors": [
+    "Ibtisam Tanveer",
+    "Jalaluddin Qureshi"
+  ],
+  "release_date": "2018-07-16T07:28:46.473Z",
+  "accessed_utc_date": "2026-11-21",
+  "rights": "CC BY 4.0, credit the original authors. This package contains newly calculated summary tables and checksums only.",
+  "landing": "https://doi.org/10.17632/r6skswb8s4.2",
+  "queries": [
+    {
+      "query": "multi robot wireless communication packet reception dataset transmitter receiver packet loss robot swarm sequence number sent received robots experimental data wireless broadcast datasets multi robot network github",
+      "result": "Found Tanveer and Qureshi, Mendeley single-hop multicasting with per-mote ACK/NACK status. Used as a stationary instrumented comparator. Physical placement after transmission and limitations found in the Guide and release metadata."
+    }
+  ],
+  "history": {
+    "prior_git_commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "historical_text_documents": 620,
+    "normalized_keys": [
+      "10.17632/r6skswb8s4",
+      "Packet Reception Data for Single-hop Wireless Multicasting",
+      "r6skswb8s4"
+    ],
+    "historical_matches": [],
+    "scope": "Project evidence on the state branch (includes regular collection and targeted follow-ups) and early project baseline catalogue. Companion papers and data releases are distinguished."
+  },
+  "retrieval": {
+    "metadata_url": "https://data.mendeley.com/public-api/datasets/r6skswb8s4",
+    "metadata_sha256": "ddbcf4655adbb6f4e3da30bc5c21164e3b93740d839b0a0b68a13da578a7f4e8",
+    "version_archive": "https://data.mendeley.com/public-api/zip/r6skswb8s4/download/2",
+    "downloaded_archive_sha256": "21202b9f67c6c478456eab2937749327abba704b1b922bd65e2c43c1ef9be216",
+    "inputs": [
+      {
+        "name": "Grid Topology (Cleaned Raw data).zip",
+        "publisher_sha256": "e0fa6b398284fb8cf75ccf86f7aaf28aa7a79273ef99f6b5c39223e8fb3a7a1f",
+        "bytes": 1022568
+      },
+      {
+        "name": "Guide.docx",
+        "publisher_sha256": "55412f2f8d316e9ca3414d36811a424b3f63c6369827dd4130bc14aeb30cad72",
+        "bytes": 19658
+      },
+      {
+        "name": "Images.zip",
+        "publisher_sha256": "61fd20240508001e98ee2adb1d2c97581a75bda4c04d1bf0355e5e88ba2c0843",
+        "bytes": 1497597
+      },
+      {
+        "name": "Results.zip",
+        "publisher_sha256": "6738f5806ffdad4d335faf7a1bd854ee452250a9dd8607571860cfe03c38524d",
+        "bytes": 179654
+      },
+      {
+        "name": "TelosB code.zip",
+        "publisher_sha256": "a5ff412d9a88acabbf2da2fb2c2d966829d500b0eff5f8953514024d769ba87a",
+        "bytes": 7190900
+      }
+    ],
+    "integrity": "All five members of the outer archive had their byte count and SHA-256 checked against the Mendeley metadata. Used the cleaned-raw ZIP and Guide.docx; saved clustering-result sheets and plot image files were not counted as further experiments."
+  },
+  "experiment": "Real TelosB stationary single-hop multicast in a rural grid. Six runs, three for each nominal 20 m / 25 m setting, each with one broadcaster, 15 receiving motes and 3000 broadcast packet numbers. The guide identifies model training runs model-20G and model 25G as physical runs whose clustering is evaluated in exp1/2 and exp3/4. Distances are condition labels; they need not be identical for every transmitter–receiver pair. After broadcasting the motes were carried close to the transmitter to return NACK frames to reduce lost feedback. The deposit provides cleaned reception outcomes rather than time-stamped raw TX/RX network events. There are no moving robots, clock readings, flight controllers or actuator signals in these tables.",
+  "cleaning": "Decoded the six XLSX matrices using the P1–P3000 headers and Mote1–Mote15 row labels; workbook row order can differ. In the accompanying .m scripts x1..x15 give packet IDs plotted as received. Parsed those numeric arrays as data, not executed code. Each receiver has the same 3,000 publication-stated attempts in that run. Count agreement/disagreement at matched packet IDs and receiver identities. A run with 3,000 broadcasts gives 45,000 receiver opportunities, not 45,000 independently transmitted packets. No duration inferred from index differences.",
+  "uncertainty": "In the four runs with identical representations, observed outcomes per source file can be counted exactly. The other two have different reported bits: 169 cells in model-20G (Mote5) and 6,594 in exp4 (7 motes); filename/receiver identities checked. No rule establishes which is correct. The lower bound requires agreement of both views for receipt; upper bound permits any disputed cell to be received. Bounds are conditional on at least one of the two source encodings being correct for each disputed cell and not a confidence interval. Any hidden common acquisition error, including feedback loss, is outside this comparison. Longest gaps count consecutive packet indices, not elapsed time.",
+  "counts": {
+    "broadcasts": 18000,
+    "receiver_opportunities": 270000,
+    "agreed_receipts": 189129,
+    "agreed_losses": 74108,
+    "disputed": 6763,
+    "exp4_all15_received_bounds": [
+      2,
+      44
+    ]
+  },
+  "reproduce": "Python 3 standard library. python derive_multicast.py \"Grid Topology (Cleaned Raw data).zip\" OUTPUT_DIRECTORY. Zip and original workbook/script checksums are in this receipt and multicast-broadcasts.csv."
+}

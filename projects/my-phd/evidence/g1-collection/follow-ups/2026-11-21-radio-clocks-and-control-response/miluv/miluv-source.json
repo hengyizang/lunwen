@@ -1,0 +1,1729 @@
+{
+  "title": "MILUV: A Multi-UAV Indoor Localization dataset with UWB and Vision",
+  "dataset_doi": "10.25452/figshare.plus.28386041.v1",
+  "concept_doi": "10.25452/figshare.plus.28386041",
+  "primary_article_doi": "10.1177/02783649251405898",
+  "authors": [
+    "Mohammed Shalaby",
+    "Syed Shabbir Ahmed",
+    "Nicholas Dahdah",
+    "Charles Cossette",
+    "Jerome Le Ny",
+    "James R. Forbes"
+  ],
+  "version": "Figshare Plus v1; devkit and clock model revisions pinned in the documents below",
+  "license": "CC BY 4.0 (Figshare files); attribute the named authors. Devkit MIT license applies to code. Independent derived summaries and file checksums only.",
+  "checked_utc_date": "2026-11-21",
+  "source": "https://api.figshare.com/v2/articles/28386041/versions/1",
+  "fixed_url": "https://doi.org/10.25452/figshare.plus.28386041.v1",
+  "version_api_sha256": "e25dfbc710eda10ab399077639ec96c95ee8c0593a2a7772172fdc9d0df3d08f",
+  "history": {
+    "commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "status": "Existing dataset catalogue and grouping are upgraded with per-transaction timing, matching and distance evidence. No new dataset family.",
+    "screened_files": 620,
+    "matches": {
+      "10.25452/figshare.plus.28386041": [],
+      "www.decar.ca/miluv": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json"
+      ],
+      "decargroup/miluv": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-miluv-experiment-groups.csv"
+      ],
+      "MILUV": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-miluv-experiment-groups.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/README.md"
+      ],
+      "10.1177/02783649251405898": []
+    }
+  },
+  "queries": [
+    {
+      "query": "MILUV dataset download data McGill MILUV Borealis experiments zip multi robot UWB dataset passive listening CSV 1c data",
+      "result": "Devkit pin has experiment index and preprocessing, no data download in setup instructions. Located final IJRR paper via Europe PMC; Availability names versioned Figshare deposit."
+    },
+    {
+      "query": "MILUV dataset OneDrive download Borealis zenodo UWB ViNT multi robot McGill Walter Goudar public GitHub release dataset localization",
+      "result": "Resolved official Figshare v1 through the paper; selected all 16 three-robot experiment files from the 39-item record."
+    },
+    {
+      "query": "decargroup/miluv pinned git tree, preprocess/process_uwb.py and linked decargroup/uwb_calibration submodule",
+      "result": "Checked ownership of six radio times, ROS header offsets, publisher outlier removal and passive matching before endpoint files are emitted. Read tag and anchor geometry, digital clock period and formula."
+    }
+  ],
+  "inputs": "All three robot directories from all 16 three-robot experiment archives in the versioned 39-file deposit. Three complete UWB active, three passive and three mocap CSVs per experiment; also checked each timeshift.yaml. No single-robot runs, images, CIR waveforms, unprocessed bags or separate calibration experiment. 160 verified members, 988697938 unpacked bytes. Original archive-wide supplied MD5 values are recorded for retrieval; the full archives were not downloaded. HTTP range read central directories; validated byte Content-Range, deflated payload sizes, ZIP CRC32 and computed per-member SHA-256.",
+  "configuration_inputs": {
+    "experiments.csv": {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv",
+      "sha256": "8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c"
+    },
+    "tags.yaml": {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/uwb/tags.yaml",
+      "sha256": "6499c59ebfd498d3077d00c3fbecc3c873112641f25d1f1473b94b1a63be3215"
+    },
+    "anchors.yaml": {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/uwb/anchors.yaml",
+      "sha256": "4e38cef90d8db1cc0fed2a51aa2b67fee3a637140d4bdb685c1608472b5bb4f3"
+    }
+  },
+  "documents": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13552925/fullTextXML",
+      "sha256": "0229746903b9ba8208e267c39c165bfcf98e96556f65be2f0526c8c803f48a0a",
+      "local_document": "paper.xml"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/preprocess/process_uwb.py",
+      "sha256": "e5e32fc672effec2af9ab21b14d3406d534bc27da1d85eba06766936493f4e3b",
+      "local_document": "process_uwb.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/preprocess/cleanup_csv.py",
+      "sha256": "0798479fc0476a2dbbee644875fc0d04423d0c9c965ebfa42a9ca35aad820dbb",
+      "local_document": "cleanup_csv.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/uwb_calibration/c1a03543631b1422f35ef85f6b496737583752ee/pyuwbcalib/postprocess.py",
+      "sha256": "493caebbc9dcc1f3b9785dc53b6a12dd7ddae4281ad0d90fa99247f66a2ff9c0",
+      "local_document": "postprocess.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/uwb_calibration/c1a03543631b1422f35ef85f6b496737583752ee/pyuwbcalib/utils.py",
+      "sha256": "b2d1f7af589bb2e51ca37639c8ef83956d9b5b9a7ce459decf2cb26a67cce5e5",
+      "local_document": "utils.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/uwb_calibration/c1a03543631b1422f35ef85f6b496737583752ee/pyuwbcalib/uwbcalibrate.py",
+      "sha256": "31fdfb84fff2c3988436d1f8ab32893054936c469d8b8dd273af023f4188854f",
+      "local_document": "uwbcalibrate.py"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/decargroup/miluv/80843c17ef74d1a64ed6f00579cf052b52c62e60/docs/data.md",
+      "sha256": "b55b5082d52ee56d4397ae39eba951ff8da884ac9afea085cc9b2b6205e0dcaa",
+      "local_document": "data.md"
+    }
+  ],
+  "archives": {
+    "default_3_zigzag_0.zip": {
+      "file_id": 52317935,
+      "url": "https://ndownloader.figshare.com/files/52317935",
+      "archive_bytes": 11097295077,
+      "publisher_archive_md5_not_recomputed": "e12f97b0df631d16cefb6ce703fd9550",
+      "central_directory_entries": 86446,
+      "selected_members": [
+        {
+          "path": "default_3_zigzag_0/ifo001/mocap.csv",
+          "bytes": 4494003,
+          "compressed_bytes": 1986520,
+          "zip_header_offset": 11069221369,
+          "zip_method": 8,
+          "crc32": "128232ad",
+          "sha256": "fe0ceb35293b2cfb4768ac9d4509655ae867e99f41454e6c08fba513e5c0edc6"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo001/uwb_passive.csv",
+          "bytes": 26673801,
+          "compressed_bytes": 6891750,
+          "zip_header_offset": 11077873747,
+          "zip_method": 8,
+          "crc32": "0e65c531",
+          "sha256": "daee5b8bb17d3df7e36639ce96014b8a23847b21a5ab196ccca73f0e084053cf"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo001/uwb_range.csv",
+          "bytes": 9049736,
+          "compressed_bytes": 3802510,
+          "zip_header_offset": 11074071120,
+          "zip_method": 8,
+          "crc32": "118bf681",
+          "sha256": "5ed1af6688c8f348df62537f087886aad425da199908a5dad401d5b7b670352c"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo002/mocap.csv",
+          "bytes": 4511230,
+          "compressed_bytes": 1986100,
+          "zip_header_offset": 6437167043,
+          "zip_method": 8,
+          "crc32": "3bd2de10",
+          "sha256": "f25e3146d65b5c556e713dc0cc215a4d904fc1705871c1da28d4f51125f57d48"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo002/uwb_passive.csv",
+          "bytes": 28184424,
+          "compressed_bytes": 7168537,
+          "zip_header_offset": 6448905636,
+          "zip_method": 8,
+          "crc32": "5bee88e6",
+          "sha256": "81b0262f1a29e68c89c834a66f056913e95b282745c51628bdbb59ae77697eeb"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo002/uwb_range.csv",
+          "bytes": 9039347,
+          "compressed_bytes": 3799397,
+          "zip_header_offset": 6445106122,
+          "zip_method": 8,
+          "crc32": "13769cb4",
+          "sha256": "9c01d49d4dc1a952c84710610fab2bc3912c55d09be3749ca8af2dba1127a21d"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo003/mocap.csv",
+          "bytes": 4513972,
+          "compressed_bytes": 1982257,
+          "zip_header_offset": 8712985674,
+          "zip_method": 8,
+          "crc32": "3db324e2",
+          "sha256": "d18cce765c8e1216c8167aa9c4a6de5d25f342edc0530d9c306c06891ea3b3cf"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo003/uwb_passive.csv",
+          "bytes": 28079949,
+          "compressed_bytes": 7159597,
+          "zip_header_offset": 8724788538,
+          "zip_method": 8,
+          "crc32": "c23c8989",
+          "sha256": "dc050eec3be4448e33de575318112228766b453b8f30901608d66f8ea5186c1f"
+        },
+        {
+          "path": "default_3_zigzag_0/ifo003/uwb_range.csv",
+          "bytes": 9063720,
+          "compressed_bytes": 3807992,
+          "zip_header_offset": 8720980429,
+          "zip_method": 8,
+          "crc32": "61580f1d",
+          "sha256": "aa4b4fe69cc406f6af3163e7d664bf3d2fedc0931d085e2f3ffbf2bbad6c9736"
+        },
+        {
+          "path": "default_3_zigzag_0/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 11084765616,
+          "zip_method": 8,
+          "crc32": "dc20037a",
+          "sha256": "fb3db908528a88d8fe9e58a603a33bd04aee0829b42922279f3efd30cb5c7769"
+        }
+      ]
+    },
+    "default_3_zigzag_1.zip": {
+      "file_id": 52317932,
+      "url": "https://ndownloader.figshare.com/files/52317932",
+      "archive_bytes": 10414960905,
+      "publisher_archive_md5_not_recomputed": "92883842b9ea207e4fd3e9655fdf9d0d",
+      "central_directory_entries": 82754,
+      "selected_members": [
+        {
+          "path": "default_3_zigzag_1/ifo001/mocap.csv",
+          "bytes": 4216149,
+          "compressed_bytes": 1869092,
+          "zip_header_offset": 8298062498,
+          "zip_method": 8,
+          "crc32": "7a421dca",
+          "sha256": "30814688ca21b61dd4971b520839f146e6d7757b82d44994a5e3cd7259c5b037"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo001/uwb_passive.csv",
+          "bytes": 26159482,
+          "compressed_bytes": 6663056,
+          "zip_header_offset": 8284606920,
+          "zip_method": 8,
+          "crc32": "bbd0e0c7",
+          "sha256": "06d2c4b25b781a003e578c2394941e4b09eb8fd308f70b58106e0eff5aaed6be"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo001/uwb_range.csv",
+          "bytes": 8361769,
+          "compressed_bytes": 3525546,
+          "zip_header_offset": 8281081257,
+          "zip_method": 8,
+          "crc32": "fcb8e266",
+          "sha256": "3bde622b1154640219210b390a2d780781d3e10bdd6ccd5b3f82ac89edebca29"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo002/mocap.csv",
+          "bytes": 4205943,
+          "compressed_bytes": 1856175,
+          "zip_header_offset": 6142878042,
+          "zip_method": 8,
+          "crc32": "8adc68a9",
+          "sha256": "40ab25852bd78f749a9ff42ac88411a2c483e1eaaa65a2421bd16b4d4c65c180"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo002/uwb_passive.csv",
+          "bytes": 25436969,
+          "compressed_bytes": 6519989,
+          "zip_header_offset": 6134584322,
+          "zip_method": 8,
+          "crc32": "dc8b463b",
+          "sha256": "3349b491d756c6c48bb09935c7eaa248d951989c9d8188795c91ac2c8367ae87"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo002/uwb_range.csv",
+          "bytes": 8369921,
+          "compressed_bytes": 3528914,
+          "zip_header_offset": 6127779067,
+          "zip_method": 8,
+          "crc32": "31724705",
+          "sha256": "f5ab3d0940598ba19b906b3444eca110df5ca2d91ae82e7e2574ba6c45467694"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo003/mocap.csv",
+          "bytes": 4206209,
+          "compressed_bytes": 1855105,
+          "zip_header_offset": 6157338213,
+          "zip_method": 8,
+          "crc32": "fbdfb84c",
+          "sha256": "401a1c4efcc5ddbc18467462625d1923a06c94e009dc0df216deb8f4cea1c08d"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo003/uwb_passive.csv",
+          "bytes": 25000314,
+          "compressed_bytes": 6442608,
+          "zip_header_offset": 6150895486,
+          "zip_method": 8,
+          "crc32": "9f572b45",
+          "sha256": "bf0c6fe25d44c2e1566da1bef94a80faec22ba02b544147d39362857ec21163c"
+        },
+        {
+          "path": "default_3_zigzag_1/ifo003/uwb_range.csv",
+          "bytes": 8372846,
+          "compressed_bytes": 3529328,
+          "zip_header_offset": 6147366041,
+          "zip_method": 8,
+          "crc32": "ca52b543",
+          "sha256": "5e5b0a2ac108c7765de5125c9c852217cea12326794eb6731cfedd9cb5035754"
+        },
+        {
+          "path": "default_3_zigzag_1/timeshift.yaml",
+          "bytes": 47,
+          "compressed_bytes": 40,
+          "zip_header_offset": 8281081018,
+          "zip_method": 8,
+          "crc32": "e1b3d020",
+          "sha256": "107b505a22aed66b8ca2697eb267647786e41e33b1f4205408a295f571a0160e"
+        }
+      ]
+    },
+    "default_3_zigzag_2.zip": {
+      "file_id": 52317929,
+      "url": "https://ndownloader.figshare.com/files/52317929",
+      "archive_bytes": 10167026525,
+      "publisher_archive_md5_not_recomputed": "fc6469ac8448ceca3115336fa1cabdaf",
+      "central_directory_entries": 81714,
+      "selected_members": [
+        {
+          "path": "default_3_zigzag_2/ifo001/mocap.csv",
+          "bytes": 4071033,
+          "compressed_bytes": 1804338,
+          "zip_header_offset": 8011489065,
+          "zip_method": 8,
+          "crc32": "85ff575b",
+          "sha256": "23ba36ce10f736916d6b10b4b7e7734f573f8def99a325b2962811b006d24cb1"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo001/uwb_passive.csv",
+          "bytes": 22084116,
+          "compressed_bytes": 5709938,
+          "zip_header_offset": 10146391757,
+          "zip_method": 8,
+          "crc32": "921c8df3",
+          "sha256": "22d2c0364633d9dcc5fbbbd1eeaba34789ddffe4ca2e021c4ad1863890311e4e"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo001/uwb_range.csv",
+          "bytes": 7473783,
+          "compressed_bytes": 3157055,
+          "zip_header_offset": 10152101814,
+          "zip_method": 8,
+          "crc32": "fb275042",
+          "sha256": "9333899dc3438ee804341309ec9c5963f71df62c2cc0f61dac707ed560dc2a50"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo002/mocap.csv",
+          "bytes": 3958280,
+          "compressed_bytes": 1748978,
+          "zip_header_offset": 5940390014,
+          "zip_method": 8,
+          "crc32": "ea2dd1b2",
+          "sha256": "b299886def47330f00f1fbc8dec88f4229e6c0515e730dc9a3b7fe0a86f613d0"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo002/uwb_passive.csv",
+          "bytes": 22715382,
+          "compressed_bytes": 5824780,
+          "zip_header_offset": 5932842066,
+          "zip_method": 8,
+          "crc32": "279473f9",
+          "sha256": "a71f25ee4dc4da6816340ab771dd1d3080fc6333b1e4c740ea63d26fd3160b15"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo002/uwb_range.csv",
+          "bytes": 7439428,
+          "compressed_bytes": 3145751,
+          "zip_header_offset": 5929696198,
+          "zip_method": 8,
+          "crc32": "641987db",
+          "sha256": "f9aa0f8c3860e3e4105838690632c2bdd6f8a9d3c2cc4d2f1cc6f55aedb7a6d2"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo003/mocap.csv",
+          "bytes": 4095542,
+          "compressed_bytes": 1808063,
+          "zip_header_offset": 5956899949,
+          "zip_method": 8,
+          "crc32": "854dc19d",
+          "sha256": "193fb0c373005b27979944aab420e7ea96eaad9915e970e4bf7e99e167c8df06"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo003/uwb_passive.csv",
+          "bytes": 22140173,
+          "compressed_bytes": 5714693,
+          "zip_header_offset": 5949432864,
+          "zip_method": 8,
+          "crc32": "f966bce1",
+          "sha256": "dba8bfaa415b471f8bf84c5cc070414b84b66108ea0ed94b65c4674661e5f127"
+        },
+        {
+          "path": "default_3_zigzag_2/ifo003/uwb_range.csv",
+          "bytes": 7440156,
+          "compressed_bytes": 3142429,
+          "zip_header_offset": 5946290318,
+          "zip_method": 8,
+          "crc32": "5b816fe1",
+          "sha256": "30eaf90c16a1066810e5a9abf69411842fb0afd53b0e9ff9bbfb783cbbccbe30"
+        },
+        {
+          "path": "default_3_zigzag_2/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 8004740360,
+          "zip_method": 8,
+          "crc32": "7da270dc",
+          "sha256": "9c1e648755db9bb63366842bfd41bbdeef9498a02e1456e877e82b4020aae62f"
+        }
+      ]
+    },
+    "default_3_random_0.zip": {
+      "file_id": 52291625,
+      "url": "https://ndownloader.figshare.com/files/52291625",
+      "archive_bytes": 3231673980,
+      "publisher_archive_md5_not_recomputed": "09236b18470f0dd99c33245ee1c994ee",
+      "central_directory_entries": 23723,
+      "selected_members": [
+        {
+          "path": "default_3_random_0/ifo001/mocap.csv",
+          "bytes": 1238722,
+          "compressed_bytes": 547174,
+          "zip_header_offset": 3227970582,
+          "zip_method": 8,
+          "crc32": "51f8a61f",
+          "sha256": "8a10d8b53e415241a55a6480e0a28bd229eaa79785a34f8288afea0ee6a8c819"
+        },
+        {
+          "path": "default_3_random_0/ifo001/uwb_passive.csv",
+          "bytes": 7762632,
+          "compressed_bytes": 1994626,
+          "zip_header_offset": 3224040793,
+          "zip_method": 8,
+          "crc32": "0f26c07a",
+          "sha256": "ab6f87bfd59733a590765c10fcf59db9853fafc3e0fb4b8ff9db7f1e4d3be980"
+        },
+        {
+          "path": "default_3_random_0/ifo001/uwb_range.csv",
+          "bytes": 2455574,
+          "compressed_bytes": 1040743,
+          "zip_header_offset": 3222999933,
+          "zip_method": 8,
+          "crc32": "50dca9f8",
+          "sha256": "a51e478dd532d9c71d9c935e1784c457838ecbe6d26b8107550009beaf39c0c0"
+        },
+        {
+          "path": "default_3_random_0/ifo002/mocap.csv",
+          "bytes": 1227186,
+          "compressed_bytes": 540958,
+          "zip_header_offset": 1895857909,
+          "zip_method": 8,
+          "crc32": "5a21d81a",
+          "sha256": "af1e2c4db675a94e8454a4faffe97e58fa6c82e36f415f316a5e7a1095fa39f1"
+        },
+        {
+          "path": "default_3_random_0/ifo002/uwb_passive.csv",
+          "bytes": 7709057,
+          "compressed_bytes": 1981020,
+          "zip_header_offset": 1899032528,
+          "zip_method": 8,
+          "crc32": "a0e481a1",
+          "sha256": "ee6bde9f2b648bfa28902352700077974a87c2d575bc0b29b1a37cff93d09d1e"
+        },
+        {
+          "path": "default_3_random_0/ifo002/uwb_range.csv",
+          "bytes": 2445348,
+          "compressed_bytes": 1036837,
+          "zip_header_offset": 1897995574,
+          "zip_method": 8,
+          "crc32": "9f13a455",
+          "sha256": "9fad37756da0a013d8f3ebc510308789877be77090cfdd88bc27a5059680420c"
+        },
+        {
+          "path": "default_3_random_0/ifo003/mocap.csv",
+          "bytes": 1221766,
+          "compressed_bytes": 538105,
+          "zip_header_offset": 1901509327,
+          "zip_method": 8,
+          "crc32": "370e3c02",
+          "sha256": "b0cf166e9e78b647edabb5d82f8fe433ceda57a1b32e09c191aa57be9041ada2"
+        },
+        {
+          "path": "default_3_random_0/ifo003/uwb_passive.csv",
+          "bytes": 7371984,
+          "compressed_bytes": 1917695,
+          "zip_header_offset": 2569212377,
+          "zip_method": 8,
+          "crc32": "ee1d2977",
+          "sha256": "07b45c2df3001e7dce42311696be8a369d78f8751be7973842fa3f67643198ef"
+        },
+        {
+          "path": "default_3_random_0/ifo003/uwb_range.csv",
+          "bytes": 2443662,
+          "compressed_bytes": 1036901,
+          "zip_header_offset": 2568175359,
+          "zip_method": 8,
+          "crc32": "ce37f5c8",
+          "sha256": "eb78af3641f967f0bdbfdaff58dc652cea69202cc31f0dcda7416225d0e426e6"
+        },
+        {
+          "path": "default_3_random_0/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 40,
+          "zip_header_offset": 3228517869,
+          "zip_method": 8,
+          "crc32": "15892752",
+          "sha256": "9930590be8ce540c2ea8edae1bf3f8bbefcbfe4d90c62edcdf5a0d1f6c723177"
+        }
+      ]
+    },
+    "default_3_random_0b.zip": {
+      "file_id": 52291628,
+      "url": "https://ndownloader.figshare.com/files/52291628",
+      "archive_bytes": 3691930826,
+      "publisher_archive_md5_not_recomputed": "f99c5fd8da59eb89c89e14ba6943471b",
+      "central_directory_entries": 26814,
+      "selected_members": [
+        {
+          "path": "default_3_random_0b/ifo001/mocap.csv",
+          "bytes": 1403700,
+          "compressed_bytes": 614853,
+          "zip_header_offset": 3682359109,
+          "zip_method": 8,
+          "crc32": "a60b03e9",
+          "sha256": "69c503c5cfd37563fbf43751894e89629236e02c91e5e2a1afcf92ccd5a05e59"
+        },
+        {
+          "path": "default_3_random_0b/ifo001/uwb_passive.csv",
+          "bytes": 8104923,
+          "compressed_bytes": 2126655,
+          "zip_header_offset": 3684145088,
+          "zip_method": 8,
+          "crc32": "8a4a658e",
+          "sha256": "b005b986017242b52d4479c217864359825792650bbfeab75d4be9be7d024fae"
+        },
+        {
+          "path": "default_3_random_0b/ifo001/uwb_range.csv",
+          "bytes": 2789733,
+          "compressed_bytes": 1170894,
+          "zip_header_offset": 3682974076,
+          "zip_method": 8,
+          "crc32": "6a5e6cc2",
+          "sha256": "a59ca87eff977ab47055024cd7ed3907b9546ae122ed45ff2314888d7b951e34"
+        },
+        {
+          "path": "default_3_random_0b/ifo002/mocap.csv",
+          "bytes": 1395442,
+          "compressed_bytes": 610052,
+          "zip_header_offset": 798895188,
+          "zip_method": 8,
+          "crc32": "1f989ac1",
+          "sha256": "34a9ad7e45554cd99956b86b9965f3905316f0221275a3f2051ee8add5e9dae6"
+        },
+        {
+          "path": "default_3_random_0b/ifo002/uwb_passive.csv",
+          "bytes": 8251355,
+          "compressed_bytes": 2152306,
+          "zip_header_offset": 802545676,
+          "zip_method": 8,
+          "crc32": "719323af",
+          "sha256": "fe0095d3660fd2aee4ff92341a038e66f6882c211429e4c612d4ffe855bf7035"
+        },
+        {
+          "path": "default_3_random_0b/ifo002/uwb_range.csv",
+          "bytes": 2782805,
+          "compressed_bytes": 1168722,
+          "zip_header_offset": 801376836,
+          "zip_method": 8,
+          "crc32": "2244def3",
+          "sha256": "8ca6b89b8f1d7d7e10e79182d717331937370eeb196c3510dc2c2aca2941c673"
+        },
+        {
+          "path": "default_3_random_0b/ifo003/mocap.csv",
+          "bytes": 1394172,
+          "compressed_bytes": 605754,
+          "zip_header_offset": 2915983130,
+          "zip_method": 8,
+          "crc32": "50a1898b",
+          "sha256": "88243b6d41cf8ee16d1ad3fe38bd6a904cf70689603be17754e69bf016dc8ed1"
+        },
+        {
+          "path": "default_3_random_0b/ifo003/uwb_passive.csv",
+          "bytes": 8415911,
+          "compressed_bytes": 2187765,
+          "zip_header_offset": 2919665644,
+          "zip_method": 8,
+          "crc32": "db706368",
+          "sha256": "923ad0e03dbd42fc383ccbf3a078c9807a09e99a3c4937ebc2728f0c64239566"
+        },
+        {
+          "path": "default_3_random_0b/ifo003/uwb_range.csv",
+          "bytes": 2803625,
+          "compressed_bytes": 1177617,
+          "zip_header_offset": 2918487909,
+          "zip_method": 8,
+          "crc32": "751cfd01",
+          "sha256": "037f1c5eb50e77f460377ab597ff38ab83b17c939556644aa6cd897d3381e110"
+        },
+        {
+          "path": "default_3_random_0b/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 40,
+          "zip_header_offset": 3688337997,
+          "zip_method": 8,
+          "crc32": "e9d59ab7",
+          "sha256": "3d634d9949e4cc6e2d0fa7e88bfdc4d348c6d4c7cbf9f9bf8b41b69a44ba35fa"
+        }
+      ]
+    },
+    "default_3_random2_0.zip": {
+      "file_id": 52290083,
+      "url": "https://ndownloader.figshare.com/files/52290083",
+      "archive_bytes": 7666964009,
+      "publisher_archive_md5_not_recomputed": "dffa58060cfb1c1b5d9786dd2257a506",
+      "central_directory_entries": 60072,
+      "selected_members": [
+        {
+          "path": "default_3_random2_0/ifo001/mocap.csv",
+          "bytes": 3150125,
+          "compressed_bytes": 1392180,
+          "zip_header_offset": 7647412285,
+          "zip_method": 8,
+          "crc32": "54a2feae",
+          "sha256": "a65edc0bc1ca902af1668e1956ceb95ec52ae0c92ee8d38a0c741cd3032976b3"
+        },
+        {
+          "path": "default_3_random2_0/ifo001/uwb_passive.csv",
+          "bytes": 19213291,
+          "compressed_bytes": 4928529,
+          "zip_header_offset": 7651504422,
+          "zip_method": 8,
+          "crc32": "7f48f8b6",
+          "sha256": "caa8c59dce72a4a57282392b88a75f78497c1c021a3e878d80b567187d9315b5"
+        },
+        {
+          "path": "default_3_random2_0/ifo001/uwb_range.csv",
+          "bytes": 6256393,
+          "compressed_bytes": 2639042,
+          "zip_header_offset": 7648865262,
+          "zip_method": 8,
+          "crc32": "7fb660df",
+          "sha256": "f8f8284c7be2983c363bd11a77b3f43610d0ac11c1f223fa93c63b0407e20b32"
+        },
+        {
+          "path": "default_3_random2_0/ifo002/mocap.csv",
+          "bytes": 3135496,
+          "compressed_bytes": 1387681,
+          "zip_header_offset": 1688785084,
+          "zip_method": 8,
+          "crc32": "5a46e19b",
+          "sha256": "3b2cdca08e89671b774ef3cf9824cb7a2130923c8a09945e5f80de1e7b00ede1"
+        },
+        {
+          "path": "default_3_random2_0/ifo002/uwb_passive.csv",
+          "bytes": 19632125,
+          "compressed_bytes": 4999862,
+          "zip_header_offset": 1696853747,
+          "zip_method": 8,
+          "crc32": "19f4e05d",
+          "sha256": "04d7b51b156ac0ee7620b7bfd59a3504055ddd912d6d3d5655e077bf5fbf7f26"
+        },
+        {
+          "path": "default_3_random2_0/ifo002/uwb_range.csv",
+          "bytes": 6239366,
+          "compressed_bytes": 2632874,
+          "zip_header_offset": 1694220755,
+          "zip_method": 8,
+          "crc32": "10c18e46",
+          "sha256": "ee5164bb7e538f8eb69b00c3a4670477dd4cb282d116fa95f63324a53b6a7f47"
+        },
+        {
+          "path": "default_3_random2_0/ifo003/mocap.csv",
+          "bytes": 3145310,
+          "compressed_bytes": 1389101,
+          "zip_header_offset": 6117138540,
+          "zip_method": 8,
+          "crc32": "7b6c62ec",
+          "sha256": "c57aae066ae3032d32d07b04662f88b7e51ddd3c84becfd66c17557d8e42ac9b"
+        },
+        {
+          "path": "default_3_random2_0/ifo003/uwb_passive.csv",
+          "bytes": 19394222,
+          "compressed_bytes": 4964098,
+          "zip_header_offset": 6125543307,
+          "zip_method": 8,
+          "crc32": "ac53a85b",
+          "sha256": "0ca24b59644f05426c864ad2642fc46c43af2a5b676a03017d6d2be4d02fece7"
+        },
+        {
+          "path": "default_3_random2_0/ifo003/uwb_range.csv",
+          "bytes": 6262509,
+          "compressed_bytes": 2644407,
+          "zip_header_offset": 6122898782,
+          "zip_method": 8,
+          "crc32": "a14bd139",
+          "sha256": "31aba139423544a545fd19800605108623b86798709fd5cc92f33f62cfaf8138"
+        },
+        {
+          "path": "default_3_random2_0/timeshift.yaml",
+          "bytes": 46,
+          "compressed_bytes": 39,
+          "zip_header_offset": 7658418833,
+          "zip_method": 8,
+          "crc32": "9fd03650",
+          "sha256": "9a477bc3dbf784c0a08229fbb4c962f7d5a1b27716556f2a7277983e477b667c"
+        }
+      ]
+    },
+    "default_3_random3_0b.zip": {
+      "file_id": 52290095,
+      "url": "https://ndownloader.figshare.com/files/52290095",
+      "archive_bytes": 8387959120,
+      "publisher_archive_md5_not_recomputed": "8f7049dce67a63f9ff9fe2a90a294d0d",
+      "central_directory_entries": 64753,
+      "selected_members": [
+        {
+          "path": "default_3_random3_0b/ifo001/mocap.csv",
+          "bytes": 3433629,
+          "compressed_bytes": 1514776,
+          "zip_header_offset": 8368930920,
+          "zip_method": 8,
+          "crc32": "48916f9d",
+          "sha256": "15cdde8188da9b04bdd2c1433ae20c269ee76edbe5704906522e9f3a0cfc7e04"
+        },
+        {
+          "path": "default_3_random3_0b/ifo001/uwb_passive.csv",
+          "bytes": 20126951,
+          "compressed_bytes": 5188454,
+          "zip_header_offset": 8373493731,
+          "zip_method": 8,
+          "crc32": "52314080",
+          "sha256": "c536d75abfe068f556e32bf6d42ccdad49acf13941e33d45f82c28767d0a69a1"
+        },
+        {
+          "path": "default_3_random3_0b/ifo001/uwb_range.csv",
+          "bytes": 6676290,
+          "compressed_bytes": 2810856,
+          "zip_header_offset": 8370682756,
+          "zip_method": 8,
+          "crc32": "40a21b65",
+          "sha256": "2caf61c4ed4624b75d5373e48af2725ce2dafc7f4335b012a90d5597a11d75f9"
+        },
+        {
+          "path": "default_3_random3_0b/ifo002/mocap.csv",
+          "bytes": 3402159,
+          "compressed_bytes": 1501554,
+          "zip_header_offset": 1845944230,
+          "zip_method": 8,
+          "crc32": "a568a608",
+          "sha256": "92373b226a5bc9cb88545e7178beb5923379fa0d50d15d74852401517b93528b"
+        },
+        {
+          "path": "default_3_random3_0b/ifo002/uwb_passive.csv",
+          "bytes": 19618563,
+          "compressed_bytes": 5080946,
+          "zip_header_offset": 1839532769,
+          "zip_method": 8,
+          "crc32": "5334fc74",
+          "sha256": "2fec7c4d140f5abe656e43ed0b19df284136bd5d596db7d3261383069a60cecf"
+        },
+        {
+          "path": "default_3_random3_0b/ifo002/uwb_range.csv",
+          "bytes": 6640116,
+          "compressed_bytes": 2797970,
+          "zip_header_offset": 1836734680,
+          "zip_method": 8,
+          "crc32": "ee1560ff",
+          "sha256": "c17b51f5f6dce839b3130d8646e6db697784851993bbb58823eab8956d821787"
+        },
+        {
+          "path": "default_3_random3_0b/ifo003/mocap.csv",
+          "bytes": 3359174,
+          "compressed_bytes": 1476495,
+          "zip_header_offset": 6642669987,
+          "zip_method": 8,
+          "crc32": "0abecff6",
+          "sha256": "499524c27b91136bd14cee2f833aadcba2ac17b8070cc632a7ea4b3bf10ef087"
+        },
+        {
+          "path": "default_3_random3_0b/ifo003/uwb_passive.csv",
+          "bytes": 20442528,
+          "compressed_bytes": 5230361,
+          "zip_header_offset": 6637439505,
+          "zip_method": 8,
+          "crc32": "5f46c1e5",
+          "sha256": "a20f5e90ca8ca1d70682eb28ac36ce9621a849201ce3a32301f2b089dacea1ea"
+        },
+        {
+          "path": "default_3_random3_0b/ifo003/uwb_range.csv",
+          "bytes": 6600863,
+          "compressed_bytes": 2779861,
+          "zip_header_offset": 6634659525,
+          "zip_method": 8,
+          "crc32": "0043ec02",
+          "sha256": "863dd6d7cb790ddca2438e40b2e1828e31522bec3f2ad721e98c8cdf28a5d4a6"
+        },
+        {
+          "path": "default_3_random3_0b/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 4983036430,
+          "zip_method": 8,
+          "crc32": "542d0831",
+          "sha256": "89c2fb7ae925e57f17f82c19a9a5fa326bf45cdcac0956db9bc568dd89a3f8e7"
+        }
+      ]
+    },
+    "default_3_random3_1.zip": {
+      "file_id": 52290077,
+      "url": "https://ndownloader.figshare.com/files/52290077",
+      "archive_bytes": 7615377026,
+      "publisher_archive_md5_not_recomputed": "28eebede24763e5e53d155b2be0e6b65",
+      "central_directory_entries": 60619,
+      "selected_members": [
+        {
+          "path": "default_3_random3_1/ifo001/mocap.csv",
+          "bytes": 3157874,
+          "compressed_bytes": 1403755,
+          "zip_header_offset": 7598095273,
+          "zip_method": 8,
+          "crc32": "4fb8d3cd",
+          "sha256": "34dc99b0ba41b28d9a2d536da19b7ed5f38ffa7bae0519afccdfcb7ccd646c16"
+        },
+        {
+          "path": "default_3_random3_1/ifo001/uwb_passive.csv",
+          "bytes": 19927412,
+          "compressed_bytes": 5050731,
+          "zip_header_offset": 7592451927,
+          "zip_method": 8,
+          "crc32": "26af90ee",
+          "sha256": "393375a2fd83d4a006c1233f16f9d39f834f81c018f28fb94703c6d995eea874"
+        },
+        {
+          "path": "default_3_random3_1/ifo001/uwb_range.csv",
+          "bytes": 6233795,
+          "compressed_bytes": 2638709,
+          "zip_header_offset": 7604115911,
+          "zip_method": 8,
+          "crc32": "1fd6932e",
+          "sha256": "eef1cd3b5a832cf871d223eea7ac2f06bf70c8f24d17e3aab161cb78713e4afb"
+        },
+        {
+          "path": "default_3_random3_1/ifo002/mocap.csv",
+          "bytes": 3144958,
+          "compressed_bytes": 1400577,
+          "zip_header_offset": 1657744161,
+          "zip_method": 8,
+          "crc32": "41971b7e",
+          "sha256": "879358c79919eb84afd8c01016f6e39370383091f4c6da12998642e1e57ca4d9"
+        },
+        {
+          "path": "default_3_random3_1/ifo002/uwb_passive.csv",
+          "bytes": 18857975,
+          "compressed_bytes": 4846305,
+          "zip_header_offset": 1662224990,
+          "zip_method": 8,
+          "crc32": "abc48d34",
+          "sha256": "80de913a2a550d608deb4bf01ad12efcc6402404ed2bd28c169982f1ddf42b52"
+        },
+        {
+          "path": "default_3_random3_1/ifo002/uwb_range.csv",
+          "bytes": 6227540,
+          "compressed_bytes": 2635375,
+          "zip_header_offset": 1668446427,
+          "zip_method": 8,
+          "crc32": "52ba46e2",
+          "sha256": "315abe817c6ff3bea0829d1bfba0684b6c9d21af639252383c6fb03d50464d3d"
+        },
+        {
+          "path": "default_3_random3_1/ifo003/mocap.csv",
+          "bytes": 3148934,
+          "compressed_bytes": 1399388,
+          "zip_header_offset": 6045486616,
+          "zip_method": 8,
+          "crc32": "02d26f09",
+          "sha256": "1984f591f4fe081af1c67f564715713fc11026f97950b5792dceb1f177198743"
+        },
+        {
+          "path": "default_3_random3_1/ifo003/uwb_passive.csv",
+          "bytes": 19611645,
+          "compressed_bytes": 4988326,
+          "zip_header_offset": 6054034352,
+          "zip_method": 8,
+          "crc32": "779052bb",
+          "sha256": "c589eb315ef024ca815e39310256e73c35dd57ea9750848afc421e9be0dbbe34"
+        },
+        {
+          "path": "default_3_random3_1/ifo003/uwb_range.csv",
+          "bytes": 6218896,
+          "compressed_bytes": 2633537,
+          "zip_header_offset": 6047482316,
+          "zip_method": 8,
+          "crc32": "77beebb2",
+          "sha256": "8a9301318382a348f6e403c4ced42d50f867d56e97d9f277c3bf80a38179182d"
+        },
+        {
+          "path": "default_3_random3_1/timeshift.yaml",
+          "bytes": 47,
+          "compressed_bytes": 40,
+          "zip_header_offset": 4514020345,
+          "zip_method": 8,
+          "crc32": "2c6db3d8",
+          "sha256": "9ef325ef92237b2ecbcf46a019d2060e7fd58f34cd8493d2b329495ad1b7f5b1"
+        }
+      ]
+    },
+    "default_3_random3_2.zip": {
+      "file_id": 52290080,
+      "url": "https://ndownloader.figshare.com/files/52290080",
+      "archive_bytes": 7614550062,
+      "publisher_archive_md5_not_recomputed": "d57f07adccb7b8c4a4c829f64bf9f8db",
+      "central_directory_entries": 60864,
+      "selected_members": [
+        {
+          "path": "default_3_random3_2/ifo001/mocap.csv",
+          "bytes": 3047407,
+          "compressed_bytes": 1353163,
+          "zip_header_offset": 7599880670,
+          "zip_method": 8,
+          "crc32": "b03b8e5f",
+          "sha256": "c9807e9b256e0da3a78df988347cbb3cc52556a927fb886f79f41292ced91caa"
+        },
+        {
+          "path": "default_3_random3_2/ifo001/uwb_passive.csv",
+          "bytes": 15847027,
+          "compressed_bytes": 4173370,
+          "zip_header_offset": 7595707180,
+          "zip_method": 8,
+          "crc32": "2796a6e8",
+          "sha256": "b16ef60649d27affb10cd4671d3a32f95a250f7128989b97c90fd9e5e50e1e06"
+        },
+        {
+          "path": "default_3_random3_2/ifo001/uwb_range.csv",
+          "bytes": 5639310,
+          "compressed_bytes": 2393073,
+          "zip_header_offset": 7603483139,
+          "zip_method": 8,
+          "crc32": "0ee7b6b5",
+          "sha256": "838b6fbdc11879a6cdee0f7f70b8b0cbf08c96cd63964e01c1d1e9cf4ea8b88e"
+        },
+        {
+          "path": "default_3_random3_2/ifo002/mocap.csv",
+          "bytes": 2922897,
+          "compressed_bytes": 1301933,
+          "zip_header_offset": 4483259618,
+          "zip_method": 8,
+          "crc32": "a617b1fc",
+          "sha256": "e712b5eae709e88244935ebd999ad268796ae9b1c69696b434f616d82e9a8ca8"
+        },
+        {
+          "path": "default_3_random3_2/ifo002/uwb_passive.csv",
+          "bytes": 16289910,
+          "compressed_bytes": 4248536,
+          "zip_header_offset": 4489920994,
+          "zip_method": 8,
+          "crc32": "38dd6f0b",
+          "sha256": "71fa18175b01b3721e7a4b352f95ce9b78e40b18517c2dea88aea120c35202de"
+        },
+        {
+          "path": "default_3_random3_2/ifo002/uwb_range.csv",
+          "bytes": 5625191,
+          "compressed_bytes": 2389110,
+          "zip_header_offset": 4484997640,
+          "zip_method": 8,
+          "crc32": "c77ac33c",
+          "sha256": "a9680a24050067985f4fd7e6147273afa57e0f7326e8d719179d74cdfca617a7"
+        },
+        {
+          "path": "default_3_random3_2/ifo003/mocap.csv",
+          "bytes": 3026496,
+          "compressed_bytes": 1347143,
+          "zip_header_offset": 6025662572,
+          "zip_method": 8,
+          "crc32": "3eaa9e69",
+          "sha256": "1ce6b8bdb7564dc7998db67bf779d6bb164e9fc35a4a5da10ed8a67902ac6767"
+        },
+        {
+          "path": "default_3_random3_2/ifo003/uwb_passive.csv",
+          "bytes": 16529334,
+          "compressed_bytes": 4291250,
+          "zip_header_offset": 6021371202,
+          "zip_method": 8,
+          "crc32": "74b119e7",
+          "sha256": "9f76f0c8314e6963d69d3d9d80f0b55a7300111586bfb36548b4554846e2a584"
+        },
+        {
+          "path": "default_3_random3_2/ifo003/uwb_range.csv",
+          "bytes": 5605259,
+          "compressed_bytes": 2380894,
+          "zip_header_offset": 6018990190,
+          "zip_method": 8,
+          "crc32": "5dbcf5cc",
+          "sha256": "2b5d806f2e1a8226e71d33371933bc5d4390c4f6dd7f7eecb334e80471e552af"
+        },
+        {
+          "path": "default_3_random3_2/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 7605876330,
+          "zip_method": 8,
+          "crc32": "c9f78919",
+          "sha256": "8495866b261e59eb1c9607ba388cd220d675e4709cb21cc1946d658944a860a7"
+        }
+      ]
+    },
+    "default_3_movingTriangle_0b.zip": {
+      "file_id": 52290092,
+      "url": "https://ndownloader.figshare.com/files/52290092",
+      "archive_bytes": 8252932351,
+      "publisher_archive_md5_not_recomputed": "90051a637781593691050d0cb6868705",
+      "central_directory_entries": 60125,
+      "selected_members": [
+        {
+          "path": "default_3_movingTriangle_0b/ifo001/mocap.csv",
+          "bytes": 3129747,
+          "compressed_bytes": 1369685,
+          "zip_header_offset": 8235696553,
+          "zip_method": 8,
+          "crc32": "f40f4e63",
+          "sha256": "1a7fe8b1a9ae40e959dfc0eb9d60d381bea5f2431d71f9182c23a880b6f6a5de"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo001/uwb_passive.csv",
+          "bytes": 18235244,
+          "compressed_bytes": 4729568,
+          "zip_header_offset": 8239129763,
+          "zip_method": 8,
+          "crc32": "6bb3ac44",
+          "sha256": "bf0135e72d861b65c270fcbdfc7753adf3d1dc906927c1b8c0cab05a8671b681"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo001/uwb_range.csv",
+          "bytes": 6204731,
+          "compressed_bytes": 2608024,
+          "zip_header_offset": 8230065558,
+          "zip_method": 8,
+          "crc32": "2f9fe90e",
+          "sha256": "83a78dcb3e53ffb80280bad4fbade067e797711cea6d457bc751728a652a9775"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo002/mocap.csv",
+          "bytes": 3143829,
+          "compressed_bytes": 1385321,
+          "zip_header_offset": 4788154739,
+          "zip_method": 8,
+          "crc32": "41c807aa",
+          "sha256": "02826fd0fcb3b7f8ccf31465d0dcb9f3f181ac835ad5ed9f001e3c045528ef38"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo002/uwb_passive.csv",
+          "bytes": 17967675,
+          "compressed_bytes": 4677797,
+          "zip_header_offset": 4796332447,
+          "zip_method": 8,
+          "crc32": "49fc5908",
+          "sha256": "1116991e140080fdac96ed53ad40df0dca0212cf3291cc3594a56d4b3137be22"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo002/uwb_range.csv",
+          "bytes": 6196531,
+          "compressed_bytes": 2606340,
+          "zip_header_offset": 4793725981,
+          "zip_method": 8,
+          "crc32": "8b1a772a",
+          "sha256": "4a80f569fcb00840eef78768406b739891fcb48fcc30e69b23abb6fcf633f977"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo003/mocap.csv",
+          "bytes": 3113816,
+          "compressed_bytes": 1376917,
+          "zip_header_offset": 6496031736,
+          "zip_method": 8,
+          "crc32": "ed0e6351",
+          "sha256": "9f75a31c04813217431d071d75d51aa73a4505e59fdd1e6e17204863bca14e48"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo003/uwb_passive.csv",
+          "bytes": 18966124,
+          "compressed_bytes": 4865032,
+          "zip_header_offset": 6504395084,
+          "zip_method": 8,
+          "crc32": "2a6be1ba",
+          "sha256": "c6eab795886e7f367c636d7d62ad8d16915fb485382f89986e074b6028d2b9b2"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/ifo003/uwb_range.csv",
+          "bytes": 6197247,
+          "compressed_bytes": 2604482,
+          "zip_header_offset": 6500428562,
+          "zip_method": 8,
+          "crc32": "efa77858",
+          "sha256": "c6058c4a337deed81b11e47b40402e89607e006f6da7c0a851df72b0de464935"
+        },
+        {
+          "path": "default_3_movingTriangle_0b/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 40,
+          "zip_header_offset": 8243859459,
+          "zip_method": 8,
+          "crc32": "37f83f31",
+          "sha256": "672743c18fc949b22a8e331b5b0cd33bce6c65bdd85d0a21eede16ea68545d18"
+        }
+      ]
+    },
+    "oneTagPerRobot_3_random_0.zip": {
+      "file_id": 52289807,
+      "url": "https://ndownloader.figshare.com/files/52289807",
+      "archive_bytes": 4317281944,
+      "publisher_archive_md5_not_recomputed": "afd8782d84227ecef92cb29042f11633",
+      "central_directory_entries": 29640,
+      "selected_members": [
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo001/mocap.csv",
+          "bytes": 1539265,
+          "compressed_bytes": 674546,
+          "zip_header_offset": 4308351845,
+          "zip_method": 8,
+          "crc32": "553df02f",
+          "sha256": "dc4cfff27edd0f225e65a2a849926467143deac3075b40408fe8a285abb3bbe1"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo001/uwb_passive.csv",
+          "bytes": 7477234,
+          "compressed_bytes": 2067238,
+          "zip_header_offset": 4311064804,
+          "zip_method": 8,
+          "crc32": "de8df341",
+          "sha256": "7bc6081fc22b3643c5f2a9969b6272ef7e44bc673579695328441855a8f6904a"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo001/uwb_range.csv",
+          "bytes": 2885618,
+          "compressed_bytes": 1200078,
+          "zip_header_offset": 4309864602,
+          "zip_method": 8,
+          "crc32": "bbb224bc",
+          "sha256": "0d9abc3ee45f7b95180d804bdd85a71725907872e5c6597d4fd6f61aa0b17632"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo002/mocap.csv",
+          "bytes": 1536493,
+          "compressed_bytes": 668238,
+          "zip_header_offset": 1441088106,
+          "zip_method": 8,
+          "crc32": "d368775b",
+          "sha256": "227ad6186a1d6c772004fffd3593074dbc494199e9e49744d996b8c9645223a2"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo002/uwb_passive.csv",
+          "bytes": 9377447,
+          "compressed_bytes": 2438989,
+          "zip_header_offset": 1444889891,
+          "zip_method": 8,
+          "crc32": "cf8daa3e",
+          "sha256": "7e29ce9e4ceb6b89b0f7f5ecc295379e1112b19f2246d09eb80a052a5d84b851"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo002/uwb_range.csv",
+          "bytes": 2879604,
+          "compressed_bytes": 1197595,
+          "zip_header_offset": 1443692172,
+          "zip_method": 8,
+          "crc32": "4f2cea0f",
+          "sha256": "6a37a753bcfde396f3867f43ccd40e4cfc861dd1daa0be8da0ad889aee9eac0e"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo003/mocap.csv",
+          "bytes": 1534419,
+          "compressed_bytes": 664332,
+          "zip_header_offset": 2541705939,
+          "zip_method": 8,
+          "crc32": "60be12c0",
+          "sha256": "8ab3b5ba85d3d760bb8a404a7be4b6e0ac50d9db791ec6d147896f3a5cf02588"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo003/uwb_passive.csv",
+          "bytes": 9387633,
+          "compressed_bytes": 2436307,
+          "zip_header_offset": 3406380075,
+          "zip_method": 8,
+          "crc32": "7cd25147",
+          "sha256": "c253f3ce217166567954afd0bb1c96f203509124ee3ef7d28fbe7b3965b902dd"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/ifo003/uwb_range.csv",
+          "bytes": 2865643,
+          "compressed_bytes": 1193571,
+          "zip_header_offset": 3405186380,
+          "zip_method": 8,
+          "crc32": "45bf8d33",
+          "sha256": "61ff3de197cbd74b83a6437bd4ec29b249f115a2ebdf80c98f5d76db11eec260"
+        },
+        {
+          "path": "oneTagPerRobot_3_random_0/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 40,
+          "zip_header_offset": 4313132168,
+          "zip_method": 8,
+          "crc32": "90f11812",
+          "sha256": "5ba97e876bb5b51964debed152cbbb4bf19c5bf0909fb6ab5f6b8d1724573269"
+        }
+      ]
+    },
+    "noAprilTags_3_random3_2b.zip": {
+      "file_id": 52290071,
+      "url": "https://ndownloader.figshare.com/files/52290071",
+      "archive_bytes": 7185889660,
+      "publisher_archive_md5_not_recomputed": "12fa3646a28f10fdd20b338a5326b064",
+      "central_directory_entries": 60842,
+      "selected_members": [
+        {
+          "path": "noAprilTags_3_random3_2b/ifo001/mocap.csv",
+          "bytes": 3115555,
+          "compressed_bytes": 1383694,
+          "zip_header_offset": 7163350456,
+          "zip_method": 8,
+          "crc32": "ea96abf2",
+          "sha256": "73b3ae6fe303561c06901b387b5c58103e76f1613af84fbfd4da736f337771a6"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo001/uwb_passive.csv",
+          "bytes": 17270348,
+          "compressed_bytes": 4441801,
+          "zip_header_offset": 7172496863,
+          "zip_method": 8,
+          "crc32": "3664dc9f",
+          "sha256": "dde048e79a01fa53ad3922ec4b223e80ef4ebcb9c54ef2e2c9ee45dd7a50459b"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo001/uwb_range.csv",
+          "bytes": 5659020,
+          "compressed_bytes": 2398309,
+          "zip_header_offset": 7170098431,
+          "zip_method": 8,
+          "crc32": "31ffdf62",
+          "sha256": "66189a2dbc9ed2eed60a74a2e4de9e651bfc836e7c3d33eb46dedc0de396834d"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo002/mocap.csv",
+          "bytes": 3026553,
+          "compressed_bytes": 1348086,
+          "zip_header_offset": 1576111064,
+          "zip_method": 8,
+          "crc32": "08e14854",
+          "sha256": "2f775a1b6d558160ce5db22250d098017aab5115b15ecc58e551c2b0142cece0"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo002/uwb_passive.csv",
+          "bytes": 17484646,
+          "compressed_bytes": 4476990,
+          "zip_header_offset": 1578052679,
+          "zip_method": 8,
+          "crc32": "da86dbc0",
+          "sha256": "1ea239f3c255b0d77d0e5231401e8510b128146e712feb20f1918ecc8cabda7d"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo002/uwb_range.csv",
+          "bytes": 5630666,
+          "compressed_bytes": 2388855,
+          "zip_header_offset": 1584968996,
+          "zip_method": 8,
+          "crc32": "23ffcff9",
+          "sha256": "dc55d60830a0a7ed6434d1a577820258dbc4816957432b6af5641d64bbc82ac5"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo003/mocap.csv",
+          "bytes": 2986853,
+          "compressed_bytes": 1327190,
+          "zip_header_offset": 5678542547,
+          "zip_method": 8,
+          "crc32": "517b2883",
+          "sha256": "372e1999e81164e591326b2d202d1ec28b029c8439d412cb4819c8a744b1db8d"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo003/uwb_passive.csv",
+          "bytes": 17250430,
+          "compressed_bytes": 4434121,
+          "zip_header_offset": 5674108301,
+          "zip_method": 8,
+          "crc32": "30f4e844",
+          "sha256": "080490cb7b09ac141139f09b204dd15df9db254846890806153b68c479a7c5f2"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/ifo003/uwb_range.csv",
+          "bytes": 5626150,
+          "compressed_bytes": 2387192,
+          "zip_header_offset": 5679869856,
+          "zip_method": 8,
+          "crc32": "748e918c",
+          "sha256": "78b7d562c3f6bbcc43c118a3e7c1b610b40645a03cace14018636ab572799f5d"
+        },
+        {
+          "path": "noAprilTags_3_random3_2b/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 4262314601,
+          "zip_method": 8,
+          "crc32": "0c1fe792",
+          "sha256": "c2ba6be5bede2a5c6434e0909e2821ad1ed0230f7aca79189392e9af2fc0fe72"
+        }
+      ]
+    },
+    "cir_3_random3_0.zip": {
+      "file_id": 52290089,
+      "url": "https://ndownloader.figshare.com/files/52290089",
+      "archive_bytes": 8186191506,
+      "publisher_archive_md5_not_recomputed": "85c88d025c2fde0691fa0dc08afcd3ab",
+      "central_directory_entries": 62842,
+      "selected_members": [
+        {
+          "path": "cir_3_random3_0/ifo001/mocap.csv",
+          "bytes": 3222141,
+          "compressed_bytes": 1431142,
+          "zip_header_offset": 8172315307,
+          "zip_method": 8,
+          "crc32": "8445b377",
+          "sha256": "84606a427b3c4f07c973cb722d98bf316268379f174d4e183ac690ef23a701bf"
+        },
+        {
+          "path": "cir_3_random3_0/ifo001/uwb_passive.csv",
+          "bytes": 569710,
+          "compressed_bytes": 165113,
+          "zip_header_offset": 8177339463,
+          "zip_method": 8,
+          "crc32": "04ab5829",
+          "sha256": "a783561927613a9d29ea5ee878a0d8d8dcc52dfedef344e50a241f4b155d98dd"
+        },
+        {
+          "path": "cir_3_random3_0/ifo001/uwb_range.csv",
+          "bytes": 295820,
+          "compressed_bytes": 129218,
+          "zip_header_offset": 8177210131,
+          "zip_method": 8,
+          "crc32": "8469afa2",
+          "sha256": "5fbe3aed1e31830ceaa355bc17af46a7b1e0e610a9242683b0030caa6d803084"
+        },
+        {
+          "path": "cir_3_random3_0/ifo002/mocap.csv",
+          "bytes": 3211273,
+          "compressed_bytes": 1427788,
+          "zip_header_offset": 1775310814,
+          "zip_method": 8,
+          "crc32": "61d73cdb",
+          "sha256": "d23f2210dbcd04fcc773fd1dcdbee9d0746fc8036d26942bd9e6061d8463eeeb"
+        },
+        {
+          "path": "cir_3_random3_0/ifo002/uwb_passive.csv",
+          "bytes": 614336,
+          "compressed_bytes": 174615,
+          "zip_header_offset": 1782227555,
+          "zip_method": 8,
+          "crc32": "c2f2f542",
+          "sha256": "c810025d2c850936bc9ba84ef7fd2bc2e367e19493cec6b4b244dc550dbb4d69"
+        },
+        {
+          "path": "cir_3_random3_0/ifo002/uwb_range.csv",
+          "bytes": 297414,
+          "compressed_bytes": 129878,
+          "zip_header_offset": 1782097563,
+          "zip_method": 8,
+          "crc32": "09a468a3",
+          "sha256": "5ac5588319616aa7458ea39de84a452aec66f612a6a364711b86bc979c2d8ce0"
+        },
+        {
+          "path": "cir_3_random3_0/ifo003/mocap.csv",
+          "bytes": 3216077,
+          "compressed_bytes": 1427104,
+          "zip_header_offset": 6483423513,
+          "zip_method": 8,
+          "crc32": "451acf6e",
+          "sha256": "6b6cf7a2c02fb5be7ae578380e14f79caf98457d4bebec6bdaa1f7e990e4a28a"
+        },
+        {
+          "path": "cir_3_random3_0/ifo003/uwb_passive.csv",
+          "bytes": 631924,
+          "compressed_bytes": 177829,
+          "zip_header_offset": 6490536198,
+          "zip_method": 8,
+          "crc32": "f08024fe",
+          "sha256": "c1a19fc8e6905e6e57c58797a8f4367f0b389f42b911df8619cff376c43e4436"
+        },
+        {
+          "path": "cir_3_random3_0/ifo003/uwb_range.csv",
+          "bytes": 299058,
+          "compressed_bytes": 130629,
+          "zip_header_offset": 6490405455,
+          "zip_method": 8,
+          "crc32": "e41903f2",
+          "sha256": "55e111f1f60fcd4633fa305f032a5fbf0d179326d64fba0ee5d49578c31a9a98"
+        },
+        {
+          "path": "cir_3_random3_0/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 8177504692,
+          "zip_method": 8,
+          "crc32": "afe1d1c6",
+          "sha256": "e06e70926e0ca15d8061ff0186e660a5a8cc7b3235e5e1cd4e59b7b80173a935"
+        }
+      ]
+    },
+    "cir_3_random3_1.zip": {
+      "file_id": 52290074,
+      "url": "https://ndownloader.figshare.com/files/52290074",
+      "archive_bytes": 7474706925,
+      "publisher_archive_md5_not_recomputed": "919d900f6921c0277e4c41297d60658c",
+      "central_directory_entries": 59785,
+      "selected_members": [
+        {
+          "path": "cir_3_random3_1/ifo001/mocap.csv",
+          "bytes": 2979173,
+          "compressed_bytes": 1327941,
+          "zip_header_offset": 7463869352,
+          "zip_method": 8,
+          "crc32": "19099cc6",
+          "sha256": "9fe15490f2c3ce8dbe275c658abb66dedec1d9128249b96a6ccc009a3ecc3f09"
+        },
+        {
+          "path": "cir_3_random3_1/ifo001/uwb_passive.csv",
+          "bytes": 546692,
+          "compressed_bytes": 157215,
+          "zip_header_offset": 7458782694,
+          "zip_method": 8,
+          "crc32": "fe76c145",
+          "sha256": "dc91108e97469eb2d95c2d2188f789c68e8d2216463f2450d940a5c3a8cb1ef6"
+        },
+        {
+          "path": "cir_3_random3_1/ifo001/uwb_range.csv",
+          "bytes": 273091,
+          "compressed_bytes": 119649,
+          "zip_header_offset": 7458662931,
+          "zip_method": 8,
+          "crc32": "faede57b",
+          "sha256": "d843ec34e3d23676f0c69520d2367181d399234d55aa9d65f25a96721a16914a"
+        },
+        {
+          "path": "cir_3_random3_1/ifo002/mocap.csv",
+          "bytes": 2871188,
+          "compressed_bytes": 1280984,
+          "zip_header_offset": 4414128965,
+          "zip_method": 8,
+          "crc32": "3633f490",
+          "sha256": "d296aa148b3bc6f67b6b2b305db9475b876ed8833ee6b87e79587ba399ba847b"
+        },
+        {
+          "path": "cir_3_random3_1/ifo002/uwb_passive.csv",
+          "bytes": 554711,
+          "compressed_bytes": 158993,
+          "zip_header_offset": 4412691551,
+          "zip_method": 8,
+          "crc32": "d2960808",
+          "sha256": "e1872c5b937ecf82c54d770f5624411ae7571b1fb5ea163b707d6ed461dbfa62"
+        },
+        {
+          "path": "cir_3_random3_1/ifo002/uwb_range.csv",
+          "bytes": 273308,
+          "compressed_bytes": 119985,
+          "zip_header_offset": 4412571452,
+          "zip_method": 8,
+          "crc32": "bfd0c964",
+          "sha256": "bf4b371b64e85b43570ea5f0b4d1f32c5bfa3844e0f4bb7a0b0e5eb69bf4689a"
+        },
+        {
+          "path": "cir_3_random3_1/ifo003/mocap.csv",
+          "bytes": 2853616,
+          "compressed_bytes": 1271737,
+          "zip_header_offset": 4420689647,
+          "zip_method": 8,
+          "crc32": "b08587df",
+          "sha256": "02eb7e128046873355942e871ec9702650e6e28b8ef09bfeedfc1903567349e6"
+        },
+        {
+          "path": "cir_3_random3_1/ifo003/uwb_passive.csv",
+          "bytes": 555458,
+          "compressed_bytes": 157736,
+          "zip_header_offset": 5935304894,
+          "zip_method": 8,
+          "crc32": "83b7d187",
+          "sha256": "c497c483679bd06253510264f10f37013699db3fec9780fa4bc8df3b79c497ed"
+        },
+        {
+          "path": "cir_3_random3_1/ifo003/uwb_range.csv",
+          "bytes": 269650,
+          "compressed_bytes": 118418,
+          "zip_header_offset": 5935186362,
+          "zip_method": 8,
+          "crc32": "93cd7591",
+          "sha256": "c0605f2bb106de0fa4880e1094c6b52ef200299588cc5ca3fecdf8af53ca2d2e"
+        },
+        {
+          "path": "cir_3_random3_1/timeshift.yaml",
+          "bytes": 48,
+          "compressed_bytes": 41,
+          "zip_header_offset": 7466432146,
+          "zip_method": 8,
+          "crc32": "28441d70",
+          "sha256": "a430ccb80f9644c78952aac03332178f3792b8cd5a7df4d8f7716d16f25f4dc8"
+        }
+      ]
+    },
+    "cir_3_random3_2.zip": {
+      "file_id": 52290086,
+      "url": "https://ndownloader.figshare.com/files/52290086",
+      "archive_bytes": 7671250614,
+      "publisher_archive_md5_not_recomputed": "f746680b17019e2d7a8e572d4e6cc0fb",
+      "central_directory_entries": 61351,
+      "selected_members": [
+        {
+          "path": "cir_3_random3_2/ifo001/mocap.csv",
+          "bytes": 3014833,
+          "compressed_bytes": 1339310,
+          "zip_header_offset": 7659998716,
+          "zip_method": 8,
+          "crc32": "ca78ebcd",
+          "sha256": "b4bc4bf3db611e697be1ebfa69f58e4171044852b5abf12349f5446d4dbbf47f"
+        },
+        {
+          "path": "cir_3_random3_2/ifo001/uwb_passive.csv",
+          "bytes": 560654,
+          "compressed_bytes": 162160,
+          "zip_header_offset": 7654803396,
+          "zip_method": 8,
+          "crc32": "5f0594cc",
+          "sha256": "7129a714de2a3d16b49835e25dcb2037d1218df3d3523f66426a0073fc0862d0"
+        },
+        {
+          "path": "cir_3_random3_2/ifo001/uwb_range.csv",
+          "bytes": 291093,
+          "compressed_bytes": 127356,
+          "zip_header_offset": 7654675926,
+          "zip_method": 8,
+          "crc32": "853e7b80",
+          "sha256": "1bf02d606bfd18e1b495e308e6a561de7f4b406defd9cb7aca6e03cf0403e3e6"
+        },
+        {
+          "path": "cir_3_random3_2/ifo002/mocap.csv",
+          "bytes": 3025062,
+          "compressed_bytes": 1346836,
+          "zip_header_offset": 4551248644,
+          "zip_method": 8,
+          "crc32": "dd97aab9",
+          "sha256": "56ea20ffdb20782ab108737beba5520341389f355d067c5e65fcbf712d15851f"
+        },
+        {
+          "path": "cir_3_random3_2/ifo002/uwb_passive.csv",
+          "bytes": 552259,
+          "compressed_bytes": 161325,
+          "zip_header_offset": 4556809866,
+          "zip_method": 8,
+          "crc32": "2b20089e",
+          "sha256": "45082b4cefc5f83dd33b929baf0dd85d5a93332bc7408da5db0b28e880c405fe"
+        },
+        {
+          "path": "cir_3_random3_2/ifo002/uwb_range.csv",
+          "bytes": 285298,
+          "compressed_bytes": 124801,
+          "zip_header_offset": 4549836225,
+          "zip_method": 8,
+          "crc32": "9cd8ec34",
+          "sha256": "cb3b7cccf5de622c716ca72fe912fd1d015bb725e764ce1be6b290b2fbe901cc"
+        },
+        {
+          "path": "cir_3_random3_2/ifo003/mocap.csv",
+          "bytes": 2939741,
+          "compressed_bytes": 1306606,
+          "zip_header_offset": 4558420989,
+          "zip_method": 8,
+          "crc32": "2dc60558",
+          "sha256": "27b87f28a7d63352a846a49dd0cfb8d0fd08793eb7f4584f46041e97f6b17168"
+        },
+        {
+          "path": "cir_3_random3_2/ifo003/uwb_passive.csv",
+          "bytes": 587986,
+          "compressed_bytes": 166982,
+          "zip_header_offset": 6143043144,
+          "zip_method": 8,
+          "crc32": "35367927",
+          "sha256": "7a529509b2b228aa99cf385d083ab547f6971118f360181be222fe606db3e830"
+        },
+        {
+          "path": "cir_3_random3_2/ifo003/uwb_range.csv",
+          "bytes": 283033,
+          "compressed_bytes": 123771,
+          "zip_header_offset": 4556971392,
+          "zip_method": 8,
+          "crc32": "863a74db",
+          "sha256": "feeb1a79d41b25c3511891a0ff424621ead6ce7f7aa6744033c901e6ef9876c3"
+        },
+        {
+          "path": "cir_3_random3_2/timeshift.yaml",
+          "bytes": 47,
+          "compressed_bytes": 40,
+          "zip_header_offset": 7662750241,
+          "zip_method": 8,
+          "crc32": "9cecaa9c",
+          "sha256": "aef44a0e7d4c832f62394b242dc88570368647e0b79a8986d88f428151534a41"
+        }
+      ]
+    },
+    "cirObstacles_3_random_0.zip": {
+      "file_id": 52317539,
+      "url": "https://ndownloader.figshare.com/files/52317539",
+      "archive_bytes": 3152244500,
+      "publisher_archive_md5_not_recomputed": "b2087e3d2b3f2e23b835a5cb1b46528a",
+      "central_directory_entries": 23381,
+      "selected_members": [
+        {
+          "path": "cirObstacles_3_random_0/ifo001/mocap.csv",
+          "bytes": 1192501,
+          "compressed_bytes": 528483,
+          "zip_header_offset": 3147985199,
+          "zip_method": 8,
+          "crc32": "d9394c47",
+          "sha256": "e633dc86e442b4b6a92643db3501a9bac1c912d5b8c9b6194b90437cb540e7d8"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo001/uwb_passive.csv",
+          "bytes": 228703,
+          "compressed_bytes": 65819,
+          "zip_header_offset": 3146084044,
+          "zip_method": 8,
+          "crc32": "fb6487f7",
+          "sha256": "8e66863a832e0a4ed2c584f3af29787b7ae56ed35e50d7fede4b2ffbbfe2104d"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo001/uwb_range.csv",
+          "bytes": 115348,
+          "compressed_bytes": 51041,
+          "zip_header_offset": 3146032881,
+          "zip_method": 8,
+          "crc32": "8da51a12",
+          "sha256": "d79d77aafa44715a0f5f3302de4eb08ff158837c423597807481c029a552dad8"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo002/mocap.csv",
+          "bytes": 1187965,
+          "compressed_bytes": 524700,
+          "zip_header_offset": 688960416,
+          "zip_method": 8,
+          "crc32": "e40afc5a",
+          "sha256": "f6184648cc935afc97e037677dd2486100db3ccfb375672f542d00349c075677"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo002/uwb_passive.csv",
+          "bytes": 218353,
+          "compressed_bytes": 65280,
+          "zip_header_offset": 691583055,
+          "zip_method": 8,
+          "crc32": "38769419",
+          "sha256": "be2f71bc93d3a6611b34d0b32e6dbcb116cf9dd8ef509d8dd3bab24b2aff5bd6"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo002/uwb_range.csv",
+          "bytes": 116443,
+          "compressed_bytes": 51517,
+          "zip_header_offset": 691531416,
+          "zip_method": 8,
+          "crc32": "65193ee3",
+          "sha256": "8bf7381fc06d7dd2126fab59951533f054e00e91b13d0bb05ccc14bff8349305"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo003/mocap.csv",
+          "bytes": 1184364,
+          "compressed_bytes": 522120,
+          "zip_header_offset": 1870002452,
+          "zip_method": 8,
+          "crc32": "24a05691",
+          "sha256": "684ac2748dce9f5343d055a55e52b4f3b0195de882a35ab3503288baac5c28cb"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo003/uwb_passive.csv",
+          "bytes": 212663,
+          "compressed_bytes": 62617,
+          "zip_header_offset": 2496789740,
+          "zip_method": 8,
+          "crc32": "65e56cd2",
+          "sha256": "6d6d66df9ea70f865c770d17beb6b5f2033d3145d81b38519d802a7802c726fc"
+        },
+        {
+          "path": "cirObstacles_3_random_0/ifo003/uwb_range.csv",
+          "bytes": 111472,
+          "compressed_bytes": 49514,
+          "zip_header_offset": 2496740104,
+          "zip_method": 8,
+          "crc32": "e1fbcc6a",
+          "sha256": "14729982c5cf392a37c4abc80a1d90481581342ed2a1af4fe229839ebfceab14"
+        },
+        {
+          "path": "cirObstacles_3_random_0/timeshift.yaml",
+          "bytes": 47,
+          "compressed_bytes": 40,
+          "zip_header_offset": 3149016876,
+          "zip_method": 8,
+          "crc32": "ab875ab0",
+          "sha256": "4b392d2924fa445bb930b059da8b7eacca9e1bd0386ba642e93fba6b79be475f"
+        }
+      ]
+    }
+  },
+  "data_semantics": {
+    "identity": "One retained active transaction is addressed by from_id, to_id and all six original radio timestamps. One passive observation adds the listener ID and its three raw reception timestamps. Robot-specific exports are selected by whether its tag was an active endpoint, even in the passive file; the directory name is not necessarily the observer. Collapse identical selected fields within experiment; require a unique active identity, a unique passive identity, and at most one row per listener and matched transaction. Check copied ranges and copied active header timestamps after the join. These files contain successful/retained transactions only: publisher postprocessing removes active measurements with absolute pre-calibration bias >=4 m and drops passive observations without a matching active event. There is no total transmitted or listened-for denominator.",
+    "clocks": "Program header times are seconds relative to a common experiment origin; publisher cleanup shifts both timestamp and timestamp_n. Paper describes Chrony/NTP synchronization of computers at the start of each experiment, explicitly retaining independent radio oscillators and no ground truth clock offsets. The six low-level radio times have nanosecond units on the initiating/responding clocks. Subtracting host headers measures differences between logging events, not propagation, sensor delivery, command adoption or closed-loop information age. Negative signs are retained.",
+    "active": "The first message is sent by the initiator and received by the responder; messages two and three are sent by the responder and received by the initiator (paper Fig. 7). Use within-clock differences modulo the archived 32-bit period, then 0.5*c*(dt1-dt3/dt4*dt2), c=0.299702547 m/ns, following pyuwbcalib. Range errors use publisher gt_range (m), before/after stored correction. Each experiment/link is evaluated on the same retained rows. A group with many events is not many independent flights.",
+    "geometry": "Independently reload motion-capture poses at the original active timestamp using component-wise linear interpolation of xyz and xyzw quaternion followed by normalization and rotation of the tag moment arm, plus matching fixed anchor coordinates. Compare only inside the position streams needed for each link; do not extrapolate. Location reference is derived from the same mocap system as publisher gt_range; close agreement checks field interpretation, not absolute accuracy.",
+    "passive": "Descriptive differential range to the responder minus to the initiator. Use corrected per-listener local intervals L21=rx2-rx1, L32=rx3-rx2, responder B32=tx3-tx2, B21=tx2-rx1; all within-clock modulo the DW1000 period. Estimate c*(L21*B32/L32-B21) minus the recorded corrected active range. Compare with simultaneous mocap geometry at the active header, ignoring within-handshake motion. Not a calibrated TDoA solution or a correction for invalid records. Publish median, 95th absolute error and untrimmed RMSE including large anomalies. The static triangle bound |d(listener,responder)-d(listener,initiator)| <= d(initiator,responder) is checked with an additional 1 m descriptive tolerance; it flags physical inconsistency, not a proven failure mechanism. No geometry residual or header gap is deleted for being large.",
+    "selection_limits": "The obstacle flight also records CIR and has a different acquisition rate. Non-randomized trajectories/conditions. Per-experiment comparisons do not isolate effects of obstructions or recording mode."
+  },
+  "checks": {
+    "independent_decimal_check": [
+      {
+        "file": "default_3_random_0/default_3_random_0/ifo001/uwb_range.csv",
+        "rows": 3159,
+        "max_abs_recalculated_minus_published_m_decimal": "0.000002625566837980269481072"
+      },
+      {
+        "file": "cirObstacles_3_random_0/cirObstacles_3_random_0/ifo001/uwb_range.csv",
+        "rows": 148,
+        "max_abs_recalculated_minus_published_m_decimal": "0.000001846897452946488117643"
+      }
+    ],
+    "active_export_rows": 271096,
+    "unique_active": 194609,
+    "passive_export_rows": 945197,
+    "unique_passive": 702276,
+    "match_failures": 0,
+    "strictly_negative_host_gap": 98655,
+    "passive_geometry_comparable": 701525,
+    "passive_triangle_violations_at_1m_tolerance": 23896,
+    "directed_link_groups": 924,
+    "link_groups_with_worse_postcalibration_rmse": 23
+  },
+  "reproduction": "Run python fetch_miluv_subset.py INPUT_DIR to fetch and verify members. Then python derive_miluv.py INPUT_DIR OUTPUT_DIR with pandas, NumPy, SciPy and PyYAML. If downloading complete archives instead, extract each to INPUT_DIR/ and obtain the three configuration files from the pinned URLs."
+}

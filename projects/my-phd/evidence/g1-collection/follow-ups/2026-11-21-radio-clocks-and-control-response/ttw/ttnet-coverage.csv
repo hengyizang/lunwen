@@ -1,0 +1,4 @@
+series,intended_registrations,accepted_registrations,reported_registration_errors,raw_serial_logs,accepted_ids_without_archives,runs_with_published_max,processed_node_rows,accepted_node_rounds
+serie1,540,540,0,540,,538,14040,11834
+serie2,540,540,0,539,68859,539,14014,12704
+serie3,540,479,61,473,75296|75301|75440|75488|75506|75572,472,11825,11283

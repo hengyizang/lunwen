@@ -1,0 +1,92 @@
+{
+  "source_title": "NCSbench: platform-a-wireless sample measurement",
+  "source_organization": "Chair of Communication Networks, Technical University of Munich (tum-lkn); NCSbench contributors",
+  "accessed_utc": "2026-11-21",
+  "source_repository": "https://github.com/tum-lkn/NCSbench",
+  "commit": "d7e3261d2847ab663c1f0a732c7611e046ce614d",
+  "measurement_directory": "https://github.com/tum-lkn/NCSbench/tree/d7e3261d2847ab663c1f0a732c7611e046ce614d/benchmark/measurements/platform-a-wireless",
+  "guide": "https://github.com/tum-lkn/NCSbench/wiki/Step-by-step-NCS-benchmarking/274a1f908efa96caa449a66b39d1a1c6b2c90a27",
+  "guide_locator": "Section 3 names this sample directory and links the sample-generating study. Wiki repository revision 274a1f908efa96caa449a66b39d1a1c6b2c90a27; page Step-by-step-NCS-benchmarking.md lines 91–106.",
+  "rights": {
+    "label": "Repository MIT License, copyright (c) 2018 ncsbenchmark contributors; no separate licence found in the measurement directory. Only newly computed summaries, source metadata and a new offline reader are included here.",
+    "url": "https://github.com/tum-lkn/NCSbench/blob/d7e3261d2847ab663c1f0a732c7611e046ce614d/LICENSE.md"
+  },
+  "evidence_level": "Source files downloaded and inspected (all 15 CSVs plus the archived capture), source implementation read, three study PDFs inspected. No experiment rerun.",
+  "query_trail": [
+    {
+      "route": "Public search for an experimentally measured networked sensor–controller–actuator timing trace; followed NCSbench lab repository → wiki sample → platform-a-wireless → instrumented code and linked study PDFs.",
+      "resources": [
+        "https://github.com/tum-lkn/NCSbench",
+        "https://api.github.com/repos/tum-lkn/NCSbench/git/trees/d7e3261d2847ab663c1f0a732c7611e046ce614d?recursive=1"
+      ]
+    },
+    {
+      "route": "Existing NIST workcell candidates continued from previous batch: ranged GETs to the official object paths for the graph ZIP, PLC ZIP and README timed out; both official id pages returned HTTP 503, both /rmm/records/ endpoints HTTP 502. Checked the distributor implementation; it describes S3 access but did not identify a verifiable alternate object for either record. No source rows recovered or counted for those two candidates.",
+      "dois": [
+        "10.18434/M32242",
+        "10.18434/mds2-2361"
+      ],
+      "resources": [
+        "https://data.nist.gov/od/ds/mds2-2242/CoaxChannel_GDB_Data.zip",
+        "https://data.nist.gov/od/ds/mds2-2361/PLC%20Data.zip",
+        "https://data.nist.gov/od/ds/mds2-2361/README.txt",
+        "https://data.nist.gov/od/id/mds2-2242",
+        "https://data.nist.gov/od/id/mds2-2361",
+        "https://data.nist.gov/rmm/records/mds2-2242",
+        "https://data.nist.gov/rmm/records/mds2-2361",
+        "https://github.com/usnistgov/oar-dist-service"
+      ]
+    }
+  ],
+  "studies": [
+    {
+      "doi": "10.1109/CCNC46108.2020.9045199",
+      "title": "NCSbench: Reproducible Benchmarking Platform for Networked Control Systems",
+      "authors": "Samuele Zoppi, Onur Ayan, Fabio Molinari, Zenit Music, Sebastian Gallenmüller, Georg Carle, Wolfgang Kellerer",
+      "full_text": "https://www.net.in.tum.de/fileadmin/bibtex/publications/papers/gallenmueller_ccnc2020.pdf",
+      "sha256": "0cafe96f04311b5e9030937f3616606311c1009cefdf7eac0cbe70d18d21763c",
+      "evidence": "Figure 2 defines read, application/network handoff, reception and actuator-write markers. One-way delays require comparable clocks."
+    },
+    {
+      "doi": "10.1109/CCNC46108.2020.9045298",
+      "title": "NCSbench Demo: Reproducible Benchmarking Platform for Networked Control Systems",
+      "full_text": "https://mediatum.ub.tum.de/doc/1535118/547455.pdf",
+      "sha256": "7e0e50595ed3d04a9b524b622a69da3391576584f952bb49a8c7921bd9b7e7c1",
+      "evidence": "Fig. 1 and experimental setup describe the communications path and balancing robot. This demonstration uses the same platform family and is not an independent measurement release."
+    },
+    {
+      "title": "Reproducible Benchmarking Platform for Networked Control Systems",
+      "full_text": "https://mediatum.ub.tum.de/doc/1462178/995631282938.pdf",
+      "sha256": "b32ee710bfe2279b8d3a87ea0c6e14ee5a48211249bb64861dc3680c812edac0",
+      "evidence": "The wiki links this full-text study specifically to the sample files. Grouped with the main benchmarking study, not counted as an additional publication."
+    }
+  ],
+  "measurement_semantics": [
+    "Single published wireless example, not an industrial PLC, a set of independent repeats, or multi-robot scheduling. Robot code uses a physical LEGO platform gyro and encoders, the remote controller calculates actuation and UDP carries both directions.",
+    "Robot.py lines 234–255: tsr immediately precedes gyro and encoder reads; tsstx precedes send_sensor_signals. Report k+1 carries robot times for k but the current sensor readings. The motor_voltage_applied fields report the values held in the software, not a terminal measurement.",
+    "Lines 285–316: regular receive branch checks command sequence against the current cycle, schedules application around the next trigger and records taw after both SetDuty calls. Lines 89–109: motor setpoints are converted to rounded, clipped percentage duty and written/flushed to sysfs. An instantaneous measured voltage, GPIO edge and first physical motion are absent.",
+    "Lines 340–356: local-prediction fallback synthesizes a theoretical receive marker and stamps its local write; no unambiguous fallback flag is in the timing CSVs. Passage of the voltage consistency filter is not proof of packet delivery or causality. No independently synchronized one-way delay or absolute information age is inferred.",
+    "Distinct timing domains: six intervals use separate differences within the robot monotonic clock, controller monotonic clock, or the capture clock. The robot read-to-post-write interval includes scheduled waiting. Wire/hardware receive/transmit instants are not measured by the application markers."
+  ],
+  "file_checks": [
+    "Six 1,684-row telemetry streams match corresponding integer sensor payload fields for all 1,684 logged rows, including recorded motor setpoint telemetry. Six 1,389-row timing streams match the four 100 ns robot fields exactly; the host receive stamp matches telemetry at k and host pre-send stamp is within one 100 ns encoding tick of the transmitted command.",
+    "Joined robot cycles 295..1683 use reports 296..1684. Capture shows one further control repeat/window k=1684 outside the timing CSV coverage; sensor captures extend to 1746. The capture ends in one incomplete unrelated UDP record; the two experiment-port payload families were complete. No clock or sample ordering is extrapolated outside the joined window.",
+    "1,333 applied/commanded pairs agree exactly in integer microvolt encodings; 1,385 pairs agree within one unit at both sides; four disagree by over one. Compare both populations in the timing summary. No packet fault or new applied command is imputed. The controller lost counter counts observed sequence gaps, which differs from proof of end-to-end delivery.",
+    "The precomputed controller processing/robot round-trip CSVs have only headers. All intervals in this release were independently reconstructed from data-bearing files. Quantiles use linear interpolation."
+  ],
+  "implementation": {
+    "robot.py": {
+      "url": "https://github.com/tum-lkn/NCSbench/blob/d7e3261d2847ab663c1f0a732c7611e046ce614d/src/robot.py",
+      "sha256": "63dc674dd42b2905d9cb4b8013daf12e9b4781b8141fa769399276e7907c9998"
+    },
+    "controller_socket.py": {
+      "url": "https://github.com/tum-lkn/NCSbench/blob/d7e3261d2847ab663c1f0a732c7611e046ce614d/src/controller_socket.py",
+      "sha256": "614129f00d0292fface87add16f682a49fe5608ec2356125c63f3ace07099964"
+    },
+    "packet.py": {
+      "url": "https://github.com/tum-lkn/NCSbench/blob/d7e3261d2847ab663c1f0a732c7611e046ce614d/src/packet.py",
+      "sha256": "c6b4c9aa07c801b63bc971d89477f89904daa6870a6ca3991120d8e2bcde6140"
+    }
+  },
+  "reproduce": "python derive_ncsbench.py <NCSbench checkout>/benchmark/measurements/platform-a-wireless <output-directory> (Python 3, NumPy). Read local source files only. Source-file lengths and SHA-256 digests are in ncsbench-source-files.csv."
+}

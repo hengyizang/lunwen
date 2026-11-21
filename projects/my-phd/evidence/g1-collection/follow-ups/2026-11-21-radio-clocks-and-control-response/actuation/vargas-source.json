@@ -1,0 +1,40 @@
+{
+  "title": "Towards a Modular and Easily Reconfigurable Robotic Platform",
+  "author": "J.M. (Jesus) Vargas Cruz",
+  "source_type": "University of Twente MSc thesis, report 069RaM2025",
+  "year": 2025,
+  "published": "August 2025",
+  "landing": "https://essay.utwente.nl/108544/",
+  "accessed_utc": "2026-11-21",
+  "pdf": "https://essay.utwente.nl/fileshare/file/108544/vargas2025msc.pdf",
+  "bytes": 26193413,
+  "sha256": "17b1bc86fe753081550af78b8a8c95a4d08f6cba08e3146acefc8cce9907f6e0",
+  "rights": "Public university full text. No explicit open-data license was verified. Only new factual numerical transcriptions of published measurements, locators and summary are shared. Source PDF, videos, images and ROS bags not mirrored.",
+  "grade": "Full text and graph-annotation-level evidence; 22 published ROS endpoint observations, group statistics only for button-to-LED and button-to-motion. No public original video or bag verified for this study; not counted as a raw dataset.",
+  "lookup": [
+    {
+      "query": "physical robot motion-to-photon latency measurement open source dataset ROS controller command actuation latency camera robot delay teleoperation real measurement LEDs timestamps data Github",
+      "result": "Direct UT thesis; see §5.2 experiments setup and §5.2.5 pp. 38-40 (PDF pp. 46-48)."
+    },
+    {
+      "query": "PDF embedded hyperlinks to the analysis notebook/project",
+      "linked_project": "https://git.ram.eemcs.utwente.nl/vargascruzjm/kuka-ido-robot",
+      "result": "Public unauthenticated HTTP request followed redirect to /users/sign_in. The GitLab API v4 project lookup returned 404 when unauthenticated. A recording archive was not verified."
+    }
+  ],
+  "figure": "Physical KUKA iDo move from rest, requested speed 0.2 m/s, alternating directions, 22 repetitions. Figure 5.7 prints one integer-millisecond label for each ROS command-to-first-odometry-change interval, pp. 39. All 22 graph annotations were recovered from the fixed PDF and visually read back. Median of printed labels 56.5 ms, range 26 to 88 ms, mean 53.8182 ms. Thesis prose gives approximate median 55 ms. These are the authors’ plotted numbers, not independent processing of the original bags.",
+  "video_evidence": "§5.2.5 and Figs. 5.6/5.9 use video at 240 frames/s (nominal frame separation about 4.17 ms) to mark first button press, LED indication of controller receipt and first visible robot motion. Approximate medians about 62 ms button-to-LED and 82 ms button-to-motion; latter IQR about 22 ms, one trial above 140 ms. The 22 individual LED and motion values are not recovered. Do not subtract the separate marginal medians to estimate a paired mechanical delay. The paper concludes that delay remains below 100 ms, but its analysis explicitly identifies one exception. ROS commands and video-origin delays have different start and end events.",
+  "history": {
+    "commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "files": 620,
+    "keys": [
+      "Towards a Modular and Easily Reconfigurable Robotic Platform",
+      "essays.utwente.nl/108544",
+      "essay.utwente.nl/108544",
+      "vargas2025msc",
+      "Vargas Cruz Towards a Modular"
+    ],
+    "matches": []
+  },
+  "reproduce": "Use the PDF from the fixed link; python derive_vargas.py PDF OUTPUT_DIRECTORY. Requires Poppler pdfimages, NumPy, Pillow, Tesseract. Code extracts Fig. 5.7, finds 22 green onset bands, deskews the numerical annotations for OCR and checks the transcribed values against a separate visual reading."
+}

@@ -1,0 +1,263 @@
+{
+  "title": "teleop-hands-latency-analysis: operator and follower humanoid hand IMU recordings",
+  "author": "rhoyn (GitHub project account and copyright holder), September 2026",
+  "repository": "rhoyn/teleop-hands-latency-analysis",
+  "fixed_revision": "6f886f6202a147b6a64f70e66f7feec7681b0346",
+  "landing": "https://github.com/rhoyn/teleop-hands-latency-analysis/tree/6f886f6202a147b6a64f70e66f7feec7681b0346",
+  "rights": "Root MIT License, Copyright (c) 2026 rhoyn. NOTICE lists the bundled font and third-party library notices. Only original statistics and file digests are shared here; no recordings, photographs or videos mirrored.",
+  "accessed_utc": "2026-11-21",
+  "history": {
+    "commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "files": 620,
+    "keys": [
+      "rhoyn/teleop-hands-latency-analysis",
+      "teleop-hands-latency-analysis",
+      "rhoyn.com/low-latency-accurate-hands",
+      "6f886f6202a147b6a64f70e66f7feec7681b0346"
+    ],
+    "matches": []
+  },
+  "queries": [
+    {
+      "query": "physical robot motion-to-photon latency measurement open source dataset ROS controller command actuation latency camera robot delay teleoperation real measurement LEDs timestamps data Github",
+      "discovery": "Public author repository explicitly describes hand pairs, filmed physical captures, raw data folder, method and source."
+    },
+    {
+      "url": "https://api.github.com/repos/rhoyn/teleop-hands-latency-analysis/git/trees/6f886f6202a147b6a64f70e66f7feec7681b0346?recursive=1",
+      "discovery": "Resolved the immutable commit, inventoried all 21 CSV takes and 21 similarly named videos; verified each CSV, six documentation/code files plus main and recorder, and the take-0 video for each stack by published Git blob SHA-1. Files below include byte counts and SHA-256. Videos were inspected as stream metadata, not used as frame-level timing references."
+    }
+  ],
+  "source_files": [
+    {
+      "path": "LICENSE",
+      "bytes": 1062,
+      "git_blob": "f7da1eb8548980484d20e42168fe3618bed1b12b",
+      "sha256": "a47131886e7f660b71bc6658c5a3bb47944783f51ec5f0b7fb21914808692143"
+    },
+    {
+      "path": "NOTICE",
+      "bytes": 5257,
+      "git_blob": "ced9bf4a60ce9e98c7a6b171be578e137f29b53e",
+      "sha256": "8622f27ab11f930cc19ec17af7403308d93687e568c2e310a99215020439de34"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13335,
+      "git_blob": "b0d9fc00f1fae0da2f97af44d980e514675d1161",
+      "sha256": "14ccd4ebbb9080acc37eedad31d39902b4cac0416fbcf15896c44eb3516d58b9"
+    },
+    {
+      "path": "algos/algo.hpp",
+      "bytes": 15149,
+      "git_blob": "881a78dd963fbc6b22cbdd165b95d57a8b1f9d3b",
+      "sha256": "f83928c4a049309467d37ad9f9ed4a1525a412ab2f82ce561b661fa15ade573f"
+    },
+    {
+      "path": "algos/algo_cross_correlation.cpp",
+      "bytes": 12080,
+      "git_blob": "a6b4e151ac36ddb6ca6caedb9ff0add77397458a",
+      "sha256": "e2cda3433fe6aa32e788d5bbffb8cf9f6275eb385c7b2127e4f4bbf8babeafb0"
+    },
+    {
+      "path": "esp32_firmware.cpp",
+      "bytes": 2439,
+      "git_blob": "a585604fbbf0895a1046dc8401d0154453cff867",
+      "sha256": "05f0a526f0d99996b4a09af8ee08eefaba551fca3eae8665b9b35c23e52a7818"
+    },
+    {
+      "path": "inputs/rhoyn_0.csv",
+      "bytes": 674319,
+      "git_blob": "dc88750b220a004402f5f3581e9ca7d702eb51e0",
+      "sha256": "2b11d30bd60a49b70e395ca2faa67ef12bce824009fa39a572e7d68140a5647c"
+    },
+    {
+      "path": "inputs/rhoyn_1.csv",
+      "bytes": 592112,
+      "git_blob": "3e3942531844eed6274c57ef2f7d38c2f5a45e01",
+      "sha256": "cdc71bb1709d058b0942fb20b032716ff3fe05cd401947e0f64029d13c3dae91"
+    },
+    {
+      "path": "inputs/rhoyn_2.csv",
+      "bytes": 622354,
+      "git_blob": "0adaee31d269b0e33d7848a45c9fbb1d5a68a676",
+      "sha256": "ba776c6bca080612e7fb80760c4c1ab8140c2ef1897f61fb56985e986fd9c22b"
+    },
+    {
+      "path": "inputs/rhoyn_3.csv",
+      "bytes": 619462,
+      "git_blob": "3bcaaa79fd81dd15721a21b8c7352a1bf7f4ec3f",
+      "sha256": "8c8aaf578fb4b313359f17d4f0e1a2bb91bfe32cd7b5a52139b492dc981f462c"
+    },
+    {
+      "path": "inputs/rhoyn_4.csv",
+      "bytes": 795334,
+      "git_blob": "7ab24d5e9bfd6d6e62db4dbbcb6b6ab6d4e235b6",
+      "sha256": "e6905a3d819522e62e260e8628482f7830ac57f7d9cbd2c427d2b3273990521b"
+    },
+    {
+      "path": "inputs/rhoyn_5.csv",
+      "bytes": 601083,
+      "git_blob": "ec46d325fcb3e08b32c5aeb4236d2f0164ac8517",
+      "sha256": "d92573af082f90cb50c9b231a78dcf9d077c33db6f43c54a48931a72ebc7f1bd"
+    },
+    {
+      "path": "inputs/rhoyn_6.csv",
+      "bytes": 716673,
+      "git_blob": "13af162c01488b79413bb0997007a4dab73446f2",
+      "sha256": "c194a67777e26cb787b526887a296ba015e1fc4413bdeb9ec18a437ad6621f13"
+    },
+    {
+      "path": "inputs/rhoyn_7.csv",
+      "bytes": 659176,
+      "git_blob": "29cc6bb39c235201c4fbe864c263e3ed1b793a15",
+      "sha256": "db98081c9c894dd934ac8e2fc1d3176131e417db5de0c3f9494d57ee59e509dc"
+    },
+    {
+      "path": "inputs/rhoyn_8.csv",
+      "bytes": 659729,
+      "git_blob": "14054be5a29780c0c4ddd52fbbbb9d0bdd17beef",
+      "sha256": "7af18216a7105ee4b7b42ee62a87aadcb42e018dd57347123228409a6d77358c"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_0.csv",
+      "bytes": 2245084,
+      "git_blob": "edc8ada661dca095ba95e26720455e4e4561e91e",
+      "sha256": "3d3a65c35235a2114eb5a3436bbd30b5318869c5589cca0ef2d306dbe4f4bab3"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_1.csv",
+      "bytes": 1977281,
+      "git_blob": "b36cf138d1009ae3f9a5612bfb35ab446e1034e2",
+      "sha256": "6470aeff93715a8d125fe6f73b6202f0edfaf6fcdc39d7a750d8009204b33162"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_2.csv",
+      "bytes": 1758469,
+      "git_blob": "29f7e593f44e51e22515e9eeff8bb8cd5e1ed1cd",
+      "sha256": "28d1fb713f6e7edf60f44ebf9ebe89df4bb175755b9c5c9404722061637575bd"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_3.csv",
+      "bytes": 1066518,
+      "git_blob": "9d5498d1e6769faff3800e8b41b0ed83bf51f408",
+      "sha256": "e7cef280927cac0926bbecf42404ed7bdd01ded9e62a3bff086ce2c49dcae9bf"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_4.csv",
+      "bytes": 1010413,
+      "git_blob": "3940eb6d0d8dd92ae2a025229e251107e61b2c07",
+      "sha256": "33792e5ae7ffb3d7185cf6f55d47f6e532265690c473ccd6ece34721886f1f66"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+genesisextremcontrol_5.csv",
+      "bytes": 831521,
+      "git_blob": "2897f82402b7964809cdbaedc821395add9be024",
+      "sha256": "80c2f48499cf8d6097a5e420d945233b4f53f2e3e326129a61cc6a799b5acba1"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_0.csv",
+      "bytes": 5124109,
+      "git_blob": "47ce3357c198a62973fb32fe05d3bc340927f7f0",
+      "sha256": "6dec7c4861ef3837c893e822e22fc2cddbeb3f16312754b23b9b7427e2f92daf"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_1.csv",
+      "bytes": 1856477,
+      "git_blob": "fdd941050950e0238e33832cdb6ad8dae0e6fcb9",
+      "sha256": "9e662dd20587aef6dc68d8191cd7c4d6d2866790b88f35616fac24cc1ffb6518"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_2.csv",
+      "bytes": 1861721,
+      "git_blob": "e42c5d7ee0bb2b2656c61e1440c5769b61ff03fe",
+      "sha256": "cea06eb30617ea685cedd59719bc0ed0e44bc1cb2774f5db91136e14df7bea15"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_3.csv",
+      "bytes": 902976,
+      "git_blob": "0610eb8b2d955af2d7f7c667fe70471106244379",
+      "sha256": "71224d0aa24976e083317268f70e1eed532e412b5b6b37e484bf6a21b34f99c0"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_4.csv",
+      "bytes": 941696,
+      "git_blob": "e1904e8e3704d02d403bbadeb9fc48d913c0ff08",
+      "sha256": "61b14b4735cdb006708fb55558941289fc225a6e6e7d8c0d2a08e03833b338ba"
+    },
+    {
+      "path": "inputs/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_5.csv",
+      "bytes": 1027712,
+      "git_blob": "220c485ee4badb6d9bcd259f42ced8e19d211229",
+      "sha256": "9018663240305c06330b146adad7756b9818c8800ddcb79d9222d34aeb3e4914"
+    },
+    {
+      "path": "main.cpp",
+      "bytes": 15169,
+      "git_blob": "b08912da1a16bd459d8a6708956c7147776dfefa",
+      "sha256": "c10eb0a851e4a812f12aae76495f1f10d033bbc6cfc3e5ea24369ee12456b62f"
+    },
+    {
+      "path": "recorder.cpp",
+      "bytes": 8980,
+      "git_blob": "34b3fe0dede57f8926f4bc55bc714db41ba4a366",
+      "sha256": "4eadb10933ddc13e8b696181b1f873122c59dc76a020ecc52034f0cff67b4e15"
+    }
+  ],
+  "three_videos_verified": [
+    {
+      "path": "videos/rhoyn_0.mp4",
+      "bytes": 705491,
+      "git_blob": "8e3569aabae8194eb6508c767b0b425cd9067f0c",
+      "sha256": "d4b4d387c38042d4a5f16712dea13b3280dc4541fd3622c2628672cfbde3c88c",
+      "stream": {
+        "width": 480,
+        "height": 270,
+        "r_frame_rate": "60/1",
+        "duration": "10.000000",
+        "nb_frames": "600"
+      }
+    },
+    {
+      "path": "videos/xrobotoolkitpicovr+genesisextremcontrol_0.mp4",
+      "bytes": 1548811,
+      "git_blob": "29f5b424ce8e5b545d7fddd7d8f3d08faff19983",
+      "sha256": "96345b08b938bf5be7ef482ae65a4ba71c2b0650a393353b31b7daca390d8e9d",
+      "stream": {
+        "width": 480,
+        "height": 270,
+        "r_frame_rate": "60/1",
+        "duration": "24.000000",
+        "nb_frames": "1440"
+      }
+    },
+    {
+      "path": "videos/xrobotoolkitpicovr+nvidiagrootlowlatencyweights_0.mp4",
+      "bytes": 2594253,
+      "git_blob": "39f3abbc9da74ffe687d8f63f7ba73c7e31de70b",
+      "sha256": "9b38bf7de68c015449b87cc28ee9deebdb0e1bc130a58da534065f8b21bc10a4",
+      "stream": {
+        "width": 480,
+        "height": 270,
+        "r_frame_rate": "60/1",
+        "duration": "50.000000",
+        "nb_frames": "3000"
+      }
+    }
+  ],
+  "fixed_raw_url_template": "https://raw.githubusercontent.com/rhoyn/teleop-hands-latency-analysis/6f886f6202a147b6a64f70e66f7feec7681b0346/{path}",
+  "grade": "Physical experiments per authors. One MPU6050 on the operator hand (m2) and another on the humanoid follower hand (m1). Three named teleoperation stacks, 9+6+6 takes; matched videos in the tree and sensor/rig photos support the physical setup. All CSV files contain measured-looking integer-quantized gyro streams; no simulation examples are substituted. This is a self-published hardware benchmark with no independently calibrated latency reference. The README notes the original CSVs used an earlier logger build.",
+  "timing": "The provided firmware reads the two separate I2C buses in concurrent tasks, timestamps the main-loop start with one ESP32 micros() value and waits for both reads before building the packet. One common time tag per pair avoids the need to align two logger clocks. Exact conversion instants and sensor-to-sensor sampling skew are not recorded. CSV alone cannot validate that the original logger implementation and filters exactly matched the current code. No hardware edge or protocol identifier separates network transmission, buffering, controller decision or mechanical actuation.",
+  "cleaning": "All 21 unique CSV files included separately. The timestamps are strictly increasing within each file, with every adjacent interval between 995 and 1006 microseconds, and no interval >1.5 ms. No interpolation or stitching across takes. A missing CSV row cannot be studied using transport sequence numbers, which are absent. Each time is counted once despite measuring two body parts.",
+  "measurement": "The recorded gyro components in deg/s are converted to vector magnitudes. The G1 metric is a full-take Pearson correlation across integer lags from -200 to +200 samples. For each candidate lag k, compare the same central subset of robot indices i to operator indices i-k. Select highest correlation, earliest signed lag in case of an exact tie, and report the median timestamp difference among retained winning pairs. Positive means later follower movement. This summarizes waveform alignment, not a per-command reaction-time distribution. A separate sensitivity repeats the search after excluding pairs where any gyro axis on either device rounds at 131 counts/(deg/s) to -32768 or 32767; mask changes with candidate lag. The set of candidate pairs and typically its size change with lag; a weaker, different or ambiguous peak can result, not a corrected ground truth. Same measurements analyzed twice, not additional acquisitions.",
+  "comparison": "The authors report medians across ten estimators per recording, then across files, of 20.3/44.5/89.3 ms. These have related inputs and are not ten independent physical trials. The all-sample global correlation gives 20.0/45.0/94.0 ms. Excluding rail-affected pairs gives 19.0/50.0/97.5 ms. One rhoyn file shifts from 20 to 70 ms and its peak correlation drops from 0.8176 to 0.3951. Differences between sessions and motions are not attributable solely to the teleoperation architecture.",
+  "alignment_qualification": "No precision claim for packet transport or network method. Independent physical end-to-end motion was observed in the selected sessions, but the experimental sampling order, robot tracking dynamics, input motion and IMU filtering affect the waveform comparison. A median of correlations is not a one-way packet delay or a synchronized physical contact event.",
+  "coverage": {
+    "input_files": 21,
+    "rows": 236052,
+    "actual_nonduplicate_sha": 21,
+    "robot_rail_rows": 29824,
+    "leader_rail_rows": 27187
+  },
+  "reproduce": "Retrieve the inputs/ CSVs at the fixed commit and use Python 3 with NumPy: python derive_hand_imu.py CHECKOUT OUTPUT_DIRECTORY. No videos needed.",
+  "independent_check": "All 21 all-sample maximizing lags also matched an independent normalized FFT-based valid correlation with sliding operator-window moments on 2026-11-21. Deterministic rerun to a second directory matched both CSVs byte for byte."
+}

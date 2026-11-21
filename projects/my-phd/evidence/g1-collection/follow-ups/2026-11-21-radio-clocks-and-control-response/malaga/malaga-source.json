@@ -1,0 +1,29 @@
+{
+  "title": "Roundtrip times in networked telerobots for sensory data transmissions",
+  "creator": {
+    "name": "FERNANDEZ MADRIGAL, JUAN ANTONIO",
+    "affiliation": "Universidad de Málaga",
+    "orcid": "0000-0003-1376-7967"
+  },
+  "doi": "10.5281/zenodo.14967644",
+  "accessed_utc": "2026-11-21",
+  "version": "1.0.0",
+  "date_published": "2025-03-04",
+  "source_record": "https://zenodo.org/records/14967644",
+  "metadata": "https://zenodo.org/api/records/14967644",
+  "archive": "https://zenodo.org/api/records/14967644/files/dataset040325.zip/content",
+  "source_filename": "dataset040325.zip",
+  "bytes": 4595523,
+  "publisher_md5_verified": "124e3ab645aaaf64c82d9d7a3b61782c",
+  "sha256": "c95b18a646d1726ea1918e3eef6b3b83809420c7e1495c7e25e7df76b0e43f1a",
+  "rights": "CC BY 4.0 (record metadata). Juan Antonio Fernandez Madrigal, Universidad de Málaga, source DOI above; this release computes new per-file summaries and retains original experiment labels. https://creativecommons.org/licenses/by/4.0/",
+  "search_route": "Followed existing 2026-11-21 datasets.csv entry (Zenodo record 14967644) to versioned record metadata, original archive, all 36 measurement/metadata pairs, and two DOI references embedded in the record. Existing source upgraded to file-level evidence.",
+  "related_works": {
+    "10.1109/JSEN.2013.2263381": "Log-Logistic Modeling of Sensory Flow Delays in Networked Telerobots",
+    "10.3390/s140202305": "Marginal Probabilistic Modeling of the Delays in the Sensory Data Transmission of Networked Telerobots"
+  },
+  "coverage": "36 numeric CSVs with 36 matching metadata files; 7,897,375 finite nonnegative observations in ms, zero negative and zero equal to zero. 12 realoct2023, 18 realpapersensors, 4 sim, 2 ciprirealrobofeb2025. Each original file and its metadata are hashed individually. Linear interpolated quantiles are computed independently for each experiment.",
+  "interpretation": "Sensory-request round-trip measured by the source combines network, OS and application service. The series contain durations rather than absolute send/receive timestamps, command identity, controller use time or actuator updates. Preserve author labels, including echo configurations and four simulated experiments, and do not pool heterogeneous experiments. The record links two studies for subsets of historical experiments without a complete mapping between study and file.",
+  "comparison": "035 stationary and 036 moving are both labelled as 2,880-byte same-building, Wi-Fi plus 1 Gb wired, ROS2 robot/station. The maxima include individual long stalls and the trials are observational; the data cannot attribute any difference to motion or networking alone.",
+  "reproduce": "python derive_malaga.py dataset040325.zip <output-directory> (Python 3, NumPy). Script verifies fixed archive SHA-256 and reads its members without extracting them."
+}

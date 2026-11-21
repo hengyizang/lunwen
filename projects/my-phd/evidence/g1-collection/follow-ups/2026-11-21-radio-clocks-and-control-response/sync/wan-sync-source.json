@@ -1,0 +1,60 @@
+{
+  "title": "Data for \"PTP Over Wide Area Networks With Offset Measurement Outlier Filtering\"",
+  "doi": "10.5281/zenodo.16794348",
+  "concept_doi": "10.5281/zenodo.14231422",
+  "authors": [
+    "Vázquez, Víctor",
+    "Megías, Carlos",
+    "Vélez, Carmen",
+    "Esteban, Héctor",
+    "Díaz, Javier",
+    "Ros, Eduardo"
+  ],
+  "version": "2.1",
+  "checked_utc": "2026-11-21",
+  "landing": "https://doi.org/10.5281/zenodo.16794348",
+  "archive_name": "dataset.zip",
+  "bytes": 64018332,
+  "publisher_md5": "0f6c4653a2b0bfd35c0dfa6f508f47b9",
+  "sha256": "078c5ca3a23c776fca6aa6d35c3fb4b7be935264505765c92426a046a8cad4e2",
+  "access_url": "https://zenodo.org/api/records/16794348/files/dataset.zip/content",
+  "publisher_record_url": "https://zenodo.org/api/records/16794348",
+  "publisher_record_sha256": "0ebe3248b626b7702fcbece69d15799190020e220cf12f68b00c076ca4786e94",
+  "rights": "CC BY 4.0 per the fixed Zenodo record; attribute the listed depositors. Only independently computed summaries, file digests and interpretation are provided.",
+  "history": {
+    "prior_commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "count": 620,
+    "release_keys": [
+      "10.5281/zenodo.16794348",
+      "10.5281/zenodo.14231422",
+      "Data for \"PTP Over Wide Area Networks With Offset Measurement Outlier Filtering\""
+    ],
+    "paths": []
+  },
+  "readme": {
+    "member": "dataset/README.md",
+    "sha256": "c9b376fcb4a1af531e94500ff7edf4fdc5fedf92597b7eb89c26cc8b5db2c78b"
+  },
+  "companion": {
+    "doi": "10.1109/ACCESS.2025.3615674",
+    "institutional_pdf": "https://digibug.ugr.es/bitstream/handle/10481/107101/PTP_Over_Wide_Area_Networks_With_Offset_Measurement_Outlier_Filtering.pdf?isAllowed=y&sequence=1",
+    "locator": "§IV and Fig. 3, long-distance network and GNSS common-view reference. Live San Fernando server follows UTC(ROA). Granada client is compared locally to a passive hydrogen maser disciplined using satellite common view. The two sites are more than 300 km apart.",
+    "scope": "Methods checked in institutional PDF using web reader and archive README."
+  },
+  "retrieval_queries": [
+    "wireless time synchronization dataset offset hardware GPS PPS ground truth sensor nodes public dataset timestamp PTP wireless clock synchronization",
+    "PTP over wide area networks with offset measurement outlier filtering PDF Granada local reference GPS common clock PPS measurement topology"
+  ],
+  "evidence_grade": "Raw complete live WAN subset, distinct external reference clock. Fixed-site fiber network. Transferring the result to wireless or inter-robot links requires another experiment.",
+  "selection": "Every CSV in dataset/roa/ was read and CRC checked: 7 ptp4l, 1 chrony, 6 directional one-way delay files. The separate dataset/clock standalone oscillator file and 13 dataset/testbed/ emulation/training files were not pooled or analyzed. Use v2.1 column names offset_true/offset_raw (ns); earlier releases use different names and units.",
+  "fields": "offset_true is independent clock time error vs common-view reference. offset_raw is the PTP client unfiltered estimate and offset_filt is its optional filtered estimate. delay_raw is a one-way estimate derived from a round trip, distinct from the separately recorded direction-specific delays. Acquisition timestamps retained as integer ns. Per-variable statistics use complete rows and retain signs. Absolute p95 interpolates linearly.",
+  "coverage": {
+    "live_files": 14,
+    "live_clock_reference_rows": 800822,
+    "live_ptp_raw_offset_rows": 699255,
+    "two_direction_delay_observations": 1035060
+  },
+  "joining": "The simultaneous acquisition streams do not share exact event time stamps across offset_true and offset_raw in any of the 7 PTP files. Calculate distributions by stream within a run; do not report row-paired errors. The six one-way delay files are separate sessions from the PTP experiments. Half-difference of their directional medians is a descriptive asymmetry on those dates, not half the delay of a matched packet pair or the error of a particular previously recorded PTP update.",
+  "limitations": "Clock error is a measured reference for clock synchronization only; endpoint application scheduling and control-loop adoption are unavailable. Clock/reference operations, filters, network load, epoch and oscillator all vary between files, ruling out direct causal comparison from these summaries alone.",
+  "reproduce": "python derive_wan_sync.py WAN_ZIP OUTPUT_DIRECTORY (Python + NumPy)"
+}

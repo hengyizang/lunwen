@@ -1,0 +1,56 @@
+{
+  "title": "Clock Synchronization Accuracy over Mobile Networks",
+  "doi": "10.5281/zenodo.14230741",
+  "concept_doi": "10.5281/zenodo.14230740",
+  "authors": [
+    "Kalnins, Marcis"
+  ],
+  "version": "First Zenodo record (index 0), no author-supplied version string, record 14230741",
+  "checked_utc": "2026-11-21",
+  "landing": "https://doi.org/10.5281/zenodo.14230741",
+  "archive_name": "Clock Synchronization Accuracy over Mobile Networks.zip",
+  "bytes": 59977118,
+  "publisher_md5": "945aefa3013bc926d748f7e820275069",
+  "sha256": "76cf0da2b1d64f5b77d3e90a06b4c9f848d6d999243314bdbc8d886385d82a93",
+  "access_url": "https://zenodo.org/api/records/14230741/files/Clock%20Synchronization%20Accuracy%20over%20Mobile%20Networks.zip/content",
+  "publisher_record_url": "https://zenodo.org/api/records/14230741",
+  "publisher_record_sha256": "6bd4d296e9c5cb89879b950f5ec0fd8a6d7d202637b6ab458078e6a953317a8f",
+  "rights": "CC BY 4.0 per the fixed Zenodo record; attribute the listed depositors. Only independently computed summaries, file digests and interpretation are provided.",
+  "history": {
+    "prior_commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "count": 620,
+    "release_keys": [
+      "10.5281/zenodo.14230741",
+      "10.5281/zenodo.14230740",
+      "Clock Synchronization Accuracy over Mobile Networks"
+    ],
+    "paths": []
+  },
+  "readme_sha256": "ea74417647eb775e1aaefaf3faf1796a76a4b85ecee27a02f53c0cf46caf0765",
+  "companion": {
+    "doi": "10.1109/FOAN63517.2024.10765641",
+    "source": "https://www.edi.lv/publications/clock-synchronization-and-network-delay-evaluation-over-a-private-5g-standalone-network/",
+    "grade": "Author institution abstract; full method of differential PPS measurement also described in the deposit. Article covers private SA portion only.",
+    "author_page_sha256": "e0a4e6bdbd39a796a30eb4630f6e954273b983615f17bb60f0e340523857f3d0"
+  },
+  "retrieval_queries": [
+    "wireless time synchronization dataset offset hardware GPS PPS ground truth sensor nodes public dataset timestamp PTP wireless clock synchronization datasets Flocklab PPS",
+    "dataset time synchronization WLAN PTP 802.11 wireless hardware timestamps offset csv dataset experimental PPS clock synchronization accuracy measurements",
+    "Clock Synchronization and Network Delay Evaluation over a Private 5G Standalone Network Kalnins Rusins Elsts scopes"
+  ],
+  "measurement": "PTPd logs: numeric Offset From Master field (seconds) in slave state; this is an in-band clock adjustment/estimate. Physical offset: Analog Discovery 2 oscilloscope CH2−CH1 difference of pulse edges emitted by the two device NIC timers (seconds). This is differential reference measurement, not absolute UTC calibration. Source schematics identify cellular BITE NSA, private SA and PTP master placements. No actuator or application-use timestamp.",
+  "selection": "All four tabulated scope series, eight PTPd logs, and both pcapng captures in the publisher ZIP. All member reads enforce ZIP CRC; no underlying packets or network addresses are distributed. PPS series are distinct and are never concatenated. Counts within a run represent repeated observations of the same setup.",
+  "cleaning": "Retain original row order, record missing PPS entries, convert seconds to milliseconds, absolute p95 uses linear interpolation at 0.95*(n−1). For PTPd detect timestamp record boundaries, including concatenated records on a single physical line; state counts include init/fault/listen/reset while offset summaries use slv only. Repeated header lines and blanks are ignored. Do not discard the initial clock adjustment. Clock-reset log contains large adjustments.",
+  "coverage": {
+    "pps_rows": 3600,
+    "numeric_pps": 3522,
+    "null_pps": 78,
+    "ptpd_slave_rows": 2144,
+    "ptpd_joined_boundaries_restored": 352,
+    "capture_packets": 45746
+  },
+  "time_boundaries": "The folder and calendar dates separate software and physical data. Software files span 2023-07, 2023-11, 2024-01; scope files are 2024-06/07. Do not infer estimation error by subtracting rows from distinct recordings. The naive local time strings in PTPd logs have no stated zone. The NSA scope file has a sample counter and no UTC column. For SA scope files the UTC column identifies the recorded output row; it does not establish exact PPS phase relative to packet timestamps.",
+  "captures": "Parse pcapng enhanced-packet blocks, raw-IP interface and 1 ns advertised timestamp resolution. Count only IPv4 UDP PTPv2 messages recognized by destination port and PTP version. Capture resolution is not a clock accuracy bound. The UPF-as-grandmaster capture has listed UTC envelope encompassing the matching 2024-07-04 scope series. The UE-as-grandmaster capture runs 17:55:52–17:55:56 UTC on 2024-07-03 (4.162 s); neither same-day UTC-marked scope sequence falls in that envelope. No packet-level delay or packet loss is inferred, and source/receiver clocks are not aligned by matching ordinals.",
+  "limits": "No repeated randomized traffic-treatment assignment, sequence-level causal claim, camera/vehicle clock or controller receipt log. High/low clock offset in a particular trial does not establish corresponding closed-loop robot control error.",
+  "reproduce": "python derive_mobile_sync.py MOBILE_ZIP OUTPUT_DIRECTORY (Python standard library)"
+}

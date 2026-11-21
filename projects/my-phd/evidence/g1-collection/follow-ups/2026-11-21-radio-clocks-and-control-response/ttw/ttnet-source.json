@@ -1,0 +1,179 @@
+{
+  "title": "TTnet - Model validation data",
+  "creator": [
+    {
+      "name": "Romain Jacob",
+      "affiliation": "ETH Zurich",
+      "orcid": "0000-0002-2218-5750"
+    }
+  ],
+  "version": "2.1",
+  "doi": "10.5281/zenodo.3753974",
+  "concept_doi": "10.5281/zenodo.3530721",
+  "landing": "https://doi.org/10.5281/zenodo.3753974",
+  "retrieved_utc": "2026-11-21",
+  "record": "https://zenodo.org/api/records/3753974",
+  "record_sha256": "039309861258a0ed32094556cebe5039edae6399fece101a4f4ea6a52e5e71e3",
+  "associated_article": {
+    "doi": "10.4230/LIPIcs.ECRTS.2020.19",
+    "arxiv": "2002.07491",
+    "title": "The Time-Triggered Wireless Architecture",
+    "authors": [
+      "Romain Jacob",
+      "Licong Zhang",
+      "Marco Zimmerling",
+      "Jan Beutel",
+      "Samarjit Chakraborty",
+      "Lothar Thiele"
+    ],
+    "publisher_pdf": "https://drops.dagstuhl.de/storage/00lipics/lipics-vol165-ecrts2020/LIPIcs.ECRTS.2020.19/LIPIcs.ECRTS.2020.19.pdf",
+    "sha256": "6d40bb8f12ae2037d7726bcbc6e083cd528f37dabc4033bf0b68776aa91c01fe",
+    "locator": "Section 3.3 and Table 2 / Figure 8, with raw-to-processed links in the repository README."
+  },
+  "processing_source": "https://github.com/romain-jacob/TTW-Artifacts/tree/2dd958e0b874143fe449bd057651ee4c13e6d15e",
+  "source_files": [
+    {
+      "path": "README.md",
+      "bytes": 10580,
+      "sha256": "99ea57db54c865988502af8eaef0fe58b2fc26f9f6af60370cf517d648392366",
+      "upstream_git_blob": "5c0af63b45b234964e62d42627a58ef3201e61e3"
+    },
+    {
+      "path": "LICENSE.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "upstream_git_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+    },
+    {
+      "path": "src/ttnet_analysis.py",
+      "bytes": 19292,
+      "sha256": "0d090d3900a45beee71e66c7580c0e24c0e5d9daefd93dba10e3c895c71eccfb",
+      "upstream_git_blob": "dfddeccdfd4dba15b1abd7a98db29bafb065cf6e"
+    },
+    {
+      "path": "ttnet_model-validation.ipynb",
+      "bytes": 5689757,
+      "sha256": "b64be3fd567f3169525aecc41a3019870ee61e744333efe6763e39524fc2e1f3",
+      "upstream_git_blob": "80d06799371e78574d9ca5c5bb00f66aa917fc5f"
+    },
+    {
+      "path": "data_processed/serie1/serie1_all.csv",
+      "bytes": 1336496,
+      "sha256": "c961a3456e198aff9f9d15eaa15fd11e12ccf34786ff3668d933a7b5a598e4a7",
+      "upstream_git_blob": "1176d7f72656967deca64021e13e66365d4ef514"
+    },
+    {
+      "path": "data_processed/serie1/serie1_metrics.csv",
+      "bytes": 40513,
+      "sha256": "dde85d28a99702664eb1d1fc6a749cf27672aa63ffd420a1ee21d0adbfb41a18",
+      "upstream_git_blob": "e7744091291c50be255add5c23410361b30036cc"
+    },
+    {
+      "path": "data_processed/serie2/serie2_all.csv",
+      "bytes": 1376488,
+      "sha256": "e4a382cbd774dcf88075d77d73e01107110a335856a20a5f4469e0a10d22140e",
+      "upstream_git_blob": "169afdecba1c1c1f7352979e19b1750e98ab5cef"
+    },
+    {
+      "path": "data_processed/serie2/serie2_metrics.csv",
+      "bytes": 40561,
+      "sha256": "47d518a92051f18e68fe98abe551b96f5fbeeac5ebdba2eeef490ff68c3a4d41",
+      "upstream_git_blob": "074a524614f1329872e2344a176e98c5c4c80e80"
+    },
+    {
+      "path": "data_processed/serie3/serie3_all.csv",
+      "bytes": 1186519,
+      "sha256": "60fa70b72eb7138cc48164c2436b10b10d761f0539094f5016c989628efba326",
+      "upstream_git_blob": "2122154ea724c8ed8598c4a3440fe65452881711"
+    },
+    {
+      "path": "data_processed/serie3/serie3_metrics.csv",
+      "bytes": 35475,
+      "sha256": "eca75d45713441b33ac6ac67c689cd5c607967757677674a8b6393d8f06c26ee",
+      "upstream_git_blob": "3226ccf5ff5311584074f662ca9c642c4773c662"
+    }
+  ],
+  "source_archives": [
+    {
+      "name": "data_raw.zip",
+      "url": "https://zenodo.org/api/records/3753974/files/data_raw.zip/content",
+      "published_bytes": 72879977,
+      "published_checksum": "md5:cd71d109d322ee309a2272ce80424cd6",
+      "scope": "Downloaded complete archive. Read serial.csv and testsummary.csv for all 1,552 archived trials, and the three series registration lists.",
+      "sha256": "3dcfb366828cdff8d95a51dd095cdd8071a61a7b6c9851425d44a232eb7216b0"
+    },
+    {
+      "name": "serie1_all_data.zip",
+      "url": "https://zenodo.org/api/records/3753974/files/serie1_all_data.zip/content",
+      "published_bytes": 16754683432,
+      "published_checksum": "md5:9fefeb123b4d6c33ccfe794e0d01a21a",
+      "scope": "ZIP64 directory inspected via HTTP 206 ranges (exact Content-Range checked), two complete trial members CRC-verified. Published full-archive MD5 is a reference, not locally recomputed.",
+      "central_directory_files": 1083
+    },
+    {
+      "name": "serie2_all_data.zip",
+      "url": "https://zenodo.org/api/records/3753974/files/serie2_all_data.zip/content",
+      "published_bytes": 16719753403,
+      "published_checksum": "md5:e1d156eee9cd2770d94f8104a9e2c13e",
+      "scope": "ZIP64 directory inspected via HTTP 206 ranges (exact Content-Range checked), two complete trial members CRC-verified. Published full-archive MD5 is a reference, not locally recomputed.",
+      "central_directory_files": 1080
+    }
+  ],
+  "scope_of_rights": {
+    "zenodo": "gpl-2.0-or-later",
+    "repository_license": "GPL version 3 text at https://github.com/romain-jacob/TTW-Artifacts/blob/2dd958e0b874143fe449bd057651ee4c13e6d15e/LICENSE.txt",
+    "included": "New summary statistics, source identifiers and checksums, and independent readers. Source archives, article and vendor code remain at their respective sources."
+  },
+  "queries": [
+    "multi-hop wireless control cyber-physical testbed cart-pole LWB TTW open dataset",
+    "site:zenodo.org FlockLab public datasets TTnet model validation GPIO",
+    "Paper and artifact → repository README and publication → fixed data version via concept DOI → raw serial logs, registration confirmations and six processed CSVs → full bundle directories."
+  ],
+  "sampling": "For series 1 and 2, select the lowest archived test ID with published round statistic for each of (payload bytes, slots) = (8, 5) and (64, 30). Fully retrieve the four listed nested members from the matching large archives and verify original ZIP CRC plus identical serial.csv to its corresponding small archive member. The deposit reports that series 3 detailed traces were not retained.",
+  "complete_nested_members": [
+    {
+      "series": "serie1",
+      "test": "66873",
+      "remote_archive": "serie1_all_data.zip",
+      "member": "serie1/results/66873.tar.gz",
+      "crc32": "34be2dcc",
+      "sha256": "9ae973ea459aa843ef1f613d10a6a403ca9fbce4b89f86e6e8c01bf2c0f73293",
+      "bytes": 30838816
+    },
+    {
+      "series": "serie1",
+      "test": "67353",
+      "remote_archive": "serie1_all_data.zip",
+      "member": "serie1/results/67353.tar.gz",
+      "crc32": "e370ad74",
+      "sha256": "32f87ac5a80fc83c80fbe72942ad091f6367e1d50496ec1c9cf4adb271b2f601",
+      "bytes": 31315598
+    },
+    {
+      "series": "serie2",
+      "test": "68673",
+      "remote_archive": "serie2_all_data.zip",
+      "member": "serie2/results/68673.tar.gz",
+      "crc32": "d5fcb87c",
+      "sha256": "219289a7b8e40adcc992c83f753c927f21e820ca83a89e838aa470304cb691ce",
+      "bytes": 30856280
+    },
+    {
+      "series": "serie2",
+      "test": "69155",
+      "remote_archive": "serie2_all_data.zip",
+      "member": "serie2/results/69155.tar.gz",
+      "crc32": "5dd6da95",
+      "sha256": "699f77281a6101502a4079ca892eb78dc192a4008fa40d9ca0eb46f67bca8b28",
+      "bytes": 31279292
+    }
+  ],
+  "timing_semantics": "T_round is the measured firmware duration of the wireless scheduling round, in microseconds. Processed CSVs contain one accepted result or a missing value per node and trial. Of 39,879 published node rows, 35,821 have a value; each equals its node’s first serial T in the same trial. Independently reproduced all 1,549 published per-trial maxima. Reasons for omitted observations in the author processing code include joining during the measurement round. The 4,058 omitted measurements are not a lost-packet count.",
+  "admissions": "1,620 intended registrations, 1,559 accepted; series 3 reports 31 observer-configuration and 30 busy-slot rejections. Seven already accepted IDs lack serial archives. Three further serial archives have no published maximum.",
+  "gpio": "Across the four complete trial members, the GPIO actuation table only records RST for each observer. Compare planned and executed reset timestamps at the published precision. Four separate traced pins INT1/2 and LED1/2 are observed on the 26 nodes. Merged trace rows contain cross-observer time reversals; all four logs are monotonic within each node. A reset or GPIO edge does not establish physical robot actuation.",
+  "statistics": "ttnet-conditions.csv reports medians and empirical nearest-rank P95 across recorded per-trial maximum durations by payload and slots. This differs in estimator and coverage from the authors’ TriScale confidence-bound statistic.",
+  "reproduce": [
+    "Python 3.11+. Download data_raw.zip and the six data_processed files from fixed upstream URLs preserving their paths. Run python derive_ttnet.py data_raw.zip data_processed OUT.",
+    "For each complete_nested_members item, extract its member from the specified source archive to SAMPLES/TEST_ID.tar.gz; either download the archive or use a seekable HTTP range reader. Run python derive_ttnet_gpio.py SAMPLES data_raw.zip OUT."
+  ]
+}

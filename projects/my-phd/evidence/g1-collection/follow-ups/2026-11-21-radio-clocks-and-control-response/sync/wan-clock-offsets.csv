@@ -1,0 +1,9 @@
+file,tool,external_reference_rows,external_signed_median_ns,external_abs_median_ns,external_abs_p95_ns,software_raw_rows,software_raw_abs_median_ns,software_filtered_rows,shared_exact_time_values_true_raw
+dataset/roa/chrony/20240201-122552_poll6-100k.csv,chrony,100021,-4212.0,39539.0,80860.0,,,,
+dataset/roa/ptp4l/20240502-140703_linreg-mmedian-100-none-100k.csv,ptp4l,100113,-6041.0,30589.0,104904.4,99864,95141.5,,0
+dataset/roa/ptp4l/20240505-235713_linreg-mmedian-100-iqr-100-2-100k.csv,ptp4l,100115,-193.0,5176.0,17758.3,99834,90629.0,998,0
+dataset/roa/ptp4l/20240513-155826_linreg-mmedian-100-mzscore-500-2-100k.csv,ptp4l,100123,-604.0,7930.0,16341.9,99704,80891.5,199,0
+dataset/roa/ptp4l/20240520-090908_linreg-mmedian-100-zscore-100-2-100k.csv,ptp4l,100103,471.0,4042.0,12192.0,99896,78720.5,999,0
+dataset/roa/ptp4l/20240524-083903_linreg-mmedian-100-mzscore-100-2-100k.csv,ptp4l,100112,574.0,4709.0,14965.0,100023,86444.0,1000,0
+dataset/roa/ptp4l/20240610-092247_linreg-mmedian-100-iqr-500-2-100k.csv,ptp4l,100118,949.0,5813.0,18708.15,99979,69688.0,200,0
+dataset/roa/ptp4l/20240611-155411_linreg-mmedian-100-zscore-500-2-100k.csv,ptp4l,100117,758.0,2014.0,7635.2,99955,76108.0,200,0

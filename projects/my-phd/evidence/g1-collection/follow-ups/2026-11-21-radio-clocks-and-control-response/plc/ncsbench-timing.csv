@@ -1,0 +1,13 @@
+subset,interval,cycles,min_ms,p50_ms,p95_ms,p99_ms,max_ms
+all_aligned_cycles,robot_read_to_pre_send,1389,2.383800,3.636100,5.440200,6.199976,11.180400
+all_aligned_cycles,robot_pre_send_to_receive_marker,1389,10.577300,17.155100,19.698860,22.675664,30.955300
+all_aligned_cycles,robot_receive_marker_to_post_write,1389,2.520400,15.193200,18.562600,19.944880,26.932000
+all_aligned_cycles,robot_read_to_post_write,1389,32.905600,35.891300,37.877500,38.971684,48.069800
+all_aligned_cycles,controller_receive_to_pre_send,1389,0.868340,0.945042,1.009834,1.054359,1.226207
+all_aligned_cycles,capture_sensor_to_command,1389,0.902000,0.981000,1.055000,1.110600,1.268000
+reported_pair_within_1_microvolt,robot_read_to_pre_send,1385,2.383800,3.636100,5.441200,6.205368,11.180400
+reported_pair_within_1_microvolt,robot_pre_send_to_receive_marker,1385,10.577300,17.151100,19.646620,22.027496,27.660300
+reported_pair_within_1_microvolt,robot_receive_marker_to_post_write,1385,6.742100,15.202200,18.564800,19.947140,26.932000
+reported_pair_within_1_microvolt,robot_read_to_post_write,1385,33.209500,35.896800,37.871400,38.976212,48.069800
+reported_pair_within_1_microvolt,controller_receive_to_pre_send,1385,0.868340,0.945042,1.009353,1.054422,1.226207
+reported_pair_within_1_microvolt,capture_sensor_to_command,1385,0.902000,0.981000,1.054800,1.110800,1.268000

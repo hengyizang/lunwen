@@ -1,0 +1,53 @@
+{
+  "title": "Experimental dataset of the article: \"Accurate Synchronization-Free UWB-TDoA Indoor Localization with Unlimited Tag Support\"",
+  "doi": "10.5281/zenodo.20051894",
+  "concept_doi": "10.5281/zenodo.20051893",
+  "creator": "Pérez Solano, Juan José",
+  "date": "2026-05-06",
+  "version": "First Zenodo record (index 0), no author-supplied version string, record 20051894",
+  "landing": "https://doi.org/10.5281/zenodo.20051894",
+  "checked_utc": "2026-11-21",
+  "zenodo_record": "https://zenodo.org/api/records/20051894",
+  "zenodo_record_sha256": "7cf8a242e1da6bb794a6c4e3596ddb368f6585abcfa07482522dac9fd71ac4e5",
+  "datacite_record": "https://api.datacite.org/dois/10.5281/zenodo.20051894",
+  "archive_name": "Data_set.zip",
+  "archive_url": "https://zenodo.org/api/records/20051894/files/Data_set.zip/content",
+  "bytes": 16372653,
+  "publisher_md5": "af8c217d6a69c5a4872660401cb6767c",
+  "archive_sha256": "cc5843a0f99fcdaa079103a2f1039728f8529f61157833b36ea0ed6c39d478d1",
+  "rights": "CC BY 4.0 (fixed version Zenodo/DataCite metadata and README.pdf p. 5); attribution to Juan José Pérez Solano. Derived summaries and script only.",
+  "history": {
+    "prior_commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "count": 620,
+    "release_keys": [
+      "10.5281/zenodo.20051894",
+      "10.5281/zenodo.20051893",
+      "Accurate Synchronization-Free UWB-TDoA Indoor Localization with Unlimited Tag Support"
+    ],
+    "paths": []
+  },
+  "query_log": [
+    "Followed the related G1 literature search lead for the exact title “Accurate Synchronization-Free UWB-TDoA Indoor Localization with Unlimited Tag Support”. Resolved release and concept DOI in DataCite and Zenodo and downloaded the complete Data_set.zip. Read README.pdf in the archive, verified its sequence diagram, parsed every non-metadata CSV and searched all project evidence by DOI and normalized companion title."
+  ],
+  "method_source": {
+    "member": "README.pdf",
+    "sha256": "94a7b540ce0ebfa04ea5cdca04901fd7276a48e78b3172489058b0d649e66996",
+    "locators": "p. 1 origin/destination DW1000 clock roles; p. 2 sequence diagram, poll/ack/range labels and four TDoA groups; pp. 3–4 fixed anchor/tag geometry in metres, and which side of the brick wall contains A0 and tag; p. 5 data license."
+  },
+  "coverage": {
+    "real_csvs": 7,
+    "exchanges": 70000,
+    "timestamp_fields_per_exchange": 30,
+    "file_layout": "Three single-room LOS tag points, two NLOS1 tag points (different room from A0) and two NLOS2 tag points (same room as A0). The tag remains passive; A0 and four peer anchor radios exchange packets.",
+    "macos_entries_excluded": true,
+    "records_with_value_ge_2p40": 289,
+    "values_ge_2p40": 830,
+    "duplicates_within_file": 0,
+    "zero_timestamp_cells": 0
+  },
+  "evidence": "Hardware UWB common radio events timestamped in different local clock domains, at fixed positions with and without line of sight. Each comparison uses two transmissions initiated by A0 and recorded at A0 and a receiver. A1–4 supply one adjacent pair each; the passive tag supplies the four adjacent pairs and the entire Poll1–Range span. The common-event ratio supplies relative *interval* dispersion only. Positive ppm means the receiver recorded more elapsed ticks than the sender.",
+  "cleaning": "Source integers sometimes exceed the nominal 40-bit DW1000 modulus 2^40 within an exchange. Preserve exactly as published; all compared same-clock endpoint differences are positive without extra wrap correction. Count crossings only when the first stored integer is below 2^40 and last is above or equal; this is a representation diagnostic. No inter-exchange unwrapping or epoch alignment. Hash each full CSV and check numeric dimensionality and exact duplicate content. No numerical exclusions, no filtering or resampling.",
+  "stats": "Use 1e6 * (receiver_elapsed_ticks - A0_elapsed_ticks) / A0_elapsed_ticks. Each of 63 rows summarizes 10,000 exchanges within one source file, receiver and event pair with linearly interpolated 5th/50th/95th percentiles and extrema. Nine comparisons share the same exchanges; totals must not be treated as independent samples. For the seven Poll1–Range tag comparisons, individual-run medians range from -4.1389354 to -3.6006803 ppm.",
+  "limitations": "The deposit contains radio event ticks, fixed tag/anchor coordinates and a protocol diagram. External clock ground truth, absolute synchronization phase error, robot motion, packet loss denominator, application time stamps, send-queue age and controller adoption time are unobserved. Time-varying reception/propagation delays and oscillator rate together affect the relative interval ratio. No independent UTC, GNSS or oscilloscope reference was supplied for this release. Positions are separate experiments; LOS versus NLOS is not a controlled causal clock comparison. No causal or localization accuracy metric is inferred.",
+  "reproduce": "python derive_uwb_intervals.py UWB_ZIP OUTPUT_DIRECTORY (Python + NumPy)."
+}

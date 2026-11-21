@@ -1,0 +1,11 @@
+source,release_url,file_evidence,rights,history_status,provenance
+MILUV 三机器人主动测距与被动监听,https://doi.org/10.25452/figshare.plus.28386041.v1,固定版本 Figshare，16 场三机试验的交易、监听与动作捕捉记录,CC BY 4.0（数据），MIT（工具）,upgrade,miluv/miluv-source.json
+WSR 移动机器人双向 Wi-Fi,https://github.com/Harvard-REACT/WSR-Toolbox-Dataset/tree/7c8cb67c8dff9553e39f65552c0de4bf427ba42c,固定版 Git，882 份 CSI 接收文件，双端交换编号,BSD-2-Clause,new,swarm/wsr-source.json
+TelosB 固定单跳组播,https://doi.org/10.17632/r6skswb8s4.2,6 场逐包接收位图，保留工作簿和绘图输入冲突,CC BY 4.0,new,mote/multicast-source.json
+五锚点 UWB 被动标签,https://doi.org/10.5281/zenodo.20051894,"7 个固定位置，各 10,000 组无线硬件时间戳",CC BY 4.0,new,uwbclock/uwb-clock-source.json
+5G 网络端点时钟与 PPS,https://doi.org/10.5281/zenodo.14230741,4 组示波器双通道 PPS 测量，软件日志和抓包单列,CC BY 4.0,new,sync/mobile-sync-source.json
+长距离光纤 PTP 与外部参考时钟,https://doi.org/10.5281/zenodo.16794348,14 个实网测量文件，频标参照与方向时延分开,CC BY 4.0,new,sync/wan-sync-source.json
+NCSbench 两轮倒立摆远程闭环,https://github.com/tum-lkn/NCSbench/tree/d7e3261d2847ab663c1f0a732c7611e046ce614d/benchmark/measurements/platform-a-wireless,同一物理机器人的读传感器至写占空比周期；远程控制与抓包作对照,仓库 MIT,new,plc/ncsbench-source.json
+Málaga 网络遥操作传感请求 RTT,https://zenodo.org/records/14967644,完整归档内 36 对测量／元数据，其中 4 组标记仿真,CC BY 4.0,upgrade,malaga/malaga-source.json
+操作者和机器人手部双 IMU,https://github.com/rhoyn/teleop-hands-latency-analysis/tree/6f886f6202a147b6a64f70e66f7feec7681b0346,固定版 Git，21 段配对角速度轨迹，独立复算与量程极限敏感性,仓库 MIT，第三方组件见 NOTICE,new,actuation/hand-imu-source.json
+TTnet / FlockLab 无线调度轮次,https://doi.org/10.5281/zenodo.3753974,完整串口小包及全部 6 张相应上游处理表，另从大包抽 4 场完整成员,数据 GPL-2.0-or-later；工具库附 GPL 第 3 版许可文本,new,ttw/ttnet-source.json

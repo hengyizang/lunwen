@@ -1,0 +1,89 @@
+{
+  "title": "WSR-Toolbox-Dataset — reciprocal WiFi CSI captures on a physical robot testbed",
+  "repository": "Harvard-REACT/WSR-Toolbox-Dataset",
+  "source_url": "https://github.com/Harvard-REACT/WSR-Toolbox-Dataset/tree/7c8cb67c8dff9553e39f65552c0de4bf427ba42c",
+  "release_commit": "7c8cb67c8dff9553e39f65552c0de4bf427ba42c",
+  "authors": "Ninad Jadhav, Weiying Wang, Diana Zhang, Swarun Kumar, Stephanie Gil and Harvard-REACT; citation and testbed roles as documented in the dataset README",
+  "rights": "Dataset repository LICENSE: BSD 2-Clause, Copyright (c) 2021 Harvard-REACT. Derived counts and intervals only; underlying raw radio data remain at source.",
+  "accessed_utc_date": "2026-11-21",
+  "queries": [
+    {
+      "query": "multi robot wireless communication experimental dataset transmitted received packets mobile robots packet sequence IEEE 802.15.4 packet reception ratio dataset robot swarm raw data github Crazyflie packet delivery",
+      "selected": "Harvard-REACT/WSR-Toolbox-Dataset; physical multi-peer testbed, reciprocal CSI files; a neighboring RSSI-only source lacked transmit logs."
+    },
+    {
+      "query": "wireless mobile robots communication link packet reception dataset ground robots sender receiver RSSI packet sequence multi-robot WiFi measurements csv dataset robot robot communication github",
+      "selected": "Confirmed the README descriptions and corresponding code. Synthetic smart-factory traffic and simulated swarm packet logs were excluded."
+    }
+  ],
+  "history": {
+    "prior_git_commit": "aa269f9b8943662524791ef24471ca07213cffbf",
+    "historical_text_documents": 620,
+    "normalized_keys": [
+      "Harvard-REACT/WSR-Toolbox-Dataset",
+      "WSR-Toolbox-Dataset",
+      "7c8cb67c8dff9553e39f65552c0de4bf427ba42c",
+      "2109.12205",
+      "2012.04174",
+      "Toolbox Release: A WiFi-Based Relative Bearing Sensor for Robotics",
+      "WSR: A WiFi Sensor for Collaborative Robotics"
+    ],
+    "historical_matches": [],
+    "scope": "Project evidence on the state branch (includes regular collection and targeted follow-ups) and early project baseline catalogue. Companion papers and data releases are distinguished."
+  },
+  "inputs": {
+    "tree": "https://api.github.com/repos/Harvard-REACT/WSR-Toolbox-Dataset/git/trees/7c8cb67c8dff9553e39f65552c0de4bf427ba42c?recursive=1",
+    "tree_summary": "Complete, not truncated. All 882 .dat blobs under the 2D raw-data branch were retrieved. Git object SHA-1 and source size were verified for every input; per-file SHA-256 retained in wsr-captures.csv.",
+    "capture_bytes": 481595392,
+    "document_checksums": {
+      "README.md": {
+        "url": "https://raw.githubusercontent.com/Harvard-REACT/WSR-Toolbox-Dataset/7c8cb67c8dff9553e39f65552c0de4bf427ba42c/README.md",
+        "sha256": "93c4afc123e8c024d1b8366f8afb610ffaf7f1cc6708a8fc3274409db5322384"
+      },
+      "LICENSE": {
+        "url": "https://raw.githubusercontent.com/Harvard-REACT/WSR-Toolbox-Dataset/7c8cb67c8dff9553e39f65552c0de4bf427ba42c/LICENSE",
+        "sha256": "434b9d76ca6958924894ee12d5809aa2563711472b7fb30c4e8bc3bbd12db79b"
+      },
+      "config_files/dataset.json": {
+        "url": "https://raw.githubusercontent.com/Harvard-REACT/WSR-Toolbox-Dataset/7c8cb67c8dff9553e39f65552c0de4bf427ba42c/config_files/dataset.json",
+        "sha256": "3df1a433c692da6e27578cb9fd1cadb718294e0f20b0651e9df99146ae516681"
+      }
+    },
+    "reader_cpp": {
+      "url": "https://raw.githubusercontent.com/Harvard-REACT/WSR-Toolbox-cpp/59dd5da04e0573b1397555247a7d90708bc60e5a/src/WSR_Util.cpp",
+      "sha256": "3cc71e8061c1f318adbd7de7020670575ae8077d6b04a4c19083e02917183a94",
+      "locator": "read_bfee_timestamp_mac, forward/reverse channel product by frame_count"
+    },
+    "publication": {
+      "arxiv": "2109.12205",
+      "url": "https://arxiv.org/pdf/2109.12205",
+      "sha256": "e28dd3f8fac8ba38273dce2bb571b099d60fa2f20a1e0605ecaff3e5fefcbfde",
+      "locator": "§III.A–B, round robin responses and matching counter; §IV-B testbed and 637 samples. Original citation and alternative WSR paper 2012.04174 in the dataset README."
+    }
+  },
+  "protocol": "The central receiver robot broadcasts in round-robin order; a neighbor returns a transmission after detecting a packet intended for itself. Each file logs incoming CSI at the named endpoint, regardless of tx/rx in its filename. Common frame counter joins a forward and a reply record from the same ranked peer/run. It identifies a reciprocal exchange, not two observations of the same one-way packet. Use labels from config_files/dataset.json.",
+  "coverage": {
+    "capture_files": 882,
+    "run_groups": 245,
+    "set_names": [
+      "LOS_Set_A",
+      "LOS_Set_B",
+      "NLOS_Set_A",
+      "NLOS_Set_B",
+      "NLOS_Set_C"
+    ],
+    "paired_link_runs": 637,
+    "extra_central_only_link_runs": 49,
+    "complete_csi_records": 2066437,
+    "files_with_incomplete_tail": 881,
+    "excluded_trailing_bytes": 115571,
+    "pair_counter_matches": 991267,
+    "only_at_central_given_both_capture_files": 4851,
+    "only_at_peer_given_both_capture_files": 2492,
+    "unseen_at_both_inside_common_index_span": 2575
+  },
+  "measures": "Runs grouped by condition directory and shared filename acquisition key, direction by sender label inside each receiver capture. Integer Unix seconds and microseconds from CSI header; strictly increasing within each run/direction. No local frame counter repeated. Median/max intervals are between local logged arrivals. Unseen at both counts IDs in the intersection of the two observed counter spans that occur in neither log; boundaries outside this span are not imputed. Source-side send events and radio loss are not guaranteed by an absent CSI log. Blank columns mean no corresponding file, not 0 arrivals. The 49 extra link-runs are central evidence for tx2 in NLOS Set C without tx2 files.",
+  "clock_boundary": "Across 637 matches at the link/run level, medians of (peer receive clock - central receive clock) for same-index exchanges run from -323833 to +57777931 microseconds. Differences include host clock offset and reciprocal direction ordering. They are not estimates of one-way latency, RTT or controller adoption. No globally synchronized event time or per-transmission ground-truth denominator is asserted.",
+  "independent_audit": "A separate NumPy fixed-stride decode verified length/code (0x00e7 / 187), 233-byte record counts, microseconds range and truncated-byte counts for every single file. Full per-file hashes and shape are retained.",
+  "reproduce": "Python 3 standard library. python derive_wsr.py DATASET_CHECKOUT OUTPUT_DIRECTORY. Expected Dataset/2D-Displacement_raw_data and config_files/dataset.json under DATASET_CHECKOUT."
+}
