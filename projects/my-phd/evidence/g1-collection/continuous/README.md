@@ -7,11 +7,11 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：7
-- **最近更新时间 (UTC)**：2026-11-21T07:59:03Z
-- **累计净新增文献** (`literature-new.csv`)：623 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：528 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：551 条
+- **已完成轮次**：8
+- **最近更新时间 (UTC)**：2026-11-21T08:04:25Z
+- **累计净新增文献** (`literature-new.csv`)：767 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：612 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：686 条
 - **累计已完成确定性清洗数据集**：14 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
@@ -19,16 +19,16 @@
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 1 | 6 |
-| `R2_Aerial_Actuator` | 72 | 9 |
-| `R5_MultiRobot_Comm` | 86 | 3 |
-| `Robotics_Embodied` | 244 | 157 |
-| `Mechanical_Physics_AI` | 209 | 211 |
-| `Mechatronics_PHM_Control` | 86 | 150 |
-| `Smart_Manufacturing` | 13 | 68 |
-| `Smart_Factory_DigitalTwin` | 5 | 59 |
+| `R1_Force_Contact` | 1 | 7 |
+| `R2_Aerial_Actuator` | 73 | 32 |
+| `R5_MultiRobot_Comm` | 87 | 16 |
+| `Robotics_Embodied` | 246 | 165 |
+| `Mechanical_Physics_AI` | 291 | 279 |
+| `Mechatronics_PHM_Control` | 165 | 164 |
+| `Smart_Manufacturing` | 18 | 70 |
+| `Smart_Factory_DigitalTwin` | 10 | 59 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 35 | 0 |
+| `Adjacent` | 38 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -72,3 +72,4 @@
 | 5 | 2026-11-21T07:49:14Z | Broad Engineering R5: Robotics_Embodied | +118 | +112 | +3 | [round-05-audit.json](rounds/round-05-audit.json) |
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
 | 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
+| 8 | 2026-11-21T08:04:25Z | Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control | +144 | +84 | +0 | [round-08-audit.json](rounds/round-08-audit.json) |

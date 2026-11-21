@@ -1,0 +1,310 @@
+{
+  "schema_version": "1.0",
+  "round": 8,
+  "completed_at": "2026-11-21T08:04:25Z",
+  "batch_label": "Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control",
+  "base_head_sha": "9af37d5bb7d9a746f3de77b639f1cef7e5b7476c",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 154,
+    "duplicates_skipped": 10,
+    "net_new": 144,
+    "new_reading_queue": 135,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "generative CAD design mechanical engineering",
+        "receipt_id": "20261121t080425z-openalex-f3244516af",
+        "request_url": "https://api.openalex.org/works?search=generative+CAD+design+mechanical+engineering&per-page=12",
+        "result_count": 12,
+        "response_sha256": "743f579e745b8e6a531983ab46fa4e02ebec331d57b30a8255ca45a89748ac26",
+        "normalized_results_sha256": "47a08af2f1967e7895bf4322adbc8089cbac27e2761cc8f8af6a81c45aa34d63"
+      },
+      {
+        "provider": "crossref",
+        "query": "generative CAD design mechanical engineering",
+        "receipt_id": "20261121t080426z-crossref-9f4978c63e",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=generative+CAD+design+mechanical+engineering&rows=12",
+        "result_count": 12,
+        "response_sha256": "aeec7c9050925816b7602c871a4aacab5ad6c311fd69e5b9f33174a661c8baa8",
+        "normalized_results_sha256": "8e750500b7c7e0d165d6c70c6b58b92a204b75c98ff809b0ae8bfaa2dc9ca826"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "generative CAD design mechanical engineering",
+        "receipt_id": "20261121t080428z-europe-pmc-c3a1bb0942",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=generative+CAD+design+mechanical+engineering&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "c95ca3633dcd5d7e22cab4879fd3355f6d687911f217bb3e32506d31934d80c2",
+        "normalized_results_sha256": "563d9b18d7d9ab64f11c1f2d4d0182777b0c60e73ef02c1ad78fa7aca182514d"
+      },
+      {
+        "provider": "hal",
+        "query": "generative CAD design mechanical engineering",
+        "receipt_id": "20261121t080430z-hal-29b26054d3",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=generative+CAD+design+mechanical+engineering&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "fc7d925c5b7f023e6f2eb82e48d5ee0901ff6c7171e7e874e4555d85ebb978d9",
+        "normalized_results_sha256": "82515abd808334c82294a05d030dac62c8ebafdf3c867cd21d5b7eeecde8ee38"
+      },
+      {
+        "provider": "openalex",
+        "query": "neural operator CFD fluid thermal",
+        "receipt_id": "20261121t080432z-openalex-d9bc8192e0",
+        "request_url": "https://api.openalex.org/works?search=neural+operator+CFD+fluid+thermal&per-page=12",
+        "result_count": 12,
+        "response_sha256": "0100ec5e6f2a66c8b8ef4f81e3e6768d1394aef424df7d0c2850227db4493263",
+        "normalized_results_sha256": "b1f6e79e426a36978c9836c930fe5126f5d9ad68c9ffa4c695f1f67a7c978a07"
+      },
+      {
+        "provider": "crossref",
+        "query": "neural operator CFD fluid thermal",
+        "receipt_id": "20261121t080433z-crossref-64118ad003",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=neural+operator+CFD+fluid+thermal&rows=12",
+        "result_count": 12,
+        "response_sha256": "89d185628cce843e7848abc940f0573938e5ceccb2b1dd748125cda0e2de127f",
+        "normalized_results_sha256": "4a111d53668d183ad8f899cfa64ac0899d27844608ba6a5ccd584e8bb7d118ee"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "neural operator CFD fluid thermal",
+        "receipt_id": "20261121t080434z-europe-pmc-3559226d56",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=neural+operator+CFD+fluid+thermal&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "34a8665a4e035defb36160ac1fb5c0e84092d252d4c471eb9abf2166de74d709",
+        "normalized_results_sha256": "6b7ea82e11c06ad3e321d984e06e0a21aa84e8493c0ceb4e5cac32fd1c1dac03"
+      },
+      {
+        "provider": "hal",
+        "query": "neural operator CFD fluid thermal",
+        "receipt_id": "20261121t080437z-hal-c16973783a",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=neural+operator+CFD+fluid+thermal&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "openalex",
+        "query": "bearing fault diagnosis domain adaptation",
+        "receipt_id": "20261121t080439z-openalex-00b1c97d17",
+        "request_url": "https://api.openalex.org/works?search=bearing+fault+diagnosis+domain+adaptation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "bb35643ae39cea5e992229ce510ee21d849f4a4af925beb4c5a4da83f3c99f16",
+        "normalized_results_sha256": "87900fd0050a55d7a9b9c3537307deb58309c7bafdbfe439490c8db92edb0ded"
+      },
+      {
+        "provider": "crossref",
+        "query": "bearing fault diagnosis domain adaptation",
+        "receipt_id": "20261121t080441z-crossref-e804f885cd",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=bearing+fault+diagnosis+domain+adaptation&rows=12",
+        "result_count": 12,
+        "response_sha256": "3758004f5db3d1ce351fb811561b85e15c99be91b88f76bca1915303a62cca01",
+        "normalized_results_sha256": "1bdbec3f75f1fdd208f79606f911b28b8f3f87afc07dea44517a6ba4e5e73ea1"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "bearing fault diagnosis domain adaptation",
+        "receipt_id": "20261121t080442z-europe-pmc-2fabed4709",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=bearing+fault+diagnosis+domain+adaptation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "432976bb0507cb993f96cd765928a93be709487bf9cad6392e217ed875a8de92",
+        "normalized_results_sha256": "0792e265ecb924aee5b3beaf24f2f2b8a3065dc77c72a393f2ba35a547805f74"
+      },
+      {
+        "provider": "hal",
+        "query": "bearing fault diagnosis domain adaptation",
+        "receipt_id": "20261121t080449z-hal-fb1bd1057d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=bearing+fault+diagnosis+domain+adaptation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "openalex",
+        "query": "remaining useful life rotating machinery",
+        "receipt_id": "20261121t080450z-openalex-bb4d9871c0",
+        "request_url": "https://api.openalex.org/works?search=remaining+useful+life+rotating+machinery&per-page=12",
+        "result_count": 12,
+        "response_sha256": "b1e8d054da9238d773611dd0c42e3a4420b9c943ec407667ccbdac43962921b0",
+        "normalized_results_sha256": "44bdcfd2ab345ad334ca810c00de08c4c758e6f671ce885bb7f23c53c23f4b50"
+      },
+      {
+        "provider": "crossref",
+        "query": "remaining useful life rotating machinery",
+        "receipt_id": "20261121t080452z-crossref-8e362f3e9b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=remaining+useful+life+rotating+machinery&rows=12",
+        "result_count": 12,
+        "response_sha256": "dce65422cbb9725ec7e875efacba8c3f8d90704d3c8b947df23e73767d797ccd",
+        "normalized_results_sha256": "4aa815c2bc9112b932ab367687f2516b42d46840892b44269c1a00a7c1f2e4f0"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "remaining useful life rotating machinery",
+        "receipt_id": "20261121t080453z-europe-pmc-2bd23d7987",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=remaining+useful+life+rotating+machinery&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1ca1d4d6e3acd07e7674345e405b40dbc4f578548048ef35d7cc9e84ae9a9671",
+        "normalized_results_sha256": "3afadaaf643f818c25c7f42e88adcc767e279c91cc3e82327d3e02b22c818ced"
+      },
+      {
+        "provider": "hal",
+        "query": "remaining useful life rotating machinery",
+        "receipt_id": "20261121t080501z-hal-a783512178",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=remaining+useful+life+rotating+machinery&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 6,
+        "response_sha256": "f1d89759a90d14f90c4c838ad45c27fb0834e049c13855750cf143f4e7ee63a5",
+        "normalized_results_sha256": "8cbd86b573cb91a20141a255307d8bfcd7d21cc57d48b07ea5cf997846efc207"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/lra.2025.3609669",
+        "receipt_id": "20261121t080504z-opencitations-29ad914c84",
+        "result_count": 3,
+        "response_sha256": "2e7233c56cd2e6ab823a36ddf8f377c71715a73fd7b4b1fafcf47ebb6dd9cab9"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s26041129",
+        "receipt_id": "20261121t080505z-opencitations-8d0ba1b8e4",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 164,
+    "off_topic_filtered": 58,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 22,
+    "net_new": 84,
+    "provider_statuses": [
+      {
+        "query": "tribology wear",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tribology wear",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "uav thrust",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "uav thrust",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "uav thrust",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "uav thrust",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "uav thrust",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "v2x perception",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "v2x perception",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "v2x perception",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "v2x perception",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "v2x perception",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
