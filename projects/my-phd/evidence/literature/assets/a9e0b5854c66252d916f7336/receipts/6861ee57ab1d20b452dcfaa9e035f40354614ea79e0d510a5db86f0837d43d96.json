@@ -1,0 +1,98 @@
+{
+  "acquired_at": "2026-11-21T04:18:44.379831+00:00",
+  "arxiv_id": null,
+  "authors": [
+    "Toulabi, Sobhan",
+    "Mousavi, Seyyede Marzieh",
+    "Saberi, Farhad Fani"
+  ],
+  "downloads": [
+    {
+      "acquired_at": "2026-11-21T04:18:46.609348+00:00",
+      "bytes": 405881,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://www.nature.com/articles/s41598-026-65823-8?error=cookies_not_supported&code=0703aaed-f59d-45d1-a48c-37c38a16ba70",
+      "http_status": 200,
+      "kind": "html",
+      "page_metadata": {
+        "authors": [
+          "Toulabi, Sobhan",
+          "Mousavi, Seyyede Marzieh",
+          "Saberi, Farhad Fani"
+        ],
+        "pdf_candidates": [
+          "https://www.nature.com/articles/s41598-026-65823-8.pdf"
+        ],
+        "publication_date": null,
+        "publication_date_basis": null,
+        "source_type": "project_page",
+        "title": "Fault- and saturation-aware quadrotor tracking via MRAC with an RL-inspired adaptive reference governor"
+      },
+      "path": "data/raw/literature/sources/1b9a71b42497e5a48d11780f144f1a08adaa4fdf051d0fc7500751ad0738b693.html",
+      "sha256": "1b9a71b42497e5a48d11780f144f1a08adaa4fdf051d0fc7500751ad0738b693",
+      "source_url": "https://www.nature.com/articles/s41598-026-65823-8",
+      "text_path": "data/raw/literature/sources/1b9a71b42497e5a48d11780f144f1a08adaa4fdf051d0fc7500751ad0738b693.txt",
+      "text_sha256": "359e38f60dc0b59745ffbf67776a31b1da24fe3c4e5021074bdcb11da0ad842f"
+    },
+    {
+      "acquired_at": "2026-11-21T04:18:49.546270+00:00",
+      "bytes": 9326851,
+      "content_type": "application/pdf",
+      "final_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf?error=cookies_not_supported&code=15dedf09-e7b2-45a1-9adf-22557d0edb24",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7.pdf",
+      "sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+      "source_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf"
+    }
+  ],
+  "execution": {
+    "mode": "cloud",
+    "receipt_id": "44865437075"
+  },
+  "failures": [],
+  "final_url": "https://www.nature.com/articles/s41598-026-65823-8?error=cookies_not_supported&code=0703aaed-f59d-45d1-a48c-37c38a16ba70",
+  "local_pdf": "data/raw/literature/sources/283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7.pdf",
+  "original_input": "https://www.nature.com/articles/s41598-026-65823-8",
+  "pdf_status": "acquired",
+  "pdfs": [
+    {
+      "acquired_at": "2026-11-21T04:18:49.546270+00:00",
+      "bytes": 9326851,
+      "content_type": "application/pdf",
+      "final_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf?error=cookies_not_supported&code=15dedf09-e7b2-45a1-9adf-22557d0edb24",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7.pdf",
+      "permissions": {
+        "human_review": "required",
+        "license": "unknown",
+        "permission_evidence_url": null,
+        "public_access_is_not_reuse_permission": true,
+        "reuse_permission": "unknown"
+      },
+      "sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+      "source_pdf_sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+      "source_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf",
+      "version": null
+    }
+  ],
+  "permissions": {
+    "human_review": "required",
+    "license": "unknown",
+    "permission_evidence_url": null,
+    "public_access_is_not_reuse_permission": true,
+    "reuse_permission": "unknown"
+  },
+  "publication_date": null,
+  "publication_date_basis": null,
+  "schema_version": 1,
+  "scientific_support_status": "unreviewed_source",
+  "source_pdf_sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+  "source_type": "project_page",
+  "source_url": "https://www.nature.com/articles/s41598-026-65823-8",
+  "status": "acquired",
+  "title": "Fault- and saturation-aware quadrotor tracking via MRAC with an RL-inspired adaptive reference governor",
+  "version": null,
+  "version_basis": "unspecified; acquired bytes fixed by SHA256"
+}
