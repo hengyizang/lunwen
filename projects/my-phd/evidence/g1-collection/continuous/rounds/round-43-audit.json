@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0",
+  "round": 43,
+  "completed_at": "2026-11-21T11:12:53Z",
+  "batch_label": "Broad Engineering R43: Smart_Manufacturing",
+  "base_head_sha": "8252892d617ec879cbedad2df60461afa3bf36a9",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 108,
+    "duplicates_skipped": 16,
+    "net_new": 92,
+    "new_reading_queue": 80,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "friction stir welding quality",
+        "receipt_id": "20261121t111253z-arxiv-da599e3348",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Afriction+AND+all%3Astir+AND+all%3Awelding+AND+all%3Aquality&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "91a4c6afb842ec815603709f8715f9525de0375602fb7c5785df0d53b271096a",
+        "normalized_results_sha256": "dff3d54ae47d325cb31924bc91c2a3f28a507f8af0e32fbd744fe5935400a733"
+      },
+      {
+        "provider": "crossref",
+        "query": "friction stir welding quality",
+        "receipt_id": "20261121t111253z-crossref-c4e6570fcf",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=friction+stir+welding+quality&rows=12",
+        "result_count": 12,
+        "response_sha256": "80bc5ee832186fde40791806afc6c7dbd6e3f4add93877a3200df59cb5dd9632",
+        "normalized_results_sha256": "ea2cb5c9e713b4fc94ee5255e0acdb7add73d85496236284b90dd2c591e62056"
+      },
+      {
+        "provider": "openalex",
+        "query": "friction stir welding quality",
+        "receipt_id": "20261121t111254z-openalex-a24e52f8a9",
+        "request_url": "https://api.openalex.org/works?search=friction+stir+welding+quality&per-page=12",
+        "result_count": 12,
+        "response_sha256": "c5bd75444b358c102fa3fdc12d999ea6f54d2735fe951807017078dd19a6397b",
+        "normalized_results_sha256": "4befda9901c3b028f163a13470f4a0658ca23fcc1d8e048b5c3a90a151de1214"
+      },
+      {
+        "provider": "arxiv",
+        "query": "resistance spot welding nugget",
+        "receipt_id": "20261121t111256z-arxiv-4ff95c93c2",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aresistance+AND+all%3Aspot+AND+all%3Awelding+AND+all%3Anugget&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "b2ea08f70faa3342effcc9fa8089b1bf0a86887b08ca76f854f5afbadf190340",
+        "normalized_results_sha256": "9053f8f17cf65ad1e1f680297678fcfe209cbe46eac654720d74c1c43ea7f99b"
+      },
+      {
+        "provider": "crossref",
+        "query": "resistance spot welding nugget",
+        "receipt_id": "20261121t111257z-crossref-0c4a2c2708",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=resistance+spot+welding+nugget&rows=12",
+        "result_count": 12,
+        "response_sha256": "36daaca47612a00f73ed788912bb76bcd8c9fb5ee412b97a8fc05e3caee31d39",
+        "normalized_results_sha256": "dcb91a9dc16c52a9ff88c234f32c1c23cba875700e982727f6bba51f91c52e46"
+      },
+      {
+        "provider": "openalex",
+        "query": "resistance spot welding nugget",
+        "receipt_id": "20261121t111258z-openalex-2ba99462cf",
+        "request_url": "https://api.openalex.org/works?search=resistance+spot+welding+nugget&per-page=12",
+        "result_count": 12,
+        "response_sha256": "84b331d40fa1f6c0ff0368255cefea8391fbaf101e0bb11dff285d864d12b824",
+        "normalized_results_sha256": "6a66f38cb14ecf40e78660c9b1bb8aee6cb645a4ebfed9150f340d2166664e8d"
+      },
+      {
+        "provider": "arxiv",
+        "query": "robotic grinding force control",
+        "receipt_id": "20261121t111300z-arxiv-2c3384e3da",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Agrinding+AND+all%3Aforce+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 5,
+        "response_sha256": "6b261941aaaa304213d915af27b65d2cb9b6969a3f16c357af810789b3988250",
+        "normalized_results_sha256": "0373f9cd9e28bdf4a06f241159079274aa46e04b4ce61a7bd0cc17099941ac22"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic grinding force control",
+        "receipt_id": "20261121t111300z-crossref-3297c324d6",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+grinding+force+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "22cf3ceab51a87b8fe79c09f7ca56f70d420c403362d24cb084cf8fdd3e1012e",
+        "normalized_results_sha256": "28febd8f0350f3a104394f130bf6f481b5082ce43a6efe4df009c9e4a71302d2"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic grinding force control",
+        "receipt_id": "20261121t111302z-openalex-7c1f975479",
+        "request_url": "https://api.openalex.org/works?search=robotic+grinding+force+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6a9f172a13cd24188a52aaab628721473f3a00ad63181a83b60108d71aa5a375",
+        "normalized_results_sha256": "5b3e94b0c5ce796b58f2bc1b6adc25de835f8f8de053683ae2a4d0f5d939900d"
+      },
+      {
+        "provider": "arxiv",
+        "query": "ultrasonic assisted machining monitoring",
+        "receipt_id": "20261121t111303z-arxiv-d678af95d5",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aultrasonic+AND+all%3Aassisted+AND+all%3Amachining+AND+all%3Amonitoring&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "8386a06fb5ef5f0c907a6d50dcb7f46ec4a3b70940404f92204f7acea1b66b7b",
+        "normalized_results_sha256": "7e039617028e2a85233400689cbcf4021874d0d9f9e7a49f29baca1359a20e67"
+      },
+      {
+        "provider": "crossref",
+        "query": "ultrasonic assisted machining monitoring",
+        "receipt_id": "20261121t111304z-crossref-4d2a456984",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=ultrasonic+assisted+machining+monitoring&rows=12",
+        "result_count": 12,
+        "response_sha256": "7ba1d85fa6348536f91944837066c5e3b65b5401d935acec5e2e451622806ef6",
+        "normalized_results_sha256": "a7b9d0ae7a4512708971b7a157442a950315cc6fad6787df8a85f3ef677f4408"
+      },
+      {
+        "provider": "openalex",
+        "query": "ultrasonic assisted machining monitoring",
+        "receipt_id": "20261121t111306z-openalex-4697ffec83",
+        "request_url": "https://api.openalex.org/works?search=ultrasonic+assisted+machining+monitoring&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9029f79e344116bc6cab0caa13a602153cb5301f4a3c64ffdb5e18f9a98f388c",
+        "normalized_results_sha256": "434bff58d91fb23ff94357292e8c9e093834df7a58a0c4d73fbbee4f8e8e68d7"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1080/00194506.2021.1962414",
+        "receipt_id": "20261121t111308z-opencitations-681b266c0c",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.energy.2016.08.077",
+        "receipt_id": "20261121t111309z-opencitations-dda4c3bdac",
+        "result_count": 3,
+        "response_sha256": "c5bd3028418223dfe3dbe16bd7f296c839d7c3a4e1071fb86547efd11bd667f5"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 120,
+    "off_topic_filtered": 45,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 51,
+    "net_new": 24,
+    "provider_statuses": [
+      {
+        "query": "gearbox fault sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "gearbox fault sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "gearbox fault sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pmsm motor sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "pmsm motor sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pmsm motor sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "pmsm motor sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hydraulic actuator sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "hydraulic actuator sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hydraulic actuator sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "imu odometry sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "imu odometry sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "imu odometry sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-d0zgsm-acoustic-mems-sensor-arr",
+        "key": "dataverse:10.7910/dvn/d0zgsm",
+        "dataset_name": "Acoustic MEMS Sensor Array for Quench Detection of CICC Superconducting Cables",
+        "doi": "10.7910/dvn/d0zgsm",
+        "landing_url": "https://doi.org/10.7910/DVN/D0ZGSM",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-d0zgsm-acoustic-mems-sensor-arr-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-d0zgsm-acoustic-mems-sensor-arr-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_d0zgsm_acoustic_mems_sensor_arr.py",
+        "cleaned_rows": 569,
+        "raw_total_rows": 569,
+        "verified_sha256": "ee045c0e8a7dc648deb42d6fb28aa8c98587b92aa682a576c8a45944ac98b459"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-1g3ssb-multi-sensor-based-power\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Expt_3.tab: f16dec591ac709ffce5ed7d82ce87db76c86744b84d76a32087457068e1e40be != fa922de59b6813263e8e926123b56cd969a99e7d37baf817094308875786cb7c\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

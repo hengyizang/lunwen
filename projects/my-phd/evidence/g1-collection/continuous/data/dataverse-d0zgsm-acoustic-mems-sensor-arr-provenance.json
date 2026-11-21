@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-d0zgsm-acoustic-mems-sensor-arr",
+  "dataset_name": "Acoustic MEMS Sensor Array for Quench Detection of CICC Superconducting Cables",
+  "doi": "10.7910/dvn/d0zgsm",
+  "landing_url": "https://doi.org/10.7910/DVN/D0ZGSM",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/D0ZGSM",
+  "access_date": "2026-11-21",
+  "round_number": 43,
+  "observed_license_metadata": "unknown_optional_metadata",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "20ja042_fig5_data.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4862735",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/D0ZGSM/17a4fdd5fa2-f0ba628886d0?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2720ja042_fig5_data.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T111407Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d606e897d05139f9a81a6ef46711e824b602815474f93ef4537bcd5b2b06e376",
+      "http_status": 200,
+      "bytes": 100846,
+      "publisher_checksum": "dataverse_original_md5:fdf7a0287da4b7ccdcd3db7442a69670",
+      "verified_md5": "abcd18c6510c48ec58cc3233891d7e89",
+      "verified_sha256": "ee045c0e8a7dc648deb42d6fb28aa8c98587b92aa682a576c8a45944ac98b459"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-d0zgsm-acoustic-mems-sensor-arr",
+  "raw_total_bytes": 100846,
+  "raw_total_rows": 569,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-d0zgsm-acoustic-mems-sensor-arr-cleaned.csv",
+  "cleaned_csv_sha256": "78a6bb91b46efd8b9f7637402e79faf7d5e154bfa9d53b5cc15ae872012681df",
+  "cleaned_rows": 569,
+  "cleaned_cols": 11,
+  "null_counts_by_file": {
+    "20ja042_fig5_data.tab": {
+      "Report:": 569,
+      "MakotoTakayasu,JA-20-42.“AcousticMEMSSensorArrayforQuenchDetectionofCICCSuperconductingCables,”publishedIEEETrans.Appl.Superconduct.,30,no.4,4702705,June2020.": 1,
+      "C": 3,
+      "D": 3,
+      "E": 569,
+      "F": 2,
+      "G": 3,
+      "H": 3,
+      "I": 2,
+      "J": 3
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
