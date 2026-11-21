@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34072891-source-data-for-the-labo",
+  "dataset_name": "Source data for the laboratory hydraulic-fracturing tests, acoustic-emission analyses, in-situ-stress measurements, six-stage field-fracturing comparison, and post-fracturing gas-drainage monitoring.",
+  "doi": "10.1371/journal.pone.0359936.s001",
+  "landing_url": "https://plos.figshare.com/articles/dataset/_p_Source_data_for_the_laboratory_hydraulic-fracturing_tests_acoustic-emission_analyses_in-situ-stress_measurements_six-stage_field-fracturing_comparison_and_post-fracturing_gas-drainage_monitoring_p_/34072891",
+  "source_api_url": "https://api.figshare.com/v2/articles/34072891",
+  "access_date": "2026-11-21",
+  "round_number": 46,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "pone.0359936.s001.zip",
+      "download_url": "https://ndownloader.figshare.com/files/69666154",
+      "final_url": "https://s3-eu-west-1.amazonaws.com/pstorage-plos-3567654/69666154/pone.0359936.s001.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA3OGA3B5WCXW4IOSW/20261121/eu-west-1/s3/aws4_request&X-Amz-Date=20261121T121818Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=6e6d4657b6500ca0fea6fe00abb575dd07ab5a25b4573d0b7916390d02a678d7",
+      "http_status": 200,
+      "bytes": 7415190,
+      "publisher_checksum": "md5:56e4a47cf4ea4bbe2fac5e9ee6f1a0ca",
+      "verified_md5": "56e4a47cf4ea4bbe2fac5e9ee6f1a0ca",
+      "verified_sha256": "6448aa3c3b472b992818a0df373957e277183d7d82d03df2251e253195ab5d98"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34072891-source-data-for-the-labo",
+  "raw_total_bytes": 7415190,
+  "raw_total_rows": 636,
+  "duplicate_rows_removed": 1,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34072891-source-data-for-the-labo-cleaned.csv",
+  "cleaned_csv_sha256": "c2440887fd691d867df4a2ee65dee5eb01399a9e2ab887b0387e87f2a96ded5b",
+  "cleaned_rows": 635,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "pone.0359936.s001.zip::10_RA_AF_6_8_12_MPa.csv": {
+      "RA": 0,
+      "AF": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

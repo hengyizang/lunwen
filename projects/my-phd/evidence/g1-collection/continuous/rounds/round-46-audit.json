@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0",
+  "round": 46,
+  "completed_at": "2026-11-21T12:14:14Z",
+  "batch_label": "Broad Engineering R46: Smart_Factory_DigitalTwin",
+  "base_head_sha": "6df43bf344381b96fb16a9710eba2528fe652637",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 132,
+    "duplicates_skipped": 17,
+    "net_new": 115,
+    "new_reading_queue": 111,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "assembly line balancing reinforcement",
+        "receipt_id": "20261121t121414z-arxiv-a9569a6c00",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aassembly+AND+all%3Aline+AND+all%3Abalancing+AND+all%3Areinforcement&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "104e1344e65b01fbae779287c1c7c697442723aa76a25ddf782e13c335336226",
+        "normalized_results_sha256": "b73e2c73965beaa8ca807d9bc468a5ca32ad8e2a9e09141e24a6dd367c0ca3fa"
+      },
+      {
+        "provider": "crossref",
+        "query": "assembly line balancing reinforcement",
+        "receipt_id": "20261121t121416z-crossref-3c9c9e380c",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=assembly+line+balancing+reinforcement&rows=12",
+        "result_count": 12,
+        "response_sha256": "e96abb6d83b15f2cfcd942fd37832ff70852f4ef529ded24246b8a93c0b1d962",
+        "normalized_results_sha256": "5f7b102f5a7f1088dd9f192e4ca28065fc5da0ce30e76ab64897ea8d360f5846"
+      },
+      {
+        "provider": "openalex",
+        "query": "assembly line balancing reinforcement",
+        "receipt_id": "20261121t121418z-openalex-28e048ba02",
+        "request_url": "https://api.openalex.org/works?search=assembly+line+balancing+reinforcement&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a773b496ac6847a3ed63f47f17fc7bfbfe5a3bcb5a102b1f97eefa87c98e4433",
+        "normalized_results_sha256": "eeee8aac42c4d89b58f067e55176b1124e58c7000077340b65bbd889d82bf09d"
+      },
+      {
+        "provider": "arxiv",
+        "query": "reconfigurable manufacturing system control",
+        "receipt_id": "20261121t121421z-arxiv-ce400185ce",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Areconfigurable+AND+all%3Amanufacturing+AND+all%3Asystem+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "5dcbe864b0622494ce083cc09abeb6fb6a7c69862e4322cac5232cab85cadc1d",
+        "normalized_results_sha256": "a59b7a6def206c4f6ded6342f5c6c0a76d9ccc5120e7b95fe139747647b56487"
+      },
+      {
+        "provider": "crossref",
+        "query": "reconfigurable manufacturing system control",
+        "receipt_id": "20261121t121423z-crossref-807a6d0c18",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=reconfigurable+manufacturing+system+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "66e376b5e5bd9f7b984bccbee82d6d7a2c2e8394d5dcdc02532227caf40350e3",
+        "normalized_results_sha256": "9c276e884ce06d2649bdfd2094c87a26fbcdceeb7f9f984bdfac95dda389aec8"
+      },
+      {
+        "provider": "openalex",
+        "query": "reconfigurable manufacturing system control",
+        "receipt_id": "20261121t121425z-openalex-0fccf9b7d3",
+        "request_url": "https://api.openalex.org/works?search=reconfigurable+manufacturing+system+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "bee04a1147c6be2291896677810867e7ee490c0bdda74577dfaf81e3c28a2fe4",
+        "normalized_results_sha256": "05e69f2bfede3afa43e60214a890775903e8b9c1377999b64e400d1eede6ae1c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "production line anomaly detection",
+        "receipt_id": "20261121t121427z-arxiv-f7caf15c6b",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aproduction+AND+all%3Aline+AND+all%3Aanomaly+AND+all%3Adetection&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "35c2f2269545869c35919a1f36096f9f2107f1bdd67639f1136fc73ebf7dcff6",
+        "normalized_results_sha256": "d181df80976b660493bc9b8ebf8df4c621efe199fb086fbed7e84a17db5e4b63"
+      },
+      {
+        "provider": "crossref",
+        "query": "production line anomaly detection",
+        "receipt_id": "20261121t121429z-crossref-b243e74d2c",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=production+line+anomaly+detection&rows=12",
+        "result_count": 12,
+        "response_sha256": "c0daa430b459d22d12437ee814c5c3eb66250ef56b916d057f3e0a360529ba1c",
+        "normalized_results_sha256": "0bfa8079b3091e03abd74cf59028f2b8409d6f7cb2be1a02c6c24411eaeecd18"
+      },
+      {
+        "provider": "openalex",
+        "query": "production line anomaly detection",
+        "receipt_id": "20261121t121432z-openalex-7dcaf71c88",
+        "request_url": "https://api.openalex.org/works?search=production+line+anomaly+detection&per-page=12",
+        "result_count": 12,
+        "response_sha256": "381def160359b2f089e7dbbc60d36f25aea6a95785f311b4f407062dfb4b4c69",
+        "normalized_results_sha256": "1f5640d687df4a1d2d72d5146a1e9d5ebf5757888038e7204f08753c8474de89"
+      },
+      {
+        "provider": "arxiv",
+        "query": "predictive maintenance digital twin",
+        "receipt_id": "20261121t121435z-arxiv-27bb09c659",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apredictive+AND+all%3Amaintenance+AND+all%3Adigital+AND+all%3Atwin&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "780073c169e9944f0c7e2e1f248bcfb8c2d23c3e8b1756a4e70cea112c219d02",
+        "normalized_results_sha256": "71e909cad731c89c92d33f4a1fad062830332f6ab484e19289b22a25c4b39083"
+      },
+      {
+        "provider": "crossref",
+        "query": "predictive maintenance digital twin",
+        "receipt_id": "20261121t121437z-crossref-be924760ad",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=predictive+maintenance+digital+twin&rows=12",
+        "result_count": 11,
+        "response_sha256": "facdd87650ebe3c4acf13e8ecd63b41489945fd203c85a8bc7e18d7dff9122b8",
+        "normalized_results_sha256": "eec69a007c3793eabb2dd8132b50ed1c473140cf8d5aaffbb34fc0c5d677ed09"
+      },
+      {
+        "provider": "openalex",
+        "query": "predictive maintenance digital twin",
+        "receipt_id": "20261121t121438z-openalex-35b990695f",
+        "request_url": "https://api.openalex.org/works?search=predictive+maintenance+digital+twin&per-page=12",
+        "result_count": 12,
+        "response_sha256": "fce547eb29ea9f73e6d843d88cfece85f42314253539be2ac5985e132f4e1083",
+        "normalized_results_sha256": "d810459d76741988c3f3d0741cd183dc632edc8148005901a7f8a09ce03abd44"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s26134244",
+        "receipt_id": "20261121t121441z-opencitations-c888830890",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.34133/cbsystems.0616",
+        "receipt_id": "20261121t121442z-opencitations-36c5da1835",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 91,
+    "off_topic_filtered": 65,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 16,
+    "net_new": 10,
+    "provider_statuses": [
+      {
+        "query": "welding inspection sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "welding inspection sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "welding inspection sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "welding inspection sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "cnc milling sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "chatter detection sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "chatter detection sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "fatigue crack sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "fatigue crack sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 19,
+    "cleaned": [
+      {
+        "slug": "figshare-32362131-data-sheet-5-optimizing",
+        "key": "figshare:32362131",
+        "dataset_name": "Data Sheet 5_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.zip",
+        "doi": "10.3389/fmech.2026.1781598.s001",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_5_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_zip/32362131",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32362131-data-sheet-5-optimizing-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32362131-data-sheet-5-optimizing-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32362131_data_sheet_5_optimizing.py",
+        "cleaned_rows": 24,
+        "raw_total_rows": 70,
+        "verified_sha256": "21fe3aef7ab0a1cfed826cd94c24d647e939ff8c675ed8531e47452bcab88339"
+      },
+      {
+        "slug": "figshare-29045729-data-analysis",
+        "key": "figshare:29045729",
+        "dataset_name": "Data Analysis",
+        "doi": "10.6084/m9.figshare.29045729.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_Analysis_Raw_csv/29045729/1",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-29045729-data-analysis-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-29045729-data-analysis-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_29045729_data_analysis.py",
+        "cleaned_rows": 15,
+        "raw_total_rows": 369876,
+        "verified_sha256": "0324671b766cd7f8982b3e3e1640a393a4e719afd07f60a3fc4f64cd375df45e"
+      },
+      {
+        "slug": "figshare-34072891-source-data-for-the-labo",
+        "key": "figshare:34072891",
+        "dataset_name": "Source data for the laboratory hydraulic-fracturing tests, acoustic-emission analyses, in-situ-stress measurements, six-stage field-fracturing comparison, and post-fracturing gas-drainage monitoring.",
+        "doi": "10.1371/journal.pone.0359936.s001",
+        "landing_url": "https://plos.figshare.com/articles/dataset/_p_Source_data_for_the_laboratory_hydraulic-fracturing_tests_acoustic-emission_analyses_in-situ-stress_measurements_six-stage_field-fracturing_comparison_and_post-fracturing_gas-drainage_monitoring_p_/34072891",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34072891-source-data-for-the-labo-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34072891-source-data-for-the-labo-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34072891_source_data_for_the_labo.py",
+        "cleaned_rows": 635,
+        "raw_total_rows": 636,
+        "verified_sha256": "6448aa3c3b472b992818a0df373957e277183d7d82d03df2251e253195ab5d98"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "cannot insert source_file, already exists"
+      },
+      {
+        "name": "Source Data.zip",
+        "url": "https://figshare.com/articles/dataset/Source_Data_zip/29039588",
+        "error": "Request failed for https://api.figshare.com/v2/articles/29039588: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Fault types of SKF6205 bearings.",
+        "url": "https://plos.figshare.com/articles/dataset/_p_Fault_types_of_SKF6205_bearings_p_/34860816",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34860816: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Language matters: a terminological audit of Australian structural design standards for code calibration",
+        "url": "https://tandf.figshare.com/articles/dataset/Language_matters_a_terminological_audit_of_Australian_structural_design_standards_for_code_calibration/34921883",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34921883: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Waste-fume spectroscopy: A new method for real-time monitoring of molten pool metallurgical behavior in additive manufacturing",
+        "url": "https://figshare.com/articles/dataset/_b_Waste-fume_spectroscopy_A_new_method_for_real-time_monitoring_of_molten_pool_metallurgical_behavior_in_additive_manufacturing_b_/35004475",
+        "error": "Request failed for https://api.figshare.com/v2/articles/35004475: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Selective laser melting, Ti-6Al-4V, Additive manufacturing, Tensile properties,",
+        "url": "https://figshare.com/articles/dataset/Selective_laser_melting_Ti-6Al-4V_Additive_manufacturing_Tensile_properties_/31646617",
+        "error": "Request failed for https://api.figshare.com/v2/articles/31646617: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "CrowdSound: An acoustic dataset for crowd safety analysis",
+        "url": "https://figshare.com/articles/dataset/_b_CrowdSound_An_acoustic_dataset_for_crowd_safety_analysis_b_/34747698",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34747698: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Comparative performance of ANN and PINN models.",
+        "url": "https://plos.figshare.com/articles/dataset/_p_Comparative_performance_of_ANN_and_PINN_models_p_/33627326",
+        "error": "Request failed for https://api.figshare.com/v2/articles/33627326: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Data for: PiAM — A physics-informed adaptive multi-fidelity framework for residual deformation prediction in the LPBF process",
+        "url": "https://figshare.com/articles/dataset/Data_for_PiAM_A_physics-informed_adaptive_multi-fidelity_framework_for_residual_deformation_prediction_in_the_LPBF_process/34808832",
+        "error": "Request failed for https://api.figshare.com/v2/articles/34808832: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：45
-- **最近更新时间 (UTC)**：2026-11-21T12:11:35Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4709 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1927 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：4083 条
-- **累计已完成确定性清洗数据集**：97 个
+- **已完成轮次**：46
+- **最近更新时间 (UTC)**：2026-11-21T12:14:14Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4824 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1937 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：4194 条
+- **累计已完成确定性清洗数据集**：100 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,13 +20,13 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 149 | 99 |
-| `R2_Aerial_Actuator` | 403 | 113 |
-| `R5_MultiRobot_Comm` | 253 | 90 |
-| `Robotics_Embodied` | 1385 | 591 |
-| `Mechanical_Physics_AI` | 1494 | 875 |
-| `Mechatronics_PHM_Control` | 1254 | 661 |
-| `Smart_Manufacturing` | 690 | 388 |
-| `Smart_Factory_DigitalTwin` | 221 | 88 |
+| `R2_Aerial_Actuator` | 404 | 113 |
+| `R5_MultiRobot_Comm` | 255 | 90 |
+| `Robotics_Embodied` | 1389 | 593 |
+| `Mechanical_Physics_AI` | 1496 | 885 |
+| `Mechatronics_PHM_Control` | 1284 | 664 |
+| `Smart_Manufacturing` | 717 | 398 |
+| `Smart_Factory_DigitalTwin` | 308 | 88 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 366 | 0 |
 | `R2` | 37 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-34950610-dataset-robotic-sanding` | Dataset: Robotic Sanding Chilean Oak End-Grain Roughness | 10.6084/m9.figshare.34950610.v1 | `summary_table` | 14 | `8ce7afdc0306` | [CSV](data/figshare-34950610-dataset-robotic-sanding-cleaned.csv) · [JSON](data/figshare-34950610-dataset-robotic-sanding-provenance.json) · [PY](data/derive_figshare_34950610_dataset_robotic_sanding.py) |
-| `figshare-24116583-dataset-robotic-sanding` | Dataset: Robotic Sanding MDF Roughness | 10.6084/m9.figshare.24116583.v1 | `summary_table` | 33 | `551d8bbee4ba` | [CSV](data/figshare-24116583-dataset-robotic-sanding-cleaned.csv) · [JSON](data/figshare-24116583-dataset-robotic-sanding-provenance.json) · [PY](data/derive_figshare_24116583_dataset_robotic_sanding.py) |
-| `figshare-25024495-optimization-of-a-hydrog` | Optimization of a Hydrogen Exchange-Mass Spectrometry Robotic Liqui... | 10.1021/acs.analchem.3c04186.s006 | `cleaned_rows` | 88 | `9d05e14cdbec` | [CSV](data/figshare-25024495-optimization-of-a-hydrog-cleaned.csv) · [JSON](data/figshare-25024495-optimization-of-a-hydrog-provenance.json) · [PY](data/derive_figshare_25024495_optimization_of_a_hydrog.py) |
 | `dataverse-cfzwvn-rural-donegal-drone-imag` | Rural Donegal Drone Images | 10.7910/dvn/cfzwvn | `summary_table` | 12 | `fa833327bc62` | [CSV](data/dataverse-cfzwvn-rural-donegal-drone-imag-cleaned.csv) · [JSON](data/dataverse-cfzwvn-rural-donegal-drone-imag-provenance.json) · [PY](data/derive_dataverse_cfzwvn_rural_donegal_drone_imag.py) |
 | `dataverse-itfa7o-replication-data-for-ind` | Replication Data for: Individual vulnerability to industrial robot... | 10.7910/dvn/itfa7o | `summary_table` | 10 | `6160be0c6072` | [CSV](data/dataverse-itfa7o-replication-data-for-ind-cleaned.csv) · [JSON](data/dataverse-itfa7o-replication-data-for-ind-provenance.json) · [PY](data/derive_dataverse_itfa7o_replication_data_for_ind.py) |
 | `dataverse-0wb6z1-the-replication-material` | The replication materials for the paper titled "Industrial Robots,... | 10.7910/dvn/0wb6z1 | `summary_table` | 30 | `24a008db25af` | [CSV](data/dataverse-0wb6z1-the-replication-material-cleaned.csv) · [JSON](data/dataverse-0wb6z1-the-replication-material-provenance.json) · [PY](data/derive_dataverse_0wb6z1_the_replication_material.py) |
@@ -71,12 +68,14 @@
 | `figshare-34982740-an-ai-empowered-laser-ga` | An AI-empowered laser-galvanometer contouring system for 3D anomaly... | 10.6084/m9.figshare.34982740.v2 | `cleaned_rows` | 17 | `52c1d4956973` | [CSV](data/figshare-34982740-an-ai-empowered-laser-ga-cleaned.csv) · [JSON](data/figshare-34982740-an-ai-empowered-laser-ga-provenance.json) · [PY](data/derive_figshare_34982740_an_ai_empowered_laser_ga.py) |
 | `dataverse-4saz4x-the-effect-of-vibration` | The effect of vibration cycle ergometry on pulmonary VO2 kinetics,... | 10.7910/dvn/4saz4x | `cleaned_rows` | 35 | `ce5db73af5fa` | [CSV](data/dataverse-4saz4x-the-effect-of-vibration-cleaned.csv) · [JSON](data/dataverse-4saz4x-the-effect-of-vibration-provenance.json) · [PY](data/derive_dataverse_4saz4x_the_effect_of_vibration.py) |
 | `dataverse-lpnslg-tensile-test-and-finite` | Tensile Test and Finite Element Optimization of the Triple-pipe Reb... | 10.7910/dvn/lpnslg | `summary_table` | 8 | `af22dc85042b` | [CSV](data/dataverse-lpnslg-tensile-test-and-finite-cleaned.csv) · [JSON](data/dataverse-lpnslg-tensile-test-and-finite-provenance.json) · [PY](data/derive_dataverse_lpnslg_tensile_test_and_finite.py) |
+| `figshare-32362131-data-sheet-5-optimizing` | Data Sheet 5_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s001 | `summary_table` | 24 | `21fe3aef7ab0` | [CSV](data/figshare-32362131-data-sheet-5-optimizing-cleaned.csv) · [JSON](data/figshare-32362131-data-sheet-5-optimizing-provenance.json) · [PY](data/derive_figshare_32362131_data_sheet_5_optimizing.py) |
+| `figshare-29045729-data-analysis` | Data Analysis | 10.6084/m9.figshare.29045729.v1 | `summary_table` | 15 | `0324671b766c` | [CSV](data/figshare-29045729-data-analysis-cleaned.csv) · [JSON](data/figshare-29045729-data-analysis-provenance.json) · [PY](data/derive_figshare_29045729_data_analysis.py) |
+| `figshare-34072891-source-data-for-the-labo` | Source data for the laboratory hydraulic-fracturing tests, acoustic... | 10.1371/journal.pone.0359936.s001 | `cleaned_rows` | 635 | `6448aa3c3b47` | [CSV](data/figshare-34072891-source-data-for-the-labo-cleaned.csv) · [JSON](data/figshare-34072891-source-data-for-the-labo-provenance.json) · [PY](data/derive_figshare_34072891_source_data_for_the_labo.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 21 | 2026-11-21T09:08:59Z | Broad Engineering R21: R2_Aerial_Actuator / R5_MultiRobot_Comm | +134 | +47 | +3 | [round-21-audit.json](rounds/round-21-audit.json) |
 | 22 | 2026-11-21T09:14:08Z | Broad Engineering R22: R5_MultiRobot_Comm / Robotics_Embodied | +106 | +83 | +3 | [round-22-audit.json](rounds/round-22-audit.json) |
 | 23 | 2026-11-21T09:19:02Z | Broad Engineering R23: Robotics_Embodied | +202 | +40 | +3 | [round-23-audit.json](rounds/round-23-audit.json) |
 | 24 | 2026-11-21T09:24:11Z | Broad Engineering R24: Robotics_Embodied | +157 | +53 | +1 | [round-24-audit.json](rounds/round-24-audit.json) |
@@ -101,3 +100,4 @@
 | 43 | 2026-11-21T11:12:53Z | Broad Engineering R43: Smart_Manufacturing | +92 | +24 | +1 | [round-43-audit.json](rounds/round-43-audit.json) |
 | 44 | 2026-11-21T11:59:23Z | Broad Engineering R44: Smart_Manufacturing | +21 | +0 | +1 | [round-44-audit.json](rounds/round-44-audit.json) |
 | 45 | 2026-11-21T12:11:35Z | Broad Engineering R45: Smart_Manufacturing | +104 | +13 | +2 | [round-45-audit.json](rounds/round-45-audit.json) |
+| 46 | 2026-11-21T12:14:14Z | Broad Engineering R46: Smart_Factory_DigitalTwin | +115 | +10 | +3 | [round-46-audit.json](rounds/round-46-audit.json) |

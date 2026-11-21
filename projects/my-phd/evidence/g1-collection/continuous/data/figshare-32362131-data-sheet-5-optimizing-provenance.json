@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-32362131-data-sheet-5-optimizing",
+  "dataset_name": "Data Sheet 5_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.zip",
+  "doi": "10.3389/fmech.2026.1781598.s001",
+  "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_5_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_zip/32362131",
+  "source_api_url": "https://api.figshare.com/v2/articles/32362131",
+  "access_date": "2026-11-21",
+  "round_number": 46,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Data Sheet 5_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.zip",
+      "download_url": "https://ndownloader.figshare.com/files/64804392",
+      "final_url": "https://s3-eu-west-1.amazonaws.com/pstorage-frontiersin-54389059089340853/64804392/DataSheet5_OptimizingpredictivemaintenancewithsyntheticdataacasestudyonABBIRB1100industrialrobot.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAINCDM4RBVVB6WR3Q/20261121/eu-west-1/s3/aws4_request&X-Amz-Date=20261121T121454Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=c142b8620e103749810f3406604609d068fe0e9967842478764086de45d5cd7c",
+      "http_status": 200,
+      "bytes": 2833161,
+      "publisher_checksum": "md5:78e4190347e1d915527114ad81fa9e9f",
+      "verified_md5": "78e4190347e1d915527114ad81fa9e9f",
+      "verified_sha256": "21fe3aef7ab0a1cfed826cd94c24d647e939ff8c675ed8531e47452bcab88339"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-32362131-data-sheet-5-optimizing",
+  "raw_total_bytes": 2833161,
+  "raw_total_rows": 70,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-32362131-data-sheet-5-optimizing-cleaned.csv",
+  "cleaned_csv_sha256": "f59dc16cd701bc7e7739bd862c54ec84b9bd7dcb1010c16c3fb2ba49411969b6",
+  "cleaned_rows": 24,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Data Sheet 5_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.zip::Table_Folds_ALL.csv": {
+      "model": 0,
+      "fold": 0,
+      "accuracy": 0,
+      "balanced_accuracy": 0,
+      "f1_macro": 0,
+      "f1_weighted": 0
+    },
+    "Data Sheet 5_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.zip::Table_PerClass_XGB_SMOTEENN.csv": {
+      "Model": 0,
+      "Class": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "support": 0
+    },
+    "Data Sheet 5_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.zip::Table_Severity_PerFault_Folds.csv": {
+      "fault_type": 0,
+      "fold": 0,
+      "accuracy": 0,
+      "balanced_accuracy": 0,
+      "f1_macro": 0,
+      "severity_levels": 0
+    },
+    "Data Sheet 5_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.zip::Table_PerClass_XGB_baseline.csv": {
+      "Model": 0,
+      "Class": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "support": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

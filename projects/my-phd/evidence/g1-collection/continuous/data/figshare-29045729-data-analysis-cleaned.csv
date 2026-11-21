@@ -1,0 +1,16 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Data_Analysis_Normalized.csv,Measurement,numeric,1269,1269,0,6,1,2,3,3.48385,5,6,1.69359
+Data_Analysis_Normalized.csv,Conditions,categorical_or_text,1269,1269,0,4,,,,,,,"{""A"": 366, ""B"": 320, ""C"": 300}"
+Data_Analysis_Normalized.csv,Value,numeric,1269,1269,0,70,0.027,0.052,0.067,0.0651387,0.08,0.096,0.0172213
+Data_Analysis_Normalized.csv,Unnamed: 3,categorical_or_text,1269,0,1269,0,,,,,,,{}
+Data_Analysis_Normalized.csv,Unnamed: 4,categorical_or_text,1269,0,1269,0,,,,,,,{}
+Data_Analysis_Normalized.csv,Unnamed: 5,categorical_or_text,1269,0,1269,0,,,,,,,{}
+Data_Analysis_Raw.csv,Measurement,numeric,177317,177317,0,6,1,2,3,3.4574,5,6,1.68973
+Data_Analysis_Raw.csv,Conditions,categorical_or_text,177317,177317,0,4,,,,,,,"{""C"": 59599, ""A"": 56577, ""B"": 30578}"
+Data_Analysis_Raw.csv,Value,numeric,177317,177317,0,115533,22.972,63.3747,66.9285,66.5951,70.1966,81.5452,5.24758
+Data_Analysis_Raw.csv,Unnamed: 3,categorical_or_text,177317,0,177317,0,,,,,,,{}
+Data_Analysis_Raw.csv,Unnamed: 4,categorical_or_text,177317,0,177317,0,,,,,,,{}
+Data_Analysis_Raw.csv,Unnamed: 5,categorical_or_text,177317,0,177317,0,,,,,,,{}
+Data_Analysis_Raw.csv,Unnamed: 6,categorical_or_text,177317,0,177317,0,,,,,,,{}
+Data_Analysis_Raw.csv,Unnamed: 7,categorical_or_text,177317,0,177317,0,,,,,,,{}
+Data_Analysis_Raw.csv,Unnamed: 8,categorical_or_text,177317,0,177317,0,,,,,,,{}

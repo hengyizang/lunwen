@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-29045729-data-analysis",
+  "dataset_name": "Data Analysis",
+  "doi": "10.6084/m9.figshare.29045729.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_Analysis_Raw_csv/29045729/1",
+  "source_api_url": "https://api.figshare.com/v2/articles/29045729",
+  "access_date": "2026-11-21",
+  "round_number": 46,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Data_Analysis_Normalized.csv",
+      "download_url": "https://ndownloader.figshare.com/files/54486128",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/54486128/Data_Analysis_Normalized.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T121520Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Data_Analysis_Normalized.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=9504696b518b2d874cbde151aac81c409bd3de6982e822ae8f1e10a9890c6c47",
+      "http_status": 200,
+      "bytes": 2589165,
+      "publisher_checksum": "md5:6fe0a3c0df8577557bf4b9e39a741a6d",
+      "verified_md5": "6fe0a3c0df8577557bf4b9e39a741a6d",
+      "verified_sha256": "0324671b766cd7f8982b3e3e1640a393a4e719afd07f60a3fc4f64cd375df45e"
+    },
+    {
+      "file": "Data_Analysis_Raw.csv",
+      "download_url": "https://ndownloader.figshare.com/files/54486131",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/54486131/Data_Analysis_Raw.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T121526Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Data_Analysis_Raw.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=a7c3e71531d33dad54c2c35703553c454b833fda7de8a9ff9eda011104aa2dc8",
+      "http_status": 200,
+      "bytes": 3483521,
+      "publisher_checksum": "md5:7b120d1e59aae109d1c7e42549e20d9e",
+      "verified_md5": "7b120d1e59aae109d1c7e42549e20d9e",
+      "verified_sha256": "b5cce0a9f0d24933ec086a55bdd0ce6a2aec5e2263654d8b12848a4fa09c2f30"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-29045729-data-analysis",
+  "raw_total_bytes": 6072686,
+  "raw_total_rows": 369876,
+  "duplicate_rows_removed": 191290,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-29045729-data-analysis-cleaned.csv",
+  "cleaned_csv_sha256": "556cc7408ff6f249b5aa8707a6fce3f3e914bf075122ca742eb6ef8bcfb45a0b",
+  "cleaned_rows": 15,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Data_Analysis_Normalized.csv": {
+      "Measurement": 0,
+      "Conditions": 0,
+      "Value": 0,
+      "Unnamed: 3": 1269,
+      "Unnamed: 4": 1269,
+      "Unnamed: 5": 1269
+    },
+    "Data_Analysis_Raw.csv": {
+      "Measurement": 0,
+      "Conditions": 0,
+      "Value": 0,
+      "Unnamed: 3": 177317,
+      "Unnamed: 4": 177317,
+      "Unnamed: 5": 177317,
+      "Unnamed: 6": 177317,
+      "Unnamed: 7": 177317,
+      "Unnamed: 8": 177317
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
