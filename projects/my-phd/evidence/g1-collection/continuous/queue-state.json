@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "round_number": 32,
+  "round_number": 33,
   "total_new_literature": 3403,
-  "total_new_datasets": 1571,
+  "total_new_datasets": 1599,
   "total_new_reading_queue": 2919,
   "cleaned_datasets": [
     "figshare:31990188",
@@ -73,7 +73,10 @@
     "dataverse:10.7910/dvn/prdwpp",
     "figshare:30944375",
     "figshare:31158421",
-    "figshare:34066695"
+    "figshare:34066695",
+    "dataverse:10.7910/dvn/getyap",
+    "dataverse:10.7910/dvn/fs95y3",
+    "dataverse:10.7910/dvn/yuiynm"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1041,10 +1044,53 @@
       "cleaned_rows": 8,
       "raw_total_rows": 8,
       "verified_sha256": "4f9ab8a6081de8ef5ad2b494e0b835021a3f1360150a04d8dd22925533a35ccf"
+    },
+    {
+      "slug": "dataverse-getyap-drone-medical-package-de",
+      "key": "dataverse:10.7910/dvn/getyap",
+      "dataset_name": "Drone Medical Package Delivery for Improved Transportation and Better Patient Outcomes Full Dataset",
+      "doi": "10.7910/dvn/getyap",
+      "landing_url": "https://doi.org/10.7910/DVN/GETYAP",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-getyap-drone-medical-package-de-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-getyap-drone-medical-package-de-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_getyap_drone_medical_package_de.py",
+      "cleaned_rows": 202,
+      "raw_total_rows": 202,
+      "verified_sha256": "ebb7e13fb595327c162a1176a85b0f828296e7fcd3189070cb6466827ae09616"
+    },
+    {
+      "slug": "dataverse-fs95y3-gomezmurillotarwater-ant",
+      "key": "dataverse:10.7910/dvn/fs95y3",
+      "dataset_name": "GomezMurilloTarwater_Antswarmmechs_Biotropica",
+      "doi": "10.7910/dvn/fs95y3",
+      "landing_url": "https://doi.org/10.7910/DVN/FS95Y3",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-fs95y3-gomezmurillotarwater-ant-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-fs95y3-gomezmurillotarwater-ant-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_fs95y3_gomezmurillotarwater_ant.py",
+      "cleaned_rows": 133,
+      "raw_total_rows": 133,
+      "verified_sha256": "3cc853cf2fb07e68c4c555e9027a82234e21bb9b4eebe76995e760088b387a47"
+    },
+    {
+      "slug": "dataverse-yuiynm-replication-data-for-com",
+      "key": "dataverse:10.7910/dvn/yuiynm",
+      "dataset_name": "Replication Data for: Community perceptions of the use of drone mapping for Vulnerability and Capacity Assessments in Bicol Region, Philippines",
+      "doi": "10.7910/dvn/yuiynm",
+      "landing_url": "https://doi.org/10.7910/DVN/YUIYNM",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-yuiynm-replication-data-for-com-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-yuiynm-replication-data-for-com-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_yuiynm_replication_data_for_com.py",
+      "cleaned_rows": 87,
+      "raw_total_rows": 452,
+      "verified_sha256": "d35d03d5c6fa812541732881d4d6de7bedc16f35c21961adc000b0ab46c2111b"
     }
   ],
   "snowballed_dois": [
     "10.1002/9781394331925.ch23",
+    "10.1002/advs.77505",
     "10.1007/978-3-030-38688-7_3",
     "10.1007/978-981-97-8043-3_39",
     "10.1007/s40194-018-0567-9",
@@ -1092,6 +1138,7 @@
     "10.3389/fpsyg.2021.716976",
     "10.3390/app16041783",
     "10.3390/biomimetics10100650",
+    "10.3390/biomimetics11090647",
     "10.3390/jfmk11040391",
     "10.3390/machines12090658",
     "10.3390/machines13080659",
@@ -1394,9 +1441,18 @@
       "net_new_datasets": 32,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 33,
+      "completed_at": "2026-11-21T10:09:02Z",
+      "batch_label": "Broad Engineering R33: R2_Aerial_Actuator (2026)",
+      "net_new_literature": 0,
+      "net_new_datasets": 28,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T10:04:00Z",
+  "updated_at": "2026-11-21T10:09:02Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -1416,9 +1472,9 @@
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 689,
-    "Mechatronics_PHM_Control": 509,
-    "Smart_Manufacturing": 286,
+    "Mechanical_Physics_AI": 702,
+    "Mechatronics_PHM_Control": 516,
+    "Smart_Manufacturing": 307,
     "Robotics_Embodied": 464,
     "R5_MultiRobot_Comm": 77,
     "Smart_Factory_DigitalTwin": 71,
@@ -1441,6 +1497,7 @@
     "dataverse:10.7910/dvn/dmcjbp",
     "dataverse:10.7910/dvn/e96tq3",
     "dataverse:10.7910/dvn/eptgob",
+    "dataverse:10.7910/dvn/fsly3y",
     "dataverse:10.7910/dvn/g9y8wc",
     "dataverse:10.7910/dvn/gqaliw",
     "dataverse:10.7910/dvn/gvr2ba",

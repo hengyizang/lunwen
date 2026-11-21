@@ -1,0 +1,88 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+crib-drone-survey-results.tab,SubmissionDate,categorical_or_text,452,452,0,452,,,,,,,"{""2021-08-26T11:22:28.387Z"": 1, ""2021-08-26T11:22:27.704Z"": 1, ""2021-08-26T11:22:26.775Z"": 1}"
+crib-drone-survey-results.tab,start,categorical_or_text,452,452,0,452,,,,,,,"{""2021-08-26T11:08:19.391+08:00"": 1, ""2021-08-26T10:45:34.799+08:00"": 1, ""2021-08-26T10:31:08.517+08:00"": 1}"
+crib-drone-survey-results.tab,end,categorical_or_text,452,452,0,452,,,,,,,"{""2021-08-26T11:22:20.218+08:00"": 1, ""2021-08-26T11:02:59.716+08:00"": 1, ""2021-08-26T10:43:31.401+08:00"": 1}"
+crib-drone-survey-results.tab,today,categorical_or_text,452,452,0,13,,,,,,,"{""2021-08-18"": 58, ""2021-08-10"": 52, ""2021-08-20"": 51}"
+crib-drone-survey-results.tab,interviewer,categorical_or_text,452,452,0,9,,,,,,,"{""Sosito_Chanle"": 60, ""Aldea_Gian_Euroedd"": 60, ""Bajao_Leonardo"": 56}"
+crib-drone-survey-results.tab,interviewer_other,categorical_or_text,452,5,447,5,,,,,,,"{""Nina potenciana"": 1, ""Edmundo evangelista"": 1, ""Dennis oclarino"": 1}"
+crib-drone-survey-results.tab,group_consent-note_info_1,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_2,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_3,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_4,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_5,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_6,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_7,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_8,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_9,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_10,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_11,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_12,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_13,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_14,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_15,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_16,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,group_consent-note_info_18,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,consent,categorical_or_text,452,452,0,1,,,,,,,"{""OK"": 452}"
+crib-drone-survey-results.tab,municipality,categorical_or_text,452,452,0,5,,,,,,,"{""Viga"": 126, ""Baras"": 116, ""Pandan"": 96}"
+crib-drone-survey-results.tab,barangay,categorical_or_text,452,452,0,20,,,,,,,"{""P_Vera_Summit"": 46, ""San_Jose_Oco"": 40, ""Danao"": 34}"
+crib-drone-survey-results.tab,age,numeric,452,452,0,68,18,32,45,45.9801,58,88,16.1173
+crib-drone-survey-results.tab,gender,categorical_or_text,452,452,0,4,,,,,,,"{""female"": 242, ""male"": 208, ""transgender"": 1}"
+crib-drone-survey-results.tab,education,categorical_or_text,452,452,0,7,,,,,,,"{""junior_high"": 189, ""elementary"": 125, ""college"": 101}"
+crib-drone-survey-results.tab,general_knowledge,categorical_or_text,452,452,0,3,,,,,,,"{""med"": 221, ""low"": 206, ""high"": 25}"
+crib-drone-survey-results.tab,internet_access,categorical_or_text,452,452,0,6,,,,,,,"{""0_never"": 225, ""4_daily"": 71, ""2_few_month"": 69}"
+crib-drone-survey-results.tab,know_drones,categorical_or_text,452,452,0,3,,,,,,,"{""no"": 239, ""yes"": 211, ""decline"": 2}"
+crib-drone-survey-results.tab,note_drone_description,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,aware_flights,categorical_or_text,452,452,0,3,,,,,,,"{""no"": 292, ""yes"": 158, ""decline"": 2}"
+crib-drone-survey-results.tab,see_flights,categorical_or_text,452,158,294,2,,,,,,,"{""yes"": 124, ""no"": 34}"
+crib-drone-survey-results.tab,first_seeing,categorical_or_text,452,124,328,2,,,,,,,"{""yes"": 74, ""no"": 50}"
+crib-drone-survey-results.tab,length_knowing,categorical_or_text,452,452,0,5,,,,,,,"{""today"": 180, ""crib"": 118, ""before_crib"": 100}"
+crib-drone-survey-results.tab,note_images_intro,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,image1_raw,categorical_or_text,452,452,0,4,,,,,,,"{""not_private"": 421, ""private"": 14, ""dk"": 10}"
+crib-drone-survey-results.tab,image1_raw_feature,categorical_or_text,452,14,438,3,,,,,,,"{""yes"": 8, ""no"": 3, ""dk"": 3}"
+crib-drone-survey-results.tab,image1_raw_other,categorical_or_text,452,6,446,5,,,,,,,"{""Mai ko aram"": 2, ""Mga harong"": 1, ""Dai"": 1}"
+crib-drone-survey-results.tab,image1_annotated,categorical_or_text,452,438,14,4,,,,,,,"{""not_private"": 415, ""private"": 17, ""dk"": 3}"
+crib-drone-survey-results.tab,image1_edited,categorical_or_text,452,31,421,3,,,,,,,"{""private"": 19, ""no_longer_private"": 10, ""dk"": 2}"
+crib-drone-survey-results.tab,image2_raw,categorical_or_text,452,452,0,4,,,,,,,"{""not_private"": 333, ""private"": 99, ""dk"": 15}"
+crib-drone-survey-results.tab,image2_raw_feature,categorical_or_text,452,99,353,2,,,,,,,"{""yes"": 67, ""no"": 32}"
+crib-drone-survey-results.tab,image2_raw_other,categorical_or_text,452,32,420,8,,,,,,,"{""Kubeta"": 18, ""Comfort room"": 8, ""Toilet"": 1}"
+crib-drone-survey-results.tab,image2_annotated,categorical_or_text,452,353,99,4,,,,,,,"{""private"": 279, ""not_private"": 69, ""dk"": 3}"
+crib-drone-survey-results.tab,image2_edited,categorical_or_text,452,378,74,3,,,,,,,"{""private"": 227, ""no_longer_private"": 149, ""dk"": 2}"
+crib-drone-survey-results.tab,image3_raw,categorical_or_text,452,452,0,4,,,,,,,"{""not_private"": 427, ""dk"": 11, ""private"": 10}"
+crib-drone-survey-results.tab,image3_raw_feature,categorical_or_text,452,10,442,2,,,,,,,"{""yes"": 7, ""no"": 3}"
+crib-drone-survey-results.tab,image3_raw_other,categorical_or_text,452,3,449,2,,,,,,,"{""Mai"": 2, ""Saksakyan"": 1}"
+crib-drone-survey-results.tab,image3_annotated,categorical_or_text,452,442,10,4,,,,,,,"{""not_private"": 422, ""private"": 16, ""decline"": 3}"
+crib-drone-survey-results.tab,image3_edited,categorical_or_text,452,26,426,2,,,,,,,"{""no_longer_private"": 17, ""private"": 9}"
+crib-drone-survey-results.tab,note_activities,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,support_scientists,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_support"": 229, ""support"": 211, ""neither"": 6}"
+crib-drone-survey-results.tab,support_police,categorical_or_text,452,452,0,6,,,,,,,"{""strongly_support"": 245, ""support"": 185, ""neither"": 11}"
+crib-drone-survey-results.tab,support_map,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_support"": 218, ""support"": 214, ""neither"": 14}"
+crib-drone-survey-results.tab,support_emergency,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_support"": 304, ""support"": 144, ""oppose"": 2}"
+crib-drone-survey-results.tab,support_farmers,categorical_or_text,452,452,0,5,,,,,,,"{""support"": 244, ""strongly_support"": 140, ""neither"": 41}"
+crib-drone-survey-results.tab,support_hobbyists,categorical_or_text,452,452,0,6,,,,,,,"{""support"": 206, ""neither"": 133, ""oppose"": 67}"
+crib-drone-survey-results.tab,support_health,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_support"": 249, ""support"": 178, ""neither"": 14}"
+crib-drone-survey-results.tab,note_red_cross_usage,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,freq_malfunction,categorical_or_text,452,452,0,6,,,,,,,"{""rarely"": 211, ""sometimes"": 111, ""never"": 81}"
+crib-drone-survey-results.tab,freq_increase_safety,categorical_or_text,452,452,0,6,,,,,,,"{""sometimes"": 179, ""often"": 113, ""rarely"": 98}"
+crib-drone-survey-results.tab,freq_threaten_privacy,categorical_or_text,452,452,0,6,,,,,,,"{""never"": 293, ""sometimes"": 87, ""rarely"": 46}"
+crib-drone-survey-results.tab,freq_function,categorical_or_text,452,452,0,6,,,,,,,"{""often"": 139, ""sometimes"": 123, ""always"": 86}"
+crib-drone-survey-results.tab,freq_decrease_safety,categorical_or_text,452,452,0,5,,,,,,,"{""never"": 273, ""rarely"": 133, ""sometimes"": 33}"
+crib-drone-survey-results.tab,freq_protect_privacy,categorical_or_text,452,452,0,6,,,,,,,"{""sometimes"": 174, ""rarely"": 123, ""often"": 91}"
+crib-drone-survey-results.tab,trust_redcross_overall,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_trust"": 390, ""slightly_trust"": 56, ""slightly_distrust"": 2}"
+crib-drone-survey-results.tab,trust_redcross,categorical_or_text,452,452,0,5,,,,,,,"{""strongly_trust"": 295, ""slightly_trust"": 145, ""neither"": 6}"
+crib-drone-survey-results.tab,trust_govt,categorical_or_text,452,452,0,6,,,,,,,"{""slightly_trust"": 219, ""strongly_trust"": 172, ""neither"": 46}"
+crib-drone-survey-results.tab,trust_police,categorical_or_text,452,452,0,6,,,,,,,"{""strongly_trust"": 228, ""slightly_trust"": 174, ""neither"": 36}"
+crib-drone-survey-results.tab,trust_neighbor,categorical_or_text,452,452,0,6,,,,,,,"{""neither"": 184, ""slightly_trust"": 113, ""slightly_distrust"": 78}"
+crib-drone-survey-results.tab,trust_business,categorical_or_text,452,452,0,6,,,,,,,"{""neither"": 147, ""slightly_trust"": 142, ""slightly_distrust"": 90}"
+crib-drone-survey-results.tab,trust_ngo,categorical_or_text,452,452,0,6,,,,,,,"{""slightly_trust"": 159, ""neither"": 101, ""slightly_distrust"": 92}"
+crib-drone-survey-results.tab,note_end,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,meta-audit,categorical_or_text,452,302,150,1,,,,,,,"{""audit.csv"": 302}"
+crib-drone-survey-results.tab,meta-instanceID,categorical_or_text,452,452,0,452,,,,,,,"{""uuid:bfb146d2-3cbf-43fa-bde0-df3827cf477a"": 1, ""uuid:2352392e-f38d-4ac2-b9fe-7aded705e421"": 1, ""uuid:41a3a1c6-78ba-4d52-ac17-c8880ae25421"": 1}"
+crib-drone-survey-results.tab,KEY,categorical_or_text,452,452,0,452,,,,,,,"{""uuid:bfb146d2-3cbf-43fa-bde0-df3827cf477a"": 1, ""uuid:2352392e-f38d-4ac2-b9fe-7aded705e421"": 1, ""uuid:41a3a1c6-78ba-4d52-ac17-c8880ae25421"": 1}"
+crib-drone-survey-results.tab,SubmitterID,numeric,452,452,0,1,55,55,55,55,55,55,0
+crib-drone-survey-results.tab,SubmitterName,categorical_or_text,452,452,0,1,,,,,,,"{""CRIB data collector"": 452}"
+crib-drone-survey-results.tab,AttachmentsPresent,numeric,452,452,0,2,0,0,1,0.668142,1,1,0.471402
+crib-drone-survey-results.tab,AttachmentsExpected,numeric,452,452,0,2,0,0,1,0.668142,1,1,0.471402
+crib-drone-survey-results.tab,Status,categorical_or_text,452,0,452,0,,,,,,,{}
+crib-drone-survey-results.tab,ReviewState,categorical_or_text,452,26,426,2,,,,,,,"{""hasIssues"": 18, ""rejected"": 8}"
+crib-drone-survey-results.tab,DeviceID,categorical_or_text,452,452,0,11,,,,,,,"{""collect:8kytclK4NLTXvl5w"": 60, ""collect:e7qHkjF89wtD1wwh"": 59, ""collect:6g7yqwAomGIqxhzj"": 56}"
+crib-drone-survey-results.tab,Edits,numeric,452,452,0,1,0,0,0,0,0,0,0

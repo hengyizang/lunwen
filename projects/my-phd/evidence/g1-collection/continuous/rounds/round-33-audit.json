@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 33,
+  "completed_at": "2026-11-21T10:09:02Z",
+  "batch_label": "Broad Engineering R33: R2_Aerial_Actuator (2026)",
+  "base_head_sha": "d380de76d604c25bc63c053adb4db87873b79cad",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 76,
+    "duplicates_skipped": 76,
+    "net_new": 0,
+    "new_reading_queue": 0,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t100902z-arxiv-8b13aa401e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aquadrotor+AND+all%3Aactuator+AND+all%3Asaturation+AND+all%3Atrajectory+AND+all%3Atracking%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "bb5f6d6449fc68e6201e789e6d8e06cca7ee3421dcbe8842c2bf3b4fc9809c77",
+        "normalized_results_sha256": "acad4a891e9ad13c4e699cb51f31beb87a67fc1b2983c1751b7f5c68a0c78776"
+      },
+      {
+        "provider": "openalex",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t100903z-openalex-e91ec831fd",
+        "request_url": "https://api.openalex.org/works?search=quadrotor+actuator+saturation+trajectory+tracking&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "af99741600c44bf83edacd830c385c5fa399989facbeca7f49b9aac0dd2382e0",
+        "normalized_results_sha256": "13402dd901085692d012d314b870bde22fb1925c1a1eb45fe7d3b1cc00182d73"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t100905z-europe-pmc-82c5141307",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=quadrotor+actuator+saturation+trajectory+tracking&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "5b5fdad71be26d87f6eb0e14280b142b221833dec017603eddfac4beeabe7b5d",
+        "normalized_results_sha256": "b091f04a04ba7eba4d5845d3168ab1014819341ea570c66900b03618aa3ecf54"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t100913z-arxiv-19fc0dbaec",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Amultirotor+AND+all%3Arotor+AND+all%3Afailure+AND+all%3Acontrol+AND+all%3Aallocation%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "e6e2f08f9d4f8187a81ac8cdef4b039cfde41cb07b5bb7c74819173ceb07a9b2",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t100914z-openalex-89f46111b1",
+        "request_url": "https://api.openalex.org/works?search=multirotor+rotor+failure+control+allocation&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "82e84d2bc8dbad20c9f7d60d6d10f4bf717e6465537b1079352a011520f22ed1",
+        "normalized_results_sha256": "f17d581e90ccac0cf0896f00c5ebd7af44167d282d9f4c79c0f2b6bc712488a8"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t100915z-europe-pmc-4128e0ae3c",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multirotor+rotor+failure+control+allocation&pageSize=12&format=json",
+        "result_count": 6,
+        "response_sha256": "d170c05953a5cab28087343abbfff5af74457eca77a6ca99b139549a836c83b4",
+        "normalized_results_sha256": "48fc97b188c58955207b47a53ab946c15d81abe4a2d41d67a9a0df750e0016a7"
+      },
+      {
+        "provider": "arxiv",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t100923z-arxiv-57aaadb129",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Areference+AND+all%3Agovernor+AND+all%3Aquadrotor+AND+all%3Aconstrained+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "fcf3b2b0091c5704759aa08bda6ff8661927210f2d9534d65021eae1037172a7",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t100924z-openalex-ee61a4d5c5",
+        "request_url": "https://api.openalex.org/works?search=reference+governor+quadrotor+constrained+control&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "cb323362d0e1ef9fa39e58d2b99a36329713da713af25cb808dfdebf6449e5db",
+        "normalized_results_sha256": "d0cddd52b6cbdb48a5d6b257fc3281cf5c515f2afbe317ddab73ed2a443cab28"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t100925z-europe-pmc-721409f67b",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=reference+governor+quadrotor+constrained+control&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "c8e68bd02a034c567061f14552b0c0b05a306758ec34745822f42c9a9688699b",
+        "normalized_results_sha256": "bdd0e1660fda139bc2b5f42e4c092f8e3f32fb8a51f7a30bcb6d65c30496fbc6"
+      },
+      {
+        "provider": "arxiv",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t100927z-arxiv-7f9938d3bb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Anonlinear+AND+all%3AMPC+AND+all%3Aquadrotor+AND+all%3Athrust+AND+all%3Aconstraint%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "2232b65de05d95967583a94668d3a1c7fc64a2b50d7c823f4a3b8a988b570461",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t100928z-openalex-7ae6d276a1",
+        "request_url": "https://api.openalex.org/works?search=nonlinear+MPC+quadrotor+thrust+constraint&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "ff170d114a5109019c68368607f9ca4223eed38270fb3e337093df2c60347153",
+        "normalized_results_sha256": "4022ce875891c6ec629c9fa72137d5b3d612f8ab91252f31addae5d80140fc97"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t100930z-europe-pmc-0440832024",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=nonlinear+MPC+quadrotor+thrust+constraint&pageSize=12&format=json",
+        "result_count": 9,
+        "response_sha256": "d3bd58ec3ce38b7df5ca883fdfb323f4807b3f08666eafcc4f79a107a1891d71",
+        "normalized_results_sha256": "971ce7742b6a81499df166bca7d8d899ada17122c2f6692dbbbaf4a01f96ef08"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1002/advs.77505",
+        "receipt_id": "20261121t100932z-opencitations-34a8add590",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/biomimetics11090647",
+        "receipt_id": "20261121t100933z-opencitations-7baf708194",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 177,
+    "off_topic_filtered": 136,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 13,
+    "net_new": 28,
+    "provider_statuses": [
+      {
+        "query": "wafer defect",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wafer defect",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "wafer defect",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wafer defect",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wafer defect",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "pcb defect",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pcb defect",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "pcb defect",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pcb defect",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pcb defect",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "solder joint",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "solder joint",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "solder joint",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "solder joint",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "solder joint",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "steel surface defect",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "steel surface defect",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "steel surface defect",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "steel surface defect",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "steel surface defect",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 4,
+    "cleaned": [
+      {
+        "slug": "dataverse-getyap-drone-medical-package-de",
+        "key": "dataverse:10.7910/dvn/getyap",
+        "dataset_name": "Drone Medical Package Delivery for Improved Transportation and Better Patient Outcomes Full Dataset",
+        "doi": "10.7910/dvn/getyap",
+        "landing_url": "https://doi.org/10.7910/DVN/GETYAP",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-getyap-drone-medical-package-de-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-getyap-drone-medical-package-de-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_getyap_drone_medical_package_de.py",
+        "cleaned_rows": 202,
+        "raw_total_rows": 202,
+        "verified_sha256": "ebb7e13fb595327c162a1176a85b0f828296e7fcd3189070cb6466827ae09616"
+      },
+      {
+        "slug": "dataverse-fs95y3-gomezmurillotarwater-ant",
+        "key": "dataverse:10.7910/dvn/fs95y3",
+        "dataset_name": "GomezMurilloTarwater_Antswarmmechs_Biotropica",
+        "doi": "10.7910/dvn/fs95y3",
+        "landing_url": "https://doi.org/10.7910/DVN/FS95Y3",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-fs95y3-gomezmurillotarwater-ant-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-fs95y3-gomezmurillotarwater-ant-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_fs95y3_gomezmurillotarwater_ant.py",
+        "cleaned_rows": 133,
+        "raw_total_rows": 133,
+        "verified_sha256": "3cc853cf2fb07e68c4c555e9027a82234e21bb9b4eebe76995e760088b387a47"
+      },
+      {
+        "slug": "dataverse-yuiynm-replication-data-for-com",
+        "key": "dataverse:10.7910/dvn/yuiynm",
+        "dataset_name": "Replication Data for: Community perceptions of the use of drone mapping for Vulnerability and Capacity Assessments in Bicol Region, Philippines",
+        "doi": "10.7910/dvn/yuiynm",
+        "landing_url": "https://doi.org/10.7910/DVN/YUIYNM",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-yuiynm-replication-data-for-com-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-yuiynm-replication-data-for-com-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_yuiynm_replication_data_for_com.py",
+        "cleaned_rows": 87,
+        "raw_total_rows": 452,
+        "verified_sha256": "d35d03d5c6fa812541732881d4d6de7bedc16f35c21961adc000b0ab46c2111b"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

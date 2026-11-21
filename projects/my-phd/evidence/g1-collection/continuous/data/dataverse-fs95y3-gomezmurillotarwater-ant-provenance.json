@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-fs95y3-gomezmurillotarwater-ant",
+  "dataset_name": "GomezMurilloTarwater_Antswarmmechs_Biotropica",
+  "doi": "10.7910/dvn/fs95y3",
+  "landing_url": "https://doi.org/10.7910/DVN/FS95Y3",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/FS95Y3",
+  "access_date": "2026-11-21",
+  "round_number": 33,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "GomezMurillo_2026_Antswarmmech.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13469034",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/FS95Y3/19c7760e3f1-47b4c15949f4?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27GomezMurillo_2026_Antswarmmech.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T100953Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cc276b7877cca5d56b2059dc52b79474804e23f5e166db4a61a3f84870c094bb",
+      "http_status": 200,
+      "bytes": 18263,
+      "publisher_checksum": "dataverse_original_md5:f5c5882f52a5cb1ef8b6958556d01c64",
+      "verified_md5": "67ff1e55fe14c2669b29f8677ef57163",
+      "verified_sha256": "3cc853cf2fb07e68c4c555e9027a82234e21bb9b4eebe76995e760088b387a47"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fs95y3-gomezmurillotarwater-ant",
+  "raw_total_bytes": 18263,
+  "raw_total_rows": 133,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-fs95y3-gomezmurillotarwater-ant-cleaned.csv",
+  "cleaned_csv_sha256": "9d88f98a3bf907b0a1b8b075b815503bc999e1e4b02a0be7dd7a61a73571703d",
+  "cleaned_rows": 133,
+  "cleaned_cols": 20,
+  "null_counts_by_file": {
+    "GomezMurillo_2026_Antswarmmech.tab": {
+      "swarm_id": 0,
+      "month": 0,
+      "julian_day": 0,
+      "year": 0,
+      "ant": 0,
+      "site": 0,
+      "biomass": 3,
+      "velocity": 3,
+      "total_area": 0,
+      "n_species": 0,
+      "n_obligates": 0,
+      "n_facultatives": 0,
+      "n_individuos": 0,
+      "shannon.di": 0,
+      "pielou.ev": 0,
+      "Total_SpeciesSite": 3,
+      "max_ShannonSite": 0,
+      "DominantBirds": 0,
+      "DominantsAbundance": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
