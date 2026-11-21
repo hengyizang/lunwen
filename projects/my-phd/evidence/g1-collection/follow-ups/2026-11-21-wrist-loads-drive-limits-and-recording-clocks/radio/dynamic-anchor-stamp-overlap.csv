@@ -1,0 +1,9 @@
+case,anchor_streams,unique_stamps_any,common_stamps_all_four,exactly_one_anchor
+Dynamic_measurements/LOS/Trajectory_A/Case_1,4,8405,0,8405
+Dynamic_measurements/LOS/Trajectory_A/Case_2,4,8219,0,8219
+Dynamic_measurements/LOS/Trajectory_B/Case_3,4,6645,0,6645
+Dynamic_measurements/LOS/Trajectory_B/Case_4,4,7253,0,7253
+Dynamic_measurements/NLOS/Trajectory_A/Case_1,4,9447,0,9447
+Dynamic_measurements/NLOS/Trajectory_A/Case_2,4,9156,0,9156
+Dynamic_measurements/NLOS/Trajectory_B/Case_3,4,6297,0,6297
+Dynamic_measurements/NLOS/Trajectory_B/Case_4,4,6280,0,6280

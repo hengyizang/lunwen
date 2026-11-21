@@ -1,0 +1,84 @@
+{
+  "verified_utc": "2026-11-21",
+  "artifacts": [
+    {
+      "id": "eclipse-tracecompass/tracecompass-test-traces:ctf/src/main/resources/ros2",
+      "title": "Trace Compass Test Traces: ROS2 simple system / trace-example-2-20220407155648",
+      "creator": "Christophe Bédard (trace contribution), Eclipse Trace Compass project (distribution)",
+      "version": "51217fafe19c7d614f83175fc359f770968aa347",
+      "trace_addition": "https://github.com/eclipse-tracecompass/tracecompass-test-traces/commit/d5fb44e62aadad67897c7b641ba926f8f13d6b2a",
+      "source": "https://github.com/eclipse-tracecompass/tracecompass-test-traces/tree/51217fafe19c7d614f83175fc359f770968aa347/ctf/src/main/resources/ros2",
+      "catalogue": "https://github.com/eclipse-tracecompass/tracecompass-test-traces/blob/51217fafe19c7d614f83175fc359f770968aa347/ctf/src/main/java/org/eclipse/tracecompass/testtraces/ctf/CtfTestTrace.java#L473-L484",
+      "launch": "https://github.com/christophebedard/ros2-message-flow-analysis/blob/2e27f3709ea56453082bc80b3d42bdcb639ead90/examples/example-2_trivial.launch.py",
+      "license": "EPL-2.0. Repository NOTICE covers the program and accompanying materials. This batch shares newly computed statistics and source locators.",
+      "license_url": "https://github.com/eclipse-tracecompass/tracecompass-test-traces/blob/51217fafe19c7d614f83175fc359f770968aa347/NOTICE.md",
+      "evidence_level": "measured trace files decoded; not physical plant measurements",
+      "file_check": {
+        "files": 17,
+        "data_streams": 8,
+        "indices": 8,
+        "metadata": 1,
+        "bytes_including_indices": 4072936,
+        "blob_manifest": "trace-blobs.json",
+        "metadata_sha256": "b3636bb4b93ff9d25cdc5cad27d2d3ca37f2e28556532db162778168b14df8ba"
+      },
+      "signals": "Single-host LTTng CTF 1.8 capture of three ROS node processes on eight CPU streams. Source /topic_a DDS writer and relay /topic_b writer each have unique source stamps per topic. Successful rmw_take reports a matching source stamp. Pair RCL publish with DDS write in thread by matching rcl_publish message address to dds:write_pre data and matching writer at write_pre and write. Resolve subscription callbacks using the initialization handle chain. Pair successful take with subsequent subscription callback of matching topic/thread and callback_end. The relay publishes exactly once inside each matched incoming callback on the same thread.",
+      "clock": "Clock metadata monotonic 1 GHz, UUID 507ad184-257b-4164-b479-27ac6cfeb1fe. Differences computed exclusively from Babeltrace event clock cycles. The epoch-like DDS source timestamp is solely an equality key, not subtracted from the event clock.",
+      "scope": "99,338 events. 1,986 complete application chains. DDS write-to-take includes transport, queueing and execution until take. Single host; three processes. The source describes a trivial message flow. Endpoints are software nodes. Unmatched sends and takes do not identify network drops.",
+      "historical_extension": "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/ros/caret-source.json cites addition d5fb44e6 as an uncounted software-test lead. This pass verifies all CTF files and derives two-hop linkages and timing."
+    },
+    {
+      "id": "ros-tracing/tracetools_analysis:converted_pingpong",
+      "title": "tracetools_analysis callback-duration example: converted_pingpong",
+      "creator": "Christophe Bédard (sample revision), ros-tracing/tracetools_analysis contributors",
+      "version": "caa8c05158bb2f898e1632188e57eb58c5e88d05",
+      "sample_update": "https://github.com/ros-tracing/tracetools_analysis/commit/c874d59f743f2daff424cf56bfb32cb5c4cdcbed",
+      "source": "https://github.com/ros-tracing/tracetools_analysis/blob/caa8c05158bb2f898e1632188e57eb58c5e88d05/tracetools_analysis/analysis/sample_data/converted_pingpong",
+      "notebook": "https://github.com/ros-tracing/tracetools_analysis/blob/caa8c05158bb2f898e1632188e57eb58c5e88d05/tracetools_analysis/analysis/callback_duration.ipynb",
+      "launch": "https://github.com/ros-tracing/tracetools_analysis/blob/caa8c05158bb2f898e1632188e57eb58c5e88d05/tracetools_analysis/launch/pingpong.launch.py",
+      "license": "Apache-2.0 (repository LICENSE; no separate file-level terms found). Raw example is referenced at source.",
+      "license_url": "https://github.com/ros-tracing/tracetools_analysis/blob/caa8c05158bb2f898e1632188e57eb58c5e88d05/LICENSE",
+      "evidence_level": "published converted measured event stream decoded",
+      "file_check": {
+        "files": 1,
+        "bytes": 43889,
+        "sha256": "30b46aa79536797834b6546066c72f50c54f546b23c8ce190af478b9cc594411",
+        "git_blob": "2dabe6ef4132f333868950bb0bbd9c8c81c6891a"
+      },
+      "signals": "248 primitive event dictionaries include two process IDs and 91 completable callback-start/end pairs. One pair is internal /parameter_events. Remaining 90 comprise 30 source timer, 30 /ping subscriber, and 30 /pong subscriber callbacks. Runtime pairs use process, thread and registered callback handles. No per-message DDS write/take, publish event or sequence number appears. Ordered triples are grouped between consecutive source timer starts after filtering the internal callback.",
+      "clock": "Converted Babeltrace _timestamp in nanoseconds. Single launch example declares both processes together. Unlike the CTF release, converted file retains no host or clock metadata. No cross-host comparison.",
+      "scope": "Software timing under ping–pong test workload with extra work requested in both nodes. Callback start-to-start spacings depend on workload and scheduling. No absolute network, message-specific RTT or motion latency inferred."
+    }
+  ],
+  "associated_works": [
+    {
+      "doi": "10.1016/j.robot.2022.104361",
+      "arxiv": "2204.10208v6",
+      "title": "Message flow analysis with complex causal links for distributed ROS 2 systems",
+      "authors": [
+        "Christophe Bédard",
+        "Pierre-Yves Lajoie",
+        "Giovanni Beltrame",
+        "Michel Dagenais"
+      ],
+      "year": 2023,
+      "evidence_level": "full text reread",
+      "locator": "Section IV-A and IV-B (topic plus DDS source stamp, direct links); Figure 5 (source, relay and sink); CtfTestTrace.java links the same launch graph. The present timing statistics are calculated from this test capture.",
+      "url": "https://arxiv.org/pdf/2204.10208v6",
+      "rights": "Public author preprint. Bibliographic facts and evidence locators only."
+    },
+    {
+      "doi": "10.1109/LRA.2022.3174346",
+      "title": "ros2_tracing: Multipurpose Low-Overhead Framework for Real-Time Tracing of ROS 2",
+      "authors": [
+        "Christophe Bédard",
+        "Ingo Lütkebohle",
+        "Michel Dagenais"
+      ],
+      "year": 2022,
+      "evidence_level": "previously catalogued paper; source tool identified",
+      "locator": "Related method and implementation; this run used repository sample and launch/notebook documentation. No claim that this sample is a specific paper run.",
+      "url": "https://doi.org/10.1109/LRA.2022.3174346"
+    }
+  ]
+}

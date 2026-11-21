@@ -1,0 +1,5 @@
+doi,locator,load,transition,quantity,unit,conventional,weighted_acceleration_control,relative_reduction_percent
+10.1541/ieejias.137.427,Table 2,Full,acceleration,speed overshoot,rpm,93.6,38.6,58.7607
+10.1541/ieejias.137.427,Table 2,Full,deceleration,speed overshoot,rpm,187,71.3,61.8717
+10.1541/ieejias.137.427,Table 2,None,acceleration,speed overshoot,rpm,180,63.5,64.7222
+10.1541/ieejias.137.427,Table 2,None,deceleration,speed overshoot,rpm,191,63.9,66.5445

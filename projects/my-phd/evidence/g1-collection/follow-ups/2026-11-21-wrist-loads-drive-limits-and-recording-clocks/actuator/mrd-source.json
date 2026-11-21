@@ -1,0 +1,74 @@
+{
+  "id": "github:MRDLab/mis-tool-characterization",
+  "title": "Medical Robotics and Devices Lab Data Repository — da Vinci tool input/output characterization",
+  "institution": "University of Minnesota Medical Robotics and Devices Lab",
+  "related_paper_authors": [
+    "John J. O’Neill",
+    "Trevor K. Stephens",
+    "Timothy M. Kowalewski"
+  ],
+  "retrieved_utc": "2026-11-21",
+  "repository": "https://github.com/MRDLab/mis-tool-characterization",
+  "commit": "03658b2ccefef9adceebc38dd4a17bd6e190cd2e",
+  "commit_date": "2018-10-02T20:08:00Z",
+  "tree_sha": "38ad9cc4ba818102acf1a6e696069071f918c7a8",
+  "evidence_level": "measured files; all numeric trial logs",
+  "related_article": "10.1109/lra.2018.2849862",
+  "precursor_article": "10.1115/dmd2017-3519",
+  "links": {
+    "fixed_source": "https://github.com/MRDLab/mis-tool-characterization/tree/03658b2ccefef9adceebc38dd4a17bd6e190cd2e",
+    "signal_definitions": "https://github.com/MRDLab/mis-tool-characterization/blob/03658b2ccefef9adceebc38dd4a17bd6e190cd2e/README.md",
+    "conversion": "https://github.com/MRDLab/mis-tool-characterization/blob/03658b2ccefef9adceebc38dd4a17bd6e190cd2e/visualization/compileData.m",
+    "author_article": "https://mrd.umn.edu/sites/mrd.umn.edu/files/2020-10/ONeill2018EvaluationTorqueMeasurements.pdf",
+    "apparatus": "https://mrd.umn.edu/sites/mrd.umn.edu/files/2020-10/Kong2017DesignPortableDynamic.pdf"
+  },
+  "key_source_blobs": {
+    "README.md": "d95461ead37eb7cf172494908a35a42d1e576a2f",
+    "visualization/compileData.m": "44225233e6829093cf22905226fc72db29ca4a49",
+    "visualization/compileDataRPY.m": "8b197f75c991418f4c1a550bf14fb255cf7cddf6"
+  },
+  "rights": {
+    "source_attribution": "Contains information from the University of Minnesota Medical Robotics and Devices Lab MRDLab/mis-tool-characterization database, made available under the Open Database License (ODbL).",
+    "database": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "contents": "https://opendatacommons.org/licenses/dbcl/1-0/",
+    "visualization_code": "Author repository assigns GPL-3.0 to visualization code. The independent NumPy calculation here does not redistribute that code.",
+    "derivative_tables": "mrd-bench-runs.csv and mrd-command-excursions.csv are provided under ODbL 1.0. See source_attribution, database and contents. The repository contains numerical summaries; fetch the original time series from the author repository."
+  },
+  "acquisition": {
+    "files": 340,
+    "unique_git_blobs": 340,
+    "input_bytes": 432558516,
+    "jointly_finite_10_column_rows": 6799186,
+    "folders": 15,
+    "inventory_rule": "All case-insensitive data/<folder>/<digits>.txt entries in the fixed recursive tree. Serial logs, readmes, trained weights and software are outside the trial table. Each file byte count and Git blob SHA-1 was recomputed before parsing."
+  },
+  "signal_constraints": [
+    "Proximal (back) and distal (front) reactions are measured with separate Futek TFF325 devices on the same synchronized sampling system. SHA-verified files supply native signs. Torque scaling is 0.000039811 N·m per count. No filtering or zero-offset correction was applied. Use file ranges for within-trial descriptive comparisons; right-jaw signs are not standardized across tools.",
+    "Column 8 is the back-end command recorded by the authors, described as an analog output in [-1,1]. Column 4 is back-end measured current. Column 7 is the front-end load command: README says ampere, but multiple individual headers and conversion code question that unit, so the tables retain native units. The two command columns belong to different motors; their difference is not clipping.",
+    "Column 1 is labeled ms, whereas the published 1 kHz timing and the median observed 0.001 increment per trial are consistent with a time field in seconds. The table keeps native clock values. The two command decimals/precision differ across files.",
+    "No separate, physically sampled analog connector output, post-limiter back-end command, saturation bit or actual ADC/DAC range was identified in these 10 columns. Exact equality and out-of-range counts are for logged field values only."
+  ],
+  "result": {
+    "source_bounds": [
+      -1,
+      1
+    ],
+    "back_command_observed_minmax": [
+      -1.14,
+      1.0638
+    ],
+    "samples_exactly_at_either_documented_endpoint": 0,
+    "samples_outside_documented_interval": 21,
+    "runs_outside": 3,
+    "contiguous_excursions": 3,
+    "longest_excursion_samples": 18,
+    "interpretation": "A run holds front native command 0.8 while the back command exceeds 1 for 18 samples, with measured current and two changing reaction torques on the same acquisition clock. Three remaining negative out-of-range samples are at indices 1/2 of two right-jaw files. Insufficient evidence to reconstruct a software limit or establish a physical current/supply limit. Front-end load command is constant within each of all 340 runs."
+  },
+  "reproduce": "python derive_mrd.py OUTPUT_DIRECTORY CACHE_DIRECTORY; requires NumPy. All 340 original files were downloaded and the script was executed on 2026-11-21 UTC.",
+  "outputs": [
+    "mrd-bench-runs.csv",
+    "mrd-command-excursions.csv",
+    "mrd-literature.csv",
+    "mrd-citations.csv"
+  ]
+}

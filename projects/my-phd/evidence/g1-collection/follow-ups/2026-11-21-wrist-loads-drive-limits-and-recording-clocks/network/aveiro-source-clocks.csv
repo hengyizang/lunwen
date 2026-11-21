@@ -1,0 +1,8 @@
+stream,station,rows,distinct_insert_times,insert_time_backsteps,observation_timestamp_rows,insert_before_observation,median_insert_minus_observation_ms,min_insert_minus_observation_ms,max_insert_minus_observation_ms,generation_delta_rollbacks,defined_speed_value_rows,exact_zero_speed_value_rows
+cam,157,8778,8778,0,8778,0,2.319,0.757,41.529,14,8778,8778
+cam,306,320,320,0,320,0,2.674,1.344,4.693,7,320,0
+camera,all_detections,49068,49068,3724,49068,0,64.130,6.297,265.481,0,0,0
+lidar,all_detections,10737,10737,1,10737,0,59.992,5.261,127.572,0,0,0
+luxonis,all_detections,25851,9153,0,25851,0,0.000,0.000,0.000,0,0,0
+radar,all_detections,11999,11999,35,11999,0,44.643,3.073,107.783,0,0,0
+vam,755,1401,1401,0,1401,0,1.932,0.715,5.559,4,1401,0

@@ -1,0 +1,48 @@
+{
+  "retrieved_utc_date": "2026-11-21",
+  "scope": "Industrial servo anti-windup, independent shaft-torque measurement and wrist force/torque error references; all included articles are free full text. Author/title and identifier history checking is performed in the parent batch.",
+  "queries": [
+    "robot wrist force torque sensor offset thermal drift calibration decoupling zero drift temperature PMC six axis multi-axis force",
+    "force torque sensor hysteresis creep zero drift strain gauge multi-axis load cell robot six-axis Sensors calibration PMC",
+    "torque motor dynamometer saturation current saturation identification feedback PMSM open article torque sensor current limitation test bench",
+    "AC servo drive saturation anti windup torque transducer experimental spindle drive saturation motor torque experimental torque limit measured dynamometer PMC",
+    "\"A Method of Wind-up Restraint Control\" torque saturation Gao Komada DOI J-STAGE",
+    "\"Rapid and Stable Speed Response\" SVM Kitajima 107 115 J-stage 2015 SPMSM",
+    "\"Current Control for SPMSM\" Final-State Control Miyajima 794 J-stage field weakening 2012",
+    "\"Speed Servo System Considering Voltage Saturation\" Hayasaka 120 122 J-STAGE Ohishi",
+    "Kanmachi et al. (2017) refs 8, 9, 11, 12, 13, 16, 18 -> publisher PDF. Checked referring paper methods and backward citations for each.",
+    "Wang et al. 10.1049/elp2.70185: full article search for torque transducer, experimental platform and 1000 rpm, inspect Secs 4 and 5.",
+    "Gierczynski et al. 2024 Sec. 3 and Supplementary Materials -> publisher /s1 and physical ZIP, independently inspect both Excel worksheets per quadrant."
+  ],
+  "interfaces": [
+    "Public web search and publisher sites",
+    "Crossref works endpoint for DOI/title/authors (J-STAGE page typos retained for matching)",
+    "Europe PMC fullTextXML, article metadata/authors, figures, tables and reference elements",
+    "Publisher PDFs via free J-STAGE and MDPI download, parsed with pdftotext; Wiley full-text HTML via public web search"
+  ],
+  "counts": {
+    "works": 24,
+    "full_text": 24,
+    "binary_or_xml_digests": 23,
+    "verified_citations": 20,
+    "public_empirical_supplements_decoded": 1
+  },
+  "access_notes": [
+    "Wiley full article was accessible via the search connector. Direct bytes were not archived; the CSV leaves the full-text SHA-256 field blank for that article.",
+    "Several motor studies offer raw captured waveforms on reasonable request. None of those are reported here as public data releases. A publisher XML download for 10.3390/en17236096 returned HTML; both the PDF and ZIP were subsequently fetched from the publisher.",
+    "Crossref reference indexes may differ from printed bibliography numbering, especially for bilingual IEEJ texts. Citation locators use the printed numbers.",
+    "J-STAGE landing pages and some English titles have typographical variants. 10.1541/ieejias.122.120 appears as Indiredt/Indirect; 10.1541/ieejias.128.208 as Proportinal/Proportional. The canonical DOI unifies these forms."
+  ],
+  "excluded_leads": [
+    "10.13973/j.cnki.robot.180203 emerged from search; no independently examined full-text result in this subset.",
+    "S0925231224020630 sparse drift identification and S0263224123003913 FBG wrist sensor appeared in search and were not promoted from landing-page/abstract evidence."
+  ],
+  "article_data_links": [
+    {
+      "paper_doi": "10.3390/en17236096",
+      "target": "https://www.mdpi.com/article/10.3390/en17236096/s1",
+      "evidence": "The publisher article links S1, and all four workbooks were retrieved and parsed."
+    }
+  ],
+  "reproducibility": "Figures and tables are located in literature.csv. No source full text or source ZIP is mirrored here."
+}

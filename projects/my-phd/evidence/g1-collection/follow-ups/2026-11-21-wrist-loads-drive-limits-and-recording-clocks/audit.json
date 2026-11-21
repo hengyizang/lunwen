@@ -1,0 +1,330 @@
+{
+  "parent": "08c8ab373c43c798d6992965c50a582d050c5ddc",
+  "verified_date_utc": "2026-11-21",
+  "stage": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "previous_run": {
+    "last_commit": "08c8ab373c43c798d6992965c50a582d050c5ddc",
+    "branch_at_start": "08c8ab373c43c798d6992965c50a582d050c5ddc",
+    "actions_queued": 0,
+    "actions_in_progress": 0
+  },
+  "historical_coverage": {
+    "git_blobs_checked": 1399,
+    "evidence_git_blobs_checked": 1337,
+    "gzip_files_decoded": 7,
+    "archive_members_read": 301,
+    "nested_gzip_payloads": 256,
+    "early_files_compared": 7,
+    "distinct_early_files": 1
+  },
+  "searchable_paths_and_archive_members": 1699,
+  "tabular_catalogues_including_input_snapshots": 38,
+  "title_rows_including_repeated_inputs": 45362,
+  "method": "Downloaded immutable GitHub project snapshot, independently matched every project file with its blob SHA1 in the complete Git tree. Decompressed all seven gzip files, both tar archives and their nested provider responses. Compared seven early files against their historical revision ab7d82f435520c996cf592faefca9b1c5a945d5b, including the one differing file in this search. Matched DOI, arXiv, dataset concept and version IDs, fixed repository paths, exact/lowercase/diacritic-folded titles and approximate tokenized titles. Reviewed similar-title candidates using titles and creators. The project contains 55 numbered rounds and 13 earlier follow-ups. Historical counts reflect the checked project records.",
+  "counts": {
+    "bibliographic_records": 49,
+    "first_seen_records": 30,
+    "previous_records": 19,
+    "by_evidence_and_history": [
+      {
+        "history": "new_source",
+        "level": "measured files",
+        "count": 15
+      },
+      {
+        "history": "new_source",
+        "level": "software execution trace",
+        "count": 1
+      },
+      {
+        "history": "new_work",
+        "level": "bibliographic screening",
+        "count": 5
+      },
+      {
+        "history": "new_work",
+        "level": "full text",
+        "count": 25
+      },
+      {
+        "history": "previous_source_extended",
+        "level": "measured files",
+        "count": 3
+      },
+      {
+        "history": "previous_source_extended",
+        "level": "software execution trace",
+        "count": 1
+      },
+      {
+        "history": "previous_work",
+        "level": "bibliographic screening",
+        "count": 4
+      },
+      {
+        "history": "previous_work",
+        "level": "full text",
+        "count": 15
+      }
+    ],
+    "sources": 20,
+    "first_seen_sources": 16,
+    "extended_sources": 4,
+    "directed_work_to_work": 35,
+    "directed_work_to_data": 1,
+    "edges_found_in_previous_directed_tables": 4,
+    "subdirectory_tables": 48
+  },
+  "boundaries": [
+    "WiDEVIEW preprint, journal article and conference article have distinct identifiers and titles; source does not establish equivalence. One study family and one data release.",
+    "Multiple AUTOPILOT versions, trials and papers may share project equipment and loggers. A data source or trial count is not a count of independent replications.",
+    "Tier-4 CARET 2,880 events, F1/10 platoon archive and Pérez Solano UWB timestamp release were previously analyzed; excluded from the new source count.",
+    "Public data were used to produce summary tables and independently authored extraction scripts. Rights and attribution appear in each source record. No raw bag archives, video, PDFs or original sensor logs were mirrored."
+  ],
+  "tables": [
+    {
+      "file": "actuator/mrd-bench-runs.csv",
+      "rows": 340,
+      "sha256": "1c83920a013dc62cb382af694170ac4659f38fb31444f26ac4f554f6cbb772fd"
+    },
+    {
+      "file": "actuator/mrd-citations.csv",
+      "rows": 6,
+      "sha256": "8eeda2fa2351cfcd954c080172c149c15906210de1fe4cd6484262fa1c2f3ea1"
+    },
+    {
+      "file": "actuator/mrd-command-excursions.csv",
+      "rows": 3,
+      "sha256": "6fd00106749ca65b566060614834aad6eb8bdc0fc57029548bd20f5eafd9e321"
+    },
+    {
+      "file": "actuator/mrd-literature.csv",
+      "rows": 6,
+      "sha256": "c53f479988d98880d48d7d57d20a42577c48a3167af7ebf16882f89180f230ae"
+    },
+    {
+      "file": "assembly/connector-outcomes.csv",
+      "rows": 7,
+      "sha256": "f39c8d5548454bc17a683d0261cbd029f0710615c62d7372afbe523003ff8409"
+    },
+    {
+      "file": "assembly/pih-baseline-sensitivity.csv",
+      "rows": 1089,
+      "sha256": "51bfae00feefafb5cb71bf18aee257520ff0cc84880d80bf41018d0493a7b8ed"
+    },
+    {
+      "file": "assembly/pih-conditions.csv",
+      "rows": 82,
+      "sha256": "7899d180a51ef6903ed0b9aaa782ddfe71769e32868764ab44fa44df7f9e4ba8"
+    },
+    {
+      "file": "assembly/pih-trials.csv",
+      "rows": 363,
+      "sha256": "c4480d295dbb0c4d8e36ba8a08964a88e66d7750b8a632305f355f5549e8a8dc"
+    },
+    {
+      "file": "cutting/cutting-labels.csv",
+      "rows": 180,
+      "sha256": "3ff451321b47f52b7e631fc833005f1afae590565b95e061df2af44e1389a04e"
+    },
+    {
+      "file": "cutting/processed-counts.csv",
+      "rows": 12,
+      "sha256": "6e3544f8c8a83a3934709eb1118d5df1b0a8c9694d76043be34316d45274e54f"
+    },
+    {
+      "file": "cutting/trial-pairs.csv",
+      "rows": 180,
+      "sha256": "ebfc05f7a5c7fbf7efc0adcc353865611067b49c9696daec235ceba8ea45ba9e"
+    },
+    {
+      "file": "network/aveiro-source-clocks.csv",
+      "rows": 7,
+      "sha256": "e0e0f66e0d9f1d4d2cc3e523d615f8338376f438e94f5cbd0d5ba6d9762f838b"
+    },
+    {
+      "file": "network/brainport-message-pairs.csv",
+      "rows": 24,
+      "sha256": "dff34b6e5fda85b1dc799b0c54f39fcfba4073d92a30df0899b621ce7998a2e9"
+    },
+    {
+      "file": "network/brainport-three-logger-matches.csv",
+      "rows": 2,
+      "sha256": "f10eb6546ad1bc854484f2d3152a9bae4c553837f569062bd56318e17e95b135"
+    },
+    {
+      "file": "network/brainport-vehicle-status.csv",
+      "rows": 10,
+      "sha256": "fb6181372a7ee8ed723a19fd958b09eb4e0e0800a463cf6b7c2855d85268fd08"
+    },
+    {
+      "file": "network/citation-edges.csv",
+      "rows": 1,
+      "sha256": "48e3ec2a0d9c4ceca338301c09f265f32e3bf262a9840e2d2ef087d766aa1918"
+    },
+    {
+      "file": "network/literature.csv",
+      "rows": 4,
+      "sha256": "0f483df838cc04013270100409820c7d29c31e9ff1275fd2d926e1bc603d652b"
+    },
+    {
+      "file": "network/livorno-cam-pairs.csv",
+      "rows": 20,
+      "sha256": "d285cc307a2f67a732f1ccd56774d5673a720c893ad1340db3ba30135f0018cd"
+    },
+    {
+      "file": "network/livorno-related-channel-coverage.csv",
+      "rows": 32,
+      "sha256": "7b19b60f26fb2167873b1f2026c1ebdbf38f2fbb8959e948495ad49546b98d3c"
+    },
+    {
+      "file": "network/livorno-warning-and-speed.csv",
+      "rows": 20,
+      "sha256": "e694a141d1a7f74259e975538ebd001807cadbc85857f8ed777245e8eeff95dc"
+    },
+    {
+      "file": "network/porto-v2i-receiver.csv",
+      "rows": 24,
+      "sha256": "477c30da80d3c5da209287acecccd19aada6f1ca922f3b9f1d7ac338405e801c"
+    },
+    {
+      "file": "qdrone/ground-truth-overlap.csv",
+      "rows": 3,
+      "sha256": "73194b173b2d77ec2fa80b2ee7a2e5e4302196f595ba558634fa0822e8604b8b"
+    },
+    {
+      "file": "qdrone/indoor-inventory.csv",
+      "rows": 9,
+      "sha256": "b4fbc49518eadd899befccc08dada54d6d85724ae2da189e80d19e83756443d0"
+    },
+    {
+      "file": "qdrone/uwb-anchor-intervals.csv",
+      "rows": 24,
+      "sha256": "4527f7bb3505255203eda1a16f6777ce3875a6c65ee4abe4c033813cc0fea784"
+    },
+    {
+      "file": "radio/bag-static-interval-anomalies.csv",
+      "rows": 21,
+      "sha256": "3f476503ffd73b1dc08c506c6a07145107445c80579e47b4498a4db20e665af6"
+    },
+    {
+      "file": "radio/bag-stream-verification.csv",
+      "rows": 48,
+      "sha256": "c9f0c74171c23daf0a5bc7e6007d3a5791a0270aa8b95020ff082f214b36adb7"
+    },
+    {
+      "file": "radio/citations.csv",
+      "rows": 7,
+      "sha256": "897bea159034da19eb1295d6d67b114693f83f2d42843ab46ffe7f76a136535e"
+    },
+    {
+      "file": "radio/dynamic-anchor-stamp-overlap.csv",
+      "rows": 8,
+      "sha256": "8530dd3af1e7c5f1e1f30bdb10a7b5edf8f1233627b647c76049ead8b78b24bb"
+    },
+    {
+      "file": "radio/dynamic-stream-clocks.csv",
+      "rows": 48,
+      "sha256": "e8490c9e7178e1684dd85c128df1c907389dd4d43f51f220a5bff598fcece577"
+    },
+    {
+      "file": "radio/literature.csv",
+      "rows": 4,
+      "sha256": "6b036f7affcb7f54eaa084f59ffd0bd1ba83dec67cd742c613f68d566d5b596b"
+    },
+    {
+      "file": "radio/locura-clock-and-geometry.csv",
+      "rows": 6,
+      "sha256": "15f203b4dad35ba6f785a9811099ce3df6ff582b16e8bb2a07b6623da2cca43e"
+    },
+    {
+      "file": "radio/static-clock-and-counter-check.csv",
+      "rows": 767,
+      "sha256": "8cd89a7756bdf5b0e3b9083277ecb9fcf2a8581134bbe01a02edb84878d3adc9"
+    },
+    {
+      "file": "references/citation-edges.csv",
+      "rows": 20,
+      "sha256": "07502b04fc2909f4ba794e764b962ca8c32672849ea428f3e47c4696b4d06a4b"
+    },
+    {
+      "file": "references/current-grid-boundary.csv",
+      "rows": 20,
+      "sha256": "ae0b2e3a249a567fbe2ab3efc146c9c1219511621c61267aa2c77888a91e4045"
+    },
+    {
+      "file": "references/current-grid-summary.csv",
+      "rows": 4,
+      "sha256": "418b59bd3fd691b3b4125db2307745898dd2a1cf60ff83fbc05b7af52f3406b7"
+    },
+    {
+      "file": "references/literature.csv",
+      "rows": 24,
+      "sha256": "c0e85c7fae3a85539db60596ec4938df544df5f2ce9ec31205fb6b1cfeb471ae"
+    },
+    {
+      "file": "references/overshoot-comparison.csv",
+      "rows": 4,
+      "sha256": "6a609ff545e5c6738783541b888cf9a538d6890ccb09822c6aaeb252b7f53f7b"
+    },
+    {
+      "file": "ros-traces/matched-chains.csv",
+      "rows": 1986,
+      "sha256": "40bc5c69ef6b3762e48b0ca44ee7c587105a0a504b6f7516de53c155dc45972a"
+    },
+    {
+      "file": "ros-traces/timings.csv",
+      "rows": 23,
+      "sha256": "0c18847d516459707f3f588e8e447e2e06cf9665f0b2bb9cafeaad02273c42fb"
+    },
+    {
+      "file": "ros-traces/trace-counts.csv",
+      "rows": 66,
+      "sha256": "dc1ccebd0a75a3afbaa28c7bccbc3dcfda69df9f05d43cadd0a056154a2666e3"
+    },
+    {
+      "file": "wideview/bag-indexes.csv",
+      "rows": 21,
+      "sha256": "842330d256e85c6333a2b4ceff6b9c0a832fad583d9848525f27c849bd1149a0"
+    },
+    {
+      "file": "wideview/figure3b-readouts.csv",
+      "rows": 18,
+      "sha256": "b915b56608b30acd9c8a8eda5869fe983e0fc31acd5812aa94066d75a5843642"
+    },
+    {
+      "file": "wideview/first-ten-seconds.csv",
+      "rows": 36,
+      "sha256": "58b70640895463cbbfeb5681af5fce278624a3cf7df206366296f158e88c8607"
+    },
+    {
+      "file": "wrist/forceldm-episodes.csv",
+      "rows": 474,
+      "sha256": "0da58b4c7c42892d7de8033ccad15db203dd438eee59ac41c46395c69429ea60"
+    },
+    {
+      "file": "wrist/forceldm-tasks.csv",
+      "rows": 6,
+      "sha256": "80354b0bd08de0b1b8af9ea0dba3942607f3bf4952e282c9c41b053d5987801b"
+    },
+    {
+      "file": "wrist/gravity-inventory.csv",
+      "rows": 6,
+      "sha256": "e11e580e601653ea097a2975bc798263f3b859b2d9e2ca572111457fbd1f811c"
+    },
+    {
+      "file": "wrist/gravity-pose-transfer.csv",
+      "rows": 4,
+      "sha256": "c9de92a18d157c0694ccbcb14a78cc038bce850f04ac98ec85c250f4cc77c271"
+    },
+    {
+      "file": "wrist/gravity-static-windows.csv",
+      "rows": 40,
+      "sha256": "21d68d3e6567a3451463d3e67474ceffef584ded0b663086c60cd126ddebde19"
+    }
+  ]
+}

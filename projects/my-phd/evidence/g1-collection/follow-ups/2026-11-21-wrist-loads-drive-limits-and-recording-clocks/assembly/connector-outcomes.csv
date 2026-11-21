@@ -1,0 +1,8 @@
+bias_source,compensation,trials,successes_by_author_criteria,manipulators,primary_locator_print_pages,denominator_notes
+cable,pose-dependent bias model,20,20,single,"pp. 82–84, §§7.5.2–7.6","Starting x ±0.01 m, z −0.02 m, orientation ±15 degrees."
+cable,single staging-point tare,10,2,single,"p. 84, §7.6",Two successes derived from ten tests and 80% failure; successful initial orientations were close to zero. Same start bounds as compensated group.
+bending beam,pose-dependent bias model,30,29,single,"pp. 100–102, §8.5.2","One jammed incomplete connection, trial 26. Subsequent tests at the same initial position succeeded."
+bending beam,single staging-point tare,10,0,single,"p. 102, §8.6","Starting bounds match the compensation tests, including angular offset ±5 degrees."
+bending beam,pose-dependent bias model,25,24,dual,"pp. 111–112, §§9.5–9.6","One jam, trial 3. Comparator in §9.6 reuses §8.6 and was not run again."
+independently oscillating pendulum,per-axis oscillating bias model,15,15,single,"pp. 118–124, §§10.4–10.5","3 kg disk on 1.8 m arm. Contact example in Fig. 10.5, first contact at 27 s. Start offsets reported along x and z."
+independently oscillating pendulum,per-axis average precontact tare,10,0,single,"pp. 124–125, §10.6","Occasional flush fit failed author criteria due to cycling hold/advance commands and extended duration. Text reports y/z starting offsets for comparator versus x/z for model, so exact matching not established."

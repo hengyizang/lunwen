@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-21 UTC",
+  "queries": [
+    {
+      "query": "force torque calibration robot dataset csv UR5 gravity calibration poses sensor github calibration_data wrench dataset measurements",
+      "followed": "author data records and license statements"
+    },
+    {
+      "query": "six axis force torque sensor drift temperature compensation data Zenodo experiment calibration load robot sensor calibration open data",
+      "followed": "Skrede Zenodo 11078469 and 11096791 were previously known and held out here"
+    },
+    {
+      "query": "GitHub force torque sensor calibration gravity dataset bag real sensor ft_sensor_calibr data files calibration poses bias",
+      "followed": "leledeyuan00 GitHub and Hugging Face ForceLDM"
+    },
+    {
+      "query": "Simplified Bias and Gravity Compensation wrist sensor garment Lele Yuan force calibration",
+      "followed": "Crossref and DBLP resolved Dayuan Chen et al.; publisher did not supply open PDF; verified reference edges using Crossref"
+    },
+    {
+      "query": "ForceLDM A Force-aware Latent Dynamics Model for Contact-Rich Manipulation OpenReview NeurIPS authors arxiv PDF",
+      "followed": "arXiv, project page, fixed published paper PDF, author dataset data card, calibration scripts and LFS entries"
+    },
+    {
+      "query": "GitHub README link to Chastj/non-contact-force-compensation-with-wrist-mounted-f-t-sensor",
+      "followed": "Commit d269dfe18650f47ea43a9b7d9516a5b1d8d7537b returned README and solver_ftcal.m only, no measured files; excluded from data count."
+    }
+  ],
+  "literature": [
+    {
+      "doi": "10.1109/ROBIO66223.2025.11376212",
+      "title": "Simplified Offset and Gravity Compensation for Wrist-Mounted Force/Torque Sensor with a Garment Manipulation Application",
+      "authors": [
+        "Dayuan Chen",
+        "Yukuan Zhang",
+        "Weizan He",
+        "Alberto Elías Petrilli-Barceló",
+        "Jose Victorio Salazar Luces",
+        "Yasuhisa Hirata"
+      ],
+      "year": 2025,
+      "evidence_level": "bibliographic screening",
+      "location": "https://doi.org/10.1109/ROBIO66223.2025.11376212",
+      "checked": "Crossref record; Chen paper has a publisher-deposited bibliography. No claim of full text access to these three works."
+    },
+    {
+      "doi": "10.1109/JSEN.2021.3056943",
+      "title": "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+      "authors": [
+        "Yongqiang Yu",
+        "Ran Shi",
+        "Yunjiang Lou"
+      ],
+      "year": 2022,
+      "evidence_level": "bibliographic screening",
+      "location": "https://doi.org/10.1109/JSEN.2021.3056943",
+      "checked": "Crossref record; Chen paper has a publisher-deposited bibliography. No claim of full text access to these three works."
+    },
+    {
+      "doi": "10.1109/JSEN.2024.3443201",
+      "title": "Offsets and Gravity Parameters Estimation for Noncontact Force Compensation With Wrist-Mounted Force/Torque Sensor",
+      "authors": [
+        "Qi Huang",
+        "Xuanchen Zhang",
+        "Hongtao Pan",
+        "Yong Cheng",
+        "Kun Lu"
+      ],
+      "year": 2024,
+      "evidence_level": "bibliographic screening",
+      "location": "https://doi.org/10.1109/JSEN.2024.3443201",
+      "checked": "Crossref record; Chen paper has a publisher-deposited bibliography. No claim of full text access to these three works."
+    },
+    {
+      "id": "arXiv:2611.03294v1",
+      "openreview": "0j9L12vSKx",
+      "year": 2026,
+      "title": "ForceLDM: A Force-aware Latent Dynamics Model for Contact-Rich Manipulation",
+      "authors": [
+        "Peiyuan Tang",
+        "Yao Li",
+        "Xiaodong Zhang",
+        "Wuyang Zhang",
+        "Qin Xia",
+        "Yanyong Zhang",
+        "Zijiang James Yang"
+      ],
+      "evidence_level": "full text",
+      "source": "https://raw.githubusercontent.com/tpy001/ForceLDM/6c257b882c6d2ba869d77603f8d3d916abcb957e/static/paper/forceldm.pdf",
+      "record": "https://arxiv.org/abs/2611.03294v1",
+      "licence": "arXiv v1 is CC BY 4.0",
+      "locator": "Appendices A.1–A.3, Tables 6–7, pp. 15–16; compared against source Parquets and calibration card."
+    }
+  ],
+  "directed_citations": [
+    {
+      "citing": "10.1109/ROBIO66223.2025.11376212",
+      "cited": "10.1109/JSEN.2021.3056943",
+      "source": "https://api.crossref.org/works/10.1109/ROBIO66223.2025.11376212",
+      "locator": "ref11",
+      "evidence": "publisher-deposited DOI citation"
+    },
+    {
+      "citing": "10.1109/ROBIO66223.2025.11376212",
+      "cited": "10.1109/JSEN.2024.3443201",
+      "source": "https://api.crossref.org/works/10.1109/ROBIO66223.2025.11376212",
+      "locator": "ref12",
+      "evidence": "publisher-deposited DOI citation"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+archive,trial,member,uncompressed_bytes,zip_crc32,sensor_events,uwb,imu,height,has_appended_xyz,min_sensor_timestamp_s,max_sensor_timestamp_s,adjacent_backward_timestamp_timed_sensor_rows,adjacent_reversals_same_sensor_type,largest_reversal_us
+Dataset with Ground Truth/indoor-gt.zip,1,indoor-gt/2018-05-30-11-15-17_exp1_groundtruth_added.csv,5759758,afcf0f38,50208,10127,26722,13359,1,0.0,267.207395,376,0,6962
+Dataset with Ground Truth/indoor-gt.zip,2,indoor-gt/2018-05-30-11-31-47_exp2_groundtruth_added.csv,6646112,ea4494ba,58091,11837,30836,15418,1,0.0,308.344453,317,0,4511
+Dataset with Ground Truth/indoor-gt.zip,3,indoor-gt/2018-05-30-13-13-21_exp3_big_circle_groundtruth_added.csv,9450188,2be7d57b,82035,15834,44134,22067,1,0.0,441.312559,472,0,7515
+All Datasets/indoor.zip,1,1_Indoor/2018-05-30-11-15-17_exp1_groundtruth_addedtest.csv,4750139,9346c598,50208,10127,26722,13359,0,0.0,267.207395,376,0,6962
+All Datasets/indoor.zip,2,1_Indoor/2018-05-30-11-31-47_exp2_groundtruth_addedtest.csv,5530118,ac8db0cd,58091,11837,30836,15418,0,0.0,308.344453,317,0,4511
+All Datasets/indoor.zip,3,1_Indoor/2018-05-30-13-13-21_exp3_big_circle_groundtruth_addedtest.csv,7794351,193dd15b,82035,15834,44134,22067,0,0.0,441.312559,472,0,7515
+All Datasets/indoor.zip,4,1_Indoor/2018-05-30-13-26-45_exp4_up_down_groundtruth_addedtest.csv,4013472,b44ef061,42089,7929,22773,11387,0,0.0,227.71109,288,0,5788
+All Datasets/indoor.zip,5,1_Indoor/2018-05-30-13-32-30_exp5_left_right_groundtruth_addedtest.csv,7895195,cf2e4ab8,83087,16467,44414,22206,0,0.0,444.109007,629,0,10374
+All Datasets/indoor.zip,6,1_Indoor/2018-05-30-13-45-38_exp6_free_motion_track_failed_groundtruth_addedtest.csv,6542791,1f5206ec,68964,14127,36558,18279,0,0.0,365.558823,638,0,4640

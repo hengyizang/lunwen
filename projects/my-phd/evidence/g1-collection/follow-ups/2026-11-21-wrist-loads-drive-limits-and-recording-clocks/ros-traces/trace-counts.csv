@@ -1,0 +1,67 @@
+source,event_or_check,count
+pingpong,ros2:callback_end,91
+pingpong,ros2:callback_start,91
+pingpong,ros2:rcl_init,2
+pingpong,ros2:rcl_node_init,2
+pingpong,ros2:rcl_publisher_init,6
+pingpong,ros2:rcl_service_init,12
+pingpong,ros2:rcl_subscription_init,4
+pingpong,ros2:rcl_timer_init,1
+pingpong,ros2:rclcpp_callback_register,17
+pingpong,ros2:rclcpp_service_callback_added,12
+pingpong,ros2:rclcpp_subscription_callback_added,4
+pingpong,ros2:rclcpp_subscription_init,4
+pingpong,ros2:rclcpp_timer_callback_added,1
+pingpong,ros2:rclcpp_timer_link_node,1
+pingpong,observed callback order test_ping:timer|test_pong:/ping|test_ping:/pong,30
+example2,dds:create_reader,26
+example2,dds:create_writer,29
+example2,dds:read,4094
+example2,dds:write,6153
+example2,dds:write_pre,6095
+example2,ros2:callback_end,6065
+example2,ros2:callback_start,6065
+example2,ros2:rcl_init,3
+example2,ros2:rcl_node_init,3
+example2,ros2:rcl_publish,6061
+example2,ros2:rcl_publisher_init,8
+example2,ros2:rcl_service_init,18
+example2,ros2:rcl_subscription_init,5
+example2,ros2:rcl_take,4034
+example2,ros2:rcl_timer_init,1
+example2,ros2:rclcpp_callback_register,24
+example2,ros2:rclcpp_executor_execute,6065
+example2,ros2:rclcpp_executor_get_next_ready,24189
+example2,ros2:rclcpp_executor_wait_for_work,12096
+example2,ros2:rclcpp_publish,4032
+example2,ros2:rclcpp_service_callback_added,18
+example2,ros2:rclcpp_subscription_callback_added,5
+example2,ros2:rclcpp_subscription_init,5
+example2,ros2:rclcpp_take,4034
+example2,ros2:rclcpp_timer_callback_added,1
+example2,ros2:rclcpp_timer_link_node,1
+example2,ros2:rmw_publish,6095
+example2,ros2:rmw_publisher_init,11
+example2,ros2:rmw_subscription_init,8
+example2,ros2:rmw_take,4094
+example2,/topic_a unique writes,2031
+example2,/topic_a observed successful takes and callbacks,1986
+example2,/topic_a distinct write-take-callback matches,1986
+example2,/topic_a writes without matching take,45
+example2,/topic_a takes without matching write,0
+example2,/topic_a unmatched writes before first matched publication,5
+example2,/topic_a unmatched writes after last matched publication,40
+example2,/topic_a unmatched takes before first matched take,0
+example2,/topic_a unmatched takes after last matched take,0
+example2,/topic_b unique writes,1986
+example2,/topic_b observed successful takes and callbacks,2026
+example2,/topic_b distinct write-take-callback matches,1986
+example2,/topic_b writes without matching take,0
+example2,/topic_b takes without matching write,40
+example2,/topic_b unmatched writes before first matched publication,0
+example2,/topic_b unmatched writes after last matched publication,0
+example2,/topic_b unmatched takes before first matched take,0
+example2,/topic_b unmatched takes after last matched take,40
+example2,source publish to sink callback via matched in-callback relay,1986
+example2,complete chains exceeding one 5 ms source timer period,14
+example2,first 10 complete chains exceeding 5 ms,9

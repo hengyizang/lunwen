@@ -1,0 +1,86 @@
+{
+  "title": "PiH Dataset for Determining Exception Context in Assembly Operations form Multimodal Data",
+  "creators": [
+    "Simonič, Mihael",
+    "Majcen Horvat, Matevž"
+  ],
+  "doi": "10.5281/zenodo.7221443",
+  "concept_doi": "10.5281/zenodo.7221442",
+  "version": "Zenodo record 7221443, metadata revision 3, last updated 2022-11-14T11:26:27.613929+00:00",
+  "source_url": "https://zenodo.org/records/7221443",
+  "publisher_api": "https://zenodo.org/api/records/7221443",
+  "retrieved_utc": "2026-11-21",
+  "license": "CC BY 4.0 (Zenodo record metadata). Numerical summaries and independent audit code are provided with attribution to Mihael Simonič and Matevž Majcen Horvat.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "archive": {
+    "id": "f0836284-449f-4ea6-9add-962a2cef986f",
+    "key": "pih-database.zip",
+    "size": 40004447,
+    "checksum": "md5:d9e3c338b8c44997dc75039249991612",
+    "links": {
+      "self": "https://zenodo.org/api/records/7221443/files/pih-database.zip/content"
+    }
+  },
+  "archive_sha256": "ad32da8367af61137afbf8092d592c3e419703e5d77da06793ea985e72ae4787",
+  "coverage": "Read the 40,004,447-byte ZIP with matching publisher MD5. All 363 different panda MATLAB payloads were decoded. Each has a matching ArUco file and RGB filename, verified by filename only. The archive contains 726 MAT and 363 JPG. Analysis is limited to the 363 panda state files. No pictures or raw matrices are mirrored.",
+  "companion": {
+    "doi": "10.3390/s22207962",
+    "title": "Determining Exception Context in Assembly Operations from Multimodal Data",
+    "authors": [
+      "Mihael Simonič",
+      "Matevž Majcen Horvat (Zenodo) / Matevž Majcen Hrovat (article)",
+      "Sašo Džeroski",
+      "Aleš Ude",
+      "Bojan Nemec"
+    ],
+    "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9610822/",
+    "article_locator": "§3.1 (hardware); §3.2 peg-in-hole experiments; Data Availability Statement links 7221443 and 7221387.",
+    "article_xml": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9610822/fullTextXML",
+    "xml_sha256": "18ce0fdb73ffc958bde18fbf0dfa66d2fda9180951511125eb2b5f8457b8edc1"
+  },
+  "history_status": "extension of historically catalogued assembly dataset; no new paper or release count",
+  "prior_catalogue": "https://github.com/hengyizang/lunwen/blob/08c8ab373c43c798d6992965c50a582d050c5ddc/projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+  "dedup_keys": [
+    "10.5281/zenodo.7221443",
+    "10.5281/zenodo.7221442",
+    "10.3390/s22207962",
+    "PiH Dataset for Determining Exception Context",
+    "Simonič / Simonic; Majcen Horvat / Majcen Hrovat"
+  ],
+  "related_but_distinct": "Earlier ring-insertion file audit concerned 7221387 and 6364950, a different assembly task. The present DOI was previously listed by title/metadata; this pass inspects Cranfield peg-in-hole MAT files.",
+  "evidence_level": "full original numeric MAT member, all 363 robot state members; companion full text checked",
+  "findings": [
+    "363 robot-state MAT files, 181 under slot 1 and 182 under slot 2. Each contains states.ATIFT_plate, states.ATIFT_wrist, and states.FT in six columns, as well as position and rotation, measured and reference joint position/speed, and measured and external joint-torque fields. All three six-channel fields are finite for all 13,433 rows. Exactly 362 files have 37 rows and one has 39. The 363 MAT payload hashes and datetime suffixes differ.",
+    "The source paper reports 180 data entries (three attempts in each of 40 failure conditions plus 60 nominal). The archive contains both slots. Each has 60 nominal captures and three per nonzero offset except x−1 mm with 4 files in slot 1 and 5 in slot 2. Some repeat index numbers have different datetime suffixes; multiplying the paper count by two misses three published captures. No claim is made that these archive captures are statistically independent.",
+    "In 7,367 adjacent row pairs states.t repeats (6,066 distinct t values summed within files). For every repeated pair the ATIFT_plate vector and the ATIFT_wrist vector each change, while FT stays exactly unchanged. states.trun strictly increases within all 363 files. Dropping repeated t rows would discard new plate and wrist readings. This outcome does not determine the individual hardware clocks or lags.",
+    "At a descriptive plate-force-norm threshold of 5, 223 of 363 files cross it. The threshold is applied in the native reported values and differs from the article’s 10 N z-direction stop. In nominal (zero commanded positional offset) files, 0/60 slot 1 and 47/60 slot 2 cross 5. The slot split makes the threshold unsuitable as a universal failure label.",
+    "For each file crossing 5, summarize all rows before the first crossing with plate norm at or below 0.5/1/2. Across those ceilings the eligible files are 195/219/223 and the eligible rows 1,979/4,228/6,753. At ceiling 1 the across-file median of the within-file medians is 0.555011 for plate-force norm, 2.277396 for wrist-force norm, and 0.019142 for wrist-moment norm. These are an operational low-load comparison at the same recorded rows; they are not a calibration offset vector."
+  ],
+  "limitations": [
+    "The article identifies the ATI Delta underneath the plate as the primary force sensor in the peg-in-hole task. It names the wrist ATI Nano25 for the separate ring task. A nonconstant field named ATIFT_wrist is present in these peg records, but its identity, coordinate transform, tare procedure, unit convention and latency are not verified from the archive. FT differs from both named ATI fields. Native component norms are reported without rotation or unit conversion.",
+    "The release contains no explicitly identified unloaded electronic bias vector, tare timestamp, certified free-contact interval, independent first-touch switch, or independently calibrated contact wrench at the wrist. Low plate-load is a descriptive condition. Values also depend on object weight, mounting, reference frame, insertion conditions and filtering.",
+    "The zero folder is zero commanded Cartesian offset, not zero force. A 5-unit norm threshold is distinct from the published stopping criterion of 10 N along z; there is no inference about controller success based on our threshold. Matching auxiliary filenames does not verify marker/image values or alignment."
+  ],
+  "outputs": {
+    "pih-trials.csv": "Per member SHA-256, capture count, repeated time checks and paired six-axis norm summaries. Row indices are zero-based. Force uses first three components, moment uses last three.",
+    "pih-baseline-sensitivity.csv": "At each of three plate-force-norm ceilings, within-file medians for selected rows preceding the first crossing of 5. Empty medians mean ineligible.",
+    "pih-conditions.csv": "Trial count, row count and number crossing the audit threshold grouped by slot and commanded position error.",
+    "audit_pih.py": "Reproduction requires scipy and numpy and the pinned public ZIP. Standard-library zipfile checks member CRC on decompression; the full archive MD5 is compared to Zenodo."
+  },
+  "queries": [
+    {
+      "query": "robotic connector insertion dataset raw force tared initial bias force torque haptic dataset HDF5 connector insertion tare force dataset real robot actual sensor calibration",
+      "result": "Followed article Determining Exception Context in Assembly Operations from Multimodal Data to both cited deposits. The previously catalogued square-peg file set was not part of the published copper-ring archive-level audit."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9610822/",
+      "query": "Check sensors, source of assembly force, stop threshold and number of attempts",
+      "result": "Identified board-mounted ATI Delta for peg task; separate wrist Nano25 for ring task; z-axis 10 N stop; 180 data entries stated."
+    },
+    {
+      "url": "https://zenodo.org/api/records/7221443",
+      "query": "Compare archive checksum, timestamped panda/ArUco/image groups by slot, fields and duplicate timestamps; check for in-trial low-load comparison.",
+      "result": "One complete 40 MB archive; all 363 panda MATs read, three finite six-axis fields; low-load comparisons retained with limits."
+    }
+  ]
+}

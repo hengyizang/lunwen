@@ -1,0 +1,36 @@
+{
+  "retrieved_utc": "2026-11-21",
+  "scope": "G1 R2 measurement and limits; non-clinical robotic grasper experiments",
+  "queries": [
+    "robot actuator test bench torque tracking saturation load cell dataset csv exoskeleton torque reference measured motor current limit open data Zenodo",
+    "open source gearbox joint actuator loadcell dataset torque tracking robot actuator open data motor torque tracking high torque robot measured torque repo github csv bench max current",
+    "Torque-controlled actuator motor current saturation antiwindup \"torque sensor\" measured current limit datasets collaborative robot actuator torque bench data sets figshare zenodo",
+    "\"Evaluation of Torque Measurement Surrogates\" filetype:pdf O’Neill torque grip MRD Stephens author",
+    "\"Design of a Portable Dynamic Calibration Instrument\" PDF by Kong ONeill DOI instrument torque transducer maximum torque Stephens",
+    "\"Gaussian Process Regression for Sensorless Grip Force Estimation\" Hannaford pdf University experiments sensor motor pulley tissue grasps data github",
+    "\"Dynamic modeling of cable driven elongated surgical instruments\" Miyasaka grip force pdf Raven DOI data torque force errors Haptics lab University Washington",
+    "\"Hysteresis model of longitudinally loaded cable\" Miyasaka DOI 2016 data cable material identified Doi model verified title",
+    "\"Unscented Kalman filter and 3D vision to improve\" 7487606 full pdf Haghighipanah DOI cable joint angle estimation laparoscopic Raven",
+    "\"Field oriented control dataset of a 3-phase permanent magnet synchronous motor\" dataset simulated source iq reference torque measured torquemeter"
+  ],
+  "methods": [
+    "Verified experiment setup, article reference numbers, DOI author/title via Crossref and cited publisher records. Downloaded and inspected recursive source tree and every numeric trial blob. Links are pinned to a commit where possible.",
+    "Crosschecked six works against Crossref individually. The PMC reference-list hyperlink for three distinct papers repeats one identifier. Reference 16 matches that identifier; references 14 and 22 match different works by authors, title and separate IEEE DOI pages.",
+    "The README links an apparent wrong file for the 2018 article. We independently found the author-hosted PDF with the correct title and DOI on page 3027."
+  ],
+  "rejected_or_deferred": [
+    {
+      "reference": "10.1016/j.dib.2023.109002",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10015176/",
+      "decision": "Simulink supplies FOC reference/feedback signals, including channels named measured. Excluded from this study of independent physical torque readout."
+    },
+    {
+      "reference": "https://github.com/uun3406/BLDC-TestBed-HardwareX",
+      "decision": "Already audited in the preceding independent torque bench batch; not counted here."
+    },
+    {
+      "reference": "https://github.com/JCamiloD06/load-dependent-steering-mpc",
+      "decision": "Already audited in the preceding state branch. A measured-current torque conversion is distinct from MRDLab’s independent sensors."
+    }
+  ]
+}

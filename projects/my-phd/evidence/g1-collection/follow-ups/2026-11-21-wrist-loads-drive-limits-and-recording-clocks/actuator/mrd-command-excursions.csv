@@ -1,0 +1,4 @@
+path,git_blob_sha1,first_sample_zero_based,last_sample_zero_based,samples,first_time_native,last_time_native,back_command_min,back_command_max,back_measured_current_min_A,back_measured_current_max_A,back_transducer_min_Nm,back_transducer_max_Nm,front_transducer_min_Nm,front_transducer_max_Nm
+data/Tool_4_Maryland_L_4/07.TXT,ae8075d233b2268d3353c61cf185f2cd2d148b8a,17308,17325,18,17.308,17.325,1.0077,1.0638,-0.561,-0.525,0.027549212,0.168639396,-0.092281898,-0.054620692
+data/Tool_4_Maryland_R_5/00.TXT,8315d9131c1a6c0c0d9ab5a294b992a539a9fb41,1,2,2,0.001,0.002,-1.14,-1.03,0.2,0.201,0.014968936,0.018870414,0.010151805,0.010231427
+data/Tool_4_Maryland_R_5/20.TXT,b697bab84ad5b992cd3de65bdbaa54d8b92f2c46,1,1,1,0.001,0.001,-1.04,-1.04,0.203,0.203,0.01273952,0.01273952,0.009833317,0.009833317

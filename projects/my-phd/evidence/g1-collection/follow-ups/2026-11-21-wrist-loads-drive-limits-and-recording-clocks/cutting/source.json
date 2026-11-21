@@ -1,0 +1,85 @@
+{
+  "title": "AML Robot Cutting Dataset — full fixture, native wrist feedback and processed cutting labels",
+  "authors": [
+    "Sahand Rezaei-Shoshtari",
+    "David Meger",
+    "Inna Sharf (associated study)"
+  ],
+  "repo": "McGill-AML/aml_robot_cutting_dataset",
+  "previous_owner_alias": "sahandrez/aml_robot_cutting_dataset",
+  "source_url": "https://github.com/McGill-AML/aml_robot_cutting_dataset",
+  "immutable_release": "https://github.com/McGill-AML/aml_robot_cutting_dataset/tree/62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+  "version": "62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+  "retrieved_utc": "2026-11-21",
+  "evidence_level": "complete measured and processed files, independently decoded, Git blob verified",
+  "history_status": "extended_existing_release",
+  "previous_batch": "https://github.com/hengyizang/lunwen/blob/08c8ab373c43c798d6992965c50a582d050c5ddc/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/cutting-source.json",
+  "prior_file_scope": "179 of 180 fixture CSVs; 12 first-repetition robot bags and the corresponding joint-1 tables. No new release, literature record or physical trial is counted.",
+  "companion": {
+    "title": "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference",
+    "authors": [
+      "Sahand Rezaei-Shoshtari",
+      "David Meger",
+      "Inna Sharf"
+    ],
+    "doi": "10.1109/IROS45743.2020.9341446",
+    "arxiv": "2007.11167",
+    "fulltext": "https://arxiv.org/pdf/2007.11167",
+    "publication": "2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)"
+  },
+  "rights": "Public GitHub repository, BSD 3-Clause, copyright 2020 Sahand Rezaei-Shoshtari. Source LICENSE is pinned. Outputs contain attributed descriptive statistics, file identifiers, and independently authored analysis code. Consult the source license for original files.",
+  "license_url": "https://github.com/McGill-AML/aml_robot_cutting_dataset/blob/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/LICENSE",
+  "license_git_blob": "5a6814d04046be0709f1bf6802bd0c9d5354983b",
+  "source_readme": "https://github.com/McGill-AML/aml_robot_cutting_dataset/blob/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/README.md",
+  "readme_blob": "c2f1db79cc2a8a7646645f0510bf24b449f0f2f9",
+  "producer_label_code": "https://github.com/McGill-AML/aml_robot_cutting_dataset/blob/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/aml_robot_cutting/robot_data_helper.py",
+  "producer_label_code_git_blob": "74673c41f695d4e509c88d47bdc52d07c2bda470",
+  "protocol": "Kinova Jaco 2, joystick cartesian velocity commands during wood cutting. ATI Mini40 is attached to the specimen fixture. Authors say the two streams were unsynchronized, the fixture is nominally 200 Hz and ROS tool_wrench nominally 10 Hz. Each of 12 specimens has 15 repetitions; only 12 combinations of material and thickness were collected.",
+  "coverage": {
+    "verified_unique_source_data_files": 1440,
+    "verified_source_data_bytes": 144663898,
+    "uncompressed_rosbag_v2": 180,
+    "ati_fixture_csv": 180,
+    "processed_joint_csv": 1080,
+    "physical_trial_ids": 180,
+    "fixture_finite_six_axis_samples": 1222590,
+    "ros_wrench_messages": 32240,
+    "cartesian_velocity_messages": 320923,
+    "actual_joint_torque_messages": 32246,
+    "compensated_joint_torque_messages": 32244,
+    "processed_multijoint_instants": 14963,
+    "positives": 2258
+  },
+  "findings": [
+    "All 180 fixture files decoded. The earlier outstanding specimen 1, repetition 11 is Git blob cc2c9e6743f0aeedad86df90af626153d7d58c88 (13,710,042 bytes). It adds 240,642 rows with six finite observed channels, maximum norms 117.783496 and 2.174884 in native force/moment-channel units, 97,601 decreases in auxiliary column 7, and a constant column 8 of 1000.",
+    "In that trial fixture rows span 1,203.205 s at the documented nominal rate, versus 27.006373822 s from the bag record times of 271 robot tool-wrench messages. The fixture/robot span ratio is 44.552631. Across all 180 trials, 179 fixture spans exceed the corresponding bag-wrench span and 19 ratios exceed 2. The one ratio below 1 is specimen 4 repetition 15 (0.858585).",
+    "All 32,240 robot WrenchStamped messages use frame j2n6s300_link_base. Header times are strictly increasing and sequence numbers contiguous within every bag. Individual bag-record minus message-header stamp ranges from 0.092021 to 11.083530 ms. These are two timestamps on the ROS side; neither timestamps the ATI fixture.",
+    "The 180 joint-1 tables yield 14,963 processed instants. The README specimen table gives 14,863 total. Its specimen 7 row gives 1,070, while the 15 corresponding files yield 1,170 on each of the six joints. All 11 other README specimen counts match.",
+    "All 1,080 processed joint files were decoded. For each trial, all six joint streams have the same relative time and cutting flag sample-by-sample. Independently reproducing the producer’s rolling torque-variability rule gives 2,258 positive labels and zero mismatches over 14,963 instants. Therefore a cutting-label score alone cannot validate independently measured contact boundaries.",
+    "Across all 75 specimen 1–5 fixture files (642,685 rows) peak force-channel norms range from 16.108366 to 117.783496 and column 7 is finite. All 105 specimen 6–12 files (579,905 rows) have nonfinite column 7 throughout and peak force-channel norms at most 1.771054. The pattern coincides with specimen/material groups and metadata-format change."
+  ],
+  "verification": {
+    "previous_implementation": "https://raw.githubusercontent.com/hengyizang/lunwen/08c8ab373c43c798d6992965c50a582d050c5ddc/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/derive_cutting.py",
+    "previous_reader_git_blob": "906ed39a3218028648dfd335f20ee727e9774fbb",
+    "fixture_reproduction": "Ran the frozen earlier derive_cutting.py with --include-outstanding against the pinned release. Compared all 180 rows to the previous table: every previously numeric row is identical. The one inventory-only row is now numeric. All 12 previously published paired-first-trial rows reproduce exactly.",
+    "new_implementation": "audit_cuts.py uses the pinned reader for source verification and ROS Wrench/JointAngles values. It decodes the serialized WrenchStamped header and bag timestamp separately and calculates cutting labels from six per-trial CSVs and four torque channels according to the source helper. Run python audit_cuts.py PATH_TO_PRIOR_DERIVE_CUTTING_PY OUTPUT --cache CACHE. Python standard library only.",
+    "outputs_sha256": {
+      "cutting-labels": "3ff451321b47f52b7e631fc833005f1afae590565b95e061df2af44e1389a04e",
+      "processed-counts": "6e3544f8c8a83a3934709eb1118d5df1b0a8c9694d76043be34316d45274e54f",
+      "trial-pairs": "ebfc05f7a5c7fbf7efc0adcc353865611067b49c9696daec235ceba8ea45ba9e"
+    }
+  },
+  "limitations": [
+    "Filename matching supports trial membership only. The source has no published cross-device time offset, per-ATI-sample defined time field, hand/fixture transform or preload reference. Comparing maxima or durations does not estimate contact force error or absolute timing. No interpolation/alignment was imposed.",
+    "The long trial contains many more fixture samples than its matching robot recording. The nominal duration assumes uninterrupted 200 Hz capture. The data do not establish why that record is longer or which fixture rows correspond to the bag.",
+    "Fixture norms are computed directly from the first and second three columns without converting units. Source README lists physical sensor properties. The observed split across specimen groups prevents treating numeric scale as constant across groups without channel/unit calibration.",
+    "Kinova cartesian velocity commands and joint torque observations do not expose a paired before/after effort limiter. The two ROS stamps alone cannot isolate sensor acquisition latency, transport latency or clock accuracy.",
+    "Processed channel vectors across six joints repeat the same time and label. The measurement count 14,963 refers to instants, not six times that number. 32,240 is a ROS message count."
+  ],
+  "files": {
+    "trial-pairs.csv": "One row per trial; Git SHA-1 for three members, ROS message counts, message/header stamps, fixture finite-channel counts and peaks, nominal duration, and processed labels. fixture_over_robot_span=(rows-1)/200/(last_bag_record_time-first_bag_record_time).",
+    "processed-counts.csv": "README reported vs observed processed joint-1 rows for twelve specimens.",
+    "cutting-labels.csv": "Per-trial six ordered joint source blob IDs, processed instants, recorded positives, recomputed positives and row-level differences.",
+    "audit_cuts.py": "Reproduction script; pass the earlier immutable helper URL downloaded as a local file."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "title": "Force Guided Assembly Under Bias",
+  "authors": [
+    "Peter J. Staritz"
+  ],
+  "year": 2003,
+  "report": "CMU-RI-TR-03-17",
+  "publication_type": "PhD dissertation, Robotics Institute, Carnegie Mellon University, May 2003",
+  "source_url": "https://publications.ri.cmu.edu/force-guided-assembly-under-bias",
+  "pdf": "https://publications.ri.cmu.edu/storage/publications/pub_files/pub4/staritz_peter_2003_1/staritz_peter_2003_1.pdf",
+  "pdf_sha256": "923ea7e3fb2a55319ad89ba5005c2a714d8e0ce209b32caf8837bc57699850be",
+  "pdf_bytes": 3693841,
+  "pdf_pages": 181,
+  "retrieved_utc": "2026-11-21",
+  "rights": "Copyright 2003 Peter J. Staritz, all rights reserved, according to the title page. The public CMU full text is linked. Only bibliographic facts, numerical observations reported by the author, and original commentary are included.",
+  "history_keys": [
+    "Peter J. Staritz",
+    "Peter Staritz",
+    "Force Guided Assembly Under Bias",
+    "CMU-RI-TR-03-17"
+  ],
+  "evidence_level": "full text; author-reported experimental results and plots. No released raw samples located. The trial counts are a factual extraction from the thesis, not a second dataset or individual trial records.",
+  "findings": [
+    "Sections 6.1 and 6.5 distinguish two sources of apparent load. The wrist sensor was zeroed before gripping the payload to remove sensor internal stresses. A cable, beam or pendulum attached to the connector then supplied position-dependent or dynamic physical loads. Free-space motion (no connector contact) was used to identify the latter before the guarded approach. These are distinct from electronic zero drift.",
+    "Figure 7.15 plots actual and estimated Fx/Fz/Ty through the cable trial, with guard-to-contact event Alpha and steady contact event Beta. The plot was taken from an earlier series using a calculated 6 N minimum force (discussion p. 83), while the larger study computed 16.15 N. The illustration does not give the large study’s mean or peak. Figure 8.9 supplies the corresponding beam Fz/Ty example.",
+    "Figure 10.5 and §10.5 identify first pendulum-trial contact at 27 s and discuss growing precontact model error. The 0.0534 N average error over eight periods on p. 121 and the 0.13% period error on p. 120 are values in one illustrated example, not across trials.",
+    "Sections 7.5–10.6 specify model-versus-tare assembly outcomes. The dual-robot beam comparator reuses the single-robot series, so there are seven distinct experimental groups in the extracted table. Section 6.6 defines successful assembly by flushness (gap over 0.5 mm fails), stable contact, efficient intentional motion and gentle forces. A flush fit alone could count as a failure."
+  ],
+  "limitations": [
+    "The measured wrist signal includes both payload bias and contact load after engagement. Model subtraction estimates contact wrench; the single-manipulator receptacle is mounted on a stand. No independent calibrated per-sample contact force or electrical sensor-drift channel is established.",
+    "Five-DOF planar experimental assembly with one connector design. Seven recorded groups drawn from four experiment chapters are reported; no pooled comparative effect is estimated. The counts are not claims of new digital raw data."
+  ],
+  "queries": [
+    {
+      "query": "robotic connector insertion dataset raw force tared initial bias force torque haptic dataset HDF5 connector insertion tare force dataset real robot actual sensor calibration",
+      "result": "Identified thesis from CMU PDF."
+    },
+    {
+      "query": "Force Guided Assembly Under Bias Staritz 2003 pdf table compensation force measurements experiments multi-axis insertion results bias mass CMU RI",
+      "result": "Matched institutional catalogue and full PDF. Read §§6.1, 6.5–6.7, 7.4–7.6, 8.5–8.6, 9.5–9.6, 10.4–10.6; linked figure contexts and checked comparator reuse."
+    }
+  ],
+  "outputs": [
+    "connector-outcomes.csv"
+  ]
+}

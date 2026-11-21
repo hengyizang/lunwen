@@ -1,0 +1,26 @@
+{
+  "id": "locura4iot:20220611-uwb-twr",
+  "title": "20220611-uwb-twr – LocURa4IoT indoor mobile-to-anchor ranging",
+  "creators": [
+    "Quentin Vey",
+    "Réjane Dalcé",
+    "Adrien van den Bossche",
+    "Thierry Val"
+  ],
+  "version": "experiment 2022-06-11; publisher HTTP Last-Modified 2026-04-14 08:09:22 GMT for the data file",
+  "source_url": "https://locura4iot.irit.fr/datasets/20220611-uwb-twr/",
+  "download": "https://locura4iot.irit.fr/datasets/20220611-uwb-twr/20220611-uwb-twr.json",
+  "schema_sha256": "01b1780f41f41a4f34fe474fa5fe9f0d0f7d2bb391aaa25bb9fe7e6b40db3799",
+  "file_bytes": 7115180,
+  "sha256": "542ad86c06d5b30c69fcfc36b179ee8e11ed9dac54339dd5a9974fb94853eeae",
+  "companion": "10.1109/LCN53696.2022.9843513",
+  "rights": "Open Database License (ODbL), as stated by LocURa4IoT. Credit the listed authors. This folder shares calculated per-link aggregates, not the event database. Original reader available under CeCILL 2.1 from the same page.",
+  "evidence_level": "measured files",
+  "retrieved_utc": "2026-11-21",
+  "method": "One JSON line per reception/exchange. Use t4-t1 on mobile, t3-t2 on anchor, each modulo 2^40, then halve the difference. Check against published raw tof ticks. Separately reconstruct Euclidean reference from both recorded node positions and compare to reported distance. Keep all ranges, even negative. RMSE compares published rangeNoSkew or rangeSkew against reported distance on precisely the same exchanges. Verify that base64 CIR binary decodes into complete int16 complex pairs; no CIR inference performed.",
+  "limits": "Six links share the same surveyed experiment. Reference distance comes from the provider; no separate time trace of the ground-truth instrument or control adoption is available here. The source lists a sequence number for retained records but provides no complete loss denominator. Negative corrected distances occur near the origin and are kept.",
+  "outputs": [
+    "locura-clock-and-geometry.csv"
+  ],
+  "reproduce": "python derive_locura.py 20220611-uwb-twr.json locura-clock-and-geometry.csv"
+}

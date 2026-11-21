@@ -1,0 +1,33 @@
+{
+  "id": "10.6084/m9.figshare.29605775.v2",
+  "aliases": [
+    "10.6084/m9.figshare.29605775",
+    "cucudasluv/UWB-dataset",
+    "UWB-dataset.zip"
+  ],
+  "title": "UWB-dataset (Hanyang University outdoor UWB, static and dynamic LOS/NLOS measurements)",
+  "creator": "Byeonghyun Lee (deposit); companion study by Byeonghyun Lee, Jeik Choi, Siheon Jeong, JungHun Choi and Ki-Yong Oh",
+  "version": "Figshare version 2, 2025-07-22, file 56448518",
+  "source_url": "https://figshare.com/articles/software/UWB-dataset/29605775",
+  "file_url": "https://ndownloader.figshare.com/files/56448518",
+  "sha256": "6920fd5ab890424ffcd5aaeea0bed1e75d7101edeeda251c4f87b830965fed9b",
+  "publisher_md5": "2a3808e0d781704b96f2e436a7623f74",
+  "bytes": 106620838,
+  "retrieved_utc": "2026-11-21",
+  "rights": "Archive and v2 Figshare metadata list Apache 2.0. The companion article has CC BY-NC-ND 4.0. Original analyses and identifiers only.",
+  "evidence_level": "measured files",
+  "article": "10.1038/s41597-025-05887-9",
+  "locators": "Article Methods, Fig. 2 (CFO-corrected SS-TWR); Data Records, Table 4 (dynamic sensor interfaces); ref. 42 names deposit. Archive README, custom_msg/msg/Anchor.msg, all 767 static CSVs, 48 dynamic source streams and all eight ROS bags.",
+  "static_cleaning": "Classify six named two-column summary lines per reporting file separately from original 21-column samples. Preserve header-only files and one non-tabular record in the inventory. Parse integral radio fields exactly in decimal, then compare local elapsed timestamps modulo 2^32. Each direction has its own clock; do not subtract timestamps from unlike radios. Distances and counters have independent validity masks. Inspect forward counter jumps only across adjacent valid pairs.",
+  "dynamic_cleaning": "Use integer nanoseconds. Compare the CSV export-time minus the recorded message stamp per row, then independently rebuild native serialized ROS messages on each topic in order and compare message-by-message with the archived bags. All eight bags contain playback-node connections. A bag event time and a CSV export-time cannot be substituted here.",
+  "scope": "Physical static deployment with a transmitter and receiver; eight mobile ground-robot runs with four fixed anchors plus GNSS and IMU. This is not a multi-vehicle communications capture. Anchor stamp coverage and archive-vs-CSV recorder clock differences are pertinent to asynchronous mobile sensing.",
+  "limits": "Counter jumps can cover more than one unlogged measurement; intervening states and transmitter attempt denominator are not identified. Negative direct differences of signed representations need modular handling. The cause of 21 remaining inconsistent static rows is not documented. An exact received-message timestamp is not a control-adoption timestamp.",
+  "outputs": [
+    "static-clock-and-counter-check.csv",
+    "dynamic-stream-clocks.csv",
+    "dynamic-anchor-stamp-overlap.csv",
+    "bag-stream-verification.csv",
+    "bag-static-interval-anomalies.csv",
+    "bag-clock-findings.md"
+  ]
+}

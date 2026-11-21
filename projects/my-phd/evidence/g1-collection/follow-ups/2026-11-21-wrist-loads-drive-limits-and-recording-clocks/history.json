@@ -1,0 +1,891 @@
+{
+  "counters": {
+    "git_blobs_checked": 1399,
+    "evidence_git_blobs_checked": 1337,
+    "gzip_files_decoded": 7,
+    "archive_members_read": 301,
+    "nested_gzip_payloads": 256,
+    "early_files_compared": 7,
+    "distinct_early_files": 1
+  },
+  "read_searchable_parts": 1699,
+  "catalogue_rows_with_titles": 45362,
+  "catalogue_count": 38,
+  "hits": {
+    "10.1109/lra.2018.2849862": {},
+    "10.1115/dmd2017-3519": {},
+    "10.1109/icra.2016.7487605": {},
+    "10.1109/lra.2017.2666420": {},
+    "10.1109/icra.2016.7487596": {},
+    "10.1109/icra.2016.7487606": {},
+    "10.1541/ieejias.137.427": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+        "10.1541/ieejias.137.427"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+        "10.1541/ieejias.137.427",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+        "10.1541/ieejias.137.427"
+      ]
+    },
+    "10.1541/ieejias.133.526": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-citation-edges.csv": [
+        "10.1541/ieejias.133.526"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature-search.json": [
+        "10.1541/ieejias.133.526"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv": [
+        "10.1541/ieejias.133.526",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+        "10.1541/ieejias.133.526"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+        "10.1541/ieejias.133.526",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+        "10.1541/ieejias.133.526"
+      ]
+    },
+    "10.1541/ieejias.128.208": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-citation-edges.csv": [
+        "10.1541/ieejias.128.208"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature-search.json": [
+        "10.1541/ieejias.128.208"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv": [
+        "10.1541/ieejias.128.208",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+        "10.1541/ieejias.128.208"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+        "10.1541/ieejias.128.208",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+        "10.1541/ieejias.128.208"
+      ]
+    },
+    "10.1541/ieejias.120.1321": {},
+    "10.1541/ieejias.122.120": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+        "10.1541/ieejias.122.120"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+        "10.1541/ieejias.122.120",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+        "10.1541/ieejias.122.120"
+      ]
+    },
+    "10.1541/ieejias.126.206": {},
+    "10.1541/ieejias.132.794": {},
+    "10.1541/ieejjia.4.107": {},
+    "10.3390/en17236096": {},
+    "10.3390/electronics15173946": {},
+    "10.3390/en19020346": {},
+    "10.3390/en19194658": {},
+    "10.3390/wevj15010035": {},
+    "10.3390/wevj14010002": {},
+    "10.3390/wevj17090476": {},
+    "10.1049/elp2.70185": {},
+    "10.3390/s19133012": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.3390/s19133012"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.3390/s19133012",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.3390/s19133012",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.3390/s19133012",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+        "10.3390/s19133012"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+        "10.3390/s19133012",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+        "10.3390/s19133012"
+      ]
+    },
+    "10.3390/s16060798": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/bc2afeb4d3db82685cb8ba3406f042875d5384557cad733d6494fac49e0cc57c.json.gz!bc2afeb4d3db82685cb8ba3406f042875d5384557cad733d6494fac49e0cc57c.json": [
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.3390/s16060798"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.3390/s16060798",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.3390/s16060798",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.3390/s16060798",
+        "normalized title"
+      ]
+    },
+    "10.3390/s19194259": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.3390/s19194259"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.3390/s19194259",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.3390/s19194259",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.3390/s19194259",
+        "normalized title"
+      ]
+    },
+    "10.3390/s21134498": {},
+    "10.3390/s21092895": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!citation-raw/307ea5cfc42f2933e6be.json": [
+        "10.3390/s21092895",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.3390/s21092895"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.3390/s21092895",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.3390/s21092895",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv": [
+        "10.3390/s21092895",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/citation-edges.csv": [
+        "10.3390/s21092895",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.3390/s21092895",
+        "normalized title"
+      ]
+    },
+    "10.3390/s21144706": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!citation-raw/1307898af6457f2750cc.json": [
+        "10.3390/s21144706",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.3390/s21144706"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.3390/s21144706",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.3390/s21144706",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv": [
+        "10.3390/s21144706",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/citation-edges.csv": [
+        "10.3390/s21144706",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.3390/s21144706",
+        "normalized title"
+      ]
+    },
+    "10.3390/s25216619": {
+      "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv": [
+        "10.3390/s25216619",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+        "10.3390/s25216619",
+        "normalized title"
+      ]
+    },
+    "10.3390/s26030871": {
+      "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv": [
+        "10.3390/s26030871"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+        "10.3390/s26030871"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+        "10.3390/s26030871",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+        "10.3390/s26030871",
+        "normalized title"
+      ]
+    },
+    "its-tp1800": {},
+    "autopilot-ga731993-d4.3": {},
+    "10.1109/vnc51378.2020.9318407": {},
+    "eu-tp1662": {},
+    "10.1038/s41597-025-05887-9": {},
+    "10.1177/02783649241230640": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/citation-edges.csv": [
+        "10.1177/02783649241230640"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv": [
+        "10.1177/02783649241230640",
+        "2203.14471",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/search.json": [
+        "10.1177/02783649241230640",
+        "2203.14471"
+      ]
+    },
+    "10.1109/lcn53696.2022.9843513": {},
+    "10.1109/sas58821.2023.10254018": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/citation-edges.csv": [
+        "10.1109/sas58821.2023.10254018"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv": [
+        "10.1109/sas58821.2023.10254018",
+        "2305.08532",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/search.json": [
+        "10.1109/sas58821.2023.10254018",
+        "2305.08532"
+      ]
+    },
+    "10.1109/robio66223.2025.11376212": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.1109/robio66223.2025.11376212"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.1109/robio66223.2025.11376212",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.1109/robio66223.2025.11376212",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.1109/robio66223.2025.11376212",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv": [
+        "10.1109/robio66223.2025.11376212",
+        "normalized title"
+      ]
+    },
+    "10.1109/jsen.2021.3056943": {
+      "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-20261108.md": [
+        "10.1109/jsen.2021.3056943"
+      ],
+      "projects/my-phd/evidence/auxiliary/session-g1-batch2-deepening-sources-20261108.json": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/anchor-search.json": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!citation-raw/2e57d8fdf65daa29b218.json": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.1109/jsen.2021.3056943"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/citation-edges.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/reading-guide.csv": [
+        "10.1109/jsen.2021.3056943",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature-search.json": [
+        "10.1109/jsen.2021.3056943"
+      ]
+    },
+    "10.1109/jsen.2024.3443201": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+        "10.1109/jsen.2024.3443201"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+        "10.1109/jsen.2024.3443201",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+        "10.1109/jsen.2024.3443201",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "10.1109/jsen.2024.3443201",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv": [
+        "10.1109/jsen.2024.3443201",
+        "normalized title"
+      ]
+    },
+    "arxiv:2611.03294": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv": [
+        "2611.03294",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+        "2611.03294",
+        "normalized title"
+      ]
+    },
+    "10.1016/j.robot.2022.104361": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/lit/r5-citation-edges.csv": [
+        "10.1016/j.robot.2022.104361"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/lit/r5-literature-search.json": [
+        "10.1016/j.robot.2022.104361",
+        "2204.10208",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/lit/r5-literature.csv": [
+        "10.1016/j.robot.2022.104361",
+        "2204.10208",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/ros/caret-source.json": [
+        "10.1016/j.robot.2022.104361",
+        "2204.10208"
+      ]
+    },
+    "10.1109/itsc45102.2020.9294440": {},
+    "cmu-ri-tr-03-17": {},
+    "10.3390/s22207962": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/72a7b08d6b4fd1ce957f8c9595e20dccb1569e20ccfb6375d360c7fb7d24d698.json.gz!72a7b08d6b4fd1ce957f8c9595e20dccb1569e20ccfb6375d360c7fb7d24d698.json": [
+        "10.3390/s22207962",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/b39add537a5c304e937e3de28c7c0c31ed1482c0f364a64a8c57616e2fd0e842.json.gz!b39add537a5c304e937e3de28c7c0c31ed1482c0f364a64a8c57616e2fd0e842.json": [
+        "10.3390/s22207962",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/c8e729a49189cab32ae68980047f9c5b0c57cc96c40777d68dee334feeef15e1.json.gz!c8e729a49189cab32ae68980047f9c5b0c57cc96c40777d68dee334feeef15e1.json": [
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/ee6290a8e975073b871dfece6fdf1f6d7c92ea8495a0090f9d96b3482f2997f7.json.gz!ee6290a8e975073b871dfece6fdf1f6d7c92ea8495a0090f9d96b3482f2997f7.json": [
+        "10.3390/s22207962",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/f5257cd01b561ac2c26bbd70c2b51c27e2235eeef075507874dbd62b3a63cb66.json.gz!f5257cd01b561ac2c26bbd70c2b51c27e2235eeef075507874dbd62b3a63cb66.json": [
+        "10.3390/s22207962",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature-search.json": [
+        "10.3390/s22207962"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv": [
+        "10.3390/s22207962",
+        "normalized title"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/rings/rings-source.json": [
+        "10.3390/s22207962"
+      ]
+    },
+    "arxiv:2309.16057": {},
+    "10.1109/tiv.2024.3521215": {},
+    "10.1109/ssrr62954.2024.10770056": {},
+    "QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset": {},
+    "10.5281/zenodo.7221443": {
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv": [
+        "PiH Dataset for Determining Exception Context"
+      ]
+    },
+    "McGill-AML/aml_robot_cutting_dataset": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/cutting-source.json": [
+        "McGill-AML/aml_robot_cutting_dataset",
+        "sahandrez/aml_robot_cutting_dataset"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/derive_cutting.py": [
+        "McGill-AML/aml_robot_cutting_dataset"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/datasets.csv": [
+        "McGill-AML/aml_robot_cutting_dataset"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/history-matches.json": [
+        "McGill-AML/aml_robot_cutting_dataset",
+        "sahandrez/aml_robot_cutting_dataset"
+      ],
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/search.json": [
+        "McGill-AML/aml_robot_cutting_dataset"
+      ]
+    },
+    "github:MRDLab/mis-tool-characterization": {},
+    "10.3390/en17236096/s1": {},
+    "PeiYuan001/forceldm-dataset": {},
+    "leledeyuan00/Gravity-Compensation-F-T-sensor": {},
+    "eclipse-tracecompass/tracecompass-test-traces:ctf/src/main/resources/ros2": {
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/ros/caret-source.json": [
+        "eclipse-tracecompass/tracecompass-test-traces"
+      ]
+    },
+    "ros-tracing/tracetools_analysis:converted_pingpong": {},
+    "10.5281/zenodo.3630479": {},
+    "10.5281/zenodo.3630478": {},
+    "10.5281/zenodo.3602546": {},
+    "10.5281/zenodo.3603301": {},
+    "10.5281/zenodo.3606473": {},
+    "10.5281/zenodo.3606616": {},
+    "10.5281/zenodo.21644263": {
+      "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv": [
+        "10.5281/zenodo.21644262",
+        "normalized title"
+      ]
+    },
+    "10.5281/zenodo.6884095": {},
+    "locura4iot:20220611-uwb-twr": {},
+    "10.6084/m9.figshare.29605775.v2": {},
+    "unmannedlab/UWB_Dataset": {}
+  },
+  "near": {
+    "10.1109/lra.2018.2849862": [],
+    "10.1115/dmd2017-3519": [],
+    "10.1109/icra.2016.7487605": [],
+    "10.1109/lra.2017.2666420": [],
+    "10.1109/icra.2016.7487596": [],
+    "10.1109/icra.2016.7487606": [],
+    "10.1541/ieejias.137.427": [
+      [
+        1.0,
+        "Anti-Windup Control Considering the Acceleration Torque Component for the Speed Control System of an AC Servo",
+        "Toshiyuki Kanmachi | Ryusuke Tokuno | Kiyoshi Ohishi",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+      ]
+    ],
+    "10.1541/ieejias.133.526": [
+      [
+        1.0,
+        "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+        "Kazuhide Kaneko | Kiyoshi Ohishi",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+      ],
+      [
+        1.0,
+        "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+        "Kazuhide Kaneko | Kiyoshi Ohishi",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv"
+      ]
+    ],
+    "10.1541/ieejias.128.208": [
+      [
+        1.0,
+        "Anti-Windup Algorithm with Priority to Proportinal Control Output of Speed PI Controller for Position Servo System",
+        "Masaki Sazawa | Takahiro Yamada | Kiyoshi Ohishi | Seiichiro Katsura",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+      ],
+      [
+        1.0,
+        "Anti-Windup Algorithm with Priority to Proportinal Control Output of Speed PI Controller for Position Servo System",
+        "Masaki Sazawa | Takahiro Yamada | Kiyoshi Ohishi | Seiichiro Katsura",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv"
+      ]
+    ],
+    "10.1541/ieejias.120.1321": [],
+    "10.1541/ieejias.122.120": [
+      [
+        1.0,
+        "Speed Servo System Considering Voltage Saturation of Indiredt Vector Control System",
+        "Kiyoshi Ohishi | Emiko Hayasaka | Tetsuaki Nagano | Masaya Harakawa",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+      ]
+    ],
+    "10.1541/ieejias.126.206": [],
+    "10.1541/ieejias.132.794": [],
+    "10.1541/ieejjia.4.107": [],
+    "10.3390/en17236096": [],
+    "10.3390/electronics15173946": [],
+    "10.3390/en19020346": [],
+    "10.3390/en19194658": [],
+    "10.3390/wevj15010035": [],
+    "10.3390/wevj14010002": [],
+    "10.3390/wevj17090476": [],
+    "10.1049/elp2.70185": [],
+    "10.3390/s19133012": [
+      [
+        1.0,
+        "Decoupled Six-Axis Force–Moment Sensor with a Novel Strain Gauge Arrangement and Error Reduction Techniques",
+        "Getnet Ayele Kebede, Anton Royanto Ahmad, Shao-Chun Lee, Chyi-Yeu Lin",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Decoupled Six-Axis Force–Moment Sensor with a Novel Strain Gauge Arrangement and Error Reduction Techniques",
+        "Getnet Ayele Kebede, Anton Royanto Ahmad, Shao-Chun Lee, Chyi-Yeu Lin",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ],
+      [
+        1.0,
+        "Decoupled Six-Axis Force–Moment Sensor with a Novel Strain Gauge Arrangement and Error Reduction Techniques",
+        "Getnet Ayele Kebede | Anton Royanto Ahmad | Shao-Chun Lee | Chyi-Yeu Lin",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv"
+      ]
+    ],
+    "10.3390/s16060798": [
+      [
+        1.0,
+        "Use of a Force-Torque Sensor for Self-Calibration of a 6-DOF Medical Robot",
+        "Ahmed Joubair, Long Zhao, Pascal Bigras, Ilian Bonev",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Use of a Force-Torque Sensor for Self-Calibration of a 6-DOF Medical Robot",
+        "Ahmed Joubair, Long Zhao, Pascal Bigras, Ilian Bonev",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ]
+    ],
+    "10.3390/s19194259": [
+      [
+        1.0,
+        "Hysteresis Compensation in Force/Torque Sensors Using Time Series Information",
+        "Ryuichiro Koike, Sho Sakaino, Toshiaki Tsuji",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Hysteresis Compensation in Force/Torque Sensors Using Time Series Information",
+        "Ryuichiro Koike, Sho Sakaino, Toshiaki Tsuji",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ]
+    ],
+    "10.3390/s21134498": [],
+    "10.3390/s21092895": [
+      [
+        1.0,
+        "Design and Calibration of Robot Base Force/Torque Sensors and Their Application to Non-Collocated Admittance Control for Automated Tool Changing",
+        "Hubert Gattringer; Andreas Müller; Philip Hörmandinger",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv"
+      ],
+      [
+        1.0,
+        "Design and Calibration of Robot Base Force/Torque Sensors and Their Application to Non-Collocated Admittance Control for Automated Tool Changing",
+        "Hubert Gattringer, Andreas Müller, Philip Hoermandinger",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Design and Calibration of Robot Base Force/Torque Sensors and Their Application to Non-Collocated Admittance Control for Automated Tool Changing",
+        "Hubert Gattringer, Andreas Müller, Philip Hoermandinger",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ]
+    ],
+    "10.3390/s21144706": [
+      [
+        1.0,
+        "An Integrated Compensation Method for the Force Disturbance of a Six-Axis Force Sensor in Complex Manufacturing Scenarios",
+        "Lei Yao; Qingguang Gao; Dailin Zhang; Wanpeng Zhang; Youping Chen",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv"
+      ],
+      [
+        1.0,
+        "An Integrated Compensation Method for the Force Disturbance of a Six-Axis Force Sensor in Complex Manufacturing Scenarios",
+        "Lei Yao, Qingguang Gao, Dailin Zhang, Wanpeng Zhang, Youping Chen",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "An Integrated Compensation Method for the Force Disturbance of a Six-Axis Force Sensor in Complex Manufacturing Scenarios",
+        "Lei Yao, Qingguang Gao, Dailin Zhang, Wanpeng Zhang, Youping Chen",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ]
+    ],
+    "10.3390/s25216619": [
+      [
+        1.0,
+        "A Universal Tool Interaction Force Estimation Approach for Robotic Tool Manipulation.",
+        "Wen D; Xiao J; Xie Y; Luo T; Zhang J; Zhou W.",
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv"
+      ],
+      [
+        1.0,
+        "A Universal Tool Interaction Force Estimation Approach for Robotic Tool Manipulation.",
+        "",
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+      ]
+    ],
+    "10.3390/s26030871": [
+      [
+        1.0,
+        "A Redundant-Sensing-Based Six-Axis Force/Torque Sensor Enabling Compactness and High Sensitivity",
+        "Seung Yeon Lee | Jae Yoon Sim | Dong-Yeop Seok | Yong Bum Kim | Jaeyoon Shim | Uikyum Kim | Hyouk Ryeol Choi",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv"
+      ]
+    ],
+    "its-tp1800": [],
+    "autopilot-ga731993-d4.3": [],
+    "10.1109/vnc51378.2020.9318407": [],
+    "eu-tp1662": [],
+    "10.1038/s41597-025-05887-9": [],
+    "10.1177/02783649241230640": [
+      [
+        1.0,
+        "UTIL: An ultra-wideband time-difference-of-arrival indoor localization dataset",
+        "Wenda Zhao | Abhishek Goudar | Xinyuan Qiao | Angela P. Schoellig",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv"
+      ]
+    ],
+    "10.1109/lcn53696.2022.9843513": [],
+    "10.1109/sas58821.2023.10254018": [
+      [
+        1.0,
+        "Benchmarking UWB-Based Infrastructure-Free Positioning and Multi-Robot Relative Localization: Dataset and Characterization",
+        "Paola Torrico Morón | Sahar Salimpour | Lei Fu | Xianjia Yu | Jorge Peña Queralta | Tomi Westerlund",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv"
+      ]
+    ],
+    "10.1109/robio66223.2025.11376212": [
+      [
+        1.0,
+        "Simplified Offset and Gravity Compensation for Wrist-Mounted Force/Torque Sensor with a Garment Manipulation Application",
+        "Dayuan Chen, Yukuan Zhang, Weizan He, Alberto Elías Petrilli-Barceló, Jose Victorio Salazar Luces, Yasuhisa Hirata",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Simplified Offset and Gravity Compensation for Wrist-Mounted Force/Torque Sensor with a Garment Manipulation Application",
+        "Dayuan Chen, Yukuan Zhang, Weizan He, Alberto Elías Petrilli-Barceló, Jose Victorio Salazar Luces, Yasuhisa Hirata",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ],
+      [
+        1.0,
+        "Simplified Offset and Gravity Compensation for Wrist-Mounted Force/Torque Sensor with a Garment Manipulation Application",
+        "",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv"
+      ]
+    ],
+    "10.1109/jsen.2021.3056943": [
+      [
+        1.0,
+        "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+        "Yongqiang Yu; Ran Shi; Yunjiang Lou",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!citation-literature.csv"
+      ],
+      [
+        1.0,
+        "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+        "Yongqiang Yu, Ran Shi, Yunjiang Lou",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+        "Yongqiang Yu, Ran Shi, Yunjiang Lou",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ],
+      [
+        1.0,
+        "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+        "",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/reading-guide.csv"
+      ],
+      [
+        1.0,
+        "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+        "",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv"
+      ]
+    ],
+    "10.1109/jsen.2024.3443201": [
+      [
+        1.0,
+        "Offsets and Gravity Parameters Estimation for Noncontact Force Compensation With Wrist-Mounted Force/Torque Sensor",
+        "Qi Huang, Xuanchen Zhang, Hongtao Pan, Yong Cheng, Kun Lu",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "Offsets and Gravity Parameters Estimation for Noncontact Force Compensation With Wrist-Mounted Force/Torque Sensor",
+        "Qi Huang, Xuanchen Zhang, Hongtao Pan, Yong Cheng, Kun Lu",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+      ],
+      [
+        1.0,
+        "Offsets and Gravity Parameters Estimation for Noncontact Force Compensation With Wrist-Mounted Force/Torque Sensor",
+        "",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv"
+      ]
+    ],
+    "arxiv:2611.03294": [
+      [
+        1.0,
+        "ForceLDM: A Force-aware Latent Dynamics Model for Contact-Rich Manipulation",
+        "Peiyuan Tang, Yao Li, Xiaodong Zhang, Wuyang Zhang, Qin Xia, Yanyong Zhang, Zijiang Yang",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      [
+        1.0,
+        "ForceLDM: A Force-aware Latent Dynamics Model for Contact-Rich Manipulation",
+        "Peiyuan Tang, Yao Li, Xiaodong Zhang, Wuyang Zhang, Qin Xia, Yanyong Zhang, Zijiang Yang",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv"
+      ]
+    ],
+    "10.1016/j.robot.2022.104361": [
+      [
+        1.0,
+        "Message flow analysis with complex causal links for distributed ROS 2 systems",
+        "Christophe Bédard | Pierre–Yves Lajoie | Giovanni Beltrame | Michel Dagenais",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/lit/r5-literature.csv"
+      ]
+    ],
+    "10.1109/itsc45102.2020.9294440": [],
+    "cmu-ri-tr-03-17": [],
+    "10.3390/s22207962": [
+      [
+        1.0,
+        "Determining Exception Context in Assembly Operations from Multimodal Data",
+        "Mihael Simonič | Matevž Majcen Hrovat | Sašo Džeroski | Aleš Ude | Bojan Nemec",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv"
+      ]
+    ],
+    "arxiv:2309.16057": [],
+    "10.1109/tiv.2024.3521215": [],
+    "10.1109/ssrr62954.2024.10770056": [],
+    "QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset": [],
+    "10.5281/zenodo.7221443": [],
+    "McGill-AML/aml_robot_cutting_dataset": [],
+    "github:MRDLab/mis-tool-characterization": [],
+    "10.3390/en17236096/s1": [],
+    "PeiYuan001/forceldm-dataset": [],
+    "leledeyuan00/Gravity-Compensation-F-T-sensor": [],
+    "eclipse-tracecompass/tracecompass-test-traces:ctf/src/main/resources/ros2": [],
+    "ros-tracing/tracetools_analysis:converted_pingpong": [],
+    "10.5281/zenodo.3630479": [],
+    "10.5281/zenodo.3630478": [],
+    "10.5281/zenodo.3602546": [],
+    "10.5281/zenodo.3603301": [],
+    "10.5281/zenodo.3606473": [],
+    "10.5281/zenodo.3606616": [],
+    "10.5281/zenodo.21644263": [],
+    "10.5281/zenodo.6884095": [],
+    "locura4iot:20220611-uwb-twr": [],
+    "10.6084/m9.figshare.29605775.v2": [],
+    "unmannedlab/UWB_Dataset": []
+  },
+  "parent": "08c8ab373c43c798d6992965c50a582d050c5ddc",
+  "statuses": {
+    "10.1109/lra.2018.2849862": "new_work",
+    "10.1115/dmd2017-3519": "new_work",
+    "10.1109/icra.2016.7487605": "new_work",
+    "10.1109/lra.2017.2666420": "new_work",
+    "10.1109/icra.2016.7487596": "new_work",
+    "10.1109/icra.2016.7487606": "new_work",
+    "10.1541/ieejias.137.427": "previous_work",
+    "10.1541/ieejias.133.526": "previous_work",
+    "10.1541/ieejias.128.208": "previous_work",
+    "10.1541/ieejias.120.1321": "new_work",
+    "10.1541/ieejias.122.120": "previous_work",
+    "10.1541/ieejias.126.206": "new_work",
+    "10.1541/ieejias.132.794": "new_work",
+    "10.1541/ieejjia.4.107": "new_work",
+    "10.3390/en17236096": "new_work",
+    "10.3390/electronics15173946": "new_work",
+    "10.3390/en19020346": "new_work",
+    "10.3390/en19194658": "new_work",
+    "10.3390/wevj15010035": "new_work",
+    "10.3390/wevj14010002": "new_work",
+    "10.3390/wevj17090476": "new_work",
+    "10.1049/elp2.70185": "new_work",
+    "10.3390/s19133012": "previous_work",
+    "10.3390/s16060798": "previous_work",
+    "10.3390/s19194259": "previous_work",
+    "10.3390/s21134498": "new_work",
+    "10.3390/s21092895": "previous_work",
+    "10.3390/s21144706": "previous_work",
+    "10.3390/s25216619": "previous_work",
+    "10.3390/s26030871": "previous_work",
+    "its-tp1800": "new_work",
+    "autopilot-ga731993-d4.3": "new_work",
+    "10.1109/vnc51378.2020.9318407": "new_work",
+    "eu-tp1662": "new_work",
+    "10.1038/s41597-025-05887-9": "new_work",
+    "10.1177/02783649241230640": "previous_work",
+    "10.1109/lcn53696.2022.9843513": "new_work",
+    "10.1109/sas58821.2023.10254018": "previous_work",
+    "10.1109/robio66223.2025.11376212": "previous_work",
+    "10.1109/jsen.2021.3056943": "previous_work",
+    "10.1109/jsen.2024.3443201": "previous_work",
+    "arxiv:2611.03294": "previous_work",
+    "10.1016/j.robot.2022.104361": "previous_work",
+    "10.1109/itsc45102.2020.9294440": "new_work",
+    "cmu-ri-tr-03-17": "new_work",
+    "10.3390/s22207962": "previous_work",
+    "arxiv:2309.16057": "new_work",
+    "10.1109/tiv.2024.3521215": "new_work",
+    "10.1109/ssrr62954.2024.10770056": "new_work",
+    "QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset": "new_source",
+    "10.5281/zenodo.7221443": "previous_source_extended",
+    "McGill-AML/aml_robot_cutting_dataset": "previous_source_extended",
+    "github:MRDLab/mis-tool-characterization": "new_source",
+    "10.3390/en17236096/s1": "new_source",
+    "PeiYuan001/forceldm-dataset": "new_source",
+    "leledeyuan00/Gravity-Compensation-F-T-sensor": "new_source",
+    "eclipse-tracecompass/tracecompass-test-traces:ctf/src/main/resources/ros2": "previous_source_extended",
+    "ros-tracing/tracetools_analysis:converted_pingpong": "new_source",
+    "10.5281/zenodo.3630479": "new_source",
+    "10.5281/zenodo.3630478": "new_source",
+    "10.5281/zenodo.3602546": "new_source",
+    "10.5281/zenodo.3603301": "new_source",
+    "10.5281/zenodo.3606473": "new_source",
+    "10.5281/zenodo.3606616": "new_source",
+    "10.5281/zenodo.21644263": "previous_source_extended",
+    "10.5281/zenodo.6884095": "new_source",
+    "locura4iot:20220611-uwb-twr": "new_source",
+    "10.6084/m9.figshare.29605775.v2": "new_source",
+    "unmannedlab/UWB_Dataset": "new_source"
+  },
+  "note": "Archive-member paths follow !; a reappearance in a primary catalogue and in its archived inputs is one historical identity. Author strings of similar works are retained for manual review. An empty match is relative to this project snapshot."
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-21 UTC",
+  "queries": [
+    "ros2 trace dataset message flow analysis distributed nodes dataset LTTng indirect causal links Bédard trace files ROS 2 Zenodo GitHub replication",
+    "CARET trace data demo inter process multi machine ROS 2 sample trace data lttng recorded downloadable dataset caret analysis pub sub callback",
+    "ROS 2 multi-computer latency measurement raw send receive timestamp traces data csv PTP zenoh FastDDS Wifi robot latency measurement GitHub csv",
+    "\"ROS 2\" \"trace\" Bédard example traces download distributed traces trace-reference-system Eclipse Trace Compass test traces ROS2 archive",
+    "github eclipse tracecompass test traces ROS2 message flow ros2 transport host trace git lfs ros2 examples",
+    "\"trace-reference-system\" ROS2 trace download multi host Zenodo data message flow analysis tracing"
+  ],
+  "inclusions": [
+    "Public Git source / binary file retrieval, each byte stream checked by Git object SHA-1 and parsed. Outputs are aggregate derived statistics. The related paper/launch graph was used to check correspondence with the design."
+  ],
+  "leads": [
+    {
+      "url": "https://github.com/tier4/caret_demos/tree/a4d8bf89c6015797d3e4890a7ccc2542822b6282/samples/end_to_end_sample",
+      "review": "Re-decoded all 2,880 events across 12 CPU streams. Exact same capture and stamp pairing already analysed under projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/ros/caret-source.json. Excluded."
+    },
+    {
+      "url": "https://github.com/christophebedard/ros2-message-flow-analysis/tree/2e27f3709ea56453082bc80b3d42bdcb639ead90",
+      "review": "Paper companion distributed examples and setup scripts. The tested example-2 trace is distributed by Eclipse. No additional recorded two-host RTAB-Map or reference-system capture was found in this repository tree."
+    },
+    {
+      "url": "https://github.com/neil-rti/ros2_latency_evaluation/tree/b88c8a0e60d73435c9253c72102b3495df2b6e83",
+      "linked_data": "https://barkhauseninstitut.sharepoint.com/:f:/s/BIDocTransfer/ErQS-1UxiIRGka0WQ04ql3gBLnIckYFFEyxTtCzN-xLt1w?e=QLCP78",
+      "review": "Linked dataset endpoint returned HTTP 200 with HTML Error title and a failure message. No file list/bytes verified."
+    },
+    {
+      "url": "https://github.com/hal-lab-u-tokyo/ros2-perf-multihost/tree/80fde1fad94a9889c488896750e7632f73dcfb71",
+      "review": "Multi-host experiment software. Repository tree search for result captures or CSVs did not locate a data file. No data counted."
+    }
+  ],
+  "limits": "Both accepted traces cover software execution. No wireless or multi-host motion data were verified in these two sources."
+}

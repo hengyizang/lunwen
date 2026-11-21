@@ -1,0 +1,3 @@
+record,trial,destination,source_log,intermediate_log,source_candidates,intermediate_candidates,destination_rows,unique_payload_triplets,middle_before_source,destination_before_middle,median_tx_to_middle_ms,median_middle_to_rx_ms,median_end_to_end_ms
+3603301,193,3101,3199,630892900,589,583,317,66,61,1,-2.0,42.0,40.0
+3603301,193,3103,3199,630892900,589,583,285,29,24,3,-2,40,38

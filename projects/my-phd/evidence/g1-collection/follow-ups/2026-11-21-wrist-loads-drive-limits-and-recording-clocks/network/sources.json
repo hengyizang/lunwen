@@ -1,0 +1,485 @@
+[
+  {
+    "id": "10.5281/zenodo.3630479",
+    "doi": "10.5281/zenodo.3630479",
+    "aliases": [
+      "10.5281/zenodo.3602255",
+      "10.5281/zenodo.3602256"
+    ],
+    "title": "Livorno, Urban driving, Automated vehicle detects fallen bicycle",
+    "authors": [
+      "AVR",
+      "CNIT",
+      "LINKS",
+      "TIM"
+    ],
+    "source_url": "https://zenodo.org/records/3630479",
+    "metadata_url": "https://zenodo.org/api/records/3630479",
+    "version_doi": "10.5281/zenodo.3630479",
+    "metadata_modified": "2020-01-29T19:20:52.829168+00:00",
+    "published": "2020-01-09",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Livorno, hazard warning and speed",
+    "scope": "10 zipped physical trials, 2 vehicle CAM loggers, DENM receive logs, vehicle speed, one instrumented brake logger. Matching uses all 17 non-log CAM fields, retains source IDs and only reports one-to-one timestamp differences.",
+    "limitations": "Packets not matched at both loggers can arise from logging coverage, retransmission or clocks. No sender-side hazard time on a common verified clock. Vehicle speed in native recorded units. A later speed change does not identify a brake-controller invocation.",
+    "outputs": [
+      "livorno-cam-pairs.csv",
+      "livorno-warning-and-speed.csv"
+    ],
+    "files": [
+      {
+        "name": "513-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/513-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 165209,
+        "publisher_checksum": "md5:c8a2f2981436b7d8ecc8c6166e2d810f",
+        "checked_bytes": true
+      },
+      {
+        "name": "514-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/514-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 179311,
+        "publisher_checksum": "md5:b02004c8470eefe0b74cbeec127809b3",
+        "checked_bytes": true
+      },
+      {
+        "name": "515-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/515-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 161778,
+        "publisher_checksum": "md5:4b925bb97236c7b7658453923f4ff662",
+        "checked_bytes": true
+      },
+      {
+        "name": "516-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/516-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 195900,
+        "publisher_checksum": "md5:c499bbd758a6b931cd770b2dc74df263",
+        "checked_bytes": true
+      },
+      {
+        "name": "517-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/517-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 256029,
+        "publisher_checksum": "md5:b09985e451bd0134cdcbbc54fefec963",
+        "checked_bytes": true
+      },
+      {
+        "name": "518-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/518-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 181202,
+        "publisher_checksum": "md5:5ef405b294a1b1287abf5a6e36bb741f",
+        "checked_bytes": true
+      },
+      {
+        "name": "519-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/519-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 241466,
+        "publisher_checksum": "md5:de186d5d519e1d22520ac8eb0362870f",
+        "checked_bytes": true
+      },
+      {
+        "name": "520-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/520-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 194195,
+        "publisher_checksum": "md5:dff970fcc8c0f126b235b71de725c9da",
+        "checked_bytes": true
+      },
+      {
+        "name": "521-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/521-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 199838,
+        "publisher_checksum": "md5:a0c3b681202a04e4fc76fc8496c42853",
+        "checked_bytes": true
+      },
+      {
+        "name": "522-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip",
+        "url": "https://zenodo.org/api/records/3630479/files/522-Livorno_Urban_VRU_protection_TS14_FB_IT4.zip/content",
+        "bytes": 152393,
+        "publisher_checksum": "md5:3a880a97f8657953b3ec6a8fb5e39ebf",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.3630478",
+    "doi": "10.5281/zenodo.3630478",
+    "aliases": [
+      "10.5281/zenodo.3601392",
+      "10.5281/zenodo.3601393"
+    ],
+    "title": "Livorno, Urban driving, detection of fallen bicycle",
+    "authors": [
+      "AVR",
+      "CNIT",
+      "LINKS",
+      "TIM"
+    ],
+    "source_url": "https://zenodo.org/records/3630478",
+    "metadata_url": "https://zenodo.org/api/records/3630478",
+    "version_doi": "10.5281/zenodo.3630478",
+    "metadata_modified": "2020-01-29T19:20:52.916318+00:00",
+    "published": "2020-01-08",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Livorno, earlier hazard trials",
+    "scope": "7 archived sessions checked. Six have an on-board CAM / DENM logger from the same car and vehicle speed. The last has oneM2M files only for these channel checks.",
+    "limitations": "Older archive fields include log_stationnid; completed CAM/DENM files lack log_action. detectiontimeutc and detectiontime match literally in all inspected on-board DENM rows. Their values do not establish absolute POSIX UTC or one-way latency.",
+    "outputs": [
+      "livorno-related-channel-coverage.csv"
+    ],
+    "files": [
+      {
+        "name": "305-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/305-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 3172381,
+        "publisher_checksum": "md5:16c2b8d3d271f35889ffdce46e5e0472",
+        "checked_bytes": true
+      },
+      {
+        "name": "306-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/306-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 7864158,
+        "publisher_checksum": "md5:e46283ea6a9ac293c58a4a81bc16dae5",
+        "checked_bytes": true
+      },
+      {
+        "name": "307-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/307-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 2183196,
+        "publisher_checksum": "md5:a059dc635d7385b5ec75a61d4b85a876",
+        "checked_bytes": true
+      },
+      {
+        "name": "308-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/308-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 819353,
+        "publisher_checksum": "md5:f5ea40abda4ea2c9dd0ebe0c23a901c0",
+        "checked_bytes": true
+      },
+      {
+        "name": "309-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/309-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 3607392,
+        "publisher_checksum": "md5:a3ab1871e2475196eb404811afdc713e",
+        "checked_bytes": true
+      },
+      {
+        "name": "310-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/310-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 779995,
+        "publisher_checksum": "md5:24ac8b7215759a4cdd2717b677e4ce18",
+        "checked_bytes": true
+      },
+      {
+        "name": "316-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip",
+        "url": "https://zenodo.org/api/records/3630478/files/316-Livorno_Urban_Driving_VRU_protection_Fallen_Bicycle_FB_IT3.zip/content",
+        "bytes": 15158,
+        "publisher_checksum": "md5:4d66448cf51550356abf2546edfaf28e",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.3602546",
+    "doi": "10.5281/zenodo.3602546",
+    "aliases": [
+      "10.5281/zenodo.3602545"
+    ],
+    "title": "Livorno, Urban driving, Connected vehicle detects fallen bicyle",
+    "authors": [
+      "LINKS",
+      "TIM"
+    ],
+    "source_url": "https://zenodo.org/records/3602546",
+    "metadata_url": "https://zenodo.org/api/records/3602546",
+    "version_doi": "10.5281/zenodo.3602546",
+    "metadata_modified": "2020-01-24T19:24:35.150510+00:00",
+    "published": "2020-01-09",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Connected vehicle in the hazard trials",
+    "scope": "Single early trial numbered 177. Includes 2,833 CAMs and 24 received DENMs from vehicle logger 3904. The file name identifies the recording as a Turin test.",
+    "limitations": "The two named vehicle/driver CSVs have 1,998 rows each but provide rowid, timestamp, logger and application ID only. No numeric CAN speed or brake in those tables. One endpoint of a radio trace does not establish delivery or a vehicle response.",
+    "outputs": [
+      "livorno-related-channel-coverage.csv"
+    ],
+    "files": [
+      {
+        "name": "177-Livorno_Urban_Driving_Test_Turin_22-03-2019_Fallen_Bicycle_Fallen_bicycle_1553259086.zip",
+        "url": "https://zenodo.org/api/records/3602546/files/177-Livorno_Urban_Driving_Test_Turin_22-03-2019_Fallen_Bicycle_Fallen_bicycle_1553259086.zip/content",
+        "bytes": 111693,
+        "publisher_checksum": "md5:c9ebcf38562272d6a3796765471d4a3e",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.3603301",
+    "doi": "10.5281/zenodo.3603301",
+    "aliases": [
+      "10.5281/zenodo.3603300"
+    ],
+    "title": "Brainport, Platooning, formation and platooning from default locations",
+    "authors": [
+      "TNO",
+      "TASS",
+      "NXP",
+      "Technolution",
+      "NEVS (National Electric Vehicle Sweden)"
+    ],
+    "source_url": "https://zenodo.org/records/3603301",
+    "metadata_url": "https://zenodo.org/api/records/3603301",
+    "version_doi": "10.5281/zenodo.3603301",
+    "metadata_modified": "2020-01-24T19:24:35.375266+00:00",
+    "published": "2020-01-09",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Brainport, default locations",
+    "scope": "One physical two-car run (193); cellular IotVehicleMessage, three recorders for PlatoonFormation advice, resampled speed and reported vehicle modes. Complete decoded JSON payload equality required.",
+    "limitations": "Source assigns formation messages to the planner service ID with no target in the outer sender label; both destinations compare to the same 589 candidates. Where destination advice differs, it cannot match on full payload. Cross-logger times retain negative intervals.",
+    "outputs": [
+      "brainport-message-pairs.csv",
+      "brainport-three-logger-matches.csv",
+      "brainport-vehicle-status.csv"
+    ],
+    "files": [
+      {
+        "name": "193-Brainport_Platooning_2019-04-09-testI5.zip",
+        "url": "https://zenodo.org/api/records/3603301/files/193-Brainport_Platooning_2019-04-09-testI5.zip/content",
+        "bytes": 54797230,
+        "publisher_checksum": "md5:c09d91a318c171b71046e292a4b19f15",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.3606473",
+    "doi": "10.5281/zenodo.3606473",
+    "aliases": [
+      "10.5281/zenodo.3606472"
+    ],
+    "title": "Brainport, Platooning, baseline platoon formation without IoT",
+    "authors": [
+      "TNO",
+      "TASS",
+      "NXP",
+      "Technolution",
+      "NEVS (National Electric Vehicle Sweden)"
+    ],
+    "source_url": "https://zenodo.org/records/3606473",
+    "metadata_url": "https://zenodo.org/api/records/3606473",
+    "version_doi": "10.5281/zenodo.3606473",
+    "metadata_modified": "2020-01-24T19:25:05.336412+00:00",
+    "published": "2020-01-13",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Brainport, formation baseline",
+    "scope": "Three physical runs (192,197,198) labelled baseline formation without IoT by the producer. Checked actual cellular IotVehicleMessage for both vehicle endpoints and WIRE receiver 3199, GPS speed and vehicleMode.",
+    "limitations": "Baseline describes the formation intervention; network logs exist. Negative intervals in 197 and 198 preclude physical one-way latency from those two-clock differences. IotVehicleMessage existence does not establish use in the direct platoon controller.",
+    "outputs": [
+      "brainport-message-pairs.csv",
+      "brainport-vehicle-status.csv"
+    ],
+    "files": [
+      {
+        "name": "192-Brainport_Platooning_2019-04-09-testJ2.zip",
+        "url": "https://zenodo.org/api/records/3606473/files/192-Brainport_Platooning_2019-04-09-testJ2.zip/content",
+        "bytes": 59019526,
+        "publisher_checksum": "md5:95c2229b6b7120ff12ef1fb6683beb9a",
+        "checked_bytes": true
+      },
+      {
+        "name": "197-Brainport_Platooning_2019-04-09-testJ3.zip",
+        "url": "https://zenodo.org/api/records/3606473/files/197-Brainport_Platooning_2019-04-09-testJ3.zip/content",
+        "bytes": 64148731,
+        "publisher_checksum": "md5:5de387e96dd384bcf1d4113754ce128b",
+        "checked_bytes": true
+      },
+      {
+        "name": "198-Brainport_Platooning_2019-04-09-testJ3R.zip",
+        "url": "https://zenodo.org/api/records/3606473/files/198-Brainport_Platooning_2019-04-09-testJ3R.zip/content",
+        "bytes": 43057790,
+        "publisher_checksum": "md5:0de8e4fa377ba98c742dcb416b721874",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.3606616",
+    "doi": "10.5281/zenodo.3606616",
+    "aliases": [
+      "10.5281/zenodo.3606615"
+    ],
+    "title": "Brainport, Platooning, platoon formation variation",
+    "authors": [
+      "TNO",
+      "TASS",
+      "NXP",
+      "Technolution",
+      "NEVS (National Electric Vehicle Sweden)"
+    ],
+    "source_url": "https://zenodo.org/records/3606616",
+    "metadata_url": "https://zenodo.org/api/records/3606616",
+    "version_doi": "10.5281/zenodo.3606616",
+    "metadata_modified": "2020-01-24T19:24:49.868779+00:00",
+    "published": "2020-01-13",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Brainport, formation variation",
+    "scope": "One physical run (97); planner-to-vehicle advice, a single local vehicle logger with speed and status, and infrastructure logs. Trials 97 and 193 are distinct by recording date, archive hash and experiment ID.",
+    "limitations": "The other vehicle has messages observed at receiver 3103 but its own local TX capture is absent here. Duplicated service-side payloads excluded from one-to-one timings. One cellular advice topic cannot establish the short-range control-loop delay.",
+    "outputs": [
+      "brainport-message-pairs.csv",
+      "brainport-vehicle-status.csv"
+    ],
+    "files": [
+      {
+        "name": "97-Brainport_Platooning_2018-10-03-testB8film.zip",
+        "url": "https://zenodo.org/api/records/3606616/files/97-Brainport_Platooning_2018-10-03-testB8film.zip/content",
+        "bytes": 11198487,
+        "publisher_checksum": "md5:f699922abe90f9e80afec4d94570c3fe",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.21644263",
+    "doi": "10.5281/zenodo.21644263",
+    "aliases": [
+      "10.5281/zenodo.21644262"
+    ],
+    "title": "Real World No-collision Multi-sensor and V2X Road User Dataset",
+    "authors": [
+      "Figueiredo, Andreia",
+      "Tiago",
+      "Almeida, António",
+      "Clérigo, André",
+      "Rito, Pedro",
+      "Luís, Miguel",
+      "Sargento, Susana"
+    ],
+    "source_url": "https://zenodo.org/records/21644263",
+    "metadata_url": "https://zenodo.org/api/records/21644263",
+    "version_doi": "10.5281/zenodo.21644263",
+    "metadata_modified": "2026-07-29T08:44:50.320090+00:00",
+    "published": "2026-07-28",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Aveiro, cooperative participants with roadside sensing",
+    "scope": "All six CSVs fully scanned. Compared database insertion time against timestamp per row; counted ordering reversals by stream and actual zero-speed values for each vehicle.",
+    "limitations": "Rows are sorted by a source timestamp according to the release; the different edb_insert_timestamp can decrease across rows. Insert-minus-timestamp measures a field difference, not a V2V radio or actuation delay. CAM generationDeltaTime is modulo and can roll over. Object observations have no verified cross-sensor ID match in this analysis.",
+    "outputs": [
+      "aveiro-source-clocks.csv"
+    ],
+    "files": [
+      {
+        "name": "cam.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/cam.csv/content",
+        "bytes": 15608736,
+        "publisher_checksum": "md5:8e4e0dfde05fa46b4f66bf92efbbe70f",
+        "checked_bytes": true
+      },
+      {
+        "name": "camera.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/camera.csv/content",
+        "bytes": 16211347,
+        "publisher_checksum": "md5:ae043586164627bebb240222e63cacbd",
+        "checked_bytes": true
+      },
+      {
+        "name": "dataset_overview.png",
+        "url": "https://zenodo.org/api/records/21644263/files/dataset_overview.png/content",
+        "bytes": 377779,
+        "publisher_checksum": "md5:21bcba31f8d9eda4a528fc01b3f4a9a7",
+        "checked_bytes": false
+      },
+      {
+        "name": "lidar.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/lidar.csv/content",
+        "bytes": 4957375,
+        "publisher_checksum": "md5:530b5f354f65dfadf69ebf11fe47bf55",
+        "checked_bytes": true
+      },
+      {
+        "name": "luxonis.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/luxonis.csv/content",
+        "bytes": 6344486,
+        "publisher_checksum": "md5:763e8689002c7acb31f7c0e6c9e34982",
+        "checked_bytes": true
+      },
+      {
+        "name": "radar.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/radar.csv/content",
+        "bytes": 4522790,
+        "publisher_checksum": "md5:bc509de499befb44ca27f1ea25afcf30",
+        "checked_bytes": true
+      },
+      {
+        "name": "vam.csv",
+        "url": "https://zenodo.org/api/records/21644263/files/vam.csv/content",
+        "bytes": 569157,
+        "publisher_checksum": "md5:ae482e9876d4c890ddc19491e4ffda46",
+        "checked_bytes": true
+      }
+    ]
+  },
+  {
+    "id": "10.5281/zenodo.6884095",
+    "doi": "10.5281/zenodo.6884095",
+    "aliases": [
+      "10.5281/zenodo.6884094"
+    ],
+    "title": "A Dataset for Exploring Wi-Fi Network Diversity in Vehicle-to-Infrastructure Communication",
+    "authors": [
+      "Meireles, Rui",
+      "Rodrigues, António",
+      "Stanciu, Andrei",
+      "Aguiar, Ana",
+      "Steenkiste, Peter"
+    ],
+    "source_url": "https://zenodo.org/records/6884095",
+    "metadata_url": "https://zenodo.org/api/records/6884095",
+    "version_doi": "10.5281/zenodo.6884095",
+    "metadata_modified": "2024-07-29T20:53:34.201952+00:00",
+    "published": "2020-11-25",
+    "retrieved_utc": "2026-11-21",
+    "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Credit to listed release creators. Aggregates are this batch’s calculations.",
+    "evidence_level": "measured-files",
+    "area": "Porto/Gaia, instrumented moving receiver",
+    "scope": "Complete receiver-side 1 Hz table, grouped by eight traces and three 802.11 radio types; compared monitor-frame bytes, reported application throughput, beacons, and sentinel values.",
+    "limitations": "The archive exposes second-level digests rather than paired application packet IDs. All node clocks were synchronized via NTP according to the README. Channel utilization for n/ac in 40x traces was approximated. Beacon RSSI and beacon interval have publisher-filled default values.",
+    "outputs": [
+      "porto-v2i-receiver.csv"
+    ],
+    "files": [
+      {
+        "name": "README.md",
+        "url": "https://zenodo.org/api/records/6884095/files/README.md/content",
+        "bytes": 6695,
+        "publisher_checksum": "md5:162058f2c676a0d729595f57ad836358",
+        "checked_bytes": true
+      },
+      {
+        "name": "vehicle-movement.gif",
+        "url": "https://zenodo.org/api/records/6884095/files/vehicle-movement.gif/content",
+        "bytes": 11529343,
+        "publisher_checksum": "md5:e80d745baa0a06231cc2400bf022b94a",
+        "checked_bytes": false
+      },
+      {
+        "name": "wifi-exp-log-summary.csv",
+        "url": "https://zenodo.org/api/records/6884095/files/wifi-exp-log-summary.csv/content",
+        "bytes": 11281179,
+        "publisher_checksum": "md5:5e55f74d2c9a46f0f01bf7814d66da60",
+        "checked_bytes": true
+      }
+    ]
+  }
+]

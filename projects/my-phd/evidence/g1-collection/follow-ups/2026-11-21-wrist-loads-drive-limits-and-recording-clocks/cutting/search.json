@@ -1,0 +1,42 @@
+{
+  "date_utc": "2026-11-21",
+  "route": "Targeted continuation from earlier history-matched source; no new literature query or release counted.",
+  "queries": [
+    {
+      "source": "https://github.com/hengyizang/lunwen/blob/08c8ab373c43c798d6992965c50a582d050c5ddc/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/cutting-source.json",
+      "question": "Which fixture member was previously limited to an inventory record?",
+      "result": "Specimen 1, repetition 11, 13,710,042 bytes; previous bag analysis only covered repetition 1 of each specimen."
+    },
+    {
+      "source": "https://api.github.com/repos/McGill-AML/aml_robot_cutting_dataset/git/trees/62fae2c2294c1f3d63ea860b3aa9c60810a307eb?recursive=1",
+      "question": "Which fixed blobs match ft_sensor_data/cut_{s}/cut_{s}_{r}.csv, robot_data/cut_{s}/cut_{s}_{r}.bag and data/cut_{s}/cut_{s}_{r}/joint_{1..6}.csv?",
+      "result": "180 fixture files, 180 bags, and 1,080 joint CSVs; all were retrieved by pinned raw.githubusercontent.com URL and validated using Git blob SHA-1."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/McGill-AML/aml_robot_cutting_dataset/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/ft_sensor_data/cut_1/cut_1_11.csv",
+      "question": "Does direct complete-file transfer agree with the pinned tree inventory?",
+      "result": "Yes. SHA-1 cc2c9e6743f0aeedad86df90af626153d7d58c88 and size 13710042 bytes. Finite six-axis coverage added."
+    },
+    {
+      "source": "https://github.com/McGill-AML/aml_robot_cutting_dataset/blob/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/README.md",
+      "question": "Do published per-specimen data-point counts match the processed joint CSVs, and were the two instruments synchronized?",
+      "result": "A 100-row discrepancy is isolated to specimen 7. The README explicitly states synchronization was unfinished."
+    },
+    {
+      "source": "https://github.com/McGill-AML/aml_robot_cutting_dataset/blob/62fae2c2294c1f3d63ea860b3aa9c60810a307eb/aml_robot_cutting/robot_data_helper.py",
+      "question": "Can labels be recreated from robot joint torque alone, and do the six streams share timing and labels?",
+      "result": "Yes, 14,963 aligned instants and 2,258 positive labels, zero differences."
+    }
+  ],
+  "dedup_keys": [
+    "https://github.com/McGill-AML/aml_robot_cutting_dataset",
+    "sahandrez/aml_robot_cutting_dataset",
+    "AML Robot Cutting Dataset",
+    "62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+    "2007.11167",
+    "10.1109/IROS45743.2020.9341446",
+    "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference"
+  ],
+  "historic_source": "https://github.com/hengyizang/lunwen/blob/08c8ab373c43c798d6992965c50a582d050c5ddc/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/cutting/cutting-source.json",
+  "status": "Substantive extension of a known dataset. No additional study, new physical trial, or standalone citation is counted."
+}

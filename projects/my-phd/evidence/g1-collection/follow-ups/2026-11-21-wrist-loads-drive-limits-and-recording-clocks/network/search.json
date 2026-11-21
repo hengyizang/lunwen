@@ -1,0 +1,58 @@
+{
+  "as_of_utc": "2026-11-21",
+  "scope": "R5 civil mobile robots and road vehicles. Two-endpoint evidence, clock semantics, co-recorded physical speed, full-payload matching and nearby measurement counterexamples.",
+  "queries": [
+    "public dataset vehicle to vehicle communication V2V IEEE 802.11p raw trace packet reception dataset log sequence number Zenodo received CSV measured mobility two vehicles",
+    "robot to robot communication wireless ROS PDR robot dataset vehicular WiFi packets packet ID GPS transmitted received Porto dataset GitHub data platooning actual",
+    "vehicle to vehicle C-V2X PC5 dataset packet transmission receive timestamps GPS CSV open dataset real world ITS G5 measurements github",
+    "vehicular communication V2V convoy 802.11p CAM matched vehicle-to-vehicle packet reception two vehicles dataset zenodo PDR automated driving PCAP real road dataset vehicle platooning packet loss zenodo",
+    "site:zenodo.org AUTOPILOT platooning Brainport Versailles Tampere communication vehicle Platooning commanded actual gaps data",
+    "DataCite /dois query=Livorno fallen bicycle and query=Livorno fallen bicyle, checked Zenodo version and concept IDs",
+    "AUTOPILOT Livorno fallen bicycle DENM automated driving Livorno sea port fallen bike field demonstration paper IoT pilot evaluation vehicle road hazard",
+    "AUTOPILOT Brainport Platooning platoon formation TNO NXP test course AV IoT traffic lights real measurements platoon service data Brainport paper DOI 2019",
+    "Tools for Technical Evaluation of C-ITS Interoperability full pdf Netten Wedemeijer Wissingh 2018 ITS World Congress TNO repository",
+    "Exploring Wi-Fi Network Diversity for Vehicle-to-Infrastructure Communication pdf Meireles vehicle UDP 2020 full text"
+  ],
+  "screening": [
+    {
+      "source": "Bristol ITS-G5 city trials 10.5523/bris.eupowp7h3jl525yxhm3521f57; F1/10 platoon 10.5281/zenodo.13710763; RSSI localization 10.5281/zenodo.1219249; UCR-CISL/SEE-V2X",
+      "decision": "Detected previously collected sources, omitted."
+    },
+    {
+      "source": "AI4Mobile industrial iV2V 10.21227/04ta-v128, fraunhoferhhi/ai4mobile-industrial; CRAWDAD gatech/vehicular 10.15783/C74S3Z",
+      "decision": "Catalogues and free documentation exist; DataPort presents a login for capture files. Kept as search leads only."
+    },
+    {
+      "source": "Vehicle-to-Infrastructure IEEE 802.11ad Wi-Fi dataset 10.5281/zenodo.7026551",
+      "decision": "Record verified, separate 660 MB capture archive; deferred, not counted."
+    }
+  ],
+  "relations": [
+    {
+      "from": "10.5281/zenodo.6884095",
+      "to": "10.1109/VNC51378.2020.9318407",
+      "type": "isSupplementTo",
+      "support": "Zenodo relation, release README and VNC §II"
+    },
+    {
+      "from": "ITS-TP1800",
+      "to": [
+        "10.5281/zenodo.3603301",
+        "10.5281/zenodo.3606473",
+        "10.5281/zenodo.3606616"
+      ],
+      "type": "same project, pilot and logging architecture; no asserted figure–archive identity",
+      "support": "Brainport AUTOPILOT campaign, Zenodo metadata and paper pp.8–10"
+    },
+    {
+      "from": "AUTOPILOT-GA731993-D4.3",
+      "to": [
+        "10.5281/zenodo.3630479",
+        "10.5281/zenodo.3630478",
+        "10.5281/zenodo.3602546"
+      ],
+      "type": "same funded project and hazard use case; aggregate report may refer to additional trials",
+      "support": "Grant 731993, §3.2.3.2, and release metadata"
+    }
+  ]
+}

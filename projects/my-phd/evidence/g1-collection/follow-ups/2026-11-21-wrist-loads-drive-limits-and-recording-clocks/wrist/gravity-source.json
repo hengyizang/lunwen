@@ -1,0 +1,33 @@
+{
+  "title": "Matlab & Python demonstration on Simplified Bias and Gravity Compensation for Wrist-Mounted F/T sensor",
+  "creator": "Dayuan (GitHub leledeyuan00, Tohoku University Smart Robots Design Lab)",
+  "source": "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor",
+  "revision": "139efe1841f97391002655ef370911d0417feaed",
+  "commit_date": "2025-08-16",
+  "retrieved": "2026-11-21 UTC",
+  "evidence_level": "decoded measured files",
+  "inventory": "gravity-inventory.csv",
+  "readme": "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor/blob/139efe1841f97391002655ef370911d0417feaed/README.md",
+  "signal_definition_sources": [
+    "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor/blob/139efe1841f97391002655ef370911d0417feaed/gravity_compute.py",
+    "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor/blob/139efe1841f97391002655ef370911d0417feaed/gravity_pose_drifting_show.m",
+    "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor/blob/139efe1841f97391002655ef370911d0417feaed/drifting_show.m",
+    "https://github.com/leledeyuan00/Gravity-Compensation-F-T-sensor/blob/139efe1841f97391002655ef370911d0417feaed/gravity_result.txt"
+  ],
+  "access": "Public GitHub, free without login. No LICENSE file at this commit; GitHub repository license field null. Link to the original measurements; only independent derived statistics and a reader are included here.",
+  "hardware": "README identifies an ATI Axis-80 EtherCAT sensor and ROS2. The authors describe the static stand as approximately 35 hours. Seven columns encode time in seconds, three forces and three moments.",
+  "observed": [
+    "The 130,511 times strictly increase and span 130,510.076489 s (36.252799 h). The input describes a stationary sensor. It does not include temperature, a traceable unloaded zero or an external reference wrench.",
+    "Between the first and last 600 samples, the mean Fz changes +0.635238617 N and mean Mz changes +0.001255193 Nm. The hourly table supports a check of whether drift is linear or persists through the whole stand.",
+    "The 7-pose and 100-pose files specify position/quaternion and measured wrench expressed in the robot base frame. The pinned code estimates base gravity, sensor-fixed force offsets, an axial center-of-mass distance, and sensor-fixed moment offsets. Fitting seven samples reproduces gravity_result.txt to its printed precision.",
+    "The seven-pose fit has RMS vector residuals 0.257968 N and 0.004969 Nm on the same file. Applying that unchanged fit to the hundred-pose measurements gives 4.504126 N and 0.203784 Nm. Separately refitting the hundred-pose file gives 0.497332 N and 0.006096 Nm on that file.",
+    "GP2025-07-22-22-06-02.txt separately contains 1,756 finite 11-column samples of time, six-axis wrench and quaternion; its extra pose channels are absent from the long static trace."
+  ],
+  "limitations": [
+    "The static sensor may carry preload or tool weight. Drift is a change in recorded signal. Temperature causation and absolute sensor bias cannot be identified without additional reference channels.",
+    "The acquisition setup, payload, retaring and other changes between the two pose collections are unspecified. Cross-file residuals quantify transfer at the recorded settings; they do not identify the cause of the change.",
+    "A related publication is Chen et al. DOI 10.1109/ROBIO66223.2025.11376212. The GitHub README does not explicitly identify the paper or claim that every file is a manuscript experiment."
+  ],
+  "related_paper": "10.1109/ROBIO66223.2025.11376212",
+  "reproduce": "python derive-gravity.py OUTPUT CACHE (numpy, scipy)"
+}

@@ -1,0 +1,80 @@
+{
+  "record_id": "10.3390/en17236096/s1",
+  "parent_doi": "10.3390/en17236096",
+  "type": "publisher supplementary data for journal article",
+  "title": "Identification of the Parameters of the Highly Saturated Permanent Magnet Synchronous Motor (PMSM): Selected Problems of Accuracy — four-quadrant identification workbooks (Supplementary Materials)",
+  "authors": [
+    "Michal Gierczynski",
+    "Rafal Jakubowski",
+    "Emil Kupiec",
+    "Lukasz Jan Niewiara",
+    "Tomasz Tarczewski",
+    "Lech M. Grzesiak"
+  ],
+  "version": "Publisher version, Energies 17(23), 6096, 2024",
+  "year": 2024,
+  "retrieved_utc_date": "2026-11-21",
+  "source_url": "https://www.mdpi.com/article/10.3390/en17236096/s1",
+  "resolved_url": "https://www.mdpi.com/1996-1073/17/23/6096/s1",
+  "article": "https://www.mdpi.com/1996-1073/17/23/6096/pdf",
+  "rights": "The article is CC BY 4.0. The public supplement S1 has no separate license file inside the four-workbook ZIP. This repository supplies factual summaries, selected rounded derived boundary checks and a parser; original workbooks remain at the publisher.",
+  "archive_bytes": 1506741,
+  "archive_sha256": "5eb81626c8d7eb80063eaa0421496d849a9c4ad49902457a7e28d9686c5c9649",
+  "files": [
+    {
+      "entry": "SupplementaryMaterials/Results_Q1.xlsx",
+      "size": 461343,
+      "sha256": "f4517dfc6b1c331ed8727a15e93127cb64742f34e2a16d775619e125e2950128"
+    },
+    {
+      "entry": "SupplementaryMaterials/Results_Q2.xlsx",
+      "size": 435611,
+      "sha256": "676bed819485f35a710f5d1990565ad775edc0166e2928407839f42a0d198e89"
+    },
+    {
+      "entry": "SupplementaryMaterials/Results_Q3.xlsx",
+      "size": 433640,
+      "sha256": "77c7dad054198591636b8e996ffca606bf189293aae88e5ec470677b91f318cb"
+    },
+    {
+      "entry": "SupplementaryMaterials/Results_Q4.xlsx",
+      "size": 432869,
+      "sha256": "0ace94936db3ef74270097dd2b870624dbf1bbf598b2ba8703a0e064ca347a01"
+    }
+  ],
+  "evidence_level": "file-level numerical verification across all four workbooks plus primary full text",
+  "test": "Civilian traction PMSM on a test bench at approximately 550 rpm; shaft torque measured by KTR DATAFLEX 42/200. Paper Eq./figure conventions are separate from spreadsheet column headings.",
+  "schema": {
+    "Arkusz1": "One detail sheet in each workbook. Actual d/q currents, voltages, electrical speed, flux, trq calc, T_mes, T_mes_K. Units and sign are explicit in source cells.",
+    "DaneZbiorcze": "Ten 26 × 26 operating-point matrices. B4 through B274 at increments of 30 identify the measured channel. Columns D:AC have requested d-axis current; rows use requested q-axis current in C. Read measured d/q and torque jointly as finite.",
+    "workbook_sign": "Across all finite observations T_mes_K equals minus T_mes; the published torque grid agrees with T_mes_K. Compare trq calc with that signed convention."
+  },
+  "coverage": {
+    "quadrants": 4,
+    "grid_cells_counting_axes_in_each_quadrant": 2704,
+    "finite_joint_cells": 2084,
+    "without_all_three": 620,
+    "partial_cells": 1,
+    "partial_cell_example": "Q1, requested (130 A, 250 A) has nonfinite measured d/q but a torque grid value of 0. This cell is excluded; interpreting finite torque as a standalone measurement would add one unsupported sample.",
+    "nominal_request_pairs_over_250A": 20,
+    "sampled_norms_over_250A": 27,
+    "largest_request_norm_A": 250.7987241,
+    "largest_measured_norm_A": 250.807607,
+    "max_abs_axis_tracking_errors_A": {
+      "d": 0.0327911,
+      "q": 0.0160065
+    },
+    "note": "Counts include overlapping zero-current axes among the four separately supplied workbooks. They count finite quadrant observations, not distinct setpoints or time samples."
+  },
+  "source_check": "Both publisher URLs returned the same 1,506,741 bytes. The OOXML workbook relationships, cached finite values, repeated coordinate labels and both sheet representations were checked; signed torque/dq tuples matched to <1e-7 across sheets in every quadrant.",
+  "interpretation": [
+    "The 250 A magnitude in Sec. 3 is a nominal operating envelope. The 20 finite requested coordinate pairs beyond 250 A extend by less than 0.8 A; the measured currents track closely. No timestamp or separate post-limit current request is present, and overshooting a nominal geometric boundary does not establish electronic clipping.",
+    "With all 2,084 finite pairs the largest absolute difference between trq calc and T_mes_K is 4.8663641 N·m at Q3 Arkusz1 row 223 (id ≈ −59.993 A, iq ≈ −239.994 A). Only this row exceeds 2.5% of the paper’s nominal 163 N·m. Section 3 describes Fig. 18f as below 2.5%; the full stored workbook range and whatever subset or processing generated the plotted surface need to be reconciled. The signed raw operating point lies inside 250 A.",
+    "The article refers to magnetic saturation in the machine, which can alter inductance without command clipping. Steady-state grids cannot be used to infer closed-loop limiter timing."
+  ],
+  "reproduce": "python derive-current-grid.py downloaded-supplement.zip output-directory",
+  "outputs": [
+    "current-grid-summary.csv",
+    "current-grid-boundary.csv"
+  ]
+}

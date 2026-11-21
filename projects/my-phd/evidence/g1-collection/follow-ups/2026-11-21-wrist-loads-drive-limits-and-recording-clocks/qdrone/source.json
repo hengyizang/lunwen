@@ -1,0 +1,66 @@
+{
+  "id": "QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset",
+  "title": "Q-Drone UWB Benchmark Dataset (verified indoor sensor and ground-truth archives)",
+  "creator": "QDrone, AUSM Lab, York University; associated study by Zahra Arjmandi, Jungwon Kang, Kunwoo Park and Gunho Sohn",
+  "source_url": "https://huggingface.co/datasets/QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset/tree/cd3774c9db03899afde886a52f06687bbe4a1ed1",
+  "version": "cd3774c9db03899afde886a52f06687bbe4a1ed1",
+  "verified_utc": "2026-11-21",
+  "evidence_level": "measured release files decoded",
+  "rights": "Hugging Face dataset card explicitly declares MIT; publicly downloadable without credentials. Local derivatives are counts, timing statistics, and file digests. The conference article has separate publisher rights.",
+  "rights_url": "https://huggingface.co/datasets/QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset/blob/cd3774c9db03899afde886a52f06687bbe4a1ed1/README.md",
+  "docs": [
+    "https://benchmark.qdrone.ausmlab.com/documentation/",
+    "https://benchmark.qdrone.ausmlab.com/datasets/",
+    "https://benchmark.qdrone.ausmlab.com/benchmark/dataset/dataset_ground_truth_release/"
+  ],
+  "file_provenance": [
+    {
+      "path": "All Datasets/indoor.zip",
+      "bytes": 9635549,
+      "lfs_sha256": "0bd32415be7d81250d95eb9f4acae044c797ffe49ac1decd247c4f5b47538ce9",
+      "pointer_git_oid": "afb66f20dca2db374aaca6a2792408c2de4661d9",
+      "source_url": "https://huggingface.co/datasets/QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset/resolve/cd3774c9db03899afde886a52f06687bbe4a1ed1/All%20Datasets/indoor.zip"
+    },
+    {
+      "path": "Dataset with Ground Truth/indoor-gt.zip",
+      "bytes": 6276458,
+      "lfs_sha256": "110dddc745f291fe9693fd42f6540d9116691f922421a22d5511c3e7378c2899",
+      "pointer_git_oid": "485234b3d5c32a57af1ae58983dbb5a9e8f54bc3",
+      "source_url": "https://huggingface.co/datasets/QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset/resolve/cd3774c9db03899afde886a52f06687bbe4a1ed1/Dataset%20with%20Ground%20Truth/indoor-gt.zip"
+    }
+  ],
+  "format": "Two-row groups in the base CSV comprise record type followed by payload. Ground-truth CSV contains one column-name header then three-row groups, adding XYZ to every event as documented on 24 August 2023. Type 0 UWB carries time, module, distance and self-range error; type 2 IMU has time and ten channels; type 3 has only height. No timestamps are imputed to height or XYZ. All data rows must have eleven columns, padding is empty or zero, and used values are finite. Numerical equalities compare fields ignoring spelling and padding.",
+  "comparability": "Independent total station positions in published sensor order are evidence of a matched release, not a verified independent reference clock. Repeated XYZ may reflect rounding, repeated assignment or stationary pose and cannot establish the native station rate. No raw total-station acquisition times or clock-offset history can be recovered from the two checked releases. UWB module-specific gaps include missed or delayed observations; no transmit or packet reception pairs are available. Archive subset is indoor; no claims about additional ground-truth archives.",
+  "article": {
+    "doi": "10.1109/ITSC45102.2020.9294440",
+    "authors": [
+      "Zahra Arjmandi",
+      "Jungwon Kang",
+      "Kunwoo Park",
+      "Gunho Sohn"
+    ],
+    "title": "Benchmark Dataset of Ultra-Wideband Radio Based UAV Positioning",
+    "year": 2020,
+    "source_url": "https://doi.org/10.1109/ITSC45102.2020.9294440",
+    "metadata_url": "https://api.crossref.org/works/10.1109/ITSC45102.2020.9294440",
+    "evidence_level": "full-text methods and author dataset documentation verified; numerical results in the CSVs were recomputed from the 2023-plus release",
+    "full_text_url": "https://www.academia.edu/70271163/Benchmark_Dataset_of_Ultra_Wideband_Radio_Based_UAV_Positioning",
+    "locators": "Section III-C and III-D (independent robotic total station and sensors); IV-A (onboard reference time, UWB and total-station time alignment); IV-B (registration to the UWB frame). The authors describe using the onboard NUC as the clock reference and a time translation for total-station data. No interval uncertainty is established by the appended three-column XYZ rows. Public HTML text extraction contains garbled annotations and some equations; none of those equations were used.",
+    "source_version": "2020 IEEE 23rd International Conference on Intelligent Transportation Systems (ITSC). DOI metadata checked via Crossref; readable methods in public full-text HTML on Academia. The 2023 release note documents the added XYZ row."
+  },
+  "query_log": [
+    {
+      "query": "Hanyang reference 23: Arjmandi et al. 2020 DOI 10.1109/ITSC45102.2020.9294440 → QDrone/UWB_IMU_GT_QDrone_Benchmark_Dataset",
+      "action": "Resolved Crossref authors and title; read fixed HF card/trees and hashed both indoor ZIPs."
+    },
+    {
+      "query": "Benchmark Dataset of Ultra-Wideband Radio Based UAV Positioning total station interpolation synchronization coordinate timestamp dataset Arjmandi pdf indoor",
+      "action": "Reread paper sections III-C/D and IV-A/B, official documentation, and ground-truth release announcement."
+    },
+    {
+      "query": "benchmark.qdrone.ausmlab.com ground truth interpolation total station dataset timestamps indoor range self range reference Arjmandi sensor fusion",
+      "action": "Checked published formats and source limits. MIT card and release subset recorded."
+    }
+  ],
+  "publication_scope": "Civil indoor measurement validation; independent location-reference provenance, archive overlap, mixed-sensor order and UWB reporting intervals."
+}

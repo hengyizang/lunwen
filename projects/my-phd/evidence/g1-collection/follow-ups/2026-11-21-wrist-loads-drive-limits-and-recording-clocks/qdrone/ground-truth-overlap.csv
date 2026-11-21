@@ -1,0 +1,4 @@
+trial,sensor_events_compared,identical_sensor_payloads_numeric,max_abs_tag_payload_difference_mixed_units,identical_uwb_or_imu_timestamps,timed_uwb_or_imu_events,finite_xyz_rows,distinct_xyz,adjacent_equal_xyz_all,uwb_with_xyz,distinct_xyz_at_uwb,adjacent_equal_xyz_uwb
+1,50208,50208,0,36849,36849,50208,29972,20203,10127,8391,1736
+2,58091,58091,0,42673,42673,58091,34335,23735,11837,9605,2227
+3,82035,82035,0,59968,59968,82035,50614,31331,15834,14075,1755

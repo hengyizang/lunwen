@@ -1,0 +1,26 @@
+{
+  "checked": "2026-11-21 UTC",
+  "queries": [
+    "UTIL UWB TDOA dataset static csv bias metal wood Zhao Goudar",
+    "independent experimental UWB TDOA data static anchor ground truth dataset UTIL flight",
+    "Indoor UWB Localisation LocURa4IoT Quentin Vey full text dataset hal",
+    "Benchmarking UWB-Based Infrastructure-Free Positioning multi robot dataset Moron PDF dataset link",
+    "Benchmark Dataset of Ultra-Wideband Radio-based UAV Positioning authors pdf anchor reference data"
+  ],
+  "sources": [
+    "https://utiasdsl.github.io/util-uwb-dataset/",
+    "https://api.figshare.com/v2/articles/29605775/versions/2",
+    "https://www.nature.com/articles/s41597-025-05887-9",
+    "https://zenodo.org/api/records/20051894",
+    "https://arxiv.org/pdf/2305.08532",
+    "https://locura4iot.irit.fr/datasets/20220611-uwb-twr/",
+    "https://locura4iot.irit.fr/datasets/20220611-uwb-twr/draw.py",
+    "https://api.crossref.org/works/{doi}"
+  ],
+  "results": [
+    "Pérez Solano 10.5281/zenodo.20051894 already audited at file level on 70,000 exchanges. Excluded duplicate.",
+    "The 2024 UTIL paper was previously read. The Hanyang article links its independent outdoor dataset and cites UTIL, Vey, WiDEVIEW, Arjmandi and Morón. Checked each citation in the actual HTML.",
+    "Morón preprint explicitly cites Vey. Vey site publishes exact per-radio clock schema, ODbL and a 7,115,180 byte JSONL. HAL PDF endpoint returned HTML, so Vey appears as metadata-screened, separately from its numerical data."
+  ],
+  "retrieval": "Hanyang archive MD5 verified against Figshare, CRC32 tested for every member. LocURa4IoT HTTP download resumed using byte ranges after timeout, final length checked against Content-Length and complete JSON parsing."
+}

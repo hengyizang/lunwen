@@ -1,0 +1,100 @@
+{
+  "title": "WiDEVIEW: An UltraWideBand and Vision Dataset for Deciphering Pedestrian-Vehicle Interactions",
+  "authors": [
+    "Jia Huang",
+    "Alvika Gautam",
+    "Junghun Choi",
+    "Srikanth Saripalli"
+  ],
+  "year": 2023,
+  "retrieved": "2026-11-21 UTC",
+  "repository": "https://github.com/unmannedlab/UWB_Dataset",
+  "revision": "d03259df66df97bba0e00e54c121a59dfc7d5881",
+  "originally_cited_release": "https://github.com/unmannedlab/UWB_Dataset/blob/d03259df66df97bba0e00e54c121a59dfc7d5881/README.md",
+  "replacement_folder": "https://drive.google.com/drive/folders/1xfoZglEnwKbIVEFZd_aaB1O1bNGL9Amuq1sSGMQ_jPAX6OoGyiN4eFjWl6dbvlRdtAu2NTds",
+  "replacement_provenance": "https://github.com/unmannedlab/UWB_Dataset/issues/5#issuecomment-6611423857",
+  "evidence_level": "observed measurements for a declared 10-second subsample; complete index metadata for 21 ROS bags; published chart readouts",
+  "queries": [
+    "Followed reference 3 of Lee et al., Comprehensive outdoor UWB dataset: Static and dynamic measurements in LOS/NLOS environments (10.1038/s41597-025-05887-9) to arXiv:2309.16057; used embedded unmannedlab/UWB_Dataset link.",
+    "WiDEVIEW raw data UWB ROS bag download Texas A&M Zenodo Huggingface pedestrian bag range dataset mirror; searched the original first sequence filename.",
+    "Inspected fixed Git tree, published Drive links and author spreadsheet; checked repository issues for alternative downloads after HTTP 404 on both original preview and download URLs. Issue 5, collaborator response on 2026-11-03, supplied a replacement folder.",
+    "Crossref DOI resolution for the two separate publisher records listed by the authors, arXiv full text and source tar, and binary HTTP ranges in all replacement Drive files."
+  ],
+  "full_paper": {
+    "title": "WiDEVIEW: An UltraWideBand and Vision Dataset for Deciphering Pedestrian-Vehicle Interactions",
+    "authors": [
+      "Jia Huang",
+      "Alvika Gautam",
+      "Junghun Choi",
+      "Srikanth Saripalli"
+    ],
+    "id": "arXiv:2309.16057v1",
+    "doi": "10.48550/arXiv.2309.16057",
+    "url": "https://arxiv.org/abs/2309.16057v1",
+    "full_text": "https://arxiv.org/pdf/2309.16057v1",
+    "sha256": "a3b757c405941738c72149ceec3d1416f8fe70fcc0952df2a32079f3b3a314a6",
+    "locator": "Section V-B, Figure 3, page 5. Paper reports mean magnitude of A0-T0 LiDAR/UWB range difference 0.1983 m (SD 0.1996 m) for 10 s of sequence 1. LiDAR serves as the relative-range reference. See below for separate partial file reproduction.",
+    "rights": "arXiv non-exclusive distribution licence; no article PDF, native graphic or imagery redistributed."
+  },
+  "related_publisher_records": [
+    {
+      "doi": "10.1109/TIV.2024.3521215",
+      "title": "Ultra-Wideband Technology for Improved Detection of Vulnerable Road Users in Urban Settings: Dataset and Evaluation",
+      "authors": [
+        "Jia Huang",
+        "Alvika Gautam",
+        "Junghun Choi",
+        "Srikanth Saripalli"
+      ],
+      "publication_date": [
+        2025,
+        12
+      ],
+      "evidence": "bibliographic screening",
+      "relation": "The dataset maintainer lists this distinct publication; no separate release or independent experiment is counted. The 2024 DOI of the journal work appears in a 2025 print issue."
+    },
+    {
+      "doi": "10.1109/SSRR62954.2024.10770056",
+      "title": "Assessing Ultra-Wideband Technology for Improved Detection of Vulnerable Road Users in Urban Settings",
+      "authors": [
+        "Jia Huang",
+        "Alvika Gautam",
+        "Junghun Choi",
+        "Srikanth Saripalli"
+      ],
+      "publication_date": [
+        2024,
+        11,
+        12
+      ],
+      "evidence": "bibliographic screening",
+      "relation": "The dataset maintainer lists this distinct publication; no separate release or independent experiment is counted. The 2024 DOI of the journal work appears in a 2025 print issue."
+    }
+  ],
+  "evidence": [
+    "21 of 21 replacement file headers and complete final connection/chunk indexes validated as ROSBAG V2.0. Summed source object size 230,179,692,101 bytes; full per-topic metadata came from 12,423,864 footer bytes. All 21 historical README download/preview links returned HTTP 404 as observed. Older rows 19 and 20 shared one file ID; the replacement filenames have distinct IDs.",
+    "Metadata counts 8,040 /Decawave messages and 16,147 Velodyne messages. UWB count is a ROS message count, not a radio-frame or anchor-link count; complete payloads were not downloaded across all scenes.",
+    "Within the first 10 s of sequence 1, read all 36 indexed UWB messages by offset; tag 0, sequential headers 2123–2158, all four anchors represented each time (144 transmitted ranges in the ROS payloads). A0 spans 0.820–7.902 m. Source publisher plotting code treats distance as metres. ROS bag recording time minus header stamp = 0.122903–0.807740 ms (median 0.4684645 ms).",
+    "DecawaveNode assigns rospy.Time.now() after serial parsing and excludes zero range slots. ROS header-to-bag lag thus measures the ROS writer/host path. A radio transmit timestamp, receive timestamp at a peer, and controller-consumption stamp are not provided in this message.",
+    "Figure 3b independently checked against the identical 613×379 image in the arXiv source. Eighteen approximate readouts of the normalized UWB and LiDAR traces, nine target seconds per instrument, separately report actual readout location on each drawn curve. The chart is dimensionless and contains no per-point metre ground truth. Do not use its pixels to claim replication of the paper’s 0.1983 m.",
+    "An original calibration example 0001.pcd was independently parsed. Its 49,965 finite points only carry x/y/z. This individual cloud lacks time, tag IDs and per-pedestrian labels, so it cannot supply the missing matched LiDAR distances."
+  ],
+  "clock_source": "https://github.com/unmannedlab/UWB_Dataset/blob/d03259df66df97bba0e00e54c121a59dfc7d5881/decawave_ros/nodes/DecawaveNode",
+  "timing_software": "https://github.com/unmannedlab/UWB_Dataset/blob/d03259df66df97bba0e00e54c121a59dfc7d5881/sensor_syn.py",
+  "scale_source": "https://github.com/unmannedlab/UWB_Dataset/blob/d03259df66df97bba0e00e54c121a59dfc7d5881/decawave_ros/plot/plotbag_4a2t.py",
+  "figure_source": {
+    "url": "https://arxiv.org/src/2309.16057v1",
+    "path": "Images/lidar_uwb.png",
+    "sha256": "6938ba442e239544f302a03512f05e90860aa8c52dabff73f2b98520234769f8",
+    "method": "Nearest pure-colored marker pixel column to each integer second, excluding legend. Grayscale gridline anchors set affine pixel-to-seconds and pixel-to-normalized-range coordinates. Median row among exact-color pixels in selected column. Finite-pixel resolution ~0.023 s/px and ~0.0034 normalized distance/px; a separate maximum timestamp offset of 0.241 s occurs because of marker spacing/overlap. No interpolation or point matching across modalities."
+  },
+  "calibration_cloud": {
+    "url": "https://github.com/unmannedlab/UWB_Dataset/blob/d03259df66df97bba0e00e54c121a59dfc7d5881/lidar2camera/manual_calib/data/0001.pcd",
+    "git_blob_sha1": "c1beddf0044a1af205a70b957dea63fd2d135300"
+  },
+  "rights": "Repository README License section explicitly applies GPL-2.0 to data and code. Attribute Jia Huang, Alvika Gautam, Junghun Choi and Srikanth Saripalli. The accompanying sample readouts and index table were extracted and reformatted on 2026-11-21. GPL text provided alongside the tables. Raw bags, pedestrian identities, images and point clouds are not copied.",
+  "reproduce": [
+    "python read-bags.py CACHE --all-indexes verifies the repository CSVs against all 21 replacement footers and the relevant 36 message payloads. Uses the standard library.",
+    "python derive-wideview.py OUTPUT CACHE reproduces Figure 3b readouts and checks the XYZ sample, requires numpy and Pillow."
+  ]
+}

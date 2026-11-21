@@ -1,0 +1,39 @@
+{
+  "title": "ForceLDM Dataset",
+  "creator": "PeiYuan001; associated paper led by Peiyuan Tang and Yao Li",
+  "source": "https://huggingface.co/datasets/PeiYuan001/forceldm-dataset",
+  "revision": "ee424c789ee8e43c95d34d08ba88c9f6b39870f6",
+  "commit_date": "2026-10-31",
+  "retrieved": "2026-11-21 UTC",
+  "evidence_level": "decoded measured files",
+  "directories": [
+    "https://huggingface.co/datasets/PeiYuan001/forceldm-dataset/tree/ee424c789ee8e43c95d34d08ba88c9f6b39870f6/data/chunk-000",
+    "https://huggingface.co/datasets/PeiYuan001/forceldm-dataset/tree/ee424c789ee8e43c95d34d08ba88c9f6b39870f6/calibration"
+  ],
+  "readme": "https://huggingface.co/datasets/PeiYuan001/forceldm-dataset/blob/ee424c789ee8e43c95d34d08ba88c9f6b39870f6/README.md",
+  "source_fields": [
+    "observation.effort = calibrated world-frame Fx,Fy,Fz,Mx,My,Mz (N,Nm)",
+    "observation.state[7:13] = second copy of the same wrench",
+    "observation.is_contact = retained, binary source label",
+    "task_index, frame_index, episode_index"
+  ],
+  "inventory": "forceldm-episodes.csv",
+  "integrity": "474 parquet files totaling 103,506,831 bytes; every file SHA-256 matched the pinned Hugging Face LFS oid. All 362,339 frames have six finite calibrated values, consecutive per-file frame indices, binary contact labels, and exact equality of the two wrench fields at stored numerical precision.",
+  "paper": "arXiv:2611.03294v1, OpenReview 0j9L12vSKx",
+  "paper_copy_examined": "https://raw.githubusercontent.com/tpy001/ForceLDM/6c257b882c6d2ba869d77603f8d3d916abcb957e/static/paper/forceldm.pdf",
+  "paper_sha256": "b256dec71602c05840dfb6b856a5a1055149cf6f1f5de0ef6e43a687cf31eb3e",
+  "author_calibration": "ft_calib_result.npz SHA-256 e98dce6f07dad3bd381e67cf7a8ce47cea6d6bf8c8308356c18499eddf129e15. num_samples 210, fitted signed mass -0.90072587 in the original convention. The published conversion subtracts offsets in the sensor frame and reorients forces and moments into the world; no retaring, filtering or per-episode refit.",
+  "observed": [
+    "The first five task frame totals (332,237) exactly match Table 7 of the paper. The same files contain 423 episode indices, 3 more than the reported 420 demonstrations. Specifically the public set has 101,81,81,80,80 for USB, gear, box, board and VGA whereas the paper reports 100,80,80,80,80. An additional 51 peeling episodes contain 30,102 frames. The public release lists 474 training episodes and no held-out split.",
+    "Separate summaries of Euclidean force and moment norms by the source label show that its force-magnitude distributions overlap. Within-task framewise force-magnitude AUC for gear placement is 0.514111; board wiping gives 0.987378. For VGA insertion 203 label-zero frames have force norm above 25 N.",
+    "Table 6 distinguishes the primary xArm seven-axis setup with a wrist transducer from a separate six-joint Piper-X experiment that uses current-derived joint torques. The public directory contains seven-joint state slots and a six-component wrench, and its six tasks differ from the Piper-X task list."
+  ],
+  "limitations": [
+    "These logs are training demonstrations. Appendix A.3 uses a 25 N criterion during separate evaluation trials. A demonstration frame exceeding that value cannot be labeled a failed evaluation.",
+    "Contact annotations were preserved during calibration, do not define an independent contact-force reference, and may depend on task stage. High label-zero force is an observation about a label rather than proof of a contact error. Framewise AUC measures rank separation, is descriptive, and treats temporally dependent frames as rows without reporting inferential error bars.",
+    "Original before-compensation measurements were not independently obtained here. The input Parquet SHA manifest, author validation report and transformation show provenance. The paired state and effort copies cannot validate the sensor twice. Reasons for the release/manuscript count differences were not established.",
+    "The HF card and file list do not declare a dataset license. The associated arXiv article is CC BY 4.0; those article rights do not establish rights for the episode files."
+  ],
+  "access": "Free, public HF download without account. This batch includes aggregate statistics, content hashes and an independent reader; retrieve full Parquets or video from the publisher.",
+  "reproduce": "python derive-forceldm.py OUTPUT CACHE (numpy, pyarrow); all 474 files processed in this pass."
+}

@@ -1,0 +1,7 @@
+citing_doi,cited_doi,reference_number,reference_list_url,title_verification
+10.1109/lra.2018.2849862,10.1115/dmd2017-3519,15,https://mrd.umn.edu/sites/mrd.umn.edu/files/2020-10/ONeill2018EvaluationTorqueMeasurements.pdf,Cited author/title matches canonical DOI record.
+10.1109/lra.2018.2849862,10.1109/icra.2016.7487605,12,https://mrd.umn.edu/sites/mrd.umn.edu/files/2020-10/ONeill2018EvaluationTorqueMeasurements.pdf,Cited author/title matches canonical DOI record.
+10.1109/lra.2018.2849862,10.1109/lra.2017.2666420,11,https://mrd.umn.edu/sites/mrd.umn.edu/files/2020-10/ONeill2018EvaluationTorqueMeasurements.pdf,Cited author/title matches canonical DOI record.
+10.1109/lra.2017.2666420,10.1109/icra.2016.7487596,14,https://pmc.ncbi.nlm.nih.gov/articles/PMC5679484/,The PMC hyperlink repeats 10.1109/ICRA.2016.7487605. Matched cited author/title against IEEE and Crossref rather than using the erroneous link.
+10.1109/lra.2017.2666420,10.1109/icra.2016.7487605,16,https://pmc.ncbi.nlm.nih.gov/articles/PMC5679484/,Cited author/title matches canonical DOI record.
+10.1109/lra.2017.2666420,10.1109/icra.2016.7487606,22,https://pmc.ncbi.nlm.nih.gov/articles/PMC5679484/,The PMC hyperlink repeats 10.1109/ICRA.2016.7487605. Matched cited author/title against IEEE and Crossref rather than using the erroneous link.

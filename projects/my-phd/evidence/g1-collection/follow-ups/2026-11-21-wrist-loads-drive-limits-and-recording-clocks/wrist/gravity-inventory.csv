@@ -1,0 +1,7 @@
+path,git_blob_sha1,bytes,rows,columns
+datas/GP2025-07-22-22-06-02.txt,08aef62fb64ecdf6869e126fb87f94e6e23c7245,191381,1756,11
+datas/recorded_messages_pose.txt,475cf70a42c70b1b6234888f826b361c212b19cf,1027,7,7
+datas/recorded_messages_pose_100.txt,cfe0a58b8ec38381af1aeabe7d871270d0b80364,14372,100,7
+datas/recorded_messages_wrench.txt,06bddca7c2e826d8bd44b8c9a43ba35133e2f971,852,7,6
+datas/recorded_messages_wrench_100.txt,963918bdfb75c2332a577b68aea46982c1575ad3,12464,100,6
+datas/static_pose_recording.txt,1062fc3886d28bec68882ff8e89951af9a85e6ce,8887806,130511,7

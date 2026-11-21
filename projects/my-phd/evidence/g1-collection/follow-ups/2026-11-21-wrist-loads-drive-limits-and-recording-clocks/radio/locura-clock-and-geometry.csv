@@ -1,0 +1,7 @@
+initiator,target,events,unique_seqnums,distinct_geometry_distances,min_geometry_distance_m,max_geometry_distance_m,max_xyz_vs_published_distance_m,reported_range_vs_corrected_mismatches,corrected_negative_ranges,raw_rmse_m,corrected_rmse_m,raw_median_bias_m,corrected_median_bias_m,within_exchange_clock_rollovers,max_abs_unrounded_tof_minus_field_ticks,valid_complex_int16_CIR_payloads
+183,100,643,643,71,2.86,7.962,0.000499382,0,0,0.195493377,0.159471785,0.142111,0.034966,0,0.5,643
+183,101,706,706,51,3.842,5.475,0.000493279,0,0,0.302987467,0.251711461,-0.288857,0.1784605,0,0.5,706
+183,150,477,477,54,11.284,12.722,0.000487194,0,0,0.394396263,0.382722387,-0.390686,0.234106,0,0.5,477
+183,171,704,704,70,2.029,4.337,0.000499578,0,0,0.302906692,0.195207546,0.173946,-0.0677845,0,0.5,704
+183,180,708,708,67,5.901,7.55,0.000493585,0,0,1.118231091,0.216584883,-1.26084,0.004652,0,0.5,708
+183,184,708,708,71,0,7,0.000483359,0,36,2.353966662,0.188057564,-2.328372,-0.0954235,0,0.5,708

@@ -1,0 +1,24 @@
+source,topic_or_path,metric,observations,min_ns,median_ns,p95_nearest_rank_ns,max_ns
+pingpong,test_ping:/pong,callback_duration,30,64341,196049.0,237300,396526
+pingpong,test_ping:timer,callback_duration,30,38459,102895.0,131357,163016
+pingpong,test_pong:/parameter_events,callback_duration,1,57045,57045,57045,57045
+pingpong,test_pong:/ping,callback_duration,30,116931,287933.0,331400,400587
+pingpong,test_ping:timer -> test_pong:/ping,ordered_start_spacing_no_message_id,30,289000,726999.0,823402,919464
+pingpong,test_pong:/ping -> test_ping:/pong,ordered_start_spacing_no_message_id,30,290492,870271.5,1348035,1631260
+pingpong,test_ping:timer -> test_ping:/pong,ordered_start_spacing_no_message_id,30,579492,1618580.5,2162438,2427410
+pingpong,test_ping:timer,inter_start,29,499761779,500002052,500090002,500299260
+example2,/topic_a,rcl_publish_to_dds_write,2031,4006,22950,36707,322787
+example2,/topic_a,dds_write_to_rmw_take,1986,42062,195244.0,299360,45377631
+example2,/topic_a,rmw_take_to_callback_start,1986,2388,10434.0,19581,112992
+example2,/topic_a,callback_duration,1986,19164,84374.5,143008,330106
+example2,/topic_a,rcl_publish_to_callback_start,1986,52305,226364.0,347984,45389062
+example2,/topic_b,rcl_publish_to_dds_write,1986,3573,17174.0,30748,71261
+example2,/topic_b,dds_write_to_rmw_take,1986,35853,187934.5,298560,12369408
+example2,/topic_b,rmw_take_to_callback_start,2026,2330,10764.5,19659,283479
+example2,/topic_b,callback_duration,2026,15569,99403.5,163795,612068
+example2,/topic_b,rcl_publish_to_callback_start,1986,42324,214715.0,341760,12380836
+example2,first 10 complete chains,source_rcl_publish_to_sink_callback_start,10,1043294,23316209.5,45537944,45537944
+example2,subsequent complete chains,source_rcl_publish_to_sink_callback_start,1976,104424,452016.0,697593,12483690
+example2,/topic_a -> /topic_b,source_rcl_publish_to_sink_callback_start,1986,104424,458095.0,702485,45537944
+example2,/topic_a -> /topic_b,relay_callback_start_to_relay_rcl_publish,1986,2003,9223.5,17207,186899
+example2,/topic_a -> /topic_b,source_rcl_publish_to_sink_callback_end,1986,129173,552591.5,857412,45599586
