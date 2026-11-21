@@ -1,0 +1,891 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+ABTS-I MSM Pathfinder MH 2008.tab,q1010,categorical_or_text,553,550,3,7,,,,,,,"{""C1"": 189, ""C2"": 174, ""C3"": 156}"
+ABTS-I MSM Pathfinder MH 2008.tab,q102,categorical_or_text,553,553,0,50,,,,,,,"{""24/06/08"": 26, ""31/07/08"": 23, ""02/08/08"": 22}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1020,categorical_or_text,553,536,17,124,,,,,,,"{""16:00"": 14, ""14:30"": 13, ""12:30"": 13}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1021,categorical_or_text,553,531,22,128,,,,,,,"{""17:00"": 15, ""13:15"": 14, ""12:30"": 14}"
+ABTS-I MSM Pathfinder MH 2008.tab,q103,numeric,553,550,3,2,1,2,2,1.84909,2,2,0.358286
+ABTS-I MSM Pathfinder MH 2008.tab,q1030,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q104,numeric,553,546,7,3,2,3,3,3.03846,3,4,0.201792
+ABTS-I MSM Pathfinder MH 2008.tab,q105,numeric,553,547,6,2,0,0,0,0.00182815,0,1,0.0427569
+ABTS-I MSM Pathfinder MH 2008.tab,q107,numeric,553,537,16,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q108,categorical_or_text,553,540,13,3,,,,,,,"{""RAVINDRA"": 306, ""ROHAN"": 217, ""RENUKA"": 17}"
+ABTS-I MSM Pathfinder MH 2008.tab,q108a,categorical_or_text,553,539,14,5,,,,,,,"{""S5"": 304, ""S4"": 216, ""S1"": 17}"
+ABTS-I MSM Pathfinder MH 2008.tab,q108b,categorical_or_text,553,537,16,65,,,,,,,"{""24/06/08"": 25, ""07/08/08"": 22, ""02/08/08"": 18}"
+ABTS-I MSM Pathfinder MH 2008.tab,q201,numeric,553,553,0,1,3,3,3,3,3,3,0
+ABTS-I MSM Pathfinder MH 2008.tab,q202,categorical_or_text,553,550,3,11,,,,,,,"{""PUNE"": 173, ""BEED"": 59, ""LATUR"": 57}"
+ABTS-I MSM Pathfinder MH 2008.tab,q2020,numeric,553,285,268,7,1,4,8,6.42105,9,9,3.10467
+ABTS-I MSM Pathfinder MH 2008.tab,q203,categorical_or_text,553,550,3,290,,,,,,,"{""PARALI"": 27, ""UDGIR"": 27, ""JALGAON"": 18}"
+ABTS-I MSM Pathfinder MH 2008.tab,q2030,numeric,553,488,65,15,1,1,3,5.09631,5,31,6.4786
+ABTS-I MSM Pathfinder MH 2008.tab,q204,categorical_or_text,553,525,28,94,,,,,,,"{""DIC"": 68, ""PARBHANI"": 34, ""MUKTA PROJECT"": 32}"
+ABTS-I MSM Pathfinder MH 2008.tab,q205,numeric,553,544,9,5,1,5,5,6.20772,5,96,10.9927
+ABTS-I MSM Pathfinder MH 2008.tab,q2050,categorical_or_text,553,9,544,5,,,,,,,"{""DARGA"": 3, ""MAHUR"": 3, ""CLINIC"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q301,numeric,553,550,3,38,17,22,26,27.6018,30,65,7.97055
+ABTS-I MSM Pathfinder MH 2008.tab,q302,numeric,553,549,4,3,1,2,3,2.52277,3,3,0.838148
+ABTS-I MSM Pathfinder MH 2008.tab,q303,numeric,553,442,111,35,0,8,10,9.69249,12,18,3.30159
+ABTS-I MSM Pathfinder MH 2008.tab,q304,numeric,553,547,6,4,1,1,1,1.35101,2,4,0.528678
+ABTS-I MSM Pathfinder MH 2008.tab,q305a,numeric,553,179,374,5,0,0,1,1.06704,2,4,0.871508
+ABTS-I MSM Pathfinder MH 2008.tab,q305b,numeric,553,173,380,6,0,0,1,1.02312,1,10,1.21499
+ABTS-I MSM Pathfinder MH 2008.tab,q306,numeric,553,184,369,7,1,3,5,19.0978,6,96,34.0817
+ABTS-I MSM Pathfinder MH 2008.tab,q3060,numeric,553,68,485,6,2,5,6,5.44118,7,7,1.64255
+ABTS-I MSM Pathfinder MH 2008.tab,q3061,numeric,553,6,547,3,5,5,5.5,5.66667,6,7,0.816497
+ABTS-I MSM Pathfinder MH 2008.tab,q3062,numeric,553,2,551,1,6,6,6,6,6,6,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3063,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q3064,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q3065,categorical_or_text,553,22,531,10,,,,,,,"{""AS PER WISH"": 6, ""AS WISH"": 5, ""AS PER THE WISH"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q307a,categorical_or_text,553,545,8,326,,,,,,,"{""UDGIR"": 18, ""SHIVAJI NAGAR"": 16, ""PIMPRI"": 15}"
+ABTS-I MSM Pathfinder MH 2008.tab,q307b,categorical_or_text,553,550,3,11,,,,,,,"{""PUNE"": 172, ""BEED"": 58, ""LATUR"": 57}"
+ABTS-I MSM Pathfinder MH 2008.tab,q307c,categorical_or_text,553,550,3,1,,,,,,,"{""MAHARASHTRA"": 550}"
+ABTS-I MSM Pathfinder MH 2008.tab,q308a,categorical_or_text,553,547,6,328,,,,,,,"{""UDGIR"": 26, ""PARALI"": 24, ""PUNE"": 22}"
+ABTS-I MSM Pathfinder MH 2008.tab,q308b,categorical_or_text,553,546,7,52,,,,,,,"{""PUNE"": 70, ""LATUR"": 56, ""BEED"": 55}"
+ABTS-I MSM Pathfinder MH 2008.tab,q309,numeric,553,549,4,9,1,4,4,6.81967,5,96,14.562
+ABTS-I MSM Pathfinder MH 2008.tab,q3090,categorical_or_text,553,14,539,9,,,,,,,"{""WITH GURU"": 4, ""GURU"": 3, ""WITH BROTHER"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q310,numeric,553,547,6,9,1,3,6,12.106,6,96,24.9136
+ABTS-I MSM Pathfinder MH 2008.tab,q3100,categorical_or_text,553,39,514,24,,,,,,,"{""MANGATI"": 12, ""MANGTI"": 4, ""SARALA/PATHI"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q311,numeric,553,468,85,35,0,2000,3000,3773.08,4500,30000,2652.76
+ABTS-I MSM Pathfinder MH 2008.tab,q312,numeric,553,454,99,20,0,0,500,827.093,1000,10000,1145.95
+ABTS-I MSM Pathfinder MH 2008.tab,q313,numeric,553,545,8,13,1,1,2,11.4092,7,96,27.0369
+ABTS-I MSM Pathfinder MH 2008.tab,q3130,numeric,553,361,192,12,2,2,4,10.1994,10,96,20.588
+ABTS-I MSM Pathfinder MH 2008.tab,q3131,numeric,553,65,488,9,3,8,11,29.3231,12,96,36.8854
+ABTS-I MSM Pathfinder MH 2008.tab,q3132,numeric,553,5,548,4,4,5,11,8.6,11,12,3.78153
+ABTS-I MSM Pathfinder MH 2008.tab,q3133,numeric,553,2,551,2,5,6.75,8.5,8.5,10.25,12,4.94975
+ABTS-I MSM Pathfinder MH 2008.tab,q3134,numeric,553,1,552,1,6,6,6,6,6,6,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3135,numeric,553,1,552,1,7,7,7,7,7,7,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3136,numeric,553,1,552,1,8,8,8,8,8,8,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3137,numeric,553,1,552,1,9,9,9,9,9,9,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3138,numeric,553,1,552,1,10,10,10,10,10,10,0
+ABTS-I MSM Pathfinder MH 2008.tab,q3139,numeric,553,1,552,1,11,11,11,11,11,11,0
+ABTS-I MSM Pathfinder MH 2008.tab,q31300,numeric,553,1,552,1,12,12,12,12,12,12,0
+ABTS-I MSM Pathfinder MH 2008.tab,q31301,categorical_or_text,553,69,484,34,,,,,,,"{""READING"": 14, ""NOTHING"": 8, ""WATCH TV"": 5}"
+ABTS-I MSM Pathfinder MH 2008.tab,q401a,numeric,553,535,18,32,0,12,15,15.714,19,36,4.97056
+ABTS-I MSM Pathfinder MH 2008.tab,q401b,numeric,553,487,66,24,0,0,18,12.729,21,34,10.4761
+ABTS-I MSM Pathfinder MH 2008.tab,q402,numeric,553,524,29,2,0,0,0,0.156489,0,1,0.363665
+ABTS-I MSM Pathfinder MH 2008.tab,q403,categorical_or_text,553,72,481,23,,,,,,,"{""FRIEND"": 13, ""NEIGHBOUR"": 11, ""UNKNOWN"": 8}"
+ABTS-I MSM Pathfinder MH 2008.tab,q404,numeric,553,532,21,6,1,1,1,2.10902,2,96,4.25409
+ABTS-I MSM Pathfinder MH 2008.tab,q4040,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q405,numeric,553,348,205,2,0,0,0,0.0977011,0,1,0.297338
+ABTS-I MSM Pathfinder MH 2008.tab,q406,numeric,553,500,53,2,0,0,0,0.176,0,1,0.381202
+ABTS-I MSM Pathfinder MH 2008.tab,q407,categorical_or_text,553,533,20,7,,,,,,,"{""B"": 301, ""D"": 143, ""A"": 43}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4070,categorical_or_text,553,238,315,5,,,,,,,"{""D"": 194, ""C"": 19, ""F"": 15}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4071,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4072,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4073,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4074,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4075,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q408,categorical_or_text,553,531,22,6,,,,,,,"{""A"": 441, ""B"": 37, ""E"": 25}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4080,categorical_or_text,553,405,148,5,,,,,,,"{""B"": 324, ""C"": 47, ""F"": 23}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4081,categorical_or_text,553,54,499,5,,,,,,,"{""C"": 47, ""D"": 4, ""F"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4082,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4083,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4084,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4085,categorical_or_text,553,3,550,2,,,,,,,"{""DONâT KNOW"": 2, ""NO FEELINGS"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q409,numeric,553,532,21,2,0,0,0,0.171053,0,1,0.376909
+ABTS-I MSM Pathfinder MH 2008.tab,q410,categorical_or_text,553,90,463,5,,,,,,,"{""A"": 69, ""C"": 13, ""B"": 4}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4100,categorical_or_text,553,65,488,4,,,,,,,"{""B"": 45, ""C"": 17, ""96"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4101,categorical_or_text,553,35,518,3,,,,,,,"{""C"": 32, ""D"": 2, ""96"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4102,categorical_or_text,553,9,544,2,,,,,,,"{""D"": 6, ""96"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4103,categorical_or_text,553,2,551,1,,,,,,,"{""E"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4104,categorical_or_text,553,6,547,5,,,,,,,"{""RELATIVES"": 2, ""FRIEND"": 1, ""SISTER IN LAW"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q411,numeric,553,87,466,4,1,1,2,4,3,96,14.2192
+ABTS-I MSM Pathfinder MH 2008.tab,q4110,numeric,553,2,551,2,3,3,3,3,3,3,0
+ABTS-I MSM Pathfinder MH 2008.tab,q412,numeric,553,144,409,3,0,0,0,4.25,0,99,19.8285
+ABTS-I MSM Pathfinder MH 2008.tab,q413,numeric,553,528,25,5,1,3,4,15.6477,4,96,31.4488
+ABTS-I MSM Pathfinder MH 2008.tab,q4130,numeric,553,1,552,1,3,3,3,3,3,3,0
+ABTS-I MSM Pathfinder MH 2008.tab,q4131,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4132,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4133,categorical_or_text,553,64,489,35,,,,,,,"{""NOTHING"": 13, ""LIVE ALONE"": 7, ""ALONE"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q414a,numeric,553,526,27,5,1,1,1,1.63118,2,5,1.00518
+ABTS-I MSM Pathfinder MH 2008.tab,q414b,numeric,553,489,64,5,1,5,5,4.68507,5,5,0.73482
+ABTS-I MSM Pathfinder MH 2008.tab,q414c,numeric,553,485,68,4,1,5,5,4.97113,5,5,0.247282
+ABTS-I MSM Pathfinder MH 2008.tab,q415,numeric,553,525,28,3,0,0,0,0.428571,0,99,4.33135
+ABTS-I MSM Pathfinder MH 2008.tab,q416,numeric,553,522,31,2,0,0,0,0.275862,1,1,0.447376
+ABTS-I MSM Pathfinder MH 2008.tab,q417,numeric,553,524,29,6,1,2,2,17.4714,3,96,34.6072
+ABTS-I MSM Pathfinder MH 2008.tab,q4170,categorical_or_text,553,73,480,54,,,,,,,"{""CORPORATION"": 6, ""SWARGATE"": 4, ""COLLEGE"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q418,categorical_or_text,553,516,37,8,,,,,,,"{""C"": 161, ""96"": 105, ""B"": 101}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4180,categorical_or_text,553,202,351,7,,,,,,,"{""F"": 52, ""96"": 40, ""C"": 38}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4181,categorical_or_text,553,8,545,3,,,,,,,"{""F"": 4, ""G"": 3, ""96"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4182,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4183,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4184,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4185,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4186,categorical_or_text,553,121,432,87,,,,,,,"{""NOT ANY PLACE"": 6, ""SWARGATE"": 6, ""FORT"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q419,numeric,553,523,30,10,1,6,7,20.5182,11,96,31.7685
+ABTS-I MSM Pathfinder MH 2008.tab,q4190,categorical_or_text,553,66,487,36,,,,,,,"{""FARM"": 11, ""ZADIT"": 8, ""BUSHY PLACE"": 7}"
+ABTS-I MSM Pathfinder MH 2008.tab,q420,categorical_or_text,553,518,35,10,,,,,,,"{""F"": 111, ""96"": 75, ""K"": 59}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4200,categorical_or_text,553,257,296,9,,,,,,,"{""K"": 85, ""I"": 43, ""G"": 39}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4201,categorical_or_text,553,59,494,7,,,,,,,"{""K"": 29, ""J"": 8, ""F"": 5}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4202,categorical_or_text,553,5,548,2,,,,,,,"{""K"": 4, ""G"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q4203,numeric,553,1,552,1,96,96,96,96,96,96,0
+ABTS-I MSM Pathfinder MH 2008.tab,q4204,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4205,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4206,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4207,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4208,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q4209,categorical_or_text,553,76,477,35,,,,,,,"{""FARM"": 21, ""NOT ANY PLACE"": 6, ""ZADIT"": 5}"
+ABTS-I MSM Pathfinder MH 2008.tab,q501,numeric,553,526,27,11,0,1,2,2.56274,3,98,4.60257
+ABTS-I MSM Pathfinder MH 2008.tab,q502,numeric,553,522,31,8,0,0,1,1.14368,1,98,4.38551
+ABTS-I MSM Pathfinder MH 2008.tab,q503a,numeric,553,525,28,18,0,0,1,2.34857,3,98,5.03636
+ABTS-I MSM Pathfinder MH 2008.tab,q503b,numeric,553,524,29,27,0,1,4,8.18702,10,200,15.6024
+ABTS-I MSM Pathfinder MH 2008.tab,q504a,numeric,553,525,28,13,0,0,1,1.61905,2,98,4.57378
+ABTS-I MSM Pathfinder MH 2008.tab,q504a0,numeric,553,523,30,23,0,1,3,5.57744,6,98,11.0313
+ABTS-I MSM Pathfinder MH 2008.tab,q505,numeric,553,525,28,2,0,0,0,0.329524,1,1,0.470489
+ABTS-I MSM Pathfinder MH 2008.tab,q506,numeric,553,176,377,2,1,1,1,1.21591,1,2,0.412625
+ABTS-I MSM Pathfinder MH 2008.tab,q507,numeric,553,38,515,5,1,3,3,10.2368,3,96,25.4733
+ABTS-I MSM Pathfinder MH 2008.tab,q5070,categorical_or_text,553,2,551,1,,,,,,,"{""CORPORATION"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q508a,numeric,553,37,516,6,0,0,0,0.675676,1,6,1.35511
+ABTS-I MSM Pathfinder MH 2008.tab,q508b,numeric,553,37,516,8,0,1,1,2.43243,2,22,4.35597
+ABTS-I MSM Pathfinder MH 2008.tab,q509a,numeric,553,37,516,5,0,0,0,5.67568,1,97,22.1486
+ABTS-I MSM Pathfinder MH 2008.tab,q509b,numeric,553,36,517,6,0,0,2,1.97222,2,24,3.9532
+ABTS-I MSM Pathfinder MH 2008.tab,q510a,numeric,553,37,516,7,0,1,97,55.5946,97,97,48.1055
+ABTS-I MSM Pathfinder MH 2008.tab,q510b,numeric,553,16,537,6,0,0,1,3.0625,1.25,22,5.91573
+ABTS-I MSM Pathfinder MH 2008.tab,q511,numeric,553,16,537,2,0,1,1,0.9375,1,1,0.25
+ABTS-I MSM Pathfinder MH 2008.tab,q512,numeric,553,16,537,5,2,9,9,13.4375,9,96,22.1328
+ABTS-I MSM Pathfinder MH 2008.tab,q5120,categorical_or_text,553,1,552,1,,,,,,,"{""TRUST IN PARTNER"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q513,numeric,553,16,537,2,1,1,1,1.25,1,3,0.68313
+ABTS-I MSM Pathfinder MH 2008.tab,q514,numeric,553,35,518,3,0,1,97,61.2571,97,97,47.177
+ABTS-I MSM Pathfinder MH 2008.tab,q515,numeric,553,13,540,4,1,6,9,7.53846,9,9,2.53691
+ABTS-I MSM Pathfinder MH 2008.tab,q5150,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q516,numeric,553,13,540,3,1,1,1,1.61538,1,4,1.19293
+ABTS-I MSM Pathfinder MH 2008.tab,q517,numeric,553,188,365,2,1,2,2,1.78191,2,2,0.414048
+ABTS-I MSM Pathfinder MH 2008.tab,q518,numeric,553,147,406,7,1,3,3,9.45578,3,96,23.5181
+ABTS-I MSM Pathfinder MH 2008.tab,q5180,categorical_or_text,553,13,540,13,,,,,,,"{""PIMPRI"": 1, ""IN COLLEGE"": 1, ""BEHIND COURT"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q519,numeric,553,146,407,16,0,50,100,103.089,100,1000,108.889
+ABTS-I MSM Pathfinder MH 2008.tab,q520a,numeric,553,147,406,15,0,1,2,3.80952,4,98,8.64389
+ABTS-I MSM Pathfinder MH 2008.tab,q520b,numeric,553,147,406,26,0,2.5,7,12.8912,15,98,18.3049
+ABTS-I MSM Pathfinder MH 2008.tab,q521a,numeric,553,146,407,7,0,0,97,57.3904,97,97,47.5945
+ABTS-I MSM Pathfinder MH 2008.tab,q521b,numeric,553,61,492,10,0,0,0,3.09836,1,98,13.0431
+ABTS-I MSM Pathfinder MH 2008.tab,q522a,numeric,553,146,407,14,0,1,3,6.43836,4,97,17.4771
+ABTS-I MSM Pathfinder MH 2008.tab,q522b,numeric,553,142,411,25,0,3,8,14.2535,15,98,20.3928
+ABTS-I MSM Pathfinder MH 2008.tab,q523,numeric,553,140,413,2,0,1,1,0.964286,1,1,0.186243
+ABTS-I MSM Pathfinder MH 2008.tab,q524,numeric,553,139,414,4,2,9,9,11.0791,9,96,14.7423
+ABTS-I MSM Pathfinder MH 2008.tab,q5240,categorical_or_text,553,3,550,3,,,,,,,"{""DON'T KNOW"": 1, ""DIDN'T KNOW"": 1, ""DON'T KNOW ABOUT IT"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q525,numeric,553,139,414,3,1,1,1,1.10791,1,3,0.354896
+ABTS-I MSM Pathfinder MH 2008.tab,q526,numeric,553,146,407,4,0,1,1,43.6849,97,98,47.9389
+ABTS-I MSM Pathfinder MH 2008.tab,q527,numeric,553,86,467,6,1,9,9,12.0814,9,96,18.7925
+ABTS-I MSM Pathfinder MH 2008.tab,q5270,categorical_or_text,553,3,550,3,,,,,,,"{""LACK OF INFORMATION"": 1, ""BECAUSE OF NOT INFORMATION"": 1, ""DIDN'T KNOW"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q528,numeric,553,87,466,4,1,1,1,1.4023,1,4,0.827714
+ABTS-I MSM Pathfinder MH 2008.tab,q529,numeric,553,527,26,2,0,0,1,0.59962,1,1,0.490441
+ABTS-I MSM Pathfinder MH 2008.tab,q530a,numeric,553,318,235,10,0,1,1,1.33648,1,12,1.08473
+ABTS-I MSM Pathfinder MH 2008.tab,q530b,numeric,553,263,290,14,0,1,1,1.96198,1,96,6.33047
+ABTS-I MSM Pathfinder MH 2008.tab,q531,numeric,553,315,238,6,1,1,1,9.70159,2,96,26.4953
+ABTS-I MSM Pathfinder MH 2008.tab,q5310,categorical_or_text,553,24,529,9,,,,,,,"{""HUSBAND"": 8, ""PANTI"": 7, ""UNKNOWN"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q532a,numeric,553,315,238,10,0,0,1,1.51746,2,12,1.74729
+ABTS-I MSM Pathfinder MH 2008.tab,q532b,numeric,553,313,240,21,0,2,3,5.03514,5,98,9.08094
+ABTS-I MSM Pathfinder MH 2008.tab,q533a,numeric,553,316,237,9,0,0,3,46.462,97,97,48.1243
+ABTS-I MSM Pathfinder MH 2008.tab,q533b,numeric,553,172,381,14,0,0,1,2.70349,3,98,7.95083
+ABTS-I MSM Pathfinder MH 2008.tab,q534a,numeric,553,311,242,11,0,0,1,21.1029,4,97,38.7291
+ABTS-I MSM Pathfinder MH 2008.tab,q534b,numeric,553,251,302,20,0,1,3,6.54183,5,98,15.2473
+ABTS-I MSM Pathfinder MH 2008.tab,q535,numeric,553,248,305,2,0,1,1,0.826613,1,1,0.379347
+ABTS-I MSM Pathfinder MH 2008.tab,q536,numeric,553,249,304,7,1,9,9,15.7028,9,96,25.8067
+ABTS-I MSM Pathfinder MH 2008.tab,q5360,categorical_or_text,553,15,538,13,,,,,,,"{""UNKNOWN"": 2, ""NOT KNOWN"": 2, ""TRUST IN PARTNER"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q537,numeric,553,249,304,4,1,1,1,1.50602,1,4,1.04388
+ABTS-I MSM Pathfinder MH 2008.tab,q538,numeric,553,314,239,3,0,1,97,55.6146,97,97,47.7317
+ABTS-I MSM Pathfinder MH 2008.tab,q539,numeric,553,135,418,8,1,5,9,9.72593,9,96,15.4328
+ABTS-I MSM Pathfinder MH 2008.tab,q5390,categorical_or_text,553,3,550,3,,,,,,,"{""1"": 1, ""NEVER DO"": 1, ""ALWAYS USE MOUTH"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q540,numeric,553,132,421,4,1,1,1,1.70455,2,4,1.177
+ABTS-I MSM Pathfinder MH 2008.tab,q541,numeric,553,525,28,2,0,0,1,0.647619,1,1,0.478167
+ABTS-I MSM Pathfinder MH 2008.tab,q542,numeric,553,341,212,4,1,1,1,17.7478,1,96,36.2135
+ABTS-I MSM Pathfinder MH 2008.tab,q5420,categorical_or_text,553,52,501,11,,,,,,,"{""UNKNOWN"": 39, ""UNKNOWN PERSON"": 3, ""UNKNOWN PEOPLE"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q543a,numeric,553,343,210,10,0,0,1,1.28571,2,13,1.7721
+ABTS-I MSM Pathfinder MH 2008.tab,q543b,numeric,553,343,210,21,0,1,3,4.61808,5,98,7.42585
+ABTS-I MSM Pathfinder MH 2008.tab,q544a,numeric,553,341,212,9,0,0,1,34.5601,97,97,46.0915
+ABTS-I MSM Pathfinder MH 2008.tab,q544b,numeric,553,223,330,17,0,0,1,2.26009,3,40,4.23888
+ABTS-I MSM Pathfinder MH 2008.tab,q545a,numeric,553,344,209,10,0,0,1,21.5174,4,97,39.2615
+ABTS-I MSM Pathfinder MH 2008.tab,q545b,numeric,553,271,282,22,0,0,2,4.07011,5,98,7.6603
+ABTS-I MSM Pathfinder MH 2008.tab,q546,numeric,553,274,279,2,0,1,1,0.956204,1,1,0.205015
+ABTS-I MSM Pathfinder MH 2008.tab,q547,numeric,553,273,280,8,1,9,9,11.2418,9,96,14.8066
+ABTS-I MSM Pathfinder MH 2008.tab,q5470,categorical_or_text,553,7,546,6,,,,,,,"{""DIDNâT KNOW"": 2, ""UNKNOWN"": 1, ""DIDN'T USE BEFORE 2 YEARS NOW USE REGULARLY"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q548,numeric,553,273,280,4,1,1,1,1.14652,1,4,0.522083
+ABTS-I MSM Pathfinder MH 2008.tab,q549,numeric,553,342,211,4,0,1,97,53.9678,97,98,47.9102
+ABTS-I MSM Pathfinder MH 2008.tab,q550,numeric,553,158,395,7,1,9,9,11.8228,9,96,18.3239
+ABTS-I MSM Pathfinder MH 2008.tab,q5500,categorical_or_text,553,4,549,4,,,,,,,"{""DONâT LIKE THE TASTE."": 1, ""NOT KNOW"": 1, ""NOTHING"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q551,numeric,553,166,387,4,1,1,1,1.43373,1,4,0.95591
+ABTS-I MSM Pathfinder MH 2008.tab,q552,numeric,553,520,33,4,0,0,0,2.96923,1,98,15.675
+ABTS-I MSM Pathfinder MH 2008.tab,q553a,numeric,553,517,36,2,0,0,0,0.0464217,0,1,0.2106
+ABTS-I MSM Pathfinder MH 2008.tab,q553b,numeric,553,519,34,2,0,0,0,0.127168,0,1,0.333482
+ABTS-I MSM Pathfinder MH 2008.tab,q553c,numeric,553,516,37,2,0,0,0,0.232558,0,1,0.422873
+ABTS-I MSM Pathfinder MH 2008.tab,q553d,numeric,553,516,37,2,0,0,0,0.263566,1,1,0.440994
+ABTS-I MSM Pathfinder MH 2008.tab,q554,numeric,553,513,40,3,0,0,0,0.296296,1,2,0.469714
+ABTS-I MSM Pathfinder MH 2008.tab,q555,numeric,553,519,34,13,1,1,3,6.24855,3,97,17.4763
+ABTS-I MSM Pathfinder MH 2008.tab,q5550,categorical_or_text,553,4,549,4,,,,,,,"{""DONâT GIVE CONDOM"": 1, ""5"": 1, ""DOES NOT USE CONDOM"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q556,numeric,553,513,40,4,0,1,1,1.07018,1,3,0.518173
+ABTS-I MSM Pathfinder MH 2008.tab,q557,numeric,553,514,39,3,0,1,97,56.5156,97,97,47.5994
+ABTS-I MSM Pathfinder MH 2008.tab,q558,numeric,553,515,38,3,0,1,97,63.3146,97,97,46.0001
+ABTS-I MSM Pathfinder MH 2008.tab,q559,numeric,553,516,37,3,0,0,1,25.2248,97,97,42.125
+ABTS-I MSM Pathfinder MH 2008.tab,q601,numeric,553,530,23,2,0,0,1,0.560377,1,1,0.49681
+ABTS-I MSM Pathfinder MH 2008.tab,q602a,numeric,553,291,262,13,0,0,1,3.22337,3.5,20,4.86879
+ABTS-I MSM Pathfinder MH 2008.tab,q602b,numeric,553,289,264,27,0,1,1,9.15917,12,98,15.3135
+ABTS-I MSM Pathfinder MH 2008.tab,q603,numeric,553,292,261,4,1,1,1,2.85274,2,96,11.0177
+ABTS-I MSM Pathfinder MH 2008.tab,q6030,categorical_or_text,553,6,547,4,,,,,,,"{""NEIGHBOUR"": 2, ""UNKNOWN"": 2, ""1"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q604,numeric,553,290,263,2,0,0,1,0.558621,1,1,0.49741
+ABTS-I MSM Pathfinder MH 2008.tab,q605a,numeric,553,282,271,2,0,0,0,0.0744681,0,1,0.262998
+ABTS-I MSM Pathfinder MH 2008.tab,q605b,numeric,553,286,267,2,0,0,0,0.101399,0,1,0.302385
+ABTS-I MSM Pathfinder MH 2008.tab,q605c,numeric,553,283,270,2,0,0,0,0.0176678,0,1,0.131974
+ABTS-I MSM Pathfinder MH 2008.tab,q606,numeric,553,296,257,2,1,1,1,1.22297,1,2,0.416945
+ABTS-I MSM Pathfinder MH 2008.tab,q607a,numeric,553,64,489,8,0,0,1,1.32812,2,12,2.24
+ABTS-I MSM Pathfinder MH 2008.tab,q607b,numeric,553,66,487,14,0,0,1,4.51515,4,98,12.9142
+ABTS-I MSM Pathfinder MH 2008.tab,q608,numeric,553,66,487,2,0,1,1,0.984848,1,1,0.123091
+ABTS-I MSM Pathfinder MH 2008.tab,q609,numeric,553,63,490,5,2,10,10,22.1905,10,96,30.3925
+ABTS-I MSM Pathfinder MH 2008.tab,q6090,categorical_or_text,553,7,546,7,,,,,,,"{""DAILY USE NIRODH"": 1, ""USE REGULAR"": 1, ""ALWAYS USE CONDOM"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q610,numeric,553,66,487,2,1,1,1,1.0303,1,2,0.172733
+ABTS-I MSM Pathfinder MH 2008.tab,q611,numeric,553,298,255,2,0,0,1,0.741611,1,1,0.438485
+ABTS-I MSM Pathfinder MH 2008.tab,q612,numeric,553,224,329,3,1,1,1,2.55357,2,96,10.9211
+ABTS-I MSM Pathfinder MH 2008.tab,q6120,categorical_or_text,553,5,548,5,,,,,,,"{""LADY NEIGHBOUR"": 1, ""FRIEND"": 1, ""NOT STILL"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q613a,numeric,553,218,335,15,0,1,4,6.08716,10,30,6.48335
+ABTS-I MSM Pathfinder MH 2008.tab,q613b,numeric,553,217,336,31,0,2,13,18.8571,30,98,20.8225
+ABTS-I MSM Pathfinder MH 2008.tab,q614,numeric,553,223,330,2,0,0,0,0.430493,1,1,0.496259
+ABTS-I MSM Pathfinder MH 2008.tab,q615,numeric,553,212,341,9,1,7,10,15.7547,11,96,24.7581
+ABTS-I MSM Pathfinder MH 2008.tab,q6150,categorical_or_text,553,14,539,13,,,,,,,"{""REGULAR USE"": 2, ""BOTH NOT READY TO USE CONDOM"": 1, ""NO WISH"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q616a,numeric,553,294,259,10,0,97,97,84.4082,97,97,32.2768
+ABTS-I MSM Pathfinder MH 2008.tab,q616b,numeric,553,37,516,11,0,0,1,4.97297,4,32,8.41456
+ABTS-I MSM Pathfinder MH 2008.tab,q617,numeric,553,39,514,2,0,1,1,0.846154,1,1,0.365518
+ABTS-I MSM Pathfinder MH 2008.tab,q618,numeric,553,38,515,4,1,1,1,1.57895,1.75,4,1.05604
+ABTS-I MSM Pathfinder MH 2008.tab,q701a,numeric,553,511,42,2,0,0,0,0.0117417,0,1,0.107827
+ABTS-I MSM Pathfinder MH 2008.tab,q701b,numeric,553,514,39,2,0,0,0,0.0914397,0,1,0.288514
+ABTS-I MSM Pathfinder MH 2008.tab,q701c,numeric,553,512,41,2,0,0,0,0.150391,0,1,0.357803
+ABTS-I MSM Pathfinder MH 2008.tab,q701d,numeric,553,511,42,2,0,0,0,0.142857,0,1,0.35027
+ABTS-I MSM Pathfinder MH 2008.tab,q701e,numeric,553,7,546,1,95,95,95,95,95,95,0
+ABTS-I MSM Pathfinder MH 2008.tab,q702,numeric,553,528,25,3,0,0,0,0.496212,1,2,0.612941
+ABTS-I MSM Pathfinder MH 2008.tab,q703,categorical_or_text,553,524,29,11,,,,,,,"{""A"": 290, ""96"": 171, ""B"": 31}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7030,categorical_or_text,553,296,257,12,,,,,,,"{""B"": 188, ""E"": 27, ""N"": 23}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7031,categorical_or_text,553,39,514,8,,,,,,,"{""E"": 14, ""C"": 6, ""N"": 5}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7032,categorical_or_text,553,9,544,7,,,,,,,"{""J"": 2, ""D"": 2, ""K"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7033,categorical_or_text,553,2,551,2,,,,,,,"{""G"": 1, ""O"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7034,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7035,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7036,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7037,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7038,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7039,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q70300,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q70301,categorical_or_text,553,145,408,10,,,,,,,"{""NOTHING"": 84, ""NEVER"": 39, ""NO"": 14}"
+ABTS-I MSM Pathfinder MH 2008.tab,q704,numeric,553,521,32,3,0,0,0,1.52015,0,97,11.9361
+ABTS-I MSM Pathfinder MH 2008.tab,q705,numeric,553,525,28,11,0,94,94,90.1543,94,99,18.3524
+ABTS-I MSM Pathfinder MH 2008.tab,q706,categorical_or_text,553,20,533,5,,,,,,,"{""A"": 13, ""96"": 3, ""D"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7060,categorical_or_text,553,2,551,1,,,,,,,"{""D"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7061,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7062,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7063,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7064,categorical_or_text,553,3,550,2,,,,,,,"{""NOTHING"": 2, ""NOTHING INFORMATION GIVEN"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q707,numeric,553,504,49,3,0,0,1,0.72619,1,2,0.62457
+ABTS-I MSM Pathfinder MH 2008.tab,q708,numeric,553,526,27,2,1,1,1,1.03232,1,2,0.177015
+ABTS-I MSM Pathfinder MH 2008.tab,q709a,numeric,553,3,550,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q709b,numeric,553,3,550,2,1,1,1,32.3333,48,95,54.2709
+ABTS-I MSM Pathfinder MH 2008.tab,q709c,numeric,553,3,550,3,0,0.5,1,32,48,95,54.5619
+ABTS-I MSM Pathfinder MH 2008.tab,q709d,numeric,553,3,550,2,1,1,1,32.3333,48,95,54.2709
+ABTS-I MSM Pathfinder MH 2008.tab,q709e,numeric,553,3,550,1,0,0,0,0,0,0,0
+ABTS-I MSM Pathfinder MH 2008.tab,q710,numeric,553,523,30,2,0,0,0,0.122371,0,1,0.328027
+ABTS-I MSM Pathfinder MH 2008.tab,q711,numeric,553,526,27,4,1,1,1,1.14068,1,4,0.485189
+ABTS-I MSM Pathfinder MH 2008.tab,q712,categorical_or_text,553,50,503,8,,,,,,,"{""A"": 15, ""C"": 15, ""G"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7120,categorical_or_text,553,4,549,3,,,,,,,"{""H"": 2, ""C"": 1, ""F"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7121,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7122,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7123,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7124,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7125,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7126,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7127,categorical_or_text,553,2,551,2,,,,,,,"{""UNKNOWN"": 1, ""BUS DRIVER"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q713,numeric,553,529,24,9,0,97,97,91.087,97,97,22.9523
+ABTS-I MSM Pathfinder MH 2008.tab,q714,categorical_or_text,553,31,522,9,,,,,,,"{""H"": 9, ""A"": 7, ""C"": 5}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7140,categorical_or_text,553,6,547,5,,,,,,,"{""F"": 2, ""B"": 1, ""I"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7141,categorical_or_text,553,1,552,1,,,,,,,"{""H"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7142,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7143,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7144,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7145,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7146,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7147,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7148,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q715,categorical_or_text,553,32,521,5,,,,,,,"{""A"": 18, ""B"": 10, ""C"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7150,categorical_or_text,553,3,550,2,,,,,,,"{""C"": 2, ""H"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7151,categorical_or_text,553,1,552,1,,,,,,,"{""D"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q7152,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7153,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7154,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7155,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7156,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7157,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q7158,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q716a,numeric,553,529,24,2,0,0,1,0.714556,1,1,0.452053
+ABTS-I MSM Pathfinder MH 2008.tab,q716b,numeric,553,531,22,2,0,0,1,0.596987,1,1,0.490966
+ABTS-I MSM Pathfinder MH 2008.tab,q716c,numeric,553,531,22,2,0,0,0,0.423729,1,1,0.494614
+ABTS-I MSM Pathfinder MH 2008.tab,q716d,numeric,553,531,22,2,0,0,0,0.231638,0,1,0.422277
+ABTS-I MSM Pathfinder MH 2008.tab,q716e,numeric,553,530,23,2,0,1,1,0.767925,1,1,0.422556
+ABTS-I MSM Pathfinder MH 2008.tab,q716f,numeric,553,524,29,2,0,0,0,0.259542,1,1,0.438802
+ABTS-I MSM Pathfinder MH 2008.tab,q716g,numeric,553,529,24,2,0,0,0,0.128544,0,1,0.335012
+ABTS-I MSM Pathfinder MH 2008.tab,q716h,numeric,553,529,24,2,0,0,0,0.0491493,0,1,0.216384
+ABTS-I MSM Pathfinder MH 2008.tab,q716i,numeric,553,530,23,2,0,0,0,0.0528302,0,1,0.223906
+ABTS-I MSM Pathfinder MH 2008.tab,q717a,numeric,553,386,167,2,0,0,0,0.38601,1,1,0.487465
+ABTS-I MSM Pathfinder MH 2008.tab,q717b,numeric,553,428,125,2,0,0,0,0.483645,1,1,0.500317
+ABTS-I MSM Pathfinder MH 2008.tab,q717c,numeric,553,439,114,2,0,0,1,0.605923,1,1,0.489209
+ABTS-I MSM Pathfinder MH 2008.tab,q717d,numeric,553,485,68,2,0,0,1,0.65567,1,1,0.47564
+ABTS-I MSM Pathfinder MH 2008.tab,q717e,numeric,553,385,168,2,0,0,0,0.280519,1,1,0.449838
+ABTS-I MSM Pathfinder MH 2008.tab,q717f,numeric,553,465,88,2,0,0,0,0.0516129,0,1,0.221483
+ABTS-I MSM Pathfinder MH 2008.tab,q717g,numeric,553,504,49,2,0,0,1,0.579365,1,1,0.494151
+ABTS-I MSM Pathfinder MH 2008.tab,q717h,numeric,553,513,40,2,0,0,1,0.506823,1,1,0.500441
+ABTS-I MSM Pathfinder MH 2008.tab,q717i,numeric,553,513,40,2,0,0,1,0.666667,1,1,0.471865
+ABTS-I MSM Pathfinder MH 2008.tab,q718,numeric,553,531,22,3,1,3,3,2.91525,3,3,0.304638
+ABTS-I MSM Pathfinder MH 2008.tab,q719,numeric,553,530,23,3,1,2,2,2.3566,3,3,0.689651
+ABTS-I MSM Pathfinder MH 2008.tab,q720a,numeric,553,527,26,3,0,0,0,0.806452,0,99,8.5986
+ABTS-I MSM Pathfinder MH 2008.tab,q720b,numeric,553,527,26,3,0,0,0,0.800759,0,99,8.5988
+ABTS-I MSM Pathfinder MH 2008.tab,q720c,numeric,553,527,26,3,0,0,0,0.789374,0,99,8.59919
+ABTS-I MSM Pathfinder MH 2008.tab,q721,numeric,553,527,26,4,1,2,2,1.98861,2,4,0.575038
+ABTS-I MSM Pathfinder MH 2008.tab,q722,numeric,553,523,30,3,0,0,1,0.862333,1,2,0.65227
+ABTS-I MSM Pathfinder MH 2008.tab,q723,numeric,553,527,26,6,1,2,3,12.9545,4,95,28.8925
+ABTS-I MSM Pathfinder MH 2008.tab,q724a,numeric,553,527,26,3,0,0,0,0.851992,0,99,8.59685
+ABTS-I MSM Pathfinder MH 2008.tab,q724b,numeric,553,525,28,3,0,0,0,0.904762,0,99,8.61089
+ABTS-I MSM Pathfinder MH 2008.tab,q724c,numeric,553,526,27,3,0,0,0,0.838403,0,99,8.60556
+ABTS-I MSM Pathfinder MH 2008.tab,q725,numeric,553,526,27,4,1,2,97,60.538,97,97,46.2244
+ABTS-I MSM Pathfinder MH 2008.tab,q726a,numeric,553,530,23,2,0,0,0,0.171698,0,1,0.377474
+ABTS-I MSM Pathfinder MH 2008.tab,q726b,numeric,553,528,25,2,0,0,0,0.0435606,0,1,0.204309
+ABTS-I MSM Pathfinder MH 2008.tab,q726c,numeric,553,528,25,2,0,0,0,0.174242,0,1,0.379678
+ABTS-I MSM Pathfinder MH 2008.tab,q726d,numeric,553,521,32,2,0,0,0,0.318618,1,1,0.466388
+ABTS-I MSM Pathfinder MH 2008.tab,q727,numeric,553,523,30,2,0,0,0,0.0229446,0,1,0.14987
+ABTS-I MSM Pathfinder MH 2008.tab,q728,categorical_or_text,553,8,545,8,,,,,,,"{""UDDAN"": 1, ""SNEHAJYOT"": 1, ""MUKTA"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q729,numeric,553,12,541,4,1,2,5,4.08333,5,6,1.78164
+ABTS-I MSM Pathfinder MH 2008.tab,q801,numeric,553,531,22,2,0,1,1,0.856874,1,1,0.350532
+ABTS-I MSM Pathfinder MH 2008.tab,q802a,categorical_or_text,553,191,362,40,,,,,,,"{""UDAN"": 35, ""SEDT"": 18, ""UDDAN"": 16}"
+ABTS-I MSM Pathfinder MH 2008.tab,q802b,categorical_or_text,553,22,531,19,,,,,,,"{""UDAAN"": 4, ""SAMPATHIK"": 1, ""GRAMIN VIKAS SANSTHA, BANSAROLA"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q802c,categorical_or_text,553,13,540,11,,,,,,,"{""SAMBHAVANA"": 3, ""AASHUDYA"": 1, ""NANDURBAR"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q802d,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q803,numeric,553,446,107,3,0,1,1,16.9888,1,99,36.3225
+ABTS-I MSM Pathfinder MH 2008.tab,q804,numeric,553,343,210,17,1,95,95,92.7692,95,99,15.508
+ABTS-I MSM Pathfinder MH 2008.tab,q805,numeric,553,451,102,2,0,1,1,0.844789,1,1,0.362507
+ABTS-I MSM Pathfinder MH 2008.tab,q806,numeric,553,390,163,2,0,0,1,0.741026,1,1,0.438634
+ABTS-I MSM Pathfinder MH 2008.tab,q807,numeric,553,388,165,2,0,1,1,0.858247,1,1,0.349247
+ABTS-I MSM Pathfinder MH 2008.tab,q8070,categorical_or_text,553,333,220,115,,,,,,,"{""PRAKASH"": 26, ""MILIND"": 24, ""PRAMOD"": 20}"
+ABTS-I MSM Pathfinder MH 2008.tab,q808,numeric,553,452,101,18,0,2,4,6.63496,8.5,50,7.6313
+ABTS-I MSM Pathfinder MH 2008.tab,q809,numeric,553,456,97,33,0,10,20,38.0066,50,500,58.0745
+ABTS-I MSM Pathfinder MH 2008.tab,q810,numeric,553,448,105,2,0,0,0,0.131696,0,1,0.338538
+ABTS-I MSM Pathfinder MH 2008.tab,q811,numeric,553,448,105,2,0,0,0,0.0580357,0,1,0.234072
+ABTS-I MSM Pathfinder MH 2008.tab,q812,numeric,553,455,98,2,0,0,0,0.0725275,0,1,0.259645
+ABTS-I MSM Pathfinder MH 2008.tab,q813,categorical_or_text,553,29,524,18,,,,,,,"{""DIC COMMITTEE"": 4, ""MUKTA CLINIC"": 3, ""ADOCACY COMMITTEE"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q8130,categorical_or_text,553,3,550,2,,,,,,,"{""PARBHANI"": 2, ""HEALTH COMMITTEE"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q8131,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q8132,categorical_or_text,553,1,552,1,,,,,,,"{""MUKTA FOUNDATION ICHALKARANJI KOLHAPUR"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q814,numeric,553,32,521,7,1,2,2,14.25,3,99,32.274
+ABTS-I MSM Pathfinder MH 2008.tab,q815,numeric,553,527,26,2,0,0,0,0.113852,0,1,0.317933
+ABTS-I MSM Pathfinder MH 2008.tab,q816a,categorical_or_text,553,59,494,25,,,,,,,"{""UDAN"": 11, ""UDAAN"": 11, ""UDDAN"": 4}"
+ABTS-I MSM Pathfinder MH 2008.tab,q816b,categorical_or_text,553,29,524,14,,,,,,,"{""HUMSAFAR"": 12, ""SAMBHAVANA"": 2, ""SAMBHAWANA"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q816c,categorical_or_text,553,18,535,15,,,,,,,"{""SAMBHAVANA"": 3, ""HUMSAYA"": 2, ""HAMSAFAR"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q816d,categorical_or_text,553,10,543,10,,,,,,,"{""HAMSATHI"": 1, ""UDAAN"": 1, ""NARI"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q817,numeric,553,61,492,2,0,0,0,0.360656,1,1,0.484176
+ABTS-I MSM Pathfinder MH 2008.tab,q818,categorical_or_text,553,18,535,9,,,,,,,"{""A"": 8, ""a"": 2, ""BHAKTIMUKTI"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q819,numeric,553,62,491,1,0,0,0,0,0,0,0
+ABTS-I MSM Pathfinder MH 2008.tab,q820,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q8200,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q8201,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q8202,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q821,numeric,553,1,552,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q8210,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q901,numeric,553,525,28,2,0,1,1,0.899048,1,1,0.301553
+ABTS-I MSM Pathfinder MH 2008.tab,q902,categorical_or_text,553,475,78,11,,,,,,,"{""B"": 198, ""H"": 89, ""A"": 53}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9020,categorical_or_text,553,393,160,15,,,,,,,"{""H"": 114, ""D"": 74, ""F"": 50}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9021,categorical_or_text,553,235,318,11,,,,,,,"{""H"": 89, ""F"": 37, ""E"": 31}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9022,categorical_or_text,553,88,465,10,,,,,,,"{""H"": 48, ""F"": 13, ""G"": 7}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9023,categorical_or_text,553,22,531,6,,,,,,,"{""H"": 13, ""F"": 4, ""N"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9024,categorical_or_text,553,8,545,6,,,,,,,"{""H"": 3, ""F"": 1, ""96"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9025,categorical_or_text,553,3,550,3,,,,,,,"{""H"": 1, ""P"": 1, ""96"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9026,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q9027,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q9028,categorical_or_text,553,4,549,4,,,,,,,"{""READING"": 1, ""STREET PLAY"": 1, ""CUSTOMER"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q903,numeric,553,453,100,3,0,0,1,1.03974,1,99,6.54888
+ABTS-I MSM Pathfinder MH 2008.tab,q904a,numeric,553,484,69,3,0,1,1,14.5248,1,95,33.1263
+ABTS-I MSM Pathfinder MH 2008.tab,q904b,numeric,553,484,69,3,0,0,1,7.70455,1,95,25.1459
+ABTS-I MSM Pathfinder MH 2008.tab,q904c,numeric,553,482,71,3,0,1,1,17.7759,1,95,36.2818
+ABTS-I MSM Pathfinder MH 2008.tab,q904d,numeric,553,480,73,3,0,1,1,4.83542,1,95,18.8222
+ABTS-I MSM Pathfinder MH 2008.tab,q904e,numeric,553,484,69,3,0,1,1,3.66736,1,95,15.7809
+ABTS-I MSM Pathfinder MH 2008.tab,q904f,numeric,553,483,70,3,0,1,1,7.55694,1,95,24.0887
+ABTS-I MSM Pathfinder MH 2008.tab,q904g,numeric,553,482,71,3,0,0,0,7.08506,1,95,24.629
+ABTS-I MSM Pathfinder MH 2008.tab,q905a,numeric,553,483,70,3,0,0,0,1.87785,0,95,12.8488
+ABTS-I MSM Pathfinder MH 2008.tab,q905b,numeric,553,483,70,3,0,0,0,3.32712,1,95,16.4361
+ABTS-I MSM Pathfinder MH 2008.tab,q905c,numeric,553,483,70,3,0,1,1,1.1677,1,95,4.28144
+ABTS-I MSM Pathfinder MH 2008.tab,q905d,numeric,553,483,70,3,0,0,0,3.89234,0,95,18.4589
+ABTS-I MSM Pathfinder MH 2008.tab,q905e,numeric,553,483,70,3,0,0,0,6.77226,1,95,23.9211
+ABTS-I MSM Pathfinder MH 2008.tab,q905f,numeric,553,483,70,3,0,1,1,7.13251,1,95,23.4314
+ABTS-I MSM Pathfinder MH 2008.tab,q906a,numeric,553,486,67,3,0,1,1,34.4938,95,95,45.2332
+ABTS-I MSM Pathfinder MH 2008.tab,q906b,numeric,553,485,68,3,0,1,1,12.5093,1,95,31.0283
+ABTS-I MSM Pathfinder MH 2008.tab,q906c,numeric,553,485,68,3,0,1,1,17.1464,1,95,35.6709
+ABTS-I MSM Pathfinder MH 2008.tab,q906d,numeric,553,485,68,3,0,1,1,12.2186,1,95,30.8418
+ABTS-I MSM Pathfinder MH 2008.tab,q906e,numeric,553,485,68,3,0,0,0,12.0969,1,95,31.1851
+ABTS-I MSM Pathfinder MH 2008.tab,q906f,numeric,553,484,69,3,0,0,1,12.0331,1,95,30.9482
+ABTS-I MSM Pathfinder MH 2008.tab,q906g,numeric,553,484,69,3,0,0,1,13.6178,1,95,32.6582
+ABTS-I MSM Pathfinder MH 2008.tab,q906h,numeric,553,484,69,3,0,0,1,13.3719,1,95,32.4726
+ABTS-I MSM Pathfinder MH 2008.tab,q906i,numeric,553,482,71,3,0,1,1,11.2386,1,95,29.4731
+ABTS-I MSM Pathfinder MH 2008.tab,q907,numeric,553,485,68,3,0,0,0,1.31753,1,95,9.58295
+ABTS-I MSM Pathfinder MH 2008.tab,q908,numeric,553,484,69,3,0,1,1,1.03719,1,95,4.29534
+ABTS-I MSM Pathfinder MH 2008.tab,q909,categorical_or_text,553,415,138,4,,,,,,,"{""A"": 276, ""B"": 73, ""C"": 63}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9090,categorical_or_text,553,61,492,3,,,,,,,"{""B"": 33, ""C"": 26, ""96"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9091,categorical_or_text,553,2,551,1,,,,,,,"{""C"": 2}"
+ABTS-I MSM Pathfinder MH 2008.tab,q9092,categorical_or_text,553,5,548,4,,,,,,,"{""UDAN"": 2, ""AJOLE DOCTOR"": 1, ""MUKTA"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q910,numeric,553,484,69,2,0,0,1,0.636364,1,1,0.481543
+ABTS-I MSM Pathfinder MH 2008.tab,q911,numeric,553,309,244,2,0,0,0,0.12945,0,1,0.336242
+ABTS-I MSM Pathfinder MH 2008.tab,q912,numeric,553,309,244,2,0,1,1,0.902913,1,1,0.296557
+ABTS-I MSM Pathfinder MH 2008.tab,q913,numeric,553,483,70,4,0,0,1,10.6957,1,99,29.137
+ABTS-I MSM Pathfinder MH 2008.tab,q914,numeric,553,468,85,3,0,0,0,3.64316,1,95,17.2134
+ABTS-I MSM Pathfinder MH 2008.tab,q1001a,numeric,553,534,19,3,0,0,0,3.06742,0,99,16.8786
+ABTS-I MSM Pathfinder MH 2008.tab,q1001b,numeric,553,530,23,3,0,0,0,2.7283,0,99,15.8758
+ABTS-I MSM Pathfinder MH 2008.tab,q1001c,numeric,553,531,22,3,0,0,0,3.00377,0,99,16.937
+ABTS-I MSM Pathfinder MH 2008.tab,q1002a,numeric,553,112,441,5,1,2,4,48.9911,97,97,47.3759
+ABTS-I MSM Pathfinder MH 2008.tab,q1002b,numeric,553,110,443,5,1,2,4,44.6909,97,97,47.1016
+ABTS-I MSM Pathfinder MH 2008.tab,q1002c,numeric,553,107,446,5,1,97,97,86.486,97,97,29.724
+ABTS-I MSM Pathfinder MH 2008.tab,q1003,categorical_or_text,553,108,445,9,,,,,,,"{""D"": 32, ""A"": 25, ""C"": 18}"
+ABTS-I MSM Pathfinder MH 2008.tab,q10030,categorical_or_text,553,44,509,7,,,,,,,"{""A"": 13, ""C"": 10, ""D"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q10031,categorical_or_text,553,14,539,5,,,,,,,"{""A"": 8, ""C"": 3, ""J"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q10032,categorical_or_text,553,2,551,2,,,,,,,"{""A"": 1, ""C"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q10033,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q10034,categorical_or_text,553,4,549,4,,,,,,,"{""VIJAY MUNDE"": 1, ""PRIVATE HOSPITAL FROM MUKTA"": 1, ""NAME DONâT KNOW"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1004,numeric,553,109,444,14,0,4,7,7.77982,10,30,5.5949
+ABTS-I MSM Pathfinder MH 2008.tab,q1005,numeric,553,529,24,3,0,0,1,1.2344,1,95,8.20741
+ABTS-I MSM Pathfinder MH 2008.tab,q1006,numeric,553,529,24,3,0,0,0,1.84688,1,95,11.5644
+ABTS-I MSM Pathfinder MH 2008.tab,q1007,numeric,553,509,44,17,0,0,2,3.2947,3,98,8.90432
+ABTS-I MSM Pathfinder MH 2008.tab,q1008a,numeric,553,454,99,2,0,0,0,0.0969163,0,1,0.29617
+ABTS-I MSM Pathfinder MH 2008.tab,q1008b,numeric,553,454,99,2,0,0,0,0.0881057,0,1,0.283761
+ABTS-I MSM Pathfinder MH 2008.tab,q1008c,numeric,553,453,100,2,0,0,0,0.0529801,0,1,0.224241
+ABTS-I MSM Pathfinder MH 2008.tab,q1008d,numeric,553,22,531,1,95,95,95,95,95,95,0
+ABTS-I MSM Pathfinder MH 2008.tab,q1009,numeric,553,525,28,3,0,0,1,0.721905,1,99,4.32625
+ABTS-I MSM Pathfinder MH 2008.tab,q1101a,numeric,553,533,20,3,0,0,0,0.574109,1,99,4.29905
+ABTS-I MSM Pathfinder MH 2008.tab,q1101b,numeric,553,532,21,3,0,0,1,0.723684,1,99,4.29785
+ABTS-I MSM Pathfinder MH 2008.tab,q1101c,numeric,553,532,21,3,0,0,0,0.533835,0,99,6.06562
+ABTS-I MSM Pathfinder MH 2008.tab,q1101d,numeric,553,529,24,3,0,0,0,0.567108,0,99,7.44117
+ABTS-I MSM Pathfinder MH 2008.tab,q1101e,numeric,553,529,24,3,0,0,0,0.563327,0,99,7.4412
+ABTS-I MSM Pathfinder MH 2008.tab,q1101f,numeric,553,529,24,3,0,0,0,0.393195,0,99,6.08186
+ABTS-I MSM Pathfinder MH 2008.tab,q1101g,numeric,553,527,26,3,0,0,0,0.567362,0,99,7.45524
+ABTS-I MSM Pathfinder MH 2008.tab,q1102a,numeric,553,352,201,6,1,2,3,4.26705,5,99,8.90931
+ABTS-I MSM Pathfinder MH 2008.tab,q1102b,numeric,553,350,203,4,1,1,1,1.95429,2,5,1.68362
+ABTS-I MSM Pathfinder MH 2008.tab,q1102c,numeric,553,350,203,6,1,5,5,5.19714,5,99,10.221
+ABTS-I MSM Pathfinder MH 2008.tab,q1102d,numeric,553,348,205,6,1,5,5,6.05172,5,99,10.0416
+ABTS-I MSM Pathfinder MH 2008.tab,q1102e,numeric,553,348,205,3,4,5,5,5.80747,5,99,8.70293
+ABTS-I MSM Pathfinder MH 2008.tab,q1102f,numeric,553,349,204,6,1,5,5,6.02865,5,99,10.0321
+ABTS-I MSM Pathfinder MH 2008.tab,q1102g,numeric,553,347,206,3,4,5,5,6.08069,5,99,10.049
+ABTS-I MSM Pathfinder MH 2008.tab,q1201,numeric,553,524,29,8,1,1,2,4.38168,5,96,12.2471
+ABTS-I MSM Pathfinder MH 2008.tab,q12010,numeric,553,286,267,8,1,2,5,4.86014,6,96,7.86563
+ABTS-I MSM Pathfinder MH 2008.tab,q12011,numeric,553,123,430,7,2,4.5,5,5.70732,6,96,8.30044
+ABTS-I MSM Pathfinder MH 2008.tab,q12012,numeric,553,56,497,5,3,5,6,5.46429,6,7,0.893701
+ABTS-I MSM Pathfinder MH 2008.tab,q12013,numeric,553,20,533,4,5,6,6,10.75,7,96,20.0785
+ABTS-I MSM Pathfinder MH 2008.tab,q12014,categorical_or_text,553,16,537,13,,,,,,,"{""NOTHING"": 3, ""6"": 2, ""GIVE SOME WMPLOYMENT"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1202,categorical_or_text,553,528,25,6,,,,,,,"{""B"": 226, ""A"": 212, ""C"": 47}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12020,categorical_or_text,553,429,124,6,,,,,,,"{""B"": 200, ""C"": 198, ""D"": 19}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12021,categorical_or_text,553,222,331,6,,,,,,,"{""C"": 167, ""D"": 39, ""F"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12022,categorical_or_text,553,132,421,3,,,,,,,"{""D"": 127, ""G"": 4, ""F"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12023,categorical_or_text,553,11,542,3,,,,,,,"{""E"": 5, ""G"": 3, ""F"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12024,categorical_or_text,553,6,547,2,,,,,,,"{""G"": 3, ""F"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12025,categorical_or_text,553,48,505,13,,,,,,,"{""DONâT KNOW"": 23, ""DON'T KNOW"": 9, ""NOTHING"": 4}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1203,categorical_or_text,553,361,192,103,,,,,,,"{""NOTHING"": 222, ""NO"": 34, ""SEPARATE DIC FOR MSM"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1204,categorical_or_text,553,515,38,6,,,,,,,"{""C"": 233, ""E"": 164, ""A"": 92}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12040,categorical_or_text,553,111,442,6,,,,,,,"{""C"": 70, ""D"": 32, ""B"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12041,categorical_or_text,553,6,547,1,,,,,,,"{""D"": 6}"
+ABTS-I MSM Pathfinder MH 2008.tab,q12042,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q12043,categorical_or_text,553,0,553,0,,,,,,,{}
+ABTS-I MSM Pathfinder MH 2008.tab,q12044,categorical_or_text,553,6,547,6,,,,,,,"{""TALK WITH PER EDUCATOR"": 1, ""WILL COME IN DIC"": 1, ""DONâT JBN KNOW"": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,q1205,categorical_or_text,553,319,234,25,,,,,,,"{""NOTHING"": 252, ""NO"": 44, ""NO."": 1}"
+ABTS-I MSM Pathfinder MH 2008.tab,notes,categorical_or_text,553,427,126,408,,,,,,,"{""RESPONDANT WAS NON MSM."": 3, ""NO INFORMATION ABOUT HIV-STI, NOT TESTED FOR HIV-STI, REGUALR USE OF CONDOM, GAVE GOOD ANSWER"": 3, ""RESPONDANT IS NOT MSM"": 3}"
+ABTS-I MSM Pathfinder MH 2008.tab,age,numeric,553,553,0,7,1,2,3,3.23689,3,99,7.2121
+ABTS-I MSM Pathfinder MH 2008.tab,firstage,numeric,553,535,18,7,0,1,1,1.50654,2,6,0.792908
+ABTS-I MSM Pathfinder MH 2008.tab,firstagewomen,numeric,553,535,18,7,0,1,1,1.50654,2,6,0.792908
+ABTS-I MSM Pathfinder MH 2008.tab,q410_a,numeric,553,553,0,2,0,0,0,0.124774,0,1,0.330762
+ABTS-I MSM Pathfinder MH 2008.tab,q410_b,numeric,553,49,504,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q410_c,numeric,553,63,490,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q410_d,numeric,553,11,542,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q410_e,numeric,553,2,551,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_a,numeric,553,43,510,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_b,numeric,553,301,252,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_c,numeric,553,50,503,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_d,numeric,553,336,217,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_e,numeric,553,22,531,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q407_f,numeric,553,16,537,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_a,numeric,553,441,112,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_b,numeric,553,361,192,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_c,numeric,553,94,459,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_d,numeric,553,23,530,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_e,numeric,553,36,517,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q408_f,numeric,553,30,523,1,1,1,1,1,1,1,0
+ABTS-I MSM Pathfinder MH 2008.tab,q501code,numeric,553,526,27,5,0,2,2,2.21103,2,98,4.29298
+ABTS-I MSM Pathfinder MH 2008.tab,q503acode,numeric,553,525,28,6,0,0,2,1.93333,2,98,4.37216
+ABTS-I MSM Pathfinder MH 2008.tab,q503bcode,numeric,553,524,29,12,0,2,3,5.45038,5,200,15.0501
+ABTS-I MSM Pathfinder MH 2008.tab,q520acode,numeric,553,147,406,5,0,1,1,1.86395,2,98,8.04154
+ABTS-I MSM Pathfinder MH 2008.tab,q520bcode,numeric,553,147,406,6,0,1,3,5.09524,4,98,15.6596
+ABTS-I MSM Pathfinder MH 2008.tab,q522acode,numeric,553,146,407,5,0,1,2,4.76027,2,97,17.4606
+ABTS-I MSM Pathfinder MH 2008.tab,q522bcode,numeric,553,142,411,7,0,1,3,5.91549,4,98,17.6778
+ABTS-I FSW Pathfinder MH 2008.tab,_102_dt_interview,categorical_or_text,1544,1517,27,94,,,,,,,"{""05/07/08"": 51, ""19/06/08"": 49, ""24/07/08"": 49}"
+ABTS-I FSW Pathfinder MH 2008.tab,_102_time_from,categorical_or_text,1544,1509,35,401,,,,,,,"{""12:00"": 44, ""14:00"": 39, ""13:30"": 37}"
+ABTS-I FSW Pathfinder MH 2008.tab,_102_time_to,categorical_or_text,1544,1468,76,369,,,,,,,"{""14:00"": 45, ""13:00"": 39, ""12:45"": 34}"
+ABTS-I FSW Pathfinder MH 2008.tab,_103_language_interview,numeric,1544,1528,16,2,1,1,2,1.74149,2,2,0.437958
+ABTS-I FSW Pathfinder MH 2008.tab,_103_language_other,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_104_completion_status,numeric,1544,1529,15,4,1,3,3,3.03466,3,4,0.203315
+ABTS-I FSW Pathfinder MH 2008.tab,_107_quesionnaire_checked,numeric,1544,1530,14,2,0,1,1,0.997386,1,1,0.0510808
+ABTS-I FSW Pathfinder MH 2008.tab,_108b_dt_checked,categorical_or_text,1544,1503,41,105,,,,,,,"{""30/08/08"": 80, ""24/07/08"": 60, ""25/07/08"": 52}"
+ABTS-I FSW Pathfinder MH 2008.tab,_201_group,numeric,1544,1541,3,3,1,1,1,1.0026,1,4,0.0805405
+ABTS-I FSW Pathfinder MH 2008.tab,_202_nm_dist,categorical_or_text,1544,1534,10,10,,,,,,,"{""PUNE"": 247, ""PARABHANI"": 168, ""LATUR"": 167}"
+ABTS-I FSW Pathfinder MH 2008.tab,_202_code_dist,numeric,1544,1530,14,10,1,3,6,5.57451,8,10,2.91071
+ABTS-I FSW Pathfinder MH 2008.tab,_203_nm_city,categorical_or_text,1544,1521,23,105,,,,,,,"{""BUDHWAR PETH"": 119, ""NASHIK CITY"": 114, ""AUSA"": 71}"
+ABTS-I FSW Pathfinder MH 2008.tab,_203_code_city,numeric,1544,1411,133,10,1,1,2,2.75053,4,13,2.41658
+ABTS-I FSW Pathfinder MH 2008.tab,_205_sexwork_topology,numeric,1544,1504,40,7,1,1,2,2.92952,4,96,4.60094
+ABTS-I FSW Pathfinder MH 2008.tab,_205_sexwork_topology_other,categorical_or_text,1544,2,1542,2,,,,,,,"{""TAMASHA ARTIST"": 1, ""PHONE"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_206_place_interview,numeric,1544,1533,11,7,1,5,6,8.23222,6,96,17.5214
+ABTS-I FSW Pathfinder MH 2008.tab,_206_place_interview_other,categorical_or_text,1544,53,1491,13,,,,,,,"{""DHABA"": 19, ""VEHICLE"": 15, ""TATA SUMO"": 7}"
+ABTS-I FSW Pathfinder MH 2008.tab,_301_age,numeric,1544,1518,26,51,2,25,30,33.666,38,98,13.1516
+ABTS-I FSW Pathfinder MH 2008.tab,_302_literacy,numeric,1544,1521,23,3,1,1,1,1.45891,1,3,0.830219
+ABTS-I FSW Pathfinder MH 2008.tab,_303_marital_status,numeric,1544,1513,31,4,1,2,3,2.55122,3,4,0.920907
+ABTS-I FSW Pathfinder MH 2008.tab,_304_current_liv_arr,numeric,1544,1521,23,8,1,2,3,4.0046,6,96,7.78979
+ABTS-I FSW Pathfinder MH 2008.tab,_304_current_liv_arr_other,numeric,1544,13,1531,10,0,0.5,2,2.14286,2.5,7,2.4103
+ABTS-I FSW Pathfinder MH 2008.tab,_305a_no_male_children,numeric,1544,1497,47,7,0,0,1,0.973948,2,11,0.960442
+ABTS-I FSW Pathfinder MH 2008.tab,_305b_no_female_children,numeric,1544,1463,81,7,0,0,1,0.838004,1,8,0.93591
+ABTS-I FSW Pathfinder MH 2008.tab,_306a_no_male_below12,numeric,1544,1141,403,6,0,0,1,0.711656,1,30,1.17583
+ABTS-I FSW Pathfinder MH 2008.tab,_306b_no_female_below12,numeric,1544,1107,437,6,0,0,0,0.582656,1,15,0.854298
+ABTS-I FSW Pathfinder MH 2008.tab,_307_nm_native_place,categorical_or_text,1544,1523,21,585,,,,,,,"{""NEPAL"": 47, ""KARNATAK"": 38, ""BEED"": 33}"
+ABTS-I FSW Pathfinder MH 2008.tab,_308a_current_live_city,categorical_or_text,1544,1429,115,286,,,,,,,"{""NASHIK"": 123, ""PUNE"": 67, ""BUDHWAR PETH"": 61}"
+ABTS-I FSW Pathfinder MH 2008.tab,_308b_current_live_dist,categorical_or_text,1544,1408,136,32,,,,,,,"{""PUNE"": 221, ""LATUR"": 159, ""BEED"": 154}"
+ABTS-I FSW Pathfinder MH 2008.tab,_308c_current_live_state,categorical_or_text,1544,1339,205,3,,,,,,,"{""MAHARASHTRA"": 1336, ""LATUR"": 2, ""PARBHANI"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_309_period_sexwork_location,numeric,1544,1363,181,79,0,36,60,95.5649,120,480,89.3491
+ABTS-I FSW Pathfinder MH 2008.tab,_310a_move_out_town,numeric,1544,1368,176,5,1,5,5,4.46857,5,5,1.1336
+ABTS-I FSW Pathfinder MH 2008.tab,_310b_move_out_dist,numeric,1544,1368,176,5,1,5,5,4.81506,5,5,0.637874
+ABTS-I FSW Pathfinder MH 2008.tab,_310c_move_out_state,numeric,1544,1364,180,5,1,5,5,4.98167,5,5,0.196338
+ABTS-I FSW Pathfinder MH 2008.tab,_311_move_out_with_client,numeric,1544,1361,183,3,0,0,0,0.414401,0,99,4.65235
+ABTS-I FSW Pathfinder MH 2008.tab,_312_activity_otherthan_sexwork,numeric,1544,1443,101,7,0,0,0,8.60915,2,96,26.1236
+ABTS-I FSW Pathfinder MH 2008.tab,_312_activity_otherthan_sexwork_,categorical_or_text,1544,94,1450,60,,,,,,,"{""PE"": 14, ""TAILORING"": 5, ""DANCE"": 5}"
+ABTS-I FSW Pathfinder MH 2008.tab,_313a_own,numeric,1544,1480,64,2,0,0,0,0.19527,0,1,0.396543
+ABTS-I FSW Pathfinder MH 2008.tab,_313b_own,numeric,1544,1477,67,2,0,0,0,0.0765064,0,1,0.265897
+ABTS-I FSW Pathfinder MH 2008.tab,_313c_own,numeric,1544,1478,66,2,0,0,0,0.179296,0,1,0.38373
+ABTS-I FSW Pathfinder MH 2008.tab,_313d_own,numeric,1544,1475,69,2,0,0,0,0.224407,0,1,0.417333
+ABTS-I FSW Pathfinder MH 2008.tab,_313e_own,numeric,1544,1476,68,2,0,0,0,0.447832,1,1,0.49744
+ABTS-I FSW Pathfinder MH 2008.tab,_313f_own,numeric,1544,1476,68,2,0,0,0,0.353659,1,1,0.478267
+ABTS-I FSW Pathfinder MH 2008.tab,_313g_own,numeric,1544,1467,77,2,0,0,0,0.0743013,0,1,0.26235
+ABTS-I FSW Pathfinder MH 2008.tab,_313h_own,numeric,1544,1477,67,2,0,0,0,0.305349,1,1,0.460711
+ABTS-I FSW Pathfinder MH 2008.tab,_313i_own,numeric,1544,1468,76,2,0,0,0,0.0585831,0,1,0.234923
+ABTS-I FSW Pathfinder MH 2008.tab,_314_earn_from_sexwork,numeric,1544,1268,276,58,0,1500,3000,4723.06,6000,60000,5377.21
+ABTS-I FSW Pathfinder MH 2008.tab,_314_earn_from_othersources,numeric,1544,503,1041,55,0,600,1200,1476.51,1800,20000,1852.14
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_1,numeric,1544,1473,71,7,0,0,0,2.95859,1,96,13.7309
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_2,numeric,1544,207,1337,7,0,3,3,9.03382,5,96,21.6603
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_3,numeric,1544,56,1488,4,0,4.75,5,4.48214,5,5,1.00889
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_4,numeric,1544,5,1539,2,0,5,5,4,5,5,2.23607
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_5,numeric,1544,2,1542,2,0,24,48,48,72,96,67.8823
+ABTS-I FSW Pathfinder MH 2008.tab,_315_save_money_other,categorical_or_text,1544,40,1504,26,,,,,,,"{""LIC"": 11, ""AT HOME"": 4, ""COLLECT AT HOME"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_316_pickup_client,numeric,1544,1307,237,11,1,1,2,10.202,8,96,24.0163
+ABTS-I FSW Pathfinder MH 2008.tab,_316_pickup_client_other,categorical_or_text,1544,73,1471,38,,,,,,,"{""AT WORK PLACE"": 14, ""PERSONALLY"": 5, ""PERSONAL"": 5}"
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_1,categorical_or_text,1544,1306,238,13,,,,,,,"{""M"": 1077, ""B"": 51, ""K"": 35}"
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_2,numeric,1544,9,1535,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_3,numeric,1544,6,1538,4,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_6,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_7,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_8,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_9,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_10,categorical_or_text,1544,1,1543,1,,,,,,,"{""M"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_317_pickup_client_other316_othe,categorical_or_text,1544,30,1514,23,,,,,,,"{""AT WORK PLACE"": 5, ""FROM FRIEND"": 2, ""IN MARKET"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_318_entertain_client,numeric,1544,1313,231,9,1,1,6,7.35796,7,96,16.8293
+ABTS-I FSW Pathfinder MH 2008.tab,_318_entertain_client_other,categorical_or_text,1544,30,1514,12,,,,,,,"{""FARM"": 7, ""FARMING"": 5, ""IN FIELD"": 4}"
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_otherthan3,categorical_or_text,1544,1309,235,9,,,,,,,"{""K"": 983, ""F"": 155, ""G"": 42}"
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_2,categorical_or_text,1544,55,1489,8,,,,,,,"{""G"": 15, ""96"": 11, ""J"": 11}"
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_3,numeric,1544,12,1532,4,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_6,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_7,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_8,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_9,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_319_entertain_client_other318_o,categorical_or_text,1544,40,1504,17,,,,,,,"{""TO FRIEND"": 12, ""FARMING"": 8, ""FARM"": 3}"
+ABTS-I FSW Pathfinder MH 2008.tab,_320_age_sexwork_started,numeric,1544,1318,226,43,0,18,21,24.8293,26,180,15.3412
+ABTS-I FSW Pathfinder MH 2008.tab,_321_forced_for_first_sex,numeric,1544,1340,204,3,0,0,0,0.332836,0,99,3.83584
+ABTS-I FSW Pathfinder MH 2008.tab,_322_circum_first_sex_sold,numeric,1544,1099,445,8,1,1,1,16.222,4,99,34.111
+ABTS-I FSW Pathfinder MH 2008.tab,_322_circum_first_sex_sold_other,categorical_or_text,1544,135,1409,108,,,,,,,"{""HUSBAND LEFT"": 12, ""LOVE"": 4, ""DEVDASHI"": 4}"
+ABTS-I FSW Pathfinder MH 2008.tab,_323_cirum_first_sex_sold,numeric,1544,212,1332,7,1,1,1,12.5566,4,99,29.9619
+ABTS-I FSW Pathfinder MH 2008.tab,_323_cirum_first_sex_sold_other,categorical_or_text,1544,25,1519,24,,,,,,,"{""RAPED"": 2, ""BRING & LIVE WITH HIM"": 1, ""RELATIVES FORCED"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_324_who_responsible,numeric,1544,129,1415,9,1,4,6,11.7674,7,99,23.3277
+ABTS-I FSW Pathfinder MH 2008.tab,_324_who_responsible_other,categorical_or_text,1544,5,1539,5,,,,,,,"{""INFORM THAT WE WILL GET THE WORK"": 1, ""PE"": 1, ""STEP MOTHER"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_325_whom_pay_back,numeric,1544,7,1537,3,1,3,5,29.8571,50.5,96,45.2196
+ABTS-I FSW Pathfinder MH 2008.tab,_325_whom_pay_back_other,categorical_or_text,1544,2,1542,2,,,,,,,"{""KNOWN"": 1, ""UNKNOWN PERSON"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_401_no_days_inweek_sexwork,numeric,1544,1336,208,12,0,4,7,5.66916,7,98,5.02382
+ABTS-I FSW Pathfinder MH 2008.tab,_402_no_clients_inweek,numeric,1544,1334,210,56,0,3,8,15.6057,20,480,25.4498
+ABTS-I FSW Pathfinder MH 2008.tab,_403_charge_per_sexual_encounter,numeric,1544,1260,284,58,0,50,100,176.065,200,5000,291.473
+ABTS-I FSW Pathfinder MH 2008.tab,_404a_no_oclients_lastworking_da,numeric,1544,1444,100,20,0,0,2,24.4474,9.25,99,40.6594
+ABTS-I FSW Pathfinder MH 2008.tab,_404b_no_oclients_last7working_d,numeric,1544,1062,482,32,0,2,4,16.5819,10,98,30.2681
+ABTS-I FSW Pathfinder MH 2008.tab,_405a_no_times_lastworking_day,numeric,1544,1102,442,20,0,0,1,3.06171,3,98,11.0409
+ABTS-I FSW Pathfinder MH 2008.tab,_405b_no_times_last7working_days,numeric,1544,1099,445,35,0,2,4,15.6561,10,98,29.3441
+ABTS-I FSW Pathfinder MH 2008.tab,_406_oclient_used_condom,numeric,1544,1063,481,2,0,1,1,0.997178,1,1,0.0530743
+ABTS-I FSW Pathfinder MH 2008.tab,_407_how_often_use_condom,numeric,1544,1060,484,3,1,1,1,1.03396,1,3,0.251112
+ABTS-I FSW Pathfinder MH 2008.tab,_408_period_using_condom,numeric,1544,1037,507,55,1,24,48,63.135,84,448,52.545
+ABTS-I FSW Pathfinder MH 2008.tab,_409_reason_not_used_condom,numeric,1544,37,1507,6,1,2,3,13.0541,4,96,29.302
+ABTS-I FSW Pathfinder MH 2008.tab,_409_reason_not_used_condom_othe,categorical_or_text,1544,3,1541,3,,,,,,,"{""DIDN'T KNOW ABOUT IT"": 1, ""DIDN'T KNOW"": 1, ""IF GIVE MORE MONEY"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_410_double_condom,numeric,1544,1057,487,4,1,1,1,2.29801,4,4,1.38755
+ABTS-I FSW Pathfinder MH 2008.tab,_411_willing_use_female_condom,numeric,1544,1060,484,5,0,1,2,45.316,97,97,47.9446
+ABTS-I FSW Pathfinder MH 2008.tab,_412a_no_rclients_lastworking_da,numeric,1544,1435,109,15,0,1,2,22.8237,5,98,39.6478
+ABTS-I FSW Pathfinder MH 2008.tab,_412b_no_rclients_last7working_d,numeric,1544,1132,412,31,0,2,4,12.3975,8,100,25.2995
+ABTS-I FSW Pathfinder MH 2008.tab,_413a_no_times_lastworking_day,numeric,1544,1105,439,15,0,0,1,2.8362,3,98,10.1625
+ABTS-I FSW Pathfinder MH 2008.tab,_413b_no_times_last7working_days,numeric,1544,1100,444,34,0,2,4,12.3173,8,100,24.6734
+ABTS-I FSW Pathfinder MH 2008.tab,_414_rclient_used_condom,numeric,1544,1132,412,3,0,1,1,1.06449,1,98,2.88726
+ABTS-I FSW Pathfinder MH 2008.tab,_415_how_often_use_condom,numeric,1544,1126,418,4,1,1,1,1.06483,1,4,0.370306
+ABTS-I FSW Pathfinder MH 2008.tab,_416_period_using_condom,numeric,1544,1093,451,51,1,24,48,58.6322,84,360,49.7356
+ABTS-I FSW Pathfinder MH 2008.tab,_417_reason_not_used_condom,numeric,1544,40,1504,6,1,2,4,14.625,4,96,31.1783
+ABTS-I FSW Pathfinder MH 2008.tab,_417_reason_not_used_condom_othe,categorical_or_text,1544,6,1538,5,,,,,,,"{""DON'T KNOW"": 2, ""GETTING MORE MONEY"": 1, ""4"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_418_double_condom,numeric,1544,1128,416,4,1,1,2,2.36613,4,4,1.40723
+ABTS-I FSW Pathfinder MH 2008.tab,_419_willing_use_female_condom,numeric,1544,1081,463,5,0,1,1,41.2581,97,97,47.4564
+ABTS-I FSW Pathfinder MH 2008.tab,_420_no_non_paying_rpartners,numeric,1544,1491,53,5,0,0,1,0.734406,1,4,0.645493
+ABTS-I FSW Pathfinder MH 2008.tab,_421_relationship_non_paying_rpa,numeric,1544,957,587,3,1,1,1,5.24242,2,96,18.7224
+ABTS-I FSW Pathfinder MH 2008.tab,var1,categorical_or_text,1544,41,1503,19,,,,,,,"{""PARTNER"": 16, ""RELATIVES"": 3, ""RELATIVE"": 3}"
+ABTS-I FSW Pathfinder MH 2008.tab,_422a_no_times_sex_past_1week,numeric,1544,942,602,15,0,0,1,2.01911,2,98,5.01365
+ABTS-I FSW Pathfinder MH 2008.tab,_422b_no_times_sex_past_1month,numeric,1544,937,607,29,0,1,4,9.60832,8,98,20.1802
+ABTS-I FSW Pathfinder MH 2008.tab,_423_non_paying_rpartner_used_co,numeric,1544,941,603,3,0,0,1,0.656748,1,98,3.21534
+ABTS-I FSW Pathfinder MH 2008.tab,_424_how_often_use_condom,numeric,1544,912,632,4,1,1,2,2.42215,4,4,1.41982
+ABTS-I FSW Pathfinder MH 2008.tab,_425_period_using_condom,numeric,1544,443,1101,36,0,12,24,39.1129,48,300,40.7972
+ABTS-I FSW Pathfinder MH 2008.tab,_426_reason_not_used_condom,numeric,1544,461,1083,6,1,1,2,9.16269,2,96,25.6914
+ABTS-I FSW Pathfinder MH 2008.tab,_426_reason_not_used_condom_othe,categorical_or_text,1544,34,1510,28,,,,,,,"{""DON'T KNOW"": 3, ""DONT WANT CHILD"": 3, ""THERE IS BELIEVE"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_427_double_condom,numeric,1544,880,664,4,1,4,4,3.43523,4,4,1.13998
+ABTS-I FSW Pathfinder MH 2008.tab,_428_willing_use_female_condom,numeric,1544,895,649,5,0,1,1,38.8145,97,97,47.0957
+ABTS-I FSW Pathfinder MH 2008.tab,_429_non_paying_partners,numeric,1544,1453,91,3,0,0,0,0.170681,0,99,2.61218
+ABTS-I FSW Pathfinder MH 2008.tab,_430a_no_non_paying_partners_pas,numeric,1544,145,1399,12,0,0,1,1.90345,2,15,2.74956
+ABTS-I FSW Pathfinder MH 2008.tab,_430b_no_non_paying_part_past_1y,numeric,1544,143,1401,25,0,1,3,19.0769,15,100,32.0636
+ABTS-I FSW Pathfinder MH 2008.tab,_431_most_unpaidsex,numeric,1544,145,1399,7,1,2,3,14.8276,3,96,31.6485
+ABTS-I FSW Pathfinder MH 2008.tab,_431_most_unpaidsex_other,categorical_or_text,1544,20,1524,16,,,,,,,"{""CUSTOMER"": 4, ""CLIENT"": 2, ""KNOWN PERSON"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_432_non_paying_partner_used_con,numeric,1544,143,1401,3,0,0,1,2.06993,1,98,11.4742
+ABTS-I FSW Pathfinder MH 2008.tab,_433_how_often_use_condom,numeric,1544,138,1406,4,1,1,1,1.94928,3,4,1.2517
+ABTS-I FSW Pathfinder MH 2008.tab,_434_period_using_condom,numeric,1544,78,1466,19,2,12,24,37.359,48,300,42.8483
+ABTS-I FSW Pathfinder MH 2008.tab,_435_reason_not_used_condom,numeric,1544,46,1498,5,1,2,2,26.6087,73.5,96,41.6912
+ABTS-I FSW Pathfinder MH 2008.tab,_435_reason_not_used_condom_othe,numeric,1544,2,1542,2,1,1.25,1.5,1.5,1.75,2,0.707107
+ABTS-I FSW Pathfinder MH 2008.tab,_436_double_condom,numeric,1544,132,1412,4,1,1,4,2.98485,4,4,1.34212
+ABTS-I FSW Pathfinder MH 2008.tab,_437_willing_use_female_condom,numeric,1544,133,1411,4,0,1,1,40.6241,97,97,47.5201
+ABTS-I FSW Pathfinder MH 2008.tab,_438_condom_breakage,numeric,1544,1385,159,3,0,0,0,1.01372,0,98,8.69135
+ABTS-I FSW Pathfinder MH 2008.tab,_439_no_clients_brought_own_cond,numeric,1544,1301,243,15,0,0,1,3.22367,3,501,17.8421
+ABTS-I FSW Pathfinder MH 2008.tab,_440_who_puton_condom,numeric,1544,1343,201,5,1,1,1,2.78109,3,97,10.3906
+ABTS-I FSW Pathfinder MH 2008.tab,_441_carrying_condom_right_now,numeric,1544,1364,180,3,0,0,0,0.306452,1,2,0.510997
+ABTS-I FSW Pathfinder MH 2008.tab,_442_main_source_condoms,numeric,1544,1376,168,13,1,1,1,7.21366,3,97,20.0793
+ABTS-I FSW Pathfinder MH 2008.tab,_442_main_source_condom_other,categorical_or_text,1544,53,1491,13,,,,,,,"{""PARAMEDIC"": 23, ""01"": 9, ""3"": 7}"
+ABTS-I FSW Pathfinder MH 2008.tab,_443_willing_purchase_condoms,numeric,1544,1374,170,4,0,1,1,1.48981,3,3,0.994287
+ABTS-I FSW Pathfinder MH 2008.tab,_444_asked_oralsex,numeric,1544,1330,214,3,0,0,1,0.720301,1,99,3.84735
+ABTS-I FSW Pathfinder MH 2008.tab,_445_performed_oralsex,numeric,1544,822,722,2,0,0,0,0.0888078,0,1,0.284639
+ABTS-I FSW Pathfinder MH 2008.tab,_446_used_condom_oralsex,numeric,1544,81,1463,2,0,0,1,0.666667,1,1,0.474342
+ABTS-I FSW Pathfinder MH 2008.tab,_447_asked_analsex,numeric,1544,1324,220,3,0,0,1,0.71148,1,99,3.85644
+ABTS-I FSW Pathfinder MH 2008.tab,_448_performed_analsex,numeric,1544,813,731,2,0,0,0,0.095941,0,1,0.294692
+ABTS-I FSW Pathfinder MH 2008.tab,_449_used_condom_analsex,numeric,1544,65,1479,2,0,1,1,0.8,1,1,0.403113
+ABTS-I FSW Pathfinder MH 2008.tab,_501_currently_debt,numeric,1544,1439,105,2,0,0,0,0.228631,0,1,0.420097
+ABTS-I FSW Pathfinder MH 2008.tab,_502_sexworkers_treated_fairly,numeric,1544,1394,150,3,0,0,1,0.868723,1,2,0.631192
+ABTS-I FSW Pathfinder MH 2008.tab,_503_rpartner_encourages_outside,numeric,1544,1407,137,3,0,1,1,35.3198,97,97,46.1693
+ABTS-I FSW Pathfinder MH 2008.tab,_504_stopped_carrying_condom,numeric,1544,1341,203,4,0,0,0,22.5928,1,97,40.8873
+ABTS-I FSW Pathfinder MH 2008.tab,_505_no_times_given_something_po,numeric,1544,1416,128,23,0,94,94,82.8644,94,99,29.7712
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_1,numeric,1544,31,1513,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_2,categorical_or_text,1544,4,1540,1,,,,,,,"{""E"": 4}"
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_3,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_506_give_police_avoid_trouble_6,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_506_other,categorical_or_text,1544,24,1520,13,,,,,,,"{""FINE"": 9, ""NOTHING"": 3, ""GIVEN NOTHING"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_507_police_treat_fairly_than_la,numeric,1544,1244,300,4,0,1,1,7.90273,1,97,25.1923
+ABTS-I FSW Pathfinder MH 2008.tab,_508_verbally_abused,numeric,1544,1429,115,2,0,0,0,0.325402,1,1,0.468689
+ABTS-I FSW Pathfinder MH 2008.tab,_509_no_times_someone_beaten,numeric,1544,1416,128,5,0,1,1,1.34605,1,4,0.803894
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_1,numeric,1544,20,1524,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_2,numeric,1544,2,1542,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_3,categorical_or_text,1544,8,1536,4,,,,,,,"{""K"": 3, ""J"": 2, ""I"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_4,numeric,1544,1,1543,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_6,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_7,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_8,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_9,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_who_did_this_10,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_510_other,categorical_or_text,1544,19,1525,17,,,,,,,"{""NEIGHBOUR"": 3, ""DHABA OWNER"": 1, ""BOYFRIEND"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_511_how_often_beat,numeric,1544,178,1366,3,1,1,2,2.06742,2,99,7.32351
+ABTS-I FSW Pathfinder MH 2008.tab,_512a_posses_rationcard,numeric,1544,1441,103,2,0,0,0,0.41499,1,1,0.492891
+ABTS-I FSW Pathfinder MH 2008.tab,_512b_posses_voterid,numeric,1544,1443,101,2,0,0,0,0.435204,1,1,0.495956
+ABTS-I FSW Pathfinder MH 2008.tab,_512c_posses_bank_ac,numeric,1544,1443,101,2,0,0,0,0.36729,1,1,0.482234
+ABTS-I FSW Pathfinder MH 2008.tab,_512d_posses_lic_policy,numeric,1544,1440,104,2,0,0,0,0.134722,0,1,0.341545
+ABTS-I FSW Pathfinder MH 2008.tab,_512e_posses_self_birth_certific,numeric,1544,1439,105,2,0,0,0,0.346769,1,1,0.476107
+ABTS-I FSW Pathfinder MH 2008.tab,_512f_posses_child_birth_certifi,numeric,1544,1179,365,2,0,0,1,0.726887,1,1,0.445747
+ABTS-I FSW Pathfinder MH 2008.tab,_512g_posses_pan_card,numeric,1544,1439,105,2,0,0,0,0.0410007,0,1,0.198361
+ABTS-I FSW Pathfinder MH 2008.tab,_512h_posses_passport,numeric,1544,1439,105,2,0,0,0,0.00972898,0,1,0.0981887
+ABTS-I FSW Pathfinder MH 2008.tab,_512i_posses_mediclaim_policy,numeric,1544,1431,113,2,0,0,0,0.0055905,0,1,0.0745864
+ABTS-I FSW Pathfinder MH 2008.tab,_513a_want_rationcard,numeric,1544,895,649,2,0,1,1,0.837989,1,1,0.368667
+ABTS-I FSW Pathfinder MH 2008.tab,_513b_want_voterid,numeric,1544,867,677,2,0,1,1,0.810842,1,1,0.39186
+ABTS-I FSW Pathfinder MH 2008.tab,_513c_want_bank_ac,numeric,1544,945,599,2,0,0,1,0.554497,1,1,0.497284
+ABTS-I FSW Pathfinder MH 2008.tab,_513d_want_lic_policy,numeric,1544,1201,343,2,0,0,1,0.506245,1,1,0.500169
+ABTS-I FSW Pathfinder MH 2008.tab,_513e_want_self_birth_certificat,numeric,1544,951,593,2,0,0,1,0.660358,1,1,0.473837
+ABTS-I FSW Pathfinder MH 2008.tab,_513f_want_child_birth_certifica,numeric,1544,395,1149,2,0,0,1,0.508861,1,1,0.500555
+ABTS-I FSW Pathfinder MH 2008.tab,_513g_want_pancard,numeric,1544,1341,203,2,0,0,1,0.563013,1,1,0.496199
+ABTS-I FSW Pathfinder MH 2008.tab,_513h_want_passport,numeric,1544,1369,175,2,0,0,0,0.418554,1,1,0.493502
+ABTS-I FSW Pathfinder MH 2008.tab,_513i_want_mediclaim_policy,numeric,1544,1373,171,2,0,0,1,0.522214,1,1,0.499688
+ABTS-I FSW Pathfinder MH 2008.tab,_514_if_tired_take_clients,numeric,1544,1295,249,3,1,1,1,1.73282,3,3,0.899749
+ABTS-I FSW Pathfinder MH 2008.tab,_515_turned_away_refused_condom,numeric,1544,1291,253,3,0,1,1,24.8335,1,97,41.6181
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_1,numeric,1544,1403,141,10,0,0,0,0.656635,0,96,7.9178
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_2,categorical_or_text,1544,186,1358,7,,,,,,,"{""D"": 79, ""E"": 41, ""C"": 33}"
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_3,categorical_or_text,1544,33,1511,3,,,,,,,"{""E"": 18, ""D"": 9, ""F"": 6}"
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_4,numeric,1544,1,1543,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_6,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_516_provide_financial_support_7,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_516_other,categorical_or_text,1544,9,1535,8,,,,,,,"{""MALKIN"": 2, ""OLD PEOPLE"": 1, ""HUSBANDS MOTHER AND FATHER"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_517_feel_financial_support,numeric,1544,674,870,5,1,1,1,5.26706,2,96,18.9159
+ABTS-I FSW Pathfinder MH 2008.tab,_517_feel_financial_support_othe,categorical_or_text,1544,22,1522,17,,,,,,,"{""NO FEELINGS"": 4, ""FEEL BETTER"": 2, ""NOTHING"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_518_husband_feel1,numeric,1544,116,1428,6,1,1,2,16.431,3,96,34.2665
+ABTS-I FSW Pathfinder MH 2008.tab,_518_husband_feel2,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_518_husband_feel3,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_518_husband_feel4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_518_husband_feel5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_518_feel_financial_support_husb,categorical_or_text,1544,16,1528,15,,,,,,,"{""FEELS NOTHING"": 2, ""DON'T KNOW IN HOME"": 1, ""DONT KNOW"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_519_fall_sick,numeric,1544,1349,195,3,0,0,1,0.899185,2,2,0.892721
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_a,numeric,1544,1260,284,2,0,0,0,0.37619,1,1,0.484621
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_b,numeric,1544,1415,129,2,0,0,0,0.383039,1,1,0.4863
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_c,numeric,1544,1416,128,2,0,0,0,0.364407,1,1,0.481433
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_d,numeric,1544,1412,132,2,0,0,1,0.502833,1,1,0.500169
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_e,numeric,1544,765,779,2,0,0,0,0.312418,1,1,0.463783
+ABTS-I FSW Pathfinder MH 2008.tab,_520_permission_for_f,numeric,1544,749,795,2,0,0,0,0.321762,1,1,0.467465
+ABTS-I FSW Pathfinder MH 2008.tab,_521_effort_for_healthcare,numeric,1544,1435,109,3,1,3,3,2.81185,3,3,0.470317
+ABTS-I FSW Pathfinder MH 2008.tab,_522_advice_fellow_sexworkers,numeric,1544,1428,116,3,1,2,3,2.39356,3,3,0.795406
+ABTS-I FSW Pathfinder MH 2008.tab,_523_comfort_speaking_in_group,numeric,1544,1423,121,4,1,2,3,18.2656,3,97,35.4834
+ABTS-I FSW Pathfinder MH 2008.tab,_524a_police,numeric,1544,1407,137,3,0,0,0,0.265814,0,99,3.74114
+ABTS-I FSW Pathfinder MH 2008.tab,_524b_madam,numeric,1544,1397,147,3,0,0,0,0.30136,0,99,3.75638
+ABTS-I FSW Pathfinder MH 2008.tab,_524c_client,numeric,1544,1402,142,3,0,0,0,0.501427,1,99,4.58534
+ABTS-I FSW Pathfinder MH 2008.tab,_525_feel_ashamed_tobe_sexworker,numeric,1544,1297,247,4,1,2,2,2.71935,4,4,1.08221
+ABTS-I FSW Pathfinder MH 2008.tab,_526_sexworkers_problems,numeric,1544,1343,201,3,0,1,1,0.936709,1,2,0.491068
+ABTS-I FSW Pathfinder MH 2008.tab,_527a_police,numeric,1544,1397,147,3,0,0,0,0.238368,0,99,3.75252
+ABTS-I FSW Pathfinder MH 2008.tab,_527b_madam,numeric,1544,1383,161,3,0,0,0,0.378886,0,99,4.61479
+ABTS-I FSW Pathfinder MH 2008.tab,_527c_client,numeric,1544,1391,153,3,0,0,0,0.617541,1,99,5.3062
+ABTS-I FSW Pathfinder MH 2008.tab,_528_client_violent_help,numeric,1544,1312,232,4,1,3,3,39.8438,97,97,46.2608
+ABTS-I FSW Pathfinder MH 2008.tab,_529a_woman_constable,numeric,1544,1422,122,3,0,1,1,23.2046,1,95,40.0275
+ABTS-I FSW Pathfinder MH 2008.tab,_529b_bring_child,numeric,1544,1418,126,3,0,0,1,18.6312,1,95,37.0517
+ABTS-I FSW Pathfinder MH 2008.tab,_529c_make_phonecall,numeric,1544,1422,122,3,0,1,1,18.6512,1,95,36.9772
+ABTS-I FSW Pathfinder MH 2008.tab,_529d_explanation_arrest,numeric,1544,1419,125,3,0,1,1,17.308,1,95,35.768
+ABTS-I FSW Pathfinder MH 2008.tab,_530_arrested,numeric,1544,1423,121,2,1,1,1,1.31061,2,2,0.462907
+ABTS-I FSW Pathfinder MH 2008.tab,_531_sexworkers_helped_when_arre,numeric,1544,460,1084,3,1,1,2,2.1413,2,95,7.54822
+ABTS-I FSW Pathfinder MH 2008.tab,_532a_police_explained,numeric,1544,454,1090,3,0,0,1,2.08811,1,95,11.6496
+ABTS-I FSW Pathfinder MH 2008.tab,_532b_informed_arrest,numeric,1544,454,1090,4,0,0,1,7.18722,1,99,24.353
+ABTS-I FSW Pathfinder MH 2008.tab,_532c_hired_lawyer,numeric,1544,452,1092,3,0,0,1,3.83628,1,95,17.4901
+ABTS-I FSW Pathfinder MH 2008.tab,_532d_belongings_returned,numeric,1544,449,1095,4,0,1,1,14.02,1,99,32.8705
+ABTS-I FSW Pathfinder MH 2008.tab,_532e_ngo_helped,numeric,1544,453,1091,4,0,0,0,1.42826,1,99,9.99391
+ABTS-I FSW Pathfinder MH 2008.tab,_533_no_sexworkers_together_deal,numeric,1544,1362,182,6,1,2,3,10.2254,5,95,24.9263
+ABTS-I FSW Pathfinder MH 2008.tab,_534a_participated_navipahat,numeric,1544,1315,229,2,0,0,0,0.361977,1,1,0.480755
+ABTS-I FSW Pathfinder MH 2008.tab,_534b_participated_pemela,numeric,1544,1279,265,2,0,0,0,0.0688038,0,1,0.253219
+ABTS-I FSW Pathfinder MH 2008.tab,_534c_participated_dist_conventi,numeric,1544,1287,257,2,0,0,0,0.206682,0,1,0.405083
+ABTS-I FSW Pathfinder MH 2008.tab,_534d_participated_int_women_day,numeric,1544,1314,230,2,0,0,1,0.503044,1,1,0.500181
+ABTS-I FSW Pathfinder MH 2008.tab,_534e_participated_aids_day_rall,numeric,1544,1309,235,2,0,0,0,0.463713,1,1,0.498872
+ABTS-I FSW Pathfinder MH 2008.tab,_601_heard_mukta,numeric,1544,1491,53,2,0,1,1,0.898055,1,1,0.302677
+ABTS-I FSW Pathfinder MH 2008.tab,_602a_nm_muktango,categorical_or_text,1544,1240,304,121,,,,,,,"{""MUKTA"": 771, ""DON'T KNOW"": 38, ""DONT KNOW"": 31}"
+ABTS-I FSW Pathfinder MH 2008.tab,_602b_nm_muktango,categorical_or_text,1544,30,1514,13,,,,,,,"{""VANCHIT VIKAS"": 10, ""KAYAKALP"": 6, ""SAHELI"": 3}"
+ABTS-I FSW Pathfinder MH 2008.tab,_602c_nm_muktango,categorical_or_text,1544,7,1537,5,,,,,,,"{""KAYAKALP"": 2, ""SAHELI"": 2, ""UDAN(PUNE)"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_602d_nm_muktango,categorical_or_text,1544,3,1541,3,,,,,,,"{""UDAAN"": 1, ""ABDS"": 1, ""VANCHIT VIKAS"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_602e_nm_muktango,categorical_or_text,1544,1,1543,1,,,,,,,"{""JPSDP"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_603_sexworkers_decision,numeric,1544,1287,257,3,0,1,1,6.07459,1,99,21.9582
+ABTS-I FSW Pathfinder MH 2008.tab,_604_received_most_services,categorical_or_text,1544,1238,306,13,,,,,,,"{""A"": 1075, ""95"": 60, ""a"": 52}"
+ABTS-I FSW Pathfinder MH 2008.tab,_605_given_muktaid,numeric,1544,1325,219,2,0,1,1,0.909434,1,1,0.287099
+ABTS-I FSW Pathfinder MH 2008.tab,_606_remember_muktaid,numeric,1544,1218,326,2,0,0,0,0.220033,0,1,0.414439
+ABTS-I FSW Pathfinder MH 2008.tab,_607_remember_nm_pe,numeric,1544,1197,347,2,0,1,1,0.809524,1,1,0.392841
+ABTS-I FSW Pathfinder MH 2008.tab,_607_nm_pe,categorical_or_text,1544,944,600,542,,,,,,,"{""NITIN SIR"": 16, ""ASHA"": 11, ""SHANTABAI"": 11}"
+ABTS-I FSW Pathfinder MH 2008.tab,_608_no_times_contacted_by_pe,numeric,1544,1309,235,27,0,2,3,7.91367,5,200,18.0953
+ABTS-I FSW Pathfinder MH 2008.tab,_609_no_free_condom_got,numeric,1544,1354,190,74,0,12,100,123.917,144,2500,173.738
+ABTS-I FSW Pathfinder MH 2008.tab,_610_currently_working_as_pe,numeric,1544,1377,167,2,0,0,0,0.0522876,0,1,0.222687
+ABTS-I FSW Pathfinder MH 2008.tab,_611_worked_as_pe,numeric,1544,1303,241,2,0,0,0,0.0445127,0,1,0.20631
+ABTS-I FSW Pathfinder MH 2008.tab,_612_introduced_mukta_sexworkers,numeric,1544,1310,234,2,0,0,1,0.738931,1,1,0.439385
+ABTS-I FSW Pathfinder MH 2008.tab,_613_member_mukta_gr,numeric,1544,1299,245,3,0,0,0,0.548114,0,99,6.13358
+ABTS-I FSW Pathfinder MH 2008.tab,_614_nm_group1,categorical_or_text,1544,175,1369,63,,,,,,,"{""MUKTA COMMITTEE"": 22, ""MUKTA GAT"": 18, ""ADVOCACY COMMITTEE"": 14}"
+ABTS-I FSW Pathfinder MH 2008.tab,_614_nm_group2,categorical_or_text,1544,19,1525,12,,,,,,,"{""ADVOCACY COMMITTEE"": 4, ""MUKTA COMMITTEE"": 4, ""MUKTA"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_614_nm_group3,categorical_or_text,1544,4,1540,4,,,,,,,"{""DISHA DARSHAK"": 1, ""BACHAT GAT"": 1, ""ADVISORY COMMITTI"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_614_nm_group4,categorical_or_text,1544,2,1542,2,,,,,,,"{""STEERING COMMITTEE"": 1, ""MUKTA SAVING SCHEME"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_615_last_mukta_meeting,numeric,1544,307,1237,8,1,2,2,9.98371,3,99,26.3867
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_1,categorical_or_text,1544,1295,249,9,,,,,,,"{""97"": 415, ""E"": 364, ""A"": 266}"
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_2,numeric,1544,4,1540,2,96,96,96.5,96.5,97,97,0.57735
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_3,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_4,numeric,1544,1,1543,1,97,97,97,97,97,97,0
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_5,numeric,1544,1,1543,1,96,96,96,96,96,96,0
+ABTS-I FSW Pathfinder MH 2008.tab,_616_change_after_mukta_other,categorical_or_text,1544,136,1408,52,,,,,,,"{""DON'T KNOW"": 21, ""DONT KNOW"": 19, ""HE DOESN'T KNOW"": 14}"
+ABTS-I FSW Pathfinder MH 2008.tab,_617_heard_other_ngo,numeric,1544,1427,117,2,0,0,0,0.0525578,0,1,0.223227
+ABTS-I FSW Pathfinder MH 2008.tab,_618a_nm_otherngo,categorical_or_text,1544,59,1485,24,,,,,,,"{""SAHELI"": 20, ""ADHAR"": 9, ""VANCHIT VIKAS"": 4}"
+ABTS-I FSW Pathfinder MH 2008.tab,_618b_nm_otherngo,categorical_or_text,1544,14,1530,9,,,,,,,"{""KAYAKALP"": 3, ""VANCHIT VIKAS"": 3, ""SAHELI"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_618c_nm_otherngo,numeric,1544,1,1543,1,0,0,0,0,0,0,0
+ABTS-I FSW Pathfinder MH 2008.tab,_618d_nm_otherngo,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_619_received_service,numeric,1544,69,1475,2,0,0,0,0.362319,1,1,0.484192
+ABTS-I FSW Pathfinder MH 2008.tab,_620_received_most_services,numeric,1544,4,1540,3,1,73.75,98.5,74.25,99,99,48.8356
+ABTS-I FSW Pathfinder MH 2008.tab,_621_involved_non_mukta_gr,numeric,1544,68,1476,2,0,0,0,0.147059,0,1,0.356798
+ABTS-I FSW Pathfinder MH 2008.tab,_622_nm_non_mukta_group1,categorical_or_text,1544,7,1537,6,,,,,,,"{""GOSPAK BABA BACHAT GUT"": 2, ""ADHAR KENDRA ADHAKSHA (BACHAT GUT)"": 1, ""ADVISORY BOARD"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_622_nm_non_mukta_group2,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_622_nm_non_mukta_group3,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_622_nm_non_mukta_group4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_701_heard_about_hiv,numeric,1544,1488,56,2,0,1,1,0.969086,1,1,0.173143
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_1,categorical_or_text,1544,1438,106,16,,,,,,,"{""H"": 733, ""B"": 400, ""G"": 100}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_2,categorical_or_text,1544,770,774,16,,,,,,,"{""H"": 319, ""O"": 79, ""M"": 76}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_3,categorical_or_text,1544,317,1227,12,,,,,,,"{""H"": 122, ""O"": 73, ""G"": 28}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_4,categorical_or_text,1544,88,1456,10,,,,,,,"{""H"": 35, ""P"": 14, ""O"": 13}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_5,categorical_or_text,1544,22,1522,7,,,,,,,"{""P"": 6, ""O"": 4, ""H"": 4}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_6,categorical_or_text,1544,6,1538,5,,,,,,,"{""P"": 2, ""F"": 1, ""O"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_7,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_8,categorical_or_text,1544,1,1543,1,,,,,,,"{""H"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_learnt_about_hiv_source_9,categorical_or_text,1544,1,1543,1,,,,,,,"{""O"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_702_other,categorical_or_text,1544,45,1499,38,,,,,,,"{""PROGRAM IN PUNE"": 3, ""TOLD BY OWNER"": 2, ""PRIVATE CLINIC"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_703_know_hiv_infectedone,numeric,1544,1433,111,3,0,0,0,0.611305,1,99,3.71323
+ABTS-I FSW Pathfinder MH 2008.tab,_704a_sti_increases_hiv,numeric,1544,1442,102,3,0,1,1,26.681,95,95,41.9783
+ABTS-I FSW Pathfinder MH 2008.tab,_704b_hiv_aids_same,numeric,1544,1441,103,3,0,0,1,18.4955,1,95,37.086
+ABTS-I FSW Pathfinder MH 2008.tab,_704c_sti_always_symptoms,numeric,1544,1433,111,3,0,1,1,26.0809,95,95,41.8631
+ABTS-I FSW Pathfinder MH 2008.tab,_704d_healthy_look_person_hiv,numeric,1544,1438,106,3,0,1,1,14.9416,1,95,33.5802
+ABTS-I FSW Pathfinder MH 2008.tab,_704e_analsex_transmits_hiv,numeric,1544,1440,104,3,0,1,1,41.3167,95,95,46.6307
+ABTS-I FSW Pathfinder MH 2008.tab,_704f_mother_transmits_hiv,numeric,1544,1442,102,3,0,1,1,9.73578,1,95,27.4135
+ABTS-I FSW Pathfinder MH 2008.tab,_704g_hivaids_cured,numeric,1544,1437,107,3,0,0,0,12.3737,1,95,31.4796
+ABTS-I FSW Pathfinder MH 2008.tab,_705a_avoiding_shared_things,numeric,1544,1435,109,3,0,0,0,10.1324,1,95,28.9011
+ABTS-I FSW Pathfinder MH 2008.tab,_705b_eating_nutritious_food,numeric,1544,1430,114,3,0,0,1,14.0007,1,95,33.0556
+ABTS-I FSW Pathfinder MH 2008.tab,_705c_always_condom,numeric,1544,1428,116,3,0,1,1,5.57913,1,95,20.3098
+ABTS-I FSW Pathfinder MH 2008.tab,_70d_avoiding_insect_bite,numeric,1544,1426,118,3,0,0,0,15.5799,1,95,34.7527
+ABTS-I FSW Pathfinder MH 2008.tab,_705e_medication_beforesex,numeric,1544,1429,115,3,0,0,0,28.2519,95,95,43.2264
+ABTS-I FSW Pathfinder MH 2008.tab,_705f_avoiding_shared_inj_needle,numeric,1544,1429,115,3,0,1,1,8.13296,1,95,24.9716
+ABTS-I FSW Pathfinder MH 2008.tab,_706_feel_risk_hiv_infection,numeric,1544,1436,108,4,0,0,1,3.1351,1,99,15.4147
+ABTS-I FSW Pathfinder MH 2008.tab,_707_know_where_hiv_testing,numeric,1544,1438,106,3,0,0,1,1.97288,1,95,10.7774
+ABTS-I FSW Pathfinder MH 2008.tab,_708_where_go_hiv_testing_1,categorical_or_text,1544,1047,497,4,,,,,,,"{""A"": 611, ""B"": 302, ""C"": 132}"
+ABTS-I FSW Pathfinder MH 2008.tab,_708_where_go_hiv_testing_2,categorical_or_text,1544,204,1340,2,,,,,,,"{""C"": 108, ""B"": 96}"
+ABTS-I FSW Pathfinder MH 2008.tab,_708_where_go_hiv_testing_3,categorical_or_text,1544,16,1528,2,,,,,,,"{""C"": 15, ""88"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_708_other,categorical_or_text,1544,2,1542,2,,,,,,,"{""DON'T KNOW"": 1, ""HOSPITAL"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_709_hiv_test_taken,numeric,1544,1430,114,3,0,0,1,0.777622,1,99,3.70834
+ABTS-I FSW Pathfinder MH 2008.tab,_710_when_last_hiv_test_taken,numeric,1544,929,615,3,0,0,0,0.745963,0,98,7.85181
+ABTS-I FSW Pathfinder MH 2008.tab,_711_collected_test_result,numeric,1544,919,625,3,0,1,1,1.20675,1,99,5.60858
+ABTS-I FSW Pathfinder MH 2008.tab,_712_are_drugs_treat_aids,numeric,1544,1286,258,4,0,0,1,16.7753,1,99,35.5701
+ABTS-I FSW Pathfinder MH 2008.tab,_713_heard_art,numeric,1544,1276,268,4,0,0,0,17.7288,1,99,36.7467
+ABTS-I FSW Pathfinder MH 2008.tab,_801a_have_genital_ulcer,numeric,1544,1482,62,3,0,0,0,0.265857,0,99,3.64654
+ABTS-I FSW Pathfinder MH 2008.tab,_801b_have_vaginal_discharge,numeric,1544,1482,62,3,0,0,0,0.446694,0,99,5.14308
+ABTS-I FSW Pathfinder MH 2008.tab,_801c_have_abdominal_pain,numeric,1544,1479,65,3,0,0,0,0.408384,0,99,4.46482
+ABTS-I FSW Pathfinder MH 2008.tab,_802a_when_genital_ulcer,numeric,1544,558,986,5,1,2,97,61.8961,97,97,45.7564
+ABTS-I FSW Pathfinder MH 2008.tab,_802b_when_vaginal_discharge,numeric,1544,554,990,5,1,2,97,52.1029,97,97,47.4448
+ABTS-I FSW Pathfinder MH 2008.tab,_802c_when_abdominal_pain,numeric,1544,553,991,5,1,2,3,43.3201,97,97,47.2263
+ABTS-I FSW Pathfinder MH 2008.tab,_803_1st,categorical_or_text,1544,514,1030,12,,,,,,,"{""A"": 276, ""D"": 96, ""E"": 40}"
+ABTS-I FSW Pathfinder MH 2008.tab,_803_2nd,categorical_or_text,1544,161,1383,11,,,,,,,"{""A"": 62, ""D"": 28, ""I"": 18}"
+ABTS-I FSW Pathfinder MH 2008.tab,_803_3rd,categorical_or_text,1544,45,1499,9,,,,,,,"{""A"": 17, ""H"": 7, ""D"": 6}"
+ABTS-I FSW Pathfinder MH 2008.tab,_803_4th,categorical_or_text,1544,17,1527,5,,,,,,,"{""A"": 6, ""B"": 5, ""I"": 3}"
+ABTS-I FSW Pathfinder MH 2008.tab,_803_5th,categorical_or_text,1544,7,1537,3,,,,,,,"{""A"": 3, ""D"": 2, ""J"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_803_other,categorical_or_text,1544,3,1541,3,,,,,,,"{""INCREASED CLEANLINESS"": 1, ""TOLD BY PE"": 1, ""DOESN'T DO ANYTHING"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_804_period_symptoms,numeric,1544,486,1058,32,0,2,4,12.2675,8,300,27.9859
+ABTS-I FSW Pathfinder MH 2008.tab,_805_asked_partner_visit_clinic,numeric,1544,1454,90,3,0,1,1,33.9003,97,97,45.838
+ABTS-I FSW Pathfinder MH 2008.tab,_806_partner_visited_clinic,numeric,1544,1041,503,3,0,0,0,6.5879,1,95,23.3888
+ABTS-I FSW Pathfinder MH 2008.tab,_807_no_times_visited_mukta_clin,numeric,1544,1454,90,17,0,2,3,3.39065,3,300,10.971
+ABTS-I FSW Pathfinder MH 2008.tab,_808a_govt_clinic,numeric,1544,1362,182,2,0,0,0,0.051395,0,1,0.220883
+ABTS-I FSW Pathfinder MH 2008.tab,_808b_private_clinic,numeric,1544,1362,182,2,0,0,0,0.112335,0,1,0.315894
+ABTS-I FSW Pathfinder MH 2008.tab,_808c_non_mukta_ngo_clinic,numeric,1544,1356,188,2,0,0,0,0.0258112,0,1,0.15863
+ABTS-I FSW Pathfinder MH 2008.tab,_808d_pharmacy,numeric,1544,1356,188,2,0,0,0,0.0339233,0,1,0.181099
+ABTS-I FSW Pathfinder MH 2008.tab,_809_syphilis_test,numeric,1544,1441,103,3,0,0,1,0.925746,1,99,4.50348
+ABTS-I FSW Pathfinder MH 2008.tab,_901a_consume_alcohol,numeric,1544,1479,65,2,0,0,0,0.275186,1,1,0.446759
+ABTS-I FSW Pathfinder MH 2008.tab,_901b_consume_gutka,numeric,1544,1479,65,2,0,0,1,0.542258,1,1,0.49838
+ABTS-I FSW Pathfinder MH 2008.tab,_901c_consume_bidi,numeric,1544,1474,70,2,0,0,0,0.0386703,0,1,0.192873
+ABTS-I FSW Pathfinder MH 2008.tab,_901d_consume_sleeping_pills,numeric,1544,1472,72,3,0,0,0,0.0747283,0,99,2.58161
+ABTS-I FSW Pathfinder MH 2008.tab,_901e_consume_brown_sugar,numeric,1544,1471,73,3,0,0,0,0.0700204,0,99,2.5817
+ABTS-I FSW Pathfinder MH 2008.tab,_901f_consume_ganja,numeric,1544,1471,73,3,0,0,0,0.0727396,0,99,2.58215
+ABTS-I FSW Pathfinder MH 2008.tab,_901g_consume_other_drugs,numeric,1544,1468,76,3,0,0,0,0.0735695,0,99,2.5849
+ABTS-I FSW Pathfinder MH 2008.tab,_902a_how_often_consume_alcohol,numeric,1544,868,676,6,1,2,5,3.7765,5,99,4.86812
+ABTS-I FSW Pathfinder MH 2008.tab,_902b_how_often_consume_gutka,numeric,1544,867,677,5,1,1,1,1.48904,1,5,1.22834
+ABTS-I FSW Pathfinder MH 2008.tab,_902c_how_often_consume_bidi,numeric,1544,864,680,6,1,5,5,5.12731,5,99,5.60706
+ABTS-I FSW Pathfinder MH 2008.tab,_902d_how_often_consume_sleeping,numeric,1544,864,680,5,1,5,5,5.51157,5,99,7.14523
+ABTS-I FSW Pathfinder MH 2008.tab,_902e_how_often_consume_brown_su,numeric,1544,863,681,5,1,5,5,5.5365,5,99,7.14066
+ABTS-I FSW Pathfinder MH 2008.tab,_902f_how_often_consume_ganja,numeric,1544,843,701,4,1,5,5,5.32266,5,99,5.60521
+ABTS-I FSW Pathfinder MH 2008.tab,_902g_how_often_consume_other_dr,numeric,1544,842,702,5,1,5,5,5.32185,5,99,5.60891
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_1,numeric,1544,1348,196,8,1,1,2,29.8479,96,96,42.9389
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_2,numeric,1544,460,1084,8,1,2,2,7.82826,2,96,21.222
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_3,numeric,1544,249,1295,6,3,6,7,18.2289,7,96,30.4761
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_4,numeric,1544,69,1475,6,2,6,7,45.1884,96,96,44.9006
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_5,numeric,1544,14,1530,4,5,5.25,7,38.0714,96,96,44.8132
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_6,numeric,1544,4,1540,2,6,6,6,6.25,6.25,7,0.5
+ABTS-I FSW Pathfinder MH 2008.tab,_1001_ngo_should_services_other,categorical_or_text,1544,410,1134,210,,,,,,,"{""NOTHING"": 41, ""DONT KNOW"": 29, ""LIKE MUKTA"": 28}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_1,categorical_or_text,1544,1359,185,8,,,,,,,"{""A"": 1082, ""B"": 237, ""96"": 31}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_2,categorical_or_text,1544,1146,398,8,,,,,,,"{""B"": 1003, ""F"": 37, ""D"": 23}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_3,categorical_or_text,1544,568,976,8,,,,,,,"{""G"": 212, ""F"": 91, ""E"": 83}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_4,categorical_or_text,1544,215,1329,7,,,,,,,"{""G"": 86, ""F"": 41, ""E"": 38}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_5,categorical_or_text,1544,75,1469,5,,,,,,,"{""G"": 37, ""E"": 19, ""F"": 12}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_6,categorical_or_text,1544,20,1524,3,,,,,,,"{""G"": 9, ""F"": 9, ""96"": 2}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1002_ngo_provides_services_othe,categorical_or_text,1544,115,1429,57,,,,,,,"{""CONDOM"": 17, ""DONT KNOW"": 11, ""GIVE INFORMATION"": 8}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1003_suggestions,categorical_or_text,1544,1109,435,746,,,,,,,"{""NO"": 145, ""NOTHING"": 73, ""-"": 70}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_progra,categorical_or_text,1544,1361,183,6,,,,,,,"{""C"": 1094, ""E"": 92, ""96"": 89}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_2,categorical_or_text,1544,149,1395,4,,,,,,,"{""D"": 68, ""C"": 46, ""96"": 32}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_3,categorical_or_text,1544,7,1537,3,,,,,,,"{""D"": 5, ""96"": 1, ""C"": 1}"
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_4,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_5,categorical_or_text,1544,0,1544,0,,,,,,,{}
+ABTS-I FSW Pathfinder MH 2008.tab,_1004_complaint_about_ngo_other,categorical_or_text,1544,107,1437,36,,,,,,,"{""PE"": 46, ""DON'T KNOW"": 10, ""DONT KNOW"": 8}"

@@ -1,0 +1,328 @@
+{
+  "schema_version": "1.0",
+  "round": 39,
+  "completed_at": "2026-11-21T10:39:02Z",
+  "batch_label": "Broad Engineering R39: Robotics_Embodied",
+  "base_head_sha": "eada96803f6ef2ccfe9490beff48a2f873f980bc",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 146,
+    "duplicates_skipped": 54,
+    "net_new": 92,
+    "new_reading_queue": 85,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "robotic grasping affordance learning",
+        "receipt_id": "20261121t103902z-arxiv-d3fb14d1a3",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Agrasping+AND+all%3Aaffordance+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "297a368eddab4cc30435b5d7163ec41624fe0ac600b41baf53a6475eb662c4cd",
+        "normalized_results_sha256": "8e939f4588e78c6bc11340c1e10f4ffced7bcd62ab1c18e9257f42ff4ea80a42"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic grasping affordance learning",
+        "receipt_id": "20261121t103903z-openalex-6a69d22e34",
+        "request_url": "https://api.openalex.org/works?search=robotic+grasping+affordance+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "61315c3dc277aa614041f1765787a4bcf1ba7cb0300201701074622bb8c911e9",
+        "normalized_results_sha256": "28ed98cb121a238e3a6956129d6f9df69c7fd343beb4c69b254574d05898f432"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic grasping affordance learning",
+        "receipt_id": "20261121t103905z-europe-pmc-0877c8ded2",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+grasping+affordance+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "512e3723ceb9a3fc7e6c898cb86531e84bd4d4a27fa377c3e9858779d07f8525",
+        "normalized_results_sha256": "e3e191fdaab8bd4be9ebf6b139991d32809fa99f7dfa0159b17b91aeb8d9c582"
+      },
+      {
+        "provider": "arxiv",
+        "query": "legged locomotion terrain adaptation",
+        "receipt_id": "20261121t103913z-arxiv-9a8e108293",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Alegged+AND+all%3Alocomotion+AND+all%3Aterrain+AND+all%3Aadaptation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "e9cf5f2f87a0e2fa4b007025f83a9aee35a967c523a41e80279ef3d4f6b12e1e",
+        "normalized_results_sha256": "6dd27cae5f8e25efdf618ace33c1ee7d8bdd9a832f1d20c0f37aa1a4ed117a75"
+      },
+      {
+        "provider": "openalex",
+        "query": "legged locomotion terrain adaptation",
+        "receipt_id": "20261121t103914z-openalex-f367470ae0",
+        "request_url": "https://api.openalex.org/works?search=legged+locomotion+terrain+adaptation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6195ecba5daa0dea844bdbe4e8605174743f2e0c994b338a26391e7897094c6e",
+        "normalized_results_sha256": "4d549ddc03aa983f5c9f710601fffd40c33d2bc38854d133b6d00c3de359d6ae"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "legged locomotion terrain adaptation",
+        "receipt_id": "20261121t103916z-europe-pmc-274f202060",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=legged+locomotion+terrain+adaptation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "cf5e685367a5b89faea8193cb732163ee12d0558557e126a62ddf19ea1040f2b",
+        "normalized_results_sha256": "ddd527e411fe43c05ea0ed91bc34d6928fdf023fd73c2b6d056d4cf074abf537"
+      },
+      {
+        "provider": "arxiv",
+        "query": "robotic assembly reinforcement learning",
+        "receipt_id": "20261121t103920z-arxiv-15dd7f75d9",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Aassembly+AND+all%3Areinforcement+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "6f56305bf9d88f658020e3ac22a0285c8f675728f40172d61c0cb3215714b26c",
+        "normalized_results_sha256": "b0f5760cb91a944a0323b8f960593ce4a7f82dc56682a905b5f8506628053ba3"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic assembly reinforcement learning",
+        "receipt_id": "20261121t103921z-openalex-ea29c32000",
+        "request_url": "https://api.openalex.org/works?search=robotic+assembly+reinforcement+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2584eb66ddce1280f9930c87ba556a004252aeb2fa156393289c86cad5ce37ec",
+        "normalized_results_sha256": "d5a6f0cab165fae615503728c8a6109d53eaf88777a9faf4c4d5ee48c1bdf186"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic assembly reinforcement learning",
+        "receipt_id": "20261121t103923z-europe-pmc-6e3aa3d674",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+assembly+reinforcement+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "afcd55e181eedc918ec65d24e89472114649ea626cc0bd4f07fa6e7dd33ce2eb",
+        "normalized_results_sha256": "4c0fe31f7e86c6449d904544ac114527ea862d6f9cb6459520b7d15492db4f80"
+      },
+      {
+        "provider": "arxiv",
+        "query": "collaborative robot trajectory optimization",
+        "receipt_id": "20261121t103931z-arxiv-82c3cfa74a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acollaborative+AND+all%3Arobot+AND+all%3Atrajectory+AND+all%3Aoptimization&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "32c7242e711d7a055e3a94908a2fa26d24d80d329ff9285a9465d334e5bd99d3",
+        "normalized_results_sha256": "560302f6eb1c8d0f3f76c6af2c8191306b3b2cf0aee3ceae822bf879cff38a2f"
+      },
+      {
+        "provider": "openalex",
+        "query": "collaborative robot trajectory optimization",
+        "receipt_id": "20261121t103932z-openalex-a5bce9ffbf",
+        "request_url": "https://api.openalex.org/works?search=collaborative+robot+trajectory+optimization&per-page=12",
+        "result_count": 12,
+        "response_sha256": "cf9271824acc40b60bfc1c952bfc8de578e5aae0b7f7a99606df7da5c424018a",
+        "normalized_results_sha256": "1f47b4e8a90215ab7ad8c9491ce9c4a4df19e15ad21003702e835a5daf949064"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "collaborative robot trajectory optimization",
+        "receipt_id": "20261121t103933z-europe-pmc-176b246bfa",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=collaborative+robot+trajectory+optimization&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "181683f01ec571fb237a240940fb2ea1230224186ee1e24129663230f5980fe0",
+        "normalized_results_sha256": "added8fdb4e5dbdf5d87f234b8c23777335b9012487f91fc7da03a14b1dd81f0"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/jmse12101792",
+        "receipt_id": "20261121t103940z-opencitations-2d9abe4e87",
+        "result_count": 2,
+        "response_sha256": "1e9db35196f94a38fccebb3693e0a720f35caf50d8be8e83a0cc09d68a56c68a"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/gec61857.2024.10880916",
+        "receipt_id": "20261121t103942z-opencitations-dcafd9e89e",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 188,
+    "off_topic_filtered": 114,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 42,
+    "net_new": 32,
+    "provider_statuses": [
+      {
+        "query": "structural health monitoring",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural health monitoring",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "structural health monitoring",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural health monitoring",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural health monitoring",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bridge vibration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bridge vibration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "bridge vibration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bridge vibration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bridge vibration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "turbofan degradation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "turbofan degradation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "turbofan degradation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "turbofan degradation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "turbofan degradation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "bearing prognostics",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing prognostics",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "bearing prognostics",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing prognostics",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing prognostics",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 5,
+    "cleaned": [
+      {
+        "slug": "dataverse-25880-annual-behavioral-tracki",
+        "key": "dataverse:10.7910/dvn/25880",
+        "dataset_name": "Annual Behavioral Tracking Survey (FSW & High Risk MSM)-I (2008) (By Pathfinder)",
+        "doi": "10.7910/dvn/25880",
+        "landing_url": "https://doi.org/10.7910/DVN/25880",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-25880-annual-behavioral-tracki-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-25880-annual-behavioral-tracki-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_25880_annual_behavioral_tracki.py",
+        "cleaned_rows": 890,
+        "raw_total_rows": 2097,
+        "verified_sha256": "4e2b18c6ac7002feaa5b48951e6098b7dc6e5a8f94920906abdb2d192b73f7dc"
+      },
+      {
+        "slug": "dataverse-25901-annual-behavioral-tracki",
+        "key": "dataverse:10.7910/dvn/25901",
+        "dataset_name": "Annual Behavioral Tracking Survey (FSW & High risk MSM)-II -2011 (By Pathfinder)",
+        "doi": "10.7910/dvn/25901",
+        "landing_url": "https://doi.org/10.7910/DVN/25901",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-25901-annual-behavioral-tracki-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-25901-annual-behavioral-tracki-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_25901_annual_behavioral_tracki.py",
+        "cleaned_rows": 1054,
+        "raw_total_rows": 3587,
+        "verified_sha256": "da8e9bebe52840ac4130e55371122827731a42c0391bfa2ca80a4d73291febe1"
+      },
+      {
+        "slug": "dataverse-ombstn-a-sound-dataset-of-vario",
+        "key": "dataverse:10.7910/dvn/ombstn",
+        "dataset_name": "A Sound Dataset of Various Discrete Manufacturing Operations on Real Shop Floors Collected Using Internal Sound Sensors",
+        "doi": "10.7910/dvn/ombstn",
+        "landing_url": "https://doi.org/10.7910/DVN/OMBSTN",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ombstn-a-sound-dataset-of-vario-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ombstn-a-sound-dataset-of-vario-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ombstn_a_sound_dataset_of_vario.py",
+        "cleaned_rows": 40,
+        "raw_total_rows": 40,
+        "verified_sha256": "f7a279a1337befb56bbe2a36cb7209ab8356d19895398bb6ad6ea8647a422072"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

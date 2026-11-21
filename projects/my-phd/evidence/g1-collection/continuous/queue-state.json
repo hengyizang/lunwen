@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 38,
-  "total_new_literature": 3999,
-  "total_new_datasets": 1792,
-  "total_new_reading_queue": 3462,
+  "round_number": 39,
+  "total_new_literature": 4091,
+  "total_new_datasets": 1824,
+  "total_new_reading_queue": 3547,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -86,7 +86,10 @@
     "dataverse:10.7910/dvn/lznnl1",
     "dataverse:10.7910/dvn/brzhhg",
     "figshare:34013343",
-    "figshare:27988055"
+    "figshare:27988055",
+    "dataverse:10.7910/dvn/25880",
+    "dataverse:10.7910/dvn/25901",
+    "dataverse:10.7910/dvn/ombstn"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1236,6 +1239,48 @@
       "cleaned_rows": 10,
       "raw_total_rows": 91902,
       "verified_sha256": "e3012d302b207dffd0877b091080746f82f6eb7aae27fed3e348af18ac9d0a46"
+    },
+    {
+      "slug": "dataverse-25880-annual-behavioral-tracki",
+      "key": "dataverse:10.7910/dvn/25880",
+      "dataset_name": "Annual Behavioral Tracking Survey (FSW & High Risk MSM)-I (2008) (By Pathfinder)",
+      "doi": "10.7910/dvn/25880",
+      "landing_url": "https://doi.org/10.7910/DVN/25880",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-25880-annual-behavioral-tracki-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-25880-annual-behavioral-tracki-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_25880_annual_behavioral_tracki.py",
+      "cleaned_rows": 890,
+      "raw_total_rows": 2097,
+      "verified_sha256": "4e2b18c6ac7002feaa5b48951e6098b7dc6e5a8f94920906abdb2d192b73f7dc"
+    },
+    {
+      "slug": "dataverse-25901-annual-behavioral-tracki",
+      "key": "dataverse:10.7910/dvn/25901",
+      "dataset_name": "Annual Behavioral Tracking Survey (FSW & High risk MSM)-II -2011 (By Pathfinder)",
+      "doi": "10.7910/dvn/25901",
+      "landing_url": "https://doi.org/10.7910/DVN/25901",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-25901-annual-behavioral-tracki-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-25901-annual-behavioral-tracki-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_25901_annual_behavioral_tracki.py",
+      "cleaned_rows": 1054,
+      "raw_total_rows": 3587,
+      "verified_sha256": "da8e9bebe52840ac4130e55371122827731a42c0391bfa2ca80a4d73291febe1"
+    },
+    {
+      "slug": "dataverse-ombstn-a-sound-dataset-of-vario",
+      "key": "dataverse:10.7910/dvn/ombstn",
+      "dataset_name": "A Sound Dataset of Various Discrete Manufacturing Operations on Real Shop Floors Collected Using Internal Sound Sensors",
+      "doi": "10.7910/dvn/ombstn",
+      "landing_url": "https://doi.org/10.7910/DVN/OMBSTN",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ombstn-a-sound-dataset-of-vario-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ombstn-a-sound-dataset-of-vario-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ombstn_a_sound_dataset_of_vario.py",
+      "cleaned_rows": 40,
+      "raw_total_rows": 40,
+      "verified_sha256": "f7a279a1337befb56bbe2a36cb7209ab8356d19895398bb6ad6ea8647a422072"
     }
   ],
   "snowballed_dois": [
@@ -1266,6 +1311,7 @@
     "10.1038/s41598-026-47975-9",
     "10.1109/auteee67053.2025.11322247",
     "10.1109/autotestcon47465.2024.10697527",
+    "10.1109/gec61857.2024.10880916",
     "10.1109/icuas69441.2026.11598692",
     "10.1109/indin64977.2025.11279680",
     "10.1109/iros.2018.8593904",
@@ -1296,6 +1342,7 @@
     "10.3390/biomimetics10100650",
     "10.3390/biomimetics11090647",
     "10.3390/jfmk11040391",
+    "10.3390/jmse12101792",
     "10.3390/machines12090658",
     "10.3390/machines13080659",
     "10.3390/mi17080934",
@@ -1655,34 +1702,43 @@
       "net_new_datasets": 52,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 39,
+      "completed_at": "2026-11-21T10:39:02Z",
+      "batch_label": "Broad Engineering R39: Robotics_Embodied",
+      "net_new_literature": 92,
+      "net_new_datasets": 32,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T10:34:04Z",
+  "updated_at": "2026-11-21T10:39:02Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 328,
+    "Adjacent": 330,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 391,
-    "Mechanical_Physics_AI": 1308,
-    "Mechatronics_PHM_Control": 911,
-    "Robotics_Embodied": 1254,
-    "R5_MultiRobot_Comm": 248,
-    "R1_Force_Contact": 143,
-    "Smart_Manufacturing": 528,
-    "Smart_Factory_DigitalTwin": 202
+    "Mechanical_Physics_AI": 1319,
+    "Mechatronics_PHM_Control": 920,
+    "Robotics_Embodied": 1343,
+    "R5_MultiRobot_Comm": 250,
+    "R1_Force_Contact": 147,
+    "Smart_Manufacturing": 533,
+    "Smart_Factory_DigitalTwin": 212
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 775,
-    "Mechatronics_PHM_Control": 581,
-    "Smart_Manufacturing": 336,
-    "Robotics_Embodied": 539,
+    "Mechanical_Physics_AI": 796,
+    "Mechatronics_PHM_Control": 599,
+    "Smart_Manufacturing": 337,
+    "Robotics_Embodied": 542,
     "R5_MultiRobot_Comm": 80,
-    "Smart_Factory_DigitalTwin": 72,
+    "Smart_Factory_DigitalTwin": 73,
     "R2_Aerial_Actuator": 101,
     "R1_Force_Contact": 76
   },

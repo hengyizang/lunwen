@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-ombstn-a-sound-dataset-of-vario",
+  "dataset_name": "A Sound Dataset of Various Discrete Manufacturing Operations on Real Shop Floors Collected Using Internal Sound Sensors",
+  "doi": "10.7910/dvn/ombstn",
+  "landing_url": "https://doi.org/10.7910/DVN/OMBSTN",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/OMBSTN",
+  "access_date": "2026-11-21",
+  "round_number": 39,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "HF01_20230411_label.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14164667",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/OMBSTN/1a0305169d7-d5f30fc6a20d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27HF01_20230411_label.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T104026Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cc0f26c52fe9f1952623043f73b6b8ba2236b30380584f6ca0c5d92203678b2e",
+      "http_status": 200,
+      "bytes": 92,
+      "publisher_checksum": "dataverse_original_md5:07fa6fcb087469d22d9392d40de4dbf9",
+      "verified_md5": "f3ec62255381228cea7cfe1786061729",
+      "verified_sha256": "f7a279a1337befb56bbe2a36cb7209ab8356d19895398bb6ad6ea8647a422072"
+    },
+    {
+      "file": "PB01_20210426_label.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14164675",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/OMBSTN/1a0304fad8b-1d51619c33eb?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27PB01_20210426_label.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T104027Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=81d6c966e437963ec7df4dea32520a6f3867bdb34679cfad4bf6252dede056ac",
+      "http_status": 200,
+      "bytes": 235,
+      "publisher_checksum": "dataverse_original_md5:fc6d82bb266ab307e2c0a9235b28bbe1",
+      "verified_md5": "1815b12258d15c03e2bbb9c7e0222708",
+      "verified_sha256": "05c72bb73144ca32a92aa8c7c4720a86704ec9b684a146ba70095e519fe5494d"
+    },
+    {
+      "file": "HF01_20221215_label.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14164720",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/OMBSTN/1a030512b61-1b7b4be52990?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27HF01_20221215_label.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T104029Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=eeb6c373270fb116a7b8c9451155f274627598329574a556d31b8c51e1d82dda",
+      "http_status": 200,
+      "bytes": 245,
+      "publisher_checksum": "dataverse_original_md5:bc0c8cae60e6b2e06ec74e1736dc0e01",
+      "verified_md5": "033338c6cc4f74cfa207044994feac74",
+      "verified_sha256": "e399a7dea6c5a41933661fcb81eada03087237ca6d98f697d8eb056b8805dbd0"
+    },
+    {
+      "file": "HF01_20230314_label.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14164670",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/OMBSTN/1a030513edf-00d7f7633559?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27HF01_20230314_label.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T104031Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6fef0ab166314739441efdaaa4e7ca94c43342e7a55e80e0cbcbc60772492218",
+      "http_status": 200,
+      "bytes": 282,
+      "publisher_checksum": "dataverse_original_md5:af8bdb5c5a5a74d2d7da862cb6383a2c",
+      "verified_md5": "388896b4631f2de8dee193c7f4bcc4dd",
+      "verified_sha256": "4a0ed8159b3b72e647080b928beb89176390a26e87c92a166e5a960fdbf58f66"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-ombstn-a-sound-dataset-of-vario",
+  "raw_total_bytes": 854,
+  "raw_total_rows": 40,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-ombstn-a-sound-dataset-of-vario-cleaned.csv",
+  "cleaned_csv_sha256": "b53efd63af017a06d4553d4e221eab57bff728cf234790ef7d3bda73935e957f",
+  "cleaned_rows": 40,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "HF01_20230411_label.tab": {
+      "StartTime": 0,
+      "EndTime": 0
+    },
+    "PB01_20210426_label.tab": {
+      "StartTime": 0,
+      "EndTime": 0
+    },
+    "HF01_20221215_label.tab": {
+      "StartTime": 0,
+      "EndTime": 0
+    },
+    "HF01_20230314_label.tab": {
+      "StartTime": 0,
+      "EndTime": 0
+    }
+  },
+  "time_monotonicity": {
+    "HF01_20230411_label.tab": {
+      "column": "StartTime",
+      "numeric_samples": 3,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 1037.82083956,
+      "median_step": 1040.60625578,
+      "max_step": 1043.391672
+    },
+    "PB01_20210426_label.tab": {
+      "column": "StartTime",
+      "numeric_samples": 12,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 22.509000000000015,
+      "median_step": 22.777999999999793,
+      "max_step": 45.777000000000044
+    },
+    "HF01_20221215_label.tab": {
+      "column": "StartTime",
+      "numeric_samples": 14,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 146.69000000000005,
+      "median_step": 174.66000000000008,
+      "max_step": 224.99
+    },
+    "HF01_20230314_label.tab": {
+      "column": "StartTime",
+      "numeric_samples": 11,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 165.97291760000002,
+      "median_step": 173.6656261,
+      "max_step": 1511.254176
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
